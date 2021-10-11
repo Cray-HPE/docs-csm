@@ -9,8 +9,9 @@ into the CSM Kubernetes cluster).
 * [Deploy CSM Applications and Services](#deploy-csm-applications-and-services)
   * [Setup Nexus](#setup-nexus)
   * [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
-  * [Add Compute Cabinet Routing to NCNs](#add-compute-cabinet-routing-to-ncns)
   * [Initialize cray CLI](#initialize-cray-cli)
+  * [Apply After Sysmgmt Manifest Workarounds](#apply-after-sysmgmt-manifest-workarounds)
+  * [Add Compute Cabinet Routing to NCNs](#add-compute-cabinet-routing-to-ncns)
 * [Validate CSM Install](#validate-csm-install)
 * [Reboot from the LiveCD to NCN](#reboot-from-the-livecd-to-ncn)
 
@@ -306,39 +307,6 @@ ncn-w003: nameserver 10.92.100.225
 > **`NOTE`** The script connects to ncn-m001 which will be the PIT node, whose
 > password may be different from that of the other NCNs.
 
-<a name="apply-after-sysmgmt-manifest-workarounds"></a>
-### Apply After Sysmgmt Manifest Workarounds
-
-Check for workarounds in the `/opt/cray/csm/workarounds/after-sysmgmt-manifest` directory within the CSM tar. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
-
-```bash
-# Example
-pit# ls /opt/cray/csm/workarounds/after-sysmgmt-manifest
-```
-
-If there is a workaround here, the output looks similar to the following:
-```
-CASMCMS-6857  CASMNET-423
-```
-
-<a name="add-compute-cabinet-routing-to-ncns"></a>
-### Add Compute Cabinet Routing to NCNs
-
-NCNs require additional routing to enable access to Mountain, Hill and River Compute cabinets.
-
-Requires:
-* Platform installation
-* Running and configured SLS
-* Can be run from PIT if passwordless SSH is set up to all NCNs, but should be run post ncn-m001 reboot.
-
-To apply the routing, run:
-```bash
-ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1570/CASMINST-1570.sh
-```
-
-> **`NOTE`** Currently, there is no automated procedure to apply routing changes to all worker NCNs to support Mountain, Hill and River
-Compute Node Cabinets. 
-
 <a name="initialize-cray-cli"></a>
 ### Initialize cray CLI
 
@@ -398,6 +366,39 @@ The 'cray' CLI only needs to be initialized once per user on a node.
    * Keycloak may not yet be set up to authorize you as a user
 
    While resolving these issues is beyond the scope of this section, you may get clues to what is failing by adding `-vvvvv` to the `cray init ...` commands.
+
+<a name="apply-after-sysmgmt-manifest-workarounds"></a>
+### Apply After Sysmgmt Manifest Workarounds
+
+Check for workarounds in the `/opt/cray/csm/workarounds/after-sysmgmt-manifest` directory within the CSM tar. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
+
+```bash
+# Example
+pit# ls /opt/cray/csm/workarounds/after-sysmgmt-manifest
+```
+
+If there is a workaround here, the output looks similar to the following:
+```
+CASMCMS-6857  CASMNET-423
+```
+
+<a name="add-compute-cabinet-routing-to-ncns"></a>
+### Add Compute Cabinet Routing to NCNs
+
+NCNs require additional routing to enable access to Mountain, Hill and River Compute cabinets.
+
+Requires:
+* Platform installation
+* Running and configured SLS
+* Can be run from PIT if passwordless SSH is set up to all NCNs, but should be run post ncn-m001 reboot.
+
+To apply the routing, run:
+```bash
+ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1570/CASMINST-1570.sh
+```
+
+> **`NOTE`** Currently, there is no automated procedure to apply routing changes to all worker NCNs to support Mountain, Hill and River
+Compute Node Cabinets. 
 
 
 <a name="validate-csm-install"></a>
