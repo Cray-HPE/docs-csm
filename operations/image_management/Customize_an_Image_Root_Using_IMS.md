@@ -189,7 +189,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 <a name="register"></a>
 **Register the Image Root with the IMS Service**
 
-10.  Update the IMS image record.
+10. Update the IMS image record.
 
     ```bash
     ncn# cray ims images update $IMS_IMAGE_ID \
@@ -209,7 +209,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 **Locate an IMS Image to Customize**
 
-11.  Locate the IMS image record for the image that is being customized.
+11. Locate the IMS image record for the image that is being customized.
 
     ```bash
     ncn# cray ims images list
@@ -339,35 +339,35 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 14. Verify that the status of the IMS job is waiting_on_user.
 
-   ```bash
-   ncn# cray ims jobs describe $IMS_JOB_ID
-   status = "waiting_on_user"
-   enable_debug = false
-   kernel_file_name = "vmlinuz"
-   artifact_id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
-   build_env_size = 10
-   job_type = "customize"
-   kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
-   kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize"
-   id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
-   image_root_archive_name = "my_customized_image"
-   initrd_file_name = "initrd"
-   created = "2018-11-21T18:22:53.409405+00:00"
-   kubernetes_namespace = "ims"
-   public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
-   kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
-   [[ssh_containers]]
-   status = "pending"
-   jail = false
-   name = "customize"
+    ```bash
+    ncn# cray ims jobs describe $IMS_JOB_ID
+    status = "waiting_on_user"
+    enable_debug = false
+    kernel_file_name = "vmlinuz"
+    artifact_id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
+    build_env_size = 10
+    job_type = "customize"
+    kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
+    kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize"
+    id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
+    image_root_archive_name = "my_customized_image"
+    initrd_file_name = "initrd"
+    created = "2018-11-21T18:22:53.409405+00:00"
+    kubernetes_namespace = "ims"
+    public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
+    kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
+    [[ssh_containers]]
+    status = "pending"
+    jail = false
+    name = "customize"
 
-   [ssh_containers.connection_info."cluster.local"]
-   host = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service.ims.svc.cluster.local"
-   port = 22
-   [ssh_containers.connection_info.customer_access]
-   host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com"
-   port = 22
-   ```
+    [ssh_containers.connection_info."cluster.local"]
+    host = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service.ims.svc.cluster.local"
+    port = 22
+    [ssh_containers.connection_info.customer_access]
+    host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com"
+    port = 22
+    ```
 
 15. Customize the image in the image customization environment.
 
@@ -465,125 +465,125 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 16. Tail the `buildenv-sidecar` to ensure that any artifacts are properly uploaded to S3 and associated with IMS.
 
-   ```bash
-   ncn# kubectl -n ims logs -f $POD -c buildenv-sidecar
-   + python -m ims_python_helper image upload_artifacts sles15_barebones_image 7de80ccc-1e7d-43a9-a6e4-02cad10bb60b
-   -v -r /mnt/image/sles15_barebones_image.sqsh -k /mnt/image/image-root/boot/vmlinuz
-   -i /mnt/image/image-root/boot/initrd
-   {
-       "ims_image_artifacts": [
-           {
-               "link": {
-                   "etag": "4add976679c7e955c4b16d7e2cfa114e-32",
-                   "path": "s3://boot-images/d88521c3-b339-43bc-afda-afdfda126388/rootfs",
-                   "type": "s3"
-               },
-               "md5": "94165af4373e5ace3e817eb4baba2284",
-               "type": "application/vnd.cray.image.rootfs.squashfs"
-           },
-           {
-               "link": {
-                   "etag": "f836412241aae79d160556ed6a4eb4d4",
-                   "path": "s3://boot-images/d88521c3-b339-43bc-afda-afdfda126388/kernel",
-                   "type": "s3"
-               },
-               "md5": "f836412241aae79d160556ed6a4eb4d4",
-               "type": "application/vnd.cray.image.kernel"
-           },
-           {
-               "link": {
-                   "etag": "ec8793c07f94e59a2a30abdb1bd3d35a-4",
-                   "path": "s3://boot-images/d88521c3-b339-43bc-afda-afdfda126388/initrd",
-                   "type": "s3"
-               },
-               "md5": "86832ee3977ca0515592e5d00271d2fe",
-               "type": "application/vnd.cray.image.initrd"
-           },
-           {
-               "link": {
-                   "etag": "13af343f3e76b0f8c7fbef7ee3588ac1",
-                   "path": "s3://boot-images/d88521c3-b339-43bc-afda-afdfda126388/manifest.json",
-                   "type": "s3"
-               },
-               "md5": "13af343f3e76b0f8c7fbef7ee3588ac1",
-               "type": "application/json"
-           }
-       ],
-       "ims_image_record": {
-           "created": "2018-12-17T22:59:43.264129+00:00",
-           "id": "d88521c3-b339-43bc-afda-afdfda126388",
-           "name": "sles15_barebones_image"
-           "link": {
-               "etag": "13af343f3e76b0f8c7fbef7ee3588ac1",
-               "path": "s3://boot-images/d88521c3-b339-43bc-afda-afdfda126388/manifest.json",
-               "type": "s3"
-           },
-       },
-       "ims_job_record": {
-           "artifact_id": "2233c82a-5081-4f67-bec4-4b59a60017a6",
-           "build_env_size": 10,
-           "created": "2018-11-21T18:22:53.409405+00:00",
-           "enable_debug": false,
-           "id": "ad5163d2-398d-4e93-94f0-2f439f114fe7",
-           "image_root_archive_name": "sles15_barebones_image",
-           "initrd_file_name": "initrd",
-           "job_type": "create",
-           "kernel_file_name": "vmlinuz",
-           "kubernetes_configmap": "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap",
-           "kubernetes_job": "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create",
-           "kubernetes_service": "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service",
-           "public_key_id": "a252ff6f-c087-4093-a305-122b41824a3e",
-           "resultant_image_id": "d88521c3-b339-43bc-afda-afdfda126388",
-           "ssh_port": 0,
-           "status": "packaging_artifacts"
-       },
-       "result": "success"
-   }
-   ```
+    ```bash
+    ncn# kubectl -n ims logs -f $POD -c buildenv-sidecar
+    + python -m ims_python_helper image upload_artifacts sles15_barebones_image 7de80ccc-1e7d-43a9-a6e4-02cad10bb60b
+    -v -r /mnt/image/sles15_barebones_image.sqsh -k /mnt/image/image-root/boot/vmlinuz
+    -i /mnt/image/image-root/boot/initrd
+    {
+        "ims_image_artifacts": [
+            {
+                "link": {
+                    "etag": "4add976679c7e955c4b16d7e2cfa114e-32",
+                    "path": "s3://boot-images/d88521c3-b339-43bc-afda-afdfda126388/rootfs",
+                    "type": "s3"
+                },
+                "md5": "94165af4373e5ace3e817eb4baba2284",
+                "type": "application/vnd.cray.image.rootfs.squashfs"
+            },
+            {
+                "link": {
+                    "etag": "f836412241aae79d160556ed6a4eb4d4",
+                    "path": "s3://boot-images/d88521c3-b339-43bc-afda-afdfda126388/kernel",
+                    "type": "s3"
+                },
+                "md5": "f836412241aae79d160556ed6a4eb4d4",
+                "type": "application/vnd.cray.image.kernel"
+            },
+            {
+                "link": {
+                    "etag": "ec8793c07f94e59a2a30abdb1bd3d35a-4",
+                    "path": "s3://boot-images/d88521c3-b339-43bc-afda-afdfda126388/initrd",
+                    "type": "s3"
+                },
+                "md5": "86832ee3977ca0515592e5d00271d2fe",
+                "type": "application/vnd.cray.image.initrd"
+            },
+            {
+                "link": {
+                    "etag": "13af343f3e76b0f8c7fbef7ee3588ac1",
+                    "path": "s3://boot-images/d88521c3-b339-43bc-afda-afdfda126388/manifest.json",
+                    "type": "s3"
+                },
+                "md5": "13af343f3e76b0f8c7fbef7ee3588ac1",
+                "type": "application/json"
+            }
+        ],
+        "ims_image_record": {
+            "created": "2018-12-17T22:59:43.264129+00:00",
+            "id": "d88521c3-b339-43bc-afda-afdfda126388",
+            "name": "sles15_barebones_image"
+            "link": {
+                "etag": "13af343f3e76b0f8c7fbef7ee3588ac1",
+                "path": "s3://boot-images/d88521c3-b339-43bc-afda-afdfda126388/manifest.json",
+                "type": "s3"
+            },
+        },
+        "ims_job_record": {
+            "artifact_id": "2233c82a-5081-4f67-bec4-4b59a60017a6",
+            "build_env_size": 10,
+            "created": "2018-11-21T18:22:53.409405+00:00",
+            "enable_debug": false,
+            "id": "ad5163d2-398d-4e93-94f0-2f439f114fe7",
+            "image_root_archive_name": "sles15_barebones_image",
+            "initrd_file_name": "initrd",
+            "job_type": "create",
+            "kernel_file_name": "vmlinuz",
+            "kubernetes_configmap": "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap",
+            "kubernetes_job": "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create",
+            "kubernetes_service": "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service",
+            "public_key_id": "a252ff6f-c087-4093-a305-122b41824a3e",
+            "resultant_image_id": "d88521c3-b339-43bc-afda-afdfda126388",
+            "ssh_port": 0,
+            "status": "packaging_artifacts"
+        },
+        "result": "success"
+    }
+    ```
 
-   The IMS customization workflow automatically copies the NCN Certificate Authority's public certificate to /etc/cray/ca/certificate_authority.crt within the image root being customized. This can be used to enable secure communications between the NCN and the client node.
+    The IMS customization workflow automatically copies the NCN Certificate Authority's public certificate to /etc/cray/ca/certificate_authority.crt within the image root being customized. This can be used to enable secure communications between the NCN and the client node.
 
 17. Look up the ID of the newly created image.
 
-   ```bash
-   ncn# cray ims jobs describe $IMS_JOB_ID
-   status = "success"
-   enable_debug = false
-   kernel_file_name = "vmlinuz"
-   artifact_id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
-   build_env_size = 10
-   job_type = "customize"
-   kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
-   kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize"
-   id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
-   image_root_archive_name = "my_customized_image"
-   initrd_file_name = "initrd"
-   resultant_image_id = "d88521c3-b339-43bc-afda-afdfda126388"
-   created = "2018-11-21T18:22:53.409405+00:00"
-   kubernetes_namespace = "ims"
-   public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
-   kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
-   ```
+    ```bash
+    ncn# cray ims jobs describe $IMS_JOB_ID
+    status = "success"
+    enable_debug = false
+    kernel_file_name = "vmlinuz"
+    artifact_id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
+    build_env_size = 10
+    job_type = "customize"
+    kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
+    kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize"
+    id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
+    image_root_archive_name = "my_customized_image"
+    initrd_file_name = "initrd"
+    resultant_image_id = "d88521c3-b339-43bc-afda-afdfda126388"
+    created = "2018-11-21T18:22:53.409405+00:00"
+    kubernetes_namespace = "ims"
+    public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
+    kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
+    ```
 
-   If successful, create a variable for the IMS `resultant_image_id` value in the returned data.
+    If successful, create a variable for the IMS `resultant_image_id` value in the returned data.
 
-   ```bash
-   ncn# export IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
-   ```
+    ```bash
+    ncn# export IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
+    ```
 
 18. Verify the new IMS image record exists.
 
-   ```bash
-   ncn# cray ims images describe $IMS_RESULTANT_IMAGE_ID
-   created = "2018-12-04T17:25:52.482514+00:00"
-   id = "d88521c3-b339-43bc-afda-afdfda126388"
-   name = "my_customized_image.squashfs"
+    ```bash
+    ncn# cray ims images describe $IMS_RESULTANT_IMAGE_ID
+    created = "2018-12-04T17:25:52.482514+00:00"
+    id = "d88521c3-b339-43bc-afda-afdfda126388"
+    name = "my_customized_image.squashfs"
 
-   [link]
-   type = "s3"
-   path = "/d88521c3-b339-43bc-afda-afdfda126388/my_customized_image.squashfs"
-   etag = "28f3d78c8cceca2083d7d3090d96bbb7"
-   ```
+    [link]
+    type = "s3"
+    path = "/d88521c3-b339-43bc-afda-afdfda126388/my_customized_image.squashfs"
+    etag = "28f3d78c8cceca2083d7d3090d96bbb7"
+    ```
 
 **Clean Up the Image Customization Environment**
 
