@@ -30,5 +30,7 @@ Expected Results
 * Step 1: You can configure the hostname
 * Step 2: The output of all show commands is correct
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/dell/
+index)
+
 

@@ -18,4 +18,5 @@ If that doesn't work you may need to install pip3 first:
 > bash 
 > pip3 install --editable 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

@@ -55,4 +55,5 @@ Expected Results
 * Step 4: You can validate the BGP relationship is established and that the network statement is advertised to the peer □ Step 5: Soft reconfiguration is enabled
 Use the space below for notes as needed. 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

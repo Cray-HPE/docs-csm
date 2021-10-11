@@ -33,4 +33,5 @@ Expected Results:
 * Step 1: You can create the banner
 * Step 2: The output of the banner looks correct 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

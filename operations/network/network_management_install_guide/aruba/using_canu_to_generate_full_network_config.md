@@ -28,4 +28,5 @@ bash
 	sw-leaf-bmc-001 Config Generated
 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
+index)

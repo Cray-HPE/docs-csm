@@ -31,4 +31,5 @@ bash
 
 The output file for the `canu init` command is set with the `--out FILENAME` flag.
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

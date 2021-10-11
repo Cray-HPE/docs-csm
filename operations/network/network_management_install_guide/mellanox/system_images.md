@@ -34,5 +34,6 @@ Expected Results
 * Step 4: You can see you are running the uploaded image
 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)
 

@@ -20,5 +20,5 @@ switch (config) # configuration text file my-filename upload
 scp://root@my-server/root/tmp/my-filename 
 ```
 
-
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

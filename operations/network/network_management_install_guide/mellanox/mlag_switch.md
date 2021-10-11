@@ -123,5 +123,6 @@ switch (config)# mlag-vip my-vip
 switch (config)# mlag system-mac 00:00:5e:00:01:5d
 ```
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)
 

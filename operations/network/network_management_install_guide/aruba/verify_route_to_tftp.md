@@ -18,4 +18,7 @@ Displaying ipv4 routes selected for forwarding
 * This route can be a static route or a BGP route that's pinned to a single worker. (1.4.2 patch introduces the BGP pinned route)
 * Verify that you can ping the next hop of this route.
 * For example above we would ping 10.252.1.9.  If this is not reachable this is your problem.
-asdfs
+
+
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
+index)

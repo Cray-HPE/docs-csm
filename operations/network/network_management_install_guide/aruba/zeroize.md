@@ -34,4 +34,4 @@ Secondary Software Image [XL.10.00.0006]
 Select profile(primary):
 ```
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/index)

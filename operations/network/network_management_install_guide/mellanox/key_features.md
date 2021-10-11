@@ -6,9 +6,8 @@ Feature list:
 
 | Feature      | Notes | Description     |
 | :---        |    :----:   |          :--- |
-|VSX MLAG	| | Layer 2 Redundancy, Allows the NCNs to be bonded so if one link fails they can continue to operate. |
-|VSX	| | Layer 3 Redundancy, Allows one Spine switch/default gateway to fail and continue to work |
-|Lacp fallback	| | Allows for LACP links to come up individually without LACP PDUs, used for PXE booting the NCNs. |
+|MLAG	| | Layer 2 Redundancy, Allows the NCNs to be bonded so if one link fails they can continue to operate. |
+|MLAG	| | Layer 3 Redundancy, Allows one Spine switch/default gateway to fail and continue to work |
 |Vlan	| | Segregates layer 2 broadcast domains, need to separate NMN/HMN/compute traffic. |
 |MSTP	| | Layer 2 loop prevention mechanism at edge |
 |IP routing	| | IP routing / static routes |
@@ -23,4 +22,5 @@ Feature list:
 |VRF	| | Virtual routing and forwarding, used to segregate traffic between networks |
 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

@@ -70,4 +70,5 @@ Expected Results
 * Step 2: The output of all show commands is correct
 * Step 3: You can connect to the switch from the workstation 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
+index)

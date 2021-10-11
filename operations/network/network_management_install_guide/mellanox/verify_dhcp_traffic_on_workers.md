@@ -29,3 +29,6 @@ If the Source IP of the DHCP Reply/Offer is the MetalLB IP, the DHCP packet will
 ```
  
 If you run into this, the only solution that we've found so far is restarting KEA and making sure that it gets moved to a different worker.  
+
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

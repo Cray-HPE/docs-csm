@@ -50,4 +50,5 @@ If you have the system's SHCD, you can use Canu to validate the configuration an
 
 > canu -s 1.5 network config --shcd SHCD.xlsx --csi-folder /var/www/prep/SYSTEMNAME/ --folder configs
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
+index)

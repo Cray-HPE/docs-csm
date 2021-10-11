@@ -12,4 +12,6 @@ switch(config)# ip igmp snooping enable
 Expected Results.
 * Step 1: show ip igmp-snooping vlan 1 should show IGMP enabled on the VLAN, but no IGMP Querier set.
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/dell/
+index)
+

@@ -15,4 +15,6 @@ Expected Results
 * Step 2: You can see the log files from the switch on the remote server
 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/dell/
+index)
+

@@ -32,4 +32,5 @@ Expected Results
 * Step 5: LLDP statistics are displayed 
 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

@@ -36,4 +36,5 @@ Expected Results
 * Step 2: You can test the cable and see the results in the CLI output 
 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
+index)

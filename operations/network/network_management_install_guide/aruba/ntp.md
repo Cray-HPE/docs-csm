@@ -51,5 +51,6 @@ Expected Results
 * Step 3: The system time of the switch matches the NTP server
 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
+index)
 

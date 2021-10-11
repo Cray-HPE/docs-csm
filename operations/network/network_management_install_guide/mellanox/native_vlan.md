@@ -35,4 +35,5 @@ Expected Results
 * Step 3: You can configure an IP address on the VLAN interface
 * Step 4: You can successfully ping the other switch’s VLAN interface  
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

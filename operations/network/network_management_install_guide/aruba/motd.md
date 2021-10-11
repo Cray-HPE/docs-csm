@@ -39,4 +39,5 @@ Expected Results:
 * Step 2: The output of the MOTD banner looks correct 
 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
+index)

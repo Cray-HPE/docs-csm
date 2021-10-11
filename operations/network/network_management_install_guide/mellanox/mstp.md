@@ -25,4 +25,5 @@ Expected Results
 * Step 2: Spanning-tree is enabled, if loops are detected ports should go blocked state.
 * Step 3: Spanning-tree splits traffic domain between two DUTs
    
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

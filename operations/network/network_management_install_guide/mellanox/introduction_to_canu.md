@@ -6,3 +6,5 @@ You can also use CANU to check if Aruba switches on a Shasta network meet the fi
 
 CANU reads switch version information from the _canu.yaml_ file in the root directory. 
 
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

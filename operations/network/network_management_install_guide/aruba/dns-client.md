@@ -27,3 +27,6 @@ Expected Results
 * Step 1: You can configure the DNS client 
 * Step 2: The output is correct
 * Step 3: You can ping the device
+
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
+index)

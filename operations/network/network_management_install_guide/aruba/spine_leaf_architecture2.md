@@ -17,4 +17,5 @@ Other common differences in spine-leaf topologies include:
 * A scale-out vs. scale-up of infrastructure
 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
+index)

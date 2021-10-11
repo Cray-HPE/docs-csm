@@ -28,4 +28,6 @@ Expected Results
 * Step 2: You can boot into the uploaded image
 * Step 3: You can see you are running the uploaded image
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/dell/
+index)
+

@@ -30,4 +30,5 @@ Expected Results
 * Step 2: You can bind the SNMP server to the default VRF
 * Step 3: You can connect from the workstation using the community name  
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

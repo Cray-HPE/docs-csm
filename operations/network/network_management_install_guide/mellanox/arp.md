@@ -22,5 +22,6 @@ Expected Results
 * Step 1: You are able to ping the connected device 
 * Step 2: You can view the ARP entries 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)
 

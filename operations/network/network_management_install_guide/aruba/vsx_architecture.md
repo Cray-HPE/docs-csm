@@ -6,5 +6,6 @@ Switches in the campus and data center sit at the heart of the network and are r
 
 To address this requirement, Aruba’s Virtual Switching Extension (VSX) has been designed from the ground up to provide industry-leading performance and high availability with much-needed simplicity. This is accomplished through the resiliency of AOS-CX, a modern network operating system that performs continuous state synchronization.
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
+index)
 

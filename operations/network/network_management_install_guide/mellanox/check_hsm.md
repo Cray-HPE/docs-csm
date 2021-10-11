@@ -49,3 +49,6 @@ Your output from SMD should look like this:
   "Type": "Node"
 },
 ```
+
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

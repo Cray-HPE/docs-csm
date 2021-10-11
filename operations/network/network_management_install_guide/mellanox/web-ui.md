@@ -29,4 +29,5 @@ Expected Results
 * Step 3: You can connect to the IP address from a browser login to the management menu  
 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

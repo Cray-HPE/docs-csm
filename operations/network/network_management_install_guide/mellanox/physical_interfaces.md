@@ -22,4 +22,5 @@ Expected Results
 * Step 2: You can establish a link with a partner
 * Step 3: You can pass traffic as expected 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
+index)

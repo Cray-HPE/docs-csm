@@ -45,58 +45,58 @@ __________________________________
 
 ## Introduction:
 
-   1. [Introduction](#index)
-   1. [Notice](#index)
-   1. [Index](#index)
+   1. [Introduction](/docs-csm/operations/network/network_management_install_guide/dell/index)
+   1. [Notice](/docs-csm/operations/network/network_management_install_guide/dell/index)
+   1. [Index](/docs-csm/operations/network/network_management_install_guide/dell/index)
 
 ### Managing switches from CLI
 
 ###Device management
-  1. [Management Interface](#management_interface)
-  1. [Network Time Protocol (NTP) Client](#ntp)
-  1. [Domain Name System (DNS) Client](#dns-client)
-  1. [Hostname](#hostname)
-  1. [Domain Name](#domain_name)
-  1. [Secure Shell (SSH)](#ssh)
-  1. [Remote Logging](#remote_logging)
-  1. [SNMPv2c Community](#snmp-community)
-  1. [System images](#system_images)
+  1. [Management Interface](/docs-csm/operations/network/network_management_install_guide/dell/management_interface)
+  1. [Network Time Protocol (NTP) Client](/docs-csm/operations/network/network_management_install_guide/dell/ntp)
+  1. [Domain Name System (DNS) Client](/docs-csm/operations/network/network_management_install_guide/dell/dns-client)
+  1. [Hostname](/docs-csm/operations/network/network_management_install_guide/dell/hostname)
+  1. [Domain Name](/docs-csm/operations/network/network_management_install_guide/dell/domain_name)
+  1. [Secure Shell (SSH)](/docs-csm/operations/network/network_management_install_guide/dell/ssh)
+  1. [Remote Logging](/docs-csm/operations/network/network_management_install_guide/dell/remote_logging)
+  1. [SNMPv2c Community](/docs-csm/operations/network/network_management_install_guide/dell/snmp-community)
+  1. [System images](/docs-csm/operations/network/network_management_install_guide/dell/system_images)
 
 ### Layer one features
-  1. [Physical Interfaces](#physical_interfaces)
-  1. [Locator LED](#locator_led)
+  1. [Physical Interfaces](/docs-csm/operations/network/network_management_install_guide/dell/physical_interfaces)
+  1. [Locator LED](/docs-csm/operations/network/network_management_install_guide/dell/locator_led)
 
 ### Layer two features
-  1. [Link Layer Discovery Protocol (LLDP)](#lldp)
-  1. [Virtual Local Access Networks (VLANs)](#vlan)
-  1. [VLAN Trunking 802.1Q](#vlan_trunking_8021q)
-  1. [Link Aggregation Group (LAG)](#lag)
-  1. [Multiple Spanning Tree Protocol (MSTP)](#mstp)
+  1. [Link Layer Discovery Protocol (LLDP)](/docs-csm/operations/network/network_management_install_guide/dell/lldp)
+  1. [Virtual Local Access Networks (VLANs)](/docs-csm/operations/network/network_management_install_guide/dell/vlan)
+  1. [VLAN Trunking 802.1Q](/docs-csm/operations/network/network_management_install_guide/dell/vlan_trunking_8021q)
+  1. [Link Aggregation Group (LAG)](/docs-csm/operations/network/network_management_install_guide/dell/lag)
+  1. [Multiple Spanning Tree Protocol (MSTP)](/docs-csm/operations/network/network_management_install_guide/dell/mstp)
 
 ### Layer three features
-  1. [VLAN Interface](#vlan_interface)
-  1. [Address Resolution Protocol (ARP)](#arp)
-  1. [Loopback Interface](#loopback)
-
+  1. [VLAN Interface](/docs-csm/operations/network/network_management_install_guide/dell/vlan_interface)
+  1. [Address Resolution Protocol (ARP)](/docs-csm/operations/network/network_management_install_guide/dell/arp)
+  1. [Loopback Interface](/docs-csm/operations/network/network_management_install_guide/dell/loopback)
 
 ### Multicast
-  1. [IGMP](#igmp)
+  1. [IGMP](/docs-csm/operations/network/network_management_install_guide/dell/igmp)
 
 ### Security
-  1. [Access Control Lists (ACLs)](#acl)
+  1. [Access Control Lists (ACLs)](/docs-csm/operations/network/network_management_install_guide/dell/acl)
 
 ### Quality of Service
-  1. [Qos)](#qos)
+  1. [Qos)](/docs-csm/operations/network/network_management_install_guide/dell/qos)
 
 ### Performing upgrade on Dell switches
-  1. [Software upgrade](#upgrade)
+  1. [Software upgrade](/docs-csm/operations/network/network_management_install_guide/dell/upgrade)
 
 ### Backing up switch configuration
-  1. [Backing up switch configuration](#backup)
+  1. [Backing up switch configuration](/docs-csm/operations/network/network_management_install_guide/dell/backup)
 
 ### Factory reset
-  1. [Reset configuration](#reset)
+  1. [Reset configuration](/docs-csm/operations/network/network_management_install_guide/dell/reset)
  
+
 
 
 

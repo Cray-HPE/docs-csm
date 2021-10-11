@@ -23,4 +23,6 @@ Expected Results
 * Step 3: You can connect from the workstation using the community name
 
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/dell/
+index)
+

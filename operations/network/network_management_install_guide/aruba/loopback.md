@@ -33,4 +33,5 @@ Expected Results
 * Step 2: You can give a loopback interface an IP address
 * Step 3: You can validate the configuration using the show commands.
 
-[Back to Index](#index)
+[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
+index)
