@@ -236,18 +236,18 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 12. Create an IMS job record and start the image customization job.
 
-   After customizing the image, IMS will automatically upload any build artifacts \(root file system, kernel, and initrd\) to S3, and associate the S3 artifacts with IMS. Unfortunately, IMS is not able to dynamically determine the names of the Linux kernel and initrd to look for, because the file name for these vary depending upon Linux distribution, Linux version, dracut configuration, and more. Thus, the user must pass the name of the kernel and initrd that IMS is to look for in the resultant image root's /boot directory.
+    After customizing the image, IMS will automatically upload any build artifacts \(root file system, kernel, and initrd\) to S3, and associate the S3 artifacts with IMS. Unfortunately, IMS is not able to dynamically determine the names of the Linux kernel and initrd to look for, because the file name for these vary depending upon Linux distribution, Linux version, dracut configuration, and more. Thus, the user must pass the name of the kernel and initrd that IMS is to look for in the resultant image root's /boot directory.
 
-   Use the following table to help determine the default kernel and initrd file names to specify when submitting the job to customize an image. These are just default names. Please consult with the site administrator to determine if these names have been changed for a given image or recipe.
+    Use the following table to help determine the default kernel and initrd file names to specify when submitting the job to customize an image. These are just default names. Please consult with the site administrator to determine if these names have been changed for a given image or recipe.
 
-   |Recipe|Recipe Name|Kernel File Name|Initrd File Name|
-   |------|-----------|----------------|----------------|
-   |SLES 15 SP1 Barebones|cray-sles15sp1-barebones|vmlinuz|initrd|
-   |COS|cray-shasta-compute-sles15sp1.x86_64-1.4.66|vmlinuz|initrd|
+    |Recipe|Recipe Name|Kernel File Name|Initrd File Name|
+    |------|-----------|----------------|----------------|
+    |SLES 15 SP1 Barebones|cray-sles15sp1-barebones|vmlinuz|initrd|
+    |COS|cray-shasta-compute-sles15sp1.x86_64-1.4.66|vmlinuz|initrd|
 
-   1. Start the image customization job.
+    1. Start the image customization job.
 
-      Before running the following command, replace the MY\_CUSTOMIZED\_IMAGE value with the name of the image root being used.
+       Before running the following command, replace the MY\_CUSTOMIZED\_IMAGE value with the name of the image root being used.
 
        ```bash
        ncn# cray ims jobs create \
@@ -286,20 +286,20 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
        port = 22
        ```
 
-   2.  Create variables for the IMS job ID, Kubernetes job ID, and the SSH connection values in the returned data.
+    2. Create variables for the IMS job ID, Kubernetes job ID, and the SSH connection values in the returned data.
 
        Before setting the SSH values, determine the appropriate method to SSH into the customization pod:
 
        - `[ssh_containers.connection_info.customer_access]` values \(**preferred**\): The `customer_access` address is a dynamic hostname that is made available for use by the customer to access the IMS Job from outside the Kubernetes cluster.
        - `[ssh_containers.connection_info."cluster.local"]` values: The `cluster.local` address is used when trying to access an IMS Job from a pod that is running within the HPE Cray EX Kubernetes cluster. For example, this is the address that CFS uses to talk to the IMS Job during a pre-boot customization session.
 
-           The external IP address should only be used if the dynamic `customer_access` hostname does not resolve properly. In the following example, the admin could then SSH to the 10.103.2.160 IP address.
+       The external IP address should only be used if the dynamic `customer_access` hostname does not resolve properly. In the following example, the admin could then SSH to the 10.103.2.160 IP address.
 
-           ```bash
-           ncn# kubectl get services -n ims | grep IMS_JOB_ID
-           NAME                                                    TYPE           CLUSTER-IP      EXTERNAL-IP    PORT(S)        AGE
-           cray-ims-06c3dd57-f347-4229-85b3-1d024a947b3f-service   LoadBalancer   10.29.129.204   10.103.2.160   22:31627/TCP   21h
-           ```
+       ```bash
+       ncn# kubectl get services -n ims | grep IMS_JOB_ID
+       NAME                                                    TYPE           CLUSTER-IP      EXTERNAL-IP    PORT(S)        AGE
+       cray-ims-06c3dd57-f347-4229-85b3-1d024a947b3f-service   LoadBalancer   10.29.129.204   10.103.2.160   22:31627/TCP   21h
+       ```
 
        To create the variables:
 
@@ -318,7 +318,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
        A jailed environment lets users SSH into the SSH container and be immediately within the image root for the image being customized. Users do not need to `cd` or `chroot` into the image root. Using a jailed environment has some advantages, such as making the IMS SSH job shell look more like a compute node. This allows applications like the CFS to perform actions on both IMS job pods \(pre-boot\) and compute nodes \(post-boot\).
 
-13. Use `kubectl` and the returned IMS\_KUBERNETES\_JOB value to describe the image create job.
+13. Use `kubectl` and the returned `IMS_KUBERNETES_JOB` value to describe the image create job.
 
     ```bash
     ncn# kubectl -n ims describe job $IMS_KUBERNETES_JOB
@@ -337,7 +337,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ncn# export POD=cray-ims-cfa864b3-4e08-49b1-9c57-04573228fd3f-customize-xh2jf
     ```
 
-14. Verify that the status of the IMS job is waiting\_on\_user.
+14. Verify that the status of the IMS job is waiting_on_user.
 
    ```bash
    ncn# cray ims jobs describe $IMS_JOB_ID
