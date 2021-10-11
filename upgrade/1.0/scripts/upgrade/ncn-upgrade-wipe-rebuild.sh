@@ -61,9 +61,19 @@ EOF
     usb_rc=$?
     set -e
     if [[ "$usb_rc" -eq 0 ]]; then
-      umount /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata || true
-      usb_device_path=$(echo $usb_device | awk '{print $2}') || true
-      eject $usb_device_path || true
+      usb_device_path=$(echo $usb_device | awk '{print $2}')
+      if blkid -p $usb_device_path; then
+        have_mnt=0
+        for mnt_point in /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata; do
+          if mountpoint $mnt_point; then
+            have_mnt=1
+            umount $mnt_point
+          fi
+        done
+        if [ "$have_mnt" -eq 1 ]; then
+          eject $usb_device_path
+        fi
+      fi
     fi
     umount /var/lib/etcd /var/lib/sdu || true
     for md in /dev/md/*; do mdadm -S $md || echo nope ; done
