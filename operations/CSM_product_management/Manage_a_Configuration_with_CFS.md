@@ -26,7 +26,7 @@ management nodes in addition to the configuration required by CSM. Consult the
 documentation for these products for more information.
 
 For more detailed information on configuration management with CFS, see these
-topics in [Configuration Management](configuration_management/Configuration_Management.md)
+topics in [Configuration Management](../configuration_management/Configuration_Management.md)
    * Configuration Layers
    * Ansible Inventory
    * Configuration Management with the CFS Batcher
@@ -275,7 +275,7 @@ via NCN personalization.
 By default, the `csm.password` role reads passwords from Vault using the
 `secret/csm/management_nodes` secret and the `root_password` key in that secret.
 To set the password in Vault, follow steps 1-3 in the
-[Update NCN Passwords](#operations/security_and_authentication/Update_NCN_Passwords.md)
+[Update NCN Passwords](../security_and_authentication/Update_NCN_Passwords.md)
 procedure.
 
 This role is enabled by default in the CSM `site.yml` top-level play and assumes
@@ -284,7 +284,7 @@ the NCNs, create a CFS session with using the  [CSM Configuration Layer](#csm_co
 with `site.yml` as the playbook. This will re-run NCN personalization and all of
 its configuration layers. To only change the root password, use the
 `rotate-pw-mgmt-nodes.yml` playbook by following the instructions in the
-[Update NCN Passwords](#operations/security_and_authentication/Update_NCN_Passwords.md)
+[Update NCN Passwords](../security_and_authentication/Update_NCN_Passwords.md)
 procedure.
 
 <a name="create_a_cfs_configuration_json_file"></a>
