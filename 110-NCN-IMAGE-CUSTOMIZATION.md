@@ -111,6 +111,7 @@ CFS, and re-register them with the Boot Script Service (BSS) for booting.
 function in a shell on an NCN:
 
    ```bash
+   ncn# export CRAY_FORMAT=json
    ncn# get-ncn-image() { echo $(cray bss bootparameters list --hosts $1 | jq -r .[].params | egrep -o "metal.server=(\S+)" | cut -d"=" -f2-)/$(cray bss bootparameters list --hosts $1 | jq -r .[].params | egrep -o "rd.live.squashimg=(\S+)" | cut -d"=" -f2-);  }
    ```
 
@@ -144,12 +145,17 @@ be applied to. The `k8s-filesystem.squashfs` file is used in the examples.
 
 1. Download the image and compute its md5sum.
    ```bash
-   ncn# export IMAGE_MD5SUM=`cray artifacts get $S3_BUCKET $S3_IMAGE_NAME $S3_IMAGE_NAME | md5sum | awk '{ print $1 }'` 
+   ncn# export IMAGE_MD5SUM=`cray artifacts get $S3_BUCKET $S3_IMAGE_NAME $(basename "$S3_IMAGE_NAME") | md5sum | awk '{ print $1 }'`
    ```
 
 1. Create a new IMS image record for the image.
    ```bash
    ncn# export IMS_IMAGE_ID=`cray ims images create --name $S3_IMAGE_NAME --format json | jq -r .id`
+   ```
+
+1. Upload the image to the `boot-images` bucket.
+   ```bash
+   ncn# cray artifacts create boot-images $IMS_IMAGE_ID/$S3_IMAGE_NAME $(basename "$S3_IMAGE_NAME")
    ```
 
 1. Create an image manifest file.
@@ -161,7 +167,7 @@ be applied to. The `k8s-filesystem.squashfs` file is used in the examples.
       "artifacts": [
          {
             "link": {
-               "path": "$S3_IMAGE",
+               "path": "s3://boot-images/$IMS_IMAGE_ID/$S3_IMAGE_NAME",
                "type": "s3"
             },
             "md5": "$IMAGE_MD5SUM",
@@ -196,5 +202,57 @@ be applied to. The `k8s-filesystem.squashfs` file is used in the examples.
          "type": "s3"
       },
       "name": "k8s-filesystem.squashfs"
+   }
+   ```
+
+### Customize the NCN Image
+
+NCN images are customized in a similar manner as other images available on the
+system. Refer to "Create an Image Customization CFS Session" in the
+_HPE Cray EX System Administration Guide S-8001_. After creating a CFS configuration
+with one or more layers, create a CFS session meant for image customization.
+
+The following procedure uses a CFS configuration named `ncn-image-customization`
+which specifies the Ansible playbook.
+
+1. Create the CFS session
+   ```bash
+   ncn# cray cfs sessions create --name ncn-image-customization \
+       --configuration-name ncn-image-customization \
+       --target-definition image \
+       --target-group Management $IMS_IMAGE_ID
+   {
+      "ansible": {
+         "config": "cfs-default-ansible-cfg",
+         "limit": null,
+         "verbosity": 0
+      },
+      "configuration": {
+         "limit": "",
+         "name": "ncn-image-customization"
+      },
+      "name": "ncn-image-customization",
+      "status": {
+         "artifacts": [],
+         "session": {
+            "completionTime": null,
+            "job": null,
+            "startTime": null,
+            "status": "pending",
+            "succeeded": "none"
+         }
+      },
+      "tags": {},
+      "target": {
+         "definition": "image",
+         "groups": [
+            {
+            "members": [
+               "3b2fff9f-6325-4286-8024-fd1bf29f211c"
+            ],
+            "name": "Management"
+            }
+         ]
+      }
    }
    ```
