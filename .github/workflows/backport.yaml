@@ -1,0 +1,14 @@
+name: Backport
+
+on:
+  pull_request:
+    types:
+      - closed
+      - labeled
+
+jobs:
+  backport:
+    runs-on: self-hosted
+    name: Backport closed pull request
+    steps:
+    - uses: Cray-HPE/backport-action@v1

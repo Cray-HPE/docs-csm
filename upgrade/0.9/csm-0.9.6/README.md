@@ -29,6 +29,7 @@
 - [Apply cray-hms-hmcollector scale changes](#apply-cray-hms-hmcollector-scale-changes)
 - [Setup Nexus](#setup-nexus)
 - [Update NCNs](#update-ncns)
+- [Update BSS metadata](#update-bss)
 - [Upgrade Services](#upgrade-services)
 - [Rollout Deployment Restart](#rollout-deployment-restart)
 - [Verification](#verification)
@@ -132,6 +133,16 @@ report `FAIL` when uploading duplicate assets. This is ok as long as
    ncn-m001# ./update-ncns.sh
    ```
 
+<a name="update-bss"></a>
+## Update BSS metadata
+
+1. Execute the following script from the scripts directory determined above to update BSS metadata.
+
+   ```bash
+   ncn-m001# cd "$CSM_SCRIPTDIR"
+   ncn-m001# ./update-bss-metadata.sh
+   ```
+
 <a name="upgrade-services"></a>
 ## Upgrade Services
 
@@ -186,6 +197,16 @@ deployment "cray-dns-unbound" successfully rolled out
    ```bash
    ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"0.9.6".configuration.import_date'
    ```
+
+### Verify updated images for CVE-2021-3711:
+
+ Execute the following script from the scripts directory to make sure correct images for CVE-2021-3711 are updated:
+
+   ```bash
+   ncn-m001# cd "$CSM_SCRIPTDIR"
+   ncn-m001# ./validate_versions.sh
+   ```
+
 ### Verify cray-sysmgmt-health changes:
 
 1. Confirm node-exporter is running on each storage node. This command can be run from a master node.  Validate that the result contains `go_goroutines` (replace ncn-s001 below with each storage node):
@@ -265,7 +286,7 @@ deployment "cray-dns-unbound" successfully rolled out
        "/srv/cray/scripts/metal/set-bmc-bbs.sh",
        "/srv/cray/scripts/metal/disable-cloud-init.sh",
        "/srv/cray/scripts/common/update_ca_certs.py",
-       "zypper --no-gpg-checks in -y https://packages.local/repository/casmrel-755/cray-node-exporter-1.2.2.1-1.x86_64.rpm"
+       "zypper --no-gpg-checks in -y https://packages.local/repository/csm-sle-15sp2/x86_64/cray-node-exporter-1.2.2.1-1.x86_64.rpm"
      ]
    }
    ```

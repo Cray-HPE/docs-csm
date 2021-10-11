@@ -293,16 +293,16 @@ Check the expiration of the certificates.
 
    **`NOTE:`** Please update the below command with the appropriate amount of worker nodes.
 
-   For Shasta v1.3 and earlier :
-
-   ```bash
-   ncn-m# pdcp -w ncn-m00[2-3] -w ncn-w001 /root/.kube/config /root/.kube/
-   ```
-
    For Shasta v1.4 and later :
 
    ```
    ncn-m# pdcp -w ncn-m00[2-3] -w ncn-w00[1-3] /etc/kubernetes/admin.conf /etc/kubernetes/
+   ```
+
+   For Shasta v1.3 and earlier :
+
+   ```bash
+   ncn-m# pdcp -w ncn-m00[2-3] -w ncn-w001 /root/.kube/config /root/.kube/
    ```
 
 ## Regenerating kubelet .pem certificates
@@ -367,11 +367,123 @@ Check the expiration of the certificates.
    ```
 
 6. Perform a rolling reboot of master nodes.
-   1. Follow process [Reboot_NCNs](../node_management/Reboot_NCNs.md)
+
+   For Shasta v1.4 and later :
+
+   1. Follow the [Reboot_NCNs](../node_management/Reboot_NCNs.md) process.
+
+   For Shasta v1.3 and earlier :
+
+   1. Follow the [Reboot_NCNs](https://github.com/Cray-HPE/docs-csm/blob/release/0.9/operations/node_management/Reboot_NCNs.md) process.
+
+       **NOTES:** 
+       - ncn-w001 is the externally connected node. On Shasta v1.4 and later, ncn-m001 is the externally connected node.
+       - The ncnGetXnames.sh script is not available; The xname can be found in the file `/etc/cray/xname` on the specific node.
 
    **IMPORTANT:** Please ensure you are verifying pods are running on the master node that was rebooted before proceeding to the next node.
 
 7. Perform a rolling reboot of worker nodes.
-   1. Follow process [Reboot_NCNs](../node_management/Reboot_NCNs.md)
 
-   **IMPORTANT:** Please keep track of where the nexus pod is running and ensure it is either scaled down to 0 replicas or has moved and full started via the drain process.
+   For Shasta v1.4 and later :
+   1. Follow the [Reboot_NCNs](../node_management/Reboot_NCNs.md) process.
+
+   For Shasta v1.3 and earlier :
+
+   1. Before rebooting any worker node, scale nexus replicas to 0.
+        
+      ```bash
+      ncn-m# kubectl scale deployment nexus -n nexus --replicas=0
+      ```
+
+   2. Follow the [Reboot_NCNs](https://github.com/Cray-HPE/docs-csm/blob/release/0.9/operations/node_management/Reboot_NCNs.md) process.
+
+       **NOTES:** 
+       - ncn-w001 is the externally connected node. On Shasta v1.4 and later, ncn-m001 is the externally connected node.
+       - The failover-leader.sh, ncnGetXnames.sh and add_pod_priority.sh scripts are not available or required when rebooting worker nodes.
+       - After draining a worker, force delete any pod that fails to terminate due to `Cannot evict pod as it would violate the pod's disruption budget`.
+         
+         ```bash
+         ncn-m# kubectl delete pod <pod-name> -n <namespace> --force
+         ```
+
+       - Reference the Shasta v1.3 Admin Guide for any steps related to checking system health.
+
+   3. After rebooting all the worker nodes, scale nexus replicas back to 1 and verify nexus is running.
+        
+      ```bash
+      ncn-m# kubectl scale deployment nexus -n nexus --replicas=1
+
+       ncn-m# kubectl get pods -n nexus | grep nexus
+       nexus-868d7b8466-gjnps       2/2     Running   0          5m
+      ```
+
+8. For Shasta v1.3 and earlier, restart the sonar cronjobs and verify vault etcd is healthy.
+
+   1. Restart the sonar cronjobs.
+
+      ```bash
+      ncn-m# kubectl -n services get cronjob sonar-jobs-watcher -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' | kubectl replace --force -f -
+
+      ncn-m# kubectl -n services get cronjob sonar-sync -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' | kubectl replace --force -f -
+      ```
+
+   2. After at least a minute, verify that the cronjobs have been scheduled.
+
+      ```bash
+      ncn-m# # kubectl get cronjobs -n services sonar-jobs-watcher
+      NAME                 SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+      sonar-jobs-watcher   */1 * * * *   False     1        23s             5m10s
+
+      ncn-m# kubectl get cronjobs -n services sonar-sync
+      NAME         SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+      sonar-sync   */1 * * * *   False     1        32s             5m15s
+      ```
+
+   3. Check the health of vault etcd.
+ 
+      ```bash
+      ncn-m# for pod in $(kubectl get pods -l app=etcd -n vault -o jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} ###"; kubectl -n vault exec $pod  -- /bin/sh -c "ETCDCTL_API=3 etcdctl --cacert /etc/etcdtls/operator/etcd-tls/etcd-client-ca.crt --cert /etc/etcdtls/operator/etcd-tls/etcd-client.crt --key /etc/etcdtls/operator/etcd-tls/etcd-client.key --endpoints https://localhost:2379 endpoint health"; done
+      ```
+
+   4. If the above health of vault etcd reports any pods as `unhealthy`, backup the secret, delete the secret. The operator will create a new secret.
+
+      ```bash
+      ncn-m# kubectl get secret -n vault cray-vault-etcd-tls -o yaml > /root/vault_sec.yaml
+      ncn-m# kubectl delete secret -n vault cray-vault-etcd-tls
+      ```
+ 
+   5. Once the new secret has been created and the cray-vault-etcd pods are running, verify the health of vault etcd.
+
+      ```bash
+      ncn-m# kubectl get secret -n vault cray-vault-etcd-tls
+    
+      NAME                  TYPE     DATA   AGE
+      cray-vault-etcd-tls   Opaque   9      5m
+    
+      ncn-m# kubectl get pods -l app=etcd -n vault
+    
+      NAME                         READY   STATUS    RESTARTS   AGE
+      cray-vault-etcd-stzjf6dqd5   1/1     Running   0          10m
+      cray-vault-etcd-ws59fgssxt   1/1     Running   0          10m
+      cray-vault-etcd-xmvfxz48vs   1/1     Running   0          10m
+    
+      ncn-m# for pod in $(kubectl get pods -l app=etcd -n vault -o jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} ###"; kubectl -n vault exec $pod  -- /bin/sh -c "ETCDCTL_API=3 etcdctl --cacert /etc/etcdtls/operator/etcd-tls/etcd-client-ca.crt --cert /etc/etcdtls/operator/etcd-tls/etcd-client.crt --key /etc/etcdtls/operator/etcd-tls/etcd-client.key --endpoints https://localhost:2379 endpoint health"; done
+
+      ### cray-vault-etcd-stzjf6dqd5 ###
+      https://localhost:2379 is healthy: successfully committed proposal: took = 19.999618ms
+      ### cray-vault-etcd-ws59fgssxt ###
+      https://localhost:2379 is healthy: successfully committed proposal: took = 19.597736ms
+      ### cray-vault-etcd-xmvfxz48vs ###
+      https://localhost:2379 is healthy: successfully committed proposal: took = 19.81056ms
+      ```
+
+      **NOTE:**
+
+      Vault etcd errors such as `tls: bad certificate." Reconnecting` can be ignored.
+
+      ```bash
+      ncn-m# kubectl logs -l app=etcd -n vault  | grep "bad certificate\". Reconnecting"
+
+      WARNING: 2021/09/24 17:35:11 grpc: addrConn.createTransport failed to connect to {0.0.0.0:2379 0  <nil>}. Err :connection error: desc = "transport: authentication handshake failed: remote error: tls: bad certificate". Reconnecting...
+      ```
+
