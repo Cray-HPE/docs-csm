@@ -151,11 +151,3 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       [n000]# cscli show_nodes
       [n000]# cscli fs_info
       ```
-
-<a name="next-topic"></a>
-# Next Topic
-
-   After completing this procedure the next step is to update the management network.
-
-   **See:** [Update Management Network](index.md#update_management_network)
-

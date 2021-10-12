@@ -66,7 +66,7 @@ In order for these scripts to work the following commands will need to be applie
     ```bash
     pit# SYSTEM_NAME=eniac
     pit# CSI_PATH="/var/www/ephemeral/prep/${SYSTEM_NAME}/networks/"
-    pit# /usr/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 "${CSI_PATH}"
+    pit# /usr/local/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 "${CSI_PATH}"
     ```
 
 ### Verification
