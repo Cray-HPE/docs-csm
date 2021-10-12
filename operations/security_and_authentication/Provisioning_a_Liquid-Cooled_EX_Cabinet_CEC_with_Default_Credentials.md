@@ -105,30 +105,24 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
     ![Front Panel Controls](../../img//CEC_Display_Controls_CEC_Actions.svg)
 
-13. Power cycle the compute blade slots in each compute chassis slot. 
+13. **Important!**: Power cycle the compute blade slots in each chassis. If Cray System Management is provisioned, use CAPMC to power cycle the compute blade slots (example show cabinets 1000-1003).
+    **Note**: If a chassis is not fully populated, specify each slot individually.
 
-    1. If Cray System Management is available, use CAPMC to power cycle the compute blades.
+    ```bash
+    ncn-m001# cray capmc xname_off create --xnames x[1000-1003]c[0-7]s[0-7] --format json
+    ```
 
-       Power off the compute chassis slots in each cabinet (example show cabinets 1000-1003):
-       Note: If a cabinet chassis is not fully populated, specify each slot individually.
+    Check the power status:
 
-       ```bash
-       ncn-m001# cray capmc xname_off create --xnames x[1000-1003]c[0-7]s[0-7] --format json
-       ```
+    ```bash
+    ncn-m001# cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
+    ```
 
-       Check the power status:
+    Power on the compute chassis slots:
 
-       ```bash
-       ncn-m001# cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
-       ```
-
-       Power on the compute chassis slots:
-
-       ```bash
-       ncn-m001# cray capmc xname_on create --xnames x[1000-1003]c[0-7]s[0-7] --format json
-       ```
-
-    2. If a management system has not been provisioned (the cabinet is bare metal), set the cabinet circuit breakers to off, then back to on.
+    ```bash
+    ncn-m001# cray capmc xname_on create --xnames x[1000-1003]c[0-7]s[0-7] --format json
+    ```
 
 14. To test the password, connect to the CMM serial console though the CEC. The IPv6 address is the same, but the port numbers are different as described below. 
 
