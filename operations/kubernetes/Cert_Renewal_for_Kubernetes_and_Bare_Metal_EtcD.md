@@ -341,7 +341,7 @@ Check the expiration of the certificates.
    5. systemctl start kubelet.service
    6. kubeadm init phase kubelet-finalize all --cert-dir /var/lib/kubelet/pki/
 
-5. Check the expiration of the kubectl certificates files.  See [File Locations](#file-locations) for the list of files.
+5. Check the expiration of the kubectl certificates files. See [File Locations](#file-locations) for the list of files.
 
    ***This task is for each master and worker node. The example checks each kubelet certificate in [File Locations](#file-locations).***
 
