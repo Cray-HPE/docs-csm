@@ -17,11 +17,11 @@ This provides additional information and manual steps for reproducing the barebo
 <a name="csm-boot-script-steps"></a>
 ## 1. Steps the Script Performs
 
-This script automates the following steps.  If the script fails investigate the underlying service
-to insure it is operating correctly and examine the detailed log file to find information on the
+This script automates the following steps. If the script fails investigate the underlying service
+to ensure it is operating correctly and examine the detailed log file to find information on the
 exact error and cause of failure.
 
-- Obtain the kubernetes API gateway access token
+- Obtain the Kubernetes API gateway access token
 - Find the existing barebones boot image using IMS
 - Create a BOS session template for the barebones boot image
 - Find an enabled compute node using HSM
@@ -39,7 +39,7 @@ successful if the boot reaches the dracut stage.
 
 By default the script will gather all enabled compute nodes that are present in HSM and
 choose one at random to perform the boot test. This may be overridden with a command line
-option to choose which compute node is rebooted using the '--xname' option. The input
+option to choose which compute node is rebooted using the `--xname` option. The input
 compute node must be enabled and present in HSM to be used. If the input compute node is
 not available a warning will be issued and the test will continue with a valid compute node
 instead of the user selected node.
@@ -52,16 +52,16 @@ ncn# /opt/cray/tests/integration/csm/barebonesImageTest --xname x3000c0s10b1n0
 ## 3. Controlling Test Script Output Level
 
 Output is directed to both the console calling the script as well as a log file that will hold
-more detailed information on the run and any potential problems found.  The log file is written
-to '/tmp/cray.barebones-boot-test.log' and will overwrite any existing file at that location on
-each new run of the script.  
+more detailed information on the run and any potential problems found. The log file is written
+to `/tmp/cray.barebones-boot-test.log` and will overwrite any existing file at that location on
+each new run of the script.
 
 The messages output to the console and the log file may be controlled separately through
-environment variables.  To control the information being sent to the console, set the variable
-'CONSOLE_LOG_LEVEL'.  To control the information being sent to the log file, set the variable
-'FILE_LOG_LEVEL'.  Valid values in increasing levels of detail are: "CRITICAL, ERROR, WARNING, 
-INFO, DEBUG".  The default for the console output is 'INFO' and the default for the log file
-is 'DEBUG'.
+environment variables. To control the information being sent to the console, set the variable
+`CONSOLE_LOG_LEVEL`. To control the information being sent to the log file, set the variable
+`FILE_LOG_LEVEL`. Valid values in increasing levels of detail are: `CRITICAL`, `ERROR`, 
+`WARNING`, `INFO`, `DEBUG`. The default for the console output is `INFO` and the default for
+the log file is `DEBUG`.
 
 Here is an example of running the script with more information displayed on the console
 during the execution of the test:
@@ -76,7 +76,7 @@ cray.barebones-boot-test: DEBUG    Creating bos session template with etag:bc390
 <a name="csm-boot-manual-steps"></a>
 ## 4. Manual Steps To Reproduce This Script
 
-The following manual steps may be performed to reproduce the actions of this script.  The result should
+The following manual steps may be performed to reproduce the actions of this script. The result should
 be the same as running the script.
 
 1. [Locate CSM Barebones Image in IMS](#csm-boot-steps-locate-barebones-image-in-ims)
