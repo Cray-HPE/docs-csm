@@ -43,7 +43,4 @@ Expected Results
 * Step 1: You can create and enable multiple VLAN interfaces 
 * Step 2: You can assign the trunk VLAN interfaces
 
-
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
-
+[Back to Index](./index.md)

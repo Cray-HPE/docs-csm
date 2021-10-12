@@ -115,5 +115,4 @@ NOTE:
 
 * host/dst arguments to the tcpdump command can help to restrict the filter to only capture packets you need.
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

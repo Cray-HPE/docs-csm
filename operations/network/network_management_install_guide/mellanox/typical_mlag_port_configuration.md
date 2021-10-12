@@ -34,6 +34,5 @@ interface mlag-port-channel 1 switchport hybrid allowed-vlan add 10</td>
 </pre>
 </table>
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)
 

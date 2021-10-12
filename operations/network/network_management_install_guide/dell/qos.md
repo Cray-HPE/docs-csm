@@ -25,7 +25,4 @@ switch(conf-if-eth1/1/1)# trust-map dot1p dot1p-trust-map
 switch(config-sys-qos)# trust-map dot1p dot1p-trust-map
 ```
 
-
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/dell/
-index)
-
+[Back to Index](./index.md)

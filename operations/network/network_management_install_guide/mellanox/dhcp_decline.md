@@ -34,5 +34,4 @@ curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis
 curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces?ComponentID=x3000c0s25b0n0
 ```
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)

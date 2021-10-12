@@ -19,6 +19,5 @@ Default Firmware 11.1600.0200 updated. Please save configuration and reboot for 
 switch (config) # configuration write
 6.	Reboot the system to enable auto update.
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)
 

@@ -33,5 +33,4 @@ switch# show interface mgmt
 * Step 2: You can assign an IP address to the management interface 
 *  Step 3: You can configure a loopback interface to be use for Switch management. 
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)

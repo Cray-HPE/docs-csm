@@ -1,6 +1,6 @@
 # Network traffic pattern inside of the system
 
-![](/docs-csm/operations/network/network_management_install_guide/img/network_traffic_pattern.png)
+![](../img/network_traffic_pattern.png)
  
 Internal Networks:
 
@@ -15,5 +15,4 @@ External and Edge Networks:
 	* Access from the System to the Site for network services like DNS, LDAP, etc.
 
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)

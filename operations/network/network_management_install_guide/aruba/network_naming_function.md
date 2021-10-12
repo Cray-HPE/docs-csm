@@ -9,7 +9,6 @@ In below you can find the overview of the different networks services defined in
 | Short name / acronym   | HMN        | NMN      | CAN | CMN | SUN
 
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)
 
 

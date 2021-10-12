@@ -5,7 +5,7 @@ The intent here is to show case a complete member failure scenario where spine-0
 
 In below a visualization of the powered down spine-01:
 
-![](/docs-csm/operations/network/network_management_install_guide/img/member_power_failure.png)
+![](../img/member_power_failure.png)
  
 What would you expect to see in this scenario?
 
@@ -13,5 +13,4 @@ What would you expect to see in this scenario?
 * If traffic was originally flowing through the member that was shut down, a small percentage of packets may be dropped. A sub second value is expected during this event.
 * When restoring the power, the hashing needs to be recalculated and some packets may be dropped during this event as well. A sub second value is expected during this event.
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

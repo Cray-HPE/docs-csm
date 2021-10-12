@@ -53,5 +53,4 @@ Show Commands to Validate Functionality
 switch# show access-list [hitcounts] [ip|ipv6|mac ACL] [control-plane vrf VRF]
 ```
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

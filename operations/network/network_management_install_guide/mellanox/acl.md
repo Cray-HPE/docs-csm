@@ -30,5 +30,4 @@ Show Commands to Validate Functionality
 switch# show ipv4 access-lists <access-list-name>
 ```
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)

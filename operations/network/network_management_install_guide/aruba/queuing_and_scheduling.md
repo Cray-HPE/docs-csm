@@ -72,5 +72,4 @@ switch(config-schedule)# strict queue 7
 switch(config-schedule)# exit
 ```
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

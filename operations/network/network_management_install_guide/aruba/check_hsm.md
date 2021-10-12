@@ -50,5 +50,4 @@ Your output from SMD should look like this:
 },
 ```
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

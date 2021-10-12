@@ -35,6 +35,4 @@ Expected Results
 * Step 1: You can enter diagnostics mode successfully
 * Step 2: You can test the cable and see the results in the CLI output 
 
-
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

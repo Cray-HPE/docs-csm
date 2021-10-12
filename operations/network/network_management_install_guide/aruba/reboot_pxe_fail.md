@@ -32,5 +32,4 @@ If this fails you may have a misconfigured CAN or need to add a route to the MTL
 ncn-w001:~ # ip route add 10.1.0.0/16 via 10.252.0.1 dev vlan002
 ```
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

@@ -37,5 +37,4 @@ Shell into a Kea Pod
 kubectl exec -n services -it pod/$(kubectl get -n services pods | grep kea | head -n 1) -c cray-dhcp-kea -- /bin/bash
 ```
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)

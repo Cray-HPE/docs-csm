@@ -30,6 +30,5 @@ For example: 8320, 8325:
 
 NOTE: If you were replacing the secondary member and did not do software upgrade prior to enabling the ports, you would experience a reboot on the secondary unit after it has detected the primary VSX member and gotten new software from it before normal ports would come up.
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)
 

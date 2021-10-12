@@ -4,7 +4,7 @@ The intent here is to show case a complete ISL (inter-switch-link) link failure 
 
 In below a visualization of disconnected ISL link and how the traffic pattern would look:
 
-![](/docs-csm/operations/network/network_management_install_guide/img/vsx_split.png)
+![](../img/vsx_split.png)
  
 What would you expect to see in this scenario?
 
@@ -13,6 +13,4 @@ What would you expect to see in this scenario?
 * If traffic was originally flowing through secondary VSX member a small percentage of packets may be dropped when disconnecting the ISL. A sub second value is expected during this event.
 * When connecting back ISL link, the hashing needs to be recalculated and some packets may be dropped during this event as well. A sub second value is expected during this event.
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
-
+[Back to Index](./index.md)

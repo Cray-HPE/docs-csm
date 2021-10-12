@@ -33,5 +33,4 @@ Expected Results
 * Step 1: You can create the Exec banner
 * Step 2: The output of the Exec banner looks correct  
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

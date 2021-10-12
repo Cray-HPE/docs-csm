@@ -37,5 +37,4 @@ Expected Results
 * Step 2: You can log trap events
 * Step 3: You can successfully trigger a trap event
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

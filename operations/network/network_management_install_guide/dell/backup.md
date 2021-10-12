@@ -12,6 +12,5 @@ ftp://userid:passwd@hostip/filepath | scp://userid:passwd@hostip/filepath |
 sftp://userid:passwd@hostip/filepath | tftp://hostip/filepath}
 ```
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/dell/
-index)
+[Back to Index](./index.md)
 

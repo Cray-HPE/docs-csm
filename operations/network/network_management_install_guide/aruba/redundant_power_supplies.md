@@ -32,5 +32,4 @@ Mbr/PSU  Number   Number           Status
 1/4       N/A      N/A              Absent        0
 ```
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

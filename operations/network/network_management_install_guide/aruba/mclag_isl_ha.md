@@ -4,7 +4,7 @@ The intent here is to show case a ISL (inter-switch-link) link failover scenario
 
 In below a visualization of disconnected ISL link:
 
-![](/docs-csm/operations/network/network_management_install_guide/img/vsx_isl_ha.png)
+![](../img/vsx_isl_ha.png)
  
 What would you expect to see in this scenario?
 
@@ -12,5 +12,4 @@ What would you expect to see in this scenario?
 * A small percentage of packets will be dropped when disconnecting the cable where traffic is flowing. A sub second value is expected during this event.
 * When connecting back the cable, the hashing needs to be recalculated and some packets may be dropped during this event as well. A sub second value is expected during this event.
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

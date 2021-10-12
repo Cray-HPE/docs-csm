@@ -14,6 +14,5 @@ For example:
 switch (config) # mac-address-table static 00:11:22:33:44:55 vlan 1 interface ethernet 1/1
 ```
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)
 

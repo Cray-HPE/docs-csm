@@ -25,5 +25,4 @@ More details, requirements and limitations on Mellanox devices can be found from
 
 [https://docs.mellanox.com/display/ONYXv381174/MLAG]()
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)

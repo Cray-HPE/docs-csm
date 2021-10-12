@@ -22,5 +22,4 @@ Feature list:
 |VRF	| | Virtual routing and forwarding, used to segregate traffic between networks |
 
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)

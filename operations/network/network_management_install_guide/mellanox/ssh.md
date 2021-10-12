@@ -49,5 +49,4 @@ Expected Results
 * Step 4: You can successfully connect to the switch via an SSH client using SSH 2.0.
 
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)

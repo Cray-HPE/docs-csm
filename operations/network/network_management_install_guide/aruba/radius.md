@@ -32,5 +32,4 @@ Expected Results
 * Step 2: The output of the show commands is correct
 * Step 3: You can successfully access the switch using credentials validated by the RADIUS server 
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

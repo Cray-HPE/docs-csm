@@ -23,6 +23,4 @@ switch (config vlan 2) # ip igmp snooping
 switch (config vlan 10)# show ip igmp snooping querier
 ```
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
-
+[Back to Index](./index.md)

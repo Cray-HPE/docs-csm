@@ -44,5 +44,4 @@ Expected Results
 * Step 4: The output of the show commands is correct   
 
 	
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

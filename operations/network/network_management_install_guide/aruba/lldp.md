@@ -61,8 +61,5 @@ Expected Results
 * Step 4: Remote device LLDP information is displayed 
 * Step 5: LLDP statistics are displayed 
 
-
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
-
+[Back to Index](./index.md)
 

@@ -193,4 +193,4 @@ Expected Results
 * Step 5: Everything is synchronized from the primary to the secondary  
 
 	
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/index)
+[Back to Index](./index.md)

@@ -17,6 +17,5 @@ Show Commands to Validate Functionality
 switch# show ip access-list name
 ```
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/dell/
-index)
+[Back to Index](./index.md)
 

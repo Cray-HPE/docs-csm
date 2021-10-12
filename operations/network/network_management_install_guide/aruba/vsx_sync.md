@@ -82,5 +82,4 @@ Expected Results
 * Step 2: You can create the ACL 
 * Step 3: Everything synchronized on the primary is now on the secondary  
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

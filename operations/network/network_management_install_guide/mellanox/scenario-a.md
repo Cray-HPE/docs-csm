@@ -16,5 +16,4 @@ The example here covers outside connections achieved via management network.
 ### Topology
 
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)

@@ -4,7 +4,7 @@
 
 ### Dell supplemental guide to Mellanox installations
 
-![](/docs-csm/operations/network/network_management_install_guide/img/intro.png)
+![](../img/intro.png)
 
 © 2021 Hewlett Packard Enterprise Development LP
 
@@ -45,60 +45,57 @@ __________________________________
 
 ## Introduction:
 
-   1. [Introduction](/docs-csm/operations/network/network_management_install_guide/dell/index)
-   1. [Notice](/docs-csm/operations/network/network_management_install_guide/dell/index)
-   1. [Index](/docs-csm/operations/network/network_management_install_guide/dell/index)
+   1. [Introduction](./index.md)
+   1. [Notice](./index.md)
+   1. [Index](./index.md)
 
 ### Managing switches from CLI
 
 ###Device management
-  1. [Management Interface](/docs-csm/operations/network/network_management_install_guide/dell/management_interface)
-  1. [Network Time Protocol (NTP) Client](/docs-csm/operations/network/network_management_install_guide/dell/ntp)
-  1. [Domain Name System (DNS) Client](/docs-csm/operations/network/network_management_install_guide/dell/dns-client)
-  1. [Hostname](/docs-csm/operations/network/network_management_install_guide/dell/hostname)
-  1. [Domain Name](/docs-csm/operations/network/network_management_install_guide/dell/domain_name)
-  1. [Secure Shell (SSH)](/docs-csm/operations/network/network_management_install_guide/dell/ssh)
-  1. [Remote Logging](/docs-csm/operations/network/network_management_install_guide/dell/remote_logging)
-  1. [SNMPv2c Community](/docs-csm/operations/network/network_management_install_guide/dell/snmp-community)
-  1. [System images](/docs-csm/operations/network/network_management_install_guide/dell/system_images)
+  1. [Management Interface](./management_interface.md)
+  1. [Network Time Protocol (NTP) Client](./ntp.md)
+  1. [Domain Name System (DNS) Client](./dns-client.md)
+  1. [Hostname](./hostname.md)
+  1. [Domain Name](./domain_name.md)
+  1. [Secure Shell (SSH)](./ssh.md)
+  1. [Remote Logging](./remote_logging.md)
+  1. [SNMPv2c Community](./snmp-community.md)
+  1. [System images](./system_images.md)
 
 ### Layer one features
-  1. [Physical Interfaces](/docs-csm/operations/network/network_management_install_guide/dell/physical_interfaces)
-  1. [Locator LED](/docs-csm/operations/network/network_management_install_guide/dell/locator_led)
+  1. [Physical Interfaces](./physical_interfaces.md)
+  1. [Locator LED](./locator_led.md)
 
 ### Layer two features
-  1. [Link Layer Discovery Protocol (LLDP)](/docs-csm/operations/network/network_management_install_guide/dell/lldp)
-  1. [Virtual Local Access Networks (VLANs)](/docs-csm/operations/network/network_management_install_guide/dell/vlan)
-  1. [VLAN Trunking 802.1Q](/docs-csm/operations/network/network_management_install_guide/dell/vlan_trunking_8021q)
-  1. [Link Aggregation Group (LAG)](/docs-csm/operations/network/network_management_install_guide/dell/lag)
-  1. [Multiple Spanning Tree Protocol (MSTP)](/docs-csm/operations/network/network_management_install_guide/dell/mstp)
+  1. [Link Layer Discovery Protocol (LLDP)](./lldp.md)
+  1. [Virtual Local Access Networks (VLANs)](./vlan.md)
+  1. [VLAN Trunking 802.1Q](./vlan_trunking_8021q.md)
+  1. [Link Aggregation Group (LAG)](./lag.md)
+  1. [Multiple Spanning Tree Protocol (MSTP)](./mstp.md)
 
 ### Layer three features
-  1. [VLAN Interface](/docs-csm/operations/network/network_management_install_guide/dell/vlan_interface)
-  1. [Address Resolution Protocol (ARP)](/docs-csm/operations/network/network_management_install_guide/dell/arp)
-  1. [Loopback Interface](/docs-csm/operations/network/network_management_install_guide/dell/loopback)
+  1. [VLAN Interface](./vlan_interface.md)
+  1. [Address Resolution Protocol (ARP)](./arp.md)
+  1. [Loopback Interface](./loopback.md)
 
 ### Multicast
-  1. [IGMP](/docs-csm/operations/network/network_management_install_guide/dell/igmp)
+  1. [IGMP](./igmp.md)
 
 ### Security
-  1. [Access Control Lists (ACLs)](/docs-csm/operations/network/network_management_install_guide/dell/acl)
+  1. [Access Control Lists (ACLs)](./acl.md)
 
 ### Quality of Service
-  1. [Qos)](/docs-csm/operations/network/network_management_install_guide/dell/qos)
+  1. [Qos)](./qos.md)
 
 ### Performing upgrade on Dell switches
-  1. [Software upgrade](/docs-csm/operations/network/network_management_install_guide/dell/upgrade)
+  1. [Software upgrade](./upgrade.md)
 
 ### Backing up switch configuration
-  1. [Backing up switch configuration](/docs-csm/operations/network/network_management_install_guide/dell/backup)
+  1. [Backing up switch configuration](./backup.md)
 
 ### Factory reset
-  1. [Reset configuration](/docs-csm/operations/network/network_management_install_guide/dell/reset)
+  1. [Reset configuration](./reset.md)
  
-
-
-
 
 
 

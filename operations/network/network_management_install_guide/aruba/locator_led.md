@@ -50,6 +50,4 @@ Expected Results
 * Step 6: The LED is no longer lit
 * Step 7: The show command shows the LED is in the off state
 
-
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/aruba/
-index)
+[Back to Index](./index.md)

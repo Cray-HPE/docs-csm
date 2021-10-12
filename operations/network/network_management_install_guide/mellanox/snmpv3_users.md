@@ -16,5 +16,4 @@ Show Commands to Validate Functionality
 switch# show snmp users
 ```
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)

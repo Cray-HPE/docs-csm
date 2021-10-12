@@ -20,5 +20,4 @@ Expected Results
 * Step 2: You can validate using the show command(s) above 
 * Step 3: You can ping the connected device
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)

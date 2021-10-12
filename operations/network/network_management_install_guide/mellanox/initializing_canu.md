@@ -14,8 +14,10 @@ Later in the install process, the _sls_input_file.json_ file is generally in `/m
 
 To get the switch IP addresses from CSI output, run the command:
 
+```
+canu -s 1.4 init --csi-folder /CSI/OUTPUT/FOLDER/ADDRESS --out output.txt
+```
 
-> $ canu -s 1.4 init --csi-folder /CSI/OUTPUT/FOLDER/ADDRESS --out output.txt
 8 IP addresses saved to output.txt
 
 
@@ -26,10 +28,10 @@ To parse the Shasta SLS API for IP addresses, ensure that you have a valid token
 To get the switch IP addresses from the Shasta SLS API, run the command:
 
 
-bash
-> $ canu -s 1.4 init --auth-token ~./config/cray/tokens/ --sls-address 1.2.3.4 --out output.txt
+```
+canu -s 1.4 init --auth-token ~./config/cray/tokens/ --sls-address 1.2.3.4 --out output.txt
+```
 
 The output file for the `canu init` command is set with the `--out FILENAME` flag.
 
-[Back to Index](/docs-csm/operations/network/network_management_install_guide/mellanox/
-index)
+[Back to Index](./index.md)
