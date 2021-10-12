@@ -53,7 +53,7 @@ Directory location = /etc/cray/ceph/_upgraded
     >>   ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/list-cephfs-clients.sh
     >>   ```
 
-2. Verify that you conman is running
+2. Verify that conman is running
 
     ```bash
     ncn-m# kubectl get pods -n services|grep con
