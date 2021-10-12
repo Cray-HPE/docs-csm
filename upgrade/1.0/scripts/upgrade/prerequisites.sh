@@ -36,6 +36,10 @@ case $key in
     ;;
 esac
 done
+echo " ****** WARNING ******"
+echo " ****** /mnt/pitdata WILL BE UNMOUNTED ******"
+echo " ****** YOU NEED TO MOUNT IT AGAIN IF YOU WANT TO USE /mnt/pitdata ******"
+read -p "Read and act on above steps. Press Enter key to continue ..."
 
 if [[ -z ${CSM_RELEASE} ]]; then
     echo "CSM RELEASE is not specified"
