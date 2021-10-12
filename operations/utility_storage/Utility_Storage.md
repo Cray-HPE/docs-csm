@@ -5,11 +5,17 @@ Utility storage is designed to support Kubernetes and the System Management Serv
 Ceph is the utility storage platform that is used to enable pods to store persistent data. It is deployed to provide block, object, and file storage to the management services running on Kubernetes, as well as for telemetry data coming from the compute nodes.
 
 ***IMPORTANT NOTES***
->
+
 > - When running commands for Ceph health you must run those from either ncn-m or ncn-s001/2/3.
 > - Unless otherwise specified to run on the host in question, you can run the commands on either masters or ncn-s00(1/2/3)
 > - Those are the only servers with the credentials.
 > - The document will specify when to run a command from a node other than those
+
+## Key Concepts
+
+> - **Shrink:** This only pertains to removing nodes from a cluster.  Since Octopus and the move to utilize ceph orchestrator, the ceph     cluster is probing nodes and adding unused drives.  So removing a drive will only work if the actual drive is removed from aserver.
+> - **Add:** This will most commonly pertain to adding a node with its full allotment of drives.  
+> - **Replace:** This will most commonly pertain to replacing a drive or a node after hardware repairs.
 
 ## Table of Contents
 
@@ -19,7 +25,8 @@ Ceph is the utility storage platform that is used to enable pods to store persis
 - [Manage Ceph Services](Manage_Ceph_Services.md)
 - [Adjust Ceph Pool Quotas](Adjust_Ceph_Pool_Quotas.md)
 - [Add Ceph OSDs](Add_Ceph_OSDs.md)
-- [Shrink Ceph OSDs](Shrink_Ceph_OSDs.md)
+- [Add Node to Ceph Cluster](Add_Ceph_Node.md)
+- [Remove Node from Ceph Cluster](Remove_Ceph_Node.md)
 - [Ceph Health States](Ceph_Health_States.md)
 - [Dump Ceph Crash Data](Dump_Ceph_Crash_Data.md)
 - [Identify Ceph Latency Issues](Identify_Ceph_Latency_Issues.md)
