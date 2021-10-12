@@ -160,13 +160,15 @@ Before rebooting NCNs:
 
 #### Utility Storage Nodes (Ceph)
 
-1. Reboot each of the storage nodes \(one at a time\).
+1. Reboot each of the storage nodes (one at a time).
 
     1. Establish a console session to each storage node.
 
         Use the [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) procedure referenced in step 4.
+   
+    2. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
 
-    2. Reboot the selected node.
+    3. Reboot the selected node.
 
         ```bash
          ncn-s# shutdown -r now
@@ -193,9 +195,9 @@ Before rebooting NCNs:
             ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
-    3. Watch on the console until the node has successfully booted and the login prompt is reached.
+    4. Watch on the console until the node has successfully booted and the login prompt is reached.
 
-    1. Retrieve the `XNAME` for the node being rebooted.
+    5. Retrieve the `XNAME` for the node being rebooted.
 
        This xname is available on the node being rebooted in the following file:
 
@@ -203,7 +205,7 @@ Before rebooting NCNs:
        ncn# ssh NODE cat /etc/cray/xname
        ```
 
-    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+    6. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
        The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
 
@@ -222,7 +224,7 @@ Before rebooting NCNs:
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
-    4. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
+    7. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
         **Troubleshooting:** If the slurmctld and slurmdbd pods do not start after powering back up the node, check for the following error:
 
@@ -241,15 +243,15 @@ Before rebooting NCNs:
         - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
         - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
 
-    5. Disconnect from the console.
+    8. Disconnect from the console.
 
-    6. Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
+    9. Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
 
         **Important:** Ensure `ceph -s` shows that Ceph is healthy BEFORE MOVING ON to reboot the next storage node. Once Ceph has recovered the downed mon, it may take a several minutes for Ceph to resolve clock skew.
 
 #### NCN Worker Nodes
 
-1. Reboot each of the worker nodes \(one at a time\).
+1. Reboot each of the worker nodes (one at a time).
 
     **NOTE:** You are doing a single worker at a time, so please keep track of what ncn-w0xx you are on for these steps.
 
@@ -259,13 +261,13 @@ Before rebooting NCNs:
 
         See [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
 
-    1. Failover any postgres leader that is running on the worker node you are rebooting.
+    2. Failover any postgres leader that is running on the worker node you are rebooting.
 
        ```bash
        ncn-m# /usr/share/doc/csm/upgrade/1.0/scripts/k8s/failover-leader.sh <node to be rebooted>
        ```
 
-    1. Cordon and Drain the node
+    3. Cordon and Drain the node
 
        ```bash
        ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
@@ -289,7 +291,9 @@ Before rebooting NCNs:
        ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
        ```
 
-    1. Reboot the selected node.
+    4. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
+   
+    5. Reboot the selected node.
 
         ```bash
          ncn-w# shutdown -r now
@@ -317,9 +321,9 @@ Before rebooting NCNs:
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-    1. Watch on the console until the node has successfully booted and the login prompt is reached.
+    6. Watch on the console until the node has successfully booted and the login prompt is reached.
 
-    1. Retrieve the `XNAME` for the node being rebooted.
+    7. Retrieve the `XNAME` for the node being rebooted.
 
        This xname is available on the node being rebooted in the following file:
 
@@ -327,7 +331,7 @@ Before rebooting NCNs:
        ncn# ssh NODE cat /etc/cray/xname
        ```
 
-    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+    8. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
        The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
 
@@ -346,29 +350,29 @@ Before rebooting NCNs:
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
-    1. Uncordon the node
+    9. Uncordon the node
 
        ```bash
        ncn-m# kubectl uncordon <node you just rebooted>
        ```
 
-    1. Verify pods are running on the rebooted node.
+    10. Verify pods are running on the rebooted node.
 
-        Within a minute or two, the following command should begin to show pods in a `Running` state (replace NCN in the command below with the name of the worker node):
+         Within a minute or two, the following command should begin to show pods in a `Running` state (replace NCN in the command below with the name of the worker node):
 
-        ```bash
-        ncn-m# kubectl get pods -o wide -A | grep <node to be rebooted>
-        ```
+         ```bash
+         ncn-m# kubectl get pods -o wide -A | grep <node to be rebooted>
+         ```
 
-    1. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
+    11. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
-        Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.
+         Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.
 
-        If terminating pods are reported when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.
+         If terminating pods are reported when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.
 
-    1. Disconnect from the console.
+    12. Disconnect from the console.
 
-    1. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
+    13. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
 
 1. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
 
@@ -376,13 +380,15 @@ Before rebooting NCNs:
 
 #### NCN Master Nodes
 
-1. Reboot each of the master nodes \(one at a time\) starting with ncn-m003 then ncn-m001.  There are special instructions for ncn-m001 below since its console connection is not managed by conman.
+1. Reboot each of the master nodes (one at a time) starting with ncn-m003 then ncn-m001.  There are special instructions for ncn-m001 below since its console connection is not managed by conman.
 
     1. Establish a console session to the master node you are rebooting.
 
         See step [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
 
-    2. Reboot the selected node.
+    2. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
+   
+    3. Reboot the selected node.
 
         ```bash
          ncn-m001# shutdown -r now
@@ -410,9 +416,9 @@ Before rebooting NCNs:
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-    3. Watch on the console until the node has successfully booted and the login prompt is reached.
+    4. Watch on the console until the node has successfully booted and the login prompt is reached.
 
-    1. Retrieve the `XNAME` for the node being rebooted.
+    5. Retrieve the `XNAME` for the node being rebooted.
 
        This xname is available on the node being rebooted in the following file:
 
@@ -420,7 +426,7 @@ Before rebooting NCNs:
        ncn# ssh NODE cat /etc/cray/xname
        ```
 
-    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+    6. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
        The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
 
@@ -439,19 +445,21 @@ Before rebooting NCNs:
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
-    4. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
+    7. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
 
-    5. Disconnect from the console.
+    8. Disconnect from the console.
 
-    6. Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number until all master nodes have successfully rebooted.
+    9. Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number until all master nodes have successfully rebooted.
 
 2. Reboot `ncn-m001`.
 
     1. Determine the CAN IP address for one of the other NCNs in the system to establish an SSH session with that NCN.
 
     2. Establish a console session to `ncn-m001` from a remote system, as `ncn-m001` is the NCN that has an externally facing IP address.
+   
+    3. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
 
-    3. Power cycle the node
+    4. Power cycle the node
 
         Ensure the expected results are returned from the power status check before rebooting:
 
@@ -479,9 +487,9 @@ Before rebooting NCNs:
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-    4. Watch on the console until the node has successfully booted and the login prompt is reached.
+    5. Watch on the console until the node has successfully booted and the login prompt is reached.
 
-    5. Retrieve the `XNAME` for the node being rebooted.
+    6. Retrieve the `XNAME` for the node being rebooted.
 
         This xname is available on the node being rebooted in the following file:
 
@@ -489,7 +497,7 @@ Before rebooting NCNs:
         ncn# ssh NODE cat /etc/cray/xname
         ```
 
-    6. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+    7. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
        The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
 
@@ -508,9 +516,9 @@ Before rebooting NCNs:
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
-    7. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
+    8. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
 
-    8. Disconnect from the console.
+    9. Disconnect from the console.
 
 3. Remove any dynamically assigned interface IPs that did not get released automatically by running the CASMINST-2015 script:
 
