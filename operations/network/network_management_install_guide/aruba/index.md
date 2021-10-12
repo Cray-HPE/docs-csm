@@ -4,7 +4,7 @@
 
 ### ARUBA - CX Platform based networks
 
-![title](/docs-csm/operations/network/network_management_install_guide/img/intro.png)
+![](/img/intro.png)
 
 © 2021 Hewlett Packard Enterprise Development LP
 
@@ -48,7 +48,7 @@ __________________________________
    1. [Introduction](/docs-csm/operations/network/network_management_install_guide/aruba/index)
    1. [Notice](/docs-csm/operations/network/network_management_install_guide/aruba/index)
    1. [Index](/docs-csm/operations/network/network_management_install_guide/aruba/index)
-   1. [Introduction to Canu](/introduction_to_canu.md)
+   1. [Introduction to Canu](./introduction_to_canu.md)
 
 ### Quick start guide to Canu
 
