@@ -61,9 +61,19 @@ EOF
     usb_rc=$?
     set -e
     if [[ "$usb_rc" -eq 0 ]]; then
-      umount /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata || true
-      usb_device_path=$(echo $usb_device | awk '{print $2}') || true
-      eject $usb_device_path || true
+      usb_device_path=$(echo $usb_device | awk '{print $2}')
+      if blkid -p $usb_device_path; then
+        have_mnt=0
+        for mnt_point in /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata; do
+          if mountpoint $mnt_point; then
+            have_mnt=1
+            umount $mnt_point
+          fi
+        done
+        if [ "$have_mnt" -eq 1 ]; then
+          eject $usb_device_path
+        fi
+      fi
     fi
     umount /var/lib/etcd /var/lib/sdu || true
     for md in /dev/md/*; do mdadm -S $md || echo nope ; done
@@ -113,13 +123,30 @@ echo "mgmt IP/Host: ${upgrade_ncn_mgmt_host}"
 
 # retrieve IPMI username/password from vault
 VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.data.vault-root} | base64 -d)
-IPMI_USERNAME=$(kubectl exec -it -n vault -c vault cray-vault-1 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Username')
-export IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault cray-vault-1 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Password')
-# during worker upgrade, one vault pod might be offline, so we just try another one
-if [[ -z ${IPMI_USERNAME} ]]; then
-    IPMI_USERNAME=$(kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Username')
-    export IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | jq -r '.data.Password')
-fi
+# Make sure we got a vault token
+[[ -n ${VAULT_TOKEN} ]]
+
+# During worker upgrades, one vault pod might be offline, so we look for one that works.
+# List names of all Running vault pods, grep for just the cray-vault-# pods, and try them in
+# turn until one of them has the IPMI credentials.
+IPMI_USERNAME=""
+IPMI_PASSWORD=""
+for VAULT_POD in $(kubectl get pods -n vault --field-selector status.phase=Running --no-headers \
+                    -o custom-columns=:.metadata.name | grep -E "^cray-vault-(0|[1-9][0-9]*)$") ; do
+    IPMI_USERNAME=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
+        "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
+        vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | 
+        jq -r '.data.Username')
+    # If we are not able to get the username, no need to try and get the password.
+    [[ -n ${IPMI_USERNAME} ]] || continue
+    export IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
+        "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
+        vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | 
+        jq -r '.data.Password')
+    break
+done
+# Make sure we found a pod that worked
+[[ -n ${IPMI_USERNAME} ]]
 
 state_name="SET_PXE_BOOT"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})

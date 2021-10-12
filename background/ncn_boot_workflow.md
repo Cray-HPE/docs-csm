@@ -28,7 +28,7 @@ Under normal operations, the NCNs use the following boot order:
 <a name="reasons-to-change-the-bootorder"></a>
 ## Reasons to Change the Boot Order After CSM Install
 
-After the CSM install is complete, it is usually not necessary to change the boot order.  Having PXE first and disk as a fallback works in the majority of situations.
+After the CSM install is complete, it is usually not necessary to change the boot order. Having PXE first and disk as a fallback works in the majority of situations.
 
 It may be desirable to change the boot order under these circumstances:
 

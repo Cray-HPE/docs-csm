@@ -229,7 +229,7 @@ The configuration workflow described here is intended to help understand the exp
 1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plane, then it will join the Kubernetes cluster.  
     - Now `ncn-s001` should notice this from any one of the worker nodes and move forward with creation of ConfigMaps and running the post-Ceph playbooks (s3, OSD pools, quotas, etc.)
 1. Once `ncn-s001` creates etcd-backup-s3-credentials during the ceph-rgw-users role which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward
-   > **`NOTE`**: If several hours have elapsed between storage and master nodes booting, or if there were issues PXE booting master nodes, the cloud init script on `ncn-s001` may not complete successfully.  This can cause the `/var/log/cloud-init-output.log` on master node(s) to continue to output the following message:
+   > **`NOTE`**: If several hours have elapsed between storage and master nodes booting, or if there were issues PXE booting master nodes, the cloud init script on `ncn-s001` may not complete successfully. This can cause the `/var/log/cloud-init-output.log` on master node(s) to continue to output the following message:
    >
    > [ 1328.351558] cloud-init[8472]: Waiting for storage node to create etcd-backup-s3-credentials secret...
    >
@@ -535,7 +535,7 @@ If there are LVM check failures, then the problem must be resolved before contin
     24
     ```
 
-   **`IMPORTANT:`** If the returned number of OSDs is equal to total_osds calculated, then you can skip the following steps.  If not, then please proceed with the below additional checks and remediation steps.
+   **`IMPORTANT:`** If the returned number of OSDs is equal to total_osds calculated, then you can skip the following steps. If not, then please proceed with the below additional checks and remediation steps.
 
 1. Compare your number of OSDs to your output which should resemble the example below. The number of drives will depend on the server hardware.
 
@@ -702,6 +702,31 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
     ```bash
     pit# grep peer-address /var/www/ephemeral/prep/${SYSTEM_NAME}/metallb.yaml
     ```
+
+1. Run the script appropriate for your switch hardware vendor:
+
+    * If you have Mellanox switches, run the BGP helper script.
+
+        The BGP helper script requires three parameters: the IP address of switch 1, the IP address of switch 2, and the path to the to CSI generated network files.
+
+        * The IP addresses used should be Node Management Network IP addresses (NMN). These IP addresses will be used for the BGP Router-ID.
+        * The path to the CSI generated network files must include `CAN.yaml`, `HMN.yaml`, `HMNLB.yaml`, `NMNLB.yaml`, and `NMN.yaml`. The path must include the SYSTEM_NAME.
+
+        The IP addresses in this example should be replaced by the IP addresses of the switches.
+
+        ```bash
+        pit# /usr/local/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/
+        ```
+
+    * If you have Aruba switches, run CANU.
+     
+        CANU requires three parameters: the IP address of switch 1, the IP address of switch 2, and the path to the to directory containing the file `sls_input_file.json`
+
+        The IP addresses in this example should be replaced by the IP addresses of the switches.
+
+        ```bash
+        pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/
+        ```
 
 1. <a name="bgp-check-procedure">Do the following steps</a> ***for each of the switch IP addresses that you found previously***:
 
