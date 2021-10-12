@@ -49,7 +49,8 @@
 
 ### Managing switches from CLI
 
-###Device management
+### Device management
+
   1. [Management Interface](./management_interface.md)
   1. [Network Time Protocol (NTP) Client](./ntp.md)
   1. [Domain Name System (DNS) Client](./dns-client.md)
@@ -82,7 +83,7 @@
   1. [Routed Interfaces](./routed_interface.md)
   1. [VLAN Interface](./vlan_interface.md)
   1. [Address Resolution Protocol (ARP)](./arp.md)
-  1. [Static MAC] (./static_mac.md)
+  1. [Static MAC](./static_mac.md)
   1. [Static Routing](./static_routing.md)
   1. [Loopback Interface](./loopback.md)
   1. [Open Shortest Path First (OSPF) v2](./ospfv2.md)
@@ -94,7 +95,7 @@
 
 ### Security
   1. [Access Control Lists (ACLs)](./acl.md)
-  1. [IP filter] (./ip_filter.md)
+  1. [IP filter](./ip_filter.md)
 
 ### Performing upgrade on Mellanox
   1. [Switch upgrade](./upgrade.md)
