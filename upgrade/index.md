@@ -28,15 +28,15 @@ sections, but there is also a general troubleshooting topic.
 
     See [Prepare for Upgrade](prepare_for_upgrade.md)
 
-   <a name="update_management_network"></a>
+   <a name="upgrade_management_nodes_csm_services"></a>
 
 1. Upgrade Management Nodes and CSM Services
 
-    The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
+   The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
 
-    The upgrade is a guided process Starting with [Upgrade Management Nodes and CSM Services](1.0/README.md)
+   The upgrade is a guided process Starting with [Upgrade Management Nodes and CSM Services](1.0/README.md)
 
-    <a name="validate_csm_health"></a>
+   <a name="update_management_network"></a>
 
 1. Update Management Network
 
@@ -49,12 +49,12 @@ sections, but there is also a general troubleshooting topic.
 
    See [Update Management Network](update_management_network.md)
 
-   <a name="upgrade_management_nodes_csm_services"></a>
+   <a name="validate_csm_health"></a>
 
 1. Validate CSM Health
 
      > **`IMPORTANT:`** Wait at least 15 minutes after
-     > [`upgrade.sh`](1.0/README.md#deploy-manifests) in stage 4 completes to let the various Kubernetes
+     > [`csm-service-upgrade.sh`](1.0/Stage_4.md) in stage 4 completes to let the various Kubernetes
      > resources get initialized and started.
   
      Run the following validation checks to ensure that everything is still working
