@@ -468,15 +468,15 @@ Before rebooting NCNs:
 
     4. Watch on the console until the node has successfully booted and the login prompt is reached.
 
-    1. Retrieve the `XNAME` for the node being rebooted.
+    5. Retrieve the `XNAME` for the node being rebooted.
 
-       This xname is available on the node being rebooted in the following file:
+        This xname is available on the node being rebooted in the following file:
 
-       ```bash
-       ncn# ssh NODE cat /etc/cray/xname
-       ```
+        ```bash
+        ncn# ssh NODE cat /etc/cray/xname
+        ```
 
-    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+    6. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
        The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
 
@@ -495,11 +495,17 @@ Before rebooting NCNs:
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
-    5. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
+    7. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
 
-    6. Disconnect from the console.
+    8. Disconnect from the console.
 
-3. Re-run the platform health checks and ensure that all BGP peering sessions are Established with both spine switches.
+3. Remove any dynamically assigned interface IPs that did not get released automatically by running the CASMINST-2015 script:
+
+```bash
+ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+```
+
+4. Re-run the platform health checks and ensure that all BGP peering sessions are Established with both spine switches.
 
     See [Validate CSM Health](../validate_csm_health.md) for the platform health checks.
 
