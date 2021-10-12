@@ -146,7 +146,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 #### Record MAC and IP addresses for nodes
 
-**IMPORTANT**: Record the node management network (NMN) MAC and IP addresses for each node in the blade (labeled `Node Maintenance Network`).  To prevent disruption in the data virtualization service (DVS), these addresses must be maintained in the HSM when the blade is swapped and discovered.
+**IMPORTANT**: Record the node management network (NMN) MAC and IP addresses for each node in the blade (labeled `Node Maintenance Network`). To prevent disruption in the data virtualization service (DVS), these addresses must be maintained in the HSM when the blade is swapped and discovered.
 
 The hardware management network MAC and IP addresses are assigned algorithmically and *must not be deleted* from the HSM.
 
@@ -287,11 +287,11 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
 #### Record the NIC MAC and IP addresses
 
-**IMPORTANT**: Record the ComponentID, MAC, and IP addresses for each node in the blade in the destination system.  To prevent disruption in the data virtualization service (DVS), these addresses must be maintained in the HSM when the replacement blade is swapped and discovered.
+**IMPORTANT**: Record the ComponentID, MAC, and IP addresses for each node in the blade in the destination system. To prevent disruption in the data virtualization service (DVS), these addresses must be maintained in the HSM when the replacement blade is swapped and discovered.
 
 The hardware management network NIC MAC addresses for liquid-cooled blades are assigned algorithmically and *must not be deleted* from the HSM.
 
-19. Query HSM to determine the ComponentID, MAC, and IP addresses associated with nodes in the destination blade.  The prerequisites show an example of how to gather HSM values and store them to a file.
+19. Query HSM to determine the ComponentID, MAC, and IP addresses associated with nodes in the destination blade. The prerequisites show an example of how to gather HSM values and store them to a file.
 
     ```bash
     ncn-m001# cray hsm inventory ethernetInterfaces list \
@@ -571,7 +571,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
 #### Check DVS
 
-There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their waiter, and at least one cray-cps-cm-pm pod.  Usually there are two cray-cps-cm-pm pods, one on ncn-w002 and one on ncn-w003 and other worker nodes
+There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their waiter, and at least one cray-cps-cm-pm pod. Usually there are two cray-cps-cm-pm pods, one on ncn-w002 and one on ncn-w003 and other worker nodes
 
 42. Check the cray-cps pods on worker nodes and verify they are `Running`.
 
@@ -586,7 +586,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     services   cray-cps-wait-for-etcd-jb95m 0/1  Completed
     ```
 
-43. SSH to each worker node running CPS/DVS, and run  `dmesg -T`  to ensure that there are no recurring `"DVS: merge_one" ` error messages as shown.  The error messages indicate that DVS is detecting an IP address change for one of the client nodes.
+43. SSH to each worker node running CPS/DVS, and run  `dmesg -T`  to ensure that there are no recurring `"DVS: merge_one" ` error messages as shown. The error messages indicate that DVS is detecting an IP address change for one of the client nodes.
 
     ```bash
     ncn-m001# dmesg -T | grep "DVS: merge_one"
