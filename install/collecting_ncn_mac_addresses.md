@@ -56,7 +56,9 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     ```bash
     pit# mv /var/www/boot/script.ipxe /var/www/boot/script.ipxe.bak
     ```
-2. Verify consoles are active with `conman -q`.  The following command lists all nodes that ConMan is configured for,
+
+2. Verify consoles are active with `conman -q`. The following command lists all nodes that ConMan is configured for,
+
     ```bash
     pit# conman -q
     ncn-m002-mgmt
@@ -271,7 +273,7 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
    
    Return to this procedure after applying the workaround instructions.
 
-9. Wipe the disks before reluanching the NCNs.
+9. Wipe the disks before relaunching the NCNs.
 
    See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
 
