@@ -898,7 +898,13 @@ Perform the following steps **on ncn-m001**.
 
 #### 7. Validation
 
-Only follow the steps in the section for the node type that was rebuilt:
+As a result of rebuilding any NCN(s) remove any dynamically assigned interface IPs that did not get released automatically by running the CASMINST-2015 script:
+
+```bash
+ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+```
+
+Once that is done only follow the steps in the section for the node type that was rebuilt:
 
 - [Validate Worker Node](#validate_worker_node)
 - [Validate Master Node](#validate_master_node)
