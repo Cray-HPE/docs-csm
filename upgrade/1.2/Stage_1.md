@@ -75,6 +75,14 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-k8s-master.
 
 ## Stage 1.4
 
+Run the following command to complete the upgrade of the weave and multus manifest versions:
+
+```bash
+ncn-m002# /srv/cray/scripts/common/apply-networking-manifests.sh
+```
+
+## Stage 1.5
+
 Run the following command to complete the Kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
 
 ```bash
@@ -84,7 +92,7 @@ ncn-m002# pdsh -b -S -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n'
 
 > **`NOTE`**: kubelet has been upgraded already so you can ignore the warning to upgrade kubelet
 
-## Stage 1.5
+## Stage 1.6
 
 Run the following command cleanup several prometheus alert configurations:
 
