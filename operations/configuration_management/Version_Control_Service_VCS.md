@@ -76,7 +76,7 @@ https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/org/cray/teams
 
 ### Backup and Restore Data
 
-Data for gitea is stored in two places. Git content is stored directly in a PVC, while structural data, such as gitea users and the list and attributes of repos, is stored in a Postres database. Because of this, both sources must be backed up and restored together.
+Data for gitea is stored in two places. Git content is stored directly in a PVC, while structural data, such as gitea users and the list and attributes of repos, is stored in a Postgres database. Because of this, both sources must be backed up and restored together.
 
 #### Backup Postgres Data
 
@@ -119,7 +119,7 @@ Data for gitea is stored in two places. Git content is stored directly in a PVC,
     done
    ```
 
-   Edit the manifest file created above to remove creationTimestamp, resourceVersion, selfLink, uid for each entry.  Then `copy all files to a safe location`.
+   Edit the manifest file created above to remove creationTimestamp, resourceVersion, selfLink, uid for each entry. Then `copy all files to a safe location`.
 
 ## Backup PVC Data
 
@@ -137,13 +137,13 @@ kubectl -n services cp ${POD}:vcs.tar ./vcs.tar
 
 ## Restore Postgres Data
 
-**`IMPORTANT:`** Only do this if necessary.  You will not always restore after a backup as we callout the backup procedure as a precautionary step.
+**`IMPORTANT:`** Only do this if necessary. You will not always restore after a backup as we callout the backup procedure as a precautionary step.
 
 Restoring VCS from Postgres is documented here: [Restore_Postgres.md](../../operations/kubernetes/Restore_Postgres.md#restore-postgres-for-vcs)
 
 ## Restore PVC Data
 
-**`IMPORTANT:`** Only do this if necessary.  You will not always restore after a backup as we callout the backup procedure as a precautionary step.
+**`IMPORTANT:`** Only do this if necessary. You will not always restore after a backup as we callout the backup procedure as a precautionary step.
 
 When restoring the VCS postgres database, the PVC should also be restored to the same point in time. The restore process can be run at any time while the service is running using the following commands:
 
