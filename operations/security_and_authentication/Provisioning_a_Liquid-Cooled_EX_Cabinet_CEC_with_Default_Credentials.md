@@ -105,25 +105,43 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
     ![Front Panel Controls](../../img//CEC_Display_Controls_CEC_Actions.svg)
 
-13. **Important!**: Power cycle the compute blade slots in each chassis. If Cray System Management is provisioned, use CAPMC to power cycle the compute blade slots (example show cabinets 1000-1003).
-    **Note**: If a chassis is not fully populated, specify each slot individually.
-
-    ```bash
-    ncn-m001# cray capmc xname_off create --xnames x[1000-1003]c[0-7]s[0-7] --format json
-    ```
-
-    Check the power status:
-
-    ```bash
-    ncn-m001# cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
-    ```
-
-    Power on the compute chassis slots:
-
-    ```bash
-    ncn-m001# cray capmc xname_on create --xnames x[1000-1003]c[0-7]s[0-7] --format json
-    ```
-
+13. **Important!**: Power cycle the compute blade slots in each chassis.
+    
+    1.  If Cray System Management (CSM) is provisioned, use CAPMC to power cycle the compute blade slots (example show cabinets 1000-1003). **Note**: If a chassis is not fully populated, specify each slot individually:
+    
+       ```bash
+       ncn-m001# cray capmc xname_off create --xnames x[1000-1003]c[0-7]s[0-7] --format json
+       ```
+    
+       Check the power status:
+    
+       ```bash
+       ncn-m001# cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
+       ```
+    
+       Power on the compute chassis slots:
+    
+       ```bash
+       ncn-m001# cray capmc xname_on create --xnames x[1000-1003]c[0-7]s[0-7] --format json
+       ```
+    
+    2. If the cabinet has not been provisioned with CSM or other management software (bare-metal), the compute chassis slots are most likely powered off. To perform chassis power control operations, SSH to a CMM and and use the `redfish -h` command to display the power control commands:
+    
+       ```
+       > ssh root@x9000c1
+       x9000c1:> redfish -h
+       
+       "redfish" -- redfish API debugging tool
+       <snip>    
+               redfish chassis status
+               redfish chassis power [on|off|forceoff]
+               redfish [blade|perif] [0-7] [on|off|forceoff]
+               redfish node status
+               redfish node [0-1] [on|off|forceoff]
+       <snip>
+       x9000c1:> 
+       ```
+    
 14. To test the password, connect to the CMM serial console though the CEC. The IPv6 address is the same, but the port numbers are different as described below. 
 
       ```screen
