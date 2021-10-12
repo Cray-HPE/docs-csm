@@ -1,18 +1,24 @@
+
+
 ## Upload and Register an Image Recipe
 
 Download and expand recipe archives from S3 and IMS. Modify and upload a recipe archive, and then register that recipe archive with IMS.
 
+
 ### Prerequisites
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployment:
-    -   `cray-ims`, the Image Management Service \(IMS\)
--   The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
--   A token providing Simple Storage Service \(S3\) credentials has been generated.
+
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployment:
+    - `cray-ims`, the Image Management Service \(IMS\)
+- The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
+- A token providing Simple Storage Service \(S3\) credentials has been generated.
+
 
 ### Limitations
 
--   The commands in this procedure must be run as the `root` user in this release.
--   The IMS tool currently only supports Kiwi-NG recipe types.
+- The commands in this procedure must be run as the `root` user.
+- The IMS tool currently only supports Kiwi-NG recipe types.
+
 
 ### Procedure
 
@@ -130,4 +136,5 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     etag = ""
     type = "s3"
     ```
+
 

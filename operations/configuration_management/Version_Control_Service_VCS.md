@@ -76,7 +76,7 @@ https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/org/cray/teams
 
 ### Backup and Restore Data
 
-Data for gitea is stored in two places. Git content is stored directly in a PVC, while structural data, such as gitea users and the list and attributes of repos, is stored in a Postres database. Because of this, both sources must be backed up and restored together.
+Data for gitea is stored in two places. Git content is stored directly in a PVC, while structural data, such as gitea users and the list and attributes of repos, is stored in a Postgres database. Because of this, both sources must be backed up and restored together.
 
 #### Backup Postgres Data
 

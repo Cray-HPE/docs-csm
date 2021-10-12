@@ -84,5 +84,5 @@ personalization.
 
    ***NOTE***: Subsequent password changes need only update the password hash in
    Hashicorp Vault and create the CFS session as long as the branch of the CSM
-   configuration management repository hasn't changed.
+   configuration management repository has not changed.
 

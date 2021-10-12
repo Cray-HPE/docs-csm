@@ -1,3 +1,5 @@
+
+
 ## Delete or Recover Deleted IMS Content
 
 The Image Management System \(IMS\) manages user supplied SSH public Keys, customizable image recipes, images, and IMS jobs that are used to build or customize images. In previous versions of IMS, deleting an IMS public key, recipe, or image resulted in that item being permanently deleted. Additionally, IMS recipes and images store linked artifacts in the Simple Storage Service \(S3\) datastore. These artifacts are referenced by the IMS recipe and image records. The default option when deleting an IMS recipe and image record was to also delete these linked S3 artifacts.
@@ -36,9 +38,10 @@ New functionality has been added to IMS to enable administrators to soft delete,
 
 Soft deleting an IMS record effectively removes the record being deleted from the default collection, and moves it to a new deleted collection. Recovering a deleted IMS record \(undelete operation\) moves the IMS record from the deleted collection back to the collection of available items. Hard deleting an IMS record permanently deletes it from the deleted collection.
 
+
 ### Delete an IMS Artifact
 
-Use the cray CLI utility to delete either soft delete or hard delete an IMS public-key, recipe, or image.
+Use the `cray` CLI utility to delete either soft delete or hard delete an IMS public-key, recipe, or image.
 
 Soft deleting an IMS public key, recipe, or image removes the record\(s\) from the collection of available items. Hard deleting permanently removes the item from the deleted collection. Additionally, any linked artifacts are also permanently removed.
 
@@ -206,6 +209,9 @@ The steps in this procedure assume that a deleted image is being recovered. The 
     etag = ""
     ...
     ```
+
+
+
 
 
 
