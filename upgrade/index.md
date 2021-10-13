@@ -1,7 +1,6 @@
 # Upgrade CSM
 
-The upgrade process for Cray Systems Management CSM 1.1.0 to CSM 1.2.0, which has many steps in multiple procedures
-which should be done in a specific order.
+The process for upgrading Cray Systems Management (CSM) has many steps in multiple procedures which should be done in a specific order.
 
 After the upgrade of CSM software, the CSM health checks will validate the system before doing any other operational
 tasks like the check and update of firmware on system components. Once the CSM upgrade has completed, other
