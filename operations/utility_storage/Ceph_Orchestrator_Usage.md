@@ -13,7 +13,7 @@ This provides a nice centralized interface for the management of the ceph cluste
 
 ## Troubleshooting Ceph Orchestrator
 
-### Watching cephadm Log MEssages
+### Watching `cephadm` Log Messages
 
 This is useful when making changes via the orchestrator like add/remove/scale services or upgrades.
 
