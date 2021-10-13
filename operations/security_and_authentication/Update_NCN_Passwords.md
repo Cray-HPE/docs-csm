@@ -11,14 +11,14 @@ for more information.
 It is a recommended best practice for system security to change the root
 password after the install is complete.
 
-The NCN root user password is stored in the [Hashicorp Vault](HashiCorp_Vault.md)
+The NCN root user password is stored in the [HashiCorp Vault](HashiCorp_Vault.md)
 instance, and applied with the `csm.password` Ansible role via a CFS session. If
 no password is added to Vault as in the procedure below, this Ansible role will
 skip any password updates.
 
 NOTE: The root password is also updated when applying the CSM Configuration Layer
 during NCN personalization using the `site.yml` playbook if the password has
-been added to [Hashicorp Vault](HashiCorp_Vault.md). See the
+been added to [HashiCorp Vault](HashiCorp_Vault.md). See the
 [Managing Configuration with CFS](operations/managing_configuration_with_CFS.md)
 procedure for more information.
 
@@ -35,13 +35,13 @@ personalization.
    ncn# openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) PASSWORD
    ```
 
-1. Get the [Hashicorp Vault](HashiCorp_Vault.md) root token:
+1. Get the [HashiCorp Vault](HashiCorp_Vault.md) root token:
 
    ```bash
    ncn# kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
    ```
 
-1. Write the password hash from step 1 to the [Hashicorp Vault](HashiCorp_Vault.md).
+1. Write the password hash from step 1 to the [HashiCorp Vault](HashiCorp_Vault.md).
    The `vault login` command will request the token value from the output of
    step 2 above. The `vault read` command verifies the hash was stored
    correctly.
@@ -58,7 +58,7 @@ personalization.
    exit
    ```
 
-   ***NOTE***: The CSM instance of [Hashicorp Vault](HashiCorp_Vault.md) does
+   ***NOTE***: The CSM instance of [HashiCorp Vault](HashiCorp_Vault.md) does
    not support the `patch` operation. Ensure that if you are updating the
    `password` field in the `secret/csm/users/root` secret that you are also
    update the other fields, for example the user's [SSH keys](SSH_Keys.md).
@@ -99,8 +99,8 @@ personalization.
    ```
 
    ***NOTE***: Subsequent password changes need only update the password hash in
-   Hashicorp Vault and create the CFS session as long as the branch of the CSM
-   configuration management repository hasn't changed.
+   HashiCorp Vault and create the CFS session as long as the branch of the CSM
+   configuration management repository has not changed.
 
 ### Procedure for Other Users
 
