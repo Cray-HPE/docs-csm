@@ -157,4 +157,5 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
 15. Perform this procedure for each CEC in all system cabinets.
 
-      HPE Cray EX2000 cabinets (Hill) have a single CEC per cabinet.
+    - HPE Cray EX3000 and EX4000 cabinets have two CECs per cabinet.  
+    - HPE Cray EX2000 cabinets have a single CEC per cabinet.
