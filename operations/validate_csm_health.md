@@ -453,7 +453,7 @@ There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites availa
 
 Run the NCN health checks against the three different types of nodes with the following commands:
 
-**IMPORTANT:** These tests may only be successful while booted into the PIT node. Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
+**IMPORTANT:** These tests should only be run while booted into the PIT node. Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
 
 
 ```bash
@@ -476,7 +476,6 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
   - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * K8S Test: Kubernetes Velero No Failed Backups
   - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the `velero` command to delete backups from a Kubernetes node to clear this situation.
-
 
 <a name="optional-check-of-system-management-monitoring-tools"></a>
 ### 1.9 Optional Check of System Management Monitoring Tools
