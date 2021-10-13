@@ -1,6 +1,8 @@
-# Barebones Image Boot Additional Information
+# Troubleshoot the CMS Barebones Image Boot Test
 
-This provides additional information and manual steps for reproducing the barebones image boot test.
+Verify that the CSM services needed to boot a node are available and working properly. This section
+describes how the barebonesImageTest script works and how to interpret the results. If the script is
+unavailable, the manual steps for reproducing the barebones image boot test are provided.
 
 ## Topics
 
@@ -17,17 +19,20 @@ This provides additional information and manual steps for reproducing the barebo
 <a name="csm-boot-script-steps"></a>
 ## 1. Steps the Script Performs
 
-This script automates the following steps. If the script fails investigate the underlying service
-to ensure it is operating correctly and examine the detailed log file to find information on the
-exact error and cause of failure.
+The script file is: `/opt/cray/tests/integration/csm/barebonesImageTest`
 
-- Obtain the Kubernetes API gateway access token
-- Find the existing barebones boot image using IMS
-- Create a BOS session template for the barebones boot image
-- Find an enabled compute node using HSM
-- Watch the console log for the target compute node using console services
-- Create a BOS session to reboot the target compute node
-- Wait for the console output to show an error or successfully reach dracut
+This script automates the following steps.
+
+1. Obtain the Kubernetes API gateway access token
+2. Find the existing barebones boot image using IMS
+3. Create a BOS session template for the barebones boot image
+4. Find an enabled compute node using HSM
+5. Watch the console log for the target compute node using console services
+6. Create a BOS session to reboot the target compute node
+7. Wait for the console output to show an error or successfully reach dracut
+
+If the script fails, investigate the underlying service to ensure it is operating correctly
+and examine the detailed log file to find information on the exact error and cause of failure.
 
 The boot may take up to 10 or 15 minutes. The image being booted does not support a complete boot,
 so the node will not boot fully into an operating system. This test is merely to verify that the
@@ -37,11 +42,11 @@ successful if the boot reaches the dracut stage.
 <a name="csm-boot-compute-node"></a>
 ## 2. Controlling Which Node Is Used
 
-By default the script will gather all enabled compute nodes that are present in HSM and
+By default, the script will gather all enabled compute nodes that are present in HSM and
 choose one at random to perform the boot test. This may be overridden with a command line
 option to choose which compute node is rebooted using the `--xname` option. The input
 compute node must be enabled and present in HSM to be used. If the input compute node is
-not available a warning will be issued and the test will continue with a valid compute node
+not available, a warning will be issued and the test will continue with a valid compute node
 instead of the user selected node.
 
 ```bash
@@ -222,32 +227,40 @@ type = "GET"
 ```
 
 <a name="csm-boot-steps-watch-boot"></a>
-### 4.5 Connect to the node's console and watch the boot
+### 4.5 Connect to the Node's Console and Watch the Boot
 
-See [Manage Node Consoles](conman/Manage_Node_Consoles.md) for information on how to connect to the node's console (and for
-instructions on how to close it later).
+The boot may take up to 10 or 15 minutes. The image being booted does not support a complete boot,
+so the node will not boot fully into an operating system. This test is merely to verify that the
+CSM services needed to boot a node are available and working properly.
 
-The boot may take up to 10 or 15 minutes. The image being booted does not support a complete boot, so the node will not
-boot fully into an operating system. This test is merely to verify that the CSM services needed to boot a node are available and
-working properly.
+1. Connect to the node's console.
+  See [Manage Node Consoles](../operations/conman/Manage_Node_Consoles.md)
+  for information on how to connect to the node's console (and for instructions on how to close it later).
 
-This boot test is considered successful if the boot reaches the dracut stage. You know this has happened if the console output has
-something similar to the following somewhere within the final 20 lines of its output:
-```
-[    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
-[    7.898169] dracut: Refusing to continue
-```
+2. Monitor the boot.
+  This boot test is considered successful if the boot reaches the dracut stage. You know this has
+  happened if the console output has something similar to the following somewhere within the final
+  20 lines of its output:
+  ```
+  [    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
+  [    7.898169] dracut: Refusing to continue
+  ```
 
-**NOTE**: As long as the preceding text is found near the end of the console output, the test is considered successful. It is normal
-(and **not** indicative of a test failure) to see something similar to the following at the very end of the console output:
-```
-         Starting Dracut Emergency Shell...
-[   11.591948] device-mapper: uevent: version 1.0.3
-[   11.596657] device-mapper: ioctl: 4.40.0-ioctl (2019-01-18) initialised: dm-devel@redhat.com
-Warning: dracut: FATAL: Don't know how to handle
-Press Enter for maintenance
-(or press Control-D to continue):
-```
+  **NOTE**: As long as the preceding text is found near the end of the console output, the test is
+  considered successful. It is normal (and **not** indicative of a test failure) to see something 
+  similar to the following at the very end of the console output:
+  ```
+           Starting Dracut Emergency Shell...
+  [   11.591948] device-mapper: uevent: version 1.0.3
+  [   11.596657] device-mapper: ioctl: 4.40.0-ioctl (2019-01-18) initialised: dm-devel@redhat.com
+  Warning: dracut: FATAL: Don't know how to handle
+  Press Enter for maintenance
+  (or press Control-D to continue):
+  ```
 
-After the node has reached this point, close the console session. The test is complete.
+3. Exit the console.
+  ```
+  cray-console-node# &.
+  ```
 
+The test is complete.

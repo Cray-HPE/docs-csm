@@ -752,7 +752,7 @@ cray.barebones-boot-test: INFO     Sucessfully completed barebones image boot te
 
 The script will choose an enabled compute node that is listed in the Hardware State Manager (HSM) for
 the test unless the user passes in a specific node using the `--xname` argument. If a compute node is
-specified but unavailable an available node will be used instead and a warning will be logged.
+specified but unavailable, an available node will be used instead and a warning will be logged.
 
 ```bash
 ncn# /opt/cray/tests/integration/csm/barebonesImageTest --xname x3000c0s10b4n0
