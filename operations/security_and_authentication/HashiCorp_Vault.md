@@ -1,6 +1,6 @@
 ## HashiCorp Vault
 
-A deployment of Hashicorp Vault, managed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority \(CA\) material, and serves APIs through a PKI engine instance. This instance also serves as a general secrets engine for the system.
+A deployment of HashiCorp Vault, managed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority \(CA\) material, and serves APIs through a PKI engine instance. This instance also serves as a general secrets engine for the system.
 
 Kubernetes service account authorization is utilized to authenticate access to Vault. The configuration of Vault, as deployed on the system, can be viewed with the following command:
 
@@ -19,7 +19,7 @@ For more information, refer to the following resources:
 
 ### Storage Model
 
-In previous releases, Vault used etcd as a high-availability \(HA\) storage back-end. Currently, Vault uses Hashicorp's Raft Implementation. Raft is now configured to run natively inside the Vault statefulset instead of as an independent deployment.
+In previous releases, Vault used etcd as a high-availability \(HA\) storage back-end. Currently, Vault uses HashiCorp's Raft Implementation. Raft is now configured to run natively inside the Vault statefulset instead of as an independent deployment.
 
 ### Unseal Keys
 
