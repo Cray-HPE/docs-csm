@@ -4,7 +4,7 @@ Before doing any steps on this page, please make sure you looked at [Identify_Ce
 
 **`IMPORTANT:`** This will be a mix of commands that need to be run on the host(s) running the MDS daemon(s) and other commands that can be run from any of the ceph-mon nodes.
 
-**`NOTICE:`** These steps are based off upstream documentation.  This can be viewed here.  https://docs.ceph.com/en/octopus/cephfs/troubleshooting/.
+**`NOTICE:`** These steps are based off upstream documentation. This can be viewed here.  https://docs.ceph.com/en/octopus/cephfs/troubleshooting/.
 
 > Please ensure you are on the correct version of documentation for the cluster you are running.
 
@@ -33,7 +33,7 @@ Procedure:
    [ceph: root@ncn-s003 /]#
    ```
 
-   **NOTE:** You may see messages like this "WARNING: The same type, major and minor should not be used for multiple devices."  They can be ignored.  There is an upstream bug to address this.
+   **NOTE:** You may see messages like this "WARNING: The same type, major and minor should not be used for multiple devices."  They can be ignored. There is an upstream bug to address this.
 
 4. Dump in flight ops
 
@@ -45,7 +45,7 @@ Procedure:
    }
    ```
 
-   **NOTE:**  The example above is about how to run the command.  Recreating the exact scenario to provide a full example is not easily done.  This will be updated when the information is available.
+   **NOTE:**  The example above is about how to run the command. Recreating the exact scenario to provide a full example is not easily done. This will be updated when the information is available.
 
 General Steps from upstream:
 
