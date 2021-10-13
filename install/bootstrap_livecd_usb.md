@@ -57,7 +57,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 1. Install/upgrade the CSI RPM
 
    ```bash
-   linux# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
+   linux# rpm -Uvh --force $(find ${CSM_PATH}/rpm/embedded/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
 
 1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
@@ -186,7 +186,7 @@ which device that is.
     linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
     ```
 
-    > Note: If the previous command fails with this error message indicating that this Linux computer does not have the checkmedia rpm installed, then the rpm can be installed and the `csi pit format` can be run again
+    > Note: If the previous command fails with this error message, this indicates that this Linux computer does not have the checkmedia RPM installed. In that case, the RPM can be installed and `csi pit format` can be run again
     > ```
     > ERROR: Unable to validate ISO. Please install checkmedia
     > ```
@@ -727,7 +727,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    The following assumes the CSM_PATH environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "goss-servers*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/embedded/cray/csm/ -name "goss-servers*.rpm" | sort -V | tail -1)
    pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "csm-testing*.rpm" | sort -V | tail -1)
    ```
 
