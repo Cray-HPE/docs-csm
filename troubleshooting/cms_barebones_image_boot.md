@@ -234,33 +234,33 @@ so the node will not boot fully into an operating system. This test is merely to
 CSM services needed to boot a node are available and working properly.
 
 1. Connect to the node's console.
-  See [Manage Node Consoles](../operations/conman/Manage_Node_Consoles.md)
-  for information on how to connect to the node's console (and for instructions on how to close it later).
+   See [Manage Node Consoles](../operations/conman/Manage_Node_Consoles.md)
+   for information on how to connect to the node's console (and for instructions on how to close it later).
 
 2. Monitor the boot.
-  This boot test is considered successful if the boot reaches the dracut stage. You know this has
-  happened if the console output has something similar to the following somewhere within the final
-  20 lines of its output:
-  ```
-  [    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
-  [    7.898169] dracut: Refusing to continue
-  ```
+   This boot test is considered successful if the boot reaches the dracut stage. You know this has
+   happened if the console output has something similar to the following somewhere within the final
+   20 lines of its output:
+   ```
+   [    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
+   [    7.898169] dracut: Refusing to continue
+   ```
 
-  **NOTE**: As long as the preceding text is found near the end of the console output, the test is
-  considered successful. It is normal (and **not** indicative of a test failure) to see something 
-  similar to the following at the very end of the console output:
-  ```
-           Starting Dracut Emergency Shell...
-  [   11.591948] device-mapper: uevent: version 1.0.3
-  [   11.596657] device-mapper: ioctl: 4.40.0-ioctl (2019-01-18) initialised: dm-devel@redhat.com
-  Warning: dracut: FATAL: Don't know how to handle
-  Press Enter for maintenance
-  (or press Control-D to continue):
-  ```
+   **NOTE**: As long as the preceding text is found near the end of the console output, the test is
+   considered successful. It is normal (and **not** indicative of a test failure) to see something 
+   similar to the following at the very end of the console output:
+   ```
+            Starting Dracut Emergency Shell...
+   [   11.591948] device-mapper: uevent: version 1.0.3
+   [   11.596657] device-mapper: ioctl: 4.40.0-ioctl (2019-01-18) initialised: dm-devel@redhat.com
+   Warning: dracut: FATAL: Don't know how to handle
+   Press Enter for maintenance
+   (or press Control-D to continue):
+   ```
 
 3. Exit the console.
-  ```
-  cray-console-node# &.
-  ```
+   ```
+   cray-console-node# &.
+   ```
 
 The test is complete.
