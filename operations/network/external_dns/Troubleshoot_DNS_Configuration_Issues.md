@@ -56,7 +56,7 @@ The Domain Name Service \(DNS\) is not configured properly.
     Search through Kubernetes service objects for `external-dns.alpha.kubernetes.io/hostname` annotations to find the corresponding external IP. The kubectl command makes it easy to generate an /etc/hosts compatible listing of IP addresses to hostnames using the go-template output format shown below.
 
     ```screen
-    ncn-m001:~ # kubectl get svc --all-namespaces -o go-template --template \
+    ncn-m001# kubectl get svc --all-namespaces -o go-template --template \
     '{{ range .items }}{{ $lb := .status.loadBalancer }}{{ with .metadata.annotations }}
     {{ with (index . "external-dns.alpha.kubernetes.io/hostname") }}
     {{ $hostnames := . }}{{ with $lb }}{{ range .ingress }}
