@@ -29,6 +29,7 @@ This document specifies the procedures for deploying the non-compute nodes
 - [LiveCD Cluster Authentication](#livecd-cluster-authentication)
 - [BGP Routing](#bgp-routing)
 - [Validation](#validation)
+  - [Manual LVM Check Procedure](#manual-lvm-check-procedure)
 - [Optional Validation](#optional-validation)
 - [Configure and Trim UEFI Entries](#configure-and-trim-uefi-entries)
 
@@ -271,7 +272,7 @@ The configuration workflow described here is intended to help understand the exp
     - **kubernetes-workers** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](104-NCN-PARTITIONING.md#worker-nodes-with-etcd)
     - A brief overview of what is expected is here, in [disk plan of record / baseline](104-NCN-PARTITIONING.md#plan-of-record--baseline)
 
-1. Set each node to always UEFI Network Boot, and ensure they are powered off
+1. <a name="set-uefi-and-power-off"></a>Set each node to always UEFI Network Boot, and ensure they are powered off
     ```bash
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
@@ -308,7 +309,7 @@ The configuration workflow described here is intended to help understand the exp
 
     > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 
-1. Boot the **Storage Nodes**
+1. <a name="boot-the-storage-nodes"></a>Boot the **Storage Nodes**
     ```bash
     pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
@@ -345,7 +346,7 @@ The configuration workflow described here is intended to help understand the exp
     > CASMINST-1093
     > ```
 
-1. Once all storage nodes are up and ncn-s001 is running ceph-ansible, boot **Kubernetes Managers and Workers**
+1. <a name="boot-master-and-worker-nodes"></a>Once all storage nodes are up and ncn-s001 is running ceph-ansible, boot **Kubernetes Managers and Workers**
     ```bash
     pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
@@ -491,7 +492,6 @@ Note: If migrating from Shasta v1.3.x, the worker nodes have different IP addres
    /usr/bin/mellanox_set_bgp_peers.py
    ```
 
-
 <a name="validation"></a>
 ### Validation
 
@@ -511,19 +511,7 @@ Observe the output of the checks and note any failures, then remediate them.
    pit# csi pit validate --k8s
    ```
 
-   > **`WARNING`** if test failures for "/dev/sdc" are observed they should be discarded for a manual test:
-   > ```bash
-   > # masters:
-   > ncn# blkid -L ETCDLVM
-   > # workers:
-   > ncn# blkid -L CONLIB
-   > ncn# blkid -L CONRUN
-   > ncn# blkid -L K8SLET
-   > ```
-   >
-   > The test should be looking for the ephemeral disk, that disk is sometimes `/dev/sdc`. The name of the disk is a more accurate test, and is not prone to the random path change.
-
-   > Note: If your shell terminal is not echoing your input after running this, type "reset" and press enter to recover.
+   > **`WARNING`** If test failures for `/dev/sdc` are observed, the [Manual LVM Check Procedure](#manual-lvm-check-procedure) **must** be carried out to determine if they are true failures.
 
 1. Ensure that weave has not split-brained
 
@@ -536,6 +524,39 @@ Observe the output of the checks and note any failures, then remediate them.
 
    1. Wipe the ncns using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
    1. Return to the 'Boot the **Storage Nodes**' step of [Start Deployment](#start-deployment) section above.
+
+<a name="manual-lvm-check-procedure"></a>
+#### Manual LVM Check Procedure
+
+If an automated test reports a failure relating to `/dev/sdc` on a master or worker NCN, this manual procedure **must be followed** to determine whether or not there is a real error.
+
+* To manually validate the ephemeral disks on a master node, run the following command:
+    ```bash
+    ncn-m# blkid -L ETCDLVM
+    ```
+
+* To manually validate the ephemeral disks on a worker node, run the following commands:
+    ```bash
+    ncn-w# blkid -L CONLIB
+    ncn-w# blkid -L CONRUN
+    ncn-w# blkid -L K8SLET
+    ```
+
+The validation is considered successful if each of the commands returns the name of any device (e.g. `/dev/sdd`, `/dev/sdb1`, etc). The name of the device does not matter -- each command just needs to output the name of some device.
+
+If any nodes fail the validation, then the problem **must** be resolved before continuing with the install.
+
+* If any **master node** has the problem, then you must wipe and redeploy **all** of the NCNs before continuing the installation:
+    1. Wipe each worker node using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
+    1. Wipe each master node (**except** `ncn-m001` because it is the PIT node) using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
+    1. Wipe each storage node using the 'Full Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
+    1. Return to the [Set each node to always UEFI Network Boot, and ensure they are powered off](#set-uefi-and-power-off) step of the [Deploy](#deploy) section above.
+
+* If only **worker nodes** have the problem, then you must wipe and redeploy the affected worker nodes before continuing the installation:
+    1. Wipe each affected worker node using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
+    1. Power off each affected worker node.
+    1. Return to the [Boot the Master and Worker Nodes](#boot-master-and-worker-nodes) step of the [Deploy](#deploy) section above.
+        * Note: The `ipmitool` command will give errors trying to power on the unaffected nodes, since they are already powered on -- this is expected and not a problem.
 
 <a name="optional-validation"></a>
 ### Optional Validation 

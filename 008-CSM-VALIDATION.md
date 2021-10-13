@@ -390,6 +390,8 @@ Count: 2, Failed: 0, Skipped: 0
 <a name="automated-goss-testing"></a>
 ## Automated Goss Testing
 
+**NOTE:** The tests in this section **must be run on the PIT node.** Do not run them from any other node. If you have already redeployed your PIT node to `ncn-m001`, skip this section.
+
 There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites available that cover a variety of sub-systems.
 
 You can execute the general NCN test suite via:
@@ -414,7 +416,7 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
   - Due to a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the ```velero``` command to delete backups from a Kubernetes node to clear this situation.
 * K8S Test: sdc Drive Test
   - There is a known test issue that can produce false failures of this test.
-  - If it fails, perform the manual validation steps from the [Validation section](005-CSM-METAL-INSTALL.md#validation) of the [CSM Metal Install](005-CSM-METAL-INSTALL.md) chapter.
+  - If it fails, perform the [Manual LVM Check Procedure](005-CSM-METAL-INSTALL.md#manual-lvm-check-procedure).
 
 <a name="hms-tests"></a>
 ## Hardware Management Services Tests
