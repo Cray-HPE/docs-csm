@@ -1,6 +1,6 @@
 ## PKI Certificate Authority \(CA\)
 
-An instance of Hashicorp Vault, deployed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority \(CA\) material, and serves APIs through a Public Key Infrastructure \(PKI\) engine instance.
+An instance of HashiCorp Vault, deployed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority \(CA\) material, and serves APIs through a Public Key Infrastructure \(PKI\) engine instance.
 
 CA material is injected as a start-up secret into Vault through a SealedSecret that translates into a Kubernetes Secret.
 
