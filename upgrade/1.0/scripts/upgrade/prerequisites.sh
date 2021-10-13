@@ -36,6 +36,10 @@ case $key in
     ;;
 esac
 done
+echo " ****** WARNING ******"
+echo " ****** /mnt/pitdata WILL BE UNMOUNTED ******"
+echo " ****** YOU NEED TO MOUNT IT AGAIN IF YOU WANT TO USE /mnt/pitdata ******"
+read -p "Read and act on above steps. Press Enter key to continue ..."
 
 if [[ -z ${CSM_RELEASE} ]]; then
     echo "CSM RELEASE is not specified"
@@ -529,6 +533,17 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     pdsh -b -S -w $(grep -oP 'ncn-w\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'for image in sonatype/nexus3:3.25.0 dtr.dev.cray.com/cray/proxyv2:1.6.13-cray1 dtr.dev.cray.com/baseos/busybox:1 docker.io/sonatype/nexus3:3.25.0 dtr.dev.cray.com/cray/cray-nexus-setup:0.3.2; do crictl pull $image; done'
 
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+
+state_name="CSM_UPDATE_SPIRE_ENTRIES"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/update-spire-entries.sh
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"

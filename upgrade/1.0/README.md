@@ -22,7 +22,7 @@ upgrade that node.
 - [Stage 3 - Kubernetes Upgrade](Stage_3.md)
 - [Stage 4 - CSM Services Upgrade](Stage_4.md)
 - [Stage 5 - Apply Known Workarounds](Stage_5.md)
-- [Stage 6 - Return to Main Page and Proceed to CSM Validation](../index.md)
+- [Stage 6 - Return to Main Page and Proceed to *Update Management Network*](../index.md#update_management_network)
 
 **`Important:`** Please take note of the below content for troubleshooting purposes in the case that you encounter issues.
 
