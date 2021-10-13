@@ -261,7 +261,7 @@ The configuration workflow described here is intended to help understand the exp
     - **kubernetes-worker nodes** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd)
     - A brief overview of what is expected is here, in [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline)
 
-1. Set each node to always UEFI Network Boot, and ensure they are powered off
+1. <a name="set-uefi-and-power-off"></a>Set each node to always UEFI Network Boot, and ensure they are powered off
 
     ```bash
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot,persistent
@@ -470,27 +470,31 @@ If needed, the LVM checks can be performed manually on the master and worker nod
 * Manual check on worker nodes:
     ```bash
     ncn-w# blkid -L CONLIB
-    /dev/sdc
-   ncn-w# blkid -L CONRUN
-   /dev/sdc
-   ncn-w# blkid -L K8SLET
-   /dev/sdc
-   ```
+    /dev/sdb2
+    ncn-w# blkid -L CONRUN
+    /dev/sdb1
+    ncn-w# blkid -L K8SLET
+    /dev/sdb3
+    ```
 
 The manual checks are considered successful if all of the `blkid` commands report a disk device (such as `/dev/sdc` -- the particular device is unimportant). If any of the `lsblk` commands return no output, then the check is a failure. **Any failures must be resolved before continuing.** See the following section for details on how to do so.
 
 <a name="lvm-check-failure-recovery"></a>
 #### 3.3.3 LVM Check Failure Recovery
 
-If there are LVM check failures, then the problem must be resolved before continuing to the next step.
+If there are LVM check failures, then the problem must be resolved before continuing with the install.
 
-* If a **master node** has the problem then it is best to wipe and redeploy all of the management nodes before continuing the installation.
-    1. Wipe the each of the worker and master nodes (except `ncn-m001` because it is the PIT node) using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe) and then wipe each of the storage nodes using the 'Full Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
-    1. Return to the [Boot the **Storage Nodes**](#boot-the-storage-nodes) step of [Deploy Management Nodes](#deploy_management_nodes) section above.
+* If **any master node** has the problem, then you must wipe and redeploy **all** of the NCNs before continuing the installation:
+    1. Wipe each worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
+    1. Wipe each master node (**except** `ncn-m001` because it is the PIT node) using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
+    1. Wipe each storage node using the 'Full Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
+    1. Return to the [Set each node to always UEFI Network Boot, and ensure they are powered off](#set-uefi-and-power-off) step of the [Deploy Management Nodes](#deploy_management_nodes) section above.
 
-* If a **worker node** has the problem then it is best to wipe and redeploy that worker node before continuing the installation.
-    1. Wipe this  worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
-    1. Return to the [Boot the Master and Worker Nodes**](#boot-master-and-worker-nodes) step of [Deploy Management Nodes](#deploy_management_nodes) section above.
+* If **only worker nodes** have the problem, then you must wipe and redeploy the affected worker nodes before continuing the installation:
+    1. Wipe each affected worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
+    1. Power off each affected worker node.
+    1. Return to the [Boot the Master and Worker Nodes](#boot-master-and-worker-nodes) step of the [Deploy Management Nodes](#deploy_management_nodes) section above.
+        * Note: The `ipmitool` command will give errors trying to power on the unaffected nodes, since they are already powered on -- this is expected and not a problem.
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 ### 3.4 Check for Unused Drives on Utility Storage Nodes
