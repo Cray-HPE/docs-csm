@@ -116,9 +116,9 @@ Expected output is similar to the following:
 <a name="csm-boot-steps-bos-session-template"></a>
 ### 4.2 Create a BOS Session Template for the CSM Barebones Image
 
-The session template below can be copied and used as the basis for the BOS Session Template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in the Image Management Service (IMS).
+The session template below can be copied and used as the basis for the BOS session template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in the Image Management Service (IMS).
 
-1. Create `sessiontemplate.json`
+1. Create the `sessiontemplate.json` file.
    ```bash
    ncn# vi sessiontemplate.json
    ```
@@ -148,11 +148,11 @@ The session template below can be copied and used as the basis for the BOS Sessi
      "name": "shasta-1.4-csm-bare-bones-image"
    }
 
-   **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
+   **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones noted earlier in the `cray ims images list` command.
 
 
 2. Create the BOS session template using the following file as input:
-   ```
+   ```bash
    ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
    ```
    The expected output is:
@@ -161,8 +161,8 @@ The session template below can be copied and used as the basis for the BOS Sessi
    ```
 
 <a name="csm-boot-steps-node"></a>
-### 4.3 Find an available compute node
-
+### 4.3 Find an Available Compute Node
+To list hte compute nodes managed by HSM:
 ```bash
 ncn# cray hsm state components list --role Compute --enabled true
 ```
@@ -194,7 +194,7 @@ Arch = "X86"
 Class = "River"
 ```
 
-> If it is noticed that compute nodes are missing from Hardware State Manager, refer to [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) to troubleshoot any Node BMCs that have not been discovered.
+> Troubleshooting: If any compute nodes are missing from HSM database, refer to [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) to troubleshoot any Node BMCs that have not been discovered.
 
 Choose a node from those listed and set `XNAME` to its ID. In this example, `x3000c0s17b2n0`:
 ```bash
@@ -202,7 +202,7 @@ ncn# export XNAME=x3000c0s17b2n0
 ```
 
 <a name="csm-boot-steps-reboot"></a>
-### 4.4 Reboot the node using a BOS session template
+### 4.4 Reboot the Node Using a BOS Session Template
 
 Create a BOS session to reboot the chosen node using the BOS session template that was created:
 ```bash
