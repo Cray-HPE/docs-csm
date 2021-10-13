@@ -26,6 +26,7 @@
 # Procedures
 
 - [Preparation](#preparation)
+- [Run Validation Checks (Pre-Upgrade)](#run-validation-checks-pre-upgrade)
 - [Apply cray-hms-hmcollector scale changes](#apply-cray-hms-hmcollector-scale-changes)
 - [Setup Nexus](#setup-nexus)
 - [Update NCNs](#update-ncns)
@@ -33,6 +34,7 @@
 - [Upgrade Services](#upgrade-services)
 - [Rollout Deployment Restart](#rollout-deployment-restart)
 - [Verification](#verification)
+- [Run Validation Checks (Post-Upgrade)](#run-validation-checks-post-upgrade)
 - [Exit Typescript](#exit-typescript)
 
 <a name="preparation"></a>
@@ -78,6 +80,14 @@
    ```bash
    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm/docs-csm-latest.noarch.rpm
    ```
+
+<a name="run-validation-checks-pre-upgrade"></a>
+## Run Validation Checks (Pre-Upgrade)
+
+It is important to first verify a healthy starting state. To do this, run the
+[CSM validation checks](../../../008-CSM-VALIDATION.md). If any problems are
+found, correct them and verify the appropriate validation checks before
+proceeding.
 
 <a name="apply-cray-hms-hmcollector-scale-changes"></a> 
 ## Apply cray-hms-hmcollector scale changes
@@ -341,6 +351,22 @@ NOTE: All examples below will use the node seen in the above example.
 ```
    {"Components":["x1003c7s7b1n1"],"Flag":"OK","State":"Ready","Timestamp":"2021-09-13T13:00:00"}
 ```
+
+<a name="run-validation-checks-post-upgrade"></a>
+## Run Validation Checks (Post-Upgrade)
+
+> **`IMPORTANT:`** Wait at least 15 minutes after
+> [`upgrade.sh`](#upgrade-services) completes to let the various Kubernetes
+> resources get initialized and started.
+
+Run the following validation checks to ensure that everything is still working
+properly after the upgrade:
+
+1. [Platform health checks](../../../008-CSM-VALIDATION.md#platform-health-checks)
+2. [Network health checks](../../../008-CSM-VALIDATION.md#network-health-checks)
+
+Other health checks may be run as desired.
+
 
 <a name="exit-typescript"></a>
 ## Exit Typescript
