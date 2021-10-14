@@ -1,10 +1,10 @@
-# CSM Operational Activities
+# Cray System Management (CSM) Administration Guide
 
 The Cray System Management (CSM) operational activities are administrative procedures required to operate an HPE Cray EX system with CSM software installed.
 
 The following administrative topics can be found in this guide:
 
-- [CSM Operational Activities](#csm-operational-activities)
+- [Cray System Management (CSM) Administration Guide](#cray-system-management-csm-administration-guide)
     - [CSM Product Management](#csm-product-management)
   - [Image Management](#image-management)
   - [Boot Orchestration](#boot-orchestration)
@@ -24,6 +24,7 @@ The following administrative topics can be found in this guide:
   - [System Layout Service (SLS)](#system-layout-service-sls)
   - [System Configuration Service](#system-configuration-service)
   - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
+  - [Hardware Management (HM) Collector](#hardware-management-hm-collector)
   - [Node Management](#node-management)
   - [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
   - [Network](#network)
@@ -64,7 +65,6 @@ Build and customize image recipes with the Image Management Service (IMS).
    * [Customize an Image Root Using IMS](image_management/Customize_an_Image_Root_Using_IMS.md)
      * [Create UAN Boot Images](image_management/Create_UAN_Boot_Images.md)
      * [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
-     * [Customize an Image Root to Install Singularity](image_management/Customize_an_Image_Root_to_Install_Singularity.md)
    * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
    * [Configure IMS to validate RPMS](image_management/Configure_IMS_to_validate_rpms.md)
 
@@ -478,6 +478,13 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
   * [Restore HSM Postgres from a Backup](hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
   * [Restore HSM Postgres without a Backup](hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
 
+<a name=""></a>
+
+## Hardware Management (HM) Collector
+
+The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system. 
+
+ * [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
 
 <a name="node-management"></a>
 
@@ -497,7 +504,6 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
     * [Move a Standard Rack Node](node_management/Move_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node (Same Rack/Same HSN Ports)](node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
   * [Clear Space in Root File System on Worker Nodes](node_management/Clear_Space_in_Root_File_System_on_Worker_Nodes.md)
-  * [Manually Wipe Boot Configuration on Nodes to be Reinstalled](node_management/Manually_Wipe_Boot_Configuration_on_Nodes_to_be_Reinstalled.md)
   * [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
   * [Reset Credentials on Redfish Devices](node_management/Reset_Credentials_on_Redfish_Devices_for_Reinstallation.md)
   * [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs.md)
@@ -644,8 +650,6 @@ See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list 
   * [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
   * [FAS Use Cases](firmware/FAS_Use_Cases.md)
   * [Upload Olympus BMC Recovery Firmware into TFTP Server](firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
-  * [Install HPC Firmware Pack (HFP)](firmware/Install_HPC_Firmware_Pack.md)
-  * [Install HPC Firmware Pack from PIT or LiveCD](firmware/Install_HPC_Firmware_Pack_from_PIT_or_LiveCD.md)
 
 
 <a name="user-access-service-uas"></a>
