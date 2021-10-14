@@ -598,7 +598,7 @@ The central DNS infrastructure provides the structural networking hierarchy and 
   * [Manage the DNS Unbound Resolver](network/dns/Manage_the_DNS_Unbound_Resolver.md)
   * [Enable ncsd on UANs](network/dns/Enable_ncsd_on_UANs.md)
   * [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
-  * [Troubleshoot DNS Configuration Issues](network/dns/Troubleshoot_DNS_Configuration_Issues.md)
+  * [Troubleshoot PowerDNS](network/dns/Troubleshoot_PowerDNS.md)
 
 
 <a name="external-dns"></a>
