@@ -4,9 +4,9 @@
 
 Prepare a storage node before rebuilding it.
 
-**IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed.  For example, if this is a rebuild in place then ceph components will not be reporting down, versus a failed node rebuild. 
+**IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed.  For example, if this is a rebuild in place then ceph components will not be reporting down, versus a failed node rebuild.
 
-## Step 1 - Check the status of Ceph.
+## Step 1 - Check the status of Ceph
 
 1. Check the OSD status, weight, and location:
 

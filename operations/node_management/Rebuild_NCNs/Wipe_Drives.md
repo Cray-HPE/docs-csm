@@ -7,19 +7,48 @@ All commands in this section must be run on the node being rebuilt \(unless othe
 Only follow the steps in the section for the node type that is being rebuilt:
 
 - [Wipe Disks](#wipe-disks)
-  - [Wipe Disks: Master or Worker Node](#wipe-disks-master-or-worker-node)
+  - [Wipe Disks: Master](#wipe-disks-master)
+  - [Worker Node](#worker-node)
   - [Wipe Disks: Utility Storage Node](#wipe-disks-utility-storage-node)
 
 <a name="wipe_disks_master_worker"></a>
 
-## Wipe Disks: Master or Worker Node
+## Wipe Disks: Master
 
-This section applies to master and worker nodes. Skip this section if rebuilding a storage node. 
+1. Unmount the etcD volume and remove the volume group.
 
-```bash
-ncn-mw# mdisks=$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print "/dev/" $2}')
-ncn-mw# wipefs --all --force $mdisks
-```
+   **NOTE:** etcd should already be stopped as part of the "Prepare Master Node" steps.
+
+   ```bash
+   /run/lib-etcd
+   vgremove -f etcdvg0-ETCDK8S
+   ```
+
+2. Unmount the `SDU` mountpoint and remove the volume group.
+
+   ```bash
+   umount /var/lib/sdu
+   vgremove -f metalvg0-CRAYSDU
+   ```
+
+3. Wipe the drives
+
+   ```bash
+   mdisks=$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '   {print "/dev/" $2}')
+   wipefs --all --force $mdisks
+   ```
+
+## Worker Node
+
+1. Stop contianerd, unmount volumes, and wipe drives.
+
+    ```bash
+    systemctl stop containerd.service
+    umount /var/lib/kubelet
+    umount /run/lib-containerd
+    umount /run/containerd
+    wipefs --all --force /dev/sd* /dev/disk/by-label/*
+    ```
 
 ## Wipe Disks: Utility Storage Node
 
