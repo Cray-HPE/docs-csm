@@ -1,3 +1,5 @@
+
+
 # Configure Dell CDU switch
 
 This page describes how Dell CDU switches are configured.
@@ -6,11 +8,12 @@ CDU switches are located in liquid-cooled cabinets and provide connectivity to M
 CDU switches act as leaf switches in the architecture.
 They run in a high availability pair and use VLT to provide redundancy.
 
-Requirements:
+## Prerequisites
 
-   - Two uplinks from each CDU switch to the upstream switch, this is normally a spine switch.
-   - Three connections between the switches, two of these are used for the VLTi (VLT interconnect) and one used for the keepalive.
-   - The VLTi uses two 100gb links between the switches.
+- Two uplinks from each CDU switch to the upstream switch, this is normally a spine switch.
+- Connectivity to the switch is established.
+- Three connections between the switches, two of these are used for the VLT interconnect (VLTi), and one used for the keepalive.
+- The VLTi uses two 100gb links between the switches.
 
 ![Diagram of CDU Wiring to Upstream Switch](../img/network/CDU-Wiring.png)
 
@@ -22,7 +25,7 @@ The ISL are ports 49 and 50 on both CDU switches.
 
 The Keepalive is port 48.
 
-   Note: These are examples only, your installation and cabling may vary.
+   **NOTE:** The following are only examples; installation and cabling may vary.
    This information is on the 25G_10G tab of the SHCD spreadsheet.
 
 | Source | Source Label Info | Destination Label Info | Destination | Description | Notes
@@ -35,7 +38,6 @@ The Keepalive is port 48.
 | d100sw1 | d100u01-j49 | d100u02-j49 | d100sw2 | 100g-1m-DAC | |
 | d100sw1 | d100u01-j50 | d100u02-j50 | d100sw2 | 100g-1m-DAC | |
 
-It is assumed that you have connectivity to the switch.
 
 ## Configure VLT
 
@@ -43,10 +45,13 @@ It is assumed that you have connectivity to the switch.
 ## Configure VLAN
 
 **Cray Site Init (CSI) generates the IP addresses used by the system, below are samples only.**
-The VLAN information is located in the network YAML files. Below are examples.
-1. The CDU switches will have VLAN interfaces in NMN, HMN, NMN_MTN, HMN_MTN networks.
+The VLAN information is located in the network YAML files. The following are examples.
 
-   ```
+1. Verify the CDU switches have VLAN interfaces in the NMN, HMN, NMN_MTN, and HMN_MTN.
+
+   Example NMN.yaml:
+   
+   ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    SNIPPET
      - ip_address: 10.252.0.5
@@ -63,7 +68,10 @@ The VLAN information is located in the network YAML files. Below are examples.
      comment: ""
      gateway: 10.252.0.1
    ```
-   ```
+
+   Example HMN.yaml:
+   
+   ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml
 
    SNIPPET
@@ -81,7 +89,10 @@ The VLAN information is located in the network YAML files. Below are examples.
      comment: ""
      gateway: 10.254.0.1
    ```
-   ```
+   
+   Example NMN_MTN.yaml:
+
+   ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN_MTN.yaml
 
    full_name: Mountain Node Management Network
@@ -107,7 +118,10 @@ The VLAN information is located in the network YAML files. Below are examples.
      iprange-end: 10.100.3.254
    name: NMN_MTN
    ```
-   ```
+
+   Example HMN_MTN.yaml:
+   
+   ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN_MTN.yaml
 
    full_name: Mountain Hardware Management Network
@@ -134,14 +148,14 @@ The VLAN information is located in the network YAML files. Below are examples.
    name: HMN_MTN
    ```
 
-   Note: CSI does not yet generate IP addresses for the CDU switches on VLANs HMN_MTN and NMN_MTN.
+   **NOTE:** CSI does not yet generate IP addresses for the CDU switches on VLANs HMN_MTN and NMN_MTN.
    - The first CDU switch in the pair will always have an IP address ending in .2 on the HMN_MTN and NMN_MTN networks.
    - The second CDU switch in the pair will always have an IP address ending in .3 on the HMN_MTN and NMN_MTN networks.
    - Both CDU MTN VLAN IP addresses will be at the beginning of the subnet.
    - The gateway will always end in .1 and will be at the beginning of the subnet.
    - Every Mountain Cabinet will get its own HMN and NMN VLAN.
 
-1. Below is an example of CDU switch IP addressing based on the network .yaml files from above.
+   The following is an example of CDU switch IP addressing based on the network .yaml files from above.
 
    | VLAN | CDU1 | CDU2	| Purpose |
    | --- | --- | ---| --- |
@@ -150,7 +164,7 @@ The VLAN information is located in the network YAML files. Below are examples.
    | 2000 | 10.100.0.2/22| 10.100.0.3/22 | Mountain Node Management
    | 3000 | 10.104.0.2/22| 10.104.0.3/22 | Mountain Hardware Management
 
-   If the system has additional Mountain Cabinets the VLANs will look like this.
+   If the system has additional Mountain Cabinets the VLANs will look like the following.
    This is an example of a system with 3 cabinets.
 
    | VLAN | CDU1 | CDU2	| Purpose |
@@ -162,16 +176,18 @@ The VLAN information is located in the network YAML files. Below are examples.
    | 2002 | 10.100.8.2/22| 10.100.8.3/22 | Mountain Node Management
    | 3002 | 10.104.8.2/22| 10.104.8.3/22 | Mountain Hardware Management
 
-1. Below is the output of an SHCD, the components in the x1000 cabinet would get their own NMN and HMN VLAN and components in the x1001 would also get their own NMN and HMN VLAN.
-The CECs will be on the HMN VLAN of that cabinet.
+1. View the output of the SHCD.
+   
+   The components in the x1000 cabinet would get their own NMN and HMN VLAN and components in the x1001 would also get their own NMN and HMN VLAN.
+   The CECs will be on the HMN VLAN of that cabinet.
 
-![Example of CDU connections to CMM in SHCD](../img/network/CDU-CMM-SHCD.png)
+   ![Example of CDU connections to CMM in SHCD](../img/network/CDU-CMM-SHCD.png)
 
-1. Once you have all this information you can now configure the VLANs on the switches.
+1. Configure the VLANs on the switches.
 
-   NMN MTN VLAN config
+   NMN MTN VLAN configuration:
 
-   ```
+   ```bash
    sw-cdu-001(config)#
        interface vlan2000
        mode L3
@@ -195,9 +211,9 @@ The CECs will be on the HMN VLAN of that cabinet.
        virtual-address 10.100.0.1
    ```
 
-   HMN MTN VLAN config
+   HMN MTN VLAN configuration:
 
-   ```
+   ```bash
    sw-cdu-001(config)#
        interface vlan3000
        mode L3
@@ -222,18 +238,19 @@ The CECs will be on the HMN VLAN of that cabinet.
    ```
 
 ## Configure Uplink
+
 The uplink ports are the ports connecting the CDU switches to the upstream switch, most likely a spine switch.
 
 
 ## Configure ACL
 
-These ACLs are designed to block traffic from the node management network to and from the hardware management network.
+These ACLs are designed to block traffic from the NMN to and from the HMN.
 
-1. The first step is to create the access list, once it is created we have to apply it to a VLAN.
+1. Create the access list.
 
-   NOTE: these are examples only, the IP addresses below need to match what was generated by CSI.
+   **NOTE:** The following are examples only. The IP addresses below need to match what was generated by CSI.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
    ip access-list nmn-hmn
    seq 10 deny ip 10.252.0.0/17 10.254.0.0/17
@@ -249,7 +266,7 @@ These ACLs are designed to block traffic from the node management network to and
 
 1. Apply ACL to VLANs.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
    interface vlan2
    ip access-group nmn-hmn in
@@ -265,21 +282,21 @@ These ACLs are designed to block traffic from the node management network to and
    ip access-group nmn-hmn out
    ```
 
-## Configure Spanning-tree
+## Configure Spanning-Tree
 
-Spanning tree is used to protect the network against layer2 loops.
+Spanning-tree is used to protect the network against layer2 loops.
 Dell switches should have these settings for spanning-tree using bpduguard and not bpdufilter.
 
-1. Enable spanning tree for these VLANs.
+1. Enable spanning-tree for these VLANs.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
    spanning-tree vlan 1-2,4,4091 priority 61440
    ```
 
 1. Ensure that no ports have bpduguard enabled.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
    interface ethernet 1/1/x
    no spanning-tree bpdufilter
@@ -288,7 +305,7 @@ Dell switches should have these settings for spanning-tree using bpduguard and n
 
 1. Add BPDUguard to ports going to CMMs.
 
-   ```
+   ```bash
    interface port-channel1
    description CMM_CAB_1000
    no shutdown
@@ -302,9 +319,9 @@ Dell switches should have these settings for spanning-tree using bpduguard and n
 
 ## Configure OSPF
 
-OSPF is a dynamic routing protocol used to exchange routes. It provides reachability from the MTN networks to NMN/Kubernetes networks. The router-id used here is the NMN IP address. (VLAN 2 IP)
+OSPF is a dynamic routing protocol used to exchange routes. It provides reachability from the MTN networks to NMN/Kubernetes networks. The router-id used here is the NMN IP address (VLAN 2 IP).
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
    router ospf 1
    router-id 10.252.0.x
@@ -322,11 +339,11 @@ OSPF is a dynamic routing protocol used to exchange routes. It provides reachabi
 
 ## Configure NTP
 
-The IP addresses used here will be the first three worker nodes on the NMN network. These can be found in NMN.yaml.
+The IP addresses used are the first three worker nodes on the NMN network. These can be found in NMN.yaml.
 
 1. Get current NTP configuration.
 
-   ```
+   ```bash
    sw-cdu-001# show running-configuration | grep ntp
    ntp server 10.252.1.12
    ntp server 10.252.1.13
@@ -335,7 +352,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
 1. Delete any current NTP configuration.
 
-   ```
+   ```bash
    sw-cdu-001# configure terminal
    sw-cdu-001(config)# no ntp server 10.252.1.12
    sw-cdu-001(config)# no ntp server 10.252.1.13
@@ -344,7 +361,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
 1. Add new NTP server configuration.
 
-   ```
+   ```bash
    ntp server 10.252.1.10 prefer
    ntp server 10.252.1.11
    ntp server 10.252.1.12
@@ -353,7 +370,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
 1. Verify NTP status.
 
-   ```
+   ```bash
    sw-cdu-001# show ntp associations
         remote           refid      st t when poll reach   delay   offset  jitter
    ==============================================================================
@@ -365,25 +382,27 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
 ## Configure DNS
 
-1. This will point to the unbound DNS server.
+1. Configure DNS.
+   
+   This will point to the unbound DNS server.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
    ip name-server 10.92.100.225
    ```
 
 ## Configure SNMP
 
-1. Configure SNMP
+1. Configure SNMP.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
    snmp-server group cray-reds-group 3 noauth read cray-reds-view
    snmp-server user testuser cray-reds-group 3 auth md5 testpass1 priv des testpass2
    snmp-server view cray-reds-view 1.3.6.1.2 included
    ```
 
-## Downlink port configuration
+## Downlink Port Configuration
 
 
 ## Configure Flow Control
@@ -397,11 +416,12 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 - This configuration offers increased throughput and redundancy.
 - The CEC will not need to be programmed in order to support the LAG configuration as it was required in previous versions. The updated firmware takes care of this.
 
-1. Ports going to CMM switches.
-   The VLANs used are the cabinet VLANs that are generated from CSI
-   The Description should be changed to match the cabinet number.
+1. Configure ports going to CMM switches.
+   
+   The VLANs used are the cabinet VLANs that are generated from CSI.
+   The description should be changed to match the cabinet number.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
    interface port-channel1
    description CMM_CAB_1000
@@ -423,11 +443,11 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
    flowcontrol transmit on
    ```
 
-## CEC port configuration.
+## CEC Port Configuration
 
 The VLAN used here is generated from CSI. It is the HMN_MTN VLAN that is assigned to that cabinet.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
    interface ethernet1/1/50
    description CEC_CAB_1003_alt
@@ -443,21 +463,25 @@ The VLAN used here is generated from CSI. It is the HMN_MTN VLAN that is assigne
 
 Disable iSCSI in the configuration.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
    no iscsi enable
    ```
 
-## Save configuration
+## Save Configuration
 
-   ```
+To save the configuration:
+
+   ```bash
    sw-cdu-001(config)# exit
    sw-cdu-001# write memory
    ```
 
 ## Show Running Configuration
 
-   ```
+To display the running configuration:
+
+   ```bash
    sw-cdu-001# show running-config
    ```
 

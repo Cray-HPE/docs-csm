@@ -26,7 +26,7 @@ The resulting CA will be used to sign multiple workloads on the platform (Ingres
 <a name="use_default_platform_generated_ca"></a>
 ## Use Default Platform Generated CA
 
-In shasta-cfg, there is a Sealed Secret generator named `platform_ca`. By default, the `customizations.yaml` file will contain a generation template to use this generator, and will create a sealed secret named `generated-platform-ca-1`. The `cray-vault` overrides in `customizations.yaml` contain a) a templated reference to expand the `generated-platform-ca-1` Sealed Secret and b) directives instructing vault to load the CA material on start-up -- ultimately initializing a Hashicorp Vault PKI Engine instance with the material.
+In shasta-cfg, there is a Sealed Secret generator named `platform_ca`. By default, the `customizations.yaml` file will contain a generation template to use this generator, and will create a sealed secret named `generated-platform-ca-1`. The `cray-vault` overrides in `customizations.yaml` contain a) a templated reference to expand the `generated-platform-ca-1` Sealed Secret and b) directives instructing vault to load the CA material on start-up -- ultimately initializing a HashiCorp Vault PKI Engine instance with the material.
 
 > Note: the intermediate CA gets installed into Vault, not the root CA (as generated). Use of a root CA is not recommended.
 
