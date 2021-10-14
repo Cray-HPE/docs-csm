@@ -144,7 +144,7 @@
    ceph mgr fail
    ```
 
-## Optionally Add Rados Gateway to the New Nodes
+## Optionally Add Rados Gateway to the Rebuilt Nodes
 
 1. Deploy Rados Gateway containers to the new nodes.
 
