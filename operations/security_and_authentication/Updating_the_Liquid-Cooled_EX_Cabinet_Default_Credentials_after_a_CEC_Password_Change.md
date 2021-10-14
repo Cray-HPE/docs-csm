@@ -1,4 +1,4 @@
-## Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials after a CEC Password Change
+## Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change
 
 This procedure changes the credential for liquid-cooled EX cabinet chassis controllers and node controller (BMCs) used by CSM services after the CECs have been set to a new global default credential. 
 
@@ -238,7 +238,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 
     For each Redfish endpoint that is reported use the following to troubleshoot why it is not `DiscoverOK` or `DiscoveryStarted`:
     - If the Redfish endpoint is `DiscoveryStarted`, then that BMC is currently in the process of being inventoried by HSM. Wait a few minutes and re-try the bash script above to re-check the current discovery status of the RedfishEndpoints.
-        
+      
         > The hms-discovery cronjob (if enabled) will trigger a discover on BMCs that are not currently in `DiscoverOK` or `DiscoveryStarted` every 3 minutes.  
     - If the Redfish endpoint is `HTTPsGetFailed`, then HSM had issues contacting BMC.
     
