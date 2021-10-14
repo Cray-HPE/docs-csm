@@ -1,10 +1,10 @@
-# CSM Operational Activities
+# Cray System Management (CSM) Administration Guide
 
 The Cray System Management (CSM) operational activities are administrative procedures required to operate an HPE Cray EX system with CSM software installed.
 
 The following administrative topics can be found in this guide:
 
-- [CSM Operational Activities](#csm-operational-activities)
+- [Cray System Management (CSM) Administration Guide](#cray-system-management-csm-administration-guide)
     - [CSM Product Management](#csm-product-management)
   - [Image Management](#image-management)
   - [Boot Orchestration](#boot-orchestration)
@@ -24,6 +24,7 @@ The following administrative topics can be found in this guide:
   - [System Layout Service (SLS)](#system-layout-service-sls)
   - [System Configuration Service](#system-configuration-service)
   - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
+  - [Hardware Management (HM) Collector](#hardware-management-hm-collector)
   - [Node Management](#node-management)
   - [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
   - [Network](#network)
@@ -478,6 +479,13 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
   * [Restore HSM Postgres from a Backup](hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
   * [Restore HSM Postgres without a Backup](hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
 
+<a name=""></a>
+
+## Hardware Management (HM) Collector
+
+The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system. 
+
+ * [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
 
 <a name="node-management"></a>
 
@@ -644,8 +652,6 @@ See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list 
   * [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
   * [FAS Use Cases](firmware/FAS_Use_Cases.md)
   * [Upload Olympus BMC Recovery Firmware into TFTP Server](firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
-  * [Install HPC Firmware Pack (HFP)](firmware/Install_HPC_Firmware_Pack.md)
-  * [Install HPC Firmware Pack from PIT or LiveCD](firmware/Install_HPC_Firmware_Pack_from_PIT_or_LiveCD.md)
 
 
 <a name="user-access-service-uas"></a>

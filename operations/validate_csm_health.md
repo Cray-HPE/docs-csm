@@ -29,19 +29,16 @@ The areas should be tested in the order they are listed on this page. Errors in 
       - [1.8.1 Known Test Issues](#autogoss-issues)
     - [1.9 OPTIONAL Check of System Management Monitoring Tools](#optional-check-of-system-management-monitoring-tools)
   - [2. Hardware Management Services Health Checks](#hms-health-checks)
-    - [2.1 HMS Test Execution](#hms-test-execution)
-    - [2.2 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
-      - [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results)
-      - [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues)
+    - [2.1 HMS CT Test Execution](#hms-test-execution)
+    - [2.2 Aruba Switch SNMP Fixup](#hms-aruba-fixup)
+    - [2.3 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
+      - [2.3.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results)
+      - [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues)
   - [3 Software Management Services Health Checks](#sms-health-checks)
     - [3.1 SMS Test Execution](#sms-checks)
     - [3.2 Interpreting cmsdev Results](#cmsdev-results)
   - [4. Booting CSM Barebones Image](#booting-csm-barebones-image)
-    - [4.1 Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
-    - [4.2 Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
-    - [4.3 Find an available compute node](#csm-node)
-    - [4.4 Reboot the node using a BOS session template](#csm-reboot)
-    - [4.5 Connect to the node's console and watch the boot](#csm-watch-boot)
+    - [4.1 Running the script](#csm-run-script)
   - [5. UAS / UAI Tests](#uas-uai-tests)
     - [5.1 Validate the Basic UAS Installation](#uas-uai-validate-install)
     - [5.2 Validate UAI Creation](#uas-uai-validate-create)
@@ -191,7 +188,12 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
             INFO: running post_bootstrap
             INFO: trying to bootstrap a new cluster
          ```
-         Errors reported prior to the lock status, such as **ERROR: get_cluster** or **ERROR: ObjectCache.run ProtocolError('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))** can be ignored.
+         Errors reported prior to the lock status can be ignored - for example:
+         - **ERROR: get_cluster**
+         - **ERROR: ObjectCache.run ProtocolError('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))**
+         - **ERROR: failed to update leader lock** 
+         - **ERROR: Exception when working with master via replication connection**
+         
          If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
 
       - Verify the State of each cluster member is 'running'.
@@ -495,26 +497,34 @@ Information to assist with troubleshooting some of the components mentioned in t
 Execute the HMS smoke and functional tests after the CSM install to confirm that the Hardware Management Services are running and operational.
 
 <a name="hms-test-execution"></a>
-### 2.1 HMS Test Execution
+### 2.1 HMS CT Test Execution
 
 These tests should be executed as root on at least one worker NCN and one master NCN (but **not** ncn-m001 if it is still the PIT node).
 
-Run the HMS smoke tests.
+Run the HMS CT smoke tests.  This is done by running the `run_hms_ct_tests.sh` script:
+
 ```
-ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
+ncn# /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
 ```
 
-Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
+The return value of the script is 0 if all CT tests ran successfully, non-zero
+if not.  On CT test failures the script will instruct the admin to look at the
+CT test log files.  If one or more failures occur, investigate the cause of
+each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
-Otherwise, run the HMS functional tests.
-```
-ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
-```
+<a name="hms-aruba-fixup"></a>
+### 2.2 Aruba Switch SNMP Fixup
 
-Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
+Systems with Aruba leaf switches sometimes have issues with a known SNMP bug
+which prevents HSM discovery from discovering all HW.  At this stage of the
+installation process, a script can be run to detect if this issue is 
+currently affecting the system, and if so, correct it.
+
+Refer to [Air cooled hardware is not getting properly discovered with Aruba leaf switches](../troubleshooting/known_issues/discovery_aruba_snmp_issue.md) for 
+details.
 
 <a name="hms-smd-discovery-validation"></a>
-### 2.2 Hardware State Manager Discovery Validation
+### 2.3 Hardware State Manager Discovery Validation
 
 By this point in the installation process, the Hardware State Manager (HSM) should
 have done its discovery of the system.
@@ -523,14 +533,15 @@ The foundational information for this discovery is from the System Layout Servic
 comparison needs to be done to see that what is specified in SLS (focusing on
 BMC components and Redfish endpoints) are present in HSM.
 
-Execute the `verify_hsm_discovery.py` script on a Kubernetes master or worker NCN:
+To perform this comparison execute the `verify_hsm_discovery.py` script on a Kubernetes master or worker NCN.  The result is pass/fail (returns 0 or non-zero):
+
 ```
 ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
 ```
 
 The output will ideally appear as follows, if there are mismatches these will be displayed in the appropriate section of
-the output. Refer to [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results) and
-[2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
+the output. Refer to [2.3.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results) and
+[2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
 ```bash
 ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
 
@@ -571,7 +582,7 @@ any FAIL information displayed, the script will exit with a non-zero exit
 code.  Failure information interpretation is described in the next section.
 
 <a name="hms-smd-discovery-validation-interpreting-results"></a>
-#### 2.2.1 Interpreting results
+#### 2.3.1 Interpreting results
 
 The Cabinet Checks output is divided into three sections:
 
@@ -626,10 +637,10 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
 
 * In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated BMCs will have no HSM data and will show up in the mismatch list.
 
-If it was determined that the mismatch can not be ignored, then proceed onto the the [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
+If it was determined that the mismatch can not be ignored, then proceed onto the the [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
 
 <a name="hms-smd-discovery-validation-known-issues"></a>
-#### 2.2.2 Known Issues
+#### 2.3.2 Known Issues
 
 Known issues that may prevent hardware from getting discovered by Hardware State Manager:
 * [Air cooled hardware is not getting properly discovered with Aruba leaf switches](../troubleshooting/known_issues/discovery_aruba_snmp_issue.md)
@@ -702,191 +713,50 @@ beyond the dracut stage of the boot process. However, if the dracut stage is rea
 boot can be considered successful and shows that the necessary CSM services needed to
 boot a node are up and available.
    * This inability to boot the barebones image fully will be resolved in future releases of the
-   CSM product.
+CSM product.
 * In addition to the CSM Barebones image, the release also includes an IMS Recipe that
 can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires
 RPMs that are not installed with the CSM product. The CSM Barebones recipe can be built after the
 Cray OS (COS) product stream is also installed on to the system.
    * In future releases of the CSM product, work will be undertaken to resolve these dependency issues.
 * This procedure can be followed on any NCN or the PIT node.
-* The Cray CLI must be configured on the node where this procedure is being performed. See [Configure the Cray Command Line Interface](configure_cray_cli.md) for details on how to do this.
+* This script uses the Kubernetes API Gateway to access CSM services. This gateway must be properly
+configured to allow an access token to be generated by the script.
+* This script is installed as part of the 'cray-cmstools-crayctldeploy' RPM.
+* For additional information on the script and for troubleshooting help look at the document
+[Barebones Image Boot](../troubleshooting/cms_barebones_image_boot.md).
 ---
 
-1. [Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
-1. [Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
-1. [Find an available compute node](#csm-node)
-1. [Reboot the node using a BOS session template](#csm-reboot)
-1. [Watch Boot on Console](#csm-watch-boot)
+1. [Running the script](#csm-run-script)
 
-<a name="locate-csm-barebones-image-in-ims"></a>
-### 4.1 Locate CSM Barebones Image in IMS
+<a name="csm-run-script"></a>
+### 4.1 Run the Test Script
 
-Locate the CSM Barebones image and note the `etag` and `path` fields in the output.
+The script is executable and can be run without any arguments. It returns 0 on success and
+non-zero on failure.
 
 ```bash
-ncn# cray ims images list --format json | jq '.[] | select(.name | contains("barebones"))'
+ncn# /opt/cray/tests/integration/csm/barebonesImageTest
 ```
 
-Expected output is similar to the following:
-```json
-{
-  "created": "2021-01-14T03:15:55.146962+00:00",
-  "id": "293b1e9c-2bc4-4225-b235-147d1d611eef",
-  "link": {
-    "etag": "6d04c3a4546888ee740d7149eaecea68",
-    "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",
-    "type": "s3"
-  },
-  "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-PRODUCT_VERSION"
-}
+A successful run would generate output like the following:
+```bash
+ncn# /opt/cray/tests/integration/csm/barebonesImageTest
+cray.barebones-boot-test: INFO     Barebones image boot test starting
+cray.barebones-boot-test: INFO       For complete logs look in the file /tmp/cray.barebones-boot-test.log
+cray.barebones-boot-test: INFO     Creating bos session with template:csm-barebones-image-test, on node:x3000c0s10b1n0
+cray.barebones-boot-test: INFO     Starting boot on compute node: x3000c0s10b1n0
+cray.barebones-boot-test: INFO     Found dracut message in console output - success!!!
+cray.barebones-boot-test: INFO     Sucessfully completed barebones image boot test.
 ```
 
-<a name="csm-bos-session-template"></a>
-### 4.2 Create a BOS Session Template for the CSM Barebones Image
-
-The session template below can be copied and used as the basis for the BOS Session Template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in the Image Management Service (IMS).
-
-1. Create `sessiontemplate.json`
-   ```bash
-   ncn# vi sessiontemplate.json
-   ```
-
-   The session template should contain the following:
-   ```json
-   {
-     "boot_sets": {
-       "compute": {
-         "boot_ordinal": 2,
-         "etag": "etag_value_from_cray_ims_command",
-         "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-         "network": "nmn",
-         "node_roles_groups": [
-           "Compute"
-         ],
-         "path": "path_value_from_cray_ims_command",
-         "rootfs_provider": "cpss3",
-         "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-         "type": "s3"
-       }
-     },
-     "enable_cfs": false,
-     "name": "shasta-PRODUCT_VERSION-csm-bare-bones-image"
-   }
-   ```
-
-   **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
-
-   **NOTE**: The rootfs provider shown above references the `dvs` provider. DVS is not provided as part of the CSM 
-   distribution and is not expected to work until the COS product is installed and configured. As noted above, the 
-   barebones image is not expected to boot at this time. Work is being done to enable a fully functional and bootable 
-   barebones image in a future release of the CSM product. Until that work is complete, the use of the `dvs` rootfs
-   provider is suggested.
-
-from Redeploy Pit Node section)
-2. Create the BOS session template using the following file as input:
-   ```
-   ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-PRODUCT_VERSION-csm-bare-bones-image
-   ```
-   The expected output is:
-   ```
-   /sessionTemplate/shasta-PRODUCT_VERSION-csm-bare-bones-image
-   ```
-
-<a name="csm-node"></a>
-### 4.3 Find an available compute node
+The script will choose an enabled compute node that is listed in the Hardware State Manager (HSM) for
+the test unless the user passes in a specific node using the `--xname` argument. If a compute node is
+specified but unavailable, an available node will be used instead and a warning will be logged.
 
 ```bash
-ncn# cray hsm state components list --role Compute --enabled true
+ncn# /opt/cray/tests/integration/csm/barebonesImageTest --xname x3000c0s10b4n0
 ```
-
-Example output:
-```
-[[Components]]
-ID = "x3000c0s17b1n0"
-Type = "Node"
-State = "On"
-Flag = "OK"
-Enabled = true
-Role = "Compute"
-NID = 1
-NetType = "Sling"
-Arch = "X86"
-Class = "River"
-
-[[Components]]
-ID = "x3000c0s17b2n0"
-Type = "Node"
-State = "On"
-Flag = "OK"
-Enabled = true
-Role = "Compute"
-NID = 2
-NetType = "Sling"
-Arch = "X86"
-Class = "River"
-```
-
-> If it is noticed that compute nodes are missing from Hardware State Manager, refer to [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) to troubleshoot any Node BMCs that have not been discovered.
-
-Choose a node from those listed and set `XNAME` to its ID. In this example, `x3000c0s17b2n0`:
-```bash
-ncn# export XNAME=x3000c0s17b2n0
-```
-
-<a name="csm-reboot"></a>
-### 4.4 Reboot the node using a BOS session template
-
-Create a BOS session to reboot the chosen node using the BOS session template that was created:
-```bash
-ncn# cray bos session create --template-uuid shasta-PRODUCT_VERSION-csm-bare-bones-image --operation reboot --limit $XNAME
-```
-
-Expected output looks similar to the following:
-```
-limit = "x3000c0s17b2n0"
-operation = "reboot"
-templateUuid = "shasta-PRODUCT_VERSION-csm-bare-bones-image"
-[[links]]
-href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
-jobId = "boa-8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
-rel = "session"
-type = "GET"
-
-[[links]]
-href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1/status"
-rel = "status"
-type = "GET"
-```
-
-<a name="csm-watch-boot"></a>
-### 4.5 Connect to the node's console and watch the boot
-
-See [Manage Node Consoles](conman/Manage_Node_Consoles.md) for information on how to connect to the node's console (and for
-instructions on how to close it later).
-
-The boot may take up to 10 or 15 minutes. The image being booted does not support a complete boot, so the node will not
-boot fully into an operating system. This test is merely to verify that the CSM services needed to boot a node are available and
-working properly.
-
-This boot test is considered successful if the boot reaches the dracut stage. You know this has happened if the console output has
-something similar to the following somewhere within the final 20 lines of its output:
-```
-[    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
-[    7.898169] dracut: Refusing to continue
-```
-
-**NOTE**: As long as the preceding text is found near the end of the console output, the test is considered successful. It is normal
-(and **not** indicative of a test failure) to see something similar to the following at the very end of the console output:
-```
-         Starting Dracut Emergency Shell...
-[   11.591948] device-mapper: uevent: version 1.0.3
-[   11.596657] device-mapper: ioctl: 4.40.0-ioctl (2019-01-18) initialised: dm-devel@redhat.com
-Warning: dracut: FATAL: Don't know how to handle
-Press Enter for maintenance
-(or press Control-D to continue):
-```
-
-After the node has reached this point, close the console session. The test is complete.
 
 <a name="uas-uai-tests"></a>
 ## 5. UAS / UAI Tests

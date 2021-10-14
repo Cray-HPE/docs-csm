@@ -231,8 +231,17 @@ The configuration workflow described here is intended to help understand the exp
 1. Once `ncn-s001` notices that `ncn-m002` has created /etc/kubernetes/admin.conf, then `ncn-s001` waits for any worker node to become available.
 1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plane, then it will join the Kubernetes cluster.  
     - Now `ncn-s001` should notice this from any one of the worker nodes and move forward with creation of ConfigMaps and running the post-Ceph playbooks (s3, OSD pools, quotas, etc.)
-1. Once `ncn-s001` creates etcd-backup-s3-credentials during the benji-backups role, which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward.
-
+1. Once `ncn-s001` creates etcd-backup-s3-credentials during the ceph-rgw-users role which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward
+   > **`NOTE`**: If several hours have elapsed between storage and master nodes booting, or if there were issues PXE booting master nodes, the cloud init script on `ncn-s001` may not complete successfully.  This can cause the `/var/log/cloud-init-output.log` on master node(s) to continue to output the following message:
+   >
+   > [ 1328.351558] cloud-init[8472]: Waiting for storage node to create etcd-backup-s3-credentials secret...
+   >
+   > In this case, the following script is safe to be executed again on `ncn-s001`:
+   >
+   > ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
+   >
+   > After this script finishes, the secrets will be created and the cloud-init script on the master node(s) should complete.
+   >
 
 <a name="deploy"></a>
 ##### 3.2 Deploy
@@ -426,10 +435,20 @@ The configuration workflow described here is intended to help understand the exp
     ```
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
+
 #### 3.3 Check for Unused Drives on Utility Storage Nodes
 
  > **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware.
  > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning. 
+
+> **`IMPORTANT:`** Estimate the expected number of OSDs using the following table and using this equation:
+> 
+>  total_osds = (num of utility storage/ceph nodes) * (OSD count from table below for the appropriate hardware)
+
+| Hardware Manufacturer | OSD Drive Count (not including OS drives)|
+| :-------------------: | :---------------------------------------: |
+| GigaByte              | 12 |
+| HPE                   | 8  |
 
 ##### Option 1
 
@@ -442,8 +461,11 @@ The configuration workflow described here is intended to help understand the exp
     24
     ```
 
-2. Compare your number of OSDs to the output below. 
-   > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the following command to limit the results.
+   **`IMPORTANT:`** If the returned number of OSDs is equal to total_osds calculated, then you can skip the following steps.  If not, then please proceed with the below additional checks and remediation steps.
+
+1. Compare your number of OSDs to your output which should resemble the example below. The number of drives will depend on the server hardware.
+
+   > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the below command to limit the results.
 
     ```bash
     ncn-s# ceph orch device ls
@@ -485,7 +507,7 @@ The configuration workflow described here is intended to help understand the exp
     24
     ```
 
-    If the numbers are equal, then you may need to fail your `ceph-mgr` daemon to get a fresh inventory.
+    If the numbers are equal, but less than the `total_osds` calculated, then you may need to fail your `ceph-mgr` daemon to get a fresh inventory.
 
     ```bash
     ncn-s# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
@@ -522,7 +544,7 @@ The configuration workflow described here is intended to help understand the exp
     The field `available` would be `True` if Ceph sees the drive as empty and can
     be used, e.g.:
 
-    ```
+    ```text
     Device Path               Size         rotates available Model name
     /dev/sda                  447.13 GB    False   False     SAMSUNG MZ7LH480
     /dev/sdb                  447.13 GB    False   False     SAMSUNG MZ7LH480
@@ -540,9 +562,12 @@ The configuration workflow described here is intended to help understand the exp
     ncn-s# cephadm shell -- ceph-volume inventory --format json-pretty | jq -r '.[]|select(.available==true)|.path'
     ```
 
-1. Wipe the drive ONLY after you have confirmed the drive is not being used by the current Ceph cluster via options 1, 2, or both.
+##### Wipe and Add Drives
+
+1. Wipe the drive ***ONLY after you have confirmed the drive is not being used by the current Ceph cluster*** via options 1, 2, or both.
 
     > The following example wipes drive `/dev/sdc` on `ncn-s002`. You should replace these values with the appropriate ones for your situation.
+
     ```bash
     ncn-s# ceph orch device zap ncn-s002 /dev/sdc --force
     ```
@@ -635,13 +660,13 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
    1. This command will list the available helper scripts.
       ```bash
-      pit# ls -1 /usr/bin/*mellanox_set_bgp_peer*py
+      pit# ls -1 /usr/local/bin/*mellanox_set_bgp_peer*py
       ```
 
       Expected output looks similar to the following:
 
       ```
-      /usr/bin/mellanox_set_bgp_peers.py
+      /usr/local/bin/mellanox_set_bgp_peers.py
       ```
 
    1. Run the BGP helper script if you have mellanox switches.
@@ -656,7 +681,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
       The IP addresses in this example should be replaced by the IP addresses of the switches.
 
       ```bash
-      pit# /usr/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/```
+      pit# /usr/local/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/```
 
    1. Run CANU if you have Aruba switches.
      
@@ -747,25 +772,18 @@ Observe the output of the checks and note any failures, then remediate them.
 
 1. Check the storage nodes.
 
-   **`Note`**: Throughout the output of the `csi pit validate` command there will be a test total for each node where the tests run. Be sure to check all of them and not just the final one.
-
    ```bash
    pit# csi pit validate --ceph | tee csi-pit-validate-ceph.log
    ```
 
-   Once that command has finished, the following will extract the test totals reported for each node:
-   ```bash
-   pit# grep "Total" csi-pit-validate-ceph.log
-   ```
+   Once that command has finished, check the last line of output to see the results of the tests.
 
-   Example output for a system with 3 storage nodes:
+   Example last line of output:
    ```
    Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4226 seconds
-   Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4077 seconds
-   Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4246 seconds
    ```
 
-   If these total lines report any failed tests, look through the full output of the test to see which node had the failed test and what the details are for that test.
+   If the test total line reports any failed tests, look through the full output of the test in csi-pit-validate-ceph.log to see which node had the failed test and what the details are for that test.
 
    **`Note`**: Please see [Utility Storage](../operations/utility_storage/Utility_Storage.md) to help resolve any failed tests.
 
