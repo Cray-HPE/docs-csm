@@ -1,16 +1,16 @@
-# PowerDNS troubleshooting
+# Troubleshoot PowerDNS
 
-## List DNS zone contents
+## List DNS Zone Contents
 
-The PowerDNS zone database is populated with data from two sources
+The PowerDNS zone database is populated with data from two sources:
 
 * The cray-powerdns-manager service creates the zones and DNS records based on data sourced from the System Layout Service (SLS)
-* The external DNS records are populated by the cray-externaldns-external-dns service using data sourced from Kubernetes annotations and virtual service definitions.
+* The external DNS records are populated by the cray-externaldns-external-dns service using data sourced from Kubernetes annotations and virtual service definitions
 
-The `cray-powerdns-visualizer` command can be used to view the zone structure that cray-powerdns-manager will create.
+Use the `cray-powerdns-visualizer` command to view the zone structure that cray-powerdns-manager will create.
 
 ```
-ncn-m001:~ # kubectl -n services exec deployment/cray-powerdns-manager -c cray-powerdns-manager -- cray-powerdns-visualizer
+ncn-m001# kubectl -n services exec deployment/cray-powerdns-manager -c cray-powerdns-manager -- cray-powerdns-visualizer
 .
 ├── 252.10.in-addr.arpa.
 │   ├── [PTR]  5.252.10.in-addr.arpa.
@@ -32,19 +32,19 @@ ncn-m001:~ # kubectl -n services exec deployment/cray-powerdns-manager -c cray-p
 ...
 ```
 
-For more information on External DNS and troubleshooting steps see the [External DNS documentation](../external_dns/External_DNS.md)
+For more information on External DNS and troubleshooting steps, see the [External DNS documentation](../external_dns/External_DNS.md).
 
-## PowerDNS logging
+## PowerDNS Logging
 
-When troubleshooting DNS problems it may prove helpful to increase the level of logging from the default value of 3 (error).
+When troubleshooting DNS problems, it may prove helpful to increase the level of logging from the default value of 3 (error).
 
-1. Edit the cray-dns-powerdns ConfigMap
+1. Edit the cray-dns-powerdns ConfigMap.
 
    ```
-   ncn-m001:~ # kubectl -n services edit cm cray-dns-powerdns
+   ncn-m001# kubectl -n services edit cm cray-dns-powerdns
    ```
 
-1. Set the `loglevel` parameter in `pdns.conf` to the desired setting
+1. Set the `loglevel` parameter in `pdns.conf` to the desired setting.
 
    ```
    pdns.conf: |
@@ -58,23 +58,23 @@ When troubleshooting DNS problems it may prove helpful to increase the level of 
       version-string=anonymous
    ```
 
-1. Restart the PowerDNS service
+1. Restart the PowerDNS service.
 
    ```
-   ncn-m001:~ # kubectl -n services rollout restart deployment cray-dns-powerdns
+   ncn-m001# kubectl -n services rollout restart deployment cray-dns-powerdns
    deployment.apps/cray-dns-powerdns restarted
    ```
 
-Please see the [PowerDNS documentation](https://doc.powerdns.com/authoritative/settings.html#loglevel) for more information.
+Refer to the external [PowerDNS documentation](https://doc.powerdns.com/authoritative/settings.html#loglevel) for more information.
 
-## Verify DNSSEC operation
+## Verify DNSSEC Operation
 
-### Verify zones are being signed with the zone signing key
+### Verify Zones are Being Signed with the Zone Signing Key
 
-Check that the required zone has a DNSKEY entry, this should match the public key portion of the zone signing key.
+Check that the required zone has a DNSKEY entry; this should match the public key portion of the zone signing key.
 
 ```
-ncn-m001:~ # kubectl -n services exec deployment/cray-dns-powerdns -c cray-dns-powerdns -- pdnsutil show-zone wasp.dev.cray.com
+ncn-m001# kubectl -n services exec deployment/cray-dns-powerdns -c cray-dns-powerdns -- pdnsutil show-zone wasp.dev.cray.com
 This is a Master zone
 Last SOA serial number we notified: 2021090901 == 2021090901 (serial in the database)
 Zone has following allowed TSIG key(s): wasp-key
@@ -91,16 +91,16 @@ DS = wasp.dev.cray.com. IN DS 26690 13 1 8c926281afb822a2bea767f08c79b856a2427c2
 DS = wasp.dev.cray.com. IN DS 26690 13 2 2bfd71e5403f99d25496f5f7f352e71747bb72ee6eb240dcaf8b56b95d18ef6c ; ( SHA256 digest )
 DS = wasp.dev.cray.com. IN DS 26690 13 4 df40f23a7ee051d7e3d40d4059640bda3558cd74a37110b25f7b8cf4e60506c77bf33a660400710d397df0a1cde26d70 ; ( SHA-384 digest )
 ```
-If the DNSKEY record is incorrect verify that the zone name is correct in the `dnssec` SealedSecret in `customizations.yaml` and that the desired zone signing key was used. Please see the [PowerDNS Configuration Guide](./PowerDNS_Configuration.md) for more information.
+If the DNSKEY record is incorrect, verify that the zone name is correct in the `dnssec` SealedSecret in `customizations.yaml` and that the desired zone signing key was used. Please see the [PowerDNS Configuration Guide](./PowerDNS_Configuration.md) for more information.
 
-### Verify TSIG operation
+### Verify TSIG Operation
 
-> **`IMPORTANT`** these examples are for informational purposes only. The use of the `dig` -y option to present the key should be avoided in favour of the -k option with the secret in a file to avoid the key being displayed in `ps` output or the shell history.
+> **`IMPORTANT`** these examples are for informational purposes only. The use of the `dig` command `-y` option to present the key should be avoided in favour of the `-k` option with the secret in a file to avoid the key being displayed in `ps` command output or the shell history.
 
-1. Determine the IP address of the external DNS service
+1. Determine the IP address of the external DNS service.
 
    ```
-   ncn-m001:~ # kubectl -n services get service cray-dns-powerdns-can-tcp
+   ncn-m001# kubectl -n services get service cray-dns-powerdns-can-tcp
    NAME                        TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)        AGE
    cray-dns-powerdns-can-tcp   LoadBalancer   10.27.91.157   10.101.8.113   53:30726/TCP   6d
    ```
@@ -122,7 +122,7 @@ If the DNSKEY record is incorrect verify that the zone name is correct in the `d
    sma-kibana.wasp.dev.cray.com. 300 IN	RRSIG	A 13 5 300 20210930000000 20210909000000 26690 wasp.dev.cray.com. [omitted]
    ```
 
-   When presented with an invalid key the transfer should fail
+   When presented with an invalid key the transfer should fail.
 
    ```
    $ dig -t axfr wasp.dev.cray.com @10.101.8.113 -y "hmac-sha256:wasp-key:B7n/sK74pa7r0ygOZkKpW9mWkPjq8fV71j1SaTpzJMQ="
@@ -132,10 +132,10 @@ If the DNSKEY record is incorrect verify that the zone name is correct in the `d
    ;; global options: +cmd
    ; Transfer failed.
    ```
-   The `cray-dns-powerdns` pod log will also indicate that the request failed
+   The `cray-dns-powerdns` pod log will also indicate that the request failed.
 
    ```
-   ncn-m001:~ # kubectl -n services logs cray-dns-powerdns-64fdf6597c-pqgdt -c cray-dns-powerdns
+   ncn-m001# kubectl -n services logs cray-dns-powerdns-64fdf6597c-pqgdt -c cray-dns-powerdns
    ---
    Sep 22 09:31:17 Packet for 'wasp.dev.cray.com' denied: Signature with TSIG key 'wasp-key' failed to validate
    ```
