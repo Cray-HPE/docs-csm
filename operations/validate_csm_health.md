@@ -614,6 +614,19 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
 
 * The node BMC of 'ncn-m001' will not typically be present in HSM component data, as it is typically connected to the site network instead of the HMN network.
 
+* The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depedning on the state of the system when the `verify_hsm_discovery.py` script is ran. If the system is currently going through the process of installation, then this is an expected mistmatch as the [Preapre Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet. 
+   > For more information refer to [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
+
+   Example mistmatch for the BMC of a HPE Apollo XL654D:
+```bash
+...
+  Nodes: FAIL
+    - x3000c0s30b1n0 (Compute, NID 5) - Not found in HSM Components.
+  NodeBMCs: FAIL
+    - x3000c0s19b1 - Not found in HSM Components; Not found in HSM Redfish Endpoints.
+...
+```
+
 * Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
    > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
 
