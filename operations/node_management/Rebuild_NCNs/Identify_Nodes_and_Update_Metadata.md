@@ -23,7 +23,7 @@ This section applies to all node types. The commands in this section assume you 
 1. Get a token to interact with BSS using the REST API.
 
     ```bash
-    ncn# TOKEN=$(curl -s -k -S -d grant_type=client_credentials \
+    ncn# TOKEN=$(curl -s -S -d grant_type=client_credentials \
         -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
         -o jsonpath='{.data.client-secret}' | base64 -d` \
         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
@@ -33,7 +33,7 @@ This section applies to all node types. The commands in this section assume you 
 1. Do a PUT action for the new JSON file.
 
     ```bash
-    ncn# curl -i -s -k -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" \
+    ncn# curl -i -s -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" \
     "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" -X PUT -d @./${XNAME}.json
     ```
 

@@ -52,11 +52,22 @@ Prepare a master node before rebuilding it.
    "first-master-hostname": "ncn-m001",
    ```
 
-1. Get a token to interact with BSS via the REST API.
+1. Get a token to interact with BSS using the REST API.
 
     ```bash
-   curl -i -s -k -H "Content-Type: application/json"  -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" -X PUT -d @./Global.json
-   ```
+    ncn# TOKEN=$(curl -s -S -d grant_type=client_credentials \
+        -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
+        -o jsonpath='{.data.client-secret}' | base64 -d` \
+        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
+        | jq -r '.access_token')
+    ```
+
+1. Do a PUT action for the new JSON file.
+
+    ```bash
+    ncn# curl -i -s -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" \
+    "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" -X PUT -d Global.json
+    ```
 
     Ensure a good response, such as `HTTP CODE 200`, is returned in the `curl` output.
 
@@ -66,7 +77,7 @@ Prepare a master node before rebuilding it.
 
     ```bash
     #!/bin/bash
-     source /srv/cray/scripts/metal/lib.sh
+    source /srv/cray/scripts/metal/lib.sh
     export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"
     echo $(kubeadm init phase upload-certs --upload-certs 2>&1 | tail -1) > /etc/cray/kubernetes/certificate-key
     export CERTIFICATE_KEY=$(cat /etc/cray/kubernetes/certificate-key)
@@ -74,12 +85,12 @@ Prepare a master node before rebuilding it.
     export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
     export SERVICES_CIDR=$(craysys metadata get kubernetes-services-cidr)
     envsubst < /srv/cray/resources/common/kubeadm.yaml > /etc/cray/kubernetes/kubeadm.yaml
-     kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
+    kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
     echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" > /etc/cray/kubernetes/join-command-control-plane
-     mkdir -p /srv/cray/scripts/kubernetes
+    mkdir -p /srv/cray/scripts/kubernetes
     cat > /srv/cray/scripts/kubernetes/token-certs-refresh.sh <<'EOF'
     #!/bin/bash
-     if [[ "$1" != "skip-upload-certs" ]]; then
+    if [[ "$1" != "skip-upload-certs" ]]; then
         kubeadm init phase upload-certs --upload-certs --config /etc/cray/kubernetes/kubeadm.yaml
     fi
     kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
@@ -113,7 +124,7 @@ Prepare a master node before rebuilding it.
     etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member remove <MEMBER_ID>
     ```
 
-### Step 4 - Stop the etcD service ***on the master node being removed***
+### Step 4 - Stop the etcd service ***on the master node being removed***
 
 ```bash
 systemctl stop etcd.service

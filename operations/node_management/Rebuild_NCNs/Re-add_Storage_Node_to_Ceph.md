@@ -85,10 +85,10 @@
    watch ceph -s
    ```
 
-1. execute the script.
+1. Execute the script.
 
    ```bash
-   /srv/cray/scripts/common/join_cluster.sh
+   /srv/cray/scripts/common/join_ceph_cluster.sh
    ```
 
    **IMPORTANT:** While watching your window running `watch ceph -s` you will see the health go to a  HEALTH_WARN state.  This is expected.  Most commonly you will see an alert about "failed to probe daemons or devices" and this will clear.
@@ -136,7 +136,7 @@
    watch ceph -s
    ```
 
-   You will see the OSD count UP and IN counts increase.  **If** you see your ***IN** count increase but not reflect the amount of drives being added back in, then you will need to fail over the ceph mgr daemon.  This is a known bug and is addressed in newer releases.
+   You will see the OSD count UP and IN counts increase.  **If** you see your **IN** count increase but not reflect the amount of drives being added back in, then you will need to fail over the ceph mgr daemon.  This is a known bug and is addressed in newer releases.
 
    If you need to fail over the ceph-mgr daemon please run:
 
@@ -144,7 +144,9 @@
    ceph mgr fail
    ```
 
-## Optionally Add Rados Gateway to the Rebuilt Nodes
+## Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
+
+   **IMPORTANT:** Radosgw by default is deployed to the first 3 storage nodes.  This includes haproxy and keepalived.  This is automated as part of the install, but you may have to regenerate the configuration if you are not running on the first 3 storage nodes or all nodes.  Please see the 2 examples in step 1.
 
 1. Deploy Rados Gateway containers to the new nodes.
 

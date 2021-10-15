@@ -13,7 +13,7 @@ Only follow the steps in the section for the node type that is being rebuilt:
 
 ## Wipe Disks: Master
 
-1. Unmount the etcD volume and remove the volume group.
+1. Unmount the etcd volume and remove the volume group.
 
    **NOTE:** etcd should already be stopped as part of the "Prepare Master Node" steps.
 
@@ -38,13 +38,23 @@ Only follow the steps in the section for the node type that is being rebuilt:
 
 ## Wipe Disks: Worker Node
 
-1. Stop contianerd, unmount volumes, and wipe drives.
+1. Stop contianerd and wipe drives.
 
     ```bash
     systemctl stop containerd.service
+    ```
+
+1. Unmount partitions.
+
+    ```bash
     umount /var/lib/kubelet
     umount /run/lib-containerd
     umount /run/containerd
+    ```
+
+1. Wipe Drives
+
+    ```bash
     wipefs --all --force /dev/sd* /dev/disk/by-label/*
     ```
 

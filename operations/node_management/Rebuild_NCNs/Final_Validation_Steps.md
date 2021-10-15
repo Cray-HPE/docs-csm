@@ -2,7 +2,7 @@
 
 **NOTE:** The following command will indicate if a CFS job is currently in progress for this node.
 
-**IMPORTANT:** This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
+**IMPORTANT:** This command assumes that you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
   ```bash
   ncn# cray cfs components describe $XNAME --format json
