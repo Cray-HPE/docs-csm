@@ -12,7 +12,7 @@ This page will walk-through booting the LiveCD `.iso` file directly onto a BMC.
    * [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup)
 
 
-<a name="requirements"></a>   
+<a name="requirements"></a>
 ## Requirements
 
 A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obtained from:
@@ -23,7 +23,7 @@ A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obt
 <a name="bmcs-virtual-mounts"></a>
 # BMCs' Virtual Mounts
 
-Most BMCs offer a **Web Interface** for controlling the node and for providing access to its BIOS and firmware. 
+Most BMCs offer a **Web Interface** for controlling the node and for providing access to its BIOS and firmware.
 
 Refer to the following pages based on your node vendor for help mounting an ISO image:
 
@@ -102,7 +102,7 @@ Intel BMCs allow for booting with direct ISO mounts.
    * [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup)
 
 
-After attaching and booting into the ISO, the password will need to be changed before using 
+After attaching and booting into the ISO, the password will need to be changed before using
 the booted OS.
 
 1. The ISO boots with no password, requiring one to be set on first login. Enter blank as the password and

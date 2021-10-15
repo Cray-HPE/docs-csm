@@ -22,17 +22,17 @@ This will cover the generic process for executing an action. For more specific e
 2. create a JSON file {whole-system-dryrun.json}; to make this a `live update` set `"overrideDryrun": true`
 
 ```json
- {  "command": { 
+ {  "command": {
  			"version": "latest",
-      "tag":  "default", 
-      "overrideDryrun": false, 
-      "restoreNotPossibleOverride": true, 
-      "timeLimit": 1000, 
-      "description": "dryrun of full system" } 
+      "tag":  "default",
+      "overrideDryrun": false,
+      "restoreNotPossibleOverride": true,
+      "timeLimit": 1000,
+      "description": "dryrun of full system" }
  }
 ```
 
-3. execute the dryrun 
+3. execute the dryrun
 
 ```bash
 # cray fas actions create {whole-system-dryrun.json}
@@ -73,11 +73,11 @@ For the steps below, the following returned messages will help determine if a fi
 
 *	`NoOp`: Nothing to do, already at version.
 *	`NoSol`: No viable image is available; this will not be updated.
-*	`succeeded`: 
-	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy. 
+*	`succeeded`:
+	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy.
 	*	IF `live update`: the operation succeeded, and has updated the xname + target to the identified version.
-*	`failed`: 
-	*	IF `dryrun` : There is something that FAS could do, but it likely would fail; most likely because the file is missing. 
+*	`failed`:
+	*	IF `dryrun` : There is something that FAS could do, but it likely would fail; most likely because the file is missing.
 	*	IF `live update` : the operation failed, the identified version could not be put on the xname + target.
 
 Data can be viewed at several levels of information:
@@ -118,7 +118,7 @@ endTime = "2020-06-18 03:11:06.806297546 +0000 UTC"
 
 ```
 
-**NOTE** : unless the action's `state` is `completed` or `aborted`; then this action is still under progress. 
+**NOTE** : unless the action's `state` is `completed` or `aborted`; then this action is still under progress.
 
 #### Get Details of Action
 
@@ -237,9 +237,9 @@ Using the `operationID` listed in the actions array we can see the full detail o
 "toTag": "",
 "state": "succeeded",
 "stateHelper": "unexpected change detected in firmware version. Expected nc.1.3.8-shasta-release.arm.2020-06-15T22:57:31+00:00.b7f0725 got: nc.1.2.25-shasta-release.arm.2020-05-15T17:27:16+00:00.0cf7f51",
-"deviceType": "", 
-"expirationTime": "", 
-"manufacturer": "cray", 
+"deviceType": "",
+"expirationTime": "",
+"manufacturer": "cray",
 "xname": "x9000c1s3b1",
 "toFirmwareVersion": ""
 }

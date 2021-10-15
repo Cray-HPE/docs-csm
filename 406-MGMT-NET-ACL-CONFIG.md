@@ -3,7 +3,7 @@
 This page describes the purpose of the ACLs and how they are configured
 
 # Requirements
-- Access to the switches 
+- Access to the switches
 
 # Aruba Configuration
 
@@ -13,13 +13,13 @@ These need to be set where the Layer3 interface is located, this will most likel
 The first step is to create the access list, once it is created we have to apply it to a VLAN.
 ```
 access-list ip nmn-hmn
-    10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0 
+    10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0
     20 deny any 10.252.0.0/255.255.128.0 10.104.0.0/255.252.0.0
-    30 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0 
+    30 deny any 10.254.0.0/255.255.128.0 10.252.0.0/255.255.128.0
     40 deny any 10.254.0.0/255.255.128.0 10.100.0.0/255.252.0.0
-    50 deny any 10.100.0.0/255.252.0.0 10.254.0.0/255.255.128.0 
+    50 deny any 10.100.0.0/255.252.0.0 10.254.0.0/255.255.128.0
     60 deny any 10.100.0.0/255.252.0.0 10.104.0.0/255.252.0.0
-    70 deny any 10.104.0.0/255.252.0.0 10.252.0.0/255.255.128.0 
+    70 deny any 10.104.0.0/255.252.0.0 10.252.0.0/255.255.128.0
     80 deny any 10.104.0.0/255.252.0.0 10.100.0.0/255.252.0.0
     90 permit any any any
 ```

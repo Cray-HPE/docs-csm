@@ -42,7 +42,7 @@ Partitioning is controlled by two aspects:
 | Node Type | No. of "small" disks (0.5 TiB) | No. of "large" disks (1.9 TiB) |
 | --- |:---:|:---:|
 | k8s-master nodes | 3 | 0
-| k8s-worker nodes | 2 | 1 
+| k8s-worker nodes | 2 | 1
 | ceph-storage nodes | 2 | 3+
 
 Disks are chosen by dracut. Kubernetes and storage nodes use different dracut modules.
@@ -54,7 +54,7 @@ Disks are chosen by dracut. Kubernetes and storage nodes use different dracut mo
 
 NCN masters and workers use the same artifacts, and thus have the same dracut modules assimilating disks. Therefore, it is important
 to beware of:
-- k8s-master nodes with 1 or more extra "large" disk(s); these disks help but are unnecessary 
+- k8s-master nodes with 1 or more extra "large" disk(s); these disks help but are unnecessary
 - ceph-storage nodes do not run the same dracut modules since they have different disk demands
 
 <a name="worker-nodes-with-etcd"></a>
@@ -66,7 +66,7 @@ easily.
 <a name="disable-luks"></a>
 #### Disable Luks
 
-> **`NOTE`** This is broken, use the [expand RAID](#expand-the-raid) option instead. (MTL-1309) 
+> **`NOTE`** This is broken, use the [expand RAID](#expand-the-raid) option instead. (MTL-1309)
 
 All NCNs (master/worker/storage) have the same kernel parameters, but are not always necessary. This method works by toggling the dependency
 for the metal ETCD module, disabling LUKs will disable ETCD bare-metal creation.
@@ -135,7 +135,7 @@ The above table's rows with overlayFS map their "Mount Paths" to the "Upper Dire
 
 > The "OverlayFS Name" is the name used in fstab and seen in the output of `mount`.
 
-| OverlayFS Name | Upper Directory | Lower Directory (or more) 
+| OverlayFS Name | Upper Directory | Lower Directory (or more)
 | --- | --- | --- |
 | `etcd_overlayfs` | `/run/lib-etcd` | `/var/lib/etcd` |
 | `containerd_overlayfs` | `/run/lib-containerd` | `/var/lib/containerd` |
@@ -160,7 +160,7 @@ There are a few overlays used for NCN image boots. These enable two critical fun
 > 3. `mount | grep ' / '` will show you the overlay being layered atop the squashFS
 
 
-Let us pick apart the `SQFSRAID` and `ROOTRAID` overlays. 
+Let us pick apart the `SQFSRAID` and `ROOTRAID` overlays.
 - `/run/rootfsbase` is the SquashFS image itself
 - `/run/initramfs/live` is the squashFS's storage array, where one or more squashFS can live
 - `/run/initramfs/overlayfs` is the overlayFS storage array, where the persistent directories live
@@ -355,7 +355,7 @@ There are two options one can leave enabled to accomplish this:
 
 For long-term usage, `rd.live.overlay.readonly=1` should be added to the command line.
 
-The `reset=1` toggle is usually used to fix a side-ways overlay, if you want to completely refresh 
+The `reset=1` toggle is usually used to fix a side-ways overlay, if you want to completely refresh
 and purge the overlay then  `rd.live.overlay.reset` is your friend.
 
 
@@ -387,7 +387,7 @@ rd.live.overlay.size=307200
 
 # Use a 1 TiB overlayFS
 rd.live.overlay.size=1000000
-``` 
+```
 
 <a name="thin-overlay-feature"></a>
 ### Thin Overlay Feature

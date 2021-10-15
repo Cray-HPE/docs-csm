@@ -17,7 +17,7 @@ Mileage may vary, as some obstacles such as BAUDRATE and `terminal` usage vary p
 
 ## Setup / Connection
 
-This will involve using a preferred utility (`minicom`, `screen`,  or `cu`) for connecting to your 
+This will involve using a preferred utility (`minicom`, `screen`,  or `cu`) for connecting to your
 switches console.
 
 > At this time it is assumed you have connected your USB-DB-9 or USB-RJ-45 cable between your switch and your NCN.

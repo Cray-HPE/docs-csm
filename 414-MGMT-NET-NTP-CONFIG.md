@@ -1,6 +1,6 @@
 # Management Network NTP configuration
 
-This page describes how NTP is setup and configured on the management network switches. 
+This page describes how NTP is setup and configured on the management network switches.
 
 # Requirements
 - Access to switches
@@ -47,7 +47,7 @@ sw-spine-001(config)# show ntp associations
 ----------------------------------------------------------------------
 ```
 
-# Dell 
+# Dell
 
 Get current NTP configuration.
 ```
