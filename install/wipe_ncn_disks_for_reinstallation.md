@@ -72,7 +72,7 @@ wiping the disks and RAIDs.
 
     ```bash
     ncn-s# ls -1 /dev/sd* /dev/disk/by-label/*
-    ncn-s# vgremove -f --select 'vg_name=~ceph*'
+    ncn-s# vgremove -f -v --select 'vg_name=~ceph*'
     ```
 
 1. List the disks for verification.
@@ -99,12 +99,14 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
 1. Reset Kubernetes on each master and worker node.
 
-    ***NOTE:*** Our recommended order is to do this first on the workers, then on the master nodes.
+   This will stop kubelet, underlying containers, and remove the contents of `/var/lib/kubelet`.
+
+   **NOTE:** The recommended order is to do this on the worker nodes, and then the master nodes.
 
     1. For each worker node, run the following:
 
         ```bash
-        ncn-w# kubeadm reset --force
+        ncn-mw# kubeadm reset --force
         ```
 
     1. List any containers running in `containerd`.
@@ -125,11 +127,11 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
         ncn-mw# crictl stop <container id from the CONTAINER column>
         ```
 
-    This will stop `kubelet`, underlying containers, and remove the contents of `/var/lib/kubelet`.
+    1. After performing the previous steps for the worker nodes to be wiped, then perform them for the master nodes to be wiped.
 
-1. Delete CEPH volumes ***on Utility Storage Nodes ONLY***.
+1. Delete Ceph Volumes **on storage nodes ONLY**.
 
-    For each Storage node:
+    For each storage node:
 
     1. Stop Ceph.
 
@@ -165,7 +167,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
         ```bash
         ncn-s# ls -1 /dev/sd* /dev/disk/by-label/*
-        ncn-s# vgremove -f --select 'vg_name=~ceph*'
+        ncn-s# vgremove -f -v --select 'vg_name=~ceph*'
         ```
 
 1. Unmount volumes.
@@ -219,7 +221,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
         7741d5096625  registry.local/sdu-docker-stable-local/cray-sdu-rda:1.1.1  /bin/sh -c /usr/s...  6 weeks ago  Up 6 weeks ago          cray-sdu-rda
         ```
 
-        If there is a running `cray-sdu-rda` container in the above output, stop it using the container id:
+    1. If there is a running `cray-sdu-rda` container in the above output, stop it using the container ID:
 
         ```bash
         ncn# podman stop 7741d5096625
@@ -229,7 +231,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
     1. Remove metal LVM.
 
         ```bash
-        ncn# vgremove -f --select 'vg_name=~metal*'
+        ncn# vgremove -f -v --select 'vg_name=~metal*'
         ```
 
         > **`NOTE`** Optionally you can run the `pvs` command and if any drives are still listed, you can remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, you should ignore the error and proceed to the next step, as this will not inhibit the wipe process.
@@ -237,7 +239,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 1. Stop the RAIDs.
 
     ```bash
-    ncn# for md in /dev/md/*; do mdadm -S $md || echo nope ; done
+    ncn# for md in /dev/md/*; do mdadm -S -v $md || echo nope ; done
     ```
 
 1. List the disks for verification.
