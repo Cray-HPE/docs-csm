@@ -1,32 +1,44 @@
 # Cray System Management (CSM) - Release Notes
 
 ## What’s New
-    * Base Platform Component Upgrades
-        - Istio version 1.7.8, running in distroless mode
-        - Containerd version 1.4.3
-        - Kubernetes version 1.19.9
-        - Weave version 2.8.0
-        - Etcd API version 3.4 (etcdctl version 3.4.14)
-        - Coredns version 1.7.0
-        - Ceph version 15.2.12-83-g528da226523 (octopus)
+* New Hardware Support
+  - AMD Rome-Based HPE Apollo 6500 XL675d Gen10+ with NVIDIA 40GB A100 GPU for use as a Compute Node.
+  - AMD Rome-Based HPE Apollo 6500 XL645d Gen10+ with NVIDIA 40GB A100 GPU for use as a Compute Node.
+  - AMD Rome-Based HPE DL385 Gen10+ with NVIDIA 40GB A100 GPU for use as a User Access Node.
+  - AMD Rome-Based HPE DL 385 Gen10+ with AMD Mi100 GPU for use as a User Access Node.
+  - AMD Milan-Based HPE DL 385 with NVIDIA 40 GB A100 GPU for use as a User Access Node.
+  - AMD Milan-Based HPE Apollo 6500/XL645d Gen10+ with NVIDIA 80GB A100 GPU for use as a Compute Node.
+  - AMD Milan-Based Windom Blade with NVIDIA 40 GB A100 GPU for use as a Compute Node.
+  - AMD Milan-Based Grizzly Peak Blade with NVIDIA 40 GB A100 GPU for use as a Compute Node.
+  - AMD Milan-Based Grizzly Peak Blade with NVIDIA 80 GB A100 GPU for use as a Compute Node.
+  - Aruba CX8325, 8360, and 6300M network switches
 
-    * Security Improvements
-        - Ansible Plays have been created to update management node Operating System Passwords and SSH Keys.
-        - A significant number of security enhancements have been implemented to eliminate vulnerabilities and provide security hardening
-          Including:
-              - The removal of clear-text passwords in CSM install scripts
-              - Incorporation of trusted-base operating systems in containers
-              - And addresses many critical security CVEs.
+* Base Platform Component Upgrades
+  - Istio version 1.7.8, running in distroless mode
+  - Containerd version 1.4.3
+  - Kubernetes version 1.19.9
+  - Weave version 2.8.0
+  - Etcd API version 3.4 (etcdctl version 3.4.14)
+  - Coredns version 1.7.0
+  - Ceph version 15.2.12-83-g528da226523 (octopus)
 
-    * Customer Requested Enhancements
-        - Error Logging for the BOS session template must be improved.
-        - IMS must provide a way to clean up sessions without the use of jq and xargs.
-        - Cray-cfs-batcher needs a maximum limit for session creation suspension.
-        - BOS session should help to identify the resulting cfs job.
-        - DHCP lease time should be increased. (It was increased to 3600 seconds.)
-        - Helm charts should have a way to be automatically patched during Shasta installation.
-        - HSM should add a timestamp to State Change Notifications (SCN) data before publishing to Kafka topic: cray-hmsstatechange-notifications.
-        - End-of-Life Alpine and nginx container images must be removed for security purposes.
+* Security Improvements
+  - Ansible Plays have been created to update management node Operating System Passwords and SSH Keys.
+  - A significant number of security enhancements have been implemented to eliminate vulnerabilities and provide security hardening
+    Including:
+        - The removal of clear-text passwords in CSM install scripts
+        - Incorporation of trusted-base operating systems in containers
+        - And addresses many critical security CVEs.
+
+* Customer Requested Enhancements
+  - Error Logging for the BOS session template must be improved.
+  - IMS must provide a way to clean up sessions without the use of jq and xargs.
+  - Cray-cfs-batcher needs a maximum limit for session creation suspension.
+  - BOS session should help to identify the resulting cfs job.
+  - DHCP lease time should be increased. (It was increased to 3600 seconds.)
+  - Helm charts should have a way to be automatically patched during Shasta installation.
+  - HSM should add a timestamp to State Change Notifications (SCN) data before publishing to Kafka topic: cray-hmsstatechange-notifications.
+  - End-of-Life Alpine and nginx container images must be removed for security purposes.
 
 ## Bug Fixes
 The following list enumerates the more important issues that were found and fixed in CSM v1.0.0. In total, there were more than 34 customer-reported issues and more than 350 development critical issues fixed in this release.
