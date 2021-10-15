@@ -5,7 +5,7 @@ the `rotate-pw-mgmt-nodes.yml` Ansible playbook provided by CSM or through
 NCN node personalization (`site.yml`).
 
 The NCNs deploy with a default password, which are changed during the system
-install. See [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md)
+install. See [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 for more information.
 
 It is a recommended best practice for system security to change the root
@@ -16,14 +16,14 @@ instance, and applied with the `csm.password` Ansible role via a CFS session. If
 no password is added to Vault as in the procedure below, this Ansible role will
 skip any password updates.
 
-NOTE: The root password is also updated when applying the CSM Configuration Layer
+***NOTE***: The root password is also updated when applying the CSM Configuration Layer
 during NCN personalization using the `site.yml` playbook if the password has
-been added to [Hashicorp Vault](HashiCorp_Vault.md). See the
-[Managing Configuration with CFS](operations/managing_configuration_with_CFS.md)
+been added to [HashiCorp Vault](HashiCorp_Vault.md). See
+[Configure Non-compute Nodes with CFS](../CSM_product_management/Configure_Non_Compute_Nodes.md#set_root_password).
 procedure for more information.
 
 Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to
-change the root password as a quicker alternative to running a full NCN
+change the root password as a quick alternative to running a full NCN
 personalization.
 
 ### Procedure for `root` User

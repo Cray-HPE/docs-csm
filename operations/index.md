@@ -45,11 +45,11 @@ The following administrative topics can be found in this guide:
    * [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
    * [Configure the Cray Command Line Interface (cray CLI)](configure_cray_cli.md)
    * [Change Passwords and Credentials](CSM_product_management/Change_Passwords_and_Credentials.md)
-   * [Manage a Configuration with CFS](CSM_product_management/Manage_a_Configuration_with_CFS.md)
+   * [Configure Non-compute Nodes with CFS](CSM_product_management/Configure_Non_Compute_Nodes.md)
+   * [Perform NCN Personalization](CSM_product_management/Perform_NCN_Personalization.md)
    * [Access the LiveCD USB Device After Reboot](Access_LiveCD_USB_Device_After_Reboot.md)
    * [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
    * [Validate Signed RPMs](CSM_product_management/Validate_Signed_RPMs.md)
-
 
 <a name="image-management"></a>
 
