@@ -11,12 +11,12 @@ Skip this section if a master or storage node was rebuilt.
       ```bash
       ncn-mw# kubectl get nodes
       NAME       STATUS   ROLES    AGE    VERSION
-      ncn-m001   Ready    master   113m   v1.18.6
-      ncn-m002   Ready    master   113m   v1.18.6
-      ncn-m003   Ready    master   112m   v1.18.6
-      ncn-w001   Ready    <none>   112m   v1.18.6
-      ncn-w002   Ready    <none>   112m   v1.18.6
-      ncn-w003   Ready    <none>   112m   v1.18.6
+      ncn-m001   Ready    master   113m   v1.19.9
+      ncn-m002   Ready    master   113m   v1.19.9
+      ncn-m003   Ready    master   112m   v1.19.9
+      ncn-w001   Ready    <none>   112m   v1.19.9
+      ncn-w002   Ready    <none>   112m   v1.19.9
+      ncn-w003   Ready    <none>   112m   v1.19.9
       ```
 
 1. Ensure there is proper routing set up for liquid-cooled hardware.
