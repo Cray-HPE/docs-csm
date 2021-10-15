@@ -7,10 +7,10 @@ This page is a guide to walk through the steps of upgrading a network to 1.4.
 With Shasta v1.4 we are using the following firmware, [FIRMWARE](409-MGMT-NET-FIRMWARE-UPDATE.md)
 
 
-## 2. IP Address and Hostname Changes 
+## 2. IP Address and Hostname Changes
 CSI will generate the IPs for the switches on a Shasta v1.4 system, they will be located here "/var/www/ephemeral/prep/{system-name}/networks" when ncn-m001 is booted from the LiveCD.
 
-Here is a snippet from NMN.yaml with the IP addresses and hostnames of the switches.  
+Here is a snippet from NMN.yaml with the IP addresses and hostnames of the switches.
 
 ```
 ip_reservations:
@@ -28,7 +28,7 @@ ip_reservations:
    aliases: []
 ```
 
-On most Shasta v1.3.x systems the IP addresses and hostnames will be as shown below, which will require them to be updated. 
+On most Shasta v1.3.x systems the IP addresses and hostnames will be as shown below, which will require them to be updated.
 
 ```
 spine-01 10.252.0.1
@@ -77,7 +77,7 @@ Shasta v1.3 to v1.4 Delta
 !v1.3 to v1.4 changes
 configure terminal
 interface ethernet 1/1/x
-no spanning-tree bpdufilter 
+no spanning-tree bpdufilter
 spanning-tree bpduguard enable
 exit
 write memory
@@ -293,7 +293,7 @@ mlag-vip rocket-mlag-domain ip 192.168.255.242 /29 force
 no interface mgmt0 dhcp
    interface mgmt0 ip address 192.168.255.243 /29
 no mlag shutdown
-   mlag system-mac 00:00:5E:00:01:5D	
+   mlag system-mac 00:00:5E:00:01:5D
 mlag-vip rocket-mlag-domain ip 192.168.255.242 /29 force
 ```
 

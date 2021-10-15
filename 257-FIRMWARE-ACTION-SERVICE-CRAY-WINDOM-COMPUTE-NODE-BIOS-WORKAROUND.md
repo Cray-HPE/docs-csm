@@ -9,7 +9,7 @@ The following conditions must be true in order to qualify for this problem:
 4. The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states: `"No Image Available"`
 5. The BIOS in question is running a version <= `1.2.5` (as reported by Redfish; or by describing the `noSolution` operation in FAS).
 6. The hardware model reported by Redfish is `wnc-rome`; this hardware's marketing designation is `HPE CRAY EX425`. If your Redfish model is different (ignoring casing), it means the blade(s) in question are not `Windom`. In this case, please contact technical support.
-7. To find the model reported by redfish, drill into the `noSolution` operation using `FAS`: 
+7. To find the model reported by redfish, drill into the `noSolution` operation using `FAS`:
 
     ```bash
     linux# cray fas operations describe {operationID} --format json

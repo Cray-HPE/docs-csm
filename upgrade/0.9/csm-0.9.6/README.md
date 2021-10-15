@@ -9,7 +9,7 @@
    rrset-roundrobin: no
    ```
 
-   Unbound back in April 2020 [changed](https://github.com/NLnetLabs/unbound/blob/master/doc/Changelog) the default of this setting to be `yes` which had the effect of randomizing the records returned from it if more than one entry corresponded (as woudl be the case for PTR records, for example):
+   Unbound back in April 2020 [changed](https://github.com/NLnetLabs/unbound/blob/master/doc/Changelog) the default of this setting to be `yes` which had the effect of randomizing the records returned from it if more than one entry corresponded (as would be the case for PTR records, for example):
 
    ```text
    21 April 2020: George
@@ -89,10 +89,10 @@ It is important to first verify a healthy starting state. To do this, run the
 found, correct them and verify the appropriate validation checks before
 proceeding.
 
-<a name="apply-cray-hms-hmcollector-scale-changes"></a> 
+<a name="apply-cray-hms-hmcollector-scale-changes"></a>
 ## Apply cray-hms-hmcollector scale changes
 
-If no scaling changes are desired to be made against the cray-hms-hmcollector deployment or if they have have not been previously applied, then this section can be skipped and proceed onto the [Setup Nexus](#setup-nexus) section. 
+If no scaling changes are desired to be made against the cray-hms-hmcollector deployment or if they have have not been previously applied, then this section can be skipped and proceed onto the [Setup Nexus](#setup-nexus) section.
 
 Before [upgrading services](#upgrade-services), `customizations.yaml` in the `site-init` secret in the `loftsman` namespace must be updated to apply or re-apply any manual scaling changes made to the cray-hms-hmcollector deployment. Follow the [Adjust HM Collector resource limits and requests](../../../operations/hmcollector/adjust_hmcollector_resource_limits_requests.md) procedure for information about tuning and updating the resource limits used by the cray-hms-hmcollector deployment. The section `Redeploy cray-hms-hmcollector with new resource limits and request` of the referenced procedure can be skipped, as the `upgrade.sh` script will re-deploy the collector with the new resource limit changes.
 
@@ -219,7 +219,7 @@ deployment "cray-dns-unbound" successfully rolled out
 
 ### Verify cray-sysmgmt-health changes:
 
-1. Confirm node-exporter is running on each storage node. This command can be run from a master node.  Validate that the result contains `go_goroutines` (replace ncn-s001 below with each storage node):
+1. Confirm node-exporter is running on each storage node. This command can be run from a master node. Validate that the result contains `go_goroutines` (replace ncn-s001 below with each storage node):
 
    ```bash
    curl -s http://ncn-s001:9100/metrics |grep go_goroutines|grep -v "#"
@@ -234,7 +234,7 @@ deployment "cray-dns-unbound" successfully rolled out
    kube-scheduler.yaml:    - --bind-address=0.0.0.0
    ```
 
-1. Confirm updated sysmgmt-health chart was deployed.  This command can be executed on a master node -- confirm the `cray-sysmgmt-health-0.12.6` chart version:
+1. Confirm updated sysmgmt-health chart was deployed. This command can be executed on a master node -- confirm the `cray-sysmgmt-health-0.12.6` chart version:
 
    ```bash
    ncn-m# helm ls -n sysmgmt-health
@@ -246,7 +246,7 @@ deployment "cray-dns-unbound" successfully rolled out
 
    **`IMPORTANT:`** Ensure you replace `XNAME` with the correct xname in the below examples (executing the `/opt/cray/platform-utils/getXnames.sh` script on a master node will display xnames):
 
-   Example for a master node -- this should be checked for each master node.  Validate the three `sed` commands are returned in the output.
+   Example for a master node -- this should be checked for each master node. Validate the three `sed` commands are returned in the output.
 
    ```bash
    ncn-m# cray bss bootparameters list --name XNAME --format=json | jq '.[]|."cloud-init"."user-data"'
@@ -275,7 +275,7 @@ deployment "cray-dns-unbound" successfully rolled out
    }
    ```
 
-   Example for a storage node -- this should be checked for each storage node.  Validate the `zypper` command is returned in the output.
+   Example for a storage node -- this should be checked for each storage node. Validate the `zypper` command is returned in the output.
 
    ```bash
    ncn-m001:~ # cray bss bootparameters list --name XNAME --format=json | jq '.[]|."cloud-init"."user-data"'
@@ -340,7 +340,7 @@ Once the patch is installed the missing timestamp fix can be validated by taking
 
 NOTE: All examples below will use the node seen in the above example.
 
-6. Send an SCN to HMNFD for that node indicating that it is in the Ready state.  Note that this won't affect anything since the node is already Ready.
+6. Send an SCN to HMNFD for that node indicating that it is in the Ready state. Note that this will not affect anything since the node is already Ready.
 
 ```
    TOKEN=`curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=\`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d\` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'`

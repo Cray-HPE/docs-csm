@@ -39,7 +39,7 @@ total 2.7G
 
 SSH into the switch you want to upgrade.
 
-Example: the IP ```10.252.1.12``` used is the liveCD 
+Example: the IP ```10.252.1.12``` used is the liveCD
 ```
 sw-leaf-001# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_6400-6300_10_06_0010.stable.swi primary
 
@@ -53,10 +53,10 @@ sw-leaf-001# show image
 ---------------------------------------------------------------------------
 ArubaOS-CX Primary Image
 ---------------------------------------------------------------------------
-Version : FL.10.06.0010                 
-Size    : 643 MB                        
-Date    : 2020-12-14 10:06:34 PST       
-SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9 
+Version : FL.10.06.0010
+Size    : 643 MB
+Date    : 2020-12-14 10:06:34 PST
+SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9
 ```
 After the firmware is uploaded you will need to boot the switch to the correct image.
 
@@ -72,13 +72,13 @@ sw-leaf-001# show version
 ArubaOS-CX
 (c) Copyright 2017-2020 Hewlett Packard Enterprise Development LP
 -----------------------------------------------------------------------------
-Version      : FL.10.06.0010                                                 
-Build Date   : 2020-09-29 07:44:16 PDT                                       
-Build ID     : ArubaOS-CX:FL.10.06.0010:3cbfcce60961:202009291304            
-Build SHA    : 3cbfcce609617b0cf84a6b941a2b36c43dfeb2cb                      
-Active Image : primary                       
+Version      : FL.10.06.0010
+Build Date   : 2020-09-29 07:44:16 PDT
+Build ID     : ArubaOS-CX:FL.10.06.0010:3cbfcce60961:202009291304
+Build SHA    : 3cbfcce609617b0cf84a6b941a2b36c43dfeb2cb
+Active Image : primary
 
-Service OS Version : FL.01.07.0002                 
+Service OS Version : FL.01.07.0002
 BIOS Version       : FL.01.0002
 ```
 
@@ -93,7 +93,7 @@ sw-spine-001 [standalone: master] # image fetch http://10.252.1.4/fw/network/ony
 
 Install the image.
 ```
-sw-spine-001 [standalone: master] # image install onyx-X86_64-3.9.1014.stable.img 
+sw-spine-001 [standalone: master] # image install onyx-X86_64-3.9.1014.stable.img
 ```
 
 Select the image to boot next.
@@ -103,13 +103,13 @@ sw-spine-001 [standalone: master] # image boot next
 
 Write memory and reload.
 ```
-sw-spine-001 [standalone: master] # write memory 
+sw-spine-001 [standalone: master] # write memory
 sw-spine-001 [standalone: master] # reload
 ```
 
 Once the switch is available, verify the image is installed.
 ```
-sw-spine-001 [standalone: master] # show images 
+sw-spine-001 [standalone: master] # show images
 
 Installed images:
   Partition 1:
@@ -155,13 +155,13 @@ File Transfer State:     download
 
 Once the image is uploaded all that is left is a reboot.
 ```
-sw-leaf-001# write memory 
+sw-leaf-001# write memory
 sw-leaf-001# reload
 ```
 
 Once the switch is available, verify the image is installed.
 ```
-sw-leaf-001# show version 
+sw-leaf-001# show version
 Dell EMC Networking OS10 Enterprise
 Copyright (c) 1999-2020 by Dell Inc. All Rights Reserved.
 OS Version: 10.5.1.4

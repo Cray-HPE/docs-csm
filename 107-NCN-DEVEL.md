@@ -14,7 +14,7 @@ find a basic flow for iterative boots.
    ```
 
 2. Set your Image IDs
-    > This finds the newest pair, so it will find the last downloaded set (i.e. your set of images). 
+    > This finds the newest pair, so it will find the last downloaded set (i.e. your set of images).
     ```bash
    pit# /root/bin/set-sqfs-links.sh
    ```

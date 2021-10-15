@@ -4,7 +4,7 @@ This page is designed to go over all the flow control settings for Dell/Mellanox
 
 ## Leaf Switch Node Connections
 
-For the node connections to a leaf switch, we want the transmit flowcontrol disabled, and receive flowcontrol enabled. The following commands will accomplish this.  
+For the node connections to a leaf switch, we want the transmit flowcontrol disabled, and receive flowcontrol enabled. The following commands will accomplish this.
 
 NOTE: If you have a TDS system involving a Hill cabinet, make sure to confirm that no CMM nor CEC components are connected to any leaf switches in your system. If these components are connected to the leaf, confirm to which ports they are connected, and modify the commands below to avoid modifying the flowcontrol settings of those ports.
 ```
@@ -46,7 +46,7 @@ Based on this example, we see that the physical ports are '1/1/51' and '1/1/52'.
 
 #### CDU Switches
 
-In order to get the ports involved in the connection to the spine switches, you can use the command shared for the leaf switch, above.  
+In order to get the ports involved in the connection to the spine switches, you can use the command shared for the leaf switch, above.
 
 In addition to this, we also need the ports which connect the pair of CDU switches together. The best way to determine the ports involved is to run the following command:
 ```
@@ -133,7 +133,7 @@ The convenient way to identify the ports involved with connections to other swit
 sw-spine-001 [standalone: master] # show interfaces status
  
 --------------------------------------------------------------------------------------------------------------------------------------------------------
-Port                  Operational state     Admin                           Speed             MTU               Description                            
+Port                  Operational state     Admin                           Speed             MTU               Description
 --------------------------------------------------------------------------------------------------------------------------------------------------------
 mgmt1                 Down                  Enabled                         UNKNOWN           1500              -
 mgmt0                 Down                  Enabled                         UNKNOWN           1500              -
@@ -186,7 +186,7 @@ Eth1/28               Down                  Enabled                         Unkn
 Eth1/29               Down                  Enabled                         Unknown           1500              -
 Eth1/30               Down                  Enabled                         Unknown           1500              -
 Eth1/31               Down                  Enabled                         Unknown           1500              -
-Eth1/32               Down                  Enabled                         Unknown           1500  
+Eth1/32               Down                  Enabled                         Unknown           1500
 ```
 The links between the 2 spines should be port-channel 100 ('Po100'). The 'mlag-port-channel' interfaces which are connections to leaf, aggregate or CDU switches would be 'Mpo' interfaces with indices greater than 100. So here, 'Mpo1'-'Mpo11' and 'Mpo17' are connections to NCN's, whereas 'Mpo113', 'Mpo151' and 'Mpo152' are connections to other switches. So identifying the port-channel and mlag-port-channel devices, we look for the "Eth" rows which have one of these labels in parentheses next to it. In the example above, these are:
 

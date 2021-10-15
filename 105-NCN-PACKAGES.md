@@ -7,7 +7,7 @@ on running nodes, but to account for drift there are collection commands listed 
 
 Source: https://stash.us.cray.com/projects/CLOUD/repos/node-image-kubernetes/browse
 
-#### Collection 
+#### Collection
 
 ```bash
 ncn-w002# zypper --disable-repositories se --installed-only | grep i+ | tr -d '|' | awk '{print $2}'

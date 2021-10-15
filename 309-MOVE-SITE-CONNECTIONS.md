@@ -1,4 +1,4 @@
-# Move Site Connections 
+# Move Site Connections
 
 In 1.4, the site connections that were previously connection to ncn-w001 will be moved to ncn-m001. This page will go over the process to make that change.
 > Note: In Shasta v1.4, any number of master nodes may have external connections, before Shasta v1.4 this was strictly ncn-w001.
@@ -9,8 +9,8 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
    Also request that the SHCD be updated with the following changes.
 
    * Swap mn01 and wn01 cabling. mn01-j1 and mn01-j3 need the external/site-links and both wn01-j1 and wn01-j3 should be wired into the leaf switch.
-   * Plug a USB stick (250GB or larger) into mn01. If one is already in wn01 please move it to mn01, otherwise new USBs should have been ordered.  
-   * Create DNS records for ncn-m001 and its BMC. 
+   * Plug a USB stick (250GB or larger) into mn01. If one is already in wn01 please move it to mn01, otherwise new USBs should have been ordered.
+   * Create DNS records for ncn-m001 and its BMC.
       - `<system-name>-ncn-m001`
       - `<system-name>-ncn-m001-mgmt`
 
@@ -18,14 +18,14 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
 
 2. Set the new host IP and default route.
 
-    After the above changes have been made, go to the console of ncn-m001 via the new BMC address given by DHCW.  
+    After the above changes have been made, go to the console of ncn-m001 via the new BMC address given by DHCW.
 
    ```bash
    username=''
    bmcaddr=''
    export IPMI_PASSWORD=''
    ipmitool -I lanplus -U $username -E -H $bmcaddr sol activate
-   ``` 
+   ```
 
    Set the new static em1 IP address in `/etc/sysconfig/network/ifcfg-em1`. Replace `172.30.XX.XX` with the `em1` IP for your system.
 
@@ -62,9 +62,9 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
  
     DCHW may do this step for you. If not, do the following after the above changes have been made
 
-    a. SSH from your laptop to ncn-m001 via the new external connection.  
+    a. SSH from your laptop to ncn-m001 via the new external connection.
 
-    b. SSH from ncn-m001 to ncn-w001 over the NMN. 
+    b. SSH from ncn-m001 to ncn-w001 over the NMN.
 
     c. Execute `ipmitool lan print 1` and check to see if `IP Address Source` is set to Static or DHCP.
 
@@ -93,7 +93,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
 5. Log out of ncn-w001. You should now be back on ncn-m001.
 
 
-6. Shutdown all of the nodes except for ncn-m001 
+6. Shutdown all of the nodes except for ncn-m001
 
     We want to make sure all of the NCNs are shutdown before starting the 1.4 installation to avoid having multiple DHCP servers running. Because Kea is also serving the BMCs their addresses, we will want to do this all at approximately the same time before they lose their leases.
 
@@ -105,7 +105,7 @@ In 1.4, the site connections that were previously connection to ncn-w001 will be
    grep -oP $stoken /etc/dnsmasq.d/statics.conf | xargs -i ipmitool -I lanplus -U $username -E -H {} power off
    ```
 
-    If you found an IP in step 3e, use ipmitool from ncn-m001 to power off ncn-w001.  
+    If you found an IP in step 3e, use ipmitool from ncn-m001 to power off ncn-w001.
 
     If you did not find an IP in step 3e or you cannot access that IP, then SSH to ncn-w001 from ncn-m001 and execute `shutdown -h now`. Make sure you have moved anything you need from ncn-w001 because we will not have access to bring it back up until we bring up another DHCP server on the LiveCD.
 

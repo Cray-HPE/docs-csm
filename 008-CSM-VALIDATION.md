@@ -26,8 +26,6 @@ Examples of when you may wish to run them are:
 
 The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks due to dependencies.
 
-For more details on these validations and health checks, see the admin guide (note to docs team: replace this with a reference to the specific section of the admin guide).
-
 <a name="platform-health-checks"></a>
 ## Platform Health Checks
 
@@ -54,7 +52,7 @@ The ncnHealthChecks script reports the following health information:
 * Management node uptimes
 * Pods yet to reach the running state
 
-Execute ncnHealthChecks script and analyze the output of each individual check. 
+Execute ncnHealthChecks script and analyze the output of each individual check.
 
 **Notes**:
 
@@ -63,7 +61,7 @@ are installed. In particular, this will be the case if you are executing this as
 If in doubt, you can validate the CRUS service using the [CMS Validation Tool](#cms-validation-utility). If the CRUS check passes using that tool, you do not need to worry
 about the `cray-crus-` pod state.
 
-* If the script output indicates any `kube-multus-ds-` pods are in a `Termininating` state, that can indicate a previous restart of these pods did not complete. In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command. After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
+* If the script output indicates any `kube-multus-ds-` pods are in a `Terminating` state, that can indicate a previous restart of these pods did not complete. In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command. After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
 
 <a name="pet-ncnpostgreshealthchecks"></a>
 ### ncnPostgresHealthChecks
@@ -162,7 +160,7 @@ ncn-s# systemctl restart ceph-mon@<node-name> && systemctl restart ceph-mgr@<nod
 
 <a name="pet-bgp"></a>
 ### BGP Peering Status and Reset
-Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system. 
+Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system.
 
 Check the Border Gateway Protocol (BGP) status on the Aruba/Mellanox switches.
 Verify that all sessions are in an **Established** state. If the state of any
@@ -200,7 +198,7 @@ ncn-m001# ssh admin@10.252.0.2
 * On an Aruba switch, you may see `Please register your products now at: https://asp.arubanetworks.com` after logging in to the switch with ssh. In this case, proceed to the [Aruba steps](#pet-bgp-aruba).
 
 <a name="pet-bgp-mellanox"></a>
-#### Mellanox Switch 
+#### Mellanox Switch
 
 1. Enable:
    ```
@@ -322,7 +320,7 @@ If there is an non-zero amount of DHCP leases for river hardware returned that i
 <a name="net-extdns"></a>
 ### Verify ability to resolve external DNS
 
-If you have configured unbound to resolve outside hostnames, then the following check should be performed. If you have not done this, then this check may be skipped. 
+If you have configured unbound to resolve outside hostnames, then the following check should be performed. If you have not done this, then this check may be skipped.
 
 Run the following on one of the master or worker nodes (not the PIT node):
 
@@ -590,7 +588,6 @@ At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.
   * The last line of output from the tool reports FAILURE
   * The return code is non-0.
 * Unless the test was run in verbose mode, the log file will contain additional information about the execution.
-* For more detailed information on the tests, please see the CSM Validation section of the admin guide (note to docs writers: replace this with the actual document name and section number/title once available).
 
 <a name="cms-checks"></a>
 ### Checks To Run
@@ -821,7 +818,7 @@ This procedure can be run from any member of the Kubernetes cluster.
 1. Log into the `cray-conman` container in this pod:
    ```bash
    ncn# kubectl exec -n services -it $PODNAME -c cray-conman -- bash
-   cray-conman# 
+   cray-conman#
    ```
 1. Check the existing list of nodes being monitored.
    ```bash
@@ -942,7 +939,7 @@ ncn# cray config describe
       username = "vers"
       ```
       This means the CLI is initialized and logged in as `vers`.
-         * If you are not `vers` you will want to authorize yourself using your username and password in the next section.  
+         * If you are not `vers` you will want to authorize yourself using your username and password in the next section.
          * If you are `vers` you are ready to move on to the validation procedure on that node.
    * The `cray config describe` output may instead look like this:
       ```
@@ -1002,7 +999,7 @@ Make sure you are running on a booted NCN node and have initialized and authoriz
    > If the cray CLI was initialized on the LiveCD PIT node, then following commands will also work on the PIT node.
 
 1. Basic UAS installation is validated using the following:
-   1. 
+   1.
       ```bash
       ncn# cray uas mgr-info list
       ```
@@ -1064,7 +1061,7 @@ In this procedure, we will show the steps being run on `ncn-w003`
    [uai_portmap]
    ```
 
-   This has created the UAI and the UAI is currently in the process of initializing and running.  
+   This has created the UAI and the UAI is currently in the process of initializing and running.
 1. Set `UAINAME` to the value of the `uai_name` field in the previous command output (`uai-vers-a00fb46b` in our example):
    ```bash
    ncn-w003# export UAINAME=uai-vers-a00fb46b
@@ -1092,7 +1089,7 @@ In this procedure, we will show the steps being run on `ncn-w003`
 1. The UAI is ready for use. You can then log into it using the command in the `uai_connect_string` field in the previous command output:
    ```bash
    ncn-w003# ssh vers@10.16.234.10
-   vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> 
+   vers@uai-vers-a00fb46b-6889b666db-4dfvn:~>
    ```
 1. Run a command on the UAI:
    ```bash
@@ -1111,10 +1108,10 @@ In this procedure, we will show the steps being run on `ncn-w003`
    vers          68      67  0 18:51 pts/0    00:00:00 -bash
    vers         120      68  0 18:52 pts/0    00:00:00 ps -afe
    ```
-1. Log out from the UAI   
+1. Log out from the UAI
    ```bash
    vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> exit
-   ncn-w003# 
+   ncn-w003#
    ```
 1. Clean up the UAI.
    ```bash
@@ -1138,7 +1135,7 @@ Here are some common failure modes seen with UAS / UAI operations and how to res
 
 If you are not logged in as a valid Keycloak user or are accidentally using the `CRAY_CREDENTIALS` environment variable (i.e. the variable is set regardless of whether you are logged in as you), you will see an error when running CLI commands.
 
-For example: 
+For example:
 ```bash
 ncn# cray uas list
 ```
@@ -1158,7 +1155,7 @@ Fix this by logging in as a real user (someone with actual Linux credentials) an
 
 When running CLI commands, you may get a Keycloak error.
 
-For example: 
+For example:
 ```bash
 ncn# cray uas list
 ```
@@ -1171,7 +1168,7 @@ Try 'cray uas list --help' for help.
 Error: Internal Server Error: An error was encountered while accessing Keycloak
 ```
 
-You may be using the wrong hostname to reach the API gateway, re-run the CLI initialization steps above and try again to check that. There may also be a problem with the Istio service mesh inside of your Shasta system. Troubleshooting this is beyond the scope of this section, but you may find more useful information by looking at the UAS pod logs in Kubernetes. There are, generally, two UAS pods, so you may need to look at logs from both to find the specific failure. The logs tend to have a very large number of `GET` events listed as part of the liveness checking.  
+You may be using the wrong hostname to reach the API gateway, re-run the CLI initialization steps above and try again to check that. There may also be a problem with the Istio service mesh inside of your Shasta system. Troubleshooting this is beyond the scope of this section, but you may find more useful information by looking at the UAS pod logs in Kubernetes. There are, generally, two UAS pods, so you may need to look at logs from both to find the specific failure. The logs tend to have a very large number of `GET` events listed as part of the liveness checking.
 
 The following shows an example of looking at UAS logs effectively (this example shows only one UAS manager, normally there would be two):
 

@@ -1,6 +1,6 @@
 # Cabinets
 
-This page provides directions on constructing the optional "cabinets.yaml" file. This file lists cabinet ids for any systems with non-contiguous cabinet id numbers and controls how the "csi config init" command treats cabinet ids. 
+This page provides directions on constructing the optional "cabinets.yaml" file. This file lists cabinet ids for any systems with non-contiguous cabinet id numbers and controls how the "csi config init" command treats cabinet ids.
 
 The `cabinets.yaml` file is particularly important for upgrades from Shasta v1.3 systems as it allows the preservation of cabinet names and network VLANs. An audit of the existing system will be required to gather the data needed to populate `cabinets.yaml`. In the example below the VLANs for cabinets 1000 and 1001 are overridden. This example can be used to preserve existing cabinet VLANs and prevent reconfiguring switches and CMMs. Similar cabinet numbering and preservation of VLANs can be used for Hill and River cabinets.
 

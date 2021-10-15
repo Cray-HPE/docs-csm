@@ -14,10 +14,10 @@ The NCNs define their products per image layer:
 
 ###### Release RPM Details
 
-The sles-release RPM is _uninstalled_ for Metal, instead the sle_HPC-release RPM is installed. These 
+The sles-release RPM is _uninstalled_ for Metal, instead the sle_HPC-release RPM is installed. These
 both provide the same files, but differ for `os-release` and `/etc/product.d/baseproduct`.
 
-The ses-release RPM is installed atop the sle_HPC-release RPM in our CEPH images. 
+The ses-release RPM is installed atop the sle_HPC-release RPM in our CEPH images.
 
 
 ### Example - On a Live System
@@ -45,5 +45,5 @@ ncn-m002   Ready    master   128m   v1.18.6   10.252.1.14   <none>        SUSE L
 ncn-m003   Ready    master   127m   v1.18.6   10.252.1.13   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.37-default   containerd://1.3.4
 ncn-w001   Ready    <none>   90m    v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.37-default   containerd://1.3.4
 ncn-w002   Ready    <none>   88m    v1.18.6   10.252.1.11   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.37-default   containerd://1.3.4
-ncn-w003   Ready    <none>   82m    v1.18.6   10.252.1.10   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.37-default   containerd://1.3.4 
+ncn-w003   Ready    <none>   82m    v1.18.6   10.252.1.10   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.37-default   containerd://1.3.4
 ```
