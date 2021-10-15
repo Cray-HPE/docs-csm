@@ -71,6 +71,6 @@ Directory location = /etc/cray/ceph/_upgraded
 
 **`NOTE:`** if conman is not running please see [establishing conman console connections](operations/../../../operations/conman/Establish_a_Serial_Connection_to_NCNs.md)
 
-3. Verify that the Workload Manager pods (slurm or pbs, for example) are in a 'Running' state by examining the output of `kubectl get pods -n user -o wide`.  If these pods are not in a good state, it may be necessary to restore Workload Manager data that was backed-up in a previous stage.  For more information about restoring Workload Manager data from back-up, see the related procedures in the `Troubleshooting and Administrative Tasks' sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`.
+3. Verify that the Workload Manager pods (slurm or pbs, for example) are in a 'Running' state by examining the output of `kubectl get pods -n user -o wide`.  If these pods are not in a good state, it may be necessary to restore Workload Manager data that was backed-up in a previous stage.  For more information about restoring Workload Manager data from back-up, see the related procedures in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`.
 
 Once the `Stage 1` upgrade is complete please proceed to [Stage 2](Stage_2.md)
