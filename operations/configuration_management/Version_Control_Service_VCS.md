@@ -9,7 +9,7 @@ https://vcs.SHASTA_CLUSTER_DNS_NAME
 On cluster nodes, the VCS service can be accessed through the gateway. VCS credentials for the `crayvcs` user are required before cloning a repository \(see the "VCS Administrative User" section below\). To clone a repository in the `cray` organization, use the following command:
 
 ```bash
-ncn# git clone https://api-gw-service-nmn.local/vcs/cray/REPO\_NAME.git
+ncn# git clone https://api-gw-service-nmn.local/vcs/cray/REPO_NAME.git
 ```
 
 ### VCS Administrative User
