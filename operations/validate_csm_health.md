@@ -582,6 +582,18 @@ __For each__ of the BMCs that show up in either of mismatch lists use the follow
    x3000c0s1b0  # No mgmt port association
    ```
 
+* The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depedning on the state of the system when the `hsm_discovery_verify.sh` script is ran. If the system is currently going through the process of installation, then this is an expected mistmatch as the [Preapre Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet. 
+   > For more information refer to [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
+
+   Example mistmatch for the BMC of a HPE Apollo XL654D:
+   ```bash
+   =============== BMCs in SLS not in HSM components ===============
+   x3000c0s30b1
+
+   =============== BMCs in SLS not in HSM Redfish Endpoints ===============
+   x3000c0s30b1
+   ```
+
 * Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
    > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
 
