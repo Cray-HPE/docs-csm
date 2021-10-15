@@ -35,7 +35,7 @@ Skip this section if a master or storage node was rebuilt.
 
 1. Confirm the pods are beginning to get scheduled and reach a `Running` state on the worker node. 
 
-    Run this command on any master or worker node. This command assumes you have set the variables from [the prerequisites section](#set-var).
+    Run this command on any master or worker node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
     ```bash
     ncn# kubectl get po -A -o wide | grep $NODE
@@ -47,7 +47,7 @@ Skip this section if a master or storage node was rebuilt.
 
 1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
-    The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](#set-var).
+    The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
     ```bash
     ncn# cray cfs components describe $XNAME --format json

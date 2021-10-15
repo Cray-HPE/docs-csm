@@ -2,7 +2,7 @@
 
 ## Description
 
-This section applies to all node types. The commands in this section assume you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#set-var).
+This section applies to all node types. The commands in this section assume you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
 ## Procedure
 
@@ -18,7 +18,7 @@ This section applies to all node types. The commands in this section assume you 
 
 **IMPORTANT:** Run these commands from a node ***NOT*** being rebuilt.
 
-**IMPORTANT:** These commands assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#set-var).
+**IMPORTANT:** These commands assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
 1. Set the BMC variable to the hostname of the BMC of the node being rebuilt.
 
@@ -96,7 +96,7 @@ Run these commands on the rebuilt node.
 
 1. Find the desired IP address.
 
-    * This command assumes you have set the variables from [the prerequisites section](#set-var).
+    * This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
         ```bash
         ncn# dig +short ${NODE}.hmn
@@ -147,7 +147,7 @@ Run these commands on the rebuilt node.
 
 1. Find the desired IP address.
 
-    * This command assumes you have set the variables from [the prerequisites section](#set-var).
+    * This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
         ```bash
         ncn# dig +short ${NODE}.can
@@ -203,7 +203,7 @@ Run these commands on the rebuilt node.
 
 2. Do a PUT action for the edited JSON file.
 
-    * This command can be run from any node. This command assumes you have set the variables from [the prerequisites section](#set-var).
+    * This command can be run from any node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
     ```bash
     ncn# curl -i -s -k -H "Content-Type: application/json" \
