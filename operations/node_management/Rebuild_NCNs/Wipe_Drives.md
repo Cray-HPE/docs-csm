@@ -8,10 +8,8 @@ Only follow the steps in the section for the node type that is being rebuilt:
 
 - [Wipe Disks](#wipe-disks)
   - [Wipe Disks: Master](#wipe-disks-master)
-  - [Worker Node](#worker-node)
+  - [Wipe Disks: Worker Node](#wipe-disks-worker-node)
   - [Wipe Disks: Utility Storage Node](#wipe-disks-utility-storage-node)
-
-<a name="wipe_disks_master_worker"></a>
 
 ## Wipe Disks: Master
 
@@ -38,7 +36,7 @@ Only follow the steps in the section for the node type that is being rebuilt:
    wipefs --all --force $mdisks
    ```
 
-## Worker Node
+## Wipe Disks: Worker Node
 
 1. Stop contianerd, unmount volumes, and wipe drives.
 
