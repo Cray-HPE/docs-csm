@@ -1,10 +1,12 @@
 ## Create a CFS Configuration
 
-Create a Configuration Framework Service \(CFS\) configuration, which contains an ordered list of layers. Each layer is defined by a Git repository clone URL, a Git commit, a name \(optional\), and the path in the repository to an Ansible playbook to execute.
+Create a Configuration Framework Service (CFS) configuration, which contains an
+ordered list of layers. Each layer is defined by a Git repository clone URL, a
+Git commit, a name, and the path in the repository to an Ansible playbook to execute.
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+-   The Cray command line interface (CLI) tool is initialized and configured on the system.
 
 ### Procedure
 
