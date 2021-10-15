@@ -9,33 +9,14 @@ This section applies to all node types. The commands in this section assume you 
 1. Run the following commands from a node that has cray cli initialized:
 
     ```bash
-    cray bss bootparameters list --name $XNAME --format=json > ${XNAME}.json
+    cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
     ```
 
 ### Step 2 - Modify the JSON file
 
-1. Remove the outer array brackets.
+1. Set the kernel parameters to wipe the disk.
 
-    * Do this by removing the first and last line of the XNAME.json file, indicated with the `[` and `]` brackets.
-
-1. Remove the leading whitespace on the new first and last lines.
-
-    * On the new first and last lines of the file, removing all whitespace characters at the beginning of those lines. The first line should now just be a `{` character and the last line should now just be a `}` character.
-
-1. Ensure the current boot parameters are appropriate for PXE booting.
-
-    1. Inspect the `"params": "kernel..."` line. If the line begins with `BOOT_IMAGE` and/or does not contain `metal.server`, the following steps are needed:
-
-    1. Remove everything before `kernel` on the `"params": "kernel"` line.
-    1. Re-run steps [Retrieve the xname and Generate BSS JSON](#identify-retrieve) for another node/xname.  Look for an example that does not contain `BOOT_IMAGE`.
-
-    1. Once an example is found, copy a portion of the `params` line for everything including and after `biosdevname`, and use that in the JSON file.
-
-    1. After copying the content after `biosdevname`, change the `"hostname=<hostname>"` to the correct host.
-
-    1. Set the kernel parameters to wipe the disk.
-
-        * Locate the portion of the line that contains `"metal.no-wipe"` and ensure it is set to zero `"metal.no-wipe=0"`.
+    * Locate the portion of the line that contains `"metal.no-wipe"` and ensure it is set to zero `"metal.no-wipe=0"`.
 
 ### Step 3 - Re-apply the boot parameters list for the node using the JSON file
 
@@ -63,7 +44,7 @@ This section applies to all node types. The commands in this section assume you 
 1. Export the list from BSS to a file with a different name.
 
     ```bash
-    ncn# cray bss bootparameters list --name ${XNAME} --format=json > ${XNAME}.check.json
+    ncn# cray bss bootparameters list --name ${XNAME} --format=json |jq .[]> ${XNAME}.check.json
     ```
 
 1. Compare the new JSON file with what was PUT to BSS.
@@ -72,20 +53,7 @@ This section applies to all node types. The commands in this section assume you 
     ncn# diff ${XNAME}.json ${XNAME}.check.json
     ```
 
-    * The only difference between the files should be the square brackets that were removed from the file, and* the whitespace changes on the first and last lines with curly braces. Expected output will look similar to:
-
-      ```screen
-      1,2c1
-      < [
-      <   {
-      ---
-      > {
-      47,48c46
-      <   }
-      < ]
-      ---
-      > }
-      ```
+    * The files should be identical
 
 [Click here for the Next Step](Wipe_Drives.md)
 
