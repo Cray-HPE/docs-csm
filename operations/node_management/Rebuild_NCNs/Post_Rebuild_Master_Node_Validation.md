@@ -64,4 +64,4 @@ Skip this section if a worker or storage node was rebuilt.
     ncn-mw# /opt/cray/platform-utils/
     ```
 
-    [Return to Main Page](Rebuild_NCNs.md#Post_Rebuild_Master_Node_Validation.md)
+   [Return to Main Page](../Rebuild_NCNs.md#Validation)
