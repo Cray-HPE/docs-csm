@@ -5,6 +5,7 @@ This document provides troubleshooting information for services and functionalit
 ### Topics
  * [Known Issues](#known-issues)
     * [CFS Sessions are Stuck in a Pending State](known_issues/cfs_sessions_stuck_in_pending.md)
+    * [Orphaned CFS Pods After Booting or Rebooting](known_issues/orphaned_cfs_pods.md)
 
 <a name="known-issues"></a>
 
