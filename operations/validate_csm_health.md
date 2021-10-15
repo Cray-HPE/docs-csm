@@ -197,6 +197,9 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
          - **ERROR: failed to update leader lock** 
          - **ERROR: Exception when working with master via replication connection**
          
+         Errors reported after rebooting worker NCNs should be re-checked in 15 minutes by re-running the ncnPostgresHealthChecks script - for example errors that start with the following:
+         - **ERROR: Error communicating with DCS**
+
          If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
 
       - Verify the State of each cluster member is 'running'.
