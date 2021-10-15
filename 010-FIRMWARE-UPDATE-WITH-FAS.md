@@ -55,11 +55,11 @@ For each item in the `Hardware Precedence Order`:
 
      *	`NoOp`: Nothing to do, already at version.
      *	`NoSol`: No viable image is available; this will not be updated.
-     *	`succeeded`: 
-     	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy. 
+     *	`succeeded`:
+     	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy.
      	*	IF `live update`: the operation succeeded, and has updated the xname + target to the identified version.
-     *	`failed`: 
-     	*	IF `dryrun` : There is something that FAS could do, but it likely would fail; most likely because the file is missing. 
+     *	`failed`:
+     	*	IF `dryrun` : There is something that FAS could do, but it likely would fail; most likely because the file is missing.
      	*	IF `live update` : the operation failed, the identified version could not be put on the xname + target.
 
 3. If `succeeded` count > 0, now perform a live update
@@ -87,13 +87,13 @@ After you identify which hardware you have; start with the top most item on this
      4. NodeBMC
         4. [BMC](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-bmc)
         5. [NodeBIOS](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-nodebios)
-        6. [Redstone FPGA 	](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-redstone-fpga) 
+        6. [Redstone FPGA 	](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#cray-device-type-nodebmc-target-redstone-fpga)
 5. [Gigabyte](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#manufacturer-gigabyte)
-	6. [BMC](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#gb-device-type-nodebmc-target-bmc) 
-	7. [BIOS](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#gb-device-type-nodebmc-target-bios) 
+	6. [BMC](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#gb-device-type-nodebmc-target-bmc)
+	7. [BIOS](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#gb-device-type-nodebmc-target-bios)
 3. [HPE](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#manufacturer-hpe)
      1. [BMC (iLO5)](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-nodebmc-target--aka-bmc)
-     2. [BIOS (System ROM)](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-nodebmc-target--aka-bios) 
+     2. [BIOS (System ROM)](256-FIRMWARE-ACTION-SERVICE-FAS-RECIPES.md#hpe-device-type-nodebmc-target--aka-bios)
 
 
 <a name="next-steps"></a>

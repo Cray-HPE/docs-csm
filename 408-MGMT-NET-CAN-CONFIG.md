@@ -39,7 +39,7 @@ interface 1/1/36
     exit
 ```
 
-There must then be two routes on the customer's switch directing traffic for the customer_access_network subnet to the endpoint on the spine switch.   
+There must then be two routes on the customer's switch directing traffic for the customer_access_network subnet to the endpoint on the spine switch.
 
 This is an example of the route configuration on the customer switch.
 These addresses/subnets are generated from CSI and can be found in ```CAN.yaml```

@@ -8,7 +8,7 @@ This procedure requires administrative privileges.
 
 ### Procedure
 
-The following procedures will require knowing a list of switches that are BGP peers to connect to. You can obtain this 
+The following procedures will require knowing a list of switches that are BGP peers to connect to. You can obtain this
 list by running the following from an NCN node:
     
 ```bash
@@ -31,7 +31,7 @@ data:
     - name: customer-access
 ```
 
-The switch IPs are the `peer-address` values. 
+The switch IPs are the `peer-address` values.
 
 #### MELLANOX
 

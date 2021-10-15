@@ -38,7 +38,7 @@ sw-24g03(config)# vlan 2
 sw-24g03(config-vlan-2)# name NMN
 sw-24g03(config-vlan-2)# vlan 4
 sw-24g03(config-vlan-4)# name HMN
-sw-24g03(config-vlan-4)# vlan 7 
+sw-24g03(config-vlan-4)# vlan 7
 sw-24g03(config-vlan-7)# name CAN
 sw-24g03(config-vlan-7)# vlan 10
 sw-24g03(config-vlan-10)# name SUN
@@ -47,7 +47,7 @@ sw-24g04(config)# vlan 2
 sw-24g04(config-vlan-2)# name NMN
 sw-24g04(config-vlan-2)# vlan 4
 sw-24g04(config-vlan-4)# name HMN
-sw-24g04(config-vlan-4)# vlan 7 
+sw-24g04(config-vlan-4)# vlan 7
 sw-24g04(config-vlan-7)# name CAN
 sw-24g04(config-vlan-7)# vlan 10
 sw-24g04(config-vlan-10)# name SUN
@@ -60,7 +60,7 @@ sw-leaf-001(config)# vlan 2
 sw-leaf-001(config-vlan-2)# name NMN
 sw-leaf-001(config-vlan-2)# vlan 4
 sw-leaf-001(config-vlan-4)# name HMN
-sw-leaf-001(config-vlan-4)# vlan 7 
+sw-leaf-001(config-vlan-4)# vlan 7
 sw-leaf-001(config-vlan-7)# name CAN
 sw-leaf-001(config-vlan-7)# vlan 10
 sw-leaf-001(config-vlan-10)# name SUN

@@ -34,10 +34,10 @@ guidebook:
 
 ### Offline Documentation
 
-The docs on a customer's LiveCD should match their reality, their install should follow the docs
+The documentation on a customer's LiveCD should match their reality, their install should follow the docs
 shipped on their liveCD.
 
-This will report the version of your installed docs:
+This will report the version of your installed documentation:
 
 ```bash
 sles# rpm -q docs-csm

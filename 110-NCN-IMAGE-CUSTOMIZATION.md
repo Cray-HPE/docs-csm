@@ -81,7 +81,7 @@ This process should be done for the "Kubernetes" image used by master and worker
 12. Set the boot links.
    ```bash
    pit# cd
-   pit# set-sqfs-links.sh   
+   pit# set-sqfs-links.sh
    ```
 
 The images will have the new password for the next boot.

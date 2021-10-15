@@ -199,7 +199,7 @@ may be referenced when making a similar site modification to v1.3.
     Check which version of sh-svr rpms are installed. If they are less than 20.03.00, then the firmware update bundle has not been installed or applied to the Gigabyte nodes. You will need to have both the firmware release tarball and the Gigabyte Node Firmware Update Guide (1.3.2) S-8010 to upgrade the firmware on Gigabyte nodes when indicated later in this procedure.
 
     ```bash
-    ncn-w001# rpm -qa | grep sh-svr 
+    ncn-w001# rpm -qa | grep sh-svr
     sh-svr-1264up-bios-20.02.00-20201022025951_2289a89.x86_64
     sh-svr-3264-bios-crayctldeploy-0.0.14-20201022025951_2289a89.x86_64
     sh-svr-3264-bios-20.02.00-20201022025951_2289a89.x86_64
@@ -305,16 +305,16 @@ may be referenced when making a similar site modification to v1.3.
 
     ```json
       {
-        "description": "NCNs running Lustre", 
+        "description": "NCNs running Lustre",
         "members": {
           "ids": [
-            "x3000c0s7b0n0", 
-            "x3000c0s9b0n0", 
-            "x3000c0s11b0n0", 
-            "x3000c0s25b0n0", 
+            "x3000c0s7b0n0",
+            "x3000c0s9b0n0",
+            "x3000c0s11b0n0",
+            "x3000c0s25b0n0",
             "x3000c0s13b0n0"
           ]
-        }, 
+        },
         "label": "lnet_ncn"
       }
     ```
@@ -368,39 +368,39 @@ may be referenced when making a similar site modification to v1.3.
     ```
     [
       {
-        "recipe_type": "kiwi-ng", 
-        "linux_distribution": "sles15", 
-        "created": "2020-09-04T03:22:15.764123+00:00", 
+        "recipe_type": "kiwi-ng",
+        "linux_distribution": "sles15",
+        "created": "2020-09-04T03:22:15.764123+00:00",
         "link": {
-          "path": "s3://ims/recipes/0bfcf98b-3b73-49ad-ab08-5b868ed3dda2/recipe.tar.gz", 
-          "etag": "dec4e4b7dd734a0a24dcf4b67e69c2f5", 
+          "path": "s3://ims/recipes/0bfcf98b-3b73-49ad-ab08-5b868ed3dda2/recipe.tar.gz",
+          "etag": "dec4e4b7dd734a0a24dcf4b67e69c2f5",
           "type": "s3"
-        }, 
-        "id": "0bfcf98b-3b73-49ad-ab08-5b868ed3dda2", 
+        },
+        "id": "0bfcf98b-3b73-49ad-ab08-5b868ed3dda2",
         "name": "cray-sles15sp1-barebones-0.1.4"
-      }, 
+      },
       {
-        "recipe_type": "kiwi-ng", 
-        "linux_distribution": "sles15", 
-        "created": "2020-09-04T03:38:07.259114+00:00", 
+        "recipe_type": "kiwi-ng",
+        "linux_distribution": "sles15",
+        "created": "2020-09-04T03:38:07.259114+00:00",
         "link": {
-          "path": "s3://ims/recipes/b463fb84-ffaf-4e00-81f1-1682acae2f25/recipe.tar.gz", 
-          "etag": "42f7b0c58ef5db1828dd772405f376b7", 
+          "path": "s3://ims/recipes/b463fb84-ffaf-4e00-81f1-1682acae2f25/recipe.tar.gz",
+          "etag": "42f7b0c58ef5db1828dd772405f376b7",
           "type": "s3"
-        }, 
-        "id": "b463fb84-ffaf-4e00-81f1-1682acae2f25", 
+        },
+        "id": "b463fb84-ffaf-4e00-81f1-1682acae2f25",
         "name": "cray-sles15sp1-cle"
-      }, 
+      },
       {
-        "recipe_type": "kiwi-ng", 
-        "linux_distribution": "sles15", 
-        "created": "2020-10-29T23:31:51.340962+00:00", 
+        "recipe_type": "kiwi-ng",
+        "linux_distribution": "sles15",
+        "created": "2020-10-29T23:31:51.340962+00:00",
         "link": {
-          "path": "s3://ims/recipes/49c703e9-3b95-4409-804f-b9c0e790487b/recipe.tar.gz", 
-          "etag": "", 
+          "path": "s3://ims/recipes/49c703e9-3b95-4409-804f-b9c0e790487b/recipe.tar.gz",
+          "etag": "",
           "type": "s3"
-        }, 
-        "id": "49c703e9-3b95-4409-804f-b9c0e790487b", 
+        },
+        "id": "49c703e9-3b95-4409-804f-b9c0e790487b",
         "name": "cray-sles15sp1-cle-1.3.26"
       }
     ]
@@ -414,17 +414,17 @@ may be referenced when making a similar site modification to v1.3.
 
     ```
       {
-        "recipe_type": "kiwi-ng", 
-        "linux_distribution": "sles15", 
-        "created": "2020-09-04T03:22:15.764123+00:00", 
+        "recipe_type": "kiwi-ng",
+        "linux_distribution": "sles15",
+        "created": "2020-09-04T03:22:15.764123+00:00",
         "link": {
-          "path": "s3://ims/recipes/0bfcf98b-3b73-49ad-ab08-5b868ed3dda2/recipe.tar.gz", 
-          "etag": "dec4e4b7dd734a0a24dcf4b67e69c2f5", 
+          "path": "s3://ims/recipes/0bfcf98b-3b73-49ad-ab08-5b868ed3dda2/recipe.tar.gz",
+          "etag": "dec4e4b7dd734a0a24dcf4b67e69c2f5",
           "type": "s3"
-        }, 
-        "id": "0bfcf98b-3b73-49ad-ab08-5b868ed3dda2", 
+        },
+        "id": "0bfcf98b-3b73-49ad-ab08-5b868ed3dda2",
         "name": "cray-sles15sp1-barebones-0.1.4"
-      }, 
+      },
     ```
 
 
@@ -454,24 +454,24 @@ may be referenced when making a similar site modification to v1.3.
     [
       {
         "link": {
-          "path": "s3://boot-images/9f32ed7b-9e1c-444d-8b63-40cefbf7e846/manifest.json", 
-          "etag": "db1b16d771a5a88cb320519e066348b8", 
+          "path": "s3://boot-images/9f32ed7b-9e1c-444d-8b63-40cefbf7e846/manifest.json",
+          "etag": "db1b16d771a5a88cb320519e066348b8",
           "type": "s3"
-        }, 
-        "id": "9f32ed7b-9e1c-444d-8b63-40cefbf7e846", 
-        "name": "cle_default_rootfs_cfs_2488e992-ee60-11ea-88f1-b42e993b710e", 
+        },
+        "id": "9f32ed7b-9e1c-444d-8b63-40cefbf7e846",
+        "name": "cle_default_rootfs_cfs_2488e992-ee60-11ea-88f1-b42e993b710e",
         "created": "2020-09-04T03:42:51.474549+00:00"
-      }, 
+      },
       {
         "link": {
-          "path": "s3://boot-images/dc1a430f-82cb-4b9b-a1dd-7c8540721013/manifest.json", 
-          "etag": "5f243b60b4211c47e79b837df2271692", 
+          "path": "s3://boot-images/dc1a430f-82cb-4b9b-a1dd-7c8540721013/manifest.json",
+          "etag": "5f243b60b4211c47e79b837df2271692",
           "type": "s3"
-        }, 
-        "id": "dc1a430f-82cb-4b9b-a1dd-7c8540721013", 
-        "name": "cle_default_rootfs_cfs_test_20200914125841b", 
+        },
+        "id": "dc1a430f-82cb-4b9b-a1dd-7c8540721013",
+        "name": "cle_default_rootfs_cfs_test_20200914125841b",
         "created": "2020-09-14T20:46:51.367749+00:00"
-      }, 
+      },
     ]
     ```
 
@@ -703,7 +703,7 @@ may be referenced when making a similar site modification to v1.3.
     MAC Address             : b4:2e:99:3b:70:28
     ```
 
-28. Collect output from "ip address" for all management NCNs. 
+28. Collect output from "ip address" for all management NCNs.
 
     This is another source of MAC address information, but also indicates the device names which will be used for the bonded interface bond0.
 
@@ -711,19 +711,19 @@ may be referenced when making a similar site modification to v1.3.
     ncn-w001# for ncn in $nodes; do echo $ncn; ssh $ncn ip address ; done
     ```
 
-29. Check full BMC information for ncn-w001 because the connection will be moved to ncn-m001. 
+29. Check full BMC information for ncn-w001 because the connection will be moved to ncn-m001.
 
     The IP address, subnet mask, and default gateway IP will be needed.
 
     ```bash
     ncn-w001# ipmitool lan print
     Set in Progress         : Set Complete
-    Auth Type Support       : NONE MD2 MD5 PASSWORD OEM 
-    Auth Type Enable        : Callback : MD5 
-                            : User     : MD5 
-                            : Operator : MD5 
-                            : Admin    : MD5 
-                            : OEM      : MD5 
+    Auth Type Support       : NONE MD2 MD5 PASSWORD OEM
+    Auth Type Enable        : Callback : MD5
+                            : User     : MD5
+                            : Operator : MD5
+                            : Admin    : MD5
+                            : OEM      : MD5
     IP Address Source       : Static Address
     IP Address              : 172.30.56.3
     Subnet Mask             : 255.255.240.0
@@ -749,7 +749,7 @@ may be referenced when making a similar site modification to v1.3.
     Bad Password Threshold  : 0
     Invalid password disable: no
     Attempt Count Reset Int.: 0
-    User Lockout Interval   : 0 
+    User Lockout Interval   : 0
     ```
 
 30. Check Mellanox firmware for the CX-4 and CX-5 on management NCNs.
@@ -774,15 +774,15 @@ may be referenced when making a similar site modification to v1.3.
     Device #1:
       Device Type:      ConnectX4
       PCI Device Name:  0000:42:00.0
-         FW             12.26.4012     N/A           
+         FW             12.26.4012     N/A
     Device #2:
       Device Type:      ConnectX5
       PCI Device Name:  0000:41:00.0
-         FW             16.28.4000     N/A           
+         FW             16.28.4000     N/A
     Device #3:
       Device Type:      ConnectX5
       PCI Device Name:  0000:81:00.0
-         FW             16.28.4000     N/A           
+         FW             16.28.4000     N/A
     ```
 
 31. When reinstalling a v1.3 system with v1.4 software, preserving the SDU configuration, plug-ins, and locally
@@ -812,7 +812,7 @@ and NCNs. Additionally, NCN configuration must be preserved in the locations as 
       * sma/ldms-compute-aggr-pvc
       * sma/ldms-compute-smpl-pvc
 
-34. The checks have all completed.  
+34. The checks have all completed.
 
     Finish the typescript file
     ```bash

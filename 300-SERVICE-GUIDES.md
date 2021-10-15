@@ -47,7 +47,7 @@ This is the interface, one or more, that comprise the NCNs' LACP link-aggregatio
 
 ##### LACP Bonding
 NCNs may have 1 or more bond interfaces, which may be comprised from one or more physical interfaces. The
-preferred default configuration is 2 physical network interfaces per bond. The number 
+preferred default configuration is 2 physical network interfaces per bond. The number
 of bonds themselves depends on your systems network topology.
 
 For example, systems with 4 network interfaces on a given node could configure either of these
@@ -65,7 +65,7 @@ For more information, see [103-NETWORKING](103-NCN-NETWORKING.md) page for NCNs.
 In general this refers to the interface to be used when the node attempts to PXE boot. This varies between vintages
 of systems; systems before "Spring 2020" often booted NCNs with onboard NICs, newer systems boot over their PCIe cards.
 
-If the system is **booting over PCIe than the "bootstrap MAC" and the "bond0 MAC 0" will be identical**. If the 
+If the system is **booting over PCIe than the "bootstrap MAC" and the "bond0 MAC 0" will be identical**. If the
 system is **booting over onboards then the "bootstrap MAC" and the "bond0 MAC 0" will be different.**
 
 > Other Nomenclature
@@ -79,10 +79,10 @@ system is **booting over onboards then the "bootstrap MAC" and the "bond0 MAC 0"
 <a name="files"></a>
 ## Files
 
-Each paragraph here will denote which pre-reqs are needed and which pages to follow 
+Each paragraph here will denote which pre-reqs are needed and which pages to follow
 for data collection.
 
---- 
+---
 
 <a name="ncn_metadatacsv"></a>
 ### `ncn_metadata.csv`
@@ -98,14 +98,14 @@ The following two guides will assist with (re)creating `ncn_metadata.csv` (an ex
 
 The following are sample rows from a `ncn_metadata.csv` file:
 * __Use case__: NCN with a single PCIe card (1 card with 2 ports):
-    > Notice how the MAC address for `Bond0 MAC0` and `Bond0 MAC1` are only off by 1, which indicates that 
+    > Notice how the MAC address for `Bond0 MAC0` and `Bond0 MAC1` are only off by 1, which indicates that
     > they are on the same 2 port card.
     ```
     Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
     x3000c0s6b0n0,Management,Worker,94:40:c9:37:77:b8,14:02:ec:da:bb:00,14:02:ec:da:bb:00,14:02:ec:da:bb:01
     ```
 * __Use case__: NCN with a dual PCIe cards (2 cards with 2 ports each for 4 ports total):
-    > Notice how the MAC address for `Bond0 MAC0` and `Bond0 MAC1` have a difference greater than 1, which 
+    > Notice how the MAC address for `Bond0 MAC0` and `Bond0 MAC1` have a difference greater than 1, which
     > indicates that they are on not on the same 2 port same card.
     ```
     Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
@@ -133,8 +133,8 @@ x3000c0s1b0n0,Management,Master,94:40:c9:37:87:32,14:02:ec:da:b9:98,14:02:ec:da:
 <a name="switch_metadatacsv"></a>
 ### `switch_metadata.csv`
 
-This file denotes your network topology devices, see [Switch Metadata](305-SWITCH-METADATA.md) for 
-directions about creating this file. 
+This file denotes your network topology devices, see [Switch Metadata](305-SWITCH-METADATA.md) for
+directions about creating this file.
 
 > use case: 2 leaf switches and 2 spine switches
 ```
@@ -171,13 +171,13 @@ x3000c0h35s1,Aggregation,Aruba
 x3000c0h36s1,Aggregation,Aruba
 x3000c0h37s1,Spine,Aruba
 x3000c0h38s1,Spine,Aruba
-``` 
+```
 
 <a name="hmn_connectionsjson"></a>
 ### `hmn_connections.json`
 
 This file denotes your BMC interfaces and other hardware network topology devices, see [HMN Connections](307-HMN-CONNECTIONS.md) for
-instructions creating this file. 
+instructions creating this file.
 
 [1]: https://stash.us.cray.com/projects/MTL/repos/cray-pre-install-toolkit/browse
 [2]: https://stash.us.cray.com/projects/MTL/repos/cray-site-init/browse

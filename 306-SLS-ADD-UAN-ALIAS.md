@@ -1,5 +1,5 @@
 # Manually add UAN Aliases to SLS
-### Prerequisites 
+### Prerequisites
 * SLS is up and running and has been populated with data.
 * Access to the API gateway `api-gw-service` (legacy: `api-gw-service-nmn.local`)
 
@@ -134,7 +134,7 @@ This guide shows the process for manually adding aliases to UAN nodes in SLS. St
     1. Log into the `cray-conman` container in this pod:
        ```bash
        ncn# kubectl exec -n services -it $PODNAME -c cray-conman -- bash
-       cray-conman#  
+       cray-conman#
        ```
 
     Check the existing connections.

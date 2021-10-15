@@ -149,7 +149,7 @@ is quicker.
 
 If you are coming from 1.3 and happened to use the `ncn_metadata.csv` without modification, you will be unable to deploy the NCNs. This section details a recovery procedure in case that happens.
 
-1. Remove the incorrectly-generated configs. Before deleting the incorrectly-generated configs consider making a backup of them. In case they need to be examined at a later time. 
+1. Remove the incorrectly-generated configs. Before deleting the incorrectly-generated configs consider making a backup of them. In case they need to be examined at a later time.
 
 > **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set. If `SYSTEM_NAME` is
 > not set the command below could potentially remove the entire prep directory.

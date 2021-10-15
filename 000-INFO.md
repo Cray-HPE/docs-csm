@@ -4,8 +4,8 @@ The documentation included here describes how to install the CSM software and va
 See [Guides](001-GUIDES.md) for the different scenarios to which this documentation can apply for installation.
 
 The rest of this page describes the conventions used in the documentation:
-* [Page naming or indexing] (#page-indexing) conventions 
-* [Annotations] (#annotations) for how we identify sections of the documentation that do not apply to all systems 
+* [Page naming or indexing] (#page-indexing) conventions
+* [Annotations] (#annotations) for how we identify sections of the documentation that do not apply to all systems
 * [Command Prompt Conventions] (#command-prompt-conventions) which describe the context for user, host, directory, chroot environment, or container environment
 
 <a name="page-indexing"></a>
@@ -32,26 +32,26 @@ These are context clues for steps, if they contain these, and you are not in tha
 
 > **`AIRGAP/OFFLINE USE`**
 
-This tag should preface any block that is for offline install steps or procedures, where there is 
+This tag should preface any block that is for offline install steps or procedures, where there is
 no online/internet connection.
 
-> **`EXTERNAL USE`** 
+> **`EXTERNAL USE`**
 
 This tag should be used to highlight anything that an internal user should ignore or skip.
 
-> **`INTERNAL USE`** 
+> **`INTERNAL USE`**
 
-This tag should be used before any block of instruction or text that is only usable or recommended for 
+This tag should be used before any block of instruction or text that is only usable or recommended for
 internal HPE CRAY systems.
 
 External (GitHub or customer) should disregard these annotated blocks - they maybe contain useful
 information as an example but are not intended for their use.
 
-> **`PREFERRED`** 
+> **`PREFERRED`**
 
 This is the preferred path, but if not possible, there will be a MANUAL section which can be done instead
 
-> **`MANUAL`** 
+> **`MANUAL`**
 
 This is a manual path that can be taken if the PREFERRED section is not possible in the given context.
 
@@ -62,7 +62,7 @@ This is a manual path that can be taken if the PREFERRED section is not possible
 
 The host name in a command prompt indicates where the command must be run. The account that must run the command is also indicated in the prompt.
 - The root or super-user account always has the # character at the end of the prompt
-- Any non-root account is indicated with account@hostname>.  A non-privileged account is referred to as user.
+- Any non-root account is indicated with `account@hostname`. A non-privileged account is referred to as user.
 
 ## Node abbreviations
 The following list contains abbreviations for nodes used below
@@ -175,8 +175,8 @@ Enter "setup" mode for the switch make and model, for example:
 remote# ssh sw-leaf-001
 sw-leaf-001>  enable
 sw-leaf-001#  configure terminal
-sw-leaf-001(conf)# 
+sw-leaf-001(conf)#
 ```
 
-Refer to the switch vendor OEM documentation for more information about configuring a specific switch. 
+Refer to the switch vendor OEM documentation for more information about configuring a specific switch.
 

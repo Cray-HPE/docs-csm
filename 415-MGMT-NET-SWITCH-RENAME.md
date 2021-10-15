@@ -395,7 +395,7 @@ Logout of the switch and return using the new IP address for vlan 2 so that vlan
    sw-spine-001 [standalone: master] (config interface vlan 4) # no ip address
    sw-spine-001 [standalone: master] (config interface vlan 4) # ip address 10.254.0.2/17 primary
    sw-spine-001 [standalone: master] (config interface vlan 4) # exit
-   sw-spine-001 [standalone: master] (config) # interface vlan 7 
+   sw-spine-001 [standalone: master] (config) # interface vlan 7
    sw-spine-001 [standalone: master] (config interface vlan 7) # no ip address
    sw-spine-001 [standalone: master] (config interface vlan 7) # ip address 10.103.8.2/24 primary
    sw-spine-001 [standalone: master] (config interface vlan 7) # exit

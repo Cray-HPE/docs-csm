@@ -20,13 +20,13 @@ This page describes rebooting and deploying the non-compute node that is current
 These services must be healthy in Kubernetes before the reboot of the LiveCD can take place.
 
 Required Platform Services:
-- cray-dhcp-kea
-- cray-dns-unbound
-- cray-bss
-- cray-sls
-- cray-s3
-- cray-ipxe
-- cray-tftp
+- `cray-dhcp-kea`
+- `cray-dns-unbound`
+- `cray-bss`
+- `cray-sls`
+- `cray-s3`
+- `cray-ipxe`
+- `cray-tftp`
 
 <a name="notice-of-danger"></a>
 ## Notice of Danger
@@ -87,7 +87,6 @@ all been run by the administrator before starting this stage.
     
 1. Get a token to use for authenticated communication with the gateway.
     
-    > **`NOTE`** `api-gw-service-nmn.local` is legacy, and will be replaced with api-gw-service.nmn.
     ```bash
     
     pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
@@ -142,14 +141,12 @@ all been run by the administrator before starting this stage.
     ```bash
     pit# efibootmgr | grep -Ei "ip(v4|4)"
     ```
-    
-1. Set the boot order for **masters** from one of the following guides:
-    
-    > `**NOTE**` If your boot order from `efibootmgr` looks like one of [these examples](101-NCN-BOOTING.md#examples) then you can proceed to the next step.
-    
-    - [Gigabyte Technology](101-NCN-BOOTING.md#gigabyte-technology)
-    - [Hewlett Packard Enterprise](101-NCN-BOOTING.md#hewlett-packard-enterprise)
-    - [Intel Corporation](101-NCN-BOOTING.md#intel-corporation)
+
+1. Configure and trim UEFI entries on the PIT node.
+
+    On the PIT node, do the following two steps outlined in [Fixing Boot-Order](101-NCN-BOOTING.md#set-boot-order). For options that depend on the node type, treat it as a master node.
+        1. [Setting Order](101-NCN-BOOTING.md#setting-order)
+        1. [Trimming](101-NCN-BOOTING.md#trimming)
     
 1. Identify Port-1 of Riser-1 in `efibootmgr` output and set `PXEPORT` variable.
     
@@ -238,7 +235,7 @@ all been run by the administrator before starting this stage.
     inet6 fe80::1602:ecff:fed9:7820/64 scope link
     ```
     
-    Now login from another machine to verify that IP is usable
+    Now log in from another machine to verify that the IP address is usable
     
     ```bash
     external# ssh root@10.102.11.13
@@ -290,7 +287,7 @@ all been run by the administrator before starting this stage.
     
     The thing to verify is that there are no error messages in the output.
     
-1. Quit the typescript session with the `exit` command and copy the file (`booted-csm-lived.<date>.txt`) to a location on another server for reference later.
+1. Quit the typescript session with the `exit` command and copy the file (`booted-csm-livecd.<date>.txt`) to a location on another server for reference later.
     
     ```bash
     pit# exit
@@ -305,21 +302,21 @@ all been run by the administrator before starting this stage.
     pit# reboot
     ```
     
-1. The node should boot, acquire its hostname (i.e. ncn-m001), and run cloud-init.
+1. The node should boot, acquire its hostname (i.e. `ncn-m001`), and run `cloud-init`.
     
-    > **`NOTE`**: If the nodes has pxe boot issues, such as getting pxe errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
+    > **`NOTE`**: If the node has PXE boot issues, such as getting PXE errors or not pulling the `ipxe.efi` binary, see [PXE boot troubleshooting](420-MGMT-NET-PXE-TSHOOT.md)
     
-    > **`NOTE`**: If ncn-m001 booted without a hostname or it did not run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
+    > **`NOTE`**: If `ncn-m001` booted without a hostname (as `ncn`) or it did not run all the `cloud-init` scripts, the following commands need to be run **(but only in that circumstance)**.
     
-    1. Make directory to copy network config files to.
+    1. Make a mount point.
         ```bash
-        ncn-m001# mkdir /mnt/cow
+        ncn-m001# mkdir -pv /mnt/cow
         ```
     1. Mount the USB to that directory.
         ```bash
-        ncn-m001# mount -L cow /mnt/cow
+        ncn-m001# mount -vL cow /mnt/cow
         ```
-    1. Copy the network config files.
+    1. Copy the network configuration files.
         ```bash
         ncn-m001# cp -pv /mnt/cow/rw/etc/sysconfig/network/ifroute-vlan* /etc/sysconfig/network/
         ncn-m001# cp -pv /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0 /etc/sysconfig/network/
@@ -338,7 +335,7 @@ all been run by the administrator before starting this stage.
         ncn-m001# cloud-init modules -m final
         ```
     
-1. Once cloud-init has completed successfully, login and start a typescript (the IP used here is the one we noted for ncn-m002 in an earlier step).
+1. Once `cloud-init` has completed successfully, log in and start a typescript (the IP address used here is the one we noted for `ncn-m002` in an earlier step).
     
     ```bash
     external# ssh root@10.102.11.13
@@ -347,7 +344,7 @@ all been run by the administrator before starting this stage.
     ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     ```
     
-1. Optionally change the root password on ncn-m001 to match the other management NCNs.
+1. Optionally change the root password on `ncn-m001` to match the other management NCNs.
     
     > This step is optional and is only needed when the other management NCNs passwords were customized during the [CSM Metal Install](005-CSM-METAL-INSTALL.md) procedure. If the management NCNs still have the default password this step can be skipped.
     
@@ -380,8 +377,8 @@ all been run by the administrator before starting this stage.
     
     ```bash
     ncn-m001# export SYSTEM_NAME=eniac
-    ncn-m001# cp /mnt/pitdata/prep/${SYSTEM_NAME}/pit-files/ifcfg-lan0 /etc/sysconfig/network/
-    ncn-m001# cp /mnt/pitdata/prep/${SYSTEM_NAME}/pit-files/ifroute-vlan002 /etc/sysconfig/network/
+    ncn-m001# cp -v /mnt/pitdata/prep/${SYSTEM_NAME}/pit-files/ifcfg-lan0 /etc/sysconfig/network/
+    ncn-m001# cp -v /mnt/pitdata/prep/${SYSTEM_NAME}/pit-files/ifroute-vlan002 /etc/sysconfig/network/
     ncn-m001# wicked ifreload lan0
     ```
     
@@ -411,8 +408,8 @@ all been run by the administrator before starting this stage.
 1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet access these RPMs will need to be externally downloaded and then copied to be installed.
     
     ```bash
-    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm/docs-csm-latest.noarch.rpm
-    ncn-m001# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+    ncn-m001# rpm -Uvh --force https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm/docs-csm-latest.noarch.rpm
+    ncn-m001# rpm -Uvh --force https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
     ```
     
 1. Now check for workarounds in the `/opt/cray/csm/workarounds/livecd-post-reboot` directory. If there are any workarounds in that directory, run those now. Each has its own instructions in their respective `README.md` files.
@@ -433,7 +430,7 @@ all been run by the administrator before starting this stage.
 At this time, the NCN cluster is fully established. The administrator may now eject any mounted USB stick:
 
 ```bash
-ncn-m001# umount /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata
+ncn-m001# umount -v /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata
 ```
 
 The administrator can continue onto [CSM Validation](008-CSM-VALIDATION.md) to conclude the CSM product deployment.
@@ -450,8 +447,8 @@ After deploying the LiveCD's NCN, the LiveCD USB itself is unharmed and availabl
 1. Mount and view the USB stick:
     ```bash
     ncn-m001# mkdir -pv /mnt/{cow,pitdata}
-    ncn-m001# mount -L cow /mnt/cow
-    ncn-m001# mount -L PITDATA /mnt/pitdata
+    ncn-m001# mount -vL cow /mnt/cow
+    ncn-m001# mount -vL PITDATA /mnt/pitdata
     ncn-m001# ls -ld /mnt/cow/rw/*
     ```
 
@@ -485,7 +482,7 @@ After deploying the LiveCD's NCN, the LiveCD USB itself is unharmed and availabl
 
 1. Be kind, unmount the USB before ejecting it:
     ```bash
-    ncn-m001# umount /mnt/cow /mnt/pitdata
+    ncn-m001# umount -v /mnt/cow /mnt/pitdata
     ```
 
 <a name="accessing-csi-from-a-usb-or-remoteiso"></a>
@@ -506,10 +503,10 @@ be accessed by any LiveCD ISO file if not the one used for the original installa
     
 1. Mount the rootfs.
     ```bash
-    ncn# mount -L PITDATA /mnt/pitdata
-    ncn# mount /mnt/pitdata/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso /mnt/livecd/
-    ncn# mount /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
-    ncn# mount /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
+    ncn# mount -vL PITDATA /mnt/pitdata
+    ncn# mount -v /mnt/pitdata/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso /mnt/livecd/
+    ncn# mount -v /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
+    ncn# mount -v /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
     ```
     
 1. Invoke CSI usage to validate it runs and is ready for use:

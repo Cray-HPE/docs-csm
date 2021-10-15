@@ -1,21 +1,21 @@
 # Firmware Action Service (FAS) Administration Guide
 
-* [Recipes](#recipes) 
+* [Recipes](#recipes)
   * [Manufacturer : Cray](#manufacturer-cray)
-    * [Device Type : RouterBMC |  Target : BMC](#cray-device-type-routerbmc--target-bmc) 
-    * [Device Type : ChassisBMC | Target: BMC](#cray-device-type-chassisbmc-target-bmc) 
-    * [Device Type : NodeBMC | Target : BMC](#cray-device-type-nodebmc-target-bmc) 
-    * [Device Type : NodeBMC | Target : NodeBIOS](#cray-device-type-nodebmc-target-nodebios) 
-    * [Device Type : NodeBMC | Target : Redstone FPGA](#cray-device-type-nodebmc-target-redstone-fpga) 
+    * [Device Type : RouterBMC |  Target : BMC](#cray-device-type-routerbmc--target-bmc)
+    * [Device Type : ChassisBMC | Target: BMC](#cray-device-type-chassisbmc-target-bmc)
+    * [Device Type : NodeBMC | Target : BMC](#cray-device-type-nodebmc-target-bmc)
+    * [Device Type : NodeBMC | Target : NodeBIOS](#cray-device-type-nodebmc-target-nodebios)
+    * [Device Type : NodeBMC | Target : Redstone FPGA](#cray-device-type-nodebmc-target-redstone-fpga)
   * [Manufacturer : HPE](#manufacturer-hpe)
-    * [Device Type : NodeBMC | Target : `iLO 5` aka BMC](#hpe-device-type-nodebmc-target--aka-bmc) 
-    * [Device Type : NodeBMC | Target : `System ROM` aka BIOS](#hpe-device-type-nodebmc-target--aka-bios) 
+    * [Device Type : NodeBMC | Target : `iLO 5` aka BMC](#hpe-device-type-nodebmc-target--aka-bmc)
+    * [Device Type : NodeBMC | Target : `System ROM` aka BIOS](#hpe-device-type-nodebmc-target--aka-bios)
   * [Manufacturer : Gigabyte](#manufacturer-gigabyte)
-    * [Device Type : NodeBMC | Target : BMC](#gb-device-type-nodebmc-target-bmc) 
-    * [Device Type : NodeBMC | Target : BIOS](#gb-device-type-nodebmc-target-bios) 
+    * [Device Type : NodeBMC | Target : BMC](#gb-device-type-nodebmc-target-bmc)
+    * [Device Type : NodeBMC | Target : BIOS](#gb-device-type-nodebmc-target-bios)
   * [Special Note: updating NCNs](#special-note-updating-ncns)
 
-## FAS Filters for `actions` and `snapshots` 
+## FAS Filters for `actions` and `snapshots`
 
 FAS uses five primary filters to determine what operations to create. The filters are listed below:
 
@@ -25,7 +25,7 @@ FAS uses five primary filters to determine what operations to create. The filter
 	* `inventoryHardwareFilter`
 	*  ` imageFilter`
 * Command Filters -> determine `how` the operations will be executed
-	* `command` 	
+	* `command`
 
 
 All filters are logically connected with `AND` logic. Only the `stateComponentFilter`, `targetFilter`, and `inventoryHardwareFilter` are used for snapshots.
@@ -34,7 +34,7 @@ All filters are logically connected with `AND` logic. Only the `stateComponentFi
 
 ---
 
-### `stateComponentFilter` 
+### `stateComponentFilter`
 The state component filter allows users to select hardware to update. Hardware can be selected individually with xnames, or in groups by leveraging the Hardware State Manager (HSM) groups and partitions features.
 
 #### Parameters
@@ -46,7 +46,7 @@ The state component filter allows users to select hardware to update. Hardware c
 
 ---
 
-### `inventoryHardwareFilter` 
+### `inventoryHardwareFilter`
 
 The inventory hardware filter takes place after the state component filter has been applied. It will remove any devices that do not conform to the identified manufacturer or models determined by querying the Redfish endpoint.
 
@@ -67,17 +67,17 @@ For example, if a user specifies an image that only applies to gigabyte, nodeBMC
 
 #### Parameters
 
-1. `imageID` -> this is the id of the image you want to force onto the system; 
+1. `imageID` -> this is the id of the image you want to force onto the system;
 2. `overrideImage` - if this is combined with imageID; it will FORCE the selected image onto all hardware identified, even if it is not applicable. This may cause undesirable outcomes, but most hardware will prevent a bad image from being loaded.
 
 ---
 
-### `targetFilter` 
+### `targetFilter`
 The target filter selects targets that match against the list. For example, if the user specifies only the BIOS target, FAS will include only operations that explicitly have BIOS as a target. A Redfish device has potentially many targets (members). Targets for FAS are case sensitive and must match Redfish.
 
 #### Parameters
 
-1. `targets` - these are the actual 'members' that will be upgraded. Examples include, but are not limited to the following: 
+1. `targets` - these are the actual 'members' that will be upgraded. Examples include, but are not limited to the following:
   * BIOS
   * BMC
   * NIC
@@ -104,8 +104,8 @@ These filters are then applied; and then `command` parameter applies settings fo
 - `version` - usually `latest` because we want to upgrade usually
 - `tag` - usually `default` because we only care about the default image (this can be mostly ignored)
 - `overrideDryrun` - This determines if this is a LIVE UPDATE or a DRYRUN; if you override; then it will provide a live update
-- `restoreNotPossibleOverride` - this determines if an update (live or dry run) will be attempted if a restore cannot be performed. Typically we do not have enough firmware to be able to do a rollback; that means if you UPDATE away from a particular version, we probably cannot go back to a previous version. Given our context it is most likely that this value will ALWAYS need to be set `true` 
-- `overwriteSameImage` - this will cause a firmware update to be performed EVEN if the device is already at the identified, selected version.  
+- `restoreNotPossibleOverride` - this determines if an update (live or dry run) will be attempted if a restore cannot be performed. Typically we do not have enough firmware to be able to do a rollback; that means if you UPDATE away from a particular version, we probably cannot go back to a previous version. Given our context it is most likely that this value will ALWAYS need to be set `true`
+- `overwriteSameImage` - this will cause a firmware update to be performed EVEN if the device is already at the identified, selected version.
 - `timeLimit` - this is the amount of time in seconds that any operation should be allowed to execute. Most `cray` stuff can be completed in about 1000 seconds or less; but the `gigabyte` stuff will commonly take 1,500 seconds or greater. We recommend setting the value to 2000; this is just a stop gap to prevent the  operation from never ending, should something get stuck.
 - `description`- this is a human friendly description; use it!
 
@@ -113,13 +113,13 @@ These filters are then applied; and then `command` parameter applies settings fo
 ---
 # <a name="recipes"></a>Recipes
 
-Below are some example `json` files that you may find useful when updating specific hardware components. In all of these examples the `overrideDryrun` field will be set to `false`; set them to `true` to perform a live update. We would recommend that when updating an entire system that you walk down the device hierarchy component type by component type, starting first with 'Routers' aka switches, proceeding to Chassis, then finally Nodes. While this is not strictly necessary we have found that it helps eliminate confusion. 
+Below are some example `json` files that you may find useful when updating specific hardware components. In all of these examples the `overrideDryrun` field will be set to `false`; set them to `true` to perform a live update. We would recommend that when updating an entire system that you walk down the device hierarchy component type by component type, starting first with 'Routers' aka switches, proceeding to Chassis, then finally Nodes. While this is not strictly necessary we have found that it helps eliminate confusion.
 
 ## <a name="manufacturer-cray"></a>Manufacturer : Cray
 
 #### <a name="cray-device-type-routerbmc--target-bmc"></a>Device Type : RouterBMC |  Target : BMC
 
-The BMC on the RouterBMC for a Cray includes the ASIC.  
+The BMC on the RouterBMC for a Cray includes the ASIC.
 
 ```json
 {
@@ -248,7 +248,7 @@ The hms-discovery job must also be stopped before updates and restarted after up
 
 #### <a name="cray-device-type-nodebmc-target-redstone-fpga"></a>Device Type : NodeBMC | Target : Redstone FPGA
 
-**IMPORTANT**: The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.  
+**IMPORTANT**: The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
 
 **NOTE**: If updating FPGAs fail due to "No Image available", you can update using the Override Image for Update procedure in [255-FIRMWARE-ACTIONS-SERVICE-FAS.md](255-FIRMWARE-ACTION-SERVICE-FAS.md). You can find the imageID using the following command: `cray fas images list --format json | jq '.[] | .[] | select(.target=="Node0.AccFPGA0")'`
 
@@ -283,7 +283,7 @@ The hms-discovery job must also be stopped before updates and restarted after up
 
 ---
 
-## <a name="manufacturer-hpe"></a>Manufacturer : HPE 
+## <a name="manufacturer-hpe"></a>Manufacturer : HPE
 ####  <a name="hpe-device-type-nodebmc-target--aka-bmc"></a>Device Type : NodeBMC | Target : `iLO 5` aka BMC
 
 ```json
@@ -380,7 +380,7 @@ The hms-discovery job must also be stopped before updates and restarted after up
 }
 ```
 
-*Note*: The timeLimit is `2000` because the Gigabyte BMCs can take a lot longer to update. 
+*Note*: The timeLimit is `2000` because the Gigabyte BMCs can take a lot longer to update.
 
 #### <a name="gb-device-type-nodebmc-target-bios"></a>Device Type : NodeBMC | Target : BIOS
 ```json
