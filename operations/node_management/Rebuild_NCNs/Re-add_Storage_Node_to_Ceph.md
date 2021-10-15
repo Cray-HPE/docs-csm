@@ -176,3 +176,4 @@
    pdsh -w ncn-s00[1..(end node number)] -f 2 '/srv/cray/scripts/metal/generate_haproxy_cfg.sh; systemctl restart haproxy.service; /srv/cray/scripts/metal/generate_keepalived_conf.sh; systemctl restart keepalived.service'
    ```
 
+[Next Step - Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md)

@@ -72,7 +72,7 @@ If the `cray-cps-cm-pm` pod is running, there will be an extra step to redeploy 
 **IMPORTANT:** The following command will cordon and drain the node. 
 
 * If there are messages indicating that the pods cannot be evicted because of a pod distribution budget, note those pod names and manually delete them. 
-* This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#set-var).
+* This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
 1. Run the following from a master node:
 
@@ -96,11 +96,11 @@ If the `cray-cps-cm-pm` pod is running, there will be an extra step to redeploy 
 
 ### Step 4 - Remove the node from the cluster after the node is drained.
 
-    This command assumes you have set the variables from [the prerequisites section](#set-var).
+This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
-    ```bash
-    kubectl delete node $NODE
-    ```
+  ```bash
+  kubectl delete node $NODE
+  ```
 
 [Click Here to Proceed to the Next Step](Identify_Nodes_and_Update_Metadata.md)
 

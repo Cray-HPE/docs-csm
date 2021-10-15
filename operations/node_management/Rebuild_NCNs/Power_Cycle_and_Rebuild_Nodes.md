@@ -213,3 +213,7 @@ Run these commands on the rebuilt node.
     ```
 
     * The output from the `ncnHealthChecks.sh` script \(run later in the "Validation" steps\) can be used to verify the `metal.no-wipe` value on every NCN.
+
+For the next step please click the link for the node type you are rebuilding
+
+[Next Step Validate Boot Raid](Validate_Boot_Raid.md)

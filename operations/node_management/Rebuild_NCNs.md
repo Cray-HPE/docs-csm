@@ -23,8 +23,6 @@ The following is a high-level overview of the NCN rebuild workflow:
 
 The system is fully installed and has transitioned off of the LiveCD.
 
-<a name="set-var"></a>
-
 For several of the commands in this section, you will need to have variables set with the name of the node being rebuilt and its xname.
 
 Set NODE to the hostname of the node being rebuilt (e.g. `ncn-w001`, `ncn-w002`, etc).
@@ -50,14 +48,6 @@ Only follow the steps in the section for the node type that is being rebuilt:
 
 ## Validation
 
-As a result of rebuilding any NCN(s) remove any dynamically assigned interface IPs that did not get released automatically by running the CASMINST-2015 script:
+After you have completed all the steps, then please run the **Final Validation** steps.
 
-```bash
-ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
-```
-
-Once that is done only follow the steps in the section for the node type that was rebuilt:
-
-* [Validate Worker Node](Rebuild_NCNs/Post_Rebuild_Worker_Node_Validation.md)
-* [Validate Master Node](Rebuild_NCNs/Post_Rebuild_Master_Node_Validation.md)
-* [Validate Storage Node](Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
+[Final Validation](rebuild_ncns/../Rebuild_NCNs/Final_Validation_Steps.md)
