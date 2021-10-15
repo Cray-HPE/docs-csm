@@ -106,7 +106,7 @@ Prepare a storage node before rebuilding it.
      41    ssd   1.74660          osd.41       down   1.00000  1.00000
     ```
 
-    1. Remove the OSDs to prevent the install from creating new OSDs on the drives, but there is still a reference to them in the crush map. It will time out trying to restart the old OSDs because of that reference.
+    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.  By default if the OSD reference is not removed, then there will still a reference to them in the crush map and will show down OSDs down that no longer exist.
 
     This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 

@@ -61,7 +61,7 @@ Skip this section if a worker or storage node was rebuilt.
 
     ```bash
     ncn-mw# /opt/cray/platform-utils/ncnHealthChecks.sh
-    ncn-mw# /opt/cray/platform-utils/
+    ncn-mw# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
     ```
 
    [Return to Main Page](../Rebuild_NCNs.md#Validation)

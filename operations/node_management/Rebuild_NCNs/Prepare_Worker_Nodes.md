@@ -45,15 +45,15 @@ If the `cray-cps-cm-pm` pod is running, there will be an extra step to redeploy 
 
 ### Step 2 - Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig before shutting down the node
 
-* The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites)
+**IMPORTANT:** The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites)
 
-1. Run the following on any node where the cray cli has been initialized:
+Run the following on any node where the cray cli has been initialized:
 
-    ```bash
+  ```bash
    cray cfs components describe $XNAME --format json
-   ```
-  
-   * Expected output:
+  ```
+
+* Expected output:
 
      ```screen
       {
@@ -71,28 +71,27 @@ If the `cray-cps-cm-pm` pod is running, there will be an extra step to redeploy 
 
 **IMPORTANT:** The following command will cordon and drain the node. 
 
-* If there are messages indicating that the pods cannot be evicted because of a pod distribution budget, note those pod names and manually delete them. 
-* This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
+**NOTE:** This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
-1. Run the following from a master node:
+Run the following from a master node:
 
-    ```bash
-    kubectl drain --ignore-daemonsets --delete-local-data $NODE
+  ```bash
+  kubectl drain --ignore-daemonsets --delete-local-data $NODE
+  ```
+
+* You may run into pods that cannot be gracefully evicted due to Pod Disruption Budgets (PDB), for example:
+
+    ```screen
+      error when evicting pod "<pod>" (will retry after 5s): Cannot evict pod as it would violate the pod's   disruption budget.
     ```
 
-    * You may run into pods that cannot be gracefully evicted due to Pod Disruption Budgets (PDB), for example:
+* In this case, there are some options. First, if the service is scalable, you can increase the scale to start up another pod on another node, and then the drain will be able to delete it. However, it will probably be necessary to force the deletion of the pod:
 
-      ```screen
-      error when evicting pod "<pod>" (will retry after 5s): Cannot evict pod as it would violate the pod's   disruption budget.
-      ```
-
-    * In this case, there are some options. First, if the service is scalable, you can increase the scale to start up another pod on another node, and then the drain will be able to delete it. However, it will probably be necessary to force the deletion of the pod:
-
-      ```bash
+    ```bash
       kubectl delete pod [-n <namespace>] --force --grace-period=0 <pod>
-      ```
+    ```
 
-    * This will delete the offending pod, and Kubernetes should schedule a replacement on another node. You can then rerun the `kubectl drain` command, and it should report that the node is drained
+* This will delete the offending pod, and Kubernetes should schedule a replacement on another node. You can then rerun the `kubectl drain` command, and it should report that the node is drained
 
 ### Step 4 - Remove the node from the cluster after the node is drained.
 
