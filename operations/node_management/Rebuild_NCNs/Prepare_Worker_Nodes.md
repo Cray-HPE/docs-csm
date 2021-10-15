@@ -45,7 +45,7 @@ If the `cray-cps-cm-pm` pod is running, there will be an extra step to redeploy 
 
 ### Step 2 - Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig before shutting down the node
 
-* The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#set-vars).
+* The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites)
 
 1. Run the following on any node where the cray cli has been initialized:
 
@@ -72,7 +72,7 @@ If the `cray-cps-cm-pm` pod is running, there will be an extra step to redeploy 
 **IMPORTANT:** The following command will cordon and drain the node. 
 
 * If there are messages indicating that the pods cannot be evicted because of a pod distribution budget, note those pod names and manually delete them. 
-* This command assumes you have set the variables from [the prerequisites section](#set-var).
+* This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#set-var).
 
 1. Run the following from a master node:
 

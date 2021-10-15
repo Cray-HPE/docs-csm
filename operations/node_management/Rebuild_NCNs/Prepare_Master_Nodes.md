@@ -8,7 +8,7 @@ Prepare a master node before rebuilding it.
 
 ### Step 1 - Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig before shutting down the node
 
-1. The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#set-var).
+1. The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
     ```bash
     ncn-m# cray cfs components describe $XNAME --format json

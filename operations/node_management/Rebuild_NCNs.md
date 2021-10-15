@@ -23,7 +23,7 @@ The following is a high-level overview of the NCN rebuild workflow:
 
 The system is fully installed and has transitioned off of the LiveCD.
 
-[](#set-var)
+<a name="set-var"></a>
 
 For several of the commands in this section, you will need to have variables set with the name of the node being rebuilt and its xname.
 

@@ -108,7 +108,7 @@ Prepare a storage node before rebuilding it.
 
     1. Remove the OSDs to prevent the install from creating new OSDs on the drives, but there is still a reference to them in the crush map. It will time out trying to restart the old OSDs because of that reference.
 
-    This command assumes you have set the variables from [the prerequisites section](#set-var).
+    This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
     This must be run from a ceph-mon node (ncn-s00[1/2/3])
 
