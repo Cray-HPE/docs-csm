@@ -94,8 +94,14 @@ all been run by the administrator before starting this stage.
       -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
-    
-1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__ to this file as a result of any customizations or workarounds use the path to that file instead. This step will prompt for the root password of the NCNs.
+
+1. Patch the `data.json` file to prevent running a CEPH script that should only ever be run on initial installation. __If you have made any changes__ to this file as a result of any customizations or workarounds use the path to that file instead.
+
+```bash
+pit# sed -i.bak 's/storage-ceph-cloudinit.sh/ceph-enable-services.sh/g' /var/www/ephemeral/configs/data.json
+```    
+
+1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. The patch to `data.json` should be the same as the one used in the last step. This step will prompt for the root password of the NCNs.
     
     ```bash
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
