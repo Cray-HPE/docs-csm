@@ -248,8 +248,9 @@ The configuration workflow described here is intended to help understand the exp
 
    This step is **strongly encouraged** for all systems.
 
-1. Create boot directories for any NCN in DNS:
-    > This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
+1. Create boot directories for any NCN in DNS This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
+
+    > **`NOTE`** This script depends on `IPMI_PASSWORD` being set, this is done in [Tokens and IPMI Password](#tokens-and-ipmi-password)
 
     ```bash
     pit# /root/bin/set-sqfs-links.sh
@@ -259,7 +260,11 @@ The configuration workflow described here is intended to help understand the exp
     - **kubernetes-worker nodes** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd)
     - A brief overview of what is expected is here, in [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline)
 
-1. Run the BIOS Baseline script to apply a configs to BMCs. The script will apply helper configs to facilitate more deterministic network booting on any NCN port. The script depends on 
+1. Run the BIOS Baseline script to apply a configs to BMCs. The script will apply helper configs to facilitate more deterministic network booting on any NCN port. **This runs against any server vendor**, some settings are not applied for certain vendors. 
+   
+    > **`NOTE`** This script depends on `IPMI_PASSWORD` being set, this is done in [Tokens and IPMI Password](#tokens-and-ipmi-password)
+   
+    > **`NOTE`** This script will enable DCMI/IPMI on Hewlett-Packard Enterprise servers equipped with ILO. If `ipmitool` is not working at this time, it will after running this script.
 
     ```bash
     pit# /root/bin/bios-baseline.sh
