@@ -1,6 +1,26 @@
 # Cray System Management (CSM) - Release Notes
 
 ## What’s New
+* Functionality
+  - Scale up to 6000 Nodes is supported.
+    - Conman has been updated to using a deployment model that handles a larger scale.
+    - Additional scaling improvements have been incorporated into several services including, Unbound, Kea, hardware state manager (HSM), and Spire.
+  - Upgrades between major versions are now allowed.
+  - The CSM installation process has been improved.
+    - Over 20 workarounds from the prior CSM release have been removed.
+    - A significant number of installation-related enhancements have been integrated, both functionally and thru documentation.
+    - Installation validation testing has been improved by updating existing validation tests and also adding additional tests.
+
+* Enhanced Documentation
+  - CSM operational documentation has been changed to markdown format for standardized deployment.
+  - CSM Administration Guides and Operational Procedures are now also available online.
+  - Searchable HTML - https://cray-hpe.github.io/docs-csm/en-10/
+  - Source - https://github.com/Cray-HPE/docs-csm/tree/release/1.0
+  - Improvements have been made to the documentation regarding installation, operations, and troubleshooting.
+    - Contains backup and restore procedures for Keycloak, Spire and SLS services.
+    - Provides guidance on setting the timezone for customer systems.
+    - Explains how to build application node xnames.
+
 * New Hardware Support
   - AMD Rome-Based HPE Apollo 6500 XL675d Gen10+ with NVIDIA 40GB A100 GPU for use as a Compute Node.
   - AMD Rome-Based HPE Apollo 6500 XL645d Gen10+ with NVIDIA 40GB A100 GPU for use as a Compute Node.
