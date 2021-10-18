@@ -1,22 +1,30 @@
 # Run NCN Personalization
 
+## Prerequisites
+
 NCN personalization is the process of applying product-specific configuration
-to NCN nodes post-boot. Prior to running this procedure, gather the following
+to NCNs post-boot. Prior to running this procedure, gather the following
 information required by [CFS](../configuration_management/Configuration_Management.md)
 to create a [configuration layer](../configuration_management/Configuration_Layers.md):
 
-* HTTP clone URL for the configuration repository in [VCS](../configuration_management/Version_Control_Service_VCS.md),
-* Path to the Ansible play to run in the repository,
-* Commit ID in the repository for CFS to pull and run on the nodes.
+* HTTP clone URL for the configuration repository in [VCS](../configuration_management/Version_Control_Service_VCS.md)
+* Path to the Ansible play to run in the repository
+* Commit ID in the repository for CFS to pull and run on the nodes
 
 Products may supply multiple plays to run, in which case multiple configuration
-layers must be created.
+layers must be created. Consult the manual for each product to configure them on
+NCNs by referring to the [1.5 HPE Cray EX System Software Getting Started Guide
+S-8000](https://www.hpe.com/support/ex-gsg) on the HPE Customer Support Center.
+
+## Procedure
 
 <a name="ncn_personalization_determine_existence"></a>
-## Determine if NCN Personalization CFS Configuration Exists
+### Determine if NCN Personalization CFS Configuration Exists
 
 If upgrading a product to a new version, an NCN personalization configuration in
-CFS should already exist. By default the configuration is named `ncn-personalization`.
+CFS should already exist. By default, the configuration is named
+`ncn-personalization`. If the default name is not used, substitute that name in
+the steps below.
 
 1. Determine if a configuration already exists.
    ```bash
@@ -24,38 +32,45 @@ CFS should already exist. By default the configuration is named `ncn-personaliza
    ```
 
 If the configuration exists, the `ncn-personalization.json` file will be
-populated with configuration layers. If it does not exist, the file will be
-empty and the command will respond with an error.
+created and populated with previously defined configuration layers. If it does
+not exist, the file will be created empty and the command will respond with an
+error. This error can be ignored.
 
 <a name="ncn_personalization_add_layer"></a>
-## Add Layer(s) to the CFS Configuration
+### Add Layer(s) to the CFS Configuration
 
-1. Add a configuration layer to the `ncn-personalization.json` file.
-   1. If the `ncn-personalization.json` file is empty, overwrite the file with
-      the configuration layer(s) information gathered from the product that is
-      configuring the NCNs. Use the [sample file with a single layer](../configuration_management/Configuration_Layers.md#configuration_layer_example_configuration_single)
-      as a template.
-   1. If a CFS configuration exists with one or more layers, add (or replace)
-      the corresponding layer entry(ies) with the configuration layer
-      information gathered for this specific product. For example:
-   ```bash
-   ncn# cat ncn-personalization.json
-   {
-      "layers": [
-         # ...
-         {
-            "name": "<product-release-etc>",
-            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/<product>-config-management.git",
-            "playbook": "site.yml",
-            "commit": "<git commit>"
-         },
-         # ... 
-      ]
-   }
-   ```
-   CFS executes the configuration layers in order. Consult the product
-   documentation to determine if its configuration layer requires special
-   placement in the layer list.
+CFS executes configuration layers in order. Refer to the _1.5 HPE Cray EX
+System Software Getting Started Guide S-8000_ on the HPE Customer Support
+Center at https://www.hpe.com/support/ex-gsg to determine if the
+configuration layer requires special placement in the layer list.
+
+> **NOTE**: The CSM configuration layer _MUST_ be the first layer in the
+> NCN personalization CFS configuration.
+
+1. Add a configuration layer to the `ncn-personalization.json` file. Follow the
+   appropriate step based on if an NCN personalization CFS configuration exists:
+   * If the `ncn-personalization.json` file is empty, overwrite the file with
+     the configuration layer(s) information gathered from the product that is
+     configuring the NCNs. Use the [sample file with a single layer](../configuration_management/Configuration_Layers.md#configuration_layer_example_configuration_single)
+     as a template.
+   * If a CFS configuration exists with one or more layers, add (or replace)
+     the corresponding layer entry(ies) with the configuration layer
+     information gathered for this specific product. For example:
+        ```bash
+        ncn# cat ncn-personalization.json
+        {
+          "layers": [
+            # ...
+            {
+              "name": "<product-release-etc>",
+              "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/<product>-config-management.git",
+              "playbook": "site.yml",
+              "commit": "<git commit>"
+            },
+            # ... 
+          ]
+        }
+        ```
 
 <a name="ncn_personalization_update_cfs_configuration"></a>
 ### Create/Update the NCN Personalization CFS Configuration Layer
@@ -72,17 +87,9 @@ empty and the command will respond with an error.
       "name": "ncn-personalization"
    }
    ```
-   > **WARNING**:
-   > When running the above step, the CFS session may fail due to the node's
-   > sshd configuration being corrupted by a different process. Run the
-   > following command on all NCNs to fix the issue.
-   >
-   > ```bash
-   > ncn# systemctl restart cfs-state-reporter
-   > ```
 
 <a name="ncn_personalization_set_component_config"></a>
-### Set the Desired Configuration on all NCNs
+### Set the Desired Configuration on NCNs
 
 1. Update the desired configuration for all NCNs.
 
@@ -95,15 +102,6 @@ empty and the command will respond with an error.
    After this command is issued, the CFS Batcher service will dispatch a CFS
    session to configure the NCNs. Since the NCN is now managed by CFS by setting
    a desired configuration, the same will happen every time the NCN boots.
-
-   > **WARNING**:
-   > When running the above step, the CFS session may fail due to the node's
-   > sshd configuration being corrupted by a different process. Run the
-   > following command on all NCNs to fix the issue.
-   >
-   > ```bash
-   > ncn# systemctl restart cfs-state-reporter
-   > ```
 
 1. Query the status of the NCN Personalization process. The status will be
    `pending` while the node is being configured by CFS, and will change to
@@ -122,20 +120,22 @@ empty and the command will respond with an error.
    ```
 
    The NCN personalization step is complete and the NCNs are now configured as
-   specified in the `ncn-personalization` configuration layers.
+   specified in the `ncn-personalization` configuration layers when each node's
+   status is `configured`.
 
    See [Configuration Management of System Components](../configuration_management/Configuration_Management_of_System_Components.md)
-   for information on setting desired configuration on specific nodes with CFS.
+   for more information on setting desired configuration on specific nodes using
+   CFS.
 
 <a name="rerun_ncn_personalization"></a>
-## Re-running NCN Personalization
+## Procedure: Re-running NCN Personalization
 
 If no changes have been made to the configuration layers (such as a new layer,
 different playbook, or new commit made), but NCN personalization needs to be
-run again, CFS can re-run NCN personalization.
+run again, CFS can re-run NCN personalization on specific nodes.
 
-Rerun the configuration for an NCN by clearing the state of the node. Clearing
-the node will cause CFS to reconfigure the node, so long as the desired
+Re-run the configuration for an NCN by clearing the state of the node. Clearing
+the node state will cause CFS to reconfigure the node, so long as the desired
 configuration was [set previously](#ncn_personalization_set_component_config).
 
 1. Clear the state of the node using CFS.
@@ -155,7 +155,7 @@ configuration was [set previously](#ncn_personalization_set_component_config).
    ncn# cray cfs components update --error-count 0 <XNAME>
    ```
 
-1. [Optional] To rerun NCN personalization on all NCNs at once, use the
+1. (Optional) To re-run NCN personalization on all NCNs at once, use the
    following loop:
    ```bash
    ncn# export CRAY_FORMAT=json
