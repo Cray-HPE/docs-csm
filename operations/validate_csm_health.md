@@ -197,6 +197,9 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
          - **ERROR: failed to update leader lock** 
          - **ERROR: Exception when working with master via replication connection**
          
+         Errors reported after rebooting worker NCNs should be re-checked in 15 minutes by re-running the ncnPostgresHealthChecks script - for example errors that start with the following:
+         - **ERROR: Error communicating with DCS**
+
          If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
 
       - Verify the State of each cluster member is 'running'.
@@ -453,7 +456,7 @@ There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites availa
 
 Run the NCN health checks against the three different types of nodes with the following commands:
 
-**IMPORTANT:** These tests may only be successful while booted into the PIT node. Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
+**IMPORTANT:** These tests should only be run while booted into the PIT node. Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
 
 
 ```bash
@@ -476,7 +479,6 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
   - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * K8S Test: Kubernetes Velero No Failed Backups
   - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the `velero` command to delete backups from a Kubernetes node to clear this situation.
-
 
 <a name="optional-check-of-system-management-monitoring-tools"></a>
 ### 1.9 Optional Check of System Management Monitoring Tools
@@ -577,6 +579,18 @@ __For each__ of the BMCs that show up in either of mismatch lists use the follow
    ```bash
    =============== BMCs in SLS not in HSM components ===============
    x3000c0s1b0  # No mgmt port association
+   ```
+
+* The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depedning on the state of the system when the `hsm_discovery_verify.sh` script is ran. If the system is currently going through the process of installation, then this is an expected mistmatch as the [Preapre Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet. 
+   > For more information refer to [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
+
+   Example mistmatch for the BMC of a HPE Apollo XL654D:
+   ```bash
+   =============== BMCs in SLS not in HSM components ===============
+   x3000c0s30b1
+
+   =============== BMCs in SLS not in HSM Redfish Endpoints ===============
+   x3000c0s30b1
    ```
 
 * Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
