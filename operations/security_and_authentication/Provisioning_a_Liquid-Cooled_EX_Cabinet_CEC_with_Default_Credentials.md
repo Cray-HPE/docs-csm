@@ -2,13 +2,13 @@
 
 This procedure provisions a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish default global credential to access the CMM controllers and node controllers (BMCs).
 
-This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. Refer to "Change Switch BMC Passwords" in the Slingshot product documentation for more information.
+This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. Refer to  "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide (> 1.6.0)*.
 
 ### Prerequisites
 
 - The administrator must have physical access to the CEC LCD panel to enable privileged command mode. The CEC does not enable users to set, display, or clear the password hash in restricted command mode.
 
-- An Apple Mac or Linux laptop that supports 10/100 IPv6 Ethernet connectivity to the CEC Ethernet port is recommended. A Windows system running a Linux emulation package may have difficulties establishing a stable network connection to the CEC.
+- A laptop with a terminal program such as Netcat (`nc`), `telnet`, or PuTTY that supports 10/100 IPv6 Ethernet connectivity to the CEC Ethernet port. 
 
 - A customer-generated hash for the CEC credentials:
 
@@ -30,7 +30,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
 3. Use the Right Arrow on the display controls to select the CEC Network Settings Menu. The IPv6 link local address is displayed on this menu.
 
-4. Start the terminal program and use Netcat (`nc`) or `telnet` to connect to CEC command shell and provide the CEC IPv6 link local address
+4. Start the terminal program and use Netcat (`nc`), `telnet`, or PuTTY to connect to CEC command shell and provide the CEC IPv6 link local address.
 
    ```screen
    # nc -t -6 'fe80::a1:3e8:0%en14' 23
