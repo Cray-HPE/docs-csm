@@ -170,43 +170,19 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
     The points below will cover the data in the table above for Member, Role, State, and Lag in MB columns.
 
     For each Postgres cluster:
-      - Verify there are three cluster members (with the exception of sma-postgres-cluster where there should be only two cluster members).
+      1. Verify there are three cluster members (with the exception of sma-postgres-cluster where there should be only two cluster members).
       If the number of cluster members is not correct, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#missing).
 
-      - Verify there is one cluster member with the Leader Role and log output indicates expected status. Such as:
-         ```bash
-         i am the leader with the lock
-         ```
-         For example:
-         ```bash
-         --- Logs for services Leader Pod cray-sls-postgres-0 ---
-            ERROR: get_cluster
-            INFO: establishing a new patroni connection to the postgres cluster
-            INFO: initialized a new cluster
-            INFO: Lock owner: cray-sls-postgres-0; I am cray-sls-postgres-0
-            INFO: Lock owner: None; I am cray-sls-postgres-0
-            INFO: no action. i am the leader with the lock
-            INFO: No PostgreSQL configuration items changed, nothing to reload.
-            INFO: postmaster pid=87
-            INFO: running post_bootstrap
-            INFO: trying to bootstrap a new cluster
-         ```
-         Errors reported prior to the lock status can be ignored - for example:
-         - **ERROR: get_cluster**
-         - **ERROR: ObjectCache.run ProtocolError('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))**
-         - **ERROR: failed to update leader lock** 
-         - **ERROR: Exception when working with master via replication connection**
-         
-         Errors reported after rebooting worker NCNs should be re-checked in 15 minutes by re-running the ncnPostgresHealthChecks script - for example errors that start with the following:
-         - **ERROR: Error communicating with DCS**
+      2. Verify there is one cluster member with the Leader Role. 
+      If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
 
-         If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
-
-      - Verify the State of each cluster member is 'running'.
+      3. Verify the State of each cluster member is 'running'.
       If any cluster members are found to be in a non 'running' state (such as 'start failed'), refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#diskfull).
 
-      - Verify there is no large or growing lag.
+      4. Verify there is no large or growing lag.
       If any cluster members are found to have lag or lag is 'unknown', refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#lag).
+
+      - **If all the above four checks indicate postgres clusters are healthy, the log output for the postgres pods can be ignored.** If possible health issues exist, re-check the health by re-running the ncnPostgresHealthChecks script in 15 minutes. If health issues persist, then review the log output and consult [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md). During NCN reboots, temporary errors related to re-election are common but should resolve upon the re-check.
 
 1. Check that all Kubernetes Postgres pods have a STATUS of Running.
     ```bash
