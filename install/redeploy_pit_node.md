@@ -174,16 +174,16 @@ data, so run them only when indicated. Instructions are in the `README` files.
         ```
         Be sure to perform this action so subsequent steps are successful.
 
-1. Patch the `data.json` file to prevent re-running a CEPH script that should only ever be run on initial installation. __If you have made any changes__ to this file as a result of any customizations or workarounds use the path to that file instead.
-
-    ```bash
-    pit# sed -i.bak 's/storage-ceph-cloudinit.sh/ceph-enable-services.sh/g' /var/www/ephemeral/configs/data.json
-    ```    
-
-1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. **The path to `data.json` should be the same as the one used in the last step** (i.e., the file you just patched). This step will prompt for the root password of the NCNs.
+1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__ to this file as a result of any customizations or workarounds use the path to that file instead. This step will prompt for the root password of the NCNs.
 
     ```bash
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
+    ```
+
+1. Patch the metadata for the CEPH nodes to have the correct run commands:
+
+    ```bash
+    pit# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
     ```
 
 1. Ensure the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.
