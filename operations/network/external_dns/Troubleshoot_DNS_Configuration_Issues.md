@@ -63,7 +63,7 @@ The Domain Name Service \(DNS\) is not configured properly.
     {{ printf "%s\t%s\n" .ip $hostnames }}{{ end }}{{ end }}
     {{ end }}{{ end }}{{ end }}' | sort -u | tr , ' '
 
-    10.101.5.128    opa-gpm.SYSTEM_DOMAIN_NAME nexus.SYSTEM_DOMAIN_NAME grafana-istio.SYSTEM_DOMAIN_NAME jaeger-istio.SYSTEM_DOMAIN_NAME prometheus-istio.SYSTEM_DOMAIN_NAME kiali-istio.SYSTEM_DOMAIN_NAME prometheus.SYSTEM_DOMAIN_NAME alertmanager.SYSTEM_DOMAIN_NAME grafana.SYSTEM_DOMAIN_NAME vcs.SYSTEM_DOMAIN_NAME sma-grafana.SYSTEM_DOMAIN_NAME sma-kibana.SYSTEM_DOMAIN_NAME csms.SYSTEM_DOMAIN_NAME
+    10.101.5.128    opa-gpm.SYSTEM_DOMAIN_NAME nexus.SYSTEM_DOMAIN_NAME jaeger-istio.SYSTEM_DOMAIN_NAME kiali-istio.SYSTEM_DOMAIN_NAME prometheus.SYSTEM_DOMAIN_NAME alertmanager.SYSTEM_DOMAIN_NAME grafana.SYSTEM_DOMAIN_NAME vcs.SYSTEM_DOMAIN_NAME sma-grafana.SYSTEM_DOMAIN_NAME sma-kibana.SYSTEM_DOMAIN_NAME csms.SYSTEM_DOMAIN_NAME
     10.101.5.129    api.SYSTEM_DOMAIN_NAME auth.SYSTEM_DOMAIN_NAME
     10.101.5.130    s3.SYSTEM_DOMAIN_NAME
     10.92.100.222   cray-dhcp-kea
