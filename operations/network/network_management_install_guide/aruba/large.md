@@ -1,5 +1,5 @@
 # Large
 
-![](../img/large.png
+![](../img/large.png)
 
 [Back to Index](./index.md)

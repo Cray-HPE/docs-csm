@@ -1,5 +1,5 @@
 # Very large (exascale)
 
-![](../img/exascale.png
+![](../img/exascale.png)
 
 [Back to Index](./index.md)
