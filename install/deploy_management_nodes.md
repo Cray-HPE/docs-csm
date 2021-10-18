@@ -34,7 +34,6 @@ the number of storage and worker nodes.
    1. [Configure after Management Node Deployment](#configure_after_management_node_deployment)
       1. [LiveCD Cluster Authentication](#livecd-cluster-authentication)
       1. [BGP Routing](#bgp-routing)
-      1. [Configure and Trim UEFI Entries](#configure-and-trim-uefi-entries)
       1. [Install Tests and Test Server on NCNs](#install-tests)
    1. [Validate Management Node Deployment](#validate_management_node_deployment)
       1. [Validation](#validation)
@@ -774,13 +773,6 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
     1. Repeat the previous steps for the remaining switch IP addresses.
 
-<a name="configure-and-trim-uefi-entries"></a>
-### 4.3 Configure and Trim UEFI Entries
-
-1. Do the following two steps **for all NCNs, but not the PIT node**:
-
-   1. [Setting Order](../background/ncn_boot_workflow.md#setting-order)
-   1. [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order)
 
 <a name="install-tests"></a>
 ### 4.4 Install Tests and Test Server on NCNs
