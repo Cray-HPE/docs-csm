@@ -22,7 +22,7 @@ If you are here with an unconfigured switch, mileage may vary.
     pit# ssh admin@10.252.0.4
 
     # SSH over HARDWARE MANAGEMENT
-    pit# ssh admin@10.254.0.4  
+    pit# ssh admin@10.254.0.4
 
     # or.. serial (device name will vary).
     pit# minicom -b 115200 -D /dev/tty.USB1
@@ -63,8 +63,8 @@ If you are here with an unconfigured switch, mileage may vary.
     sw-leaf-001# show mac-address-table
 
     ```
-3. In the output from the previous "show mac address-table" command, information will be available for all management NCNs which do not have an external connection for their BMC, such as ncn-m001. The information from these nodes is also needed in ncn_metadata.csv, but will have to be collected via another method, such as the "ipmitool lan print" command. 
-    All of the management NCNs should be present in the ncn_metadata.csv file.  
+3. In the output from the previous "show mac address-table" command, information will be available for all management NCNs which do not have an external connection for their BMC, such as ncn-m001. The information from these nodes is also needed in ncn_metadata.csv, but will have to be collected via another method, such as the "ipmitool lan print" command.
+    All of the management NCNs should be present in the ncn_metadata.csv file.
     > Tip: Mind the index (3, 2, 1.... ; not 1, 2, 3)
     ```
     Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1

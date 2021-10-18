@@ -23,11 +23,11 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
 1. Start a typescript to capture the commands and output from this installation.
    ```bash
-   linux# script -af csm-usb-lived.$(date +%Y-%m-%d).txt
+   linux# script -af csm-usb-livecd.$(date +%Y-%m-%d).txt
    linux# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-> **`INTERNAL USE`** The `ENDPOINT` URL below are for internal use. Customers do not need to download any additional 
+> **`INTERNAL USE`** The `ENDPOINT` URL below are for internal use. Customers do not need to download any additional
 > artifacts, the CSM tarball is included along with the Shasta release.
 
 2. If necessary, download the CSM software release to the Linux host which will be preparing the LiveCD.
@@ -39,33 +39,37 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    ```
 
 3. Expand the CSM software release:
-   > **`IMPORTANT`** Before proceeding, refer to the "CSM Patch Assembly" section of the Shasta Install Guide 
+   > **`IMPORTANT`** Before proceeding, refer to the "CSM Patch Assembly" section of the Shasta Install Guide
    > to apply any needed patch content for CSM. It is critical to perform these steps to ensure that the correct
    > CSM release artifacts are deployed.
-   > 
-   > **`WARNING`** Ensure that the `CSM_RELEASE` environment variable is set to the version of the patched CSM release tarball. 
-   > Applying the "CSM Patch Assembly" procedure will result in a different CSM version when compared to 
+   >
+   > **`WARNING`** Ensure that the `CSM_RELEASE` environment variable is set to the version of the patched CSM release tarball.
+   > Applying the "CSM Patch Assembly" procedure will result in a different CSM version when compared to
    > the pre-patched CSM release tarball.
    ```bash
    linux# tar -zxvf ${CSM_RELEASE}.tar.gz
-   linux# ls -l ${CSM_RELEASE}
+   linux# export CSM_PATH=$(pwd)/${CSM_RELEASE}
+   linux# ls -l ${CSM_PATH}
    ```
    The ISO and other files are now available in the extracted CSM tar.
 
-4. Remove any previously-installed versions of CSI, the CSM install docs, and the CSM install workarounds.
+4. Remove any previously-installed versions of CSI, the CSM install documentation, and the CSM install workarounds.
 
     > It is okay if this command reports that one or more of the packages are not installed.
 
     ```bash
-    linux# rpm -e cray-site-init csm-install-workarounds docs-csm
+    linux# rpm -ev cray-site-init csm-install-workarounds docs-csm
     ```
 
 5. Install the CSI RPM.
+
+   Make sure the `CSM_PATH` variable is set to the directory of your expanded CSM tarball.
+
    ```bash
-   linux# rpm -Uvh --force ./${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
+   linux# rpm -Uvh --force ${CSM_PATH}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
    ```
 
-6. Download and install the workaround and documentation RPMs. If this machine does not have direct internet 
+6. Download and install the workaround and documentation RPMs. If this machine does not have direct internet
    access these RPMs will need to be externally downloaded and then copied to be installed.
 
    ```bash
@@ -74,6 +78,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    ```
 
 7. Show the version of CSI installed.
+
    ```bash
    linux# csi version
    ```
@@ -97,7 +102,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    * Add the `embedded` repository (if necessary):
      ```bash
-     linux# zypper ar -fG "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
+     linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
      ```
      
    * Install `podman` and `podman-cni-config` packages:
@@ -106,7 +111,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `./${CSM_RELEASE}/rpm/embedded` directory.
+   from the `${CSM_PATH}/rpm/embedded` directory.
 
 9. Install lsscsi to view attached storage devices.
 
@@ -115,7 +120,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    * Add the `embedded` repository (if necessary):
      ```bash
-     linux# zypper ar -fG "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
+     linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
      ```
      
    * Install `lsscsi` package:
@@ -124,7 +129,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `./${CSM_RELEASE}/rpm/embedded` directory.
+   from the `${CSM_PATH}/rpm/embedded` directory.
 
 10. Although not strictly required, the procedures for setting up the
    `site-init` directory recommend persisting `site-init` files in a Git
@@ -135,7 +140,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    
    * Add the `embedded` repository (if necessary):
      ```bash
-     linux# zypper ar -fG "./${CSM_RELEASE}/rpm/embedded" "${CSM_RELEASE}-embedded"
+     linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
      ```
      
    * Install `git` package:
@@ -144,7 +149,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
      ```
 
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `./${CSM_RELEASE}/rpm/embedded` directory.
+   from the `${CSM_PATH}/rpm/embedded` directory.
 
 
 <a name="create-the-bootable-media"></a>
@@ -167,7 +172,7 @@ which device that is.
     [7:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sdb
     [8:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sdc
     [14:0:0:0]   disk    SanDisk  Extreme SSD      1012  /dev/sdd
-    [14:0:0:1]   enclosu SanDisk  SES Device       1012  -      
+    [14:0:0:1]   enclosu SanDisk  SES Device       1012  -
     ```
     In the above example, we can see our internal disks as the `ATA` devices and our USB as the `disk` or `enclosu` device. Since the `SanDisk` fits the profile we are looking for, we are going to use `/dev/sdd` as our disk.
 
@@ -181,11 +186,11 @@ which device that is.
 
     On Linux using the CSI application:
     ```bash
-    linux# csi pit format $USB ~/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso 50000
+    linux# csi pit format $USB "${CSM_PATH}"/cray-pre-install-toolkit-*.iso 50000
     ```
     On MacOS using the bash script:
     ```bash
-    macos# ./cray-site-init/write-livecd.sh $USB ~/${CSM_RELEASE}/cray-pre-install-toolkit-*.iso 50000
+    macos# ./cray-site-init/write-livecd.sh $USB "${CSM_PATH}"/cray-pre-install-toolkit-*.iso 50000
     ```
 
     > NOTE: At this point the USB stick is usable in any server with an x86_64 architecture based CPU. The remaining steps help add the installation data and enable SSH on boot.
@@ -194,13 +199,13 @@ which device that is.
 
     ```bash
     linux# mkdir -pv /mnt/{cow,pitdata}
-    linux# mount -L cow /mnt/cow && mount -L PITDATA /mnt/pitdata
+    linux# mount -vL cow /mnt/cow && mount -vL PITDATA /mnt/pitdata
     ```
 
 4.  Copy and extract the tarball (compressed) into the USB:
     ```bash
-    linux# cp -r ~/${CSM_RELEASE}.tar.gz /mnt/pitdata/
-    linux# tar -zxvf ~/${CSM_RELEASE}.tar.gz -C /mnt/pitdata/
+    linux# cp -rv "${CSM_PATH}.tar.gz" /mnt/pitdata/
+    linux# tar -zxvf "${CSM_PATH}.tar.gz" -C /mnt/pitdata/
     ```
 
 The USB stick is now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
@@ -245,7 +250,7 @@ Pull these files into the current working directory:
 - `switch_metadata.csv`
 - `system_config.yaml` (see below)
 
-> The optional `application_node_config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM for roles and subroles. See the CSI usage for more information.  
+> The optional `application_node_config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM for roles and subroles. See the CSI usage for more information.
 
 > The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some networking overrides (e.g. VLAN) which will allow systems on Shasta v1.3 to minimize changes to the existing system while migrating to Shasta v1.4. More information on this file can be found [here](310-CABINETS.md).
 
@@ -355,7 +360,7 @@ After gathering the files into the working directory, generate your configs:
    * Set site parameters (site-domain, site-ip, site-gw, site-nic, site-dns) for the information which connects the ncn-m001 (PIT) node to the site. The site-nic is the interface on this node connected to the site. If coming from Shasta v1.3, the information for all of these site parameters was collected.
    * There are other interfaces possible, but the install-ncn-bond-members are typically: p1p1,p10p1 for HPE nodes; p1p1,p1p2 for Gigabyte nodes; and p801p1,p801p2 for Intel nodes. If coming from Shasta v1.3, this information was collected for ncn-m001.
    * Set the three cabinet parameters (mountain-cabinets, hill-cabinets, and river-cabinets) to the number of each cabinet which are part of this system.
-   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden. See the "csi config init --help" 
+   * The starting cabinet number for each type of cabinet (for example, starting-mountain-cabinet) has a default that can be overridden. See the "csi config init --help"
    * For systems that use non-sequential cabinet id numbers, use cabinets-yaml to include the cabinets.yaml file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to explicitly specify the id of every cabinet in the system. This process is described [here](310-CABINETS.md).
    * An override to default cabinet IPv4 subnets can be made with the hmn-mtn-cidr and nmn-mtn-cidr parameters. These are also used to maintain existing configuration in a Shasta v1.3 system.
    * Several parameters (can-gateway, can-cidr, can-static-pool, can-dynamic-pool) describe the CAN (Customer Access network). The can-gateway is the common gateway IP used for both spine switches and commonly referred to as the Virtual IP for the CAN. The can-cidr is the IP subnet for the CAN assigned to this system. The can-static-pool and can-dynamic-pool are the MetalLB address static and dynamic pools for the CAN. The can-external-dns is the static IP assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The can-external-dns IP must be within the can-static-pool range.
@@ -396,8 +401,7 @@ Check for workarounds in the `/opt/cray/csm/workarounds/csi-config` directory. I
 <a name="shasta-cfg"></a>
 ### SHASTA-CFG
 
-Now execute [the procedures in 067-SHASTA-CFG.md](067-SHASTA-CFG.md) to prepare the `site-init` directory for your system.
-
+Now execute [the procedures in 067-SHASTA-CFG.md](067-SHASTA-CFG.md) to prepare the `site-init` directory for your system. **Do not skip this step.**
 
 <a name="pre-populate-livecd-daemons-configuration-and-ncn-artifacts"></a>
 ## Pre-Populate LiveCD Daemons Configuration and NCN Artifacts
@@ -443,14 +447,14 @@ This will enable SSH, and other services when the LiveCD starts.
 
 4. Unmount the Overlay, we are done with it
     ```bash
-    linux# umount /mnt/cow    
+    linux# umount /mnt/cow
     ```
 
 5. Make directories needed for basecamp (cloud-init) and the squashFS images
 
     ```bash
-    linux# mkdir -p /mnt/pitdata/configs/
-    linux# mkdir -p /mnt/pitdata/data/{k8s,ceph}/
+    linux# mkdir -pv /mnt/pitdata/configs/
+    linux# mkdir -pv /mnt/pitdata/data/{k8s,ceph}/
     ```
 
 6. Copy basecamp data
@@ -473,8 +477,11 @@ This will enable SSH, and other services when the LiveCD starts.
    ```
 
 8. Copy k8s artifacts:
+
+    Make sure the `CSM_PATH` variable is set to the directory of your expanded CSM tarball.
+    
     ```bash
-    linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/kubernetes/ /mnt/pitdata/data/k8s/ -kiK
+    linux# csi pit populate pitdata "${CSM_PATH}/images/kubernetes/" /mnt/pitdata/data/k8s/ -kiK
     ```
     
     Expected output looks similar to the following:
@@ -485,8 +492,11 @@ This will enable SSH, and other services when the LiveCD starts.
     ```
 
 9. Copy ceph/storage artifacts:
+
+    Make sure the `CSM_PATH` variable is set to the directory of your expanded CSM tarball.
+    
     ```bash
-    linux# csi pit populate pitdata ~/${CSM_RELEASE}/images/storage-ceph/ /mnt/pitdata/data/ceph/ -kiC
+    linux# csi pit populate pitdata "${CSM_PATH}/images/storage-ceph/" /mnt/pitdata/data/ceph/ -kiC
     ```
     
     Expected output looks similar to the following:
@@ -501,7 +511,7 @@ This will enable SSH, and other services when the LiveCD starts.
     linux# cd; umount /mnt/pitdata
     ```
 
-11. Quit the typescript session with the `exit` command and copy the file (csm-usb-lived.<date>.txt) to a location on another server for reference later.
+11. Quit the typescript session with the `exit` command and copy the file (csm-usb-livecd.<date>.txt) to a location on another server for reference later.
 
 Now the USB stick may be reattached to the CRAY, or if it was made on the CRAY then its server can now
 reboot into the LiveCD.
@@ -594,15 +604,15 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 3. Start a typescript to record this section of activities done on ncn-m001 while booted from the LiveCD.
 
    ```bash
-   pit# script -af booted-csm-lived.$(date +%Y-%m-%d).txt
+   pit# script -af booted-csm-livecd.$(date +%Y-%m-%d).txt
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
    
-4. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet 
+4. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
    access these RPMs will need to be externally downloaded and then copied to be installed.
    ```bash
-   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm/docs-csm-latest.noarch.rpm
-   pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   pit# rpm -Uvh --force https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm/docs-csm-latest.noarch.rpm
+   pit# rpm -Uvh --force https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
 5. Check the pit-release version.

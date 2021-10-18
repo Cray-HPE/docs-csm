@@ -104,7 +104,7 @@ done
 > <a name="hewlett-packard-enterprise"></a>
 > #### Hewlett-Packard Enterprise
 >
-> 
+>
 ><a name="masters-2"></a>
 > ##### Masters
 >
@@ -116,7 +116,7 @@ done
 > Boot0021* cray (sdb1)
 > Boot0022* cray (sdc1)
 > ```
-> 
+>
 ><a name="storage-2"></a>
 > ##### Storage
 >
@@ -128,7 +128,7 @@ done
 > Boot0002* cray (sdg1)
 > Boot0020* cray (sdh1)
 > ```
-> 
+>
 ><a name="workers-2"></a>
 > ##### Workers
 >
@@ -140,7 +140,7 @@ done
 > Boot0017* cray (sdb1)
 > Boot0018* cray (sdc1)
 > ```
-> 
+>
 > <a name="intel-corporation"></a>
 > #### Intel Corporation
 >

@@ -28,7 +28,7 @@ into the CSM Kubernetes cluster).
 > **`SKIP IF ONLINE`** - Online installs cannot upload container images to the
 > bootstrap registry since it proxies an upstream source. **DO NOT** perform
 > this procedure if the bootstrap registry was [reconfigured to proxy from an
-> upstream registry](005-CSM-METAL-INSTALL.md#configure-bootstrap-registry-to-proxy-an-upstream-registry). 
+> upstream registry](005-CSM-METAL-INSTALL.md#configure-bootstrap-registry-to-proxy-an-upstream-registry).
 
 1.  Verify that Nexus is running:
 
@@ -99,7 +99,7 @@ secret/site-init created
 >    ```bash
 >    pit# kubectl delete secret -n loftsman site-init
 >    ```
->    
+>
 >    Expected output looks similar to the following:
 >    ```
 >    secret "site-init" deleted
@@ -109,7 +109,7 @@ secret/site-init created
 >    ```bash
 >    pit# kubectl create secret -n loftsman generic site-init --from-file=/var/www/ephemeral/prep/site-init/customizations.yaml
 >    ```
->    
+>
 >    Expected output looks similar to the following:
 >    ```
 >    secret/site-init created
@@ -120,21 +120,21 @@ secret/site-init created
 > `customizations.yaml` in the `site-init` Git repository, which may no longer
 > be mounted on any cluster node, and then delete and recreate the `site-init`
 > secret as shown below.
-> 
+>
 > To **read** `customizations.yaml` from the `site-init` secret:
-> 
+>
 > ```bash
 > ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
 > ```
-> 
+>
 > To **delete** the `site-init` secret:
-> 
+>
 > ```bash
 > ncn# kubectl -n loftsman delete secret site-init
 > ```
-> 
+>
 > To **recreate** the `site-init` secret:
-> 
+>
 > ```bash
 > ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
 > ```
@@ -240,7 +240,7 @@ On success, each management NCN will be output, e.g.:
 pit# ./lib/list-ncns.sh
 + Getting admin-client-auth secret
 + Obtaining access token
-+ Querying SLS 
++ Querying SLS
 ncn-m001
 ncn-m002
 ncn-m003
@@ -273,34 +273,34 @@ for each management NCN, e.g.,:
 pit# ./lib/set-ncns-to-unbound.sh
 + Getting admin-client-auth secret
 + Obtaining access token
-+ Querying SLS 
++ Querying SLS
 + Updating ncn-m001
-Password: 
+Password:
 ncn-m001: nameserver 127.0.0.1
 ncn-m001: nameserver 10.92.100.225
 + Updating ncn-m002
-Password: 
+Password:
 ncn-m002: nameserver 10.92.100.225
 + Updating ncn-m003
-Password: 
+Password:
 ncn-m003: nameserver 10.92.100.225
 + Updating ncn-s001
-Password: 
+Password:
 ncn-s001: nameserver 10.92.100.225
 + Updating ncn-s002
-Password: 
+Password:
 ncn-s002: nameserver 10.92.100.225
 + Updating ncn-s003
-Password: 
+Password:
 ncn-s003: nameserver 10.92.100.225
 + Updating ncn-w001
-Password: 
+Password:
 ncn-w001: nameserver 10.92.100.225
 + Updating ncn-w002
-Password: 
+Password:
 ncn-w002: nameserver 10.92.100.225
 + Updating ncn-w003
-Password: 
+Password:
 ncn-w003: nameserver 10.92.100.225
 ```
 
@@ -311,10 +311,10 @@ ncn-w003: nameserver 10.92.100.225
 ### Initialize cray CLI
 
 The cray command line interface (CLI) is a framework created to integrate all of the system management REST
-APIs into easily usable commands. 
+APIs into easily usable commands.
 
 Later procedures in the installation process use the 'cray' CLI to interact with multiple services.
-The 'cray' CLI configuration needs to be initialized and the user running the procedure needs to be authorized. 
+The 'cray' CLI configuration needs to be initialized and the user running the procedure needs to be authorized.
 This section describes how to initialize the 'cray' CLI for use by a user and authorize that user.
 
 The 'cray' CLI only needs to be initialized once per user on a node.
@@ -323,7 +323,7 @@ The 'cray' CLI only needs to be initialized once per user on a node.
 
    Some of the installation procedures leading up to this point use the CLI with a Kubernetes managed service
    account normally used for internal operations. There is a procedure for extracting the OAUTH token for
-   this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations.  
+   this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations.
 
    ```bash
    ncn# unset CRAY_CREDENTIALS
@@ -333,11 +333,11 @@ The 'cray' CLI only needs to be initialized once per user on a node.
 
    The 'cray' CLI needs to know what host to use to obtain authorization and what user is requesting authorization
    so it can obtain an OAUTH token to talk to the API Gateway. This is accomplished by initializing the CLI
-   configuration. In this example, the `vers` username and its password are used. 
+   configuration. In this example, the `vers` username and its password are used.
 
    If LDAP configuration has enabled, then use a valid account in LDAP instead of 'vers'.
 
-   If LDAP configuration was not enabled, or is not working, then a keycloak local account could be created. 
+   If LDAP configuration was not enabled, or is not working, then a keycloak local account could be created.
    See "Create a Service Account in Keycloak" in the HPE Cray EX System Administration Guide 1.4 S-80001.
 
    ```bash
@@ -398,7 +398,7 @@ ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-1570/CASMINST-1570.sh
 ```
 
 > **`NOTE`** Currently, there is no automated procedure to apply routing changes to all worker NCNs to support Mountain, Hill and River
-Compute Node Cabinets. 
+Compute Node Cabinets.
 
 
 <a name="validate-csm-install"></a>
@@ -459,9 +459,9 @@ pit# kubectl -n services logs -l app=cray-sls-init-load -c cray-sls-loader
 The symptom of this situation is the present of something similar to the following in the output of the previous command:
 ```
 {"level":"warn","ts":1612296611.2630196,"caller":"sls-s3-downloader/main.go:96","msg":"Failed to ping bucket.","error":"encountered error during head_bucket operation for bucket sls at https://: RequestError: send request failed\ncaused by: Head \"https:///sls\": http: no Host in request URL"}
-```  
+```
 
-This error is most likely _intermittent_ and and deleting the cray-sls-init-load pod is expected to resolve this issue. You may need to delete the loader pod multiple times until it succeeds. 
+This error is most likely _intermittent_ and and deleting the cray-sls-init-load pod is expected to resolve this issue. You may need to delete the loader pod multiple times until it succeeds.
 ```bash
 pit# kubectl -n services delete pod cray-sls-init-load-nh5k7
 ```

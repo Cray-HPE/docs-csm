@@ -1,11 +1,11 @@
 # NCN/Management Node Locking
 
-    * [Why?](#why) 
-    * [When To Lock Management NCNs](#when-to-lock-management-ncns) 
-    * [When To Unlock Management NCNs](#when-to-unlock-management-ncns) 
-    * [Locked Behavior](#locked-behavior) 
+    * [Why?](#why)
+    * [When To Lock Management NCNs](#when-to-lock-management-ncns)
+    * [When To Unlock Management NCNs](#when-to-unlock-management-ncns)
+    * [Locked Behavior](#locked-behavior)
     * [START -> How To Lock Management NCNs](#how-to-lock-management-ncns)
-    * [How To Unlock Management NCNs](#how-to-unlock-management-ncns) 
+    * [How To Unlock Management NCNs](#how-to-unlock-management-ncns)
     * [Next Steps](#next-steps)
 
 ##  <a name="why"></a>Why?
@@ -13,18 +13,18 @@
 In Shasta 1.4 NCN black listing is turned off by default for CAPMC and FAS. Also, please note
 that Management NCNs are NOT locked by default either.
 
-Thus it is up to the administrator to properly lock NCNs to prevent things 
+Thus it is up to the administrator to properly lock NCNs to prevent things
 from accidentally being done to them, namely:
 
 * Firmware upgrades
 * Power down operations
 * Reset operations
 
-Doing any of these by accident will take down an NCN. If the NCN is a 
+Doing any of these by accident will take down an NCN. If the NCN is a
 Kubernetes master or worker node, this can have serious negative effects on
-system operation.  
+system operation.
 
-If a single node is taken down by mistake it is possible that things will 
+If a single node is taken down by mistake it is possible that things will
 recover; if all NCNs are taken down, or all Kubernetes worker nodes are taken down
 by mistake, the system is dead and has to be completely restarted.
 
@@ -55,7 +55,7 @@ Note that the cray-smd-xxx pods are in the **Running** state.
 ## <a name="when-to-unlock-management-ncns"></a>When To Unlock Management NCNs
 
 Any time a management NCN has to be power cycled, reset, or have its
-firmware updated it will first need to be unlocked.   
+firmware updated it will first need to be unlocked.
 
 After the operation is complete the targeted nodes should once again be locked.
 See below for instructions and examples.

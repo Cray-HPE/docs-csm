@@ -34,7 +34,7 @@ unalias grep >/dev/null 2>&1
 for file in ${pattern}*.md; do
 
     # trim...
-    fname="$file" 
+    fname="$file"
     fname="${fname#"${fname%%[![:space:]]*}"}"   # remove leading whitespace characters
     fname="${fname%"${fname##*[![:space:]]}"}"   # remove trailing whitespace characters
     printf "::%s\n" "$fname::"

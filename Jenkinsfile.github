@@ -43,7 +43,7 @@ pipeline {
           steps {
             script {
                 if(env.RELEASE_BRANCH_VERSION){
-                    RELEASE_FOLDER = "/" + env.RELEASE_BRANCH_VERSION 
+                    RELEASE_FOLDER = "/" + env.RELEASE_BRANCH_VERSION
                 } else {
                     RELEASE_FOLDER = ""
                 }

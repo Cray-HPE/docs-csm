@@ -14,7 +14,7 @@ Information below is sorted based on device type; complete each when directed to
 
 The following guide(s) can be done when the CRAY is operational (in runtime).
 
-These are **not** required for an installation. 
+These are **not** required for an installation.
 
 - [NCN Firmware Installation Guide for FAS](010-FIRMWARE-UPDATE-WITH-FAS.md)
 - [NCN Firmware Action Service (FAS) Guide](255-FIRMWARE-ACTION-SERVICE-FAS.md)

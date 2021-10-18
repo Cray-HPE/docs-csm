@@ -247,7 +247,7 @@ data:
 <a name="ntp"></a>
 ## NTP
 
-cloud-init modifications to NTP. 
+cloud-init modifications to NTP.
 
 > script: `/srv/cray/scripts/metal/set-ntp-config.sh`
 ---

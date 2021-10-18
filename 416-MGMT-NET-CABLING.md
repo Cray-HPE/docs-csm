@@ -7,7 +7,7 @@
 
 ### HPE DL385
 ![DL385](img/network/DL385-back.png)
-* The OCP Slot is noted (number 7) in the image above.  
+* The OCP Slot is noted (number 7) in the image above.
   * This is the bottom middle slot to the left of the VGA port.
   * Ports are numbered left-to-right:  the far left port is port 1.
 * The PCIe Slot 1 is on the top left side of the image above (under number 1).
@@ -98,7 +98,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 
 ![HPE_Large_Storage](img/network/HPE_Storage_large.png)
 
-#### SHCD Example with four aggregation switches. 
+#### SHCD Example with four aggregation switches.
 |hostname|Source          |Destination   |Destination |
 |--------|----------------|--------------|------------|
 | sn01	 | x3000u10ocp-j2 | x3000u36-j5	 | sw-25g04   |

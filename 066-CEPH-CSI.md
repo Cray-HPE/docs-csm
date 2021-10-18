@@ -66,4 +66,4 @@ If you are missing any components then you will want to re-run the storage node 
        ```
         * If your output is like above then that means that all the steps ran.
             - You can also locate file in /etc/cray/ceph that are created as each step completes
-        * If the script failed out then you will have more output for the tasks that are being run. 
+        * If the script failed out then you will have more output for the tasks that are being run.

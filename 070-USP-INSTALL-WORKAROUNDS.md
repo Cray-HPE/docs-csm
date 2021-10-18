@@ -30,18 +30,18 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 13   ssd  3.49309         osd.13      down  1.00000 1.00000
 15   ssd  3.49309         osd.15      down  1.00000 1.00000
 -7       27.94519     host ncn-s003                            <--- node where our issue exists
- 2   ssd 27.94519         osd.2       down  1.00000 1.00000    <--- our problematic VG.  
+ 2   ssd 27.94519         osd.2       down  1.00000 1.00000    <--- our problematic VG.
 
 ```
 
    **SSH to our node(s) where the issue exists and do the following:**
    
    1.  ncn-s# systemctl stop ceph-osd.target
-   2.  ncn-s# vgremove -f --select 'vg_name=~ceph*'  
+   2.  ncn-s# vgremove -f --select 'vg_name=~ceph*'
    *This will take a little bit of time, so do not panic.**
    3.  ncn-s# for i in {g..n}; do sgdisk --zap-all /dev/sd$i; done.
    
-   **This will vary node to node and you should use lsblk to identify all drives available to Ceph** 
+   **This will vary node to node and you should use lsblk to identify all drives available to Ceph**
 
    >**Manually create OSDs on the problematic nodes**
    >ncn-s# for i in {g..n}; do ceph-volume lvm create --data /dev/sd$i  --bluestore; done

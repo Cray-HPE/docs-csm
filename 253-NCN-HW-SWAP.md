@@ -122,7 +122,7 @@ It is dangerous to run with 2 worker nodes or less, work must be done with dilig
 
 6. The node will run cloud-init and will auto-join the cluster again. Monitor for status with:
     ```bash
-    linux# kubectl get nodes -w 
+    linux# kubectl get nodes -w
     ```
 
 Once your node returns to the cluster, the procedure is done.

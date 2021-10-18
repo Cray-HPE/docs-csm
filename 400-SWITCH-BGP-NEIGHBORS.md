@@ -5,12 +5,12 @@ This page will detail how to manually configure and verify BGP neighbors on the 
 - You will not have BGP peers until ```install.sh``` is ran. This is where MetalLB is deployed.
 - How do I check the status of the BGP neighbors?
 - Log into the spine switches and run `show bgp ipv4 unicast summary` for Aruba/HPE switches and `show ip bgp summary` for Mellanox.
-- Are my Neighbors stuck in IDLE? running `clear ip bgp all` on the mellanox and `clear bgp *` on the Arubas will restart the BGP process, this process may need to be done when a system is reinstalled. If only some neighbors are showing `ESTABLISHED` you may need to run the command multiple times for all the BGP peers to come up. 
+- Are my Neighbors stuck in IDLE? running `clear ip bgp all` on the mellanox and `clear bgp *` on the Arubas will restart the BGP process, this process may need to be done when a system is reinstalled. If only some neighbors are showing `ESTABLISHED` you may need to run the command multiple times for all the BGP peers to come up.
 - The BGP neighbors will be the worker NCN IPs on the NMN (node management network) (VLAN002). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.
 - On the Aruba/HPE switches properly configured BGP will look like the following.
 
 # Generate MetalLB configmap
-- Depending on the network architecture of your system you may need to peer with switches other than the spines. CSI has a BGP peers argument that accepts 'aggregation' as an option, if no option is defined it will default to the spines as being the MetalLB peers. 
+- Depending on the network architecture of your system you may need to peer with switches other than the spines. CSI has a BGP peers argument that accepts 'aggregation' as an option, if no option is defined it will default to the spines as being the MetalLB peers.
 
 CSI cli arguments with ```--bgp-peers aggregation```
 ```
@@ -52,20 +52,20 @@ sw-spine-001# show bgp ipv4 unicast summary
 VRF : default
 BGP Summary
 -----------
- Local AS               : 65533        BGP Router Identifier  : 10.252.0.1     
- Peers                  : 4            Log Neighbor Changes   : No             
- Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60             
+ Local AS               : 65533        BGP Router Identifier  : 10.252.0.1
+ Peers                  : 4            Log Neighbor Changes   : No
+ Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
 
  Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
- 10.252.0.3      65533       31457   31474   00m:02w:04d  Established   Up         
- 10.252.2.8      65533       54730   62906   00m:02w:04d  Established   Up         
- 10.252.2.9      65533       54732   62927   00m:02w:04d  Established   Up         
- 10.252.2.18     65533       54732   62911   00m:02w:04d  Established   Up 
+ 10.252.0.3      65533       31457   31474   00m:02w:04d  Established   Up
+ 10.252.2.8      65533       54730   62906   00m:02w:04d  Established   Up
+ 10.252.2.9      65533       54732   62927   00m:02w:04d  Established   Up
+ 10.252.2.18     65533       54732   62911   00m:02w:04d  Established   Up
  ```
 On the Mellanox switches, first you must run the switch commands listed in the Automated section above. Then the output should look like the following.
  
 ```
-sw-spine-001 [standalone: master] # show ip bgp summary 
+sw-spine-001 [standalone: master] # show ip bgp summary
 
 VRF name                  : default
 BGP router identifier     : 10.252.0.1
@@ -77,7 +77,7 @@ IPV6 Prefixes             : 0
 L2VPN EVPN Prefixes       : 0
 
 ------------------------------------------------------------------------------------------------------------------
-Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd        
+Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
 ------------------------------------------------------------------------------------------------------------------
 10.252.0.7        4    65533        37421     42948     308       0      0      12:23:16:07   ESTABLISHED/53
 10.252.0.8        4    65533        37421     42920     308       0      0      12:23:16:07   ESTABLISHED/51
@@ -106,13 +106,13 @@ dhcp-host=98:03:9b:bb:a9:94,10.252.1.15,ncn-w001,20m # Bond0 Mac0/Mac1
 dhcp-host=98:03:9b:bb:a9:94,10.254.1.24,ncn-w001,20m # HMN
 dhcp-host=98:03:9b:bb:a9:94,10.102.4.14,ncn-w001,20m # CAN
 ```
-- The Aruba configuration will require you to set the other peering switch as a BGP neighbor, the mellanox configuration does not require this. 
+- The Aruba configuration will require you to set the other peering switch as a BGP neighbor, the mellanox configuration does not require this.
 - You will need to delete the previous route-map, and BGP configuration on both switches.
 Aruba delete commands.
 ```
 sw-spine-001# configure terminal
 
-sw-spine-001(config)# no router  bgp 65533                          
+sw-spine-001(config)# no router  bgp 65533
 This will delete all BGP configurations on this device.
 Continue (y/n)? y
 
@@ -149,7 +149,7 @@ route-map rm-ncn-w003 permit seq 20
 route-map rm-ncn-w003 permit seq 30
      match ip address prefix-list pl-can
      set ip next-hop 10.103.10.11
-!                                                              
+!
 router bgp 65533
     bgp router-id 10.252.0.1
     maximum-paths 8
@@ -169,7 +169,7 @@ router bgp 65533
 ```
 Mellanox delete commands.
 ```
-sw-spine-001 [standalone: master] # 
+sw-spine-001 [standalone: master] #
 sw-spine-001 [standalone: master] # conf t
 sw-spine-001 [standalone: master] (config) # no router bgp 65533
 sw-spine-001 [standalone: master] (config) # no route-map ncn-w001
@@ -216,11 +216,11 @@ Mellanox configuration example.
 ```
 
 - Once the IPs are updated for the route-maps and BGP neighbors you may need to restart the BGP process on the switches, you do this by running `clear ip bgp all` on the mellanox and `clear bgp *` on the Arubas. (This may need to be done multiple times for all the peers to come up)
-- When worker nodes are reinstalled, the BGP process will need to be restarted. 
+- When worker nodes are reinstalled, the BGP process will need to be restarted.
 - If the BGP peers are still not coming up you should check the metallb.yaml config file for errors. The MetalLB config file should point to the NMN IPs of the switches configured.
 
 metallb.yaml configuration example.
-- The peer-address should be the IP of the switch that you are doing BGP peering with.  
+- The peer-address should be the IP of the switch that you are doing BGP peering with.
 ```
 ---
 apiVersion: v1

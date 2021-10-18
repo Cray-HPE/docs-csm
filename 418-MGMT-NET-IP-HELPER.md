@@ -86,7 +86,7 @@ interface vlan3000
 # Mellanox Configuration
 
 Configuration for Mellanox switch.
-Notice there is a helper for vlan 1,2,4, and 7. 
+Notice there is a helper for vlan 1,2,4, and 7.
 ```
 ## DHCP relay configuration
 ##

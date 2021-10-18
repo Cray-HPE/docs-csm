@@ -178,11 +178,11 @@ To complete firmware checkout, proceed through the below sections:
    | UAN | Gigabyte | MZ92-FS0 | BIOS | 20.03.00 | `NO` |`http://pit/fw/river/gb/sh-svr-5264-gpu-bios/bios/RBU/image.RBU`
    | UAN | Gigabyte | MZ92-FS0 | BMC | 12.84.09 | `NO` |`http://pit/fw/river/gb/sh-svr-5264-gpu-bios/bmc/fw/128409.bin`
    | | | | | | |
-   | NCN | HPE | `A42` ProLiant DL385 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A42_1.38_10_30_2020.signed.flash` | 
-   | NCN | HPE | `A43` ProLiant DL325 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A43_1.38_10_30_2020.signed.flash` | 
+   | NCN | HPE | `A42` ProLiant DL385 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A42_1.38_10_30_2020.signed.flash` |
+   | NCN | HPE | `A43` ProLiant DL325 Gen10 Plus | BIOS | 10/30/2020 1.38 | `NO` | `http://pit/fw/river/hpe/A43_1.38_10_30_2020.signed.flash` |
    | NCN | HPE | iLO5 | BMC | 2.33 | `NO` |`http://pit/fw/river/hpe/ilo5_233.bin` |
    | | | | | | |
-   | CN | CRAY | EX235n | BIOS | ex235n.bios-1.0.3 | `NO` | `http://pit/fw/mountain/cray/ex235n.bios-1.0.3.tar.gz` | 
+   | CN | CRAY | EX235n | BIOS | ex235n.bios-1.0.3 | `NO` | `http://pit/fw/mountain/cray/ex235n.bios-1.0.3.tar.gz` |
    | CN | CRAY | EX425 | BIOS | ex425.bios-1.4.3 | `NO` | `http://pit/fw/mountain/cray/ex425.bios-1.4.3.tar.gz` |
 
 3. For each server that is **lower** than the items above (except for any downgrade exceptions), run through
@@ -349,7 +349,7 @@ Find more information for each vendor below:
 - [Mellanox Upgrades](#mellanox-upgrades)
 
 | Vendor | Model | PSID | Version | Downgrade (Y/n)? | LiveCD Location |
-| :--- | :--- | --- | ---: | :---: | :--- | 
+| :--- | :--- | --- | ---: | :---: | :--- |
 | Marvell | QL41232HQCU-HC |   | 08.50.78 | `NO` | `unavailable`
 | Mellanox | MCX416A-BCA* | `CRAY000000001` | 12.28.2006 | `NO` | `http://pit/fw/pcie/images/CRAY000000001.bin`
 | Mellanox | MCX515A-CCA* | `MT_0000000011` and `MT_0000000591` | 16.28.2006 | `NO` | `http://pit/fw/pcie/images/MT_0000000011.bin`

@@ -6,7 +6,7 @@ The installation of CSM software has three scenarios which are described in this
 
 Installation prerequisites
 
-Satisfy the prerequisites for one of these three installation scenarios 
+Satisfy the prerequisites for one of these three installation scenarios
 
 * Migration from a Shasta v1.3.x system. How to collect information from a v1.3.x system to be used during the v1.4 installation, quiescing v1.3.x, checking and updating firmware to required versions, recabling site connection to shift from ncn-w001 to ncn-m001, adjust management NCNs to boot over PCIe instead of onboard NICs, shutting down Kubernetes, and powering off NCNs. Then you move to Starting an Installation.
 * First time installation of Shasta software (a bare-metal install). This describes now to setup the LiveCD to be able to collect the configuration payload, configure network switches, update firmware for switches and nodes to required versions. Then you move to Starting an Installation.
@@ -16,10 +16,10 @@ Once the installation prerequisites have been addressed, the installation is ver
 
 Starting an installation
 
-The three separate scenarios (above) continue the same way at this point, with preparation and then booting from the LiveCD.  
+The three separate scenarios (above) continue the same way at this point, with preparation and then booting from the LiveCD.
 
 * This version of the documentation supports booting from a [CSM USB LiveCD] (003-CSM-USB-LIVECD.md).
-* A future version of this documentation will support booting from a virtual ISO method [CSM Remote LiveCD] (004-CSM-REMOTE-LIVECD.md). 
+* A future version of this documentation will support booting from a virtual ISO method [CSM Remote LiveCD] (004-CSM-REMOTE-LIVECD.md).
 
 ##### [CSM USB LiveCD - Creation and Configuration](003-CSM-USB-LIVECD.md)
 
@@ -75,7 +75,7 @@ Install all of the CSM applications and services into the management Kubernetes 
   * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](006-CSM-PLATFORM-INSTALL.md#error-initiating-layer-upload)
   * [Error lookup registry.local: no such host](006-CSM-PLATFORM-INSTALL.md#error-registry-local-no-such-host)
 
-<a name="csm-install-validation-and-health-checks"></a> 
+<a name="csm-install-validation-and-health-checks"></a>
 ###### [CSM Install Validation and Health Checks](008-CSM-VALIDATION.md)
 
 The CSM installation validation and health checks can be run after install.sh finishes in this installation process, but can also be run at other times later.
@@ -139,9 +139,9 @@ The ncn-m001 node needs to reboot from the LiveCD to normal operation as a Kuber
 
 [*Double-back...*](#csm-install-validation-and-health-checks)
 
-The CSM installation validation and health checks can be run again now that ncn-m001 has been rebooted to join the Kubernetes cluster. 
+The CSM installation validation and health checks can be run again now that ncn-m001 has been rebooted to join the Kubernetes cluster.
 
-##### [NCN/Management Node Locking](009-NCN-LOCKING.md) 
+##### [NCN/Management Node Locking](009-NCN-LOCKING.md)
 
 The NCNs should be locked to prevent accidental firmware upgrades with FAS or power down operations and reset operations with CAPMC.
 
