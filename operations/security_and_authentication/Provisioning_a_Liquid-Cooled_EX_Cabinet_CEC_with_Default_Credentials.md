@@ -1,14 +1,12 @@
-
-
 ## Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials
 
-This procedure provisions a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish default global credential to access the CMM controllers and node controllers (BMCs). 
+This procedure provisions a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish default global credential to access the CMM controllers and node controllers (BMCs).
 
-This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. Refer to "Change Switch BMC Passwords" in the Slingshot product documentation for more information. 
+This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. Refer to "Change Switch BMC Passwords" in the Slingshot product documentation for more information.
 
 ### Prerequisites
 
-- The administrator must have physical access to the CEC LCD panel to enable privileged command mode. The CEC does not enable users to set, display, or clear the password hash in restricted command mode. 
+- The administrator must have physical access to the CEC LCD panel to enable privileged command mode. The CEC does not enable users to set, display, or clear the password hash in restricted command mode.
 
 - An Apple Mac or Linux laptop that supports 10/100 IPv6 Ethernet connectivity to the CEC Ethernet port is recommended. A Windows system running a Linux emulation package may have difficulties establishing a stable network connection to the CEC.
 
@@ -46,7 +44,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
    - Enter return a few times to start the connection.
 
-   - **NOTE**: If the network connection to the CEC is lost, or if a CEC command does not return to the prompt, it may be necessary to reboot the CEC.  Use the Right Arrow on the CEC control panel to display the Action menu, select Reset CEC, and press the green checkmark button to reboot the CEC. Then re-establish the `nc` or `telnet` connection. 
+   - **NOTE**: If the network connection to the CEC is lost, or if a CEC command does not return to the prompt, it may be necessary to reboot the CEC. Use the Right Arrow on the CEC control panel to display the Action menu, select Reset CEC, and press the green checkmark button to reboot the CEC. Then re-establish the `nc` or `telnet` connection.
 
      ![CEC Front Panel Controls](../../img//CEC_Display_Controls_CEC_Actions.svg)
 
@@ -99,13 +97,13 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
 11. Use the front panel Right Arrow to select the CEC Action menu.
 
-12. Reset the CMMs 3, 2, 1, and 0. 
+12. Reset the CMMs 3, 2, 1, and 0.
 
     The Reset CMM commands reboot either the even numbered, or odd numbered CMMs in the cabinet, depending on which CEC is issuing the commands.
 
     ![Front Panel Controls](../../img//CEC_Display_Controls_CEC_Actions.svg)
 
-13. To test the password, connect to the CMM serial console though the CEC. The IPv6 address is the same, but the port numbers are different as described below. 
+13. To test the password, connect to the CMM serial console though the CEC. The IPv6 address is the same, but the port numbers are different as described below.
 
       ```screen
       #!/bin/bash
@@ -114,8 +112,8 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
       nc -6 'fe80::a1:2328:0%en14' 50000
       ```
 
-      - The even numbered CEC manages the CMM serial console for chassis 0, 2, 4, 6 on TCP port numbers 50000-50003 respectively. 
-      - The odd numbered CEC manages the CMM serial console for chassis 1, 3, 5, 7 on TCP port numbers 50000-50003 respectively. 
+      - The even numbered CEC manages the CMM serial console for chassis 0, 2, 4, 6 on TCP port numbers 50000-50003 respectively.
+      - The odd numbered CEC manages the CMM serial console for chassis 1, 3, 5, 7 on TCP port numbers 50000-50003 respectively.
       - If using the script shown in the example to connect to the CMM console, type `exit` to return to the CMM login prompt and enter ctrl-c to close the console connection.
 
 14. Perform this procedure for each CEC in all system cabinets.
