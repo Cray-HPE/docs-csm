@@ -20,7 +20,6 @@ This procedure requires administrative privileges.
     ncn-w001# kubectl get vs -A | grep -v '[*]'
     NAMESPACE        NAME                              GATEWAYS                       HOSTS                                                      AGE
     istio-system     kiali                             [services/services-gateway]    [kiali-istio.SYSTEM_DOMAIN_NAME]                           2d16h
-    istio-system     prometheus                        [services/services-gateway]    [prometheus-istio.SYSTEM_DOMAIN_NAME]                      2d16h
     istio-system     tracing                           [services/services-gateway]    [jaeger-istio.SYSTEM_DOMAIN_NAME]                          2d16h
     nexus            nexus                             [services/services-gateway]    [packages.local registry.local nexus.SYSTEM_DOMAIN_NAME]   2d16h
     services         gitea-vcs-external                [services/services-gateway]    [vcs.SYSTEM_DOMAIN_NAME]                                   2d16h

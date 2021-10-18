@@ -19,7 +19,6 @@ See [External DNS](../external_dns/External_DNS.md) for more information.
 | Sysmgmt-health Prometheus |prometheus|| |No| Uses the IP of<br/>Keycloak<br/>Gatekeeper<br/>Ingress |
 | Sysmgmt-health Alert Manager |alertmanager|| |No| Uses the IP of<br/>Keycloak<br/>Gatekeeper<br/>Ingress |
 | Sysmgmt-health Grafana |grafana|| |No| Uses the IP of<br/>Keycloak<br/>Gatekeeper<br/>Ingress |
-| Istio Prometheus |prometheus-istio|| |No| Uses the IP of<br/>Keycloak<br/>Gatekeeper<br/>Ingress |
 | Istio Kiali | kiali-istio      || |No| Uses the IP of<br/>Keycloak<br/>Gatekeeper<br/>Ingress |
 | Istio Jaeger |jaeger-istio|| |No| Uses the IP of<br/>Keycloak<br/>Gatekeeper<br/>Ingress |
 | VCS |vcs|| |No| Uses the IP of<br/>Keycloak<br/>Gatekeeper<br/>Ingress |
