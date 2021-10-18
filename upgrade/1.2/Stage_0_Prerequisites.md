@@ -36,10 +36,6 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
 
 Perform these steps to update `customizations.yaml`:
 
-## Update customizations.yaml
-
-Perform these steps to update customizations.yaml:
-
  1. Prepare work area
 
      If you manage customizations.yaml in an external Git repository (as recommended), then clone a local working tree.
