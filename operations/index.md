@@ -67,7 +67,6 @@ Build and customize image recipes with the Image Management Service (IMS).
    * [Customize an Image Root Using IMS](image_management/Customize_an_Image_Root_Using_IMS.md)
      * [Create UAN Boot Images](image_management/Create_UAN_Boot_Images.md)
      * [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
-     * [Customize an Image Root to Install Singularity](image_management/Customize_an_Image_Root_to_Install_Singularity.md)
    * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
 
 <a name="boot-orchestration"></a>

@@ -182,14 +182,13 @@ Set the BMCs on the management nodes to DHCP.
 <a name="wipe_usb_device_on_pit_node"></a>
 ## Wipe USB Device on PIT Node
 
-    If intending to boot the PIT node from the Remote ISO and there is a USB device which was previously used with LiveCD data, it should be wiped to avoid having two devices with disk labels claiming to be the LiveCD.
+If intending to boot the PIT node from the Remote ISO and there is a USB device which was previously used with LiveCD data, it should be wiped to avoid having two devices with disk labels claiming to be the LiveCD. Alternatively, the USB device could be removed from the PIT node.
 
-    Or the USB device could be removed from the PIT node.
-
-    1.  Wipe USB storage on `ncn-m001`.
-        ```bash
-        ncn-m001# wipefs --all --force /dev/disk/by-label/cow /dev/disk/by-label/PITDATA /dev/disk/by-label/BOOT /dev/disk/by-label/CRAYLIVE
-        ```
+1. If not removing the USB device from `ncn-m001`, then wipe its USB storage with the following command:
+    
+    ```bash
+    ncn-m001# wipefs --all --force /dev/disk/by-label/cow /dev/disk/by-label/PITDATA /dev/disk/by-label/BOOT /dev/disk/by-label/CRAYLIVE
+    ```
 
 <a name="power_off_pit_node"></a>
 ## Power Off PIT Node

@@ -34,7 +34,6 @@ the number of storage and worker nodes.
    1. [Configure after Management Node Deployment](#configure_after_management_node_deployment)
       1. [LiveCD Cluster Authentication](#livecd-cluster-authentication)
       1. [BGP Routing](#bgp-routing)
-      1. [Configure and Trim UEFI Entries](#configure-and-trim-uefi-entries)
       1. [Install Tests and Test Server on NCNs](#install-tests)
    1. [Validate Management Node Deployment](#validate_management_node_deployment)
       1. [Validation](#validation)
@@ -230,7 +229,7 @@ The configuration workflow described here is intended to help understand the exp
 1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.
     - Now `ncn-s001` should notice this from any one of the worker nodes and move forward with creation of ConfigMaps and running the post-Ceph playbooks (s3, OSD pools, quotas, etc.)
 1. Once `ncn-s001` creates etcd-backup-s3-credentials during the ceph-rgw-users role which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward
-   > **`NOTE`**: If several hours have elapsed between storage and master nodes booting, or if there were issues PXE booting master nodes, the cloud init script on `ncn-s001` may not complete successfully.  This can cause the `/var/log/cloud-init-output.log` on master node(s) to continue to output the following message:
+   > **`NOTE`**: If several hours have elapsed between storage and master nodes booting, or if there were issues PXE booting master nodes, the cloud init script on `ncn-s001` may not complete successfully. This can cause the `/var/log/cloud-init-output.log` on master node(s) to continue to output the following message:
    >
    > [ 1328.351558] cloud-init[8472]: Waiting for storage node to create etcd-backup-s3-credentials secret...
    >
@@ -261,7 +260,7 @@ The configuration workflow described here is intended to help understand the exp
     - **kubernetes-worker nodes** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd)
     - A brief overview of what is expected is here, in [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline)
 
-1. Set each node to always UEFI Network Boot, and ensure they are powered off
+1. <a name="set-uefi-and-power-off"></a>Set each node to always UEFI Network Boot, and ensure they are powered off
 
     ```bash
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot,persistent
@@ -470,27 +469,31 @@ If needed, the LVM checks can be performed manually on the master and worker nod
 * Manual check on worker nodes:
     ```bash
     ncn-w# blkid -L CONLIB
-    /dev/sdc
-   ncn-w# blkid -L CONRUN
-   /dev/sdc
-   ncn-w# blkid -L K8SLET
-   /dev/sdc
-   ```
+    /dev/sdb2
+    ncn-w# blkid -L CONRUN
+    /dev/sdb1
+    ncn-w# blkid -L K8SLET
+    /dev/sdb3
+    ```
 
 The manual checks are considered successful if all of the `blkid` commands report a disk device (such as `/dev/sdc` -- the particular device is unimportant). If any of the `lsblk` commands return no output, then the check is a failure. **Any failures must be resolved before continuing.** See the following section for details on how to do so.
 
 <a name="lvm-check-failure-recovery"></a>
 #### 3.3.3 LVM Check Failure Recovery
 
-If there are LVM check failures, then the problem must be resolved before continuing to the next step.
+If there are LVM check failures, then the problem must be resolved before continuing with the install.
 
-* If a **master node** has the problem then it is best to wipe and redeploy all of the management nodes before continuing the installation.
-    1. Wipe the each of the worker and master nodes (except `ncn-m001` because it is the PIT node) using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe) and then wipe each of the storage nodes using the 'Full Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
-    1. Return to the [Boot the **Storage Nodes**](#boot-the-storage-nodes) step of [Deploy Management Nodes](#deploy_management_nodes) section above.
+* If **any master node** has the problem, then you must wipe and redeploy **all** of the NCNs before continuing the installation:
+    1. Wipe each worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
+    1. Wipe each master node (**except** `ncn-m001` because it is the PIT node) using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
+    1. Wipe each storage node using the 'Full Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
+    1. Return to the [Set each node to always UEFI Network Boot, and ensure they are powered off](#set-uefi-and-power-off) step of the [Deploy Management Nodes](#deploy_management_nodes) section above.
 
-* If a **worker node** has the problem then it is best to wipe and redeploy that worker node before continuing the installation.
-    1. Wipe this  worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
-    1. Return to the [Boot the Master and Worker Nodes**](#boot-master-and-worker-nodes) step of [Deploy Management Nodes](#deploy_management_nodes) section above.
+* If **only worker nodes** have the problem, then you must wipe and redeploy the affected worker nodes before continuing the installation:
+    1. Wipe each affected worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
+    1. Power off each affected worker node.
+    1. Return to the [Boot the Master and Worker Nodes](#boot-master-and-worker-nodes) step of the [Deploy Management Nodes](#deploy_management_nodes) section above.
+        * Note: The `ipmitool` command will give errors trying to power on the unaffected nodes, since they are already powered on -- this is expected and not a problem.
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 ### 3.4 Check for Unused Drives on Utility Storage Nodes
@@ -519,7 +522,7 @@ If there are LVM check failures, then the problem must be resolved before contin
     24
     ```
 
-   **`IMPORTANT:`** If the returned number of OSDs is equal to total_osds calculated, then you can skip the following steps.  If not, then please proceed with the below additional checks and remediation steps.
+   **`IMPORTANT:`** If the returned number of OSDs is equal to total_osds calculated, then you can skip the following steps. If not, then please proceed with the below additional checks and remediation steps.
 
 1. Compare your number of OSDs to your output which should resemble the example below. The number of drives will depend on the server hardware.
 
@@ -691,7 +694,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
     * If you have Mellanox switches, run the BGP helper script.
 
-        The BGP helper script requires three parameters: the IP address of switch 1, the IP addresss of switch 2, and the path to the to CSI generated network files.
+        The BGP helper script requires three parameters: the IP address of switch 1, the IP address of switch 2, and the path to the to CSI generated network files.
 
         * The IP addresses used should be Node Management Network IP addresses (NMN). These IP addresses will be used for the BGP Router-ID.
         * The path to the CSI generated network files must include `CAN.yaml`, `HMN.yaml`, `HMNLB.yaml`, `NMNLB.yaml`, and `NMN.yaml`. The path must include the SYSTEM_NAME.
@@ -704,7 +707,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
     * If you have Aruba switches, run CANU.
      
-        CANU requires three parameters: the IP address of switch 1, the IP addresss of switch 2, and the path to the to directory containing the file `sls_input_file.json`
+        CANU requires three parameters: the IP address of switch 1, the IP address of switch 2, and the path to the to directory containing the file `sls_input_file.json`
 
         The IP addresses in this example should be replaced by the IP addresses of the switches.
 
@@ -770,13 +773,6 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
     1. Repeat the previous steps for the remaining switch IP addresses.
 
-<a name="configure-and-trim-uefi-entries"></a>
-### 4.3 Configure and Trim UEFI Entries
-
-1. Do the following two steps **for all NCNs, but not the PIT node**:
-
-   1. [Setting Order](../background/ncn_boot_workflow.md#setting-order)
-   1. [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order)
 
 <a name="install-tests"></a>
 ### 4.4 Install Tests and Test Server on NCNs

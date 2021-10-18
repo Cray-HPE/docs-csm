@@ -28,7 +28,7 @@ Under normal operations, the NCNs use the following boot order:
 <a name="reasons-to-change-the-bootorder"></a>
 ## Reasons to Change the Boot Order After CSM Install
 
-After the CSM install is complete, it is usually not necessary to change the boot order.  Having PXE first and disk as a fallback works in the majority of situations.
+After the CSM install is complete, it is usually not necessary to change the boot order. Having PXE first and disk as a fallback works in the majority of situations.
 
 It may be desirable to change the boot order under these circumstances:
 
@@ -89,7 +89,7 @@ done
 - `ipmitool` can set and edit boot order; it works better for some vendors based on their BMC implementation
 - `efibootmgr` speaks directly to the node's UEFI; it can only be ignored by new BIOS activity
 
-> **`NOTE`** Cloud-init will set boot order when it runs, but this does not always work with certain hardware vendors.
+> **`NOTE`** Cloud-init will set boot order when it runs, but this does not always work with certain hardware vendors. An administrator can invoke the cloud-init script at `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN. Find the script [here, on GitHub](https://github.com/Cray-HPE/node-image-build/blob/lts/csm-1.0/boxes/ncn-common/files/scripts/metal/set-efi-bbs.sh).
 
 <a name="setting-order"></a>
 ## Setting Order

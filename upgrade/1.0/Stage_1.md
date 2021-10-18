@@ -47,13 +47,13 @@ Directory location = /etc/cray/ceph/_upgraded
    > * Both methods are dependent on the master nodes and storage nodes 001/2/3 have a ceph.client.admin.keyring and/or a ceph.conf file    (cephadm will not require the ceph.conf).
    > * When you continue with Stage 2, you may have issues running your Ceph commands.
    >   * If you are experiencing this, please double check that you restored your /etc/ceph directory from your tar backup.
-   > * Any deployments that are backed by a cephfs PVC will be unavailable during this stage of the upgrade. These deployments will be    scaled down and back up automatically. This includes **(but can vary by deployment)**: `nexus`, `cray-ipxe`, `cray-tftp`, `cray-ims`,    `cray-console-operator`, and `cray-cfs-api-db`. To view the complete list for the system being upgraded, run the following script to list    them:
+   > * Any deployments or statefulsets (except slurm and pbs) that are backed by a cephfs PVC will be unavailable during this stage of the upgrade. These deployments will be scaled down and back up automatically. This includes **(but can vary by deployment)**: `nexus`, `cray-ipxe`, `cray-tftp`, `cray-ims`, `cray-console-operator`, and `cray-cfs-api-db`. To view the complete list for the system being upgraded, run the following script to list them:
     >>
     >>   ```bash
     >>   ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/list-cephfs-clients.sh
     >>   ```
 
-2. Verify that you conman is running
+2. Verify that conman is running
 
     ```bash
     ncn-m# kubectl get pods -n services|grep con
@@ -70,5 +70,7 @@ Directory location = /etc/cray/ceph/_upgraded
     ```
 
 **`NOTE:`** if conman is not running please see [establishing conman console connections](operations/../../../operations/conman/Establish_a_Serial_Connection_to_NCNs.md)
+
+3. Verify that the Workload Manager pods (slurm or pbs, for example) are in a 'Running' state by examining the output of `kubectl get pods -n user -o wide`.  If these pods are not in a good state, it may be necessary to restore Workload Manager data that was backed-up in a previous stage.  For more information about restoring Workload Manager data from back-up, see the related procedures in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`.
 
 Once the `Stage 1` upgrade is complete please proceed to [Stage 2](Stage_2.md)
