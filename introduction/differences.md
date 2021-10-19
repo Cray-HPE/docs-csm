@@ -45,7 +45,7 @@ The most noteworthy changes since the previous release are described here.
 ### Deprecated Features
 
    * cray-conman pod. This has been replaced by cray-console-node.
-   * The `csi config init` command has changed the option from `-ntp-pool` to `ntp-pools` to support a comma-separated list of NTP pools..
+   * The `csi config init` command has changed the option from `-ntp-pool` to `ntp-pools` to support a comma-separated list of NTP pools.
 
 <a name="other_changes"></a>
 ### Other Changes
