@@ -1,4 +1,4 @@
-# Configure Non-compute Nodes with CFS
+# Configure Non-Compute Nodes with CFS
 
 Non-compute node (NCN) personalization applies post-boot configuration to the
 HPE Cray EX management nodes. Several HPE Cray EX product environments outside
