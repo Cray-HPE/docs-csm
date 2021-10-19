@@ -19,7 +19,7 @@ skip any password updates.
 ***NOTE***: The root password is also updated when applying the CSM Configuration Layer
 during NCN personalization using the `site.yml` playbook if the password has
 been added to [HashiCorp Vault](HashiCorp_Vault.md). See
-[Configure Non-compute Nodes with CFS](../CSM_product_management/Configure_Non_Compute_Nodes.md#set_root_password).
+[Configure Non-Compute Nodes with CFS](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password).
 procedure for more information.
 
 Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to
