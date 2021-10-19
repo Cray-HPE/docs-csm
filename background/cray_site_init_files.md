@@ -61,7 +61,7 @@ ncn-metadata: ncn_metadata.csv
 ncn-mgmt-node-auditing-enabled: false
 nmn-bootstrap-vlan: 2
 nmn-cidr: 10.252.0.0/17
-ntp-pool: time.nist.gov
+ntp-pools: time.nist.gov
 river-cabinets: 1
 rpm-repository: https://packages.nmn/repository/shasta-master
 site-dns: 172.30.84.40

@@ -51,7 +51,7 @@ For more description of these settings and the default values, see [Default IP A
 | --nmn-cidr 10.252.0.0/17 | Override the default cabinet IPv4 subnet for River NMN |
 | --hmn-mtn-cidr 10.104.0.0/17 | Override the default cabinet IPv4 subnet for Mountain HMN |
 | --nmn-mtn-cidr 10.100.0.0/17 | Override the default cabinet IPv4 subnet for Mountain NMN |
-| --ntp-pool time.nist.gov | External NTP server for this system to use |
+| --ntp-pools time.nist.gov | External NTP pool(s) for this system to use |
 | --site-domain dev.cray.com | Domain name for this system |
 | --site-ip 172.30.53.79/20 | IP address and netmask for the PIT node lan0 connection |
 | --site-gw 172.30.48.1 | Gateway for the PIT node to use |
@@ -72,7 +72,7 @@ For more description of these settings and the default values, see [Default IP A
    * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help` output for more information.
    * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
    * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `can-external-dns` is the static IP address assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `can-external-dns` IP address must be within the `can-static-pool` range.
-   * Set `ntp-pool` to a reachable NTP server.
+   * Set `ntp-pools` to reachable NTP pools.
    * The `application_node_config.yaml` file is required. It is used to describe the mapping between prefixes in `hmn_connections.csv` and HSM subroles. This file also defines aliases application nodes. For details, see [Create Application Node YAML](create_application_node_config_yaml.md).
    * For systems that use non-sequential cabinet id numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. See [Create Cabinets YAML](create_cabinets_yaml.md).
 
