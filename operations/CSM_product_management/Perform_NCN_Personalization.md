@@ -1,9 +1,11 @@
-# Run NCN Personalization
+# Perform NCN Personalization
+
+NCN personalization is the process of applying product-specific configuration
+to NCNs post-boot.
 
 ## Prerequisites
 
-NCN personalization is the process of applying product-specific configuration
-to NCNs post-boot. Prior to running this procedure, gather the following
+Prior to running this procedure, gather the following
 information required by [CFS](../configuration_management/Configuration_Management.md)
 to create a [configuration layer](../configuration_management/Configuration_Layers.md):
 
@@ -16,7 +18,7 @@ layers must be created. Consult the manual for each product to configure them on
 NCNs by referring to the [1.5 HPE Cray EX System Software Getting Started Guide
 S-8000](https://www.hpe.com/support/ex-gsg) on the HPE Customer Support Center.
 
-## Procedure
+## Procedure: Perform NCN Personalization
 
 <a name="ncn_personalization_determine_existence"></a>
 ### Determine if NCN Personalization CFS Configuration Exists
@@ -128,7 +130,7 @@ configuration layer requires special placement in the layer list.
    CFS.
 
 <a name="rerun_ncn_personalization"></a>
-## Procedure: Re-running NCN Personalization
+## Procedure: Re-Run NCN Personalization
 
 If no changes have been made to the configuration layers (such as a new layer,
 different playbook, or new commit made), but NCN personalization needs to be
