@@ -169,7 +169,7 @@ fi
 echo
 echo " ************ IMPORTANT NOTE ************"
 echo " ****** IF ANY MANUAL INTERVENTION IS REQUIRED HERE ******"
-echo " ****** STOP CURRENT SCRIPT FIRTST ******"
+echo " ****** STOP CURRENT SCRIPT FIRST ******"
 echo
 
 state_name="WAIT_FOR_NCN_BOOT"
