@@ -84,7 +84,7 @@ BMC/controller passwords.
       is used to apply post-boot configuration in a decoupled, layered manner. Individual software products including
       CSM provide one or more layers of configuration in a process called "NCN personalization".
 
-      See [Configure Non-compute Nodes with CFS](../operations/CSM_product_management/Configure_Non_Compute_Nodes.md)
+      See [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md)
    <a name="cray_upload_recovery_images"></a>
    1. Upload Olympus BMC Recovery Firmware into TFTP server
 
