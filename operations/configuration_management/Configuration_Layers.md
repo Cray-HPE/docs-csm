@@ -4,6 +4,60 @@ The Configuration Framework Service \(CFS\) uses configuration layers to specify
 
 Configurations with a single layer are useful when testing out a new configuration on targets, or when configuring system components with one product at a time. To fully configure a node or boot image component with all of the software products required, multiple layers can be used to apply all configurations in a single CFS session. When applying layers in a session, CFS runs through the configuration layers serially in the order specified.
 
+<a name="configuration_layer_example_configuration_single"></a>
+
+### Example Configuration (Single Layer)
+
+The following is an example configuration with a single layer. This can be used
+as a template to create a new configuration JSON file to input to CFS.
+
+```bash
+ncn# cat configuration-single.json
+{
+  "layers": [
+    {
+      "name": "configurations-layer-example-1",
+      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/example-repo.git",
+      "playbook": "site.yml",
+      "commit": "43ecfa8236bed625b54325ebb70916f55884b3a4"
+    }
+  ]
+}
+```
+
+<a name="configuration_layer_example_configuration_multiple"></a>
+### Example Configuration (Multiple Layers)
+
+The following is an example configuration with multiple layers from one or more
+different configuration repositories. This can be used as a template to create a
+new configuration JSON file to input to CFS.
+
+```bash
+ncn# cat configuration-multiple.json
+{
+  "layers": [
+    {
+      "name": "configurations-layer-example-1",
+      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/example-repo.git",
+      "playbook": "site.yml",
+      "commit": "43ecfa8236bed625b54325ebb70916f55884b3a4"
+    },
+    {
+      "name": "configurations-layer-example-2",
+      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/example-repo.git",
+      "playbook": "site-custom.yml",
+      "commit": "43ecfa8236bed625b54325ebb70916f55884b3a4"
+    },
+    {
+      "name": "configurations-layer-example-3",
+      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/second-example-repo.git",
+      "playbook": "site.yml",
+      "commit": "8236bed625b4b3a443ecfa54325ebb70916f5588"
+    }
+  ]
+}
+```
+
 ### Use Branches in Configuration Layers
 
 When defining a configuration layer, the `branch` or `commit` values can be used to reference a Git commit. The `commit` value is the recommended way to reference a Git commit. In the following example, when the configuration is created or updated, CFS will automatically check with VCS to get the commit at the head of the branch. Both the commit and the branch are then stored. The commit acts as normal, and the branch is stored to make future updates to the commit easier.
