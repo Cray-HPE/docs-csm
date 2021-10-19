@@ -16,7 +16,7 @@ applied with the `csm.password` Ansible role via a CFS session.
 
 > NOTE: The root password is also updated when applying the CSM configuration
 layer during NCN personalization using the `site.yml` playbook. See the
-[Configure Non-compute Nodes with CFS](../CSM_product_management/Configure_Non_Compute_Nodes.md#set_root_password)
+[Configure Non-Compute Nodes with CFS](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password)
 procedure for more information.
 
 Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to
