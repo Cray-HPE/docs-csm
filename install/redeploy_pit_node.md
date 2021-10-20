@@ -218,7 +218,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     pit# efibootmgr | grep -Ei "ip(v4|4)"
     ```
 
-1. Set and trim the boot order on the PIT node.
+1. Set the boot order and trim the boot order on the PIT node.
 
     In [Deploy Management Nodes](deploy_management_nodes.md#configure-and-trim-uefi-entries), this procedure was done on the other NCNs. Now it is time to do it on the PIT node. See [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
 
