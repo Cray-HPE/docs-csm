@@ -1,14 +1,23 @@
 name: Backport
-
+ 
 on:
   pull_request:
     types:
       - closed
       - labeled
-
+      - unlabeled
+ 
 jobs:
   backport:
+    if: ${{ github.event.pull_request.labels != '[]' && github.event.pull_request.labels != '' }}
+    strategy:
+      matrix:
+        label: ${{github.event.pull_request.labels.*.name}}
+      fail-fast: false
     runs-on: self-hosted
-    name: Backport closed pull request
     steps:
-    - uses: Cray-HPE/backport-action@v1
+    - name: ${{ matrix.label }}
+      env:
+        BACKPORT_LABEL: ${{ matrix.label }}
+        BACKPORT_REPORT_FAILURE: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
+      uses: Cray-HPE/backport-action@v2
