@@ -22,7 +22,8 @@ systems with onboard connections to their leaf switches and NCNs need to disable
 
 This onboard NCN port came from before spine-switches were added to the shasta-network topology. The onboard connection
 was responsible for every network (MTL/NMN/HMN/CAN) and was the sole driver of PXE booting for. Now, NCNs use bond interfaces and spine switches for those networks,
-however some older systems still have this legacy connection to their leaf switches and solely use it for PXE booting. This NIC is not used during runtime, and NCNs in this state should enable PXE within their PCIe devices' OpROMs and disable/remove this onboard connection.
+however some older systems still have this legacy connection to their leaf switches and solely use it for PXE booting. 
+This NIC is not used during runtime, and NCNs in this state should enable PXE within their PCIe devices' OpROMs and disable/remove this onboard connection.
 
 <a name="enabling-uefi-pxe-mode"></a>
 ## Enabling UEFI PXE Mode
@@ -30,7 +31,7 @@ however some older systems still have this legacy connection to their leaf switc
 <a name="mellanox"></a>
 ### Mellanox
 
-This uses the [Mellanox CLI Tools][1] for configuring UEFI PXE from the Linux command line.
+The [Mellanox CLI Tools][1] are required to configure UEFI PXE from the Linux command line.
 
 On any NCN (using 0.0.10 k8s, or 0.0.8 Ceph; anything built on ncn-0.0.21 or higher), run the following command to begin interacting with Mellanox cards:
 
@@ -45,8 +46,8 @@ Now `mst status` and other commands like `mlxfwmanager` or `mlxconfig` will work
 <a name="print-current-uefi-and-sr-iov-state"></a>
 #### Print current UEFI and SR-IOV State
 
-> UEFI: All boots are UEFI; this needs to be enabled for access to the UEFI OpROM for configuration and for usage of UEFI firmwares.
-> SR_IOV: This is currently DISABLED because it can attribute to longer POSTs on HPE blades (Gen10+, i.e. DL325 or DL385) with Mellanox ConnectX-5 PCIe cards. The technology is not yet enabled for virtualization usage, but may be in the future.
+> **UEFI:** All boots are UEFI; this needs to be enabled for access to the UEFI OpROM for configuration and for usage of UEFI firmwares.
+> **SR_IOV:** This is currently DISABLED because it can attribute to longer POSTs on HPE blades (Gen10+, i.e. DL325 or DL385) with Mellanox ConnectX-5 PCIe cards. The technology is not yet enabled for virtualization usage, but may be in the future.
 
 Use the following snippet to display device name and current UEFI PXE state.
 
@@ -104,7 +105,7 @@ The Mellanox HSN card is now neutralized, and will only be usable in a booted sy
 <a name="obtaining-mellanox-tools"></a>
 ###### Obtaining Mellanox Tools
 
-`mft` is installed in 1.4 NCN images by default.
+For 1.4 or later systems, `mft` is installed in NCN images by default.
 
 For 1.3 systems, obtain the Mellanox tools with the following commands:
 
