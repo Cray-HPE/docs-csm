@@ -192,7 +192,7 @@ Shutdown platform services.
 
 If Shasta v1.3.0 or v1.3.1 is installed, follow these three steps from Cray Shasta Administration Guide 1.3 S-8001 RevC in section 6.6 Shut Down and Power Off the Management Kubernetes Cluster.
 
-   2. Determine if patch 1.3.1 has been installed. 
+   2. Determine if patch 1.3.1 has been installed.
       Only do step 3 if patch 1.3.1 has been installed.
    3. Modify /opt/cray/crayctl/ansible_framework/main/roles/cri-ctl/tasks/main.yml file with the following lines.
    7.  Run the platform-shutdown.yml playbook.
@@ -206,9 +206,9 @@ If Shasta v1.3.0 or v1.3.1 is installed, follow these three steps from Cray Shas
 
 The management NCNs need to be powered off to facilitate a 1.4 install. Wiping the node
 will avoid boot mistakes, making the only viable option the PXE option. Below, use Ansible
-for wiping and shutting down the NCNs. 
+for wiping and shutting down the NCNs.
 
-1. Since 1.3 installs used ncn-w001 as a place to run Ansible and host Ansible inventory, 
+1. Since 1.3 installs used ncn-w001 as a place to run Ansible and host Ansible inventory,
 we will start by jumping from the manager node to ncn-w001.
     ```bash
     # jumpbox
@@ -220,7 +220,7 @@ we will start by jumping from the manager node to ncn-w001.
     ncn-w001# ansible ncn -m shell -a 'wipefs --all --force /dev/sd*'
     ```
 
-    For disks which have no labels, no output will be shown by the wipefs commands being run. 
+    For disks which have no labels, no output will be shown by the wipefs commands being run.
     If one or more disks have labels, output similar to the following is expected:
     ```
     /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54

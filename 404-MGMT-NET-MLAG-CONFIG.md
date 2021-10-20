@@ -11,7 +11,7 @@ This page describes how to setup a bonded configuration from the Non-Compute nod
 # Aruba Configuration
 
 Create the keepalive vrf on both switches.
-The following configuration will need to be done on both switches participating in VSX/MLAG, if there is a unique configuration 
+The following configuration will need to be done on both switches participating in VSX/MLAG, if there is a unique configuration
 it will be called out.
 
 ```
@@ -22,7 +22,7 @@ Create the ISL lag on both switches.
 
 ```
 sw-24g04(config)# interface lag 99
-sw-24g04(config-lag-if)# no shutdown 
+sw-24g04(config-lag-if)# no shutdown
 sw-24g04(config-lag-if)# description ISL link
 sw-24g04(config-lag-if)# no routing
 sw-24g04(config-lag-if)# vlan trunk native 1 tag
@@ -35,9 +35,9 @@ This will require a unique IP on both switches.
 
 ```
 sw-24g04(config)# int 1/1/3
-sw-24g04(config-if)# no shutdown 
+sw-24g04(config-if)# no shutdown
 sw-24g04(config-if)# mtu 9198
-sw-24g04(config-if)# vrf attach keepalive   
+sw-24g04(config-if)# vrf attach keepalive
 sw-24g04(config-if)# description keepalive
 sw-24g04(config-if)# ip address 192.168.255.0/31
 
@@ -80,7 +80,7 @@ sw-24g04(config-vsx)# vsx-sync vsx-global
 ```
 At this point you should have an Established VSX session
 ```
-sw-24g04(config-if-vlan)# show vsx brief 
+sw-24g04(config-if-vlan)# show vsx brief
 ISL State                              : In-Sync
 Device State                           : Sync-Primary
 Keepalive State                        : Keepalive-Established
@@ -99,13 +99,13 @@ VLANs in the 2xxx and 3xxx range will be for CDU switches only
 | 4 | 10.254.0.2/17| 10.254.0.3/17 | 10.254.0.1 |
 | 7 | TBD| TBD | TBD |
 | 10 | 10.11.0.2/17| 10.11.0.3/17 | 10.11.0.1 |
-| 2000 | 10.100.0.2/22| 10.100.0.3/22 | 10.100.0.1/22 | 
-| 3000 | 10.104.0.2/22| 10.104.0.3/22 | 10.104.0.1/22 | 
+| 2000 | 10.100.0.2/22| 10.100.0.3/22 | 10.100.0.1/22 |
+| 3000 | 10.104.0.2/22| 10.104.0.3/22 | 10.104.0.1/22 |
 
 ```
 sw-24g04(config)# vlan 2
 sw-24g04(config-vlan-2)# interface vlan 2
-sw-24g04(config-if-vlan)# vsx-sync active-gateways 
+sw-24g04(config-if-vlan)# vsx-sync active-gateways
 sw-24g04(config-if-vlan)# ip mtu 9198
 sw-24g04(config-if-vlan)# ip address 10.252.0.3/17
 sw-24g04(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
@@ -113,7 +113,7 @@ sw-24g04(config-if-vlan)# active-gateway ip 10.252.0.1
 
 sw-24g03(config)# vlan 2
 sw-24g03(config-vlan-2)# interface vlan 2
-sw-24g03(config-if-vlan)# vsx-sync active-gateways 
+sw-24g03(config-if-vlan)# vsx-sync active-gateways
 sw-24g03(config-if-vlan)# ip mtu 9198
 sw-24g03(config-if-vlan)# ip address 10.252.0.2/17
 sw-24g03(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00

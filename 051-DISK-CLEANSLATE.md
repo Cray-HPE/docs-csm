@@ -5,7 +5,7 @@
     * [Advanced Wipe](#advanced-wipe)
     * [Full Wipe](#full-wipe)
 
-This page will detail how disks are wiped and workarounds for wedged 
+This page will detail how disks are wiped and workarounds for wedged
 disks.
 
 Any process covered on this page will be covered by the installer.
@@ -92,7 +92,7 @@ ncn-s# vgremove -f --select 'vg_name=~ceph*'
 ncn# for md in /dev/md/*; do mdadm -S $md || echo nope ; done
 
 # Wipe the disks and RAIDs:
-ncn# sgdisk --zap-all /dev/sd* 
+ncn# sgdisk --zap-all /dev/sd*
 ncn# wipefs --all --force /dev/sd* /dev/disk/by-label/*
 ```
 

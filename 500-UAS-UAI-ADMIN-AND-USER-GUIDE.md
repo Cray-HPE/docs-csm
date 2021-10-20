@@ -1632,13 +1632,13 @@ Here is a sample lifecycle of a UAI showing these steps:
 ```
 vers> cray auth login
 Username: vers
-Password: 
+Password:
 Success!
 
 vers> cray uas list
 results = []
 
-vers> cray uas create --publickey ~/.ssh/id_rsa.pub 
+vers> cray uas create --publickey ~/.ssh/id_rsa.pub
 uai_age = "0m"
 uai_connect_string = "ssh vers@10.103.13.157"
 uai_host = "ncn-w001"
@@ -1670,8 +1670,8 @@ ECDSA key fingerprint is SHA256:XQukF3V1q0Hh/aTiFmijhLMcaOzwAL+HjbM66YR4mAg.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added '10.103.13.157' (ECDSA) to the list of known hosts.
 vers@uai-vers-8ee103bf-95b5d774-88ssd:/tmp> sinfo
-PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST 
-workq*       up   infinite      4   comp nid[000001-000004] 
+PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
+workq*       up   infinite      4   comp nid[000001-000004]
 vers@uai-vers-8ee103bf-95b5d774-88ssd> srun -n 3 -N 3 hostname
 nid000001
 nid000002
@@ -1775,7 +1775,7 @@ To configure LDAP, first determine which files need to be changed in the broker 
 [sssd]
   config_file_version = 2
   services = nss, pam
-  domains = My_DC 
+  domains = My_DC
 
 [nss]
   filter_users = root
@@ -1790,8 +1790,8 @@ To configure LDAP, first determine which files need to be changed in the broker 
   ldap_tls_reqcert = allow
   ldap_schema = rfc2307
   cache_credentials = True
-  entry_cache_timeout = 60 
-  enumerate = False 
+  entry_cache_timeout = 60
+  enumerate = False
 ```
 
 To add the above to a secret, first create a file with the contents:
@@ -1830,7 +1830,7 @@ ncn-m001-pit# kubectl create secret generic -n uas broker-sssd-conf --from-file=
 Next make a volume for the secret in the UAS configuration:
 
 ```
-ncn-m001-pit# cray uas admin config volumes create --mount-path /etc/sssd --volume-description '{"secret": {"secret_name": "broker-sssd-conf", "default_mode": 384}}' --volumename broker-sssd-config 
+ncn-m001-pit# cray uas admin config volumes create --mount-path /etc/sssd --volume-description '{"secret": {"secret_name": "broker-sssd-conf", "default_mode": 384}}' --volumename broker-sssd-config
 mount_path = "/etc/sssd"
 volume_id = "4dc6691e-e7d9-4af3-acde-fc6d308dd7b4"
 volumename = "broker-sssd-config"
@@ -1960,7 +1960,7 @@ The authenticity of host '10.103.13.162 (10.103.13.162)' can't be established.
 ECDSA key fingerprint is SHA256:k4ef6vTtJ1Dtb6H17cAFh5ljZYTl4IXtezR3fPVUKZI.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added '10.103.13.162' (ECDSA) to the list of known hosts.
-Password: 
+Password:
 Creating a new UAI...
 
 The authenticity of host '10.21.138.52 (10.21.138.52)' can't be established.
@@ -1975,8 +1975,8 @@ The next time `vers` logs in, it looks more like this:
 
 ```
 vers> ssh vers@10.103.13.162
-Password: 
-vers@uai-vers-ee6f427e-6c7468cdb8-2rqtv> 
+Password:
+vers@uai-vers-ee6f427e-6c7468cdb8-2rqtv>
 ```
 
 Only the password prompt appears now, since the hosts are all known and the end-user UAI exists but there is no `.ssh/authorized_keys` known yet by the broker UAI for `vers`.
@@ -2262,7 +2262,7 @@ EOF
 
 ncn-m001-pit# kubectl create configmap -n uas broker-sshd-conf --from-file sshd_config --from-file banner
 
-ncn-m001-pit# cray uas admin config volumes create --mount-path /etc/switchboard --volume-description '{"config_map": {"name": "broker-sshd-conf", "default_mode": 384}}' --volumename broker-sshd-config 
+ncn-m001-pit# cray uas admin config volumes create --mount-path /etc/switchboard --volume-description '{"config_map": {"name": "broker-sshd-conf", "default_mode": 384}}' --volumename broker-sshd-config
 mount_path = "/etc/switchboard"
 volume_id = "d5058121-c1b6-4360-824d-3c712371f042"
 volumename = "broker-sshd-config"
@@ -2355,7 +2355,7 @@ Now when the user connects to the broker to log in
 vers> ssh vers@10.103.13.162
 Here is a banner that will be displayed before login to SSH
 on Broker UAIs
-Password: 
+Password:
 ```
 
 ### The Provided End-User UAI Image <a name="main-uaiimages-providedenduser"></a>
@@ -2402,7 +2402,7 @@ ncn-w001# cray bos sessiontemplate list --format yaml
   name: wlm-sessiontemplate-0.1.0
 ```
 
-Alternatively, collect the sessiontemplate name used when performing the "Install and Configure the Cray Operating System (COS)" procedure in the Installation and Configuration Guide. Near the end of that procedure the step to "Create a BOS Session to boot the compute nodes" should contain the name. 
+Alternatively, collect the sessiontemplate name used when performing the "Install and Configure the Cray Operating System (COS)" procedure in the Installation and Configuration Guide. Near the end of that procedure the step to "Create a BOS Session to boot the compute nodes" should contain the name.
 
 ```
 ncn-w001# SESSION_NAME=wlm-sessiontemplate-0.1.0
@@ -2563,7 +2563,7 @@ If an error had occurred in UAS that error would likely show up here. Because th
 Sometimes a UAI will come up and run but will not work correctly. It is possible to see errors reported by elements of the UAI entrypoint script using the `kubectl logs` command. First find the UAI of interest. This starts by identifying the UAI name using the CLI:
 
 ```
-ncn-m001-pit# cray uas admin uais list 
+ncn-m001-pit# cray uas admin uais list
 [[results]]
 uai_age = "4h30m"
 uai_connect_string = "ssh broker@10.103.13.162"
@@ -2617,7 +2617,7 @@ Checking for munge.key
 Setting up munge.key
 Check for pbs.conf
 Generating SSH keys and sshd_config
-ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519 
+ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519
 ...
 ```
 
@@ -2628,7 +2628,7 @@ ncn-m001-pit# kubectl logs -n uas uai-broker-2e6ce6b7-68d78c6c95-s28dh uai-broke
 /bin/bash: warning: setlocale: LC_ALL: cannot change locale (C.UTF-8)
 Configure PAM to use sssd...
 Generating broker host keys...
-ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519 
+ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519
 Checking for UAI_CREATION_CLASS...
 Starting sshd...
 Starting sssd...
@@ -2824,7 +2824,7 @@ root          54       1  0 22:56 ?        00:00:00 su vers -c /usr/sbin/sshd -e
 vers          55      54  0 22:56 ?        00:00:00 /usr/sbin/sshd -e -f /etc/uas/ssh/sshd_config -D
 root          90       0  0 22:58 pts/0    00:00:00 /bin/sh
 root          97      90  0 22:58 pts/0    00:00:00 ps -afe
-sh-4.4# 
+sh-4.4#
 ```
 
 The procedure is to find the name of the UAI in question, use that with `kubectl` to find the pod containing that UAI, use the pod name and the `user` namespace to set up the `kubectl exec` specifying the UAI name as the container to `exec` into and specifying `/bin/sh` as the command to run. From there, the administrator can look around inside the UAI as needed.

@@ -13,7 +13,7 @@ This page will detail cases for various hardware changes.
     - [Rebuilding K8s NCNs](#rebuilding-k8s-ncns)
         - [Master nodes](#master-nodes)
         - [Worker nodes](#worker-nodes)
-
+- [Enable Kdump](#enable-kdump) 
 
 <a name='node-components'></a>
 # Node Components
@@ -122,10 +122,15 @@ It is dangerous to run with 2 worker nodes or less, work must be done with dilig
 
 6. The node will run cloud-init and will auto-join the cluster again. Monitor for status with:
     ```bash
-    linux# kubectl get nodes -w 
+    linux# kubectl get nodes -w
     ```
 
 Once your node returns to the cluster, the procedure is done.
+
+<a name='enable-kdump'></a>
+# Enable Kdump
+
+[Enable kdump](operations/node_management/Enable_Kdump.md) on the NCNs after they are rebuilt.
 
 <a name='cleaning-up-out-of-memory-pods'></a>
 ##### Cleaning up Out-Of-Memory Pods

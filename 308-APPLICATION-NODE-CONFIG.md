@@ -1,6 +1,6 @@
 # Application Node Config
 
-This page provides directions on constructing the `application_node_config.yaml` file. This file controls how the `csi config init` command finds and treats applications nodes discovered the `hmn_connections.json` file when building the SLS Input file. 
+This page provides directions on constructing the `application_node_config.yaml` file. This file controls how the `csi config init` command finds and treats applications nodes discovered the `hmn_connections.json` file when building the SLS Input file.
 
 The following `hmn_connections.json` file contains 4 application nodes. When the `csi config init` command is used without a `application_node_config.yaml` file, only the application node `uan01` will be included the generated SLS input file. The other 3 application nodes will be ignored as they have unknown prefixes and will not be present in the SLS Input file.
 ```json
@@ -22,7 +22,7 @@ prefixes:
   - vn
 
 # Additional HSM SubRole mappings
-# If a prefix does not have an HSM SubRole defined, the application node will not have a SubRole. 
+# If a prefix does not have an HSM SubRole defined, the application node will not have a SubRole.
 # See step 2 for additional information
 prefix_hsm_subroles:
   gateway: Gateway
@@ -30,25 +30,25 @@ prefix_hsm_subroles:
 
 # Application Node aliases
 # One or more aliases can be specified for an application node
-# If an application does not have entry in this map, then it will not have any aliases defined in SLS 
+# If an application does not have entry in this map, then it will not have any aliases defined in SLS
 # See step 3 for additional information
-aliases:  
+aliases:
   x3113c0s23b0n0: ["gateway-01"]
   x3114c0s23b0n0: ["visualization-02", "vn-02"]
 ```
 
 When the above `application_node_config.yaml` file is used 3 application nodes (`uan01`, `gateway01`, and `vn02`) will included in the generated SLS input file. The `login02` application node will be ignored.
 
-The following application node configuration does not add any additional prefixes, HSM subroles, or aliases: 
+The following application node configuration does not add any additional prefixes, HSM subroles, or aliases:
 ```yaml
 # Additional application node prefixes to match in the hmn_connections.json file
-prefixes: [] 
+prefixes: []
 
 # Additional HSM SubRoles
 prefix_hsm_subroles: {}
 
 # Application Node aliases
-aliases: {}  
+aliases: {}
 ```
 
 #### Requirements
@@ -73,9 +73,9 @@ Example entry from the `hmn_connections.json` file. The source name is the `Sour
 #### Directions
 1. __Add additional Application node Prefixes__
 
-    The `prefixes` field is an array of strings, that augments the list of source name prefixes that are treated as application nodes. By default `csi config init` only looks for application nodes that have source names that start with `uan`, `gn`, and `ln`. If your system contains application nodes that fall outside of those source name prefixes you will need to add additional prefixes to `application_node_config.yaml`. These additional prefixes will used in addition to the default prefixes. 
+    The `prefixes` field is an array of strings, that augments the list of source name prefixes that are treated as application nodes. By default `csi config init` only looks for application nodes that have source names that start with `uan`, `gn`, and `ln`. If your system contains application nodes that fall outside of those source name prefixes you will need to add additional prefixes to `application_node_config.yaml`. These additional prefixes will used in addition to the default prefixes.
 
-    Note: The command `csi config init` does a case insensitive check for whether a source name contains an application node prefix. 
+    Note: The command `csi config init` does a case insensitive check for whether a source name contains an application node prefix.
 
     To add an additional prefix append a new string element to the `prefixes` array:
     ```yaml
@@ -92,11 +92,11 @@ Example entry from the `hmn_connections.json` file. The source name is the `Sour
 
     By default, the `csi config init` command will use the following SubRoles for application nodes:
 
-     Prefix | HSM Subrole 
-     ------ | ----------- 
-     uan    | UAN         
-     ln     | UAN       
-     gn     | Gateway     
+     Prefix | HSM Subrole
+     ------ | -----------
+     uan    | UAN
+     ln     | UAN
+     gn     | Gateway
 
     To add additional HSM SubRole for a given prefix add a new mapping under the `prefix_hsm_subroles` field. Where the key is the application node prefix and the value is the HSM SubRole.
     ```yaml
@@ -112,14 +112,14 @@ Example entry from the `hmn_connections.json` file. The source name is the `Sour
 3. __Add Application node aliases__
     The `aliases` field is an map of xnames (strings) to an array of aliases (strings).
 
-    By default, the `csi config init` command does not set the `ExtraProperties.Alias` field for application nodes in the SLS input file. 
+    By default, the `csi config init` command does not set the `ExtraProperties.Alias` field for application nodes in the SLS input file.
 
     Instead of manually adding the application node alias as described after the system is installed [in this procedure](306-SLS-ADD-UAN-ALIAS.md) the application node aliases can be included when the SLS Input file is built.
 
-    To add additional application node aliases, add a new mapping under the `aliases` field. Where the key is the xname of the application node, and the value is an array of aliases (strings) which allows for one or more aliases to be specified for an application node. 
+    To add additional application node aliases, add a new mapping under the `aliases` field. Where the key is the xname of the application node, and the value is an array of aliases (strings) which allows for one or more aliases to be specified for an application node.
     ```yaml
     ---
-    aliases: # Application Node alias 
+    aliases: # Application Node alias
       x3113c0s23b0n0: ["gateway-01"]
       x3114c0s23b0n0: ["visualization-02", "vn-02"]
       x3115c0s23b0n0: ["uan-02"] # Added alias for the application node with the xname x3115c0s23b0n0

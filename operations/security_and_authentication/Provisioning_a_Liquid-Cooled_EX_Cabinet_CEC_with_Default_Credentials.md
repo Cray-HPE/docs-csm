@@ -1,16 +1,15 @@
 
-
 ## Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials
 
 This procedure provisions a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish default global credential to access the CMM controllers and node controllers (BMCs). 
 
-This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. To update Slingshot switch BMCs, refer to "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide* (1.6.0).  
+This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. To update Slingshot switch BMCs, refer to "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide* (>1.6.0).  
 
 ### Prerequisites
 
 - The administrator must have physical access to the CEC LCD panel to enable privileged command mode. The CEC does not enable users to set, display, or clear the password hash in restricted command mode. 
 
-- An Apple Mac or Linux laptop that supports 10/100 IPv6 Ethernet connectivity to the CEC Ethernet port is recommended. A Windows system running a Linux emulation package may have difficulties establishing a stable network connection to the CEC.
+- An laptop with terminal software such as Netcat `nc`, `telnet`, or PuTTY that supports 10/100 IPv6 Ethernet connectivity to the CEC Ethernet port is required. 
 
 - A customer-generated hash for the CEC credentials:
 
@@ -18,8 +17,10 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
    - See the `man 3 crypt` page for a description: https://man7.org/linux/man-pages/man3/crypt.3.html
 
   ```screen
-  remote# passhash PASSWORD $6$v5YlqxKB$scBci.GbT8Uf3ZPcGwrW07zEjGdq6q7/FdQGCclxh05IPCINm9SOt2RLHfdPE9UE/Ng5dtc5qCBCoSLHSW84L1
+  remote# passhash PASSWORD $6$v5YlqxKB$scBci...
   ```
+  
+  **Note**: The password  has in this example has been truncated to prevent accidental setting of production password hash to example values. The password hash is a SHA-512 hash.
 
 ### Procedure
 
@@ -85,8 +86,10 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
    The CEC validates the input syntax of the hash. Adding an extra char or omitting a character is flagged as an error. I a character is changed, the password entered in the serial console login shell or the Redfish `root` account will not work. If that happens, rerun the `set_hash` command on the CEC and reboot the CMMs.
 
       ```screen
-      EXE> set_hash $6$v5YlqxKB$scBci.GbT8Uf3ZPcGwrW07zEjGdq6q7/FdQGCclxh05IPCINm9SOt2RLHfdPE9UE/Ng5dtc5qCBCoSLHSW84L1
+      EXE> set_hash $6$v5YlqxKB$scBci...
       ```
+
+   **Note**: The password  has in this example has been truncated to prevent accidental setting of production password hash to example values. The password hash is a SHA-512 hash.
 
 10. Exit privileged command mode.
 
@@ -127,7 +130,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
     
     2. If the cabinet has not been provisioned with CSM or other management software (bare-metal), the compute chassis slots are most likely powered off. To perform chassis power control operations, SSH to a CMM and and use the `redfish -h` command to display the power control commands:
     
-       ```
+       ```screen
        > ssh root@x9000c1
        x9000c1:> redfish -h
        

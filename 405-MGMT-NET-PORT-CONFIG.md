@@ -11,7 +11,7 @@
 
 ```
 sw-leaf-001(config)#  interface 1/1/28
-sw-leaf-001(config)# no shutdown 
+sw-leaf-001(config)# no shutdown
 sw-leaf-001(config)# mtu 9198
 sw-leaf-001(config)# description HMN
 sw-leaf-001(config)# no routing
@@ -23,7 +23,7 @@ sw-leaf-001(config)# vlan access 4
 
 ```
 sw-leaf-001(config)# interface 1/1/6
-sw-leaf-001(config)# no shutdown 
+sw-leaf-001(config)# no shutdown
 sw-leaf-001(config)# mtu 9198
 sw-leaf-001(config)# description NMN
 sw-leaf-001(config)# no routing

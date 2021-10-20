@@ -29,6 +29,7 @@ This document specifies the procedures for deploying the non-compute nodes
 - [LiveCD Cluster Authentication](#livecd-cluster-authentication)
 - [BGP Routing](#bgp-routing)
 - [Validation](#validation)
+  - [Manual LVM Check Procedure](#manual-lvm-check-procedure)
 - [Optional Validation](#optional-validation)
 - [Configure and Trim UEFI Entries](#configure-and-trim-uefi-entries)
 
@@ -140,7 +141,7 @@ CASMINST-980
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
 ### Ensure Time Is Accurate Before Deploying NCNs
 
-**NOTE**: If you wish to use a timezone other than UTC, instead of step 1 below, follow 
+**NOTE**: If you wish to use a timezone other than UTC, instead of step 1 below, follow
 [this procedure for setting a local timezone](108-NCN-NTP.md#setting-a-local-timezone), then
 proceed to step 2.
 
@@ -246,7 +247,7 @@ The configuration workflow described here is intended to help understand the exp
     - The third master node ncn-m003 boots and waits for ncn-m002 to create the `/etc/cray/kubernetes/join-command-control-plane` so it can join Kubernetes
     - The second master node ncn-m002 boots, runs the kubernetes-cloudinit.sh which will create /etc/kubernetes/admin.conf and /etc/cray/kubernetes/join-command-control-plan, then waits for the storage node to create etcd-backup-s3-credentials
 1. Once ncn-s001 notices that ncn-m002 has created /etc/kubernetes/admin.conf, then ncn-s001 waits for any worker node to become available.
-1. Once each worker node notices that ncn-m002 has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.  
+1. Once each worker node notices that ncn-m002 has created /etc/cray/kubernetes/join-command-control-plan, then it will join the Kubernetes cluster.
     - Now ncn-s001 should notice this from any one of the worker nodes and move forward with creation of config maps and running the post-ceph playbooks (s3, OSD pools, quotas, etc.)
 1. Once ncn-s001 creates etcd-backup-s3-credentials during the benji-backups role which is one of the last roles after Ceph has been set up, then ncn-m001 notices this and moves forward
 
@@ -271,7 +272,7 @@ The configuration workflow described here is intended to help understand the exp
     - **kubernetes-workers** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](104-NCN-PARTITIONING.md#worker-nodes-with-etcd)
     - A brief overview of what is expected is here, in [disk plan of record / baseline](104-NCN-PARTITIONING.md#plan-of-record--baseline)
 
-1. Set each node to always UEFI Network Boot, and ensure they are powered off
+1. <a name="set-uefi-and-power-off"></a>Set each node to always UEFI Network Boot, and ensure they are powered off
     ```bash
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} chassis bootdev pxe options=efiboot,persistent
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
@@ -284,6 +285,9 @@ The configuration workflow described here is intended to help understand the exp
     ```bash
     pit# csi pit validate --livecd-preflight
     ```
+
+    > Note: If your shell terminal is not echoing your input after running this, type "reset" and press enter to recover.
+
     > Note: If you are **not** on an internal Cray/HPE system, or if you are on an offline/airgapped system, then you can ignore any errors about not being able resolve arti.dev.cray.com
 
 1. Print the consoles available to you:
@@ -308,7 +312,7 @@ The configuration workflow described here is intended to help understand the exp
 
     > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 
-1. Boot the **Storage Nodes**
+1. <a name="boot-the-storage-nodes"></a>Boot the **Storage Nodes**
     ```bash
     pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
@@ -345,7 +349,7 @@ The configuration workflow described here is intended to help understand the exp
     > CASMINST-1093
     > ```
 
-1. Once all storage nodes are up and ncn-s001 is running ceph-ansible, boot **Kubernetes Managers and Workers**
+1. <a name="boot-master-and-worker-nodes"></a>Once all storage nodes are up and ncn-s001 is running ceph-ansible, boot **Kubernetes Managers and Workers**
     ```bash
     pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
@@ -413,7 +417,7 @@ The configuration workflow described here is intended to help understand the exp
 
     ```
     Device Path               Size         rotates available Model name
-    /dev/sda                  447.13 GB    False   False     SAMSUNG MZ7LH480 
+    /dev/sda                  447.13 GB    False   False     SAMSUNG MZ7LH480
     /dev/sdb                  447.13 GB    False   False     SAMSUNG MZ7LH480
     /dev/sdc                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
     /dev/sdd                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
@@ -475,7 +479,7 @@ Note: If migrating from Shasta v1.3.x, the worker nodes have different IP addres
 
 1. Make sure you clear the BGP sessions here.
    - Aruba:`clear bgp *`
-   - Mellanox: `clear ip bgp all`
+   - Mellanox: `enable` then `clear ip bgp all`
 
    > **`NOTE`**: At this point all but possibly one of the peering sessions with the BGP neighbors should be in IDLE or CONNECT state and not ESTABLISHED state. If the switch is an Aruba, you will have one peering session established with the other switch. You should check that all of the neighbor IPs are correct.
 
@@ -490,7 +494,6 @@ Note: If migrating from Shasta v1.3.x, the worker nodes have different IP addres
    /usr/bin/aruba_set_bgp_peers.py
    /usr/bin/mellanox_set_bgp_peers.py
    ```
-
 
 <a name="validation"></a>
 ### Validation
@@ -511,19 +514,7 @@ Observe the output of the checks and note any failures, then remediate them.
    pit# csi pit validate --k8s
    ```
 
-   > **`WARNING`** if test failures for "/dev/sdc" are observed they should be discarded for a manual test:
-   > ```bash
-   > # masters:
-   > ncn# blkid -L ETCDLVM
-   > # workers:
-   > ncn# blkid -L CONLIB
-   > ncn# blkid -L CONRUN
-   > ncn# blkid -L K8SLET
-   > ```
-   >
-   > The test should be looking for the ephemeral disk, that disk is sometimes `/dev/sdc`. The name of the disk is a more accurate test, and is not prone to the random path change.
-
-   > Note: If your shell terminal is not echoing your input after running this, type "reset" and press enter to recover.
+   > **`WARNING`** If test failures for `/dev/sdc` are observed, the [Manual LVM Check Procedure](#manual-lvm-check-procedure) **must** be carried out to determine if they are true failures.
 
 1. Ensure that weave has not split-brained
 
@@ -537,8 +528,41 @@ Observe the output of the checks and note any failures, then remediate them.
    1. Wipe the ncns using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
    1. Return to the 'Boot the **Storage Nodes**' step of [Start Deployment](#start-deployment) section above.
 
+<a name="manual-lvm-check-procedure"></a>
+#### Manual LVM Check Procedure
+
+If an automated test reports a failure relating to `/dev/sdc` on a master or worker NCN, this manual procedure **must be followed** to determine whether or not there is a real error.
+
+* To manually validate the ephemeral disks on a master node, run the following command:
+    ```bash
+    ncn-m# blkid -L ETCDLVM
+    ```
+
+* To manually validate the ephemeral disks on a worker node, run the following commands:
+    ```bash
+    ncn-w# blkid -L CONLIB
+    ncn-w# blkid -L CONRUN
+    ncn-w# blkid -L K8SLET
+    ```
+
+The validation is considered successful if each of the commands returns the name of any device (e.g. `/dev/sdd`, `/dev/sdb1`, etc). The name of the device does not matter -- each command just needs to output the name of some device.
+
+If any nodes fail the validation, then the problem **must** be resolved before continuing with the install.
+
+* If any **master node** has the problem, then you must wipe and redeploy **all** of the NCNs before continuing the installation:
+    1. Wipe each worker node using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
+    1. Wipe each master node (**except** `ncn-m001` because it is the PIT node) using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
+    1. Wipe each storage node using the 'Full Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
+    1. Return to the [Set each node to always UEFI Network Boot, and ensure they are powered off](#set-uefi-and-power-off) step of the [Deploy](#deploy) section above.
+
+* If only **worker nodes** have the problem, then you must wipe and redeploy the affected worker nodes before continuing the installation:
+    1. Wipe each affected worker node using the 'Basic Wipe' section of [DISK CLEANSLATE](051-DISK-CLEANSLATE.md).
+    1. Power off each affected worker node.
+    1. Return to the [Boot the Master and Worker Nodes](#boot-master-and-worker-nodes) step of the [Deploy](#deploy) section above.
+        * Note: The `ipmitool` command will give errors trying to power on the unaffected nodes, since they are already powered on -- this is expected and not a problem.
+
 <a name="optional-validation"></a>
-### Optional Validation 
+### Optional Validation
 
 These tests are for sanity checking. These exist as software reaches maturity, or as tests are worked
 and added into the installation repertoire.
@@ -554,16 +578,11 @@ new tests.**
 1. Verify that all the pods in the kube-system namespace are running
 1. Verify that the ceph-csi requirements are in place (see [CEPH CSI](066-CEPH-CSI.md))
 
-
 <a name="configure-and-trim-uefi-entries"></a>
 ## Configure and Trim UEFI Entries
 
-> **`IMPORTANT`** *The Boot-Order is set by cloud-init, however the current setting is still iterating. This manual step is required until further notice.*
-
-Do the following two steps outlined in [Fixing Boot-Order](101-NCN-BOOTING.md#set-boot-order)
+Do the following two steps outlined in [Fixing Boot-Order](101-NCN-BOOTING.md#set-boot-order) for all NCNs **except the PIT node**.
 1. [Setting Order](101-NCN-BOOTING.md#setting-order)
 1. [Trimming](101-NCN-BOOTING.md#trimming)
 
-The administrator or CI/CD agent may now move onto the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) page to continue the CSM install, or
-may proceed further to continue optional validations. The optional validation may have differing value in various install contexts.
-
+Now move to the [CSM Platform Install](006-CSM-PLATFORM-INSTALL.md) page to continue the CSM install.

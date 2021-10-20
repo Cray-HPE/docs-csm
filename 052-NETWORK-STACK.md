@@ -1,13 +1,13 @@
 # Network Stack (Software and Hardware)
 
-This page will detail how to reload/reset interfaces within the network stack to fix 
+This page will detail how to reload/reset interfaces within the network stack to fix
 wedged interfaces.
 
 Any process covered on this page will be covered by the installer.
 
 ### Network Interfaces
 
-The NCNs have network device names set during first boot. The names vary based on the 
+The NCNs have network device names set during first boot. The names vary based on the
 available hardware. For more information, see [NCN Networking](103-NCN-NETWORKING.md).
 
 ### Network Stack

@@ -16,8 +16,8 @@ snmpv3 user testuser auth md5 auth-pass plaintext testpass1 priv des priv-pass p
 ```
 snmp-server group cray-reds-group 3 noauth read cray-reds-view
 snmp-server user testuser cray-reds-group 3 auth md5 testpass1 priv des testpass2
-snmp-server view cray-reds-view 1.3.6.1.2 included 
-``` 
+snmp-server view cray-reds-view 1.3.6.1.2 included
+```
 
 # Mellanox Configuration
 

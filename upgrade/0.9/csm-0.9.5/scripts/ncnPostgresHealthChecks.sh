@@ -55,7 +55,7 @@ do
         do
             patronictlVersion=$(timeout -k 4 --preserve-status --foreground $Delay \
 kubectl exec -it -n $c_ns -c postgres $member_i -- patronictl version | \
-awk '{ sub("\r", "", $3); print $3 }'; ) 
+awk '{ sub("\r", "", $3); print $3 }'; )
             
             # Check response in case command hung or timed out.
             # If no response, check the next cluster member:
@@ -72,7 +72,7 @@ awk '{ sub("\r", "", $3); print $3 }'; )
             "1.6.4" )
                 patronictlCmd="\$(timeout -k 4 --preserve-status --foreground \
 $Delay kubectl -n $c_ns exec \$m -- patronictl list 2>/dev/null | awk ' \$8 == \
- \"Leader\" && \$10 == \"running\" {print \$4}')"	    
+ \"Leader\" && \$10 == \"running\" {print \$4}')"
                 ;;
             "1.6.5" )
                 patronictlCmd="\$(timeout -k 4 --preserve-status --foreground \

@@ -13,7 +13,7 @@ This page will go over how to setup a re-install on a node.
     pit# cp -pv /etc/hosts ./
     pit# popd
     pit# umount /var/www/ephemeral
-    ``` 
+    ```
     Now the USB stick can be unplugged, it contains all the information we already loaded plus backups
     of initialized files.
 
@@ -37,7 +37,7 @@ next step.
     mylinuxpc> mount /dev/disk/by-label/PITDATA /mnt
     mylinuxpc> tar -xzvf $(ls -ltR *.tar.gz | head -n 1)
     mylinuxpc> ls -R /mnt
-    ``` 
+    ```
 
 5. The tarball should have extracted everything into the install-data partition. You will need to re-fetch
  your squashFS artifacts, they can be fetched into (respectively):

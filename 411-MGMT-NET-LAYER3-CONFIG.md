@@ -65,7 +65,7 @@ interface vlan 3000
 Once this is complete you should be able to see OSPF neighbors on the CDU/Leaf switches.
 
 ```
-sw-cdu-002# show ip ospf neighbors 
+sw-cdu-002# show ip ospf neighbors
 OSPF Process ID 1 VRF default
 ==============================
 
@@ -73,22 +73,22 @@ Total Number of Neighbors: 6
 
 Neighbor ID      Priority  State             Nbr Address       Interface
 -------------------------------------------------------------------------
-10.252.0.2       1         FULL/DROther      10.252.0.2         vlan2          
+10.252.0.2       1         FULL/DROther      10.252.0.2         vlan2
 
-10.252.0.3       1         FULL/DROther      10.252.0.3         vlan2          
+10.252.0.3       1         FULL/DROther      10.252.0.3         vlan2
 
-10.252.0.5       1         FULL/BDR          10.252.0.5         vlan2          
+10.252.0.5       1         FULL/BDR          10.252.0.5         vlan2
 
-10.252.0.2       1         FULL/DROther      10.254.0.2         vlan4          
+10.252.0.2       1         FULL/DROther      10.254.0.2         vlan4
 
-10.252.0.3       1         FULL/DROther      10.254.0.3         vlan4          
+10.252.0.3       1         FULL/DROther      10.254.0.3         vlan4
 
-10.252.0.5       1         FULL/BDR          10.254.0.5         vlan4 
+10.252.0.5       1         FULL/BDR          10.254.0.5         vlan4
 ```
 
 # Aruba Static route
 This route is needed for consistent PXE booting on Aruba switches.
-The second IP ```10.252.1.10``` will be a worker node. Here we are using worker 1. 
+The second IP ```10.252.1.10``` will be a worker node. Here we are using worker 1.
 ```
 ip route 10.92.100.60/32 10.252.1.10
 ip route 10.94.100.60/32 10.252.1.10
