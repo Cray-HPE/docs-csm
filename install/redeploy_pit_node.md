@@ -161,14 +161,20 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         export CEPH_VERSION=x.y.z
         ```
 
-    1. Run the `export` commands listed at the end of the output from the previous step.
+    3. Run the `export` commands listed at the end of the output from the previous step.
 
 1. <a name="csi-handoff-bss-metadata"></a>Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. 
-   
-   __If you have made any changes__ to this file as a result of any customizations or workarounds, use the path to that file instead. This step will prompt for the root password of the NCNs.
+
+    __If you have made any changes__ to this file as a result of any customizations or workarounds, use the path to that file instead. This step will prompt for the root password of the NCNs.
 
     ```bash
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
+    ```
+
+1. Patch the metadata for the CEPH nodes to have the correct run commands:
+
+    ```bash
+    pit# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
     ```
 
 1. Ensure the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.

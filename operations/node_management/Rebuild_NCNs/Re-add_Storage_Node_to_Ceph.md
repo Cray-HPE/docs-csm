@@ -6,6 +6,8 @@
 
 1. Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh`
 
+   **NOTE:** This script may also available in the `/usr/share/doc/csm/scripts` directory where the latest ***docs-csm*** rpm is installed.  If so, it can be copied from that node to the new storage node being rebuilt and skip to step 2.
+
    ```bash
    #!/bin/bash
    
@@ -16,10 +18,15 @@
    > ~/.ssh/known_hosts
    
    for node in ncn-s001 ncn-s002 ncn-s003; do
+     ssh-keyscan -H "$node" >> ~/.ssh/known_hosts
+     pdsh -w $node > ~/.ssh/known_hosts
+     if [[ "$host" == "$node" ]]; then
+       continue
+     fi
+
      if [[ $(nc -z -w 10 $node 22) ]] || [[ $counter -lt 3 ]]
      then
-       ssh-keyscan -H "$node" >> ~/.ssh/known_hosts
-       if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]] && [[ "$host" != "$node" ]]
+       if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]
        then
          scp $node:/etc/ceph/* /etc/ceph
        else
