@@ -6,30 +6,30 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
 ### Prerequisites
 
-- The administrator must have physical access to the CEC LCD panel to enable privileged command mode. The CEC does not enable users to set, display, or clear the password hash in restricted command mode.
+- Physical access to the CEC LCD panel to enable privileged command mode. The CEC does not enable users to set, display, or clear the password hash in restricted command mode.
 
-- A laptop with a terminal program such as Netcat (`nc`), `telnet`, or PuTTY that supports 10/100 IPv6 Ethernet connectivity to the CEC Ethernet port. 
+- A laptop with a terminal program such as Netcat (`nc`), `telnet`, or PuTTY that supports 10/100 IPv6 Ethernet connectivity to the CEC Ethernet port is required. 
 
-- A customer-generated hash for the CEC credentials:
+- A generated SHA-512 hash for the CEC credentials:
 
    - The `passhash` tool that is installed on the CMMs can be used to generate a SHA-512 password hash. This HPE tool is provided for convenience, but any tool that generates an SHA-512 hash that is compatible with glibc can be used. The salt portion must be between 8 and 16 chars inclusive. The CEC does not support the optional "rounds=" parameter in the hash.
    - See the `man 3 crypt` page for a description: https://man7.org/linux/man-pages/man3/crypt.3.html
 
   ```screen
-  remote# passhash PASSWORD $6$v5YlqfghB$scBci.GbT8...
+  remote# passhash PASSWORD 
+  $6$v5YlqfghB$scBci.GbT8...
   ```
   
-  **Note**: Example truncated to prevent accidental setting of production password hash to example values. The password hash is a SHA-512 hash.
+  **Note**: The example password hash is truncated to prevent using this example value. The password hash is a SHA-512 hash.
 
 ### Procedure
 
 1. Disconnect the CEC Ethernet cable from the Ethernet port.
    
-2. Connect an Ethernet cable from an Apple Mac or Linux laptop to the CEC Ethernet port.
-   The CEC Ethernet PHY will auto negotiate to either 10/100Mb speed and it supports auto crossover functionality. Any standard Ethernet patch cord should work for this.
-
+2. Connect an Ethernet cable from an Apple Mac or Linux laptop to the CEC Ethernet port. The CEC Ethernet PHY will auto negotiate to either 10/100Mb speed and it supports auto crossover functionality. Any standard Ethernet patch cord should work for this.
+   
    ![](../../img/CEC_Front_Panel.svg)
-
+   
 3. Use the Right Arrow on the display controls to select the CEC Network Settings Menu. The IPv6 link local address is displayed on this menu.
 
 4. Start the terminal program and use Netcat (`nc`), `telnet`, or PuTTY to connect to CEC command shell and provide the CEC IPv6 link local address.
@@ -46,7 +46,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
    - Enter return a few times to start the connection.
 
-   - **NOTE**: If the network connection to the CEC is lost, or if a CEC command does not return to the prompt, it may be necessary to reboot the CEC. Use the Right Arrow on the CEC control panel to display the Action menu, select Reset CEC, and press the green checkmark button to reboot the CEC. Then re-establish the `nc` or `telnet` connection.
+   - **Note**: If the network connection to the CEC is lost, or if a CEC command does not return to the prompt, it may be necessary to reboot the CEC. Use the Right Arrow on the CEC control panel to display the Action menu, select Reset CEC, and press the green checkmark button to reboot the CEC. Then re-establish the `nc` or `telnet` connection.
 
      ![CEC Front Panel Controls](../../img//CEC_Display_Controls_CEC_Actions.svg)
 
@@ -56,7 +56,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
    CEC> help
    ```
 
-   **CAUTION**: Run only the CEC commands in this procedure. Do not change other CEC settings.
+   **Caution**: Run only the CEC commands in this procedure. Do not change other CEC settings.
 
 6. From the `CEC>` prompt, generate an unlock token for the CEC. Use the `enable` command (alias for `unlock` command) without arguments to display a random unlock token on the CEC front panel.
 
@@ -92,12 +92,12 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
 10. Exit privileged command mode.
 
-   ```screen
-   EXE> lock
-   CEC>
-   ```
+       ```screen
+       EXE> lock
+       CEC>
+       ```
 
-   The CEC remains in privileged mode until it is reset with the `lock` command or if the **X** button on the CEC front panel is pressed. Typing `exit` or terminating the connection exits privileged mode. There is no connection timeout.
+    The CEC remains in privileged mode until it is reset with the `lock` command or if the **X** button on the CEC front panel is pressed. Typing `exit` or terminating the connection exits privileged mode. There is no connection timeout.
 
 11. Use the front panel Right Arrow to select the CEC Action menu.
 
@@ -105,7 +105,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
     The Reset CMM commands reboot either the even numbered, or odd numbered CMMs in the cabinet, depending on which CEC is issuing the commands.
 
-    ![Front Panel Controls](../../img//CEC_Display_Controls_CEC_Actions.svg)
+    ![Front Panel Controls](../../img/CEC_Display_Controls_CEC_Actions.svg)
 
 13. To test the password, connect to the CMM serial console though the CEC. The IPv6 address is the same, but the port numbers are different as described below.
 
