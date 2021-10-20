@@ -174,14 +174,22 @@ data, so run them only when indicated. Instructions are in the `README` files.
         export KUBERNETES_VERSION=x.y.z
         export CEPH_VERSION=x.y.z
         ```
-        Be sure to perform this action so subsequent steps are successful.
 
-1. Upload the same `data.json` file to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__
-   to this file as a result of any customizations or workarounds, use the path to that file instead. This step will
-   prompt for the root password of the NCNs.
+    3. Run the `export` commands listed at the end of the output from the previous step.
+
+
+1. <a name="csi-handoff-bss-metadata"></a>Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. 
+
+    __If you have made any changes__ to this file as a result of any customizations or workarounds, use the path to that file instead. This step will prompt for the root password of the NCNs.
 
     ```bash
-    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
+    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
+    ```
+
+1. Patch the metadata for the CEPH nodes to have the correct run commands:
+
+    ```bash
+    pit# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
     ```
 
 1. Ensure the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.
@@ -225,13 +233,9 @@ data, so run them only when indicated. Instructions are in the `README` files.
     pit# efibootmgr | grep -Ei "ip(v4|4)"
     ```
 
-1. Set and trim the boot order for **master nodes** using one of the following guides:
+1. Set and trim the boot order on the PIT node.
 
-    > **NOTE** If your boot order from `efibootmgr` looks like one of [these examples](../background/ncn_boot_workflow.md#examples), proceed to the next step.
-
-    - [Gigabyte Technology](../background/ncn_boot_workflow.md#gigabyte-technology)
-    - [Hewlett Packard Enterprise](../background/ncn_boot_workflow.md#hewlett-packard-enterprise)
-    - [Intel Corporation](../background/ncn_boot_workflow.md#intel-corporation)
+    In [Deploy Management Nodes](deploy_management_nodes.md#configure-and-trim-uefi-entries), this procedure was done on the other NCNs. Now it is time to do it on the PIT node. See [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
 
 1. Use `efibootmgr` to set the next boot device to the first PXE boot option. This step assumes the boot order was set up in the previous step.
 
@@ -240,7 +244,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
     BootNext: 0014
     ```
 
-1. Collect a backdoor login and fetch the CAN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
+1. <a name="collect-can-ip-ncn-m002"></a>Collect a backdoor login. Fetch the CAN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
 
     1. Get the IP address.
 
@@ -269,7 +273,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
     > performed of the PIT node, we cannot simply boot back to the same state.
     > This is the last step before rebooting the node.
 
-1. **`IN-PLACE WORKAROUND`** This is a workaround until the auto-wipe feature ceases preventing the creation of the 3rd disk (CASMINST-169. This step is safe to do even after auto-wipe is fixed.
+1. Wipe the disks on the PIT node.
 
     > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**, the USB device can only be wiped by operators at this point in the install. The USB device are never wiped by the CSM installer.
 
@@ -553,3 +557,5 @@ Perform the following steps on every NCN **except ncn-m001**.
    After completing this procedure, the next step is to configure administrative access.
 
    * See [Configure Administrative Access](index.md#configure_administrative_access)
+
+
