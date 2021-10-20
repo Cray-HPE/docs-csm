@@ -19,11 +19,5 @@ The following figure shows a high-level overview of the various components used 
 
 ![DNS Architecture](../../../img/operations/DNS_architecture.PNG)
 
-### Table of Contents
-
-* [Manage the DNS Unbound Resolver](Manage_the_DNS_Unbound_Resolver.md)
-* [Enable ncsd on UANs](Enable_ncsd_on_UANs.md)
-* [Troubleshoot Common DNS Issues](Troubleshoot_Common_DNS_Issues.md)
-* [Troubleshoot DNS Configuration Issues](Troubleshoot_DNS_Configuration_Issues.md)
 
 
