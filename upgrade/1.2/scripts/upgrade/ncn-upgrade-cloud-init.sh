@@ -77,39 +77,46 @@ EOF
 
 # patch_in_new_metadata() will mount PITDATA and run 'csi config init' in order to grab the newly-generated data.json and then push it into bss
 patch_in_new_metadata() {
-  # mount the partition that should have the files we need
+  # Try to find the files that we need, mounting the PITDATA partition if necessary and if possible
+
+  # Create the mount point if it does not already exist (-p ensures this command passes regardless)
   mkdir -p /mnt/pitdata
 
   prep_dir=/mnt/pitdata/prep
-  # find the three seed files
+
+  # These are the files that we need
   ncn_metadata="$prep_dir"/ncn_metadata.csv
   switch_metadata="$prep_dir"/switch_metadata.csv
   hmn_connections="$prep_dir"/hmn_connections.json
   system_config="$prep_dir"/system_config.yaml
 
-  if ! eval blkid -t LABEL=PITDATA >/dev/null; then
+  local pitdev
+  if ! pitdev=$(blkid --label PITDATA); then
     if [[ -f "$ncn_metadata" ]] \
       && [[ -f "$switch_metadata" ]] \
       && [[ -f "$hmn_connections" ]] \
       && [[ -f "$system_config" ]]; then
         echo "PITDATA not found but seed files are present. Using those to generate new metadata..."
     else
-      echo "PITDATA not found. Seed files needed to generate new cloud-init metadata."
+      echo "PITDATA not found. Seed files are needed to generate new cloud-init metadata."
       echo "Re-create/re-populate the PITDATA partition"
       echo "or"
       echo "Copy seed files to /mnt/pitdata/prep"
       exit 1
     fi
+  # Check to see if it is already mounted over this device
+  elif [[ $(df --output="target,source" $pitdev 2>/dev/null | tail -1 | awk '{ print $1 }') == /mnt/pitdata ]]; then
+    echo "PITDATA is already mounted"
+    # We unset this to remember that we do not need to unmount it
+    pitdev=""
+  # There is a device with the PITDATA label but it is not mounted over /mnt/pitdata
   else
     echo "Mounting PITDATA..."
-      if ! eval mount | grep '\/mnt\/pitdata' >/dev/null; then
-        mount -L PITDATA /mnt/pitdata/
-      fi
+    mount -L PITDATA /mnt/pitdata/
   fi
 
-
-  # we need the three seed files and the system_config to generate the metadata
-  # this also ensures we are in the right place to run config init without any arguments
+  # We need the three seed files and the system_config to generate the metadata
+  # This also ensures we are in the right place to run config init without any arguments
   if [[ -f "$ncn_metadata" ]] \
       && [[ -f "$switch_metadata" ]] \
       && [[ -f "$hmn_connections" ]] \
@@ -118,8 +125,10 @@ patch_in_new_metadata() {
         system_name=$(awk '/system-name/ {print $2}' "$system_config")
         if ! [[ -d "$prep_dir/$system_name-0.9" ]]; then
           pushd "$prep_dir" || exit 1
-            # move the original generated configs out of the way
-            mv "$system_name" "$system_name-0.9"
+            # move the original generated configs out of the way, if it exists
+            if [ -d "$system_name" ]; then
+              mv "$system_name" "$system_name-0.9"
+            fi
             echo "Generating new config payload for $system_name with csi..."
             # Run config init to get the new metadata
             csi config init
@@ -132,10 +141,15 @@ patch_in_new_metadata() {
         fi
   else
     echo "Missing seed file or system_config.yaml"
+    echo "Seed files are needed to generate new cloud-init metadata."
+    echo "Re-create/re-populate the PITDATA partition"
+    echo "or"
+    echo "Copy seed files to /mnt/pitdata/prep"
     exit 1
   fi
 
-  if eval mount | grep '\/mnt\/pitdata' >/dev/null; then
+  # Unmount pitdata, if we mounted it.
+  if [[ -n $pitdev ]]; then
     umount -l /mnt/pitdata/ || true
   fi
 }

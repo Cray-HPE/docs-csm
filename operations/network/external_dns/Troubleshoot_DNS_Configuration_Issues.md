@@ -56,19 +56,20 @@ The Domain Name Service \(DNS\) is not configured properly.
     Search through Kubernetes service objects for `external-dns.alpha.kubernetes.io/hostname` annotations to find the corresponding external IP. The kubectl command makes it easy to generate an /etc/hosts compatible listing of IP addresses to hostnames using the go-template output format shown below.
 
     ```screen
-    ncn-w001# kubectl get svc --all-namespaces -o go-template --template \
-    '{{ range .items }}{{ $lb := .status.loadBalancer }}{{ with .metadata.annotations }} \
-    {{ with (index . "external-dns.alpha.kubernetes.io/hostname") }}\
-    {{ $hostnames := . }}{{ with $lb }}{{ range .ingress }} \
-    {{ printf "%st%sn" .ip $hostnames }}{{ end }}{{ end }}\
+    ncn-m001# kubectl get svc --all-namespaces -o go-template --template \
+    '{{ range .items }}{{ $lb := .status.loadBalancer }}{{ with .metadata.annotations }}
+    {{ with (index . "external-dns.alpha.kubernetes.io/hostname") }}
+    {{ $hostnames := . }}{{ with $lb }}{{ range .ingress }}
+    {{ printf "%s\t%s\n" .ip $hostnames }}{{ end }}{{ end }}
     {{ end }}{{ end }}{{ end }}' | sort -u | tr , ' '
-    10.102.14.128	rsyslog.SYSTEM_DOMAIN_NAME
-    10.102.14.129	shasta.SYSTEM_DOMAIN_NAME auth.SYSTEM_DOMAIN_NAME s3.SYSTEM_DOMAIN_NAME
-    10.102.14.130	1b7bdf71-8069-48c0-9889-16351fdbe644.ims.SYSTEM_DOMAIN_NAME
-    10.102.14.131       prometheus.SYSTEM_DOMAIN_NAME alertmanager.SYSTEM_DOMAIN_NAME grafana.SYSTEM_DOMAIN_NAME prometheus-istio.SYSTEM_DOMAIN_NAME kiali-istio.SYSTEM_DOMAIN_NAME jaeger-istio.SYSTEM_DOMAIN_NAME vcs.SYSTEM_DOMAIN_NAME
-    10.102.14.132	7f65df32-8652-4254-906b-ccec5f0b5c55.ims.SYSTEM_DOMAIN_NAME
-    10.92.100.5	  postgres-cluster.craysma.staging.db.example.com
-    10.92.100.6	  postgres-cluster-repl.craysma.staging.db.example.com
+
+    10.101.5.128    opa-gpm.SYSTEM_DOMAIN_NAME nexus.SYSTEM_DOMAIN_NAME jaeger-istio.SYSTEM_DOMAIN_NAME kiali-istio.SYSTEM_DOMAIN_NAME prometheus.SYSTEM_DOMAIN_NAME alertmanager.SYSTEM_DOMAIN_NAME grafana.SYSTEM_DOMAIN_NAME vcs.SYSTEM_DOMAIN_NAME sma-grafana.SYSTEM_DOMAIN_NAME sma-kibana.SYSTEM_DOMAIN_NAME csms.SYSTEM_DOMAIN_NAME
+    10.101.5.129    api.SYSTEM_DOMAIN_NAME auth.SYSTEM_DOMAIN_NAME
+    10.101.5.130    s3.SYSTEM_DOMAIN_NAME
+    10.92.100.222   cray-dhcp-kea
+    10.92.100.225   cray-dns-unbound
+    10.94.100.222   cray-dhcp-kea
+    10.94.100.225   cray-dns-unbound
     ```
 
 

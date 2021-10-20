@@ -9,7 +9,7 @@ https://vcs.SHASTA_CLUSTER_DNS_NAME
 On cluster nodes, the VCS service can be accessed through the gateway. VCS credentials for the `crayvcs` user are required before cloning a repository \(see the "VCS Administrative User" section below\). To clone a repository in the `cray` organization, use the following command:
 
 ```bash
-ncn# git clone https://api-gw-service-nmn.local/vcs/cray/REPO\_NAME.git
+ncn# git clone https://api-gw-service-nmn.local/vcs/cray/REPO_NAME.git
 ```
 
 ### VCS Administrative User
@@ -33,9 +33,9 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
 ```bash
 ncn# kubectl create secret generic vcs-user-credentials --save-config \
---from-literal=vcs_username="crayvcs"
+--from-literal=vcs_username="crayvcs" \
 --from-literal=vcs_password="NEW_PASSWORD" \
---dry-run -o yaml | kubectl apply -f -
+--dry-run=client -o yaml | kubectl apply -f -
 ```
 
 The `NEW_PASSWORD` value must be replaced with the updated password.
@@ -76,7 +76,7 @@ https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/org/cray/teams
 
 ### Backup and Restore Data
 
-Data for gitea is stored in two places. Git content is stored directly in a PVC, while structural data, such as gitea users and the list and attributes of repos, is stored in a Postres database. Because of this, both sources must be backed up and restored together.
+Data for gitea is stored in two places. Git content is stored directly in a PVC, while structural data, such as gitea users and the list and attributes of repos, is stored in a Postgres database. Because of this, both sources must be backed up and restored together.
 
 #### Backup Postgres Data
 

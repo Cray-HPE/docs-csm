@@ -59,13 +59,3 @@ This procedure enables administrators to set up the service and access its compo
         Jaeger provides distributed tracing of requests across micro-services based on headers automatically injected by Envoy.
 
         For more information regarding the `jaeger-istio` front end/UI configuration, refer to the online documentation \([https://www.jaegertracing.io/](https://www.jaegertracing.io/)\). Click on the 'Docs' section to get more information around the Jaeger Frontend/UI.
-
-    Additional components are also exposed, though only for convenience. Do not rely on these components to always be available:
-
-    -   **https://prometheus-istio.\{\{shasta\_domain\}\}/**
-
-        Prometheus instance that collects Istio metrics \(included as part of `istio` Helm chart\).
-
-        For more information regarding the use of the Prometheus interface, see [https://prometheus.io/docs/alerting/overview/](https://prometheus.io/docs/alerting/overview/).
-
-

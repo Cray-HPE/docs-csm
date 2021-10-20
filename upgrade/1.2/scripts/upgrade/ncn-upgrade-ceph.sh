@@ -28,7 +28,7 @@ state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
-    ssh $upgrade_ncn "cd /usr/share/doc/csm/upgrade/1.0/scripts/ceph;./ceph-upgrade.sh"
+    ssh $upgrade_ncn "cd /usr/share/doc/csm/upgrade/1.2/scripts/ceph;./ceph-upgrade.sh"
 
     record_state "${state_name}" ${upgrade_ncn}
 else

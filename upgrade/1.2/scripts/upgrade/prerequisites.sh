@@ -274,16 +274,6 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="APPLY_POD_PRIORITY"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    . ${BASEDIR}/add_pod_priority.sh
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
 state_name="UPDATE_BSS_CLOUD_INIT_RECORDS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then

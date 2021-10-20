@@ -112,7 +112,7 @@ The VLAN information is located in the network YAML files. Below are examples.
 
 ## Configure SNMP
 
-SNMP onfiguration is required for hardware discovery of the HPE Cray EX system.
+SNMP configuration is required for hardware discovery of the HPE Cray EX system.
 
 1. Configure SNMP.
    
@@ -279,7 +279,7 @@ To save the configuration:
 
 ## Show Running Configuration
 
-To dispaly the running configuration:
+To display the running configuration:
 
    ```bash
    sw-leaf-001# show running-config

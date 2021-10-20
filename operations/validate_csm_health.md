@@ -38,11 +38,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
     - [3.1 SMS Test Execution](#sms-checks)
     - [3.2 Interpreting cmsdev Results](#cmsdev-results)
   - [4. Booting CSM Barebones Image](#booting-csm-barebones-image)
-    - [4.1 Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
-    - [4.2 Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
-    - [4.3 Find an available compute node](#csm-node)
-    - [4.4 Reboot the node using a BOS session template](#csm-reboot)
-    - [4.5 Connect to the node's console and watch the boot](#csm-watch-boot)
+    - [4.1 Running the script](#csm-run-script)
   - [5. UAS / UAI Tests](#uas-uai-tests)
     - [5.1 Validate the Basic UAS Installation](#uas-uai-validate-install)
     - [5.2 Validate UAI Creation](#uas-uai-validate-create)
@@ -171,40 +167,19 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
     The points below will cover the data in the table above for Member, Role, State, and Lag in MB columns.
 
     For each Postgres cluster:
-      - Verify there are three cluster members (with the exception of sma-postgres-cluster where there should be only two cluster members).
+      1. Verify there are three cluster members (with the exception of sma-postgres-cluster where there should be only two cluster members).
       If the number of cluster members is not correct, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#missing).
 
-      - Verify there is one cluster member with the Leader Role and log output indicates expected status. Such as:
-         ```bash
-         i am the leader with the lock
-         ```
-         For example:
-         ```bash
-         --- Logs for services Leader Pod cray-sls-postgres-0 ---
-            ERROR: get_cluster
-            INFO: establishing a new patroni connection to the postgres cluster
-            INFO: initialized a new cluster
-            INFO: Lock owner: cray-sls-postgres-0; I am cray-sls-postgres-0
-            INFO: Lock owner: None; I am cray-sls-postgres-0
-            INFO: no action. i am the leader with the lock
-            INFO: No PostgreSQL configuration items changed, nothing to reload.
-            INFO: postmaster pid=87
-            INFO: running post_bootstrap
-            INFO: trying to bootstrap a new cluster
-         ```
-         Errors reported prior to the lock status can be ignored - for example:
-         - **ERROR: get_cluster**
-         - **ERROR: ObjectCache.run ProtocolError('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))**
-         - **ERROR: failed to update leader lock** 
-         - **ERROR: Exception when working with master via replication connection** 
-         
-         If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
+      2. Verify there is one cluster member with the Leader Role. 
+      If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
 
-      - Verify the State of each cluster member is 'running'.
+      3. Verify the State of each cluster member is 'running'.
       If any cluster members are found to be in a non 'running' state (such as 'start failed'), refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#diskfull).
 
-      - Verify there is no large or growing lag.
+      4. Verify there is no large or growing lag.
       If any cluster members are found to have lag or lag is 'unknown', refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#lag).
+
+      - **If all the above four checks indicate postgres clusters are healthy, the log output for the postgres pods can be ignored.** If possible health issues exist, re-check the health by re-running the ncnPostgresHealthChecks script in 15 minutes. If health issues persist, then review the log output and consult [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md). During NCN reboots, temporary errors related to re-election are common but should resolve upon the re-check.
 
 1. Check that all Kubernetes Postgres pods have a STATUS of Running.
     ```bash
@@ -513,7 +488,7 @@ ncn# /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
 
 The return value of the script is 0 if all CT tests ran successfully, non-zero
 if not.  On CT test failures the script will instruct the admin to look at the
-CT test log files.  If one or more failures occur, investigate the cause of 
+CT test log files.  If one or more failures occur, investigate the cause of
 each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
 <a name="hms-aruba-fixup"></a>
@@ -615,6 +590,19 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
 
 * The node BMC of 'ncn-m001' will not typically be present in HSM component data, as it is typically connected to the site network instead of the HMN network.
 
+* The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depedning on the state of the system when the `verify_hsm_discovery.py` script is ran. If the system is currently going through the process of installation, then this is an expected mistmatch as the [Preapre Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet. 
+   > For more information refer to [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
+
+   Example mistmatch for the BMC of a HPE Apollo XL654D:
+```bash
+...
+  Nodes: FAIL
+    - x3000c0s30b1n0 (Compute, NID 5) - Not found in HSM Components.
+  NodeBMCs: FAIL
+    - x3000c0s19b1 - Not found in HSM Components; Not found in HSM Redfish Endpoints.
+...
+```
+
 * Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
    > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
 
@@ -698,7 +686,7 @@ If one or more checks failed:
         1
         ```
 
-Additional test execution details can be found in `/opt/cray/tests/cmsdev.log` on the node where the test was run.
+Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
 
 <a name="booting-csm-barebones-image"></a>
 ## 4. Booting CSM Barebones Image
@@ -717,187 +705,50 @@ beyond the dracut stage of the boot process. However, if the dracut stage is rea
 boot can be considered successful and shows that the necessary CSM services needed to
 boot a node are up and available.
    * This inability to boot the barebones image fully will be resolved in future releases of the
-   CSM product.
+CSM product.
 * In addition to the CSM Barebones image, the release also includes an IMS Recipe that
 can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires
 RPMs that are not installed with the CSM product. The CSM Barebones recipe can be built after the
 Cray OS (COS) product stream is also installed on to the system.
    * In future releases of the CSM product, work will be undertaken to resolve these dependency issues.
 * This procedure can be followed on any NCN or the PIT node.
-* The Cray CLI must be configured on the node where this procedure is being performed. See [Configure the Cray Command Line Interface](configure_cray_cli.md) for details on how to do this.
+* This script uses the Kubernetes API Gateway to access CSM services. This gateway must be properly
+configured to allow an access token to be generated by the script.
+* This script is installed as part of the 'cray-cmstools-crayctldeploy' RPM.
+* For additional information on the script and for troubleshooting help look at the document
+[Barebones Image Boot](../troubleshooting/cms_barebones_image_boot.md).
 ---
 
-1. [Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
-1. [Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
-1. [Find an available compute node](#csm-node)
-1. [Reboot the node using a BOS session template](#csm-reboot)
-1. [Watch Boot on Console](#csm-watch-boot)
+1. [Running the script](#csm-run-script)
 
-<a name="locate-csm-barebones-image-in-ims"></a>
-### 4.1 Locate CSM Barebones Image in IMS
+<a name="csm-run-script"></a>
+### 4.1 Run the Test Script
 
-Locate the CSM Barebones image and note the `etag` and `path` fields in the output.
+The script is executable and can be run without any arguments. It returns 0 on success and
+non-zero on failure.
 
 ```bash
-ncn# cray ims images list --format json | jq '.[] | select(.name | contains("barebones"))'
+ncn# /opt/cray/tests/integration/csm/barebonesImageTest
 ```
 
-Expected output is similar to the following:
-```json
-{
-  "created": "2021-01-14T03:15:55.146962+00:00",
-  "id": "293b1e9c-2bc4-4225-b235-147d1d611eef",
-  "link": {
-    "etag": "6d04c3a4546888ee740d7149eaecea68",
-    "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",
-    "type": "s3"
-  },
-  "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4"
-}
+A successful run would generate output like the following:
+```bash
+ncn# /opt/cray/tests/integration/csm/barebonesImageTest
+cray.barebones-boot-test: INFO     Barebones image boot test starting
+cray.barebones-boot-test: INFO       For complete logs look in the file /tmp/cray.barebones-boot-test.log
+cray.barebones-boot-test: INFO     Creating bos session with template:csm-barebones-image-test, on node:x3000c0s10b1n0
+cray.barebones-boot-test: INFO     Starting boot on compute node: x3000c0s10b1n0
+cray.barebones-boot-test: INFO     Found dracut message in console output - success!!!
+cray.barebones-boot-test: INFO     Sucessfully completed barebones image boot test.
 ```
 
-<a name="csm-bos-session-template"></a>
-### 4.2 Create a BOS Session Template for the CSM Barebones Image
-
-The session template below can be copied and used as the basis for the BOS Session Template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in the Image Management Service (IMS).
-
-1. Create `sessiontemplate.json`
-   ```bash
-   ncn# vi sessiontemplate.json
-   ```
-
-   The session template should contain the following:
-   ```json
-   {
-     "boot_sets": {
-       "compute": {
-         "boot_ordinal": 2,
-         "etag": "etag_value_from_cray_ims_command",
-         "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-         "network": "nmn",
-         "node_roles_groups": [
-           "Compute"
-         ],
-         "path": "path_value_from_cray_ims_command",
-         "rootfs_provider": "cpss3",
-         "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-         "type": "s3"
-       }
-     },
-     "cfs": {
-       "configuration": "cos-integ-config-1.4.0"
-     },
-     "enable_cfs": false,
-     "name": "shasta-1.4-csm-bare-bones-image"
-   }
-
-   **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
-
-
-2. Create the BOS session template using the following file as input:
-   ```
-   ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
-   ```
-   The expected output is:
-   ```
-   /sessionTemplate/shasta-1.4-csm-bare-bones-image
-   ```
-
-<a name="csm-node"></a>
-### 4.3 Find an available compute node
+The script will choose an enabled compute node that is listed in the Hardware State Manager (HSM) for
+the test unless the user passes in a specific node using the `--xname` argument. If a compute node is
+specified but unavailable, an available node will be used instead and a warning will be logged.
 
 ```bash
-ncn# cray hsm state components list --role Compute --enabled true
+ncn# /opt/cray/tests/integration/csm/barebonesImageTest --xname x3000c0s10b4n0
 ```
-
-Example output:
-```
-[[Components]]
-ID = "x3000c0s17b1n0"
-Type = "Node"
-State = "On"
-Flag = "OK"
-Enabled = true
-Role = "Compute"
-NID = 1
-NetType = "Sling"
-Arch = "X86"
-Class = "River"
-
-[[Components]]
-ID = "x3000c0s17b2n0"
-Type = "Node"
-State = "On"
-Flag = "OK"
-Enabled = true
-Role = "Compute"
-NID = 2
-NetType = "Sling"
-Arch = "X86"
-Class = "River"
-```
-
-> If it is noticed that compute nodes are missing from Hardware State Manager, refer to [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) to troubleshoot any Node BMCs that have not been discovered.
-
-Choose a node from those listed and set `XNAME` to its ID. In this example, `x3000c0s17b2n0`:
-```bash
-ncn# export XNAME=x3000c0s17b2n0
-```
-
-<a name="csm-reboot"></a>
-### 4.4 Reboot the node using a BOS session template
-
-Create a BOS session to reboot the chosen node using the BOS session template that was created:
-```bash
-ncn# cray bos session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit $XNAME
-```
-
-Expected output looks similar to the following:
-```
-limit = "x3000c0s17b2n0"
-operation = "reboot"
-templateUuid = "shasta-1.4-csm-bare-bones-image"
-[[links]]
-href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
-jobId = "boa-8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
-rel = "session"
-type = "GET"
-
-[[links]]
-href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1/status"
-rel = "status"
-type = "GET"
-```
-
-<a name="csm-watch-boot"></a>
-### 4.5 Connect to the node's console and watch the boot
-
-See [Manage Node Consoles](conman/Manage_Node_Consoles.md) for information on how to connect to the node's console (and for
-instructions on how to close it later).
-
-The boot may take up to 10 or 15 minutes. The image being booted does not support a complete boot, so the node will not
-boot fully into an operating system. This test is merely to verify that the CSM services needed to boot a node are available and
-working properly.
-
-This boot test is considered successful if the boot reaches the dracut stage. You know this has happened if the console output has
-something similar to the following somewhere within the final 20 lines of its output:
-```
-[    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
-[    7.898169] dracut: Refusing to continue
-```
-
-**NOTE**: As long as the preceding text is found near the end of the console output, the test is considered successful. It is normal
-(and **not** indicative of a test failure) to see something similar to the following at the very end of the console output:
-```
-         Starting Dracut Emergency Shell...
-[   11.591948] device-mapper: uevent: version 1.0.3
-[   11.596657] device-mapper: ioctl: 4.40.0-ioctl (2019-01-18) initialised: dm-devel@redhat.com
-Warning: dracut: FATAL: Don't know how to handle
-Press Enter for maintenance
-(or press Control-D to continue):
-```
-
-After the node has reached this point, close the console session. The test is complete.
 
 <a name="uas-uai-tests"></a>
 ## 5. UAS / UAI Tests
