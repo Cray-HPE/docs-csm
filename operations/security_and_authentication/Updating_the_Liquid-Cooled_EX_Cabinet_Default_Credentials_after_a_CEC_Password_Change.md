@@ -347,21 +347,74 @@ This section only needs to be performed if any liquid-cooled Node or Chassis BMC
     ```
 
 5. Restore SSH Keys configured by cray-conman on liquid-cooled Node BMCs.
-    <!-- This step is only applicable to CSM 0.9, and will be different in CSM 1.0 -->
-    View the current status of the cray-conman pods:
+    Get the SSH Console private key from Vault:
     
     ```bash
-    ncn-m001# kubectl -n services get pods -l app.kubernetes.io/instance=cray-conman
-    NAME                           READY   STATUS    RESTARTS   AGE
-    cray-conman-7f956fc9bc-97rx4   3/3     Running   0          47d
+    ncn-m001# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys \
+    -o json | jq -r '.data["vault-root"]' |  base64 -d)
+    
+    ncn-m001# kubectl -n vault exec -t cray-vault-0 -c vault \
+    -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 \
+    VAULT_FORMAT=json vault read transit/export/signing-key/mountain-bmc-console \
+    | jq -r .data.keys[]  > ssh-console.key 
     ```
     
-    Restart cray-conman deployment:
+6. Generate the SSH public key:
     ```bash
-    ncn-m001# kubectl -n services rollout restart deployment cray-conman
-    ncn-m001# kubectl -n services rollout status deployment cray-conman
+    ncn-m001# chmod 0600 ssh-console.key
+    ncn-m001# export SCSD_SSH_CONSOLE_KEY=$(ssh-keygen -yf ssh-console.key)
+    ncn-m001# echo $SCSD_SSH_CONSOLE_KEY
     ```
-    
-6. To restore passwordless SSH connections to the liquid-cooled Node BMCs and Chassis BMCs that have had the StatefulReset action applied, following [Enable Passwordless Connections to Liquid Cooled Node BMCs](../node_management/Enable_Passwordless_Connections_to_Liquid_Cooled_Node_BMCs.md).
-   
-    > __WARNING__: Using SCSD to update the SSHConsoleKey value outside of ConMan disrupts the ConMan connection to the console and collection of console logs. Refer to [Conman](../conman/ConMan.md) for more information.
+
+7. Delete the SSH Console private key from disk:
+
+    ```bash
+    ncn-m001# rm ssh-console.key
+    ```
+
+8. Generate a payload for the SCSD service. The admin must be authenticated to the Cray CLI before proceeding.
+
+    ```bash
+    ncn-m001# cat > scsd_cfg.json <<DATA
+    {
+        "Force":false,
+        "Targets":
+    $(cray hsm state components list --class Mountain --type NodeBMC --format json | jq -r '[.Components[] | .ID]'),
+        "Params":{
+            "SSHConsoleKey":"$(echo $SCSD_SSH_CONSOLE_KEY)"
+        }
+    }
+    DATA
+    ```
+
+    Alternatively create a `scsd_cfg.json` file with only the SSH Console key:
+
+    ```bash
+    ncn-m001# cat > scsd_cfg.json <<DATA
+    {
+        "Force":false,
+        "Targets":[
+            "x1000c0s0b0",
+            "x1000c0s0b0"
+         ],
+        "Params":{
+            "SSHConsoleKey":"$(echo $SCSD_SSH_CONSOLE_KEY)"
+        }
+    }
+    DATA
+    ```
+
+9. Edit the "Targets" array to contain the NodeBMCs that have have had the StatefulReset action.
+
+    1. Inspect the generated `scsd_cfg.json` file. Ensure the following are true before running the `cray scsd` command below:
+
+       - The xname looks valid/appropriate. Limit the `scsd_cfg.json` file to NodeBMCs that have had the StatefulReset action applied to them.
+       - The `SSHConsoleKey` settings match the desired public key.
+
+    2. Apply SSH Console key to the NodeBMCs:
+
+       ```bash
+       ncn-m001# cray scsd bmc loadcfg create scsd_cfg.json
+       ```
+
+    3. Check the output to verify all hardware has been set with the correct keys. Passwordless SSH to the consoles should now function as expected.
