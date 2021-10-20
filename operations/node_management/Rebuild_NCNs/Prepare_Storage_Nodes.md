@@ -10,7 +10,13 @@ Prepare a storage node before rebuilding it.
 
 If rebuilding ncn-s001, it is critical that the storage-ceph-cloudinit.sh has been removed from the runcmd in bss.
 
-1. Check the bss boot parameters for ncn-s001.
+1. Get the xname for ncn-s001.
+
+   ```bash
+   ssh ncn-s001 cat /etc/cray/xname
+   ```
+
+2. Check the bss boot parameters for ncn-s001.
 
    ```bash
    cray bss bootparameters list --name x3000c0s7b0n0 --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'
