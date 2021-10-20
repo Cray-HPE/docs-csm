@@ -32,9 +32,9 @@ however some older systems still have this legacy connection to their leaf switc
 
 This uses the [Mellanox CLI Tools][1] for configuring UEFI PXE from the Linux command line.
 
-On any NCN (using 0.0.10 k8s, or 0.0.8 Ceph; anything built on ncn-0.0.21 or higher), run this to begin interacting with Mellanox cards:
+On any NCN (using 0.0.10 k8s, or 0.0.8 Ceph; anything built on ncn-0.0.21 or higher), run the following command to begin interacting with Mellanox cards:
 
-If recovering NCNs with an earlier image without the Mellanox tools, refer to the section on the bottom of the Mellanox segment.
+> **NOTE:** If recovering NCNs with an earlier image without the Mellanox tools, refer to the [Obtaining Mellanox Tools](#obtaining-mellanox-tools) section.
 
 ```bash
 ncn# mst start
@@ -45,7 +45,7 @@ Now `mst status` and other commands like `mlxfwmanager` or `mlxconfig` will work
 <a name="print-current-uefi-and-sr-iov-state"></a>
 #### Print current UEFI and SR-IOV State
 
-> UEFI: all boots are UEFI, this needs to be enabled for access to the UEFI OpROM for configuration and for usage of UEFI firmwares.
+> UEFI: All boots are UEFI; this needs to be enabled for access to the UEFI OpROM for configuration and for usage of UEFI firmwares.
 > SR_IOV: This is currently DISABLED because it can attribute to longer POSTs on HPE blades (Gen10+, i.e. DL325 or DL385) with Mellanox ConnectX-5 PCIe cards. The technology is not yet enabled for virtualization usage, but may be in the future.
 
 Use the following snippet to display device name and current UEFI PXE state.
