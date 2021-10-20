@@ -32,12 +32,6 @@ MetalLB does not manage access to any of the NCNs, UANs, or compute nodes.
 
 ![BGP Peering](../../../img/operations/BGP_Peering.PNG "BGP Peering")
 
-### Table of Contents
 
-* [MetalLB in BGP-Mode Configuration](MetalLB_in_BGP-Mode_Configuration.md)
-* [Update BGP Neighbors](Update_BGP_Neighbors.md)
-* [Check BGP Status and Reset Sessions](Check_BGP_Status_and_Reset_Sessions.md)
-* [Troubleshoot Services without an Allocated IP Address](Troubleshoot_Services_without_an_Allocated_IP_Address.md)
-* [Troubleshoot BGP not Accepting Routes from MetalLB](Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 
 

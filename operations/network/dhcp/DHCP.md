@@ -35,6 +35,4 @@ The order can vary in the workflow outlined below, and the services in this work
     -   Compare information in NIC information in SMD and Kea DHCP reservation configurations
     -   Delete any active leases that did not match SMD
 
-### Table of Contents
 
-* [Troubleshoot DHCP Issues](Troubleshoot_DHCP_Issues.md)
