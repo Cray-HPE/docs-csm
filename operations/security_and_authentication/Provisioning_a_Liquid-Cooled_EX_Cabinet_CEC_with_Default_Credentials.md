@@ -16,8 +16,10 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
    - See the `man 3 crypt` page for a description: https://man7.org/linux/man-pages/man3/crypt.3.html
 
   ```screen
-  remote# passhash PASSWORD $6$v5YlqxKB$scBci.GbT8Uf3ZPcGwrW07zEjGdq6q7/FdQGCclxh05IPCINm9SOt2RLHfdPE9UE/Ng5dtc5qCBCoSLHSW84L1
+  remote# passhash PASSWORD $6$v5YlqfghB$scBci.GbT8...
   ```
+  
+  **Note**: Example truncated to prevent accidental setting of production password hash to example values. The password hash is a SHA-512 hash.
 
 ### Procedure
 
@@ -83,8 +85,10 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
    The CEC validates the input syntax of the hash. Adding an extra char or omitting a character is flagged as an error. I a character is changed, the password entered in the serial console login shell or the Redfish `root` account will not work. If that happens, rerun the `set_hash` command on the CEC and reboot the CMMs.
 
       ```screen
-      EXE> set_hash $6$v5YlqxKB$scBci.GbT8Uf3ZPcGwrW07zEjGdq6q7/FdQGCclxh05IPCINm9SOt2RLHfdPE9UE/Ng5dtc5qCBCoSLHSW84L1
+      EXE> set_hash $6$v5YlqxKB$scBci.GbT8...
       ```
+
+   **Note**: Example truncated to prevent accidental setting of production password hash to example values. The password hash is a SHA-512 hash.
 
 10. Exit privileged command mode.
 
