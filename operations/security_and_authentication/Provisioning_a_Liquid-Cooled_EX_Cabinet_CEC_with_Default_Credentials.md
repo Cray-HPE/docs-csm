@@ -49,7 +49,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
    - **NOTE**: If the network connection to the CEC is lost, or if a CEC command does not return to the prompt, it may be necessary to reboot the CEC.  Use the Right Arrow on the CEC control panel to display the Action menu, select Reset CEC, and press the green checkmark button to reboot the CEC. Then re-establish the `nc` or `telnet` connection. 
 
-     ![CEC Front Panel Controls](../../img//CEC_Display_Controls_CEC_Actions.svg)
+     ![CEC Front Panel Controls](../../img/CEC_Display_Controls_CEC_Actions.svg)
 
 5. From the CEC> prompt, enter help to view the list of commands.
 
