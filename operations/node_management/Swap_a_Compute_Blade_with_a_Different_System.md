@@ -524,19 +524,24 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     LastDiscoveryStatus = "DiscoverOK"
     ```
 
-37. Enable each node individually in the HSM database.
+37. Enable the nodes in the HSM database.
 
     ```bash
-    ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0b0n0
-    ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0b0n1
-    ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0b1n0
-    ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0b1n1
+    ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
-38. Verify that the nodes are enabled in the HSM. This command must be run for each node in the blade.
+38. Verify that the nodes are enabled in the HSM.
 
     ```bash
-    ncn-m001# cray hsm state components describe x1005c3s0b0n0
+    ncn-m001# cray hsm state components query create --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+    [[Components]]
+    ID = x1005c3s0b0n0
+    Type = "Node"
+    Enabled = true
+    State = "Off"
+    . . .
+    [[Components]]
+    ID = x1005c3s0b1n1
     Type = "Node"
     Enabled = true
     State = "Off"
