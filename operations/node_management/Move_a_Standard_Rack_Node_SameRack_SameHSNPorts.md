@@ -352,13 +352,10 @@ This procedure works with both application and compute nodes. This example moves
     . . .
     ```
 
-14. If necessary, enable each node individually in the HSM database \(in this example, the nodes are `x3000c0s27b[1-4]n0`\).
+14. If necessary, enable the nodes in the HSM database \(in this example, the nodes are `x3000c0s27b[1-4]n0`\).
 
     ```bash
-    ncn-m001# cray hsm state components enabled update --enabled true x3000c0s27b1n0
-    ncn-m001# cray hsm state components enabled update --enabled true x3000c0s27b2n0
-    ncn-m001# cray hsm state components enabled update --enabled true x3000c0s27b3n0
-    ncn-m001# cray hsm state components enabled update --enabled true x3000c0s27b4n0
+    ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids x3000c0s27b1n0,x3000c0s27b2n0,x3000c0s27b3n0,x3000c0s27b4n0
     ```
 
 15. Use boot orchestration to power on and boot the nodes.
@@ -367,7 +364,7 @@ This procedure works with both application and compute nodes. This example moves
 
     ```bash
     ncn-m001# cray bos v1 session create --template-uuid cle-VERSION \
-    --operation reboot --limit x3000c0s27b1n0,x3000c0s27b2n1,x3000c0s27b3n0,x3000c0s27b4n0
+    --operation reboot --limit x3000c0s27b1n0,x3000c0s27b2n0,x3000c0s27b3n0,x3000c0s27b4n0
     ```
 
 

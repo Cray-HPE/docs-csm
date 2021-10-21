@@ -10,16 +10,17 @@ Disabling nodes that are not configured correctly allows the system to successfu
 
 ### Procedure
 
-1.  Disable individual nodes with HSM.
+1.  Disable one or more nodes with HSM.
 
     ```bash
-    ncn-m001# cray hsm state components enabled update --enabled false XNAME
+    ncn-m001# cray hsm state components bulkEnabled update --enabled false --component-ids XNAME_LIST
     ```
 
 2.  Verify the desired nodes are disabled.
 
     ```bash
-    ncn-m001# cray hsm state components describe XNAME
+    ncn-m001# cray hsm state components query create --component-ids XNAME_LIST
+    [[Components]]
     Type = "Node"
     Enabled = false
     State = "On"
@@ -30,6 +31,16 @@ Disabling nodes that are not configured correctly allows the system to successfu
     Arch = "X86"
     ID = "x5000c1s0b1n1"
 
+    [[Components]]
+    Type = "Node"
+    Enabled = false
+    State = "On"
+    NID = 1004
+    Flag = "OK"
+    Role = "Compute"
+    NetType = "Sling"
+    Arch = "X86"
+    ID = "x5000c1s0b1n2"
     ```
 
 
