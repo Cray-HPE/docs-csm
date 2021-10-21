@@ -239,9 +239,9 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
     For each Redfish endpoint that is reported use the following to troubleshoot why it is not `DiscoverOK` or `DiscoveryStarted`:
     - If the Redfish endpoint is `DiscoveryStarted`, then that BMC is currently in the process of being inventoried by HSM. Wait a few minutes and re-try the bash script above to re-check the current discovery status of the RedfishEndpoints.
     - The hms-discovery cronjob (if enabled) will trigger a discover on BMCs that are not currently in `DiscoverOK` or `DiscoveryStarted` every 3 minutes.
-    - If the Redfish endpoint is `HTTPsGetFailed`, then HSM had issues contacting BMC.
+    - If the Redfish endpoint is `HTTPsGetFailed`, then HSM had issues contacting BMC, then perform the following steps:
     
-    1. Verify that the BMC xname is resolvable and pingable:
+    1. Verify that the BMC xname is resolvable and pingable.
     
        > If the BMC is a ChassisBMC, then the `b0` in its xname needs to be removed to get its hostname. Otherwise, for NodeBMCs their xnames is their BMC hostname. For example, the ChassisBMC has the xname `x1000c0b0`, and its hostname is `x1000c0`.
     
@@ -258,9 +258,9 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
                on = [ "x1001c1s0b0",]
        ```
     
-       If the slot is off, power it on:
+       If the slot is off, power it on.
     
-       ```
+       ```bash
         ncn-m001# cray capmc xname_on create --xnames x1001c1s0
        ```
     
@@ -272,47 +272,49 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
        ncn-m001# curl -k -u root:$CRED_PASSWORD https://BMC_HOSTNAME/redfish/v1/Managers | jq
        ```
     
-        If the error message below is returned, then the BMC requires a StatefulReset action. The StatefulReset action will clear user-defined credentials that are taking precedence over the CEC supplied credential. It will also clear NTP, Syslog, and SSH Key configurations on the BMC.
+       If the error message below is returned, then the BMC requires a StatefulReset action. The StatefulReset action will clear user-defined credentials that are taking precedence over the CEC supplied credential. It will also clear NTP, Syslog, and SSH Key configurations on the BMC.
 
-            ```json
-            {
-                "error": {
-                    "@Message.ExtendedInfo": [
-                    {
-                        "@odata.type": "#Message.v1_0_5.Message",
-                        "Message": "While attempting to establish a connection to /redfish/v1/Managers, the service was denied access.",
-                        "MessageArgs": [
-                        "/redfish/v1/Managers"
-                        ],
-                        "MessageId": "Security.1.0.AccessDenied",
-                        "Resolution": "Attempt to ensure that the URI is correct and that the service has the appropriate credentials.",
-                        "Severity": "Critical"
-                    }
+       ```json
+        {
+            "error": {
+                "@Message.ExtendedInfo": [
+                {
+                    "@odata.type": "#Message.v1_0_5.Message",
+                    "Message": "While attempting to establish a connection to /redfish/v1/Managers, the service was denied access.",
+                    "MessageArgs": [
+                    "/redfish/v1/Managers"
                     ],
-                    "code": "Security.1.0.AccessDenied",
-                    "message": "While attempting to establish a connection to /redfish/v1/Managers, the service was denied access."
+                    "MessageId": "Security.1.0.AccessDenied",
+                    "Resolution": "Attempt to ensure that the URI is correct and that the service has the appropriate credentials.",
+                    "Severity": "Critical"
                 }
+                ],
+                "code": "Security.1.0.AccessDenied",
+                "message": "While attempting to establish a connection to /redfish/v1/Managers, the service was denied access."
             }
-            ```
+        }
+       ```
     
-            Perform a StatefulReset on the liquid-cooled BMC replace `BMC_HOSTNAME` with the hostname of the BMC. The `OLD_DEFAULT_PASSWORD` must match the credential that was previously set on the BMC. This is mostly likely the previous global default credential for liquid-cooled BMCs.
-            ```bash
-            ncn-m001# curl -k -u root:OLD_DEFAULT_PASSWORD -X POST -H 'Content-Type: application/json' -d \
-            '{"ResetType": "StatefulReset"}' \
-            https://BMC_HOSTNAME/redfish/v1/Managers/BMC/Actions/Manager.Reset
-            ```
-    
-            After the StatefulReset action has been issued, the BMC will be unreachable for a few minutes as it performs the StatefulReset.
-            
-            **Important!**: If after the StatefulReset, the BMC is still using the old password, then power cycle the compute chassis slot(s).
+       Perform a StatefulReset on the liquid-cooled BMC and replace `BMC_HOSTNAME` with the hostname of the BMC. The `OLD_DEFAULT_PASSWORD` must match the credential that was previously set on the BMC. This is mostly likely the previous global default credential for liquid-cooled BMCs.
+       
+        ```bash
+        ncn-m001# curl -k -u root:OLD_DEFAULT_PASSWORD -X POST -H 'Content-Type: application/json' -d \
+        '{"ResetType": "StatefulReset"}' \
+        https://BMC_HOSTNAME/redfish/v1/Managers/BMC/Actions/Manager.Reset
+        ```
+       
+        After the StatefulReset action has been issued, the BMC will be unreachable for a few minutes as it performs the StatefulReset.
 
-### 3. Reapply BMC settings if a StatefulReset was performed on any BMC.
+ **Important!**: If after the StatefulReset, the BMC is still using the old password, then power cycle the compute chassis slot(s).
+
+### Reapply BMC settings if a StatefulReset was performed on any BMC.
+
 This section must be performed only if any liquid-cooled Node or Chassis BMCs had a StatefulReset action.
 
 1. For each liquid-cooled BMC that the StatefulReset action was applied, delete the BMC from HSM. Replace `BMC_XNAME` with the BMC xname to delete.
-    > ```bash
-    > ncn-m001# cray hsm inventory redfishEndpoints delete BMC_XNAME
-    > ```
+    ```bash
+    ncn-m001# cray hsm inventory redfishEndpoints delete BMC_XNAME
+    ```
 
 2. Restart MEDS to re-setup the NTP and Syslog configuration the RedfishEndpoints:
 
@@ -373,7 +375,7 @@ This section must be performed only if any liquid-cooled Node or Chassis BMCs ha
   __WARNING__: If an admin uses SCSD to update the SSHConsoleKey value outside of ConMan, it will disrupt the ConMan connection to the console and collection of console logs.
   Refer to "About the ConMan Containerized Service" in the _HPE Cray EX System Administration Guide 1.4 S-8001_.
 
-7. To restore passwordless SSH connections to the liquid-cooled Chassis BMCs that have had a StateFulReset action, follow the steps below for each Chassis BMC that was reset:
+7. To restore passwordless SSH connections to the liquid-cooled Chassis BMCs that have had a StatefulReset action, follow the steps below for each Chassis BMC that was reset:
 
     1. Save the public SSH key for the root user.
 

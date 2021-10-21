@@ -41,7 +41,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
    ```
 
    ```
-   # telnet fe80::a1:3e8:0%eth0.
+   # telnet fe80::a1:3e8:0%eth0
    ```
 
    - `en14` and `eth0` in these examples are the Ethernet interfaces for the laptop.
