@@ -26,7 +26,6 @@ All connections through the Istio ingress gateway require authentication with a 
 -   /service/rest
 -   /capsules/
 
-
 ### Table of Contents
 
 -   [Manage System Passwords](Manage_System_Passwords.md)
