@@ -6,7 +6,7 @@ over the PCIe cards.
 - [Switch PXE Boot from Onboard NIC to PCIe](#switch-pxe-boot-from-onboard-nic-to-pcie)
   - [Enabling UEFI PXE Mode](#enabling-uefi-pxe-mode)
     - [Mellanox](#mellanox)
-      - [Print current UEFI and SR-IOV State](#print-current-uefi-and-sr-iov-state)
+      - [Print Current UEFI and SR-IOV State](#print-current-uefi-and-sr-iov-state)
       - [Setting Expected Values](#setting-expected-values)
       - [High-Speed Network](#high-speed-network)
           - [Obtaining Mellanox Tools](#obtaining-mellanox-tools)
@@ -21,8 +21,8 @@ This presents a need for migration for systems still using the legacy, preview t
 systems with onboard connections to their leaf switches and NCNs need to disable/remove that connection.
 
 This onboard NCN port came from before spine-switches were added to the shasta-network topology. The onboard connection
-was responsible for every network (MTL/NMN/HMN/CAN) and was the sole driver of PXE booting for. Now, NCNs use bond interfaces and spine switches for those networks,
-however some older systems still have this legacy connection to their leaf switches and solely use it for PXE booting. 
+was responsible for every network (MTL/NMN/HMN/CAN) and was the sole driver of PXE booting for. Now, NCNs use bond interfaces and spine switches for those networks;
+however, some older systems still have this legacy connection to their leaf switches and solely use it for PXE booting. 
 This NIC is not used during runtime, and NCNs in this state should enable PXE within their PCIe devices' OpROMs and disable/remove this onboard connection.
 
 <a name="enabling-uefi-pxe-mode"></a>
@@ -44,7 +44,7 @@ ncn# mst start
 Now `mst status` and other commands like `mlxfwmanager` or `mlxconfig` will work, and devices required for these commands will be created in `/dev/mst`.
 
 <a name="print-current-uefi-and-sr-iov-state"></a>
-#### Print current UEFI and SR-IOV State
+#### Print Current UEFI and SR-IOV State
 
 > **UEFI:** All boots are UEFI; this needs to be enabled for access to the UEFI OpROM for configuration and for usage of UEFI firmwares.
 > **SR_IOV:** This is currently DISABLED because it can attribute to longer POSTs on HPE blades (Gen10+, i.e. DL325 or DL385) with Mellanox ConnectX-5 PCIe cards. The technology is not yet enabled for virtualization usage, but may be in the future.
