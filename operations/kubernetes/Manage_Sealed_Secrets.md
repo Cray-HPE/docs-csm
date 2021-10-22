@@ -49,23 +49,23 @@ encrypted.
 
 1. (Optional) Prevent tracked sealed secrets from being regenerated.
     
-    1. The sealed secrets not being regenerated **MUST BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets` list in `/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml` prior to executing the remaining steps in this section or in the "Generate Sealed Secrets" section of the [Prepare Site Init](../../install/prepare_site_init.md) procedure.
+    1. Remove the sealed secrets not being regenerated from the `spec.kubernetes.tracked_sealed_secrets` list in `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml` prior to executing the remaining steps in this section.
 
-    1. Retain the REDS/MEDS/RTS credentials.
+    2. Retain the REDS/MEDS/RTS credentials.
 
        ```bash
-       linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
-       linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
-       linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
+       linux# yq delete -i ./${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
+       linux# yq delete -i ./${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
+       linux# yq delete -i ./${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
        ```
 
-1. Prepare to generate sealed secrets.
+2. Prepare to generate sealed secrets.
    
    ```bash
    ncn-m001# ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
    ```
       
-1. Encrypt the static values in the customizations.yaml file after making changes.
+3. Encrypt the static values in the customizations.yaml file after making changes.
 
    The following command must be run within the site-init directory.
 
@@ -115,15 +115,21 @@ encrypted.
 ### Prevent Regeneration of Tracked Sealed Secrets
 
 In order to prevent tracked sealed secrets from being regenerated, they 
-**MUST BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets` list in
-`/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml` prior to executing the "Generate Sealed Secrets" section of the [Prepare Site Init](../../install/prepare_site_init.md) procedure.
+**MUST BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets` list in the `customizations.yaml` file prior to 
+executing the "Generate Sealed Secrets" section of the [Prepare Site Init](../../install/prepare_site_init.md) procedure.
+
+The `customizations.yaml` file will be located in one of the following locations depending
+on the state of the system: 
+
+* Fresh install location: `/mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml`
+* Post-install location: `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml`
 
 To retain the REDS/MEDS/RTS credentials:
 
 ```bash
-linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
-linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
-linux# yq delete -i /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
+linux# yq delete -i /mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
+linux# yq delete -i /mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
+linux# yq delete -i /mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
 ```
 
 
