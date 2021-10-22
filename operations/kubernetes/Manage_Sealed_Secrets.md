@@ -4,6 +4,16 @@
 
 Procedures for encrypting, decrypting, and modifying Kubernetes sealed secrets.
 
+Many of the examples in this section assume the USB stick used to install the system
+is still available. If site-init is no longer available on the USB stick and a backup
+has not been made, a new site-init will need to be created.
+
+The customizations.yaml file used in this procedure will be located in one of the following 
+locations depending on the state of the system: 
+
+* Fresh install location: `/mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml`
+* Post-install location: `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml`
+  
 
 ### Generate Sealed Secrets Post-Install
 
@@ -115,14 +125,8 @@ encrypted.
 ### Prevent Regeneration of Tracked Sealed Secrets
 
 In order to prevent tracked sealed secrets from being regenerated, they 
-**MUST BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets` list in the `customizations.yaml` file prior to 
+**MUST BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets` list in the customizations.yaml file prior to 
 executing the "Generate Sealed Secrets" section of the [Prepare Site Init](../../install/prepare_site_init.md) procedure.
-
-The `customizations.yaml` file will be located in one of the following locations depending
-on the state of the system: 
-
-* Fresh install location: `/mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml`
-* Post-install location: `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml`
 
 To retain the REDS/MEDS/RTS credentials:
 
