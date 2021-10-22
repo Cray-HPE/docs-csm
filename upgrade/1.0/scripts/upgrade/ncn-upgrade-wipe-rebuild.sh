@@ -166,6 +166,12 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+echo
+echo " ************ IMPORTANT NOTE ************"
+echo " ****** IF ANY MANUAL INTERVENTION IS REQUIRED HERE ******"
+echo " ****** STOP CURRENT SCRIPT FIRST ******"
+echo
+
 state_name="WAIT_FOR_NCN_BOOT"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
