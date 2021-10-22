@@ -98,8 +98,5 @@ The low-level network management components \(switch, DHCP service, ARP service\
 
 ![Management Network Connections - Liquid Cooled](../../img/Management_Network_Connections_Liquid_Cooled.png "Management Network Connections - Liquid Cooled")
 
-### Table of Contents
 
-* [Access to System Management Services](Access_to_System_Management_Services.md)
-* [Default IP Address Ranges](Default_IP_Address_Ranges.md)
-* [Connect to the HPE Cray EX Environment](Connect_to_the_HPE_Cray_EX_Environment.md)
+
