@@ -22,15 +22,11 @@ function update_bss_storage() {
     xName=$(ssh -q -o StrictHostKeyChecking=no $storage_node 'cat /etc/cray/xname')
     cray bss bootparameters list --name $xName --format=json | jq '.[]' > /tmp/$xName
     if ! grep -q "cray-node-exporter-1.2.2.1-1.x86_64.rpm" /tmp/$xName; then
-      sed -i '/"\/srv\/cray\/scripts\/common\/update_ca_certs.py"/a \        "zypper --no-gpg-checks in -y https://packages.local/repository/csm-sle-15sp2/x86_64/cray-node-exporter-1.2.2.1-1.x86_64.rpm"' /tmp/$xName
-      if [[ "$storage_node" =~ "ncn-s001" ]]
-      then
-        sed -i '/storage-ceph-cloudinit.sh/d' /tmp/$xName
-      else
-        sed -i 's/update_ca_certs.py\"/update_ca_certs.py\",/' /tmp/$xName
-      fi
+      jq -r 'del(.["cloud-init"]["user-data"].runcmd[] | select(. == "/srv/cray/scripts/common/storage-ceph-cloudinit.sh"))' /tmp/$xName > /tmp/$xName.modified
+      jq -r '.["cloud-init"]["user-data"].runcmd |= .+ (["zypper --no-gpg-checks in -y https://packages.local/repository/csm-sle-15sp2/x86_64/cray-node-exporter-1.2.2.1-1.x86_64.rpm"])' /tmp/$xName.modified  > /tmp/$xName.modified.tmp
+      mv /tmp/$xName.modified.tmp /tmp/$xName.modified
       echo "putting config"
-      curl -i -s -k -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" "https://api_gw_service.local/apis/bss/boot/v1/bootparameters" -X PUT -d @/tmp/$xName
+      curl -i -s -k -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" "https://api_gw_service.local/apis/bss/boot/v1/bootparameters" -X PUT -d @/tmp/$xName.modified
     fi
   done
 }
