@@ -22,6 +22,9 @@ Sealed secrets are stored in customizations.yaml as `SealedSecret` resources
 sealed secrets operator. First, those secrets must be seeded, generated, and
 encrypted.
 
+The steps in this section assume the USB stick is no longer available.
+If LDAP user federation is required, refer to [Add LDAP User Federation](../security_and_authentication/Add_LDAP_User_Federation.md).
+
 1. Prepare to customize the customizations.yaml file.
 
    If the customizations.yaml file is managed in an external Git repository (as recommended), then clone a local working tree. Replace the `<URL>` value in the following command before running it.
