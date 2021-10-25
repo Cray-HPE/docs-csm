@@ -400,6 +400,10 @@ Ceph is the utility storage platform that is used to enable pods to store persis
   * [Add Ceph OSDs](utility_storage/Add_Ceph_OSDs.md)
   * [Shrink Ceph OSDs](utility_storage/Shrink_Ceph_OSDs.md)
   * [Ceph Health States](utility_storage/Ceph_Health_States.md)
+  * [Ceph Daemon Memory Profiling](utility_storage/Ceph_Daemon_Memory_Profiling.md)
+  * [Ceph Service Check Script Usage](utility_storage/Ceph_Service_Check_Script_Usage.md)
+  * [Ceph Orchestrator Usage](utility_storage/Ceph_Orchestrator_Usage.md)
+  * [Ceph Storage Types](utility_storage/Ceph_Storage_Types.md)
   * [Dump Ceph Crash Data](utility_storage/Dump_Ceph_Crash_Data.md)
   * [Identify Ceph Latency Issues](utility_storage/Identify_Ceph_Latency_Issues.md)
   * [Cephadm Reference Material](utility_storage/Cephadm_Reference_Material.md)
@@ -413,6 +417,7 @@ Ceph is the utility storage platform that is used to enable pods to store persis
   * [Troubleshoot Pods Failing to Restart on Other Worker Nodes](utility_storage/Troubleshoot_Pods_Failing_to_Restart_on_Other_Worker_Nodes.md)
   * [Troubleshoot Large Object Map Objects in Ceph Health](utility_storage/Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)
   * [Troubleshoot Failure of RGW Health Check](utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
+  * [Troubleshooting Ceph MDS Reporting Slow Requests and Failure on Client](utility_storage/Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client.md)
 
 
 <a name="system-management-health"></a>
