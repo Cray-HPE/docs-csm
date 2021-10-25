@@ -31,7 +31,7 @@ cabinets:
   starting_id: 3000
 ```
 
-In this example file, there are two Hill cabinets that will be automatically numbered as 9000 and 9001. The Mountain cabinets appear in two groups as 1000 and 1001, and then another area in 1100 and 1101, with VLAN ids related to the cabinet number. This is one way to provide space in the cabinet IDs to allow for future expansion of the system or to identify location of a row of cabinets.  The River cabinets are contiguous in four separated IDs as 3000, 3001, 3002, and 30003..
+In this example file, there are two Hill cabinets that will be automatically numbered as 9000 and 9001. The Mountain cabinets appear in two groups as 1000 and 1001, and then another area in 1100 and 1101, with VLAN ids related to the cabinet number. This is one way to provide space in the cabinet IDs to allow for future expansion of the system or to identify location of a row of cabinets. The River cabinets are contiguous in four separated IDs as 3000, 3001, 3002, and 3003.
 
 A system with Hill cabinets can have one to four cabinet IDs. There is no limit on the number of Mountain or River cabinets.
 
