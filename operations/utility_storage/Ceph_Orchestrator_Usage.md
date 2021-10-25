@@ -8,7 +8,7 @@ The orchestrator manages Ceph clusters with the following capabilities:
 
 * Single command upgrades (assuming all images are in place)
 * Reduces the need to be on the physical server to address a large number of ceph service restarts or configuration changes
-* Better integration with the Ceph Dashboard (Coming soon)
+* Better integration with the Ceph Dashboard (coming soon)
 * Ability to write custom orchestration modules
 
 ## Troubleshoot Ceph Orchestrator
@@ -28,7 +28,7 @@ ncn-s# ceph config set mgr mgr/cephadm/log_to_cluster_level debug
 ncn-s# ceph -W cephadm --watch-debug
 ```
 
-> **NOTE:** For use with orchestration tasks, this can be typically run from a node running the ceph mon process (typically ncn-s00(1/2/3)). There may be cases where a cephadm is run locally on a host and it will be more efficient to tail /var/log/ceph/cephadm.log.
+> **NOTE:** For use with orchestration tasks, this can be typically run from a node running the ceph mon process. In most cases, this is ncn-s00(1/2/3). There may be cases where a cephadm is run locally on a host and it will be more efficient to tail `/var/log/ceph/cephadm.log`.
 
 
 
@@ -58,7 +58,7 @@ rgw.site1.zone1                3/3  6m ago     4h   ncn-s001;ncn-s002;ncn-s003;c
 **`Reference Key:`**
 
 1. PLACEMENT - Represents a service deployed on all nodes. Otherwise the listed placement is where it is expected to be deployed.
-2. NAME - The deployment name.  this is a generalized name to reference the deployment. This is being noted as additional subcommands the name is more specific to the actual deployed daemon.
+2. NAME - The deployment name. This is a generalized name to reference the deployment. This is being noted as additional subcommands the name is more specific to the actual deployed daemon.
 
 
 ### List Deployed Daemons
@@ -155,7 +155,7 @@ ncn-s003  /dev/vdc  hdd   4797e919-667e-4376-b   107G  Unknown  N/A    N/A    No
 ncn-s003  /dev/vdd  hdd   3b2c090d-37a0-403b-a   107G  Unknown  N/A    N/A    No
 ```
 
-> **IMPORTANT:** If `--wide` is used, it will give the reasons a drive is not `Available.`. This **DOES NOT** mean something is wrong. If Ceph already has the drive provisioned, there may be similar reasons.
+> **IMPORTANT:** If `--wide` is used, it will give the reasons a drive is not `Available`. This **DOES NOT** mean something is wrong. If Ceph already has the drive provisioned, there may be similar reasons.
 
 
 

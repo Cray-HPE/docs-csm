@@ -98,3 +98,5 @@ This procedure requires administrative privileges.
     ```bash
     ncn-m001# ceph -s
     ```
+
+

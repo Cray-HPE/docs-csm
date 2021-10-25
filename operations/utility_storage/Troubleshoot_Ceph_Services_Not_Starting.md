@@ -1,9 +1,10 @@
-# Troubleshoot Ceph services not starting after a server crash
+# Troubleshoot Ceph Services Not Starting After a Server Crash
 
 ## Issue
+
 There is a known issue where the Ceph container images will not start after a power failure or server component failure that causes the server to crash and not boot back up
 
-There will be a message like this in the journalctl logs for the ceph services on the machine that crashed
+There will be a message similar to the following in the journalctl logs for the Ceph services on the machine that crashed:
 
 `ceph daemons will not start due to: Error: readlink /var/lib/containers/storage/overlay/l/CXMD7IEI4LUKBJKX5BPVGZLY3Y: no such file or directory`
 
@@ -11,19 +12,19 @@ When the issue materializes, then it is highly likely the Ceph container images 
 
 ## Fix
 
-1. Remove the corrupted images
+1. Remove the corrupted images.
 
    ```bash
    for i in $(podman images|grep -v REPO|awk {'print $1":"$2'}); do podman image rm $i; done
    ```
 
-1. Reload the images
+1. Reload the images.
 
    ```bash
    /srv/cray/scripts/common/pre-load-images.sh
    ```
 
-1. Validate services are starting
+1. Validate that the services are starting.
 
    ```bash
    ncn-s00(1/2/3)# ceph orch ps
@@ -70,10 +71,11 @@ When the issue materializes, then it is highly likely the Ceph container images 
    rgw.site1.zone1.ncn-s003.lsmzng  ncn-s003  running (94m)  2m ago     94m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  0a5f56e8fc98
    ```
 
-   At this point the processes starting/running on the node that crashed, this may take a few minutes
+   At this point, the processes are starting/running on the node that crashed; this may take a few minutes.
 
-   If after 5 mins the service are still reporting down then fail-over the ceph mgr daemon and recheck the daemons
+   If after five mins the services are still reporting down, then fail-over the ceph mgr daemon and re-check the daemons:
 
    ```bash
    ceph mgr fail $(ceph mgr dump | jq -r .active_name)
    ```
+
