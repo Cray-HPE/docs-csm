@@ -8,7 +8,7 @@ Troubleshoot the Ceph health detail reporting down OSDs. Ensuring that OSDs are 
 
 This procedure requires admin privileges.
 
-### Procedure
+## Procedure
 
 1. Identify the down OSDs.
 
@@ -25,35 +25,37 @@ This procedure requires admin privileges.
     16    ssd   3.49309          osd.16       down   1.00000  1.00000
     ```
 
-   Option 1
+1. Restart the down OSDs.
+   
+   * **Option 1:**
 
-   1. Restart the OSD utilizing `ceph orch`
-
-    ```bash
-    ncn-m/s00(1/2/3)# ceph orch daemon restart osd.<number>
-    ```
-
-   Option 2
-
-   1. Check the logs for the OSD that is down.
-
-      Use the OSD number for the down OSD returned in the command above.
+     1. Restart the OSD utilizing `ceph orch`
 
       ```bash
-      ncn-m/s(001/2/3)# ceph osd find OSD_ID
+      ncn-m/s00(1/2/3)# ceph orch daemon restart osd.<number>
       ```
 
-   1. Manually restart the OSD.
+   * **Option 2:**
 
-      This step `must be done on the node with the reported down OSD.`
+     1. Check the logs for the OSD that is down.
 
-       ```bash
-       ncn-s# ceph orch daemon restart osd.<number>
-       ```
+        Use the OSD number for the down OSD returned in the command above.
+
+        ```bash
+        ncn-m/s(001/2/3)# ceph osd find OSD_ID
+        ```
+
+     2. Manually restart the OSD.
+
+        This step `must be done on the node with the reported down OSD.`
+
+         ```bash
+         ncn-s# ceph orch daemon restart osd.<number>
+         ```
 
     **Troubleshooting:** If the service is not restarted with `ceph orch`, restart it using [Manage Ceph Services](Manage_Ceph_Services.md)
 
-1. Verify the OSDs are running again.
+2. Verify the OSDs are running again.
 
     ```bash
     # ceph osd tree down
