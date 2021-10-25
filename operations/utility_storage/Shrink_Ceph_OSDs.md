@@ -1,4 +1,4 @@
-## Shrink Ceph OSDs
+# Shrink Ceph OSDs
 
 This procedure describes how to remove an OSD\(s\) from a Ceph cluster. Once the OSD is removed, the cluster is also rebalanced to account for the changes. Use this procedure to reduce the size of a cluster or to replace hardware.
 

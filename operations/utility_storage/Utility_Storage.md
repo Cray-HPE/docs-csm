@@ -9,7 +9,6 @@ Ceph is the utility storage platform that is used to enable pods to store persis
 **IMPORTANT NOTES:**
 
 - Commands for Ceph health must be run from either ncn-m or ncn-s001/2/3 unless they are otherwise specified to run on the host in question. 
-
 - ncn-m and ncn-s001/2/3 are the only servers with the credentials. Individual procedures will specify when to run a command from a node other than those.
 
 
