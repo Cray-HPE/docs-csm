@@ -22,7 +22,7 @@ The commands in this procedure should be run from a master NCN (unless otherwise
 
    During normal installs, the initial artifacts (docker images and helm charts) are available on `ncn-m001` in `/mnt/pitdata` after it has been rebooted out of `PIT` mode. The administrator may need to re-mount this volume (first step below):
 
-   1. Re-mount the volume
+   1. Re-mount the volume.
       
       ```bash
       ncn-m001# mount -vL PITDATA /mnt/pitdata
@@ -34,12 +34,14 @@ The commands in this procedure should be run from a master NCN (unless otherwise
       ncn-m001# ls /mnt/pitdata/csm-0.9.4/helm/*nexus*
       /mnt/pitdata/csm-0.9.4/helm/cray-nexus-0.6.0.tgz <-- this is the helm chart to use
       ```
+   
    1. Find the Nexus manifest to use.
       
       ```bash
       ncn-m001# ls /mnt/pitdata/csm-0.9.4/manifests/nexus.yaml
       /mnt/pitdata/csm-0.9.4/manifests/nexus.yaml <-- this is the manifest to use
       ```
+      
       >**NOTE:** Do not proceed with further steps until these two files are located, as they are necessary to re-install the helm chart after deletion.
 
 1. Uninstall the Nexus helm chart.

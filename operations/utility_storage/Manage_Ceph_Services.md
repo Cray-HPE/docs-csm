@@ -2,7 +2,7 @@
 
 The following commands are required to start, stop, or restart Ceph services. Restarting Ceph services is helpful for troubleshoot issues with the utility storage platform.
 
-## List Ceph services
+## List Ceph Services
 
 ```bash
 ncn-s00(1/2/3)# ceph orch ps
@@ -219,7 +219,7 @@ Two SSH sessions are required. One to do the work from and another that is runni
 
      (Optional) Limit the results.
        
-      ceph orch [<service_type>] [<service_name>] [--export] [plain|json|json-pretty|yaml] [--refresh]
+      Syntax: `ceph orch [<service_type>] [<service_name>] [--export] [plain|json|json-pretty|yaml] [--refresh]`
 
       ```bash
       ncn-s001# ceph orch ls mgr
@@ -298,7 +298,7 @@ Two SSH sessions are required. One to do the work from and another that is runni
 
   6. When the Ceph status output shows there are 3 running mgr daemons, scale the last daemon back down and up.
       
-     **IF it is the MDS or MGR daemons, then REMEMBER we have to fail over the active daemon.**
+     **If it is the MDS or MGR daemons, then REMEMBER we have to fail over the active daemon.**
 
       ```bash
       ncn-s001# ceph mgr fail ncn-s002.fumzfm   # This was our active MGR.
