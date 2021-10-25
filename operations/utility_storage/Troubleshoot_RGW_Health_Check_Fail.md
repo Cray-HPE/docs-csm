@@ -1,12 +1,12 @@
 # Troubleshoot if RGW Health Check Fails
 
-Use this procedure to determine why the rgw health check failed and what needs to be fixed.
+Use this procedure to determine why the RGW health check failed and what needs to be fixed.
 
 ## Procedure
 
 In the goss test output, look at the value of `x` in `Expected \< int \>: x` (possible values are 1, 2, 3, 4, 5). Based on the value, navigate to the corresponding numbered item below for troubleshooting this issue.
 
-Optional: Manually run the rgw health check script to see descriptive output.
+(Optional) Manually run the rgw health check script to see descriptive output.
 
 ```bash
 ncn-m001# GOSS_BASE=/opt/cray/tests/install/ncn /opt/cray/tests/install/ncn/scripts/rgw_health_check.sh
@@ -83,4 +83,5 @@ ncn-m001# GOSS_BASE=/opt/cray/tests/install/ncn /opt/cray/tests/install/ncn/scri
     ```
 
     If Ceph reports any status other than "HEALTH_OK", refer to [Utility Storage](Utility_Storage.md) for general Ceph troubleshooting.
+
 

@@ -16,7 +16,7 @@ This procedure requires admin privileges.
 
    - See [Manage_Ceph_Service](Manage_Ceph_Services.md) for more information.
 
-    If more than three storage nodes exist, check the output of `ceph orch ps` for more information
+    If more than three storage nodes exist, check the output of `ceph orch ps` for more information.
 
 1. Check ceph-mon logs to see if the cluster is out of quorum.
 

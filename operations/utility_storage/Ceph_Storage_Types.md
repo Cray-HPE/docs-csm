@@ -172,3 +172,4 @@ To remove a specific bucket:
 ```bash
 ncn-m001# radosgw-admin bucket rm --bucket-name BUCKET_NAME
 ```
+
