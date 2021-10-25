@@ -1,14 +1,15 @@
-name: Backport
-
+name: backport
+ 
 on:
   pull_request:
     types:
       - closed
       - labeled
+      - unlabeled
 
 jobs:
   backport:
+    name: "${{ github.event.action == 'closed' && 'backport' || 'dry run' }}"
     runs-on: self-hosted
-    name: Backport closed pull request
     steps:
-    - uses: Cray-HPE/backport-action@v1
+      - uses: Cray-HPE/backport-action@v3
