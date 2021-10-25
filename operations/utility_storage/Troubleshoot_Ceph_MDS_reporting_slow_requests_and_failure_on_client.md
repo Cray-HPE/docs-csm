@@ -1,6 +1,6 @@
 # Troubleshooting Ceph MDS Reporting Slow Requests and Failure on Client
 
-Use this procedure to troubleshoot Ceph MDS reporting slow requests after following the [Identify_Ceph_Latency_Issues](Identify_Ceph_Latency_Issues.md) procedure.
+Use this procedure to troubleshoot Ceph MDS reporting slow requests after following the [Identify Ceph Latency Issues](Identify_Ceph_Latency_Issues.md) procedure.
 
 > **IMPORTANT:** This procedure includes a mix of commands that need to be run on the host(s) running the MDS daemon(s) and other commands that can be run from any of the ceph-mon nodes.
 
@@ -19,7 +19,7 @@ Use this procedure to troubleshoot Ceph MDS reporting slow requests after follow
 1. Identify the active MDS.
 
    ```bash
-   ncn-s00(1/2/3):~ # ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name'
+   ncn-s00(1/2/3)# ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name'
    cephfs.ncn-s003.ihwkop
    ```
 
@@ -28,7 +28,7 @@ Use this procedure to troubleshoot Ceph MDS reporting slow requests after follow
 3. Enter into a cephadm shell.
 
    ```bash
-   ncn-s003:~ # cephadm shell
+   ncn-s003# cephadm shell
    Inferring fsid 7350865a-0b21-11ec-b9fa-fa163e06c459
    Inferring config /var/lib/ceph/7350865a-0b21-11ec-b9fa-fa163e06c459/mon.ncn-s003/config
    Using recent ceph image arti.dev.cray.com/third-party-docker-stable-local/ceph/   ceph@sha256:70536e31b29a4241999ec4fd13d93e5860a5ffdc5467911e57e6bf04dfe68337
