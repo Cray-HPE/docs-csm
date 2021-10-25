@@ -9,7 +9,7 @@ Use this procedure to troubleshoot Ceph MDS reporting slow requests after follow
 
 ## Prerequisites
 
-* The [Identify_Ceph_Latency_Issues](Identify_Ceph_Latency_Issues.md) procedure has been completed.
+* The [Identify Ceph Latency Issues](Identify_Ceph_Latency_Issues.md) procedure has been completed.
 * This issue has been encountered and this page is being used as a reference for commands.
 * The correct version of the documentation for the cluster running is being used.
 

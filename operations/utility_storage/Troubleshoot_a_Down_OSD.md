@@ -31,9 +31,9 @@ This procedure requires admin privileges.
 
      1. Restart the OSD utilizing `ceph orch`
 
-      ```bash
-      ncn-m/s00(1/2/3)# ceph orch daemon restart osd.<number>
-      ```
+        ```bash
+        ncn-m/s00(1/2/3)# ceph orch daemon restart osd.<number>
+        ```
 
    * **Option 2:**
 
@@ -47,7 +47,7 @@ This procedure requires admin privileges.
 
      2. Manually restart the OSD.
 
-        This step `must be done on the node with the reported down OSD.`
+        This step **must be done on the node with the reported down OSD.**
 
          ```bash
          ncn-s# ceph orch daemon restart osd.<number>
