@@ -36,13 +36,14 @@ Results may vary if an unconfigured switch is being used.
 
     In order to find the ports of the BMCs, cross reference the HMN tab of the SHCD.
 
-    > Syntax is for Onyx and Dell EMC devices - please reference the CLI for more information (press `?` or `tab` to assist on-the-fly).
+    > Please reference the CLI for more information (press `?` or `tab` to assist on-the-fly).
 
     Print using the VLAN ID:
-
+    
+    DellOS 10
     ```bash
     # DellOS 10
-    sw-leaf-001# show mac address-table vlan 4 | except 1/1/52
+    sw-leaf-001# show mac address-table vlan 4
     VlanId	Mac Address		Type		Interface
     4	00:1e:67:98:fe:2c	dynamic		ethernet1/1/11
     4	a4:bf:01:38:f0:b1	dynamic		ethernet1/1/27
@@ -54,18 +55,56 @@ Results may vary if an unconfigured switch is being used.
     4	a4:bf:01:48:20:57	dynamic		ethernet1/1/29
     4	a4:bf:01:4d:d9:9a	dynamic		ethernet1/1/32
     ```
+    Aruba AOS-CX
+    ```bash
+    # Aruba AOS-CX 
+    sw-leaf-bmc-001# show mac-address-table vlan 4 
+    MAC age-time            : 300 seconds
+    Number of MAC addresses : 21
+
+    MAC Address          VLAN     Type                      Port
+    --------------------------------------------------------------
+    b4:2e:99:df:f3:61    4        dynamic                   1/1/36
+    b4:2e:99:df:ec:f1    4        dynamic                   1/1/35
+    b4:2e:99:df:ec:49    4        dynamic                   1/1/33
+    94:40:c9:37:04:84    4        dynamic                   1/1/26
+    94:40:c9:35:03:06    4        dynamic                   1/1/27
+    94:40:c9:37:0a:2a    4        dynamic                   1/1/29
+    94:40:c9:37:67:60    4        dynamic                   1/1/43
+    94:40:c9:37:67:80    4        dynamic                   1/1/37
+    94:40:c9:37:77:26    4        dynamic                   1/1/31
+    94:40:c9:37:77:b8    4        dynamic                   1/1/28
+    94:40:c9:37:87:5a    4        dynamic                   1/1/30
+    94:40:c9:37:f9:b4    4        dynamic                   1/1/25
+    b4:2e:99:df:eb:c1    4        dynamic                   1/1/34
+    ```
 
     Print using the interface and trunk:
-
+    
+    DellOS 10
     ```bash
     # DellOS 10
     sw-leaf-001# show mac address-table interface ethernet 1/1/32
     VlanId	Mac Address		Type		Interface
     4	a4:bf:01:4d:d9:9a	dynamic		ethernet1/1/32
     ```
+    Aruba AOS-CX
+    ```bash
+    # Aruba AOS-CX
+    sw-leaf-bmc-001# show mac-address-table port
+      PORTS  List of Ports [e.g. 1/1/1 or 1/1/1-1/1/3 or lag1]
+    sw-leaf-bmc-001# show mac-address-table port 1/1/36
+    MAC age-time            : 300 seconds
+    Number of MAC addresses : 1
+
+    MAC Address          VLAN     Type                      Port
+    --------------------------------------------------------------
+    b4:2e:99:df:f3:61    4        dynamic                   1/1/36
+    ```
 
     Print everything:
-
+    
+    DellOS 10
     ```bash
     # DellOS 10
     sw-leaf-001# show mac address-table
@@ -74,6 +113,17 @@ Results may vary if an unconfigured switch is being used.
     ....
     # Onyx and Aruba
     sw-leaf-001# show mac-address-table
+    ```
+    Aruba AOS-CX
+    ```bash
+    # Aruba AOS-CX
+    sw-leaf-bmc-001# show mac-address-table
+    MAC age-time            : 300 seconds
+    Number of MAC addresses : 52
+
+    MAC Address          VLAN     Type                      Port
+    --------------------------------------------------------------
+    ec:eb:b8:3d:89:41    1        dynamic                   1/1/42
     ```
 
 1. Ensure the management NCNs are present in the ncn_metadata.csv file.
