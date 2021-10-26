@@ -5,7 +5,7 @@
 
 PowerDNS replaces the CoreDNS server that earlier versions of CSM used to provide External DNS services.
 
-The `cray-dns-powerdns-can-tcp` and `cray-dns-powerdns-can-udp` LoadBalancer resources are configured to service external DNS requests using the IP address specified by the CSI `--can-external-dns` command line argument.
+The `cray-dns-powerdns-can-tcp` and `cray-dns-powerdns-can-udp` LoadBalancer resources are configured to service external DNS requests using the IP address specified by the CSI `--cmn-external-dns` command line argument.
 
 The CSI `--system-name` and `--site-domain` command line arguments are combined to form the subdomain used for External DNS.
 
@@ -121,7 +121,7 @@ zone "8.101.10.in-addr.arpa" {
   file "/var/lib/bind/db.8.101.10.in-addr.arpa";
 };
 ```
-`masters` should be set to the CAN IP address of the PowerDNS service. This is typically defined at install time by the `--can-external-dns` CSI option.
+`masters` should be set to the CMN IP address of the PowerDNS service. This is typically defined at install time by the `--cmn-external-dns` CSI option.
 
 `allow-notify` should contain the CAN IP addresses of all Kubernetes worker nodes.
 
