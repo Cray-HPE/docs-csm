@@ -312,6 +312,9 @@ Mechanisms used by the system to ensure the security and authentication of inter
       *   [Update NCN Passwords](security_and_authentication/Update_NCN_Passwords.md)
       *   [Change Root Passwords for Compute Nodes](security_and_authentication/Change_Root_Passwords_for_Compute_Nodes.md)
       *   [Change NCN Image Root Password and SSH Keys](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
+      *   [Change EX Liquid-Cooled Cabinet Global Default Password](security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
+      *   [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](security_and_authentication/Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md)
+      *   [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
    *   [SSH Keys](security_and_authentication/SSH_Keys.md)
    *   [Authenticate an Account with the Command Line](security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md)
    *   [Default Keycloak Realms, Accounts, and Clients](security_and_authentication/Default_Keycloak_Realms_Accounts_and_Clients.md)
@@ -598,7 +601,7 @@ The central DNS infrastructure provides the structural networking hierarchy and 
   * [Manage the DNS Unbound Resolver](network/dns/Manage_the_DNS_Unbound_Resolver.md)
   * [Enable ncsd on UANs](network/dns/Enable_ncsd_on_UANs.md)
   * [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
-  * [Troubleshoot DNS Configuration Issues](network/dns/Troubleshoot_DNS_Configuration_Issues.md)
+  * [Troubleshoot PowerDNS](network/dns/Troubleshoot_PowerDNS.md)
 
 
 <a name="external-dns"></a>
