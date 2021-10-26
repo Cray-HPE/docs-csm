@@ -197,7 +197,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
     If active sessions are running, either wait for them to complete or cancel the session. See the following step.
 
-7. Cancel a running BOS sessions.
+7. Cancel the running BOS sessions.
 
     1.   Identify the BOS Sessions and associated BOA Kubernetes jobs to delete.
 
@@ -210,7 +210,7 @@ An authentication token is required to access the API gateway and to use the `sa
          ```bash
          #! /bin/bash
          # List all of the BOS sessions. Look for ones whose status says they are
-	 # not complete, i.e. still running.
+         # not complete, i.e. still running.
          # Output the BOA Job ID for each BOS Session that is still running.
          for ID in $(cray bos session list --format json | jq .[] | tr -d \"); do
              result=$(cray bos session status list --format json $ID | jq .metadata.complete)
