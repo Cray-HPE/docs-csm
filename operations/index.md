@@ -614,7 +614,7 @@ External DNS, along with the Customer Access Network \(CAN\), Border Gateway Pro
   * [External DNS](network/external_dns/External_DNS.md)
   * [External DNS csi config init Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
   * [Update the system-name.site-domain Value Post-Installation](network/external_dns/Update_the_system-name_site-domain_Value_Post-Installation.md)
-  * [Update the can-external-dns Value Post-Installation](network/external_dns/Update_the_can-external-dns_Value_Post-Installation.md)
+  * [Update the cmn-external-dns Value Post-Installation](network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md)
   * [Ingress Routing](network/external_dns/Ingress_Routing.md)
   * [Add NCNs and UANs to External DNS](network/external_dns/Add_NCNs_and_UANs_to_External_DNS.md)
   * [External DNS Failing to Discover Services Workaround](network/external_dns/External_DNS_Failing_to_Discover_Services_Workaround.md)
