@@ -1,50 +1,47 @@
-# Stage 5 - Workaround for known mac-learning issue with 8325.
+# Stage 5 - Workaround for MAC-learning issue with Aruba 8325 switches
 
 Issue description:
 
 > **Aruba CR:**          90598
 >
-> **Affected platform:** 8325
+> **Affected platform:** Aruba 8325 switches
 >
->**Symptom:**           MAC learning stops.
+> **Symptom:**           MAC learning stops
 >
->**Scenario:**          Under extremely rare DMA stress conditions, anL2 learning threadmay     timeout and exit preventing future MAC learning.
+> **Scenario:**          Under extremely rare DMA stress conditions, an L2 learning thread may timeout and exit, preventing future MAC learning
 >
->**Workaround:**        Reboot the switch or monitor the L2 thread and restart it with anNAE     script
+> **Workaround:**        Reboot the switch or monitor the L2 thread and restart it with an NAE script
 >
->**Fixed in:**        10.06.0130, 10.7.0010 and above.
+> **Fixed in:**        10.06.0130, 10.7.0010, and above
 >
 > [Aruba release notes](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches;productSeries=Aruba%208325%20Switch%20Series)
 
-`To fix the issue without upgrading software:`
+## Overview
 
- > You can run a NAE script on the 8325 platform switches to resolve mac learning issue.
+**`NOTE:`** If you do not have Aruba 8325 switches in your system, skip this stage and [return to main upgrade page](README.md).
 
-`The file locations in doc-csm`
+You can run the NAE script on the 8325 platform switches to resolve a MAC learning issue. An install script is provided to automate this process.
 
-- The NAE script (L2X-Watchdog-creates-bash-script.py) is located at: ../docs-csm/upgrade/1.0/    scripts/aruba
-- Automatic NAE install script (nae_upload.py) is located at: ../docs-csm/upgrade/1.0/scripts/aruba
+The file locations:
+* NAE script: [scripts/aruba/L2X-Watchdog-creates-bash-script.py](scripts/aruba/L2X-Watchdog-creates-bash-script.py)
+* Automatic NAE install script: [scripts/aruba/nae_upload.py](scripts/aruba/nae_upload.py)
 
-`Automated install of NAE script`
+## Prerequisites
 
-Prerequisites:
+* You have an 8325 in your setup that is running software version below 10.06.0130.
+* Additionally, the install script used in this procedure makes the following assumptions:
+	* The switches (and their IP addresses) are in the `/etc/hosts` file with hostnames containing the string "sw".
+	* You are using default username `admin` for the switches.
+	* All of the switches use the same password for the `admin` user (the install script will prompt you for the password).
 
-1. The nae-upload.py script relies on /etc/hosts file to pull IP addresses of the switch. Without this information the script will not run.
-2. You have 8325 in your setup that is running software version below 10.06.0130.
-3. Script assumes you  are using default username "admin"  for the switch and it will prompt you for password.
+## Procedure
 
-**`NOTE:`** The nae-upload script automatically detects 8325's and only applies the fix to this platform.
+1. Run the NAE install script:
 
-**How to run the install script:**
-
-**Step 1:**
-
-```bash
-ncn-m002:~ # /usr/share/doc/csm/upgrade/1.0/scripts/aruba/nae_upload.py
-```
-
-**step 2:**
-
-> Type in your switch password and the script will upload and enable the NAE script.
+	```bash
+	ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/aruba/nae_upload.py
+	```
+	
+1. Type in your switch password and the script will upload and enable the NAE script.
 
 [Return to main upgrade page](README.md)

@@ -1,6 +1,6 @@
 # Stage 0 - Prerequisites and Preflight Checks
 
-> **NOTE:** CSM-0.9.4 or CSM-0.9.5 is the version of CSM required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
+> **NOTE:** CSM-0.9.4 or later CSM 0.9.x is required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
 >
 > **NOTE:** Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 > 1.0.0-beta.19.
 >
@@ -78,30 +78,32 @@ Perform these steps to update `customizations.yaml`:
 
 ## Stage 0.3 - Execute Prerequisites Check
 
-1. Run check script:
+Run check script:
 
-    * Internet Connected
+* Internet Connected
 
-        ```bash
-        ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
-        ```
+    ```bash
+    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
+    ```
 
-        **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default.
+    **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default.
 
-    * Air Gapped
+* Air Gapped
 
-        ```bash
-        ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
-        ```
+    ```bash
+    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
+    ```
 
-**`IMPORTANT:`** If any errors are encountered then potential fixs should be displayed where the error occurred. `IF` the upgrade prequesites.sh script does not provide guidance, then open a support ticket for guidance before proceeding.
-
-2. The script also runs the goss tests on the initial stable node (typically `ncn-m001`) where the latest version of CSM has been installed. Make sure the goss test pass before continue.
+**`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. **IF** the upgrade `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
 
 ## Stage 0.4 - Backup VCS Data
 
-To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location.  See [Version_Control_Service_VCS.md](../../operations/configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data) for these procedures.
+To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location. See [Version_Control_Service_VCS.md](../../operations/configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data) for these procedures.
 
-**`IMPORTANT:`** As Part of this stage, only perform the backup steps.  `Only execute the restore if necessary.`  You will not always restore after a backup as we callout the backup procedure as a precautionary step.
+**`IMPORTANT:`** As part of this stage, **only perform the backup, not the restore**. The backup procedure is being done here as a precautionary step.
 
-Once the above steps have been completed please proceed to [Stage 1](Stage_1.md)
+## Stage 0.5 - Backup Workload Manager Data
+
+To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`.  The resulting back-up data should be stored in a safe location off of the system.
+
+Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).

@@ -58,7 +58,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
   To insert an `ethernetInterfaces` entry using curl:
 
   ```bash
-  ncn-m001:# while read  PAYLOAD ; do curl -H "Authorization: Bearer $MY_TOKEN" -L -X POST 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "$(echo $PAYLOAD | jq -c '{ComponentID: .xname,Description: .Desc,MACAddress: .MAC,IPAddress: .IP}')";sleep 5;  done < x9000c3s1.json
+  ncn-m001:# while read  PAYLOAD ; do curl -H "Authorization: Bearer $MY_TOKEN" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "$(echo $PAYLOAD | jq -c '{ComponentID: .xname,Description: .Desc,MACAddress: .MAC,IPAddress: .IP}')";sleep 5;  done < x9000c3s1.json
   ```
 
 - The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
@@ -146,7 +146,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 #### Record MAC and IP addresses for nodes
 
-**IMPORTANT**: Record the node management network (NMN) MAC and IP addresses for each node in the blade (labeled `Node Maintenance Network`).  To prevent disruption in the data virtualization service (DVS), these addresses must be maintained in the HSM when the blade is swapped and discovered.
+**IMPORTANT**: Record the node management network (NMN) MAC and IP addresses for each node in the blade (labeled `Node Maintenance Network`). To prevent disruption in the data virtualization service (DVS), these addresses must be maintained in the HSM when the blade is swapped and discovered.
 
 The hardware management network MAC and IP addresses are assigned algorithmically and *must not be deleted* from the HSM.
 
@@ -287,11 +287,11 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
 #### Record the NIC MAC and IP addresses
 
-**IMPORTANT**: Record the ComponentID, MAC, and IP addresses for each node in the blade in the destination system.  To prevent disruption in the data virtualization service (DVS), these addresses must be maintained in the HSM when the replacement blade is swapped and discovered.
+**IMPORTANT**: Record the ComponentID, MAC, and IP addresses for each node in the blade in the destination system. To prevent disruption in the data virtualization service (DVS), these addresses must be maintained in the HSM when the replacement blade is swapped and discovered.
 
 The hardware management network NIC MAC addresses for liquid-cooled blades are assigned algorithmically and *must not be deleted* from the HSM.
 
-19. Query HSM to determine the ComponentID, MAC, and IP addresses associated with nodes in the destination blade.  The prerequisites show an example of how to gather HSM values and store them to a file.
+19. Query HSM to determine the ComponentID, MAC, and IP addresses associated with nodes in the destination blade. The prerequisites show an example of how to gather HSM values and store them to a file.
 
     ```bash
     ncn-m001# cray hsm inventory ethernetInterfaces list \
@@ -395,7 +395,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     ```
 
     ```bash
-    ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw '{
+    ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw '{
             "Description": "Node Maintenance Network",
             "MACAddress": "$MAC",
             "IPAddress": "$IP_ADDRESS",
@@ -415,7 +415,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     To change or correct a curl command that has been entered, use a PATCH request, for example:
 
     ```bash
-    ncn-m001# curl -k -H "Authorization: Bearer $TOKEN" -L -X PATCH \ 'https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/0040a68350a4' -H 'Content-Type: application/json'  --data-raw '{"MACAddress":"xx:xx:xx:xx:xx:xx","IPAddress":"10.xxx.xxx.xxx","ComponentID":"XNAME"}'
+    ncn-m001# curl -k -H "Authorization: Bearer $TOKEN" -L -X PATCH \ 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/0040a68350a4' -H 'Content-Type: application/json'  --data-raw '{"MACAddress":"xx:xx:xx:xx:xx:xx","IPAddress":"10.xxx.xxx.xxx","ComponentID":"XNAME"}'
     ```
 
 29. Repeat the preceding command for each node in the blade.
@@ -524,19 +524,24 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     LastDiscoveryStatus = "DiscoverOK"
     ```
 
-37. Enable each node individually in the HSM database.
+37. Enable the nodes in the HSM database.
 
     ```bash
-    ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0b0n0
-    ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0b0n1
-    ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0b1n0
-    ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0b1n1
+    ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
-38. Verify that the nodes are enabled in the HSM. This command must be run for each node in the blade.
+38. Verify that the nodes are enabled in the HSM.
 
     ```bash
-    ncn-m001# cray hsm state components describe x1005c3s0b0n0
+    ncn-m001# cray hsm state components query create --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+    [[Components]]
+    ID = x1005c3s0b0n0
+    Type = "Node"
+    Enabled = true
+    State = "Off"
+    . . .
+    [[Components]]
+    ID = x1005c3s0b1n1
     Type = "Node"
     Enabled = true
     State = "Off"
@@ -571,7 +576,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
 #### Check DVS
 
-There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their waiter, and at least one cray-cps-cm-pm pod.  Usually there are two cray-cps-cm-pm pods, one on ncn-w002 and one on ncn-w003 and other worker nodes
+There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their waiter, and at least one cray-cps-cm-pm pod. Usually there are two cray-cps-cm-pm pods, one on ncn-w002 and one on ncn-w003 and other worker nodes
 
 42. Check the cray-cps pods on worker nodes and verify they are `Running`.
 
@@ -586,7 +591,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     services   cray-cps-wait-for-etcd-jb95m 0/1  Completed
     ```
 
-43. SSH to each worker node running CPS/DVS, and run  `dmesg -T`  to ensure that there are no recurring `"DVS: merge_one" ` error messages as shown.  The error messages indicate that DVS is detecting an IP address change for one of the client nodes.
+43. SSH to each worker node running CPS/DVS, and run  `dmesg -T`  to ensure that there are no recurring `"DVS: merge_one" ` error messages as shown. The error messages indicate that DVS is detecting an IP address change for one of the client nodes.
 
     ```bash
     ncn-m001# dmesg -T | grep "DVS: merge_one"

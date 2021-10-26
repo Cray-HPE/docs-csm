@@ -23,7 +23,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.
 
 > NOTE: Run the script once each for all worker nodes. Follow output of above script carefully. The script will pause for manual interaction.
 
-> NOTE: It is expected that some pods may be in bad state during a worker node upgrade. This is due to a temporary lack of computing resources during a worker upgrade. Once the worker node has been upgraded and rejoined cluster, those pods will be up and running again. All critical services have more than one replica so if one pod is down, the service is still available.
+> NOTE: It is expected that some pods may be in bad states during a worker node upgrade. This is due to a temporary lack of computing resources during a worker upgrade. Once the worker node has been upgraded and has rejoined the cluster, those pods will be up and running again. All critical services have more than one replica so that if one pod is down, the service is still available.
 
 ## Stage 3.3
 
@@ -83,6 +83,14 @@ ncn-m002# pdsh -b -S -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n'
 ```
 
 > **`NOTE`**: kubelet has been upgraded already so you can ignore the warning to upgrade kubelet
+
+## Stage 3.5
+
+Run the following command cleanup several prometheus alert configurations:
+
+```bash
+ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-clean-kube-alerts.sh
+```
 
 <a name="deploy-manifests"></a>
 

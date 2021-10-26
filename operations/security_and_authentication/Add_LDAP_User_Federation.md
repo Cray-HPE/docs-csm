@@ -23,9 +23,11 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
    If there is not a backup of site-init, perform the following steps to create a new one using the values stored in the Kubernetes cluster.
 
-   1. Create a new site-init directory using from the CSM tarball.
+   1. Create a new site-init directory using the CSM tarball.
 
-      Determine the location of the initial install tarball and set ${CSM_DISTDIR} accordingly.
+      Determine the location of the initial unpacked install tarball and set ${CSM_DISTDIR} accordingly.
+
+      > **NOTE:** If the unpacked set of CSM directories was copied, no untar action is required. If the tarball tgz file was copied, the command to unpack it is `tar -zxvf CSM_RELEASE.tar.gz`. Replace the *CSM_RELEASE* value before running the command to unpack the tarball.
 
       ```bash
       ncn-m001# cp -r ${CSM_DISTDIR}/shasta-cfg/* /root/site-init
@@ -49,7 +51,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
 2. Repopulate the keycloak_users_localize and cray-keycloak Sealed Secrets in the customizations.yaml file with the desired configuration.
 
-   Update the LDAP settings with the desired configuration. LDAP connection information 
+   Update the LDAP settings with the desired configuration. LDAP connection information
    is stored in the keycloak-users-localize Secret in the customizations.yaml file.
 
    -   The ldap_connection_url key is required and is set to an LDAP URL.
@@ -89,7 +91,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
      The example above puts an empty certs.jks in the cray-keycloak Sealed Secret.
      The next step will generate certs.jks.
 
-     Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file. 
+     Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file.
         
      The fields are as follows:
 
@@ -261,7 +263,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
 3. (Optional) Add the LDAP CA certificate in the certs.jks section of customizations.yaml.
    
-   If LDAP requires TLS (recommended), update the `cray-keycloak` Sealed 
+   If LDAP requires TLS (recommended), update the `cray-keycloak` Sealed
    Secret value by supplying a base64 encoded Java KeyStore (JKS) that
    contains the CA certificate that signed the LDAP server's host key. The
    password for the JKS file must be `password`.
@@ -278,15 +280,32 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
         ```
 
-        **Troubleshooting:** If the output shows the skopeo.tar file cannot be found, ensure that the $CSM_DISTDIR directory looks correct, and contains the `dtr.dev.cray.com` directory that includes the originally installed docker images.
+        **Troubleshooting:**
+        
+        * If the output shows the skopeo.tar file cannot be found, ensure that the $CSM_DISTDIR directory looks correct, and contains the `dtr.dev.cray.com` directory that includes the originally installed docker images.
 
-        The following is an example of the skopeo.tar file not being found:
+          The following is an example of the skopeo.tar file not being found:
 
-        ```bash
-        ++ podman load -q -i ./hack/../vendor/skopeo.tar
-        ++ sed -e 's/^.*: //'
-        + SKOPEO_IMAGE=
-        ```
+          ```bash
+          ++ podman load -q -i ./hack/../vendor/skopeo.tar
+          ++ sed -e 's/^.*: //'
+          + SKOPEO_IMAGE=
+          ```
+
+        * If the following overlay error is returned, it could be caused by an earlier podman invocation using a different configuration:
+
+          ```
+          "ERRO[0000] [graphdriver] prior storage driver overlay failed: 'overlay' is not supported over overlayfs, a mount_program is required: backing file system is unsupported for this graph driver"
+          ```
+
+          To recover podman, move the overlay directories to a backup folder as follows:
+
+          ```bash
+          ncn-m001# mkdir /var/lib/containers/storage/backup
+          ncn-m001# mv /var/lib/containers/storage/overlay* /var/lib/containers/storage/backup
+          ```
+
+          This should allow load-container-images.sh to succeed.
 
    2. Create (or update) `cert.jks` with the PEM-encoded CA certificate for an LDAP host.
 
@@ -328,7 +347,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         > from the output of the above `openssl s_client` example if the
         > following commands are unsuccessful.
 
-        Observe the issuer's DN. 
+        Observe the issuer's DN.
         
         For example:
 
@@ -350,7 +369,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
                 awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
         ```
 
-    1. Verify the issuer's certificate was properly extracted and saved in `cacert.pem`.
+    5. Verify the issuer's certificate was properly extracted and saved in `cacert.pem`.
 
         ```bash
         ncn-m001# cat cacert.pem
@@ -384,7 +403,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         -----END CERTIFICATE-----
         ```
 
-    2. Create `certs.jks`.
+    6. Create `certs.jks`.
 
         ```bash
         ncn-m001# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
@@ -392,13 +411,13 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         -storepass password -noprompt
         ```
 
-    3. Create `certs.jks.b64` by base-64 encoding `certs.jks`.
+    7. Create `certs.jks.b64` by base-64 encoding `certs.jks`.
 
         ```bash
         ncn-m001# base64 certs.jks > certs.jks.b64
         ```
 
-    4.  Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
+    8.  Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
 
         ```bash
         ncn-m001# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
@@ -419,7 +438,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
 4. Prepare to generate Sealed Secrets.
    
-   Secrets are stored in customizations.yaml as `SealedSecret` resources 
+   Secrets are stored in customizations.yaml as `SealedSecret` resources
    (encrypted secrets), which are deployed by specific charts and decrypted by the
    Sealed Secrets operator. But first, those Secrets must be seeded, generated, and
    encrypted.
@@ -515,8 +534,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
        Run the following command until there is a non-empty value in the secret (this can take a minute or two):
        
        ```bash
-       ncn-m001# kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks.b64
-         certs.jks.b64: <REDACTED>
+       ncn-m001# kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks
+        certs.jks: <REDACTED>
        ```
 
     6. Restart the `cray-keycloak-[012]` pods.

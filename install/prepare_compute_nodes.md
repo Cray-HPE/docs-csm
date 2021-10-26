@@ -5,11 +5,7 @@ These nodes have an additional procedure before they can be booted.
 
 ### Topics:
    1. [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes)
-
-### Prerequisites
-
-The time for Gigabyte compute nodes is synced with the rest of the system.
-See [Update the Gigabyte Server BIOS Time](../operations/node_management/Update_the_Gigabyte_Server_BIOS_Time.md).
+   1. [Update the BIOS Time on Gigabyte Compute Nodes](#update-the-bios-time-on-gigabyte-compute-nodes)"
 
 ## Details
 
@@ -34,7 +30,7 @@ This procedure needs to be done for each of the HPE Apollo 6500 XL645d nodes to 
 
    ```
    ncn-m001:~ # cray hsm inventory ethernetInterfaces list --component-id \
-           x3000c0s30b0n0 | jq '.[]|select((.IPAddresses|length)>0)'
+           x3000c0s30b0n0 --format json | jq '.[]|select((.IPAddresses|length)>0)'
    {
    "ID": "6805cabbc182",
    "Description": "",
@@ -62,6 +58,7 @@ This procedure needs to be done for each of the HPE Apollo 6500 XL645d nodes to 
    ]
    }
    ```
+   *NOTE:* the data might not exist in HSM for the node which is fine because if it isn't there then the data isn't needed to clean up KEA later.
 
    Make a note of the ID, MACAddress, and IPAddress of the entry that has the
    10.254 address listed. Those will be used later to clean up kea and
@@ -161,6 +158,11 @@ This procedure needs to be done for each of the HPE Apollo 6500 XL645d nodes to 
    ```
 
    Everything is now configured and the node is ready to be rebooted.
+
+<a name="update-the-bios-time-on-gigabyte-compute-nodes"></a>
+### 1. Update the BIOS Time on Gigabyte Compute Nodes
+The BIOS time for Gigabyte compute nodes must be synced with the rest of the system.
+See [Update the Gigabyte Server BIOS Time](../operations/node_management/Update_the_Gigabyte_Server_BIOS_Time.md).
 
 <a name="next-topic"></a>
 # Next Topic

@@ -1,8 +1,8 @@
-# CSM 0.9.4 to 1.0.0 Upgrade Process
+# CSM 0.9.4 or later to 1.0.0 Upgrade Process
 
 ## Introduction
 
-This document is intended to guide an administrator through the upgrade process going from Cray Systems Management 0.9 to v1.0. When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the resource_material directory for additional reference material in support of the process/scripts mentioned explicitly on this page.
+This document is intended to guide an administrator through the upgrade process going from Cray Systems Management v0.9.4 or later to v1.0. When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the resource_material directory for additional reference material in support of the process/scripts mentioned explicitly on this page.
 
 ## Terminology
 
@@ -16,13 +16,13 @@ upgrade that node.
 
 ## Upgrade Stages
 
-- [Stage 0 - Prequisites](Stage_0_Prerequisites.md)
+- [Stage 0 - Prerequisites](Stage_0_Prerequisites.md)
 - [Stage 1 - Ceph Initial Upgrade](Stage_1.md)
 - [Stage 2 - Ceph Node Image Upgrade](Stage_2.md)
 - [Stage 3 - Kubernetes Upgrade](Stage_3.md)
 - [Stage 4 - CSM Services Upgrade](Stage_4.md)
 - [Stage 5 - Apply Known Workarounds](Stage_5.md)
-- [Stage 6 - Return to Main Page and Proceed to CSM Validation](../index.md)
+- [Stage 6 - Return to Main Page and Proceed to *Update Management Network*](../index.md#update_management_network)
 
 **`Important:`** Please take note of the below content for troubleshooting purposes in the case that you encounter issues.
 

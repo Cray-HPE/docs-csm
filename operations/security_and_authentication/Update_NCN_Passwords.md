@@ -5,22 +5,22 @@ Change the passwords for non-compute nodes (NCNs) on the system using the
 the CSM `site.yml` playbook.
 
 The NCNs deploy with a default password, which are changed during the system
-install. See [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md)
+install. See [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 for more information.
 
 It is a recommended best practice for system security to change the root
 password after the install is complete.
 
-The NCN root user password is stored in the Hashicorp Vault instance, and
+The NCN root user password is stored in the HashiCorp Vault instance, and
 applied with the `csm.password` Ansible role via a CFS session.
 
-NOTE: The root password is also updated when applying the CSM Configuration Layer
-during NCN personalization using the `site.yml` playbook. See the
-[Managing Configuration with CFS](operations/managing_configuration_with_CFS.md)
+> NOTE: The root password is also updated when applying the CSM configuration
+layer during NCN personalization using the `site.yml` playbook. See the
+[Configure Non-Compute Nodes with CFS](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password)
 procedure for more information.
 
 Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to
-change the root password as a quicker alternative to running a full NCN
+change the root password as a quick alternative to running a full NCN
 personalization.
 
 ### Procedure
@@ -83,6 +83,6 @@ personalization.
    ```
 
    ***NOTE***: Subsequent password changes need only update the password hash in
-   Hashicorp Vault and create the CFS session as long as the branch of the CSM
-   configuration management repository hasn't changed.
+   HashiCorp Vault and create the CFS session as long as the branch of the CSM
+   configuration management repository has not changed.
 

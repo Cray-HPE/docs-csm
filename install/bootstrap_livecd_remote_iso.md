@@ -103,7 +103,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-1. Set up the site-link, enabling SSH to work. You can reconnect with SSH after this step.
+1. <a name="set-up-site-link"></a>Set up the site-link, enabling SSH to work. You can reconnect with SSH after this step.
    > **`NOTICE REGARDING DHCP`** If your site's network authority or network administrator has already provisioned an IPv4 address for your master node(s) external NIC(s), **then skip this step**.
 
    1. Setup Variables.
@@ -379,7 +379,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
              --can-dynamic-pool 10.103.11.128/25 \
              --nmn-cidr 10.252.0.0/17 \
              --hmn-cidr 10.254.0.0/17 \
-             --ntp-pool time.nist.gov \
+             --ntp-pools time.nist.gov \
              --site-domain dev.cray.com \
              --site-ip 172.30.53.79/20 \
              --site-gw 172.30.48.1 \
@@ -413,7 +413,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
          * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
          * By default, spine switches are used as MetalLB peers. Use `--bgp-peers aggregation` to use aggregation switches instead.
          * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `can-external-dns` is the static IP address assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `can-external-dns` IP address must be within the `can-static-pool` range.
-         * Set `ntp-pool` to a reachable NTP server
+         * Set `ntp-pools` to reachable NTP pools
 
          These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
             * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.

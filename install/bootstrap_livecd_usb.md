@@ -186,7 +186,7 @@ which device that is.
     linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
     ```
 
-    > Note: If the previous command fails with this error message indicating that this Linux computer does not have the checkmedia rpm installed, then the rpm can be installed and the `csi pit format` can be run again
+    > Note: If the previous command fails with this error message, this indicates that this Linux computer does not have the checkmedia RPM installed. In that case, the RPM can be installed and `csi pit format` can be run again
     > ```
     > ERROR: Unable to validate ISO. Please install checkmedia
     > ```
@@ -368,7 +368,7 @@ Some files are needed for generating the configuration payload. See these topics
           --can-dynamic-pool 10.103.11.128/25 \
           --nmn-cidr 10.252.0.0/17 \
           --hmn-cidr 10.254.0.0/17 \
-          --ntp-pool time.nist.gov \
+          --ntp-pools time.nist.gov \
           --site-domain dev.cray.com \
           --site-ip 172.30.53.79/20 \
           --site-gw 172.30.48.1 \
@@ -402,7 +402,7 @@ Some files are needed for generating the configuration payload. See these topics
       * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
       * By default, spine switches are used as MetalLB peers. Use `--bgp-peers aggregation` to use aggregation switches instead.
       * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `can-external-dns` is the static IP address assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `can-external-dns` IP address must be within the `can-static-pool` range.
-      * Set `ntp-pool` to a reachable NTP server
+      * Set `ntp-pools` to reachable NTP pools
 
       These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
       * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.

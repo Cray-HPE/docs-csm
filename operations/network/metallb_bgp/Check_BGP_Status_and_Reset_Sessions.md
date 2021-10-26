@@ -1,20 +1,20 @@
-## Check BGP Status and Reset Sessions
+# Check BGP Status and Reset Sessions
 
 Check the Border Gateway Protocol \(BGP\) status on the Aruba and Mellanox switches and verify that all sessions are in an Established state. If the state of any session in the table is Idle, the BGP sessions needs to be reset.
 
-### Prerequisites
+## Prerequisites
 
 This procedure requires administrative privileges.
 
-### Procedure
+## Procedure
 
-#### MELLANOX
+### MELLANOX
 
-1.  Verify that all BGP sessions are in an Established state for the Mellanox spine switches.
+1. Verify that all BGP sessions are in an Established state for the Mellanox spine switches.
 
     SSH to each spine switch to check the status of all BGP sessions.
 
-    1.  SSH to a spine switch.
+    1. SSH to a spine switch.
 
         For example:
 
@@ -22,7 +22,7 @@ This procedure requires administrative privileges.
         ncn-m001# ssh admin@sw-spine-001.mtl
         ```
 
-    1.  View the status of the BGP sessions.
+    1. View the status of the BGP sessions.
 
         ```bash
         sw-spine-001 [standalone: master] > enable
@@ -49,11 +49,11 @@ This procedure requires administrative privileges.
 
         If any of the sessions are in an Idle state, proceed to the next step.
 
-1.  Reset BGP to re-establish the sessions.
+1. Reset BGP to re-establish the sessions.
 
     <a name="mellanox-ssh"></a>
 
-    1.  SSH to each spine switch.
+    1. SSH to each spine switch.
 
         For example:
 
@@ -61,21 +61,21 @@ This procedure requires administrative privileges.
         ncn-m001# ssh admin@sw-spine-001.mtl
         ```
 
-    1.  Verify BGP is enabled.
+    1. Verify BGP is enabled.
 
         ```bash
         sw-spine-001 [standalone: master] > show protocols | include bgp
          bgp:                    enabled
         ```
 
-    1.  Clear the BGP sessions.
+    1. Clear the BGP sessions.
 
         ```bash
         sw-spine-001 [standalone: master] > enable
         sw-spine-001 [standalone: master] # clear ip bgp all
         ```
 
-    1.  Check the status of the BGP sessions to see if they are now Established.
+    1. Check the status of the BGP sessions to see if they are now Established.
 
         It may take a few minutes for sessions to become Established.
 
@@ -106,19 +106,19 @@ This procedure requires administrative privileges.
 
     **Troubleshooting:** If some sessions remain Idle, re-run the Mellanox reset steps to clear and re-check status. If some sessions still remain Idle, proceed to [reapply the cray-metallb helm chart](#reapply), along with the BGP reset, to force the speaker pods to re-establish sessions with the switch.
 
-#### Aruba
+### Aruba
 
-1.  Verify that all BGP sessions are in an Established state for the Aruba spine switches.
+1. Verify that all BGP sessions are in an Established state for the Aruba spine switches.
 
     SSH to each spine switch to check the status of all BGP sessions.
 
-    1.  SSH to a spine switch.
+    1. SSH to a spine switch.
 
         ```bash
         ncn-m001# ssh admin@sw-spine-001.mtl
         ```
 
-    1.  View the status of the BGP sessions.
+    1. View the status of the BGP sessions.
 
         ```bash
         sw-spine-001# show bgp ipv4 unicast summary
@@ -139,11 +139,11 @@ This procedure requires administrative privileges.
 
         If any of the sessions are in an Idle state, proceed to the next step.
 
-1.  Reset BGP to re-establish the sessions.
+1. Reset BGP to re-establish the sessions.
 
     <a name="aruba-ssh"></a>
 
-    1.  SSH to each spine switch.
+    1. SSH to each spine switch.
 
         For example:
 
@@ -151,13 +151,13 @@ This procedure requires administrative privileges.
         ncn-m001# ssh admin@sw-spine-001.mtl
         ```
 
-    1.  Clear the BGP sessions.
+    1. Clear the BGP sessions.
 
         ```bash
         sw-spine-001# clear bgp *
         ```
 
-    1.  Check the status of the BGP sessions.
+    1. Check the status of the BGP sessions.
 
         It may take a few minutes for sessions to become Established.
 
@@ -185,14 +185,14 @@ This procedure requires administrative privileges.
 <a name="reapply"></a>
 #### Re-apply the `cray-metallb` Helm Chart
 
-1.  Determine the cray-metallb chart version that is currently deployed.
+1. Determine the cray-metallb chart version that is currently deployed.
 
     ```bash
     ncn-m001# helm ls -A -a | grep cray-metallb
     cray-metallb   metallb-system   1   2021-02-10 14:58:43.902752441 -0600 CST  deployed  cray-metallb-0.12.2   0.8.1
     ```
 
-1.  Create a manifest file that will be used to reapply the same chart version.
+1. Create a manifest file that will be used to reapply the same chart version.
 
     ```bash
     ncn-m001# cat << EOF > ./metallb-manifest.yaml
@@ -267,5 +267,3 @@ This procedure requires administrative privileges.
     Refer to substeps [1-3](#mellanox-ssh) for Mellanox.
 
     Refer to substeps [1-2](#aruba-ssh) for Aruba.
-
-

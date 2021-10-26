@@ -1,8 +1,6 @@
 # Upgrade CSM
 
-The upgrade process for Cray Systems Management (CSM) 0.9.4, which is part of Shasta v1.4.3,
-to CSM 1.0, which is part of Shasta v1.5, has many steps in multiple procedures which should be done in a
-specific order.
+The process for upgrading Cray Systems Management (CSM) has many steps in multiple procedures which should be done in a specific order.
 
 After the upgrade of CSM software, the CSM health checks will validate the system before doing any other operational
 tasks like the check and update of firmware on system components. Once the CSM upgrade has completed, other
@@ -11,8 +9,8 @@ product streams for the HPE Cray EX system can be installed or upgraded.
 ## Topics
 
 1. [Prepare for Upgrade](#prepare_for_upgrade)
-1. [Update Management Network](#update_management_network)
 1. [Upgrade Management Nodes and CSM Services](#upgrade_management_nodes_csm_services)
+1. [Update Management Network](#update_management_network)
 1. [Validate CSM Health](#validate_csm_health)
 1. [Update Firmware with FAS](#update_firmware_with_fas)
 1. [Next Topic](#next_topic)
@@ -28,6 +26,14 @@ sections, but there is also a general troubleshooting topic.
 
     See [Prepare for Upgrade](prepare_for_upgrade.md)
 
+   <a name="upgrade_management_nodes_csm_services"></a>
+
+1. Upgrade Management Nodes and CSM Services
+
+   The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
+
+   The upgrade is a guided process Starting with [Upgrade Management Nodes and CSM Services](1.0/README.md)
+
    <a name="update_management_network"></a>
 
 1. Update Management Network
@@ -41,20 +47,12 @@ sections, but there is also a general troubleshooting topic.
 
    See [Update Management Network](update_management_network.md)
 
-   <a name="upgrade_management_nodes_csm_services"></a>
-
-1. Upgrade Management Nodes and CSM Services
-
-    The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
-
-    The upgrade is a guided process Starting with [Upgrade Management Nodes and CSM Services](1.0/README.md)
-
-    <a name="validate_csm_health"></a>
+   <a name="validate_csm_health"></a>
 
 1. Validate CSM Health
 
      > **`IMPORTANT:`** Wait at least 15 minutes after
-     > [`upgrade.sh`](1.0/README.md#deploy-manifests) in stage 4 completes to let the various Kubernetes
+     > [`csm-service-upgrade.sh`](1.0/Stage_4.md) in stage 4 completes to let the various Kubernetes
      > resources get initialized and started.
   
      Run the following validation checks to ensure that everything is still working
@@ -88,5 +86,6 @@ sections, but there is also a general troubleshooting topic.
 1. Next Topic
 
     After completion of the firmware update with FAS, the CSM product stream has been fully upgraded and
-    configured. Refer to the _HPE Cray EX Installation and Configuration Guide 1.5 S-8000_ for other product streams
-    to be upgraded and configured after CSM.
+    configured. Refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_ 
+    on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg 
+    more information on other product streams to be upgraded and configured after CSM.
