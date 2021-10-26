@@ -176,12 +176,13 @@ Prior to running NCN personalization, gather the following information:
             "commit": "<retrieved git commit>"
          }
 
-1. (Install Only) Follow the procedure in [Run NCN Personalization](./Run_NCN_Personalization.md),
+1. (Install Only) Follow the procedure in [Perform NCN Personalization](Perform_NCN_Personalization.md),
    adding a CSM configuration layer to the NCN personalization using the JSON
    from step 3.
-1. (Upgrade Only) Follow the procedure in [Run NCN Personalization](./Run_NCN_Personalization.md),
+
+1. (Upgrade Only) Follow the procedure in [Perform NCN Personalization](Perform_NCN_Personalization.md),
    replacing the existing CSM configuration layer to the NCN personalization
    using the JSON from the step 3.
 
-> **NOTE**: The CSM configuration layer _MUST_ be the first layer in the
+> **NOTE:** The CSM configuration layer _MUST_ be the first layer in the
 > NCN personalization CFS configuration.
