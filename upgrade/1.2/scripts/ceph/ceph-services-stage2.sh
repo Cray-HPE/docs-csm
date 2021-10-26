@@ -17,3 +17,9 @@ echo "Reconfiguring keepalived"
 /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf
 systemctl enable keepalived.service
 systemctl restart keepalived.service
+
+if [[ $(hostname) =~ ncn-s00[1-3] ]]; then
+  echo "Reconfiguring ceph-csi storage class config map"
+  . /srv/cray/scripts/common/csi-configuration.sh
+  create_k8s_storage_class
+fi
