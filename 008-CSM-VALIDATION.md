@@ -1,11 +1,11 @@
 # CSM Install Validation and Health Checks
-This page lists available CSM install and health checks that can be executed to validate the CSM install. They can be run anytime after the install has run to completion, but not before.
+This page lists available CSM install and health checks that can be executed to validate the CSM install.
 
 1. [Platform Health Checks](#platform-health-checks)
     1. [ncnHealthChecks](#pet-ncnhealthchecks)
     1. [ncnPostgresHealthChecks](#pet-ncnpostgreshealthchecks)
-    1. [BGP Peering Status and Reset](#pet-bgp)
     1. [Clock Skew](#pet-clock-skew)
+    1. [BGP Peering Status and Reset](#pet-bgp)
 1. [Network Health Checks](#network-health-checks)
     1. [KEA / DHCP](#net-kea)
     1. [External DNS](#net-extdns)
@@ -18,7 +18,7 @@ This page lists available CSM install and health checks that can be executed to 
 1. [UAS/UAI Tests](#uas-uai-tests)
    
 Examples of when you may wish to run them are:
-* after install.sh completes
+* after `install.sh` completes (**not before**)
 * before and after NCN reboots
 * after the system is brought back up
 * any time there is unexpected behavior observed
@@ -29,30 +29,34 @@ The areas should be tested in the order they are listed on this page. Errors in 
 <a name="platform-health-checks"></a>
 ## Platform Health Checks
 
-Scripts do not verify results. Script output includes analysis needed to determine pass/fail for each check. All health checks are expected to pass.
-Health Check scripts can be run:
-* after install.sh has been run – not before
-* before and after one of the NCN's reboot
+These scripts do not verify results. The script output includes analysis needed to determine pass/fail for each check. All platform health checks are expected to pass.
+
+Platform health check scripts can be run:
+* after `install.sh` has completed successfully (**not before**)
+* before and after an NCN reboots
 * after the system or a single node goes down unexpectedly
 * after the system is gracefully shut down and brought up
-* any time there is unexpected behavior on the system to get a baseline of data for CSM services and components
-* in order to provide relevant information to support tickets that are being opened after install.sh has been run
+* any time there is unexpected behavior on the system, in order to get a baseline of data for CSM services and components. This can provide relevant information to include in support tickets that are opened
 
-Health Check scripts can be found and run on any worker or master node from any directory.
+Platform health check scripts can be found and run on any worker or master node from any directory.
 
 <a name="pet-ncnhealthchecks"></a>
 ### ncnHealthChecks
-     ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
-The ncnHealthChecks script reports the following health information:
+     
+```bash
+ncn-mw# /opt/cray/platform-utils/ncnHealthChecks.sh
+```
+
+The `ncnHealthChecks.sh` script reports the following health information:
 * Kubernetes status for master and worker NCNs
 * Ceph health status
-* Health of etcd clusters
-* Number of pods on each worker node for each etcd cluster
-* List of automated etcd backups for the Boot Orchestration Service (BOS),  Boot Script Service (BSS), Compute Rolling Upgrade Service (CRUS), and Domain Name Service (DNS)
+* Health of `etcd` clusters
+* Number of pods on each worker node for each `etcd` cluster
+* List of automated `etcd` backups for the Boot Orchestration Service (BOS), Boot Script Service (BSS), Compute Rolling Upgrade Service (CRUS), and Domain Name Service (DNS)
 * Management node uptimes
-* Pods yet to reach the running state
+* Pods yet to reach the running state. **Any pods reported here should be investigated**, other than the exceptions listed in the notes below
 
-Execute ncnHealthChecks script and analyze the output of each individual check.
+Execute the `ncnHealthChecks.sh` script and analyze the output of each individual check.
 
 **Notes**:
 
@@ -65,13 +69,17 @@ about the `cray-crus-` pod state.
 
 <a name="pet-ncnpostgreshealthchecks"></a>
 ### ncnPostgresHealthChecks
-     ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
-For each postgres cluster the ncnPostgresHealthChecks script determines the leader pod and then reports the status of all postgres pods in the cluster.
 
-Execute ncnPostgresHealthChecks script. Verify leader for each cluster and status of cluster members.
-
-For a particular postgres cluster expected output similar to the following:
 ```bash
+ncn-mw# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+```
+
+For each postgres cluster, the `ncnPostgresHealthChecks.sh` script determines the leader pod and then reports the status of all postgres pods in the cluster.
+
+Execute the `ncnPostgresHealthChecks.sh` script. Verify the leader for each cluster and status of cluster members.
+
+For a particular postgres cluster, the expected output is similar to the following:
+```text
 --- patronictl, version 1.6.5, list for services leader pod cray-sls-postgres-0 ---
 + Cluster: cray-sls-postgres (6938772644984361037) ---+----+-----------+
 |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
@@ -81,12 +89,14 @@ For a particular postgres cluster expected output similar to the following:
 | cray-sls-postgres-2 | 10.44.0.42 |        | running |  1 |         0 |
 +---------------------+------------+--------+---------+----+-----------+
 ```
+
 Check the leader pod's log output for its status as the leader. Such as:
-```bash
+```text
 i am the leader with the lock
 ```
+
 For example:
-```bash
+```text
 --- Logs for services Leader Pod cray-sls-postgres-0 ---
   ERROR: get_cluster
   INFO: establishing a new patroni connection to the postgres cluster
@@ -99,36 +109,39 @@ For example:
   INFO: running post_bootstrap
   INFO: trying to bootstrap a new cluster
 ```
+
 Errors reported previous to the lock status, such as **ERROR: get_cluster** can be ignored.
 
 If any of the postgres clusters are exhibiting the following symptoms, then follow then "Troubleshoot Postgres Databases with the Patroni Tool" procedure in the HPE Cray EX System Administration Guide S-8001:
    * The cluster has no leader.
-   * The number of cluster members is not correct. There should be three cluster members (with the exception of sma-postgres-cluster where there should be only two cluster members).
-   * Cluster members are found to be in a non 'running' state (such as 'start failed').
-   * Cluster members are found to have lag or lag is 'unknown'.
+   * The number of cluster members is not correct. There should be three cluster members (with the exception of `sma-postgres-cluster` where there should be only two cluster members).
+   * Cluster members are found to be in a non `running` state (such as `start failed`).
+   * Cluster members are found to have lag or lag is `unknown`.
 
 See see the **About Postgres** section in the HPE Cray EX System Administration Guide S-8001 for further information.
 
 <a name="pet-clock-skew"></a>
 ### Clock Skew
-Verify that NCNs clocks are synced (these commands should be run on ncn-m001 unless otherwise noted).
+Verify that NCNs clocks are synced (these commands should be run on `ncn-m001` unless otherwise noted).
 
 ```bash
 ncn-m001# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',')" 'date'
 ```
 
-If there is skew (output from the above command shows different times across the NCNs), the system may be suffering from a bug where ncn-m001 uses itself as its own upstream NTP server. The following will check if this is the case:
+If there is skew (output from the above command shows different times across the NCNs), the system may be suffering from a bug where `ncn-m001` uses itself as its own upstream NTP server. The following will check if this is the case:
 
 ```bash
-grep server /etc/chrony.d/cray.conf
+ncn-m001# grep server /etc/chrony.d/cray.conf
 ```
-If the output from the above command returns `ncn-m001`, correct the server in the command below (the example below assumes `time.nist.gov` is the correct server, use the appropriate NTP server if desired):
+
+If the output from the above command returns `ncn-m001`, correct the server in the command below (the example below assumes `time.nist.gov` is the correct server; substitute the appropriate NTP server for your environment, if it is different):
 
 ```bash
 ncn-m001# upstream_ntp_server=time.nist.gov
 ncn-m001# sed -i "s/^\(server ncn-m001\).*/server $upstream_ntp_server iburst trust/" /etc/chrony.d/cray.conf
 ```
-Restart chronyd
+
+Restart `chronyd`
 
 ```bash
 ncn-m001# systemctl restart chronyd
@@ -143,8 +156,8 @@ ncn-m001# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\
 If the skew is large (more than a few seconds) it is usually recommended to allow the nodes to come back in sync gradually. However, you can opt to force them to sync by running this on the affected nodes:
 
 ```bash
-ncn-m001# chronyc burst 4/4 ; sleep 15
-ncn-m001# chronyc makestep
+ncn# chronyc burst 4/4 ; sleep 15
+ncn# chronyc makestep
 ```
 
 After clocks have been synced, it may be necessary to restart Ceph services. Check Ceph health:
@@ -152,10 +165,11 @@ After clocks have been synced, it may be necessary to restart Ceph services. Che
 ```bash
 ncn-m001# ceph -s
 ```
+
 If the output from the above command notes a storage node has clock skew, restart the following services on the storage node mentioned in the output:
 
 ```bash
-ncn-s# systemctl restart ceph-mon@<node-name> && systemctl restart ceph-mgr@<node-name> && systemctl restart ceph-mds@<node-name>
+ncn-s# systemctl restart ceph-mon@$(hostname) && systemctl restart ceph-mgr@$(hostname) && systemctl restart ceph-mds@$(hostname)
 ```
 
 <a name="pet-bgp"></a>
@@ -163,17 +177,17 @@ ncn-s# systemctl restart ceph-mon@<node-name> && systemctl restart ceph-mgr@<nod
 Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system.
 
 Check the Border Gateway Protocol (BGP) status on the Aruba/Mellanox switches.
-Verify that all sessions are in an **Established** state. If the state of any
-session in the table is **Idle**, reset the BGP sessions.
+Verify that all sessions are in an `Established` state. If the state of any
+session in the table is `Idle`, reset the BGP sessions.
 
-On an NCN node determine IP addresses of switches:
+On an NCN, determine the IP addresses of switches:
 
 ```bash
-ncn-m001# kubectl get cm config -n metallb-system -o yaml | head -12
+ncn# kubectl get cm config -n metallb-system -o yaml | head -12
 ```
 
 Expected output looks similar to the following:
-```
+```yaml
 apiVersion: v1
 data:
   config: |
@@ -188,14 +202,14 @@ data:
     - name: customer-access
 ```
 
-Using the first peer-address (10.252.0.2 here) ssh as the administrator to the first switch and note in the returned output if a Mellanox or Aruba switch is indicated.
+Using the first peer-address (`10.252.0.2` here), ssh as `admin` to the first switch and note in the returned output if a Mellanox or Aruba switch is indicated.
 
 ```bash
-ncn-m001# ssh admin@10.252.0.2
+ncn# ssh admin@10.252.0.2
 ```
 
-* On a Mellanox switch, you may see `Mellanox Onyx Switch Management` or `Mellanox Switch` after logging in to the switch with ssh. In this case, proceed to the [Mellanox steps](#pet-bgp-mellanox).
-* On an Aruba switch, you may see `Please register your products now at: https://asp.arubanetworks.com` after logging in to the switch with ssh. In this case, proceed to the [Aruba steps](#pet-bgp-aruba).
+* On a Mellanox switch, you may see `Mellanox Onyx Switch Management` or `Mellanox Switch` after logging in to the switch with `ssh`. In this case, proceed to the [Mellanox steps](#pet-bgp-mellanox).
+* On an Aruba switch, you may see `Please register your products now at: https://asp.arubanetworks.com` after logging in to the switch with `ssh`. In this case, proceed to the [Aruba steps](#pet-bgp-aruba).
 
 <a name="pet-bgp-mellanox"></a>
 #### Mellanox Switch
@@ -239,16 +253,16 @@ ncn-m001# ssh admin@10.252.0.2
    10.252.1.12       4    65533        2945      3363      3         0      0      1:00:21:33    ESTABLISHED/20
    ```
 
-1. If one or more BGP session is reported in an **Idle** state, reset BGP to re-establish the sessions:
+1. If one or more BGP session is reported in an `Idle` state, reset BGP to re-establish the sessions:
    ```
    sw-spine-001# clear ip bgp all
    ```
 
-   * It may take several minutes for all sessions to become **Established**. Wait a minute, or so, and then verify that all sessions now are all reported as **Established**. If some sessions remain in an **Idle** state, re-run the **clear ip bgp all** command and check again.
+   * It may take several minutes for all sessions to become `Established`. Wait a minute, or so, and then verify that all sessions now are all reported as `Established`. If some sessions remain in an `Idle` state, re-run the `clear ip bgp all` command and check again.
 
-   * If after several tries (around 10 attempts) one or more BGP session remains **Idle**, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.
+   * If after several tries (around 10 attempts) one or more BGP session remains `Idle`, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.
 
-1. Repeat the above **Mellanox** procedure using the second peer-address (10.252.0.3 here)
+1. Repeat the above **Mellanox** procedure using the second peer-address (`10.252.0.3` here)
 
 <a name="pet-bgp-aruba"></a>
 #### Aruba Switch
@@ -280,18 +294,18 @@ On an Aruba switch, the prompt may include `sw-spine` or `sw-agg`.
     10.252.1.12     65533       34101   39012   00m:01w:04d  Established   Up
    ```
 
-1. If one or more BGP session is reported in a **Idle** state, reset BGP to re-establish the sessions:
+1. If one or more BGP session is reported in a `Idle` state, reset BGP to re-establish the sessions:
    ```
    sw-agg01# clear bgp *
    ```
 
-   * It may take several minutes for all sessions to become **Established**. Wait a minute or so, and then
-   verify that all sessions now are reported as **Established**. If some sessions remain in an **Idle** state,
-   re-run the **clear bgp * ** command and check again.
+   * It may take several minutes for all sessions to become `Established`. Wait a minute or so, and then
+   verify that all sessions now are reported as `Established`. If some sessions remain in an `Idle` state,
+   re-run the `clear bgp *` command and check again.
 
-   * If after several tries one or more BGP session remains **Idle**, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.
+   * If after several tries one or more BGP session remains `Idle`, see Check BGP Status and Reset Sessions, in the HPE Cray EX Administration Guide S-8001.
 
-1. Repeat the above **Aruba** procedure using the second peer-address (10.252.0.5 in this example)
+1. Repeat the above **Aruba** procedure using the second peer-address (`10.252.0.5` in this example)
 
 <a name="network-health-checks"></a>
 ## Network Health Checks
@@ -299,11 +313,11 @@ On an Aruba switch, the prompt may include `sw-spine` or `sw-agg`.
 <a name="net-kea"></a>
 ### Verify that KEA has active DHCP leases
 
-Verify that KEA has active DHCP leases. Right after an fresh install of CSM it is important to verify that KEA is currently handing out DHCP leases on the system. The following commands can be ran on any of the master nodes or worker nodes.
+Verify that KEA has active DHCP leases. Right after an fresh install of CSM it is important to verify that KEA is currently handing out DHCP leases on the system. The following commands can be run on any of the master or worker nodes.
 
-Get a API Token:
+Get an API Token:
 ```bash
-ncn# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+ncn-mw# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
                  -d client_id=admin-client \
                  -d client_secret=`kubectl get secrets admin-client-auth \
                  -o jsonpath='{.data.client-secret}' | base64 -d` \
@@ -312,7 +326,7 @@ ncn# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
 
 Retrieve all the Leases currently in KEA:
 ```bash
-ncn# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq
+ncn-mw# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq
 ```
 
 If there is an non-zero amount of DHCP leases for river hardware returned that is a good indication that KEA is working.
@@ -345,31 +359,49 @@ Verify that the command has exit code 0, reports no errors, and resolves the add
 <a name="net-spire"></a>
 ### Verify Spire Agent is Running on Kubernetes NCNs
 
-Execute the following command on all Kubernetes NCNs (excluding the PIT):
+Execute the following command on all Kubernetes NCNs (i.e. all master and worker nodes) **excluding the PIT**:
 
 ```bash
-ncn# goss -g /opt/cray/tests/install/ncn/tests/goss-spire-agent-service-running.yaml validate
+ncn-mw# goss -g /opt/cray/tests/install/ncn/tests/goss-spire-agent-service-running.yaml validate
 ```
 
-Known failures and how to recover:
+#### Known Issue: Verify `spire-agent` is enabled and running
 
-* K8S Test: Verify spire-agent is enabled and running
+The `spire-agent` service may fail to start on Kubernetes NCNs. You can see symptoms of this in its logs using `journalctl`. It may log errors similar to `join token does not exist or has already been used`, or the last logs may contain multiple lines of `systemd[1]: spire-agent.service: Start request repeated too quickly.`. 
+    
+Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. While the `spire-agent` `systemctl` service on the Kubernetes node should eventually restart cleanly, you may have to login to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.
 
-  - The `spire-agent` service may fail to start on Kubernetes NCNs, logging errors (via journalctl) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. While the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, you may have to login to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.
-     1. Set `NODE` to the NCN which is experiencing the issue. In this example, `ncn-w002`.
+1. Set `NODE` to the NCN which is experiencing the issue. In this example, `ncn-w002`.
+    ```bash
+    ncn-mw# NODE=ncn-w002
+    ```
+
+2. Define the following function
+    ```bash
+    ncn-mw# function renewncnjoin() { 
+        for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do
+            if kubectl describe -n spire pods $pod | grep -q "Node:.*$1"; then 
+                echo "Restarting $pod running on $1"; kubectl delete -n spire pod "$pod"
+            fi
+        done }
+    ```
+
+3. Run the function as follows:
+    ```bash
+    ncn-mw# renewncnjoin $NODE
+    ```
+
+4. Repeat the original goss test on the affected NCN to verify that it passes.
+
+5. **If the test still fails**, it may be a case where the `spire-agent` service failed after an NCN was powered off for too long and its tokens expired. **If this applies to the affected NCN**, you may try the following:
+    
+    1. Run the following command **on the affected NCN**:
+        
         ```bash
-          ncn# export NODE=ncn-w002
-          ```
-     1. Define the following function
-        ```bash
-        ncn# function renewncnjoin() { for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do if kubectl describe -n spire pods $pod | grep -q "Node:.*$1"; then echo "Restarting $pod running on $1"; kubectl delete -n spire pod "$pod"; fi done }
+        ncn-mw# rm -v /root/spire/agent_svid.der /root/spire/bundle.der /root/spire/data/svid.key
         ```
-     1. Run the function as follows:
-        ```bash
-        ncn# renewncnjoin $NODE
-        ```
 
-  - The `spire-agent` service may also fail if a NCN was powered off for too long and its tokens expired. If this happens then delete `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the `request-ncn-join-token` daemonset pod.
+    2. Perform steps 1-4 again.
 
 <a name="net-vault"></a>
 ### Verify the Vault Cluster is Healthy
@@ -421,144 +453,169 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 
 Execute the HMS smoke and functional tests after the CSM install to confirm that the HMS services are running and operational.
 
-### CRAY INTERNAL USE ONLY
-The HMS tests are provided by the hms-ct-test-crayctldeploy RPM which comes preinstalled on the NCNs. However, the tests receive frequent updates so it is recommended to check and see if a newer version of the RPM is available for the applicable software installation and if so, to download and install the latest version of the RPM prior to executing the tests. The latest versions of the hms-ct-test-crayctldeploy RPM can be retrieved from car.dev.cray.com in the following folders:
-* Master: [ct-tests/HMS/sle15_sp2_ncn/x86_64/dev/master/hms-team/](http://car.dev.cray.com/artifactory/ct-tests/HMS/sle15_sp2_ncn/x86_64/dev/master/hms-team)
-* 1.4 Release: [ct-tests/HMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/hms-team/](http://car.dev.cray.com/artifactory/ct-tests/HMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/hms-team/)
-
-Install the RPM on every worker and master NCN (except for ncn-m001 if it is still the PIT node).
-
 <a name="hms-exec"></a>
 ### Test Execution
 
-These tests should be executed as root on at least one worker NCN and one master NCN (but **not** ncn-m001 if it is still the PIT node).
+These tests should be executed as root on any worker or master NCN (but **not** the PIT node).
 
 1. Run the HMS smoke tests.
 
+    ```bash
+    ncn-mw# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
+    ```
+
+    The final lines of output should indicate if there were any test failures. If that is the case, the full output should be examined.
+
+1. If no failures occur, then run the HMS functional tests.
+
+    ```bash
+    ncn-mw# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
+    ```
+
+    The final lines of output should indicate if there were any test failures. If that is the case, the full output should be examined.
+
+<a name="hms-known-issues"></a>
+#### Known Issues: HMS Functional Tests
+
+* [Erroneous HSM Warning Flags on Mountain BMCs (SDEVICE-3319)](#hms-known-issue-mountain-bmcs-warning-flags)
+* [Locked HSM Components (CASMHMS-4664)](#hms-known-issue-locked-components)
+* [Empty Drive Bays in HSM (CASMHMS-4693)](#hms-known-issue-empty-drive-bays)
+* [Unexpected HSM Discovery Status (CASMHMS-4794)](#hms-unexpected-discovery-status)
+* [Previously Captured FAS Snapshots (CASMHMS-5065)](#hms-previously-captured-fas-snapshots)
+
+<a name="hms-known-issue-mountain-bmcs-warning-flags"></a>
+##### Erroneous HSM Warning Flags on Mountain BMCs (SDEVICE-3319)
+
+The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue [SDEVICE-3319](https://connect.us.cray.com/jira/browse/SDEVICE-3319) that can cause Warning flags to be set erroneously in HSM for Mountain BMCs and result in test failures. 
+
+The following HMS functional test may fail due to this issue:
+* `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+
+The symptom of this issue is the test fails with error messages about Warning flags being set on one or more BMCs. It may look similar to the following in the test output:
+
+```text
+=================================== FAILURES ===================================
+_ /opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_remote-functional.tavern.yaml::Ensure that we can conduct a query for all Node BMCs in the Component collection _
+
+Errors:
+E   tavern.util.exceptions.TestFailError: Test 'Verify the expected response fields for all NodeBMCs' failed:
+   - Error calling validate function '<function validate_pykwalify at 0x7f44666179d0>':
+      Traceback (most recent call last):
+         File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+         File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+      pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Enum 'Warning' does not exist. Path: '/Components/9/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/10/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/11/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/12/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/13/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/14/Flag'.: Path: '/'>
 ```
-ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
+
+If you see this, perform the following steps:
+
+1. Retrieve the xnames of all Mountain BMCs with Warning flags set in HSM:
+
+    ```bash
+    ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&Class=Mountain\&Flag=Warning | jq '.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }' -c | sort -V | jq -c
+    {"ID":"x5000c1s0b0","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s0b1","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s1b0","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s1b1","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s2b0","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s2b1","Flag":"Warning","Class":"Mountain"}
+    ```
+
+1. For each Mountain BMC xname, check its Redfish BMC Manager status:
+
+    ```bash
+    ncn# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq '.Status'
+    {
+    "Health": "OK",
+    "State": "Online"
+    }
+    ```
+
+Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.
+
+<a name="hms-known-issue-locked-components"></a>
+##### Locked HSM Components (CASMHMS-4664)
+
+The following HMS functional tests may fail due to known issue [CASMHMS-4664](https://connect.us.cray.com/jira/browse/CASMHMS-4664) because of locked components in HSM:
+* `test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml`
+* `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+
+The symptom of this issue looks similar to:
+```text
+      Traceback (most recent call last):
+         File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+         File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+      pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Key 'Locked' was not defined. Path: '/Components/0'.
+         - Key 'Locked' was not defined. Path: '/Components/5'.
+         - Key 'Locked' was not defined. Path: '/Components/6'.
+         - Key 'Locked' was not defined. Path: '/Components/7'.
+         - Key 'Locked' was not defined. Path: '/Components/8'.
+         - Key 'Locked' was not defined. Path: '/Components/9'.
+         - Key 'Locked' was not defined. Path: '/Components/10'.
+         - Key 'Locked' was not defined. Path: '/Components/11'.
+         - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
 ```
-* Examine the output for errors or failures.
-2. If no failures occur, then run the HMS functional tests.
+
+Failures of these tests because of locked components as shown above can be safely ignored.
+
+<a name="hms-known-issue-empty-drive-bays"></a>
+##### Empty Drive Bays in HSM (CASMHMS-4693)
+
+The following HMS functional test may fail due to known issue [CASMHMS-4693](https://connect.us.cray.com/jira/browse/CASMHMS-4693) because of empty drive bays in HSM:
+* `test_smd_hardware_ncn-functional_remote-functional.tavern.yaml`
+
+This issue looks similar to the following in the test output:
 ```
-ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
+      Traceback (most recent call last):
+         File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+         File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+      pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/3'.
+         - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/4'.
+         - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/5'.
+         - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/6'.
+         - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/7'.: Path: '/'>
 ```
-* Examine the output for errors or failures.
 
-#### Known issues
-1.  The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue [SDEVICE-3319](https://connect.us.cray.com/jira/browse/SDEVICE-3319) that can cause Warning flags to be set erroneously in HSM for Mountain BMCs and result in test failures. If `test_smd_components_ncn-functional_remote-functional.tavern.yaml` fails during the HMS functional test run with error messages about Warning flags being set on one or more BMCs:
+Failures of this test because of empty drive bays as shown above can be safely ignored.
 
-   ```
-   =================================== FAILURES ===================================
-   _ /opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_remote-functional.tavern.yaml::Ensure that we can conduct a query for all Node BMCs in the Component collection _
+<a name="hms-unexpected-discovery-status"></a>
+##### Unexpected HSM Discovery Status (CASMHMS-4794)
 
-   Errors:
-   E   tavern.util.exceptions.TestFailError: Test 'Verify the expected response fields for all NodeBMCs' failed:
-      - Error calling validate function '<function validate_pykwalify at 0x7f44666179d0>':
-         Traceback (most recent call last):
-            File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
-               verifier.validate()
-            File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
-               raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
-         pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
-            - Enum 'Warning' does not exist. Path: '/Components/9/Flag'.
-            - Enum 'Warning' does not exist. Path: '/Components/10/Flag'.
-            - Enum 'Warning' does not exist. Path: '/Components/11/Flag'.
-            - Enum 'Warning' does not exist. Path: '/Components/12/Flag'.
-            - Enum 'Warning' does not exist. Path: '/Components/13/Flag'.
-            - Enum 'Warning' does not exist. Path: '/Components/14/Flag'.: Path: '/'>
-   ```
+The following HMS functional test may fail due to known issue [CASMHMS-4794](https://connect.us.cray.com/jira/browse/CASMHMS-4794) because of an unexpected discovery status in HSM:
+* `test_smd_discovery_status_ncn-functional_remote-functional.tavern.yaml`
 
-   * Retrieve the xnames of all Mountain BMCs with Warning flags set in HSM:
+This issue looks similar to the following in the test output:
+```
+      Traceback (most recent call last):
+         File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+         File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+      pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Value 'NotStarted' does not match pattern 'Complete'. Path: '/0/Status'.
+         - Key 'Details' was not defined. Path: '/0'.: Path: '/'>
+```
 
-   ```
-   ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&Class=Mountain\&Flag=Warning | jq '.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }' -c | sort -V | jq -c
-   {"ID":"x5000c1s0b0","Flag":"Warning","Class":"Mountain"}
-   {"ID":"x5000c1s0b1","Flag":"Warning","Class":"Mountain"}
-   {"ID":"x5000c1s1b0","Flag":"Warning","Class":"Mountain"}
-   {"ID":"x5000c1s1b1","Flag":"Warning","Class":"Mountain"}
-   {"ID":"x5000c1s2b0","Flag":"Warning","Class":"Mountain"}
-   {"ID":"x5000c1s2b1","Flag":"Warning","Class":"Mountain"}
-   ```
+Failures of this test because of an unexpected discovery status as shown above can be safely ignored.
 
-   * For each Mountain BMC xname, check its Redfish BMC Manager status:
+<a name="hms-previously-captured-fas-snapshots"></a>
+##### Previously Captured FAS Snapshots (CASMHMS-5065)
 
-   ```
-   ncn# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq '.Status'
-   {
-   "Health": "OK",
-   "State": "Online"
-   }
-   ```
-
-   * Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.
-
-2. The following HMS functional tests may fail due to known issue [CASMHMS-4664](https://connect.us.cray.com/jira/browse/CASMHMS-4664) because of locked components in HSM:
-
-   * `test_bss_bootscript_ncn-functional_remote-functional.tavern.yaml`
-   * `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
-
-   ```
-         Traceback (most recent call last):
-            File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
-               verifier.validate()
-            File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
-               raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
-         pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
-            - Key 'Locked' was not defined. Path: '/Components/0'.
-            - Key 'Locked' was not defined. Path: '/Components/5'.
-            - Key 'Locked' was not defined. Path: '/Components/6'.
-            - Key 'Locked' was not defined. Path: '/Components/7'.
-            - Key 'Locked' was not defined. Path: '/Components/8'.
-            - Key 'Locked' was not defined. Path: '/Components/9'.
-            - Key 'Locked' was not defined. Path: '/Components/10'.
-            - Key 'Locked' was not defined. Path: '/Components/11'.
-            - Key 'Locked' was not defined. Path: '/Components/12'.: Path: '/'>
-   ```
-   
-   * Failures of these tests because of locked components as shown above can be safely ignored.
-
-3. The following HMS functional test may fail due to known issue [CASMHMS-4693](https://connect.us.cray.com/jira/browse/CASMHMS-4693) because of empty drive bays in HSM:
-
-   * `test_smd_hardware_ncn-functional_remote-functional.tavern.yaml`
-
-   ```
-         Traceback (most recent call last):
-            File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
-               verifier.validate()
-            File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
-               raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
-         pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
-            - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/3'.
-            - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/4'.
-            - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/5'.
-            - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/6'.
-            - Cannot find required key 'PopulatedFRU'. Path: '/Nodes/0/Drives/7'.: Path: '/'>
-   ```
-
-   * Failures of this test because of empty drive bays as shown above can be safely ignored.
-
-4. The following HMS functional test may fail due to known issue [CASMHMS-4794](https://connect.us.cray.com/jira/browse/CASMHMS-4794) because of an unexpected discovery status in HSM:
-
-   * `test_smd_discovery_status_ncn-functional_remote-functional.tavern.yaml`
-
-   ```
-         Traceback (most recent call last):
-            File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
-               verifier.validate()
-            File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
-               raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
-         pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
-            - Value 'NotStarted' does not match pattern 'Complete'. Path: '/0/Status'.
-            - Key 'Details' was not defined. Path: '/0'.: Path: '/'>
-   ```
-
-   * Failures of this test because of an unexpected discovery status as shown above can be safely ignored.
-
-5. The following HMS functional test may fail due to known issue [CASMHMS-5065](https://connect.us.cray.com/jira/browse/CASMHMS-5065) because of FAS snapshots that may have been previously captured on the system:
-
+The following HMS functional test may fail due to known issue [CASMHMS-5065](https://connect.us.cray.com/jira/browse/CASMHMS-5065) because of FAS snapshots that may have been previously captured on the system:
    * `test_fas_snapshots_ncn-functional_remote-functional.tavern.yaml`
-
    ```
    ERROR    tavern.schemas.files:files.py:108 Error validating {'snapshots': [{'name': 'fasTestSnapshot', 'captureTime': '2021-10-25 21:29:00.139366661 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 68}, {'name': 'testSnap', 'captureTime': '2021-05-04 17:16:33.050058886 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 68}, {'name': 'testSnap2', 'captureTime': '2021-05-04 17:20:33.132276731 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 68}, {'name': 'x1000c5s5', 'captureTime': '2021-08-16 20:09:20.641734739 +0000 UTC', 'expirationTime': '2021-12-31 02:35:54 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 2}, {'name': 'x3000c0s20b4n0', 'captureTime': '2021-07-23 04:26:43.456013148 +0000 UTC', 'expirationTime': '2021-10-31 02:35:54 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 0}]}
    ```
@@ -567,14 +624,6 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
 
 <a name="cms-validation-utility"></a>
 ## Cray Management Services Validation Utility
-`/usr/local/bin/cmsdev`
-
-### CRAY INTERNAL USE ONLY
-This tool is included in the `cray-cmstools-crayctldeploy` RPM, which comes preinstalled on the ncns. However, the tool is receiving frequent updates in the run up to the release. Because of this, it is highly recommended to download and install the latest version.
-
-You can get the latest version of the RPM from car.dev.cray.com in the [csm/SCMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/cms-team/](http://car.dev.cray.com/artifactory/webapp/#/artifacts/browse/tree/General/csm/SCMS/sle15_sp2_ncn/x86_64/release/shasta-1.4/cms-team) folder. The [corresponding folder in the master branch](http://car.dev.cray.com/artifactory/webapp/#/artifacts/browse/tree/General/csm/SCMS/sle15_sp2_ncn/x86_64/release/master/cms-team) may have an even more recent version of the tool, which has not yet been synced to the release branch. At this time no changes have been included in the master branch which are not intended to work on the 1.4 release. Install it on every worker and master NCN (except for ncn-m001 if it is still the PIT node).
-
-At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.cray.com/jira/browse/CASMTRIAGE-553)) which causes some git pushes to VCS to hang. Prior to cmsdev version 0.8.21, this would result in the VCS test hanging. Starting in cmsdev version 0.8.21, the test was modified to try to avoid this issue. **If you see the VCS test hang on cmsdev version 0.8.21 or later**, please record this in ([CASMTRIAGE-553](https://connect.us.cray.com/jira/browse/CASMTRIAGE-553)) and include the cmsdev version. If you do see the test hang, stop the test with control-C and re-run it. It may take a few tries but so far it has always eventually executed.
 
 1. [Usage](#cms-usage)
 1. [Interpreting Results](#cms-results)
@@ -582,7 +631,7 @@ At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.
 
 <a name="cms-usage"></a>
 ### Usage
-`cmsdev test [-q | -v] <shortcut>`
+`/usr/local/bin/cmsdev test [-q | -v] <shortcut>`
 * The shortcut determines which component will be tested. See the table in the next section for the list of shortcuts.
 * The tool logs to /opt/cray/tests/cmsdev.log
 * The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
@@ -602,7 +651,7 @@ At the time of this writing there is a bug ([CASMTRIAGE-553](https://connect.us.
 <a name="cms-checks"></a>
 ### Checks To Run
 
-You should run a check for each of the following services after an install. These should be run on at least one worker NCN and at least one master NCN (but **not** ncn-m001 if it is still the PIT node).
+You should run a check for each of the following services after an install. These should be executed as root on any worker or master NCN (but **not** the PIT node).
 
 | Services  | Shortcut |
 | ---  | --- |
@@ -619,7 +668,7 @@ You should run a check for each of the following services after an install. Thes
 The following is a convenient way to run all of the tests and see if they passed:
 
 ```bash
-ncn# for S in bos cfs conman crus ims ipxe vcs ; do
+ncn-mw# for S in bos cfs conman crus ims ipxe vcs ; do
     LOG=/root/cmsdev-$S-$(date +"%Y%m%d_%H%M%S").log
     echo -n "$(date) Starting $S check ... "
     START=$SECONDS
