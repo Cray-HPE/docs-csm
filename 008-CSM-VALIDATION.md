@@ -540,7 +540,7 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
 
 4. The following HMS functional test may fail due to known issue [CASMHMS-4794](https://connect.us.cray.com/jira/browse/CASMHMS-4794) because of an unexpected discovery status in HSM:
 
-   * `test_smd_discovery_status.tavern.yaml`
+   * `test_smd_discovery_status_ncn-functional_remote-functional.tavern.yaml`
 
    ```
          Traceback (most recent call last):
@@ -554,6 +554,16 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-
    ```
 
    * Failures of this test because of an unexpected discovery status as shown above can be safely ignored.
+
+5. The following HMS functional test may fail due to known issue [CASMHMS-5065](https://connect.us.cray.com/jira/browse/CASMHMS-5065) because of FAS snapshots that may have been previously captured on the system:
+
+   * `test_fas_snapshots_ncn-functional_remote-functional.tavern.yaml`
+
+   ```
+   ERROR    tavern.schemas.files:files.py:108 Error validating {'snapshots': [{'name': 'fasTestSnapshot', 'captureTime': '2021-10-25 21:29:00.139366661 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 68}, {'name': 'testSnap', 'captureTime': '2021-05-04 17:16:33.050058886 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 68}, {'name': 'testSnap2', 'captureTime': '2021-05-04 17:20:33.132276731 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 68}, {'name': 'x1000c5s5', 'captureTime': '2021-08-16 20:09:20.641734739 +0000 UTC', 'expirationTime': '2021-12-31 02:35:54 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 2}, {'name': 'x3000c0s20b4n0', 'captureTime': '2021-07-23 04:26:43.456013148 +0000 UTC', 'expirationTime': '2021-10-31 02:35:54 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 0}]}
+   ```
+
+   * Any failures of this test caused by snapshots other than 'fasTestSnapshot' can be safely ignored.
 
 <a name="cms-validation-utility"></a>
 ## Cray Management Services Validation Utility
