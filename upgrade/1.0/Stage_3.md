@@ -30,27 +30,6 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.
 For ncn-m001, use ncn-m002 as the stable NCN:
 > NOTE: using vlan007/CAN IP address to `ssh` to `ncn-m002` for `ncn-m001` install
 
-`Option 1` - Internet Connected Environment
-
-Install document RPM package:
-
-```bash
-ncn-m002# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
-ncn-m002# rpm -Uvh docs-csm-latest.noarch.rpm
-```
-
-Download and untar the CSM tarball:
-
-Run:
-
-```bash
-ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
-```
-
-**NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default.
-
-`Option 2` - Air Gapped Environment
-
 Install document RPM package:
 
 ```bash

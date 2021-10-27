@@ -86,15 +86,15 @@ Perform these steps to update `customizations.yaml`:
 > ncn-m# unset CRAY_FORMAT
 >```
 
+>**`IMPORTANT:`**
+> 
+> Download csm tarball file onto the file system of ncn-m001
+> 
+
+
 Run check script:
 
-* Internet Connected
-
-    ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
-    ```
-
-    **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default.
+> Example value of `CSM_RELEASE`: csm-1.0.0
 
 * Air Gapped
 
