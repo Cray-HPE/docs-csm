@@ -83,7 +83,7 @@ Perform these steps to update `customizations.yaml`:
 > Run below command to make sure cray cli output format is reset to default
 > 
 >```
-> ncn-m# unset CRAY_OUTPUT
+> ncn-m# unset CRAY_FORMAT
 >```
 
 Run check script:
