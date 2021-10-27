@@ -78,6 +78,14 @@ Perform these steps to update `customizations.yaml`:
 
 ## Stage 0.3 - Execute Prerequisites Check
 
+>**`IMPORTANT:`**
+> 
+> Run below command to make sure cray cli output format is reset to default
+> 
+>```
+> ncn-m# unset CRAY_OUTPUT
+>```
+
 Run check script:
 
 * Internet Connected
