@@ -1,0 +1,51 @@
+kind: step
+metadata:
+  name: Setup Nexus
+  description: |-
+    # Setup Nexus
+
+    Run `./lib/setup-nexus.sh` to configure Nexus and upload CSM RPM repositories,
+    container images, and Helm charts. This command may take 20 minutes or more to run.
+
+    ```bash
+    pit# ./lib/setup-nexus.sh
+    ```
+
+    On success, `setup-nexus.sh` will output to `OK` on stderr and exit with status
+    code `0`, e.g.:
+
+    ```bash
+    pit# ./lib/setup-nexus.sh
+    ...
+    + Nexus setup complete
+    setup-nexus.sh: OK
+spec:
+  jobs:
+    - preCondition:
+        description: |-
+          Nothing
+        command: |-
+          true
+        troubleshooting: |-
+          Nothing
+      action:
+        description: |-
+          Nothing
+        command: |-
+          cd /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}
+          ./lib/setup-nexus.sh
+        troubleshooting: |-
+          In the event of an error, consult the [known issues](#known-issues) below to
+          resolve potential problems and then try running `setup-nexus.sh` again. Note
+          that subsequent runs of `setup-nexus.sh` may report `FAIL` when uploading
+          duplicate assets. This is ok as long as `setup-nexus.sh` outputs
+          `setup-nexus.sh: OK` and exits with status code `0`.
+
+          TODO: import ../operations/package_repository_management/Troubleshoot_Nexus.md here
+      postValidation:
+        description: |-
+          Nothing
+        command: |-
+          true
+        troubleshooting: |-
+          Nothing

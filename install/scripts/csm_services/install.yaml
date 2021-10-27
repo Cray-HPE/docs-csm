@@ -1,0 +1,13 @@
+kind: pipeline
+metadata:
+  name: CSM Services Install Pipeline
+  description: ../../install_csm_services.md
+spec:
+  steps:
+    - ./steps/1.initialize_bootstrap_registry.yaml
+    - ./steps/2.create_site_init_secret.yaml
+    - ./steps/3.deploy_sealed_secret_decryption_key.yaml
+    - ./steps/4.deploy_csm_application_and_services.yaml
+    - ./steps/5.setup_nexus.yaml
+    - ./steps/6.set_management_NCN_to_use_unbount.yaml
+    - ./steps/7.apply_pod_priorities.yaml
