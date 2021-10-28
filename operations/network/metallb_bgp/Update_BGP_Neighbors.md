@@ -17,7 +17,7 @@ You will not have BGP peers until CSM `install.sh` has run. This is where MetalL
 CSI CLI arguments with `--bgp-peers aggregation`
 ```bash
 linux# export IPMI_PASSWORD=changeme
-linux# csi config init --bootstrap-ncn-bmc-user root --bootstrap-ncn-bmc-pass $IPMI_PASSWORD --ntp-pool cfntp-4-1.us.cray.com,cfntp-4-2.us.cray.com --can-external-dns 10.103.8.113 --can-gateway 10.103.8.1 --site-ip 172.30.56.2/24 --site-gw 172.30.48.1 --site-dns 172.30.84.40 --site-nic em1 --system-name odin --bgp-peers aggregation
+linux# csi config init --bootstrap-ncn-bmc-user root --bootstrap-ncn-bmc-pass $IPMI_PASSWORD --ntp-pool cfntp-4-1.us.cray.com,cfntp-4-2.us.cray.com --cmn-external-dns 10.103.8.113 --cmn-gateway 10.103.8.1 --can-gateway 10.103.9.1 --site-ip 172.30.56.2/24 --site-gw 172.30.48.1 --site-dns 172.30.84.40 --site-nic em1 --system-name odin --bgp-peers aggregation
 ```
 
 ## Automated Process

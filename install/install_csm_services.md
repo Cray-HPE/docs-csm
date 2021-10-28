@@ -63,7 +63,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
     ```bash
     pit# export CSM_RELEASE=csm-x.y.z
-    pit# podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/dtr.dev.cray.com:/images:ro quay.io/skopeo/stable sync \
+    pit# podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker:/images:ro quay.io/skopeo/stable sync \
     --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000
     ```
 
