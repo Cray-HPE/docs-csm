@@ -44,7 +44,7 @@ This document and the procedure contained within it is for the purposes of commu
    ncn# ipmitool -I lanplus -U root -P <password> -H <ncn-node-name> chassis power status
    ```
    If `ncn-m001` is the node to be brought down, note that it has the external connection so it will be important to establish that ipmitool commands will be able to be run from a node external to the system, in order to get the ipmitool power staus of `ncn-m001`.
-* If `ncn-m001` is the node to take down, establish CAN links to bypass `ncn-m001` (since it will be down) in order to enable an external connection to one of the other master ncn nodes before, during, and after `ncn-m001` is brought down.
+* If `ncn-m001` is the node to take down, establish CAN links to bypass `ncn-m001` (because it will be down) in order to enable an external connection to one of the other master ncn nodes before, during, and after `ncn-m001` is brought down.
 * Verify BOS templates and create a new one(s) if needed (to be set-up for booting a specific compute node(s) after the targeted NCN node has been shutdown
    Ahead of shutting down the NCN and beginning resiliency testing, we want to verify that compute nodes identified for reboot validation can be successfully rebooted and configured.
    To see a listing of bos templates that exist on the system, run:
