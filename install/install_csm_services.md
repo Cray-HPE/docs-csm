@@ -65,6 +65,12 @@ This procedure will install CSM applications and services into the CSM Kubernete
     pit# export CSM_RELEASE=csm-x.y.z
     pit# podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/dtr.dev.cray.com:/images:ro quay.io/skopeo/stable sync \
     --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000
+
+    pit# podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/arti.dev.cray.com:/images:ro quay.io/skopeo/stable sync \
+    --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000
+
+    pit# podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/artifactory.algol60.net:/images:ro quay.io/skopeo/stable sync \
+    --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000
     ```
 
     > **`NOTE`** As the bootstrap Nexus uses the default configuration, the
