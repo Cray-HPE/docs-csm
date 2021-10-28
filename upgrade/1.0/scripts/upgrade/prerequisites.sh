@@ -315,9 +315,9 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
 
     # post the update json to bss
     curl -s -k -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" \
-	    --request PUT \
-	    --data @cloud-init-global_update.json \
-	    https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
+        --request PUT \
+        --data @cloud-init-global_update.json \
+        https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
 
     # perform additional cloud-init updates
     for upgrade_ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' '); do

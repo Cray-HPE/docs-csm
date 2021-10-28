@@ -36,6 +36,14 @@ The file locations:
 
 ## Procedure
 
+>**`IMPORTANT:`**
+> 
+> Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
+>
+>```bash
+> ncn# unset CRAY_FORMAT
+>```
+
 1. Run the NAE install script:
 
 	```bash
