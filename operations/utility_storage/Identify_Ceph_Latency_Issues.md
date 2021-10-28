@@ -68,7 +68,7 @@ Based on the output from ceph -s (using our example above) we can correlate some
    1. The most common cause here is either an abrupt clock skew or a hung mon/mgr process.
       1. The recommended remediation is to do a rolling restart of the ceph `MON` and `MGR` daemons.
 
-3. When reporting  slow ops for `MDS`, then it could be due to a couple of different reasons.
+3. When reporting slow ops for `MDS`, then it could be due to a couple of different reasons.
    1. If listed in addition to `OSDs`, then the root cause for this will typically be the `OSDs` and the process above should be used followed by restarting the `MDS` daemons
    2. If it is only listing `MDS`, then restart the MDS daemons. If the problem persists, then the logs will have to be investigated for the root cause.
    3. See [Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client](Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client.md) for additional steps to help identify MDS slow ops

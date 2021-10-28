@@ -2,7 +2,7 @@
 
 ## Procedure
 
-1. Log into a node running ceph-mon.  Typically this will be ncn-s001/2/3.
+1. Log into a node running ceph-mon. Typically this will be ncn-s001/2/3.
 
 1. Check the ceph health.
 

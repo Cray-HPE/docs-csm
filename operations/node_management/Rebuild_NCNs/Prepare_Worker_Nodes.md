@@ -82,7 +82,7 @@ Run the following from a master node:
 * You may run into pods that cannot be gracefully evicted due to Pod Disruption Budgets (PDB), for example:
 
     ```screen
-      error when evicting pod "<pod>" (will retry after 5s): Cannot evict pod as it would violate the pod's   disruption budget.
+      error when evicting pod "<pod>" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.
     ```
 
 * In this case, there are some options. First, if the service is scalable, you can increase the scale to start up another pod on another node, and then the drain will be able to delete it. However, it will probably be necessary to force the deletion of the pod:
