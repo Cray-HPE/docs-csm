@@ -397,7 +397,7 @@ If a Postgres cluster no longer has a leader, the database will need to be recov
 ```bash
 ncn-w001# POSTGRESQL=cray-smd-postgres
 ncn-w001# NAMESPACE=services
-ncn-w001# kubectl exec ${POSTGRESQL} -n ${NAMESPACE} -c postgres -- patronictl list
+ncn-w001# kubectl exec ${POSTGRESQL}-0 -n ${NAMESPACE} -c postgres -- patronictl list
 +-------------------+---------------------+------------+------+--------------+----+-----------+
 |      Cluster      |        Member       |    Host    | Role |    State     | TL | Lag in MB |
 +-------------------+---------------------+------------+------+--------------+----+-----------+
