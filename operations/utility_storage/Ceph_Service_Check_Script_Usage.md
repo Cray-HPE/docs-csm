@@ -20,7 +20,7 @@ usage:  ceph-service-status.sh # runs a simple ceph health check
 
 **`Important:`** By default this output of this command will not be verbose. This is to accommodate goss testing. For manual runs, please use the `-v true` flag.
 
-**`Important:`** If you encounter this message `parse error: Invalid numeric literal at line 1, column 5` that is indicating that the cached ssh keys in known_hosts are no longer valid. The simple fix is `> ~/.ssh/known_hosts` and re-run the script. It will update the keys.
+**`Important:`** If you encounter this message `parse error: Invalid numeric literal at line 1, column 5` that is indicating that the cached ssh keys in known_hosts are no longer valid. The simple fix is to empty the `~/.ssh/known_hosts` file and re-run the script. It will update the keys.
 
 ## Examples
 
