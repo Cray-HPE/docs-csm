@@ -8,7 +8,7 @@ As part of the installation, Kubernetes generates certificates for the required 
 
 **`IMPORTANT:`** When you pick your master node to renew the certificatess on, that is the node that will be referenced in this document as `ncn-m`.
 
-**`IMPORTANT:`** This document is based off a base hardware configuration of 3 masters and 3 workers (We are leaving off utility storage since they are not running Kubernetes). Please make sure to update any commands that run on multiple nodes accordingly.
+**`IMPORTANT:`** This document is based off a base hardware configuration of 3 masters and 3 workers (We are leaving off utility storage because they are not running Kubernetes). Please make sure to update any commands that run on multiple nodes accordingly.
 
 ## File locations
 
