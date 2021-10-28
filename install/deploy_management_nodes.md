@@ -493,7 +493,7 @@ If there are LVM check failures, then the problem must be resolved before contin
     1. Wipe each affected worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
     1. Power off each affected worker node.
     1. Return to the [Boot the Master and Worker Nodes](#boot-master-and-worker-nodes) step of the [Deploy Management Nodes](#deploy_management_nodes) section above.
-        * Note: The `ipmitool` command will give errors trying to power on the unaffected nodes, since they are already powered on -- this is expected and not a problem.
+        * Note: The `ipmitool` command will give errors trying to power on the unaffected nodes, because they are already powered on -- this is expected and not a problem.
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 ### 3.4 Check for Unused Drives on Utility Storage Nodes

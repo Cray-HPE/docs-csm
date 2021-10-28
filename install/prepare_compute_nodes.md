@@ -58,7 +58,7 @@ This procedure needs to be done for each of the HPE Apollo 6500 XL645d nodes to 
    ]
    }
    ```
-   *NOTE:* the data might not exist in HSM for the node which is fine because if it isn't there then the data isn't needed to clean up KEA later.
+   *NOTE:* the data might not exist in HSM for the node which is fine because if it is not there then the data is not needed to clean up KEA later.
 
    Make a note of the ID, MACAddress, and IPAddress of the entry that has the
    10.254 address listed. Those will be used later to clean up kea and

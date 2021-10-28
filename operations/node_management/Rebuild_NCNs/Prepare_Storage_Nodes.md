@@ -4,7 +4,7 @@
 
 Prepare a storage node before rebuilding it.
 
-**IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed.  For example, if this is a rebuild in place then ceph components will not be reporting down, versus a failed node rebuild.
+**IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed. For example, if this is a rebuild in place then ceph components will not be reporting down, versus a failed node rebuild.
 
 ## Prequisites
 
@@ -150,7 +150,7 @@ If rebuilding ncn-s001, it is critical that the storage-ceph-cloudinit.sh has be
      41    ssd   1.74660          osd.41       down   1.00000  1.00000
     ```
 
-    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.  By default if the OSD reference is not removed, then there will still a reference to them in the crush map and will show down OSDs down that no longer exist.
+    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives. By default if the OSD reference is not removed, then there will still a reference to them in the crush map and will show down OSDs down that no longer exist.
 
     This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
