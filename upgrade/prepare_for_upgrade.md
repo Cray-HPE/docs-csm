@@ -25,6 +25,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
         ncn-m001# sdu --scenario triage --start_time '-4 hours' \
         --reason "saving state before powerdown/up"
         ```
+        Refer to the HPE Cray EX System Dump Utility (SDU) Administration Guide for more information and troubleshooting steps.
 
     1. Check Ceph status.
 
@@ -79,9 +80,9 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    Some of the CSM health checks, such as booting the barebones image on the compute nodes, could be skipped.
 
-   See the `CSM Install Validation and Health Checks` procedures **`in the CSM 1.1 documentation`**. 
+   See the `CSM Install Validation and Health Checks` procedures in the documentation for your **`CURRENT**` CSM version.
 
-   **`IMPORTANT:` The validation procedures in the CSM 1.2 documentation are not all intended to work on CSM 1.1.
+   **`IMPORTANT:` The validation procedures in the CSM 1.2 documentation are not all intended to work on previous versions of CSM.
 
 1. Validate Lustre Health
 

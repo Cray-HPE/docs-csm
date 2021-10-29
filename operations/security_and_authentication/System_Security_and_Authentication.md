@@ -26,14 +26,15 @@ All connections through the Istio ingress gateway require authentication with a 
 -   /service/rest
 -   /capsules/
 
-
 ### Table of Contents
 
 -   [Manage System Passwords](Manage_System_Passwords.md)
     -   [Update NCN Passwords](Update_NCN_Passwords.md)
     -   [Change Root Passwords for Compute Nodes](Change_Root_Passwords_for_Compute_Nodes.md)
     -   [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
--   [Retrieve an Authentication Token](Retrieve_an_Authentication_Token.md)
+    -   [Change EX Liquid-Cooled Cabinet Global Default Password](Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
+    -   [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md)
+    -   [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
 -   [SSH Keys](SSH_Keys.md)
 -   [Authenticate an Account with the Command Line](Authenticate_an_Account_with_the_Command_Line.md)
 -   [Default Keycloak Realms, Accounts, and Clients](Default_Keycloak_Realms_Accounts_and_Clients.md)
@@ -57,6 +58,14 @@ All connections through the Istio ingress gateway require authentication with a 
     -   [Change the LDAP Server IP Address for New LDAP Server Content](Change_the_LDAP_Server_IP_Address_for_New_LDAP_Server_Content.md)
     -   [Remove the LDAP User Federation from Keycloak](Remove_the_LDAP_User_Federation_from_Keycloak.md)
     -   [Add LDAP User Federation](Add_LDAP_User_Federation.md)
+-   [Public Key Infrastructure \(PKI\)](Public_Key_Infrastructure_PKI.md)
+    -   [PKI Certificate Authority \(CA\)](PKI_Certificate_Authority_CA.md)
+    -   [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
+    -   [Transport Layer Security \(TLS\) for Ingress Services](Transport_Layer_Security_for_Ingress_Services.md)
+    -   [PKI Services](PKI_Services.md)
+    -   [HashiCorp Vault](HashiCorp_Vault.md)
+    -   [Backup and Restore Vault Clusters](Backup_and_Restore_Vault_Clusters.md)
+    -   [Troubleshoot Common Vault Cluster Issues](Troubleshoot_Common_Vault_Cluster_Issues.md)
 -   [Public Key Infrastructure \(PKI\)](Public_Key_Infrastructure_PKI.md)
     -   [PKI Certificate Authority \(CA\)](PKI_Certificate_Authority_CA.md)
     -   [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)

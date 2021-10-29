@@ -34,7 +34,7 @@ This procedure needs to be done for each HPE Apollo 6500 XL645d node managed by 
 
    ```
    ncn-m001:~ # cray hsm inventory ethernetInterfaces list --component-id \
-           x3000c0s30b0n0 | jq '.[]|select((.IPAddresses|length)>0)'
+           x3000c0s30b0n0 --format json | jq '.[]|select((.IPAddresses|length)>0)'
    {
    "ID": "6805cabbc182",
    "Description": "",
@@ -62,6 +62,7 @@ This procedure needs to be done for each HPE Apollo 6500 XL645d node managed by 
    ]
    }
    ```
+   *NOTE:* the data might not exist in HSM for the node which is fine because if it is not there then the data is not needed to clean up KEA later.
 
    Make a note of the ID, MACAddress, and IPAddress of the entry that has the
    10.254 address listed. Those will be used later to clean up kea and

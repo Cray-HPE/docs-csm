@@ -36,7 +36,7 @@ See the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-
 
 ### ExternalDNS (cray-externaldns-external-dns)
 
-ExternalDNS creates DNS records for services that are intended to be accessible via the Customer Access Network (CAN). For example grafana.wasp.dev.cray.com.
+ExternalDNS creates DNS records for services that are intended to be accessible via the Customer Access Network (CAN), Customer Management Network (CMN), and Customer High-Speed Network (CHN). For example grafana.cmn.wasp.dev.cray.com.
 
 Kubernetes Services annotated with `external-dns.alpha.kubernetes.io/hostname` have DNS records created.
 
@@ -48,9 +48,9 @@ Starting with CSM version 1.1 these DNS records are created in the PowerDNS serv
 
 PowerDNS is an authoritative DNS server which over the next few CSM releases will replace Unbound sa the primary DNS server within a CSM system.
 
-PowerDNS is able to respond to queries for services accessible via the CAN. records are externally accessible via the LoadBalancer IP address specified for the CSI `--can-external-dns` option.
+PowerDNS is able to respond to queries for services accessible via the CAN, CMN, or CHN. Records are externally accessible via the LoadBalancer IP address specified for the CSI `--cmn-external-dns` option.
 
-As with earlier CSM releases it is possible to delegate to PowerDNS to resolve CAN services and it is also possible to configure zone transfer to sync the DNS records from PowerDNS to Site DNS.
+As with earlier CSM releases it is possible to delegate to PowerDNS to resolve services and it is also possible to configure zone transfer to sync the DNS records from PowerDNS to Site DNS.
 
 ### PowerDNS Manager (cray-powerdns-manager)
 

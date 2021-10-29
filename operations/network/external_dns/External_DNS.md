@@ -44,20 +44,9 @@ There is a separate set of DNS instances within HPE Cray EX that is used by the 
 
 ### Connect Customer DNS to External DNS
 
-The DNS instance at the customer site should use DNS forwarding to forward the subdomain specified by the `system-name` and `site-domain` values \(combined to make the `system-name.site-domain` value\) to the IP address specified by the `can-external-dns` value. These values are defined with the `csi config init` command. The specifics on how to do the forwarding configuration is dependent on the type of DNS used by the customer.
+The DNS instance at the customer site should use DNS forwarding to forward the subdomain specified by the `system-name` and `site-domain` values \(combined to make the `system-name.site-domain` value\) to the IP address specified by the `cmn-external-dns` value. These values are defined with the `csi config init` command. The specifics on how to do the forwarding configuration is dependent on the type of DNS used by the customer.
 
 The External DNS instance currently does not support zone transfer.
-
-### Table of Contents
-
-* [External DNS csi config init Input Values](External_DNS_csi_config_init_Input_Values.md)
-* [Update the system-name.site-domain Value Post-Installation](Update_the_system-name_site-domain_Value_Post-Installation.md)
-* [Update the can-external-dns Value Post-Installation](Update_the_can-external-dns_Value_Post-Installation.md)
-* [Ingress Routing](Ingress_Routing.md)
-* [Add NCNs and UANs to External DNS](Add_NCNs_and_UANs_to_External_DNS.md)
-* [External DNS Failing to Discover Services Workaround](External_DNS_Failing_to_Discover_Services_Workaround.md)
-* [Troubleshoot Connectivity to Services with External IP addresses](Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
-* [Troubleshoot DNS Configuration Issues](Troubleshoot_DNS_Configuration_Issues.md)
 
 
 
