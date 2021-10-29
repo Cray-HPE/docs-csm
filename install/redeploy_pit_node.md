@@ -49,7 +49,7 @@ Required Platform Services:
 > - The NCN **will never wipe a USB device** during installation
 
 > 
-> - Prior to shutting down the PIT, learning the CAN IP addresses of the other NCNs will be a benefit if troubleshooting is required 
+> - Prior to shutting down the PIT, learning the CMN IP addresses of the other NCNs will be a benefit if troubleshooting is required 
 > 
 > This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
 > **unavailable**.
@@ -242,18 +242,18 @@ data, so run them only when indicated. Instructions are in the `README` files.
     BootNext: 0014
     ```
 
-1. Collect a backdoor login ... fetch the CAN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
+1. Collect a backdoor login ... fetch the CMN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
 
     1. Get the IP
 
         ```bash
-        pit# ssh ncn-m002 'ip a show vlan007 | grep inet'
+        pit# ssh ncn-m002 'ip a show bond0.cmn0 | grep inet'
         ```
 
         _Expected output (values may differ)_:
 
         ```
-        inet 10.102.11.13/24 brd 10.102.11.255 scope global vlan007
+        inet 10.102.11.13/24 brd 10.102.11.255 scope global bond0.cmn0
         inet6 fe80::1602:ecff:fed9:7820/64 scope link
         ```
 
@@ -424,9 +424,10 @@ data, so run them only when indicated. Instructions are in the `README` files.
     ncn-m001# ip a show bond0.nmn0
     ncn-m001# ip a show bond0.hmn0
     ncn-m001# ip a show bond0.can0
+    ncn-m001# ip a show bond0.cmn0
     ```
 
-1. Run `ip r` to show our default route is via the CAN/vlan007.
+1. Run `ip r` to show our default route is via the CMN.
 
     ```bash
     ncn-m001# ip r show default
