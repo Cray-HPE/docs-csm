@@ -138,11 +138,11 @@ The uplink ports are the ports connecting the CDU switches to the upstream switc
 
    ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
-   interface lag 99 multi-chassis
+   interface lag 255 multi-chassis
        no shutdown
        no routing
        vlan trunk native 1
-       vlan trunk allowed all
+       vlan trunk allowed 1-2,4
        lacp mode active
        exit
    ```
@@ -154,7 +154,7 @@ The uplink ports are the ports connecting the CDU switches to the upstream switc
    interface 1/1/51 - 1/1/52
        no shutdown
        mtu 9198
-       lag 99
+       lag 255
        exit
    ```
 
@@ -410,6 +410,28 @@ ACLs are designed to block traffic from the NMN to and from the HMN.
        80 deny any 10.104.0.0/255.252.0.0 10.100.0.0/255.252.0.0
        90 permit any any any
    ```
+   ACL with variables from a MTN system.
+   ```bash
+   sw-cdu-001 & sw-cdu-002 (config)#
+       access-list ip nmn-hmn
+       10 deny any $RVR_NMN $RVR_HMN
+       20 deny any $RVR_NMN $MTN_HMN
+       30 deny any $RVR_HMN $RVR_NMN
+       40 deny any $RVR_HMN $MTN_NMN
+       50 deny any $MTN_NMN $RVR_HMN
+       60 deny any $MTN_NMN $MTN_HMN
+       70 deny any $MTN_HMN $RVR_NMN
+       80 deny any $MTN_HMN $MTN_NMN
+       90 permit any any any
+   ```
+   ACL with variables from a MTN system.
+   ```bash
+   sw-cdu-001 & sw-cdu-002 (config)#
+       access-list ip nmn-hmn
+       10 deny any $RVR_NMN $RVR_HMN
+       20 deny any $RVR_HMN $RVR_NMN
+       30 permit any any any
+   ```
 
 1. Apply ACL to VLANs.
 
@@ -516,7 +538,8 @@ ACLs are designed to block traffic from the NMN to and from the HMN.
        no routing
        vlan trunk native 2000
        vlan trunk allowed 2000,3000,4091
-
+       spanning-tree root-guard
+       
        interface 1/1/1
        no shutdown
        mtu 9198
