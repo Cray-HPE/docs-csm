@@ -78,15 +78,14 @@ function check_service(){
 
       if [[ $verbose == "true" ]]
       then
-        echo "Service $osd on $node is reporting up for $diff seconds"
+        echo "Service $service on $host is reporting up for $diff seconds"
         echo "$service's status is reporting up: $up  in: $in"
       fi
-
-      if [[ -n "$osd" ]]
+      if [[ -n "$osd_id" ]] || [[ -n "$osd" ]]
       then
-        read -r -d "\n" service_unit status epoch < <(pdsh -N -w "$host" podman ps --format json 2>&1 |grep -v "Permanently added"|jq --arg osd "$osd" -r '.[]|select(.Names[]|contains($osd))|.Names[], .State, .StartedAt')
+        read -r -d "\n" service_unit status epoch < <(pdsh -N -w "$host" podman ps --format json 2>&1 |grep -v "Permanently added"|jq --arg osd "osd-$osd_id" -r '.[]|select(.Names[]|contains($osd))|.Names[], .State, .StartedAt')
         (( tests++ ))
-        if [[ "$service_unit" =~ "$FSID_STR-$osd" ]]
+        if [[ "$service_unit" =~ "$FSID_STR-osd-$osd_id" ]]
         then
           (( passed++ ))
         fi
@@ -157,9 +156,9 @@ function check_service(){
         echo "Service $service on $node has been restarted and up for $diff seconds"
         echo "$service's status is: $(ceph orch ps --daemon_type mds --hostname "$host" -f json-pretty|jq -r '.[].status_desc')"
       fi
-      read -r -d "\n" service_unit status epoch < <(pdsh -N -w "$host" podman ps --format json 2>&1|grep -v "Permanently added"|jq --arg service "$service" -r '.[]|select(.Names[]|contains($service))|.Names[], .State, .StartedAt')
+      read -r -d "\n" service_unit status epoch < <(pdsh -N -w "$host" podman ps --format json 2>&1|grep -v "Permanently added"|jq --arg service "$service_name" -r '.[]|select(.Names[]|contains($service))|.Names[], .State, .StartedAt')
       (( tests++ ))
-      if [[ "$service_unit" =~ "$FSID_STR-$service" ]]
+      if [[ "$service_unit" =~ "$FSID_STR-$service_name" ]]
       then
         (( passed++ ))
       fi
@@ -259,7 +258,7 @@ then
      then
        for osd in $(ceph orch ps --daemon_type osd --hostname "$host" -f json-pretty |jq -r '.[]|(.daemon_type+"."+.daemon_id)')
        do
-         check_service
+         check_service 
        done
      else
        check_service
