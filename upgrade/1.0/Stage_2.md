@@ -55,4 +55,12 @@
     ncn-m001# update_bss_storage
     ```
 
+1. Ensure the ceph services are set to autostart
+
+   On ncn-s001:
+
+   ```bash
+   /srv/cray/scripts/common/ceph-enable-services.sh
+   ```
+
  Once `Stage 2` is successfully completed, all the Ceph nodes have been rebooted into the new image. Now proceed to [Stage 3](Stage_3.md).

@@ -156,4 +156,14 @@ To prevent any possibility of losing configuration data, backup the VCS data and
 
 To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting back-up data should be stored in a safe location off of the system.
 
+## Stage 0.6 - Update the Storage Node runcmds for reboots
+
+To prevent accidental storage cloud-init runs and also to ensure the Ceph services are set to auto-start on boot, please run the below script.
+
+On ncn-m001:
+
+```bash
+python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
+```
+
 Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).
