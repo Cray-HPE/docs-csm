@@ -52,6 +52,8 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `vlan007`/CAN IP address t
 
 1. Install document RPM and run check script on `ncn-m002`
 
+    **NOTE** The `prerequisites.sh` script will warn that it will unmount `/mnt/pitdata`, but this is not accurate. The script will only unmount it if the script itself mounts it. That is, if it is mounted when the script begins, the script will not unmount it.
+
     * Option 1 - Internet Connected Environment
 
         1. Install document RPM package:
