@@ -2,11 +2,19 @@
 
 ## Manage Sealed Secrets
 
-Procedures for encrypting, decrypting, and modifying Kubernetes sealed secrets.
+Sealed secrets are essential for managing sensitive information on the system. The following procedures for managing sealed secrets are included in this section:
+
+   - [Generate Sealed Secrets Post-Install](#generate-sealed-secrets-post-install)
+   - [Prevent Regeneration of Tracked Sealed Secrets](#prevent-regeneration-of-tracked-sealed-secrets)
+   - [View Tracked Sealed Secrets](#view-tracked-sealed-secrets)
+   - [Decrypt Sealed Secrets for Review](#decrypt-sealed-secrets-for-review)
+
+In the following sections, the term "tracked sealed secrets" is used to describe
+any existing secrets stored in `spec.kubernetes.tracked_sealed_secrets` that are available to be regenerated. 
 
 Many of the examples in this section assume the USB stick used to install the system
 is still available. If site-init is no longer available on the USB stick and a backup
-has not been made, a new site-init will need to be created.
+has not been made, a new site-init will need to be created following step 1 in the [Generate Sealed Secrets Post-Install](#generate-sealed-secrets-post-install) section.
 
 The customizations.yaml file used in this procedure will be located in one of the following 
 locations depending on the state of the system: 
@@ -127,9 +135,12 @@ If LDAP user federation is required, refer to [Add LDAP User Federation](../secu
 
 ### Prevent Regeneration of Tracked Sealed Secrets
 
-In order to prevent tracked sealed secrets from being regenerated, they 
-**MUST BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets` list in the customizations.yaml file prior to 
-executing the "Generate Sealed Secrets" section of the [Prepare Site Init](../../install/prepare_site_init.md) procedure.
+Before performing the task to generate or regenerate sealed secrets, 
+administrators are able to prevent existing tracked sealed secrets from being regenerated.
+
+To prevent regeneration, sealed secrets **MUST BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets` 
+list in the customizations.yaml file prior to executing the 
+"Generate Sealed Secrets" section of the [Prepare Site Init](../../install/prepare_site_init.md) procedure.
 
 To retain the REDS/MEDS/RTS credentials:
 
