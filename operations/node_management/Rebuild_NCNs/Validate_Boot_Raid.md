@@ -16,7 +16,7 @@ Perform the following steps **on ncn-m001**.
 
 ## WAR CASMINST-2015
 
-As a result of rebuilding any NCN(s) remove any dynamically assigned interface IPs that did not get released automatically by running the CASMINST-2015 script:
+As a result of rebuilding any NCN(s), remove any dynamically assigned interface IP addresses that did not get released automatically by running the CASMINST-2015 script:
 
 ```bash
 ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
