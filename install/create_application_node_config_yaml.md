@@ -23,7 +23,7 @@ The HMN tab of the SHCD describes the air-cooled hardware present in the system 
 
 The `hmn_connections.json` file is derived from the HMN tab of a system SHCD, and is one of the seed files required by Cray Site Init (CSI) command to generate configuration files required to install CSM. The `hmn_connections.json` file is almost a 1 to 1 copy of the right-hand table in the HMN tab of the SHCD. It is an array of JSON objects, and each object represents a row from the HMN tab. Any row that is not understood by CSI will be ignored, this includes any additional devices connected to the HMN that are not managed by CSM.
 
-For a detailed mapping between the data in the SHCD and the equivalent information the `hmn_connections.json` file, see [Introduction to SHCD HMN Connections Rules](shcd_hmn_connections_rules.md#introduction) and [Application Nodes in SHCD HMN Connections Rules](shcd_hmn_connections_rules.md#application-node).
+For a detailed mapping between the data in the SHCD and the equivalent information in the `hmn_connections.json` file, see [Introduction to SHCD HMN Connections Rules](shcd_hmn_connections_rules.md#introduction) and [Application Nodes in SHCD HMN Connections Rules](shcd_hmn_connections_rules.md#application-node).
 
 ### What is a Source Name?
 
@@ -52,7 +52,7 @@ Example hmn_connections.json row representing an application node with SourceNam
     aliases: {}
     ```
 
-2. Identify application nodes present in `hmn_connections.json` or the HMN tab of the system's SHCD. In general, everything in the HMN tab of the SHCD or `hmn_connections.json` file that does not follow the [SHCD/HMN Connections Rules](shcd_hmn_connections_rules.md) should be considered an [application node](../glossary.md#application-node), unless it is a `KVM`.
+2. Identify application nodes present in `hmn_connections.json` or the HMN tab of the system's SHCD. In general, everything in the HMN tab of the SHCD or `hmn_connections.json` file that starts with uan, gn, or ln, are considered application nodes and any node that does not follow the [SHCD/HMN Connections Rules](shcd_hmn_connections_rules.md) should also be considered an [application node](../glossary.md#application-node), unless it is a `KVM`.
 
     If the `hmn_connections.json` file is available, then the following command can be used to show the HMN rows that are application nodes.
     
@@ -113,7 +113,9 @@ Example hmn_connections.json row representing an application node with SourceNam
     ln     | UAN
     gn     | Gateway
 
-    To add additional HSM SubRole for a given prefix add a new mapping under the `prefix_hsm_subroles` field. Where the key is the application node prefix and the value is the HSM SubRole.
+    If there are no additional prefixes in the SHCD or no desire to use a different HSM SubRole than the default, then this `prefix_hsm_subroles` field does not need any data populated.
+
+    To add additional HSM SubRole for a given prefix, add a new mapping under the `prefix_hsm_subroles` field. Where the key is the application node prefix and the value is the HSM SubRole.
 
     Valid HSM SubRoles values are: `Worker`, `Master`, `Storage`, `UAN`, `Gateway`, `LNETRouter`, `Visualization`, and `UserDefined`.
 
@@ -132,7 +134,7 @@ Example hmn_connections.json row representing an application node with SourceNam
     The `aliases` field is an map of xnames (strings) to an array of aliases (strings).
 
     > For guidance on building application node xnames follow one of the following:
-    > * [Building xnames for nodes in a single application node chassis](shcd_hmn_connections_rules.md#application-node-dual-node-chassis-xname)
+    > * [Building xnames for nodes in a single application node chassis](shcd_hmn_connections_rules.md#application-node-single-node-chassis-xname)
     > * [Building xnames for nodes in a dual application node chassis](shcd_hmn_connections_rules.md#application-node-dual-node-chassis-xname)
 
     By default, the `csi config init` command does not set the `ExtraProperties.Alias` field for application nodes in the SLS input file.
