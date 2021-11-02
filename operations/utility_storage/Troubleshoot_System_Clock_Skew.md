@@ -42,7 +42,7 @@ This procedure requires admin privileges.
        client:   919 KiB/s wr, 0 op/s rd, 16 op/s wr
     ```
 
-    **`IMPORTANT:`** If you see this message in the ceph logs `unable to obtain rotating service keys; retrying` it will also indicate clock skew. You may have to utilize `xzgrep skew *.xz  to see the skew` if you logs have rolled over.
+    **`IMPORTANT:`** If you see this message in the ceph logs `unable to obtain rotating service keys; retrying` it will also indicate clock skew. You may have to utilize `xzgrep skew *.xz to see the skew` if you logs have rolled over.
 
 
 2. View the Ceph health details.

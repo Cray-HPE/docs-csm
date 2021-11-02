@@ -43,13 +43,3 @@ REDS reads its configuration from the System Layout Service \(SLS\). Systems shi
 
 **Entry Point:** [Troubleshoot Common REDS Issues](Troubleshoot_Common_REDS_Issues.md)
 
----
-
-### Table of Contents
-
--   [Configure a Management Switch for REDS](Configure_a_Management_Switch_for_REDS.md)
--   [Initialize and Geolocate Nodes](Initialize_and_Geolocate_Nodes.md)
--   [Verify Node Removal](Verify_Node_Removal.md)
--   [Troubleshoot Common REDS Issues](Troubleshoot_Common_REDS_Issues.md)
-    -   [Troubleshot Common Error Messages in REDS Logs](Troubleshoot_Common_Error_Messages_in_REDS_Logs.md)
-    -   [Clear State and Restart REDS](Clear_State_and_Restart_REDS.md)
