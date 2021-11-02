@@ -54,11 +54,9 @@ router bgp 65533
 ```bash
 sw-spine-001 [standalone: master] # show run | include bgp
    protocol bgp
-   router bgp 65533 vrf CAN
    router bgp 65533 vrf default
    router bgp 65533 vrf default router-id 10.252.0.2 force
    router bgp 65533 vrf default maximum-paths ibgp 32
-   router bgp 65533 vrf CAN maximum-paths 32
 ```
 
 ### Aruba BGP updates
