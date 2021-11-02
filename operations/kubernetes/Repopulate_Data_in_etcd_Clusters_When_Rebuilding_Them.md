@@ -208,15 +208,22 @@ Data is repopulated in BSS when the REDS init job is run.
     1.  Resubscribe all compute nodes.
 
         ```bash
-        ncn-w001# pdsh -w nid00[0-9][0-9][0-9]-nmn "systemctl restart cray-dvs-orca"
+        ncn-m001# TMPFILE=$(mktemp)
+        ncn-m001# sat status --no-borders --no-headings | grep Ready | grep Compute | awk '{printf("nid%06d-nmn\n",$3);}' > $TMPFILE
+
+        ncn-m001# pdsh -w ^${TMPFILE} "systemctl restart cray-dvs-orca"
+
+        ncn-m001# rm -rf $TMPFILE
         ```
 
     2.  Resubscribe the NCNs.
 
         ```bash
-        ncn-w001# pdsh -w ncn[ws]00[0-4]-can.local "systemctl restart cray-dvs-orca"
+        ncn-m001# pdsh -w ncn-w00[0-4]-can.local "systemctl restart cray-dvs-orca"
+        ncn-m001# pdsh -w ncn-s00[0-4]-can.local "systemctl restart cray-dvs-orca"
         ```
 
+        Note: on larger systems, [0-4] may have to be a larger range.
 
 
 
