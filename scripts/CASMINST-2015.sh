@@ -15,7 +15,7 @@ vlans_to_check['vlan004']='hmn'
 vlans_to_check['vlan007']='can'
 
 for ncn in $ncns; do
-  echo "Checking $ncn for incorrect IPs..."
+  echo "Checking $ncn for incorrect IP addresses..."
 
   for vlan in "${!vlans_to_check[@]}"
   do
