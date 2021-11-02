@@ -1,6 +1,6 @@
 kind: step
 metadata:
-  name: Setup Nexus
+  name: Set Management NCNs to use Unbound
   description: |-
     # Set Management NCNs to use Unbound
 
@@ -89,6 +89,7 @@ spec:
           TODO: enforce check
           TODO: make sure passwordless ssh is enabled
         command: |-
+          cd /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}
           ./lib/list-ncns.sh
         troubleshooting: |-
           If any management NCNs are missing from the output, take corrective action before proceeding.

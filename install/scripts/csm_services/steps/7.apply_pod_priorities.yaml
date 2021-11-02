@@ -1,6 +1,6 @@
 kind: step
 metadata:
-  name: Setup Nexus
+  name: Apply Pod Priorities
   description: |-
     # Apply Pod Priorities
 
