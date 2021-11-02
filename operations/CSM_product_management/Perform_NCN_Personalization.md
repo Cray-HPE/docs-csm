@@ -1,4 +1,4 @@
-# Perfrom NCN Personalization
+# Perform NCN Personalization
 
 NCN personalization is the process of applying product-specific configuration
 to NCNs post-boot. 
@@ -18,7 +18,7 @@ layers must be created. Consult the manual for each product to configure them on
 NCNs by referring to the [1.5 HPE Cray EX System Software Getting Started Guide
 S-8000](https://www.hpe.com/support/ex-gsg) on the HPE Customer Support Center.
 
-## Procedure: Perfrom NCN Personalization
+## Procedure: Perform NCN Personalization
 
 <a name="ncn_personalization_determine_existence"></a>
 ### Determine if NCN Personalization CFS Configuration Exists
