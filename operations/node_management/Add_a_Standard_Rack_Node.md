@@ -166,13 +166,10 @@ For this procedure, a new object must be created in the SLS and modifications wi
     -   If the last discovery state is `DiscoveryStarted` then the BMC is currently being inventoried by HSM.
     -   If the last discovery state is `HTTPsGetFailed` or `ChildVerificationFailed` then an error occurred during the discovery process.
 
-9.  Enable each node individually in the HSM database \(in this example, the nodes are `x3000c0s27b1n0-n3`\).
+9.  Enable the nodes in the HSM database \(in this example, the nodes are `x3000c0s27b1n0-n3`\).
 
     ```screen
-    ncn-m001# cray hsm state components enabled update --enabled true x3000c0s27b1n0
-    ncn-m001# cray hsm state components enabled update --enabled true x3000c0s27b0n1
-    ncn-m001# cray hsm state components enabled update --enabled true x3000c0s27b0n2
-    ncn-m001# cray hsm state components enabled update --enabled true x3000c0s27b0n3
+    ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids x3000c0s27b1n0,x3000c0s27b1n1,x3000c0s27b1n2,x3000c0s27b1n3
     ```
 
 10. To force rediscovery of the components in rack 3000 \(standard racks are chassis 0\).

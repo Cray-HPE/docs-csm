@@ -150,7 +150,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
     root@spire-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
     postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
     ALTER ROLE
-    postgres=# ALTER USER service-account WITH PASSWORD 'ABC123';
+    postgres=# ALTER USER service_account WITH PASSWORD 'ABC123';
     ALTER ROLE
     postgres=#ALTER USER spire WITH PASSWORD 'XYZ123';
     ALTER ROLE
@@ -352,7 +352,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     root@keycloak-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
     postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
     ALTER ROLE
-    postgres=# ALTER USER service-account WITH PASSWORD 'ABC123';
+    postgres=# ALTER USER service_account WITH PASSWORD 'ABC123';
     ALTER ROLE
     postgres=#ALTER USER standby WITH PASSWORD '123456';
     ALTER ROLE
@@ -599,7 +599,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
     root@gitea-vcs-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
     postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
     ALTER ROLE
-    postgres=# ALTER USER service-account WITH PASSWORD 'ABC123';
+    postgres=# ALTER USER service_account WITH PASSWORD 'ABC123';
     ALTER ROLE
     postgres=#ALTER USER gitea WITH PASSWORD 'XYZ123';
     ALTER ROLE

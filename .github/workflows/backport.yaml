@@ -1,15 +1,13 @@
 name: backport
  
 on:
-  pull_request:
+  issue_comment:
     types:
-      - closed
-      - labeled
-      - unlabeled
-
+      - created
+ 
 jobs:
   backport:
-    name: "${{ github.event.action == 'closed' && 'backport' || 'dry run' }}"
     runs-on: self-hosted
+    if: github.event.issue.pull_request
     steps:
-      - uses: Cray-HPE/backport-action@v3
+      - uses: Cray-HPE/backport-command-action@main
