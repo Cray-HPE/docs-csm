@@ -249,7 +249,7 @@ This section outlines known issues that cause HMS Health Check failures.
 
 #### SDEVICE-3319 - Warning flags incorrectly set in HSM for Mountain BMCs
 
-The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue [SDEVICE-3319](https://connect.us.cray.com/jira/browse/SDEVICE-3319) that can cause Warning flags to be incorrectly set in HSM for Mountain BMCs and result in test failures. If _test_smd_components_ncn-functional_remote-functional.tavern.yaml_ fails during the HMS functional test run with error messages about Warning flags being set on one or more BMCs:
+The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue [SDEVICE-3319](https://connect.us.cray.com/jira/browse/SDEVICE-3319) that can cause Warning flags to be incorrectly set in HSM for Mountain BMCs and result in test failures. If _test_smd_components_ncn-functional_remote-functional.tavern.yaml_ fails with error messages about Warning flags being set on one or more BMCs:
 
 ```
 =================================== FAILURES ===================================
