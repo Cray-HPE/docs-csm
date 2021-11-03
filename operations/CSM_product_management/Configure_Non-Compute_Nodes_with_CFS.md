@@ -19,7 +19,8 @@ the SSH keys need to be changed per site requirements.
 The goal of passwordless SSH is to enable an easy way for interactive
 passwordless SSH from and between CSM product environments (management nodes) to
 downstream managed product environments (COS, UAN, etc), without requiring each
-downstream environment to create and apply individual changes to NCNs.
+downstream environment to create and apply individual changes to NCNs, and as a
+primary way to manage passwordless ssh configuration between management nodes.
 Passwordless SSH from downstream nodes into CSM management nodes is not intended
 or supported.
 
@@ -33,16 +34,14 @@ The management of keys on NCNs is achieved by the `trust-csm-ssh-keys` and
 `passwordless-ssh` Ansible roles in the CSM configuration management repository.
 The SSH keypair is applied to management nodes via NCN personalization.
 
-Choose one option from the following sections to enable or disable passwordless
-SSH on NCNs.
 
-### Option 1: Use the CSM-provided SSH Keys
+### Use the CSM-provided SSH Keys
 
 The default CSM Ansible plays are already configured to enable Passwordless SSH
 by default. No further action is necessary before running NCN personalization
 with CFS.
 
-### Option 2: Provide Custom SSH Keys
+### Provide Custom SSH Keys
 
 Administrators may elect to replace the CSM-provided keys with their own custom
 keys.
@@ -66,13 +65,22 @@ keys.
 Passwordless SSH with the provided keys will be setup once NCN personalization
 runs on the NCNs.
 
-### Option 3: Disable CSM-provided Passwordless SSH
+###  Disable CSM-provided Passwordless SSH
 
-Local site security requirements may preclude use of passwordless SSH access. If
-this is the case, remove or comment out the invocation of the
-`trust-csm-public-keys` role in Ansible plays in the configuration repositories
-of the environments where it is configured. By default, the HPE Cray Operating
-System (COS) and User Access Node (UAN) configurations enable passwordless SSH.
+Local site security requirements may preclude use of passwordless SSH access between
+management nodes. A variable has been added to the associated ansible roles that will
+allow you to disable passwordless ssh setup to any or all nodes.
+
+    ncn-w001:~ # grep csm_passwordless_ssh_enabled roles/trust-csm-ssh-keys/defaults/main.yaml
+    csm_passwordless_ssh_enabled: 'false'
+
+
+Published roles within product configuration repositories contain more comprehensive
+information regarding these role specific flags. Please reference associated Readme.md
+documents for additional information.
+
+By default, the HPE Cray Operating System (COS) and User Access Node (UAN) configurations
+enable passwordless SSH using these keys to the associated nodes during image customization. 
 Consult the manual for each product to change the default configuration by 
 referring to the [1.5 HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-gsg)
 on the HPE Customer Support Center.
