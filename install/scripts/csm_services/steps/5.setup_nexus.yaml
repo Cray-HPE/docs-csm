@@ -25,7 +25,41 @@ spec:
         description: |-
           Nothing
         command: |-
-          true
+          nexus_resources_ready=0
+          counter=1
+          counter_max=10
+          sleep_time=30
+          url=packages.local
+          while [[ $nexus_resources_ready -eq 0 ]] && [[ "$counter" -le "$counter_max" ]]; do
+              nexus_check_configmap=$(kubectl -n services get cm cray-dns-unbound -o json 2>&1 | jq '.binaryData."records.json.gz"' -r 2>&1 | base64 -d 2>&1| gunzip - 2>&1|jq 2>&1|grep $url|wc -l)
+              nexus_check_dns=$(dig $url +short |wc -l)
+              nexus_check_pod=$(kubectl get pods -n nexus|grep nexus|awk {' print $3 '})
+
+              if [[ "$nexus_check_dns" -eq "1" ]] && [[ "$nexus_check_pod" == "Running" ]]; then
+                  echo "$url is in dns."
+                  echo "Nexus pod $nexus_check_pod."
+                  echo "Moving forward with Nexus setup."
+                  nexus_resources_ready=1
+              fi
+              if [[ "$nexus_check_pod" != "Running" ]]; then
+                  echo "Nexus pod not ready yet."
+                  echo "Nexus pod status is: $nexus_check_pod."
+              fi
+
+              if [[ "$nexus_check_dns" -eq "0" ]]; then
+                  echo "$url is not in DNS yet."
+                  if [ "$nexus_check_configmap" -lt "1" ]; then
+                      echo "$url is not loaded into unbound configmap yet."
+                      echo "Waiting for DNS and nexus pod to be ready. Retry in $sleep_time seconds. Try $counter out of $counter_max."
+                  fi
+              fi
+              if [[ "$counter" -eq "$counter_max" ]]; then
+                  echo "Max number of checks reached, exiting."
+                  echo "Please check the status of nexus, cray-dns-unbound and cray-sls."
+                  exit 1
+              fi
+              ((counter++))
+          done
         troubleshooting: |-
           Nothing
       action:
@@ -35,8 +69,7 @@ spec:
           cd /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}
           ./lib/setup-nexus.sh
         troubleshooting: |-
-          Note
-          that subsequent runs of `setup-nexus.sh` may report `FAIL` when uploading
+          Note that subsequent runs of `setup-nexus.sh` may report `FAIL` when uploading
           duplicate assets. This is ok as long as `setup-nexus.sh` outputs
           `setup-nexus.sh: OK` and exits with status code `0`.
 
