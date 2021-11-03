@@ -35,13 +35,12 @@ spec:
           cd /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}
           ./lib/setup-nexus.sh
         troubleshooting: |-
-          In the event of an error, consult the [known issues](#known-issues) below to
-          resolve potential problems and then try running `setup-nexus.sh` again. Note
+          Note
           that subsequent runs of `setup-nexus.sh` may report `FAIL` when uploading
           duplicate assets. This is ok as long as `setup-nexus.sh` outputs
           `setup-nexus.sh: OK` and exits with status code `0`.
 
-          TODO: import ../operations/package_repository_management/Troubleshoot_Nexus.md here
+          {{ readFile "../../../operations/package_repository_management/Troubleshoot_Nexus.md" | indent 10 }}
       postValidation:
         description: |-
           Nothing
