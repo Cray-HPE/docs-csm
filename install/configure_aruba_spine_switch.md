@@ -390,7 +390,7 @@ The router-id used here is the NMN IP address. (VLAN 2 IP)
    ```
 
 
-## Configure Edge pPort
+## Configure Edge Port
 
 Edge ports are connected to non-compute nodes (NCNs).
 

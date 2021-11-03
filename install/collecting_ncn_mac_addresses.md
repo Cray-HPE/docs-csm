@@ -58,8 +58,8 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     pit# mv /var/www/boot/script.ipxe /var/www/boot/script.ipxe.bak
     ```
 
-2. Verify the consoles are active with `conman -q`.
-   
+2. Verify consoles are active with `conman -q`. The following command lists all nodes that ConMan is configured for,
+
     ```bash
     pit# conman -q
     ncn-m002-mgmt
@@ -82,13 +82,21 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     pit# sleep 10
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
     ```
+4. Wait for the nodes to netboot. You can follow them with ConMan - the `-m` option follows the console output in read-only mode or the `-j` option joins an interactive console session. The available node names were listed in step 2 above. The boot usually starts in less than 3 minutes and log data should start flowing through ConMan, speed depends on how quickly your nodes POST. To see a ConMan help screen for all supported escape sequences use `&?`.
 
-4. Wait for the nodes to netboot. Follow them with `conman -j ncn-*id*-mgmt` (use `conman -q` to see). This takes less than 3 minutes; the speed depends on how quickly the nodes POST.
-   
-5. Print off what has been found in the console logs.
-   
-   The following snippet will omit duplicates from multiple boot attempts:
-    
+    ```
+    pit# conman -m ncn-m002-mgmt
+    <ConMan> Connection to console [ncn-m002-mgmt] opened.
+      << hardware dependent boot log messages >>
+    ```
+5. Exit ConMan by typing `&.`
+    ```
+      << hardware dependent boot log messages >>
+    &.
+    <ConMan> Connection to console [ncn-m002-mgmt] closed.
+    pit#
+    ```
+6. Print off what has been found in the console logs, this snippet will omit duplicates from multiple boot attempts:
     ```bash
     pit# for file in /var/log/conman/*; do
         echo $file
@@ -96,7 +104,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     done
     ```
 
-6. Use the output from the previous step to collect 2 MACs to use for bond0, and 2 more to use for bond1 based on the topology. 
+7. Use the output from the previous step to collect 2 MACs to use for bond0, and 2 more to use for bond1 based on the topology. 
    
    **The `Bond0 MAC0` must be the first port** of the first PCIe card, specifically the port connecting the NCN to the lower spine. For example, if connected to spines01 and 02, this is going to sw-spine-001. If connected to sw-spine-007 and sw-spine-008, then this is sw-spine-007. 
    
@@ -127,7 +135,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     done
     ```
 
-7. Examine the output from `grep` to identify the MAC address that make up Bond0 for each management NCN. Use the lowest value MAC address per PCIe card.
+8. Examine the output from `grep` to identify the MAC address that make up Bond0 for each management NCN. Use the lowest value MAC address per PCIe card.
 
     > Example: 1 PCIe card with 2 ports for a total of 2 ports per node.
 
@@ -155,7 +163,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 
     The above output identified MAC0 and MAC1 of the bond as 94:40:c9:5f:b5:df and 14:02:ec:da:b9:99 respectively.
 
-8. Collect the NCN MAC address for the PIT node. This information will be used to populate the MAC addresses for ncn-m001.
+9. Collect the NCN MAC address for the PIT node. This information will be used to populate the MAC addresses for ncn-m001.
 
    ```bash
    pit# cat /proc/net/bonding/bond0  | grep Perm
@@ -163,7 +171,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
    Permanent HW addr: b8:59:9f:c7:12:f3 <-bond0-mac1
    ```
 
-9.  Update `ncn_metadata.csv` with the collected MAC addresses for Bond0 from all of the management NCNs.
+10.  Update `ncn_metadata.csv` with the collected MAC addresses for Bond0 from all of the management NCNs.
     
     > **NOTE:** Mind the index (3, 2, 1.... ; not 1, 2, 3).
 
@@ -180,7 +188,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     pit# vi ncn_metadata.csv
     ```
 
-10. If the `script.ipxe` file was renamed in the first step of this procedure, restore it to its original location.
+11. If the `script.ipxe` file was renamed in the first step of this procedure, restore it to its original location.
 
     ```bash
     pit# mv /var/www/boot/script.ipxe.bak /var/www/boot/script.ipxe
@@ -266,7 +274,7 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
    
    Return to this procedure after applying the workaround instructions.
 
-9. Wipe the disks before reluanching the NCNs.
+9. Wipe the disks before relaunching the NCNs.
 
    See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
 

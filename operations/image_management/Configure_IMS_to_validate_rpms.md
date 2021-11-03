@@ -1,10 +1,11 @@
+
 ## Configure IMS to validate RPMS
 
 Configuring IMS to validate the GPG signatures of RPMs during IMS Build operations involves two steps.
 
 1. Create and update IMS to use a new Kiwi-NG Image with the Signing Keys embedded.
    
-   **NOTE** The default IMS Kiwi-NG Image is already configured with the signing keys needed to
+   **NOTE:** The default IMS Kiwi-NG Image is already configured with the signing keys needed to
    validate HPE and SuSE RPMs and repositories. 
    
 2. Update IMS Recipes to require GPG verification of RPMs/Repos.
@@ -35,14 +36,14 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
     ncn# cat my-signing-key.asc
     -----BEGIN PGP PUBLIC KEY BLOCK-----
     ...
-   -----END PGP PUBLIC KEY BLOCK-----
+    -----END PGP PUBLIC KEY BLOCK-----
     ```
 
 1. Obtain a copy of the cray-ims-kiwi-ng-opensuse-x86_64-builder `entrypoint.sh` script.
 
-    ```bash
+   ```bash
    ncn # podman run -it --entrypoint "" --rm cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7 cat /scripts/entrypoint.sh | tee entrypoint.sh
-    ```
+   ```
   
 1. Modify the `entrypoint.sh` script to pass the signing key to the `kiwi-ng` command.  
 
@@ -238,3 +239,5 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
     ncn# cd ..
     ncn# rm -rf recipe/
     ```
+
+

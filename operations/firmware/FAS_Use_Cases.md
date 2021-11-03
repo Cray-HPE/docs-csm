@@ -459,13 +459,21 @@ See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock
     "tag": "default",
     "overrideDryrun": false,
     "restoreNotPossibleOverride": true,
-    "timeLimit": 2000,
+    "timeLimit": 4000,
     "description": "Dryrun upgrade of Gigabyte node BMCs"
   }
 }
 ```
 
-**IMPORTANT**: The *timeLimit* is `2000` because the gigabytes can take a lot longer to update.
+**IMPORTANT**: The *timeLimit* is `4000` because the gigabytes can take a lot longer to update.
+
+You may receive a node failed to update with the output:
+`stateHelper = "Firmware Update Information Returned Downloading – See /redfish/v1/UpdateService"`
+FAS has incorrectly marked this node as failed.
+It most likely will complete the update successfully.
+You can check the update status by looking at the Redfish `FirmwareInventory (/redfish/v1/UpdateService/FirmwareInventory/BMC)`
+or rerunning FAS to verify that the BMC firmware was updated.
+Make sure you have waited for the current firmware to be updated before starting a new FAS action on the same node.
 
 **Device Type: NodeBMC | Target: BIOS**
 ```json
@@ -492,11 +500,13 @@ See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock
     "tag": "default",
     "overrideDryrun": false,
     "restoreNotPossibleOverride": true,
-    "timeLimit": 2000,
+    "timeLimit": 4000,
     "description": "Dryrun upgrade of Gigabyte node BIOS"
   }
 }
 ```
+
+**IMPORTANT**: The *timeLimit* is `4000` because the gigabytes can take a lot longer to update.
 
 #### HPE
 
@@ -602,11 +612,13 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
     "tag": "default",
     "overrideDryrun": false,
     "restoreNotPossibleOverride": true,
-    "timeLimit": 2000,
+    "timeLimit": 4000,
     "description": "Dryrun upgrade of Gigabyte node BIOS"
   }
 }
 ```
+
+**IMPORTANT**: The *timeLimit* is `4000` because the gigabytes can take a lot longer to update.
 
 **Manufacturer: HPE | Device Type: NodeBMC | Target: `System ROM` aka BIOS**
 

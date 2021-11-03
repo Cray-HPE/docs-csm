@@ -11,13 +11,13 @@ cray-uas-mgr-6bbd584ccb-zg8vx                                    2/2     Running
 cray-uas-mgr-6bbd584ccb-acg7y                                    2/2     Running     0          7d7h
 ```
 
-The logs are collected in the pods, and can be seen using the `kubectl logs` command on each of the pods. Since the pods produce a lot of debug logging in the form:
+The logs are collected in the pods, and can be seen using the `kubectl logs` command on each of the pods. The pods produce a lot of debug logging in the form:
 
 ```
 127.0.0.1 - - [02/Feb/2021 22:57:18] "GET /v1/mgr-info HTTP/1.1" 200 -
 ```
 
-It is a good idea to filter this out unless the problem lies in specifically in the area of GET operations or aliveness checks. The following is an example where the last 25 lines of useful log output are retrieved from the pod `cray-uas-mgr-6bbd584ccb-zg8vx`:
+Because of that, it is a good idea to filter this out unless the problem lies in specifically in the area of GET operations or aliveness checks. The following is an example where the last 25 lines of useful log output are retrieved from the pod `cray-uas-mgr-6bbd584ccb-zg8vx`:
 
 ```
 kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v '"GET ' | tail -25

@@ -1,74 +1,128 @@
-# Stage 1 - Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)
+# Stage 1 - Kubernetes Upgrade from 1.19.9 to 1.20.11
+
+> NOTE: During the CSM-0.9 install the LiveCD containing the initial install files for this system should have been unmounted from the master node when rebooting into the Kubernetes cluster. The scripts run in this section will also attempt to unmount/eject it if found to ensure the USB stick does not get erased.
 
 ## Stage 1.1
 
-Run:
+1. Run `ncn-upgrade-k8s-master.sh` for `ncn-m002`. Follow output of the script carefully. The script will pause for manual interaction.
 
-```bash
-ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-initial.sh ncn-s001
-```
-
-> NOTE: Run the script once each for all storage nodes. Follow output of the script carefully. The script will pause for manual interaction
+    ```bash
+    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002
+    ```
+    
+1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
 ## Stage 1.2
 
-**`IMPORTANT:`** We scale down the conman deployments during stage 1.2 (this stage), so all console sessions will be down for this portion of the upgrade
-
-**`IMPORTANT`** If this has be run previously, then check point files may need to be deleted.
-
-```bash
-Directory location = /etc/cray/ceph/_upgraded
-
-/etc/cray/ceph/images_pre_pulled
-/etc/cray/ceph/radosgw_converted
-/etc/cray/ceph/upgrade_initialized
-/etc/cray/ceph/mons_upgraded
-/etc/cray/ceph/mgrs_upgraded
-/etc/cray/ceph/keys_distributed
-/etc/cray/ceph/converted_to_orch
-/etc/cray/ceph/osds_upgraded
-/etc/cray/ceph/mds_upgraded
-/etc/cray/ceph/rgws_upgraded
-```
-
-**`NOTE:`** You can delete all these files and rerun or you can just delete any files from your last step. You may end up with checkpoint files if the upgrade was exited out of by the user. But if you know you exited out of OSDs and it was not a clean exit, then you would only need remove `osd_upgraded`, `mds_upgraded` and `rgw_upgraded`.
-
-1. Start the Ceph upgrade
-
-   ```bash
-   ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph.sh
-   ```
-
-   `**`IMPORTANT NOTES`**
-
-   > * At this point your Ceph commands will still be working.
-   > * You have a new way of executing Ceph commands in addition to the traditional way.
-   >   * Please see [Cephadm Reference Material](../../operations/utility_storage/Cephadm_Reference_Material.md) for more information.
-   > * Both methods are dependent on the master nodes and storage nodes 001/2/3 have a ceph.client.admin.keyring and/or a ceph.conf file    (cephadm will not require the ceph.conf).
-   > * When you continue with Stage 2, you may have issues running your Ceph commands.
-   >   * If you are experiencing this, please double check that you restored your /etc/ceph directory from your tar backup.
-   > * Any deployments that are backed by a cephfs PVC will be unavailable during this stage of the upgrade. These deployments will be    scaled down and back up automatically. This includes **(but can vary by deployment)**: `nexus`, `cray-ipxe`, `cray-tftp`, `cray-ims`,    `cray-console-operator`, and `cray-cfs-api-db`. To view the complete list for the system being upgraded, run the following script to list    them:
-    >>
-    >>   ```bash
-    >>   ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/list-cephfs-clients.sh
-    >>   ```
-
-2. Verify that you conman is running
+1. Run `ncn-upgrade-k8s-worker.sh` for `ncn-w001`. Follow output of the script carefully. The script will pause for manual interaction.
 
     ```bash
-    ncn-m# kubectl get pods -n services|grep con
-    ncn-w002:~ # kubectl get pods -n services|grep con
-    cray-console-data-9b5984846-l6bvb                              2/2     Running            0          3d22h
-    cray-console-data-postgres-0                                   3/3     Running            0          5h15m
-    cray-console-data-postgres-1                                   3/3     Running            0          4d23h
-    cray-console-data-postgres-2                                   3/3     Running            0          5d
-    cray-console-data-wait-for-postgres-5-jrsq4                    0/2     Completed          0          3d22h
-    cray-console-node-0                                            3/3     Running            0          5d
-    cray-console-node-1                                            3/3     Running            0          5h15m
-    cray-console-operator-c4748d6b4-vvpn7                          2/2     Running            0          4d23h
-    csm-config-import-1.0.0-beta.46-5t7kx                          0/3     Completed          0          4d
+    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w001
+    ```
+    
+    > NOTE: You may need to reset the root password for each node after it is rebooted
+
+1. Repeat the previous step for each other worker node, one at a time.
+
+## Stage 1.3
+
+For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `vlan007`/CAN IP address to `ssh` to `ncn-m002` for this `ncn-m001` install
+
+1. Authenticate with the Cray CLI on `ncn-m002`.
+
+    See [Configure the Cray Command Line Interface](../../operations/configure_cray_cli.md) for details on how to do this.
+
+1. Set the `CSM_RELEASE` variable to the correct value for the CSM release upgrade being applied.
+
+    ```bash
+    ncn-m002# CSM_RELEASE=csm-1.2.0
     ```
 
-**`NOTE:`** if conman is not running please see [establishing conman console connections](operations/../../../operations/conman/Establish_a_Serial_Connection_to_NCNs.md)
+1. Install document RPM and run check script on `ncn-m002`
 
-Once the `Stage 1` upgrade is complete please proceed to [Stage 2](Stage_2.md)
+    * Option 1 - Internet Connected Environment
+
+        1. Install document RPM package:
+
+            ```bash
+            ncn-m002# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
+            ncn-m002# rpm -Uvh docs-csm-latest.noarch.rpm
+            ```
+
+        1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release tarball.
+        
+            In other words, the full URL to the CSM release tarball will be `${ENDPOINT}${CSM_RELEASE}.tar.gz`
+        
+            **NOTE** This step is optional for Cray/HPE internal installs.
+        
+            ```bash
+            ncn-m002# ENDPOINT=https://put.the/url/here/
+            ```
+
+        1. Run the script
+        
+            **NOTE** The `--endpoint` argument is optional for Cray/HPE internal use.
+
+            ```bash
+            ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --endpoint $ENDPOINT
+            ```
+
+    * Option 2 - Air Gapped Environment
+
+        1. Copy the docs-csm RPM package and CSM release tarball to `ncn-m002`.
+
+        1. Install document RPM package:
+
+            ```bash
+            ncn-m002# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
+            ```
+
+        1. Set the `TAR_DIR` variable to the directory on `ncn-m002` containing the CSM release tarball.
+        
+            In other words, the full path to the CSM release tarball will be `${TAR_DIR}/${CSM_RELEASE}.tar.gz`
+
+            ```bash
+            ncn-m002# TAR_DIR=/path/to/tarball/dir
+            ```
+
+        1. Run the script
+
+            ```bash
+            ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --tarball-file ${TAR_DIR}/${CSM_RELEASE}.tar.gz
+            ```
+
+1. Upgrade `ncn-m001`
+
+    ```bash
+    ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m001
+    ```
+
+## Stage 1.4
+
+Run the following command to complete the upgrade of the weave and multus manifest versions:
+
+```bash
+ncn-m002# /srv/cray/scripts/common/apply-networking-manifests.sh
+```
+
+## Stage 1.5
+
+Run the following command to complete the Kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
+
+```bash
+ncn-m002# export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+ncn-m002# pdsh -b -S -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'kubeadm upgrade apply v1.20.11 -y'
+```
+
+> **`NOTE`**: `kubelet` has been upgraded already, so you can ignore the warning to upgrade it
+
+## Stage 1.6
+
+Run the following command to cleanup several prometheus alert configurations:
+
+```bash
+ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-clean-kube-alerts.sh
+```
+
+<a name="deploy-manifests"></a>
+Once `Stage 1` is completed, all Kubernetes nodes have been rebooted into the new image. Now proceed to [Stage 2](Stage_2.md)

@@ -1,0 +1,13 @@
+name: backport
+ 
+on:
+  issue_comment:
+    types:
+      - created
+ 
+jobs:
+  backport:
+    runs-on: self-hosted
+    if: github.event.issue.pull_request
+    steps:
+      - uses: Cray-HPE/backport-command-action@main

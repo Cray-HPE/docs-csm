@@ -1,6 +1,6 @@
 ## VCS Branching Strategy
 
-Individual products import configuration content \(Ansible plays, roles, and more\) into a repository in the Version Control Service \(VCS\) through their installation process. Typically, this repository is of the follow form and exists in the cray organization in Gitea:
+Individual products import configuration content \(Ansible plays, roles, and more\) into a repository in the Version Control Service \(VCS\) through their installation process. Typically, this repository is of the following form and exists in the `cray` organization in VCS:
 
 ```bash
 [product name]-config-management

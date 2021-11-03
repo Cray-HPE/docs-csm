@@ -49,7 +49,7 @@ Procedure:
    Bytes released to the OS take up virtual address space but no physical memory.
    ```
 
-5. Dump heap.  This `requires` the profiler to be running.
+5. Dump heap. This `requires` the profiler to be running.
 
    ```bash
    # ceph tell mon.ncn-s001 heap dump

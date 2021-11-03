@@ -51,7 +51,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
 2. Repopulate the keycloak_users_localize and cray-keycloak Sealed Secrets in the customizations.yaml file with the desired configuration.
 
-   Update the LDAP settings with the desired configuration. LDAP connection information 
+   Update the LDAP settings with the desired configuration. LDAP connection information
    is stored in the keycloak-users-localize Secret in the customizations.yaml file.
 
    -   The ldap_connection_url key is required and is set to an LDAP URL.
@@ -91,7 +91,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
      The example above puts an empty certs.jks in the cray-keycloak Sealed Secret.
      The next step will generate certs.jks.
 
-     Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file. 
+     Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file.
         
      The fields are as follows:
 
@@ -263,7 +263,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
 3. (Optional) Add the LDAP CA certificate in the certs.jks section of customizations.yaml.
    
-   If LDAP requires TLS (recommended), update the `cray-keycloak` Sealed 
+   If LDAP requires TLS (recommended), update the `cray-keycloak` Sealed
    Secret value by supplying a base64 encoded Java KeyStore (JKS) that
    contains the CA certificate that signed the LDAP server's host key. The
    password for the JKS file must be `password`.
@@ -280,7 +280,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
         ```
 
-        **Troubleshooting:** 
+        **Troubleshooting:**
         
         * If the output shows the skopeo.tar file cannot be found, ensure that the $CSM_DISTDIR directory looks correct, and contains the `dtr.dev.cray.com` directory that includes the originally installed docker images.
 
@@ -347,7 +347,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         > from the output of the above `openssl s_client` example if the
         > following commands are unsuccessful.
 
-        Observe the issuer's DN. 
+        Observe the issuer's DN.
         
         For example:
 
@@ -438,7 +438,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
 4. Prepare to generate Sealed Secrets.
    
-   Secrets are stored in customizations.yaml as `SealedSecret` resources 
+   Secrets are stored in customizations.yaml as `SealedSecret` resources
    (encrypted secrets), which are deployed by specific charts and decrypted by the
    Sealed Secrets operator. But first, those Secrets must be seeded, generated, and
    encrypted.

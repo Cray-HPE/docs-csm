@@ -45,11 +45,11 @@ The following administrative topics can be found in this guide:
    * [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
    * [Configure the Cray Command Line Interface (cray CLI)](configure_cray_cli.md)
    * [Change Passwords and Credentials](CSM_product_management/Change_Passwords_and_Credentials.md)
-   * [Manage a Configuration with CFS](CSM_product_management/Manage_a_Configuration_with_CFS.md)
+   * [Configure Non-Compute Nodes with CFS](CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md)
+   * [Perform NCN Personalization](CSM_product_management/Perform_NCN_Personalization.md)
    * [Access the LiveCD USB Device After Reboot](Access_LiveCD_USB_Device_After_Reboot.md)
    * [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
    * [Validate Signed RPMs](CSM_product_management/Validate_Signed_RPMs.md)
-
 
 <a name="image-management"></a>
 
@@ -65,7 +65,6 @@ Build and customize image recipes with the Image Management Service (IMS).
    * [Customize an Image Root Using IMS](image_management/Customize_an_Image_Root_Using_IMS.md)
      * [Create UAN Boot Images](image_management/Create_UAN_Boot_Images.md)
      * [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
-     * [Customize an Image Root to Install Singularity](image_management/Customize_an_Image_Root_to_Install_Singularity.md)
    * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
    * [Configure IMS to validate RPMS](image_management/Configure_IMS_to_validate_rpms.md)
 
@@ -221,35 +220,6 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
        *   [Create and Populate a VCS Configuration Repository](configuration_management/Create_and_Populate_a_VCS_Configuration_Repository.md)
    *   [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
        *   [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
-   *   [Ansible Inventory](configuration_management/Ansible_Inventory.md)
-       *   [Manage Multiple Inventories in a Single Location](configuration_management/Manage_Multiple_Inventories_in_a_Single_Location.md)
-   *   [Configuration Sessions](configuration_management/Configuration_Sessions.md)
-       *   [Create a CFS Session with Dynamic Inventory](configuration_management/Create_a_CFS_Session_with_Dynamic_Inventory.md)
-       *   [Create an Image Customization CFS Session](configuration_management/Create_an_Image_Customization_CFS_Session.md)
-       *   [Set Limits for a Configuration Session](configuration_management/Set_Limits_for_a_Configuration_Session.md)
-       *   [Change the Ansible Verbosity Logs](configuration_management/Change_the_Ansible_Verbosity_Logs.md)
-       *   [Set the ansible.cfg for a Session](configuration_management/Set_the_ansible-cfg_for_a_Session.md)
-       *   [Delete CFS Sessions](configuration_management/Delete_CFS_Sessions.md)
-       *   [Automatic Session Deletion with sessionTTL](configuration_management/Automatic_Session_Deletion_with_sessionTTL.md)
-       *   [Track the Status of a Session](configuration_management/Track_the_Status_of_a_Session.md)
-       *   [View Configuration Session Logs](configuration_management/View_Configuration_Session_Logs.md)
-       *   [Troubleshoot Ansible Play Failures in CFS Sessions](configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
-       *   [Troubleshoot CFS Session Failing to Complete](configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
-   *   [Configuration Management with the CFS Batcher](configuration_management/Configuration_Management_with_the_CFS_Batcher.md)
-   *   [Configuration Management of System Components](configuration_management/Configuration_Management_of_System_Components.md)
-   *   [Ansible Execution Environments](configuration_management/Ansible_Execution_Environments.md)
-       *   [Use a Custom ansible-cfg File](configuration_management/Use_a_Custom_ansible-cfg_File.md)
-       *   [Enable Ansible Profiling](configuration_management/Enable_Ansible_Profiling.md)
-   *   [CFS Global Options](configuration_management/CFS_Global_Options.md)
-   *   [Version Control Service \(VCS\)](configuration_management/Version_Control_Service_VCS.md)
-       *   [Git Operations](configuration_management/Git_Operations.md)
-       *   [VCS Branching Strategy](configuration_management/VCS_Branching_Strategy.md)
-       *   [Customize Configuration Values](configuration_management/Customize_Configuration_Values.md)
-       *   [Update the Privacy Settings for Gitea Configuration Content Repositories](configuration_management/Update_the_Privacy_Settings_for_Gitea_Configuration_Content_Repositories.md)
-       *   [Create and Populate a VCS Configuration Repository](configuration_management/Create_and_Populate_a_VCS_Configuration_Repository.md)
-   *   [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
-      *   [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
-
 
 <a name="kubernetes"></a>
 
@@ -314,6 +284,14 @@ Mechanisms used by the system to ensure the security and authentication of inter
       *   [Update NCN Passwords](security_and_authentication/Update_NCN_Passwords.md)
       *   [Change Root Passwords for Compute Nodes](security_and_authentication/Change_Root_Passwords_for_Compute_Nodes.md)
       *   [Change NCN Image Root Password and SSH Keys](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
+      *   [Change EX Liquid-Cooled Cabinet Global Default Password](security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
+      *   [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](security_and_authentication/Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md)
+      *   [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
+      *   [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md)
+      *   [Change Air-Cooled Node BMC Credentials](security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md)
+      *   [Change SMNP Credentials on Leaf Switches](security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md)
+      *   [Update Default ServerTech PDU Credentials used by the Redfish Translation Service](security_and_authentication/Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md)
+      *   [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
    *   [SSH Keys](security_and_authentication/SSH_Keys.md)
    *   [Authenticate an Account with the Command Line](security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md)
    *   [Default Keycloak Realms, Accounts, and Clients](security_and_authentication/Default_Keycloak_Realms_Accounts_and_Clients.md)
@@ -505,7 +483,6 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
     * [Move a Standard Rack Node](node_management/Move_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node (Same Rack/Same HSN Ports)](node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
   * [Clear Space in Root File System on Worker Nodes](node_management/Clear_Space_in_Root_File_System_on_Worker_Nodes.md)
-  * [Manually Wipe Boot Configuration on Nodes to be Reinstalled](node_management/Manually_Wipe_Boot_Configuration_on_Nodes_to_be_Reinstalled.md)
   * [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
   * [Reset Credentials on Redfish Devices](node_management/Reset_Credentials_on_Redfish_Devices_for_Reinstallation.md)
   * [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs.md)
@@ -601,7 +578,7 @@ The central DNS infrastructure provides the structural networking hierarchy and 
   * [Manage the DNS Unbound Resolver](network/dns/Manage_the_DNS_Unbound_Resolver.md)
   * [Enable ncsd on UANs](network/dns/Enable_ncsd_on_UANs.md)
   * [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
-  * [Troubleshoot DNS Configuration Issues](network/dns/Troubleshoot_DNS_Configuration_Issues.md)
+  * [Troubleshoot PowerDNS](network/dns/Troubleshoot_PowerDNS.md)
 
 
 <a name="external-dns"></a>
@@ -613,7 +590,7 @@ External DNS, along with the Customer Access Network \(CAN\), Border Gateway Pro
   * [External DNS](network/external_dns/External_DNS.md)
   * [External DNS csi config init Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
   * [Update the system-name.site-domain Value Post-Installation](network/external_dns/Update_the_system-name_site-domain_Value_Post-Installation.md)
-  * [Update the can-external-dns Value Post-Installation](network/external_dns/Update_the_can-external-dns_Value_Post-Installation.md)
+  * [Update the cmn-external-dns Value Post-Installation](network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md)
   * [Ingress Routing](network/external_dns/Ingress_Routing.md)
   * [Add NCNs and UANs to External DNS](network/external_dns/Add_NCNs_and_UANs_to_External_DNS.md)
   * [External DNS Failing to Discover Services Workaround](network/external_dns/External_DNS_Failing_to_Discover_Services_Workaround.md)

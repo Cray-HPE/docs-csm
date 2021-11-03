@@ -5,7 +5,7 @@ hosting the LiveCD. This assists with remote-console setup to aid in observing t
 LiveCD will no longer be active. The node it was using will join the Kubernetes cluster as the final of three master
 nodes forming a quorum.
 
-Important: While the node is rebooting, it will be available only through Serial-over-LAN and local terminals. This
+**IMPORTANT:** While the node is rebooting, it will only be available through Serial-over-LAN and local terminals. This
 procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be unavailable.
 
 Topics:
@@ -24,9 +24,7 @@ Topics:
 <a name="required-services"></a>
 ### 1. Required Services
 
-These services must be healthy before the reboot of the LiveCD can take place. If the health checks executed in the previous installation step completed successfully \([Validate CSM Health](../operations/validate_csm_health.md)\), the following services will be healthy and ready for reboot of the LiveCD:
-
-Required Platform Services:
+These services must be healthy before the reboot of the LiveCD can take place. If the health checks performed earlier in the install completed successfully \([Validate CSM Health](../operations/validate_csm_health.md)\), the following platform services will be healthy and ready for reboot of the LiveCD:
 
    * Utility Storage (Ceph)
    * cray-bss
@@ -49,7 +47,7 @@ Required Platform Services:
 > - The NCN **will never wipe a USB device** during installation
 
 > 
-> - Prior to shutting down the PIT, learning the CAN IP addresses of the other NCNs will be a benefit if troubleshooting is required 
+> - Prior to shutting down the PIT, learning the CMN IP addresses of the other NCNs will be a benefit if troubleshooting is required 
 > 
 > This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
 > **unavailable**.
@@ -66,8 +64,10 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 <a name="start-hand-off"></a>
 #### 3.1 Start Hand-Off
 
-1. Start a new typescript (quit )
-   (Run this on the PIT node as root, the prompts are removed for easier copy-paste; this step is only useful as a whole)
+1. Start a new typescript (quit).
+   
+   Run this on the PIT node as root, the prompts are removed for easier copy-paste. This step is only useful as a whole.
+
    - Exit the current typescript if one has arrived here from the prior pages:
 
       ```bash
@@ -75,7 +75,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
       pit# popd
       ```
 
-   - Start the new script
+   - Start the new script:
 
       ```bash
       mkdir -pv /var/www/ephemeral/prep/admin
@@ -83,6 +83,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
       script -af csm-livecd-reboot.$(date +%Y-%m-%d).txt
       export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
       ```
+
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-pre-reboot` breakpoint.
 
 1. Check for workarounds in the `/opt/cray/csm/workarounds/livecd-pre-reboot` directory. If there are any
@@ -101,7 +102,8 @@ data, so run them only when indicated. Instructions are in the `README` files.
     ```
     
 1. Upload SLS file.
-    > Note the system name environment variable `SYSTEM_NAME` must be set
+    
+    > **NOTE:** The system name environment variable `SYSTEM_NAME` must be set.
 
     ```bash
     pit# csi upload-sls-file --sls-file /var/www/ephemeral/prep/${SYSTEM_NAME}/sls_input_file.json
@@ -117,7 +119,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
 1. Get a token to use for authenticated communication with the gateway.
 
-    > **`NOTE`** `api-gw-service-nmn.local` is legacy, and will be replaced with api-gw-service.nmn.
+    > **NOTE:** `api-gw-service-nmn.local` is legacy, and will be replaced with api-gw-service.nmn.
 
     ```bash
     pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
@@ -128,15 +130,15 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
 1. <a name="ncn-boot-artifacts-hand-off"></a>Upload NCN boot artifacts into S3.
 
-    1. Set variables
+    1. Set the variables.
 
-        **IMPORTANT**: The variables you set depend on whether or not you customized the default NCN images. The most
+        **IMPORTANT:** The variables you set depend on whether or not you customized the default NCN images. The most
         common procedures that involve customizing the images are
         [Configuring NCN Images to Use Local Timezone](../operations/node_management/Configure_NTP_on_NCNs.md#configure_ncn_images_to_use_local_timezone) and
         [Changing NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md).
         The two paths forward are listed below:
 
-        * If you did **not** customize the NCN images, set the following variables (this is the default path):
+        * If the NCN images were **not** customized, set the following variables (this is the default path):
 
             ```bash
             pit# export CSM_RELEASE=csm-x.y.z
@@ -145,7 +147,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
             pit# export cephdir=$artdir/storage-ceph
             ```
 
-        * If you customized the NCN images, set the following variables:
+        * If the NCN images were customized, set the following variables:
 
             ```bash
             pit# export artdir=/var/www/ephemeral/data
@@ -153,7 +155,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
             pit# export cephdir=$artdir/ceph
             ```
 
-    1. After setting the variables above per your situation, run:
+    2. After setting the variables in the previous step, run the following command.
 
         ```bash
         pit# csi handoff ncn-images \
@@ -172,14 +174,22 @@ data, so run them only when indicated. Instructions are in the `README` files.
         export KUBERNETES_VERSION=x.y.z
         export CEPH_VERSION=x.y.z
         ```
-        Be sure to perform this action so subsequent steps are successful.
 
-1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__
-   to this file as a result of any customizations or workarounds, use the path to that file instead. This step will
-   prompt for the root password of the NCNs.
+    3. Run the `export` commands listed at the end of the output from the previous step.
+
+
+1. <a name="csi-handoff-bss-metadata"></a>Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. 
+
+    __If you have made any changes__ to this file as a result of any customizations or workarounds, use the path to that file instead. This step will prompt for the root password of the NCNs.
 
     ```bash
-    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
+    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
+    ```
+
+1. Patch the metadata for the CEPH nodes to have the correct run commands:
+
+    ```bash
+    pit# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
     ```
 
 1. Ensure the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.
@@ -188,7 +198,9 @@ data, so run them only when indicated. Instructions are in the `README` files.
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
     ```
 
-1. Upload the bootstrap information; note this denotes information that should always be kept together in order to fresh-install the system again.
+1. Upload the bootstrap information.
+   
+   > **NOTE:** This denotes information that should always be kept together in order to fresh-install the system again.
 
     1. Log in; setup passwordless SSH _to_ the PIT node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the PIT (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
 
@@ -201,7 +213,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
         pit# chmod 600 /root/.ssh/authorized_keys
         ```
 
-    1. Run this to create the backup; in one swoop, log in to `ncn-m002` and `ncn-m003` and pull the files off the PIT. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
+    2. Run this to create the backup; in one swoop, log in to `ncn-m002` and `ncn-m003` and pull the files off the PIT. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
 
         ```bash
         pit# ssh ncn-m002 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
@@ -223,37 +235,33 @@ data, so run them only when indicated. Instructions are in the `README` files.
     pit# efibootmgr | grep -Ei "ip(v4|4)"
     ```
 
-1. Set and trim the boot order for **master nodes** using one of the following guides:
+1. Set and trim the boot order on the PIT node.
 
-    > `**NOTE**` If your boot order from `efibootmgr` looks like one of [these examples](../background/ncn_boot_workflow.md#examples) then you can proceed to the next step.
+    In [Deploy Management Nodes](deploy_management_nodes.md#configure-and-trim-uefi-entries), this procedure was done on the other NCNs. Now it is time to do it on the PIT node. See [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
 
-    - [Gigabyte Technology](../background/ncn_boot_workflow.md#gigabyte-technology)
-    - [Hewlett Packard Enterprise](../background/ncn_boot_workflow.md#hewlett-packard-enterprise)
-    - [Intel Corporation](../background/ncn_boot_workflow.md#intel-corporation)
-
-1. Tell the node to PXE boot on the next boot ... use `efibootmgr` to set next boot device to the first PXE boot option. This step assumes the boot order was set up by the immediate, previous step.
+1. Use `efibootmgr` to set the next boot device to the first PXE boot option. This step assumes the boot order was set up in the previous step.
 
     ```bash
     pit# efibootmgr -n $(efibootmgr | grep -Ei "ip(v4|4)" | awk '{print $1}' | head -n 1 | tr -d Boot*) | grep -i bootnext
     BootNext: 0014
     ```
 
-1. Collect a backdoor login ... fetch the CAN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
+1. <a name="collect-can-ip-ncn-m002"></a>Collect a backdoor login. Fetch the CMN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
 
-    1. Get the IP
+    1. Get the IP address.
 
         ```bash
-        pit# ssh ncn-m002 'ip a show vlan007 | grep inet'
+        pit# ssh ncn-m002 'ip a show bond0.cmn0 | grep inet'
         ```
 
         _Expected output (values may differ)_:
 
         ```
-        inet 10.102.11.13/24 brd 10.102.11.255 scope global vlan007
+        inet 10.102.11.13/24 brd 10.102.11.255 scope global bond0.cmn0
         inet6 fe80::1602:ecff:fed9:7820/64 scope link
         ```
 
-    1. Log in from another external machine to verify SSH is up and running for this session.
+    2. Log in from another external machine to verify SSH is up and running for this session.
 
         ```bash
         external# ssh root@10.102.11.13
@@ -263,21 +271,21 @@ data, so run them only when indicated. Instructions are in the `README` files.
     > Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN.
     If the reboot successfully deploys the LiveCD, this terminal can be exited.
 
-    > **POINT OF NO RETURN** The next step will wipe the underlying nodes disks clean, it will ignore USB devices. RemoteISOs are at risk here, even though a backup has been
+    > **POINT OF NO RETURN:** The next step will wipe the underlying nodes disks clean, it will ignore USB devices. RemoteISOs are at risk here, even though a backup has been
     > performed of the PIT node, we cannot simply boot back to the same state.
     > This is the last step before rebooting the node.
 
-1. **`IN-PLACE WORKAROUND`** This is a workaround until the auto-wipe feature ceases preventing the creation of the 3rd disk (CASMINST-169. This step is safe to do even after auto-wipe is fixed.
+1. Wipe the disks on the PIT node.
 
     > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**, the USB device can only be wiped by operators at this point in the install. The USB device are never wiped by the CSM installer.
 
-    1. Select disks to wipe; SATA/NVME/SAS
+    1. Select disks to wipe (SATA/NVME/SAS).
 
         ```bash
         pit# md_disks="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print "/dev/" $2}')"
         ```
 
-    1. Sanity check; print disks into typescript or console
+    2. Run a sanity check by printing disks into typescript or console.
 
         ```bash
         pit# echo $md_disks
@@ -289,7 +297,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
         /dev/sda /dev/sdb /dev/sdc
         ```
 
-    1. Wipe. **This is irreversible.**
+    3. Wipe. **This is irreversible.**
 
         ```bash
         pit# wipefs --all --force $md_disks
@@ -310,15 +318,17 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
         If there was any wiping done, output should appear similar to the snippet above. If this is re-run, there may be no output or an ignorable error.
     
-1. If you wish to preserve your conman console logs for the other NCNs, this is your last chance to do so. They will be lost after rebooting. They are located in `/var/log/conman` on the PIT node.
+1.  Preserve the ConMan console logs for the other NCNs if desired.
+    
+    > **WARNING:** This is the last chance to do so. They will be lost after rebooting. They are located in `/var/log/conman` on the PIT node.
 
-1. Quit the typescript session with the `exit` command and copy the file (`csm-livecd-reboot.<date>.txt`) to a location on another server for reference later.
+1.  Quit the typescript session with the `exit` command and copy the file (`csm-livecd-reboot.<date>.txt`) to a location on another server for reference later.
 
     ```bash
     pit# exit
     ```
 
-1. Optionally, setup conman or serial console, if not already on, from any laptop or other system with network connectivity to the cluster.
+1.  (Optional) Setup ConMan or serial console, if not already on, from any laptop or other system with network connectivity to the cluster.
     
     ```bash
     external# script -a boot.livecd.$(date +%Y-%m-%d).txt
@@ -339,11 +349,11 @@ data, so run them only when indicated. Instructions are in the `README` files.
     pit# reboot
     ```
 
-1. The node should boot, acquire its hostname (i.e. `ncn-m001`), and run cloud-init.
+1. After the node boots, acquire its hostname (i.e. `ncn-m001`), and run cloud-init.
 
-    > **`NOTE`**: If the nodes has PXE boot issues, such as getting PXE errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
+    > **NOTE:** If the nodes has PXE boot issues, such as getting PXE errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
-    > **`NOTE`**: If `ncn-m001` did not run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
+    > **NOTE:** If `ncn-m001` did not run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
 
     1. Run the following commands:
 
@@ -366,7 +376,8 @@ data, so run them only when indicated. Instructions are in the `README` files.
     ncn-m002# ssh ncn-m001
     ```
 
-1. If the pre-NCN deployment password change method was **not** used, then the root password on `ncn-m001` needs to be changed now.
+1. Change the root password on `ncn-m001` if the pre-NCN deployment password change method was not used.
+   
    Run `passwd` on ncn-m001 and complete the prompts.
 
     ```bash
@@ -375,7 +386,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
 1. Run `kubectl get nodes` to see the full Kubernetes cluster.
     
-    > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items, please refer to the `handoff`
+    > **NOTE:** If the new node fails to join the cluster after running other cloud-init items, refer to the `handoff`.
     
     ```bash
     ncn-m001# kubectl get nodes
@@ -420,9 +431,10 @@ data, so run them only when indicated. Instructions are in the `README` files.
     ncn-m001# ip a show bond0.nmn0
     ncn-m001# ip a show bond0.hmn0
     ncn-m001# ip a show bond0.can0
+    ncn-m001# ip a show bond0.cmn0
     ```
 
-1. Run `ip r` to show our default route is via the CAN/vlan007.
+1. Run `ip r` to show our default route is via the CMN.
 
     ```bash
     ncn-m001# ip r show default
@@ -444,7 +456,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
    If this machine does not have direct Internet access, these RPMs will need to be externally downloaded and then copied to the system.
 
-   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
+   **IMPORTANT:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
    were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
 
    ```bash
@@ -458,7 +470,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-post-reboot` breakpoint.
 
-1. Now exit the typescript and relocate the backup over to `ncn-m001`, thus removing the need to track `ncn-m002` as yet-another bootstrapping agent. This is required to facilitate reinstallations, because it pulls the preparation data back over to the documented area (`ncn-m001`).
+1. Exit the typescript and move the backup to `ncn-m001`, thus removing the need to track `ncn-m002` as yet-another bootstrapping agent. This is required to facilitate reinstallations, because it pulls the preparation data back over to the documented area (`ncn-m001`).
 
     ```bash
     ncn-m001# exit
@@ -474,14 +486,14 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
 > The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise because it is used for Cray installation and bootstrap. The CSI binary is compiled against the NCN base, simply fetching it from the bootable media will suffice.
 
-1. SSH back into `ncn-m001`, or restart a local console and resume the typescript
+1. SSH back into `ncn-m001`, or restart a local console and resume the typescript.
 
     ```bash
     ncn-m001# script -af /metal/bootstrap/prep/admin/csm-verify.$(date +%Y-%m-%d).txt
     ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     ```
 
-1. Obtain access to CSI
+1. Obtain access to CSI.
 
     ```bash
     ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs
@@ -493,7 +505,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
     ncn-m001# umount -vl /mnt/sqfs /mnt/rootfs /mnt/livecd
     ```
 
-1. Authenticate with the cluster
+1. Authenticate with the cluster.
 
     ```bash
     ncn-m001# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
@@ -513,7 +525,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
 ### 6. Configure DNS and NTP on each BMC
 
- > **`NOTE`** If your system is Gigabyte or Intel hardware, skip this section.
+ > **NOTE:** If the system uses Gigabyte or Intel hardware, skip this section.
 
 Perform the following steps on every NCN **except ncn-m001**.
 
@@ -548,3 +560,4 @@ Perform the following steps on every NCN **except ncn-m001**.
    After completing this procedure, the next step is to configure administrative access.
 
    * See [Configure Administrative Access](index.md#configure_administrative_access)
+

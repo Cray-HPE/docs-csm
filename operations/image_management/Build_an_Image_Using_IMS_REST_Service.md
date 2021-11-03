@@ -1,3 +1,5 @@
+
+
 ## Build an Image Using IMS REST Service
 
 Create an image root from an IMS recipe.
@@ -13,12 +15,15 @@ Create an image root from an IMS recipe.
 -   A Kiwi image recipe uploaded as a gzipped tar file and registered with IMS. See [Upload and Register an Image Recipe](Upload_and_Register_an_Image_Recipe.md).
 -   A token providing Simple Storage Service \(S3\) credentials has been generated.
 
-### LIMITATIONS
 
-The commands in this procedure must be run as the `root` user in this release.
+### Limitations
+
+The commands in this procedure must be run as the `root` user.
 
 
-### Prepare to Create the Image
+### Procedure
+
+**Prepare to Create the Image**
 
 1.  Check for an existing IMS public key `id`.
 
@@ -65,7 +70,7 @@ The commands in this procedure must be run as the `root` user in this release.
     ncn# export IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
     ```
 
-### Get the IMS Recipe to Build
+**Get the IMS Recipe to Build**
 
 3.  Locate the IMS recipe needed to build the image.
 
@@ -90,7 +95,7 @@ The commands in this procedure must be run as the `root` user in this release.
     ncn# export IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
     ```
 
-### Submit the Kubernetes Image Create Job
+**Submit the Kubernetes Image Create Job**
 
 4.  Create an IMS job record and start the image creation job.
 
@@ -286,8 +291,8 @@ The commands in this procedure must be run as the `root` user in this release.
 
     The `buildenv-sidecar` container determines if the Kiwi-NG build was successful or not.
 
-    -   If the Kiwi-NG build completed successfully, the image root, kernel, and initrd artifacts are uploaded to the artifact repository.
-    -   If the Kiwi-NG build failed to complete successfully, an optional SSH Debug shell is enabled so the image build can be debugged.
+    - If the Kiwi-NG build completed successfully, the image root, kernel, and initrd artifacts are uploaded to the artifact repository.
+    - If the Kiwi-NG build failed to complete successfully, an optional SSH Debug shell is enabled so the image build can be debugged.
 
     ```bash
     ncn# kubectl -n ims logs -f $POD -c buildenv-sidecar
@@ -384,7 +389,7 @@ The commands in this procedure must be run as the `root` user in this release.
     ...
     ```
 
-    **Important:** The IMS image creation workflow automatically copies the NCN Certificate Authority's public certificate to /etc/cray/ca/certificate\_authority.crt within the image root being built. This can be used to enable secure communications between the NCN and the client node.
+    **IMPORTANT:** The IMS image creation workflow automatically copies the NCN Certificate Authority's public certificate to /etc/cray/ca/certificate\_authority.crt within the image root being built. This can be used to enable secure communications between the NCN and the client node.
 
     If the image creation operation fails, the build artifacts will not be uploaded to S3. If enable\_debug is set to true, the IMS creation job will enable a debug SSH shell that is accessible by one or more dynamic host names. The user needs to know if they will SSH from inside or outside the Kubernetes cluster to determine which host name to use. Typically, customers access the system from outside the Kubernetes cluster using the Customer Access Network \(CAN\).
 
@@ -435,7 +440,7 @@ The commands in this procedure must be run as the `root` user in this release.
 
     To access the debug shell, SSH to the container using the private key that matches the public key used to create the IMS Job.
 
-    **Important:** The following command will not work when run on a node within the Kubernetes cluster.
+    **IMPORTANT:** The following command will not work when run on a node within the Kubernetes cluster.
 
     ```bash
     ncn# ssh -p IMS_SSH_PORT root@IMS_SSH_HOST
@@ -514,7 +519,7 @@ The commands in this procedure must be run as the `root` user in this release.
     type = "s3"
     ```
 
-### Clean Up the Create Environment
+**Clean Up the Create Environment**
 
 12. Delete the IMS job record using the `IMS_JOB_ID`.
 
@@ -525,7 +530,7 @@ The commands in this procedure must be run as the `root` user in this release.
     Deleting the job record will delete the underlying Kubernetes job, service, and ConfigMap that were created when the job record was submitted.
 
 
-Images built by IMS contain only the packages and settings that are referenced in the Kiwi-NG recipe used to build the image. The only exception is that IMS will dynamically install the system's root CA certificate to allow zypper \(via Kiwi-NG\) to talk securely with the required Nexus RPM repositories. Images that are intended to be used to boot a CN or other node must be configured with DNS and other settings that enable the image to talk to vital  services. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable DNS resolution, which are typically run against an image after it is built by IMS.
+Images built by IMS contain only the packages and settings that are referenced in the Kiwi-NG recipe used to build the image. The only exception is that IMS will dynamically install the system's root CA certificate to allow zypper \(via Kiwi-NG\) to talk securely with the required Nexus RPM repositories. Images that are intended to be used to boot a CN or other node must be configured with DNS and other settings that enable the image to talk to vital services. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable DNS resolution, which are typically run against an image after it is built by IMS.
 
 When customizing an image via [Customize an Image Root Using IMS](Customize_an_Image_Root_Using_IMS.md), once chrooted into the image root \(or if using a \`jailed\` environment\), the image will only have access to whatever configuration the image already contains. In order to talk to services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. That base level of customization is provided by the default Ansible plays used by the CFS to enable DNS resolution.
 

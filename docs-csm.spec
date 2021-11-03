@@ -21,7 +21,7 @@ is in Markdown format starting at /usr/share/doc/csm/README.md.
 
 %install
 install -m 755 -d %{buildroot}/usr/share/doc/csm
-cp -pvrR ./*.md ./background ./install ./img ./introduction ./operations ./troubleshooting ./update_product_stream ./upgrade ./*example* %{buildroot}/usr/share/doc/csm/ | awk '{print $3}' | sed "s/'//g" | sed "s|$RPM_BUILD_ROOT||g" | tee -a INSTALLED_FILES
+cp -pvrR ./*.md ./background ./install ./img ./introduction ./operations ./scripts ./troubleshooting ./update_product_stream ./upgrade ./*example* %{buildroot}/usr/share/doc/csm/ | awk '{print $3}' | sed "s/'//g" | sed "s|$RPM_BUILD_ROOT||g" | tee -a INSTALLED_FILES
 cat INSTALLED_FILES | xargs -i sh -c 'test -L {} && exit || test -f $RPM_BUILD_ROOT/{} && echo {} || echo %dir {}' > INSTALLED_FILES_2
 
 %clean

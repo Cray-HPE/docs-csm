@@ -57,7 +57,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 1. Install/upgrade the CSI RPM
 
    ```bash
-   linux# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
+   linux# rpm -Uvh --force $(find ${CSM_PATH}/rpm/embedded/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
 
 1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
@@ -186,7 +186,7 @@ which device that is.
     linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
     ```
 
-    > Note: If the previous command fails with this error message indicating that this Linux computer does not have the checkmedia rpm installed, then the rpm can be installed and the `csi pit format` can be run again
+    > Note: If the previous command fails with this error message, this indicates that this Linux computer does not have the checkmedia RPM installed. In that case, the RPM can be installed and `csi pit format` can be run again
     > ```
     > ERROR: Unable to validate ISO. Please install checkmedia
     > ```
@@ -362,10 +362,14 @@ Some files are needed for generating the configuration payload. See these topics
           --bootstrap-ncn-bmc-pass changeme \
           --system-name ${SYSTEM_NAME} \
           --can-cidr 10.103.11.0/24 \
-          --can-external-dns 10.103.11.113 \
           --can-gateway 10.103.11.1 \
           --can-static-pool 10.103.11.112/28 \
           --can-dynamic-pool 10.103.11.128/25 \
+          --cmn-cidr 10.103.12.0/24 \
+          --cmn-external-dns 10.103.12.113 \
+          --cmn-gateway 10.103.12.1 \
+          --cmn-static-pool 10.103.12.112/28 \
+          --cmn-dynamic-pool 10.103.12.128/25 \
           --nmn-cidr 10.252.0.0/17 \
           --hmn-cidr 10.254.0.0/17 \
           --ntp-pool time.nist.gov \
@@ -401,7 +405,8 @@ Some files are needed for generating the configuration payload. See these topics
       * For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. If you are using a `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
       * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
       * By default, spine switches are used as MetalLB peers. Use `--bgp-peers aggregation` to use aggregation switches instead.
-      * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `can-external-dns` is the static IP address assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `can-external-dns` IP address must be within the `can-static-pool` range.
+      * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. 
+      * Several parameters (`cmn-gateway`, `cmn-cidr`, `cmn-static-pool`, `cmn-dynamic-pool`) describe the CMN (Customer Management network). The `cmn-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CMN. The `cmn-cidr` is the IP subnet for the CMN assigned to this system. The `cmn-static-pool` and `cmn-dynamic-pool` are the MetalLB address static and dynamic pools for the CMN. The `cmn-external-dns` is the static IP address assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `cmn-external-dns` IP address must be within the `cmn-static-pool` range.
       * Set `ntp-pool` to a reachable NTP server
 
       These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
@@ -727,7 +732,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    The following assumes the CSM_PATH environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "goss-servers*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/embedded/cray/csm/ -name "goss-servers*.rpm" | sort -V | tail -1)
    pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "csm-testing*.rpm" | sort -V | tail -1)
    ```
 
