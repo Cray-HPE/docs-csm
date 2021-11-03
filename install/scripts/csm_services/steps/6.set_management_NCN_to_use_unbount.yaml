@@ -88,6 +88,7 @@ spec:
         description: |-
           TODO: enforce check
           TODO: make sure passwordless ssh is enabled
+          TODO: make sure passwordless ssh to m001 is enabled
         command: |-
           cd /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}
           ./lib/list-ncns.sh
