@@ -1,7 +1,7 @@
-# Change credentials on ServerTech PDUs
+# Change Credentials on ServerTech PDUs
 This procedure changes password used by the `admn` user on ServerTech PDUs. Either a single PDU can be updated to a new credential, or update all ServerTech PDUs in the system to the same global credentials.
 
-**Note:** This procedure does not update the default credentials that RTS uses for new ServerTech PDUs added to a system. To change the default credentials follow the [Update default ServerTech PDU credentials used by the Redfish Translation Service](Update_default_ServerTech_PDU_credentials_used_by_the_Redfish_Translation_Service.md) procedure.
+**NOTE:** This procedure does not update the default credentials that RTS uses for new ServerTech PDUs added to a system. To change the default credentials, follow the [Update default ServerTech PDU Credentials used by the Redfish Translation Service](Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md) procedure.
 
 ## Prerequisites
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
@@ -81,7 +81,7 @@ This procedure changes password used by the `admn` user on ServerTech PDUs. Eith
         Pragma: JAWS v1.01
         ```
 
-    **Note**: After 5 minutes the previous credential should stop working, as the existing session timed out.
+    **NOTE**: After 5 minutes the previous credential should stop working, as the existing session timed out.
 
 5.  Update the PDU credentials stored in Vault:
     ```bash
@@ -109,7 +109,7 @@ This procedure changes password used by the `admn` user on ServerTech PDUs. Eith
         done
         ```
         
-6.  Restart RTS to pickup the new PDU credentials:
+6.  Restart the Redfish Translation Service (RTS) to pickup the new PDU credentials:
 
     ```bash
     ncn-m001# kubectl -n services rollout restart deployment cray-hms-rts
