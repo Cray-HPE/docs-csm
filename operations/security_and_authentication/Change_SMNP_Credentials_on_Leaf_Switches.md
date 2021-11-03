@@ -1,7 +1,7 @@
-# Change SMNP credentials on Leaf switches
+# Change SMNP Credentials on Leaf Switches
 This procedure changes the SNMP credentials on management leaf switches in the system. Either a single leaf switch can be updated to use new SNMP credentials, or update all leaf switches in the system to use the same global SNMP credentials.
 
-**Note**: This procedure will not update the default SNMP credentials used when new leaf switches are added to the system. To update the default SNMP credentials for new hardware follow the [Update default Air-Cooled BMC and Leaf switch SNMP credentials](Update_default_Air-Cooled_BMC_and_Leaf_switch_SNMP_credentials.md) procedure.
+**NOTE**: This procedure will not update the default SNMP credentials used when new leaf switches are added to the system. To update the default SNMP credentials for new hardware, follow the [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md) procedure.
 
 ## Prerequisites
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
@@ -27,9 +27,9 @@ This procedure changes the SNMP credentials on management leaf switches in the s
     x3000c0w13  Dell   sw-leaf-001
     ```
     
-2. Update SNMP credentials for the `testuser` user on each leaf switch in the system. The SNMP `testuser` user requires 2 password to be provided for the SNMP Authentication and Privacy protocol passwords. Both of these passwords must be 8 characters or longer. In the examples below `foobar01` is the new SNMP Authentication password, and `foobar02` is the new SNMP Privacy password. 
+2. Update SNMP credentials for the `testuser` user on each leaf switch in the system. The SNMP `testuser` user requires 2 password to be provided for the SNMP Authentication and Privacy protocol passwords. Both of these passwords must be 8 characters or longer. In the examples below, `foobar01` is the new SNMP Authentication password, and `foobar02` is the new SNMP Privacy password. 
 
-    1.  Aruba leaf switch configuration:
+    1.  Configure the Aruba leaf switch:
         ```bash
         ncn-m001# ssh admin@sw-leaf-001
         sw-leaf-001# configure terminal
@@ -39,7 +39,7 @@ This procedure changes the SNMP credentials on management leaf switches in the s
         sw-leaf-001# exit
         ```
 
-    2.  Dell leaf switch configuration: 
+    2.  Configure the Dell leaf switch:
         ```bash
         ncn-m001# ssh admin@sw-leaf-001
         sw-leaf-001# configure terminal
@@ -78,7 +78,7 @@ This procedure changes the SNMP credentials on management leaf switches in the s
         done
         ``` 
 
-4.  Restart REDS to pickup the new SNMP credentials:
+4.  Restart the River Endpoint Discovery Service (REDS) to pickup the new SNMP credentials:
 
     ```bash
     ncn-m001# kubectl -n services rollout restart deployment cray-reds
@@ -90,7 +90,7 @@ This procedure changes the SNMP credentials on management leaf switches in the s
     ncn-m001# sleep 2m
     ```
 
-6.  Verify REDS was able to communicate with the leaf switches with update credentials:
+6.  Verify REDS was able to communicate with the leaf switches with the updated credentials:
 
     Determine the name of the REDS pods:
     ```bash
