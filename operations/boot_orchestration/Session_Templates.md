@@ -32,6 +32,9 @@ The following is an example BOS session template:
      "path": "s3://boot-images/e06530f1-fde2-4ca5-9148-7e84f4857d17/manifest_sans_boot_parameters.json", <<-- The path to the manifest.json file in S3
      "rootfs_provider_passthrough": "66666666:dvs:api-gw-service-nmn.local:300:eth0",
      "type": "s3" <<-- Type of storage
+   },
+   "boot_set2": {
+     ...
    }
  },
 ```
