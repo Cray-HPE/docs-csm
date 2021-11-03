@@ -1,16 +1,16 @@
-# Update default ServerTech PDU credentials used by the Redfish Translation Service
+# Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)
 
 This procedure updates the default credentials used by the Redfish Translation Service (RTS) for when new ServerTech PDUs are discovered in a system.
 
-The Redfish Translation Service provides a Redfish interface that CSM Services (HSM, and CAPMC) can use interact with ServerTech PDUs which do not natively support Redfish. 
+The Redfish Translation Service provides a Redfish interface that the Hardware State Manager (HSM) and Cray Advanced Platform Monitoring and Control (CAPMC) services can use interact with ServerTech PDUs which do not natively support Redfish. 
 
-There are 2 sets of default credentials that are required for RTS to function:
+There are two sets of default credentials that are required for RTS to function:
 1. The default credentials to use when new ServerTech PDUs are discovered in the system.
 2. The global default credential that RTS uses for its Redfish interface with other CSM services.
 
 **Important:**: After this procedure is completed **going forward all future ServerTech PDUs** added to the system will be assumed to be already configured with the new global default credential when getting added to the system.
 
-**Note:** This procedure will not change the credentials on existing ServerTech PDUs in a system. To change the credential on existing air-cooled hardware follow the [Change credentials on ServerTech PDUs](Change_credentials_on_ServerTech_PDUs.md) procedure. However, this procedure will update the global default credential that RTS uses for its Redfish interface to other CSM services.
+**NOTE:** This procedure will not change the credentials on existing ServerTech PDUs in a system. To change the credential on existing air-cooled hardware, follow the [Change Credentials on ServerTech PDUs](Change_Credentials_on_ServerTech_PDUs.md) procedure. However, this procedure will update the global default credential that RTS uses for its Redfish interface to other CSM services.
 
 ## Prerequisites
 
@@ -150,7 +150,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     EOF
     ```
 
-2.  Merge customizations.yaml with rts-manifest.yaml
+2.  Merge `customizations.yaml` with `rts-manifest.yaml`:
     ```bash
     ncn-m001# manifestgen -c customizations.yaml -i ./rts-manifest.yaml > ./rts-manifest.out.yaml
     ```

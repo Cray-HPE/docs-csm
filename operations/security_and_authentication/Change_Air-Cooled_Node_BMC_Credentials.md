@@ -2,7 +2,9 @@
 
 This procedure will use the System Configuration Service (SCSD) to change all air-cooled Node BMCs in the system to the same global credential. 
 
-**Limitation:** All air-cooled and liquid cooled BMCs should share the same global credentials. The air-cooled Slingshot Switch Controllers (Router BMCs) must have the same credentials as the liquid-cooled Slingshot switch controllers.
+### Limitations
+
+All air-cooled and liquid-cooled BMCs share the same global credentials. The air-cooled Slingshot switch controllers (Router BMCs) must have the same credentials as the liquid-cooled Slingshot switch controllers.
 
 ### Prerequisites
 
@@ -10,7 +12,7 @@ This procedure will use the System Configuration Service (SCSD) to change all ai
 
 ### Procedure
 
-1.  Create a SCSD payload file to change all Air-Cooled Node BMCs to the same global credential:
+1.  Create a SCSD payload file to change all air-cooled node BMCs to the same global credential:
     ```bash
     ncn-m001# export NEW_BMC_CREDENTIAL=new.root.password
     ncn-m001# cat > bmc_creds_glb.json <<DATA
