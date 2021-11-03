@@ -382,7 +382,7 @@ Before rebooting NCNs:
 
 #### NCN Master Nodes
 
-1. Reboot each of the master nodes (one at a time) starting with ncn-m003 then ncn-m001.  There are special instructions for ncn-m001 below since its console connection is not managed by conman.
+1. Reboot each of the master nodes (one at a time) starting with `ncn-m003` then `ncn-m001`. There are special instructions for `ncn-m001` below because its console connection is not managed by conman.
 
     1. Establish a console session to the master node you are rebooting.
 
@@ -529,7 +529,7 @@ Before rebooting NCNs:
 
     9. Disconnect from the console.
 
-3. Remove any dynamically assigned interface IPs that did not get released automatically by running the CASMINST-2015 script:
+3. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the CASMINST-2015 script:
 
 ```bash
 ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
