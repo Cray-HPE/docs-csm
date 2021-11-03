@@ -15,5 +15,6 @@ The example here covers outside connections achieved via management network.
 
 ### Topology
 
+![](../img/scenario-a-topology.png)
 
 [Back to Index](./index.md)
