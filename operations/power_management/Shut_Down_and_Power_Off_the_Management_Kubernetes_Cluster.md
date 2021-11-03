@@ -3,7 +3,7 @@
 
 Shut down management services and power off the HPE Cray EX management Kubernetes cluster.
 
-Be aware of the following concepts before powering off the management non-compute nodes \(NCNs\) for the Kubernetes cluster and storage:
+Understand the following concepts before powering off the management non-compute nodes \(NCNs\) for the Kubernetes cluster and storage:
 
 -   The etcd cluster provides storage for the state of the management Kubernetes cluster. The three node etcd cluster runs on the same nodes that are configured as Kubernetes Master nodes. The management cluster state must be frozen when powering off the Kubernetes cluster. When one member is unavailable, the two other members continue to provide full access to the data. When two members are down, the remaining member will switch to only providing read-only access to the data.
 -   **Avoid Unnecessary Data Movement with Ceph** - The Ceph cluster runs not only on the dedicated storage nodes, but also on the nodes configured as Kubernetes Master nodes. Specifically, the `mon` processes. If one of the storage nodes goes down, Ceph can rebalance the data onto the remaining nodes and object storage daemons \(OSDs\) to regain full protection.
@@ -20,9 +20,9 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 
 ### Prerequisites
 
-An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the SAT repository for more information.
+An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the System Admin Toolkit (SAT) product stream documentation.
 
-- A work-around may be required to set an SSH key when running the `sat bootsys shutdown --stage platform-services` command below if performing a re-install of a 1.4 system.
+- A work-around may be required to set an SSH key when running the `sat bootsys shutdown --stage platform-services` command below if performing a re-install of a 1.4.x system.
 
 - If the following error message is displayed:
 
@@ -38,7 +38,7 @@ An authentication token is required to access the API gateway and to use the `sa
   The authenticity of host 'ncn-m001 (10.252.1.4)' can't be established.
   ECDSA key fingerprint is SHA256:Mh43bU2iYDkOnQuI7Y067nV7no4btIE/OuYeHLh+n/4.
   Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-
+  
   Warning: Permanently added 'ncn-m001,10.252.1.4' (ECDSA) to the list of known hosts.
   Last login: Thu Jul 22 16:38:58 2021 from 172.25.66.163
   ncn-m001#
@@ -229,13 +229,15 @@ An authentication token is required to access the API gateway and to use the `sa
 7. Use `ipmitool` to check the power off status of management nodes.
 
     ```bash
-    ncn-m001# for ncn in ncn-m00{2,3} ncn-w00{1,2,3} ncn-s00{1,2,3}; do echo -n "$ncn: "; ipmitool -U root -H ${ncn}-mgmt -P PASSWORD -I lanplus chassis power status; done
+    ncn-m001# export USERNAME=root
+    ncn-m001# export IPMI_PASSWORD=changeme
+    ncn-m001# for ncn in ncn-m00{2,3} ncn-w00{1,2,3} ncn-s00{1,2,3}; do echo -n "$ncn: "; ipmitool -U $USERNAME -H ${ncn}-mgmt -E -I lanplus chassis power status; done
     ```
 
 8. From a remote system, activate the serial console for ncn-m001.
 
     ```bash
-    remote$ ipmitool -I lanplus -U root -P PASSWORD -H NCN-M001_BMC_HOSTNAME sol activate
+    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME sol activate
 
     ncn-m001 login: root
     Password:
@@ -249,17 +251,17 @@ An authentication token is required to access the API gateway and to use the `sa
 
 10. Wait until the console indicates that the node has shut down.
 
-11. From a remote system that has access to the management plane, use IPMItool to power off ncn-m001.
+11. From a remote system that has access to the management plane, use IPMI tool to power off ncn-m001.
 
     ```bash
-    remote$ ipmitool -I lanplus -U root -P <BMC root password> -H NCN-M001_BMC_HOSTNAME chassis power status
-    remote$ ipmitool -I lanplus -U root -P <BMC root password> -H NCN-M001_BMC_HOSTNAME chassis power off
-    remote$ ipmitool -I lanplus -U root -P <BMC root password> -H NCN-M001_BMC_HOSTNAME chassis power status
+    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME chassis power status
+    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME chassis power off
+    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME chassis power status
     ```
 
-    **CAUTION:** The modular coolant distribution unit \(MDCU\) in a liquid-cooled TDS cabinet typically receives power from its management cabinet PDUs. If the system includes a liquid-cooled TDS cabinet, **do not power off** the management cabinet PDUs, Powering off the MDCU will cause an emergency power off \(EPO\) of the TDS cabinet and may result in data loss or equipment damage.
+    **CAUTION:** The modular coolant distribution unit \(MDCU\) in a liquid-cooled HPE Cray EX2000 cabinet (also referred to as a Hill or TDS cabinet) typically receives power from its management cabinet PDUs. If the system includes a EX2000 cabinet, **do not power off** the management cabinet PDUs, Powering off the MDCU will cause an emergency power off \(EPO\) of the cabinet and may result in data loss or equipment damage.
 
-12. (Optional) If a liquid-cooled TDS cabinet is not receiving MCDU power from this management cabinet, power off the PDU circuit breakers or disconnect the PDUs from facility power and follow lockout/tagout procedures for the site.
+12. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, power off the PDU circuit breakers or disconnect the PDUs from facility power and follow lockout/tagout procedures for the site.
 
 
 

@@ -81,7 +81,7 @@ VSX software upgrade command can automatically upgrade both of the peers in VSX 
 
 SSH into the switch being upgraded.
 
-Example: the IP address ```10.252.1.12``` used is the liveCD.
+Example: the IP address `10.252.1.12` used is the liveCD.
 ```
 sw-leaf-001# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_6400-6300_10_06_0010.stable.swi primary
 
@@ -127,7 +127,7 @@ BIOS Version       : FL.01.0002
 
 1. SSH into the Primary VSX member of the VSX-pair to upgrade.
 
-     Example: the IP ```10.252.1.12``` used is the LiveCD.
+     Example: the IP `10.252.1.12` used is the LiveCD.
 
 2. Upload the firmware.
 
@@ -153,7 +153,7 @@ BIOS Version       : FL.01.0002
 
 4. After the firmware is uploaded, boot the switch to the correct image.
 
-Example: the IP address ```10.252.1.12``` used is the liveCD.
+Example: the IP address `10.252.1.12` used is the liveCD.
 ```
 sw-leaf-001# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_6400-6300_10_06_0120.stable.swi primary
 

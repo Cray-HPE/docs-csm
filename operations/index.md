@@ -1,10 +1,10 @@
-# CSM Operational Activities
+# Cray System Management (CSM) Administration Guide
 
 The Cray System Management (CSM) operational activities are administrative procedures required to operate an HPE Cray EX system with CSM software installed.
 
 The following administrative topics can be found in this guide:
 
-- [CSM Operational Activities](#csm-operational-activities)
+- [Cray System Management (CSM) Administration Guide](#cray-system-management-csm-administration-guide)
     - [CSM Product Management](#csm-product-management)
   - [Image Management](#image-management)
   - [Boot Orchestration](#boot-orchestration)
@@ -24,6 +24,7 @@ The following administrative topics can be found in this guide:
   - [System Layout Service (SLS)](#system-layout-service-sls)
   - [System Configuration Service](#system-configuration-service)
   - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
+  - [Hardware Management (HM) Collector](#hardware-management-hm-collector)
   - [Node Management](#node-management)
   - [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
   - [Network](#network)
@@ -471,13 +472,20 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
     * [Component Partition Members](hardware_state_manager/Component_Partition_Members.md)
     * [Component Memberships](hardware_state_manager/Component_Memberships.md)
   * [Hardware State Manager (HSM) State and Flag Fields](hardware_state_manager/Hardware_State_Manager_HSM_State_and_Flag_Fields.md)
-  * [Roles and Subroles](HSM_Roles_and_Subroles.md)
+  * [HSM Roles and Subroles](hardware_state_manager/HSM_Roles_and_Subroles.md)
   * [Add an NCN to the HSM Database](hardware_state_manager/Add_an_NCN_to_the_HSM_Database.md)
   * [Add a Switch to the HSM Database](hardware_state_manager/Add_a_Switch_to_the_HSM_Database.md)
   * [Create a Backup of the HSM Postgres Database](hardware_state_manager/Create_a_Backup_of_the_HSM_Postgres_Database.md)
   * [Restore HSM Postgres from a Backup](hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
   * [Restore HSM Postgres without a Backup](hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
 
+<a name=""></a>
+
+## Hardware Management (HM) Collector
+
+The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system. 
+
+ * [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
 
 <a name="node-management"></a>
 
@@ -593,7 +601,7 @@ The central DNS infrastructure provides the structural networking hierarchy and 
   * [Manage the DNS Unbound Resolver](network/dns/Manage_the_DNS_Unbound_Resolver.md)
   * [Enable ncsd on UANs](network/dns/Enable_ncsd_on_UANs.md)
   * [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
-  * [Troubleshoot DNS Configuration Issues](network/dns/Troubleshoot_DNS_Configuration_Issues.md)
+  * [Troubleshoot PowerDNS](network/dns/Troubleshoot_PowerDNS.md)
 
 
 <a name="external-dns"></a>
@@ -644,8 +652,6 @@ See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list 
   * [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
   * [FAS Use Cases](firmware/FAS_Use_Cases.md)
   * [Upload Olympus BMC Recovery Firmware into TFTP Server](firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
-  * [Install HPC Firmware Pack (HFP)](firmware/Install_HPC_Firmware_Pack.md)
-  * [Install HPC Firmware Pack from PIT or LiveCD](firmware/Install_HPC_Firmware_Pack_from_PIT_or_LiveCD.md)
 
 
 <a name="user-access-service-uas"></a>

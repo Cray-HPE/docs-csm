@@ -74,5 +74,131 @@ Select the permissions appropriately, and then navigate to the following URL to 
 https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/org/cray/teams
 ```
 
+### Backup and Restore Data
+
+Data for gitea is stored in two places. Git content is stored directly in a PVC, while structural data, such as gitea users and the list and attributes of repos, is stored in a Postres database. Because of this, both sources must be backed up and restored together.
+
+#### Backup Postgres Data
+
+1. Determine which Postgres member is the leader and exec into the leader pod to dump the data to a local file:
+    ```
+    ncn-w001# kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list
+    + Cluster: gitea-vcs-postgres (6995618180238446669) -----+----+-----------+
+    |        Member        |     Host     |  Role  |  State  | TL | Lag in MB |
+    +----------------------+--------------+--------+---------+----+-----------+
+    | gitea-vcs-postgres-0 |  10.45.0.21  | Leader | running |  1 |           |
+    | gitea-vcs-postgres-1 | 10.46.128.19 |        | running |  1 |         0 |
+    | gitea-vcs-postgres-2 |  10.47.0.21  |        | running |  1 |         0 |
+    +----------------------+--------------+--------+---------+----+-----------+
+    
+    ncn-w001# POSTGRES_LEADER=gitea-vcs-postgres-0
+    
+    ncn-w001# kubectl exec -it ${POSTGRES_LEADER} -n services -c postgres -- pg_dumpall -c -U postgres > gitea-vcs-postgres.sql
+    ```
+
+2. Determine what secrets are associated with the postgresql credentials:
+
+    ```
+    ncn-w001# kubectl get secrets -n services | grep gitea-vcs-postgres.credentials
+    postgres.gitea-vcs-postgres.credentials                   Opaque                                2      13d
+    service-account.gitea-vcs-postgres.credentials            Opaque                                2      13d
+    standby.gitea-vcs-postgres.credentials                    Opaque                                2      13d
+    ```
+
+    Export each secret to a manifest file:
+    ```
+    ncn-w001:~ # SECRETS="postgres service-account standby"
+    ncn-w001:~ # echo "---" > gitea-vcs-postgres.manifest
+    ncn-w001:~ # for secret in $SECRETS; do
+    >   kubectl get secret "${secret}.gitea-vcs-postgres.credentials" -n services -o yaml >> gitea-vcs-postgres.manifest
+    >   echo "---" >> gitea-vcs-postgres.manifest
+    > done
+   ```
+   
+   Edit the manifest file created above to remove creationTimestamp, resourceVersion, selfLink, uid for each entry  Then copy all files to a safe location.
 
 
+#### Backup PVC Data
+
+The VCS postgres backups should be accompanied by backups of the VCS PVC. The export process can be run at any time while the service is running using the following commands:
+
+Backup (save the resulting tar file to a safe location):
+```
+POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
+kubectl -n services exec ${POD} -- tar -cvf vcs.tar /data/
+kubectl -n services cp ${POD}:vcs.tar ./vcs.tar
+```
+
+#### Restore Postgres Data
+
+Restoring VCS from Postgres is documented here: [Restore_Postgres.md](../../operations/kubernetes/Restore_Postgres.md#restore-postgres-for-vcs)
+
+#### Restore PVC Data
+
+When restoring the VCS postgres database, the PVC should also be restored to the same point in time. The restore process can be run at any time while the service is running using the following commands:
+
+Restore:
+```
+POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
+kubectl -n services cp ./vcs.tar ${POD}:vcs.tar
+kubectl -n services exec ${POD} -- tar -xvf vcs.tar
+kubectl -n services rollout restart deployment gitea-vcs
+```
+
+#### Alternative Backup/Restore Strategy
+
+An alternative to the separate backups of the postgres and pvc data is to backup the git data. This has the advantage that only one backup is needed and that the git backups can be imported into any git server, not just gitea, but has the disadvantage that some information about the gitea deployment is lost (such as user/org information) and may need to be recreated manually if the VCS deployment is lost.
+
+The following scripts create/use a `vcs-content` directory that contains all git data. This should be copied to a safe location after export, and moved back to the system before import.
+
+Export:
+
+```
+RESULTS=vcs-content
+mkdir $RESULTS
+VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+git config --global credential.helper store
+echo "https://${VCS_USER}:${VCS_PASSWORD}@api-gw-service-nmn.local" > ~/.git-credentials
+for repo in $(curl -s https://api-gw-service-nmn.local/vcs/api/v1/orgs/cray/repos -u ${VCS_USER}:${VCS_PASSWORD}| jq -r '.[] | .name')
+do
+    git clone --mirror https://api-gw-service-nmn.local/vcs/cray/${repo}.git
+    cd ${repo}.git
+    git bundle create ${repo}.bundle --all
+    cp ${repo}.bundle ../$RESULTS
+    cd ..
+    rm -r $repo.git
+done
+```
+
+Import:
+
+```
+SOURCE=vcs-content
+VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+git config --global credential.helper store
+echo "https://${VCS_USER}:${VCS_PASSWORD}@api-gw-service-nmn.local" > ~/.git-credentials
+for file in $(ls $SOURCE)
+do
+    repo=$(echo $file | sed 's/.bundle$//')
+    git clone --mirror ${SOURCE}/${repo}.bundle
+    cd ${repo}.git
+    git remote set-url origin https://api-gw-service-nmn.local/vcs/cray/${repo}.git
+    git push
+    cd ..
+    rm -r ${repo}.git
+done
+```
+
+Prior to import, the repo structure may need to be recreated if it has not already been by an install. (Adjust the repo list as necessary if any additional are present. Repo settings such as public/private will also need to be manually set if this is used.)
+
+```
+VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+REPOS="analytics-config-management cos-config-management cpe-config-management slurm-config-management sma-config-management uan-config-management csm-config-management"
+for repo in $REPOS
+do
+   curl -X POST https://api-gw-service-nmn.local/vcs/api/v1/orgs/cray/repos -u ${VCS_USER}:${VCS_PASSWORD} -d name=${repo}
+done
+```

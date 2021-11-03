@@ -18,7 +18,7 @@ The version is in [SemVer](https://semver.org) format. Product installation and 
 
 The workflow of branching from pristine imported content and handling upgrades to that content is shown in the diagram below \(see "Branch Workflow"\). In this scenario, the configuration customizations are made in a customer/main branch, which can be any branch in the repository, such as master, main, integration, or others. As configuration changes are made and the system is configured as required, users can point to the commits \(white circles\) in their CFS configuration layers to test and run Cray products on the system. Users may also point to the commits on pristine branches \(blue circle\) in CFS configuration layers if the default configuration is sufficient.
 
-![](../../img/operations/branch_workflow.png "Branch Workflow")
+![Branch Workflow](../../img/operations/branch_workflow.png)
 
 When a product upgrade occurs \(cray/product/1.4.0 in the above diagram\), the product installer will create a new branch and commit based off the previous pristine branch. If the previous customizations on the customer/main branch also need to be included with the new 1.4.0 content, the user should initiate a Git merge of the new pristine content into their branch \(or possibly into a test branch based on customer/main\). This process will be the same for subsequent updates of the product as well.
 

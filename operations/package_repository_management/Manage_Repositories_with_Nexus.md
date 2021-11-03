@@ -53,7 +53,7 @@ function paginate() {
     local url="$1"
     local token
     { token="$(curl -sSk "$url" | tee /dev/fd/3 | jq -r '.continuationToken // null')"; } 3>&1
-    until [[ "$token"=="null" ]]; do
+    until [[ "$token" == "null" ]]; do
         { token="$(curl -sSk "$url&continuationToken=${token}" | tee /dev/fd/3 | jq -r '.continuationToken // null')"; } 3>&1
     done
 }
@@ -134,7 +134,7 @@ For example, to list the names of all components in the `csm-sle-15sp2` reposito
 | jq -r  '.items[] | .name' | sort -u
 noarch/basecamp-1.0.1-20210126131805_a665272.noarch.rpm
 noarch/csm-testing-1.3.2-20210205160852_e012960.noarch.rpm
-noarch/docs-csm-install-1.7.4-20210206165423_2fae6fa.noarch.rpm
+noarch/docs-csm-1.7.4-20210206165423_2fae6fa.noarch.rpm
 noarch/dracut-metal-dmk8s-1.4.7-20210129115153_7a86571.noarch.rpm
 noarch/dracut-metal-luksetcd-1.0.2-20210129115153_b34f9a5.noarch.rpm
 noarch/dracut-metal-mdsquash-1.4.20-20210201222655_e20e2ee.noarch.rpm
@@ -210,7 +210,7 @@ For example, to list the download URLs for each asset in the `csm-sle-15sp2` rep
 | jq -r  '.items[] | .assets[] | .downloadUrl' | sort -u
 https://packages.local/repository/csm-sle-15sp2/noarch/basecamp-1.0.1-20210126131805_a665272.noarch.rpm
 https://packages.local/repository/csm-sle-15sp2/noarch/csm-testing-1.3.2-20210205160852_e012960.noarch.rpm
-https://packages.local/repository/csm-sle-15sp2/noarch/docs-csm-install-1.7.4-20210206165423_2fae6fa.noarch.rpm
+https://packages.local/repository/csm-sle-15sp2/noarch/docs-csm-1.7.4-20210206165423_2fae6fa.noarch.rpm
 https://packages.local/repository/csm-sle-15sp2/noarch/dracut-metal-dmk8s-1.4.7-20210129115153_7a86571.noarch.rpm
 https://packages.local/repository/csm-sle-15sp2/noarch/dracut-metal-luksetcd-1.0.2-20210129115153_b34f9a5.noarch.rpm
 https://packages.local/repository/csm-sle-15sp2/noarch/dracut-metal-mdsquash-1.4.20-20210201222655_e20e2ee.noarch.rpm

@@ -8,7 +8,7 @@ The procedures in section detail the high-level tasks required to power on an HP
 
 -   The Cray Advanced Platform Monitoring and Control \(CAPMC\) service controls power to major components. CAPMC sequences the power on tasks in the correct order, but **does not** determine if the required software services are running on the components.
 -   The Boot Orchestration Service \(BOS\) manages and configures power on and boot tasks.
--   The System Admin Toolkit \(SAT\) automates boot and shutdown services by stage, for example:
+-   The System Admin Toolkit \(SAT\) automates boot and shutdown services by stage, for example: 
 
     ```screen
     sat bootsys boot --stage platform-services
@@ -45,13 +45,17 @@ Always use the cabinet power-on sequence for the customer site.
 The management cabinet is the first part of the system that must be powered on and booted. Management network and Slingshot fabric switches power on and boot when cabinet power is applied. After cabinets are powered on, wait at least 10 minutes for systems to initialize.
 
 -   To power on all liquid-cooled cabinet CDUs and cabinet PDUs, see [Power On Compute and IO Cabinets](Power_On_Compute_and_IO_Cabinets.md).
--   To power on all remaining system cabinet CDUs and PDUs, see [Power On Compute and IO Cabinets](Power_On_Compute_and_IO_Cabinets.md).
+-   To power on all remaining system cabinet CDUs and PDUs.
 
-After all the system cabinets are powered on, be sure that all management network and Slingshot network switches are powered on and healthy.
+After all the system cabinets are powered on, be sure that all management network and Slingshot network switches are powered on and there are no error LEDS or hardware failures.
 
 ### Power on and Boot the Kubernetes Management Cluster
 
 To power on the management cabinet and bring up the management Kubernetes cluster, refer to [Power On and Start the Management Kubernetes Cluster](Power_On_and_Start_the_Management_Kubernetes_Cluster.md).
+
+### Power on the External Lustre File System
+
+To power an external Lustre file system (ClusterStor), see [Power On the External Lustre File System](Power_On_the_External_Lustre_File System.md).
 
 ### Bring up the Slingshot Fabric
 

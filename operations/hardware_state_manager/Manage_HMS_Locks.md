@@ -113,7 +113,7 @@ ReservationDisabled = false
 
 When attempting to disable, the lock will stay in effect, but the reservation ability will be disabled. For example:
 
-``` bash
+```bash
 ncn-m001# cray hsm locks disable create --component-ids x1003c5s2b1n1
 Failure = []
 

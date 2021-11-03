@@ -1,3 +1,5 @@
+
+
 # Configure Aruba CDU Switch
 
 This page describes how Aruba CDU switches are configured.
@@ -7,10 +9,13 @@ CDU switches act as leaf switches in the architecture.
 Aruba JL720A 8360-48XT4 is the model used.
 They run in a high availability pair and use VSX to provide redundancy.
 
-Requirements:
-   - Two uplinks from each CDU switch to the upstream switch, this is normally a spine switch.
-   - Three connections between the switches, two of these are used for the ISL (Inter switch link) and one used for the keepalive.
-   - The ISL uses 100GB ports and the keepalive uses a 10GB port.
+## Prerequisites
+
+- There are two uplinks from each CDU switch to the upstream switch. This is normally a spine switch.
+- Three connections exist between the switches, two of these are used for the Inter switch link (ISL), and one used for the keepalive.
+- Connectivity to the switch is established.
+- The [Configure Aruba Management Network Base](configure_aruba_management_network_base.md) procedure has been run.
+- The ISL uses 100GB ports and the keepalive uses a 10GB port.
 
 ![Diagram of CDU Wiring to Upstream Switch](../img/network/CDU-Wiring.png)
 
@@ -22,10 +27,10 @@ The ISL are ports 49 and 50 on both CDU switches.
 
 The Keepalive is port 48.
 
-   Note: These are examples only, your installation and cabling may vary.
+   **NOTE:** These are examples only. The installation and cabling may vary.
    This information is on the 25G_10G tab of the SHCD spreadsheet.
 
-| Source | Source Label Info | Destination Label Info | Destination | Description | Notes
+| Source | Source Label Info | Destination Label Info | Destination | Description | Notes |
 | --- | --- | ---| --- | --- | --- |
 | sw-100g01 | x3105u40-j01 | d100u01-j51 | d100sw1 | 100g-30m-AOC | |
 | sw-100g02 | x3105u41-j01 | d100u01-j52 | d100sw1 | 100g-30m-AOC | |
@@ -36,21 +41,20 @@ The Keepalive is port 48.
 | d100sw1 | d100u01-j50 | d100u02-j50 | d100sw2 | 100g-1m-DAC | |
 
 
-It is assumed that you have connectivity to the switch and have done the [Configure Aruba Management Network Base](configure_aruba_management_network_base.md) procedure.
-
 ## Configure VSX
 
 1. Create the keepalive vrf on both switches.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
        vrf keepalive
    ```
 
 1. Setup the keepalive link.
+   
    This will require a unique IP address on both switches. The IP address is in its own VRF so this address will not be reachable from anywhere besides the CDU pair.
 
-   ```
+   ```bash
    sw-cdu-001(config)#
        int 1/1/48
        no shutdown
@@ -67,21 +71,25 @@ It is assumed that you have connectivity to the switch and have done the [Config
        description VSX keepalive
        ip address 192.168.255.1/31
    ```
+
 1. Create the ISL lag on both switches.
 
-  ```
-  sw-cdu-001 & sw-cdu-002 (config)#
-      interface lag 99
-      no shutdown
-      description ISL link
-      no routing
-      vlan trunk native 1 tag
-      vlan trunk allowed all
-      lacp mode active
-  ```
-1. Add the ISL ports to the LAG, these are two of the ports connected between the switches.
-
+   ```bash
+   sw-cdu-001 & sw-cdu-002 (config)#
+       interface lag 99
+       no shutdown
+       description ISL link
+       no routing
+       vlan trunk native 1 tag
+       vlan trunk allowed all
+       lacp mode active
    ```
+
+1. Add the ISL ports to the LAG.
+
+   These are two of the ports connected between the switches.
+   
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
        int 1/1/49-1/1/50
        no shutdown
@@ -91,7 +99,7 @@ It is assumed that you have connectivity to the switch and have done the [Config
 
 1. Create the VSX instance and setup the keepalive link.
 
-   ```
+   ```bash
    SW-CDU-001(config)#
        no ip icmp redirect
        vsx
@@ -111,12 +119,11 @@ It is assumed that you have connectivity to the switch and have done the [Config
        keepalive peer 192.168.255.0 source 192.168.255.1 vrf keepalive
        linkup-delay-timer 600
        vsx-sync vsx-global
-
    ```
 
-1. At this point you should have an Established VSX session
+1. Verify there is an `Established` VSX session.
 
-   ```
+   ```bash
    SW-CDU-001 # show vsx brief
    ISL State                              : In-Sync
    Device State                           : Sync-Primary
@@ -126,11 +133,12 @@ It is assumed that you have connectivity to the switch and have done the [Config
    ```
 
 ## Configure Uplink
+
 The uplink ports are the ports connecting the CDU switches to the upstream switch, most likely a spine switch.
 
 1. Create the LAG.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
    interface lag 99 multi-chassis
        no shutdown
@@ -141,9 +149,9 @@ The uplink ports are the ports connecting the CDU switches to the upstream switc
        exit
    ```
 
-1. Add ports to the LAG
+1. Add ports to the LAG.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
    interface 1/1/51 - 1/1/52
        no shutdown
@@ -155,11 +163,13 @@ The uplink ports are the ports connecting the CDU switches to the upstream switc
 ## Configure VLAN
 
 **Cray Site Init (CSI) generates the IP addresses used by the system, below are samples only.**
-The VLAN information is located in the network YAML files. Below are examples.
+The VLAN information is located in the network YAML files. The following are examples.
 
-1. The CDU switches will have VLAN interfaces in NMN, HMN, NMN_MTN, HMN_MTN networks.
+1. Configure the VLAN interfaces in for the NMN, HMN, NMN_MTN, and HMN_MTN on the CDU switches.
 
-   ```
+   NMN configuration:
+
+   ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    SNIPPET
      - ip_address: 10.252.0.5
@@ -176,7 +186,10 @@ The VLAN information is located in the network YAML files. Below are examples.
      comment: ""
      gateway: 10.252.0.1
    ```
-   ```
+   
+   HMN configuration:
+
+   ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml
    SNIPPET
      - ip_address: 10.254.0.5
@@ -193,7 +206,10 @@ The VLAN information is located in the network YAML files. Below are examples.
      comment: ""
      gateway: 10.254.0.1
    ```
-   ```
+   
+   NMN_MTN configuration:
+
+   ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN_MTN.yaml
    full_name: Mountain Node Management Network
    cidr: 10.100.0.0/17
@@ -218,7 +234,10 @@ The VLAN information is located in the network YAML files. Below are examples.
      iprange-end: 10.100.3.254
    name: NMN_MTN
    ```
-   ```
+   
+   HMN_MTN configuration:
+
+   ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN_MTN.yaml
    full_name: Mountain Hardware Management Network
    cidr: 10.104.0.0/17
@@ -244,14 +263,14 @@ The VLAN information is located in the network YAML files. Below are examples.
    name: HMN_MTN
    ```
 
-   Note: CSI does not yet generate IP addresses for the CDU switches on VLANs HMN_MTN and NMN_MTN.
+   **NOTE:** CSI does not yet generate IP addresses for the CDU switches on VLANs HMN_MTN and NMN_MTN.
    - The first CDU switch in the pair will always have an IP address ending in .2 on the HMN_MTN and NMN_MTN networks.
    - The second CDU switch in the pair will always have an IP address ending in .3 on the HMN_MTN and NMN_MTN networks.
    - Both CDU MTN VLAN IP addresses will be at the beginning of the subnet.
    - The gateway will always end in .1 and will be at the beginning of the subnet.
    - Every Mountain Cabinet will get its own HMN and NMN VLAN.
 
-1. Below is an example of CDU switch IP addressing based on the network .yaml files from above.
+   The following is an example of CDU switch IP addressing based on the network .yaml files from above:
 
    | VLAN | CDU1 | CDU2	| Purpose |
    | --- | --- | ---| --- |
@@ -260,7 +279,7 @@ The VLAN information is located in the network YAML files. Below are examples.
    | 2000 | 10.100.0.2/22| 10.100.0.3/22 | Mountain Node Management
    | 3000 | 10.104.0.2/22| 10.104.0.3/22 | Mountain Hardware Management
 
-   If the system has additional Mountain Cabinets the VLANs will look like this.
+   If the system has additional Mountain Cabinets the VLANs will look like the following.
    This is an example of a system with 3 cabinets.
 
    | VLAN | CDU1 | CDU2	| Purpose |
@@ -272,16 +291,21 @@ The VLAN information is located in the network YAML files. Below are examples.
    | 2002 | 10.100.8.2/22| 10.100.8.3/22 | Mountain Node Management
    | 3002 | 10.104.8.2/22| 10.104.8.3/22 | Mountain Hardware Management
 
-1. Below is the output of an SHCD, the components in the x1000 cabinet would get their own NMN and HMN VLAN and components in the x1001 would also get their own NMN and HMN VLAN.
-The CECs will be on the HMN VLAN of that cabinet.
+1. View the output of the SHCD to prepare to configure the VLANs on the switches.
+   
+   The components in the x1000 cabinet would get their own NMN and HMN VLAN,
+   and components in the x1001 would also get their own NMN and HMN VLAN. 
+   The CECs will be on the HMN VLAN of that cabinet.
+
+   For example:
 
    ![Example CDU Connections to CMM in SHCD](../img/network/CDU-CMM-SHCD.png)
 
-1. Once you have all this information you can now configure the VLANs on the switches.
+1. Configure the VLANs on the switches.
 
-   NMN VLAN config
+   NMN VLAN configuration:
 
-   ```
+   ```bash
    sw-cdu-001(config)#
        vlan 2
        interface vlan2
@@ -296,9 +320,10 @@ The CECs will be on the HMN VLAN of that cabinet.
        ip mtu 9198
        exit
    ```
-   HMN VLAN config
+   
+   HMN VLAN configuration:
 
-   ```
+   ```bash
    sw-cdu-001(config)#
        vlan 4
        interface vlan4
@@ -313,9 +338,10 @@ The CECs will be on the HMN VLAN of that cabinet.
        ip mtu 9198
        exit
    ```
-   NMN MTN VLAN config
+   
+   NMN MTN VLAN configuration:
 
-   ```
+   ```bash
    sw-cdu-001(config)#
        vlan 2000
        interface vlan2000
@@ -339,9 +365,9 @@ The CECs will be on the HMN VLAN of that cabinet.
        exit
    ```
 
-   HMN MTN VLAN config
+   HMN MTN VLAN configuration:
 
-   ```
+   ```bash
    sw-cdu-001(config)#
        vlan 3000
        interface vlan3000
@@ -367,13 +393,13 @@ The CECs will be on the HMN VLAN of that cabinet.
 
 ## Configure ACL
 
-These ACLs are designed to block traffic from the node management network to and from the hardware management network and restrict management access to the hardware management network.
+ACLs are designed to block traffic from the NMN to and from the HMN.
 
-1. The first step is to create the access list, once it is created we have to apply it to a VLAN.
+1. Create the access list.
 
-   NOTE: these are examples only, the IP addresses below need to match what was generated by CSI.
+   **NOTE:** These following are examples only; the IP addresses below need to match what was generated by CSI.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
        access-list ip nmn-hmn
        10 deny any 10.252.0.0/255.255.128.0 10.254.0.0/255.255.128.0
@@ -389,7 +415,7 @@ These ACLs are designed to block traffic from the node management network to and
 
 1. Apply ACL to VLANs.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
        vlan 2
        apply access-list ip nmn-hmn in
@@ -405,52 +431,31 @@ These ACLs are designed to block traffic from the node management network to and
        apply access-list ip nmn-hmn out
    ```
 
-Control plane ACL
-- This restricts management traffic to the HMN.
+## Configure Spanning-Tree
 
-   ```
-   sw-cdu-001 & sw-cdu-002 (config)#
-    access-list ip mgmt
-    05 comment ALLOW SSH, HTTPS, AND SNMP ON HMN SUBNET
-    10 permit tcp 10.254.0.0/17 any eq 22
-    20 permit tcp 10.254.0.0/17 any eq 443
-    30 permit udp 10.254.0.0/17 any eq 161
-    40 permit udp 10.254.0.0/17 any eq 162
-    45 comment ALLOW SNMP FROM HMN METALLB SUBNET
-    50 permit udp 10.94.100.0/24 any eq 161
-    60 permit udp 10.94.100.0/24 any eq 162
-    65 comment BLOCK SSH, HTTPS, AND SNMP FROM EVERYWHERE ELSE
-    70 deny tcp any any eq 22
-    80 deny tcp any any eq 443
-    90 deny udp any any eq 161
-    100 deny udp any any eq 162
-    105 comment ALLOW ANYTHING ELSE
-    110 permit any any any
-    apply access-list ip mgmt control-plane vrf default
-    ```
+1. Apply the following configuration to the Aruba CDU switches.
+   
+   If there are more 2xxx or 3xxx VLANs, add them to the `spanning-tree vlan` list.
 
-## Configure Spanning-tree
-
-1. The following config is applied to Aruba CDU switches.
-   If there are more 2xxx or 3xxx VLANs you will add them to the ```spanning-tree vlan``` list
-
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
        spanning-tree mode rpvst
        spanning-tree
        spanning-tree vlan 1,2,4,2000,3000
    ```
 
-1. Verify that each CDU switch is the root bridge for VLANs 2xxx and 3xxx
+1. Verify that each CDU switch is the root bridge for VLANs 2xxx and 3xxx.
 
 
 ## Configure OSPF
 
-1. OSPF is a dynamic routing protocol used to exchange routes.
+1. Configure OSPF. 
+   
+   OSPF is a dynamic routing protocol used to exchange routes.
    It provides reachability from the MTN networks to NMN/Kubernetes networks.
-   The router-id used here is the NMN IP address. (VLAN 2 IP)
+   The router-id used here is the NMN IP address (VLAN 2 IP).
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
        router ospf 1
        router-id 10.252.0.x
@@ -468,9 +473,11 @@ Control plane ACL
 
 ## Configure NTP
 
-1. The IP addresses used here will be the first three worker nodes on the NMN network. These can be found in NMN.yaml.
+1. Configure NTP.
+   
+   The IP addresses used are the first three worker nodes on the NMN network. These can be found in NMN.yaml.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
        ntp server 10.252.1.7
        ntp server 10.252.1.8
@@ -480,29 +487,30 @@ Control plane ACL
 
 ## Configure DNS
 
-1. This will point to the unbound DNS server.
+1. Configure DNS to point to the unbound DNS server.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
        ip dns server-address 10.92.100.225
    ```
 
-## Configure Downlink port
+## Configure Downlink Port
 
 
 ## Configure LAG for CMMs
 
-- This **requires** updated CMM firmware. (version 1.4.20 or later). See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md) for details on updating CMM firmware with FAS.
+- This **requires** updated CMM firmware (version 1.4.20 or later). See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md) for details on updating CMM firmware with FAS.
 - A static LAG will be configured on the CDU switches.
 - The CDU switches have two cables (10Gb RJ45) connecting to each CMM.
 - This configuration offers increased throughput and redundancy.
 - The CEC will not need to be programmed in order to support the LAG configuration as it was required in previous versions. The updated firmware takes care of this.
 
-1. Ports going to CMM switches.
-   The VLANs used are the cabinet VLANs that are generated from CSI
+1. Configure ports going to CMM switches.
+   
+   The VLANs used are the cabinet VLANs that are generated from CSI.
    The Description should be changed to match the cabinet number.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
        interface lag 1 multi-chassis static
        no shutdown
@@ -518,9 +526,9 @@ Control plane ACL
        exit
    ```
 
-1. Ports going to CECs
+1. Configure ports going to CECs.
 
-   ```
+   ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
        interface 1/1/1
        no shutdown
@@ -533,9 +541,11 @@ Control plane ACL
    ```
 
 
-## Save configuration
+## Save Configuration
 
-   ```
+To save the configuration:
+
+   ```bash
    sw-cdu-001(config)# exit
    sw-cdu-001# write memory
    ```
@@ -543,7 +553,10 @@ Control plane ACL
 
 ## Show Running Configuration
 
-   ```
+To display the running configuration:
+
+   ```bash
    sw-cdu-001# show running-config
    ```
+
 

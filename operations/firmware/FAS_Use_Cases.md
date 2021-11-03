@@ -276,13 +276,13 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
     1.  Disable the `hms-discovery` Kubernetes cronjob:
 
         ```bash
-        ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
+        ncn# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
         ```
 
     2.  Power off all the components; for example, in chassis 0-7, cabinets 1000-1003.
 
         ```bash
-        ncn-m001# cray capmc xname_off create --xnames x[1000-1003]c[0-7] --recursive true --continue true
+        ncn# cray capmc xname_off create --xnames x[1000-1003]c[0-7] --recursive true --continue true
         ```
 
         This command powers off all the node cards, then all the compute blades, then all the Slingshot switch ASICS, then all the Slingshot switch enclosures, and finally all chassis enclosures in cabinets 1000-1003.
@@ -298,7 +298,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         The `overrideDryrun = false` value indicates that the command will do a dry-run.
 
         ```bash
-        ncn-m001# cray fas actions create chassisBMC.json
+        ncn# cray fas actions create chassisBMC.json
         overrideDryrun = false
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
         ```
@@ -308,7 +308,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         Replace the actionID value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
         ```bash
-        ncn-m001# cray fas actions describe {actionID}
+        ncn# cray fas actions describe {actionID}
         blockedBy = []
         state = "completed"
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
@@ -367,7 +367,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         The returned `overrideDryrun = true` indicates that an actual firmware update job was created. A new `actionID` will also be returned.
 
         ```bash
-        ncn-m001# cray fas actions create chassisBMC.json
+        ncn# cray fas actions create chassisBMC.json
         overrideDryrun = true
         actionID = "bc40f10a-e50c-4178-9288-8234b336077b"
         ```
@@ -377,13 +377,13 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 5.  Restart the `hms-discovery` cronjob.
 
     ```bash
-    ncn-m001 # kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
+    ncn# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
     The `hms-discovery` cronjob will run within 5 minutes of being unsuspended and start powering on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually:
 
     ```bash
-    ncn-m001 # cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
+    ncn# cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
     ```
 
     The `--prereq` option ensures all required components are powered on first. The `--continue` option allows the command to complete in systems without fully populated hardware.
@@ -459,13 +459,21 @@ See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock
     "tag": "default",
     "overrideDryrun": false,
     "restoreNotPossibleOverride": true,
-    "timeLimit": 2000,
+    "timeLimit": 4000,
     "description": "Dryrun upgrade of Gigabyte node BMCs"
   }
 }
 ```
 
-**IMPORTANT**: The *timeLimit* is `2000` because the gigabytes can take a lot longer to update.
+**IMPORTANT**: The *timeLimit* is `4000` because the gigabytes can take a lot longer to update.
+
+You may receive a node failed to update with the output:
+`stateHelper = "Firmware Update Information Returned Downloading – See /redfish/v1/UpdateService"`
+FAS has incorrectly marked this node as failed.
+It most likely will complete the update successfully.
+You can check the update status by looking at the redfish `FirmwareInvetnory (/redfish/v1/UpdateService/FirmwareInventory/BMC)`
+or rerunning FAS to verify that the BMC firmware was updated.
+Make sure you have waited for the current firmware to be updated before starting a new FAS action on the same node.
 
 **Device Type: NodeBMC | Target: BIOS**
 ```json
@@ -492,11 +500,13 @@ See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock
     "tag": "default",
     "overrideDryrun": false,
     "restoreNotPossibleOverride": true,
-    "timeLimit": 2000,
+    "timeLimit": 4000,
     "description": "Dryrun upgrade of Gigabyte node BIOS"
   }
 }
 ```
+
+**IMPORTANT**: The *timeLimit* is `4000` because the gigabytes can take a lot longer to update.
 
 #### HPE
 
@@ -532,7 +542,7 @@ See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock
 
 **Device Type: NodeBMC | Target: `System ROM` aka BIOS**
 
-**IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
+**IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than ncn-m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
 See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
 
 ```json
@@ -602,11 +612,13 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
     "tag": "default",
     "overrideDryrun": false,
     "restoreNotPossibleOverride": true,
-    "timeLimit": 2000,
+    "timeLimit": 4000,
     "description": "Dryrun upgrade of Gigabyte node BIOS"
   }
 }
 ```
+
+**IMPORTANT**: The *timeLimit* is `4000` because the gigabytes can take a lot longer to update.
 
 **Manufacturer: HPE | Device Type: NodeBMC | Target: `System ROM` aka BIOS**
 

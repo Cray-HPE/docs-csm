@@ -18,8 +18,7 @@ The Kubernetes image is used by the master and worker nodes.
    pit# cd /var/www/ephemeral/data/k8s
    pit# unsquashfs kubernetes-0.1.69.squashfs
    ```
-
-1. Change into the image root
+1. Chroot into the image root
 
    ```bash
    pit# chroot ./squashfs-root
@@ -38,6 +37,12 @@ The Kubernetes image is used by the master and worker nodes.
    ```
 
 1. Replace the default root public and private ssh keys with your own or generate a new pair with `ssh-keygen(1)`
+
+   ```bash
+   chroot-pit# mknod /dev/urandom c 1 9
+   chroot-pit# ssh-keygen <options>
+   chroot-pit# rm /dev/urandom
+   ```
 
 1. Create the new SquashFS artifact
 

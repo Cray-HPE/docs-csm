@@ -3,9 +3,7 @@
 
 ## Bring Up the Slingshot Fabric
 
-Use Ansible to bring up the Slingshot fabric. This procedure assumes the Slingshot fabric is installed an configured.
-
-In release 1.4, the slingshot-fabric-manager pod controls the fabric.
+This procedure assumes the Slingshot fabric is installed an configured. The slingshot-fabric-manager software controls the fabric. On systems running Kubernetes, the slingshot-fabric-manager pod controls the fabric. 
 
 ### Prerequisites
 

@@ -125,7 +125,7 @@ After identifying which hardware is in the system, start with the top most item 
 There are several use cases for using the FAS to update firmware on the system. These use cases are intended to be run by system administrators with a good understanding of firmware. Under no circumstances should non-administrator users attempt to use FAS or perform a firmware update.
 
 -   Perform a firmware update: Update the firmware of an xname's target to the latest, earliest, or an explicit version.
--   Determine what hardware can be updated by performing a dry-run: The easiest was to determine what can be updated is to perform a dry-run of the update.
+-   Determine what hardware can be updated by performing a dry-run: This is the easiest way to determine what can be updated.
 -   Take a snapshot of the system: Record the firmware versions present on each target for the identified xnames. If the firmware version corresponds to an image available in the images repository, link the `imageID` to the record.
 -   Restore the snapshot of the system: Take the previously recorded snapshot and use the related `imageIDs` to put the xname/targets back to the firmware version they were at, at the time of the snapshot.
 -   Provide firmware for updating: FAS can only update an xname/target if it has an image record that is applicable. Most administrators will not encounter this use case.
@@ -157,10 +157,10 @@ FAS operations will have one of the following states:
 - blocked - Only one operation can be performed on a node at a time. If more than one update is required for a xname, operations will be blocked. This will have a message of "blocked by sibling".
 - inProgress - Update is in progress, but not completed.
 - verifying - Waiting for update to complete.
-- failed - An update was attempted, but could FAS is unable to tell that the update succeeded in the time allowed.
+- failed - An update was attempted, but FAS is unable to tell that the update succeeded in the allotted time.
 - noOperation - Firmware is at the correct version according to the images loaded into FAS.
 - noSolution - FAS does not have a suitable image for an update.
-- aborted - The operation was aborted before it could determine if it was successful. If aborted after the update command was sent to the node, the node may still have updated.
+- aborted - the operation was aborted before it could determine if it was successful.  If aborted after the update command was sent to the node, the node may still have updated.
 
 <a name="firmware-images"></a>
 

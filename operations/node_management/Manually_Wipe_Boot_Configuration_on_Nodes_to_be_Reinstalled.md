@@ -44,7 +44,9 @@ This procedure is necessary for preparing any NCNs that need to have software re
     -   SOL:
 
         ```bash
-        ncn-w001# ipmitool -U root -P <BMC root password> -I lanplus -H BMC_IP_ADDRESS sol activate
+        ncn-w001# export USERNAME=root
+        ncn-w001# export IPMI_PASSWORD=changeme
+        ncn-w001# ipmitool -U $USERNAME -E -I lanplus -H BMC_IP_ADDRESS sol activate
         ```
 
         **SOL Trouble?**

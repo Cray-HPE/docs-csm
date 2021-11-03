@@ -151,7 +151,7 @@ Mentioned in this workflow:
 
 ### Replace Nodes
 
-- [Replace a Compute Blade](Replace_a_Compute_Blade.md) 
+- [Replace a Compute Blade](Replace_a_Compute_Blade.md)
 - [Swap a Compute Blade with a Different System](Swap_a_Compute_Blade_with_a_Different_System.md)
 
 
@@ -159,6 +159,6 @@ Mentioned in this workflow:
 
 ### Move Nodes
 
-- [Move a Standard Rack Node](Move_a_Standard_Rack_Node.md) 
+- [Move a Standard Rack Node](Move_a_Standard_Rack_Node.md)
 - [Move a Standard Rack Node \(Same HSN Ports\)](Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
 

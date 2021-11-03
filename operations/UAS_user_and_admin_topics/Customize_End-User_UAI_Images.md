@@ -30,10 +30,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
         compute:
         boot_ordinal: 2
         etag: d54782b3853a2d8713a597d80286b93e
-        kernel_parameters: console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g
-            intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless
-            numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y
-            rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}
+        kernel_parameters: ip=dhcp quiet spire_join_token=${SPIRE_JOIN_TOKEN}
         network: nmn
         node_roles_groups:
         - Compute
@@ -47,7 +44,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
     name: wlm-sessiontemplate-0.1.0
     ```
 
-    Alternatively, collect the sessiontemplate name used when performing the installation/configuration procedure in the Cray Operating System (COS) documentation repository. Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name.
+    Alternatively, collect the sessiontemplate name used during the Cray Operating System (COS) install. Refer to the "Boot COS" procedure in the COS product stream documentation. Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name.
 
     ```
     ncn-w001# SESSION_NAME=wlm-sessiontemplate-0.1.0

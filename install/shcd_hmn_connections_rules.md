@@ -12,7 +12,7 @@
     3. [Storage](#management-node-storage)
 5. [Application Node](#application-node)
     1. [Single Node Chassis](#application-node-single-node-chassis)
-        1. [Building xnames for nodes in a single application node chassis](#application-node-dual-node-chassis-xname)
+        1. [Building xnames for nodes in a single application node chassis](#application-node-single-node-chassis-xname)
     2. [Dual Node Chassis](#application-node-dual-node-chassis)
         1. [Building xnames for nodes in a dual application node chassis](#application-node-dual-node-chassis-xname)
 6. [Columbia Slingshot Switch](#columbia-slingshot-switch)
@@ -738,6 +738,7 @@ The HMN connections representation for the SHCD table row above.
 {"Source":"uan01","SourceRack":"x3000","SourceLocation":"u04","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j25"}
 ```
 
+<a name="application-node-single-node-chassis-xname"></a>
 #### Building xnames for nodes in a single application node chassis
 The xname format for nodes takes the form of `xXcCsSbBnN`:
   - xX: where `X` is the Cabinet or Rack identification number.
@@ -962,7 +963,7 @@ Management switch in slot 12 of cabinet 3000, its management port is connected t
 
 ### HMN Connections
 The HMN connections representation for the SHCD table row above.
-```JSON
+```json
 {"Source":"sw-25g01","SourceRack":"x3000","SourceLocation":"u12","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j41"}
 ```
 

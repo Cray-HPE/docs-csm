@@ -68,6 +68,6 @@ Display all the information for a specific UAI class by referencing its class ID
       volumename: slurm-config
     ```
 
-    Refer to [About UAI Classes](About_UAI_Classes.md) and [Elements of a UAI](Elements_of_a_UAI.md) for an explanation of the output of this command.
+    Refer to [UAI Classes](UAI_Classes.md) and [Elements of a UAI](Elements_of_a_UAI.md) for an explanation of the output of this command.
 
 

@@ -5,7 +5,7 @@ There is a known issue with the HMS Discovery cronjob when a BMC does not respon
 This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and RouterBMCs.
 
 ## Prerequisites
-- The Cray CLI has been initialized.
+
 - Only applicable to an Air Cooled NodeBMC or RouterBMC.
 
 ## Symptoms
@@ -76,25 +76,18 @@ This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and Ro
 5. If the BMC has a MAC Address with a component ID and does not have a RedfishEndpoint in HSM, then proceed to the next section.
 
 ## Solution
-1. Delete the MAC address associated with the BMC from HSM.
-    ```bash
-    ncn# cray hsm inventory ethernetInterfaces delete $BMC_MAC
-    ```
 
-    After a few minutes the MAC address and IP address should get added back into HSM:
-    ```bash
-    ncn# cray hsm inventory ethernetInterfaces describe $BMC_MAC
-    ID = "54802852b706"
-    Description = ""
-    MACAddress = "54:80:28:52:b7:06"
-    LastUpdate = "2021-06-28T18:15:21.50797Z"
-    ComponentID = ""
-    Type = ""
-    [[IPAddresses]]
-    IPAddress = "10.254.1.27"
-    ```
+Correcting this river redfish endpoint discovery issue can be done by running the `river_rf_endpoint_discovery_fixup.py` script:
 
-2. Wait for the hms-discovery cronjob to run again and run to completion after the MAC was deleted.
+```
+ncn# /opt/cray/csm/scripts/hms_verification/river_rf_endpoint_discovery_fixup.py
+```
+
+The return value of the script is 0 if fixup was successful or no fixup was needed. Otherwise, a non-zero return means that manual intervention may be needed to correct the issue. Continue to the next section if there were failures.
+
+### Script Debugging Steps
+
+1. Check that the hms-discovery cronjob has run to completion since running the script.
     ```bash
     ncn# kubectl -n services get pods -l app=hms-discovery
     NAME                             READY   STATUS      RESTARTS   AGE
@@ -110,7 +103,9 @@ This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and Ro
     hms-discovery-1624903020-qk6ww   0/2     Completed   0          109s
     ```
 
-3. Verify that the MAC address has a component ID associated with it.
+    If not, wait until it has and then continue to the next step.
+
+2. Verify that the MAC address has a component ID associated with it.
     ```bash
     ncn# cray hsm inventory ethernetInterfaces describe $BMC_MAC
     ID = "54802852b706"
@@ -123,7 +118,9 @@ This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and Ro
     IPAddress = "10.254.1.27"
     ```
 
-4. Verify that that a RedfishEndpoint now exists for the BMC.
+    If `ComponentID` remains empty check the hms-discovery logs for errors. Otherwise, move on to the next step.
+
+3. Verify that a RedfishEndpoint now exists for the BMC.
     > The BMC when first added to HSM may not be DiscoverOK right away. It may take up 5 minutes for BMC hostname to start resolving in DNS. The HMS Discovery cronjob should automatically trigger a discovery for any RedfishEndpoints that are not in the DiscoveryOk or DiscoveryStated states, such as HTTPsGETFailed.
     ```bash
     ncn# cray hsm inventory redfishEndpoints describe $BMC
@@ -138,7 +135,6 @@ This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and Ro
     Password = ""
     MACAddr = "54802852b706"
     RediscoverOnUpdate = true
-
     [DiscoveryInfo]
     LastDiscoveryAttempt = "2021-06-28T18:26:05.902976Z"
     LastDiscoveryStatus = "DiscoverOK"

@@ -115,4 +115,4 @@ tar xf /run/overlay.tar.gz -C /run/overlayfs/rw
 mount -o remount /
 ```
 
-If you excluded the `squashfs` files from the backup you will also need to repopulate them following the configuration section.
+If you excluded the `squashfs` files from the backup, you will also need to repopulate them following the configuration section.

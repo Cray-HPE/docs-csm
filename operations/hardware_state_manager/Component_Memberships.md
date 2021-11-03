@@ -6,7 +6,7 @@ At this point in time, only information about node components is needed. The `--
 
 The following is an example membership:
 
-```screen
+```bash
 {
     "id" : "x2c3s0b0n0",
     "groupLabels" : [
@@ -26,13 +26,13 @@ By default, the memberships collection contains all components, regardless of if
 
 Retrieve all node memberships:
 
-```screen
+```bash
 ncn-m# cray hsm memberships list --type node
 ```
 
 Retrieve only nodes not in a partition:
 
-```screen
+```bash
 ncn-m# cray hsm memberships list --type node --partition NULL
 ```
 
@@ -40,7 +40,7 @@ ncn-m# cray hsm memberships list --type node --partition NULL
 
 Any components in /hsm/v2/State/Components can have its group and memberships looked up with its individual component xname ID.
 
-```screen
+```bash
 ncn-m# cray hsm memberships describe MEMBER_ID
 ```
 

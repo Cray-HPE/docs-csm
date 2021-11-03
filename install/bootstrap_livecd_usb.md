@@ -29,8 +29,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 1. Set up the Typescript directory as well as the initial typescript. This directory will be returned to for every typescript in the entire CSM installation.
 
    ```bash
-   linux# mkdir -p /var/www/ephemeral/prep/admin
-   linux# pushd !$
+   linux# cd ~
    linux# script -af csm-install-usb.$(date +%Y-%m-%d).txt
    linux# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
@@ -39,6 +38,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    **Important:** To ensure that the CSM release plus any patches, workarounds, or hotfixes are included
    follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
+
+   **Important:** Download to a location that has sufficient space for both the tarball and the expanded tarball.
 
    The rest of this procedure will use the CSM_RELEASE variable and expect to have the
    contents of the CSM software release tarball plus any patches, workarounds, or hotfixes.
@@ -56,7 +57,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 1. Install/upgrade the CSI RPM
 
    ```bash
-   linux# rpm -Uvh --force ${CSM_PATH}/rpm/cray/csm/sle-15sp2/x86_64/cray-site-init-*.x86_64.rpm
+   linux# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
 
 1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
@@ -305,7 +306,27 @@ Some files are needed for generating the configuration payload. See these topics
 
       A new directory matching your `--system-name` argument will now exist in your working directory.
 
-   1. Skip the next step to continue with the [CSI Workarounds](#csi-workarounds)
+      These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
+      * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
+
+         ```
+         "Couldn't find switch port for NCN: x3000c0s1b0"
+         ```
+
+      * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
+
+         ```json
+         {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
+         {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
+         ```
+
+      * If a cooling door is found in `hmn_connections.json`, there may be a message like the following. It can be safely ignored.
+
+         ```json
+         {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
+         {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
+
+   1. Skip the next step and continue with the [CSI Workarounds](#csi-workarounds).
 
 1. If doing a first time install or the `system_config.yaml` parameter file for a reinstall is not available, generate the system configuration.
 
@@ -375,7 +396,7 @@ Some files are needed for generating the configuration payload. See these topics
          * `p1p1,p10p1` for HPE nodes
          * `p1p1,p1p2` for Gigabyte nodes
          * `p801p1,p801p2` for Intel nodes
-         * If you are not using a `cabinets-yaml` file, set the three cabinet parameters (`mountain-cabinets`, `hill-cabinets`, and `river-cabinets`) to the number of each cabinet which are part of this system.
+      * If you are not using a `cabinets-yaml` file, set the three cabinet parameters (`mountain-cabinets`, `hill-cabinets`, and `river-cabinets`) to the number of each cabinet which are part of this system.
       * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help`
       * For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. If you are using a `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
       * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
@@ -525,13 +546,19 @@ This will enable SSH, and other services when the LiveCD starts.
     storage-ceph-0.0.5.squashfs-----------------------> /mnt/pitdata/data/ceph/...OK
     ```
 
+1. Quit the typescript session with the `exit` command and copy the file (csm-install-usb.<date>.txt) to the data partition on the USB drive.
+
+    ```bash
+    linux# mkdir -pv /mnt/pitdata/prep/logs
+    linux# exit
+    linux# cp ~/csm-install-usb.*.txt /mnt/pitdata/prep/logs
+    ```
+
 1. Unmount the data partition:
 
     ```bash
     linux# cd; umount -v /mnt/pitdata
     ```
-
-1. Quit the typescript session with the `exit` command and copy the file (csm-install-usb.<date>.txt) to a location on another server for reference later.
 
 Now the USB device may be reattached to the management node, or if it was made on the management node then it can now
 reboot into the LiveCD.
@@ -559,15 +586,15 @@ See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page
 
    ```bash
    external# export SYSTEM_NAME=eniac
-   external# export username=root
-   external# export password=changeme
-   external# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
+   external# export USERNAME=root
+   external# export IPMI_PASSWORD=changeme
+   external# ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
    ```
 
    Connect to the IPMI console.
 
    ```bash
-   external# ipmitool -I lanplus -U $username -P $password -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
+   external# ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
    ncn-m001#
    ```
 
@@ -649,11 +676,11 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
 
    ```bash
-   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
-   linux# scp -p docs-csm-install-*rpm csm-install-workarounds-*rpm ncn-m001:/root
+   linux# scp -p docs-csm-*rpm csm-install-workarounds-*rpm ncn-m001:/root
    linux# ssh ncn-m001
-   pit# rpm -Uvh --force docs-csm-install-latest.noarch.rpm
+   pit# rpm -Uvh --force docs-csm-latest.noarch.rpm
    pit# rpm -Uvh --force csm-install-workarounds-latest.noarch.rpm
    ```
 

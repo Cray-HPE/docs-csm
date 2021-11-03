@@ -6,7 +6,7 @@ The procedures in section detail the high-level tasks required to power off an H
 
 -   The Cray Advanced Platform Monitoring and Control \(CAPMC\) service controls power to major components. CAPMC sequences the power off tasks in the correct order, but **does not** gracefully shut down software services.
 -   The Boot Orchestration Service \(BOS\) manages proper shutdown and power off tasks for compute nodes and User Access Nodes \(UANs\).
--   The System Admin Tookit \(SAT\) automates shutdown services by stage, for example:
+-   The System Admin Toolkit \(SAT\) automates shutdown services by stage, for example:
 
     ```screen
     sat bootsys shutdown --stage platform-services
@@ -36,6 +36,10 @@ To power off standard rack and liquid-cooled cabinet PDUs, see [Power Off Comput
 #### Shut Down the Management Kubernetes Cluster
 
 Shut down the management Kubernetes cluster, see [Shut Down and Power Off the Management Kubernetes Cluster](Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md).
+
+### Power Off the External Lustre File System
+
+Power off the external Lustre file system (ClusterStor), see [Power Off the External Lustre File System](Power_Off_the External_Lustre_File_System.md).
 
 ### Lockout Tagout Facility Power
 

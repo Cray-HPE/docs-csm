@@ -9,13 +9,13 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 ### Prerequisites
 
 * All compute cabinet PDUs, servers, and switches must be powered on.
-* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the SAT repository for more information.
+* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the System Admin Toolkit (SAT) product stream documentation.
 
 ### Procedure
 
 1.  Obtain the authorization key.
 
-    See [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md), [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md), and "SAT Authentication" in the SAT repository for more information.
+    See [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md), [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md), and "SAT Authentication" in the System Admin Toolkit (SAT) product stream documentation.
 
 2.  List detailed information about the available boot orchestration service \(BOS\) session template names.
 

@@ -85,13 +85,28 @@ if [[ ${first_master_hostname} == ${upgrade_ncn} ]]; then
       VERBOSE=1 csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
       ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
       ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/1.0/scripts/k8s/promote-initial-master.sh"
+<<<<<<< HEAD
+ 
+=======
 
+>>>>>>> e2bccf80e3789ab2f1a495252bff38c8a51a3c44
       record_state "${state_name}" ${upgrade_ncn}
    else
       echo "====> ${state_name} has been completed"
    fi
 fi
 
+state_name="BSS_MASTER_BACKUP"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    ./create-bss-etcd-backup.sh $upgrade_ncn
+
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
 
 state_name="STOP_ETCD_SERVICE"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})

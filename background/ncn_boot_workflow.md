@@ -29,7 +29,7 @@ PXE. The method to use will vary depending on the system environment.
    ncn# cat /proc/cmdline
    ```
 
-   If it starts with `kernel` then the node network booted. If it starts with `BOOT_IMAGE=(` then it disk booted.
+   If it starts with `kernel`, then the node network booted. If it starts with `BOOT_IMAGE=(`, then it disk booted.
 
 1. Check output from `efibootmgr`.
 
@@ -37,7 +37,36 @@ PXE. The method to use will vary depending on the system environment.
    ncn# efibootmgr
    ```
 
-   The `BootCurrent` value should be matched to the list beneath to see if it lines up with a networking option or a `cray sd*)` option for disk boots.
+   The `BootCurrent` value should be matched to the list beneath it to see if it lines up with a networking option or a `cray sd*)` option for disk boots.
+
+   ```bash
+   ncn# efibootmgr
+   BootCurrent: 0016    <---- BootCurrent
+   Timeout: 2 seconds
+   BootOrder: 0000,0011,0013,0014,0015,0016,0017,0005,0007,0018,0019,001A,001B,001C,001D,001E,001F,0020,0021,0012
+   Boot0000* cray (sda1)
+   Boot0001* UEFI: Built-in EFI Shell
+   Boot0005* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4E
+   Boot0007* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
+   Boot0010* UEFI: AMI Virtual CDROM0 1.00
+   Boot0011* cray (sdb1)
+   Boot0012* UEFI: Built-in EFI Shell
+   Boot0013* UEFI OS
+   Boot0014* UEFI OS
+   Boot0015* UEFI: AMI Virtual CDROM0 1.00
+   Boot0016* UEFI: SanDisk     <--- Matches here
+   Boot0017* UEFI: SanDisk, Partition 2
+   Boot0018* UEFI: HTTP IP4 Intel(R) I350 Gigabit Network Connection
+   Boot0019* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
+   Boot001A* UEFI: HTTP IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4E
+   Boot001B* UEFI: HTTP IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
+   Boot001C* UEFI: HTTP IP4 Intel(R) I350 Gigabit Network Connection
+   Boot001D* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
+   Boot001E* UEFI: PXE IP6 Intel(R) I350 Gigabit Network Connection
+   Boot001F* UEFI: PXE IP6 Intel(R) I350 Gigabit Network Connection
+   Boot0020* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:1D:D8:4E
+   Boot0021* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
+   ```
 
 <a name="set-bmcs-to-dhcp"></a>
 ### Set BMCs to DHCP
@@ -45,18 +74,22 @@ PXE. The method to use will vary depending on the system environment.
 If you are reinstalling a system, the BMCs for the NCNs may be set to static. We check `/var/lib/misc/dnsmasq.leases` for setting up the symlinks for the artifacts each node needs to boot. So if your BMCs are set to static, those artifacts will not get setup correctly. You can set them back to DHCP by using a command such as:
 
 ```bash
+ncn# export USERNAME=root
+ncn# export IPMI_PASSWORD=changeme
 ncn# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
 do
-ipmitool -U username -I lanplus -H $h -P password lan set 1 ipsrc dhcp
+ipmitool -U $USERNAME -I lanplus -H $h -E lan set 1 ipsrc dhcp
 done
 ```
 
 Some BMCs need a cold reset in order to pick up this change fully:
 
 ```bash
+ncn# export USERNAME=root
+ncn# export IPMI_PASSWORD=changeme
 ncn# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
 do
-ipmitool -U username -I lanplus -H $h -P password mc reset cold
+ipmitool -U $USERNAME -I lanplus -H $h -E mc reset cold
 done
 ```
 
@@ -75,7 +108,7 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
 
 > **`NOTE`** The four digit hex numbers shown in the examples below may be different, even between nodes of the same function and vendor. The first two efibootmgr commands will display the correct hex numbers for the third efibootmgr command to use in setting the proper boot order.
 
-1. Create our boot-bios-selector file(s) based on the manufacturer:
+Follow the section corresponding to the hardware manufacturer of the system:
 
    > <a name="gigabyte-technology"></a>
    > #### Gigabyte Technology
@@ -89,8 +122,9 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
    > ncn-m# efibootmgr | grep cray | tee /tmp/bbs2
    > Boot0000* cray (sda1)
    > Boot0002* cray (sdb1)
-   > ncn-m# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > ncn-m# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
    > BootOrder: 0007,0009,0000,0002
+   > ncn-m# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
    > ```
    >
    > ##### Storage
@@ -102,8 +136,9 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
    > ncn-s# efibootmgr | grep cray | tee /tmp/bbs2
    > Boot0000* cray (sda1)
    > Boot0002* cray (sdb1)
-   > ncn-s# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > ncn-s# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
    > BootOrder: 0007,0009,0000,0002
+   > ncn-s# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
    > ```
    >
    > ##### Workers
@@ -119,8 +154,9 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
    > ncn-w# efibootmgr | grep cray | tee /tmp/bbs2
    > Boot0000* cray (sda1)
    > Boot0002* cray (sdb1)
-   > ncn-w# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > ncn-w# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
    > BootOrder: 0009,0007,000B,0000,0002
+   > ncn-w# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
    > ```
    >
    > <a name="hewlett-packard-enterprise"></a>
@@ -136,8 +172,9 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
    > ncn-m# efibootmgr | grep cray | tee /tmp/bbs2
    > Boot0021* cray (sdb1)
    > Boot0022* cray (sdc1)
-   > ncn-m# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > ncn-m# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
    > BootOrder: 0014,0018,0021,0022
+   > ncn-m# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
    > ```
    >
    > ##### Storage
@@ -149,8 +186,9 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
    > ncn-s# efibootmgr | grep cray | tee /tmp/bbs2
    > Boot0002* cray (sdg1)
    > Boot0020* cray (sdh1)
-   > ncn-s# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > ncn-s# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
    > BootOrder: 001C,001D,0002,0020
+   > ncn-s# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
    > ```
    >
    > ##### Workers
@@ -162,8 +200,9 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
    > ncn-w# efibootmgr | grep cray | tee /tmp/bbs2
    > Boot0017* cray (sdb1)
    > Boot0018* cray (sdc1)
-   > ncn-w# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > ncn-w# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
    > BootOrder: 0012,0017,0018
+   > ncn-w# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
    > ```
    >
    > <a name="intel-corporation"></a>
@@ -177,8 +216,9 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
    > ncn-m# efibootmgr | grep -i 'cray' | tee /tmp/bbs2
    > Boot0011* cray (sda1)
    > Boot0012* cray (sdb1)
-   > ncn-m# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > ncn-m# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
    > BootOrder: 000E,0014,0011,0012
+   > ncn-m# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
    >```
    > ##### Storage
    > ```bash
@@ -188,8 +228,9 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
    > ncn-s# efibootmgr | grep -i 'cray' | tee /tmp/bbs2
    > Boot0014* cray (sda1)
    > Boot0015* cray (sdb1)
-   > ncn-s# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > ncn-s# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
    > BootOrder: 000E,0012,0014,0015
+   > ncn-s# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
    > ```
    > ##### Workers
    >
@@ -200,8 +241,9 @@ Setting the boot order with efibootmgr will ensure that the desired network inte
    > ncn-w# efibootmgr | grep -i 'cray' | tee /tmp/bbs2
    > Boot0010* cray (sda1)
    > Boot0011* cray (sdb1)
-   > ncn-w# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -t '*' ',' | tr -d '\n' | sed 's/,$//') | grep -i bootorder
+   > ncn-w# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
    > BootOrder: 0008,000C,0010,0011
+   > ncn-w# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
    > ```
 
 After following the steps above on a given NCN, that NCN will now use the desired Shasta boot order.
@@ -238,7 +280,7 @@ Simply run the reverse-pattern of the PXE commands from the [setting boot order]
 2. Remove them:
 
    ```bash
-   ncn# cat /tmp/rbbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -t -i efibootmgr -b {} -B
+   ncn# cat /tmp/rbbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -t -i efibootmgr -b {} -B
    ```
 
 Your boot menu should be trimmed down to contain only relevant entries.
@@ -309,9 +351,9 @@ Reset the BIOS. Refer to vendor documentation for resetting the BIOS or attempt 
 
 > **`NOTE`** When using `ipmitool` against a machine remotely, it requires more arguments:
 > ```bash
-> linux# username=root
+> linux# USERNAME=root
 > linux# IPMI_PASSWORD=CHANGEME
-> linux# ipmitool -I lanplus -U $username -E -H <bmc-hostname>
+> linux# ipmitool -I lanplus -U $USERNAME -E -H <bmc-hostname>
 > ```
 
 1. Reset BIOS with ipmitool

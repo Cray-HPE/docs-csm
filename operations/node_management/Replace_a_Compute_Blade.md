@@ -21,9 +21,9 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    ncn-m001# cray bos v1 session create --template-uuid BOS_TEMPLATE \
    --operation shutdown --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
    ```
-   
+
    Specify all the nodes in the blade using a comma separated list. This example shows the command to shut down an EX425 compute blade (Windom) in cabinet 1000, chassis 3, slot 5. This blade type includes two node cards, each with two logical nodes (4 processors).
-   
+
 4. Disable the chassis slot in the Hardware State Manager (HSM).
 
    This example shows cabinet 1000, chassis 3, slot 0 (x1000c3s0).
@@ -100,17 +100,17 @@ Replace an HPE Cray EX liquid-cooled compute blade.
       		}
       	]
       ```
-      
+
       2. Delete each Node NIC MAC address the Hardware State Manager (HSM) Ethernet interfaces table.
-      
+
          ```bash
          ncn-m001# cray hsm inventory ethernetInterfaces delete b42e99be1a2b
          ncn-m001# cray hsm inventory ethernetInterfaces delete b42e99be1a2c
          ```
-      
+
       3. Delete the Redfish endpoint for the removed node.
-   
-7. Replace the blade hardware. 
+
+7. Replace the blade hardware.
 
    Review the *Remove a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173* for detailed instructions (https://internal.support.hpe.com/).
 
@@ -125,11 +125,11 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
    ```bash
    ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
-   
+
    ncn-m001# kubectl get cronjobs.batch -n services hms-discovery
    NAME SCHEDULE SUSPEND ACTIVE LAST SCHEDULE AGE
    hms-discovery */3 * * * * False 1 41s 33d
-   
+
    ncn-m001# kubectl -n services logs hms-discovery-1600117560-5w95d hms-discovery | grep "Mountain discovery finished" | jq '.discoveredXnames'
    [
    "x1000c3s0b0"
@@ -214,7 +214,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
     ```
 
 16. Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
-    
+
 17. Optional: If necessary, update the firmware. Review the [Firmware Action Service (FAS)](../firmware/FAS_Admin_Procedures.md) documentation.
 
     ```bash

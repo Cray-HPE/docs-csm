@@ -29,9 +29,9 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 
     The system will present one of the following prompts, both of which indicate that the user has entered the UEFI shell.
 
-    ![](../../img/operations/Full_UEFI_Prompt.png "Full UEFI Prompt")
+    ![Full UEFI Prompt](../../img/operations/Full_UEFI_Prompt.png)
 
-    ![](../../img/operations/Simple_UEFI_Prompt.png "Simple UEFI Prompt")
+    ![Simple UEFI Prompt](../../img/operations/Simple_UEFI_Prompt.png)
 
 3.  Use one of the following options to resolve the issue:
 

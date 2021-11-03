@@ -5,10 +5,10 @@ can be passed to the `csi` (Cray Site Init) program during the CSM installation 
 
 Information gathered from a site survey is needed to feed into the CSM installation process, such as system name, system size, site network information for the CAN, site DNS configuration, site NTP configuration, network information for the node used to bootstrap the installation. More detailed component level information about the system hardware is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadsheet prepared by HPE Cray Manufacturing to assemble the components of the system and connect appropriately labeled cables.
 
-How the configuration payload is prepared depends on whether this is a first time install of CSM
+How the configuration payload is prepared depends on whether this is a first time installation of CSM
 software on this system or the CSM software is being reinstalled. The reinstall scenario has the
-advantage of being able to use the configuration payload from a previous first time install of CSM
-and an extra configuration file which that generated.
+advantage of being able to use the configuration payload from the previous CSM installation
+and an extra configuration file which that installation generated.
 
 
 ### Topics:
@@ -61,6 +61,9 @@ For more description of these settings and the default values, see [Default IP A
 | --application-node-config-yaml application_node_config.yaml | Name of `application_node_config.yaml` |
 | --cabinets-yaml cabinets.yaml | Name of `cabinets.yaml` |
 | --bgp-peers aggregation | Override the default BGP peers, using aggregation switches instead of spines |
+| --primary-server-name primary | Desired name for the primary DNS server |
+| --secondary-servers "" | Comma seperated list of FQDN/IP for all DNS servers to be notified on DNS zone update |
+| --notify-zones "" | A comma separated list of DNS zones to transfer |
 
    * This is a long list of options. It can be helpful to create a Bash script file to call the `csi` command with all of these options, and then edit that file to adjust the values for the particular system being installed.
    * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management nodes.
@@ -75,6 +78,7 @@ For more description of these settings and the default values, see [Default IP A
    * Set `ntp-pool` to a reachable NTP server.
    * The `application_node_config.yaml` file is required. It is used to describe the mapping between prefixes in `hmn_connections.csv` and HSM subroles. This file also defines aliases application nodes. For details, see [Create Application Node YAML](create_application_node_config_yaml.md).
    * For systems that use non-sequential cabinet id numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. See [Create Cabinets YAML](create_cabinets_yaml.md).
+  * The PowerDNS zone transfer arguments `primary-server-name`, `secondary-servers`, and `notify-zones` are optional unless zone transfer is being configured. For more information see the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md#zone-transfer)
 
 <a name="configuration_payload_files"></a>
 ### Configuration Payload Files
@@ -128,7 +132,7 @@ The `hmn_connections.json` file is extracted from the HMN tab of the SHCD spread
 includes the `hms-shcd-parser` container which can be used on the PIT node booted from the LiveCD (RemoteISO
 or USB device) or a Linux system to do this extraction. Although some information in these files can be populated from site survey information, the SHCD prepared by HPE Cray Manufacturing is the best source of data for hmn_connections.json.
 
-No action is required to create this file at this point, and will be created when the PIT node is bootstrapped.
+No action is required to create this file at this point, and it will be created when the PIT node is bootstrapped.
 
 <a name="ncn_metadata_csv"></a>
 #### `ncn_metadata.csv`

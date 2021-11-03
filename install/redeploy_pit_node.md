@@ -1,8 +1,7 @@
 # Redeploy PIT Node
 
 The following procedure contains information for rebooting and deploying the management node that is currently
-hosting the LiveCD. The following steps detail how an administrator through loading hand-off data and rebooting
-the node. This assists with remote-console setup to aid in observing the reboot. At the end of this procedure, the
+hosting the LiveCD. This assists with remote-console setup to aid in observing the reboot. At the end of this procedure, the
 LiveCD will no longer be active. The node it was using will join the Kubernetes cluster as the final of three master
 nodes forming a quorum.
 
@@ -25,7 +24,7 @@ Topics:
 <a name="required-services"></a>
 ### 1. Required Services
 
-These services must be healthy before the reboot of the LiveCD can take place. If the health checks executed in the previous installation step completed successfully ([Validate CSM Health](../operations/validate_csm_health.md)), the following services will be healthy and ready for reboot of the LiveCD:
+These services must be healthy before the reboot of the LiveCD can take place. If the health checks executed in the previous installation step completed successfully \([Validate CSM Health](../operations/validate_csm_health.md)\), the following services will be healthy and ready for reboot of the LiveCD:
 
 Required Platform Services:
 
@@ -48,9 +47,10 @@ Required Platform Services:
 > - Rebooting a remoteISO will dump all running changes on the PIT node; USBs are accessible after the install
 >
 > - The NCN **will never wipe a USB device** during installation
->
-> - Learning the CAN IP addresses of the other NCNs will be a benefit if troubleshooting is required
->
+
+> 
+> - Prior to shutting down the PIT, learning the CMN IP addresses of the other NCNs will be a benefit if troubleshooting is required 
+> 
 > This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
 > **unavailable**.
 
@@ -85,6 +85,21 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
       ```
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-pre-reboot` breakpoint.
 
+1. Check for workarounds in the `/opt/cray/csm/workarounds/livecd-pre-reboot` directory. If there are any
+workarounds in that directory, run those when the workaround instructs. Timing is critical to ensure properly loaded
+data, so run them only when indicated. Instructions are in the `README` files.
+    
+    ```bash
+    # Example
+    pit# ls /opt/cray/csm/workarounds/livecd-pre-reboot
+    ```
+    
+    If there is a workaround here, the output looks similar to the following:
+
+    ```
+    CASMINST-435
+    ```
+    
 1. Upload SLS file.
     > Note the system name environment variable `SYSTEM_NAME` must be set
 
@@ -115,25 +130,27 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
     1. Set variables
 
-        **IMPORTANT**: The variables you set depend on whether or not you followed the steps in
-        [Configure NCN Images to Use Local Timezone](../operations/configure_ntp_on_ncns.md#configure_ncn_images_to_use_local_timezone). The
-        two paths forward are listed below:
+        **IMPORTANT**: The variables you set depend on whether or not you customized the default NCN images. The most
+        common procedures that involve customizing the images are
+        [Configuring NCN Images to Use Local Timezone](../operations/node_management/Configure_NTP_on_NCNs.md#configure_ncn_images_to_use_local_timezone) and
+        [Changing NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md).
+        The two paths forward are listed below:
 
-        * If you customized the timezones, set the following variables:
-
-            ```bash
-            pit# export artdir=/var/www/ephemeral/data
-            pit# export k8sdir=$artdir/k8s
-            pit# export cephdir=$artdir/ceph
-            ```
-
-        * If you did **not** customize the timezones, set the following variables (this is the default path):
+        * If you did **not** customize the NCN images, set the following variables (this is the default path):
 
             ```bash
             pit# export CSM_RELEASE=csm-x.y.z
             pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
             pit# export k8sdir=$artdir/kubernetes
             pit# export cephdir=$artdir/storage-ceph
+            ```
+
+        * If you customized the NCN images, set the following variables:
+
+            ```bash
+            pit# export artdir=/var/www/ephemeral/data
+            pit# export k8sdir=$artdir/k8s
+            pit# export cephdir=$artdir/ceph
             ```
 
     1. After setting the variables above per your situation, run:
@@ -157,12 +174,16 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         ```
         Be sure to perform this action so subsequent steps are successful.
 
-1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__
-   to this file as a result of any customizations or workarounds, use the path to that file instead. This step will
-   prompt for the root password of the NCNs.
+1. Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. __If you have made any changes__ to this file as a result of any customizations or workarounds use the path to that file instead. This step will prompt for the root password of the NCNs.
 
     ```bash
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json
+    ```
+
+1. Patch the metadata for the CEPH nodes to have the correct run commands:
+
+    ```bash
+    pit# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
     ```
 
 1. Ensure the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.
@@ -221,18 +242,18 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     BootNext: 0014
     ```
 
-1. Collect a backdoor login ... fetch the CAN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
+1. Collect a backdoor login ... fetch the CMN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
 
     1. Get the IP
 
         ```bash
-        pit# ssh ncn-m002 'ip a show vlan007 | grep inet'
+        pit# ssh ncn-m002 'ip a show bond0.cmn0 | grep inet'
         ```
 
         _Expected output (values may differ)_:
 
         ```
-        inet 10.102.11.13/24 brd 10.102.11.255 scope global vlan007
+        inet 10.102.11.13/24 brd 10.102.11.255 scope global bond0.cmn0
         inet6 fe80::1602:ecff:fed9:7820/64 scope link
         ```
 
@@ -247,7 +268,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     If the reboot successfully deploys the LiveCD, this terminal can be exited.
 
     > **POINT OF NO RETURN** The next step will wipe the underlying nodes disks clean, it will ignore USB devices. RemoteISOs are at risk here, even though a backup has been
-    > performed of the PIT node we cannot simply boot back to the same state.
+    > performed of the PIT node, we cannot simply boot back to the same state.
     > This is the last step before rebooting the node.
 
 1. **`IN-PLACE WORKAROUND`** This is a workaround until the auto-wipe feature ceases preventing the creation of the 3rd disk (CASMINST-169. This step is safe to do even after auto-wipe is fixed.
@@ -291,8 +312,8 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         /dev/sdc: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
         ```
 
-        If there was any wiping done, output should appear similar to the snippet above. If this is re-ran, there may be no output or an ignorable error.
-
+        If there was any wiping done, output should appear similar to the snippet above. If this is re-run, there may be no output or an ignorable error.
+    
 1. If you wish to preserve your conman console logs for the other NCNs, this is your last chance to do so. They will be lost after rebooting. They are located in `/var/log/conman` on the PIT node.
 
 1. Quit the typescript session with the `exit` command and copy the file (`csm-livecd-reboot.<date>.txt`) to a location on another server for reference later.
@@ -301,16 +322,16 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     pit# exit
     ```
 
-1. Optionally, setup conman or serial console if not already on one from any laptop or other system with network connectivity to the cluster.
-
+1. Optionally, setup conman or serial console, if not already on, from any laptop or other system with network connectivity to the cluster.
+    
     ```bash
     external# script -a boot.livecd.$(date +%Y-%m-%d).txt
     external# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     external# SYSTEM_NAME=eniac
-    external# username=root
-    external# IPMI_PASSWORD=changeme
-    external# ipmitool -I lanplus -U $username -E -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
-    external# ipmitool -I lanplus -U $username -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
+    external# USERNAME=root
+    external# export IPMI_PASSWORD=changeme
+    external# ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
+    external# ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
     ```
 
 <a name="reboot"></a>
@@ -342,11 +363,12 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
     ```bash
     external# ssh root@10.102.11.13
-      ncn-m002# pushd /metal/bootstrap/prep/admin
-      ncn-m002# script -af csm-verify.$(date +%Y-%m-%d).txt
-      ncn-m002# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
-      ncn-m002# ssh ncn-m001
-      ```
+
+    ncn-m002# pushd /metal/bootstrap/prep/admin
+    ncn-m002# script -af csm-verify.$(date +%Y-%m-%d).txt
+    ncn-m002# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+    ncn-m002# ssh ncn-m001
+    ```
 
 1. If the pre-NCN deployment password change method was **not** used, then the root password on `ncn-m001` needs to be changed now.
    Run `passwd` on ncn-m001 and complete the prompts.
@@ -356,9 +378,9 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     ```
 
 1. Run `kubectl get nodes` to see the full Kubernetes cluster.
-
-    > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items please refer to the `handoff`
-
+    
+    > **`NOTE`** If the new node fails to join the cluster after running other cloud-init items, please refer to the `handoff`
+    
     ```bash
     ncn-m001# kubectl get nodes
     ```
@@ -402,9 +424,10 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     ncn-m001# ip a show bond0.nmn0
     ncn-m001# ip a show bond0.hmn0
     ncn-m001# ip a show bond0.can0
+    ncn-m001# ip a show bond0.cmn0
     ```
 
-1. Run `ip r` to show our default route is via the CAN/vlan007.
+1. Run `ip r` to show our default route is via the CMN.
 
     ```bash
     ncn-m001# ip r show default
@@ -424,17 +447,17 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
 1. Install the latest documentation and workaround packages. This will require external access.
 
-   If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
+   If this machine does not have direct Internet access, these RPMs will need to be externally downloaded and then copied to the system.
 
    **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
    were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
 
    ```bash
-   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm-install/docs-csm-install-latest.noarch.rpm
+   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
-   linux# scp -p docs-csm-install-*rpm csm-install-workarounds-*rpm ncn-m001:/root
+   linux# scp -p docs-csm-*rpm csm-install-workarounds-*rpm ncn-m001:/root
    linux# ssh ncn-m001
-   ncn-m001# rpm -Uvh docs-csm-install-latest.noarch.rpm
+   ncn-m001# rpm -Uvh docs-csm-latest.noarch.rpm
    ncn-m001# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
    ```
 
@@ -484,7 +507,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1.  **`IN-PLACE WORKAROUND`** Set the wipe safeguard to allow safe net-reboots. **This will set the safeguard on all NCNs**. This is fixed by MTL
+1.  **`IN-PLACE WORKAROUND`** Set the wipe safeguard to allow safe net-reboots. **This will set the safeguard on all NCNs**.
 
     ```bash
     ncn-m001# /tmp/csi handoff bss-update-param --set metal.no-wipe=1
@@ -497,7 +520,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
  > **`NOTE`** If your system is Gigabyte or Intel hardware, skip this section.
 
-Perform the following steps on every NCN **except m001**.
+Perform the following steps on every NCN **except ncn-m001**.
 
 1. Set environment variables. Make sure to set the appropriate value for the `IPMI_PASSWORD` variable.
 

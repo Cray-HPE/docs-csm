@@ -232,26 +232,25 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
       echo "0 */1 * * * root /srv/cray/scripts/kubernetes/token-certs-refresh.sh >> /var/log/cray/cron.log 2>&1" > /etc/cron.d/cray-k8s-token-certs-refresh
       ```
 
-   1. Find the member ID of the master node being removed.
+1. Find the line with the name of the master being removed. The member ID is the alphanumeric string in the first field of that line. The IP address is in the URL in the fourth field in the line. Note the member ID and IP address for use in subsequent steps.
 
-      ```bash
-      ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-          --cert=/etc/kubernetes/pki/etcd/ca.crt  \
-          --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
-      ```
+   ```bash
+   ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+       --cert=/etc/kubernetes/pki/etcd/ca.crt  \
+       --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
+   ```
 
-   1. Find the line with the name of the master being removed. The member ID is the alphanumeric string in the first field of that line. The IP address is in the URL in the fourth field in the line. Note the member ID and IP address for use in subsequent steps.
-   1. Remove the master node from the etcd cluster backing Kubernetes.
+1. Remove the master node from the etcd cluster backing Kubernetes.
 
-      Replace the MEMBER_ID value with the value returned in the previous sub-step.
+   Replace the `MEMBER_ID` value with the value returned in the previous sub-step.
 
-      ```bash
-      ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-          --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key \
-          --endpoints=localhost:2379 member remove <MEMBER_ID>
-      ```
+   ```bash
+   ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+       --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key \
+       --endpoints=localhost:2379 member remove <MEMBER_ID>
+   ```
    <a name="stop-etcd"></a>
-1. Stop the etcd service on the master node being removed.
+1. Stop the etcd service **on the master node being removed**.
 
    ```bash
    NODE# systemctl stop etcd.service
@@ -261,6 +260,14 @@ Skip this section if rebuilding a worker or storage node. The examples in this s
 
    ```bash
    ncn# kubectl delete node NODE
+   ```
+   
+1. Add the node back into the etcd cluster so when it reboots it can rejoin. The IP and hostname of the rebuilt node is needed for the following command. Replace the `NCN-M_HOSTNAME` and `IP_ADDRESS` address values. Use the IP address you noted in an earlier step from the `etcdctl` command.
+
+   ```bash
+   ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt \
+           --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member add NCN-M_HOSTNAME \
+           --peer-urls=https://IP_ADDRESS:2380
    ```
 
 <a name="prepare-storage-node"></a>
@@ -354,7 +361,7 @@ Skip this section if rebuilding a master or worker node. The examples in this se
                  17  active+clean
     ```
 
- 1. If the node is a ceph-mon node, remove it from the mon map.
+1. If the node is a ceph-mon node, remove it from the mon map.
 
     Skip this step if the node is not a ceph-mon node.
 
@@ -414,11 +421,11 @@ Skip this section if rebuilding a master or worker node. The examples in this se
                  60  active+undersized+degraded
     ```
 
- 1. Remove Ceph OSDs.
+1. Remove Ceph OSDs.
 
     The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
-    ```
+    ```bash
     -5        6.98639     host ncn-s003
      1   ssd  1.74660         osd.1       down        0 1.00000
      3   ssd  1.74660         osd.3       down        0 1.00000
@@ -441,6 +448,12 @@ Skip this section if rebuilding a master or worker node. The examples in this se
     purged osd.6
     destroyed osd.9
     purged osd.9
+    ```
+
+1. Remove the node from the crush map.
+
+    ```bash
+    # ceph osd crush rm <hostname>
     ```
 
 #### 2. Identify Nodes and Update Metadata
@@ -575,7 +588,8 @@ This section applies to master and worker nodes. Skip this section if rebuilding
     **Warning:** This is the point of no return. Once the disks are wiped,the node must be rebuilt.
 
     ```
-    NODE# wipefs --all --force /dev/sd* /dev/disk/by-label/*
+    NODE# mdisks=$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print "/dev/" $2}')
+    NODE# wipefs --all --force $mdisks
     ```
 
 1. Set the PXE boot option and power cycle the node.
@@ -587,6 +601,241 @@ This section applies to master and worker nodes. Skip this section if rebuilding
       ```
 
       For example, if you are rebuilding ncn-w003, this would be `ncn-w003-mgmt`.
+
+   1. Export the root password of the BMC.
+
+      ```bash
+      ncn# export IPMI_PASSWORD=changeme
+      ```
+
+   1. Set the PXE/efiboot option.
+
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis bootdev pxe options=efiboot
+      ```
+
+   1. Power off the node.
+
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power off
+      ```
+
+   1. Verify that the node is off.
+   
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power status
+      ```
+
+      Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
+
+   1. Power on the node.
+
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power on
+      ```
+
+   1. Verify that the node is on.
+
+      Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
+
+      ```bash
+      ncn# ipmitool -I lanplus -U root -E -H $BMC chassis power status
+      ```
+
+1. Observe the boot.
+
+    After a bit, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output which indicates that the PXE boot has begun the TFTP download of the ipxe program. Later messages will appear as the Linux kernel loads and then the scripts in the initrd begin to run, including cloud-init.
+
+   Wait until cloud-init displays messages similar to these on the console to indicate that cloud-init has finished with the module called `modules:final`.
+
+   ```
+   [  295.466827] cloud-init[9333]: Cloud-init v. 20.2-8.45.1 running 'modules:final' at Thu, 26 Aug 2021 15:23:20 +0000. Up 125.72 seconds.
+   [  295.467037] cloud-init[9333]: Cloud-init v. 20.2-8.45.1 finished at Thu, 26 Aug 2021 15:26:12 +0000. Datasource DataSourceNoCloudNet [seed=cmdline,http://10.92.100.81:8888/][dsmode=net].  Up 295.46 seconds
+   ```
+
+   Then press return on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console (**&** then **.**), and then use `ssh` to log in to the node to complete the remaining validation steps.
+
+    **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file (see the step to [inspect and modify the JSON file](#inspect)) and make sure these instructions were completed correctly.
+
+   **Master nodes only** if cloud-init did not complete the newly-rebuilt node will need to have its etcd service definition manually updated. Reconfigure the etcd service, and restart the cloud init on the newly rebuilt master:
+
+   ```bash
+   NODE# systemctl stop etcd.service; sed -i 's/new/existing/' \
+           /etc/systemd/system/etcd.service /srv/cray/resources/common/etcd/etcd.service; \
+           systemctl daemon-reload ; rm -rf /var/lib/etcd/member; \
+           systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
+   ```
+
+1. Confirm vlan004 is up with the correct IP address on the rebuilt node.
+
+    The following examples assume the NCN/hostname is `NODE`.
+
+    1. Find the desired IP address.
+
+        ```bash
+        NODE# dig +short NODE.hmn
+        10.254.1.16
+        ```
+
+    1. Confirm the output from the dig command matches the interface.
+
+        If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
+
+        ```bash
+        NODE# ip addr show vlan004
+        14: vlan004@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+            link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
+            inet 10.254.1.16/17 brd 10.254.127.255 scope global vlan004
+               valid_lft forever preferred_lft forever
+            inet6 fe80::ba59:9fff:fe2b:2f9e/64 scope link
+               valid_lft forever preferred_lft forever
+        ```
+
+       1. Change the IP address for vlan004 if necessary.
+
+           ```bash
+           NODE# vim /etc/sysconfig/network/ifcfg-vlan004
+           ```
+
+           Set the IPADDR line to the correct IP address with a `/17` mask.
+
+           ```bash
+           IPADDR='10.254.1.16/17'
+           ```
+
+    1. Restart the vlan004 network interface.
+
+        ```bash
+        NODE# wicked ifreload vlan004
+        ```
+
+    1. Confirm the output from the dig command matches the interface.
+
+        ```bash
+        NODE# ip addr show vlan004
+        ```
+
+1. Confirm that vlan007 is up with the correct IP address on the rebuilt node.
+
+    The following examples assume the NCN/hostname is `NODE`.
+
+    1. Find the desired IP address.
+
+        ```bash
+        NODE# dig +short NODE.can
+        10.103.8.11
+        ```
+
+    1. Confirm the output from the dig command matches the interface.
+
+        If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
+
+        ```bash
+        NODE# ip addr show vlan007
+        15: vlan007@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+            link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
+            inet 10.103.8.11/24 brd 10.103.8.255 scope global vlan007
+               valid_lft forever preferred_lft forever
+            inet6 fe80::ba59:9fff:fe2b:2f9e/64 scope link
+               valid_lft forever preferred_lft forever
+        ```
+
+       1. Change the IP address for vlan007 if necessary.
+
+           ```bash
+           NODE# vim /etc/sysconfig/network/ifcfg-vlan007
+           ```
+
+           Set the IPADDR line to the correct IP address with a `/24` mask.
+
+           ```bash
+           IPADDR='10.103.8.11/24'
+           ```
+
+    1. Restart the vlan007 network interface.
+
+        ```bash
+        NODE# wicked ifreload vlan007
+        ```
+
+    1. Confirm the output from the dig command matches the interface.
+
+        ```bash
+        NODE# ip addr show vlan007
+        ```
+
+1. Verify the new node is in the cluster.
+
+    Run the following command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
+
+    ```bash
+    ncn# kubectl get nodes
+    NAME       STATUS   ROLES    AGE    VERSION
+    ncn-m001   Ready    master   113m   v1.18.6
+    ncn-m002   Ready    master   113m   v1.18.6
+    ncn-m003   Ready    master   112m   v1.18.6
+    ncn-w001   Ready    <none>   112m   v1.18.6
+    ncn-w002   Ready    <none>   112m   v1.18.6
+    ncn-w003   Ready    <none>   112m   v1.18.6
+    ```
+
+1. Set the wipe flag back so it will not wipe the disk when the node is rebooted.
+
+    1. Edit the XNAME.json file and set the `metal.no-wipe=1` value.
+
+    1. Do a PUT action for the edited JSON file.
+
+        ```bash
+        ncn# curl -i -s -k -H "Content-Type: application/json" \
+        -H "Authorization: Bearer ${TOKEN}" \
+        "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" \
+        -X PUT -d @./XNAME.json
+        ```
+
+    The output from the ncnHealthChecks.sh script \(run later in the "Validation" steps\) can be used to verify what `metal.no-wipe` value has been set on every NCN.
+
+1. Ensure there is proper routing set up for liquid-cooled hardware.
+
+<a name="rebuild_storage"></a>
+
+##### 3.2. Rebuild Node: Storage
+
+This section applies to storage nodes. Skip this section if rebuilding a master or worker node. All commands in this section must be run on any storage node that is already in the cluster and is not being rebuilt \(unless otherwise indicated\).
+
+1. Wipe the disks on the node being rebuilt.
+
+   This can be done from the ConMan console window.
+
+   1. Delete CEPH Volumes
+
+      ```bash
+      NODE# systemctl stop ceph-osd.target
+      ```
+
+   1. Make sure the OSDs (if any) are not running after running the first command.
+
+      ```bash
+      NODE# ls -1 /dev/sd* /dev/disk/by-label/*
+      NODE# vgremove -f --select 'vg_name=~ceph*'
+      ```
+
+1. Wipe the disks and RAIDs.
+
+   **Warning:** This is the point of no return. Once the disks are wiped,the node must be rebuilt.
+
+   ```
+   NODE# wipefs --all --force /dev/sd* /dev/disk/by-label/*
+   ```
+
+1. Set the PXE boot option and power cycle the node.
+
+   1. Set the BMC variable to the hostname of the BMC of the node being rebuilt.
+
+      ```bash
+      ncn# export BMC=<NCN name>-mgmt
+      ```
+
+      For example, if you are rebuilding ncn-s003, this would be `ncn-s003-mgmt`.
 
    1. Export the root password of the BMC.
 
@@ -742,44 +991,6 @@ This section applies to master and worker nodes. Skip this section if rebuilding
         NODE# ip addr show vlan007
         ```
 
-1. Verify the new node is in the cluster.
-
-    Run the following command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
-
-    ```bash
-    ncn# kubectl get nodes
-    NAME       STATUS   ROLES    AGE    VERSION
-    ncn-m001   Ready    master   113m   v1.18.6
-    ncn-m002   Ready    master   113m   v1.18.6
-    ncn-m003   Ready    master   112m   v1.18.6
-    ncn-w001   Ready    <none>   112m   v1.18.6
-    ncn-w002   Ready    <none>   112m   v1.18.6
-    ncn-w003   Ready    <none>   112m   v1.18.6
-    ```
-
-1. Set the wipe flag back so it will not wipe the disk when the node is rebooted.
-
-    1. Edit the XNAME.json file and set the `metal.no-wipe=1` value.
-
-    1. Do a PUT action for the edited JSON file.
-
-        ```bash
-        ncn# curl -i -s -k -H "Content-Type: application/json" \
-        -H "Authorization: Bearer ${TOKEN}" \
-        "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" \
-        -X PUT -d @./XNAME.json
-        ```
-
-    The output from the ncnHealthChecks.sh script \(run later in the "Validation" steps\) can be used to verify what `metal.no-wipe` value has been set on every NCN.
-
-1. Ensure there is proper routing set up for liquid-cooled hardware.
-
-<a name="rebuild_storage"></a>
-
-##### 3.2. Rebuild Node: Storage
-
-This section applies to storage nodes. Skip this section if rebuilding a master or worker node. All commands in this section must be run on any storage node that is already in the cluster and is not being rebuilt \(unless otherwise indicated\).
-
 1. Use `ssh` to log in to the node where Ansible will run.
 
     -   If rebuilding `ncn-s001`, log in to either `ncn-s002` or `ncn-s003`.
@@ -875,7 +1086,13 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
 
 #### 4. Validation
 
-Only follow the steps in the section for the node type that was rebuilt:
+As a result of rebuilding any NCN(s) remove any dynamically assigned interface IPs that did not get released automatically by running the CASMINST-2015 script:
+
+```bash
+ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+```
+
+Once that is done only follow the steps in the section for the node type that was rebuilt:
 
 - [Validate Worker Node](#validate_worker_node)
 - [Validate Master Node](#validate_master_node)
@@ -974,26 +1191,6 @@ Skip this section if a master or storage node was rebuilt. The examples in this 
 Validate the master node rebuilt successfully.
 
 Skip this section if a worker or storage node was rebuilt. The examples in this section assume the master node with a hostname of `NODE` and component name of `XNAME` was rebuilt.
-
-   1. Add the newly-rebuilt node to the etcd cluster.
-
-      Manually add the node to the cluster from a healthy/existing master node. The IP and hostname of the rebuilt node is needed for the following command. Replace the NCN-M\_HOSTNAME and IP\_ADDRESS address values. Use the IP address you noted in an earlier step from the `etcdctl` command.
-
-      ```bash
-      ncn# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt \
-              --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member add NCN-M_HOSTNAME \
-              --peer-urls=https://IP_ADDRESS:2380
-      ```
-
-      Once the new node is up, use `ssh` to log in to it, reconfigure the etcd service, and restart the cloud init:
-
-      ```bash
-      ncn# ssh NODE
-      NODE# systemctl stop etcd.service; sed -i 's/new/existing/' \
-              /etc/systemd/system/etcd.service /srv/cray/resources/common/etcd/etcd.service; \
-              systemctl daemon-reload ; rm -rf /var/lib/etcd/member; \
-              systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
-      ```
 
    1. Verify the new node is in the cluster.
 

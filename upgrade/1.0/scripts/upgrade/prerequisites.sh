@@ -93,47 +93,6 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-# Apply WAR for CASMINST-2689, just in case
-if [[ $(hostname) == "ncn-m001" ]]; then
-  echo "Opening and refreshing fallback artifacts on the NCNs.."
-
-
-  # Copy it to the other NCNs
-  for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ');
-  do
-    ssh_keygen_keyscan "${i}"
-    scp -r ${BASEDIR}/CASMINST-2689.sh $i:/tmp/CASMINST-2689.sh
-    ssh $i -t '/tmp/CASMINST-2689.sh'
-  done
-
-  # Check if ncn-m001 is using itself for an upstream server
-  if [[ "$(awk '/^server/ {print $2}' /etc/chrony.d/cray.conf)" == ncn-m001 ]] ||
-      [[ "$(chronyc tracking | awk '/Reference ID/ {print $5}' | tr -d '()')" == ncn-m001 ]]; then
-        # Get the upstream NTP server from cloud-init metadata, trying a few different sources before failing
-        upstream_ntp_server=$(craysys metadata get upstream_ntp_server)
-        # check to make sure we are not re-creating the bug by setting m001 to use itself as an upstream
-        if [[ "$upstream_ntp_server" == "ncn-m001" ]]; then
-          # if a pool is set, and we did not find an upstream server, just use the pool
-          if grep "^\(pool\).*" /etc/chrony.d/cray.conf >/dev/null ; then
-            sed -i "/^\(server ncn-m001\).*/d" /etc/chrony.d/cray.conf
-          # otherwise error
-          else
-            echo "Upstream server cannot be $upstream_ntp_server"
-            exit 1
-          fi
-        else
-          # Swap in the "real" NTP server
-          sed -i "s/^\(server ncn-m001\).*/server $upstream_ntp_server iburst trust/" /etc/chrony.d/cray.conf
-          # add a new config that will step the clock if it is less that 1s of drift, otherwise, it will slew it
-          # this applies on startups of the system from a reboot only
-          sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 $upstream_ntp_server" /etc/chrony.d/cray.conf
-          # Apply the change to use the new upstream server
-        fi
-        systemctl restart chronyd
-  fi
-fi
-
-
 state_name="CHECK_CLOUD_INIT_PREREQ"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
@@ -183,6 +142,39 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+# Apply WAR for CASMINST-2689, just in case
+if [[ $(hostname) == "ncn-m001" ]]; then
+  echo "Opening and refreshing fallback artifacts on the NCNs.."
+    
+  "${BASEDIR}"/CASMINST-2689.sh
+
+  # Check if ncn-m001 is using itself for an upstream server
+  if [[ "$(awk '/^server/ {print $2}' /etc/chrony.d/cray.conf)" == ncn-m001 ]] ||
+      [[ "$(chronyc tracking | awk '/Reference ID/ {print $5}' | tr -d '()')" == ncn-m001 ]]; then
+        # Get the upstream NTP server from cloud-init metadata, trying a few different sources before failing
+        upstream_ntp_server=$(craysys metadata get upstream_ntp_server)
+        # check to make sure we are not re-creating the bug by setting m001 to use itself as an upstream
+        if [[ "$upstream_ntp_server" == "ncn-m001" ]]; then
+          # if a pool is set, and we did not find an upstream server, just use the pool
+          if grep "^\(pool\).*" /etc/chrony.d/cray.conf >/dev/null ; then
+            sed -i "/^\(server ncn-m001\).*/d" /etc/chrony.d/cray.conf
+          # otherwise error
+          else
+            echo "Upstream server cannot be $upstream_ntp_server"
+            exit 1
+          fi
+        else
+          # Swap in the "real" NTP server
+          sed -i "s/^\(server ncn-m001\).*/server $upstream_ntp_server iburst trust/" /etc/chrony.d/cray.conf
+          # add a new config that will step the clock if it is less that 1s of drift, otherwise, it will slew it
+          # this applies on startups of the system from a reboot only
+          sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 $upstream_ntp_server" /etc/chrony.d/cray.conf
+          # Apply the change to use the new upstream server
+        fi
+        systemctl restart chronyd
+  fi
+fi
+
 state_name="INSTALL_CSI"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
@@ -208,10 +200,10 @@ state_name="UPDATE_DOC_RPM"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    if [[ ! -f docs-csm-install-latest.noarch.rpm ]]; then
-        echo "Please make sure 'docs-csm-install-latest.noarch.rpm' exists under: $(pwd)"
+    if [[ ! -f docs-csm-latest.noarch.rpm ]]; then
+        echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: $(pwd)"
     fi
-    cp docs-csm-install-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/
+    cp docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -349,6 +341,8 @@ sed -i 's/^\(  echo "local stratum 3 orphan" >>"$CHRONY_CONF"$\)/  echo "local s
 sed -i '/^\(  echo "logchange 1.0" >>"$CHRONY_CONF"$\)/a \ \ echo "initstepslew 1 $UPSTREAM_NTP_SERVER" >>"$CHRONY_CONF"' srv/cray/scripts/metal/ntp-upgrade-config.sh
 # remove the unreachable default ntp pools
 rm -f etc/chrony.d/pool.conf
+# silence some of the noise mksquashfs creates
+sed -i 's/^mksquashfs.*/& 1>\/dev\/null/' srv/cray/scripts/common/create-kis-artifacts.sh
 # Create the new artifacts
 srv/cray/scripts/common/create-kis-artifacts.sh
 # set -e back
@@ -413,7 +407,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_ARTI_DIR=${CSM_ARTI_DIR}" >> /etc/cray/upgrade/csm/myenv
-    echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/$(ls ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-install-latest.noarch.rpm | awk -F'/sle-15sp2/' '{print $2}')" >> /etc/cray/upgrade/csm/myenv
+    echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/$(ls ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/noarch/docs-csm-latest.noarch.rpm | awk -F'/sle-15sp2/' '{print $2}')" >> /etc/cray/upgrade/csm/myenv
 
     record_state ${state_name} $(hostname)
 else

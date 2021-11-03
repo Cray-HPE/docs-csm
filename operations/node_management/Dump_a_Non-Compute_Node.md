@@ -20,7 +20,7 @@ A non-compute node \(NCN\) has crashed or an admin has triggered a node crash.
 
 3.  Collect the dump data using the System Dump Utility \(SDU\).
 
-    See the documentation in the SDU repository for more information about collecting data.
+    Refer to the "Run a Triage Collection with SDU" procedure in the SDU product stream documentation for more information about collecting dump data.
 
     The `--start_time` command option can be customized. For example, "-1 day", "-2 hours", or a date/time string can be used. For more information on the SDU command options, use the `sdu --help` command.
 

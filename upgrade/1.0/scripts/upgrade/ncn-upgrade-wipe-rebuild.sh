@@ -41,6 +41,21 @@ if [[ $state_recorded == "0" ]]; then
         --limit $UPGRADE_XNAME
      fi
 
+<<<<<<< HEAD
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="BSS_BACKUP_POST_UPDATE_PARAM"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    ./create-bss-etcd-backup.sh $upgrade_ncn
+
+=======
+>>>>>>> e2bccf80e3789ab2f1a495252bff38c8a51a3c44
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -219,6 +234,18 @@ if [[ $state_recorded == "0" ]]; then
 
     csi handoff bss-update-param --set metal.no-wipe=1 --limit $UPGRADE_XNAME
 
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="BSS_BACKUP_POST_SET_NO_WIPE"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    ./create-bss-etcd-backup.sh $upgrade_ncn
+    
     record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"

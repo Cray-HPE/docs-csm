@@ -26,6 +26,8 @@ failure.
    * [When To Lock Management Nodes](#when-to-lock-management-nodes)
    * [When To Unlock Management Nodes](#when-to-unlock-management-nodes)
    * [How To Lock Management Nodes](#how-to-lock-management-nodes)
+      * [Script](#lock-script)
+      * [Manual Steps](#lock-manual)
    * [How To Unlock Management Nodes](#how-to-unlock-management-nodes)
 
 
@@ -63,6 +65,21 @@ should once again be locked.
 <a name="how-to-lock-management-nodes"></a>
 
 ### How To Lock Management Nodes
+
+<a name="lock-script"></a>
+
+#### Script
+
+Run the `lock_management_nodes.py` script to lock all management nodes that are not already locked:
+```
+ncn# /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
+```
+
+The return value of the script is 0 if locking was successful. Otherwise, a non-zero return means that manual intervention may be needed to lock the nodes. Continue below for manual steps.
+
+<a name="lock-manual"></a>
+
+#### Manual Steps
 
 Use the `cray hsm locks lock` command to perform locking.
 

@@ -4,7 +4,7 @@ The members object in the group definition has additional actions available for 
 
 The following is an example of group members:
 
-```screen
+```bash
 {
     "ids" : [
         "x0c0s0b0n0","x0c0s0b0n1","x0c0s0b1n0"
@@ -12,23 +12,23 @@ The following is an example of group members:
 }
 ```
 
-## Retrieve Group Members
+### Retrieve Group Members
 
 Retrieve just the members array for a group:
 
-```screen
+```bash
 ncn-m# cray hsm groups members list GROUP_LABEL
 ```
 
 Retrieve only the members of a group that are also in a specific partition:
 
-```screen
+```bash
 ncn-m# cray hsm groups members list --partition PARTITION_NAME GROUP_LABEL
 ```
 
 Retrieve only the members of a group that are not in any partition currently:
 
-```screen
+```bash
 ncn-m# cray hsm groups members list --partition NULL GROUP_LABEL
 ```
 
@@ -38,13 +38,13 @@ Add a single component to a group. The only time this is not permitted is if the
 
 Add a component to a group:
 
-```screen
+```bash
 ncn-m# cray hsm groups members create --id MEMBER_ID GROUP_LABEL
 ```
 
 For example:
 
-```screen
+```bash
 ncn-m# cray hsm groups members create --id x1c0s0b0n0 blue
 ```
 
@@ -54,13 +54,13 @@ Single members are removed with the component xname ID from the given group.
 
 Remove a member from a group:
 
-```screen
+```bash
 ncn-m# cray hsm groups members delete MEMBER_ID GROUP_LABEL
 ```
 
 For example:
 
-```screen
+```bash
 ncn-m# cray hsm groups members delete x1c0s0b0n0 blue
 ```
 

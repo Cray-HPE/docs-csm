@@ -6,7 +6,7 @@ Update the Cray Advanced Platform Monitoring and Control \(CAPMC\) configmap to 
 
 Modifying the CAPMC configmap to ignore nodes can prevent them from accidentally being power cycled.
 
-Nodes can also be locked with the Hardware State Manager \(HSM\) API. Refer to [NCN and Management Node Locking](../hardware_state_manager/NCN_and_Management_Node_Locking.md) for more information.
+Nodes can also be locked with the Hardware State Manager \(HSM\) API. Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
 
 ### Prerequisites
 

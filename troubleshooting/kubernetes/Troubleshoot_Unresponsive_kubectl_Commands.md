@@ -131,17 +131,16 @@ The `kubectl` command is not responsive on a node.
 
     **IMPORTANT:** If the node experiencing issues is `ncn-w001`, the ipmitool command must be run from another node that has access to the management plane. The admin will be cut off if using `ncn-w001` when powering off `ncn-w001-mgmt`.
 
-    Replace NODE\_NAME in the commands below with the node experiencing the issue. In this example, it is `ncn-w001`.
+    Replace NCN\_NAME in the commands below with the node experiencing the issue. In this example, it is `ncn-w999`.
 
     ```bash
-    ncn-w001# ipmitool -U root -P PASSWORD -I lanplus \
-    -H NCN_NAME-mgmt power off; sleep 5;
-    ncn-w001# ipmitool -U root -P PASSWORD -I lanplus \
-    -H NCN_NAME-mgmt power show; echo
-    ncn-w001# ipmitool -U root -P PASSWORD -I lanplus \
-    -H NCN_NAME-mgmt power on; sleep 5;
-    ncn-w001# ipmitool -U root -P PASSWORD -I lanplus \
-    -H NCN_NAME power show; echo
+    ncn-w001# export USERNAME=root
+    ncn-w001# export IPMI_PASSWORD=changeme
+    ncn-w001# export NCN_NAME=ncn-w999
+    ncn-w001# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power off; sleep 5;
+    ncn-w001# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power show; echo
+    ncn-w001# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power on; sleep 5;
+    ncn-w001# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME} power show; echo
     ```
 
 4.  Watch the console of the node being rebooted.
@@ -149,8 +148,7 @@ The `kubectl` command is not responsive on a node.
     This command will not return anything, but will show the ttyS0 console of the node. Use `~.` to disconnect. The same `~.` keystroke can also break an SSH session. After doing this, the connection to the SSH session may need to be reestablished.
 
     ```bash
-    ncn-w001# ipmitool -U root -P PASSWORD -I lanplus \
-    -H NCN_NAME-mgmt sol activate
+    ncn-w001# ipmitool -U $USERNAME -E -I lanplus -H NCN_NAME-mgmt sol activate
     ```
 
 

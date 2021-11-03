@@ -14,9 +14,8 @@ This procedure will install CSM applications and services into the CSM Kubernete
    1. [Apply Pod Priorities](#apply-pod-priorities)
    1. [Apply After Sysmgmt Manifest Workarounds](#apply-after-sysmgmt-manifest-workarounds)
    1. [Known Issues](#known-issues)
-      * [Error: not ready: https://packages.local](#error-not-ready)
-      * [Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK](#error-initiating-layer-upload)
-      * [Error lookup registry.local: no such host](#error-registry-local-no-such-host)
+      * [install.sh known issues](#known-issues-install-sh)
+      * [Setup Nexus known issues](#known-issues-setup-nexus)
    1. [Next Topic](#next-topic)
 
 
@@ -64,8 +63,10 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
     ```bash
     pit# export CSM_RELEASE=csm-x.y.z
-    pit# podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/dtr.dev.cray.com:/images:ro quay.io/skopeo/stable sync \
-    --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000
+
+    pit# for source_dir in $(ls /var/www/ephemeral/${CSM_RELEASE}/docker); do \
+    podman run --rm --network host -v /var/www/ephemeral/${CSM_RELEASE}/docker/${source_dir}:/images:ro quay.io/skopeo/stable sync \
+    --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000; done
     ```
 
     > **`NOTE`** As the bootstrap Nexus uses the default configuration, the
@@ -177,6 +178,7 @@ This is expected and can safely be ignored.
 <a name="deploy-csm-applications-and-services"></a>
 ### 4. Deploy CSM Applications and Services
 
+
 Run `install.sh` to deploy CSM applications services. This command may take 25 minutes or more to run.
 
 > **`NOTE`** `install.sh` requires various system configuration which are
@@ -192,7 +194,7 @@ Run `install.sh` to deploy CSM applications services. This command may take 25 m
 > pit# echo $SYSTEM_NAME
 > pit# echo $CSM_RELEASE
 > ```
-> If they are not set perform the following:
+> If they are not set, perform the following:
 >
 > ```bash
 > pit# export SYSTEM_NAME=eniac
@@ -340,7 +342,7 @@ ncn-w003: nameserver 10.92.100.225
 <a name="apply-pod-priorities"></a>
 ### 7. Apply Pod Priorities
 
-Run the `add_pod_priority.sh` script to create and apply a pod priority class to services critical to CSM. This will give these services a higher priority than others to ensure they get scheduled by Kubernetes in the event that resources limited on smaller deployments.
+Run the `add_pod_priority.sh` script to create and apply a pod priority class to services critical to CSM. This will give these services a higher priority than others to ensure they get scheduled by Kubernetes in the event that resources are limited on smaller deployments.
 
 ```bash
 pit# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/add_pod_priority.sh
@@ -373,6 +375,9 @@ Follow the [workaround instructions](../update_product_stream/index.md#apply-wor
 <a name="known-issues"></a>
 ### 9. Known Issues
 
+<a name="known-issues-install-sh"></a>
+#### 9.1 install.sh known issues
+
 The `install.sh` script changes cluster state and should not simply be rerun
 in the event of a failure without careful consideration of the specific
 error. It may be possible to resume installation from the last successful
@@ -380,11 +385,45 @@ command executed by `install.sh`, but administrators will need to appropriately
 modify `install.sh` to pick up where the previous run left off. (Note: The
 `install.sh` script runs with `set -x`, so each command will be printed to
 stderr prefixed with the expanded value of PS4, namely, `+ `.)
+ 
+The following error may occur when running `./install.sh`:
+  ```
+  + csi upload-sls-file --sls-file /var/www/ephemeral/prep/eniac/sls_input_file.json
+  2021/10/05 18:42:58 Retrieving S3 credentials ( sls-s3-credentials ) for SLS
+  2021/10/05 18:42:58 Unable to SLS S3 secret from k8s:secrets "sls-s3-credentials" not found
+  ```
+
+  1. Verify the `sls-s3-credentials` secret exists in the `default` namespace:
+     ```bash
+     pit# kubectl get secret sls-s3-credentials
+     NAME                 TYPE     DATA   AGE
+     sls-s3-credentials   Opaque   7      28d
+     ```
+
+  2. Check for running sonar-sync jobs. If there are no sonar-sync jobs, then wait for one to complete. The sonar-sync cronjob is responsible for copying the `sls-s3-credentials` secret from the `default` to `services` namespaces.
+     ```bash
+     pit# kubectl -n services get pods -l cronjob-name=sonar-sync
+     NAME                          READY   STATUS      RESTARTS   AGE
+     sonar-sync-1634322840-4fckz   0/1     Completed   0          73s
+     sonar-sync-1634322900-pnvl6   1/1     Running     0          13s
+     ```
+
+  3. Verify the `sls-s3-credentials` secret now exists in the `services` namespaces.
+     ```bash
+     pit# kubectl -n services get secret sls-s3-credentials
+     NAME                 TYPE     DATA   AGE
+     sls-s3-credentials   Opaque   7      20s
+     ```
+  
+  4. Running `install.sh` again is expected to succeed.
+
+<a name="known-issues-setup-nexus"></a>
+#### 9.2 Setup Nexus known issues
 
 Known potential issues with suggested fixes are listed in [Troubleshoot Nexus](../operations/package_repository_management/Troubleshoot_Nexus.md).
 
 <a name="next-topic"></a>
-# 9. Next Topic
+# 10. Next Topic
 
    After completing this procedure the next step is to redeploy the PIT node.
 

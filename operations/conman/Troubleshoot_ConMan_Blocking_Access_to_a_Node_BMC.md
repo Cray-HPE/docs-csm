@@ -25,7 +25,9 @@ The Cray command line interface \(CLI\) tool is initialized and configured on th
     does not use IPMI.
 
     ```
-    ncn-m001# ipmitool -I lanplus -H BMC_IP -U USERNAME -P BMC_PASSWORD sol deactivate
+    ncn-m001# export USERNAME=root
+    ncn-m001# export IPMI_PASSWORD=changeme
+    ncn-m001# ipmitool -I lanplus -H BMC_IP -U $USERNAME -E sol deactivate
     ```
 
 3. Restart the console services.

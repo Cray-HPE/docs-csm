@@ -11,7 +11,9 @@ Console log information is no longer being collected for Gigabyte nodes or ConMa
 1.  Use `ipmitool` to deactivate the current console connection.
 
     ```bash
-    ncn-m001# ipmitool -H xname -U USER -P PASSWORD sol deactivate
+    ncn-m001# export USERNAME=root
+    ncn-m001# export IPMI_PASSWORD=changeme
+    ncn-m001# ipmitool -H xname -U $USERNAME -E sol deactivate
     ```
 
 2.  Retrieve the `cray-conman` pod ID.

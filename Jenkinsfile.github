@@ -1,0 +1,57 @@
+@Library('csm-shared-library') _
+
+pipeline {
+    agent {
+        label "metal-gcp-builder"
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: "10"))
+        timestamps()
+    }
+
+    environment {
+        IS_STABLE = getBuildIsStable(releaseBranchIsStable: true)
+        BUILD_METADATA = getRpmRevision(isStable: env.IS_STABLE)
+        GIT_REPO_NAME = getRepoName()
+        RELEASE_BRANCH_VERSION = getReleaseBranchVersion()
+    }
+    
+    stages {
+        stage("Prepare") {
+            steps {
+                script {
+                    withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
+                        runLibraryScript("addRpmMetaData.sh", "${env.GIT_REPO_NAME}.spec")
+                        sh "make prepare"
+                    }
+                }
+            }
+        }
+
+      stage("Build RPM") {
+          steps {
+              script {
+                  withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
+                      sh "make rpm"
+                    }
+                }
+            }
+        }
+
+      stage('Publish') {
+          steps {
+            script {
+                if(env.RELEASE_BRANCH_VERSION){
+                    RELEASE_FOLDER = "/" + env.RELEASE_BRANCH_VERSION 
+                } else {
+                    RELEASE_FOLDER = ""
+                }
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.IS_STABLE)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
+            }
+        }
+      }
+    }
+  }
+

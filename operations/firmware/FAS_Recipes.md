@@ -192,7 +192,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 #### Device Type: NodeBMC | Target: `System ROM` aka BIOS
 
 **IMPORTANT:**
-* If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
+* If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than ncn-m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
 See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
 * Node should be powered on for System ROM update and will need to be rebooted to use the updated BIOS.
 
@@ -259,14 +259,21 @@ See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#confi
     "tag": "default",
     "overrideDryrun": false,
     "restoreNotPossibleOverride": true,
-    "timeLimit": 2000,
+    "timeLimit": 4000,
     "description": "Dryrun upgrade of Gigabyte node BMCs"
   }
 }
 ```
 
-**NOTE:** The timeLimit is `2000` because the Gigabytes can take a lot longer to update.
+**NOTE:** The timeLimit is `4000` because the Gigabytes can take a lot longer to update.
 
+You may receive a node failed to update with the output:
+`stateHelper = "Firmware Update Information Returned Downloading – See /redfish/v1/UpdateService"`
+FAS has incorrectly marked this node as failed.
+It most likely will complete the update successfully.
+You can check the update status by looking at the redfish `FirmwareInvetnory (/redfish/v1/UpdateService/FirmwareInventory/BMC)`
+or rerunning FAS to verify that the BMC firmware was updated.
+Make sure you have waited for the current firmware to be updated before starting a new FAS action on the same node.
 
 <a name="gb-device-type-nodebmc-target-bios"></a>
 
@@ -293,7 +300,7 @@ See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#confi
     "tag": "default",
     "overrideDryrun": false,
     "restoreNotPossibleOverride": true,
-    "timeLimit": 2000,
+    "timeLimit": 4000,
     "description": "Dryrun upgrade of Gigabyte node BIOS"
   }
 }

@@ -8,7 +8,7 @@ The `sat bootsys shutdown` and `sat bootsys boot` commands are used to shut down
 
 ### Prerequisites
 
-An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the SAT repository for more information.
+An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the System Admin Toolkit (SAT) product stream documentation.
 
 ### Procedure
 
@@ -37,7 +37,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
     3.  If the Slingshot network includes edge switches, obtain the user ID and password for these switches.
 
-2.  Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs. You can list all the session templates using `cray bos v1 sessiontemplate list`. If you are unsure of which template is in use, you can call `sat status` to find the XNAME, then use `cray cfs components describe XNAME` to find the bos_session, and use `cray bos v1 session describe BOS_SESSION` to find the templateUuid. Then finally use `cray bos v1 sessiontemplate describe TEMPLATE_UUID` to determine the list of XNAMEs associated with a given template. For example:
+2.  Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs. You can list all the session templates using `cray bos v1 sessiontemplate list`. If you are unsure of which template is in use, you can call `sat status` to find the xname, then use `cray cfs components describe XNAME` to find the bos_session, and use `cray bos v1 session describe BOS_SESSION` to find the `templateUuid`. Then finally use `cray bos v1 sessiontemplate describe TEMPLATE_UUID` to determine the list of xnames associated with a given template. For example:
 
     ```bash
     ncn-m001# sat status | grep "Compute\|Application"
@@ -70,7 +70,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
 3.  Use `sat auth` to authenticate to the API gateway within SAT.
 
-    See [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md), [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md), and "SAT Authentication" in the SAT repository for more information.
+    See [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md), [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md), and "SAT Authentication" in the System Admin Toolkit (SAT) product stream documentation.
 
 4.  Use sat to capture state of the system before the shutdown.
 
@@ -149,7 +149,7 @@ An authentication token is required to access the API gateway and to use the `sa
         slingshot-fabric-manager-5dc448779c-d8n6q   2/2     Running   0          4d21h
         ```
 
-        Run `fmn_status` in the fabric manager pod and save it to a file:
+        Run `fmn_status` in the slingshot-fabric-manager pod and save the output to a file:
 
         ```bash
         ncn-m001# kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
@@ -201,9 +201,9 @@ An authentication token is required to access the API gateway and to use the `sa
 
 7.  Coordinate with the site to prevent new sessions from starting in the services listed.
 
-    In version 1.4, there is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
+    In version 1.4.x, there is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
-8.  Follow the vendor WLM documentation to drain processes running on compute nodes. For slurm see scontrol man page and for pbs see pbsnodes man page.
+8.  Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, the see `scontrol` man page and for PBS Professional, see the `pbsnodes` man page.
 
 
 

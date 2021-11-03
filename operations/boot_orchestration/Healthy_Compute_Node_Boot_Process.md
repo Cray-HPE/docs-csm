@@ -16,7 +16,7 @@ A healthy DHCP exchange between server and client looks like the following:
 
 The following figure shows what a healthy DHCP discover process looks like via Wireshark, which is a packet analyzer:
 
-![](../../img/operations/Wireshark_Healthy_DHCP_Discover_Sequence.png "Healthy DHCP Discover Sequence Displayed on the Wireshark UI")
+![Healthy DHCP Discover Sequence Displayed on the Wireshark UI](../../img/operations/Wireshark_Healthy_DHCP_Discover_Sequence.png)
 
 The DHCP client uses port 68, whereas the DHCP server uses port 67. Unlike most Kubernetes pods, the DHCP pod is located on the host network.
 

@@ -1,26 +1,32 @@
 # Manage a Configuration with CFS
 
-Many product streams need to use the Configuration Framework Service (CFS) to apply post-boot configuration to the management nodes.
-This post-boot configuration by CFS is known as NCN personalization. CFS is also used for the compute nodes and application nodes
-for node personalization (post-boot) and for pre-boot configuration of images (image customization).
+Many product streams need to use the Configuration Framework Service (CFS) to
+apply post-boot configuration to the management nodes. This post-boot
+configuration is known as NCN personalization.
 
-NCN Personalization performs automated post-boot configuration tasks on the HPE Cray EX management nodes. Many HPE
-Cray EX management services (including DVS and SMA) require NCN personalization to function.
+NCN personalization applies post-boot configuration to the HPE Cray EX
+management nodes. Many HPE Cray EX management services outside of CSM
+(including DVS and SMA) require NCN personalization to function.
 
-In this release, NCN Personalization must be set up manually. In general, this process requires two steps:
-1. Create and upload a CFS Configuration file. This file lists the Ansible playbooks stored in the Version Control Service or VCS (gitea) that configure each NCN.
-1. Update the component endpoints in CFS for each management node requiring post-boot configuration. This step tells CFS to apply the CFS configuration automatically to a specific node.
+NCN Personalization is set up via the following steps:
+1. Create and upload a configuration file for the NCNs to CFS. This file lists
+   the Ansible playbooks and their location in the Version Control Service (VCS)
+   that configure each NCN.
+1. Set the desired configuration from the previous step in CFS for each
+   management node requiring post-boot configuration. This step directs CFS to
+   apply the configuration automatically to each node.
 
-Hewlett Packard Enterprise recommends that the configurations for both CNs and NCNs use the same git
-commit IDs. This requirement ensures that the configurations remain compatible. This compatibility is necessary for
-services like DVS which require low-level compatibility between CNs and NCNs.
+Hewlett Packard Enterprise recommends that the configurations for both CNs and
+NCNs use the same git commit IDs. This requirement ensures that the
+configurations remain compatible. This compatibility is necessary for services
+like DVS which require low-level compatibility between CNs and NCNs.
 
-Software product streams which include configuration content to be applied to the management nodes
-may include those which configure management functionality, such as COS, SMA, and CSM,
-or optional functionality to enable user productivity with UAI, such as PE, Analytics, and file system
-mounts like Lustre or SpectrumScale.
+Additional software product streams may require NCN personalization of the
+management nodes in addition to the configuration required by CSM. Consult the
+documentation for these products for more information.
 
-For more detailed information see these topics in [Configuration Management](../configuration_management/Configuration_Management.md)
+For more detailed information on configuration management with CFS, see these
+topics in [Configuration Management](configuration_management/Configuration_Management.md)
    * Configuration Layers
    * Ansible Inventory
    * Configuration Management with the CFS Batcher
@@ -40,7 +46,7 @@ For more detailed information see these topics in [Configuration Management](../
             * Provide Custom Keys
             * Restore Keys to Initial Defaults
             * Create a CFS Configuration for the Application of Passwordless SSH to NCNs
-      * [Setting the root Password](#set_root_password)
+      * [Setting the root Password on NCNs](#set_root_password)
    * [Create a CFS Configuration JSON File](#create_a_cfs_configuration_json_file)
    * [Upload and Apply the CFS Configuration File](#upload_and_apply_the_cfs_configuration_file)
    * [Rerun NCN Personalization on an NCN](#rerun_ncn_personalization_on_an_ncn)
@@ -153,7 +159,9 @@ customization and node personalization for CFS targets.
 
 To replace the private key half:
 ```bash
-ncn# kubectl get secret -n services csm-private-key -o json | jq --arg value "$(cat ~/.ssh/id_rsa |base64)" '.data["value"]=$value' | | kubectl apply -f -
+ncn-m001# kubectl get secret -n services csm-private-key -o json | \
+    jq --arg value "$(cat ~/.ssh/id_rsa | base64)" \
+    '.data["value"]=$value' | kubectl apply -f -
 ```
 
 In this example, `~/.ssh/id_rsa` is a local file containing a private key in a format specified by the admin.
@@ -219,9 +227,9 @@ Multiple product configuration layers may be created later to apply multiple cha
 
    The `git ls-remote` command in this step will require a valid username and password in VCS. See previous step for the `crayvcs` username and its password.
    ```bash
-   ncn-m001# COMMIT=$(git ls-remote \
-     https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git \
-     grep refs/heads/cray/csm/${RELEASE} | awk '{print $1}')
+   ncn# COMMIT=$(git ls-remote \
+   https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git \
+   refs/heads/cray/csm/${RELEASE} | awk '{print $1}')
    Username for 'https://api-gw-service-nmn.local': crayvcs
    Password for 'https://crayvcs@api-gw-service-nmn.local': 
    ncn-m001# echo $COMMIT
@@ -229,6 +237,7 @@ Multiple product configuration layers may be created later to apply multiple cha
    ```
 
 1. Create a JSON file with just the CSM configuration information in it using the RELEASE and COMMIT collected above.
+
    ```bash
    ncn# cat <<'EOF' > csm-config-$RELEASE.json
    {
@@ -243,7 +252,7 @@ Multiple product configuration layers may be created later to apply multiple cha
    }
    EOF
    ncn# sed -i -e "s:@RELEASE@:$RELEASE:g" \
-   -e "s:@COMMIT@:$COMMIT@:g" csm-config-$RELEASE.json
+   -e "s:@COMMIT@:$COMMIT:g" csm-config-$RELEASE.json
    ```
 
 1. If this is a first time install and only the CSM software product has been installed, then this file can become

@@ -3,7 +3,7 @@
 There are several operations which configure administrative access to different parts of the system.
 Ensuring that the `cray` CLI can be used by administrative credentials enables use of many management
 services via commands. The management nodes can be locked from accidental manipulation by the
-`cray capmc` and `cray fas` commands when then intent is to work on the entire system except the
+`cray capmc` and `cray fas` commands when the intent is to work on the entire system except the
 management nodes. The `cray scsd` command can change the SSH keys, NTP server, syslog server, and
 BMC/controller passwords.
 
@@ -38,9 +38,9 @@ BMC/controller passwords.
       APIs into easily usable commands.
 
       Later procedures in the installation workflow use the `cray` command to interact with multiple services.
-      The `cray` CLI configuration needs to be initialized for the Linux account and the keycloak user credentials
-      used in initialization running the procedure needs to be authorized for administrative actions.
-
+      The `cray` CLI configuration needs to be initialized for the Linux account. The Keycloak user who initializes the
+      CLI configuration needs to be authorized for administrative actions.
+   
       See [Configure the Cray Command Line Interface (cray CLI)](../operations/configure_cray_cli.md)
    <a name="lock_management_nodes"></a>
    1. Lock Management Nodes
@@ -53,10 +53,17 @@ BMC/controller passwords.
       If a single node is taken down by mistake, it is possible that things will recover. However, if all management
       nodes are taken down, or all Kubernetes worker nodes are taken down by mistake, the system is dead and has to be
       completely restarted.
+      **Lock the management nodes now!**
+   
+      
+      Run the `lock_management_nodes.py` script to lock all management nodes that are not already locked:
+      ```
+      ncn# /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
+      ```
 
-      Lock the management nodes **now**!
+      The return value of the script is 0 if locking was successful. Otherwise, a non-zero return means that manual intervention may be needed to lock the nodes.
 
-      See [Lock and Unlock Nodes](../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
+      For more inormation see [Lock and Unlock Nodes](../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
    <a name="configure_with_scsd"></a>
    1. Configure BMC and Controller Parameters with SCSD
 

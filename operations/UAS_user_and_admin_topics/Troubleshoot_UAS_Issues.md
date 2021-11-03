@@ -115,7 +115,7 @@ Specify the location of the Kubernetes certificate with `KUBECONFIG`.
 [user@uai-user-be3a6770-6876c88676-2p2lk ~]# KUBECONFIG=/tmp/CONFIG kubectl get nodes
 NAME STATUS ROLES AGE VERSION
 ncn-m001 Ready master 16d v1.13.3
-ncn-m002 Ready master 16d v1.13.3```
+ncn-m002 Ready master 16d v1.13.3
 ```
 
 Users must specify `KUBECONFIG` with every kubectl command or specify the kubeconfig file location for the life of the UAI. To do this, either set the `KUBECONFIG` environment variable or set the `--kubeconfig` flag .

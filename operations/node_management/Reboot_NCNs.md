@@ -146,13 +146,15 @@ Before rebooting NCNs:
 
 #### Utility Storage Nodes (Ceph)
 
-1. Reboot each of the storage nodes \(one at a time\).
+1. Reboot each of the storage nodes (one at a time).
 
     1. Establish a console session to each storage node.
 
         Use the [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) procedure referenced in step 4.
+   
+    2. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
 
-    2. Reboot the selected node.
+    3. Reboot the selected node.
 
         ```bash
          ncn-s# shutdown -r now
@@ -163,8 +165,10 @@ Before rebooting NCNs:
         To power off the node:
 
         1. ```bash
-           ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
-           ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+           ncn-m001# export USERNAME=root
+           ncn-m001# export IPMI_PASSWORD=changeme
+           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
+           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
            ```
 
             Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
@@ -172,14 +176,21 @@ Before rebooting NCNs:
         To power back on the node:
 
         1. ```bash
-            ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
-            ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
+            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
             ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
-    3. Watch on the console until the node has successfully booted and the login prompt is reached.
+    4. Watch on the console until the node has successfully booted and the login prompt is reached.
+   
+    5. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
+   
+   ```bash
+   ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
+   BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
+   ```
 
-    1. Retrieve the `XNAME` for the node being rebooted.
+    6. Retrieve the `XNAME` for the node being rebooted.
 
        This xname is available on the node being rebooted in the following file:
 
@@ -187,7 +198,7 @@ Before rebooting NCNs:
        ncn# ssh NODE cat /etc/cray/xname
        ```
 
-    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+    7. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
        The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
 
@@ -206,34 +217,34 @@ Before rebooting NCNs:
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
-    4. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
+    8. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
-        **Troubleshooting:** If the slurmctld and slurmdbd pods do not start after powering back up the node, check for the following error:
+         **Troubleshooting:** If the slurmctld and slurmdbd pods do not start after powering back up the node, check for the following error:
 
-        ```bash
-        ncn-m001# kubectl describe pod -n user -lapp=slurmctld
-        Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
-        ```
+         ```bash
+         ncn-m001# kubectl describe pod -n user -lapp=slurmctld
+         Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
+         ```
 
-        ```bash
-        ncn-m001# kubectl describe pod -n user -lapp=slurmdbd
-        Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
-        ```
+         ```bash
+         ncn-m001# kubectl describe pod -n user -lapp=slurmdbd
+         Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
+         ```
 
-        Remove the following files on every worker node to resolve the failure:
+         Remove the following files on every worker node to resolve the failure:
 
-        - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
-        - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
+         - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
+         - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
 
-    5. Disconnect from the console.
+    9. Disconnect from the console.
 
-    6. Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
+    10. Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
 
-        **Important:** Ensure `ceph -s` shows that Ceph is healthy BEFORE MOVING ON to reboot the next storage node. Once Ceph has recovered the downed mon, it may take a several minutes for Ceph to resolve clock skew.
+         **Important:** Ensure `ceph -s` shows that Ceph is healthy BEFORE MOVING ON to reboot the next storage node. Once Ceph has recovered the downed mon, it may take a several minutes for Ceph to resolve clock skew.
 
 #### NCN Worker Nodes
 
-1. Reboot each of the worker nodes \(one at a time\).
+1. Reboot each of the worker nodes (one at a time).
 
     **NOTE:** You are doing a single worker at a time, so please keep track of what ncn-w0xx you are on for these steps.
 
@@ -243,13 +254,13 @@ Before rebooting NCNs:
 
         See [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
 
-    1. Failover any postgres leader that is running on the worker node you are rebooting.
+    2. Failover any postgres leader that is running on the worker node you are rebooting.
 
-       ````bash
+       ```bash
        ncn-m# /usr/share/doc/csm/upgrade/1.0/scripts/k8s/failover-leader.sh <node to be rebooted>
-       ````
+       ```
 
-    1. Cordon and Drain the node
+    3. Cordon and Drain the node
 
        ```bash
        ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
@@ -273,7 +284,9 @@ Before rebooting NCNs:
        ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
        ```
 
-    1. Reboot the selected node.
+    4. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
+   
+    5. Reboot the selected node.
 
         ```bash
          ncn-w# shutdown -r now
@@ -284,8 +297,10 @@ Before rebooting NCNs:
         To power off the node:
 
         1. ```bash
-           ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
-           ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+           ncn-m001# export USERNAME=root
+           ncn-m001# export IPMI_PASSWORD=changeme
+           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
+           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
            ```
 
             Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
@@ -293,15 +308,22 @@ Before rebooting NCNs:
         To power back on the node:
 
         1. ```bash
-            ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
-            ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
+            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
             ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-    1. Watch on the console until the node has successfully booted and the login prompt is reached.
+    6. Watch on the console until the node has successfully booted and the login prompt is reached.
+   
+    7. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
+   
+   ```bash
+   ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
+   BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
+   ```
 
-    1. Retrieve the `XNAME` for the node being rebooted.
+    8. Retrieve the `XNAME` for the node being rebooted.
 
        This xname is available on the node being rebooted in the following file:
 
@@ -309,7 +331,7 @@ Before rebooting NCNs:
        ncn# ssh NODE cat /etc/cray/xname
        ```
 
-    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+    9. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
        The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
 
@@ -328,29 +350,29 @@ Before rebooting NCNs:
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
-    1. Uncordon the node
-
-       ```bash
-       ncn-m# kubectl uncordon <node you just rebooted>
-       ```
-
-    1. Verify pods are running on the rebooted node.
-
-        Within a minute or two, the following command should begin to show pods in a `Running` state (replace NCN in the command below with the name of the worker node):
+    10. Uncordon the node
 
         ```bash
-        ncn-m# kubectl get pods -o wide -A | grep <node to be rebooted>
+        ncn-m# kubectl uncordon <node you just rebooted>
         ```
 
-    1. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
+    11. Verify pods are running on the rebooted node.
 
-        Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.
+         Within a minute or two, the following command should begin to show pods in a `Running` state (replace NCN in the command below with the name of the worker node):
 
-        If terminating pods are reported when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.
+         ```bash
+         ncn-m# kubectl get pods -o wide -A | grep <node to be rebooted>
+         ```
 
-    1. Disconnect from the console.
+    12. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
-    1. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
+         Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.
+
+         If terminating pods are reported when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.
+
+    13. Disconnect from the console.
+
+    14. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
 
 1. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
 
@@ -358,13 +380,15 @@ Before rebooting NCNs:
 
 #### NCN Master Nodes
 
-1. Reboot each of the master nodes \(one at a time\) starting with ncn-m003 then ncn-m001.  There are special instructions for ncn-m001 below since its console connection is not managed by conman.
+1. Reboot each of the master nodes (one at a time) starting with ncn-m003 then ncn-m001.  There are special instructions for ncn-m001 below since its console connection is not managed by conman.
 
     1. Establish a console session to the master node you are rebooting.
 
         See step [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
 
-    2. Reboot the selected node.
+    2. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
+   
+    3. Reboot the selected node.
 
         ```bash
          ncn-m001# shutdown -r now
@@ -375,8 +399,10 @@ Before rebooting NCNs:
         To power off the node:
 
         ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ncn-m001# export USERNAME=root
+        ncn-m001# export IPMI_PASSWORD=changeme
+        ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
+        ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
@@ -384,15 +410,22 @@ Before rebooting NCNs:
         To power back on the node:
 
         ```bash
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
-        ncn-m001# ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
+        ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-    3. Watch on the console until the node has successfully booted and the login prompt is reached.
+    4. Watch on the console until the node has successfully booted and the login prompt is reached.
+   
+    5. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
+   
+   ```bash
+   ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
+   BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
+   ```
 
-    1. Retrieve the `XNAME` for the node being rebooted.
+    6. Retrieve the `XNAME` for the node being rebooted.
 
        This xname is available on the node being rebooted in the following file:
 
@@ -400,7 +433,7 @@ Before rebooting NCNs:
        ncn# ssh NODE cat /etc/cray/xname
        ```
 
-    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+    7. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
        The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
 
@@ -419,31 +452,35 @@ Before rebooting NCNs:
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
-    4. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
+    8. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
 
-    5. Disconnect from the console.
+    9. Disconnect from the console.
 
-    6. Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number until all master nodes have successfully rebooted.
+    10. Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number until all master nodes have successfully rebooted.
 
 2. Reboot `ncn-m001`.
 
     1. Determine the CAN IP address for one of the other NCNs in the system to establish an SSH session with that NCN.
 
     2. Establish a console session to `ncn-m001` from a remote system, as `ncn-m001` is the NCN that has an externally facing IP address.
+   
+    3. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
 
-    3. Power cycle the node
+    4. Power cycle the node
 
         Ensure the expected results are returned from the power status check before rebooting:
 
         ```bash
-        # ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        external# export USERNAME=root
+        external# export IPMI_PASSWORD=changeme
+        external# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
         ```
 
         To power off the node:
 
         ```bash
-        # ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power off
-        # ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        external# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
+        external# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
@@ -451,23 +488,23 @@ Before rebooting NCNs:
         To power back on the node:
 
         ```bash
-        # ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power on
-        # ipmitool -U root -H ${hostname}-mgmt -P PASSWORD-I lanplus power status
+        external# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
+        external# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-    4. Watch on the console until the node has successfully booted and the login prompt is reached.
+    5. Watch on the console until the node has successfully booted and the login prompt is reached.
 
-    1. Retrieve the `XNAME` for the node being rebooted.
+    6. Retrieve the `XNAME` for the node being rebooted.
 
-       This xname is available on the node being rebooted in the following file:
+        This xname is available on the node being rebooted in the following file:
 
-       ```bash
-       ncn# ssh NODE cat /etc/cray/xname
-       ```
+        ```bash
+        ncn# ssh NODE cat /etc/cray/xname
+        ```
 
-    1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+    7. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
        The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
 
@@ -486,11 +523,17 @@ Before rebooting NCNs:
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
-    5. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
+    8. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
 
-    6. Disconnect from the console.
+    9. Disconnect from the console.
 
-3. Re-run the platform health checks and ensure that all BGP peering sessions are Established with both spine switches.
+3. Remove any dynamically assigned interface IPs that did not get released automatically by running the CASMINST-2015 script:
+
+```bash
+ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+```
+
+4. Re-run the platform health checks and ensure that all BGP peering sessions are Established with both spine switches.
 
     See [Validate CSM Health](../validate_csm_health.md) for the platform health checks.
 

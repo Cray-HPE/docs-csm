@@ -24,9 +24,9 @@ snippet of MTL.yaml
 ```
 ## Aruba Configuration
 
-Check the configuration for ```interface vlan x```
-This configuration will be the same on BOTH Switches (except the ```ip address```).
-You will see that there is an ```active-gateway``` and ```ip helper-address``` configured.
+Check the configuration for `interface vlan x`
+This configuration will be the same on BOTH Switches (except the `ip address`).
+You will see that there is an `active-gateway` and `ip helper-address` configured.
 
 ```
 sw-spine-001(config)# int vlan 1,2,4,7
@@ -116,7 +116,7 @@ Displaying ipv4 routes selected for forwarding
 10.92.100.60/32, vrf default
 	via  10.252.1.7,  [1/0],  static
 ```
-You can see that the route is ```10.92.100.60/32 via 10.252.1.7``` with ```10.252.1.7``` being the worker node.
+You can see that the route is `10.92.100.60/32 via 10.252.1.7` with `10.252.1.7` being the worker node.
 
 If that static route is missing you will need to add it.
 ```
@@ -125,9 +125,9 @@ sw-spine-001(config)# ip route 10.92.100.60/32 10.252.1.7
 
 ## Mellanox Configuration
 
-Check the configuration for ```interface vlan 1```
-This configuration will be the same on BOTH Switches (except the ```ip address```).
-You will see that there is ```magp``` and ```ip dhcp relay``` configured.
+Check the configuration for `interface vlan 1`
+This configuration will be the same on BOTH Switches (except the `ip address`).
+You will see that there is `magp` and `ip dhcp relay` configured.
 
 ```
 sw-spine-001 [standalone: master] # show run int vlan 1
@@ -239,7 +239,7 @@ VRF Name default:
                                       c        10.252.0.6        vlan2            bgp        200/0
                                       c        10.252.0.7        vlan2            bgp        200/0
 ```
-If these routes are missing please see [Update BGP Neighbors](../operations/update_bgp_neighbors.md).
+If these routes are missing please see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md).
 
 ## Next steps
 

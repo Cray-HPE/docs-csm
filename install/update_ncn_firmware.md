@@ -93,11 +93,11 @@ Reset Gigabyte nodes to factory defaults to resolve problems with `ipmitool`, Re
      export mtoken='ncn-m(?!001)\w+-mgmt'
      export stoken='ncn-s\w+-mgmt'
      export wtoken='ncn-w\w+-mgmt'
-     export username=root
+     export USERNAME=root
      export IPMI_PASSWORD=changeme
-     grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} fru | grep -i 'board product'
-     grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} mc info | grep -i 'firmware revision'
-     grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} mc info | grep -i 'product version'
+     grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} fru | grep -i 'board product'
+     grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} mc info | grep -i 'firmware revision'
+     grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} mc info | grep -i 'product version'
      ```
 
    > #### Manufacturer Examples
@@ -293,8 +293,8 @@ All NCNs are now updated via GUI.
 1. Set login vars for redfish™
 
     ```bash
-   export username=root
-   export password=changeme
+   export USERNAME=root
+   export PASSWORD=changeme
    ```
 
 2. Invoke `mfw` with the matching firmware (check `ls 1 /var/www/fw/river/hpe` for a list)
@@ -306,7 +306,7 @@ All NCNs are now updated via GUI.
 3. Watch status:
 
     ```bash
-    pit# curl -sk -u $username:$password https://$1/redfish/v1/UpdateService | jq |grep -E 'State|Progress|Status'"
+    pit# curl -sk -u $USERNAME:$PASSWORD https://$1/redfish/v1/UpdateService | jq |grep -E 'State|Progress|Status'"
     ```
 
 <a name="upgrade-gigabyte-firmware"></a>
