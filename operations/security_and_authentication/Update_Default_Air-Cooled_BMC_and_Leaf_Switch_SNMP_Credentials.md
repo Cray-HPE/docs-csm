@@ -1,20 +1,25 @@
-# Update default Air-Cooled BMC and Leaf switch SNMP credentials
+# Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials
 
 This procedure updates the default credentials used when new air-cooled hardware is discovered for the first time. This includes the default Redfish credentials used for new air-cooled NodeBMCs and Slingshot switch BMCs (RouterBMCs), and SNMP credentials for new management leaf switches.
 
 **Important:** After this procedure is completed **going forward all future air-cooled hardware** added to the system will be assumed to be already configured with the new global default credential when getting added to the system.
 
-**Note:** This procedure will not update the Redfish or SNMP credentials for existing air-cooled devices. To change the credentials on existing air-cooled hardware follow the [Change Air-Cooled Node BMC Credentials](Change_Air-Cooled_Node_BMC_Credentials.md) and [Change SMNP credentials on Leaf switches](Change_SMNP_credentials_on_Leaf_switches.md) procedures. 
+**NOTE:** This procedure will not update the Redfish or SNMP credentials for existing air-cooled devices. To change the credentials on existing air-cooled hardware follow the [Change Air-Cooled Node BMC Credentials](Change_Air-Cooled_Node_BMC_Credentials.md) and [Change SMNP Credentials on Leaf Switches](Change_SMNP_Credentials_on_Leaf_Switches.md) procedures. 
+
+
+## Limitation
+
+The default global credentials used for liquid-cooled BMCs in the [Change Cray EX Liquid-Cooled Cabinet Global Default Password](Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md) procedure needs to be the same as the one used in this procedure for air-cooled BMCs river hardware. 
 
 ## Prerequisites
 
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   **Limitation:** The default global credentials used for liquid-cooled BMCs in the [Change Cray EX Liquid-Cooled Cabinet Global Default Password](Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md) procedure needs to be the same as the one used in this procedure for air-cooled BMCs river hardware. 
+
 
 ## Procedure
 
 #### 1.1 Acquire site-init.
-Before redeploying REDS, update the `customizations.yaml` file in the `site-init` secret in the `loftsman` namespace.
+Before redeploying the River Endpoint Discovery Service (REDS), update the `customizations.yaml` file in the `site-init` secret in the `loftsman` namespace.
 
 1.  If the `site-init` repository is available as a remote repository [as described here](../../install/prepare_site_init.md#push-to-a-remote-repository), then clone it to ncn-m001. Otherwise, ensure that the `site-init` repository is available on ncn-m001.
 
@@ -149,7 +154,7 @@ Before redeploying REDS, update the `customizations.yaml` file in the `site-init
     EOF
     ```
 
-2.  Merge customizations.yaml with reds-manifest.yaml
+2.  Merge `customizations.yaml` with `reds-manifest.yaml`:
     ```bash
     ncn-m001# manifestgen -c customizations.yaml -i ./reds-manifest.yaml > ./reds-manifest.out.yaml
     ```
