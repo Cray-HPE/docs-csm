@@ -18,7 +18,14 @@
 
 1. Repeat the previous step for each other storage node, one at a time.
 
-1. After `ncn-upgrade-ceph-nodes.sh` has successfully run for all storage nodes, deploy `node-exporter` and `alertmanager`.
+1. After `ncn-upgrade-ceph-nodes.sh` has successfully run for all storage nodes, rescan ssh keys on all storage nodes
+    ```bash
+    ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'rm -rf /root/.ssh/known_hosts'
+
+    ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
+    ```
+
+1. Deploy `node-exporter` and `alertmanager`.
 
     **NOTE:** This process will need to run on a node running `ceph-mon`, which in most cases will be `ncn-s001`, `ncn-s002`, and `ncn-s003`. It only needs to be run once, not on every one of these nodes.
 
