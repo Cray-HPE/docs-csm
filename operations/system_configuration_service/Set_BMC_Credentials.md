@@ -2,6 +2,12 @@
 
 Use the System Configuration Service \(SCSD\) to set the BMCs credentials to unique values, or set them all to the same value. Redfish BMCs get installed into the system with default credentials. Once the machine is shipped, the Redfish credentials must be changed on all BMCs. This is done using System Configuration Service \(SCSD\) through the Cray CLI.
 
+**Important:** If the credentials for other devices need to be changed, refer to the following device-specific credential changing procedures:
+- To change liquid-cooled BMC credentials, refer to [Change Cray EX Liquid-Cooled Cabinet Global Default Password](../security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md).
+- To change air-cooled Node BMC credentials, refer to [Change Air-Cooled Node BMC Credentials](../security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md).
+- To change ServerTech PDU credentials, refer to [Change Credentials on ServerTech PDUs](../security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
+- To change Slingshot switch BMC credentials, refer to "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide (> 1.6.0)*.
+
 ### Prerequisites
 
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
