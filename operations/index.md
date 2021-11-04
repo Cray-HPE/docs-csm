@@ -516,7 +516,6 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Launch a Virtual KVM on Gigabyte Servers](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Servers.md)
   * [Launch a Virtual KVM on Intel Servers](node_management/Launch_a_Virtual_KVM_on_Intel_Servers.md)
   * [Change Java Security Settings](node_management/Change_Java_Security_Settings.md)
-  * [Verify Accuracy of the System Clock](node_management/Verify_Accuracy_of_the_System_Clock.md)
   * [Configuration of NCN Bonding](node_management/Configuration_of_NCN_Bonding.md)
     * [Change Interfaces in the Bond](node_management/Change_Interfaces_in_the_Bond.md)
     * [Troubleshoot Interfaces with IP Address Issues](node_management/Troubleshoot_Interfaces_with_IP_Address_Issues.md)
