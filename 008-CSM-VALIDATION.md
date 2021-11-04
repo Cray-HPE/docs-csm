@@ -627,7 +627,7 @@ Failures of this test caused by snapshots other than 'fasTestSnapshot' can be sa
 <a name="hms-bmcs-set-to-on-state-in-hsm"></a>
 ##### BMCs Set to "On" State in HSM (CASMHMS-5239)
 
-The following HMS functional test may fail due to known issue [CASMHMS-5239](https://connect.us.cray.com/jira/browse/CASMHMS-5239) because of CMMs setting BMC states to "On" instead of "Ready":
+The following HMS functional test may fail due to known issue [CASMHMS-5239](https://connect.us.cray.com/jira/browse/CASMHMS-5239) because of CMMs setting BMC states to "On" instead of "Ready" in HSM:
 * `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
 
 This issue looks similar to the following in the test output:
