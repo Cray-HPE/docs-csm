@@ -42,7 +42,7 @@ These interfaces can be observed on a live NCN with the following command.
 <a name="device-naming"></a>
 #### Device Naming
 
-The underlying naming relies on [BIOSDEVNAME][1], this helps conform device naming into a smaller
+The underlying naming relies on [BIOSDEVNAME](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname), this helps conform device naming into a smaller
 set of possible names. It also helps show us when driver issues occur, if a non-BIOSDEVNAME interface appears
  then METAL can/should receive a triage report/bug.
 
