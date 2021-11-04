@@ -34,11 +34,12 @@ applied with the `csm.password` Ansible role via a CFS session.
 
    ```bash
    ncn# kubectl exec -itn vault cray-vault-0 -- sh
-   export VAULT_ADDR=http://cray-vault:8200
-   vault login
-   vault write secret/csm/management_nodes root_password='HASH'
-   vault read secret/csm/management_nodes
-   exit
+
+   cray-vault-0# export VAULT_ADDR=http://cray-vault:8200
+   cray-vault-0# vault login
+   cray-vault-0# vault write secret/csm/management_nodes root_password='HASH'
+   cray-vault-0# vault read secret/csm/management_nodes
+   cray-vault-0# exit
    ```
 
 ### Procedure: Apply Root Password to NCNs (Standalone)
