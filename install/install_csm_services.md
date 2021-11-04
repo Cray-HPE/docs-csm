@@ -14,8 +14,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
    1. [Apply Pod Priorities](#apply-pod-priorities)
    1. [Apply After Sysmgmt Manifest Workarounds](#apply-after-sysmgmt-manifest-workarounds)
    1. [Known Issues](#known-issues)
-      * [install.sh known issues](#known-issues-install-sh)
-      * [Setup Nexus known issues](#known-issues-setup-nexus)
+      * [`install.sh` Known Issues](#known-issues-install-sh)
    1. [Next Topic](#next-topic)
 
 
@@ -247,8 +246,8 @@ pit# ./lib/setup-nexus.sh
 setup-nexus.sh: OK
 ```
 
-In the event of an error, consult the [known issues](#known-issues) below to
-resolve potential problems and then try running `setup-nexus.sh` again. Note
+In the event of an error, consult [Troubleshoot Nexus](../operations/package_repository_management/Troubleshoot_Nexus.md)
+to resolve potential problems and then try running `setup-nexus.sh` again. Note
 that subsequent runs of `setup-nexus.sh` may report `FAIL` when uploading
 duplicate assets. This is ok as long as `setup-nexus.sh` outputs
 `setup-nexus.sh: OK` and exits with status code `0`.
@@ -373,7 +372,7 @@ Follow the [workaround instructions](../update_product_stream/index.md#apply-wor
 ### 9. Known Issues
 
 <a name="known-issues-install-sh"></a>
-#### 9.1 install.sh known issues
+#### 9.1 `install.sh` Known Issues
 
 The `install.sh` script changes cluster state and should not simply be rerun
 in the event of a failure without careful consideration of the specific
@@ -413,11 +412,6 @@ The following error may occur when running `./install.sh`:
      ```
   
   4. Running `install.sh` again is expected to succeed.
-
-<a name="known-issues-setup-nexus"></a>
-#### 9.2 Setup Nexus known issues
-
-Known potential issues with suggested fixes are listed in [Troubleshoot Nexus](../operations/package_repository_management/Troubleshoot_Nexus.md).
 
 <a name="next-topic"></a>
 # 10. Next Topic

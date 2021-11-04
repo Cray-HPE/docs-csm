@@ -17,35 +17,35 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
 1. Optional system health checks.
 
-    1. Use the System Dump Utility \(SDU\) to capture current state of system before the shutdown.
+   1. Use the System Dump Utility \(SDU\) to capture current state of system before the shutdown.
 
-        **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
+      **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
 
-        ```screen
-        ncn-m001# sdu --scenario triage --start_time '-4 hours' \
-        --reason "saving state before powerdown/up"
-        ```
-        Refer to the HPE Cray EX System Dump Utility (SDU) Administration Guide for more information and troubleshooting steps.
+      ```screen
+      ncn-m001# sdu --scenario triage --start_time '-4 hours' \
+      --reason "saving state before powerdown/up"
+      ```
+      Refer to the HPE Cray EX System Dump Utility (SDU) Administration Guide for more information and troubleshooting steps.
 
-    1. Check Ceph status.
+   1. Check Ceph status.
 
-        ```screen
-        ncn-m001# ceph -s > ceph.status
-        ```
+      ```screen
+      ncn-m001# ceph -s > ceph.status
+      ```
 
-    1. Check Kubernetes pod status for all pods.
+   1. Check Kubernetes pod status for all pods.
 
-        ```screen
-        ncn-m001# kubectl get pods -o wide -A > k8s.pods
-        ```
+      ```screen
+      ncn-m001# kubectl get pods -o wide -A > k8s.pods
+      ```
 
-        Additional Kubernetes status check examples :
+      Additional Kubernetes status check examples :
 
-        ```screen
-        ncn-m001# kubectl get pods -o wide -A | egrep "CrashLoopBackOff" > k8s.pods.CLBO
-        ncn-m001# kubectl get pods -o wide -A | egrep "ContainerCreating" > k8s.pods.CC
-        ncn-m001# kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
-        ```
+      ```screen
+      ncn-m001# kubectl get pods -o wide -A | egrep "CrashLoopBackOff" > k8s.pods.CLBO
+      ncn-m001# kubectl get pods -o wide -A | egrep "ContainerCreating" > k8s.pods.CC
+      ncn-m001# kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
+      ```
 
 1. Check for running sessions.
 
@@ -71,18 +71,20 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
 1. Coordinate with the site to prevent new sessions from starting in the services listed (BOS, CFS, CRUS, FAS, NMD).
 
-    In version Shasta v1.4, there is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
-
+    There is currently no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
 1. Validate CSM Health
 
-   Run the CSM health checks to ensure that everything is working properly before the upgrade starts.
+   Run the CSM health checks to ensure that everything is working properly before the upgrade starts. It is always best to 
+   perform all possible health checks. Be sure to run the validation procedures appropriate for your **current** CSM version.
 
-   Some of the CSM health checks, such as booting the barebones image on the compute nodes, could be skipped.
+   **NOTE**: Booting the barebones image on the compute nodes may be skipped if all compute nodes are currently running
+   application workloads. However, **it is recommended to do this test if possible**, because it validates that boot services
+   are still working properly.
 
-   See the `CSM Install Validation and Health Checks` procedures **`in the CSM 0.9 documentation`**. 
+   * If upgrading **from CSM 1.0 (Shasta 1.5)**, follow the [Validate CSM Health](../operations/validate_csm_health.md) procedures.
 
-   **`IMPORTANT:`** The validation procedures in the CSM 1.0 documentation are not all intended to work on CSM 0.9.
+   * If upgrading **from CSM 0.9 (Shasta 1.4)**, see the [CSM Install Validation and Health Checks](https://github.com/Cray-HPE/docs-csm/blob/release/0.9/008-CSM-VALIDATION.md) procedures **`in the CSM 0.9 documentation`**. The validation procedures in the CSM 1.0 documentation are not all intended to work on CSM 0.9.
 
 1. Validate Lustre Health
 

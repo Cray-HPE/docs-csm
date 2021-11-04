@@ -1,5 +1,7 @@
 # Update management network from 1.4 to 1.5
 
+**IMPORTANT**: These procedures only need to be followed if upgrading from CSM 0.9 (Shasta 1.4). If upgrading from CSM 1.0 (Shasta 1.5), these procedures should already have been done.
+
 ## New Features and Functions for v1.5
 
 - Static Lags from the CDU switches to the CMMs (Aruba and Dell).
