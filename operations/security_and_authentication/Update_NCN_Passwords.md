@@ -1,9 +1,5 @@
 ## Update NCN Passwords
 
-Change the passwords for non-compute nodes (NCNs) on the system using the
-`rotate-pw-mgmt-nodes.yml` Ansible playbook provided by CSM or by running
-the CSM `site.yml` playbook.
-
 The NCNs deploy with a default password, which are changed during the system
 install. See [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 for more information.
@@ -14,16 +10,7 @@ password after the install is complete.
 The NCN root user password is stored in the HashiCorp Vault instance, and
 applied with the `csm.password` Ansible role via a CFS session.
 
-> NOTE: The root password is also updated when applying the CSM configuration
-layer during NCN personalization using the `site.yml` playbook. See the
-[Configure Non-Compute Nodes with CFS](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password)
-procedure for more information.
-
-Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to
-change the root password as a quick alternative to running a full NCN
-personalization.
-
-### Procedure
+### Procedure: Configure Root Password in Vault
 
 1. Generate a new password hash for the root user. Replace `PASSWORD` with the
    root password that will be used.
@@ -54,26 +41,29 @@ personalization.
    exit
    ```
 
+### Procedure: Apply Root Password to NCNs (Standalone)
+
+Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to
+**only** change the root password on NCNs. This is a quick alternative to
+running a [full NCN personalization](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password),
+where passwords are also applied using the password stored in Vault set in the
+procedure above.
+
 1. Create a CFS configuration layer to run the password change Ansible playbook.
-   Replace the branch name in the JSON below with the branch in the CSM
-   configuration management Git repository that is in use. Alternatively, the
-   `branch` key can be replaced with the `commit` key and the git commit id
-   that is in use. See [Use Branches in Configuration Layers](#operations/configuration_management/Configuration_Layers.md)
-   for more information.
 
    ```bash
-   ncn# cat config.json
+   ncn# cat ncn-password-update-config.json
    {
      "layers": [
        {
          "name": "ncn-password-update",
          "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
          "playbook": "rotate-pw-mgmt-nodes.yml",
-         "branch": "ADD BRANCH NAME HERE"
+         "commit": "<INSERT GIT COMMIT ID>"
        }
      ]
    }
-   ncn# cray cfs configurations update ncn-password-update --file ./config.json
+   ncn# cray cfs configurations update ncn-password-update --file ./ncn-password-update-config.json
    ```
 
 1. Create a CFS configuration session to apply the password update.
@@ -83,6 +73,7 @@ personalization.
    ```
 
    ***NOTE***: Subsequent password changes need only update the password hash in
-   HashiCorp Vault and create the CFS session as long as the branch of the CSM
-   configuration management repository has not changed.
+   HashiCorp Vault and create the CFS session as long as the commit in the CSM
+   configuration management repository has not changed. If the commit has changed,
+   repeat this procedure from the beginning.
 
