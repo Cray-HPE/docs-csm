@@ -21,7 +21,7 @@ event that spire-postgres databases cannot be restored from a backup.
    ncn# kubectl get pvc -n spire | grep spire-data-spire-server | awk '{print $1}' | xargs kubectl delete -n spire pvc
    ```
 
-3. Disable spire-agent on all of the Kubernetes NCNs and delete the join data.
+3. Disable spire-agent on all of the Kubernetes NCNs (all worker nodes and master nodes) and delete the join data.
 
    ```bash
    ncn# for ncn in $(kubectl get nodes -o name | cut -d'/' -f2); do ssh "${ncn}" systemctl stop spire-agent; ssh "${ncn}" rm /

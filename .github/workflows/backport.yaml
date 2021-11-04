@@ -1,14 +1,13 @@
-name: Backport
-
+name: backport
+ 
 on:
-  pull_request:
+  issue_comment:
     types:
-      - closed
-      - labeled
-
+      - created
+ 
 jobs:
   backport:
     runs-on: self-hosted
-    name: Backport closed pull request
+    if: github.event.issue.pull_request
     steps:
-    - uses: Cray-HPE/backport-action@v1
+      - uses: Cray-HPE/backport-command-action@main

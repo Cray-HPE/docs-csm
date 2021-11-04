@@ -25,6 +25,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
         ncn-m001# sdu --scenario triage --start_time '-4 hours' \
         --reason "saving state before powerdown/up"
         ```
+        Refer to the HPE Cray EX System Dump Utility (SDU) Administration Guide for more information and troubleshooting steps.
 
     1. Check Ceph status.
 
