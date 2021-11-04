@@ -248,7 +248,7 @@ ncn# cray hsm inventory redfishEndpoints describe <xname>
 This section outlines known issues that cause HMS Health Check failures.
 
 * [Warning flags incorrectly set in HSM for Mountain BMCs (SDEVICE-3319)](#hms-known-issue-mountain-bmcs-warning-flags)
-* [BMCs Set to "On" State in HSM (CASMHMS-5239)](#hms-bmcs-set-to-on-state-in-hsm)
+* [BMCs set to "On" state in HSM (CASMHMS-5239)](#hms-bmcs-set-to-on-state-in-hsm)
 
 <a name="hms-known-issue-mountain-bmcs-warning-flags"></a>
 #### Warning flags incorrectly set in HSM for Mountain BMCs (SDEVICE-3319)
@@ -308,7 +308,7 @@ If you see this, perform the following steps:
 Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.
 
 <a name="hms-bmcs-set-to-on-state-in-hsm"></a>
-##### BMCs Set to "On" State in HSM (CASMHMS-5239)
+##### BMCs set to "On" state in HSM (CASMHMS-5239)
 
 The following HMS functional test may fail due to known issue [CASMHMS-5239](https://connect.us.cray.com/jira/browse/CASMHMS-5239) because of CMMs setting BMC states to "On" instead of "Ready" in HSM:
 * `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
