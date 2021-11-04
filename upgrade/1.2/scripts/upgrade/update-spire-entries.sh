@@ -53,3 +53,19 @@ if ! kubectl exec -n spire spire-server-0 --container spire-server -- ./bin/spir
 else
     echo "spiffe://shasta/compute/workload/ckdump_helper already exists. Not adding."
 fi
+
+if kubectl exec -n spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID "spiffe://shasta/compute/workload/dvs-get-comp" | grep -q "spiffe://shasta/compute/workload/dvs-get-comp"; then
+    echo "Deleting spiffe://shasta/compute/workload/dvs-get-comp"
+    entryid="$(kubectl exec -n spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID spiffe://shasta/compute/workload/dvs-get-comp | grep "Entry ID" | awk '{print $4}')"
+    kubectl exec -n spire spire-server-0 --container spire-server -- ./bin/spire-server entry delete --entryID "$entryid"
+else
+  echo "spiffe://shasta/compute/workload/dvs-get-comp does not exist. Not deleting."
+fi
+
+if kubectl exec -n spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID "spiffe://shasta/ncn/workload/dvs-get-comp" | grep -q "spiffe://shasta/ncn/workload/dvs-get-comp"; then
+    echo "Deleting spiffe://shasta/ncn/workload/dvs-get-comp"
+    entryid="$(kubectl exec -n spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID spiffe://shasta/ncn/workload/dvs-get-comp | grep "Entry ID" | awk '{print $4}')"
+    kubectl exec -n spire spire-server-0 --container spire-server -- ./bin/spire-server entry delete --entryID "$entryid"
+else
+  echo "spiffe://shasta/ncn/workload/dvs-get-comp does not exist. Not deleting."
+fi
