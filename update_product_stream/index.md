@@ -45,8 +45,11 @@ None.
 
       If doing a first time install, this can be done on a Linux system, but for an upgrade, it could be done on one of the NCNs, such as ncn-m001.
 
+      > **`NOTE:`** Use `--no-same-owner` and `--no-same-permissions` options to `tar` when extracting a CSM release
+      > distribution as `root` to ensure the current `umask` value.
+
       ```bash
-      linux# tar -xzvf ${CSM_RELEASE}.tar.gz
+      linux# tar --no-same-owner --no-same-permissions -xzvf ${CSM_RELEASE}.tar.gz
       ```
 
    1. Before using this software release, check for any patches available for it. If patches are available, see [Apply Patch to CSM Release](#patch).
