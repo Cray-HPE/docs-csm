@@ -460,7 +460,7 @@ These tests should be executed as root on any worker or master NCN (but **not** 
 
 1. Run the HMS smoke tests.
 
-    ```bash
+    ```
     ncn-mw# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
     ```
 
@@ -468,7 +468,7 @@ These tests should be executed as root on any worker or master NCN (but **not** 
 
 1. If no failures occur, then run the HMS functional tests.
 
-    ```bash
+    ```
     ncn-mw# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
     ```
 
@@ -482,6 +482,7 @@ These tests should be executed as root on any worker or master NCN (but **not** 
 * [Empty Drive Bays in HSM (CASMHMS-4693)](#hms-known-issue-empty-drive-bays)
 * [Unexpected HSM Discovery Status (CASMHMS-4794)](#hms-unexpected-discovery-status)
 * [Previously Captured FAS Snapshots (CASMHMS-5065)](#hms-previously-captured-fas-snapshots)
+* [BMCs Set to "On" State in HSM (CASMHMS-5239)](#hms-bmcs-set-to-on-state-in-hsm)
 
 <a name="hms-known-issue-mountain-bmcs-warning-flags"></a>
 ##### Erroneous HSM Warning Flags on Mountain BMCs (SDEVICE-3319)
@@ -493,7 +494,7 @@ The following HMS functional test may fail due to this issue:
 
 The symptom of this issue is the test fails with error messages about Warning flags being set on one or more BMCs. It may look similar to the following in the test output:
 
-```text
+```
 =================================== FAILURES ===================================
 _ /opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_remote-functional.tavern.yaml::Ensure that we can conduct a query for all Node BMCs in the Component collection _
 
@@ -518,8 +519,8 @@ If you see this, perform the following steps:
 
 1. Retrieve the xnames of all Mountain BMCs with Warning flags set in HSM:
 
-    ```bash
-    ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&Class=Mountain\&Flag=Warning | jq '.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }' -c | sort -V | jq -c
+    ```
+    ncn-mw# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&Class=Mountain\&Flag=Warning | jq '.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }' -c | sort -V | jq -c
     {"ID":"x5000c1s0b0","Flag":"Warning","Class":"Mountain"}
     {"ID":"x5000c1s0b1","Flag":"Warning","Class":"Mountain"}
     {"ID":"x5000c1s1b0","Flag":"Warning","Class":"Mountain"}
@@ -530,8 +531,8 @@ If you see this, perform the following steps:
 
 1. For each Mountain BMC xname, check its Redfish BMC Manager status:
 
-    ```bash
-    ncn# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq '.Status'
+    ```
+    ncn-mw# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq '.Status'
     {
     "Health": "OK",
     "State": "Online"
@@ -548,7 +549,7 @@ The following HMS functional tests may fail due to known issue [CASMHMS-4664](ht
 * `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
 
 The symptom of this issue looks similar to:
-```text
+```
       Traceback (most recent call last):
          File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
             verifier.validate()
@@ -615,12 +616,32 @@ Failures of this test because of an unexpected discovery status as shown above c
 ##### Previously Captured FAS Snapshots (CASMHMS-5065)
 
 The following HMS functional test may fail due to known issue [CASMHMS-5065](https://connect.us.cray.com/jira/browse/CASMHMS-5065) because of FAS snapshots that may have been previously captured on the system:
-   * `test_fas_snapshots_ncn-functional_remote-functional.tavern.yaml`
-   ```
-   ERROR    tavern.schemas.files:files.py:108 Error validating {'snapshots': [{'name': 'fasTestSnapshot', 'captureTime': '2021-10-25 21:29:00.139366661 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 68}, {'name': 'testSnap', 'captureTime': '2021-05-04 17:16:33.050058886 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 68}, {'name': 'testSnap2', 'captureTime': '2021-05-04 17:20:33.132276731 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 68}, {'name': 'x1000c5s5', 'captureTime': '2021-08-16 20:09:20.641734739 +0000 UTC', 'expirationTime': '2021-12-31 02:35:54 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 2}, {'name': 'x3000c0s20b4n0', 'captureTime': '2021-07-23 04:26:43.456013148 +0000 UTC', 'expirationTime': '2021-10-31 02:35:54 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 0}]}
-   ```
+* `test_fas_snapshots_ncn-functional_remote-functional.tavern.yaml`
 
-   * Any failures of this test caused by snapshots other than 'fasTestSnapshot' can be safely ignored.
+```
+ERROR    tavern.schemas.files:files.py:108 Error validating {'snapshots': [{'name': 'fasTestSnapshot', 'captureTime': '2021-10-25 21:29:00.139366661 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 68}, {'name': 'testSnap', 'captureTime': '2021-05-04 17:16:33.050058886 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 68}, {'name': 'testSnap2', 'captureTime': '2021-05-04 17:20:33.132276731 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 68}, {'name': 'x1000c5s5', 'captureTime': '2021-08-16 20:09:20.641734739 +0000 UTC', 'expirationTime': '2021-12-31 02:35:54 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 2}, {'name': 'x3000c0s20b4n0', 'captureTime': '2021-07-23 04:26:43.456013148 +0000 UTC', 'expirationTime': '2021-10-31 02:35:54 +0000 UTC', 'ready': True, 'relatedActions': [], 'uniqueDeviceCount': 0}]}
+```
+
+Failures of this test caused by snapshots other than 'fasTestSnapshot' can be safely ignored.
+
+<a name="hms-bmcs-set-to-on-state-in-hsm"></a>
+##### BMCs Set to "On" State in HSM (CASMHMS-5239)
+
+The following HMS functional test may fail due to known issue [CASMHMS-5239](https://connect.us.cray.com/jira/browse/CASMHMS-5239) because of CMMs setting BMC states to "On" instead of "Ready":
+* `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+
+This issue looks similar to the following in the test output:
+```
+      Traceback (most recent call last):
+            verifier.validate()
+         File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+      pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Enum 'On' does not exist. Path: '/Components/9/State'.
+         - Enum 'On' does not exist. Path: '/Components/10/State'.: Path: '/'>
+```
+
+Failures of this test caused by BMCs in the "On" state can be safely ignored.
 
 <a name="cms-validation-utility"></a>
 ## Cray Management Services Validation Utility
