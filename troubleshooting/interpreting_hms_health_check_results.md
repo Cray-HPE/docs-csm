@@ -308,7 +308,7 @@ If you see this, perform the following steps:
 Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.
 
 <a name="hms-bmcs-set-to-on-state-in-hsm"></a>
-##### BMCs set to "On" state in HSM (CASMHMS-5239)
+#### BMCs set to "On" state in HSM (CASMHMS-5239)
 
 The following HMS functional test may fail due to known issue [CASMHMS-5239](https://connect.us.cray.com/jira/browse/CASMHMS-5239) because of CMMs setting BMC states to "On" instead of "Ready" in HSM:
 * `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
