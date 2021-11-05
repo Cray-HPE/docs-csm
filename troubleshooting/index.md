@@ -6,6 +6,7 @@ This document provides troubleshooting information for services and functionalit
  * [Known Issues](#known-issues)
     * [Hardware Discovery](#known-issues-hardware-discovery)
     * [initrd.img.xz not found](#initrd-not-found)
+    * [Power Capping](#power-capping)
     * [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
     * [BOS/BOA Incorrect command is output to rerun a failed operation.](known_issues/incorrect_output_for_bos_command_rerun.md)
     * [CFS Sessions are Stuck in a Pending State](known_issues/cfs_sessions_stuck_in_pending.md)
@@ -105,3 +106,8 @@ Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
 Examining /metal/boot/boot/kernel...kernel is OK.
 Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
 ```
+
+<a name="power-capping"></a>
+
+### Power Capping
+Power capping via CAPMC is not supported for Bard Peak liquid cooled blades.
