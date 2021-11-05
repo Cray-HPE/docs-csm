@@ -480,7 +480,7 @@ Execute the HMS smoke and functional tests after the CSM install to confirm that
 <a name="hms-test-execution"></a>
 ### 2.1 HMS Test Execution
 
-These tests should be executed as root on at least one worker NCN and one master NCN (but **not** ncn-m001 if it is still the PIT node).
+These tests should be executed as root on any worker or master NCN (but **not** the PIT node).
 
 Run the HMS smoke tests.
 ```
@@ -489,7 +489,7 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resou
 
 Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
-Otherwise, run the HMS functional tests.
+If no failures occur, then run the HMS functional tests.
 ```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 ```

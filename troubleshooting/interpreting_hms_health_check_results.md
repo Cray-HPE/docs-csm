@@ -247,9 +247,18 @@ ncn# cray hsm inventory redfishEndpoints describe <xname>
 
 This section outlines known issues that cause HMS Health Check failures.
 
-#### SDEVICE-3319 - Warning flags incorrectly set in HSM for Mountain BMCs
+* [Warning flags incorrectly set in HSM for Mountain BMCs (SDEVICE-3319)](#hms-known-issue-mountain-bmcs-warning-flags)
+* [BMCs set to "On" state in HSM (CASMHMS-5239)](#hms-bmcs-set-to-on-state-in-hsm)
 
-The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue [SDEVICE-3319](https://connect.us.cray.com/jira/browse/SDEVICE-3319) that can cause Warning flags to be incorrectly set in HSM for Mountain BMCs and result in test failures. If _test_smd_components_ncn-functional_remote-functional.tavern.yaml_ fails with error messages about Warning flags being set on one or more BMCs:
+<a name="hms-known-issue-mountain-bmcs-warning-flags"></a>
+#### Warning flags incorrectly set in HSM for Mountain BMCs (SDEVICE-3319)
+
+The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue [SDEVICE-3319](https://connect.us.cray.com/jira/browse/SDEVICE-3319) that can cause Warning flags to be incorrectly set in HSM for Mountain BMCs and result in test failures.
+
+The following HMS functional test may fail due to this issue:
+* `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+
+The symptom of this issue is the test fails with error messages about Warning flags being set on one or more BMCs. It may look similar to the following in the test output:
 
 ```
 =================================== FAILURES ===================================
@@ -257,13 +266,13 @@ _ /opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_
 
 Errors:
 E   tavern.util.exceptions.TestFailError: Test 'Verify the expected response fields for all NodeBMCs' failed:
-    - Error calling validate function '<function validate_pykwalify at 0x7f44666179d0>':
-        Traceback (most recent call last):
-          File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+   - Error calling validate function '<function validate_pykwalify at 0x7f44666179d0>':
+      Traceback (most recent call last):
+         File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
             verifier.validate()
-          File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+         File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
             raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
-        pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+      pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
          - Enum 'Warning' does not exist. Path: '/Components/9/Flag'.
          - Enum 'Warning' does not exist. Path: '/Components/10/Flag'.
          - Enum 'Warning' does not exist. Path: '/Components/11/Flag'.
@@ -272,26 +281,48 @@ E   tavern.util.exceptions.TestFailError: Test 'Verify the expected response fie
          - Enum 'Warning' does not exist. Path: '/Components/14/Flag'.: Path: '/'>
 ```
 
-* Retrieve the xnames of all Mountain BMCs with Warning flags set in HSM:
+If you see this, perform the following steps:
+
+1. Retrieve the xnames of all Mountain BMCs with Warning flags set in HSM:
+
+    ```
+    ncn-mw# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&Class=Mountain\&Flag=Warning | jq '.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }' -c | sort -V | jq -c
+    {"ID":"x5000c1s0b0","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s0b1","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s1b0","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s1b1","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s2b0","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s2b1","Flag":"Warning","Class":"Mountain"}
+    ```
+
+1. For each Mountain BMC xname, check its Redfish BMC Manager status:
+
+    ```
+    ncn-mw# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq '.Status'
+    {
+    "Health": "OK",
+    "State": "Online"
+    }
+    ```
+
+Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.
+
+<a name="hms-bmcs-set-to-on-state-in-hsm"></a>
+#### BMCs set to "On" state in HSM (CASMHMS-5239)
+
+The following HMS functional test may fail due to known issue [CASMHMS-5239](https://connect.us.cray.com/jira/browse/CASMHMS-5239) because of CMMs setting BMC states to "On" instead of "Ready" in HSM:
+* `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+
+This issue looks similar to the following in the test output:
 
 ```
-ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&Class=Mountain\&Flag=Warning | jq '.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }' -c | sort -V | jq -c
-{"ID":"x5000c1s0b0","Flag":"Warning","Class":"Mountain"}
-{"ID":"x5000c1s0b1","Flag":"Warning","Class":"Mountain"}
-{"ID":"x5000c1s1b0","Flag":"Warning","Class":"Mountain"}
-{"ID":"x5000c1s1b1","Flag":"Warning","Class":"Mountain"}
-{"ID":"x5000c1s2b0","Flag":"Warning","Class":"Mountain"}
-{"ID":"x5000c1s2b1","Flag":"Warning","Class":"Mountain"}
+      Traceback (most recent call last):
+            verifier.validate()
+         File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+      pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Enum 'On' does not exist. Path: '/Components/9/State'.
+         - Enum 'On' does not exist. Path: '/Components/10/State'.: Path: '/'>
 ```
 
-* For each Mountain BMC xname, check its Redfish BMC Manager status:
-
-```
-ncn# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq '.Status'
-{
-  "Health": "OK",
-  "State": "Online"
-}
-```
-
-* Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.
+Failures of this test caused by BMCs in the "On" state can be safely ignored.
