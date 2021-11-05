@@ -35,13 +35,13 @@ The management of keys on NCNs is achieved by the `trust-csm-ssh-keys` and
 The SSH keypair is applied to management nodes via NCN personalization.
 
 
-### Use the CSM-provided SSH Keys
+### Option 1: Use the CSM-provided SSH Keys
 
 The default CSM Ansible plays are already configured to enable Passwordless SSH
 by default. No further action is necessary before running NCN personalization
 with CFS.
 
-### Provide Custom SSH Keys
+### Option 2: Provide Custom SSH Keys
 
 Administrators may elect to replace the CSM-provided keys with their own custom
 keys.
@@ -65,25 +65,29 @@ keys.
 Passwordless SSH with the provided keys will be setup once NCN personalization
 runs on the NCNs.
 
-###  Disable CSM-provided Passwordless SSH
+###  Option 3: Disable CSM-provided Passwordless SSH
 
 Local site security requirements may preclude use of passwordless SSH access between
 management nodes. A variable has been added to the associated ansible roles that will
 allow you to disable passwordless ssh setup to any or all nodes.
 
-    ncn-w001:~ # grep csm_passwordless_ssh_enabled roles/trust-csm-ssh-keys/defaults/main.yaml
+    ```
+    ncn-w:~ # grep csm_passwordless_ssh_enabled roles/trust-csm-ssh-keys/defaults/main.yaml
     csm_passwordless_ssh_enabled: 'false'
+    ```
 
+This variable can be overwritten using either a host specific setting or 'global' to affect
+all nodes where the playbook is run. Please reference [Customize Configuration Values](../configuration_management/Customize_Configuration_Values.md)
+for more detailed information.
 
 Published roles within product configuration repositories contain more comprehensive
-information regarding these role specific flags. Please reference associated Readme.md
+information regarding these role-specific flags. Please reference associated Readme.md
 documents for additional information.
 
-By default, the HPE Cray Operating System (COS) and User Access Node (UAN) configurations
-enable passwordless SSH using these keys to the associated nodes during image customization. 
 Consult the manual for each product to change the default configuration by 
 referring to the [1.5 HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-gsg)
-on the HPE Customer Support Center.
+on the HPE Customer Support Center. Similar configuration values for disabling the
+role will be required in these product specific configuration repositories.
 
 Modifying Ansible plays in a configuration repository will require a new commit
 and subsequent update of the [configuration layer](../configuration_management/Configuration_Layers.md)
