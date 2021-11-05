@@ -8,6 +8,8 @@ Liquid Cooled cabinet node card power features are supported by the node control
 
 The Cray Advanced Platform Management and Control \(CAPMC\) API facilitates power control and enables power-aware WLMs such as Slurm to perform power management and power capping tasks.
 
+***Note: Power capping via CAPMC is not supported for Bard Peak liquid cooled blades.***
+
 **Always use the Boot Orchestration Service \(BOS\) to power off or power on compute nodes.**
 
 ### Redfish API
