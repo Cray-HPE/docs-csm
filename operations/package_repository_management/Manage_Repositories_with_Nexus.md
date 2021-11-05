@@ -158,21 +158,9 @@ x86_64/cfs-state-reporter-1.4.4-20201204120230_c198848.x86_64.rpm
 x86_64/cfs-state-reporter-1.4.6-20210128142236_6bb340b.x86_64.rpm
 x86_64/cfs-trust-1.0.2-20201216135115_58f3d86.x86_64.rpm
 x86_64/cfs-trust-1.0.3-20210125135157_2a234cb.x86_64.rpm
-x86_64/craycli-0.40.8-20210122153602_8689250.x86_64.rpm
-x86_64/craycli-wrapper-0.40.6-20210122144319_0608411.x86_64.rpm
-x86_64/cray-cmstools-crayctldeploy-0.8.18-20210129163615_eebc7e8.x86_64.rpm
-x86_64/cray-metal-basecamp-1.1.0-20210203221641_1de4aa6.x86_64.rpm
-x86_64/cray-nexus-0.9.0-2.20210204104035_080a74e.x86_64.rpm
-x86_64/cray-site-init-1.5.18-20210204150234_b3ed304.x86_64.rpm
-x86_64/cray-switchboard-1.2.0-20201204104325_4cadbeb.x86_64.rpm
-x86_64/cray-uai-util-1.0.5-20201210081525_e7edeef.x86_64.rpm
-x86_64/csm-ssh-keys-1.0.3-20201211133315_1c474e9.x86_64.rpm
-x86_64/csm-ssh-keys-1.0.4-20210125120351_1193c0c.x86_64.rpm
-x86_64/csm-ssh-keys-roles-1.0.3-20201211133315_1c474e9.x86_64.rpm
-x86_64/csm-ssh-keys-roles-1.0.4-20210125120351_1193c0c.x86_64.rpm
-x86_64/hms-ct-test-crayctldeploy-1.3.2-20210203105451_5db2610.x86_64.rpm
-x86_64/loftsman-1.0.3.3-20210111191208_5322725.x86_64.rpm
-x86_64/manifestgen-1.3.1-20210201191257_7a2f66d.x86_64.rpm
+
+...
+
 ```
 
 Each component item has the following structure:
@@ -235,20 +223,9 @@ https://packages.local/repository/csm-sle-15sp2/x86_64/cfs-state-reporter-1.4.6-
 https://packages.local/repository/csm-sle-15sp2/x86_64/cfs-trust-1.0.2-20201216135115_58f3d86.x86_64.rpm
 https://packages.local/repository/csm-sle-15sp2/x86_64/cfs-trust-1.0.3-20210125135157_2a234cb.x86_64.rpm
 https://packages.local/repository/csm-sle-15sp2/x86_64/craycli-0.40.8-20210122153602_8689250.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/craycli-wrapper-0.40.6-20210122144319_0608411.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/cray-cmstools-crayctldeploy-0.8.18-20210129163615_eebc7e8.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/cray-metal-basecamp-1.1.0-20210203221641_1de4aa6.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/cray-nexus-0.9.0-2.20210204104035_080a74e.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/cray-site-init-1.5.18-20210204150234_b3ed304.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/cray-switchboard-1.2.0-20201204104325_4cadbeb.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/cray-uai-util-1.0.5-20201210081525_e7edeef.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/csm-ssh-keys-1.0.3-20201211133315_1c474e9.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/csm-ssh-keys-1.0.4-20210125120351_1193c0c.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/csm-ssh-keys-roles-1.0.3-20201211133315_1c474e9.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/csm-ssh-keys-roles-1.0.4-20210125120351_1193c0c.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/hms-ct-test-crayctldeploy-1.3.2-20210203105451_5db2610.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/loftsman-1.0.3.3-20210111191208_5322725.x86_64.rpm
-https://packages.local/repository/csm-sle-15sp2/x86_64/manifestgen-1.3.1-20210201191257_7a2f66d.x86_64.rpm
+
+...
+
 ```
 
 ### Create a Repository
