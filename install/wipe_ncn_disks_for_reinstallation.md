@@ -25,7 +25,7 @@ The following are potential use cases for wiping disks:
 ## 1. Basic Wipe
 
 A basic wipe includes wiping the disks and all of the RAIDs. These basic wipe instructions can be
-executed on **any management nodes** (master, worker and storage).
+executed on **any management nodes** (master, worker, and storage).
 
 1. List the disks for verification.
 
@@ -172,9 +172,9 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
 1. Unmount volumes.
 
-    > **`NOTE`** Some of the following `umount` commands may fail or have warnings depending on the state of the NCN. Failures in this section can be ignored and will not inhibit the wipe process.
-    >
-    > **`NOTE:`** There is an edge case where the overlay may keep you from unmounting the drive. If this is a rebuild you ignore this.
+    > **NOTE:** Some of the following `umount` commands may fail or have warnings depending on the state of the NCN. Failures in this section can be ignored and will not inhibit the wipe process.
+    
+    > **NOTE:** There is an edge case where the overlay may keep you from unmounting the drive. If this is a rebuild you ignore this.
 
     1. Master nodes.
 
@@ -234,7 +234,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
         ncn# vgremove -f -v --select 'vg_name=~metal*'
         ```
 
-        > **`NOTE`** Optionally you can run the `pvs` command and if any drives are still listed, you can remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, you should ignore the error and proceed to the next step, as this will not inhibit the wipe process.
+       > **NOTE:** Optionally, run the `pvs` command and if any drives are still listed, remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, you should ignore the error and proceed to the next step, as this will not inhibit the wipe process.
 
 1. Stop the RAIDs.
 
@@ -255,7 +255,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
     ncn# wipefs --all --force /dev/sd* /dev/disk/by-label/*
     ```
 
-    **Note**: On worker nodes, it is a known issue that the `sgdisk` command sometimes encounters a hard hang. If you see no output from the command for 90 seconds, close the terminal session to the worker node, open a new terminal session to it, and complete the disk wipe procedure by running the above `wipefs` command.
+   > **NOTE:** On worker nodes, it is a known issue that the `sgdisk` command sometimes encounters a hard hang. If you see no output from the command for 90 seconds, close the terminal session to the worker node, open a new terminal session to it, and complete the disk wipe procedure by running the above `wipefs` command.
 
-    See [Basic Wipe](#basic-wipe) section for expected output from the `wipefs` command.
+   See [Basic Wipe](#basic-wipe) section for expected output from the `wipefs` command.
 

@@ -208,6 +208,12 @@ Delete an account with the curl command:
 
 Update an account's password with the curl command:
 
+> **WARNING**: Changing Redfish credentials outside of Cray System Management (CSM) services may cause the Redfish device to be no longer manageable under CSM.
+> If the credentials for other devices need to be changed, refer to the following device-specific credential changing procedures:
+> - To change liquid-cooled BMC credentials, refer to [Change Cray EX Liquid-Cooled Cabinet Global Default Password](../security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md).
+> - To change air-cooled Node BMC credentials, refer to [Change Air-Cooled Node BMC Credentials](../security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md).
+> - To change Slingshot switch BMC credentials, refer to "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide (> 1.6.0)*.
+
 ```bash
 # curl -u root:xxx -X PATCH \
 -H 'Content-Type: application/json' \
