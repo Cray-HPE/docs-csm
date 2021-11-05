@@ -131,6 +131,8 @@ If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-heal
 
 Additionally, hmn-discovery and unbound manager cronjob pods may be in a 'NotReady' state. This is expected as these pods are periodically started and transition to the completed state.
 
+**IMPORTANT:** If `ncn-s001` is down when running the ncnHealthChecks script, status from the `ceph -s` command  will be unavailable. In this case, the `ceph -s` command can be executed on any available master or storage node to determine the status of the Ceph cluster.
+
 <a name="pet-ncnpostgreshealthchecks"></a>
 ### 1.2 ncnPostgresHealthChecks
 
