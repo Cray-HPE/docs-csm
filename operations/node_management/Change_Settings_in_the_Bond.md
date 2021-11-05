@@ -14,7 +14,7 @@ This procedure requires administrative privileges.
 
 1. Customize the settings of the bond(s).
    
-   For more information, refer to the following lines of the `script.ipxe` file in the metal-ipxe repository:
+   For more information, refer to the following lines of the `script.ipxe` file in the [metal-ipxe repository](https://github.com/Cray-HPE/metal-ipxe/blob/main/script.ipxe):
 
    ```bash
    # Assign bonds.
