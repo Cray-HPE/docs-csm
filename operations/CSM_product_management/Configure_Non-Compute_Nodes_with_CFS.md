@@ -80,9 +80,10 @@ This variable can be overwritten using either a host specific setting or 'global
 all nodes where the playbook is run. Please reference [Customize Configuration Values](../configuration_management/Customize_Configuration_Values.md)
 for more detailed information.
 
-Published roles within product configuration repositories contain more comprehensive
-information regarding these role-specific flags. Please reference associated Readme.md
-documents for additional information.
+Published roles within product configuration repositories can contain more comprehensive
+information regarding these role-specific flags. Please reference any role specific associated Readme.md
+documents for additional information, as role documentation is updated more frequently as
+changes are introduced.
 
 Consult the manual for each product to change the default configuration by 
 referring to the [1.5 HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-gsg)
