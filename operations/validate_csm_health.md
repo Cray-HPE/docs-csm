@@ -64,18 +64,18 @@ Available Platform Health Checks:
 
 There are multiple Goss test suites available that cover a variety of sub-systems. The platform health checks are defined in the test suites `ncn-healthcheck` and `ncn-kubernetes-checks`.
 
-Run the NCN health checks with the following command:
+Run the NCN health checks with the following command (If m001 is the PIT node, run on the PIT, otherwise run from any NCN):
 
-**IMPORTANT:** Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block. 
+**IMPORTANT:** Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
 
 ```bash
-ncn# /opt/cray/tests/install/ncn/automated/ncn-healthcheck
+# /opt/cray/tests/install/ncn/automated/ncn-healthcheck
 ```
 
 And the Kubernetes test suite via:
 
 ```bash
-ncn# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
+# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 ```
 Review the output for `Result: FAIL` and follow the instructions provided to resolve any such test failures. With the exception of the [Known Test Issues](#autogoss-issues), all health checks are expected to pass.
 
