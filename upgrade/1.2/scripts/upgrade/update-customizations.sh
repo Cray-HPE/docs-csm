@@ -94,8 +94,13 @@ if [[ -z "$(yq r "$c" 'spec.kubernetes.sealed_secrets.dnssec')" ]]; then
   yq w -i "$c" 'spec.kubernetes.sealed_secrets.dnssec.generate.data[0].args.value' ZHVtbXkK
 fi
 
-# Delete unused externaldns configuraation
+# Remove unused cray-externaldns configuration and add domain filters required for bifurcated CAN.
 yq d -i "$c" 'spec.kubernetes.services.cray-externaldns'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'cmn.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'can.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'chn.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'nmn.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'hmn.{{ network.dns.external }}'
 
 # Add required PowerDNS and Unbound configuration
 yq w -i "$c" 'spec.kubernetes.services.cray-dns-unbound.domain_name' '{{ network.dns.external }}'

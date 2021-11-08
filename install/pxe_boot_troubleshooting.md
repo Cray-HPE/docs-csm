@@ -1,22 +1,25 @@
+
+
 # PXE Boot Troubleshooting
 
-This page is designed to cover various issues that arise when trying to PXE boot nodes in a Shasta system.
+This page is designed to cover various issues that arise when trying to PXE boot nodes in an HPE Cray EX system.
 
-* [Configuration required for PXE booting](#required-configuration)
-* [Switch Configuration](#switch-configuration)
-    * [Aruba Configuration](#aruba-configuration)
-    * [Mellanox Configuration](#mellanox-configuration)
-* [Next steps](#next-steps)
-    * [Restart BSS](#restart-bss)
-    * [Restart KEA](#restart-kea)
-    * [Missing BSS Data](#missing-bss-data)
+- [PXE Boot Troubleshooting](#pxe-boot-troubleshooting)
+  - [Configuration required for PXE booting](#configuration-required-for-pxe-booting)
+  - [Switch Configuration](#switch-configuration)
+    - [Aruba Configuration](#aruba-configuration)
+    - [Mellanox Configuration](#mellanox-configuration)
+  - [Next steps](#next-steps)
+    - [Restart BSS](#restart-bss)
+    - [Restart KEA](#restart-kea)
+    - [Missing BSS Data](#missing-bss-data)
 
 In order for PXE booting to work successfully, the management network switches need to be configured correctly.
 
 <a name="#required-configuration"></a>
 ## Configuration required for PXE booting
 
-To successfully PXE boot nodes, the following is required.
+To successfully PXE boot nodes, the following is required:
 
 - The IP helper-address must be configured on VLAN 1,2,4,7. This will be where the layer 3 gateway exists (spine or aggregation)
 - The virtual-IP/VSX/MAGP IP address must be configured on VLAN 1,2,4,7.
@@ -24,8 +27,9 @@ To successfully PXE boot nodes, the following is required.
 - ncn-m001 needs an active gateway on VLAN1 this can be identified from MTL.yaml generated from CSI.
 - ncn-m001 needs an IP helper-address on VLAN1 pointing to 10.92.100.222.
 
-snippet of MTL.yaml
-```
+Snippet of MTL.yaml:
+
+```yaml
   name: network_hardware
   net-name: MTL
   vlan_id: 0
@@ -39,236 +43,259 @@ snippet of MTL.yaml
 <a name="#aruba-configuration"></a>
 ### Aruba Configuration
 
-Check the configuration for `interface vlan x`
-This configuration will be the same on BOTH Switches (except the `ip address`).
-You will see that there is an `active-gateway` and `ip helper-address` configured.
+1.  Check the configuration for `interface vlan x`.
 
-```
-sw-spine-001(config)# int vlan 1,2,4,7
-sw-spine-001(config-if-vlan-<1,2,4,7>)# show run current-context
-```
-Ouput
-```
-interface vlan 1
-    ip mtu 9198
-    ip address 10.1.0.2/16
-    active-gateway ip mac 12:00:00:00:6b:00
-    active-gateway ip 10.1.0.1
-    ip helper-address 10.92.100.222
-interface vlan 2
-    vsx-sync active-gateways
-    ip mtu 9198
-    ip address 10.252.0.2/17
-    active-gateway ip mac 12:01:00:00:01:00
-    active-gateway ip 10.252.0.1
-    ip helper-address 10.92.100.222
-    ip ospf 1 area 0.0.0.0
-interface vlan 4
-    vsx-sync active-gateways
-    ip mtu 9198
-    ip address 10.254.0.2/17
-    active-gateway ip mac 12:01:00:00:01:00
-    active-gateway ip 10.254.0.1
-    ip helper-address 10.94.100.222
-    ip ospf 1 area 0.0.0.0
-interface vlan 7
-    ip mtu 9198
-    ip address 10.103.11.1/24
-    active-gateway ip mac 12:01:00:00:01:00
-    active-gateway ip 10.103.11.111
-    ip helper-address 10.92.100.222
-```
+    This configuration will be the same on BOTH Switches (except the `ip address`).
+    There will be an `active-gateway` and `ip helper-address` configured.
 
-If any of this configuration is missing, you will need to update it to BOTH switches.
-```
-sw-spine-002# conf t
-sw-spine-002(config)# int vlan 1
-sw-spine-002(config-if-vlan)# ip helper-address 10.92.100.222
-sw-spine-002(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
-sw-spine-002(config-if-vlan)# active-gateway ip 10.1.0.1
+    ```bash
+    sw-spine-001(config)# int vlan 1,2,4,7
+    sw-spine-001(config-if-vlan-<1,2,4,7>)# show run current-context
+    ```
 
-sw-spine-002# conf t
-sw-spine-002(config)# int vlan 2
-sw-spine-002(config-if-vlan)# ip helper-address 10.92.100.222
-sw-spine-002(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
-sw-spine-002(config-if-vlan)# active-gateway ip 10.252.0.1
+    Example ouput:
 
-sw-spine-002# conf t
-sw-spine-002(config)# int vlan 4
-sw-spine-002(config-if-vlan)# ip helper-address 10.94.100.222
-sw-spine-002(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
+    ```
+    interface vlan 1
+        ip mtu 9198
+        ip address 10.1.0.2/16
+        active-gateway ip mac 12:00:00:00:6b:00
+        active-gateway ip 10.1.0.1
+        ip helper-address 10.92.100.222
+    interface vlan 2
+        vsx-sync active-gateways
+        ip mtu 9198
+        ip address 10.252.0.2/17
+        active-gateway ip mac 12:01:00:00:01:00
+        active-gateway ip 10.252.0.1
+        ip helper-address 10.92.100.222
+        ip ospf 1 area 0.0.0.0
+    interface vlan 4
+        vsx-sync active-gateways
+        ip mtu 9198
+        ip address 10.254.0.2/17
+        active-gateway ip mac 12:01:00:00:01:00
+        active-gateway ip 10.254.0.1
+        ip helper-address 10.94.100.222
+        ip ospf 1 area 0.0.0.0
+    interface vlan 7
+        ip mtu 9198
+        ip address 10.103.11.1/24
+        active-gateway ip mac 12:01:00:00:01:00
+        active-gateway ip 10.103.11.111
+        ip helper-address 10.92.100.222
+    ```
 
-sw-spine-002# conf t
-sw-spine-002(config)# int vlan 7
-sw-spine-002(config-if-vlan)# ip helper-address 10.92.100.222
-sw-spine-002(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
-sw-spine-002(config-if-vlan)# active-gateway ip xxxxxxx
-sw-spine-002(config-if-vlan)# write mem
-```
+2.  If any of this configuration is missing, update it to BOTH switches.
 
-Verify the route to the TFTP server is in place.
-This is a static route to get to the TFTP server via a worker node.
-You can get the worker node IP address from `NMN.yaml` from CSI-generated data.
-```
-  - ip_address: 10.252.1.9
-    name: ncn-w001
-    comment: x3000c0s4b0n0
-    aliases:
-```
+    ```bash
+    sw-spine-002# conf t
+    sw-spine-002(config)# int vlan 1
+    sw-spine-002(config-if-vlan)# ip helper-address 10.92.100.222
+    sw-spine-002(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
+    sw-spine-002(config-if-vlan)# active-gateway ip 10.1.0.1
 
-```
-sw-spine-002(config)# show ip route static
-```
-output
-```
+    sw-spine-002# conf t
+    sw-spine-002(config)# int vlan 2
+    sw-spine-002(config-if-vlan)# ip helper-address 10.92.100.222
+    sw-spine-002(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
+    sw-spine-002(config-if-vlan)# active-gateway ip 10.252.0.1
 
-Displaying ipv4 routes selected for forwarding
+    sw-spine-002# conf t
+    sw-spine-002(config)# int vlan 4
+    sw-spine-002(config-if-vlan)# ip helper-address 10.94.100.222
+    sw-spine-002(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
 
-'[x/y]' denotes [distance/metric]
+    sw-spine-002# conf t
+    sw-spine-002(config)# int vlan 7
+    sw-spine-002(config-if-vlan)# ip helper-address 10.92.100.222
+    sw-spine-002(config-if-vlan)# active-gateway ip mac 12:01:00:00:01:00
+    sw-spine-002(config-if-vlan)# active-gateway ip xxxxxxx
+    sw-spine-002(config-if-vlan)# write mem
+    ```
 
-0.0.0.0/0, vrf default
-    via  10.103.15.209,  [1/0],  static
-10.92.100.60/32, vrf default
-    via  10.252.1.7,  [1/0],  static
-```
-You can see that the route is `10.92.100.60/32 via 10.252.1.7` with `10.252.1.7` being the worker node.
+3.  Verify the route to the TFTP server is in place.
 
-If that static route is missing you will need to add it.
-```
-sw-spine-001(config)# ip route 10.92.100.60/32 10.252.1.7
-```
+    This is a static route to get to the TFTP server via a worker node.
+
+    The worker node IP address is in `NMN.yaml` from CSI-generated data.
+
+    ```
+      - ip_address: 10.252.1.9
+        name: ncn-w001
+        comment: x3000c0s4b0n0
+        aliases:
+    ```
+
+    ```bash
+    sw-spine-002(config)# show ip route static
+    ```
+
+    Example output:
+
+    ```
+    Displaying ipv4 routes selected for forwarding
+
+    '[x/y]' denotes [distance/metric]
+
+    0.0.0.0/0, vrf default
+      via  10.103.15.209,  [1/0],  static
+    10.92.100.60/32, vrf default
+      via  10.252.1.7,  [1/0],  static
+    ```
+
+    In this example, the route is `10.92.100.60/32 via 10.252.1.7`, with `10.252.1.7` being the worker node.
+
+    If that static route is missing, add it.
+
+    ```bash
+    sw-spine-001(config)# ip route 10.92.100.60/32 10.252.1.7
+    ```
 
 <a name="#mellanox-configuration"></a>
 ### Mellanox Configuration
 
-Check the configuration for `interface vlan 1`
-This configuration will be the same on BOTH Switches (except the `ip address`).
-You will see that there is `magp` and `ip dhcp relay` configured.
+1.  Check the configuration for `interface vlan 1`.
 
-```
-sw-spine-001 [standalone: master] # show run int vlan 1
-```
-output
-```
-interface vlan 1
-interface vlan 1 ip address 10.1.0.2/16 primary
-interface vlan 1 ip dhcp relay instance 2 downstream
-interface vlan 1 magp 1
-interface vlan 1 magp 1 ip virtual-router address 10.1.0.1
-interface vlan 1 magp 1 ip virtual-router mac-address 00:00:5E:00:01:01
-```
-If this configuration is missing, you will need to add it to BOTH switches.
-```
-sw-spine-001 [standalone: master] # conf t
-sw-spine-001 [standalone: master] (config) # interface vlan 1 magp 1
-sw-spine-001 [standalone: master] (config interface vlan 1 magp 1) # ip virtual-router address 10.1.0.1
-sw-spine-001 [standalone: master] (config interface vlan 1 magp 1) # ip virtual-router mac-address 00:00:5E:00:01:01
-sw-spine-001 [standalone: master] # conf t
-sw-spine-001 [standalone: master] (config) # ip dhcp relay instance 2 vrf default
-sw-spine-001 [standalone: master] (config) # ip dhcp relay instance 2 address 10.92.100.222
-sw-spine-001 [standalone: master] (config) # interface vlan 2 ip dhcp relay instance 2 downstream
-```
-You can then verify the VLAN 1 MAGP configuration.
-```
-sw-spine-001 [standalone: master] # show magp 1
-```
-output
-```
+    This configuration will be the same on BOTH Switches (except the `ip address`).
+    `magp` and `ip dhcp relay` will be configured.
 
-MAGP 1:
-  Interface vlan: 1
-  Admin state   : Enabled
-  State         : Master
-  Virtual IP    : 10.1.0.1
-  Virtual MAC   : 00:00:5E:00:01:01
-```
-Verify the DHCP relay configuration
+    ```bash
+    sw-spine-001 [standalone: master] # show run int vlan 1
+    ```
 
-```
-sw-spine-001 [standalone: master] (config) # show ip dhcp relay instance 2
-```
-output
-```
+    Example output:
 
-VRF Name: default
+    ```bash
+    interface vlan 1
+    interface vlan 1 ip address 10.1.0.2/16 primary
+    interface vlan 1 ip dhcp relay instance 2 downstream
+    interface vlan 1 magp 1
+    interface vlan 1 magp 1 ip virtual-router address 10.1.0.1
+    interface vlan 1 magp 1 ip virtual-router mac-address 00:00:5E:00:01:01
+    ```
 
-DHCP Servers:
-  10.92.100.222
+1.  If this configuration is missing, add it to BOTH switches.
 
-DHCP relay agent options:
-  always-on         : Disabled
-  Information Option: Disabled
-  UDP port          : 67
-  Auto-helper       : Disabled
+    ```bash
+    sw-spine-001 [standalone: master] # conf t
+    sw-spine-001 [standalone: master] (config) # interface vlan 1 magp 1
+    sw-spine-001 [standalone: master] (config interface vlan 1 magp 1) # ip virtual-router address 10.1.0.1
+    sw-spine-001 [standalone: master] (config interface vlan 1 magp 1) # ip virtual-router mac-address 00:00:5E:00:01:01
+    sw-spine-001 [standalone: master] # conf t
+    sw-spine-001 [standalone: master] (config) # ip dhcp relay instance 2 vrf default
+    sw-spine-001 [standalone: master] (config) # ip dhcp relay instance 2 address 10.92.100.222
+    sw-spine-001 [standalone: master] (config) # interface vlan 2 ip dhcp relay instance 2 downstream
+    ```
 
--------------------------------------------
-Interface   Label             Mode
--------------------------------------------
-vlan1       N/A               downstream
-vlan2       N/A               downstream
-vlan7       N/A               downstream
-```
+1.  Verify the VLAN 1 MAGP configuration.
 
-Verify that the route to the TFTP server and the route for the ingress gateway are available.
+    ```bash
+    sw-spine-001 [standalone: master] # show magp 1
+    ```
+    Example output:
+    
+    ```
+    MAGP 1:
+      Interface vlan: 1
+      Admin state   : Enabled
+      State         : Master
+      Virtual IP    : 10.1.0.1
+      Virtual MAC   : 00:00:5E:00:01:01
+    ```
 
-```
-sw-spine-001 [standalone: master] # show ip route 10.92.100.60
-```
+1.  Verify the DHCP relay configuration.
 
-```
+    ```bash
+    sw-spine-001 [standalone: master] (config) # show ip dhcp relay instance 2
+    ```
 
-Flags:
-  F: Failed to install in H/W
-  B: BFD protected (static route)
-  i: BFD session initializing (static route)
-  x: protecting BFD session failed (static route)
-  c: consistent hashing
-  p: partial programming in H/W
+    Example output:
 
-VRF Name default:
-  ------------------------------------------------------------------------------------------------------
-  Destination       Mask              Flag     Gateway           Interface        Source     AD/M
-  ------------------------------------------------------------------------------------------------------
-  default           0.0.0.0           c        10.101.15.161     eth1/12          static     1/1
-  10.92.100.60      255.255.255.255   c        10.252.0.5        vlan2            bgp        200/0
-                                      c        10.252.0.6        vlan2            bgp        200/0
-                                      c        10.252.0.7        vlan2            bgp        200/0
-```
+    ```
+    VRF Name: default
 
-```
-sw-spine-001 [standalone: master] # show ip route 10.92.100.71
-```
+    DHCP Servers:
+      10.92.100.222
 
-```
+    DHCP relay agent options:
+      always-on         : Disabled
+      Information Option: Disabled
+      UDP port          : 67
+      Auto-helper       : Disabled
 
-Flags:
-  F: Failed to install in H/W
-  B: BFD protected (static route)
-  i: BFD session initializing (static route)
-  x: protecting BFD session failed (static route)
-  c: consistent hashing
-  p: partial programming in H/W
+    -------------------------------------------
+    Interface   Label             Mode
+    -------------------------------------------
+    vlan1       N/A               downstream
+    vlan2       N/A               downstream
+    vlan7       N/A               downstream
+    ```
 
-VRF Name default:
-  ------------------------------------------------------------------------------------------------------
-  Destination       Mask              Flag     Gateway           Interface        Source     AD/M
-  ------------------------------------------------------------------------------------------------------
-  default           0.0.0.0           c        10.101.15.161     eth1/12          static     1/1
-  10.92.100.71      255.255.255.255   c        10.252.0.5        vlan2            bgp        200/0
-                                      c        10.252.0.6        vlan2            bgp        200/0
-                                      c        10.252.0.7        vlan2            bgp        200/0
-```
-If these routes are missing please see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md).
+1.  Verify that the route to the TFTP server and the route for the ingress gateway are available.
+
+    ```bash
+    sw-spine-001 [standalone: master] # show ip route 10.92.100.60
+    ```
+
+    Example output:
+
+    ```
+    Flags:
+      F: Failed to install in H/W
+      B: BFD protected (static route)
+      i: BFD session initializing (static route)
+      x: protecting BFD session failed (static route)
+      c: consistent hashing
+      p: partial programming in H/W
+
+    VRF Name default:
+      ------------------------------------------------------------------------------------------------------
+      Destination       Mask              Flag     Gateway           Interface        Source     AD/M
+      ------------------------------------------------------------------------------------------------------
+      default           0.0.0.0           c        10.101.15.161     eth1/12          static     1/1
+      10.92.100.60      255.255.255.255   c        10.252.0.5        vlan2            bgp        200/0
+                                          c        10.252.0.6        vlan2            bgp        200/0
+                                          c        10.252.0.7        vlan2            bgp        200/0
+    ```
+
+    ```bash
+    sw-spine-001 [standalone: master] # show ip route 10.92.100.71
+    ```
+
+    Example output:
+
+    ```
+    Flags:
+      F: Failed to install in H/W
+      B: BFD protected (static route)
+      i: BFD session initializing (static route)
+      x: protecting BFD session failed (static route)
+      c: consistent hashing
+      p: partial programming in H/W
+
+    VRF Name default:
+      ------------------------------------------------------------------------------------------------------
+      Destination       Mask              Flag     Gateway           Interface        Source     AD/M
+      ------------------------------------------------------------------------------------------------------
+      default           0.0.0.0           c        10.101.15.161     eth1/12          static     1/1
+      10.92.100.71      255.255.255.255   c        10.252.0.5        vlan2            bgp        200/0
+                                          c        10.252.0.6        vlan2            bgp        200/0
+                                          c        10.252.0.7        vlan2            bgp        200/0
+    ```
+
+    If these routes are missing, refer to [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md).
 
 <a name="#next-steps"></a>
 ## Next steps
 
-If your configuration looks good, and you are still not able to PXE boot there are some other things to try.
+If the configuration looks good, and PXE boot is still not working, there are some other things to try.
 
 <a name="restart-bss"></a>
 ### Restart BSS
-If while watching an NCN boot attempt you see the following output on the console during PXE
-(specifically the 404 error at the bottom):
+
+Restart the Boot Script Service (BSS) if the following output is returned on the console during PXE
+(specifically the 404 error at the bottom) during an NCN boot attempt:
 
 ```text
 https://api-gw-service-nmn.local/apis/bss/boot/v1/bootscript...X509 chain 0x6d35c548 added X509 0x6d360d68 "eniac.dev.cray.com"
@@ -304,15 +331,17 @@ HTTP 0x6d35da88 status 404 Not Found
 <a name="restart-kea"></a>
 ### Restart KEA
 
-In some cases rebooting the KEA pod has resolved PXE issues.
+In some cases, rebooting the KEA pod has resolved PXE issues.
 
-1. Get KEA pod
+1. Get the KEA pod.
+    
     ```bash
     ncn-m002# kubectl get pods -n services | grep kea
     cray-dhcp-kea-6bd8cfc9c5-m6bgw                                 3/3     Running     0          20h
     ```
 
-1. Delete KEA Pod
+1. Delete the KEA Pod.
+    
     ```bash
     ncn-m002# kubectl delete pods -n services cray-dhcp-kea-6bd8cfc9c5-m6bgw
     ```
@@ -328,22 +357,22 @@ failed or were skipped accidentally, this will cause the `ncn-m001` PXE boot to 
 In that case, use the following recovery procedure.
 
 1. Reboot to the PIT.
+   
+   * If using a USB PIT:
+     
+     1. Reboot the PIT node, watching the console as it boots.
+        
+     1. Manually stop it at the boot menu.
+        
+     2. Select the USB device for the boot.
+        
+     3. Once booted, log in and mount the data partition.
+   
+        ```bash
+        pit# mount -vL PITDATA
+        ```
 
-    * If using a USB PIT:
-    
-        1. Reboot the PIT node, watching the console as it boots.
-        
-        1. Manually stop it at the boot menu.
-        
-        1. Select the USB device for the boot.
-        
-        1. Once booted, log in and mount the data partition.
-        
-            ```bash
-            pit# mount -vL PITDATA
-            ```
-
-    * If using a remote ISO PIT, follow the [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) procedure up through (**and including**) the [Set Up The Site Link](bootstrap_livecd_remote_iso.md#set-up-site-link) step.
+   * If using a remote ISO PIT, follow the [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) procedure up through (**and including**) the [Set Up The Site Link](bootstrap_livecd_remote_iso.md#set-up-site-link) step.
 
 1. Set variables for the system name, the CAN IP address for `ncn-m002`. the Kubernetes version, and the Ceph version.
 
@@ -351,7 +380,7 @@ In that case, use the following recovery procedure.
 
     The Kubernetes and Ceph versions are from the output of the [`csi handoff ncn-images` command in the Redeploy PIT Node procedure](redeploy_pit_node.md#ncn-boot-artifacts-hand-off). If needed, the typescript file from that procedure should be on `ncn-m002` in the `/metal/bootstrap/prep/admin` directory.
 
-    Be sure to substitute the correct values for your system in the commands below.
+    Substitute the correct values for the system in use in the following commands:
 
     ```bash
     pit# SYSTEM_NAME=eniac
@@ -360,7 +389,7 @@ In that case, use the following recovery procedure.
     pit# export CEPH_VERSION=x.y.z
     ```
 
-1. **If using a remote ISO PIT**, run the following commands to finish configuring the network and copy files. 
+3. **If using a remote ISO PIT**, run the following commands to finish configuring the network and copy files. 
 
     **Skip these steps if using a USB PIT**.
 
@@ -370,34 +399,34 @@ In that case, use the following recovery procedure.
         pit# scp -p ${CAN_IP_NCN_M002}:/metal/bootstrap/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
         ```
 
-    1. Apply the network changes.
+    2. Apply the network changes.
         
         ```bash
         pit# wicked ifreload all
         pit# systemctl restart wickedd-nanny && sleep 5
         ```
 
-    1. Copy `data.json` from `ncn-m002` to the PIT node.
+    3. Copy `data.json` from `ncn-m002` to the PIT node.
 
         ```bash
         pit# mkdir -p /var/www/ephemeral/configs
         pit# scp ${CAN_IP_NCN_M002}:/metal/bootstrap/prep/${SYSTEM_NAME}/basecamp/data.json /var/www/ephemeral/configs
         ```
 
-1. Copy Kubernetes config file from `ncn-m002`.
+4. Copy Kubernetes config file from `ncn-m002`.
 
     ```bash
     pit# mkdir -pv ~/.kube
     pit# scp ${CAN_IP_NCN_M002}:/etc/kubernetes/admin.conf ~/.kube/config
     ```
 
-1. Set DNS to use unbound.
+5. Set DNS to use unbound.
 
     ```bash
     pit# echo "nameserver 10.92.100.225" > /etc/resolv.conf
     ```
 
-1. Export the API token.
+6. Export the API token.
 
     ```bash
     pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
@@ -406,7 +435,7 @@ In that case, use the following recovery procedure.
         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1. Re-run the [BSS handoff commands from the Redeploy PIT Node procedure](redeploy_pit_node.md#ncn-boot-artifacts-hand-off).
+7. Re-run the [BSS handoff commands from the Redeploy PIT Node procedure](redeploy_pit_node.md#ncn-boot-artifacts-hand-off).
 
     **WARNING: These commands should never be run from a node other than the PIT node or `ncn-m001`**
     
@@ -415,6 +444,7 @@ In that case, use the following recovery procedure.
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
     ```
 
-1. Perform the [BSS Restart](#restart-bss) and the [KEA Restart](#restart-kea) procedures.
+8. Perform the [BSS Restart](#restart-bss) and the [KEA Restart](#restart-kea) procedures.
 
-1. Reboot the PIT node.
+9.  Reboot the PIT node.
+
