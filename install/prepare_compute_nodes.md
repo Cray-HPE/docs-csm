@@ -162,7 +162,7 @@ This procedure needs to be done for each of the HPE Apollo 6500 XL645d nodes to 
 <a name="update-the-bios-time-on-gigabyte-compute-nodes"></a>
 ### 1. Update the BIOS Time on Gigabyte Compute Nodes
 The BIOS time for Gigabyte compute nodes must be synced with the rest of the system.
-See [Update the Gigabyte Server BIOS Time](../operations/node_management/Update_the_Gigabyte_Server_BIOS_Time.md).
+See [Update the Gigabyte Node BIOS Time](../operations/node_management/Update_the_Gigabyte_Node_BIOS_Time.md).
 
 <a name="next-topic"></a>
 # Next Topic
