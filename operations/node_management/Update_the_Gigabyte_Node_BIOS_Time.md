@@ -1,5 +1,5 @@
 
-## Update the Gigabyte Server BIOS Time
+## Update the Gigabyte Node BIOS Time
 
 Check and set the time for Gigabyte compute nodes.
 
