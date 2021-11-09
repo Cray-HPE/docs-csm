@@ -1,6 +1,4 @@
-# Prepare Master Node
-
-## Description
+# Prepare Master Nodes
 
 Prepare a master node before rebuilding it.
 
@@ -146,12 +144,14 @@ This will allow the node to rejoin the cluster automatically when it rebuilds.
 * The IP and hostname of the rebuilt node is needed for the following command.
 * Replace the `<IP_ADDRESS>` address value with the IP address you noted in an earlier step from the `etcdctl` command.
 
-**IMPORTANT:** This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites)
+> **IMPORTANT:** This command assumes the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites) are set.
 
 ```bash
 etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member add $NODE --peer-urls=https://<IP_ADDRESS>:2380
 ```
 
-[Click Here to Proceed to the Next Step](Identify_Nodes_and_Update_Metadata.md)
+### Step 7 - Proceed to the next step in the NCN rebuild procedure
 
-Or [Click Here to Return to Main page](../Rebuild_NCNs.md)
+Proceed to the [Identify Nodes and Update Metadata](Identify_Nodes_and_Update_Metadata.md) procedure
+or return to high-level [NCN Rebuild](../Rebuild_NCNs.md) procedure.
+

@@ -1,21 +1,24 @@
 # Wipe Disks
 
-**Warning:** This is the point of no return. Once the disks are wiped, the node must be rebuilt.
+> **WARNING:** This is the point of no return. Once the disks are wiped, the node must be rebuilt.
 
 All commands in this section must be run on the node being rebuilt \(unless otherwise indicated\). These commands can be done from the ConMan console window.
 
+## Procedure 
+
 Only follow the steps in the section for the node type that is being rebuilt:
 
-- [Wipe Disks](#wipe-disks)
-  - [Wipe Disks: Master](#wipe-disks-master)
+  - [Wipe Disks: Master Node](#wipe-disks-master-node)
   - [Wipe Disks: Worker Node](#wipe-disks-worker-node)
   - [Wipe Disks: Utility Storage Node](#wipe-disks-utility-storage-node)
 
-## Wipe Disks: Master
+After completing the steps for the node type being rebuilt, proceed to the [next step](#next-step) header.
+
+### Wipe Disks: Master Node
 
 1. Unmount the etcd volume and remove the volume group.
 
-   **NOTE:** etcd should already be stopped as part of the "Prepare Master Node" steps.
+   > **NOTE:** etcd should already be stopped as part of the [Prepare Master Node](Prepare_Master_Nodes.md) steps.
 
    ```bash
    /run/lib-etcd
@@ -29,14 +32,14 @@ Only follow the steps in the section for the node type that is being rebuilt:
    vgremove -f metalvg0-CRAYSDU
    ```
 
-3. Wipe the drives
+3. Wipe the drives.
 
    ```bash
    mdisks=$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '   {print "/dev/" $2}')
    wipefs --all --force $mdisks
    ```
 
-## Wipe Disks: Worker Node
+### Wipe Disks: Worker Node
 
 1. Stop contianerd and wipe drives.
 
@@ -52,28 +55,28 @@ Only follow the steps in the section for the node type that is being rebuilt:
     umount /run/containerd
     ```
 
-1. Wipe Drives
+1. Wipe the drives.
 
     ```bash
     wipefs --all --force /dev/sd* /dev/disk/by-label/*
     ```
 
-## Wipe Disks: Utility Storage Node
+### Wipe Disks: Utility Storage Node
 
-1. Stop running OSDs on the node being wiped
+1. Stop running OSDs on the node being wiped.
 
     ```bash
     ncn-s# systemctl stop ceph-osd.target
     ```
 
-2. Make sure the OSDs (if any) are not running after running the first command.
+1. Make sure the OSDs (if any) are not running after running the first command.
 
     ```bash
     ncn-s# ls -1 /dev/sd* /dev/disk/by-label/*
     ncn-s# vgremove -f --select 'vg_name=~ceph*'
     ```
 
-3. Unmount and remove the metalvg0 volume group
+1. Unmount and remove the metalvg0 volume group.
 
    ```bash
    umount /etc/ceph
@@ -82,12 +85,13 @@ Only follow the steps in the section for the node type that is being rebuilt:
    vgremove -f metalvg0
    ```
 
-4. Wipe the disks and RAIDs.
+1. Wipe the disks and RAIDs.
 
     ```bash
     wipefs --all --force /dev/sd* /dev/disk/by-label/*
     ```
 
-[Click Here for the Next Step](Power_Cycle_and_Rebuild_Nodes.md)
+## Next Step
 
-Or [CLick Here to Return to the Main Page](../Rebuild_NCNs.md)
+Proceed to the next step to [Power Cycle and Rebuild Nodes](Power_Cycle_and_Rebuild_Nodes.md) or return to the high-level [Rebuild NCNs](../Rebuild_NCNs.md) procedure.
+

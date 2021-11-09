@@ -1,12 +1,19 @@
 # Identify Nodes and Update Metadata
 
-## Inspect and modify the JSON file
+Use the following procedure to update the metadata for nodes being rebuilt.
+This section applies to all node types.
 
-This section applies to all node types. The commands in this section assume you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
+## Prerequisites
+
+The commands in this section assume the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites) are set.
+
+## Procedure
+
+Inspect and modify the boot parameters JSON file with the following steps.
 
 ### Step 1 - Generate the Boot Script Service \(BSS\) boot parameters JSON file
 
-1. Run the following commands from a node that has cray cli initialized:
+1. Run the following commands from a node that has `cray cli` initialized:
 
     ```bash
     cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
@@ -15,8 +22,8 @@ This section applies to all node types. The commands in this section assume you 
 ### Step 2 - Modify the JSON file
 
 1. Set the kernel parameters to wipe the disk.
-
-    * Locate the portion of the line that contains `"metal.no-wipe"` and ensure it is set to zero `"metal.no-wipe=0"`.
+   
+   Locate the portion of the line that contains `"metal.no-wipe"` and ensure it is set to zero `"metal.no-wipe=0"`.
 
 ### Step 3 - Re-apply the boot parameters list for the node using the JSON file
 
@@ -37,7 +44,7 @@ This section applies to all node types. The commands in this section assume you 
     "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" -X PUT -d @./${XNAME}.json
     ```
 
-    **IMPORTANT:** Ensure a good response \(`HTTP CODE 200`\) is returned in the output.
+    > **IMPORTANT:** Ensure a good response \(`HTTP CODE 200`\) is returned in the output.
 
 ### Step 4 -  Verify the `bss bootparameters list` command returns the expected information.
 
@@ -48,13 +55,16 @@ This section applies to all node types. The commands in this section assume you 
     ```
 
 1. Compare the new JSON file with what was PUT to BSS.
+   
+   The files should be identical when compared.
 
     ```bash
     ncn# diff ${XNAME}.json ${XNAME}.check.json
     ```
 
-    * The files should be identical
+### Step 5 - Proceed to the next step in the NCN rebuild procedure
 
-[Click here for the Next Step](Wipe_Drives.md)
+Proceed to the next step in the NCN rebuild procedure to [Wipe Disks](Wipe_Disks.md)
+or return to the high-level [NCN Rebuild](../Rebuild_NCNs.md) procedure.
 
-Or [Click here to returrn to the Main Page](../Rebuild_NCNs.md)
+

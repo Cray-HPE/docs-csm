@@ -1,12 +1,14 @@
-# Adding a Ceph Node to the Ceph Cluster
+# Add a Ceph Node to the Ceph Cluster
 
-**NOTE:** This operation can be done to add more than one node at the same time.
+> **NOTE:** This operation can be done to add more than one node at the same time.
 
-## Add Join Script
+## Procedure
+
+### Add Join Script
 
 1. Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh`
 
-   **NOTE:** This script may also available in the `/usr/share/doc/csm/scripts` directory where the latest ***docs-csm*** rpm is installed. If so, it can be copied from that node to the new storage node being rebuilt and skip to step 2.
+   > **NOTE:** This script may also available in the `/usr/share/doc/csm/scripts` directory where the latest ***docs-csm*** rpm is installed. If so, it can be copied from that node to the new storage node being rebuilt and skip to step 2.
 
    ```bash
    #!/bin/bash
@@ -100,7 +102,7 @@
 
    **IMPORTANT:** While watching your window running `watch ceph -s` you will see the health go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about "failed to probe daemons or devices" and this will clear.
 
-## Zapping OSDs
+### Zap OSDs
 
    **IMPORTANT:** Only do this if you were not able to wipe the node prior to rebuild.
 
@@ -124,11 +126,11 @@
    ncn-s003  /dev/sdh  ssd   S455NY0MB42468  1920G  Unknown  N/A    N/A    No
    ```
 
-   **IMPORTANT:** In the above example the drives on our rebuilt node are showing "Available = no". This is expected because the check is based on the presence of an LVM on the volume.
+   > **IMPORTANT:** In the above example the drives on our rebuilt node are showing "Available = no". This is expected because the check is based on the presence of an LVM on the volume.
 
-   **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that you are not seeing OS drives. These will have a size of 480G.
+   > **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that you are not seeing OS drives. These will have a size of 480G.
 
-1. Zap the drives
+1. Zap the drives.
 
    ```bash
    for drive in $(ceph orch device ls $NODE --format json-pretty |jq -r '.[].devices[].path')
@@ -151,9 +153,9 @@
    ceph mgr fail
    ```
 
-## Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
+### Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
 
-   **IMPORTANT:** Radosgw by default is deployed to the first 3 storage nodes. This includes haproxy and keepalived. This is automated as part of the install, but you may have to regenerate the configuration if you are not running on the first 3 storage nodes or all nodes. Please see the 2 examples in step 1.
+> **IMPORTANT:** Radosgw by default is deployed to the first 3 storage nodes. This includes haproxy and keepalived. This is automated as part of the install, but you may have to regenerate the configuration if you are not running on the first 3 storage nodes or all nodes. Please see the 2 examples in step 1.
 
 1. Deploy Rados Gateway containers to the new nodes.
 
@@ -185,4 +187,7 @@
    pdsh -w ncn-s00[1..(end node number)] -f 2 '/srv/cray/scripts/metal/generate_haproxy_cfg.sh; systemctl restart haproxy.service; /srv/cray/scripts/metal/generate_keepalived_conf.sh; systemctl restart keepalived.service'
    ```
 
-[Next Step - Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md)
+### Validate Storage Node
+
+After completing the previous sections, proceed to the next step in the NCN Rebuild procedure.
+Refer to [Post Rebuild Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md).

@@ -1,10 +1,12 @@
-# 6.3. Validate Storage Node
+# Post Rebuild Storage Node Validation
 
 Validate the storage node rebuilt successfully.
 
-Skip this section if a master or worker node was rebuilt.
+> **NOTE:** Skip this section if a master or worker node was rebuilt.
 
-1. Verify there are 3 mons, 3 mds, 3 mgr processes, and rgws
+## Procedure
+
+1. Verify there are 3 mons, 3 mds, 3 mgr processes, and rgws.
 
     ```bash
     ncn-m# ceph -s
@@ -62,4 +64,4 @@ Skip this section if a master or worker node was rebuilt.
     <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
     ```
 
-   [Return to Main Page](../Rebuild_NCNs.md#Validation)
+1. Return to the [Rebuild NCNs](../Rebuild_NCNs.md) high-level procedure and perform the "Final Validation" steps.

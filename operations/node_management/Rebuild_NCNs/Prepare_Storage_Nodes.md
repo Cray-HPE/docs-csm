@@ -1,10 +1,8 @@
 # Prepare Storage Node
 
-## Description
-
 Prepare a storage node before rebuilding it.
 
-**IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed. For example, if this is a rebuild in place then ceph components will not be reporting down, versus a failed node rebuild.
+> **IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed. For example, if this is a rebuild in place then ceph components will not be reporting down, versus a failed node rebuild.
 
 ## Prequisites
 
@@ -16,7 +14,7 @@ If rebuilding ncn-s001, it is critical that the storage-ceph-cloudinit.sh has be
    ssh ncn-s001 cat /etc/cray/xname
    ```
 
-2. Check the bss boot parameters for ncn-s001.
+2. Check the `bss bootparameter` for ncn-s001.
 
    ```bash
    cray bss bootparameters list --name x3000c0s7b0n0 --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'
@@ -44,13 +42,15 @@ If rebuilding ncn-s001, it is critical that the storage-ceph-cloudinit.sh has be
 
    If it is there then it will need to be fixed by running:
 
-   **IMPORTANT:** The below python script is provided by the docs-csm rpm being installed.
+   > **IMPORTANT:** The below python script is provided by the docs-csm rpm being installed.
 
    ```bash
    python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
    ```
 
-## Step 1 - Check the status of Ceph
+## Procedure
+
+### Step 1 - Check the status of Ceph
 
 1. Check the OSD status, weight, and location:
 
@@ -152,9 +152,9 @@ If rebuilding ncn-s001, it is critical that the storage-ceph-cloudinit.sh has be
 
     1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives. By default if the OSD reference is not removed, then there will still a reference to them in the crush map and will show down OSDs down that no longer exist.
 
-    This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
+    This command assumes the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites) are set.
 
-    This must be run from a ceph-mon node (ncn-s00[1/2/3])
+    This must be run from a ceph-mon node (ncn-s00[1/2/3]).
 
     ```bash
     for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
@@ -173,6 +173,8 @@ If rebuilding ncn-s001, it is critical that the storage-ceph-cloudinit.sh has be
     purged osd.9
     ```
 
-[Click Here to Proceed to the Next Step](Identify_Nodes_and_Update_Metadata.md)
+### Step 2 - Proceed to the next step in the NCN rebuild procedure
 
-Or [Click Here to Return to Main page](../Rebuild_NCNs.md)
+Proceed to the [Identify Nodes and Update Metadata](Identify_Nodes_and_Update_Metadata.md) procedure
+or return to high-level [NCN Rebuild](../Rebuild_NCNs.md) procedure.
+
