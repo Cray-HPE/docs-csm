@@ -10,7 +10,7 @@ Perform the following steps on **ncn-m001** to validate the `BOOTRAID` artifacts
    ncn-m001# cray init
    ```
 
-1. Run the script to ensure the local BOOTRAID has a valid kernel and initrd.
+1. Run the script to ensure the local `BOOTRAID` has a valid kernel and initrd.
    
    ```bash
    ncn-m001# /opt/cray/tests/install/ncn/scripts/validate-bootraid-artifacts.sh
@@ -28,4 +28,4 @@ Once that is done only follow the steps in the section for the node type that wa
 
 * [Master Node](Post_Rebuild_Master_Node_Validation.md)
 * [Worker Node](Post_Rebuild_Worker_Node_Validation.md)
-* [Storage Node](Re-add_Storage_Node_to_Ceph.md)
+* [Storage Node](Add_a_Storage_Node_to_the_Ceph_Cluster.md).

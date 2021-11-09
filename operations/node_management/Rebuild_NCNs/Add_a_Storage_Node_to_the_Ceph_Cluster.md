@@ -1,6 +1,6 @@
-# Add a Ceph Node to the Ceph Cluster
+# Add a Storage Node to the Ceph Cluster
 
-> **NOTE:** This operation can be done to add more than one node at the same time.
+This operation can be done to add more than one node at the same time.
 
 ## Procedure
 
@@ -104,11 +104,11 @@
 
 ### Zap OSDs
 
-   **IMPORTANT:** Only do this if you were not able to wipe the node prior to rebuild.
+> **IMPORTANT:** Only do this if you were not able to wipe the node prior to rebuild.
 
-   **NOTE:** The commands in the Zapping OSDs section will need to be run from a node running ceph-mon. Typically ncn-s00(1/2/3).
+> **NOTE:** The commands in the Zapping OSDs section will need to be run from a node running ceph-mon. Typically ncn-s00(1/2/3).
 
-1. Find the devices on the node being rebuilt
+1. Find the devices on the node being rebuilt.
 
    ```bash
    ceph orch device ls $NODE
@@ -159,13 +159,13 @@
 
 1. Deploy Rados Gateway containers to the new nodes.
 
-   - If running Rados Gateway on all nodes is the desired conifugration then do:
+   - If running Rados Gateway on all nodes is the desired conifugration:
 
       ```bash
       ceph orch apply rgw site1 zone1 --placement="*"
       ```
 
-   - If deploying to select nodes then do:
+   - If deploying to select nodes:
   
      ```bash
      ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"

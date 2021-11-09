@@ -48,7 +48,7 @@ The following is a high-level overview of the NCN rebuild workflow:
 5. Rebuild Storage Node
    
    Only needed for storage nodes.
-   See [Re-add Storage Node to Ceph](Rebuild_NCNs/Re-add_Storage_Node_to_Ceph.md).
+   See [Add a Storage Node to the Ceph Cluster](Rebuild_NCNs/Add_a_Storage_Node_to_the_Ceph_Cluster.md).
 
 6. Validate `BOOTRAID` Artifacts
    
