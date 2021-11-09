@@ -667,6 +667,8 @@ MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manag
 
 ## Spire
 
+Spire provides the ability to authenticate nodes and workloads, and to securely distribute and manage their identities along with the credentials associated with them.
+
   * [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
   * [Troubleshoot Spire Failing to Start on NCNs](spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
 
