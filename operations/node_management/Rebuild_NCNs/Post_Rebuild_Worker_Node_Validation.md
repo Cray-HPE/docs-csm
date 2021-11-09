@@ -1,4 +1,4 @@
-# 7.1. Validate Worker Node
+# Post Rebuild Worker Node Validation
 
 Validate the worker node rebuilt successfully.
 

@@ -70,16 +70,18 @@ The commands in this section assume the variables from [the prerequisites sectio
 
 ### Step 3 - Observe the boot
 
-1. After a bit, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output which indicates that the PXE boot has begun the TFTP download of the ipxe program. Later messages will appear as the Linux kernel loads and then the scripts in the initrd begin to run, including `cloud-init`.
+After a bit, the node should begin to boot.
 
-1. Wait until `cloud-init` displays messages similar to these on the console to indicate that cloud-init has finished with the module called `modules:final`.
+1. View the boot from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output which indicates that the PXE boot has begun the TFTP download of the ipxe program. Later messages will appear as the Linux kernel loads and then the scripts in the initrd begin to run, including `cloud-init`.
+
+2. Wait until `cloud-init` displays messages similar to these on the console to indicate that cloud-init has finished with the module called `modules:final`.
    
    ```screen
    [  295.466827] cloud-init[9333]: Cloud-init v. 20.2-8.45.1 running 'modules:final' at Thu, 26 Aug2021  15:23:20 +0000. Up 125.72 seconds.
    [  295.467037] cloud-init[9333]: Cloud-init v. 20.2-8.45.1 finished at Thu, 26 Aug 2021 15:26:12+0000. Datasource DataSourceNoCloudNet [seed=cmdline,http://10.92.100.81:8888/][dsmode=net].  Up 29546 seconds
    ```
 
-1. Press enter on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console (**&** then **.**), and then use `ssh` to log in to the node to complete the remaining validation steps.
+3. Press enter on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console (**&** then **.**), and then use `ssh` to log in to the node to complete the remaining validation steps.
 
    * **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file (see the step to [inspect and modify the JSON file](Identify_Nodes_and_Update_Metadata.md#Inspect-and-modify-the-JSON-file) and make sure these instructions were completed correctly.
 
@@ -107,7 +109,10 @@ Run these commands on the rebuilt node.
 
 2. Confirm the output from the `dig` command matches the interface.
 
-    1. If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
+    1. Verify if the IP addresses match.
+       
+       If the IP addresses match, proceed to the next step.
+       If they do not match, continue with the following sub-steps.
 
         ```bash
         ncn# ip addr show vlan004
@@ -119,7 +124,7 @@ Run these commands on the rebuilt node.
                valid_lft forever preferred_lft forever
         ```
 
-    2. Change the IP address for `vlan004` if necessary.
+    1. Change the IP address for `vlan004` if necessary.
 
         ```bash
         ncn# vim /etc/sysconfig/network/ifcfg-vlan004
@@ -131,13 +136,13 @@ Run these commands on the rebuilt node.
              IPADDR='10.254.1.16/17'
              ```
 
-    3. Restart the `vlan004` network interface.
+    1. Restart the `vlan004` network interface.
 
         ```bash
         ncn# wicked ifreload vlan004
         ```
 
-    4. Confirm the output from the `dig` command matches the interface.
+    1. Confirm the output from the `dig` command matches the interface.
 
         ```bash
         ncn# ip addr show vlan004
@@ -156,26 +161,29 @@ Run these commands on the rebuilt node.
    10.103.8.11
    ```
 
-2. Confirm the output from the dig command matches the interface.
+2. Confirm the output from the `dig` command matches the interface.
+   
+   1. Check to see if the IP addresses match.
+   
+      If the IP addresses match, proceed to the next step.
+      If they do not match, continue with the following sub-steps.
+   
+      ```bash
+      ip addr show vlan007
+      ```
 
-   * If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
+      Example Output:
 
-     ```bash
-     ip addr show vlan007
-     ```
-
-     Example Output:
-
-     ```screen
-     15: vlan007@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
-          link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
-          inet 10.103.8.11/24 brd 10.103.8.255 scope global vlan007
+      ```screen
+      15: vlan007@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+            link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
+            inet 10.103.8.11/24 brd 10.103.8.255 scope global vlan007
             valid_lft forever preferred_lft forever
             inet6 fe80::ba59:9fff:fe2b:2f9e/64 scope link
                valid_lft forever preferred_lft forever
-     ```
+      ```
 
-     1. Change the IP address for `vlan007` if necessary.
+   1. Change the IP address for `vlan007` if necessary.
    
         ```bash
         vim /etc/sysconfig/network/ifcfg-vlan007
@@ -187,36 +195,37 @@ Run these commands on the rebuilt node.
         IPADDR='10.103.8.11/24'
         ```
 
-     2. Restart the `vlan007` network interface.
+   1. Restart the `vlan007` network interface.
 
         ```bash
         wicked ifreload vlan007
         ```
 
-     3. Confirm the output from the `dig` command matches the interface.
+   1. Confirm the output from the `dig` command matches the interface.
 
         ```bash
         ip addr show vlan007
         ```
 
-## Step 6 - Set the wipe flag back so it will not wipe the disk when the node is rebooted
+### Step 6 - Set the wipe flag back so it will not wipe the disk when the node is rebooted
 
 1. Edit the XNAME.json file and set the `metal.no-wipe=1` value.
 
-2. Do a PUT action for the edited JSON file.
+1. Do a PUT action for the edited JSON file.
    
-   * This command can be run from any node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
+   This command can be run from any node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
      
-     ```bash
-     ncn# curl -i -s -k -H "Content-Type: application/json" \
-         -H "Authorization: Bearer ${TOKEN}" \
-         "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" \
-         -X PUT -d @./${XNAME}.json
-     ```
+   ```bash
+   ncn# curl -i -s -k -H "Content-Type: application/json" \
+      -H "Authorization: Bearer ${TOKEN}" \
+      "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" \
+      -X PUT -d @./${XNAME}.json
+   ```
+   
+   The output from the `ncnHealthChecks.sh` script \(run later in the validation steps\) can be used to verify the `metal.no-wipe` value on every NCN.
 
-   * The output from the `ncnHealthChecks.sh` script \(run later in the "Validation" steps\) can be used to verify the `metal.no-wipe` value on every NCN.
 
+### Step 7 - Proceed to the next step in the NCN rebuild procedure
 
-## Next Step
+For the next step in the NCN rebuild procedure, see [Validate Boot Raid](Validate_Boot_Raid.md).
 
-For the next step in the NCN Rebuild procedure, see [Validate Boot Raid](Validate_Boot_Raid.md).

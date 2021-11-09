@@ -43,7 +43,7 @@ If the `cray-cps-cm-pm` pod is running, there will be an extra step to redeploy 
 
 ### Step 2 - Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig before shutting down the node
 
-**IMPORTANT:** The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites)
+> **IMPORTANT:** The following command will indicate if a CFS job is currently in progress for this node. This command assumes the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites) are set.
 
 Run the following on any node where the `cray cli` has been initialized:
 
