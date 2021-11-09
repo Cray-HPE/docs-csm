@@ -270,7 +270,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       ncn-m# dmsetup -ls 
       ```
 
-      Expected output when the etcd volume is present
+      Expected output when the etcd volume is present will show `ETCDLVM`, but the numbers might be different.
 
       ```bash
       ETCDLVM (254:1)
@@ -282,7 +282,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       ncn-m# dmsetup remove $(dmsetup ls | grep -i etcd | awk '{print $1}')
       ```
 
-      > **Note:** The following output  means the etcd voume  mapper is not present.
+      > **Note:** The following output  means the etcd volume  mapper is not present.
       ```bash
       No device specified.
       Command failed.
