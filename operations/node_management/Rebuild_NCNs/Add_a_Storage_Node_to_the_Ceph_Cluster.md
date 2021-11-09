@@ -100,11 +100,11 @@ This operation can be done to add more than one node at the same time.
    /srv/cray/scripts/common/join_ceph_cluster.sh
    ```
 
-   **IMPORTANT:** While watching your window running `watch ceph -s` you will see the health go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about "failed to probe daemons or devices" and this will clear.
+   **IMPORTANT:** While watching the window running with `watch ceph -s`, the health go to a `HEALTH_WARN` state. This is expected. Most commonly there will be an alert about "failed to probe daemons or devices" and this will clear.
 
 ### Zap OSDs
 
-> **IMPORTANT:** Only do this if you were not able to wipe the node prior to rebuild.
+> **IMPORTANT:** This is only required if the user was unable to wipe the node prior to rebuild.
 
 > **NOTE:** The commands in the Zapping OSDs section will need to be run from a node running ceph-mon. Typically ncn-s00(1/2/3).
 
@@ -128,7 +128,7 @@ This operation can be done to add more than one node at the same time.
 
    > **IMPORTANT:** In the above example the drives on our rebuilt node are showing "Available = no". This is expected because the check is based on the presence of an LVM on the volume.
 
-   > **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that you are not seeing OS drives. These will have a size of 480G.
+   > **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that there are no OS drives. These will have a size of 480G.
 
 1. Zap the drives.
 
@@ -145,9 +145,9 @@ This operation can be done to add more than one node at the same time.
    watch ceph -s
    ```
 
-   You will see the OSD count UP and IN counts increase. **If** you see your **IN** count increase but not reflect the amount of drives being added back in, then you will need to fail over the ceph mgr daemon. This is a known bug and is addressed in newer releases.
+   The OSD will count UP and IN counts increase. **If** the **IN** count increases but does not reflect the amount of drives being added back in, then fail over the ceph mgr daemon. This is a known bug and is addressed in newer releases.
 
-   If you need to fail over the ceph-mgr daemon please run:
+   To fail over the ceph-mgr daemon, run the following command:
 
    ```bash
    ceph mgr fail

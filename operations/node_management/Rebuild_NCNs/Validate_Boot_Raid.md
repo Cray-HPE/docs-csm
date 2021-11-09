@@ -16,7 +16,7 @@ Perform the following steps on **ncn-m001** to validate the `BOOTRAID` artifacts
    ncn-m001# /opt/cray/tests/install/ncn/scripts/validate-bootraid-artifacts.sh
    ```
 
-## WAR CASMINST-2015
+### WAR CASMINST-2015
 
 As a result of rebuilding any NCN(s), remove any dynamically assigned interface IP addresses that did not get released automatically by running the CASMINST-2015 script:
 
@@ -24,8 +24,11 @@ As a result of rebuilding any NCN(s), remove any dynamically assigned interface 
 ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
 ```
 
-Once that is done only follow the steps in the section for the node type that was rebuilt:
+### NCN Rebuild Next Steps 
 
-* [Master Node](Post_Rebuild_Master_Node_Validation.md)
-* [Worker Node](Post_Rebuild_Worker_Node_Validation.md)
-* [Storage Node](Add_a_Storage_Node_to_the_Ceph_Cluster.md).
+Proceed with the NCN rebuild procedure. 
+Only use the sections for the node type that was rebuilt:
+
+* [Master node](Post_Rebuild_Master_Node_Validation.md)
+* [Worker node](Post_Rebuild_Worker_Node_Validation.md)
+* [Storage node](Add_a_Storage_Node_to_the_Ceph_Cluster.md)

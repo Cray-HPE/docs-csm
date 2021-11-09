@@ -25,7 +25,7 @@ After completing the steps for the node type being rebuilt, proceed to the [next
    vgremove -f etcdvg0-ETCDK8S
    ```
 
-2. Unmount the `SDU` mountpoint and remove the volume group.
+2. Unmount the System Dump Utility (SDU) mountpoint and remove the volume group.
 
    ```bash
    umount /var/lib/sdu
