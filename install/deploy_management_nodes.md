@@ -180,8 +180,28 @@ proceed to step 2.
 ### 2. Update Management Node Firmware
 
 The management nodes are expected to have certain minimum firmware installed for BMC, node BIOS, and PCIe card
-firmware. Where possible, the firmware should be updated prior to install. Some firmware can be updated
-during or after the installation, but it is better to meet the minimum NCN firmware requirement before starting.
+firmware. Where possible, the firmware should be updated prior to install. It is good to meet the minimum NCN
+firmware requirement before starting.
+
+   >**Note:** When the PIT node is booted from the LiveCD, it is not possible to use the Firmware Action Service (FAS) to update the
+   the firmware because that service has not yet been installed. However, at this point, it would be possible to use
+   the HPE Cray EX HPC Firmware Pack (HFP) product on the PIT node to learn about the firmware versions available in HFP.
+
+   If the firmware is not updated at this point in the installation workflow, it can be done with FAS after CSM and HFP have 
+   both been installed and configured, however, at that point a rolling reboot procedure for the management nodes will be needed 
+   after the firmware has been updated.
+
+   See the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
+   on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for information about the HPE Cray EX HPC Firmware Pack (HFP) product.
+
+   In the HFP documentation there is information about the recommended firmware packages to be installed.
+   See "Product Details" in the HPE Cray EX HPC Firwmare Pack Installation Guide.
+
+   Some of the component types have manual procedures to check firmware versions and update firmware. 
+   See "Upgrading Firmware Without FAS" in the HPE Cray EX HPC Firwmare Pack Installation Guide.
+   It will be possible to extract the files from the product tarball, but the install.sh script from that product 
+   will be unable to load the firmware versions into the Firmware Action Services (FAS) because the management nodes
+   are not booted and running Kubernetes and FAS cannot be used until Kubernetes is running.
 
 1. (optional) Check these BIOS settings on management nodes [NCN BIOS](../background/ncn_bios.md).
 
