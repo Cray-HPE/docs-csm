@@ -193,10 +193,10 @@ firmware requirement before starting.
    on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for information about the HPE Cray EX HPC Firmware Pack (HFP) product.
 
    In the HFP documentation there is information about the recommended firmware packages to be installed.
-   See "Product Details" in the HPE Cray EX HPC Firwmare Pack Installation Guide.
+   See "Product Details" in the _HPE Cray EX HPC Firwmare Pack Installation Guide_.
 
    Some of the component types have manual procedures to check firmware versions and update firmware. 
-   See "Upgrading Firmware Without FAS" in the HPE Cray EX HPC Firwmare Pack Installation Guide.
+   See "Upgrading Firmware Without FAS" in the _HPE Cray EX HPC Firwmare Pack Installation Guide_.
    It will be possible to extract the files from the product tarball, but the install.sh script from that product 
    will be unable to load the firmware versions into the Firmware Action Services (FAS) because the management nodes
    are not booted and running Kubernetes and FAS cannot be used until Kubernetes is running.
