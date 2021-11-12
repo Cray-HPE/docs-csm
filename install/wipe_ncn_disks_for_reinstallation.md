@@ -219,7 +219,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
     2. Worker nodes.
 
         ```bash
-        ncn-w# umount -v /run/containerd /run/lib-containerd /var/lib/containerd /var/lib/kubelet /var/lib/sdu
+        ncn-w# umount -v /var/lib/kubelet /var/lib/sdu /run/containerd /var/lib/containerd /run/lib-containerd 
         ```
 
     1. Storage nodes.
@@ -310,8 +310,12 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
    1. Stop the RAIDs.
 
+       This step shows status before and after stopping the RAIDs.
+
        ```bash
+       ncn# cat /proc/mdstat
        ncn# for md in /dev/md/*; do mdadm -S -v $md || echo nope ; done
+       ncn# cat /proc/mdstat
        ```
 
    1. List the disks for verification.
