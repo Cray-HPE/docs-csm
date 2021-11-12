@@ -109,19 +109,16 @@ CSM-provided keys.
    ```
 
 <a name="set_root_password"></a>
-## Set the Root Password
+## Configure the Root Password in Vault
 
-This procedure should be run during CSM installation and afterwards whenever
-the password needs to be changed per site requirements.
-
-The root password is managed on NCNs by using the `csm.password` Ansible role
+The root password is applied to NCNs by using the `csm.password` Ansible role
 located in the CSM configuration management repository. Root passwords are set
 and managed in Vault.
 
-1. Set the password in Vault by following steps 1-3 in the
-   [Update NCN Passwords](../security_and_authentication/Update_NCN_Passwords.md)
-   procedure.
-1. Run [NCN personalization](#run_ncn_personalization).
+1. Set the password in Vault by following the _Configure Root Password in Vault_
+   procedure in [Update NCN Passwords](../security_and_authentication/Update_NCN_Passwords.md).
+1. Apply the Vault password to the NCNs in the
+   [NCN personalization](#run_ncn_personalization) procedure.
 
 <a name="run_ncn_personalization"></a>
 ## Run NCN Personalization

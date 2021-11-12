@@ -10,14 +10,27 @@ This process should be done for the "Kubernetes" image used by master and worker
 
 The Kubernetes image is used by the master and worker nodes.
 
+1. Change to the working directory for the Kubernetes image.
+
+   ```bash
+   pit# cd /var/www/ephemeral/data/k8s
+   ```
+
 1. Open the image.
 
    The Kubernetes image will be of the form "kubernetes-0.1.69.squashfs" in /var/www/ephemeral/data/k8s, but the version number may be different.
 
    ```bash
-   pit# cd /var/www/ephemeral/data/k8s
    pit# unsquashfs kubernetes-0.1.69.squashfs
    ```
+
+1. Save the old SquashFS image, kernel, and initrd.
+
+   ```bash
+   pit# mkdir -v old
+   pit# mv -v *squashfs *kernel initrd* old
+   ```
+
 1. Chroot into the image root
 
    ```bash
@@ -64,13 +77,6 @@ The Kubernetes image is used by the master and worker nodes.
    pit# umount -v /var/www/ephemeral/data/k8s/squashfs-root/mnt/squashfs
    ```
 
-1. Save old SquashFS image.
-
-   ```bash
-   pit# mkdir -v old
-   pit# mv -v *squashfs old
-   ```
-
 1. Move new SquashFS image, kernel, and initrd into place.
 
    ```bash
@@ -81,6 +87,36 @@ The Kubernetes image is used by the master and worker nodes.
 
    ```bash
    pit# chmod -v 644 initrd.img.xz
+   ```
+
+1. Rename the new squashfs, kernel, and initrd to include a new version string.
+
+   If the old name of the squashfs was kubernetes-0.1.69.squashfs, then its version was '0.1.69', so the newly created version should be renamed to include a version of '0.1.69-1' with an additional dash and a build iteration number of 1. This will help to track what base version was used.
+
+   ```bash
+   pit# ls -l old/*squashfs
+   -rw-r--r--  1 root root 5135859712 Aug 19 19:10 kubernetes-0.1.69.squashfs
+   ```
+
+   Set the VERSION variable based on the version string displayed by the above command.
+
+   ```bash
+   pit# VERSION=0.1.69-1
+   pit# mv filesystem.squashfs kubernetes-${VERSION}.squashfs
+   pit# mv initrd.img.xz initrd.img-${VERSION}.xz
+   ```
+
+   The kernel file will have a name with the kernel version but not this new $VERSION.
+
+   ```bash
+   pit# ls -l *kernel
+   -rw-r--r--  1 root root    8552768 Aug 19 19:09 5.3.18-24.75-default.kernel
+   ```
+
+   Rename it to include the version string.
+
+   ```bash
+   pit# mv 5.3.18-24.75-default.kernel 5.3.18-24.75-default-${VERSION}.kernel
    ```
 
 1. Set the boot links.
@@ -96,13 +132,25 @@ The Kubernetes image will have the new password for the next boot.
 
 The Ceph image is used by the utility storage nodes.
 
+1. Change to the working directory for the Kubernetes image.
+
+   ```bash
+   pit# cd /var/www/ephemeral/data/k8s
+   ```
+
 1. Open the image.
 
    The Ceph image will be of the form "storage-ceph-0.1.69.squashfs" in /var/www/ephemeral/data/ceph, but the version number may be different.
 
    ```bash
-   pit# cd /var/www/ephemeral/data/ceph
    pit# unsquashfs storage-ceph-0.1.69.squashfs
+   ```
+
+1. Save the old SquashFS image, kernel, and initrd.
+
+   ```bash
+   pit# mkdir -v old
+   pit# mv -v *squashfs *kernel initrd* old
    ```
 
 1. Change into the image root
@@ -162,6 +210,36 @@ The Ceph image is used by the utility storage nodes.
 
    ```bash
    pit# chmod -v 644 initrd.img.xz
+   ```
+
+1. Rename the new squashfs, kernel, and initrd to include a new version string.
+
+   If the old name of the squashfs was storage-ceph-0.1.69.squashfs, then its version was '0.1.69', so the newly created version should be renamed to include a version of '0.1.69-1' with an additional dash and a build iteration number of 1. This will help to track what base version was used.
+
+   ```bash
+   pit# ls -l old/*squashfs
+   -rw-r--r--  1 root root 5135859712 Aug 19 19:10 storage-ceph-0.1.69.squashfs
+   ```
+
+   Set the VERSION variable based on the version string displayed by above command.
+
+   ```bash
+   pit# VERSION=0.1.69-1
+   pit# mv filesystem.squashfs storage-ceph-${VERSION}.squashfs
+   pit# mv initrd.img.xz initrd.img-${VERSION}.xz
+   ```
+
+   The kernel file will have a name with the kernel version but not this new $VERSION.
+
+   ```bash
+   pit# ls -l *kernel
+   -rw-r--r--  1 root root    8552768 Aug 19 19:09 5.3.18-24.75-default.kernel
+   ```
+
+   Rename it to include the version string.
+
+   ```bash
+   pit# mv 5.3.18-24.75-default.kernel 5.3.18-24.75-default-${VERSION}.kernel
    ```
 
 1. Set the boot links.
