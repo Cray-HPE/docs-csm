@@ -6,6 +6,7 @@ This page will assist you with configuring and activating your booted LiveCD thr
     * [LiveCD Interfaces](#livecd-interfaces)
     * [Setup the Site-Link Connection(s)](#setup-site-link-connections)
     * [Setup Internal Connections](#setup-internal-connections)
+    * [Download and Install the Workaround and Documentation RPMs](#update-docs-and-wars)
 * [Customization](#customization)
     * [Hostname](#hostname)
     * [SHASTA-CFG](#shasta-cfg)
@@ -82,6 +83,16 @@ pit# wicked ifreload all
 pit# /root/bin/csi-setup-vlan002.sh $nmn_cidr
 pit# /root/bin/csi-setup-vlan004.sh $hmn_cidr
 pit# /root/bin/csi-setup-vlan007.sh $can_cidr
+```
+
+<a name="update-docs-and-wars"></a>
+#### Download and Install the Workaround and Documentation RPMs
+If this machine does not have direct internet access these RPMs will need to be externally downloaded and
+then copied to be installed.
+
+```bash
+pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/docs-csm/docs-csm-latest.noarch.rpm
+pit# rpm -Uvh https://storage.googleapis.com/csm-release-public/shasta-1.4/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
 ```
 
 <a name="customization"></a>
