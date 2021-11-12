@@ -64,18 +64,18 @@ Available Platform Health Checks:
 
 There are multiple Goss test suites available that cover a variety of sub-systems. The platform health checks are defined in the test suites `ncn-healthcheck` and `ncn-kubernetes-checks`.
 
-Run the NCN health checks with the following command:
+Run the NCN health checks with the following command (If m001 is the PIT node, run on the PIT, otherwise run from any NCN):
 
-**IMPORTANT:** Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block. 
+**IMPORTANT:** Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
 
 ```bash
-ncn# /opt/cray/tests/install/ncn/automated/ncn-healthcheck
+# /opt/cray/tests/install/ncn/automated/ncn-healthcheck
 ```
 
 And the Kubernetes test suite via:
 
 ```bash
-ncn# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
+# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 ```
 Review the output for `Result: FAIL` and follow the instructions provided to resolve any such test failures. With the exception of the [Known Test Issues](#autogoss-issues), all health checks are expected to pass.
 
@@ -86,7 +86,7 @@ Review the output for `Result: FAIL` and follow the instructions provided to res
 * Kubernetes Query BSS Cloud-init for ca-certs
   - This test may fail immediately after platform install. It should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * Kubernetes Velero No Failed Backups
-  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the `velero` command to delete backups from a Kubernetes node to clear this situation.
+  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the `velero` command to delete backups from a Kubernetes node to clear this situation. See the output of the test for more details on how to cleanup backups that have failed due to a known interruption.
 * Verify spire-agent is enabled and running
 
   - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker nodes and master nodes), logging errors (via journalctl) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. Even though the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.
