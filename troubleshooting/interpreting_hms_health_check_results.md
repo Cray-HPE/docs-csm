@@ -5,11 +5,12 @@
 2. [HMS Smoke Tests](#hms-smoke-tests)
 3. [HMS Functional Tests](#hms-functional-tests)
 4. [Additional Troubleshooting](#additional-troubleshooting)
+5. [Install Blocking vs. Non-Blocking Failures](#blocking-vs-nonblocking-failures)
 
 <a name="introduction"></a>
 ### Introduction
 
-This document describes how to interpret the results of the HMS health check scripts and techniques for troubleshooting when failures occur.
+This document describes how to interpret the results of the HMS Health Check scripts and techniques for troubleshooting when failures occur.
 
 <a name="hms-smoke-tests"></a>
 ### HMS Smoke Tests
@@ -240,3 +241,20 @@ Use the following command to check the current discovery status of the endpoint:
 ```
 ncn# cray hsm inventory redfishEndpoints describe <xname>
 ```
+
+<a name="blocking-vs-nonblocking-failures"></a>
+### Install Blocking vs. Non-Blocking Failures
+
+The HMS Health Checks include tests for multiple types of system components, some of which are critical for the installation of the system, while others are not.
+
+The following types of HMS test failures should be considered blocking for system installations:
+
+* HMS service pods not running
+* HMS service APIs unreachable through the API Gateway or Cray CLI
+* Failures related to HMS discovery (unreachable BMCs, unresponsive controller hardware, no Redfish connectivity)
+
+The following types of HMS test failures should **not** be considered blocking for system installations:
+
+* Failures due to hardware issues on individual compute nodes
+
+It is typically safe to postpone the investigation and resolution of non-blocking failures until after the CSM installation has completed.
