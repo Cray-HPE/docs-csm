@@ -11,7 +11,7 @@
 <a name="introduction"></a>
 ### Introduction
 
-This document describes how to interpret the results of the HMS health check scripts and techniques for troubleshooting when failures occur.
+This document describes how to interpret the results of the HMS Health Check scripts and techniques for troubleshooting when failures occur.
 
 <a name="hms-smoke-tests"></a>
 ### HMS Smoke Tests
@@ -246,7 +246,7 @@ ncn# cray hsm inventory redfishEndpoints describe <xname>
 <a name="blocking-vs-nonblocking-failures"></a>
 ### Install Blocking vs. Non-Blocking Failures
 
-The HMS health checks include tests for multiple types of system components, some of which are critical for the installation of the system, while others are not.
+The HMS Health Checks include tests for multiple types of system components, some of which are critical for the installation of the system, while others are not.
 
 The following types of HMS test failures should be considered blocking for system installations:
 
