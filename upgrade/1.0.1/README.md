@@ -78,6 +78,22 @@ to resolve potential problems and then try running `setup-nexus.sh` again. Note 
 report `FAIL` when uploading duplicate assets. This is ok as long as `setup-nexus.sh` outputs `setup-nexus.sh: OK` and exits
 with status code `0`.
 
+<a name="run-validation-checks-pre-upgrade"></a>
+## Run Validation Checks (Pre-Upgrade)
+
+_Pre-upgrades must run after nexus is setup in order to ensure any and all necessary RPMs are available_.
+
+1. Invoke the 1.2 NCN boot order backport
+
+   > **`NOTE`** This presumes all NCNs are still online, and their BMCs are reachable. If some NCNs are not reachable over SSH then the EFI boot menus will not be corrected. If some BMCs are not reachable over IPMI then vendor specific tweaks will not be applied.
+
+   ```bash
+   ncn-m001# export IPMI_PASSWORD=changeme
+   ncn-m001# export CI=1
+   ncn-m001# /usr/share/doc/csm/upgrade/lib/validation/CASMREL-776-CSM12-NCN-boot-order-backport/install-hotfix.sh
+   ```
+
+
 <a name="upgrade-services"></a>
 
 ## Upgrade Services
