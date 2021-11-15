@@ -135,22 +135,19 @@ keys will be republished.
    ```
 
 <a name="set_root_password"></a>
-## Set the Root Password
-
-This procedure should be run during CSM installation and afterwards whenever
-the password needs to be changed per site requirements.
+## Configure the Root Password in Vault
 
 The root password is managed on NCNs by using the `csm.password` Ansible role
 located in the CSM configuration management repository. Root passwords are set
 and managed in Vault.
 
-1. Set the password in Vault by following steps 1-3 in the
-   [Update NCN Passwords](../security_and_authentication/Update_NCN_Passwords.md)
-   procedure.
-1. Run [NCN personalization](#run_ncn_personalization).
+1. Set the password in Vault by following the _Configure Root Password in Vault_
+   procedure in [Update NCN Passwords](../security_and_authentication/Update_NCN_Passwords.md#configure_root_password_in_vault).
+1. Apply the Vault password to the NCNs in the
+   [Perform NCN personalization](#perform_ncn_personalization) procedure.
 
-<a name="run_ncn_personalization"></a>
-## Run NCN Personalization
+<a name="perform_ncn_personalization"></a>
+## Perform NCN Personalization
 
 After completing the previous procedures, apply the configuration to the NCNs
 by running NCN personalization with [CFS](../configuration_management/Configuration_Management.md).
@@ -245,12 +242,17 @@ By default the script will perform the following steps:
 ### Automatic CSM Configuration Overrides
 
 The script also supports several flags to override these behaviors:
-- csm-release: Overrides the version of the CSM release that is used. Defaults to the latest version.
-- git-commit: Overrides the git commit cloned for the configuration content. Defaults to the latest
-commit on the csm-release branch.
-- git-clone-url: Overrides the source of the configuration content. Defaults to `https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git`
-- ncn-config-file: Sets a file other than `ncn-personalization.json` to be used for the configuration.
-- xnames: A comma-separated list xnames to deploy to. Defaults to all `Management` nodes in HSM.
-- clear-state: Clears existing state from components to ensure CFS runs. This can be used if
-configuration needs to be re-run on successful nodes with no change to the git content since the previous
-run. For examples, if the ssh keys have changed. 
+- `csm-release:` Overrides the version of the CSM release that is used. Defaults
+  to the latest version.
+- `git-commit`: Overrides the git commit cloned for the configuration content.
+  Defaults to the latest commit on the csm-release branch.
+- `git-clone-url`: Overrides the source of the configuration content. Defaults
+  to `https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git`.
+- `ncn-config-file`: Sets a file other than `ncn-personalization.json` to be
+  used for the configuration.
+- `xnames`: A comma-separated list xnames to deploy to. Defaults to all
+  `Management` nodes in HSM.
+- `clear-state`: Clears existing state from components to ensure CFS runs. This
+   can be used if configuration needs to be re-run on successful nodes with no
+   change to the git content since the previous run. For examples, if the ssh
+   keys have changed. 
