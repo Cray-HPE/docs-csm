@@ -66,7 +66,7 @@ If you are reinstalling a system, the BMCs for the NCNs may be set to static IP 
 ```bash
 ncn# export USERNAME=root
 ncn# export IPMI_PASSWORD=changeme
-ncn# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+ncn# for h in $( grep mgmt /etc/hosts | grep -v m001 | awk -F ',' '{print $2}' )
 do
 ipmitool -U $USERNAME -I lanplus -H $h -E lan set 1 ipsrc dhcp
 done
@@ -77,7 +77,7 @@ Some BMCs need a cold reset in order to pick up this change fully:
 ```bash
 ncn# export USERNAME=root
 ncn# export IPMI_PASSWORD=changeme
-ncn# for h in $( grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' )
+ncn# for h in $( grep mgmt /etc/hosts | grep -v m001 | awk -F ',' '{print $2}' )
 do
 ipmitool -U $USERNAME -I lanplus -H $h -E mc reset cold
 done

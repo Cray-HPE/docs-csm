@@ -220,7 +220,13 @@ sections, but there is also a general troubleshooting topic.
       with many devices on the system. FAS can be used to update the firmware for all of the devices it
       communicates with at once, or specific devices can be targeted for a firmware update.
 
-      See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md)
+      >**IMPORTANT:** 
+      Before FAS can be used to update firmware, refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
+      on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for information about how to install
+      the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
+      available. Once FAS is aware that new firmware is available, then see
+      [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
+
    <a name="prepare_compute_nodes"></a>
 
    1. Prepare Compute Nodes
@@ -230,6 +236,7 @@ sections, but there is also a general troubleshooting topic.
 
       These compute node types require preparation.
          * HPE Apollo 6500 XL645d Gen10 Plus
+         * Gigabyte 
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
    <a name="next_topic"></a>
