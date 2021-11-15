@@ -48,7 +48,7 @@ keys. The `replace_ssh_keys.sh` script can be used to replace the keys from
 files.
 
 ```bash
-ncn-m001# /usr/share/doc/csm/scripts/install/configuration/replace_ssh_keys.sh \
+ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/replace_ssh_keys.sh \
 --public-key-file ./id_rsa.pub --private-key-file ./id_rsa
 ```
 
@@ -115,7 +115,7 @@ To restore the default CSM keys, administrators can run the
 `restore_ssh_keys.sh` script.
 
 ```bash
-ncn-m001# /usr/share/doc/csm/scripts/install/configuration/restore_ssh_keys.sh
+ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/restore_ssh_keys.sh
 ```
 
 Alternatively, the keys can be deleted from Kubernetes directly.
@@ -159,7 +159,7 @@ running the steps manually. For more information on the script, see
 [Automatically Apply CSM Configuration to NCNs](#auto_apply_csm_config).
 
 ```bash
-ncn-m001# /usr/share/doc/csm/scripts/install/configuration/apply_csm_configuration.sh
+ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh
 ```
 
 To manually run NCN personalization, first gather the following information: 
@@ -227,7 +227,7 @@ CSM configuration can automatically be applied to NCNs by running the
 `apply_csm_configuration.sh` script.
 
 ```bash
-ncn-m001# /usr/share/doc/csm/scripts/install/configuration/apply_csm_configuration.sh
+ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh
 ```
 
 ### Automatic CSM Configuration Steps
