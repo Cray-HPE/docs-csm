@@ -48,7 +48,7 @@ Use this procedure to verify that a node has been successfully removed from the 
     Class = "River"
     ```
 
-3.  If a River node will not be replaced, update the SLS input file to omit it.
+3.  If a River node will not be replaced, update SLS to omit it.
 
 
 
