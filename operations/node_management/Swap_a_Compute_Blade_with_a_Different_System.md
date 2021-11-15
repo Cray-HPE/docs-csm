@@ -1,6 +1,6 @@
 
 
-## Swap a compute blade with a different system
+## Swap a Compute Blade with a Different System
 
 Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 

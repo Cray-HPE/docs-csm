@@ -44,7 +44,15 @@ with CFS.
 ### Option 2: Provide Custom SSH Keys
 
 Administrators may elect to replace the CSM-provided keys with their own custom
-keys.
+keys. The `replace_ssh_keys.sh` script can be used to replace the keys from
+files.
+
+```bash
+ncn-m001# /usr/share/doc/csm/scripts/install/configuration/replace_ssh_keys.sh \
+--public-key-file ./id_rsa.pub --private-key-file ./id_rsa
+```
+
+Alternatively, the keys stored in Kubernetes can be updated directly. 
 
 1. Replace the private key half:
    ```bash
@@ -103,11 +111,19 @@ associated with the product.
 > Use this procedure if switching from custom keys to the default CSM SSH keys
 > only, otherwise it can be skipped.
 
+To restore the default CSM keys, administrators can run the
+`restore_ssh_keys.sh` script.
+
+```bash
+ncn-m001# /usr/share/doc/csm/scripts/install/configuration/restore_ssh_keys.sh
+```
+
+Alternatively, the keys can be deleted from Kubernetes directly.
 The `csm-ssh-keys` Kubernetes deployment provided by CSM periodically checks the
 ConfigMap and secret containing the key information. If these entries do not
-exist, it will recreate them from the default CSM keys. In this case, deleting
-the associated ConfigMap and secrets will republish them with the default
-CSM-provided keys.
+exist, it will recreate them from the default CSM keys. To manually restore
+keys, delete the associated ConfigMap and secret, and the default CSM-provided
+keys will be republished.
 
 1. Delete the `csm-private-key` Kubernetes secret.
    ```bash
@@ -138,8 +154,15 @@ and managed in Vault.
 
 After completing the previous procedures, apply the configuration to the NCNs
 by running NCN personalization with [CFS](../configuration_management/Configuration_Management.md).
+This can be accomplished by running the `apply_csm_configuration.sh` script, or
+running the steps manually. For more information on the script, see
+[Automatically Apply CSM Configuration to NCNs](#auto_apply_csm_config).
 
-Prior to running NCN personalization, gather the following information: 
+```bash
+ncn-m001# /usr/share/doc/csm/scripts/install/configuration/apply_csm_configuration.sh
+```
+
+To manually run NCN personalization, first gather the following information: 
 
 * HTTP clone URL for the configuration repository in [VCS](../configuration_management/Version_Control_Service_VCS.md)
 * Path to the Ansible play to run in the repository
@@ -196,3 +219,38 @@ Prior to running NCN personalization, gather the following information:
 
 > **NOTE:** The CSM configuration layer _MUST_ be the first layer in the
 > NCN personalization CFS configuration.
+
+<a name="auto_apply_csm_config"></a>
+## Automatically Apply CSM Configuration to NCNs
+
+CSM configuration can automatically be applied to NCNs by running the
+`apply_csm_configuration.sh` script.
+
+```bash
+ncn-m001# /usr/share/doc/csm/scripts/install/configuration/apply_csm_configuration.sh
+```
+
+### Automatic CSM Configuration Steps
+ 
+By default the script will perform the following steps:
+1. Finds the latest installed release version of the CSM product stream.
+1. Finds the latest commit on the release branch of the `csm-config-management` repo.
+1. Creates or updates the `ncn-personalization.json` configuration file.
+1. Finds all nodes in HSM with the `Management` role.
+1. Disables configuration for all NCNs.
+1. Updates the `ncn-personalization` configuration in CFS from the `ncn-personalization.json` file.
+1. Enables configuration for all NCN nodes, and sets their desired configuration to `ncn-personalization`.
+1. Monitors CFS until all NCN nodes have successfully completed, or failed, configuration.
+
+### Automatic CSM Configuration Overrides
+
+The script also supports several flags to override these behaviors:
+- csm-release: Overrides the version of the CSM release that is used. Defaults to the latest version.
+- git-commit: Overrides the git commit cloned for the configuration content. Defaults to the latest
+commit on the csm-release branch.
+- git-clone-url: Overrides the source of the configuration content. Defaults to `https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git`
+- ncn-config-file: Sets a file other than `ncn-personalization.json` to be used for the configuration.
+- xnames: A comma-separated list xnames to deploy to. Defaults to all `Management` nodes in HSM.
+- clear-state: Clears existing state from components to ensure CFS runs. This can be used if
+configuration needs to be re-run on successful nodes with no change to the git content since the previous
+run. For examples, if the ssh keys have changed. 
