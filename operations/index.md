@@ -26,7 +26,6 @@ The following administrative topics can be found in this guide:
   - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
   - [Hardware Management (HM) Collector](#hardware-management-hm-collector)
   - [Node Management](#node-management)
-  - [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
   - [Network](#network)
     - [Management Network](#management-network)
     - [Customer Access Network (CAN)](#customer-access-network-can)
@@ -482,6 +481,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Add a Standard Rack Node](node_management/Add_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node](node_management/Move_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node (Same Rack/Same HSN Ports)](node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
+    * [Verify Node Removal](node_management/Verify_Node_Removal.md)
   * [Clear Space in Root File System on Worker Nodes](node_management/Clear_Space_in_Root_File_System_on_Worker_Nodes.md)
   * [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
   * [Reset Credentials on Redfish Devices](node_management/Reset_Credentials_on_Redfish_Devices_for_Reinstallation.md)
@@ -504,20 +504,6 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Enable Passwordless Connections to Liquid Cooled Node BMCs](node_management/Enable_Passwordless_Connections_to_Liquid_Cooled_Node_BMCs.md)
     * [View BIOS Logs for Liquid Cooled Nodes](node_management/View_BIOS_Logs_for_Liquid_Cooled_Nodes.md)
   * [Configure NTP on NCNs](node_management/Configure_NTP_on_NCNs.md)
-
-
-<a name="reds"></a>
-
-## River Endpoint Discovery Service (REDS)
-
-The River Endpoint Discovery Service \(REDS\) performs geolocation and initialization of compute nodes, based on a mapping file that is provided with each system.
-
-  * [Configure a Management Switch for REDS](river_endpoint_discovery_service/Configure_a_Management_Switch_for_REDS.md)
-  * [Initialize and Geolocate Nodes](river_endpoint_discovery_service/Initialize_and_Geolocate_Nodes.md)
-  * [Verify Node Removal](river_endpoint_discovery_service/Verify_Node_Removal.md)
-  * [Troubleshoot Common REDS Issues](river_endpoint_discovery_service/Troubleshoot_Common_REDS_Issues.md)
-    * [Troubleshot Common Error Messages in REDS Logs](river_endpoint_discovery_service/Troubleshoot_Common_Error_Messages_in_REDS_Logs.md)
-    * [Clear State and Restart REDS](river_endpoint_discovery_service/Clear_State_and_Restart_REDS.md)
 
 
 <a name="network"></a>
