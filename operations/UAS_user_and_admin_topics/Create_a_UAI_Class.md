@@ -1,3 +1,6 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: View a UAI Class](View_a_UAI_Class.md)
 
 ## Create a UAI Class
 
@@ -5,7 +8,10 @@ Add a new User Access Instance (UAI) class to the User Access Service (UAS) so t
 
 ### Prerequisites
 
-Install and initialize the `cray` administrative CLI.
+* The administrator must be logged into an NCN or a host that has administrative access to the HPE Cray EX System API Gateway
+* The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
+* The HPE Cray EX System CLI must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
+* The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
 
 ### Procedure
 
@@ -14,23 +20,15 @@ Install and initialize the `cray` administrative CLI.
     ```
     ncn-m001-pit# cray uas admin config classes create --image-id <image-id> [options]
     ```
-    `--image-id <image-id>` specifies the UAI image identifier of the UAI image to be used in creating UAIs of the new class. Any number of classes using the same image id can be defined.
 
-    The following options are available:
+    The only required option is `--image-id IMAGE_ID` which sets the container image that will be used to create a UAI from this UAI Class.
 
-    * `--image-id <image-id>` set the UAI image to be used creating UAIs of this class (included here for completeness, this option is required for creation, not for updates)
-    * `--volume-list '<volume-id>[,<volume-id[,...]]'` set up the list of volumes mounted by UAIs of this class
-    * `--resource-id <resource-id>` set a resource specification to be used for UAIs of this class
-    * `--uai-compute-network yes|no` set the `uai_compute_network` flag described above in the UAI class
-    * `--opt-ports '<port-number>[,<port-number[,...]]'` sets up TCP ports in addition to SSH on which UAIs of this class will listen on their external IP address (i.e. the address SSH is listening on)
-    * `-uai-creation-class <class-id>` for broker UAIs only, the class of end-user UAIs the broker will create when handling a login
-    * `--namespace '<namespace-name>'` sets the Kubernetes namespace where UAIs of this class will run
-    * `--priority-class-name '<priority-class-name>'` set the Kubernetes priority class of UAIs created with this class
-    * `--public-ip yes|no` specify whether UAIs created with this class will listen on a public (LoadBalancer) IP address (`yes`) or a Kubernetes private (ClusterIP) IP address (`no`)
-    * `--default yes|no` specify whether this UAI class should be used as a default UAI class or not (see description in the previous section)
-    * `--comment 'text'` set a free-form text comment on the UAI class
+    Other options and arguments can be discovered using the:
 
-    Only the `--image-id` option is required to create a UAI class. In that case, a UAI class with the specified UAI Image and no volumes will be created.
+    ```
+    ncn-m001-pit# cray uas admin config classes create --help
+    ```
 
+    command.  See [UAI Classes](UAI_Classes.md) for more information on what the settings in a UAI Class mean and how to use them.
 
-
+[Next Topic: View a UAI Class](View_a_UAI_Class.md)

@@ -1,7 +1,14 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
 
-## UAS and UAI Health Checks
+[Next Topic: Troubleshoot UAS Issues](Troubleshoot_UAS_Issues.md)
 
-Initialize and authorize the CLI so a user may run procedures on any given node.
+
+## UAS and UAI Legacy Mode Health Checks
+
+Check the health of UAS and UAI to validate installation / upgrade of an HPE Cray EX system.  This is a legacy mode procedure that can be run at installation / upgrade time to make sure that the following are true:
+* UAS is installed and running correctly
+* UAI images are installed and registered correctly
+* UAIs can be created in legacy mode
 
 ### Initialize and Authorize the CLI
 
@@ -95,7 +102,7 @@ default_image = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 image_list = [ "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest",]
 ```
 
-The output shows that the pre-made end-user UAI image, cray/cray-uai-sles15sp1:latest, is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use. If other UAI images have been created and registered, they may also appear in the output.
+The output shows that the pre-made End-User UAI image, cray/cray-uai-sles15sp1:latest, is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use. If other UAI images have been created and registered, they may also appear in the output.
 
 ### Validate UAI Creation
 
@@ -234,7 +241,7 @@ ncn-w003# kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | 
 
 ### UAI Images not in Registry
 
-If output is similar to the following, the pre-made end-user UAI image is not in the user's local registry \(or whatever registry it is being pulled from, see the uai\_img value for details\). Locate and the image and push / import it to the registry.
+If output is similar to the following, the pre-made End-User UAI image is not in the user's local registry \(or whatever registry it is being pulled from, see the uai\_img value for details\). Locate and the image and push / import it to the registry.
 
 ```bash
 ncn-w003# cray uas list
@@ -269,3 +276,4 @@ ncn-w003# kubectl describe -n user <pod-name>
 If volumes are missing, they will be in the Events:section of the output. Other problems may show up there as well. The names of the missing volumes or other issues should indicate what needs to be fixed to enable the UAI.
 
 
+[Next Topic: Troubleshoot UAS Issues](Troubleshoot_UAS_Issues.md)

@@ -1,9 +1,12 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: Configure A Default UAI Class for Legacy Mode](Configure_a_Default_UAI_Class_for_Legacy_Mode.md)
 
 ## Legacy Mode User-Driven UAI Management
 
 In the legacy mode, users create and manage their own UAIs through the Cray CLI. A user may create, list and delete only UAIs owned by the user. The user may not create a UAI for another user, nor may the user see or delete UAIs owned by another user. Once created, the information describing the UAI gives the user the information needed to reach the UAI using SSH and log into it.
 
-The following diagram illustrates a system running with UAIs created in the legacy mode by four users, each of whom has created at least one end-user UAI. Notice that the example user Pat has created two end-user UAIs:
+The following diagram illustrates a system running with UAIs created in the legacy mode by four users, each of whom has created at least one End-User UAI. Notice that the example user Pat has created two End-User UAIs:
 
 ![UAS Legacy Mode](../../img/uas_legacy_mode.svg)
 
@@ -11,4 +14,8 @@ In the simplest UAS configuration, there is some number of UAI images available 
 
 ### The Benefits of Using UAI Classes with Legacy Mode
 
-A slightly more sophisticated configuration approach defines a default UAI Class that is always used by legacy mode UAI creation. When this approach is taken, the user can no longer specify the image to use, as it will be supplied by the UAI class, and the volumes mounted in any UAI created in legacy mode will be based on the specified UAI class. As long as volumes do not conflict within the list of volumes in a given UAI class, there is no need to avoid duplicate mount-path settings in the global list of volumes when this approach is used.
+A slightly more sophisticated configuration approach defines a default [UAI Class](UAI_Classes.md) that is always used by legacy mode UAI creation. When this approach is taken, the user can no longer specify the image to use, as it will be supplied by the UAI class, and the volumes mounted in any UAI created in legacy mode will be based on the specified UAI class. As long as volumes do not conflict within the list of volumes in a given UAI class, there is no need to avoid duplicate mount-path settings in the global list of volumes when this approach is used.  All other configuration in the default UAI Class will also be applied to all new legacy mode UAIs, so, for example, a site can place timeouts or resource specifications on UAIs by defining them in the default UAI Class.
+
+The [UAI Classes](UAI_Classes.md) section provides information on what might go in an End-User UAI Class and what should specifically go in the Non-Brokered UAI Class used in legacy mode.
+
+[Next Topic: Configure A Default UAI Class for Legacy Mode](Configure_a_Default_UAI_Class_for_Legacy_Mode.md)

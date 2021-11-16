@@ -1,3 +1,6 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: Troubleshoot UAS by Viewing Log Output](Troubleshoot_UAS_by_Viewing_Log_Output.md)
 
 ## Troubleshoot UAS Issues
 
@@ -214,3 +217,4 @@ Warning  Failed
 Scheduling  21s (x20 over 4m31s)  default-scheduler  0/4 nodes are available: 1 Insufficient pods, 3 node(s) didn't match node selector.
 ```
 
+[Next Topic: Troubleshoot UAS by Viewing Log Output](Troubleshoot_UAS_by_Viewing_Log_Output.md)

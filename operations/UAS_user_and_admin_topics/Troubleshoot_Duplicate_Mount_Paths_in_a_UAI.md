@@ -1,3 +1,6 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: Troubleshoot Missing or Incorrect UAI Images](Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
 
 ## Troubleshoot Duplicate Mount Paths in a UAI
 
@@ -59,3 +62,5 @@ volumename = "delete-me"
 path = "/tmp/foo"
 type = "DirectoryOrCreate"
 ```
+
+[Next Topic: Troubleshoot Missing or Incorrect UAI Images](Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
