@@ -17,17 +17,10 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [Topics:](#topics)
   - [1. Platform Health Checks](#platform-health-checks)
     - [1.1 ncnHealthChecks](#pet-ncnhealthchecks)
-    - [1.2 ncnPostgresHealthChecks](#pet-ncnpostgreshealthchecks)
-    - [1.3 BGP Peering Status and Reset](#pet-bgp)
-      - [1.3.1 Mellanox Switch](#pet-bgp-mellanox)
-      - [1.3.2 Aruba Switch](#pet-bgp-aruba)
-    - [1.4 Verify that KEA has active DHCP leases](#net-kea)
-    - [1.5 Verify ability to resolve external DNS](#net-extdns)
-    - [1.6 Verify Spire Agent is Running on Kubernetes NCNs](#net-spire)
-    - [1.7 Verify the Vault Cluster is Healthy](#net-vault)
-    - [1.8 Automated Goss Testing](#automated-goss-testing)
-      - [1.8.1 Known Test Issues](#autogoss-issues)
-    - [1.9 OPTIONAL Check of System Management Monitoring Tools](#optional-check-of-system-management-monitoring-tools)
+      - [1.1.1 Known Test Issues](#autogoss-issues)
+    - [1.2 OPTIONAL Check of ncnHealthChecks Resources](#pet-ncnhealthchecks-resources)
+      - [1.2.1 Known Issues](#known-issues)
+    - [1.3 OPTIONAL Check of System Management Monitoring Tools](#optional-check-of-system-management-monitoring-tools)
   - [2. Hardware Management Services Health Checks](#hms-health-checks)
     - [2.1 HMS CT Test Execution](#hms-test-execution)
     - [2.2 Aruba Switch SNMP Fixup](#hms-aruba-fixup)
@@ -51,7 +44,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
 <a name="platform-health-checks"></a>
 ## 1. Platform Health Checks
 
-Scripts do not verify results. Script output includes analysis needed to determine pass/fail for each check. All health checks are expected to pass.
+All platform health checks are expected to pass. Each check has been implemented as a [Goss](https://github.com/aelsabbahy/goss) test which reports a PASS or FAIL.
 
 Health Check scripts can be run:
 * After CSM install.sh has been run (not before)
@@ -61,338 +54,42 @@ Health Check scripts can be run:
 * Any time there is unexpected behavior on the system to get a baseline of data for CSM services and components
 * In order to provide relevant information to support tickets that are being opened after CSM install.sh has been run
 
-
 Available Platform Health Checks:
 1. [ncnHealthChecks](#pet-ncnhealthchecks)
-1. [ncnPostgresHealthChecks](#pet-ncnpostgreshealthchecks)
-1. [BGP Peering Status and Reset](#pet-bgp)
-1. [KEA / DHCP](#net-kea)
-1. [External DNS](#net-extdns)
-1. [Spire Agent](#net-spire)
-1. [Vault Cluster](#net-vault)
-1. [Automated Goss Testing](#automated-goss-testing)
+1. [OPTIONAL Check of ncnHealthChecks Resources](#pet-optional-ncnhealthchecks-resources)
+1. [OPTIONAL Check of System Management Monitoring Tools](#optional-check-of-system-management-monitoring-tools)
 
 <a name="pet-ncnhealthchecks"></a>
 ### 1.1 ncnHealthChecks
 
-Health Check scripts can be found and run on any worker or master node (not on PIT node), from any directory.
+There are multiple Goss test suites available that cover a variety of sub-systems. The platform health checks are defined in the test suites `ncn-healthcheck` and `ncn-kubernetes-checks`.
 
-   ```bash
-   ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
-   ```
+Run the NCN health checks with the following command (If m001 is the PIT node, run on the PIT, otherwise run from any NCN):
 
-The ncnHealthChecks script reports the following health information:
-* Kubernetes status for master and worker NCNs
-* Ceph health status
-* Health of etcd clusters
-* Number of pods on each worker node for each etcd cluster
-* Alarms set for any of the Etcd clusters
-* Health of Etcd cluster's database
-* List of automated etcd backups for the Boot Orchestration Service (BOS), Boot Script Service (BSS), Compute Rolling Upgrade Service (CRUS), and Domain Name Service (DNS), and Firmware Action Service (FAS) clusters
-* NCN node uptimes
-* NCN master and worker node resource consumption
-* NCN node xnames and metal.no-wipe status
-* NCN worker node pod counts
-* Pods yet to reach the running state
-
-Execute the ncnHealthChecks script and analyze the output of each individual check.
-
-**IMPORTANT:** When the PIT node is booted, the NCN node metal.no-wipe status is not available and is correctly reported as 'unavailable'. Once ncn-m001 has been booted, the NCN metal.no-wipe status is expected to be reported as metal.no-wipe=1.
-
-**IMPORTANT:** Only when ncn-m001 has been booted, if the output of the ncnHealthChecks.sh script shows that there are nodes that do not have the metal.no-wipe=1 status, then do the following:
+**IMPORTANT:** Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
 
 ```bash
-ncn# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
+# /opt/cray/tests/install/ncn/automated/ncn-healthcheck
 ```
 
-**IMPORTANT:** If the output of pod statuses indicates that there are pods in the `Evicted` state, it may be due to the /root file system being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%. This may commonly happen on ncn-m001 as it is a location that install and doc files may be downloaded to. It may be necessary to clean up space in the /root directory if this is the root cause of pod evictions. The following commands can be used to determine if analysis of files under /root is needed to free-up space.
+And the Kubernetes test suite via:
 
 ```bash
-ncn# df -h /root
-Filesystem      Size  Used Avail Use% Mounted on
-LiveOS_rootfs   280G  245G   35G  88% /
+# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 ```
+Review the output for `Result: FAIL` and follow the instructions provided to resolve any such test failures. With the exception of the [Known Test Issues](#autogoss-issues), all health checks are expected to pass.
 
-```bash
-ncn# du -h -s /root/
-225G  /root/
-```
 
-```bash
-ncn# du -ah -B 1024M /root | sort -n -r | head -n 10
-```
+<a name="autogoss-issues"></a>
+#### 1.1.1 Known Test Issues
 
-**Note**: The `cray-crus-` pod is expected to be in the Init state until slurm and munge
-are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
-If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
+* Kubernetes Query BSS Cloud-init for ca-certs
+  - This test may fail immediately after platform install. It should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
+* Kubernetes Velero No Failed Backups
+  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the `velero` command to delete backups from a Kubernetes node to clear this situation. See the output of the test for more details on how to cleanup backups that have failed due to a known interruption.
+* Verify spire-agent is enabled and running
 
-Additionally, hmn-discovery and unbound manager cronjob pods may be in a 'NotReady' state. This is expected as these pods are periodically started and transition to the completed state.
-
-<a name="pet-ncnpostgreshealthchecks"></a>
-### 1.2 ncnPostgresHealthChecks
-
-
-Postgres Health Check scripts can be found and run on any worker or master node (not on PIT node), from any directory.
-The ncnPostgresHealthChecks script reports the following postgres health information:
-* The status of each postgresql resource
-* The number of cluster members
-* The node which is the Leader
-* The state of the each cluster member
-* Replication Lag for any cluster member
-* Kubernetes postgres pod status
-
-Execute ncnPostgresHealthChecks script and analyze the output of each individual check.
-
-   ```bash
-   ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
-   ```
-1. Check the STATUS of the postgresql resources which are managed by the operator:
-    ```bash
-    NAMESPACE   NAME                         TEAM                VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE   STATUS
-    services    cray-sls-postgres            cray-sls            11        3      1Gi                                     12d   Running
-    ```
-    If any postgresql resources remains in a STATUS other than Running (such as SyncFailed), refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#syncfailed).
-
-1. For a particular Postgres cluster, the expected output is similar to the following:
-    ```bash
-    --- patronictl, version 1.6.5, list for services leader pod cray-sls-postgres-0 ---
-    + Cluster: cray-sls-postgres (6938772644984361037) ---+----+-----------+
-    |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
-    +---------------------+------------+--------+---------+----+-----------+
-    | cray-sls-postgres-0 | 10.47.0.35 | Leader | running |  1 |           |
-    | cray-sls-postgres-1 | 10.36.0.33 |        | running |  1 |         0 |
-    | cray-sls-postgres-2 | 10.44.0.42 |        | running |  1 |         0 |
-    +---------------------+------------+--------+---------+----+-----------+
-    ```
-    The points below will cover the data in the table above for Member, Role, State, and Lag in MB columns.
-
-    For each Postgres cluster:
-      1. Verify there are three cluster members (with the exception of sma-postgres-cluster where there should be only two cluster members).
-      If the number of cluster members is not correct, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#missing).
-
-      2. Verify there is one cluster member with the Leader Role. 
-      If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
-
-      3. Verify the State of each cluster member is 'running'.
-      If any cluster members are found to be in a non 'running' state (such as 'start failed'), refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#diskfull).
-
-      4. Verify there is no large or growing lag.
-      If any cluster members are found to have lag or lag is 'unknown', refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#lag).
-
-      - **If all the above four checks indicate postgres clusters are healthy, the log output for the postgres pods can be ignored.** If possible health issues exist, re-check the health by re-running the ncnPostgresHealthChecks script in 15 minutes. If health issues persist, then review the log output and consult [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md). During NCN reboots, temporary errors related to re-election are common but should resolve upon the re-check.
-
-1. Check that all Kubernetes Postgres pods have a STATUS of Running.
-    ```bash
-    ncn# kubectl get pods -A -o wide -l application=spilo
-    NAMESPACE           NAME                                                              READY   STATUS             RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
-    services            cray-sls-postgres-0                                               3/3     Running            3          6d      10.38.0.102   ncn-w002   <none>           <none>
-    services            cray-sls-postgres-1                                               3/3     Running            3          5d20h   10.42.0.89    ncn-w001   <none>           <none>
-    services            cray-sls-postgres-2                                               3/3     Running            0          5d20h   10.36.0.31    ncn-w003   <none>           <none>
-    ```
-
-    If any Postgres pods have a STATUS other then Running, gather more information from the pod and refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#missing).
-
-    ```bash
-    ncn# kubectl describe pod <pod name> -n <pod namespace>
-    ncn# kubectl logs <pod name> -n <pod namespace> -c <pod container name>
-    ```
-
-<a name="pet-bgp"></a>
-### 1.3 BGP Peering Status and Reset
-Verify that Border Gateway Protocol (BGP) peering sessions are established for each worker node on the system.
-
-Check the Border Gateway Protocol (BGP) status on the Aruba or Mellanox switches.
-Verify that all sessions are in an **Established** state. If the state of any
-session in the table is **Idle**, reset the BGP sessions.
-
-On an NCN, determine the IP addresses of switches:
-
-```bash
-ncn-m001# kubectl get cm config -n metallb-system -o yaml | head -12
-```
-
-Expected output looks similar to the following:
-```
-apiVersion: v1
-data:
-  config: |
-    peers:
-    - peer-address: 10.252.0.2
-      peer-asn: 65533
-      my-asn: 65533
-    - peer-address: 10.252.0.3
-      peer-asn: 65533
-      my-asn: 65533
-    address-pools:
-    - name: customer-access
-```
-
-Using the first peer-address (10.252.0.2 here), log in using `ssh` as the administrator to the first switch and note in the returned output if a Mellanox or Aruba switch is indicated.
-
-```bash
-ncn-m001# ssh admin@10.252.0.2
-```
-
-* On a Mellanox switch, `Mellanox Onyx Switch Management` or `Mellanox Switch` may be displayed after logging in to the switch with `ssh`. In this case, proceed to the [Mellanox steps](#pet-bgp-mellanox).
-* On an Aruba switch, `Please register your products now at: https://asp.arubanetworks.com` may be displayed after logging in to the switch with `ssh`. In this case, proceed to the [Aruba steps](#pet-bgp-aruba).
-
-<a name="pet-bgp-mellanox"></a>
-#### 1.3.1 Mellanox Switch
-
-1. Enable:
-   ```
-   sw-spine-001# enable
-   ```
-
-1. Verify BGP is enabled:
-   ```
-   sw-spine-001# show protocols | include bgp
-   ```
-
-   Expected output looks similar to the following:
-   ```
-   bgp:                    enabled
-   ```
-
-1. Check peering status:
-   ```
-   sw-spine-001# show ip bgp summary
-   ```
-
-   Expected output looks similar to the following:
-   ```
-   VRF name                  : default
-   BGP router identifier     : 10.252.0.2
-   local AS number           : 65533
-   BGP table version         : 3
-   Main routing table version: 3
-   IPV4 Prefixes             : 59
-   IPV6 Prefixes             : 0
-   L2VPN EVPN Prefixes       : 0
-
-   ------------------------------------------------------------------------------------------------------------------
-   Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
-   ------------------------------------------------------------------------------------------------------------------
-   10.252.1.10       4    65533        2945      3365      3         0      0      1:00:21:33    ESTABLISHED/20
-   10.252.1.11       4    65533        2942      3356      3         0      0      1:00:20:49    ESTABLISHED/19
-   10.252.1.12       4    65533        2945      3363      3         0      0      1:00:21:33    ESTABLISHED/20
-   ```
-
-1. If one or more BGP session is reported in an **Idle** state, reset BGP to re-establish the sessions:
-   ```
-   sw-spine-001# clear ip bgp all
-   ```
-
-   * It may take several minutes for all sessions to become **Established**. Wait a minute or so, and then verify that all sessions now are all reported as **Established**. If some sessions remain in an **Idle** state, re-run the **clear ip bgp all** command and check again.
-
-   * If after several tries one or more BGP session remains **Idle**, see [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
-
-2. Repeat the above **Mellanox** procedure using the second peer-address (10.252.0.3 here).
-
-<a name="pet-bgp-aruba"></a>
-#### 1.3.2 Aruba Switch
-
-On an Aruba switch, the prompt may include `sw-spine` or `sw-agg`.
-
-1. Check BGP peering status.
-   ```
-   sw-agg01# show bgp ipv4 unicast summary
-   ```
-
-   Expected output looks similar to the following:
-   ```
-   VRF : default
-   BGP Summary
-   -----------
-    Local AS               : 65533        BGP Router Identifier  : 10.252.0.4
-    Peers                  : 7            Log Neighbor Changes   : No
-    Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
-    Confederation Id       : 0
-
-    Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
-    10.252.0.5      65533       19579   19588   20h:40m:30s  Established   Up
-    10.252.1.7      65533       34137   39074   20h:41m:53s  Established   Up
-    10.252.1.8      65533       34134   39036   20h:36m:44s  Established   Up
-    10.252.1.9      65533       34104   39072   00m:01w:04d  Established   Up
-    10.252.1.10     65533       34105   39029   00m:01w:04d  Established   Up
-    10.252.1.11     65533       34099   39042   00m:01w:04d  Established   Up
-    10.252.1.12     65533       34101   39012   00m:01w:04d  Established   Up
-   ```
-
-1. If one or more BGP session is reported in a **Idle** state, reset BGP to re-establish the sessions:
-   ```
-   sw-agg01# clear bgp *
-   ```
-
-   * It may take several minutes for all sessions to become **Established**. Wait a minute or so, and then
-   verify that all sessions now are reported as **Established**. If some sessions remain in an **Idle** state,
-   re-run the **clear bgp \*** command and check again.
-
-   * If after several tries one or more BGP session remains **Idle**, see [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
-
-
-1. Repeat the above **Aruba** procedure using the second peer-address (10.252.0.5 in this example).
-
-<a name="net-kea"></a>
-### 1.4 Verify that KEA has active DHCP leases
-
-Verify that KEA has active DHCP leases. Right after an fresh install of CSM, it is important to verify that KEA is currently handing out DHCP leases on the system. The following commands can be run on any of the master nodes or worker nodes.
-
-Get an API Token:
-```bash
-ncn# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
-                 -d client_id=admin-client \
-                 -d client_secret=`kubectl get secrets admin-client-auth \
-                 -o jsonpath='{.data.client-secret}' | base64 -d` \
-                          https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-```
-
-Retrieve all the leases currently in KEA:
-```bash
-ncn# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
-```
-
-If there is an non-zero amount of DHCP leases for air-cooled hardware returned, that is a good indication that KEA is working.
-
-<a name="net-extdns"></a>
-### 1.5 Verify ability to resolve external DNS
-
-If unbound is configured to resolve outside hostnames, then the following check should be performed. If unbond is not configured to resolve outside hostnames, then this check may be skipped. 
-
-Run the following on one of the master or worker nodes (not the PIT node):
-
-```bash
-ncn# nslookup cray.com ; echo "Exit code is $?"
-```
-
-Expected output looks similar to the following:
-```
-Server:         10.92.100.225
-Address:        10.92.100.225#53
-
-Non-authoritative answer:
-Name:   cray.com
-Address: 52.36.131.229
-
-Exit code is 0
-```
-
-Verify that the command has exit code 0, reports no errors, and resolves the address.
-
-<a name="net-spire"></a>
-### 1.6 Verify Spire Agent is Running on Kubernetes NCNs
-
-Execute the following command on all Kubernetes NCNs (i.e. all worker nodes and master nodes, excluding the PIT):
-
-```bash
-ncn# goss -g /opt/cray/tests/install/ncn/tests/goss-spire-agent-service-running.yaml validate
-```
-
-Known failures and how to recover:
-
-* K8S Test: Verify spire-agent is enabled and running
-
-  - The `spire-agent` service may fail to start on Kubernetes NCNs, logging errors (via journalctl) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. Even though the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.
+  - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker nodes and master nodes), logging errors (via journalctl) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. Even though the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.
      1. Set `NODE` to the NCN which is experiencing the issue. In this example, `ncn-w002`.
         ```bash
           ncn# export NODE=ncn-w002
@@ -408,54 +105,45 @@ Known failures and how to recover:
 
   - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, delete `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the `request-ncn-join-token` daemonset pod.
 
-<a name="net-vault"></a>
-### 1.7 Verify the Vault Cluster is Healthy
 
-Execute the following commands on `ncn-m002`:
+<a name="pet-optional-ncnhealthchecks-resources"></a>
+### 1.2 OPTIONAL Check of ncnHealthChecks Resources
 
-```bash
-ncn-m002# goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-vault-cluster-health.yaml validate
-```
-
-Check the output to verify no failures are reported:
-```
-Count: 2, Failed: 0, Skipped: 0
-```
-
-<a name="automated-goss-testing"></a>
-### 1.8 Automated Goss Testing
-
-There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites available that cover a variety of sub-systems.
-
-Run the NCN health checks against the three different types of nodes with the following commands:
-
-**IMPORTANT:** These tests may only be successful while booted into the PIT node. Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
-
+To dump the ncn uptimes, the node resource consumptions and/or the list of pods not in a running state, run the following:
 
 ```bash
-pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-master
-pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-worker
-pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-storage
+ncn# /opt/cray/platform-utils/ncnHealthCheck.sh -s ncn_uptimes
+ncn# /opt/cray/platform-utils/ncnHealthCheck.sh -s node_resource_consumption
+ncn# /opt/cray/platform-utils/ncnHealthCheck.sh -s pods_not_running
 ```
+<a name="known-issues"></a>
+#### 1.2.1 Known Issues
 
-And the Kubernetes test suite via:
+* pods_not_running
+  - If the output of `pods_not_running` indicates that there are pods in the `Evicted` state, it may be due to the root file system being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%. This may commonly happen on ncn-m001 as it is a location that install and doc files may be downloaded to. It may be necessary to clean up space in the / directory if this is the root cause of pod evictions. The following commands can be used to determine if analysis of files under / is needed to free-up space. Listing the top 10 files that are 1024M or larger is one way to start the analysis.
 
-```bash
-pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
-```
+    ```bash
+    ncn# df -h /
+    Filesystem      Size  Used Avail Use% Mounted on
+    LiveOS_rootfs   280G  245G   35G  88% /
+    ```
 
-<a name="autogoss-issues"></a>
-#### 1.8.1 Known Test Issues
+    ```bash
+    ncn# du -h -s /root/
+    225G  /root/
+    ```
 
-* These tests can only reliably be executed from the PIT node. Should be addressed in a future release.
-* K8S Test: Kubernetes Query BSS Cloud-init for ca-certs
-  - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
-* K8S Test: Kubernetes Velero No Failed Backups
-  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the `velero` command to delete backups from a Kubernetes node to clear this situation.
+    ```bash
+    ncn# du -ah -B 1024M /root | sort -n -r | head -n 10
+    ```
+  - The `cray-crus-` pod is expected to be in the Init state until Slurm and MUNGE
+are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
+If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
+  - The `hmn-discovery` and `cray-dns-unbound-manager` cronjob pods may be in a 'NotReady' state. This is expected as these pods are periodically started and transition to the completed state.
 
 
 <a name="optional-check-of-system-management-monitoring-tools"></a>
-### 1.9 Optional Check of System Management Monitoring Tools
+### 1.3 OPTIONAL Check of System Management Monitoring Tools
 
 If all designated prerequisites are met, the availability of system management health services may optionally be validated by accessing the URLs listed in [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md).
 It is very important to check the `Prerequisites` section of this document.

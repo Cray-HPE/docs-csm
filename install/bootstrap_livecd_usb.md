@@ -41,6 +41,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    **Important:** Download to a location that has sufficient space for both the tarball and the expanded tarball.
 
+   > Note: Expansion of the tarball may take more than 45 minutes.
+
    The rest of this procedure will use the CSM_RELEASE variable and expect to have the
    contents of the CSM software release tarball plus any patches, workarounds, or hotfixes.
 
@@ -554,9 +556,9 @@ This will enable SSH, and other services when the LiveCD starts.
 1. Quit the typescript session with the `exit` command and copy the file (csm-install-usb.<date>.txt) to the data partition on the USB drive.
 
     ```bash
-    linux# mkdir -pv /mnt/pitdata/prep/logs
+    linux# mkdir -pv /mnt/pitdata/prep/admin
     linux# exit
-    linux# cp ~/csm-install-usb.*.txt /mnt/pitdata/prep/logs
+    linux# cp ~/csm-install-usb.*.txt /mnt/pitdata/prep/admin
     ```
 
 1. Unmount the data partition:
@@ -668,8 +670,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Start a typescript to record this section of activities done on ncn-m001 while booted from the LiveCD.
 
    ```bash
-   pit# mkdir -pv /var/www/ephemeral/prep/logs
-   pit# script -af /var/www/ephemeral/prep/logs/booted-csm-livecd.$(date +%Y-%m-%d).txt
+   pit# mkdir -pv /var/www/ephemeral/prep/admin
+   pit# script -af /var/www/ephemeral/prep/admin/booted-csm-livecd.$(date +%Y-%m-%d).txt
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
