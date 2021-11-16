@@ -25,6 +25,11 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 <a>install-csm-services</a>
 ### 2. Install CSM Services
+Setup password-less SSH for pi:
+```bash
+   linux# rsync -av ncn-m002:.ssh/ /root/.ssh/
+```
+Install csm services using yap;
 ```bash
    linux# cd /usr/share/doc/csm/install/scripts/csm_services
    linux# yapl -f install.yaml execute
