@@ -1,20 +1,29 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: Legacy Mode User-Driven UAI Management](Legacy_Mode_User-Driven_UAI_Management.md)
 
 ## Customize End-User UAI Images
 
-The provided end-user UAI image is a basic UAI image that includes an up-to-date version of the Sles Linux Distribution and client support for both the Slurm and PBS Professional workload managers. It provides an entrypoint to using UAIs and doing workload management from UAIs. This UAI image is not suitable for use with the Cray PE because it cannot be assured of being up-to-date with what is running on Shasta compute nodes at a given site. To support building software to be run in compute nodes, it is necessary to create a custom end-user UAI image and use that.
+The provided End-User UAI image is a basic UAI image that includes an up-to-date version of the SLES Linux Distribution. It provides an entrypoint to using UAIs and an easy way for administrators to experiment with UAS configurations. To support building software to be run in compute nodes, or other HPC and Analytics workflows, it is necessary to create a custom End-User UAI image and use that.
 
-A custom end-user UAI image can be any container image set up with the end-user UAI entrypoint script. For this case, it will be a UAI image built from the squashfs image used on compute nodes on the host system. This section describes how to create this kind of custom end-user UAI image.
+A custom End-User UAI image can be any container image set up with the End-User UAI entrypoint script.  Experimentation with the wide range of possible UAI images is beyond the scope of this document, but the example given here should offer a starting point for that kind of experimentation.
+
+The example provided here covers the most comon use-case, which is building a UAI image from the squashfs image used on compute nodes on the host system to support application development, workload management and analytics workflows. Some of the steps are specific to that activity, others would be common to or similar to steps needed to create special purpose UAIs.
 
 ### Prerequisites
 
--   This procedure requires administrator privileges.
--   All steps in this procedure must be run from a true NCN (master or worker node), not from the LiveCD node. In particular, pushing the final image to `registry.local` will fail with an error reporting a bad x509 certificate if it is attempted on the LiveCD node.
+* The administrator must be logged into an NCN or a host that has administrative access to the HPE Cray EX System API Gateway
+* The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
+* The HPE Cray EX System CLI must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
+* The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
+
+**NOTE:** this procedure cannot be run from a PIT node or an external host, it must be run from a Kubernetes Worker or Master node.
 
 ### Procedure
 
-1. Build a custom end-user UAI image.
+1. Choose a name for the custom image
 
-    The following steps are used to build a custom End-User UAI image called `registry.local/cray/cray-uai-compute:latest`. Alter this name as needed by changing the following in the procedure to use a different name:
+     This example names the custom End-User UAI image called `registry.local/cray/cray-uai-compute:latest`, and places that name in an environment variable for convenience.  Alter the name as appropriate for the image to be created:
 
     ```
     ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
@@ -62,7 +71,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
 
 1. Mount the SquashFS and create a tarball.
 
-    1. Create a directory to mount the SquashFS:
+    1. Create a directory and mount the SquashFS on the directory:
 
         ```
         ncn-w001# mkdir -v mount
@@ -87,7 +96,7 @@ A custom end-user UAI image can be any container image set up with the end-user 
         ./usr/bin/uai-ssh.sh
         ```
 
-        If the script is not present, the easiest place to get a copy of the script is from a UAI built from the end-user UAI image provided with UAS, and it can be appended to the tarball:
+        If this script is not present, the easiest place to get a copy of the script is from a UAI built from the End-User UAI image provided with UAS, and it can be appended to the tarball:
 
         ```
         ncn-w001# mkdir -pv ./usr/bin
@@ -147,4 +156,4 @@ A custom end-user UAI image can be any container image set up with the end-user 
     ncn-w001# rm -fv ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
     ```
 
-
+[Next Topic: Legacy Mode User-Driven UAI Management](Legacy_Mode_User-Driven_UAI_Management.md)

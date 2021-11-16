@@ -1,3 +1,6 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: List Available UAI Images in Legacy Mode](List_Available_UAI_Images_in_Legacy_Mode.md)
 
 ## Create and Use Default UAIs in Legacy Mode
 
@@ -46,26 +49,27 @@ From there the user creates a UAI. The UAI starts out in a `Pending` or `Waiting
 ```
 vers> cray uas create --publickey ~/.ssh/id_rsa.pub
 uai_age = "0m"
-uai_connect_string = "ssh vers@10.103.13.157"
-uai_host = "ncn-w001"
-uai_img = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
-uai_ip = "10.103.13.157"
-uai_msg = "ContainerCreating"
-uai_name = "uai-vers-8ee103bf"
-uai_status = "Waiting"
+uai_connect_string = "ssh vers@34.136.140.107"
+uai_host = "ncn-w002"
+uai_img = "registry.local/cray/cray-uai-sles15sp2:1.2.4"
+uai_ip = "34.136.140.107"
+uai_msg = ""
+uai_name = "uai-vers-01b26dd1"
+uai_status = "Running: Ready"
 username = "vers"
 
 [uai_portmap]
 
 vers> cray uas list
+ cray uas list
 [[results]]
-uai_age = "0m"
-uai_connect_string = "ssh vers@10.103.13.157"
-uai_host = "ncn-w001"
-uai_img = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
-uai_ip = "10.103.13.157"
+uai_age = "1m"
+uai_connect_string = "ssh vers@34.136.140.107"
+uai_host = "ncn-w002"
+uai_img = "registry.local/cray/cray-uai-sles15sp2:1.2.4"
+uai_ip = "34.136.140.107"
 uai_msg = ""
-uai_name = "uai-vers-8ee103bf"
+uai_name = "uai-vers-01b26dd1"
 uai_status = "Running: Ready"
 username = "vers"
 ```
@@ -73,27 +77,30 @@ username = "vers"
 Using `cray uas list`, the user watches the UAI until it reaches a `Running: Ready` state. The UAI is now ready to accept SSH logins from the user, and the user then logs into the UAI to run a simple Slurm job, and logs out.
 
 ```
-vers> ssh vers@10.103.13.157
-The authenticity of host '10.103.13.157 (10.103.13.157)' can't be established.
-ECDSA key fingerprint is SHA256:XQukF3V1q0Hh/aTiFmijhLMcaOzwAL+HjbM66YR4mAg.
+vers>  ssh vers@34.136.140.107
+The authenticity of host '34.136.140.107 (34.136.140.107)' can't be established.
+ECDSA key fingerprint is SHA256:5gU4SPiw8UvcX7s+xJfVMKULaUi3e0E3i+XA6AklEJA.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-Warning: Permanently added '10.103.13.157' (ECDSA) to the list of known hosts.
-vers@uai-vers-8ee103bf-95b5d774-88ssd:/tmp> sinfo
-PARTITION AVAIL  TIMELIMIT  NODES  STATE NODELIST
-workq*       up   infinite      4   comp nid[000001-000004]
-vers@uai-vers-8ee103bf-95b5d774-88ssd> srun -n 3 -N 3 hostname
-nid000001
-nid000002
-nid000003
-vers@uai-vers-8ee103bf-95b5d774-88ssd> exit
+Warning: Permanently added '34.136.140.107' (ECDSA) to the list of known hosts.
+vers@uai-vers-01b26dd1-45tpc:~> ps -afe
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 14:50 ?        00:00:00 /bin/bash /usr/bin/uai-ssh.sh
+root        45     1  0 14:50 ?        00:00:00 su vers -c /usr/sbin/sshd -e -f /etc/uas/ssh/sshd_config -D
+vers        46    45  0 14:50 ?        00:00:00 /usr/sbin/sshd -e -f /etc/uas/ssh/sshd_config -D
+vers       107    46  0 14:53 ?        00:00:00 sshd: vers [priv]
+vers       110   107  0 14:53 ?        00:00:00 sshd: vers@pts/0
+vers       111   110  0 14:53 pts/0    00:00:00 -bash
+vers       148   111  0 14:53 pts/0    00:00:00 ps -afe
+vers@uai-vers-01b26dd1-45tpc:~> exit
 logout
-Connection to 10.103.13.157 closed.
+Connection to 34.136.140.107 closed.
 ```
 
 Now finished with the UAI, the user deletes it with `cray uas delete`. If the user has more than one UAI to delete, the argument to the `--uai-list` option can be a comma separated list of UAI names.
 
 ```
-vers> cray uas delete --uai-list uai-vers-8ee103bf
-results = [ "Successfully deleted uai-vers-8ee103bf",]
+vers> cray uas delete --uai-list uai-vers-01b26dd1
+results = [ "Successfully deleted uai-vers-01b26dd1",]
 ```
 
+[Next Topic: List Available UAI Images in Legacy Mode](List_Available_UAI_Images_in_Legacy_Mode.md)

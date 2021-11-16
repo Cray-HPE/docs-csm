@@ -1,3 +1,6 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: Delete a Volume Configuration](Delete_a_Volume_Configuration.md)
 
 ## Update a UAS Volume
 
@@ -5,9 +8,12 @@ Modify the configuration of an already-registered UAS volume. Almost any part of
 
 ### Prerequisites
 
--   Install and initialize the `cray` administrative CLI.
--   Obtain the UAS volume ID of a volume. Perform [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) if needed.
--   Read [Add a Volume to UAS](Add_a_Volume_to_UAS.md). The options and caveats for updating volumes are the same as for creating volumes.
+* The administrator must be logged into an NCN or a host that has administrative access to the HPE Cray EX System API Gateway
+* The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
+* The HPE Cray EX System CLI must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
+* The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
+* The administrator must know UAS volume ID of a volume. Perform [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) if needed.
+* The administrator should be familiar with [Add a Volume to UAS](Add_a_Volume_to_UAS.md). The options and caveats for updating volumes are the same as for creating volumes.
 
 ### Procedure
 
@@ -27,3 +33,4 @@ Modify the configuration of an already-registered UAS volume. Almost any part of
 
     The `--volumename`, `--volume-description`, and `--mount-path` options may be used in any combination to update the configuration of a given volume.
 
+[Next Topic: Delete a Volume Configuration](Delete_a_Volume_Configuration.md)
