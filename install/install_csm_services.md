@@ -19,21 +19,28 @@ This procedure will install CSM applications and services into the CSM Kubernete
 <a name="install-yapl"></a>
 
 ### 1. Install Yapl
+
 ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/cray/csm/sle-15sp2/x86_64/yapl-*.x86_64.rpm
+   linux# rpm -Uvh /var/www/ephemeral/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/yapl-*.x86_64.rpm
 ```
 
 <a>install-csm-services</a>
+
 ### 2. Install CSM Services
+
 Setup password-less SSH for pi:
+
 ```bash
    linux# rsync -av ncn-m002:.ssh/ /root/.ssh/
 ```
+
 Install csm services using yap;
+
 ```bash
    linux# cd /usr/share/doc/csm/install/scripts/csm_services
    linux# yapl -f install.yaml execute
 ```
+
 > **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. You can rerun above command any time.
 
 > **NOTE**: stdout is redirected to `/usr/share/doc/csm/install/scripts/csm_services/yapl.log` . If you would like to show stdout in terminall, you can use `yapl -f install.yaml --console-output execute`
