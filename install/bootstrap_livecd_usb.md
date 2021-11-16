@@ -107,8 +107,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
    ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/x86_64/podman-*.x86_64.rpm
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/noarch/podman-cni-config-*.noarch.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Containers/ -name "podman*.rpm" | sort -V | tail -1)
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Containers/ -name "podman-cni-config*.rpm" | sort -V | tail -1)
    ```
 
 1. (optional) Install lsscsi to view attached storage devices.
@@ -125,7 +125,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
    ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/x86_64/lsscsi-*.x86_64.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Basesystem/ -name "lsscsi*.rpm" | sort -V | tail -1)
    ```
 
 1. Although not strictly required, the procedures for setting up the
@@ -144,8 +144,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
    ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/x86_64/git-core-*.x86_64.rpm
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Development-Tools/15-SP2/x86_64/update/x86_64/git-*.x86_64.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Basesystem/ -name "git-core-*.rpm" | sort -V | tail -1)
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Development-Tools/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Development-Tools/ -name "git-*.rpm" | sort -V | tail -1)
    ```
 
 <a name="create-the-bootable-media"></a>
