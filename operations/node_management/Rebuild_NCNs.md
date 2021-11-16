@@ -666,6 +666,16 @@ This section applies to master and worker nodes. Skip this section if rebuilding
            systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
    ```
 
+    **Rebuilt node with modified ssh key(s):** The cloud-init process can fail when accessing other nodes if ssh keys have been modified in the cluster.  If this occurs, the following steps can be used to repair the desired ssh keys on the newly rebuilt node:
+
+    1. Allow cloud-init to fail due to the non-matching keys.
+    1. Copy the correct ssh key(s) to the newly rebuilt node.
+    1. Re-run cloud-init on the newly rebuilt node:
+
+    ```bash
+    ncn-m# cloud-init clean; cloud-init init --local; cloud-init init
+    ```
+
 1. Confirm vlan004 is up with the correct IP address on the rebuilt node.
 
     The following examples assume the NCN/hostname is `NODE`.
