@@ -42,10 +42,6 @@ usage()
    echo
 }
 
-if [[ $# -eq 0 ]]; then
-  usage
-fi
-
 while [[ $# -gt 0 ]]; do
   key="$1"
 
@@ -109,7 +105,10 @@ fi
 if [[ -z "${COMMIT}" ]]; then
     VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
     VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-    echo "https://${VCS_USER}:${VCS_PASSWORD}@api-gw-service-nmn.local/vcs/cray/csm-config-management.git" > .git-credentials
+    TEMP_DIR=`mktemp -d`
+    TEMP_HOME=$HOME
+    HOME=$TEMP_DIR
+    cd $TEMP_DIR
     echo "${CLONE_URL/\/\//\/\/${VCS_USER}:${VCS_PASSWORD}@}" > .git-credentials
     git config --file .gitconfig credential.helper store
     COMMIT=$(git ls-remote $CLONE_URL refs/heads/cray/csm/${RELEASE} | awk '{print $1}')
@@ -119,6 +118,9 @@ if [[ -z "${COMMIT}" ]]; then
         echo "No git commit found"
         exit 1
     fi
+    cd -
+    HOME=$TEMP_HOME
+    rm -r $TEMP_DIR
 fi
 
 CONFIG="{
@@ -155,7 +157,7 @@ fi
 ## RUNNING CFS ##
 if [[ -z $XNAMES ]]; then
     echo "Retrieving a list of all management node xnames"
-    XNAMES=$(cray hsm state components list --role Management | jq -r '.Components | map(.ID) | join(",")')
+    XNAMES=$(cray hsm state components list --role Management --format json | jq -r '.Components | map(.ID) | join(",")')
 fi
 XNAME_LIST=${XNAMES//,/ }
 
@@ -180,7 +182,7 @@ for xname in $XNAME_LIST; do
 done
 
 while true; do
-  RESULT=$(cray cfs components list --status pending --ids ${XNAMES} | jq length)
+  RESULT=$(cray cfs components list --status pending --ids ${XNAMES} --format json | jq length)
   if [[ "$RESULT" -eq 0 ]]; then
     break
   fi
@@ -188,9 +190,9 @@ while true; do
   sleep 60
 done
 
-CONFIGURED=$(cray cfs components list --status configured --ids ${XNAMES} | jq length)
-FAILED=$(cray cfs components list --status failed --ids ${XNAMES} | jq length)
+CONFIGURED=$(cray cfs components list --status configured --ids ${XNAMES} --format json | jq length)
+FAILED=$(cray cfs components list --status failed --ids ${XNAMES} --format json | jq length)
 echo "Configuration complete. $CONFIGURED component(s) completed successfully.  $FAILED component(s) failed."
 if [ "$FAILED" -ne "0" ]; then
-   echo "The following components failed: $(cray cfs components list --status failed --ids ${XNAMES} | jq -r '. | map(.id) | join(",")')"
+   echo "The following components failed: $(cray cfs components list --status failed --ids ${XNAMES} --format json | jq -r '. | map(.id) | join(",")')"
 fi

@@ -31,18 +31,7 @@ The following is an example of the point-to-point configuration on the spine swi
     ```
 
 
-There must then be two routes on the customer's switch directing traffic for the `customer_access_network` subnet to the endpoint on the spine switch. The following is an example of the route configuration on the customer switch. These addresses and subnets are generated from CSI and can be found in the CAN.yaml file.
-
-```screen
-- full_name: CAN Bootstrap DHCP Subnet
-  cidr:
-    ip: 10.101.8.0
-    mask:
-    - 255
-    - 255
-    - 255
-    - 0
-```
+There must then be two routes on the customer's switch directing traffic for the `customer_access_network` subnet to the endpoint on the spine switch. The following is an example of the route configuration on the customer switch.
 
 There must be a default route on each spine switch that will direct traffic that does not match other routes to the endpoint on the customer switch. The following examples are for the route configuration on sw-spine-001.
 
@@ -128,7 +117,7 @@ Default route on the NCN \(configured by the can-network role\):
 
 ```screen
 ncn-m001# ip route
-default via 10.102.5.27 dev vlan007
+default via 10.102.5.27 dev bond0.cmn0
 ```
 
 
