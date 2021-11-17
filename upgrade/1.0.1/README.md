@@ -41,6 +41,13 @@
 
     See [Check for Latest Workarounds and Documentation Updates](../../update_product_stream/index.md#workarounds).
 
+1. Rescan SSH keys on all storage nodes
+```bash
+ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
+
+ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
+```
+
 <a name="setup-nexus"></a>
 ## Setup Nexus
 
