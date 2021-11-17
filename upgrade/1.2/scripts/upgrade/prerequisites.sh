@@ -21,7 +21,7 @@ case $key in
     shift # past value
     ;;
     --endpoint)
-    SEARCHPATH="$2"
+    ENDPOINT="$2"
     shift # past argument
     shift # past value
     ;;
@@ -36,10 +36,6 @@ case $key in
     ;;
 esac
 done
-echo " ****** WARNING ******"
-echo " ****** /mnt/pitdata WILL BE UNMOUNTED ******"
-echo " ****** YOU NEED TO MOUNT IT AGAIN IF YOU WANT TO USE /mnt/pitdata ******"
-read -p "Read and act on above steps. Press Enter key to continue ..."
 
 if [[ -z ${CSM_RELEASE} ]]; then
     echo "CSM RELEASE is not specified"
@@ -51,7 +47,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
 
     if [[ -z ${ENDPOINT} ]]; then
         # default endpoint to internal artifactory
-        ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-unstable-local/csm/
+        ENDPOINT=https://artifactory.algol60.net/artifactory/releases/csm/1.2/
         echo "Use internal endpoint: ${ENDPOINT}"
     fi
 
@@ -236,16 +232,6 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="APPLY_POD_PRIORITY"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    . ${BASEDIR}/add_pod_priority.sh
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
 state_name="UPDATE_BSS_CLOUD_INIT_RECORDS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
@@ -396,10 +382,3 @@ fi
 cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r '.[] | .node' || true)
 echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
 
-# Alert the user of action to take for cleanup
-if [[ ${#UNMOUNTS[@]} -ne 0 ]]; then
-    for m in "${UNMOUNTS[@]}"
-    do
-        echo "Please umount -l $m"
-    done
-fi
