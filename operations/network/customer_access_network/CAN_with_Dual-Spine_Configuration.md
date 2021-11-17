@@ -117,7 +117,7 @@ Default route on the NCN \(configured by the can-network role\):
 
 ```screen
 ncn-m001# ip route
-default via 10.102.5.27 dev vlan007
+default via 10.102.5.27 dev bond0.cmn0
 ```
 
 

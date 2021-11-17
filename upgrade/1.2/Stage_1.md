@@ -26,7 +26,7 @@
 
 ## Stage 1.3
 
-For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `vlan007`/CAN IP address to `ssh` to `ncn-m002` for this `ncn-m001` install
+For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP address to `ssh` to `ncn-m002` for this `ncn-m001` install
 
 1. Authenticate with the Cray CLI on `ncn-m002`.
 

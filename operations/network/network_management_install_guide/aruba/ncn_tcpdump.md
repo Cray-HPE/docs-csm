@@ -5,10 +5,10 @@ If your host is not getting an IP address you can run a packet capture to see if
 On ncn-w001 or a worker/manager with kubectl, run:
 
 ```
-tcpdump -w dhcp.pcap -envli vlan002 port 67 or port 68
+tcpdump -w dhcp.pcap -envli bond0.nmn0 port 67 or port 68
 ```
 
-This will make a .pcap file named dhcp in your current directory. It will collect all DHCP traffic on the port you specify, in this example we are looking for DHCP traffic on interface vlan002 (10.252.0.0/17)
+This will make a .pcap file named dhcp in your current directory. It will collect all DHCP traffic on the port you specify, in this example we are looking for DHCP traffic on interface bond0.nmn0 (10.252.0.0/17)
 
 To view the DHCP traffic, run:
 
