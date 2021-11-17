@@ -16,6 +16,7 @@ Topics:
       * [Start Hand-Off](#start-hand-off)
    * [Reboot](#reboot)
    * [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
+   * [Fix NTP on ncn-m001](#fix-ntp-config-on-ncn-m001)
    * [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
    * [Validate `BOOTRAID` artifacts](#validate-bootraid-artifacts)
    * [Next Topic](#next-topic)
@@ -218,7 +219,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     pit# efibootmgr | grep -Ei "ip(v4|4)"
     ```
 
-1. Set and trim the boot order on the PIT node.
+1. Set the boot order and trim the boot order on the PIT node.
 
     In [Deploy Management Nodes](deploy_management_nodes.md#configure-and-trim-uefi-entries), this procedure was done on the other NCNs. Now it is time to do it on the PIT node. See [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
 
@@ -506,36 +507,47 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
 > **`CSI NOTE`** `/tmp/csi` will delete itself on the next reboot. The `/tmp` directory is `tmpfs` and runs in memory, it normally will not persist on restarts.
 
+<a name="fix-ntp-config-on-ncn-m001"></a>
+### 6. Fix the NTP Config on ncn-m001
+
+Run the following commands on ncn-m001 **only**:
+
+```bash
+wget -O /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/cloudinit/config/cc_ntp.py
+wget -O /etc/cloud/templates/chrony.conf.cray.tmpl https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/config/cray.conf.j2
+cloud-init single --name ntp --frequency always
+```
+
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
-### 6. Configure DNS and NTP on each BMC
+### 7. Configure DNS and NTP on each BMC
 
- > **`NOTE`** If the system uses Gigabyte or Intel hardware, skip this section.
+ > **`NOTE`** If the system uses Gigabyte nodes or Intel nodes, skip this section.
 
-Perform the following steps on every NCN **except ncn-m001**.
+The following steps will configure DNS and NTP on the BMC for each management node **except ncn-m001**.
 
 1. Set environment variables. Make sure to set the appropriate value for the `IPMI_PASSWORD` variable.
 
     ```bash
-    ncn# export IPMI_PASSWORD=changeme
-    ncn# export USERNAME=root
+    ncn-m001# export IPMI_PASSWORD=changeme
+    ncn-m001# export USERNAME=root
     ```
 
 1. Disable DHCP and configure NTP on the BMC using data from cloud-init.
 
     ```bash
-    ncn# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -S -n
+    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -S -n
     ```
 
 1. Configure DNS on the BMC using data from cloud-init.
 
     ```bash
-    ncn# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -d
+    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -d
     ```
 
 1. (Optional) View the settings of the BMC:
 
     ```bash
-    ncn# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -s
+    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -s
     ```
 
 <a name="validate-bootraid-artifacts"></a>

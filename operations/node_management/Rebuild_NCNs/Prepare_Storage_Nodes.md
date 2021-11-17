@@ -4,7 +4,51 @@
 
 Prepare a storage node before rebuilding it.
 
-**IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed.  For example, if this is a rebuild in place then ceph components will not be reporting down, versus a failed node rebuild.
+**IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed. For example, if this is a rebuild in place then ceph components will not be reporting down, versus a failed node rebuild.
+
+## Prequisites
+
+If rebuilding ncn-s001, it is critical that the storage-ceph-cloudinit.sh has been removed from the runcmd in bss.
+
+1. Get the xname for ncn-s001.
+
+   ```bash
+   ssh ncn-s001 cat /etc/cray/xname
+   ```
+
+2. Check the bss boot parameters for ncn-s001.
+
+   ```bash
+   cray bss bootparameters list --name x3000c0s7b0n0 --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'
+   ```
+
+   Expected Output:
+
+   ```screen
+   [
+   "/srv/cray/scripts/metal/install-bootloader.sh",
+   "/srv/cray/scripts/metal/set-host-records.sh",
+   "/srv/cray/scripts/metal/set-dhcp-to-static.sh",
+   "/srv/cray/scripts/metal/set-dns-config.sh",
+   "/srv/cray/scripts/metal/set-ntp-config.sh",
+   "/srv/cray/scripts/metal/enable-lldp.sh",
+   "/srv/cray/scripts/metal/set-bmc-bbs.sh",
+   "/srv/cray/scripts/metal/set-efi-bbs.sh",
+   "/srv/cray/scripts/metal/disable-cloud-init.sh",
+   "/srv/cray/scripts/common/update_ca_certs.py",
+   "/srv/cray/scripts/metal/install-rpms.sh",
+   "/srv/cray/scripts/common/pre-load-images.sh",
+   "/srv/cray/scripts/common/ceph-enable-services.sh"
+   ]
+   ```
+
+   If it is there then it will need to be fixed by running:
+
+   **IMPORTANT:** The below python script is provided by the docs-csm rpm being installed.
+
+   ```bash
+   python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
+   ```
 
 ## Step 1 - Check the status of Ceph
 
@@ -106,7 +150,7 @@ Prepare a storage node before rebuilding it.
      41    ssd   1.74660          osd.41       down   1.00000  1.00000
     ```
 
-    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.  By default if the OSD reference is not removed, then there will still a reference to them in the crush map and will show down OSDs down that no longer exist.
+    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives. By default if the OSD reference is not removed, then there will still a reference to them in the crush map and will show down OSDs down that no longer exist.
 
     This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 

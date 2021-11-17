@@ -4,95 +4,21 @@
 
 ## Add Join Script
 
-1. Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh`
+1. There is a script located at `/srv/cray/scripts/common/join_ceph_cluster.sh` that will need to be copied to the node that was rebuilt.  
 
-   **NOTE:** This script may also available in the `/usr/share/doc/csm/scripts` directory where the latest ***docs-csm*** rpm is installed. If so, it can be copied from that node to the new storage node being rebuilt and skip to step 2.
-
-   ```bash
-   #!/bin/bash
-   
-   (( counter=0 ))
-   
-   host=$(hostname)
-   
-   > ~/.ssh/known_hosts
-   
-   for node in ncn-s001 ncn-s002 ncn-s003; do
-     ssh-keyscan -H "$node" >> ~/.ssh/known_hosts
-     pdsh -w $node > ~/.ssh/known_hosts
-     if [[ "$host" == "$node" ]]; then
-       continue
-     fi
-
-     if [[ $(nc -z -w 10 $node 22) ]] || [[ $counter -lt 3 ]]
-     then
-       if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]
-       then
-         scp $node:/etc/ceph/* /etc/ceph
-       else
-         scp $node:/etc/ceph/rgw.pem /etc/ceph/rgw.pem
-       fi
-   
-       if [[ ! $(pdsh -w $node "/srv/cray/scripts/common/pre-load-images.sh; ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-keyscan -H $host >> ~/.ssh/known_hosts ;ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
-       then
-         (( counter+1 ))
-         if [[ $counter -ge 3 ]]
-         then
-           echo "Unable to access ceph monitor nodes"
-           exit 1
-         fi
-       else
-         break
-       fi
-     fi
-   done
-   
-   sleep 30
-   (( ceph_mgr_failed_restarts=0 ))
-   (( ceph_mgr_successful_restarts=0 ))
-   until [[ $(cephadm shell -- ceph-volume inventory --format json-pretty|jq '.[] | select(.available == true) | .path' | wc -l) == 0 ]]
-   do
-     for node in ncn-s001 ncn-s002 ncn-s003; do
-       if [[ $ceph_mgr_successful_restarts > 10 ]]
-       then
-         echo "Failed to bring in OSDs, manual troubleshooting required."
-         exit 1
-       fi
-       if pdsh -w $node ceph mgr fail
-       then
-         (( ceph_mgr_successful_restarts+1 ))
-         sleep 120
-         break
-       else
-         (( ceph_mgr_failed_restarts+1 ))
-         if [[ $ceph_mgr_failed_restarts -ge 3 ]]
-         then
-           echo "Unable to access ceph monitor nodes."
-           exit 1
-         fi
-       fi
-     done
-   done
-   
-   for service in $(cephadm ls | jq -r '.[].systemd_unit')
-   do
-     systemctl enable $service
-   done
-   ```
-
-1. Change the mode of the script.
+2. Change the mode of the script.
 
    ```bash
    chmod u+x /srv/cray/scripts/common/join_ceph_cluster.sh
    ```
 
-1. In a separate window log into one of the following ncn-s00(1/2/3) and execute the following:
+3. In a separate window log into one of the following ncn-s00(1/2/3) and execute the following:
 
    ```bash
    watch ceph -s
    ```
 
-1. Execute the script.
+4. Execute the script.
 
    ```bash
    /srv/cray/scripts/common/join_ceph_cluster.sh

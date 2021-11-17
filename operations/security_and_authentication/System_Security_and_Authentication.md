@@ -25,5 +25,3 @@ All connections through the Istio ingress gateway require authentication with a 
 -   /v2
 -   /service/rest
 -   /capsules/
-
-

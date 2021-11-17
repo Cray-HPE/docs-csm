@@ -13,6 +13,14 @@ ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
 
 This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.4 or CSM-0.9.5.
 
+>**`IMPORTANT:`**
+> 
+> Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
+>
+>```bash
+> ncn# unset CRAY_FORMAT
+>```
+
 ## Stage 0.1 - Install latest docs RPM
 
 1. Install latest document RPM package:
@@ -38,63 +46,107 @@ Perform these steps to update `customizations.yaml`:
 
 1. Extract `customizations.yaml` from the `site-init` secret:
 
-   ```bash
-   ncn-m001# cd /tmp
-   ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
-   ```
+    ```bash
+    ncn-m001# cd /tmp
+    ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
+    ```
 
-2. Update `customizations.yaml`:
+1. Update `customizations.yaml`:
 
-   ```bash
-   ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/update-customizations.sh -i customizations.yaml
-   ```
+    ```bash
+    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/update-customizations.sh -i customizations.yaml
+    ```
 
-3. Update the `site-init` secret:
+1. Update the `site-init` secret:
 
-   ```bash
-   ncn-m001# kubectl delete secret -n loftsman site-init
-   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-   ```
+    ```bash
+    ncn-m001# kubectl delete secret -n loftsman site-init
+    ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+    ```
 
-4. If using an external Git repository for managing customizations ([as recommended](../../install/prepare_site_init.md#version-control-site-init-files)),
+1. If [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
    clone a local working tree and commit appropriate changes to `customizations.yaml`.
    
-   For Example:
+    For example:
 
-   ```bash
-   ncn-m001# git clone <URL> site-init
-   ncn-m001# cp /tmp/customizations.yaml site-init
-   ncn-m001# cd site-init
-   ncn-m001# git add customizations.yaml
-   ncn-m001# git commit -m 'Remove Gitea PVC configuration from customizations.yaml'
-   ncn-m001# git push
-   ```
+    ```bash
+    ncn-m001# git clone <URL> site-init
+    ncn-m001# cp /tmp/customizations.yaml site-init
+    ncn-m001# cd site-init
+    ncn-m001# git add customizations.yaml
+    ncn-m001# git commit -m 'Remove Gitea PVC configuration from customizations.yaml'
+    ncn-m001# git push
+    ```
 
 5. Return to original working directory:
 
-   ```bash
-   ncn-m001# cd -
-   ```
+    ```bash
+    ncn-m001# cd -
+    ```
 
 ## Stage 0.3 - Execute Prerequisites Check
 
-Run check script:
+>**`IMPORTANT:`**
+> 
+> Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
+>
+>```bash
+> ncn# unset CRAY_FORMAT
+>```
 
-* Internet Connected
+1. Authenticate with the Cray CLI on `ncn-m001`.
+
+    See [Configure the Cray Command Line Interface](../../operations/configure_cray_cli.md) for details on how to do this.
+
+1. Set the `CSM_RELEASE` variable to the correct value for the CSM release upgrade being applied.
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
+    ncn-m001# CSM_RELEASE=csm-1.0.0
     ```
 
-    **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default.
+1. Run check script:
 
-* Air Gapped
+    **NOTE** The `prerequisites.sh` script will warn that it will unmount `/mnt/pitdata`, but this is not accurate. The script will only unmount it if the script itself mounts it. That is, if it is mounted when the script begins, the script will not unmount it.
 
-    ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
-    ```
+    * Option 1 - Internet Connected Environment
 
-**`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. **IF** the upgrade `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
+        1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release tarball.
+        
+            In other words, the full URL to the CSM release tarball will be `${ENDPOINT}${CSM_RELEASE}.tar.gz`
+        
+            **NOTE** This step is optional for Cray/HPE internal installs.
+        
+            ```bash
+            ncn-m001# ENDPOINT=https://put.the/url/here/
+            ```
+
+        1. Run the script
+        
+            **NOTE** The `--endpoint` argument is optional for Cray/HPE internal use.
+
+            ```bash
+            ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --endpoint $ENDPOINT
+            ```
+
+    * Option 2 - Air Gapped Environment
+
+        1. Set the `TAR_DIR` variable to the directory on `ncn-m001` containing the CSM release tarball.
+        
+            In other words, the full path to the CSM release tarball will be `${TAR_DIR}/${CSM_RELEASE}.tar.gz`
+
+            ```bash
+            ncn-m001# TAR_DIR=/path/to/tarball/dir
+            ```
+
+        1. Run the script
+
+            ```bash
+            ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --tarball-file ${TAR_DIR}/${CSM_RELEASE}.tar.gz
+            ```
+
+**`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. 
+
+**IF** the upgrade `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
 
 ## Stage 0.4 - Backup VCS Data
 
@@ -104,6 +156,6 @@ To prevent any possibility of losing configuration data, backup the VCS data and
 
 ## Stage 0.5 - Backup Workload Manager Data
 
-To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`.  The resulting back-up data should be stored in a safe location off of the system.
+To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting back-up data should be stored in a safe location off of the system.
 
 Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).
