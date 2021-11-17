@@ -77,7 +77,7 @@ EOF
 
 # patch_in_new_metadata() will mount PITDATA and run 'csi config init' in order to grab the newly-generated data.json and then push it into bss
 patch_in_new_metadata() {
-  # TODO: MTL-1429
+  echo "TODO: MTL-1429"
 
   # # Try to find the files that we need, mounting the PITDATA partition if necessary and if possible
 
