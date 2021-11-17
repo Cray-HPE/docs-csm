@@ -36,7 +36,7 @@ Perform these steps to update `customizations.yaml`:
 1. Update `customizations.yaml`:
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/update-customizations.sh -i customizations.yaml
+    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/update-customizations.sh -i customizations.yaml
     ```
 
 1. Update the `site-init` secret:
