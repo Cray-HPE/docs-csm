@@ -25,3 +25,6 @@ rpm_build_source:
 
 rpm_build:
 	BUILD_METADATA=$(BUILD_METADATA) rpmbuild -ba $(SPEC_FILE) --define "_topdir $(BUILD_DIR)"
+
+latest_rpm:
+	cp "$(BUILD_DIR)/docs-csm-$(VERSION)*noarch.rpm" "$(BUILD_DIR)/docs-csm-latest.noarch.rpm" 

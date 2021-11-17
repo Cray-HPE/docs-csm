@@ -34,6 +34,9 @@ pipeline {
               script {
                   withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
                       sh "make rpm"
+                      if(env.RELEASE_BRANCH_VERSION){
+                        sh "make latest_rpm"
+                      }
                     }
                 }
             }
@@ -47,8 +50,8 @@ pipeline {
                 } else {
                     RELEASE_FOLDER = ""
                 }
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.IS_STABLE)
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, os: "noarch", pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.IS_STABLE)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, os: "noarch", pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
             }
         }
       }
