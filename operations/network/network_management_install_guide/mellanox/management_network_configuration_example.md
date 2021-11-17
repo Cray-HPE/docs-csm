@@ -262,7 +262,7 @@ Configure default routes on Workers
 
 * To make it persistent we'll need to create a ifcfg file for hsn0 and remove the old vlan7 default route.
 
-> ncn-w001:/ # mv /etc/sysconfig/network/ifroute-vlan007 /etc/sysconfig/network/ifroute-vlan007.old
+> ncn-w001:/ # mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old
 > 
 > ncn-w001:/ # echo "default 10.101.10.1 - -" > /etc/sysconfig/network/ifroute-hsn0
 

@@ -29,7 +29,7 @@ PING 10.1.0.1 (10.1.0.1) 56(84) bytes of data.
 If this fails you may have a misconfigured CAN or need to add a route to the MTL network.
 
 ```
-ncn-w001:~ # ip route add 10.1.0.0/16 via 10.252.0.1 dev vlan002
+ncn-w001:~ # ip route add 10.1.0.0/16 via 10.252.0.1 dev bond0.nmn0
 ```
 
 [Back to Index](./index.md)
