@@ -267,6 +267,7 @@ This section outlines known issues that cause HMS Health Check failures.
 
 * [Warning flags incorrectly set in HSM for Mountain BMCs (SDEVICE-3319)](#hms-known-issue-mountain-bmcs-warning-flags)
 * [BMCs set to "On" state in HSM (CASMHMS-5239)](#hms-bmcs-set-to-on-state-in-hsm)
+* [ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM (CASMHMS-5272)](#hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm)
 
 <a name="hms-known-issue-mountain-bmcs-warning-flags"></a>
 #### Warning flags incorrectly set in HSM for Mountain BMCs (SDEVICE-3319)
@@ -318,8 +319,8 @@ If you see this, perform the following steps:
     ```
     ncn-mw# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq '.Status'
     {
-    "Health": "OK",
-    "State": "Online"
+      "Health": "OK",
+      "State": "Online"
     }
     ```
 
@@ -344,3 +345,27 @@ This issue looks similar to the following in the test output:
 ```
 
 Failures of this test caused by BMCs in the "On" state can be safely ignored.
+
+<a name="hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm"></a>
+#### ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM (CASMHMS-5272)
+
+The following HMS functional test may fail due to known issue [CASMHMS-5272](https://connect.us.cray.com/jira/browse/CASMHMS-5272) because of ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM:
+* `test_smd_component_endpoints_ncn-functional_remote-functional.tavern.yaml`
+
+This issue looks similar to the following in the test output:
+
+```
+        Traceback (most recent call last):
+          File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+          File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+        pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Enum 'AuxiliaryController' does not exist. Path: '/ComponentEndpoints/32/RedfishSubtype'.
+         - Enum 'AuxiliaryController' does not exist. Path: '/ComponentEndpoints/83/RedfishSubtype'.
+         - Enum 'AuxiliaryController' does not exist. Path: '/ComponentEndpoints/92/RedfishSubtype'.
+         - Enum 'AuxiliaryController' does not exist. Path: '/ComponentEndpoints/106/RedfishSubtype'.
+         - Enum 'AuxiliaryController' does not exist. Path: '/ComponentEndpoints/126/RedfishSubtype'.: Path: '/'>
+```
+
+Failures of this test caused by AuxiliaryController endpoints for Cassini mezzanine cards can be safely ignored.
