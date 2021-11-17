@@ -272,5 +272,9 @@ ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_swi
 
 7. Verify that customizations.yaml contains the updated password.
 
+   ```bash
+   ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
+   {"SNMPUsername": "testuser", "SNMPAuthPassword": "testpass1", "SNMPPrivPassword": "testpass2"}
+   ```
 
 
