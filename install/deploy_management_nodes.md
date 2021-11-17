@@ -177,6 +177,8 @@ proceed to step 2.
 <a name="update_management_node_firmware"></a>
 ## 2. Update Management Node Firmware
 
+> All firmware can be found in the HFP package provided with the Shasta release.
+
 The management nodes are expected to have certain minimum firmware installed for BMC, node BIOS, and PCIe card
 firmware. Where possible, the firmware should be updated prior to install. It is good to meet the minimum NCN
 firmware requirement before starting.
@@ -200,6 +202,8 @@ firmware requirement before starting.
    It will be possible to extract the files from the product tarball, but the install.sh script from that product 
    will be unable to load the firmware versions into the Firmware Action Services (FAS) because the management nodes
    are not booted and running Kubernetes and FAS cannot be used until Kubernetes is running.
+
+   If booted into the PIT node, the firmware can be found with HFP package provided with the Shasta release.
 
 1. (optional) Check these BIOS settings on management nodes [NCN BIOS](../background/ncn_bios.md).
 
