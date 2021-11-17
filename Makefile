@@ -28,4 +28,4 @@ rpm_build:
 
 latest_rpm:
 	DOCS_RPM=$(wildcard $(BUILD_DIR)/RPMS/noarch/docs-csm-$(VERSION)-*.noarch.rpm)
-	cp "${DOCS_RPM}" "$(BUILD_DIR)/RPMS/noarch/docs-csm-latest.noarch.rpm" 
+	cp "$(DOCS_RPM)" "$(BUILD_DIR)/RPMS/noarch/docs-csm-latest.noarch.rpm" 
