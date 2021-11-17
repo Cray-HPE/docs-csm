@@ -1,17 +1,7 @@
 # Stage 0 - Prerequisites and Preflight Checks
 
-> **NOTE:** CSM-1.1.0 is required in order to upgrade to CSM-1.2.0
->
-> **NOTE:** Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 > 1.0.0-beta.19.
->
+> **NOTE:** CSM-1.0.1 is required in order to upgrade to CSM-1.2.0
 
-Use the following command can be used to check the CSM version on the system:
-
-```bash
-ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
-```
-
-This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.4 or CSM-0.9.5.
 
 ## Stage 0.1 - Install latest docs RPM
 
@@ -21,7 +11,7 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
 
         ```bash
         ncn-m001# cd /root/
-        ncn-m001# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm
+        ncn-m001# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm
         ncn-m001# rpm -Uvh docs-csm-latest.noarch.rpm
         ```
 
