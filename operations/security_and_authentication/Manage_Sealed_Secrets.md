@@ -8,6 +8,7 @@ Sealed secrets are essential for managing sensitive information on the system. T
    - [Prevent Regeneration of Tracked Sealed Secrets](#prevent-regeneration-of-tracked-sealed-secrets)
    - [View Tracked Sealed Secrets](#view-tracked-sealed-secrets)
    - [Decrypt Sealed Secrets for Review](#decrypt-sealed-secrets-for-review)
+   - [Fix an Incorrect Value in a Sealed Secret](#fix-an-incorrect-value-in-a-sealed-secret)
 
 In the following sections, the term "tracked sealed secrets" is used to describe
 any existing secrets stored in `spec.kubernetes.tracked_sealed_secrets` that are available to be regenerated. 
@@ -189,4 +190,87 @@ Expected output looks similar to the following:
 ```bash
 {"Username": "root", "Password": "..."}
 ```
+
+
+### Fix an Incorrect Value in a Sealed Secret
+
+This procedure describes how to correct an invalid password in the customizations.yaml file during an install. In the following example, a typo was made in the cray_reds_credentials vault_switch_defaults SNMPAuthPassword, resulting in hardware not being discovered.
+
+The general process outlined in the following steps can be followed if a different value is incorrect.
+
+```bash
+ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
+{"SNMPUsername": "testuser", "SNMPAuthPassword": "testpas1", "SNMPPrivPassword": "testpass2"}
+```
+
+1. Decrypt the cray_reds_credentials secret.
+
+   ```bash
+   ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials > cray_reds_credentials.json
+   ```
+
+   The output file should look similar to the following.
+   Note that the data values are `base64` encoded.
+
+   ```json
+   {
+   "kind": "Secret",
+   "apiVersion": "v1",
+   "metadata": {
+      "name": "cray-reds-credentials",
+      "creationTimestamp": null,
+      "annotations": {
+         "sealedsecrets.bitnami.com/cluster-wide": "true"
+      },
+      "ownerReferences": [
+         {
+         "apiVersion": "bitnami.com/v1alpha1",
+         "kind": "SealedSecret",
+         "name": "cray-reds-credentials",
+         "uid": "",
+         "controller": true
+         }
+      ]
+   },
+   "data": {
+      "vault_redfish_defaults": "eyJDcmF5IjogeyJVc2VybmFtZSI6ICJyb290IiwgIlBhc3N3b3JkIjogImluaXRpYWwwIn19",
+      "vault_switch_defaults": "eyJTTk1QVXNlcm5hbWUiOiAidGVzdHVzZXIiLCAiU05NUEF1dGhQYXNzd29yZCI6ICJ0ZXN0cGFzMSIsICJTTk1QUHJpdlBhc3N3b3JkIjogInRlc3RwYXNzMiJ9"
+   }
+   }
+   ```
+
+2. Decode the vault_switch_defaults credentials to a working file.
+
+   ```bash
+   ncn-m# jq -r '.data.vault_switch_defaults' cray_reds_credentials.json | base64 --decode > vault_switch_defaults.json
+   ```
+
+3. Correct the password in the vault_switch_defaults.json file.
+
+   ```json
+   {"SNMPUsername": "testuser", "SNMPAuthPassword": "testpass1", "SNMPPrivPassword": "testpass2"}
+   ```
+
+4. Update cray_reds_credentials.json with an encoded version of the new password.
+
+   ```bash
+   ncn-m# cat <<< $(jq ".data.vault_switch_defaults=\"$(base64 --wrap=0 vault_switch_defaults.json)\"" cray_reds_credentials.json) > cray_reds_credentials.json
+   ```
+
+5. Verify that cray_reds_credentials.json has been updated with the new password.
+
+   ```bash
+   ncn-m# jq -r '.data.vault_switch_defaults' cray_reds_credentials.json | base64 --decode
+   {"SNMPUsername": "testuser", "SNMPAuthPassword": "testpass1", "SNMPPrivPassword": "testpass2"}
+   ```
+
+6. Replace the cray_reds_credentials secret in customizations.yaml with one containing the new credentials.
+
+   ```bash
+   ncn-m# cat cray_reds_credentials.json | ./utils/secrets-encrypt.sh | yq w -f - -i customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials'
+   ```
+
+7. Verify that customizations.yaml contains the updated password.
+
+
 
