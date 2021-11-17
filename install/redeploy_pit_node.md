@@ -16,6 +16,7 @@ Topics:
       * [Start Hand-Off](#start-hand-off)
    * [Reboot](#reboot)
    * [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
+   * [Fix NTP on ncn-m001](#fix-ntp-config-on-ncn-m001)
    * [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
    * [Validate `BOOTRAID` artifacts](#validate-bootraid-artifacts)
    * [Next Topic](#next-topic)
@@ -506,8 +507,19 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
 > **`CSI NOTE`** `/tmp/csi` will delete itself on the next reboot. The `/tmp` directory is `tmpfs` and runs in memory, it normally will not persist on restarts.
 
+<a name="fix-ntp-config-on-ncn-m001"></a>
+### 6. Fix the NTP Config on ncn-m001
+
+Run the following commands on ncn-m001 **only**:
+
+```bash
+cp /usr/share/doc/csm/scripts/cc_ntp.py /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py
+cp /usr/share/doc/csm/scripts/chrony.conf.cray.tmpl /etc/cloud/templates/chrony.conf.cray.tmpl
+cloud-init single --name ntp --frequency always
+```
+
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
-### 6. Configure DNS and NTP on each BMC
+### 7. Configure DNS and NTP on each BMC
 
  > **`NOTE`** If the system uses Gigabyte or Intel hardware, skip this section.
 
@@ -539,7 +551,7 @@ Perform the following steps on every NCN **except ncn-m001**.
     ```
 
 <a name="validate-bootraid-artifacts"></a>
-### 7. Validate `BOOTRAID` artifacts
+### 8. Validate `BOOTRAID` artifacts
 
 Perform the following steps **on ncn-m001**.
 
