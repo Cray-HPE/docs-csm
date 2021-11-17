@@ -683,7 +683,7 @@ This section applies to all node types. The commands in this section assume you 
     ncn-m# cloud-init clean; cloud-init init --local; cloud-init init
     ```
 
-1. Confirm `vlan004` is up with the correct IP address on the rebuilt node.
+1. Confirm `bond0.hmn0` is up with the correct IP address on the rebuilt node.
 
     Run these commands on the rebuilt node.
 
@@ -701,19 +701,19 @@ This section applies to all node types. The commands in this section assume you 
         If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
 
         ```bash
-        ncn# ip addr show vlan004
-        14: vlan004@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+        ncn# ip addr show bond0.hmn0
+        14: bond0.hmn0@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
             link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
-            inet 10.254.1.16/17 brd 10.254.127.255 scope global vlan004
+            inet 10.254.1.16/17 brd 10.254.127.255 scope global bond0.hmn0
                valid_lft forever preferred_lft forever
             inet6 fe80::ba59:9fff:fe2b:2f9e/64 scope link
                valid_lft forever preferred_lft forever
         ```
 
-        1. Change the IP address for `vlan004` if necessary.
+        1. Change the IP address for `bond0.hmn0` if necessary.
 
             ```bash
-            ncn# vim /etc/sysconfig/network/ifcfg-vlan004
+            ncn# vim /etc/sysconfig/network/ifcfg-bond0.hmn0
             ```
 
             Set the `IPADDR` line to the correct IP address with a `/17` mask. For example, if the correct IP address is `10.254.1.16`, the line should be:
@@ -722,19 +722,19 @@ This section applies to all node types. The commands in this section assume you 
             IPADDR='10.254.1.16/17'
             ```
 
-        1. Restart the `vlan004` network interface.
+        1. Restart the `bond0.hmn0` network interface.
 
             ```bash
-            ncn# wicked ifreload vlan004
+            ncn# wicked ifreload bond0.hmn0
             ```
 
         1. Confirm the output from the dig command matches the interface.
 
             ```bash
-            ncn# ip addr show vlan004
+            ncn# ip addr show bond0.hmn0
             ```
 
-1. Confirm that `vlan007` is up with the correct IP address on the rebuilt node.
+1. Confirm that `bond0.cmn0` is up with the correct IP address on the rebuilt node.
 
     Run these commands on the rebuilt node.
 
@@ -752,19 +752,19 @@ This section applies to all node types. The commands in this section assume you 
         If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
 
         ```bash
-        ncn# ip addr show vlan007
-        15: vlan007@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+        ncn# ip addr show bond0.cmn0
+        15: bond0.cmn0@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
             link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
-            inet 10.103.8.11/24 brd 10.103.8.255 scope global vlan007
+            inet 10.103.8.11/24 brd 10.103.8.255 scope global bond0.cmn0
                valid_lft forever preferred_lft forever
             inet6 fe80::ba59:9fff:fe2b:2f9e/64 scope link
                valid_lft forever preferred_lft forever
         ```
 
-        1. Change the IP address for `vlan007` if necessary.
+        1. Change the IP address for `bond0.cmn0` if necessary.
 
             ```bash
-            ncn# vim /etc/sysconfig/network/ifcfg-vlan007
+            ncn# vim /etc/sysconfig/network/ifcfg-bond0.cmn0
             ```
 
             Set the `IPADDR` line to the correct IP address with a `/24` mask. For example, if the correct IP address is `10.103.8.11`, the line should be:
@@ -773,16 +773,16 @@ This section applies to all node types. The commands in this section assume you 
             IPADDR='10.103.8.11/24'
             ```
 
-        1. Restart the `vlan007` network interface.
+        1. Restart the `bond0.cmn0` network interface.
 
             ```bash
-            ncn# wicked ifreload vlan007
+            ncn# wicked ifreload bond0.cmn0
             ```
 
         1. Confirm the output from the dig command matches the interface.
 
             ```bash
-            ncn# ip addr show vlan007
+            ncn# ip addr show bond0.cmn0
             ```
 
 1. Set the wipe flag back so it will not wipe the disk when the node is rebooted.
