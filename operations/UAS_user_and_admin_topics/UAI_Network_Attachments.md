@@ -9,7 +9,7 @@ This section describes the data at each of those stages to show how the final ne
 
 The details of CSI localization are beyond the scope of this guide, but here are the important settings, and the values used in the following examples:
 
-- The interface name on which the Kubernetes worker nodes reach their NMN subnet: `vlan002`
+- The interface name on which the Kubernetes worker nodes reach their NMN subnet: `bond0.nmn0`
 - The network and CIDR configured on that interface: `10.252.0.0/17`
 - The IP address of the gateway to other NMN subnets found on that network: `10.252.0.1`
 - The subnets where compute nodes reside on this system:
@@ -34,7 +34,7 @@ spec:
       nmn_subnet: 10.252.2.0/23
       nmn_supernet: 10.252.0.0/17
       nmn_supernet_gateway: 10.252.0.1
-      nmn_vlan: vlan002
+      nmn_vlan: bond0.nmn0
       # NOTE: the term DHCP here is misleading, this is merely
       #       a range of reserved IPs for UAIs that should not
       #       be handed out to others because the network
@@ -116,7 +116,7 @@ items:
     config: '{
       "cniVersion": "0.3.0",
       "type": "macvlan",
-      "master": "vlan002",
+      "master": "bond0.nmn0",
       "mode": "bridge",
       "ipam": {
         "type": "host-local",
