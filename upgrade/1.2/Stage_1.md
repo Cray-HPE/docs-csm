@@ -6,9 +6,27 @@
 
 For each master node in the cluster (exclude ncn-m001), again follow the steps:
 
-```bash
-ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002
-```
+    ```bash
+    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002
+    ```
+    
+1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
+
+## Stage 1.2
+
+1. Run `ncn-upgrade-k8s-worker.sh` for `ncn-w001`. Follow output of the script carefully. The script will pause for manual interaction.
+
+    ```bash
+    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w001
+    ```
+    
+    > NOTE: You may need to reset the root password for each node after it is rebooted
+
+1. Repeat the previous step for each other worker node, one at a time.
+
+## Stage 1.3
+
+For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP address to `ssh` to `ncn-m002` for this `ncn-m001` install
 
 > NOTE: Run the script once each for all master nodes, excluding ncn-m001. Follow output of above script carefully. The script will pause for manual interaction
 > NOTE: You may need to reset the root password for each node after it is rebooted

@@ -6,15 +6,15 @@ The most frequent issue with the Customer Access Network \(CAN\) is trouble acce
 
 The best way to resolve this issue is to try to ping an outside IP address from one of the NCNs other than `ncn-m001`, which has a direct connection that it can use instead of the Customer Access Network \(CAN\). The following are some things to check to make sure CAN is configured correctly:
 
-### Does the NCN have an IP Address Configured on the vlan007 Interface?
+### Does the NCN have an IP Address Configured on the bond0.cmn0 Interface?
 
-Check the status of the vlan007 interface. Make sure it has an address specified.
+Check the status of the bond0.cmn0 interface. Make sure it has an address specified.
 
 ```screen
-ncn-w002# ip addr show vlan007
-534: vlan007@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+ncn-w002# ip addr show bond0.cmn0
+534: bond0.cmn0@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
     link/ether 98:03:9b:b4:27:62 brd ff:ff:ff:ff:ff:ff
-    inet 10.102.5.5/26 brd 10.101.8.255 scope global vlan007
+    inet 10.102.5.5/26 brd 10.101.8.255 scope global bond0.cmn0
        valid_lft forever preferred_lft forever
     inet6 fe80::9a03:9bff:feb4:2762/64 scope link
        valid_lft forever preferred_lft forever
@@ -28,7 +28,7 @@ Check the default route on an NCN other than `ncn-m001`. There should be a defau
 
 ```screen
 ncn-w002# ip route | grep default
-default via 10.102.5.27 dev vlan007
+default via 10.102.5.27 dev bond0.cmn0
 ```
 
 If there is not an address specified, make sure the can- values have been defined in csi config init input.
@@ -73,7 +73,7 @@ If the outside IP address cannot be reached, check the spine switch configuratio
 
 ### Can the Spines Reach the NCN?
 
-Check that each of the spines can ping one or more of the NCNs at its vlan007 IP address. If there is only one spine being used on the system, only `spine-001` needs to be checked.
+Check that each of the spines can ping one or more of the NCNs at its bond0.cmn0 IP address. If there is only one spine being used on the system, only `spine-001` needs to be checked.
 
 ```screen
 sw-spine-001 [standalone: master] # ping 10.102.5.5
