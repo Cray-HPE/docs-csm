@@ -332,6 +332,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
        * [Backup and Restore Vault Clusters](security_and_authentication/Backup_and_Restore_Vault_Clusters.md)
        * [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
    * [API Authorization](security_and_authentication/API_Authorization.md)
+   * [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
 
 
 <a name="resiliency"></a>
@@ -612,7 +613,6 @@ MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manag
   * [MetalLB in BGP-Mode](network/metallb_bgp/MetalLB_in_BGP-Mode.md)
   * [MetalLB in BGP-Mode Configuration](network/metallb_bgp/MetalLB_in_BGP-Mode_Configuration.md)
   * [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
-  * [Update BGP Neighbors](network/metallb_bgp/Update_BGP_Neighbors.md)
   * [Troubleshoot Services without an Allocated IP Address](network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
   * [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 

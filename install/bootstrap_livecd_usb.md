@@ -56,10 +56,16 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    The ISO and other files are now available in the directory from the extracted CSM tar.
 
+1. Configure zypper with the `embedded` repository from the CSM release.
+
+   ```bash
+   linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
+   ```
+
 1. Install/upgrade the CSI RPM
 
    ```bash
-   linux# rpm -Uvh --force $(find ${CSM_PATH}/rpm/embedded/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
+   linux# zypper up --repo ${CSM_RELEASE}-embedded -y cray-site-init
    ```
 
 1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
@@ -76,21 +82,15 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    Expected output looks similar to the following:
 
-   ```
-   CRAY-Site-Init build signature...
-   Build Commit   : b3ed3046a460d804eb545d21a362b3a5c7d517a3-release-shasta-1.4
-   Build Time     : 2021-02-04T21:05:32Z
-   Go Version     : go1.14.9
-   Git Version    : b3ed3046a460d804eb545d21a362b3a5c7d517a3
-   Platform       : linux/amd64
-   App. Version   : 1.5.18
+    ```bash
+    CRAY-Site-Init build signature...
+    Build Commit   : b3ed3046a460d804eb545d21a362b3a5c7d517a3-release-shasta-1.4
+    Build Time     : 2021-02-04T21:05:32Z
+    Go Version     : go1.14.9
+    Git Version    : b3ed3046a460d804eb545d21a362b3a5c7d517a3
+    Platform       : linux/amd64
+    App. Version   : 1.5.18
     ```
-
-1. Configure zypper with the `embedded` repository from the CSM release.
-
-   ```bash
-   linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
-   ```
 
 1. Install podman or docker to support container tools required to generated
    sealed secrets.
@@ -107,11 +107,11 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
    ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/x86_64/podman-*.x86_64.rpm
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/noarch/podman-cni-config-*.noarch.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Containers/ -name "podman*.rpm" | sort -V | tail -1)
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Containers/ -name "podman-cni-config*.rpm" | sort -V | tail -1)
    ```
 
-1. Install lsscsi to view attached storage devices.
+1. (optional) Install lsscsi to view attached storage devices.
 
    lsscsi RPMs are included in the `embedded` repository in the CSM release and
    may be installed in your pre-LiveCD environment using `zypper` as follows:
@@ -125,9 +125,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
    ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/x86_64/lsscsi-*.x86_64.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Basesystem/ -name "lsscsi*.rpm" | sort -V | tail -1)
    ```
-
 
 1. Although not strictly required, the procedures for setting up the
    `site-init` directory recommend persisting `site-init` files in a Git
@@ -145,8 +144,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
    ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/x86_64/git-core-*.x86_64.rpm
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Development-Tools/15-SP2/x86_64/update/x86_64/git-*.x86_64.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Basesystem/ -name "git-core-*.rpm" | sort -V | tail -1)
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Development-Tools/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Development-Tools/ -name "git-*.rpm" | sort -V | tail -1)
    ```
 
 <a name="create-the-bootable-media"></a>
@@ -182,7 +181,7 @@ which device that is.
 
 1. Format the USB device
 
-    On Linux using the CSI application:
+    On Linux (on reinstalls, this could be any NCN or an existing PIT) using the CSI application:
 
     ```bash
     linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
@@ -723,10 +722,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    ```bash
    pit# cd /var/www/ephemeral
-   pit# export CSM_RELEASE=csm-x.y.z
-   pit# echo $CSM_RELEASE
-   pit# export CSM_PATH=$(pwd)/${CSM_RELEASE}
-   pit# echo $CSM_PATH
+   pit:/var/www/ephemeral# export CSM_RELEASE=csm-x.y.z
+   pit:/var/www/ephemeral# echo $CSM_RELEASE
+   pit:/var/www/ephemeral# export CSM_PATH=$(pwd)/${CSM_RELEASE}
+   pit:/var/www/ephemeral# echo $CSM_PATH
    ```
 
 1. Install Goss Tests and Server
@@ -734,8 +733,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    The following assumes the CSM_PATH environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/embedded/cray/csm/ -name "goss-servers*.rpm" | sort -V | tail -1)
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
+   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit:/var/www/ephemeral# cd 
    ```
 
 1. Verify the system:
