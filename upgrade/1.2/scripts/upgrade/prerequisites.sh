@@ -102,12 +102,9 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
-    rm -rf /root/.ssh/known_hosts || true
-    touch /root/.ssh/known_hosts
-    for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' ')
-    do
-        ssh_keygen_keyscan $i
-    done
+     grep -oP "(ncn-\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
+
+     grep -oP "(ncn-\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
 
     record_state ${state_name} $(hostname)
 else
@@ -280,6 +277,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     temp_file=$(mktemp)
     artdir=${CSM_ARTI_DIR}/images
+    radosgw-admin bucket link --uid=STS --bucket=ncn-images
     set -o pipefail
     csi handoff ncn-images \
           --kubeconfig /etc/kubernetes/admin.conf \
@@ -319,8 +317,8 @@ state_name="PREFLIGHT_CHECK"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
-     /opt/cray/tests/install/ncn/scripts/validate-bootraid-artifacts.sh
+    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    /opt/cray/tests/install/ncn/scripts/validate-bootraid-artifacts.sh
 
     # get all installed csm version into a file
     kubectl get cm -n services cray-product-catalog -o json | jq  -r '.data.csm' | yq r -  -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions
