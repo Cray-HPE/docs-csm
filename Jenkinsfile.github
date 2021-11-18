@@ -35,7 +35,7 @@ pipeline {
                   withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
                       sh "make rpm"
                       if(env.RELEASE_BRANCH_VERSION){
-                        sh "make latest_rpm"
+                        sh "make rpm_latest"
                       }
                     }
                 }
