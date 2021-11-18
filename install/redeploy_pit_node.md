@@ -192,10 +192,10 @@ data, so run them only when indicated. Instructions are in the `README` files.
     pit# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
     ```
 
-1. Ensure the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.
+1. Ensure the DNS server value is correctly set to point toward Unbound at `10.92.100.225` (NMN) and `10.94.100.225` (HMN).
 
     ```bash
-    pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
+    pit# csi handoff bss-update-cloud-init --set meta-data.dns-server="10.92.100.225 10.94.100.225" --limit Global
     ```
 
 1. Upload the bootstrap information.
