@@ -265,14 +265,14 @@ It is typically safe to postpone the investigation and resolution of non-blockin
 
 This section outlines known issues that cause HMS Health Check failures.
 
-* [Warning flags incorrectly set in HSM for Mountain BMCs (SDEVICE-3319)](#hms-known-issue-mountain-bmcs-warning-flags)
-* [BMCs set to "On" state in HSM (CASMHMS-5239)](#hms-bmcs-set-to-on-state-in-hsm)
-* [ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM (CASMHMS-5272)](#hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm)
+* [Warning flags incorrectly set in HSM for Mountain BMCs](#hms-known-issue-mountain-bmcs-warning-flags)
+* [BMCs set to "On" state in HSM](#hms-bmcs-set-to-on-state-in-hsm)
+* [ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM](#hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm)
 
 <a name="hms-known-issue-mountain-bmcs-warning-flags"></a>
-#### Warning flags incorrectly set in HSM for Mountain BMCs (SDEVICE-3319)
+#### Warning flags incorrectly set in HSM for Mountain BMCs
 
-The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue [SDEVICE-3319](https://connect.us.cray.com/jira/browse/SDEVICE-3319) that can cause Warning flags to be incorrectly set in HSM for Mountain BMCs and result in test failures.
+The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue that can cause Warning flags to be incorrectly set in HSM for Mountain BMCs and result in test failures.
 
 The following HMS functional test may fail due to this issue:
 * `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
@@ -327,9 +327,9 @@ If you see this, perform the following steps:
 Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.
 
 <a name="hms-bmcs-set-to-on-state-in-hsm"></a>
-#### BMCs set to "On" state in HSM (CASMHMS-5239)
+#### BMCs set to "On" state in HSM
 
-The following HMS functional test may fail due to known issue [CASMHMS-5239](https://connect.us.cray.com/jira/browse/CASMHMS-5239) because of CMMs setting BMC states to "On" instead of "Ready" in HSM:
+The following HMS functional test may fail due to a known issue because of CMMs setting BMC states to "On" instead of "Ready" in HSM:
 * `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
 
 This issue looks similar to the following in the test output:
@@ -347,9 +347,9 @@ This issue looks similar to the following in the test output:
 Failures of this test caused by BMCs in the "On" state can be safely ignored.
 
 <a name="hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm"></a>
-#### ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM (CASMHMS-5272)
+#### ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM
 
-The following HMS functional test may fail due to known issue [CASMHMS-5272](https://connect.us.cray.com/jira/browse/CASMHMS-5272) because of ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM:
+The following HMS functional test may fail due to a known issue because of ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM:
 * `test_smd_component_endpoints_ncn-functional_remote-functional.tavern.yaml`
 
 This issue looks similar to the following in the test output:
