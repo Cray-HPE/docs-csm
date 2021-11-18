@@ -132,3 +132,15 @@ and many more...
 * Cfs_session_stuck_in_pending: Under some circumstances, Configuration Framework Service (CFS) sessions can get stuck in a `pending` state, never completing and potentially blocking other sessions. This addresses cleaning up those sessions.
 * The `branch` parameter in CFS configurations may not work, and setting it will instead return an error. Continue setting the git commit hash instead.
 * After a boot or reboot a few CFS Pods may continue running even after they have finished and never go away. For more information see [Orphaned CFS Pods After Booting or Rebooting](troubleshooting/known_issues/orphaned_cfs_pods.md).
+* Intermittently, kernel dumps do not deliver because the CA cert for Spire needed to be reset.
+* Intermittently, PXE booting of NCNs time out.
+* Intermittently, Console replays output.
+* FAS loader is not handling the new Slingshot 1.6 firmware update because of its new version scheme.
+* Ceph services do not auto-start after a reboot of a storage node.
+* Intermittently, ssh connections to Ceph show host key verification errors.
+* Intermittently, DNS requests briefly fail during hardware discovery or an upgrade.
+* SCSD is not able to change root credentials for DL325/385 due to a bug in the 11.2021 iLO firmware.
+* Intermittently, Gigabyte firmware updates via FAS show an error.
+* Rarely, Nexus is not available when scaling down NCN workers to two nodes.
+* The boot order for Gigabyte NCNs does not persist after a reboot or reinstall.
+* Intermittently, storage nodes have clock skew during fresh install.
