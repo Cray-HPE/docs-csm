@@ -164,12 +164,12 @@ function update_write_files_user_data() {
     # Format for ifroute-<interface> syntax
     nmn_routes=()
     for rt in $nmn_cabinet_subnets; do
-        nmn_routes+=("$rt $nmn_gateway - vlan002")
+        nmn_routes+=("$rt $nmn_gateway - bond0.nmn0")
     done
 
     hmn_routes=()
     for rt in $hmn_cabinet_subnets; do
-        hmn_routes+=("$rt $hmn_gateway - vlan004")
+        hmn_routes+=("$rt $hmn_gateway - bond0.hmn0")
     done
 
     printf -v nmn_routes_string '%s\\n' "${nmn_routes[@]}"
@@ -182,13 +182,13 @@ cat <<EOF>write-files-user-data.json
     "write_files": [{
         "content": "${nmn_routes_string%,}",
         "owner": "root:root",
-        "path": "/etc/sysconfig/network/ifroute-vlan002",
+        "path": "/etc/sysconfig/network/ifroute-bond0.nmn0",
         "permissions": "0644"
       },
       {
         "content": "${hmn_routes_string%,}",
         "owner": "root:root",
-        "path": "/etc/sysconfig/network/ifroute-vlan004",
+        "path": "/etc/sysconfig/network/ifroute-bond0.hmn0",
         "permissions": "0644"
       }
     ]

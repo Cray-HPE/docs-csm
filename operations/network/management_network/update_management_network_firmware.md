@@ -8,18 +8,7 @@ Access to the switches from the LiveCD/ncn-m001.
 
 ## Configuration
 
-All firmware will be located at `/var/www/fw/network` on the LiveCD. It should contain the following files:
-
-```
-ncn-m001-pit:/var/www/network/firmware # ls -lh
-total 2.7G
--rw-rw-r--+ 1 root root 658353828 Jan  7  2021 ArubaOS-CX_6400-6300_10_06_0010.stable.swi
--rw-rw-r--+ 1 root root 384156519 May  3 22:18 ArubaOS-CX_8320_10_06_0110.stable.swi
--rw-rw-r--+ 1 root root 444610797 Jan  7  2021 ArubaOS-CX_8325_10_06_0010.stable.swi
--rw-rw-r--+ 1 root root 431371873 Apr 30 20:55 ArubaOS-CX_8360_10_06_0110.stable.swi
--rw-rw-r--+ 1 root root 763636433 Aug 26  2020 onyx-X86_64-3.9.1014.stable.img
--rw-rw-r--+ 1 root root 604119040 Oct 28  2020 OS10_Enterprise_10.5.1.4.stable.tar
-```
+All firmware can be found in the HFP package provided with the Shasta release.
 
 ## Switch Firmware
 
