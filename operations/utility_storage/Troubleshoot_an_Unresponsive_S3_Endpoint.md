@@ -49,8 +49,8 @@ Expected Responses: 2xx, 3xx
     ```bash
     ncn-s# journalctl -u keepalived.service --no-pager |grep -i gratuitous
     Aug 25 19:33:12 ncn-s001 Keepalived_vrrp[12439]: Registering gratuitous ARP shared channel
-    Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: Sending gratuitous ARP on vlan002 for 10.252.1.3
-    Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: (VI_0) Sending/queueing gratuitous ARPs on vlan002 for 10.252.1.3
+    Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: Sending gratuitous ARP on bond0.nmn0 for 10.252.1.3
+    Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: (VI_0) Sending/queueing gratuitous ARPs on bond0.nmn0 for 10.252.1.3
     ```
 
    `HAProxy:`
