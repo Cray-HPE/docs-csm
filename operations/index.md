@@ -362,6 +362,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
        *   [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
    *   [Troubleshoot SPIRE Failing to Start on NCNs](security_and_authentication/Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md)
    *   [API Authorization](security_and_authentication/API_Authorization.md)
+   *   [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
 
 
 <a name="resiliency"></a>
