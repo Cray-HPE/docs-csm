@@ -217,20 +217,14 @@ function update_k8s_runcmd_user_data() {
 cat <<EOF>k8s-runcmd-user-data.json
 {
   "user-data": {
-      "runcmd": [
-          "/srv/cray/scripts/metal/install-bootloader.sh",
-          "/srv/cray/scripts/metal/set-host-records.sh",
-          "/srv/cray/scripts/metal/set-dhcp-to-static.sh",
-          "/srv/cray/scripts/metal/set-dns-config.sh",
-          "/srv/cray/scripts/metal/set-ntp-config.sh",
-          "/srv/cray/scripts/metal/enable-lldp.sh",
-          "/srv/cray/scripts/metal/set-bmc-bbs.sh",
-          "/srv/cray/scripts/metal/set-efi-bbs.sh",
-          "/srv/cray/scripts/metal/disable-cloud-init.sh",
-          "/srv/cray/scripts/common/update_ca_certs.py",
-          "/srv/cray/scripts/metal/install-rpms.sh",
-          "/srv/cray/scripts/common/kubernetes-cloudinit.sh"
-      ]
+    "runcmd": [
+      "/srv/cray/scripts/metal/net-init.sh",
+      "/srv/cray/scripts/common/update_ca_certs.py",
+      "/srv/cray/scripts/metal/install.sh",
+      "/srv/cray/scripts/common/kubernetes-cloudinit.sh",
+      "/srv/cray/scripts/join-spire-on-storage.sh",
+      "touch /etc/cloud/cloud-init.disabled"
+    ]
   }
 }
 EOF
@@ -242,21 +236,14 @@ function update_first_ceph_runcmd_user_data() {
 cat <<EOF>first-ceph-runcmd-user-data.json
 {
   "user-data": {
-      "runcmd": [
-          "/srv/cray/scripts/metal/install-bootloader.sh",
-          "/srv/cray/scripts/metal/set-host-records.sh",
-          "/srv/cray/scripts/metal/set-dhcp-to-static.sh",
-          "/srv/cray/scripts/metal/set-dns-config.sh",
-          "/srv/cray/scripts/metal/set-ntp-config.sh",
-          "/srv/cray/scripts/metal/enable-lldp.sh",
-          "/srv/cray/scripts/metal/set-bmc-bbs.sh",
-          "/srv/cray/scripts/metal/set-efi-bbs.sh",
-          "/srv/cray/scripts/metal/disable-cloud-init.sh",
-          "/srv/cray/scripts/common/update_ca_certs.py",
-          "/srv/cray/scripts/metal/install-rpms.sh",
-          "/srv/cray/scripts/common/pre-load-images.sh",
-          "/srv/cray/scripts/common/storage-ceph-cloudinit.sh"
-      ]
+    "runcmd": [
+      "/srv/cray/scripts/metal/net-init.sh",
+      "/srv/cray/scripts/common/update_ca_certs.py",
+      "/srv/cray/scripts/metal/install.sh",
+      "/srv/cray/scripts/common/pre-load-images.sh",
+      "touch /etc/cloud/cloud-init.disabled",
+      "/srv/cray/scripts/common/ceph-enable-services.sh"
+    ]
   }
 }
 EOF
@@ -268,20 +255,14 @@ function update_ceph_worker_runcmd_user_data() {
 cat <<EOF>ceph-worker-runcmd-user-data.json
 {
   "user-data": {
-      "runcmd": [
-          "/srv/cray/scripts/metal/install-bootloader.sh",
-          "/srv/cray/scripts/metal/set-host-records.sh",
-          "/srv/cray/scripts/metal/set-dhcp-to-static.sh",
-          "/srv/cray/scripts/metal/set-dns-config.sh",
-          "/srv/cray/scripts/metal/set-ntp-config.sh",
-          "/srv/cray/scripts/metal/enable-lldp.sh",
-          "/srv/cray/scripts/metal/set-bmc-bbs.sh",
-          "/srv/cray/scripts/metal/set-efi-bbs.sh",
-          "/srv/cray/scripts/metal/disable-cloud-init.sh",
-          "/srv/cray/scripts/common/update_ca_certs.py",
-          "/srv/cray/scripts/metal/install-rpms.sh",
-          "/srv/cray/scripts/common/pre-load-images.sh"
-      ]
+    "runcmd": [
+      "/srv/cray/scripts/metal/net-init.sh",
+      "/srv/cray/scripts/common/update_ca_certs.py",
+      "/srv/cray/scripts/metal/install.sh",
+      "/srv/cray/scripts/common/pre-load-images.sh",
+      "touch /etc/cloud/cloud-init.disabled",
+      "/srv/cray/scripts/common/ceph-enable-services.sh"
+    ]
   }
 }
 EOF
