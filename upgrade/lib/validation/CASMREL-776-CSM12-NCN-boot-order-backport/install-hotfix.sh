@@ -10,7 +10,7 @@ ilorest_ver='3.2.3-1'
 # Installs RPMs, or fetches them if possible.
 function install_rpms {
     zypper --no-gpg-checks \
-        --plus-repo https://packages.local/repository/csm-sles-15sp2 \
+        --plus-repo https://packages.local/repository/csm-sle-15sp2 \
         -n in -y \
         "ilorest=$ilorest_ver" \
         "pit-init=$pitinit_ver"
