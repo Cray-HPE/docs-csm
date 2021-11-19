@@ -97,8 +97,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 
    ```bash
-   pit# mkdir -pv /var/www/ephemeral/prep/admin
-   pit# pushd !$
+   pit# cd ~
    pit# script -af csm-install-remoteiso.$(date +%Y-%m-%d).txt
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
@@ -138,7 +137,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    1. (recommended) After reconnecting, resume the typescript (the `-a` appends to an existing script).
 
        ```bash
-      pit# pushd /var/www/ephemeral/prep/admin
+      pit# cd ~
       pit# script -af $(ls -tr csm-install-remoteiso* | head -n 1)
       pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
       ```
@@ -164,6 +163,18 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     pit# mount -v -L PITDATA
     pit# pushd /var/www/ephemeral
     pit/var/www/ephemeral# mkdir -v prep configs data
+    ```
+
+1. Quit the typescript session with the `exit` command, copy the file (csm-install-remoteis.<date>.txt) from its initial location to the newly created directory, and restart the typescript.
+
+    ```bash
+    pit# mkdir -pv /mnt/pitdata/prep/admin
+    pit# exit # The typescript
+    pit# cp ~/csm-install-remoteiso.*.txt /mnt/pitdata/prep/admin
+    pit# cd /mnt/pitdata/prep/admin
+    pit# script -af $(ls -tr csm-install-remoteiso* | head -n 1)
+    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+    pit# pushd /var/www/ephemeral
     ```
 
 1. Download the CSM software release to the PIT node.
@@ -195,6 +206,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    1. Expand the tarball on the PIT node.
 
+      > Note: Expansion of the tarball may take more than 45 minutes.
+
+
       ```bash
       pit:/var/www/ephemeral# tar -zxvf ${CSM_RELEASE}.tar.gz
       pit:/var/www/ephemeral# ls -l ${CSM_RELEASE}
@@ -213,9 +227,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Install/upgrade the CSI and testing RPMs.
 
    ```bash
-   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/embedded/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
-   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/embedded/cray/csm/ -name "goss-servers*.rpm" | sort -V | tail -1)
-   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/cray/csm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "cray-site-init*.rpm" | sort -V | tail -1)
+   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
+   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit:/var/www/ephemeral# cd
    ```
 
 1. Show the version of CSI installed.

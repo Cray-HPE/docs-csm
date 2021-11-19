@@ -9,10 +9,10 @@ ncns=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" \
   jq -r '.[] | ."ExtraProperties" | ."Aliases" | .[]' | sort)
 
 declare -A vlans_to_check
-# Do not be tempted to add vlan002 to this list without more checking as there are things like VIPs that should not be
+# Do not be tempted to add bond0.nmn0 to this list without more checking as there are things like VIPs that should not be
 # removed!
-vlans_to_check['vlan004']='hmn'
-vlans_to_check['vlan007']='can'
+vlans_to_check['bond0.hmn0']='hmn'
+vlans_to_check['bond0.cmn0']='can'
 
 for ncn in $ncns; do
   echo "Checking $ncn for incorrect IP addresses..."

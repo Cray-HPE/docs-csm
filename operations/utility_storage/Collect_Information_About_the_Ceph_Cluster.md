@@ -2,7 +2,7 @@
 
 These general commands for Ceph are helpful for obtaining information pertinent to troubleshooting issues.
 
-As a reference, the Ceph commands below are run from a ceph-mon node. Certain commands will work on different systems. For example, the rbd command can be used on the worker nodes if specifying the proper key.
+As a reference, the Ceph commands below are run from a ceph-mon node. Certain commands will work on different systems. For example, the `rbd` command can be used on the worker nodes if specifying the proper key.
 
 ## Ceph Log and File Locations
 
@@ -160,3 +160,4 @@ ncn-m001# ceph osd lspools
 10 kube
 11 smf
 ```
+

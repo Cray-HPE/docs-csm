@@ -178,8 +178,28 @@ proceed to step 2.
 ## 2. Update Management Node Firmware
 
 The management nodes are expected to have certain minimum firmware installed for BMC, node BIOS, and PCIe card
-firmware. Where possible, the firmware should be updated prior to install. Some firmware can be updated
-during or after the installation, but it is better to meet the minimum NCN firmware requirement before starting.
+firmware. Where possible, the firmware should be updated prior to install. It is good to meet the minimum NCN
+firmware requirement before starting.
+
+   >**Note:** When the PIT node is booted from the LiveCD, it is not possible to use the Firmware Action Service (FAS) to update the
+   the firmware because that service has not yet been installed. However, at this point, it would be possible to use
+   the HPE Cray EX HPC Firmware Pack (HFP) product on the PIT node to learn about the firmware versions available in HFP.
+
+   If the firmware is not updated at this point in the installation workflow, it can be done with FAS after CSM and HFP have 
+   both been installed and configured, however, at that point a rolling reboot procedure for the management nodes will be needed 
+   after the firmware has been updated.
+
+   See the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
+   on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for information about the HPE Cray EX HPC Firmware Pack (HFP) product.
+
+   In the HFP documentation there is information about the recommended firmware packages to be installed.
+   See "Product Details" in the HPE Cray EX HPC Firwmare Pack Installation Guide.
+
+   Some of the component types have manual procedures to check firmware versions and update firmware. 
+   See "Upgrading Firmware Without FAS" in the HPE Cray EX HPC Firwmare Pack Installation Guide.
+   It will be possible to extract the files from the product tarball, but the install.sh script from that product 
+   will be unable to load the firmware versions into the Firmware Action Services (FAS) because the management nodes
+   are not booted and running Kubernetes and FAS cannot be used until Kubernetes is running.
 
 1. (optional) Check these BIOS settings on management nodes [NCN BIOS](../background/ncn_bios.md).
 
@@ -686,158 +706,6 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
    pit# mkdir -v ~/.kube
    pit# scp ncn-m002.nmn:/etc/kubernetes/admin.conf ~/.kube/config
    ```
-
-
-<a name="bgp-routing"></a>
-### 4.2 BGP Routing
-
-After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IP addresses are incorrect on the switches. Follow the steps below and see [Check and Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md) for more details on the BGP configuration.
-
-1. Make sure the SYSTEM_NAME variable is set to name of your system.
-
-    ```bash
-    pit# export SYSTEM_NAME=eniac
-    ```
-
-1. Determine the IP address of the worker NCNs.
-
-    ```bash
-    pit# grep -B1 "name: ncn-w" /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
-    ```
-
-1. Determine the IP addresses for the switches that are peering.
-
-    ```bash
-    pit# grep peer-address /var/www/ephemeral/prep/${SYSTEM_NAME}/metallb.yaml
-    ```
-
-1. Run the script appropriate for your switch hardware vendor:
-
-    * If you have Mellanox switches, run the BGP helper script.
-
-        The BGP helper script requires three parameters: the IP address of switch 1, the IP address of switch 2, and the path to the to CSI generated network files.
-
-        * The IP addresses used should be Node Management Network IP addresses (NMN). These IP addresses will be used for the BGP Router-ID.
-        * The path to the CSI generated network files must include `CAN.yaml`, `HMN.yaml`, `HMNLB.yaml`, `NMNLB.yaml`, and `NMN.yaml`. The path must include the SYSTEM_NAME.
-
-        The IP addresses in this example should be replaced by the IP addresses of the switches.
-
-        ```bash
-        pit# /usr/local/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/
-        ```
-
-    * If you have Aruba switches, run CANU.
-     
-        CANU requires three parameters: the IP address of switch 1, the IP address of switch 2, and the path to the to directory containing the file `sls_input_file.json`
-
-        The IP addresses in this example should be replaced by the IP addresses of the switches.
-
-        ```bash
-        pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/
-        ```
-
-1. <a name="bgp-check-procedure">Do the following steps</a> ***for each of the switch IP addresses that you found previously***:
-
-    1. Log in to the switch as the `admin` user:
-      
-        ```bash
-        pit# ssh admin@<switch_ip_address>
-        ```   
-
-    1. Clear the BGP peering sessions by running the following commands. You should see either "arubanetworks" or "Mellanox" in the first output you see when you log in to the switch.
-        * Aruba: `clear bgp *`
-        * Mellanox: First run `enable`, then run `clear ip bgp all`
-
-    1. Wait about 10 seconds, then check the status of the BGP peering sessions.
-        * Aruba: `show bgp ipv4 unicast summary`
-        * Mellanox: `show ip bgp summary`
-
-        You should see a neighbor for each of the workers NCN IP addresses found above. If it is an Aruba switch, you will also see a neighbor for the other switch of the pair that are peering.
-
-        At this point the peering sessions with the worker IP addresses should be in `IDLE`, `CONNECT`, or `ACTIVE` state (not `ESTABLISHED`). This is due to the MetalLB speaker pods not being deployed yet.
-
-        You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
-
-    1. Check the BGP config to verify that the NCN neighbors are configured as passive.
-        * Aruba: 
-        
-            ```
-            # show run bgp
-            ``` 
-            
-            The passive neighbor configuration is required, which looks similar to `neighbor 10.252.1.7 passive`
-
-            EXAMPLE OUTPUT
-            ```
-            sw-spine-001# show run bgp
-            router bgp 65533
-            bgp router-id 10.252.0.2
-            maximum-paths 8
-            distance bgp 20 70
-            neighbor 10.252.0.3 remote-as 65533
-            neighbor 10.252.1.7 remote-as 65533
-            neighbor 10.252.1.7 passive
-            neighbor 10.252.1.8 remote-as 65533
-            neighbor 10.252.1.8 passive
-            neighbor 10.252.1.9 remote-as 65533
-            neighbor 10.252.1.9 passive
-            ```
-
-        * Mellanox: 
-        
-            ```
-            # show run protocol bgp
-            ``` 
-            
-            The passive neighbor configuration is required, which looks similar to `router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive` 
-
-            EXAMPLE OUTPUT
-            ```
-            protocol bgp
-            router bgp 65533 vrf default
-            router bgp 65533 vrf default router-id 10.252.0.2 force
-            router bgp 65533 vrf default maximum-paths ibgp 32
-            router bgp 65533 vrf default neighbor 10.252.1.7 remote-as 65533
-            router bgp 65533 vrf default neighbor 10.252.1.7 route-map ncn-w003
-            router bgp 65533 vrf default neighbor 10.252.1.8 remote-as 65533
-            router bgp 65533 vrf default neighbor 10.252.1.8 route-map ncn-w002
-            router bgp 65533 vrf default neighbor 10.252.1.9 remote-as 65533
-            router bgp 65533 vrf default neighbor 10.252.1.9 route-map ncn-w001
-            router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive
-            router bgp 65533 vrf default neighbor 10.252.1.8 transport connection-mode passive
-            router bgp 65533 vrf default neighbor 10.252.1.9 transport connection-mode passive
-            ```
-
-    1. Repeat the previous steps for the remaining switch IP addresses.
-
-1. If the neighbor IP addresses do not match the worker NCN IP addresses:
-
-    1. Run the script appropriate for your switch hardware vendor:
-
-        * If you have Mellanox switches, run the BGP helper script.
-
-            The BGP helper script requires three parameters: the IP address of switch 1, the IP addresss of switch 2, and the path to the to CSI generated network files.
-
-            * The IP addresses used should be Node Management Network IP addresses (NMN). These IP addresses will be used for the BGP Router-ID.
-            * The path to the CSI generated network files must include `CAN.yaml`, `HMN.yaml`, `HMNLB.yaml`, `NMNLB.yaml`, and `NMN.yaml`. The path must include the SYSTEM_NAME.
-
-            The IP addresses in this example should be replaced by the IP addresses of the switches.
-
-            ```bash
-            pit# /usr/local/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/
-            ```
-
-        * If you have Aruba switches, run CANU.
-     
-            CANU requires three parameters: the IP address of switch 1, the IP addresss of switch 2, and the path to the to directory containing the file `sls_input_file.json`
-
-            The IP addresses in this example should be replaced by the IP addresses of the switches.
-
-            ```bash
-            pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/
-            ```
-
-    1. Repeat the previous [BGP check procedure](#bgp-check-procedure) ***on each switch***.
 
 <a name="install-tests"></a>
 ### 4.4 Install Tests and Test Server on NCNs
