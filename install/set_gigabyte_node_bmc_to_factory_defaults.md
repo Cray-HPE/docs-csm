@@ -9,8 +9,9 @@ Use the management scripts and text files to reset Gigabyte BMC to factory defau
 - When BIOS or BMC flash procedures fail using Redfish
   - Run the `do_bmc_factory_default.sh` script
   - Run `ipmitool -I lanplus -U admin -P password -H BMC_or_CMC_IP mc reset cold` and flash it again after 5 minutes seconds
-- If booted from the PIT node, the required scripts are located in
-   `/var/www/fw/river/sh-svr-scripts`
+- If booted from the PIT node:
+  - the firmware packages are located in the HFP package provided with the Shasta release
+  - the required scripts are located in `/var/www/fw/river/sh-svr-scripts`
 
 ### Procedure
 

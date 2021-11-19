@@ -362,6 +362,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
        * [Backup and Restore Vault Clusters](security_and_authentication/Backup_and_Restore_Vault_Clusters.md)
        * [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
    * [API Authorization](security_and_authentication/API_Authorization.md)
+   * [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
 
 
 <a name="resiliency"></a>
