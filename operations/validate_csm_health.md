@@ -112,9 +112,9 @@ Review the output for `Result: FAIL` and follow the instructions provided to res
 To dump the ncn uptimes, the node resource consumptions and/or the list of pods not in a running state, run the following:
 
 ```bash
-ncn# /opt/cray/platform-utils/ncnHealthCheck.sh -s ncn_uptimes
-ncn# /opt/cray/platform-utils/ncnHealthCheck.sh -s node_resource_consumption
-ncn# /opt/cray/platform-utils/ncnHealthCheck.sh -s pods_not_running
+ncn# /opt/cray/platform-utils/ncnHealthChecks.sh -s ncn_uptimes
+ncn# /opt/cray/platform-utils/ncnHealthChecks.sh -s node_resource_consumption
+ncn# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
 ```
 <a name="known-issues"></a>
 #### 1.2.1 Known Issues
