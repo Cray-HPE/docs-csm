@@ -2,7 +2,7 @@
 
 pipeline {
     agent {
-        label "metal-gcp-builder"
+        label "metal-gcp-builder-new"
     }
 
     options {
@@ -16,8 +16,24 @@ pipeline {
         GIT_REPO_NAME = getRepoName()
         RELEASE_BRANCH_VERSION = getReleaseBranchVersion()
     }
-    
+
     stages {
+        stage("Update Vendored Dependencies") {
+            steps {
+                script {
+                    sh(returnStdout: true, script: "git vendor list").split("\n").findAll{it =~ /^[a-z]/}.each {
+                        it = it.replaceFirst(/:$/, "")
+                        echo "Updating vendor dependency ${it}"
+                        (vendorName, vendorBranch) = it.split('@')
+                        sh "git vendor update ${vendorName} ${vendorBranch}"
+                        // RPM build may get confused on multiple spec files in tarball
+                        echo "Removing spec files from vendored dependencies"
+                        sh "find . -mindepth 2 -name '*.spec' -delete"
+                    }
+                }
+            }
+        }
+
         stage("Prepare") {
             steps {
                 script {
@@ -29,7 +45,6 @@ pipeline {
             }
         }
 
-      
       stage("Build RPM") {
           steps {
               script {
