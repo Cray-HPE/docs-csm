@@ -666,7 +666,17 @@ This section applies to master and worker nodes. Skip this section if rebuilding
            systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
    ```
 
-1. Confirm vlan004 is up with the correct IP address on the rebuilt node.
+    **Rebuilt node with modified ssh key(s):** The cloud-init process can fail when accessing other nodes if ssh keys have been modified in the cluster.  If this occurs, the following steps can be used to repair the desired ssh keys on the newly rebuilt node:
+
+    1. Allow cloud-init to fail due to the non-matching keys.
+    1. Copy the correct ssh key(s) to the newly rebuilt node.
+    1. Re-run cloud-init on the newly rebuilt node:
+
+    ```bash
+    ncn-m# cloud-init clean; cloud-init init --local; cloud-init init
+    ```
+
+1. Confirm `bond0.hmn0` is up with the correct IP address on the rebuilt node.
 
     The following examples assume the NCN/hostname is `NODE`.
 
@@ -682,20 +692,20 @@ This section applies to master and worker nodes. Skip this section if rebuilding
         If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
 
         ```bash
-        NODE# ip addr show vlan004
-        14: vlan004@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+        ncn# ip addr show bond0.hmn0
+        14: bond0.hmn0@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
             link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
-            inet 10.254.1.16/17 brd 10.254.127.255 scope global vlan004
+            inet 10.254.1.16/17 brd 10.254.127.255 scope global bond0.hmn0
                valid_lft forever preferred_lft forever
             inet6 fe80::ba59:9fff:fe2b:2f9e/64 scope link
                valid_lft forever preferred_lft forever
         ```
 
-       1. Change the IP address for vlan004 if necessary.
+        1. Change the IP address for `bond0.hmn0` if necessary.
 
-           ```bash
-           NODE# vim /etc/sysconfig/network/ifcfg-vlan004
-           ```
+            ```bash
+            ncn# vim /etc/sysconfig/network/ifcfg-bond0.hmn0
+            ```
 
            Set the IPADDR line to the correct IP address with a `/17` mask.
 
@@ -703,19 +713,19 @@ This section applies to master and worker nodes. Skip this section if rebuilding
            IPADDR='10.254.1.16/17'
            ```
 
-    1. Restart the vlan004 network interface.
+        1. Restart the `bond0.hmn0` network interface.
 
-        ```bash
-        NODE# wicked ifreload vlan004
-        ```
+            ```bash
+            ncn# wicked ifreload bond0.hmn0
+            ```
 
     1. Confirm the output from the dig command matches the interface.
 
-        ```bash
-        NODE# ip addr show vlan004
-        ```
+            ```bash
+            ncn# ip addr show bond0.hmn0
+            ```
 
-1. Confirm that vlan007 is up with the correct IP address on the rebuilt node.
+1. Confirm that `bond0.cmn0` is up with the correct IP address on the rebuilt node.
 
     The following examples assume the NCN/hostname is `NODE`.
 
@@ -731,20 +741,20 @@ This section applies to master and worker nodes. Skip this section if rebuilding
         If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
 
         ```bash
-        NODE# ip addr show vlan007
-        15: vlan007@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+        ncn# ip addr show bond0.cmn0
+        15: bond0.cmn0@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
             link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
-            inet 10.103.8.11/24 brd 10.103.8.255 scope global vlan007
+            inet 10.103.8.11/24 brd 10.103.8.255 scope global bond0.cmn0
                valid_lft forever preferred_lft forever
             inet6 fe80::ba59:9fff:fe2b:2f9e/64 scope link
                valid_lft forever preferred_lft forever
         ```
 
-       1. Change the IP address for vlan007 if necessary.
+        1. Change the IP address for `bond0.cmn0` if necessary.
 
-           ```bash
-           NODE# vim /etc/sysconfig/network/ifcfg-vlan007
-           ```
+            ```bash
+            ncn# vim /etc/sysconfig/network/ifcfg-bond0.cmn0
+            ```
 
            Set the IPADDR line to the correct IP address with a `/24` mask.
 
@@ -752,13 +762,11 @@ This section applies to master and worker nodes. Skip this section if rebuilding
            IPADDR='10.103.8.11/24'
            ```
 
-    1. Restart the vlan007 network interface.
+        1. Restart the `bond0.cmn0` network interface.
 
-        ```bash
-        NODE# wicked ifreload vlan007
-        ```
-
-    1. Confirm the output from the dig command matches the interface.
+            ```bash
+            ncn# wicked ifreload bond0.cmn0
+            ```
 
         ```bash
         NODE# ip addr show vlan007
@@ -766,18 +774,9 @@ This section applies to master and worker nodes. Skip this section if rebuilding
 
 1. Verify the new node is in the cluster.
 
-    Run the following command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
-
-    ```bash
-    ncn# kubectl get nodes
-    NAME       STATUS   ROLES    AGE    VERSION
-    ncn-m001   Ready    master   113m   v1.18.6
-    ncn-m002   Ready    master   113m   v1.18.6
-    ncn-m003   Ready    master   112m   v1.18.6
-    ncn-w001   Ready    <none>   112m   v1.18.6
-    ncn-w002   Ready    <none>   112m   v1.18.6
-    ncn-w003   Ready    <none>   112m   v1.18.6
-    ```
+            ```bash
+            ncn# ip addr show bond0.cmn0
+            ```
 
 1. Set the wipe flag back so it will not wipe the disk when the node is rebooted.
 

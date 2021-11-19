@@ -26,7 +26,6 @@ The following administrative topics can be found in this guide:
   - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
   - [Hardware Management (HM) Collector](#hardware-management-hm-collector)
   - [Node Management](#node-management)
-  - [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
   - [Network](#network)
     - [Management Network](#management-network)
     - [Customer Access Network (CAN)](#customer-access-network-can)
@@ -363,6 +362,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
        *   [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
    *   [Troubleshoot SPIRE Failing to Start on NCNs](security_and_authentication/Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md)
    *   [API Authorization](security_and_authentication/API_Authorization.md)
+   *   [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
 
 
 <a name="resiliency"></a>
@@ -408,6 +408,10 @@ Ceph is the utility storage platform that is used to enable pods to store persis
   * [Add Ceph OSDs](utility_storage/Add_Ceph_OSDs.md)
   * [Shrink Ceph OSDs](utility_storage/Shrink_Ceph_OSDs.md)
   * [Ceph Health States](utility_storage/Ceph_Health_States.md)
+  * [Ceph Daemon Memory Profiling](utility_storage/Ceph_Daemon_Memory_Profiling.md)
+  * [Ceph Service Check Script Usage](utility_storage/Ceph_Service_Check_Script_Usage.md)
+  * [Ceph Orchestrator Usage](utility_storage/Ceph_Orchestrator_Usage.md)
+  * [Ceph Storage Types](utility_storage/Ceph_Storage_Types.md)
   * [Dump Ceph Crash Data](utility_storage/Dump_Ceph_Crash_Data.md)
   * [Identify Ceph Latency Issues](utility_storage/Identify_Ceph_Latency_Issues.md)
   * [Cephadm Reference Material](utility_storage/Cephadm_Reference_Material.md)
@@ -421,6 +425,7 @@ Ceph is the utility storage platform that is used to enable pods to store persis
   * [Troubleshoot Pods Failing to Restart on Other Worker Nodes](utility_storage/Troubleshoot_Pods_Failing_to_Restart_on_Other_Worker_Nodes.md)
   * [Troubleshoot Large Object Map Objects in Ceph Health](utility_storage/Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)
   * [Troubleshoot Failure of RGW Health Check](utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
+  * [Troubleshooting Ceph MDS Reporting Slow Requests and Failure on Client](utility_storage/Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client.md)
 
 
 <a name="system-management-health"></a>
@@ -512,6 +517,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Add a Standard Rack Node](node_management/Add_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node](node_management/Move_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node (Same Rack/Same HSN Ports)](node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
+    * [Verify Node Removal](node_management/Verify_Node_Removal.md)
   * [Clear Space in Root File System on Worker Nodes](node_management/Clear_Space_in_Root_File_System_on_Worker_Nodes.md)
   * [Manually Wipe Boot Configuration on Nodes to be Reinstalled](node_management/Manually_Wipe_Boot_Configuration_on_Nodes_to_be_Reinstalled.md)
   * [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
@@ -534,20 +540,6 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Enable Passwordless Connections to Liquid Cooled Node BMCs](node_management/Enable_Passwordless_Connections_to_Liquid_Cooled_Node_BMCs.md)
     * [View BIOS Logs for Liquid Cooled Nodes](node_management/View_BIOS_Logs_for_Liquid_Cooled_Nodes.md)
   * [Configure NTP on NCNs](node_management/Configure_NTP_on_NCNs.md)
-
-
-<a name="reds"></a>
-
-## River Endpoint Discovery Service (REDS)
-
-The River Endpoint Discovery Service \(REDS\) performs geolocation and initialization of compute nodes, based on a mapping file that is provided with each system.
-
-  * [Configure a Management Switch for REDS](river_endpoint_discovery_service/Configure_a_Management_Switch_for_REDS.md)
-  * [Initialize and Geolocate Nodes](river_endpoint_discovery_service/Initialize_and_Geolocate_Nodes.md)
-  * [Verify Node Removal](river_endpoint_discovery_service/Verify_Node_Removal.md)
-  * [Troubleshoot Common REDS Issues](river_endpoint_discovery_service/Troubleshoot_Common_REDS_Issues.md)
-    * [Troubleshot Common Error Messages in REDS Logs](river_endpoint_discovery_service/Troubleshoot_Common_Error_Messages_in_REDS_Logs.md)
-    * [Clear State and Restart REDS](river_endpoint_discovery_service/Clear_State_and_Restart_REDS.md)
 
 
 <a name="network"></a>
