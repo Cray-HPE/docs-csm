@@ -12,7 +12,6 @@ product streams for the HPE Cray EX system can be installed or upgraded.
 1. [Upgrade Management Nodes and CSM Services](#upgrade_management_nodes_csm_services)
 1. [Update Management Network](#update_management_network)
 1. [Validate CSM Health](#validate_csm_health)
-1. [Update Firmware with FAS](#update_firmware_with_fas)
 1. [Next Topic](#next_topic)
 
 Note: If problems are encountered during the upgrade, some of the topics do have their own troubleshooting
@@ -75,17 +74,16 @@ sections, but there is also a general troubleshooting topic.
   
      See [Validate CSM Health](../operations/validate_csm_health.md)
   
-     <a name="update_firmware_with_fas"></a>
-
-1. Update Firmware with FAS
-
-    See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md)
-
     <a name="next_topic"></a>
 
 1. Next Topic
 
-    After completion of the firmware update with FAS, the CSM product stream has been fully upgraded and
+    After completion of the validation of CSM health, the CSM product stream has been fully upgraded and
     configured. Refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_ 
     on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg 
     more information on other product streams to be upgraded and configured after CSM.
+
+    > **Note:** If a newer version of the HPE Cray EX HPC Firmware Pack (HFP) is available, then the next step
+    would be to install HFP which will inform the Firmware Action Services (FAS) of the newest firmware
+    available. Once FAS is aware that new firmware is available, then see
+    [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
