@@ -26,25 +26,39 @@ This procedure requires administrative privileges.
 
         ```bash
         sw-spine-001 [standalone: master] > enable
-        sw-spine-001 [standalone: master] # show ip bgp summary
+        sw-spine-001 [standalone: master] # show ip bgp vrf all summary
 
-        VRF name                  : default
-        BGP router identifier     : 10.252.0.2
+        VRF name                  : CAN
+        BGP router identifier     : 10.101.8.2
         local AS number           : 65533
-        BGP table version         : 50
-        Main routing table version: 50
-        IPV4 Prefixes             : 68
+        BGP table version         : 1634
+        Main routing table version: 1634
+        IPV4 Prefixes             : 46
         IPV6 Prefixes             : 0
         L2VPN EVPN Prefixes       : 0
 
         ------------------------------------------------------------------------------------------------------------------
         Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
         ------------------------------------------------------------------------------------------------------------------
-        10.252.1.10       4    65533        3144      3564      50        0      0      1:01:50:41    ESTABLISHED/13
-        10.252.1.11       4    65533        3144      3569      50        0      0      1:01:50:40    ESTABLISHED/14
-        10.252.1.12       4    65533        3145      3576      50        0      0      1:01:50:41    ESTABLISHED/14
-        10.252.1.13       4    65533        3144      3568      50        0      0      1:01:50:41    ESTABLISHED/13
-        10.252.1.14       4    65533        3145      3572      50        0      0      1:01:50:41    ESTABLISHED/14
+        10.101.8.8        4    65536        667385    678016    1634      0      0      6:21:29:59    ESTABLISHED/14
+        10.101.8.9        4    65536        667177    678199    1634      0      0      6:21:30:04    ESTABLISHED/18
+        10.101.8.10       4    65536        667359    678211    1634      0      0      6:21:30:16    ESTABLISHED/14
+
+        VRF name                  : default
+        BGP router identifier     : 10.252.0.2
+        local AS number           : 65533
+        BGP table version         : 40
+        Main routing table version: 40
+        IPV4 Prefixes             : 40
+        IPV6 Prefixes             : 0
+        L2VPN EVPN Prefixes       : 0
+
+        ------------------------------------------------------------------------------------------------------------------
+        Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
+        ------------------------------------------------------------------------------------------------------------------
+        10.252.1.7        4    65533        595814    595793    40        0      0      6:21:29:52    ESTABLISHED/12
+        10.252.1.8        4    65533        595827    595804    40        0      0      6:21:30:03    ESTABLISHED/16
+        10.252.1.9        4    65533        595842    595817    40        0      0      6:21:30:16    ESTABLISHED/12
         ```
 
         If any of the sessions are in an Idle state, proceed to the next step.
@@ -81,25 +95,39 @@ This procedure requires administrative privileges.
 
         ```bash
         sw-spine-001 [standalone: master] > enable
-        sw-spine-001 [standalone: master] # show ip bgp summary
+        sw-spine-001 [standalone: master] # show ip bgp vrf all summary
 
-        VRF name                  : default
-        BGP router identifier     : 10.252.0.2
+        VRF name                  : CAN
+        BGP router identifier     : 10.101.8.2
         local AS number           : 65533
-        BGP table version         : 50
-        Main routing table version: 50
-        IPV4 Prefixes             : 68
+        BGP table version         : 1634
+        Main routing table version: 1634
+        IPV4 Prefixes             : 46
         IPV6 Prefixes             : 0
         L2VPN EVPN Prefixes       : 0
 
         ------------------------------------------------------------------------------------------------------------------
         Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
         ------------------------------------------------------------------------------------------------------------------
-        10.252.1.10       4    65533        3144      3564      50        0      0      1:01:50:41    ESTABLISHED/13
-        10.252.1.11       4    65533        3144      3569      50        0      0      1:01:50:40    ESTABLISHED/14
-        10.252.1.12       4    65533        3145      3576      50        0      0      1:01:50:41    ESTABLISHED/14
-        10.252.1.13       4    65533        3144      3568      50        0      0      1:01:50:41    ESTABLISHED/13
-        10.252.1.14       4    65533        3145      3572      50        0      0      1:01:50:41    ESTABLISHED/14
+        10.101.8.8        4    65536        667385    678016    1634      0      0      6:21:29:59    ESTABLISHED/14
+        10.101.8.9        4    65536        667177    678199    1634      0      0      6:21:30:04    ESTABLISHED/18
+        10.101.8.10       4    65536        667359    678211    1634      0      0      6:21:30:16    ESTABLISHED/14
+
+        VRF name                  : default
+        BGP router identifier     : 10.252.0.2
+        local AS number           : 65533
+        BGP table version         : 40
+        Main routing table version: 40
+        IPV4 Prefixes             : 40
+        IPV6 Prefixes             : 0
+        L2VPN EVPN Prefixes       : 0
+
+        ------------------------------------------------------------------------------------------------------------------
+        Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
+        ------------------------------------------------------------------------------------------------------------------
+        10.252.1.7        4    65533        595814    595793    40        0      0      6:21:29:52    ESTABLISHED/12
+        10.252.1.8        4    65533        595827    595804    40        0      0      6:21:30:03    ESTABLISHED/16
+        10.252.1.9        4    65533        595842    595817    40        0      0      6:21:30:16    ESTABLISHED/12
         ```
 
     Once all sessions are in an Established state, BGP reset is complete for the Mellanox switches.
