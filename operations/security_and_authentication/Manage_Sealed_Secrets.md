@@ -200,7 +200,7 @@ The general process outlined in the following steps can be followed if a differe
 
 ```bash
 ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
-{"SNMPUsername": "testuser", "SNMPAuthPassword": "testpas1", "SNMPPrivPassword": "testpass2"}
+{"SNMPUsername": "<USERID>", "SNMPAuthPassword": "<A-PASS>", "SNMPPrivPassword": "<P-PASS>"}
 ```
 
 1. Decrypt the cray_reds_credentials secret.
@@ -248,7 +248,7 @@ ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_swi
 3. Correct the password in the vault_switch_defaults.json file.
 
    ```json
-   {"SNMPUsername": "testuser", "SNMPAuthPassword": "testpass1", "SNMPPrivPassword": "testpass2"}
+   {"SNMPUsername": "<USERID>", "SNMPAuthPassword": "<A-PASS>", "SNMPPrivPassword": "<P-PASS>"}
    ```
 
 4. Update cray_reds_credentials.json with an encoded version of the new password.
@@ -261,7 +261,7 @@ ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_swi
 
    ```bash
    ncn-m# jq -r '.data.vault_switch_defaults' cray_reds_credentials.json | base64 --decode
-   {"SNMPUsername": "testuser", "SNMPAuthPassword": "testpass1", "SNMPPrivPassword": "testpass2"}
+   {"SNMPUsername": "<USERID>", "SNMPAuthPassword": "<A-PASS>", "SNMPPrivPassword": "<P-PASS>"}
    ```
 
 6. Replace the cray_reds_credentials secret in customizations.yaml with one containing the new credentials.
@@ -274,6 +274,6 @@ ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_swi
 
    ```bash
    ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
-   {"SNMPUsername": "testuser", "SNMPAuthPassword": "testpass1", "SNMPPrivPassword": "testpass2"}
+   {"SNMPUsername": "<USERID>", "SNMPAuthPassword": "<A-PASS>", "SNMPPrivPassword": "<P-PASS>"}
    ```
 
