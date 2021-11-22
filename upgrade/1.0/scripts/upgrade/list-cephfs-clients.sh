@@ -3,7 +3,7 @@
 echo "The following deployments/statefulsets are cephfs clients and will be unavailable during initial Ceph upgrade:"
 echo ""
 
-client_list=$(kubectl get pvc -A -o json | jq -r '.items[] | select(.metadata.namespace!="user") | select(.spec.storageClassName=="ceph-cephfs-external") | .metadata.namespace, .metadata.name')
+client_list=$(kubectl get pvc -A -o json | jq -r '.items[] | select(.spec.storageClassName=="ceph-cephfs-external") | .metadata.namespace, .metadata.name')
 client_array=( $client_list )
 array_length=${#client_array[@]}
 while [[ "$cnt" -lt "$array_length" ]]; do
