@@ -156,7 +156,6 @@ patch_in_new_metadata() {
   # fi
 }
 
-# Generate mountain/hill routes for NCNs and add to write_files
 function update_write_files_user_data() {
     # Collect network information from SLS
     nmn_hmn_networks=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2>/dev/null | jq ".[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetName: .Subnets.Name, SubnetCIDR: .Subnets.CIDR, Gateway: .Subnets.Gateway} | select(.SubnetName==\"network_hardware\") ")
@@ -165,28 +164,42 @@ function update_write_files_user_data() {
     [[ -n ${cabinet_networks} ]] || on_error "Cannot retrieve cabinet networks from SLS. Check SLS connectivity."
 
     # NMN
+    nmnlb=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2>/dev/null | jq ".[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetCIDR: .Subnets.CIDR} | select(.NetworkName==\"NMNLB\")")
+    nmnlb_cidr=$(echo $nmnlb | jq -r .SubnetCIDR)
+    [[ -n ${nmnlb_cidr} ]] || on_error "NMN LB CIDR not found"
     nmn_gateway=$(echo "${nmn_hmn_networks}" | jq -r ". | select(.NetworkName==\"NMN\") | .Gateway")
     [[ -n ${nmn_gateway} ]] || on_error "NMN gateway not found"
     nmn_cabinet_subnets=$(echo "${cabinet_networks}" | jq -r ". | select(.NetworkName==\"NMN\" or .NetworkName==\"NMN_RVR\" or .NetworkName==\"NMN_MTN\") | .SubnetCIDR")
     [[ -n ${nmn_cabinet_subnets} ]] || on_error "NMN cabinet subnets not found"
 
     # HMN
+    hmnlb=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2>/dev/null | jq ".[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetCIDR: .Subnets.CIDR} | select(.NetworkName==\"HMNLB\")")
+    hmnlb_cidr=$(echo $hmnlb | jq -r .SubnetCIDR)
+    [[ -n ${hmnlb_cidr} ]] || on_error "HMN LB CIDR not found"
     hmn_gateway=$(echo "${nmn_hmn_networks}" | jq -r ". | select(.NetworkName==\"HMN\") | .Gateway")
     [[ -n ${hmn_gateway} ]] || on_error "HMN gateway not found"
     hmn_cabinet_subnets=$(echo "${cabinet_networks}" | jq -r ". | select(.NetworkName==\"HMN\" or .NetworkName==\"HMN_RVR\" or .NetworkName==\"HMN_MTN\") | .SubnetCIDR")
     [[ -n ${hmn_cabinet_subnets} ]] || on_error "HMN cabinet subnets not found"
 
+    # MTL
+    mtl_cidr=$(echo "${nmn_hmn_networks}" | jq -r ". | select(.NetworkName==\"MTL\") | .SubnetCIDR")
+    [[ -n ${mtl_cidr} ]] || on_error "MTL CIDR not found"
+    mtl_gateway=$(echo "${nmn_hmn_networks}" | jq -r ". | select(.NetworkName==\"MTL\") | .Gateway")
+    [[ -n ${mtl_gateway} ]] || on_error "MTL gateway not found"
 
     # Format for ifroute-<interface> syntax
     nmn_routes=()
     for rt in $nmn_cabinet_subnets; do
         nmn_routes+=("$rt $nmn_gateway - bond0.nmn0")
     done
+    nmn_routes+=("$nmnlb_cidr $nmn_gateway - bond0.nmn0")
+    nmn_routes+=("$mtl_cidr $mtl_gateway - bond0.nmn0")
 
     hmn_routes=()
     for rt in $hmn_cabinet_subnets; do
         hmn_routes+=("$rt $hmn_gateway - bond0.hmn0")
     done
+    hmn_routes+=("$hmnlb_cidr $hmn_gateway - bond0.hmn0")
 
     printf -v nmn_routes_string '%s\\n' "${nmn_routes[@]}"
     printf -v hmn_routes_string '%s\\n' "${hmn_routes[@]}"
