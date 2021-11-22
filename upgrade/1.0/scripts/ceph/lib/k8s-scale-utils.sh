@@ -20,7 +20,7 @@ function scale_down_cephfs_clients () {
   rm -f $cephfs_deployments_replica_counts_file
   rm -f $cephfs_statefulsets_replica_counts_file
   cnt=0
-  client_list=$(kubectl get pvc -A -o json | jq -r '.items[] | select(.metadata.namespace!="user") | select(.spec.storageClassName=="ceph-cephfs-external") | .metadata.namespace, .metadata.name')
+  client_list=$(kubectl get pvc -A -o json | jq -r '.items[] | select(.spec.storageClassName=="ceph-cephfs-external") | .metadata.namespace, .metadata.name')
   client_array=( $client_list )
   array_length=${#client_array[@]}
   while [[ "$cnt" -lt "$array_length" ]]; do
@@ -66,7 +66,7 @@ function scale_down_cephfs_clients () {
 
 function scale_up_cephfs_clients () {
   cnt=0
-  client_list=$(kubectl get pvc -A -o json | jq -r '.items[] | select(.metadata.namespace!="user") | select(.spec.storageClassName=="ceph-cephfs-external") | .metadata.namespace, .metadata.name')
+  client_list=$(kubectl get pvc -A -o json | jq -r '.items[] | select(.spec.storageClassName=="ceph-cephfs-external") | .metadata.namespace, .metadata.name')
   client_array=( $client_list )
   array_length=${#client_array[@]}
   while [[ "$cnt" -lt "$array_length" ]]; do
