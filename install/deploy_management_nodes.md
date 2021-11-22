@@ -33,7 +33,6 @@ the number of storage and worker nodes.
       1. [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
    1. [Configure after Management Node Deployment](#configure_after_management_node_deployment)
       1. [LiveCD Cluster Authentication](#livecd-cluster-authentication)
-      1. [BGP Routing](#bgp-routing)
       1. [Install Tests and Test Server on NCNs](#install-tests)
    1. [Validate Management Node Deployment](#validate_management_node_deployment)
       1. [Validation](#validation)

@@ -460,7 +460,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
    were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
 
    ```bash
-   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
+   linux# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    linux# scp -p docs-csm-*rpm csm-install-workarounds-*rpm ncn-m001:/root
    linux# ssh ncn-m001

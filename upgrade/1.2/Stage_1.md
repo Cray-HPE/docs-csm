@@ -45,7 +45,7 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
         1. Install document RPM package:
 
             ```bash
-            ncn-m002# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
+            ncn-m002# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm
             ncn-m002# rpm -Uvh docs-csm-latest.noarch.rpm
             ```
 
