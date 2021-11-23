@@ -351,16 +351,6 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="CSM_UPDATE_SPIRE_ENTRIES"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/update-spire-entries.sh
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
 # Take cps deployment snapshot
 cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r '.[] | .node' || true)
 echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
