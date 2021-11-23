@@ -377,16 +377,6 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="CSM_UPDATE_SPIRE_ENTRIES"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/update-spire-entries.sh
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
 # Take cps deployment snapshot (if cps installed)
 set +e
 trap - ERR
