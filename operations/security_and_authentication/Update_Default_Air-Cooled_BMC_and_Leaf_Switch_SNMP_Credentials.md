@@ -70,9 +70,9 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     ```bash
     ncn-m001# ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_switch_defaults -r | base64 -d | jq
     {
-        "SNMPUsername": "testuser",
-        "SNMPAuthPassword": "foo",
-        "SNMPPrivPassword": "bar"
+        "SNMPUsername": "<USERID>",
+        "SNMPAuthPassword": "<A-PASS>",
+        "SNMPPrivPassword": "<P-PASS>"
     }
     ```
 
@@ -80,13 +80,16 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     
     Specify the desired default Redfish credentials:
     ```bash
-    ncn-m001# echo '{"Cray":{"Username":"root","Password":"foobar"}}' | base64 > reds.redfish.creds.json.b64
+    ncn-m001# echo '{"Cray":{"Username":"root","Password":"<RF-PASS>"}}' | base64 > reds.redfish.creds.json.b64
     ```
 
     Specify the desired default SNMP credentials:
     ```bash
-    ncn-m001# echo '{"SNMPUsername":"testuser","SNMPAuthPassword":"foo1","SNMPPrivPassword":"bar2"}' | base64 > reds.switch.creds.json.b64
+    ncn-m001# echo '{"SNMPUsername":"<USERID>","SNMPAuthPassword":"<A-PASS>","SNMPPrivPassword":"<P-PASS>"}' | base64 > reds.switch.creds.json.b64
     ```
+
+NOTE: Be sure these match the actual SNMP user, auth password and priv passwords
+configured in the hardware!
 
 
     Update and regenerate `cray_reds_credentials` sealed secret:
@@ -112,7 +115,7 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     ncn-m001# ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
     {
         "Username": "root",
-        "Password": "foobar"
+        "Password": "<RF-PASS>"
     }
     ```
 
@@ -120,9 +123,9 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     ```bash
     ncn-m001# ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_switch_defaults -r | base64 -d | jq
     {
-        "SNMPUsername": "testuser",
-        "SNMPAuthPassword": "foo1",
-        "SNMPPrivPassword": "bar2"
+        "SNMPUsername": "<USERID>",
+        "SNMPAuthPassword": "<A-PASS>",
+        "SNMPPrivPassword": "<P-PASS>"
     }
     ```
 
@@ -182,7 +185,7 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     ==== Data ====
     Key     Value
     ---     -----
-    Cray    map[password:foobar username:root]
+    Cray    map[password:<RF-PASS> username:root]
     ```
 
 7.  Verify the default SNMP credentials have updated in Vault:
@@ -195,7 +198,7 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     ========== Data ==========
     Key                 Value
     ---                 -----
-    SNMPAuthPassword    foo1
-    SNMPPrivPassword    bar2
-    SNMPUsername        testuser
+    SNMPAuthPassword    <A-PASS>
+    SNMPPrivPassword    <P-PASS>
+    SNMPUsername        <USERID>
     ```
