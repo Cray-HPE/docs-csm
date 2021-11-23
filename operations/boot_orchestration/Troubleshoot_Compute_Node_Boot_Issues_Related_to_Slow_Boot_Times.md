@@ -138,9 +138,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         server: envoy
         transfer-encoding: chunked
 
-        Sidecar available
-         [WARNING]: Ignoring invalid path provided to plugin path: '/opt/cray/crayctl/files'
-        is not a directory
+        ...
 
         PLAY [Compute] *****************************************************************
 
