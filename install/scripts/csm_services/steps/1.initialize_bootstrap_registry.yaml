@@ -36,10 +36,25 @@ spec:
           > is listening on localhost:5000.
         command: |-
           podman load -i /var/lib/cray/container-images/cray-nexus/skopeo-stable.tar quay.io/skopeo/stable
-          
-          for source_dir in $(ls /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}/docker); do \
-          podman run --rm --network host -v /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}/docker/${source_dir}:/images:ro quay.io/skopeo/stable sync \
-          --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 /images localhost:5000; done
+
+          podman run --rm --network host -v /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}/docker:/images:ro \
+              quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 \
+              /images localhost:5000
+
+          # XXX For backwards compatibilty with CSM 1.0, container images under
+          # XXX dtr.dev.cray.com and quay.io are also uploaded to the root of
+          # XXX registry.local. This is only necessary while charts and procedures still
+          # XXX reference dtr.dev.cray.com or quay.io/skopeo/stable:latest.
+          if [ -d "/var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}/docker/dtr.dev.cray.com" ]]; then
+              podman run --rm --network host -v /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}/docker/dtr.dev.cray.com:/images:ro \
+                  quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 \
+                  /images localhost:5000
+          fi
+          if [ -d "/var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}/docker/quay.io/skopeo/stable:latest" ]; then
+              podman run --rm --network host -v /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}/docker/quay.io:/image:ro \
+                  quay.io/skopeo/stable copy --dest-tls-verify=false --dest-creds admin:admin123 \
+                  dir:/image/skopeo/stable:latest docker://localhost:5000/skopeo/stable:latest
+          fi
         troubleshooting: |-
           Nothing
       postValidation:
