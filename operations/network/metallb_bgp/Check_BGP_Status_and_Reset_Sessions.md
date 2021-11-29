@@ -149,7 +149,7 @@ This procedure requires administrative privileges.
     1.  View the status of the BGP sessions.
 
         ```bash
-        sw-spine-001# show bgp ipv4 unicast summary
+        sw-spine-001# show bgp all summary
         VRF : default
         BGP Summary
         -----------
@@ -190,7 +190,7 @@ This procedure requires administrative privileges.
         It may take a few minutes for sessions to become Established.
 
         ```bash
-        sw-spine-001# show bgp ipv4 unicast summary
+        sw-spine-001# show bgp all summary
         VRF : default
         BGP Summary
         -----------

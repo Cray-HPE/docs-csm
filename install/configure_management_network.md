@@ -44,9 +44,6 @@ cabinets will have Aggregation switches.
 
 On a typical system, the Mellanox switches are Spine switches and the Dell switches are used for Aggregation, CDU, and Leaf switches.
 
-
-   1. [Update Management Network Firmware](../operations/network/management_network/Update_Management_Network_Firmware.md)
-
 <a name="next-topic"></a>
 # Next Topic
 

@@ -35,12 +35,6 @@ __________________________________
 The display and command line illustrated in this document are examples and might not exactly match your particular environment. The switch and accessory drawings in this document are for illustration only, and may not exactly match your installed products.
 __________________________________
 
-## Revision history
-
-| Revision      | Change Description |
-| :---        |    :----   |
-| Revision 1.0      | Initial release      |
-
 # Table of contents
 
 ## Introduction:
@@ -48,18 +42,12 @@ __________________________________
    1. [Introduction](./index.md)
    1. [Notice](./index.md)
    1. [Index](./index.md)
-   1. [Introduction to Canu](./introduction_to_canu.md)
+   1. [Introduction to CANU](./introduction_to_canu.md)
 
-### Quick start guide to Canu
 
-   1. [Quick start guide to Canu](./quick_start_guide_to_canu.md)
-
-### Canu:
-   1. [Installation](./canu_installation.md)
-   1. [Initializing canu](./initializing_canu.md)
-   1. [Use Canu to verify, generate or compare switch configuration](./canu_verify_generate_compare_switch_configuration.md)
-   1. [Using Canu to generate full network configuration](./using_canu_to_generate_full_network_config.md)
-   1. [Uninstall Canu](./uninstall_canu.md)
+### CANU:
+CANU (CSM Automatic Network Utility) is a tool used to generate/validate/test the Shasta management network.
+Documentation for CANU can be found at https://github.com/Cray-HPE/canu
 
 ### Examples of Network topologies:
 
