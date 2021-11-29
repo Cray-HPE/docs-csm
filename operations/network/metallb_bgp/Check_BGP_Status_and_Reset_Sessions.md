@@ -19,7 +19,7 @@ This procedure requires administrative privileges.
         For example:
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.mtl
+        ncn-m001# ssh admin@sw-spine-001.hmn
         ```
 
     1.  View the status of the BGP sessions.
@@ -72,7 +72,7 @@ This procedure requires administrative privileges.
         For example:
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.mtl
+        ncn-m001# ssh admin@sw-spine-001.hmn
         ```
 
     1.  Verify BGP is enabled.
@@ -143,26 +143,53 @@ This procedure requires administrative privileges.
     1.  SSH to a spine switch.
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.mtl
+        ncn-m001# ssh admin@sw-spine-001.hmn
         ```
 
     1.  View the status of the BGP sessions.
 
         ```bash
-        sw-spine-001# show bgp all summary
+        sw-spine-001# show bgp all-vrf all summary
         VRF : default
         BGP Summary
         -----------
-         Local AS               : 65533        BGP Router Identifier  : 10.252.0.2
-         Peers                  : 4            Log Neighbor Changes   : No
-         Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
-         Confederation Id       : 0
+        Local AS               : 65533        BGP Router Identifier  : 10.2.0.2
+        Peers                  : 4            Log Neighbor Changes   : No
+        Cfg. Hold Time         : 3            Cfg. Keep Alive        : 1
+        Confederation Id       : 0
 
-         Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
-         10.252.0.3      65533       19704   19708   00m:01w:00d  Established   Up
-         10.252.1.10     65533       34455   39416   00m:01w:04d  Established   Up
-         10.252.1.11     65533       34458   39400   00m:01w:04d  Established   Up
-         10.252.1.12     65533       34448   39415   00m:01w:04d  Established   Up
+        Address-family : IPv4 Unicast
+        -----------------------------
+        Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
+        10.252.0.3      65533       571006  571002  06d:14h:38m  Established   Up
+        10.252.1.7      65533       451712  451502  03d:09h:34m  Established   Up
+        10.252.1.8      65533       450943  450712  03d:09h:36m  Established   Up
+        10.252.1.9      65533       451463  451267  03d:09h:35m  Established   Up
+
+        Address-family : IPv6 Unicast
+        -----------------------------
+
+        Address-family : L2VPN EVPN
+        -----------------------------
+
+        VRF : Customer
+        BGP Summary
+        -----------
+        Local AS               : 65533        BGP Router Identifier  : 10.103.15.186
+        Peers                  : 4            Log Neighbor Changes   : No
+        Cfg. Hold Time         : 3            Cfg. Keep Alive        : 1
+        Confederation Id       : 0
+
+        Address-family : IPv4 Unicast
+        -----------------------------
+        Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
+        10.103.11.3     65533       500874  500891  00h:00m:11s  Established   Up
+        10.103.11.8     65536       374118  374039  03d:09h:35m  Established   Up
+        10.103.11.9     65536       373454  373290  03d:09h:35m  Established   Up
+        10.103.11.10    65536       374169  374087  03d:09h:34m  Established   Up
+
+        Address-family : IPv6 Unicast
+        -----------------------------
         ```
 
         If any of the sessions are in an Idle state, proceed to the next step.
@@ -176,7 +203,7 @@ This procedure requires administrative privileges.
         For example:
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.mtl
+        ncn-m001# ssh admin@sw-spine-001.hmn
         ```
 
     1.  Clear the BGP sessions.
@@ -190,20 +217,47 @@ This procedure requires administrative privileges.
         It may take a few minutes for sessions to become Established.
 
         ```bash
-        sw-spine-001# show bgp all summary
+        sw-spine-001# show bgp all-vrf all summary
         VRF : default
         BGP Summary
         -----------
-         Local AS               : 65533        BGP Router Identifier  : 10.252.0.2
-         Peers                  : 4            Log Neighbor Changes   : No
-         Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
-         Confederation Id       : 0
+        Local AS               : 65533        BGP Router Identifier  : 10.2.0.2
+        Peers                  : 4            Log Neighbor Changes   : No
+        Cfg. Hold Time         : 3            Cfg. Keep Alive        : 1
+        Confederation Id       : 0
 
-         Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
-         10.252.0.3      65533       19704   19708   00m:01w:00d  Established   Up
-         10.252.1.10     65533       34455   39416   00m:01w:04d  Established   Up
-         10.252.1.11     65533       34458   39400   00m:01w:04d  Established   Up
-         10.252.1.12     65533       34448   39415   00m:01w:04d  Established   Up
+        Address-family : IPv4 Unicast
+        -----------------------------
+        Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
+        10.252.0.3      65533       571006  571002  06d:14h:38m  Established   Up
+        10.252.1.7      65533       451712  451502  03d:09h:34m  Established   Up
+        10.252.1.8      65533       450943  450712  03d:09h:36m  Established   Up
+        10.252.1.9      65533       451463  451267  03d:09h:35m  Established   Up
+
+        Address-family : IPv6 Unicast
+        -----------------------------
+
+        Address-family : L2VPN EVPN
+        -----------------------------
+
+        VRF : Customer
+        BGP Summary
+        -----------
+        Local AS               : 65533        BGP Router Identifier  : 10.103.15.186
+        Peers                  : 4            Log Neighbor Changes   : No
+        Cfg. Hold Time         : 3            Cfg. Keep Alive        : 1
+        Confederation Id       : 0
+
+        Address-family : IPv4 Unicast
+        -----------------------------
+        Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
+        10.103.11.3     65533       500874  500891  00h:00m:11s  Established   Up
+        10.103.11.8     65536       374118  374039  03d:09h:35m  Established   Up
+        10.103.11.9     65536       373454  373290  03d:09h:35m  Established   Up
+        10.103.11.10    65536       374169  374087  03d:09h:34m  Established   Up
+
+        Address-family : IPv6 Unicast
+        -----------------------------
         ```
 
     Once all sessions are in an Established state, BGP reset is complete for the Aruba switches.
