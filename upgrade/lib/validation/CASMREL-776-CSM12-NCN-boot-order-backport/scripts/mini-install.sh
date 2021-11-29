@@ -7,7 +7,6 @@ set -e
 
 # Echo that we're the original, but stripped down script.
 echo "Running stripped CSM 1.2 install.sh script, $0"
-# See the original "install.sh" here: https://raw.githubusercontent.com/Cray-HPE/node-image-build/develop/boxes/ncn-common/files/scripts/metal/install.sh?token=AB3JQE4CBRQKCKMZ5UAKHH3BL4264'
 
 # Load the metal library.
 printf 'Metal Install: [ % -20s ]\n' 'loading ...' && . /srv/cray/scripts/metal/metal-lib.sh && printf 'Metal Install: [ % -20s ]\n' 'loading done' && sleep 2
