@@ -23,9 +23,9 @@ __________________________________
 
 ## User guides
 
-   1. [Aruba](./aruba/index_aruba.md)
-   1. [Dell](./dell/index_aruba.md)
-   1. [Mellanox](./mellanox/index_aruba.md)
+   1. [Aruba](./network_management_install_guide/aruba/index_aruba.md)
+   1. [Dell](./network_management_install_guide/dell/index_aruba.md)
+   1. [Mellanox](./network_management_install_guide/mellanox/index_aruba.md)
 
 
 ### CANU:
