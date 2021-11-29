@@ -131,6 +131,8 @@ If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-heal
 
 Additionally, hmn-discovery and unbound manager cronjob pods may be in a 'NotReady' state. This is expected as these pods are periodically started and transition to the completed state.
 
+**IMPORTANT:** If `ncn-s001` is down when running the ncnHealthChecks script, status from the `ceph -s` command  will be unavailable. In this case, the `ceph -s` command can be executed on any available master or storage node to determine the status of the Ceph cluster.
+
 <a name="pet-ncnpostgreshealthchecks"></a>
 ### 1.2 ncnPostgresHealthChecks
 
@@ -480,7 +482,7 @@ Execute the HMS smoke and functional tests after the CSM install to confirm that
 <a name="hms-test-execution"></a>
 ### 2.1 HMS Test Execution
 
-These tests should be executed as root on at least one worker NCN and one master NCN (but **not** ncn-m001 if it is still the PIT node).
+These tests should be executed as root on any worker or master NCN (but **not** the PIT node).
 
 Run the HMS smoke tests.
 ```
@@ -489,7 +491,7 @@ ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resou
 
 Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
-Otherwise, run the HMS functional tests.
+If no failures occur, then run the HMS functional tests.
 ```
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 ```

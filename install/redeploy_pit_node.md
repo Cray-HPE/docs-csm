@@ -521,33 +521,33 @@ cloud-init single --name ntp --frequency always
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
 ### 7. Configure DNS and NTP on each BMC
 
- > **`NOTE`** If the system uses Gigabyte or Intel hardware, skip this section.
+ > **`NOTE`** If the system uses Gigabyte nodes or Intel nodes, skip this section.
 
-Perform the following steps on every NCN **except ncn-m001**.
+The following steps will configure DNS and NTP on the BMC for each management node **except ncn-m001**.
 
 1. Set environment variables. Make sure to set the appropriate value for the `IPMI_PASSWORD` variable.
 
     ```bash
-    ncn# export IPMI_PASSWORD=changeme
-    ncn# export USERNAME=root
+    ncn-m001# export IPMI_PASSWORD=changeme
+    ncn-m001# export USERNAME=root
     ```
 
 1. Disable DHCP and configure NTP on the BMC using data from cloud-init.
 
     ```bash
-    ncn# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -S -n
+    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -S -n
     ```
 
 1. Configure DNS on the BMC using data from cloud-init.
 
     ```bash
-    ncn# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -d
+    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -d
     ```
 
 1. (Optional) View the settings of the BMC:
 
     ```bash
-    ncn# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -s
+    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -s
     ```
 
 <a name="validate-bootraid-artifacts"></a>

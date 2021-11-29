@@ -5,11 +5,13 @@
 2. [HMS Smoke Tests](#hms-smoke-tests)
 3. [HMS Functional Tests](#hms-functional-tests)
 4. [Additional Troubleshooting](#additional-troubleshooting)
+5. [Install Blocking vs. Non-Blocking Failures](#blocking-vs-nonblocking-failures)
+6. [Known Issues](#known-issues)
 
 <a name="introduction"></a>
 ### Introduction
 
-This document describes how to interpret the results of the HMS health check scripts and techniques for troubleshooting when failures occur.
+This document describes how to interpret the results of the HMS Health Check scripts and techniques for troubleshooting when failures occur.
 
 <a name="hms-smoke-tests"></a>
 ### HMS Smoke Tests
@@ -240,3 +242,130 @@ Use the following command to check the current discovery status of the endpoint:
 ```
 ncn# cray hsm inventory redfishEndpoints describe <xname>
 ```
+
+<a name="blocking-vs-nonblocking-failures"></a>
+### Install Blocking vs. Non-Blocking Failures
+
+The HMS Health Checks include tests for multiple types of system components, some of which are critical for the installation of the system, while others are not.
+
+The following types of HMS test failures should be considered blocking for system installations:
+
+* HMS service pods not running
+* HMS service APIs unreachable through the API Gateway or Cray CLI
+* Failures related to HMS discovery (unreachable BMCs, unresponsive controller hardware, no Redfish connectivity)
+
+The following types of HMS test failures should **not** be considered blocking for system installations:
+
+* Failures due to hardware issues on individual compute nodes
+
+It is typically safe to postpone the investigation and resolution of non-blocking failures until after the CSM installation has completed.
+
+<a name="known-issues"></a>
+### Known Issues
+
+This section outlines known issues that cause HMS Health Check failures.
+
+* [Warning flags incorrectly set in HSM for Mountain BMCs](#hms-known-issue-mountain-bmcs-warning-flags)
+* [BMCs set to "On" state in HSM](#hms-bmcs-set-to-on-state-in-hsm)
+* [ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM](#hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm)
+
+<a name="hms-known-issue-mountain-bmcs-warning-flags"></a>
+#### Warning flags incorrectly set in HSM for Mountain BMCs
+
+The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue that can cause Warning flags to be incorrectly set in HSM for Mountain BMCs and result in test failures.
+
+The following HMS functional test may fail due to this issue:
+* `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+
+The symptom of this issue is the test fails with error messages about Warning flags being set on one or more BMCs. It may look similar to the following in the test output:
+
+```
+=================================== FAILURES ===================================
+_ /opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_remote-functional.tavern.yaml::Ensure that we can conduct a query for all Node BMCs in the Component collection _
+
+Errors:
+E   tavern.util.exceptions.TestFailError: Test 'Verify the expected response fields for all NodeBMCs' failed:
+   - Error calling validate function '<function validate_pykwalify at 0x7f44666179d0>':
+      Traceback (most recent call last):
+         File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+         File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+      pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Enum 'Warning' does not exist. Path: '/Components/9/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/10/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/11/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/12/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/13/Flag'.
+         - Enum 'Warning' does not exist. Path: '/Components/14/Flag'.: Path: '/'>
+```
+
+If you see this, perform the following steps:
+
+1. Retrieve the xnames of all Mountain BMCs with Warning flags set in HSM:
+
+    ```
+    ncn-mw# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&Class=Mountain\&Flag=Warning | jq '.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }' -c | sort -V | jq -c
+    {"ID":"x5000c1s0b0","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s0b1","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s1b0","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s1b1","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s2b0","Flag":"Warning","Class":"Mountain"}
+    {"ID":"x5000c1s2b1","Flag":"Warning","Class":"Mountain"}
+    ```
+
+1. For each Mountain BMC xname, check its Redfish BMC Manager status:
+
+    ```
+    ncn-mw# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq '.Status'
+    {
+      "Health": "OK",
+      "State": "Online"
+    }
+    ```
+
+Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.
+
+<a name="hms-bmcs-set-to-on-state-in-hsm"></a>
+#### BMCs set to "On" state in HSM
+
+The following HMS functional test may fail due to a known issue because of CMMs setting BMC states to "On" instead of "Ready" in HSM:
+* `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+
+This issue looks similar to the following in the test output:
+
+```
+      Traceback (most recent call last):
+            verifier.validate()
+         File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+      pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Enum 'On' does not exist. Path: '/Components/9/State'.
+         - Enum 'On' does not exist. Path: '/Components/10/State'.: Path: '/'>
+```
+
+Failures of this test caused by BMCs in the "On" state can be safely ignored.
+
+<a name="hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm"></a>
+#### ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM
+
+The following HMS functional test may fail due to a known issue because of ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM:
+* `test_smd_component_endpoints_ncn-functional_remote-functional.tavern.yaml`
+
+This issue looks similar to the following in the test output:
+
+```
+        Traceback (most recent call last):
+          File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+          File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+        pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Enum 'AuxiliaryController' does not exist. Path: '/ComponentEndpoints/32/RedfishSubtype'.
+         - Enum 'AuxiliaryController' does not exist. Path: '/ComponentEndpoints/83/RedfishSubtype'.
+         - Enum 'AuxiliaryController' does not exist. Path: '/ComponentEndpoints/92/RedfishSubtype'.
+         - Enum 'AuxiliaryController' does not exist. Path: '/ComponentEndpoints/106/RedfishSubtype'.
+         - Enum 'AuxiliaryController' does not exist. Path: '/ComponentEndpoints/126/RedfishSubtype'.: Path: '/'>
+```
+
+Failures of this test caused by AuxiliaryController endpoints for Cassini mezzanine cards can be safely ignored.

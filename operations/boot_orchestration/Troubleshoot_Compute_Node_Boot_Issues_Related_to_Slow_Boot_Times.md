@@ -138,9 +138,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         server: envoy
         transfer-encoding: chunked
 
-        Sidecar available
-         [WARNING]: Ignoring invalid path provided to plugin path: '/opt/cray/crayctl/files'
-        is not a directory
+        ...
 
         PLAY [Compute] *****************************************************************
 
@@ -156,34 +154,8 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         TASK [cle-hosts-cf : create temporary workarea] ********************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
 
-        TASK [cle-hosts-cf : copy /etc/hosts from NCN host OS into compute image] ******
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        TASK [cle-hosts-cf : copy /etc/hosts into place] *******************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        TASK [cle-hosts-cf : remove temporary workarea] ********************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        TASK [limits : Ensure our file limits are set] *********************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        TASK [shadow : Change root password in /etc/shadow] ****************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        TASK [kdump : Install stock /etc/sysconfig/kdump] ******************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        TASK [kdump : copy kdump initrd script] ****************************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        TASK [kdump : create kdump initrd] *********************************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        TASK [kdump : remove kdump initrd script] **************************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
         ...
+        
         ```
 
 

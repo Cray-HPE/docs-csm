@@ -106,6 +106,8 @@ Perform these steps to update `customizations.yaml`:
 
 1. Run check script:
 
+    **NOTE** The `prerequisites.sh` script will warn that it will unmount `/mnt/pitdata`, but this is not accurate. The script will only unmount it if the script itself mounts it. That is, if it is mounted when the script begins, the script will not unmount it.
+
     * Option 1 - Internet Connected Environment
 
         1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release tarball.

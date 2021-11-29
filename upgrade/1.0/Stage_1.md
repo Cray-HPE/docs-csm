@@ -55,7 +55,7 @@
     > * Both methods require the master nodes and storage nodes 001/2/3 to have a `ceph.client.admin.keyring` and/or a `ceph.conf` file (`cephadm` will not require the `ceph.conf`).
     > * When you continue with Stage 2, you may have issues running your Ceph commands.
     >     * If you are experiencing this, please double check that you restored your `/etc/ceph` directory from your tar backup.
-    > * Any deployments or statefulsets (except `slurm` and `pbs`) that are backed by a `cephfs` PVC will be unavailable during this stage of the upgrade. These deployments will be scaled down and back up automatically. This includes **(but can vary by deployment)**: `nexus`, `cray-ipxe`, `cray-tftp`, `cray-ims`, `cray-console-operator`, and `cray-cfs-api-db`. To view the complete list for the system being upgraded, run the following script to list them:
+    > * Any deployments or statefulsets that are backed by a `cephfs` PVC will be unavailable during this stage of the upgrade. These deployments will be scaled down and back up automatically. This includes **(but can vary by deployment)**: `nexus`, `cray-ipxe`, `cray-tftp`, `cray-ims`, `cray-console-operator`, and `cray-cfs-api-db`. To view the complete list for the system being upgraded, run the following script to list them:
     >>
     >>   ```bash
     >>   ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/list-cephfs-clients.sh
