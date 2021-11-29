@@ -45,7 +45,7 @@ sections, but there is also a general troubleshooting topic.
       The cabling should be validated between the nodes and the management network switches. The information in the
       Shasta Cabling Diagram (SHCD) can be used to confirm the cables which physically connect components of the system.
       Having the data in the SHCD which matches the physical cabling will be needed later in both
-      [Prepare Configuration Payload](#prepare_configuration_payload) and [Configure Management Network Switches](#configure_management_network).
+      [Prepare Configuration Payload](#prepare_configuration_payload) and [Configure Management Network](configure_management_network.md).
 
       See [Validate Management Network Cabling](validate_management_network_cabling.md)
 
