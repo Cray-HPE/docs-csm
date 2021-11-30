@@ -143,9 +143,20 @@ yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator.rsyslogAggregatorC
 yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator-udp.rsyslogAggregatorCan.externalHostname' 'rsyslog.cmn.{{ network.dns.external }}'
 yq w -i "$c" 'spec.kubernetes.services.sma-kibana.externalAuthority' 'sma-kibana.cmn.{{ network.dns.external }}'
 yq w -i "$c" 'spec.kubernetes.services.sma-grafana.externalAuthority' 'sma-grafana.cmn.{{ network.dns.external }}'
-yq w -i "$c" 'spec.kubernetes.services.cray-opa.jwtValidation.keycloak.issuers.shasta' 'https://api.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
-yq w -i "$c" 'spec.kubernetes.services.cray-opa.jwtValidation.keycloak.issuers.keycloak' 'https://auth.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.gatekeeper-policy-manager.gatekeeper-policy-manager.externalAuthority' 'opa-gpm.cmn.{{ network.dns.external }}'
+
+# cray-opa changes
+yq d -i "$c" 'spec.kubernetes.services.cray-opa.jwtValidation'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.shasta-cmn' 'https://api.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-cmn' 'https://auth.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.shasta-nmn' 'https://api.nmn.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-nmn' 'https://auth.nmn.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-admin.issuers.shasta-cmn' 'https://api.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-admin.issuers.keycloak-cmn' 'https://auth.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-user.issuers.shasta-cmn' 'https://api.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-user.issuers.keycloak-cmn' 'https://auth.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-user.issuers.shasta-can' 'https://api.can.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-user.issuers.keycloak-can' 'https://auth.can.{{ network.dns.external }}/keycloak/realms/shasta'
 
 # cray-istio changes
 yq d -i "$c" 'spec.kubernetes.services.cray-istio-deploy'
