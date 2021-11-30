@@ -153,8 +153,8 @@ yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-nmn' 'https://auth.nmn.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-admin.issuers.shasta-cmn' 'https://api.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-admin.issuers.keycloak-cmn' 'https://auth.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
-yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-user.issuers.shasta-cmn' 'https://api.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
-yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-user.issuers.keycloak-cmn' 'https://auth.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-user.issuers.shasta-chn' 'https://api.chn.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-user.issuers.keycloak-chn' 'https://auth.chn.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-user.issuers.shasta-can' 'https://api.can.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-user.issuers.keycloak-can' 'https://auth.can.{{ network.dns.external }}/keycloak/realms/shasta'
 
