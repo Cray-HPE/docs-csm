@@ -1,0 +1,36 @@
+@Library('csm-shared-library') _
+
+pipeline {
+    agent {
+        label "metal-gcp-builder"
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: "10"))
+        timestamps()
+    }
+
+    environment {
+        NAME = "platform-utils"
+        DESCRIPTION = "Health check scripts and utilities."
+        IS_STABLE = getBuildIsStable()
+        BUILD_METADATA = getRpmRevision(isStable: env.IS_STABLE)
+    }
+
+    stages {
+        stage("Build") {
+            steps {
+                sh "make rpm"
+            }
+        }
+
+        stage("Publish") {
+            steps {
+                script {
+                    publishCsmRpms(component: env.NAME, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.IS_STABLE)
+                    publishCsmRpms(component: env.NAME, pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
+                }
+            }
+        }
+    }
+}
