@@ -477,7 +477,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     1. Check IP addresses, do not run tests if these are missing and instead start triage.
 
        ```bash
-       pit# wicked show bond0 bond0.nmn0 bond0.hmn0 bond0.can0
+       pit# wicked show bond0 bond0.nmn0 bond0.hmn0 bond0.can0 bond0.cmn0
        bond0           up
        link:     #7, state up, mtu 1500
        type:     bond, mode ieee802-3ad, hwaddr b8:59:9f:fe:49:d4
