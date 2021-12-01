@@ -2,7 +2,7 @@
 
 pipeline {
     agent {
-        label "metal-gcp-builder-new"
+        label "metal-gcp-builder-dev"
     }
 
     options {
@@ -26,9 +26,6 @@ pipeline {
                         echo "Updating vendor dependency ${it}"
                         (vendorName, vendorBranch) = it.split('@')
                         sh "git vendor update ${vendorName} ${vendorBranch}"
-                        // RPM build may get confused on multiple spec files in tarball
-                        echo "Removing spec files from vendored dependencies"
-                        sh "find . -mindepth 2 -name '*.spec' -delete"
                     }
                 }
             }

@@ -16,6 +16,8 @@ prepare:
 	rm -rf $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)/SPECS $(BUILD_DIR)/SOURCES
 	cp $(SPEC_FILE) $(BUILD_DIR)/SPECS/
+	# rpmbuild may get confused on multiple spec files in tarball
+	find . -mindepth 2 -name '*.spec' -delete
 
 rpm_package_source:
 	tar --transform 'flags=r;s,^,/${NAME}-${VERSION}/,' --exclude .git --exclude dist -cvjf $(SOURCE_PATH) .
