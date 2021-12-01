@@ -98,14 +98,4 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="POST_CSM_ENABLE_PSP"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/enable-psp.sh
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
 ok_report
