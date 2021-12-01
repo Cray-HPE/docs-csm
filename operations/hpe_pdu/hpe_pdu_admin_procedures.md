@@ -3,7 +3,7 @@
 * [HPE PDU Initial Set-up](#hpe-pdu-initial-set-up)
 * [Updating HPE PDU Firmware](#updating-hpe-pdu-firmware)
 * [Changing HPE PDU User Passwords](#changing-hpe-pdu-user-passwords)
-* [Discovery of HPE PDU after upgrading CSM](#discovery-of-hpe-pdu-after-updating-csm)
+* [Discovery of HPE PDU after upgrading CSM](#discovery-of-hpe-pdu-after-upgrading-csm)
 
 **Because of the pulling method used to process sensor data from the HPD PDU, telemetry data may take up to 6 minutes to refresh, this includes outlet status, voltage and other data from the PDU.**
 
