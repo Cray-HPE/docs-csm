@@ -33,6 +33,8 @@ The most noteworthy changes since the previous release are described here.
       * Introduces the cray-dns-powerdns, cray-dns-powerdns-postgres, and cray-powerdns-manager pods
       * Supports zone transfer to external DNS servers via AXFR query and DNSSEC
       * Please refer to the [DNS overview](../operations/network/dns/DNS.md) and [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for further information.
+   * NCN user password and SSH key management is available for both root and
+     non-root users via NCN personalization. Please refer to [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md).
 
 <a name="deprecating_features"></a>
 ### Deprecating Features
