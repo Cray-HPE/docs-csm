@@ -8,7 +8,7 @@ Documentation for the Management can be found here [Management Net Docs](../oper
 
 
 The configuration for these switches will be generated from CSM Automated Network Utility (CANU)
-Documentation for CANU can be found at https://github.com/Cray-HPE/can
+Documentation for CANU can be found at https://github.com/Cray-HPE/canu
 
 It is assumed that the administrator configuring the Management Network has a basic understanding of networking protocols (STP, VLAN, OSPF, LAG/MLAG, BGP, etc...), and knows how to configure network equipment. It is also assumed that they understand and know how to read an SHCD file.
 
