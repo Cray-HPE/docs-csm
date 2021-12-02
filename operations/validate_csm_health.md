@@ -20,7 +20,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
       - [1.1.1 Known Test Issues](#autogoss-issues)
     - [1.2 OPTIONAL Check of ncnHealthChecks Resources](#pet-ncnhealthchecks-resources)
       - [1.2.1 Known Issues](#known-issues)
-    - [1.3 OPTIONAL Check of System Management Monitoring Tools](#optional-check-of-system-management-monitoring-tools)
+    - [1.3 Check of System Management Monitoring Tools](#check-of-system-management-monitoring-tools)
   - [2. Hardware Management Services Health Checks](#hms-health-checks)
     - [2.1 HMS CT Test Execution](#hms-test-execution)
     - [2.2 Aruba Switch SNMP Fixup](#hms-aruba-fixup)
@@ -57,7 +57,7 @@ Health Check scripts can be run:
 Available Platform Health Checks:
 1. [ncnHealthChecks](#pet-ncnhealthchecks)
 1. [OPTIONAL Check of ncnHealthChecks Resources](#pet-optional-ncnhealthchecks-resources)
-1. [OPTIONAL Check of System Management Monitoring Tools](#optional-check-of-system-management-monitoring-tools)
+1. [Check of System Management Monitoring Tools](#check-of-system-management-monitoring-tools)
 
 <a name="pet-ncnhealthchecks"></a>
 ### 1.1 ncnHealthChecks
@@ -142,8 +142,8 @@ If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-heal
   - The `hmn-discovery` and `cray-dns-unbound-manager` cronjob pods may be in a 'NotReady' state. This is expected as these pods are periodically started and transition to the completed state.
 
 
-<a name="optional-check-of-system-management-monitoring-tools"></a>
-### 1.3 OPTIONAL Check of System Management Monitoring Tools
+<a name="check-of-system-management-monitoring-tools"></a>
+### 1.3 Check of System Management Monitoring Tools
 
 If all designated prerequisites are met, the availability of system management health services may optionally be validated by accessing the URLs listed in [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md).
 It is very important to check the `Prerequisites` section of this document.
@@ -156,6 +156,7 @@ Information to assist with troubleshooting some of the components mentioned in t
 * [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
 * [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 * [Troubleshoot Services without an Allocated IP Address](network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
+* [Troubleshoot Prometheus Alerts](system_management_health/Troubleshoot_Prometheus_Alerts.md)
 
 
 <a name="hms-health-checks"></a>
