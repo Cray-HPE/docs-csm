@@ -19,12 +19,14 @@ The following is needed before running this procedure:
 * Admin password for HPE PDU _(default: 12345678)_
 
 1. Use the `ssh` command from your local machine:
-  ```bash
-  > ssh -L 8443:{PDU_xname}:443 -N root@{ncn-m001_ip}
-  ```
-  Where `{PDU_xname}` is the xname of the PDU and `{ncn-m001_ip}` is the ip address of ncn-m001.\
-  You will need to enter the root password for ncn-m001.
+    ```bash
+    > ssh -L 8443:{PDU_xname}:443 -N root@{ncn-m001_ip}
+    ```
+    Where `{PDU_xname}` is the xname of the PDU and `{ncn-m001_ip}` is the ip address of ncn-m001.\
+    You will need to enter the root password for ncn-m001.
+
 2. Connect to: [`https://localhost:8443`](https://localhost:8443) using a web browser.
+
 3. Log in with the `admin` username.  Enter the admin password.  If you have not changed the admin password, there will be a prompt to change the password.
 
 ### HPE PDU Initial Set-up
@@ -90,19 +92,19 @@ The firmware will be updated and the PDU management processor will restart.
         ncn-m001# kubectl -n services rollout status deployment cray-hms-rts
         ```
 2. Find the list of PDU MAC address.  The `ID` field in each element is the normalized MAC address of each PDU:
-  ```bash
- ncn-m001# cray hsm inventory ethernetInterfaces list --type CabinetPDUController
- ```
+    ```bash
+    ncn-m001# cray hsm inventory ethernetInterfaces list --type CabinetPDUController
+    ```
 3. Use the `"ID"` from the command above to delete each HPE PDU MAC address from HSM:
- ```bash
- ncn-m001# cray hsm inventory ethernetInterfaces delete {ID}
- ```
+    ```bash
+    ncn-m001# cray hsm inventory ethernetInterfaces delete {ID}
+    ```
 4. On the next `hms-discovery` job run, it should locate the PDU and discover it correctly as a HPE PDU.
 5. After waiting 5 minutes, verify the enthernet interfaces that were pervious delete are now present:
- ```bash
- ncn-m001# cray hsm inventory ethernetInterfaces list --type CabinetPDUController
- ```
+    ```bash
+    ncn-m001# cray hsm inventory ethernetInterfaces list --type CabinetPDUController
+    ```
 6. Verify the redfish endpoints for the PDUs exist and are DiscoverOK:
- ```bash
- ncn-m001# cray hsm inventory redfishEndpoints list --type CabinetPDUController
- ```
+    ```bash
+    ncn-m001# cray hsm inventory redfishEndpoints list --type CabinetPDUController
+    ```
