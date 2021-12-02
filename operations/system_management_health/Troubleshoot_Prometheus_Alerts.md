@@ -1,11 +1,69 @@
 # Troubleshoot Prometheus Alerts
 
 General Prometheus Alert Troubleshooting Topics
+- [CephMgrIsAbsent and CephMgrIsMissingReplicas](#cephmgrmissing)
+- [CephNetworkPacketsDropped](#networkpatcketsdropped))
+- [CPUThrottlingHigh](#cputhrottlinghigh)
+- [KubePodNotReady](#kubepodnotready)
 - [PostgresqlFollowerReplicationLagSMA](#followerlagsma)
 - [PostgresqlHighRollbackRate](#highrollbackrate)
 - [PostgresqlInactiveReplicationSlot](#inactiveslot)
 - [PostgresqlNotEnoughConnections](#notenoughconnections)
-- [CPUThrottlingHigh](#cputhrottlinghigh)
+
+<a name="cephmgrmissing"></a>
+## CephMgrIsAbsent and CephMgrIsMissingReplicas
+
+If the CephMgrIsAbsent and/or CephMgrIsMissingReplicas alerts fire, use the following steps to ensure the `prometheus` module has been enabled for `Ceph`. The following steps should be executed on ncn-s001:
+
+```bash
+ncn-s001# ceph mgr module ls | jq '.enabled_modules'
+[
+  "cephadm",
+  "iostat",
+  "restful"
+]
+```
+
+If `prometheus` is missing from the output, enable with the following command:
+
+```bash
+ncn-s001# ceph mgr module enable prometheus
+```
+
+Confirm the module is now enabled:
+
+```bash
+ncn-s001# ceph mgr module ls | jq '.enabled_modules'
+[
+  "cephadm",
+  "iostat",
+  "prometheus",
+  "restful"
+]
+```
+
+The CephMgrIsAbsent and CephMgrIsMissingReplicas alerts should now clear in Prometheus.
+
+
+<a name="networkpacketsdropped"></a>
+## CephNetworkPacketsDropped
+
+The CephNetworkPacketsDropped alert does not necessarily indicate there are packets being dropped on an interface on a storage node. In a future release this alert will be renamed to be more generic. If this alert fires, inspect the IP address in the details of the alert to determine the node in question (can be storage, master or worker node). If the interface in question is determined to be healthy, this alert can be ignored.
+
+
+<a name="cputhrottlinghigh"></a>
+## CPUThrottlingHigh
+
+Alerts for CPUThrottlingHigh on gatekeeper-audit can be ignored. This pod is not utilized in this release.
+
+Alerts for CPUThrottlingHigh on CFS services such as cfs-batcher and cfs-trust can be ignored. Because CFS is idle most of the time these services have low CPU requests, and it is normal for CFS service resource usage to spike when it is in use.
+
+
+<a name="kubepodnotready"></a>
+## KubePodNotReady
+
+Alerts for KubePodNotReady on cray-crus could be ignored if the Slurm software has not been installed. The cray-crus pod interacts with Slurm to manage compute node rolling upgrades.
+
 
 <a name="followerlagsma"></a>
 ## PostgresqlFollowerReplicationLagSMA
@@ -31,13 +89,8 @@ Alerts for PostgresqlInactiveReplicationSlot on sma-postgres-cluster pods with s
 Alerts for PostgresqlNotEnoughConnections for datname="foo" and datname="bar" can be ignored. These databases are not used and will be removed in a future release.
 
 
-<a name="cputhrottlinghigh"></a>
-## CPUThrottlingHigh
+<a name="networkpacketsdropped"></a>
+## CephNetworkPacketsDropped
 
-Alerts for CPUThrottlingHigh on gatekeeper-audit can be ignored. This pod is not utilized in this release.
-
-Alerts for CPUThrottlingHigh on CFS services such as cfs-batcher and cfs-trust can be ignored. Because CFS is idle most of the time these services have low CPU requests, and it is normal for CFS service resource usage to spike when it is in use.
-
-
-
+The CephNetworkPacketsDropped alert does not necessarily indicate there are packets being dropped on an interface on a storage node. In a future release this alert will be renamed to be more generic. If this alert fires, inspect the IP address in the details of the alert to determine the node in question (can be storage, master or worker node). If the interface in question is determined to be healthy, this alert can be ignored.
 
