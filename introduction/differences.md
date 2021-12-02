@@ -50,6 +50,7 @@ The most noteworthy changes since the previous release are described here.
         * The cray-dns-unbound-manager CronJob will be deprecated in a future release once all DNS records are migrated to PowerDNS.
         * The introduction of PowerDNS and Bifurcated CAN will introduce some node and service naming changes.
         * Please see the [PowerDNS migration notice](../introduction/PowerDNS_migration.md) for more information.
+   * The Compute Rolling Upgrade Service (CRUS) will be deprecated in the CSM-1.3.0 release. Enhanced BOS functionality will replace CRUS. This includes the ability to stage changes to nodes that can be acted upon later when the node reboots. It also includes the ability to reboot nodes without specifying any boot artifacts. This latter ability relies on the artifacts already having been staged.
 
 <a name="deprecated_features"></a>
 ### Deprecated Features
