@@ -81,6 +81,15 @@ The firmware will be updated and the PDU management processor will restart.
     ncn-m001# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
     ncn-m001# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
     ```
+    Identify HPE PDUs that RTS is aware of:
+    ```bash
+        ncn-m001# vault kv list secret/pdu-creds
+        [
+          "global/",
+          "x3000m0",
+          "x3000m1"
+        ]
+    ```
     1.  For each HPE PDU Identified in the command above remove it from Vault:
         ```bash
         ncn-m001# PDU=x3000m0
