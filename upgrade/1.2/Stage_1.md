@@ -1,4 +1,4 @@
-# Stage 1 - Kubernetes Upgrade from 1.19.9 to 1.20.11
+# Stage 1 - Kubernetes Upgrade from 1.19.9 to 1.20.13
 
 > NOTE: During the CSM-0.9 install the LiveCD containing the initial install files for this system should have been unmounted from the master node when rebooting into the Kubernetes cluster. The scripts run in this section will also attempt to unmount/eject it if found to ensure the USB stick does not get erased.
 
@@ -26,7 +26,7 @@
 
 ## Stage 1.3
 
-For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `vlan007`/CAN IP address to `ssh` to `ncn-m002` for this `ncn-m001` install
+For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP address to `ssh` to `ncn-m002` for this `ncn-m001` install
 
 1. Authenticate with the Cray CLI on `ncn-m002`.
 
@@ -45,7 +45,7 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `vlan007`/CAN IP address t
         1. Install document RPM package:
 
             ```bash
-            ncn-m002# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
+            ncn-m002# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm
             ncn-m002# rpm -Uvh docs-csm-latest.noarch.rpm
             ```
 
@@ -111,7 +111,7 @@ Run the following command to complete the Kubernetes upgrade _(this will restart
 
 ```bash
 ncn-m002# export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-ncn-m002# pdsh -b -S -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'kubeadm upgrade apply v1.20.11 -y'
+ncn-m002# pdsh -b -S -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'kubeadm upgrade apply v1.20.13 -y'
 ```
 
 > **`NOTE`**: `kubelet` has been upgraded already, so you can ignore the warning to upgrade it

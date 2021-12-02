@@ -1,0 +1,25 @@
+# Physical interfaces 
+
+Relevant Configuration 
+
+Enable the interface 
+
+```
+switch(config)# interface IFACE
+switch(config-if)# no shutdown
+```
+
+Show Commands to Validate Functionality 
+
+```
+switch# show interface IFACE [transceiver|brief|dom|extended]
+```
+
+Expected Results 
+
+* Step 1: The switch recognizes the transceiver without errors
+* Step 2: You can enter the interface context for the port and enable it 
+* Step 3: You can establish a link with a partner
+* Step 4: You can pass traffic as expected 
+
+[Back to Index](./index.md)

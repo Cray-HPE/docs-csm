@@ -23,19 +23,9 @@ To successfully PXE boot nodes, the following is required:
 
 - The IP helper-address must be configured on VLAN 1,2,4,7. This will be where the layer 3 gateway exists (spine or aggregation)
 - The virtual-IP/VSX/MAGP IP address must be configured on VLAN 1,2,4,7.
-- There must be a static route pointing to the TFTP server (Aruba Only).
-- ncn-m001 needs an active gateway on VLAN1 this can be identified from MTL.yaml generated from CSI.
-- ncn-m001 needs an IP helper-address on VLAN1 pointing to 10.92.100.222.
+- spine01/spine02 needs an active gateway on VLAN1 this can be identified from MTL.yaml generated from CSI.
+- spine01/spine02 needs an IP helper-address on VLAN1 pointing to 10.92.100.222.
 
-Snippet of MTL.yaml:
-
-```yaml
-  name: network_hardware
-  net-name: MTL
-  vlan_id: 0
-  comment: ""
-  gateway: 10.1.0.1
-```
 
 <a name="#switch-configuration"></a>
 ## Switch Configuration
@@ -114,43 +104,6 @@ Snippet of MTL.yaml:
     sw-spine-002(config-if-vlan)# write mem
     ```
 
-3.  Verify the route to the TFTP server is in place.
-
-    This is a static route to get to the TFTP server via a worker node.
-
-    The worker node IP address is in `NMN.yaml` from CSI-generated data.
-
-    ```
-      - ip_address: 10.252.1.9
-        name: ncn-w001
-        comment: x3000c0s4b0n0
-        aliases:
-    ```
-
-    ```bash
-    sw-spine-002(config)# show ip route static
-    ```
-
-    Example output:
-
-    ```
-    Displaying ipv4 routes selected for forwarding
-
-    '[x/y]' denotes [distance/metric]
-
-    0.0.0.0/0, vrf default
-      via  10.103.15.209,  [1/0],  static
-    10.92.100.60/32, vrf default
-      via  10.252.1.7,  [1/0],  static
-    ```
-
-    In this example, the route is `10.92.100.60/32 via 10.252.1.7`, with `10.252.1.7` being the worker node.
-
-    If that static route is missing, add it.
-
-    ```bash
-    sw-spine-001(config)# ip route 10.92.100.60/32 10.252.1.7
-    ```
 
 <a name="#mellanox-configuration"></a>
 ### Mellanox Configuration
@@ -284,7 +237,7 @@ Snippet of MTL.yaml:
                                           c        10.252.0.7        vlan2            bgp        200/0
     ```
 
-    If these routes are missing, refer to [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md).
+
 
 <a name="#next-steps"></a>
 ## Next steps

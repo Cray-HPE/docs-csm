@@ -1,17 +1,7 @@
 # Stage 0 - Prerequisites and Preflight Checks
 
-> **NOTE:** CSM-1.1.0 is required in order to upgrade to CSM-1.2.0
->
-> **NOTE:** Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 > 1.0.0-beta.19.
->
+> **NOTE:** CSM-1.0.1 is required in order to upgrade to CSM-1.2.0
 
-Use the following command can be used to check the CSM version on the system:
-
-```bash
-ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
-```
-
-This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.4 or CSM-0.9.5.
 
 ## Stage 0.1 - Install latest docs RPM
 
@@ -21,7 +11,7 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
 
         ```bash
         ncn-m001# cd /root/
-        ncn-m001# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
+        ncn-m001# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm
         ncn-m001# rpm -Uvh docs-csm-latest.noarch.rpm
         ```
 
@@ -36,74 +26,45 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
 
 Perform these steps to update `customizations.yaml`:
 
- 1. Prepare work area
+1. Extract `customizations.yaml` from the `site-init` secret:
 
-     If you manage customizations.yaml in an external Git repository (as recommended), then clone a local working tree.
-
-    ```
-    ncn-m001# git clone <URL> /root/site-init
-    ncn-m001# cd /root/site-init
+    ```bash
+    ncn-m001# cd /tmp
+    ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
     ```
 
-    If you do not have a backup of site-init then perform the following steps to create a new one using the values stored in the Kubernetes cluster.
+1. Update `customizations.yaml`:
 
-    * Create a new site-init directory using from the CSM tarball
+    ```bash
+    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/update-customizations.sh -i customizations.yaml
+    ```
 
-      ```
-      ncn-m001# cp -r ${CSM_DISTDIR}/shasta-cfg /root/site-init
-      ncn-m001# cd /root/site-init
-      ```
+1. Update the `site-init` secret:
 
-    * Extract customizations.yaml from the site-init secret
+    ```bash
+    ncn-m001# kubectl delete secret -n loftsman site-init
+    ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+    ```
 
-      ```
-      ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
-      ```
+1. If [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
+   clone a local working tree and commit appropriate changes to `customizations.yaml`.
+   
+    For example:
 
-    * Extract the certificate and key used to create the sealed secrets
+    ```bash
+    ncn-m001# git clone <URL> site-init
+    ncn-m001# cp /tmp/customizations.yaml site-init
+    ncn-m001# cd site-init
+    ncn-m001# git add customizations.yaml
+    ncn-m001# git commit -m 'Remove Gitea PVC configuration from customizations.yaml'
+    ncn-m001# git push
+    ```
 
-      ```
-      ncn-m001# mkdir certs
-      ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
-      ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
-      ```
+5. Return to original working directory:
 
-  > **Note**: All subsequent steps of this procedure should be performed within the `/root/site-init` directory created in this step.
-
-1. Update customizations.yaml
-
-   Apply new values required for PowerDNS
-
-   ```
-   ncn-m001# ${CSM_SCRIPTDIR}/upgrade/update-customizations.sh -i customizations.yaml
-   ```
-
-1. Configure DNS zone transfer and DNSSEC (optional)
-
-   If the DNS zone transfer and DNSSEC features are required please review the [PowerDNS configuration guide](../../operations/network/dns/PowerDNS_Configuration.md) and update `customizations.yaml` with the appropriate values.
-
-1. Generate the new PowerDNS API key secret
-
-   > **Note**: This step will also generate the SealedSecrets for the DNSSEC keys if configured in the previous step.  
-
-   ```
-   ncn-m001# ./utils/secrets-seed-customizations.sh customizations.yaml
-   ```
-
-1. Update the `site-init` secret
-
-   ```
-   ncn-m001# kubectl delete secret -n loftsman site-init
-   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-   ```
-
-1. Commit changes to customizations.yaml if using an external Git repository.
-
-   ```
-   ncn-m001# git add customizations.yaml
-   ncn-m001# git commit -m 'Add required PowerDNS configuration'
-   ncn-m001# git push
-   ```
+    ```bash
+    ncn-m001# cd -
+    ```
 
 ## Stage 0.3 - Execute Prerequisites Check
 

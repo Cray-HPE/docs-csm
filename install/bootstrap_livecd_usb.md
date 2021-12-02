@@ -41,6 +41,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    **Important:** Download to a location that has sufficient space for both the tarball and the expanded tarball.
 
+   > Note: Expansion of the tarball may take more than 45 minutes.
+
    The rest of this procedure will use the CSM_RELEASE variable and expect to have the
    contents of the CSM software release tarball plus any patches, workarounds, or hotfixes.
 
@@ -54,10 +56,16 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    The ISO and other files are now available in the directory from the extracted CSM tar.
 
+1. Configure zypper with the `embedded` repository from the CSM release.
+
+   ```bash
+   linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
+   ```
+
 1. Install/upgrade the CSI RPM
 
    ```bash
-   linux# rpm -Uvh --force $(find ${CSM_PATH}/rpm/embedded/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
+   linux# zypper up --repo ${CSM_RELEASE}-embedded -y cray-site-init
    ```
 
 1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
@@ -74,21 +82,15 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    Expected output looks similar to the following:
 
-   ```
-   CRAY-Site-Init build signature...
-   Build Commit   : b3ed3046a460d804eb545d21a362b3a5c7d517a3-release-shasta-1.4
-   Build Time     : 2021-02-04T21:05:32Z
-   Go Version     : go1.14.9
-   Git Version    : b3ed3046a460d804eb545d21a362b3a5c7d517a3
-   Platform       : linux/amd64
-   App. Version   : 1.5.18
+    ```bash
+    CRAY-Site-Init build signature...
+    Build Commit   : b3ed3046a460d804eb545d21a362b3a5c7d517a3-release-shasta-1.4
+    Build Time     : 2021-02-04T21:05:32Z
+    Go Version     : go1.14.9
+    Git Version    : b3ed3046a460d804eb545d21a362b3a5c7d517a3
+    Platform       : linux/amd64
+    App. Version   : 1.5.18
     ```
-
-1. Configure zypper with the `embedded` repository from the CSM release.
-
-   ```bash
-   linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
-   ```
 
 1. Install podman or docker to support container tools required to generated
    sealed secrets.
@@ -105,11 +107,11 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
    ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/x86_64/podman-*.x86_64.rpm
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/noarch/podman-cni-config-*.noarch.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Containers/ -name "podman*.rpm" | sort -V | tail -1)
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Containers/ -name "podman-cni-config*.rpm" | sort -V | tail -1)
    ```
 
-1. Install lsscsi to view attached storage devices.
+1. (optional) Install lsscsi to view attached storage devices.
 
    lsscsi RPMs are included in the `embedded` repository in the CSM release and
    may be installed in your pre-LiveCD environment using `zypper` as follows:
@@ -123,9 +125,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
    ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/x86_64/lsscsi-*.x86_64.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Basesystem/ -name "lsscsi*.rpm" | sort -V | tail -1)
    ```
-
 
 1. Although not strictly required, the procedures for setting up the
    `site-init` directory recommend persisting `site-init` files in a Git
@@ -143,8 +144,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
    ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/x86_64/git-core-*.x86_64.rpm
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Development-Tools/15-SP2/x86_64/update/x86_64/git-*.x86_64.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Basesystem/ -name "git-core-*.rpm" | sort -V | tail -1)
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Development-Tools/$(find ./${CSM_RELEASE}/rpm/embedded/suse/SLE-Module-Development-Tools/ -name "git-*.rpm" | sort -V | tail -1)
    ```
 
 <a name="create-the-bootable-media"></a>
@@ -180,7 +181,7 @@ which device that is.
 
 1. Format the USB device
 
-    On Linux using the CSI application:
+    On Linux (on reinstalls, this could be any NCN or an existing PIT) using the CSI application:
 
     ```bash
     linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
@@ -554,9 +555,9 @@ This will enable SSH, and other services when the LiveCD starts.
 1. Quit the typescript session with the `exit` command and copy the file (csm-install-usb.<date>.txt) to the data partition on the USB drive.
 
     ```bash
-    linux# mkdir -pv /mnt/pitdata/prep/logs
+    linux# mkdir -pv /mnt/pitdata/prep/admin
     linux# exit
-    linux# cp ~/csm-install-usb.*.txt /mnt/pitdata/prep/logs
+    linux# cp ~/csm-install-usb.*.txt /mnt/pitdata/prep/admin
     ```
 
 1. Unmount the data partition:
@@ -668,8 +669,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Start a typescript to record this section of activities done on ncn-m001 while booted from the LiveCD.
 
    ```bash
-   pit# mkdir -pv /var/www/ephemeral/prep/logs
-   pit# script -af /var/www/ephemeral/prep/logs/booted-csm-livecd.$(date +%Y-%m-%d).txt
+   pit# mkdir -pv /var/www/ephemeral/prep/admin
+   pit# script -af /var/www/ephemeral/prep/admin/booted-csm-livecd.$(date +%Y-%m-%d).txt
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
@@ -681,7 +682,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
 
    ```bash
-   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
+   linux# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm
    linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    linux# scp -p docs-csm-*rpm csm-install-workarounds-*rpm ncn-m001:/root
    linux# ssh ncn-m001
@@ -721,10 +722,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    ```bash
    pit# cd /var/www/ephemeral
-   pit# export CSM_RELEASE=csm-x.y.z
-   pit# echo $CSM_RELEASE
-   pit# export CSM_PATH=$(pwd)/${CSM_RELEASE}
-   pit# echo $CSM_PATH
+   pit:/var/www/ephemeral# export CSM_RELEASE=csm-x.y.z
+   pit:/var/www/ephemeral# echo $CSM_RELEASE
+   pit:/var/www/ephemeral# export CSM_PATH=$(pwd)/${CSM_RELEASE}
+   pit:/var/www/ephemeral# echo $CSM_PATH
    ```
 
 1. Install Goss Tests and Server
@@ -732,8 +733,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    The following assumes the CSM_PATH environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/embedded/cray/csm/ -name "goss-servers*.rpm" | sort -V | tail -1)
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
+   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit:/var/www/ephemeral# cd 
    ```
 
 1. Verify the system:

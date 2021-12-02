@@ -1,5 +1,5 @@
 # Change SMNP Credentials on Leaf Switches
-This procedure changes the SNMP credentials on management leaf switches in the system. Either a single leaf switch can be updated to use new SNMP credentials, or update all leaf switches in the system to use the same global SNMP credentials.
+This procedure changes the SNMP credentials on management leaf switches in the system. All SNMP credentials need to be the same as those found in the customizations.yaml sealed secret cray_reds_credentials.
 
 **NOTE**: This procedure will not update the default SNMP credentials used when new leaf switches are added to the system. To update the default SNMP credentials for new hardware, follow the [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md) procedure.
 
@@ -8,51 +8,63 @@ This procedure changes the SNMP credentials on management leaf switches in the s
 
 ## Procedure
 
-1. List Leaf switches in system:
-    ```bash
-    ncn-m001# cray sls search hardware list --type comptype_mgmt_switch --format json | 
-        jq -r '["Xname", "Brand", "Alias"], (.[] | [.Xname, .ExtraProperties.Brand, .ExtraProperties.Aliases[0]]) | @tsv' | column -t
-    ```
+There are 3 steps involved.  The first 2 steps involve running the *leaf_switch_snmp_creds.sh* script. This script can be used to check for undesireable SNMP user IDs/creds, and also to set new ones.  The default behavior is to check first and then set new creds.   The script can be run either 
+interactively (no env vars or command line options) or non-interactively (using env vars on the command line).  (Examples below will use the env var method.)
 
-    Sample output for a system with 1 Aruba leaf switch:
-    ```
-    Xname       Brand  Alias
-    x3000c0w14  Aruba  sw-leaf-001
-    ```
+1. (Optional) Check if undesireable SNMP user IDs/creds are present on leaf switches.
 
-    Sample output for a system with 2 Dell leaf switches:
-    ```
-    Xname       Brand  Alias
-    x3000c0w14  Dell   sw-leaf-002
-    x3000c0w13  Dell   sw-leaf-001
-    ```
-    
-2. Update SNMP credentials for the `testuser` user on each leaf switch in the system. The SNMP `testuser` user requires 2 password to be provided for the SNMP Authentication and Privacy protocol passwords. Both of these passwords must be 8 characters or longer. In the examples below, `foobar01` is the new SNMP Authentication password, and `foobar02` is the new SNMP Privacy password. 
+   ```bash
+   ncn-m001# SNMPDELUSER=<OLDID> SNMPMGMTPW=<MGMTPW> \
+             /opt/cray/csm/scripts/hms_verification/leaf_switch_snmp_creds.sh -c
 
-    1.  Configure the Aruba leaf switch:
-        ```bash
-        ncn-m001# ssh admin@sw-leaf-001
-        sw-leaf-001# configure terminal
-        sw-leaf-001(config)# snmpv3 user testuser auth md5 auth-pass plaintext foobar01 priv des priv-pass plaintext foobar02
-        sw-leaf-001(config)# exit
-        sw-leaf-001# write memory
-        sw-leaf-001# exit
-        ```
+   ==> Getting management network leaf switch info from SLS...
+ 
+   ==> Fetching switch hostnames...
+   ===============================
+   Checking SNMP default creds on Dell leaf switch: sw-leaf-002
+ 
+   ==> SNMP user ID 'testuser' found on switch sw-leaf-002.
+   ===============================
+   Checking SNMP default creds on Dell leaf switch: sw-leaf-001
+ 
+   ==> SNMP user ID 'testuser' found on switch sw-leaf-001.
 
-    2.  Configure the Dell leaf switch:
-        ```bash
-        ncn-m001# ssh admin@sw-leaf-001
-        sw-leaf-001# configure terminal
-        sw-leaf-001(config)# snmp-server user testuser cray-reds-group 3 auth md5 foobar01 priv des foobar02
-        sw-leaf-001(config)# exit
-        sw-leaf-001# write memory
-        sw-leaf-001# exit
-        ```
+   ```
+
+
+2. Update SNMP credentials (desired SNMP userID and auth/priv passwords) on leaf switches.  Note that the SNMP user ids and passwords are not shown.
+
+Also note that this will change the SNMP credentials in Vault.  See below for 
+details on how to do that.
+
+
+   ```bash
+   ncn-m001# SNMPDELUSER=<OLDID> SNMPNEWUSER=<NEWID> \
+             SNMPAUTHPW=<AUTHPW> SNMPPRIVPW=<PRIVPW> \
+             SNMPMGMTPW=<MGMTPW> \
+             /opt/cray/csm/scripts/hms_verification/leaf_switch_snmp_creds.sh
+
+   ==> Getting management network leaf switch info from SLS...
+ 
+   ==> Fetching switch hostnames...
+   ===============================
+   Checking SNMP default creds on Dell leaf switch: sw-leaf-002
+ 
+   ==> SNMP user ID 'OLDID' found on switch sw-leaf-002.
+   Setting SNMP default creds on Aruba leaf switch: sw-leaf-002
+   ===============================
+   Checking SNMP default creds on Dell leaf switch: sw-leaf-001
+ 
+   ==> SNMP user ID 'OLDID' found on switch sw-leaf-001.
+   Setting SNMP default creds on Dell leaf switch: sw-leaf-002
+
+   ```
+
 
 3.  Update Vault with new SNMP credentials:
     ```bash
-    ncn-m001# SNMP_AUTH_PASS=foobar01
-    ncn-m001# SNMP_PRIV_PASS=foobar02
+    ncn-m001# SNMP_AUTH_PASS=<A-PASS>
+    ncn-m001# SNMP_PRIV_PASS=<P-PASS>
     ncn-m001# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
     ncn-m001# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
     ```
@@ -110,3 +122,11 @@ This procedure changes the SNMP credentials on management leaf switches in the s
     ```
     2021/10/26 20:03:21 WARNING: Failed to get ifIndex<->name map (1.3.6.1.2.1.31.1.1.1.1) for x3000c0w22: Received a report from the agent - UsmStatsWrongDigests(1.3.6.1.6.3.15.1.1.5.0)
     ```
+
+## Troubleshooting
+
+If the creds are not working, check the Vault creds as shown above.
+
+If the *leaf_switch_snmp_creds.sh* script fails for whatever reason on any
+leaf switch, the creds can be looked at and changed manually using the 
+procedures found in [Aruba SNMP Users Guide](../../operations/network/network_management_install_guide/aruba/snmpv3_users.md) or [Dell SNMP Users Guide](../../operations/network/network_management_install_guide/dell/snmpv3_users.md).

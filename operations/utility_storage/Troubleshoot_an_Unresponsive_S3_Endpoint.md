@@ -1,6 +1,8 @@
 # Troubleshoot an Unresponsive Rados-Gateway (radosgw) S3 Endpoint
 
-## Issue 1: Rados-Gateway/s3 endpoint is not accessible
+The following section includes various issues causing an unresponsive radosgw S3 endpoint and how to resolve them.
+
+## Issue 1: Rados-Gateway/s3 endpoint is Not Accessible
 
 ```bash
 ncn# response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://rgw-vip)|echo "Curl Response Code: $response"
@@ -9,7 +11,7 @@ Curl Response Code: 200
 
 Expected Responses: 2xx, 3xx
 
-### Procedure:
+### Procedure
 
 1. Check the individual endpoints.
 
@@ -21,9 +23,9 @@ Expected Responses: 2xx, 3xx
    Curl Response Code for ncn-s003: 200
    ```
 
-   **`NOTE:`** If an error occurs with the above script, then echo $num_storage_nodes. If it is not an integer that matches the known configuration of the number of Utility Storage nodes, then you can run cloud-init init to refresh your cloud-init cache. Alternatively you can manually set that number if you know your number of Utility Storage nodes.
+   **Troubleshooting:** If an error occurs with the above script, then `echo $num_storage_nodes`. If it is not an integer that matches the known configuration of the number of Utility Storage nodes, then run `cloud-init init` to refresh the cloud-init cache. Alternatively, manually set that number if the number of Utility Storage nodes is known.
 
-1. Check the HAProxy endpoint
+2. Check the HAProxy endpoint.
 
    ```bash
    ncn# response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://rgw-vip)|echo "Curl Response Code: $response"
@@ -31,11 +33,11 @@ Expected Responses: 2xx, 3xx
    Curl Response Code: 200
    ```
 
-1. Verify HAProxy and KeepAlived Status
+3. Verify HAProxy and KeepAlived status.
 
    `KeepAlived:`
 
-   1. Check KeepAlived on each node running ceph-radosgw. By default this will be all Utility Storage nodes, but may differ based on your configuration.
+   1. Check KeepAlived on each node running ceph-radosgw. By default, this will be all Utility Storage nodes, but may differ based on your configuration.
 
    ```bash
    ncn-s# systemctl is-active keepalived.service
@@ -47,8 +49,8 @@ Expected Responses: 2xx, 3xx
     ```bash
     ncn-s# journalctl -u keepalived.service --no-pager |grep -i gratuitous
     Aug 25 19:33:12 ncn-s001 Keepalived_vrrp[12439]: Registering gratuitous ARP shared channel
-    Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: Sending gratuitous ARP on vlan002 for 10.252.1.3
-    Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: (VI_0) Sending/queueing gratuitous ARPs on vlan002 for 10.252.1.3
+    Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: Sending gratuitous ARP on bond0.nmn0 for 10.252.1.3
+    Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: (VI_0) Sending/queueing gratuitous ARPs on bond0.nmn0 for 10.252.1.3
     ```
 
    `HAProxy:`
@@ -58,7 +60,7 @@ Expected Responses: 2xx, 3xx
     active
    ```
 
-## Issue 2 Ceph reports HEALTH_OK but s3 operations not functioning
+## Issue 2: Ceph Reports HEALTH_OK but S3 Operations Not Functioning
 
 Restart Ceph OSDs to help make the rgw.local:8080 endpoint responsive.
 
@@ -106,3 +108,5 @@ This procedure requires admin privileges.
     ```
 
     Wait for Ceph health to return to OK before moving between nodes.
+
+    
