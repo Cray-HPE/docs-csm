@@ -16,9 +16,9 @@ function scale_down_cephfs_clients () {
     echo "Did not find nexus pod to take snapshot from -- continuing..."
   fi
 
+  touch $cephfs_deployments_replica_counts_file
+  touch $cephfs_statefulsets_replica_counts_file
 
-  rm -f $cephfs_deployments_replica_counts_file
-  rm -f $cephfs_statefulsets_replica_counts_file
   cnt=0
   client_list=$(kubectl get pvc -A -o json | jq -r '.items[] | select(.spec.storageClassName=="ceph-cephfs-external") | .metadata.namespace, .metadata.name')
   client_array=( $client_list )
@@ -32,33 +32,75 @@ function scale_down_cephfs_clients () {
       kubectl get deployment -n $ns $deployment -o yaml | grep -q "claimName: $pvc_name"
       if [[ "$?" -eq 0 ]]; then
         num_replicas=$(kubectl -n $ns get deployment $deployment -o json | jq -r '.spec.replicas')
-        if [[ "$num_replicas" -eq 0 ]]; then
-          #
-          # We may have already scaled this deployment down or are re-running
-          # the upgrade script. Be careful not to write zeros in the
-          # replica count file.
-          #
-          if [ "$deployment" == "cray-tftp" ]; then
-            num_replicas=3
-          else
-            num_replicas=1
+        if [[ "$num_replicas" -ne 0 ]]; then
+          if ! grep -q ${ns}_${deployment} $cephfs_deployments_replica_counts_file; then
+            #
+            # Only add number of replicas to the counts file if it's not there,
+            # allowing for the script to be re-run as the deployment is being scaled down.
+            #
+            echo "${ns}_${deployment} $num_replicas" >> $cephfs_deployments_replica_counts_file
           fi
+          echo "Ensuring $deployment deployment in namespace $ns is scaled from $num_replicas to zero"
+          kubectl scale deployment -n "$ns" "$deployment" --replicas=0
         fi
-        echo "${ns}_${deployment} $num_replicas" >> $cephfs_deployments_replica_counts_file
-        echo "Ensuring $deployment deployment in namespace $ns is scaled from $num_replicas to zero"
-        kubectl scale deployment -n "$ns" "$deployment" --replicas=0
       fi
     done
     for statefulset in $(kubectl get statefulset -n $ns -o json | jq -r '.items[].metadata.name'); do
       kubectl get statefulset -n $ns $statefulset -o yaml | grep -q "claimName: $pvc_name"
       if [[ "$?" -eq 0 ]]; then
         num_replicas=$(kubectl -n $ns get statefulset $statefulset -o json | jq -r '.spec.replicas')
-        if [[ "$num_replicas" -eq 0 ]]; then
-          num_replicas=3
+        if [[ "$num_replicas" -ne 0 ]]; then
+          if ! grep -q ${ns}_${statefulset} $cephfs_statefulsets_replica_counts_file; then
+            #
+            # Only add number of replicas to the counts file if it's not there,
+            # allowing for the script to be re-run as the statefulset is being scaled down.
+            #
+            echo "${ns}_${statefulset} $num_replicas" >> $cephfs_statefulsets_replica_counts_file
+          fi
+          echo "Ensuring $statefulset statefulset in namespace $ns is scaled from $num_replicas to zero"
+          kubectl scale statefulset -n "$ns" "$statefulset" --replicas=0
         fi
-        echo "${ns}_${statefulset} $num_replicas" >> $cephfs_statefulsets_replica_counts_file
-        echo "Ensuring $statefulset statefulset in namespace $ns is scaled from $num_replicas to zero"
-        kubectl scale statefulset -n "$ns" "$statefulset" --replicas=0
+      fi
+    done
+  done
+
+  cnt=0
+  client_list=$(kubectl get pvc -A -o json | jq -r '.items[] | select(.spec.storageClassName=="ceph-cephfs-external") | .metadata.namespace, .metadata.name')
+  client_array=( $client_list )
+  array_length=${#client_array[@]}
+  while [[ "$cnt" -lt "$array_length" ]]; do
+    ns="${client_array[$cnt]}"
+    cnt=$((cnt+1))
+    pvc_name="${client_array[$cnt]}"
+    cnt=$((cnt+1))
+    for deployment in $(kubectl get deployment -n $ns -o json | jq -r '.items[].metadata.name'); do
+      kubectl get deployment -n $ns $deployment -o yaml | grep -q "claimName: $pvc_name"
+      if [[ "$?" -eq 0 ]]; then
+        num_ready=1
+        until [[ "${num_ready}" -eq 0 ]]; do
+          num_ready=$(kubectl -n $ns get deployment $deployment -o json | jq -r '.status.readyReplicas')
+          if [[ "${num_ready}" -eq 0 ]]; then
+            break
+          fi
+          echo "Waiting for $deployment deployment in $ns namespace to scale down (${num_ready} pod(s) running)..."
+          sleep 5
+        done
+        echo "Deployment $deployment in namespace $ns has been scaled down."
+      fi
+    done
+    for statefulset in $(kubectl get statefulset -n $ns -o json | jq -r '.items[].metadata.name'); do
+      kubectl get statefulset -n $ns $statefulset -o yaml | grep -q "claimName: $pvc_name"
+      if [[ "$?" -eq 0 ]]; then
+        num_ready=1
+        until [[ "${num_ready}" -eq 0 ]]; do
+          num_ready=$(kubectl -n $ns get statefulset $statefulset -o json | jq -r '.status.readyReplicas')
+          if [[ "${num_ready}" -eq 0 ]]; then
+            break
+          fi
+          echo "Waiting for $statefulset statefulset in $ns namespace to scale down (${num_ready} pod(s) running)..."
+          sleep 5
+        done
+        echo "Statefulset $statefulset in namespace $ns has been scaled down."
       fi
     done
   done
