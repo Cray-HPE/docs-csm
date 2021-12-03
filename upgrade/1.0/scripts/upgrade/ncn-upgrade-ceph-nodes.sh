@@ -108,9 +108,7 @@ if [[ $state_recorded == "0" ]]; then
     ssh-copy-id -f -i ~/ceph.pub root@${upgrade_ncn}
     ceph orch host add ${upgrade_ncn}
     sleep 20
-    ceph orch daemon redeploy mon.${upgrade_ncn}
-    sleep 20
-    for s in $(ceph orch ps | grep ${upgrade_ncn} | awk '{print $1}'); do  ceph orch daemon start $s; done
+    for s in $(ceph orch ps | grep ${upgrade_ncn} | awk '{print $1}'); do  ceph orch daemon redeploy $s; done
 
     record_state "${state_name}" ${upgrade_ncn}
 else
