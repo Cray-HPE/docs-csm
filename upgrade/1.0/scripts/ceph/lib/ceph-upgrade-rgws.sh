@@ -11,7 +11,7 @@ function upgrade_rgws () {
 
   echo "sleeping 20 seconds to allow for old rgw instances to stop"
   sleep 20
-  ceph orch apply rgw site1 zone1 --placement="3 $(ceph node ls|jq -r '.mon|keys| join(" ")')" --port=8080
+  ceph orch apply rgw site1 zone1 --placement="$(ceph node ls|jq -r '.osd|keys[]'|wc -l) $(ceph node ls|jq -r '.osd|keys| join(" ")')" --port=8080
 
   while [[ $(ceph health) != "HEALTH_OK" ]]; do
     echo "sleeping 5 seconds before next check"
