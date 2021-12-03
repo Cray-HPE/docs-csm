@@ -123,18 +123,19 @@ The table below represents all recognizable FS labels on any given management no
 
 | k8s-master | k8s-worker | storage-ceph | FS Label | Partitions | Device |  Partition Size | OverlayFS | Work Order(s) | Memo
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| ✅ | ✅ | ✅ | `BOOTRAID` | `/metal/recovery` | 2 small disks in RAID1 (mirror) | `500 MiB` | ❌ | Present since Shasta-Preview 1 |
-| ✅ | ✅ | ✅ | `SQFSRAID` | `/run/initramfs/live` | 2 small disks in RAID1 (mirror) | `25 GiB` | ✅ | [CASM-1885](https://connect.us.cray.com/jira/browse/MTL-1885) |  squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G) On pepsi's ncn-w001, we are at about 20G of non-volatile data storage needed. |
-| ✅ | ✅ | ✅ | `ROOTRAID` | `/run/initramfs/overlayfs` | 2 small disks in RAID1 (mirror) | `150 GiB` | ✅ | Present since Shasta-Preview 1 | The persistent image file is loaded from this partition, when the image file is loaded the underlying drive is lazily unmounted (`umount -l`) so that when the overlay closes the disk follows suit. |
+| ✅ | ✅ | ✅ | `BOOTRAID` | `/metal/recovery` | 2 small disks in RAID1 | `500 MiB` | ❌ | Present since Shasta-Preview 1 |
+| ✅ | ✅ | ✅ | `SQFSRAID` | `/run/initramfs/live` | 2 small disks in RAID1 | `25 GiB` | ✅ | [CASM-1885](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1885) |  squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G) On pepsi's ncn-w001, we are at about 20G of non-volatile data storage needed. |
+| ✅ | ✅ | ✅ | `ROOTRAID` | `/run/initramfs/overlayfs` | 2 small disks in RAID1 | `150 GiB` | ✅ | Present since Shasta-Preview 1 | The persistent image file is loaded from this partition, when the image file is loaded the underlying drive is lazily unmounted (`umount -l`) so that when the overlay closes the disk follows suit. |
 | ✅ | ✅ | ✅ | `AUX` | `/dev/md/AUX` _(Not Mounted)_ | 2 small disks in RAID0 (stripe) | `250 GiB` | ❌ | [MTL-1308](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1308) [MTL-1562](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1562) | Auxiliary RAID array for cloud-init to use. |
-| ❌ | ❌ | ✅ | `CEPHETC` | `/etc/ceph` | LVM | `10 GiB` | ❌ | [MTL-1308](https://connect.us.cray.com/jira/browse/MTL-1308) | |
-| ❌ | ❌ | ✅ | `CEPHVAR` | `/var/lib/ceph` | LVM | `60 GiB` | ❌ | [MTL-1308](https://connect.us.cray.com/jira/browse/MTL-1308) |  |
-| ❌ | ❌ | ✅ | `CONTAIN` | `/run/containers` | LVM | `60 GiB` | ❌ | [MTL-1308](https://connect.us.cray.com/jira/browse/MTL-1308) | |
-| ✅ | ✅ | ❌ | `CRAYS3FSCACHE` | `/var/lib/s3fs_cache` | LVM | `100 GiB` | ❌ | [MTL-1562](https://connect.us.cray.com/jira/browse/MTL-1562) | |
-| ❌ | ✅ | ❌ | `CONRUN` | `/run/containerd` | Ephemeral | `75 GiB` | ❌ | [MTL-916](https://connect.us.cray.com/jira/browse/MTL-916) | On pepsi ncn-w001, we have less than 200G of operational storage for this. |
-| ❌ | ✅ | ❌ | `CONLIB` | `/run/lib-containerd` | Ephemeral | `25%` | ✅ | [MTL-892](https://connect.us.cray.com/jira/browse/MTL-892) [CASMINST-255](https://connect.us.cray.com/jira/browse/CASMINST-255) | |
-| ✅ | ❌ | ❌ | `ETCDLVM` | `/run/lib-etcd` | Ephemeral | `32 GiB` | ✅ | [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) | |
-| ✅ | ❌ | ❌ | `K8SLET` | `/var/lib/kubelet` | Ephemeral | `25%` | ❌ | [MTL-892](https://connect.us.cray.com/jira/browse/MTL-892) [CASMINST-255](https://connect.us.cray.com/jira/browse/CASMINST-255) | |
+| ❌ | ❌ | ✅ | `CEPHETC` | `/etc/ceph` | LVM | `10 GiB` | ❌ | [MTL-1308](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1308) | |
+| ❌ | ❌ | ✅ | `CEPHVAR` | `/var/lib/ceph` | LVM | `60 GiB` | ❌ | [MTL-1308](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1308) |  |
+| ❌ | ❌ | ✅ | `CONTAIN` | `/run/containers` | LVM | `60 GiB` | ❌ | [MTL-1308](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1308) | |
+| ✅ | ✅ | ❌ | `CRAYS3FSCACHE` | `/var/lib/s3fs_cache` | LVM | `100 GiB` | ❌ | [MTL-1562](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1562) | |
+| ❌ | ✅ | ❌ | `CONRUN` | `/run/containerd` | Ephemeral | `75 GiB` | ❌ | [MTL-916](https://jira-pro.its.hpecorp.net:8443/browse/MTL-916) | On pepsi ncn-w001, we have less than 200G of operational storage for this. |
+| ❌ | ✅ | ❌ | `CONLIB` | `/run/lib-containerd` | Ephemeral | `25%` | ✅ | [MTL-892](https://jira-pro.its.hpecorp.net:8443/browse/MTL-892) [CASMINST-255](https://jira-pro.its.hpecorp.net:8443/browse/CASMINST-255) | |
+| ✅ | ❌ | ❌ | `ETCDLVM` | `/run/lib-etcd` | Ephemeral | `32 GiB` | ✅ | [CASMPET-338](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-338) | |
+| ✅ | ❌ | ❌ | `K8SLET` | `/var/lib/kubelet` | Ephemeral | `25%` | ❌ | [MTL-892](https://jira-pro.its.hpecorp.net:8443/browse/MTL-892) [CASMINST-255](https://jira-pro.its.hpecorp.net:8443/browse/CASMINST-255) | |
+>>>>>>> 5b2ff4be6f... afix all JIRA links to new JIRA
 
 The above table's rows with overlayFS map their "Mount Paths" to the "Upper Directory" in the table below:
 
@@ -431,9 +432,9 @@ Deprecated FS labels/partitions from Shasta 1.3.X (no longer in Shasta 1.4.0 and
 
 | FS Label | Partitions | Nodes	| Device | Size on Disk | Work Order | Memo
 | --- | --- | ---| --- | --- | --- | --- |
-| `K8SKUBE` | `/var/lib/kubelet` | ncn-w001, ncn-w002 | Ephemeral | Max/Remainder | [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
-| `K8SEPH` | `/var/lib/cray/k8s_ephemeral` | ncn-w001, ncn-w002 | Ephemeral | Max/Remainder | [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
-| `CRAYINSTALL` | `/var/cray/vfat` | ncn-w001, ncn-w002 | Ephemeral | `12 GiB` |  [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
-| `CRAYVBIS` | `/var/cray/vbis` | ncn-w001, ncn-w002 | Ephemeral | `900 GiB` |  [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
-| `CRAYNFS` | `/var/lib/nfsroot/nmd` | ncn-w001, ncn-w002 | Ephemeral | `12 GiB` |  [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
-| `CRAYSDU` | `/var/lib/sdu` | all masters and workers | LVM | `100 GiB` | [MTL-1292](https://connect.us.cray.com/jira/browse/MTL-1292) [MTL-1562](https://connect.us.cray.com/jira/browse/MTL-1562) | Implemented in MTL-1292 and refactored in MTL-1562 |
+| `K8SKUBE` | `/var/lib/kubelet` | ncn-w001, ncn-w002 | Ephemeral | Max/Remainder | [CASMPET-338](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-338) [CASMPET-342](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
+| `K8SEPH` | `/var/lib/cray/k8s_ephemeral` | ncn-w001, ncn-w002 | Ephemeral | Max/Remainder | [CASMPET-338](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-338) [CASMPET-342](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
+| `CRAYINSTALL` | `/var/cray/vfat` | ncn-w001, ncn-w002 | Ephemeral | `12 GiB` |  [CASMPET-338](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-338) [CASMPET-342](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
+| `CRAYVBIS` | `/var/cray/vbis` | ncn-w001, ncn-w002 | Ephemeral | `900 GiB` |  [CASMPET-338](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-338) [CASMPET-342](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
+| `CRAYNFS` | `/var/lib/nfsroot/nmd` | ncn-w001, ncn-w002 | Ephemeral | `12 GiB` |  [CASMPET-338](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-338) [CASMPET-342](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
+| `CRAYSDU` | `/var/lib/sdu` | all masters and workers | LVM | `100 GiB` | [MTL-1292](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1292) [MTL-1562](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1562) | Implemented in MTL-1292 and refactored in MTL-1562 |
