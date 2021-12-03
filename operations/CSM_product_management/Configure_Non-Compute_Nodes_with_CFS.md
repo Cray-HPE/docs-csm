@@ -20,7 +20,7 @@ The goal of passwordless SSH is to enable an easy way for interactive
 passwordless SSH from and between CSM product environments (management nodes) to
 downstream managed product environments (COS, UAN, etc), without requiring each
 downstream environment to create and apply individual changes to NCNs, and as a
-primary way to manage passwordless ssh configuration between management nodes.
+primary way to manage passwordless SSH configuration between management nodes.
 Passwordless SSH from downstream nodes into CSM management nodes is not intended
 or supported.
 
@@ -49,44 +49,50 @@ files.
 
 ```bash
 ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/replace_ssh_keys.sh \
---public-key-file ./id_rsa.pub --private-key-file ./id_rsa
+--public-key-file ./id_rsa-csm.pub --private-key-file ./id_rsa-csm
 ```
 
 Alternatively, the keys stored in Kubernetes can be updated directly. 
 
 1. Replace the private key half:
    ```bash
-   ncn# kubectl get secret -n services csm-private-key -o json | jq --arg value "$(cat ~/.ssh/id_rsa | base64)" '.data["value"]=$value' | kubectl apply -f -
+   ncn# kubectl get secret -n services csm-private-key -o json | jq --arg value "$(cat ~/.ssh/id_rsa-csm | base64)" '.data["value"]=$value' | kubectl apply -f -
    ```
-   `~/.ssh/id_rsa` is a local file containing a valid SSH private key.
+   where `~/.ssh/id_rsa-csm` is a local file containing a valid SSH private key.
 
 1. Replace the public key half:
    ```bash
    ncn# kubectl delete configmap -n services csm-public-key && \
-      cat ~/.ssh/id_rsa.pub | \
+      cat ~/.ssh/id_rsa-csm.pub | \
       base64 > ./value && kubectl create configmap --from-file \
       value csm-public-key --namespace services && rm ./value
    ```
-   `~/.ssh/id_rsa.pub` is a local file containing a valid public key intended for
-    CSM and downstream products.
+   where `~/.ssh/id_rsa-csm.pub` is a local file containing a valid public key
+   intended for CSM and downstream products.
 
-Passwordless SSH with the provided keys will be setup once NCN personalization
+Passwordless SSH with the provided keys will be set up once NCN personalization
 runs on the NCNs.
+
+**NOTE**: This key pair may or may not be the same key pair used for the NCN
+`root` user. See the _Configure the Root Password and Root SSH Keys in Vault_
+procedure below for setting the root user SSH keys on NCNs.
 
 ###  Option 3: Disable CSM-provided Passwordless SSH
 
 Local site security requirements may preclude use of passwordless SSH access between
 management nodes. A variable has been added to the associated ansible roles that will
-allow you to disable passwordless ssh setup to any or all nodes.
+allow you to disable passwordless SSH setup to any or all nodes. From the cloned
+csm-config-management repository directory:
 
     ```
-    ncn-w:~ # grep csm_passwordless_ssh_enabled roles/trust-csm-ssh-keys/defaults/main.yaml
+    ncn# grep csm_passwordless_ssh_enabled roles/trust-csm-ssh-keys/defaults/main.yaml
     csm_passwordless_ssh_enabled: 'false'
     ```
 
-This variable can be overwritten using either a host specific setting or 'global' to affect
+This variable can be overwritten using either a host-specific setting or 'global' to affect
 all nodes where the playbook is run. Please reference [Customize Configuration Values](../configuration_management/Customize_Configuration_Values.md)
-for more detailed information.
+for more detailed information. Do not modify the value in the `roles/trust-csm-ssh-keys/defaults/main.yaml`
+file.
 
 Published roles within product configuration repositories can contain more comprehensive
 information regarding these role-specific flags. Please reference any role specific associated Readme.md
@@ -135,14 +141,17 @@ keys will be republished.
    ```
 
 <a name="set_root_password"></a>
-## Configure the Root Password in Vault
+## Configure the Root Password and Root SSH Keys in Vault
 
-The root password is managed on NCNs by using the `csm.password` Ansible role
-located in the CSM configuration management repository. Root passwords are set
-and managed in Vault.
+The root user password and SSH keys are managed on NCNs by using the
+`csm.password` and `csm.ssh_keys` Ansible roles, respectively, located in the
+CSM configuration management repository. Root user passwords and SSH keys are
+set and managed in Vault.
 
-1. Set the password in Vault by following the _Configure Root Password in Vault_
-   procedure in [Update NCN Passwords](../security_and_authentication/Update_NCN_Passwords.md#configure_root_password_in_vault).
+1. Set the root user password in Vault by following the _Configure Root Password in Vault_
+   procedure in [Update NCN User Passwords](../security_and_authentication/Update_NCN_Passwords.md#configure_root_password_in_vault).
+1. Set the root user SSH keys in Vault by following the _Configure Root SSH Keys in Vault_
+   procedure in [Update NCN User SSH Keys](../security_and_authentication/SSH_Keys.md#configure_root_keys_in_vault).
 1. Apply the Vault password to the NCNs in the
    [Perform NCN personalization](#perform_ncn_personalization) procedure.
 

@@ -130,7 +130,7 @@ The table below represents all recognizable FS labels on any given management no
 | ❌ | ❌ | ✅ | `CEPHETC` | `/etc/ceph` | LVM | `10 GiB` | ❌ | [MTL-1308](https://connect.us.cray.com/jira/browse/MTL-1308) | |
 | ❌ | ❌ | ✅ | `CEPHVAR` | `/var/lib/ceph` | LVM | `60 GiB` | ❌ | [MTL-1308](https://connect.us.cray.com/jira/browse/MTL-1308) |  |
 | ❌ | ❌ | ✅ | `CONTAIN` | `/run/containers` | LVM | `60 GiB` | ❌ | [MTL-1308](https://connect.us.cray.com/jira/browse/MTL-1308) | |
-| ✅ | ✅ | ❌ | `CRAYSDU` | `/var/lib/sdu` | LVM | `100 GiB` | ❌ | [MTL-1292](https://connect.us.cray.com/jira/browse/MTL-1292) | |
+| ✅ | ✅ | ❌ | `CRAYS3FSCACHE` | `/var/lib/s3fs_cache` | LVM | `100 GiB` | ❌ | [MTL-1562](https://connect.us.cray.com/jira/browse/MTL-1562) | |
 | ❌ | ✅ | ❌ | `CONRUN` | `/run/containerd` | Ephemeral | `75 GiB` | ❌ | [MTL-916](https://connect.us.cray.com/jira/browse/MTL-916) | On pepsi ncn-w001, we have less than 200G of operational storage for this. |
 | ❌ | ✅ | ❌ | `CONLIB` | `/run/lib-containerd` | Ephemeral | `25%` | ✅ | [MTL-892](https://connect.us.cray.com/jira/browse/MTL-892) [CASMINST-255](https://connect.us.cray.com/jira/browse/CASMINST-255) | |
 | ✅ | ❌ | ❌ | `ETCDLVM` | `/run/lib-etcd` | Ephemeral | `32 GiB` | ✅ | [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) | |
@@ -436,3 +436,4 @@ Deprecated FS labels/partitions from Shasta 1.3.X (no longer in Shasta 1.4.0 and
 | `CRAYINSTALL` | `/var/cray/vfat` | ncn-w001, ncn-w002 | Ephemeral | `12 GiB` |  [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
 | `CRAYVBIS` | `/var/cray/vbis` | ncn-w001, ncn-w002 | Ephemeral | `900 GiB` |  [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
 | `CRAYNFS` | `/var/lib/nfsroot/nmd` | ncn-w001, ncn-w002 | Ephemeral | `12 GiB` |  [CASMPET-338](https://connect.us.cray.com/jira/browse/CASMPET-338) [CASMPET-342](https://connect.us.cray.com/jira/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
+| `CRAYSDU` | `/var/lib/sdu` | all masters and workers | LVM | `100 GiB` | [MTL-1292](https://connect.us.cray.com/jira/browse/MTL-1292) [MTL-1562](https://connect.us.cray.com/jira/browse/MTL-1562) | Implemented in MTL-1292 and refactored in MTL-1562 |
