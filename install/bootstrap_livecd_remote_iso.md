@@ -543,7 +543,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
     ```bash
     pit# mkdir -vp /mnt/pitdata
-    pit# mount -v -L PITDATA /mnt/pitdata
+    pit# mount -v --bind /var/www/ephemeral/ /mnt/pitdata/
     ```
 
 1. The following procedure will set up customized CA certificates for deployment using Shasta-CFG.
