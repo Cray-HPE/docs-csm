@@ -20,7 +20,7 @@ For each ServerTech PDU:
 1. Change password for the `admn` user on the ServerTech PDU. 
     
    ```bash
-   ncn-m001# curl -i -k -u admn:<OLD-PDU-PASSWORD> -X PATCH \
+   linux# curl -i -k -u admn:<OLD-PDU-PASSWORD> -X PATCH \
                   https://<PDU_IP_OR_HOSTNAME>/jaws/config/users/local/admn \
                   -d "{ \"password\": \"<NEW_PDU_PASSWORD>\" }"
    ```
@@ -40,7 +40,7 @@ For each ServerTech PDU:
 
 8. Verify that the new password works:
    ```bash
-   ncn-m001# curl -i -k -u admn:<NEW-PDU-PASSWORD> \
+   linux# curl -i -k -u admn:<NEW-PDU-PASSWORD> \
                   https://<PDU_IP_OR_HOSTNAME>/jaws/config/banner
    ```
    Expected output upon a successful password change:

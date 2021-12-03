@@ -9,12 +9,12 @@ all software systems work smoothly with the Redfish hardware.
 
 Before doing these operations, the following is assumed:
 
-- There is a workstation or laptop which can access all target BMCs
+- There is a workstation or laptop which can access all target BMCs.
 - Workstation or laptop has the 'curl' command installed.
 - The hostname or IP address of each BMC is known or obtainable.
 - The default BMC password is obtainable for each target BMC.
 
-### Set BMC passwords on all River BMC hardware
+### Set BMC passwords on all Air-Cooled BMC hardware
 
 This involves interaction with the BMC hardware itself.
 
@@ -38,7 +38,7 @@ Refer to the following procedure for each BMC:
 2. Determine which Redfish account is the root account:
 
   ```bash
-  $ curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts | jq
+  linux# curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts | jq
   {
     "@odata.context": "/redfish/v1/$metadata#ManagerAccountCollection.ManagerAccountCollection",
     "@odata.id": "/redfish/v1/AccountService/Accounts",
@@ -70,7 +70,7 @@ Refer to the following procedure for each BMC:
  - If the account information contains an *etag* entry, note this number, as it will be required when setting the password.
 
   ```bash
-  $ curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts/1 | jq
+  linux# curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts/1 | jq
   {
     "@odata.context": "/redfish/v1/$metadata#ManagerAccount.ManagerAccount",
     "@odata.id": "/redfish/v1/AccountService/Accounts/1",
@@ -94,14 +94,14 @@ Refer to the following procedure for each BMC:
 4. Set the new password for this account.  Use the ETAG in the header if needed.
 
   ```bash
-  $ curl -s -k -u root:<DFLTPW> -H "If-None-Match: 570254F2" -H "Content-Type: application/json" -X PATCH -d '{"Password":"<NEWPW>"}' https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts/1
-  $
+  linux# curl -s -k -u root:<DFLTPW> -H "If-None-Match: 570254F2" -H "Content-Type: application/json" -X PATCH -d '{"Password":"<NEWPW>"}' https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts/1
+  linux#  
   ```
 
 5. Test to be sure the new password works.  If the password set operation didn't work, then this will fail.
 
   ```bash
-  $ curl -s -k -u root:<NEWPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem
+  linux# curl -s -k -u root:<NEWPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem
   {
     "@odata.context": "/redfish/v1/$metadata#ManagerAccount.ManagerAccount",
     "@odata.id": "/redfish/v1/AccountService/Accounts/1",
@@ -127,10 +127,13 @@ Refer to the following procedure for each BMC:
 This is the exact same procedure as for node BMCs, except that the source of
 the default BMC passwords is different.  
 
-The default passwords for all River-based high speed network switch BMCs is a 
+The default passwords for all air cooled high speed network switch BMCs is a 
 known factory default and is outside the scope of this document.
 
 Once this password, and any HSN BMC IP addresses or hostnames are obtained, 
 the procedure above can be used to set the Redfish root account passwords to
 the new value.
+
+**NOTE:** The default credentials for both air-cooled and liquid-cooled high-speed network switch BMCs should be identical.
+
 
