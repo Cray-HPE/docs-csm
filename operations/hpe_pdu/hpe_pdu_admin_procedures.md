@@ -18,7 +18,7 @@ The following is needed before running this procedure:
 * Root password for ncn-m001
 * Admin password for HPE PDU _(default: 12345678)_
 
-1. Use the `ssh` command from your local machine:
+1. Use the `ssh` command from your local PC/MAC/Linux machine:
     ```bash
     > ssh -L 8443:{PDU_xname}:443 -N root@{ncn-m001_ip}
     ```
@@ -31,15 +31,15 @@ The following is needed before running this procedure:
 
 ### HPE PDU Initial Set-up
 Use this procedure to do the following:
-* Ensure redfish is enabled
+* Ensure Redfish is enabled
 * Add the default user
 * Enable Outlet Control
 
 1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
 
 #### Ensure Redfish is Enabled
-1. Using the **"Settings"** Icon (gear in computer monitor in top right corner) navigate to **"Network Settings"**.
-2. Verify there is a check next to "RESTapi Access", if not, click the **"Edit"** Icon (pencil) and enable.
+1. Using the **"Settings"** icon (gear in computer monitor in top right corner) navigate to **"Network Settings"**.
+2. Verify there is a check next to "RESTapi Access", if not, click the **"Edit"** icon (pencil) and enable.
 
 #### Add Default User
 1. Using the **"admin"** menu (top right corner) navigate to **"User Accounts"**.
@@ -47,21 +47,21 @@ Use this procedure to do the following:
 3. Use the form to add the _username_ and _password_ for the default River user.  Assign the role _"Administrator"_ to that user.
 
 #### Enable Outlet Control
-1. Using the **"Home"** icon (House in top right corner) navigate to **"Control & Manage"**
-2. Verify **"Outlet Control Enable"** switch on the top of the page is selected (green)
+1. Using the **"Home"** icon (House in top right corner) navigate to **"Control & Manage"**.
+2. Verify **"Outlet Control Enable"** switch on the top of the page is selected (green).
 
 #### Update HPE PDU Firmware
 ##### Check Firmware Version
-1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`
-2. Check which version of firmware is installed by selecting the **"Home"** icon (House in the top right corner) navigate to **"Identification"**
-3. The _"Version"_ will be displayed.  If the version is not _"2.0.0.L"_ update firmware.
+1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
+2. Check which version of firmware is installed by selecting the **"Home"** icon (House in the top right corner) navigate to **"Identification"**.
+3. The _"Version"_ will be displayed.  If the version is not the _"2.0.0.L"_, update firmware.
 
 ##### Update Firmware
 1. Download version **2.0.0.L** firmware from: [https://support.hpe.com/connect/s/search?language=en_US#q=P9S23A&t=All&sort=%40hpescuniversaldate%20descending&numberOfResults=25&f:@contenttype=[Drivers%20and%20Software]](https://support.hpe.com/connect/s/search?language=en_US#q=P9S23A&t=All&sort=%40hpescuniversaldate%20descending&numberOfResults=25&f:@contenttype=[Drivers%20and%20Software])
-This will download an ".exe" file which is a self extracting zip file.
+This will download an .exe file, which is a self extracting zip file.
 2. If using a windows system, run the .exe file to extract the files, or use an unzip program on the file.  One of the files extracted will be named **"HPE.FW"**, that is the firmware file you will need for uploading.
 3. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
-4. Using the **"Settings"** Icon (gear in computer monitor in top right corner) navigate to **"System Management"**
+4. Using the **"Settings"** icon (gear in computer monitor in top right corner) navigate to **"System Management"**.
 5. Click the **"Update Firmware"** button.
 6. Click **"Choose File"** and select the **"HPE.FW"** file downloaded.
 7. Click **"Upload"** button.
@@ -109,11 +109,11 @@ The firmware will be updated and the PDU management processor will restart.
     ncn-m001# cray hsm inventory ethernetInterfaces delete {ID}
     ```
 4. On the next `hms-discovery` job run, it should locate the PDU and discover it correctly as a HPE PDU.
-5. After waiting 5 minutes, verify the enthernet interfaces that were pervious delete are now present:
+    After waiting 5 minutes, verify the ethernet interfaces that were previously deleted are now present:
     ```bash
     ncn-m001# cray hsm inventory ethernetInterfaces list --type CabinetPDUController
     ```
-6. Verify the redfish endpoints for the PDUs exist and are DiscoverOK:
+6. Verify the Redfish endpoints for the PDUs exist and are DiscoverOK:
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints list --type CabinetPDUController
     ```
