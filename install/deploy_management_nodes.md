@@ -8,7 +8,7 @@ take place. Watching the console or the console log for certain nodes can help t
 what happens and when. When the process completes for all nodes, the Ceph storage is
 initialized and the Kubernetes cluster is created and ready for a workload. The PIT node
 will join Kubernetes after it is rebooted later in
-[Redeploy PIT Node](index.md#redeploy_pit_node).
+[Deploy Final NCN](index.md#deploy_final_ncn).
 
 <a name="timing-of-deployments"></a>
 ## Timing of Deployments
