@@ -32,7 +32,7 @@ switch(config-schedule)# strict queue <0-7>
 switch(config-schedule)# wfq queue <0-7> weight <0-253>
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show interface IFACE queues

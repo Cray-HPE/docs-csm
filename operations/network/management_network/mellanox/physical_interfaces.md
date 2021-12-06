@@ -10,7 +10,7 @@ Enter interface context
 switch (config) # interface ethernet 1/1
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show interfaces ethernet 1/1

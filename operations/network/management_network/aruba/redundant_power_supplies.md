@@ -6,7 +6,7 @@ There are no configuration commands for switch power supply functionality.
 
 NOTE: HA will be covered in HA section. 
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show environment power-supply

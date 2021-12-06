@@ -27,7 +27,7 @@ switch(config)# qos trust [none|cos|dscp]
 switch(config-if)# qos trust [none|cos|dscp]
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show qos [cos-map|dscp-map|trust]

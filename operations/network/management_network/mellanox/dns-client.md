@@ -16,7 +16,7 @@ Configure a domain name
 switch(config)# ip domain-list mydomain2.com
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show hosts

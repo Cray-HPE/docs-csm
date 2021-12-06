@@ -9,7 +9,7 @@ switch(config)# interface IFACE
 switch(config-if)# no shutdown
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show interface IFACE [transceiver|brief|dom|extended]

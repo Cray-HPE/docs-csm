@@ -42,7 +42,7 @@ switch# diag utilities tshark [file]
 switch# copy tshark-pcap REMOTE-URL vrf VRF
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show mirror <1-4>

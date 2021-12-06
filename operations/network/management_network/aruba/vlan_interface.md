@@ -18,7 +18,7 @@ switch(config-if-vlan)# ip address IP-ADDR/SUBNET
 switch(config-if-vlan)# no shutdown
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show vlan [VLAN|interface IFACE|summary]

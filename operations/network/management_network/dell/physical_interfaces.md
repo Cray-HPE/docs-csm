@@ -19,7 +19,7 @@ switch(config)# interface ethernet 1/1/1
 switch(conf-if-eth1/1/1)# shutdown
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 switch# show configuration

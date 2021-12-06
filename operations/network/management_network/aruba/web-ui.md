@@ -16,7 +16,7 @@ Configure REST API
 switch(config)# https-server rest access-mode read-<only|write>
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show https-server

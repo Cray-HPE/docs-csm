@@ -26,7 +26,7 @@ switch(config interface vlan 10)# ip address 10.10.10.1/24
 switch(config interface vlan 10)# ip ospf area 0
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show ip ospf 

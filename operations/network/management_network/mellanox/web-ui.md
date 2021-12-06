@@ -16,7 +16,7 @@ Configure REST API
 switch(config)# web enable http|https
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show web

@@ -1,53 +1,55 @@
-# Check HSM
+# Check the Hardware State Manager (HSM)
 
-Hardware State Manager has two important parts: 
+The Hardware State Manager (HSM) has two important parts: 
 
-* SLS - Systems Layout Service: This is the "expected" state of the system (as populated by networks.yaml and other sources).
-* SMD - State Manager Daemon:  This is the "discovered" or active state of the system during runtime.
+* **System Layout Service (SLS):** This is the "expected" state of the system (as populated by networks.yaml and other sources)
+* **State Manager Daemon (SMD):**  This is the "discovered" or active state of the system during runtime
 
-SLS: 
+## Procedure
 
-```
-curl  -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/sls/v1/hardware | jq | less
-```
+1. Check SLS. 
 
-The output from SLS should look like this:
+    ```
+    curl  -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/sls/v1/hardware | jq | less
+    ```
 
-```
-{
-  "Parent": "x1000c7s1b0",
-  "Xname": "x1000c7s1b0n0",
-  "Type": "comptype_node",
-  "Class": "Mountain",
-  "TypeString": "Node",
-  "ExtraProperties": {
-    "Aliases": [
-      "nid001228"
-    ],
-    "NID": 1228,
-    "Role": "Compute"
-  }
-}
-```
+    The output from SLS should look similar to the following:
 
-SMD:
+    ```
+    {
+      "Parent": "x1000c7s1b0",
+      "Xname": "x1000c7s1b0n0",
+      "Type": "comptype_node",
+      "Class": "Mountain",
+      "TypeString": "Node",
+      "ExtraProperties": {
+        "Aliases": [
+          "nid001228"
+        ],
+        "NID": 1228,
+        "Role": "Compute"
+      }
+    }
+    ```
 
-```
-curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces | jq | less
-```
+1. Check SMD.
 
-Your output from SMD should look like this:
+    ```
+    curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces | jq | less
+    ```
 
-```
-{
-  "ID": "0040a6838b0e",
-  "Description": "",
-  "MACAddress": "0040a6838b0e",
-  "IPAddress": "10.100.1.147",
-  "LastUpdate": "2020-07-24T23:44:24.578476Z",
-  "ComponentID": "x1000c7s1b0n0",
-  "Type": "Node"
-},
-```
+    The output from SMD should look similar to the following:
 
-[Back to Index](./index.md)
+    ```
+    {
+      "ID": "0040a6838b0e",
+      "Description": "",
+      "MACAddress": "0040a6838b0e",
+      "IPAddress": "10.100.1.147",
+      "LastUpdate": "2020-07-24T23:44:24.578476Z",
+      "ComponentID": "x1000c7s1b0n0",
+      "Type": "Node"
+    },
+    ```
+
+[Back to Index](../index.md)

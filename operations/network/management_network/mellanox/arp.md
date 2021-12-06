@@ -11,7 +11,7 @@ Switch (config) #  interface mgmt0
 switch(config interface mgmt0)# arp ipv4 IP-ADDR mac MAC-ADDR
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show ip arp

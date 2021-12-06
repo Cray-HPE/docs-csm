@@ -12,7 +12,7 @@ switch(config)# snmp-server user <USER> cray-reds-group 3 auth md5 <A-PASS> priv
 
 **NOTE: Removal an SNMPv3 user us not possible on Dell equipment.**
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show snmp user

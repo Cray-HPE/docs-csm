@@ -20,7 +20,7 @@ switch(config-msdp-peer)# enable
 switch(config-msdp-peer)# connect-source <IFNAME>
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 switch# show ip msdp peer

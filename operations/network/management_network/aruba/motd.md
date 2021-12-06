@@ -11,7 +11,7 @@ Create a banner.
 switch(config)# banner <motd|exec> DELIM
 ```
 
-Show Commands to Validate Functionality. 
+Show commands to validate functionality: . 
 
 ```
 switch# show banner <motd|exec>

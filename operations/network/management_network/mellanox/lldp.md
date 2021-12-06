@@ -17,7 +17,7 @@ switch (config interface ethernet 1/1) # lldp receive
 switch (config interface ethernet 1/1) # lldp transmit
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show lldp local

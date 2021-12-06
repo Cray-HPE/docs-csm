@@ -22,7 +22,7 @@ Assign a native VLAN
 switch(config-if)# switchport trunk native vlan-id 1
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 switch# show interfaces switchport 

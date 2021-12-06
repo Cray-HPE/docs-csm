@@ -12,7 +12,7 @@ switch(conf-mstp)# name my-mstp-region
 switch(conf-mstp)# revision 0
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 switch# show spanning-tree mst 

@@ -14,7 +14,7 @@ switch(config)# spanning-tree instance VALUE vlan VLANS
 switch(config)# spanning-tree instance VALUE priority VALUE 
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show spanning-tree mst detail

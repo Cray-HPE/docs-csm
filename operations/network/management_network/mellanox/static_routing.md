@@ -8,7 +8,7 @@ Relevant Configuration
 switch(config)# ip route vrf default 0.0.0.0/0 null0
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show ip route

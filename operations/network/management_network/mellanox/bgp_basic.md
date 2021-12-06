@@ -41,7 +41,7 @@ On BGP router 2
 switch(config router bgp 100)# neighbor 10.10.10.1 remote-as 100
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show ip bgp summary

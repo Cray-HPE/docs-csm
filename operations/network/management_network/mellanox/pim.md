@@ -30,7 +30,7 @@ switch (config) # ip pim vrf default rp-candidate ethernet 1/12 group-list 225.1
 switch (config) # ip pim vrf default rp-candidate ethernet 1/12 bidir
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show ip pim protocol

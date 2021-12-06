@@ -56,7 +56,7 @@ switch(config-if)# ip ospf authentication <message-digest|simple-text|null> swit
 switch(config-if)# ip ospf message-digest-key md5 <cipher|plain>text KEY 
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show ip ospf [interface|neighbors]

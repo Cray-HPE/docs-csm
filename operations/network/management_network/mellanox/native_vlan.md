@@ -22,7 +22,7 @@ Configure a VLAN as native
 [standalone: master] (config interface ethernet 1/1) # switchport access vlan 3
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show interface switchport

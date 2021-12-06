@@ -16,7 +16,7 @@ Bind the SNMP server to a VRF
 switch(config)# snmp-server vrf <default|VRF>
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show snmp community

@@ -20,7 +20,7 @@ switch (config)#configuration write
 switch (config)#reload 
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show version

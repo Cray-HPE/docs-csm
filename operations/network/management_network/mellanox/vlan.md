@@ -42,7 +42,7 @@ From within the interface context, configure the interface mode to Trunk.
 switch (config interface ethernet 1/35) # switchport mode trunk
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show vlan [VLAN]

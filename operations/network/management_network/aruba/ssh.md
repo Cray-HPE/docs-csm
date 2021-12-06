@@ -30,7 +30,7 @@ switch(config)# ssh maximum-auth-attempts VALUE
 switch(config)# ssh known-host remove <all|IP-ADDR>
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show ssh server [vrf VRF|all-vrfs]

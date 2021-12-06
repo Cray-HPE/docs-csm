@@ -10,7 +10,7 @@ Creating a domain name
 switch(config)# ip map-hostname
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show hosts

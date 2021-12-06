@@ -23,7 +23,7 @@ Define your interface IP statically using the following command:
 switch (config) # interface mgmt0 ip address <IP address> <netmask>
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 switch# show interface mgmt

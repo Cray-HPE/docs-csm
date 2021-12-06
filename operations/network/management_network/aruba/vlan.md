@@ -42,7 +42,7 @@ switch(config)# vlan <VLAN>
 switch(config-vlan-100)# voice 
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show vlan [VLAN]

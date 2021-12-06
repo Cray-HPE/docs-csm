@@ -22,7 +22,7 @@ switch(config)# vsf member <ID>
 switch(vsf-member)# link <ID> <IFACE-RANGE>
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show vsf <brief|configuration|status>

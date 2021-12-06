@@ -17,7 +17,7 @@ switch(config)# interface vlan 2
 switch(conf-if-vl-2)# no shutdown
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 switch# show interface vlan 

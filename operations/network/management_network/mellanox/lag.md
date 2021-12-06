@@ -31,7 +31,7 @@ To enable LACP in LAG
 switch (config interfaces ethernet 1/7)# lacp rate fast
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show interface port-channel

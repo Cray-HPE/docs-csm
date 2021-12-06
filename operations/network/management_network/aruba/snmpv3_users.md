@@ -16,7 +16,7 @@ Remove an SNMPv3 user
 switch(config)# no snmpv3 user <USER>
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show snmpv3 users

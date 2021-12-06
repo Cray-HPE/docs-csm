@@ -10,7 +10,7 @@ Enable led
 switch# led locator <flashing|off|on>
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show environment led

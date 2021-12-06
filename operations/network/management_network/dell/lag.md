@@ -25,7 +25,7 @@ switch(config)# interface ethernet 1/1/1
 switch(conf-if-eth1/1/1)#channel-group 10 mode active
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 switch# show interface port-channel 

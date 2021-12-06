@@ -29,7 +29,7 @@ Configure the system timezone
 switch (config) # clock timezone UTC-offset UTC-7
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch (config)# show ntp

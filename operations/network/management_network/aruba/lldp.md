@@ -11,7 +11,7 @@ Enable an interface to receive or transmit LLDP packets
 switch(config-if)# lldp <receive|transmit>
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show lldp [local-device|neighbor-info|statistics]

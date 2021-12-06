@@ -8,7 +8,7 @@ Relevant Configuration
 switch(config)# <ip|ipv6> route IP-ADDR/<SUBNET|PREFIX> IP-ADDR
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show <ip|ipv6> route [static]

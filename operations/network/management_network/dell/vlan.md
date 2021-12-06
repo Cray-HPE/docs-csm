@@ -12,7 +12,7 @@ Create VLAN
 switch(config)# interface vlan <VLAN>
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 switch# show vlan [VLAN]

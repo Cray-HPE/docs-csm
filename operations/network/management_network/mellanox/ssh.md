@@ -35,7 +35,7 @@ Enable SSH to listen for incoming connections
 switch(config)# ssh server listen enable
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show ssh server 

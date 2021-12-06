@@ -18,7 +18,7 @@ switch(config)# interface IFACE
 switch(config-if)# no shutdown switch(config-if)# lag LAG 
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show mclag <brief|configuration|status>

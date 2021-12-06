@@ -10,7 +10,7 @@ Create a banner.
 switch(config)# banner motd Testing
 ```
 
-Show Commands to Validate Functionality. 
+Show commands to validate functionality: . 
 
 ```
 switch# show banner

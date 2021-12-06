@@ -18,7 +18,7 @@ switch (config) # interface ethernet 1/14 ip address 192.168.75.1/31
 primary
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show ethernet interface IFACE

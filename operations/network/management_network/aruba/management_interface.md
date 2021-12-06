@@ -40,7 +40,7 @@ To Assign an IP address to the interface
 ```
 switch(config-if-mgmt)# ip <dhcp|static IP-ADDR> 
 ```
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 switch# show interface mgmt

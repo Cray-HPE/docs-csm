@@ -28,7 +28,7 @@ Set IP filtering rules for input or output traffic. For example, block (drop) UD
 switch (config) # ip filter chain input rule set 2 target drop protocol udp source-port 100
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch (config) # show ip filter

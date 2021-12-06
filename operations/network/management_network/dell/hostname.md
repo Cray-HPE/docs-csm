@@ -11,7 +11,7 @@ Creating a hostname
 switch(config)# hostname <NAME>
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 switch# show hostname

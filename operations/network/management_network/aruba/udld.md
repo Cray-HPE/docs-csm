@@ -19,7 +19,7 @@ Enable UDLD
 switch(config-if)# udld
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show udld [interface IFACE]

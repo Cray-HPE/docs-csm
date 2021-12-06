@@ -76,7 +76,7 @@ Enable cached reauthentication on the interface
 switch(config-macauth)# cached-reauth
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show aaa authentication port-access mac-auth interface <IFACE|all> <port-statistics|client-status [mac MAC-ADDR]>

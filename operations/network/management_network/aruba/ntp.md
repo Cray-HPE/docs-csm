@@ -38,7 +38,7 @@ Configure the system timezone
 switch(config)# clock timezone TIMEZONE
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show ntp status

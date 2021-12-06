@@ -10,7 +10,7 @@ Configure a new SNMPv3 user (Minimum 8 characters for passwords)
 switch(config)# snmp-server user admin v3 enable
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show snmp users

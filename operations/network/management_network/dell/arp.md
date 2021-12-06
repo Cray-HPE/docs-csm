@@ -10,7 +10,7 @@ Configure static ARP on an interface
 switch(config-if)# ip arp ipv4 IP-ADDR mac MAC-ADDR
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 switch# show ip arp

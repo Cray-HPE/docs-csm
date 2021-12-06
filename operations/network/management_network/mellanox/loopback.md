@@ -17,7 +17,7 @@ Configure an IP address on the loopback interface. Run:
 switch (config interface loopback 2)# ip address 20.20.20.20 /32
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show interfaces loopback 2

@@ -18,7 +18,7 @@ Configure a SNMPv2c trap receiver host
 switch(config)# snmp-server host IP-ADDR <trap|inform> version v2c [community NAME]
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show snmp 

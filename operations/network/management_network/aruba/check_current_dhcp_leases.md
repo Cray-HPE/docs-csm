@@ -1,17 +1,23 @@
-# Check current DHCP leases
 
-We'll use the Kea API to retrieve data from the DHCP lease database.
-First you need to get the auth token, On ncn-w001 or a worker/manager with kubectl, run:
+# Check Current DHCP Leases
+
+Use the Kea API to retrieve data from the DHCP lease database.
+
+## Prerequisites
+
+An auth token is set up. If one has not been set up, log on to ncn-w001 or a worker/manager with `kubectl` and run the following:
 
 ```
 export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 ```
 
-Once you generate the auth token you can run these commands on a a worker or manager node.
+Once an auth token is genereated, these commands can be run on a worker or manager node.
 
-If you want to retrieve all the Leases, (warning this may cause your terminal to crash based on the size of the output.)
+## Commands to Check Leases
 
 Get all leases:
+
+**WARNING:** This may cause the terminal to crash based on the size of the output.
 
 ```
 curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq
@@ -39,10 +45,10 @@ curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/j
 ```
 
 If you want to see the total amount of leases.
-Total Leases:
+Total leases:
 
 ```
 curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq '.[].text'
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

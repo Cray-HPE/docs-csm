@@ -60,7 +60,7 @@ switch(config-portgroup)# vsx-sync
 switch(config-addrgroup)# vsx-sync
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show vsx <brief|configuration|status> [config-sync]

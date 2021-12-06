@@ -13,7 +13,7 @@ switch(config)# spanning-tree mst revision 1
 switch(config)# spanning-tree mst name mellanox
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show spanning-tree 

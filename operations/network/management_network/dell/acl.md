@@ -11,7 +11,7 @@ switch(config)# ip access-list name
 switch(conf-ipv4-acl)# permit ip 1.1.1.0/24 any
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 switch# show ip access-list name

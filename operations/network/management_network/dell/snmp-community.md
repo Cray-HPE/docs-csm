@@ -10,7 +10,7 @@ Configure an SNMPv2c community name
 switch(config)# snmp-server community community-name 
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 switch# show snmp community

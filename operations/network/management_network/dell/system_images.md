@@ -16,7 +16,7 @@ Install image
 Switch(config)# image install file-url
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality: 
 
 ```
 Switch(config)# show boot detail

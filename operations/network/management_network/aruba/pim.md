@@ -12,7 +12,7 @@ switch(config-pim)# bsr-candidate source-ip-interface IFACE
 switch(config-pim)# rp-candidate source-ip-interface IFACE
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show ip pim bsr

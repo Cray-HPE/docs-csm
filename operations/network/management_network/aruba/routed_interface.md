@@ -12,7 +12,7 @@ Give an interface an IP address
 switch(config-if)# <ip|ipv6> address IP-ADDR/<SUBNET|PREFIX>
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show <ip|ipv6> interface IFACE

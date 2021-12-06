@@ -17,7 +17,7 @@ Create and enable the VLAN interface, and assign it an IP address
 switch(config vlan 6)# ip address 10.1.0.2/16 
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
 ```
 switch# show vlan
