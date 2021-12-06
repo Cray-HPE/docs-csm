@@ -412,7 +412,7 @@ After updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NC
 
 Procedure for updating NCNs:
 1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H x3000c0s10b0 -s` (x3000c0s10b0 is the xname of the NCN BMC)-
-   See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
+   See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc")
 2. Run a dryrun for all NCNs first to determine which NCNs and targets need updating.
 3. For each NCN requiring updates to target `BMC` or `iLO5`
    (Update of `BMC` and `iLO 5` will not affect the nodes):
@@ -428,7 +428,7 @@ See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock
    3. Reboot the Node -
    See [Reboot NCNs](../node_management/Reboot_NCNs.md)
    4. For `HPE` NCNs, run the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` -
-   See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
+   See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc")
    5. Relock the NCN BMC -
 See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
 
@@ -543,7 +543,7 @@ Make sure you have waited for the current firmware to be updated before starting
 **Device Type: NodeBMC | Target: `System ROM` aka BIOS**
 
 **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than ncn-m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
-See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
+See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc")
 
 ```json
 {

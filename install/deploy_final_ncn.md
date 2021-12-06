@@ -1,4 +1,4 @@
-# Redeploy PIT Node
+# Deploy Final NCN
 
 The following procedure contains information for rebooting and deploying the management node that is currently
 hosting the LiveCD. This assists with remote-console setup to aid in observing the reboot. At the end of this procedure, the

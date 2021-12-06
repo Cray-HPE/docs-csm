@@ -2,7 +2,7 @@
 
 The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available
 to bootstrap the PIT node--the RemoteISO or a bootable USB device. This procedure describes using the USB
-device. If not using the USB device, see [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md).
+device. If not using the USB device, see [Bootstrap PIT Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md).
 
 There are 5 overall steps that provide a bootable USB with SSH enabled, capable of installing Shasta v1.5 (or higher).
 
