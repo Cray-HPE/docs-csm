@@ -36,8 +36,8 @@ the same regardless of the starting point in the workflow.
 
    1. [Deploy Management Nodes](../install/index.md#deploy_management_nodes)
    1. [Install CSM Services](../install/index.md#install_csm_services)
-   1. [Validate CSM Health Before PIT Node Redeploy](../install/index.md#validate_csm_health_before_pit_redeploy)
-   1. [Redeploy PIT Node](../install/index.md#redeploy_pit_node)
+   1. [Validate CSM Health Before Final NCN Deployment](../install/index.md#validate_csm_health_before_final_ncn_deploy)
+   1. [Deploy Final NCN](../install/index.md#deploy_final_ncn)
    1. [Configure Administrative Access](../install/index.md#configure_administrative_access)
    1. [Validate CSM Health](../install/index.md#validate_csm_health)
    1. [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md)

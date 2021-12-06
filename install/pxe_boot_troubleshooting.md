@@ -304,7 +304,7 @@ In some cases, rebooting the KEA pod has resolved PXE issues.
 
 If the PXE boot is giving 404 errors, this could be because the necessary information is not in BSS. The
 information is uploaded into BSS with the `csi handoff bss-metadata` and `csi handoff bss-update-cloud-init`
-commands in the [Redeploy PIT Node](redeploy_pit_node.md#csi-handoff-bss-metadata) procedure. If these commands
+commands in the [Deploy Final NCN](deploy_final_ncn.md#csi-handoff-bss-metadata) procedure. If these commands
 failed or were skipped accidentally, this will cause the `ncn-m001` PXE boot to fail.
 
 In that case, use the following recovery procedure.
@@ -329,9 +329,9 @@ In that case, use the following recovery procedure.
 
 1. Set variables for the system name, the CAN IP address for `ncn-m002`. the Kubernetes version, and the Ceph version.
 
-    The CAN IP address for `ncn-m002` is obtained [at this step of the Redeploy PIT Node procedure](redeploy_pit_node.md#collect-can-ip-ncn-m002).
+    The CAN IP address for `ncn-m002` is obtained [at this step of the Deploy Final NCN procedure](deploy_final_ncn.md#collect-can-ip-ncn-m002).
 
-    The Kubernetes and Ceph versions are from the output of the [`csi handoff ncn-images` command in the Redeploy PIT Node procedure](redeploy_pit_node.md#ncn-boot-artifacts-hand-off). If needed, the typescript file from that procedure should be on `ncn-m002` in the `/metal/bootstrap/prep/admin` directory.
+    The Kubernetes and Ceph versions are from the output of the [`csi handoff ncn-images` command in the Deploy Final NCN procedure](deploy_final_ncn.md#ncn-boot-artifacts-hand-off). If needed, the typescript file from that procedure should be on `ncn-m002` in the `/metal/bootstrap/prep/admin` directory.
 
     Substitute the correct values for the system in use in the following commands:
 
@@ -388,7 +388,7 @@ In that case, use the following recovery procedure.
         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-7. Re-run the [BSS handoff commands from the Redeploy PIT Node procedure](redeploy_pit_node.md#ncn-boot-artifacts-hand-off).
+7. Re-run the [BSS handoff commands from the Deploy Final NCN procedure](deploy_final_ncn.md#ncn-boot-artifacts-hand-off).
 
     **WARNING: These commands should never be run from a node other than the PIT node or `ncn-m001`**
     
