@@ -26,12 +26,12 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
    get\_token needs to be created or exist in the script with the following curl command. The get\_token function is defined below:
 
    ```bash
-   function get_token () {
-   ADMIN_SECRET=$(kubectl get secrets admin-client-auth -ojsonpath='{.data.client-secret}' | base64 -d)
-   curl -s -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$ADMIN_SECRET \
-   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | python -c 'import sys,
-   json; print json.load(sys.stdin)["access_token"]'
-   }
+    ncn-m001# function get_token () {
+        curl -s -S -d grant_type=client_credentials \
+            -d client_id=admin-client \
+            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'
+    }
    ```
 
    The get\_token script adds the authorization required by the HTTPS security token. -H options tell the REST API to accept the data as JSON and that the information is for a JSON-enabled application.
