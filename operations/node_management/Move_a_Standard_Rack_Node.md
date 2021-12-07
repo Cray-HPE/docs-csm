@@ -8,10 +8,10 @@ Update the location-based xname for a standard rack node within the system.
 
     ```screen
     ncn-m001# function get_token () {
-    ADMIN_SECRET=$(kubectl get secrets admin-client-auth -ojsonpath='{.data.client-secret}' | base64 -d)
-    curl -s -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$ADMIN_SECRET \
-    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
-    | python -c 'import sys, json; print json.load(sys.stdin)["access_token"]'
+        curl -s -S -d grant_type=client_credentials \
+            -d client_id=admin-client \
+            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'
     }
     ```
 
