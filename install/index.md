@@ -236,6 +236,15 @@ sections, but there is also a general troubleshooting topic.
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
    <a name="next_topic"></a>
+
+   1. Remove temporary keycloak user for 'cray' CLI
+
+      If the optional step 'Configure the Cray Command Line Interface (cray CLI)' above was performed the
+      temporary user created must be cleaned up from keycloak. To do this follow the step
+      'Remove the temporary user after the install is complete' described in:
+      [Configure the Cray Command Line Interface (`cray` CLI)](../../operations/configure_cray_cli.md).
+      This will remove the temporary user and uninitialze the `cray` CLI on all master and worker nodes.
+
    1. Next Topic
 
       After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has

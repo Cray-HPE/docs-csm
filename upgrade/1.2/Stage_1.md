@@ -30,7 +30,7 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
 
 1. Authenticate with the Cray CLI on `ncn-m002`.
 
-    See [Configure the Cray Command Line Interface](../../operations/configure_cray_cli.md) for details on how to do this.
+    If the `cray` CLI has not been initialized, see [Configure the Cray Command Line Interface](../../operations/configure_cray_cli.md) for details on how to do this.
 
 1. Set the `CSM_RELEASE` variable to the correct value for the CSM release upgrade being applied.
 
