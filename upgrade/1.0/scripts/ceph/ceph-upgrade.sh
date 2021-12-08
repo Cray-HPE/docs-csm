@@ -233,7 +233,7 @@ if [ -f "$upgrade_rgws_file" ]; then
 else
   echo "Upgrading radosgw to 15.2.8"
   upgrade_rgws
-  wait_for_running_daemons rgw 3
+  wait_for_running_daemons rgw $(ceph node ls|jq -r '.osd|keys[]'|wc -l)
   echo "Enabling STS"
   enable_sts
   mark_initialized $upgrade_rgws_file
