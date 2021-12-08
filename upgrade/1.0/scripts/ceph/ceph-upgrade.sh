@@ -255,9 +255,9 @@ scale_up_cephfs_clients
 echo "Enabling all Ceph services to start on boot"
 for host in $(ceph node ls| jq -r '.osd|keys[]'); do
   echo "Enabling services on host: $host"
-  ssh "$host" 'for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));do echo "Enabling service $service on $(hostname)"; systemctl enable $service; done'
+  ssh "$host" 'for service in $(cephadm ls |jq -r .[].systemd_unit);do echo "Enabling service $service on $(hostname)"; systemctl enable $service; done'
   echo "Verifying services on host: $host"
-  output=$(ssh "$host" 'for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));do echo $service; systemctl is-enabled $service; done')
+  output=$(ssh "$host" 'for service in $(cephadm ls |jq -r .[].systemd_unit);do echo $service; systemctl is-enabled $service; done')
   cnt=0
   client_array=( $output )
   array_length=${#client_array[@]}
