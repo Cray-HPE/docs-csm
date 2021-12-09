@@ -66,7 +66,7 @@ Prepare a master node before rebuilding it.
 
     ```bash
     ncn# curl -i -s -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" \
-    "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" -X PUT -d Global.json
+    "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" -X PUT -d @./Global.json
     ```
 
     Ensure a good response, such as `HTTP CODE 200`, is returned in the `curl` output.
@@ -96,7 +96,7 @@ Prepare a master node before rebuilding it.
     kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
     echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" \
         > /etc/cray/kubernetes/join-command-control-plane
-     EOF
+    EOF
     chmod +x /srv/cray/scripts/kubernetes/token-certs-refresh.sh
     /srv/cray/scripts/kubernetes/token-certs-refresh.sh skip-upload-certs
     echo "0 */1 * * * root /srv/cray/scripts/kubernetes/token-certs-refresh.sh >> /var/log/cray/cron.log 2>&1" > /etc/cron.d/cray-k8s-token-certs-refresh
