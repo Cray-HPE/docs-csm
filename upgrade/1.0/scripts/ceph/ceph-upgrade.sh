@@ -272,3 +272,11 @@ for host in $(ceph node ls| jq -r '.osd|keys[]'); do
     fi
   done
 done
+
+echo "Ensuring ceph commands can be executed on all storage nodes"
+for host in $(ceph node ls| jq -r '.osd|keys[]'); do
+  if [[ ! "$host" =~ ^ncn-s00[1-3]*$ ]]; then
+    echo "Copying client.admin key to: $host"
+    scp /etc/ceph/ceph.client.admin.keyring $host:/etc/ceph
+  fi
+done
