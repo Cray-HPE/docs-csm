@@ -1,14 +1,14 @@
-# Erase all zeroize
+# Erase All zeroize
 
 Erases customer data on the management modules in a secure manner. The command prompts for confirmation of zeroization. 
 
-Syntax
+## Syntax
 
 ```erase all zeroize```
 
-Example Erasing customer data on the management modules in a secure manner:
+## Example Erasing Customer Data on the Management Modules in a Secure Manner
 
-```
+```bash
 switch# erase all zeroize
 
 This will securely erase all customer data and reset the switch to factory defaults. This will initiate a reboot and render the. switch unavailable until the   zeroization is complete.This should take several minutes to one hour to complete.
@@ -34,4 +34,4 @@ Secondary Software Image [XL.10.00.0006]
 Select profile(primary):
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

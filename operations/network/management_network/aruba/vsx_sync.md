@@ -1,50 +1,50 @@
-# VSX sync 
+# VSX Sync 
 
 Configuration synchronization is one aspect of this VSX solution where the primary switch configuration is synced to the secondary switch. This allows for pseudo single pane of glass configuration and helps keep key configuration pieces in sync as operational changes are made. Since the solution is primarily for HA, it is expected that the vast majority of configuration policy is the same across both peers. 
 
-Relevant Configuration 
+## Configuration Commands 
 
-Synchronize VLANs 
+Synchronize VLANs: 
 
-```
+```bash
 switch(config-vlan)# vsx-sync
 ```
 
-Synchronize ACLs 
+Synchronize ACLs: 
 
-```
+```bash
 switch(config-acl-ip)# vsx-sync
 ```
 
-Synchronize Classifier and Policy 
+Synchronize classifier and policy: 
 
-```
+```bash
 switch(config-class-ip)# vsx-sync
 ```
 
-Synchronize PBR 
+Synchronize PBR: 
 
-```
+```bash
 switch(config-pbr-action-list)# vsx-sync
 ```
 
-Synchronize VLAN memberships and ACLs on physical or LAG interfaces 
+Synchronize VLAN memberships and ACLs on physical or LAG interfaces: 
 
-```
+```bash
 switch(config-if)# vsx-sync access-lists vlans
 ```
 
 Show commands to validate functionality:  
 
-```
+```bash
 switch# show run vsx-sync
 ```
 
-Example Output 
+## Example Output 
 
 On the first switch: 
 
-```
+```bash
 switch(config)# vlan 10
 switch(config-vlan-10)# vsx-sync
 switch(config)# access-list ip secure_mcast_sources
@@ -57,7 +57,7 @@ switch(config-acl-ip)# 30 permit any any
 
 On the secondary switch: 
 
-```
+```bash
 switch2# show run vsx-sync
 Current vsx-sync configuration:
 vlan 10
@@ -76,10 +76,10 @@ access-list ip secure_mcast_sources
     30 permit any any any
 ```
 
-Expected Results 
+## Expected Results 
 
-* Step 1: You can configure the VLAN 
-* Step 2: You can create the ACL 
-* Step 3: Everything synchronized on the primary is now on the secondary  
+1. You can configure the VLAN
+2. You can create the ACL
+3. Everything synchronized on the primary is now on the secondary  
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)
