@@ -1,6 +1,8 @@
-# Virtual switching framework (VSF) 6300 only 
+
+# Virtual Switching Framework (VSF) - 6300 Only 
 
 Virtual Switching Framework (VSF) defines a virtual switch comprised of multiple individual physical switches, inter-connected through standard Ethernet links. These physical switches will operate with one control plane, thereby visible to the peers as a virtual switch stack. 
+
 Within the stack, one switch is the “Master” switch, which runs all the control plane software and manages the ASICs of all the stack members. A second switch can be configured as the “Standby” switch, which will take over as Master if the master fails. 
 
 Each stack member must have a unique member number. While deploying a stack, the user must ensure that each member has a distinct member number by renumbering the switches to desired member numbers. Stack formation will fail if there is a member number conflict. 
@@ -13,24 +15,24 @@ The secondary member number is user configurable, and there is no default second
 
 Other than the primary and secondary members, no members can ever become master / standby of the stack. 
 
-Relevant Configuration 
+## Configuration Commands
 
-Create a VSF Member 
+Create a VSF Member: 
 	
-```	
+```bash
 switch(config)# vsf member <ID>
 switch(vsf-member)# link <ID> <IFACE-RANGE>
 ```
 
 Show commands to validate functionality:  
 
-```
+```bash
 switch# show vsf <brief|configuration|status>
 ```
 
-Example Output 
+## Example Output 
 
-```
+```bash
 switch# show vsf topology
           Stby     Master
 CPU Utilization
@@ -42,4 +44,4 @@ VSF link 2         : Down
 +---+    +---+    +---+
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

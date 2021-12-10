@@ -1,9 +1,11 @@
-# Scenario A: network connection via management network
 
 
-The example here covers outside connections achieved via management network. 
+# Scenario A: Network Connection via Management Network
+
+The example here covers outside connections achieved with the management network. 
 
 ### Summary
+
 * Create a new VRF
 * Move interfaces to the new VRF
 * Create a new BGP process for the new VRF
@@ -15,6 +17,8 @@ The example here covers outside connections achieved via management network.
 
 ### Topology
 
+The following is an example topology:
+
 ![](../img/scenario-a-topology.png)
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

@@ -1,10 +1,10 @@
 
 # Uninstall CANU
 
-Unintalling Canu can be achieved by: 
+Uninstall CANU with the following command: 
 
 ```
 pip3 uninstall canu
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

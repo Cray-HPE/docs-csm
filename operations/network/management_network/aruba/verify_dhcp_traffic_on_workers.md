@@ -1,16 +1,17 @@
-# Verify the DHCP traffic on the workers
 
-Example issue: Source address of the DHCP Offer is the Metallb address of KEA "10.92.100.222".  
+# Verify the DHCP Traffic on the Worker Nodes
 
-The source address of the DHCP Reply/Offer NEEDS to be the address of the vlan interface on the Worker.
+This section is an example issue of where the source address of the DHCP Offer is the Metallb address of KEA "10.92.100.222".  
 
-Here's how to look at DHCP traffic on the workers:
+The source address of the DHCP Reply/Offer **MUST** be the address of the VLAN interface on the worker node.
 
+Use the following command to look at DHCP traffic on the workers:
+
+```bash
+ncn-w001# tcpdump -envli bond0 port 67 or 68
 ```
-ncn-w001:~ # tcpdump -envli bond0 port 67 or 68
-```
 
-You are looking for the source IP of the DHCP Reply/Offer, this is an example of working offer:
+Look for the source IP of the DHCP Reply/Offer. The following is an example of working offer:
 
 ```
 10.252.1.9.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 309, hops 1, xid 0x98b0982e, Flags [Broadcast]
@@ -27,7 +28,9 @@ If the Source IP of the DHCP Reply/Offer is the MetalLB IP, the DHCP packet will
   Client-Ethernet-Address 14:02:ec:d9:79:88
   file "ipxe.efi"[|bootp]
 ```
- 
-If you run into this, the only solution that we've found so far is restarting KEA and making sure that it gets moved to a different worker.  
 
-[Back to Index](./index.md)
+## Resolution
+
+If this issue occurs, the only solution is to restart KEA and making sure that it gets moved to a different worker node.  
+
+[Back to Index](../index.md)

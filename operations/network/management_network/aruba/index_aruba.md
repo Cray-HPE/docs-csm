@@ -52,12 +52,12 @@ Documentation for CANU can be found at https://github.com/Cray-HPE/canu
 
 ### Network Design Explained
 
-   1. [What is Spine-Leaf Architecture?](./spine_leaf_architecture.md)
-   1. [How does a spine-leaf architecture differ from traditional network designs?](./spine_leaf_architecture2.md)
-   1. [Why are spine-leaf architectures becoming more popular?](./spine_leaf_architecture3.md)
+   1. [What is Spine-Leaf Architecture?](./spine_leaf_architecture.md#what-is-spine-leaf-architecture)
+   1. [How does a spine-leaf architecture differ from traditional network designs?](./spine_leaf_architecture.md#how-does-a-spine-leaf-architecture-differ-from-traditional-network-designs)
+   1. [Why are spine-leaf architectures becoming more popular?](./spine_leaf_architecture.md#why-are-spine-leaf-architectures-becoming-more-popular)
    1. [What is VSX?](./vsx_architecture.md)
-   1. [What are the benefits of VSX?](./vsx_architecture2.md)
-   1. [VSX summary](./vsx_architecture3.md)
+   1. [What are the benefits of VSX?](./vsx_architecture.md#what-are-the-benefits-of-vsx)
+   1. [VSX summary](./vsx_architecture.md#vsx-summary)
 
 ### Built in High-Availability
 
