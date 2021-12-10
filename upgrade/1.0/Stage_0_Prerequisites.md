@@ -1,6 +1,6 @@
 # Stage 0 - Prerequisites and Preflight Checks
 
-> **NOTE:** CSM-0.9.4 or later CSM 0.9.x is required in order to upgrade to CSM-1.0.0 (available with Shasta v1.5).
+> **NOTE:** CSM-0.9.4 or later CSM 0.9.x is required in order to upgrade to CSM-1.0.1 (available with Shasta v1.5).
 >
 > **NOTE:** Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 > 1.0.0-beta.19.
 >
@@ -101,7 +101,7 @@ Perform these steps to update `customizations.yaml`:
 1. Set the `CSM_RELEASE` variable to the correct value for the CSM release upgrade being applied.
 
     ```bash
-    ncn-m001# CSM_RELEASE=csm-1.0.0
+    ncn-m001# CSM_RELEASE=csm-1.0.1
     ```
 
 1. Run check script:
