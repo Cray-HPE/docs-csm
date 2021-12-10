@@ -27,17 +27,17 @@ See [Prepare for Upgrade](prepare_for_upgrade.md)
 
 The procedure you follow depends on the new CSM version to which you are upgrading:
    
-* Upgrading **to CSM 1.0.**
+* Upgrading **to CSM 1.0.1**
 
     The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
 
-    The upgrade is a guided process starting with [Upgrade Management Nodes and CSM Services](1.0/README.md).
+    The upgrade is a guided process starting with [Upgrade Management Nodes and CSM Services](1.0.1/README.md).
 
-* Upgrading **to CSM 1.0.1**
+* Upgrading **to CSM 1.0.2**
    
-    **IMPORTANT**: You must already be at CSM 1.0.0 in order to upgrade to CSM 1.0.1.
+    **IMPORTANT**: You must already be at CSM 1.0.1 in order to upgrade to CSM 1.0.2.
   
-    The upgrade is a guided process starting with [CSM 1.0.1 Patch Installation Instructions](1.0.1/README.md).
+    The upgrade is a guided process starting with [CSM 1.0.1 Patch Installation Instructions](1.0.2/README.md).
 
 <a name="update_management_network"></a>
 ## Update Management Network
