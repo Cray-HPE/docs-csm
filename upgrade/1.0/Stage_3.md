@@ -47,7 +47,7 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `vlan007`/CAN IP address t
 1. Set the `CSM_RELEASE` variable to the correct value for the CSM release upgrade being applied.
 
     ```bash
-    ncn-m002# CSM_RELEASE=csm-1.0.0
+    ncn-m002# CSM_RELEASE=csm-1.0.1
     ```
 
 1. Install document RPM and run check script on `ncn-m002`

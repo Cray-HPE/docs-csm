@@ -84,7 +84,7 @@ The following lists enumerate major improvements since CSM v0.9.x.
   - End-of-Life Alpine and nginx container images must be removed for security purposes.
 
 ### Bug Fixes
-The following list enumerates the more important issues that were found and fixed in CSM v1.0.0. In total, there were more than 34 customer-reported issues and more than 350 development critical issues fixed in this release.
+The following list enumerates the more important issues that were found and fixed in CSM v1.0.1. In total, there were more than 34 customer-reported issues and more than 350 development critical issues fixed in this release.
 
 Critical Issues Resolved:
 * Prometheus cannot scrape kubelet/kube-proxy.
