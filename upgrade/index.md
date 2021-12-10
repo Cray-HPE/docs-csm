@@ -37,7 +37,7 @@ The procedure you follow depends on the new CSM version to which you are upgradi
    
     **IMPORTANT**: You must already be at CSM 1.0.1 in order to upgrade to CSM 1.0.2.
   
-    The upgrade is a guided process starting with [CSM 1.0.1 Patch Installation Instructions](1.0.2/README.md).
+    The upgrade is a guided process starting with [CSM 1.0.2 Patch Installation Instructions](1.0.2/README.md).
 
 <a name="update_management_network"></a>
 ## Update Management Network
