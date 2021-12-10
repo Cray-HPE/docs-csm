@@ -150,7 +150,7 @@ Prior to running NCN personalization, gather the following information:
    ```bash
    ncn# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
 
-   1.0.0:
+   1.0.1:
       configuration:
          clone_url: https://vcs.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git
          commit: 43ecfa8236bed625b54325ebb70916f55884b3a4

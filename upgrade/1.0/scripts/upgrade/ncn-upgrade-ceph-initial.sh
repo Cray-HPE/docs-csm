@@ -12,9 +12,9 @@ upgrade_ncn=$1
 
 . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
 
-skipCephInitial=$(sort -V /tmp/csm_versions | tail -1 | grep "1.0.0" | wc -l)
+skipCephInitial=$(sort -V /tmp/csm_versions | tail -1 | grep "1.0.1" | wc -l)
 if [[ $skipCephInitial -eq 1 ]]; then
-    echo "It is running on 1.0.0 already. Skip ceph upgrade"
+    echo "It is running on 1.0.1 already. Skip ceph upgrade"
     exit 0
 fi
 
