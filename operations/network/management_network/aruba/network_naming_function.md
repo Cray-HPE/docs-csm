@@ -9,6 +9,6 @@ The following table provides an overview of the different network services defin
 | Short name / acronym   | HMN        | NMN      | CAN | CMN | SUN
 
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)
 
 

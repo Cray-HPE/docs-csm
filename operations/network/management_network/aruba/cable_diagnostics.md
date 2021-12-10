@@ -38,4 +38,4 @@ IFNAME
 1. You can enter diagnostics mode successfully
 1. You can test the cable and see the results in the CLI output 
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

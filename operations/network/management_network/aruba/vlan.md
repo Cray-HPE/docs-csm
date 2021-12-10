@@ -64,4 +64,4 @@ VLAN  Name                              Status  Reason          Type      Interf
 1. You can assign a VLAN to the physical interface 
 
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

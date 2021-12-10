@@ -18,4 +18,4 @@ switch(config-if-vlan)# igmp
 
 `show ip igmp-snooping vlan 1` should show IGMP enabled on the VLAN, but no IGMP Querier set.
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

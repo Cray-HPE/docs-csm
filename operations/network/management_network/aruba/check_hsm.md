@@ -52,4 +52,4 @@ The Hardware State Manager (HSM) has two important parts:
     },
     ```
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

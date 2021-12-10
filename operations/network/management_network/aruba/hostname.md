@@ -29,6 +29,6 @@ switch-test
 1. You can configure the hostname
 2. The output of all show commands is correct  
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)
 
 

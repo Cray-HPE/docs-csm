@@ -33,4 +33,4 @@ Capacity also improves because STP is no longer required or at least the impact 
 
 In addition to higher performance, spine-leaf topologies provide better scalability. Additional spine switches can be added and connected to every leaf, increasing capacity. Likewise, new leaf switches can be seamlessly inserted when port density becomes a problem. In either case, this “scale-out” of infrastructure doesn’t require any re-architecting of the network, and there is no downtime.
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

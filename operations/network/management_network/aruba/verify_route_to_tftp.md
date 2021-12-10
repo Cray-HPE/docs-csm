@@ -20,4 +20,4 @@ This route can be a static route or a BGP route that is pinned to a single worke
 
 Verify that you can ping the next hop of this route. For example, in the example above we would ping 10.252.1.9. If this is not reachable, this is the problem.
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

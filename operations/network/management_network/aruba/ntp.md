@@ -51,4 +51,4 @@ Reference time: Thu Jan 28 2016 0:57:06.647 (UTC)
 3. The system time of the switch matches the NTP server
 
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

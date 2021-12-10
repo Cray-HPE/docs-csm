@@ -33,4 +33,4 @@ switch(config)# do show banner exec
 1. You can create the Exec banner
 2. The output of the Exec banner looks correct  
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

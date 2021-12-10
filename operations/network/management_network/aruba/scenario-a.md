@@ -21,4 +21,4 @@ The following is an example topology:
 
 ![](../img/scenario-a-topology.png)
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

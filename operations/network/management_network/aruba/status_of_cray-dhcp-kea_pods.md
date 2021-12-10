@@ -39,4 +39,4 @@ Use this procedure to verify the status of the cray-dhcp-kea pods and services. 
 
     This output will also show which worker node the kea-dhcp pod is currently on.
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

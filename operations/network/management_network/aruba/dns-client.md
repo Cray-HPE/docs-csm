@@ -28,4 +28,4 @@ switch# show ip dns
 1. The output is correct
 1. You can ping the device
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

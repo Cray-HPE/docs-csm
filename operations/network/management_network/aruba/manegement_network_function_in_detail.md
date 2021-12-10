@@ -34,4 +34,4 @@ The following is a description of the system management network functions:
 	* Ceph (IP-based storage)
 
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

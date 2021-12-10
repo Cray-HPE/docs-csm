@@ -43,4 +43,4 @@ Use this procedure to check the logs for a cray-dhcp-kea pod.
     ncn-w001# kubectl exec -n services -it pod/$(kubectl get -n services pods | grep kea | head -n 1) -c cray-dhcp-kea -- /bin/bash
     ```
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

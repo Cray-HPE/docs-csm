@@ -316,4 +316,4 @@ This section provides an example of how to configure the management network.
         ncn-w003: 04:59:36.825591 98:5d:82:71:ba:2d > 02:00:00:00:00:1e, ethertype IPv4 (0x0800), length 98: (tos 0x0, ttl 54, id 33996, offset 0, flags [none], proto ICMP (1), length 84)
         ```
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

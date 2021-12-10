@@ -42,4 +42,4 @@ switch# show ip pim rp-set
 * You successfully enabled the BSR on both 8325s using loopback0 as the BSR source IP
 
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

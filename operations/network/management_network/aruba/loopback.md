@@ -33,4 +33,4 @@ Interface loopback1 is up
 2. You can give a loopback interface an IP address
 3. You can validate the configuration using the `show` commands
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

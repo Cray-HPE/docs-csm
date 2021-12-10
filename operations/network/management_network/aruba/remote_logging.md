@@ -19,4 +19,4 @@ switch(config)# logging IP-ADDR
 1. You can see the log files from the switch on the remote server  
 
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

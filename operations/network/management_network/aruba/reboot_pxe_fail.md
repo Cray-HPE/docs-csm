@@ -35,4 +35,4 @@ The following are common error messages when PXE fails:
     ncn-w001# ip route add 10.1.0.0/16 via 10.252.0.1 dev bond0.nmn0
     ```
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

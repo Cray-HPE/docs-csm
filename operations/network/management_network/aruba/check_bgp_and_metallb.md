@@ -48,4 +48,4 @@ Access to the spine switches is required.
     sw-spine01 [standalone: master] # clear ip bgp all
     ```
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

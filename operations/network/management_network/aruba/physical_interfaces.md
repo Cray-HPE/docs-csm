@@ -24,4 +24,4 @@ switch# show interface IFACE [transceiver|brief|dom|extended]
 3. You can establish a link with a partner
 4. You can pass traffic as expected 
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

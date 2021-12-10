@@ -22,4 +22,4 @@ switch# show domain-name
 1. You can configure the domain name
 1. The output of all show commands is correct  
  
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

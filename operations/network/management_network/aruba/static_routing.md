@@ -51,4 +51,4 @@ Displaying ipv6 routes selected for forwarding
 2. You can validate using the `show` command(s)
 3. You can ping the connected device
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

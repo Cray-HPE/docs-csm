@@ -22,4 +22,4 @@ For example:
 
 To test for duplicate IPs, ping the suspected address while you turn off the node. If you continue to get responses, then you have a duplicate IP.
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)

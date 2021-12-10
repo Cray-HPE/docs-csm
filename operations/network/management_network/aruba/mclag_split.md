@@ -14,4 +14,4 @@ The following is expected in this scenario:
 * If traffic was originally flowing through secondary VSX member a small percentage of packets may be dropped when disconnecting the ISL. A sub second value is expected during this event.
 * When connecting back ISL link, the hashing needs to be recalculated and some packets may be dropped during this event as well. A sub second value is expected during this event.
 
-[Back to Index](../index.md)
+[Back to Index](../index_aruba.md)
