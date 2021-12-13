@@ -63,5 +63,5 @@ Port-ID        Tx-Packets     Rx-packets     Rx-discarded   TLVs-Unknown
 4. Remote device LLDP information is displayed 
 5. LLDP statistics are displayed 
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)
 

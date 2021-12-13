@@ -39,4 +39,4 @@ switch# show ip msdp sa-cache
 
 1. Verify MSDP session is Up and it is using loopback interface as source.
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

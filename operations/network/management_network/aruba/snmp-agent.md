@@ -71,4 +71,4 @@ Host                     Port  Type      Version SecName                        
 2. The output of all `show` commands is correct
 3. You can connect to the switch from the workstation 
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

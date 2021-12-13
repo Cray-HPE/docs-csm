@@ -57,4 +57,4 @@ code_point local_priority color   name
 7          7              green   Network_Control
 ```
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

@@ -146,4 +146,4 @@ Interface 1/1/1* (in):
   use 'policy NAME copy' to create a uniquely-named policy
 ```
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

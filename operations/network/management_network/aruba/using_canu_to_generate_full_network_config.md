@@ -29,4 +29,4 @@ canu -s 1.3 network config -a full --shcd FILENAME.xlsx --tabs INTER_SWITCH_LINK
 	sw-leaf-bmc-001 Config Generated
 
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

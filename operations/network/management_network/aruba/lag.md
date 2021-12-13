@@ -85,4 +85,4 @@ F - Aggregable I - Individual
 2. You can add ports to a LAG
 3. You can configure a LAG interface  
 	
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

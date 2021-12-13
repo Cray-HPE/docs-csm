@@ -82,4 +82,4 @@ access-list ip secure_mcast_sources
 2. You can create the ACL
 3. Everything synchronized on the primary is now on the secondary  
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

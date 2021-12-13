@@ -63,4 +63,4 @@ switch(config)# interface loopback 0
 2. You can assign an IP address to the management interface
 3. You can configure a loopback interface to be use for switch management
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

@@ -25,4 +25,4 @@ Configuring (net1 b4:2e:99:be:1a:37)...... ok
     10.92.100.71
     ```
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

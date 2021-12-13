@@ -13,4 +13,4 @@ The following is expected in this scenario:
 * If traffic was originally flowing through the member that was shut down, a small percentage of packets may be dropped. A sub second value is expected during this event.
 * When restoring the power, the hashing needs to be recalculated and some packets may be dropped during this event as well. A sub second value is expected during this event.
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

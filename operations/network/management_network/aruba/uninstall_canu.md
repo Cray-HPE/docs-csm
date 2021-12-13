@@ -7,4 +7,4 @@ Uninstall CANU with the following command:
 pip3 uninstall canu
 ```
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

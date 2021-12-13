@@ -89,4 +89,4 @@ switch# show aaa authentication port-access mac-auth interface <IFACE|all> <port
 2. You are able to authenticate using the specified dot1x authentication method 
 3. The output of the `show` commands looks correct
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

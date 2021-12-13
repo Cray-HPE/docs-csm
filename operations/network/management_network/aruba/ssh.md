@@ -66,4 +66,4 @@ MACs      :  umac-64-etm@openssh.com,umac-128-etm@openssh.com,
 3. The output of the `show` commands is correct
 4. You can successfully connect to the switch via an SSH client using SSH 2.0.
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

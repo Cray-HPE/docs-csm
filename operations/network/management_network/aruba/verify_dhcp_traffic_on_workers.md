@@ -33,4 +33,4 @@ If the Source IP of the DHCP Reply/Offer is the MetalLB IP, the DHCP packet will
 
 If this issue occurs, the only solution is to restart KEA and making sure that it gets moved to a different worker node.  
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

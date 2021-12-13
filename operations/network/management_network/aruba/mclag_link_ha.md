@@ -12,4 +12,4 @@ The network is now fully configured up, and you decide to test HA functionality 
 * A small percentage of packets will be dropped when disconnecting the cable where traffic is flowing. A sub second value is expected during this event.
 * When connecting back the cable, the hashing needs to be recalculated and some packets may be dropped during this event as well. A sub second value is expected during this event.
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

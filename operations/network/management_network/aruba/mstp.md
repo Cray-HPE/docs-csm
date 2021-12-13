@@ -51,4 +51,4 @@ Port         Role           State        Cost    Priority   Type
 2. Spanning-tree is enabled, if loops are detected ports should go blocked state
 3. Spanning-tree splits traffic domain between two DUTs
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

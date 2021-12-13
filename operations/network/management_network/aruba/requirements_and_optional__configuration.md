@@ -19,4 +19,4 @@ Requirements and optional configuration:
 
 > **IMPORTANT:** As there are multiple ways of achieving the connectivity these are just simple examples of how remote access could be achieved. And more complex configurations such as security etc. are up to the site network administrators.  
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

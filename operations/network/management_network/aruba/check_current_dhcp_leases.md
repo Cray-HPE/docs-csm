@@ -51,4 +51,4 @@ Total leases:
 curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq '.[].text'
 ```
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

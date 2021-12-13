@@ -51,4 +51,4 @@ The Bluetooth feature allows Bluetooth enabled devices to connect to and manage 
 1. The output of the show commands looks correct
 
 
-[[Back to Index](../index_aruba.md)
+[[Back to Index](index_aruba.md)

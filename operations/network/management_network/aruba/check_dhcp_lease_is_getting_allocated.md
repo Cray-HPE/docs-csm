@@ -16,4 +16,4 @@ The following is an example of the lease showing `DHCP4_LEASE_ADVERT`:
 
 Restarting KEA will fix the `DHCP4_LEASE_ADVERT` issue in most cases.
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

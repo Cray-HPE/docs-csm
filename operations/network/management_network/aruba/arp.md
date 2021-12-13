@@ -23,4 +23,4 @@ ARP is commonly used for mapping IPv4 addresses to MAC addresses.
 1. You can view the ARP entries 
 
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

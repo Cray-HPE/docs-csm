@@ -16,4 +16,4 @@ External and Edge Networks:
 	* Access from the System to the Site for network services like DNS, LDAP, and more
 
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

@@ -50,4 +50,4 @@ Snmpv3user                        md5       aes       none           True
 2. You can connect to the server from the workstation  
 
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

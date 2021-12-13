@@ -32,5 +32,5 @@ The switch should now enable the VSX ports. Once VSX sync is completed, all port
 
 > **NOTE:** If you were replacing the secondary member and did not do software upgrade prior to enabling the ports, you would experience a reboot on the secondary unit after it has detected the primary VSX member and gotten new software from it before normal ports would come up.
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)
 

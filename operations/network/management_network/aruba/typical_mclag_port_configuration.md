@@ -49,4 +49,4 @@ interface 1/1/1
 </pre>
 </table>
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)

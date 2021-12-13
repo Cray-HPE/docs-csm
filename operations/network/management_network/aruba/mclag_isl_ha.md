@@ -13,4 +13,4 @@ The following things are expected to be seen in this scenario:
 * A small percentage of packets will be dropped when disconnecting the cable where traffic is flowing; A sub second value is expected during this event
 * When connecting back the cable, the hashing needs to be recalculated and some packets may be dropped during this event as well; A sub second value is expected during this event
 
-[Back to Index](../index_aruba.md)
+[Back to Index](index_aruba.md)
