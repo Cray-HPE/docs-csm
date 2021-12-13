@@ -341,7 +341,7 @@ ncn-w003: nameserver 10.92.100.225
 Run the `add_pod_priority.sh` script to create and apply a pod priority class to services critical to CSM. This will give these services a higher priority than others to ensure they get scheduled by Kubernetes in the event that resources limited on smaller deployments.
 
 ```bash
-pit# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/add_pod_priority.sh
+pit# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/add_pod_priority.sh
 Creating csm-high-priority-service pod priority class
 priorityclass.scheduling.k8s.io/csm-high-priority-service configured
 

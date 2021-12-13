@@ -24,7 +24,7 @@ pit_check() {
 }
 
 if ! eval pit_check; then
-	# get the mount directory as it can vary between vintages: CSM 0.9.X uses /metal/boot, CSM 1.0 uses /metal/recovery
+	# get the mount directory as it can vary between vintages: CSM 0.9.X uses /metal/boot, CSM 1.0.1 uses /metal/recovery
 	BOOTRAID=$(awk '/LABEL=BOOTRAID/ {print $2}' /etc/fstab.metal)
 else
 	BOOTRAID=""

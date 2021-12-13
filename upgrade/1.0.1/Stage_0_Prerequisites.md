@@ -54,7 +54,7 @@ Perform these steps to update `customizations.yaml`:
 1. Update `customizations.yaml`:
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/update-customizations.sh -i customizations.yaml
+    ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/update-customizations.sh -i customizations.yaml
     ```
 
 1. Update the `site-init` secret:
@@ -125,7 +125,7 @@ Perform these steps to update `customizations.yaml`:
             **NOTE** The `--endpoint` argument is optional for Cray/HPE internal use.
 
             ```bash
-            ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --endpoint $ENDPOINT
+            ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --endpoint $ENDPOINT
             ```
 
     * Option 2 - Air Gapped Environment
@@ -141,7 +141,7 @@ Perform these steps to update `customizations.yaml`:
         1. Run the script
 
             ```bash
-            ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --tarball-file ${TAR_DIR}/${CSM_RELEASE}.tar.gz
+            ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --tarball-file ${TAR_DIR}/${CSM_RELEASE}.tar.gz
             ```
 
 **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. 

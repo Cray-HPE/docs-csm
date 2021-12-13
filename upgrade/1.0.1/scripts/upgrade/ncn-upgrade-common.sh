@@ -55,7 +55,7 @@ function drain_node() {
    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
    if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
-      /usr/share/doc/csm/upgrade/1.0/scripts/k8s/remove-k8s-node.sh $upgrade_ncn
+      /usr/share/doc/csm/upgrade/1.0.1/scripts/k8s/remove-k8s-node.sh $upgrade_ncn
 
       record_state "${state_name}" ${upgrade_ncn}
       echo

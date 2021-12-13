@@ -124,7 +124,7 @@ if [[ $state_recorded == "0" ]]; then
         ssh_keygen_keyscan "${upgrade_ncn}"
         ssh_keys_done=1
     fi
-    ssh ${upgrade_ncn} '/usr/share/doc/csm/upgrade/1.0/scripts/ceph/ceph-services-stage2.sh'
+    ssh ${upgrade_ncn} '/usr/share/doc/csm/upgrade/1.0.1/scripts/ceph/ceph-services-stage2.sh'
     ssh ${upgrade_ncn} '/srv/cray/scripts/metal/ntp-upgrade-config.sh'
 
     record_state "${state_name}" ${upgrade_ncn}
@@ -132,7 +132,7 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-. /usr/share/doc/csm/upgrade/1.0/scripts/ceph/lib/ceph-health.sh
+. /usr/share/doc/csm/upgrade/1.0.1/scripts/ceph/lib/ceph-health.sh
 wait_for_health_ok
 
 if [[ ${upgrade_ncn} == "ncn-s001" ]]; then
@@ -145,7 +145,7 @@ if [[ ${upgrade_ncn} == "ncn-s001" ]]; then
             ssh_keygen_keyscan "${upgrade_ncn}"
             ssh_keys_done=1
         fi
-        scp /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/create_rgw_buckets.sh $upgrade_ncn:/tmp
+        scp /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/create_rgw_buckets.sh $upgrade_ncn:/tmp
         ssh ${upgrade_ncn} '/tmp/create_rgw_buckets.sh'
 
         record_state "${state_name}" ${upgrade_ncn}

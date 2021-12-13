@@ -42,7 +42,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
     ssh $upgrade_ncn "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
-    ssh $upgrade_ncn '/usr/share/doc/csm/upgrade/1.0/scripts/ceph/ceph-partitions-stage1.sh'
+    ssh $upgrade_ncn '/usr/share/doc/csm/upgrade/1.0.1/scripts/ceph/ceph-partitions-stage1.sh'
 
     record_state "${state_name}" ${upgrade_ncn}
 else

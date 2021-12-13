@@ -49,19 +49,19 @@ if [ $lowest_count -eq 0 ]; then
     echo "      2. Once its upgrade is completed, run the following commands to move all of the"
     echo "         critical pods to it:"
     for pod in $kea_pod $nexus_pod $conman_pod ; do
-        echo "         # /usr/share/doc/csm/upgrade/1.0/scripts/k8s/move-pod.sh $pod ${emptiest_worker}"
+        echo "         # /usr/share/doc/csm/upgrade/1.0.1/scripts/k8s/move-pod.sh $pod ${emptiest_worker}"
     done
     echo "      3. Upgrade the remaining worker nodes in any order."
 else
     echo "      1. Run the following commands to move all critical pods from ${emptiest_worker} to ${other_worker}:"
     for pod in $lowest_podlist; do
-        echo "         # /usr/share/doc/csm/upgrade/1.0/scripts/k8s/move-pod.sh $pod ${other_worker}"
+        echo "         # /usr/share/doc/csm/upgrade/1.0.1/scripts/k8s/move-pod.sh $pod ${other_worker}"
     done
     echo "      2. Upgrade ${emptiest_worker}."
     echo "      3. Once its upgrade is completed, run the following commands to move all of the"
     echo "         critical pods to it:"
     for pod in $kea_pod $nexus_pod $conman_pod ; do
-        echo "         # /usr/share/doc/csm/upgrade/1.0/scripts/k8s/move-pod.sh $pod ${emptiest_worker}"
+        echo "         # /usr/share/doc/csm/upgrade/1.0.1/scripts/k8s/move-pod.sh $pod ${emptiest_worker}"
     done
     echo "      4. Upgrade the remaining worker nodes in any order."
 fi

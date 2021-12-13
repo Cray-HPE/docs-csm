@@ -47,7 +47,7 @@ The file locations:
 1. Run the NAE install script:
 
 	```bash
-	ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/aruba/nae_upload.py
+	ncn-m002# /usr/share/doc/csm/upgrade/1.0.1/scripts/aruba/nae_upload.py
 	```
 	
 1. Type in your switch password and the script will upload and enable the NAE script.

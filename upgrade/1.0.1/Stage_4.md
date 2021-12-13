@@ -11,7 +11,7 @@
 Run `csm-service-upgrade.sh` to deploy upgraded CSM applications and services:
 
 ```bash
-ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/csm-service-upgrade.sh
+ncn-m002# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/csm-service-upgrade.sh
 ```
 
 Once `Stage 4` service upgrade is complete, proceed to [Stage 5](Stage_5.md)

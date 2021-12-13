@@ -72,7 +72,7 @@ The commands in this procedure should be run from a master NCN (unless otherwise
    ncn-m001# /mnt/pitdata/csm-0.9.4/lib/setup-nexus.sh
    ```
 
-1. Re-populate Nexus with `1.0` artifacts. This step is also necessary if the mds/cephfs corruption occurred when upgrading from `0.9.x` to `1.0`. Nexus must be populated with both versions of the artifacts in order to support both old/new docker images during upgrade.
+1. Re-populate Nexus with `1.0.1` artifacts. This step is also necessary if the mds/cephfs corruption occurred when upgrading from `0.9.x` to `1.0.1`. Nexus must be populated with both versions of the artifacts in order to support both old/new docker images during upgrade.
 
    Locate the Nexus setup script, this is typically in `/root/csm-1.0.*` on `ncn-m001`:
 
@@ -95,7 +95,7 @@ The commands in this procedure should be run from a master NCN (unless otherwise
 
    Source the `k8s-scale-utils.sh` script in order to define the `scale_up_cephfs_clients` function:
    ```bash
-   ncn-m001# source /usr/share/doc/csm/upgrade/1.0/scripts/ceph/lib/k8s-scale-utils.sh
+   ncn-m001# source /usr/share/doc/csm/upgrade/1.0.1/scripts/ceph/lib/k8s-scale-utils.sh
    ```
 
    Execute the `scale_up_cephfs_clients` function in order to scale up any `cephfs` clients that may still be scaled down:
