@@ -18,8 +18,8 @@ __________________________________
 ## Network Switch User Guides
 
    1. [Aruba](./aruba/index_aruba.md)
-   1. [Dell](./dell/index_aruba.md)
-   1. [Mellanox](./mellanox/index_aruba.md)
+   1. [Dell](./dell/index_dell.md)
+   1. [Mellanox](./mellanox/index_mellanox.md)
 
 
 ### CANU
