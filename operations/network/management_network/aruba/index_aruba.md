@@ -1,7 +1,7 @@
 
 # Aruba Installation and Configuration Guide
 
-### ARUBA - CX Platform based networks
+## ARUBA - CX Platform Based Networks
 
 ![](../../../../img/operations/management_network/intro.png)
 
@@ -28,20 +28,20 @@ The display and command line illustrated in this document are examples and might
 __________________________________
 
 
-# Table of contents
+## Table of contents
 
 ### Introduction
 
-   1. [Introduction](./index.md)
-   1. [Notice](./index.md)
-   1. [Index](./index.md)
-   1. [Introduction to CANU](./introduction_to_canu.md)
-
+   1. [Introduction](#introduction)
+   2. [Notice](notice.md)
+   3. [Index](../index.md)
 
 ### CANU
 
 The CSM Automatic Network Utility (CANU) is a tool used to generate/validate/test the Shasta management network.
 Documentation for CANU can be found at https://github.com/Cray-HPE/canu
+
+  1. [Introduction to CANU](../introduction_to_canu.md)
 
 ### Examples of Network Topologies
 
