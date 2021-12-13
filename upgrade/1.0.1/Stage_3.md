@@ -15,7 +15,7 @@
 1. Run `ncn-upgrade-k8s-master.sh` for `ncn-m002`. Follow output of the script carefully. The script will pause for manual interaction.
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002
+    ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002
     ```
     
     > NOTE: You may need to reset the root password for each node after it is rebooted
@@ -29,7 +29,7 @@
     > NOTE: It is expected that some pods may be in bad states during a worker node upgrade. This is due to a temporary lack of computing resources. Once the worker node has been upgraded and has rejoined the cluster, those pods will be up and running again. All critical services have more than one replica so that if one pod is down, the service is still available.
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w001
+    ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w001
     ```
     
     > NOTE: You may need to reset the root password for each node after it is rebooted
@@ -78,7 +78,7 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `vlan007`/CAN IP address t
             **NOTE** The `--endpoint` argument is optional for Cray/HPE internal use.
 
             ```bash
-            ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --endpoint $ENDPOINT
+            ncn-m002# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --endpoint $ENDPOINT
             ```
 
     * Option 2 - Air Gapped Environment
@@ -102,13 +102,13 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `vlan007`/CAN IP address t
         1. Run the script
 
             ```bash
-            ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --tarball-file ${TAR_DIR}/${CSM_RELEASE}.tar.gz
+            ncn-m002# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --tarball-file ${TAR_DIR}/${CSM_RELEASE}.tar.gz
             ```
 
 1. Upgrade `ncn-m001`
 
     ```bash
-    ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m001
+    ncn-m002# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m001
     ```
 
 ## Stage 3.4
@@ -127,7 +127,7 @@ ncn-m002# pdsh -b -S -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n'
 Run the following command cleanup several prometheus alert configurations:
 
 ```bash
-ncn-m002# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-clean-kube-alerts.sh
+ncn-m002# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/ncn-clean-kube-alerts.sh
 ```
 
 <a name="deploy-manifests"></a>

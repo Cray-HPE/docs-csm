@@ -82,9 +82,9 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
    application workloads. However, **it is recommended to do this test if possible**, because it validates that boot services
    are still working properly.
 
-   * If upgrading **from CSM 1.0 (Shasta 1.5)**, follow the [Validate CSM Health](../operations/validate_csm_health.md) procedures.
+   * If upgrading **from CSM 1.0.1 (Shasta 1.5)**, follow the [Validate CSM Health](../operations/validate_csm_health.md) procedures.
 
-   * If upgrading **from CSM 0.9 (Shasta 1.4)**, see the [CSM Install Validation and Health Checks](https://github.com/Cray-HPE/docs-csm/blob/release/0.9/008-CSM-VALIDATION.md) procedures **`in the CSM 0.9 documentation`**. The validation procedures in the CSM 1.0 documentation are not all intended to work on CSM 0.9.
+   * If upgrading **from CSM 0.9 (Shasta 1.4)**, see the [CSM Install Validation and Health Checks](https://github.com/Cray-HPE/docs-csm/blob/release/0.9/008-CSM-VALIDATION.md) procedures **`in the CSM 0.9 documentation`**. The validation procedures in the CSM 1.0.1 documentation are not all intended to work on CSM 0.9.
 
 1. Validate Lustre Health
 

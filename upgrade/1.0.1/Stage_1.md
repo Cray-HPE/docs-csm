@@ -13,7 +13,7 @@
 1. Run `ncn-upgrade-ceph-initial.sh` for `ncn-s001`. Follow output of the script carefully. The script will pause for manual interaction.
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph-initial.sh ncn-s001
+    ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/ncn-upgrade-ceph-initial.sh ncn-s001
     ```
 
 1. Repeat the previous step for each other storage node, one at a time.
@@ -44,7 +44,7 @@
     **NOTE**: This script may take hours to complete. In the script output, if you observe a continuous loop on a single OSD, **do not abort the script**. It should eventually progress. If it does not, contact Cray HPE support.
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/ncn-upgrade-ceph.sh
+    ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/ncn-upgrade-ceph.sh
     ```
 
     **`IMPORTANT NOTES`**
@@ -58,7 +58,7 @@
     > * Any deployments or statefulsets that are backed by a `cephfs` PVC will be unavailable during this stage of the upgrade. These deployments will be scaled down and back up automatically. This includes **(but can vary by deployment)**: `nexus`, `cray-ipxe`, `cray-tftp`, `cray-ims`, `cray-console-operator`, and `cray-cfs-api-db`. To view the complete list for the system being upgraded, run the following script to list them:
     >>
     >>   ```bash
-    >>   ncn-m001# /usr/share/doc/csm/upgrade/1.0/scripts/upgrade/list-cephfs-clients.sh
+    >>   ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/list-cephfs-clients.sh
     >>   ```
 
 2. Verify that cray console services are running

@@ -42,7 +42,7 @@ The procedure you follow depends on the new CSM version to which you are upgradi
 <a name="update_management_network"></a>
 ## Update Management Network
 
-**IMPORTANT**: Only do this step if upgrading from CSM 0.9 (Shasta 1.4). If upgrading from CSM 1.0 (Shasta 1.5), skip this step.
+**IMPORTANT**: Only do this step if upgrading from CSM 0.9 (Shasta 1.4). If upgrading from CSM 1.0.1 (Shasta 1.5), skip this step.
 
 There are new features and functions with Shasta v1.5. Some of these changes were available as patches and hotfixes
 for Shasta v1.4, so may already be applied.
