@@ -19,4 +19,4 @@ The following images are example network topologies for systems of various sizes
 
 ![](../../../../img/operations/management_network/small.png)
 
-[Back to Index](./index.md)
+[Back to Index](index_aruba.md)
