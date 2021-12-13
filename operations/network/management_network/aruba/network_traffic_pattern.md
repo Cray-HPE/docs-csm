@@ -1,7 +1,7 @@
 
 # Network Traffic Pattern
 
-![](../img/network_traffic_pattern.png)
+![](../../../../img/operations/management_network/network_traffic_pattern.png)
  
 Internal Networks:
 

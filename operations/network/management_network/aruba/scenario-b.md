@@ -18,6 +18,6 @@ This example covers outside connections achieved via highspeed network.
 
 The following is an example topology:
 
-![](../img/scenario-b-topology.png)
+![](../../../../img/operations/management_network/scenario-b-topology.png)
 
 [Back to Index](../index_aruba.md)

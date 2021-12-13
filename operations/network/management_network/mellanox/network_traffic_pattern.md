@@ -1,6 +1,6 @@
 # Network traffic pattern inside of the system
 
-![](../img/network_traffic_pattern.png)
+![](../../../../img/operations/management_network/network_traffic_pattern.png)
  
 Internal Networks:
 

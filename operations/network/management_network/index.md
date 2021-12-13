@@ -30,7 +30,7 @@ Documentation for CANU can be found at https://github.com/Cray-HPE/canu
 ## Management Network Version Matrix
 
 | CSM version | Compatable Version(s) |
-| ------------- | ------------- | ----- |
+| ------------- | ------------- |
 | 1.0 | N/A |
 | 1.1 | 1.0 |
 | 1.2 | 1.1, 1.0 |
@@ -69,7 +69,7 @@ Software enhancements are listed in reverse-chronological order, with the newest
 
 Unless otherwise noted, each network version listed includes all enhancements added in earlier versions.
 
-Version 1.2
+**Version 1.2:**
 
 <table>
 <td>

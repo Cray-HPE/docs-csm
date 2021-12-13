@@ -15,6 +15,6 @@ The example here covers outside connections achieved via highspeed network.
 
 ### Topology
 
-![](../img/scenario-b-topology.png)
+![](../../../../img/operations/management_network/scenario-b-topology.png)
 
 [Back to Index](./index.md)

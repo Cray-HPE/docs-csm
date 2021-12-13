@@ -19,6 +19,6 @@ The example here covers outside connections achieved with the management network
 
 The following is an example topology:
 
-![](../img/scenario-a-topology.png)
+![](../../../../img/operations/management_network/scenario-a-topology.png)
 
 [Back to Index](../index_aruba.md)

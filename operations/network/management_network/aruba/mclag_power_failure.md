@@ -5,7 +5,7 @@ The intent here is to showcase a complete member failure scenario where the spin
 
 The following is a visualization of the powered down spine-01:
 
-![](../img/member_power_failure.png)
+![](../../../../img/operations/management_network/member_power_failure.png)
  
 The following is expected in this scenario:
 

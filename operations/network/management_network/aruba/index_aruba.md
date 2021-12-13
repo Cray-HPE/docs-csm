@@ -3,7 +3,7 @@
 
 ### ARUBA - CX Platform based networks
 
-![](../img/intro.png)
+![](../../../../img/operations/management_network/intro.png)
 
 © 2021 Hewlett Packard Enterprise Development LP
 

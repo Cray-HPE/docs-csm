@@ -5,7 +5,7 @@ The intent here is to showcase a complete inter-switch-link (ISL) link failure s
 
 The following is a visualization of a disconnected ISL link and how the traffic pattern would look:
 
-![](../img/vsx_split.png)
+![](../../../../img/operations/management_network/vsx_split.png)
  
 The following is expected in this scenario:
 
