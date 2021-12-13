@@ -45,10 +45,10 @@ Documentation for CANU can be found at https://github.com/Cray-HPE/canu
 
 ### Examples of Network Topologies
 
-   1. [Very Large](./very_large.md)
-   1. [Large](./large.md)
-   1. [Medium](./medium.md)
-   1. [Small](./small.md)
+   1. [Very Large](./network_topologies.md#very-large)
+   1. [Large](./network_topologies.md#large)
+   1. [Medium](./network_topologies.md#medium)
+   1. [Small](./network_topologies.md#small)
 
 ### Network Design Explained
 
