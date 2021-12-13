@@ -76,6 +76,34 @@ function retry_enable_service() {
   done
 }
 
+function verify_cephfs_clients_inactive() {
+  tell_output=$(ceph tell mds.$(ceph fs dump -f json-pretty 2>/dev/null | jq -r '.filesystems[].mdsmap.info[].name') session ls 2>/dev/null|jq '.[]|.inst + .client_metadata.root')
+
+  active_pvcs=""
+  NL=$'\n'
+
+  all_pvs=$(kubectl describe pv -A)
+  all_pvcs=$(kubectl get pvc -A)
+  for line in ${tell_output}; do
+    if [[ "$line" =~ csi-vol ]]; then
+      volume=$(echo $line | awk -F / '{print $5}')
+      pvc=$(echo "$all_pvs" | grep -e $volume -e ^Name | grep -B1 $volume | grep -v subvolumeName | awk '{print $2}')
+      pvc_name=$(echo "$all_pvcs" | grep $pvc | awk '{print $2}')
+      active_pvcs+="        ${pvc_name} ${NL}"
+    fi
+  done
+
+  if [ ! -z "$active_pvcs" ]; then
+    echo "ERROR: The following CephFS pvcs currently have active clients and those clients"
+    echo "       MUST be scaled down in order to continue with this upgrade without data"
+    echo "       corruption:${NL}"
+    echo "$active_pvcs"
+    echo "After scaling these clients down, continue the upgrade by re-running the"
+    echo "ncn-upgrade-ceph.sh script."
+    exit 1
+  fi
+}
+
 for node in $(seq 1 "$num_storage_nodes"); do
  nodename=$(printf "ncn-s%03d" "$node")
  ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts
@@ -101,6 +129,9 @@ fi
 
 echo "Scaling down cephfs clients (if needed)"
 scale_down_cephfs_clients
+
+echo "Verifying there are no active CephFS clients"
+verify_cephfs_clients_inactive
 
 if [ -f "$convert_rgw_file" ]; then
   echo "Radosgw has already been converted"

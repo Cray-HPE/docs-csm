@@ -84,15 +84,15 @@ This procedure requires administrative privileges and will require at least two 
 
    ```
 
-  If you find an Running OSD container then we should assume that the drive is being used or might have critical data on it. If you know this to 100% not be the case (example a rebuild), then you can proceed.
+   If you find an Running OSD container then we should assume that the drive is being used or might have critical data on it. If you know this to 100% not be the case (example a rebuild), then you can proceed.
 
-  Repeat this step for all drives on the storage node\(s\) that have unused storage which should be added to Ceph.
+   Repeat this step for all drives on the storage node\(s\) that have unused storage which should be added to Ceph.
 
-  ```bash
-    ncn-s001# ceph orch device zap ncn-s001 /dev/sdb (optional --force)
+   ```bash
+   ncn-s001# ceph orch device zap ncn-s001 /dev/sdb (optional --force)
    ```
 
-  Proceed to the next step after all of the OSDs have been added to the storage nodes.
+   Proceed to the next step after all of the OSDs have been added to the storage nodes.
 
 1. In the first window, check how many OSDs are available.
 
@@ -131,10 +131,16 @@ This procedure requires administrative privileges and will require at least two 
    osd.2  ncn-s001  running (4d)  20s ago    4d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  4ebd6db27d08
    ```
 
-1. Run the ceph-pool-quotas.yml playbook to reset the pool quotas.
+2. Reset the pool quotas.
+   
+   This step is only necessary when the cluster capacity has increased.
+   
+   ```bash
+   ncn-s00(1/2/3)# source /srv/cray/scripts/common/fix_ansible_inv.sh
+   ncn-s00(1/2/3)# fix_inventory
+   ncn-s00(1/2/3)# source /etc/ansible/boto3_ansible/bin/activate
+   ncn-s00(1/2/3)# ansible-playbook /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
+   ncn-s00(1/2/3)# deactivate
+   ```
 
-    This step is only necessary when the cluster capacity has increased.
 
-    ```bash
-    ncn-w001# ansible-playbook /opt/cray/crayctl/ansible_framework/main/ceph-pool-quotas.yml
-    ```

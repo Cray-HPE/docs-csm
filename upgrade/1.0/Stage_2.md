@@ -18,7 +18,14 @@
 
 1. Repeat the previous step for each other storage node, one at a time.
 
-1. After `ncn-upgrade-ceph-nodes.sh` has successfully run for all storage nodes, deploy `node-exporter` and `alertmanager`.
+1. After `ncn-upgrade-ceph-nodes.sh` has successfully run for all storage nodes, rescan ssh keys on all storage nodes
+    ```bash
+    ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
+
+    ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
+    ```
+
+1. Deploy `node-exporter` and `alertmanager`.
 
     **NOTE:** This process will need to run on a node running `ceph-mon`, which in most cases will be `ncn-s001`, `ncn-s002`, and `ncn-s003`. It only needs to be run once, not on every one of these nodes.
 
@@ -54,5 +61,13 @@
     ncn-m001# . /usr/share/doc/csm/upgrade/1.0/scripts/ceph/lib/update_bss_metadata.sh
     ncn-m001# update_bss_storage
     ```
+
+1. Ensure the ceph services are set to autostart
+
+   On ncn-s001:
+
+   ```bash
+   /srv/cray/scripts/common/ceph-enable-services.sh
+   ```
 
  Once `Stage 2` is successfully completed, all the Ceph nodes have been rebooted into the new image. Now proceed to [Stage 3](Stage_3.md).

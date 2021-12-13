@@ -362,6 +362,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
        * [Backup and Restore Vault Clusters](security_and_authentication/Backup_and_Restore_Vault_Clusters.md)
        * [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
    * [API Authorization](security_and_authentication/API_Authorization.md)
+   * [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
 
 
 <a name="resiliency"></a>
@@ -530,12 +531,11 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs.md)
   * [Change Settings for HMS Collector Polling of Air Cooled Nodes](node_management/Change_Settings_for_HMS_Collector_Polling_of_Air_Cooled_Nodes.md)
   * [Use the Physical KVM](node_management/Use_the_Physical_KVM.md)
-  * [Launch a Virtual KVM on Gigabyte Servers](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Servers.md)
-  * [Launch a Virtual KVM on Intel Servers](node_management/Launch_a_Virtual_KVM_on_Intel_Servers.md)
+  * [Launch a Virtual KVM on Gigabyte Nodes](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Nodes.md)
+  * [Launch a Virtual KVM on Intel Nodes](node_management/Launch_a_Virtual_KVM_on_Intel_Nodes.md)
   * [Change Java Security Settings](node_management/Change_Java_Security_Settings.md)
-  * [Verify Accuracy of the System Clock](node_management/Verify_Accuracy_of_the_System_Clock.md)
   * [Configuration of NCN Bonding](node_management/Configuration_of_NCN_Bonding.md)
-    * [Change Interfaces in the Bond](node_management/Change_Interfaces_in_the_Bond.md)
+    * [Change Settings in the Bond](node_management/Change_Settings_in_the_Bond.md)
     * [Troubleshoot Interfaces with IP Address Issues](node_management/Troubleshoot_Interfaces_with_IP_Address_Issues.md)
   * [Troubleshoot Loss of Console Connections and Logs on Gigabyte Nodes](node_management/Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
   * [Check the BMC Failover Mode](node_management/Check_the_BMC_Failover_Mode.md)

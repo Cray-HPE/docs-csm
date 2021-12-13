@@ -72,7 +72,7 @@ Air Cooled nodes support these power capping and monitoring API calls:
 -   get\_node\_energy\_stats
 -   get\_system\_power
 
-### Examples for Liquid Cooled Compute Node Power Management
+### Examples for Compute Node Power Management
 
 **Get Node Energy**
 
