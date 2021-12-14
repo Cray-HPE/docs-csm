@@ -343,7 +343,7 @@ validate_prereqs() {
 		exit 3
 	fi
 
-	# validate that spire is included in platform.yaml
+	# validate that spire is included in sysmgmt.yaml
 	if ! yq r "${PWD}/manifests/sysmgmt.yaml" 'spec.charts(name==spire)' | grep -q spire; then
 		echo "The spire chart is missing from ${PWD}/manifests/sysmgmt.yaml"
 		exit 3
