@@ -1,4 +1,4 @@
-# CSM 1.0.2 Patch Installation Instructions
+# CSM 1.0.10 Patch Installation Instructions
 
 ## Steps
 
@@ -20,7 +20,7 @@
    ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-1. Download and extract the CSM 1.0.2 release to `ncn-m001`.
+1. Download and extract the CSM 1.0.10 release to `ncn-m001`.
 
    See [Download and Extract CSM Product Release](../../update_product_stream/index.md#download-and-extract).
 
@@ -29,7 +29,7 @@
    **IMPORTANT**: If necessary, be sure to change this example command to match the actual location of the extracted files.
 
    ```bash
-   ncn-m001# export CSM_DISTDIR="$(pwd)/csm-1.0.2"
+   ncn-m001# export CSM_DISTDIR="$(pwd)/csm-1.0.10"
    ```
 
 1. Set `CSM_RELEASE_VERSION` to the version reported by `${CSM_DISTDIR}/lib/version.sh`:
@@ -144,13 +144,13 @@ deployment "cray-dns-unbound" successfully rolled out
    0.9.5
    0.9.6
    1.0.1
-   1.0.2
+   1.0.10
    ```
 
 1. Confirm the `import_date` reflects the timestamp of the upgrade:
 
    ```bash
-   ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.0.2".configuration.import_date'
+   ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.0.10".configuration.import_date'
    ```
 
 <a name="exit-typescript"></a>
