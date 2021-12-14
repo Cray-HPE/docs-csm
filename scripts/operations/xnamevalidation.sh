@@ -337,12 +337,6 @@ validate_prereqs() {
 		exit 3
 	fi
 
-	# validate loftsman-platform configmap exists
-	if ! kubectl get configmap -n loftsman loftsman-platform >/dev/null 2>&1; then
-		echo "Error: missing site-init secret in loftsman namespace."
-		exit 3
-	fi
-
 	# validate that cray-opa is included in platform.yaml
 	if ! yq r "${PWD}/manifests/platform.yaml" 'spec.charts(name==cray-opa)' | grep -q cray-opa; then
 		echo "The cray-opa chart is missing from ${PWD}/manifests/platform.yaml"
