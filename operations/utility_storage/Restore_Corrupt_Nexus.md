@@ -77,14 +77,14 @@ The commands in this procedure should be run from a master NCN (unless otherwise
    Locate the Nexus setup script, this is typically in `/root/csm-1.0.*` on `ncn-m001`:
 
    ```bash
-   ncn-m001# ls /root/csm-1.0.0-beta.50/lib/setup-nexus.sh
-   /root/csm-1.0.0-beta.50/lib/setup-nexus.sh
+   ncn-m001# ls /root/csm-1.0.1/lib/setup-nexus.sh
+   /root/csm-1.0.1/lib/setup-nexus.sh
    ```
 
    Re-populate the `1.0.x` artifacts by running the `setup-nexus.sh` script:
 
    ```bash
-   ncn-m001# /root/csm-1.0.0-beta.50/lib/setup-nexus.sh
+   ncn-m001# /root/csm-1.0.1/lib/setup-nexus.sh
    ```
 
 1. Re-populate Nexus with any add-on products that had been installed on this system.
