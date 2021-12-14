@@ -154,7 +154,7 @@ with system-specific customizations.
         > environment.
 
         ```bash
-        linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
+        linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim
         ```
 
         Create (or update) `cert.jks` with the PEM-encoded CA certificate for an
@@ -163,7 +163,7 @@ with system-specific customizations.
         > **`IMPORTANT`** Replace `<ca-cert.pem>` and `<alias>` as appropriate.
 
         ```bash
-        linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool \
+        linux# podman run --rm -v "$(pwd):/data" artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim keytool \
         -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks \
         -storepass password -noprompt
         ```
@@ -252,7 +252,7 @@ with system-specific customizations.
         *   Create `certs.jks`:
 
             ```bash
-            linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
+            linux# podman run --rm -v "$(pwd):/data" artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim keytool -importcert \
             -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
             -storepass password -noprompt
             ```
@@ -503,7 +503,7 @@ encrypted.
     > **`NOTE`** Requires a properly configured Docker or Podman environment.
 
     ```bash
-    linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
+    linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/zeromq/zeromq:v4.0.5
     ```
 
 1.  Re-encrypt existing secrets:
