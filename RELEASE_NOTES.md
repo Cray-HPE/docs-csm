@@ -1,6 +1,6 @@
 # Cray System Management (CSM) - Release Notes
 
-## CSM 1.0.2
+## CSM 1.0.10
 The following lists enumerate the improvements and enhancements since CSM 1.0.1
 
 ### New Functionality
