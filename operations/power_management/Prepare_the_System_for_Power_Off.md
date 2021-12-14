@@ -80,7 +80,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
 5.  Optional system health checks.
 
-    1.  Use the System Dump Utility \(SDU\) to capture current state of system before the shutdown.
+    1.  Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
 
         **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
 
