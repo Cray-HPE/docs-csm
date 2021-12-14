@@ -1,7 +1,7 @@
 # Cray System Management (CSM) - Release Notes
 
-## CSM 1.0.1
-The following lists enumerate the improvements and enhancements since CSM 1.0
+## CSM 1.0.2
+The following lists enumerate the improvements and enhancements since CSM 1.0.1
 
 ### New Functionality
 * Adds hardware discovery and power control for Bard Peak Olympus blades. (Power-capping not supported yet.)
@@ -20,7 +20,7 @@ The following lists enumerate the improvements and enhancements since CSM 1.0
 * Fixes an issue where the boot order for Gigabyte NCNs wasn't persisting after a reboot or reinstall.
 * Fixes an intermittent issue where storage nodes would have clock skew during fresh install.
 
-## CSM 1.0
+## CSM 1.0.1
 The following lists enumerate major improvements since CSM v0.9.x.
 
 ### What’s New
