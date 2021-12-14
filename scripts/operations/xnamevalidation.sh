@@ -39,7 +39,6 @@ add_xname_workload_entry() {
 	agentPath="$4"
 
 	xname="${tenant##*/}"
-	# xname="$(echo $tenant | awk -F/ '{print $NF}')"
 
 	if ! kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID "spiffe://shasta/${type}/${xname}/workload/${workload}" | grep -q "spiffe://shasta/${type}/${xname}/workload/${workload}"; then
 		if [ "$#" -eq 5 ]; then
