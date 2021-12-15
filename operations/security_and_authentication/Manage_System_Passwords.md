@@ -292,7 +292,7 @@ In both cases, a `running-config` must be saved out to non-volatile storage in a
 
 ### SNMP Credentials
 
-To adjust the SNMP credentials, the following need to get performed:
+To adjust the SNMP credentials, perform the following tasks:
 
 1. Update the default credentials specified in the customizations.yaml file.
    

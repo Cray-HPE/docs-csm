@@ -2,7 +2,7 @@
 
 This procedure updates the default credentials used when new air-cooled hardware is discovered for the first time. This includes the default Redfish credentials used for new air-cooled NodeBMCs and Slingshot switch BMCs (RouterBMCs), and SNMP credentials for new management leaf switches.
 
-**IMPORTANT:** After this procedure is completed **going forward all future air-cooled hardware** added to the system will be assumed to be already configured with the new global default credential when getting added to the system.
+**IMPORTANT:** After this procedure is completed, **all future air-cooled hardware** added to the system will be assumed to be configured with the new global default credential.
 
 **NOTE:** This procedure will not update the Redfish or SNMP credentials for existing air-cooled devices. To change the credentials on existing air-cooled hardware follow the [Change Air-Cooled Node BMC Credentials](Change_Air-Cooled_Node_BMC_Credentials.md) and [Change SMNP Credentials on Leaf Switches](Change_SMNP_Credentials_on_Leaf_Switches.md) procedures. 
 
