@@ -41,7 +41,7 @@ for it to be applied to the NCNs.
    step 2 above. The `vault read` command verifies the hash was stored
    correctly.
 
-   ***NOTE***: It is important to enclose the hash in single quotes to preserve
+   **NOTE:**: It is important to enclose the hash in single quotes to preserve
    any special characters.
 
    ```bash
@@ -101,7 +101,7 @@ procedure above.
    ncn# cray cfs sessions create --name ncn-password-update-`date +%Y%m%d%H%M%S` --configuration-name ncn-password-update
    ```
 
-   ***NOTE***: Subsequent password changes need only update the password hash in
+   **NOTE:** Subsequent password changes need only update the password hash in
    HashiCorp Vault and create the CFS session as long as the commit in the CSM
    configuration management repository has not changed. If the commit has
    changed, repeat this procedure from the beginning.

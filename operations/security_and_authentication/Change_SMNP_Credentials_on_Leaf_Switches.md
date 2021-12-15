@@ -1,15 +1,17 @@
+
 # Change SMNP Credentials on Leaf Switches
+
 This procedure changes the SNMP credentials on management leaf switches in the system. All SNMP credentials need to be the same as those found in the customizations.yaml sealed secret cray_reds_credentials.
 
-**NOTE**: This procedure will not update the default SNMP credentials used when new leaf switches are added to the system. To update the default SNMP credentials for new hardware, follow the [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md) procedure.
+**NOTE:** This procedure will not update the default SNMP credentials used when new leaf switches are added to the system. To update the default SNMP credentials for new hardware, follow the [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md) procedure.
 
 ## Prerequisites
+
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 ## Procedure
 
-There are 3 steps involved.  The first 2 steps involve running the *leaf_switch_snmp_creds.sh* script. This script can be used to check for undesireable SNMP user IDs/creds, and also to set new ones.  The default behavior is to check first and then set new creds.   The script can be run either 
-interactively (no env vars or command line options) or non-interactively (using env vars on the command line).  (Examples below will use the env var method.)
+There are three steps involved. The first two steps involve running the *leaf_switch_snmp_creds.sh* script. This script can be used to check for undesireable SNMP user IDs/creds, and also to set new ones. The default behavior is to check first and then set new creds. The script can be run either interactively (no env vars or command line options) or non-interactively (using env vars on the command line). The following examples use the env var method.
 
 1. (Optional) Check if undesireable SNMP user IDs/creds are present on leaf switches.
 
@@ -32,9 +34,9 @@ interactively (no env vars or command line options) or non-interactively (using 
    ```
 
 
-2. Update SNMP credentials (desired SNMP userID and auth/priv passwords) on leaf switches.  Note that the SNMP user ids and passwords are not shown.
+2. Update SNMP credentials (desired SNMP userID and auth/priv passwords) on leaf switches. The SNMP user IDs and passwords are not shown.
 
-Also note that this will change the SNMP credentials in Vault.  See below for 
+Also note that this will change the SNMP credentials in Vault. See below for 
 details on how to do that.
 
 
@@ -60,8 +62,8 @@ details on how to do that.
 
    ```
 
-
 3.  Update Vault with new SNMP credentials:
+    
     ```bash
     ncn-m001# SNMP_AUTH_PASS=<A-PASS>
     ncn-m001# SNMP_PRIV_PASS=<P-PASS>
@@ -70,7 +72,9 @@ details on how to do that.
     ```
 
     Either update the credentials in Vault for a single leaf switch or update Vault for all leaf switches to have same global default value:
+
     -   To update Vault for a single leaf switch:
+        
         ```bash
         ncn-m001# XNAME=x3000c0w22
         ncn-m001# vault kv get secret/hms-creds/$XNAME | 
@@ -80,6 +84,7 @@ details on how to do that.
         ```
 
     -   To update Vault for all leaf switches in the system to the same password:
+        
         ```bash
         for XNAME in $(cray sls search hardware list --type comptype_mgmt_switch --format json | jq -r .[].Xname); do
             echo "Updating SNMP creds for $XNAME"
@@ -98,6 +103,7 @@ details on how to do that.
     ```
 
 5.  Wait for REDS to initialize itself:
+    
     ```bash
     ncn-m001# sleep 2m
     ```
@@ -105,6 +111,7 @@ details on how to do that.
 6.  Verify REDS was able to communicate with the leaf switches with the updated credentials:
 
     Determine the name of the REDS pods:
+    
     ```bash
     ncn-m001# kubectl -n services get pods -l app.kubernetes.io/name=cray-reds
     NAME                         READY   STATUS    RESTARTS   AGE
@@ -112,6 +119,7 @@ details on how to do that.
     ```
 
     Check the logs of the REDS pod for SNMP communication issues. Replace `CRAY_REDS_POD_NAME` with the currently running pod for REDS:
+    
     ```bash
     ncn-m001# kubectl -n services logs CRAY_REDS_POD_NAME cray-reds | grep "Failed to get ifIndex<->name map"
     ```
@@ -119,6 +127,7 @@ details on how to do that.
     If nothing is returned, then REDS is able to successfully communicate to the leaf switches in the system via SNMP.
 
     Errors like the following occur when SNMP credentials in Vault to not match what is configured on the leaf switch. 
+    
     ```
     2021/10/26 20:03:21 WARNING: Failed to get ifIndex<->name map (1.3.6.1.2.1.31.1.1.1.1) for x3000c0w22: Received a report from the agent - UsmStatsWrongDigests(1.3.6.1.6.3.15.1.1.5.0)
     ```
