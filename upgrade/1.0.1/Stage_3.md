@@ -28,6 +28,8 @@
 
     > NOTE: It is expected that some pods may be in bad states during a worker node upgrade. This is due to a temporary lack of computing resources. Once the worker node has been upgraded and has rejoined the cluster, those pods will be up and running again. All critical services have more than one replica so that if one pod is down, the service is still available.
 
+    > NOTE: It is possible that some postgres clusters may report errors when `ncn-upgrade-k8s-worker.sh` runs and checks the postgres clusters. If errors are reported indicating that a cluster does not have a leader or is lagging, it is recommended to re-run the `ncn-upgrade-k8s-worker.sh` again after waiting about 30 minutes to give the clusters time to resume to a healthy state. If postgres clusters still report leader or lag issues, then refer to [Troubleshoot Postgres Database](../../operations/kubernetes/Troubleshoot_Postgres_Database.md).
+
     ```bash
     ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w001
     ```
