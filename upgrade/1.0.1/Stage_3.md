@@ -141,7 +141,7 @@ ncn-m003:
 "k8s.gcr.io/kube-scheduler:v1.19.9"
 ```
 
-> **`NOTE`**: If the output indicates the pods are still running `v1.18.6` images, this is an indication that the `kubeadm upgrade apply` may have had issues. *The output from that command should be inspected and addressed before moving on with the upgrade.*
+> **`NOTE`**: If the output indicates the pods are still running `v1.18.6` images, this is an indication that the `kubeadm upgrade apply` may have had issues. *The output from that command should be inspected and addressed before moving on with the upgrade. If v1.18.6 is shown, discontinue the upgrade and contact HPE Service for support.*
 
 ## Stage 3.5
 
