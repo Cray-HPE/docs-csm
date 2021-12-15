@@ -1,14 +1,14 @@
-## Clear Space in Root File System on Worker Nodes
+# Clear Space in Root File System on Worker Nodes
 
 The disk space on an NCN worker node can fill up if any services are consuming a large portion of the root file system on the node. This procedure shows how to safely clear some space on worker nodes to return them to an appropriate storage threshold.
 
-### Prerequisites
+## Prerequisites
 
 An NCN worker node has a full disk.
 
 ### Procedure
 
-1.  Check to see if Docker is running.
+1. Check to see if Docker is running.
 
     ```bash
     ncn-w001# syctemctl status docker
@@ -29,7 +29,7 @@ An NCN worker node has a full disk.
 
     If Docker is active, proceed to the next step to check its usage.
 
-2.  View the file space usage for Docker.
+2. View the file space usage for Docker.
 
     ```bash
     ncn-w001# du -sh /var/lib/docker
@@ -38,7 +38,7 @@ An NCN worker node has a full disk.
 
     If the output indicates usage is over 100GB, proceed to the next step to prune Docker.
 
-3.  Prune the Docker images.
+3. Prune the Docker images.
 
     The `until=24` option in the command below preserves data less than one day old.
 
@@ -48,7 +48,7 @@ An NCN worker node has a full disk.
 
     Check the usage again with the `du -sh /var/lib/docker` command.
 
-4.  Prune the Docker volumes.
+4. Prune the Docker volumes.
 
     The `until=24` option in the command below preserves data less than one day old.
 
@@ -58,7 +58,7 @@ An NCN worker node has a full disk.
 
     Check the usage again with the `du -sh /var/lib/docker` command.
 
-5.  Check the usage of /var/log/cray.
+5. Check the usage of /var/log/cray.
 
     Another potentially large consumer of space is /var/log/cray when certain debug flags are enabled.
 
@@ -68,6 +68,3 @@ An NCN worker node has a full disk.
     ```
 
     If the usage is over 20GB, examine the logging and determine if any of the older log information needs to be kept. Candidates for clean up include old imfile-state files, as well as old forwarding-queue files. Reduce the quantity of any additional logging as soon as possible to prevent the disk from filling up again.
-
-
-
