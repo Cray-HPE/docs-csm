@@ -92,86 +92,40 @@ state_name="ENSURE_POSTGRES_HEALTHY"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    if [[ ! $UPGRADE_POSTGRES_MAX_LAG =~ ^[0-9][0-9]*$ ]]; then
-        echo "Skipping postgres cluster max lag checks because of UPGRADE_POSTGRES_MAX_LAG setting"
-    else
-        echo "Postgres cluster checks may take several minutes, depending on latency"
-    fi
-    if [[ ! -z $(kubectl get postgresql -A -o json | jq '.items[].status | select(.PostgresClusterStatus != "Running")') ]]; then
+    
+    SCRIPT_BASE="/opt/cray/tests/install/ncn/scripts"
+    
+    echo; echo "Check PostgresClusterStatus is 'Running' or 'Updating'"
+    ${SCRIPT_BASE}/postgres_clusters_running.sh
+    if [[ $? -ne 0 ]]
+    then 
         echo "--- ERROR --- not all Postgresql Clusters have a status of 'Running'"
         exit 1
     fi
-    postgresClusters="$(kubectl get postgresql -A | awk '/postgres/ || NR==1' | \
-                    grep -v NAME | awk '{print $1","$2}')"
-    for c in $postgresClusters
-    do
-        # NameSpace and postgres cluster name
-        c_ns="$(echo $c | awk -F, '{print $1;}')"
-        c_name="$(echo $c | awk -F, '{print $2;}')"
-        echo -n "Checking postgres cluster ${c_name} in namespace ${c_ns} ..."
-        c_attempt=0
-        c_lag_history=""
-        while [ true ]; do
-            # Normally I would use let for arithmetic, but if the let expression evaluates to 0,
-            # the return code is non-0, which breaks us because we are operating under set -e.
-            # Therefore, in this function, arithmetic is performed in the following fashion:
-            c_attempt=$((${c_attempt} + 1))
 
-            echo -n "."
-            if [[ $c_attempt -gt 1 ]]; then
-                # Sleep before re-attempting
-                sleep $UPGRADE_POSTGRES_WAIT_SECONDS_BETWEEN_ATTEMPTS
-            fi
-            c_cluster_details=$(kubectl exec "${c_name}-1" -c postgres -it -n ${c_ns} -- curl -s http://localhost:8008/cluster)
-            c_num_of_members=$(echo $c_cluster_details | jq '.members | length' )
-            c_num_of_leader=$(echo $c_cluster_details | jq '.members[] | .role' | grep "leader" | wc -l)
-            c_max_lag=$(echo $c_cluster_details | jq '[.members[] | .lag] | max')
-            if [[ -n $c_lag_history ]]; then
-                c_lag_history+=", $c_max_lag"
-            else
-                c_lag_history="$c_max_lag"
-            fi
-            c_unknown_lag=$(echo $c_cluster_details | jq '[.members[] | .lag]' | grep "unknown" | wc -l)
+    echo; echo "Check for correct number of cluster members"
+    ${SCRIPT_BASE}/postgres_pods_running.sh -p
+    if [[ $? -ne 0 ]]
+    then 
+        echo "--- ERROR --- not all Postgresql Clusters have the correct number of members."
+        exit 1
+    fi
 
-            # check number of members
-            if [[ $c_name == "sma-postgres-cluster" ]]; then
-                if [[ $c_num_of_members -ne 2 ]]; then
-                    echo -e "\n--- ERROR --- $c cluster only has $c_num_of_members/2 cluster members"
-                    exit 1
-                fi
-            else
-                if [[ $c_num_of_members -ne 3 ]]; then
-                    echo -e "\n--- ERROR --- $c cluster only has $c_num_of_members/3 cluster members"
-                    exit 1
-                fi
-            fi
+    echo; echo "Check for cluster leaders"
+    ${SCRIPT_BASE}/postgres_clusters_leader.sh -p
+    if [[ $? -ne 0 ]]
+    then 
+        echo "--- ERROR --- not all Postgresql Clusters have a leader."
+        exit 1
+    fi
 
-            #check number of leader
-            if [[ $c_num_of_leader -ne 1 ]]; then
-                echo -e "\n--- ERROR --- $c cluster does not have a leader"
-                exit 1
-            fi
-
-            #check lag:unknown
-            if [[ $c_unknown_lag -gt 0 ]]; then
-                echo -e "\n--- ERROR --- $c cluster has lag: unknown"
-                exit 1
-            fi
-
-            if [[ $UPGRADE_POSTGRES_MAX_LAG =~ ^[0-9][0-9]*$ ]]; then
-                #check max_lag is <= $UPGRADE_POSTGRES_MAX_LAG
-                if [[ $c_max_lag -gt $UPGRADE_POSTGRES_MAX_LAG ]]; then
-                    # If we have not exhausted our number of attempts, retry
-                    [[ $c_attempt -ge $UPGRADE_POSTGRES_MAX_ATTEMPTS ]] || continue
-                    
-                    echo -e "\n--- ERROR --- $c cluster has lag: $c_lag_history"
-                    exit 1
-                fi
-            fi
-            echo " OK"
-            break
-        done
-    done
+    echo; echo "Check replication lag"
+    ${SCRIPT_BASE}/postgres_replication_lag.sh -p -e 
+    if [[ $? -ne 0 ]]
+    then 
+        echo "--- ERROR --- Postgresql Clusters have lag."
+        exit 1
+    fi
 
     record_state "${state_name}" ${upgrade_ncn}
 else
@@ -226,7 +180,6 @@ if [[ $cfs_config_status != "configured" ]]; then
     echo "*************************************************"
     cat <<EOF
 Confirm the CFS configurationStatus after rebuilding the node. If the state is pending, the administrator may want to tail the logs of the CFS pod running on that node to watch the CFS job finish.
-
 IMPORTANT: 
   The NCN personalization (CFS configuration) for a worker node which has been rebuilt should be complete before continuing in this process. If the state is failed for this node, it should be be addressed now.
 EOF
@@ -290,7 +243,6 @@ export SW_ARUBA_PASSWORD=$SW_PASSWORD
 export SW_MELLANOX_PASSWORD=$SW_PASSWORD
 
 cat <<EOF
-
 NOTE:
     If below test failed, try to fix it based on test output. Then run current script again
 EOF
