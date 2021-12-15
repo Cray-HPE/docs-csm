@@ -122,6 +122,27 @@ ncn-m002# pdsh -b -S -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n'
 
 > **`NOTE`**: `kubelet` has been upgraded already, so you can ignore the warning to upgrade it
 
+After the above command has completed and pods have been restarted, execute the following command to ensure pods in the kube-system namespace are running new (`v1.19.9`) versions of their images:
+
+```bash
+ncn-m002# for i in `seq 3`; do echo "ncn-m00$i:"; kubectl get po -n kube-system kube-apiserver-ncn-m00${i} -o json | jq '.spec.containers[].image';   kubectl get po -n kube-system kube-controller-manager-ncn-m00${i} -o json | jq '.spec.containers[].image';   kubectl get po -n kube-system kube-scheduler-ncn-m00${i} -o json | jq '.spec.containers[].image'; done
+
+ncn-m001:
+"k8s.gcr.io/kube-apiserver:v1.19.9"
+"docker.io/cray/kube-controller-manager:v1.19.9"
+"k8s.gcr.io/kube-scheduler:v1.19.9"
+ncn-m002:
+"k8s.gcr.io/kube-apiserver:v1.19.9"
+"docker.io/cray/kube-controller-manager:v1.19.9"
+"k8s.gcr.io/kube-scheduler:v1.19.9"
+ncn-m003:
+"k8s.gcr.io/kube-apiserver:v1.19.9"
+"docker.io/cray/kube-controller-manager:v1.19.9"
+"k8s.gcr.io/kube-scheduler:v1.19.9"
+```
+
+> **`NOTE`**: If the output indicates the pods are still running `v1.18.6` images, this is an indication that the `kubeadm upgrade apply` may have had issues. *The output from that command should be inspected and addressed before moving on with the upgrade.*
+
 ## Stage 3.5
 
 Run the following command cleanup several prometheus alert configurations:
