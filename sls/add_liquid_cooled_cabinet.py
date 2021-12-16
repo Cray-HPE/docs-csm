@@ -4,6 +4,7 @@ import argparse
 import json
 import re
 import netaddr
+import shutil
 
 def find_next_available_subnet(sls_network):
     name = sls_network["Name"]
@@ -13,17 +14,52 @@ def find_next_available_subnet(sls_network):
     for sls_subnet in sls_network["ExtraProperties"]["Subnets"]:
         subnet_name = sls_subnet["Name"]
         subnet_cidr = sls_subnet["CIDR"]
-        print("Found subnet {} with CIDR {}".format(subnet_name, subnet_cidr))
+        print("  Found subnet {} with CIDR {}".format(subnet_name, subnet_cidr))
         existing_subnets.add(subnet_cidr)
 
     for available_subnet in list(network_subnet.subnet(22)):
         if available_subnet in existing_subnets:
-            print(available_subnet, "Already in use!")
+            print("  {} Already in use!".format(available_subnet))
         else:
-            print(available_subnet, "Available for use")
+            print("  {} Available for use.".format(available_subnet))
             return available_subnet
 
     return None
+
+def build_network(name, full_name, cidr, vlan_range):
+    return {
+        "Name": name,
+        "FullName": full_name,
+        "IPRanges": [
+            cidr
+        ],
+        "Type": "ethernet",
+        "ExtraProperties": {
+            "CIDR": cidr,
+            "VlanRange": vlan_range,
+            "MTU": 9000,
+            "Subnets": []
+        }
+    }
+
+def add_cabinet_subnet(sls_network, cabinet_xname, vlan):
+    print("Selecting subnet for {} cabinet in {} network".format(cabinet_xname, sls_network["Name"]))
+    cabinet_subnet = find_next_available_subnet(sls_network)
+
+    sls_subnet = {
+        # TODO Figure out preferred order of keys
+        "Name": cabinet_xname.replace("x", "cabinet_"), # cabinet_1000
+        "FullName": "",
+        "CIDR": str(cabinet_subnet),
+        "VlanID": vlan,
+        "Gateway": str(cabinet_subnet[1]),
+        "DHCPStart": str(cabinet_subnet[10]),
+        "DHCPEnd": str(cabinet_subnet[-2]) # Pick the address right before the broadcast address
+    }
+
+    sls_network["ExtraProperties"]["Subnets"].append(sls_subnet)
+
+    return sls_subnet
 
 MOUNTAIN_CHASSIS_LIST = ["c0", "c1", "c2", "c3", "c4", "c5", "c6", "c7"]
 HILL_TDS_CHASSIS_LIST = ["c1", "c3"]
@@ -51,10 +87,16 @@ chassis_list = MOUNTAIN_CHASSIS_LIST
 if args.cabinet_type == "Hill":
     chassis_list = MOUNTAIN_CHASSIS_LIST
 
-print("SLS State File:", args.sls_state_file)
-print("Cabinet:       ", args.cabinet)
-print("Cabinet Type:  ", args.cabinet_type)
-print("Starting NID:  ", args.starting_nid)
+print("========================")
+print("Configuration")
+print("========================")
+print("SLS State File:   ", args.sls_state_file)
+print("Starting NID:     ", args.starting_nid)
+print("Cabinet:          ", args.cabinet)
+print("Cabinet Type:     ", args.cabinet_type)
+print("Cabinet VLAN HMN: ", args.cabinet_vlan_hmn)
+print("Cabinet VLAN NMN: ", args.cabinet_vlan_nmn)
+print()
 
 # Load in existing SLS State
 sls_state = None
@@ -62,6 +104,7 @@ with open(args.sls_state_file) as f:
     sls_state = json.load(f)
 
 allHardware = sls_state["Hardware"]
+allNetworks = sls_state["Networks"]
 
 #
 # Hardware
@@ -101,6 +144,7 @@ for chassis in chassis_list:
     chassisBMCXname = "{}b0".format(chassisXname)
     # print(chassisBMCXname)
     
+    # Ideal ChassisBMC SLS Object
     # chassisBMC = {
     #     "Parent": chassisXname,
     #     "Xname": chassisBMCXname,
@@ -110,7 +154,7 @@ for chassis in chassis_list:
     # }
     # hardwareToAdd.append(chassisBMC)
 
-    # There is a bug in CSI that generates Chassis wrong.
+    # There is a bug in CSI that generates Chassis hardware object wrong, so the following will be used instead
     chassis = {
         "Parent": args.cabinet,
         "Xname": chassisXname,
@@ -125,7 +169,6 @@ for chassis in chassis_list:
             nodeBMCXname = "{}s{}b{}".format(chassisBMCXname, slot, bmc)
             for node in range(2):
                 nodeXname = "{}n{}".format(nodeBMCXname, node)
-                # print(nodeXname)
 
                 node = {
                     "Parent": nodeBMCXname,
@@ -158,14 +201,10 @@ nidSet = set()
 for xname in allHardware:
     hardware = allHardware[xname]
 
-    if hardware["Type"] != "comptype_node":
-        continue
-
-    if "ExtraProperties" not in hardware:
+    if hardware["Type"] != "comptype_node" or "ExtraProperties" not in hardware:
         continue
 
     extraProperties = hardware["ExtraProperties"]
-
     if extraProperties["Role"] != "Compute":
         continue
 
@@ -180,94 +219,53 @@ for xname in allHardware:
 if foundDuplicateNIDs:
     exit(1)
 
-
 #
 # Networks
 #
-allNetworks = sls_state["Networks"]
 
 # Add in the HMN_MTN and NMN_MTN networks if they do not exist
 if "HMN_MTN" not in sls_state["Networks"]:
-    hmn_network = {
-        "Name": "HMN_MTN",
-        "FullName": "Mountain Hardware Management Network",
-        "IPRanges": [
-            DEFAULT_HMN_MTN_CIDR
-        ],
-        "Type": "ethernet",
-        "ExtraProperties": {
-            "CIDR": DEFAULT_HMN_MTN_CIDR,
-            "VlanRange": [1000, 1256],
-            "MTU": 9000,
-            "Subnets": []
-        }
-    }
-    allNetworks["HMN_MTN"] = hmn_network
+    allNetworks["HMN_MTN"] = build_network("HMN_MTN", "Mountain Hardware Management Network", DEFAULT_HMN_MTN_CIDR, [1000, 1256])
+
 if "NMN_MTN" not in sls_state["Networks"]:
-    hmn_network = {
-        "Name": "NMN_MTN",
-        "FullName": "Mountain Node Management Network",
-        "IPRanges": [
-            DEFAULT_NMN_MTN_CIDR
-        ],
-        "Type": "ethernet",
-        "ExtraProperties": {
-            "CIDR": DEFAULT_NMN_MTN_CIDR,
-            "VlanRange": [1257, 1512],
-            "MTU": 9000,
-            "Subnets": []
-        }
-    }
-    allNetworks["NMN_MTN"] = hmn_network
+    allNetworks["NMN_MTN"] = build_network("NMN_MTN", "Mountain Node Management Network", DEFAULT_NMN_MTN_CIDR, [1257, 1512])
 
+print("========================")
+print("Network Configuration")
+print("========================")
 
+hmn_subnet = add_cabinet_subnet(allNetworks["HMN_MTN"], args.cabinet, args.cabinet_vlan_hmn)
+nmn_subnet = add_cabinet_subnet(allNetworks["NMN_MTN"], args.cabinet, args.cabinet_vlan_nmn)
 
-hmn_network = allNetworks["HMN_MTN"]
-cabinet_hmn_subnet = find_next_available_subnet(hmn_network)
-
-sls_cabinet_hmn_subnet = {
-    # TODO Figure out preferred order of keys
-    "Name": args.cabinet.replace("x", "cabinet_"), # cabinet_1000
-    "FullName": "",
-    "CIDR": str(cabinet_hmn_subnet),
-    "VlanID": args.cabinet_vlan_hmn,
-    "Gateway": str(cabinet_hmn_subnet[1]),
-    "DHCPStart": str(cabinet_hmn_subnet[10]),
-    "DHCPEnd": str(cabinet_hmn_subnet[-2]) # Pick the address right before the broadcast address
-}
-
-hmn_network["ExtraProperties"]["Subnets"].append(sls_cabinet_hmn_subnet)
-
-nmn_network = allNetworks["NMN_MTN"]
-cabinet_nmn_subnet = find_next_available_subnet(nmn_network)
-
-sls_cabinet_nmn_subnet = {
-    # TODO Figure out preferred order of keys
-    "Name": args.cabinet.replace("x", "cabinet_"), # cabinet_1000
-    "FullName": "",
-    "CIDR": str(cabinet_nmn_subnet),
-    "VlanID": args.cabinet_vlan_nmn,
-    "Gateway": str(cabinet_nmn_subnet[1]),
-    "DHCPStart": str(cabinet_nmn_subnet[10]),
-    "DHCPEnd": str(cabinet_nmn_subnet[-2]) # Pick the address right before the broadcast address
-}
-nmn_network["ExtraProperties"]["Subnets"].append(sls_cabinet_nmn_subnet)
+print()
+print("HMN_MTN Subnet")
+print("  CIDR:       ", hmn_subnet["CIDR"])
+print("  Gateway:    ", hmn_subnet["Gateway"])
+print("  DHCP Start: ", hmn_subnet["DHCPStart"])
+print("  DHCP End:   ", hmn_subnet["DHCPEnd"])
+print("NMN_MTN Subnet")
+print("  CIDR:       ", nmn_subnet["CIDR"])
+print("  Gateway:    ", nmn_subnet["Gateway"])
+print("  DHCP Start: ", nmn_subnet["DHCPStart"])
+print("  DHCP End:   ", nmn_subnet["DHCPEnd"])
+print()
 
 
 # Verify no duplicate Cabinet VLANs
 foundDuplicateVlans = False
 vlanSet = set()
-for subnet in hmn_network["ExtraProperties"]["Subnets"]:
-    vlan = subnet["VlanID"]
-    if vlan in vlanSet:
-        foundDuplicateVlan = True
-        print("Error found duplicate VLAN {} with subnet {} in {}".format(vlan, subnet["Name"], "HMN_MTN"))
+for network in ["HMN_MTN", "NMN_MTN"]:
+    for subnet in  allNetworks[network]["ExtraProperties"]["Subnets"]:
+        vlan = subnet["VlanID"]
+        if vlan in vlanSet:
+            foundDuplicateVlans = True
+            print("Error found duplicate VLAN {} with subnet {} in {}".format(vlan, subnet["Name"], network))
 
-    vlanSet.add(vlan)
+        vlanSet.add(vlan)
 if foundDuplicateVlans:
     exit(1)
 
-# Write/Move out original file?
-# Write out new SLS dump
-with open("sls_dump.out.json", "w") as f:
+# Write out the updated SLS dump
+print("Writing updated SLS state to", args.sls_state_file)
+with open(args.sls_state_file, "w") as f:
     json.dump(sls_state, f, indent=2)
