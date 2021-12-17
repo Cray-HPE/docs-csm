@@ -1,101 +1,189 @@
+# Standard Rack Node Power Management
 
+HPE Cray EX standard EIA rack node power management is supported by the server
+vendor BMC firmware. The BMC exposes the power control API for a node through
+the node's Redfish Power schema.
 
-## Standard Rack Node Power Management
+Out-of-band power management data is polled by a collector and published on a
+Kafka bus for entry into the Power Management Database (PMDB). Access to the
+data stored in the PMDB is available through the System Monitoring Application
+(SMA) Grafana instance.
 
-HPE Cray EX standard EIA rack node power management is supported by the server vendor BMC firmware. The BMC exposes the power control API for a node through the node's Redfish ChassisPower schema.
+Power limiting of a node must be enabled and may require additional licenses to
+use. Refer to vendor documentation for instructions on how to enable power
+limiting and what licenses, if any, are needed.
 
-Out-of-band power management data is polled by a collector and published on a Kafka bus for entry into the Power Management Database. The Cray Advanced Platform Management and Control \(CAPMC\) API facilitates power control and enables power aware WLMs such as Slurm to perform power management and power capping tasks.
+CAPMC only handles power capping of one hardware type at a time. Each vendor and
+server model has their own power capping capabilities. Therefore a different
+power cap request will be needed for each vendor and model that needs to have
+its power limited.
 
-**Important:** Always use the Boot Orchestration Service \(BOS\) to power off or power on compute nodes.
+## Interfaces
+-   get_power_cap_capabilities
+-   get_power_cap
+-   set_power_cap
 
-### Redfish API
+## Deprecated interfaces
+[CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md)
+-   get_node_energy \(Deprecated\)
+-   get_node_energy_stats \(Deprecated\)
+-   get_system_power \(Deprecated\)
 
-The Redfish API for rack-mounted nodes is the node's Chassis Power resource which is presented by the BMC. OEM properties may be used to augment the Power schema and allow for feature parity with previous Cray system power management capabilities. A PowerControl resource presents the various power management capabilities for the node.
+## Redfish API
 
-Each node has a node power control resource. The power control of the node must be enabled and may require additional licenses to use.
+The Redfish API for rack-mounted nodes is the node's Power resource which is
+presented by the BMC. OEM properties may be used to augment the Power schema and
+allow for feature parity with previous Cray system power management
+capabilities.
 
-CAPMC does not enable power capping on all standard rack nodes because each server vendor has a different implementation. The `Activate` and `Deactivate` commands that follow apply to Gigabyte nodes only.
-
-**Get Node Power Limit Settings**
-
-```bash
-# curl -k -u $login:$pass -H "Content-Type: application/json" \
--X GET https://$BMC_IP/redfish/v1/Chassis/Self/Power 2>/dev/null | python -m json.tool | egrep 'LimitInWatts'
+## CrayCLI Examples
+### Get Node Power Limit Capabilities
+Query the power capping control bounds, grouped by node type. Control values
+which are returned as zero indicate the respective control is unconstrained or
+not enabled. 
+#### Example of a node with 4 GPUs
 ```
-
-Use the Cray CLI to get the node power limit settings:
-
-```bash
-# cray capmc get_power_cap create --nids 100006 --format json | jq
+ncn-m001# cray capmc get_power_cap_capabilities create --nids 1995 --format json
 {
   "e": 0,
   "err_msg": "",
   "groups": [
     {
-      "powerup": 0,
-      "host_limit_min": 0,
-      "supply": 65535,
-      "host_limit_max": 0,
+      "name": "3_AuthenticAMD_64c_256GiB_3200MHz_NodeAccel.NVIDIA",
+      "desc": "3_AuthenticAMD_64c_256GiB_3200MHz_NodeAccel.NVIDIA",
+      "host_limit_max": 1985,
+      "host_limit_min": 595,
+      "static": 0,
+      "supply": 0,
+      "powerup": 250,
+      "nids": [
+        1995
+      ],
       "controls": [
         {
-          "max": 0,
-          "min": 0,
-          "name": "Chassis Power Control",
-          "desc": "Chassis Power Control"
+          "name": "Node Power Control",
+          "desc": "Node Power Control",
+          "max": 1985,
+          "min": 595
+        },
+        {
+          "name": "Accelerator 0 Power Control",
+          "desc": "Accelerator 0 Power Control",
+          "max": 400,
+          "min": 100
+        },
+        {
+          "name": "Accelerator 1 Power Control",
+          "desc": "Accelerator 1 Power Control",
+          "max": 400,
+          "min": 100
+        },
+        {
+          "name": "Accelerator 1 Power Control",
+          "desc": "Accelerator 1 Power Control",
+          "max": 400,
+          "min": 100
+        },
+        {
+          "name": "Accelerator 1 Power Control",
+          "desc": "Accelerator 1 Power Control",
+          "max": 400,
+          "min": 100
         }
-      ],
-      "nids": [
-        100006
-      ],
-      "static": 0,
-      "desc": "3_AuthenticAMD_64c_244GiB_3200MHz_NoAccel",
-      "name": "3_AuthenticAMD_64c_244GiB_3200MHz_NoAccel"
+      ]
     }
   ]
 }
-
 ```
-
-**Set Node Power Limit**
-
-```bash
-# curl -k -u $login:$pass -H "Content-Type: application/json" \
--H 'If-Match: W/"'${o_data}'"' -X PATCH https://$BMC_IP/redfish/v1/Chassis/Self/Power \
---data '{"PowerControl": [{"PowerLimit": {"LimitInWatts": '$LimitValue'}}]}'
-```
+The maximum power draw for a node is the host_limit_max. The host_limit_max
+minus the power limit of the 4 GPUs is the power remaining for the host CPU and
+memory. If all 4 GPUs are set to 400 watt limit, there would be 385 watts left
+for the host CPU and memory. The node power control limit controls the host
+CPU and memory power as well as the aceelerator power. If the node power limit
+is set to 1000 watts, and the accelerators max limit was set to 200 watts, that
+would leave 200 watts for the host CPU and memory. The minumum power draw is the
+sum of the GPU minimums and the host CPU and memory minimums. The minumum power
+draw for the host CPU and memory is 195 watts.
+### Get Node Power Limit
+Query the nodes for their currently set power limits. CAPMC will only return
+power limit informaiton for computes nodes that are in the Ready state. This
+guarnatees that the power limiting infrastructure has been properly configured
+on the node.
+#### No limits set, unconstrained
+ncn-m001:~ # cray capmc get_power_cap create --nids 9
+{
+  "e": 0,
+  "err_msg": "",
+  "nids": [
+    {
+      "nid": 9,
+      "controls": [
+        {
+          "name": "node",
+          "val": 0
+        }
+      ]
+    }
+  ]
+}
+This shows there is no power limit set on the node, which means there is no
+power constraint on the node and it can use up to the host_limit_max power.
+#### Limits set
+ncn-m001:~ # cray capmc get_power_cap create --nids 1995
+{
+  "e": 0,
+  "err_msg": "",
+  "nids": [
+    {
+      "nid": 1995,
+      "controls": [
+        {
+          "name": "node",
+          "val": 1985
+        },
+        {
+          "name": "Accelerator 0 Power Control",
+          "val": 400
+        },
+        {
+          "name": "Accelerator 1 Power Control",
+          "val": 400
+        },
+        {
+          "name": "Accelerator 2 Power Control",
+          "val": 400
+        },
+        {
+          "name": "Accelerator 3 Power Control",
+          "val": 400
+        }
+      ]
+    }
+  ]
+}
+Related to the get_power_cap_capabilities above, this node is set to allow the
+accelerators to use the maximum 400 watts of power per GPU. The host CPU and
+memory can use up to 385 watts.
+### Set Node Power Limit
 
 Set the node power limit to 600 Watts:
 
-```bash
+```
 # cray capmc set_power_cap create --nids 1,2,3 --node 600
 ```
 
-**Get Node Energy Counter**
-
-```bash
-# curl -k -u $login:$pass -H "Content-Type: application/json" \
--X GET https://$BMC_IP/redfish/v1/Chassis/Self/Power 2>/dev/null \
-| python -m json.tool | egrep 'PowerConsumedWatts'
-
+## Hardware Specific Information
+### Gigabyte
+#### Enable power limiting
 ```
-
-**Activate Node Power Limit**
-
-```bash
-# curl -k -u $login:$pass -H "Content-Type: application/json" \
--X POST https://$BMC_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
+ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" \
+-X POST https://$BMC/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
 --data '{"PowerLimitTrigger": "Activate"}'
 ```
 
-**Deactivate Node Power Limit**
-
-```bash
-# curl -k -u $login:$pass -H "Content-Type: application/json" \
--X POST https://$BMC_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
+#### Deactivate Node Power Limit
+```
+ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" \
+-X POST https://$BMC/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
 --data '{"PowerLimitTrigger": "Deactivate"}'
 ```
-
-
-
-
-
