@@ -17,7 +17,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
 1. Optional system health checks.
 
-    1. Use the System Dump Utility \(SDU\) to capture current state of system before the shutdown.
+    1. Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
 
         **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
 
@@ -25,7 +25,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
         ncn-m001# sdu --scenario triage --start_time '-4 hours' \
         --reason "saving state before powerdown/up"
         ```
-        Refer to the HPE Cray EX System Dump Utility (SDU) Administration Guide for more information and troubleshooting steps.
+        Refer to the HPE Cray EX System Diagnostic Utility (SDU) Administration Guide for more information and troubleshooting steps.
 
     1. Check Ceph status.
 

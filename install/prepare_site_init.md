@@ -12,7 +12,6 @@ default install procedures.
    1. [Generate Sealed Secrets](#generate-sealed-secrets)
    1. [Version Control Site-Init Files](#version-control-site-init-files)
       1. [Push to a Remote Repository](#push-to-a-remote-repository)
-   1. [Patch cloud-init with the CA](#patch-cloud-init-with-the-ca)
    1. [Customer-Specific Customizations](#customer-specific-customizations)
 
 ## Details
@@ -155,7 +154,7 @@ with system-specific customizations.
         > environment.
 
         ```bash
-        linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
+        linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim
         ```
 
         Create (or update) `cert.jks` with the PEM-encoded CA certificate for an
@@ -164,7 +163,7 @@ with system-specific customizations.
         > **`IMPORTANT`** Replace `<ca-cert.pem>` and `<alias>` as appropriate.
 
         ```bash
-        linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool \
+        linux# podman run --rm -v "$(pwd):/data" artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim keytool \
         -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks \
         -storepass password -noprompt
         ```
@@ -253,7 +252,7 @@ with system-specific customizations.
         *   Create `certs.jks`:
 
             ```bash
-            linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
+            linux# podman run --rm -v "$(pwd):/data" artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim keytool -importcert \
             -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
             -storepass password -noprompt
             ```
@@ -504,7 +503,7 @@ encrypted.
     > **`NOTE`** Requires a properly configured Docker or Podman environment.
 
     ```bash
-    linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
+    linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/zeromq/zeromq:v4.0.5
     ```
 
 1.  Re-encrypt existing secrets:
@@ -600,6 +599,12 @@ baseline configuration during initial system installation.
     linux# git commit -m "Baseline configuration for $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)"
     ```
 
+1. Unmount the shim from earlier if one was used (for users of the [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md)):
+   ```bash
+   pit# umount -v /mnt/pitdata
+   pit# rmdir /mnt/pitdata
+   ```
+
 
 <a name="push-to-a-remote-repository"></a>
 #### 5.1 Push to a Remote Repository
@@ -608,34 +613,8 @@ It is **strongly recommended** that the site-init repository be maintained
 off-cluster. Add a remote repository and push the baseline configuration on
 `master` branch to a corresponding remote branch.
 
-
-<a name="patch-cloud-init-with-the-ca"></a>
-### 6. Patch cloud-init with the CA
-
-**`NOTE`** Skip this if using a USB LiveCD. These steps are done elsewhere in that procedure.
-
-Using `csi` on a generated site-init directory...
-
-1. Patch the CA certificate from the shasta-cfg:
-   ```bash
-   pit# csi patch ca \
-   --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
-   --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
-   --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
-   ```
-
-1. To assure it picks up the new meta-data:
-   ```bash
-   pit# systemctl restart basecamp
-   ```
-
-1. Unmount the shim from earlier if one was used (for users of the [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md)):
-   ```bash
-   pit# umount -v /mnt/pitdata
-   ```
-
 <a name="customer-specific-customizations"></a>
-### 7. Customer-Specific Customizations
+### 6. Customer-Specific Customizations
 
 Customer-specific customizations are any changes on top of the baseline
 configuration to satisfy customer-specific requirements. It is recommended that

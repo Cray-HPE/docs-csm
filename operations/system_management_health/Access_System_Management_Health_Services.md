@@ -32,11 +32,15 @@ This procedure enables administrators to set up the service and access its compo
 
         For more information regarding the use of the Prometheus interface, see [https://prometheus.io/docs/prometheus/latest/getting\_started/](https://prometheus.io/docs/prometheus/latest/getting_started/).
 
+        Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet. See [Troubleshoot Prometheus Alerts](operations/system_management_health/Troubleshoot_Prometheus_Alerts.md).
+
     -   **https://alertmanager.\{\{shasta\_domain\}\}/**
 
-        Central Alertmanager instance that manages prometheus alerts.
+        Central Alertmanager instance that manages Prometheus alerts.
 
         The alertmanager manages the alerts it receives and generates notifications to users or applications. For more information about `alert-manager`, refer to the following documentation: [https://prometheus.io/docs/prometheus/latest/getting\_started/](https://prometheus.io/docs/prometheus/latest/getting_started/).
+
+        Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet. See [Troubleshoot Prometheus Alerts](operations/system_management_health/Troubleshoot_Prometheus_Alerts.md).
 
     -   **https://grafana.\{\{shasta\_domain\}\}/**
 
@@ -59,3 +63,13 @@ This procedure enables administrators to set up the service and access its compo
         Jaeger provides distributed tracing of requests across micro-services based on headers automatically injected by Envoy.
 
         For more information regarding the `jaeger-istio` front end/UI configuration, refer to the online documentation \([https://www.jaegertracing.io/](https://www.jaegertracing.io/)\). Click on the 'Docs' section to get more information around the Jaeger Frontend/UI.
+
+    Additional components are also exposed, though only for convenience. Do not rely on these components to always be available:
+
+    -   **https://prometheus-istio.\{\{shasta\_domain\}\}/**
+
+        Prometheus instance that collects Istio metrics \(included as part of `istio` Helm chart\).
+
+        For more information regarding the use of the Prometheus interface, see [https://prometheus.io/docs/alerting/overview/](https://prometheus.io/docs/alerting/overview/).
+
+

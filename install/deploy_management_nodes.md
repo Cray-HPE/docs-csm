@@ -8,7 +8,7 @@ take place. Watching the console or the console log for certain nodes can help t
 what happens and when. When the process completes for all nodes, the Ceph storage is
 initialized and the Kubernetes cluster is created and ready for a workload. The PIT node
 will join Kubernetes after it is rebooted later in
-[Redeploy PIT Node](index.md#redeploy_pit_node).
+[Deploy Final NCN](index.md#deploy_final_ncn).
 
 <a name="timing-of-deployments"></a>
 ## Timing of Deployments
@@ -176,6 +176,8 @@ proceed to step 2.
 <a name="update_management_node_firmware"></a>
 ## 2. Update Management Node Firmware
 
+> All firmware can be found in the HFP package provided with the Shasta release.
+
 The management nodes are expected to have certain minimum firmware installed for BMC, node BIOS, and PCIe card
 firmware. Where possible, the firmware should be updated prior to install. It is good to meet the minimum NCN
 firmware requirement before starting.
@@ -199,6 +201,8 @@ firmware requirement before starting.
    It will be possible to extract the files from the product tarball, but the install.sh script from that product 
    will be unable to load the firmware versions into the Firmware Action Services (FAS) because the management nodes
    are not booted and running Kubernetes and FAS cannot be used until Kubernetes is running.
+
+   If booted into the PIT node, the firmware can be found with HFP package provided with the Shasta release.
 
 1. (optional) Check these BIOS settings on management nodes [NCN BIOS](../background/ncn_bios.md).
 
@@ -755,7 +759,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
    Once that command has finished, the following will extract the test totals reported for each node:
    ```bash
-   pit# grep "Total" csi-pit-validate-k8s.log
+   pit# grep "Total Test" csi-pit-validate-k8s.log
    ```
 
    Example output for a system with 5 master and worker nodes (other than the PIT node):

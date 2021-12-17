@@ -1,4 +1,4 @@
-# Redeploy PIT Node
+# Deploy Final NCN
 
 The following procedure contains information for rebooting and deploying the management node that is currently
 hosting the LiveCD. This assists with remote-console setup to aid in observing the reboot. At the end of this procedure, the
@@ -27,12 +27,12 @@ Topics:
 These services must be healthy before the reboot of the LiveCD can take place. If the health checks performed earlier in the install completed successfully \([Validate CSM Health](../operations/validate_csm_health.md)\), the following platform services will be healthy and ready for reboot of the LiveCD:
 
    * Utility Storage (Ceph)
-   * cray-bss
-   * cray-dhcp-kea
-   * cray-dns-unbound
-   * cray-ipxe
-   * cray-sls
-   * cray-tftp
+   * `cray-bss`
+   * `cray-dhcp-kea`
+   * `cray-dns-unbound`
+   * `cray-ipxe`
+   * `cray-sls`
+   * `cray-tftp`
 
 <a name="notice-of-danger"></a>
 ### 2. Notice of Danger
@@ -65,42 +65,27 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 #### 3.1 Start Hand-Off
 
 1. Start a new typescript (quit).
-   
-   Run this on the PIT node as root, the prompts are removed for easier copy-paste. This step is only useful as a whole.
+    
+    1. Exit the current typescript if one has arrived here from the prior pages:
 
-   - Exit the current typescript if one has arrived here from the prior pages:
+        ```bash
+        pit# exit
+        pit# popd
+        ```
 
-      ```bash
-      pit# exit
-      pit# popd
-      ```
+    1. Start the new script:
 
-   - Start the new script:
+        > The prompts below are removed for easier copy-paste. This step is only useful as a whole.
 
-      ```bash
-      mkdir -pv /var/www/ephemeral/prep/admin
-      pushd /var/www/ephemeral/prep/admin
-      script -af csm-livecd-reboot.$(date +%Y-%m-%d).txt
-      export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
-      ```
+        ```bash
+        mkdir -pv /var/www/ephemeral/prep/admin
+        pushd /var/www/ephemeral/prep/admin
+        script -af csm-livecd-reboot.$(date +%Y-%m-%d).txt
+        export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+        ```
 
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-pre-reboot` breakpoint.
 
-1. Check for workarounds in the `/opt/cray/csm/workarounds/livecd-pre-reboot` directory. If there are any
-workarounds in that directory, run those when the workaround instructs. Timing is critical to ensure properly loaded
-data, so run them only when indicated. Instructions are in the `README` files.
-    
-    ```bash
-    # Example
-    pit# ls /opt/cray/csm/workarounds/livecd-pre-reboot
-    ```
-    
-    If there is a workaround here, the output looks similar to the following:
-
-    ```
-    CASMINST-435
-    ```
-    
 1. Upload SLS file.
     
     > **NOTE:** The system name environment variable `SYSTEM_NAME` must be set.
@@ -111,7 +96,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
     Expected output looks similar to the following:
 
-    ```
+    ```text
     2021/02/02 14:05:15 Retrieving S3 credentials ( sls-s3-credentials ) for SLS
     2021/02/02 14:05:15 Uploading SLS file: /var/www/ephemeral/prep/eniac/sls_input_file.json
     2021/02/02 14:05:15 Successfully uploaded SLS Input File.
@@ -155,7 +140,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
             pit# export cephdir=$artdir/ceph
             ```
 
-    2. After setting the variables in the previous step, run the following command.
+    1. After setting the variables in the previous step, run the following command.
 
         ```bash
         pit# csi handoff ncn-images \
@@ -198,9 +183,21 @@ data, so run them only when indicated. Instructions are in the `README` files.
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server="10.92.100.225 10.94.100.225" --limit Global
     ```
 
+1.  Preserve the ConMan console logs for the other NCNs if desired. (optional)
+
+    You may wish to preserve them for later examination, but it is not required. However, **this is the last chance to do so**. They will be lost after rebooting the PIT node.
+    
+    The following commands will copy them into a directory that will be backed up before the PIT node reboot.
+    
+    ```bash
+    
+    pit# mkdir -pv /var/www/ephemeral/prep/logs
+    pit# cp -prv /var/log/conman /var/www/ephemeral/prep/logs/conman.$(date +%Y-%m-%d_%H-%M-%S)
+    ```
+
 1. Upload the bootstrap information.
    
-   > **NOTE:** This denotes information that should always be kept together in order to fresh-install the system again.
+    > **NOTE:** This denotes information that should always be kept together in order to fresh-install the system again.
 
     1. Log in; setup passwordless SSH _to_ the PIT node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the PIT (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
 
@@ -213,13 +210,13 @@ data, so run them only when indicated. Instructions are in the `README` files.
         pit# chmod 600 /root/.ssh/authorized_keys
         ```
 
-    2. Run this to create the backup; in one swoop, log in to `ncn-m002` and `ncn-m003` and pull the files off the PIT. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
+    1. Run this backup files from the PIT to `ncn-m002` and `ncn-m003`. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
 
         ```bash
         pit# ssh ncn-m002 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
         "mkdir -pv /metal/bootstrap
         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
-        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
+        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete  pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
 
         ```bash
@@ -254,14 +251,14 @@ data, so run them only when indicated. Instructions are in the `README` files.
         pit# ssh ncn-m002 'ip a show bond0.cmn0 | grep inet'
         ```
 
-        _Expected output (values may differ)_:
+        _Expected output will look similar to the following (exact values may differ)_:
 
-        ```
+        ```text
         inet 10.102.11.13/24 brd 10.102.11.255 scope global bond0.cmn0
         inet6 fe80::1602:ecff:fed9:7820/64 scope link
         ```
 
-    2. Log in from another external machine to verify SSH is up and running for this session.
+    1. Log in from another external machine to verify SSH is up and running for this session.
 
         ```bash
         external# ssh root@10.102.11.13
@@ -271,13 +268,13 @@ data, so run them only when indicated. Instructions are in the `README` files.
     > Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN.
     If the reboot successfully deploys the LiveCD, this terminal can be exited.
 
-    > **POINT OF NO RETURN:** The next step will wipe the underlying nodes disks clean, it will ignore USB devices. RemoteISOs are at risk here, even though a backup has been
+    > **POINT OF NO RETURN:** The next step will wipe the underlying nodes disks clean, it will ignore USB devices. RemoteISOs are at risk here; even though a backup has been
     > performed of the PIT node, we cannot simply boot back to the same state.
     > This is the last step before rebooting the node.
 
 1. Wipe the disks on the PIT node.
 
-    > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**, the USB device can only be wiped by operators at this point in the install. The USB device are never wiped by the CSM installer.
+    > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**. USB devices can only be wiped by operators at this point in the install. USB devices are never wiped by the CSM installer.
 
     1. Select disks to wipe (SATA/NVME/SAS).
 
@@ -293,7 +290,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
         Expected output looks similar to the following:
 
-        ```
+        ```text
         /dev/sda /dev/sdb /dev/sdc
         ```
 
@@ -305,7 +302,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
         If any disks had labels present, output looks similar to the following:
 
-        ```
+        ```text
         /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
         /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
         /dev/sda: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
@@ -317,10 +314,6 @@ data, so run them only when indicated. Instructions are in the `README` files.
         ```
 
         If there was any wiping done, output should appear similar to the snippet above. If this is re-run, there may be no output or an ignorable error.
-    
-1.  Preserve the ConMan console logs for the other NCNs if desired.
-    
-    > **WARNING:** This is the last chance to do so. They will be lost after rebooting. They are located in `/var/log/conman` on the PIT node.
 
 1.  Quit the typescript session with the `exit` command and copy the file (`csm-livecd-reboot.<date>.txt`) to a location on another server for reference later.
 
