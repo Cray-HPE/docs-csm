@@ -75,7 +75,12 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     err_msg = ""
     ```
 
-7.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
+7.  Bring up the Slingshot Fabric
+    To bring up the Slingshot fabric, see:
+    -  The *Slingshot Administration Guide* for Cray EX systems PDF.
+    -  The *Slingshot Troubleshooting Guide* PDF.
+
+8.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
     See [Power On and Boot Compute and User Access Nodes](Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md).
 

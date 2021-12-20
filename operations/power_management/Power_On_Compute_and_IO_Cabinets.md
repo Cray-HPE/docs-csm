@@ -70,3 +70,7 @@ After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers
 
 8. Make sure all system management network switches and Slingshot network switches are powered on in each rack and there are no error LEDS or hardware failures.
 
+9.  Bring up the Slingshot Fabric
+    To bring up the Slingshot fabric, see:
+    -  The *Slingshot Administration Guide* for Cray EX systems PDF.
+    -  The *Slingshot Troubleshooting Guide* PDF.
