@@ -9,7 +9,11 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 ### Prerequisites
 
 * All compute cabinet PDUs, servers, and switches must be powered on.
-* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the System Admin Toolkit (SAT) product stream documentation.
+* The Slingshot Fabric is up and configured
+    To bring up the Slingshot fabric, see:
+    -  The *Slingshot Administration Guide* for Cray EX systems PDF.
+    -  The *Slingshot Troubleshooting Guide* PDF.
+* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the Shasta Admin Toolkit (SAT)  product stream documentation.
 
 ### Procedure
 
