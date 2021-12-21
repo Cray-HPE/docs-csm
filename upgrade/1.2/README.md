@@ -15,6 +15,11 @@ When doing a rolling upgrade of the entire cluster, at some point you will need 
 responsibility of the "stable" NCN to another master node. However, you do not need to do this before you are ready to
 upgrade that node.
 
+>**`IMPORTANT:`**
+>
+> For TDS systems with only three worker nodes, see [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to lower CPU requests on several services which can improve pod scheduling on smaller systems during this upgrade.
+>
+
 ## Upgrade Stages
 
 - [Stage 0 - Prerequisites](Stage_0_Prerequisites.md)
