@@ -388,9 +388,9 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
     The `--prereq` option ensures all required components are powered on first. The `--continue` option allows the command to complete in systems without fully populated hardware.
 
-6.  Bring up the Slingshot Fabric
-    To bring up the Slingshot fabric, see:
-    -  The *Slingshot Administration Guide* for Cray EX systems PDF.
+6.  Bring up the Slingshot Fabric.
+    Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
+    -  The *Slingshot Administration Guide* PDF for HPE Cray EX system.
     -  The *Slingshot Troubleshooting Guide* PDF.
 
 7.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
