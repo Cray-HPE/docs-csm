@@ -64,7 +64,6 @@ Health Check scripts can be run:
 * Any time there is unexpected behavior on the system to get a baseline of data for CSM services and components
 * In order to provide relevant information to support tickets that are being opened after CSM install.sh has been run
 
-
 Available Platform Health Checks:
 1. [ncnHealthChecks](#pet-ncnhealthchecks)
 1. [ncnPostgresHealthChecks](#pet-ncnpostgreshealthchecks)
@@ -78,10 +77,10 @@ Available Platform Health Checks:
 <a name="pet-ncnhealthchecks"></a>
 ### 1.1 ncnHealthChecks
 
-Health Check scripts can be found and run on any worker or master node (not on PIT node), from any directory.
+NCN Health Check scripts can be found and run on any worker or master node (**not on the PIT node**), from any directory.
 
    ```bash
-   ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
+   ncn-mw# /opt/cray/platform-utils/ncnHealthChecks.sh
    ```
 
 The ncnHealthChecks script reports the following health information:
@@ -105,10 +104,10 @@ Execute the ncnHealthChecks script and analyze the output of each individual che
 **IMPORTANT:** Only when ncn-m001 has been booted, if the output of the ncnHealthChecks.sh script shows that there are nodes that do not have the metal.no-wipe=1 status, then do the following:
 
 ```bash
-ncn# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
+ncn-mw# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
 ```
 
-**IMPORTANT:** If the output of pod statuses indicates that there are pods in the `Evicted` state, it may be due to the /root file system being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%. This may commonly happen on ncn-m001 as it is a location that install and doc files may be downloaded to. It may be necessary to clean-up space in the /root directory if this is the root cause of pod evictions. The following commands can be used to determine if analysis of files under /root is needed to free-up space.
+**IMPORTANT:** If the output of pod statuses indicates that there are pods in the `Evicted` state, it may be due to the `/root` file system being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%. This may commonly happen on `ncn-m001` as it is a location that install and doc files may be downloaded to. It may be necessary to clean-up space in the `/root` directory if this is the cause of pod evictions. The following commands can be used to determine if analysis of files under `/root` is needed to free-up space.
 
 ```bash
 ncn# df -h /root
@@ -129,15 +128,14 @@ ncn# du -ah -B 1024M /root | sort -n -r | head -n 10
 are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
 If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
 
-Additionally, hmn-discovery and unbound manager cronjob pods may be in a 'NotReady' state. This is expected as these pods are periodically started and transition to the completed state.
+Additionally, `hms-discovery` and `cray-dns-unbound-manager` cronjob pods may be in a 'NotReady' state. This is expected as these pods are periodically started and should eventually transition to the `Completed` state.
 
-**IMPORTANT:** If `ncn-s001` is down when running the ncnHealthChecks script, status from the `ceph -s` command  will be unavailable. In this case, the `ceph -s` command can be executed on any available master or storage node to determine the status of the Ceph cluster.
+**IMPORTANT:** If `ncn-s001` is down when running the ncnHealthChecks script, status from the `ceph -s` command will be unavailable. In this case, the `ceph -s` command can be executed on any available master or storage node to determine the status of the Ceph cluster.
 
 <a name="pet-ncnpostgreshealthchecks"></a>
 ### 1.2 ncnPostgresHealthChecks
 
-
-Postgres Health Check scripts can be found and run on any worker or master node (not on PIT node), from any directory.
+Postgres Health Check scripts can be found and run on any worker or master node (**not on the PIT node**), from any directory.
 The ncnPostgresHealthChecks script reports the following postgres health information:
 * The status of each postgresql resource
 * The number of cluster members
@@ -357,7 +355,7 @@ Retrieve all the leases currently in KEA:
 ncn# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
 ```
 
-If there is an non-zero amount of DHCP leases for air-cooled hardware returned, that is a good indication that KEA is working.
+If there is a non-zero amount of DHCP leases for air-cooled hardware returned, then that is a good indication that KEA is working.
 
 <a name="net-extdns"></a>
 ### 1.5 Verify ability to resolve external DNS
@@ -480,6 +478,8 @@ Information to assist with troubleshooting some of the components mentioned in t
 
 Execute the HMS smoke and functional tests after the CSM install to confirm that the Hardware Management Services are running and operational.
 
+Note: Do not run HMS tests concurrently on multiple nodes. They may interfere with one another and cause false failures.
+
 <a name="hms-test-execution"></a>
 ### 2.1 HMS Test Execution
 
@@ -560,10 +560,10 @@ __For each__ of the BMCs that show up in either of mismatch lists use the follow
    x3000c0s1b0  # No mgmt port association
    ```
 
-* The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depedning on the state of the system when the `hsm_discovery_verify.sh` script is ran. If the system is currently going through the process of installation, then this is an expected mistmatch as the [Preapre Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet. 
+* The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depending on the state of the system when the `hsm_discovery_verify.sh` script is run. If the system is currently going through the process of installation, then this is an expected mismatch as the [Prepare Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet. 
    > For more information refer to [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
 
-   Example mistmatch for the BMC of a HPE Apollo XL654D:
+   Example mismatch for the BMC of a HPE Apollo XL654D:
    ```bash
    =============== BMCs in SLS not in HSM components ===============
    x3000c0s30b1
@@ -671,6 +671,8 @@ the Cray OS (COS) product, or similar, be used.
 ---
 **NOTES**
 
+* This test is **very important to run** during the CSM install prior to redeploying the PIT node
+because it validates all of the services required for that operation.
 * The CSM Barebones image included with the release will not successfully complete
 the beyond the dracut stage of the boot process. However, if the dracut stage is reached the
 boot can be considered successful and shows that the necessary CSM services needed to
@@ -711,7 +713,7 @@ Expected output is similar to the following:
     "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",
     "type": "s3"
   },
-  "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4"
+  "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.5"
 }
 ```
 
@@ -747,7 +749,7 @@ The session template below can be copied and used as the basis for the BOS Sessi
        "configuration": "cos-integ-config-1.4.0"
      },
      "enable_cfs": false,
-     "name": "shasta-1.4-csm-bare-bones-image"
+     "name": "shasta-1.5-csm-bare-bones-image"
    }
    ```
 
@@ -755,11 +757,11 @@ The session template below can be copied and used as the basis for the BOS Sessi
 
 2. Create the BOS session template using the following file as input:
    ```
-   ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
+   ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.5-csm-bare-bones-image
    ```
    The expected output is:
    ```
-   /sessionTemplate/shasta-1.4-csm-bare-bones-image
+   /sessionTemplate/shasta-1.5-csm-bare-bones-image
    ```
 
 <a name="csm-node"></a>
@@ -808,14 +810,14 @@ ncn# export XNAME=x3000c0s17b2n0
 
 Create a BOS session to reboot the chosen node using the BOS session template that was created:
 ```bash
-ncn# cray bos session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit $XNAME
+ncn# cray bos session create --template-uuid shasta-1.5-csm-bare-bones-image --operation reboot --limit $XNAME
 ```
 
 Expected output looks similar to the following:
 ```
 limit = "x3000c0s17b2n0"
 operation = "reboot"
-templateUuid = "shasta-1.4-csm-bare-bones-image"
+templateUuid = "shasta-1.5-csm-bare-bones-image"
 [[links]]
 href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
 jobId = "boa-8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
@@ -955,7 +957,7 @@ This procedure must run on a master or worker node (not the PIT node and not `nc
 
 1. Set `UAINAME` to the value of the `uai_name` field in the previous command output (`uai-vers-a00fb46b` in our example):
    ```bash
-   ncn# export UAINAME=uai-vers-a00fb46b
+   ncn# UAINAME=uai-vers-a00fb46b
    ```
 
 1. Check the current status of the UAI:
