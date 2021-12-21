@@ -52,7 +52,7 @@ installation-centric artifacts such as:
     ```bash
     linux# /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/meta/init.sh /mnt/pitdata/prep/site-init
     ```
-    `*IMPORTANT*` The output of this command states that customizations.yaml should be reviewed and updated before
+    **`IMPORTANT`** The output of this command states that customizations.yaml should be reviewed and updated before
     running the secrets-reencrypt.sh and secrets-seed-customizations.sh scripts. These two scripts will be run 
     later in this document, do not run them at this time.
 
