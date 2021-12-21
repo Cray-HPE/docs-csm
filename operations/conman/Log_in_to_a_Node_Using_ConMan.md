@@ -4,11 +4,11 @@ This procedure shows how to connect to the node's Serial Over Lan (SOL) via ConM
 
 ### Prerequisites
 
-The user performing this procedure needs to have access permission to the cray-console-operator and cray-console-node pods.
+The user performing this procedure needs to have access permission to the `cray-console-operator` and `cray-console-node` pods.
 
 ### Procedure
 
-1. Log in to a non-compute node (NCN) that acts as the Kubernetes master or worker. This procedure assumes that it is being carried out on an NCN acting as a Kubernetes master.
+1. Log in to a non-compute node (NCN) that acts as a Kubernetes master or worker.
 
 1. Retrieve the `cray-console-operator` pod ID.
 
