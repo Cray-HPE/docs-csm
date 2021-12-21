@@ -52,6 +52,9 @@ installation-centric artifacts such as:
     ```bash
     linux# /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/meta/init.sh /mnt/pitdata/prep/site-init
     ```
+    `*IMPORTANT*` The output of this command states that customizations.yaml should be reviewed and updated before
+    running the secrets-reencrypt.sh and secrets-seed-customizations.sh scripts. These two scripts will be run 
+    later in this document, do not run them at this time.
 
 1.  The `yq` tool used in the following procedures is available under
 `/mnt/pitdata/prep/site-init/utils/bin` once the SHASTA-CFG repo has been
