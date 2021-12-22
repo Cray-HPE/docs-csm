@@ -238,7 +238,6 @@ yq w -i "$c" 'spec.kubernetes.services.cray-dns-powerdns.cray-service.sealedSecr
 
 # Add proxiedWebAppExternalHostnames
 yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['gatekeeper-policy-manager']['gatekeeper-policy-manager'].externalAuthority }}"
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-nexus'].istio.ingress.hosts.ui.authority }}"
 yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-istio'].istio.tracing.externalAuthority }}"
 yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-kiali'].externalAuthority }}"
 yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-sysmgmt-health']['prometheus-operator'].prometheus.prometheusSpec.externalAuthority }}"
@@ -305,7 +304,7 @@ yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-can.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.can.{{ network.dns.external}},auth.can.{{ network.dns.external }}'
 
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-cmn.serviceAnnotations.[metallb.universe.tf/address-pool]' 'customer-management'
-yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-cmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.cmn.{{ network.dns.external}},auth.cmn.{{ network.dns.external }}'
+yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-cmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.cmn.{{ network.dns.external}},auth.cmn.{{ network.dns.external }},nexus.cmn.{{ network.dns.external }}'
 
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-chn.serviceAnnotations.[metallb.universe.tf/address-pool]' 'customer-high-speed'
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-chn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.chn.{{ network.dns.external}},auth.chn.{{ network.dns.external }}'
@@ -366,11 +365,16 @@ yq w -i "$c" 'spec.kubernetes.services.cray-kiali.kiali-operator.cr.spec.externa
 yq w -i "$c" 'spec.kubernetes.services.cray-kiali.kiali-operator.cr.spec.external_services.tracing.url' "https://{{ kubernetes.services['cray-istio'].istio.tracing.externalAuthority}}"
 
 # cray-uas-mgr changes
+yq w -i "$c" 'spec.kubernetes.services.cray-uas-mgr.uasConfig.require_bican' 'false'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-uas-mgr.uasConfig.dns_domain' '{{ network.dns.external }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-uas-mgr.images.images[+]' 'cray/cray-uai-sles15sp1:latest'
 yq w -i "$c" 'spec.kubernetes.services.cray-uas-mgr.images.defaultImage' 'cray/cray-uai-sles15sp1:latest'
 
 # cray-metallb
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-metallb.metallb.configInLine' '{{ network.metallb | toYaml }}'
+
+# wlm.macvlan
+yq d -i "$c" 'spec.wlm.macvlansetup.nmn_vlan'
 
 if [[ "$inplace" == "yes" ]]; then
     cp "$c" "$customizations"
