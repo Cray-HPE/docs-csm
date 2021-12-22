@@ -17,7 +17,7 @@ def find_node_nids(allHardware, slsClass, role):
             continue
 
         extraProperties = hardware["ExtraProperties"]
-        if extraProperties["Role"] != role:
+        if role != None and extraProperties["Role"] != role:
             continue
 
         nids.append(hardware["ExtraProperties"]["NID"])
