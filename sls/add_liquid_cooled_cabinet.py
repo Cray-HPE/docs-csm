@@ -4,7 +4,6 @@ import argparse
 import json
 import re
 import netaddr
-import shutil
 
 def find_next_available_subnet(sls_network):
     name = sls_network["Name"]
@@ -14,13 +13,11 @@ def find_next_available_subnet(sls_network):
     for sls_subnet in sls_network["ExtraProperties"]["Subnets"]:
         subnet_name = sls_subnet["Name"]
         subnet_cidr = sls_subnet["CIDR"]
-        print("  Found subnet {} with CIDR {}".format(subnet_name, subnet_cidr))
+        print("  Found existing subnet {} with CIDR {}".format(subnet_name, subnet_cidr))
         existing_subnets.add(subnet_cidr)
 
     for available_subnet in list(network_subnet.subnet(22)):
-        if available_subnet in existing_subnets:
-            print("  {} Already in use!".format(available_subnet))
-        else:
+        if available_subnet not in existing_subnets:
             print("  {} Available for use.".format(available_subnet))
             return available_subnet
 
@@ -76,8 +73,6 @@ parser.add_argument("--cabinet-vlan-hmn", type=int, required=True, help="Cabinet
 parser.add_argument("--cabinet-vlan-nmn", type=int, required=True, help="Cabinet NMN vlan add, ex: 2000")
 parser.add_argument("--starting-nid", type=int, required=True, help="Starting NID for new cabinet, ex: 1000")
 args = parser.parse_args()
-
-print(args)
 
 if re.match("^x([0-9]{1,4})$", args.cabinet) == None:
     print("Invalid cabinet xname provided: ", args.cabinet)
@@ -188,7 +183,6 @@ for chassis in chassis_list:
 
 for hardware in hardwareToAdd:
     xname = hardware["Xname"] 
-    # print("Adding {}".format(xname))
     if xname in allHardware:
         print("Error {} already exists in {}!".format(xname, args.sls_state_file))
         exit(1)
