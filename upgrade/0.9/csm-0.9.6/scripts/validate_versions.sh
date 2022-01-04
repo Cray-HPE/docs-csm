@@ -5,7 +5,7 @@
 
 validated=true
 # Confirm the version of istio pilot image is 1.6.13-cray2
-ver=$(kubectl describe pod istiod- -n istio-system | grep Image: | cut -d':' -f3)
+ver=$(kubectl describe pod istiod- -n istio-system | grep Image: | cut -d':' -f3 | uniq)
 if [ "$ver" != "1.6.13-cray2" ]; then
   echo "Error: istio pilot image version $ver is unexpected."
   validated=false
