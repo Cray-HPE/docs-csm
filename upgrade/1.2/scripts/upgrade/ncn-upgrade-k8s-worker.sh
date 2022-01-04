@@ -238,12 +238,18 @@ fi
 redeploy=$(cat /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot | grep $upgrade_ncn | wc -l)
 if [[ $redeploy == "1" ]];then
     cray cps deployment update --nodes $upgrade_ncn
-    cps_state=$(cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="|grep -v "running" | wc -l)
-    if [[ $cps_state -ne 0 ]];then
-        echo "ERROR: CPS is not running on $upgrade_ncn"
-        cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="
-        exit 1
-    fi
+    while [[ $(cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="|grep -v "running" | wc -l) != 0 ]]
+    do
+        printf "%c" "."
+        counter=$((counter+1))
+        if [ $counter -gt 30 ]; then
+            counter=0
+            echo "ERROR: CPS is not running on $upgrade_ncn"
+            cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="
+            exit 1
+        fi
+        sleep 5
+    done
     cps_pod_assigned=$(kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $upgrade_ncn|wc -l)
     if [[ $cps_pod_assigned -ne 1 ]];then
         echo "ERROR: CPS pod is not assigned to $upgrade_ncn"
