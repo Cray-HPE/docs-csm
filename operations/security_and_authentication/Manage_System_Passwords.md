@@ -80,6 +80,7 @@ The tables below include the default login credentials for each rack type. These
 | sw-spine | Spine | Mellanox SN2100 |  admin |
 | sw-leaf-bmc | Leaf-BMC/Mgmt | Aruba 6300   |  admin |
 | sw-spine | Spine | Aruba 8325 |  admin |
+| sw-leaf | Leaf | Aruba 8325 |  admin |
 
 **Air-Cooled Cabinet:**
 
@@ -92,7 +93,7 @@ The tables below include the default login credentials for each rack type. These
 
 | Name   | Role | Switch         |  Login |
 | ------ | ---- | -------------- |  ----- |
-| sw-cdu | CDU/Leaf  | Dell S4048T-ON |  admin |
+| sw-cdu | CDU/Leaf | Dell S4048T-ON |  admin |
 | sw-cdu | CDU/Leaf | Aruba 8360 |  admin |
 
 
