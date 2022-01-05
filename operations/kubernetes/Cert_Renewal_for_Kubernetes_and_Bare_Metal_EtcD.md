@@ -245,13 +245,13 @@ Run the following steps on each master node.
    ```bash
    ncn-m# systemctl restart etcd.service
    ```
-**Run the remaining steps onboth  master and worker nodes.**
+**Run the remaining steps on both  master and worker nodes.**
 
 1. Restart kubelet.
 
    Run the following command on each Kubernetes node.
 
-   **IMPORTANT:** The below example will need to be adjusted to reflect the correct amount of master and worker nodes in the environment being used.
+   **IMPORTANT:** The following example will need to be adjusted to reflect the correct amount of master and worker nodes in the environment being used.
 
    ```bash
    ncn-m# pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] systemctl restart kubelet.service
