@@ -185,7 +185,7 @@ Run the following steps on each master node.
     -rw------- 1 root root 1675 Sep 22 17:13 server.key
     ```
 
-   Not all the certificate files were updated.
+   Not all the certificate files were updated in this example.
 
    **IMPORTANT:** Some certificates were not updated because they have a distant expiration time and did not need to be updated. ***This is expected.***
 
@@ -245,8 +245,7 @@ Run the following steps on each master node.
    ```bash
    ncn-m# systemctl restart etcd.service
    ```
-
-#### On master and worker nodes
+**Run the remaining steps onboth  master and worker nodes.**
 
 1. Restart kubelet.
 
@@ -258,7 +257,7 @@ Run the following steps on each master node.
    ncn-m# pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] systemctl restart kubelet.service
    ```
 
-2. Fix `kubectl` command access.
+1. Fix `kubectl` command access.
 
    **NOTE:** The following command will only respond with Unauthorized if certificates have expired. In any case, the new client certificates will need to be distributed in the following steps.
 
@@ -276,7 +275,7 @@ Run the following steps on each master node.
    ncn-w003   Ready    <none>   370d   v1.18.6
    ```
 
-3. Distribute the client certificate to the rest of the cluster.
+1. Distribute the client certificate to the rest of the cluster.
 
    **NOTE:** There may be errors when copying files. The target may or may not exist depending on the version of Shasta.
   
@@ -329,7 +328,7 @@ Run the following steps on each master node.
    ncn-m# for node in ncn-m00{1..3} ncn-w00{1..3}; do scp /root/$node.kubelet.conf $node:/etc/kubernetes/; done
    ```
 
-4. Log into each node one at a time and do the following.
+4. Log into each node one at a time and run the following commands:
 
    1. systemctl stop kubelet.service
    2. rm /etc/kubernetes/kubelet.conf
@@ -355,10 +354,10 @@ Run the following steps on each master node.
 
 6. Perform a rolling reboot of master nodes.
    
-   Follow the [Reboot_NCNs](../node_management/Reboot_NCNs.md) process.
+   Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) process.
 
    **IMPORTANT:** Verify pods are running on the master node that was rebooted before proceeding to the next node.
 
 7. Perform a rolling reboot of worker nodes.
    
-   Follow the [Reboot_NCNs](../node_management/Reboot_NCNs.md) process.
+   Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) process.
