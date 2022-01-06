@@ -8,7 +8,7 @@
 # desired.
 #
 
-spire_postgres_new_limit=2100m
+spire_postgres_new_request=1
 cray_capmc_new_cpu_request=500m
 elasticsearch_master_new_cpu_request=1500m
 cluster_kafka_new_cpu_request=1
@@ -22,10 +22,10 @@ nexus_new_cpu_request=2
 cray_metallb_speaker_new_cpu_request=1
 
 
-if [ ! -z $spire_postgres_new_limit ]; then
+if [ ! -z $spire_postgres_new_request ]; then
   current_req=$(kubectl get postgresql -n spire spire-postgres -o json | jq -r '.spec.resources.requests.cpu')
-  echo "Patching spire-postgres cluster with new cpu request of $spire_postgres_new_limit (from $current_req)"
-  kubectl patch postgresql spire-postgres -n spire --type=json -p="[{'op' : 'replace', 'path':'/spec/resources/requests/cpu', 'value' : \"$spire_postgres_new_limit\" }]"
+  echo "Patching spire-postgres cluster with new cpu request of $spire_postgres_new_request (from $current_req)"
+  kubectl patch postgresql spire-postgres -n spire --type=json -p="[{'op' : 'replace', 'path':'/spec/resources/requests/cpu', 'value' : \"$spire_postgres_new_request\" }]"
   until [[ $(kubectl get postgresql -n spire spire-postgres -o json | jq -r '.status.PostgresClusterStatus') == "Running" ]]
   do
     echo "Waiting for spire-postgres cluster to reach running state..."
