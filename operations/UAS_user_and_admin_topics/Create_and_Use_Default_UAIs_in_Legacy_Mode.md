@@ -16,15 +16,15 @@ Create a UAI using the default UAI image or the default UAI class in legacy mode
 
     `<path>` is the path to a file containing an SSH public-key matched to the SSH private key belonging to the user.
 
-1. Watch the UAI and see when it is ready for logins.
+2. Watch the UAI and see when it is ready for logins.
 
     ```
     user> cray uas list
     ```
 
-1. Log into the UAI using the `ssh` command.
+3. Log into the UAI using the `ssh` command.
 
-1. Delete the UAI when finished working with it.
+4. Delete the UAI when finished working with it.
 
     ```
     user> cray uas delete --uai-list '<uai-list>'

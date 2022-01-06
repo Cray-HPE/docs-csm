@@ -43,7 +43,7 @@ To create a volume, follow this procedure.
 
     The example above will create a directory `/host_files` in every UAI configured to use this volume and mount the file `/etc/passwd` from the host node into that directory as a file named `host_passwd`. Notice the form of the `--volume-description` argument. It is a JSON string encapsulating an entire `volume_description` field as shown in the JSON output in the previous section.
 
-1.  Perform [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) to verify that the new volume is configured.
+2.  Perform [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) to verify that the new volume is configured.
 
     The new volume appears in the output of the `cray uas admin config volumes list` command.
 

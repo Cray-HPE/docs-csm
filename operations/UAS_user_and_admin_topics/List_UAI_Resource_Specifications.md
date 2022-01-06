@@ -15,25 +15,25 @@ Obtain a list of all the UAI resource specifications registered with UAS.
 
 ### Procedure
 
-1.  List all the resource specifications registered in UAS.
+List all the resource specifications registered in UAS.
 
-    The resource specifications returned by the following command are available for UAIs to use:
+The resource specifications returned by the following command are available for UAIs to use:
 
-    ```
-    ncn-m001-pit# cray uas admin config resources list
-    [[results]]
-    comment = "Resource Specification to use with Brokered End-User UAIs"
-    limit = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
-    request = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
-    resource_id = "f26ee12c-6215-4ad1-a15e-efe4232f45e6"
-    ```
+```
+ncn-m001-pit# cray uas admin config resources list
+[[results]]
+comment = "Resource Specification to use with Brokered End-User UAIs"
+limit = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
+request = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
+resource_id = "f26ee12c-6215-4ad1-a15e-efe4232f45e6"
+```
 
-    The following are the configurable parts of a resource specification:
-    * `limit` - A JSON string describing a Kubernetes resource limit
-    * `request` - A JSON string describing a Kubernetes resource request
-    * `comment` - An optional free form string containing any information an administrator might find useful about the resource specification
-    * `resource-id` - Used for examining, updating or deleting the resource specification as well as linking the resource specification into a UAI class
+The following are the configurable parts of a resource specification:
+* `limit` - A JSON string describing a Kubernetes resource limit
+* `request` - A JSON string describing a Kubernetes resource request
+* `comment` - An optional free form string containing any information an administrator might find useful about the resource specification
+* `resource-id` - Used for examining, updating or deleting the resource specification as well as linking the resource specification into a UAI class
 
-    Refer to [Elements of a UAI](Elements_of_a_UAI.md) for more information.
+Refer to [Elements of a UAI](Elements_of_a_UAI.md) for more information.
 
 [Next Topic: Create a UAI Resource Specification](Create_a_UAI_Resource_Specification.md)

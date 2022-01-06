@@ -16,22 +16,22 @@ Display a specific resource specification using the `resource_id` of that specif
 
 ### Procedure
 
-1.  Retrieve a resource specification.
+Retrieve a resource specification.
 
-    To examine a particular resource specification, use a command of the following form:
+To examine a particular resource specification, use a command of the following form:
 
-    ```bash
-    ncn-m001-pit# cray uas admin config resources describe RESOURCE_ID
-    ```
+```bash
+ncn-m001-pit# cray uas admin config resources describe RESOURCE_ID
+```
 
-    For example:
+For example:
 
-    ```bash
-    ncn-m001-pit# cray uas admin config resources describe f26ee12c-6215-4ad1-a15e-efe4232f45e6
-    comment = "Resource Specification to use with Brokered End-User UAIs"
-    limit = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
-    request = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
-    resource_id = "f26ee12c-6215-4ad1-a15e-efe4232f45e6"
-    ```
+```bash
+ncn-m001-pit# cray uas admin config resources describe f26ee12c-6215-4ad1-a15e-efe4232f45e6
+comment = "Resource Specification to use with Brokered End-User UAIs"
+limit = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
+request = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
+resource_id = "f26ee12c-6215-4ad1-a15e-efe4232f45e6"
+```
 
 [Next Topic: Update a Resource Specification](Update_a_Resource_Specification.md)

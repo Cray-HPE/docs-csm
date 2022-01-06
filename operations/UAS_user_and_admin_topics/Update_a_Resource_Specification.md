@@ -24,20 +24,20 @@ ncn-m001-pit# cray uas admin config resources update [OPTIONS] RESOURCE_ID
 
 The \[OPTIONS\] used by this command are the same options used to create resource specifications. See [Create a UAI Resource Specification](Create_a_UAI_Resource_Specification.md) and [Elements of a UAI](Elements_of_a_UAI.md) for a full description of those options.
 
-1.  Update a UAI resource specification.
+Update a UAI resource specification.
 
-    The following example changes the CPU and memory limits on a UAI resource specification to 1 CPU and 1GiB, respectively.
+The following example changes the CPU and memory limits on a UAI resource specification to 1 CPU and 1GiB, respectively.
 
-    ```bash
-    ncn-m001-pit# cray uas admin config resources update \
-    --limit '{"cpu": "1", "memory": "1Gi"}' 85645ff3-1ce0-4f49-9c23-05b8a2d31849
-    ```
+```bash
+ncn-m001-pit# cray uas admin config resources update \
+--limit '{"cpu": "1", "memory": "1Gi"}' 85645ff3-1ce0-4f49-9c23-05b8a2d31849
+```
 
-    and the following example does the same for the cpu and memory requests:
+and the following example does the same for the cpu and memory requests:
 
-    ```bash
-    ncn-m001-pit# cray uas admin config resources update \
-    --request '{"cpu": "1", "memory": "1Gi"}' 85645ff3-1ce0-4f49-9c23-05b8a2d31849
-    ```
+```bash
+ncn-m001-pit# cray uas admin config resources update \
+--request '{"cpu": "1", "memory": "1Gi"}' 85645ff3-1ce0-4f49-9c23-05b8a2d31849
+```
 
 [Next Topic: Delete a UAI Resource Specification](Delete_a_UAI_Resource_Specification.md)
