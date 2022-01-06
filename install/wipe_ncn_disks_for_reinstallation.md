@@ -111,7 +111,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       1. List any containers running in `containerd`.
 
          ```bash
-         ncn-m/w # crictl ps
+         ncn-w # crictl ps
          CONTAINER           IMAGE               CREATED              STATE               NAME                                                ATTEMPT             POD ID
          66a78adf6b4c2       18b6035f5a9ce       About a minute ago   Running             spire-bundle                                        1212                6d89f7dee8ab6
          7680e4050386d       c8344c866fa55       24 hours ago         Running             speaker                                             0                   5460d2bffb4d7
