@@ -15,23 +15,23 @@ View all the details of every available UAI class. Use this information to selec
 
 ### Procedure
 
-1.  List all available UAI classes.
+List all available UAI classes.
 
-    To list available UAI classes, use the following command:
+To list available UAI classes, use the following command:
 
-    ```
-    ncn-m001-pit# cray uas admin config classes list
-    ```
+```
+ncn-m001-pit# cray uas admin config classes list
+```
 
-    The `cray uas admin config classes list` command supports the same `--format` options as the `cray uas admin config volumes list` command. See [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) for details.
+The `cray uas admin config classes list` command supports the same `--format` options as the `cray uas admin config volumes list` command. See [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) for details.
 
-    For example:
+For example:
 
-    ```bash
-    ncn-m001-pit# cray uas admin config classes list --format json
-    <output not shown>
-    ```
+```bash
+ncn-m001-pit# cray uas admin config classes list --format json
+<output not shown>
+```
 
-  See [UAI Classes](UAI_Classes.md) and [Elements of a UAI](Elements_of_a_UAI.md) for more details on the output.
+See [UAI Classes](UAI_Classes.md) and [Elements of a UAI](Elements_of_a_UAI.md) for more details on the output.
 
 [Next Topic: Create a UAI Class](Create_a_UAI_Class.md)

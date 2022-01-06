@@ -22,7 +22,7 @@ UAI host node identification is an exclusive activity, not an inclusive one, so 
 
   In this example, there are three nodes known by Kubernetes that are not running as Kubernetes master nodes. These are all potential UAI host nodes.
 
-1. Identify the nodes that are excluded from eligibility as UAI host nodes.
+2. Identify the nodes that are excluded from eligibility as UAI host nodes.
 
   ```
   ncn-m001-pit# kubectl get no -l uas=False

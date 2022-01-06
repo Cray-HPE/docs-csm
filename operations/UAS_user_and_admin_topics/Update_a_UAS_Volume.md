@@ -17,20 +17,20 @@ Modify the configuration of an already-registered UAS volume. Almost any part of
 
 ### Procedure
 
-1.  Modify the configuration of a UAS volume.
+Modify the configuration of a UAS volume.
 
-    Once a UAS volume has been configured, any part of it except for the `volume_id` can be updated with a command of the following form:
+Once a UAS volume has been configured, any part of it except for the `volume_id` can be updated with a command of the following form:
 
-    ```
-    cray uas admin config volumes update [options] <volume-id>
-    ```
+```
+cray uas admin config volumes update [options] <volume-id>
+```
 
-    For example:
+For example:
 
-    ```
-    ncn-m001-pit# cray uas admin config volumes update --volumename 'my-example-volume' a0066f48-9867-4155-9268-d001a4430f5c
-    ```
+```
+ncn-m001-pit# cray uas admin config volumes update --volumename 'my-example-volume' a0066f48-9867-4155-9268-d001a4430f5c
+```
 
-    The `--volumename`, `--volume-description`, and `--mount-path` options may be used in any combination to update the configuration of a given volume.
+The `--volumename`, `--volume-description`, and `--mount-path` options may be used in any combination to update the configuration of a given volume.
 
 [Next Topic: Delete a Volume Configuration](Delete_a_Volume_Configuration.md)

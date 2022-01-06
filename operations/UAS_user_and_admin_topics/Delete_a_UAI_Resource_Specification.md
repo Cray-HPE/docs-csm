@@ -22,10 +22,10 @@ To delete a particular resource specification, use a command of the following fo
 ncn-m001-pit# cray uas admin config resources delete RESOURCE_ID
 ```
 
-1.  Remove a UAI resource specification from UAS.
+Remove a UAI resource specification from UAS.
 
-    ```bash
-    ncn-m001-pit# cray uas admin config resources delete 7c78f5cf-ccf3-4d69-ae0b-a75648e5cddb
-    ```
+```bash
+ncn-m001-pit# cray uas admin config resources delete 7c78f5cf-ccf3-4d69-ae0b-a75648e5cddb
+```
 
 [Next Topic: UAI Classes](UAI_Classes.md)

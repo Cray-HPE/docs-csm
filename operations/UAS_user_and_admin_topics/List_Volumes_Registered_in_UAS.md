@@ -17,107 +17,107 @@ List the details of all volumes registered in UAS with the `cray uas admin confi
 
 The volume registrations in the UAS configuration can be quite extensive and sometimes difficult to read in the default TOML format used by the `cray` administrative CLI.  The following shows the `--format` option to the `cray` CLI being used to switch to various output formats that may be easier to read or more useful for certain tasks.  Feel free to use that option with any `cray` CLI command to select a more comfortable output style.
 
-1.  List the details of all the volumes registered in UAS.
+List the details of all the volumes registered in UAS.
 
-    -   Retrieve the list in TOML.
+-   Retrieve the list in TOML.
 
-        ```bash
-        ncn-m001-pit# cray uas admin config volumes list
-        [[results]]
-        mount_path = "/etc/localtime"
-        volume_id = "11a4a22a-9644-4529-9434-d296eef2dc48"
-        volumename = "timezone"
+    ```bash
+    ncn-m001-pit# cray uas admin config volumes list
+    [[results]]
+    mount_path = "/etc/localtime"
+    volume_id = "11a4a22a-9644-4529-9434-d296eef2dc48"
+    volumename = "timezone"
 
-        [results.volume_description.host_path]
-        path = "/etc/localtime"
-        type = "FileOrCreate"
-        [[results]]
-        mount_path = "/etc/sssd"
-        volume_id = "1ec36af0-d5b6-4ad9-b3e8-755729765d76"
-        volumename = "broker-sssd-config"
+    [results.volume_description.host_path]
+    path = "/etc/localtime"
+    type = "FileOrCreate"
+    [[results]]
+    mount_path = "/etc/sssd"
+    volume_id = "1ec36af0-d5b6-4ad9-b3e8-755729765d76"
+    volumename = "broker-sssd-config"
 
-        [results.volume_description.secret]
-        default_mode = 384
-        secret_name = "broker-sssd-conf"
-        [[results]]
-        mount_path = "/lus"
-        volume_id = "a3b149fd-c477-41f0-8f8d-bfcee87fdd0a"
-        volumename = "lustre"
+    [results.volume_description.secret]
+    default_mode = 384
+    secret_name = "broker-sssd-conf"
+    [[results]]
+    mount_path = "/lus"
+    volume_id = "a3b149fd-c477-41f0-8f8d-bfcee87fdd0a"
+    volumename = "lustre"
 
-        [results.volume_description.host_path]
-        path = "/lus"
-        type = "DirectoryOrCreate"
-        ```
+    [results.volume_description.host_path]
+    path = "/lus"
+    type = "DirectoryOrCreate"
+    ```
 
-    -   Retrieve the list in YAML format.
+-   Retrieve the list in YAML format.
 
-        ```bash
-        ncn-m001-pit# cray uas admin config volumes list --format yaml
-        - mount_path: /etc/localtime
-          volume_description:
-            host_path:
-              path: /etc/localtime
-              type: FileOrCreate
-          volume_id: 11a4a22a-9644-4529-9434-d296eef2dc48
-          volumename: timezone
-        - mount_path: /etc/sssd
-          volume_description:
-            secret:
-              default_mode: 384
-              secret_name: broker-sssd-conf
-          volume_id: 1ec36af0-d5b6-4ad9-b3e8-755729765d76
-          volumename: broker-sssd-config
-        - mount_path: /lus
-          volume_description:
-            host_path:
-              path: /lus
-              type: DirectoryOrCreate
-          volume_id: a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
-          volumename: lustre
-        ```
+    ```bash
+    ncn-m001-pit# cray uas admin config volumes list --format yaml
+    - mount_path: /etc/localtime
+      volume_description:
+        host_path:
+          path: /etc/localtime
+          type: FileOrCreate
+      volume_id: 11a4a22a-9644-4529-9434-d296eef2dc48
+      volumename: timezone
+    - mount_path: /etc/sssd
+      volume_description:
+        secret:
+          default_mode: 384
+          secret_name: broker-sssd-conf
+      volume_id: 1ec36af0-d5b6-4ad9-b3e8-755729765d76
+      volumename: broker-sssd-config
+    - mount_path: /lus
+      volume_description:
+        host_path:
+          path: /lus
+          type: DirectoryOrCreate
+      volume_id: a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
+      volumename: lustre
+    ```
 
-    -   Retrieve the list in JSON format.
+-   Retrieve the list in JSON format.
 
-        ```bash
-        ncn-m001-pit# cray uas admin config volumes list --format json
-        [
-          {
-            "mount_path": "/etc/localtime",
-            "volume_description": {
-              "host_path": {
-                "path": "/etc/localtime",
-                "type": "FileOrCreate"
-              }
-            },
-            "volume_id": "11a4a22a-9644-4529-9434-d296eef2dc48",
-            "volumename": "timezone"
-          },
-          {
-            "mount_path": "/etc/sssd",
-            "volume_description": {
-              "secret": {
-                "default_mode": 384,
-                "secret_name": "broker-sssd-conf"
-              }
-            },
-            "volume_id": "1ec36af0-d5b6-4ad9-b3e8-755729765d76",
-            "volumename": "broker-sssd-config"
-          },
-          {
-            "mount_path": "/lus",
-            "volume_description": {
-              "host_path": {
-                "path": "/lus",
-                "type": "DirectoryOrCreate"
-              }
-            },
-            "volume_id": "a3b149fd-c477-41f0-8f8d-bfcee87fdd0a",
-            "volumename": "lustre"
+    ```bash
+    ncn-m001-pit# cray uas admin config volumes list --format json
+    [
+      {
+        "mount_path": "/etc/localtime",
+        "volume_description": {
+          "host_path": {
+            "path": "/etc/localtime",
+            "type": "FileOrCreate"
           }
-        ]
-        ```
+        },
+        "volume_id": "11a4a22a-9644-4529-9434-d296eef2dc48",
+        "volumename": "timezone"
+      },
+      {
+        "mount_path": "/etc/sssd",
+        "volume_description": {
+          "secret": {
+            "default_mode": 384,
+            "secret_name": "broker-sssd-conf"
+          }
+        },
+        "volume_id": "1ec36af0-d5b6-4ad9-b3e8-755729765d76",
+        "volumename": "broker-sssd-config"
+      },
+      {
+        "mount_path": "/lus",
+        "volume_description": {
+          "host_path": {
+            "path": "/lus",
+            "type": "DirectoryOrCreate"
+          }
+        },
+        "volume_id": "a3b149fd-c477-41f0-8f8d-bfcee87fdd0a",
+        "volumename": "lustre"
+      }
+    ]
+    ```
 
-    The JSON formatted output can help guide administrators in constructing new volume descriptions required to add or update a volume description in UAS. JSON is the required input format for volume descriptions in UAS.
+The JSON formatted output can help guide administrators in constructing new volume descriptions required to add or update a volume description in UAS. JSON is the required input format for volume descriptions in UAS.
 
 Looking at the above output, each volume has a `mount_path`, `volume_description`, `volume_name` and `volume_id` entry.
 

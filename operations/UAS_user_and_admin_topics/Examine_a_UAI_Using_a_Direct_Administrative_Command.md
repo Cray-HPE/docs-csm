@@ -17,28 +17,28 @@ Print out information about a UAI.
 
 ### Procedure
 
-1.  Print out information about a UAI.
+Print out information about a UAI.
 
-    To examine an existing UAI use a command of the following form:
+To examine an existing UAI use a command of the following form:
 
-    ```
-    cray uas admin uais describe <uai-name>
-    ```
-    For example:
+```
+cray uas admin uais describe <uai-name>
+```
+For example:
 
-    ```bash
-    ncn-m001-pit# cray uas admin uais describe uai-broker-07624d65
-    uai_age = "5h33m"
-    uai_connect_string = "ssh broker@34.136.140.107"
-    uai_host = "ncn-w003"
-    uai_img = "registry.local/cray/cray-uai-broker:1.2.4"
-    uai_ip = "34.136.140.107"
-    uai_msg = ""
-    uai_name = "uai-broker-07624d65"
-    uai_status = "Running: Ready"
-    username = "broker"
+```bash
+ncn-m001-pit# cray uas admin uais describe uai-broker-07624d65
+uai_age = "5h33m"
+uai_connect_string = "ssh broker@34.136.140.107"
+uai_host = "ncn-w003"
+uai_img = "registry.local/cray/cray-uai-broker:1.2.4"
+uai_ip = "34.136.140.107"
+uai_msg = ""
+uai_name = "uai-broker-07624d65"
+uai_status = "Running: Ready"
+username = "broker"
 
-    [uai_portmap]
-    ```
+[uai_portmap]
+```
 
 [Next Topic: Deleting a UAI](Delete_a_UAI.md)
