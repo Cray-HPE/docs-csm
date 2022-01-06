@@ -100,7 +100,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
 
     > **NOTE:** The command `csi config init` does a case insensitive check for whether a source name contains an application node prefix. For example, the prefix `uan` will match `uan`, `Uan`, and `UAN`.
 
-    From the [example hmn_connections.json output](#hmn-connections-example-output), the following additional prefixes are required:
+    From the HMN example above, the following additional prefixes are required:
 
     ```yaml
     # Additional application node prefixes to match in the hmn_connections.json file
@@ -129,7 +129,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
 
     Valid HSM SubRoles values are: `Worker`, `Master`, `Storage`, `UAN`, `Gateway`, `LNETRouter`, `Visualization`, and `UserDefined`.
 
-    From the [example hmn_connections.json output](#hmn-connections-example-output) the following additional prefix HSM SubRole mappings are required:
+    From the HMN example above, the following additional prefix HSM SubRole mappings are required:
 
     ```yaml
     # Additional HSM SubRoles
@@ -151,7 +151,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
 
     For each application node add its alias mapping under the `aliases` field. Where the key is the xname of the application node, and the value is an array of aliases (strings) which allows for one or more aliases to be specified for an application node.
 
-    From the [example hmn_connections.json output](#hmn-connections-example-output) the following application node aliases are required:
+    From the HMN example above, the following application node aliases are required:
 
     ```yaml
     # Application Node aliases
@@ -164,7 +164,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
     ```
     > The ordering of xnames under `aliases` does not matter.
 
-6. Final information in the example `application_node_config.yaml` built from the [example hmn_connections.json output](#hmn-connections-example-output).
+6. Final information in the example `application_node_config.yaml` built from the HMN example above.
     
     ```yaml
     ---
