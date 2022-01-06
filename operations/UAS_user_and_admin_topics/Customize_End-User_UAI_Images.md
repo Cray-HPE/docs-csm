@@ -29,7 +29,7 @@ The example provided here covers the most comon use-case, which is building a UA
     ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
     ```
 
-1. Query BOS for a sessiontemplate ID.
+2. Query BOS for a sessiontemplate ID.
 
     Identify the Sessiontemplate name to use. A full list may be found with the following command:
 
@@ -59,7 +59,7 @@ The example provided here covers the most comon use-case, which is building a UA
     ncn-w001# SESSION_NAME=wlm-sessiontemplate-0.1.0
     ```
 
-1. Download a compute node SquashFS.
+3. Download a compute node SquashFS.
 
     Use the Sessiontemplate name to download a compute node squashfs from a BOS sessiontemplate name:
 
@@ -69,7 +69,7 @@ The example provided here covers the most comon use-case, which is building a UA
     ncn-w001# cray artifacts get boot-images $SESSION_ID/rootfs rootfs.squashfs
     ```
 
-1. Mount the SquashFS and create a tarball.
+4. Mount the SquashFS and create a tarball.
 
     1. Create a directory and mount the SquashFS on the directory:
 
@@ -79,7 +79,7 @@ The example provided here covers the most comon use-case, which is building a UA
         ncn-w001# mount -v -o loop,ro rootfs.squashfs `pwd`/mount
         ```
 
-    1. Create the tarball.
+    2. Create the tarball.
 
         **IMPORTANT:** 99-slingshot-network.conf is omitted from the tarball as that prevents the UAI from running sshd as the UAI user with the `su` command:
 
@@ -89,7 +89,7 @@ The example provided here covers the most comon use-case, which is building a UA
 
         This may take several minutes. Notice that this does not create a compressed tarball. Using an uncompressed format makes it possible to add files if needed once the tarball is made. It also makes the procedure run just a bit more quickly. If warnings related to xattr are displayed, continue with the procedure as the resulting tarball should still result in a functioning UAI container image.
 
-    1. Check that the tarball contains './usr/bin/uai-ssh.sh'.
+    3. Check that the tarball contains './usr/bin/uai-ssh.sh'.
 
         ```
         ncn-w001# tar tf $SESSION_ID.tar | grep '[.]/usr/bin/uai-ssh[.]sh'
@@ -125,7 +125,7 @@ The example provided here covers the most comon use-case, which is building a UA
         ncn-w001# tar rvf 0c0d4081-2e8b-433f-b6f7-e1ef0b907be3.tar ./usr/bin/uai-ssh.sh
         ```
 
-1. Create and push the container image.
+5. Create and push the container image.
 
     Create a container image using podman or docker and push it to the site container registry. Any container-specific modifications may also be done here with a Dockerfile. The ENTRYPOINT layer must be /usr/bin/uai-ssh.sh as that starts SSHD for the user in the UAI container started by UAS.
 
@@ -137,13 +137,13 @@ The example provided here covers the most comon use-case, which is building a UA
     ncn-w001# podman push $UAI_IMAGE_NAME
     ```
 
-1. Register the new container image with UAS.
+6. Register the new container image with UAS.
 
     ```
     ncn-w001# cray uas admin config images create --imagename $UAI_IMAGE_NAME
     ```
 
-1. Cleanup the mount directory and tarball.
+7. Cleanup the mount directory and tarball.
 
     ```
     ncn-w001# umount -v mount; rmdir -v mount

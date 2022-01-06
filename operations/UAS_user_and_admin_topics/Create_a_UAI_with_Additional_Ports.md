@@ -46,7 +46,7 @@ Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports 
     8888 = 8888
     ```
 
-3.  Log in to the UAI with the connection string.
+2.  Log in to the UAI with the connection string.
 
     ```bash
     $ ssh USERNAME@UAI_IP_ADDRESS -i ~/.ssh/id_rsa

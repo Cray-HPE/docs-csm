@@ -38,9 +38,9 @@ SSH to log into a Broker UAI and reach the End-User UAIs on demand.
     * The broker mechanism in the Broker UAI creates a new UAI because `vers` has never logged into this Broker UAI before.
     * There is a second prompt to acknowledge an unknown host which is, in this case, the End-User UAI itself. The Broker UAI constructs a public/private key pair for the hidden SSH connection between the broker and the End-User UAI shown in the image in [Broker Mode UAI Management](Broker_Mode_UAI_Management.md).
 
-1. Log out of the Broker UAI.
+2. Log out of the Broker UAI.
 
-1. Log in to the Broker UAI again.
+3. Log in to the Broker UAI again.
 
     The next time `vers` logs in, it will look similar to the following:
 

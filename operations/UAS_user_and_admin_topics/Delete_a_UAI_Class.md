@@ -24,10 +24,10 @@ cray uas admin config classes delete UAI_CLASS_ID
 
 `UAI_CLASS_ID` is the UAI Class ID of the UAI class.
 
-1.  Delete a UAI class.
+Delete a UAI class.
 
-    ```screen
-    ncn-m001-pit# cray uas admin config classes delete bb28a35a-6cbc-4c30-84b0-6050314af76b
-    ```
+```screen
+ncn-m001-pit# cray uas admin config classes delete bb28a35a-6cbc-4c30-84b0-6050314af76b
+```
 
 [Next Topic: UAI Management](UAI_Management.md)
