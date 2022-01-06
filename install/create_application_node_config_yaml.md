@@ -29,9 +29,15 @@ For a detailed mapping between the data in the SHCD and the equivalent informati
 
 ### What is a Source Name?
 
-The source name is the `Source` field in each row or element of the `hmn_connections.json`, and this name of the device that is being connected to the HMN network. From this source name, the `csi config init` command can infer the type of hardware that is connected to the HMN network (Node BMC, PDU, HSN Switch BMC, and more).
+The source name is the name of the device that is being connected to the HMN network.  In the SHCD HMN tab, this is in a column with the header `Source` or the `Source` field in the element of the `hmn_connections.json` for this device. From this source name, the `csi config init` command can infer the type of hardware that is connected to the HMN network (Node BMC, PDU, HSN Switch, BMC, and more).
 
-Example hmn_connections.json row representing an application node with SourceName `uan01` in cabinet `x3000` in slot 19. Its BMC is connected to port 47 of the management leaf switch in x3000 in slot 14.
+Example SHCD row from HMN tab with column headers representing an application node with SourceName `uan01` in cabinet `x3000` in slot 19. Its BMC is connected to port 37 of the management leaf switch in x3000 in slot 14.
+
+| Source (J20) | Rack (K20) | Location (L20) | (M20) | Parent (N20) | (O20) | Port (P20) | Destination (Q20) | Rack (R20) | Location (S20) | (T20) | Port (U20) |
+| ------------ | ---------- | -------------- | ----- | ------------ | ----- | ---------- | ----------------- | ---------- | -------------- | ----- | ---------- |
+| uan01    | x3000      | u19            |       |              | -     | j3         | sw-smn01          | x3000      | u14            | -     | j37        |
+
+Example `hmn_connections.json` row representing an application node with SourceName `uan01` in cabinet `x3000` in slot 19. Its BMC is connected to port 37 of the management leaf switch in x3000 in slot 14.
 
 ```json
 { "Source": "uan01", "SourceRack": "x3000", "SourceLocation": "u19", "DestinationRack": "x3000", "DestinationLocation": "u14", "DestinationPort": "j37" }
@@ -58,6 +64,16 @@ Example hmn_connections.json row representing an application node with SourceNam
 
 2. Identify application nodes present in `hmn_connections.json` or the HMN tab of the system's SHCD. In general, everything in the HMN tab of the SHCD or `hmn_connections.json` file that starts with uan, gn, or ln, are considered application nodes and any node that does not follow the [SHCD/HMN Connections Rules](shcd_hmn_connections_rules.md) should also be considered an [application node](../glossary.md#application-node), unless it is a `KVM`.
 
+    If the `hmn_connections.json` file is not available, then use the HMN tab of SHCD spreadsheet. This table is equivalent to the [example hmn_connections.json output](#hmn-connections-example-output) below.
+
+    | Source (J20) | Rack (K20) | Location (L20) | (M20) | Parent (N20) | (O20) | Port (P20) | Destination (Q20) | Rack (R20) | Location (S20) | (T20) | Port (U20) |
+    | ------------ | ---------- | -------------- | ----- | ------------ | ----- | ---------- | ----------------- | ---------- | -------------- | ----- | ---------- |
+    | gateway01    | x3000      | u29            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j42        |
+    | login02      | x3000      | u28            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j43        |
+    | lnet01       | x3000      | u27            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j41        |
+    | vn01         | x3000      | u25            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j40        |
+    | uan01        | x3000      | u23            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j39        |
+
     If the `hmn_connections.json` file is available, then the following command can be used to show the HMN rows that are application nodes.
     
     ```bash
@@ -75,16 +91,6 @@ Example hmn_connections.json row representing an application node with SourceNam
     {"Source":"vn01","SourceRack":"x3000","SourceLocation":"u25","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j40"},
     {"Source":"uan01","SourceRack":"x3000","SourceLocation":"u23","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j39"},
     ```
-
-    If the HMN Connections.json file is not available, then the HMN tab of SHCD spreadsheet will need to be used instead. The table below is equivalent to the [example hmn_connections.json output](#hmn-connections-example-output) above.
-
-    | Source (J20) | Rack (K20) | Location (L20) | (M20) | Parent (N20) | (O20) | Port (P20) | Destination (Q20) | Rack (R20) | Location (S20) | (T20) | Port (U20) |
-    | ------------ | ---------- | -------------- | ----- | ------------ | ----- | ---------- | ----------------- | ---------- | -------------- | ----- | ---------- |
-    | gateway01    | x3000      | u29            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j42        |
-    | login02      | x3000      | u28            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j43        |
-    | lnet01       | x3000      | u27            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j41        |
-    | vn01         | x3000      | u25            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j40        |
-    | uan01        | x3000      | u23            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j39        |
 
 3. Add additional application node prefixes.
 
