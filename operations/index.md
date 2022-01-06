@@ -28,7 +28,6 @@ The following administrative topics can be found in this guide:
   - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
   - [Hardware Management (HM) Collector](#hardware-management-hm-collector)
   - [Node Management](#node-management)
-  - [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
   - [Network](#network)
     - [Management Network](#management-network)
     - [Customer Access Network (CAN)](#customer-access-network-can)
@@ -363,6 +362,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
        * [Backup and Restore Vault Clusters](security_and_authentication/Backup_and_Restore_Vault_Clusters.md)
        * [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
    * [API Authorization](security_and_authentication/API_Authorization.md)
+   * [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
 
 
 <a name="resiliency"></a>
@@ -524,18 +524,18 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Add a Standard Rack Node](node_management/Add_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node](node_management/Move_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node (Same Rack/Same HSN Ports)](node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
+    * [Verify Node Removal](node_management/Verify_Node_Removal.md)
   * [Clear Space in Root File System on Worker Nodes](node_management/Clear_Space_in_Root_File_System_on_Worker_Nodes.md)
   * [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
   * [Reset Credentials on Redfish Devices](node_management/Reset_Credentials_on_Redfish_Devices_for_Reinstallation.md)
   * [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs.md)
   * [Change Settings for HMS Collector Polling of Air Cooled Nodes](node_management/Change_Settings_for_HMS_Collector_Polling_of_Air_Cooled_Nodes.md)
   * [Use the Physical KVM](node_management/Use_the_Physical_KVM.md)
-  * [Launch a Virtual KVM on Gigabyte Servers](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Servers.md)
-  * [Launch a Virtual KVM on Intel Servers](node_management/Launch_a_Virtual_KVM_on_Intel_Servers.md)
+  * [Launch a Virtual KVM on Gigabyte Nodes](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Nodes.md)
+  * [Launch a Virtual KVM on Intel Nodes](node_management/Launch_a_Virtual_KVM_on_Intel_Nodes.md)
   * [Change Java Security Settings](node_management/Change_Java_Security_Settings.md)
-  * [Verify Accuracy of the System Clock](node_management/Verify_Accuracy_of_the_System_Clock.md)
   * [Configuration of NCN Bonding](node_management/Configuration_of_NCN_Bonding.md)
-    * [Change Interfaces in the Bond](node_management/Change_Interfaces_in_the_Bond.md)
+    * [Change Settings in the Bond](node_management/Change_Settings_in_the_Bond.md)
     * [Troubleshoot Interfaces with IP Address Issues](node_management/Troubleshoot_Interfaces_with_IP_Address_Issues.md)
   * [Troubleshoot Loss of Console Connections and Logs on Gigabyte Nodes](node_management/Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
   * [Check the BMC Failover Mode](node_management/Check_the_BMC_Failover_Mode.md)
@@ -547,20 +547,6 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
     * [View BIOS Logs for Liquid Cooled Nodes](node_management/View_BIOS_Logs_for_Liquid_Cooled_Nodes.md)
   * [Configure NTP on NCNs](node_management/Configure_NTP_on_NCNs.md)
   * [Swap a Compute Blade with a Different System](node_management/Swap_a_Compute_Blade_with_a_Different_System.md)
-
-
-<a name="reds"></a>
-
-## River Endpoint Discovery Service (REDS)
-
-The River Endpoint Discovery Service \(REDS\) performs geolocation and initialization of compute nodes, based on a mapping file that is provided with each system.
-
-  * [Configure a Management Switch for REDS](river_endpoint_discovery_service/Configure_a_Management_Switch_for_REDS.md)
-  * [Initialize and Geolocate Nodes](river_endpoint_discovery_service/Initialize_and_Geolocate_Nodes.md)
-  * [Verify Node Removal](river_endpoint_discovery_service/Verify_Node_Removal.md)
-  * [Troubleshoot Common REDS Issues](river_endpoint_discovery_service/Troubleshoot_Common_REDS_Issues.md)
-    * [Troubleshot Common Error Messages in REDS Logs](river_endpoint_discovery_service/Troubleshoot_Common_Error_Messages_in_REDS_Logs.md)
-    * [Clear State and Restart REDS](river_endpoint_discovery_service/Clear_State_and_Restart_REDS.md)
 
 
 <a name="network"></a>

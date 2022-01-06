@@ -107,37 +107,37 @@ The commands are the same for all hardware vendors, except where noted.
     * Gigabyte Technology
 
         ```bash
-        ncn# efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
+        ncn/pit# efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
         ```
         
     * Hewlett-Packard Enterprise
 
         ```bash
-        ncn# efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
+        ncn/pit# efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
         ```
 
     * Intel Corporation
 
         ```bash
-        ncn# efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
+        ncn/pit# efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
         ```
 
 1. Create a list of the cray disk boot devices.
 
     ```bash
-    ncn# efibootmgr | grep cray | tee /tmp/bbs2
+    ncn/pit# efibootmgr | grep cray | tee /tmp/bbs2
     ```
     
 1. Set the boot order to first PXE boot, with disk boot as the fallback options.
 
     ```bash
-    ncn# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
+    ncn/pit# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
     ```
 
 1. Set all of the desired boot options to be active.
 
     ```bash
-    ncn# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
+    ncn/pit# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
     ```
 
 After following the steps above on a given NCN, that NCN will now use the desired Shasta boot order.
@@ -159,29 +159,29 @@ In this case, the instructions are the same regardless of node type (management,
     * Gigabyte Technology
 
         ```bash
-        ncn# efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection|nvme|sata)' | tee /tmp/rbbs1
-        ncn# efibootmgr | grep -iP '(pxe ipv?4.*)' | grep -i connection | tee /tmp/rbbs2
+        ncn/pit# efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection|nvme|sata)' | tee /tmp/rbbs1
+        ncn/pit# efibootmgr | grep -iP '(pxe ipv?4.*)' | grep -i connection | tee /tmp/rbbs2
         ```
 
     * Hewlett-Packard Enterprise
         > **`NOTE`** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippet(s)](../install/switch_pxe_boot_from_onboard_nic_to_pcie.md#high-speed-network).
 
         ```bash
-        ncn# efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1
-        ncn# efibootmgr | grep -iP '(sata|nvme)' | tee /tmp/rbbs2
+        ncn/pit# efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1
+        ncn/pit# efibootmgr | grep -iP '(sata|nvme)' | tee /tmp/rbbs2
         ```
 
     * Intel Corporation
 
         ```bash
-        ncn# efibootmgr | grep -vi 'ipv4' | grep -iP '(sata|nvme|uefi)' | tee /tmp/rbbs1
-        ncn# efibootmgr | grep -i baseboard | tee /tmp/rbbs2
+        ncn/pit# efibootmgr | grep -vi 'ipv4' | grep -iP '(sata|nvme|uefi)' | tee /tmp/rbbs1
+        ncn/pit# efibootmgr | grep -i baseboard | tee /tmp/rbbs2
         ```
 
 1. Remove them.
 
     ```bash
-    ncn# cat /tmp/rbbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -t -i efibootmgr -b {} -B
+    ncn/pit# cat /tmp/rbbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -t -i efibootmgr -b {} -B
     ```
 
 Your boot menu should be trimmed down to contain only relevant entries.
@@ -263,19 +263,19 @@ Reset the BIOS. Refer to vendor documentation for resetting the BIOS or attempt 
 1. Reset BIOS with `ipmitool`
 
     ```bash
-    ncn# ipmitool chassis bootdev none options=clear-cmos
+    ncn/pit# ipmitool chassis bootdev none options=clear-cmos
     ```
 
 1. Set next boot with `ipmitool`
 
     ```bash
-    ncn# ipmitool chassis bootdev pxe options=efiboot,persistent
+    ncn/pit# ipmitool chassis bootdev pxe options=efiboot,persistent
     ```
 
 1. Boot to BIOS for checkout of boot devices
 
     ```bash
-    ncn# ipmitool chassis bootdev bios options=efiboot
+    ncn/pit# ipmitool chassis bootdev bios options=efiboot
     ```
 
 This is the end of the Reverting Changes procedure.
@@ -292,7 +292,7 @@ Parsing the output of `efibootmgr` can be helpful in determining which device is
 1. Display the current UEFI boot selections.
 
     ```bash
-    ncn# efibootmgr
+    ncn/pit# efibootmgr
     BootCurrent: 0015
     Timeout: 1 seconds
     BootOrder: 000E,000D,0011,0012,0007,0005,0006,0008,0009,0000,0001,0002,000A,000B,000C,0003,0004,000F,0010,0013,0014
@@ -328,13 +328,13 @@ Parsing the output of `efibootmgr` can be helpful in determining which device is
     Notice the lack of "Boot" in the ID number given, we want `Boot0014` so we pass `0014` to `efibootmgr`:
 
     ```bash
-    ncn-m# efibootmgr -n 0014
+    ncn/pit# efibootmgr -n 0014
     ```
 
 1. Verify the `BootNext` device is what you selected:
 
     ```bash
-    ncn-m# efibootmgr | grep -i bootnext
+    ncn/pit# efibootmgr | grep -i bootnext
     BootNext: 0014
     ```
 

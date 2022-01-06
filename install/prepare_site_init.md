@@ -347,8 +347,8 @@ with system-specific customizations.
         ```yaml
         ldapSearchBase: "dc=dcldap,dc=dit"
         localRoleAssignments:
-            - {"group": "criemp", "role": "admin", "client": "shasta"}
-            - {"group": "criemp", "role": "admin", "client": "cray"}
+            - {"group": "employee", "role": "admin", "client": "shasta"}
+            - {"group": "employee", "role": "admin", "client": "cray"}
             - {"group": "craydev", "role": "admin", "client": "shasta"}
             - {"group": "craydev", "role": "admin", "client": "cray"}
             - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
@@ -370,8 +370,8 @@ with system-specific customizations.
         - command: update
           path: spec.kubernetes.services.cray-keycloak-users-localize.localRoleAssignments
           value:
-          - {"group": "criemp", "role": "admin", "client": "shasta"}
-          - {"group": "criemp", "role": "admin", "client": "cray"}
+          - {"group": "employee", "role": "admin", "client": "shasta"}
+          - {"group": "employee", "role": "admin", "client": "cray"}
           - {"group": "craydev", "role": "admin", "client": "shasta"}
           - {"group": "craydev", "role": "admin", "client": "cray"}
           - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
@@ -393,8 +393,8 @@ with system-specific customizations.
         sealedSecrets:
             - '{{ kubernetes.sealed_secrets.keycloak_users_localize | toYaml }}'
         localRoleAssignments:
-            - {"group": "criemp", "role": "admin", "client": "shasta"}
-            - {"group": "criemp", "role": "admin", "client": "cray"}
+            - {"group": "employee", "role": "admin", "client": "shasta"}
+            - {"group": "employee", "role": "admin", "client": "cray"}
             - {"group": "craydev", "role": "admin", "client": "shasta"}
             - {"group": "craydev", "role": "admin", "client": "cray"}
             - {"group": "shasta_admins", "role": "admin", "client": "shasta"}

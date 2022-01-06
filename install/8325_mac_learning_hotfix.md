@@ -36,8 +36,8 @@ You can run a NAE script on the 8325 platform switches to resolve mac learning i
 
 ## The file locations in doc-csm
 
-* The NAE script is located at:  [../docs-csm/upgrade/1.0/scripts/aruba/L2X-Watchdog-creates-bash-script.py](../docs-csm/upgrade/1.0/scripts/aruba/L2X-Watchdog-creates-bash-script.py)
-* Automatic NAE install script is located at:  [../docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py](../docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py)
+* The NAE script is located at:  [../docs-csm/upgrade/1.0.1/scripts/aruba/L2X-Watchdog-creates-bash-script.py](../docs-csm/upgrade/1.0.1/scripts/aruba/L2X-Watchdog-creates-bash-script.py)
+* Automatic NAE install script is located at:  [../docs-csm/upgrade/1.0.1/scripts/aruba/nae_upload.py](../docs-csm/upgrade/1.0.1/scripts/aruba/nae_upload.py)
 
 
 ## Automated install of NAE script
@@ -54,7 +54,7 @@ NOTE: The `nae-upload.py` script automatically detects 8325s and only applies th
 
 1. Run the following command:
     ```bash
-    ncn-m001# ./docs-csm/upgrade/1.0/scripts/aruba/nae_upload.py
+    ncn-m001# ./docs-csm/upgrade/1.0.1/scripts/aruba/nae_upload.py
     ```
 
 2. Type in your switch password and the script will upload and enable the NAE script.

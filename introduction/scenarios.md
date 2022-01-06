@@ -53,7 +53,7 @@ or a reinstall..
 <a name="upgrade"></a>
 ## Upgrade
 
-   The upgrade from Shasta v1.4.2 (including CSM 0.9.3) to Shasta v1.5 (including CSM 1.0) is supported.
+   The upgrade from Shasta v1.4.2 (including CSM 0.9.3) to Shasta v1.5 (including CSM 1.0.1) is supported.
    This process will upgrade the Ceph storage software, then the storage nodes, then the Kubernetes master nodes and worker nodes,
    and finally the CSM services. The management nodes are upgraded using a rolling upgrade approach which enables
    management services to continue to function even as one or a few nodes are being upgraded.
