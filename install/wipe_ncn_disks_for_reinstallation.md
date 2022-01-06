@@ -62,7 +62,7 @@ executed on **any management nodes** (master, worker, and storage).
 This section is specific to utility storage nodes. An advanced wipe includes deleting the Ceph volumes and then
 wiping the disks and RAIDs.
 
-1. Delete CEPH volumes.
+1. Delete Ceph volumes.
 
     ```bash
     ncn-s# systemctl stop ceph-osd.target
@@ -157,7 +157,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
            ncn-m# crictl stop <container id from the CONTAINER column>
            ```
 
-1. Delete Ceph Volumes **on storage nodes ONLY**.
+1. Delete Ceph Volumes **on utility storage nodes ONLY**.
 
     1. For each storage node:
 
@@ -202,9 +202,9 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
     > **NOTE:** Some of the following `umount` commands may fail or have warnings depending on the state of the NCN. Failures in this section can be ignored and will not inhibit the wipe process.
     
-    > **NOTE:** There is an edge case where the overlay may keep you from unmounting the drive. If this is a rebuild you ignore this.
+    > **NOTE:** There is an edge case where the overlay may keep the drive from being unmounted. If this is a rebuild, ignore this.
 
-    1. Master nodes.
+    1. Master nodes
 
         Stop the etcd service on the master node before unmounting /var/lib/etcd
 
@@ -213,13 +213,13 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
         ncn-m# umount -v /run/lib-etcd /var/lib/etcd /var/lib/sdu
         ```
 
-    1. Worker nodes.
+    1. Worker nodes
 
         ```bash
         ncn-w# umount -v /var/lib/kubelet /var/lib/sdu /run/containerd /var/lib/containerd /run/lib-containerd 
         ```
 
-    1. Storage nodes.
+    1. Storage nodes
 
         ```bash
         ncn-s# umount -vf /var/lib/ceph /var/lib/containers /etc/ceph
@@ -229,11 +229,8 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
         ```bash
         ncn-s# mount | grep "containers"
-
-        /dev/mapper/metalvg0-CONTAIN on /var/lib/containers type xfs (rw,noatime,swalloc,attr2,largeio,inode64,allocsize|
-        32k,noquota)
-        /dev/mapper/metalvg0-CONTAIN on /var/lib/containers/storage/overlay type xfs (rw,noatime,swalloc,attr2,largeio,i|
-        bufs=8,logbsize=32k,noquota)
+      /dev/mapper/metalvg0-CONTAIN on /var/lib/containers type xfs (rw,noatime,swalloc,attr2,largeio,inode64,allocsize=131072k,logbufs=8,logbsize=32k,noquota)
+      /dev/mapper/metalvg0-CONTAIN on /var/lib/containers/storage/overlay type xfs (rw,noatime,swalloc,attr2,largeio,inode64,allocsize=131072k,logbufs=8,logbsize=32k,noquota)
 
         ncn-s# umount -v /var/lib/containers/storage/overlay
         umount: /var/lib/containers/storage/overlay unmounted
@@ -279,7 +276,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       ncn-m# dmsetup remove $(dmsetup ls | grep -i etcd | awk '{print $1}')
       ```
 
-      > **Note:** The following output  means the etcd volume  mapper is not present.
+      > **NOTE:** The following output means the etcd volume mapper is not present.
       ```bash
       No device specified.
       Command failed.
@@ -292,14 +289,15 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
 1. Remove metal LVM.
 
-     ```bash
-     ncn# vgremove -f -v --select 'vg_name=~metal*'
-     ```
+   ```bash
+   ncn# vgremove -f -v --select 'vg_name=~metal*'
+   ```
 
    > **NOTE:** Optionally, run the `pvs` command. If any drives are still listed, remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, ignore the error and proceed to the next step, as this will not inhibit the wipe process.
+
 1. Group these commands together for each node.
 
-   This group of commands should be done in succession on one node before moving to do the same set of commands on the next node. The nodes would be addressed in descending order for each type of node.  Start with the utility storage nodes, then the worker nodes, then ncn-m003, then ncn-m002. 
+   This group of commands should be done in succession on one node before moving to do the same set of commands on the next node. The nodes would be addressed in descending order for each type of node. Start with the utility storage nodes, then the worker nodes, then ncn-m003, then ncn-m002.
 
    > **WARNING:** Do not run these commands on ncn-m001
    1. Stop the RAIDs.
@@ -326,7 +324,6 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
        If any disks had labels present, output from `wipefs` looks similar to the following:
 
-   **NOTE:** On worker nodes, it is a known issue that the `sgdisk` command sometimes encounters a hard hang. If there is no output from the command for 90 seconds, close the terminal session to the worker node, open a new terminal session to it, and complete the disk wipe procedure by running the above `wipefs` command.
        ```
        /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
        /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
@@ -338,7 +335,6 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
        /dev/sdc: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
        ```
 
-   See [Basic Wipe](#basic-wipe) section for expected output from the `wipefs` command.
        Verify there are no error messages in the output.
 
        The `wipefs` command may fail if no labeled disks are found, which is an indication of a larger problem.
