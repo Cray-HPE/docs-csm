@@ -237,7 +237,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
       umount: /var/lib/containers unmounted
       ```
 
-1. Remove auxiliary LVMs.
+1. Stop `cray-sdu-rda`.
 
    1. Stop `cray-sdu-rda` container if necessary.
 
