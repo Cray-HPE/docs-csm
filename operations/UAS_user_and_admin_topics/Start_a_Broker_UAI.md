@@ -15,6 +15,8 @@ Create a Broker UAI after a Broker UAI class has been created.
 * There must be an appropriate Broker UAI Class defined: [Configure a Broker UAI Class](Configure_a_Broker_UAI_Class.md).
 * The administrator must know the Class ID of the desired Broker UAI Class: [List UAI Classes](List_Available_UAI_Classes.md)
 
+Optional: the administrator may choose a site defined name for the Broker UAI to be used in conjunction with the HPE Cray EX System External DNS mechanism.
+
 ### Procedure
 
 Use the following command to create a Broker UAI:
@@ -41,5 +43,24 @@ username = "broker"
 
 [uai_portmap]
 ```
+
+When a UAI is created on an external IP address (as is always the case with Broker UAIs) the UAI name (`uai_name` field above) is given to the HPE Cray EX System External DNS mechanism to be advertised to the site DNS.  Unless a site defined name is used, a unique name like the one shown above is calculated and used.  If a site defined DNS name for the Broker UAI is desired, the UAI name may be added to the command that creates the Broker UAI as follows:
+
+```
+ncn-m001-pit# cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker --uai-name my-broker-uai
+uai_age = "0m"
+uai_connect_string = "ssh broker@35.226.246.154"
+uai_host = "ncn-w003"
+uai_img = "registry.local/cray/cray-uai-broker:1.2.4"
+uai_ip = "35.226.246.154"
+uai_msg = ""
+uai_name = "my-broker-uai"
+uai_status = "Running: Ready"
+username = "broker"
+
+[uai_portmap]
+```
+
+If a UAI name is specified for creation that matches that of an already created UAI, no new UAI will be created, but the creation operation will appear to succeed and will return the status of the already existing UAI.
 
 [Next Topic: Log in to a Broker UAI](Log_in_to_a_Broker_UAI.md)
