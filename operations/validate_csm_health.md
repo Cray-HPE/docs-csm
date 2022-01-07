@@ -294,10 +294,10 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
    ...
    ```
 
-* Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
+* Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel node blades can be ignored. Gigabyte node blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
    > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
 
-   Example mismatch for a CMC an Intel server blade:
+   Example mismatch for a CMC an Intel node blade:
 ```bash
 ...
   ChassisBMCs/CMCs: FAIL
