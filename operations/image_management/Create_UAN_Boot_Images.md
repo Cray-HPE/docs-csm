@@ -542,11 +542,11 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 20. Determine the correct value for the ifmap option in the `kernel_parameters` string for the type of UAN.
 
     -   Use ifmap=net0:nmn0,lan0:hsn0,lan1:hsn1 if the UANs are:
-        -   Either HPE DL325 or DL385 server that have a single OCP PCIe card installed.
-        -   Gigabyte servers that do not have additional PCIe network cards installed other than the built-in LOM ports.
+        -   Either HPE DL325 or DL385 nodes that have a single OCP PCIe card installed.
+        -   Gigabyte nodes that do not have additional PCIe network cards installed other than the built-in LOM ports.
     -   Use ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 if the UANs are:
-        -   Either HPE DL325 or DL385 servers which have a second OCP PCIe card installed, regardless if it is being used or not.
-        -   Gigabyte servers that have a PCIe network card installed in addition to the built-in LOM ports, regardless if it is being used or not.
+        -   Either HPE DL325 or DL385 nodes which have a second OCP PCIe card installed, regardless if it is being used or not.
+        -   Gigabyte nodes that have a PCIe network card installed in addition to the built-in LOM ports, regardless if it is being used or not.
 21. Construct a JSON BOS boot session template for the UAN.
 
     1.  Populate the template with the following information:

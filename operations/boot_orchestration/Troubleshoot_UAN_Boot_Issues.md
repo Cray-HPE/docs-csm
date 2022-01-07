@@ -22,7 +22,7 @@ UAN boots are performed in three phases:
 
 ### PXE Issues
 
-Most failures to PXE are the result of misconfigured network switches and/or BIOS settings. The UAN must PXE boot over the Node Management Network \(NMN\) and the switches must be configured to allow connectivity to the NMN. The cable for the NMN must be connected to the first port of the OCP card on HPE DL325 and DL385 servers or to the first port of the built-in LAN-On-Motherboard \(LOM\) on Gigabyte servers.
+Most failures to PXE are the result of misconfigured network switches and/or BIOS settings. The UAN must PXE boot over the Node Management Network \(NMN\) and the switches must be configured to allow connectivity to the NMN. The cable for the NMN must be connected to the first port of the OCP card on HPE DL325 and DL385 nodes or to the first port of the built-in LAN-On-Motherboard \(LOM\) on Gigabyte nodes.
 
 ### Initrd \(Dracut\) Issues
 
