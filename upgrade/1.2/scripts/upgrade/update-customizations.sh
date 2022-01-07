@@ -107,6 +107,12 @@ yq w -i "$c" 'spec.kubernetes.services.cray-powerdns-manager.cray-service.sealed
 yq w -i "$c" 'spec.kubernetes.services.cray-dns-powerdns.service.can.loadBalancerIP' '{{ network.netstaticips.site_to_system_lookups }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-dns-powerdns.cray-service.sealedSecrets[0]' '{{ kubernetes.sealed_secrets.powerdns | toYaml }}'
 
+# lower cpu request for tds systems (3 workers)
+num_workers=$(kubectl get nodes | grep ncn-w | wc -l)
+if [ $num_workers -le 3 ]; then
+  yq m -i --overwrite "$c" ${BASEDIR}/tds_cpu_requests.yaml
+fi
+
 if [[ "$inplace" == "yes" ]]; then
     cp "$c" "$customizations"
 else
