@@ -98,6 +98,8 @@ _Pre-upgrades must run after nexus is setup in order to ensure any and all neces
 
 ## Upgrade Services
 
+> For TDS systems with only three worker nodes the `customizations.yaml` file will be edited automatically during upgrade to lower CPU requests on several services which can improve pod scheduling on smaller systems. See the file: `${CSM_DISTDIR}/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified (prior to proceeding with this upgrade) with different values if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/CSM_product_management/Post_Install_Customizations.md).
+
 Run `upgrade.sh` to deploy upgraded CSM applications and services:
 
 ```bash
