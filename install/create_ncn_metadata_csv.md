@@ -5,7 +5,7 @@ The information in the `ncn_metadata.csv` file identifies each of the management
 as a master, worker, or storage node, and provides the MAC address information needed to identify the BMC and
 the NIC which will be used to boot the node.
 
-Some of the data in the `ncn_metadata.csv` can be found in the SHCD. However, the hardest data
+Some of the data in the `ncn_metadata.csv` can be found in the SHCD in the HMN tab. However, the hardest data
 to collect is the MAC addresses for the node's BMC, the node's bootable network interface, and the
 pair of network interfaces which will become the bonded interface `bond0`.
 
@@ -31,7 +31,7 @@ Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
 x3000c0s9b0n0,Management,Storage,94:40:c9:37:77:26,14:02:ec:d9:76:88,14:02:ec:d9:76:88,94:40:c9:5f:b6:92
 ```
 
-For each management node, the xname, role, and subrole can be extracted from the SHCD. However, the rest of the
+For each management node, the xname, role, and subrole can be extracted from the SHCD in the HMN tab. However, the rest of the
 MAC address information needs to be collected another way.
 
 Check the description for component names while mapping names between the SHCD and the `ncn_metadata.csv` file.
