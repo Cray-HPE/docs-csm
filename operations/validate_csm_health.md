@@ -112,9 +112,9 @@ Review the output for `Result: FAIL` and follow the instructions provided to res
 To dump the ncn uptimes, the node resource consumptions and/or the list of pods not in a running state, run the following:
 
 ```bash
-ncn# /opt/cray/platform-utils/ncnHealthCheck.sh -s ncn_uptimes
-ncn# /opt/cray/platform-utils/ncnHealthCheck.sh -s node_resource_consumption
-ncn# /opt/cray/platform-utils/ncnHealthCheck.sh -s pods_not_running
+ncn# /opt/cray/platform-utils/ncnHealthChecks.sh -s ncn_uptimes
+ncn# /opt/cray/platform-utils/ncnHealthChecks.sh -s node_resource_consumption
+ncn# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
 ```
 <a name="known-issues"></a>
 #### 1.2.1 Known Issues
@@ -294,10 +294,10 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
    ...
    ```
 
-* Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
+* Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel node blades can be ignored. Gigabyte node blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
    > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
 
-   Example mismatch for a CMC an Intel server blade:
+   Example mismatch for a CMC an Intel node blade:
 ```bash
 ...
   ChassisBMCs/CMCs: FAIL
