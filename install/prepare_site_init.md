@@ -1,9 +1,7 @@
 # Prepare Site Init
 
 These procedures guide administrators through setting up the `site-init`
-directory which contains important customizations for various products. The
-[appendix](#appendix) is informational only; it does **not** include any
-default install procedures.
+directory which contains important customizations for various products.
 
 ### Topics:
    1. [Background](#background)
@@ -137,14 +135,16 @@ with system-specific customizations.
 
 1.  To federate Keycloak with an upstream LDAP:
 
-    In the example below, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
+    1. Set environment variables for LDAP and PORT
 
-    ```bash
-    linux# export LDAP=dcldap2.us.cray.com
-    linux# export PORT=636
-    ```
+       In the example below, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
 
-    *   If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
+       ```bash
+       linux# export LDAP=dcldap2.us.cray.com
+       linux# export PORT=636
+       ```
+
+    1.  If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
         secret value by supplying a base64 encoded Java KeyStore (JKS) that
         contains the CA certificate that signed the LDAP server's host key. The
         password for the JKS file must be `password`. Administrators may use the
@@ -152,36 +152,23 @@ with system-specific customizations.
         packaged with CSM to create a JKS file that includes a PEM-encoded
         CA certificate to verify the LDAP host(s) as follows:
 
-        Load the `openjdk` container image:
+        This step builds an exmaple that will create (or update) `cert.jks` with the PEM-encoded CA certificate for an LDAP host and then prepares `certs.jks.b64` which will be injected into customizations.yaml.
 
-        > **`NOTE`** Requires a properly configured Docker or Podman
-        > environment.
+        1. Load the `openjdk` container image:
 
-        ```bash
-        linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
-        ```
+           > **`NOTE`** Requires a properly configured Docker or Podman
+           > environment.
 
-        Create (or update) `cert.jks` with the PEM-encoded CA certificate for an
-        LDAP host:
-
-        > **`IMPORTANT`** Replace `<ca-cert.pem>` and `<alias>` as appropriate.
-
-        ```bash
-        linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool \
-        -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks \
-        -storepass password -noprompt
-        ```
-
-        For example, create the `certs.jks.b64` file as follows:
-
-        *   Get the issuer certificate for the LDAP server at port 636. Use `openssl s_client` to connect
+           ```bash
+           linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
+           ```
+        1.  Get the issuer certificate for the LDAP server at port 636. Use `openssl s_client` to connect
             and show the certificate chain returned by the LDAP host:
 
             ```bash
             linux# openssl s_client -showcerts -connect $LDAP:${PORT} </dev/null
             ```
-
-            Either manually extract (i.e., cut/paste) the issuer's
+        1.  Either manually extract (i.e., cut/paste) the issuer's
             certificate into `cacert.pem` or try the following commands to
             create it automatically.
 
@@ -210,8 +197,9 @@ with system-specific customizations.
             2.  Extract the issuer's certificate using `awk`:
 
                 > **`NOTE`** The issuer DN is properly escaped as part of the
-                > `awk` pattern below. If the value you are using is
-                > different, be sure to escape it properly!
+                > `awk` pattern below. It must be changed to match the value 
+                > for emailAddress, CN, OU, etc. for your LDAP.  If the value
+                > you are using is different, be sure to escape it properly!
 
                 ```bash
                 linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | \
@@ -219,7 +207,7 @@ with system-specific customizations.
                           awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
                 ```
 
-        *   Verify issuer's certificate was properly extracted and saved in `cacert.pem`:
+        1.  Verify issuer's certificate was properly extracted and saved in `cacert.pem`:
 
             ```bash
             linux# cat cacert.pem
@@ -253,7 +241,9 @@ with system-specific customizations.
             -----END CERTIFICATE-----
             ```
 
-        *   Create `certs.jks`:
+        1.  Create `certs.jks`:
+
+            > **`NOTE`** The alias used in this command for `cray-data-center-ca` should be changed to match your LDAP.
 
             ```bash
             linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
@@ -261,184 +251,150 @@ with system-specific customizations.
             -storepass password -noprompt
             ```
 
-        Create `certs.jks.b64` by base-64 encoding `certs.jks`:
+        1.  Create `certs.jks.b64` by base-64 encoding `certs.jks`:
 
-        ```bash
-        linux# base64 certs.jks > certs.jks.b64
-        ```
+            ```bash
+            linux# base64 certs.jks > certs.jks.b64
+            ```
 
-        Then, inject and encrypt `certs.jks.b64` into `customizations.yaml`:
+        1. Inject and encrypt `certs.jks.b64` into `customizations.yaml`:
 
-        ```bash
-        linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
-        yq r -j - | /mnt/pitdata/prep/site-init/utils/secrets-encrypt.sh | \
-        yq w -f - -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
-        {
-          "kind": "Secret",
-          "apiVersion": "v1",
-          "metadata": {
-            "name": "keycloak-certs",
-            "namespace": "services",
-            "creationTimestamp": null
-          },
-          "data": {}
-        }
-        EOF
-        ```
-
-    *   Update the `keycloak_users_localize` sealed secret with the
+            ```bash
+            linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
+            yq r -j - | /mnt/pitdata/prep/site-init/utils/secrets-encrypt.sh | \
+            yq w -f - -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
+            {
+              "kind": "Secret",
+              "apiVersion": "v1",
+              "metadata": {
+                "name": "keycloak-certs",
+                "namespace": "services",
+                "creationTimestamp": null
+              },
+              "data": {}
+            }
+            EOF
+            ```
+    1.  Update the `keycloak_users_localize` sealed secret with the
         appropriate value for `ldap_connection_url`.
 
-        Set `ldap_connection_url` in `customizations.yaml`:
+        1. Set `ldap_connection_url` in `customizations.yaml`:
 
-        For example:
+           For example:
 
-        ```bash
-        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml \
-        'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' "ldaps://$LDAP"
-        ```
+           ```bash
+           linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml \
+           'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' "ldaps://$LDAP"
+           ```
 
-        On success, review the `keycloak_users_localize` sealed secret.
+        1. On success, review the `keycloak_users_localize` sealed secret.
 
-        ```bash
-        linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
-        ```
+           ```bash
+           linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
+           ```
 
-        Expected output is similar to:
+           Expected output is similar to:
 
-      > ```
-      > generate:
-      >     name: keycloak-users-localize
-      >     data:
-      >     - type: static
-      >         args:
-      >         name: ldap_connection_url
-      >         value: ldaps://dcldap2.us.cray.com
-      > ```
-
-    *   Configure the `ldapSearchBase` and `localRoleAssignments` settings for
+         > ```
+         > generate:
+         >     name: keycloak-users-localize
+         >     data:
+         >     - type: static
+         >         args:
+         >         name: ldap_connection_url
+         >         value: ldaps://dcldap2.us.cray.com
+         > ```
+    1.  Configure the `ldapSearchBase` and `localRoleAssignments` settings for
         the `cray-keycloak-users-localize` chart in `customizations.yaml`.
 
-        Set `ldapSearchBase` in `customizations.yaml`:
+        There may be one or more groups in LDAP for admins and one or more for users.
+        Each admin group needs to be assigned to role `admin` and set to both `shasta` and `cray` clients in Keycloak.
+        Each user group needs to be assigned to role `user` and set to both `shasta` and `cray` clients in Keycloak.
 
-        > **`IMPORTANT`** Replace `<search-base>` as appropriate.
 
-        ```bash
-        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase '<search-base>'
-        ```
+        1. Set `ldapSearchBase` in `customizations.yaml`:
 
-        Set `localRoleAssignments` that map to `admin` and/or `user` roles for
-        both `shasta` and `cray` clients in `customizations.yaml`:
+           This example sets `ldapSearchBase` to `dc=dcldap,dc=dit`
 
-        > **`IMPORTANT`** Replace `<admin-group>` and `<user-group>` as
-        > appropriate. Also add other assignments as desired.
+           ```bash
+           linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=dcldap,dc=dit'
+           ```
 
-        ```bash
-        linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
-        - command: update
-          path: spec.kubernetes.services.cray-keycloak-users-localize.localRoleAssignments
-          value:
-          - {"group": "<admin-group>", "role": "admin", "client": "shasta"}
-          - {"group": "<admin-group>", "role": "admin", "client": "cray"}
-          - {"group": "<user-group>", "role": "user", "client": "shasta"}
-          - {"group": "<user-group>", "role": "user", "client": "cray"}
-        EOF
-        ```
+        1. Set `localRoleAssignments` in `customizations.yaml`:
 
-        For example, if you wanted to set the search-base and localRoleAssignments to look like this:
+           This example sets `localRoleAssignments` for the LDAP groups `employee`, `craydev`, and `shasta_admins` to be the admin role and the LDAP group `shasta_users` to be the user role.
 
-        ```yaml
-        ldapSearchBase: "dc=dcldap,dc=dit"
-        localRoleAssignments:
-            - {"group": "employee", "role": "admin", "client": "shasta"}
-            - {"group": "employee", "role": "admin", "client": "cray"}
-            - {"group": "craydev", "role": "admin", "client": "shasta"}
-            - {"group": "craydev", "role": "admin", "client": "cray"}
-            - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
-            - {"group": "shasta_admins", "role": "admin", "client": "cray"}
-            - {"group": "shasta_users", "role": "user", "client": "shasta"}
-            - {"group": "shasta_users", "role": "user", "client": "cray"}
-        ```
+           ```bash
+           linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
+           - command: update
+             path: spec.kubernetes.services.cray-keycloak-users-localize.localRoleAssignments
+             value:
+             - {"group": "employee", "role": "admin", "client": "shasta"}
+             - {"group": "employee", "role": "admin", "client": "cray"}
+             - {"group": "craydev", "role": "admin", "client": "shasta"}
+             - {"group": "craydev", "role": "admin", "client": "cray"}
+             - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
+             - {"group": "shasta_admins", "role": "admin", "client": "cray"}
+             - {"group": "shasta_users", "role": "user", "client": "shasta"}
+             - {"group": "shasta_users", "role": "user", "client": "cray"}
+           EOF
+           ```
 
-        Then set `ldapSearchBase` in `customizations.yaml`:
+        1. On success, review the `cray-keycloak-users-localize` values.
 
-        ```bash
-        linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=dcldap,dc=dit'
-        ```
+           ```bash
+           linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize
+           ```
 
-        And then set `localRoleAssignments` in `customizations.yaml`:
+           Expected output looks similar to:
 
-        ```bash
-        linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
-        - command: update
-          path: spec.kubernetes.services.cray-keycloak-users-localize.localRoleAssignments
-          value:
-          - {"group": "employee", "role": "admin", "client": "shasta"}
-          - {"group": "employee", "role": "admin", "client": "cray"}
-          - {"group": "craydev", "role": "admin", "client": "shasta"}
-          - {"group": "craydev", "role": "admin", "client": "cray"}
-          - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
-          - {"group": "shasta_admins", "role": "admin", "client": "cray"}
-          - {"group": "shasta_users", "role": "user", "client": "shasta"}
-          - {"group": "shasta_users", "role": "user", "client": "cray"}
-        EOF
-        ```
-
-        On success, review the `cray-keycloak-users-localize` values.
-
-        ```bash
-        linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize
-        ```
-
-        Expected output looks similar to:
-
-        ```
-        sealedSecrets:
-            - '{{ kubernetes.sealed_secrets.keycloak_users_localize | toYaml }}'
-        localRoleAssignments:
-            - {"group": "employee", "role": "admin", "client": "shasta"}
-            - {"group": "employee", "role": "admin", "client": "cray"}
-            - {"group": "craydev", "role": "admin", "client": "shasta"}
-            - {"group": "craydev", "role": "admin", "client": "cray"}
-            - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
-            - {"group": "shasta_admins", "role": "admin", "client": "cray"}
-            - {"group": "shasta_users", "role": "user", "client": "shasta"}
-            - {"group": "shasta_users", "role": "user", "client": "cray"}
-        ldapSearchBase: dc=dcldap,dc=dit
-        ```
+           ```
+           sealedSecrets:
+               - '{{ kubernetes.sealed_secrets.keycloak_users_localize | toYaml }}'
+           localRoleAssignments:
+               - {"group": "employee", "role": "admin", "client": "shasta"}
+               - {"group": "employee", "role": "admin", "client": "cray"}
+               - {"group": "craydev", "role": "admin", "client": "shasta"}
+               - {"group": "craydev", "role": "admin", "client": "cray"}
+               - {"group": "shasta_admins", "role": "admin", "client": "shasta"}
+               - {"group": "shasta_admins", "role": "admin", "client": "cray"}
+               - {"group": "shasta_users", "role": "user", "client": "shasta"}
+               - {"group": "shasta_users", "role": "user", "client": "cray"}
+           ldapSearchBase: dc=dcldap,dc=dit
+           ```
 
 1.  If you need to resolve outside hostnames, you will need to configure
     forwarding in the cray-dns-unbound service. For example, if you are using a
     hostname and not an IP address for the upstream LDAP server in step 4 above, you
     will need to be able to resolve that hostname.
 
-    Set the `forwardZones` for the `cray-dns-unbound` service:
+    1. Set the `forwardZones` for the `cray-dns-unbound` service:
 
-    ```bash
-    linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
-    - command: update
-      path: spec.kubernetes.services.cray-dns-unbound
-      value:
-        forwardZones:
-        - name: "."
-          forwardIps:
-          - "{{ network.netstaticips.system_to_site_lookups }}"
-    EOF
-    ```
+       ```bash
+       linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
+       - command: update
+         path: spec.kubernetes.services.cray-dns-unbound
+         value:
+           forwardZones:
+           - name: "."
+             forwardIps:
+             - "{{ network.netstaticips.system_to_site_lookups }}"
+       EOF
+       ```
 
-    On success, review the `cray-dns-unbound` values.
-    ```bash
-    linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
-    ```
+    1. On success, review the `cray-dns-unbound` values.
+       ```bash
+       linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
+       ```
 
-    Expected output looks similar to:
+       Expected output looks similar to:
 
-    ```
-    forwardZones:
-    - name: "."
-      forwardIps:
-      - "{{ network.netstaticips.system_to_site_lookups }}"
-    ```
+       ```
+       forwardZones:
+       - name: "."
+         forwardIps:
+         - "{{ network.netstaticips.system_to_site_lookups }}"
+       ```
 
 <a name="generate-sealed-secrets"></a>
 ### 4. Generate Sealed Secrets
