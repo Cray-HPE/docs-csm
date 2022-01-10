@@ -1,3 +1,6 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: Troubleshoot UAIs by Viewing Log Output](Troubleshoot_UAIs_by_Viewing_Log_Output.md)
 
 ## Troubleshoot UAS by Viewing Log Output
 
@@ -50,4 +53,4 @@ kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v '"
 
 If an error had occurred in UAS that error would likely show up here. Because there are two replicas of `cray-uas-mgr` running, the logging of interest may be in the other pod, so apply the same command to the other pod if the information is not here.
 
-
+[Next Topic: Troubleshoot UAIs by Viewing Log Output](Troubleshoot_UAIs_by_Viewing_Log_Output.md)

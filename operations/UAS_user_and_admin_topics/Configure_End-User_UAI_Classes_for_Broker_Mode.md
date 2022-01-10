@@ -1,9 +1,10 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: Configure a Broker UAI class](Configure_a_Broker_UAI_Class.md)
+
 
 ## Configure End-User UAI Classes for Broker Mode
 
-Each UAI broker will create and manage a single class of end-user UAIs. Setting up UAI classes for this is similar to [Configure a Default UAI Class for Legacy Mode](Configure_a_Default_UAI_Class_for_Legacy_Mode.md) with the following exceptions:
+Each UAI broker will create and manage a single class of End-User UAIs.  A site using the Broker Mode of UAI management must create a Brokered End-User UAI Class for each distinct type of End-User UAI it wants served by a Broker UAI.  Information on what should be configured for a Brokered End-User UAI Class can be found in [UAI Classes](UAI_Classes.md).
 
-* The `public_ip` flag for brokered UAI classes should be set to `false`
-* The `default` flag for brokered UAI classes may be set to `true` or `false` but should, most likely, be set to `false`.
-
-Everything else should be the same as it would be for a legacy mode UAI class.
+[Next Topic: Configure a Broker UAI class](Configure_a_Broker_UAI_Class.md)

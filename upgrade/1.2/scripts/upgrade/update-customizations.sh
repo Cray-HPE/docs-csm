@@ -376,6 +376,12 @@ yq w -i --style=single "$c" 'spec.kubernetes.services.cray-metallb.metallb.confi
 # wlm.macvlan
 yq d -i "$c" 'spec.wlm.macvlansetup.nmn_vlan'
 
+# lower cpu request for tds systems (3 workers)
+num_workers=$(kubectl get nodes | grep ncn-w | wc -l)
+if [ $num_workers -le 3 ]; then
+  yq m -i --overwrite "$c" ${BASEDIR}/tds_cpu_requests.yaml
+fi
+
 if [[ "$inplace" == "yes" ]]; then
     cp "$c" "$customizations"
 else

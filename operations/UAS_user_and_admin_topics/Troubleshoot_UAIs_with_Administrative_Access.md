@@ -1,3 +1,6 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
 
 ## Troubleshoot UAIs with Administrative Access
 
@@ -45,3 +48,5 @@ sh-4.4#
 ```
 
 The procedure is to find the name of the UAI in question, use that with `kubectl` to find the pod containing that UAI, use the pod name and the `user` namespace to set up the `kubectl exec` specifying the UAI name as the container to `exec` into and specifying `/bin/sh` as the command to run. From there, the administrator can look around inside the UAI as needed.
+
+[Next Topic: Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)

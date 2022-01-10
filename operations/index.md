@@ -505,8 +505,8 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs.md)
   * [Change Settings for HMS Collector Polling of Air Cooled Nodes](node_management/Change_Settings_for_HMS_Collector_Polling_of_Air_Cooled_Nodes.md)
   * [Use the Physical KVM](node_management/Use_the_Physical_KVM.md)
-  * [Launch a Virtual KVM on Gigabyte Servers](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Servers.md)
-  * [Launch a Virtual KVM on Intel Servers](node_management/Launch_a_Virtual_KVM_on_Intel_Servers.md)
+  * [Launch a Virtual KVM on Gigabyte Nodes](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Nodes.md)
+  * [Launch a Virtual KVM on Intel Nodes](node_management/Launch_a_Virtual_KVM_on_Intel_Nodes.md)
   * [Change Java Security Settings](node_management/Change_Java_Security_Settings.md)
   * [Configuration of NCN Bonding](node_management/Configuration_of_NCN_Bonding.md)
     * [Change Settings in the Bond](node_management/Change_Settings_in_the_Bond.md)
@@ -521,6 +521,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
     * [View BIOS Logs for Liquid Cooled Nodes](node_management/View_BIOS_Logs_for_Liquid_Cooled_Nodes.md)
   * [Configure NTP on NCNs](node_management/Configure_NTP_on_NCNs.md)
   * [Swap a Compute Blade with a Different System](node_management/Swap_a_Compute_Blade_with_a_Different_System.md)
+  * [Update the Gigabyte Node BIOS Time](node_management/Update_the_Gigabyte_Node_BIOS_Time.md)
 
 
 <a name="network"></a>
