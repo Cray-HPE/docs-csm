@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2021 Hewlett Packard Enterprise Development LP
+# Copyright 2021-2022 Hewlett Packard Enterprise Development LP
 
 error=0
 printf "=============== Linting \” (https://www.compart.com/en/unicode/U+201D) ... \n"
