@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2021 Hewlett Packard Enterprise Development LP
+# Copyright 2021-2022 Hewlett Packard Enterprise Development LP
 set -u
 # dump table-of-contents to stdout
 # usage:

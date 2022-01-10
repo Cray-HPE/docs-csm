@@ -51,6 +51,9 @@ installation-centric artifacts such as:
     ```bash
     linux# /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/meta/init.sh /mnt/pitdata/prep/site-init
     ```
+    **`IMPORTANT`** The output of this command states that customizations.yaml should be reviewed and updated before
+    running the secrets-reencrypt.sh and secrets-seed-customizations.sh scripts. These two scripts will be run
+    later in this document, do not run them at this time.
 
 1.  The `yq` tool used in the following procedures is available under
 `/mnt/pitdata/prep/site-init/utils/bin` once the SHASTA-CFG repo has been
@@ -91,7 +94,7 @@ with system-specific customizations.
     * `spec.kubernetes.sealed_secrets.cray_meds_credentials`
     * `spec.kubernetes.sealed_secrets.cray_hms_rts_credentials`
 
-    Replace the `Password` references with values appropriate for your system. See
+    Replace the `Password` references with values appropriate for your system.
     Edit `customizations.yaml`, replacing the `Password` references with values appropriate for your system. See
     the `Decrypting Sealed Secrets for Review` section of [Sealed Secrets Procedures](../operations/kubernetes/Sealed_Secrets_Procedures.md)
     if you need to examine credentials from prior installs.
