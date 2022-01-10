@@ -329,15 +329,28 @@ state_name="PRECACHE_NEXUS_IMAGES"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
+
+    images=$(kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.images_to_cache' | grep "sonatype\|proxy\|busybox")
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    pdsh -b -S -w $(grep -oP 'ncn-w\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'for image in sonatype/nexus3:3.25.0 dtr.dev.cray.com/cray/proxyv2:1.6.13-cray1 dtr.dev.cray.com/baseos/busybox:1 docker.io/sonatype/nexus3:3.25.0 dtr.dev.cray.com/cray/cray-nexus-setup:0.3.2; do crictl pull $image; done'
+    output=$(pdsh -b -S -w $(grep -oP 'ncn-w\w\d+' /etc/hosts | sort -u | tr -t '\n' ',') 'for image in '$images'; do crictl pull $image; done' 2>&1)
+    echo "$output"
+
+    if [[ "$output" == *"failed"* ]]; then
+      echo ""
+      echo "Verify the images which failed in the output above are available in nexus."
+      exit 1
+    fi
 
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
-# Take cps deployment snapshot
-cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r '.[] | .node' || true)
-echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
-
+# Take cps deployment snapshot (if cps installed)
+set +e
+kubectl get pod -n services | grep -q cray-cps
+if [ "$?" -eq 0 ]; then
+  cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r '.[] | .node' || true)
+  echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
+fi
+set -e
