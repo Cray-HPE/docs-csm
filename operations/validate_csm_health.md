@@ -294,10 +294,10 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
    ...
    ```
 
-* Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
+* Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel node blades can be ignored. Gigabyte node blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
    > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
 
-   Example mismatch for a CMC an Intel server blade:
+   Example mismatch for a CMC an Intel node blade:
 ```bash
 ...
   ChassisBMCs/CMCs: FAIL
@@ -496,11 +496,11 @@ This section can be run on any NCN or the PIT node.
 
    Expected output looks similar to the following:
    ```
-   default_image = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
-   image_list = [ "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest",]
+   default_image = "registry.local/cray/cray-uai-sles15sp3:1.0.11"
+   image_list = [ "registry.local/cray/cray-uai-sles15sp3:1.0.11",]
    ```
 
-   This example output shows that the pre-made end-user UAI image (`cray/cray-uai-sles15sp1:latest`) is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use. If other UAI images have been created and registered, they may also show up here, which is acceptable.
+   This example output shows that the pre-made end-user UAI image (`cray/cray-uai-sles15sp3:1.0.11`) is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use. If other UAI images have been created and registered, they may also show up here, which is acceptable.
 
 <a name="uas-uai-validate-create"></a>
 ### 5.2 Validate UAI Creation
@@ -526,7 +526,7 @@ This procedure must run on a master or worker node (not the PIT node and not `nc
    ```
    uai_connect_string = "ssh vers@10.16.234.10"
    uai_host = "ncn-w001"
-   uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
+   uai_img = "registry.local/cray/cray-uai-sles15sp3:1.0.11"
    uai_ip = "10.16.234.10"
    uai_msg = ""
    uai_name = "uai-vers-a00fb46b"
@@ -554,7 +554,7 @@ This procedure must run on a master or worker node (not the PIT node and not `nc
    uai_age = "0m"
    uai_connect_string = "ssh vers@10.16.234.10"
    uai_host = "ncn-w001"
-   uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
+   uai_img = "registry.local/cray/cray-uai-sles15sp3:1.0.11"
    uai_ip = "10.16.234.10"
    uai_msg = ""
    uai_name = "uai-vers-a00fb46b"
@@ -680,7 +680,7 @@ The following shows an example of looking at UAS logs effectively (this example 
    2021-02-08 15:32:41,267 - uas_mgr - INFO - getting pod info uai-vers-87a0ff6e
    2021-02-08 15:32:41,360 - uas_mgr - INFO - No start time provided from pod
    2021-02-08 15:32:41,361 - uas_mgr - INFO - getting service info for uai-vers-87a0ff6e-ssh in namespace user
-   127.0.0.1 - - [08/Feb/2021 15:32:41] "POST /v1/uas?imagename=registry.local%2Fcray%2Fno-image-registered%3Alatest HTTP/1.1" 200 -
+   127.0.0.1 - - [08/Feb/2021 15:32:41] "POST /v1/uas?imagename=registry.local%2Fcray%2Fno-image-registered%3A1.0.11 HTTP/1.1" 200 -
    2021-02-08 15:32:54,455 - uas_auth - INFO - UasAuth lookup complete for user vers
    2021-02-08 15:32:54,455 - uas_mgr - INFO - UAS request for: vers
    2021-02-08 15:32:54,455 - uas_mgr - INFO - listing deployments matching: host None, labels uas=managed,user=vers
@@ -713,7 +713,7 @@ There may be something similar to the following output:
 uai_age = "0m"
 uai_connect_string = "ssh vers@10.103.13.172"
 uai_host = "ncn-w001"
-uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
+uai_img = "registry.local/cray/cray-uai-sles15sp3:1.0.11"
 uai_ip = "10.103.13.172"
 uai_msg = "ErrImagePull"
 uai_name = "uai-vers-87a0ff6e"

@@ -92,9 +92,9 @@ with system-specific customizations.
     * `spec.kubernetes.sealed_secrets.cray_meds_credentials`
     * `spec.kubernetes.sealed_secrets.cray_hms_rts_credentials`
 
-    Replace the `Password` references with values appropriate for your system. See
+    Replace the `Password` references with values appropriate for your system.
     Edit `customizations.yaml`, replacing the `Password` references with values appropriate for your system. See
-    the `Decrypting Sealed Secrets for Review` section of [Sealed Secrets Procedures](../operations/kubernetes/Sealed_Secrets_Procedures.md)
+    the `Decrypt Sealed Secrets for Review` section of [Manage Sealed Secrets](../operations/security_and_authentication/Manage_Sealed_Secrets.md#decrypt-sealed-secrets-for-review)
     if you need to examine credentials from prior installs.
 
 1. Review the changes that you made:

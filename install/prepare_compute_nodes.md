@@ -7,11 +7,7 @@
       3. [Configure the switch port for the iLO to use VLAN 4](#configure_switch_port)
       4. [Clear bad MAC and IP address out of KEA](#cleanup_kea)
       5. [Clear bad ID out of HSM](#cleanup_hsm)
-
-### Prerequisites
-
-The time for Gigabyte compute nodes is synced with the rest of the system.
-See [Update the Gigabyte Server BIOS Time](../operations/node_management/Update_the_Gigabyte_Server_BIOS_Time.md).
+   2. [Update the BIOS Time on Gigabyte Compute Nodes](#update-the-bios-time-on-gigabyte-compute-nodes)
 
 ## Details
 
@@ -223,6 +219,12 @@ x3000c0s30b4n0.
 Everything is now configured and the CSM software will automatically discover
 the node after several minutes. After it has been discovered, the node is ready
 to be booted.
+
+<a name="update-the-bios-time-on-gigabyte-compute-nodes"></a>
+### 1. Update the BIOS Time on Gigabyte Compute Nodes
+The BIOS time for Gigabyte compute nodes must be synced with the rest of the system.
+See [Update the Gigabyte Node BIOS Time](../operations/node_management/Update_the_Gigabyte_Node_BIOS_Time.md).
+
 
 <a name="next-topic"></a>
 

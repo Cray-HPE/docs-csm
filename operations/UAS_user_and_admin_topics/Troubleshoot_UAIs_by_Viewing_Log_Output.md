@@ -1,3 +1,6 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: Troubleshoot Stale Brokered UAIs](Troubleshoot_Stale_Brokered_UAIs.md)
 
 ## Troubleshoot UAIs by Viewing Log Output
 
@@ -28,7 +31,7 @@ uai_status = "Running: Ready"
 username = "vers"
 ```
 
-Using this, find the UAI in question, remembering that end-user UAIs run in the `user` Kubernetes namespace and broker UAIs run in the `uas` Kubernetes namespace.
+Using this, find the UAI in question, remembering that End-User UAIs run in the `user` Kubernetes namespace and Broker UAIs run in the `uas` Kubernetes namespace.
 
 ```
 ncn-m001-pit# kubectl get po -n user | grep uai-vers-6da50e7a
@@ -62,7 +65,7 @@ ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519
 ...
 ```
 
-This can also be done for the broker using the broker UAI pod's name and the `uas` namespace:
+This can also be done for the broker using the Broker UAI pod's name and the `uas` namespace:
 
 ```
 ncn-m001-pit# kubectl logs -n uas uai-broker-2e6ce6b7-68d78c6c95-s28dh uai-broker-2e6ce6b7
@@ -78,4 +81,4 @@ Starting sssd...
 
 The above is from a successful broker starting and running.
 
-
+[Next Topic: Troubleshoot Stale Brokered UAIs](Troubleshoot_Stale_Brokered_UAIs.md)

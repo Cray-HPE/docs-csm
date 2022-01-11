@@ -1,0 +1,62 @@
+spec:
+  kubernetes:
+    services:
+      cray-spire:
+        cray-service:
+          sqlCluster:
+            resources:
+              requests:
+                cpu: "1"
+      cray-hms-smd:
+        cray-service:
+          sqlCluster:
+            resources:
+              requests:
+                cpu: "1"
+          containers:
+            cray-smd:
+              resources:
+                requests:
+                  cpu: "1"
+      cray-nexus:
+        sonatype-nexus:
+          nexus:
+            resources:
+              requests:
+                cpu: "2"
+      cray-metallb:
+        metallb:
+          speaker:
+            resources:
+              requests:
+                cpu: "1"
+      cray-hms-capmc:
+        cray-service:
+          containers:
+            cray-capmc:
+              resources:
+                requests:
+                  cpu: "500m"
+      sma-elasticsearch:
+        resources:
+          requests:
+            cpu: "1500m"
+      sma-zk-kafka:
+        kafkaReqCPU: "1"
+        zkReqCPU: "100m"
+      sma-grafana:
+        cray-service:
+          containers:
+            sma-grafana:
+              resources:
+                requests:
+                  cpu: "100m"
+      sma-kibana:
+        cray-service:
+          containers:
+            sma-kibana:
+              resources:
+                requests:
+                  cpu: "100m"
+      sma-postgres-cluster:
+        pgReqCPU: "500m"

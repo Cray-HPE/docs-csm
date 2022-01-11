@@ -284,7 +284,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
        host = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service.ims.svc.cluster.local"
        port = 22
        [ssh_containers.connection_info.customer_access]
-       host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com"
+       host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com"
        port = 22
        ```
 
@@ -308,7 +308,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
        ```bash
        ncn# export IMS_JOB_ID=ad5163d2-398d-4e93-94f0-2f439f114fe7
        ncn# export IMS_KUBERNETES_JOB=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize
-       ncn# export IMS_SSH_HOST=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com
+       ncn# export IMS_SSH_HOST=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com
        ncn# export IMS_SSH_PORT=22
        ```
 
@@ -367,7 +367,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     host = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service.ims.svc.cluster.local"
     port = 22
     [ssh_containers.connection_info.customer_access]
-    host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com"
+    host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com"
     port = 22
     ```
 
@@ -418,7 +418,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         ```bash
         ncn# ansible all -i $IMS_SSH_HOST, -m ping --ssh-extra-args " -p $IMS_SSH_PORT -i ./pod_rsa_key \
         -o StrictHostKeyChecking=no" -u root
-        ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com | SUCCESS => {
+        ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com | SUCCESS => {
             "changed": false,
             "ping": "pong"
         }
@@ -427,7 +427,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         This Ansible inventory file below can also be used. The private key \(`./pod_rsa_key`\) corresponds to the public key file the container has in its authorized\_keys file.
 
         ```bash
-        myimage-customize ansible_user=root ansible_host=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com ansible_port=22 \
+        myimage-customize ansible_user=root ansible_host=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com ansible_port=22 \
                           ansible_ssh_private_key_file=./pod_rsa_key ansible_ssh_common_args='-o \
                           StrictHostKeyChecking=no'
         ```
