@@ -509,7 +509,7 @@ baseline configuration during initial system installation.
 <a name="push-to-a-remote-repository"></a>
 #### 5.1 Push to a Remote Repository
 
-It is **strongly recommended** to that the site-init repository be maintained
+It is **strongly recommended** that the site-init repository be maintained
 off-cluster. Add a remote repository and push the baseline configuration on
 `master` branch to a corresponding remote branch.
 
