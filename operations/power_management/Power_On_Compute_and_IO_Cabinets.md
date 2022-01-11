@@ -72,5 +72,5 @@ After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers
 
 9.  Bring up the Slingshot Fabric.
     Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
-    -  The *Slingshot Administration Guide* PDF for HPE Cray EX system.
+    -  The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
     -  The *Slingshot Troubleshooting Guide* PDF.
