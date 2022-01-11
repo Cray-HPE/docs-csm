@@ -24,7 +24,7 @@ installation-centric artifacts such as:
 *   Cluster-wide network configuration settings required by Helm Charts
     deployed by product stream Loftsman Manifests
 *   [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
-*   Sealed Secret Generate Blocks -- an form of plain-text input that renders
+*   Sealed Secret Generate Blocks -- a form of plain-text input that renders
     to a Sealed Secret
 *   Helm Chart value overrides that are merged into Loftsman Manifests by
     product stream installers
