@@ -82,7 +82,7 @@ The following lists enumerate major improvements since CSM v0.9.x.
   - Helm charts should have a way to be automatically patched during Shasta installation.
   - HSM should add a timestamp to State Change Notifications (SCN) data before publishing to Kafka topic: cray-hmsstatechange-notifications.
   - End-of-Life Alpine and nginx container images must be removed for security purposes.
-  - CAPMC simulates reinit on hardware that does not support restart; see [CAPMC reinit and configuration](troubleshooting/CAPMC_reinit_and_config.md) for more information
+  - CAPMC simulates reinit on hardware that does not support restart; see [CAPMC reinit and configuration](troubleshooting/capmc/CAPMC_reinit_and_config.md) for more information
 
 ### Bug Fixes
 The following list enumerates the more important issues that were found and fixed in CSM v1.0.1. In total, there were more than 34 customer-reported issues and more than 350 development critical issues fixed in this release.
