@@ -1,12 +1,21 @@
 # Add a Liquid-Cooled Cabinet to SLS
 
-TODO This will add the new cabinet to the hardware part of SLS....
+This procedure adds one or more liquid-cooled cabinets and associated CDU management switches to SLS.
 
 ## Prerequisites
 
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   TODO Need information about what Liquid Cooled cabinets are being added to the system
--   TODO Need information about what CDU Switches (if any are being added to the system)
+-   Collect information for the liquid-cooled cabinets being added to the system. For each cabinet collect:
+    * Cabinet Xname (eg x1004)
+    * Hardware Management Network (HMN) VLAN ID configured on the CEC (eg 3004)
+    * Node Management Network (NMN) VLAN ID configured on the CEC (eg 2004)
+    * Starting compute node NID (eg 2025)
+    * Cabinet Type: Mountain (8 Chassis) or Hill (2 Chassis)
+
+-   Collect information for the CDU Switches (if any) being added to the system. For each CDU Management Switch collect:
+    - CDU Switch xname (eg d1w1)
+    - CDU Switch brand (eg Dell or Aruba)
+    - CDU Switch Alias (eg sw-cdu-004 )
 
 ## Procedure
 
@@ -17,16 +26,15 @@ TODO This will add the new cabinet to the hardware part of SLS....
     ```
 
 2.  **For each** new liquid-cooled cabinet being added to the system collect the following information about each cabinet:
-    > TODO Make this a table
     * Cabinet Xname (eg x1004)
-    * HMN VLAN ID configured on the CEC (eg 3004)
-    * NMN VLAN ID configured on the CEC (eg 2004)
+    * Hardware Management Network (HMN) VLAN ID configured on the CEC (eg 3004)
+    * Node Management Network (NMN) VLAN ID configured on the CEC (eg 2004)
     * Starting compute node NID (eg 2025)
     * Cabinet Type (Mountain (8 Chassis) or Hill (2 Chassis))
 
-    > The inspect_nid_allocations.py script can be used to help determine the existing NID allocations in use by the system:
+    > The inspect_sls_cabinets.py script can be used to help display information about existing cabinets present in the system:
     > ```bash
-    > ncn-m001# ./inspect_nid_alloacations.py sls_dump.json    
+    > ncn-m001# /usr/share/doc/csm/operations/system_layout_service/scripts/inspect_sls_cabinets.py sls_dump.json    
     > ```
     > Example Output with a system with 1 Air-cooled cabinet and 4 liquid-cooled cabinets:
     > ```
@@ -53,13 +61,22 @@ TODO This will add the new cabinet to the hardware part of SLS....
     > x3000 (River)       | 1513      | 10.107.0.0/22       | 1770      | 10.106.0.0/22
     > ```
 
-3.  **For each** new liquid-cooled add it to the SLS state dump taken in step 1:
+3.  **For each** new liquid-cooled cabinet add it to the previously taken SLS state dump in __ascending order__:
+    Command line flags for `add_liquid_cooled_cabinet.py`:
+    | Argument             | Description                                                       | Example value        |
+    | -------------------- | ----------------------------------------------------------------- | -------------------- |
+    | `--cabinet`          | Xname of the liquid-cooled cabinet to add                         | `x1000`              |
+    | `--cabinet-type`     | Type of liquid-cooled cabinet to add                              | `Mountain` or `Hill` |
+    | `--cabinet-vlan-hmn` | Hardware Management Network (HMN) VLAN ID configured on the CEC   | `3004`               |
+    | `--cabinet-vlan-nmn` | Node Management Network (NMN) VLAN ID configured on the CEC       | `2004`               |
+    | `--starting-nid`     | Starting NID for new cabinet. Each cabinet is allocated 256 NIDs. | `2024`               |
+
     ```bash
-    ncn-m001# ./add_liquid_cooled_cabinet.py sls_dump.json \
+    ncn-m001# /usr/share/doc/csm/operations/system_layout_service/scripts/add_liquid_cooled_cabinet.py sls_dump.json \
         --cabinet x1004  \
         --cabinet-type Mountain \
         --cabinet-vlan-hmn 3004 \
-        --cabinet-vlan-nmn 3005 \
+        --cabinet-vlan-nmn 2004 \
         --starting-nid 2024
     ```
 
@@ -73,7 +90,7 @@ TODO This will add the new cabinet to the hardware part of SLS....
     Cabinet:           x1004
     Cabinet Type:      Mountain
     Cabinet VLAN HMN:  3004
-    Cabinet VLAN NMN:  3005
+    Cabinet VLAN NMN:  2004
 
     ========================
     Network Configuration
@@ -102,41 +119,23 @@ TODO This will add the new cabinet to the hardware part of SLS....
       DHCP Start:  10.100.16.10
       DHCP End:    10.100.19.254
 
+    Next available NID 2280
     Writing updated SLS state to sls_dump.json
     ```
 
+    **Note** if adding more than 1 cabinet and contiguous NIDs are desired the value of the `Next available NID 2280` can be used as the value to the `--start-nid` argument when adding the next cabinet.
+
     Possible Errors:
-    -   **Error**: Duplicate Cabinet:
-        ```
-        Error x1000 already exists in sls_dump.json!
-        ```
-
-        **Resolution**: TODO
-
-    -   **Error**: Duplicate NID values:
-        ```
-        Error found duplicate NID 3000
-        ``` 
-
-        **Resolution**: Need to choose a different starting NID value for the cabinet.
-
-    -   **Error**: Duplicate Cabinet HMN VLAN ID:
-        ```
-        Error found duplicate VLAN 3022 with subnet cabinet_1001 in HMN_MTN
-        ```
-
-        **Resolution**: Ensure that the this new cabinet gets an unique HMN VLAN ID. 
-    
-    -   **Error**: Duplicate Cabinet NMN VLAN ID:
-        ```
-        Error found duplicate VLAN 3023 with subnet cabinet_1001 in NMN_MTN
-        ```
-
-        **Resolution**: Ensure that the this new cabinet gets an unique NMN VLAN ID. 
+    | Problem                        | Error Message                                                         | Resolution |
+    | ------------------------------ | --------------------------------------------------------------------- | ---------- |
+    | Duplicate Cabinet Xname        | `Error x1000 already exists in sls_dump.json!`                        | The cabinet has already present in SLS. Ensure the new cabinet has a unique xname. |
+    | Duplicate NID values           | `Error found duplicate NID 3000`                                      | Need to choose a different starting NID value for the cabinet that does not overlap. |
+    | Duplicate Cabinet HMN VLAN ID: | `Error found duplicate VLAN 3022 with subnet cabinet_1001 in HMN_MTN` | Ensure that the this new cabinet gets an unique HMN VLAN ID. |
+    | Duplicate Cabinet NMN VLAN ID  | `Error found duplicate VLAN 3023 with subnet cabinet_1001 in NMN_MTN` | Ensure that the this new cabinet gets an unique NMN VLAN ID. | 
 
 4.  Inspect cabinet subnet and VLAN allocations in the system after adding the new cabinets cabinets:
     ```bash
-    ncn-m001# ./inspect_sls_cabinets.py sls_dump.json 
+    ncn-m001# /usr/share/doc/csm/operations/system_layout_service/scripts/inspect_sls_cabinets.py sls_dump.json 
     ```
 
     Example output:
@@ -162,7 +161,7 @@ TODO This will add the new cabinet to the hardware part of SLS....
     x1001 (Mountain)    | 3001      | 10.104.4.0/22       | 2001      | 10.100.4.0/22
     x1002 (Mountain)    | 3002      | 10.104.8.0/22       | 2002      | 10.100.8.0/22
     x1003 (Mountain)    | 3003      | 10.104.12.0/22      | 2003      | 10.100.12.0/22
-    x1004 (Mountain)    | 3004      | 10.104.16.0/22      | 3005      | 10.100.16.0/22
+    x1004 (Mountain)    | 3004      | 10.104.16.0/22      | 2004      | 10.100.16.0/22
     x3000 (River)       | 1513      | 10.107.0.0/22       | 1770      | 10.106.0.0/22
     ```
 
@@ -172,17 +171,64 @@ TODO This will add the new cabinet to the hardware part of SLS....
     - CDU Switch Alias (eg sw-cdu-004 )
 
 
-6.  **For each** new CDU Switch add it to the SLS state dump taken in step 1:
-    > TODO Add each switch in ascending alias order
+6.  **For each** new CDU Switch add it to the SLS state dump taken in step 1 in __ascending order__ based on the switch alias:
     ```bash
-    ncn-m001# ./add_cdu_switch.py sls_dump.json \
+    ncn-m001# /usr/share/doc/csm/operations/system_layout_service/scripts/add_cdu_switch.py sls_dump.json \
         --cdu-switch d1w1 \
-        --alias sw-spine-cdu-003 \
+        --alias sw-cdu-003 \
         --brand Dell
     ```
 
+    Example output:
+    ```
+    ========================
+    Configuration
+    ========================
+    SLS State File: sls_dump.json
+    CDU Switch:     d1w1
+    Brand:          Dell
+    Alias:          sw-cdu-003
 
-7.  Perform a SLS load state operation to replace the contents of SLS with the data from the `sls_dump.json` file.
+    ================================
+    CDU Switch Network Configuration
+    ================================
+    Selecting IP Reservation for d1w1 CDU Switch in HMN's network_hardware subnet
+    Found existing IP reservation sw-spine-001 with IP 10.254.0.2
+    Found existing IP reservation sw-spine-002 with IP 10.254.0.3
+    Found existing IP reservation sw-leaf-bmc-001 with IP 10.254.0.4
+    Found existing IP reservation sw-leaf-bmc-002 with IP 10.254.0.5
+    Found existing IP reservation sw-cdu-001 with IP 10.254.0.6
+    Found existing IP reservation sw-cdu-002 with IP 10.254.0.7
+    10.254.0.8 Available for use.
+    Selecting IP Reservation for d1w1 CDU Switch in NMN's network_hardware subnet
+    Found existing IP reservation sw-spine-001 with IP 10.252.0.2
+    Found existing IP reservation sw-spine-002 with IP 10.252.0.3
+    Found existing IP reservation sw-leaf-bmc-001 with IP 10.252.0.4
+    Found existing IP reservation sw-leaf-bmc-002 with IP 10.252.0.5
+    Found existing IP reservation sw-cdu-001 with IP 10.252.0.6
+    Found existing IP reservation sw-cdu-002 with IP 10.252.0.7
+    10.252.0.8 Available for use.
+    Selecting IP Reservation for d1w1 CDU Switch in MTL's network_hardware subnet
+    Found existing IP reservation sw-spine-001 with IP 10.1.0.2
+    Found existing IP reservation sw-spine-002 with IP 10.1.0.3
+    Found existing IP reservation sw-leaf-bmc-001 with IP 10.1.0.4
+    Found existing IP reservation sw-leaf-bmc-002 with IP 10.1.0.5
+    Found existing IP reservation sw-cdu-001 with IP 10.1.0.6
+    Found existing IP reservation sw-cdu-002 with IP 10.1.0.7
+    10.1.0.8 Available for use.
+
+    HMN IP: 10.254.0.8
+    NMN IP: 10.252.0.8
+    MTL IP: 10.1.0.8
+
+    Writing updated SLS state to sls_dump.json
+    ```
+7. Inspect the differences between the original SLS state file and the modified one:
+    ```bash
+    ncn-m001# diff sls_dump.original.json sls_dump.json
+    ```
+
+8.  Perform a SLS load state operation to replace the contents of SLS with the data from the `sls_dump.json` file.
     
     Get an API Token:
     ```bash
@@ -198,7 +244,7 @@ TODO This will add the new cabinet to the hardware part of SLS....
         https://api-gw-service-nmn.local/apis/sls/v1/loadstate
     ```
 
-8.  MEDS will automatically start looking for potential hardware in the newly added liquid-cooled cabinets. 
+9.  MEDS will automatically start looking for potential hardware in the newly added liquid-cooled cabinets. 
 
     **Note**: No hardware in these new cabinets until the management network has been reconfigured to add the new cabinets, and routes has been added to teh management NCNs in the system.
     <!-- TODO Need to add links to these 2 procedures --/>
