@@ -1,5 +1,27 @@
 #! /usr/bin/env python3
 
+# MIT License
+#
+# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+
 import argparse
 import json
 import re
@@ -69,7 +91,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("sls_state_file", type=str, help="SLS State file to modify")
 parser.add_argument("--cabinet", type=str, required=True, help="Cabinet xname to add, ex: x1000")
 parser.add_argument("--cabinet-type", type=str, required=True, help="Cabinet type", choices={"Hill", "Mountain"})
-parser.add_argument("--cabinet-vlan-hmn", type=int, required=True, help="Cabinet HMN vlan add, ex: 1000")
+parser.add_argument("--cabinet-vlan-hmn", type=int, required=True, help="Hardware Management Network (HMN) VLAN ID configured on the CEC, ex: 1000")
 parser.add_argument("--cabinet-vlan-nmn", type=int, required=True, help="Cabinet NMN vlan add, ex: 2000")
 parser.add_argument("--starting-nid", type=int, required=True, help="Starting NID for new cabinet, ex: 1000")
 args = parser.parse_args()
@@ -106,7 +128,7 @@ allNetworks = sls_state["Networks"]
 #
 
 # Add Hardware required for Hill or Mountain Cabinet
-#   If this peices of hardware already exists, stop!
+#   If this pieces of hardware already exists, stop!
 #
 # Cabinet
 # ChassisBMC
@@ -161,7 +183,7 @@ for chassis in chassis_list:
 
     for slot in range(8):
         for bmc in range(2):
-            nodeBMCXname = "{}s{}b{}".format(chassisBMCXname, slot, bmc)
+            nodeBMCXname = "{}s{}b{}".format(chassisXname, slot, bmc)
             for node in range(2):
                 nodeXname = "{}n{}".format(nodeBMCXname, node)
 
@@ -231,13 +253,24 @@ print("========================")
 hmn_subnet = add_cabinet_subnet(allNetworks["HMN_MTN"], args.cabinet, args.cabinet_vlan_hmn)
 nmn_subnet = add_cabinet_subnet(allNetworks["NMN_MTN"], args.cabinet, args.cabinet_vlan_nmn)
 
+cabinet_networks = allHardware[args.cabinet]["ExtraProperties"]["Networks"]["cn"]
+cabinet_networks["HMN"]["CIDR"] = hmn_subnet["CIDR"]
+cabinet_networks["HMN"]["Gateway"] = hmn_subnet["Gateway"]
+cabinet_networks["HMN"]["VLan"] = hmn_subnet["VlanID"]
+
+cabinet_networks["NMN"]["CIDR"] = nmn_subnet["CIDR"]
+cabinet_networks["NMN"]["Gateway"] = nmn_subnet["Gateway"]
+cabinet_networks["NMN"]["VLan"] = nmn_subnet["VlanID"]
+
 print()
 print("HMN_MTN Subnet")
+print("  VlanID:     ", hmn_subnet["VlanID"])
 print("  CIDR:       ", hmn_subnet["CIDR"])
 print("  Gateway:    ", hmn_subnet["Gateway"])
 print("  DHCP Start: ", hmn_subnet["DHCPStart"])
 print("  DHCP End:   ", hmn_subnet["DHCPEnd"])
 print("NMN_MTN Subnet")
+print("  VlanID:     ", nmn_subnet["VlanID"])
 print("  CIDR:       ", nmn_subnet["CIDR"])
 print("  Gateway:    ", nmn_subnet["Gateway"])
 print("  DHCP Start: ", nmn_subnet["DHCPStart"])
@@ -258,6 +291,8 @@ for network in ["HMN_MTN", "NMN_MTN"]:
         vlanSet.add(vlan)
 if foundDuplicateVlans:
     exit(1)
+
+print("Next available NID", currentNID)
 
 # Write out the updated SLS dump
 print("Writing updated SLS state to", args.sls_state_file)
