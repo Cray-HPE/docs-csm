@@ -93,9 +93,9 @@ with system-specific customizations.
     * `spec.kubernetes.sealed_secrets.cray_meds_credentials`
     * `spec.kubernetes.sealed_secrets.cray_hms_rts_credentials`
 
-    Replace the `Password` references with values appropriate for your system. See
+    Replace the `Password` references with values appropriate for your system.
     Edit `customizations.yaml`, replacing the `Password` references with values appropriate for your system. See
-    the `Decrypting Sealed Secrets for Review` section of [Sealed Secrets Procedures](../operations/kubernetes/Sealed_Secrets_Procedures.md)
+    the `Decrypt Sealed Secrets for Review` section of [Manage Sealed Secrets](../operations/security_and_authentication/Manage_Sealed_Secrets.md#decrypt-sealed-secrets-for-review)
     if you need to examine credentials from prior installs.
 
 1. Review the changes that you made:
@@ -406,41 +406,48 @@ with system-specific customizations.
 
 1.  Configure the Unbound DNS resolver.
 
-  If a valid DNS server was defined using the CSI `--site-dns` option then no further action is required and the default configuration will suffice.
+    If access to a site DNS server is required and this DNS server was specified using the CSI `--site-dns` option then no further action is required.
 
-  Default configuration:
+    The default configuration is as follows:
 
-  ```
-  cray-dns-unbound:
-      domain_name: '{{ network.dns.external }}'
-      forwardZones:
-        - name: "."
-          forwardIps:
-            - "{{ network.netstaticips.system_to_site_lookups }}"
-  ```
-    
-   If there is no requirement to resolve external hostnames or no upstream DNS server
-    then remove the DNS forwarding configuration from the `cray-dns-unbound` service. 
+    ```
+    cray-dns-unbound:
+        domain_name: '{{ network.dns.external }}'
+        forwardZones:
+          - name: "."
+            forwardIps:
+              - "{{ network.netstaticips.system_to_site_lookups }}"
+    ```
 
- 
-   1. Remove the `forwardZones` configuration for the `cray-dns-unbound` service:
+    The configured site DNS server can be verified by inspecting the value set for `system_to_site_lookups`.
 
-      ```bash
-      linux# yq delete -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound.forwardZones
-      ```
+    ```
+    # yq r /mnt/pitdata/prep/site-init/customizations.yaml spec.network.netstaticips.system_to_site_lookups
+    172.30.84.40
+    ```
+
+    If there is no requirement to resolve external hostnames or no upstream DNS server
+    then remove the DNS forwarding configuration from the `cray-dns-unbound` service.
+
+    1. Remove the `forwardZones` configuration for the `cray-dns-unbound` service:
+
+       ```bash
+       linux# yq delete -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound.forwardZones
+       ```
 
     1. Review the `cray-dns-unbound` values.
 
-      ```bash
-      linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
-      ```
+       ```bash
+       linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
+       ```
 
-      Expected output is:
+       Expected output is:
 
-      ```
-	  domain_name: '{{ network.dns.external }}'
-      ```
-      > **`IMPORTANT`** **Do not** remove the `domain_name` entry, it is required for Unbound to forward requests to PowerDNS correctly.
+       ```
+	   domain_name: '{{ network.dns.external }}'
+       ```
+
+       > **`IMPORTANT`** **Do not** remove the `domain_name` entry, it is required for Unbound to forward requests to PowerDNS correctly.
 
 1. Configure PowerDNS zone transfer and DNSSEC (optional)
 
