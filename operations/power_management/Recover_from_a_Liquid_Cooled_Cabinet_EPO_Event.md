@@ -77,7 +77,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
 7.  Bring up the Slingshot Fabric.
     Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
-    -  The *Slingshot Administration Guide* PDF for HPE Cray EX system.
+    -  The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
     -  The *Slingshot Troubleshooting Guide* PDF.
 
 8.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
