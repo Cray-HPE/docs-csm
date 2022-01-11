@@ -48,7 +48,7 @@ modified to include a CapmcConfiguration section.
         ```
         To change a setting, uncomment the line and modify the setting to a valid value.
 
-    1. Save and exit from the confimap.
+    1. Save and exit from the ConfigMap.
 
 1. Restart CAPMC.
 
