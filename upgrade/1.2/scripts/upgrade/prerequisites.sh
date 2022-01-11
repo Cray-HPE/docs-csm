@@ -218,41 +218,12 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="UPDATE_BSS_CLOUD_INIT_RECORDS"
+state_name="UPDATE_CLOUD_INIT_RECORDS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "${state_name} ..."
 
-    # get bss cloud-init data with host_records
-    curl -k -H "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global|jq .[] > cloud-init-global.json
-
-    # get ip of api-gw in nmn
-    ip=$(dig api-gw-service-nmn.local +short)
-
-    # get entry number to add record to
-    entry_number=$(jq '."cloud-init"."meta-data".host_records|length' cloud-init-global.json )
-
-    # check for record already exists and create the script to be idempotent
-    for ((i=0;i<$entry_number; i++)); do
-        record=$(jq '."cloud-init"."meta-data".host_records['$i']' cloud-init-global.json)
-        if [[ $record =~ "packages.local" ]] || [[ $record =~ "registry.local" ]]; then
-                echo "packages.local and registry.local already in BSS cloud-init host_records"
-        fi
-    done
-
-    # create the updated json
-    jq '."cloud-init"."meta-data".host_records['$entry_number']|= . + {"aliases": ["packages.local", "registry.local"],"ip": "'$ip'"}' cloud-init-global.json  > cloud-init-global_update.json
-
-    # post the update json to bss
-    curl -s -k -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" \
-        --request PUT \
-        --data @cloud-init-global_update.json \
-        https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
-
-    # perform additional cloud-init updates
-    for upgrade_ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' '); do
-        . ${BASEDIR}/ncn-upgrade-cloud-init.sh $upgrade_ncn
-    done
+    csi upgrade metadata --1-0-to-1-2 
 
     record_state ${state_name} $(hostname)
     echo
