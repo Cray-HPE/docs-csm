@@ -92,14 +92,4 @@ To prevent any possibility of losing configuration data, backup the VCS data and
 
 **`IMPORTANT:`** As part of this stage, **only perform the backup, not the restore**. The backup procedure is being done here as a precautionary step.
 
-## Stage 0.5 - Update the Storage Node runcmds for reboots
-
-To prevent accidental storage cloud-init runs and also to ensure the Ceph services are set to auto-start on boot, please run the below script.
-
-On ncn-m001:
-
-```bash
-python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
-```
-
 Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).
