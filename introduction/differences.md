@@ -29,6 +29,7 @@ The most noteworthy changes since the previous release are described here.
          * Rome-Based HPE DL 385(v1) Gen10
    * Node consoles are now managed by cray-console-node which is based on conman.
    * HSM now has a v2 REST API
+   * CAPMC simulates reinit on hardware that does not support restart [CAPMC reinit and configuration](../introduction/CAPMC_reinit_and_config.md)
 
 <a name="deprecating_features"></a>
 ### Deprecating Features
