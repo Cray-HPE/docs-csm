@@ -171,17 +171,6 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="INSTALL_WAR_DOC"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-
-    rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "csm-install-workarounds-*.rpm") 
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
 state_name="UPDATE_DOC_RPM"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
