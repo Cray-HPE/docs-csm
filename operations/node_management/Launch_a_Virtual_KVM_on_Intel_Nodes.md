@@ -1,15 +1,15 @@
 ## Launch a Virtual KVM on Intel Servers
 
-This procedure shows how to launch a virtual KVM to connect to an Intel server. The virtual KVM can be launched on any host that is on the same network as the server's BMC. This method of connecting to a server is frequently used during system installation.
+This procedure shows how to launch a virtual KVM to connect to an Intel node. The virtual KVM can be launched on any host that is on the same network as the nodes's BMC. This method of connecting to a nodes is frequently used during system installation.
 
 ### Prerequisites
 
 -   A laptop or workstation with a browser and access to the Internet
--   The externally visible BMC IP address of the server's integrated BMC
+-   The externally visible BMC IP address of the nodes's integrated BMC
 
 ### Procedure
 
-1.  Connect to the server's BMC by entering the externally visible BMC IP address in the address bar of a web browser.
+1.  Connect to the nodes's BMC by entering the externally visible BMC IP address in the address bar of a web browser.
 
     The login page appears.
 
@@ -44,9 +44,9 @@ This procedure shows how to launch a virtual KVM to connect to an Intel server. 
 
         ![Java iKVM Viewer](../../img/operations/Java_iKVM_Viewer.png "Java iKVM Viewer")
 
-    The virtual KVM \(iKVM Viewer\) is ready to use. There is now a virtual iKVM session connected to the server that enables control via the web similar to standing directly in front of the physical KVM.
+    The virtual KVM \(iKVM Viewer\) is ready to use. There is now a virtual iKVM session connected to the nodes that enables control via the web similar to standing directly in front of the physical KVM.
 
-    **Troubleshooting:** If the interface appears to lock up while working in the BMC menus \(often encountered when creating virtual drives\), it may be necessary to reset the server using **Power Control** \> **Power Reset**.
+    **Troubleshooting:** If the interface appears to lock up while working in the BMC menus \(often encountered when creating virtual drives\), it may be necessary to reset the nodes using **Power Control** \> **Power Reset**.
 
 
 

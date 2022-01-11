@@ -2,7 +2,7 @@
 
 This procedure will install CSM applications and services into the CSM Kubernetes cluster.
 
-> **Node:** Check the information in [Known Issues](#known-issues) before starting this procedure to be warned about possible problems.
+> **NOTE:** Check the information in [Known Issues](#known-issues) before starting this procedure to be warned about possible problems.
 
 ### Topics:
    1. [Initialize Bootstrap Registry](#initialize-bootstrap-registry)
@@ -13,10 +13,10 @@ This procedure will install CSM applications and services into the CSM Kubernete
    1. [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
    1. [Apply Pod Priorities](#apply-pod-priorities)
    1. [Apply After Sysmgmt Manifest Workarounds](#apply-after-sysmgmt-manifest-workarounds)
+   1. [Wait For Everything To Settle](#wait-for-everything-to-settle)
    1. [Known Issues](#known-issues)
       * [`install.sh` Known Issues](#known-issues-install-sh)
    1. [Next Topic](#next-topic)
-
 
 ## Details
 
@@ -174,6 +174,8 @@ This is expected and can safely be ignored.
 
 <a name="deploy-csm-applications-and-services"></a>
 ### 4. Deploy CSM Applications and Services
+
+> **NOTE**: During this step, on (only) TDS systems with three worker nodes the `customizations.yaml` file will be edited (automatically) to lower pod CPU requests for some services in order to better facilitate scheduling on smaller systems. See the file: `/var/www/ephemeral/${CSM_RELEASE}/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified with different values (prior to executing the `install.sh` script below) if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/CSM_product_management/Post_Install_Customizations.md).
 
 Run `install.sh` to deploy CSM applications services. This command may take 25 minutes or more to run.
 
@@ -368,11 +370,17 @@ After running the `add_pod_priority.sh` script, the affected pods will be restar
 
 Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `after-sysmgmt-manifest` breakpoint.
 
+<a name="wait-for-everything-to-settle"></a>
+### 9. Wait For Everything To Settle
+
+Wait **at least 15 minutes** to let the various Kubernetes resources get initialized and started before proceeding with the rest of the install.
+Because there are a number of dependencies between them, some services are not expected to work immediately after the install script completes.
+
 <a name="known-issues"></a>
-### 9. Known Issues
+### 10. Known Issues
 
 <a name="known-issues-install-sh"></a>
-#### 9.1 `install.sh` Known Issues
+#### 10.1 `install.sh` Known Issues
 
 The `install.sh` script changes cluster state and should not simply be rerun
 in the event of a failure without careful consideration of the specific
@@ -414,7 +422,7 @@ The following error may occur when running `./install.sh`:
   4. Running `install.sh` again is expected to succeed.
 
 <a name="next-topic"></a>
-# 10. Next Topic
+# 11. Next Topic
 
    After completing this procedure the next step is to redeploy the PIT node.
 

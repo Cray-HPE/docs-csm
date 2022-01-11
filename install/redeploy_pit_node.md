@@ -74,7 +74,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         pit# popd
         ```
 
-    1. Start the new script:
+    1. Start the new script on the PIT node.
 
         > The prompts below are removed for easier copy-paste. This step is only useful as a whole.
 
@@ -216,7 +216,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         pit# ssh ncn-m002 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
         "mkdir -pv /metal/bootstrap
         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
-        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete  pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
+        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
 
         ```bash
@@ -232,11 +232,11 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     pit# efibootmgr | grep -Ei "ip(v4|4)"
     ```
 
-1. Set the boot order and trim the boot order on the PIT node.
+1. Set and trim the boot order on the PIT node.
 
-    In [Deploy Management Nodes](deploy_management_nodes.md#configure-and-trim-uefi-entries), this procedure was done on the other NCNs. Now it is time to do it on the PIT node. See [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
+    This only needs to be done for the PIT node, not for any of the other NCNs. For the procedures to do this, see [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
 
-1. Tell the node to PXE boot on the next boot. 
+1. Tell the PIT node to PXE boot on the next boot. 
    
    Use `efibootmgr` to set the next boot device to the first PXE boot option. This step assumes the boot order was set up in the previous step.
 
@@ -344,13 +344,15 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     pit# reboot
     ```
 
-1. After the node boots, acquire its hostname (i.e. `ncn-m001`), and run cloud-init.
+1. Wait for the node to boot, acquire its hostname (i.e. `ncn-m001`), and run cloud-init.
+
+    If all of that happens successfully, **skip the rest of this step and proceed to the next step**. Otherwise, use the following information to remediate the problems.
 
     > **NOTE:**: If the nodes has PXE boot issues, such as getting PXE errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](pxe_boot_troubleshooting.md).
 
     > **NOTE:** If `ncn-m001` did not run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
 
-    1. Run the following commands:
+    * Run the following commands on `ncn-m001` **ONLY IF** `ncn-m001` did not run all the cloud-init scripts:
 
         ```bash
         ncn-m001# cloud-init clean
@@ -373,7 +375,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
 1. Change the root password on `ncn-m001` if the pre-NCN deployment password change method was **not** used.
    
-   Run `passwd` on ncn-m001 and complete the prompts.
+   Run `passwd` on `ncn-m001` and complete the prompts.
 
     ```bash
     ncn-m001# passwd
@@ -446,21 +448,11 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     ncn-m001# rm -v /etc/zypp/repos.d/* && zypper ms --remote --disable
     ```
 
-1. Install the latest documentation and workaround packages. This will require external access.
+1. Download and install/upgrade the workaround and documentation RPMs. 
 
-   If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
+    If this machine does not have direct internet access these RPMs will need to be externally downloaded and then copied to this machine.
 
-   **IMPORTANT:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
-   were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
-
-   ```bash
-   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
-   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
-   linux# scp -p docs-csm-*rpm csm-install-workarounds-*rpm ncn-m001:/root
-   linux# ssh ncn-m001
-   ncn-m001# rpm -Uvh docs-csm-latest.noarch.rpm
-   ncn-m001# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
-   ```
+    **Important:** To ensure that the latest workarounds and documentation updates are available, see [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds)
 
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-post-reboot` breakpoint.
 
@@ -508,7 +500,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1.  **`IN-PLACE WORKAROUND`** Set the wipe safeguard to allow safe net-reboots. **This will set the safeguard on all NCNs**.
+1.  Set the wipe safeguard to allow safe net-reboots on all NCNs.
 
     ```bash
     ncn-m001# /tmp/csi handoff bss-update-param --set metal.no-wipe=1
@@ -517,7 +509,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 > **`CSI NOTE`** `/tmp/csi` will delete itself on the next reboot. The `/tmp` directory is `tmpfs` and runs in memory, it normally will not persist on restarts.
 
 <a name="fix-ntp-config-on-ncn-m001"></a>
-### 6. Fix the NTP Config on `ncn-m001`
+### 6. Fix the NTP Configuration on `ncn-m001`
 
 Run the following commands on `ncn-m001` **only**:
 
@@ -532,43 +524,66 @@ ncn-m001# cloud-init single --name ntp --frequency always
 
  > **`NOTE`** If the system uses Gigabyte nodes or Intel nodes, skip this section.
 
-The following steps will configure DNS and NTP on the BMC for each management node **except ncn-m001**.
+Configure DNS and NTP on the BMC for each management node **except `ncn-m001`**. 
 
-1. Set environment variables. Make sure to set the appropriate value for the `IPMI_PASSWORD` variable.
+The commands in this section are all run on `ncn-m001`, but they are being run **for** 
+every management node **except `ncn-m001`**. That is, the `NCN` variable in the first step
+will end up being set to every NCN name **except** `ncn-m001`.
+
+Carry out the following steps for every NCN **except** `ncn-m001`:
+
+1. Set environment variables. 
+
+    Make sure to set the appropriate value for the `IPMI_PASSWORD` variable and `NCN` variable.
+
+    This example is for `ncn-m002`, but you will be repeating this procedure for every NCN **except** `ncn-m001`.
 
     ```bash
     ncn-m001# export IPMI_PASSWORD=changeme
     ncn-m001# export USERNAME=root
+    ncn-m001# NCN=ncn-m002
     ```
 
 1. Disable DHCP and configure NTP on the BMC using data from cloud-init.
 
     ```bash
-    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -S -n
+    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${NCN}-mgmt" -S -n
     ```
 
 1. Configure DNS on the BMC using data from cloud-init.
 
     ```bash
-    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -d
+    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${NCN}-mgmt" -d
     ```
 
 1. (Optional) View the settings of the BMC:
 
     ```bash
-    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -s
+    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${NCN}-mgmt" -s
     ```
+
+1. Repeat the previous steps for all remaining NCNs **except `ncn-m001`**.
 
 <a name="validate-bootraid-artifacts"></a>
 ### 8. Validate `BOOTRAID` artifacts
 
-Perform the following steps **on ncn-m001**.
+Perform the following steps **on `ncn-m001`**.
 
 1. Initialize the Cray CLI on `ncn-m001`. See [Configure the Cray Command Line Interface](../operations/configure_cray_cli.md) for details on how to do this.
 
-1. Run the script to ensure the local BOOTRAID has a valid kernel and initrd
+1. Ensure that `ssh` works from `ncn-m001` to itself.
 
+    The following command must work before proceeding to the next step.
+
+    ```bash
+    ncn-m001# ssh ncn-m001 date
     ```
+
+1. Run the script to ensure the local BOOTRAID has a valid kernel and initrd.
+
+    This script will perform the check on all NCNs, including `ncn-m001`.
+
+    ```bash
     ncn-m001# /opt/cray/tests/install/ncn/scripts/validate-bootraid-artifacts.sh
     ```
 
