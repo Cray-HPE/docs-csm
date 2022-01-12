@@ -62,8 +62,6 @@ hmn_cabinet_subnets=$(echo "${cabinet_networks}" | jq -r ". | select(.NetworkNam
 # MTL
 mtl_cidr=$(echo "${nmn_hmn_networks}" | jq -r ". | select(.NetworkName==\"MTL\") | .SubnetCIDR")
 [[ -n ${mtl_cidr} ]] || on_error "MTL CIDR not found"
-mtl_gateway=$(echo "${nmn_hmn_networks}" | jq -r ". | select(.NetworkName==\"MTL\") | .Gateway")
-[[ -n ${mtl_gateway} ]] || on_error "MTL gateway not found"
 
 # Create the routing files first so we can fan it out to all the NCNs later.
 local_nmn_route_file="./ifroute-bond0.nmn0"
@@ -78,7 +76,7 @@ nmn_routes=()
 for rt in $nmn_cabinet_subnets; do
     nmn_routes+=("$rt $nmn_gateway - bond0.nmn0")
 done
-nmn_routes+=("$mtl_cidr $mtl_gateway - bond0.nmn0")
+nmn_routes+=("$mtl_cidr $nmn_gateway - bond0.nmn0")
 nmn_routes+=("$nmnlb_cidr $nmn_gateway - bond0.nmn0")
 
 hmn_routes=()
@@ -92,13 +90,15 @@ printf -v hmn_routes_string '%s\n' "${hmn_routes[@]}"
 
 echo "Contents of $local_nmn_route_file"
 echo "${nmn_routes_string}"
+echo
 echo "Contents of $local_hmn_route_file"
 echo "${hmn_routes_string}"
+echo
 
 echo "Writing $local_nmn_route_file"
-echo "${nmn_routes_string}" > $local_nmn_route_file
+echo -n "${nmn_routes_string}" > $local_nmn_route_file
 echo "Writing $local_hmn_route_file"
-echo "${hmn_routes_string}" > $local_hmn_route_file
+echo -n "${hmn_routes_string}" > $local_hmn_route_file
 
 for ncn in $ncns; do
   echo "Adding routes to $ncn."
