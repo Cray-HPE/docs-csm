@@ -77,8 +77,8 @@ nmn_routes=()
 for rt in $nmn_cabinet_subnets; do
     nmn_routes+=("$rt $nmn_gateway - bond0.nmn0")
 done
-nmn_routes+=("$nmnlb_cidr $nmn_gateway - bond0.nmn0")
 nmn_routes+=("$mtl_cidr $mtl_gateway - bond0.nmn0")
+nmn_routes+=("$nmnlb_cidr $nmn_gateway - bond0.nmn0")
 
 hmn_routes=()
 for rt in $hmn_cabinet_subnets; do
