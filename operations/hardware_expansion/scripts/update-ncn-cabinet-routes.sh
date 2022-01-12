@@ -100,6 +100,9 @@ echo -n "${nmn_routes_string}" > $local_nmn_route_file
 echo "Writing $local_hmn_route_file"
 echo -n "${hmn_routes_string}" > $local_hmn_route_file
 
+echo "Querying SLS for Managment NCNs"
+ncns=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | jq -r '.[] | ."ExtraProperties" | ."Aliases" | .[]' | sort)
+
 for ncn in $ncns; do
   echo "Adding routes to $ncn."
 
