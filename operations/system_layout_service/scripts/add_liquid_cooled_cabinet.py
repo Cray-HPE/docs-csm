@@ -159,24 +159,23 @@ for chassis in chassis_list:
     # Start with the CMM
     chassisXname = "{}{}".format(args.cabinet, chassis)
     chassisBMCXname = "{}b0".format(chassisXname)
-    # print(chassisBMCXname)
     
-    # Ideal ChassisBMC SLS Object
-    # chassisBMC = {
-    #     "Parent": chassisXname,
-    #     "Xname": chassisBMCXname,
-    #     "Type": "comptype_chassis_bmc",
-    #     "TypeString": "ChassisBMC",
-    #     "Class": args.cabinet_type,
-    # }
-    # hardwareToAdd.append(chassisBMC)
+    # ChassisBMC SLS Object
+    chassisBMC = {
+        "Parent": chassisXname,
+        "Xname": chassisBMCXname,
+        "Type": "comptype_chassis_bmc",
+        "TypeString": "ChassisBMC",
+        "Class": args.cabinet_type,
+    }
+    hardwareToAdd.append(chassisBMC)
 
-    # There is a bug in CSI that generates Chassis hardware object wrong, so the following will be used instead
+    # Chassis SLS Object
     chassis = {
         "Parent": args.cabinet,
         "Xname": chassisXname,
-        "Type": "comptype_chassis_bmc",
-        "TypeString": "ChassisBMC",
+        "Type": "comptype_chassis",
+        "TypeString": "Chassis",
         "Class": args.cabinet_type,
     }
     hardwareToAdd.append(chassis)
