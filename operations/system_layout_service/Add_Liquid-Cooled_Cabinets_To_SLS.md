@@ -1,6 +1,8 @@
-# Add a Liquid-Cooled Cabinet to SLS
+# Add Liquid-Cooled Cabinets to SLS
 
 This procedure adds one or more liquid-cooled cabinets and associated CDU management switches to SLS.
+
+**NOTE:** This procedure is intended to be used in conjunction with the top level [Add additional Liquid-Cooled Cabinets to a System](../node_management/Add_additional_Liquid-Cooled_Cabinets_to_a_System.md) procedure. 
 
 ## Prerequisites
 
@@ -15,7 +17,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 -   Collect information for the CDU Switches (if any) being added to the system. For each CDU Management Switch collect:
     - CDU Switch xname (eg d1w1)
     - CDU Switch brand (eg Dell or Aruba)
-    - CDU Switch Alias (eg sw-cdu-004 )
+    - CDU Switch Alias (eg sw-cdu-004)
 
 ## Procedure
 
