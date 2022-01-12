@@ -54,9 +54,14 @@ This procedure will use config from System Layout Service (SLS) to set up the pr
                           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-2.  Add cabinet routes to each of the NCNs using data from SLS:
+2.  Add cabinet routes to each of the management NCNs using data from SLS:
     ```bash
     ncn-m001# /usr/share/doc/csm/operations/hardware_expansion/scripts/update-ncn-cabinet-routes.sh
+    ```
+
+    If the following message appears, it means the route being added is already present on the NCN and can be safely ignored.
+    ```
+    RTNETLINK answers: File exists
     ```
 
 3.  Create payload to update the cloud-init user data for management NCNs in BSS to contain the updated cabinet route information:
@@ -84,5 +89,9 @@ This procedure will use config from System Layout Service (SLS) to set up the pr
 
 4.  Update BSS cloud init user data for the management NCNs:
     ```bash
-    ncn-m001# csi handoff bss-update-cloud-init --user-data=write-files-user-data.json
+    ncn-m001# ncn_xnames=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | jq -r '.[] | .Xname' | sort)
+    ncn-m001# for ncn in $ncn_xnames; do 
+        echo "Updating BSS for $ncn"
+        csi handoff bss-update-cloud-init --user-data=write-files-user-data.json --limit=${ncn}
+    done
     ```
