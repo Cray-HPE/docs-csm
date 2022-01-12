@@ -19,7 +19,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 
 ## Procedure
 
-1.  Perform a SLS dumpstate operation:
+1.  Perform a SLS dump state operation:
     ```bash
     ncn-m001# cray sls dumpstate list --format json > sls_dump.json
     ncn-m001# cp sls_dump.json sls_dump.original.json
@@ -128,8 +128,8 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     Possible Errors:
     | Problem                        | Error Message                                                         | Resolution |
     | ------------------------------ | --------------------------------------------------------------------- | ---------- |
-    | Duplicate Cabinet Xname        | `Error x1000 already exists in sls_dump.json!`                        | The cabinet has already present in SLS. Ensure the new cabinet has a unique xname. |
-    | Duplicate NID values           | `Error found duplicate NID 3000`                                      | Need to choose a different starting NID value for the cabinet that does not overlap. |
+    | Duplicate Cabinet Xname        | `Error x1000 already exists in sls_dump.json!`                        | The cabinet has already present in SLS. Ensure the new cabinet has a unique xname, Or the cabinet is already present in SLS. |
+    | Duplicate NID values           | `Error found duplicate NID 3000`                                      | Need to choose a different starting NID value for the cabinet that does not overlap with existing nodes. |
     | Duplicate Cabinet HMN VLAN ID: | `Error found duplicate VLAN 3022 with subnet cabinet_1001 in HMN_MTN` | Ensure that the this new cabinet gets an unique HMN VLAN ID. |
     | Duplicate Cabinet NMN VLAN ID  | `Error found duplicate VLAN 3023 with subnet cabinet_1001 in NMN_MTN` | Ensure that the this new cabinet gets an unique NMN VLAN ID. | 
 
