@@ -10,7 +10,6 @@ directory which contains important customizations for various products.
    1. [Generate Sealed Secrets](#generate-sealed-secrets)
    1. [Version Control Site-Init Files](#version-control-site-init-files)
       1. [Push to a Remote Repository](#push-to-a-remote-repository)
-   1. [Patch cloud-init with the CA](#patch-cloud-init-with-the-ca)
    1. [Customer-Specific Customizations](#customer-specific-customizations)
 
 ## Details
@@ -51,9 +50,6 @@ installation-centric artifacts such as:
     ```bash
     linux# /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/meta/init.sh /mnt/pitdata/prep/site-init
     ```
-    **`IMPORTANT`** The output of this command states that customizations.yaml should be reviewed and updated before
-    running the secrets-reencrypt.sh and secrets-seed-customizations.sh scripts. These two scripts will be run
-    later in this document, do not run them at this time.
 
 1.  The `yq` tool used in the following procedures is available under
 `/mnt/pitdata/prep/site-init/utils/bin` once the SHASTA-CFG repo has been
@@ -160,7 +156,7 @@ with system-specific customizations.
            > environment.
 
            ```bash
-           linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
+           linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim
            ```
         1.  Get the issuer certificate for the LDAP server at port 636. Use `openssl s_client` to connect
             and show the certificate chain returned by the LDAP host:
@@ -246,9 +242,10 @@ with system-specific customizations.
             > **`NOTE`** The alias used in this command for `cray-data-center-ca` should be changed to match your LDAP.
 
             ```bash
-            linux# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
-            -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
-            -storepass password -noprompt
+            linux# podman run --rm -v "$(pwd):/data" \
+            artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim keytool \
+            -importcert -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca \
+            -keystore /data/certs.jks -storepass password -noprompt
             ```
 
         1.  Create `certs.jks.b64` by base-64 encoding `certs.jks`:
@@ -363,38 +360,95 @@ with system-specific customizations.
            ldapSearchBase: dc=dcldap,dc=dit
            ```
 
-1.  If you need to resolve outside hostnames, you will need to configure
-    forwarding in the cray-dns-unbound service. For example, if you are using a
-    hostname and not an IP address for the upstream LDAP server in step 4 above, you
-    will need to be able to resolve that hostname.
+1.  Configure the Unbound DNS resolver.
 
-    1. Set the `forwardZones` for the `cray-dns-unbound` service:
+    If access to a site DNS server is required and this DNS server was specified using the CSI `--site-dns` option then no further action is required.
+    The default configuration is as follows:
+    ```
+    cray-dns-unbound:
+        domain_name: '{{ network.dns.external }}'
+        forwardZones:
+          - name: "."
+            forwardIps:
+              - "{{ network.netstaticips.system_to_site_lookups }}"
+    ```
+
+    The configured site DNS server can be verified by inspecting the value set for `system_to_site_lookups`.
+
+    ```
+    linux# yq r /mnt/pitdata/prep/site-init/customizations.yaml spec.network.netstaticips.system_to_site_lookups
+    172.30.84.40
+    ``` 
+
+    If there is no requirement to resolve external hostnames or no upstream DNS server
+    then remove the DNS forwarding configuration from the `cray-dns-unbound` service. 
+ 
+    1. Remove the `forwardZones` configuration for the `cray-dns-unbound` service:
 
        ```bash
-       linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
-       - command: update
-         path: spec.kubernetes.services.cray-dns-unbound
-         value:
-           forwardZones:
-           - name: "."
-             forwardIps:
-             - "{{ network.netstaticips.system_to_site_lookups }}"
-       EOF
-       ```
+       linux# yq delete -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound.forwardZones
+     ```
 
-    1. On success, review the `cray-dns-unbound` values.
+    1. Review the `cray-dns-unbound` values.
+
        ```bash
        linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
        ```
 
-       Expected output looks similar to:
+       Expected output is:
 
        ```
-       forwardZones:
-       - name: "."
-         forwardIps:
-         - "{{ network.netstaticips.system_to_site_lookups }}"
+       domain_name: '{{ network.dns.external }}'
        ```
+
+       > **`IMPORTANT`** **Do not** remove the `domain_name` entry, it is required for Unbound to forward requests to PowerDNS correctly.
+
+1. Configure PowerDNS zone transfer and DNSSEC (optional)
+
+   * If zone transfer is to be configured review `customizations.yaml` and ensure the `primary_server`, `secondary_servers`, and `notify_zones` values are set correctly.
+
+   * If DNSSEC is to be used then add the desired keys into the `dnssec` SealedSecret.
+
+   Please see the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
+
+1.  Review `customizations.yaml` in the `site-init` directory and replace remaining `~FIXME~` values with
+    appropriate settings.
+
+    1. Create backup copy of `customizations.yaml`:
+        ```bash
+        linux# cp -v /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml-prefixme
+        ```
+
+    1. Edit `customizations.yaml`
+        For the following `~FIXME~` values, use the example provided and just remove the `~FIXME~ e.g.`
+
+        ```
+           sma-rsyslog-aggregator:
+             cray-service:
+               service:
+                 loadBalancerIP: ~FIXME~ e.g. 10.92.100.72
+             rsyslogAggregatorHmn:
+               service:
+                 loadBalancerIP: ~FIXME~ e.g. 10.94.100.2
+           sma-rsyslog-aggregator-udp:
+             cray-service:
+               service:
+                 loadBalancerIP: ~FIXME~ e.g. 10.92.100.75
+             rsyslogAggregatorUdpHmn:
+               service:
+                 loadBalancerIP: ~FIXME~ e.g. 10.94.100.3
+        ```
+
+    1. Review your changes:
+
+        ```bash
+        linux# diff /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml-prefixme
+        ```
+
+    1. Verify that no `FIXME` strings remain in the file:
+        ```bash
+        linux# grep FIXME /mnt/pitdata/prep/site-init/customizations.yaml
+        ```
 
 <a name="generate-sealed-secrets"></a>
 ### 4. Generate Sealed Secrets
@@ -409,7 +463,7 @@ encrypted.
     > **`NOTE`** Requires a properly configured Docker or Podman environment.
 
     ```bash
-    linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
+    linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/zeromq/zeromq:v4.0.5
     ```
 
 1.  Re-encrypt existing secrets:
@@ -505,6 +559,12 @@ baseline configuration during initial system installation.
     linux# git commit -m "Baseline configuration for $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)"
     ```
 
+1. Unmount the shim from earlier if one was used (for users of the [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md)):
+
+   ```bash
+   pit# umount -v /mnt/pitdata
+   pit# rmdir /mnt/pitdata
+   ```
 
 <a name="push-to-a-remote-repository"></a>
 #### 5.1 Push to a Remote Repository
@@ -513,34 +573,8 @@ It is **strongly recommended** that the site-init repository be maintained
 off-cluster. Add a remote repository and push the baseline configuration on
 `master` branch to a corresponding remote branch.
 
-
-<a name="patch-cloud-init-with-the-ca"></a>
-### 6. Patch cloud-init with the CA
-
-**`NOTE`** Skip this if using a USB LiveCD. These steps are done elsewhere in that procedure.
-
-Using `csi` on a generated site-init directory...
-
-1. Patch the CA certificate from the shasta-cfg:
-   ```bash
-   pit# csi patch ca \
-   --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
-   --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
-   --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
-   ```
-
-1. To assure it picks up the new meta-data:
-   ```bash
-   pit# systemctl restart basecamp
-   ```
-
-1. Unmount the shim from earlier if one was used (for users of the [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md)):
-   ```bash
-   pit# umount -v /mnt/pitdata
-   ```
-
 <a name="customer-specific-customizations"></a>
-### 7. Customer-Specific Customizations
+### 6. Customer-Specific Customizations
 
 Customer-specific customizations are any changes on top of the baseline
 configuration to satisfy customer-specific requirements. It is recommended that
