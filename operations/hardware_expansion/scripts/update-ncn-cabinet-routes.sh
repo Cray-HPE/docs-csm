@@ -31,6 +31,7 @@ function on_error() {
 [[ -n ${TOKEN} ]] || on_error "Enviroment varaible TOKEN is not set"
 
 # Collect network information from SLS
+echo "Collecting networking information from SLS"
 nmn_hmn_networks=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2>/dev/null | jq ".[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetName: .Subnets.Name, SubnetCIDR: .Subnets.CIDR, Gateway: .Subnets.Gateway} | select(.SubnetName==\"network_hardware\") ")
 [[ -n ${nmn_hmn_networks} ]] || on_error "Cannot retrieve HMN and NMN networks from SLS. Check SLS connectivity."
 
@@ -89,6 +90,11 @@ hmn_routes+=("$hmnlb_cidr $hmn_gateway - bond0.hmn0")
 printf -v nmn_routes_string '%s\n' "${nmn_routes[@]}"
 printf -v hmn_routes_string '%s\n' "${hmn_routes[@]}"
 
+echo "Contents of $local_nmn_route_file"
+echo "${nmn_routes_string}"
+echo "Contents of $local_hmn_route_file"
+echo "${hmn_routes_string}"
+
 echo "Writing $local_nmn_route_file"
 echo "${nmn_routes_string}" > $local_nmn_route_file
 echo "Writing $local_hmn_route_file"
@@ -98,9 +104,11 @@ for ncn in $ncns; do
   echo "Adding routes to $ncn."
 
   # Create backup of ifroute files
+  echo "Creating backup of existing ifroute files"
   ssh -o "StrictHostKeyChecking=no" "$ncn" "if [ -e /etc/sysconfig/network/ifroute-bond0.nmn0 ]; then cp /etc/sysconfig/network/ifroute-bond0.nmn0 /etc/sysconfig/network/orig-ifroute-bond0.nmn0;fi"
   ssh -o "StrictHostKeyChecking=no" "$ncn" "if [ -e /etc/sysconfig/network/ifroute-bond0.hmn0 ]; then cp /etc/sysconfig/network/ifroute-bond0.hmn0 /etc/sysconfig/network/orig-ifroute-bond0.hmn0;fi"
 
+  echo "Adding cabinet routes"
   for rt in $nmn_cabinet_subnets; do
     ssh -o "StrictHostKeyChecking=no" "$ncn" ip route add "$rt" via "$nmn_gateway"
   done
@@ -108,6 +116,7 @@ for ncn in $ncns; do
     ssh -o "StrictHostKeyChecking=no" "$ncn" ip route add "$rt" via "$hmn_gateway"
   done
 
+  echo "Copying updated ifroute files into place"
   scp $local_nmn_route_file "$ncn:/etc/sysconfig/network/ifroute-bond0.nmn0"
   scp $local_hmn_route_file "$ncn:/etc/sysconfig/network/ifroute-bond0.hmn0"
 done
