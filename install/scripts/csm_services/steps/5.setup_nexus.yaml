@@ -33,7 +33,7 @@ spec:
           while [[ $nexus_resources_ready -eq 0 ]] && [[ "$counter" -le "$counter_max" ]]; do
               nexus_check_configmap=$(kubectl -n services get cm cray-dns-unbound -o json 2>&1 | jq '.binaryData."records.json.gz"' -r 2>&1 | base64 -d 2>&1| gunzip - 2>&1|jq 2>&1|grep $url|wc -l)
               nexus_check_dns=$(dig $url +short |wc -l)
-              nexus_check_pod=$(kubectl get pods -n nexus|grep nexus|awk {' print $3 '})
+              nexus_check_pod=$(kubectl get pods -n nexus| grep nexus | grep -v Completed |awk {' print $3 '})
 
               if [[ "$nexus_check_dns" -eq "1" ]] && [[ "$nexus_check_pod" == "Running" ]]; then
                   echo "$url is in dns."
