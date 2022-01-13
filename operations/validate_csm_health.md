@@ -46,8 +46,8 @@ The areas should be tested in the order they are listed on this page. Errors in 
 The first time these checks are performed during a CSM install, the Cray Command Line Interface (CLI) has not yet been configured. Some of the health check tests cannot be run without the Cray CLI being configured. Tests with this dependency are noted in their descriptions below. These tests may be skipped but **this is not recommended**.
 
 The Cray CLI must be configured on all NCNs and the PIT node. The following procedures explain how to do this:
-    1. [Configure Keycloak Account](../install/configure_administrative_access.md#configure_keycloak_account)
-    1. [Configure the Cray Command Line Interface (CLI)](../install/configure_administrative_access.md#configure_cray_cli)
+1. [Configure Keycloak Account](../install/configure_administrative_access.md#configure_keycloak_account)
+1. [Configure the Cray Command Line Interface (CLI)](../install/configure_administrative_access.md#configure_cray_cli)
 
 <a name="platform-health-checks"></a>
 ## 1. Platform Health Checks
