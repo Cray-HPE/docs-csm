@@ -4,9 +4,9 @@ The Configuration Framework Service \(CFS\) provides several options for targeti
 
 The following are the inventory options provided by CFS:
 
--   Dynamic inventory
--   Static inventory
--   Image Customization
+- Dynamic inventory
+- Static inventory
+- Image Customization
 
 
 ### Dynamic Inventory and Host Groups
@@ -17,8 +17,6 @@ Retrieve a list of HSM groups with the following command:
 
 ```bash
 ncn# cray hsm groups list --format json | jq .[].label
-"example-group1"
-"example-group2"
 ```
 
 These groups can be referenced in Ansible plays or when creating a CFS session directly.

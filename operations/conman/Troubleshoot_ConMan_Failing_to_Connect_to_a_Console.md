@@ -20,13 +20,17 @@ This procedure requires administrative privileges.
         -o wide|grep cray-console-operator|awk '{print $1}')
         ncn-m001# kubectl -n services exec $CONPOD -c cray-console-operator -- sh -c \
         '/app/get-node XNAME' | jq .podname | sed 's/"//g'
-        cray-console-node-2
         ```
 
     2. Find the worker node this pod is running on.
 
         ```
         ncn-m001# kubectl -n services get pods -o wide | grep cray-console-pod-2
+        ```
+
+        Example output:
+
+        ```
         cray-console-node-2   3/3  Running 0 28h  10.42.0.49  ncn-w003   <none>  <none>
         ```
 
@@ -34,7 +38,6 @@ This procedure requires administrative privileges.
 
         ```
         ncn-m001# ssh ncn-w003
-        ncn-w003#
         ```
 
     4. Check that the BMC for this node is accessible from this worker.
@@ -44,6 +47,11 @@ This procedure requires administrative privileges.
 
         ```
         ncn-w003# ping BMC_XNAME
+        ```
+
+        Example output:
+        
+        ```
         PING x3000c0s7b0.hmn (10.254.1.7) 56(84) bytes of data.
         From ncn-m002.hmn (10.254.1.18) icmp_seq=1 Destination Host Unreachable
         From ncn-m002.hmn (10.254.1.18) icmp_seq=2 Destination Host Unreachable
@@ -66,7 +74,6 @@ This procedure requires administrative privileges.
         ncn-m001# CONPOD=$(kubectl get pods -n services \-o wide|grep cray-console-operator|awk '{print $1}')
         ncn-m001# kubectl -n services exec $CONPOD -c cray-console-operator -- sh -c '/app/get-node XNAME' \
         | jq .podname | sed 's/"//g'
-        cray-console-node-2
         ```
 
     2. Check the log information for the node.
@@ -95,5 +102,5 @@ This procedure requires administrative privileges.
         ncn-m001# ipmitool -H XNAME -U $USERNAME -E -I lanplus sol deactivate
         ```
 
-    4. Retry conman to verify the connection has been reestablished.
+    4. Retry ConMan to verify the connection has been reestablished.
 

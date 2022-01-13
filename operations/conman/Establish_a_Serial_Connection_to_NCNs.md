@@ -17,7 +17,6 @@ The user performing this procedure needs to have access permission to the cray-c
     ncn-m001# NODEPOD=$(kubectl -n services exec $CONPOD -c cray-console-operator -- sh -c '/app/get-node XNAME' \
     | jq .podname | sed 's/"//g')
     ncn-m001# echo $NODEPOD
-    cray-console-node-2
     ```
 
 2. Check which NCN this pod is running on.
@@ -67,7 +66,6 @@ The user performing this procedure needs to have access permission to the cray-c
 
     ```
     ncn-m001# kubectl -n services exec -it $NODEPOD -- /bin/bash
-    cray-console-node-1:/ #
     ```
 
 

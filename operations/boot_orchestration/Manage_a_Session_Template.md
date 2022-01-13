@@ -9,6 +9,11 @@ When creating a new BOS session template, it can be helpful to start with a fram
 
 ```bash
 ncn-m001# cray bos sessiontemplatetemplate list --format json
+```
+
+Example output:
+
+```
 {
   "boot_sets": {
     "name_your_boot_set": {
@@ -118,6 +123,11 @@ Either script above will generate the following session template:
 
 ```bash
 ncn-m001# cray bos sessiontemplate describe session_template1 --format json
+```
+
+Example output:
+
+```
 {
   "cfs_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
   "enable_cfs": true,
@@ -149,6 +159,11 @@ Use the following command to view all of the available session templates:
 
 ```bash
 ncn-m001# cray bos sessiontemplate list --format json
+```
+
+Example output:
+
+```
 [
   {
     "enable_cfs": true,
@@ -174,7 +189,7 @@ ncn-m001# cray bos sessiontemplate list --format json
   }
 ]
 
-...
+[...]
 ```
 
 
@@ -184,6 +199,11 @@ View the details for a specific session template. In the following example, the 
 
 ```bash
 ncn-m001# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME --format json
+```
+
+Example output:
+
+```
 {
   "cfs_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
   "enable_cfs": true,

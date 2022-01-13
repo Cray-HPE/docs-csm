@@ -16,6 +16,11 @@ The following shows how to interpret the output:
 
 ```bash
 ncn-m001# cray hsm locks status create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 NotFound = []
 [[Components]]
 ID = "x1003c5s2b1n1"
@@ -34,6 +39,11 @@ This is a way to stop new operations from happening, not a way to prevent curren
 
 ```bash
 ncn-m001# cray hsm locks disable create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 Failure = []
 
 [Counts]
@@ -49,6 +59,11 @@ The following is an example of a when a lock is disabled:
 
 ```bash
 ncn-m001# cray hsm locks status create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 NotFound = []
 [[Components]]
 ID = "x1003c5s2b1n1"
@@ -63,6 +78,11 @@ Locks must be manually repaired after disabling a component or performing a manu
 
 ```bash
 ncn-m001# cray hsm locks repair create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 Failure = []
 
 [Counts]
@@ -78,6 +98,11 @@ To verify if the lock was successfully repaired:
 
 ```bash
 ncn-m001# cray hsm locks status create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 NotFound = []
 [[Components]]
 ID = "x1003c5s2b1n1"
@@ -92,6 +117,11 @@ Before issuing a `disable` command, verify that a lock is already in effect:
 
 ```bash
 ncn-m001# cray hsm locks lock create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 Failure = []
 
 [Counts]
@@ -101,8 +131,15 @@ Failure = 0
 
 [Success]
 ComponentIDs = [ "x1003c5s2b1n1",]
+```
 
+```
 ncn-m001# cray hsm locks status create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 NotFound = []
 [[Components]]
 ID = "x1003c5s2b1n1"
@@ -115,6 +152,11 @@ When attempting to disable, the lock will stay in effect, but the reservation ab
 
 ```bash
 ncn-m001# cray hsm locks disable create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 Failure = []
 
 [Counts]
@@ -124,8 +166,15 @@ Failure = 0
 
 [Success]
 ComponentIDs = [ "x1003c5s2b1n1",]
+```
 
+```
 ncn-m001# cray hsm locks status create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 NotFound = []
 [[Components]]
 ID = "x1003c5s2b1n1"
@@ -140,15 +189,26 @@ A lock cannot be issued to a component that is already locked. The following exa
 
 ```bash
 ncn-m001# cray hsm locks status create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 NotFound = []
 [[Components]]
 ID = "x1003c5s2b1n1"
 Locked = true  <<-- xname is locked
 Reserved = false
 ReservationDisabled = true
+```
 
-
+```
 ncn-m001# cray hsm locks lock create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 Usage: cray hsm locks lock create [OPTIONS]
 Try 'cray hsm locks lock create --help' for help.
 

@@ -21,6 +21,11 @@ ncn# cray cfs sessions create --name example \
 --configuration-name configurations-example \
 --target-definition image \
 --target-group Compute IMS_IMAGE_ID
+```
+
+Example output:
+
+```
 {
   "ansible": {
     "config": "cfs-default-ansible-cfg",
@@ -60,6 +65,11 @@ When an image customization CFS session is complete, use the CFS `describe` comm
 
 ```bash
 ncn# cray cfs sessions describe example --format json | jq .status.artifacts
+```
+
+Example output:
+
+```
 [
   {
     "image_id": "<IMS IMAGE ID>",

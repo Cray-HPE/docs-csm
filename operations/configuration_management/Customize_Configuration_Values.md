@@ -6,9 +6,9 @@ Changing or overriding default values should be done in accordance with Ansible 
 
 The following practices should also be followed:
 
--   When it is necessary to add more functionality beyond an Ansible playbook provided by a Cray product, include the product playbook in a new playbook instead of modifying it directly. Any modifications to a product playbook will result in a merge being required during a product upgrade.
--   Do not modify default Ansible role variables, override all values using inventory \(group\_vars and host\_vars directories\). Cray products do not import any content to inventory locations, so merges of new product content will not cause conflicts if variables are located in inventory.
--   Do not put any sensitive or secret information, such as passwords, in the Git repository. These values should be pulled during runtime from an external key management system.
+- When it is necessary to add more functionality beyond an Ansible playbook provided by a Cray product, include the product playbook in a new playbook instead of modifying it directly. Any modifications to a product playbook will result in a merge being required during a product upgrade.
+- Do not modify default Ansible role variables, override all values using inventory \(group\_vars and host\_vars directories\). Cray products do not import any content to inventory locations, so merges of new product content will not cause conflicts if variables are located in inventory.
+- Do not put any sensitive or secret information, such as passwords, in the Git repository. These values should be pulled during runtime from an external key management system.
 
 ### Handling Sensitive Information
 
