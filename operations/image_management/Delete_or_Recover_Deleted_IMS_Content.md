@@ -6,7 +6,13 @@ The Image Management System \(IMS\) manages user supplied SSH public Keys, custo
 
 ```bash
 ncn# cray ims recipes list
-...
+```
+
+Example output:
+
+```
+[...]
+
 [[results]]
 id = "76ef564d-47d5-415a-bcef-d6022a416c3c"
 name = "cray-sles15-barebones"
@@ -16,10 +22,19 @@ created = "2020-02-05T19:24:22.621448+00:00"
 path = "s3://ims/recipes/76ef564d-47d5-415a-bcef-d6022a416c3c/cray-sles15-barebones.tgz"
 etag = "28f3d78c8cceca2083d7d3090d96bbb7"
 type = "s3"
-...
 
+[...]
+```
+
+```
 ncn# cray ims images list
-...
+```
+
+Example output:
+
+```
+[...]
+
 [[results]]
 created = "2018-12-04T17:25:52.482514+00:00"
 id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
@@ -29,7 +44,8 @@ name = "sles_15_image.squashfs"
 type = "s3"
 path = "/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
 etag = ""
-...
+
+[...]
 ```
 
 Deleting an IMS image can create a situation where boot artifacts referenced by a Boot Orchestration Service \(BOS\) session template no longer exist, making that template unable to boot. Previously, to recover from this situation, an admin would have had to rebuild the boot image using IMS and/or reinstall the prebuilt image from the installer, reapply any Cray and site customizations, and recreate a new BOS template for the IMS image.
@@ -52,11 +68,11 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
 
 #### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
-    -   `cray-ims`, the Image Management Service \(IMS\)
-    -   `cray-nexus`, the Nexus repository manager service
--   `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
+    - `cray-ims`, the Image Management Service \(IMS\)
+    - `cray-nexus`, the Nexus repository manager service
+- `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
 
 #### Procedure
 
@@ -68,7 +84,13 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
 
         ```bash
         ncn# cray ims images list
-        ...
+        ```
+
+        Example output:
+
+        ```
+        [...]
+
         [[results]]
         created = "2018-12-04T17:25:52.482514+00:00"
         id = "4e78488d-4d92-4675-9d83-97adfc17cb19" <<-- Note this ID
@@ -78,7 +100,8 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         type = "s3"
         path = "/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
         etag = ""
-        ...
+        
+        [...]
         ```
 
     2.  Delete the image.
@@ -97,7 +120,13 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
 
         ```bash
         ncn# cray ims deleted images list
-        ...
+        ```
+
+        Example output:
+
+        ```
+        [...]
+
         [[results]]
         created = "2018-12-04T17:25:52.482514+00:00"  <<-- Date the record was originally created
         deleted = "2020-11-03T09:57:31.746521+00:00"  <<-- Date the record was deleted
@@ -108,7 +137,8 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         type = "s3"
         path = "/deleted/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs" <<-- S3 path to linked artifact was renamed
         etag = ""
-        ...
+        
+        [...]
         ```
 
         If the admin desires the public-key, recipe, or image to be permanently deleted, proceed to the next step. If the deleted image might need to be recovered in the future, no more work is needed.
@@ -121,7 +151,13 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
 
         ```bash
         ncn# cray ims deleted images list
-        ...
+        ```
+        
+        Example output:
+
+        ```
+        [...]
+
         [[results]]
         created = "2018-12-04T17:25:52.482514+00:00"
         deleted = "2020-11-03T09:57:31.746521+00:00"
@@ -132,7 +168,8 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         type = "s3"
         path = "/deleted/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
         etag = ""
-        ...
+        
+        [...]
         ```
 
     2.  Permanently delete the desired image from the deleted images list.
@@ -153,11 +190,11 @@ Recovering a deleted IMS public-key, recipe, or image record uses the following 
 
 #### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
-    -   `cray-ims`, the Image Management Service \(IMS\)
-    -   `cray-nexus`, the Nexus repository manager service
--   `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
+    - `cray-ims`, the Image Management Service \(IMS\)
+    - `cray-nexus`, the Nexus repository manager service
+- `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
 
 #### Procedure
 
@@ -167,7 +204,13 @@ The steps in this procedure assume that a deleted image is being recovered. The 
 
     ```bash
     ncn# cray ims deleted images list
-    ...
+    ```
+
+    Example output:
+
+    ```
+    [...]
+
     [[results]]
     created = "2018-12-04T17:25:52.482514+00:00"
     deleted = "2020-11-03T09:57:31.746521+00:00"
@@ -178,7 +221,8 @@ The steps in this procedure assume that a deleted image is being recovered. The 
     type = "s3"
     path = "/deleted/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
     etag = ""
-    ...
+    
+    [...]
     ```
 
 2.  Use the undelete operation to recover the image.
@@ -197,7 +241,13 @@ The steps in this procedure assume that a deleted image is being recovered. The 
 
     ```bash
     ncn# cray ims images list
-    ...
+    ```
+
+    Example output:
+
+    ```
+    [...]
+
     [[results]]
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
@@ -207,7 +257,8 @@ The steps in this procedure assume that a deleted image is being recovered. The 
     type = "s3"
     path = "/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"  <<-- The restored artifact path
     etag = ""
-    ...
+    
+    [...]
     ```
 
 

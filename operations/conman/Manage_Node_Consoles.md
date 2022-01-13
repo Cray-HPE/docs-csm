@@ -17,15 +17,17 @@ See [ConMan](ConMan.md) for other procedures related to remote consoles and node
 This procedure can be run from any member of the Kubernetes cluster to verify node consoles are being managed
 by ConMan and to connect to a console.
 
-**Note:** this procedure has changed since the CSM 0.9 release.
+**NOTE:** this procedure has changed since the CSM 0.9 release.
 
 1. Find the cray-console-operator pod ID
+    
     ```bash
     ncn# CONPOD=$(kubectl get pods -n services \-o wide|grep cray-console-operator|awk '{print $1}')
     ncn# echo $CONPOD
     ```
 
 1. Find the cray-console-node pod that is connected to the node. Be sure to substitute the actual xname of the node in the command below.
+    
     ```bash
     ncn# NODEPOD=$(kubectl -n services exec $CONPOD -c cray-console-operator -- sh -c "/app/get-node <xname>" | jq .podname | sed 's/"//g')
     ncn# echo $NODEPOD
@@ -35,7 +37,6 @@ by ConMan and to connect to a console.
 
    ```bash
    ncn# kubectl exec -n services -it $NODEPOD -c cray-console-node -- bash
-   cray-console-node#
    ```
 
 1. Check the list of nodes being monitored.
@@ -59,6 +60,7 @@ by ConMan and to connect to a console.
 1. Compute nodes or UANs are automatically added to this list a short time after they are discovered.
 
 1. To access the node's console, run the following command from within the pod. Again, remember to substitute the actual xname of the node.
+    
     ```bash
     cray-console-node# conman -j <xname>
     ```

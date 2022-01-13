@@ -2,23 +2,34 @@
 
 The artifacts \(objects\) available for use on the system are created and managed with the Cray CLI. The cray artifacts command provides the ability to manage any given artifact. The Cray CLI automatically authenticates users and provides Simple Storage Service \(S3\) credentials.
 
-All operations with the cray artifacts command assume that the user has already been authenticated. If the user has not been authenticated with the Cray CLI, run the following command and enter the appropriate credentials:
+All operations with the cray artifacts command assume that the user has already been authenticated. If the user has not been authenticated with the Cray CLI, run the following command:
 
 ```bash
 ncn# cray auth login
-Username: adminuser
-Password:
-Success!
 ```
 
-**Authorization Is Local to a Host:** whenever you are using the CLI (`cray` command) on a host (e.g. a workstation or NCN) where it has not been used before, it is necessary to authenticate on that host using `cray auth login`. There is no mechanism to distribute CLI authorization amongst hosts.
+Enter the appropriate credentials when prompted:
+
+```
+Username: adminuser
+Password:
+```
+
+`Success!` will be returned if the user is succesfully authenticated.
+
+**Authorization is Local to a Host:** whenever you are using the CLI (`cray` command) on a host (e.g. a workstation or NCN) where it has not been used before, it is necessary to authenticate on that host using `cray auth login`. There is no mechanism to distribute CLI authorization amongst hosts.
 
 ### View S3 Buckets
 
-There are several S3 buckets available that can be used to upload and download files with the cray artifacts command. To see the list of available S3 buckets:
+There are several S3 buckets available that can be used to upload and download files with the `cray artifacts` command. To see the list of available S3 buckets:
 
-```screen
+```bash
 ncn# cray artifacts buckets list
+```
+
+Example output:
+
+```
 results = [ "alc", "badger", "benji-backups", "boot-images", "etcd-backup", "fw-update", "ims", "nmd", "sds", "ssm", "vbis", "wlm",]
 ```
 
@@ -30,13 +41,18 @@ In the example below, S3\_BUCKET is a placeholder for the bucket name, site/repo
 
 ```bash
 ncn# cray artifacts create S3_BUCKET site/repos/repo.tgz /path/to/repo.tgz
+```
+
+Example output:
+
+```
 artifact = "5c5b6ae5-64da-4212-887a-301087a17099"
 Key = "site/repos/repo.tgz"
 ```
 
 In S3, the object name can be path-like and include slashes to resemble files in directories. This is useful for organizing objects within a bucket, but S3 treats it as a name only. No directory structure exists.
 
-When interacting with Cray services, use the artifact value returned by the cray artifacts create command. This will ensure that Cray services can access the uploaded object.
+When interacting with Cray services, use the artifact value returned by the `cray artifacts create` command. This will ensure that Cray services can access the uploaded object.
 
 ### Download Artifacts
 
@@ -70,6 +86,11 @@ Use the `cray artifacts list` command to list all artifacts in a bucket.
 
 ```bash
 ncn# cray artifacts list S3_BUCKET
+```
+
+Example output:
+
+```
 [[artifacts]]
 LastModified = "2020-04-03T12:20:23.876000+00:00"
 ETag = "\"e3f195c20a2399bf1b5a20df12416115\""
@@ -81,7 +102,7 @@ Size = 11234
 DisplayName = "Image Management Service User"
 ID = "IMS"
 
-...
+[...]
 ```
 
 ### Retrieve Artifact Details
@@ -92,6 +113,11 @@ Details of an artifact object in a bucket are found with the `cray artifacts des
 
 ```bash
 ncn# cray artifacts describe S3_BUCKET S3_OBJECT_KEY
+```
+
+Example output:
+
+```
 [artifact]
 AcceptRanges = "bytes"
 ContentType = "binary/octet-stream"

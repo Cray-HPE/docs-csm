@@ -19,6 +19,11 @@ The following are examples of unmet conditions:
 
     ```bash
     ncn# cray crus session describe CRUS_UPGRADE_ID
+    ```
+
+    Example output:
+
+    ```
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-node-group"
@@ -41,6 +46,11 @@ The following are examples of unmet conditions:
 
     ```bash
     ncn# cray hsm groups create --label failed-node-group
+    ```
+
+    Example output:
+
+    ```
     [[results]]
     URI = "/hsm/v2/groups/failed-node-group"
     ```
@@ -49,6 +59,11 @@ The following are examples of unmet conditions:
 
     ```bash
     ncn-w001# cray crus session describe CRUS_UPGRADE_ID
+    ```
+
+    Example output:
+
+    ```
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-node-group"

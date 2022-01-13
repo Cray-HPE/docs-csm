@@ -28,13 +28,16 @@ The default resource limits for the istio-proxy container are:
 ### Inspect the cray-hms-hmcollector pod for OOMKilled events
 
 Describe the collector-hms-hmcollector pod to determine if it has been OOMKilled in the recent past:
+
 ```
 ncn-m001# kubectl -n services describe pod -l app.kubernetes.io/name=cray-hms-hmcollector
 ```
 
 Look for the `cray-hms-hmcollector` container and check its `Last State` (if present) to see if the container has been perviously terminated due to it running out of memory:
+
 ```
-...
+[...]
+
 Containers:
   cray-hms-hmcollector:
     Container ID:   containerd://a35853bacdcea350e70c57fe1667b5b9d3c82d41e1e7c1f901832bae97b722fb
@@ -49,13 +52,15 @@ Containers:
       Exit Code:    137
       Started:      Tue, 21 Sep 2021 20:51:08 +0000
       Finished:     Tue, 21 Sep 2021 20:52:12 +0000
-...
+
+[...]
 ```
 > In the above example output the `cray-hms-hmcollector` container was perviously OOMKilled, but the container is currently running.
 
 Look for the `isitio-proxy` container and check its `Last State` (if present) to see if the container has been perviously terminated due to it running out of memory:
 ```
-...
+[...]
+
  istio-proxy:
     Container ID:  containerd://f439317c16f7db43e87fbcec59b7d36a0254dabd57ab71865d9d7953d154bb1a
     Image:         dtr.dev.cray.com/cray/proxyv2:1.7.8-cray1
@@ -81,7 +86,8 @@ Look for the `isitio-proxy` container and check its `Last State` (if present) to
       Exit Code:    137
       Started:      Tue, 21 Sep 2021 20:51:08 +0000
       Finished:     Tue, 21 Sep 2021 20:52:12 +0000
-...
+
+[...]
 ```
 > In the above example output the `istio-proxy` container was perviously OOMKilled, but the container is currently running.
 
@@ -141,6 +147,7 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
 4. Update `customizations.yaml` with the existing `cray-hms-hmcollector` resource limits and requests settings:
 
    Persist resource requests and limits from the cray-hms-hmcollector deployment:
+   
    ```bash
    ncn-m001# kubectl -n services get deployments cray-hms-hmcollector \
       -o jsonpath='{.spec.template.spec.containers[].resources}' | yq r -P - | \
@@ -148,6 +155,7 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
    ```
 
    Persist annotations manually added to `cray-hms-hmcollector` deployment:
+   
    ```bash
    ncn-m001# kubectl -n services get deployments cray-hms-hmcollector \
       -o jsonpath='{.spec.template.metadata.annotations}' | \
@@ -156,8 +164,14 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
    ```
 
    View the updated overrides added to `customizations.yaml`. If the value overrides look different to the sample output below then the resource limits and requests have been manually modified in the past.
+   
    ```bash
    ncn-m001# yq r ./customizations.yaml spec.kubernetes.services.cray-hms-hmcollector
+   ```
+
+   Example output:
+
+   ```
    hmcollector_external_ip: '{{ network.netstaticips.hmn_api_gw }}'
    resources:
    limits:
@@ -187,6 +201,7 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
    ```
 
    To specify a non-default memory limit for the Istio proxy used by the `cray-hms-hmcollector` to pod annotation `sidecar.istio.io/proxyMemoryLimit` can added under `podAnnotations`. By default the Istio proxy memory limit is `1Gi`.
+   
    ```yaml
          cray-hms-hmcollector:
             podAnnotations:
@@ -227,12 +242,14 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
 <a name="redeploy-cray-hms-hmcollector"></a>
 ## Redeploy cray-hms-hmcollector with new resource limits and requests
 1. Determine the version of HM Collector:
+    
     ```bash
     ncn-m001# HMCOLLECTOR_VERSION=$(kubectl -n loftsman get cm loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-hms-hmcollector).version')
     ncn-m001# echo $HMCOLLECTOR_VERSION
     ```
 
 2. Create `hmcollector-manifest.yaml`:
+    
     ```bash
     ncn-m001# cat > hmcollector-manifest.yaml << EOF
     apiVersion: manifests/v1beta1
@@ -253,11 +270,13 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
    ```
 
 4. Merge `customizations.yaml` with `hmcollector-manifest.yaml`:
+    
     ```bash
     ncn-m001# manifestgen -c customizations.yaml -i ./hmcollector-manifest.yaml > ./hmcollector-manifest.out.yaml
     ```
 
 5. Redeploy the HM Collector helm chart:
+    
     ```bash
     ncn-m001# loftsman ship \
         --charts-repo https://packages.local/repository/charts \

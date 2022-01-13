@@ -4,8 +4,8 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   A Boot Orchestration Service \(BOS\) session template describing the desired states of the nodes being upgraded must exist.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- A Boot Orchestration Service \(BOS\) session template describing the desired states of the nodes being upgraded must exist.
 
 ### Procedure
 
@@ -24,10 +24,15 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
 
     2.  Add members to the group.
 
-        Add compute nodes to the group by using the xname for each node being added. The following is an example:
+        Add compute nodes to the group by using the xname for each node being added.
 
         ```bash
         ncn# cray hsm groups members create slurm-nodes --id XNAME
+        ```
+
+        Example output:
+
+        ```
         [[results]]
         URI = "/hsm/v2/groups/slurm-nodes/members/x0c0s28b0n0"
         ```
@@ -56,7 +61,7 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
 
 4.  Create an upgrade session with CRUS.
 
-    The following example is upgrading 50 nodes at a step. The --upgrade-template-id value should be the name of the Boot Orchestration Service \(BOS\) session template being used.
+    The following example is upgrading 50 nodes at a step. The `--upgrade-template-id` value should be the name of the Boot Orchestration Service \(BOS\) session template being used.
 
     ```bash
     ncn# cray crus session create \
@@ -66,6 +71,11 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
     --upgrade-step-size 50 \
     --workload-manager-type slurm \
     --upgrade-template-id=BOS_SESSION_TEMPLATE_NAME
+    ```
+
+    Example output:
+
+    ```
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-nodes"
@@ -92,6 +102,11 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
 
     ```bash
     ncn-w001# cray crus session describe $UPGRADE_ID
+    ```
+
+    Example output:
+
+    ```
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-nodes"
@@ -123,6 +138,11 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
 
     ```bash
     ncn-w001# cray crus session delete $UPGRADE_ID
+    ```
+
+    Example output:
+
+    ```
     api_version = "1.0.0"
     completed = true
     failed_label = "failed-nodes"

@@ -7,7 +7,6 @@ To find the name of the Kubernetes pod that is running the CFS session:
 ```bash
 ncn# kubectl get pods --no-headers -o \
 custom-columns=":metadata.name" -n services -l cfsession=example
-cfs-f9d18751-e6d1-4326-bf76-434293a7b1c5-q8tsc
 ```
 
 Store the returned pod name as the `CFS_POD_NAME` variable for future use:
@@ -20,6 +19,11 @@ Alternatively, if the session is one of many recent sessions and the session nam
 
 ```bash
 ncn# kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
+```
+
+Example output:
+
+```
 cfs-47bed8b5-e1b1-4dd7-b71c-40e9750d3183-7msmr                 0/7     Completed   0          36m
 cfs-0675d19f-5bec-424a-b0e1-9d466299aff5-dtwhl                 0/7     Error       0          5m25s
 cfs-f49af8e9-b8ab-4cbb-a4f6-febe519ef65f-nw76v                 0/7     Error       0          4m14s
