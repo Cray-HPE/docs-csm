@@ -146,16 +146,19 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# /root/bin/csi-setup-lan0.sh $site_ip $site_gw $site_dns $site_nics
       ```
 
-   1. (recommended) print `lan0`, and if it has an IP address then exit console and log in again using SSH. The SSH connection will provide larger window sizes and better buffer-handling (screen wrapping). Finally also attempt to auto-set the hostname based on the local/on-prem DNS (this script will always append `-pit` to the end of the hostname as a means to mitigate confusing the session with an actual, deployed NCN).
+   1. Check if `lan0` has an IP address and attempt to auto-set the hostname based on DNS (this script appends `-pit` to the end of the hostname as a means to mitigate confusing the PIT node with an actual, deployed NCN). Then exit the typescript, exit the console session, and log in again using SSH.
 
       ```bash
       pit# ip a show lan0
       pit# /root/bin/csi-set-hostname.sh # this will attempt to set the hostname based on the site's own DNS records.
-      pit# exit
+      pit# exit # exit the typescript started earlier
+      pit# exit # log out of the pit node
+      # Close the console session by entering &. or ~.
+      # Then ssh back into the PIT node     
       external# ssh root@${SYSTEM_NAME}-ncn-m001
       ```
 
-   1. (recommended) After reconnecting, resume the typescript (the `-a` appends to an existing script).
+   1. After reconnecting, resume the typescript (the `-a` appends to an existing script).
 
        ```bash
       pit# cd ~
@@ -185,15 +188,15 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     ```bash
     pit# mount -v -L PITDATA
     pit# pushd /var/www/ephemeral
-    pit:/var/www/ephemeral# mkdir -v admin prep configs data
+    pit:/var/www/ephemeral# mkdir -v admin prep prep/admin configs data
     ```
 
 1. Quit the typescript session with the `exit` command, copy the file (csm-install-remoteis.<date>.txt) from its initial location to the newly created directory, and restart the typescript.
 
     ```bash
     pit# exit # The typescript
-    pit# cp ~/csm-install-remoteiso.*.txt /mnt/pitdata/prep/admin
-    pit# cd /mnt/pitdata/prep/admin
+    pit# cp -v ~/csm-install-remoteiso.*.txt /var/www/ephemeral/prep/admin
+    pit# cd /var/www/ephemeral/prep/admin
     pit# script -af $(ls -tr csm-install-remoteiso* | head -n 1)
     pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     pit# pushd /var/www/ephemeral
@@ -251,6 +254,12 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    ```bash
    pit:/var/www/ephemeral# rpm -Uvh $(find ./${CSM_RELEASE}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
+
+1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
+   access these RPMs will need to be externally downloaded and then copied to this machine.
+
+   **Important:** To ensure that the latest workarounds and documentation updates are available,
+   see [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds)
 
 1. Show the version of CSI installed.
 
@@ -511,9 +520,10 @@ Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for
 
 Finally, cleanup the shim:
  ```bash
+ pit# cd ~
  # this uses rmdir to safely remove the directory, preventing accidentaly removals if one does not notice the umount command fail.
- pit# umount /mnt/pitdata/
- pit# rmdir /mnt/pitdata
+ pit# umount -v /mnt/pitdata/
+ pit# rmdir -v /mnt/pitdata
  ```
 
 <a name="bring---up-the-pit-services-and-validate-pit-health"></a>

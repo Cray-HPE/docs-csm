@@ -51,9 +51,7 @@ installation-centric artifacts such as:
     linux# /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/meta/init.sh /mnt/pitdata/prep/site-init
     ```
 
-1.  The `yq` tool used in the following procedures is available under
-`/mnt/pitdata/prep/site-init/utils/bin` once the SHASTA-CFG repo has been
-cloned
+1.  Set up an alias to the `yq` tool for use in later procedures.
 
     ```bash
     linux# alias yq="/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
@@ -292,15 +290,15 @@ with system-specific customizations.
 
            Expected output is similar to:
 
-         > ```
-         > generate:
-         >     name: keycloak-users-localize
-         >     data:
-         >     - type: static
-         >         args:
-         >         name: ldap_connection_url
-         >         value: ldaps://dcldap2.us.cray.com
-         > ```
+           ```
+           generate:
+               name: keycloak-users-localize
+               data:
+               - type: static
+                   args:
+                   name: ldap_connection_url
+                   value: ldaps://dcldap2.us.cray.com
+           ```
     1.  Configure the `ldapSearchBase` and `localRoleAssignments` settings for
         the `cray-keycloak-users-localize` chart in `customizations.yaml`.
 
@@ -385,23 +383,23 @@ with system-specific customizations.
  
     1. Remove the `forwardZones` configuration for the `cray-dns-unbound` service:
 
-       ```bash
-       linux# yq delete -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound.forwardZones
-     ```
+        ```bash
+        linux# yq delete -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound.forwardZones
+        ```
 
     1. Review the `cray-dns-unbound` values.
 
-       ```bash
-       linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
-       ```
+        ```bash
+        linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
+        ```
 
-       Expected output is:
+        Expected output is:
 
-       ```
-       domain_name: '{{ network.dns.external }}'
-       ```
+        ```
+        domain_name: '{{ network.dns.external }}'
+        ```
 
-       > **`IMPORTANT`** **Do not** remove the `domain_name` entry, it is required for Unbound to forward requests to PowerDNS correctly.
+        > **`IMPORTANT`** **Do not** remove the `domain_name` entry, it is required for Unbound to forward requests to PowerDNS correctly.
 
 1. Configure PowerDNS zone transfer and DNSSEC (optional)
 
@@ -558,13 +556,6 @@ baseline configuration during initial system installation.
     ```bash
     linux# git commit -m "Baseline configuration for $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)"
     ```
-
-1. Unmount the shim from earlier if one was used (for users of the [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md)):
-
-   ```bash
-   pit# umount -v /mnt/pitdata
-   pit# rmdir /mnt/pitdata
-   ```
 
 <a name="push-to-a-remote-repository"></a>
 #### 5.1 Push to a Remote Repository
