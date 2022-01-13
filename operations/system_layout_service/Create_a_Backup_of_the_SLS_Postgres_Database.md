@@ -42,7 +42,7 @@ Perform a manual backup of the contents of the SLS Postgres database. This backu
 
 2. Run the `backup_sls_postgres.sh` script to take a backup of the SLS Postgres:
     ```
-    ncn# /usr/share/doc/csm/operations/system_layout_service/scripts/backup_sls_postgres.sh
+    ncn# /usr/share/doc/csm/scripts/operations/system_layout_service/backup_sls_postgres.sh
     ~/cray-sls-postgres-backup_2021-07-07_16-39-44 ~
     SLS postgres backup file will land in /root/cray-sls-postgres-backup_2021-07-07_16-39-44
     Determining the postgres leader...
