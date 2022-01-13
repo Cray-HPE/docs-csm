@@ -15,9 +15,9 @@ The areas should be tested in the order they are listed on this page. Errors in 
 
 - [0. Cray Command Line Interface](#cray-command-line-interface)
 - [1. Platform Health Checks](#platform-health-checks)
-  - [1.1 ncnHealthChecks](#pet-ncnhealthchecks)
+  - [1.1 NCN Health Checks](#pet-ncnhealthchecks)
     - [1.1.1 Known Test Issues](#autogoss-issues)
-  - [1.2 OPTIONAL Check of ncnHealthChecks Resources](#pet-ncnhealthchecks-resources)
+  - [1.2 NCN Resource Checks (optional)](#pet-ncnhealthchecks-resources)
     - [1.2.1 Known Issues](#known-issues)
   - [1.3 Check of System Management Monitoring Tools](#check-of-system-management-monitoring-tools)
 - [2. Hardware Management Services Health Checks](#hms-health-checks)
@@ -68,7 +68,7 @@ Available Platform Health Checks:
 1. [Check of System Management Monitoring Tools](#check-of-system-management-monitoring-tools)
 
 <a name="pet-ncnhealthchecks"></a>
-### 1.1 ncnHealthChecks
+### 1.1 NCN Health Checks
 
 This check requires that the [Cray CLI is configured](#cray-command-line-interface) on all worker NCNs.
 
@@ -117,9 +117,9 @@ Review the output for `Result: FAIL` and follow the instructions provided to res
 
 
 <a name="pet-optional-ncnhealthchecks-resources"></a>
-### 1.2 OPTIONAL Check of ncnHealthChecks Resources
+### 1.2 NCN Resource Checks (optional)
 
-To dump the ncn uptimes, the node resource consumptions and/or the list of pods not in a running state, run the following:
+To dump the NCN uptimes, the node resource consumptions, and/or the list of pods not in a running state, run the following:
 
 ```bash
 ncn# /opt/cray/platform-utils/ncnHealthChecks.sh -s ncn_uptimes
