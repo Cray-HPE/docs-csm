@@ -59,7 +59,7 @@ This procedure will use config from System Layout Service (SLS) to set up the pr
     ncn-m001# /usr/share/doc/csm/operations/node_management/scripts/update-ncn-cabinet-routes.sh
     ```
 
-    If the following message appears, it means the route being added is already present on the NCN and can be safely ignored.
+    If the following message appears, then the route being added is already present on the NCN and can be safely ignored.
     ```
     RTNETLINK answers: File exists
     ```
