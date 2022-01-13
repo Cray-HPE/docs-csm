@@ -15,6 +15,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
 
 - [Validate CSM Health](#validate-csm-health)
   - [Topics:](#topics)
+  - [0. Cray Command Line Interface](#cray-command-line-interface)
   - [1. Platform Health Checks](#platform-health-checks)
     - [1.1 ncnHealthChecks](#pet-ncnhealthchecks)
       - [1.1.1 Known Test Issues](#autogoss-issues)
@@ -41,6 +42,15 @@ The areas should be tested in the order they are listed on this page. Errors in 
       - [5.3.3 UAI Images not in Registry](#uas-uai-validate-debug-registry)
       - [5.3.4 Missing Volumes and other Container Startup Issues](#uas-uai-validate-debug-container)
 
+<a name="cray-command-line-interface"></a>
+## 0. Cray Command Line Interface
+
+The first time these checks are performed during a CSM install, the Cray Command Line Interface (CLI) has not yet been configured. Some of the health check tests cannot be run without the Cray CLI being configured. Tests with this dependency are noted in their descriptions below. These tests may be skipped but **this is not recommended**.
+
+The Cray CLI must be configured on all NCNs and the PIT node. The following procedures explain how to do this:
+    1. [Configure Keycloak Account](../install/configure_administrative_access.md#configure_keycloak_account)
+    1. [Configure the Cray Command Line Interface (CLI)](../install/configure_administrative_access.md#configure_cray_cli)
+
 <a name="platform-health-checks"></a>
 ## 1. Platform Health Checks
 
@@ -61,6 +71,8 @@ Available Platform Health Checks:
 
 <a name="pet-ncnhealthchecks"></a>
 ### 1.1 ncnHealthChecks
+
+This check requires that the [Cray CLI is configured](#cray-command-line-interface) on all worker NCNs.
 
 There are multiple Goss test suites available that cover a variety of subsystems. The platform health checks are defined in the test suites `ncn-healthcheck` and `ncn-kubernetes-checks`.
 
@@ -161,6 +173,8 @@ Information to assist with troubleshooting some of the components mentioned in t
 
 <a name="hms-health-checks"></a>
 ## 2. Hardware Management Services Health Checks
+
+The checks in this section require that the [Cray CLI is configured](#cray-command-line-interface) on nodes where the checks are executed.
 
 Execute the HMS smoke and functional tests after the CSM install to confirm that the Hardware Management Services are running and operational.
 
@@ -344,6 +358,8 @@ The Software Management Services health checks are run using `/usr/local/bin/cms
 <a name="sms-checks"></a>
 ### 3.1 SMS Test Execution
 
+The test in this section requires that the [Cray CLI is configured](#cray-command-line-interface) on nodes where the test is executed.
+
 The following test can be run on any Kubernetes node (any master or worker node, but **not** the PIT node).
 
 ```bash
@@ -446,6 +462,8 @@ ncn# /opt/cray/tests/integration/csm/barebonesImageTest --xname x3000c0s10b4n0
 <a name="uas-uai-tests"></a>
 ## 5. UAS / UAI Tests
 
+The commands in this section require that the [Cray CLI is configured](#cray-command-line-interface) on nodes where the commands are being executed.
+
 The procedures below use the CLI as an authorized user and run on two separate node types. The first part runs on the LiveCD node, while the second part runs on a non-LiveCD Kubernetes master or worker node. When using the CLI on either node, the CLI configuration needs to be initialized and the user running the procedure needs to be authorized.
 
 The following procedures run on separate nodes of the system. They are, therefore, separated into separate sub-sections.
@@ -462,8 +480,6 @@ The following procedures run on separate nodes of the system. They are, therefor
 ### 5.1 Validate the Basic UAS Installation
 
 This section can be run on any NCN or the PIT node.
-
-1. Initialize the Cray CLI on the node where you are running this section. See [Configure the Cray Command Line Interface](configure_cray_cli.md) for details on how to do this.
 
 1. Basic UAS installation is validated using the following:
    1.
@@ -514,8 +530,6 @@ This section can be run on any NCN or the PIT node.
    > [UAI Troubleshooting](#uas-uai-validate-debug) section for more information.
 
 This procedure must run on a master or worker node (not the PIT node and not `ncn-w001`) on the system. (It is also possible to do from an external host, but the procedure for that is not covered here).
-
-1. Initialize the Cray CLI on the node where you are running this section. See [Configure the Cray Command Line Interface](configure_cray_cli.md) for details on how to do this.
 
 1. Verify that a UAI can be created:
    ```bash
