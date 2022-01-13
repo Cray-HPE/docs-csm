@@ -378,14 +378,6 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary), see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
-    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname), see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
-
-      > ```bash
-      > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-      > ```
-      > CASMINST-1093
-      > ```
-
 1. Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
 
    **`NOTE`**: Once all storage nodes are up and the message `...sleeping 5 seconds until /etc/kubernetes/admin.conf` appears on `ncn-s001`'s console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
@@ -425,13 +417,6 @@ The configuration workflow described here is intended to help understand the exp
     **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
     **`NOTE`**: If one of the master nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [CEPH CSI Troubleshooting](ceph_csi_troubleshooting.md)
-
-    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname) see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
-
-    > ```bash
-    > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-    > CASMINST-1093
-    > ```
 
 1. Refer to [timing of deployments](#timing-of-deployments). It should take no more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the master nodes and worker nodes aside from the PIT node booted from the LiveCD are `Ready`:
 
