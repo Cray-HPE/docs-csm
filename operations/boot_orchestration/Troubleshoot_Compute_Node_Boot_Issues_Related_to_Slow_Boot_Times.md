@@ -16,6 +16,11 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
         ```bash
         ncn-m001# kubectl -nservices --sort-by=.metadata.creationTimestamp get pods | grep boa
+        ```
+
+        Example output:
+
+        ```
         boa-e3c845be-3092-4807-a0c9-272bf0e15896-7pnl4              0/2     Completed   0        3d
         boa-c740f74d-f5af-41f3-a71b-1a3fc00cbe7a-k5hdw              0/2     Completed   0        2d12h
         boa-a365b6a2-3614-4b53-9b6b-df0f4485e25d-nbcdb              0/2     Completed   0        2m43s
@@ -25,6 +30,11 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
         ```bash
         ncn-m001# kubectl logs -n services -f -c boa BOA_JOB_ID
+        ```
+
+        Example output:
+
+        ```
         2019-11-12 02:14:27,771 - DEBUG   - cray.boa - BOA starting
 
         2019-11-12 02:14:28,786 - DEBUG   - cray.boa - Boot Agent Image: acad2b43-dff5-483d-a392-8b1b1f91a60c Nodes: x5000c1s1b1n0, x3000c0s35b2n0, x5000c1s3b1n1, x3000c0s35b3n0, x5000c1s0b1n0, x5000c1s3b0n1, x5000c1s2b0n0, x5000c1s3b1n0, x5000c1s1b1n1, x5000c1s2b0n1, x3000c0s35b1n0, x5000c1s3b0n0, x5000c1s0b1n1, x5000c1s1b0n0, x5000c1s2b1n0, x5000c1s1b0n1, x5000c1s2b1n1 created.
@@ -38,51 +48,8 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         2019-11-12 02:15:15,938 - INFO    - cray.boa.smd.wait_for_nodes -
         Standby: 17 entries
         2019-11-12 02:15:15,938 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:15:20,979 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:15:26,021 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:15:31,077 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:15:36,120 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:15:41,161 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:15:46,204 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:15:51,244 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:15:56,288 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:16:01,329 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:16:06,372 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:16:11,413 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:16:16,455 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:16:21,501 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:16:26,544 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:16:31,594 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:16:36,638 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:16:41,681 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:16:46,724 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:16:51,766 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:16:56,810 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:17:01,853 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:17:06,899 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:17:11,940 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:17:16,981 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:17:22,023 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:17:27,065 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:17:32,119 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:17:37,161 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:17:42,203 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:17:47,244 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:17:52,289 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:17:57,332 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:18:02,373 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:18:07,417 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:18:12,459 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:18:17,501 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:18:22,544 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:18:27,586 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
-        2019-11-12 02:18:32,629 - INFO    - cray.boa.smd.wait_for_nodes -
-        Ready: [x3000c0s35b1n0]
-        Standby: 16 entries
-        2019-11-12 02:18:32,629 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 16 nodes to be in state: Ready
-        2019-11-12 02:18:37,673 - INFO    - cray.boa.smd.wait_for_nodes -
 
-        ...
+        [...]
 
         ```
 
@@ -94,6 +61,11 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
         ```bash
         ncn-m001# kubectl -n services get cfs
+        ```
+
+        Example output:
+
+        ```
         NAME                                           JOB                                        STATUS    SUCCEEDED   REPOSITORY CLONE URL                                               BRANCH   COMMIT                                     PLAYBOOK                            AGE
         066bc062-7fc3-11ea-970e-a4bf0138f2ba           cfs-1628cf85-e847-49af-891c-1b7655d8056d   complete   true        https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              site.yml                            4d10h
         3c3758a8-7fd9-11ea-a365-a4bf0138f2ba           cfs-05420ebf-fbbc-4d3a-a0af-a840e379fe12   complete   true        https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              site.yml                            4d8h
@@ -119,6 +91,11 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
         ```bash
         ncn-m001# kubectl -n services get pods | grep JOB_NAME
+        ```
+
+        Example output:
+
+        ```
         cfs-1628cf85-e847-49af-891c-1b7655d8056d-29ntt      0/4     Completed   0     4d11h
         ```
 
@@ -126,6 +103,11 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
         ```bash
         ncn-m001# kubectl -n services logs POD_NAME ansible
+        ```
+
+        Example output:
+
+        ```
         Inventory available
           % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                          Dload  Upload   Total   Spent    Left  Speed
@@ -138,7 +120,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         server: envoy
         transfer-encoding: chunked
 
-        ...
+        [...]
 
         PLAY [Compute] *****************************************************************
 
@@ -163,25 +145,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         TASK [cle-hosts-cf : remove temporary workarea] ********************************
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
 
-        TASK [limits : Ensure our file limits are set] *********************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        TASK [shadow : Change root password in /etc/shadow] ****************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        TASK [kdump : Install stock /etc/sysconfig/kdump] ******************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        TASK [kdump : copy kdump initrd script] ****************************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        TASK [kdump : create kdump initrd] *********************************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        TASK [kdump : remove kdump initrd script] **************************************
-        changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
-
-        ...
+        [...]
         ```
 
 

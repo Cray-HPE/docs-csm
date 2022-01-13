@@ -3,8 +3,8 @@
 
 Boot Script Service \(BSS\) delivers a boot script to a node based on its MAC address. This boot script tells the node where to obtain its boot artifacts, which include:
 
--   `kernel`
--   `initrd`
+- `kernel`
+- `initrd`
 
 In addition, the boot script also contains the kernel boot parameters. This procedure helps resolve issues related to missing boot artifacts.
 
@@ -24,6 +24,11 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 
     ```bash
     ncn-m001# kubectl get pods -n services -o wide | grep cray-bss | grep -v -etcd-
+    ```
+
+    Example output:
+
+    ```
     cray-bss-fd888bd54-gvpxq       2/2     Running     0      2d3h    10.32.0.16   ncn-w002   <none>    <none>
     ```
 

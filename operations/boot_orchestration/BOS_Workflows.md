@@ -36,8 +36,13 @@ Mentioned in this workflow:
 
     Add a configuration to CFS.
 
-    ```screen
+    ```bash
     # cray cfs configurations update sample-config --file configuration.json
+    ```
+
+    Example output:
+    
+    ```
     {
     "lastUpdated": "2020-09-22T19:56:32Z",
     "layers": [
@@ -67,7 +72,7 @@ Mentioned in this workflow:
     -   Reboot – Gracefully power down nodes that are on and then power them back up
     -   Shutdown – Gracefully power down nodes that are on
 
-    ```screen
+    ```bash
     # cray bos session create \
     --template-uuid SESSIONTEMPLATE_NAME \
     --operation Boot
@@ -153,7 +158,7 @@ Mentioned in this workflow:
     -   Reboot – Gracefully power down nodes that are on and then power them back up
     -   Shutdown – Gracefully power down nodes that are on
 
-    ```screen
+    ```bash
     # cray bos session create \
     --template-uuid SESSIONTEMPLATE_NAME \
     --operation Configure
@@ -215,7 +220,7 @@ Mentioned in this workflow:
     -   Reboot – Gracefully power down nodes that are on and then power them back up
     -   Shutdown – Gracefully power down nodes that are on
 
-    ```screen
+    ```bash
     # cray bos session create \
     --template-uuid SESSIONTEMPLATE_NAME \
     --operation Shutdown

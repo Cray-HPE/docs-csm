@@ -44,6 +44,11 @@ The Cray EX User Access Node \(UAN\) recipe currently requires the Slingshot Dia
 
         ```bash
         ncn-m001# cray ims recipes list --format json | jq '.[] | select(.name | contains("uan"))'
+        ```
+
+        Example output:
+
+        ```
         {
           "created": "2021-02-17T15:19:48.549383+00:00",
           "id": "4a5d1178-80ad-4151-af1b-bbe1480958d1",
@@ -73,6 +78,11 @@ The Cray EX User Access Node \(UAN\) recipe currently requires the Slingshot Dia
 
         ```bash
         ncn-m001# cray ims images list --format json | jq '.[] | select(.name | contains("uan"))'
+        ```
+
+        Example output:
+        
+        ```
         {
           "created": "2021-02-18T17:17:44.168655+00:00",
           "id": "6d46d601-c41f-444d-8b49-c9a2a55d3c21",

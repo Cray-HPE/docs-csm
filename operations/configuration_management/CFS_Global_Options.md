@@ -6,6 +6,11 @@ View the options with the following command:
 
 ```bash
 ncn# cray cfs options list --format json
+```
+
+Example output:
+
+```
 {
   "additionalInventoryUrl": "",
   "batchSize": 25,

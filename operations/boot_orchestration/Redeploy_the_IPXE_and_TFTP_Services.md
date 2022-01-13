@@ -15,6 +15,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-m001# kubectl get deployments -n services|egrep 'tftp|ipxe'
+    ```
+
+    Example output:
+
+    ```
     cray-ipxe                                   1/1     1            1           22m
     cray-tftp                                   3/3     3            3           28m
     ```
@@ -34,6 +39,11 @@ This procedure requires administrative privileges.
 
         ```bash
         ncn-m001# ceph -s
+        ```
+
+        Example output:
+
+        ```
           cluster:
             id:     bac74735-d804-49f3-b920-cd615b18316b
             health: HEALTH_WARN
@@ -60,6 +70,11 @@ This procedure requires administrative privileges.
 
         ```bash
         ncn-m001# ceph health detail
+        ```
+
+        Example output:
+
+        ```
         HEALTH_WARN 1 filesystem is degraded
         FS_DEGRADED 1 filesystem is degraded
             fs cephfs is degraded
@@ -69,6 +84,11 @@ This procedure requires administrative privileges.
 
         ```bash
         ncn-m001# ceph fs status
+        ```
+
+        Example output:
+
+        ```
         cephfs - 9 clients
         ======
         +------+-----------+----------+----------+-------+-------+
@@ -159,10 +179,15 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-m001# kubectl get pvc -n services|grep tftp
+    ```
+
+    Example of resources not being deleted in returned output:
+
+    ```
     cray-tftp-shared-pvc Bound pvc-315d08b0-4d00-11ea-ad9d-b42e993b7096 5Gi RWX ceph-cephfs-external 29m
     ```
 
-    *Optional:* Use the command below to delete the associated PVC.
+    *Optional:* Use the following command to delete the associated PVC.
 
     ```bash
     ncn-m001# kubectl -n services delete pvc PVC_NAME
@@ -192,7 +217,6 @@ This procedure requires administrative privileges.
 
         ```bash
         ncn-m001# kubectl get pods -n services --no-headers -o wide | grep cray-ipxe | awk '{print $1}'
-        cray-ipxe-759f95fcf5-mdbv8
         ```
 
     2.  Log into the pod using the iPXE pod ID.
@@ -213,6 +237,11 @@ This procedure requires administrative privileges.
 
         ```bash
         ncn-m001# kubectl get pods -n services --no-headers -o wide | grep cray-tftp | awk '{print $1}'
+        ```
+
+        Example output:
+
+        ```
         cray-tftp-7dc77f9cdc-bn6ml
         cray-tftp-7dc77f9cdc-ffgnh
         cray-tftp-7dc77f9cdc-mr6zd
@@ -242,6 +271,11 @@ This procedure requires administrative privileges.
 
         ```bash
         # ls -l
+        ```
+
+        Example output:
+
+        ```
         total 1919
         -rw-r--r--    1 root     root        980768 May 15 16:49 debug.efi
         -rw-r--r--    1 root     root        983776 May 15 16:50 ipxe.efi

@@ -5,6 +5,11 @@ A Configuration Framework Service \(CFS\) session using dynamic inventory is use
 ```bash
 ncn# cray cfs sessions create --name example \
 --configuration-name configurations-example
+```
+
+Example output:
+
+```
 {
   "ansible": {
     "config": "cfs-default-ansible-cfg",
