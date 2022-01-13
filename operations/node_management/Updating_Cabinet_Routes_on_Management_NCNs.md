@@ -56,7 +56,7 @@ This procedure will use config from System Layout Service (SLS) to set up the pr
 
 2.  Add cabinet routes to each of the management NCNs using data from SLS:
     ```bash
-    ncn-m001# /usr/share/doc/csm/operations/node_management/scripts/update-ncn-cabinet-routes.sh
+    ncn-m001# /usr/share/doc/csm/scripts/operations/node_management/update-ncn-cabinet-routes.sh
     ```
 
     If the following message appears, then the route being added is already present on the NCN and can be safely ignored.
