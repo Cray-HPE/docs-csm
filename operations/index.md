@@ -497,7 +497,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Disable Nodes](node_management/Disable_Nodes.md)
   * [Find Node Type and Manufacturer](node_management/Find_Node_Type_and_Manufacturer.md)
   * [Add additional Liquid-Cooled Cabinets to a System](node_management/Add_additional_Liquid-Cooled_Cabinets_to_a_System.md)
-    * [Updating Cabinet Routes on Management NCNs](node_management/Updating_Cabinet_Routes_on_Management_NCNs.md)
+  * [Updating Cabinet Routes on Management NCNs](node_management/Updating_Cabinet_Routes_on_Management_NCNs.md)
   * [Add a Standard Rack Node](node_management/Add_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node](node_management/Move_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node (Same Rack/Same HSN Ports)](node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
