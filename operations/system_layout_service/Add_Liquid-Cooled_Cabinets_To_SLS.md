@@ -36,7 +36,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 
     > The inspect_sls_cabinets.py script can be used to help display information about existing cabinets present in the system:
     > ```bash
-    > ncn-m001# /usr/share/doc/csm/operations/system_layout_service/scripts/inspect_sls_cabinets.py sls_dump.json    
+    > ncn-m001# /usr/share/doc/csm/scripts/operations/system_layout_service/inspect_sls_cabinets.py sls_dump.json    
     > ```
     > Example Output with a system with 1 Air-cooled cabinet and 4 liquid-cooled cabinets:
     > ```
@@ -75,7 +75,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     | `--starting-nid`     | Starting NID for new cabinet. Each cabinet is allocated 256 NIDs. | `2024`               |
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/operations/system_layout_service/scripts/add_liquid_cooled_cabinet.py sls_dump.json \
+    ncn-m001# /usr/share/doc/csm/scripts/operations/system_layout_service/add_liquid_cooled_cabinet.py sls_dump.json \
         --cabinet x1004  \
         --cabinet-type Mountain \
         --cabinet-vlan-hmn 3004 \
@@ -138,7 +138,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 
 4.  Inspect cabinet subnet and VLAN allocations in the system after adding the new cabinets cabinets:
     ```bash
-    ncn-m001# /usr/share/doc/csm/operations/system_layout_service/scripts/inspect_sls_cabinets.py sls_dump.json 
+    ncn-m001# /usr/share/doc/csm/scripts/operations/system_layout_service/inspect_sls_cabinets.py sls_dump.json 
     ```
 
     Example output:
@@ -176,7 +176,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 
 6.  **For each** new CDU Switch add it to the SLS state dump taken in step 1 in __ascending order__ based on the switch alias:
     ```bash
-    ncn-m001# /usr/share/doc/csm/operations/system_layout_service/scripts/add_cdu_switch.py sls_dump.json \
+    ncn-m001# /usr/share/doc/csm/scripts/operations/system_layout_service/add_cdu_switch.py sls_dump.json \
         --cdu-switch d1w1 \
         --alias sw-cdu-003 \
         --brand Dell
