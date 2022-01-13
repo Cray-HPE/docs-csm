@@ -5,7 +5,10 @@ This page is designed for:
 - Showing users how initially save switch configs so they can be used again.
 - Loading previously saved switch configs from a certain CSM version/desired version.
 
-<span style="color:red">All of these steps should be done using an out of band connection.</span>
+:exclamation: All of these steps should be done using an out of band connection. This process is disruptive and will require downtime :exclamation:  
+
+
+
 ## Mellanox
 
 Docs for config mgmt https://docs.nvidia.com/networking/display/Onyxv391014/Configuration+Management
