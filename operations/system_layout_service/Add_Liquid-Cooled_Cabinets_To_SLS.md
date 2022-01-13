@@ -64,6 +64,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     > ```
 
 3.  **For each** new liquid-cooled cabinet add it to the previously taken SLS state dump in __ascending order__:
+    
     Command line flags for `add_liquid_cooled_cabinet.py`:
     | Argument             | Description                                                       | Example value        |
     | -------------------- | ----------------------------------------------------------------- | -------------------- |
@@ -125,15 +126,15 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     Writing updated SLS state to sls_dump.json
     ```
 
-    **Note** if adding more than 1 cabinet and contiguous NIDs are desired the value of the `Next available NID 2280` can be used as the value to the `--start-nid` argument when adding the next cabinet.
+    **Note** if adding more than one cabinet and contiguous NIDs are desired the value of the `Next available NID 2280` can be used as the value to the `--start-nid` argument when adding the next cabinet.
 
     Possible Errors:
     | Problem                        | Error Message                                                         | Resolution |
     | ------------------------------ | --------------------------------------------------------------------- | ---------- |
-    | Duplicate Cabinet Xname        | `Error x1000 already exists in sls_dump.json!`                        | The cabinet has already present in SLS. Ensure the new cabinet has a unique xname, Or the cabinet is already present in SLS. |
+    | Duplicate Cabinet Xname        | `Error x1000 already exists in sls_dump.json!`                        | The cabinet has already present in SLS. Ensure the new cabinet has a unique xname, or the cabinet is already present in SLS. |
     | Duplicate NID values           | `Error found duplicate NID 3000`                                      | Need to choose a different starting NID value for the cabinet that does not overlap with existing nodes. |
-    | Duplicate Cabinet HMN VLAN ID: | `Error found duplicate VLAN 3022 with subnet cabinet_1001 in HMN_MTN` | Ensure that the this new cabinet gets an unique HMN VLAN ID. |
-    | Duplicate Cabinet NMN VLAN ID  | `Error found duplicate VLAN 3023 with subnet cabinet_1001 in NMN_MTN` | Ensure that the this new cabinet gets an unique NMN VLAN ID. | 
+    | Duplicate Cabinet HMN VLAN ID: | `Error found duplicate VLAN 3022 with subnet cabinet_1001 in HMN_MTN` | Ensure that the this new cabinet has an unique HMN VLAN ID. |
+    | Duplicate Cabinet NMN VLAN ID  | `Error found duplicate VLAN 3023 with subnet cabinet_1001 in NMN_MTN` | Ensure that the this new cabinet has an unique NMN VLAN ID. | 
 
 4.  Inspect cabinet subnet and VLAN allocations in the system after adding the new cabinets cabinets:
     ```bash
@@ -248,5 +249,4 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 
 9.  MEDS will automatically start looking for potential hardware in the newly added liquid-cooled cabinets. 
 
-    **Note**: No hardware in these new cabinets until the management network has been reconfigured to add the new cabinets, and routes has been added to teh management NCNs in the system.
-    <!-- TODO Need to add links to these 2 procedures --/>
+    **Note**: No hardware in these new cabinets will be discovered until the management network has been reconfigured to support the new cabinets, and routes has been added to the management NCNs in the system.

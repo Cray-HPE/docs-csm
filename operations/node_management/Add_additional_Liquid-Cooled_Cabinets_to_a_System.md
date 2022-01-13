@@ -1,6 +1,6 @@
 # Add additional Liquid-Cooled Cabinets to a System
 
-This top level procedure outlines the process for adding additional liquid-cooled cabinets to an already installed system. 
+This top level procedure outlines the process for adding additional liquid-cooled cabinets to a currently installed system. 
 
 ## Prerequisites
 - The System's SHCD file has been updated with the new cabinets and cabling changes.
