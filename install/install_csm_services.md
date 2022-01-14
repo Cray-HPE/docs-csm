@@ -18,15 +18,13 @@ This procedure will install CSM applications and services into the CSM Kubernete
 ## Details
 
 <a name="install-yapl"></a>
-
 ### 1. Install Yapl
 
 ```bash
-   linux# rpm -Uvh /var/www/ephemeral/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/yapl-*.x86_64.rpm
+pit# rpm -Uvh /var/www/ephemeral/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/yapl-*.x86_64.rpm
 ```
 
 <a>install-csm-services</a>
-
 ### 2. Install CSM Services
 
 > **NOTE**: During this step, on (only) TDS systems with three worker nodes the `customizations.yaml` file will be edited (automatically) to lower pod CPU requests for some services in order to better facilitate scheduling on smaller systems. See the file: `/var/www/ephemeral/${CSM_RELEASE}/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified with different values (prior to executing the `yapl` command below) if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/CSM_product_management/Post_Install_Customizations.md).
@@ -34,14 +32,14 @@ This procedure will install CSM applications and services into the CSM Kubernete
 Setup password-less SSH for the pit node:
 
 ```bash
-   linux# rsync -av ncn-m002:.ssh/ /root/.ssh/
+pit# rsync -av ncn-m002:.ssh/ /root/.ssh/
 ```
 
 Install csm services using `yapl`:
 
 ```bash
-   linux# cd /usr/share/doc/csm/install/scripts/csm_services
-   linux# yapl -f install.yaml execute
+pit# cd /usr/share/doc/csm/install/scripts/csm_services
+pit# yapl -f install.yaml execute
 ```
 
 > **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. You can rerun above command any time.
@@ -51,12 +49,9 @@ Install csm services using `yapl`:
 > **NOTE**: If you want to force a rerun, you can use `--no-cache`: `yapl -f install.yaml execute --no-cache`
 
 <a name="apply-after-sysmgmt-manifest-workarounds"></a>
-
 ### 3. Apply After Sysmgmt Manifest Workarounds
 
 Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `after-sysmgmt-manifest` breakpoint.
-
-<a name="known-issues"></a>
 
 <a name="wait-for-everything-to-settle"></a>
 ### 4. Wait For Everything To Settle
@@ -64,10 +59,10 @@ Follow the [workaround instructions](../update_product_stream/index.md#apply-wor
 Wait **at least 15 minutes** to let the various Kubernetes resources get initialized and started before proceeding with the rest of the install.
 Because there are a number of dependencies between them, some services are not expected to work immediately after the install script completes.
 
+<a name="known-issues"></a>
 ### 5. Known Issues
 
 <a name="known-issues-install-sh"></a>
-
 #### 5.1 install.sh known issues
 
 The `install.sh` script changes cluster state and should not simply be rerun
@@ -114,13 +109,11 @@ The following error may occur when running `./install.sh`:
 4. Running `install.sh` again is expected to succeed.
 
 <a name="known-issues-setup-nexus"></a>
-
 #### 5.2 Setup Nexus known issues
 
 Known potential issues with suggested fixes are listed in [Troubleshoot Nexus](../operations/package_repository_management/Troubleshoot_Nexus.md).
 
 <a name="next-topic"></a>
-
 ### 6. Next Topic
 
 After completing this procedure the next step is to validate CSM health before redeploying the final NCN.
