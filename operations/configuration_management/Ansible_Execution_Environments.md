@@ -10,7 +10,7 @@ The following modules and plug-ins are available:
 
     This callback plug-in is included to relay playbook execution results back to CFS for the purpose of tracking session status and component state.
 
-    **Warning:** This plug-in is required for CFS to function properly and must not be removed from the ansible.cfg file.
+    **WARNING:** This plug-in is required for CFS to function properly and must not be removed from the ansible.cfg file.
 
 -   **`cfs_linear` and `cfs_free` Strategy Plug-ins**
 
@@ -24,7 +24,7 @@ The following modules and plug-ins are available:
 
     An example of using this module is as follows:
 
-    ```screen
+    ```
     - name: Retrieve credentials from abc-s3-credentials k8s secret
       shasta_s3_creds:
         k8s_secret: abc-s3-credentials

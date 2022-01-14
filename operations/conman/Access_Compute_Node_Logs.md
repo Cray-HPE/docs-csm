@@ -19,9 +19,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     ```
     ncn-m001# CONPOD=$(kubectl get pods -n services \
     -o wide|grep cray-console-operator|awk '{print $1}')
-
     ncn-m001# echo $CONPOD
-    cray-console-operator-79bf95964-qpcpp
     ```
 
 3. Log on to the pod.
@@ -40,9 +38,15 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 
     ```
     /var/log/conman # ls -la
+    ```
+
+    Example output:
+
+    ```
     total 44
     -rw------- 1 root root 1415 Nov 30 20:00 console.NODE_ID
-    ...
+    
+    [...]
     ```
 
 6. Use the node's ID to retrieve its logs.
@@ -55,6 +59,5 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 
     ```
     /var/log/conman # exit
-    ncn-m001#
     ```
 

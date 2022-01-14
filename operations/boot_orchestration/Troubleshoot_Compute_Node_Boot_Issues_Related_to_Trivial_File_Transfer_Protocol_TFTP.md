@@ -27,7 +27,6 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     ```bash
     ncn-m001# PODID=$(kubectl get pods -n services --no-headers -o wide | grep cray-tftp | awk '{print $1}')
     ncn-m001# echo $PODID
-    cray-tftp-85f8dbf699-fqgfh
     ```
 
 5.  Enter the TFTP pod using the pod ID.

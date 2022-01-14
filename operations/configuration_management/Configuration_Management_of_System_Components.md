@@ -55,6 +55,11 @@ To view the configuration state of a given component, use the `describe` command
 
 ```bash
 ncn# cray cfs components describe XNAME --format json
+```
+
+Example output:
+
+```
 {
   "configurationStatus": "configured",
   "desiredConfig": "configurations-example",

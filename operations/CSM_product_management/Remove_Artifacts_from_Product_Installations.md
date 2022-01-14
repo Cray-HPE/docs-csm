@@ -13,6 +13,11 @@ The examples in this procedure show how to remove the product artifacts for the 
 
     ```bash
     ncn-m001# kubectl get cm cray-product-catalog -n services -o json | jq -r .data.csm
+    ```
+
+    Example output:
+
+    ```
     1.0.0:
     configuration:
         clone_url: https://vcs.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git

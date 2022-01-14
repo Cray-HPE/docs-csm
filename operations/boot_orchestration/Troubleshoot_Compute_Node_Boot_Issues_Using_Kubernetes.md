@@ -28,7 +28,8 @@ In the current arrangement, all three services are located on a non-compute node
     ICMP Echo reply while lease 10.100.160.199 valid.
     Abandoning IP address 10.100.160.199: pinged before offer
     Reclaiming abandoned lease 10.100.160.195.
-    ...
+    
+    [...]
     ```
 
 -   Check if a Kubernetes pod is running:

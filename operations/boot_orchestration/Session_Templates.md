@@ -8,9 +8,9 @@ Session templates can be used to boot images that are customized with the Image 
 
 The Simple Storage Service \(S3\) is used to store the manifest.json file that is created by IMS. This file contains links to all of the boot artifacts. The following S3 parameters are used in a BOS session template:
 
--   type: This is the type of storage used. Currently, the only allowable value is `s3`.
--   path: This is the path to the manifest.json file in S3. The path will follow the s3://<BUCKET\_NAME\>/<KEY\_NAME\> format.
--   etag: This entity tag helps identify the version of the manifest.json file. Currently not used but cannot be left blank.
+- type: This is the type of storage used. Currently, the only allowable value is `s3`.
+- path: This is the path to the manifest.json file in S3. The path will follow the s3://<BUCKET\_NAME\>/<KEY\_NAME\> format.
+- etag: This entity tag helps identify the version of the manifest.json file. Currently not used but cannot be left blank.
 
 The following is an example BOS session template:
 

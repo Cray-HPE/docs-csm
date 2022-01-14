@@ -17,10 +17,9 @@ Use the following command from a non-compute node \(NCN\) to see which boot arti
 ncn-m001# cray bss bootparameters list
 ```
 
-Each boot artifact has a download URL, as shown in the following examples:
+Each boot artifact has a download URL, as shown in the following example outpu:
 
-```bash
-ncn-m001# cray bss bootparameters list
+```
 [[results]]
 kernel = "s3://boot-images/dc87a741-f7cc-4167-afae-592c5a8ca7ec/vmlinuz-4.12.14-197.29_9.1.14-cray_shasta_c"
 

@@ -81,8 +81,13 @@ Data for gitea is stored in two places. Git content is stored directly in a PVC,
 #### Backup Postgres Data
 
 1. Determine which Postgres member is the leader and exec into the leader pod to dump the data to a local file:
+    
     ```
     ncn-w001# kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list
+    ```
+
+    Example output:
+    ```
     + Cluster: gitea-vcs-postgres (6995618180238446669) -----+----+-----------+
     |        Member        |     Host     |  Role  |  State  | TL | Lag in MB |
     +----------------------+--------------+--------+---------+----+-----------+
@@ -90,7 +95,9 @@ Data for gitea is stored in two places. Git content is stored directly in a PVC,
     | gitea-vcs-postgres-1 | 10.46.128.19 |        | running |  1 |         0 |
     | gitea-vcs-postgres-2 |  10.47.0.21  |        | running |  1 |         0 |
     +----------------------+--------------+--------+---------+----+-----------+
-    
+    ```
+
+    ```bash
     ncn-w001# POSTGRES_LEADER=gitea-vcs-postgres-0
     
     ncn-w001# kubectl exec -it ${POSTGRES_LEADER} -n services -c postgres -- pg_dumpall -c -U postgres > gitea-vcs-postgres.sql
@@ -100,22 +107,28 @@ Data for gitea is stored in two places. Git content is stored directly in a PVC,
 
     ```
     ncn-w001# kubectl get secrets -n services | grep gitea-vcs-postgres.credentials
+    ```
+
+    Example output:
+
+    ```
     postgres.gitea-vcs-postgres.credentials                   Opaque                                2      13d
     service-account.gitea-vcs-postgres.credentials            Opaque                                2      13d
     standby.gitea-vcs-postgres.credentials                    Opaque                                2      13d
     ```
 
-    Export each secret to a manifest file:
+3. Export each secret to a manifest file:
+
     ```
-    ncn-w001:~ # SECRETS="postgres service-account standby"
-    ncn-w001:~ # echo "---" > gitea-vcs-postgres.manifest
-    ncn-w001:~ # for secret in $SECRETS; do
+    ncn-w001# SECRETS="postgres service-account standby"
+    ncn-w001# echo "---" > gitea-vcs-postgres.manifest
+    ncn-w001# for secret in $SECRETS; do
     >   kubectl get secret "${secret}.gitea-vcs-postgres.credentials" -n services -o yaml >> gitea-vcs-postgres.manifest
     >   echo "---" >> gitea-vcs-postgres.manifest
     > done
    ```
    
-   Edit the manifest file created above to remove creationTimestamp, resourceVersion, selfLink, uid for each entry  Then copy all files to a safe location.
+4. Edit the manifest file to remove creationTimestamp, resourceVersion, selfLink, uid for each entry. Then, copy all files to a safe location.
 
 
 #### Backup PVC Data
@@ -123,6 +136,7 @@ Data for gitea is stored in two places. Git content is stored directly in a PVC,
 The VCS postgres backups should be accompanied by backups of the VCS PVC. The export process can be run at any time while the service is running using the following commands:
 
 Backup (save the resulting tar file to a safe location):
+
 ```
 POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
 kubectl -n services exec ${POD} -- tar -cvf vcs.tar /data/
@@ -138,6 +152,7 @@ Restoring VCS from Postgres is documented here: [Restore_Postgres.md](../../oper
 When restoring the VCS postgres database, the PVC should also be restored to the same point in time. The restore process can be run at any time while the service is running using the following commands:
 
 Restore:
+
 ```
 POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
 kubectl -n services cp ./vcs.tar ${POD}:vcs.tar

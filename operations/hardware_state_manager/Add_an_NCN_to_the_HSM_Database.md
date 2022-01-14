@@ -6,9 +6,9 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   The initial software installation is complete.
--   Keycloak authentication is complete.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- The initial software installation is complete.
+- Keycloak authentication is complete.
 
 ### Procedure
 
@@ -18,6 +18,11 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
 
     ```bash
     ncn-m001# grep ncn-w003-nmn /etc/hosts
+    ```
+
+    Example output:
+
+    ```
     0.252.1.15   ncn-w003.local ncn-w003 ncn-w003-nmn ncn-w003-nmn.local sms03-nmn x3000c0s24b0n0 #-label-10.252.1.15
     ```
 
@@ -47,6 +52,11 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
 
     ```bash
     ncn-m001# cray hsm state components list --id x3000c0s24b0
+    ```
+
+    Example output:
+
+    ```
     [[Components]]
     Arch = "X86"
     Enabled = true
@@ -62,6 +72,11 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
 
     ```bash
     ncn-m001# kubectl get pods -l app.kubernetes.io/instance=ncn-customization -n services -o wide
+    ```
+
+    Example output:
+
+    ```
     NAME                                  READY  STATUS    RESTARTS   AGE    IP          NODE       NOMINATED NODE   READINESS GATES
     ncn-customization-cray-service-4tqcg  2/2    Running   2          4d2h   10.47.0.3   ncn-m001   <none>           <none>
     ncn-customization-cray-service-dh8gb  2/2    Running   1          4d2h   10.42.0.4   ncn-w003   <none>           <none>
@@ -85,6 +100,11 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
         ```bash
         ncn-m001# kubectl get pods -l app.kubernetes.io/instance=ncn-customization \
         -n services -o wide | grep ncn-w003
+        ```
+
+        Example output:
+
+        ```
         ncn-customization-cray-service-dh8gb   2/2  Running   2   22d   10.36.0.119   ncn-w003   <none>   <none>
         ```
 
@@ -94,6 +114,11 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
 
         ```bash
         ncn-m001# cray cfs sessions list | grep "name ="
+        ```
+
+        Example output:
+
+        ```
         name = "ncn-customization-ncn-w003-unload"
         ```
 
@@ -103,6 +128,11 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
 
         ```bash
         ncn-m001# cray cfs sessions list | grep "name ="
+        ```
+
+        Example output:
+
+        ```
         name = "ncn-customization-ncn-w003-load"
         ```
 

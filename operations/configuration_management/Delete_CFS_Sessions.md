@@ -6,8 +6,9 @@ Use the session name to delete the session:
 
 ```bash
 ncn# cray cfs sessions delete example
-<no output expected>
 ```
+
+No output is expected.
 
 To delete all completed CFS sessions, use the `deleteall` command. This command can also filter the sessions to delete based on tags, name, status, age, and success or failure. By default, if no other filter is specified, this command only deletes completed sessions.
 
