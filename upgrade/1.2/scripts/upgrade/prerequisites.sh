@@ -239,10 +239,20 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="UPGRADE_KEA"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    helm -n services upgrade cray-dhcp-kea ${CSM_ARTI_DIR}/helm/cray-dhcp-kea-*.tgz
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPDATE_CLOUD_INIT_RECORDS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "${state_name} ..."
+    echo "====> ${state_name} ..."
 
     # get bss cloud-init data with host_records
     curl -k -H "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global|jq .[] > cloud-init-global.json
@@ -379,9 +389,11 @@ fi
 
 # Take cps deployment snapshot (if cps installed)
 set +e
+trap - ERR
 kubectl get pod -n services | grep -q cray-cps
 if [ "$?" -eq 0 ]; then
   cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r '.[] | .node' || true)
   echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
 fi
+trap 'err_report' ERR
 set -e
