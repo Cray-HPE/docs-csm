@@ -1,7 +1,28 @@
 #!/bin/bash
 #
-# Copyright 2021 Hewlett Packard Enterprise Development LP
+# MIT License
 #
+# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+
 set -e
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
@@ -238,12 +259,18 @@ fi
 redeploy=$(cat /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot | grep $upgrade_ncn | wc -l)
 if [[ $redeploy == "1" ]];then
     cray cps deployment update --nodes $upgrade_ncn
-    cps_state=$(cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="|grep -v "running" | wc -l)
-    if [[ $cps_state -ne 0 ]];then
-        echo "ERROR: CPS is not running on $upgrade_ncn"
-        cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="
-        exit 1
-    fi
+    while [[ $(cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="|grep -v "running" | wc -l) != 0 ]]
+    do
+        printf "%c" "."
+        counter=$((counter+1))
+        if [ $counter -gt 30 ]; then
+            counter=0
+            echo "ERROR: CPS is not running on $upgrade_ncn"
+            cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="
+            exit 1
+        fi
+        sleep 5
+    done
     cps_pod_assigned=$(kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $upgrade_ncn|wc -l)
     if [[ $cps_pod_assigned -ne 1 ]];then
         echo "ERROR: CPS pod is not assigned to $upgrade_ncn"

@@ -1,16 +1,19 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: UAI Images](UAI_Images.md)
 
 ## Configure UAIs in UAS
 
-The four main items of UAI configuration in UAS. Links to procedures for listing, adding, examining, updating, and deleting each item.
+The sub-topics in this section cover the four main elements of UAI configuration in UAS, and provide Links to procedures for listing, adding, examining, updating, and deleting each kind of element.
 
 Options for the elements of a UAI are maintained in the UAS configuration. The following can be configured in UAS:
 
--   UAI images
--   Volumes
--   Resource specifications
--   UAI Classes
+-   [UAI images](UAI_Images.md)
+-   [Volumes](Volumes.md)
+-   [Resource Specifications](Resource_Specifications.md)
+-   [UAI Classes](UAI_Classes.md)
 
-Only users who are defined as administrators in an HPE Cray EX system and are logged in using the administrative CLI \(`cray` command\) can configure UAS. Configure UAS from a LiveCD node or from any system with the administrative CLI installed that can reach the HPE Cray EX API Gateway.
+Only users who are defined as administrators in an HPE Cray EX system and are logged in using the administrative CLI \(`cray` command\) can configure UAS. Configure UAS from a LiveCD node or from any system with the administrative CLI installed that can reach the HPE Cray EX API Gateway as an adminisgtrator.
 
 The following procedures provide instructions for creating, updating, examining, and removing configuration items from UAS:
 
@@ -39,4 +42,4 @@ The following procedures provide instructions for creating, updating, examining,
     -   [Modify a UAI Class](Modify_a_UAI_Class.md)
     -   [Delete a UAI Class](Delete_a_UAI_Class.md)
 
-
+[Next Topic: UAI Images](UAI_Images.md)

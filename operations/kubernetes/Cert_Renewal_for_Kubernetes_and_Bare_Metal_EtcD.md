@@ -1,18 +1,17 @@
-# Kubernetes and Bare Metal EtcD Certificate Renewal
 
-## Scope
+# Kubernetes and Bare Metal EtcD Certificate Renewal
 
 As part of the installation, Kubernetes generates certificates for the required subcomponents. This document will help walk through the process of renewing the certificates.
 
-**`IMPORTANT:`** Depending on the version of Kubernetes, the command may or may not reside under the alpha category. Use `kubectl certs --help` and `kubectl alpha certs --help` to determine this. The overall command syntax should be the same and this is just whether or not the command structure will require `alpha` in it.
+**IMPORTANT:** 
+   
+   - Depending on the version of Kubernetes, the command may or may not reside under the `alpha` category. Use `kubectl certs --help` and `kubectl alpha certs --help` to determine this. The overall command syntax should be the same and this is just whether or not the command structure will require `alpha` in it.
+   - The node referenced in this document as `ncn-m` is the master node selected to renew the certificates on.
+   - This document is based off a base hardware configuration of three master nodes and three worker nodes. Utility storage nodes are not mentioned because they are not running Kubernetes. Please make sure to update any commands that run on multiple nodes accordingly.
 
-**`IMPORTANT:`** When you pick your master node to renew the certificatess on, that is the node that will be referenced in this document as `ncn-m`.
+## File Locations
 
-**`IMPORTANT:`** This document is based off a base hardware configuration of 3 masters and 3 workers (We are leaving off utility storage because they are not running Kubernetes). Please make sure to update any commands that run on multiple nodes accordingly.
-
-## File locations
-
-**`IMPORTANT:`** Master nodes will have certificates for both Kubernetes services and the Kubernetes client. Workers will only have the certificates for the Kubernetes client.
+**IMPORTANT:** Master nodes will have certificates for both Kubernetes services and the Kubernetes client. Workers will only have the certificates for the Kubernetes client.
 
 Services (master nodes):
 
@@ -52,9 +51,9 @@ Client (master and worker nodes):
 
 ## Procedure
 
-Check the expiration of the certificates.
+1. Log into a master node.
 
-1. Log into a master node and run the following:
+1. Check the expiration of the certificates.
 
     ```bash
     ncn-m# kubeadm alpha certs check-expiration --config /etc/kubernetes/kubeadmcfg.yaml
@@ -78,11 +77,9 @@ Check the expiration of the certificates.
     front-proxy-ca          Sep 02, 2030 15:21 UTC   8y              no
     ```
 
-### Backing up existing certificates
+### Backup Existing Certificates
 
-1. Backup existing certificates.
-
-    Master Nodes:
+1. Backup existing certificates on master nodes:
 
     ```bash
     ncn-m# pdsh -w ncn-m00[1-3] tar cvf /root/cert_backup.tar /etc/kubernetes/pki/ /var/lib/kubelet/pki/
@@ -97,9 +94,9 @@ Check the expiration of the certificates.
     ..  shortened output
     ```
 
-    Worker Nodes:
+1. Backup existing certificates on worker nodes:
 
-    **`IMPORTANT:`** The range of nodes below should reflect the size of the environment. This should run on every worker node.
+    **IMPORTANT:** The range of nodes below should reflect the size of the environment. This should run on every worker node.
 
     ```bash
     ncn-m# pdsh -w ncn-w00[1-3] tar cvf /root/cert_backup.tar /var/lib/kubelet/pki/
@@ -113,9 +110,9 @@ Check the expiration of the certificates.
     ..  shortened output
     ```
 
-### Renewing Certificates
+### Renew Certificates
 
-#### On each master node
+Run the following steps on each master node.
 
 1. Renew the Certificates.
 
@@ -157,7 +154,7 @@ Check the expiration of the certificates.
     front-proxy-ca          Sep 02, 2030 15:21 UTC   8y              no
     ```
 
-1. This command may have only updated some certificates.
+1. Check to see if only some of the certificates were updated.
 
     ```bash
     ncn-m# ncn-m001:~ # ls -l /etc/kubernetes/pki
@@ -188,9 +185,9 @@ Check the expiration of the certificates.
     -rw------- 1 root root 1675 Sep 22 17:13 server.key
     ```
 
-   As we can see not all the certificate files were updated.
+   Not all the certificate files were updated in this example.
 
-   `IMPORTANT:` Some certificates were not updated because they have a distant expiration time and did not need to be updated. ***This is expected.***
+   **IMPORTANT:** Some certificates were not updated because they have a distant expiration time and did not need to be updated. ***This is expected.***
 
       Certificates most likely to not be updated due to a distant expiration:
 
@@ -238,32 +235,31 @@ Check the expiration of the certificates.
    notAfter=Sep  4 17:01:38 2022 GMT
    ```
 
-   **`IMPORTANT:`** DO NOT forget to verify certificates in /etc/kubernetes/pki/etcd.
-   - As noted in our above output all certificates including those for etcd were updated. Please note `apiserver-etcd-client.crt` is a Kubernetes api cert not an etcd only cert. Also the `/var/lib/kubelet/pki/` certificates will be updated in the Kubernetes client section that follows.
+   **IMPORTANT:** Do **NOT** forget to verify certificates in /etc/kubernetes/pki/etcd.
+   - As noted in the above output, all certificates including those for etcd were updated. Please note `apiserver-etcd-client.crt` is a Kubernetes api cert not an etcd only cert. Also, the `/var/lib/kubelet/pki/` certificates will be updated in the Kubernetes client section that follows.
 
 1. Restart etcd.
 
-   Once the steps to renew the needed certs have been completed on all the master nodes, then log into each master node one at a time and do:
+   Once the steps to renew the needed certs have been completed on all the master nodes, log into each master node one at a time and run the following:
 
    ```bash
    ncn-m# systemctl restart etcd.service
    ```
-
-#### On master and worker nodes
+**Run the remaining steps on both  master and worker nodes.**
 
 1. Restart kubelet.
 
-   On each Kubernetes node do:
+   Run the following command on each Kubernetes node.
 
-   **`IMPORTANT:`** The below example will need to be adjusted to reflect the correct amount of master and worker nodes in your environment.
+   **IMPORTANT:** The following example will need to be adjusted to reflect the correct amount of master and worker nodes in the environment being used.
 
    ```bash
    ncn-m# pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] systemctl restart kubelet.service
    ```
 
-2. Fix kubectl command access.
+1. Fix `kubectl` command access.
 
-   `NOTE:` Only if your certificates have expired will the following command respond with Unauthorized. In any case, the new client certificates will need to be distributed in the following steps.
+   **NOTE:** The following command will only respond with Unauthorized if certificates have expired. In any case, the new client certificates will need to be distributed in the following steps.
 
    ```bash
    ncn-m# kubectl get nodes
@@ -279,60 +275,60 @@ Check the expiration of the certificates.
    ncn-w003   Ready    <none>   370d   v1.18.6
    ```
 
-3. Distribute the client certificate to the rest of the cluster.
+1. Distribute the client certificate to the rest of the cluster.
 
-   `NOTE:` You may have errors copying files. The target may or may not exist depending on the version of Shasta.
+   **NOTE:** There may be errors when copying files. The target may or may not exist depending on the version of Shasta.
   
-   - You **DO NOT** need to copy this to the master node where you are performing this work.
+   - **DO NOT** copy this to the master node where this work is being performed.
    - Copy `/etc/kubernetes/admin.conf` to all master and worker nodes.
 
    Client access:
 
-   **`NOTE:`** Please update the below command with the appropriate amount of worker nodes.
+   **NOTE:** Update the following command with the appropriate amount of worker nodes.
 
    ```
    ncn-m# pdcp -w ncn-m00[2-3] -w ncn-w00[1-3] /etc/kubernetes/admin.conf /etc/kubernetes/
    ```
 
 
-## Regenerating kubelet .pem certificates
-
+## Regenerate kubelet .pem Certificates
 
 1. Backup certificates for `kubelet` on each master and worker node:
 
-   **`IMPORTANT:`** The below example will need to be adjusted to reflect the correct amount of master and worker nodes in your environment.
+   **IMPORTANT:** The following example will need to be adjusted to reflect the correct amount of master and worker nodes in the environment being used.
 
    ```bash
    ncn-m# pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] tar cvf /root/kubelet_certs.tar /etc/kubernetes/kubelet.conf /var/lib/kubelet/pki/
    ```
 
-2. On the master node where you updated the other certificates do:
+2. Log into the master node where the other certificates were updated.
 
-   Get your current `apiserver-advertise-address`.
+   1. Get your current `apiserver-advertise-address`.
 
-   ```bash
-   ncn# kubectl config view|grep server
-    server: https://10.252.120.2:6442
-   ```
+      ```bash
+      ncn# kubectl config view|grep server
+      server: https://10.252.120.2:6442
+      ```
 
-   Using the IP address from the above output do:
-   - The `apiserver-advertise-address` may vary, so make sure you are not copy and pasting without verifying.
+   1. Generate a new `kubelet.conf` file in the `/root/` directory with the IP address from the previous command.
 
-   ```bash
-   ncn-m# for node in $(kubectl get nodes -o json|jq -r '.items[].metadata.name'); do kubeadm alpha kubeconfig user --org system:nodes --client-name system:node:$node --apiserver-advertise-address 10.252.120.2 --apiserver-bind-port 6442 > /root/$node.kubelet.conf; done
-   ```
+      **NOTE:** The `apiserver-advertise-address` may vary, so make sure you are not copy and pasting without verifying.
 
-   This will generate a new `kubelet.conf` file in the `/root/` directory. There should be a new file per node running Kubernetes.
+      ```bash
+      ncn-m# for node in $(kubectl get nodes -o json|jq -r '.items[].metadata.name'); do kubeadm alpha kubeconfig user --org system:nodes --client-name system:node:$node --apiserver-advertise-address 10.252.120.2 --apiserver-bind-port 6442 > /root/$node.kubelet.conf; done
+      ```
+      
+      There should be a new `kubelet.conf` file per node running Kubernetes.
 
 3. Copy each file to the corresponding node shown in the filename.
 
-   **`NOTE:`** Please update the below command with the appropriate amount of master and worker nodes.
+   **NOTE:** Please update the below command with the appropriate amount of master and worker nodes.
 
    ```bash
    ncn-m# for node in ncn-m00{1..3} ncn-w00{1..3}; do scp /root/$node.kubelet.conf $node:/etc/kubernetes/; done
    ```
 
-4. Log into each node one at a time and do the following.
+4. Log into each node one at a time and run the following commands:
 
    1. systemctl stop kubelet.service
    2. rm /etc/kubernetes/kubelet.conf
@@ -357,11 +353,11 @@ Check the expiration of the certificates.
    ```
 
 6. Perform a rolling reboot of master nodes.
+   
+   Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) process.
 
-   1. Follow the [Reboot_NCNs](../node_management/Reboot_NCNs.md) process.
-
-   **IMPORTANT:** Please ensure you are verifying pods are running on the master node that was rebooted before proceeding to the next node.
+   **IMPORTANT:** Verify pods are running on the master node that was rebooted before proceeding to the next node.
 
 7. Perform a rolling reboot of worker nodes.
-
-   1. Follow the [Reboot_NCNs](../node_management/Reboot_NCNs.md) process.
+   
+   Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) process.

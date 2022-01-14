@@ -105,8 +105,8 @@ The commands in this procedure must be run as the `root` user.
 
     |Recipe|Recipe Name|Kernel File Name|Initrd File Name|
     |------|-----------|----------------|----------------|
-    |SLES 15 SP1 Barebones|cray-sles15sp1-barebones|vmlinuz|initrd|
-    |COS|cray-shasta-compute-sles15sp1.x86_64-1.4.66|vmlinuz|initrd|
+    |SLES 15 SP3 Barebones|cray-sles15sp3-barebones|vmlinuz|initrd|
+    |COS|cray-shasta-compute-sles15sp3.x86_64-1.4.66|vmlinuz|initrd|
 
     ```bash
     ncn# cray ims jobs create \
@@ -425,14 +425,14 @@ The commands in this procedure must be run as the `root` user.
     host = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service.ims.svc.cluster.local"
     port = 22
     [ssh_containers.connection_info.customer_access]
-    host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com" <<-- Note this host
+    host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com" <<-- Note this host
     port = 22 <<-- Note this port
     ```
 
     If successful, create variables for the SSH connection information.
 
     ```bash
-    ncn# IMS_SSH_HOST=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.shasta.cray.com
+    ncn# IMS_SSH_HOST=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com
     ncn# IMS_SSH_PORT=22
     ```
 

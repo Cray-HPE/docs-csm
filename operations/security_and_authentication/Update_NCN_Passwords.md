@@ -1,4 +1,4 @@
-## Update NCN Passwords
+## Update NCN User Passwords
 
 The NCNs deploy with a default password, which are changed during the system
 install. See [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
@@ -11,6 +11,14 @@ The NCN root user password is stored in the [HashiCorp Vault](HashiCorp_Vault.md
 instance, and applied with the `csm.password` Ansible role via a CFS session. If
 no password is added to Vault as in the procedure below, this Ansible role will
 skip any password updates.
+
+### New in CSM Release 1.2.0
+
+The location of the password secret in Vault has changed in CSM version 1.2. The
+previous location (`secret/csm/management_nodes root_password=...`) has been
+changed to `secret/csm/users/root password=...`. You must set the password in
+the new location using the _Configure Root Password in Vault_ procedure below
+for it to be applied to the NCNs.
 
 <a name="configure_root_password_in_vault"></a>
 ### Procedure: Configure Root Password in Vault
@@ -33,25 +41,25 @@ skip any password updates.
    step 2 above. The `vault read` command verifies the hash was stored
    correctly.
 
-   ***NOTE***: It is important to enclose the hash in single quotes to preserve
+   **NOTE:**: It is important to enclose the hash in single quotes to preserve
    any special characters.
 
    ```bash
    ncn# kubectl exec -itn vault cray-vault-0 -- sh
    cray-vault-0# export VAULT_ADDR=http://cray-vault:8200
    cray-vault-0# vault login
-   cray-vault-0# vault write secret/csm/users/root password='HASH' [... other fields ...]
+   cray-vault-0# vault write secret/csm/users/root password='<INSERT HASH HERE>' [... other fields (see warning below) ...]
    cray-vault-0# vault read secret/csm/users/root
    cray-vault-0# exit
    ncn#
    ```
 
-   ***WARNING***: The CSM instance of [HashiCorp Vault](HashiCorp_Vault.md) does
-   not support the `patch` operation, only `write`. Ensure that if the `password`
-   field in the `secret/csm/users/root` secret is being updated that the other
-   fields, for example the user's [SSH keys](SSH_Keys.md) are also updated.
-   Updating the password without including values for the other fields will
-   result in loss of data of the other fields.
+   > ***WARNING***: The CSM instance of [HashiCorp Vault](HashiCorp_Vault.md) does
+   > not support the `patch` operation, only `write`. Ensure that if the `password`
+   > field in the `secret/csm/users/root` secret is being updated that the other
+   > fields, for example the user's [SSH keys](SSH_Keys.md#configure_root_keys_in_vault),
+   > are also updated. Updating the password without including values for the
+   > other fields will result in loss of data of the other fields.
 
    The path to the secret and the password field are configurable locations in
    the CSM `csm.password` Ansible role located in the CSM configuration
@@ -93,7 +101,7 @@ procedure above.
    ncn# cray cfs sessions create --name ncn-password-update-`date +%Y%m%d%H%M%S` --configuration-name ncn-password-update
    ```
 
-   ***NOTE***: Subsequent password changes need only update the password hash in
+   **NOTE:** Subsequent password changes need only update the password hash in
    HashiCorp Vault and create the CFS session as long as the commit in the CSM
    configuration management repository has not changed. If the commit has
    changed, repeat this procedure from the beginning.

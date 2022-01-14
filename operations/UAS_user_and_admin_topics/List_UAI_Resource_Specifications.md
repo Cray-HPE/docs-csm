@@ -1,3 +1,6 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: Create a UAI Resource Specification](Create_a_UAI_Resource_Specification.md)
 
 ## List UAI Resource Specifications
 
@@ -5,34 +8,32 @@ Obtain a list of all the UAI resource specifications registered with UAS.
 
 ### Prerequisites
 
-The `cray` administrative CLI must be installed and initialized.
+* The administrator must be logged into an NCN or a host that has administrative access to the HPE Cray EX System API Gateway
+* The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
+* The HPE Cray EX System CLI must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
+* The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
 
 ### Procedure
 
-1.  List all the resource specifications registered in UAS.
+List all the resource specifications registered in UAS.
 
-    The resource specifications returned by the following command are available for UAIs to use:
+The resource specifications returned by the following command are available for UAIs to use:
 
-    ```
-    ncn-m001-pit# cray uas admin config resources list
-    [[results]]
-    comment = "my first example resource specification"
-    limit = "{\"cpu\": \"300m\", \"memory\": \"250Mi\"}"
-    request = "{\"cpu\": \"300m\", \"memory\": \"250Mi\"}"
-    resource_id = "85645ff3-1ce0-4f49-9c23-05b8a2d31849"
+```
+ncn-m001-pit# cray uas admin config resources list
+[[results]]
+comment = "Resource Specification to use with Brokered End-User UAIs"
+limit = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
+request = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
+resource_id = "f26ee12c-6215-4ad1-a15e-efe4232f45e6"
+```
 
-    [[results]]
-    comment = "my second example resource specification"
-    limit = "{\"cpu\": \"4\", \"memory\": \"1Gi\"}"
-    request = "{\"cpu\": \"4\", \"memory\": \"1Gi\"}"
-    resource_id = "eff9e1f2-3560-4ece-a9ce-8093e05e032d"
-    ```
+The following are the configurable parts of a resource specification:
+* `limit` - A JSON string describing a Kubernetes resource limit
+* `request` - A JSON string describing a Kubernetes resource request
+* `comment` - An optional free form string containing any information an administrator might find useful about the resource specification
+* `resource-id` - Used for examining, updating or deleting the resource specification as well as linking the resource specification into a UAI class
 
-    The following are the configurable parts of a resource specification:
-    * `limit` - A JSON string describing a Kubernetes resource limit
-    * `request` - A JSON string describing a Kubernetes resource request
-    * `comment` - An optional free form string containing any information an administrator might find useful about the resource specification
-    * `resource-id` - Used for examining, updating or deleting the resource specification as well as linking the resource specification into a UAI class
+Refer to [Elements of a UAI](Elements_of_a_UAI.md) for more information.
 
-    Refer to [Elements of a UAI](Elements_of_a_UAI.md) for more information.
-
+[Next Topic: Create a UAI Resource Specification](Create_a_UAI_Resource_Specification.md)
