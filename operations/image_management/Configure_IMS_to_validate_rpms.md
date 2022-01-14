@@ -22,10 +22,15 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
 
 1. Determine the container version for the IMS Kiwi-NG container.
 
-    ```bash
+   ```bash
    ncn# kubectl -n services get cm cray-configmap-ims-v2-image-create-kiwi-ng -o yaml | grep cray-ims-kiwi-ng-opensuse-x86_64-builder
-          - image: cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7
-    ```
+   ```
+
+   Example output:
+
+   ```
+     - image: cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7
+   ```
    
    If successful, make note of the version of the listed container. In this case, the version is `0.4.7`.
 
@@ -70,7 +75,7 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
     ENTRYPOINT ["/scripts/entrypoint.sh"]
     ```
 
-    NOTE: Make sure that the version of the `cray-ims-kiwi-ng-opensuse-x86_64-builder`
+    **NOTE:** Make sure that the version of the `cray-ims-kiwi-ng-opensuse-x86_64-builder`
     image in the `FROM` line matches the version of the image above.
    
 1. Verify that the following files are in the temporary directory.
@@ -131,8 +136,15 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
 
     ```bash
     ncn-m001# cray ims recipes list --format json
+    ```
+
+    Example output:
+
+    ```
     [
-      ...
+
+      [...]
+
       {
         "created": "2021-06-29T21:50:38.319526+00:00",
         "id": "1aab3dbb-a654-4c84-b820-a293bd4ab2b4",
@@ -145,7 +157,9 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
         "name": "cos-2.1.51-slingshot-1.2.1",
         "recipe_type": "kiwi-ng"
       },
-    ...
+    
+    [...]
+
     ]
     ```
 
@@ -193,6 +207,11 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
     ```bash
     ncn-m001# cray ims recipes create --name "My Recipe" \
     --recipe-type kiwi-ng --linux-distribution sles15
+    ```
+
+    Example output:
+
+    ```
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "2233c82a-5081-4f67-bec4-4b59a60017a6" 
     linux_distribution = "sles15"

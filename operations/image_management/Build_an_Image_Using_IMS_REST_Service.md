@@ -6,14 +6,14 @@ Create an image root from an IMS recipe.
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
-    -   `cray-ims`, the Image Management Service \(IMS\)
-    -   `cray-nexus`, the Nexus repository manager service
--   The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
--   `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
--   A Kiwi image recipe uploaded as a gzipped tar file and registered with IMS. See [Upload and Register an Image Recipe](Upload_and_Register_an_Image_Recipe.md).
--   A token providing Simple Storage Service \(S3\) credentials has been generated.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
+    - `cray-ims`, the Image Management Service \(IMS\)
+    - `cray-nexus`, the Nexus repository manager service
+- The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
+- `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
+- A Kiwi image recipe uploaded as a gzipped tar file and registered with IMS. See [Upload and Register an Image Recipe](Upload_and_Register_an_Image_Recipe.md).
+- A token providing Simple Storage Service \(S3\) credentials has been generated.
 
 
 ### Limitations
@@ -33,13 +33,20 @@ The commands in this procedure must be run as the `root` user.
 
     ```bash
     ncn# cray ims public-keys list
-    ...
+    ```
+
+    Example output:
+
+    ```
+    [...]
+
     [[results]]
     public_key = "ssh-rsa AAAAB3NzaC1yc2EA ... AsVruw1Zeiec2IWt"
     id = "a252ff6f-c087-4093-a305-122b41824a3e"
     name = "username public key"
     created = "2018-11-21T17:19:07.830000+00:00"
-    ...
+    
+    [...]
     ```
 
     If a public key associated with the username in use is not returned, proceed to the next step. If a public key associated with the username does exist, create a variable for the IMS public key `id` value in the returned data and then proceed to step 3.
@@ -57,7 +64,12 @@ The commands in this procedure must be run as the `root` user.
     Replace the username value with the actual username being used on the system when setting the public key name.
 
     ```bash
-    ncn# cray ims public-keys create --name "username public key" --public-key ~/.ssh/id\_rsa.pub
+    ncn# cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub
+    ```
+
+    Example output:
+
+    ```
     public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl50gK4l9uupxC2KHxMpTNxPTJbnwEdWy1jst5W5LqJx9fdTrc9uNJ33HAq+WIOhPVGbLm2N4GX1WTUQ4+wVOSmmBBJnlu/l5rmO9lEGT6U8lKG8dA9c7qhguGHy7M7WBgdW/gWA16gwE/u8Qc2fycFERRKmFucL/Er9wA0/Qvz7/U59yO+HOtk5hvEz/AUkvaaoY0IVBfdNBCl59CIdZHxDzgXlXzd9PAlrXZNO8jDD3jyFAOvMMRG7py78zj2NUngvsWYoBcV3FcREZJU529uJ0Au8Vn9DRADyB4QQS2o+fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
     id = "a252ff6f-c087-4093-a305-122b41824a3e"
     name = "username public key"
@@ -76,7 +88,13 @@ The commands in this procedure must be run as the `root` user.
 
     ```bash
     ncn# cray ims recipes list
-    ...
+    ```
+
+    Example output:
+
+    ```
+    [...]
+
     [[results]]
     id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
     name = "my_recipe.tgz"
@@ -86,7 +104,8 @@ The commands in this procedure must be run as the `root` user.
     path = "s3://ims/recipes/2233c82a-5081-4f67-bec4-4b59a60017a6/my_recipe.tgz"
     etag = "28f3d78c8cceca2083d7d3090d96bbb7"
     type = "s3"
-    ...
+    
+    [...]
     ```
 
     If successful, create a variable for the IMS recipe `id` in the returned data.
@@ -115,6 +134,11 @@ The commands in this procedure must be run as the `root` user.
     --artifact-id $IMS_RECIPE_ID \
     --public-key-id $IMS_PUBLIC_KEY_ID \
     --enable-debug False
+    ```
+
+    Example output:
+
+    ```
     status = "creating"
     enable_debug = false
     kernel_file_name = "vmlinuz"
@@ -142,10 +166,15 @@ The commands in this procedure must be run as the `root` user.
 
     ```bash
     ncn# kubectl -n ims describe job $IMS_KUBERNETES_JOB
+    ```
+
+    Example output:
+
+    ```
     Name: ims-myimage-create
     Namespace: default
 
-    ...
+    [...]
 
     Events:
     Type Reason Age From Message
@@ -167,6 +196,11 @@ The commands in this procedure must be run as the `root` user.
 
     ```bash
     ncn# kubectl -n ims logs -f $POD -c fetch-recipe
+    ```
+
+    Example output:
+
+    ```
     INFO:/scripts/fetch.py:IMS_JOB_ID=ad5163d2-398d-4e93-94f0-2f439f114fe7
     INFO:/scripts/fetch.py:Setting job status to 'fetching_recipe'.
     INFO:ims_python_helper:image_set_job_status: {{ims_job_id: ad5163d2-398d-4e93-94f0-2f439f114fe7, job_status: fetching_recipe}}
@@ -184,7 +218,13 @@ The commands in this procedure must be run as the `root` user.
 
     ```bash
     ncn# kubectl -n ims logs -f $POD -c wait-for-repos
-    ...
+    ```
+
+    Example output:
+
+    ```
+    [...]
+
     2019-05-17 09:53:47,381 - INFO    - __main__ - Recipe contains the following repos: ['http://api-gw-service-nmn.local/repositories/sle15-Module-Basesystem/', 'http://api-gw-service-nmn.local/repositories/sle15-Product-SLES/', 'http://api-gw-service-nmn.local/repositories/cray-sle15']
     2019-05-17 09:53:47,381 - INFO    - __main__ - Attempting to get http://api-gw-service-nmn.local/repositories/sle15-Module-Basesystem/repodata/repomd.xml
     2019-05-17 09:53:47,404 - INFO    - __main__ - 200 response getting http://api-gw-service-nmn.local/repositories/sle15-Module-Basesystem/repodata/repomd.xml
@@ -198,6 +238,11 @@ The commands in this procedure must be run as the `root` user.
 
     ```bash
     ncn# kubectl -n ims logs -f $POD -c build-ca-rpm
+    ```
+
+    Example output:
+
+    ```
     cray_ca_cert-1.0.0/
     cray_ca_cert-1.0.0/etc/
     cray_ca_cert-1.0.0/etc/cray/
@@ -249,11 +294,18 @@ The commands in this procedure must be run as the `root` user.
 
     ```bash
     ncn# kubectl -n ims logs -f $POD -c build-image
+    ```
+
+    Example output:
+
+    ```
     + RECIPE_ROOT_PARENT=/mnt/recipe
     + IMAGE_ROOT_PARENT=/mnt/image
     + PARAMETER_FILE_BUILD_FAILED=/mnt/image/build_failed
     + PARAMETER_FILE_KIWI_LOGFILE=/mnt/image/kiwi.log
-    ...
+    
+    [...]
+
     + kiwi-ng --logfile=/mnt/image/kiwi.log --type tbz system build --description /mnt/recipe --target /mnt/image
     [ INFO    ]: 16:14:31 | Loading XML description
     [ INFO    ]: 16:14:31 | --> loaded /mnt/recipe/config.xml
@@ -272,7 +324,9 @@ The commands in this procedure must be run as the `root` user.
     [ INFO    ]: 16:14:32 | --> Type: rpm-md
     [ INFO    ]: 16:14:32 | --> Translated: http://api-gw-service-nmn.local/repositories/cray-sle15
     [ INFO    ]: 16:14:32 | --> Alias: DST_built_rpms
-    ...
+    
+    [...]
+
     [ INFO    ]: 16:19:19 | Calling images.sh script
     [ INFO    ]: 16:19:55 | Creating system image
     [ INFO    ]: 16:19:55 | Creating XZ compressed tar archive
@@ -296,6 +350,11 @@ The commands in this procedure must be run as the `root` user.
 
     ```bash
     ncn# kubectl -n ims logs -f $POD -c buildenv-sidecar
+    ```
+
+    Example output:
+
+    ```
     Not running user shell for successful create action
     Copying SMS CA Public Certificate to target image root
     + IMAGE_ROOT_PARENT=/mnt/image
@@ -313,7 +372,9 @@ The commands in this procedure must be run as the `root` user.
 
     Exportable Squashfs 4.0 filesystem, gzip compressed, data block size 131072
     	compressed data, compressed metadata, compressed fragments, compressed xattrs
-    ...
+    
+    [...]
+
     + python -m ims_python_helper image upload_artifacts sles15_barebones_image 7de80ccc-1e7d-43a9-a6e4-02cad10bb60b \
          -v -r /mnt/image/sles15_barebones_image.sqsh -k /mnt/image/image-root/boot/vmlinuz
          -i /mnt/image/image-root/boot/initrd
@@ -386,7 +447,8 @@ The commands in this procedure must be run as the `root` user.
         },
         "result": "success"
     }
-    ...
+    
+    [...]
     ```
 
     **IMPORTANT:** The IMS image creation workflow automatically copies the NCN Certificate Authority's public certificate to /etc/cray/ca/certificate\_authority.crt within the image root being built. This can be used to enable secure communications between the NCN and the client node.
@@ -401,6 +463,11 @@ The commands in this procedure must be run as the `root` user.
 
     ```bash
     ncn# cray ims jobs describe $IMS_JOB_ID
+    ```
+
+    Example output:
+
+    ```
     status = "waiting_on_user"
     enable_debug = false
     kernel_file_name = "vmlinuz"
@@ -444,6 +511,11 @@ The commands in this procedure must be run as the `root` user.
 
     ```bash
     ncn# ssh -p IMS_SSH_PORT root@IMS_SSH_HOST
+    ```
+
+    Example output:
+
+    ```
     Last login: Tue Sep  4 18:06:27 2018 from gateway
     [root@POD ~]#
     ```
@@ -481,6 +553,11 @@ The commands in this procedure must be run as the `root` user.
 
     ```bash
     ncn# cray ims jobs describe $IMS_JOB_ID
+    ```
+
+    Example output:
+
+    ```
     status = "success"
     enable_debug = false
     kernel_file_name = "vmlinuz"
@@ -509,6 +586,11 @@ The commands in this procedure must be run as the `root` user.
 
     ```bash
     ncn# cray ims images describe $IMS_RESULTANT_IMAGE_ID
+    ```
+
+    Example output:
+
+    ```
     created = "2018-12-17T22:59:43.264129+00:00"
     id = "d88521c3-b339-43bc-afda-afdfda126388"
     name = "sles15_barebones_image"

@@ -13,6 +13,11 @@ as a template to create a new configuration JSON file to input to CFS.
 
 ```bash
 ncn# cat configuration-single.json
+```
+
+Example configuration:
+
+```
 {
   "layers": [
     {
@@ -34,6 +39,11 @@ new configuration JSON file to input to CFS.
 
 ```bash
 ncn# cat configuration-multiple.json
+```
+
+Example configuration:
+
+```
 {
   "layers": [
     {
@@ -64,7 +74,11 @@ When defining a configuration layer, the `branch` or `commit` values can be used
 
 ```bash
 ncn-m001# cat configurations-example.json
+```
 
+Example configuration:
+
+```
 {
   "layers": [
     {
@@ -81,7 +95,11 @@ ncn-m001# cat configurations-example.json
 ncn-m001# cray cfs configurations update configurations-example \
 --file ./configurations-example.json \
 --format json
+```
 
+Example output:
+
+```
 {
   "lastUpdated": "2021-07-28T03:26:30:37Z",
   "layers": [
@@ -101,7 +119,11 @@ If changes are made to a repository and branches are specified in the configurat
 
 ```bash
 ncn-m001# cray cfs configurations update configurations-example --update-branches
+```
 
+Example output:
+
+```
 {
   "lastUpdated": "2021-07-28T03:26:30:37Z",
   "layers": [

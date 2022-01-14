@@ -5,8 +5,8 @@ DHCP issues can result in node boot failures. This procedure helps investigate a
 
 ### Prerequisites
 
--   This procedure requires administrative privileges.
--   `kubectl` is installed.
+- This procedure requires administrative privileges.
+- `kubectl` is installed.
 
 ### Limitations
 
@@ -20,6 +20,11 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 
     ```bash
     ncn-m001# kubectl get pods -A | grep kea
+    ```
+
+    Example output:
+    
+    ```
     services cray-dhcp-kea-554698bb69-r9wwt          3/3 Running   0 13h
     services cray-dhcp-kea-postgres-0                2/2 Running   0 10d
     services cray-dhcp-kea-postgres-1                2/2 Running   0 3d18h
@@ -27,7 +32,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     services cray-dhcp-kea-wait-for-postgres-3-7gqvg 0/3 Completed 0 10d
     ```
 
-3.  Start a tcpdump session on the NCN.
+3.  Start a `tcpdump` session on the NCN.
 
     The following example sends tcpdump data to `stdout`.
 
@@ -47,7 +52,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     ncn-m001# kubectl exec -it $PODID /bin/sh
     ```
 
-6.  Start a tcpdump session from within the DHCP pod.
+6.  Start a `tcpdump` session from within the DHCP pod.
 
 7.  Open another terminal to perform the following tasks:
 

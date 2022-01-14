@@ -146,16 +146,6 @@ sections, but there is also a general troubleshooting topic.
       yet been redeployed. In addition, redeploying the PIT node successfully requires several CSM services to be working
       properly, so validating this is important.
 
-      **Note**: At this point of the install, the `cray` CLI has not yet been configured. Some of the tests (Hardware State
-      Manager Discovery Validation, Booting the CSM Barebones Image on compute nodes, UAS/UAI) require it to be configured
-      in order to run. These tests may be skipped until after the PIT node has been redeployed, but **this is not recommended**.
-
-      To enable the 'cray' CLI in order to execute those tests, follow these two procedures before performing the CSM health
-      validation:
-
-         1. [Configure Keycloak Account](configure_administrative_access.md#configure_keycloak_account)
-         1. [Configure the Cray Command Line Interface (cray CLI)](configure_administrative_access.md#configure_cray_cli)
-
       To run the CSM health checks, see [Validate CSM Health](../operations/validate_csm_health.md)
    <a name="deploy_final_ncn"></a>
 

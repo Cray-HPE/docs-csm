@@ -22,7 +22,7 @@ The workflow of branching from pristine imported content and handling upgrades t
 
 When a product upgrade occurs \(cray/product/1.4.0 in the above diagram\), the product installer will create a new branch and commit based off the previous pristine branch. If the previous customizations on the customer/main branch also need to be included with the new 1.4.0 content, the user should initiate a Git merge of the new pristine content into their branch \(or possibly into a test branch based on customer/main\). This process will be the same for subsequent updates of the product as well.
 
-**Important:** If the Cray product has specific instructions for installing and upgrading configuration content, those should take precedence over this generic workflow.
+**IMPORTANT:** If the Cray product has specific instructions for installing and upgrading configuration content, those should take precedence over this generic workflow.
 
 The "Branch Workflow" diagram is an example workflow that can be used to manage new product content being introduced during upgrades. However, CFS and VCS do not require any specific branching strategy. Users are free to manage the branches as they see fit with the exception of the pristine branches imported by individual Cray products. CFS configuration layers \(see [Configuration Layers](Configuration_Layers.md)\) only require a Git commit ID, a Git repository clone URL, and the path to an Ansible playbook to run the configuration content in the repository.
 

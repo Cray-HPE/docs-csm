@@ -13,8 +13,12 @@ This procedure requires the Kibana service to be up and running on a non-compute
     ```
     ncn-m001# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations.yaml}' \
     | base64 -d | grep "external:"
-          external: SHASTA_EXTERNAL_DOMAIN.com
+    ```
 
+    Example output:
+    
+    ```
+        external: SHASTA_EXTERNAL_DOMAIN.com
     ```
 
 2.  Navigate to the following URL in a web browser:

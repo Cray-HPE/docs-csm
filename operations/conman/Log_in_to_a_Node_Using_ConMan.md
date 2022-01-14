@@ -16,28 +16,31 @@ The user performing this procedure needs to have access permission to the `cray-
     ncn# CONPOD=$(kubectl get pods -n services \
         -o wide|grep cray-console-operator|awk '{print $1}')
     ncn# echo $CONPOD
-    cray-console-operator-79bf95964-qpcpp
     ```
 
-1. Set the `XNAME` variable to the xname of the node whose console you wish to open.
+2. Set the `XNAME` variable to the xname of the node whose console you wish to open.
 
     ```bash
     ncn# XNAME=x123456789s0c0n0
     ```
 
-1. Find the `cray-console-node` pod that is connected to that node.
+3. Find the `cray-console-node` pod that is connected to that node.
 
     ```bash
     ncn# NODEPOD=$(kubectl -n services exec $CONPOD -c cray-console-operator -- \
         sh -c "/app/get-node $XNAME" | jq .podname | sed 's/"//g')
     ncn# echo $NODEPOD
-    cray-console-node-1
     ```
 
-1. Connect to the node's console using ConMan on the `cray-console-node` pod you found.
+4. Connect to the node's console using ConMan on the `cray-console-node` pod you found.
 
     ```bash
     ncn# kubectl exec -it -n services $NODEPOD -- conman -j $XNAME
+    ```
+
+    Example output:
+
+    ```
     <ConMan> Connection to console [x3000c0s25b1] opened.
 
     nid000009 login:
@@ -45,4 +48,4 @@ The user performing this procedure needs to have access permission to the `cray-
 
     Using the command above, a user can also attach to an already active SOL session that is being used by another user, so both can access the node's SOL simultaneously.
 
-1. Exit the connection to the console with the `&.` command.
+5. Exit the connection to the console with the `&.` command.

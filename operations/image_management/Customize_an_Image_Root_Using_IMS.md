@@ -38,13 +38,20 @@ Afterwards, the IMS customization workflow automatically copies the NCN CA publi
 
     ```bash
     ncn# cray ims public-keys list
-    ...
+    ```
+
+    Example output:
+
+    ```
+    [...]
+
     [[results]]
     public_key = "ssh-rsa AAAAB3NzaC1yc2EA ... AsVruw1Zeiec2IWt"
     id = "a252ff6f-c087-4093-a305-122b41824a3e"
     name = "username public key"
     created = "2018-11-21T17:19:07.830000+00:00"
-    ...
+    
+    [...]
     ```
 
     If a public key associated with the username in use is not returned, proceed to the next step. If a public key associated with the username does exist, create a variable for the IMS public key `id` value in the returned data and then proceed to step 3.
@@ -63,6 +70,11 @@ Afterwards, the IMS customization workflow automatically copies the NCN CA publi
 
     ```bash
     ncn# cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub
+    ```
+
+    Example output:
+
+    ```
     public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCl50gK4l9uupxC2KHxMpTNxPTJbnwEdWy1jst5W5LqJx9fdTrc9uNJ33HAq+WIOhPVGbLm2N4GX1WTUQ4+wVOSmmBBJnlu/l5rmO9lEGT6U8lKG8dA9c7qhguGHy7M7WBgdW/gWA16gwE/u8Qc2fycFERRKmFucL/Er9wA0/Qvz7/U59yO+HOtk5hvEz/AUkvaaoY0IVBfdNBCl59CIdZHxDzgXlXzd9PAlrXZNO8jDD3jyFAOvMMRG7py78zj2NUngvsWYoBcV3FcREZJU529uJ0Au8Vn9DRADyB4QQS2o+fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
     id = "a252ff6f-c087-4093-a305-122b41824a3e"
     name = "username public key"
@@ -96,7 +108,11 @@ Afterwards, the IMS customization workflow automatically copies the NCN CA publi
 
     ```bash
     ncn# cray ims images create --name $IMS_ROOTFS_FILENAME
+    ```
 
+    Example output:
+
+    ```
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
     name = "sles_15_image.squashfs"
@@ -188,6 +204,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ```bash
     ncn# cray artifacts create boot-images $IMS_IMAGE_ID/manifest.json manifest.json
     ```
+
 <a name="register"></a>
 **Register the Image Root with the IMS Service**
 
@@ -197,6 +214,11 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ncn# cray ims images update $IMS_IMAGE_ID \
     --link-type s3 \
     --link-path s3://boot-images/$IMS_IMAGE_ID/manifest.json
+    ```
+
+    Example output:
+
+    ```
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
     name = "sles_15_image.squashfs"
@@ -215,7 +237,13 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
     ```bash
     ncn# cray ims images list
-    ...
+    ```
+
+    Example output:
+
+    ```
+    [...]
+
     [[results]]
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
@@ -225,7 +253,8 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     type = "s3"
     path = "/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
     etag = ""
-    ...
+    
+    [...]
     ```
 
     If successful, create a variable for the `id` for the image that is being customized.
@@ -260,6 +289,11 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
        --public-key-id $IMS_PUBLIC_KEY_ID \
        --enable-debug False \
        --image-root-archive-name MY_CUSTOMIZED_IMAGE
+       ```
+
+       Example output:
+
+       ```
        status = "creating"
        enable_debug = false
        kernel_file_name = "vmlinuz"
@@ -299,6 +333,11 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
        ```bash
        ncn# kubectl get services -n ims | grep IMS_JOB_ID
+       ```
+
+       Example output:
+
+       ```
        NAME                                                    TYPE           CLUSTER-IP      EXTERNAL-IP    PORT(S)        AGE
        cray-ims-06c3dd57-f347-4229-85b3-1d024a947b3f-service   LoadBalancer   10.29.129.204   10.103.2.160   22:31627/TCP   21h
        ```
@@ -324,9 +363,16 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
     ```bash
     ncn# kubectl -n ims describe job $IMS_KUBERNETES_JOB
+    ```
+
+    Example output:
+
+    ```
     Name: cray-ims-cfa864b3-4e08-49b1-9c57-04573228fd3f-customize
     Namespace: default
-    ...
+    
+    [...]
+
     Events:
     Type Reason Age From Message
     ---- ------ ---- ---- -------
@@ -343,6 +389,11 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
     ```bash
     ncn# cray ims jobs describe $IMS_JOB_ID
+    ```
+
+    Example output:
+
+    ```
     status = "waiting_on_user"
     enable_debug = false
     kernel_file_name = "vmlinuz"
@@ -472,6 +523,11 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     + python -m ims_python_helper image upload_artifacts sles15_barebones_image 7de80ccc-1e7d-43a9-a6e4-02cad10bb60b
     -v -r /mnt/image/sles15_barebones_image.sqsh -k /mnt/image/image-root/boot/vmlinuz
     -i /mnt/image/image-root/boot/initrd
+    ```
+
+    Example output:
+
+    ```
     {
         "ims_image_artifacts": [
             {
@@ -549,6 +605,11 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
     ```bash
     ncn# cray ims jobs describe $IMS_JOB_ID
+    ```
+
+    Example output:
+
+    ```
     status = "success"
     enable_debug = false
     kernel_file_name = "vmlinuz"
@@ -577,6 +638,11 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
     ```bash
     ncn# cray ims images describe $IMS_RESULTANT_IMAGE_ID
+    ```
+
+    Example output:
+
+    ```
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "d88521c3-b339-43bc-afda-afdfda126388"
     name = "my_customized_image.squashfs"
