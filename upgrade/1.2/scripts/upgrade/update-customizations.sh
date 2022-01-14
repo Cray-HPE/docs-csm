@@ -247,6 +247,8 @@ yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'chn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'nmn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'hmn.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'nmnlb.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'hmnlb.{{ network.dns.external }}'
 
 # Add required PowerDNS and Unbound configuration
 yq w -i "$c" 'spec.kubernetes.services.cray-dns-unbound.domain_name' '{{ network.dns.external }}'
@@ -291,8 +293,8 @@ yq w -i "$c" 'spec.kubernetes.services.gatekeeper-policy-manager.gatekeeper-poli
 yq d -i "$c" 'spec.kubernetes.services.cray-opa.jwtValidation'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.shasta-cmn' 'https://api.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-cmn' 'https://auth.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
-yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.shasta-nmn' 'https://api.nmn.{{ network.dns.external }}/keycloak/realms/shasta'
-yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-nmn' 'https://auth.nmn.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.shasta-nmn' 'https://api.nmnlb.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-nmn' 'https://auth.nmnlb.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-admin.issuers.shasta-cmn' 'https://api.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-admin.issuers.keycloak-cmn' 'https://auth.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-user.issuers.shasta-chn' 'https://api.chn.{{ network.dns.external }}/keycloak/realms/shasta'
@@ -311,16 +313,18 @@ yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dns
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.chn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.nmn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.hmn.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.nmnlb.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.hmnlb.{{ network.dns.external }}'
 yq d -i "$c" 'spec.kubernetes.services.cray-istio.extraIngressServices'
 yq d -i "$c" 'spec.kubernetes.services.cray-istio.ingressgatewayhmn'
 
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway.loadBalancerIP' '{{ network.netstaticips.nmn_api_gw }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway.serviceAnnotations.[metallb.universe.tf/address-pool]' 'node-management'
-yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.nmn.{{ network.dns.external}},auth.nmn.{{ network.dns.external }}'
+yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.nmnlb.{{ network.dns.external}},auth.nmnlb.{{ network.dns.external }}'
 
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.loadBalancerIP' '{{ network.netstaticips.hmn_api_gw }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations[metallb.universe.tf/address-pool]' 'hardware-management'
-yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'hmcollector.hmn.{{ network.dns.external }}'
+yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'hmcollector.hmnlb.{{ network.dns.external }}'
 
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-can.serviceAnnotations.[metallb.universe.tf/address-pool]' 'customer-access'
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-can.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.can.{{ network.dns.external}},auth.can.{{ network.dns.external }}'
