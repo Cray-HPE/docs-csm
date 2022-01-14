@@ -384,4 +384,29 @@ if [ "$?" -eq 0 ]; then
   cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r '.[] | .node' || true)
   echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
 fi
+
+state_name="ADD_MTL_ROUTES"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+
+    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    NCNS=$(grep -oP 'ncn-w\w\d+|ncn-s\w\d+' /etc/hosts | sort -u)
+    Ncount=$(echo $NCNS | wc -w)
+    HOSTS=$(echo $NCNS | tr -t ' ' ',')
+    pdsh -w $HOSTS ip route add 10.1.0.0/16 via 10.252.0.1 dev vlan002
+    Rcount=$(pdsh -w $HOSTS ip route show | grep "10.1.0.0" | wc -l)
+    pdsh -w $HOSTS ip route show | grep "10.1.0.0"
+
+    if [[ $Rcount -ne $Ncount ]]; then
+        echo ""
+        echo "Could not set routes on all worker and storage nodes."
+        exit 1
+    fi
+
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 set -e
