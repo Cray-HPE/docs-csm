@@ -15,7 +15,7 @@ This top level procedure outlines the process for adding additional liquid-coole
 
 3.  Reconfigure management network.
     
-    **NOTE:** This step is currently a placeholder.
+    **NOTE:** Placeholder: Provide a link to the procedure once ready.
 
 4.  Verify new hardware has been discovered by performing the [Hardware State Manager Discovery Validation](../validate_csm_health.md#hms-smd-discovery-validation) procedure. 
     After the management network has been reconfigured, it may take up to 10 minutes for the hardware in the new cabinets to become discovered.
@@ -25,4 +25,4 @@ This top level procedure outlines the process for adding additional liquid-coole
 
 6.  Continue on to the *Slingshot Operations Guide* to bring up the additional cabinets.  
 
-    **NOTE:** This step is currently a placeholder.
+    **NOTE:** Placeholder: Provide a link to the procedure once ready.
