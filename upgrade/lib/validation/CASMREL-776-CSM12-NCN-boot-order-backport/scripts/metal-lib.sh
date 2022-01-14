@@ -30,7 +30,8 @@ type mprint >/dev/null 2>&1 || . /srv/cray/scripts/common/lib.sh
 set -e
 
 # initrd - fetched from /proc/cmdline ; grab the horse we rode in on, not what the API aliens say.
-export initrd=$(grep -Po 'initrd=([\w\.]+)' /proc/cmdline | cut -d '=' -f2)
+initrd=$(grep -Po 'initrd=([\w\.]+)' /proc/cmdline | cut -d '=' -f2)
+export initrd
 [ -z "$initrd" ] && initrd=initrd.img.xz
 
 trim() {
@@ -43,7 +44,7 @@ install_grub2() {
     local working_path=${1:-/metal/recovery}
     mount -v -L $fslabel $working_path 2>/dev/null || echo 'continuing ...'
     # Remove all existing ones; this script installs the only bootloader.
-    for entry in $(efibootmgr | awk -F '*' '/CRAY/ {print $1}'); do
+    for entry in $(efibootmgr | awk -F '[* ]' /CRAY/'{print $1}'); do
          efibootmgr -q -b ${entry:4:8} -B
     done
 
