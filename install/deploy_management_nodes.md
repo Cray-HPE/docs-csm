@@ -511,7 +511,7 @@ If needed, the LVM checks can be performed manually on the master and worker nod
 The manual checks are considered successful if all of the `blkid` commands report a disk device (such as `/dev/sdc` -- the particular device is unimportant). If any of the `lsblk` commands return no output, then the check is a failure. **Any failures must be resolved before continuing.** See the following section for details on how to do so.
 
 <a name="lvm-check-failure-recovery"></a>
-#### 3.3.3 LVM Check Failure Recovery
+#### 3.3.4 LVM Check Failure Recovery
 
 If there are LVM check failures, then the problem must be resolved before continuing with the install.
 
