@@ -582,9 +582,13 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     NCNS=$(grep -oP 'ncn-w\w\d+|ncn-s\w\d+' /etc/hosts | sort -u)
     Ncount=$(echo $NCNS | wc -w)
     HOSTS=$(echo $NCNS | tr -t ' ' ',')
-    pdsh -w $HOSTS ip route add 10.1.0.0/16 via 10.252.0.1 dev vlan002
-    Rcount=$(pdsh -w $HOSTS ip route show | grep "10.1.0.0" | wc -l)
-    pdsh -w $HOSTS ip route show | grep "10.1.0.0"
+    GATEWAY=$(cray sls networks describe NMN --format json | \
+        jq -r '.ExtraProperties.Subnets[]|select(.FullName=="NMN Management Network Infrastructure")|.Gateway')
+    SUBNET=$(cray sls networks describe MTL --format json | \
+        jq -r '.ExtraProperties.Subnets[]|select(.FullName=="MTL Management Network Infrastructure")|.CIDR')
+    pdsh -w $HOSTS ip route add $SUBNET via $GATEWAY dev vlan002
+    Rcount=$(pdsh -w $HOSTS ip route show | grep $SUBNET | wc -l)
+    pdsh -w $HOSTS ip route show | grep $SUBNET
 
     if [[ $Rcount -ne $Ncount ]]; then
         echo ""
