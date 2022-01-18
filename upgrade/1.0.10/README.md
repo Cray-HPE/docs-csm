@@ -7,6 +7,7 @@
 1. [Upgrade Services](#upgrade-services)
 1. [Rollout Deployment Restart](#rollout-deployment-restart)
 1. [Verification](#verification)
+1. [Run NCN Personalization](#run-ncn-personalization)
 1. [Exit Typescript](#exit-typescript)
 
 <a name="preparation"></a>
@@ -154,6 +155,40 @@ deployment "cray-dns-unbound" successfully rolled out
    ```bash
    ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.0.10".configuration.import_date'
    ```
+
+<a name="run-ncn-personalization"></a>
+
+## Run NCN Personalization
+
+1. Run NCN Personalization to update the NCNs to the latest configruation.
+   Complete the [Run NCN Personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#run-ncn-personalization)
+   procedure.
+
+1. Confirm the version of the Loftsman RPM installed on each NCN. Output below
+   will vary based on the number of NCNs in the system.
+
+   ```bash
+   ncn-m001# for xname in $(cray hsm state components list --role Management | jq -r .Components[].ID);
+   do
+       out=$(ssh -oStrictHostKeyChecking=no -q $xname "rpm -qa | grep loftsman")
+       echo $name $out
+   done
+   x3000c0s11b0n0 loftsman-1.2.0-1.x86_64
+   x3000c0s13b0n0 loftsman-1.2.0-1.x86_64
+   x3000c0s15b0n0 loftsman-1.2.0-1.x86_64
+   x3000c0s17b0n0 loftsman-1.2.0-1.x86_64
+   x3000c0s1b0n0 loftsman-1.2.0-1.x86_64
+   x3000c0s36b0n0 loftsman-1.2.0-1.x86_64
+   x3000c0s38b0n0 loftsman-1.2.0-1.x86_64
+   x3000c0s3b0n0 loftsman-1.2.0-1.x86_64
+   x3000c0s5b0n0 loftsman-1.2.0-1.x86_64
+   x3000c0s7b0n0 loftsman-1.2.0-1.x86_64
+   x3000c0s9b0n0 loftsman-1.2.0-1.x86_64
+   ```
+
+   If the version of the Loftsman RPM does not match the output above, review
+   the Ansible play output in the CFS session logs created during NCN
+   Personalization for any errors.
 
 <a name="exit-typescript"></a>
 
