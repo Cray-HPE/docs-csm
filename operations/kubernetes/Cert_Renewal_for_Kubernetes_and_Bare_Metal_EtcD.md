@@ -312,13 +312,13 @@ Run the following steps on each master node.
       error: You must be logged in to the server (Unauthorized)
       ```
 
-   2. Copy /etc/kubernetes/admin.conf to /root/.kube/config.
+   1. Copy /etc/kubernetes/admin.conf to /root/.kube/config.
    
       ```
       ncn-m# cp /etc/kubernetes/admin.conf /root/.kube/config
       ```
 
-   3. Check the status of the nodes again.
+   1. Check the status of the nodes again.
    
       ```
       ncn-m# kubectl get nodes
@@ -327,14 +327,14 @@ Run the following steps on each master node.
       Example output:
 
       ```
-      NAME       STATUS   ROLES                  AGE   VERSION
-      ncn-m001   Ready    control-plane,master   27h   v1.20.13
-      ncn-m002   Ready    control-plane,master   8d    v1.20.13
-      ncn-m003   Ready    control-plane,master   8d    v1.20.13
-      ncn-w001   Ready    <none>                 8d    v1.20.13
-      ncn-w002   Ready    <none>                 8d    v1.20.13
-      ncn-w003   Ready    <none>                 8d    v1.20.13
-      ```
+      NAME       STATUS   ROLES    AGE    VERSION
+      ncn-m001   Ready    master   370d   v1.18.6
+      ncn-m002   Ready    master   370d   v1.18.6
+      ncn-m003   Ready    master   370d   v1.18.6
+      ncn-w001   Ready    <none>   370d   v1.18.6
+      ncn-w002   Ready    <none>   370d   v1.18.6
+      ncn-w003   Ready    <none>   370d   v1.18.6
+   ```
 
 2. Distribute the client certificate to the rest of the cluster.
 
