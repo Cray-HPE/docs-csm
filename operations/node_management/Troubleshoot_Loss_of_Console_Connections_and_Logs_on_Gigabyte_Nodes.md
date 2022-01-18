@@ -22,7 +22,6 @@ Console log information is no longer being collected for Gigabyte nodes or ConMa
     ncn-m001# CONPOD=$(kubectl get pods -n services \
     -o wide|grep cray-conman|awk '{print $1}')
     ncn-m001# echo $CONPOD
-    cray-conman-77fdfc9f66-m2s9k
     ```
 
 3.  Log on to the pod.

@@ -119,9 +119,13 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
    1. Verify that the hms-discovery cron job has stopped (`ACTIVE` = `0` and `SUSPEND` = `True`).
 
-
       ```bash
       ncn-m001# kubectl get cronjobs -n services hms-discovery
+      ```
+
+      Example output:
+
+      ```
       NAME             SCHEDULE        SUSPEND     ACTIVE   LAST   SCHEDULE  AGE
       hms-discovery    */3 * * * *     True         0       117s             15d
       ```
@@ -156,6 +160,11 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
    ```bash
    ncn-m001# cray hsm inventory ethernetInterfaces list --component-id x9000c3s0b0n0 --format json
+   ```
+
+   Example output:
+
+   ```
    [
      {
        "ID": "0040a6836339",
@@ -218,7 +227,8 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
     ```bash
     ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-    ncn-m001# cray bos session create --template-uuid $BOS_TEMPLATE --operation shutdown --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+    ncn-m001# cray bos session create --template-uuid $BOS_TEMPLATE --operation shutdown \
+    --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
 
@@ -264,6 +274,11 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
     ```bash
     ncn-m001# kubectl get cronjobs -n services hms-discovery
+    ```
+
+    Example output:
+
+    ```
     NAME             SCHEDULE        SUSPEND     ACTIVE   LAST SCHEDULE    AGE
     hms-discovery    */3 * * * *     True         0       128s             15d
     ```
@@ -297,6 +312,11 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     ```bash
     ncn-m001# cray hsm inventory ethernetInterfaces list \
     --component-id XNAME --format json
+    ```
+
+    Example output:
+
+    ```
     [
       {
         "ID": "0040a6836399",
@@ -479,6 +499,11 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe XNAME --format json
+    ```
+
+    Example output:
+
+    ```
     {
     	"ID": "x1005c3s0b0",
     	"Type": "NodeBMC",
@@ -513,6 +538,11 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe x1005c3 --format json
+    ```
+
+    Example output:
+
+    ```
     {
         "ID": "x1005c3",
         "Type": "ChassisBMC",
@@ -535,13 +565,20 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 37. Enable the nodes in the HSM database.
 
     ```bash
-    ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+    ncn-m001# cray hsm state components bulkEnabled update --enabled true \
+    --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
 38. Verify that the nodes are enabled in the HSM.
 
     ```bash
-    ncn-m001# cray hsm state components query create --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+    ncn-m001# cray hsm state components query create \
+    --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+    ```
+
+    Example output:
+
+    ```
     [[Components]]
     ID = x1005c3s0b0n0
     Type = "Node"
@@ -590,6 +627,11 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 
     ```bash
     ncn-m001# kubectl get pods -Ao wide | grep cps
+    ```
+
+    Example output:
+
+    ```
     services   cray-cps-75cffc4b94-j9qzf    2/2  Running   0   42h 10.40.0.57  ncn-w001
     services   cray-cps-cm-pm-g6tjx         5/5  Running   21  41h 10.42.0.77  ncn-w003
     services   cray-cps-cm-pm-kss5k         5/5  Running   21  41h 10.39.0.80  ncn-w002
@@ -673,7 +715,6 @@ ncn-m001#
         "text": "0 IPv4 lease(s) found."
       }
     ]
-    ncn-m001#
     ```
 
 48. If there are duplicate entries in the SMD as a result of the swap procedure, (10.100.0.105 in this example), delete the duplicate entry.
@@ -682,6 +723,11 @@ ncn-m001#
 
        ```bash
        ncn-m001# cray hsm inventory ethernetInterfaces list --ip-address 10.100.0.105 --format json | jq
+       ```
+
+       Example output:
+
+       ```
        [
          {
            "ID": "0040a68350a4",
@@ -740,6 +786,11 @@ ncn-m001#
 
     ```bash
     ncn-m001# ssh x3000c0s14b0n0
+    ```
+
+    Example output:
+
+    ```
     The authenticity of host 'x3000c0s14b0n0 (10.252.1.29)' can't be established.
     ECDSA key fingerprint is SHA256:wttHXF5CaJcQGPTIq4zWp0whx3JTwT/tpx1dJNyyXkA.
     Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
