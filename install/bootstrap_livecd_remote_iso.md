@@ -213,11 +213,11 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit:/var/www/ephemeral# export SYSTEM_NAME=eniac
       ```
 
-   1. Save the `CSM_RELEASE` for usage later; all subsequent shell sessions will have this var set.
+   1. Save the `CSM_RELEASE` and `SYSTEM_NAME` for usage later; all subsequent shell sessions will have this var set.
 
       ```bash
       # Prepend a new line to assure we add on a unique line and not at the end of another.
-      pit:/var/www/ephemeral# echo -e "\nCSM_RELEASE=$CSM_RELEASE" >>/etc/environment
+      pit:/var/www/ephemeral# echo -e "\nCSM_RELEASE=$CSM_RELEASE\nSYSTEM_NAME=$SYSTEM_NAME" >>/etc/environment
       ```
 
    1. Fetch the release tarball.
