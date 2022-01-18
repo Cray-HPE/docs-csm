@@ -39,6 +39,11 @@ Refer to the following procedure for each BMC:
 
   ```bash
   linux# curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts | jq
+  ```
+
+  Example output:
+
+  ```
   {
     "@odata.context": "/redfish/v1/$metadata#ManagerAccountCollection.ManagerAccountCollection",
     "@odata.id": "/redfish/v1/AccountService/Accounts",
@@ -61,7 +66,7 @@ Refer to the following procedure for each BMC:
       }
     ]
   }
-```
+  ```
 
 3. For each account listed, use *curl* to find the one which describes the *root* account ("UserName": "root").  
 
@@ -71,6 +76,11 @@ Refer to the following procedure for each BMC:
 
   ```bash
   linux# curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts/1 | jq
+  ```
+
+  Example output:
+
+  ```
   {
     "@odata.context": "/redfish/v1/$metadata#ManagerAccount.ManagerAccount",
     "@odata.id": "/redfish/v1/AccountService/Accounts/1",
@@ -102,6 +112,11 @@ Refer to the following procedure for each BMC:
 
   ```bash
   linux# curl -s -k -u root:<NEWPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem
+  ```
+
+  Example output:
+
+  ```
   {
     "@odata.context": "/redfish/v1/$metadata#ManagerAccount.ManagerAccount",
     "@odata.id": "/redfish/v1/AccountService/Accounts/1",

@@ -63,13 +63,19 @@ The `chronyc` command can be used to gather information on the state of NTP.
 
    ```bash
    ncn# chronyc accheck 10.252.0.7
-   208 Access allowed
    ```
+
+   `208 Access allowed` will be returned if a host is allowed to use NTP from HOST.
 
 1. Check the system clock performance.
 
    ```bash
    ncn# chronyc tracking
+   ```
+
+   Example output:
+
+   ```
    Reference ID    : 0AFC0104 (ncn-s003)
    Stratum         : 4
    Ref time (UTC)  : Mon Nov 30 20:02:24 2020
@@ -89,6 +95,11 @@ The `chronyc` command can be used to gather information on the state of NTP.
 
    ```bash
    ncn# chronyc sourcestats
+   ```
+
+   Example output:
+
+   ```
    210 Number of sources = 8
    Name/IP Address            NP  NR  Span  Frequency  Freq Skew  Offset  Std Dev
    ==============================================================================
@@ -106,6 +117,11 @@ The `chronyc` command can be used to gather information on the state of NTP.
 
    ```bash
    ncn# chronyc sources
+   ```
+
+   Example output:
+
+   ```
    210 Number of sources = 8
    MS Name/IP address         Stratum Poll Reach LastRx Last sample
    ===============================================================================
@@ -172,7 +188,7 @@ initstepslew 1 time.nist.gov
 local stratum 8 orphan
 ```
 
-These settings ensure there is a low-stratum NTP server that ncn-m001 has access to.  ncn-m001 also has
+These settings ensure there is a low-stratum NTP server that ncn-m001 has access to. ncn-m001 also has the following:
 
 ```
 # all non-ncn-m001 NCNs use ncn-m001 as their server, and they trust it
@@ -265,6 +281,11 @@ there. You can find a list of timezones to use in the commands below by running 
 
    ```bash
    pit# timedatectl
+   ```
+
+   Example output:
+
+   ```
          Local time: Fri 2021-03-26 06:35:58 CDT
      Universal time: Fri 2021-03-26 11:35:58 UTC
            RTC time: Fri 2021-03-26 11:35:58
@@ -276,6 +297,11 @@ there. You can find a list of timezones to use in the commands below by running 
 
    ```bash
    pit# hwclock --verbose
+   ```
+
+   Example output:
+
+   ```
    hwclock from util-linux 2.33.1
    System Time: 1616758841.688220
    Trying to open: /dev/rtc0

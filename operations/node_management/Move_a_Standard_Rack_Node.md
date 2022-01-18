@@ -38,6 +38,11 @@ Update the location-based xname for a standard rack node within the system.
 
         ```bash
         ncn-m001# cray sls hardware describe x3000c0w31j31 --format json
+        ```
+
+        Example output:
+
+        ```
           {
             "TypeString": "MgmtSwitchConnector",
             "Parent": "x3000c0w31",
