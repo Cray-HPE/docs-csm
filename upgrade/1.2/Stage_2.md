@@ -1,57 +1,118 @@
-# Stage 2 - Ceph image upgrade
+# Stage 2 - Kubernetes Upgrade from 1.19.9 to 1.20.13
 
-1. Run `ncn-upgrade-ceph-nodes.sh` for `ncn-s001`. Follow output of the script carefully. The script will pause for manual interaction.
+> NOTE: During the CSM-0.9 install the LiveCD containing the initial install files for this system should have been unmounted from the master node when rebooting into the Kubernetes cluster. The scripts run in this section will also attempt to unmount/eject it if found to ensure the USB stick does not get erased.
+
+## Stage 2.1
+
+1. Run `ncn-upgrade-k8s-master.sh` for `ncn-m002`. Follow output of the script carefully. The script will pause for manual interaction.
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-ceph-nodes.sh ncn-s001
+    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002
     ```
+    
+1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
+## Stage 2.2
+
+1. Run `ncn-upgrade-k8s-worker.sh` for `ncn-w001`. Follow output of the script carefully. The script will pause for manual interaction.
+
+    ```bash
+    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w001
+    ```
+    
     > NOTE: You may need to reset the root password for each node after it is rebooted
 
-1. Repeat the previous step for each other storage node, one at a time.
+1. Repeat the previous step for each other worker node, one at a time.
 
-1. After `ncn-upgrade-ceph-nodes.sh` has successfully run for all storage nodes, rescan ssh keys on all storage nodes
-    ```bash
-    ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
+## Stage 2.3
 
-    ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
-    ```
+For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP address to `ssh` to `ncn-m002` for this `ncn-m001` install
 
-1. Deploy `node-exporter` and `alertmanager`.
+1. Authenticate with the Cray CLI on `ncn-m002`.
 
-    **NOTE:** This process will need to run on a node running `ceph-mon`, which in most cases will be `ncn-s001`, `ncn-s002`, and `ncn-s003`. It only needs to be run once, not on every one of these nodes.
+    See [Configure the Cray Command Line Interface](../../operations/configure_cray_cli.md) for details on how to do this.
 
-    1. Deploy `node-exporter` and `alertmanager`:
-
-        ```bash
-        ncn-s# ceph orch apply node-exporter
-        Scheduled node-exporter update...
-
-        ncn-s# ceph orch apply alertmanager
-        Scheduled alertmanager update...
-        ```
-
-    1. Verify `node-exporter` and `alertmanager` are running:
-
-        ```bash
-        ncn-s# ceph orch ps --daemon_type node-exporter
-        NAME                    HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                       IMAGE ID           CONTAINER ID
-        node-exporter.ncn-s001  ncn-s001  running (57m)  3m ago     67m  0.18.1   docker.io/prom/node-exporter:v0.18.1             e5a616e4b9cf       3465eade21da
-        node-exporter.ncn-s002  ncn-s002  running (57m)  3m ago     67m  0.18.1   registry.local/prometheus/node-exporter:v0.18.1  e5a616e4b9cf       7ed9b6cc9991
-        node-exporter.ncn-s003  ncn-s003  running (57m)  3m ago     67m  0.18.1   registry.local/prometheus/node-exporter:v0.18.1  e5a616e4b9cf       1078d9e555e4
-
-        ncn-s# ceph orch ps --daemon_type alertmanager
-        NAME                   HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                      IMAGE ID           CONTAINER ID
-        alertmanager.ncn-s001  ncn-s001  running (66m)  3m ago     68m  0.20.0   registry.local/prometheus/alertmanager:v0.20.0  0881eb8f169f       775aa53f938f
-        ```
-
-        **IMPORTANT:** There should be a `node-exporter` container per Ceph node and a single `alertmanager` container for the cluster.
-
-1. Update BSS to ensure the Ceph images are loaded if a node is rebuilt.
+1. Set the `CSM_RELEASE` variable to the correct value for the CSM release upgrade being applied.
 
     ```bash
-    ncn-m001# . /usr/share/doc/csm/upgrade/1.2/scripts/ceph/lib/update_bss_metadata.sh
-    ncn-m001# update_bss_storage
+    ncn-m002# CSM_RELEASE=csm-1.2.0
     ```
 
- Once `Stage 2` is successfully completed, all the Ceph nodes have been rebooted into the new image. Now proceed to [Stage 3](Stage_3.md).
+1. Install document RPM and run check script on `ncn-m002`
+
+    * Option 1 - Internet Connected Environment
+
+        1. Install document RPM package:
+
+            ```bash
+            ncn-m002# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm
+            ncn-m002# rpm -Uvh docs-csm-latest.noarch.rpm
+            ```
+
+        1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release tarball.
+        
+            In other words, the full URL to the CSM release tarball will be `${ENDPOINT}${CSM_RELEASE}.tar.gz`
+        
+            **NOTE** This step is optional for Cray/HPE internal installs.
+        
+            ```bash
+            ncn-m002# ENDPOINT=https://put.the/url/here/
+            ```
+
+        1. Run the script
+        
+            **NOTE** The `--endpoint` argument is optional for Cray/HPE internal use.
+
+            ```bash
+            ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --endpoint $ENDPOINT
+            ```
+
+    * Option 2 - Air Gapped Environment
+
+        1. Copy the docs-csm RPM package and CSM release tarball to `ncn-m002`.
+
+        1. Install document RPM package:
+
+            ```bash
+            ncn-m002# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
+            ```
+
+        1. Set the `TAR_DIR` variable to the directory on `ncn-m002` containing the CSM release tarball.
+        
+            In other words, the full path to the CSM release tarball will be `${TAR_DIR}/${CSM_RELEASE}.tar.gz`
+
+            ```bash
+            ncn-m002# TAR_DIR=/path/to/tarball/dir
+            ```
+
+        1. Run the script
+
+            ```bash
+            ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --tarball-file ${TAR_DIR}/${CSM_RELEASE}.tar.gz
+            ```
+
+1. Upgrade `ncn-m001`
+
+    ```bash
+    ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m001
+    ```
+
+## Stage 2.4
+
+Run the following command to complete the upgrade of the weave and multus manifest versions:
+
+```bash
+ncn-m002# /srv/cray/scripts/common/apply-networking-manifests.sh
+```
+
+## Stage 2.5
+
+Run the following script to complete the Kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
+
+```bash
+ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/upgrade_control_plane.sh
+```
+
+> **`NOTE`**: `kubelet` has been upgraded already, so you can ignore the warning to upgrade it
+
+Once `Stage 2` is completed, all Kubernetes nodes have been rebooted into the new image. Now proceed to [Stage 3](Stage_3.md)
