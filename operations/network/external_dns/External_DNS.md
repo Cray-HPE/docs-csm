@@ -6,20 +6,20 @@ External DNS, along with the Customer Access Network \(CAN\), Border Gateway Pro
 
 The following services are currently available:
 
--   HPE Cray EX API \(requires valid JWT\)
--   Keycloak
--   Ceph RADOS gateway \(requires valid JWT\)
--   Nexus
--   System Management Health Prometheus \(redirects to Keycloak for SSO\)
--   System Management Health Grafana \(redirects to Keycloak for SSO\)
--   System Management Health Alertmanager \(redirects to Keycloak for SSO\)
--   Kiali, for Istio service mesh visibility \(redirects to Keycloak for SSO\)
--   Jaeger, for Istio tracing \(redirects to Keycloak for SSO\)
+- HPE Cray EX API \(requires valid JWT\)
+- Keycloak
+- Ceph RADOS gateway \(requires valid JWT\)
+- Nexus
+- System Management Health Prometheus \(redirects to Keycloak for SSO\)
+- System Management Health Grafana \(redirects to Keycloak for SSO\)
+- System Management Health Alertmanager \(redirects to Keycloak for SSO\)
+- Kiali, for Istio service mesh visibility \(redirects to Keycloak for SSO\)
+- Jaeger, for Istio tracing \(redirects to Keycloak for SSO\)
 
 In general, external hostnames should resolve to a CAN external IP address for the following services:
 
--   `istio-system/istio-ingressgateway-can` - Istio's ingress gateway.
--   `services/cray-keycloak-gatekeeper-ingress` - Keycloak Gatekeeper's ingress reverse proxy that redirects browsers to Keycloak for log in, and then to Istio's ingress gateway with a valid JWT for authorized access.
+- `istio-system/istio-ingressgateway-can` - Istio's ingress gateway.
+- `services/cray-keycloak-gatekeeper-ingress` - Keycloak Gatekeeper's ingress reverse proxy that redirects browsers to Keycloak for log in, and then to Istio's ingress gateway with a valid JWT for authorized access.
 
 This can be verified using the dig command to resolve the external hostname and compare it with Kubernetes.
 

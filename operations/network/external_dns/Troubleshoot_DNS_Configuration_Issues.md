@@ -18,6 +18,11 @@ The Domain Name Service \(DNS\) is not configured properly.
 
     ```bash
     ncn-w001# kubectl -n services get svc cray-externaldns-coredns-udp
+    ```
+
+    Example output:
+
+    ```
     NAME                           TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)        AGE
     cray-externaldns-coredns-udp   LoadBalancer   10.25.156.88   10.102.14.113   53:32674/UDP   45h
     ```
@@ -28,7 +33,6 @@ The Domain Name Service \(DNS\) is not configured properly.
 
     ```bash
     $ dig SERVICE.SYSTEM_DOMAIN_NAME +short
-    10.102.14.131
     ```
 
     If an IP address is returned, DNS is configured properly and the remaining steps in this procedure can be skipped. If an IP address is not returned, proceed to the next step.
@@ -39,7 +43,6 @@ The Domain Name Service \(DNS\) is not configured properly.
 
     ```bash
     $ dig SERVICE.SYSTEM_DOMAIN_NAME +short @10.102.14.113
-    10.102.14.131
     ```
 
 4.  Direct DNS requests to the cluster IP address from an NCN.
@@ -48,21 +51,24 @@ The Domain Name Service \(DNS\) is not configured properly.
 
     ```bash
     ncn-w001# dig SERVICE.SYSTEM_DOMAIN_NAME +short @10.25.156.88
-    10.102.14.131
     ```
 
 5.  Access services in the event that external DNS is down, the backing etcd database is having issues, or something was configured incorrectly.
 
     Search through Kubernetes service objects for `external-dns.alpha.kubernetes.io/hostname` annotations to find the corresponding external IP. The kubectl command makes it easy to generate an /etc/hosts compatible listing of IP addresses to hostnames using the go-template output format shown below.
 
-    ```screen
+    ```bash
     ncn-m001# kubectl get svc --all-namespaces -o go-template --template \
     '{{ range .items }}{{ $lb := .status.loadBalancer }}{{ with .metadata.annotations }}
     {{ with (index . "external-dns.alpha.kubernetes.io/hostname") }}
     {{ $hostnames := . }}{{ with $lb }}{{ range .ingress }}
     {{ printf "%s\t%s\n" .ip $hostnames }}{{ end }}{{ end }}
     {{ end }}{{ end }}{{ end }}' | sort -u | tr , ' '
+    ```
 
+    Example output:
+
+    ```
     10.101.5.128    opa-gpm.SYSTEM_DOMAIN_NAME nexus.SYSTEM_DOMAIN_NAME jaeger-istio.SYSTEM_DOMAIN_NAME kiali-istio.SYSTEM_DOMAIN_NAME prometheus.SYSTEM_DOMAIN_NAME alertmanager.SYSTEM_DOMAIN_NAME grafana.SYSTEM_DOMAIN_NAME vcs.SYSTEM_DOMAIN_NAME sma-grafana.SYSTEM_DOMAIN_NAME sma-kibana.SYSTEM_DOMAIN_NAME csms.SYSTEM_DOMAIN_NAME
     10.101.5.129    api.SYSTEM_DOMAIN_NAME auth.SYSTEM_DOMAIN_NAME
     10.101.5.130    s3.SYSTEM_DOMAIN_NAME

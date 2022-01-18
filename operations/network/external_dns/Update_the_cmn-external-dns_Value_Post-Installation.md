@@ -16,6 +16,11 @@ The system is installed.
 
     ```bash
     ncn-w001# kubectl -n services get svc | grep cray-externaldns-coredns-
+    ```
+
+    Example output:
+
+    ```
     cray-externaldns-coredns-tcp                     LoadBalancer   10.25.211.48    10.102.14.113   53:31111/TCP                 2d2h
     cray-externaldns-coredns-udp                     LoadBalancer   10.25.156.88    10.102.14.113   53:32674/UDP                 2d2h
     ```

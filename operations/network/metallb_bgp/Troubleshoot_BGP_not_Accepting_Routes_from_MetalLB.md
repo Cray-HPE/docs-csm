@@ -27,7 +27,11 @@ This procedure requires administrative privileges.
 
         ```bash
         sw-spine-001 [standalone: master] # show ip bgp vrf all summary
+        ```
 
+        Example output:
+
+        ```
         VRF name                  : CAN
         BGP router identifier     : 10.101.8.2
         local AS number           : 65533
@@ -65,7 +69,11 @@ This procedure requires administrative privileges.
 
         ```bash
         sw-spine-001 [standalone: master] # show ip route vrf all bgp
+        ```
 
+        Example output:
+
+        ```
         Flags:
           F: Failed to install in H/W
           B: BFD protected (static route)
@@ -167,6 +175,11 @@ This procedure requires administrative privileges.
 
         ```bash
         sw-spine-001# show bgp all-vrf all summary
+        ```
+
+        Example output:
+
+        ```
         VRF : default
         BGP Summary
         -----------
@@ -213,7 +226,11 @@ This procedure requires administrative privileges.
 
         ```bash
         sw-spine-001# show ip route  bgp all-vrfs
+        ```
 
+        Example output:
+
+        ```
         Displaying ipv4 routes selected for forwarding
 
         Origin Codes: C - connected, S - static, L - local

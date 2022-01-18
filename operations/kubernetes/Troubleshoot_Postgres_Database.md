@@ -31,11 +31,17 @@ The following is an example for `keycloak-postgres` where no endpoints are liste
 
 ```bash
 ncn-w001# kubectl get endpoints keycloak-postgres -n services
+```
+
+Example output:
+
+```
 NAME                ENDPOINTS         AGE
 keycloak-postgres   <none>            3d22h
 ```
 
 If the database is unavailable, check if the [Disk Full](#diskfull) is the cause of the issue. Otherwise, check the `postgres-operator` logs for errors.
+
 ```bash
 ncn-w001# kubectl logs -l app.kubernetes.io/name=postgres-operator -n services
 ```
@@ -103,6 +109,11 @@ The following is an example where replication is working:
 
 ```bash
 ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list
+```
+
+Example output:
+
+```
 +-------------------+---------------------+------------+--------+---------+----+-----------+
 |      Cluster      |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
 +-------------------+---------------------+------------+--------+---------+----+-----------+
@@ -132,6 +143,11 @@ A reinitialize will get the lagging replica member re-synced and replicating aga
 
 ```bash
 ncn-w001# kubectl exec keycloak-postgres-1 -n services -it -- bash
+```
+
+Example output:
+
+```
 root@keycloak-postgres-1:/home/postgres# patronictl reinit keycloak-postgres keycloak-postgres-0
 Are you sure you want to reinitialize members keycloak-postgres-0? [y/N]: y
 Failed: reinitialize for member keycloak-postgres-0, status code=503, (restarting after failure already in progress)
@@ -149,6 +165,11 @@ Verify that replication has recovered:
 
 ```bash
 ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- bash
+```
+
+Example output:
+
+```
 postgres@keycloak-postgres-2:~$ patronictl list
 +-------------------+---------------------+--------------+--------+---------+----+-----------+
 |      Cluster      |        Member       |     Host     |  Role  |  State  | TL | Lag in MB |
@@ -179,24 +200,43 @@ Check for any postgresql resource that has a `STATUS` of `SyncFailed`. `SyncFail
 
 Other `STATUS` values such as `Updating` are a non issue. It is expected that this will eventually change to `Running` or possibly `SyncFailed` if the `postgres-operator` encounters issues syncing updates to the postgresql cluster.
 
-```bash
-ncn-w001# kubectl get postgresql -A
-NAMESPACE   NAME                         TEAM                VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE     STATUS
-services    cray-console-data-postgres   cray-console-data   11        3      2Gi                                     4h10m   Running
-services    cray-sls-postgres            cray-sls            11        3      1Gi                                     4h12m   SyncFailed
-services    cray-smd-postgres            cray-smd            11        3      30Gi     500m          8Gi              4h12m   Updating
-services    gitea-vcs-postgres           gitea-vcs           11        3      50Gi                                    4h11m   Running
-services    keycloak-postgres            keycloak            11        3      1Gi                                     4h13m   Running
-spire       spire-postgres               spire               11        3      20Gi     1             4Gi              4h10m   Running
-```
+1. Check for any postgresql resource that has a `STATUS` of `SyncFailed`.
+   
+    ```bash
+    ncn-w001# kubectl get postgresql -A
+    ```
 
-```bash
-ncn-w001# kubectl get pods -l app.kubernetes.io/name=postgres-operator -n services
-NAME                                      READY   STATUS    RESTARTS   AGE
-cray-postgres-operator-6fffc48b4c-mqz7z   2/2     Running   0          5h26m
+    Example output:
 
-ncn-w001# kubectl logs cray-postgres-operator-6fffc48b4c-mqz7z -n services -c postgres-operator | grep -i sync | grep -i msg
-```
+    ```
+    NAMESPACE   NAME                         TEAM                VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE     STATUS
+    services    cray-console-data-postgres   cray-console-data   11        3      2Gi                                     4h10m   Running
+    services    cray-sls-postgres            cray-sls            11        3      1Gi                                     4h12m   SyncFailed
+    services    cray-smd-postgres            cray-smd            11        3      30Gi     500m          8Gi              4h12m   Updating
+    services    gitea-vcs-postgres           gitea-vcs           11        3      50Gi                                    4h11m   Running
+    services    keycloak-postgres            keycloak            11        3      1Gi                                     4h13m   Running
+    spire       spire-postgres               spire               11        3      20Gi     1             4Gi              4h10m   Running
+    ```
+
+1. Find the the `postgres-operator` pod name.
+
+    ```bash
+    ncn-w001# kubectl get pods -l app.kubernetes.io/name=postgres-operator -n services
+    ```
+
+    Example output:
+
+    ```
+    NAME                                      READY   STATUS    RESTARTS   AGE
+    cray-postgres-operator-6fffc48b4c-mqz7z   2/2     Running   0          5h26m
+    ```
+
+1. Check the logs for the `postgres-operator`.
+
+    ```
+    ncn-w001# kubectl logs cray-postgres-operator-6fffc48b4c-mqz7z -n services \
+    -c postgres-operator | grep -i sync | grep -i msg
+    ```
 
 #### Case 1 : msg="could not sync cluster: could not sync persistent volumes: could not sync volumes: could not resize EBS volumes: some persistent volumes are not compatible with existing resizing providers"
 
@@ -354,6 +394,7 @@ Most services expect to maintain a Postgres cluster consisting of three pods for
 ### Determine if a cluster member is missing
 
 For a given Postgres cluster, check how many pods are running.
+
 ```bash
 ncn-w001# POSTGRESQL=keycloak-postgres
 ncn-w001# NAMESPACE=services
@@ -364,29 +405,56 @@ ncn-w001# kubectl get pods -A -l "application=spilo,cluster-name=${POSTGRESQL}"
 
 If the number of Postgres pods for the given cluster is more or less than expected, increase or decrease as needed. This example will patch the keycloak-postgres cluster resource so that three pods should be running.
 
-```bash
-ncn-w001# POSTGRESQL=keycloak-postgres
-ncn-w001# NAMESPACE=services
-ncn-w001# kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
-```
-Confirm the number of cluster members, otherwise known as pods, by checking the postgresql resource.
-```bash
-ncn-w001# kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE}
-NAME                TEAM       VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE   STATUS
-keycloak-postgres   keycloak   11        3      10Gi                                    29m   Running
-```
+1. Set the POSTGRESQL and NAMESPACE variables.
+    
+    ```bash
+    ncn-w001# POSTGRESQL=keycloak-postgres
+    ncn-w001# NAMESPACE=services
+    ```
 
-If a pod is starting but remains in Pending, CrashLoopBackOff, ImagePullBackOff or other non Running states, describe the pod and/or get logs from the pod for further analysis. For example:
-```bash
-ncn-w001# kubectl get pods -A -l "application=spilo,cluster-name=${POSTGRESQL}"
-NAMESPACE   NAME                  READY   STATUS    RESTARTS   AGE
-services    keycloak-postgres-0   0/3     Pending   0          36m
-services    keycloak-postgres-1   3/3     Running   0          35m
-services    keycloak-postgres-2   3/3     Running   0          34m
+1. Patch the keycloak-postgres cluster resource to ensure three pods are running.
 
-ncn-w001# kubectl describe pod "${POSTGRESQL}-0" -n ${NAMESPACE}
-ncn-w001# kubectl logs "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE}
-```
+    ```bash
+    ncn-w001# kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' \
+    -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
+    ```
+
+1. Confirm the number of cluster members, otherwise known as pods, by checking the postgresql resource.
+
+    ```bash
+    ncn-w001# kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE}
+    NAME                TEAM       VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE   STATUS
+    keycloak-postgres   keycloak   11        3      10Gi                                    29m   Running
+    ```
+
+1. If a pod is starting but remains in Pending, CrashLoopBackOff, ImagePullBackOff or other non Running states, describe the pod and/or get logs from the pod for further analysis.
+
+    1. Find the pod name.
+    
+        ```bash
+        ncn-w001# kubectl get pods -A -l "application=spilo,cluster-name=${POSTGRESQL}"
+        ```
+
+        Example output:
+
+        ```
+        NAMESPACE   NAME                  READY   STATUS    RESTARTS   AGE
+        services    keycloak-postgres-0   0/3     Pending   0          36m
+        services    keycloak-postgres-1   3/3     Running   0          35m
+        services    keycloak-postgres-2   3/3     Running   0          34m
+        ```
+
+    1. Describe the pod.
+    
+        ```
+        ncn-w001# kubectl describe pod "${POSTGRESQL}-0" -n ${NAMESPACE}
+        ```
+
+    1. View the pod logs.
+    
+        ```
+        ncn-w001# kubectl logs "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE}
+        ```
 
 <a name="leader"></a>
 ## Is the Postgres Leader missing?
@@ -394,18 +462,32 @@ ncn-w001# kubectl logs "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE}
 If a Postgres cluster no longer has a leader, the database will need to be recovered.
 
 ### Determine if the Postgres Leader is missing
-```bash
-ncn-w001# POSTGRESQL=cray-smd-postgres
-ncn-w001# NAMESPACE=services
-ncn-w001# kubectl exec ${POSTGRESQL}-0 -n ${NAMESPACE} -c postgres -- patronictl list
-+-------------------+---------------------+------------+------+--------------+----+-----------+
-|      Cluster      |        Member       |    Host    | Role |    State     | TL | Lag in MB |
-+-------------------+---------------------+------------+------+--------------+----+-----------+
-| cray-smd-postgres | cray-smd-postgres-0 | 10.42.0.25 |      |  running     |    |   unknown |
-| cray-smd-postgres | cray-smd-postgres-1 | 10.44.0.34 |      | start failed |    |   unknown |
-| cray-smd-postgres | cray-smd-postgres-2 | 10.36.0.44 |      | start failed |    |   unknown |
-+-------------------+---------------------+------------+------+--------------+----+-----------+
-```
+
+1. Set the POSTGRESQL and NAMESPACE variables.
+   
+    ```bash
+    ncn-w001# POSTGRESQL=cray-smd-postgres
+    ncn-w001# NAMESPACE=services
+    ```
+
+1. Check if the leader is missing.
+    
+    ```
+    ncn-w001# kubectl exec ${POSTGRESQL}-0 -n ${NAMESPACE} -c postgres -- patronictl list
+    ```
+
+    Example output:
+
+    ```
+    +-------------------+---------------------+------------+------+--------------+----+-----------+
+    |      Cluster      |        Member       |    Host    | Role |    State     | TL | Lag in MB |
+    +-------------------+---------------------+------------+------+--------------+----+-----------+
+    | cray-smd-postgres | cray-smd-postgres-0 | 10.42.0.25 |      |  running     |    |   unknown |
+    | cray-smd-postgres | cray-smd-postgres-1 | 10.44.0.34 |      | start failed |    |   unknown |
+    | cray-smd-postgres | cray-smd-postgres-2 | 10.36.0.44 |      | start failed |    |   unknown |
+    +-------------------+---------------------+------------+------+--------------+----+-----------+
+    ```
+
 ### Recover from a missing Postgres Leader
 
 See the [Recover from Postgres WAL Event](Recover_from_Postgres_WAL_Event.md) procedure.
