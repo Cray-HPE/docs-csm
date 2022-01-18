@@ -23,8 +23,8 @@ upgrade that node.
 ## Upgrade Stages
 
 - [Stage 0 - Prerequisites](Stage_0_Prerequisites.md)
-- [Stage 1 - Kubernetes Upgrade](Stage_1.md)
-- [Stage 2 - Ceph Node Image Upgrade](Stage_2.md)
+- [Stage 1 - Ceph Node Image Upgrade](Stage_1.md)
+- [Stage 2 - Kubernetes Upgrade](Stage_2.md)
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
 - [Stage 4 - Apply Known Workarounds](Stage_4.md)
 - [Stage 5 - Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
