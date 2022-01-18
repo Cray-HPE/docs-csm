@@ -20,7 +20,11 @@ This procedure requires root privileges.
     ncn-w001# for pod in $(kubectl get pods -l app=etcd -n services \
     -o jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} ###"; \
     kubectl -n services exec ${pod} -- /bin/sh -c "ETCDCTL_API=3 etcdctl endpoint health"; done
+    ```
 
+    Example output:
+
+    ```
     ### cray-bos-etcd-6nkn6dzhv7 ###
     127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.670457ms
     ### cray-bos-etcd-6xtp2gqs64 ###
@@ -35,46 +39,8 @@ This procedure requires root privileges.
     127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.632738ms
     ### cray-cps-etcd-8ml5whzhjh ###
     127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.792795ms
-    ### cray-cps-etcd-9xh5dbvgvp ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.952686ms
-    ### cray-cps-etcd-cmjb9hvfgb ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.132689ms
-    ### cray-crus-etcd-4ccjwq9g2g ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.000064ms
-    ### cray-crus-etcd-5p7xgk9fj4 ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.415419ms
-    ### cray-crus-etcd-qmdcb6xvjg ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.383509ms
-    ### cray-externaldns-etcd-2b2rkfgj6s ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.39374ms
-    ### cray-externaldns-etcd-7frkfnbncx ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.405028ms
-    ### cray-externaldns-etcd-7gwlgc47pf ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 974.093µs
-    ### cray-fw-update-etcd-brplp6r44r ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.030956ms
-    ### cray-fw-update-etcd-qzwf2k4ccs ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 8.40234ms
-    ### cray-fw-update-etcd-wp29sfq25j ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.740369ms
-    ### cray-hbtd-etcd-b5lsrllglj ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.639258ms
-    ### cray-hbtd-etcd-dnsgsr4xqb ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.761431ms
-    ### cray-hbtd-etcd-zzbrp6hmdv ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.437008ms
-    ### cray-hmnfd-etcd-4fp999tl7c ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.200601ms
-    ### cray-hmnfd-etcd-5k9nw25pdc ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.75563ms
-    ### cray-hmnfd-etcd-8tzmz869gx ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.1993ms
-    ### cray-reds-etcd-mmnqnd45bw ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.034105ms
-    ### cray-reds-etcd-swkghllr6n ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.456472ms
-    ### cray-reds-etcd-wspl4fbt97 ###
-    127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.351777ms
+
+    [...]
     ```
 
     If any of the etcd clusters are not healthy, refer to [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
@@ -87,7 +53,11 @@ This procedure requires root privileges.
     ncn-w001# kubectl get pod -n services -o wide | head -n 1; for cluster in \
     $(kubectl get etcdclusters.etcd.database.coreos.com -n services | grep -v NAME | \
     awk '{print $1}'); do kubectl get pod -n services -o wide | grep $cluster; echo ""; done
+    ```
 
+    Example output:
+
+    ```
     NAME                                    READY   STATUS    RESTARTS AGE   IP            NODE       NOMINATED NODE  READINESS GATE
     cray-bos-etcd-7gl9dccmrq                1/1     Running   0        8d    10.40.0.88    ncn-w003   <none>          <none>
     cray-bos-etcd-g65fjhhlbg                1/1     Running   0        8d    10.42.0.36    ncn-w002   <none>          <none>
@@ -155,7 +125,7 @@ This procedure requires root privileges.
         done
         ```
 
-        For example:
+        Example of command being entered:
 
         ```bash
         ncn-w001# for pod in $(kubectl get pods -l app=etcd -n services -o \
@@ -167,6 +137,11 @@ This procedure requires root privileges.
         $2=="foo" && $3=="fooCheck" && $4=="1" && $5=="" ) print "PASS:  \
         " PRINT $0; else print "FAILED DATABASE CHECK - \
         EXPECTED: OK foo fooCheck 1   GOT: " PRINT $0 \}'; done
+        ```
+
+        Example output:
+
+        ```
         ### cray-bos-etcd-7cxq6qrhz5 Etcd Database Check: ###
         PASS:  OK foo fooCheck 1
         ### cray-bos-etcd-b9m4k5qfrd Etcd Database Check: ###
@@ -193,40 +168,8 @@ This procedure requires root privileges.
         PASS:  OK foo fooCheck 1
         ### cray-externaldns-etcd-2vnb5t4657 Etcd Database Check: ###
         PASS:  OK foo fooCheck 1
-        ### cray-externaldns-etcd-sc4b88ptg2 Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-externaldns-etcd-smhxd9mb8n Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-fas-etcd-j9qmtrxnhh Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-fas-etcd-w8xl7vbn84 Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-fas-etcd-zr2vnvhdwk Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-hbtd-etcd-jcxl65xwwd Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-hbtd-etcd-rpwx7qdtxb Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-hbtd-etcd-vswmwrmhpl Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-hmnfd-etcd-2rpvswtpd2 Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-hmnfd-etcd-6pm4tm5d6x Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-hmnfd-etcd-776b2g5d4l Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-reds-etcd-m8wgp24k9p Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-reds-etcd-wghvvfbnjp Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-reds-etcd-zpzw8mpkfk Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-uas-mgr-etcd-4xq5swfsr2 Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-uas-mgr-etcd-kfd64zwpbz Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-uas-mgr-etcd-nmqkdh8n2d Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
+
+        [...]
         ```
 
     -   To check one cluster:
@@ -250,7 +193,7 @@ This procedure requires root privileges.
         done
         ```
 
-        For example:
+        Example of command being entered:
 
         ```bash
         ncn-w001# for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
@@ -263,6 +206,11 @@ This procedure requires root privileges.
         $3=="fooCheck" && $4=="1" && $5=="" ) print "PASS:  " PRINT $0; \
         else print "FAILED DATABASE CHECK - EXPECTED: \
         OK foo fooCheck 1   GOT: " PRINT $0 }'; done
+        ```
+
+        Example output:
+
+        ```
         ### cray-bos-etcd-7cxq6qrhz5 Etcd Database Check: ###
         PASS:  OK foo fooCheck 1
         ### cray-bos-etcd-b9m4k5qfrd Etcd Database Check: ###
@@ -273,8 +221,8 @@ This procedure requires root privileges.
 
     If any of the etcd cluster databases are not healthy, refer to the following procedures:
 
-    -   Refer to [Check for and Clear etcd Cluster Alarms](Check_for_and_Clear_etcd_Cluster_Alarms.md)
-    -   Refer to [Clear Space in an etcd Cluster Database](Clear_Space_in_an_etcd_Cluster_Database.md)
+    - Refer to [Check for and Clear etcd Cluster Alarms](Check_for_and_Clear_etcd_Cluster_Alarms.md)
+    - Refer to [Clear Space in an etcd Cluster Database](Clear_Space_in_an_etcd_Cluster_Database.md)
 
 
 

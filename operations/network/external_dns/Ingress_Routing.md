@@ -6,10 +6,22 @@ For example, the configuration below controls the ingress routing for prometheus
 
 ```bash
 ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus
+```
+
+Example output:
+
+```
 NAME                             GATEWAYS                      HOSTS                              AGE
 cray-sysmgmt-health-prometheus   [services/services-gateway]   [prometheus.SYSTEM_DOMAIN_NAME]   22h
+```
 
+```
 ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus -o yaml
+```
+
+Example output:
+
+```
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:

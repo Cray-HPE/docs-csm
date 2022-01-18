@@ -19,6 +19,11 @@ The Kubernetes cluster on master nodes is being rebuilt.
 
     ```bash
     ncn# ./list-objects.py --bucket-name etcd-backup
+    ```
+
+    Example output:
+
+    ```
     bare-metal/etcd-backup-2020-02-04-18-00-10.tar.gz
     bare-metal/etcd-backup-2020-02-04-18-10-06.tar.gz
     bare-metal/etcd-backup-2020-02-04-18-20-02.tar.gz
@@ -75,6 +80,11 @@ The Kubernetes cluster on master nodes is being rebuilt.
         ```bash
         ncn-m001# grep -e initial-cluster: -e initial-advertise-peer-urls: \
         /etc/kubernetes/kubeadmcfg.yaml
+        ```
+
+        Example output:
+
+        ```
         initial-cluster: ncn-m001=https://10.252.1.7:2380,ncn-m002=https://10.252.1.8:2380,ncn-m003=https://10.252.1.9:2380
         initial-advertise-peer-urls: https://10.252.1.7:2380
         ```
@@ -115,6 +125,11 @@ The Kubernetes cluster on master nodes is being rebuilt.
         ```bash
         ncn-m002# grep -e initial-cluster: -e initial-advertise-peer-urls: \
         /etc/kubernetes/kubeadmcfg.yaml
+        ```
+
+        Example output:
+
+        ```
         initial-cluster: ncn-m001=https://10.252.1.7:2380,ncn-m002=https://10.252.1.8:2380,ncn-m003=https://10.252.1.9:2380
         initial-advertise-peer-urls: https://10.252.1.8:2380
         ```
@@ -155,6 +170,11 @@ The Kubernetes cluster on master nodes is being rebuilt.
         ```bash
         ncn-m003# grep -e initial-cluster: -e initial-advertise-peer-urls: \
         /etc/kubernetes/kubeadmcfg.yaml
+        ```
+
+        Example output:
+
+        ```
         initial-cluster: ncn-m001=https://10.252.1.7:2380,ncn-m002=https://10.252.1.8:2380,ncn-m003=https://10.252.1.9:2380
         initial-advertise-peer-urls: https://10.252.1.9:2380
         ```
@@ -228,6 +248,11 @@ The Kubernetes cluster on master nodes is being rebuilt.
     ncn-m001# ETCDCTL_API=3 etcdctl --cacert /etc/kubernetes/pki/etcd/ca.crt \
     --cert /etc/kubernetes/pki/etcd/server.crt \
     --key /etc/kubernetes/pki/etcd/server.key member list
+    ```
+
+    Example output:
+
+    ```
     448a8d056377359a, started, ncn-m001, https://10.252.1.7:2380, https://10.252.1.7:2379,https://127.0.0.1:2379
     986f6ff2a30b01cb, started, ncn-m002, https://10.252.1.8:2380, https://10.252.1.8:2379,https://127.0.0.1:2379
     d5a8e497e2788510, started, ncn-m003, https://10.252.1.9:2380, https://10.252.1.9:2379,https://127.0.0.1:2379

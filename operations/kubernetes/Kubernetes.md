@@ -14,8 +14,8 @@ The resiliency feature of Kubernetes ensures that the desired number of deployme
 
 Kubernetes components can be divided into:
 
--   **Master components** - Kubernetes master components provide the cluster's control plane. These components make global decisions about the cluster, such as scheduling, and responding to cluster events.
--   **Worker components** - A Kubernetes worker is a node that provides services necessary to run application containers. It is managed by the Kubernetes master. Node components run on every node and keep pods running, while providing the Kubernetes runtime environment.
+- **Master components** - Kubernetes master components provide the cluster's control plane. These components make global decisions about the cluster, such as scheduling, and responding to cluster events.
+- **Worker components** - A Kubernetes worker is a node that provides services necessary to run application containers. It is managed by the Kubernetes master. Node components run on every node and keep pods running, while providing the Kubernetes runtime environment.
 
 An etcd cluster is used for storage and state management of the Kubernetes cluster.
 

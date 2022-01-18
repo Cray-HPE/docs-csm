@@ -17,6 +17,11 @@ The system is installed.
 
     ```bash
     ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus -o yaml
+    ```
+
+    Example output:
+
+    ```
     apiVersion: networking.istio.io/v1beta1
     kind: VirtualService
     metadata:
@@ -54,6 +59,11 @@ The system is installed.
 
     ```bash
     ncn-w001# kubectl get configmap -n services cray-externaldns-coredns -o yaml
+    ```
+
+    Example output:
+
+    ```
     apiVersion: v1
     data:
       Corefile: |-
@@ -122,6 +132,11 @@ The system is installed.
 
     ```bash
     ncn-w001# kubectl get deployment -n services cray-keycloak-gatekeeper-ingress -o yaml
+    ```
+
+    Example output:
+
+    ```
     apiVersion: extensions/v1beta1
     kind: Deployment
     metadata:
@@ -305,6 +320,11 @@ The system is installed.
     ```bash
     ncn-w001# kubectl -n istio-system get secrets istio-ingressgateway-certs -o jsonpath='{.data.tls\.crt}'| \
     base64 -d | openssl x509 -text -noout
+    ```
+
+    Example output:
+
+    ```
     Certificate:
         Data:
             Version: 3 (0x2)
