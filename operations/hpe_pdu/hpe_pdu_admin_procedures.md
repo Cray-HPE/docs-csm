@@ -27,7 +27,7 @@ The following is needed before running this procedure:
 
 2. Connect to: [`https://localhost:8443`](https://localhost:8443) using a web browser.
 
-3. Log in with the `admin` username.  Enter the admin password.  If you have not changed the admin password, there will be a prompt to change the password.
+3. Log in with the `admin` username. Enter the admin password. If you have not changed the admin password, there will be a prompt to change the password.
 
 ### HPE PDU Initial Set-up
 Use this procedure to do the following:
@@ -44,7 +44,7 @@ Use this procedure to do the following:
 #### Add Default User
 1. Using the **"admin"** menu (top right corner) navigate to **"User Accounts"**.
 2. Click on the **"Add User"** button.
-3. Use the form to add the _username_ and _password_ for the default River user.  Assign the role _"Administrator"_ to that user.
+3. Use the form to add the _username_ and _password_ for the default River user. Assign the role _"Administrator"_ to that user.
 
 #### Enable Outlet Control
 1. Using the **"Home"** icon (House in top right corner) navigate to **"Control & Manage"**.
@@ -54,12 +54,12 @@ Use this procedure to do the following:
 ##### Check Firmware Version
 1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
 2. Check which version of firmware is installed by selecting the **"Home"** icon (House in the top right corner) navigate to **"Identification"**.
-3. The _"Version"_ will be displayed.  If the version is not the _"2.0.0.L"_, update firmware.
+3. The _"Version"_ will be displayed. If the version is not the _"2.0.0.L"_, update firmware.
 
 ##### Update Firmware
 1. Download version **2.0.0.L** firmware from: [https://support.hpe.com/connect/s/search?language=en_US#q=P9S23A&t=All&sort=%40hpescuniversaldate%20descending&numberOfResults=25&f:@contenttype=[Drivers%20and%20Software]](https://support.hpe.com/connect/s/search?language=en_US#q=P9S23A&t=All&sort=%40hpescuniversaldate%20descending&numberOfResults=25&f:@contenttype=[Drivers%20and%20Software])
 This will download an .exe file, which is a self extracting zip file.
-2. If using a windows system, run the .exe file to extract the files, or use an unzip program on the file.  One of the files extracted will be named **"HPE.FW"**, that is the firmware file you will need for uploading.
+2. If using a windows system, run the .exe file to extract the files, or use an unzip program on the file. One of the files extracted will be named **"HPE.FW"**, that is the firmware file you will need for uploading.
 3. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
 4. Using the **"Settings"** icon (gear in computer monitor in top right corner) navigate to **"System Management"**.
 5. Click the **"Update Firmware"** button.
@@ -75,7 +75,7 @@ The firmware will be updated and the PDU management processor will restart.
 4. Enter new password and make any other changes for that user account and click the **"Save"** button.
 
 #### Discover HPE PDU after Upgrading CSM
-**This procedure is only needed when upgrading CSM, not performing a fresh install.  This procedure should be run after CSM has been fully upgraded including the discovery job.**
+**This procedure is only needed when upgrading CSM, not performing a fresh install. This procedure should be run after CSM has been fully upgraded including the discovery job.**
 1.  In CSM 1.0 and before the hms-discovery job and Redfish Translation Service (RTS) treated all PDUs as if were made by ServerTech, and after the upgrade to CSM 1.2 RTS will still think the HPE PDUs in the system are ServerTech PDUs. These erroneous HPE PDU entries for RTS need to get removed from Vault.  
     ```bash
     ncn-m001# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
@@ -100,7 +100,7 @@ The firmware will be updated and the PDU management processor will restart.
         ncn-m001# kubectl -n services rollout restart deployment cray-hms-rts
         ncn-m001# kubectl -n services rollout status deployment cray-hms-rts
         ```
-2. Find the list of PDU MAC address.  The `ID` field in each element is the normalized MAC address of each PDU:
+2. Find the list of PDU MAC address. The `ID` field in each element is the normalized MAC address of each PDU:
     ```bash
     ncn-m001# cray hsm inventory ethernetInterfaces list --type CabinetPDUController
     ```

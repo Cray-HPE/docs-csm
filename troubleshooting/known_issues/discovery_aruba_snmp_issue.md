@@ -7,7 +7,7 @@
 
 ## Procedure to determine if you affected by this known issue
 
-Run the `arubafix.sh` script.  Executed with no arguments, this script will
+Run the `arubafix.sh` script. Executed with no arguments, this script will
 see if this problem currently exists on the system, and if so, fix it.
 
 **NOTE: This script requires the admin to enter the Aruba switch management interface's admin password.**  This script is thus not completely automatic.
@@ -26,7 +26,7 @@ This script needs to be run twice if the first run finds issues; if it finds no 
 
 The first run is to check for the issue and fix issues it finds; the second run is to verify that the issue is fixed.
 
-If two runs are needed, sufficient time needs to be allowed between runs for an HSM discovery job to run.  This job runs every five minutes; thus the admin should wait at least 6 minutes to be sure the discovery job has run before running a second execution.
+If two runs are needed, sufficient time needs to be allowed between runs for an HSM discovery job to run. This job runs every five minutes; thus the admin should wait at least 6 minutes to be sure the discovery job has run before running a second execution.
 
 Example:
 
@@ -54,7 +54,7 @@ Found unknown/undiscovered MACs in discovery log.
  
 ==> Applying SNMP reset to Aruba switches...
  
- ==> PASSWORD REQUIRED for Aruba access.  Enter Password:  
+ ==> PASSWORD REQUIRED for Aruba access. Enter Password:  
 
 Performing SNMP Reset on Aruba leaf switch: sw-leaf-001
  
@@ -97,7 +97,7 @@ one of its operations, in which case the script output will show the problem.
 
 If the script appears to run but the discovery is still failing (after 
 potentially two runs of the script), then either the initial indications of 
-the discovery problem were mis-interpreted or the Aruba switches didn't 
+the discovery problem were mis-interpreted or the Aruba switches did not 
 properly respond to the corrective action.
 
 To test the former, re-run the script with maximum debugging output enabled:
@@ -106,8 +106,8 @@ To test the former, re-run the script with maximum debugging output enabled:
 ncn# /opt/cray/csm/scripts/hms_verification/arubafix.sh -d -d -d
 ```
 
-If this doesn't show anything significant, then the switches may not be 
-responding to an SNMP reset.  Apply the workaround described 
+If this does not show anything significant, then the switches may not be 
+responding to an SNMP reset. Apply the workaround described 
 in [the following procedure](../../install/configure_aruba_aggregation_switch.md) 
 -- particuarly the "Configure SNMP" section -- to the Aruba leaf switches in the system.
 

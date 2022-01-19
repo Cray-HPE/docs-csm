@@ -5,7 +5,7 @@
 
 ## UAS and UAI Legacy Mode Health Checks
 
-Check the health of UAS and UAI to validate installation / upgrade of an HPE Cray EX system.  This is a legacy mode procedure that can be run at installation / upgrade time to make sure that the following are true:
+Check the health of UAS and UAI to validate installation / upgrade of an HPE Cray EX system. This is a legacy mode procedure that can be run at installation / upgrade time to make sure that the following are true:
 * UAS is installed and running correctly
 * UAI images are installed and registered correctly
 * UAIs can be created in legacy mode

@@ -1,6 +1,6 @@
 # Check KEA DHCP logs
 
-In order to check the logs for the pod you'll need to know the pod name, run this command to see the pod name:
+In order to check the logs for the pod you will need to know the pod name, run this command to see the pod name:
 
 ```
 kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea

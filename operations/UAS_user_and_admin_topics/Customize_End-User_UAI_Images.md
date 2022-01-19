@@ -6,7 +6,7 @@
 
 The provided End-User UAI image is a basic UAI image that includes an up-to-date version of the SLES Linux Distribution. It provides an entrypoint to using UAIs and an easy way for administrators to experiment with UAS configurations. To support building software to be run in compute nodes, or other HPC and Analytics workflows, it is necessary to create a custom End-User UAI image and use that.
 
-A custom End-User UAI image can be any container image set up with the End-User UAI entrypoint script.  Experimentation with the wide range of possible UAI images is beyond the scope of this document, but the example given here should offer a starting point for that kind of experimentation.
+A custom End-User UAI image can be any container image set up with the End-User UAI entrypoint script. Experimentation with the wide range of possible UAI images is beyond the scope of this document, but the example given here should offer a starting point for that kind of experimentation.
 
 The example provided here covers the most comon use-case, which is building a UAI image from the squashfs image used on compute nodes on the host system to support application development, workload management and analytics workflows. Some of the steps are specific to that activity, others would be common to or similar to steps needed to create special purpose UAIs.
 
@@ -23,7 +23,7 @@ The example provided here covers the most comon use-case, which is building a UA
 
 1. Choose a name for the custom image
 
-     This example names the custom End-User UAI image called `registry.local/cray/cray-uai-compute:latest`, and places that name in an environment variable for convenience.  Alter the name as appropriate for the image to be created:
+     This example names the custom End-User UAI image called `registry.local/cray/cray-uai-compute:latest`, and places that name in an environment variable for convenience. Alter the name as appropriate for the image to be created:
 
     ```
     ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest

@@ -183,15 +183,15 @@ Note: Do not run HMS tests concurrently on multiple nodes. They may interfere wi
 
 These tests should be executed as root on at least one worker NCN and one master NCN (but **not** ncn-m001 if it is still the PIT node).
 
-Run the HMS CT smoke tests.  This is done by running the `run_hms_ct_tests.sh` script:
+Run the HMS CT smoke tests. This is done by running the `run_hms_ct_tests.sh` script:
 
 ```
 ncn# /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
 ```
 
 The return value of the script is 0 if all CT tests ran successfully, non-zero
-if not.  On CT test failures the script will instruct the admin to look at the
-CT test log files.  If one or more failures occur, investigate the cause of
+if not. On CT test failures the script will instruct the admin to look at the
+CT test log files. If one or more failures occur, investigate the cause of
 each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
 <a name="hms-aruba-fixup"></a>
@@ -259,9 +259,9 @@ x1000 (Mountain)
 
 ```
 
-The script will have an exit code of 0 if there are no failures.  If there is
+The script will have an exit code of 0 if there are no failures. If there is
 any FAIL information displayed, the script will exit with a non-zero exit
-code.  Failure information interpretation is described in the next section.
+code. Failure information interpretation is described in the next section.
 
 <a name="hms-smd-discovery-validation-interpreting-results"></a>
 #### 2.3.1 Interpreting results
@@ -274,16 +274,16 @@ The Cabinet Checks output is divided into three sections:
 
 In the River section, any hardware found in SLS and not discovered by HSM is
 considered a failure, with the exception of PDU controllers, which is a
-warning.  Also, the BMC of one of the management NCNs (typically 'ncn-m001')
+warning. Also, the BMC of one of the management NCNs (typically 'ncn-m001')
 will not be connected to the HSM HW network and thus will show up as being not
-discovered and/or not having any mgmt network connection.  This is treated as
+discovered and/or not having any mgmt network connection. This is treated as
 a warning.
 
 In the Mountain section, the only thing considered a failure are Chassis BMCs
 that are not discovered in HSM.   All other items (nodes, node BMCs and router
 BMCs) which are not discovered are considered warnings.
 
-Any failures need to be investigated by the admin for rectification.  Any
+Any failures need to be investigated by the admin for rectification. Any
 warnings should also be examined by the admin to insure they are accurate and
 expected.
 

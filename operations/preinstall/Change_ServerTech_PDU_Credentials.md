@@ -5,7 +5,7 @@ This procedure should be used to update all ServerTech PDUs in the system to
 the same global credentials.
 
 **NOTE:** This procedure only updates the default credentials on the 
-ServerTech PDU hardware.  No credentials are set in any management software.
+ServerTech PDU hardware. No credentials are set in any management software.
 
 ## Prerequisites
 - The ServerTech PDUs must be accessible via a workstation or laptop.
