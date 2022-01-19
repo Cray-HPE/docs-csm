@@ -133,8 +133,8 @@ if [[ $state_recorded == "0" ]]; then
         ssh_keys_done=1
     fi
 
-    if [[ $(upgrade_ncn) =~ ncn-s00[1-3] ]]; then
-        scp /etc/kubernetes/admin.conf $upgrade_ncn:/etc/kubernetes
+    if [[ ${upgrade_ncn} =~ ncn-s00[1-3] ]]; then
+        scp /etc/kubernetes/admin.conf ${upgrade_ncn}:/etc/kubernetes
     fi
 
     ssh ${upgrade_ncn} '/usr/share/doc/csm/upgrade/1.2/scripts/ceph/ceph-services-stage2.sh'
