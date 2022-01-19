@@ -29,6 +29,11 @@ This procedure requires administrative privileges.
     ```bash
     ncn-m002# for i in ncn-{w,s}00{1..3} ncn-m00{2..3}; do echo \
     "------$i--------"; ssh $i '/srv/cray/scripts/metal/set-ntp-config.sh'; done
+    ```
+
+    Example output:
+
+    ```
     ------ncn-w001--------
     CURRENT TIME SETTINGS
     rtc: 2021-01-16 15:04:57.593224+00:00
@@ -47,8 +52,8 @@ This procedure requires administrative privileges.
     NEW TIME SETTINGS
     rtc: 2021-02-19 13:03:06.515083+00:00
     sys: 2021-02-19 13:03:07.184846+0000
-    ...
-    ...
+    
+    [...]
     ```
 
 4.  Reboot each node.

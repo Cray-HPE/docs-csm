@@ -16,6 +16,11 @@ Use this procedure to quickly synchronize changes made in Keycloak to the comput
 
     ncn-w001# cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
     jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
+    ```
+
+    Expected output looks similar to the following:
+
+    ```
     job.batch "keycloak-users-localize-1" deleted
     job.batch/keycloak-users-localize-1 replaced
     ```
@@ -26,6 +31,11 @@ Use this procedure to quickly synchronize changes made in Keycloak to the comput
 
     ```bash
     ncn-w001# kubectl get pods -n services | grep keycloak-users-localize
+    ```
+
+    Expected output looks similar to the following:
+
+    ```
     keycloak-users-localize-1-sk2hn                                0/2     Completed   0          2m35s
     ```
 
@@ -35,6 +45,11 @@ Use this procedure to quickly synchronize changes made in Keycloak to the comput
 
     ```bash
     ncn-w001# kubectl logs -n services KEYCLOAK_POD_NAME keycloak-localize
+    ```
+
+    Expected output looks similar to the following:
+
+    ```
     <logs showing it has updated the "s3" objects and ConfigMaps>
     2020-07-20 18:26:15,774 - INFO    - keycloak_localize - keycloak-localize complete
     ```

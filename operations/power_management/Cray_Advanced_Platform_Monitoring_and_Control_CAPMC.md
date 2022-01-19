@@ -8,13 +8,13 @@ Refer to the CAPMC API documentation for detailed API information.
 
 The current release of CAPMC supports the following power control features:
 
--   Retrieve Redfish power status and power management capabilities of components
--   Control single components via NID or xname
--   Control grouped components
--   Control the entire system \(all or s0\)
--   Can specify ancestors \(--prereq\) and descendants \(--recursive\) of single component
--   Provide a --force option for immediate power off
--   Power capping
+- Retrieve Redfish power status and power management capabilities of components
+- Control single components via NID or xname
+- Control grouped components
+- Control the entire system \(all or s0\)
+- Can specify ancestors \(`--prereq`\) and descendants \(`--recursive`\) of single component
+- Provide a `--force` option for immediate power off
+- Power capping
 
 Power sequencing using CAPMC assumes that all cabinets and PDUs have been plugged in, breakers are on, and PDU controllers, BMCs, and other embedded controllers are on and available. CAPMC provides a default order for components to powering on, but the power sequence can be configured.
 
@@ -28,14 +28,14 @@ The `cray capmc` command \(see `--help`\) can be used to control power to specif
 
 **Air Cooled Cabinets**
 
--   Compute Nodes
+- Compute Nodes
 
 **Liquid Cooled Cabinets**
 
--   Chassis
--   Slingshot Switch blades
--   Compute blades
--   Compute nodes
+- Chassis
+- Slingshot Switch blades
+- Compute blades
+- Compute nodes
 
 ### Component Groups
 
@@ -43,9 +43,9 @@ CAPMC uses xnames to specify entire cabinets or specific components throughout t
 
 The cabinet naming convention assigns a number to each cabinet in the system. Cabinets can be located anywhere on the computer room floor, although manufacturing typically follows a sequential cabinet numbering scheme:
 
--   Liquid Cooled cabinet numbers: x1000–x2999
--   Air Cooled cabinet numbers: x3000–x4999
--   Liquid Cooled TDS cabinet numbers: x5000–5999
+- Liquid Cooled cabinet numbers: x1000–x2999
+- Air Cooled cabinet numbers: x3000–x4999
+- Liquid Cooled TDS cabinet numbers: x5000–5999
 
 Cabinet numbers can range from 0-9999 and contain from 1–4 digits only.
 
@@ -65,39 +65,39 @@ CAPMC API calls provide means for third party software to implement advanced pow
 
 Air Cooled nodes support these power capping and monitoring API calls:
 
--   get\_power\_cap\_capabilities
--   get\_power\_cap
--   set\_power\_cap
--   get\_node\_energy
--   get\_node\_energy\_stats
--   get\_system\_power
+- get\_power\_cap\_capabilities
+- get\_power\_cap
+- set\_power\_cap
+- get\_node\_energy
+- get\_node\_energy\_stats
+- get\_system\_power
 
 ### Examples for Liquid Cooled Compute Node Power Management
 
 **Get Node Energy**
 
-```screen
-ncn-m001# cray capmc get\_node\_energy create --nids NID\_LIST --start-time '2020-03-04 12:00:00' \\
+```bash
+ncn-m001# cray capmc get_node_energy create --nids NID_LIST --start-time '2020-03-04 12:00:00' \
 --end-time '2020-03-04 12:10:00' --format json
 ```
 
 **Get Node Energy Stats**
 
-```screen
-ncn-m001# cray capmc get\_node\_energy\_stats create --nids NID\_LIST --start-time \\
+```bash
+ncn-m001# cray capmc get_node_energy_stats create --nids NID_LIST --start-time \
 '2020-03-04 12:00:00' --end-time '2020-03-04 12:10:00' --format json
 ```
 
 **Get Node Power Control and Limit Settings**
 
-```screen
-ncn-m001# cray capmc get\_power\_cap create –-nids NID\_LIST --format json
+```bash
+ncn-m001# cray capmc get_power_cap create –-nids NID_LIST --format json
 ```
 
 **Get System Power**
 
-```screen
-ncn-m001# cray capmc get\_system\_power create --start-time \\
+```bash
+ncn-m001# cray capmc get_system_power create --start-time \
 '2020-03-04 12:00:00' --window-len 30 --format json
 ```
 
@@ -105,68 +105,68 @@ ncn-m001# cray capmc get\_system\_power create --start-time \\
 
 The supply field contains the Max limit for the node.
 
-```screen
-ncn-m001# cray capmc get\_power\_cap\_capabilities create –-nids NID\_LIST --format json
+```bash
+ncn-m001# cray capmc get_power_cap_capabilities create –-nids NID_LIST --format json
 ```
 
 **Set Node Power Limit**
 
-```screen
-ncn-m001# cray capmc set\_power\_cap create –-nids NID\_LIST --node 225 --format json
+```bash
+ncn-m001# cray capmc set_power_cap create –-nids NID_LIST --node 225 --format json
 ```
 
 **Remove Node Power Limit \(Set to Default\)**
 
-```screen
-ncn-m001# cray capmc set\_power\_cap create –-nids NID\_LIST --node 0 --format json
+```bash
+ncn-m001# cray capmc set_power_cap create –-nids NID_LIST --node 0 --format json
 ```
 
 **Activate Node Power Limit**
 
-```screen
-# curl -k -u $login:$pass -H "Content-Type: application/json" \\
--X POST https://$BMC\_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger --date
-'\{"PowerLimitTrigger": "Activate"\}'
+```bash
+# curl -k -u $login:$pass -H "Content-Type: application/json" \
+-X POST https://$BMC_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger --date
+'{"PowerLimitTrigger": "Activate"}'
 ```
 
 **Deactivate Node Power Limit**
 
-```screen
-# curl -k -u $login:$pass -H "Content-Type: application/json" \\
--X POST https://$BMC\_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger --data
-'\{"PowerLimitTrigger": "Deactivate"\}'
+```bash
+# curl -k -u $login:$pass -H "Content-Type: application/json" \
+-X POST https://$BMC_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger --data
+'{"PowerLimitTrigger": "Deactivate"}'
 ```
 
 ## Power On/Off Examples
 
 **Power Off a Cabinet**
 
-```screen
-ncn-m001# cray capmc xname\_off create --xnames x1000 --recursive --format json
+```bash
+ncn-m001# cray capmc xname_off create --xnames x1000 --recursive --format json
 ```
 
 **Power Off a Chassis 0 and Its Descendents**
 
-```screen
-ncn-m001# cray capmc xname\_off create --xnames x1000c0 --recursive --format json
+```bash
+ncn-m001# cray capmc xname_off create --xnames x1000c0 --recursive --format json
 ```
 
 **Power Off Node 0 in Cabinet 1000, Chassis, 0, Slot 0, Node Card 0**
 
-```screen
-ncn-m001# cray capmc xname\_off create --xnames x1000c0s0b0n0 --format json
+```bash
+ncn-m001# cray capmc xname_off create --xnames x1000c0s0b0n0 --format json
 ```
 
 **Emergency Power Off \(EPO\) CLI Command**
 
-```screen
-ncn-m001#  cray capmc emergency\_power\_off –-xnames LIST\_OF\_CHASSIS --force --format json
+```bash
+ncn-m001#  cray capmc emergency_power_off –-xnames LIST_OF_CHASSIS --force --format json
 ```
 
 To recover or "reset" the components after a software EPO, set the chassis to a known hardware state \(off\). The cabinet\(s\) can then be powered on normally after the EPO is cleared. For a complete procedure, see [Recover from a Liquid Cooled Cabinet EPO Event](Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md).
 
-```screen
-ncn-m001# cray capmc xname\_off create --xnames LIST\_OF\_CHASSIS --force true
+```bash
+ncn-m001# cray capmc xname_off create --xnames LIST_OF_CHASSIS --force true
 e = 0
 err_msg = ""
 ```

@@ -4,8 +4,8 @@ Repositories are added to systems to extend the system functionality beyond what
 
 Refer to the following for more information about Nexus:
 
--   The official Sonatype documentation: [https://help.sonatype.com/repomanager3](https://help.sonatype.com/repomanager3)
--   Nexus REST API and Web UI management: [Manage Repositories with Nexus](Manage_Repositories_with_Nexus.md)
+- The official Sonatype documentation: [https://help.sonatype.com/repomanager3](https://help.sonatype.com/repomanager3)
+- Nexus REST API and Web UI management: [Manage Repositories with Nexus](Manage_Repositories_with_Nexus.md)
 
 
 

@@ -5,18 +5,18 @@ Shut down management services and power off the HPE Cray EX management Kubernete
 
 Understand the following concepts before powering off the management non-compute nodes \(NCNs\) for the Kubernetes cluster and storage:
 
--   The etcd cluster provides storage for the state of the management Kubernetes cluster. The three node etcd cluster runs on the same nodes that are configured as Kubernetes Master nodes. The management cluster state must be frozen when powering off the Kubernetes cluster. When one member is unavailable, the two other members continue to provide full access to the data. When two members are down, the remaining member will switch to only providing read-only access to the data.
--   **Avoid Unnecessary Data Movement with Ceph** - The Ceph cluster runs not only on the dedicated storage nodes, but also on the nodes configured as Kubernetes Master nodes. Specifically, the `mon` processes. If one of the storage nodes goes down, Ceph can rebalance the data onto the remaining nodes and object storage daemons \(OSDs\) to regain full protection.
--   **Avoid Spinning up Replacement Pods on Worker Nodes** - Kubernetes keeps all pods running on the management cluster. The `kubelet` process on each node retrieves information from the etcd cluster about what pods must be running. If a node becomes unavailable for more than five minutes, Kubernetes creates replacement pods on other management nodes.
--   **High-Speed Network \(HSN\)** - When the management cluster is shut down the HSN is also shut down.
+- The etcd cluster provides storage for the state of the management Kubernetes cluster. The three node etcd cluster runs on the same nodes that are configured as Kubernetes Master nodes. The management cluster state must be frozen when powering off the Kubernetes cluster. When one member is unavailable, the two other members continue to provide full access to the data. When two members are down, the remaining member will switch to only providing read-only access to the data.
+- **Avoid Unnecessary Data Movement with Ceph** - The Ceph cluster runs not only on the dedicated storage nodes, but also on the nodes configured as Kubernetes Master nodes. Specifically, the `mon` processes. If one of the storage nodes goes down, Ceph can rebalance the data onto the remaining nodes and object storage daemons \(OSDs\) to regain full protection.
+- **Avoid Spinning up Replacement Pods on Worker Nodes** - Kubernetes keeps all pods running on the management cluster. The `kubelet` process on each node retrieves information from the etcd cluster about what pods must be running. If a node becomes unavailable for more than five minutes, Kubernetes creates replacement pods on other management nodes.
+- **High-Speed Network \(HSN\)** - When the management cluster is shut down the HSN is also shut down.
 
 The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes management cluster and performs these tasks:
 
--   Stops etcd and which freezes the state of the Kubernetes cluster on each management node.
--   Stops **and disables** the kubelet on each management and worker node.
--   Stops all containers on each management and worker node.
--   Stop `containerd` on each management and worker node.
--   Stops Ceph from rebalancing on the management node that is running a `mon` process.
+- Stops etcd and which freezes the state of the Kubernetes cluster on each management node.
+- Stops **and disables** the kubelet on each management and worker node.
+- Stops all containers on each management and worker node.
+- Stop `containerd` on each management and worker node.
+- Stops Ceph from rebalancing on the management node that is running a `mon` process.
 
 ### Prerequisites
 
@@ -64,6 +64,11 @@ An authentication token is required to access the API gateway and to use the `sa
 
    ```bash
    ncn-m001# /opt/cray/platform-utils/ncnGetXnames.sh
+   ```
+
+   Example output:
+
+   ```
                 +++++ Get NCN Xnames +++++
    === Can be executed on any worker or master ncn node. ===
    === Executing on ncn-m001, Thu Mar 18 20:58:04 UTC 2021 ===
@@ -95,6 +100,11 @@ An authentication token is required to access the API gateway and to use the `sa
 
    ```bash
    ncn-m001# sat bootsys shutdown --stage platform-services
+   ```
+
+   Example output:
+
+   ```
    The following Non-compute Nodes (NCNs) will be included in this operation:
    managers:
    - ncn-m001
@@ -129,6 +139,11 @@ An authentication token is required to access the API gateway and to use the `sa
 
    ```bash
    ncn-m001# for ncn in ncn-w00{1,2,3}; do echo "$ncn"; ssh $ncn "crictl ps"; echo; done
+   ```
+
+   Example output:
+
+   ```
    ncn-w001
    CONTAINER         IMAGE             CREATED           STATE         NAME              ATTEMPT         POD ID
    032d69162ad24     302d9780da639     54 minutes ago    Running       cray-dhcp-kea     0               e4d1c01818a5a
@@ -146,6 +161,11 @@ An authentication token is required to access the API gateway and to use the `sa
 
    ```bash
    ncn-m001# sat bootsys shutdown --stage platform-services
+   ```
+
+   Example output:
+
+   ```
    The following Non-compute Nodes (NCNs) will be included in this operation:
    managers:
    - ncn-m001
@@ -181,6 +201,11 @@ An authentication token is required to access the API gateway and to use the `sa
 
    ```bash
    ncn-m001# sat bootsys shutdown --stage ncn-power
+   ```
+
+   Example output:
+
+   ```
    Proceed with shutdown of other management NCNs? [yes,no] yes
    Proceeding with shutdown of other management NCNs.
    IPMI username: root
@@ -213,6 +238,11 @@ An authentication token is required to access the API gateway and to use the `sa
 
    ```bash
    ncn-m001# screen -ls
+   ```
+
+   Example output:
+
+   ```
    There are screens on:
    26745.SAT-console-ncn-m003-mgmt (Detached)
    26706.SAT-console-ncn-m002-mgmt (Detached)
@@ -222,7 +252,9 @@ An authentication token is required to access the API gateway and to use the `sa
    26552.SAT-console-ncn-w003-mgmt (Detached)
    26514.SAT-console-ncn-w002-mgmt (Detached)
    26444.SAT-console-ncn-w001-mgmt (Detached)
+   ```
 
+   ```
    ncn-m001# screen -x 26745.SAT-console-ncn-m003-mgmt
    ```
 

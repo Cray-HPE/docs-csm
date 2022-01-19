@@ -8,11 +8,11 @@ The procedures in section detail the high-level tasks required to power off an H
 -   The Boot Orchestration Service \(BOS\) manages proper shutdown and power off tasks for compute nodes and User Access Nodes \(UANs\).
 -   The System Admin Toolkit \(SAT\) automates shutdown services by stage, for example:
 
-    ```screen
+    ```bash
     sat bootsys shutdown --stage platform-services
     ```
 
-    ```screen
+    ```bash
     sat bootsys shutdown --stage bos-operations
     ```
 
