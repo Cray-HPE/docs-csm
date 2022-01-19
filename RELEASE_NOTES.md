@@ -145,3 +145,4 @@ and many more...
 * Rarely, Nexus is not available when scaling down NCN workers to two nodes.
 * The boot order for Gigabyte NCNs does not persist after a reboot or reinstall.
 * Intermittently, storage nodes have clock skew during fresh install.
+* Kube-multus pods may fail to restart due to ImagePullBackOff. For more information see [Kube-multus pod is in ImagePullBackOff](troubleshooting/known_issues/kube_multus_pod_in_ImagePullBackOff.md).
