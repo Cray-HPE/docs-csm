@@ -15,9 +15,9 @@ UAI host node identification is an exclusive activity, not an inclusive one, so 
   ```
   ncn-m001-pit# kubectl get nodes | grep -v master
   NAME       STATUS   ROLES    AGE   VERSION
-  ncn-w001   Ready    <none>   10d   v1.18.6
-  ncn-w002   Ready    <none>   25d   v1.18.6
-  ncn-w003   Ready    <none>   23d   v1.18.6
+  ncn-w001   Ready    <none>   10d   v1.20.13
+  ncn-w002   Ready    <none>   25d   v1.20.13
+  ncn-w003   Ready    <none>   23d   v1.20.13
   ```
 
   In this example, there are three nodes known by Kubernetes that are not running as Kubernetes master nodes. These are all potential UAI host nodes.
@@ -27,7 +27,7 @@ UAI host node identification is an exclusive activity, not an inclusive one, so 
   ```
   ncn-m001-pit# kubectl get no -l uas=False
   NAME       STATUS   ROLES    AGE   VERSION
-  ncn-w001   Ready    <none>   10d   v1.18.6
+  ncn-w001   Ready    <none>   10d   v1.20.13
   ```
 
   **NOTE:** Given the fact that labels are textual not boolean, it is a good idea to try various common spellings of false. The ones that will prevent UAIs from running are 'False', 'false' and 'FALSE'. Repeat the above with all three options to be sure.

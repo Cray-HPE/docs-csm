@@ -7,13 +7,13 @@ The `kubectl` CLI commands can be used to retrieve information about the Kuberne
 
 ```bash
 ncn# kubectl get nodes
-NAME       STATUS     ROLES    AGE   VERSION
-ncn-m001   Ready      master   19d   v1.14.3
-ncn-m002   Ready      master   19d   v1.14.3
-ncn-m003   Ready      master   19d   v1.14.3
-ncn-w001   Ready      <none>   19d   v1.14.3
-ncn-w002   Ready      <none>   19d   v1.14.3
-ncn-w003   Ready      <none>   19d   v1.14.3
+NAME       STATUS   ROLES                  AGE   VERSION
+ncn-m001   Ready    control-plane,master   27h   v1.20.13
+ncn-m002   Ready    control-plane,master   8d    v1.20.13
+ncn-m003   Ready    control-plane,master   8d    v1.20.13
+ncn-w001   Ready    <none>                 8d    v1.20.13
+ncn-w002   Ready    <none>                 8d    v1.20.13
+ncn-w003   Ready    <none>                 8d    v1.20.13
 ```
 
 ### Retrieve Pod Status

@@ -101,13 +101,13 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn# kubectl get nodes -o wide
-    NAME       STATUS   ROLES    AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                              KERNEL-VERSION           CONTAINER-RUNTIME
-    ncn-m001   Ready    master   27d   v1.18.2   10.252.0.10   <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
-    ncn-m002   Ready    master   27d   v1.18.2   10.252.0.11   <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
-    ncn-m003   Ready    master   27d   v1.18.2   10.252.0.12   <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
-    ncn-w001   Ready    <none>   27d   v1.18.2   10.252.0.4    <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
-    ncn-w002   Ready    <none>   27d   v1.18.2   10.252.0.5    <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
-    ncn-w003   Ready    <none>   27d   v1.18.2   10.252.0.6    <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
+    NAME       STATUS   ROLES                  AGE   VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
+    ncn-m001   Ready    control-plane,master   27h   v1.20.13   10.252.1.4    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-m002   Ready    control-plane,master   8d    v1.20.13   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-m003   Ready    control-plane,master   8d    v1.20.13   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w001   Ready    <none>                 8d    v1.20.13   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w002   Ready    <none>                 8d    v1.20.13   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w003   Ready    <none>                 8d    v1.20.13   10.252.1.9    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
     ```
 
 ### Collect Information After Powering Down the Node
