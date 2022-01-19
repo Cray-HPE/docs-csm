@@ -168,10 +168,10 @@ deployment "cray-dns-unbound" successfully rolled out
    will vary based on the number of NCNs in the system.
 
    ```bash
-   ncn-m001# for xname in $(cray hsm state components list --role Management | jq -r .Components[].ID);
+   ncn-m001# for xname in $(cray hsm state components list --role Management --format json | jq -r .Components[].ID);
    do
        out=$(ssh -oStrictHostKeyChecking=no -q $xname "rpm -qa | grep loftsman")
-       echo $name $out
+       echo $xname $out
    done
    x3000c0s11b0n0 loftsman-1.2.0-1.x86_64
    x3000c0s13b0n0 loftsman-1.2.0-1.x86_64
