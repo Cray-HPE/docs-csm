@@ -12,6 +12,11 @@ Ceph is reporting the cluster \[WRN\] overall HEALTH\_WARN 1 daemons have recent
 
     ```bash
     ncn-m001# ceph crash ls
+    ```
+
+    Example output:
+
+    ```
     ID                                                               ENTITY       NEW
     2021-02-02_13:45:18.543633Z_a31173f7-44c8-45b1-a253-80efa25b45f1 mon.ncn-s003  *
     ```
@@ -22,6 +27,11 @@ Ceph is reporting the cluster \[WRN\] overall HEALTH\_WARN 1 daemons have recent
 
     ```bash
     ncn-m001# ceph crash info CRASH_ID
+    ```
+
+    Example output:
+
+    ```
     {
         "crash_id": "2021-02-02_13:45:18.543633Z_a31173f7-44c8-45b1-a253-80efa25b45f1",
         "timestamp": "2021-02-02 13:45:18.543633Z",

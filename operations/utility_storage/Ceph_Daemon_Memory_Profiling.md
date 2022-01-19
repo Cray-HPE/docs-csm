@@ -11,7 +11,12 @@ This procedure is meant as an instructional guide to provide information back to
 1. Identify the process and location of the daemon to profile.
 
    ```bash
-   ncn-s00(1/2/3)#  ceph orch ps --daemon_type mon
+   ncn-s00(1/2/3)# ceph orch ps --daemon_type mon
+   ```
+
+   Example output:
+
+   ```
    NAME          HOST      STATUS        REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE ID      CONTAINER ID
    mon.ncn-s001  ncn-s001  running (1h)  60s ago    1h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  bcca26f69191
    mon.ncn-s002  ncn-s002  running (1h)  61s ago    1h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  43c8472465b2
@@ -24,13 +29,19 @@ This procedure is meant as an instructional guide to provide information back to
 
    ```bash
    ncn-s001# ceph tell mon.ncn-s001 heap start_profiler
-   mon.ncn-s001 started profiler
    ```
+
+   A message stating "mon.ncn-s001 started profiler" will be returned.
 
 4. Dump stats. This `does NOT require` the profiler to be running.
 
    ```bash
    ncn-s001# ceph tell mon.ncn-s001 heap stats
+   ```
+
+   Example output:
+
+   ```
    mon.ncn-s001 tcmalloc heap stats:------------------------------------------------
    MALLOC:      972461744 (  927.4 MiB) Bytes in use by application
    MALLOC: +            0 (    0.0 MiB) Bytes in page heap freelist
@@ -56,6 +67,11 @@ This procedure is meant as an instructional guide to provide information back to
 
    ```bash
    # ceph tell mon.ncn-s001 heap dump
+   ```
+
+   Example output:
+
+   ```
    mon.ncn-s001 dumping heap profile now.
    ------------------------------------------------
    MALLOC:      976849264 (  931.6 MiB) Bytes in use by application
@@ -82,13 +98,15 @@ This procedure is meant as an instructional guide to provide information back to
 
    ```bash
    ncn-s001# ceph tell mon.ncn-s001 heap release
-   mon.ncn-s001 releasing free RAM back to system.
    ```
+
+   A message stating "mon.ncn-s001 releasing free RAM back to system" will be returned.
 
 7. Stop the profiler.
 
    ```bash
    ncn-s001# ceph tell mon.ncn-s001 heap stop_profiler
-   mon.ncn-s001 stopped profiler
    ```
+
+   A message stating " mon.ncn-s001 stopped profiler" will be returned.
 

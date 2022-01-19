@@ -25,7 +25,12 @@ usage:  ceph-service-status.sh # runs a simple ceph health check
 ### Simple Ceph Health Check
 
 ```bash
- # /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
+# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
+```
+
+Example output:
+
+```
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating ssh keys..
@@ -35,7 +40,12 @@ Tests run: 1  Tests Passed: 1
 ### Service Check for a Single Service on a Single Node
 
 ```bash
- # /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -v true -s mon.ncn-s001
+# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -v true -s mon.ncn-s001
+```
+
+Example output:
+
+```
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating ssh keys..
@@ -52,6 +62,11 @@ Tests run: 2  Tests Passed: 2
 
 ```bash
 # /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -a true -v true
+```
+
+Example output:
+
+```
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating ssh keys..
@@ -108,6 +123,11 @@ Tests run: 12  Tests Passed: 12
 
 ```bash
 # /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -s mon
+```
+
+Example output:
+
+```
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating ssh keys..
