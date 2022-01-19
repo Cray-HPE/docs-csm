@@ -8,6 +8,11 @@ Ceph health is reporting a HEALTH\_WARN for large Object Map \(omap\) objects.
 
 ```bash
 ncn-m001# ceph -s
+```
+
+Example output:
+
+```
   cluster:
     id:     464f8ee0-667d-49ac-a82b-43ba8d377f81
     health: HEALTH_WARN
@@ -58,6 +63,11 @@ ncn-m001# ceph -s
 
             ```bash
             ncn-m001# ceph osd pool autoscale-status
+            ```
+
+            Example output:
+
+            ```
              POOL                          SIZE  TARGET SIZE  RATE  RAW CAPACITY   RATIO  TARGET RATIO  BIAS  PG_NUM  NEW PG_NUM  AUTOSCALE
              cephfs_data                 477.8M                3.0        64368G  0.0000                 1.0       4              on
              cephfs_metadata             781.9M                3.0        64368G  0.0000                 4.0      16              on

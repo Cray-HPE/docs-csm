@@ -14,6 +14,11 @@ This procedure requires admin privileges.
 
     ```bash
     ncn-m001# ceph -s
+    ```
+
+    Example output:
+
+    ```
     cluster:
        id:     73084634-9534-434f-a28b-1d6f39cf1d3d
        health: HEALTH_WARN
