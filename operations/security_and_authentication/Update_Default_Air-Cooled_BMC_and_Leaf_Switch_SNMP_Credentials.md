@@ -13,7 +13,7 @@ The default global credentials used for liquid-cooled BMCs in the [Change Cray E
 
 ## Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 
 ## Procedure
@@ -62,6 +62,11 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     
     ```bash
     ncn-m001# ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
+    ```
+
+    Expected output looks similar to the following:
+
+    ```
     {
         "Cray": {
             "Username": "root",
@@ -74,6 +79,11 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     
     ```bash
     ncn-m001# ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_switch_defaults -r | base64 -d | jq
+    ```
+
+    Expected output looks similar to the following:
+
+    ```
     {
         "SNMPUsername": "testuser",
         "SNMPAuthPassword": "foo",
@@ -118,6 +128,11 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     
     ```bash
     ncn-m001# ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_redfish_defaults -r | base64 -d | jq
+    ```
+
+    Expected output looks similar to the following:
+
+    ```
     {
         "Username": "root",
         "Password": "foobar"
@@ -128,6 +143,11 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     
     ```bash
     ncn-m001# ./utils/secrets-decrypt.sh cray_reds_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_switch_defaults -r | base64 -d | jq
+    ```
+
+    Expected output looks similar to the following:
+
+    ```
     {
         "SNMPUsername": "testuser",
         "SNMPAuthPassword": "foo1",

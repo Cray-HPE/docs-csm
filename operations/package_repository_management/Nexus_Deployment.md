@@ -18,6 +18,11 @@ A typical deployment will look similar to the following:
 
 ```bash
 # kubectl -n nexus get all
+```
+
+Example output:
+
+```
 NAME                             READY   STATUS    RESTARTS   AGE
 pod/cray-precache-images-6tp2c   2/2     Running   0          20d
 pod/cray-precache-images-dnwdx   2/2     Running   0          20d
@@ -42,7 +47,7 @@ replicaset.apps/nexus-55d8c77547   1         1         1       19dd
 
 The `cray-precache-images` DaemonSet is used to keep select container images resident in the image cache on each worker node to ensure Nexus resiliency. It is deployed as a critical platform component prior to Nexus.
 
-**Warning:** The `cray-nexus` chart deploys Nexus with a single replica and the corresponding `nexus-data` PVC with `RWX` access mode. Nexus should **NEVER** be scaled to more than one replica; otherwise, the instance data in `nexus-data` PV will most likely be corrupted. Using `RWX` access mode enables Nexus to quickly restart on another worker node in the event of a node failure and avoid additional delay because of volume multi-attach errors.
+**WARNING:** The `cray-nexus` chart deploys Nexus with a single replica and the corresponding `nexus-data` PVC with `RWX` access mode. Nexus should **NEVER** be scaled to more than one replica; otherwise, the instance data in `nexus-data` PV will most likely be corrupted. Using `RWX` access mode enables Nexus to quickly restart on another worker node in the event of a node failure and avoid additional delay because of volume multi-attach errors.
 
 ### Bootstrap Registry
 
@@ -54,9 +59,9 @@ By default, http://pit.nmn:5000 is the default mirror configured in /etc/contain
 
 Product installers vendor the `dtr.dev.cray.com/cray/cray-nexus-setup:0.4.0` container image, which includes helper scripts for working with the Nexus REST API to update and modify repositories. Product release distributions will include the nexus-blobstores.yaml and nexus-repositories.yaml files, which define the Nexus blob stores and repositories required for that version of the product. Also, expect to find directories that include specific types of assets:
 
--   `rpm/` - RPM repositories
--   `docker/` - Container images
--   `helm/` - Helm Charts
+- `rpm/` - RPM repositories
+- `docker/` - Container images
+- `helm/` - Helm Charts
 
 Prior to deploying Helm charts to the system management Kubernetes cluster, product installers will setup repositories in Nexus and then upload assets to them. Typically, all of this is automated in the beginning of a product's `install.sh` script, and will look something like the following:
 

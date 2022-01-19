@@ -15,6 +15,11 @@ The fabric manager software is installed and configured.
 
     ```bash
     ncn-m001# kubectl get pods -l app.kubernetes.io/name=slingshot-fabric-manager -n services
+    ```
+
+    Example output:
+
+    ```
     NAME                                        READY   STATUS    RESTARTS   AGE
     slingshot-fabric-manager-5dc448779c-d8n6q   2/2     Running   0          4d21h
     ```
@@ -23,8 +28,9 @@ The fabric manager software is installed and configured.
 
     ```bash
     ncn-m001# kubectl exec -it slingshot-fabric-manager-5dc448779c-d8n6q -n services -- /bin/bash
-    slingshot-fabric-manager:#
     ```
+
+    The command prompt in the shell will now be `slingshot-fabric-manager:#`.
 
 3. Bring up the Slingshot fabric.
 
@@ -32,7 +38,7 @@ The fabric manager software is installed and configured.
    slingshot-fabric-manager:# fmn_fabric_bringup -c
    ```
 
-5.  Check the status of the fabric.
+4.  Check the status of the fabric.
 
     From within in the fabric manager pod:
 

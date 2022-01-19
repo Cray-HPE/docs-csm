@@ -22,6 +22,11 @@ This procedure prevents services from being taken out of service when a node goe
 
     ```bash
     ncn-w001# kubectl get statefulsets -A
+    ```
+
+    Example output:
+
+    ```
     NAMESPACE        NAME                                                   READY              AGE
     backups          benji-k8s-postgresql                                   1/1                2d14h
     nexus            nexus                                                  1/1                2d14h
@@ -59,6 +64,11 @@ This procedure prevents services from being taken out of service when a node goe
 
     ```bash
     ncn-w001# kubectl get pods -A -o wide | grep SERVICE_NAME
+    ```
+
+    Example output:
+
+    ```
     operators   cray-vault-operator-57dbbb7db5-9lr6z       1/1     Running        0    5d18h   10.40.0.11    ncn-w002   <none>  <none>
     services    cray-meds-vault-loader-bzgbd               0/2     Completed      0    5d18h   10.40.0.24    ncn-w002   <none>  <none>
     services    cray-reds-vault-loader-d9cn9               0/2     Completed      0    5d18h   10.40.0.25    ncn-w002   <none>  <none>

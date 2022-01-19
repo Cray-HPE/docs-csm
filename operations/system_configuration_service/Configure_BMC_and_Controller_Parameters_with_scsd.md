@@ -74,16 +74,20 @@ After the script runs, verify that it worked:
 
    ```bash
    ncn-w001# ssh x1000c1s0b0
-   x1000c1s0b0:>
    ```
 
-   Notice that the command prompt includes the hostname for this node controller
+   Notice that the command prompt (`x1000c1s0b0:>`) includes the hostname for this node controller.
 
-1. The logs from power actions for node 0 and node 1 on this node controller are in /var/log.
+2. The logs from power actions for node 0 and node 1 on this node controller are in /var/log.
 
    ```bash
    x1000c1s0b0:> cd /var/log
    x1000c1s0b0:> ls -l powerfault_*
+   ```
+
+   Expected output looks similar to the following:
+
+   ```
    -rw-r--r--    1 root     root           306 May 10 15:32 powerfault_dn.Node0
    -rw-r--r--    1 root     root           306 May 10 15:32 powerfault_dn.Node1
    -rw-r--r--    1 root     root          5781 May 10 15:36 powerfault_up.Node0
@@ -95,6 +99,6 @@ After the script runs, verify that it worked:
 If this script does not achieve the goal of setting SSH keys, check the following:
 
 * Make sure the SSH key is correct.
-* If --exclude= or --include= was used with the script, insure the correct XNames were specified.
+* If `--exclude=` or `--include=` was used with the script, ensure the correct XNames were specified.
 * Re-run the script with --debug=3 for verbose debugging output. Look for things like missing BMCs, bad authentication token, bad communications with BMCs, etc.
 
