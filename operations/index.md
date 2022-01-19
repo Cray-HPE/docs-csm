@@ -220,6 +220,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
        *   [Create and Populate a VCS Configuration Repository](configuration_management/Create_and_Populate_a_VCS_Configuration_Repository.md)
    *   [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
        *   [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
+   *   [CFS Key Management](CFS_Key_Management.md)
 
 <a name="kubernetes"></a>
 
