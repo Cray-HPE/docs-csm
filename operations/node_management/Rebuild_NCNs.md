@@ -915,13 +915,13 @@ Skip this section if a master or storage node was rebuilt.
 
       ```bash
       ncn-mw# kubectl get nodes
-      NAME       STATUS   ROLES    AGE    VERSION
-      ncn-m001   Ready    master   113m   v1.18.6
-      ncn-m002   Ready    master   113m   v1.18.6
-      ncn-m003   Ready    master   112m   v1.18.6
-      ncn-w001   Ready    <none>   112m   v1.18.6
-      ncn-w002   Ready    <none>   112m   v1.18.6
-      ncn-w003   Ready    <none>   112m   v1.18.6
+      NAME       STATUS   ROLES                  AGE   VERSION
+      ncn-m001   Ready    control-plane,master   27h   v1.20.13
+      ncn-m002   Ready    control-plane,master   8d    v1.20.13
+      ncn-m003   Ready    control-plane,master   8d    v1.20.13
+      ncn-w001   Ready    <none>                 8d    v1.20.13
+      ncn-w002   Ready    <none>                 8d    v1.20.13
+      ncn-w003   Ready    <none>                 8d    v1.20.13
       ```
 
 1. Ensure there is proper routing set up for liquid-cooled hardware.
@@ -999,13 +999,13 @@ Skip this section if a worker or storage node was rebuilt.
 
     ```bash
     ncn-mw# kubectl get nodes
-    NAME       STATUS   ROLES    AGE    VERSION
-    ncn-m001   Ready    master   113m   v1.18.6
-    ncn-m002   Ready    master   113m   v1.18.6
-    ncn-m003   Ready    master   112m   v1.18.6
-    ncn-w001   Ready    <none>   112m   v1.18.6
-    ncn-w002   Ready    <none>   112m   v1.18.6
-    ncn-w003   Ready    <none>   112m   v1.18.6
+    NAME       STATUS   ROLES                  AGE   VERSION
+    ncn-m001   Ready    control-plane,master   27h   v1.20.13
+    ncn-m002   Ready    control-plane,master   8d    v1.20.13
+    ncn-m003   Ready    control-plane,master   8d    v1.20.13
+    ncn-w001   Ready    <none>                 8d    v1.20.13
+    ncn-w002   Ready    <none>                 8d    v1.20.13
+    ncn-w003   Ready    <none>                 8d    v1.20.13
     ```
 
 1. Ensure there is proper routing set up for liquid-cooled hardware.
