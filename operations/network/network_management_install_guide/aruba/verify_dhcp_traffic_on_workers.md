@@ -28,6 +28,6 @@ If the Source IP of the DHCP Reply/Offer is the MetalLB IP, the DHCP packet will
   file "ipxe.efi"[|bootp]
 ```
  
-If you run into this, the only solution that we've found so far is restarting KEA and making sure that it gets moved to a different worker.  
+If you run into this, the only solution that we have found so far is restarting KEA and making sure that it gets moved to a different worker.  
 
 [Back to Index](./index.md)

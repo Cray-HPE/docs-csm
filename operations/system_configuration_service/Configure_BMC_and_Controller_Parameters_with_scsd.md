@@ -54,10 +54,10 @@ Usage: set_ssh_keys.py [options]
                     Each item in the list is matched on the front
                     of each target XName and included is there is a match.
                     NOTE: --include and --exclude are mutually exclusive.
-   --sshkey=key     SSH key to set on BMCs.  If none is specified, will use
+   --sshkey=key     SSH key to set on BMCs. If none is specified, will use
 ```
 
-If no command line arguments are needed, SSH keys are set on all discovered mountain controllers, using the root account's public RSA key.  Using an alternate key requires the --sshkey=key argument:
+If no command line arguments are needed, SSH keys are set on all discovered mountain controllers, using the root account's public RSA key. Using an alternate key requires the --sshkey=key argument:
 
 ```bash
   # set_ssh_keys.py --sshkey="AAAbbCcDddd...."
@@ -96,5 +96,5 @@ If this script does not achieve the goal of setting SSH keys, check the followin
 
 * Make sure the SSH key is correct.
 * If --exclude= or --include= was used with the script, insure the correct XNames were specified.
-* Re-run the script with --debug=3 for verbose debugging output.  Look for things like missing BMCs, bad authentication token, bad communications with BMCs, etc.
+* Re-run the script with --debug=3 for verbose debugging output. Look for things like missing BMCs, bad authentication token, bad communications with BMCs, etc.
 

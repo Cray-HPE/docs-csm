@@ -521,7 +521,7 @@ Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for
 Finally, cleanup the shim:
  ```bash
  pit# cd ~
- # this uses rmdir to safely remove the directory, preventing accidentaly removals if one does not notice the umount command fail.
+ # this uses rmdir to safely remove the directory, preventing accidental removal if one does not notice a umount command failure.
  pit# umount -v /mnt/pitdata/
  pit# rmdir -v /mnt/pitdata
  ```

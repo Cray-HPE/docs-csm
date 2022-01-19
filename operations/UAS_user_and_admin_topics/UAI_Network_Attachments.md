@@ -6,7 +6,7 @@
 
 The UAI network attachment configuration flows from the CRAY Site Initializer (CSI) localization data through `customizations.yaml` into the UAS Helm chart and, ultimately, into Kubernetes in the form of a "network-attachment-definition".
 
-This section describes the data at each of those stages to show how the final network attachment gets created.  Customization of the network attachments may be needed by some sites to, for example, increase the size of the reserved sub-net used for UAI macvlan attachments.
+This section describes the data at each of those stages to show how the final network attachment gets created. Customization of the network attachments may be needed by some sites to, for example, increase the size of the reserved sub-net used for UAI macvlan attachments.
 
 ### CSI Localization Data
 

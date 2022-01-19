@@ -14,7 +14,7 @@ To install the development build of CANU type:
 python3 setup.py develop --user
 ```
 
-If that doesn't work you may need to install pip3 first:
+If that does not work you may need to install pip3 first:
 
 ```
 pip3 install --editable 

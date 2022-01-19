@@ -15,7 +15,7 @@ List the details of all volumes registered in UAS with the `cray uas admin confi
 
 ### Procedure
 
-The volume registrations in the UAS configuration can be quite extensive and sometimes difficult to read in the default TOML format used by the `cray` administrative CLI.  The following shows the `--format` option to the `cray` CLI being used to switch to various output formats that may be easier to read or more useful for certain tasks.  Feel free to use that option with any `cray` CLI command to select a more comfortable output style.
+The volume registrations in the UAS configuration can be quite extensive and sometimes difficult to read in the default TOML format used by the `cray` administrative CLI. The following shows the `--format` option to the `cray` CLI being used to switch to various output formats that may be easier to read or more useful for certain tasks. Feel free to use that option with any `cray` CLI command to select a more comfortable output style.
 
 List the details of all the volumes registered in UAS.
 
@@ -129,6 +129,6 @@ The `volume_description` is the JSON description of the volume, specified as a d
 
 The `volumename` is a string the creator of the volume may chose to describe or name the volume. It must be comprised of only lower case alphanumeric characters and dashes ('-') and must begin and end with an alphanumeric character. It is used inside the UAI pod specification to identify the volume that is mounted in a given location in a container. The name is required and administrators are free to use any name that meets the above requirements. Volume names do need to be unique within any given UAI and are far more useful when searching for a volume if they are unique across the entire UAS configuration.
 
-The `volume_id` is a unique identifier used to identify the UAS volume when examining, updating or deleting a volume and when linking a volume to a UAI class.  It is assigned automatically by UAS.
+The `volume_id` is a unique identifier used to identify the UAS volume when examining, updating or deleting a volume and when linking a volume to a UAI class. It is assigned automatically by UAS.
 
 [Next Topic: Add a Volume to UAS](Add_a_Volume_to_UAS.md)

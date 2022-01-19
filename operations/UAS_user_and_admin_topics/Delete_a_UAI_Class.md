@@ -4,7 +4,7 @@
 
 ## Delete a UAI Class
 
-Delete a UAI class. After deletion, the class will no longer be available for creation of UAIs.  Existing UAIs are unaffected.
+Delete a UAI class. After deletion, the class will no longer be available for creation of UAIs. Existing UAIs are unaffected.
 
 ### Prerequisites
 

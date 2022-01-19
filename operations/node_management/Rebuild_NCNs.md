@@ -673,7 +673,7 @@ This section applies to all node types. The commands in this section assume you 
            systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
     ```
 
-    **Rebuilt node with modified ssh key(s):** The cloud-init process can fail when accessing other nodes if ssh keys have been modified in the cluster.  If this occurs, the following steps can be used to repair the desired ssh keys on the newly rebuilt node:
+    **Rebuilt node with modified ssh key(s):** The cloud-init process can fail when accessing other nodes if ssh keys have been modified in the cluster. If this occurs, the following steps can be used to repair the desired ssh keys on the newly rebuilt node:
 
     1. Allow cloud-init to fail due to the non-matching keys.
     1. Copy the correct ssh key(s) to the newly rebuilt node.

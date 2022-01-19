@@ -208,7 +208,6 @@ sections, but there is also a general troubleshooting topic.
       the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
       available. Once FAS is aware that new firmware is available, then see
       [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
-
    <a name="prepare_compute_nodes"></a>
 
    1. Prepare Compute Nodes
@@ -222,6 +221,7 @@ sections, but there is also a general troubleshooting topic.
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
    <a name="next_topic"></a>
+
    1. Next Topic
 
       After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has

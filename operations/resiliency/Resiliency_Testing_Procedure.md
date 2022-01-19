@@ -218,5 +218,5 @@ The purpose of this procedure is to launch a non-interactive, long-running batch
 ### Execute Post-Boot Health Checks
 * Re-run the `Platform Health Checks` section of [Validate CSM Health](../validate_csm_health.md) noting any output that indicates output is not as expected. Note that in a future version of CSM, these checks will be further automated for better efficiency and pass/fail clarity.
 * Ensure that after a downed NCN worker node (can ignore if not a worker node) has been powered up, a new uai can be created on that NCN. It may be necessary to label the nodes again, to ensure the uai gets created on the worker node that was just powered on. Refer to the section above for `Launch a Non-Interactive Batch Job` for the procedure. Do not forget to remove the labels after the uai has been created. Once the uai has been created, log into it and ensure a new workload manager job can be launched.
-* Ensure tickets have been opened for any unexpected behavior along with associated logs and notes on work-arounds, if any were executed.
+* Ensure tickets have been opened for any unexpected behavior along with associated logs and notes on workarounds, if any were executed.
 
