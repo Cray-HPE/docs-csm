@@ -387,3 +387,32 @@ if [ "$?" -eq 0 ]; then
 fi
 trap 'err_report' ERR
 set -e
+
+state_name="ADD_MTL_ROUTES"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+
+    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    NCNS=$(grep -oP 'ncn-w\w\d+|ncn-s\w\d+' /etc/hosts | sort -u)
+    Ncount=$(echo $NCNS | wc -w)
+    HOSTS=$(echo $NCNS | tr -t ' ' ',')
+    GATEWAY=$(cray sls networks describe NMN --format json | \
+        jq -r '.ExtraProperties.Subnets[]|select(.FullName=="NMN Management Network Infrastructure")|.Gateway')
+    SUBNET=$(cray sls networks describe MTL --format json | \
+        jq -r '.ExtraProperties.Subnets[]|select(.FullName=="MTL Management Network Infrastructure")|.CIDR')
+    pdsh -w $HOSTS ip route add $SUBNET via $GATEWAY dev vlan002
+    Rcount=$(pdsh -w $HOSTS ip route show | grep $SUBNET | wc -l)
+    pdsh -w $HOSTS ip route show | grep $SUBNET
+
+
+    if [[ $Rcount -ne $Ncount ]]; then
+        echo ""
+        echo "Could not set routes on all worker and storage nodes."
+        exit 1
+    fi
+
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
