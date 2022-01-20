@@ -16,7 +16,7 @@ upgrade that node.
 
 >**`IMPORTANT:`**
 >
-> For TDS systems with only three worker nodes, see [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to lower CPU requests on several services which can improve pod scheduling on smaller systems during this upgrade.
+> For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed.  See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to accomplish this.
 >
 
 ## Upgrade Stages
