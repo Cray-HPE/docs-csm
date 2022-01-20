@@ -6,6 +6,7 @@
 1. [Setup Nexus](#setup-nexus)
 1. [Upgrade Services](#upgrade-services)
 1. [Rollout Deployment Restart](#rollout-deployment-restart)
+1. [Apply Pod Priorities](#apply-pod-priorities)
 1. [Verification](#verification)
 1. [Run NCN Personalization](#run-ncn-personalization)
 1. [Exit Typescript](#exit-typescript)
@@ -130,6 +131,34 @@ Waiting for deployment "cray-dns-unbound" rollout to finish: 1 old replicas are 
 Waiting for deployment "cray-dns-unbound" rollout to finish: 1 old replicas are pending termination...
 deployment "cray-dns-unbound" successfully rolled out
 ```
+<a name="apply-pod-priorities"></a>
+
+## Apply Pod Priorities
+
+Run the `add_pod_priority.sh` script to create and apply a pod priority class to services critical to CSM. This will give these services a higher priority than others to ensure they get scheduled by Kubernetes in the event that resources limited on smaller deployments.
+
+```bash
+ncn-m001:~ # /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/add_pod_priority.sh
+Creating csm-high-priority-service pod priority class
+priorityclass.scheduling.k8s.io/csm-high-priority-service configured
+
+Patching cray-postgres-operator deployment in services namespace
+deployment.apps/cray-postgres-operator patched
+
+Patching cray-postgres-operator-postgres-operator-ui deployment in services namespace
+deployment.apps/cray-postgres-operator-postgres-operator-ui patched
+
+Patching istio-operator deployment in istio-operator namespace
+deployment.apps/istio-operator patched
+
+Patching istio-ingressgateway deployment in istio-system namespace
+deployment.apps/istio-ingressgateway patched
+.
+.
+.
+```
+
+After running the `add_pod_priority.sh` script, the affected pods will be restarted as the pod priority class is applied to them.
 
 <a name="verification"></a>
 

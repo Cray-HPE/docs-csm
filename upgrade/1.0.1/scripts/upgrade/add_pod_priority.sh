@@ -133,7 +133,7 @@ for etcdcluster in $ETCDCLUSTERS; do
   ns=$(kubectl get etcdcluster -A | grep " $etcdcluster " | awk '{print $1}')
   if [ ! -z "$ns" ]; then
     echo "Patching $etcdcluster etcdcluster in $ns namespace"
-    kubectl -n $ns patch etcdcluster $etcdcluster --type merge -p '{"spec": {"template": {"spec": {"priorityClassName": "csm-high-priority-service"}}}}'
+    kubectl -n $ns patch etcdcluster $etcdcluster --type merge -p '{"spec": {"pod": {"priorityClassName": "csm-high-priority-service"}}}'
     echo ""
     restart_etcd_pods $ns $etcdcluster
     echo ""
