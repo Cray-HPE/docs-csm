@@ -305,6 +305,12 @@ The configuration workflow described here is intended to help understand the exp
 1. Validate that the LiveCD is ready for installing NCNs.
    > Observe the output of the checks and note any failures, then remediate them.
 
+    Specify the admin user password for the management switches in the system.
+    ```bash
+    pit# export SW_ADMIN_PASSWORD='changeme'
+    ```
+
+    Run the LiveCD preflight checks.
     ```bash
     pit# csi pit validate --livecd-preflight
     ```
