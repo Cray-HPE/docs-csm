@@ -306,7 +306,7 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
    ...
    ```
 
-* Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel node blades can be ignored. Gigabyte node blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
+* Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel node blades can be ignored. Gigabyte node blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored. Otherwise, verify that the root service account is configured for the CMC and add it if needed by following the steps outlined in [Add Root Service Account for Gigabyte Controllers](./security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md).
    > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
 
    Example mismatch for a CMC an Intel node blade:
@@ -317,7 +317,7 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
 ...
 ```
 
-* HPE PDUs are not supported at this time and will likely show up as not being found in HSM. They can be ignored.
+* HPE PDUs are supported and should show up as being found in HSM. If they aren't, they should be investigated since that may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered. Refer to [HPE PDU Admin Procedures](./hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
    > Cabinet PDU Controllers have xnames in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 
    Example mismatch for HPE PDU:
