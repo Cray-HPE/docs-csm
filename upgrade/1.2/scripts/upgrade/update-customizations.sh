@@ -397,7 +397,7 @@ yq w -i "$c" 'spec.kubernetes.services.cray-uas-mgr.images.images[+]' 'cray/cray
 yq w -i "$c" 'spec.kubernetes.services.cray-uas-mgr.images.defaultImage' 'cray/cray-uai-sles15sp1:latest'
 
 # cray-metallb
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-metallb.metallb.configInLine' '{{ network.metallb | toYaml }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-metallb.metallb.configInline' '{{ network.metallb | toYaml }}'
 
 # wlm.macvlan
 yq d -i "$c" 'spec.wlm.macvlansetup.nmn_vlan'
