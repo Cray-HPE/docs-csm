@@ -187,6 +187,9 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "cray-site-init*.rpm") 
 
+    # upload csi to s3
+    csi handoff upload-utils --kubeconfig /etc/kubernetes/admin.conf
+
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -196,7 +199,7 @@ state_name="UPDATE_DOC_RPM"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    if [[ ! -f docs-csm-latest.noarch.rpm ]]; then
+    if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
         echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: $(pwd)"
     fi
     cp /root/docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
@@ -275,6 +278,27 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="UPGRADE_CSM_CONFIG"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    helm -n services upgrade csm-config ${CSM_ARTI_DIR}/helm/csm-config-*.tgz --wait
+    CSM_CONFIG_VERSION=$(helm list -n services -o json | jq -r '.[] | select (.name=="csm-config") | .app_version')
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="UPGRADE_CFS_OPERATOR"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    helm -n services upgrade cray-cfs-operator ${CSM_ARTI_DIR}/helm/cray-cfs-operator-*.tgz
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPDATE_CLOUD_INIT_RECORDS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
@@ -311,7 +335,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has been completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="UPLOAD_NEW_NCN_IMAGE"
@@ -350,7 +374,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_ARTI_DIR=${CSM_ARTI_DIR}" >> /etc/cray/upgrade/csm/myenv
     echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/docs-csm-latest.noarch.rpm" >> /etc/cray/upgrade/csm/myenv
-
+    echo "export CSM_CONFIG_VERSION=${CSM_CONFIG_VERSION}" >> /etc/cray/upgrade/csm/myenv
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -442,3 +466,5 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
 else
     echo "====> ${state_name} has been completed"
 fi
+
+ok_report
