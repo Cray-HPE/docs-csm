@@ -164,12 +164,6 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-# polling console logs in background
-kill $(ps -ef | grep kubectl | grep -v "grep" | awk '{print $2}') || true
-CON_POD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}')
-CON_NODE=$(kubectl -n services exec $CON_POD -- sh -c "/app/get-node $UPGRADE_XNAME" | jq .podname | sed 's/"//g')
-kubectl -n services exec pod/$CON_NODE -c cray-console-node -- sh -c "tail -f /var/log/conman/console.$UPGRADE_XNAME" >> /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/console.log &
-
 
 state_name="POWER_CYCLE_NCN"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
@@ -197,11 +191,6 @@ state_name="WAIT_FOR_NCN_BOOT"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    # inline tips for watching boot logs
-    cat <<EOF
-TIPS:
-    operations/conman/ConMan.md has instructions for watching boot/console output of a node
-EOF
     # wait for boot
     counter=0
     printf "%s" "waiting for boot: $upgrade_ncn ..."
