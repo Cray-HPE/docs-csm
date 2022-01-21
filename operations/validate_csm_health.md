@@ -68,6 +68,11 @@ Run the NCN health checks with the following command (If m001 is the PIT node, r
 
 **IMPORTANT:** Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
 
+Specify the admin user password for the management switches in the system which is required for the `ncn-healthcheck` test.
+```bash
+# export SW_ADMIN_PASSWORD='changeme'
+```
+
 ```bash
 # /opt/cray/tests/install/ncn/automated/ncn-healthcheck
 ```
