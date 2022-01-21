@@ -455,15 +455,6 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
     **Important:** To ensure that the latest workarounds and documentation updates are available, see [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds)
 
-1. Install/upgrade testing and utility RPMs on `ncn-m001` from Nexus.
-
-    ```bash
-    ncn-m001# zypper ar --gpgcheck-allow-unsigned https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2
-    ncn-m001# zypper install -y csm-testing goss-servers platform-utils
-    ncn-m001# zypper rr csm-sle-15sp2
-    ncn-m001# systemctl restart goss-servers
-    ```
-
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-post-reboot` breakpoint.
 
 1. Exit the typescript and move the backup to `ncn-m001`, thus removing the need to track `ncn-m002` as yet-another bootstrapping agent. This is required to facilitate reinstallations, because it pulls the preparation data back over to the documented area (`ncn-m001`).
