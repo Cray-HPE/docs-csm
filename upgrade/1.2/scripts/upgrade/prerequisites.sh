@@ -205,6 +205,32 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="UPDATE_CUSTOMIZATIONS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/site-init
+    mkdir -p ${SITE_INIT_DIR}
+    pushd ${SITE_INIT_DIR}
+    ${CSM_ARTI_DIR}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/zeromq/zeromq:v4.0.5
+    cp -r ${CSM_ARTI_DIR}/shasta-cfg/* ${SITE_INIT_DIR}
+    mkdir -p certs
+    kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
+    kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
+    kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
+    . ${BASEDIR}/update-customizations.sh -i ${SITE_INIT_DIR}/customizations.yaml
+    yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
+    yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
+    yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
+    ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
+    ./utils/secrets-seed-customizations.sh customizations.yaml || true
+    kubectl delete secret -n loftsman site-init
+    kubect create secret -n loftsman generic site-init --from-file=./customizations.yaml
+    popd
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="SETUP_NEXUS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
