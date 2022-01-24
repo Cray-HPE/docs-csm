@@ -311,10 +311,8 @@ fi
 echo "******************************************"
 echo "******************************************"
 echo "**** Enter SSH password of switches: ****"
-read -s -p "" SW_PASSWORD
+read -s -p "" SW_ADMIN_PASSWORD
 echo
-export SW_ARUBA_PASSWORD=$SW_PASSWORD
-export SW_MELLANOX_PASSWORD=$SW_PASSWORD
 
 cat <<EOF
 
@@ -322,6 +320,7 @@ NOTE:
     If below test failed, try to fix it based on test output. Then run current script again
 EOF
 
-ssh $upgrade_ncn -t "SW_ARUBA_PASSWORD=$SW_PASSWORD SW_MELLANOX_PASSWORD=$SW_PASSWORD GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate"
+ssh $upgrade_ncn -t "SW_ADMIN_PASSWORD=$SW_ADMIN_PASSWORD GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate"
 
 ok_report
+
