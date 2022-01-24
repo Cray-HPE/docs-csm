@@ -9,13 +9,13 @@ It is assumed that some procedures are already known by admins and thus does not
   - [High Level Procedure Summary](#high-level-procedure-summary)
     - [Prepare for Resiliency Testing](#prepare-for-resiliency-testing)
     - [Establish System Health Before Beginning](#establish-system-health-before-beginning)
-    - [Monitoring for Changes](#monitoring-for-changes)
+    - [Monitor for Changes](#monitor-for-changes)
     - [Launch a Non-Interactive Batch Job](#launch-a-non-interactive-batch-job)
       - [Launch on a UAI](#launch-on-a-uai)
       - [Launch on a UAN](#launch-on-a-uan)
     - [Shut Down an NCN](#shut-down-an-ncn)
     - [Conduct Testing](#conduct-testing)
-    - [Power On the Downed NCN](#power-on-the-downed-ncn)
+    - [Power on the Downed NCN](#power-on-the-downed-ncn)
     - [Execute Post-Boot Health Checks](#execute-post-boot-health-checks)
 
 <a name="preparation"></a>
@@ -101,15 +101,15 @@ Part of the data being returned via execution of the `Platform Health Checks` in
    ```
 
 <a name="monitoring-for-changes"></a>
-### Monitoring for Changes
+### Monitor for Changes
 
 In order to keep watch on various items during and after the fault has been introduced (in this case, the shutdown of a single NCN node), the steps listed below can help give insight into changing health conditions. It is an eventual goal to strive for a monitoring dashboard which would help track these sort of things in a single or few automated views. Until that can be incorporated, these kinds of command prompt sessions can be useful.
 
 1. Set up a `watch` command to repeatedly run with the Cray CLI (that will hit the service API) to ensure that critical services can ride through a fault. Note that there is not more than a window of 5-10 minutes where a service would, intermittently, fail to respond.
+   
+   In the examples below, the CLI commands are checking the `bos` and `cps` APIs. It may be desired to choose additional Cray CLI commands to run in this manner. The ultimate proof of system resiliency lies in the ability to perform system level use cases and to, further, prove that can be done at scale. If there are errors being returned, consistently (and without recovery), with respect to these commands, it is likely that business critical use cases (that utilize the same APIs) will also fail.
   
-  In the examples below, the CLI commands are checking the `bos` and `cps` APIs. It may be desired to choose additional Cray CLI commands to run in this manner. The ultimate proof of system resiliency lies in the ability to perform system level use cases and to, further, prove that can be done at scale. If there are errors being returned, consistently (and without recovery), with respect to these commands, it is likely that business critical use cases (that utilize the same APIs) will also fail.
-  
-  It may be useful to reference instructions for [Configuring the Cray CLI](../configure_cray_cli.md).
+   It may be useful to reference instructions for [Configuring the Cray CLI](../configure_cray_cli.md).
 
    ```bash
    ncn# watch -n 5 "date; cray cps contents"
@@ -248,7 +248,7 @@ Additionally, it is important to verify that the batch job continued to run, uni
       nid000004
       ```
 
-1. Copy an MPI application source and workload manager (WLM) batch job files to the UAI.
+1. Copy an MPI application source and WLM batch job files to the UAI.
 
 1. Compile an MPI application with the UAI. Launch application as batch job (not interactive) on compute node(s) that have not been designated, already, for reboots once an NCN is shut down.
    
@@ -262,7 +262,7 @@ Additionally, it is important to verify that the batch job continued to run, uni
 
 #### Launch on a UAN
 
-1. Login to the UAN and verify that a workload manager (WLM) has been properly configured (in this case, Slurm will be used).
+1. Login to the UAN and verify that a WLM has been properly configured (in this case, Slurm will be used).
    
    ```bash
    uan01# srun -N 4 hostname | sort
@@ -336,13 +336,13 @@ After the target NCN was shut down, assuming the command line windows that were 
 1. If the target node for shutdown was a worker NCN, verify that the UAI launched on that node still exists. It should be running on another worker NCN.
    
    * Any prior SSH session established with the UAI while it was running on the downed NCN worker node will be unresponsive. A new SSH session will need to be established once the UAI pods has been successfully relocated to another worker NCN.
-   * Log back into the UAI and verify that the workload manager (WLM) batch job is still running and streaming output. The log file created with the kick-off of the batch job should still be accessible and the `squeue` command can be used to verify that the job continues to run (for Slurm).
+   * Log back into the UAI and verify that the WLM batch job is still running and streaming output. The log file created with the kick-off of the batch job should still be accessible and the `squeue` command can be used to verify that the job continues to run (for Slurm).
   
-1. If the workload manager batch job was launched on a UAN, log back into it and verify that the WLM (workload manager) batch job is still running and streaming output via the log file created with the batch job and/or the `squeue` command (if Slurm is used as the WLM).
+2. If the WLM batch job was launched on a UAN, log back into it and verify that the batch job is still running and streaming output via the log file created with the batch job and/or the `squeue` command (if Slurm is used as the WLM).
    
-1. Verify that new WLM jobs can be started on a compute node after the NCN is down (either via a UAI or the UAN node).
+3. Verify that new WLM jobs can be started on a compute node after the NCN is down (either via a UAI or the UAN node).
 
-1. Look at any pods that, are at this point, in a state other than `Running`, `Completed`, `Pending`, or `Terminating`:
+4. Look at any pods that, are at this point, in a state other than `Running`, `Completed`, `Pending`, or `Terminating`:
    
    ```bash
    ncn# kubectl get pods -o wide -A | grep -Ev "Running|Completed|Pending|Termin"
@@ -355,7 +355,7 @@ After the target NCN was shut down, assuming the command line windows that were 
    Additionally, it is as important to understand (and document) any work-around procedures needed to fix issues encountered. In addition to filing a bug for a permanent fix, work-around documentation can be very useful when written up - for both internal and external customers to access.
 
 <a name="power-on-ncn"></a>
-### Power On the Downed NCN
+### Power on the Downed NCN
 
 1. Use the `ipmitool` command to power up the NCN.
    
@@ -365,8 +365,10 @@ After the target NCN was shut down, assuming the command line windows that were 
    ncn# ipmitool -I lanplus -U root -P <password> -H <hostname> chassis power on   #example hostname is ncn-w003-mgmt
    ```
 
+   Check the following depending on the NCN type powered on:
+
    * If the NCN being powered on is a master or worker, verify that `Terminating` pods on that NCN clear up. It may take several minutes. Watch the command prompt, previously set-up, that is displaying the `Terminating` pod list.
-   * If the NCN being powered on is a storage node, wait for Ceph to recover and again report a "HEALTH_OK" status. It may take several minutes for Ceph to resolve clock skew. This can be noted in the previously set-u window to watch ceph status.
+   * If the NCN being powered on is a storage node, wait for Ceph to recover and again report a "HEALTH_OK" status. It may take several minutes for Ceph to resolve clock skew. This can be noted in the previously set-up window to watch Ceph status.
 
 1. Check that pod statuses have returned to the state that they were in at the beginning of this procedure, paying particular attention to any pods that were previously noted to be in a bad state while the NCN was down. Additionally, there is no concern if pods that were in a bad state at the beginning of the procedure, are still in a bad state. What is important to note is anything that is different from either the beginning of the test or from the time that the NCN was down.
 
