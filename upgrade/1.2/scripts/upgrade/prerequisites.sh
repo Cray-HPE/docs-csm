@@ -467,4 +467,39 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+
+state_name="SETUP_CFS_CONFIGURATIONS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    tmp_folder="/tmp/csm-config-management"
+    # get current csm-config version
+    csm_config_version=$(helm list -n services | grep csm-config | awk '{print $10}')
+    # get VCS details
+    rm -rf ${tmp_folder}
+    vcs_password=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+    git clone https://crayvcs:${vcs_password}@api-gw-service-nmn.local/vcs/cray/csm-config-management.git ${tmp_folder}
+    pushd ${tmp_folder}
+    head_commit=$(git show-ref origin/cray/csm/${csm_config_version} --head | grep ${csm_config_version} | awk '{print $1}')
+    popd +0
+    cat <<EOF > /root/rebuild-ncn.json
+{
+  "layers": [
+    {
+      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+      "commit":"${head_commit}",
+      "name": "cray/csm/${csm_config_version}",
+      "playbook": "rebuild-ncn.yml"
+    }
+  ]
+}
+EOF
+    # make sure we have cfs created
+    cray cfs sessions delete rebuild-ncn  2>/dev/null || true
+    cray cfs configurations update rebuild-ncn --file /root/rebuild-ncn.json --format json
+    exit 1
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 ok_report
