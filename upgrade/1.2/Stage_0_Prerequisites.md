@@ -35,9 +35,29 @@ Perform these steps to update `customizations.yaml`:
 
 1. Update `customizations.yaml`:
 
+    > **`IMPORTANT:`** If the password for the local Nexus `admin` account has
+    > been changed from the default `admin123` (not typical), then set the
+    > `NEXUS_PASSWORD` environment variable to the correct `admin` password
+    > before running update-customizations.sh! For example:
+    >
+    > ```bash
+    > ncn-m001# export NEXUS_PASSWORD=cu$t0m@DM1Np4s5w0rd
+    > ```
+    >
+    > Otherwise, a random 32-character base64-encoded string will be generated
+    > and updated as the default `admin` password when Nexus is upgraded.
+
     ```bash
     ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/update-customizations.sh -i customizations.yaml
     ```
+
+    > **`IMPORTANT:`** If the `NEXUS_PASSWORD` environment variable was set as
+    > previously mentioned, then remove it before continuing:
+    >
+    > ```bash
+    > ncn-m001# export -n NEXUS_PASSWORD
+    > ncn-m001# unset NEXUS_PASSWORD
+    > ```
 
 1. Update the `site-init` secret:
 
@@ -48,7 +68,7 @@ Perform these steps to update `customizations.yaml`:
 
 1. If [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
    clone a local working tree and commit appropriate changes to `customizations.yaml`.
-   
+
     For example:
 
     ```bash
