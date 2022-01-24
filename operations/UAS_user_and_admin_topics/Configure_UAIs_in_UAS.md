@@ -13,7 +13,7 @@ Options for the elements of a UAI are maintained in the UAS configuration. The f
 -   [Resource Specifications](Resource_Specifications.md)
 -   [UAI Classes](UAI_Classes.md)
 
-Only users who are defined as administrators in an HPE Cray EX system and are logged in using the administrative CLI \(`cray` command\) can configure UAS. Configure UAS from a LiveCD node or from any system with the administrative CLI installed that can reach the HPE Cray EX API Gateway as an adminisgtrator.
+Only users who are defined as administrators in an HPE Cray EX system and are logged in using the administrative CLI \(`cray` command\) can configure UAS. Configure UAS from a LiveCD node or from any system with the administrative CLI installed that can reach the HPE Cray EX API Gateway as an administrator.
 
 The following procedures provide instructions for creating, updating, examining, and removing configuration items from UAS:
 

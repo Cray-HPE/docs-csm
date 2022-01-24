@@ -216,11 +216,11 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit:/var/www/ephemeral# export SYSTEM_NAME=eniac
       ```
 
-   1. Save the `CSM_RELEASE` for usage later; all subsequent shell sessions will have this var set.
+   1. Save the `CSM_RELEASE` and `SYSTEM_NAME` variable for usage later; all subsequent shell sessions will have this var set.
 
       ```bash
       # Prepend a new line to assure we add on a unique line and not at the end of another.
-      pit:/var/www/ephemeral# echo -e "\nCSM_RELEASE=$CSM_RELEASE" >>/etc/environment
+      pit:/var/www/ephemeral# echo -e "\nCSM_RELEASE=$CSM_RELEASE\nSYSTEM_NAME=$SYSTEM_NAME" >>/etc/environment
       ```
 
    1. Fetch the release tarball.
@@ -521,7 +521,7 @@ Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for
 Finally, cleanup the shim:
  ```bash
  pit# cd ~
- # this uses rmdir to safely remove the directory, preventing accidentaly removals if one does not notice the umount command fail.
+ # this uses rmdir to safely remove the directory, preventing accidental removal if one does not notice a umount command failure.
  pit# umount -v /mnt/pitdata/
  pit# rmdir -v /mnt/pitdata
  ```

@@ -20,7 +20,7 @@ other for the first time.)
 This should only need to be done once (Unless hardware is added or PoR config has changed) Once this configuration file has been saved you
 should be able to switch between the two configuration files.
 
-This example is a 1.0 system that's going to 1.2
+This example is a 1.0 system that is going to 1.2
 
 -  Write current configuration to file, this copies the current running config to a binary config file.
 ```
@@ -58,7 +58,7 @@ Unsaved changes : no
 This requires a reboot.
 Type 'yes' to confirm: yes
 ```
-- Once the switch is rebooted verify the config file is correct.  It should reboot without any configuration.
+- Once the switch is rebooted verify the config file is correct. It should reboot without any configuration.
 ```
 switch-cc30b4 [standalone: master] # show configuration files
 csm1.0
@@ -69,7 +69,7 @@ Active configuration: csm1.2
 Unsaved changes : yes
 ```
 - Now is when we paste in the new CANU generated 1.2 config.
-- Once that's completed you can save the config.
+- Once that is completed you can save the config.
 ```
 (config) # write memory
 ```
@@ -115,7 +115,7 @@ other for the first time.)
 
 This should only need to be done once (Unless hardware is added or PoR config has changed) Once this configuration file has been saved you
 should be able to switch between the two configuration files.
-This example is a 1.0 system that's going to 1.2
+This example is a 1.0 system that is going to 1.2
 - save startup config to new xml config
 ```
 sw-leaf-bmc-001(config)# copy config://startup.xml config://csm1.0.xml
@@ -130,7 +130,7 @@ Continuing without saving system configuration
 Proceed to reboot the system? [confirm yes/no]:yes
 ```
 - This will boot the switch to factory defaults, this is when you will paste in the new CANU generated config.
-- Once that's complete you'll want to save the config and verify that both configs exist.
+- Once that is complete, save the config and verify that both configs exist.
 ```
 sw-cdu-001(config)# do write memory
 sw-cdu-001(config)# copy config://startup.xml config://csm1.2.xml
@@ -181,7 +181,7 @@ Maximum number of checkpoints
 ```
 sw-spine-001(config)# copy running-config checkpoint CSM1_0
 Note: checkpoint name with special characters not allowed (only
-alphanumerical, hyphen and underscore are allowed)
+alphanumeric, hyphen, and underscore are allowed)
 ```
 - Checking on your saved checkpoints:
 ```

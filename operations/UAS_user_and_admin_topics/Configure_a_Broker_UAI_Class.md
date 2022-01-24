@@ -16,7 +16,7 @@ Configuring a Broker UAI class consists of the following actions:
   * `uai_compute_network` set to `false`
   * `uai_creation_class` set to the class-id of the End-User UAI class
 
-The basic contents of a Broker UAI Class is discussed in [UAI Classes](UAI_Classes.md).  Familiarity with that information is assumed in the example below.
+The basic contents of a Broker UAI Class is discussed in [UAI Classes](UAI_Classes.md). Familiarity with that information is assumed in the example below.
 
 ### Example of Volumes to Connect Broker UAIs to LDAP
 
@@ -28,7 +28,7 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
 
 1. Configure LDAP and determine which files need to be changed in the Broker UAI and what their contents should be.
 
-    In this example, the file is `/etc/sssd/sssd.conf` and its contents are representative but sanitized.  Substitute your own site specific contents:
+    In this example, the file is `/etc/sssd/sssd.conf` and its contents are representative but sanitized. Substitute your own site specific contents:
 
     ```
     [sssd]

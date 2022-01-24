@@ -345,6 +345,25 @@ yq w -i --style=single "$c" 'spec.kubernetes.services.cray-keycloak.setup.keyclo
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-keycloak.setup.keycloak.clients.oauth2-proxy-customer-access.proxiedHosts' '{{ proxiedWebAppExternalHostnames.customerAccess }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-keycloak.setup.keycloak.clients.oauth2-proxy-customer-high-speed.proxiedHosts' '{{ proxiedWebAppExternalHostnames.customerHighSpeed }}'
 
+# nexus -- add admin credential
+if [[ -z "$(yq r "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential')" ]]; then
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.name' nexus-admin-credential
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[0].type' static
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[0].args.name' username
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[0].args.value' "${NEXUS_USERNAME:-admin}"
+    if [[ -v NEXUS_PASSWORD && -n "$NEXUS_PASSWORD" ]]; then
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].type' static_b64
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.name' password
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.value' "$(base64 <<< "$NEXUS_PASSWORD")"
+    else
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].type' randstr
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.name' password
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.length' 32
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.encoding' base64
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.url_safe' yes
+    fi
+fi
+
 # remove cray-keycloak-gatekeeper
 yq d -i "$c" 'spec.kubernetes.services.cray-keycloak-gatekeeper'
 
@@ -375,12 +394,12 @@ yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.custom
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-management.hostAliases[0].hostnames[+]' 'auth.cmn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-management.hosts' '{{ proxiedWebAppExternalHostnames.customerManagement }}'
 
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-management'] | toYaml }}"
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-access'] | toYaml }}"
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.hostAliases[0].ip' '{{ network.netstaticips.nmn_api_gw }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.hostAliases[0].hostnames[0]' 'auth.can.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.hosts' '{{ proxiedWebAppExternalHostnames.customerAccess }}'
 
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-management'] | toYaml }}"
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-high-speed'] | toYaml }}"
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.hostAliases[0].ip' '{{ network.netstaticips.nmn_api_gw }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.hostAliases[0].hostnames[0]' 'auth.chn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.hosts' '{{ proxiedWebAppExternalHostnames.customerHighSpeed }}'

@@ -29,24 +29,32 @@ pit# rpm -Uvh /var/www/ephemeral/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/ya
 
 > **NOTE**: During this step, on (only) TDS systems with three worker nodes the `customizations.yaml` file will be edited (automatically) to lower pod CPU requests for some services in order to better facilitate scheduling on smaller systems. See the file: `/var/www/ephemeral/${CSM_RELEASE}/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified with different values (prior to executing the `yapl` command below) if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/CSM_product_management/Post_Install_Customizations.md).
 
-Setup password-less SSH for the pit node:
+1. Setup passwordless SSH for the pit node:
 
-```bash
-pit# rsync -av ncn-m002:.ssh/ /root/.ssh/
-```
+    ```bash
+    pit# rsync -av ncn-m002:.ssh/ /root/.ssh/
+    ```
 
-Install csm services using `yapl`:
+1. Install csm services using `yapl`:
 
-```bash
-pit# cd /usr/share/doc/csm/install/scripts/csm_services
-pit# yapl -f install.yaml execute
-```
+    ```bash
+    pit# pushd /usr/share/doc/csm/install/scripts/csm_services
+    pit# yapl -f install.yaml execute
+    pit# popd
+    ```
 
-> **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. You can rerun above command any time.
+    > **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. You can rerun above command any time.
 
-> **NOTE**: stdout is redirected to `/usr/share/doc/csm/install/scripts/csm_services/yapl.log` . If you would like to show stdout in the terminal, you can use `yapl -f install.yaml --console-output execute`
+    > **NOTE**: stdout is redirected to `/usr/share/doc/csm/install/scripts/csm_services/yapl.log` . If you would like to show stdout in the terminal, you can use `yapl -f install.yaml --console-output execute`
 
-> **NOTE**: If you want to force a rerun, you can use `--no-cache`: `yapl -f install.yaml execute --no-cache`
+    > **NOTE**: If you want to force a rerun, you can use `--no-cache`: `yapl -f install.yaml execute --no-cache`
+
+1. Copy `yapl` log files so they can be retained with other install logs:
+
+    ```bash
+    pit# mkdir -pv /var/www/ephemeral/prep/logs &&
+         cp -v /usr/share/doc/csm/install/scripts/csm_services/yapl.log /var/www/ephemeral/prep/logs
+    ```
 
 <a name="apply-after-sysmgmt-manifest-workarounds"></a>
 ### 3. Apply After Sysmgmt Manifest Workarounds
@@ -89,7 +97,7 @@ The following error may occur when running `./install.sh`:
    sls-s3-credentials   Opaque   7      28d
    ```
 
-2. Check for running sonar-sync jobs. If there are no sonar-sync jobs, then wait for one to complete. The sonar-sync cronjob is responsible for copying the `sls-s3-credentials` secret from the `default` to `services` namespaces.
+1. Check for running sonar-sync jobs. If there are no sonar-sync jobs, then wait for one to complete. The sonar-sync cronjob is responsible for copying the `sls-s3-credentials` secret from the `default` to `services` namespaces.
 
    ```bash
    pit# kubectl -n services get pods -l cronjob-name=sonar-sync
@@ -98,7 +106,7 @@ The following error may occur when running `./install.sh`:
    sonar-sync-1634322900-pnvl6   1/1     Running     0          13s
    ```
 
-3. Verify the `sls-s3-credentials` secret now exists in the `services` namespaces.
+1. Verify the `sls-s3-credentials` secret now exists in the `services` namespaces.
 
    ```bash
    pit# kubectl -n services get secret sls-s3-credentials
@@ -106,7 +114,7 @@ The following error may occur when running `./install.sh`:
    sls-s3-credentials   Opaque   7      20s
    ```
 
-4. Running `install.sh` again is expected to succeed.
+1. Running `install.sh` again is expected to succeed.
 
 <a name="known-issues-setup-nexus"></a>
 #### 5.2 Setup Nexus known issues

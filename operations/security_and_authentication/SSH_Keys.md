@@ -98,7 +98,7 @@ procedure above.
 
    ***NOTE***: Subsequent SSH key changes need only update the field contents in
    Hashicorp Vault and create the CFS session as long as the branch of the CSM
-   configuration management repository hasn't changed. If the commit has
+   configuration management repository has not changed. If the commit has
    changed, repeat this procedure from the beginning.
 
 ### Procedure for Other Users

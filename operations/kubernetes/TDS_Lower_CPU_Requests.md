@@ -1,6 +1,6 @@
 ## TDS Lower CPU Requests
 
-TDS systems with three worker nodes may encounter pod scheduling issues when worker nodes are taken out of the Kubernetes cluster and being upgraded.  _*For systems with only three worker nodes*_, the following script can be executed to reduce the CPU request for some services with high CPU requests in order to allow critical upgrade related services to be successfully scheduled on two worker nodes:
+TDS systems with three worker nodes will encounter pod scheduling issues when worker nodes are taken out of the Kubernetes cluster and being upgraded.  _*For systems with only three worker nodes*_, the following script should be executed to reduce the CPU request for some services with high CPU requests in order to allow critical upgrade related services to be successfully scheduled on two worker nodes:
 
 >
 >```bash
@@ -8,7 +8,7 @@ TDS systems with three worker nodes may encounter pod scheduling issues when wor
 >```
 >
 
-Note that some services with these lower CPU request may encounter CPU throttling (see [Determine if Pods are Hitting Resource Limits](./Determine_if_Pods_are_Hitting_Resource_Limits.md)).  If needed, the top portion of the script (see below) can be edited and re-run to further adjust these CPU requests.  Note that commenting out any of the lines below will indicate the script should not adjust the CPU resource for that service.  Also see the `Kubernetes/Compute Resources/Namespace (Pods)` grafana page ([Access System Management Health Services](../system_management_health/Access_System_Management_Health_Services.md)) for a historical view of a given pod's CPU utilization for this specific system.
+Note that some services with these lower CPU request may encounter CPU throttling (see [Determine if Pods are Hitting Resource Limits](./Determine_if_Pods_are_Hitting_Resource_Limits.md)).  If needed, the top portion of the script (see below) can be edited and re-run to further adjust these CPU requests. Note that commenting out any of the lines below will indicate the script should not adjust the CPU resource for that service. Also see the `Kubernetes/Compute Resources/Namespace (Pods)` grafana page ([Access System Management Health Services](../system_management_health/Access_System_Management_Health_Services.md)) for a historical view of a given pod's CPU utilization for this specific system.
 
 >
 >```

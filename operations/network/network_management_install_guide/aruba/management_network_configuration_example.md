@@ -260,7 +260,7 @@ Configure default routes on Workers
 
 > ncn-w001:/ # ip route replace default via 10.101.10.1 dev hsn0
 
-* To make it persistent we'll need to create a ifcfg file for hsn0 and remove the old vlan7 default route.
+* To make it persistent we will need to create a ifcfg file for hsn0 and remove the old vlan7 default route.
 
 > ncn-w001:/ # mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old
 > 
@@ -280,7 +280,7 @@ PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 Verify External Connectivity
 
 * You should now have external connectivity from outside the Shasta system to the external services offered by MetalLB over the HSN.
-* Verify you're going over the HSN by a traceroute.
+* Verify you are going over the HSN by a traceroute.
 
 ```
 NCN-m001 ~ % traceroute 10.101.8.113

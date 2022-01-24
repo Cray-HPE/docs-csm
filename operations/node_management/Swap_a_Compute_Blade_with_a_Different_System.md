@@ -17,9 +17,9 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 ### Prerequisites
 
-- The Slingshot fabric must be configured with the desired topology for both blades
+- The Slingshot fabric must be configured with the desired topology for both blades.
 
-- The System Layout Service (SLS) must have the desired HSN configuration
+- The System Layout Service (SLS) must have the desired HSN configuration.
 
 - The blade that is removed from the source system must be installed in the empty slot left by the blade removed from destination system and visa-versa.
 
@@ -28,8 +28,8 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 - Review the following command examples. The commands can be used to capture the required values from the HSM `ethernetInterfaces` table and write the values to a file. The file then can be used to automate subsequent commands in this procedure, for example:
 
   ```bash
-  ncn-m001:# mkdir blade_swap_scripts; cd blade_swap_scripts
-  ncn-m001:# cat blade_query.sh
+  ncn-m001# mkdir blade_swap_scripts; cd blade_swap_scripts
+  ncn-m001# cat blade_query.sh
 
   #!/bin/bash
   BLADE=$1
@@ -41,8 +41,8 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
   ```
 
   ```bash
-  ncn-m001:# ./blade_query.sh x1000c0s1 x1000c0s1.json
-  ncn-m001:# cat x1000c0s1.json
+  ncn-m001# ./blade_query.sh x1000c0s1 x1000c0s1.json
+  ncn-m001# cat x1000c0s1.json
   {"xname":"x9000c3s1b0n0","ID":"0040a6836339","MAC":"00:40:a6:83:63:39","IP":"10.100.0.10","Desc":"Node Maintenance Network"}
   {"xname":"x9000c3s1b0n1","ID":"0040a683633a","MAC":"00:40:a6:83:63:3a","IP":"10.100.0.98","Desc":"Node Maintenance Network"}
   {"xname":"x9000c3s1b1n0","ID":"0040a68362e2","MAC":"00:40:a6:83:62:e2","IP":"10.100.0.123","Desc":"Node Maintenance Network"}
@@ -52,7 +52,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
   To delete an `ethernetInterfaces` entry using curl:
 
   ```bash
-  ncn-m001:# for ID in $(cat x9000c3s1.json | jq -r '.ID'); do cray hsm inventory ethernetInterfaces delete $ID; done
+  ncn-m001# for ID in $(cat x9000c3s1.json | jq -r '.ID'); do cray hsm inventory ethernetInterfaces delete $ID; done
   ```
 
   To insert an `ethernetInterfaces` entry using curl:
@@ -83,7 +83,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 #### Disable the Redfish endpoints for the nodes
 
-3. Temporarily disable endpoint discovery service (MEDS) for each compute node. Disabling the slot prevents hms-discovery from automatically powering on the slot.
+3. Temporarily disable the Redfish endpoints for each compute node NodeBMC.
 
    ```bash
    ncn-m001# cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0
@@ -98,11 +98,12 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
    ```bash
    ncn-m001# curl -k -u root:PASSWORD -X POST -H \
-   'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
-   https://x9000c3s0b0/redfish/v1/Managers/BMC/Actions/Manager.Reset
+    'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
+    https://x9000c3s0b0/redfish/v1/Managers/BMC/Actions/Manager.Reset
 
    ncn-m001# curl -k -u root:PASSWORD -X POST -H \
-   'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \ https://x9000c3s0b1/redfish/v1/Managers/BMC/Actions/Manager.Reset
+     'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
+     https://x9000c3s0b1/redfish/v1/Managers/BMC/Actions/Manager.Reset
    ```
    Use Ctrl-C to return to the prompt if command does not return.
 
@@ -136,7 +137,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 #### Disable the chassis slot
 
-6. Disable the chassis slot. This example disables slot 0, chassis 3, in cabinet 9000.
+6. Disable the chassis slot. Disabling the slot prevents hms-discovery from automatically powering on the slot. This example disables slot 0, chassis 3, in cabinet 9000.
 
    ```bash
    ncn-m001# cray hsm state components enabled update --enabled false x9000c3s0
@@ -240,12 +241,12 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
     ```bash
     ncn-m001# curl -k -u root:PASSWORD -X POST -H 'Content-Type: application/json' -d \
-    '{"ResetType": "StatefulReset"}' \
-    https://x1005c3s0b0/redfish/v1/Managers/BMC/Actions/Manager.Reset
+      '{"ResetType": "StatefulReset"}' \
+      https://x1005c3s0b0/redfish/v1/Managers/BMC/Actions/Manager.Reset
 
     ncn-m001# curl -k -u root:PASSWORD -X POST -H 'Content-Type: application/json' -d \
-    '{"ResetType": "StatefulReset"}' \
-    https://x1005c3s0b1/redfish/v1/Managers/BMC/Actions/Manager.Reset
+      '{"ResetType": "StatefulReset"}' \
+      https://x1005c3s0b1/redfish/v1/Managers/BMC/Actions/Manager.Reset
     ```
 
 
@@ -256,7 +257,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
     ```bash
     ncn-m001# kubectl -n services patch cronjobs hms-discovery \
-    -p '{"spec": {"suspend": true }}'
+      -p '{"spec": {"suspend": true }}'
     ```
 
 16. Verify that the hms-discovery cron job has stopped (`ACTIVE` = `0` and `SUSPEND` = `True`).
@@ -351,8 +352,9 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 26. Obtain an authentication token to access the API gateway. In the example below, replace `myuser`, `mypass`, and `shasta` in the cURL command with site-specific values. Note the value of `access_token`. Review [Retrieve an Authentication Token](../security_and_authentication/Retrieve_an_Authentication_Token.md) for more information. The example is a script to secure a token and set it to the variable MY_TOKEN.
 
     ```bash
-    ncn-m001# MY_TOKEN=$(curl -s -d grant_type=password -d client_id=shasta -d \ username=USERNAME -d password=PASSWORD \
-    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    ncn-m001# MY_TOKEN=$(curl -s -d grant_type=password -d client_id=shasta -d \
+      username=USERNAME -d password=PASSWORD \
+      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 
     ncn-m001:# echo $MY_TOKEN
     eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJW . .
@@ -360,7 +362,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
 27. Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes). To prevent from Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
 
-    1. Create an `eth_interfaces` file that contains the interface IDs for the `Node Maintenance Network` entries for the destination system. (When repeating this procedure for the source system, use the interface IDS for the source system.)
+    1. Create an `eth_interfaces` file that contains the interface IDs for the `Node Maintenance Network` entries for the destination system. (When repeating this procedure for the source system, use the interface IDs for the source system.)
 
        ```bash
        ncn-m001# cat eth_interfaces
@@ -395,15 +397,18 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     ```
 
     ```bash
-    ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw '{
-            "Description": "Node Maintenance Network",
-            "MACAddress": "$MAC",
-            "IPAddress": "$IP_ADDRESS",
-            "ComponentID": "$XNAME"
-          }'
+    ncn-m001# curl -H "Authorization: Bearer ${MY_TOKEN}" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "{
+            \"Description\": \"Node Maintenance Network\",
+            \"MACAddress\": \"$MAC\",
+            \"IPAddress\": \"$IP_ADDRESS\",
+            \"ComponentID\": \"$XNAME\"
+        }"
     ```
 
-    **Note:** Kea may must be restarted when the curl command is issued.
+    **Note:**  Kea may must be restarted when the curl command is issued.
+    ```bash
+    ncn-m001# kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
+    ```
 
     When repeating this procedure for the source system, ComponentID and IPAddress must be the values recorded from the source system, and the MACAddress must be the value recorded from the blade in the destination system.
 
@@ -415,7 +420,8 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     To change or correct a curl command that has been entered, use a PATCH request, for example:
 
     ```bash
-    ncn-m001# curl -k -H "Authorization: Bearer $TOKEN" -L -X PATCH \ 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/0040a68350a4' -H 'Content-Type: application/json' --data-raw '{"MACAddress":"xx:xx:xx:xx:xx:xx","IPAddress":"10.xxx.xxx.xxx","ComponentID":"XNAME"}'
+    ncn-m001# curl -k -H "Authorization: Bearer $TOKEN" -L -X PATCH \
+      'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/0040a68350a4' -H 'Content-Type: application/json'  --data-raw '{"MACAddress":"xx:xx:xx:xx:xx:xx","IPAddress":"10.xxx.xxx.xxx","ComponentID":"XNAME"}'
     ```
 
 29. Repeat the preceding command for each node in the blade.
@@ -444,7 +450,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
     ```bash
     ncn-m001# kubectl -n services patch cronjobs hms-discovery \
-    -p '{"spec" : {"suspend" : false }}'
+      -p '{"spec" : {"suspend" : false }}'
 
     ncn-m001# kubectl get cronjobs.batch -n services hms-discovery
     NAME             SCHEDULE      SUSPEND   ACTIVE   LAST   SCHEDULE  AGE
@@ -453,17 +459,17 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     ncn-m001# kubectl get pods -Ao wide | grep hms-discovery
 
     ncn-m001# kubectl -n services logs hms-discovery-1600117560-5w95d \
-    hms-discovery | grep "Mountain discovery finished" | jq '.discoveredXnames'
+      hms-discovery | grep "Mountain discovery finished" | jq '.discoveredXnames'
     [
-    "x1005c3s0b0"
+      "x1005c3s0b0"
     ]
     ```
 
 33. Wait for 3 minutes for the blade to power on and the node controllers (BMCs) to be discovered.
 
-       ```bash
-        ncn-m001# sleep 180
-       ```
+    ```bash
+    ncn-m001# sleep 180
+    ```
 
 
 
@@ -506,22 +512,24 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 36. Optional: Verify that discovery has completed (`LastDiscoveryStatus` = "`DiscoverOK`").
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoints describe x1005c3b0
-    Type = "ChassisBMC"
-    Domain = ""
-    MACAddr = "02:03:ed:03:00:00"
-    Enabled = true
-    Hostname = "x1005c3"
-    RediscoverOnUpdate = true
-    FQDN = "x1005c3"
-    User = "root"
-    Password = ""
-    IPAddress = "10.104.0.76"
-    ID = "x1005c3b0"
-    [DiscoveryInfo]
-    LastDiscoveryAttempt = "2020-09-03T19:03:47.989621Z"
-    RedfishVersion = "1.2.0"
-    LastDiscoveryStatus = "DiscoverOK"
+    ncn-m001# cray hsm inventory redfishEndpoints describe x1005c3 --format json
+    {
+        "ID": "x1005c3",
+        "Type": "ChassisBMC",
+        "Hostname": "x1005c3",
+        "Domain": "",
+        "FQDN": "x1005c3",
+        "Enabled": true,
+        "User": "root",
+        "Password": "",
+        "MACAddr": "02:03:ED:03:00:00",
+        "RediscoverOnUpdate": true,
+        "DiscoveryInfo": {
+            "LastDiscoveryAttempt": "2020-09-03T19:03:47.989621Z",
+            "LastDiscoveryStatus": "DiscoverOK",
+            "RedfishVersion": "1.2.0"
+        }
+    }
     ```
 
 37. Enable the nodes in the HSM database.
@@ -557,7 +565,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     ```bash
     ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
     ncn-m001# cray bos session create --template-uuid $BOS_TEMPLATE \
-    --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+      --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
 
@@ -581,7 +589,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 42. Check the cray-cps pods on worker nodes and verify they are `Running`.
 
     ```bash
-    # kubectl get pods -Ao wide | grep cps
+    ncn-m001# kubectl get pods -Ao wide | grep cps
     services   cray-cps-75cffc4b94-j9qzf    2/2  Running   0   42h 10.40.0.57  ncn-w001
     services   cray-cps-cm-pm-g6tjx         5/5  Running   21  41h 10.42.0.77  ncn-w003
     services   cray-cps-cm-pm-kss5k         5/5  Running   21  41h 10.39.0.80  ncn-w002
@@ -625,8 +633,8 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 
     ```bash
     ncn-m001# kubectl exec -it -n services \
-    $(kubectl get pods --all-namespaces |grep slingshot | awk '{print $2}') \
-    -- fmn_status
+      $(kubectl get pods --all-namespaces |grep slingshot | awk '{print $2}') \
+      -- fmn_status
     ```
 
 
@@ -636,11 +644,11 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 Check for duplicate IP entries in the State Management Database (SMD). Duplicate entries will cause DNS operations to fail.
 
 ```bash
-ncn-m001:~ # ssh uan01
+ncn-m001# ssh uan01
 ssh: Could not resolve hostname uan01: Temporary failure in name resolution
-ncn-m001:~ # ssh x3000c0s14b0n0
+ncn-m001# ssh x3000c0s14b0n0
 ssh: Could not resolve hostname x3000c0s14b0n0: Temporary failure in name resolution
-ncn-m001:~ # ssh x1000c1s1b0n1
+ncn-m001# ssh x1000c1s1b0n1
 ssh: Could not resolve hostname x1000c1s1b0n1: Temporary failure in name resolution
 ```
 
@@ -655,8 +663,7 @@ ncn-m001#
 47. Use the following example curl command to check for active DHCP leases. If there are 0 DHCP leases, there is a configuration error.
 
     ```bash
-    ncn-m001# curl -s -X POST -H "Content-Type: application/json" -d \
-    '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' cray-dhcp-kea-api:8000 | jq
+    ncn-m001# curl -H "Authorization: Bearer ${MY_TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
     [
       {
         "arguments": {
@@ -674,7 +681,7 @@ ncn-m001#
     1. Show the `EthernetInterfaces` for the duplicate IP address:
 
        ```bash
-       ncn-m001# curl -s http://cray-smd/hsm/v1/Inventory/EthernetInterfaces?IPAddress=10.100.0.105 | jq
+       ncn-m001# cray hsm inventory ethernetInterfaces list --ip-address 10.100.0.105 --format json | jq
        [
          {
            "ID": "0040a68350a4",
@@ -700,13 +707,13 @@ ncn-m001#
     2. Delete the older entry.
 
        ```bash
-       ncn-m001: curl -X DELETE -s -k http://cray-smd/hsm/v1/Inventory/EthernetInterfaces/0040a68350a4
+       ncn-m001# cray hsm inventory ethernetInterfaces delete 0040a68350a4
        ```
 
 49. Check DNS using `dnslookup`.
 
     ```bash
-    ncn-w001:~ # nslookup 10.252.1.29
+    ncn-w001# nslookup 10.252.1.29
     29.1.252.10.in-addr.arpa	name = uan01.
     29.1.252.10.in-addr.arpa	name = uan01.local.
     29.1.252.10.in-addr.arpa	name = x3000c0s14b0n0.
@@ -714,14 +721,14 @@ ncn-m001#
     29.1.252.10.in-addr.arpa	name = uan01-nmn.
     29.1.252.10.in-addr.arpa	name = uan01-nmn.local.
 
-    ncn-w001:~ # nslookup uan01
+    ncn-w001# nslookup uan01
     Server:		10.92.100.225
     Address:	10.92.100.225#53
 
     Name:	uan01
     Address: 10.252.1.29
 
-    ncn-w001:~ # nslookup x3000c0s14b0n0
+    ncn-w001# nslookup x3000c0s14b0n0
     Server:		10.92.100.225
     Address:	10.92.100.225#53
 
@@ -732,7 +739,7 @@ ncn-m001#
 50. Check SSH.
 
     ```bash
-    ncn-m001:~ # ssh x3000c0s14b0n0
+    ncn-m001# ssh x3000c0s14b0n0
     The authenticity of host 'x3000c0s14b0n0 (10.252.1.29)' can't be established.
     ECDSA key fingerprint is SHA256:wttHXF5CaJcQGPTIq4zWp0whx3JTwT/tpx1dJNyyXkA.
     Are you sure you want to continue connecting (yes/no/[fingerprint])? yes

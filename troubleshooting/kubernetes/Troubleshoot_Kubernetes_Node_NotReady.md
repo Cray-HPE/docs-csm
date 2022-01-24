@@ -12,13 +12,13 @@ The `kubectl get nodes` command returns a NotReady state for a master or worker 
 
     ```bash
     ncn-w001# kubectl get nodes
-    NAME       STATUS   ROLES    AGE   VERSION
-    ncn-m001   Ready    master   27h   v1.19.9
-    ncn-m002   Ready    master   19h   v1.19.9
-    ncn-m003   Ready    master   18h   v1.19.9
-    ncn-w001   NotReady <none>   36h   v1.19.9
-    ncn-w002   Ready    <none>   36h   v1.19.9
-    ncn-w003   Ready    <none>   36h   v1.19.9
+    NAME       STATUS   ROLES                  AGE   VERSION
+    ncn-m001   Ready    control-plane,master   27h   v1.20.13
+    ncn-m002   Ready    control-plane,master   8d    v1.20.13
+    ncn-m003   Ready    control-plane,master   8d    v1.20.13
+    ncn-w001   NotReady <none>                 8d    v1.20.13
+    ncn-w002   Ready    <none>                 8d    v1.20.13
+    ncn-w003   Ready    <none>                 8d    v1.20.13
     ```
 
 ### Recovery Steps

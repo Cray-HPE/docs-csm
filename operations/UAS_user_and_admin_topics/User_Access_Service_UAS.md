@@ -4,9 +4,9 @@
 
 The User Access Service \(UAS\) is a service that manages User Access Instances \(UAIs\) which are containerized services under Kubernetes that provide application developers and users with a lightweight login environment in which to create and run user applications. UAIs run on non-compute nodes \(NCN\), specifically Kubernetes Worker nodes.
 
-At a high level, there are two ways to configure UAS with respect to allowing users access to UAIs.  The standard configuration involves the use of [Broker UAIs](Broker_Mode_UAI_Management.md) through which users establish SSH login sessions.  When a login session is established to a Broker UAI the Broker UAI either locates or creates a new UAI on behalf of the user and forwards the user's SSH connection to that UAI.  A [legacy configuration](Legacy_Mode_User-Driven_UAI_Management.md) requires users to create their own UAIs through the `cray` CLI.  Once a UAI is created in this way, the users can use SSH to log into the UAI directly.  The legacy configuration will soon be deprecated.  Sites using it should migrate to the Broker UAI based configuration.
+At a high level, there are two ways to configure UAS with respect to allowing users access to UAIs. The standard configuration involves the use of [Broker UAIs](Broker_Mode_UAI_Management.md) through which users establish SSH login sessions. When a login session is established to a Broker UAI the Broker UAI either locates or creates a new UAI on behalf of the user and forwards the user's SSH connection to that UAI. A [legacy configuration](Legacy_Mode_User-Driven_UAI_Management.md) requires users to create their own UAIs through the `cray` CLI. Once a UAI is created in this way, the users can use SSH to log into the UAI directly. The legacy configuration will soon be deprecated. Sites using it should migrate to the Broker UAI based configuration.
 
-Once logged into a UAI, users can use most of the facilities found on a User Access Node \(UAN\) with certain [limitations](UAS_Limitations.md).  Users can also use UAIs to transfer data between the Cray system and external systems.
+Once logged into a UAI, users can use most of the facilities found on a User Access Node \(UAN\) with certain [limitations](UAS_Limitations.md). Users can also use UAIs to transfer data between the Cray system and external systems.
 
 By default, the timezone inside the UAI container is configured to match the timezone on the host NCN on which it is running, For example, if the timezone on the host NCN is set to CDT, the UAIs on that host will also be set to CDT.
 
@@ -39,9 +39,9 @@ Authorized users in [Legacy UAI Management](Legacy_Mode_User-Driven_UAI_Manageme
 
 ### Getting started
 
-UAS is highly configurable and it is recommended that administrators familiarize themselves with, at least, the major concepts covered in the Table of Contents below before allowing users to use UAIs.  In particular, the concepts of [End-User UAIs](End_User_UAIs.md) and [Broker UAIs](Broker_Mode_UAI_Management.md), and the procedures for setting up and customizing Broker UAIs are critical to setting up UAS properly.
+UAS is highly configurable and it is recommended that administrators familiarize themselves with, at least, the major concepts covered in the Table of Contents below before allowing users to use UAIs. In particular, the concepts of [End-User UAIs](End_User_UAIs.md) and [Broker UAIs](Broker_Mode_UAI_Management.md), and the procedures for setting up and customizing Broker UAIs are critical to setting up UAS properly.
 
-Another important topic, once administrators are familiar with setting up UAS to provide basic UAIs, is customizing the UAI image to support user workflows.  At the simplest level, administrators will want to create and use a UAI image that matches the booted compute nodes.  This can be done by following the [Customize End-User UAI Images](Customize_End-User_UAI_Images.md) procedure.
+Another important topic, once administrators are familiar with setting up UAS to provide basic UAIs, is customizing the UAI image to support user workflows. At the simplest level, administrators will want to create and use a UAI image that matches the booted compute nodes. This can be done by following the [Customize End-User UAI Images](Customize_End-User_UAI_Images.md) procedure.
 
 ### Table of Contents
 

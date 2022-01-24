@@ -29,7 +29,7 @@ The most noteworthy changes since the previous release are described here.
          * Rome-Based HPE DL 385(v1) Gen10
    * Node consoles are now managed by cray-console-node which is based on conman.
    * HSM now has a v2 REST API
-   * PowerDNS authoriative DNS server
+   * PowerDNS authoritative DNS server
       * Introduces the cray-dns-powerdns, cray-dns-powerdns-postgres, and cray-powerdns-manager pods
       * Supports zone transfer to external DNS servers via AXFR query and DNSSEC
       * Please refer to the [DNS overview](../operations/network/dns/DNS.md) and [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for further information.
