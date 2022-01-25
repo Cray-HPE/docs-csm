@@ -245,7 +245,7 @@ Some files are needed for generating the configuration payload. See these topics
 1. Change into the preparation directory plus necessary PIT directories (for later):
 
    ```bash
-   linux:usb# mkdir -pv /mnt/pitdata/admin /mnt/pitdata/prep /mnt/pitdata/configs /mnt/pitdata/data
+   linux:usb# mkdir -pv /mnt/pitdata/admin /mnt/pitdata/prep /mnt/pitdata/configs /mnt/pitdata/data/{k8s,ceph}
    linux:usb# cd /mnt/pitdata/prep
    ```
 
