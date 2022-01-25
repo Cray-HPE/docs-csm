@@ -5,20 +5,17 @@ This document and the procedures contained within it are for the purposes of com
 It is assumed that some procedures are already known by admins and thus does not go into great detail or attempt to encompass every command necessary for execution. It is intended to be higher level guidance (with some command examples) to inform internal users and customers about our process.
 
 ## High Level Procedure Summary
-- [Resiliency Testing Procedure](#resiliency-testing-procedure)
-  - [High Level Procedure Summary](#high-level-procedure-summary)
-    - [Prepare for Resiliency Testing](#prepare-for-resiliency-testing)
-    - [Establish System Health Before Beginning](#establish-system-health-before-beginning)
-    - [Monitor for Changes](#monitor-for-changes)
-    - [Launch a Non-Interactive Batch Job](#launch-a-non-interactive-batch-job)
-      - [Launch on a UAI](#launch-on-a-uai)
-      - [Launch on a UAN](#launch-on-a-uan)
-    - [Shut Down an NCN](#shut-down-an-ncn)
-    - [Conduct Testing](#conduct-testing)
-    - [Power on the Downed NCN](#power-on-the-downed-ncn)
-    - [Execute Post-Boot Health Checks](#execute-post-boot-health-checks)
 
-<a name="preparation"></a>
+   - [Prepare for Resiliency Testing](#prepare-for-resiliency-testing)
+   - [Establish System Health Before Beginning](#establish-system-health-before-beginning)
+   - [Monitor for Changes](#monitor-for-changes)
+   - [Launch a Non-Interactive Batch Job](#launch-a-non-interactive-batch-job)
+   - [Shut Down an NCN](#shut-down-an-ncn)
+   - [Conduct Testing](#conduct-testing)
+   - [Power on the Downed NCN](#power-on-the-downed-ncn)
+   - [Execute Post-Boot Health Checks](#execute-post-boot-health-checks)
+
+<a name="prepare-for-resiliency-testing"></a>
 ### Prepare for Resiliency Testing
 
 * Confirm the xname mapping for each node on the system. This get dumped out by execution of the `/opt/cray/platform-utils/ncnGetXnames.sh` script.
@@ -87,7 +84,7 @@ It is assumed that some procedures are already known by admins and thus does not
    uan# srun -N 4 hostname | sort
    ```
 
-<a name="establish-system-health"></a>
+<a name="establish-system-health-before-beginning"></a>
 ### Establish System Health Before Beginning
 
 In order to ensure that the system is healthy before taking an NCN node down, run the `Platform Health Checks` section of [Validate CSM Health](../validate_csm_health.md).
@@ -100,7 +97,7 @@ Part of the data being returned via execution of the `Platform Health Checks` in
    ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
    ```
 
-<a name="monitoring-for-changes"></a>
+<a name="monitor-for-changes"></a>
 ### Monitor for Changes
 
 In order to keep watch on various items during and after the fault has been introduced (in this case, the shutdown of a single NCN node), the steps listed below can help give insight into changing health conditions. It is an eventual goal to strive for a monitoring dashboard which would help track these sort of things in a single or few automated views. Until that can be incorporated, these kinds of command prompt sessions can be useful.
@@ -155,7 +152,7 @@ In order to keep watch on various items during and after the fault has been intr
 
    If Postgres reports a status that deviates from `Running`, that would require further investigation and possibly remediation via [Troubleshooting the Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md).
 
-<a name="launch-batch-job"></a>
+<a name="launch-a-non-interactive-batch-job"></a>
 ### Launch a Non-Interactive Batch Job
 
 The purpose of this procedure is to launch a non-interactive, long-running batch job across computes via a UAI (or the UAN, if present) in order to ensure that even though the UAI pod used to launch the job is running on the NCN worker node being taken down, it will start up on another NCN worker (once Kubernetes begins terminating pods).
@@ -283,7 +280,7 @@ Additionally, it is important to verify that the batch job continued to run, uni
 
 1. Verify that the job launched on the UAN is running and that application output is streaming to a file. Streaming output will be used to verify that the batch job is still running during resiliency testing. A batch job, when submitted, will designate a log file location. This log file can be accessed to be able to verify that the batch job is continuing to run after an NCN is brought down and once it is back online. Additionally, the `squeue` command can be used to verify that the job continues to run (for Slurm).
 
-<a name="shut-down-ncn"></a>
+<a name="shut-down-an-ncn"></a>
 ### Shut Down an NCN
 
 1. Establish a console session to the NCN targeted for shutdown by executing the steps in [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md).
@@ -354,7 +351,7 @@ After the target NCN was shut down, assuming the command line windows that were 
    
    Additionally, it is as important to understand (and document) any work-around procedures needed to fix issues encountered. In addition to filing a bug for a permanent fix, work-around documentation can be very useful when written up - for both internal and external customers to access.
 
-<a name="power-on-ncn"></a>
+<a name="power-on-the-downed-ncn"></a>
 ### Power on the Downed NCN
 
 1. Use the `ipmitool` command to power up the NCN.
@@ -372,7 +369,7 @@ After the target NCN was shut down, assuming the command line windows that were 
 
 1. Check that pod statuses have returned to the state that they were in at the beginning of this procedure, paying particular attention to any pods that were previously noted to be in a bad state while the NCN was down. Additionally, there is no concern if pods that were in a bad state at the beginning of the procedure, are still in a bad state. What is important to note is anything that is different from either the beginning of the test or from the time that the NCN was down.
 
-<a name="post-boot-health-check"></a>
+<a name="execute-post-boot-health-check"></a>
 ### Execute Post-Boot Health Checks
 
 1. Re-run the `Platform Health Checks` section of [Validate CSM Health](../validate_csm_health.md) noting any output that indicates output is not as expected. Note that in a future version of CSM, these checks will be further automated for better efficiency and pass/fail clarity.
