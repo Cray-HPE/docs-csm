@@ -20,11 +20,11 @@ It is assumed that some procedures are already known by admins and thus does not
 
 * Confirm the xname mapping for each node on the system. This get dumped out by execution of the `/opt/cray/platform-utils/ncnGetXnames.sh` script.
 
-* Verify that `metal.no-wipe=1` is set for each of the NCNs via ouptput from running the ncnGetXnames.sh script.
+* Verify that `metal.no-wipe=1` is set for each of the NCNs via ouptput from running the `ncnGetXnames.sh` script.
 
-* Ensure that you can run as an authorized user on the Cray CLI.
+* Ensure the user account in use is an authorized user on the Cray CLI.
   
-  Login as a user account you have access to:
+  Log in as a user account where the credentials are known:
    
    ```bash
    ncn# export CRAY_CONFIG_DIR=$(mktemp -d); echo $CRAY_CONFIG_DIR; cray init --configuration default --hostname https://api-gw-service-nmn.local
@@ -48,7 +48,7 @@ It is assumed that some procedures are already known by admins and thus does not
    ncn# kubectl get pods -o wide -A | grep -Ev 'Running|Completed'
    ```
 
-* Note which pods are running on an NCN that will be taken down (as well as the total number of pods running). Here is an example that shows the listing of pods running on `ncn-w001`:
+* Note which pods are running on an NCN that will be taken down (as well as the total number of pods running). The following is an example that shows the listing of pods running on `ncn-w001`:
    
    ```bash
    ncn# kubectl get pods -o wide -A | grep ncn-w001 | awk '{print $2}'
@@ -78,7 +78,9 @@ It is assumed that some procedures are already known by admins and thus does not
 
    For more information regarding management of BOS session templates, refer to [Manage a Session Template](../boot_orchestration/Manage_a_Session_Template.md).
 
-* If a UAN is present on the system, log onto it and verify that the workload manager (WLM) is configured by running a command (example for Slurm):
+* If a UAN is present on the system, log onto it and verify that the workload manager (WLM) is configured by running a command. 
+   
+   The following is an example for Slurm:
    
    ```bash
    uan# srun -N 4 hostname | sort
@@ -126,7 +128,7 @@ In order to keep watch on various items during and after the fault has been intr
    
    This takes around 5-6 minutes, and Kubernetes will begin terminating pods so that new pods to replace them can start-up on another NCN. Pods that had been running on the downed NCN will remain in `Terminated` state until the NCN is back up. Pods that need to start-up on other nodes will be `Pending` until they start-up. Some pods that have anti-affinity configurations or that run as daemonsets will not be able to start up on another NCN. Those pods will remain in Pending state until the NCN is back up.
    
-   Finally, it is helpful to have a window tracking the list of pods that are not in `Completed` or `Running` state to be able to determine how that list is changing once the NCN is downed and pods begin shifting around. This step offers a view of what is going on at the time that the NCN is brought down and once Kubernetes detects an issue and begins remediation. It is not so important to capture everything that is happening during this step. It may be helpful for debugging. The output of these windows/commands becomes more interesting once you have brought the NCN down for a period of time and then bring it back up. At that point, the expectation is that everything can recover. 
+   Finally, it is helpful to have a window tracking the list of pods that are not in `Completed` or `Running` state to be able to determine how that list is changing once the NCN is downed and pods begin shifting around. This step offers a view of what is going on at the time that the NCN is brought down and once Kubernetes detects an issue and begins remediation. It is not so important to capture everything that is happening during this step. It may be helpful for debugging. The output of these windows/commands becomes more interesting once the NCN is down for a period of time and then it is brought back up. At that point, the expectation is that everything can recover. 
 
    Run the following commands in separate windows:
    
@@ -142,7 +144,7 @@ In order to keep watch on various items during and after the fault has been intr
    ncn# watch -n 5 "date; kubectl get pods -o wide -A | grep -v Completed | grep -v Running"
    ```
 
-1. Detect the change in state of the various Postgres instances running.
+2. Detect the change in state of the various Postgres instances running.
    
    Run the following in a seperate window:
 
@@ -249,7 +251,7 @@ Additionally, it is important to verify that the batch job continued to run, uni
 
 1. Compile an MPI application with the UAI. Launch application as batch job (not interactive) on compute node(s) that have not been designated, already, for reboots once an NCN is shut down.
    
-   1. Verify that batch job is running and that application output is streaming to a file. Streaming output will be used to verify that the batch job is still running during resiliency testing. A batch job, when submitted, will designate a log file location. This log file can be accessed to be able to verify that the batch job is continuing to run after an NCN is brought down and once it is back online. Additionally, the `squeue` command can be used to verify that the job continues to run (for slurm).
+   1. Verify that batch job is running and that application output is streaming to a file. Streaming output will be used to verify that the batch job is still running during resiliency testing. A batch job, when submitted, will designate a log file location. This log file can be accessed to be able to verify that the batch job is continuing to run after an NCN is brought down and once it is back online. Additionally, the `squeue` command can be used to verify that the job continues to run (for Slurm).
    
    1. Delete the UAI session when all of the testing is complete.
    
@@ -259,8 +261,10 @@ Additionally, it is important to verify that the batch job continued to run, uni
 
 #### Launch on a UAN
 
-1. Login to the UAN and verify that a WLM has been properly configured (in this case, Slurm will be used).
+1. Login to the UAN and verify that a WLM has been properly configured.
    
+   In this example, Slurm will be used.
+
    ```bash
    uan01# srun -N 4 hostname | sort
    ```
@@ -345,7 +349,7 @@ After the target NCN was shut down, assuming the command line windows that were 
    ncn# kubectl get pods -o wide -A | grep -Ev "Running|Completed|Pending|Termin"
    ```
    
-   Compare what comes up in this list to the pod list that you collected before. If there are new pods that are in status `ImagePullBackOff` or `CrashLoopBackOff`, a `kubectl describe` as well as `kubectl logs` command should be run against them to collect additional data about what happened. Obviously, if there were pods in a bad state before the procedure started, then it should not be expected that bringing one of the NCNs down is going to fix that. 
+   Compare what comes up in this list to the pod list that was collected before. If there are new pods that are in status `ImagePullBackOff` or `CrashLoopBackOff`, a `kubectl describe` as well as `kubectl logs` command should be run against them to collect additional data about what happened. Obviously, if there were pods in a bad state before the procedure started, then it should not be expected that bringing one of the NCNs down is going to fix that. 
    
    Ignore anything that was already in a bad state before (that was deemed to be ok). It is also worth taking note of any pods in a bad state at this stage as this should be checked again after bringing the NCN back up - to see if those pods remain in a bad state or if they are cleared. Noting behaviors, collecting logs, and opening tickets throughout this process is recommended when behavior occurs that is not expected. When we see an issue that has not been encountered before, it may not be immediately clear if code changes/regressions are at fault or if it is simply an intermittent/timing kind of issue that has not previously surfaced. The recommendation at that point, given time/resources is to repeat the test to gain a sense of the repeatability of the behavior (in the case that the issue is not directly tied to a code-change).
    
