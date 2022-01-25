@@ -44,6 +44,41 @@ cabinets will have Aggregation switches.
 
 On a typical system, the Mellanox switches are Spine switches and the Dell switches are used for Aggregation, CDU, and Leaf switches.
 
+## Site connections
+
+Currently CANU ***does not*** automatically create site connections (LAGs/uplink interfaces or default routes). 
+
+Hence you need to manually configure the uplinks for site connections as well as default routes. 
+
+Example configuration: 
+
+NOTE: these are very simplistic examples and depending on your install scenario you may need to also configure LAG's etc. 
+
+***Mellanox***
+
+```
+sw-spine-001 [standalone: master] > ena
+sw-spine-001 [standalone: master] # conf t
+sw-spine-001 [standalone: master] (config) #interface ethernet 1/16 no switchport force
+sw-spine-001 [standalone: master] (config) #interface ethernet 1/16 speed 10G force
+sw-spine-001 [standalone: master] (config) #interface ethernet 1/16 ip address 10.102.255.10/30 primary
+sw-spine-001 [standalone: master] (config) #ip route vrf Customer 0.0.0.0/0 10.102.3.3 
+sw-spine-001 [standalone: master] (config) #ip route vrf Customer 0.0.0.0/0 10.102.255.9
+```
+***Aruba***
+
+```
+sw-spine-001# config
+sw-spine-001(config)# Interface 1/1/16
+sw-spine-001(int-1/1/16)# vrf attach Customer
+sw-spine-001(int-1/1/16)# ip address 10.102.255.10/30
+sw-spine-001(int-1/1/16)# no shutdown
+sw-spine-001(int-1/1/16)# exit
+sw-spine-001(int-1/1/16)# ip route 0.0.0.0/0 10.102.3.3 vrf Customer
+sw-spine-001(int-1/1/16)# ip route 0.0.0.0/0 0.102.255.9 vrf Customer
+```
+
+
 <a name="next-topic"></a>
 # Next Topic
 
