@@ -59,11 +59,12 @@ NOTE: these are very simplistic examples and depending on your install scenario 
 ```
 sw-spine-001 [standalone: master] > ena
 sw-spine-001 [standalone: master] # conf t
-sw-spine-001 [standalone: master] (config) #interface ethernet 1/16 no switchport force
-sw-spine-001 [standalone: master] (config) #interface ethernet 1/16 speed 10G force
-sw-spine-001 [standalone: master] (config) #interface ethernet 1/16 ip address 10.102.255.10/30 primary
-sw-spine-001 [standalone: master] (config) #ip route vrf Customer 0.0.0.0/0 10.102.3.3 
-sw-spine-001 [standalone: master] (config) #ip route vrf Customer 0.0.0.0/0 10.102.255.9
+sw-spine-001 [standalone: master] (config) # interface ethernet 1/16 no switchport force
+sw-spine-001 [standalone: master] (config) # interface ethernet 1/16 speed 10G force
+sw-spine-001 [standalone: master] (config) # interface ethernet 1/16 vrf forwarding Customer
+sw-spine-001 [standalone: master] (config) # interface ethernet 1/16 ip address 10.102.255.10/30 primary
+sw-spine-001 [standalone: master] (config) # ip route vrf Customer 0.0.0.0/0 10.102.3.3 
+sw-spine-001 [standalone: master] (config) # ip route vrf Customer 0.0.0.0/0 10.102.255.9
 ```
 ***Aruba***
 
