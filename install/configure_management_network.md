@@ -44,7 +44,7 @@ cabinets will have Aggregation switches.
 
 On a typical system, the Mellanox switches are Spine switches and the Dell switches are used for Aggregation, CDU, and Leaf switches.
 
-## Site connections
+## Site Connections
 
 Currently CANU ***does not*** automatically create site connections (LAGs/uplink interfaces or default routes). 
 
