@@ -23,6 +23,12 @@ For systems with mountain cabinets ONLY. Changes must
 ncn# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'); cmms=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?type=comptype_chassis_bmc" | jq -r '.[] | .Xname'); for cmm in ${cmms}; do echo ${cmm}; curl -sk -u root:password https://${cmm}/redfish/v1/UpdateService/FirmwareInventory/BMC | jq .Version; done
 ```
 
+Alternatively: 
+
+```bash
+ncn# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'); cmms=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?type=comptype_chassis_bmc" | jq -r '.[] | .Xname'); for cmm in ${cmms}; do echo ${cmm}; curl -sk -u root:initial0 https://${cmm}/redfish/v1/UpdateService/FirmwareInventory/BMC/b0 | jq .Version; done
+```
+
 Expected output
 
 ```bash
@@ -54,6 +60,7 @@ router bgp 65533
 **Mellanox:**
 
 ```bash
+sw-spine-001 [standalone: master] > ena
 sw-spine-001 [standalone: master] # show run | include bgp
    protocol bgp
    router bgp 65533 vrf default
