@@ -73,7 +73,7 @@ EOF
         printf "%c" "."
         sleep 10
     done
-    
+    record_state "${state_name}" ${upgrade_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
