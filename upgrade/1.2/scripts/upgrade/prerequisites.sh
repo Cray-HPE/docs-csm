@@ -283,7 +283,9 @@ state_name="UPGRADE_CSM_CONFIG"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
-    helm -n services upgrade csm-config ${CSM_ARTI_DIR}/helm/csm-config-*.tgz --wait
+    helm del -n services csm-config 
+    sleep 10
+    helm -n services upgrade --install csm-config ${CSM_ARTI_DIR}/helm/csm-config-*.tgz --wait
     CSM_CONFIG_VERSION=$(helm list -n services -o json | jq -r '.[] | select (.name=="csm-config") | .app_version')
     record_state ${state_name} $(hostname)
 else
