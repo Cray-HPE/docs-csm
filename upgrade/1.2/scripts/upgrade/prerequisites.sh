@@ -228,7 +228,7 @@ if [[ $state_recorded == "0" ]]; then
     ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
     ./utils/secrets-seed-customizations.sh customizations.yaml || true
     kubectl delete secret -n loftsman site-init
-    kubect create secret -n loftsman generic site-init --from-file=./customizations.yaml
+    kubectl create secret -n loftsman generic site-init --from-file=./customizations.yaml
     popd
 else
     echo "====> ${state_name} has been completed"
