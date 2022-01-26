@@ -451,7 +451,12 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         jq -r '.ExtraProperties.Subnets[]|select(.FullName=="NMN Management Network Infrastructure")|.Gateway')
     SUBNET=$(cray sls networks describe MTL --format json | \
         jq -r '.ExtraProperties.Subnets[]|select(.FullName=="MTL Management Network Infrastructure")|.CIDR')
-    pdsh -w $HOSTS ip route add $SUBNET via $GATEWAY dev vlan002
+    DEVICE="vlan002"
+    ip addr show | grep $DEVICE
+    if [[ $? -ne 0 ]]; then
+        DEVICE="bond0.nmn0"
+    fi
+    pdsh -w $HOSTS ip route add $SUBNET via $GATEWAY dev $DEVICE
     Rcount=$(pdsh -w $HOSTS ip route show | grep $SUBNET | wc -l)
     pdsh -w $HOSTS ip route show | grep $SUBNET
 
