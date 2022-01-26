@@ -36,30 +36,39 @@ echo " ****** BACKUP DATA ON ${upgrade_ncn} TO USB OR OTHER SAFE LOCATION ******
 echo " ****** DATA MANAGED BY K8S/CEPH WILL BE BACKED UP/RESTORED AUTOMATICALLY ******"
 read -p "Read and act on above steps. Press Enter key to continue ..."
 
+state_name="REBUILD_NODE"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    # run cfs job
+    session_name="ncn-rebuild-${upgrade_ncn}-$(date +%s)"
+    cray cfs sessions create --name ${session_name} \
+        --configuration-name rebuild-ncn \
+        --ansible-verbosity 1 \
+        --ansible-limit $(ssh ${upgrade_ncn} 'cat /etc/cray/xname')
 
-# run cfs job
-session_name="ncn-rebuild-${upgrade_ncn}-$(date +%s)"
-cray cfs sessions create --name ${session_name} \
-    --configuration-name rebuild-ncn \
-    --ansible-verbosity 1 \
-    --ansible-limit $(ssh ${upgrade_ncn} 'cat /etc/cray/xname')
+    cfs_job_id=$(cray cfs sessions describe ${session_name} --format json  | jq -r '.status.session.job')
 
-cfs_job_id=$(cray cfs sessions describe ${session_name} --format json  | jq -r '.status.session.job')
-
-echo "Wait for CFS job"
-while true ; do
-    cfs_job_status=$(cray cfs sessions describe ${session_name} --format json  | jq -r '.status.session.status')
-    if [[ ${cfs_job_status} == "complete" ]] ; then
-        cfs_job_succeeded=$(cray cfs sessions describe ${session_name} --format json  | jq -r '.status.session.succeeded')
-        if [[ ${cfs_job_succeeded} == "false" ]]; then
-            echo "cfs job: ${cfs_job_id} failed"
-            exit 1
+    echo "Wait for CFS job"
+    while true ; do
+        cfs_job_status=$(cray cfs sessions describe ${session_name} --format json  | jq -r '.status.session.status')
+        if [[ ${cfs_job_status} == "complete" ]] ; then
+            cfs_job_succeeded=$(cray cfs sessions describe ${session_name} --format json  | jq -r '.status.session.succeeded')
+            if [[ ${cfs_job_succeeded} == "false" ]]; then
+                echo "cfs job: ${cfs_job_id} failed"
+                kubectl logs -n services ${cfs_job_id} -c ansible-0
+                exit 1
+            fi
+            break
         fi
-        break
-    fi
-    printf "%c" "."
-    sleep 20
-done
-# console output cfs log
+        printf "%c" "."
+        sleep 20
+    done
+    
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+
 
 
