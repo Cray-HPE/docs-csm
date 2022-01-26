@@ -230,6 +230,7 @@ if [[ $state_recorded == "0" ]]; then
     kubectl delete secret -n loftsman site-init
     kubectl create secret -n loftsman generic site-init --from-file=./customizations.yaml
     popd
+    record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
