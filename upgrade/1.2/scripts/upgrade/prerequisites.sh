@@ -228,8 +228,9 @@ if [[ $state_recorded == "0" ]]; then
     ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
     ./utils/secrets-seed-customizations.sh customizations.yaml || true
     kubectl delete secret -n loftsman site-init
-    kubect create secret -n loftsman generic site-init --from-file=./customizations.yaml
+    kubectl create secret -n loftsman generic site-init --from-file=./customizations.yaml
     popd
+    record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
@@ -282,7 +283,9 @@ state_name="UPGRADE_CSM_CONFIG"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
-    helm -n services upgrade csm-config ${CSM_ARTI_DIR}/helm/csm-config-*.tgz --wait
+    helm del -n services csm-config 
+    sleep 10
+    helm -n services upgrade --install csm-config ${CSM_ARTI_DIR}/helm/csm-config-*.tgz --wait
     CSM_CONFIG_VERSION=$(helm list -n services -o json | jq -r '.[] | select (.name=="csm-config") | .app_version')
     record_state ${state_name} $(hostname)
 else
@@ -471,6 +474,7 @@ fi
 state_name="SETUP_CFS_CONFIGURATIONS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
     tmp_folder="/tmp/csm-config-management"
     # get current csm-config version
     csm_config_version=$(helm list -n services | grep csm-config | awk '{print $10}')
@@ -496,7 +500,6 @@ EOF
     # make sure we have cfs created
     cray cfs sessions delete rebuild-ncn  2>/dev/null || true
     cray cfs configurations update rebuild-ncn --file /root/rebuild-ncn.json --format json
-    exit 1
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
