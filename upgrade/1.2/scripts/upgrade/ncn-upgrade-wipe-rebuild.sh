@@ -42,6 +42,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     echo
     echo " ***** Rebuild Node: ${upgrade_ncn} *****"
+    echo
     # run cfs job
     session_name="ncn-rebuild-${upgrade_ncn}-$(date +%s)"
     cray cfs sessions create --name ${session_name} \
@@ -50,6 +51,12 @@ if [[ $state_recorded == "0" ]]; then
         --ansible-limit $(ssh ${upgrade_ncn} 'cat /etc/cray/xname')
 
     cfs_job_id=$(cray cfs sessions describe ${session_name} --format json  | jq -r '.status.session.job')
+
+    cat <<EOF
+TIPS:
+    watch cfs job progress:
+        kubectl logs -f -n services ${cfs_job_id} -c ansible-0
+EOF
 
     echo "Wait for CFS job"
     while true ; do
@@ -64,7 +71,7 @@ if [[ $state_recorded == "0" ]]; then
             break
         fi
         printf "%c" "."
-        sleep 20
+        sleep 10
     done
     
 else
