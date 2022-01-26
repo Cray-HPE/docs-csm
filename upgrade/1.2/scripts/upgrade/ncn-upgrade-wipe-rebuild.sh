@@ -65,7 +65,7 @@ EOF
             cfs_job_succeeded=$(cray cfs sessions describe ${session_name} --format json  | jq -r '.status.session.succeeded')
             if [[ ${cfs_job_succeeded} == "false" ]]; then
                 echo "cfs job: ${cfs_job_id} failed"
-                kubectl logs -f -n services --selector=job-name=${cfs_job_id} -c ansible-0
+                kubectl logs -n services --selector=job-name=${cfs_job_id} -c ansible-0
                 exit 1
             fi
             break
