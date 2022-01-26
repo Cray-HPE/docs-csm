@@ -474,6 +474,7 @@ fi
 state_name="SETUP_CFS_CONFIGURATIONS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
     tmp_folder="/tmp/csm-config-management"
     # get current csm-config version
     csm_config_version=$(helm list -n services | grep csm-config | awk '{print $10}')
@@ -499,7 +500,6 @@ EOF
     # make sure we have cfs created
     cray cfs sessions delete rebuild-ncn  2>/dev/null || true
     cray cfs configurations update rebuild-ncn --file /root/rebuild-ncn.json --format json
-    exit 1
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
