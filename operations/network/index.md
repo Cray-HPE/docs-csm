@@ -32,19 +32,13 @@ __________________________________
 CANU (CSM Automatic Network Utility) is a tool used to generate/validate/test the Shasta management network.
 Documentation for CANU can be found at https://github.com/Cray-HPE/canu
 
-## Management network version matrix
-
-| CSM version | Compatable with |
-| ------------- |:-------------:| -----:|
-| 1.0 | N/A |
-| 1.1 | 1.0 |
-| 1.2 | 1.1, 1.0 |
-
 ### Products Supported
 
 This release applies to the following product models
 
+* Aruba 8320 Switch Series
 * Aruba 8325 Switch Series
+* Aruba 8360 Switch Series
 * Aruba 6300 Switch Series
 * Mellanox SN2100 Switch Series
 * Mellanox SN2700 Switch Series
@@ -56,7 +50,9 @@ This release applies to the following product models
 
 | Model | software version |
 | ----- | -----: |
+| Aruba 8320 Switch Series | 10.08.1021 |
 | Aruba 8325 Switch Series | 10.08.1021 |
+| Aruba 8360 Switch Series | 10.08.1021 |
 | Aruba 6300 Switch Series | 10.08.1021 |
 | Mellanox SN2100 Switch Series | 3.9.3210|
 | Mellanox SN2700 Switch Series | 3.9.3210|

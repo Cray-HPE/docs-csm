@@ -1,7 +1,7 @@
 # Update Management Network Firmware
 
 This page describes how to update firmware on the management network switches.
-
+These procedures are also found in the vendor [user guides](./user_guides.md).
 ## Requirements
 
 Access to the switches from the LiveCD/ncn-m001.
@@ -12,17 +12,17 @@ All firmware can be found in the HFP package provided with the Shasta release.
 
 ## Switch Firmware
 
-| Vendor | Model | Version |
-| --- | --- | --- |
-| Aruba | 6300 | ArubaOS-CX_6400-6300_10.06.0010 |
-| Aruba | 8320 | ArubaOS-CX_8320_10.06.0010 or ArubaOS-CX_8320_10.06.0110 |
-| Aruba | 8325 | ArubaOS-CX_8325_10.06.0010 |
-| Aruba | 8360 | ArubaOS-CX_8360_10.06.0010 or ArubaOS-CX_8360_10.06.0110 |
-| Dell | S3048-ON | 10.5.1.4 |
-| Dell | S4148F-ON | 10.5.1.4 |
-| Dell | S4148T-ON | 10.5.1.4 |
-| Mellanox | MSN2100 | 3.9.1014 |
-| Mellanox | MSN2700 | 3.9.1014 |
+| Model | software version |
+| ----- | -----: |
+| Aruba 8320 Switch Series | 10.08.1021 |
+| Aruba 8325 Switch Series | 10.08.1021 |
+| Aruba 8360 Switch Series | 10.08.1021 |
+| Aruba 6300 Switch Series | 10.08.1021 |
+| Mellanox SN2100 Switch Series | 3.9.3210|
+| Mellanox SN2700 Switch Series | 3.9.3210|
+| Dell S3048-ON Switch Series | 10.5.1.4|
+| Dell S4148T-ON Switch Series | 10.5.1.4|
+| Dell S4148F-ON Switch Series | 10.5.1.4|
 
 ## Aruba Firmware Best Practices
 
