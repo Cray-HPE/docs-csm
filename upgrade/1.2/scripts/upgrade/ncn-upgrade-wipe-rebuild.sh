@@ -40,6 +40,8 @@ state_name="REBUILD_NODE"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    echo
+    echo " ***** Rebuild Node: ${upgrade_ncn} *****"
     # run cfs job
     session_name="ncn-rebuild-${upgrade_ncn}-$(date +%s)"
     cray cfs sessions create --name ${session_name} \
