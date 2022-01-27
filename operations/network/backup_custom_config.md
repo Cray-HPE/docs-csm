@@ -8,6 +8,7 @@ This includes:
 - users and passwords
 - snmp credentials
 - site connections
+- interface speed commands
 - default routes
 - any other customized config for this system
 
@@ -32,12 +33,20 @@ interface 1/1/36
     exit
 ```
 ```
+sw-spine-001(config)# show run | include interface-group
+system interface-group 3 speed 10g
+```
+```
 sw-spine-002# show run int 1/1/36
 interface 1/1/36 
     no shutdown 
     description to:CANswitch_cfcanb6s1-46:from:sw-25g02_x3000u40-j36
     ip address 10.101.15.190/30
     exit
+```
+```
+sw-spine-002(config)# show run | include interface-group
+system interface-group 3 speed 10g
 ```
 ```
 sw-spine-001# show run | include "ip route"
@@ -90,6 +99,9 @@ interface 1/1/36
     exit
 ```
 ```
+sw-spine-001(config)# system interface-group 3 speed 10g
+```
+```
 sw-spine-002# conf t
 interface 1/1/36 
     no shutdown 
@@ -97,6 +109,9 @@ interface 1/1/36
     description to:CANswitch_cfcanb6s1-46:from:sw-25g02_x3000u40-j36
     ip address 10.101.15.190/30
     exit
+```
+```
+sw-spine-001(config)# system interface-group 3 speed 10g
 ```
 ```
 sw-spine-001# conf t
@@ -184,6 +199,7 @@ Once these credentials are retrieved from vault you can fill in the `xxxxxx` fie
 ##### Aruba
 
 ```
+sw-leaf-001# show run | include snmp
 snmp-server vrf default
 snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxxx
  ```
