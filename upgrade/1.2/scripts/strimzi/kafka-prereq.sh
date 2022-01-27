@@ -30,8 +30,8 @@ done
 
 echo "Patching kafka topics to be managed by helm"
 for i in $(kubectl get -n services kafkatopics | awk '{print $1}' | tail -n+2); do
-	kubectl annotate -n services kafkatopics.kafka.strimzi.io "$i" 'meta.helm.sh/release-name=cray-shared-kafka'
-	kubectl annotate -n services kafkatopics.kafka.strimzi.io "$i" 'meta.helm.sh/release-namespace=services'
+	kubectl annotate -n services kafkatopics.kafka.strimzi.io "$i" 'meta.helm.sh/release-name=cray-shared-kafka' --overwrite=true
+	kubectl annotate -n services kafkatopics.kafka.strimzi.io "$i" 'meta.helm.sh/release-namespace=services' --overwrite=true
 	kubectl label -n services kafkatopics.kafka.strimzi.io "$i" 'app.kubernetes.io/managed-by=Helm' --overwrite=true
 done
 
