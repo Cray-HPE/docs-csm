@@ -302,6 +302,31 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="UPLOAD_NEW_NCN_IMAGE"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    temp_file=$(mktemp)
+    artdir=${CSM_ARTI_DIR}/images
+    radosgw-admin bucket link --uid=STS --bucket=ncn-images
+    set -o pipefail
+    csi handoff ncn-images \
+          --kubeconfig /etc/kubernetes/admin.conf \
+          --k8s-kernel-path $artdir/kubernetes/*.kernel \
+          --k8s-initrd-path $artdir/kubernetes/initrd*.xz \
+          --k8s-squashfs-path $artdir/kubernetes/kubernetes*.squashfs \
+          --ceph-kernel-path $artdir/storage-ceph/*.kernel \
+          --ceph-initrd-path $artdir/storage-ceph/initrd*.xz \
+          --ceph-squashfs-path $artdir/storage-ceph/storage-ceph*.squashfs | tee $temp_file
+    set +o pipefail
+
+    KUBERNETES_VERSION=`cat $temp_file | grep "export KUBERNETES_VERSION=" | awk -F'=' '{print $2}'`
+    CEPH_VERSION=`cat $temp_file | grep "export CEPH_VERSION=" | awk -F'=' '{print $2}'`
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPDATE_CLOUD_INIT_RECORDS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
@@ -333,35 +358,14 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         --data @cloud-init-global_update.json \
         https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
 
-    csi upgrade metadata --1-0-to-1-2 
+    csi upgrade metadata --1-0-to-1-2 \
+        --k8s-kernel s3://ncn-images/k8s/${KUBERNETES_VERSION}/kernel \
+        --k8s-initrd s3://ncn-images/k8s/${KUBERNETES_VERSION}/initrd \
+        --storage-kernel s3://ncn-images/ceph/${CEPH_VERSION}/kernel \
+        --storage-initrd s3://ncn-images/ceph/${CEPH_VERSION}/initrd
 
     record_state ${state_name} $(hostname)
     echo
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-state_name="UPLOAD_NEW_NCN_IMAGE"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-    temp_file=$(mktemp)
-    artdir=${CSM_ARTI_DIR}/images
-    radosgw-admin bucket link --uid=STS --bucket=ncn-images
-    set -o pipefail
-    csi handoff ncn-images \
-          --kubeconfig /etc/kubernetes/admin.conf \
-          --k8s-kernel-path $artdir/kubernetes/*.kernel \
-          --k8s-initrd-path $artdir/kubernetes/initrd*.xz \
-          --k8s-squashfs-path $artdir/kubernetes/kubernetes*.squashfs \
-          --ceph-kernel-path $artdir/storage-ceph/*.kernel \
-          --ceph-initrd-path $artdir/storage-ceph/initrd*.xz \
-          --ceph-squashfs-path $artdir/storage-ceph/storage-ceph*.squashfs | tee $temp_file
-    set +o pipefail
-
-    KUBERNETES_VERSION=`cat $temp_file | grep "export KUBERNETES_VERSION=" | awk -F'=' '{print $2}'`
-    CEPH_VERSION=`cat $temp_file | grep "export CEPH_VERSION=" | awk -F'=' '{print $2}'`
-    record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
