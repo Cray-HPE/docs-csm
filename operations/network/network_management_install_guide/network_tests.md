@@ -11,13 +11,13 @@ Tests are found here https://github.com/Cray-HPE/canu/blob/main/canu/test/aruba/
 
 ##### Examples
 - Pulling switch inventory from SLS and logging to screen, this requires the API gateway to be up.
-`ncn-w001:~ # canu test --log`
+    - `ncn-w001:~ # canu test --log`
 
 - Pulling switch inventory from sls file and connecting to the switches via their CMN IPs, this can be done outside the shasta cluster.
-`ncn-w001:~ # canu test --sls-file ../Hela/sls_input_file.json --network CMN`
+    - `ncn-w001:~ # canu test --sls-file ../Hela/sls_input_file.json --network CMN`
 
 - Pulling switch inventory from SLS and having the output be in json format.
-`ncn-w001:~ # canu test --json`
+    - `ncn-w001:~ # canu test --json`
 
 Running the tests can take some time if there are a lot of management switches.
 

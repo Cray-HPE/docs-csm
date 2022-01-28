@@ -1,6 +1,6 @@
 # Wipe switch config
 
-#### Aruba
+### Aruba
 
 It is recommended to create a checkpoint before erasing the switch config.
 
@@ -32,4 +32,47 @@ Do you want to save the current configuration (y/n)? n
 The switch will reboot without any config.
 The default user is `admin` without any password.
 
-The next step is likely. [apply switch configs](apply_switch_configs.md).
+The next step is likely going to be [apply switch configs](apply_switch_configs.md).
+
+### Dell
+
+- save startup config to new xml config
+```
+sw-leaf-bmc-001(config)# copy config://startup.xml config://csm1.0.xml
+```
+- Erase the startup config and reboot
+```
+sw-leaf-bmc-001# delete startup-configuration
+Proceed to delete startup-configuration [confirm yes/no(default)]:yes
+sw-leaf-bmc-001# reload
+System configuration has been modified. Save? [yes/no]:no
+Continuing without saving system configuration
+Proceed to reboot the system? [confirm yes/no]:yes
+```
+- This will boot the switch to factory defaults, The next step is likely going to be [apply switch configs](apply_switch_configs.md).
+
+### Mellanox
+
+- Create a new config file for csm 1.2, when a new config file is created no data is written to it. We will boot to this new config file and
+paste the CANU generated config to it.
+```
+(config) # configuration new csm1.2
+```
+- check that the configuration files contain the new csm1.2 blank config we just created.
+```
+(config) # show configuration
+files
+csm1.0 (active)
+csm1.2
+initial
+initial.bak
+Active configuration: csm1.0
+Unsaved changes : no
+```
+- We will now switch to the new config, this requires a reboot
+```
+(config) # configuration switch-to csm1.2
+This requires a reboot.
+Type 'yes' to confirm: yes
+```
+The next step is likely going to be [apply switch configs](apply_switch_configs.md).

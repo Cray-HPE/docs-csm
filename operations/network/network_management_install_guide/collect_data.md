@@ -10,6 +10,8 @@ For example:
 
 * ***Step 2***: Retrieve SLS file from a Shasta system (log in to ncn-m001) on a NCN, this will output the sls file to a file called sls_file.json in your current working directory. 
 
+##### If this is an upgrade SLS needs to be updated to the correct CSM version first.
+
 Run the command  
 
 ```
