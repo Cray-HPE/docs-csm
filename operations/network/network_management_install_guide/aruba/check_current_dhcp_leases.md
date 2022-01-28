@@ -1,6 +1,6 @@
 # Check current DHCP leases
 
-We'll use the Kea API to retrieve data from the DHCP lease database.
+We will use the Kea API to retrieve data from the DHCP lease database.
 First you need to get the auth token, On ncn-w001 or a worker/manager with kubectl, run:
 
 ```

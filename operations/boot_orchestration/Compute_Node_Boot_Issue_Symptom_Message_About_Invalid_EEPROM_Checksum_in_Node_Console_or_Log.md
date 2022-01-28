@@ -18,10 +18,15 @@ The following figure shows that the EEPROM checksum errors lead to a `dracut-ini
 
 ### Problem Detection
 
-Run dmidecode from the compute node to identify its model. H87926-500 is the silver model that may exhibit this issue, whereas the production model, H87926-550, does not exhibit SOL connection issues.
+Run `dmidecode` from the compute node to identify its model. H87926-500 is the silver model that may exhibit this issue, whereas the production model, H87926-550, does not exhibit SOL connection issues.
 
 ```bash
 cmp4:~ # dmidecode|grep H87926
+```
+
+Example output:
+
+```
         Version: H87926-550
 ```
 

@@ -86,6 +86,11 @@ csm-config-management repository directory:
 
     ```
     ncn# grep csm_passwordless_ssh_enabled roles/trust-csm-ssh-keys/defaults/main.yaml
+    ```
+    
+    Example output:
+
+    ```
     csm_passwordless_ssh_enabled: 'false'
     ```
 

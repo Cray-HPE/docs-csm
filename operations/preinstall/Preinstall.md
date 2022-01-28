@@ -18,7 +18,7 @@ This procedure is outlined in [Change Liquid-Cooled BMC Credentials](../security
 
 ### ServerTech PDU Default Credentials
 
-ServerTech PDUs must have their default credentials set as well.  These are
+ServerTech PDUs must have their default credentials set as well. These are
 not native Redfish devices; they have a proprietary interface which is
 abstracted by the HMS Redfish Translation Service.
 

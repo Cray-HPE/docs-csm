@@ -146,16 +146,6 @@ sections, but there is also a general troubleshooting topic.
       yet been redeployed. In addition, redeploying the PIT node successfully requires several CSM services to be working
       properly, so validating this is important.
 
-      **Note**: At this point of the install, the `cray` CLI has not yet been configured. Some of the tests (Hardware State
-      Manager Discovery Validation, Booting the CSM Barebones Image on compute nodes, UAS/UAI) require it to be configured
-      in order to run. These tests may be skipped until after the PIT node has been redeployed, but **this is not recommended**.
-
-      To enable the 'cray' CLI in order to execute those tests, follow these two procedures before performing the CSM health
-      validation:
-
-         1. [Configure Keycloak Account](configure_administrative_access.md#configure_keycloak_account)
-         1. [Configure the Cray Command Line Interface (cray CLI)](configure_administrative_access.md#configure_cray_cli)
-
       To run the CSM health checks, see [Validate CSM Health](../operations/validate_csm_health.md)
    <a name="deploy_final_ncn"></a>
 
@@ -218,7 +208,6 @@ sections, but there is also a general troubleshooting topic.
       the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
       available. Once FAS is aware that new firmware is available, then see
       [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
-
    <a name="prepare_compute_nodes"></a>
 
    1. Prepare Compute Nodes
@@ -232,6 +221,7 @@ sections, but there is also a general troubleshooting topic.
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
    <a name="next_topic"></a>
+
    1. Next Topic
 
       After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has

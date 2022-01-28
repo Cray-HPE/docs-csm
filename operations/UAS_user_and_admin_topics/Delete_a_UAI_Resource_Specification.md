@@ -4,7 +4,7 @@
 
 ## Delete a UAI Resource Specification
 
-Delete a specific UAI resource specification using the `resource_id` of that specification. Once deleted, UAIs will no longer be able to use that specification for creation.  Existing UAIs are not affected by the change.
+Delete a specific UAI resource specification using the `resource_id` of that specification. Once deleted, UAIs will no longer be able to use that specification for creation. Existing UAIs are not affected by the change.
 
 ### Prerequisites
 

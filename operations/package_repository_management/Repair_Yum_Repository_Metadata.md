@@ -90,6 +90,11 @@ The system is fully installed.
 
         ```bash
         ncn# kubectl -n nexus get pods | grep nexus
+        ```
+
+        Example output:
+
+        ```
         nexus-55d8c77547-65k6q              2/2     Running     1          22h
         ```
 
@@ -98,6 +103,11 @@ The system is fully installed.
         ```bash
         ncn# kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
         -c nexus -- ls -ltr /nexus-data/log/tasks
+        ```
+
+        Example output:
+
+        ```
         total 8
         -rw-r--r-- 1 nexus nexus 1763 Aug 23 00:50 repository.yum.rebuild.metadata-20200822235306934.log
         -rw-r--r-- 1 nexus nexus 1525 Aug 23 01:00 repository.cleanup-20200823010000013.log
@@ -109,6 +119,11 @@ The system is fully installed.
         ncn# kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
         -c nexus -- grep -R 'Rebuilding yum metadata for repository mirror-1.3.0-opensuse-leap-15' \
         /nexus-data/log/tasks
+        ```
+
+        Example output:
+
+        ```
         /nexus-data/log/tasks/repository.yum.rebuild.metadata-20200822235306934.log:2020-08-22 23:53:06,936+0000 INFO  [event-12-thread-797]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.CreateRepoFacetImpl - Rebuilding yum metadata for repository mirror-1.3.0-opensuse-leap-15
         ```
 
@@ -119,6 +134,11 @@ The system is fully installed.
         ```bash
         ncn# kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
         -c nexus -- cat /nexus-data/log/tasks/repository.yum.rebuild.metadata-20200822235306934.log
+        ```
+
+        Example output:
+
+        ```
         2020-08-22 23:53:06,934+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask - Task information:
         2020-08-22 23:53:06,935+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  ID: 35536bcd-3947-4ba9-8d6d-43dcadbb87ad
         2020-08-22 23:53:06,935+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  Type: repository.yum.rebuild.metadata
@@ -146,6 +166,11 @@ The system is fully installed.
 ```bash
 ncn# kubectl -n nexus exec -ti nexus-55d8c77547-65k6q -c nexus -- \
 cat /nexus-data/log/tasks/repository.yum.rebuild.metadata-20200822231259523.log
+```
+
+Example output:
+
+```
 2020-08-22 23:12:59,523+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask - Task information:
 2020-08-22 23:12:59,526+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  ID: 35536bcd-3947-4ba9-8d6d-43dcadbb87ad
 2020-08-22 23:12:59,526+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  Type: repository.yum.rebuild.metadata

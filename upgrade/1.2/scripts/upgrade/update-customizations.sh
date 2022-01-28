@@ -247,6 +247,8 @@ yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'chn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'nmn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'hmn.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'nmnlb.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'hmnlb.{{ network.dns.external }}'
 
 # Add required PowerDNS and Unbound configuration
 yq w -i "$c" 'spec.kubernetes.services.cray-dns-unbound.domain_name' '{{ network.dns.external }}'
@@ -291,8 +293,8 @@ yq w -i "$c" 'spec.kubernetes.services.gatekeeper-policy-manager.gatekeeper-poli
 yq d -i "$c" 'spec.kubernetes.services.cray-opa.jwtValidation'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.shasta-cmn' 'https://api.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-cmn' 'https://auth.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
-yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.shasta-nmn' 'https://api.nmn.{{ network.dns.external }}/keycloak/realms/shasta'
-yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-nmn' 'https://auth.nmn.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.shasta-nmn' 'https://api.nmnlb.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-nmn' 'https://auth.nmnlb.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-admin.issuers.shasta-cmn' 'https://api.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-admin.issuers.keycloak-cmn' 'https://auth.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-user.issuers.shasta-chn' 'https://api.chn.{{ network.dns.external }}/keycloak/realms/shasta'
@@ -311,16 +313,18 @@ yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dns
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.chn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.nmn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.hmn.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.nmnlb.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.hmnlb.{{ network.dns.external }}'
 yq d -i "$c" 'spec.kubernetes.services.cray-istio.extraIngressServices'
 yq d -i "$c" 'spec.kubernetes.services.cray-istio.ingressgatewayhmn'
 
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway.loadBalancerIP' '{{ network.netstaticips.nmn_api_gw }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway.serviceAnnotations.[metallb.universe.tf/address-pool]' 'node-management'
-yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.nmn.{{ network.dns.external}},auth.nmn.{{ network.dns.external }}'
+yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.nmnlb.{{ network.dns.external}},auth.nmnlb.{{ network.dns.external }}'
 
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.loadBalancerIP' '{{ network.netstaticips.hmn_api_gw }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations[metallb.universe.tf/address-pool]' 'hardware-management'
-yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'hmcollector.hmn.{{ network.dns.external }}'
+yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'hmcollector.hmnlb.{{ network.dns.external }}'
 
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-can.serviceAnnotations.[metallb.universe.tf/address-pool]' 'customer-access'
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-can.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.can.{{ network.dns.external}},auth.can.{{ network.dns.external }}'
@@ -340,6 +344,25 @@ yq w -i --style=single "$c" 'spec.kubernetes.services.cray-keycloak.setup.keyclo
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-keycloak.setup.keycloak.clients.oauth2-proxy-customer-management.proxiedHosts' '{{ proxiedWebAppExternalHostnames.customerManagement }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-keycloak.setup.keycloak.clients.oauth2-proxy-customer-access.proxiedHosts' '{{ proxiedWebAppExternalHostnames.customerAccess }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-keycloak.setup.keycloak.clients.oauth2-proxy-customer-high-speed.proxiedHosts' '{{ proxiedWebAppExternalHostnames.customerHighSpeed }}'
+
+# nexus -- add admin credential
+if [[ -z "$(yq r "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential')" ]]; then
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.name' nexus-admin-credential
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[0].type' static
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[0].args.name' username
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[0].args.value' "${NEXUS_USERNAME:-admin}"
+    if [[ -v NEXUS_PASSWORD && -n "$NEXUS_PASSWORD" ]]; then
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].type' static_b64
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.name' password
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.value' "$(base64 <<< "$NEXUS_PASSWORD")"
+    else
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].type' randstr
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.name' password
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.length' 32
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.encoding' base64
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.url_safe' yes
+    fi
+fi
 
 # remove cray-keycloak-gatekeeper
 yq d -i "$c" 'spec.kubernetes.services.cray-keycloak-gatekeeper'
@@ -371,12 +394,12 @@ yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.custom
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-management.hostAliases[0].hostnames[+]' 'auth.cmn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-management.hosts' '{{ proxiedWebAppExternalHostnames.customerManagement }}'
 
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-management'] | toYaml }}"
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-access'] | toYaml }}"
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.hostAliases[0].ip' '{{ network.netstaticips.nmn_api_gw }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.hostAliases[0].hostnames[0]' 'auth.can.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.hosts' '{{ proxiedWebAppExternalHostnames.customerAccess }}'
 
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-management'] | toYaml }}"
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-high-speed'] | toYaml }}"
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.hostAliases[0].ip' '{{ network.netstaticips.nmn_api_gw }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.hostAliases[0].hostnames[0]' 'auth.chn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.hosts' '{{ proxiedWebAppExternalHostnames.customerHighSpeed }}'
@@ -393,7 +416,7 @@ yq w -i "$c" 'spec.kubernetes.services.cray-uas-mgr.images.images[+]' 'cray/cray
 yq w -i "$c" 'spec.kubernetes.services.cray-uas-mgr.images.defaultImage' 'cray/cray-uai-sles15sp1:latest'
 
 # cray-metallb
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-metallb.metallb.configInLine' '{{ network.metallb | toYaml }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-metallb.metallb.configInline' '{{ network.metallb | toYaml }}'
 
 # wlm.macvlan
 yq d -i "$c" 'spec.wlm.macvlansetup.nmn_vlan'

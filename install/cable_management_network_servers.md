@@ -85,7 +85,7 @@ NOTES:
 
 * REQUIRED:  Master 001 (ncn-m001) is required to have a site connection on OCP Port 2 for installation and maintenance.
 * RECOMMENDED: Masters 002 and 003 may optionally have a site connection on OCP Port 2 for emergency system access.
-* REQUIRED:  Master 001 (ncn-m001) is required to have it's BMC/iLO connected to the site.
+* REQUIRED:  Master 001 (ncn-m001) is required to have its BMC/iLO connected to the site.
 <br>
 <br>
 

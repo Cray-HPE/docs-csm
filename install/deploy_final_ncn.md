@@ -391,14 +391,14 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
     Expected output looks similar to the following:
 
-    ```
-    NAME       STATUS   ROLES    AGE     VERSION
-    ncn-m001   Ready    master   7s      v1.18.6
-    ncn-m002   Ready    master   4h40m   v1.18.6
-    ncn-m003   Ready    master   4h38m   v1.18.6
-    ncn-w001   Ready    <none>   4h39m   v1.18.6
-    ncn-w002   Ready    <none>   4h39m   v1.18.6
-    ncn-w003   Ready    <none>   4h39m   v1.18.6
+    ```text
+    NAME       STATUS   ROLES                  AGE   VERSION
+    ncn-m001   Ready    control-plane,master   27s   v1.20.13
+    ncn-m002   Ready    control-plane,master   4h    v1.20.13
+    ncn-m003   Ready    control-plane,master   4h    v1.20.13
+    ncn-w001   Ready    <none>                 4h    v1.20.13
+    ncn-w002   Ready    <none>                 4h    v1.20.13
+    ncn-w003   Ready    <none>                 4h    v1.20.13
     ```
 
 1. Restore and verify the site link. It will be necessary to restore the `ifcfg-lan0` file from either manual backup taken during the prior "Hand-Off" step or re-mount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.

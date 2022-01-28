@@ -3,18 +3,23 @@
 Rebuild a master, worker, or storage non-compute node (NCN). Use this procedure in the event that a node has a hardware failure, or some other issue with the node has occurred that warrants rebuilding the node.
 
 The following is a high-level overview of the NCN rebuild workflow:
-1. [Prepare Node](#prepare_nodes)
-    * There is a different procedure for each type of node (worker, master, and storage).
-1. [Identify Node and Update Metadata](#identify_node_and_update_metadata)
-    * Same procedure for all node types.
-1. [Wipe Disks](#wipe_disks)
-    * Same for master and worker nodes, but different for storage nodes.
-1. [Power Cycle Node](#power_cycle_node)
-    * Same procedure for all node types.
-1. [Rebuild Storage Node](#rebuild__storage_node)
-    * Only needed for storage nodes
-1. [Validation](#validation)
-    * There is a different procedure for each type of node (worker, master, and storage).
+- [Rebuild NCNs](#rebuild-ncns)
+  - [Prerequisites](#prerequisites)
+  - [Procedure](#procedure)
+    - [1. Prepare Node](#1-prepare-node)
+      - [1.1. Prepare Worker Node](#11-prepare-worker-node)
+      - [1.2. Prepare Master Node](#12-prepare-master-node)
+      - [1.3. Prepare Storage Node](#13-prepare-storage-node)
+      - [2. Identify Nodes and Update Metadata](#2-identify-nodes-and-update-metadata)
+      - [3. Wipe Disks](#3-wipe-disks)
+        - [3.1. Wipe Disks: Master or Worker](#31-wipe-disks-master-or-worker)
+        - [3.2. Wipe Disks: Storage](#32-wipe-disks-storage)
+      - [4. Power Cycle Node](#4-power-cycle-node)
+      - [5. Rebuild Storage Node](#5-rebuild-storage-node)
+      - [6. Validation](#6-validation)
+        - [6.1. Validate Worker Node](#61-validate-worker-node)
+        - [6.2. Validate Master Node](#62-validate-master-node)
+        - [6.3. Validate Storage Node](#63-validate-storage-node)
 
 ## Prerequisites
 
@@ -58,6 +63,11 @@ Skip this section if rebuilding a master or storage node. Unless otherwise noted
 
     ```bash
     ncn# cray cps deployment list --format json | grep -C1 podname
+    ```
+
+    Example output:
+
+    ```
         "node": "ncn-w002",
         "podname": "cray-cps-cm-pm-j7td7"
       },
@@ -89,6 +99,11 @@ Skip this section if rebuilding a master or storage node. Unless otherwise noted
 
     ```bash
     ncn# cray cfs components describe $XNAME --format json
+    ```
+
+    Example output:
+
+    ```
     {
       "configurationStatus": "configured",
       "desiredConfig": "ncn-personalization-full",
@@ -108,7 +123,7 @@ Skip this section if rebuilding a master or storage node. Unless otherwise noted
     ncn# kubectl drain --ignore-daemonsets --delete-local-data $NODE
     ```
 
-    You may run into pods that cannot be gracefully evicted due to Pod Disruption Budgets (PDB), for example:
+    There may be pods that cannot be gracefully evicted due to Pod Disruption Budgets (PDB), for example:
 
     ```
     error when evicting pod "<pod>" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.
@@ -144,6 +159,11 @@ Skip this section if rebuilding a worker or storage node. The commands should be
 
     ```bash
     ncn-m# cray cfs components describe $XNAME --format json
+    ```
+
+    Example output:
+
+    ```
     {
       "configurationStatus": "configured",
       "desiredConfig": "ncn-personalization-full",
@@ -289,6 +309,11 @@ Skip this section if rebuilding a master or worker node.
 
     ```bash
     ncn# cray cfs components describe $XNAME --format json
+    ```
+
+    Example output:
+
+    ```
     {
       "configurationStatus": "configured",
       "desiredConfig": "ncn-personalization-full",
@@ -306,6 +331,11 @@ Skip this section if rebuilding a master or worker node.
 
     ```bash
     ncn-s# ceph osd tree
+    ```
+
+    Example output:
+
+    ```
     ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
     -1       20.95917 root default
     -3        6.98639     host ncn-s001
@@ -329,6 +359,11 @@ Skip this section if rebuilding a master or worker node.
 
     ```bash
     ncn-s# ceph -s
+    ```
+
+    Example output:
+
+    ```
       cluster:
         id:     22d01fcd-a75b-4bfc-b286-2ed8645be2b5
         health: HEALTH_WARN
@@ -366,6 +401,11 @@ Skip this section if rebuilding a master or worker node.
 
     ```bash
     ncn-s# ceph mon dump
+    ```
+
+    Example output:
+
+    ```
     dumped monmap epoch 5
     epoch 5
     fsid 22d01fcd-a75b-4bfc-b286-2ed8645be2b5
@@ -389,6 +429,11 @@ Skip this section if rebuilding a master or worker node.
 
     ```bash
     ncn-s# ceph -s
+    ```
+
+    Example output:
+
+    ```
       cluster:
         id:     22d01fcd-a75b-4bfc-b286-2ed8645be2b5
         health: HEALTH_WARN
@@ -436,6 +481,11 @@ Skip this section if rebuilding a master or worker node.
     ```bash
     ncn-s# for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd \
         --force; ceph osd purge osd.$osd --force; done
+    ```
+
+    Example output:
+
+    ```
     destroyed osd.1
     purged osd.1
     destroyed osd.3
@@ -673,7 +723,7 @@ This section applies to all node types. The commands in this section assume you 
            systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
     ```
 
-    **Rebuilt node with modified ssh key(s):** The cloud-init process can fail when accessing other nodes if ssh keys have been modified in the cluster.  If this occurs, the following steps can be used to repair the desired ssh keys on the newly rebuilt node:
+    **Rebuilt node with modified ssh key(s):** The cloud-init process can fail when accessing other nodes if ssh keys have been modified in the cluster. If this occurs, the following steps can be used to repair the desired ssh keys on the newly rebuilt node:
 
     1. Allow cloud-init to fail due to the non-matching keys.
     1. Copy the correct ssh key(s) to the newly rebuilt node.
@@ -689,19 +739,24 @@ This section applies to all node types. The commands in this section assume you 
 
     1. Find the desired IP address.
 
-        This command assumes you have set the variables from [the prerequisites section](#set-var).
+        This command assumes you have set the variables from [the prerequisites section](#set-var). 
+        An IP address will be returned.
 
         ```bash
         ncn# dig +short ${NODE}.hmn
-        10.254.1.16
         ```
 
-    1. Confirm the output from the dig command matches the interface.
+    2. Confirm the output from the dig command matches the interface.
 
         If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
 
         ```bash
         ncn# ip addr show bond0.hmn0
+        ```
+
+        Example output:
+
+        ```
         14: bond0.hmn0@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
             link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
             inet 10.254.1.16/17 brd 10.254.127.255 scope global bond0.hmn0
@@ -722,37 +777,42 @@ This section applies to all node types. The commands in this section assume you 
             IPADDR='10.254.1.16/17'
             ```
 
-        1. Restart the `bond0.hmn0` network interface.
+        2. Restart the `bond0.hmn0` network interface.
 
             ```bash
             ncn# wicked ifreload bond0.hmn0
             ```
 
-        1. Confirm the output from the dig command matches the interface.
+        3. Confirm the output from the dig command matches the interface.
 
             ```bash
             ncn# ip addr show bond0.hmn0
             ```
 
-1. Confirm that `bond0.cmn0` is up with the correct IP address on the rebuilt node.
+2. Confirm that `bond0.cmn0` is up with the correct IP address on the rebuilt node.
 
     Run these commands on the rebuilt node.
 
     1. Find the desired IP address.
     
         This command assumes you have set the variables from [the prerequisites section](#set-var).
+        An IP address will be returned.
 
         ```bash
         ncn# dig +short ${NODE}.can
-        10.103.8.11
         ```
 
-    1. Confirm the output from the dig command matches the interface.
+    2. Confirm the output from the dig command matches the interface.
 
         If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
 
         ```bash
         ncn# ip addr show bond0.cmn0
+        ```
+
+        Example output:
+
+        ```
         15: bond0.cmn0@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
             link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
             inet 10.103.8.11/24 brd 10.103.8.255 scope global bond0.cmn0
@@ -773,23 +833,23 @@ This section applies to all node types. The commands in this section assume you 
             IPADDR='10.103.8.11/24'
             ```
 
-        1. Restart the `bond0.cmn0` network interface.
+        2. Restart the `bond0.cmn0` network interface.
 
             ```bash
             ncn# wicked ifreload bond0.cmn0
             ```
 
-        1. Confirm the output from the dig command matches the interface.
+        3. Confirm the output from the dig command matches the interface.
 
             ```bash
             ncn# ip addr show bond0.cmn0
             ```
 
-1. Set the wipe flag back so it will not wipe the disk when the node is rebooted.
+3. Set the wipe flag back so it will not wipe the disk when the node is rebooted.
 
     1. Edit the XNAME.json file and set the `metal.no-wipe=1` value.
 
-    1. Do a PUT action for the edited JSON file.
+    2. Do a PUT action for the edited JSON file.
     
         This command can be run from any node. This command assumes you have set the variables from [the prerequisites section](#set-var).
 
@@ -853,10 +913,9 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
     ncn-s# cd /etc/ansible/group_vars
     ncn-s# export RGW_VIRTUAL_IP=$(craysys metadata get rgw-virtual-ip)
     ncn-s# echo $RGW_VIRTUAL_IP
-    10.252.1.3
     ```
 
-1. Run the ceph-ansible playbook to reinstall the node and bring it back into the cluster.
+2. Run the ceph-ansible playbook to reinstall the node and bring it back into the cluster.
 
     Run the following commands on the storage node being rebuilt.
 
@@ -865,13 +924,13 @@ This section applies to storage nodes. Skip this section if rebuilding a master 
     ncn-s# ansible-playbook /etc/ansible/ceph-ansible/site.yml
     ```
 
-1. Open another SSH session to a storage node that is not currently being rebuilt, and then monitor the build.
+3. Open another SSH session to a storage node that is not currently being rebuilt, and then monitor the build.
 
     ```bash
     ncn-s# watch ceph -s
     ```
 
-1. Run the radosgw-sts-setup.yml Ansible play on the storage node being rebuilt.
+4. Run the radosgw-sts-setup.yml Ansible play on the storage node being rebuilt.
 
     Ensure Ceph is healthy and the ceph-ansible playbook has finished before running the following Ansible play on the storage node being rebuilt.
 
@@ -915,30 +974,40 @@ Skip this section if a master or storage node was rebuilt.
 
       ```bash
       ncn-mw# kubectl get nodes
-      NAME       STATUS   ROLES    AGE    VERSION
-      ncn-m001   Ready    master   113m   v1.18.6
-      ncn-m002   Ready    master   113m   v1.18.6
-      ncn-m003   Ready    master   112m   v1.18.6
-      ncn-w001   Ready    <none>   112m   v1.18.6
-      ncn-w002   Ready    <none>   112m   v1.18.6
-      ncn-w003   Ready    <none>   112m   v1.18.6
       ```
 
-1. Ensure there is proper routing set up for liquid-cooled hardware.
+      Example output:
 
-1. Confirm /var/lib/containerd is on overlay on the node which was rebooted.
+      ```
+      NAME       STATUS   ROLES                  AGE   VERSION
+      ncn-m001   Ready    control-plane,master   27h   v1.20.13
+      ncn-m002   Ready    control-plane,master   8d    v1.20.13
+      ncn-m003   Ready    control-plane,master   8d    v1.20.13
+      ncn-w001   Ready    <none>                 8d    v1.20.13
+      ncn-w002   Ready    <none>                 8d    v1.20.13
+      ncn-w003   Ready    <none>                 8d    v1.20.13
+      ```
+
+2. Ensure there is proper routing set up for liquid-cooled hardware.
+
+3. Confirm /var/lib/containerd is on overlay on the node which was rebooted.
 
     Run the following command on the rebuilt node.
 
     ```bash
     ncn-w# df -h /var/lib/containerd
+    ```
+
+    Example output:
+
+    ```
     Filesystem            Size  Used Avail Use% Mounted on
     containerd_overlayfs  378G  245G  133G  65% /var/lib/containerd
     ```
 
     After several minutes of the node joining the cluster, pods should be in a `Running` state for the worker node.
 
-1. Confirm the pods are beginning to get scheduled and reach a `Running` state on the worker node. 
+4. Confirm the pods are beginning to get scheduled and reach a `Running` state on the worker node. 
 
     Run this command on any master or worker node. This command assumes you have set the variables from [the prerequisites section](#set-var).
 
@@ -946,16 +1015,21 @@ Skip this section if a master or storage node was rebuilt.
     ncn# kubectl get po -A -o wide | grep $NODE
     ```
 
-1. Confirm BGP is healthy.
+5. Confirm BGP is healthy.
 
     Follow the steps in the [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) to verify and fix BGP if needed.
 
-1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+6. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
     The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](#set-var).
 
     ```bash
     ncn# cray cfs components describe $XNAME --format json
+    ```
+
+    Example output:
+
+    ```
     {
       "configurationStatus": "configured",
       "desiredConfig": "ncn-personalization-full",
@@ -968,7 +1042,7 @@ Skip this section if a master or storage node was rebuilt.
     If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
     If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from `cray-cfs` to determine why the configuration may not have completed.
 
-1. Redeploy the `cray-cps-cm-pm` pod.
+7. Redeploy the `cray-cps-cm-pm` pod.
 
     This step is only required if the `cray-cps-cm-pm` pod was running on the node before it was rebuilt.
     > The Content Projection Service (CPS) is part of the COS product so if this worker node is being rebuilt before the COS product has been installed, CPS will not be installed yet.
@@ -978,7 +1052,7 @@ Skip this section if a master or storage node was rebuilt.
     ncn# cray cps deployment update --nodes "ncn-w001,ncn-w002"
     ```
 
-1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
+8. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
     ```bash
     ncn-mw# /opt/cray/platform-utils/ncnHealthChecks.sh
@@ -999,27 +1073,37 @@ Skip this section if a worker or storage node was rebuilt.
 
     ```bash
     ncn-mw# kubectl get nodes
-    NAME       STATUS   ROLES    AGE    VERSION
-    ncn-m001   Ready    master   113m   v1.18.6
-    ncn-m002   Ready    master   113m   v1.18.6
-    ncn-m003   Ready    master   112m   v1.18.6
-    ncn-w001   Ready    <none>   112m   v1.18.6
-    ncn-w002   Ready    <none>   112m   v1.18.6
-    ncn-w003   Ready    <none>   112m   v1.18.6
     ```
 
-1. Ensure there is proper routing set up for liquid-cooled hardware.
+    Example output:
 
-1. Confirm the `sdc` disk has the correct lvm on the rebuilt node.
+    ```
+    NAME       STATUS   ROLES                  AGE   VERSION
+    ncn-m001   Ready    control-plane,master   27h   v1.20.13
+    ncn-m002   Ready    control-plane,master   8d    v1.20.13
+    ncn-m003   Ready    control-plane,master   8d    v1.20.13
+    ncn-w001   Ready    <none>                 8d    v1.20.13
+    ncn-w002   Ready    <none>                 8d    v1.20.13
+    ncn-w003   Ready    <none>                 8d    v1.20.13
+    ```
+
+2. Ensure there is proper routing set up for liquid-cooled hardware.
+
+3. Confirm the `sdc` disk has the correct lvm on the rebuilt node.
 
     ```bash
     ncn-m# lsblk | grep -A2 ^sdc
+    ```
+
+    Example output:
+
+    ```
     sdc                   8:32   0 447.1G  0 disk
      └─ETCDLVM           254:0    0 447.1G  0 crypt
        └─etcdvg0-ETCDK8S 254:1    0    32G  0 lvm   /run/lib-etcd
     ```
 
-1. Confirm `etcd` is running and shows the node as a member once again.
+4. Confirm `etcd` is running and shows the node as a member once again.
 
     The newly built master node should be in the returned list.
 
@@ -1028,12 +1112,17 @@ Skip this section if a worker or storage node was rebuilt.
                    --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
     ```
 
-1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+5. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
     The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](#set-var).
 
     ```bash
     ncn# cray cfs components describe $XNAME --format json
+    ```
+
+    Example output:
+
+    ```
     {
       "configurationStatus": "configured",
       "desiredConfig": "ncn-personalization-full",
@@ -1046,7 +1135,7 @@ Skip this section if a worker or storage node was rebuilt.
     If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
     If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from `cray-cfs` to determine why the configuration may not have completed.
 
-1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
+6. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
     ```bash
     ncn-mw# /opt/cray/platform-utils/ncnHealthChecks.sh
@@ -1065,6 +1154,11 @@ Skip this section if a master or worker node was rebuilt.
 
     ```bash
     ncn-m# ceph -s
+    ```
+
+    Example output
+
+    ```
       cluster:
         id:     22d01fcd-a75b-4bfc-b286-2ed8645be2b5
         health: HEALTH_OK
@@ -1091,6 +1185,11 @@ Skip this section if a master or worker node was rebuilt.
 
     ```bash
     ncn-m# ceph osd tree
+    ```
+
+    Example output:
+
+    ```
     ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
     -1       20.95917 root default
     -3        6.98639     host ncn-s001
@@ -1126,6 +1225,11 @@ Skip this section if a master or worker node was rebuilt.
 
     ```bash
     ncn# cray cfs components describe $XNAME --format json
+    ```
+
+    Example output:
+
+    ```
     {
       "configurationStatus": "configured",
       "desiredConfig": "ncn-personalization-full",

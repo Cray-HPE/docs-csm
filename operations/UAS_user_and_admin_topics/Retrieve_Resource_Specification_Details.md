@@ -12,7 +12,7 @@ Display a specific resource specification using the `resource_id` of that specif
 * The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
 * The HPE Cray EX System CLI must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
 * The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
-* The administrsator must know the Resource ID of the resource specification to be retrieved: [List Resource Specifications](List_UAI_Resource_Specifications.md)
+* The administrator must know the Resource ID of the resource specification to be retrieved: [List Resource Specifications](List_UAI_Resource_Specifications.md)
 
 ### Procedure
 

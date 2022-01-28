@@ -12,7 +12,7 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
 
     The following is an example URL for a system:
 
-    ```screen
+    ```
     auth.system1.us.cray.com/keycloak/admin
     ```
 

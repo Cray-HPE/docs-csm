@@ -20,13 +20,13 @@ Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports 
 
 ### Procedure
 
-1.  Create a new UAI with the `--ports` option.
+1. Create a new UAI with the `--ports` option.
 
     ```bash
     vers> cray uas create --publickey PUBLIC_SSH_KEY_FILE --ports PORT_LIST
     ```
 
-    When these ports are exposed in the UAI, they will be mapped from the port number on the externally visible IP of the UAI to the port number used to reach the UAI pod. The mapping of these ports is displayed in the `uai_portmap` element of the returned output from `cray uas create`, and `cray uas list`. The mapping is shown as a dictionary where the key is the externally served port and the value is the internally routed port.  Applications running on the UAI should listen on the internally routed port.  Usually these will be the same value.  
+    When these ports are exposed in the UAI, they will be mapped from the port number on the externally visible IP of the UAI to the port number used to reach the UAI pod. The mapping of these ports is displayed in the `uai_portmap` element of the returned output from `cray uas create`, and `cray uas list`. The mapping is shown as a dictionary where the key is the externally served port and the value is the internally routed port. Applications running on the UAI should listen on the internally routed port. Usually these will be the same value.  
 
     ```bash
     vers> cray uas create --publickey ~/.ssh/id_rsa.pub --ports 80,443,8888
@@ -46,7 +46,7 @@ Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports 
     8888 = 8888
     ```
 
-2.  Log in to the UAI with the connection string.
+2. Log in to the UAI with the connection string.
 
     ```bash
     $ ssh USERNAME@UAI_IP_ADDRESS -i ~/.ssh/id_rsa

@@ -5,7 +5,7 @@ This procedure should be used to update all ServerTech PDUs in the system to
 the same global credentials.
 
 **NOTE:** This procedure only updates the default credentials on the 
-ServerTech PDU hardware.  No credentials are set in any management software.
+ServerTech PDU hardware. No credentials are set in any management software.
 
 ## Prerequisites
 - The ServerTech PDUs must be accessible via a workstation or laptop.
@@ -26,6 +26,7 @@ For each ServerTech PDU:
    ```
 
    Expected output upon a successful password change:
+   
    ```
    HTTP/1.1 204 No Content
    Content-Type: text/html
@@ -38,12 +39,15 @@ For each ServerTech PDU:
 
    **NOTE**: After 5 minutes the previous credential should stop working, as the existing session timed out.
 
-8. Verify that the new password works:
+1. Verify that the new password works:
+   
    ```bash
    linux# curl -i -k -u admn:<NEW-PDU-PASSWORD> \
                   https://<PDU_IP_OR_HOSTNAME>/jaws/config/banner
    ```
+   
    Expected output upon a successful password change:
+   
    ```
    HTTP/1.1 200 OK
    Content-Type: application/json

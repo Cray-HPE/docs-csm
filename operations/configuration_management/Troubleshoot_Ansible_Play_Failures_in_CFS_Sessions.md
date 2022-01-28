@@ -16,6 +16,11 @@ A configuration session exists for CFS.
 
     ```bash
     ncn# kubectl get pods -n services $CFS_POD_NAME
+    ```
+
+    Example output:
+
+    ```
     NAME                                             READY   STATUS   RESTARTS   AGE
     cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn   0/3     Error    0          25h
     ```
@@ -24,6 +29,11 @@ A configuration session exists for CFS.
 
     ```bash
     ncn# kubectl logs -n services $CFS_POD_NAME
+    ```
+
+    Example output:
+
+    ```
     Error from server (BadRequest): a container name must be specified for pod cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn, choose one of: [inventory ansible-0 istio-proxy] or one of the init containers: [git-clone-0 istio-init]
     ```
 
@@ -35,13 +45,17 @@ A configuration session exists for CFS.
 
         ```bash
         ncn# kubectl logs -n services CFS_POD_NAME git-clone-0
-        Cloning into '/inventory'...
         ```
 
     2.  Check the inventory container.
 
         ```bash
         # kubectl logs -n services CFS_POD_NAME inventory
+        ```
+
+        Example output:
+
+        ```
           % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                          Dload  Upload   Total   Spent    Left  Speed
           0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0curl: (7) Failed to connect to localhost port 15000: Connection refused
@@ -70,6 +84,11 @@ A configuration session exists for CFS.
 
         ```bash
         ncn# kubectl logs -n services CFS_POD_NAME ansible-0
+        ```
+
+        Example output:
+
+        ```
         Waiting for Inventory
         Waiting for Inventory
         Inventory available
@@ -77,7 +96,7 @@ A configuration session exists for CFS.
                                          Dload  Upload   Total   Spent    Left  Speed
           0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
 
-        ...
+        [...]
 
         TASK [ncmp_hsn_cns : SLES Compute Nodes (HSN): Create/Update ifcfg-hsnx File(s)] ***
         fatal: [x3000c0s19b1n0]: FAILED! => {"msg": "'interfaces' is undefined"}

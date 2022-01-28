@@ -22,53 +22,28 @@
         ncn-m001# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
         ```
 
-## Stage 0.2 - Update `customizations.yaml`
+## Stage 0.2 - Update SLS
 
-Perform these steps to update `customizations.yaml`:
-
-1. Extract `customizations.yaml` from the `site-init` secret:
-
-    ```bash
-    ncn-m001# cd /tmp
-    ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
-    ```
-
-1. Update `customizations.yaml`:
-
-    ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/update-customizations.sh -i customizations.yaml
-    ```
-
-1. Update the `site-init` secret:
-
-    ```bash
-    ncn-m001# kubectl delete secret -n loftsman site-init
-    ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-    ```
-
-1. If [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
-   clone a local working tree and commit appropriate changes to `customizations.yaml`.
-   
-    For example:
-
-    ```bash
-    ncn-m001# git clone <URL> site-init
-    ncn-m001# cp /tmp/customizations.yaml site-init
-    ncn-m001# cd site-init
-    ncn-m001# git add customizations.yaml
-    ncn-m001# git commit -m 'Remove Gitea PVC configuration from customizations.yaml'
-    ncn-m001# git push
-    ```
-
-5. Return to original working directory:
-
-    ```bash
-    ncn-m001# cd -
-    ```
+SLS needs to be updated. Right now this is manual. There will be a tool coming soon.
+This is a placeholder until the tool is ready to be added to the automation.
 
 ## Stage 0.3 - Execute Prerequisites Check
 
 Run check script:
+
+   > **`IMPORTANT:`** If the password for the local Nexus `admin` account has
+   > been changed from the default `admin123` (not typical), then set the
+   > `NEXUS_PASSWORD` environment variable to the correct `admin` password
+   > before running prerequisites.sh! 
+   >
+   > For example:
+   >
+   > ```bash
+   > ncn-m001# export NEXUS_PASSWORD=cu$t0m@DM1Np4s5w0rd
+   > ```
+   >
+   > Otherwise, a random 32-character base64-encoded string will be generated
+   > and updated as the default `admin` password when Nexus is upgraded.
 
 * Internet Connected
 
@@ -80,11 +55,32 @@ Run check script:
 
 * Air Gapped
 
-    ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
-    ```
+   ```bash
+   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
+   ```
 
 **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. **IF** the upgrade `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
+
+**`IMPORTANT:`** If the `NEXUS_PASSWORD` environment variable was set as previously mentioned, then remove it before continuing:
+   
+   ```bash
+   ncn-m001# export -n NEXUS_PASSWORD
+   ncn-m001# unset NEXUS_PASSWORD
+   ```
+
+**`OPTIONAL:`** Customizations.yaml has been updated in this step. If [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
+   clone a local working tree and commit appropriate changes to `customizations.yaml`.
+
+   For example:
+
+   ```bash
+   ncn-m001# git clone <URL> site-init
+   ncn-m001# cd site-init
+   ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
+   ncn-m001# git add customizations.yaml
+   ncn-m001# git commit -m 'CSM 1.2 upgrade - customizations.yaml'
+   ncn-m001# git push
+   ```
 
 ## Stage 0.4 - Backup VCS Data
 

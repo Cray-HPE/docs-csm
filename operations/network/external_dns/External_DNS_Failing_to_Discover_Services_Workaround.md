@@ -18,6 +18,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-w001# kubectl get vs -A | grep -v '[*]'
+    ```
+
+    Example output:
+
+    ```
     NAMESPACE        NAME                              GATEWAYS                       HOSTS                                                      AGE
     istio-system     kiali                             [services/services-gateway]    [kiali-istio.SYSTEM_DOMAIN_NAME]                           2d16h
     istio-system     tracing                           [services/services-gateway]    [jaeger-istio.SYSTEM_DOMAIN_NAME]                          2d16h
@@ -36,6 +41,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus -o yaml
+    ```
+
+    Example output:
+
+    ```
     apiVersion: networking.istio.io/v1beta1
     kind: VirtualService
     metadata:

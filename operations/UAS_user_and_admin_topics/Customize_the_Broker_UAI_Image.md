@@ -12,7 +12,7 @@ The key pieces of the Broker UAI image are:
 * An entrypoint shell script that initializes the container and starts the SSH daemon running.
 * An SSH configuration that forces logged in users into the `switchboard` command which creates / selects End-User UAIs and redirects connections.
 
-The primary way to customize the Broker UAI image is by [defining volumes and connecting them to the Broker UAI class](Configure_a_Broker_UAI_Class.md) for a given broker. Some customizations may require action that cannot be covered simply by using volumes to override configuration.  Those cases generally require changing the Broker UAI behavior in some way. Those cases can be covered either by volume mounting a customized entrypoint script, or volume mounting a customized SSH configuration. Both of these cases are shown in the following examples.
+The primary way to customize the Broker UAI image is by [defining volumes and connecting them to the Broker UAI class](Configure_a_Broker_UAI_Class.md) for a given broker. Some customizations may require action that cannot be covered simply by using volumes to override configuration. Those cases generally require changing the Broker UAI behavior in some way. Those cases can be covered either by volume mounting a customized entrypoint script, or volume mounting a customized SSH configuration. Both of these cases are shown in the following examples.
 
 ### Customize the Broker UAI Entrypoint Script
 
@@ -70,7 +70,7 @@ Starting at the top:
 * `pam_config ...` can be customized to set up PAM as needed. The configuration here assumes the broker is using SSSD to reach a directory server for authentication and that, if a home directory is not present for a user at login, one should be made on the broker.
 * The `ssh-keygen...` part is needed to set up the SSH host key for the broker and should be left alone.
 * The `UAI_CREATION_CLASS` code should be left alone, as it sets up information used by `switchboard` to create End-User UAIs.
-* The `/usr/sbin/sshd...` part starts the SSH server on the broker and should be left alone.  Configuration of SSH is covered in the next section and is done by replacing `/etc/switchboard/sshd_config` not by modifying this line.
+* The `/usr/sbin/sshd...` part starts the SSH server on the broker and should be left alone. Configuration of SSH is covered in the next section and is done by replacing `/etc/switchboard/sshd_config` not by modifying this line.
 * The `sssd` part assumes the broker is using SSSD to reach a directory server, it can be changed as needed.
 * The `sleep infinity` prevents the script from exiting which keeps the Broker UAI running. It should not be removed or altered.
 
@@ -134,7 +134,7 @@ EOF
 ncn-m001-pit# kubectl create configmap -n uas broker-entrypoint --from-file=entrypoint.sh
 ```
 
-**NOTE**: The `default_mode` setting, which will set the mode on the file /app/broker/entrypoint.sh is decimal 493 here instead of octal 0755.  The octal notation is not permitted in a JSON specification. Decimal numbers have to be used.
+**NOTE**: The `default_mode` setting, which will set the mode on the file /app/broker/entrypoint.sh is decimal 493 here instead of octal 0755. The octal notation is not permitted in a JSON specification. Decimal numbers have to be used.
 
 ```
 ncn-m001-pit# cray uas admin config volumes create --mount-path /app/broker --volume-description '{"config_map": {"name": "broker-entrypoint", "default_mode": 493}}' --volumename broker-entrypoint

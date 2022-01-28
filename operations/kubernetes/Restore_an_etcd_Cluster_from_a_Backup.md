@@ -22,7 +22,7 @@ The automated script will restore the cluster from the most recent backup if it 
 If it does not discover a backup within the last 7 days, it will ask the user if they would like to rebuild the cluster.
 
 ```
-ncn-w001 # cd /opt/cray/platform-utils/etcd_restore_rebuild_util
+ncn-w001# cd /opt/cray/platform-utils/etcd_restore_rebuild_util
 
 # rebuild/restore a single cluster
 ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -s cray-bos-etcd
@@ -61,6 +61,11 @@ etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
     ncn-w001# kubectl exec -it -n operators \
     $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
     -c boto3 -- list_backups cray-bos
+    ```
+
+    Example output:
+
+    ```
     cray-bos/etcd.backup_v108497_2020-03-20-23:42:37
     cray-bos/etcd.backup_v125815_2020-03-21-23:42:37
     cray-bos/etcd.backup_v143095_2020-03-22-23:42:38
@@ -78,8 +83,11 @@ etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
     ncn-w001# kubectl exec -it -n operators \
     $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
     -c util -- restore_from_backup cray-bos etcd.backup_v277935_2020-03-30-23:52:54
+    ```
 
+    Example output:
 
+    ```
     etcdrestore.etcd.database.coreos.com/cray-bos-etcd created
     ```
 
@@ -91,6 +99,11 @@ etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
 
         ```bash
         ncn-w001# kubectl -n services get pod | grep SERVICE_NAME
+        ```
+
+        Example output:
+        
+        ```
         cray-bos-etcd-498jn7th6p             1/1     Running              0          4h1m
         cray-bos-etcd-dj7d894227             1/1     Running              0          3h59m
         cray-bos-etcd-tk4pr4kgqk             1/1     Running              0          4
@@ -102,6 +115,11 @@ etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
 
         ```bash
         ncn-w001# kubectl -n services delete etcdrestore.etcd.database.coreos.com/cray-bos-etcd
+        ```
+
+        Example output:
+
+        ```
         etcdrestore.etcd.database.coreos.com "cray-bos-etcd" deleted
         ```
 

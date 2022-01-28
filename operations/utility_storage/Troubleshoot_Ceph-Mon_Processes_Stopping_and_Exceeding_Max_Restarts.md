@@ -24,6 +24,11 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
         ```bash
         ncn-m001# ps -ef |grep ceph-mon
+        ```
+        
+        Example output:
+
+        ```
         root     24465 24175  0 10:04 pts/0    00:00:00 grep ceph-mon
         ceph     33480     1  0 Jan15 ?        00:11:36 /usr/bin/ceph-mon -f --cluster ceph --id ncn-m001 --setuser ceph --setgroup ceph  <<-- If missing, it is not running
         ```

@@ -11,10 +11,15 @@ The CSI `--system-name` and `--site-domain` command line arguments are combined 
 
 ### Site setup
 
-In the following example, the IP address `10.101.8.113` is used for External DNS and the system has the subdomain `wasp.dev.cray.com`
+In the following example, the IP address `10.101.8.113` is used for External DNS and the system has the subdomain `system.dev.cray.com`
 
 ```
-ncn-m001:~ # kubectl -n services get service -l app.kubernetes.io/name=cray-dns-powerdns
+ncn-m001# kubectl -n services get service -l app.kubernetes.io/name=cray-dns-powerdns
+```
+
+Example output:
+
+```
 NAME                        TYPE           CLUSTER-IP      EXTERNAL-IP    PORT(S)        AGE
 cray-dns-powerdns-api       ClusterIP      10.24.24.29     <none>         8081/TCP       21d
 cray-dns-powerdns-can-tcp   LoadBalancer   10.27.91.157    10.101.8.113   53:30726/TCP   21d
@@ -25,9 +30,9 @@ cray-dns-powerdns-nmn-tcp   LoadBalancer   10.22.159.196   10.92.100.85   53:319
 cray-dns-powerdns-nmn-udp   LoadBalancer   10.17.203.241   10.92.100.85   53:31898/UDP   21d
 ```
 
-A system administrator would typically setup the subdomain `wasp.dev.cray.com` in their site DNS and create a record which points to the IP address `10.101.8.113`, for example `ins1.wasp.dev.cray.com`.
+A system administrator would typically setup the subdomain `system.dev.cray.com` in their site DNS and create a record which points to the IP address `10.101.8.113`, for example `ins1.system.dev.cray.com`.
 
-The administrator would then delegate queries to `wasp.dev.cray.com` to `ins1.wasp.dev.cray.com` making it authoritative for that subdomain allowing CSM to respond to queries for services like `prometheus.wasp.dev.cray.com`
+The administrator would then delegate queries to `system.dev.cray.com` to `ins1.system.dev.cray.com` making it authoritative for that subdomain allowing CSM to respond to queries for services like `prometheus.system.dev.cray.com`
 
 The specifics of how to configure to configuring DNS forwarding is dependent on the DNS server in use, please consult the documentation provided by the DNS server vendor for more information.
 
@@ -47,13 +52,13 @@ Zone transfer is configured via `customizations.yaml` parameters and can also be
 The name of the PowerDNS server, this is combined with the system domain information to create the NS record for zones, for example.
 
 ```
-wasp.dev.cray.com.	1890	IN	NS	primary.wasp.dev.cray.com.
+system.dev.cray.com.	1890	IN	NS	primary.system.dev.cray.com.
 ```
 
 This record will also point to the External DNS IP address
 
 ```
-$ dig +short primary.wasp.dev.cray.com
+$ dig +short primary.system.dev.cray.com
 10.101.8.113
 ```
 
@@ -76,7 +81,7 @@ If the default value is used no servers to notify on zone update will be configu
 A comma separated list of zones to transfer.
 
 ```
-wasp.dev.cray.com,8.101.10.in-addr.arpa
+system.dev.cray.com,8.101.10.in-addr.arpa
 ```
 
 If the default value is used then PowerDNS will attempt to transfer all zones.
@@ -100,18 +105,18 @@ include "/etc/bind/named.conf.local";
 include "/etc/bind/named.conf.default-zones";
 include "/etc/bind/named.conf.log";
 
-zone "wasp.dev.cray.com" {
+zone "system.dev.cray.com" {
   type slave;
   masters { 10.101.8.113; };
   allow-notify { 10.101.8.8; 10.101.8.9; 10.101.8.10; };
-  file "/var/lib/bind/db.wasp.dev.cray.com";
+  file "/var/lib/bind/db.system.dev.cray.com";
 };
 
-zone "can.wasp.dev.cray.com" {
+zone "can.system.dev.cray.com" {
   type slave;
   masters { 10.101.8.113; };
   allow-notify { 10.101.8.8; 10.101.8.9; 10.101.8.10; };
-  file "/var/lib/bind/db.can.wasp.dev.cray.com";
+  file "/var/lib/bind/db.can.system.dev.cray.com";
 };
 
 zone "8.101.10.in-addr.arpa" {
@@ -137,7 +142,12 @@ If DNSSEC is to be used for zone transfer then the `dnssec` SealedSecret in `cus
 Here is an example of a zone signing key.
 
 ```
-ncn-m001:~ # cat Kwasp.dev.cray.com.+013+63812.private
+ncn-m001# cat Ksystem.dev.cray.com.+013+63812.private
+```
+
+Example output:
+
+```
 Private-key-format: v1.3
 Algorithm: 13 (ECDSAP256SHA256)
 PrivateKey: +WFrfooCjTtoRU5UfhrpuTL0IEm6hYc4YJ6u8CcYquo=
@@ -145,10 +155,16 @@ Created: 20210817081902
 Publish: 20210817081902
 Activate: 20210817081902
 ```
+
 Encode the key using the `base64` utility.
 
 ```
-ncn-m001:~ # base64 Kwasp.dev.cray.com.+013+63812.private
+ncn-m001# base64 Ksystem.dev.cray.com.+013+63812.private
+```
+
+Example output:
+
+```
 UHJpdmF0ZS1rZXktZm9ybWF0OiB2MS4zCkFsZ29yaXRobTogMTMgKEVDRFNBUDI1NlNIQTI1NikK
 UHJpdmF0ZUtleTogK1dGcmZvb0NqVHRvUlU1VWZocnB1VEwwSUVtNmhZYzRZSjZ1OENjWXF1bz0K
 Q3JlYXRlZDogMjAyMTA4MTcwODE5MDIKUHVibGlzaDogMjAyMTA4MTcwODE5MDIKQWN0aXZhdGU6
@@ -157,7 +173,7 @@ IDIwMjEwODE3MDgxOTAyCg==
 
 Populate the generate block in `customizations.yaml` with the encoded key.
 
-> **`IMPORTANT`** the name of the key in SealedSecret **must** match the name of the zone being secured, in the below example the zone name is `wasp.dev.cray.com`. If multiple zones are to be secured each zone should have its own entry even if the same key is used.
+> **`IMPORTANT`** the name of the key in SealedSecret **must** match the name of the zone being secured, in the below example the zone name is `system.dev.cray.com`. If multiple zones are to be secured each zone should have its own entry even if the same key is used.
 
 ```
 spec:
@@ -169,7 +185,7 @@ spec:
           data:
             - type: static_b64
               args:
-                name: wasp.dev.cray.com
+                name: system.dev.cray.com
                 value: |
                   UHJpdmF0ZS1rZXktZm9ybWF0OiB2MS4zCkFsZ29yaXRobTogMTMgKEVDRFNBUDI1NlNIQTI1NikK
                   UHJpdmF0ZUtleTogK1dGcmZvb0NqVHRvUlU1VWZocnB1VEwwSUVtNmhZYzRZSjZ1OENjWXF1bz0K
@@ -193,7 +209,7 @@ spec:
           data:
             - type: static_b64
               args:
-                name: wasp.dev.cray.com
+                name: system.dev.cray.com
                 value: |
                   UHJpdmF0ZS1rZXktZm9ybWF0OiB2MS4zCkFsZ29yaXRobTogMTMgKEVDRFNBUDI1NlNIQTI1NikK
                   UHJpdmF0ZUtleTogK1dGcmZvb0NqVHRvUlU1VWZocnB1VEwwSUVtNmhZYzRZSjZ1OENjWXF1bz0K
@@ -201,9 +217,9 @@ spec:
                   IDIwMjEwODE3MDgxOTAyCg==
             - type: static
               args:
-                name: wasp-key.tsig
+                name: system-key.tsig
                 value:
-                  name:      wasp-key
+                  name:      system-key
                   algorithm: hmac-sha256
                   key:       dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY=
 ```
@@ -215,14 +231,14 @@ spec:
 An example configuration demonstrating how to extend the previous BIND configuration example and add the TSIG key.
 
 ```
-key "wasp-key" {
+key "system-key" {
 	algorithm hmac-sha256;
 	secret "dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY=";
 };
 # Primary server IP address (i.e., PowerDNS CAN ip)
 server 10.101.8.113 {
 	keys {
-		wasp-key;
+		system-key;
 	};
 };
 ```

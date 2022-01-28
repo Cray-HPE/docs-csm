@@ -74,13 +74,29 @@ ncn-m001# zypper install atftp
 
 The `atftp` TFTP client can be used to request files from the TFTP server. The TFTP server is on the NMN and listens on port 69. The TFTP server sends the ipxe.efi file as the response in this example.
 
+Request the files:
+
 ```bash
 ncn-m001# atftp
-ncn-m001# atftp
+```
+
+Example output:
+
+```
 tftp> connect 10.100.160.2 69
 tftp> get ipxe.efi test-ipxe.efi
 tftp> quit
+```
+
+List the files:
+
+```bash
 ncn-m001# ls -l test-ipxe.efi
+```
+
+Example output:
+
+```
 -rw-r--r-- 1 root root 951904 Sep 11 10:44 test-ipxe.efi
 ```
 

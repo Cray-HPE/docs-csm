@@ -21,6 +21,10 @@ __________________________________
 The display and command line illustrated in this document are examples and might not exactly match your particular environment. The switch and accessory drawings in this document are for illustration only, and may not exactly match your installed products.
 __________________________________
 
+## Start guide
+This guide is designed to be followed when doing a fresh install, upgrade, reinstall or adding hardware.
+[Start guide](./network_management_install_guide/start_guide.md)
+
 ## User guides
 
    1. [Aruba](./network_management_install_guide/aruba/index_aruba.md)
@@ -31,6 +35,23 @@ __________________________________
 ### CANU:
 CANU (CSM Automatic Network Utility) is a tool used to generate/validate/test the Shasta management network.
 Documentation for CANU can be found at https://github.com/Cray-HPE/canu
+
+### Useful pages
+- [Collect data](./network_management_install_guide/collect_data.md)
+- [Cable Management Network Servers](../../install/cable_management_network_servers.md)
+   - shows how servers in CSM should be cabled.
+- [SHCD HMN Tab/HMN Connections Rules](../../install/shcd_hmn_connections_rules.md)
+   - shows how the HMN tab on the SHCD should be formatted.
+- [SHCD Connection Rules](./network_management_install_guide/shcd_connection_rules.md)
+   - shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.
+- [Backup custom config](./network_management_install_guide/backup_custom_config.md)
+   - shows users how to backup configuration that's custom to their system, this include site connections and credentials.
+- [Config management](./network_management_install_guide/config_management.md)
+   - shows users how to save a running config to the switch for backup purposes or to switch between different switch configs.
+- [Validate switch config](./network_management_install_guide/validate_switch_configs.md)
+- [wipe management switches](./network_management_install_guide/wipe_mgmt_switches.md)
+- [Generate switch configs](./network_management_install_guide/generate_switch_configs.md)
+[Validate SHCD](./network_management_install_guide/validate_shcd.md)
 
 ### Products Supported
 

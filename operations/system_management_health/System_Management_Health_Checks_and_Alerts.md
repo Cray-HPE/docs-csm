@@ -18,6 +18,11 @@ Obtain the cluster IP address:
 
 ```bash
 ncn-w001# kubectl -n sysmgmt-health get svc cray-sysmgmt-health-promet-prometheus
+```
+
+Example output:
+
+```
 NAME                                    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
 cray-sysmgmt-health-promet-prometheus   ClusterIP   10.16.201.80   <none>        9090/TCP   2d6h
 ```
@@ -26,6 +31,11 @@ Get active alerts, which includes `KubeletTooManyPods` if it is going off:
 
 ```bash
 ncn-w001# curl -s http://CLUSTER-IP:PORT/api/v1/alerts | jq . | grep -B 10 -A 20 KubeletTooManyPods
+```
+
+Example output:
+
+```
 {
   "status": "success",
   "data": {

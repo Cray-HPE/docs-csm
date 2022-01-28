@@ -22,6 +22,11 @@ Currently, only `smf` includes a quota.
 
     ```bash
     ncn-m001# ceph df detail
+    ```
+
+    Example output:
+
+    ```
     RAW STORAGE:
       CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
       ssd       21 TiB     21 TiB     122 GiB      134 GiB          0.62
@@ -62,6 +67,11 @@ Currently, only `smf` includes a quota.
 
     ```bash
     ncn-s001# vim /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
+    ```
+
+    Example ceph-pool-quotas.yml:
+
+    ```
     ceph_pool_quotas:
       - pool_name: smf
         percent_of_total: .71 <-- Change this to desired percentage
@@ -80,6 +90,11 @@ Currently, only `smf` includes a quota.
 
     ```bash
     ncn-m001# ceph df detail
+    ```
+
+    Example output:
+
+    ```
     RAW STORAGE:
       CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
       ssd       21 TiB     21 TiB     122 GiB      134 GiB          0.62

@@ -32,6 +32,11 @@ The following example is based on `cray-smd-postgres`.
 
     ```bash
     ncn-w001# for i in {0..2}; do echo "${POSTGRESQL}-${i}:"; kubectl exec ${POSTGRESQL}-${i} -n ${NAMESPACE} -c postgres -- df -h pgdata; done
+    ```
+
+    Example output:
+
+    ```
     cray-smd-postgres-0:
     Filesystem      Size  Used Avail Use% Mounted on
     /dev/rbd8        30G   28G  1.6G  95% /home/postgres/pgdata
@@ -144,6 +149,11 @@ The following example is based on `cray-smd-postgres`, where the postgresql `cra
 
     ```
     ncn-w001# kubectl delete pvc "${PGDATA}-1" "${PGDATA}-2" -n ${NAMESPACE}
+    ```
+
+    Example output:
+
+    ```
     persistentvolumeclaim "pgdata-cray-smd-postgres-1" deleted
     persistentvolumeclaim "pgdata-cray-smd-postgres-2" deleted
     ```
@@ -152,6 +162,11 @@ The following example is based on `cray-smd-postgres`, where the postgresql `cra
 
     ```
     ncn-w001# kubectl patch -p '{"spec": {"resources": {"requests": {"storage": "'${PGRESIZE}'"}}}}' "pvc/${PGDATA}-0" -n ${NAMESPACE}
+    ```
+
+    Example output:
+
+    ```
     persistentvolumeclaim/pgdata-cray-smd-postgres-0 patched
     ```
 
@@ -165,6 +180,11 @@ The following example is based on `cray-smd-postgres`, where the postgresql `cra
 
     ```
     ncn-w001# kubectl get "postgresql/${POSTGRESQL}" -n ${NAMESPACE} -o json | jq '.spec.volume = {"size": "'${PGRESIZE}'"}' | kubectl apply -f -
+    ```
+
+    Example output:
+
+    ```
     postgresql.acid.zalan.do/cray-smd-postgres configured
     ```
 
@@ -172,6 +192,11 @@ The following example is based on `cray-smd-postgres`, where the postgresql `cra
 
     ```
     ncn-w001# kubectl delete pod "${POSTGRESQL}-0" -n services
+    ```
+
+    Example output:
+
+    ```
     pod "cray-smd-postgres-0" deleted
     ```
 
@@ -179,6 +204,11 @@ The following example is based on `cray-smd-postgres`, where the postgresql `cra
 
     ```
     ncn-w001# kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE}
+    ```
+
+    Example output:
+
+    ```
     NAME                  READY   STATUS    RESTARTS   AGE
     cray-smd-postgres-0   3/3     Running   0          14s
 
@@ -189,7 +219,13 @@ The following example is based on `cray-smd-postgres`, where the postgresql `cra
     | cray-smd-postgres | cray-smd-postgres-0 | 10.44.0.38 | Leader | running |  2 |           |
     +-------------------+---------------------+------------+--------+---------+----+-----------+
 
+    ```
     ncn-w001# kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE}
+    ```
+
+    Example output:
+
+    ```
     NAME                TEAM       VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE   STATUS
     cray-smd-postgres   cray-smd   11        1      120Gi    500m          100Mi            11m   Running
     ```
@@ -198,6 +234,11 @@ The following example is based on `cray-smd-postgres`, where the postgresql `cra
 
     ```
     ncn-w001# kubectl exec "${POSTGRESQL}-0" -n services -c postgres -it -- psql -U postgres
+    ```
+
+    Example output:
+    
+    ```
     psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))
     Type "help" for help.
 
@@ -208,6 +249,11 @@ The following example is based on `cray-smd-postgres`, where the postgresql `cra
 
     ```
     ncn-w001# kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
+    ```
+
+    Example output:
+    
+    ```
     postgresql.acid.zalan.do/cray-smd-postgres patched
     ```
 
@@ -342,6 +388,11 @@ The following example restores the dump to the `cray-smd-postgres` cluster.
     
         ```
         ncn-w001# kubectl get secrets -n ${NAMESPACE} | grep "${POSTGRESQL}.credentials"
+        ```
+
+        Example output:
+
+        ```
         services            hmsdsuser.cray-smd-postgres.credentials                       Opaque                                2      31m
         services            postgres.cray-smd-postgres.credentials                        Opaque                                2      31m
         services            service-account.cray-smd-postgres.credentials                 Opaque                                2      31m

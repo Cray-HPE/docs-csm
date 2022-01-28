@@ -120,6 +120,11 @@ is being monitored by conman for console logs.
 
    ```
    ncn-w001# ping -c 4 uan01-mgmt
+   ```
+
+   Example output:
+
+   ```
    PING uan01-mgmt (10.254.2.53) 56(84) bytes of data.
    64 bytes from x3000c0s19b0 (10.254.2.53): icmp_seq=1 ttl=255 time=0.170 ms
    64 bytes from x3000c0s19b0 (10.254.2.53): icmp_seq=2 ttl=255 time=0.228 ms

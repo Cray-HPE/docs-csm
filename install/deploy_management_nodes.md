@@ -305,6 +305,12 @@ The configuration workflow described here is intended to help understand the exp
 1. Validate that the LiveCD is ready for installing NCNs.
    > Observe the output of the checks and note any failures, then remediate them.
 
+    Specify the admin user password for the management switches in the system.
+    ```bash
+    pit# export SW_ADMIN_PASSWORD='changeme'
+    ```
+
+    Run the LiveCD preflight checks.
     ```bash
     pit# csi pit validate --livecd-preflight
     ```
@@ -378,14 +384,6 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary), see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
-    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname), see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
-
-      > ```bash
-      > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-      > ```
-      > CASMINST-1093
-      > ```
-
 1. Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
 
    **`NOTE`**: Once all storage nodes are up and the message `...sleeping 5 seconds until /etc/kubernetes/admin.conf` appears on `ncn-s001`'s console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
@@ -426,13 +424,6 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: If one of the master nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [CEPH CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
-    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname) see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
-
-    > ```bash
-    > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-    > CASMINST-1093
-    > ```
-
 1. Refer to [timing of deployments](#timing-of-deployments). It should take no more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the master nodes and worker nodes aside from the PIT node booted from the LiveCD are `Ready`:
 
     ```bash
@@ -443,12 +434,12 @@ The configuration workflow described here is intended to help understand the exp
     Expected output looks similar to the following:
 
     ```text
-    NAME       STATUS   ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
-    ncn-m002   Ready    master   14m     v1.18.6   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-m003   Ready    master   13m     v1.18.6   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w001   Ready    <none>   6m30s   v1.18.6   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w002   Ready    <none>   6m16s   v1.18.6   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+    NAME       STATUS   ROLES                  AGE   VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
+    ncn-m002   Ready    control-plane,master   2h    v1.20.13   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-m003   Ready    control-plane,master   2h    v1.20.13   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w001   Ready    <none>                 2h    v1.20.13   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w002   Ready    <none>                 2h    v1.20.13   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w003   Ready    <none>                 2h    v1.20.13   10.252.1.9    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
     ```
 
 1.  Stop watching the console from `ncn-m002`.
@@ -526,7 +517,7 @@ If needed, the LVM checks can be performed manually on the master and worker nod
 The manual checks are considered successful if all of the `blkid` commands report a disk device (such as `/dev/sdc` -- the particular device is unimportant). If any of the `lsblk` commands return no output, then the check is a failure. **Any failures must be resolved before continuing.** See the following section for details on how to do so.
 
 <a name="lvm-check-failure-recovery"></a>
-#### 3.3.3 LVM Check Failure Recovery
+#### 3.3.4 LVM Check Failure Recovery
 
 If there are LVM check failures, then the problem must be resolved before continuing with the install.
 
@@ -732,12 +723,12 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
     Expected output looks similar to the following:
 
     ```text
-    NAME       STATUS   ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
-    ncn-m002   Ready    master   14m     v1.18.6   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-m003   Ready    master   13m     v1.18.6   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w001   Ready    <none>   6m30s   v1.18.6   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w002   Ready    <none>   6m16s   v1.18.6   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+    NAME       STATUS   ROLES                  AGE   VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
+    ncn-m002   Ready    control-plane,master   2h    v1.20.13   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-m003   Ready    control-plane,master   2h    v1.20.13   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w001   Ready    <none>                 2h    v1.20.13   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w002   Ready    <none>                 2h    v1.20.13   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w003   Ready    <none>                 2h    v1.20.13   10.252.1.9    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
     ```
 
 <a name="install-tests"></a>

@@ -29,7 +29,7 @@ This procedure needs to be done for each of the HPE Apollo 6500 XL645d servers
 that will be managed by CSM software. River compute nodes always index their
 BMCs from 1. For example, the compute BMCs in servers with more than one node
 will have xnames as follows: x3000c0s30b1, x3000c0s30b2, x3000c0s30b3, and so
-on.  The node indicator is always a 0. For example, x3000c0s30b1n0 or
+on. The node indicator is always a 0. For example, x3000c0s30b1n0 or
 x3000c0s30b4n0.
 
    <a name="gather_information"></a>

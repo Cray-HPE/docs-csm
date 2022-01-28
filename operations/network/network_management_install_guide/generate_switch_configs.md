@@ -21,3 +21,4 @@ canu generate network config --csm 1.2 -a full --shcd ./HPE\ System\ Hela\ CCD.r
 * ***Tds*** – Aruba-based Test and Development System. These are small systems characterized by Kubernetes NCNs cabling directly to the spine (to save $). 
 * ***Full*** – Aruba-based Leaf-Spine systems, usually customer production systems. 
 * ***V1*** – Dell and Mellanox based systems of either a TDS or Full layout. 
+

@@ -245,7 +245,7 @@ Some files are needed for generating the configuration payload. See these topics
 1. Change into the preparation directory plus necessary PIT directories (for later):
 
    ```bash
-   linux:usb# mkdir -pv /mnt/pitdata/admin /mnt/pitdata/prep /mnt/pitdata/configs /mnt/pitdata/data
+   linux:usb# mkdir -pv /mnt/pitdata/admin /mnt/pitdata/prep /mnt/pitdata/configs /mnt/pitdata/data/{k8s,ceph}
    linux:usb# cd /mnt/pitdata/prep
    ```
 
@@ -461,7 +461,7 @@ Now that the configuration is generated, we can populate the LiveCD with the gen
 
 This will enable SSH, and other services when the LiveCD starts.
 
-1. Set system name and enter prep directory if one hasn't already (one should already be here from the previous section).
+1. Set system name and enter prep directory if one has not already (one should already be here from the previous section).
 
     ```bash
     linux# export SYSTEM_NAME=eniac
@@ -564,7 +564,7 @@ reboot into the LiveCD.
 Some systems will boot the USB device automatically if no other OS exists (bare-metal). Otherwise the
 administrator may need to use the BIOS Boot Selection menu to choose the USB device.
 
-If an administrator has the node booted with an operating system which will next be rebooting into the LiveCD, then use `efibootmgr` to set the boot order to be the USB device.  See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information about how to set the boot order to have the USB device first.
+If an administrator has the node booted with an operating system which will next be rebooting into the LiveCD, then use `efibootmgr` to set the boot order to be the USB device. See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information about how to set the boot order to have the USB device first.
 
 > UEFI booting must be enabled to find the USB device's EFI bootloader.
 

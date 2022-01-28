@@ -10,7 +10,7 @@ kubectl logs -n services pod/$(kubectl get -n services pods | grep kea | head -n
 
 
 * Here we can see that KEA is allocating a lease to 10.104.0.23.
-* The lease MUST say DHCP4_LEASE_ALLOC, if it says DHCP4_LEASE_ADVERT, there is likely a problem.  Restarting KEA will fix this issue most of the time.
+* The lease MUST say DHCP4_LEASE_ALLOC, if it says DHCP4_LEASE_ADVERT, there is likely a problem. Restarting KEA will fix this issue most of the time.
 
 
 2021-06-21 16:44:31.124 INFO  [kea-dhcp4.leases/18.139837089017472] DHCP4_LEASE_ ***ADVERT*** [hwtype=1 14:02:ec:d9:79:88], cid=[no info], tid=0xe87fad10: lease 10.252.1.16 will be advertised

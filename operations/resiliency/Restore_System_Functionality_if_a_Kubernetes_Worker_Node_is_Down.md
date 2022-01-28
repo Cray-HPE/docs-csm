@@ -16,13 +16,19 @@ This procedure requires administrative privileges.
 
         ```bash
         ncn# kubectl get pvc –A
+        ```
+
+        Example output:
+
+        ```
         NAMESPACE         NAME                                                                                                 STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS           AGE
         jhub              claim-user                                                                                           Bound    pvc-3cf34569-4db4-11ea-b8e1-a4bf01581d70   10Gi       RWO            ceph-rbd-external      14d
         jhub              claim-users                                                                                          Bound    pvc-18b7155a-4dba-11ea-bf78-a4bf01684f9e   10Gi       RWO            ceph-rbd-external      14d
         jhub              claim-user01                                                                                         Bound    pvc-c5df3ba1-4db3-11ea-b8e1-a4bf01581d70   10Gi       RWO            ceph-rbd-external      14d
         jhub              hub-db-dir                                                                                           Bound    pvc-b41675c6-4d4e-11ea-b8e1-a4bf01581d70   1Gi        RWO            ceph-rbd-external      15d
         loftsman          loftsman-chartmuseum-data-pvc                                                                        Bound    pvc-7d45b88b-4575-11ea-bf78-a4bf01684f9e   1Gi        RWO            ceph-rbd-external      25d
-        ...
+        
+        [...]
         ```
 
     2.  Get a list of PVCs for a particular pod.
@@ -36,6 +42,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn# pdsh -w ncn-s00[1-3],ncn-m00[1-3],ncn-w00[1-3] date
+    ```
+
+    Example output:
+
+    ```
     ncn-m001: Thu Feb 27 08:41:11 CST 2020
     ncn-s002: Thu Feb 27 08:41:11 CST 2020
     ncn-s003: Thu Feb 27 08:41:11 CST 2020
@@ -53,6 +64,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn# kubectl get pods -A -o wide | grep NODE_NAME
+    ```
+
+    Example output:
+
+    ```
     default        cray-dhcp-7b5c6496c6-76rst                                       1/1   Running      0  5d14h  10.252.1.1  ncn-w001   <none>  <none>
     default        kube-keepalived-vip-mgmt-plane-nmn-local-vxldv                   1/1   Running      1  25d    10.252.1.1   ncn-w001  <none>  <none>
     ims            cray-ims-57b4f98b-bc0d-422e-8891-808ab69bf158-create-nbd5c       0/2   Init:Error   0  6d21h  10.40.1.36   ncn-w001  <none>  <none>
@@ -63,7 +79,8 @@ This procedure requires administrative privileges.
     istio-system   istio-pilot-9d769b86c-mzshz                                      2/2   Running      0  4m54s  10.40.1.38   ncn-w001  <none>  <none>
     istio-system   istio-pilot-9d769b86c-t8mtg                                      2/2   Running      0  5m10s  10.40.1.51   ncn-w001  <none>  <none>
     istio-system   istio-sidecar-injector-b887db765-td7db                           1/1   Running      0  12d    10.40.0.173  ncn-w001  <none>  <none>
-    ...
+    
+    [...]
     ```
 
     Take note of any pods that are not in a `Running` or `Completed` state, or have another state that is not considered to be healthy. This will help identify after the node is brought back up what new issues have occurred.
@@ -72,6 +89,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn# kubectl get pods -A -o wide | grep -v -e Completed -e Running
+    ```
+
+    Example output:
+
+    ```
     NAMESPACE   NAME                                                   READY   STATUS  RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
     backups     benji-k8s-backup-backups-namespace-1594161300-gk72h    0/1     Error   0          5d20h   10.45.0.109   ncn-w001   <none>           <none>
     backups     benji-k8s-backup-backups-namespace-1594161600-kqprj    0/1     Error   0          5d20h   10.45.0.126   ncn-w001   <none>           <none>
@@ -94,20 +116,26 @@ This procedure requires administrative privileges.
     services    boa-cf973765-92e7-4c5e-b52a-e904088976b8-cplj6         0/2     Error   0          5d23h   10.42.0.158   ncn-w002   <none>           <none>
     services    boa-f6f86426-58bf-4c6f-b3cd-e25010aa9ff6-s7zph         0/2     Error   0          4d2h    10.36.0.191   ncn-w003   <none>           <none>
     services    cfs-0336105c-e697-4d9d-a129-badde6da3218-vn6n4         0/3     Error   0          6d20h   10.42.0.98    ncn-w002   <none>           <none>
-    ...
+    
+    [...]
     ```
 
 4.  View the status of the node before taking it down.
 
     ```bash
     ncn# kubectl get nodes -o wide
-    NAME       STATUS   ROLES    AGE   VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                              KERNEL-VERSION           CONTAINER-RUNTIME
-    ncn-m001   Ready    master   27d   v1.18.2   10.252.0.10   <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
-    ncn-m002   Ready    master   27d   v1.18.2   10.252.0.11   <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
-    ncn-m003   Ready    master   27d   v1.18.2   10.252.0.12   <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
-    ncn-w001   Ready    <none>   27d   v1.18.2   10.252.0.4    <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
-    ncn-w002   Ready    <none>   27d   v1.18.2   10.252.0.5    <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
-    ncn-w003   Ready    <none>   27d   v1.18.2   10.252.0.6    <none>        SUSE Linux Enterprise Server 15 SP1   4.12.14-197.45-default   containerd://1.3.3
+    ```
+
+    Example output:
+
+    ```
+    NAME       STATUS   ROLES                  AGE   VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
+    ncn-m001   Ready    control-plane,master   27h   v1.20.13   10.252.1.4    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-m002   Ready    control-plane,master   8d    v1.20.13   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-m003   Ready    control-plane,master   8d    v1.20.13   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w001   Ready    <none>                 8d    v1.20.13   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w002   Ready    <none>                 8d    v1.20.13   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w003   Ready    <none>                 8d    v1.20.13   10.252.1.9    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
     ```
 
 ### Collect Information After Powering Down the Node

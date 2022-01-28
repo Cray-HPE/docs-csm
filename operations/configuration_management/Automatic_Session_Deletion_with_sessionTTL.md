@@ -8,14 +8,18 @@ Update the `sessionTTL` using the following command:
 
 ```bash
 ncn# cray cfs options update --session-ttl 24h
+```
 
-[ ... output removed ...]
+Example output:
+
+```
+[...]
 
 sessionTTL = "24h"
 ```
 
-To disable the `sessionTTL` feature, use --session-ttl "" in the command above.
+To disable the `sessionTTL` feature, use `--session-ttl ""` in the command above.
 
-**Important:** The `sessionTTL` option deletes all completed sessions that meet the TTL criteria, regardless of if they were successful.
+**IMPORTANT:** The `sessionTTL` option deletes all completed sessions that meet the TTL criteria, regardless of if they were successful.
 
 

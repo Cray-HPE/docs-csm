@@ -38,7 +38,7 @@ To register the image explicitly as non-default:
 ncn-m001-pit# cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest --default no
 ```
 
-Registering an image with the `--default no` option is usually unnecessary. Omitting the `--default` option causes UAS to set the default attribute as `false`.  So, the following command would be equivalent to the previous command:
+Registering an image with the `--default no` option is usually unnecessary. Omitting the `--default` option causes UAS to set the default attribute as `false`. So, the following command would be equivalent to the previous command:
 
 ```
 ncn-m001-pit# cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest

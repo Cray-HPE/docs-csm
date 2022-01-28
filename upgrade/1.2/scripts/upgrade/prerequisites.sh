@@ -187,6 +187,9 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "cray-site-init*.rpm") 
 
+    # upload csi to s3
+    csi handoff upload-utils --kubeconfig /etc/kubernetes/admin.conf
+
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -196,10 +199,37 @@ state_name="UPDATE_DOC_RPM"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    if [[ ! -f docs-csm-latest.noarch.rpm ]]; then
+    if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
         echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: $(pwd)"
     fi
     cp /root/docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="UPDATE_CUSTOMIZATIONS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/site-init
+    mkdir -p ${SITE_INIT_DIR}
+    pushd ${SITE_INIT_DIR}
+    ${CSM_ARTI_DIR}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/zeromq/zeromq:v4.0.5
+    cp -r ${CSM_ARTI_DIR}/shasta-cfg/* ${SITE_INIT_DIR}
+    mkdir -p certs
+    kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
+    kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
+    kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
+    . ${BASEDIR}/update-customizations.sh -i ${SITE_INIT_DIR}/customizations.yaml
+    yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
+    yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
+    yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
+    ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
+    ./utils/secrets-seed-customizations.sh customizations.yaml || true
+    kubectl delete secret -n loftsman site-init
+    kubectl create secret -n loftsman generic site-init --from-file=./customizations.yaml
+    popd
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -239,10 +269,43 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="UPGRADE_KEA"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    helm -n services upgrade cray-dhcp-kea ${CSM_ARTI_DIR}/helm/cray-dhcp-kea-*.tgz
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="UPGRADE_CSM_CONFIG"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    helm del -n services csm-config 
+    sleep 10
+    helm -n services upgrade --install csm-config ${CSM_ARTI_DIR}/helm/csm-config-*.tgz --wait
+    CSM_CONFIG_VERSION=$(helm list -n services -o json | jq -r '.[] | select (.name=="csm-config") | .app_version')
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="UPGRADE_CFS_OPERATOR"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    helm -n services upgrade cray-cfs-operator ${CSM_ARTI_DIR}/helm/cray-cfs-operator-*.tgz
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPDATE_CLOUD_INIT_RECORDS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "${state_name} ..."
+    echo "====> ${state_name} ..."
 
     # get bss cloud-init data with host_records
     curl -k -H "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global|jq .[] > cloud-init-global.json
@@ -275,7 +338,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     record_state ${state_name} $(hostname)
     echo
 else
-    echo "${state_name} has been completed"
+    echo "====> ${state_name} has been completed"
 fi
 
 state_name="UPLOAD_NEW_NCN_IMAGE"
@@ -314,7 +377,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_ARTI_DIR=${CSM_ARTI_DIR}" >> /etc/cray/upgrade/csm/myenv
     echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/docs-csm-latest.noarch.rpm" >> /etc/cray/upgrade/csm/myenv
-
+    echo "export CSM_CONFIG_VERSION=${CSM_CONFIG_VERSION}" >> /etc/cray/upgrade/csm/myenv
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -325,6 +388,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    rpm --force -Uvh $(find $CSM_ARTI_DIR/rpm/cray/csm/ -name \*csm-testing\*.rpm | sort -V | tail -1)
     /opt/cray/tests/install/ncn/scripts/validate-bootraid-artifacts.sh
 
     # get all installed csm version into a file
@@ -338,7 +402,6 @@ if [[ $state_recorded == "0" ]]; then
       exit 1
     fi
 
-    rpm --force -Uvh $(find $CSM_ARTI_DIR/rpm/cray/csm/ -name \*csm-testing\*.rpm | sort -V | tail -1)
     GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
 
     record_state ${state_name} $(hostname)
@@ -367,21 +430,79 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="CSM_UPDATE_SPIRE_ENTRIES"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/update-spire-entries.sh
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
 # Take cps deployment snapshot (if cps installed)
 set +e
+trap - ERR
 kubectl get pod -n services | grep -q cray-cps
 if [ "$?" -eq 0 ]; then
   cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r '.[] | .node' || true)
   echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
 fi
+trap 'err_report' ERR
 set -e
+
+state_name="ADD_MTL_ROUTES"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+
+    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    NCNS=$(grep -oP 'ncn-w\w\d+|ncn-s\w\d+' /etc/hosts | sort -u)
+    Ncount=$(echo $NCNS | wc -w)
+    HOSTS=$(echo $NCNS | tr -t ' ' ',')
+    GATEWAY=$(cray sls networks describe NMN --format json | \
+        jq -r '.ExtraProperties.Subnets[]|select(.FullName=="NMN Management Network Infrastructure")|.Gateway')
+    SUBNET=$(cray sls networks describe MTL --format json | \
+        jq -r '.ExtraProperties.Subnets[]|select(.FullName=="MTL Management Network Infrastructure")|.CIDR')
+    pdsh -w $HOSTS ip route add $SUBNET via $GATEWAY dev vlan002
+    Rcount=$(pdsh -w $HOSTS ip route show | grep $SUBNET | wc -l)
+    pdsh -w $HOSTS ip route show | grep $SUBNET
+
+
+    if [[ $Rcount -ne $Ncount ]]; then
+        echo ""
+        echo "Could not set routes on all worker and storage nodes."
+        exit 1
+    fi
+
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+
+state_name="SETUP_CFS_CONFIGURATIONS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    tmp_folder="/tmp/csm-config-management"
+    # get current csm-config version
+    csm_config_version=$(helm list -n services | grep csm-config | awk '{print $10}')
+    # get VCS details
+    rm -rf ${tmp_folder}
+    vcs_password=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+    git clone https://crayvcs:${vcs_password}@api-gw-service-nmn.local/vcs/cray/csm-config-management.git ${tmp_folder}
+    pushd ${tmp_folder}
+    head_commit=$(git show-ref origin/cray/csm/${csm_config_version} --head | grep ${csm_config_version} | awk '{print $1}')
+    popd +0
+    cat <<EOF > /root/rebuild-ncn.json
+{
+  "layers": [
+    {
+      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+      "commit":"${head_commit}",
+      "name": "cray/csm/${csm_config_version}",
+      "playbook": "rebuild-ncn.yml"
+    }
+  ]
+}
+EOF
+    # make sure we have cfs created
+    cray cfs sessions delete rebuild-ncn  2>/dev/null || true
+    cray cfs configurations update rebuild-ncn --file /root/rebuild-ncn.json --format json
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+ok_report

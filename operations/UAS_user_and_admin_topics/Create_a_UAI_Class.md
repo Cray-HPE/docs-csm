@@ -29,6 +29,6 @@ Other options and arguments can be discovered using the:
 ncn-m001-pit# cray uas admin config classes create --help
 ```
 
-command.  See [UAI Classes](UAI_Classes.md) for more information on what the settings in a UAI Class mean and how to use them.
+command. See [UAI Classes](UAI_Classes.md) for more information on what the settings in a UAI Class mean and how to use them.
 
 [Next Topic: View a UAI Class](View_a_UAI_Class.md)

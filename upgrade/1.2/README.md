@@ -17,14 +17,14 @@ upgrade that node.
 
 >**`IMPORTANT:`**
 >
-> For TDS systems with only three worker nodes, see [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to lower CPU requests on several services which can improve pod scheduling on smaller systems during this upgrade.  Independently, the `customizations.yaml` file will be edited automatically during upgrade for TDS systems prior to deploying new CSM services. See the file: `/usr/share/doc/csm/upgrade/1.2/scripts/upgrade/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified (prior to proceeding with this upgrade) with different values if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/CSM_product_management/Post_Install_Customizations.md).
+> For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed.  See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to accomplish this.  Independently, the `customizations.yaml` file will be edited automatically during upgrade for TDS systems prior to deploying new CSM services. See the file: `/usr/share/doc/csm/upgrade/1.2/scripts/upgrade/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified (prior to proceeding with this upgrade) with different values if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/CSM_product_management/Post_Install_Customizations.md).
 >
 
 ## Upgrade Stages
 
 - [Stage 0 - Prerequisites](Stage_0_Prerequisites.md)
-- [Stage 1 - Kubernetes Upgrade](Stage_1.md)
-- [Stage 2 - Ceph Node Image Upgrade](Stage_2.md)
+- [Stage 1 - Ceph Node Image Upgrade](Stage_1.md)
+- [Stage 2 - Kubernetes Upgrade](Stage_2.md)
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
 - [Stage 4 - Apply Known Workarounds](Stage_4.md)
 - [Stage 5 - Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)

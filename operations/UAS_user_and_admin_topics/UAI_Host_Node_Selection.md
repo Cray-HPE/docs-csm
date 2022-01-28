@@ -15,9 +15,9 @@ UAI host node identification is an exclusive activity, not an inclusive one, so 
   ```
   ncn-m001-pit# kubectl get nodes | grep -v master
   NAME       STATUS   ROLES    AGE   VERSION
-  ncn-w001   Ready    <none>   10d   v1.18.6
-  ncn-w002   Ready    <none>   25d   v1.18.6
-  ncn-w003   Ready    <none>   23d   v1.18.6
+  ncn-w001   Ready    <none>   10d   v1.20.13
+  ncn-w002   Ready    <none>   25d   v1.20.13
+  ncn-w003   Ready    <none>   23d   v1.20.13
   ```
 
   In this example, there are three nodes known by Kubernetes that are not running as Kubernetes master nodes. These are all potential UAI host nodes.
@@ -27,7 +27,7 @@ UAI host node identification is an exclusive activity, not an inclusive one, so 
   ```
   ncn-m001-pit# kubectl get no -l uas=False
   NAME       STATUS   ROLES    AGE   VERSION
-  ncn-w001   Ready    <none>   10d   v1.18.6
+  ncn-w001   Ready    <none>   10d   v1.20.13
   ```
 
   **NOTE:** Given the fact that labels are textual not boolean, it is a good idea to try various common spellings of false. The ones that will prevent UAIs from running are 'False', 'false' and 'FALSE'. Repeat the above with all three options to be sure.
@@ -94,7 +94,7 @@ So, to create a new node group or replace an existing one, called `uai`, contain
 
 ## Using Kubernetes Taints and Tolerations to Make NCNs Exclusive UAI Hosts
 
-If a site has the NCN resources to host UAIs exclusively on a set of NCNs without impacting the operation of the HPE Cray EX System Management Plane, it is recommended to isolate UAIs on NCNs that do not also host Management Plane services.  This can be done using [Kubernetes Taints and Tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration).  By default, UAIs tolerate running on nodes where the `uai_only` taint has been set, while mangement services beyond the minimal set required to make the node a functioning Kubernetes Worker node on HPE Cray EX do not tolerate that taint.  By adding that taint to nodes in the Kubernetes cluster, sites can keep management services away from those nodes while allowing UAIs to run there.  By further adding the `uas=False` label to all worker nodes in the Kubernetes cluster where UAIs are _not_ allowed, sites can ensure that UAIs only run on exclusive UAI hosts.
+If a site has the NCN resources to host UAIs exclusively on a set of NCNs without impacting the operation of the HPE Cray EX System Management Plane, it is recommended to isolate UAIs on NCNs that do not also host Management Plane services. This can be done using [Kubernetes Taints and Tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration). By default, UAIs tolerate running on nodes where the `uai_only` taint has been set, while mangement services beyond the minimal set required to make the node a functioning Kubernetes Worker node on HPE Cray EX do not tolerate that taint. By adding that taint to nodes in the Kubernetes cluster, sites can keep management services away from those nodes while allowing UAIs to run there. By further adding the `uas=False` label to all worker nodes in the Kubernetes cluster where UAIs are _not_ allowed, sites can ensure that UAIs only run on exclusive UAI hosts.
 
 Further selection of UAI hosts can be achieved by any site by adding further taints to Kubernetes nodes, and configuring tolerations for those taints into specific [UAI Classes](UAI_Classes.md).
 

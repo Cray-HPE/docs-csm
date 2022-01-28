@@ -11,19 +11,25 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 
     Use either the CrayPort or Kubernetes Secret method to find the signing key.
 
-    * **CrayPort**:
+    * **CrayPort:**
 
     1. Find the signing key.
-        ```bash
+       
+       ```bash
        ncn-m001# curl LINK_TO_KEY_IN_CRAYPORT
        ```
 
-    * **Kubernetes Secret**:
+    * **Kubernetes Secret:**
 
     1. Find the key and write it to a file.
 
         ```bash
         ncn-m001# kubectl -n services get secrets hpe-signing-key -o jsonpath='{.data.gpg-pubkey}' | base64 -d | tee hpe-signing-key.asc
+        ```
+
+        Example output:
+
+        ```
         -----BEGIN PGP PUBLIC KEY BLOCK-----
         Version: GnuPG v2.0.22 (GNU/Linux)
         mQENBFZp0YMBCADNNhdrR/K7jk6iFh/D/ExEumPSdriJwDUlHY70bkEUChLyRACI
@@ -67,6 +73,11 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 
    ```bash
    ncn-m001# rpm -qpi PATH-TO-KEY/hpe-signing-key.asc
+   ```
+
+   Example output:
+
+   ```
    Name        : gpg-pubkey
    Version     : 9da39f44
    Release     : 5669d183
@@ -139,6 +150,11 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 
     ```bash
     ncn-m001# rpm -Kvv csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm
+    ```
+
+    Example output:
+
+    ```
     D: loading keyring from pubkeys in /var/lib/rpm/pubkeys/*.key
     D: couldn't find any keys in /var/lib/rpm/pubkeys/*.key
     D: loading keyring from rpmdb
@@ -168,3 +184,5 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
     D: closed   db index       /var/lib/rpm/Packages
     D: closed   db environment /var/lib/rpm
     ```
+
+    

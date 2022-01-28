@@ -11,6 +11,11 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
     
   ```bash
   ncn# kubectl exec cray-smd-postgres-0 -n services -c postgres -it -- patronictl list
+  ```
+
+  Example output:
+
+  ```
   + Cluster: cray-smd-postgres (6975238790569058381) ---+----+-----------+
   |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
   +---------------------+------------+--------+---------+----+-----------+
@@ -26,6 +31,11 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
 
   ```bash
   ncn# kubectl -n services get pods -l cluster-name=cray-smd-postgres
+  ```
+
+  Example output:
+
+  ```
   NAME                  READY   STATUS    RESTARTS   AGE
   cray-smd-postgres-0   3/3     Running   0          18d
   cray-smd-postgres-1   3/3     Running   0          18d
@@ -54,6 +64,11 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
     
     ```bash
     ncn# /usr/share/doc/csm/operations/hardware_state_manager/scripts/backup_smd_postgres.sh
+    ```
+
+    Exxample output:
+
+    ```
     ~/cray-smd-postgres-backup_2021-07-07_16-39-44 ~
     HSM postgres backup file will land in /root/cray-smd-postgres-backup_2021-07-07_16-39-44
     Determining the postgres leader...

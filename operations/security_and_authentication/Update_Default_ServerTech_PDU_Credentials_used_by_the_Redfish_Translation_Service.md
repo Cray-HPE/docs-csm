@@ -40,6 +40,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     > okay. If there are differences between what is in the repository and what
     > was stored in the `site-init`, then it suggests settings were changed at some
     > point.
+    
     ```bash
     ncn-m001# cd site-init
     ncn-m001# git diff
@@ -55,9 +56,16 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     ```
 
 #### 1.2 Modify RTS sealed secret to use new global default credentials.
+
 1.  Inspect the original default ServerTech PDU credentials:
+    
     ```bash
     ncn-m001# ./utils/secrets-decrypt.sh cray_hms_rts_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_pdu_defaults -r | base64 -d | jq
+    ```
+
+    Expected output looks similar to the following:
+
+    ```
     {
       "Username": "admn",
       "Password": "foo"
@@ -65,8 +73,14 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     ```
 
 2.  Inspect the original default RTS Redfish Interface credentials:
+    
     ```bash
     ncn-m001# ./utils/secrets-decrypt.sh cray_hms_rts_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_rts_defaults -r | base64 -d | jq
+    ```
+
+    Expected output looks similar to the following:
+
+    ```
     {
       "Username": "root",
       "Password": "secret"
@@ -76,17 +90,19 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
 2.  Update the default credentials in `customizations.yaml` for RTS:
     
     Specify the desired default ServerTech PDU credentials:
+    
     ```bash
     ncn-m001# echo '{"Username":"admn", "Password":"foobar"}' | base64 > rts.pdu.creds.json.b64
     ```
 
     Specify the desired default RTS Redfish interface credentials:
+    
     ```bash
     ncn-m001# echo '{"Username":"root", "Password":"supersecert"}' | base64 > rts.redfish.creds.json.b64
     ```
 
-
     Update and regenerate `cray_hms_rts_credentials` sealed secret:
+   
     ```bash
     ncn-m001# cat << EOF | yq w - 'data.vault_pdu_defaults' "$(<rts.pdu.creds.json.b64)" | yq w - 'data.vault_rts_defaults' "$(<rts.redfish.creds.json.b64)" | yq r -j - | ./utils/secrets-encrypt.sh | yq w -f - -i ./customizations.yaml 'spec.kubernetes.sealed_secrets.cray_hms_rts_credentials'
     {
@@ -105,8 +121,14 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
 4.  Decrypt generated secret for review.
     
     Default ServerTech PDU credentials:
+    
     ```bash
     ncn-m001# ./utils/secrets-decrypt.sh cray_hms_rts_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_pdu_defaults -r | base64 -d | jq
+    ```
+
+    Expected output looks similar to the following:
+
+    ```
     {
       "Username": "admn",
       "Password": "foobar"
@@ -114,8 +136,14 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     ```
 
     Default RTS Redfish interface credentials:
+
     ```bash
     ncn-m001# ./utils/secrets-decrypt.sh cray_hms_rts_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_rts_defaults -r | base64 -d | jq
+    ```
+
+    Expected output looks similar to the following:
+
+    ```
     {
       "Username": "root",
       "Password": "supersecert"
@@ -124,19 +152,23 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
 
 
 5.  Update the site-init secret for the system:
+    
     ```bash
     ncn-m001# kubectl delete secret -n loftsman site-init
     ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
     ```
 
 #### 1.3 Redeploy RTS to pick up the new sealed secret and push credentials into vault.
+
 1.  Determine the version of RTS:
+    
     ```bash
     ncn-m001# RTS_VERSION=$(kubectl -n loftsman get cm loftsman-core-services -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-hms-rts).version')
     ncn-m001# echo $RTS_VERSION
     ```
 
-2.  Create `rts-manifest.yaml`:
+1.  Create `rts-manifest.yaml`:
+   
     ```bash
     ncn-m001# cat > rts-manifest.yaml << EOF 
     apiVersion: manifests/v1beta1
@@ -150,30 +182,35 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     EOF
     ```
 
-2.  Merge `customizations.yaml` with `rts-manifest.yaml`:
+1.  Merge `customizations.yaml` with `rts-manifest.yaml`:
+    
     ```bash
     ncn-m001# manifestgen -c customizations.yaml -i ./rts-manifest.yaml > ./rts-manifest.out.yaml
     ```
 
-3.  Redeploy the RTS helm chart:
+1.  Redeploy the RTS helm chart:
+    
     ```bash
     ncn-m001# loftsman ship \
         --charts-repo https://packages.local/repository/charts \
         --manifest-path rts-manifest.out.yaml
     ```
 
-5.  Wait for the RTS Init job to run to completion:
+1.  Wait for the RTS Init job to run to completion:
+    
     ```bash
     ncn-m001# kubectl -n services wait job  cray-hms-rts-init --for=condition=complete --timeout=5m
     ```
 
-6.  Verify the default ServerTech PDU credentials have updated in Vault:
+1.  Verify the default ServerTech PDU credentials have updated in Vault:
+    
     ```bash
     ncn-m001# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
     ncn-m001# kubectl -n vault exec -it cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 vault kv get secret/pdu-creds/global/pdu
     ```
 
     Expected output:
+    
     ```
     ====== Data ======
     Key         Value
@@ -182,13 +219,14 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     Username    admn
     ```
 
-7.  Verify that default RTS Redfish interface credential has updated in Vault:
+1.  Verify that default RTS Redfish interface credential has updated in Vault:
 
     ```bash
     ncn-m001# kubectl -n vault exec -it cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 vault kv get secret/pdu-creds/global/rts
     ```
 
     Expected output:
+    
     ```
     ====== Data ======
     Key         Value

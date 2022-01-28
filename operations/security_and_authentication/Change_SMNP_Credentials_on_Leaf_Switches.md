@@ -18,7 +18,11 @@ There are three steps involved. The first two steps involve running the *leaf_sw
    ```bash
    ncn-m001# SNMPDELUSER=<OLDID> SNMPMGMTPW=<MGMTPW> \
              /opt/cray/csm/scripts/hms_verification/leaf_switch_snmp_creds.sh -c
+   ```
 
+   Example output:
+
+   ```
    ==> Getting management network leaf switch info from SLS...
  
    ==> Fetching switch hostnames...
@@ -36,16 +40,18 @@ There are three steps involved. The first two steps involve running the *leaf_sw
 
 2. Update SNMP credentials (desired SNMP userID and auth/priv passwords) on leaf switches. The SNMP user IDs and passwords are not shown.
 
-Also note that this will change the SNMP credentials in Vault. See below for 
-details on how to do that.
-
+   Also note that this will change the SNMP credentials in Vault. See below for details on how to do that.
 
    ```bash
    ncn-m001# SNMPDELUSER=<OLDID> SNMPNEWUSER=<NEWID> \
              SNMPAUTHPW=<AUTHPW> SNMPPRIVPW=<PRIVPW> \
              SNMPMGMTPW=<MGMTPW> \
              /opt/cray/csm/scripts/hms_verification/leaf_switch_snmp_creds.sh
+   ```
 
+   Example output:
+
+   ```
    ==> Getting management network leaf switch info from SLS...
  
    ==> Fetching switch hostnames...
@@ -114,6 +120,11 @@ details on how to do that.
     
     ```bash
     ncn-m001# kubectl -n services get pods -l app.kubernetes.io/name=cray-reds
+    ```
+
+    Example output:
+
+    ```
     NAME                         READY   STATUS    RESTARTS   AGE
     cray-reds-6b99b9d5dc-c5g2t   2/2     Running   0          3m21s
     ```

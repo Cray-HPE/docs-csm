@@ -10,7 +10,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 - [FAS Admin Procedures](#fas-admin-procedures)
   - [Topics](#topics)
-  - [Warning for Non-Compute Nodes (NCNs)</a>](#warning-for-non-compute-nodes-ncns)
+  - [Warning for Non-Compute Nodes (NCNs)</a>](#warning-for-non-compute-nodes-ncnsa)
   - [Ignore Nodes within FAS](#ignore-nodes-within-fas)
     - [Procedure](#procedure)
   - [Override an Image for an Update](#override-an-image-for-an-update)
@@ -77,7 +77,9 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
    ```bash
    ncn# cray fas images list --format json | jq '.[] | .[] | select(.target=="TARGETNAME")'
    ```
+   
    To narrow down the selection, update the select field to match multiple items. For example:
+   
    ```bash
    ncn# cray fas images list --format json | jq '.[] | .[] | select(.target=="BMC" and .manufacturer=="cray" and .deviceType=="NodeBMC")'
    ```
@@ -263,6 +265,11 @@ This procedure includes information on how check the firmware versions for the e
 
     ```
     ncn# cray fas actions status list {actionID}
+    ```
+
+    Example output:
+
+    ```
     actionID = "e6dc14cd-5e12-4d36-a97b-0dd372b0930f"
     snapshotID = "00000000-0000-0000-0000-000000000000"
     startTime = "2021-09-07 16:43:04.294233199 +0000 UTC"
@@ -304,6 +311,11 @@ This procedure includes information on how check the firmware versions for the e
 
        ```bash
        ncn# cray fas actions describe {actionID} --format json
+       ```
+
+       Example output:
+
+       ```
        {
              "parameters": {
                "stateComponentFilter": {
@@ -400,6 +412,11 @@ This procedure includes information on how check the firmware versions for the e
 
    ```bash
    ncn# cray fas operations describe {operationID} --format json
+   ```
+
+   Example output:
+
+   ```
        {
        "fromFirmwareVersion": "", "fromTag": "",
        "fromImageURL": "",
@@ -434,6 +451,7 @@ Update the firmware on any devices indicating a new version is needed.
 This procedure will read all RPMs in the Nexus repository and upload firmware images to S3 and create image records for firmware not already in FAS.
 
 1. Check the loader status.
+    
     ```bash
     ncn# cray fas loader list | grep loaderStatus
     ```

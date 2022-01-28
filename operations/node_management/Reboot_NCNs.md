@@ -205,6 +205,11 @@ Before rebooting NCNs:
 
        ```bash
        ncn# cray cfs components describe XNAME --format json
+       ```
+
+       Example output:
+
+       ```
        {
          "configurationStatus": "configured",
          "desiredConfig": "ncn-personalization-full",
@@ -224,11 +229,21 @@ Before rebooting NCNs:
 
          ```bash
          ncn-m001# kubectl describe pod -n user -lapp=slurmctld
+         ```
+
+         Example output:
+
+         ```
          Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
          ```
 
          ```bash
          ncn-m001# kubectl describe pod -n user -lapp=slurmdbd
+         ```
+
+         Example output:
+
+         ```
          Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
          ```
 
@@ -339,6 +354,11 @@ Before rebooting NCNs:
 
        ```bash
        ncn# cray cfs components describe XNAME --format json
+       ```
+
+       Example output:
+
+       ```
        {
          "configurationStatus": "configured",
          "desiredConfig": "ncn-personalization-full",
@@ -441,6 +461,11 @@ Before rebooting NCNs:
 
        ```bash
        ncn# cray cfs components describe XNAME --format json
+       ```
+
+       Example output:
+
+       ```
        {
          "configurationStatus": "configured",
          "desiredConfig": "ncn-personalization-full",
@@ -512,6 +537,11 @@ Before rebooting NCNs:
 
        ```bash
        ncn# cray cfs components describe XNAME --format json
+       ```
+
+       Example output:
+
+       ```
        {
          "configurationStatus": "configured",
          "desiredConfig": "ncn-personalization-full",

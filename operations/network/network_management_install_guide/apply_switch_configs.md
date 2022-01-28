@@ -8,3 +8,6 @@ Be sure to type `auto-confirm` before pasting in the configuration.
 This will automatically accept prompts.
 
 `switch(config)# auto-confirm`
+
+Once this is complete for all the switches, you should validate that the switch configs match what is generated.  [validate switch configs](validate_switch_configs.md)
+

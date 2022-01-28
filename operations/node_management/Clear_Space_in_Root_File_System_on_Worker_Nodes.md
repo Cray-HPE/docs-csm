@@ -12,6 +12,11 @@ An NCN worker node has a full disk.
 
     ```bash
     ncn-w001# syctemctl status docker
+    ```
+
+    Example output:
+
+    ```
     ● docker.service - Docker Application Container Engine
        Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; vendor pres>
        Active: **active** (running) since Wed 2020-06-10 11:03:49 CDT; 2 months 2 days >
@@ -24,7 +29,7 @@ An NCN worker node has a full disk.
                ├─5557 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port >
                └─5576 docker-containerd-shim -namespace moby -workdir /var/lib/dock>
 
-    ...
+    [...]
     ```
 
     If Docker is active, proceed to the next step to check its usage.
@@ -33,6 +38,11 @@ An NCN worker node has a full disk.
 
     ```bash
     ncn-w001# du -sh /var/lib/docker
+    ```
+    
+    Example output:
+
+    ```
     178G    /var/lib/docker
     ```
 
@@ -64,6 +74,11 @@ An NCN worker node has a full disk.
 
     ```bash
     ncn-w001# du -sh /var/log/cray
+    ```
+
+    Example output:
+
+    ```
     76M     /var/log/cray
     ```
 

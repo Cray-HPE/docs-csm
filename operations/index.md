@@ -220,6 +220,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
        *   [Create and Populate a VCS Configuration Repository](configuration_management/Create_and_Populate_a_VCS_Configuration_Repository.md)
    *   [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
        *   [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
+   *   [CFS Key Management](CFS_Key_Management.md)
 
 <a name="kubernetes"></a>
 
@@ -292,6 +293,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
      * [Change SMNP Credentials on Leaf Switches](security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md)
      * [Update Default ServerTech PDU Credentials used by the Redfish Translation Service](security_and_authentication/Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md)
      * [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
+     * [Add Root Service Account for Gigabyte Controllers](security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md)
    * [SSH Keys](security_and_authentication/SSH_Keys.md)
    * [Authenticate an Account with the Command Line](security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md)
    * [Default Keycloak Realms, Accounts, and Clients](security_and_authentication/Default_Keycloak_Realms_Accounts_and_Clients.md)
@@ -496,7 +498,11 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Enable Nodes](node_management/Enable_Nodes.md)
   * [Disable Nodes](node_management/Disable_Nodes.md)
   * [Find Node Type and Manufacturer](node_management/Find_Node_Type_and_Manufacturer.md)
+  * [Add additional Liquid-Cooled Cabinets to a System](node_management/Add_additional_Liquid-Cooled_Cabinets_to_a_System.md)
   * [Updating Cabinet Routes on Management NCNs](node_management/Updating_Cabinet_Routes_on_Management_NCNs.md)
+  * [Move a liquid-cooled blade within a System](node_management/Move_a_liquid-cooled_blade_within_a_System.md)
+    * [Removing a Liquid-cooled blade from a System](node_management/Removing_a_Liquid-cooled_blade_from_a_System.md)
+    * [Adding a Liquid-cooled blade to a System](node_management/Adding_a_Liquid-cooled_blade_to_a_System.md)
   * [Add a Standard Rack Node](node_management/Add_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node](node_management/Move_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node (Same Rack/Same HSN Ports)](node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)

@@ -4,7 +4,7 @@
 
 ## Create a UAI Resource Specification
 
-Add a resource specification to UAS. Once added, a resource specification can be used to request or limit specific resource consumption on a host node or gain access to host node features managed by Kubernetes resources.  The examples in this documentation focus on memory and CPU usage, but Kubernetes does use resources in some configurations to manage access to other kinds of resources.
+Add a resource specification to UAS. Once added, a resource specification can be used to request or limit specific resource consumption on a host node or gain access to host node features managed by Kubernetes resources. The examples in this documentation focus on memory and CPU usage, but Kubernetes does use resources in some configurations to manage access to other kinds of resources.
 
 ### Prerequisites
 

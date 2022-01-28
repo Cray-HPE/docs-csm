@@ -65,21 +65,22 @@ If LDAP user federation is required, refer to [Add LDAP User Federation](../secu
    1. Extract the certificate and key used to create the sealed secrets.
 
       ```bash
+      ncn-m001# mkdir -p certs
       ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
       ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
       ```
 
 1. (Optional) Prevent tracked sealed secrets from being regenerated.
     
-    1. Remove the sealed secrets not being regenerated from the `spec.kubernetes.tracked_sealed_secrets` list in `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml` prior to executing the remaining steps in this section.
+   Remove the sealed secrets not being regenerated from the `spec.kubernetes.tracked_sealed_secrets` list in `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml` prior to executing the remaining steps in this section.
 
-    2. Retain the REDS/MEDS/RTS credentials.
+   Retain the REDS/MEDS/RTS credentials.
 
-       ```bash
-       linux# yq delete -i ./${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
-       linux# yq delete -i ./${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
-       linux# yq delete -i ./${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
-       ```
+   ```bash
+   ncn-m001# yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
+   ncn-m001# yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
+   ncn-m001# yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
+   ```
 
 2. Prepare to generate sealed secrets.
    
