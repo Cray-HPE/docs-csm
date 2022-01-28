@@ -76,6 +76,12 @@ if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
    fi
 fi
 
+# REMOVE ME:
+csi handoff bss-update-param \
+    --set metal.server=http://rgw-vip.nmn/ncn-images/k8s/${KUBERNETES_VERSION} \
+    --set rd.live.squashimg=filesystem.squashfs \
+    --limit $UPGRADE_XNAME
+
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
 
 if [[ ${upgrade_ncn} == "ncn-m001" ]]; then

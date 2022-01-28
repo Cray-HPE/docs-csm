@@ -59,6 +59,12 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+# REMOVE ME:
+csi handoff bss-update-param \
+    --set metal.server=http://rgw-vip.nmn/ncn-images/k8s/${KUBERNETES_VERSION} \
+    --set rd.live.squashimg=filesystem.squashfs \
+    --limit $UPGRADE_XNAME
+
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
 
 cfs_config_status=$(cray cfs components describe $UPGRADE_XNAME --format json | jq -r '.configurationStatus')
