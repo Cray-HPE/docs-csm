@@ -46,6 +46,15 @@ Note:  A roadmap item for CANU is the ability to “inject” customer configura
 
 Always before making configuration changes, analyze the changes shown in the above configuration diff section. 
 
+:exclamation: All of these steps should be done using an out of band connection. This process is disruptive and will require downtime :exclamation:  
+
+#### Caveats and known issues
+- Some configuration may need to be applied in a certain order.
+  - Example: `Customer VRF` needs to be applied before adding interfaces/routes to the VRF.
+- When applying certain configuration it may wipe out pre-existing configuration.
+  - An example of this would be adding a VRF to a port.
+
+
 For example:  
 
 ```

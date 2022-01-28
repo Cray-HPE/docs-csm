@@ -38,6 +38,7 @@ Documentation for CANU can be found at https://github.com/Cray-HPE/canu
 
 ### Useful pages
 - [Collect data](./network_management_install_guide/collect_data.md)
+   - Input data needed to generate switch configs.
 - [Cable Management Network Servers](../../install/cable_management_network_servers.md)
    - shows how servers in CSM should be cabled.
 - [SHCD HMN Tab/HMN Connections Rules](../../install/shcd_hmn_connections_rules.md)
@@ -49,10 +50,15 @@ Documentation for CANU can be found at https://github.com/Cray-HPE/canu
 - [Config management](./network_management_install_guide/config_management.md)
    - shows users how to save a running config to the switch for backup purposes or to switch between different switch configs.
 - [Validate switch config](./network_management_install_guide/validate_switch_configs.md)
+   - Compares the configuration on a running system to what is generated.
 - [wipe management switches](./network_management_install_guide/wipe_mgmt_switches.md)
+   - Erase the switch configuration, this is useful for fresh installs.
 - [Generate switch configs](./network_management_install_guide/generate_switch_configs.md)
-[Validate SHCD](./network_management_install_guide/validate_shcd.md)
-
+   - Generate configurations for all management switches.
+- [Manual switch configs](./network_management_install_guide/manual_switch_configs.md)
+   - Some configuration needs to be done manually (authentication/SNMP).
+- [Validate SHCD](./network_management_install_guide/validate_shcd.md)
+   - Validate the SHCD against the CSM network architecture.
 ### Products Supported
 
 This release applies to the following product models
@@ -66,6 +72,8 @@ This release applies to the following product models
 * Dell S3048-ON Switch Series
 * Dell S4148T-ON Switch Series
 * Dell S4148F-ON Switch Series
+
+Architecture and naming conventions can be found at https://github.com/Cray-HPE/canu/blob/main/network_modeling/models/cray-network-architecture.yaml
 
 ### Minimum software version requirements
 
