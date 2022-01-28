@@ -168,4 +168,14 @@ On ncn-m001:
 python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
 ```
 
+## Stage 0.6 - Backup BSS Data
+
+In the event of a problem during the upgrade which may cause the loss of BSS data, perform the following to preserve this data.
+
+   ```bash
+   ncn-m001# cray bss bootparameters list --format=json >bss-backup-$(date +%Y-%m-%d).json
+   ```
+
+The resulting file needs to be saved in the event that BSS data needs to be restored in the future.
+
 Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).
