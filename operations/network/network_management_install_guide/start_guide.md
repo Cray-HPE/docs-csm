@@ -11,7 +11,7 @@
 1. [Validate the SHCD](../validate_shcd.md)
 1. Generate switch configs and apply via out of band management connection or console connection.  An example on how to generate switch configs can be found on the [generate switch configs](../generate_switch_configs.md) page.
 1. Apply the switch configs. [apply switch configs](../apply_switch_configs.md).
-1. validate that the switch configs match what is generated.  [validate switch configs](validate_switch_configs.md)
+1. validate that the switch configs match what is generated.  [validate switch configs](../validate_switch_configs.md)
 1. Run [network tests](./network_tests.md) against the management network.
 ### Upgrade
 
@@ -20,7 +20,7 @@
 1. [Validate the SHCD](../validate_shcd.md)
 1. Generate switch configs and apply via out of band management connection or console connection.  An example on how to generate switch configs can be found on the [generate switch configs](../generate_switch_configs.md) page.
 1. Apply the switch configs. [apply switch configs](../apply_switch_configs.md).
-1. validate that the switch configs match what is generated.  [validate switch configs](validate_switch_configs.md)
+1. validate that the switch configs match what is generated.  [validate switch configs](../validate_switch_configs.md)
 1. If custom config exists use the `--override` function from CANU so that this config does not get overwritten.
 1. Run [network tests](./network_tests.md) against the management network.
 
