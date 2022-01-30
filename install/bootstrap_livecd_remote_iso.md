@@ -211,7 +211,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     ```bash
     pit# mount -v -L PITDATA
     pit# pushd /var/www/ephemeral
-    pit:/var/www/ephemeral# mkdir -v admin prep prep/admin configs data
+    pit# mkdir -v admin prep prep/admin configs data
     ```
 
 1. Quit the typescript session with the `exit` command, copy the file (csm-install-remoteis.<date>.txt) from its initial location to the newly created directory, and restart the typescript.
@@ -222,7 +222,6 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     pit# cd /var/www/ephemeral/prep/admin
     pit# script -af $(ls -tr csm-install-remoteiso* | head -n 1)
     pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
-    pit# pushd /var/www/ephemeral
     ```
 
 1. Download the CSM software release to the PIT node.
@@ -234,22 +233,22 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    1. Set helper variables
 
       ```bash
-      pit:/var/www/ephemeral# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm
-      pit:/var/www/ephemeral# export CSM_RELEASE=csm-x.y.z
-      pit:/var/www/ephemeral# export SYSTEM_NAME=eniac
+      pit# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm
+      pit# export CSM_RELEASE=csm-x.y.z
+      pit# export SYSTEM_NAME=eniac
       ```
 
    1. Save the `CSM_RELEASE` and `SYSTEM_NAME` variable for usage later; all subsequent shell sessions will have this var set.
 
       ```bash
       # Prepend a new line to assure we add on a unique line and not at the end of another.
-      pit:/var/www/ephemeral# echo -e "\nCSM_RELEASE=$CSM_RELEASE\nSYSTEM_NAME=$SYSTEM_NAME" >>/etc/environment
+      pit# echo -e "\nCSM_RELEASE=$CSM_RELEASE\nSYSTEM_NAME=$SYSTEM_NAME" >>/etc/environment
       ```
 
    1. Fetch the release tarball.
 
       ```bash
-      pit:/var/www/ephemeral# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz -O /var/www/ephemeral/${CSM_RELEASE}.tar.gz
+      pit# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz -O /var/www/ephemeral/${CSM_RELEASE}.tar.gz
       ```
 
    1. Expand the tarball on the PIT node.
@@ -258,16 +257,19 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 
       ```bash
-      pit:/var/www/ephemeral# tar -zxvf ${CSM_RELEASE}.tar.gz
-      pit:/var/www/ephemeral# ls -l ${CSM_RELEASE}
+      pit# tar -C /var/www/ephemeral -zxvf /var/www/ephemeral/${CSM_RELEASE}.tar.gz
+      pit# CSM_PATH=/var/www/ephemeral/${CSM_RELEASE}
+      pit# echo $CSM_PATH
+      pit# echo -e "\CSM_PATH=$CSM_PATH" >>/etc/environment
+      pit# ls -l ${CSM_PATH}
       ```
 
    1. Copy the artifacts into place.
 
       ```bash
-      pit:/var/www/ephemeral# mkdir -pv data/{k8s,ceph}
-      pit:/var/www/ephemeral# rsync -a -P --delete ./${CSM_RELEASE}/images/kubernetes/ ./data/k8s/
-      pit:/var/www/ephemeral# rsync -a -P --delete ./${CSM_RELEASE}/images/storage-ceph/ ./data/ceph/
+      pit# mkdir -pv /var/www/ephemeral/data/{k8s,ceph} &&
+            rsync -a -P --delete ${CSM_PATH}/images/kubernetes/ /var/www/ephemeral/data/k8s/ &&
+            rsync -a -P --delete ${CSM_PATH}/images/storage-ceph/ /var/www/ephemeral/data/ceph/
       ```
 
    > The PIT ISO, Helm charts/images, and bootstrap RPMs are now available in the extracted CSM tar.
@@ -275,7 +277,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Install/upgrade CSI; check if a newer version was included in the tar-ball.
 
    ```bash
-   pit:/var/www/ephemeral# rpm -Uvh $(find ./${CSM_RELEASE}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh $(find ${CSM_PATH}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
 
 1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
@@ -287,7 +289,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Show the version of CSI installed.
 
    ```bash
-   pit:/var/www/ephemeral# /root/bin/metalid.sh
+   pit# /root/bin/metalid.sh
    ```
 
    Expected output looks similar to the following:
@@ -328,7 +330,7 @@ Some files are needed for generating the configuration payload. See these topics
 1. Change into the preparation directory plus necessary PIT directories (for later):
 
    ```bash
-   pit:/var/www/ephemeral# cd prep
+   pit# cd /var/www/ephemeral/prep
    ```
 
 1. Pull these files into the current working directory, or create them if this is a first-time/initial install:
@@ -372,10 +374,10 @@ Some files are needed for generating the configuration payload. See these topics
       system_config.yaml
       ```
 
-   1. Set an environment variable so this system name can be used in later commands.
+   1. Verify that the `SYSTEM_NAME` variable is set.
 
       ```bash
-      pit:/var/www/ephemeral/prep/# export SYSTEM_NAME=eniac
+      pit:/var/www/ephemeral/prep/# echo $SYSTEM_NAME
       ```
 
    1. Generate the system configuration
@@ -439,10 +441,10 @@ Some files are needed for generating the configuration payload. See these topics
       switch_metadata.csv
       ```
 
-   1. Set an environment variable so this system name can be used in later commands.
+   1. Verify that the `SYSTEM_NAME` variable is set.
 
       ```bash
-      pit:/var/www/ephemeral/prep/# export SYSTEM_NAME=eniac
+      pit:/var/www/ephemeral/prep/# echo $SYSTEM_NAME
       ```
 
    1. Generate the system config:
@@ -556,7 +558,6 @@ Finally, cleanup the shim:
    > **`NOTE`** `pit-init` will re-run `csi config init`, copy all generated files into place, apply the CA patch, and finally restart daemons. This will also re-print the `metalid.sh` content incase it was skipped in the previous step. **Re-installs** can skip running `csi config init` entirely and simply run `pit-init.sh` after gathering CSI input files into `/var/www/ephemeral/prep`.
 
     ```bash
-    pit# export SYSTEM_NAME=eniac
     pit# export USERNAME=root
     pit# export IPMI_PASSWORD=changeme
     pit# /root/bin/pit-init.sh
@@ -568,26 +569,13 @@ Finally, cleanup the shim:
    pit# /root/bin/configure-ntp.sh
    ```
 
-1. Set shell environment variables.
-
-   The CSM_RELEASE and CSM_PATH variables will be used later.
-
-   ```bash
-   pit# cd /var/www/ephemeral
-   pit:/var/www/ephemeral# export CSM_RELEASE=csm-x.y.z
-   pit:/var/www/ephemeral# echo $CSM_RELEASE
-   pit:/var/www/ephemeral# export CSM_PATH=$(pwd)/${CSM_RELEASE}
-   pit:/var/www/ephemeral# echo $CSM_PATH
-   ```
-
 1. Install Goss Tests and Server
 
    The following assumes the CSM_PATH environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
-   pit:/var/www/ephemeral# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
-   pit:/var/www/ephemeral# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)   
-   pit:/var/www/ephemeral# cd
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)   
    ```
 
 1. Verify the system:
