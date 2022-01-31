@@ -256,7 +256,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
 1. Remove etcd device **on master nodes ONLY**.
 
-   1. This `dmsetup` comand wil determine whether an etcd volume is present.
+   1. This `dmsetup` command will determine whether an etcd volume is present.
 
       ```bash
       ncn-m# dmsetup ls
