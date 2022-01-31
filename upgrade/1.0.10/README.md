@@ -53,6 +53,16 @@ ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'trunc
 ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
 ```
 
+1. Backup BSS Data
+
+In the event of a problem during the upgrade which may cause the loss of BSS data, perform the following to preserve this data.
+
+   ```bash
+   ncn-m001# cray bss bootparameters list --format=json >bss-backup-$(date +%Y-%m-%d).json
+   ```
+
+The resulting file needs to be saved in the event that BSS data needs to be restored in the future.
+
 <a name="setup-nexus"></a>
 
 ## Setup Nexus
