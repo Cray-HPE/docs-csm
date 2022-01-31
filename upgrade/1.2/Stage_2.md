@@ -107,6 +107,14 @@ ncn-m002# /srv/cray/scripts/common/apply-networking-manifests.sh
 
 ## Stage 2.5
 
+Run the following script to apply anti-affinity to coredns pods:
+
+```bash
+ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/apply-coredns-pod-affinity.sh
+```
+
+## Stage 2.6
+
 Run the following script to complete the Kubernetes upgrade _(this will restart several pods on each master to their new docker containers)_:
 
 ```bash
