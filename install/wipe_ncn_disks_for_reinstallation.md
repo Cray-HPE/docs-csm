@@ -267,7 +267,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
    1. This `dmsetup` comand wil determine whether an etcd volume is present.
 
       ```bash
-      ncn-m# dmsetup -ls 
+      ncn-m# dmsetup ls 
       ```
 
       Expected output when the etcd volume is present will show `ETCDLVM`, but the numbers might be different.
