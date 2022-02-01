@@ -26,6 +26,8 @@ snmp-server view cray-reds-view 1.3.6.1.2 included
 
  #### Authentication config
 
+ This is for all switches.
+
  
 ##### Aruba
 ```

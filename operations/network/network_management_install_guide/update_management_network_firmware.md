@@ -1,7 +1,7 @@
 # Update Management Network Firmware
 
 This page describes how to update firmware on the management network switches.
-These procedures are also found in the vendor [user guides](./user_guides.md).
+More details and other options to upgrade firmware can be found in the switch [user guides](./user_guides.md).
 ## Requirements
 
 Access to the switches from the LiveCD/ncn-m001.

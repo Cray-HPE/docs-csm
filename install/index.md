@@ -93,10 +93,8 @@ sections, but there is also a general troubleshooting topic.
    1. Configure Management Network Switches
 
       Now that the PIT node has been booted with the LiveCD environment and CSI has generated the switch IP addresses,
-      the management network switches can be configured. This procedure will configure the spine switches, aggregation
-      switches (if present), CDU switches (if present), and the leaf switches.
-
-      See [Configure Management Network Switches](configure_management_network.md)
+      the management network switches can be configured.
+      [Management Net Docs](../operations/network/index.md)
 
       **Note**: If a reinstall of this software release is being done on this system and the management network switches
       have already been configured, then this topic could be skipped and instead move to
