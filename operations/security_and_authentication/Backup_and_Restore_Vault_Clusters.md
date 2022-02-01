@@ -256,7 +256,7 @@ View the existing Vault backups on the system and use a completed backup to perf
     2.  Verify the changes were successfully made.
 
         ```bash
-        ncn# kubectl -n vault  get deployment
+        ncn# kubectl -n vault get deployment
         ```
 
         Example output:
@@ -308,7 +308,7 @@ View the existing Vault backups on the system and use a completed backup to perf
     2.  Verify the changes were successfully made.
 
         ```bash
-        ncn# kubectl -n vault  get deployment
+        ncn# kubectl -n vault get deployment
         ```
 
         Example output:

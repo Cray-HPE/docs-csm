@@ -88,7 +88,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
                           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-### Preserve node xname to IP mapping
+### Preserve node xname to IP address mapping
 4.  **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.** When DVS is operating over the NMN, and a blade is being replaced the mapping of node xname to node IP address must be preserved. Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes). To prevent from Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
 
     1. Create an `eth_interfaces` file that contains the interface IDs for the `Node Maintenance Network` entries for the destination blade location. If there has not been a blade previously in the destination location there may not be any Ethernet Interfaces to delete from HSM.
@@ -354,7 +354,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 
 #### Check DNS
 
-Check for duplicate IP entries in the State Management Database (SMD). Duplicate entries will cause DNS operations to fail.
+Check for duplicate IP address entries in the State Management Database (SMD). Duplicate entries will cause DNS operations to fail.
 
 ```bash
 ncn-m001:~ # ssh uan01

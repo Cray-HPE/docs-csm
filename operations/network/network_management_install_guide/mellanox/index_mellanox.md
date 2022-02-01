@@ -17,7 +17,7 @@ The HPE Cray recommended way of configuring the network is via the CANU tool, he
 Also included in this guide are our current documented and supported network scenarios.
 Please do note that not every configuration option is covered here and for any configuration outside of the scope of this document; You should refer to the official Mellanox user manuals.
 
-Mellanox documentation and software  can be found from:
+Mellanox documentation and software can be found from:
 
 [https://docs.mellanox.com/]()
 
@@ -43,7 +43,7 @@ __________________________________
 ### Canu:
    1. [Installation](./canu_installation.md)
    1. [Initializing canu](./initializing_canu.md)
-   1. [Use Canu to verify, generate or compare switch configuration](./canu_verify_generate_compare_switch_connfiguration.md)
+   1. [Use Canu to verify, generate or compare switch configuration](./canu_verify_generate_compare_switch_configuration.md)
    1. [Using Canu to generate full network configuration](./using_canu_to_generate_full_network_config.md)
    1. [Uninstall Canu](#uninstall_canu.md)
 
@@ -141,7 +141,7 @@ __________________________________
   1. [Check Kea DHPC logs](./check_kea_dhcp_logs.md)
   1. [TCPDUMP](./ncn_tcpdump.md)
   1. [Check BGP and MetalLB](./check_bgp_and_metallb.md)
-  1. [You are getting IP, but not the correct one. Duplicate IP check](./duplicate_ip.md)
+  1. [Getting incorrect IP address. Duplicate IP address check](./duplicate_ip.md)
   1. [Large number of DHCP declines during a node boot](./dhcp_decline.md)
 
 ### DNS

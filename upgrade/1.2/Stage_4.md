@@ -1,44 +1,41 @@
 # Stage 4 - Upgrade Aruba switches to 10.08.1021
 
-As part of the CSM 1.2 you need to upgrade Aruba switches to 10.08.1021.
+As part of the CSM 1.2 upgrade, you must upgrade Aruba switches to 10.08.1021.
 
-After this change the NAE script to address Mac learning issue with 8325 is no longer required and needs to be deleted from the system. 
+With that new software level, the NAE script to address Mac learning issue with `8325` switches is no longer required and needs to be deleted from the system. 
 
-### Automated removal of NAE script
+## 4.1 Removal of NAE script
 
-#### Prerequisites:
+### Prerequisites
 
-1. The nae_remove.py script relies on /etc/hosts file to pull IP addresses of the switch. Without this information the script won’t run.
-2. You have 8325 in your setup that is running software version 10.08.1021
-3. Script assumes you  are using default username "admin"  for the switch and it will prompt you for password.
+1. The `nae_remove.py` script relies on the `/etc/hosts` file to pull the IP addresses of the switches. Without this information, the script will not run.
+2. You have an `8325` switch in your setup that is running software version 10.08.1021
+3. Script assumes you are using default username `admin` for the switch and it will prompt you for password.
 
-NOTE: 	The nae_remover script automatically detects 8325’s and only applies the fix to this platform.
+NOTE: 	The nae_remover script automatically detects `8325` switches and only applies the fix to that platform.
 
-#### How to run the install script:
+### Run The Removal Script
 
-**Step 1:**
+```bash
+ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/aruba/nae_remove.py
 ```
-ncn-m002:~ # /usr/share/doc/csm/upgrade/1.2/scripts/aruba/nae_remove.py
-```
 
-**step 2:**
+When prompted, type in your switch password.
 
-> Type in your switch password and the script will upload and enable the NAE script.
-
-## Upgrading software
+## 4.2 Upgrade Switch Software
 
 ### Pre-requisites
 
 * Choose which way you want to upload the new software to the switches.
-	* Via USB
-	* Via WEB UI
-	* Via TFTP or SFTP
+	* USB
+	* Web UI
+	* TFTP or SFTP
 
-NOTE: if you do not want to proceed with pre-staging you can also upload the new software directly using ‘vsx update-software’ command, however you will be limited to only using TFTP if you choose not to pre-stage the firmware.
+NOTE: If you do not want to proceed with pre-staging, you can also upload the new software directly using `vsx update-software` command. However you will be limited to only using TFTP if you choose not to pre-stage the firmware.
 
-NOTE 2: VSX update-software is only available in VSX paired switches, for example 6300 would not have this upgrade option. 
+NOTE: VSX update-software is only available in VSX paired switches. For example, `6300` switches would not have this upgrade option.
 
-### Upgrading with VSX update-software: 
+### Option 1: Upgrading with VSX update-software: 
 
 ```
 switch# vsx update-software tftp://192.168.1.1/ArubaOS-CX_8325_10_08_1021.swi 
@@ -55,7 +52,7 @@ Progress [......................................................................
 Secondary VSX system updated completely. Rebooting primary.
 ```
 
-### Upgrading without VSX software 
+### Option 2: Upgrading without VSX software 
 
 ```
 switch# copy tftp://192.168.1.1/ArubaOS-CX_6400-6300_10_08_1021.swi secondary

@@ -16,7 +16,7 @@
     services            cray-dns-unbound-manager-1635449040                  1/1           61s        2m35s
 	```
 
-* If you see one of the jobs show `0/1` for more than 10 minutes and there are other runs with `1/1`.  That means that job is hung. You can delete the job with:
+* If you see one of the jobs show `0/1` for more than 10 minutes and there are other runs with `1/1`. That means that job is hung. You can delete the job with:
 
 
 	```bash
