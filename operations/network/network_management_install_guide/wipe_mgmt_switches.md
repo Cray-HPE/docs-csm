@@ -36,11 +36,11 @@ The next step is likely going to be [apply switch configs](apply_switch_configs.
 
 ### Dell
 
-- save startup config to new xml config
+Save startup config to new xml config
 ```
 sw-leaf-bmc-001(config)# copy config://startup.xml config://csm1.0.xml
 ```
-- Erase the startup config and reboot
+Erase the startup config and reboot
 ```
 sw-leaf-bmc-001# delete startup-configuration
 Proceed to delete startup-configuration [confirm yes/no(default)]:yes
@@ -49,16 +49,15 @@ System configuration has been modified. Save? [yes/no]:no
 Continuing without saving system configuration
 Proceed to reboot the system? [confirm yes/no]:yes
 ```
-- This will boot the switch to factory defaults, The next step is likely going to be [apply switch configs](apply_switch_configs.md).
+This will boot the switch to factory defaults, The next step is likely going to be [apply switch configs](apply_switch_configs.md).
 
 ### Mellanox
 
-- Create a new config file for csm 1.2, when a new config file is created no data is written to it. We will boot to this new config file and
-paste the CANU generated config to it.
+Create a new config file, when a new config file is created no data is written to it. We will boot to this new config file which will be blank.
 ```
 (config) # configuration new csm1.2
 ```
-- check that the configuration files contain the new csm1.2 blank config we just created.
+check that the configuration files contain the new csm1.2 blank config we just created.
 ```
 (config) # show configuration
 files
@@ -75,4 +74,5 @@ Unsaved changes : no
 This requires a reboot.
 Type 'yes' to confirm: yes
 ```
-The next step is likely going to be [apply switch configs](apply_switch_configs.md).
+
+This will boot the switch to factory defaults, The next step is likely going to be [apply switch configs](apply_switch_configs.md).

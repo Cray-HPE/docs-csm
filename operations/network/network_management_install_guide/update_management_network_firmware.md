@@ -270,13 +270,13 @@ BIOS Version       : GL-01-0013
 1. Fetch the image from ncn-m001.
 
    ```
-   sw-spine-001 [standalone: master] # image fetch http://10.252.1.4/fw/network/onyx-X86_64-3.9.1014.stable.img
+   sw-spine-001 [standalone: master] # image fetch scp://root@10.252.1.4/root/onyx-X86_64-3.9.3210.img
    ```
 
 3. Install the image.
 
    ```
-   sw-spine-001 [standalone: master] # image install onyx-X86_64-3.9.1014.stable.img
+   sw-spine-001 [standalone: master] # image install onyx-X86_64-3.9.3210.img
    ```
 
 4. Select the image to boot next.

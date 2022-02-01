@@ -12,6 +12,8 @@ This includes:
 - default routes
 - any other customized config for this system
 
+This configuration will likely vary from site to site.  This guide will cover the most common site setup.
+
  #### Backup site connection configuration
 You can find the site connections on the SHCD.
 ```
@@ -84,7 +86,7 @@ sw-spine-002 [mlag-domain: master] # show run | include "ip route"
 
  #### Apply site connection configuration
 
- Once the generated configuration has been applied you will need to apply the backed up site connection configuration with a couple modifications.  Since we are now using a VRF to seperate customer traffic we will need to add the site ports and the default routes to that VRF.
+ Once the generated configuration has been applied. [apply switch configs](apply_switch_configs.md). You will need to apply the backed up site connection configuration with a couple modifications.  Since we are now using a VRF to seperate customer traffic we will need to add the site ports and the default routes to that VRF.  
  ##### Aruba
 `vrf attach Customer` will be added to the port configuration that connects to the site.
 `vrf Customer` will be appended to the default route configuration.
@@ -207,6 +209,7 @@ snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plai
 ##### Dell
 
 ```
+sw-leaf-001# show running-configuration | include snmp
 snmp-server group cray-reds-group 3 noauth read cray-reds-view
 snmp-server user xxxxxx cray-reds-group 3 auth md5 xxxxxx priv des xxxxxx
 snmp-server view cray-reds-view 1.3.6.1.2 included
