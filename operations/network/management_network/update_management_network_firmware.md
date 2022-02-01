@@ -121,7 +121,7 @@ BIOS Version       : FL.01.0002
 
 1. SSH into the Primary VSX member of the VSX-pair to upgrade.
 
-     Example: the IP `10.252.1.12` used is the LiveCD.
+     Example: the IP address `10.252.1.12` used is the LiveCD.
 
 2. Upload the firmware.
 

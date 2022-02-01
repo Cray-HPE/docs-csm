@@ -8,7 +8,7 @@ SSH to log into a Broker UAI and reach the End-User UAIs on demand.
 
 ### Prerequisites
 
-* The user must be logged into a host that can reach the external IP of the Broker UAI
+* The user must be logged into a host that can reach the external IP address of the Broker UAI
 * The user must know the external IP or DNS host name of the Broker UAI
 
 ### Procedure

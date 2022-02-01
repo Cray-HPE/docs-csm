@@ -1,6 +1,6 @@
 #PIM-SM bootstrap router (BSR) and rendezvous-point (RP) 
 
- “Every PIM multicast group needs to be associated with the IP address of a Rendezvous Point (RP) [...] For all senders to reach all receivers, it is crucial that all routers in the domain use the same mappings of group addresses to RP addresses. [...] The BSR mechanism provides a way in which viable group-to-RP mappings can be created and rapidly distributed to all the PIM routers in a domain.” –rfc5059 
+ "Every PIM multicast group needs to be associated with the IP address of a Rendezvous Point (RP) [...] For all senders to reach all receivers, it is crucial that all routers in the domain use the same mappings of group addresses to RP addresses. [...] The BSR mechanism provides a way in which viable group-to-RP mappings can be created and rapidly distributed to all the PIM routers in a domain." –rfc5059 
  
 Relevant Configuration 
 
@@ -23,7 +23,7 @@ switch# show ip pim rp-set
 Test Steps:
 
 1.	Use the previous IGMP, MSDP configuration and topology.
-2.	On both Core Switches create loopback1 interface using the same IP for both devices.
+2.	On both Core Switches create loopback1 interface using the same IP address for both devices.
 3.	Enable OSPF on loopback interface and make sure route redistribution is configured.
 4.	Enable PIM-SM on loopback1
 5.	Configure loopback1 to act as RP for both 8325s using: rp-candidate source-ip-interface loopback1

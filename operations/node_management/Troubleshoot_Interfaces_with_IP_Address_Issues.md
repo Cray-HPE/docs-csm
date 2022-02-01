@@ -2,7 +2,7 @@
 
 Correct NCNs that are failing to assigning a static IP address or detect a duplicate IP address.
 
-The Wicked network manager tool will fail to bring an interface up if its assigned IP address already exists in the respective LAN. This can be detected by checking for signs of duplicate IP messages in the log.
+The Wicked network manager tool will fail to bring an interface up if its assigned IP address already exists in the respective LAN. This can be detected by checking for signs of duplicate IP address messages in the log.
 
 ### Prerequisites
 

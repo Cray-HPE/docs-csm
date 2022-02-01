@@ -1,6 +1,6 @@
 # Static routing 
 
-“Static routing is manually performed by the network administrator. The administrator is responsible for discovering and propagating routes through the network. These definitions are manually programmed in every routing device in the envi- ronment. After a device has been configured, it simply forwards packets out the predetermined ports. There is no com- munication between routers regarding the current topology of the network.” –IBM Redbook, TCP/IP Tutorial and Technical Overview 
+"Static routing is manually performed by the network administrator. The administrator is responsible for discovering and propagating routes through the network. These definitions are manually programmed in every routing device in the envi- ronment. After a device has been configured, it simply forwards packets out the predetermined ports. There is no com- munication between routers regarding the current topology of the network." –IBM Redbook, TCP/IP Tutorial and Technical Overview 
 
 Relevant Configuration 
 
