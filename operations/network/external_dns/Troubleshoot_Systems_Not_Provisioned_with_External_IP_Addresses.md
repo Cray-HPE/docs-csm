@@ -4,7 +4,7 @@ Systems that do not support CAN will not have services provisioned with external
 
 If SSH access to a non-compute node \(NCN\) is available, it is possible to override resolution of external hostnames and forward local ports into the cluster for the cluster IP address of the corresponding service.
 
-**Warning:** This will bypass the Keycloak gatekeeper and Istio ingress gateway, which handle authentication and authorization.
+**WARNING:** This will bypass the Keycloak gatekeeper and Istio ingress gateway, which handle authentication and authorization.
 
 Enable systems without CAN to provision services with external hostnames.
 
@@ -20,6 +20,11 @@ The Customer Access Network \(CAN\) is not supported on the system.
 
     ```bash
     ncn-w001# kubectl get vs -A | grep -v '[*]'
+    ```
+
+    Example output:
+
+    ```
     NAMESPACE        NAME                              GATEWAYS                       HOSTS                                                      AGE
     istio-system     kiali                             [services/services-gateway]    [kiali-istio.SYSTEM_DOMAIN_NAME]                           2d16h
     istio-system     tracing                           [services/services-gateway]    [jaeger-istio.SYSTEM_DOMAIN_NAME]                          2d16h
@@ -38,6 +43,11 @@ The Customer Access Network \(CAN\) is not supported on the system.
 
     ```bash
     ncn-w001# kubectl -n sysmgmt-health get service cray-sysmgmt-health-promet-prometheus
+    ```
+
+    Example output:
+
+    ```
     NAME                                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
     cray-sysmgmt-health-promet-prometheus   ClusterIP   10.25.124.159   <none>        9090/TCP   23h
     ```

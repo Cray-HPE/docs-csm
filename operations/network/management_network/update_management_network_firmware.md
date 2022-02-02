@@ -99,6 +99,11 @@ Once the reboot is complete, check and make sure the firmware version is correct
 
 ```
 sw-leaf-001# show version
+```
+
+Example output:
+
+```
 -----------------------------------------------------------------------------
 ArubaOS-CX
 (c) Copyright 2017-2020 Hewlett Packard Enterprise Development LP
@@ -116,7 +121,7 @@ BIOS Version       : FL.01.0002
 
 1. SSH into the Primary VSX member of the VSX-pair to upgrade.
 
-     Example: the IP `10.252.1.12` used is the LiveCD.
+     Example: the IP address `10.252.1.12` used is the LiveCD.
 
 2. Upload the firmware.
 
@@ -131,6 +136,11 @@ BIOS Version       : FL.01.0002
 
    ```
    sw-leaf-001# show image
+   ```
+
+   Example output:
+
+   ```
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
@@ -142,30 +152,39 @@ BIOS Version       : FL.01.0002
 
 4. After the firmware is uploaded, boot the switch to the correct image.
 
-Example: the IP address `10.252.1.12` used is the liveCD.
-```
-sw-leaf-001# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_6400-6300_10_06_0120.stable.swi primary
+   Example: the IP address `10.252.1.12` used is the liveCD.
 
-sw-leaf-001# write mem
-Copying configuration: [Success]
-```
-Once the upload is complete, check the images:
+   ```
+   sw-leaf-001# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_6400-6300_10_06_0120.stable.swi primary
 
-```
-sw-leaf-001# show image
----------------------------------------------------------------------------
-ArubaOS-CX Primary Image
----------------------------------------------------------------------------
-Version : FL.10.06.0120
-Size    : 643 MB
-Date    : 2021-03-14 10:06:34 PST
-SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9
-```
-After the firmware is uploaded, boot the switch to the correct image. When upgrading a VSX pair, use the VSX upgrade command to automatically upgrade both pairs.
-```
-sw-leaf-001# vsx update-software boot-bank primary
-```
-This will trigger the upgrade process on the VSX pair and it will start the dialogue explaining what will happen next, i.e. if any firmware/driver upgrades are needed (i.e. the unit would reboot twice if this was the case) and it will show you on the screen the current status of the upgrade process. in VSX upgrade process the secondary VSX member will always boot first.
+   sw-leaf-001# write mem
+   Copying configuration: [Success]
+   ```
+   Once the upload is complete, check the images:
+
+   ```
+   sw-leaf-001# show image
+   ```
+
+   Example output:
+
+   ```
+   ---------------------------------------------------------------------------
+   ArubaOS-CX Primary Image
+   ---------------------------------------------------------------------------
+   Version : FL.10.06.0120
+   Size    : 643 MB
+   Date    : 2021-03-14 10:06:34 PST
+   SHA-256 : 78dc27c5e521e92560a182ca44dc04b60d222b9609129c93c1e329940e1e11f9
+   ```
+   
+   After the firmware is uploaded, boot the switch to the correct image. When upgrading a VSX pair, use the VSX upgrade command to automatically upgrade both pairs.
+   
+   ```
+   sw-leaf-001# vsx update-software boot-bank primary
+   ```
+   
+   This will trigger the upgrade process on the VSX pair and it will start the dialogue explaining what will happen next, i.e. if any firmware/driver upgrades are needed (i.e. the unit would reboot twice if this was the case) and it will show you on the screen the current status of the upgrade process. in VSX upgrade process the secondary VSX member will always boot first.
 
 ## Mellanox Firmware Update
 
@@ -200,7 +219,11 @@ This will trigger the upgrade process on the VSX pair and it will start the dial
 
    ```
    sw-spine-001 [standalone: master] # show images
+   ```
 
+   Example output:
+
+   ```
    Installed images:
    Partition 1:
      version: X86_64 3.9.0300 2020-02-26 19:25:24 x86_64
@@ -231,6 +254,11 @@ This will trigger the upgrade process on the VSX pair and it will start the dial
 
    ```
    sw-leaf-001# show image status
+   ```
+
+   Example output:
+
+   ```
    Image Upgrade State:     download
    ==================================================
    File Transfer State:     download
@@ -255,6 +283,11 @@ This will trigger the upgrade process on the VSX pair and it will start the dial
 
    ```
    sw-leaf-001# show version
+   ```
+
+   Example output:
+
+   ```
    Dell EMC Networking OS10 Enterprise
    Copyright (c) 1999-2020 by Dell Inc. All Rights Reserved.
    OS Version: 10.5.1.4

@@ -4,8 +4,8 @@ The Customer Access Network \(CAN\) needs to be connected to both spines in a du
 
 For more information:
 
--   Mellanox: [https://community.mellanox.com/s/article/howto-configure-magp-on-mellanox-switches](https://community.mellanox.com/s/article/howto-configure-magp-on-mellanox-switches)
--   Aruba: [https://www.arubanetworks.com/techdocs/AOS-CX/10.04/HTML/5200-6728/index.html\#book.html](https://www.arubanetworks.com/techdocs/AOS-CX/10.04/HTML/5200-6728/index.html#book.html)
+- Mellanox: [https://community.mellanox.com/s/article/howto-configure-magp-on-mellanox-switches](https://community.mellanox.com/s/article/howto-configure-magp-on-mellanox-switches)
+- Aruba: [https://www.arubanetworks.com/techdocs/AOS-CX/10.04/HTML/5200-6728/index.html\#book.html](https://www.arubanetworks.com/techdocs/AOS-CX/10.04/HTML/5200-6728/index.html#book.html)
 
 ![Dual-Spine Configuration](../../../img/operations/CAN_Dual-Spine_Configuration.PNG "Dual-Spine Configuration")
 
@@ -91,9 +91,9 @@ The NCN will also need to configure a default route pointing to a gateway IP add
 
 Then the following MAGP configuration will be added \(same configuration on each of the spines\):
 
--   virtual-router address = can-gateway
--   virtual-router mac-address = 00:00:5E:00:01:07.
-    -   The MAC used here follows [RFC 3768 Section 7.3](https://tools.ietf.org/html/rfc3768#section-7.3) in the external documentation.
+- virtual-router address = can-gateway
+- virtual-router mac-address = 00:00:5E:00:01:07
+  - The MAC used here follows [RFC 3768 Section 7.3](https://tools.ietf.org/html/rfc3768#section-7.3) in the external documentation
 
 
 MAGP on the spine:
@@ -117,6 +117,11 @@ Default route on the NCN \(configured by the can-network role\):
 
 ```screen
 ncn-m001# ip route
+```
+
+Example output:
+
+```
 default via 10.102.5.27 dev bond0.cmn0
 ```
 

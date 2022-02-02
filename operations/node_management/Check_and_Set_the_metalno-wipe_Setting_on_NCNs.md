@@ -22,6 +22,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-m001# ./ncnGetXnames.sh
+    ```
+
+    Example output:
+
+    ```
     ncn-m001: x3000c0s1b0n0 - metal.no-wipe=1
 
     ncn-m002: x3000c0s2b0n0 - metal.no-wipe=1
@@ -66,6 +71,11 @@ This procedure requires administrative privileges.
 
         ```bash
         ncn-m001# ./ncnGetXnames.sh
+        ```
+
+        Example output:
+
+        ```
         ncn-m001: x3000c0s1b0n0 - metal.no-wipe=1
 
         ncn-m002: x3000c0s2b0n0 - metal.no-wipe=1

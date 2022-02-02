@@ -1,13 +1,10 @@
 
 # Typical configuration of MCLAG link connecting to NCN
 
-The intent here is to show case very basic MCLAG link configuration and your configuration may differ. Note the ‘multi-chassis’ definition after the ‘interface lag xx’ command. This is what defines the LAG to be able to peer both to Spine-01 and Spine-02.
+The intent here is to showcase a very basic MCLAG link configuration -- your configuration may differ. Note the `multi-chassis` definition after the `interface lag xx` command. This is what defines the LAG to be able to peer both to `Spine-01` and `Spine-02`.
 
-<table>
-
-<td>
-<pre>
 Spine-01
+```
 interface lag 1 multi-chassis
     no shutdown
     no routing
@@ -21,13 +18,10 @@ interface 1/1/1
     no shutdown
     mtu 9198
     lag 1
+```
 
-</td>
-</pre>
-
-<td>
-<pre>
 Spine-02
+```
 interface lag 1 multi-chassis
     no shutdown
     no routing
@@ -41,10 +35,6 @@ interface 1/1/1
     no shutdown
     mtu 9198
     lag 1
-
-
-</td>
-</pre>
-</table>
+```
 
 [Back to Index](./index.md)

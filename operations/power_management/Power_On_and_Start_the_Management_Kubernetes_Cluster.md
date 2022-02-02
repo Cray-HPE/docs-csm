@@ -65,6 +65,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
    ```bash
    ncn-m001# sat bootsys boot --stage ncn-power
+   ``` 
+
+   Example output:
+
+   ```
    IPMI username: root
    IPMI password:
    The following Non-compute Nodes (NCNs) will be included in this operation:
@@ -101,6 +106,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     ```bash
     ncn-m001# screen -ls
+    ```
+
+    Example output:
+
+    ```
     There are screens on:
     26745.SAT-console-ncn-m003-mgmt (Detached)
     26706.SAT-console-ncn-m002-mgmt (Detached)
@@ -110,7 +120,9 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     26552.SAT-console-ncn-w003-mgmt (Detached)
     26514.SAT-console-ncn-w002-mgmt (Detached)
     26444.SAT-console-ncn-w001-mgmt (Detached)
+    ```
 
+    ```
     ncn-m001# screen -x 26745.SAT-console-ncn-m003-mgmt
     ```
 
@@ -127,6 +139,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     ```bash
     ncn-m001# sat bootsys boot --stage platform-services --ceph-timeout 60
+    ```
+
+    Example output:
+
+    ```
     The following Non-compute Nodes (NCNs) will be included in this operation:
     managers:
     - ncn-m001
@@ -158,6 +175,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     ```bash
     ncn-m001# grep "fatal Ceph health warnings" /var/log/cray/sat/sat.log | tail -n 1
+    ```
+
+    Example output:
+
+    ```
     2021-08-04 17:28:21,945 - INFO - sat.cli.bootsys.ceph - Ceph is not healthy: The following fatal Ceph health warnings were found: POOL_NO_REDUNDANCY
     ```
 
@@ -175,6 +197,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     ```bash
     ncn-m001# ceph df
+    ```
+
+    Example output:
+
+    ```
     RAW STORAGE:
         CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
         ssd       63 TiB     60 TiB     2.8 TiB      2.8 TiB          4.45
@@ -244,6 +271,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     ```bash
     ncn-m001# kubectl get pods -n spire -o wide | grep spire-jwks
+    ```
+
+    Example output:
+
+    ```
     spire-jwks-6b97457548-gc7td    2/3  CrashLoopBackOff   9    23h   10.44.0.117  ncn-w002 <none>   <none>
     spire-jwks-6b97457548-jd7bd    2/3  CrashLoopBackOff   9    23h   10.36.0.123  ncn-w003 <none>   <none>
     spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
@@ -257,44 +289,81 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
 1. Check if any pods are in CrashLoopBackOff due to errors connecting to vault. If so, restart the vault operator, the vault pods and finally the pod which is in CrashLoopBackOff. For example:
 
-    ```bash
-    ncn-m001# kubectl get pods -A | grep CrashLoopBackOff
-    services            cray-console-node-1                            2/3     CrashLoopBackOff   206        6d21h
+    1. Find the pods in CrashLoopBackOff.
 
-    ncn-m001# kubectl -n services logs cray-console-node-1 cray-console-node | grep "connection failure" | grep vault
-    2021/08/26 16:39:28 Error: &api.ResponseError{HTTPMethod:"PUT", URL:"http://cray-vault.vault:8200/v1/auth/kubernetes/login", StatusCode:503, RawError:true, Errors:[]string{"upstream connect error or disconnect/reset before headers. reset reason: connection failure"}}
-    panic: Error: &api.ResponseError{HTTPMethod:"PUT", URL:"http://cray-vault.vault:8200/v1/auth/kubernetes/login", StatusCode:503, RawError:true, Errors:[]string{"upstream connect error or disconnect/reset before headers. reset reason: connection failure"}}
+        ```bash
+        ncn-m001# kubectl get pods -A | grep CrashLoopBackOff
+        ```
 
-    # Restart the vault-operator
-    ncn-m001# kubectl delete pods -n vault -l app.kubernetes.io/name=vault-operator
+        Example output:
 
-    # Wait for the operator pod to restart with 2/2 Ready and Running - for example:
-    ncn-m001#  kubectl get pods -n vault -l app.kubernetes.io/name=vault-operator
-    NAME                                  READY   STATUS    RESTARTS   AGE
-    cray-vault-operator-69b4b6887-dfn2f   2/2     Running   2          1m
+        ```
+        services     cray-console-node-1        2/3     CrashLoopBackOff   206        6d21h
+        ```
 
-    # Restart the cray-vault pods
-    ncn-m001# kubectl rollout restart statefulset cray-vault -n vault
+    2. View the logs for the pods in CrashLoopBackOff.
 
-    # Wait for the cray-vault pods to restart with 5/5 Ready and Running - for example:
-    ncn-m001# kubectl get pods -n vault -l app.kubernetes.io/name=vault
-    NAME           READY   STATUS    RESTARTS   AGE
-    cray-vault-0   5/5     Running   1          2m
-    cray-vault-1   5/5     Running   1          2m
-    cray-vault-2   5/5     Running   2          2m
+        ```bash
+        ncn-m001# kubectl -n services logs cray-console-node-1 cray-console-node | grep "connection failure" | grep vault
+        ```
 
-    # Restart cray-console-node-1
-    ncn-m001# kubectl delete pod cray-console-node-1 -n services
+        Example output:
 
-    # Wait for cray-console-node-1 to restart with 3/3 Ready and Running - for example:
-    ncn-m001# kubectl get pods -n services | grep  cray-console-node-1
-    cray-console-node-1                                            3/3     Running            0          2m
-    ```
+        ```
+        2021/08/26 16:39:28 Error: &api.ResponseError{HTTPMethod:"PUT", URL:"http://cray-vault.vault:8200/v1/auth/kubernetes/login", StatusCode:503, RawError:true, Errors:[]string{"upstream connect error or disconnect/reset before headers. reset reason: connection failure"}}
+        panic: Error: &api.ResponseError{HTTPMethod:"PUT", URL:"http://cray-vault.vault:8200/v1/auth/kubernetes/login", StatusCode:503, RawError:true, Errors:[]string{"upstream connect error or disconnect/reset before headers. reset reason: connection failure"}}
+        ```
+
+    3. Restart the vault-operator.
+
+        ```bash
+        ncn-m001# kubectl delete pods -n vault -l app.kubernetes.io/name=vault-operator
+        ```
+
+    4. Wait for the cray-vault pods to restart with 5/5 Ready and Running.
+        
+        ```bash
+        ncn-m001#  kubectl get pods -n vault -l app.kubernetes.io/name=vault-operator
+        ```
+
+        Example output:
+
+        ```
+        NAME                                  READY   STATUS    RESTARTS   AGE
+        cray-vault-operator-69b4b6887-dfn2f   2/2     Running   2          1m
+        ```
+
+    5. Restart the pod(s).
+
+        In this example, cray-console-node-1 is the pod.
+
+        ```bash
+        ncn-m001# kubectl delete pod cray-console-node-1 -n services
+        ```
+
+    6. Wait for the pod(s) to restart with 3/3 Ready and Running.
+
+        In this example, cray-console-node-1 is the pod.
+
+        ```
+        ncn-m001# kubectl get pods -n services | grep cray-console-node-1
+        ```
+
+        Example output:
+
+        ```
+        cray-console-node-1      3/3     Running            0          2m
+        ```
 
 1. Determine whether the cfs-state-reporter service is failing to start on each manager/master and worker NCN while trying to contact CFS.
 
     ```bash
     ncn-m001# pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
+    ```
+
+    Example output:
+
+    ```
     ncn-w001:  cfs-state-reporter.service - cfs-state-reporter reports configuration level of the system
     ncn-w001:    Loaded: loaded (/usr/lib/systemd/system/cfs-state-reporter.service; enabled; vendor preset: disabled)
     ncn-w001:    Active: activating (start) since Thu 2021-03-18 22:29:15 UTC; 21h ago
@@ -340,6 +409,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     ```bash
     ncn-m001# kubectl get cronjobs.batch -A
+    ```
+
+    Example output:
+
+    ```
     NAMESPACE     NAME                              SCHEDULE       SUSPEND   ACTIVE   LAST SCHEDULE   AGE
     kube-system   kube-etcdbackup                   */10 * * * *   False     0        2d1h            29d
     operators     kube-etcd-defrag                  0 0 * * *      False     0        18h             29d
@@ -360,6 +434,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     ```bash
     ncn-m001# kubectl describe cronjobs.batch -n kube-system kube-etcdbackup | egrep -A 15 Events
+    ```
+
+    Example output:
+
+    ```
     Events:
       Type     Reason            Age                      From                Message
       ----     ------            ----                     ----                -------
@@ -399,6 +478,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     ```bash
     ncn-m001# kubectl get cronjobs -n backups benji-k8s-backup-backups-namespace
+    ```
+
+    Example output:
+
+    ```
     NAME                                 SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
     kube-etcdbackup                      */10 * * * *  False     0        92s             29
     ```
@@ -409,6 +493,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     ```bash
     ncn-m001# sat status --filter role=management
+    ```
+
+    Example output:
+
+    ```
     +----------------+------+----------+-------+---------+---------+------+-------+-------------+----------+
     | xname          | Type | NID      | State | Flag    | Enabled | Arch | Class | Role        | Net Type |
     +----------------+------+----------+-------+---------+---------+------+-------+-------------+----------+
@@ -430,6 +519,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     ```bash
     ncn-m001# cray hsm inventory discover create --xnames x3000c0s12b0,x3000c0s20b0
+    ```
+
+    Example output:
+
+    ```
     [[results]]
     URI = "/hsm/v2/Inventory/DiscoveryStatus/0"
     ```
@@ -438,6 +532,11 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
     ```bash
     ncn-m001# sat status --filter Role=Management
+    ```
+
+    Example output:
+
+    ```
     +----------------+------+--------+-------+------+---------+------+-------+------------+----------+
     | xname          | Type | NID    | State | Flag | Enabled | Arch | Class | Role       | Net Type |
     +----------------+------+--------+-------+------+---------+------+-------+------------+----------+

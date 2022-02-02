@@ -6,7 +6,7 @@ Disabling nodes that are not configured correctly allows the system to successfu
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 ### Procedure
 
@@ -20,6 +20,11 @@ Disabling nodes that are not configured correctly allows the system to successfu
 
     ```bash
     ncn-m001# cray hsm state components query create --component-ids XNAME_LIST
+    ```
+
+    Example output:
+
+    ```
     [[Components]]
     Type = "Node"
     Enabled = false

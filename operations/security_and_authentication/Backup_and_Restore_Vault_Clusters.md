@@ -21,6 +21,11 @@ View the existing Vault backups on the system and use a completed backup to perf
 
     ```bash
     ncn# velero get schedule
+    ```
+
+    Example output:
+
+    ```
     NAME                 STATUS    CREATED                         SCHEDULE    BACKUP TTL   LAST BACKUP   SELECTOR
     vault-daily-backup   Enabled   2021-01-26 14:14:04 +0000 UTC   0 2 * * *   0s           19h ago       vault_cr=cray-vault
     ```
@@ -29,11 +34,17 @@ View the existing Vault backups on the system and use a completed backup to perf
 
     ```bash
     ncn# velero get backup
+    ```
+
+    Example output:
+
+    ```
     NAME                                STATUS      ERRORS   WARNINGS   CREATED                         EXPIRES   STORAGE LOCATION   SELECTOR
     vault-daily-backup-20210217020038   Completed   0        0          2021-02-17 02:00:38 +0000 UTC   29d       default            vault_cr=cray-vault
     vault-daily-backup-20210216020035   Completed   0        0          2021-02-16 02:00:35 +0000 UTC   28d       default            vault_cr=cray-vault
     vault-daily-backup-20210215020035   Completed   0        0          2021-02-15 02:00:35 +0000 UTC   27d       default            vault_cr=cray-vault
-    ...
+    
+    [...]
     ```
 
 3.  View the details of a completed backup.
@@ -42,6 +53,11 @@ View the existing Vault backups on the system and use a completed backup to perf
 
     ```bash
     ncn# velero describe backup BACKUP_NAME --details
+    ```
+
+    Example output:
+
+    ```
     Name:         vault-daily-backup-20210217020038
     Namespace:    velero
     Labels:       app.kubernetes.io/managed-by=Helm
@@ -134,6 +150,11 @@ View the existing Vault backups on the system and use a completed backup to perf
 
     ```bash
     ncn# velero describe backup BACKUP_NAME --details
+    ```
+
+    Example output:
+
+    ```
     Name:         vault-daily-backup-20210217020038
     Namespace:    velero
     Labels:       app.kubernetes.io/managed-by=Helm
@@ -224,13 +245,23 @@ View the existing Vault backups on the system and use a completed backup to perf
 
         ```bash
         ncn# kubectl -n vault scale deployment cray-vault-operator --replicas=0
+        ```
+
+        Example output:
+
+        ```
         deployment.apps/cray-vault-operator scaled
         ```
 
     2.  Verify the changes were successfully made.
 
         ```bash
-        ncn# kubectl -n vault  get deployment
+        ncn# kubectl -n vault get deployment
+        ```
+
+        Example output:
+
+        ```
         NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
         cray-vault-operator   0/0     0            0           19h
         ```
@@ -251,6 +282,11 @@ View the existing Vault backups on the system and use a completed backup to perf
 
     ```bash
     ncn# velero restore create --from-backup BACKUP_NAME
+    ```
+
+    Example output:
+
+    ```
     Restore request "vault-daily-backup-20210217100000" submitted successfully.
     Run `velero restore describe vault-daily-backup-20210217100000` or `velero restore logs vault-daily-backup-20210217100000` for more details.
     ```
@@ -261,13 +297,23 @@ View the existing Vault backups on the system and use a completed backup to perf
 
         ```bash
         ncn# kubectl -n vault scale deployment cray-vault-operator --replicas=1
+        ```
+
+        Example output:
+
+        ```
         deployment.apps/cray-vault-operator scaled
         ```
 
     2.  Verify the changes were successfully made.
 
         ```bash
-        ncn# kubectl -n vault  get deployment
+        ncn# kubectl -n vault get deployment
+        ```
+
+        Example output:
+
+        ```
         NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
         cray-vault-operator   1/1     1            1           19h
         ```
@@ -280,6 +326,11 @@ View the existing Vault backups on the system and use a completed backup to perf
 
         ```bash
         ncn# kubectl -n vault get pod -o wide -l vault_cr=cray-vault
+        ```
+
+        Example output:
+
+        ```
         NAME                                     READY   STATUS             RESTARTS   AGE     IP           NODE       NOMINATED NODE   READINESS GATES
         cray-vault-0                             4/5     CrashLoopBackOff   9          30m     10.44.0.33   ncn-w001   <none>           <none>
         cray-vault-1                             4/5     CrashLoopBackOff   9          30m     10.42.0.10   ncn-w002   <none>           <none>
@@ -291,6 +342,11 @@ View the existing Vault backups on the system and use a completed backup to perf
 
         ```bash
         ncn# kubectl delete pod -n vault -l vault_cr=cray-vault
+        ```
+
+        Example output:
+
+        ```
         pod "cray-vault-0" deleted
         pod "cray-vault-1" deleted
         pod "cray-vault-2" deleted
@@ -301,6 +357,11 @@ View the existing Vault backups on the system and use a completed backup to perf
 
         ```bash
         ncn# kubectl get pod -n vault -l vault_cr=cray-vault
+        ```
+
+        Example output:
+
+        ```
         NAME                                     READY   STATUS    RESTARTS   AGE
         cray-vault-0                             5/5     Running   2          105s
         cray-vault-1                             5/5     Running   2          67s

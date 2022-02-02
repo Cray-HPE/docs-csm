@@ -8,9 +8,9 @@ The following are the parameters that most commonly must be set:
 
     **IMPORTANT:** If the scsd tool is used to update the SSHConsoleKey value outside of ConMan, it will disrupt the ConMan connection to the console and collection of console logs. Refer to [ConMan](../conman/ConMan.md) for more information.
 
--   NTP server
--   Syslog server
--   BMC/Controller passwords
+- NTP server
+- Syslog server
+- BMC/Controller passwords
 
 The scsd tool includes a REST API to facilitate operations to set parameters. It will contact the Hardware State Manager \(HSM\) to verify that targets are correct and in a valid hardware state, unless the "Force" flag is specified. Once it has a list of targets, scsd will perform the needed Redfish operations in parallel using TRS. Any credentials needed will be retrieved from Vault.
 
@@ -22,7 +22,6 @@ To view the current build version of the scsd service:
 
 ```
 ncn-m001# cray scsd version list
-Version = "v1.2.3"
 ```
 
 

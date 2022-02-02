@@ -20,6 +20,11 @@ Enabling nodes that are available provides an accurate system configuration and 
 
     ```bash
     ncn-m001# cray hsm state components query create --component-ids XNAME_LIST
+    ```
+
+    Example output:
+
+    ```
     [[Components]]
     Type = "Node"
     Enabled = true

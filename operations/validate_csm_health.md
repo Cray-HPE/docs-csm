@@ -78,6 +78,11 @@ Run the NCN health checks with the following command (If m001 is the PIT node, r
 
 **IMPORTANT:** Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
 
+Specify the admin user password for the management switches in the system which is required for the `ncn-healthcheck` test.
+```bash
+# export SW_ADMIN_PASSWORD='changeme'
+```
+
 ```bash
 # /opt/cray/tests/install/ncn/automated/ncn-healthcheck
 ```
@@ -198,7 +203,7 @@ each failure. See the [interpreting_hms_health_check_results](../troubleshooting
 ### 2.2 Aruba Switch SNMP Fixup
 
 Systems with Aruba leaf switches sometimes have issues with a known SNMP bug
-which prevents HSM discovery from discovering all HW.  At this stage of the
+which prevents HSM discovery from discovering all HW. At this stage of the
 installation process, a script can be run to detect if this issue is 
 currently affecting the system, and if so, correct it.
 
@@ -215,7 +220,7 @@ The foundational information for this discovery is from the System Layout Servic
 comparison needs to be done to see that what is specified in SLS (focusing on
 BMC components and Redfish endpoints) are present in HSM.
 
-To perform this comparison execute the `verify_hsm_discovery.py` script on a Kubernetes master or worker NCN.  The result is pass/fail (returns 0 or non-zero):
+To perform this comparison execute the `verify_hsm_discovery.py` script on a Kubernetes master or worker NCN. The result is pass/fail (returns 0 or non-zero):
 
 ```
 ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
@@ -280,7 +285,7 @@ discovered and/or not having any mgmt network connection. This is treated as
 a warning.
 
 In the Mountain section, the only thing considered a failure are Chassis BMCs
-that are not discovered in HSM.   All other items (nodes, node BMCs and router
+that are not discovered in HSM. All other items (nodes, node BMCs and router
 BMCs) which are not discovered are considered warnings.
 
 Any failures need to be investigated by the admin for rectification. Any
@@ -306,7 +311,7 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
    ...
    ```
 
-* Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel node blades can be ignored. Gigabyte node blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
+* Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel node blades can be ignored. Gigabyte node blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored. Otherwise, verify that the root service account is configured for the CMC and add it if needed by following the steps outlined in [Add Root Service Account for Gigabyte Controllers](./security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md).
    > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
 
    Example mismatch for a CMC an Intel node blade:
@@ -317,7 +322,7 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
 ...
 ```
 
-* HPE PDUs are not supported at this time and will likely show up as not being found in HSM. They can be ignored.
+* HPE PDUs are supported and should show up as being found in HSM. If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered. Refer to [HPE PDU Admin Procedures](./hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
    > Cabinet PDU Controllers have xnames in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 
    Example mismatch for HPE PDU:

@@ -21,6 +21,11 @@ The following is an example of `ifcfg-bond0`:
 
 ```bash
 ncn-w001# cat /etc/sysconfig/network/ifcfg-bond0
+```
+
+Example output:
+
+```
 BONDING_MASTER='yes'
 BONDING_MODULE_OPTS='mode=802.3ad miimon=100 lacp_rate=fast xmit_hash_policy=layer2+3'
 BONDING_SLAVE0='p1p1'
@@ -53,6 +58,11 @@ Use the following command to view information about a specific interface. In thi
 
 ```bash
 ncn-w001# wicked ifstatus --verbose bond0.cmn0
+```
+
+Example output:
+
+```
 bond0.cmn0         up
       link:     #4603, state up, mtu 1500
       type:     vlan bond0[7], hwaddr b8:59:9f:c7:11:12
@@ -71,6 +81,11 @@ To view information about the bond:
 
 ```bash
 ncn-w001# wicked ifstatus bond0
+```
+
+Example output:
+
+```
 bond0           device-not-running
       link:     #9, state up, mtu 9238
       type:     bond, mode ieee802-3ad, hwaddr b8:59:9f:4a:f6:30

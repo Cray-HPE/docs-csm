@@ -33,9 +33,9 @@ This procedure shows how to launch a virtual KVM to connect to Gigabyte node. Th
 
         ![KVM Options](../../img/operations/KVM_Options.png "KVM Options")
 
-        -   H5Viewer is compatible with most browsers.
-        -   JViewer is an option when HTML5 is not available.
-        -   Serial Over LAN should be used as a last resort option.
+        - H5Viewer is compatible with most browsers.
+        - JViewer is an option when HTML5 is not available.
+        - Serial Over LAN should be used as a last resort option.
 
     The virtual KVM is ready to use. There is now a virtual KVM session connected to the node that enables control via the web similar to standing directly in front of the physical KVM.
 

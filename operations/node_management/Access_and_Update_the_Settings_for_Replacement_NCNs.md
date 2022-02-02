@@ -18,6 +18,11 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     ncn# export USERNAME=root   
     ncn# export IPMI_PASSWORD=changeme   
     ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt power status
+    ```
+
+    Example output:
+
+    ```
     Error: Unable to establish IPMI v2 / RMCP+ session
     ```
 
@@ -27,6 +32,11 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     ncn# export USERNAME=defaultuser
     ncn# export IPMI_PASSWORD=defaultpassword
     ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt power status
+    ```
+    
+    Example output:
+
+    ```
     Chassis Power is on
     ```
 
@@ -46,6 +56,11 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
 
     ```bash
     ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user list 1
+    ```
+
+    Example output:
+
+    ```
     ID  Name	 Callin  Link Auth  IPMI Msg   Channel Priv Limit
     1               false   false      true       ADMINISTRATOR
     2   admin       false   false      true       ADMINISTRATOR
@@ -107,6 +122,11 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
 
     ```bash
     ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user list 1
+    ```
+
+    Example output:
+
+    ```
     ID  Name	     Callin  Link Auth	IPMI Msg   Channel Priv Limit
     1                    false   false      true       ADMINISTRATOR
     2   admin            false   false      true       ADMINISTRATOR
@@ -132,6 +152,11 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
 
     ```bash
     ncn# ipmitool -I lanplus -U root -E -H NCN_NODE-mgmt user list 1
+    ```
+
+    Example output:
+
+    ```
     ID  Name	     Callin  Link Auth	IPMI Msg   Channel Priv Limit
     1                    false   false      true       ADMINISTRATOR
     2   admin            false   false      true       ADMINISTRATOR

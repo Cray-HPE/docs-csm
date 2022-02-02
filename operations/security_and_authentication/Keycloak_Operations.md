@@ -2,10 +2,10 @@
 
 A service may need to access Keycloak to perform various tasks. These typical uses for a service to access Keycloak include creating a new service account, creating a new user, etc. These operations require Keycloak administrative access. As part of the System Management Services \(SMS\) installation process, Keycloak is initialized with a Master realm. An administrative client and user are created within this realm. The system installation process adds the information needed for the Keycloak administrator's authentication into a Kubernetes secret that can be accessed by any pod. Using this information and the Keycloak REST API, a service can create an account in the `Shasta` realm. The Keycloak master administrative authentication information is located in the `keycloak-master-admin-auth` secret, which includes the following fields:
 
--   `client-id` - Client ID for administrative operations
--   `user` - Username for the Keycloak Master admin.
--   `password` - Password for the Keycloak Master admin.
--   `internal_token_url` - URL that can be used to get a token, such as https://istio-ingressgateway.istio-system.svc.cluster.local/keycloak/realms/master/protocol/openid-connect/token.
+- `client-id` - Client ID for administrative operations
+- `user` - Username for the Keycloak Master admin.
+- `password` - Password for the Keycloak Master admin.
+- `internal_token_url` - URL that can be used to get a token, such as https://istio-ingressgateway.istio-system.svc.cluster.local/keycloak/realms/master/protocol/openid-connect/token.
 
     The pod in the following example gets a Keycloak Master admin token and makes a request to create a client with a user ID attribute mapper.
 
@@ -70,6 +70,11 @@ A service may need to access Keycloak to perform various tasks. These typical us
 
     ```bash
     ncn# kubectl logs -n services kc-admin-example
+    ```
+
+    Example output:
+
+    ```
     fetch http://dl-cdn.alpinelinux.org/alpine/v3.8/main/x86_64/APKINDEX.tar.gz
     fetch http://dl-cdn.alpinelinux.org/alpine/v3.8/community/x86_64/APKINDEX.tar.gz
     v3.8.1-115-ge3ed6b4e31 [http://dl-cdn.alpinelinux.org/alpine/v3.8/main]

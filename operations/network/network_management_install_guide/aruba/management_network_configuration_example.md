@@ -11,7 +11,7 @@ Aruba
 
 Move interfaces into CAN VRF
 
-* If you have existing CAN interface configuration it will be deleted once you move the interface into the new VRF.  You will have to re-apply it.
+* If you have existing CAN interface configuration it will be deleted once you move the interface into the new VRF. You will have to re-apply it.
 * NOTE: These are example configs only, most implementations of Bi-CAN will be different.
 
 Aruba

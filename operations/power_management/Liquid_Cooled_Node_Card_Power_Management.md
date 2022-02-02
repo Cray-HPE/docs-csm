@@ -16,10 +16,10 @@ The Redfish API for Liquid Cooled compute blades is the node's Chassis Power res
 
 Each node has three or more power control resources:
 
--   Node power control
--   CPU power control
--   Memory power control
--   Accelerator power control \(one resource per accelerator connected to the node\)
+- Node power control
+- CPU power control
+- Memory power control
+- Accelerator power control \(one resource per accelerator connected to the node\)
 
 The PowerControl resources will only manifest in the nC's Redfish endpoint after a node has been powered on and background processes have discovered the node's power management capabilities.
 
@@ -31,77 +31,77 @@ CAPMC API calls provide means for third party software to implement advanced pow
 
 The AMD EPYC node card supports these power capping and monitoring API calls:
 
--   get\_power\_cap\_capabilities
--   get\_power\_cap
--   set\_power\_cap
--   get\_node\_energy
--   get\_node\_energy\_stats
--   get\_node\_energy\_counter
--   get\_system\_power
--   get\_system\_power\_details
+- get\_power\_cap\_capabilities
+- get\_power\_cap
+- set\_power\_cap
+- get\_node\_energy
+- get\_node\_energy\_stats
+- get\_node\_energy\_counter
+- get\_system\_power
+- get\_system\_power\_details
 
 ### Cray CLI Examples for Liquid Cooled Compute Node Power Management
 
 -   **Get Node Energy**
 
-    ```screen
-    ncn-m001# cray capmc get\_node\_energy create --nids NID\_LIST \\
+    ```bash
+    ncn-m001# cray capmc get_node_energy create --nids NID_LIST \
     --start-time '2020-03-04 12:00:00' --end-time '2020-03-04 12:10:00' --format json
     ```
 
 -   **Get Node Energy Stats**
 
-    ```screen
-    ncn-m001# cray capmc get\_node\_energy\_stats create --nids NID\_LIST \\
+    ```bash
+    ncn-m001# cray capmc get_node_energy_stats create --nids NID_LIST \
     --start-time '2020-03-04 12:00:00' --end-time '2020-03-04 12:10:00' --format json
     ```
 
 
 -   **Get Node Energy Counter**
 
-    ```screen
-    ncn-m001# cray capmc get\_node\_energy\_counter create --nids NID\_LIST \\
+    ```bash
+    ncn-m001# cray capmc get_node_energy_counter create --nids NID_LIST \
     --time '2020-03-04 12:00:00' --format json
     ```
 
 -   **Get Node Power Control and Limit Settings**
 
-    ```screen
-    ncn-m001# cray capmc get\_power\_cap create –-nids NID\_LIST \\
+    ```bash
+    ncn-m001# cray capmc get_power_cap create –-nids NID_LIST \
     --format json
     ```
 
 -   **Get System Power**
 
-    ```screen
-    ncn-m001# cray capmc get\_system\_power create \\
+    ```bash
+    ncn-m001# cray capmc get_system_power create \
     --start-time '2020-03-04 12:00:00' --window-len 30 --format json
     ```
 
-    ```screen
-    ncn-m001# cray capmc get\_system\_power\_details create \\
+    ```bash
+    ncn-m001# cray capmc get_system_power_details create \
     --start-time '2020-03-04 12:00:00' --window-len 30 --format json
     ```
 
 -   **Get Power Capping Capabilities**
 
-    ```screen
-    ncn-m001#  cray capmc get\_power\_cap\_capabilities create –-nids NID\_LIST \\
+    ```bash
+    ncn-m001#  cray capmc get_power_cap_capabilities create –-nids NID_LIST \
     --format json
     ```
 
 -   **Set Node Power Limit**
 
-    ```screen
-    ncn-m001#  cray capmc set\_power\_cap create –-nids NID\_LIST \\
+    ```bash
+    ncn-m001#  cray capmc set_power_cap create –-nids NID_LIST \
     --node 225 --format json
     ```
 
 
 -   **Remove Node Power Limit \(Set to Default\)**
 
-    ```screen
-    ncn-m001#  cray capmc set\_power\_cap create –-nids NID\_LIST \\
+    ```bash
+    ncn-m001#  cray capmc set_power_cap create –-nids NID_LIST \
     --node 0 --format json
     ```
 

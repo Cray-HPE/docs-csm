@@ -17,6 +17,6 @@ Displaying ipv4 routes selected for forwarding
 
 * This route can be a static route or a BGP route that is pinned to a single worker. (1.4.2 patch introduces the BGP pinned route)
 * Verify that you can ping the next hop of this route.
-* For example above we would ping 10.252.1.9.  If this is not reachable this is your problem.
+* For example above we would ping 10.252.1.9. If this is not reachable this is your problem.
 
 [Back to Index](./index.md)

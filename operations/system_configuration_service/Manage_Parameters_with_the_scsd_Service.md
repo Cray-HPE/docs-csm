@@ -89,6 +89,11 @@ Retrieve NTP server information, syslog information, or the SSH key from a singl
 
 ```
 ncn-m001# cray scsd bmc cfg describe XNAME --format json
+```
+
+Example output:
+
+```
 {
   "Force": false,
   "Params": {
@@ -296,6 +301,11 @@ To set the Redfish credentials for a single target:
 
 ```
 ncn-m001# cray scsd bmc creds create XNAME --format json
+```
+
+Example output:
+
+```
 {
     "StatusMsg": "OK"
 }

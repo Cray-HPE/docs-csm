@@ -8,10 +8,10 @@ For more information on setting up LDAP federation, see the Keycloak administrat
 
 Users are expected to have the following attributes:
 
--   uidNumber
--   gidNumber
--   homeDirectory
--   loginShell
+- uidNumber
+- gidNumber
+- homeDirectory
+- loginShell
 
 These attributes are added to the users by adding a "User Attribute Mapper" to the LDAP User Federation object. For each of these, there should be a User Attribute Mapper that maps the "LDAP Attribute" in the LDAP Directory to the "User Model Attribute," which will be uidNumber, gidNumber, and more.
 

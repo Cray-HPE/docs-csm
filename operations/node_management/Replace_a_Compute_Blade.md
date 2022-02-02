@@ -46,6 +46,11 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
       ```bash
       ncn-m001# kubectl get cronjobs -n services hms-discovery
+      ```
+
+      Example output:
+
+      ```
       NAME SCHEDULE SUSPEND ACTIVE LAST SCHEDULE AGE^M
       hms-discovery */3 * * * * True 0 117s 15d
       ```
@@ -75,6 +80,11 @@ Replace an HPE Cray EX liquid-cooled compute blade.
       ```bash
       ncn-m001# cray hsm inventory ethernetInterfaces list \
       --component-id x1000c3s0b0n0 --format json
+      ```
+
+      Example output:
+
+      ```
       	[
       		{
       			"ID": "b42e99be1a2b",
@@ -140,8 +150,9 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
    ```bash
    ncn-m001# cray hsm inventory redfishEndpoints update --enabled true --rediscover-on-update true
-   x1000c3s0b0
    ```
+
+   The updated xname(s) will be returned.
 
 10. Wait for 3-5 minutes for the blade to power on and the node BMCs to be discovered.
 
@@ -149,6 +160,11 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
     ```bash
     ncn-m001# cray hsm state components describe x1000c3s0b0n0
+    ```
+
+    Example output:
+
+    ```
     Type = "Node"
     Enabled = true
     State = "Off"
@@ -159,6 +175,11 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe x1000c3s0b0 --format json
+    ```
+
+    Example output:
+
+    ```
     	{
     		"ID": "x1000c3s0b0",
     		"Type": "NodeBMC",
@@ -180,7 +201,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
     ```
 
     - When `LastDiscoveryStatus` displays as `DiscoverOK`, the node BMC has been successfully discovered.
-    -  If the last discovery state is `DiscoveryStarted` then the BMC is currently being inventoried by HSM.
+    - If the last discovery state is `DiscoveryStarted` then the BMC is currently being inventoried by HSM.
     - If the last discovery state is `HTTPsGetFailed` or `ChildVerificationFailed`, then an error has
       occurred during the discovery process.
 
@@ -196,6 +217,11 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe x1000c3
+    ```
+
+    Example output:
+
+    ```
     Type = "ChassisBMC"
     Domain = ""
     MACAddr = "02:13:88:03:00:00"
@@ -232,7 +258,8 @@ Replace an HPE Cray EX liquid-cooled compute blade.
     2. Copy `existingHSN.json` to a `newHSN.json`, edit `newHSN.json` with the changes, then run
 
        ```bash
-       ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://API_SYSTEM/apis/sls/v1/networks/HSN -X PUT -d @newHSN.json
+       ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://API_SYSTEM/apis/sls/v1/networks/HSN \
+       -X PUT -d @newHSN.json
        ```
 
 19. Reload DVS on NCNs.
@@ -242,7 +269,8 @@ Replace an HPE Cray EX liquid-cooled compute blade.
     Specify the appropriate BOS template for the node type.
 
     ```bash
-    ncn-m001# cray bos v1 session create --template-uuid BOS_TEMPLATE --operation reboot --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
+    ncn-m001# cray bos v1 session create --template-uuid BOS_TEMPLATE --operation reboot \
+    --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
     ```
 
 
