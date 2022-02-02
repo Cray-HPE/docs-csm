@@ -13,6 +13,7 @@
 1. Apply the switch configs. [apply switch configs](apply_switch_configs.md).  This includes [generated switch configs](generate_switch_configs.md) and [manual switch configs](manual_switch_config.md)
 1. validate that the switch configs match what is generated.  [validate switch configs](validate_switch_configs.md)
 1. Run [network tests](network_tests.md) against the management network.
+
 ### Upgrade
 
 1. Collect system data. [collect data](collect_data.md)
@@ -21,6 +22,16 @@
 1. Generate switch configs.  An example on how to generate switch configs can be found on the [generate switch configs](generate_switch_configs.md) page.
 1. Use the `canu validate` feature to apply the switch configs.  [validate switch configs](validate_switch_configs.md)
 1. If custom config exists use the `--override` function from CANU so that this config does not get overwritten.
+1. Run [network tests](network_tests.md) against the management network.
+
+### Upgrade wipe
+1. Collect system data. [collect data](collect_data.md)
+1. Upgrade switch firmware to specified firmware version, this info is located on the  [update management network firmware page](update_management_network_firmware.md)
+1. Backup config. [config management](config_management.md).
+1. If the switches have any configuration, it is recommenced to erase it before any configuration.  These procedures can be found on the [wipe mgmt switches](wipe_mgmt_switches.md) page.
+1. [Validate the SHCD](validate_shcd.md)
+1. Generate switch configs.  An example on how to generate switch configs can be found on the [generate switch configs](generate_switch_configs.md) page.
+1. Apply the switch configs. [apply switch configs](apply_switch_configs.md).  This includes [generated switch configs](generate_switch_configs.md) and [manual switch configs](manual_switch_config.md)
 1. Run [network tests](network_tests.md) against the management network.
 
 ### Reinstall
