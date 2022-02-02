@@ -359,10 +359,8 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
 
     csi upgrade metadata --1-0-to-1-2 \
-        --k8s-kernel s3://ncn-images/k8s/${KUBERNETES_VERSION}/kernel \
-        --k8s-initrd s3://ncn-images/k8s/${KUBERNETES_VERSION}/initrd \
-        --storage-kernel s3://ncn-images/ceph/${CEPH_VERSION}/kernel \
-        --storage-initrd s3://ncn-images/ceph/${CEPH_VERSION}/initrd
+        --k8s-version ${KUBERNETES_VERSION} \
+        --ceph-version ${CEPH_VERSION}
 
     record_state ${state_name} $(hostname)
     echo
