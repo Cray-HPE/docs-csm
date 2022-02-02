@@ -4,8 +4,8 @@ Some services on the system are required to access services outside of the HPE C
 
 The label used for scheduling these services is `no_external_access`:
 
--   If the `no_external_access` label is applied to a node with the value `True`, then any pods that require outside access will not be scheduled on that node.
--   If the `no_external_access` label is applied to a node with the value `False`, or if the label does not exist on the node, then any pods that require outside access will be scheduled on that node.
+- If the `no_external_access` label is applied to a node with the value `True`, then any pods that require outside access will not be scheduled on that node.
+- If the `no_external_access` label is applied to a node with the value `False`, or if the label does not exist on the node, then any pods that require outside access will be scheduled on that node.
 
 Therefore, if CAN is not configured on the system, the label `no_external_access=True` must be applied to all NCN master and worker nodes other than `ncn-m001`.
 
@@ -13,7 +13,7 @@ Therefore, if CAN is not configured on the system, the label `no_external_access
 
 The label can be configured by setting the following values to True in the customizations.yaml file. This value needs to be set for each NCN master and worker node, excluding `ncn-m001`.
 
-```screen
+```
       cray-node-labels:
         nodeLabels:
         - ncn-m001:no_external_access=False
@@ -28,13 +28,13 @@ The label can be configured by setting the following values to True in the custo
 
 The label can be set by editing the Kubernetes ConfigMap by running the following command:
 
-```screen
+```bash
 ncn-m001# kubectl edit cm -n services cray-node-labels
 ```
 
 Edit the following section as desired \(save and close by hitting the **ESC** key and typing **:wq**\):
 
-```screen
+```
   node_labels: |2-
 
     - ncn-m001:no_external_access=False
@@ -47,7 +47,7 @@ Edit the following section as desired \(save and close by hitting the **ESC** ke
 
 To view the labels applied to each node:
 
-```screen
+```bash
 ncn-m001# kubectl get nodes --show-labels
 ```
 

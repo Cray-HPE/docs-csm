@@ -6,5 +6,5 @@ Locks can only be used to prevent actions firmware updates with FAS or power sta
 
 The locking API also includes actions to repair or disable a node's locking ability with respect to HMS services. The disable function will make it so a device cannot be firmware updated or power controlled \(via an HMS service\) until a repair is done. Future requests to perform a firmware update via FAS or power state change via CAPMC cannot be made on that xname until the repair action is used.
 
-**Warning:** System administrators should **LOCK** NCNs after the system has been brought up to prevent an admin from unintentionally firmware updating or powering off an NCN. If this lock is not engaged, an authorized request to FAS or CAPMC could power off the NCNs, which will negatively impact system stability and the health of services running on those NCNs.
+**WARNING:** System administrators should **LOCK** NCNs after the system has been brought up to prevent an admin from unintentionally firmware updating or powering off an NCN. If this lock is not engaged, an authorized request to FAS or CAPMC could power off the NCNs, which will negatively impact system stability and the health of services running on those NCNs.
 

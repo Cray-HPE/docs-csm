@@ -12,6 +12,11 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     
   ```bash
   ncn# kubectl exec cray-smd-postgres-0 -n services -c postgres -it -- patronictl list
+  ```
+
+  Example output:
+
+  ```
   + Cluster: cray-smd-postgres (6975238790569058381) ---+----+-----------+
   |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
   +---------------------+------------+--------+---------+----+-----------+
@@ -27,6 +32,11 @@ This procedure can be used to restore the HSM Postgres database from a previousl
   
   ```bash
   ncn# cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("smd"))'
+  ```
+
+  Example output:
+
+  ```
   cray-smd-postgres-2021-07-11T23:10:08.manifest
   cray-smd-postgres-2021-07-11T23:10:08.psql
   ```
@@ -57,6 +67,11 @@ This procedure can be used to restore the HSM Postgres database from a previousl
             
             ```bash
             ncn# cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("smd"))'
+            ```
+
+            Example output:
+
+            ```
             cray-smd-postgres-2021-07-11T23:10:08.manifest
             cray-smd-postgres-2021-07-11T23:10:08.psql
             ```
@@ -126,6 +141,11 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     
     ```bash
     ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
+    ```
+
+    Example output:
+
+    ```
     +-------------------+---------------------+------------+--------+---------+----+-----------+
     |      Cluster      |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
     +-------------------+---------------------+------------+--------+---------+----+-----------+
@@ -133,7 +153,11 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     | cray-smd-postgres | cray-smd-postgres-1 | 10.44.0.34 |        | running |    |         0 |
     | cray-smd-postgres | cray-smd-postgres-2 | 10.36.0.44 |        | running |    |         0 |
     +-------------------+---------------------+------------+--------+---------+----+-----------+
+    ```
 
+    Create a variable for the identified leader:
+
+    ```
     ncn-w001# POSTGRES_LEADER=cray-smd-postgres-0
     ```
 
@@ -143,6 +167,11 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     
     ```bash
     ncn# kubectl exec $POSTGRES_LEADER -n services -c postgres -it -- bash -c "psql -U hmsdsuser -d hmsds -c 'SELECT * FROM system'"
+    ```
+
+    Example output:
+
+    ```
      id | schema_version | system_info
     ----+----------------+-------------
       0 |             17 | {}
@@ -190,6 +219,11 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     
     ```bash
     ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
+    ```
+
+    Example output:
+
+    ```
     +-------------------+---------------------+------------+--------+---------+----+-----------+
     |      Cluster      |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
     +-------------------+---------------------+------------+--------+---------+----+-----------+
@@ -197,7 +231,11 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     | cray-smd-postgres | cray-smd-postgres-1 | 10.44.0.34 |        | running |    |         0 |
     | cray-smd-postgres | cray-smd-postgres-2 | 10.36.0.44 |        | running |    |         0 |
     +-------------------+---------------------+------------+--------+---------+----+-----------+
+    ```
+    
+    Set a variable for the new leader:
 
+    ```
     ncn-w001# POSTGRES_LEADER=cray-smd-postgres-0
     ```
 
@@ -243,6 +281,11 @@ This procedure can be used to restore the HSM Postgres database from a previousl
         
         ```bash
         ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
+        ```
+
+        Example output:
+
+        ```
         +-------------------+---------------------+------------+--------+---------+----+-----------+
         |      Cluster      |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
         +-------------------+---------------------+------------+--------+---------+----+-----------+
@@ -250,7 +293,11 @@ This procedure can be used to restore the HSM Postgres database from a previousl
         | cray-smd-postgres | cray-smd-postgres-1 | 10.44.0.34 |        | running |    |         0 |
         | cray-smd-postgres | cray-smd-postgres-2 | 10.36.0.44 |        | running |    |         0 |
         +-------------------+---------------------+------------+--------+---------+----+-----------+
+        ```
 
+        Set a variable for the leader:
+
+        ```
         ncn-w001# POSTGRES_LEADER=cray-smd-postgres-0
         ```
         
@@ -258,6 +305,11 @@ This procedure can be used to restore the HSM Postgres database from a previousl
         
         ```bash
         ncn-w001# kubectl get secrets -n ${NAMESPACE} | grep "${POSTGRESQL}.credentials"
+        ```
+
+        Example output:
+
+        ```
         services            hmsdsuser.cray-smd-postgres.credentials                       Opaque                                2      31m
         services            postgres.cray-smd-postgres.credentials                        Opaque                                2      31m
         services            service-account.cray-smd-postgres.credentials                 Opaque                                2      31m
@@ -270,10 +322,8 @@ This procedure can be used to restore the HSM Postgres database from a previousl
         
         ```bash
         ncn-w001# kubectl get secret hmsdsuser.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d
-        hmsdsuser
-
+        
         ncn-w001# kubectl get secret hmsdsuser.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d
-        ABCXYZ
         ```
         
         Exec into the leader pod to reset the user's password:
@@ -307,6 +357,11 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     
     ```bash
     ncn# cray hsm service ready
+    ```
+
+    Example output:
+
+    ```
     code = 0
     message = "HSM is healthy"
     ```
@@ -315,7 +370,6 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     
     ```bash
     ncn# cray hsm state components list --type node --format json | jq .[].ID | wc -l
-    1000
     ```
 
 15. Resync the component state and inventory.
@@ -327,11 +381,10 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     ncn# for e in $endpoints; do cray hsm inventory discover create --xnames ${e}; done
     ```
 
-    Wait for discovery to complete. Discovery is complete after there are no redfishEndpoints left in the 'DiscoveryStarted' state
+    Wait for discovery to complete. Discovery is complete after there are no redfishEndpoints left in the 'DiscoveryStarted' state. A value of `0` will be returned.
     
     ```bash
     ncn# cray hsm inventory redfishEndpoints list --format json | grep -c "DiscoveryStarted"
-    0
     ```
 
 16. Check for discovery errors.

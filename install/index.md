@@ -140,27 +140,13 @@ sections, but there is also a general troubleshooting topic.
 
    1. Validate CSM Health Before Final NCN Deployment
 
-      After installing all of the CSM services now would be an good time to validate the health of the
-      management nodes and all CSM services. The advantage in doing it now is that if there are any problems
-      detected with the core infrastructure or the nodes, it is easy to rewind the installation to
-      [Deploy Management Nodes](#deploy_management_nodes) because the PIT node has not yet been redeployed.
+      After installing all of the CSM services, now validate the health of the management nodes and all CSM services. 
+      The reason to do it now is that if there are any problems detected with the core infrastructure or the nodes, it is
+      easy to rewind the installation to [Deploy Management Nodes](#deploy_management_nodes) because the PIT node has not
+      yet been redeployed. In addition, redeploying the PIT node successfully requires several CSM services to be working
+      properly, so validating this is important.
 
-      After installing all of the CSM services, wait at least 15 minutes to let the various Kubernetes
-      resources get initialized and started before trying to validate CSM health. Because there are a number
-      of dependencies between them, some services are not expected to work immediately after the install
-      script completes. Some of the time waiting can be spent preparing the `cray` CLI.  
-      
-      **Note**: If doing the CSM validation at this point, some of the tests which use the 'cray' CLI will fail
-      until these two procedures have been done. These tests, such as Hardware State Manager Discovery Validation, 
-      Booting the CSM Barebones Image on compute nodes, or the UAS/UAI Tests can be skipped until after the PIT 
-      node has been redeployed.  
-   
-      To enable the 'cray' CLI, these two procedures could be done now.  
-      
-      * Optional [Configure Keycloak Account](configure_administrative_access.md#configure_keycloak_account)
-      * Optional [Configure the Cray Command Line Interface (cray CLI)](configure_administrative_access.md#configure_cray_cli)
-
-      To run the CSM health checks now, see [Validate CSM Health](../operations/validate_csm_health.md)
+      To run the CSM health checks, see [Validate CSM Health](../operations/validate_csm_health.md)
    <a name="deploy_final_ncn"></a>
 
    1. Deploy Final NCN
@@ -222,7 +208,6 @@ sections, but there is also a general troubleshooting topic.
       the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
       available. Once FAS is aware that new firmware is available, then see
       [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
-
    <a name="prepare_compute_nodes"></a>
 
    1. Prepare Compute Nodes
@@ -236,6 +221,7 @@ sections, but there is also a general troubleshooting topic.
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
    <a name="next_topic"></a>
+
    1. Next Topic
 
       After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has

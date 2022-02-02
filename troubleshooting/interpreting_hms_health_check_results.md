@@ -214,6 +214,10 @@ ncn# ping -c 1 <xname>
 ncn# curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq
 ```
 
+If discovery failures for Gigabyte CMCs with xnames of the form `xXc0sSb999` occur, verify that the root service account is configured for the CMC and add it if needed by following the steps outlined in [Add Root Service Account for Gigabyte Controllers](../operations/security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md).
+
+If discovery failures for HPE PDUs with xnames of the form `xXmM` occur, this may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered. Refer to [HPE PDU Admin Procedures](../operations/hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
+
 ##### ChildVerificationFailed
 
 Check the SMD logs to determine the cause of the bad Redfish path encountered during discovery.

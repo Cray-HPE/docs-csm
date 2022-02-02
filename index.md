@@ -1,4 +1,4 @@
-# Cray System Management Documentation
+≈# Cray System Management Documentation
 
 ### Scope and Audience
 
@@ -30,7 +30,7 @@ scripts, revision control with git, configuration management with Ansible, YAML,
    of the HPE Cray EX system, differences between previous release and this release, and conventions
    used in this documentation.
 
-1. [Pre-Install Steps](operations/install/Preinstall.md)
+1. [Pre-Install Steps](operations/preinstall/Preinstall.md)
 
    This chapter outlines how to set up default credentials for River BMCs and
    ServerTech PDUs, which must be done before the initial installation of
@@ -40,7 +40,7 @@ scripts, revision control with git, configuration management with Ansible, YAML,
 1. [Update CSM Product Stream](update_product_stream/index.md)
 
    This chapter explains how to get the CSM product release, any patches, update to the latest set of
-   documenation and any installation workarounds, and check for any Field Notices or Hotfixes.
+   documentation and any installation workarounds, and check for any Field Notices or Hotfixes.
 
 
 1. [Install CSM](install/index.md)
@@ -110,7 +110,7 @@ scripts, revision control with git, configuration management with Ansible, YAML,
 
 MIT License
 
-(C) Copyright [2020] Hewlett Packard Enterprise Development LP
+(C) Copyright [2020-2022] Hewlett Packard Enterprise Development LP
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),

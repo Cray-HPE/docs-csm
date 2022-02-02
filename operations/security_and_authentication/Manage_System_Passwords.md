@@ -70,28 +70,31 @@ Each rack type includes a different set of passwords. During different stages of
 
 The tables below include the default login credentials for each rack type. These passwords can be changed by going into the console on a given switch and changing it. However, if the user gets locked out attempting to change the password or the configuration gets corrupted for an individual switch, it can wipe out the entire network configuration for the system.
 
+> **NOTE:** IP addresses can be found from the generated SLS file.
 
 **Liquid-Cooled Cabinet:**
 
-| Name     | Role      | Switch          | IP Address | Login |
-| -----    | --------- | --------------- | ---------- | ----- |
-| sw-smn01 | Leaf/Mgmt | Dell S3048-ON   | 10.254.0.2 | admin |
-| sw-smn02 | Spine-001 | Mellanox SN2100 | 10.254.0.1 | admin |
-| sw-smn03 | Spine-002 | Mellanox SN2100 | 10.254.0.3 | admin |
-
+| Name     | Role      | Switch          |  Login |
+| -----    | --------- | --------------- |  ----- |
+| sw-leaf-bmc | Leaf-BMC/Mgmt | Dell S3048-ON   |  admin |
+| sw-spine | Spine | Mellanox SN2100 |  admin |
+| sw-leaf-bmc | Leaf-BMC/Mgmt | Aruba 6300   |  admin |
+| sw-spine | Spine | Aruba 8325 |  admin |
+| sw-leaf | Leaf | Aruba 8325 |  admin |
 
 **Air-Cooled Cabinet:**
 
-| Name    | Role      | Switch        | IP Address | Login |
-| ------- | --------- | ------------- | ---------- | ----- |
-| mtnsw01 | Leaf/Mgmt | Dell S3048-ON | 10.254.0.2 | admin |
-
+| Name    | Role      | Switch        |  Login |
+| ------- | --------- | ------------- |  ----- |
+| sw-leaf-bmc | Leaf/Mgmt | Dell S3048-ON |  admin |
+| sw-leaf-bmc | Leaf-BMC/Mgmt | Aruba 6300   |  admin |
 
 **Coolant Distribution Unit (CDU):**
 
-| Name   | Role | Switch         | IP Address | Login |
-| ------ | ---- | -------------- | ---------- | ----- |
-| cdu-s1 | CDU  | Dell S4048T-ON | 10.254.0.2 | admin |
+| Name   | Role | Switch         |  Login |
+| ------ | ---- | -------------- |  ----- |
+| sw-cdu | CDU/Leaf | Dell S4048T-ON |  admin |
+| sw-cdu | CDU/Leaf | Aruba 8360 |  admin |
 
 
 **ClusterStor:**
@@ -331,5 +334,5 @@ Refer to the following product stream documentation for detailed procedures abou
 
 **Cray Operating System (COS):** To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the COS product stream documentation for more information. 
 
-**User Access Node (UAN):** Refer to "Create UAN Boot Images" in the UAN product stream documenation for the steps required to change the password on UANs. The "uan_shadow" header in the "UAN Ansible Roles" section includes more context on setting the root password on UANS.
+**User Access Node (UAN):** Refer to "Create UAN Boot Images" in the UAN product stream documentation for the steps required to change the password on UANs. The "uan_shadow" header in the "UAN Ansible Roles" section includes more context on setting the root password on UANS.
 

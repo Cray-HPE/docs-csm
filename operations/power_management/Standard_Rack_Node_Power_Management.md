@@ -27,6 +27,11 @@ Use the Cray CLI to get the node power limit settings:
 
 ```bash
 # cray capmc get_power_cap create --nids 100006 --format json | jq
+```
+
+Example output:
+
+```
 {
   "e": 0,
   "err_msg": "",

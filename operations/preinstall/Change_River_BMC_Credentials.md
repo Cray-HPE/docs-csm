@@ -1,7 +1,7 @@
 ## Fresh Install: Setting NodeBMC and RouterBMC Redfish Credentials
 
 These steps are performed before the installation of Shasta System Management
-or HPCM management software stacks.  The goal is to set the BMC Redfish 
+or HPCM management software stacks. The goal is to set the BMC Redfish 
 credentials to values that the management software will be expecting so that
 all software systems work smoothly with the Redfish hardware.
 
@@ -19,7 +19,7 @@ Before doing these operations, the following is assumed:
 This involves interaction with the BMC hardware itself.
 
 The BMC factory-default passwords are found on a sticker or card associated
-with the blades themselves.  Some blade enclosures also have a chassis-level
+with the blades themselves. Some blade enclosures also have a chassis-level
 management controller (CMC) which may also have its own default password, which
 would need to be changed as well.
 
@@ -29,7 +29,7 @@ the desired password (which must match the one set in customizations.yaml).
 
 Each Redfish BMC will have at least one "account", and often several accounts.
 Each account has an ordinal number, and only one of the accounts is the *root*
-account.  This account is the one that must have its password changed.
+account. This account is the one that must have its password changed.
 
 Refer to the following procedure for each BMC:
 
@@ -39,6 +39,11 @@ Refer to the following procedure for each BMC:
 
   ```bash
   linux# curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts | jq
+  ```
+
+  Example output:
+
+  ```
   {
     "@odata.context": "/redfish/v1/$metadata#ManagerAccountCollection.ManagerAccountCollection",
     "@odata.id": "/redfish/v1/AccountService/Accounts",
@@ -61,7 +66,7 @@ Refer to the following procedure for each BMC:
       }
     ]
   }
-```
+  ```
 
 3. For each account listed, use *curl* to find the one which describes the *root* account ("UserName": "root").  
 
@@ -71,6 +76,11 @@ Refer to the following procedure for each BMC:
 
   ```bash
   linux# curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts/1 | jq
+  ```
+
+  Example output:
+
+  ```
   {
     "@odata.context": "/redfish/v1/$metadata#ManagerAccount.ManagerAccount",
     "@odata.id": "/redfish/v1/AccountService/Accounts/1",
@@ -91,17 +101,22 @@ Refer to the following procedure for each BMC:
   }
   ```
 
-4. Set the new password for this account.  Use the ETAG in the header if needed.
+4. Set the new password for this account. Use the ETAG in the header if needed.
 
   ```bash
   linux# curl -s -k -u root:<DFLTPW> -H "If-None-Match: 570254F2" -H "Content-Type: application/json" -X PATCH -d '{"Password":"<NEWPW>"}' https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts/1
   linux#  
   ```
 
-5. Test to be sure the new password works.  If the password set operation didn't work, then this will fail.
+5. Test to be sure the new password works. If the password set operation did not work, then this will fail.
 
   ```bash
   linux# curl -s -k -u root:<NEWPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem
+  ```
+
+  Example output:
+
+  ```
   {
     "@odata.context": "/redfish/v1/$metadata#ManagerAccount.ManagerAccount",
     "@odata.id": "/redfish/v1/AccountService/Accounts/1",

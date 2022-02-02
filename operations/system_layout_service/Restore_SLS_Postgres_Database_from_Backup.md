@@ -99,8 +99,14 @@ This procedure can be used to restore the SLS Postgres database from a previousl
 5. Determine the database schema version of the currently running SLS database and verify that it matches the database schema version from the Postgres backup:
 
     Database schema of the currently running SLS Postgres instance.
+    
     ```bash
     ncn# kubectl exec $POSTGRES_LEADER -n services -c postgres -it -- bash -c "psql -U slsuser -d sls -c 'SELECT * FROM schema_migrations'"
+    ```
+
+    Example output:
+
+    ```
      version | dirty
     ---------+-------
            3 | f
@@ -109,8 +115,14 @@ This procedure can be used to restore the SLS Postgres database from a previousl
     > The output above shows the database schema is at version 3.
 
     Database schema version from the Postgres backup:
+    
     ```bash
     ncn# cat "$POSTGRES_SQL_FILE" | grep "COPY public.schema_migrations" -A 2
+    ```
+
+    Example output:
+
+    ```
     COPY public.schema_migrations (version, dirty) FROM stdin;
     3       f
     \.
@@ -125,30 +137,42 @@ This procedure can be used to restore the SLS Postgres database from a previousl
     > **THIS WILL DELETE AND REPLACE THE CURRENT CONTENTS OF THE SLS DATABASE**
 
     ```bash
-    ncn# /usr/share/doc/csm/operations/system_layout_service/scripts/restore_sls_postgres_from_backup.sh
-
+    ncn# /usr/share/doc/csm/scripts/operations/system_layout_service/restore_sls_postgres_from_backup.sh
     ```
 
 7. Verify the health of the SLS Postgres cluster by running the `ncnPostgresHealthChecks.sh` script. Follow the [ncnPostgresHealthChecks topic in Validate CSM Health document](../validate_csm_health.md#pet-ncnpostgreshealthchecks).
 
 
 8. Verify that the service is functional:
+    
     ```bash
     ncn# cray sls version list
+    ```
+
+    Example output:
+
+    ```
     Counter = 5
     LastUpdated = "2021-04-05T22:51:36.575276Z"
     ```
 
     Get the number of hardware objects stored in SLS:
+    
     ```bash
     ncn# cray sls hardware list --format json | jq .[].Xname | wc -l
-    37
     ```
 
     Get the name of networks stored in SLS:
+    
     > If the system does not have liquid cooled hardware, the `HMN_MTN` and `NMN_MTN` networks may not be present.
+    
     ```bash
     ncn# cray sls networks list --format json | jq -r .[].Name
+    ```
+
+    Example output:
+
+    ```
     HMN_MTN
     HMN_RVR
     NMNLB

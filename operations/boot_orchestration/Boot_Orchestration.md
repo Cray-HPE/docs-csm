@@ -19,6 +19,11 @@ BOS utilizes the Cray CLI commands. The latest API information can be found with
 
 ```bash
 ncn-m001# cray bos list
+```
+
+Example output:
+
+```
 [[results]]
 major = "1"
 minor = "0"

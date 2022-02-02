@@ -16,6 +16,11 @@ The commands in this procedure need to be run on a ceph-mon node.
 
     ```bash
     ncn-m001# ceph -s
+    ```
+
+    Example output:
+
+    ```
       cluster:
         id:     64e553c3-e7d9-4636-81a4-56f26c1b20e1
         health: HEALTH_ERR
@@ -45,6 +50,11 @@ The commands in this procedure need to be run on a ceph-mon node.
 
     ```bash
     ncn-m001# ceph health detail
+    ```
+
+    Example output:
+
+    ```
     HEALTH_ERR 1 nearfull osd(s); 13 pool(s) nearfull; Degraded data redundancy (low space): 3 pgs backfill_toofull
     OSD_NEARFULL 1 nearfull osd(s)
         osd.9 is near full  <<-- Note this value
@@ -54,6 +64,11 @@ The commands in this procedure need to be run on a ceph-mon node.
 
     ```bash
     ncn-m001# ceph df
+    ```
+
+    Example output:
+
+    ```
     RAW STORAGE:
        CLASS    SIZE       AVAIL      USED       RAW USED     %RAW USED
        ssd      56 TiB     24 TiB     32 TiB       32 TiB         57.15
@@ -82,6 +97,11 @@ The commands in this procedure need to be run on a ceph-mon node.
 
     ```bash
     ncn-m001# ceph osd df
+    ```
+
+    Example output:
+
+    ```
     ID CLASS WEIGHT  REWEIGHT SIZE    RAW USE DATA    OMAP     META    AVAIL   %USE  VAR  PGS STATUS
      1   ssd 3.49219  1.00000 3.5 TiB 2.1 TiB 2.1 TiB  6.3 MiB 3.9 GiB 1.4 TiB 60.81 1.06  57     up
      4   ssd 3.49219  1.00000 3.5 TiB 2.0 TiB 2.0 TiB  133 KiB 3.7 GiB 1.5 TiB 57.58 1.01  56     up
@@ -115,6 +135,11 @@ The commands in this procedure need to be run on a ceph-mon node.
 
     ```bash
     ncn-m001# ceph osd df
+    ```
+
+    Example output:
+
+    ```
     ID CLASS WEIGHT  REWEIGHT SIZE    RAW USE DATA    OMAP     META    AVAIL   %USE  VAR  PGS STATUS
      1   ssd 3.49219  1.00000 3.5 TiB 2.1 TiB 2.1 TiB  7.1 MiB 4.7 GiB 1.4 TiB 60.91 1.07  57     up
      4   ssd 3.49219  1.00000 3.5 TiB 2.0 TiB 2.0 TiB  137 KiB 3.7 GiB 1.5 TiB 57.65 1.01  56     up

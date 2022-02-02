@@ -41,13 +41,19 @@ Expected Responses: 2xx, 3xx
 
    ```bash
    ncn-s# systemctl is-active keepalived.service
-   active
    ```
+
+   `active` should be returned in the output.
 
    1. Check for the KeepAlived instance hosting the VIP (Virtual IP). This command will have to be run on each node until you find the expected output.
 
     ```bash
     ncn-s# journalctl -u keepalived.service --no-pager |grep -i gratuitous
+    ```
+
+    Example output:
+
+    ```
     Aug 25 19:33:12 ncn-s001 Keepalived_vrrp[12439]: Registering gratuitous ARP shared channel
     Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: Sending gratuitous ARP on bond0.nmn0 for 10.252.1.3
     Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: (VI_0) Sending/queueing gratuitous ARPs on bond0.nmn0 for 10.252.1.3
@@ -56,9 +62,10 @@ Expected Responses: 2xx, 3xx
    `HAProxy:`
 
    ```bash
-    ncn-s# systemctl is-active haproxy.service
-    active
+   ncn-s# systemctl is-active haproxy.service
    ```
+
+   `active` should be returned in the output.
 
 ## Issue 2: Ceph Reports HEALTH_OK but S3 Operations Not Functioning
 
@@ -85,6 +92,11 @@ This procedure requires admin privileges.
 
     ```bash
     ncn-m001# ceph osd tree
+    ```
+
+    Example output:
+
+    ```
     ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
     -1       20.95312 root default
     -7        6.98438     host ncn-s001

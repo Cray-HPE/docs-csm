@@ -1,47 +1,62 @@
-# Stage 4 - Workaround for MAC-learning issue with Aruba 8325 switches
+# Stage 4 - Upgrade Aruba switches to 10.08.1021
 
-Issue description:
+As part of the CSM 1.2 upgrade, you must upgrade Aruba switches to 10.08.1021.
 
-> **Aruba CR:**          90598
->
-> **Affected platform:** Aruba 8325 switches
->
-> **Symptom:**           MAC learning stops
->
-> **Scenario:**          Under extremely rare DMA stress conditions, an L2 learning thread may timeout and exit, preventing future MAC learning
->
-> **Workaround:**        Reboot the switch or monitor the L2 thread and restart it with an NAE script
->
-> **Fixed in:**        10.06.0130, 10.7.0010, and above
->
-> [Aruba release notes](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches;productSeries=Aruba%208325%20Switch%20Series)
+With that new software level, the NAE script to address Mac learning issue with `8325` switches is no longer required and needs to be deleted from the system. 
 
-## Overview
+## 4.1 Removal of NAE script
 
-**`NOTE:`** If you do not have Aruba 8325 switches in your system, skip this stage and [return to main upgrade page](README.md).
+### Prerequisites
 
-You can run the NAE script on the 8325 platform switches to resolve a MAC learning issue. An install script is provided to automate this process.
+1. The `nae_remove.py` script relies on the `/etc/hosts` file to pull the IP addresses of the switches. Without this information, the script will not run.
+2. You have an `8325` switch in your setup that is running software version 10.08.1021
+3. Script assumes you are using default username `admin` for the switch and it will prompt you for password.
 
-The file locations:
-* NAE script: [scripts/aruba/L2X-Watchdog-creates-bash-script.py](scripts/aruba/L2X-Watchdog-creates-bash-script.py)
-* Automatic NAE install script: [scripts/aruba/nae_upload.py](scripts/aruba/nae_upload.py)
+NOTE: 	The nae_remover script automatically detects `8325` switches and only applies the fix to that platform.
 
-## Prerequisites
+### Run The Removal Script
 
-* You have an 8325 in your setup that is running software version below 10.06.0130.
-* Additionally, the install script used in this procedure makes the following assumptions:
-	* The switches (and their IP addresses) are in the `/etc/hosts` file with hostnames containing the string "sw".
-	* You are using default username `admin` for the switches.
-	* All of the switches use the same password for the `admin` user (the install script will prompt you for the password).
+```bash
+ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/aruba/nae_remove.py
+```
 
-## Procedure
+When prompted, type in your switch password.
 
-1. Run the NAE install script:
+## 4.2 Upgrade Switch Software
 
-	```bash
-	ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/aruba/nae_upload.py
-	```
-	
-1. Type in your switch password and the script will upload and enable the NAE script.
+### Pre-requisites
+
+* Choose which way you want to upload the new software to the switches.
+	* USB
+	* Web UI
+	* TFTP or SFTP
+
+NOTE: If you do not want to proceed with pre-staging, you can also upload the new software directly using `vsx update-software` command. However you will be limited to only using TFTP if you choose not to pre-stage the firmware.
+
+NOTE: VSX update-software is only available in VSX paired switches. For example, `6300` switches would not have this upgrade option.
+
+### Option 1: Upgrading with VSX update-software: 
+
+```
+switch# vsx update-software tftp://192.168.1.1/ArubaOS-CX_8325_10_08_1021.swi 
+Do you want to save the current configuration (y/n)? y
+The running configuration was saved to the startup configuration.
+
+This command will download new software to the %s image of both the VSX primary and secondary systems,
+then reboot them in sequence. The VSX secondary will reboot first, followed by the primary.
+Continue (y/n)? y
+VSX Primary Software Update Status     : <VSX primary software update status>
+VSX Secondary Software Update Status   : <VSX secondary software update status>
+VSX ISL Status                         : <VSX ISL status>
+Progress [..........................................................................................]
+Secondary VSX system updated completely. Rebooting primary.
+```
+
+### Option 2: Upgrading without VSX software 
+
+```
+switch# copy tftp://192.168.1.1/ArubaOS-CX_6400-6300_10_08_1021.swi secondary
+switch# boot system secondary
+```
 
 [Return to main upgrade page](README.md)

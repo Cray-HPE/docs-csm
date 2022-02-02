@@ -15,7 +15,7 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
          1. [Subsequent Fresh-Installs (Re-Installs)](#subsequent-fresh-installs-re-installs)
          1. [First-Time/Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal)
       1. [CSI Workarounds](#csi-workarounds)
-      1. [Prepare Site Init](#prepare_site_init)
+      1. [Prepare Site Init](#prepare-site-init)
    1. [Prepopulate LiveCD Daemons Configuration and NCN Artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
    1. [Boot the LiveCD](#boot-the-livecd)
       1. [First Login](#first-login)
@@ -139,21 +139,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    `site-init` directory recommend persisting `site-init` files in a Git
    repository.
 
-   Git RPMs are included in the `embedded` repository in the CSM release and
-   may be installed in your pre-LiveCD environment using `zypper` as follows:
+   Follow the procedure in [Prepare Site Init](prepare_site_init.md) to set up the site-init directory for your system.
 
-   * Install `git` package:
-
-     ```bash
-     linux:usb# zypper in --repo ${CSM_RELEASE}-embedded -y git
-     ```
-
-   Or one may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `${CSM_PATH}/rpm/embedded` directory.
-   ```bash
-   linux:usb# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/x86_64/git-core-*.x86_64.rpm
-   linux:usb# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Development-Tools/15-SP2/x86_64/update/x86_64/git-*.x86_64.rpm
-   ```
 
 <a name="create-the-bootable-media"></a>
 ### 2. Create the Bootable Media
@@ -236,7 +223,7 @@ The SHASTA-CFG structure and other configuration files will be prepared, then `c
 * [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
 * [Generate Installation Files](#generate-installation-files)
 * [CSI Workarounds](#csi-workarounds)
-* [Prepare Site Init](#prepare_site_init)
+* [Prepare Site Init](#prepare-site-init)
 
 <a name="before-configuration-payload-workarounds"></a>
 #### 3.1 Before Configuration Payload Workarounds
@@ -258,7 +245,7 @@ Some files are needed for generating the configuration payload. See these topics
 1. Change into the preparation directory plus necessary PIT directories (for later):
 
    ```bash
-   linux:usb# mkdir -pv /mnt/pitdata/admin /mnt/pitdata/prep /mnt/pitdata/configs /mnt/pitdata/data
+   linux:usb# mkdir -pv /mnt/pitdata/admin /mnt/pitdata/prep /mnt/pitdata/configs /mnt/pitdata/data/{k8s,ceph}
    linux:usb# cd /mnt/pitdata/prep
    ```
 
@@ -474,7 +461,7 @@ Now that the configuration is generated, we can populate the LiveCD with the gen
 
 This will enable SSH, and other services when the LiveCD starts.
 
-1. Set system name and enter prep directory if one hasn't already (one should already be here from the previous section).
+1. Set system name and enter prep directory if one has not already (one should already be here from the previous section).
 
     ```bash
     linux# export SYSTEM_NAME=eniac
@@ -577,9 +564,7 @@ reboot into the LiveCD.
 Some systems will boot the USB device automatically if no other OS exists (bare-metal). Otherwise the
 administrator may need to use the BIOS Boot Selection menu to choose the USB device.
 
-If an administrator is rebooting a node into the LiveCD, versus booting a bare-metal or wiped node, then `efibootmgr` will deterministically set the boot order.
-
-See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information on this topic..
+If an administrator has the node booted with an operating system which will next be rebooting into the LiveCD, then use `efibootmgr` to set the boot order to be the USB device. See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information about how to set the boot order to have the USB device first.
 
 > UEFI booting must be enabled to find the USB device's EFI bootloader.
 

@@ -31,6 +31,11 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     ```bash
     ncn-m001# kubectl get cm -n services cray-product-catalog -o json | jq -r .data.uan
+    ```
+
+    Example output:
+    
+    ```
     PRODUCT_VERSION:
       configuration:
         clone_url: https://vcs.CRAY_EX_HOSTNAME/vcs/cray/uan-config-management.git # <--- Gitea clone url
@@ -84,10 +89,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     ```bash
     ncn-m001# git clone https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git
-    . . .
     ncn-m001# cd uan-config-management && git checkout cray/uan/PRODUCT_VERSION && git pull
-    Branch 'cray/uan/PRODUCT_VERSION' set up to track remote branch 'cray/uan/PRODUCT_VERSION' from 'origin'.
-    Already up to date.
     ```
 
 7.  Create a branch using the imported branch from the installation to customize the UAN image.
@@ -98,8 +100,6 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     ```bash
     ncn-m001# git checkout -b integration && git merge cray/uan/PRODUCT_VERSION
-    Switched to a new branch 'integration'
-    Already up to date.
     ```
 
 8.  Configure a root user in the UAN image by adding the encrypted password of the root user from /etc/shadow on an NCN worker to the file group\_vars/Application/passwd.yml. Skip this step if the root user is already configured in the image.
@@ -118,7 +118,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     Variables should be defined and overridden in the Ansible inventory locations of the repository as shown in the following example and **not** in the Ansible plays and roles defaults. See https://docs.ansible.com/ansible/2.9/user\_guide/playbooks\_best\_practices.html\#content-organization for directory layouts for inventory.
 
-    **Warning:** Never place sensitive information such as passwords in the git repository.
+    **WARNING** Never place sensitive information such as passwords in the git repository.
 
     The following example shows how to add a vars.yml file containing site-specific configuration values to the `Application` group variable location.
 
@@ -128,9 +128,6 @@ This guide only details how to apply UAN-specific configuration to the UAN image
     ncn-m001# vim group_vars/Application/vars.yml
     ncn-m001# git add group_vars/Application/vars.yml
     ncn-m001# git commit -m "Add vars.yml customizations"
-    [integration ecece54] Add vars.yml customizations
-     1 file changed, 1 insertion(+)
-     create mode 100644 group_vars/Application/vars.yml
     ```
 
 10. Verify that the System Layout Service \(SLS\) and the uan\_interfaces configuration role refer to the Mountain Node Management Network by the same name. Skip this step if there are no Mountain cabinets in the HPE Cray EX system.
@@ -160,22 +157,28 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     ```bash
     ncn-m001# git push --set-upstream origin integration
+    ```
+    
+    Enter the appropriate credentials when prompted:
+
+    ```
     Username for 'https://api-gw-service-nmn.local': crayvcs
-     Password for 'https://crayvcs@api-gw-service-nmn.local':
-     . . .
-     remote: Processed 1 references in total
-     To https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git
-      * [new branch]      integration -> integration
-      Branch 'integration' set up to track remote branch 'integration' from 'origin'.
+    Password for 'https://crayvcs@api-gw-service-nmn.local':
+
+    [...]
     ```
 
 12. Capture the most recent commit for reference in setting up a CFS configuration and navigate to the parent directory.
 
     ```bash
     ncn-m001# git rev-parse --verify HEAD
+    ```
 
-    ecece54b1eb65d484444c4a5ca0b244b329f4667
+    `ecece54b1eb65d484444c4a5ca0b244b329f4667` is an example commit that could be returned.
 
+    Navigate back to the parent directory:
+
+    ```
     ncn-m001# cd ..
     ```
 
@@ -215,6 +218,11 @@ This guide only details how to apply UAN-specific configuration to the UAN image
     ncn-m001# cray cfs configurations update uan-config-PRODUCT_VERSION \
                       --file ./uan-config-PRODUCT_VERSION.json \
                       --format json
+    ```
+
+    Example output:
+
+    ```
     {
       "lastUpdated": "2021-07-28T03:26:00:37Z",
       "layers": [
@@ -235,6 +243,11 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
         ```bash
         ncn-m001# tar -xvf shasta-1.4.0-p2.tar
+        ```
+
+        Example output:
+
+        ```
         1.4.0-p2/
         1.4.0-p2/csm/
         1.4.0-p2/csm/csm-0.8.22-0.9.0.patch.gz
@@ -330,6 +343,11 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
         ```bash
         ncn-m001# la UAN-1.4.0-day-zero/lib/modules/
+        ```
+
+        Example output:
+
+        ```
         total 8.0K
         drwxr-xr-x 3 root root   49 Feb 25 17:50 ./
         drwxr-xr-x 8 root root 4.0K Feb 25 17:52 ../
@@ -340,15 +358,26 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
         ```bash
         ncn-m001# mksquashfs UAN-1.4.0-day-zero UAN-1.4.0-day-zero.squashfs
+        ```
+
+        Example output:
+
+        ```
         Parallel mksquashfs: Using 64 processors
         Creating 4.0 filesystem on UAN-1.4.0-day-zero.squashfs, block size 131072.
-        ...
+        
+        [...]
         ```
 
     12. Create a new IMS image registration and save the id field in an environment variable.
 
         ```bash
         ncn-m001# cray ims images create --name UAN-1.4.0-day-zero
+        ```
+
+        Example output:
+
+        ```
         name = "UAN-1.4.0-day-zero"
         created = "2021-03-17T20:23:05.576754+00:00"
         id = "ac31e971-f990-4b5f-821d-c0c18daefb6e"
@@ -389,11 +418,12 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         [artifact.Metadata]
         md5sum = "cb6a8934ad3c483e740c648238800e93"
 
-        ncn-m00# cray artifacts describe boot-images ${NEW_IMAGE_ID}/initrd
-        ...
+        ncn-m001# cray artifacts describe boot-images ${NEW_IMAGE_ID}/initrd
+        [...]
         
         ncn-m001# cray artifacts describe boot-images ${NEW_IMAGE_ID}/kernel
-        ...
+        
+        [...]
         ```
 
         Note that when adding the etag to the IMS manifest below, remove the quotation 
@@ -404,6 +434,11 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
         ```bash
         ncn-m001# md5sum UAN-1.4.0-day-zero.squashfs initrd vmlinuz
+        ```
+
+        Example output:
+
+        ```
         cb6a8934ad3c483e740c648238800e93  UAN-1.4.0-day-zero.squashfs
         3fd8a72a49a409f70140fabe11bdac25  initrd
         5edcf3fd42ab1eccfbf1e52008dac5b9  vmlinuz
@@ -413,6 +448,11 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
         ```bash
         ncn-m001# cray ims images describe c880251d-b275-463f-8279-e6033f61578b
+        ```
+
+        Example output:
+
+        ```
         created = "2021-03-24T18:00:24.464755+00:00"
         id = "c880251d-b275-463f-8279-e6033f61578b"
         name = "cray-shasta-uan-cos-sles15sp1.x86_64-0.1.32"
@@ -487,8 +527,6 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         ```bash
         ncn-m001# cray artifacts create boot-images \
         ${NEW_IMAGE_ID}/manifest.json uan-manifest.json
-        artifact = "ac31e971-f990-4b5f-821d-c0c18daefb6e/manifest.json"
-        Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/manifest.json"
         ```
 
     23. Update the IMS image to use the new uan-manifest.json file.
@@ -497,6 +535,11 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         ncn-m001# cray ims images update ${NEW_IMAGE_ID} \
         --link-type s3 --link-path s3://boot-images/${NEW_IMAGE_ID}/manifest.json \
         --link-etag 6d04c3a4546888ee740d7149eaecea68
+        ```
+
+        Example output:
+
+        ```
         created = "2021-03-17T20:23:05.576754+00:00"
         id = "ac31e971-f990-4b5f-821d-c0c18daefb6e"
         name = "UAN-1.4.0-day-zero"
@@ -533,6 +576,11 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     ```bash
     ncn-m001# cray hsm state components list --role Application --subrole UAN --format json | jq -r .Components[].ID
+    ```
+
+    Example output:
+
+    ```
     x3000c0s19b0n0
     x3000c0s24b0n0
     x3000c0s20b0n0
@@ -542,11 +590,11 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 20. Determine the correct value for the ifmap option in the `kernel_parameters` string for the type of UAN.
 
     -   Use ifmap=net0:nmn0,lan0:hsn0,lan1:hsn1 if the UANs are:
-        -   Either HPE DL325 or DL385 server that have a single OCP PCIe card installed.
-        -   Gigabyte servers that do not have additional PCIe network cards installed other than the built-in LOM ports.
+        -   Either HPE DL325 or DL385 nodes that have a single OCP PCIe card installed.
+        -   Gigabyte nodes that do not have additional PCIe network cards installed other than the built-in LOM ports.
     -   Use ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 if the UANs are:
-        -   Either HPE DL325 or DL385 servers which have a second OCP PCIe card installed, regardless if it is being used or not.
-        -   Gigabyte servers that have a PCIe network card installed in addition to the built-in LOM ports, regardless if it is being used or not.
+        -   Either HPE DL325 or DL385 nodes which have a second OCP PCIe card installed, regardless if it is being used or not.
+        -   Gigabyte nodes that have a PCIe network card installed in addition to the built-in LOM ports, regardless if it is being used or not.
 21. Construct a JSON BOS boot session template for the UAN.
 
     1.  Populate the template with the following information:

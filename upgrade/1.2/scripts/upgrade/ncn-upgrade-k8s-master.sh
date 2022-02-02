@@ -1,7 +1,28 @@
 #!/bin/bash
 #
-# Copyright 2021 Hewlett Packard Enterprise Development LP
+# MIT License
 #
+# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+
 set -e
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
@@ -55,86 +76,25 @@ if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
    fi
 fi
 
-first_master_hostname=`curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | \
-     jq -r '.[] | ."cloud-init"."meta-data"."first-master-hostname"'`
-if [[ ${first_master_hostname} == ${upgrade_ncn} ]]; then
-   state_name="RECONFIGURE_FIRST_MASTER"
-   state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
-   if [[ $state_recorded == "0" ]]; then
-      echo "====> ${state_name} ..."
-      promotingMaster="none"
-      masterNodes=$(kubectl get nodes| grep "ncn-m" | awk '{print $1}')
-      for node in $masterNodes; do
-        # skip upgrade_ncn
-        if [[ ${node} == ${upgrade_ncn} ]]; then
-            continue;
-        fi
-        # check if cloud-init data is healthy
-        ssh $node -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cloud-init query -a > /dev/null 2>&1'
-        rc=$?
-        if [[ "$rc" -eq 0 ]]; then
-            promotingMaster=$node
-            echo "Promote: ${promotingMaster} to be FIRST_MASTER"
-            break;
-        fi
-      done
-
-      if [[ ${promotingMaster} == "none" ]];then
-        echo "No master nodes has healthy cloud-init metadata, fail upgrade. You may try to upgrade another master node first. If that still fails, we do not have any master nodes that can be promoted."
-        exit 1
-      fi
-
-      VERBOSE=1 csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
-      ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
-      ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/1.2/scripts/k8s/promote-initial-master.sh"
-
-      record_state "${state_name}" ${upgrade_ncn}
-   else
-      echo "====> ${state_name} has been completed"
-   fi
-fi
-
-
-state_name="STOP_ETCD_SERVICE"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-    ssh $upgrade_ncn 'systemctl daemon-reload'
-    ssh $upgrade_ncn 'systemctl stop etcd.service'
-    record_state "${state_name}" ${upgrade_ncn}
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-state_name="PREPARE_ETCD"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-    export MEMBER_ID=$(etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-     --cert=/etc/kubernetes/pki/etcd/ca.crt \
-     --key=/etc/kubernetes/pki/etcd/ca.key \
-     --endpoints=localhost:2379 member list | \
-     grep $upgrade_ncn | cut -d ',' -f1)
-
-     etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-     --cert=/etc/kubernetes/pki/etcd/ca.crt \
-     --key=/etc/kubernetes/pki/etcd/ca.key \
-     --endpoints=localhost:2379 member remove $MEMBER_ID
-
-     etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-      --cert=/etc/kubernetes/pki/etcd/ca.crt  \
-      --key=/etc/kubernetes/pki/etcd/ca.key \
-      --endpoints=localhost:2379 \
-      member add $upgrade_ncn --peer-urls=https://$UPGRADE_IP_NMN:2380
-
-    record_state "${state_name}" ${upgrade_ncn}
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-drain_node $upgrade_ncn
-
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
+
+if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
+    state_name="RESTORE_M001_NET_CONFIG"
+    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+    if [[ $state_recorded == "0" ]]; then
+        echo "====> ${state_name} ..."
+
+        if [[ $ssh_keys_done == "0" ]]; then
+            ssh_keygen_keyscan "${upgrade_ncn}"
+            ssh_keys_done=1
+        fi
+        scp ifcfg-lan0 root@ncn-m001:/etc/sysconfig/network/
+        ssh root@ncn-m001 'wicked ifreload lan0'
+        record_state "${state_name}" ${upgrade_ncn}
+    else
+        echo "====> ${state_name} has been completed"
+    fi
+fi
 
 # Restore files used by the System Admin Toolkit (SAT) that were previously backed up
 state_name="RESTORE_SAT_LOCAL_FILES"

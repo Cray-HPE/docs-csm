@@ -22,7 +22,11 @@ A healthy etcd cluster is available on the system. See [Check the Health and Bal
     ncn-w001# kubectl exec -it -n operators \
     $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
     -c util -- create_backup cray-bos wednesday-manual-backup
+    ```
 
+    Example output:
+
+    ```
     etcdbackup.etcd.database.coreos.com/cray-bos-etcd-cluster-manual-backup-25847 created
     ```
 
@@ -30,7 +34,11 @@ A healthy etcd cluster is available on the system. See [Check the Health and Bal
 
     ```bash
     ncn-w001# kubectl -n services get etcdbackup BACKUP_NAME -o yaml
+    ```
 
+    Example output:
+
+    ```
       .
       .
       status:

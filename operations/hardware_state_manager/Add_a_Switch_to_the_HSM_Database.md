@@ -32,6 +32,11 @@ Manually add a switch to the Hardware State Manager \(HSM\) database. Switches n
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints list --id XNAME
+    ```
+
+    Example output:
+
+    ```
     [[RedfishEndpoints]]
     Domain = ""
     RediscoverOnUpdate = true
@@ -48,7 +53,6 @@ Manually add a switch to the Hardware State Manager \(HSM\) database. Switches n
     RedfishVersion = "1.2.0"
     LastDiscoveryStatus = "DiscoverOK"
     ```
-
 
 The switch is now discovered by the HSM.
 

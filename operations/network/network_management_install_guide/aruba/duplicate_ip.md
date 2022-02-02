@@ -1,6 +1,6 @@
-# You are getting IP, but not the correct one. Duplicate IP check
+# You are getting an IP address, but not the correct one. Duplicate IP address check
 
-A sign of a duplicate IP is seeing a DECLINE message from the client to the server.
+A sign of a duplicate IP address is seeing a DECLINE message from the client to the server.
 
 ```
 10.40.0.0.337 > 10.42.0.58.67: BOOTP/DHCP, Request from b4:2e:99:be:1a:d3, length 301, hops 1, xid 0x9d1210d, Flags [none]

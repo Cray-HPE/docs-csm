@@ -1,8 +1,30 @@
 #!/bin/bash
+#
+# MIT License
+#
+# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
 set -euo pipefail
 
 TMPDIR=$(mktemp -d)
-TRUSTDOMAIN=$(kubectl get pod -n spire spire-server-0 -o json | jq -r '.spec.containers[].env[]| select(.name=="SPIRE_DOMAIN") | .value')
 
 # usage returns the usage
 usage() {
@@ -14,249 +36,6 @@ $0 [enable | disable ]
 enable  - enables xname validation on the OPA gateway
 disable - disables xname validation on the OPA gateway
 "
-}
-
-# get_tenants gets a list of tenants by querying the postgres server. This cannot
-# be done via the spire-server binary, as it will fail to return data once there
-# are a large number of entries.
-get_tenants() {
-	kubectl exec -itn spire spire-postgres-0 --container postgres -- su postgres -c "psql spire -c \"SELECT spiffe_id FROM registered_entries where spiffe_id LIKE '%tenant1%'\" -P "tuples_only" -P "pager 0"" | sort -u
-}
-
-# get_tenants_by_type returns a tenant of a specific type, which can be more easily
-# used in a for loop
-get_tenants_by_type() {
-	type="$1"
-	get_tenants | grep "$type/tenant1"
-}
-
-# add_xname_workload_entry takes an xname, type, workload, and optionally a ttl and
-# creates a spire entry if it doesn't already exist
-add_xname_workload_entry() {
-	tenant="$1"
-	type="$2"
-	workload="$3"
-	agentPath="$4"
-
-	xname="${tenant##*/}"
-
-	if ! kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID "spiffe://shasta/${type}/${xname}/workload/${workload}" | grep -q "spiffe://shasta/${type}/${xname}/workload/${workload}"; then
-		if [ "$#" -eq 5 ]; then
-			ttl="$5"
-			kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry create \
-				-parentID "$tenant" \
-				-spiffeID "spiffe://${TRUSTDOMAIN}/${type}/${xname}/workload/${workload}" \
-				-selector unix:uid:0 \
-				-selector unix:gid:0 \
-				-selector "unix:path:${agentPath}" \
-				-ttl "${ttl}" || echo "Entry creation failed: $*"
-		else
-			kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry create \
-				-parentID "$tenant" \
-				-spiffeID "spiffe://${TRUSTDOMAIN}/${type}/${xname}/workload/${workload}" \
-				-selector unix:uid:0 \
-				-selector unix:gid:0 \
-				-selector "unix:path:${agentPath}" || echo "Entry creation failed: $*"
-		fi
-	else
-		echo "Entry already exists: $*"
-	fi
-}
-
-# add_regular_workload_entry takes an xname, type, workload, and optionally a ttl and
-# creates a spire entry if it doesn't already exist
-add_regular_workload_entry() {
-	type="$1"
-	workload="$2"
-	agentPath="$3"
-
-	if ! kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID "spiffe://shasta/${type}/workload/${workload}" | grep -q "spiffe://shasta/${type}/workload/${workload}"; then
-		if [ "$#" -eq 4 ]; then
-			ttl="$4"
-			kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry create \
-				-parentID "spiffe://shasta/$type" \
-				-spiffeID "spiffe://${TRUSTDOMAIN}/${type}/workload/${workload}" \
-				-selector unix:uid:0 \
-				-selector unix:gid:0 \
-				-selector "unix:path:${agentPath}" \
-				-ttl "${ttl}" || echo "Entry creation failed: $*"
-		else
-			kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry create \
-				-parentID "spiffe://shasta/$type" \
-				-spiffeID "spiffe://${TRUSTDOMAIN}/${type}/workload/${workload}" \
-				-selector unix:uid:0 \
-				-selector unix:gid:0 \
-				-selector "unix:path:${agentPath}" || echo "Entry creation failed: $*"
-		fi
-	else
-		echo "Entry already exists: $*"
-	fi
-}
-# delete_workload_entry finds a workload entry and removes it if it exists
-delete_workload_entry() {
-	spiffeID="$1"
-
-	if kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID "$spiffeID" | grep -q "Entry ID"; then
-		# For some reason, this command has a ^M at the end. the tr command strips this out.
-		for entryID in $(kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID "$spiffeID" | grep "Entry ID" | awk '{print $4}' | tr -d "\015"); do
-			kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry delete -entryID "${entryID}"
-		done
-	fi
-}
-
-# delete_workloads_for_tenant takes a tenant and will delete all workloads that
-# are associated with that tenant
-delete_workloads_for_tenant() {
-	tenant="$1"
-
-	if kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -parentID "$tenant" | grep -q "Entry ID"; then
-		# For some reason, this command has a ^M at the end. the tr command strips this out.
-		for entryID in $(kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -parentID "$tenant" | grep "Entry ID" | awk '{print $4}' | tr -d "\015"); do
-			# Only delete entries where the SPIFFE ID contains the string workload
-			if kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -entryID "${entryID}" | grep "SPIFFE ID" | grep -q workload; then
-				kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry delete -entryID "$entryID"
-			fi
-		done
-	fi
-}
-
-# delete_spiffeID takes a spiffeID and deletes it if it exists
-delete_spiffeID() {
-	spiffeID="$1"
-
-	if kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID "$spiffeID" | grep -q "Entry ID"; then
-		# For some reason, this command has a ^M at the end. the tr command strips this out.
-		for entryID in $(kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry show -spiffeID "$spiffeID" | grep "Entry ID" | awk '{print $4}' | tr -d "\015"); do
-			kubectl exec -itn spire spire-server-0 --container spire-server -- ./bin/spire-server entry delete -entryID "$entryID"
-		done
-	fi
-}
-
-# add_xname_workloads adds all the xname validaton workloads that are used in
-# CSM 1.2 to each spire client
-add_xname_workloads() {
-
-	# Add workloads for existing NCNs
-	for tenant in $(get_tenants_by_type ncn | tr -d "\015"); do
-		add_xname_workload_entry "$tenant" ncn bos-state-reporter /usr/bin/bos-state-reporter-spire-agent
-		add_xname_workload_entry "$tenant" ncn cfs-state-reporter /usr/bin/cfs-state-reporter-spire-agent
-		add_xname_workload_entry "$tenant" ncn cpsmount /usr/bin/cpsmount-spire-agent
-		add_xname_workload_entry "$tenant" ncn cpsmount_helper /opt/cray/cps-utils/bin/cpsmount_helper
-		add_xname_workload_entry "$tenant" ncn dvs-hmi /usr/bin/dvs-hmi-spire-agent
-		add_xname_workload_entry "$tenant" ncn dvs-map /usr/bin/dvs-map-spire-agent
-		add_xname_workload_entry "$tenant" ncn heartbeat /usr/bin/heartbeat-spire-agent
-		add_xname_workload_entry "$tenant" ncn orca /usr/bin/orca-spire-agent
-	done
-
-	# Add workloads for existing Computes
-	for tenant in $(get_tenants_by_type compute | tr -d "\015"); do
-		add_xname_workload_entry "$tenant" compute bos-state-reporter /usr/bin/bos-state-reporter-spire-agent
-		add_xname_workload_entry "$tenant" compute cfs-state-reporter /usr/bin/cfs-state-reporter-spire-agent
-		add_xname_workload_entry "$tenant" compute ckdump /usr/bin/ckdump-spire-agent 864000
-		add_xname_workload_entry "$tenant" compute ckdump_helper /usr/sbin/ckdump_helper 864000
-		add_xname_workload_entry "$tenant" compute cpsmount /usr/bin/cpsmount-spire-agent
-		add_xname_workload_entry "$tenant" compute cpsmount_helper /opt/cray/cps-utils/bin/cpsmount_helper
-		add_xname_workload_entry "$tenant" compute dvs-hmi /usr/bin/dvs-hmi-spire-agent
-		add_xname_workload_entry "$tenant" compute dvs-map /usr/bin/dvs-map-spire-agent
-		add_xname_workload_entry "$tenant" compute heartbeat /usr/bin/heartbeat-spire-agent
-		add_xname_workload_entry "$tenant" compute orca /usr/bin/orca-spire-agent
-		add_xname_workload_entry "$tenant" compute wlm /usr/bin/wlm-spire-agent
-	done
-
-	# Add workloads for existing Storage nodes
-	for tenant in $(get_tenants_by_type storage | tr -d "\015"); do
-		add_xname_workload_entry "$tenant" storage cfs-state-reporter /usr/bin/cfs-state-reporter-spire-agent
-	done
-
-	# Add workloads for existing UANs
-	for tenant in $(get_tenants_by_type uan | tr -d "\015"); do
-		add_xname_workload_entry "$tenant" uan bos-state-reporter /usr/bin/bos-state-reporter-spire-agent
-		add_xname_workload_entry "$tenant" uan cfs-state-reporter /usr/bin/cfs-state-reporter-spire-agent
-		add_xname_workload_entry "$tenant" uan ckdump /usr/bin/ckdump-spire-agent 864000
-		add_xname_workload_entry "$tenant" uan ckdump_helper /usr/sbin/ckdump_helper 864000
-		add_xname_workload_entry "$tenant" uan cpsmount /usr/bin/cpsmount-spire-agent
-		add_xname_workload_entry "$tenant" uan cpsmount_helper /opt/cray/cps-utils/bin/cpsmount_helper
-		add_xname_workload_entry "$tenant" uan dvs-hmi /usr/bin/dvs-hmi-spire-agent
-		add_xname_workload_entry "$tenant" uan dvs-map /usr/bin/dvs-map-spire-agent
-		add_xname_workload_entry "$tenant" uan heartbeat /usr/bin/heartbeat-spire-agent
-		add_xname_workload_entry "$tenant" uan orca /usr/bin/orca-spire-agent
-	done
-}
-
-# add_regular_workloads adds all the regular workloads that are used in CSM 1.2
-add_regular_workloads() {
-
-	add_regular_workload_entry ncn bos-state-reporter /usr/bin/bos-state-reporter-spire-agent
-	add_regular_workload_entry ncn cfs-state-reporter /usr/bin/cfs-state-reporter-spire-agent
-	add_regular_workload_entry ncn cpsmount /usr/bin/cpsmount-spire-agent
-	add_regular_workload_entry ncn cpsmount_helper /opt/cray/cps-utils/bin/cpsmount_helper
-	add_regular_workload_entry ncn dvs-hmi /usr/bin/dvs-hmi-spire-agent
-	add_regular_workload_entry ncn dvs-map /usr/bin/dvs-map-spire-agent
-	add_regular_workload_entry ncn heartbeat /usr/bin/heartbeat-spire-agent
-	add_regular_workload_entry ncn orca /usr/bin/orca-spire-agent
-
-	add_regular_workload_entry compute bos-state-reporter /usr/bin/bos-state-reporter-spire-agent
-	add_regular_workload_entry compute cfs-state-reporter /usr/bin/cfs-state-reporter-spire-agent
-	add_regular_workload_entry compute ckdump /usr/bin/ckdump-spire-agent 864000
-	add_regular_workload_entry compute ckdump_helper /usr/sbin/ckdump_helper 864000
-	add_regular_workload_entry compute cpsmount /usr/bin/cpsmount-spire-agent
-	add_regular_workload_entry compute cpsmount_helper /opt/cray/cps-utils/bin/cpsmount_helper
-	add_regular_workload_entry compute dvs-hmi /usr/bin/dvs-hmi-spire-agent
-	add_regular_workload_entry compute dvs-map /usr/bin/dvs-map-spire-agent
-	add_regular_workload_entry compute heartbeat /usr/bin/heartbeat-spire-agent
-	add_regular_workload_entry compute orca /usr/bin/orca-spire-agent
-	add_regular_workload_entry compute wlm /usr/bin/wlm-spire-agent
-
-	add_regular_workload_entry storage cfs-state-reporter /usr/bin/cfs-state-reporter-spire-agent
-
-	add_regular_workload_entry uan bos-state-reporter /usr/bin/bos-state-reporter-spire-agent
-	add_regular_workload_entry uan cfs-state-reporter /usr/bin/cfs-state-reporter-spire-agent
-	add_regular_workload_entry uan ckdump /usr/bin/ckdump-spire-agent 864000
-	add_regular_workload_entry uan ckdump_helper /usr/sbin/ckdump_helper 864000
-	add_regular_workload_entry uan cpsmount /usr/bin/cpsmount-spire-agent
-	add_regular_workload_entry uan cpsmount_helper /opt/cray/cps-utils/bin/cpsmount_helper
-	add_regular_workload_entry uan dvs-hmi /usr/bin/dvs-hmi-spire-agent
-	add_regular_workload_entry uan dvs-map /usr/bin/dvs-map-spire-agent
-	add_regular_workload_entry uan heartbeat /usr/bin/heartbeat-spire-agent
-	add_regular_workload_entry uan orca /usr/bin/orca-spire-agent
-}
-
-# delete_regular_workloads removes all the non-xname specific workloads from spire
-delete_regular_workloads() {
-	for computeWorkload in $(kubectl exec -itn spire spire-postgres-0 --container postgres -- su postgres -c "psql spire -c \"SELECT spiffe_id FROM registered_entries where spiffe_id LIKE '%compute/workload%'\" -P "tuples_only" -P "pager 0"" | tr -d "\015" | sort -u); do
-		delete_workload_entry "$computeWorkload"
-	done
-
-	for ncnWorkload in $(kubectl exec -itn spire spire-postgres-0 --container postgres -- su postgres -c "psql spire -c \"SELECT spiffe_id FROM registered_entries where spiffe_id LIKE '%ncn/workload%'\" -P "tuples_only" -P "pager 0"" | tr -d "\015" | sort -u); do
-		delete_workload_entry "$ncnWorkload"
-	done
-
-	for storageWorkload in $(kubectl exec -itn spire spire-postgres-0 --container postgres -- su postgres -c "psql spire -c \"SELECT spiffe_id FROM registered_entries where spiffe_id LIKE '%storage/workload%'\" -P "tuples_only" -P "pager 0"" | tr -d "\015" | sort -u); do
-		delete_workload_entry "$storageWorkload"
-	done
-
-	for uanWorkload in $(kubectl exec -itn spire spire-postgres-0 --container postgres -- su postgres -c "psql spire -c \"SELECT spiffe_id FROM registered_entries where spiffe_id LIKE '%uan/workload%'\" -P "tuples_only" -P "pager 0"" | tr -d "\015" | sort -u); do
-		delete_workload_entry "$uanWorkload"
-	done
-}
-
-# delete_xname_workloads removes all the xname specific workloads from spire
-delete_xname_workloads() {
-	for computeWorkload in $(kubectl exec -itn spire spire-postgres-0 --container postgres -- su postgres -c "psql spire -c \"SELECT spiffe_id FROM registered_entries where spiffe_id LIKE '%compute/x%/workload%'\" -P \"tuples_only\" -P "pager 0"" | tr -d "\015" | sort -u); do
-		delete_workload_entry "$computeWorkload"
-	done
-
-	for ncnWorkload in $(kubectl exec -itn spire spire-postgres-0 --container postgres -- su postgres -c "psql spire -c \"SELECT spiffe_id FROM registered_entries where spiffe_id LIKE '%ncn/x%/workload%'\" -P \"tuples_only\" -P "pager 0"" | tr -d "\015" | sort -u); do
-		delete_workload_entry "$ncnWorkload"
-	done
-
-	for storageWorkload in $(kubectl exec -itn spire spire-postgres-0 --container postgres -- su postgres -c "psql spire -c \"SELECT spiffe_id FROM registered_entries where spiffe_id LIKE '%storage/x%/workload%'\" -P \"tuples_only\" -P "pager 0"" | tr -d "\015" | sort -u); do
-		delete_workload_entry "$storageWorkload"
-	done
-
-	for uanWorkload in $(kubectl exec -itn spire spire-postgres-0 --container postgres -- su postgres -c "psql spire -c \"SELECT spiffe_id FROM registered_entries where spiffe_id LIKE '%uan/x%/workload%'\" -P \"tuples_only\" -P "pager 0"" | tr -d "\015" | sort -u); do
-		delete_workload_entry "$uanWorkload"
-	done
 }
 
 # backup_customizations saves a yaml version of the customizations secret to a
@@ -379,7 +158,7 @@ validate_prereqs() {
 wait_for_spire() {
 	RETRY=0
 	MAX_RETRIES=30
-	RETRY_SECONDS=10
+	RETRY_SECONDS=30
 	until kubectl get -n spire statefulset spire-server | grep -q '3/3'; do
 		if [[ $RETRY -lt $MAX_RETRIES ]]; then
 			RETRY="$((RETRY + 1))"
@@ -392,36 +171,91 @@ wait_for_spire() {
 	done
 }
 
+validate_disable() {
+	if [ "$(helm get values -n spire spire -o json | jq -r '.server.tokenService.enableXNameWorkloads')" = "true" ]; then
+		echo "xname validation is already enabled"
+		exit 1
+	fi
+}
+
+validate_enable() {
+	if [ ! "$(helm get values -n spire spire -o json | jq -r '.server.tokenService.enableXNameWorkloads')" = "true" ]; then
+		echo "xname validation is already disabled"
+		exit 1
+	fi
+}
+
+function sshnh() {
+	/usr/bin/ssh -o "StrictHostKeyChecking no" -o "UserKnownHostsFile /dev/null" "$@"
+}
+
+disable_spire_on_NCNs() {
+        echo "Stopping spire on NCNs"
+	storageNodes=$(ceph node ls | jq -r '.[] | keys[]' | sort -u)
+	ncnNodes=$(kubectl get nodes -o name | cut -d'/' -f2)
+
+	for node in $storageNodes $ncnNodes; do
+		sshnh "$node" systemctl stop spire-agent
+		sshnh "$node" rm -f /root/spire/data/svid.key /root/spire/bundle.der /root/spire/agent_svid.der
+	done
+
+}
+
+enable_spire_on_NCNs() {
+        echo "Enabling spire on NCNs"
+	ncnNodes=$(kubectl get nodes -o name | cut -d'/' -f2)
+
+	for node in $ncnNodes; do
+		sshnh "$node" systemctl start spire-agent
+	done
+
+	/opt/cray/platform-utils/spire/fix-spire-on-storage.sh
+}
+
+uninstall_spire() {
+        echo "Uninstalling spire"
+	helm uninstall -n spire spire
+	while ! [ "$(kubectl get pods -n spire --no-headers | wc -l)" -eq 0 ]; do
+		echo "Waiting for all spire pods to be terminated."
+		sleep 30
+	done
+
+	echo "Removing spire-server PVCs"
+	for pvc in $(kubectl get pvc -n spire --no-headers -o custom-columns=":metadata.name"); do
+		kubectl delete pvc -n spire "$pvc"
+	done
+}
+
 enable_xnameValidation() {
 	validate_prereqs
-	echo "Adding Workload Entries"
-	add_xname_workloads
-	echo "Enabling xname validation in cray-opa and spire charts"
+	validate_disable
 	backup_customizations
 	get_customizations
 	enable_xname_in_charts
 	create_manifest
+	disable_spire_on_NCNs
+	uninstall_spire
 	run_loftsman
 	update_customizations
 	wait_for_spire
-	echo "Removing old Workload Entries"
-	delete_regular_workloads
+	enable_spire_on_NCNs
+	echo "xname validation has been enabled."
 }
 
 disable_xnameValidation() {
 	validate_prereqs
-	echo "Adding non-xname specific Workload Entries"
-	add_regular_workloads
-	echo "Disabling xname validation in cray-opa and spire charts"
+	validate_enable
 	backup_customizations
 	get_customizations
 	disable_xname_in_charts
 	create_manifest
+	disable_spire_on_NCNs
+	uninstall_spire
 	run_loftsman
 	update_customizations
 	wait_for_spire
-	echo "Removing xname Workload Entries"
-	delete_xname_workloads
+	enable_spire_on_NCNs
+	echo "xname validation has been disabled."
 }
 
 # Main

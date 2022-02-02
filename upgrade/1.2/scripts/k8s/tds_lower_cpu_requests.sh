@@ -1,4 +1,27 @@
 #!/bin/bash
+#
+# MIT License
+#
+# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
 
 #
 # Edit the following values as needed to suit specific system
@@ -8,7 +31,7 @@
 # desired.
 #
 
-spire_postgres_new_limit=2100m
+spire_postgres_new_request=1
 cray_capmc_new_cpu_request=500m
 elasticsearch_master_new_cpu_request=1500m
 cluster_kafka_new_cpu_request=1
@@ -22,10 +45,10 @@ nexus_new_cpu_request=2
 cray_metallb_speaker_new_cpu_request=1
 
 
-if [ ! -z $spire_postgres_new_limit ]; then
+if [ ! -z $spire_postgres_new_request ]; then
   current_req=$(kubectl get postgresql -n spire spire-postgres -o json | jq -r '.spec.resources.requests.cpu')
-  echo "Patching spire-postgres cluster with new cpu request of $spire_postgres_new_limit (from $current_req)"
-  kubectl patch postgresql spire-postgres -n spire --type=json -p="[{'op' : 'replace', 'path':'/spec/resources/requests/cpu', 'value' : \"$spire_postgres_new_limit\" }]"
+  echo "Patching spire-postgres cluster with new cpu request of $spire_postgres_new_request (from $current_req)"
+  kubectl patch postgresql spire-postgres -n spire --type=json -p="[{'op' : 'replace', 'path':'/spec/resources/requests/cpu', 'value' : \"$spire_postgres_new_request\" }]"
   until [[ $(kubectl get postgresql -n spire spire-postgres -o json | jq -r '.status.PostgresClusterStatus') == "Running" ]]
   do
     echo "Waiting for spire-postgres cluster to reach running state..."

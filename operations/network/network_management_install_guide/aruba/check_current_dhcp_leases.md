@@ -1,6 +1,6 @@
 # Check current DHCP leases
 
-We'll use the Kea API to retrieve data from the DHCP lease database.
+We will use the Kea API to retrieve data from the DHCP lease database.
 First you need to get the auth token, On ncn-w001 or a worker/manager with kubectl, run:
 
 ```
@@ -18,7 +18,7 @@ curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/j
 If you have the IP and are looking for the hostname/MAC address.
 ```
 
-IP Lookup:
+IP Address Lookup:
 
 ```
 curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get", "service": [ "dhcp4" ], "arguments": { "ip-address": "x.x.x.x" } }' https://api_gw_service.local/apis/dhcp-kea | jq

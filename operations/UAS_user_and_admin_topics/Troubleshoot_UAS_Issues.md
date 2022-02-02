@@ -1,3 +1,6 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: Troubleshoot UAS by Viewing Log Output](Troubleshoot_UAS_by_Viewing_Log_Output.md)
 
 ## Troubleshoot UAS Issues
 
@@ -93,7 +96,7 @@ If UAS pods are stuck in the `Pending` state, the admin needs to ensure the Kube
 ```bash
 ncn-w001# kubectl get nodes -l uas
 NAME        STATUS   ROLES    AGE   VERSION
-ncn-w001   Ready    master   11d   v1.13.3
+ncn-w001   Ready    <none>   11d   v1.20.13
 ```
 
 If none of the nodes are found or if the nodes listed are marked as `NotReady`, the UAI pods will not be scheduled and will not start.
@@ -114,8 +117,8 @@ Specify the location of the Kubernetes certificate with `KUBECONFIG`.
 ```bash
 [user@uai-user-be3a6770-6876c88676-2p2lk ~]# KUBECONFIG=/tmp/CONFIG kubectl get nodes
 NAME STATUS ROLES AGE VERSION
-ncn-m001 Ready master 16d v1.13.3
-ncn-m002 Ready master 16d v1.13.3
+ncn-m001 Ready control-plane,master 16d v1.20.13
+ncn-m002 Ready control-plane,master 16d v1.20.13
 ```
 
 Users must specify `KUBECONFIG` with every kubectl command or specify the kubeconfig file location for the life of the UAI. To do this, either set the `KUBECONFIG` environment variable or set the `--kubeconfig` flag .
@@ -214,3 +217,4 @@ Warning  Failed
 Scheduling  21s (x20 over 4m31s)  default-scheduler  0/4 nodes are available: 1 Insufficient pods, 3 node(s) didn't match node selector.
 ```
 
+[Next Topic: Troubleshoot UAS by Viewing Log Output](Troubleshoot_UAS_by_Viewing_Log_Output.md)

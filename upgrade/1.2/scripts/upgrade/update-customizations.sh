@@ -1,5 +1,27 @@
 #!/usr/bin/env bash
-# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
+# MIT License
+#
+# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
 
 set -e
 BASEDIR=$(dirname $0)
@@ -41,10 +63,131 @@ if [[ ! -f "$customizations" ]]; then
     usage
 fi
 
+if ! command -v yq &> /dev/null
+then
+    echo >&2 "error: yq could not be found"
+    exit 1
+fi
+
+if ! command -v jq &> /dev/null
+then
+    echo >&2 "error: jq could not be found"
+    exit 1
+fi
+
 c="$(mktemp)"
 trap "rm -f '$c'" EXIT
 
 cp "$customizations" "$c"
+
+# Get token to access SLS data
+export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+
+if [ -z "${TOKEN}" -o "${TOKEN}" == "" -o "${TOKEN}" == "null" ]; then
+    echo >&2 "error: failed to obtain token from keycloak"
+    exit 1
+fi
+
+# Get Networks from SLS
+NETWORKSJSON=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks)
+
+if [ -z "${NETWORKSJSON}" -o "${NETWORKSJSON}" == "" -o "${NETWORKSJSON}" == "null" ]; then
+    echo >&2 "error: failed to get Networks from SLS"
+    exit 1
+fi
+
+errors=0
+peerindex=0
+
+# Gather the metallb peer information and add it to customizations
+for n in "NMN" "CMN"; do
+numpeers=0
+
+    peerASN=$(echo "${NETWORKSJSON}" | jq --arg n "$n" '.[] | select(.Name == $n) | .ExtraProperties.PeerASN')
+    myASN=$(echo "${NETWORKSJSON}" | jq --arg n "$n" '.[] | select(.Name == $n) | .ExtraProperties.MyASN')
+
+    if [ -z "${peerASN}" -o "${peerASN}" == "null" -o "${peerASN}" == "" ]; then
+        echo >&2 "error:  PeerASN missing in SLS for network ${n}"
+        errors=$((errors+1))
+    fi
+
+    if [ -z "${myASN}" -o "${myASN}" == "null" -o "${myASN}" == "" ]; then
+        echo >&2 "error:  MyASN missing in SLS for network ${n}"
+        errors=$((errors+1))
+    fi
+
+    subnets=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[].Name')
+    for i in ${subnets}; do
+        if [ "${i}" == "network_hardware" ]; then
+            reservations=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" --arg i "$i" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[] | select(.Name == $i) | .IPReservations[].Name')
+            for j in ${reservations}; do
+                if [[ "${j}" =~ .*"spine".* ]]; then
+                    numpeers=$((numpeers+1))
+                    peerIP=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" --arg i "$i" --arg j "$j" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[] | select(.Name == $i) | .IPReservations[] | select(.Name == $j) | .IPAddress')
+
+                    if [ -z "${peerIP}" -o "${peerIP}" == "null" -o "${peerIP}" == "" ]; then
+                        echo >&2 "error:  IPAddress missing in SLS for ${j} in network ${n}"
+                        errors=$((errors+1))
+                    fi
+
+                    if [ $errors -eq 0 ]; then
+                        yq w -i "$c" 'spec.network.metallb.peers['${peerindex}'].peer-address' "${peerIP}"
+                        yq w -i "$c" 'spec.network.metallb.peers['${peerindex}'].peer-asn' "${peerASN}"
+                        yq w -i "$c" 'spec.network.metallb.peers['${peerindex}'].my-asn' "${myASN}"
+                        peerindex=$((peerindex+1))
+                    fi
+                fi
+            done
+        fi
+    done
+
+    if [ $numpeers -eq 0 ]; then
+        echo >&2 "error: No peers found for network ${n}"
+        errors=$((errors+1))
+    fi
+
+done
+
+# Stop here if we had any problems getting the peer information
+if [ $errors -gt 0 ]; then
+    exit 1
+fi
+
+# Gather the metallb pool information and add it to customizations
+poolindex=0
+
+networks=$(echo "${NETWORKSJSON}" | jq -r '.[].Name')
+for n in ${networks}; do
+    subnets=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[].Name')
+    for i in ${subnets}; do
+        if [[ "${i}" =~ .*"_metallb_".* ]]; then
+            poolName=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" --arg i "$i" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[] | select(.Name == $i) | .MetalLBPoolName')
+            poolCIDR=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" --arg i "$i" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[] | select(.Name == $i) | .CIDR')
+
+            if [ -z "${poolName}" -o "${poolName}" == "null" -o "${poolName}" == "" ]; then
+                echo >&2 "error:  MetalLBPoolName missing in SLS for subnet ${i} in network ${n}"
+                errors=$((errors+1))
+            fi
+
+            if [ -z "${poolCIDR}" -o "${poolCIDR}" == "null " -o "${poolCIDR}" == "" ]; then
+                echo >&2 "error:  CIDR missing in SLS for subnet ${i} in network ${n}"
+                errors=$((errors+1))
+            fi
+
+            if [ $errors -eq 0 ]; then
+                yq w -i "$c" 'spec.network.metallb.address-pools['${poolindex}'].name' ${poolName}
+                yq w -i "$c" 'spec.network.metallb.address-pools['${poolindex}'].protocol' 'bgp'
+                yq w -i "$c" 'spec.network.metallb.address-pools['${poolindex}'].addresses[+]' ${poolCIDR}
+                poolindex=$((poolindex+1))
+            fi
+        fi
+    done
+done
+
+# Stop here if we had any problems getting the pool information
+if [ $errors -gt 0 ]; then
+    exit 1
+fi
 
 # Ensure Gitea's PVC configuration has been removed (stop gap for potential upgrades from CSM 0.9.4)
 yq d -i "$c" 'spec.kubernetes.services.gitea.cray-service.persistentVolumeClaims'
@@ -104,6 +247,8 @@ yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'chn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'nmn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'hmn.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'nmnlb.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'hmnlb.{{ network.dns.external }}'
 
 # Add required PowerDNS and Unbound configuration
 yq w -i "$c" 'spec.kubernetes.services.cray-dns-unbound.domain_name' '{{ network.dns.external }}'
@@ -117,7 +262,6 @@ yq w -i "$c" 'spec.kubernetes.services.cray-dns-powerdns.cray-service.sealedSecr
 
 # Add proxiedWebAppExternalHostnames
 yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['gatekeeper-policy-manager']['gatekeeper-policy-manager'].externalAuthority }}"
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-nexus'].istio.ingress.hosts.ui.authority }}"
 yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-istio'].istio.tracing.externalAuthority }}"
 yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-kiali'].externalAuthority }}"
 yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-sysmgmt-health']['prometheus-operator'].prometheus.prometheusSpec.externalAuthority }}"
@@ -149,8 +293,8 @@ yq w -i "$c" 'spec.kubernetes.services.gatekeeper-policy-manager.gatekeeper-poli
 yq d -i "$c" 'spec.kubernetes.services.cray-opa.jwtValidation'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.shasta-cmn' 'https://api.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-cmn' 'https://auth.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
-yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.shasta-nmn' 'https://api.nmn.{{ network.dns.external }}/keycloak/realms/shasta'
-yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-nmn' 'https://auth.nmn.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.shasta-nmn' 'https://api.nmnlb.{{ network.dns.external }}/keycloak/realms/shasta'
+yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-nmn' 'https://auth.nmnlb.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-admin.issuers.shasta-cmn' 'https://api.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-admin.issuers.keycloak-cmn' 'https://auth.cmn.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-customer-user.issuers.shasta-chn' 'https://api.chn.{{ network.dns.external }}/keycloak/realms/shasta'
@@ -169,22 +313,24 @@ yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dns
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.chn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.nmn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.hmn.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.nmnlb.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.hmnlb.{{ network.dns.external }}'
 yq d -i "$c" 'spec.kubernetes.services.cray-istio.extraIngressServices'
 yq d -i "$c" 'spec.kubernetes.services.cray-istio.ingressgatewayhmn'
 
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway.loadBalancerIP' '{{ network.netstaticips.nmn_api_gw }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway.serviceAnnotations.[metallb.universe.tf/address-pool]' 'node-management'
-yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.nmn.{{ network.dns.external}},auth.nmn.{{ network.dns.external }}'
+yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.nmnlb.{{ network.dns.external}},auth.nmnlb.{{ network.dns.external }}'
 
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.loadBalancerIP' '{{ network.netstaticips.hmn_api_gw }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations[metallb.universe.tf/address-pool]' 'hardware-management'
-yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'hmcollector.hmn.{{ network.dns.external }}'
+yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'hmcollector.hmnlb.{{ network.dns.external }}'
 
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-can.serviceAnnotations.[metallb.universe.tf/address-pool]' 'customer-access'
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-can.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.can.{{ network.dns.external}},auth.can.{{ network.dns.external }}'
 
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-cmn.serviceAnnotations.[metallb.universe.tf/address-pool]' 'customer-management'
-yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-cmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.cmn.{{ network.dns.external}},auth.cmn.{{ network.dns.external }}'
+yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-cmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.cmn.{{ network.dns.external}},auth.cmn.{{ network.dns.external }},nexus.cmn.{{ network.dns.external }}'
 
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-chn.serviceAnnotations.[metallb.universe.tf/address-pool]' 'customer-high-speed'
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-chn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.chn.{{ network.dns.external}},auth.chn.{{ network.dns.external }}'
@@ -198,6 +344,25 @@ yq w -i --style=single "$c" 'spec.kubernetes.services.cray-keycloak.setup.keyclo
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-keycloak.setup.keycloak.clients.oauth2-proxy-customer-management.proxiedHosts' '{{ proxiedWebAppExternalHostnames.customerManagement }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-keycloak.setup.keycloak.clients.oauth2-proxy-customer-access.proxiedHosts' '{{ proxiedWebAppExternalHostnames.customerAccess }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-keycloak.setup.keycloak.clients.oauth2-proxy-customer-high-speed.proxiedHosts' '{{ proxiedWebAppExternalHostnames.customerHighSpeed }}'
+
+# nexus -- add admin credential
+if [[ -z "$(yq r "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential')" ]]; then
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.name' nexus-admin-credential
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[0].type' static
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[0].args.name' username
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[0].args.value' "${NEXUS_USERNAME:-admin}"
+    if [[ -v NEXUS_PASSWORD && -n "$NEXUS_PASSWORD" ]]; then
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].type' static_b64
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.name' password
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.value' "$(base64 <<< "$NEXUS_PASSWORD")"
+    else
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].type' randstr
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.name' password
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.length' 32
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.encoding' base64
+        yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.url_safe' yes
+    fi
+fi
 
 # remove cray-keycloak-gatekeeper
 yq d -i "$c" 'spec.kubernetes.services.cray-keycloak-gatekeeper'
@@ -229,12 +394,12 @@ yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.custom
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-management.hostAliases[0].hostnames[+]' 'auth.cmn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-management.hosts' '{{ proxiedWebAppExternalHostnames.customerManagement }}'
 
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-management'] | toYaml }}"
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-access'] | toYaml }}"
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.hostAliases[0].ip' '{{ network.netstaticips.nmn_api_gw }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.hostAliases[0].hostnames[0]' 'auth.can.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.hosts' '{{ proxiedWebAppExternalHostnames.customerAccess }}'
 
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-management'] | toYaml }}"
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-high-speed'] | toYaml }}"
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.hostAliases[0].ip' '{{ network.netstaticips.nmn_api_gw }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.hostAliases[0].hostnames[0]' 'auth.chn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.hosts' '{{ proxiedWebAppExternalHostnames.customerHighSpeed }}'
@@ -245,11 +410,22 @@ yq w -i "$c" 'spec.kubernetes.services.cray-kiali.kiali-operator.cr.spec.externa
 yq w -i "$c" 'spec.kubernetes.services.cray-kiali.kiali-operator.cr.spec.external_services.tracing.url' "https://{{ kubernetes.services['cray-istio'].istio.tracing.externalAuthority}}"
 
 # cray-uas-mgr changes
+yq w -i "$c" 'spec.kubernetes.services.cray-uas-mgr.uasConfig.require_bican' 'false'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-uas-mgr.uasConfig.dns_domain' '{{ network.dns.external }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-uas-mgr.images.images[+]' 'cray/cray-uai-sles15sp1:latest'
 yq w -i "$c" 'spec.kubernetes.services.cray-uas-mgr.images.defaultImage' 'cray/cray-uai-sles15sp1:latest'
 
 # cray-metallb
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-metallb.metallb.configInLine' '{{ network.metallb | toYaml }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-metallb.metallb.configInline' '{{ network.metallb | toYaml }}'
+
+# wlm.macvlan
+yq d -i "$c" 'spec.wlm.macvlansetup.nmn_vlan'
+
+# lower cpu request for tds systems (3 workers)
+num_workers=$(kubectl get nodes | grep ncn-w | wc -l)
+if [ $num_workers -le 3 ]; then
+  yq m -i --overwrite "$c" ${BASEDIR}/tds_cpu_requests.yaml
+fi
 
 if [[ "$inplace" == "yes" ]]; then
     cp "$c" "$customizations"

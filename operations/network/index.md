@@ -34,7 +34,7 @@ Documentation for CANU can be found at https://github.com/Cray-HPE/canu
 
 ## Management network version matrix
 
-| CSM version | Compatable with |
+| CSM version | Compatible with |
 | ------------- |:-------------:| -----:|
 | 1.0 | N/A |
 | 1.1 | 1.0 |
@@ -58,8 +58,8 @@ This release applies to the following product models
 | ----- | -----: |
 | Aruba 8325 Switch Series | 10.08.1021 |
 | Aruba 6300 Switch Series | 10.08.1021 |
-| Mellanox SN2100 Switch Series | 3.9.3302|
-| Mellanox SN2700 Switch Series | 3.9.3302|
+| Mellanox SN2100 Switch Series | 3.9.3210|
+| Mellanox SN2700 Switch Series | 3.9.3210|
 | Dell S3048-ON Switch Series | 10.5.1.4|
 | Dell S4148T-ON Switch Series | 10.5.1.4|
 | Dell S4148F-ON Switch Series | 10.5.1.4|

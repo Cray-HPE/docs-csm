@@ -31,6 +31,11 @@ Several Batcher behaviors are configurable. All of the Batcher configuration is 
 
 ```bash
 # cray cfs options list | grep -i batch
+```
+
+Example output:
+
+```
 batchSize = 25
 batchWindow = 60
 batcherCheckInterval = 10

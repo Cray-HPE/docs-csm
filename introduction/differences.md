@@ -2,10 +2,11 @@
 
 The most noteworthy changes since the previous release are described here.
 
-### Topics:
+### Topics
+
    * [New Features](#new_features)
-   * [Deprecating Features](#deprecating_features)
    * [Deprecated Features](#deprecated_features)
+   * [Removed Features](#removed_features)
    * [Other Changes](#other_changes)
 
 
@@ -13,6 +14,8 @@ The most noteworthy changes since the previous release are described here.
 
 <a name="new_features"></a>
 ### New Features
+
+The following features are new in this release:
 
    * Scaling improvements for larger systems
       * BOS
@@ -29,19 +32,21 @@ The most noteworthy changes since the previous release are described here.
          * Rome-Based HPE DL 385(v1) Gen10
    * Node consoles are now managed by cray-console-node which is based on conman.
    * HSM now has a v2 REST API
-   * PowerDNS authoriative DNS server
+   * PowerDNS authoritative DNS server
       * Introduces the cray-dns-powerdns, cray-dns-powerdns-postgres, and cray-powerdns-manager pods
       * Supports zone transfer to external DNS servers via AXFR query and DNSSEC
       * Please refer to the [DNS overview](../operations/network/dns/DNS.md) and [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for further information.
    * NCN user password and SSH key management is available for both root and
      non-root users via NCN personalization. Please refer to [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md).
 
-<a name="deprecating_features"></a>
-### Deprecating Features
+<a name="deprecated_features"></a>
+### Deprecated Features
+
+The following features are no longer supported and are planned to be removed in a future release:
 
    * HSM v1 REST API has been deprecated as of CSM version 0.9.3. The v1 HSM APIs will be removed in the CSM version 1.3 release.
    * Many CAPMC v1 REST API and CLI features are being deprecated as part of CSM version 1.0; Full removal of the deprecated CAPMC features will happen in CSM version 1.3. Further development of CAPMC service or CLI has stopped. CAPMC has entered end-of-life but will still be generally available. CAPMC is going to be replaced with the Power Control Service (PCS) in a future release. The current API/CLI portfolio for CAPMC are being pruned to better align with the future direction of PCS. More information about PCS and the CAPMC transition will be released as part of subsequent CSM releases.
-   * HMNFD v1 REST API has been deprecated as of CSM version 1.2.  The v1 HMNFD APIs will be removed in the CSM version 1.5 release.
+   * HMNFD v1 REST API has been deprecated as of CSM version 1.2. The v1 HMNFD APIs will be removed in the CSM version 1.5 release.
      * For more information on what features have been deprecated please view the CAPMC swagger doc or read the [CAPMC deprecation notice](../introduction/CAPMC_deprecation.md)
    * The Boot Orchestration Service (BOS) API is changing in the upcoming CSM-1.2.0 release:
         * The `--template-body` option for the Cray CLI `bos` command will be deprecated.
@@ -52,8 +57,10 @@ The most noteworthy changes since the previous release are described here.
         * Please see the [PowerDNS migration notice](../introduction/PowerDNS_migration.md) for more information.
    * The Compute Rolling Upgrade Service (CRUS) will be deprecated in the CSM-1.3.0 release. Enhanced BOS functionality will replace CRUS. This includes the ability to stage changes to nodes that can be acted upon later when the node reboots. It also includes the ability to reboot nodes without specifying any boot artifacts. This latter ability relies on the artifacts already having been staged.
 
-<a name="deprecated_features"></a>
-### Deprecated Features
+<a name="removed_features"></a>
+### Removed Features
+
+The following features have been completely removed:
 
    * cray-conman pod. This has been replaced by cray-console-node.
    * The cray-externaldns-coredns, cray-externaldns-etcd, and cray-externaldns-wait-for-etcd pods have been removed. PowerDNS is now the provider of the external DNS service.

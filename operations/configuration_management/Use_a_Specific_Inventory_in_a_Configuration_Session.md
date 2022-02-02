@@ -9,7 +9,11 @@ For example:
 
 ```bash
 ncn-m001# cat configurations-example-additional-inventory.json
+```
 
+Example configuration:
+
+```
 {
   "layers": [
     {

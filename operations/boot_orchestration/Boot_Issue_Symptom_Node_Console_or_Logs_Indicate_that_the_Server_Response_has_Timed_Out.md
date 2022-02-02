@@ -21,16 +21,29 @@ Check if the `nf_nat_tftp` kernel module has been loaded. The kernel module is l
 
 ### Resolution
 
-Load `nf_nat_tftp` if it has not been loaded already by executing modprobe nf\_nat\_tftp from the non-compute node \(NCN\), and then restarting the `cray-tftp` service.
+1. Load `nf_nat_tftp` if it has not been loaded already by executing modprobe nf\_nat\_tftp from the non-compute node \(NCN\).
 
-```bash
-ncn-m001# kubectl get pods -n services -o wide|grep -E "NAME|tftp"
-NAME                         READY     STATUS   RESTARTS   AGE  IP             NODE     NOMINATED NODE   READINESS GATES
-cray-tftp-885cc65c4-fk8bm    2/2       Running  0          56s  10.32.0.63     ncn-w002 <none>           <none>
+    ```bash
+    ncn-m001# kubectl get pods -n services -o wide|grep -E "NAME|tftp"
+    ```
 
-ncn-m001# kubectl delete pod cray-tftp-885cc65c4-fk8bm
-pod "cray-tftp-885cc65c4-fk8bm" deleted
-```
+    Example output:
 
+    ```
+    NAME                         READY     STATUS   RESTARTS   AGE  IP             NODE     NOMINATED NODE   READINESS GATES
+    cray-tftp-885cc65c4-fk8bm    2/2       Running  0          56s  10.32.0.63     ncn-w002 <none>           <none>
+    ```
 
+1. Restart the `cray-tftp` service.
+    
+    ```bash
+    ncn-m001# kubectl delete pod cray-tftp-885cc65c4-fk8bm
+    ```
 
+    Example output:
+
+    ```
+    pod "cray-tftp-885cc65c4-fk8bm" deleted
+    ```
+
+    

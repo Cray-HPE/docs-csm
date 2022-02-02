@@ -101,6 +101,11 @@ If the nodes are not off when the update command is issued, the update will get 
 
         ```bash
         ncn-w001# cray fas actions create nodeBMC.json
+        ```
+
+        Example output:
+
+        ```
         overrideDryrun = false
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
         ```
@@ -111,6 +116,11 @@ If the nodes are not off when the update command is issued, the update will get 
 
         ```bash
         ncn-w001# cray fas actions describe {actionID}
+        ```
+
+        Example output:
+
+        ```
         blockedBy = []
         state = "completed"
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
@@ -170,6 +180,11 @@ If the nodes are not off when the update command is issued, the update will get 
 
         ```bash
         ncn-w001# cray fas actions create nodeBMC.json
+        ```
+
+        Example output:
+        
+        ```
         overrideDryrun = true
         actionID = "bc40f10a-e50c-4178-9288-8234b336077b"
         ```
@@ -182,6 +197,11 @@ If the nodes are not off when the update command is issued, the update will get 
 
     ```bash
     ncn-w001# cray fas actions describe {actionID}
+    ```
+
+    Example output:
+
+    ```
     [operationSummary.failed]
     [[operationSummary.failed.operationKeys]]
     stateHelper = "unexpected change detected in firmware version. Expected nc.1.3.10-shasta-release.arm.2020-07-21T23:58:22+00:00.d479f59 got: nc.cronomatic-dev.arm.2019-09-24T13:20:24+00:00.9d0f8280"
@@ -285,7 +305,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         ncn# cray capmc xname_off create --xnames x[1000-1003]c[0-7] --recursive true --continue true
         ```
 
-        This command powers off all the node cards, then all the compute blades, then all the Slingshot switch ASICS, then all the Slingshot switch enclosures, and finally all chassis enclosures in cabinets 1000-1003.
+        This command powers off all the node cards, then all the compute blades, then all the Slingshot switch ASICs, then all the Slingshot switch enclosures, and finally all chassis enclosures in cabinets 1000-1003.
 
         When power is removed from a chassis, the high-voltage DC rectifiers that support the chassis are powered off. If a component is not populated, the `--continue` option enables the command to continue instead of returning error messages.
 
@@ -299,6 +319,11 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
         ```bash
         ncn# cray fas actions create chassisBMC.json
+        ```
+
+        Example output:
+
+        ```
         overrideDryrun = false
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
         ```
@@ -309,6 +334,11 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
         ```bash
         ncn# cray fas actions describe {actionID}
+        ```
+
+        Example output:
+
+        ```
         blockedBy = []
         state = "completed"
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
@@ -368,6 +398,11 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
         ```bash
         ncn# cray fas actions create chassisBMC.json
+        ```
+
+        Example output:
+
+        ```
         overrideDryrun = true
         actionID = "bc40f10a-e50c-4178-9288-8234b336077b"
         ```
@@ -388,7 +423,12 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
     The `--prereq` option ensures all required components are powered on first. The `--continue` option allows the command to complete in systems without fully populated hardware.
 
-6.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
+6.  Bring up the Slingshot Fabric.
+    Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
+    -  The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
+    -  The *Slingshot Troubleshooting Guide* PDF.
+
+7.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
 ---
 
@@ -693,6 +733,11 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
 
         ```bash
         ncn-w001# cray fas actions create nodeBIOS.json
+        ```
+
+        Example output:
+
+        ```
         overrideDryrun = false
         actionID = "a88d8207-8bca-4ba1-9b80-14772e5f3f34"
         ```
@@ -703,6 +748,11 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
 
         ```bash
         ncn-w001# cray fas actions describe {actionID}
+        ```
+
+        Example output:
+
+        ```
         blockedBy = []
         state = "completed"
         actionID = "a88d8207-8bca-4ba1-9b80-14772e5f3f34"
@@ -762,6 +812,11 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
 
         ```bash
         ncn-w001# cray fas actions create nodeBIOS.json
+        ```
+
+        Example output:
+
+        ```
         overrideDryrun = true
         actionID = "bc40f10a-e50c-4178-9288-8234b336077b"
         ```
@@ -772,6 +827,11 @@ Use this procedure to update compute node BIOS firmware using FAS. There are two
 
     ```bash
     ncn-w001# cray fas actions describe {actionID}
+    ``
+
+    Example output:
+    
+    ```
     [[operationSummary.noOperation.operationKeys]]
     stateHelper = ""
     fromFirmwareVersion = "wnc.bios-1.2.4"
@@ -838,6 +898,11 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 
     ```bash
     ncn# cray fas operations describe {operationID} --format json
+    ```
+
+    Example output:
+
+    ```
     {
        "operationID":"102c949f-e662-4019-bc04-9e4b433ab45e",
        "actionID":"9088f9a2-953a-498d-8266-e2013ba2d15d",
@@ -879,6 +944,11 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
    ```bash
    ncn# cray fas images list --format json | jq '.images[] | select(.manufacturer=="cray") \
    | select(.target=="Node1.BIOS") | select(any(.models[]; contains("EX425")))'
+   ```
+
+   Example output:
+
+   ```
    {
        "imageID": "e23f5465-ed29-4b18-9389-f8cf0580ca60",
        "createTime": "2021-03-04T00:04:05Z",
@@ -947,6 +1017,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 4. Get a high-level summary of the job to verify the changes corrected the issue.
 
    Use the returned actionID from the `cray fas actions create` command.
+   
    ```bash
    ncn# cray fas actions create UPDATED_COMMAND.json
    ```
