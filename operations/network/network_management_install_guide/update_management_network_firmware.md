@@ -2,11 +2,9 @@
 
 This page describes how to update firmware on the management network switches.
 More details and other options to upgrade firmware can be found in the switch [user guides](./user_guides.md).
-## Requirements
-
-Access to the switches from the LiveCD/ncn-m001.
-
-## Configuration
+#### Prerequisites 
+- Access to the switches.
+- Firmware in a location that the switches can reach. 
 
 All firmware can be found in the HFP package provided with the Shasta release.
 
@@ -14,10 +12,10 @@ All firmware can be found in the HFP package provided with the Shasta release.
 
 | Model | software version |
 | ----- | -----: |
-| Aruba 8320 Switch Series | 10.08.1021 |
-| Aruba 8325 Switch Series | 10.08.1021 |
-| Aruba 8360 Switch Series | 10.08.1021 |
-| Aruba 6300 Switch Series | 10.08.1021 |
+| Aruba 8320 Switch Series | 10.09.0010  |
+| Aruba 8325 Switch Series | 10.09.0010  |
+| Aruba 8360 Switch Series | 10.09.0010  |
+| Aruba 6300 Switch Series | 10.09.0010  |
 | Mellanox SN2100 Switch Series | 3.9.3210|
 | Mellanox SN2700 Switch Series | 3.9.3210|
 | Dell S3048-ON Switch Series | 10.5.1.4|

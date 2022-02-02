@@ -1,6 +1,8 @@
 # Collect Data 
 
- 
+#### Prerequisites 
+- SSH access to the switches.
+- SLS API access.
 
 * ***Step 1***: Retrieve the most up-to-date SHCD spreadsheet. Accuracy in this spreadsheet is critical. 
 

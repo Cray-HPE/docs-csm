@@ -1,5 +1,8 @@
 # Validate the SHCD
 
+#### Prerequisites 
+- Up to date SHCD.
+
 Use CANU (CSM Automated Network Utility) to validate the SHCD. SHCD validation is required to ensure Plan-of-Record network configurations are generated. This is an iterative process to create a model of the entire network topology connection-by-connection. 
 
 * Open existing SHCD in Excel. 
@@ -132,3 +135,10 @@ After an SHCD has been validated it should be uploaded to an official storage lo
 
 * customer communication (CAST ticket for customers) 
 * or SharePoint (internal systems and sometimes customer systems). 
+
+#### Output SHCD to JSON
+
+- Once the SHCD is fully validate, the user will be able to output all the connection details to a `json` file.
+- This is used to generate switch configs.
+
+```canu validate shcd -a v1 --shcd ./test.xlsx --tabs 40G_10G,NMN,HMN --corners I12,S37,I9,S20,I20,S31  --json --out cabling.json```

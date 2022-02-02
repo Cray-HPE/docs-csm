@@ -1,4 +1,7 @@
-# Backup custom config
+# Backup Custom Config
+
+#### Prerequisites 
+- Access to the switches.
 
 If your doing a fresh install of CSM but previously had a different version of CSM installed you will need to backup/restore certain switch config after the switch has been wiped.
 
@@ -101,6 +104,7 @@ interface 1/1/36
     exit
 ```
 ```
+sw-spine-001# conf t
 sw-spine-001(config)# system interface-group 3 speed 10g
 ```
 ```
@@ -194,9 +198,9 @@ sw-spine-001 [standalone: master] # conf t
    username monitor password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    ```
 #### Backup SNMP credentials
-SNMP is currently only used on sw-leaf-bmc switches, these credentials can be retrieved from vault.  More info on SNMP creds can be found on the [Change SNMP Credentials on Leaf Switches](../../operations/security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md) page.
+SNMP is currently only used on sw-leaf-bmc switches, these credentials can be retrieved from vault.  More info on SNMP creds can be found on the [Change SNMP Credentials on Leaf Switches](../../../operations/security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md) page.
 
-Once these credentials are retrieved from vault you can fill in the `xxxxxx` fields below and paste the commands into the switch after elevating to global configuration mode `conf t`
+Once these credentials are retrieved from Vault you can fill in the `xxxxxx` fields below.
 
 ##### Aruba
 

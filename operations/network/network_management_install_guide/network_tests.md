@@ -1,4 +1,9 @@
-### Network tests
+# Network tests
+
+#### Prerequisites 
+- SSH access to the switches.
+- SLS file or SLS API access.
+ 
 
 Canu has the ability to run tests against the management network.  (Aruba Only)
 

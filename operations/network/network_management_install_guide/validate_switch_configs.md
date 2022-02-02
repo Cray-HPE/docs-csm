@@ -1,5 +1,10 @@
 # Validate switch configs
 
+#### Prerequisites 
+- SSH access to the switches or the running config file.
+- Generated Switch configs.
+    - [Generate Switch Config](generate_switch_configs.md)
+
 #### Compare CSM 1.2 switch configs with running configs 
 
  Next you would want to compare the current running configuration with the generated configuration.  
@@ -44,11 +49,12 @@ Note:  A roadmap item for CANU is the ability to “inject” customer configura
 
  Configuration updates depending on the current version of network configuration may be as easy as adding few lines or be complete rip & replace operation which may lead you to choosing to wipe the existing configuration or just simply adding few lines in the configuration.  
 
-Always before making configuration changes, analyze the changes shown in the above configuration diff section. 
+Always before making configuration changes, analyze the changes shown in the above configuration diff section.
 
 :exclamation: All of these steps should be done using an out of band connection. This process is disruptive and will require downtime :exclamation:  
 
 #### Caveats and known issues
+- Mellanox and Dell support is limited.
 - Some configuration may need to be applied in a certain order.
   - Example: `Customer VRF` needs to be applied before adding interfaces/routes to the VRF.
 - When applying certain configuration it may wipe out pre-existing configuration.
