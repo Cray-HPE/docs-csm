@@ -209,6 +209,7 @@ yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator.cray-service.servi
 yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator.cray-service.volumeClaimTemplate.storageClassName' 'sma-block-replicated'
 yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator.cray-service.volumeClaimTemplate.resources.requests.storage' '16Gi'
 yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator.rsyslogAggregatorHmn.service.loadBalancerIP' '10.94.100.72'
+yq d -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator.rsyslogAggregatorCan'
 yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator.rsyslogAggregatorCmn.externalHostname' 'rsyslog.cmn.{{ network.dns.external }}'
 yq d -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator.volumeClaimTemplate'
 
@@ -216,6 +217,7 @@ yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator-udp.cray-service.s
 yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator-udp.cray-service.volumeClaimTemplate.storageClassName' 'sma-block-replicated'
 yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator-udp.cray-service.volumeClaimTemplate.resources.requests.storage' '16Gi'
 yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator-udp.rsyslogAggregatorUdpHmn.service.loadBalancerIP' '10.94.100.72'
+yq d -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator-udp.rsyslogAggregatorCan'
 yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator-udp.rsyslogAggregatorCmn.externalHostname' 'rsyslog.cmn.{{ network.dns.external }}'
 yq d -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator-udp.volumeClaimTemplate'
 
@@ -283,7 +285,9 @@ yq w -i "$c" 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.a
 yq w -i "$c" 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.grafana.externalAuthority' 'grafana.cmn.{{ network.dns.external }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-s3.service.annotations.[external-dns.alpha.kubernetes.io/hostname]' 's3.cmn.{{ network.dns.external }}'
 yq w -i "$c" 'spec.kubernetes.services.gitea.externalHostname' 'vcs.cmn.{{ network.dns.external }}'
+yq d -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator.rsyslogAggregatorCan'
 yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator.rsyslogAggregatorCmn.externalHostname' 'rsyslog.cmn.{{ network.dns.external }}'
+yq d -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator-udp.rsyslogAggregatorCan'
 yq w -i "$c" 'spec.kubernetes.services.sma-rsyslog-aggregator-udp.rsyslogAggregatorCmn.externalHostname' 'rsyslog.cmn.{{ network.dns.external }}'
 yq w -i "$c" 'spec.kubernetes.services.sma-kibana.externalAuthority' 'sma-kibana.cmn.{{ network.dns.external }}'
 yq w -i "$c" 'spec.kubernetes.services.sma-grafana.externalAuthority' 'sma-grafana.cmn.{{ network.dns.external }}'
