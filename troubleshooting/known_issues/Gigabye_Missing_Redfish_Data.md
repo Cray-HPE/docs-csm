@@ -1,9 +1,15 @@
 ### Gigabyte BMC Missing Redfish Data
 
-If data from Gigabyte nodes are missing from Hardware State Manager (HSM) or other CSM tools, check the redfish endpoint on the BMC to see if the data is present.
-If the data is not present, then a reboot of the BMC is needed to refresh the Redfish values.
+Follow this procedure if you notice data from Gigabyte nodes are missing from Hardware State Manager(HSM) or other CSM tools.
+Make sure the firmware and BIOS of the Gigabyte node is at the latest supported level.
 
-###### Rebooting the Gigabyte BMC
+If data from Gigabyte nodes are missing from Hardware State Manager (HSM) or other CSM tools, check the redfish endpoint on the BMC to see if the data is present.
+
+If the data is not present in the Redfish, then a cold reset of the BMC is needed to refresh the Redfish values.
+
+If the data is present in the Redfish, a rediscovery of the BMC may populate the values in HSM.
+
+###### Resetting the Gigabyte BMC
 
 Run the command: `ipmitool -I lanplus -U admin -P password -H <target bmc ip> mc reset cold`
 * `password` is the admin password
