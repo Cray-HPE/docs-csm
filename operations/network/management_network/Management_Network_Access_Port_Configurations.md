@@ -215,49 +215,67 @@ interface mlag-port-channel 7 switchport hybrid allowed-vlan add 7
 interface mlag-port-channel 7 switchport hybrid allowed-vlan add
 ```
 
+Mellanox MLAG port configuration:
+```
+placeholder for config
+Mlag, native vlan 1, allowed vlan 10
+```
+Mellanox port configuration:
+```
+placeholder
+Generic, member of port-channel with speed and mtu set
+```
+
 ## HPE NCN Storage Port Configuration
 
-Aruba port configuration:
+Aruba port lag configuration:
 ```
-sw-spine02# show run int 1/1/7
-interface 1/1/7
+sw-leaf-003# show run int lag 6
+interface lag 6 multi-chassis
     no shutdown
-    mtu 9198
-    lag 4
-    exit
-```
-Aruba LAG configuration:
-```
-sw-spine02# show run int lag 4
-interface lag 4 multi-chassis
-    no shutdown
+    description ncn-s001:ocp:1
     no routing
     vlan trunk native 1
-    vlan trunk allowed 1-2,4,7
+    vlan trunk allowed 1-2,4,6-7
     lacp mode active
     lacp fallback
+    spanning-tree port-type admin-edge
     exit
 ```
-Aruba Storage port configuration (future use):
+Aruba port physical configuration:
+sw-leaf-003# show run int 1/1/6
+interface 1/1/6
+    no shutdown
+    mtu 9198
+    description ncn-s001:ocp:1
+    lag 6
+    exit
+
+```
+Aruba Storage port lag interface configuration (future use):
 These will be configured, but the ports will be shut down until needed.
 ```
-sw-spine02# show run int 1/1/7
-interface 1/1/7
-    shutdown
-    mtu 9198
-    lag 4
-    exit
-```
-Aruba LAG configuration:
-```
-sw-spine02# show run int lag 4
-interface lag 4 multi-chassis
-    shutdown
+sw-leaf-003# show run int lag 3
+interface lag 3 multi-chassis
+    no shutdown
+    description ncn-s001:ocp:2
     no routing
-    vlan access 10
+    vlan trunk native 1
+    vlan trunk allowed 10
     lacp mode active
     lacp fallback
+    spanning-tree port-type admin-edge
     exit
+```
+Aruba Storage port physical interface configuration (future use):
+sw-leaf-003# show run int 1/1/3
+interface 1/1/3
+    no shutdown
+    mtu 9198
+    description ncn-s001:ocp:2
+    lag 3
+    exit
+
 ```
 
 # CMM Port Configuration
