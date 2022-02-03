@@ -14,12 +14,17 @@ This topic describes the content and purpose of the the fields in a UAI Class an
 
 The following is JSON-formatted example output from the cray uas admin config classes list command \(see [List Available UAI Classes](List_Available_UAI_Classes.md)\). This output contains examples of three UAI classes:
 
--   A brokered End-User UAI class
--   A UAI broker class
--   A non-brokered End-User UAI class
+- A brokered End-User UAI class
+- A UAI broker class
+- A non-brokered End-User UAI class
 
 ```
 ncn-m001-pit# cray uas admin config classes list --format json
+```
+
+Example output:
+
+```
 [
   {
     "class_id": "bdb4988b-c061-48fa-a005-34f8571b88b4",
@@ -33,8 +38,8 @@ ncn-m001-pit# cray uas admin config classes list --format json
     "replicas": 1,
     "resource_config": {
       "comment": "Resource Specification to use with Brokered End-User UAIs",
-      "limit": "{\"cpu\": \"1\", \"memory\": \"1Gi\"}",
-      "request": "{\"cpu\": \"1\", \"memory\": \"1Gi\"}",
+      "limit": "{"cpu": "1", "memory": "1Gi"}",
+      "request": "{"cpu": "1", "memory": "1Gi"}",
       "resource_id": "f26ee12c-6215-4ad1-a15e-efe4232f45e6"
     },
     "resource_id": "f26ee12c-6215-4ad1-a15e-efe4232f45e6",
@@ -264,8 +269,8 @@ The following Resource Specification description is provided as a convenience to
 ```
     "resource_config": {
       "comment": "Resource Specification to use with Brokered End-User UAIs",
-      "limit": "{\"cpu\": \"1\", \"memory\": \"1Gi\"}",
-      "request": "{\"cpu\": \"1\", \"memory\": \"1Gi\"}",
+      "limit": "{"cpu": "1", "memory": "1Gi"}",
+      "request": "{"cpu": "1", "memory": "1Gi"}",
       "resource_id": "f26ee12c-6215-4ad1-a15e-efe4232f45e6"
     },
 ```
