@@ -79,9 +79,9 @@ Documentation for CANU can be found at https://github.com/Cray-HPE/canu
    1. [Scenario B: network connection via high speed network](./scenario-b.md)
    1. [Example of how to configure Scenario A or B](./management_network_configuration_example.md)
 
-### Managing switches from CLI
+## Managing switches from CLI
 
-###Device management
+### Device management
   1. [Management Interface](./management_interface.md)
   1. [Network Time Protocol (NTP) Client](./ntp.md)
   1. [Domain Name System (DNS) Client](./dns-client.md)
