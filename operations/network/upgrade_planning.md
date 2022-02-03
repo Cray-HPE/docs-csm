@@ -5,7 +5,7 @@ Creating an upgrade plan is always going to be unique and dependent on the requi
 
 Some release versions of the network configuration require coupled upgrade of software to enable new software functionality or bug fixes that may add time required to do the full upgrade.  
 
-For example: in rel/1.2 to we will upgrade Aruba/Mellanox switches to newer code.  
+For example: in rel/1.2 we will upgrade Aruba/Mellanox switches to newer code.  
 
 In this case and cases where configuration changes are extensive you may want to consider taking the generated configurations after review and uploading them to the switches startup config prior to booting to new code to upgrade both configuration and software simultaneously.  
 
