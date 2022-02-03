@@ -35,9 +35,9 @@ __________________________________
    1. [Notice](./index.md)
    1. [Index](./index.md)
 
-### Managing switches from CLI
+## Managing switches from CLI
 
-###Device management
+### Device management
   1. [Management Interface](./management_interface.md)
   1. [Network Time Protocol (NTP) Client](./ntp.md)
   1. [Domain Name System (DNS) Client](./dns-client.md)

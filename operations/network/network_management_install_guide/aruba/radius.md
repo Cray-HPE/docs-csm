@@ -1,6 +1,6 @@
 # RADIUS 
 
-“RADIUS is designed to authenticate and log dial-up remote users to a network.” – rfc2865 
+"RADIUS is designed to authenticate and log dial-up remote users to a network." – rfc2865 
 
 Relevant Configuration 
 

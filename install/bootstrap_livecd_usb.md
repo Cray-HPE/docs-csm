@@ -15,7 +15,7 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
          1. [Subsequent Fresh-Installs (Re-Installs)](#subsequent-fresh-installs-re-installs)
          1. [First-Time/Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal)
       1. [CSI Workarounds](#csi-workarounds)
-      1. [Prepare Site Init](#prepare_site_init)
+      1. [Prepare Site Init](#prepare-site-init)
    1. [Prepopulate LiveCD Daemons Configuration and NCN Artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
    1. [Boot the LiveCD](#boot-the-livecd)
       1. [First Login](#first-login)
@@ -223,7 +223,7 @@ The SHASTA-CFG structure and other configuration files will be prepared, then `c
 * [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
 * [Generate Installation Files](#generate-installation-files)
 * [CSI Workarounds](#csi-workarounds)
-* [Prepare Site Init](#prepare_site_init)
+* [Prepare Site Init](#prepare-site-init)
 
 <a name="before-configuration-payload-workarounds"></a>
 #### 3.1 Before Configuration Payload Workarounds

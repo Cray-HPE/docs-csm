@@ -305,7 +305,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         ncn# cray capmc xname_off create --xnames x[1000-1003]c[0-7] --recursive true --continue true
         ```
 
-        This command powers off all the node cards, then all the compute blades, then all the Slingshot switch ASICS, then all the Slingshot switch enclosures, and finally all chassis enclosures in cabinets 1000-1003.
+        This command powers off all the node cards, then all the compute blades, then all the Slingshot switch ASICs, then all the Slingshot switch enclosures, and finally all chassis enclosures in cabinets 1000-1003.
 
         When power is removed from a chassis, the high-voltage DC rectifiers that support the chassis are powered off. If a component is not populated, the `--continue` option enables the command to continue instead of returning error messages.
 

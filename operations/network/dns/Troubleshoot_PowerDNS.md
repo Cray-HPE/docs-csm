@@ -113,7 +113,7 @@ If the DNSKEY record is incorrect, verify that the zone name is correct in the `
 
 ### Verify TSIG Operation
 
-> **IMPORTANT:** These examples are for informational purposes only. The use of the `dig` command `-y` option to present the key should be avoided in favour of the `-k` option with the secret in a file to avoid the key being displayed in `ps` command output or the shell history.
+> **IMPORTANT:** These examples are for informational purposes only. The use of the `dig` command `-y` option to present the key should be avoided in favor of the `-k` option with the secret in a file to avoid the key being displayed in `ps` command output or the shell history.
 
 1. Determine the IP address of the external DNS service.
 

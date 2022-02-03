@@ -66,7 +66,7 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
     ncn# /usr/share/doc/csm/operations/hardware_state_manager/scripts/backup_smd_postgres.sh
     ```
 
-    Exxample output:
+    Example output:
 
     ```
     ~/cray-smd-postgres-backup_2021-07-07_16-39-44 ~
