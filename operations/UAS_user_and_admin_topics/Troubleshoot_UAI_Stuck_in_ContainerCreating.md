@@ -24,6 +24,11 @@ The UAI has been in the `ContainerCreating` status for several minutes.
 
     ```
     ncn-m001-pit# cray uas admin uais list --owner ctuser
+    ```
+
+    Example output:
+
+    ```
     [[results]]
     uai_age = "1m"
     uai_connect_string = "ssh ctuser@10.103.13.159"
@@ -40,6 +45,11 @@ The UAI has been in the `ContainerCreating` status for several minutes.
 
     ```
     ncn-m001-pit# kubectl get po -n user | grep uai-ctuser-bcd1ff74
+    ```
+
+    Example output:
+
+    ```
     uai-ctuser-bcd1ff74-7d94967bdc-4vm66   0/1     ContainerCreating   0          2m58s
     ```
 
@@ -47,6 +57,11 @@ The UAI has been in the `ContainerCreating` status for several minutes.
 
     ```
     ncn-m001-pit# kubectl describe pod -n user uai-ctuser-bcd1ff74-7d94967bdc-4vm66
+    ```
+
+    Example output:
+
+    ```
     Name:                 uai-ctuser-bcd1ff74-7d94967bdc-4vm66
     Namespace:            user
     Priority:             -100
@@ -54,7 +69,7 @@ The UAI has been in the `ContainerCreating` status for several minutes.
     Node:                 ncn-w001/10.252.1.12
     Start Time:           Wed, 03 Feb 2021 18:33:00 -0600
 
-    ...
+    [...]
 
     Events:
     Type     Reason       Age                    From               Message
