@@ -215,13 +215,15 @@ Additionally, it is important to verify that the batch job continued to run, uni
 
       ```
       [[results]]
-      username =  "uastest"
-      uai_host =  "ncn-w001"
-      uai_status =  "Running: Ready"
-      uai_connect_string = "ssh uastest@172.30.48.49 -p 31137 -i ~/.ssh/id_rsa"
-      uai_img =  "bis.local:5000/cray/cray-uas-sles15sp1-slurm:latest"
-      uai_age =  "1m"
-      uai_name =  "uai-uastest-5653e9b9"
+      uai_age = "2m"
+      uai_connect_string = "ssh vers@10.103.8.170"
+      uai_host = "ncn-w002"
+      uai_img = "registry.local/cray/cray-uai-cos-2.1.70:latest"
+      uai_ip = "10.103.8.170"
+      uai_msg = ""
+      uai_name = "uai-vers-f8fa541f"
+      uai_status = "Running: Ready"
+      username = "vers"
       ```
    
    1. Log in to the created UAI.
@@ -229,13 +231,13 @@ Additionally, it is important to verify that the batch job continued to run, uni
       For example:
 
       ```bash
-      ncn# ssh uastest@172.30.48.49 -p 31137 -i ~/.ssh/id_rsa
+      ncn# ssh vers@10.103.8.170
       ```
    
    1. Verify the configuration of Slurm, for example, within the UAI:
    
       ```bash
-      uastest@uai-uastest-5653e9b9:/lus/uastest> srun -N 4 hostname | sort
+      vers@uai-vers-f8fa541f-5c5c9f5b75-vsb2k:/lus> srun -N 4 hostname | sort
       ```
 
       Example output:
@@ -256,7 +258,7 @@ Additionally, it is important to verify that the batch job continued to run, uni
    1. Delete the UAI session when all of the testing is complete.
    
       ```bash
-      ncn# cray uas delete --uai-list uai-uastest-5653e9b9
+      ncn# cray uas delete --uai-list uai-vers-f8fa541f
       ```
 
 #### Launch on a UAN
