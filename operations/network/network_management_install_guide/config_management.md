@@ -3,7 +3,7 @@
 
 This page is designed for:
 - Showing users how initially save switch configs so they can be used again.
-- Loading previously saved switch configs from a certain CSM version/desired version.
+- Switching between saved configurations.
 
 :exclamation: All of these steps should be done using an out of band connection. This process is disruptive and will require downtime :exclamation:  
 
@@ -13,13 +13,14 @@ All this info can be found in the switch [user guides](user_guides.md).
 
 ## Aruba
 
+###Change configuration
 
 Maximum number of checkpoints
 1. Maximum checkpoints: 64 (including the startup configuration)
 1. Maximum user checkpoints: 32
 1. Maximum system checkpoints: 32
 
-##### Saving the current configuration into a checkpoint (needs be done when in both CSM1.0 and CSM1.2 configuration to save the configs in checkpoint).
+##### Saving the current configuration into a checkpoint (needs be done when in both CSM1.0 and CSM1.2).
 
 - Saving configuration to a checkpoint:
 ```
