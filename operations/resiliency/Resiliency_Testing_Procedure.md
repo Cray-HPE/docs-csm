@@ -144,7 +144,7 @@ In order to keep watch on various items during and after the fault has been intr
    ncn# watch -n 5 "date; kubectl get pods -o wide -A | grep -v Completed | grep -v Running"
    ```
 
-2. Detect the change in state of the various Postgres instances running.
+1. Detect the change in state of the various Postgres instances running.
    
    Run the following in a seperate window:
 
@@ -341,11 +341,11 @@ After the target NCN was shut down, assuming the command line windows that were 
    * Any prior SSH session established with the UAI while it was running on the downed NCN worker node will be unresponsive. A new SSH session will need to be established once the UAI pods has been successfully relocated to another worker NCN.
    * Log back into the UAI and verify that the WLM batch job is still running and streaming output. The log file created with the kick-off of the batch job should still be accessible and the `squeue` command can be used to verify that the job continues to run (for Slurm).
   
-2. If the WLM batch job was launched on a UAN, log back into it and verify that the batch job is still running and streaming output via the log file created with the batch job and/or the `squeue` command (if Slurm is used as the WLM).
+1. If the WLM batch job was launched on a UAN, log back into it and verify that the batch job is still running and streaming output via the log file created with the batch job and/or the `squeue` command (if Slurm is used as the WLM).
    
-3. Verify that new WLM jobs can be started on a compute node after the NCN is down (either via a UAI or the UAN node).
+1. Verify that new WLM jobs can be started on a compute node after the NCN is down (either via a UAI or the UAN node).
 
-4. Look at any pods that, are at this point, in a state other than `Running`, `Completed`, `Pending`, or `Terminating`:
+1. Look at any pods that, are at this point, in a state other than `Running`, `Completed`, `Pending`, or `Terminating`:
    
    ```bash
    ncn# kubectl get pods -o wide -A | grep -Ev "Running|Completed|Pending|Termin"
@@ -384,5 +384,5 @@ After the target NCN was shut down, assuming the command line windows that were 
    
    > **IMPORTANT:** Do not forget to remove the labels after the UAI has been created. Once the UAI has been created, log into it and ensure a new workload manager job can be launched.
 
-2. Ensure tickets have been opened for any unexpected behavior along with associated logs and notes on workarounds, if any were executed.
+1. Ensure tickets have been opened for any unexpected behavior along with associated logs and notes on workarounds, if any were executed.
 
