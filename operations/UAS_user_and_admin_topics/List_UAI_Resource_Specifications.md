@@ -21,14 +21,20 @@ The resource specifications returned by the following command are available for 
 
 ```
 ncn-m001-pit# cray uas admin config resources list
+```
+
+Example output:
+
+```
 [[results]]
 comment = "Resource Specification to use with Brokered End-User UAIs"
-limit = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
-request = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
+limit = "{"cpu": "300m", "memory": "1Gi"}"
+request = "{"cpu": "300m", "memory": "1Gi"}"
 resource_id = "f26ee12c-6215-4ad1-a15e-efe4232f45e6"
 ```
 
 The following are the configurable parts of a resource specification:
+
 * `limit` - A JSON string describing a Kubernetes resource limit
 * `request` - A JSON string describing a Kubernetes resource request
 * `comment` - An optional free form string containing any information an administrator might find useful about the resource specification
