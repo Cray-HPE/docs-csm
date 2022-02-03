@@ -8,6 +8,11 @@ If a user attempts to create a UAI in the legacy mode and cannot create the UAI 
 
 ```
 ncn-m001-pit# cray uas create --publickey ~/.ssh/id_rsa.pub
+```
+
+Example output:
+
+```
 Usage: cray uas create [OPTIONS]
 Try 'cray uas create --help' for help.
 
@@ -18,6 +23,11 @@ Currently, there is not a lot of UAS log information available from this error (
 
 ```
 ncn-m001-pit# cray uas admin config volumes list | grep -e mount_path -e volumename -e volume_id
+```
+
+Example output:
+
+```
 mount_path = "/app/broker"
 volume_id = "1f3bde56-b2e7-4596-ab3a-6aa4327d29c7"
 volumename = "broker-entrypoint"
@@ -54,6 +64,11 @@ Looking through this list, the mount path for the volume named `delete-me` and t
 
 ```
 ncn-m001-pit# cray uas admin config volumes delete 7b924270-c9e9-4b0e-85f5-5bc62c02457e
+```
+
+Example output:
+
+```
 mount_path = "/opt/forge"
 volume_id = "7b924270-c9e9-4b0e-85f5-5bc62c02457e"
 volumename = "delete-me"

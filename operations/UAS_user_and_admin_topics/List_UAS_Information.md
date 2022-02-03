@@ -11,6 +11,11 @@ Use the `cray uas mgr-info list` command to determine the version and service na
 
 ```bash
 ncn-w001# cray uas mgr-info list
+```
+
+Example output:
+
+```
 service_name = "cray-uas-mgr"
 version = "1.16.1"
 ```

@@ -29,8 +29,8 @@ For example:
 ```bash
 ncn-m001-pit# cray uas admin config resources describe f26ee12c-6215-4ad1-a15e-efe4232f45e6
 comment = "Resource Specification to use with Brokered End-User UAIs"
-limit = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
-request = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
+limit = "{"cpu": "300m", "memory": "1Gi"}"
+request = "{"cpu": "300m", "memory": "1Gi"}"
 resource_id = "f26ee12c-6215-4ad1-a15e-efe4232f45e6"
 ```
 
