@@ -96,6 +96,11 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
                    --volume-description \
                    '{"secret": {"secret_name": "broker-sssd-conf", "default_mode": 384}}' \
                     --volumename broker-sssd-config
+     ```
+
+     Example output:
+
+     ```
      mount_path = "/etc/sssd"
      volume_id = "1ec36af0-d5b6-4ad9-b3e8-755729765d76"
      volumename = "broker-sssd-config"
@@ -110,12 +115,34 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
      * The secret is mounted on the directory `/etc/sssd` not the file `/etc/sssd/sssd.conf` because Kubernetes does not permit the replacement of an existing regular file with a volume but does allow overriding a directory
      * The value `384` is used here for the default mode of the file instead of `0600`, which would be easier to read, because JSON does not accept octal numbers in the leading zero form
 
-4. Obtain the information needed to create a UAI class for the Broker UAI containing the updated configuration in the volume list.
+4. Make a volume to hold an empty and writeable `/etc/sssd/conf.d` in the Broker UAI:
+
+   ```
+   ncn-m001# cray uas admin config volumes create --mount-path /etc/sssd/conf.d --volume-description '{"empty_dir": {"medium": "Memory"}}' --volumename sssd-conf-d --format yaml
+   ```
+   
+   Example output:
+
+   ```
+   mount_path: /etc/sssd/conf.d
+   volume_description:
+     empty_dir:
+       medium: Memory
+   volume_id: 541980f9-fadc-41cd-8222-e2ffdb6421c4
+   volumename: sssd-conf-d
+   ```
+
+5. Obtain the information needed to create a UAI class for the Broker UAI containing the updated configuration in the volume list.
 
    The image-id of the Broker UAI image, the volume-ids of the volumes to be added to the broker class, and the class-id of the End-User UAI class managed by the broker are required:
 
    ```
    ncn-m001-pit# cray uas admin config images list
+   ```
+   
+   Example output:
+   
+   ```
    [[results]]
    default = true
    image_id = "1996c7f7-ca45-4588-bc41-0422fe2a1c3d"
@@ -156,20 +183,32 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
    [results.volume_description.host_path]
    path = "/lus"
    type = "DirectoryOrCreate"
+   [[results]]
+   mount_path = "/etc/sssd/conf.d"
+   volume_id = "541980f9-fadc-41cd-8222-e2ffdb6421c4"
+   volumename = "sssd-conf-d"
+
+   [results.volume_description.empty_dir]
+   medium = "Memory"
    ```
 
-5. Create the Broker UAI class with the content retrieved in the previous step.
+6. Create the Broker UAI class with the content retrieved in the previous step.
 
     ```
     ncn-m001-pit#cray uas admin config classes create \
                 --image-id 8f180ddc-37e5-4ead-b261-2b401914a79f \
-                --volume-list 11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a \
+                --volume-list 11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a,541980f9-fadc-41cd-8222-e2ffdb6421c4 \
                 --replicas 3 \
                 --namespace uas \
                 --uai-compute-network no \
                 --public-ip yes \
                 --comment "UAI broker class" \
                 --uai-creation-class bdb4988b-c061-48fa-a005-34f8571b88b4
+    ```
+
+    Example output:
+
+    ```
     class_id = "d764c880-41b8-41e8-bacc-f94f7c5b053d"
     comment = "UAI broker class"
     default = false
@@ -181,7 +220,7 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
     replicas = 3
     uai_compute_network = false
     uai_creation_class = "bdb4988b-c061-48fa-a005-34f8571b88b4"
-    volume_list = [ "11a4a22a-9644-4529-9434-d296eef2dc48", "1ec36af0-d5b6-4ad9-b3e8-755729765d76", "a3b149fd-c477-41f0-8f8d-bfcee87fdd0a",]
+    volume_list = [ "11a4a22a-9644-4529-9434-d296eef2dc48", "1ec36af0-d5b6-4ad9-b3e8-755729765d76", "a3b149fd-c477-41f0-8f8d-bfcee87fdd0a","541980f9-fadc-41cd-8222-e2ffdb6421c4"]
     [[volume_mounts]]
     mount_path = "/etc/localtime"
     volume_id = "11a4a22a-9644-4529-9434-d296eef2dc48"
@@ -207,9 +246,20 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
     path = "/lus"
     type = "DirectoryOrCreate"
     
+    [[results.volume_mounts]]
+    mount_path = "/etc/sssd/conf.d"
+    volume_id = "541980f9-fadc-41cd-8222-e2ffdb6421c4"
+    volumename = "sssd-conf-d"
+
+    [results.volume_mounts.volume_description.empty_dir]
+    medium = "Memory"
+    
     [uai_image]
     default = false
     image_id = "8f180ddc-37e5-4ead-b261-2b401914a79f"
     imagename = "registry.local/cray/cray-uai-broker:1.2.4"
     ```
+
+    __NOTE__: in some versions of UAS, SSSD will not start correctly when customized as described above because `/etc/sssd/sssd.conf` is mounted with the wrong mode in spite of being configured with the right mode. If SSSD is not working in a Broker UAI, refer to this [troubleshooting section](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md).
+
 [Next Topic: Start a Broker UAI](Start_a_Broker_UAI.md)

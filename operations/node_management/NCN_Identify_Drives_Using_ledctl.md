@@ -1,6 +1,6 @@
 # NCN Drive Identification
 
-Basic usage for the ledmon/ledctl software for drive indentification via the drive leds.
+Basic usage for the ledmon/ledctl software for drive identification using the drive LEDs.
 
 ## Usage
 

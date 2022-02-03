@@ -168,7 +168,7 @@ The `chrony` logs are stored at `/var/log/chrony/`
 
 #### Known Issues and Bugs
 
-As the NTP setup switched from a homegrown shell script into a native cloud-init module, there were some bugs that ended up shipping with older versions of CSM.  If customers upgraded, these bugs carried forward and can present problems with time syncing correctly. This section aims to describe how to diagnose and fix these.
+As the NTP setup switched from a homegrown shell script into a native cloud-init module, there were some bugs that ended up shipping with older versions of CSM. If customers upgraded, these bugs carried forward and can present problems with time syncing correctly. This section aims to describe how to diagnose and fix these.
 
 These issues all relate to certain nodes not being in a correct state.
 

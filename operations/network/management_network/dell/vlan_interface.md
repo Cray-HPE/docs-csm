@@ -27,7 +27,7 @@ Expected Results
 
 * Step 1: You can configure the VLAN
 * Step 2: You can enable the interface and associate it with the VLAN
-* Step 3: You can create an IP enabled VLAN interface, and it is up
+* Step 3: You can create an IP-enabled VLAN interface, and it is up
 * Step 4: You validate the configuration is correct
 * Step 5: You can ping from the switch to the client and from the client to the switch
 

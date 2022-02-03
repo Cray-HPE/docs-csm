@@ -683,7 +683,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 
 #### Check DNS
 
-Check for duplicate IP entries in the State Management Database (SMD). Duplicate entries will cause DNS operations to fail.
+Check for duplicate IP address entries in the State Management Database (SMD). Duplicate entries will cause DNS operations to fail.
 
 ```bash
 ncn-m001# ssh uan01

@@ -1,6 +1,6 @@
 # Routed interfaces
 
-By default Mellanox interfaces are set as “switchports” which is to allow L2 communication. To change to routed only port, you have to disable L2 functionality.
+By default Mellanox interfaces are set as "switchports" which is to allow L2 communication. To change to routed only port, you have to disable L2 functionality.
 
 Relevant Configuration 
 

@@ -1,6 +1,6 @@
 # MLAG
 
-A link aggregation group (LAG) is used for extending the bandwidth from a single link to multiple links and provide redundancy in case of link failure. Extending the implementation of the LAG to more than a single device provides yet another level of redundancy that extends from the link level to the node level. This extrapolation of the LAG from single to multiple switches is referred to as multi-chassis link aggregation (MLAG). MLAG is supported on Ethernet blades’ internal and external ports.
+A link aggregation group (LAG) is used for extending the bandwidth from a single link to multiple links and provide redundancy in case of link failure. Extending the implementation of the LAG to more than a single device provides yet another level of redundancy that extends from the link level to the node level. This extrapolation of the LAG from single to multiple switches is referred to as multi-chassis link aggregation (MLAG). MLAG is supported on Ethernet blades' internal and external ports.
 
 Configuring L2 MLAG  
 
@@ -81,9 +81,9 @@ On Switch 2:
 switch (config interface vlan 4000)# ip address 1.1.1.2 /30
 ```
 
-The peer with the interface VLAN with the highest IP is the MLAG master. 
+The peer with the interface VLAN with the highest IP address is the MLAG master. 
 
-In the example, above, Switch 2 (with IP 1.1.1.2) is the master. 
+In the example, above, Switch 2 (with IP address 1.1.1.2) is the master. 
 
 The IP addresses of both peers can be seen in via "show mlag" command.
 
@@ -101,7 +101,7 @@ On Switch 2:
 switch (config interface vlan 4000)# ipl 1 peer-address 1.1.1.1
 ```
 
-(Optional) Configure a virtual IP (VIP) for the MLAG. MLAG VIP is important for retrieving peer information. 
+(Optional) Configure a virtual IP (VIP) address for the MLAG. MLAG VIP is important for retrieving peer information. 
 
 NOTE: If you have a mgmt0 interface, the IP address should be within the subnet of the management interface. Do not use mgmt1. The management network is used for keepalive messages between the switches. The MLAG domain must be unique name for each MLAG domain. In case you have more than one pair of MLAG switches on the same network, each domain (consist of two switches) should be configured with different name.
 

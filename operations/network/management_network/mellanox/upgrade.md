@@ -9,7 +9,7 @@ Target Version |Verified Versions from Which to Upgrade|
 3.9.1xxx| 3.9.0xxx, 3.8.2xxx
 3.9.0xxx| 3.8.2xxx, 3.8.1xxx
 
-Note: the following steps should be repeated for each “upgrade hop”
+Note: the following steps should be repeated for each "upgrade hop"
 
  
 

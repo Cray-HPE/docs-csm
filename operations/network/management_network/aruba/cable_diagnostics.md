@@ -4,7 +4,7 @@ In a situation where you believe you might have a bad copper cable, you can use 
 
 Relevant Configuration 
 
-Enter “diagnostics” to open up the diagnostics menu 
+Enter "diagnostics" to open up the diagnostics menu 
 
 ```
 switch# diagnostics

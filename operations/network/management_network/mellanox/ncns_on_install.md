@@ -1,6 +1,6 @@
 # NCNs on install
 
-Verify the DNSMASQ config file matches what's configured on the switches.
+Verify the DNSMASQ config file matches what is configured on the switches.
 
 Here's a DNSMASQ config file for the Metal network (VLAN1). As you can see the router is 10.1.0.1, this has to match what the IP address is on the switches doing the routing for the MTL network.  
 
@@ -20,7 +20,7 @@ interface=bond0
 interface-name=pit.mtl,bond0
 ```
 
-### This needs to point to the liveCD IP for provisioning in bare-metal environments.
+### This needs to point to the liveCD IP address for provisioning in bare-metal environments.
 
 ```
 dhcp-option=interface:bond0,option:dns-server,10.1.1.2

@@ -19,7 +19,7 @@ Canonical name: `hostname`.`network-path`.`system-name`.`tld`
 * `system-name` - The customer defined name of the system
 * `tld` - The top-level domain
 
-Kubernetes services present on the Hardware Management Network (HMN) and Node Management Network (NMN) that needed to be referenced by name used names in the `.local` domain which will be deprecated in favour of a fully qualified domain name.
+Kubernetes services present on the Hardware Management Network (HMN) and Node Management Network (NMN) that needed to be referenced by name used names in the `.local` domain which will be deprecated in favor of a fully qualified domain name.
 
 ### Examples
 
