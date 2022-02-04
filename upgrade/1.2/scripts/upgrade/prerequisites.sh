@@ -360,7 +360,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
 
     csi upgrade metadata --1-0-to-1-2 \
         --k8s-version ${KUBERNETES_VERSION} \
-        --ceph-version ${CEPH_VERSION}
+        --storage-version ${CEPH_VERSION}
 
     record_state ${state_name} $(hostname)
     echo
@@ -490,6 +490,7 @@ if [[ $state_recorded == "0" ]]; then
     vcs_password=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
     git clone https://crayvcs:${vcs_password}@api-gw-service-nmn.local/vcs/cray/csm-config-management.git ${tmp_folder}
     pushd ${tmp_folder}
+    git fetch
     head_commit=$(git show-ref origin/cray/csm/${csm_config_version} --head | grep ${csm_config_version} | awk '{print $1}')
     popd +0
     cat <<EOF > /root/rebuild-ncn.json
