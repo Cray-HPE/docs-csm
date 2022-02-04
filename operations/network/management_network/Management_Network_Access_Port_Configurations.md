@@ -236,7 +236,7 @@ interface lag 6 multi-chassis
     description ncn-s001:ocp:1
     no routing
     vlan trunk native 1
-    vlan trunk allowed 1-2,4,6-7
+    vlan trunk allowed 1-2,4,7
     lacp mode active
     lacp fallback
     spanning-tree port-type admin-edge
@@ -269,6 +269,7 @@ interface lag 3 multi-chassis
     exit
 ```
 Aruba Storage port physical interface configuration (future use):
+```
 sw-leaf-003# show run int 1/1/3
 interface 1/1/3
     no shutdown
