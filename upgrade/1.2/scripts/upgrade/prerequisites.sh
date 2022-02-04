@@ -360,7 +360,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
 
     csi upgrade metadata --1-0-to-1-2 \
         --k8s-version ${KUBERNETES_VERSION} \
-        --ceph-version ${CEPH_VERSION}
+        --storage-version ${CEPH_VERSION}
 
     record_state ${state_name} $(hostname)
     echo
