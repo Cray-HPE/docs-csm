@@ -228,7 +228,7 @@ Generic, member of port-channel with speed and mtu set
 
 ## HPE NCN Storage Port Configuration
 
-Aruba port lag configuration:
+Aruba LAG configuration:
 ```
 sw-leaf-003# show run int lag 6
 interface lag 6 multi-chassis
@@ -243,6 +243,7 @@ interface lag 6 multi-chassis
     exit
 ```
 Aruba port physical configuration:
+```
 sw-leaf-003# show run int 1/1/6
 interface 1/1/6
     no shutdown
