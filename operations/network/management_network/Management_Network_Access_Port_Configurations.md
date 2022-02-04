@@ -106,14 +106,14 @@ interface lag 17 multi-chassis
 ## Gigabyte/Intel NCN Worker Port Configuration
 The cabling guidelines for all servers can be found in [Cable Management Network Servers](../../../install/cable_management_network_servers.md).
 
-Mellanox port configuration:
+Aruba port configuration:
 ```
 sw-spine-002 [gamora-mlag-domain: master] # show run int ethernet 1/1
 interface ethernet 1/1 speed 40G force
 interface ethernet 1/1 mtu 9216 force
 interface ethernet 1/1 mlag-channel-group 1 mode active
 ```
-Mellanox MLAG configuration:
+Aruba LAG configuration:
 ```
 sw-spine-002 [gamora-mlag-domain: master] # show run int mlag-port-channel 1
 interface mlag-port-channel 1
