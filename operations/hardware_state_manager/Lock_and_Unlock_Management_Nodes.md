@@ -102,7 +102,7 @@ Use the `cray hsm locks lock` command to perform locking.
 
    Example output:
 
-   ```
+   ```bash
    Failure = []
 
    [Counts]
@@ -142,7 +142,7 @@ Use the `cray hsm locks lock` command to perform locking.
 
    Example output:
 
-   ```
+   ```bash
    Failure = []
 
    [Counts]
@@ -162,7 +162,7 @@ Use the `cray hsm locks lock` command to perform locking.
 
    Example output:
 
-   ```
+   ```bash
    Failure = []
 
    [Counts]
@@ -191,7 +191,7 @@ Use the `cray hsm locks unlock` command to perform unlocking.
 
    Example output:
 
-   ```
+   ```bash
    Failure = []
 
    [Counts]
@@ -210,7 +210,7 @@ Use the `cray hsm locks unlock` command to perform unlocking.
 
    Example output:
 
-   ```
+   ```bash
    Failure = []
 
    [Counts]
@@ -231,7 +231,7 @@ Use the `cray hsm locks unlock` command to perform unlocking.
 
    Example output:
 
-   ```
+   ```bash
    Failure = []
 
    [Counts]
@@ -251,7 +251,7 @@ Use the `cray hsm locks unlock` command to perform unlocking.
 
    Example output:
 
-   ```
+   ```bash
    Failure = []
 
    [Counts]
