@@ -42,6 +42,27 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="PRE_CEPH_CSI_UPGRADE_REQUIREMENTS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    scp ncn-s001:/srv/cray/scripts/common/csi-configuration.sh /tmp/csi-configuration.sh
+    mkdir -p /srv/cray/tmp
+    . /tmp/csi-configuration.sh
+    create_ceph_rbd_1.2_csi_configmap
+    create_ceph_cephfs_1.2_csi_configmap
+    create_k8s_1.2_ceph_secrets
+    create_sma_1.2_ceph_secrets
+    create_cephfs_1.2_ceph_secrets
+    create_k8s_1.2_storage_class
+    create_sma_1.2_storage_class
+    create_cephfs_1.2_storage_class
+
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="CSM_SERVICE_UPGRADE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then

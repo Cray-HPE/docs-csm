@@ -464,6 +464,7 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
   * [Create a Backup of the HSM Postgres Database](hardware_state_manager/Create_a_Backup_of_the_HSM_Postgres_Database.md)
   * [Restore HSM Postgres from a Backup](hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
   * [Restore HSM Postgres without a Backup](hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
+  * [Set BMC Management Role](Set_BMC_Management_Role.md)
 
 <a name=""></a>
 
