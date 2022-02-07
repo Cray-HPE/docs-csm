@@ -199,7 +199,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
 1.  Wait for the RTS Init job to run to completion:
     
     ```bash
-    ncn-m001# kubectl -n services wait job  cray-hms-rts-init --for=condition=complete --timeout=5m
+    ncn-m001# kubectl -n services wait job cray-hms-rts-init --for=condition=complete --timeout=5m
     ```
 
 1.  Verify the default ServerTech PDU credentials have updated in Vault:

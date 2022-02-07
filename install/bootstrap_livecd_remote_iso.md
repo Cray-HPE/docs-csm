@@ -185,7 +185,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     In some cases the `parted` command may give an error similar to the following:
     ```text
     Error: Partition(s) 4 on /dev/sda have been written, but we have been unable to inform the kernel of the change, probably 
-    because it/they are in use.  As a result, the old partition(s) will remain in use.  You should reboot now before making 
+    because it/they are in use. As a result, the old partition(s) will remain in use. You should reboot now before making 
     further changes.
     ```
 
@@ -260,7 +260,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# tar -C /var/www/ephemeral -zxvf /var/www/ephemeral/${CSM_RELEASE}.tar.gz
       pit# CSM_PATH=/var/www/ephemeral/${CSM_RELEASE}
       pit# echo $CSM_PATH
-      pit# echo -e "\CSM_PATH=$CSM_PATH" >>/etc/environment
+      pit# echo -e "\nCSM_PATH=$CSM_PATH" >>/etc/environment
       pit# ls -l ${CSM_PATH}
       ```
 
@@ -531,10 +531,10 @@ Some files are needed for generating the configuration payload. See these topics
 
 Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
 
-<a name="prepare_site_init"></a>
+<a name="prepare-site-init"></a>
 #### 4.4 Prepare Site Init
 
-First, prepare a shim to faciliate going through the site-init guide:
+First, prepare a shim to facilitate going through the site-init guide:
 
  ```bash
  pit# mkdir -vp /mnt/pitdata

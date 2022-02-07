@@ -11,7 +11,7 @@ recommended best practice for system security to change the SSH keys after the
 install is complete on a schedule. This procedure defines how to change the keys
 once the system is operational.
 
-The NCN root user keys are stored in the [Hashicorp Vault](HashiCorp_Vault.md)
+The NCN root user keys are stored in the [HashiCorp Vault](HashiCorp_Vault.md)
 instance, and applied with the `csm.ssh_keys` Ansible role via a CFS session. If
 no keys are added to Vault as in the procedure below, this Ansible role will
 skip any updates.
@@ -23,14 +23,14 @@ skip any updates.
    a new pair or stage an existing pair as desired as per your security policies
    and procedures.
 
-1. Get the [Hashicorp Vault](HashiCorp_Vault.md) root token:
+1. Get the [HashiCorp Vault](HashiCorp_Vault.md) root token:
 
    ```bash
    ncn# kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
    ```
 
 1. Write the private and public halves of the key pair gathered in step 1 to the
-   [Hashicorp Vault](HashiCorp_Vault.md). The `vault login` command will request
+   [HashiCorp Vault](HashiCorp_Vault.md). The `vault login` command will request
    the token value from the output of step 2 above. The `vault read` command
    verifies the keys were stored correctly.
 
@@ -50,7 +50,7 @@ skip any updates.
    ncn# 
    ```
 
-   > ***WARNING***: The CSM instance of [Hashicorp Vault](HashiCorp_Vault.md) does
+   > ***WARNING***: The CSM instance of [HashiCorp Vault](HashiCorp_Vault.md) does
    > not support the `patch` operation. Ensure that if you are updating the
    > `ssh_private_key` and `ssh_public_key` field in the `secret/csm/users/root`
    > secret that you are also update the other fields, for example the user's
@@ -97,7 +97,7 @@ procedure above.
    ```
 
    ***NOTE***: Subsequent SSH key changes need only update the field contents in
-   Hashicorp Vault and create the CFS session as long as the branch of the CSM
+   HashiCorp Vault and create the CFS session as long as the branch of the CSM
    configuration management repository has not changed. If the commit has
    changed, repeat this procedure from the beginning.
 

@@ -117,7 +117,7 @@ Example output:
 +-------------------+---------------------+------------+--------+---------+----+-----------+
 |      Cluster      |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
 +-------------------+---------------------+------------+--------+---------+----+-----------+
-| keycloak-postgres | keycloak-postgres-0 | 10.40.0.23 | Leader | running |  1 |         0 |
+| keycloak-postgres | keycloak-postgres-0 | 10.40.0.23 | Leader | running |  1 |           |
 | keycloak-postgres | keycloak-postgres-1 | 10.42.0.25 |        | running |  1 |         0 |
 | keycloak-postgres | keycloak-postgres-2 | 10.42.0.29 |        | running |  1 |         0 |
 +-------------------+---------------------+------------+--------+---------+----+-----------+
@@ -130,7 +130,7 @@ The following is an example where replication is broken:
 |      Cluster      |        Member       |     Host     |  Role  |  State   | TL | Lag in MB |
 +-------------------+---------------------+--------------+--------+----------+----+-----------+
 | keycloak-postgres | keycloak-postgres-0 | 10.42.10.22  |        | starting |    |   unknown |
-| keycloak-postgres | keycloak-postgres-1 | 10.40.11.191 | Leader | running  | 47 |         0 |
+| keycloak-postgres | keycloak-postgres-1 | 10.40.11.191 | Leader | running  | 47 |           |
 | keycloak-postgres | keycloak-postgres-2 | 10.40.11.190 |        | running  | 14 |       608 |
 +-------------------+---------------------+--------------+--------+----------+----+-----------+
 ```
@@ -143,18 +143,25 @@ A reinitialize will get the lagging replica member re-synced and replicating aga
 
 ```bash
 ncn-w001# kubectl exec keycloak-postgres-1 -n services -it -- bash
+root@keycloak-postgres-1:/home/postgres# patronictl reinit keycloak-postgres keycloak-postgres-0
 ```
 
 Example output:
 
 ```
-root@keycloak-postgres-1:/home/postgres# patronictl reinit keycloak-postgres keycloak-postgres-0
 Are you sure you want to reinitialize members keycloak-postgres-0? [y/N]: y
 Failed: reinitialize for member keycloak-postgres-0, status code=503, (restarting after failure already in progress)
 Do you want to cancel it and reinitialize anyway? [y/N]: y
 Success: reinitialize for member keycloak-postgres-0
+```
 
+```bash
 root@keycloak-postgres-1:/home/postgres# patronictl reinit keycloak-postgres keycloak-postgres-2
+```
+
+Example output:
+
+```
 Are you sure you want to reinitialize members keycloak-postgres-2? [y/N]: y
 Failed: reinitialize for member keycloak-postgres-2, status code=503, (restarting after failure already in progress)
 Do you want to cancel it and reinitialize anyway? [y/N]: y
@@ -164,19 +171,118 @@ Success: reinitialize for member keycloak-postgres-2
 Verify that replication has recovered:
 
 ```bash
-ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- bash
+ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list
 ```
 
 Example output:
 
 ```
-postgres@keycloak-postgres-2:~$ patronictl list
 +-------------------+---------------------+--------------+--------+---------+----+-----------+
 |      Cluster      |        Member       |     Host     |  Role  |  State  | TL | Lag in MB |
 +-------------------+---------------------+--------------+--------+---------+----+-----------+
 | keycloak-postgres | keycloak-postgres-0 | 10.42.10.22  |        | running | 47 |         0 |
-| keycloak-postgres | keycloak-postgres-1 | 10.40.11.191 | Leader | running | 47 |         0 |
-| keycloak-postgres | keycloak-postgres-2 | 10.40.11.190 |        | running | 47 |           |
+| keycloak-postgres | keycloak-postgres-1 | 10.40.11.191 | Leader | running | 47 |           |
+| keycloak-postgres | keycloak-postgres-2 | 10.40.11.190 |        | running | 47 |         0 |
++-------------------+---------------------+--------------+--------+---------+----+-----------+
+```
+
+If a cluster member is `stopped` after a successful reinitialization, check for pg_internal.init.* files that may need to be cleaned up. This can occur if the pgdata disk was full prior to the reinitialization, leaving truncated pg_internal.init.* files in the pgdata directory.
+
+```bash
+ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list
+```
+
+Example output:
+
+```
++-------------------+---------------------+--------------+--------+---------+----+-----------+
+|      Cluster      |        Member       |     Host     |  Role  |  State  | TL | Lag in MB |
++-------------------+---------------------+--------------+--------+---------+----+-----------+
+| keycloak-postgres | keycloak-postgres-0 | 10.42.10.22  |        | running | 47 |         0 |
+| keycloak-postgres | keycloak-postgres-1 | 10.40.11.191 | Leader | running | 47 |           |
+| keycloak-postgres | keycloak-postgres-2 | 10.40.11.190 |        | stopped |    |   unknown |
++-------------------+---------------------+--------------+--------+---------+----+-----------+
+```
+ 
+Exec into that pod that is `stopped` and check the most recent postgres log for any `invalid segment number 0` errors relating to pg_internal.init.* files.
+
+```bash
+ncn-w001# kubectl exec keycloak-postgres-2 -n services -it -- bash
+postgres@keycloak-postgres-2:~$ export LOG=`ls -t /home/postgres/pgdata/pgroot/pg_log/*.csv | head -1`
+postgres@keycloak-postgres-2:~$ grep pg_internal.init $LOG | grep "invalid segment number 0" | tail -1
+```
+
+Example output:
+
+```
+2022-02-01 16:59:35.529 UTC,"standby","",227600,"127.0.0.1:42264",61f966f7.37910,3,"sending backup ""pg_basebackup base backup""",2022-02-01 16:59:35 UTC,7/0,0,ERROR,XX000,"invalid segment number 0 in file ""pg_internal.init.2239188""",,,,,,,,,"pg_basebackup"
+```
+
+If the check above finds such files, first find any zero length pg_internal.init.* files.
+```bash
+postgres@keycloak-postgres-2:~$ find /home/postgres/pgdata -name pg_internal.init.* -size 0 
+```
+
+Example output:
+
+```
+./pgroot/data/base/16622/pg_internal.init.2239004
+...
+./pgroot/data/base/16622/pg_internal.init.2239010
+```
+
+Then delete the zero length pg_internal.init.* files. Double check the syntax of the command in this step before executing it `-size 0 -exec rm {} \;`.
+
+
+```bash
+postgres@keycloak-postgres-2:~$ find /home/postgres/pgdata -name pg_internal.init.* -size 0 -exec rm {} \;
+```
+
+Next find any non-zero length pg_internal.init.* files that were truncated when the file system filled up.
+
+```bash
+postgres@keycloak-postgres-2:~$ grep pg_internal.init $LOG | grep "invalid segment number 0" | tail -1
+```
+
+Example output:
+
+```
+2022-02-01 16:59:35.529 UTC,"standby","",227600,"127.0.0.1:42264",61f966f7.37910,3,"sending backup ""pg_basebackup base backup""",2022-02-01 16:59:35 UTC,7/0,0,ERROR,XX000,"invalid segment number 0 in file ""pg_internal.init.2239188""",,,,,,,,,"pg_basebackup"
+```
+
+Locate the non-zero length pg_internal.init.* file.
+
+```bash
+postgres@keycloak-postgres-2:~$ find ~/pgdata -name pg_internal.init.2239188
+```
+
+Example output:
+
+```
+/home/postgres/pgdata/pgroot/data/base/16622/pg_internal.init.2239188
+```
+
+Then delete (or move to a different location) the non-zero length pg_internal.init.* file.
+
+```bash
+postgres@keycloak-postgres-2:~$ rm /home/postgres/pgdata/pgroot/data/base/16622/pg_internal.init.2239188
+```
+
+Iterate over the above steps to find, locate and delete non-zero length pg_internal.init.* files until there are no more new `invalid segment number 0` messages. At this point, verify that the cluster member has started.
+
+```bash
+ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list
+```
+
+Example output:
+
+```
++-------------------+---------------------+--------------+--------+---------+----+-----------+
+|      Cluster      |        Member       |     Host     |  Role  |  State  | TL | Lag in MB |
++-------------------+---------------------+--------------+--------+---------+----+-----------+
+| keycloak-postgres | keycloak-postgres-0 | 10.42.10.22  |        | running | 47 |         0 |
+| keycloak-postgres | keycloak-postgres-1 | 10.40.11.191 | Leader | running | 47 |           |
+| keycloak-postgres | keycloak-postgres-2 | 10.40.11.190 |        | running | 47 |         0 |
 +-------------------+---------------------+--------------+--------+---------+----+-----------+
 ```
 

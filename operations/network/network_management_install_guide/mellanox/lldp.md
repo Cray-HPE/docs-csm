@@ -1,6 +1,6 @@
 # Link layer discovery protocol (LLDP) 
 
-LLDP is used to advertise the device’s identity and abilities and read other devices connected to the same network. Note: LLDP is enabled by default. 
+LLDP is used to advertise the device's identity and abilities and read other devices connected to the same network. Note: LLDP is enabled by default. 
 
 Relevant Configuration 
 

@@ -1,6 +1,6 @@
 [Top: User Access Service (UAS)](User_Access_Service_UAS.md)
 
-[Next Topic: Clear UAS Configuration](Reset_the_UAS_Configuration_to_Original_Installed_Settings.md)
+[Next Topic: Troubleshoot Broker UAI SSSD Can't Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
 
 ## Troubleshoot UAS / CLI Authentication Issues
 
@@ -109,4 +109,4 @@ uai_age = "11m"
 uai_name = ""
 ```
 
-[Next Topic: Clear UAS Configuration](Reset_the_UAS_Configuration_to_Original_Installed_Settings.md)
+[Next Topic: Troubleshoot Broker UAI SSSD Can't Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)

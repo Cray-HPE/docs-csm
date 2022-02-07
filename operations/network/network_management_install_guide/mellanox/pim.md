@@ -1,6 +1,6 @@
 # PIM-SM bootstrap router (BSR) and rendezvous-point (RP) 
 
-“Every PIM multicast group needs to be associated with the IP address of a Rendezvous Point (RP) [...] For all senders to reach all receivers, it is crucial that all routers in the domain use the same mappings of group addresses to RP addresses. [...] The BSR mechanism provides a way in which viable group-to-RP mappings can be created and rapidly distributed to all the PIM routers in a domain.” –rfc5059 
+"Every PIM multicast group needs to be associated with the IP address of a Rendezvous Point (RP) [...] For all senders to reach all receivers, it is crucial that all routers in the domain use the same mappings of group addresses to RP addresses. [...] The BSR mechanism provides a way in which viable group-to-RP mappings can be created and rapidly distributed to all the PIM routers in a domain." –rfc5059 
 
 Relevant Configuration 
 

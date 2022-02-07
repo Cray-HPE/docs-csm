@@ -346,7 +346,7 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
         In this example, cray-console-node-1 is the pod.
 
         ```
-        ncn-m001# kubectl get pods -n services | grep  cray-console-node-1
+        ncn-m001# kubectl get pods -n services | grep cray-console-node-1
         ```
 
         Example output:
