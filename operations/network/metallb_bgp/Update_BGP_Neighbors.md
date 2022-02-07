@@ -72,7 +72,7 @@ In order for these scripts to work the following commands will need to be applie
    `*WARNING*` The mellanox_set_bgp_peers.py script assumes that the prefix length of the CAN is `/24`. If that value is incorrect for the system being installed then update the script with the correct prefix length by editing the following line.
 
     ```python
-    cmd_prefix_list_can = "ip prefix-list pl-can seq 30 permit {} /24 ge 24".format(
+    cmd_prefix_list_can = "ip prefix-list pl-can seq 30 permit {} /24 ge 24".format()
     ```
 
 ### Verification
