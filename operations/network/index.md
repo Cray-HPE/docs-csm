@@ -46,18 +46,18 @@ Documentation for CANU can be found at:
 - [Collect data](./management_network/collect_data.md)
    - Input data needed to generate switch configs.
 - [Cable Management Network Servers](../../install/cable_management_network_servers.md)
-   - shows how servers in CSM should be cabled.
+   - Shows how servers in CSM should be cabled.
 - [SHCD HMN Tab/HMN Connections Rules](../../install/shcd_hmn_connections_rules.md)
-   - shows how the HMN tab on the SHCD should be formatted.
+   - Shows how the HMN tab on the SHCD should be formatted.
 - [SHCD Connection Rules](./management_network/shcd_connection_rules.md)
-   - shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.
+   - Shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.
 - [Backup custom config](./management_network/backup_custom_config.md)
-   - shows users how to backup configuration that's custom to their system, this include site connections and credentials.
+   - Shows users how to backup configuration that's custom to their system, this include site connections and credentials.
 - [Config management](./management_network/config_management.md)
-   - shows users how to save a running config to the switch for backup purposes or to switch between different switch configs.
+   - Shows users how to save a running config to the switch for backup purposes or to switch between different switch configs.
 - [Validate switch config](./management_network/validate_switch_configs.md)
    - Compares the configuration on a running system to what is generated.
-- [wipe management switches](./management_network/wipe_mgmt_switches.md)
+- [Wipe management switches](./management_network/wipe_mgmt_switches.md)
    - Erase the switch configuration, this is useful for fresh installs.
 - [Generate switch configs](./management_network/generate_switch_configs.md)
    - Generate configurations for all management switches.
@@ -79,7 +79,9 @@ This release applies to the following product models
 * Dell S4148T-ON Switch Series
 * Dell S4148F-ON Switch Series
 
-Architecture and naming conventions can be found at https://github.com/Cray-HPE/canu/blob/main/network_modeling/models/cray-network-architecture.yaml
+Architecture and naming conventions can be found at:
+
+https://github.com/Cray-HPE/canu/blob/main/network_modeling/models/cray-network-architecture.yaml
 
 ### Minimum software version requirements
 - [Network Firmware](./management_network/update_management_network_firmware.md)
