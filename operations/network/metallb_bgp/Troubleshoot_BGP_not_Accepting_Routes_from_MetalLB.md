@@ -225,7 +225,7 @@ This procedure requires administrative privileges.
         To check the routes for Aruba:
 
         ```bash
-        sw-spine-001# show ip route  bgp all-vrfs
+        sw-spine-001# show ip route bgp all-vrfs
         ```
 
         Example output:

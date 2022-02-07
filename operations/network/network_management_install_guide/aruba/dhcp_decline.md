@@ -20,7 +20,7 @@ dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252
 dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.67
 ```
 
-This indicates an issue with an IP being allocated is already being used and not able to get the IP assigned to the device as previously set.
+This indicates an issue with an IP address being allocated is already being used and not able to get the IP address assigned to the device as previously set.
 
 * Check by MAC (no colons):
 

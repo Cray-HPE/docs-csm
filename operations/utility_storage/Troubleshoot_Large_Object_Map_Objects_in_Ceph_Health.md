@@ -52,10 +52,10 @@ Example output:
         ncn-m001# ceph config set client.osd osd_deep_scrub_large_omap_object_key_threshold 350000
         ```
 
-        In the exmaple below, the rgw_usage_max_user_shards is set to 16 from 1.  This can be set to a maximum of 32.
+        In the example below, the rgw_usage_max_user_shards is set to 16 from 1. This can be set to a maximum of 32.
 
         ```bash
-        ceph config set client.radosgw  rgw_usage_max_user_shards 16
+        ceph config set client.radosgw rgw_usage_max_user_shards 16
         ```
 
     - Increase the number of PGs for the Ceph pool.

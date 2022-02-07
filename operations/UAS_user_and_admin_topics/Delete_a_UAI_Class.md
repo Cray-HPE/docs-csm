@@ -12,7 +12,7 @@ Delete a UAI class. After deletion, the class will no longer be available for cr
 * The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
 * The HPE Cray EX System CLI must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
 * The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
-* The administrator must know the Class ID of the UAI Class to be deleted: [List UAI CLasses](List_Available_UAI_Classes.md)
+* The administrator must know the Class ID of the UAI Class to be deleted: [List UAI Classes](List_Available_UAI_Classes.md)
 
 ### Procedure
 

@@ -203,7 +203,7 @@ each failure. See the [interpreting_hms_health_check_results](../troubleshooting
 ### 2.2 Aruba Switch SNMP Fixup
 
 Systems with Aruba leaf switches sometimes have issues with a known SNMP bug
-which prevents HSM discovery from discovering all HW.  At this stage of the
+which prevents HSM discovery from discovering all HW. At this stage of the
 installation process, a script can be run to detect if this issue is 
 currently affecting the system, and if so, correct it.
 
@@ -220,7 +220,7 @@ The foundational information for this discovery is from the System Layout Servic
 comparison needs to be done to see that what is specified in SLS (focusing on
 BMC components and Redfish endpoints) are present in HSM.
 
-To perform this comparison execute the `verify_hsm_discovery.py` script on a Kubernetes master or worker NCN.  The result is pass/fail (returns 0 or non-zero):
+To perform this comparison execute the `verify_hsm_discovery.py` script on a Kubernetes master or worker NCN. The result is pass/fail (returns 0 or non-zero):
 
 ```
 ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
@@ -285,7 +285,7 @@ discovered and/or not having any mgmt network connection. This is treated as
 a warning.
 
 In the Mountain section, the only thing considered a failure are Chassis BMCs
-that are not discovered in HSM.   All other items (nodes, node BMCs and router
+that are not discovered in HSM. All other items (nodes, node BMCs and router
 BMCs) which are not discovered are considered warnings.
 
 Any failures need to be investigated by the admin for rectification. Any
@@ -322,7 +322,7 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
 ...
 ```
 
-* HPE PDUs are supported and should show up as being found in HSM. If they aren't, they should be investigated since that may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered. Refer to [HPE PDU Admin Procedures](./hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
+* HPE PDUs are supported and should show up as being found in HSM. If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered. Refer to [HPE PDU Admin Procedures](./hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
    > Cabinet PDU Controllers have xnames in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 
    Example mismatch for HPE PDU:

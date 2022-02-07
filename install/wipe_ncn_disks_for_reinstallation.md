@@ -253,7 +253,7 @@ If a node type is not specified, the step should be run regardless of node type.
 
 1. Remove etcd device **on master nodes ONLY**.
 
-    1. This `dmsetup` comand wil determine whether an etcd volume is present.
+    1. This `dmsetup` command will determine whether an etcd volume is present.
 
         ```bash
         ncn-m# dmsetup ls 

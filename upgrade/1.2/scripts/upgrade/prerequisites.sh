@@ -359,10 +359,8 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
 
     csi upgrade metadata --1-0-to-1-2 \
-        --k8s-kernel s3://ncn-images/k8s/${KUBERNETES_VERSION}/kernel \
-        --k8s-initrd s3://ncn-images/k8s/${KUBERNETES_VERSION}/initrd \
-        --storage-kernel s3://ncn-images/ceph/${CEPH_VERSION}/kernel \
-        --storage-initrd s3://ncn-images/ceph/${CEPH_VERSION}/initrd
+        --k8s-version ${KUBERNETES_VERSION} \
+        --storage-version ${CEPH_VERSION}
 
     record_state ${state_name} $(hostname)
     echo
@@ -492,6 +490,7 @@ if [[ $state_recorded == "0" ]]; then
     vcs_password=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
     git clone https://crayvcs:${vcs_password}@api-gw-service-nmn.local/vcs/cray/csm-config-management.git ${tmp_folder}
     pushd ${tmp_folder}
+    git fetch
     head_commit=$(git show-ref origin/cray/csm/${csm_config_version} --head | grep ${csm_config_version} | awk '{print $1}')
     popd +0
     cat <<EOF > /root/rebuild-ncn.json

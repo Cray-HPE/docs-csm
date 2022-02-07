@@ -3,7 +3,7 @@
 The HPE Cray EX systems include two node types:
 
 - **Compute Nodes** that run high-performance computing applications and are named `nidXXXXXX`. Every system must contain four or more compute nodes, starting at `nid000001`.
-- **Non-Compute Nodes \(NCNs\)** that carry out system management functions as part of the management Kubernetes cluster. NCNs outside of the Kubernetes cluster function as  application nodes \(AN\).
+- **Non-Compute Nodes \(NCNs\)** that carry out system management functions as part of the management Kubernetes cluster. NCNs outside of the Kubernetes cluster function as application nodes \(AN\).
 
 
 Nine or more management NCNs host system services:

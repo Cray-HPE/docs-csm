@@ -50,9 +50,9 @@
    ncn-s003  /dev/sdh  ssd   S455NY0MB42468  1920G  Unknown  N/A    N/A    No
    ```
 
-   **IMPORTANT:** In the above example the drives on our rebuilt node are showing "Available = no".  This is expected since the check is based on the presence of an lvm on the volume.
+   **IMPORTANT:** In the above example the drives on our rebuilt node are showing "Available = no". This is expected since the check is based on the presence of an lvm on the volume.
 
-   **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS.  Please double check that you are not seeing OS drives. These will have a size of 480G.
+   **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that you are not seeing OS drives. These will have a size of 480G.
 
 1. Zap the drives
 
@@ -110,7 +110,7 @@
     rgw.site1.zone1.ncn-s003.nnwuqy  ncn-s003  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8           553b0cb212c      a9706e6d7a69
     ```
 
-1. Add nodes into HAproxy and KeepAlived.
+1. Add nodes into HAProxy and KeepAlived.
 
    ```bash
    pdsh -w ncn-s00[1..(end node number)] -f 2 '/srv/cray/scripts/metal/generate_haproxy_cfg.sh; systemctl restart haproxy.service; /srv/cray/scripts/metal/generate_keepalived_conf.sh; systemctl restart keepalived.service'
