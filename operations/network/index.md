@@ -16,18 +16,19 @@ __________________________________
 
 ### Switch configuration guides
 
-[Fresh install](./network_management_install_guide/fresh_install.md)
-      - This is either a first time install or the previous CSM was wiped and requires a new install.
-[Upgrade](./network_management_install_guide/upgrade.md)
-      - Upgrading to a new CSM version.
-[Re-install](./network_management_install_guide/reinstall.md)
-      - Reinstalling the same CSM version.
-[Added Hardware](./network_management_install_guide/added_hardware.md)
-      - New hardware was added to the system.
-[Replace Switch](./network_management_install_guide/replace_switch.md)
-      - Switch failed and needs to be replaced.
+- [Fresh install](./network_management_install_guide/fresh_install.md)
+   - This is either a first time install or the previous CSM was wiped and requires a new install.
+- [Upgrade](./network_management_install_guide/upgrade.md)
+   - Upgrading to a new CSM version.
+- [Re-install](./network_management_install_guide/reinstall.md)
+   - Reinstalling the same CSM version.
+- [Added Hardware](./network_management_install_guide/added_hardware.md)
+   - New hardware was added to the system.
+- [Replace Switch](./network_management_install_guide/replace_switch.md)
+   - Switch failed and needs to be replaced.
 
 ### User guides
+The user guides contain information such as are generic configuration examples, explanation of currently used technologies, topology maps and summary of the network design used in the CSM management network.
 
 - [Aruba](./network_management_install_guide/aruba/index_aruba.md)
 - [Dell](./network_management_install_guide/dell/index_aruba.md)
