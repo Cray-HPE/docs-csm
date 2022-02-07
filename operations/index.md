@@ -220,7 +220,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
        *   [Create and Populate a VCS Configuration Repository](configuration_management/Create_and_Populate_a_VCS_Configuration_Repository.md)
    *   [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
        *   [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
-   *   [CFS Key Management](CFS_Key_Management.md)
+   *   [CFS Key Management](configuration_management/CFS_Key_Management.md)
 
 <a name="kubernetes"></a>
 
@@ -393,7 +393,7 @@ Ceph is the utility storage platform that is used to enable pods to store persis
   * [Troubleshoot System Clock Skew](utility_storage/Troubleshoot_System_Clock_Skew.md)
   * [Troubleshoot an Unresponsive S3 Endpoint](utility_storage/Troubleshoot_an_Unresponsive_S3_Endpoint.md)
   * [Troubleshoot Ceph-Mon Processes Stopping and Exceeding Max Restarts](utility_storage/Troubleshoot_Ceph-Mon_Processes_Stopping_and_Exceeding_Max_Restarts.md)
-  * [Troubleshoot Pods Failing to Restart on Other Worker Nodes](utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md)
+  * [Troubleshoot Pods Multi-Attach Error](utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md)
   * [Troubleshoot Large Object Map Objects in Ceph Health](utility_storage/Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)
   * [Troubleshoot Failure of RGW Health Check](utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
   * [Troubleshooting Ceph MDS Reporting Slow Requests and Failure on Client](utility_storage/Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client.md)
@@ -576,10 +576,10 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
 
 ### Dynamic Host Configuration Protocol (DHCP)
 
-The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers.
+The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers. 
 
-  * [DHCP](/network/dhcp/DHCP.md)
-  * [Troubleshoot DHCP Issues](/network/dhcp/Troubleshoot_DHCP_Issues.md)
+  * [DHCP](network/dhcp/DHCP.md)
+  * [Troubleshoot DHCP Issues](network/dhcp/Troubleshoot_DHCP_Issues.md)
 
 <a name="domain-name-service-dns"></a>
 
