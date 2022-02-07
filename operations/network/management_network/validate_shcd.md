@@ -27,7 +27,7 @@ Start with the 10G_25G_40G_100G tab and select the upper left corner and lower r
 
 This is a block of data on the right hand of the worksheet and is not the calculated values used for cable labels on the left-hand side. 
 
-![](../network/shcd_example.png)
+![](./img/shcd_example.png)
 
 In this example above the 10G_25G_40G_100G worksheet has the upper left and lower right corners of I37 and T107 respectively. 
 
