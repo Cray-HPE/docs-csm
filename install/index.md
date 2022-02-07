@@ -28,6 +28,7 @@ Once the CSM installation has completed, other product streams for the HPE Cray 
    1. [Configure Prometheus Alert Notifications](#configure_prometheus_alert_notifications)
    1. [Update Firmware with FAS](#update_firmware_with_fas)
    1. [Prepare Compute Nodes](#prepare_compute_nodes)
+   1. [Remove Temporary Keycloak User](#remove_temp_keycloak_user)
    1. [Next Topic](#next_topic)
    1. [Troubleshooting Installation Problems](#troubleshooting_installation)
 
@@ -235,15 +236,18 @@ sections, but there is also a general troubleshooting topic.
          * Gigabyte 
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
-   <a name="next_topic"></a>
 
-   1. Remove temporary keycloak user for 'cray' CLI
+   <a name="remove_temp_keycloak_user"></a>
+
+   1. Remove Temporary Keycloak User for 'cray' CLI
 
       If the optional step 'Configure the Cray Command Line Interface (cray CLI)' above was performed the
       temporary user created must be cleaned up from keycloak. To do this follow the step
       'Remove the temporary user after the install is complete' described in:
       [Configure the Cray Command Line Interface (`cray` CLI)](../../operations/configure_cray_cli.md).
       This will remove the temporary user and uninitialze the `cray` CLI on all master and worker nodes.
+
+   <a name="next_topic"></a>
 
    1. Next Topic
 

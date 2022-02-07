@@ -11,7 +11,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
 
 This script will create a new keycloak account that is authorized for the `cray` CLI and use that account
 to initialize and authorize the `cray` CLI on all master and worker nodes in the cluster. This account is
-only intended to be used for the duration of the install should be removed when the install is complete.
+only intended to be used for the duration of the install and should be removed when the install is complete.
 
 ## Procedure
 
@@ -46,7 +46,7 @@ only intended to be used for the duration of the install should be removed when 
    ```
 
    Now the `cray` CLI is operational on all nodes where success was reported. If a node was
-   unsuccessful with initialization there will be an error reported and see the troubleshooting
+   unsuccessful with initialization, there will be an error reported. See the troubleshooting
    section for additional information.
 
 1. Remove the temporary user after the install is complete.
@@ -133,7 +133,7 @@ only intended to be used for the duration of the install should be removed when 
 ## Troubleshooting
 
    Each node will have `Success` reported if everything worked and the node was initialized
-   and the `cray` CLI is operational for that node. For nodes with problems there will be a
+   and the `cray` CLI is operational for that node. For nodes with problems, there will be a
    brief error message that reports what the problem is on that node.
 
    ```bash
@@ -189,11 +189,13 @@ only intended to be used for the duration of the install should be removed when 
 
 1. Missing Python Modules
 
-   It is possible that some Python modules required for the script are missing - particularly 
-   on the `PIT` node if that is still active. This script should run from any of the NCN nodes
-   so if it fails on one node copy it to any location on another node and try to run it from
-   there.
+   It is possible that some Python modules required for the script are missing on individual
+   nodes - particularly on the `PIT` node if that is still active. This script could run from
+   any of the NCN nodes, so if it fails on one node, copy it to any location on another node
+   and try to run it from there.
 
+   In the below example the script fails on 'ncn' due to the missing Python module 'oauthlib'
+   so it is copied to 'ncn-m002' and successfully runs from that node:
    ```bash
    ncn# python3 /usr/share/doc/csm/install/scripts/craycli_init.py --run
    Traceback (most recent call last):
@@ -203,13 +205,14 @@ only intended to be used for the duration of the install should be removed when 
    ncn# scp /usr/share/doc/csm/install/scripts/craycli_init.py ncn-m002:~/my_dir/
    ncn# ssh ncn-m002
    ncn-m002# cd my_dir
-   ncn-m002# python3 /usr/share/doc/csm/install/scripts/craycli_init.py --run
+   ncn-m002# python3 ./craycli_init.py --run
    ```
 
-   At this point expect it to proceed as documented, but it will fail on the node that was
-   originally used due to the lack of critical Python modules.
+   At this point expect it to proceed as documented, but it will fail again on the node
+   originally attempted on due to the lack of critical Python modules on that node, but
+   may complete successfully on the rest of the nodes.
 
-   Alternatively the modules could be installed using 'pip' or 'pip3' if that is installed on the node.
+   Alternatively the modules could be installed using 'pip' or 'pip3' if that is available on the node.
 
 **NOTE:**  While resolving these issues is beyond the scope of this section, more information about what is failing can be found by adding `-vvvvv` to the `cray init ...` commands.
 

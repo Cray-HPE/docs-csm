@@ -459,7 +459,7 @@ The following procedures run on separate nodes of the system. They are, therefor
 
 This section can be run on any NCN or the PIT node.
 
-1. Initialize the Cray CLI on the node where you are running this section. See [Configure the Cray Command Line Interface](configure_cray_cli.md) for details on how to do this if not initialized already.
+1. Initialize the Cray CLI on the node where you are running this section. See [Configure the Cray Command Line Interface](configure_cray_cli.md) for details on how to do this, if not initialized already.
 
 1. Basic UAS installation is validated using the following:
    1.
@@ -511,7 +511,7 @@ This section can be run on any NCN or the PIT node.
 
 This procedure must run on a master or worker node (not the PIT node and not `ncn-w001`) on the system. (It is also possible to do from an external host, but the procedure for that is not covered here).
 
-1. Initialize the Cray CLI on the node where you are running this section. See [Configure the Cray Command Line Interface](configure_cray_cli.md) for details on how to do this if not initialized already.
+1. Initialize the Cray CLI on the node where you are running this section. See [Configure the Cray Command Line Interface](configure_cray_cli.md) for details on how to do this, if not initialized already.
 
 1. Verify that a UAI can be created:
    ```bash

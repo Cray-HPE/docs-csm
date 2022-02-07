@@ -224,6 +224,16 @@ Everything is now configured and the CSM software will automatically discover
 the node after several minutes. After it has been discovered, the node is ready
 to be booted.
 
+<a name="remove-keycloak-user"></a>
+
+# Remove Temporary Keycloak User
+
+   If a temporary user was created in Keycloak for the installation, that user
+   should now be removed from the system.
+
+   See [Remove Temporary Keycloak User](index.md#remove_temp_keycloak_user) for
+   more information on this step.
+
 <a name="next-topic"></a>
 
 # Next Topic

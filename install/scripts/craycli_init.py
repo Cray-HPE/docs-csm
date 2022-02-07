@@ -21,8 +21,6 @@
 #
 # (MIT License)
 
-# NOTE: on mug needed to install python-dateutil to get this to work!
-
 """
 This script will set up a new 'temporary' user in keycloak and use that
 account to initialize the cray cli on all master and worker nodes of the
@@ -71,7 +69,7 @@ DEFAULT_SLS_BASE = 'https://' + DEFAULT_HOSTNAME + '/apis/sls/v1'
 DEFAULT_KEYCLOAK_GROUP = "craydev"
 
 # Global file names and locations
-THIS_FILE_FULL_PATH = __file__
+THIS_FILE_FULL_PATH = os.path.abspath(__file__)
 REMOTE_FILE_NAME = REMOTE_FILE_DIR + os.path.basename(__file__)
 
 # Logger for this script
@@ -103,9 +101,15 @@ INIT_FAILURE_MSG = {
     MSG_PYTHON_SCRIPT_ERROR : "Python script failed",
 }
 
-# Class to hold/access information about the temporary user created for craycli
-# use during install
 class CliUserAuth(object):
+    """
+    Class to manage access to the secret that holds the username and password
+    being used for cray cli authentication/initialization.
+
+    The information is stored in a k8s secret so that it can be accessed from multiple
+    nodes at different times to get the same information.
+    """
+
     # defaults - make settable later if needed
     CLI_USER_AUTH_SECRET_NAME = "craycli-install-tmp-user-auth"
     CLI_USER_PASSWORD_LENGTH = 40
@@ -138,7 +142,7 @@ class CliUserAuth(object):
         return self._tu_password
 
     def deleteSecret(self):
-        # get the secret if it exists
+        # delete the secret if it exists
         sec = None
         try: 
             sec = self._k8sClientApi.read_namespaced_secret(self.CLI_USER_AUTH_SECRET_NAME, "services").data
@@ -172,7 +176,7 @@ class CliUserAuth(object):
 
             newPassword = self._newPassword
             if newPassword == None:
-                # generate a random 20 char password
+                # generate a random password
                 alphabet = string.ascii_letters + string.digits
                 newPassword = ''.join(secrets.choice(alphabet) for i in range(self.CLI_USER_PASSWORD_LENGTH))
 
@@ -195,8 +199,11 @@ class CliUserAuth(object):
             self._tu_password = base64.b64decode(sec.data['password']).decode('ascii')
         return
 
-# Class to wrap keycloak authentication with calls to the keycloak rest api
 class KeycloakSetup(object):
+    """
+    Class to wrap keycloak authentication with calls to the keycloak rest api.
+    """
+
     MASTER_REALM_NAME = 'master'
     SHASTA_REALM_NAME = 'shasta'
 
@@ -328,12 +335,13 @@ class KeycloakSetup(object):
         for item in items:
             if item["username"] == username:
                 user_id = item["id"]
+                break
 
         # report what we found
         LOGGER.debug(f"Keycloak user id: {user_id}")
         return user_id
 
-    # get the keycloak user id for a given username
+    # get the keycloak group id for a given groupname
     def get_grp_id(self, groupname):
         # check the input
         if groupname == "":
@@ -352,6 +360,7 @@ class KeycloakSetup(object):
         for item in items:
             if item["name"] == groupname:
                 group_id = item["id"]
+                break
 
         # report what we found
         LOGGER.debug(f"Group id: {group_id}")
@@ -367,8 +376,8 @@ def read_keycloak_master_admin_secrets(k8sClientApi):
             'user': base64.b64decode(sec['user']),
             'password': base64.b64decode(sec['password'])
         }
-    except client.exceptions.ApiException:
-        LOGGER.error(f"Keycloak master admin secret not present")
+    except client.exceptions.ApiException as err:
+        LOGGER.error(f"Keycloak master admin secret not present: {err}")
         sys.exit(1)
 
 def run_remote_command(host, cmdOpt):
@@ -450,6 +459,7 @@ def getToken(k8sClientApi):
 # get the management nodes from sls
 def getSlsNodes(k8sClientApi):
     # TODO: with powerDNS changes, need to add '.hmn' or '.nmn' to the hostnames
+    # https://jira-pro.its.hpecorp.net:8443/browse/CASMCMS-7474
 
     LOGGER.debug(f"Finding ncn nodes on the cluster through SLS")
 
@@ -573,7 +583,7 @@ def doIndividualInit(k8sClientApi):
         ('Username: ', tmpUser.tu_username),
         ('Password: ', tmpUser.tu_password)], MSG_CRAY_INIT)
 
-    # call cray init with user
+    # call cray auth with user
     LOGGER.info("Calling cray auth login")
     callExpect("cray auth login",
         [('Username: ', tmpUser.tu_username),
@@ -604,7 +614,7 @@ def callExpect(cmdStr, inputPairs, exitErr):
     child = pexpect.spawn(cmdStr)
 
     # loop through the expected input/output args
-    for i, elem in enumerate(inputPairs):
+    for elem in inputPairs:
         child.expect(elem[0])
         child.sendline(elem[1])
 
@@ -713,7 +723,7 @@ def main():
 
     # set up logging
     logLevel = logging.INFO
-    if args.debug == True:
+    if args.debug:
         logLevel = logging.DEBUG
     log_format = "%(asctime)-15s - %(levelname)-7s - %(message)s"
     logging.basicConfig(level=logLevel, format=log_format)
@@ -729,14 +739,14 @@ def main():
     k8sClientApi = client.CoreV1Api()
 
     # figure out which part we are running
-    if args.run == True:
+    if args.run:
         # see if the user supplied a group
         grp = DEFAULT_KEYCLOAK_GROUP
         if args.group != None:
             grp = args.group
 
         doRun(k8sClientApi, grp)
-    elif args.cleanup == True:
+    elif args.cleanup:
         # see if there is a re-init or just cleanup
         if args.username != None and args.password != None:
             doReinitCleanup(k8sClientApi, args.username, args.password)
@@ -744,9 +754,9 @@ def main():
             LOGGER.error("Must supply a password with username for reinitialization")
         else:
             doCleanup(k8sClientApi)
-    elif args.initnode == True:
+    elif args.initnode:
         doIndividualInit(k8sClientApi)
-    elif args.cleanupnode == True:
+    elif args.cleanupnode:
         doIndividualCleanup()
 
 if __name__ == '__main__':
