@@ -13,7 +13,7 @@ Once the CSM installation has completed, other product streams for the HPE Cray 
 
 ### Topics:
 
-   1. [Validate SHCD](../operations/network/network_management_install_guide/validate_shcd.md)
+   1. [Validate SHCD](../operations/network/management_network/validate_shcd.md)
    1. [Prepare Configuration Payload](#prepare_configuration_payload)
    1. [Prepare Management Nodes](#prepare_management_nodes)
    1. [Bootstrap PIT Node](#bootstrap_pit_node)
@@ -47,7 +47,7 @@ sections, but there is also a general troubleshooting topic.
       Having the data in the SHCD which matches the physical cabling will be needed later in both
       [Prepare Configuration Payload](#prepare_configuration_payload) and [Configure Management Network](configure_management_network.md).
 
-      See [Validate SHCD](../operations/network/network_management_install_guide/validate_shcd.md)
+      See [Validate SHCD](../operations/network/management_network/validate_shcd.md)
 
       **Note**: If a reinstall or fresh install of this software release is being done on this system and the management
       network cabling has already been validated, then this topic could be skipped and instead move to

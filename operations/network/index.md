@@ -16,23 +16,23 @@ __________________________________
 
 ### Switch configuration guides
 
-- [Fresh install](./network_management_install_guide/fresh_install.md)
+- [Fresh install](./management_network/fresh_install.md)
    - This is either a first time install or the previous CSM was wiped and requires a new install.
-- [Upgrade](./network_management_install_guide/upgrade.md)
+- [Upgrade](./management_network/upgrade.md)
    - Upgrading to a new CSM version.
-- [Re-install](./network_management_install_guide/reinstall.md)
+- [Re-install](./management_network/reinstall.md)
    - Reinstalling the same CSM version.
-- [Added Hardware](./network_management_install_guide/added_hardware.md)
+- [Added Hardware](./management_network/added_hardware.md)
    - New hardware was added to the system.
-- [Replace Switch](./network_management_install_guide/replace_switch.md)
+- [Replace Switch](./management_network/replace_switch.md)
    - Switch failed and needs to be replaced.
 
 ### User guides
 The user guides contain information such as are generic configuration examples, explanation of currently used technologies, topology maps and summary of the network design used in the CSM management network.
 
-- [Aruba](./network_management_install_guide/aruba/index_aruba.md)
-- [Dell](./network_management_install_guide/dell/index_aruba.md)
-- [Mellanox](./network_management_install_guide/mellanox/index_aruba.md)
+- [Aruba](./management_network/aruba/index_aruba.md)
+- [Dell](./management_network/dell/index_aruba.md)
+- [Mellanox](./management_network/mellanox/index_aruba.md)
 
 
 ### CANU:
@@ -40,27 +40,27 @@ CANU (CSM Automatic Network Utility) is the tool used to generate/validate/test 
 Documentation for CANU can be found at https://github.com/Cray-HPE/canu
 
 ### Useful pages
-- [Collect data](./network_management_install_guide/collect_data.md)
+- [Collect data](./management_network/collect_data.md)
    - Input data needed to generate switch configs.
 - [Cable Management Network Servers](../../install/cable_management_network_servers.md)
    - shows how servers in CSM should be cabled.
 - [SHCD HMN Tab/HMN Connections Rules](../../install/shcd_hmn_connections_rules.md)
    - shows how the HMN tab on the SHCD should be formatted.
-- [SHCD Connection Rules](./network_management_install_guide/shcd_connection_rules.md)
+- [SHCD Connection Rules](./management_network/shcd_connection_rules.md)
    - shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.
-- [Backup custom config](./network_management_install_guide/backup_custom_config.md)
+- [Backup custom config](./management_network/backup_custom_config.md)
    - shows users how to backup configuration that's custom to their system, this include site connections and credentials.
-- [Config management](./network_management_install_guide/config_management.md)
+- [Config management](./management_network/config_management.md)
    - shows users how to save a running config to the switch for backup purposes or to switch between different switch configs.
-- [Validate switch config](./network_management_install_guide/validate_switch_configs.md)
+- [Validate switch config](./management_network/validate_switch_configs.md)
    - Compares the configuration on a running system to what is generated.
-- [wipe management switches](./network_management_install_guide/wipe_mgmt_switches.md)
+- [wipe management switches](./management_network/wipe_mgmt_switches.md)
    - Erase the switch configuration, this is useful for fresh installs.
-- [Generate switch configs](./network_management_install_guide/generate_switch_configs.md)
+- [Generate switch configs](./management_network/generate_switch_configs.md)
    - Generate configurations for all management switches.
-- [Manual switch configs](./network_management_install_guide/manual_switch_configs.md)
+- [Manual switch configs](./management_network/manual_switch_configs.md)
    - Some configuration needs to be done manually (authentication/SNMP).
-- [Validate SHCD](./network_management_install_guide/validate_shcd.md)
+- [Validate SHCD](./management_network/validate_shcd.md)
    - Validate the SHCD against the CSM network architecture.
 ### Products Supported
 
@@ -79,7 +79,7 @@ This release applies to the following product models
 Architecture and naming conventions can be found at https://github.com/Cray-HPE/canu/blob/main/network_modeling/models/cray-network-architecture.yaml
 
 ### Minimum software version requirements
-- [Network Firmware](./network_management_install_guide/update_management_network_firmware.md)
+- [Network Firmware](./management_network/update_management_network_firmware.md)
 
 ### Enhancements
 

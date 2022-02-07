@@ -29,7 +29,7 @@ This is a placeholder until the tool is ready to be added to the automation.
 
 ## Stage 0.3 - Upgrade Management Network
 
-- The [start guide](../../operations/network/network_management_install_guide/start_guide.md) will have the required steps to upgrade the management network.
+- The [start guide](../../operations/network/management_network/start_guide.md) will have the required steps to upgrade the management network.
 - See the  [landing page](../../operations/network/index.md) for more information on the management network. 
 
 ## Stage 0.4 - Execute Prerequisites Check
