@@ -761,7 +761,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
        `*WARNING*` The mellanox_set_bgp_peers.py script assumes that the prefix length of the CAN is `/24`. If that value is incorrect for the system being installed then update the script with the correct prefix length by editing the following line.
 
        ```python
-       cmd_prefix_list_can = "ip prefix-list pl-can seq 30 permit {} /24 ge 24".format(
+       cmd_prefix_list_can = "ip prefix-list pl-can seq 30 permit {} /24 ge 24".format()
        ```
 
     * If you have Aruba switches, run CANU.
