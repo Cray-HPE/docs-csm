@@ -250,9 +250,9 @@ Some files are needed for generating the configuration payload. See these topics
 <a name="subsequent-fresh-installs-re-installs"></a>
 ##### 3.1.a Subsequent Fresh-Installs (Re-Installs)
 
-1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
+1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
 
-   > **`SKIP STEP IF`** if the `system_config.yaml` file is unavailable please skip this step and move onto the next one in order to generate the first configuration payload..
+   > **`SKIP STEP IF`** if the `system_config.yaml` file is unavailable please skip this step and move onto the next one in order to generate the first configuration payload.
    
    1. Check for the configuration files. The needed files should be in the current directory.
 
