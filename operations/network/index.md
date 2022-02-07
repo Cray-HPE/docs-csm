@@ -37,7 +37,10 @@ The user guides contain information such as are generic configuration examples, 
 
 ### CANU:
 CANU (CSM Automatic Network Utility) is the tool used to generate/validate/test the Shasta management network.
-Documentation for CANU can be found at https://github.com/Cray-HPE/canu
+
+Documentation for CANU can be found at:
+
+ https://github.com/Cray-HPE/canu
 
 ### Useful pages
 - [Collect data](./management_network/collect_data.md)

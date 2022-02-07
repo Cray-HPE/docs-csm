@@ -17,7 +17,9 @@ Upgrading to a new CSM version.
 1. [Validate the SHCD](validate_shcd.md)
     - The SHCD defines the topology of a Shasta system, this is needed when generating switch configs.
 1. [Generate switch configs](generate_switch_configs.md)
+    - Generate the switch configuration file(s)
 1. [Apply switch configs](apply_switch_configs.md)  
+    - Applying the configuration to switch.
 1. [Validate switch configs](validate_switch_configs.md) 
     - Checks differences between generated configs and the configs on the system.
 1. [Network tests](network_tests.md)
