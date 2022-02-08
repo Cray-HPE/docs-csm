@@ -78,6 +78,7 @@ if [[ $state_recorded == "0" ]]; then
         numOfPods=$(kubectl get pods -A -l 'app=etcd'| grep $cluster | grep "Running" | wc -l)
         if [[ $numOfPods -ne 3 ]];then
             echo "ERROR - Etcd cluster: $cluster should have 3 pods running but only $numOfPods are running"
+            exit 1
         fi
     done
 
