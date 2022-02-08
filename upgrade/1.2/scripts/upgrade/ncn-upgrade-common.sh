@@ -76,7 +76,7 @@ function drain_node() {
    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
    if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
-      /usr/share/doc/csm/upgrade/1.2/scripts/k8s/remove-k8s-node.sh $upgrade_ncn
+      csi automate ncn kubernetes --action delete-ncn --ncn ${upgrade_ncn} --kubeconfig /etc/kubernetes/admin.conf
 
       record_state "${state_name}" ${upgrade_ncn}
       echo
