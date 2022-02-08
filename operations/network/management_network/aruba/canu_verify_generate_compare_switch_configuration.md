@@ -1,4 +1,4 @@
-# Use CANU to verify, generate or compare switch configuration
+# Use CANU to Verify, Generate, or Compare Switch Configurations
 
 
 ### Check Single Switch Firmware
@@ -26,7 +26,7 @@ canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2 --username USER
 canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2,192.168.1.3,192.168.1.4 --username USERNAME --password PASSWORD
 ```
 
-### Expected output: 
+### Expected Output
 
 	------------------------------------------------------------------
     STATUS  IP              HOSTNAME            FIRMWARE
@@ -53,11 +53,11 @@ canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2,192.168.1.3,192
 
 When using the _network firmware_ commands, the table will show either: 🛶 Pass, ❌ Fail, or 🔺 Error. The switch will **pass** or **fail** based on if the switch firmware matches the _canu.yaml_
 
-Output results to a File
+#### Output results to a File
 
-To output the results of the switch firmware or network firmware commands to a file, append the `--out FILENAME` flag
+To output the results of the switch firmware or network firmware commands to a file, append the `--out FILENAME` flag.
 
-JSON
+#### JSON
 
 To get the JSON output from a single switch, or from multiple switches, make sure to use the `--json` flag. An example json output is below.
 
@@ -116,8 +116,6 @@ Expected results:
 	1/1/52  ==> test-spine02   1/1/52                                                                   	Aruba JL635A  GL.10.06.0010
 
 
-Notes: 
-
 Sometimes when checking cabling using LLDP, the neighbor does not return any information except a MAC address. When that is the case, CANU looks up the MAC in the ARP table and displays the IP addresses and vlan information associated with the MAC.
 
 Entries in the table will be colored based on what they are. For example: Neighbors that have _ncn_ in their name will be colored blue. Neighbors that have a port labeled (not a MAC address), are generally switches and are labeled green. Ports that are duplicated, will be bright white.
@@ -132,11 +130,10 @@ An example of checking the cabling of multiple switches:
 canu --shasta 1.5 network cabling --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
-There are two different `--view` options, **switch** and **equipment**.
+There are two different `--view` options, **switch** and **equipment**:
 
-1. The `--view switch` option displays a table for every switch IP address passed in showing connections. This is the same view as shown in the above example of checking single switch cabling.
-
-2. The `--view equipment` option displays a table for each mac address connection. This means that servers and switches will both display incoming and outgoing connections.
+* `--view switch` option: Displays a table for every switch IP address passed in showing connections. This is the same view as shown in the above example of checking single switch cabling.
+* `--view equipment` option: Displays a table for each mac address connection. This means that servers and switches will both display incoming and outgoing connections.
 
 An example of checking the cabling of multiple switches and displaying with the equipment view: 
 
