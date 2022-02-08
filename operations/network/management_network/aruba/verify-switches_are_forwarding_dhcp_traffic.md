@@ -2,8 +2,4 @@
 
 If you made it this far and still cannot pxe boot, you may have run into the IP-Helper breaking on the switch.
 
-<<<<<<< HEAD
 [Back to Index](./index.md)
-=======
-[Back to Index](../index.md)
->>>>>>> release/1.2
