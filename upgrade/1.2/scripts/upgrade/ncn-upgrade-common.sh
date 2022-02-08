@@ -110,14 +110,14 @@ function wait_for_kubernetes() {
   if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
       set +e
-      printf "%s" "waiting for k8s: $upgrade_ncn ..."
+      echo "waiting for k8s: $upgrade_ncn ..."
       until csi automate ncn kubernetes --action is-member --ncn $upgrade_ncn --kubeconfig /etc/kubernetes/admin.conf
       do
           sleep 5
       done
       # Restore set -e
       set -e
-      printf "\n%s\n"  "$upgrade_ncn joined k8s"
+      echo "$upgrade_ncn joined k8s"
 
       record_state "${state_name}" ${upgrade_ncn}
   else
