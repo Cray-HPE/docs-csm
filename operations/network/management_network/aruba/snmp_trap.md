@@ -37,4 +37,4 @@ Expected Results
 * Step 2: You can log trap events
 * Step 3: You can successfully trigger a trap event
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

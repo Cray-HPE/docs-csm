@@ -50,4 +50,8 @@ Your output from SMD should look like this:
 },
 ```
 
+<<<<<<< HEAD
 [Back to Index](./index.md)
+=======
+[Back to Index](../index.md)
+>>>>>>> release/1.2

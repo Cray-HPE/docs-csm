@@ -19,4 +19,4 @@ iPXE> echo ${address}
 10.92.100.71
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

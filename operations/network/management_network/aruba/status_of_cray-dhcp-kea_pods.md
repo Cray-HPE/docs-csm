@@ -37,4 +37,4 @@ cray-dhcp-kea-postgres-2 2/2 Running 0 5d23h 10.39.0.208 ncn-w001 <none> <none>
 
 This output will also show which worker node the kea-dhcp pod is currently on.
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

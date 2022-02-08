@@ -85,4 +85,4 @@ Number of authorized clients
 : 2 
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

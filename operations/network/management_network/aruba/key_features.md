@@ -22,4 +22,4 @@ Feature list:
 |SNMP	| | Allows for device polling from the NCNs to map out interfaces |
 |VRF	| | Virtual routing and forwarding, used to segregate traffic between networks |
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

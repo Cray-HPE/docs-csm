@@ -37,4 +37,4 @@ Expected Results.
 •	You configured the specific group-prefix that will be used in the next test.
 •	You successfully enabled the BSR on both 8325s using loopback0 as the BSR source IP.
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

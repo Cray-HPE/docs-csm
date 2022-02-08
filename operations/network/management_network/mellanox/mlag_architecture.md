@@ -25,4 +25,4 @@ More details, requirements and limitations on Mellanox devices can be found from
 
 [https://docs.mellanox.com/display/ONYXv381174/MLAG]()
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

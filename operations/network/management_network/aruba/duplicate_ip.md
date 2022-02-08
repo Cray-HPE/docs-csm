@@ -18,4 +18,8 @@ A sign of a duplicate IP address is seeing a DECLINE message from the client to 
 
 To test for Duplicate IPs you can ping the suspected address while you turn off the node, if you continue to get responses, then you have a duplicate IP.
 
+<<<<<<< HEAD
 [Back to Index](./index.md)
+=======
+[Back to Index](../index.md)
+>>>>>>> release/1.2

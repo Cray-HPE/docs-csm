@@ -123,4 +123,4 @@ switch (config)# mlag-vip my-vip
 switch (config)# mlag system-mac 00:00:5e:00:01:5d
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

@@ -28,4 +28,4 @@ Expected Results
 * Step 2: The output is correct
 * Step 3: You can ping the device
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

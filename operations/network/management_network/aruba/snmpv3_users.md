@@ -50,4 +50,4 @@ Expected Results
 * Step 2: You can connect to the server from the workstation  
 
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

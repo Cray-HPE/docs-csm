@@ -42,6 +42,6 @@ Expected Results
 * Step 3: You can configure an IP address on the VLAN interface
 * Step 4: You can successfully ping the other switch's VLAN interface  
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)
 
 

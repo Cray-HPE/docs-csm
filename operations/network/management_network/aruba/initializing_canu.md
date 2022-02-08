@@ -34,4 +34,8 @@ canu -s 1.4 init --auth-token ~./config/cray/tokens/ --sls-address 1.2.3.4 --out
 
 The output file for the `canu init` command is set with the `--out FILENAME` flag.
 
+<<<<<<< HEAD
 [Back to Index](./index.md)
+=======
+[Back to Index](../index.md)
+>>>>>>> release/1.2

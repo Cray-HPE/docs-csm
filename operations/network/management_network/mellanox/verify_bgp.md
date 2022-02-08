@@ -22,4 +22,4 @@ BGP Summary
  10.252.1.9      65533       78389   90108   02m:02w:02d  Established   Up
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

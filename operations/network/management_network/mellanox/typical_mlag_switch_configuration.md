@@ -25,4 +25,4 @@ interface vlan 4000 ipl 1 peer-address 192.168.255.254
 </pre>
 </table>
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

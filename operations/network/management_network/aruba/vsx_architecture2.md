@@ -18,4 +18,4 @@ Aruba VSX Benefits
 
 Thanks to its design principles, VSX also supports live upgrades, delivering on the promise of in-service software upgrades where no maintenance windows are required. Within an hour, core and aggregation switches in the campus and top of rack (ToR) switches in the data center can be successfully upgraded while continuously delivering high-performing network services, without compromise
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

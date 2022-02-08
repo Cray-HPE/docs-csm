@@ -36,4 +36,4 @@ If the State/pfxrcd is "IDLE" you need to restart the bgp process with this comm
 sw-spine01 [standalone: master] # clear ip bgp all
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

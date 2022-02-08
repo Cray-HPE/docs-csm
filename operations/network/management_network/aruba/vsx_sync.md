@@ -82,4 +82,4 @@ Expected Results
 * Step 2: You can create the ACL 
 * Step 3: Everything synchronized on the primary is now on the secondary  
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

@@ -23,4 +23,4 @@ switch (config vlan 2) # ip igmp snooping
 switch (config vlan 10)# show ip igmp snooping querier
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

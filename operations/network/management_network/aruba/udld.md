@@ -54,6 +54,6 @@ Expected Results
 Notes:
 With SFP+ XCVERS, Aruba Switches automatically detect a broken bidirectional link, rendering the port into a down state.
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)
 
 

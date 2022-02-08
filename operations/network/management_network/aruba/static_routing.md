@@ -51,4 +51,4 @@ Expected Results
 * Step 2: You can validate using the show command(s) above 
 * Step 3: You can ping the connected device
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

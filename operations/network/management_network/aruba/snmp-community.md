@@ -46,4 +46,4 @@ Expected Results
 * Step 3: You can connect from the workstation using the community name  
 
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

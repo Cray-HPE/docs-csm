@@ -1,6 +1,6 @@
 # Network traffic pattern inside of the system
 
-![](../img/network_traffic_pattern.png)
+![](../../../../img/network/management_network/network_traffic_pattern.png)
  
 Internal Networks:
 
@@ -15,4 +15,4 @@ External and Edge Networks:
 	* Access from the System to the Site for network services like DNS, LDAP, etc.
 
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

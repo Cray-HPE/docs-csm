@@ -33,4 +33,4 @@ Expected Results:
 * Step 1: You can create the banner
 * Step 2: The output of the banner looks correct 
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

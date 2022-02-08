@@ -32,4 +32,4 @@ Expected Results
 * Step 5: LLDP statistics are displayed 
 
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

@@ -34,4 +34,4 @@ Show Commands to Validate Functionality
 switch (config) # show ip filter
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

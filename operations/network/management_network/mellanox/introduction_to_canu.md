@@ -6,4 +6,4 @@ You can also use CANU to check if Aruba switches on a Shasta network meet the fi
 
 CANU reads switch version information from the _canu.yaml_ file in the root directory. 
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

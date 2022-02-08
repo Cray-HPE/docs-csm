@@ -47,4 +47,4 @@ Expected Results
 * Step 4: You validate the configuration is correct
 * Step 5: You can ping from the switch to the client and from the client to the switch  
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

@@ -72,4 +72,4 @@ switch(config-schedule)# strict queue 7
 switch(config-schedule)# exit
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

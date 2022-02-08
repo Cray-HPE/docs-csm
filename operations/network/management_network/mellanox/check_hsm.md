@@ -50,4 +50,4 @@ Your output from SMD should look like this:
 },
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

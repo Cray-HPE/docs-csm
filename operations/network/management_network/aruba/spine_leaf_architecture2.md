@@ -9,7 +9,11 @@ Traditionally, data center networks were based on a three-tier model:
 
 At the most basic level, a spine-leaf architecture collapses one of these tiers, as depicted in these diagrams.
 
+<<<<<<< HEAD
 ![](../img/architecture_comparison.png)
+=======
+![](../../../../img/network/management_network/architecture_comparison.png)
+>>>>>>> release/1.2
  
 Other common differences in spine-leaf topologies include:
 
@@ -17,4 +21,8 @@ Other common differences in spine-leaf topologies include:
 * A scale-out vs. scale-up of infrastructure
 
 
+<<<<<<< HEAD
 [Back to Index](./index.md)
+=======
+[Back to Index](../index.md)
+>>>>>>> release/1.2

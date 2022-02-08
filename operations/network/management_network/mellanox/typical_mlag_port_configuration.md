@@ -34,5 +34,5 @@ interface mlag-port-channel 1 switchport hybrid allowed-vlan add 10</td>
 </pre>
 </table>
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)
 

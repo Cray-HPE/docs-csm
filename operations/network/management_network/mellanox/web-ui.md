@@ -29,4 +29,4 @@ Expected Results
 * Step 3: You can connect to the IP address from a browser login to the management menu  
 
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

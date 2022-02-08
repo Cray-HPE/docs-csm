@@ -20,4 +20,4 @@ If that does not work you may need to install pip3 first:
 pip3 install --editable 
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

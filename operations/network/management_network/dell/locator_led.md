@@ -22,4 +22,4 @@ Expected Results
 * Step 1: The Locator LED should be in the off state
 * Step 2: The Locator LED is now flashing
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

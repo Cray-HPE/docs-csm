@@ -193,4 +193,4 @@ Expected Results
 * Step 5: Everything is synchronized from the primary to the secondary  
 
 	
-[Back to Index](./index.md)
+[Back to Index](../index.md)

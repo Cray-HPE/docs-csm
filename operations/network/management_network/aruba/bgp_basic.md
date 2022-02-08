@@ -55,4 +55,4 @@ Expected Results
 * Step 3: You can configure a BGP neighbor that uses an MD5 encrypted password
 * Step 4: You can validate the BGP relationship is established and that the network statement is advertised to the peer □ Step 5: Soft reconfiguration is enabled
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

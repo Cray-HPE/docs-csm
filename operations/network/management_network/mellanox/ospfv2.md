@@ -38,5 +38,5 @@ Expected Results
 * Step 2: You can enable OSPF on the loopback, SVI or routed interfaces.
 * Step 3: The output of the show commands looks correct.
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)
 

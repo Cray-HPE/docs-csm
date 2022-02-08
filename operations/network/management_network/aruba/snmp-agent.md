@@ -70,4 +70,4 @@ Expected Results
 * Step 2: The output of all show commands is correct
 * Step 3: You can connect to the switch from the workstation 
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

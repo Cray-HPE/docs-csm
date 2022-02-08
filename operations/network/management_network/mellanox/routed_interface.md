@@ -31,5 +31,5 @@ Expected Results
 * Step 3: The interface is up, and you can validate the IP address and subnet are correct 
 * Step 4: You can ping from the switch to the client and from the client to the switch 
    
-[Back to Index](./index.md)
+[Back to Index](../index.md)
 

@@ -1,7 +1,5 @@
 # How to connect management network to your campus network
 
-Description
-
 In the event that you want to connect the Supercomputer to directly to your campus network. You have number of different possibilities to get this accomplished, in this guide we will go over the two most typical ways of accomplishing this. Further explained in Scenario A and B that will cover the examples of adding connections through management network or highspeed network.
 
 Requirements and optional configuration
@@ -20,4 +18,4 @@ Requirements and optional configuration
 
 **IMPORTANT:** As there are multiple ways of achieving the connectivity these are just simple examples of how remote access could be achieved. And more complex configurations such as security etc. are up to the site network administrators.  
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

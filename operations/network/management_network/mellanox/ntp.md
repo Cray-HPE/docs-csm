@@ -40,4 +40,4 @@ Expected Results
 * Step 2: You can validate the functionality using the show command 
 * Step 3: The system time of the switch matches the NTP server
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

@@ -21,4 +21,4 @@ Expected Results
 * Step 1: You are able to ping the connected device 
 * Step 2: You can view the ARP entries 
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

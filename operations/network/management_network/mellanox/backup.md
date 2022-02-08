@@ -20,4 +20,4 @@ switch (config) # configuration text file my-filename upload
 scp://root@my-server/root/tmp/my-filename 
 ```
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

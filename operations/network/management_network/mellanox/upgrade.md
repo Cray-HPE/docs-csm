@@ -92,5 +92,5 @@ Module             Device              Version
 
 MGMT               SIB2                15.2007.0900
 ```
-[Back to Index](./index.md)
+[Back to Index](../index.md)
 

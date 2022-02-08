@@ -19,4 +19,4 @@ Displaying ipv4 routes selected for forwarding
 * Verify that you can ping the next hop of this route.
 * For example above we would ping 10.252.1.9. If this is not reachable this is your problem.
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

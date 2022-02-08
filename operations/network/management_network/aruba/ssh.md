@@ -65,4 +65,4 @@ Expected Results
 * Step 3: The output of the show commands is correct
 * Step 4: You can successfully connect to the switch via an SSH client using SSH 2.0.
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)

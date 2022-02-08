@@ -14,5 +14,5 @@ Expected Results
 * Step 1: You can configure remote logging
 * Step 2: You can see the log files from the switch on the remote server
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)
 

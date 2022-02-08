@@ -50,4 +50,4 @@ Expected Results
 * Step 6: The LED is no longer lit
 * Step 7: The show command shows the LED is in the off state
 
-[Back to Index](./index.md)
+[Back to Index](../index.md)
