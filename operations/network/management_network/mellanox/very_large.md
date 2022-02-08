@@ -1,5 +1,5 @@
 # Very large (exascale)
 
-![](../../../../img/network/management_network/exascale.png)
+![](../img/exascale.png)
 
-[Back to Index](../index.md)
+[Back to Index](./index.md)

@@ -1,4 +1,4 @@
-### Introduction to CANU
+# Introduction to CANU
 
 CANU (CSM Automatic Network Utility) will guide you through to install new Shasta network and make the installation to follow best practices and set you up with supported configuration. 
 

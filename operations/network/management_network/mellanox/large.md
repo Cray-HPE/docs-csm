@@ -1,5 +1,5 @@
 # Large
 
-![](../../../../img/network/management_network/large.png)
+![](../img/large.png)
 
-[Back to Index](../index.md)
+[Back to Index](./index.md)
