@@ -102,3 +102,25 @@ function ssh_keygen_keyscan() {
     ssh-keyscan -H "${upgrade_ncn},${ncn_ip}" >> "${known_hosts}"
     return $?
 }
+
+function wait_for_kubernetes() {
+  upgrade_ncn=$1
+  state_name="WAIT_FOR_K8S"
+  state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+  if [[ $state_recorded == "0" ]]; then
+      echo "====> ${state_name} ..."
+      set +e
+      printf "%s" "waiting for k8s: $upgrade_ncn ..."
+      until csi automate ncn kubernetes --action is-member --ncn $upgrade_ncn --kubeconfig /etc/kubernetes/admin.conf
+      do
+          sleep 5
+      done
+      # Restore set -e
+      set -e
+      printf "\n%s\n"  "$upgrade_ncn joined k8s"
+
+      record_state "${state_name}" ${upgrade_ncn}
+  else
+      echo "====> ${state_name} has been completed"
+  fi
+}
