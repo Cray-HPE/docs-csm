@@ -20,6 +20,27 @@ sw-spine-001# checkpoint rollback CSM1_0
 
 ### Dell
 
+View the configuration files.  Make sure that `csm1.0` and `csm1.2` exist.  If they do you can proceed.
+
+```
+sw-leaf-001# dir config
+
+Directory contents for folder: config
+Date (modified)        Size (bytes)  Name
+---------------------  ------------  ------------------------------------------
+2022-02-08T16:31:42Z   112189        csm1.0.xml
+2022-02-08T16:28:31Z   112189        csm1.2.xml
+2022-02-08T16:30:23Z   112189        startup.xml
+```
+
+Copy the desired config to startup config and reboot the switch without saving configuration.
+
+```
+sw-leaf-001# copy config://csm1.0.xml config://startup.xml
+Copy completed
+sw-leaf-001# reload
+System configuration has been modified. Save? [yes/no]:no
+```
 ### Mellanox
 
 View the configuration files.  Make sure that `csm1.0` and `csm1.2` exist.  If they do you can proceed.
