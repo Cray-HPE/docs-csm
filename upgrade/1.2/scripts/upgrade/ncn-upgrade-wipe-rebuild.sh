@@ -239,6 +239,10 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+if [[ $upgrade_ncn != ncn-s* ]]; then
+    wait_for_kubernetes $upgrade_ncn
+fi 
+
 state_name="SET_BSS_NO_WIPE"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
