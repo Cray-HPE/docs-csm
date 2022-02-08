@@ -569,7 +569,7 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
    * [Required Labels if CAN is Not Configured](network/customer_access_network/Required_Labels_if_CAN_is_Not_Configured.md)
    * [Externally Exposed Services](network/customer_access_network/Externally_Exposed_Services.md)
    * [Connect to the CAN](network/customer_access_network/Connect_to_the_CAN.md)
-   * [CAN with Dual-Spine Configuration](network/customer_access_network/CAN_with_Dual-Spine_Configuration.md)
+   * [CAN with Dual-Spine Configuration](network/customer_access_network/Dual_Spine_Configuration.md)
    * [Troubleshoot CAN Issues](network/customer_access_network/Troubleshoot_CAN_Issues.md)
 
 
