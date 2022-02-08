@@ -83,6 +83,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
         --starting-nid 2024
     ```
 
+    > TODO update output
     Example output:
     ```
     ========================
@@ -182,6 +183,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
         --brand Dell
     ```
 
+    > TODO update output
     Example output:
     ```
     ========================
