@@ -149,4 +149,4 @@ If the creds are not working, check the Vault creds as shown above.
 
 If the *leaf_switch_snmp_creds.sh* script fails for whatever reason on any
 leaf switch, the creds can be looked at and changed manually using the 
-procedures found in [Aruba SNMP Users Guide](../../operations/network/network_management_install_guide/aruba/snmpv3_users.md) or [Dell SNMP Users Guide](../../operations/network/network_management_install_guide/dell/snmpv3_users.md).
+procedures found in [Aruba SNMP Users Guide](../../operations/network/management_network/aruba/snmpv3_users.md) or [Dell SNMP Users Guide](../../operations/network/management_network/dell/snmpv3_users.md).

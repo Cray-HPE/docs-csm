@@ -27,7 +27,11 @@
 SLS needs to be updated. Right now this is manual. There will be a tool coming soon.
 This is a placeholder until the tool is ready to be added to the automation.
 
-## Stage 0.3 - Execute Prerequisites Check
+## Stage 0.3 - Upgrade Management Network
+
+- See the  [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network. 
+
+## Stage 0.4 - Execute Prerequisites Check
 
 Run check script:
 
@@ -82,7 +86,7 @@ Run check script:
    ncn-m001# git push
    ```
 
-## Stage 0.4 - Backup VCS Data
+## Stage 0.5 - Backup VCS Data
 
 To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location. See [Version_Control_Service_VCS.md](../../operations/configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data) for these procedures.
 

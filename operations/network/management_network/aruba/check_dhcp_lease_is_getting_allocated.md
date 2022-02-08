@@ -15,4 +15,4 @@ kubectl logs -n services pod/$(kubectl get -n services pods | grep kea | head -n
 
 2021-06-21 16:44:31.124 INFO  [kea-dhcp4.leases/18.139837089017472] DHCP4_LEASE_ ***ADVERT*** [hwtype=1 14:02:ec:d9:79:88], cid=[no info], tid=0xe87fad10: lease 10.252.1.16 will be advertised
 
-[Back to Index](../index.md)
+[Back to Index](./index.md)
