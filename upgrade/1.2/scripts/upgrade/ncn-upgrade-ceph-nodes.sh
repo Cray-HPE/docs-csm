@@ -43,6 +43,10 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
     csi handoff bss-update-cloud-init --set meta-data.wipe-ceph-osds=no --limit Global
+    
+    csi handoff bss-update-param \
+        --set metal.no-wipe=1 \
+        --limit $UPGRADE_XNAME
 
     record_state "${state_name}" ${upgrade_ncn}
 else

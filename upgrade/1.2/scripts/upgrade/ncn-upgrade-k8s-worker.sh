@@ -120,6 +120,7 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+csi handoff bss-update-param --set metal.no-wipe=0 --limit $UPGRADE_XNAME
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
 
 # TODO: wait for k8s

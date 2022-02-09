@@ -145,7 +145,6 @@ state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     
-    csi handoff bss-update-param --set metal.no-wipe=0 --limit $UPGRADE_XNAME
     ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $upgrade_ncn_mgmt_host chassis bootdev pxe options=efiboot
 
     record_state "${state_name}" ${upgrade_ncn}

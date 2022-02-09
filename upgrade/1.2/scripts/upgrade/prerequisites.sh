@@ -210,7 +210,7 @@ fi
 
 state_name="UPDATE_CUSTOMIZATIONS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/site-init
     mkdir -p ${SITE_INIT_DIR}
