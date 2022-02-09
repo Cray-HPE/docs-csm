@@ -31,8 +31,8 @@ __________________________________
 The user guides contain information such as are generic configuration examples, explanation of currently used technologies, topology maps and summary of the network design used in the CSM management network.
 
 - [Aruba](aruba/index_aruba.md)
-- [Dell](dell/index_aruba.md)
-- [Mellanox](mellanox/index_aruba.md)
+- [Dell](dell/index_dell.md)
+- [Mellanox](mellanox/index_mellanox.md)
 
 
 ### CANU:
@@ -49,7 +49,7 @@ Documentation for CANU can be found at:
    - Shows how servers in CSM should be cabled.
 - [SHCD HMN Tab/HMN Connections Rules](../../../install/shcd_hmn_connections_rules.md)
    - Shows how the HMN tab on the SHCD should be formatted.
-- [SHCD Connection Rules](shcd_connection_rules.md)
+- [SHCD Connection Rules](../../../install/shcd_hmn_connections_rules.md)
    - Shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.
 - [Backup custom config](backup_custom_config.md)
    - Shows users how to backup configuration that's custom to their system, this include site connections and credentials.
@@ -61,7 +61,7 @@ Documentation for CANU can be found at:
    - Erase the switch configuration, this is useful for fresh installs.
 - [Generate switch configs](generate_switch_configs.md)
    - Generate configurations for all management switches.
-- [Manual switch configs](manual_switch_configs.md)
+- [Manual switch configs](manual_switch_config.md)
    - Some configuration needs to be done manually (authentication/SNMP).
 - [Validate SHCD](validate_shcd.md)
    - Validate the SHCD against the CSM network architecture.
