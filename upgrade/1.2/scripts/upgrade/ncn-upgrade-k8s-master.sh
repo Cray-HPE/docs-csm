@@ -130,6 +130,7 @@ fi
 
 drain_node $upgrade_ncn
 
+csi handoff bss-update-param --set metal.no-wipe=0 --limit $UPGRADE_XNAME
 ${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
 
 # Restore files used by the System Admin Toolkit (SAT) that were previously backed up
