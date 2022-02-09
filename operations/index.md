@@ -464,7 +464,7 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
   * [Create a Backup of the HSM Postgres Database](hardware_state_manager/Create_a_Backup_of_the_HSM_Postgres_Database.md)
   * [Restore HSM Postgres from a Backup](hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
   * [Restore HSM Postgres without a Backup](hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
-  * [Set BMC Management Role](Set_BMC_Management_Role.md)
+  * [Set BMC Management Role](hardware_state_manager/Set_BMC_Management_Role.md)
 
 <a name=""></a>
 
@@ -555,7 +555,7 @@ HPE Cray EX systems can have network switches in many roles: spine switches, lea
     * [Aruba Installation and Configuration](network/management_network/aruba/index_aruba.md)
     * [Dell Installation and Configuration](network/management_network/dell/index_dell.md)
     * [Mellanox Installation and Configuration](network/management_network/mellanox/index_mellanox.md)
-  * [Update Management Network Firmware](network/management_network/firmware/Update_Management_Network_Firmware.md)
+  * [Update Management Network Firmware](network/management_network/firmware/update_management_network_firmware.md)
 
 
 <a name="customer-access-network-can"></a>
