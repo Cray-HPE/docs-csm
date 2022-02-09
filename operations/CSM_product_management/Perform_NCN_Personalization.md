@@ -109,7 +109,7 @@ configuration layer requires special placement in the layer list.
 1. Update the desired configuration for all NCNs.
 
    ```bash
-   ncn# for xname in $(cray hsm state components list --role Management --format json | jq -r .Components[].ID)
+   ncn# for xname in $(cray hsm state components list --role Management --type node --format json | jq -r .Components[].ID)
    do
        cray cfs components update --desired-config ncn-personalization --enabled true --format json $xname
    done
@@ -124,7 +124,7 @@ configuration layer requires special placement in the layer list.
 
    ```bash
    ncn# export CRAY_FORMAT=json
-   ncn# for xname in $(cray hsm state components list --role Management | jq -r .Components[].ID)
+   ncn# for xname in $(cray hsm state components list --role Management --type node | jq -r .Components[].ID)
    do
        cray cfs components describe $xname | jq -r ' .id+" status="+.configurationStatus'
    done
@@ -182,7 +182,7 @@ configuration was [set previously](#ncn_personalization_set_component_config).
    
    ```bash
    ncn# export CRAY_FORMAT=json
-   ncn# for xname in $(cray hsm state components list --role Management | jq -r .Components[].ID)
+   ncn# for xname in $(cray hsm state components list --role Management --type node | jq -r .Components[].ID)
    do
        cray cfs components update --error-count 0 $xname
        cray cfs components update --state '[]' $xname

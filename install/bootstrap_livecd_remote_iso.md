@@ -260,7 +260,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# tar -C /var/www/ephemeral -zxvf /var/www/ephemeral/${CSM_RELEASE}.tar.gz
       pit# CSM_PATH=/var/www/ephemeral/${CSM_RELEASE}
       pit# echo $CSM_PATH
-      pit# echo -e "\CSM_PATH=$CSM_PATH" >>/etc/environment
+      pit# echo -e "\nCSM_PATH=$CSM_PATH" >>/etc/environment
       pit# ls -l ${CSM_PATH}
       ```
 
