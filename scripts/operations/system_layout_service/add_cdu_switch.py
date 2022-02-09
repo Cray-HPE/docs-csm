@@ -170,20 +170,14 @@ print("================================")
 print("CDU Switch Network Configuration")
 print("================================")
 
-network_names = ["HMN", "NMN", "MTL"]
-if "CMN" in allNetworks:
-    network_names.append("CMN")
-
 ips = {}
-for network_name in network_names:
+for network_name in ["HMN", "NMN", "MTL"]:
     ips[network_name] = add_cdu_ip_reservation(allNetworks[network_name], args.cdu_switch, args.alias)
 
 print()
 print("HMN IP: {}".format(ips["HMN"]))
 print("NMN IP: {}".format(ips["NMN"]))
 print("MTL IP: {}".format(ips["MTL"]))
-if "CMN" in ips:
-    print("CMN IP: {}".format(ips["CMN"]))
 print()
 
 # Write out the updated SLS dump
