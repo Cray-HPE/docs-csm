@@ -144,16 +144,26 @@ if [[ $state_recorded == "0" ]]; then
                 # Sleep before re-attempting
                 sleep $UPGRADE_POSTGRES_WAIT_SECONDS_BETWEEN_ATTEMPTS
             fi
-            c_cluster_details=$(kubectl exec "${c_name}-1" -c postgres -it -n ${c_ns} -- curl -s http://localhost:8008/cluster)
-            c_num_of_members=$(echo $c_cluster_details | jq '.members | length' )
-            c_num_of_leader=$(echo $c_cluster_details | jq '.members[] | .role' | grep "leader" | wc -l)
-            c_max_lag=$(echo $c_cluster_details | jq '[.members[] | .lag] | max')
+
+            #check for leader
+            c_leader=$(kubectl exec "${c_name}-0" -c postgres -n ${c_ns} -- patronictl list -f json 2>/dev/null | jq -r '.[] | select((.Role == "Leader") and (.State =="running")) | .Member')
+
+            if [[ -z $c_leader ]]; then
+                echo -e "\n--- ERROR --- $c cluster does not have a leader"
+                exit 1
+            fi
+
+            #cluster details from leader
+            c_cluster_details=$(kubectl exec ${c_leader} -c postgres -n ${c_ns} -- patronictl list -f json 2>/dev/null)
+            c_num_of_members=$(echo $c_cluster_details | jq '. | length' )
+            c_max_lag=$(echo $c_cluster_details | jq '[.[] | select((.Role == "") and (."Lag in MB" != "unknown"))."Lag in MB"] | max')
+            c_unknown_lag=$(echo $c_cluster_details | jq '.[] | select(.Role == "")."Lag in MB"' | grep "unknown" | wc -l)
+
             if [[ -n $c_lag_history ]]; then
                 c_lag_history+=", $c_max_lag"
             else
                 c_lag_history="$c_max_lag"
             fi
-            c_unknown_lag=$(echo $c_cluster_details | jq '[.members[] | .lag]' | grep "unknown" | wc -l)
 
             # check number of members
             if [[ $c_name == "sma-postgres-cluster" ]]; then
@@ -166,12 +176,6 @@ if [[ $state_recorded == "0" ]]; then
                     echo -e "\n--- ERROR --- $c cluster only has $c_num_of_members/3 cluster members"
                     exit 1
                 fi
-            fi
-
-            #check number of leader
-            if [[ $c_num_of_leader -ne 1 ]]; then
-                echo -e "\n--- ERROR --- $c cluster does not have a leader"
-                exit 1
             fi
 
             #check lag:unknown
