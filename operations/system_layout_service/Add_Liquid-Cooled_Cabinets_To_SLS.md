@@ -83,7 +83,6 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
         --starting-nid 2024
     ```
 
-    > TODO update output
     Example output:
     ```
     ========================
@@ -113,11 +112,13 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
       10.100.16.0/22 Available for use.
 
     HMN_MTN Subnet
+      VlanID:      3004
       CIDR:        10.104.16.0/22
       Gateway:     10.104.16.1
       DHCP Start:  10.104.16.10
       DHCP End:    10.104.19.254
     NMN_MTN Subnet
+      VlanID:      2004
       CIDR:        10.100.16.0/22
       Gateway:     10.100.16.1
       DHCP Start:  10.100.16.10
@@ -183,10 +184,9 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
         --brand Dell
     ```
 
-    > TODO update output
     Example output:
     ```
-    ========================
+   ========================
     Configuration
     ========================
     SLS State File: sls_dump.json
@@ -198,29 +198,29 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     CDU Switch Network Configuration
     ================================
     Selecting IP Reservation for d1w1 CDU Switch in HMN's network_hardware subnet
-    Found existing IP reservation sw-spine-001 with IP 10.254.0.2
-    Found existing IP reservation sw-spine-002 with IP 10.254.0.3
-    Found existing IP reservation sw-leaf-bmc-001 with IP 10.254.0.4
-    Found existing IP reservation sw-leaf-bmc-002 with IP 10.254.0.5
-    Found existing IP reservation sw-cdu-001 with IP 10.254.0.6
-    Found existing IP reservation sw-cdu-002 with IP 10.254.0.7
-    10.254.0.8 Available for use.
+      Found existing IP reservation sw-spine-001 with IP 10.254.0.2
+      Found existing IP reservation sw-spine-002 with IP 10.254.0.3
+      Found existing IP reservation sw-leaf-001 with IP 10.254.0.4
+      Found existing IP reservation sw-leaf-002 with IP 10.254.0.5
+      Found existing IP reservation sw-cdu-001 with IP 10.254.0.6
+      Found existing IP reservation sw-cdu-002 with IP 10.254.0.7
+      10.254.0.8 Available for use.
     Selecting IP Reservation for d1w1 CDU Switch in NMN's network_hardware subnet
-    Found existing IP reservation sw-spine-001 with IP 10.252.0.2
-    Found existing IP reservation sw-spine-002 with IP 10.252.0.3
-    Found existing IP reservation sw-leaf-bmc-001 with IP 10.252.0.4
-    Found existing IP reservation sw-leaf-bmc-002 with IP 10.252.0.5
-    Found existing IP reservation sw-cdu-001 with IP 10.252.0.6
-    Found existing IP reservation sw-cdu-002 with IP 10.252.0.7
-    10.252.0.8 Available for use.
+      Found existing IP reservation sw-spine-001 with IP 10.252.0.2
+      Found existing IP reservation sw-spine-002 with IP 10.252.0.3
+      Found existing IP reservation sw-leaf-001 with IP 10.252.0.4
+      Found existing IP reservation sw-leaf-002 with IP 10.252.0.5
+      Found existing IP reservation sw-cdu-001 with IP 10.252.0.6
+      Found existing IP reservation sw-cdu-002 with IP 10.252.0.7
+      10.252.0.8 Available for use.
     Selecting IP Reservation for d1w1 CDU Switch in MTL's network_hardware subnet
-    Found existing IP reservation sw-spine-001 with IP 10.1.0.2
-    Found existing IP reservation sw-spine-002 with IP 10.1.0.3
-    Found existing IP reservation sw-leaf-bmc-001 with IP 10.1.0.4
-    Found existing IP reservation sw-leaf-bmc-002 with IP 10.1.0.5
-    Found existing IP reservation sw-cdu-001 with IP 10.1.0.6
-    Found existing IP reservation sw-cdu-002 with IP 10.1.0.7
-    10.1.0.8 Available for use.
+      Found existing IP reservation sw-spine-001 with IP 10.1.0.2
+      Found existing IP reservation sw-spine-002 with IP 10.1.0.3
+      Found existing IP reservation sw-leaf-001 with IP 10.1.0.4
+      Found existing IP reservation sw-leaf-002 with IP 10.1.0.5
+      Found existing IP reservation sw-cdu-001 with IP 10.1.0.6
+      Found existing IP reservation sw-cdu-002 with IP 10.1.0.7
+      10.1.0.8 Available for use.
 
     HMN IP: 10.254.0.8
     NMN IP: 10.252.0.8
@@ -228,6 +228,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 
     Writing updated SLS state to sls_dump.json
     ```
+
 7. Inspect the differences between the original SLS state file and the modified one:
     ```bash
     ncn-m001# diff sls_dump.original.json sls_dump.json

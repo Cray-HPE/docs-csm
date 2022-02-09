@@ -70,15 +70,15 @@ This procedure will use config from System Layout Service (SLS) to set up the pr
     {
         "user-data": {
             "write_files": [{
-                "content": $(jq -n --rawfile file ifroute-bond0.nmn0 '$file'),
+                "content": $(jq -n --rawfile file ifroute-vlan002 '$file'),
                 "owner": "root:root",
-                "path": "/etc/sysconfig/network/ifroute-bond0.nmn0",
+                "path": "/etc/sysconfig/network/ifroute-vlan002",
                 "permissions": "0644"
             },
             {
-                "content": $(jq -n --rawfile file ifroute-bond0.hmn0 '$file'),
+                "content": $(jq -n --rawfile file ifroute-vlan004 '$file'),
                 "owner": "root:root",
-                "path": "/etc/sysconfig/network/ifroute-bond0.hmn0",
+                "path": "/etc/sysconfig/network/ifroute-vlan004",
                 "permissions": "0644"
             }
             ]
@@ -89,7 +89,7 @@ This procedure will use config from System Layout Service (SLS) to set up the pr
 
 4.  Update BSS cloud init user data for the management NCNs:
     ```bash
-    ncn-m001# ncn_xnames=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | jq -r '.[] | .Xname' | sort)
+    ncn-m001# ncn_xnames=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?type=comptype_node&extra_properties.Role=Management" | jq -r '.[] | .Xname' | sort)
     ncn-m001# for ncn in $ncn_xnames; do 
         echo "Updating BSS for $ncn"
         csi handoff bss-update-cloud-init --user-data=write-files-user-data.json --limit=${ncn}

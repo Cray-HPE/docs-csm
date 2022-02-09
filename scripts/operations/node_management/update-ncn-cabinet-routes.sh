@@ -39,11 +39,6 @@ cabinet_networks=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2>/dev/nul
 [[ -n ${cabinet_networks} ]] || on_error "Cannot retrieve cabinet networks from SLS. Check SLS connectivity."
 
 # NMN
-nmnlb=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2>/dev/null | jq ".[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetCIDR: .Subnets.CIDR} | select(.NetworkName==\"NMNLB\")")
-
-nmnlb_cidr=$(echo $nmnlb | jq -r .SubnetCIDR)
-[[ -n ${nmnlb_cidr} ]] || on_error "NMN LB CIDR not found"
-
 nmn_gateway=$(echo "${nmn_hmn_networks}" | jq -r ". | select(.NetworkName==\"NMN\") | .Gateway")
 [[ -n ${nmn_gateway} ]] || on_error "NMN gateway not found"
 
@@ -51,21 +46,14 @@ nmn_cabinet_subnets=$(echo "${cabinet_networks}" | jq -r ". | select(.NetworkNam
 [[ -n ${nmn_cabinet_subnets} ]] || on_error "NMN cabinet subnets not found"
 
 # HMN
-hmnlb=$(curl -k -H "Authorization: Bearer ${TOKEN}" ${URL} 2>/dev/null | jq ".[] | {NetworkName: .Name, Subnets: .ExtraProperties.Subnets[]} | { NetworkName: .NetworkName, SubnetCIDR: .Subnets.CIDR} | select(.NetworkName==\"HMNLB\")")
-hmnlb_cidr=$(echo $hmnlb | jq -r .SubnetCIDR)
-[[ -n ${hmnlb_cidr} ]] || on_error "HMN LB CIDR not found"
 hmn_gateway=$(echo "${nmn_hmn_networks}" | jq -r ". | select(.NetworkName==\"HMN\") | .Gateway")
 [[ -n ${hmn_gateway} ]] || on_error "HMN gateway not found"
 hmn_cabinet_subnets=$(echo "${cabinet_networks}" | jq -r ". | select(.NetworkName==\"HMN\" or .NetworkName==\"HMN_RVR\" or .NetworkName==\"HMN_MTN\") | .SubnetCIDR")
 [[ -n ${hmn_cabinet_subnets} ]] || on_error "HMN cabinet subnets not found"
 
-# MTL
-mtl_cidr=$(echo "${nmn_hmn_networks}" | jq -r ". | select(.NetworkName==\"MTL\") | .SubnetCIDR")
-[[ -n ${mtl_cidr} ]] || on_error "MTL CIDR not found"
-
 # Create the routing files first so we can fan it out to all the NCNs later.
-local_nmn_route_file="./ifroute-bond0.nmn0"
-local_hmn_route_file="./ifroute-bond0.hmn0"
+local_nmn_route_file="./ifroute-vlan002"
+local_hmn_route_file="./ifroute-vlan004"
 rm -f $local_nmn_route_file
 rm -f $local_hmn_route_file
 touch $local_nmn_route_file
@@ -74,16 +62,13 @@ touch $local_hmn_route_file
 # Format for ifroute-<interface> syntax
 nmn_routes=()
 for rt in $nmn_cabinet_subnets; do
-    nmn_routes+=("$rt $nmn_gateway - bond0.nmn0")
+    nmn_routes+=("$rt $nmn_gateway - vlan002")
 done
-nmn_routes+=("$mtl_cidr $nmn_gateway - bond0.nmn0")
-nmn_routes+=("$nmnlb_cidr $nmn_gateway - bond0.nmn0")
 
 hmn_routes=()
 for rt in $hmn_cabinet_subnets; do
-    hmn_routes+=("$rt $hmn_gateway - bond0.hmn0")
+    hmn_routes+=("$rt $hmn_gateway - vlan004")
 done
-hmn_routes+=("$hmnlb_cidr $hmn_gateway - bond0.hmn0")
 
 printf -v nmn_routes_string '%s\n' "${nmn_routes[@]}"
 printf -v hmn_routes_string '%s\n' "${hmn_routes[@]}"
@@ -101,15 +86,15 @@ echo "Writing $local_hmn_route_file"
 echo -n "${hmn_routes_string}" > $local_hmn_route_file
 
 echo "Querying SLS for Managment NCNs"
-ncns=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | jq -r '.[] | ."ExtraProperties" | ."Aliases" | .[]' | sort)
+ncns=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?type=comptype_node&extra_properties.Role=Management" | jq -r '.[] | ."ExtraProperties" | ."Aliases" | .[]' | sort)
 
 for ncn in $ncns; do
   echo "Adding routes to $ncn."
 
   # Create backup of ifroute files
   echo "Creating backup of existing ifroute files"
-  ssh -o "StrictHostKeyChecking=no" "$ncn" "if [ -e /etc/sysconfig/network/ifroute-bond0.nmn0 ]; then cp /etc/sysconfig/network/ifroute-bond0.nmn0 /etc/sysconfig/network/orig-ifroute-bond0.nmn0;fi"
-  ssh -o "StrictHostKeyChecking=no" "$ncn" "if [ -e /etc/sysconfig/network/ifroute-bond0.hmn0 ]; then cp /etc/sysconfig/network/ifroute-bond0.hmn0 /etc/sysconfig/network/orig-ifroute-bond0.hmn0;fi"
+  ssh -o "StrictHostKeyChecking=no" "$ncn" "if [ -e /etc/sysconfig/network/ifroute-vlan002 ]; then cp /etc/sysconfig/network/ifroute-vlan002 /etc/sysconfig/network/orig-ifroute-vlan002;fi"
+  ssh -o "StrictHostKeyChecking=no" "$ncn" "if [ -e /etc/sysconfig/network/ifroute-vlan004 ]; then cp /etc/sysconfig/network/ifroute-vlan004 /etc/sysconfig/network/orig-ifroute-vlan004;fi"
 
   echo "Adding cabinet routes"
   for rt in $nmn_cabinet_subnets; do
@@ -120,6 +105,6 @@ for ncn in $ncns; do
   done
 
   echo "Copying updated ifroute files into place"
-  scp $local_nmn_route_file "$ncn:/etc/sysconfig/network/ifroute-bond0.nmn0"
-  scp $local_hmn_route_file "$ncn:/etc/sysconfig/network/ifroute-bond0.hmn0"
+  scp $local_nmn_route_file "$ncn:/etc/sysconfig/network/ifroute-vlan002"
+  scp $local_hmn_route_file "$ncn:/etc/sysconfig/network/ifroute-vlan004"
 done
