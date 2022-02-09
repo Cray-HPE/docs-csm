@@ -5,7 +5,7 @@ This is either a first time install or the previous CSM was wiped and requires a
 :exclamation: All of these steps should be done using an out of band connection. This process is disruptive and will require downtime :exclamation: 
 
 
-1. [Update management network firmware](update_management_network_firmware.md)
+1. [Update management network firmware](firmware/update_management_network_firmware.md)
     - Upgrade switch firmware to specified firmware version.
 1. [Backup custom config](backup_custom_config.md)
     - If the system had a previous version of CSM on it, you need to backup all custom configuration and credential configuration.  This procedure can be found at:

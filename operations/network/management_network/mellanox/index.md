@@ -94,7 +94,7 @@ __________________________________
 
 ### Layer one features
   1. [Physical Interfaces](./physical_interfaces.md)
-  2. [Cable Diagnostics](cable_diagnonstics.md)
+  1. [Cable Diagnostics](cable_diagnonstics.md)
 
 ### Layer two features
   1. [Link Layer Discovery Protocol (LLDP)](./lldp.md)
