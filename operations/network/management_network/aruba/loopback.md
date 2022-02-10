@@ -1,17 +1,17 @@
-# Loopback interface 
+# Loopback Interface 
 
-You can think of loopbacks as internal virtual interfaces. Loopback interfaces are not bound to a physical port and are used for device management and routing protocols. 
+Loopbacks are essentially internal virtual interfaces. Loopback interfaces are not bound to a physical port and are used for device management and routing protocols. 
 
-Relevant Configuration 
+## Configuration Commands
 
-```
+```bash
 switch(config)# interface loopback LOOPBACK
 switch(config-loopback-if)# ip address IP-ADDR/<SUBNET|PREFIX>
 ```
 
-Example Output 
+## Example Output 
 
-```
+```bash
 switch(config)# interface loopback 1
 switch(config-loopback-if)# ip address 99.99.99.1/32
 switch(config-loopback-if)# end
@@ -27,10 +27,10 @@ Interface loopback1 is up
  IPv4 address 99.99.99.1/32
 ```
 
-Expected Results 
+## Expected Results 
 
-* Step 1: You can create a loopback interface
-* Step 2: You can give a loopback interface an IP address
-* Step 3: You can validate the configuration using the show commands.
+1. Administrators can create a loopback interface
+2. Administrators can give a loopback interface an IP address
+3. Administrators can validate the configuration using the `show` commands.
 
 [Back to Index](../index.md)

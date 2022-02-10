@@ -46,8 +46,8 @@ switch# show ntp status
 
 Expected Results 
 
-* Step 1: You can configure the NTP client
-* Step 2: You can validate the functionality using the show command 
+* Step 1: Administrators can configure the NTP client
+* Step 2: Administrators can validate the functionality using the show command 
 * Step 3: The system time of the switch matches the NTP server
 
 

@@ -51,9 +51,9 @@ switch# show policy [NAME]
 
 ## Expected Results
  
-1. You can configure a class
-2. You can configure a policy
-3. You can apply a policy to an interface
+1. Administrators can configure a class
+2. Administrators can configure a policy
+3. Administrators can apply a policy to an interface
 4. The output of the `show` commands is correct  
 
 ## Example Output 

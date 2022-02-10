@@ -18,7 +18,7 @@ switch# show domain-name
 
 ## Expected Results 
 
-1. You can configure the domain name
+1. Administrators can configure the domain name
 1. The output of all show commands is correct  
  
 [Back to Index](../index.md)

@@ -1,12 +1,12 @@
-# Multiple spanning tree protocol (MSTP) 
+# Multiple Spanning Tree Protocol (MSTP) 
 
 MSTP (802.1s) ensures that only one active path exists between any two nodes in a spanning-tree instance. A spanning- tree instance comprises a unique set of VLANs. MSTP instances significantly improve network resource utilization while maintaining a loop-free environment. 
 
-Relevant Configuration 
+## Configuration Commands
 
-Enable MSTP (default mode for spanning-tree) 
+Enable MSTP (default mode for spanning-tree): 
 
-```
+```bash
 switch(config)# spanning-tree
 switch(config)# spanning-tree config-name <NAME> 
 switch(config)# spanning-tree config-revision <VALUE> Configure an MSTP instance and priority
@@ -14,15 +14,15 @@ switch(config)# spanning-tree instance VALUE vlan VLANS
 switch(config)# spanning-tree instance VALUE priority VALUE 
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
-```
+```bash
 switch# show spanning-tree mst detail
 ```
 
-Example Output 
+## Example Output 
 
-```
+```bash
 switch# show span
 Spanning tree status
 Extended System-id
@@ -44,10 +44,10 @@ Port         Role           State        Cost    Priority   Type
 ------------ -------------- ------------ ------- ---------- ----------
 ```
 
-Expected Results 
+## Expected Results 
 
-* Step 1: Spanning-tree mode is configured
-* Step 2: Spanning-tree is enabled, if loops are detected ports should go blocked state.
-* Step 3: Spanning-tree splits traffic domain between two DUTs
+1. Spanning-tree mode is configured
+2. Spanning-tree is enabled, if loops are detected ports should go blocked state
+3. Spanning-tree splits traffic domain between two DUTs
 
 [Back to Index](../index.md)
