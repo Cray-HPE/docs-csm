@@ -60,19 +60,20 @@ Press any key to continue...
 
 Follow these steps on any NCN to fix the issue:
 
-   1. Run the `CASMINST-2689.sh` script from the `CASMINST-2689` workaround at the `livecd-post-reboot` breakpoint.
+   1. Install the Shasta 1.4 (a.k.a. CSM 0.9) install workaround RPM. See the CSM 0.9 documentation for details on how to do this.
 
-      Follow the usual [workaround instructions](../update_product_stream/index.md#apply-workarounds) **with the following exceptions**:
-         * Use the latest Shasta 1.4 install workaround RPM, **not** the Shasta 1.5 install workaround RPM
-         * For the  `livecd-post-reboot` breakpoint, ignore any workarounds other than `CASMINST-2689`
-         * Do not follow the workaround `README.md` instructions -- only run the `CASMINST-2689.sh` script in the `CASMINST-2689` subdirectory
+   1. Run the `CASMINST-2689.sh` script from the `CASMINST-2689` workaround at the `livecd-post-reboot` breakpoint:
+   
+      ```bash
+      ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh
+      ```
 
    1. Run these commands:
 
       ```bash
       ncn# for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' '); do
-         scp -r csm-install-workarounds/workarounds/livecd-post-reboot/CASMINST-2689/ $i:/opt/cray/csm/workarounds/livecd-post-reboot/
-      done
+               scp -r /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689 $i:/opt/cray/csm/workarounds/livecd-post-reboot/
+            done
       ncn# pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh'
       ```
 

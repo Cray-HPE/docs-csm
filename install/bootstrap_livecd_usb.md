@@ -10,11 +10,9 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
    1. [Download and Expand the CSM Release](#download-and-expand-the-csm-release)
    1. [Create the Bootable Media](#create-the-bootable-media)
    1. [Configuration Payload](#configuration-payload)
-      1. [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
       1. [Generate Installation Files](#generate-installation-files)
          1. [Subsequent Fresh-Installs (Re-Installs)](#subsequent-fresh-installs-re-installs)
          1. [First-Time/Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal)
-      1. [CSI Workarounds](#csi-workarounds)
       1. [Prepare Site Init](#prepare-site-init)
    1. [Prepopulate LiveCD Daemons Configuration and NCN Artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
    1. [Boot the LiveCD](#boot-the-livecd)
@@ -42,15 +40,15 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
 1. The CSM software release should be downloaded and expanded for use.
 
-   **Important:** To ensure that the CSM release plus any patches, workarounds, or hotfixes are included
-   follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
+   **Important:** In order to ensure that the CSM release plus any patches, documentation updates, 
+   or hotfixes are included, follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
 
    **Important:** Download to a location that has sufficient space for both the tarball and the expanded tarball.
 
    > Note: Expansion of the tarball may take more than 45 minutes.
 
    The rest of this procedure will use the CSM_RELEASE variable and expect to have the
-   contents of the CSM software release tarball plus any patches, workarounds, or hotfixes.
+   contents of the CSM software release tarball plus any patches or hotfixes.
 
    ```bash
    linux:usb# CSM_RELEASE=csm-x.y.z
@@ -68,11 +66,10 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    linux:usb# rpm -Uvh $(find ./${CSM_RELEASE}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
 
-1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
-   access these RPMs will need to be externally downloaded and then copied to this machine.
+1. Download and install/upgrade the documentation RPM. If this machine does not have direct internet
+   access this RPM will need to be externally downloaded and then copied to this machine.
 
-   **Important:** To ensure that the latest workarounds and documentation updates are available,
-   see [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds)
+   See [Check for Latest Documentation](../update_product_stream/index.md#documentation)
 
 1. Show the version of CSI installed.
 
@@ -220,18 +217,11 @@ The USB device is now bootable and contains our artifacts. This may be useful fo
 
 The SHASTA-CFG structure and other configuration files will be prepared, then `csi` will generate system-unique configuration payload used for the rest of the CSM installation on the USB device.
 
-* [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
 * [Generate Installation Files](#generate-installation-files)
-* [CSI Workarounds](#csi-workarounds)
 * [Prepare Site Init](#prepare-site-init)
 
-<a name="before-configuration-payload-workarounds"></a>
-#### 3.1 Before Configuration Payload Workarounds
-
-Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-configuration-payload` breakpoint.
-
 <a name="generate-installation-files"></a>
-#### 3.2 Generate Installation Files
+#### 3.1 Generate Installation Files
 
 Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if one has not already prepared the information for this system.
 
@@ -267,7 +257,7 @@ Some files are needed for generating the configuration payload. See these topics
    After gathering the files into this working directory, move on to [Subsequent Fresh-Installs (Re-Installs)](#subsequent-fresh-installs-re-installs).
 
 <a name="subsequent-fresh-installs-re-installs"></a>
-##### 3.2.a Subsequent Fresh-Installs (Re-Installs)
+##### 3.1.a Subsequent Fresh-Installs (Re-Installs)
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
 
@@ -332,10 +322,10 @@ Some files are needed for generating the configuration payload. See these topics
       >   {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >   ```
 
-   1. Skip the next step and continue with the [CSI Workarounds](#csi-workarounds).
+   1. Skip the next step and continue to [prepare site init](#prepare_site_init).
 
 <a name="first-timeinitial-installs-bare-metal"></a>
-##### 3.2.b First-Time/Initial Installs (bare-metal)
+##### 3.1.b First-Time/Initial Installs (bare-metal)
 
 1. **For first-time/initial installs (without a `system_config.yaml`file)**, generate the system configuration. See below for an explanation of the command line parameters and some common settings.
 
@@ -440,15 +430,10 @@ Some files are needed for generating the configuration payload. See these topics
       >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >    ```
 
-   1. Continue with the next step to apply the [csi-config workarounds](#33-csi-workarounds).
+   1. Continue to the next step to [prepare site init](#prepare_site_init).
       
-<a name="csi-workarounds"></a>
-#### 3.3 CSI Workarounds
-
-Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
-
 <a name="prepare_site_init"></a>
-#### 3.4 Prepare Site Init
+#### 3.2 Prepare Site Init
 
 > **`NOTE`**: It is assumed at this point that `/mnt/pitdata` is still mounted on the linux system, this is important as the following procedure depends on that mount existing.  
 
