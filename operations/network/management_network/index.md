@@ -31,7 +31,7 @@ __________________________________
 The user guides contain information such as are generic configuration examples, explanation of currently used technologies, topology maps and summary of the network design used in the CSM management network.
 
 - [Aruba](aruba/index_aruba.md)
-- [Dell](dell/index_dell.md)
+- [Dell](dell/index.md)
 - [Mellanox](mellanox/index_mellanox.md)
 
 

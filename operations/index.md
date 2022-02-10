@@ -553,7 +553,7 @@ HPE Cray EX systems can have network switches in many roles: spine switches, lea
 
   * [HPE Cray EX Management Network Installation and Configuration Guide](network/management_network/index.md)
     * [Aruba Installation and Configuration](network/management_network/aruba/index_aruba.md)
-    * [Dell Installation and Configuration](network/management_network/dell/index_dell.md)
+    * [Dell Installation and Configuration](network/management_network/dell/index.md)
     * [Mellanox Installation and Configuration](network/management_network/mellanox/index_mellanox.md)
   * [Update Management Network Firmware](network/management_network/firmware/update_management_network_firmware.md)
 
