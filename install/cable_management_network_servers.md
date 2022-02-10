@@ -135,11 +135,11 @@ NOTES:
 The OCP ports go to the First switch and the PCIe ports go to the Second switch. OCP port 1 and PCIe port 1 form a Bond. OCP port 2 and PCIe port 2 form a Bond.
 ![Diagram of HPE Storage Node Cabling for Small System](../img/network/HPE_Storage.png)
 
-For systems that include 4 leaf-bmc switches the cabling will look like the following.
+For systems that include 4 leaf switches the cabling will look like the following.
 
 ![Diagram of HPE Storage Node Cabling for Large System](../img/network/HPE_Storage_large.png)
 
-#### SHCD Example with four leaf-bmc switches.
+#### SHCD Example with four leaf switches.
 |hostname|Source          |Destination   |Destination |
 |--------|----------------|--------------|------------|
 | sn01	 | x3000u10ocp-j2 | x3000u36-j5	 | sw-25g04   |
