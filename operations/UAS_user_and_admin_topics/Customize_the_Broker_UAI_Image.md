@@ -80,7 +80,7 @@ The following is an example of replacing the entrypoint script with a new entryp
 
 1. Create a new entrypoint script.
 
-    **NOTE:** A special document form is used to prevent variable substitution in the file.
+    **NOTE:** A special "here document" form is used to prevent variable substitution in the file.
 
     ```
     ncn-m001-pit# cat <<-"EOF" > entrypoint.sh
@@ -134,13 +134,13 @@ The following is an example of replacing the entrypoint script with a new entryp
     EOF
     ```
 
-1. Create a new ConfigMap with the content from the script.
+2. Create a new ConfigMap with the content from the script.
     
     ```
     ncn-m001-pit# kubectl create configmap -n uas broker-entrypoint --from-file=entrypoint.sh
     ```
 
-1. Create a new volume.
+3. Create a new volume.
 
     **NOTE**: The `default_mode` setting, which will set the mode on the file /app/broker/entrypoint.sh is decimal 493 here instead of octal 0755. The octal notation is not permitted in a JSON specification. Decimal numbers have to be used.
 
@@ -160,7 +160,7 @@ The following is an example of replacing the entrypoint script with a new entryp
     name = "broker-entrypoint"
     ```
 
-1. List the UAI classes.
+4. List the UAI classes.
 
     ```
     ncn-m001-pit# cray uas admin config classes list | grep -e class_id -e comment
@@ -178,7 +178,7 @@ The following is an example of replacing the entrypoint script with a new entryp
     comment = "UAI broker class"
     ```
 
-1. Describe the desired UAI class.
+5. Describe the desired UAI class.
    
     ```
     ncn-m001-pit# cray uas admin config classes describe d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
@@ -235,7 +235,7 @@ The following is an example of replacing the entrypoint script with a new entryp
       volumename: lustre
     ```
 
-1. Update the UAI class. 
+6. Update the UAI class. 
 
     ```
     ncn-m001-pit# cray uas admin config classes update --volume-list '11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,2246bbb1-4006-4b11-ba57-6588a7b7c02f,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a' d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
@@ -300,7 +300,7 @@ The following is an example of replacing the entrypoint script with a new entryp
       volumename: lustre
     ```
 
-1. After the Broker UAI class is updated, all that remains is to clear out any existing End-User UAIs (existing UAIs will not work with the new broker because the new broker will have a new key-pair shared with its UAIs) and the existing Broker UAI (if any) and create a new Broker UAI.
+7. After the Broker UAI class is updated, all that remains is to clear out any existing End-User UAIs (existing UAIs will not work with the new broker because the new broker will have a new key-pair shared with its UAIs) and the existing Broker UAI (if any) and create a new Broker UAI.
 
     **NOTE:** Clearing out existing UAIs will terminate any user activity on those UAIs, make sure that users are warned of the disruption.
 
@@ -371,7 +371,7 @@ The following is an example that follows on from the previous section and config
 
 1. Create a new pre-login `banner` file.
    
-    **NOTE:** A special document form is used to prevent variable substitution in the file.
+    **NOTE:** A special "here document" form is used to prevent variable substitution in the file.
 
     ```
     ncn-m001-pit# cat <<-"EOF" > banner
@@ -381,9 +381,9 @@ The following is an example that follows on from the previous section and config
     EOF
     ```
 
-1. Create a new `sshd_config`.
+2. Create a new `sshd_config`.
 
-    **NOTE:** A special document form is used to prevent variable substitution in the file.
+    **NOTE:** A special "here document" form is used to prevent variable substitution in the file.
 
     ```
     ncn-m001-pit# cat <<-"EOF" > sshd_config
@@ -405,13 +405,13 @@ The following is an example that follows on from the previous section and config
     EOF
     ```
 
-1. Add the new `banner` file and `sshd_config` to a Kubernetes ConfigMap.
+3. Add the new `banner` file and `sshd_config` to a Kubernetes ConfigMap.
 
     ```
     ncn-m001-pit# kubectl create configmap -n uas broker-sshd-conf --from-file sshd_config --from-file banner
     ```
 
-1. Mount the changes over `/etc/switchboard`.
+4. Mount the changes over `/etc/switchboard`.
 
     ```
     ncn-m001-pit# cray uas admin config volumes create \
@@ -432,7 +432,7 @@ The following is an example that follows on from the previous section and config
     name = "broker-sshd-conf"
     ```
 
-1. Update the UAI class.
+5. Update the UAI class.
 
     ```
     ncn-m001-pit# cray uas admin config classes update --volume-list '4577eddf-d81e-40c9-9c91-082f3193edd6,11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,2246bbb1-4006-4b11-ba57-6588a7b7c02f,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a' d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
@@ -505,7 +505,7 @@ The following is an example that follows on from the previous section and config
       volumename: lustre
     ```
 
-1. Once the new configuration is installed, clean out the old UAIs and restart the broker.
+6. Once the new configuration is installed, clean out the old UAIs and restart the broker.
 
     **NOTE:** Clearing out existing UAIs will terminate any user activity on those UAIs, make sure that users are warned of the disruption.
 
@@ -519,7 +519,7 @@ The following is an example that follows on from the previous section and config
 
         Output similar to `results = [ "Successfully deleted uai-vers-e937b810",]` will be returned for each command.
 
-    1. Restart the broker.
+    2. Restart the broker.
         
         ```
         ncn-m001-pit# cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker
@@ -541,7 +541,7 @@ The following is an example that follows on from the previous section and config
         [uai_portmap]
         ```
 
-1. Connect to the broker to log in:
+7. Connect to the broker to log in:
 
     ```
     vers> ssh vers@104.197.32.33
