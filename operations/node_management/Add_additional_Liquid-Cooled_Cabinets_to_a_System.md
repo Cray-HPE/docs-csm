@@ -15,11 +15,12 @@ This top level procedure outlines the process for adding additional liquid-coole
 
 2. Reconfigure management network:
    1. Obtain updated switch configs from CSM.
-   2. Update switch configs to current set of management switches.
+   2. Verify/Update current configuration on management network switches.
    3. Verify new switches are at factory defaults.
-   4. Load switch configs onto new switches.
-   5. Rack and cable new switches.
-   6. Power on new switches.
+   4. Upgrade new switch firmware.
+   5. Load switch configs onto new switches.
+   6. Rack and cable new switches.
+   7. Power on new switches.
 
 3. Perform procedures in [Updating Cabinet Routes on Management NCNs](Updating_Cabinet_Routes_on_Management_NCNs.md)
 
