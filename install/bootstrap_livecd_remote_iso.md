@@ -15,11 +15,9 @@ lack of removable storage.
    1. [Attaching and Booting the LiveCD with the BMC](#attaching-and-booting-the-livecd-with-the-bmc)
    1. [First Login](#first-login)
    1. [Configure the Running LiveCD](#configure-the-running-livecd)
-      1. [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
       1. [Generate Installation Files](#generate-installation-files)
          1. [Subsequent Fresh-Installs (Re-Installs)](#subsequent-fresh-installs-re-installs)
          1. [First-Time/Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal)
-      1. [CSI Workarounds](#csi-workarounds)
       1. [Prepare Site Init](#prepare-site-init)
    1. [Bring-up the PIT Services and Validate PIT Health](#bring---up-the-pit-services-and-validate-pit-health)
    1. [Next Topic](#next-topic)
@@ -44,8 +42,8 @@ the instructions for attaching to the BMC will differ.
 
 1. The CSM software release should be downloaded and expanded for use.
 
-   **Important:** To ensure that the CSM release plus any patches, workarounds, or hotfixes are included
-   follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
+   **Important:** Ensure that you have the CSM release plus any patches or hotfixes by
+   following the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
 
    The cray-pre-install-toolkit ISO and other files are now available in the directory from the extracted CSM tar.
    The ISO will have a name similar to
@@ -226,8 +224,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 1. Download the CSM software release to the PIT node.
 
-   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
-   were downloaded to a system using the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
+   **Important:** In an earlier step, the CSM release plus any patches or hotfixes
+   was downloaded to a system using the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
    Either copy from that system to the PIT node or set the ENDPOINT variable to URL and use `wget`.
 
    1. Set helper variables
@@ -280,11 +278,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# rpm -Uvh $(find ${CSM_PATH}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
 
-1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
-   access these RPMs will need to be externally downloaded and then copied to this machine.
+1. Download and install/upgrade the documentation RPM. If this machine does not have direct internet
+   access this RPM will need to be externally downloaded and then copied to this machine.
 
-   **Important:** To ensure that the latest workarounds and documentation updates are available,
-   see [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds)
+   See [Check for Latest Documentation](../update_product_stream/index.md#documentation)
 
 1. Show the version of CSI installed.
 
@@ -312,13 +309,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    = PIT Identification = COPY/CUT END =========================================
    ```
 
-<a name="before-configuration-payload-workarounds"></a>
-#### 4.1 Before Configuration Payload Workarounds
-
-Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-configuration-payload` breakpoint.
-
 <a name="generate-installation-files"></a>
-#### 4.2 Generate Installation Files
+#### 4.1 Generate Installation Files
 
 Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if one has not already prepared the information for this system.
 
@@ -351,7 +343,7 @@ Some files are needed for generating the configuration payload. See these topics
    After gathering the files into this working directory, move on to [Subsequent Fresh-Installs (Re-Installs)](#subsequent-fresh-installs-re-installs).
 
 <a name="subsequent-fresh-installs-re-installs"></a>
-##### 4.2.a Subsequent Fresh-Installs (Re-Installs)
+##### 4.1.a Subsequent Fresh-Installs (Re-Installs)
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
 
@@ -416,10 +408,10 @@ Some files are needed for generating the configuration payload. See these topics
       >   {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >   ```
 
-   1. Skip the next step and continue with the [CSI Workarounds](#csi-workarounds).
+   1. Skip the next step and continue to [prepare site init](#prepare-site-init).
 
 <a name="first-timeinitial-installs-bare-metal"></a>
-##### 4.2.b First-Time/Initial Installs (bare-metal)
+##### 4.1.b First-Time/Initial Installs (bare-metal)
 
 1. **For first-time/initial installs (without a `system_config.yaml`file)**, generate the system configuration. See below for an explanation of the command line parameters and some common settings.
 
@@ -522,15 +514,10 @@ Some files are needed for generating the configuration payload. See these topics
       >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >    ```
 
-   1. Continue with the next step to apply the [csi-config workarounds](#33-csi-workarounds).
-
-<a name="csi-workarounds"></a>
-#### 4.3 CSI Workarounds
-
-Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
+   1. Continue with the next step to [prepare site init](#prepare-site-init).
 
 <a name="prepare-site-init"></a>
-#### 4.4 Prepare Site Init
+#### 4.2 Prepare Site Init
 
 First, prepare a shim to facilitate going through the site-init guide:
 
