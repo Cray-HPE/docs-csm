@@ -8,13 +8,13 @@ This top level procedure outlines the process for adding additional liquid-coole
 - Follow the procedure [Create a Backup of the SLS Postgres Database](../system_layout_service/Create_a_Backup_of_the_SLS_Postgres_Database.md).
 - Follow the procedure [Create a Backup of the HSM Postgres Database](../hardware_state_manager/Create_a_Backup_of_the_HSM_Postgres_Database.md).
 - Backup running-config on all management switches.
-- Export switch backup to CSM.
+- Export switch backup to CSM R&D.
 
 ## Procedure
 1. Perform procedures in [Add Liquid-Cooled Cabinets to SLS](../system_layout_service/Add_Liquid-Cooled_Cabinets_To_SLS.md).
 
 2. Reconfigure management network:
-   1. Obtain updated switch configs from CSM.
+   1. Obtain updated switch configs from CSM R&D.
    2. Verify/Update current configuration on management network switches.
    3. Verify new switches are at factory defaults.
    4. Upgrade new switch firmware.
