@@ -200,7 +200,8 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
-        echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: $(pwd)"
+        echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: /root"
+        exit 1
     fi
     cp /root/docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
     record_state ${state_name} $(hostname)
