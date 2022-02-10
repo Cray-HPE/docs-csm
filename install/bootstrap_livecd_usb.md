@@ -34,8 +34,8 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 1. Set up the Typescript directory as well as the initial typescript. This directory will be returned to for every typescript in the entire CSM installation.
 
    ```bash
-   linux:usb# script -af csm-install-usb.$(date +%Y-%m-%d).txt
-   linux:usb# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   linux# script -af csm-install-usb.$(date +%Y-%m-%d).txt
+   linux# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
 1. The CSM software release should be downloaded and expanded for use.
@@ -47,15 +47,14 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    > Note: Expansion of the tarball may take more than 45 minutes.
 
-   The rest of this procedure will use the CSM_RELEASE variable and expect to have the
-   contents of the CSM software release tarball plus any patches or hotfixes.
+   The rest of this procedure will use the `CSM_RELEASE` and `CSM_PATH` variables.
 
    ```bash
-   linux:usb# CSM_RELEASE=csm-x.y.z
-   linux:usb# echo $CSM_RELEASE
-   linux:usb# tar -zxvf ${CSM_RELEASE}.tar.gz
-   linux:usb# ls -l ${CSM_RELEASE}
-   linux:usb# CSM_PATH=$(pwd)/${CSM_RELEASE}
+   linux# CSM_RELEASE=csm-x.y.z
+   linux# echo $CSM_RELEASE
+   linux# tar -zxvf ${CSM_RELEASE}.tar.gz
+   linux# ls -l ${CSM_RELEASE}
+   linux# CSM_PATH=$(pwd)/${CSM_RELEASE}
    ```
 
    The ISO and other files are now available in the directory from the extracted CSM tar.
@@ -63,7 +62,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 1. Install/upgrade CSI; check if a newer version was included in the tar-ball.
 
    ```bash
-   linux:usb# rpm -Uvh $(find ./${CSM_RELEASE}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
+   linux# rpm -Uvh $(find ./${CSM_RELEASE}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
 
 1. Download and install/upgrade the documentation RPM. If this machine does not have direct internet
@@ -74,7 +73,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 1. Show the version of CSI installed.
 
    ```bash
-   linux:usb# csi version
+   linux# csi version
    ```
 
    Expected output looks similar to the following:
@@ -92,7 +91,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 1. Configure zypper with the `embedded` repository from the CSM release.
 
    ```bash
-   linux:usb# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
+   linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
    ```
 
 1. Install podman or docker to support container tools required to generated
@@ -104,14 +103,14 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    * Install `podman` and `podman-cni-config` packages:
 
      ```bash
-     linux:usb# zypper in --repo ${CSM_RELEASE}-embedded -y podman podman-cni-config
+     linux# zypper in --repo ${CSM_RELEASE}-embedded -y podman podman-cni-config
      ```
 
    Or one may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
    ```bash
-   linux:usb# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/x86_64/podman-*.x86_64.rpm
-   linux:usb# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/noarch/podman-cni-config-*.noarch.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/x86_64/podman-*.x86_64.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/noarch/podman-cni-config-*.noarch.rpm
    ```
 
 1. Install lsscsi to view attached storage devices.
@@ -122,22 +121,16 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    * Install `lsscsi` package:
 
      ```bash
-     linux:usb# zypper in --repo ${CSM_RELEASE}-embedded -y lsscsi
+     linux# zypper in --repo ${CSM_RELEASE}-embedded -y lsscsi
      ```
 
    Or one may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
    ```bash
-   linux:usb# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/x86_64/lsscsi-*.x86_64.rpm
+   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/x86_64/lsscsi-*.x86_64.rpm
    ```
 
-
-1. Although not strictly required, the procedures for setting up the
-   `site-init` directory recommend persisting `site-init` files in a Git
-   repository.
-
-   Follow the procedure in [Prepare Site Init](prepare_site_init.md) to set up the site-init directory for your system.
-
+1. Follow the procedure in [Prepare Site Init](prepare_site_init.md) to set up the `site-init` directory for your system.
 
 <a name="create-the-bootable-media"></a>
 ### 2. Create the Bootable Media
@@ -150,7 +143,7 @@ which device that is.
     This example shows the USB device is /dev/sdd on the host.
 
     ```bash
-    linux:usb# lsscsi
+    linux# lsscsi
     ```
 
     Expected output looks similar to the following:
@@ -167,7 +160,7 @@ which device that is.
     Set a variable with your disk to avoid mistakes:
 
     ```bash
-    linux:usb# export USB=/dev/sd<disk_letter>
+    linux# export USB=/dev/sd<disk_letter>
     ```
 
 1. Format the USB device
@@ -175,7 +168,7 @@ which device that is.
     On Linux using the CSI application:
 
     ```bash
-    linux:usb# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+    linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
     ```
 
     > Note: If the previous command fails with this error message, this indicates that this Linux computer does not have the checkmedia RPM installed. In that case, the RPM can be installed and `csi pit format` can be run again
@@ -186,14 +179,14 @@ which device that is.
     >   1.  Install the missing rpms
     >
     >   ```bash
-    >   linux:usb# zypper in --repo ${CSM_RELEASE}-embedded -y libmediacheck5 checkmedia
-    >   linux:usb# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+    >   linux# zypper in --repo ${CSM_RELEASE}-embedded -y libmediacheck5 checkmedia
+    >   linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
     >   ```
 
     On MacOS using the bash script:
 
     ```bash
-    macos:usb# ./cray-site-init/write-livecd.sh $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+    macos# ./cray-site-init/write-livecd.sh $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
     ```
 
     > NOTE: At this point the USB device is usable in any server with an x86_64 architecture based CPU. The remaining steps help add the installation data and enable SSH on boot.
@@ -201,14 +194,14 @@ which device that is.
 1. Mount the configuration and persistent data partition:
 
     ```bash
-    linux:usb# mkdir -pv /mnt/{cow,pitdata}
-    linux:usb# mount -vL cow /mnt/cow && mount -vL PITDATA /mnt/pitdata
+    linux# mkdir -pv /mnt/{cow,pitdata}
+    linux# mount -vL cow /mnt/cow && mount -vL PITDATA /mnt/pitdata
     ```
 
 1.  Copy and extract the tarball (compressed) into the USB:
     ```bash
-    linux:usb# cp -v ${CSM_PATH}.tar.gz /mnt/pitdata/
-    linux:usb# tar -zxvf ${CSM_PATH}.tar.gz -C /mnt/pitdata/
+    linux# cp -v ${CSM_PATH}.tar.gz /mnt/pitdata/
+    linux# tar -zxvf ${CSM_PATH}.tar.gz -C /mnt/pitdata/
     ```
 
 The USB device is now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
@@ -235,8 +228,8 @@ Some files are needed for generating the configuration payload. See these topics
 1. Change into the preparation directory plus necessary PIT directories (for later):
 
    ```bash
-   linux:usb# mkdir -pv /mnt/pitdata/admin /mnt/pitdata/prep /mnt/pitdata/configs /mnt/pitdata/data/{k8s,ceph}
-   linux:usb# cd /mnt/pitdata/prep
+   linux# mkdir -pv /mnt/pitdata/admin /mnt/pitdata/prep /mnt/pitdata/configs /mnt/pitdata/data/{k8s,ceph}
+   linux# cd /mnt/pitdata/prep
    ```
 
 1. Pull these files into the current working directory, or create them if this is a first-time/initial install:
@@ -322,7 +315,7 @@ Some files are needed for generating the configuration payload. See these topics
       >   {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >   ```
 
-   1. Skip the next step and continue to [prepare site init](#prepare_site_init).
+   1. Skip the next step and continue to [prepare site init](#prepare-site-init).
 
 <a name="first-timeinitial-installs-bare-metal"></a>
 ##### 3.1.b First-Time/Initial Installs (bare-metal)
@@ -354,7 +347,7 @@ Some files are needed for generating the configuration payload. See these topics
       ```
 
    1. Generate the system config:
-      > **`NOTE`** the provided command below is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary sifnificatnly depending on ones system and site configuration.
+      > **`NOTE`** the provided command below is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary significatnly depending on ones system and site configuration.
       
       ```bash
       linux:/mnt/pitdata/prep# csi config init \
@@ -428,9 +421,9 @@ Some files are needed for generating the configuration payload. See these topics
       >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >    ```
 
-   1. Continue to the next step to [prepare site init](#prepare_site_init).
+   1. Continue to the next step to [prepare site init](#prepare-site-init).
       
-<a name="prepare_site_init"></a>
+<a name="prepare-site-init"></a>
 #### 3.2 Prepare Site Init
 
 > **`NOTE`**: It is assumed at this point that `/mnt/pitdata` is still mounted on the linux system, this is important as the following procedure depends on that mount existing.  
@@ -655,7 +648,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 1. Set the same variables from the `csi config init` step from earlier, and then invoke "PIT init" to setup the PIT server for deploying NCNs.
     > The data partition is set to `fsopt=noauto` to facilitate LiveCDs over virtual-ISO mount. USB installations need to mount this manually.
-   > **`NOTE`** `pit-init` will re-run `csi config init`, copy all generated files into place, apply the CA patch, and finally restart daemons. This will also re-print the `metalid.sh` content incase it was skipped in the previous step. **Re-installs** can skip running `csi config init` entirely and simply run `pit-init.sh` after gathering CSI input files into `/var/www/ephemeral/prep`.
+   > **`NOTE`** `pit-init` will re-run `csi config init`, copy all generated files into place, apply the CA patch, and finally restart daemons. This will also re-print the `metalid.sh` content in case it was skipped in the previous step. **Re-installs** can skip running `csi config init` entirely and simply run `pit-init.sh` after gathering CSI input files into `/var/www/ephemeral/prep`.
    
     ```bash
     pit# export SYSTEM_NAME=eniac
@@ -672,7 +665,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 1. Set shell environment variables.
 
-   The CSM_RELEASE and CSM_PATH variables will be used later.
+   The `CSM_RELEASE` and `CSM_PATH` variables will be used later.
 
    ```bash
    pit# cd /var/www/ephemeral
@@ -684,7 +677,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 1. Install Goss Tests and Server
 
-   The following assumes the CSM_PATH environment variable is set to the absolute path of the unpacked CSM release.
+   The following assumes the `CSM_PATH` environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
    pit:/var/www/ephemeral# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "goss-servers*.rpm" | sort -V | tail -1)

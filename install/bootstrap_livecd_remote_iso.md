@@ -212,7 +212,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     pit# mkdir -v admin prep prep/admin configs data
     ```
 
-1. Quit the typescript session with the `exit` command, copy the file (csm-install-remoteis.<date>.txt) from its initial location to the newly created directory, and restart the typescript.
+1. Quit the typescript session with the `exit` command, copy the file (csm-install-remoteiso.<date>.txt) from its initial location to the newly created directory, and restart the typescript.
 
     ```bash
     pit# exit # The typescript
@@ -440,7 +440,7 @@ Some files are needed for generating the configuration payload. See these topics
       ```
 
    1. Generate the system config:
-      > **`NOTE`** the provided command below is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary sifnificatnly depending on ones system and site configuration.
+      > **`NOTE`** the provided command below is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary significatnly depending on ones system and site configuration.
 
       ```bash
       pit:/var/www/ephemeral/prep/# csi config init \
@@ -540,7 +540,7 @@ Finally, cleanup the shim:
 ### 5. Bring-up the PIT Services and Validate PIT Health
 
 1. Set the same variables from the `csi config init` step from earlier, and then invoke "PIT init" to setup the PIT server for deploying NCNs.
-   > **`NOTE`** `pit-init` will re-run `csi config init`, copy all generated files into place, apply the CA patch, and finally restart daemons. This will also re-print the `metalid.sh` content incase it was skipped in the previous step. **Re-installs** can skip running `csi config init` entirely and simply run `pit-init.sh` after gathering CSI input files into `/var/www/ephemeral/prep`.
+   > **`NOTE`** `pit-init` will re-run `csi config init`, copy all generated files into place, apply the CA patch, and finally restart daemons. This will also re-print the `metalid.sh` content in case it was skipped in the previous step. **Re-installs** can skip running `csi config init` entirely and simply run `pit-init.sh` after gathering CSI input files into `/var/www/ephemeral/prep`.
 
     ```bash
     pit# export USERNAME=root
