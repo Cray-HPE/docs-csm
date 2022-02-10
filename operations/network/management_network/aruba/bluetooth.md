@@ -54,8 +54,8 @@ Enabled             : No
 ## Expected Results 
 
 1. The USB mounts properly
-1. You can see and connect to the Bluetooth PAN
-1. You can edit the configuration via the Bluetooth connection 
+1. Administrators can see and connect to the Bluetooth PAN
+1. Administrators can edit the configuration via the Bluetooth connection 
 1. The output of the show commands looks correct
 
 [[Back to Index](../index.md)

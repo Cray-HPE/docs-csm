@@ -24,8 +24,8 @@ switch# show ip dns
 
 ## Expected Results 
 
-1. You can configure the DNS client 
+1. Administrators can configure the DNS client 
 1. The output is correct
-1. You can ping the device
+1. Administrators can ping the device
 
 [Back to Index](../index.md)

@@ -1,33 +1,34 @@
-# Link aggregation group (LAG) 
+# Link Aggregation Group (LAG) 
 
 Link Aggregation allows you to assign multiple physical links to one logical link that functions as a single, higher-speed link providing dramatically increased bandwidth. 
 
-Relevant Configuration 
+## Configuration Commands 
 
-Create and configure the LAG interface 
+Create and configure the LAG interface: 
 
-```
+```bash
 switch(config)# interface lag LAG 
 switch(config-lag-if)# no shutdown 
 switch(config-lag-if)# lacp mode active 
 ```
 
-Associate member links with the LAG interface switch(config)# interface IFACE
+Associate member links with the LAG interface:
 
-```
+```bash
+switch(config)# interface IFACE
 switch(config-if)# no shutdown 
 switch(config-if)# lag LAG 
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
-```
+```bash
 switch# show lacp <interfaces|aggregates|configuration>
 ```
 
-Example Output 
+## Example Output 
 
-```
+```bash
 switch# show interface lag1
 Aggregate-name lag1
 Aggregated-interfaces : 1/1/1 1/1/4
@@ -77,10 +78,10 @@ Aggregate mode        : active
 F - Aggregable I - Individual
 ```
 
-Expected Results 
+## Expected Results 
 
-* Step 1: You can create and configure a LAG 
-* Step 2: You can add ports to a LAG
-* Step 3: You can configure a LAG interface  
+1. Administrators can create and configure a LAG
+2. Administrators can add ports to a LAG
+3. Administrators can configure a LAG interface  
 	
 [Back to Index](../index.md)

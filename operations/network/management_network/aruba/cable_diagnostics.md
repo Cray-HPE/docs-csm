@@ -34,7 +34,7 @@ IFNAME
 
 ## Expected Results 
 
-1. You can enter diagnostics mode successfully
-1. You can test the cable and see the results in the CLI output 
+1. Administrators can enter diagnostics mode successfully
+1. Administrators can test the cable and see the results in the CLI output 
 
 [Back to Index](index_aruba.md)

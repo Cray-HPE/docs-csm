@@ -50,10 +50,10 @@ switch# show bgp all [summary|neighbors]
 
 ## Expected Results
  
-1. You can configure BGP on the switch
-2. You can create the network statements and the routes are in the routing table
-3. You can configure a BGP neighbor that uses an MD5 encrypted password
-4. You can validate the BGP relationship is established and that the network statement is advertised to the peer
+1. Administrators can configure BGP on the switch
+2. Administrators can create the network statements and the routes are in the routing table
+3. Administrators can configure a BGP neighbor that uses an MD5 encrypted password
+4. Administrators can validate the BGP relationship is established and that the network statement is advertised to the peer
 5. Soft reconfiguration is enabled
 
 [Back to Index](index_aruba.md)
