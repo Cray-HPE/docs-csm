@@ -2,7 +2,7 @@
 
 This page provides directions on constructing the `switch_metadata.csv` file.
 
-This file is manually created to include information about all spine, leaf, CDU, and aggregation switches in the system.
+This file is manually created to include information about all spine, leaf-bmc, CDU, and leaf switches in the system.
 None of the Slingshot switches for the HSN should be included in this file.
 
 The file should have the following format, in ascending order by Xname:
@@ -11,8 +11,8 @@ The file should have the following format, in ascending order by Xname:
 Switch Xname,Type,Brand
 d0w1,CDU,Dell
 d0w2,CDU,Dell
-x3000c0w38,Leaf,Dell
-x3000c0w36,Leaf,Dell
+x3000c0w38,leafBMC,Dell
+x3000c0w36,leafBMC,Dell
 x3000c0h33s1,Spine,Mellanox
 x3000c0h34s1,Spine,Mellanox
 ```
@@ -23,8 +23,8 @@ The above file would lead to this pairing between component name and hostname:
 | --------- | -------------- |
 | sw-spine-001 | x3000c0h33s1 |
 | sw-spine-002 | x3000c0h34s1 |
-| sw-leaf-001 | x3000c0w38 |
-| sw-leaf-002 | x3000c0w36 |
+| sw-leaf-bmc-001 | x3000c0w38 |
+| sw-leaf-bmc-002 | x3000c0w36 |
 | sw-cdu-001 | d0w1 |
 | sw-cdu-002 | d0w2 |
 
@@ -53,7 +53,7 @@ There may be other switches in a specific SHCD, but the general guidelines for a
 
 #### Format
 
-Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXcCwW`. CDU switches use `dDwW`.
+Spine and leaf switches use the format `xXcChHsS`. leaf-bmc switches use `xXcCwW`. CDU switches use `dDwW`.
 
 #### Reference Diagram for Subsequent Sections
 
@@ -66,7 +66,7 @@ Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXc
     
     Look for the following :
     
-    - The slot number(s) for the leaf switches (usually 48-port switches)
+    - The slot number(s) for the leaf-bmc switches (usually 48-port switches)
         
         - In the above diagram this is x3000u22
     
@@ -75,7 +75,7 @@ Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXc
         - In the above diagram this is x3000u23R and x3000u23L (two side-by-side switches)
         - Newer side-by-side switches use slot numbers of s1 and s2 instead of R and L
 
-2. Each spine or aggregation switch will follow this format: `xXcChHsS`
+2. Each spine or leaf switch will follow this format: `xXcChHsS`
     
     > This format also applies to CDU switches that are in a River cabinet that make connections to an adjacent Hill cabinet.
 
@@ -84,7 +84,7 @@ Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXc
     - hH : where "H" is the slot number in the cabinet (height)
     - sS : where "S" is the horizontal space number'
 
-3. Each leaf switch will follow this format: `xXcCwW`:
+3. Each leaf-bmc switch will follow this format: `xXcCwW`:
     
     - xX : where "X" is the River cabinet identification number (the figure above is "3000")
     - cC : where "C" is the chassis identification number. This should be "0".
@@ -97,7 +97,7 @@ Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXc
     - dD : where "D" is the Coolant Distribution Unit (CDU)
     - wW : where "W" is the management switch in a CDU
 
-5. Each item in the file is either of type `Aggregation`, `CDU`, `Leaf`, or `Spine`.
+5. Each item in the file is either of type `leaf`, `CDU`, `leaf-bmc`, or `Spine`.
 
 6. Each line in the file must denote the Brand, either `Dell`, `Mellanox`, or `Aruba`.
 
@@ -111,42 +111,42 @@ See the following example files for reference.
 
 #### Examples
 
-> __Use case:__ 2 Aruba CDU Switches, 2 Aruba leaf switches, 4 Aruba aggregation switches, and 2 Aruba spine switches:
+> __Use case:__ 2 Aruba CDU Switches, 2 Aruba leaf-bmc switches, 4 Aruba leaf switches, and 2 Aruba spine switches:
 
 ```bash
 pit# cat example_switch_metadata.csv
 Switch Xname,Type,Brand
 d0w1,CDU,Aruba
 d0w2,CDU,Aruba
-x3000c0w31,Leaf,Aruba
-x3000c0w32,Leaf,Aruba
-x3000c0h33s1,Aggregation,Aruba
-x3000c0h34s1,Aggregation,Aruba
-x3000c0h35s1,Aggregation,Aruba
-x3000c0h36s1,Aggregation,Aruba
+x3000c0w31,leafBMC,Aruba
+x3000c0w32,leafBMC,Aruba
+x3000c0h33s1,leaf,Aruba
+x3000c0h34s1,leaf,Aruba
+x3000c0h35s1,leaf,Aruba
+x3000c0h36s1,leaf,Aruba
 x3000c0h37s1,Spine,Aruba
 x3000c0h38s1,Spine,Aruba
 ```
 
-> __Use case:__ 2 Dell CDU switches, 2 Dell leaf switches, and 2 Mellanox spine switches:
+> __Use case:__ 2 Dell CDU switches, 2 Dell leaf-bmc switches, and 2 Mellanox spine switches:
 
 ```bash
 Switch Xname,Type,Brand
 d0w1,CDU,Dell
 d0w2,CDU,Dell
-x3000c0w36,Leaf,Dell
-x3000c0w38,Leaf,Dell
+x3000c0w36,leafBMC,Dell
+x3000c0w38,leafBMC,Dell
 x3000c0h33s1,Spine,Mellanox
 x3000c0h34s1,Spine,Mellanox
 ```
 
-> __Use case:__ 2 Dell leaf switches and 2 Mellanox switches in the same slot number:
+> __Use case:__ 2 Dell leaf-bmc switches and 2 Mellanox switches in the same slot number:
 
 ```bash
 pit# cat example_switch_metadata.csv
 Switch Xname,Type,Brand
-x3000c0w38,Leaf,Dell
-x3000c0w36,Leaf,Dell
+x3000c0w38,leafBMC,Dell
+x3000c0w36,leafBMC,Dell
 x3000c0h33s1,Spine,Mellanox
 x3000c0h33s2,Spine,Mellanox
 ```

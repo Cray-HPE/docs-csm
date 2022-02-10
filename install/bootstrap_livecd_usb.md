@@ -391,7 +391,6 @@ Some files are needed for generating the configuration payload. See these topics
           --cabinets-yaml cabinets.yaml \
           --hmn-mtn-cidr 10.104.0.0/17 \
           --nmn-mtn-cidr 10.100.0.0/17 \
-          --bgp-peers aggregation
             
       # Verify the newly generated configuration payload's `system_config.yaml` matches the current version of CSI.
       # NOTE: Keep this new system_config.yaml somewhere safe to facilitate re-installs.
@@ -416,7 +415,6 @@ Some files are needed for generating the configuration payload. See these topics
       > 1. The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help`
       > 1. For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. If one are using a `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
       > 1. An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
-      > 1. By default, spine switches are used as MetalLB peers. Use `--bgp-peers aggregation` to use aggregation switches instead.
       
       > **`SPECIAL/IGNORABLE WARNINGS`** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored:
       > 
