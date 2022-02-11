@@ -130,26 +130,6 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/x86_64/lsscsi-*.x86_64.rpm
    ```
 
-1. Although not strictly required, the procedures for setting up the
-   `site-init` directory recommend persisting `site-init` files in a Git
-   repository.
-
-   Git RPMs are included in the `embedded` repository in the CSM release and
-   may be installed in your pre-LiveCD environment using `zypper` as follows:
-
-   * Install `git` package:
-
-     ```bash
-     linux:usb# zypper in --repo ${CSM_RELEASE}-embedded -y git
-     ```
-
-   Or one may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `${CSM_PATH}/rpm/embedded` directory.
-   ```bash
-   linux:usb# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/x86_64/git-core-*.x86_64.rpm
-   linux:usb# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Development-Tools/15-SP2/x86_64/update/x86_64/git-*.x86_64.rpm
-   ```
-
 <a name="create-the-bootable-media"></a>
 ### 2. Create the Bootable Media
 
@@ -446,7 +426,13 @@ Some files are needed for generating the configuration payload. See these topics
 
 > **`NOTE`**: It is assumed at this point that `/mnt/pitdata` is still mounted on the linux system, this is important as the following procedure depends on that mount existing.  
 
-Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for your system.
+1. Install Git if not already installed (recommended).
+
+    Although not strictly required, the procedures for setting up the
+   `site-init` directory recommend persisting `site-init` files in a Git
+   repository.
+
+1. Follow all of the [Prepare Site Init](prepare_site_init.md) procedures.
 
 <a name="prepopulate-livecd-daemons-configuration-and-ncn-artifacts"></a>
 ### 4. Prepopulate LiveCD Daemons Configuration and NCN Artifacts
