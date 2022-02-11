@@ -510,44 +510,49 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
  > **NOTE:** If the system uses Gigabyte or Intel hardware, skip this section.
 
 Configure DNS and NTP on the BMC for each management node **except `ncn-m001`**. 
+However, the commands in this section are all run **on** `ncn-m001`.
 
-The commands in this section are all run on `ncn-m001`, but they are being run **for** 
-every management node **except `ncn-m001`**. That is, the `NCN` variable in the first step
-will end up being set to every NCN name **except** `ncn-m001`.
+1. Set environment variables.
 
-Carry out the following steps for every NCN **except** `ncn-m001`:
-
-1. Set environment variables. 
-
-    Make sure to set the appropriate value for the `IPMI_PASSWORD` variable and `NCN` variable.
-
-    This example is for `ncn-m002`, but you will be repeating this procedure for every NCN **except** `ncn-m001`.
+    Set the `IPMI_PASSWORD` and `USERNAME` variables to the BMC credentials for your NCNs.
+    
+    > Using `read -s` for this prevents the credentials from being echoed to the screen
 
     ```bash
-    ncn-m001# export IPMI_PASSWORD=changeme
-    ncn-m001# export USERNAME=root
-    ncn-m001# NCN=ncn-m002
+    ncn-m001# read -s IPMI_PASSWORD
+    ncn-m001# read -s USERNAME
+    ncn-m001# export IPMI_PASSWORD USERNAME
     ```
 
-1. Disable DHCP and configure NTP on the BMC using data from cloud-init.
+1. Set `BMCS` variable to list of the BMCs for all master nodes, worker nodes, and storage nodes, 
+   except `ncn-m001-mgmt`:
 
     ```bash
-    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${NCN}-mgmt" -S -n
+    ncn-m001# BMCS=$(grep -Eo "[[:space:]]ncn-[msw][0-9][0-9][0-9]-mgmt([.]|[[:space:]]|$)" /etc/hosts | 
+                        sed 's/^.*\(ncn-[msw][0-9][0-9][0-9]-mgmt\).*$/\1/' | 
+                        sort -u | 
+                        grep -v "^ncn-m001-mgmt$")
+    ncn-m001# echo $BMCS
     ```
 
-1. Configure DNS on the BMC using data from cloud-init.
+1. Run the following to loop through all of the BMCs (except `ncn-m001-mgmt`) and apply the desired settings.
 
     ```bash
-    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${NCN}-mgmt" -d
+    ncn-m001# for BMC in $BMCS ; do
+                echo "$BMC: Disabling DHCP and configure NTP on the BMC using data from cloud-init"
+                /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -S -n
+                echo
+                echo "$BMC: Configuring DNS on the BMC using data from cloud-init"
+                /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -d
+                echo
+                echo "$BMC: Showing settings"
+                /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -s
+                echo
+                echo "Press enter to proceed to next BMC, or control-C to abort"
+                echo
+                read
+            done ; echo "Configuration completed on all NCN BMCs"
     ```
-
-1. Show the settings of the BMC, if desired:
-
-    ```bash
-    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${NCN}-mgmt" -s
-    ```
-
-1. Repeat the previous steps for all remaining NCNs **except `ncn-m001`**.
 
 <a name="next-topic"></a>
 ### 7. Next Topic
