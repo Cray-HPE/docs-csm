@@ -367,6 +367,7 @@ if [[ -z "$(yq r "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential')" 
         yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.url_safe' yes
     fi
 fi
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-nexus.sealedSecrets[+]' "{{ kubernetes.sealed_secrets['nexus-admin-credential'] | toYaml }}"
 
 # remove cray-keycloak-gatekeeper
 yq d -i "$c" 'spec.kubernetes.services.cray-keycloak-gatekeeper'
