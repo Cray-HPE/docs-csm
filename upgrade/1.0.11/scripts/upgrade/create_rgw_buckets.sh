@@ -23,7 +23,34 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
+function ssh_keygen_keyscan() {
+    local upgrade_ncn ncn_ip known_hosts
+    known_hosts="/root/.ssh/known_hosts"
+    sed -i 's@pdsh.*@@' $known_hosts
+    upgrade_ncn="$1"
+    ncn_ip=$(host ${upgrade_ncn} | awk '{ print $NF }')
+    [ -n "${ncn_ip}" ]
+    # Because we may be called without set -e, we should check return codes after running commands
+    [ $? -ne 0 ] && return 1
+    echo "${upgrade_ncn} IP address is ${ncn_ip}"
+    ssh-keygen -R "${upgrade_ncn}" -f "${known_hosts}"
+    [ $? -ne 0 ] && return 1
+    ssh-keygen -R "${ncn_ip}" -f "${known_hosts}"
+    [ $? -ne 0 ] && return 1
+    ssh-keyscan -H "${upgrade_ncn},${ncn_ip}" >> "${known_hosts}"
+    return $?
+}
+
 num_storage_nodes=$(printf "%03d" $(craysys metadata get num_storage_nodes))
+truncate /root/.ssh/known_hosts --size=0
+
+for node_num in $(seq 1 "$num_storage_nodes"); do
+  nodename=$(printf "ncn-s%03d" "$node_num")
+  ssh_keygen_keyscan "${nodename}"
+  nodename=$(printf "ncn-s%03d.nmn" "$node_num")
+  ssh_keygen_keyscan "${nodename}"
+done
+
 sed -i "s/LASTNODE/$num_storage_nodes/g" /etc/ansible/hosts
 
 source /etc/ansible/boto3_ansible/bin/activate
