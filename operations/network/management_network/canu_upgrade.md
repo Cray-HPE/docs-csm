@@ -6,7 +6,7 @@
     - [Generate Switch Config](generate_switch_configs.md)
 
 ### Mellanox
-Compare the generated 1.0 configs with the 1.2 generated configs.
+Compare 1.0 and 1.2 generated configs.
 ```
 canu validate switch config --running ./1.0/sw-spine-001.cfg --generated ./1.2/sw-spine-001.cfg --vendor mellanox
 - banner motd "
