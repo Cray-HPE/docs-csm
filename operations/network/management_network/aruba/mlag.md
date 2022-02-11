@@ -38,9 +38,9 @@ switch(config-if)# end
 
 Expected Results 
 
-* Step 1: You can configure MCLAG
-* Step 2: You can create an MCLAG interface
-* Step 3: You can add ports to the MCLAG interface
+* Step 1: Administrators can configure MCLAG
+* Step 2: Administrators can create an MCLAG interface
+* Step 3: Administrators can add ports to the MCLAG interface
 * Step 4: The output of the show commands is correct   
 
 	

@@ -1,4 +1,4 @@
-# Using CANU to generate full network configuration
+# Use CANU to Generate Full Network Configuration
 
 CANU can also generate switch config for all the switches on a network.
 
@@ -8,17 +8,15 @@ The instructions are exactly the same as the above except there will not be a ho
 
 To generate switch config run: 
 
-
 ```
 canu -s 1.5 network config -a full --shcd FILENAME.xlsx --tabs 'INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES' --corners 'J14,T44,J14,T48,J14,T24,J14,T23' --csi-folder /CSI/OUTPUT/FOLDER/ADDRESS --folder FOLDERNAME
 ```
-
 
 ```
 canu -s 1.3 network config -a full --shcd FILENAME.xlsx --tabs INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES --corners J14,T44,J14,T48,J14,T24,J14,T23 --csi-folder /CSI/OUTPUT/FOLDER/ADDRESS --folder switch_config
 ```
 
-### Expected results: 
+### Expected Results 
 
 	sw-spine-001 Config Generated
 	sw-spine-002 Config Generated

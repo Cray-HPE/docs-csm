@@ -1,47 +1,50 @@
-# Virtual switching extension (VSX) 
+# Virtual Switching Extension (VSX) 
 
-Aruba's Virtual Switching Extension (VSX) is a solution that integrates two independent ArubaOS-CX switches into an active/active virtualized high availability (HA) solution. The two switch peers utilize a connected link for control and data. This solution allows the switches to present as one virtualized switch in critical areas. Configuration synchronization is one aspect of this VSX solution where the primary switch configuration is synced to the secondary switch. This allows for pseudo-single pane of glass configuration and helps keep key configuration pieces in sync as operational changes are made. Since the solution is primarily for HA, it is expected that the vast majority of configuration policy is the same across both peers. 
+Aruba’s Virtual Switching Extension (VSX) is a solution that integrates two independent ArubaOS-CX switches into an active/active virtualized high availability (HA) solution. The two switch peers utilize a connected link for control and data. This solution allows the switches to present as one virtualized switch in critical areas.
 
-Relevant Configuration 
+Configuration synchronization is one aspect of this VSX solution where the primary switch configuration is synced to the secondary switch. This allows for pseudo-single pane of glass configuration and helps keep key configuration pieces in sync as operational changes are made. Since the solution is primarily for HA, it is expected that the vast majority of configuration policy is the same across both peers. 
 
-Enable VSX 
+## Configuration Commands 
 
-```
+Enable VSX: 
+
+```bash
 switch(config)# vsx
 ```
 
-Give the device a role of primary or secondary 
+Give the device a role of primary or secondary: 
 
-```
+```bash
 switch(config-vsx)# role <primary|secondary>
 ```
 
-Configure the VSX keepalive between the two VSX peer switches 
+Configure the VSX keepalive between the two VSX peer switches: 
 
-```
+```bash
 switch(config-vsx)# keepalive peer PEER-IP source SRC-IP
 ```
 
-Select a physical or LAG interface to become the inter-switch-link 
+Select a physical or LAG interface to become the inter-switch-link: 
 
-```
+```bash
 switch(config-vsx)# inter-switch-link IFACE
 ```
 
-Create Multi-Chassis LAG interfaces 
+Create Multi-Chassis LAG interfaces: 
 
-```
+```bash
 switch(config)# interface lag LAG multi-chassis
 ```
 
-Associate the physical interfaces with the LAG 
-```
+Associate the physical interfaces with the LAG: 
+
+```bash
 switch(config-if)# lag LAG
 ```
 
-Synchronize global configurations 
+Synchronize global configurations: 
 
-```
+```bash
 switch(config-vsx)# vsx-sync [aaa] [sflow] [snmp] [static-routes] [time] [copp-policy] [dns]
 [mclag-interfaces] [qos-global] [ssh]
 Synchronize interface memberships 
@@ -60,15 +63,15 @@ switch(config-portgroup)# vsx-sync
 switch(config-addrgroup)# vsx-sync
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
-```
+```bash
 switch# show vsx <brief|configuration|status> [config-sync]
 ```
 
-Example Output 
+## Example Output 
 
-```
+```bash
 switch(config)# int 1/1/49
 switch(config-if)# description VSX KEEPALIVE LINK
 switch(config-if)# no shut
@@ -184,13 +187,12 @@ access-list ip secure_mcast_sources
     30 permit any any any
 ```
 
-Expected Results 
+## Expected Results 
 
-* Step 1: You can configure vsx
-* Step 2: You can create a multi-chassis interface
-* Step 3: You can add ports to the multi-chassis interface
-* Step 4: You can configure the VLANs and ACLs for synchronization
-* Step 5: Everything is synchronized from the primary to the secondary  
-
+1. Administrators can configure VSX
+2. Administrators can create a multi-chassis interface
+3. Administrators can add ports to the multi-chassis interface
+4. Administrators can configure the VLANs and ACLs for synchronization
+5. Everything is synchronized from the primary to the secondary    
 	
 [Back to Index](../index.md)

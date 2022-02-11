@@ -43,18 +43,18 @@ Documentation for CANU can be found at https://github.com/Cray-HPE/canu
 
 ### Examples of Network topologies:
 
-   1. [Very Large](./very_large.md)
-   1. [Large](./large.md)
-   1. [Medium](./medium.md)
-   1. [Small](./small.md)
+   1. [Very Large](network_topologies.md#very-large)
+   2. [Large](network_topologies.md#large)
+   3. [Medium](network_topologies.md#medium)
+   4. [Small](network_topologies.md#small)
 
 ### Network design explained
    1. [What is Spine-Leaf Architecture?](./spine_leaf_architecture.md)
-   1. [How does a spine-leaf architecture differ from traditional network designs?](./spine_leaf_architecture2.md)
-   1. [Why are spine-leaf architectures becoming more popular?](./spine_leaf_architecture3.md)
+   1. [How Does a Spine-Leaf Architecture Differ From Traditional Network Designs?](./spine_leaf_architecture.md)
+   1. [Why are Spine-Leaf Architectures Becoming More Popular?](./spine_leaf_architecture.md)
    1. [What is VSX?](./vsx_architecture.md)
-   1. [What are the benefits of VSX?](./vsx_architecture2.md)
-   1. [VSX summary](./vsx_architecture3.md)
+   1. [What are the benefits of VSX?](./vsx_architecture.md)
+   1. [VSX summary](./vsx_architecture.md)
 
 ### Built in High Availability
    1. [VSX: MCLAG link HA	](./mclag_link_ha.md)

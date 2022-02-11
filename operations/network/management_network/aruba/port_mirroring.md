@@ -1,67 +1,58 @@
-# Port mirroring 
+# Port Mirroring 
 
 Port mirroring, also known as Switched Port Analyzer (SPAN), enables traffic on one or more switch interfaces to be replicated on another interface for purposes such as monitoring. 
 
-Relevant Configuration 
+## Configuration Commands
 
-Create and Enable a Mirror Session 
+Create and enable a mirror session: 
 
-```
+```bash
 switch(config)# mirror session <1-4> switch(config-mirror)# enable
 ```
 
-Configure a Source Interface
+Configure a source interface:
 
-```
+```bash
 switch(config-mirror)# source interface IFACE <both|tx|rx>
 ```
 
-Configure an Interface as the Mirror Destination
+Configure an interface as the mirror destination:
 
-``` 
+```bash
 switch(config-mirror)# destination interface IFACE 
 ```
 
-Configure a Tunnel as the Mirror Destination (ERSPAN) 
+Configure a tunnel as the mirror destination (ERSPAN): 
 
-```
+```bash
 switch(config-mirror)# destination tunnel IP-ADDR source IP-ADDR [id VALUE> [vrf VRF]
 ```
 
-Configure CPU as the Mirror Destination
+Configure CPU as the mirror destination:
 
-``` 
+```bash 
 switch(config-mirror)# destination cpu
 ```
 
-Generate and Copy the Internal Packet Capture 
+Generate and copy the internal packet capture: 
 
-```
+```bash
 switch# diagnostics
 switch# diag utilities tshark [file]
 switch# copy tshark-pcap REMOTE-URL vrf VRF
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
-```
+```bash
 switch# show mirror <1-4>
 ```
-
-Expected Results 
-
-* Step 1: You can configure port mirroring
-* (Step 2: The output of the show commands is correct
-* Step 3: You can see the traffic for the source interface on the sniffer 
  
+> **NOTES:**
+> * Administrators can set the Switch CPU as the destination for mirrored traffic. Keep in mind that all the traffic from an  interface will be sent to the CPU and could create high CPU utilization. 
+> * It is not recommended to use this method on taking captures in live network as the amount of traffic could negatively hit the CPU; so in those cases, the recommendation would be to use external capture station.
 
-
-NOTES: 
-
-* You can set the Switch CPU as the destination for mirrored traffic. Keep in mind that all the traffic from an interface will be sent to the CPU and could create high CPU utilization. 
-* We advise against using this method on taking captures in live network as the amount of traffic could negatively hit the CPU, so in those cases recommendation would be to use external capture station.
-
-Doing a port capture directly on device: 
+To do a port capture directly on device: 
 
 ```
 8325(config)# mirror session 1
@@ -74,7 +65,7 @@ Doing a port capture directly on device:
 8325(config-mirror-1)# enable
 ```
 
-To start TCPDUMP from shell.
+To start TCPDUMP from shell:
 
 ```
 8325# start-shell
@@ -111,8 +102,13 @@ listening on MirrorRxNet, link-type EN10MB (Ethernet), capture size 262144 bytes
 0 packets dropped by kernel
 ```
  
-NOTE: 
+> **NOTE:** host/dst arguments to the `tcpdump` command can help to restrict the filter to only capture the desired packets.
 
-* host/dst arguments to the tcpdump command can help to restrict the filter to only capture packets you need.
+## Expected Results 
+
+1. Administrators can configure port mirroring
+2. The output of the `show` commands is correct
+3. Administrators can see the traffic for the source interface on the sniffer 
+
 
 [Back to Index](../index.md)

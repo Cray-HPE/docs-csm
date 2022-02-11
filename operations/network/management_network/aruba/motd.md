@@ -35,7 +35,7 @@ that spans multiple lines.
 
 Expected Results: 
 
-* Step 1: You can create the MOTD banner
+* Step 1: Administrators can create the MOTD banner
 * Step 2: The output of the MOTD banner looks correct 
 
 
