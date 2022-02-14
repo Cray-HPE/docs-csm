@@ -21,8 +21,8 @@ Once the CSM installation has completed, other product streams for the HPE Cray 
    1. [Collect MAC Addresses for NCNs](#collect_mac_addresses_for_ncns)
    1. [Deploy Management Nodes](#deploy_management_nodes)
    1. [Install CSM Services](#install_csm_services)
-   1. [Validate CSM Health Before PIT Node Redeploy](#validate_csm_health_before_pit_redeploy)
-   1. [Redeploy PIT Node](#redeploy_pit_node)
+   1. [Validate CSM Health Before Final NCN Deployment](#validate_csm_health_before_final_ncn_deploy)
+   1. [Deploy Final NCN](#deploy_final_ncn)
    1. [Configure Administrative Access](#configure_administrative_access)
    1. [Validate CSM Health](#validate_csm_health)
    1. [Configure Prometheus Alert Notifications](#configure_prometheus_alert_notifications)
@@ -82,10 +82,10 @@ sections, but there is also a general troubleshooting topic.
    work smoothly for nodes from all vendors. It is recommended to try the RemoteISO first.  
    
       Use one of these procedures to bootstrap the PIT node from the LiveCD.  
-      * [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
+      * [Bootstrap PIT Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
          * **Gigabyte BMCs** should not use the RemoteISO method.
          * **Intel BMCs** should not use the RemoteISO method.
-      * [Bootstrap Pit Node from LiveCD USB](bootstrap_livecd_usb.md) (fallback)
+      * [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md) (fallback)
 
       Using the LiveCD USB method requires a USB 3.0 device with at least 1TB of space to create a bootable LiveCD.
    <a name="configure_management_network"></a>
@@ -125,7 +125,7 @@ sections, but there is also a general troubleshooting topic.
    the other management nodes can be deployed. This procedure will boot all of the management nodes, initialize
    Ceph storage on the storage nodes, and start the Kubernetes cluster on all of the worker nodes and the master nodes,
    except for the PIT node. The PIT node will join Kubernetes after it is rebooted later in 
-   [Redeploy PIT Node](#redeploy_pit_node).  
+   [Deploy Final NCN](#deploy_final_ncn).  
    
       See [Deploy Management Nodes](deploy_management_nodes.md)  
    <a name="install_csm_services"></a>
@@ -136,40 +136,36 @@ sections, but there is also a general troubleshooting topic.
    repository will be populated with artifacts; containerized CSM services will be installed; and a few other configuration steps taken.  
    
       See [Install CSM Services](install_csm_services.md)
-   <a name="validate_csm_health_before_pit_redeploy"></a>
+   <a name="validate_csm_health_before_final_ncn_deploy"></a>
 
-   1. Validate CSM Health Before PIT Node Redeploy
+   1. Validate CSM Health Before Final NCN Deployment
 
-      After installing all of the CSM services now would be an good time to validate the health of the
-      management nodes and all CSM services. The advantage in doing it now is that if there are any problems
-      detected with the core infrastructure or the nodes, it is easy to rewind the installation to
-      [Deploy Management Nodes](#deploy_management_nodes) because the PIT node has not yet been redeployed.
+      After installing all of the CSM services, now validate the health of the management nodes and all CSM services. 
+      The reason to do it now is that if there are any problems detected with the core infrastructure or the nodes, it is
+      easy to rewind the installation to [Deploy Management Nodes](#deploy_management_nodes) because the PIT node has not
+      yet been redeployed. In addition, redeploying the PIT node successfully requires several CSM services to be working
+      properly, so validating this is important.
 
-      After installing all of the CSM services, wait at least 15 minutes to let the various Kubernetes
-      resources get initialized and started before trying to validate CSM health. Because there are a number
-      of dependencies between them, some services are not expected to work immediately after the install
-      script completes. Some of the time waiting can be spent preparing the `cray` CLI.  
-      
-      **Note**: If doing the CSM validation at this point, some of the tests which use the 'cray' CLI will fail
-      until these two procedures have been done. These tests, such as Hardware State Manager Discovery Validation, 
-      Booting the CSM Barebones Image on compute nodes, or the UAS/UAI Tests can be skipped until after the PIT 
-      node has been redeployed.  
-   
-      To enable the 'cray' CLI, these two procedures could be done now.  
-      
-      * Optional [Configure Keycloak Account](configure_administrative_access.md#configure_keycloak_account)
-      * Optional [Configure the Cray Command Line Interface (cray CLI)](configure_administrative_access.md#configure_cray_cli)
+      **Note**: At this point of the install, the `cray` CLI has not yet been configured. Some of the tests (Hardware State
+      Manager Discovery Validation, Booting the CSM Barebones Image on compute nodes, UAS/UAI) require it to be configured
+      in order to run. These tests may be skipped until after the PIT node has been redeployed, but **this is not recommended**.
 
-      To run the CSM health checks now, see [Validate CSM Health](../operations/validate_csm_health.md)
-   <a name="redeploy_pit_node"></a>
+      To enable the 'cray' CLI in order to execute those tests, follow these two procedures before performing the CSM health
+      validation:
 
-   1. Redeploy PIT Node
+         1. [Configure Keycloak Account](configure_administrative_access.md#configure_keycloak_account)
+         1. [Configure the Cray Command Line Interface (cray CLI)](configure_administrative_access.md#configure_cray_cli)
+
+      To run the CSM health checks, see [Validate CSM Health](../operations/validate_csm_health.md)
+   <a name="deploy_final_ncn"></a>
+
+   1. Deploy Final NCN
 
       Now that all CSM services have been installed and the CSM health checks completed, with the possible exception
       of Booting the CSM Barebones Image and the UAS/UAI tests, the PIT node can be rebooted to leave the LiveCD
       environment and assume its intended role as one the Kubernetes master nodes.
 
-      See [Redeploy PIT Node](redeploy_pit_node.md)
+      See [Deploy Final NCN](deploy_final_ncn.md)
    <a name="configure_administrative_access"></a>
 
    1. Configure Administrative Access

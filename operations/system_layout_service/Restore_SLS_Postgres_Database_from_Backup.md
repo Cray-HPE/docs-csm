@@ -125,7 +125,7 @@ This procedure can be used to restore the SLS Postgres database from a previousl
     > **THIS WILL DELETE AND REPLACE THE CURRENT CONTENTS OF THE SLS DATABASE**
 
     ```bash
-    ncn# /usr/share/doc/csm/operations/system_layout_service/scripts/restore_sls_postgres_from_backup.sh
+    ncn# /usr/share/doc/csm/scripts/operations/system_layout_service/restore_sls_postgres_from_backup.sh
 
     ```
 

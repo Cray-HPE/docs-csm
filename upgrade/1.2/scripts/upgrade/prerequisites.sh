@@ -1,7 +1,28 @@
 #!/bin/bash
 #
-# Copyright 2021 Hewlett Packard Enterprise Development LP
+# MIT License
 #
+# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+
 set -e
 BASEDIR=$(dirname $0)
 . ${BASEDIR}/upgrade-state.sh
@@ -231,8 +252,9 @@ state_name="UPDATE_DOC_RPM"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    if [[ ! -f docs-csm-latest.noarch.rpm ]]; then
-        echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: $(pwd)"
+    if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
+        echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: /root"
+        exit 1
     fi
     cp /root/docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
     record_state ${state_name} $(hostname)
@@ -526,17 +548,64 @@ state_name="PRECACHE_NEXUS_IMAGES"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
+
+    images=$(kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.images_to_cache' | grep "sonatype\|proxy\|busybox")
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    pdsh -b -S -w $(grep -oP 'ncn-w\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'for image in sonatype/nexus3:3.25.0 dtr.dev.cray.com/cray/proxyv2:1.6.13-cray1 dtr.dev.cray.com/baseos/busybox:1 docker.io/sonatype/nexus3:3.25.0 dtr.dev.cray.com/cray/cray-nexus-setup:0.3.2; do crictl pull $image; done'
+    output=$(pdsh -b -S -w $(grep -oP 'ncn-w\w\d+' /etc/hosts | sort -u | tr -t '\n' ',') 'for image in '$images'; do crictl pull $image; done' 2>&1)
+    echo "$output"
+
+    if [[ "$output" == *"failed"* ]]; then
+      echo ""
+      echo "Verify the images which failed in the output above are available in nexus."
+      exit 1
+    fi
 
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
-# Take cps deployment snapshot
-cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r '.[] | .node' || true)
-echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
+# Take cps deployment snapshot (if cps installed)
+set +e
+kubectl get pod -n services | grep -q cray-cps
+if [ "$?" -eq 0 ]; then
+  cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r '.[] | .node' || true)
+  echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
+fi
+set -e
+
+state_name="ADD_MTL_ROUTES"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+
+    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    NCNS=$(grep -oP 'ncn-w\w\d+|ncn-s\w\d+' /etc/hosts | sort -u)
+    Ncount=$(echo $NCNS | wc -w)
+    HOSTS=$(echo $NCNS | tr -t ' ' ',')
+    GATEWAY=$(cray sls networks describe NMN --format json | \
+        jq -r '.ExtraProperties.Subnets[]|select(.FullName=="NMN Management Network Infrastructure")|.Gateway')
+    SUBNET=$(cray sls networks describe MTL --format json | \
+        jq -r '.ExtraProperties.Subnets[]|select(.FullName=="MTL Management Network Infrastructure")|.CIDR')
+    DEVICE="vlan002"
+    ip addr show | grep $DEVICE
+    if [[ $? -ne 0 ]]; then
+        DEVICE="bond0.nmn0"
+    fi
+    pdsh -w $HOSTS ip route add $SUBNET via $GATEWAY dev $DEVICE
+    Rcount=$(pdsh -w $HOSTS ip route show | grep $SUBNET | wc -l)
+    pdsh -w $HOSTS ip route show | grep $SUBNET
+
+    if [[ $Rcount -ne $Ncount ]]; then
+        echo ""
+        echo "Could not set routes on all worker and storage nodes."
+        exit 1
+    fi
+
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
 
 # Alert the user of action to take for cleanup
 if [[ ${#UNMOUNTS[@]} -ne 0 ]]; then

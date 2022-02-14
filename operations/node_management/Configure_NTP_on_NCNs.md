@@ -1,17 +1,8 @@
 # Configure NTP on NCNs
 
-The management nodes serve Network Time Protocol (NTP) at stratum 3, and all management nodes
-peer with each other. Currently, the PIT node booted from the LiveCD does not run NTP, but the
-other nodes do when they are booted. NTP is currently allowed on the Node Management Network (NMN)
-and Hardware Management Network (HMN).
+The management nodes serve Network Time Protocol (NTP) at stratum 10, except for ncn-m001, which serves at stratum 8 (or lower if an upstream NTP server is set), and all management nodes peer with each other. 
 
-The NTP peers are set in the `data.json` file, which is normally created during an initial
-install. To configure NTP, edit this file, restart basecamp, and then reboot the nodes to apply
-the change.
-
-If NTP is not configured in the `data.json` file, the NCNs will simply peer with themselves
-until an upstream NTP server is configured. The time on the NCNs may not match the
-current time at the site, but they will stay in sync with each other.
+Until an upstream NTP server is configured. The time on the NCNs may not match the current time at the site, but they will stay in sync with each other.
 
 ### Topics:
    * [Change NTP Config](#change_ntp_config)
@@ -156,6 +147,80 @@ The `chrony` logs are stored at `/var/log/chrony/`
    ```bash
    ncn# chronyc makestep
    ```
+
+<a name="known-issues-and-bugs"></a>
+
+#### Known Issues and Bugs
+
+As the NTP setup switched from a homegrown shell script into a native cloud-init module, there were some bugs that ended up shipping with older versions of CSM.  If customers upgraded, these bugs carried forward and can present problems with time syncing correctly.  This section aims to describe how to diagnose and fix these.
+
+These issues all relate to certain nodes not being in a correct state.
+
+##### Correct State
+
+ncn-m001 should have these important settings in `/etc/chrony.d/cray.conf`:
+
+```
+server time.nist.gov iburst trust
+# or 
+pool time.nist.gov iburst
+# ncn-m001 should NOT use itself as a server and is known to cause issues
+
+# this allows the clock to step itself during a restart without affecting running apps if it drifts more than 1 second
+initstepslew 1 time.nist.gov
+# the other ncns are set to 10, so in the event of a tie, ncn-m001 is chosen as the leader
+local stratum 8 orphan
+```
+
+These settings ensure there is a low-stratum NTP server that ncn-m001 has access to.  ncn-m001 also has
+
+```
+# all non-ncn-m001 NCNs use ncn-m001 as their server, and they trust it
+server ncn-m001 iburst trust
+# no pools are on the other ncns
+# ncn-m001 should NOT use itself as a server and is known to cause issues
+
+# this allows the clock to step itself during a restart without affecting running apps if it drifts more than 1 second
+initstepslew 1 ncn-m001
+# the ncns peer with each other at a high stratum, and choose ncn-m001 (statum 8 or lower) in the event of a tie
+local stratum 10 orphan
+
+# The nodes should have a max of 9 peers and should not include themselves in the list
+peer ncn-m001 minpoll -2 maxpoll 9 iburst
+peer ncn-m003 minpoll -2 maxpoll 9 iburst
+peer ncn-s001 minpoll -2 maxpoll 9 iburst
+peer ncn-s002 minpoll -2 maxpoll 9 iburst
+peer ncn-s003 minpoll -2 maxpoll 9 iburst
+peer ncn-w001 minpoll -2 maxpoll 9 iburst
+peer ncn-w002 minpoll -2 maxpoll 9 iburst
+peer ncn-w003 minpoll -2 maxpoll 9 iburst
+```
+
+##### Quick Fixes
+
+###### Fix ncn-m001
+
+Most of the bugs from 0.9.x+ carried forward with upgrades.  Most commonly, ncn-m001 is the problem as it either does not have a valid upstream, or has a bad config.  This can be quickly remedied by running three commands to download the latest `cc_ntp` module, downloading an updated template, and re-running cloud-init.
+
+```
+wget -O /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/cloudinit/config/cc_ntp.py
+wget -O /etc/cloud/templates/chrony.conf.cray.tmpl https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/config/cray.conf.j2
+cloud-init single --name ntp --frequency always
+```
+
+###### Fix other NCNs
+
+The other NCNs sometimes have the wrong stratum set or are missing the `initstepslew` directive.  These can be added in fairly quickly with some `sed` commands:
+
+```
+# increase the stratum on non-ncn-m001 NCNs
+sed -i "s/local stratum 3 orphan/local stratum 10 orphan/" /etc/chrony.d/cray.conf
+# add a new line after the logchange directive
+sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 ncn-m001" /etc/chrony.d/cray.conf
+# restart
+systemctl restart chronyd
+```
+
 
 <a name="customize_ntp"></a>
 ### Customize NTP
@@ -347,4 +412,4 @@ You need to adjust the node images so that they also boot in the local timezone.
     pit# set-sqfs-links.sh
     ```
 
-1. Make a note that when performing the [csi handoff of NCN boot artifacts in Redeploy PIT Node](../../install/redeploy_pit_node.md#ncn-boot-artifacts-hand-off), you must be sure to specify these new images. Otherwise ncn-m001 will use the default timezone when it boots, and subsequent reboots of the other NCNs will also lose the customized timezone changes.
+1. Make a note that when performing the [csi handoff of NCN boot artifacts in Deploy Final NCN](../../install/deploy_final_ncn.md#ncn-boot-artifacts-hand-off), you must be sure to specify these new images. Otherwise ncn-m001 will use the default timezone when it boots, and subsequent reboots of the other NCNs will also lose the customized timezone changes.

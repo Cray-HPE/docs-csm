@@ -1,4 +1,4 @@
-# Redeploy PIT Node
+# Deploy Final NCN
 
 The following procedure contains information for rebooting and deploying the management node that is currently
 hosting the LiveCD. This assists with remote-console setup to aid in observing the reboot. At the end of this procedure, the
@@ -29,12 +29,12 @@ These services must be healthy before the reboot of the LiveCD can take place. I
 Required Platform Services:
 
    * Utility Storage (Ceph)
-   * cray-bss
-   * cray-dhcp-kea
-   * cray-dns-unbound
-   * cray-ipxe
-   * cray-sls
-   * cray-tftp
+   * `cray-bss`
+   * `cray-dhcp-kea`
+   * `cray-dns-unbound`
+   * `cray-ipxe`
+   * `cray-sls`
+   * `cray-tftp`
 
 <a name="notice-of-danger"></a>
 ### 2. Notice of Danger
@@ -66,40 +66,28 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 <a name="start-hand-off"></a>
 #### 3.1 Start Hand-Off
 
-1. Start a new typescript (quit )
-   (Run this on the PIT node as root, the prompts are removed for easier copy-paste; this step is only useful as a whole)
-   - Exit the current typescript if one has arrived here from the prior pages:
+1. Start a new typescript (quit).
+    
+    1. Exit the current typescript if one has arrived here from the prior pages:
 
-      ```bash
-      pit# exit
-      pit# popd
-      ```
+        ```bash
+        pit# exit
+        pit# popd
+        ```
 
-   - Start the new script
+    1. Start the new script on the PIT node.
 
-      ```bash
-      mkdir -pv /var/www/ephemeral/prep/admin
-      pushd /var/www/ephemeral/prep/admin
-      script -af csm-livecd-reboot.$(date +%Y-%m-%d).txt
-      export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
-      ```
+        > The prompts below are removed for easier copy-paste. This step is only useful as a whole.
+
+        ```bash
+        mkdir -pv /var/www/ephemeral/prep/admin
+        pushd /var/www/ephemeral/prep/admin
+        script -af csm-livecd-reboot.$(date +%Y-%m-%d).txt
+        export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+        ```
+
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-pre-reboot` breakpoint.
 
-1. Check for workarounds in the `/opt/cray/csm/workarounds/livecd-pre-reboot` directory. If there are any
-workarounds in that directory, run those when the workaround instructs. Timing is critical to ensure properly loaded
-data, so run them only when indicated. Instructions are in the `README` files.
-    
-    ```bash
-    # Example
-    pit# ls /opt/cray/csm/workarounds/livecd-pre-reboot
-    ```
-    
-    If there is a workaround here, the output looks similar to the following:
-
-    ```
-    CASMINST-435
-    ```
-    
 1. Upload SLS file.
     > Note the system name environment variable `SYSTEM_NAME` must be set
 
@@ -109,7 +97,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
     Expected output looks similar to the following:
 
-    ```
+    ```text
     2021/02/02 14:05:15 Retrieving S3 credentials ( sls-s3-credentials ) for SLS
     2021/02/02 14:05:15 Uploading SLS file: /var/www/ephemeral/prep/eniac/sls_input_file.json
     2021/02/02 14:05:15 Successfully uploaded SLS Input File.
@@ -153,7 +141,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
             pit# export cephdir=$artdir/ceph
             ```
 
-    1. After setting the variables above per your situation, run:
+    1. After setting the variables in the previous step, run the following command.
 
         ```bash
         pit# csi handoff ncn-images \
@@ -192,7 +180,21 @@ data, so run them only when indicated. Instructions are in the `README` files.
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server="10.92.100.225 10.94.100.225" --limit Global
     ```
 
-1. Upload the bootstrap information; note this denotes information that should always be kept together in order to fresh-install the system again.
+1.  Preserve the ConMan console logs for the other NCNs if desired. (optional)
+
+    You may wish to preserve them for later examination, but it is not required. However, **this is the last chance to do so**. They will be lost after rebooting the PIT node.
+    
+    The following commands will copy them into a directory that will be backed up before the PIT node reboot.
+    
+    ```bash
+    
+    pit# mkdir -pv /var/www/ephemeral/prep/logs
+    pit# cp -prv /var/log/conman /var/www/ephemeral/prep/logs/conman.$(date +%Y-%m-%d_%H-%M-%S)
+    ```
+
+1. Upload the bootstrap information.
+   
+    > **NOTE:** This denotes information that should always be kept together in order to fresh-install the system again.
 
     1. Log in; setup passwordless SSH _to_ the PIT node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the PIT (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
 
@@ -205,7 +207,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
         pit# chmod 600 /root/.ssh/authorized_keys
         ```
 
-    1. Run this to create the backup; in one swoop, log in to `ncn-m002` and `ncn-m003` and pull the files off the PIT. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
+    1. Run this backup files from the PIT to `ncn-m002` and `ncn-m003`. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
 
         ```bash
         pit# ssh ncn-m002 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
@@ -229,13 +231,11 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
 1. Set and trim the boot order for **master nodes** using one of the following guides:
 
-    > `**NOTE**` If your boot order from `efibootmgr` looks like one of [these examples](../background/ncn_boot_workflow.md#examples) then you can proceed to the next step.
+    This only needs to be done for the PIT node, not for any of the other NCNs. For the procedures to do this, see [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
 
-    - [Gigabyte Technology](../background/ncn_boot_workflow.md#gigabyte-technology)
-    - [Hewlett Packard Enterprise](../background/ncn_boot_workflow.md#hewlett-packard-enterprise)
-    - [Intel Corporation](../background/ncn_boot_workflow.md#intel-corporation)
-
-1. Tell the node to PXE boot on the next boot ... use `efibootmgr` to set next boot device to the first PXE boot option. This step assumes the boot order was set up by the immediate, previous step.
+1. Tell the PIT node to PXE boot on the next boot. 
+   
+    Use `efibootmgr` to set the next boot device to the first PXE boot option. This step assumes the boot order was set up in the previous step.
 
     ```bash
     pit# efibootmgr -n $(efibootmgr | grep -Ei "ip(v4|4)" | awk '{print $1}' | head -n 1 | tr -d Boot*) | grep -i bootnext
@@ -250,9 +250,9 @@ data, so run them only when indicated. Instructions are in the `README` files.
         pit# ssh ncn-m002 'ip a show bond0.cmn0 | grep inet'
         ```
 
-        _Expected output (values may differ)_:
+        _Expected output will look similar to the following (exact values may differ)_:
 
-        ```
+        ```text
         inet 10.102.11.13/24 brd 10.102.11.255 scope global bond0.cmn0
         inet6 fe80::1602:ecff:fed9:7820/64 scope link
         ```
@@ -267,13 +267,14 @@ data, so run them only when indicated. Instructions are in the `README` files.
     > Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN.
     If the reboot successfully deploys the LiveCD, this terminal can be exited.
 
-    > **POINT OF NO RETURN** The next step will wipe the underlying nodes disks clean, it will ignore USB devices. RemoteISOs are at risk here, even though a backup has been
+
+    > **POINT OF NO RETURN:** The next step will wipe the underlying nodes disks clean, it will ignore USB devices. RemoteISOs are at risk here; even though a backup has been
     > performed of the PIT node, we cannot simply boot back to the same state.
     > This is the last step before rebooting the node.
 
 1. **`IN-PLACE WORKAROUND`** This is a workaround until the auto-wipe feature ceases preventing the creation of the 3rd disk (CASMINST-169. This step is safe to do even after auto-wipe is fixed.
 
-    > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**, the USB device can only be wiped by operators at this point in the install. The USB device are never wiped by the CSM installer.
+    > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**. USB devices can only be wiped by operators at this point in the install. USB devices are never wiped by the CSM installer.
 
     1. Select disks to wipe; SATA/NVME/SAS
 
@@ -289,7 +290,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
         Expected output looks similar to the following:
 
-        ```
+        ```text
         /dev/sda /dev/sdb /dev/sdc
         ```
 
@@ -301,7 +302,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
         If any disks had labels present, output looks similar to the following:
 
-        ```
+        ```text
         /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
         /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
         /dev/sda: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
@@ -313,8 +314,6 @@ data, so run them only when indicated. Instructions are in the `README` files.
         ```
 
         If there was any wiping done, output should appear similar to the snippet above. If this is re-run, there may be no output or an ignorable error.
-    
-1. If you wish to preserve your conman console logs for the other NCNs, this is your last chance to do so. They will be lost after rebooting. They are located in `/var/log/conman` on the PIT node.
 
 1. Quit the typescript session with the `exit` command and copy the file (`csm-livecd-reboot.<date>.txt`) to a location on another server for reference later.
 
@@ -343,13 +342,15 @@ data, so run them only when indicated. Instructions are in the `README` files.
     pit# reboot
     ```
 
-1. The node should boot, acquire its hostname (i.e. `ncn-m001`), and run cloud-init.
+1. Wait for the node to boot, acquire its hostname (i.e. `ncn-m001`), and run cloud-init.
+
+    If all of that happens successfully, **skip the rest of this step and proceed to the next step**. Otherwise, use the following information to remediate the problems.
 
     > **`NOTE`**: If the nodes has PXE boot issues, such as getting PXE errors or not pulling the ipxe.efi binary, see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
     > **`NOTE`**: If `ncn-m001` did not run all the cloud-init scripts, the following commands need to be run **(but only in that circumstance)**.
 
-    1. Run the following commands:
+    * Run the following commands on `ncn-m001` **ONLY IF** `ncn-m001` did not run all the cloud-init scripts:
 
         ```bash
         ncn-m001# cloud-init clean
@@ -370,8 +371,9 @@ data, so run them only when indicated. Instructions are in the `README` files.
     ncn-m002# ssh ncn-m001
     ```
 
-1. If the pre-NCN deployment password change method was **not** used, then the root password on `ncn-m001` needs to be changed now.
-   Run `passwd` on ncn-m001 and complete the prompts.
+1. Change the root password on `ncn-m001` if the pre-NCN deployment password change method was not used.
+   
+   Run `passwd` on `ncn-m001` and complete the prompts.
 
     ```bash
     ncn-m001# passwd
@@ -445,21 +447,11 @@ data, so run them only when indicated. Instructions are in the `README` files.
     ncn-m001# rm -v /etc/zypp/repos.d/* && zypper ms --remote --disable
     ```
 
-1. Install the latest documentation and workaround packages. This will require external access.
+1. Download and install/upgrade the workaround and documentation RPMs. 
 
-   If this machine does not have direct Internet access, these RPMs will need to be externally downloaded and then copied to the system.
+    If this machine does not have direct internet access these RPMs will need to be externally downloaded and then copied to this machine.
 
-   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
-   were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
-
-   ```bash
-   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
-   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
-   linux# scp -p docs-csm-*rpm csm-install-workarounds-*rpm ncn-m001:/root
-   linux# ssh ncn-m001
-   ncn-m001# rpm -Uvh docs-csm-latest.noarch.rpm
-   ncn-m001# rpm -Uvh csm-install-workarounds-latest.noarch.rpm
-   ```
+    **Important:** To ensure that the latest workarounds and documentation updates are available, see [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds)
 
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-post-reboot` breakpoint.
 
@@ -507,7 +499,7 @@ data, so run them only when indicated. Instructions are in the `README` files.
     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1.  **`IN-PLACE WORKAROUND`** Set the wipe safeguard to allow safe net-reboots. **This will set the safeguard on all NCNs**.
+1.  Set the wipe safeguard to allow safe net-reboots on all NCNs.
 
     ```bash
     ncn-m001# /tmp/csi handoff bss-update-param --set metal.no-wipe=1
@@ -520,35 +512,48 @@ data, so run them only when indicated. Instructions are in the `README` files.
 
  > **`NOTE`** If your system is Gigabyte or Intel hardware, skip this section.
 
-Perform the following steps on every NCN **except ncn-m001**.
+Configure DNS and NTP on the BMC for each management node **except `ncn-m001`**. 
 
-1. Set environment variables. Make sure to set the appropriate value for the `IPMI_PASSWORD` variable.
+The commands in this section are all run on `ncn-m001`, but they are being run **for** 
+every management node **except `ncn-m001`**. That is, the `NCN` variable in the first step
+will end up being set to every NCN name **except** `ncn-m001`.
+
+Carry out the following steps for every NCN **except** `ncn-m001`:
+
+1. Set environment variables. 
+
+    Make sure to set the appropriate value for the `IPMI_PASSWORD` variable and `NCN` variable.
+
+    This example is for `ncn-m002`, but you will be repeating this procedure for every NCN **except** `ncn-m001`.
 
     ```bash
-    ncn# export IPMI_PASSWORD=changeme
-    ncn# export USERNAME=root
+    ncn-m001# export IPMI_PASSWORD=changeme
+    ncn-m001# export USERNAME=root
+    ncn-m001# NCN=ncn-m002
     ```
 
 1. Disable DHCP and configure NTP on the BMC using data from cloud-init.
 
     ```bash
-    ncn# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -S -n
+    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${NCN}-mgmt" -S -n
     ```
 
 1. Configure DNS on the BMC using data from cloud-init.
 
     ```bash
-    ncn# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -d
+    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${NCN}-mgmt" -d
     ```
 
 1. Show the settings of the BMC, if desired:
 
     ```bash
-    ncn# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "$(hostname)-mgmt" -s
+    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${NCN}-mgmt" -s
     ```
 
+1. Repeat the previous steps for all remaining NCNs **except `ncn-m001`**.
+
 <a name="next-topic"></a>
-# Next Topic
+### 7. Next Topic
 
    After completing this procedure, the next step is to configure administrative access.
 
