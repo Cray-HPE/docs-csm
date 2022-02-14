@@ -98,9 +98,9 @@ In the event of a problem during the upgrade which may cause the loss of BSS dat
 
    ```bash
    ncn-m001# cray bss bootparameters list --format=json > bss-backup-$(date +%Y-%m-%d).json
-   ncn-m001: cp bss-backup-$(date +%Y-%m-%d).json /var/opt/cray/config-data/
+   ncn-m001# cray artifacts create config-data bss-backup-$(date +%Y-%m-%d).json bss-backup-$(date +%Y-%m-%d).json
    ```
 
-The resulting file needs to be saved in the event that BSS data needs to be restored in the future. 
+The resulting file needs to be saved in the event that BSS data needs to be restored in the future.
 
 Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).
