@@ -19,7 +19,7 @@ Input for `csi config init`:
 
 The `cmn-external-dns` value is the IP address that DNS queries under the combined system-name.site-domain values need to be delegated.
 
-This will be the shared IP address for `services/cray-externaldns-coredns-tcp` and services/cray-externaldns-coredns-udp services, which must be an IP address in the `customer_management_static_metallb_address_pool` subnet defined in the `csi config init` input. See [Customer Access Network \(CMN\)](../customer_access_network/Customer_Access_Network_CMN.md) for more information.
+This will be the shared IP address for `services/cray-externaldns-coredns-tcp` and services/cray-externaldns-coredns-udp services, which must be an IP address in the `customer_management_static_metallb_address_pool` subnet defined in the `csi config init` input. See [Customer Access Network (CAN)](../customer_access_network/Customer_Access_Network_CAN.md) for more information.
 
 Changing this value requires updating the `loadBalancerIP` value of the `services/cray-externaldns-coredns-tcp` and `services/cray-externaldns-coredns-udp` services.
 

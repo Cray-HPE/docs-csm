@@ -16,23 +16,23 @@ __________________________________
 
 ### Switch configuration guides
 
-- [Fresh install](./management_network/fresh_install.md)
+- [Fresh install](fresh_install.md)
    - This is either a first time install or the previous CSM was wiped and requires a new install.
-- [Upgrade](./management_network/upgrade.md)
+- [Upgrade](upgrade.md)
    - Upgrading to a new CSM version.
-- [Re-install](./management_network/reinstall.md)
+- [Re-install](reinstall.md)
    - Reinstalling the same CSM version.
-- [Added Hardware](./management_network/added_hardware.md)
+- [Added Hardware](added_hardware.md)
    - New hardware was added to the system.
-- [Replace Switch](./management_network/replace_switch.md)
+- [Replace Switch](replace_switch.md)
    - Switch failed and needs to be replaced.
 
 ### User guides
 The user guides contain information such as are generic configuration examples, explanation of currently used technologies, topology maps and summary of the network design used in the CSM management network.
 
-- [Aruba](./management_network/aruba/index_aruba.md)
-- [Dell](./management_network/dell/index_aruba.md)
-- [Mellanox](./management_network/mellanox/index_aruba.md)
+- [Aruba](aruba/index.md)
+- [Dell](dell/index.md)
+- [Mellanox](mellanox/index.md)
 
 
 ### CANU:
@@ -43,27 +43,27 @@ Documentation for CANU can be found at:
  https://github.com/Cray-HPE/canu
 
 ### Useful pages
-- [Collect data](./management_network/collect_data.md)
+- [Collect data](collect_data.md)
    - Input data needed to generate switch configs.
-- [Cable Management Network Servers](../../install/cable_management_network_servers.md)
+- [Cable Management Network Servers](../../../install/cable_management_network_servers.md)
    - Shows how servers in CSM should be cabled.
-- [SHCD HMN Tab/HMN Connections Rules](../../install/shcd_hmn_connections_rules.md)
+- [SHCD HMN Tab/HMN Connections Rules](../../../install/shcd_hmn_connections_rules.md)
    - Shows how the HMN tab on the SHCD should be formatted.
-- [SHCD Connection Rules](./management_network/shcd_connection_rules.md)
+- [SHCD Connection Rules](../../../install/shcd_hmn_connections_rules.md)
    - Shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.
-- [Backup custom config](./management_network/backup_custom_config.md)
+- [Backup custom config](backup_custom_config.md)
    - Shows users how to backup configuration that's custom to their system, this include site connections and credentials.
-- [Config management](./management_network/config_management.md)
+- [Config management](config_management.md)
    - Shows users how to save a running config to the switch for backup purposes or to switch between different switch configs.
-- [Validate switch config](./management_network/validate_switch_configs.md)
+- [Validate switch config](validate_switch_configs.md)
    - Compares the configuration on a running system to what is generated.
-- [Wipe management switches](./management_network/wipe_mgmt_switches.md)
+- [Wipe management switches](wipe_mgmt_switches.md)
    - Erase the switch configuration, this is useful for fresh installs.
-- [Generate switch configs](./management_network/generate_switch_configs.md)
+- [Generate switch configs](generate_switch_configs.md)
    - Generate configurations for all management switches.
-- [Manual switch configs](./management_network/manual_switch_configs.md)
+- [Manual switch configs](manual_switch_config.md)
    - Some configuration needs to be done manually (authentication/SNMP).
-- [Validate SHCD](./management_network/validate_shcd.md)
+- [Validate SHCD](validate_shcd.md)
    - Validate the SHCD against the CSM network architecture.
 ### Products Supported
 
@@ -84,7 +84,7 @@ Architecture and naming conventions can be found at:
 https://github.com/Cray-HPE/canu/blob/main/network_modeling/models/cray-network-architecture.yaml
 
 ### Minimum software version requirements
-- [Network Firmware](./management_network/update_management_network_firmware.md)
+- [Network Firmware](firmware/update_management_network_firmware.md)
 
 ### Enhancements
 
