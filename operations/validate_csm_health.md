@@ -100,7 +100,16 @@ Review the output for `Result: FAIL` and follow the instructions provided to res
 * Kubernetes Query BSS Cloud-init for ca-certs
   - This test may fail immediately after platform install. It should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * Kubernetes Velero No Failed Backups
-  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the `velero` command to delete backups from a Kubernetes node to clear this situation. See the output of the test for more details on how to cleanup backups that have failed due to a known interruption.
+  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to delete backups from a Kubernetes node to clear this situation. See the output of the test for more details on how to cleanup backups that have failed due to a known interruption. For example:
+     1. Run the following to find the failed backup.
+        ```bash
+        ncn# kubectl get backups -A -o json | jq -e ‘.items[] | select(.status.phase == “PartiallyFailed”) | .metadata.name’
+        ```
+     1. Delete the backup, where <backup> is replaced with a backup returned in the previous step.
+        ```bash
+        ncn# kubectl delete backups <backup> -n velero
+        ```
+
 * Verify spire-agent is enabled and running
 
   - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker nodes and master nodes), logging errors (via journalctl) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. Even though the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.
