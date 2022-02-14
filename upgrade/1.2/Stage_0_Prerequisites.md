@@ -143,10 +143,11 @@ python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
 
 ## Stage 0.6 - Backup BSS Data
 
-In the event of a problem during the upgrade which may cause the loss of BSS data, perform the following to preserve this data.
+In the event of a problem during the upgrade which may cause the loss of BSS data, perform the following to preserve this data, and back it up to the config-data bucket in your Ceph cluster.
 
    ```bash
-   ncn-m001# cray bss bootparameters list --format=json >bss-backup-$(date +%Y-%m-%d).json
+   ncn-m001# cray bss bootparameters list --format=json > bss-backup-$(date +%Y-%m-%d).json
+   ncn-m001# cray artifacts create config-data bss-backup-$(date +%Y-%m-%d).json bss-backup-$(date +%Y-%m-%d).json
    ```
 
 The resulting file needs to be saved in the event that BSS data needs to be restored in the future.
