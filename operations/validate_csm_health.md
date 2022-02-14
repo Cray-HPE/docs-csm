@@ -454,7 +454,15 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 * K8S Test: Kubernetes Query BSS Cloud-init for ca-certs
   - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * K8S Test: Kubernetes Velero No Failed Backups
-  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the `velero` command to delete backups from a Kubernetes node to clear this situation.
+  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to delete backups from a Kubernetes node to clear this situation. For example:
+     1. Run the following to find the failed backup.
+        ```bash
+        ncn# kubectl get backups -A -o json | jq -e ‘.items[] | select(.status.phase == “PartiallyFailed”) | .metadata.name’
+        ```
+     1. Delete the backup, where <backup> is replaced with a backup returned in the previous step.
+        ```bash
+        ncn# kubectl delete backups <backup> -n velero
+        ```
 
 <a name="check-of-system-management-monitoring-tools"></a>
 ### 1.9 Check of System Management Monitoring Tools
