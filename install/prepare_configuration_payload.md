@@ -64,7 +64,6 @@ For more description of these settings and the default values, see [Default IP A
 | --install-ncn-bond-members p1p1,p10p1 | NICs on each management node to become bond0 |
 | --application-node-config-yaml application_node_config.yaml | Name of `application_node_config.yaml` |
 | --cabinets-yaml cabinets.yaml | Name of `cabinets.yaml` |
-| --bgp-peers aggregation | Override the default BGP peers, using aggregation switches instead of spines |
 | --primary-server-name primary | Desired name for the primary DNS server |
 | --secondary-servers "" | Comma seperated list of FQDN/IP for all DNS servers to be notified on DNS zone update |
 | --notify-zones "" | A comma separated list of DNS zones to transfer |
@@ -97,7 +96,7 @@ command during the installation process.
 | [`application_node_config.yaml`](#application_node_config_yaml) | SHCD | The number and type of application nodes with mapping from the name in the SHCD to the desired hostname |
 | [`hmn_connections.json`](#hmn_connections_json) | SHCD | The network topology for HMN of the entire system |
 | [`ncn_metadata.csv`](#ncn_metadata_csv) | SHCD, other| The number of master, worker, and storage nodes and MAC address information for BMC and bootable NICs |
-| [`switch_metadata.csv`](#switch_metadata_csv) | SHCD | Inventory of all spine, aggregation, CDU, and leaf switches |
+| [`switch_metadata.csv`](#switch_metadata_csv) | SHCD | Inventory of all spine, leaf, CDU, and leaf-bmc switches |
 
 Although some information in these files can be populated from site survey information, the SHCD prepared by
 HPE Cray Manufacturing is the best source of data for `hmn_connections.json`. The `ncn_metadata.csv` does
@@ -156,8 +155,8 @@ See [Create NCN Metadata CSV](create_ncn_metadata_csv.md) for instructions about
 <a name="switch_metadata_csv"></a>
 #### `switch_metadata.csv`
 
-The `switch_metadata.csv` file is manually created to include information about all spine, aggregation, CDU,
-and leaf switches in the system. None of the Slingshot switches for the HSN should be included in this file.
+The `switch_metadata.csv` file is manually created to include information about all spine, leaf, CDU,
+and leaf-bmc switches in the system. None of the Slingshot switches for the HSN should be included in this file.
 
 See [Create Switch Metadata CSV](create_switch_metadata_csv.md) for instructions about creating this file.
 

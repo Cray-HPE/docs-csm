@@ -22,7 +22,6 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [1.3 Check of System Management Monitoring Tools](#check-of-system-management-monitoring-tools)
 - [2. Hardware Management Services Health Checks](#hms-health-checks)
   - [2.1 HMS CT Test Execution](#hms-test-execution)
-  - [2.2 Aruba Switch SNMP Fixup](#hms-aruba-fixup)
   - [2.3 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
     - [2.3.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results)
     - [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues)
@@ -199,19 +198,8 @@ if not. On CT test failures the script will instruct the admin to look at the
 CT test log files. If one or more failures occur, investigate the cause of
 each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
-<a name="hms-aruba-fixup"></a>
-### 2.2 Aruba Switch SNMP Fixup
-
-Systems with Aruba leaf switches sometimes have issues with a known SNMP bug
-which prevents HSM discovery from discovering all HW. At this stage of the
-installation process, a script can be run to detect if this issue is 
-currently affecting the system, and if so, correct it.
-
-Refer to [Air cooled hardware is not getting properly discovered with Aruba leaf switches](../troubleshooting/known_issues/discovery_aruba_snmp_issue.md) for 
-details.
-
 <a name="hms-smd-discovery-validation"></a>
-### 2.3 Hardware State Manager Discovery Validation
+### 2.2 Hardware State Manager Discovery Validation
 
 By this point in the installation process, the Hardware State Manager (HSM) should
 have done its discovery of the system.
@@ -228,7 +216,7 @@ ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
 
 The output will ideally appear as follows, if there are mismatches these will be displayed in the appropriate section of
 the output. Refer to [2.3.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results) and
-[2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
+[2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
 ```bash
 ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
 
@@ -269,7 +257,7 @@ any FAIL information displayed, the script will exit with a non-zero exit
 code. Failure information interpretation is described in the next section.
 
 <a name="hms-smd-discovery-validation-interpreting-results"></a>
-#### 2.3.1 Interpreting results
+#### 2.2.1 Interpreting results
 
 The Cabinet Checks output is divided into three sections:
 
@@ -340,7 +328,7 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
 If it was determined that the mismatch can not be ignored, then proceed onto the the [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
 
 <a name="hms-smd-discovery-validation-known-issues"></a>
-#### 2.3.2 Known Issues
+#### 2.2.2 Known Issues
 
 Known issues that may prevent hardware from getting discovered by Hardware State Manager:
 * [Air cooled hardware is not getting properly discovered with Aruba leaf switches](../troubleshooting/known_issues/discovery_aruba_snmp_issue.md)

@@ -30,19 +30,19 @@ Save the output of the following:
 <a name="hpe_aruba_switch_configuration"></a>
 ### HPE Aruba Switch Configuration
 
-The management network switches should be configured in this order: Spine, Aggregation (if present), CDU (if present), and Leaf.
+The management network switches should be configured in this order: Spine, Leaf (if present), CDU (if present), and Leaf-BMC.
 Only systems with liquid-cooled cabinets will have the CDU switches. Only systems with many nodes in air-cooled cabinets
-will have Aggregation switches.
+will have Leaf switches.
 
 
 <a name="dell_and_mellanox_switch_configuration"></a>
 ### Dell and Mellanox Switch Configuration
 
-The management network switches should be configured in this order: Spine, Aggregation (if present), CDU (if present), and Leaf.
+The management network switches should be configured in this order: Spine, Leaf (if present), CDU (if present), and Leaf-BMC.
 Only systems with liquid-cooled cabinets will have the CDU switches. Only systems with many nodes in air-cooled
-cabinets will have Aggregation switches.
+cabinets will have Leaf switches.
 
-On a typical system, the Mellanox switches are Spine switches and the Dell switches are used for Aggregation, CDU, and Leaf switches.
+On a typical system, the Mellanox switches are Spine switches and the Dell switches are used for Leaf, CDU, and Leaf-BMC switches.
 
 ## Site Connections
 

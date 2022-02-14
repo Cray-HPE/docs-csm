@@ -14,7 +14,7 @@ Results may vary if an unconfigured switch is being used.
 
 ## Procedure
 
-1. Establish an SSH or [Connect to Switch over USB-Serial Cable](connect_to_switch_over_usb_serial_cable.md) to the leaf switch.
+1. Establish an SSH or [Connect to Switch over USB-Serial Cable](connect_to_switch_over_usb_serial_cable.md) to the leaf-bmc switch.
     
     > **NOTE:** These IP addresses are examples; 10.X.0.4 may or may not match the setup.
     
@@ -43,7 +43,7 @@ Results may vary if an unconfigured switch is being used.
     DellOS 10
     ```bash
     # DellOS 10
-    sw-leaf-001# show mac address-table vlan 4
+    sw-leaf-bmc-001# show mac address-table vlan 4
     VlanId	Mac Address		Type		Interface
     4	00:1e:67:98:fe:2c	dynamic		ethernet1/1/11
     4	a4:bf:01:38:f0:b1	dynamic		ethernet1/1/27
@@ -84,7 +84,7 @@ Results may vary if an unconfigured switch is being used.
     DellOS 10
     ```bash
     # DellOS 10
-    sw-leaf-001# show mac address-table interface ethernet 1/1/32
+    sw-leaf-bmc-001# show mac address-table interface ethernet 1/1/32
     VlanId	Mac Address		Type		Interface
     4	a4:bf:01:4d:d9:9a	dynamic		ethernet1/1/32
     ```
@@ -107,12 +107,12 @@ Results may vary if an unconfigured switch is being used.
     DellOS 10
     ```bash
     # DellOS 10
-    sw-leaf-001# show mac address-table
+    sw-leaf-bmc-001# show mac address-table
     VlanId	Mac Address		Type		Interface
     4	a4:bf:01:4d:d9:9a	dynamic		ethernet1/1/32
     ....
     # Onyx and Aruba
-    sw-leaf-001# show mac-address-table
+    sw-leaf-bmc-001# show mac-address-table
     ```
     Aruba AOS-CX
     ```bash
