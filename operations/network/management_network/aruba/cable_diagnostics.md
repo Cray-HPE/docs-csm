@@ -37,4 +37,4 @@ IFNAME
 1. Administrators can enter diagnostics mode successfully
 1. Administrators can test the cable and see the results in the CLI output 
 
-[Back to Index](index_aruba.md)
+[Back to Index](index.md)
