@@ -1,10 +1,6 @@
-# Backing up switch configuration
+# Back Up a Switch Configuration
 
-
-Copies the running configuration or the startup configuration to a remote location as a file.
-
-Relevant configuration
-
+The following command copies the running configuration or the startup configuration to a remote location as a file. 
 
 ```
 switch# copy running-configuration {config://filepath | home://filepath |
