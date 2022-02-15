@@ -1,40 +1,41 @@
-# Performing upgrade on Dell switches
+
+# Perform an Upgrade on Dell Switches
 
 How to perform an upgrade on the Dell switches.
 
-Relevant configuration
+## Configuration Commands
 
-Download the new software image
+Download the new software image:
 
 ```
 switch# image download file-url
 ```
 
-View the current software download status
+View the current software download status:
 
 ```
 switch# show image status
 ```
 
-Install the software image
+Install the software image:
 
 ```
 switch# image install image-url
 ```
 
-View the status of the current software install
+View the status of the current software install:
 
 ```
 switch# show image status
 ```
 
-Change the next boot partition to the standby partition
+Change the next boot partition to the standby partition:
 
 ```
 switch# boot system standby
 ```
 
-Reload the new software image
+Reload the new software image:
 
 ```
 switch# reload
