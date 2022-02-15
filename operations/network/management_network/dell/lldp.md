@@ -52,5 +52,5 @@ Expected Results
 * Step 4: Remote device LLDP information is displayed
 * Step 5: LLDP statistics are displayed
 
-[Back to Index](../index.md)
+[Back to Index](index.md)
 

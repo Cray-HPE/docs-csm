@@ -31,4 +31,4 @@ Expected Results
 * Step 3: You can establish a link with a partner
 * Step 4: You can pass traffic as expected
 
-[Back to Index](../index.md)
+[Back to Index](index.md)

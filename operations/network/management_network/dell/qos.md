@@ -25,4 +25,4 @@ switch(conf-if-eth1/1/1)# trust-map dot1p dot1p-trust-map
 switch(config-sys-qos)# trust-map dot1p dot1p-trust-map
 ```
 
-[Back to Index](../index.md)
+[Back to Index](index.md)

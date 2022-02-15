@@ -16,4 +16,4 @@ Expected Results
 1. Give a loopback interface an IP address.
 1. Validate the configuration using the `show` commands.
 
-[Back to Index](../index.md)
+[Back to Index](index.md)
