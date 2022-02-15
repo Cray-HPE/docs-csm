@@ -1,8 +1,12 @@
-# CSM 1.0.10 to 1.0.11 Upgrade Process
+# CSM 1.0.11 CVE Patch/Upgrade Procedure
 
 ## Introduction
 
-This document is intended to guide an administrator through the upgrade process going from Cray Systems Management v1.0.10 to v1.0.11. When upgrading a system, this top-level README.md file should be followed top to bottom.
+This document is intended to guide an administrator through the process going from Cray Systems Management v1.0.0, v1.0.1 or v1.0.10 to v1.0.11. This top-level README.md file should be followed top to bottom.
+
+## Contents
+
+TODO: Add CVE descriptions here
 
 ## Terminology
 
@@ -25,5 +29,7 @@ upgrade the "stable" NCN.
 - [Stage 1 - Ceph Node Image Upgrade](Stage_1.md)
 - [Stage 2 - Kubernetes Node Image Upgrade](Stage_2.md)
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
+- [Stage 4 - Rollout DNS Unbound Deployment Restart](Stage_4.md)
+- [Stage 5 - Verification](Stage_5.md)
 
 **`Important:`** Please see [Upgrade Troubleshooting](./upgrade_troubleshooting.md) for troubleshooting purposes in the case that you encounter issues.
