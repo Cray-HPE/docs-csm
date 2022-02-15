@@ -37,4 +37,4 @@ switch# copy running-config tftp://192.168.1.10/runcli cli vrf default
 ######################################################################### 100.0%Success
 ```
 
-[Back to Index](index_aruba.md)
+[Back to Index](index.md)
