@@ -15,10 +15,10 @@
         ncn-m001# rpm -Uvh docs-csm-latest.noarch.rpm
         ```
 
-    * Air Gapped
+    * Air Gapped (replace the PATH_TO below with the location of the rpm)
 
         ```bash
-        ncn-m001# cd /root/
+        ncn-m001# cp [PATH_TO_docs-csm-*.noarch.rpm] /root
         ncn-m001# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
         ```
 
@@ -29,7 +29,7 @@ This is a placeholder until the tool is ready to be added to the automation.
 
 ## Stage 0.3 - Upgrade Management Network
 
-- See the  [Management Network User Guide](../../operations/network/index.md) for more information on the management network. 
+- See the  [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network. 
 
 ## Stage 0.4 - Execute Prerequisites Check
 
@@ -98,9 +98,9 @@ In the event of a problem during the upgrade which may cause the loss of BSS dat
 
    ```bash
    ncn-m001# cray bss bootparameters list --format=json > bss-backup-$(date +%Y-%m-%d).json
-   ncn-m001: cp bss-backup-$(date +%Y-%m-%d).json /var/opt/cray/config-data/
+   ncn-m001# cray artifacts create config-data bss-backup-$(date +%Y-%m-%d).json bss-backup-$(date +%Y-%m-%d).json
    ```
 
-The resulting file needs to be saved in the event that BSS data needs to be restored in the future. 
+The resulting file needs to be saved in the event that BSS data needs to be restored in the future.
 
 Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).

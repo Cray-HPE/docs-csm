@@ -88,7 +88,7 @@ The BMC ordinal for the nodes BMC is derived from the NID of the node, by applyi
 For example, the node with NID 17 in slot 10 in cabinet 3000 will have the xname of x3000s10b2n0
 
 #### SHCD
-Example 4 compute nodes in the same chassis with a CMC connected to the network. The compute node chassis is located in slot 17 of cabinet 3000, and the compute node BMCs are connected to ports 33-36 in the management leaf switch in slot 14 of cabinet 3000. Port 32 on the leaf switch is for the CMC in the chassis, refer to [Chassis Management Controller](#chassis-management-controller) section for additional details.
+Example 4 compute nodes in the same chassis with a CMC connected to the network. The compute node chassis is located in slot 17 of cabinet 3000, and the compute node BMCs are connected to ports 33-36 in the management leaf-bmc-bmc switch in slot 14 of cabinet 3000. Port 32 on the leaf-bmc-bmc switch is for the CMC in the chassis, refer to [Chassis Management Controller](#chassis-management-controller) section for additional details.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
@@ -112,7 +112,7 @@ Example 4 compute nodes in the same chassis without a CMC connected to the HMN n
 
 
 #### HMN Connections
-Example 4 compute nodes in the same chassis with the a CMC connected to the network. The compute node chassis is located in slot 17 of cabinet 3000, and the compute node BMCs are connected to ports 33-36 in the management leaf switch in slot 14 of cabinet 3000. The SourceParent for the compute nodes `SubRack-001-CMC` is connected to the port 32 on the leaf switch.
+Example 4 compute nodes in the same chassis with the a CMC connected to the network. The compute node chassis is located in slot 17 of cabinet 3000, and the compute node BMCs are connected to ports 33-36 in the management leaf-bmc-bmc switch in slot 14 of cabinet 3000. The SourceParent for the compute nodes `SubRack-001-CMC` is connected to the port 32 on the leaf-bmc-bmc switch.
 ```json
 {"Source":"nid000001","SourceRack":"x3000","SourceLocation":"u17","SourceSubLocation":"R","SourceParent":"SubRack-001-CMC","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j36"}
 {"Source":"nid000002","SourceRack":"x3000","SourceLocation":"u18","SourceSubLocation":"R","SourceParent":"SubRack-001-CMC","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j35"}
@@ -172,7 +172,7 @@ Compute node with NID 1:
     }
   }
   ```
-  > For Aruba leaf switches the `VendorName` value will be `1/1/36`. Dell leaf switches will have value `ethernet1/1/36`.
+  > For Aruba leaf-bmc switches the `VendorName` value will be `1/1/36`. Dell leaf-bmc switches will have value `ethernet1/1/36`.
 
 Compute node with NID 2:
 * Node:
@@ -209,7 +209,7 @@ Compute node with NID 2:
     }
   }
   ```
-  > For Aruba leaf switches the `VendorName` value will be `1/1/35`. Dell leaf switches will have value `ethernet1/1/35`.
+  > For Aruba leaf-bmc switches the `VendorName` value will be `1/1/35`. Dell leaf-bmc switches will have value `ethernet1/1/35`.
 
 Compute node with NID 3:
 * Node
@@ -246,7 +246,7 @@ Compute node with NID 3:
     }
   }
   ```
-  > For Aruba leaf switches the `VendorName` value will be `1/1/34`. Dell leaf switches will have value `ethernet1/1/34`.
+  > For Aruba leaf-bmc switches the `VendorName` value will be `1/1/34`. Dell leaf-bmc switches will have value `ethernet1/1/34`.
 
 
 Compute node with NID 4:
@@ -284,7 +284,7 @@ Compute node with NID 4:
     }
   }
   ```
-  > For Aruba leaf switches the `VendorName` value will be `1/1/33`. Dell leaf switches will have value `ethernet1/1/33`.
+  > For Aruba leaf-bmc switches the `VendorName` value will be `1/1/33`. Dell leaf-bmc switches will have value `ethernet1/1/33`.
 
 <a name="compute-node-single"></a>
 ### Single node chassis - Apollo 6500 XL675D
@@ -296,7 +296,7 @@ A single compute node chassis needs to match these additional conditions:
 This convention applies to all compute nodes that have a single node in a chassis, such as the Apollo XL675D.
 
 #### SHCD
-A single chassis node with NID 1 located in slot 2 of cabinet 3000. The node's BMC is connected to port 36 of the management leaf switch in slot 40 of cabinet 3000.
+A single chassis node with NID 1 located in slot 2 of cabinet 3000. The node's BMC is connected to port 36 of the management leaf-bmc switch in slot 40 of cabinet 3000.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
@@ -345,7 +345,7 @@ Management Switch Connector:
   }
 }
 ```
-> For Aruba leaf switches the `VendorName` value will be `1/1/36`. Dell leaf switches will have value `ethernet1/1/36`.
+> For Aruba leaf-bmc switches the `VendorName` value will be `1/1/36`. Dell leaf-bmc switches will have value `ethernet1/1/36`.
 
 <a name="compute-node-dual"></a>
 ### Dual node chassis - Apollo 6500 XL645D
@@ -362,7 +362,7 @@ In addition to the top-level compute node naming requirements when they are 2 no
 This convention applies to all compute nodes that have two nodes in a chassis, such as the Apollo XL645D.
 
 #### SHCD
-A compute node chassis with 2 nodes located in slot 8 of cabinet 3000. NID 1 is on the left side of the chassis, and NID 2 is on the right side. The two node BMCs are connected to ports 37 and 38 of the management leaf switch in slot 40 of cabinet 3000.
+A compute node chassis with 2 nodes located in slot 8 of cabinet 3000. NID 1 is on the left side of the chassis, and NID 2 is on the right side. The two node BMCs are connected to ports 37 and 38 of the management leaf-bmc switch in slot 40 of cabinet 3000.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
@@ -413,7 +413,7 @@ Compute node with NID 1:
     }
   }
   ```
-  > For Aruba leaf switches the `VendorName` value will be `1/1/38`. Dell leaf switches will have value `ethernet1/1/38`.
+  > For Aruba leaf-bmc switches the `VendorName` value will be `1/1/38`. Dell leaf-bmc switches will have value `ethernet1/1/38`.
 
 Compute node with NID 2:
 * Node
@@ -450,7 +450,7 @@ Compute node with NID 2:
     }
   }
   ```
-  > For Aruba leaf switches the `VendorName` value will be `1/1/37`. Dell leaf switches will have value `ethernet1/1/37`.
+  > For Aruba leaf-bmc switches the `VendorName` value will be `1/1/37`. Dell leaf-bmc switches will have value `ethernet1/1/37`.
 
 <a name="chassis-management-controller"></a>
 ## Chassis Management Controller (CMC)
@@ -465,7 +465,7 @@ A Chassis Management Controller is a device which can be used to BMCs underneath
 These devices will have the BMC ordinal of 999 for their xnames. Such as x3000c0s10b999.
 
 ### SHCD
-The CMC for the chassis in slot 28 of cabinet 3000 is connected to port 32 of the management leaf switch in slot 22 of cabinet 3000.
+The CMC for the chassis in slot 28 of cabinet 3000 is connected to port 32 of the management leaf-bmc switch in slot 22 of cabinet 3000.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
@@ -505,7 +505,7 @@ Management Switch Connector:
   }
 }
 ```
-> For Aruba leaf switches the `VendorName` value will be `1/1/32`. Dell leaf switches will have value `ethernet1/1/32`.
+> For Aruba leaf-bmc switches the `VendorName` value will be `1/1/32`. Dell leaf-bmc switches will have value `ethernet1/1/32`.
 
 <a name="management-node"></a>
 ## Management Node
@@ -521,7 +521,7 @@ The integer number after the prefix is used to determine the hostname of the mas
 Typically, the BMC of the first master node is not connected to the HMN network, as its BMC is connected to the site network.
 
 #### SHCD
-Example master node where its BMC is connected to the HMN. The master node is in slot 2 in cabinet 3000, and its BMC is connected to port 25 in the management leaf switch in slot 14 of cabinet 3000.
+Example master node where its BMC is connected to the HMN. The master node is in slot 2 in cabinet 3000, and its BMC is connected to port 25 in the management leaf-bmc switch in slot 14 of cabinet 3000.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
@@ -585,7 +585,7 @@ Management Switch Connector:
   }
 }
 ```
-> For Aruba leaf switches the `VendorName` value will be `1/1/25`. Dell leaf switches will have value `ethernet1/1/25`.
+> For Aruba leaf-bmc switches the `VendorName` value will be `1/1/25`. Dell leaf-bmc switches will have value `ethernet1/1/25`.
 
 <a name="management-node-worker"></a>
 ### Worker
@@ -596,7 +596,7 @@ The Source field needs to match both of the following conditions:
 The integer number after the prefix is used to determine the hostname of the master node. For example, `wn01` corresponds to host name `ncn-w001`.
 
 #### SHCD
-The worker node is in slot 4 of cabinet 3000, and its BMC is connected to port 48 of management leaf switch in slot 14 of cabinet 3000.
+The worker node is in slot 4 of cabinet 3000, and its BMC is connected to port 48 of management leaf-bmc switch in slot 14 of cabinet 3000.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
@@ -644,7 +644,7 @@ Management Switch Connector:
   }
 }
 ```
-> For Aruba leaf switches the `VendorName` value will be `1/1/48`. Dell leaf switches will have value `ethernet1/1/48∂`.
+> For Aruba leaf-bmc switches the `VendorName` value will be `1/1/48`. Dell leaf-bmc switches will have value `ethernet1/1/48∂`.
 
 <a name="management-node-storage"></a>
 ### Storage
@@ -655,7 +655,7 @@ The Source field needs to match both of the following conditions:
 The integer number after the prefix is used to determine the hostname of the master node. For example, `sn01` corresponds to host name `ncn-s001`.
 
 #### SHCD
-The storage node is in slot 4 of cabinet 3000, and its BMC is connected to port 29 of management leaf switch in slot 14 of cabinet 3000.
+The storage node is in slot 4 of cabinet 3000, and its BMC is connected to port 29 of management leaf-bmc switch in slot 14 of cabinet 3000.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
@@ -702,7 +702,7 @@ Management Switch Connector:
   }
 }
 ```
-> For Aruba leaf switches the `VendorName` value will be `1/1/29`. Dell leaf switches will have value `ethernet1/1/29`.
+> For Aruba leaf-bmc switches the `VendorName` value will be `1/1/29`. Dell leaf-bmc switches will have value `ethernet1/1/29`.
 
 <a name="application-node"></a>
 ## Application Node
@@ -726,7 +726,7 @@ This convention applies to all application nodes that have a single node in a ch
 
 
 #### SHCD
-Example application node is in slot 4 of cabinet 3000, and its BMC is connected to port 25 of management leaf switch in slot 14 of cabinet 3000.
+Example application node is in slot 4 of cabinet 3000, and its BMC is connected to port 25 of management leaf-bmc switch in slot 14 of cabinet 3000.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
@@ -764,7 +764,7 @@ In addition to the top-level compute node naming requirements when they are 2 no
 This convention applies to all application nodes that have two nodes in a single chassis.
 
 #### SHCD
-A application node chassis with 2 nodes located in slot 8 of cabinet 3000. uan01 is on the left side of the chassis, and uan02 is on the right side. The two node BMCs are connected to ports 37 and 38 of the management leaf switch in slot 40 of cabinet 3000.
+A application node chassis with 2 nodes located in slot 8 of cabinet 3000. uan01 is on the left side of the chassis, and uan02 is on the right side. The two node BMCs are connected to ports 37 and 38 of the management leaf-bmc switch in slot 40 of cabinet 3000.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
@@ -808,7 +808,7 @@ The following are examples of valid matches:
 
 
 ### SHCD
-A Columbia Slingshot Switch in slot 42 of cabinet 3000. Its BMC is connected to port 45 of the leaf switch in slot 38 of cabinet 3000.
+A Columbia Slingshot Switch in slot 42 of cabinet 3000. Its BMC is connected to port 45 of the leaf-bmc switch in slot 38 of cabinet 3000.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
@@ -853,7 +853,7 @@ Management Switch Connector:
   }
 }
 ```
-> For Aruba leaf switches the `VendorName` value will be `1/1/45`. Dell leaf switches will have value `ethernet1/1/45`.
+> For Aruba leaf-bmc switches the `VendorName` value will be `1/1/45`. Dell leaf-bmc switches will have value `ethernet1/1/45`.
 
 <a name="pdu-cabinet-controller"></a>
 ## PDU Cabinet Controller
@@ -868,7 +868,7 @@ The following are examples of valid matches:
 A PDU Cabinet Controller is the device that is connected to the HMN network and manages PDU underneath it.
 
 ### SHCD
-PDU controller for cabinet 3000 is connected port 41 of the leaf switch in slot 38 of cabinet 3000.
+PDU controller for cabinet 3000 is connected port 41 of the leaf-bmc switch in slot 38 of cabinet 3000.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
@@ -919,7 +919,7 @@ Management Switch Connector:
   }
 }
 ```
-> For Aruba leaf switches the `VendorName` value will be `1/1/41`. Dell leaf switches will have value `ethernet1/1/41`.
+> For Aruba leaf-bmc switches the `VendorName` value will be `1/1/41`. Dell leaf-bmc switches will have value `ethernet1/1/41`.
 
 <a name="cooling-door"></a>
 ## Cooling Door
@@ -928,7 +928,7 @@ The Source field for a Cooling door contains `door`.
 Cooling doors in an air-cooled cabinet are not currently supported by CSM software and are ignored.
 
 ### SHCD
-Cooling door for cabinet 3000 is connected to port 27 of the leaf switch in slot 36 of cabinet 3000.
+Cooling door for cabinet 3000 is connected to port 27 of the leaf-bmc switch in slot 36 of cabinet 3000.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
@@ -955,7 +955,7 @@ The Source Field matches has one of the following prefixes:
 Any management switch that is found in the HMN tab of the SHCD will be ignored by CSI.
 
 ### SHCD
-Management switch in slot 12 of cabinet 3000, its management port is connected to port 41 of the leaf management switch in slot 14 of cabinet 3000.
+Management switch in slot 12 of cabinet 3000, its management port is connected to port 41 of the leaf-bmc management switch in slot 14 of cabinet 3000.
 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |

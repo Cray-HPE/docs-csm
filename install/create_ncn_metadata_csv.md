@@ -136,8 +136,8 @@ x3000c0s1b0n0,Management,Master,94:40:c9:37:87:32,14:02:ec:da:b9:98,14:02:ec:da:
    [Collecting NCN MAC Addresses](collecting_ncn_mac_addresses.md).
 
 
-   * If the nodes are powered up and there is SSH access to the spine and leaf switches, it is possible to
-   collect information from the spine and leaf switches.
+   * If the nodes are powered up and there is SSH access to the spine and leaf-bmc switches, it is possible to
+   collect information from the spine and leaf-bmc switches.
       * The BMC MAC address can be collected from the switches using knowledge about the cabling of the HMN from the SHCD. See [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md).
       * The node MAC addresses cannot be collected until after the PIT node has booted from the LiveCD. At that point, a partial boot of the management nodes can be done to collect the remaining information from the conman console logs on the PIT node using the [Procedure: iPXE Consoles](collecting_ncn_mac_addresses.md#procedure-ipxe-consoles)
 

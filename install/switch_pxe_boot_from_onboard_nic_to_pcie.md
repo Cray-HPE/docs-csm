@@ -18,11 +18,11 @@ over the PCIe cards.
 **This applies to Newer systems (Spring 2020 or newer)** where onboard NICs are still used.
 
 This presents a need for migration for systems still using the legacy, preview topology. Specifically,
-systems with onboard connections to their leaf switches and NCNs need to disable/remove that connection.
+systems with onboard connections to their leaf-bmc switches and NCNs need to disable/remove that connection.
 
 This onboard NCN port came from before spine-switches were added to the shasta-network topology. The onboard connection
 was responsible for every network (MTL/NMN/HMN/CAN) and was the sole driver of PXE booting for. Now, NCNs use bond interfaces and spine switches for those networks;
-however, some older systems still have this legacy connection to their leaf switches and solely use it for PXE booting. 
+however, some older systems still have this legacy connection to their leaf-bmc switches and solely use it for PXE booting. 
 This NIC is not used during runtime, and NCNs in this state should enable PXE within their PCIe devices' OpROMs and disable/remove this onboard connection.
 
 <a name="enabling-uefi-pxe-mode"></a>
@@ -141,9 +141,9 @@ may shutdown the switchport as well.
 If the physical connection can be removed, this is preferred and can be done so after enabling PXE on
 the PCIe cards.
 
-If the connection must be disabled, log in to the respective leaf switch.
+If the connection must be disabled, log in to the respective leaf-bmc switch.
 
-1. Connect to the leaf switch using serial or SSH connections.
+1. Connect to the leaf-bmc switch using serial or SSH connections.
 
    Select one of the connection options below. The IP addresses and device names may vary in the commands below.
     
@@ -162,8 +162,8 @@ If the connection must be disabled, log in to the respective leaf switch.
 2. Enter configuration mode.
     
    ```sh
-   sw-leaf-001> configure terminal
-   sw-leaf-001(config)#>
+   sw-leaf-bmc-001> configure terminal
+   sw-leaf-bmc-001(config)#>
    ```
 
 3. Disable the NCN interfaces.
@@ -171,9 +171,9 @@ If the connection must be disabled, log in to the respective leaf switch.
    Check the SHCD for reference before continuing so that the interfaces connected to management NCNs are being changed. Ports 2 to 10 are commonly the master, worker, and storage nodes when there are 3 of each. Some systems may have more worker nodes or utility storage nodes, or may be racked and cabled differently.
    
    ```bash
-   sw-leaf-001(config)#> interface range 1/1/2-1/1/10
-   sw-leaf-001(config)#> shutdown
-   sw-leaf-001(config)#> write memory
+   sw-leaf-bmc-001(config)#> interface range 1/1/2-1/1/10
+   sw-leaf-bmc-001(config)#> shutdown
+   sw-leaf-bmc-001(config)#> write memory
    ```
    
    Enable the interfaces again at anytime by switching the `shutdown` command out for `no shutdown`.

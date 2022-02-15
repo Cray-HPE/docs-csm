@@ -94,7 +94,7 @@ sections, but there is also a general troubleshooting topic.
 
       Now that the PIT node has been booted with the LiveCD environment and CSI has generated the switch IP addresses,
       the management network switches can be configured.
-      [Management Net Docs](../operations/network/index.md)
+      [Management Net Docs](../operations/network/management_network/index.md)
 
       **Note**: If a reinstall of this software release is being done on this system and the management network switches
       have already been configured, then this topic could be skipped and instead move to

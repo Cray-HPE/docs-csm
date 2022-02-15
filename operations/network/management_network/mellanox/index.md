@@ -89,13 +89,12 @@ __________________________________
   1. [Remote Logging](./remote_logging.md)
   1. [Web User Interface (WebUI)](./web-ui.md)
   1. [SNMPv2c Community](./snmp_community.md)
-  1. [SNMP Traps](./snmp_trap.md)
   1. [SNMPv3 Users](./snmpv3_users.md)
   1. [System images](./system_images.md)
 
 ### Layer one features
   1. [Physical Interfaces](./physical_interfaces.md)
-  1. [Cable Diagnostics](./cable_diagnostics.md)
+  1. [Cable Diagnostics](cable_diagnonstics.md)
 
 ### Layer two features
   1. [Link Layer Discovery Protocol (LLDP)](./lldp.md)

@@ -38,7 +38,7 @@
    b42e99dff361                                                  <
    ```
 
-   If there are any MAC addresses on the left column that are not on the right column, then it is likely the leaf switches in the system are being affected by the SNMP issue. Apply the workaround described in [the following procedure](../install/configure_aruba_aggregation_switch.md) to the Aruba leaf switches in the system.
+   If there are any MAC addresses on the left column that are not on the right column, then it is likely the leaf switches in the system are being affected by the SNMP issue. Apply the workaround described in [the following procedure](../upgrade/1.2/Stage_4.md) to the Aruba leaf switches in the system.
 
    If all of the MAC addresses on the left column are present in the right column, then you are not affected by this known issue.
 
