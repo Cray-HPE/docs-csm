@@ -26,8 +26,7 @@ upgrade that node.
 - [Stage 1 - Ceph Node Image Upgrade](Stage_1.md)
 - [Stage 2 - Kubernetes Upgrade](Stage_2.md)
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
-- [Stage 4 - Apply Known Workarounds](Stage_4.md)
-- [Stage 5 - Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
+- [Stage 4 - Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
 
 **`Important:`** Please take note of the below content for troubleshooting purposes in the case that you encounter issues.
 
