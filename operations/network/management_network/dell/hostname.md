@@ -29,4 +29,4 @@ Expected Results
 * Step 1: You can configure the hostname
 * Step 2: The output of all show commands is correct
 
-[Back to Index](../index.md)
+[Back to Index](index.md)
