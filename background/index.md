@@ -32,8 +32,6 @@ software, but provides background which might be helpful for troubleshooting an 
    In addition, after running `csi` with those pre-config files, `csi` creates an output `system_config.yaml`
    file which can be passed to `csi` when reinstalling this software release.
 
-   See [Cray Site Init Files](cray_site_init_files.md) for more information about these files.
-
 <a name="certificate_authority"></a>
 ### Certificate Authority
 
@@ -109,5 +107,3 @@ software, but provides background which might be helpful for troubleshooting an 
 ### cloud-init Basecamp Configuration
 
 Metal Basecamp is a cloud-init DataSource available on the LiveCD. Basecamp's configuration file offers many inputs for various cloud-init scripts embedded within the NCN images.
-
-   * [cloud-init Basecamp Configuration](cloud-init_basecamp_configuration.md)

@@ -59,7 +59,7 @@ However, it is important to note that some pods, when running on a worker NCN th
         # kubectl describe pod -n nexus NEXUS_FULL_POD_NAME
         ```
 
-    -   If the event data at the bottom of the describe command output indicates that a Multi-Attach PVC error has occurred. See the [Troubleshoot Pods Failing to Restart on Other Worker Nodes](../utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md) procedure to unmount the PVC. This will allow the Nexus pod to begin successfully running on the new NCN worker node.
+    -   If the event data at the bottom of the describe command output indicates that a Multi-Attach PVC error has occurred. See the [Troubleshoot Pods Multi-Attach Error](../utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md) procedure to unmount the PVC. This will allow the Nexus pod to begin successfully running on the new NCN worker node.
 
 -   **High-speed network resiliency after `ncn-w001` goes down**
     -   The slingshot-fabric-manager pod running on one of NCNs does not rely on `ncn-w001`. If `ncn-w001` goes down, the slingshot-fabric-manager pods should not be impacted as the pod is runs on other NCNs, such as `ncn-w002`.

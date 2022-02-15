@@ -2,7 +2,7 @@
 
 Disable ConMan if it is blocking access to a node by other means. ConMan runs on the system as a containerized service, and it is enabled by default. However, the use of ConMan to connect to a node blocks access to that node by other Serial over LAN \(SOL\) utilities or by a virtual KVM.
 
-For information about how ConMan works, see [ConMan](/ConMan.md).
+For information about how ConMan works, see [ConMan](ConMan.md).
 
 ### Prerequisites
 
