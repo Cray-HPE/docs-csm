@@ -33,10 +33,10 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
         ncn-m001# rpm -Uvh docs-csm-latest.noarch.rpm
         ```
 
-    * Air Gapped
+    * Air Gapped (replace the PATH_TO below with the location of the rpm)
 
         ```bash
-        ncn-m001# cd /root/
+        ncn-m001# cp [PATH_TO_docs-csm-*.noarch.rpm] /root
         ncn-m001# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
         ```
 
