@@ -1,9 +1,28 @@
-# Network time protocol (NTP) client
+# Configure the Network Time Protocol (NTP) Client 
 
+The Network Time Protocol (NTP) client is essential for syncing time on various clients in the system. The following commands show how to configure NTP.
 
-"NTP is used to synchronize timekeeping among a set of distributed time servers and clients [...] It provides the protocol mechanisms to synchronize time in principle to precisions in the order of nanoseconds while preserving a non-ambiguous date well into the next century." –rfc1305
+## Relevant Configuration
 
-Example Output
+Specify a remote NTP server to use for time synchronization:
+
+```
+switch(config)# ntp server <FQDN|IP-ADDR>
+```
+
+Configure source for NTP:
+
+```
+switch(config)# ntp source interface
+```
+
+Show NTP status:
+
+```
+switch# show ntp status
+```
+
+## Example Output
 
 ```
 OS10(config)# do show ntp status
@@ -23,31 +42,11 @@ broadcastdelay:       0.000000 s
 authdelay:            0.000000 s
 ```
 
-Relevant Configuration
+## Expected Results
 
-Specify a remote NTP server to use for time synchronization
-
-```
-switch(config)# ntp server <FQDN|IP-ADDR>
-```
-
-Configure source for NTP
-
-```
-switch(config)# ntp source interface
-```
-
-Show NTP status
-
-```
-switch# show ntp status
-```
-
-Expected Results
-
-* Step 1: You can configure the NTP client
-* Step 2: You can validate the functionality using the show command
-* Step 3: The system time of the switch matches the NTP server
+1. Administrators can configure the NTP client
+2. Administrators can validate the functionality using the `show` command
+3. The system time of the switch matches the NTP server
 
 [Back to Index](index.md)
 
