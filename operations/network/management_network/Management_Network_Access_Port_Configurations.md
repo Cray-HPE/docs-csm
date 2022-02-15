@@ -215,16 +215,7 @@ interface mlag-port-channel 7 switchport hybrid allowed-vlan add 7
 interface mlag-port-channel 7 switchport hybrid allowed-vlan add
 ```
 
-Mellanox MLAG port configuration:
-```
-placeholder for config
-Mlag, native vlan 1, allowed vlan 10
-```
-Mellanox port configuration:
-```
-placeholder
-Generic, member of port-channel with speed and mtu set
-```
+Storage MLAG port configuration is not applicable on Gigabyte systems.
 
 ## HPE NCN Storage Port Configuration
 
