@@ -6,7 +6,17 @@ This document is intended to guide an administrator through the process going fr
 
 ## Contents
 
-TODO: Add CVE descriptions here
+In this patch/upgrade, we intend to address the following CVE’s:
+- [CVE-2021-4034](https://nvd.nist.gov/vuln/detail/CVE-2021-4034) - vulnerability in polkit’s pkexec that, if exploited, can allow unprivileged local users to run commands as privileged users.
+- [CVE-2022-0185](https://nvd.nist.gov/vuln/detail/CVE-2022-0185) - vulnerability in the linux kernel that allows a user to escalate their privileges, and in a containerized environment, can allow a user to escape the containerized environment.
+- [CVE-2022-23307](https://nvd.nist.gov/vuln/detail/CVE-2022-23307) - critical vulnerability in chainsaw used in log4j 1.2.x.
+- [CVE-2022-23305](https://nvd.nist.gov/vuln/detail/CVE-2022-23305) - affects log4j 1.x when it is configured with JDBCAppender.
+- [CVE-2022-23302](https://nvd.nist.gov/vuln/detail/CVE-2022-23302) - affects log4j 1.x when it is configured with JMSSink.
+- [CVE-2021-4104](https://nvd.nist.gov/vuln/detail/CVE-2021-4104) - affects log4j 1.x when it is configured with JMSAppender.
+
+After this patch/upgrade is installed, scanning may still flag CVE-2022-2330[257] CVE(s).  This is due to the version of the log4j library/jar file remains the same, though the offending features are removed.
+
+
 
 ## Terminology
 
