@@ -6,7 +6,15 @@ This document is intended to guide an administrator through the process going fr
 
 ## Contents
 
-TODO: Add CVE descriptions here
+CSM v1.0.11 is a security patch release, which addresses the following CVE's:
+
+### CVE-2022-0185: Linux kernel buffer overflow/container escape 
+More info: https://nvd.nist.gov/vuln/detail/CVE-2022-0185 \
+Remediation: upgrade Linux kernel to patched version `5.3.18-24.99`.
+
+### CVE-2021-4034: pwnkit: Local Privilege Escalation in polkit's pkexec
+More info: https://nvd.nist.gov/vuln/detail/CVE-2021-4034 \
+Remediation:  upgrade polkit and associated libpolkit0 packages to patched version `0.116-3.6.1`.
 
 ## Terminology
 
