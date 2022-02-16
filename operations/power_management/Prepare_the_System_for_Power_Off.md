@@ -8,7 +8,7 @@ The `sat bootsys shutdown` and `sat bootsys boot` commands are used to shut down
 
 ### Prerequisites
 
-An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the System Admin Tookit (SAT) product stream documentation.
+An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
 
 ### Procedure
 
@@ -20,40 +20,77 @@ An authentication token is required to access the API gateway and to use the `sa
 
     1.  If the Slingshot network includes edge switches, obtain the user ID and password for these switches.
 
-1.  Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs. You can list all the session templates using `cray bos v1 sessiontemplate list`. If you are unsure of which template is in use, you can call `sat status` to find the xname, then use `cray cfs components describe XNAME` to find the bos_session, and use `cray bos v1 session describe BOS_SESSION` to find the `templateUuid`. Then finally use `cray bos v1 sessiontemplate describe TEMPLATE_UUID` to determine the list of xnames associated with a given template. For example:
-
-    ```bash
-    ncn# sat status | grep "Compute\|Application"
-
-    | x3000c0s19b1n0 | Node | 1        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-    | x3000c0s19b2n0 | Node | 2        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-    | x3000c0s19b3n0 | Node | 3        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-    | x3000c0s19b4n0 | Node | 4        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-    | x3000c0s27b0n0 | Node | 49169248 | On    | OK   | True    | X86  | River | Application | Sling    |
-
-    ncn# cray cfs components describe x3000c0s19b1n0 | grep bos_session
-    bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
-
-    ncn# cray bos v1 session describe e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f | grep templateUuid
-    templateUuid = "compute-nid1-4-sessiontemplate"
-
-    ncn# cray bos v1 sessiontemplate describe Nid1-4session-compute | grep node_list
-    node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
-
-    ncn# cray cfs components describe x3000c0s27b0n0 | grep bos_session
-    bos_session = "b969c25a-3811-4a61-91d5-f1c194625748"
-
-    ncn# cray bos v1 session describe b969c25a-3811-4a61-91d5-f1c194625748 | grep templateUuid
-    templateUuid = "uan-sessiontemplate"
-    ```
-
-    Compute nodes: `compute-nid1-4-sessiontemplate`
-
-    UANs: `uan-sessiontemplate`
-
 1.  Use `sat auth` to authenticate to the API gateway within SAT.
 
-    See [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md), [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md), and "SAT Authentication" in the System Admin Tookit (SAT) product stream documentation.
+    If SAT has already been authenticated to the API gateway, this step may be skipped.
+
+    See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
+
+1.  Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
+
+    There will be a seperate session template for UANs and computes nodes.
+
+    1. List all the session templates.
+
+       If it is unclear what session template is in use, proceed to the next substep.
+
+       ```bash
+       ncn-m001# cray bos v1 sessiontemplate list
+       ```
+
+    1. Find the xname with `sat status`.
+
+       ```bash
+       ncn-m001# sat status | grep "Compute\|Application"
+       ```
+
+       Example output:
+
+       ```bash
+       ncn-m001# sat status | grep "Compute\|Application"
+
+       | x3000c0s19b1n0 | Node | 1        | On    | OK   | True    | X86  | River | Compute     | Sling    |
+       | x3000c0s19b2n0 | Node | 2        | On    | OK   | True    | X86  | River | Compute     | Sling    |
+       | x3000c0s19b3n0 | Node | 3        | On    | OK   | True    | X86  | River | Compute     | Sling    |
+       | x3000c0s19b4n0 | Node | 4        | On    | OK   | True    | X86  | River | Compute     | Sling    |
+       | x3000c0s27b0n0 | Node | 49169248 | On    | OK   | True    | X86  | River | Application | Sling    |
+       ```
+
+    1. Find the `bos_session` value via the Configuration Framework Service (CFS).
+
+       ```bash
+       ncn-m001# cray cfs components describe XNAME | grep bos_session
+       ```
+
+       Example output:
+
+       ```
+       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
+       ```
+
+    1. Find the required `templateUuid` value with BOS.
+
+       ```bash
+       ncn-m001# cray bos v1 session describe XNAME | grep templateUuid
+       ```
+
+       Example output:
+
+       ```bash
+       templateUuid = "compute-nid1-4-sessiontemplate"
+       ```
+
+    1. Determine the list of xnames associated with the desired boot session template.
+
+       ```bash
+       ncn-m001# cray bos v1 sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+       ```
+
+       Example output:
+
+       ```bash
+       node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
+       ```
 
 1.  Use sat to capture state of the system before the shutdown.
 
