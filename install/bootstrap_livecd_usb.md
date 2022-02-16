@@ -727,8 +727,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    The following assumes the CSM_PATH environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "goss-servers*.rpm" | sort -V | tail -1)
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
    ```
 
 1. Verify the system:
