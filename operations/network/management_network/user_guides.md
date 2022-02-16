@@ -4,7 +4,7 @@
 - https://asp.arubanetworks.com/downloads
 
 ##### Dell
-<!-- markdown-link-check-disable-next-line -->:
+<!-- markdown-link-check-disable-next-line -->
 - https://www.dell.com/support/manuals/en-us/force10-s4048-on/smartfabric-os-user-guide-10-5-1
 
 ##### Mellanox 
