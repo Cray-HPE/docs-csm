@@ -5,20 +5,20 @@
 **Prerequisite:**
 
 The following information is needed:
-* IP Address of m001 bmc
-* IP Address of m001
-* Root password for m001 bmc
+* IP Address of ncn-m001 bmc
+* IP Address of ncn-m001
+* Root password for ncn-m001 bmc
 
 ### Find the Model Name
 Use one of the following commands to find the model name for the node type in use.
 
 HPE Nodes:
 
-    `m001# curl -k -u root:password https://ipaddressOfBMC/redfish/v1/Systems/1 | jq .Model`
+  `m001# curl -k -u root:password https://ipaddressOfBMC/redfish/v1/Systems/1 | jq .Model`
 
-Gigbyte Nodes:
+Gigabyte Nodes:
 
-    `m001# curl -k -u root:password https://ipaddressOfBMC/redfish/v1/Systems/Self | jq .Model`
+  `m001# curl -k -u root:password https://ipaddressOfBMC/redfish/v1/Systems/Self | jq .Model`
 
 ### Get the Firmware Images
 1. View a list of images stored in FAS tart are ready to be flashed:
@@ -52,7 +52,7 @@ Gigabyte ncn-m001:
 
     * `passwd` = root password of BMC
     * `ipaddressOfBMC` = ipaddress of BMC
-    * `ipaddressOfM001` = ipaddress of m001 node
+    * `ipaddressOfM001` = ipaddress of ncn-m001 node
     * `filename` = filename of the image you downloaded above.
 
     b. To update BIOS:
@@ -62,10 +62,10 @@ Gigabyte ncn-m001:
 
     * `passwd` = root password of BMC
     * `ipaddressOfBMC` = ipaddress of BMC
-    * `ipaddressOfM001` = ipaddress of m001 node
+    * `ipaddressOfM001` = ipaddress of ncn-m001 node
     * `filename` = filename of the image you downloaded above.
 
-    After updating BIOS, m001 will need to be rebooted.  Follow instructions [Reboot NCNs](../node_management/Reboot_NCNs.md) for rebooting ncn-m001.
+    After updating BIOS, ncn-m001 will need to be rebooted.  Follow instructions [Reboot NCNs](../node_management/Reboot_NCNs.md) for rebooting ncn-m001.
 
 HPE ncn-m001:
 
@@ -75,7 +75,7 @@ The web interface will be used to update firmware on the HPE ncn-m001 node.
 
     `$ scp root@ipaddressOfM001Node:pathToFile/filename .`
 
-2. Open a web browser window and type in the name or ipaddress of the iLo device for m001.
+2. Open a web browser window and type in the name or ipaddress of the iLo device for ncn-m001.
 
 3. Log in with root and the root password for the iLo device
 
@@ -86,4 +86,4 @@ The web interface will be used to update firmware on the HPE ncn-m001 node.
     5. Click `“Confirm TPM override”`
     6. Click `"Flash"`
 
-  After updating BIOS, m001 will need to be rebooted.  Follow instructions [Reboot NCNs](../node_management/Reboot_NCNs.md) for rebooting ncn-m001.
+  After updating BIOS, ncn-m001 will need to be rebooted.  Follow instructions [Reboot NCNs](../node_management/Reboot_NCNs.md) for rebooting ncn-m001.
