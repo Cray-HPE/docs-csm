@@ -14,11 +14,11 @@ Use one of the following commands to find the model name for the node type in us
 
 HPE Nodes:
 
-`m001# curl -k -u root:password https://ipaddressOfBMC/redfish/v1/Systems/1 | jq .Model`
+    `m001# curl -k -u root:password https://ipaddressOfBMC/redfish/v1/Systems/1 | jq .Model`
 
 Gigbyte Nodes:
 
-`m001# curl -k -u root:password https://ipaddressOfBMC/redfish/v1/Systems/Self | jq .Model`
+    `m001# curl -k -u root:password https://ipaddressOfBMC/redfish/v1/Systems/Self | jq .Model`
 
 ### Get the Firmware Images
 1. View a list of images stored in FAS tart are ready to be flashed:
