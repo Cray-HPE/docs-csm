@@ -75,7 +75,7 @@ An authentication token is required to access the API gateway and to use the `sa
 4.  Use sat to capture state of the system before the shutdown.
 
     ```bash
-    ncn-m001# sat bootsys shutdown --stage capture-state | tee sat.capture-state
+    ncn-m001# sat bootsys shutdown --stage capture-state
     ```
 
 5.  Optional system health checks.
