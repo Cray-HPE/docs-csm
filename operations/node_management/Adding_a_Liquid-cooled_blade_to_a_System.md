@@ -42,7 +42,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
     To delete an`ethernetInterfaces`  entry using curl:
 
     ```bash
-    ncn-m001:# for ID in $(cat x1000c0s1.json | jq -r '.ID'); do cray hsm inventory ethernetInterfaces delete $ID; done
+    ncn-m001# for ID in $(cat x1000c0s1.json | jq -r '.ID'); do cray hsm inventory ethernetInterfaces delete $ID; done
     ```
 
     To insert an `ethernetInterfaces` entry using curl:
@@ -63,17 +63,25 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
     ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
     ```
 
-    Verify that the hms-discovery cron job has stopped (`ACTIVE` = `0` and `SUSPEND` = `True`).
+    Verify that the hms-discovery cron job has stopped.
 
     ```bash
     ncn-m001# kubectl get cronjobs -n services hms-discovery
+    ```
+
+    Example output. Note the `ACTIVE` = `0` and is `SUSPEND` = `True` in the output indicating the job has been suspended:
+    ```
     NAME             SCHEDULE        SUSPEND     ACTIVE   LAST   SCHEDULE  AGE
     hms-discovery    */3 * * * *     True         0       117s             15d
     ```
 
 2.  Determine if the destination chassis slot is populated. This example is checking slot 0 in chassis 3 of cabinet x1005.
     ```bash
-    ncn-m001# cray hsm state components describe 
+    ncn-m001# cray hsm state components describe x1005c3s0
+    ```
+
+    Example output:
+    ```
     ID = "x1005c3s0"
     Type = "ComputeModule"
     State = "Empty"
@@ -90,6 +98,10 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 3.  **Skip this step if the chassis slot is unpopulated**. Verify the chassis slot is powered off.
     ```bash
     ncn-m001# cray capmc get_xname_status create --xnames x1005c3s0
+    ```
+
+    Example output:
+    ```
     e = 0
     err_msg = ""
     off = [ "x1005c3s0",]
@@ -147,9 +159,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
         ncn-m001# MAC=NEW_BLADE_MAC_ADDRESS 
         ncn-m001# IP_ADDRESS=DESTLOCATION_IP_ADDRESS
         ncn-m001# XNAME=DESTLOCATION_XNAME
-        ```
-
-        ```bash
+       
         ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "{
             \"Description\": \"Node Maintenance Network\",
             \"MACAddress\": \"$MAC\",
@@ -179,10 +189,14 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
     ncn-m001# cray hsm inventory discover create --xnames x1005c3b0
     ```
 
-8. Verify that discovery of the ChassisBMC has completed (`LastDiscoveryStatus` = "`DiscoverOK`").
+8.  Verify that discovery of the ChassisBMC has completed (`LastDiscoveryStatus` = "`DiscoverOK`").
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe x1005c3b0 --format json
+    ```
+
+    Example output:
+    ```
     {
         "ID": "x1005c3b0",
         "Type": "ChassisBMC",
@@ -209,9 +223,13 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
       -p '{"spec" : {"suspend" : false }}'
     ```
 
-    Verify the hms-discovery job has been unsuspended (`ACTIVE` = `1` and `SUSPEND` = `False`).
+    Verify the hms-discovery job has been unsuspended:
     ```bash
     ncn-m001# kubectl get cronjobs.batch -n services hms-discovery
+    ```
+
+    Example output. Note the `ACTIVE` = `1` and is `SUSPEND` = `False` in the output indicating the job has been unsuspended:
+    ```
     NAME             SCHEDULE      SUSPEND   ACTIVE   LAST   SCHEDULE  AGE
     hms-discovery    */3 * * * *   False       1      41s              33d
     ```
@@ -307,6 +325,10 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
     ```bash
     ncn-m001# cray hsm state components query create --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+    ```
+    
+    Example output:
+    ```
     [[Components]]
     ID = x1005c3s0b0n0
     Type = "Node"
@@ -333,7 +355,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
 #### Check firmware
 
-17.  Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
+17. Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
     1. Review chapter 15 "Firmware Action Service (FAS)" in the _HPE Cray EX System Administration Guide 1.4 S-8001_ to perform a dry run using FAS to verify firmware versions.
 
     2. If necessary update firmware with FAS. See section 15.1 "FAS Workflows" in the _HPE Cray EX System Administration Guide 1.4 S-8001_ for more information.
@@ -344,7 +366,11 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 18. Check the cray-cps pods on worker nodes and verify they are `Running`.
 
     ```bash
-    # kubectl get pods -Ao wide | grep cps
+    ncn-m001# kubectl get pods -Ao wide | grep cps
+    ```
+
+    Example output:
+    ```
     services   cray-cps-75cffc4b94-j9qzf    2/2  Running   0   42h 10.40.0.57  ncn-w001
     services   cray-cps-cm-pm-g6tjx         5/5  Running   21  41h 10.42.0.77  ncn-w003
     services   cray-cps-cm-pm-kss5k         5/5  Running   21  41h 10.39.0.80  ncn-w002
@@ -360,6 +386,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     ncn-m001# dmesg -T | grep "DVS: merge_one"
     ```
 
+    Example output:
     ```
     [Tue Jul 21 13:09:54 2020] DVS: merge_one#351: New node map entry does not match the existing entry
     [Tue Jul 21 13:09:54 2020] DVS: merge_one#353:   nid: 8 -> 8
@@ -373,14 +400,13 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 21. SSH to the node and check each DVS mount.
 
     ```bash
-    nid001133:~ # mount | grep dvs | head -1
-    /var/lib/cps-local/0dbb42538e05485de6f433a28c19e200 on /var/opt/cray/gpu/nvidia-squashfs-21.3 type dvs (ro,relatime,blksize=524288,statsfile=/sys/kernel/debug/dvs/mounts/1/stats,attrcache_timeout=14400,cache,nodatasync,noclosesync,retry,failover,userenv,noclusterfs,killprocess,noatomic,nodeferopens,no_distribute_create_ops,no_ro_cache,loadbalance,maxnodes=1,nnodes=6,nomagic,hash_on_nid,hash=modulo,nodefile=/sys/kernel/debug/dvs/mounts/1/nodenames,nodename=x3000c0s6b0n0:x3000c0s5b0n0:x3000c0s4b0n0:x3000c0s9b0n0:x3000c0s8b0n0:x3000c0s7b0n0)
-
-    nid001133:~ # ls /var/opt/cray/gpu/nvidia-squashfs-21.3
-    rootfs
+    nid# mount | grep dvs | head -1
     ```
 
-
+    Example output:
+    ```
+    /var/lib/cps-local/0dbb42538e05485de6f433a28c19e200 on /var/opt/cray/gpu/nvidia-squashfs-21.3 type dvs (ro,relatime,blksize=524288,statsfile=/sys/kernel/debug/dvs/mounts/1/stats,attrcache_timeout=14400,cache,nodatasync,noclosesync,retry,failover,userenv,noclusterfs,killprocess,noatomic,nodeferopens,no_distribute_create_ops,no_ro_cache,loadbalance,maxnodes=1,nnodes=6,nomagic,hash_on_nid,hash=modulo,nodefile=/sys/kernel/debug/dvs/mounts/1/nodenames,nodename=x3000c0s6b0n0:x3000c0s5b0n0:x3000c0s4b0n0:x3000c0s9b0n0:x3000c0s8b0n0:x3000c0s7b0n0)
+    ```
 #### Check the HSN for the affected nodes
 
 22. Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
@@ -397,6 +423,10 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
   1.  Verify each node hostname resolves to one IP address.
       ```bash
       ncn-m001# nslookup x1005c3s0b0n0
+      ```
+
+      Example output with one IP address resolving:
+      ```
       Server:         10.92.100.225
       Address:        10.92.100.225#53
 
@@ -428,6 +458,10 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 
     ```bash
     ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
+    ```
+
+    Example output with no active DHCP leases:
+    ```json
     [
       {
         "arguments": {
@@ -445,6 +479,10 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 
        ```bash
        ncn-m001# cray hsm inventory ethernetInterfaces list --ip-address 10.100.0.105 --format json | jq
+       ```
+
+       Example output for an IP address that is associated with two MAC addresses:
+       ```json
        [
          {
            "ID": "0040a68350a4",
@@ -476,7 +514,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 26. Check DNS using `nslookup`.
 
     ```bash
-    ncn-m001:~ # nslookup 10.100.0.105
+    ncn-m001# nslookup 10.100.0.105
     105.0.100.10.in-addr.arpa        name = nid001032-nmn.
     105.0.100.10.in-addr.arpa        name = nid001032-nmn.local.
     105.0.100.10.in-addr.arpa        name = x1005c3s0b0n0.
@@ -486,7 +524,11 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
 27. Check SSH.
 
     ```bash
-    ncn-m001:~ # ssh x1005c3s0b0n0
+    ncn-m001# ssh x1005c3s0b0n0
+    ```
+
+    Example output:
+    ```
     The authenticity of host 'x1005c3s0b0n0 (10.100.0.105)' can't be established.
     ECDSA key fingerprint is SHA256:wttHXF5CaJcQGPTIq4zWp0whx3JTwT/tpx1dJNyyXkA.
     Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
