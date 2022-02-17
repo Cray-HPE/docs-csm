@@ -758,6 +758,12 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
         pit# /usr/local/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/
         ```
 
+       `*WARNING*` The mellanox_set_bgp_peers.py script assumes that the prefix length of the CAN is `/24`. If that value is incorrect for the system being installed then update the script with the correct prefix length by editing the following line.
+
+       ```python
+       cmd_prefix_list_can = "ip prefix-list pl-can seq 30 permit {} /24 ge 24".format()
+       ```
+
     * If you have Aruba switches, run CANU.
      
         CANU requires three parameters: the IP address of switch 1, the IP address of switch 2, and the path to the to directory containing the file `sls_input_file.json`

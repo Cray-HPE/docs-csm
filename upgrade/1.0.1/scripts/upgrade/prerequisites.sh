@@ -256,8 +256,9 @@ state_name="UPDATE_DOC_RPM"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    if [[ ! -f docs-csm-latest.noarch.rpm ]]; then
-        echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: $(pwd)"
+    if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
+        echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: /root"
+        exit 1
     fi
     cp /root/docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
     record_state ${state_name} $(hostname)
@@ -570,9 +571,17 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-# Take cps deployment snapshot
-cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r '.[] | .node' || true)
-echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
+# Take cps deployment snapshot (if cps installed)
+set +e
+trap - ERR
+kubectl get pod -n services | grep -q cray-cps
+if [ "$?" -eq 0 ]; then
+  cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r \
+    '.[] | select(."podname" != "NA" and ."podname" != "") | .node' || true)
+  echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
+fi
+trap 'err_report' ERR
+set -e
 
 # Alert the user of action to take for cleanup
 if [[ ${#UNMOUNTS[@]} -ne 0 ]]; then
