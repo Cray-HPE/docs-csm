@@ -3,6 +3,7 @@
 **The commands in the procedure must be run on ncn-m001**
 
 **Prerequisite:**
+
 The following information is needed:
 * IP Address of m001 bmc
 * IP Address of m001
@@ -85,4 +86,4 @@ The web interface will be used to update firmware on the HPE ncn-m001 node.
     5. Click `“Confirm TPM override”`
     6. Click `"Flash"`
 
-    After updating BIOS, m001 will need to be rebooted.  Follow instructions [Reboot NCNs](../node_management/Reboot_NCNs.md) for rebooting ncn-m001.
+  After updating BIOS, m001 will need to be rebooted.  Follow instructions [Reboot NCNs](../node_management/Reboot_NCNs.md) for rebooting ncn-m001.
