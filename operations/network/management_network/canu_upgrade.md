@@ -1,9 +1,32 @@
 # CANU 1.0 > CANU 1.2
 
 #### Prerequisites 
-- System is already running with CANU generated 1.0 configs.
+- System is already running with CANU generated 1.0 configs (1.2 preconfig).
 - Generated Switch configs for 1.2.
     - [Generate Switch Config](generate_switch_configs.md)
+
+- Be sure that your current connection to the system is not through the Spine switches.
+  - To verify this check the default route from the NCN that has the site connection.
+  ```
+  ncn-m001:~ # ip r
+  default via 10.102.3.1 dev vlan007 
+  ```
+  - Notice that the default route is through `dev vlan007`, this needs to change so we don't lose connection when moving this to the `Customer VRF`
+  - In this example the site connection is on lan0
+```
+  ncn-m001:~ # ip a show lan0
+  29: lan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether b4:2e:99:3a:26:08 brd ff:ff:ff:ff:ff:ff
+    inet 172.30.52.183/20 brd 172.30.63.255 scope global lan0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::b62e:99ff:fe3a:2608/64 scope link 
+       valid_lft forever preferred_lft forever
+```
+  - The default route needs to replaced to route out `lan0`
+  - Replace the default route with the correct next-hop router for this network.
+```
+ncn-m001:~ # ip route replace default via 172.30.48.1
+```
 
 ### Mellanox
 Compare 1.0 and 1.2 generated configs.
@@ -94,8 +117,8 @@ Config differences between running config and generated config
 lines that start with a minus "-" and RED: Config that is present in running config but not in generated config
 lines that start with a plus "+" and GREEN: Config that is present in generated config but not in running config.
 ```
-
-The following config will need to be removed before aplying the 1.2 config
+- Take a close look at the output of this, make sure that the system admin understands all the changes needed.
+- The following config will need to be removed before applying the 1.2 config
 
 ```
 - banner motd "
@@ -199,13 +222,50 @@ sw-spine-001 [mlag-domain: master] (config) # no interface vlan 7 ip icmp redire
 sw-spine-001 [mlag-domain: master] (config) # interface vlan 7 mtu 9184
 ```
 Add site connections to Customer VRF
+- You can find the site connections on the SHCD.
+```
+CAN switch	cfcanb6s1	 	 	-	31	sw-25g01	x3000	u39	-	j16
+CAN switch	cfcanb6s1	 	 	-	46	sw-25g02	x3000	u40	-	j16
+```
+This example has the site connections on port 16 on both spine switches.
 
+- Get the current configuration from port 16 on both switches.  Save this configuration as it'll be reapplied with the `Customer VRF` attached.
+- The reason we need to save this config is that when an interface is added to a VRF the previous IP config is lost.
+
+```
+sw-spine-001 [mlag-domain: master] # show run int ethernet 1/16
+interface ethernet 1/16 speed 10G force
+interface ethernet 1/16 mtu 1500 force
+interface ethernet 1/16 no switchport force
+interface ethernet 1/16 ip address 10.102.255.10/30 primary
+```
+```
+sw-spine-002 [mlag-domain: master] # show run int ethernet 1/16
+interface ethernet 1/16 speed 10G force
+interface ethernet 1/16 mtu 1500 force
+interface ethernet 1/16 no switchport force
+interface ethernet 1/16 ip address 10.102.255.86/30 primary
+```
+Save the configuration of the default route.
+```
+sw-spine-001 [mlag-domain: master] # show run | include "ip route"
+   ip route 0.0.0.0/0 10.102.255.9
+```
+```
+sw-spine-002 [mlag-domain: master] # show run | include "ip route"
+   ip route 0.0.0.0/0 10.102.255.85
+```
+Appply the saved interface config to both switches.  The only difference here should be that the `interface ethernet 1/16 vrf forwarding Customer` is added.
 ```
 interface ethernet 1/16 speed 10G force                                                                                 
 interface ethernet 1/16 mtu 1500 force                                                                                  
 interface ethernet 1/16 no switchport force
 interface ethernet 1/16 vrf forwarding Customer                                                                             
-interface ethernet 1/16 ip address 10.102.255.10/30 primary                                                                     
+interface ethernet 1/16 ip address 10.102.255.10/30 primary
+```
+Delete the existing default route, then add the new one attached to the `Customer VRF`
+```
+   no ip route 0.0.0.0/0 10.102.255.85                                                                     
    ip route vrf Customer 0.0.0.0/0 10.102.255.9 
 ```
 Save this configuration to a new config file.
