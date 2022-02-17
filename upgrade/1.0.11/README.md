@@ -16,6 +16,28 @@ Remediation: upgrade Linux kernel to patched version `5.3.18-24.99`.
 More info: https://nvd.nist.gov/vuln/detail/CVE-2021-4034 \
 Remediation:  upgrade polkit and associated libpolkit0 packages to patched version `0.116-3.6.1`.
 
+### CVE-2022-23302: affects log4j 1.x when it is configured with JMSSink
+More info: https://nvd.nist.gov/vuln/detail/CVE-2022-23302 \
+Remediation: Removed the impacted JMSSink class from the jar file.
+
+### CVE-2022-23305: affects log4j 1.x when it is configured with JDBCAppender
+More info: https://nvd.nist.gov/vuln/detail/CVE-2022-23305 \
+Remediation: removed the impacted JDBCAppender class from the jar file.
+
+### CVE-2022-23307: deserialization issue in chainsaw used in log4j 1.2.x
+More info: https://nvd.nist.gov/vuln/detail/CVE-2022-23307 \
+Remediation: removed the chainsaw from the jar file.
+
+### CVE-2021-4104: affects log4j 1.x when it is configured with JMSAppender
+More info: https://nvd.nist.gov/vuln/detail/CVE-2021-4104 \
+Remediation: removed the impacted JMSAppender class from the jar file.
+
+
+>**`NOTE:`**
+>
+>After this patch/upgrade is installed, scanning may still flag CVE-2022-2330[257] and CVE-2021-4104 CVEs.  This is due to the version of the log4j library/jar file remains the same, though the offending features are removed.
+>
+
 ## Terminology
 
 Throughout the guide the terms "stable" and "upgrade" are used in the context of the management nodes (NCNs). The

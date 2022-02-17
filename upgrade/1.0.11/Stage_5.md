@@ -43,4 +43,27 @@
 
     Version of installed polkit package must be `0.116-3.6.1` on all NCN nodes. Note: previous version of polkit package was `0.116-3.3.1`.
 
+1.  Verify that fix for CVE-2022-23302, CVE-2022-23305, CVE-2022-23307 and CVE-2021-4104 is in place:
+
+    ```bash
+    ncn-m001:~ # kubectl describe pods cray-shared-kafka -n services |grep Image:
+    Image:         strimzi/operator:0.15.0-noJndiLookupClass
+    Image:         strimzi/operator:0.15.0-noJndiLookupClass
+    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
+    Image:         strimzi/kafka:0.15.0-kafka-2.2.1-noJSM-chainsaw
+    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
+    Image:         strimzi/kafka:0.15.0-kafka-2.2.1-noJSM-chainsaw
+    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
+    Image:         strimzi/kafka:0.15.0-kafka-2.2.1-noJSM-chainsaw
+    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
+    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
+    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
+    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
+    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
+    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
+    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
+    ```
+    
+    Version tag of installed strimzi/kafka image must be `0.15.0-kafka-2.2.1-noJSM-chainsaw` and `0.15.0-kafka-2.3.1-noJSM-chainsaw`. Note: previous version tag were `0.15.0-kafka-2.2.1` and `0.15.0-kafka-2.3.1`
+    
 [Return to main upgrade page](README.md)
