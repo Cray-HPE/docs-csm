@@ -188,7 +188,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
         "Type": "ChassisBMC",
         "Hostname": "x1005c3b0",
         "Domain": "",
-        "FQDN": "x1005c3",
+        "FQDN": "x1005c3b0",
         "Enabled": true,
         "User": "root",
         "Password": "",
@@ -332,11 +332,10 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
     ```
 
 #### Check firmware
+17.   Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
+    1. Review [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) to perform a dry run using FAS to verify firmware versions.
 
-17.  Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
-    1. Review chapter 15 "Firmware Action Service (FAS)" in the _HPE Cray EX System Administration Guide 1.4 S-8001_ to perform a dry run using FAS to verify firmware versions.
-
-    2. If necessary update firmware with FAS. See section 15.1 "FAS Workflows" in the _HPE Cray EX System Administration Guide 1.4 S-8001_ for more information.
+    2. If necessary update firmware with FAS. See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) for more information.
 #### Check DVS
 
 There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their waiter, and at least one cray-cps-cm-pm pod. Usually there are two cray-cps-cm-pm pods, one on ncn-w002 and one on ncn-w003 and other worker nodes
