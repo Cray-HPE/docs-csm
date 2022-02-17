@@ -10,11 +10,9 @@ Use the hostname set in `istio.ingress.hosts.ui.authority` \(see below\) to conn
 https://nexus.{{network.dns.external}}/
 ```
 
-Users will be redirected to Keycloak to log in, and based on the default OPA policy, only admin users will be authorized. Scripts may connect by first obtaining a JWT token from Keycloak and passing it in the HTTP `Authorization` header.
-
 ### Access Nexus with the REST API
 
-The [REST API](https://help.sonatype.com/repomanager3/rest-and-integration-api) is available from NCNs or compute nodes at https://packages.local/service/rest, as well as over the CAN at https://nexus.\{\{network.dns.external\}\}/service/rest \(requires JWT token in the HTTP `Authorization` header\).
+The [REST API](https://help.sonatype.com/repomanager3/rest-and-integration-api) is available from NCNs or compute nodes at https://packages.local/service/rest, as well as over the CAN at https://nexus.\{\{network.dns.external\}\}/service/rest \(requires authentication with username and password\).
 
 Download the Open API document at /service/rest/swagger.json for details about the API, including specific options to available endpoints. By default, the REST API endpoints return \(or accept\) JSON.
 
