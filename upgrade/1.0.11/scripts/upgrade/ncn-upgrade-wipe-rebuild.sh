@@ -303,11 +303,6 @@ if [[ ${upgrade_ncn} != ncn-s* ]]; then
             ssh $upgrade_ncn 'cloud-init init > /dev/null 2>&1'
         fi
         
-        # only tinker with ntp if we are coming from 0.9.x
-        if [[ "$CSM1_EXISTS" == "false" ]]; then
-          ssh $upgrade_ncn '/srv/cray/scripts/metal/ntp-upgrade-config.sh'
-        fi
-
         record_state "${state_name}" ${upgrade_ncn}
     else
         echo "====> ${state_name} has been completed"
