@@ -98,16 +98,16 @@ UPGRADE_POSTGRES_MAX_LAG=${UPGRADE_POSTGRES_MAX_LAG:-'0'}
 # UPGRADE_POSTGRES_MAX_ATTEMPTS specifies the maximum number of times the
 # postgres check will be performed on a given cluster before failing. Note that
 # failures other than due to maximum lag are always fatal and are not retried.
-# If unset or set to a non-positive integer, default to 10
+# If unset or set to a non-positive integer, default to 2
 if [[ ! $UPGRADE_POSTGRES_MAX_ATTEMPTS =~ ^[1-9][0-9]*$ ]]; then
-    UPGRADE_POSTGRES_MAX_ATTEMPTS=10
+    UPGRADE_POSTGRES_MAX_ATTEMPTS=2
 fi
 
 # UPGRADE_POSTGRES_WAIT_SECONDS_BETWEEN_ATTEMPTS specifies the time (in seconds)
 # between postgres checks on a given cluster.
-# If unset or set to a non-positive integer, default to 10
+# If unset or set to a non-positive integer, default to 20
 if [[ ! $UPGRADE_POSTGRES_WAIT_SECONDS_BETWEEN_ATTEMPTS =~ ^[1-9][0-9]*$ ]]; then
-    UPGRADE_POSTGRES_WAIT_SECONDS_BETWEEN_ATTEMPTS=10
+    UPGRADE_POSTGRES_WAIT_SECONDS_BETWEEN_ATTEMPTS=20
 fi
 
 state_name="ENSURE_POSTGRES_HEALTHY"
@@ -144,16 +144,34 @@ if [[ $state_recorded == "0" ]]; then
                 # Sleep before re-attempting
                 sleep $UPGRADE_POSTGRES_WAIT_SECONDS_BETWEEN_ATTEMPTS
             fi
-            c_cluster_details=$(kubectl exec "${c_name}-1" -c postgres -it -n ${c_ns} -- curl -s http://localhost:8008/cluster)
-            c_num_of_members=$(echo $c_cluster_details | jq '.members | length' )
-            c_num_of_leader=$(echo $c_cluster_details | jq '.members[] | .role' | grep "leader" | wc -l)
-            c_max_lag=$(echo $c_cluster_details | jq '[.members[] | .lag] | max')
-            if [[ -n $c_lag_history ]]; then
-                c_lag_history+=", $c_max_lag"
-            else
-                c_lag_history="$c_max_lag"
+
+            #check for leader
+            c_leader=$(kubectl exec "${c_name}-0" -c postgres -n ${c_ns} -- patronictl list -f json 2>/dev/null | jq -r '.[] | select((.Role == "Leader") and (.State =="running")) | .Member')
+
+            if [[ -z $c_leader ]]; then
+                echo -e "\n--- ERROR --- $c cluster does not have a leader"
+                exit 1
             fi
-            c_unknown_lag=$(echo $c_cluster_details | jq '[.members[] | .lag]' | grep "unknown" | wc -l)
+
+            #cluster details from leader
+            c_cluster_details=$(kubectl exec ${c_leader} -c postgres -n ${c_ns} -- patronictl list -f json 2>/dev/null)
+            c_num_of_members=$(echo $c_cluster_details | jq '. | length' )
+            c_max_lag=$(echo $c_cluster_details | jq '[.[] | select((.Role == "") and (."Lag in MB" != "unknown"))."Lag in MB"] | max')
+            c_unknown_lag=$(echo $c_cluster_details | jq '.[] | select(.Role == "")."Lag in MB"' | grep "unknown" | wc -l)
+
+            if [[ -n $c_lag_history ]]; then
+                if [[ $c_unknown_lag -gt 0 ]]; then
+                    c_lag_history+=", unknown"
+                else
+                    c_lag_history+=", $c_max_lag"
+                fi
+            else
+                if [[ $c_unknown_lag -gt 0 ]]; then
+                    c_lag_history="unknown"
+                else
+                    c_lag_history="$c_max_lag"
+                fi
+            fi
 
             # check number of members
             if [[ $c_name == "sma-postgres-cluster" ]]; then
@@ -168,27 +186,24 @@ if [[ $state_recorded == "0" ]]; then
                 fi
             fi
 
-            #check number of leader
-            if [[ $c_num_of_leader -ne 1 ]]; then
-                echo -e "\n--- ERROR --- $c cluster does not have a leader"
-                exit 1
-            fi
-
-            #check lag:unknown
-            if [[ $c_unknown_lag -gt 0 ]]; then
-                echo -e "\n--- ERROR --- $c cluster has lag: unknown"
-                exit 1
-            fi
-
             if [[ $UPGRADE_POSTGRES_MAX_LAG =~ ^[0-9][0-9]*$ ]]; then
                 #check max_lag is <= $UPGRADE_POSTGRES_MAX_LAG
-                if [[ $c_max_lag -gt $UPGRADE_POSTGRES_MAX_LAG ]]; then
-                    # If we have not exhausted our number of attempts, retry
-                    [[ $c_attempt -ge $UPGRADE_POSTGRES_MAX_ATTEMPTS ]] || continue
-                    
-                    echo -e "\n--- ERROR --- $c cluster has lag: $c_lag_history"
-                    exit 1
-                fi
+                if [[ $c_max_lag -gt $UPGRADE_POSTGRES_MAX_LAG ]] || [[ $c_unknown_lag -gt 0 ]] ; then
+                     # If we have not exhausted our number of attempts, reinit lagging clusters and retry
+                     if [[ $c_attempt -ge $UPGRADE_POSTGRES_MAX_ATTEMPTS ]]; then
+                         echo -e "\n--- ERROR --- $c cluster has max lag: $c_lag_history"
+                         exit 1
+                     else
+                         #skip reinit on sma
+                         if [[ $c_name != "sma-postgres-cluster" ]]; then
+
+                             echo -n " REINIT "
+                             ${BASEDIR}/../k8s/reinit-postgres.sh $c_name $c_ns
+
+                         fi
+                         continue
+                     fi
+                 fi
             fi
             echo " OK"
             break

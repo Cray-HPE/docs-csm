@@ -214,8 +214,9 @@ state_name="UPDATE_DOC_RPM"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    if [[ ! -f docs-csm-latest.noarch.rpm ]]; then
-        echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: $(pwd)"
+    if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
+        echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: /root"
+        exit 1
     fi
     cp /root/docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
     record_state ${state_name} $(hostname)
@@ -349,7 +350,7 @@ if [[ $state_recorded == "0" ]]; then
     kubectl get cm -n services cray-product-catalog -o json | jq  -r '.data.csm' | yq r -  -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions
     # sort -V: version sort
     highest_version=$(sort -V /tmp/csm_versions | tail -1)
-    minimum_version="1.0.1"
+    minimum_version="1.0.0"
     # compare sorted versions with unsorted so we know if our highest is greater than minimum
     if [[ $(printf "$minimum_version\n$highest_version") != $(printf "$minimum_version\n$highest_version" | sort -V) ]]; then
       echo "Required CSM patch $minimum_version or above has not been applied to this system"
