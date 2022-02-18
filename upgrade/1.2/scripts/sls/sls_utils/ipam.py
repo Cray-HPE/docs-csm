@@ -136,7 +136,7 @@ def free_ipv4_addresses(subnet):
 
     # Every available IPv4 address in the subnet
     all_hosts_in_subnet = list(subnet_ipv4_network.hosts())
-    all_hosts_in_subnet.pop(-1)  # Remove the last entry for safety
+    # all_hosts_in_subnet.pop(-1)  # Remove the last entry for safety
     all_hosts_in_subnet = set(all_hosts_in_subnet)
 
     # All the IPv4 addresses used in the subnet by Reservations

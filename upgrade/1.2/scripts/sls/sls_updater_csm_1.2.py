@@ -99,6 +99,14 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
     show_default=True,
 )
 @click.option(
+    "--bgp-chn-asn",
+    required=False,
+    help="The autonomous system number for CHN BGP clients",
+    type=click.IntRange(64512, 65534),
+    default=65530,
+    show_default=True,
+)
+@click.option(
     "--bgp-cmn-asn",
     required=False,
     help="The autonomous system number for CMN BGP clients",
@@ -177,6 +185,7 @@ def main(
     customer_access_network,
     customer_highspeed_network,
     bgp_asn,
+    bgp_chn_asn,
     bgp_cmn_asn,
     bgp_nmn_asn,
     preserve_existing_subnet_for_cmn,
@@ -194,6 +203,7 @@ def main(
         customer_access_network (int, ipaddress.IPv4Network): VLAN and IPv4 CIDR of the CAN
         customer_highspeed_network (int, ipaddress.IPv4Network): VLAN and IPv4 CIDR of the CHN
         bgp_asn (int): Remote peer ASN
+        bgp_chn_asn (int): CHN local ASN
         bgp_cmn_asn (int): CMN local ASN
         bgp_nmn_asn (int): NMN local ASN
         preserve_existing_subnet_for_cmn (str|None): Whether to preserve static pool or bootstrap_dhcp (or neither)
@@ -280,7 +290,7 @@ def main(
     #
     # Add BGP peering data to CMN and NMN
     #   (ORDER DEPENDENT!!! - Must be run after CMN creation)
-    create_metallb_pools_and_asns(networks, bgp_asn, bgp_nmn_asn, bgp_cmn_asn)
+    create_metallb_pools_and_asns(networks, bgp_asn, bgp_chn_asn, bgp_cmn_asn, bgp_nmn_asn)
 
     #
     # Update uai_macvlan dhcp ranges in the NMN network.

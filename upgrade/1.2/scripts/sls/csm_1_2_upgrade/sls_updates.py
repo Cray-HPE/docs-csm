@@ -640,16 +640,25 @@ def clone_subnet_and_pivot(
             click.echo("        Adding IPs to Reservations")
             new_subnet.ipv4_gateway(next_free_ipv4_address(new_subnet))
             for old in old_reservations.values():
-                new_subnet.reservations().update(
-                    {
-                        old.name(): Reservation(
-                            old.name(),
-                            next_free_ipv4_address(new_subnet),
-                            list(old.aliases()),
-                            old.comment(),
-                        ),
-                    },
-                )
+                try:
+                    new_subnet.reservations().update(
+                        {
+                            old.name(): Reservation(
+                                old.name(),
+                                next_free_ipv4_address(new_subnet),
+                                list(old.aliases()),
+                                old.comment(),
+                            ),
+                        },
+                    )
+                except IndexError:
+                    click.secho(
+                        "        ERROR: Insufficient IPv4 addresses to create Reservations "
+                        f"- {devices} devices in a subnet supporting {total_hosts_in_prefixlen} devices.\n"
+                        "             Expert mode --<can|cmn>-subnet-override may be used to change this behavior.",
+                        fg="bright_yellow",
+                    )
+                    exit(1)
 
             # DHCP Ranges to appropriate networks
             try:
@@ -722,25 +731,28 @@ def update_nmn_uai_macvlan_dhcp_ranges(networks):
     uai_macvlan_subnet.vlan(nmn_vlan)
 
 
-def create_metallb_pools_and_asns(networks, bgp_asn, bgp_nmn_asn, bgp_cmn_asn):
+def create_metallb_pools_and_asns(networks, bgp_asn, bgp_chn_asn, bgp_cmn_asn, bgp_nmn_asn):
     """Update the NMN and CMN by creating the BGP peering.
 
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
         bgp_asn (int): Remote peer BGP ASN
-        bgp_nmn_asn (int): Local NMN BGP ASN
+        bgp_chn_asn (int): Local CHN BGP ASN
         bgp_cmn_asn (int): Local CMN BGP ASN
+        bgp_nmn_asn (int): Local NMN BGP ASN
+
     """
     click.secho(
         "Creating BGP peering ASNs and MetalLBPool names",
         fg="bright_white",
     )
-    nmn = networks.get("NMN")
-    if nmn is not None and None in nmn.bgp():
+
+    chn = networks.get("CHN")
+    if chn is not None and None in chn.bgp():
         click.echo(
-            f"    Updating the NMN network with BGP peering info MyASN: {bgp_nmn_asn} and PeerASN: {bgp_asn}",
+            f"    Updating the CHN network with BGP peering info MyASN: {bgp_chn_asn} and PeerASN: {bgp_asn}",
         )
-        nmn.bgp(bgp_nmn_asn, bgp_asn)  # bgp(my_asn, peer_asn)
+        chn.bgp(bgp_chn_asn, bgp_asn)
 
     cmn = networks.get("CMN")
     if cmn is not None and None in cmn.bgp():
@@ -749,6 +761,12 @@ def create_metallb_pools_and_asns(networks, bgp_asn, bgp_nmn_asn, bgp_cmn_asn):
         )
         cmn.bgp(bgp_cmn_asn, bgp_asn)
 
+    nmn = networks.get("NMN")
+    if nmn is not None and None in nmn.bgp():
+        click.echo(
+            f"    Updating the NMN network with BGP peering info MyASN: {bgp_nmn_asn} and PeerASN: {bgp_asn}",
+        )
+        nmn.bgp(bgp_nmn_asn, bgp_asn)  # bgp(my_asn, peer_asn)
     metallb_subnet_name_map = {
         "can_metallb_address_pool": "customer-access",
         "chn_metallb_address_pool": "customer-high-speed",
