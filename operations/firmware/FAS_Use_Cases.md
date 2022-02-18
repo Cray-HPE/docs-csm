@@ -13,6 +13,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 5. [Compute Node BIOS Workaround for HPE CRAY EX425](#cn-workaround)
 
 *NOTE* to update Switch Controllers \(sC\) or RouterBMC refer to the Rosetta Documentation
+
 ---
 
 <a name="liquidcooled"></a>
@@ -274,6 +275,7 @@ It is recommended that the Node0/1 BIOS be updated in a separate action, either 
     ```
 
     Once firmware / BIOS is updated, the compute nodes can be turned back on.
+
 ---
 
 <a name="cmm"></a>
@@ -442,6 +444,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
     -  The *Slingshot Troubleshooting Guide* PDF.
 
 7.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
+
 ---
 
 <a name="aircooled"></a>
@@ -735,6 +738,7 @@ Make sure you have waited for the current firmware to be updated before starting
     stateHelper = "unexpected change detected in firmware version. Expected 2.46 May 11 2021 got: 2.32 Apr 27 2020"
     deviceType = "NodeBMC"
     ```
+
 ---
 
 <a name="ncn-bios-bmc"></a>
@@ -923,6 +927,7 @@ See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#confi
 ```
 
 The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
+
 ---
 
 <a name="cn-workaround"></a>
