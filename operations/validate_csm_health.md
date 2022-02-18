@@ -461,7 +461,7 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
         ```
      1. Delete the backup, where <backup> is replaced with a backup returned in the previous step.
         ```bash
-        ncn# kubectl delete backups <backup> -n velero
+        ncn# velero backup delete <backup> --confirm
         ```
 
 <a name="check-of-system-management-monitoring-tools"></a>
