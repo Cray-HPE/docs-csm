@@ -98,7 +98,7 @@ There are multiple Goss test suites available that cover a variety of subsystems
   - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to delete backups from a Kubernetes node to clear this situation. See the output of the test for more details on how to cleanup backups that have failed due to a known interruption. For example:
      1. Run the following to find the failed backup.
         ```bash
-        ncn/pit# kubectl get backups -A -o json | jq -e ‘.items[] | select(.status.phase == “PartiallyFailed”) | .metadata.name’
+        ncn/pit# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
         ```
      1. Delete the backup, where <backup> is replaced with a backup returned in the previous step.
         ```bash
