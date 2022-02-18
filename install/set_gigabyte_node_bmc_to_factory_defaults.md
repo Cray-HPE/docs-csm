@@ -2,6 +2,8 @@
 
 ### Prerequisites
 
+**Note**: This section refers to scripts that exist only in the PIT environment.  If necessary, copy the LiveCD data from a different machine to get these scripts.
+
 Use the management scripts and text files to reset Gigabyte BMC to factory default settings. Set the BMC to the factory default settings in the following cases:
 
 - There are problems using the ipmitool command and Redfish does not respond
