@@ -111,7 +111,7 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
     required=False,
     help="The autonomous system number for CMN BGP clients",
     type=click.IntRange(64512, 65534),
-    default=65534,
+    default=65532,
     show_default=True,
 )
 @click.option(
@@ -119,7 +119,7 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
     required=False,
     help="The autonomous system number for NMN BGP clients",
     type=click.IntRange(64512, 65534),
-    default=65533,
+    default=65531,
     show_default=True,
 )
 @click.option(
@@ -172,7 +172,7 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
 @click.option(
     "--retain-unused-user-network",
     help="If a CHN is selected, remove the CAN.  For development systems you probably want this enabled.",
-    is_flag=False,
+    is_flag=True,
     default=True,
     show_default=True,
 )
