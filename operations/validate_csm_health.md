@@ -121,6 +121,13 @@ There are multiple Goss test suites available that cover a variety of subsystems
         ncn/pit# renewncnjoin ncn-xxxx
         ```
   - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, delete `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the `request-ncn-join-token` daemonset pod.
+* `cfs-state-reporter` errors on storage nodes
+  - If the `cfs-state-reporter` check is failing on one or more storage nodes, it could be an issue with their spire tokens. The following procedure may resolve the problem:
+     1. Run the following script on `ncn-m002`:
+        ```bash
+        ncn-m002# /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
+        ```
+     1. Then re-run the check to see if the problem has been resolved.
 
 <a name="pet-optional-ncnhealthchecks-resources"></a>
 ### 1.2 NCN Resource Checks (optional)
