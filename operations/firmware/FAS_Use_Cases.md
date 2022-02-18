@@ -274,7 +274,6 @@ It is recommended that the Node0/1 BIOS be updated in a separate action, either 
     ```
 
     Once firmware / BIOS is updated, the compute nodes can be turned back on.
-
 ---
 
 <a name="cmm"></a>
@@ -443,8 +442,8 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
     -  The *Slingshot Troubleshooting Guide* PDF.
 
 7.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
-
 ---
+
 <a name="aircooled"></a>
 
 ### Update Air-Cooled Compute Node BMC, BIOS, iLO 5, and System ROM
@@ -543,6 +542,7 @@ Make sure you have waited for the current firmware to be updated before starting
 **Device Type: NodeBMC | Target: `iLO 5` aka BMC**
 
 ```json
+{
 "stateComponentFilter": {
     "deviceTypes": [
       "nodeBMC"
@@ -571,9 +571,6 @@ Make sure you have waited for the current firmware to be updated before starting
 ```
 
 **Device Type: NodeBMC | Target: `System ROM` aka BIOS**
-
-**IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than ncn-m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
-See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
 
 ```json
 {
@@ -738,6 +735,7 @@ See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#confi
     stateHelper = "unexpected change detected in firmware version. Expected 2.46 May 11 2021 got: 2.32 Apr 27 2020"
     deviceType = "NodeBMC"
     ```
+---
 
 <a name="ncn-bios-bmc"></a>
 
@@ -862,6 +860,7 @@ Make sure you have waited for the current firmware to be updated before starting
 **Device Type: NodeBMC | Target: `iLO 5` aka BMC**
 
 ```json
+{
 "stateComponentFilter": {
     "deviceTypes": [
       "nodeBMC"
@@ -924,7 +923,6 @@ See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#confi
 ```
 
 The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
-
 ---
 
 <a name="cn-workaround"></a>
