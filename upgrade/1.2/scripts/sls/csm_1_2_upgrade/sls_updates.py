@@ -616,11 +616,11 @@ def clone_subnet_and_pivot(
             click.echo(f"    Creating {new_subnet_name} with {devices} devices:")
             click.echo(
                 f"        A /{new_subnet_prefixlen} could work and would hold up to "
-                f"{total_hosts_in_prefixlen} devices",
+                f"{total_hosts_in_prefixlen} devices (including gateway)",
             )
             click.echo(
                 f"        Using {seed_subnet} from {network_ipv4_address} that can hold up to "
-                f"{hosts_from_prefixlength(seed_subnet.prefixlen)} devices",
+                f"{hosts_from_prefixlength(seed_subnet.prefixlen)} devices (including gateway)",
             )
 
             # Change vlan if we scavenged subnet info from HMN
@@ -637,8 +637,9 @@ def clone_subnet_and_pivot(
 
             # Re-IP the new subnet
             new_subnet.ipv4_address(seed_subnet)
-            click.echo("        Adding IPs to Reservations")
+            click.echo("        Adding gateway IP address")
             new_subnet.ipv4_gateway(next_free_ipv4_address(new_subnet))
+            click.echo(f"        Adding IPs for {len(old_reservations.values())} Reservations")
             for old in old_reservations.values():
                 try:
                     new_subnet.reservations().update(
@@ -653,9 +654,9 @@ def clone_subnet_and_pivot(
                     )
                 except IndexError:
                     click.secho(
-                        "        ERROR: Insufficient IPv4 addresses to create Reservations "
+                        "        HALTING: Insufficient IPv4 addresses to create Reservations "
                         f"- {devices} devices in a subnet supporting {total_hosts_in_prefixlen} devices.\n"
-                        "             Expert mode --<can|cmn>-subnet-override may be used to change this behavior.",
+                        "             Expert mode --<can|cmn>-subnet-override must be used to change this behavior.",
                         fg="bright_yellow",
                     )
                     exit(1)
