@@ -98,7 +98,7 @@ Review the output for `Result: FAIL` and follow the instructions provided to res
         ```
      1. Delete the backup, where <backup> is replaced with a backup returned in the previous step.
         ```bash
-        ncn# kubectl delete backups <backup> -n velero
+        ncn# velero backup delete <backup> --confirm
         ```
 
 * Verify spire-agent is enabled and running
