@@ -102,7 +102,7 @@ There are multiple Goss test suites available that cover a variety of subsystems
         ```
      1. Delete the backup, where <backup> is replaced with a backup returned in the previous step.
         ```bash
-        ncn/pit# kubectl delete backups <backup> -n velero
+        ncn# velero backup delete <backup> --confirm
         ```
 * Verify spire-agent is enabled and running
   - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker nodes and master nodes), logging errors (via `journalctl`) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. Even though the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.
