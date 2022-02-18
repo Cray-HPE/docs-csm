@@ -25,7 +25,7 @@
 
 CSM 1.2 introduces the bifurcated CAN as well as network configuration controlled by data in SLS.  An offline upgrade of SLS data is performed.  More details on the upgrade and its sequence of events can be found in the [README.SLS_upgrade.md](./scripts/sls/README.SLS_Upgrade.md).
 
-The SLS data upgrade is a critical step in moving to CSM 1.2.  Upgraded SLS data is used in DNS and management network configuration.  Details of Bifurcated CAN can be found in the [BICAN document](../../operations/network/management_network/index.md) to aid in understanding an decison-making.
+The SLS data upgrade is a critical step in moving to CSM 1.2.  Upgraded SLS data is used in DNS and management network configuration.  Details of Bifurcated CAN can be found in the [BICAN document](../../operations/network/management_network/index.md) to aid in understanding and decison-making.
 
 One detail which must not be overlooked is that the existing Customer Access Network (CAN) will be migrated or retrofitted into the new Customer Management Network (CMN) while minimizing changes.  A new CAN, (or CHN) network is then created.  Pivoting the existing CAN to the new CMN allows administrative traffic (already on the CAN) to remain as-is while moving standard user traffic to a new site-routable network.
 
@@ -63,7 +63,7 @@ Usage: sls_updater_csm_1.2.py [OPTIONS]
    5. Migrate the existing CAN to CMN.
    7. Create the CHN network.
    7. Convert IPs of the CAN network.
-   8. Create MetalLB Pools and ASN entries on CMN and NMN networks.
+   8. Create MetalLB Pools Names and ASN entries on CMN and NMN networks.
    9. Update uai_macvlan in NMN dhcp ranges and uai_macvlan VLAN.
   10. Remove unused user networks (CAN or CHN) if requested [--retain-unused-user-network] to keep.
 
@@ -74,6 +74,7 @@ Options:
   --customer-access-network <INTEGER RANGE IPV4NETWORK>... - CAN - VLAN and IPv4 network CIDR block [default: 6, 10.103.6.0/24]
   --customer-highspeed-network <INTEGER RANGE IPV4NETWORK>... - CHN - VLAN and IPv4 network CIDR block [default: 5, 10.104.7.0/24]
   --bgp-asn INTEGER RANGE - The autonomous system number for BGP router [default: 65533;64512<=x<=65534]
+  --bgp-chn-asn INTEGER RANGE - The autonomous system number for CHN BGP clients  [default: 65530;64512<=x<=65534]
   --bgp-cmn-asn INTEGER RANGE - The autonomous system number for CMN BGP clients  [default: 65534;64512<=x<=65534]
   --bgp-nmn-asn INTEGER RANGE - The autonomous system number for NMN BGP clients  [default: 65533;64512<=x<=65534]
   --preserve-existing-subnet-for-cmn [external-dns|ncns] -  When creating the CMN from the CAN, preserve the metallb_static_pool for external-dns IP, or bootstrap_dhcp for NCN IPs.  By default no subnet IPs from CAN will be preserved.
@@ -117,7 +118,7 @@ curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/api
                          --retain-unused-user-network
 ```
 
-* NOTE: A detailed review of the migrated/upgraded data (using vimdiff or otherwise) for production systems and for systems which have many add-on components (UAN, login nodes, storage integration points, etc...) is strongly recommended.  Particlarly, ensure subnet reservations are correct to prevent any data mismatches.
+* NOTE: A detailed review of the migrated/upgraded data (using vimdiff or otherwise) for production systems and for systems which have many add-on components (UAN, login nodes, storage integration points, etc...) is strongly recommended.  Particularly, ensure subnet reservations are correct to prevent any data mismatches.
 
 Upload migrated SLS file to SLS service:
 
