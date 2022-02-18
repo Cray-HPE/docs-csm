@@ -111,6 +111,16 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
+1. Validate that `CSM_RELEASE` and `CSM_PATH` variables are set.
+
+    These variables were set and added to `/etc/environment` during the earlier [Bootstrap PIT Node](index.md#bootstrap_pit_node) step of the install.
+    `CSM_PATH` should be the fully-qualified path to the expanded CSM release tarball on `ncn-m001`.
+
+    ```bash
+    pit# echo $CSM_RELEASE
+    pit# echo $CSM_PATH
+    ```
+
 1. <a name="ncn-boot-artifacts-hand-off"></a>Upload NCN boot artifacts into S3.
 
     1. Set the variables.
@@ -124,21 +134,16 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         * If the NCN images were **not** customized, set the following variables (this is the default path):
 
             ```bash
-            pit# export CSM_RELEASE=csm-x.y.z
-            pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
-            pit# export k8sdir=$artdir/kubernetes
-            pit# export cephdir=$artdir/storage-ceph
+            pit# artdir=${CSM_PATH}/images ; k8sdir=$artdir/kubernetes ; cephdir=$artdir/storage-ceph
             ```
 
         * If the NCN images were customized, set the following variables:
 
             ```bash
-            pit# export artdir=/var/www/ephemeral/data
-            pit# export k8sdir=$artdir/k8s
-            pit# export cephdir=$artdir/ceph
+            pit# artdir=/var/www/ephemeral/data ; k8sdir=$artdir/k8s ; cephdir=$artdir/ceph
             ```
 
-    1. After setting the variables in the previous step, run the following command.
+    1. Run the following command.
 
         ```bash
         pit# csi handoff ncn-images \
@@ -158,10 +163,10 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         export CEPH_VERSION=x.y.z
         ```
 
-    3. Run the `export` commands listed at the end of the output from the previous step.
+    1. Run the `export` commands listed at the end of the output from the previous step.
 
 
-1. <a name="csi-handoff-bss-metadata"></a>Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. 
+1. <a name="csi-handoff-bss-metadata"></a>Upload the `data.json` file to BSS, our Kubernetes cloud-init DataSource. 
 
     __If you have made any changes__ to this file (for example, as a result of any customizations or workarounds), use the path to that file instead. This step will prompt for the root password of the NCNs.
 
@@ -189,39 +194,40 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     
     ```bash
     
-    pit# mkdir -pv /var/www/ephemeral/prep/logs
-    pit# cp -prv /var/log/conman /var/www/ephemeral/prep/logs/conman.$(date +%Y-%m-%d_%H-%M-%S)
+    pit# mkdir -pv /var/www/ephemeral/prep/logs &&
+            cp -prv /var/log/conman /var/www/ephemeral/prep/logs/conman.$(date +%Y-%m-%d_%H-%M-%S)
     ```
 
-1. Upload the bootstrap information.
+1. <a name="backup-bootstrap-information"></a>Backup the bootstrap information from `ncn-m001`.
    
     > **NOTE:** This denotes information that should always be kept together in order to fresh-install the system again.
 
     1. Log in; setup passwordless SSH _to_ the PIT node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the PIT (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
 
         ```bash
-        pit# CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1))
-        pit# echo "${CSM_RELEASE}"
+        pit# echo "${CSM_PATH}"
         # these will prompt for a password:
         pit# ssh ncn-m002 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
         pit# ssh ncn-m003 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
         pit# chmod 600 /root/.ssh/authorized_keys
         ```
 
-    1. Run this backup files from the PIT to `ncn-m002` and `ncn-m003`. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
+    1. Back up files from the PIT to `ncn-m002`.
 
         ```bash
-        pit# ssh ncn-m002 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
-        "mkdir -pv /metal/bootstrap
-        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
-        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
+        pit# ssh ncn-m002 \
+            "mkdir -pv /metal/bootstrap
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:${CSM_PATH}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
 
+    1. Back up files from the PIT to `ncn-m003`.
+
         ```bash
-        pit# ssh ncn-m003 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
-        "mkdir -pv /metal/bootstrap
-        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
-        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
+        pit# ssh ncn-m003 \
+            "mkdir -pv /metal/bootstrap
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:${CSM_PATH}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
 
 1. List ipv4 boot options using `efibootmgr`:
@@ -274,7 +280,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
 1. Wipe the disks on the PIT node.
 
-    > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**. USB devices can only be wiped by operators at this point in the install. USB devices are never wiped by the CSM installer.
+    > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda`, `sdb`, and `sdc`); they are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**. USB devices can only be wiped by operators at this point in the install. USB devices are never wiped by the CSM installer.
 
     1. Select disks to wipe (SATA/NVME/SAS).
 
@@ -315,11 +321,14 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
         If there was any wiping done, output should appear similar to the snippet above. If this is re-run, there may be no output or an ignorable error.
 
-1.  Quit the typescript session with the `exit` command and copy the file (`csm-livecd-reboot.<date>.txt`) to a location on another server for reference later.
+1.  Quit the typescript session and copy it off `ncn-m001`.
 
-    ```bash
-    pit# exit
-    ```
+    1. Stop the typescript session:
+        ```bash
+        pit# exit
+        ```
+
+    1. Back up the completed typescript file by re-running the `rsync` commands in the [Backup Bootstrap Information](#backup-bootstrap-information) section.
 
 1.  (Optional) Setup ConMan or serial console, if not already on, from any laptop or other system with network connectivity to the cluster.
     
