@@ -19,6 +19,8 @@ This is either a first time install or the previous CSM was wiped and requires a
     - Generate the switch configuration file(s)
 1. [Apply switch configs](apply_switch_configs.md)
     - Applying the configuration to switch.
+1. [Apply custom switch configs](apply_custom_config.md)  
+    - Applying the custom configuration to switch.
 1. [Validate switch configs](validate_switch_configs.md) 
     - Checks differences between generated configs and the configs on the system.
 1. [Network tests](network_tests.md)

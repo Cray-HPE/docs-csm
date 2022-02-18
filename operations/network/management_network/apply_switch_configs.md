@@ -20,6 +20,7 @@ This will automatically accept prompts.
 
 ### Dell
 - When pasting in the config be sure that all the commands were accepted.  In some cases you will need to back out of the current config context and back to global configuration for the commands to work as intended.
+- `banner motd` will need to be manually applied.
 
 An example
 
@@ -45,4 +46,27 @@ sw-leaf-bmc-001(config-router-ospf-2)# router-id 10.2.0.4
 sw-spine-001 [mlag-domain: standby] (config) # no cli default prefix-modes enable
 ```
 
-#### Be sure to `write memory` after the configuration has been applied.
+### Write memory
+
+To keep track of what version of config is running on the switch create a new configuration file using the `csm version` and the `CANU version` from `motd banner` from the running config.
+
+##### Mellanox
+`sw-spine-002 [mlag-domain: master] (config) # configuration write to csm1.0.canu1.1.11`
+##### Dell
+get the csm and canu version.
+```
+sw-leaf-bmc-001# show running-configuration | grep motd
+banner motd ^C
+ ###############################################################################
+ # CSM version:  1.0
+ # CANU version: 1.1.11
+ ###############################################################################
+ ```
+
+Create a config file with the correct versions.
+
+ ```
+sw-leaf-bmc-001(config)# copy config://startup.xml config://csm1.0-canu1.1.11
+Copy completed
+ ```
+##### Aruba
