@@ -44,13 +44,15 @@ At a minimum, answers to the following questions must be known prior to upgradin
 Several other flags in the migration script allow for user input, overrides and guidance to the upgrade process.  Taking time to review these options is important.  All current options can be seen by running:
 
 ```bash
-./scripts/sls/sls_updater_csm_1.2.py --help
+export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+${DOCDIR}/sls_updater_csm_1.2.py --help
 ```
 
 Example:
 
 ```bash
-$ ./scripts/sls/sls_updater_csm_1.2.py --help
+$ export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+$ ${DOCDIR}/sls_updater_csm_1.2.py --help
 
 Usage: sls_updater_csm_1.2.py [OPTIONS]
 
@@ -75,8 +77,8 @@ Options:
   --customer-highspeed-network <INTEGER RANGE IPV4NETWORK>... - CHN - VLAN and IPv4 network CIDR block [default: 5, 10.104.7.0/24]
   --bgp-asn INTEGER RANGE - The autonomous system number for BGP router [default: 65533;64512<=x<=65534]
   --bgp-chn-asn INTEGER RANGE - The autonomous system number for CHN BGP clients  [default: 65530;64512<=x<=65534]
-  --bgp-cmn-asn INTEGER RANGE - The autonomous system number for CMN BGP clients  [default: 65534;64512<=x<=65534]
-  --bgp-nmn-asn INTEGER RANGE - The autonomous system number for NMN BGP clients  [default: 65533;64512<=x<=65534]
+  --bgp-cmn-asn INTEGER RANGE - The autonomous system number for CMN BGP clients  [default: 65532;64512<=x<=65534]
+  --bgp-nmn-asn INTEGER RANGE - The autonomous system number for NMN BGP clients  [default: 65531;64512<=x<=65534]
   --preserve-existing-subnet-for-cmn [external-dns|ncns] -  When creating the CMN from the CAN, preserve the metallb_static_pool for external-dns IP, or bootstrap_dhcp for NCN IPs.  By default no subnet IPs from CAN will be preserved.
   --can-subnet-override <CHOICE IPV4NETWORK>... - [EXPERT] Manually/Statically assign CAN subnets to your choice of network_hardware bootstrap_dhcp, can_metallb_address_pool, and/or can_metallb_static_pool subnets.
   --cmn-subnet-override <CHOICE IPV4NETWORK>... - [EXPERT] Manually/Statically assign CMN subnets to your choice of network_hardware, bootstrap_dhcp, cmn_metallb_address_pool, and/or cmn_metallb_static_pool subnets.
@@ -92,6 +94,13 @@ Obtain a token:
 export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 ```
 
+Create a working directory:
+
+```bash
+mkdir /root/sls_upgrade
+cd /root/sls_upgrade
+```
+
 Extract SLS data to a file:
 
 ```bash
@@ -103,7 +112,8 @@ curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/api
 * Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
 ```bash
-./sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
                          --bican-user-network-name CHN \
                          --customer-highspeed-network 5 10.103.11.192/26
 ```
@@ -111,7 +121,8 @@ curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/api
 * Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing external-dns entry.
 
 ```bash
-./sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
                          --bican-user-network-name CAN \
                          --customer-access-network 6 10.103.15.192/26 \
                          --preserve-existing-subnet-for-cmn external-dns \
