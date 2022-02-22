@@ -86,76 +86,6 @@ sw-spine-002 [mlag-domain: master] # show run | include "ip route"
    ip route 0.0.0.0/0 10.102.3.2 5
    ip route 0.0.0.0/0 10.102.255.85
 ```
-
- #### Apply site connection configuration
-
- Once the generated configuration has been applied. [apply switch configs](apply_switch_configs.md). You will need to apply the backed up site connection configuration with a couple modifications.  Since we are now using a VRF to seperate customer traffic we will need to add the site ports and the default routes to that VRF.  
- ##### Aruba
-`vrf attach Customer` will be added to the port configuration that connects to the site.
-`vrf Customer` will be appended to the default route configuration.
-
-```
-sw-spine-001# conf t
-interface 1/1/36 
-    no shutdown
-    vrf attach Customer 
-    description to:CANswitch_cfcanb6s1-31:from:sw-25g01_x3000u39-j36
-    ip address 10.101.15.142/30
-    exit
-```
-```
-sw-spine-001# conf t
-sw-spine-001(config)# system interface-group 3 speed 10g
-```
-```
-sw-spine-002# conf t
-interface 1/1/36 
-    no shutdown 
-    vrf attach Customer
-    description to:CANswitch_cfcanb6s1-46:from:sw-25g02_x3000u40-j36
-    ip address 10.101.15.190/30
-    exit
-```
-```
-sw-spine-001(config)# system interface-group 3 speed 10g
-```
-```
-sw-spine-001# conf t
-sw-spine-001(config)# ip route 0.0.0.0/0 10.101.15.141 vrf Customer
-```
-```
-sw-spine-002# conf t
-sw-spine-002(config)# ip route 0.0.0.0/0 10.101.15.189 vrf Customer
-```
-##### Mellanox
-
-```
-sw-spine-001 [mlag-domain: master] # conf t
-interface ethernet 1/16 speed 10G force
-interface ethernet 1/16 mtu 1500 force
-interface ethernet 1/16 no switchport force
-interface ethernet 1/16 vrf forwarding Customer
-interface ethernet 1/16 ip address 10.102.255.10/30 primary
-```
-```
-sw-spine-002 [mlag-domain: master] # conf t
-interface ethernet 1/16 speed 10G force
-interface ethernet 1/16 mtu 1500 force
-interface ethernet 1/16 no switchport force
-interface ethernet 1/16 vrf forwarding Customer
-interface ethernet 1/16 ip address 10.102.255.86/30 primary
-```
-```
-sw-spine-001 [mlag-domain: master] # conf t
-   ip route vrf Customer 0.0.0.0/0 10.102.3.3 5
-   ip route vrf Customer 0.0.0.0/0 10.102.255.9
-```
-```
-sw-spine-002 [mlag-domain: master] # conf t
-   ip route vrf Customer 0.0.0.0/0 10.102.3.2 5
-   ip route vrf Customer 0.0.0.0/0 10.102.255.85
-```
-
  #### Backup users/password
 ##### Aruba
 ```
@@ -175,28 +105,7 @@ sw-spine-001 [standalone: master] # show run | include username
    username admin password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    username monitor password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    ```
- #### Apply users/password
 
-All that's required to re-apply the users is get into global configuration mode `conf t` and paste in the config that was copied from the previous step.
- 
-##### Aruba
-```
-sw-leaf-bmc-001# conf t
-user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
- ```
-##### Dell
-```
-sw-leaf-001# conf t
-system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
- ```
-
-##### Mellanox
-```
-sw-spine-001 [standalone: master] # conf t
-   username admin password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-   username monitor password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-   ```
 #### Backup SNMP credentials
 SNMP is currently only used on sw-leaf-bmc switches, these credentials can be retrieved from vault.  More info on SNMP creds can be found on the [Change SNMP Credentials on Leaf Switches](../../../operations/security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md) page.
 

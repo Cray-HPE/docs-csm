@@ -1,9 +1,9 @@
-# CSM 1.1.0 or later to 1.2.0 Upgrade Process (WIP)
+# CSM 1.0.0 or later to 1.2.0 Upgrade Process (WIP)
 #NOTE: this is a WIP doc
 
 ## Introduction
 
-This document is intended to guide an administrator through the upgrade process going from Cray Systems Management v1.1 to v1.2. When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the resource_material directory for additional reference material in support of the process/scripts mentioned explicitly on this page.
+This document is intended to guide an administrator through the upgrade process going from Cray Systems Management v1.0 to v1.2. When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the resource_material directory for additional reference material in support of the processes/scripts mentioned explicitly on this page.
 
 ## Terminology
 
@@ -26,8 +26,7 @@ upgrade that node.
 - [Stage 1 - Ceph Node Image Upgrade](Stage_1.md)
 - [Stage 2 - Kubernetes Upgrade](Stage_2.md)
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
-- [Stage 4 - Apply Known Workarounds](Stage_4.md)
-- [Stage 5 - Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
+- [Stage 4 - Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
 
 **`Important:`** Please take note of the below content for troubleshooting purposes in the case that you encounter issues.
 

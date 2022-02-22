@@ -7,7 +7,7 @@ To learn more about etcd, refer to the following links:
 
 - General documentation - [https://github.com/etcd-io/etcd](https://github.com/etcd-io/etcd)
 - README - [https://github.com/etcd-io/etcd/tree/master/etcdctl](https://github.com/etcd-io/etcd/tree/master/etcdctl)
-- etcd upstream performance - [https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/performance.md\#benchmarks](https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/performance.md#benchmarks)
+- etcd upstream performance - [https://etcd.io/docs/v3.5/benchmarks/](https://etcd.io/docs/v3.5/benchmarks/)
 
 ### Usage of etcd on the System
 

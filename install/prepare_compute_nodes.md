@@ -128,7 +128,7 @@ x3000c0s30b4n0.
       Example using port number 46.
 
       ```
-      sw-leaf01# show mac-address-table | include 1/1/46
+      sw-leaf-001# show mac-address-table | include 1/1/46
       94:40:c9:38:08:c7    4        dynamic                   1/1/46
       ```
 
@@ -145,17 +145,17 @@ x3000c0s30b4n0.
       Example using port number 46.
 
       ```
-      sw-leaf01# configure t
-      sw-leaf01(config)# int 1/1/46
-      sw-leaf01(config-if)# vlan trunk allowed 4
-      sw-leaf01(config-if)# write mem
+      sw-leaf-001# configure t
+      sw-leaf-001(config)# int 1/1/46
+      sw-leaf-001(config-if)# vlan trunk allowed 4
+      sw-leaf-001(config-if)# write mem
       Copying configuration: [Success]
-      sw-leaf01(config-if)# exit
-      sw-leaf01(config)# exit
+      sw-leaf-001(config-if)# exit
+      sw-leaf-001(config)# exit
       ```
    5. Verify the settings.
       ```
-      sw-leaf01# show running-config interface 1/1/46
+      sw-leaf-001# show running-config interface 1/1/46
       interface 1/1/46
           no shutdown
           mtu 9198

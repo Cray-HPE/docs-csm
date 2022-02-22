@@ -2,7 +2,7 @@
 
 Ingress routing to services via Istio's ingress gateway is configured by VirtualService custom resource definitions \(CRD\). When using external hostnames, there needs to be a VirtualService CRD that matches the external hostname to the desired destination.
 
-For example, the configuration below controls the ingress routing for prometheus.SYSTEM_DOMAIN_NAME:
+For example, the configuration below controls the ingress routing for prometheus.cmn.SYSTEM_DOMAIN_NAME:
 
 ```bash
 ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus
@@ -12,7 +12,7 @@ Example output:
 
 ```
 NAME                             GATEWAYS                      HOSTS                              AGE
-cray-sysmgmt-health-prometheus   [services/services-gateway]   [prometheus.SYSTEM_DOMAIN_NAME]   22h
+cray-sysmgmt-health-prometheus   [services/services-gateway]   [prometheus.cmn.SYSTEM_DOMAIN_NAME]   22h
 ```
 
 ```
@@ -43,11 +43,11 @@ spec:
   gateways:
   - services/services-gateway
   hosts:
-  - prometheus.SYSTEM_DOMAIN_NAME
+  - prometheus.cmn.SYSTEM_DOMAIN_NAME
   http:
   - match:
     - authority:
-        exact: prometheus.SYSTEM_DOMAIN_NAME
+        exact: prometheus.cmn.SYSTEM_DOMAIN_NAME
     route:
     - destination:
         host: cray-sysmgmt-health-promet-prometheus
@@ -56,7 +56,7 @@ spec:
 
 ```
 
-By matching the external hostname in the authority field, Istio's ingress gateway is able to route incoming traffic from OAuth2 Proxy to the `cray-sysmgmt-health-prometheus` service in the `sysmgmt-health` namespace. Also, notice that the VirtualService for prometheus.SYSTEM_DOMAIN_NAME uses the existing `services/services-gateway` Gateway CRD and does not create a new one.
+By matching the external hostname in the authority field, Istio's ingress gateway is able to route incoming traffic from OAuth2 Proxy to the `cray-sysmgmt-health-prometheus` service in the `sysmgmt-health` namespace. Also, notice that the VirtualService for prometheus.cmn.SYSTEM_DOMAIN_NAME uses the existing `services/services-gateway` Gateway CRD and does not create a new one.
 
 ### Secure Ingress via OAuth2 Proxy
 

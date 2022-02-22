@@ -22,6 +22,12 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
+echo "Updating imageRepository in kubeadm-config configmap"
+echo ""
+kubectl get configmap kubeadm-config -n kube-system -o yaml > /tmp/kubeadm-config.yaml
+cp /tmp/kubeadm-config.yaml /tmp/kubeadm-config.yaml.back
+sed -i 's/imageRepository: k8s.gcr.io/imageRepository: artifactory.algol60.net\/csm-docker\/stable\/k8s.gcr.io/' /tmp/kubeadm-config.yaml
+kubectl -n kube-system apply -f /tmp/kubeadm-config.yaml
 
 export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u)

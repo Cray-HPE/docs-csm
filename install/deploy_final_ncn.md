@@ -84,8 +84,6 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
         ```
 
-1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-pre-reboot` breakpoint.
-
 1. Upload SLS file.
     
     > **NOTE:** The system name environment variable `SYSTEM_NAME` must be set.
@@ -113,6 +111,16 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
+1. Validate that `CSM_RELEASE` and `CSM_PATH` variables are set.
+
+    These variables were set and added to `/etc/environment` during the earlier [Bootstrap PIT Node](index.md#bootstrap_pit_node) step of the install.
+    `CSM_PATH` should be the fully-qualified path to the expanded CSM release tarball on `ncn-m001`.
+
+    ```bash
+    pit# echo $CSM_RELEASE
+    pit# echo $CSM_PATH
+    ```
+
 1. <a name="ncn-boot-artifacts-hand-off"></a>Upload NCN boot artifacts into S3.
 
     1. Set the variables.
@@ -126,21 +134,16 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         * If the NCN images were **not** customized, set the following variables (this is the default path):
 
             ```bash
-            pit# export CSM_RELEASE=csm-x.y.z
-            pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
-            pit# export k8sdir=$artdir/kubernetes
-            pit# export cephdir=$artdir/storage-ceph
+            pit# artdir=${CSM_PATH}/images ; k8sdir=$artdir/kubernetes ; cephdir=$artdir/storage-ceph
             ```
 
         * If the NCN images were customized, set the following variables:
 
             ```bash
-            pit# export artdir=/var/www/ephemeral/data
-            pit# export k8sdir=$artdir/k8s
-            pit# export cephdir=$artdir/ceph
+            pit# artdir=/var/www/ephemeral/data ; k8sdir=$artdir/k8s ; cephdir=$artdir/ceph
             ```
 
-    1. After setting the variables in the previous step, run the following command.
+    1. Run the following command.
 
         ```bash
         pit# csi handoff ncn-images \
@@ -160,12 +163,12 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         export CEPH_VERSION=x.y.z
         ```
 
-    3. Run the `export` commands listed at the end of the output from the previous step.
+    1. Run the `export` commands listed at the end of the output from the previous step.
 
 
-1. <a name="csi-handoff-bss-metadata"></a>Upload the same `data.json` file we used to BSS, our Kubernetes cloud-init DataSource. 
+1. <a name="csi-handoff-bss-metadata"></a>Upload the `data.json` file to BSS, our Kubernetes cloud-init DataSource. 
 
-    __If you have made any changes__ to this file as a result of any customizations or workarounds, use the path to that file instead. This step will prompt for the root password of the NCNs.
+    __If you have made any changes__ to this file (for example, as a result of any customizations or workarounds), use the path to that file instead. This step will prompt for the root password of the NCNs.
 
     ```bash
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
@@ -191,39 +194,40 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     
     ```bash
     
-    pit# mkdir -pv /var/www/ephemeral/prep/logs
-    pit# cp -prv /var/log/conman /var/www/ephemeral/prep/logs/conman.$(date +%Y-%m-%d_%H-%M-%S)
+    pit# mkdir -pv /var/www/ephemeral/prep/logs &&
+            cp -prv /var/log/conman /var/www/ephemeral/prep/logs/conman.$(date +%Y-%m-%d_%H-%M-%S)
     ```
 
-1. Upload the bootstrap information.
+1. <a name="backup-bootstrap-information"></a>Backup the bootstrap information from `ncn-m001`.
    
     > **NOTE:** This denotes information that should always be kept together in order to fresh-install the system again.
 
     1. Log in; setup passwordless SSH _to_ the PIT node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the PIT (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
 
         ```bash
-        pit# CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1))
-        pit# echo "${CSM_RELEASE}"
+        pit# echo "${CSM_PATH}"
         # these will prompt for a password:
         pit# ssh ncn-m002 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
         pit# ssh ncn-m003 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
         pit# chmod 600 /root/.ssh/authorized_keys
         ```
 
-    1. Run this backup files from the PIT to `ncn-m002` and `ncn-m003`. _This runs `rsync` with specific parameters; `partial`, `non-verbose`, and `progress`._
+    1. Back up files from the PIT to `ncn-m002`.
 
         ```bash
-        pit# ssh ncn-m002 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
-        "mkdir -pv /metal/bootstrap
-        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
-        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
+        pit# ssh ncn-m002 \
+            "mkdir -pv /metal/bootstrap
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:${CSM_PATH}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
 
+    1. Back up files from the PIT to `ncn-m003`.
+
         ```bash
-        pit# ssh ncn-m003 CSM_RELEASE=$(basename $(ls -d /var/www/ephemeral/csm*/ | head -n 1)) \
-        "mkdir -pv /metal/bootstrap
-        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
-        rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/${CSM_RELEASE}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
+        pit# ssh ncn-m003 \
+            "mkdir -pv /metal/bootstrap
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:${CSM_PATH}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
 
 1. List ipv4 boot options using `efibootmgr`:
@@ -276,7 +280,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
 1. Wipe the disks on the PIT node.
 
-    > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda, sdb, and sdc`), they float and are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**. USB devices can only be wiped by operators at this point in the install. USB devices are never wiped by the CSM installer.
+    > **`WARNING : USER ERROR`** Do not assume to wipe the first three disks (e.g. `sda`, `sdb`, and `sdc`); they are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**. USB devices can only be wiped by operators at this point in the install. USB devices are never wiped by the CSM installer.
 
     1. Select disks to wipe (SATA/NVME/SAS).
 
@@ -317,11 +321,14 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
         If there was any wiping done, output should appear similar to the snippet above. If this is re-run, there may be no output or an ignorable error.
 
-1.  Quit the typescript session with the `exit` command and copy the file (`csm-livecd-reboot.<date>.txt`) to a location on another server for reference later.
+1.  Quit the typescript session and copy it off `ncn-m001`.
 
-    ```bash
-    pit# exit
-    ```
+    1. Stop the typescript session:
+        ```bash
+        pit# exit
+        ```
+
+    1. Back up the completed typescript file by re-running the `rsync` commands in the [Backup Bootstrap Information](#backup-bootstrap-information) section.
 
 1.  (Optional) Setup ConMan or serial console, if not already on, from any laptop or other system with network connectivity to the cluster.
     
@@ -449,13 +456,10 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     ncn-m001# rm -v /etc/zypp/repos.d/* && zypper ms --remote --disable
     ```
 
-1. Download and install/upgrade the workaround and documentation RPMs. 
+1. Download and install/upgrade the documentation RPM. If this machine does not have direct internet
+   access this RPM will need to be externally downloaded and then copied to this machine.
 
-    If this machine does not have direct internet access these RPMs will need to be externally downloaded and then copied to this machine.
-
-    **Important:** To ensure that the latest workarounds and documentation updates are available, see [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds)
-
-1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-post-reboot` breakpoint.
+    See [Check for Latest Documentation](../update_product_stream/index.md#documentation)
 
 1. Exit the typescript and move the backup to `ncn-m001`, thus removing the need to track `ncn-m002` as yet-another bootstrapping agent. This is required to facilitate reinstallations, because it pulls the preparation data back over to the documented area (`ncn-m001`).
 
@@ -515,44 +519,49 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
  > **NOTE:** If the system uses Gigabyte or Intel hardware, skip this section.
 
 Configure DNS and NTP on the BMC for each management node **except `ncn-m001`**. 
+However, the commands in this section are all run **on** `ncn-m001`.
 
-The commands in this section are all run on `ncn-m001`, but they are being run **for** 
-every management node **except `ncn-m001`**. That is, the `NCN` variable in the first step
-will end up being set to every NCN name **except** `ncn-m001`.
+1. Set environment variables.
 
-Carry out the following steps for every NCN **except** `ncn-m001`:
-
-1. Set environment variables. 
-
-    Make sure to set the appropriate value for the `IPMI_PASSWORD` variable and `NCN` variable.
-
-    This example is for `ncn-m002`, but you will be repeating this procedure for every NCN **except** `ncn-m001`.
+    Set the `IPMI_PASSWORD` and `USERNAME` variables to the BMC credentials for your NCNs.
+    
+    > Using `read -s` for this prevents the credentials from being echoed to the screen
 
     ```bash
-    ncn-m001# export IPMI_PASSWORD=changeme
-    ncn-m001# export USERNAME=root
-    ncn-m001# NCN=ncn-m002
+    ncn-m001# read -s IPMI_PASSWORD
+    ncn-m001# read -s USERNAME
+    ncn-m001# export IPMI_PASSWORD USERNAME
     ```
 
-1. Disable DHCP and configure NTP on the BMC using data from cloud-init.
+1. Set `BMCS` variable to list of the BMCs for all master nodes, worker nodes, and storage nodes, 
+   except `ncn-m001-mgmt`:
 
     ```bash
-    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${NCN}-mgmt" -S -n
+    ncn-m001# BMCS=$(grep -Eo "[[:space:]]ncn-[msw][0-9][0-9][0-9]-mgmt([.]|[[:space:]]|$)" /etc/hosts | 
+                        sed 's/^.*\(ncn-[msw][0-9][0-9][0-9]-mgmt\).*$/\1/' | 
+                        sort -u | 
+                        grep -v "^ncn-m001-mgmt$")
+    ncn-m001# echo $BMCS
     ```
 
-1. Configure DNS on the BMC using data from cloud-init.
+1. Run the following to loop through all of the BMCs (except `ncn-m001-mgmt`) and apply the desired settings.
 
     ```bash
-    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${NCN}-mgmt" -d
+    ncn-m001# for BMC in $BMCS ; do
+                echo "$BMC: Disabling DHCP and configure NTP on the BMC using data from cloud-init"
+                /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -S -n
+                echo
+                echo "$BMC: Configuring DNS on the BMC using data from cloud-init"
+                /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -d
+                echo
+                echo "$BMC: Showing settings"
+                /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -s
+                echo
+                echo "Press enter to proceed to next BMC, or control-C to abort"
+                echo
+                read
+            done ; echo "Configuration completed on all NCN BMCs"
     ```
-
-1. Show the settings of the BMC, if desired:
-
-    ```bash
-    ncn-m001# /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${NCN}-mgmt" -s
-    ```
-
-1. Repeat the previous steps for all remaining NCNs **except `ncn-m001`**.
 
 <a name="next-topic"></a>
 ### 7. Next Topic

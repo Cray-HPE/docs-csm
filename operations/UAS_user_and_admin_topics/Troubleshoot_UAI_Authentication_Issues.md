@@ -79,8 +79,8 @@ Error: Invalid Credentials
 
 To resolve this issue:
 
--   Log in to Keycloak and verify the user exists.
--   Make sure the username and password are correct.
+- Log in to Keycloak and verify the user exists.
+- Make sure the username and password are correct.
 
 
 ### `cray uas describe <user>` Does Not Work
@@ -99,6 +99,11 @@ Use `cray uas list` instead.
 
 ```bash
 # cray uas list
+```
+
+Example output:
+
+```
 [[results]]
 username = ""
 uai_host = ""

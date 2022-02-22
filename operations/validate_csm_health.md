@@ -3,7 +3,7 @@
 Anytime after the installation of the CSM services, the health of the management nodes and all CSM services can be validated.
 
 The following are examples of when to run health checks:
-* After CSM install.sh completes
+* After completing the [Install CSM Services](../install/index.md#install_csm_services) step of the CSM install (**not** before)
 * Before and after NCN reboots
 * After the system is brought back up
 * Any time there is unexpected behavior observed
@@ -13,32 +13,34 @@ The areas should be tested in the order they are listed on this page. Errors in 
 
 ## Topics:
 
-- [0. Cray Command Line Interface](#cray-command-line-interface)
-- [1. Platform Health Checks](#platform-health-checks)
-  - [1.1 NCN Health Checks](#pet-ncnhealthchecks)
-    - [1.1.1 Known Test Issues](#autogoss-issues)
-  - [1.2 NCN Resource Checks (optional)](#pet-ncnhealthchecks-resources)
-    - [1.2.1 Known Issues](#known-issues)
-  - [1.3 Check of System Management Monitoring Tools](#check-of-system-management-monitoring-tools)
-- [2. Hardware Management Services Health Checks](#hms-health-checks)
-  - [2.1 HMS CT Test Execution](#hms-test-execution)
-  - [2.2 Aruba Switch SNMP Fixup](#hms-aruba-fixup)
-  - [2.3 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
-    - [2.3.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results)
-    - [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues)
-- [3 Software Management Services Health Checks](#sms-health-checks)
-  - [3.1 SMS Test Execution](#sms-checks)
-  - [3.2 Interpreting cmsdev Results](#cmsdev-results)
-- [4. Booting CSM Barebones Image](#booting-csm-barebones-image)
-  - [4.1 Running the script](#csm-run-script)
-- [5. UAS / UAI Tests](#uas-uai-tests)
-  - [5.1 Validate the Basic UAS Installation](#uas-uai-validate-install)
-  - [5.2 Validate UAI Creation](#uas-uai-validate-create)
-  - [5.3 UAS/UAI Troubleshooting](#uas-uai-validate-debug)
-    - [5.3.1 Authorization Issues](#uas-uai-validate-debug-auth)
-    - [5.3.2 UAS Cannot Access Keycloak](#uas-uai-validate-debug-keycloak)
-    - [5.3.3 UAI Images not in Registry](#uas-uai-validate-debug-registry)
-    - [5.3.4 Missing Volumes and other Container Startup Issues](#uas-uai-validate-debug-container)
+- [Validate CSM Health](#validate-csm-health)
+  - [Topics:](#topics)
+  - [0. Cray Command Line Interface](#0-cray-command-line-interface)
+  - [1. Platform Health Checks](#1-platform-health-checks)
+    - [1.1 NCN Health Checks](#11-ncn-health-checks)
+      - [1.1.1 Known Test Issues](#111-known-test-issues)
+    - [1.2 NCN Resource Checks (optional)](#12-ncn-resource-checks-optional)
+      - [1.2.1 Known Issues](#121-known-issues)
+    - [1.3 Check of System Management Monitoring Tools](#13-check-of-system-management-monitoring-tools)
+  - [2. Hardware Management Services Health Checks](#2-hardware-management-services-health-checks)
+    - [2.1 HMS CT Test Execution](#21-hms-ct-test-execution)
+    - [2.2 Hardware State Manager Discovery Validation](#22-hardware-state-manager-discovery-validation)
+      - [2.2.1 Interpreting results](#221-interpreting-results)
+      - [2.2.2 Known Issues](#222-known-issues)
+  - [3 Software Management Services Health Checks](#3-software-management-services-health-checks)
+    - [3.1 SMS Test Execution](#31-sms-test-execution)
+    - [3.2 Interpreting cmsdev Results](#32-interpreting-cmsdev-results)
+  - [4. Booting CSM Barebones Image](#4-booting-csm-barebones-image)
+  - [Barebones Image Boot.](#barebones-image-boot)
+    - [4.1 Run the Test Script](#41-run-the-test-script)
+  - [5. UAS / UAI Tests](#5-uas--uai-tests)
+    - [5.1 Validate the Basic UAS Installation](#51-validate-the-basic-uas-installation)
+    - [5.2 Validate UAI Creation](#52-validate-uai-creation)
+    - [5.3 UAS/UAI Troubleshooting](#53-uasuai-troubleshooting)
+      - [5.3.1 Authorization Issues](#531-authorization-issues)
+      - [5.3.2 UAS Cannot Access Keycloak](#532-uas-cannot-access-keycloak)
+      - [5.3.3 UAI Images not in Registry](#533-uai-images-not-in-registry)
+      - [5.3.4 Missing Volumes and other Container Startup Issues](#534-missing-volumes-and-other-container-startup-issues)
 
 <a name="cray-command-line-interface"></a>
 ## 0. Cray Command Line Interface
@@ -54,14 +56,6 @@ The Cray CLI must be configured on all NCNs and the PIT node. The following proc
 
 All platform health checks are expected to pass. Each check has been implemented as a [Goss](https://github.com/aelsabbahy/goss) test which reports a PASS or FAIL.
 
-Health Check scripts can be run:
-* After CSM install.sh has been run (not before)
-* Before and after one of the NCNs reboots
-* After the system or a single node goes down unexpectedly
-* After the system is gracefully shut down and brought up
-* Any time there is unexpected behavior on the system to get a baseline of data for CSM services and components
-* In order to provide relevant information to support tickets that are being opened after CSM install.sh has been run
-
 Available Platform Health Checks:
 1. [ncnHealthChecks](#pet-ncnhealthchecks)
 1. [OPTIONAL Check of ncnHealthChecks Resources](#pet-optional-ncnhealthchecks-resources)
@@ -70,30 +64,33 @@ Available Platform Health Checks:
 <a name="pet-ncnhealthchecks"></a>
 ### 1.1 NCN Health Checks
 
-This check requires that the [Cray CLI is configured](#cray-command-line-interface) on all worker NCNs.
+These checks require that the [Cray CLI is configured](#cray-command-line-interface) on all worker NCNs.
+
+If `ncn-m001` is the PIT node, run these checks on `ncn-m001`, otherwise run them from any NCN.
 
 There are multiple Goss test suites available that cover a variety of subsystems. The platform health checks are defined in the test suites `ncn-healthcheck` and `ncn-kubernetes-checks`.
 
-Run the NCN health checks with the following command (If m001 is the PIT node, run on the PIT, otherwise run from any NCN):
+1. Specify the admin user password for the management switches in the system, which is required for the `ncn-healthcheck` test.
 
-**IMPORTANT:** Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
+    ```bash
+    ncn/pit# export SW_ADMIN_PASSWORD='changeme'
+    ```
 
-Specify the admin user password for the management switches in the system which is required for the `ncn-healthcheck` test.
-```bash
-# export SW_ADMIN_PASSWORD='changeme'
-```
+1. Run the NCN health checks.
 
-```bash
-# /opt/cray/tests/install/ncn/automated/ncn-healthcheck
-```
+    ```bash
+    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck
+    ```
 
-And the Kubernetes test suite via:
+1. Run the Kubernetes checks.
 
-```bash
-# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
-```
+    ```bash
+    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
+    ```
 
-Review the output for `Result: FAIL` and follow the instructions provided to resolve any such test failures. With the exception of the [Known Test Issues](#autogoss-issues), all health checks are expected to pass.
+1. Review results.
+
+    Review the output for `Result: FAIL` and follow the instructions provided to resolve any such test failures. With the exception of the [Known Test Issues](#autogoss-issues), all health checks are expected to pass.
 
 <a name="autogoss-issues"></a>
 #### 1.1.1 Known Test Issues
@@ -101,25 +98,39 @@ Review the output for `Result: FAIL` and follow the instructions provided to res
 * Kubernetes Query BSS Cloud-init for ca-certs
   - This test may fail immediately after platform install. It should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * Kubernetes Velero No Failed Backups
-  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the `velero` command to delete backups from a Kubernetes node to clear this situation. See the output of the test for more details on how to cleanup backups that have failed due to a known interruption.
-* Verify spire-agent is enabled and running
-
-  - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker nodes and master nodes), logging errors (via journalctl) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. Even though the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.
-     1. Set `NODE` to the NCN which is experiencing the issue. In this example, `ncn-w002`.
+  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to delete backups from a Kubernetes node to clear this situation. See the output of the test for more details on how to cleanup backups that have failed due to a known interruption. For example:
+     1. Run the following to find the failed backup.
         ```bash
-          ncn# export NODE=ncn-w002
-          ```
+        ncn/pit# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
+        ```
+     1. Delete the backup, where <backup> is replaced with a backup returned in the previous step.
+        ```bash
+        ncn# velero backup delete <backup> --confirm
+        ```
+* Verify spire-agent is enabled and running
+  - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker nodes and master nodes), logging errors (via `journalctl`) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. Even though the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.
      1. Define the following function
         ```bash
-        ncn# function renewncnjoin() { for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do if kubectl describe -n spire pods $pod | grep -q "Node:.*$1"; then echo "Restarting $pod running on $1"; kubectl delete -n spire pod "$pod"; fi done }
+        ncn/pit# function renewncnjoin() { 
+            for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do 
+                if kubectl describe -n spire pods $pod | grep -q "Node:.*$1"; then
+                    echo "Restarting $pod running on $1"
+                    kubectl delete -n spire pod "$pod"
+                fi
+            done }
         ```
-     1. Run the function as follows:
+     1. Run the function as follows (substituting the name of the impacted NCN):
         ```bash
-        ncn# renewncnjoin $NODE
+        ncn/pit# renewncnjoin ncn-xxxx
         ```
-
   - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, delete `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the `request-ncn-join-token` daemonset pod.
-
+* `cfs-state-reporter` errors on storage nodes
+  - If the `cfs-state-reporter` check is failing on one or more storage nodes, it could be an issue with their spire tokens. The following procedure may resolve the problem:
+     1. Run the following script on `ncn-m002`:
+        ```bash
+        ncn-m002# /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
+        ```
+     1. Then re-run the check to see if the problem has been resolved.
 
 <a name="pet-optional-ncnhealthchecks-resources"></a>
 ### 1.2 NCN Resource Checks (optional)
@@ -127,15 +138,16 @@ Review the output for `Result: FAIL` and follow the instructions provided to res
 To dump the NCN uptimes, the node resource consumptions, and/or the list of pods not in a running state, run the following:
 
 ```bash
-ncn# /opt/cray/platform-utils/ncnHealthChecks.sh -s ncn_uptimes
-ncn# /opt/cray/platform-utils/ncnHealthChecks.sh -s node_resource_consumption
-ncn# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
+ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s ncn_uptimes
+ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s node_resource_consumption
+ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
 ```
+
 <a name="known-issues"></a>
 #### 1.2.1 Known Issues
 
 * pods_not_running
-  - If the output of `pods_not_running` indicates that there are pods in the `Evicted` state, it may be due to the root file system being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%. This may commonly happen on ncn-m001 as it is a location that install and doc files may be downloaded to. It may be necessary to clean up space in the / directory if this is the root cause of pod evictions. The following commands can be used to determine if analysis of files under / is needed to free-up space. Listing the top 10 files that are 1024M or larger is one way to start the analysis.
+  - If the output of `pods_not_running` indicates that there are pods in the `Evicted` state, it may be due to the root file system being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85% full until it is back under 80%. This commonly happens on `ncn-m001`, because it is a location where install and documentation files may have been downloaded. It may be necessary to clean up space in the `/` directory if this is the root cause of pod evictions. Listing the top 10 files that are 1024M or larger is one way to start the analysis.
 
     ```bash
     ncn# df -h /
@@ -179,18 +191,18 @@ Information to assist with troubleshooting some of the components mentioned in t
 
 The checks in this section require that the [Cray CLI is configured](#cray-command-line-interface) on nodes where the checks are executed.
 
-Execute the HMS smoke and functional tests after the CSM install to confirm that the Hardware Management Services are running and operational.
+Execute the HMS tests to confirm that the Hardware Management Services are running and operational.
 
 Note: Do not run HMS tests concurrently on multiple nodes. They may interfere with one another and cause false failures.
 
 <a name="hms-test-execution"></a>
 ### 2.1 HMS CT Test Execution
 
-These tests should be executed as root on at least one worker NCN and one master NCN (but **not** ncn-m001 if it is still the PIT node).
+These tests may be executed on any one worker or master NCN (but **not** `ncn-m001` if it is still the PIT node).
 
-Run the HMS CT smoke tests. This is done by running the `run_hms_ct_tests.sh` script:
+Run the HMS CT tests. This is done by running the `run_hms_ct_tests.sh` script:
 
-```
+```bash
 ncn# /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
 ```
 
@@ -199,19 +211,8 @@ if not. On CT test failures the script will instruct the admin to look at the
 CT test log files. If one or more failures occur, investigate the cause of
 each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
-<a name="hms-aruba-fixup"></a>
-### 2.2 Aruba Switch SNMP Fixup
-
-Systems with Aruba leaf switches sometimes have issues with a known SNMP bug
-which prevents HSM discovery from discovering all HW. At this stage of the
-installation process, a script can be run to detect if this issue is 
-currently affecting the system, and if so, correct it.
-
-Refer to [Air cooled hardware is not getting properly discovered with Aruba leaf switches](../troubleshooting/known_issues/discovery_aruba_snmp_issue.md) for 
-details.
-
 <a name="hms-smd-discovery-validation"></a>
-### 2.3 Hardware State Manager Discovery Validation
+### 2.2 Hardware State Manager Discovery Validation
 
 By this point in the installation process, the Hardware State Manager (HSM) should
 have done its discovery of the system.
@@ -222,16 +223,14 @@ BMC components and Redfish endpoints) are present in HSM.
 
 To perform this comparison execute the `verify_hsm_discovery.py` script on a Kubernetes master or worker NCN. The result is pass/fail (returns 0 or non-zero):
 
-```
+```bash
 ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
 ```
 
 The output will ideally appear as follows, if there are mismatches these will be displayed in the appropriate section of
 the output. Refer to [2.3.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results) and
-[2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
-```bash
-ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
-
+[2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
+```text
 HSM Cabinet Summary
 ===================
 x1000 (Mountain)
@@ -269,7 +268,7 @@ any FAIL information displayed, the script will exit with a non-zero exit
 code. Failure information interpretation is described in the next section.
 
 <a name="hms-smd-discovery-validation-interpreting-results"></a>
-#### 2.3.1 Interpreting results
+#### 2.2.1 Interpreting results
 
 The Cabinet Checks output is divided into three sections:
 
@@ -289,12 +288,12 @@ that are not discovered in HSM. All other items (nodes, node BMCs and router
 BMCs) which are not discovered are considered warnings.
 
 Any failures need to be investigated by the admin for rectification. Any
-warnings should also be examined by the admin to insure they are accurate and
+warnings should also be examined by the administrator to ensure they are accurate and
 expected.
 
 For each of the BMCs that show up as not being present in HSM components or
-Redfish Endpoints use the following notes to determine if the issue with the
-BMC can be safely ignored, or if there is a legitimate issue with the BMC.
+Redfish Endpoints use the following notes to determine whether the issue with the
+BMC can be safely ignored or needs to be addressed before proceeding.
 
 * The node BMC of 'ncn-m001' will not typically be present in HSM component data, as it is typically connected to the site network instead of the HMN network.
 
@@ -322,7 +321,7 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
 ...
 ```
 
-* HPE PDUs are supported and should show up as being found in HSM. If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered. Refer to [HPE PDU Admin Procedures](./hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
+* HPE PDUs are supported and should show up as being found in HSM. If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered. Refer to [HPE PDU Admin Procedures](hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
    > Cabinet PDU Controllers have xnames in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 
    Example mismatch for HPE PDU:
@@ -340,10 +339,9 @@ BMC can be safely ignored, or if there is a legitimate issue with the BMC.
 If it was determined that the mismatch can not be ignored, then proceed onto the the [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
 
 <a name="hms-smd-discovery-validation-known-issues"></a>
-#### 2.3.2 Known Issues
+#### 2.2.2 Known Issues
 
 Known issues that may prevent hardware from getting discovered by Hardware State Manager:
-* [Air cooled hardware is not getting properly discovered with Aruba leaf switches](../troubleshooting/known_issues/discovery_aruba_snmp_issue.md)
 * [HMS Discovery job not creating RedfishEndpoints in Hardware State Manager](../troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints.md)
 
 <a name="sms-health-checks"></a>
@@ -444,8 +442,7 @@ ncn# /opt/cray/tests/integration/csm/barebonesImageTest
 ```
 
 A successful run would generate output like the following:
-```bash
-ncn# /opt/cray/tests/integration/csm/barebonesImageTest
+```text
 cray.barebones-boot-test: INFO     Barebones image boot test starting
 cray.barebones-boot-test: INFO       For complete logs look in the file /tmp/cray.barebones-boot-test.log
 cray.barebones-boot-test: INFO     Creating bos session with template:csm-barebones-image-test, on node:x3000c0s10b1n0
@@ -469,7 +466,7 @@ The commands in this section require that the [Cray CLI is configured](#cray-com
 
 The procedures below use the CLI as an authorized user and run on two separate node types. The first part runs on the LiveCD node, while the second part runs on a non-LiveCD Kubernetes master or worker node. When using the CLI on either node, the CLI configuration needs to be initialized and the user running the procedure needs to be authorized.
 
-The following procedures run on separate nodes of the system. They are, therefore, separated into separate sub-sections.
+The following procedures run on separate nodes of the system.
 
 1. [Validate Basic UAS Installation](#uas-uai-validate-install)
 1. [Validate UAI Creation](#uas-uai-validate-create)
@@ -491,7 +488,7 @@ This section can be run on any NCN or the PIT node.
       ```
 
       Expected output looks similar to the following:
-      ```
+      ```text
       service_name = "cray-uas-mgr"
       version = "1.11.5"
       ```
@@ -503,7 +500,7 @@ This section can be run on any NCN or the PIT node.
       ```
 
       Expected output looks similar to the following:
-      ```
+      ```text
       results = []
       ```
 
@@ -514,7 +511,7 @@ This section can be run on any NCN or the PIT node.
    ```
 
    Expected output looks similar to the following:
-   ```
+   ```text
    default_image = "registry.local/cray/cray-uai-sles15sp3:1.0.11"
    image_list = [ "registry.local/cray/cray-uai-sles15sp3:1.0.11",]
    ```
@@ -532,7 +529,7 @@ This section can be run on any NCN or the PIT node.
    > take the form of UAIs stuck in 'waiting' state trying to set up volume mounts. See the
    > [UAI Troubleshooting](#uas-uai-validate-debug) section for more information.
 
-This procedure must run on a master or worker node (not the PIT node and not `ncn-w001`) on the system. (It is also possible to do from an external host, but the procedure for that is not covered here).
+This procedure must run on a master or worker node (**not the PIT node and not `ncn-w001`**) on the system.
 
 1. Verify that a UAI can be created:
    ```bash
@@ -540,7 +537,7 @@ This procedure must run on a master or worker node (not the PIT node and not `nc
    ```
 
    Expected output looks similar to the following:
-   ```
+   ```text
    uai_connect_string = "ssh vers@10.16.234.10"
    uai_host = "ncn-w001"
    uai_img = "registry.local/cray/cray-uai-sles15sp3:1.0.11"
@@ -566,7 +563,7 @@ This procedure must run on a master or worker node (not the PIT node and not `nc
    ```
 
    Expected output looks similar to the following:
-   ```
+   ```text
    [[results]]
    uai_age = "0m"
    uai_connect_string = "ssh vers@10.16.234.10"
@@ -592,7 +589,7 @@ This procedure must run on a master or worker node (not the PIT node and not `nc
    ```
 
    Expected output looks similar to the following:
-   ```
+   ```text
    UID          PID    PPID  C STIME TTY          TIME CMD
    root           1       0  0 18:51 ?        00:00:00 /bin/bash /usr/bin/uai-ssh.sh
    munge         36       1  0 18:51 ?        00:00:00 /usr/sbin/munged
@@ -616,7 +613,7 @@ This procedure must run on a master or worker node (not the PIT node and not `nc
    ```
 
    Expected output looks similar to the following:
-   ```
+   ```text
    results = [ "Successfully deleted uai-vers-a00fb46b",]
    ```
 
@@ -638,7 +635,7 @@ ncn# cray uas list
 ```
 
 The symptom of this problem is output similar to the following:
-```
+```text
 Usage: cray uas list [OPTIONS]
 Try 'cray uas list --help' for help.
 
@@ -658,7 +655,7 @@ ncn# cray uas list
 ```
 
 The symptom of this problem is output similar to the following:
-```
+```text
 Usage: cray uas list [OPTIONS]
 Try 'cray uas list --help' for help.
 
@@ -669,26 +666,26 @@ If the wrong hostname was used to reach the API gateway, re-run the CLI initiali
 
 The following shows an example of looking at UAS logs effectively (this example shows only one UAS manager, normally there would be two):
 
-1. Determine the pod name of the uas-mgr pod
+1. Determine the pod name of the `uas-mgr` pod
    ```bash
    ncn# kubectl get po -n services | grep "^cray-uas-mgr" | grep -v etcd
    ```
 
    Expected output looks similar to:
-   ```
+   ```text
    cray-uas-mgr-6bbd584ccb-zg8vx                                    2/2     Running            0          12d
    ```
-2. Set PODNAME to the name of the manager pod whose logs are being viewed.
+2. Set `PODNAME` to the name of the manager pod whose logs are going to be viewed.
    ```bash
    ncn# export PODNAME=cray-uas-mgr-6bbd584ccb-zg8vx
    ```
-3. View its last 25 log entries of the cray-uas-mgr container in that pod, excluding `GET` events:
+3. View the last 25 log entries of the `cray-uas-mgr` container in that pod, excluding `GET` events:
    ```bash
    ncn# kubectl logs -n services $PODNAME cray-uas-mgr | grep -v 'GET ' | tail -25
    ```
 
    Example output:
-   ```
+   ```text
    2021-02-08 15:32:41,211 - uas_mgr - INFO - getting deployment uai-vers-87a0ff6e in namespace user
    2021-02-08 15:32:41,225 - uas_mgr - INFO - creating deployment uai-vers-87a0ff6e in namespace user
    2021-02-08 15:32:41,241 - uas_mgr - INFO - creating the UAI service uai-vers-87a0ff6e-ssh
@@ -725,7 +722,7 @@ ncn# cray uas list
 ```
 
 There may be something similar to the following output:
-```
+```text
 [[results]]
 uai_age = "0m"
 uai_connect_string = "ssh vers@10.103.13.172"

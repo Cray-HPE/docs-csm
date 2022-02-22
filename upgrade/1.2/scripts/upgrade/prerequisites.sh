@@ -200,7 +200,8 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
-        echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: $(pwd)"
+        echo "Please make sure 'docs-csm-latest.noarch.rpm' exists under: /root"
+        exit 1
     fi
     cp /root/docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
     record_state ${state_name} $(hostname)
@@ -218,9 +219,11 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     ${CSM_ARTI_DIR}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/zeromq/zeromq:v4.0.5
     cp -r ${CSM_ARTI_DIR}/shasta-cfg/* ${SITE_INIT_DIR}
     mkdir -p certs
+    set -o pipefail
     kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
     kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
     kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
+    set +o pipefail
     . ${BASEDIR}/update-customizations.sh -i ${SITE_INIT_DIR}/customizations.yaml
     yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
     yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials

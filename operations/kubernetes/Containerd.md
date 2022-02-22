@@ -2,6 +2,39 @@
 
 Containerd is a daemonset that runs on the host. It is used to run containers on the Kubernetes platform.
 
+### /var/lib/containerd filling up
+
+In older versions of containerd, there are cases where the `/var/lib/containerd` directory fills up. In the event that this occurs, the following steps can be used to remediate the issue.
+
+1. Restart containerd on the NCN:
+
+   ```bash
+   ncn-w001 # systemctl restart containerd
+   ```
+
+   Many times this will free up space in `/var/lib/containerd` -- if not proceed to Step 2.  See notes below for subsequent steps that must be taken after containerd is restarted (independent of disk space issues).
+
+1. Restart kubelet on the NCN:
+
+   ```bash
+   ncn-w001 # systemctl restart kubelet
+   ```
+
+   If restarting kubelet fails to free up space in `/var/lib/containerd`, proceed to Step 3.
+
+1. Prune unused container images on the NCN:
+
+   ```bash
+   ncn-w001 # crictl rmi --prune
+   ```
+
+   Any unused images will be pruned.  Finally, if still encountering disk space issues in `/var/lib/containerd`, proceed to the next step to reboot the NCN.
+
+1. Reboot the NCN:
+
+   Follow the [Reboot_NCNs](../node_management/Reboot_NCNs.md) process to properly cordon/drain the NCN and reboot.  Generally this final step will free up space in `/var/lib/containerd`.
+
+
 ### Restart containerd
 
 If the containerd service is restarted on a worker node, this may cause the sonar-jobs-watcher pod running on that worker node to fail when attempting to cleanup unneeded containers. For example:
@@ -64,6 +97,3 @@ If the containerd service is restarted on a worker node, this may cause the sona
 
 
 To learn more in general about containerd, refer to [https://containerd.io/](https://containerd.io/).
-
-
-

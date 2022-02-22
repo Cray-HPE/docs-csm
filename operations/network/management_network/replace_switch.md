@@ -10,7 +10,7 @@
 
 ### Steps
 1. Update Firmware.
-    - [Update management network firmware](update_management_network_firmware.md)
-2. Apply Configuration.
+    - [Update management network firmware](firmware/update_management_network_firmware.md)
+1. Apply Configuration.
     - [Apply Switch Configs](apply_switch_configs.md)
-3. Plug back in.
+1. Plug back in.
