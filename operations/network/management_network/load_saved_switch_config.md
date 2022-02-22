@@ -59,5 +59,8 @@ Unsaved changes     : yes
 ```
 switch to desired configuration.
 ```
-sw-spine-001 [standalone: master] (config) # configuration switch-to csm1.0 no-reboot
+sw-spine-001 [standalone: master] (config) # configuration switch-to csm1.0
+This requires a reboot.
+Type 'yes' to confirm: yes
 ```
+The switch will then reboot to choosen configuration.
