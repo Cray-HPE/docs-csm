@@ -31,7 +31,7 @@ cat /etc/hosts | grep sw-
 If /etc/hosts is not available because the system is being installed you will be on the pit and will need to run:  
 
 ```
-cat /var/www/ephemeral/prep/redbull/sls_input_file.json | jq ‘.Networks | .HMN | .ExtraProperties.Subnets | .[] | select(.Name==“network_hardware”)' 
+cat /var/www/ephemeral/prep/redbull/sls_input_file.json | jq '.Networks | .HMN | .ExtraProperties.Subnets | .[] | select(.Name=="network_hardware")' 
 ```
 
 Run the script below to automatically collect all switch configs.  If the command fails then log in to each individual switch and run show run. 
