@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # MIT License
 #
@@ -21,17 +22,20 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Check Markdown links
 
-on: push
+master=$1
 
-jobs:
-  markdown-link-check:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - uses: gaurav-nelson/github-action-markdown-link-check@v1
-      with:
-        use-quiet-mode: 'yes'
-        config-file: '.github/workflows/mlc_config.json'
-
+export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+echo "Updating service account signing key and issuer kube-api on $master:"
+pdsh -b -S -w $master "sed -i '/service-account-key-file/a\    - --service-account-signing-key-file=/etc/kubernetes/pki/sa.key\n    - --service-account-issuer=https://kubernetes.default.svc.cluster.local' /etc/kubernetes/manifests/kube-apiserver.yaml"
+rc=$?
+if [ "$rc" -ne 0 ]; then
+  echo ""
+  echo "ERROR: Updating kube-apiserver manifest failed. The output from this script should be inspected"
+  echo "       and addressed before moving on with the upgrade. If unable to determine the issue"
+  echo "       and run this script without errors, discontinue the upgrade and contact HPE Service"
+  echo "       for support."
+  exit 1
+fi
+echo "Sleeping for one minute to let kube-apiserver restart on $master"
+sleep 60

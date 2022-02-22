@@ -17,7 +17,7 @@ If the configs have not been generated you will need to follow the steps below.
 
 1. [Collect data](collect_data.md)
     - Collect system data.
-1. [Update management network firmware](update_management_network_firmware.md)
+1. [Update management network firmware](firmware/update_management_network_firmware.md)
     - Upgrade switch firmware to specified firmware version.
 1. [Backup custom config](backup_custom_config.md)
     - If the system had a previous version of CSM on it, you need to backup all custom configuration and credential configuration.

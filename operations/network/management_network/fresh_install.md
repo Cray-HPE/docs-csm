@@ -5,7 +5,7 @@ This is either a first time install or the previous CSM was wiped and requires a
 :exclamation: All of these steps should be done using an out of band connection. This process is disruptive and will require downtime :exclamation: 
 
 
-1. [Update management network firmware](update_management_network_firmware.md)
+1. [Update management network firmware](firmware/update_management_network_firmware.md)
     - Upgrade switch firmware to specified firmware version.
 1. [Wipe mgmt switches](wipe_mgmt_switches.md)
     - If the switches have any configuration, it is recommenced to erase it before adding any new configuration.

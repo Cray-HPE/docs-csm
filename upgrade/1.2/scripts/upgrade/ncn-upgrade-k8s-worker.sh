@@ -92,8 +92,8 @@ state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
-    ssh ${upgrade_ncn} 'wget -q http://rgw-vip.nmn/ncn-utils/csi;chmod 0755 csi; mv csi /usr/local/bin/csi'
-    ssh ${upgrade_ncn} 'csi pit validate --postgres'
+    wget -q http://rgw-vip.nmn/ncn-utils/csi;chmod 0755 csi; mv csi /usr/local/bin/csi
+    csi pit validate --postgres
 
     record_state "${state_name}" ${upgrade_ncn}
 else
