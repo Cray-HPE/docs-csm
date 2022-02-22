@@ -47,7 +47,7 @@ This procedure assumes that it is being carried out on a Mac OS X system.
 
     ```bash
     $ curl -H "Authorization: Bearer $TOKEN" \
-    https://api.SYSTEM-NAME_DOMAIN-NAME/apis/capmc/capmc/get_node_rules
+    https://api.cmn.SYSTEM-NAME_DOMAIN-NAME/apis/capmc/capmc/get_node_rules
     {
     "e":0,
     "err_msg":"",
