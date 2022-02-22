@@ -1,13 +1,21 @@
 ## Retrieve an Authentication Token
 
-Retrieve a token for authenticating to the API gateway.
+Retrieve a token for authenticating to one of the API gateways.
 
 The following are important properties of authentication tokens:
 -   Keycloak access tokens remain valid for 365 days
 -   Secrets do not expire; they are persistent in Keycloak
 -   Tokens and/or secrets can be revoked at anytime by an admin
 
-The API gateway uses OAuth2 for authentication. A token is required to authenticate with this gateway.
+The API gateways use OAuth2 for authentication. A token is required to authenticate with one of the gateways.
+
+There are multiple API gateways that are used to access services from the different networks.
+
+- services-gateway accessible at api.nmnlb.SYSETM_DOMAIN_NAME or api-gw-service-nmn.local
+- customer-admin-gateway accessible at api.cmn.SYSTEM_DOMAIN_NAME
+- customer-user-gateway accessible at api.can.SYSTEM_DOMAIN_NAME or api.chn.SYSTEM_DOMAIN_NAME
+
+The appropriate token must be retrieved from the gateway to access services on that gateway.
 
 ### Procedure
 
@@ -27,7 +35,7 @@ The API gateway uses OAuth2 for authentication. A token is required to authentic
          -d client_id=shasta \
          -d username=myuser \
          -d password=mypass \
-         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
+         https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/realms/shasta/protocol/openid-connect/token |
          python -mjson.tool
         ```
 
@@ -70,7 +78,7 @@ The API gateway uses OAuth2 for authentication. A token is required to authentic
              -d grant_type=client_credentials \
              -d client_id=admin-client \
              -d client_secret=2b0d6df0-183b-40e6-93be-51c7854388a1 \
-             https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
+             https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/realms/shasta/protocol/openid-connect/token |
              python -mjson.tool
             ```
 
@@ -100,7 +108,7 @@ The API gateway uses OAuth2 for authentication. A token is required to authentic
     ```bash
     ncn-w001# TOKEN=access_token
     ncn-w001# curl -H "Authorization: Bearer $TOKEN" \
-    https://api-gw-service-nmn.local/apis/capmc/capmc/get_node_rules
+    https://api.cmn.SYSTEM_DOMAIN_NAME/apis/capmc/capmc/get_node_rules
     {
         "e":0,
         "err_msg":"",
