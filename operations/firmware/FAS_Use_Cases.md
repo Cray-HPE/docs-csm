@@ -20,7 +20,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ### Update Liquid-Cooled Nodes BMC, FPGA, and Node BIOS
 
-Update a liquid-cooled node controller \(nC\) firmware using FAS.
+Update firmware for a liquid-cooled node controller \(nC\) using FAS.
 This section includes templates for JSON files that can be used and the procedure for running the update.
 
 All of the example JSON files below are set to run a dry-run. Update the overrideDryrun value to `true` to update the firmware.
@@ -104,7 +104,7 @@ On larger systems, it is recommended to run as two actions one after each other 
 
 #### Prerequisites
 -   The Cray nodeBMC device needs to be updated before the nodeBIOS because the nodeBMC adds a new field Redfish \(softwareId\) that the NodeX.BIOS update will require. See [Update Liquid-Cooled Node Firmware](#liquidcooled) for more information.
--   Compute node BIOS updates require the nodes to be off. If nodes are not off when update command is issued, it will report as a failed update.
+-   Compute node BIOS updates require the nodes to be off. If nodes are not off when the update command is issued, it will report as a failed update.
 
 **IMPORTANT**: The Nodes themselves must be powered **off** in order to update the BIOS on the nodes. The BMC will still have power and will perform the update.
 
@@ -497,14 +497,16 @@ This procedure updates the following hardware:
 }
 ```
 
-**IMPORTANT**: The *timeLimit* is `4000` because the gigabytes can take a lot longer to update.
+**IMPORTANT**: The *timeLimit* is `4000` because the Gigabytes can take a lot longer to update.
 
-You may receive a node failed to update with the output:
+**Troubleshooting**:
+ If a node failed to update with the output:
 `stateHelper = "Firmware Update Information Returned Downloading – See /redfish/v1/UpdateService"`
 FAS has incorrectly marked this node as failed.
 It most likely will complete the update successfully.
-You can check the update status by looking at the Redfish `FirmwareInventory (/redfish/v1/UpdateService/FirmwareInventory/BMC)`
-or rerunning FAS to verify that the BMC firmware was updated.
+To resolve this issue, do either of the following actions:
+* Check the update status by looking at the Redfish `FirmwareInventory (/redfish/v1/UpdateService/FirmwareInventory/BMC)`
+* RE-run FAS to verify that the BMC firmware was updated.
 Make sure you have waited for the current firmware to be updated before starting a new FAS action on the same node.
 
 **Device Type: NodeBMC | Target: BIOS**
@@ -538,7 +540,7 @@ Make sure you have waited for the current firmware to be updated before starting
 }
 ```
 
-**IMPORTANT**: The *timeLimit* is `4000` because the gigabytes can take a lot longer to update.
+**IMPORTANT**: The *timeLimit* is `4000` because the Gigabytes can take a lot longer to update.
 
 #### HPE
 
@@ -759,29 +761,7 @@ All of the example JSON files below are set to run a dry-run. Update the overrid
 
 After updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
 
-Due to networking FAS cannot update NCN m001.  See [Updating Frimware on m001](Updating_Firmware_m001.md)
-
-Procedure for updating NCNs:
-1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H x3000c0s10b0 -s` (x3000c0s10b0 is the xname of the NCN BMC)-
-   See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
-2. Run a dryrun for all NCNs first to determine which NCNs and targets need updating.
-3. For each NCN requiring updates to target `BMC` or `iLO 5`
-   (Update of `BMC` and `iLO 5` will not affect the nodes):
-   1. Unlock the NCN BMC -
-See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
-   2. Run the FAS action on the NCN
-   3. Relock the NCN BMC -
-See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
-4. For each NCN requiring updates to target `BIOS` or `System ROM`:
-   1. Unlock the NCN BMC -
-See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
-   2. Run the FAS action on the NCN
-   3. Reboot the Node -
-   See [Reboot NCNs](../node_management/Reboot_NCNs.md)
-   4. For `HPE` NCNs, run the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` -
-   See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
-   5. Relock the NCN BMC -
-See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
+Due to networking, FAS cannot update ncn-m001.  See [Updating Frimware on m001](Updating_Firmware_m001.md)
 
 #### Gigabyte
 
@@ -816,7 +796,7 @@ See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock
 }
 ```
 
-**IMPORTANT**: The *timeLimit* is `4000` because the gigabytes can take a lot longer to update.
+**IMPORTANT**: The *timeLimit* is `4000` because the Gigabytes can take a lot longer to update.
 
 You may receive a node failed to update with the output:
 `stateHelper = "Firmware Update Information Returned Downloading – See /redfish/v1/UpdateService"`
@@ -857,7 +837,7 @@ Make sure you have waited for the current firmware to be updated before starting
 }
 ```
 
-**IMPORTANT**: The *timeLimit* is `4000` because the gigabytes can take a lot longer to update.
+**IMPORTANT**: The *timeLimit* is `4000` because the Gigabytes can take a lot longer to update.
 
 #### HPE
 
@@ -892,10 +872,32 @@ Make sure you have waited for the current firmware to be updated before starting
 }
 ```
 
+#### Procedure for updating NCNs:
+1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H x3000c0s10b0 -s` (x3000c0s10b0 is the xname of the NCN BMC)-
+   See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
+2. Run a dryrun for all NCNs first to determine which NCNs and targets need updating.
+3. For each NCN requiring updates to target `BMC` or `iLO 5`:
+   **NOTE:** Update of `BMC` and `iLO 5` will not affect the nodes.
+   1. Unlock the NCN BMC.
+See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
+   2. Run the FAS action on the NCN.
+   3. Relock the NCN BMC.
+See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
+4. For each NCN requiring updates to target `BIOS` or `System ROM`:
+   1. Unlock the NCN BMC.
+See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
+   2. Run the FAS action on the NCN.
+   3. Reboot the Node.
+   See [Reboot NCNs](../node_management/Reboot_NCNs.md).
+   4. For `HPE` NCNs, run the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh`.
+   See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc").
+   5. Relock the NCN BMC.
+See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
+
 **Device Type: NodeBMC | Target: `System ROM` aka BIOS**
 
 **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than ncn-m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
-See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
+See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc").
 
 ```json
 {
