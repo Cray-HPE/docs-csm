@@ -13,31 +13,34 @@ The areas should be tested in the order they are listed on this page. Errors in 
 
 ## Topics:
 
-- [0. Cray Command Line Interface](#cray-command-line-interface)
-- [1. Platform Health Checks](#platform-health-checks)
-  - [1.1 NCN Health Checks](#pet-ncnhealthchecks)
-    - [1.1.1 Known Test Issues](#autogoss-issues)
-  - [1.2 NCN Resource Checks (optional)](#pet-ncnhealthchecks-resources)
-    - [1.2.1 Known Issues](#known-issues)
-  - [1.3 Check of System Management Monitoring Tools](#check-of-system-management-monitoring-tools)
-- [2. Hardware Management Services Health Checks](#hms-health-checks)
-  - [2.1 HMS CT Test Execution](#hms-test-execution)
-  - [2.3 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
-    - [2.3.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results)
-    - [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues)
-- [3 Software Management Services Health Checks](#sms-health-checks)
-  - [3.1 SMS Test Execution](#sms-checks)
-  - [3.2 Interpreting cmsdev Results](#cmsdev-results)
-- [4. Booting CSM Barebones Image](#booting-csm-barebones-image)
-  - [4.1 Running the script](#csm-run-script)
-- [5. UAS / UAI Tests](#uas-uai-tests)
-  - [5.1 Validate the Basic UAS Installation](#uas-uai-validate-install)
-  - [5.2 Validate UAI Creation](#uas-uai-validate-create)
-  - [5.3 UAS/UAI Troubleshooting](#uas-uai-validate-debug)
-    - [5.3.1 Authorization Issues](#uas-uai-validate-debug-auth)
-    - [5.3.2 UAS Cannot Access Keycloak](#uas-uai-validate-debug-keycloak)
-    - [5.3.3 UAI Images not in Registry](#uas-uai-validate-debug-registry)
-    - [5.3.4 Missing Volumes and other Container Startup Issues](#uas-uai-validate-debug-container)
+- [Validate CSM Health](#validate-csm-health)
+  - [Topics:](#topics)
+  - [0. Cray Command Line Interface](#0-cray-command-line-interface)
+  - [1. Platform Health Checks](#1-platform-health-checks)
+    - [1.1 NCN Health Checks](#11-ncn-health-checks)
+      - [1.1.1 Known Test Issues](#111-known-test-issues)
+    - [1.2 NCN Resource Checks (optional)](#12-ncn-resource-checks-optional)
+      - [1.2.1 Known Issues](#121-known-issues)
+    - [1.3 Check of System Management Monitoring Tools](#13-check-of-system-management-monitoring-tools)
+  - [2. Hardware Management Services Health Checks](#2-hardware-management-services-health-checks)
+    - [2.1 HMS CT Test Execution](#21-hms-ct-test-execution)
+    - [2.2 Hardware State Manager Discovery Validation](#22-hardware-state-manager-discovery-validation)
+      - [2.2.1 Interpreting results](#221-interpreting-results)
+      - [2.2.2 Known Issues](#222-known-issues)
+  - [3 Software Management Services Health Checks](#3-software-management-services-health-checks)
+    - [3.1 SMS Test Execution](#31-sms-test-execution)
+    - [3.2 Interpreting cmsdev Results](#32-interpreting-cmsdev-results)
+  - [4. Booting CSM Barebones Image](#4-booting-csm-barebones-image)
+  - [Barebones Image Boot.](#barebones-image-boot)
+    - [4.1 Run the Test Script](#41-run-the-test-script)
+  - [5. UAS / UAI Tests](#5-uas--uai-tests)
+    - [5.1 Validate the Basic UAS Installation](#51-validate-the-basic-uas-installation)
+    - [5.2 Validate UAI Creation](#52-validate-uai-creation)
+    - [5.3 UAS/UAI Troubleshooting](#53-uasuai-troubleshooting)
+      - [5.3.1 Authorization Issues](#531-authorization-issues)
+      - [5.3.2 UAS Cannot Access Keycloak](#532-uas-cannot-access-keycloak)
+      - [5.3.3 UAI Images not in Registry](#533-uai-images-not-in-registry)
+      - [5.3.4 Missing Volumes and other Container Startup Issues](#534-missing-volumes-and-other-container-startup-issues)
 
 <a name="cray-command-line-interface"></a>
 ## 0. Cray Command Line Interface
@@ -340,7 +343,6 @@ If it was determined that the mismatch can not be ignored, then proceed onto the
 #### 2.2.2 Known Issues
 
 Known issues that may prevent hardware from getting discovered by Hardware State Manager:
-* [Air cooled hardware is not getting properly discovered with Aruba leaf switches](../troubleshooting/known_issues/discovery_aruba_snmp_issue.md)
 * [HMS Discovery job not creating RedfishEndpoints in Hardware State Manager](../troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints.md)
 
 <a name="sms-health-checks"></a>
