@@ -56,12 +56,12 @@ spec:
 
 ```
 
-By matching the external hostname in the authority field, Istio's ingress gateway is able to route incoming traffic from Keycloak Gatekeeper to the `cray-sysmgmt-health-prometheus` service in the `sysmgmt-health` namespace. Also, notice that the VirtualService for prometheus.SYSTEM_DOMAIN_NAME uses the existing `services/services-gateway` Gateway CRD and does not create a new one.
+By matching the external hostname in the authority field, Istio's ingress gateway is able to route incoming traffic from OAuth2 Proxy to the `cray-sysmgmt-health-prometheus` service in the `sysmgmt-health` namespace. Also, notice that the VirtualService for prometheus.SYSTEM_DOMAIN_NAME uses the existing `services/services-gateway` Gateway CRD and does not create a new one.
 
-### Secure Ingress via Keycloak Gatekeeper
+### Secure Ingress via OAuth2 Proxy
 
-Web apps intended to be accessed via the browser, such as Prometheus, Alertmanager, Grafana, Kiali, Jaeger, Kibana, Elasticsearch, should go through the Keycloak Gatekeeper reverse proxy. Browser sessions are automatically configured to use a JSON Web Token \(JWT\) for authorization to Istio's ingress gateway, enabling a central enforcement point of Open Policy Agent \(OPA\) policies for system management traffic.
+Web apps intended to be accessed via the browser, such as Prometheus, Alertmanager, Grafana, Kiali, Jaeger, Kibana, Elasticsearch, should go through the OAuth2 Proxy reverse proxy. Browser sessions are automatically configured to use a JSON Web Token \(JWT\) for authorization to Istio's ingress gateway, enabling a central enforcement point of Open Policy Agent \(OPA\) policies for system management traffic.
 
-The Keycloak Gatekeeper will inject HTTP headers so that an upstream endpoint can identify the user and customize access as needed. To enable ingress via Keycloak Gatekeeper external hostnames, web apps need to be added to the `keycloak_gatekeeper_proxied_hosts` Ansible variable.
+The OAuth2 Proxy will inject HTTP headers so that an upstream endpoint can identify the user and customize access as needed. To enable ingress via OAuth2 Proxy external hostnames, web apps need to be added to the `proxiedWebAppExternalHostnames` for the appropriate ingress (`customerManagement`, `customerAccess`, or `customerHighSpeed`) in customizations.yaml (`i.e sma-grafana.{{ network.dns.external }}`).
 
 
