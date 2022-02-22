@@ -17,7 +17,7 @@ Use CANU (CSM Automated Network Utility) to validate the SHCD. SHCD validation i
 
 * NMN contains network management nodes 
 
-* HMN contains device BMC’s and other 1G management ports. 
+* HMN contains device BMC's and other 1G management ports. 
 
 * MTN_TDS, Mountain-TDS-Management (or some variation thereof for Mountain cabinets). 
 
@@ -43,7 +43,7 @@ canu validate shcd -a full --shcd ./HPE\ System\ Hela\ CCD.revA27.xlsx --tabs 10
 * ***Full*** 	– Aruba-based Leaf-Spine systems, usually customer production systems. 
 * ***V1*** 	– Dell and Mellanox based systems of either a TDS or Full layout. 
 
-CANU will ensure that each cell has valid data and that the connections between devices are allowed. Errors will stop processing and must be fixed in the spreadsheet before moving on. A “clean run” through a worksheet will include the model, a port-map of each node and may include warnings. See a list of typical errors at the end of this document to help in fixing the worksheet data. 
+CANU will ensure that each cell has valid data and that the connections between devices are allowed. Errors will stop processing and must be fixed in the spreadsheet before moving on. A "clean run" through a worksheet will include the model, a port-map of each node and may include warnings. See a list of typical errors at the end of this document to help in fixing the worksheet data. 
 
 Once the worksheet is validated you can check for any errors: 
 
@@ -53,9 +53,9 @@ canu validate shcd -a full --shcd ./HPE\ System\ Hela\ CCD.revA27.xlsx --tabs 10
 
 #### Checks and Validations 
 
-A worksheet that runs "cleanly” will have checked that: 
+A worksheet that runs "cleanly" will have checked that: 
 
-Nodes are “architecturally allowed” to connect to each other. 
+Nodes are "architecturally allowed" to connect to each other. 
 
 * No overlapping ports specified. 
 
@@ -73,7 +73,7 @@ A clean run will have the following sections:
 
 	* A list of cell-by-cell warnings of misspellings and other nit-picking items that CANU has autocorrected on the system. 
 
-***Critically***, the Warnings output will contain a section headed “Node type could not be determined for the following”.  This needs to be carefully reviewed because it may contain site uplinks that are not tracked by CANU but may also contain mis-spelled or mis-categorized nodes. As an example: 
+***Critically***, the Warnings output will contain a section headed "Node type could not be determined for the following".  This needs to be carefully reviewed because it may contain site uplinks that are not tracked by CANU but may also contain mis-spelled or mis-categorized nodes. As an example: 
 
 ```
 Node type could not be determined for the following. 
@@ -102,12 +102,12 @@ Cell: P16      Name: SITE
 
 ***From the above example two important observations can be made:***
 
-1. CAN and SITE uplinks are not in the “clean run” model. This means that these ports will not be configured. 
+1. CAN and SITE uplinks are not in the "clean run" model. This means that these ports will not be configured. 
 
-2. Critically, Cell I38 has a name of “sw-spinx-002". This should be noted as a misspelling of “sw-spine-002" and corrected. 
+2. Critically, Cell I38 has a name of "sw-spinx-002". This should be noted as a misspelling of "sw-spine-002" and corrected. 
 
 
-Today CANU validates many things, but a future feature is full cable specification checking of nodes (e.g. what NCN ports go to which switches to properly form bonds).  There are several CANU roadmap items, but today a manual review of the “SHCD Port Usage” connections list is vital.  Specifically, check: 
+Today CANU validates many things, but a future feature is full cable specification checking of nodes (e.g. what NCN ports go to which switches to properly form bonds).  There are several CANU roadmap items, but today a manual review of the "SHCD Port Usage" connections list is vital.  Specifically, check: 
 
 * K8S NCN cabling (manager, worker, storage) follows PoR cabling https://github.com/Cray-HPE/docs-csm/blob/main/install/cable_management_network_servers.md 
 
@@ -117,11 +117,11 @@ Today CANU validates many things, but a future feature is full cable specificati
 
 * Switch-to-switch cabling is appropriate for LAG formation. 
 
-* 	“Other” nodes on the network seem sane. 
+* 	"Other" nodes on the network seem sane. 
 
 #### Logging and Updates 
 
-Once the SHCD has run cleanly through CANU and CANU output has been manually validated, changes to the SHCD should be “committed” so that work is not lost, and other users can take advantage of the CANU changes.  
+Once the SHCD has run cleanly through CANU and CANU output has been manually validated, changes to the SHCD should be "committed" so that work is not lost, and other users can take advantage of the CANU changes.  
 
 Add an entry to the changelog Config. Summary first worksheet.  The changelog should include: 
 

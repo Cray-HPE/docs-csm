@@ -34,7 +34,7 @@ __________________________________
    1. [Introduction](../index.md)
    1. [Notice](../index.md)
    1. [Index](../index.md)
-   1. [Introduction to CANU](./introduction_to_canu.md)
+   2. [Introduction to CANU](../introduction_to_canu.md)
 
 
 ### CANU:
@@ -92,11 +92,10 @@ Documentation for CANU can be found at https://github.com/Cray-HPE/canu
   1. [Secure Shell (SSH)](./ssh.md)
   1. [Remote Logging](./remote_logging.md)
   1. [Web User Interface (WebUI)](./web-ui.md)
-  1. [Simple Network Management Protocol (SNMP) Agent](./snmp_agent.md)
+  1. [Simple Network Management Protocol (SNMP) Agent](snmp-agent.md)
   1. [SNMPv2c Community](./snmp-community.md)
   1. [SNMP Traps](./snmp_trap.md)
   1. [SNMPv3 Users](./snmpv3_users.md)
-  1. [System images](./system_images.md)
   1. [Bluetooth Capabilities](./bluetooth.md)
 
 ### Layer one features
