@@ -16,16 +16,28 @@ __________________________________
 
 ### Switch configuration guides
 
-- [Fresh install](./management_network/fresh_install.md)
-   - This is either a first time install or the previous CSM was wiped and requires a new install.
-- [Upgrade](./management_network/upgrade.md)
-   - Upgrading to a new CSM version.
-- [Re-install](./management_network/reinstall.md)
-   - Reinstalling the same CSM version.
-- [Added Hardware](./management_network/added_hardware.md)
-   - New hardware was added to the system.
-- [Replace Switch](./management_network/replace_switch.md)
-   - Switch failed and needs to be replaced.
+Switch config states:
+To check what state the switches are see the [upgrade](./management_network/upgrade.md) page.
+   - 1.0 Config: Non generated switch configs.
+   - 1.0 Preconfig: CANU generated configs for 1.0
+   - 1.2 Config: CANU generated configs for 1.2
+
+
+#### Starting points
+
+- Current switch configs are not generated and need to upgrade to generated configs.
+   - This can either be 1.0 generated or 1.2 generated.
+   - use the [upgrade](.management_network/upgrade.md) page.
+- Current switch configs are generated and need to go to 1.2
+   - [1.0 (Preconfig) to 1.2](./management_network/1.0_to_1.2_upgrade.md)
+- Switches have no config on them
+   - [Fresh Install](.management_network/fresh_install.md)
+ - Reinstalling the same CSM version.
+      - [Re-install](./management_network/reinstall.md)
+- New hardware was added to the system.
+   - [Added Hardware](./management_network/added_hardware.md)
+- Switch failed and needs to be replaced.
+   - [Replace Switch](./management_network/replace_switch.md)
 
 ### User guides
 The user guides contain information such as are generic configuration examples, explanation of currently used technologies, topology maps and summary of the network design used in the CSM management network.

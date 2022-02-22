@@ -98,5 +98,3 @@ Confirm:
 New password for 'monitor' account must be typed, please enter new password: 
 Confirm: 
 ```
-
-This will boot the switch to factory defaults, The next step is likely going to be [apply switch configs](apply_switch_configs.md).

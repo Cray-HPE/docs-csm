@@ -1,6 +1,6 @@
 # Upgrade
 
-Upgrading to a new CSM version without CANU generated switch configs.
+Upgrading switches from 1.0 to 1.0 Preconfig
 
 To check if the management network is using generated switch configs, log onto a management switch, and if you see a banner with a `CANU version` that means the switch config has been generated.
 ```
@@ -20,7 +20,7 @@ If the configs have not been generated you will need to follow the steps below.
 1. [Update management network firmware](update_management_network_firmware.md)
     - Upgrade switch firmware to specified firmware version.
 1. [Backup custom config](backup_custom_config.md)
-    - If the system had a previous version of CSM on it, you need to backup all custom configuration and credential configuration.  This procedure can be found on the.
+    - If the system had a previous version of CSM on it, you need to backup all custom configuration and credential configuration.
 1. [Config management](config_management.md)
     - Backup switch configs.
 1. [Validate the SHCD](validate_shcd.md)
@@ -31,8 +31,8 @@ If the configs have not been generated you will need to follow the steps below.
     - If the switches have any configuration, it is recommenced to erase it before any configuration.
 1. [Apply switch configs](apply_switch_configs.md)  
     - Applying the configuration to switch.
-1. [Apply custom switch configs](apply_custom_config_1.0.md)  
-    - Applying the custom configuration to switch.
+1. [Apply custom switch configs 1.0](apply_custom_config_1.0.md) or [Apply custom switch configs 1.2](apply_custom_config_1.2.md)  
+    - Applying the custom configuration to switch, this includes site connection and credential info.
 1. [Validate switch configs](validate_switch_configs.md) 
     - Checks differences between generated configs and the configs on the system.
 1. [Network tests](network_tests.md)
