@@ -20,7 +20,7 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 
 ### Prerequisites
 
-An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the System Admin Toolkit (SAT) product stream documentation.
+An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
 
 - A work-around may be required to set an SSH key when running the `sat bootsys shutdown --stage platform-services` command below if performing a re-install of a 1.4.x system.
 
