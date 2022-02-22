@@ -40,6 +40,11 @@ This section will provide some in-depth usage with examples of the more commonly
 
 ```bash
 ncn-s# ceph orch ls
+```
+
+Example output:
+
+```
 NAME                       RUNNING  REFRESHED  AGE  PLACEMENT                           IMAGE NAME                                       IMAGE ID
 alertmanager                   1/1  6m ago     4h   count:1                             registry.local/prometheus/alertmanager:v0.20.0   0881eb8f169f
 crash                          3/3  6m ago     4h   *                                   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c
@@ -65,6 +70,11 @@ rgw.site1.zone1                3/3  6m ago     4h   ncn-s001;ncn-s002;ncn-s003;c
 
 ```bash
 ncn-s# ceph orch ps
+```
+
+Example output:
+
+```
 NAME                             HOST      STATUS        REFRESHED  AGE  VERSION  IMAGE NAME                                       IMAGE ID      CONTAINER ID
 alertmanager.ncn-s001            ncn-s001  running (5h)  5m ago     5h   0.20.0   registry.local/prometheus/alertmanager:v0.20.0   0881eb8f169f  0e6a24469465
 crash.ncn-s001                   ncn-s001  running (5h)  5m ago     5h   15.2.8   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c  b6a582ed7573
@@ -107,8 +117,9 @@ rgw.site1.zone1.ncn-s003.tzkxya  ncn-s003  running (5h)  5m ago     5h   15.2.8 
 
 ```bash
 ncn-s# ceph orch daemon restart alertmanager.ncn-s001
-Scheduled to restart alertmanager.ncn-s001 on host 'ncn-s001'
 ```
+
+A message stating "Scheduled to restart alertmanager.ncn-s001 on host 'ncn-s001'" will be returned.
 
 Monitor the restart using the `ceph orch ps` command and the time associated with the `STATUS` should be reset and show "running (time since started)."
 
@@ -118,8 +129,9 @@ Monitor the restart using the `ceph orch ps` command and the time associated wit
 
 ```bash
 ncn-s# ceph orch apply alertmanager --placement="2 ncn-s001 ncn-s002"
-Scheduled alertmanager update...
 ```
+
+A message stating "Scheduled alertmanager update..." will be returned.
 
 **`Reference Key:`**
 
@@ -133,6 +145,11 @@ Scheduled alertmanager update...
 
 ```bash
 ncn-s# ceph orch host ls
+```
+
+Example output:
+
+```
 HOST      ADDR      LABELS  STATUS
 ncn-s001  ncn-s001
 ncn-s002  ncn-s002
@@ -143,6 +160,11 @@ ncn-s003  ncn-s003
 
 ```bash
 ncn-s# ceph orch device ls
+```
+
+Example output:
+
+```
 Hostname  Path      Type  Serial                Size   Health   Ident  Fault  Available
 ncn-s001  /dev/vdb  hdd   fb794832-f402-4f4f-a   107G  Unknown  N/A    N/A    No
 ncn-s001  /dev/vdc  hdd   9bdef369-6bac-40ca-a   107G  Unknown  N/A    N/A    No

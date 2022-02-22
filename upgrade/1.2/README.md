@@ -1,9 +1,9 @@
-# CSM 1.1.0 or later to 1.2.0 Upgrade Process (WIP)
+# CSM 1.0.0 or later to 1.2.0 Upgrade Process (WIP)
 #NOTE: this is a WIP doc
 
 ## Introduction
 
-This document is intended to guide an administrator through the upgrade process going from Cray Systems Management v1.1 to v1.2. When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the resource_material directory for additional reference material in support of the process/scripts mentioned explicitly on this page.
+This document is intended to guide an administrator through the upgrade process going from Cray Systems Management v1.0 to v1.2. When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the resource_material directory for additional reference material in support of the processes/scripts mentioned explicitly on this page.
 
 ## Terminology
 
@@ -17,7 +17,7 @@ upgrade that node.
 
 >**`IMPORTANT:`**
 >
-> For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed.  See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to accomplish this.  Independently, the `customizations.yaml` file will be edited automatically during upgrade for TDS systems prior to deploying new CSM services. See the file: `/usr/share/doc/csm/upgrade/1.2/scripts/upgrade/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified (prior to proceeding with this upgrade) with different values if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/CSM_product_management/Post_Install_Customizations.md).
+> For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed. See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to accomplish this. Independently, the `customizations.yaml` file will be edited automatically during upgrade for TDS systems prior to deploying new CSM services. See the file: `/usr/share/doc/csm/upgrade/1.2/scripts/upgrade/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified (prior to proceeding with this upgrade) with different values if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/CSM_product_management/Post_Install_Customizations.md).
 >
 
 ## Upgrade Stages
@@ -26,8 +26,7 @@ upgrade that node.
 - [Stage 1 - Ceph Node Image Upgrade](Stage_1.md)
 - [Stage 2 - Kubernetes Upgrade](Stage_2.md)
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
-- [Stage 4 - Apply Known Workarounds](Stage_4.md)
-- [Stage 5 - Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
+- [Stage 4 - Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
 
 **`Important:`** Please take note of the below content for troubleshooting purposes in the case that you encounter issues.
 
@@ -70,7 +69,7 @@ Please see [Troubleshoot Spire Failing to Start on NCNs](../../operations/spire/
 
 ### Rerun a step/script
 
-When running upgrade scripts, each script record what has been done successfully on a node. This `state` file is stored at `/ect/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state`. If a rerun is required, you will need to remove the recorded steps from this file.
+When running upgrade scripts, each script record what has been done successfully on a node. This `state` file is stored at `/etc/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state`. If a rerun is required, you will need to remove the recorded steps from this file.
 
 Here is an example of state file of `ncn-m001`:
 

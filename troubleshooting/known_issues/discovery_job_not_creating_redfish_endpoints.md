@@ -121,7 +121,7 @@ The return value of the script is 0 if fixup was successful or no fixup was need
     If `ComponentID` remains empty check the hms-discovery logs for errors. Otherwise, move on to the next step.
 
 3. Verify that a RedfishEndpoint now exists for the BMC.
-    > The BMC when first added to HSM may not be DiscoverOK right away. It may take up 5 minutes for BMC hostname to start resolving in DNS. The HMS Discovery cronjob should automatically trigger a discovery for any RedfishEndpoints that are not in the DiscoveryOk or DiscoveryStated states, such as HTTPsGETFailed.
+    > The BMC when first added to HSM may not be DiscoverOK right away. It may take up 5 minutes for BMC hostname to start resolving in DNS. The HMS Discovery cronjob should automatically trigger a discovery for any RedfishEndpoints that are not in the DiscoveryOk or DiscoveryStated states, such as HTTPsGetFailed.
     ```bash
     ncn# cray hsm inventory redfishEndpoints describe $BMC
     ID = "x3000c0s18b0"

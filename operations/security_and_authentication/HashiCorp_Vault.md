@@ -73,6 +73,11 @@ Check the status of Vault clusters with the following command:
 ncn# for n in $(seq 0 2); do echo "======= Vault status from cray-vault-${n} ======"; \
 kubectl exec -it -n vault -c vault cray-vault-${n} -- sh \
 -c "export VAULT_ADDR=http://localhost:8200; vault status"; done
+```
+
+Example output:
+
+```
 ======= Vault status from cray-vault-0 ======
 Key                     Value
 ---                     -----

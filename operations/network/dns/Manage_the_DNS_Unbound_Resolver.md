@@ -8,6 +8,11 @@ Use the kubectl command to check the status of the pods:
 
 ```bash
 ncn-w001# kubectl get -n services pods | grep unbound
+```
+
+Example output:
+
+```
 cray-dns-unbound-696c58647f-26k4c            2/2   Running      0   121m
 cray-dns-unbound-696c58647f-rv8h6            2/2   Running      0   121m
 cray-dns-unbound-coredns-q9lbg               0/2   Completed    0   121m
@@ -26,9 +31,9 @@ cray-dns-unbound-manager-1596222180-sf46q    1/2   NotReady     0   7s
 
 For more information about the pods displayed in the output above:
 
--   `cray-dns-unbound-xxx` - These are the main unbound pods.
--   `cray-dns-unbound-manager-yyy` - These are job pods that run periodically to update DNS from DHCP \(Kea\) and the SLS/SMD content for the Hardware State Manager \(HSM\). Pods will go into the `Completed` status, and then independently be reaped "later" by the Kubernetes job's processes.
--   `cray-dns-unbound-coredns-zzz` - This pod is run one time during installation of Unbound \(Stage 4\) and reconfigures CoreDNS/ExternalDNS to point to Unbound for all site/internet lookups.
+- `cray-dns-unbound-xxx` - These are the main unbound pods.
+- `cray-dns-unbound-manager-yyy` - These are job pods that run periodically to update DNS from DHCP \(Kea\) and the SLS/SMD content for the Hardware State Manager \(HSM\). Pods will go into the `Completed` status, and then independently be reaped "later" by the Kubernetes job's processes.
+- `cray-dns-unbound-coredns-zzz` - This pod is run one time during installation of Unbound \(Stage 4\) and reconfigures CoreDNS/ExternalDNS to point to Unbound for all site/internet lookups.
 
 The table below describes what the status of each pod means for the health of the `cray-dns-unbound` services and pods. The Init and NotReady states are not necessarily bad, but it means the pod is being started or is processing. The `cray-dns-manager` and `cray-dns-coredns` pods for `cray-dns-unbound` are job pods that run periodically.
 
@@ -44,6 +49,11 @@ Logs for the unbound Pods will show the status and health of actual DNS lookups.
 
 ```bash
 ncn-w001# kubectl logs -n services -l app.kubernetes.io/instance=cray-dns-unbound -c unbound
+```
+
+Example output:
+
+```
 [1596224129] unbound[8:0] debug: using localzone health.check.unbound. transparent
 [1596224129] unbound[8:0] debug: using localzone health.check.unbound. transparent
 [1596224135] unbound[8:0] debug: using localzone health.check.unbound. transparent
@@ -80,6 +90,11 @@ Manager logs will show the status of the latest "true up" of DNS with respect to
 ```bash
 ncn-w001# kubectl logs -n services pod/$(kubectl get -n services pods \
 | grep unbound | tail -n 1 | cut -f 1 -d ' ') -c manager | tail -n4
+```
+
+Example output:
+
+```
 uid: bc1e8b7f-39e2-49e5-b586-2028953d2940
 
 Comparing new and existing DNS records.
@@ -88,8 +103,8 @@ Comparing new and existing DNS records.
 
 Any log with `ERROR` or `Exception` is an indication that DNS is not healthy. The above example includes one of two possible reports for a healthy manager run. The healthy states are described below, as long as the write to the ConfigMap has not failed:
 
--   No differences found. Skipping DNS update
--   Differences found. Writing new DNS records to our configmap.
+- No differences found. Skipping DNS update
+- Differences found. Writing new DNS records to our configmap.
 
 **Troubleshooting:** The Manager runs periodically, about every minute in release v1.4. Check if this is a one-time occurrence or if it is a recurring issue.
 
@@ -124,9 +139,9 @@ Unbound stores records it obtains from DHCP, SLS, and SMD via the Manager job in
 
 This is useful in the following cases:
 
--   A transient failure in any Unbound process or required services has left the configuration data in a bad state.
--   SLS and SMD data needed to be reset because of bad or incorrect data there.
--   DHCP \(Kea\) has been restarted to clear errors.
+- A transient failure in any Unbound process or required services has left the configuration data in a bad state.
+- SLS and SMD data needed to be reset because of bad or incorrect data there.
+- DHCP \(Kea\) has been restarted to clear errors.
 
 The following clears the \(DNS Helper\) Manager generated data in the ConfigMap. This is generally safe as Unbound runtime data is held elsewhere.
 

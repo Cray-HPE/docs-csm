@@ -7,6 +7,11 @@ The `kubectl` CLI commands can be used to retrieve information about the Kuberne
 
 ```bash
 ncn# kubectl get nodes
+```
+
+Example output:
+
+```
 NAME       STATUS   ROLES                  AGE   VERSION
 ncn-m001   Ready    control-plane,master   27h   v1.20.13
 ncn-m002   Ready    control-plane,master   8d    v1.20.13
@@ -20,6 +25,11 @@ ncn-w003   Ready    <none>                 8d    v1.20.13
 
 ```bash
 ncn# kubectl get pods options
+```
+
+Example output:
+
+```
 NAME                                    READY     STATUS    RESTARTS   AGE
 api-gateway-6fffd4d854-btp4v            1/1       Running   2          11d
 api-gateway-6fffd4d854-l7z8m            1/1       Running   1          11d
@@ -46,6 +56,11 @@ ncn# kubectl describe pod POD_NAME -n NAMESPACE_NAME
 
 ```bash
 ncn# kubectl get pods -A | grep -e 'Completed|Running'
+```
+
+Example output:
+
+```
 ceph-cephfs       cephfs-provisioner-74599ccfcd-bzf5b                1/1     Running      3    2d11h
 ceph-rbd          rbd-provisioner-76c464c567-jvvk6                   1/1     Running      3    2d11h
 cert-manager      cray-certmanager-cainjector-8487d996d7-phbfr       1/1     Running      0    2d11h
@@ -67,6 +82,11 @@ istio-system      istio-init-crd-11-1.2.10-dcp4h                     0/1     Com
 
 ```bash
 ncn# kubectl get pods -A | grep -e 'Creating|ImagePull|Error|Init|Crash'
+```
+
+Example output:
+
+```
 services   cray-conman-68fffd8d9d-8h6zb               1/2    CrashLoopBackOff             694    2d10h
 services   cray-crus-549cb9cb5d-7gv6n                 0/4    Init:0/2                     0      2d10h
 services   cray-hms-badger-api-69bd7bc5b6-2v5sf       0/2    Init:0/2                     0      2d10h
@@ -82,6 +102,11 @@ services   cray-reds-77b9575457-qx7m5                 0/2    Init:2/4           
 
 ```bash
 ncn# kubectl get services -n NAMESPACE_NAME
+```
+
+Example output:
+
+```
 NAME               TYPE        CLUSTER-IP       EXTERNAL-IP  PORT(S)                      AGE
 cray-ars           ClusterIP   10.96.216.213    <none>       80/TCP                       5d
 cray-capmc         ClusterIP   10.99.76.144     <none>       27777/TCP                    5d
@@ -97,6 +122,11 @@ kvstore-3          ClusterIP   10.108.198.177   <none>       2181/TCP,2888/TCP,3
 
 ```bash
 ncn# kubectl get pods -n NAMESPACE_NAME
+```
+
+Example output:
+
+```
 NAME                             READY     STATUS    RESTARTS   AGE
 kube-apiserver-sms-01            1/1       Running   2          11d
 kube-apiserver-sms-02            1/1       Running   1          11d

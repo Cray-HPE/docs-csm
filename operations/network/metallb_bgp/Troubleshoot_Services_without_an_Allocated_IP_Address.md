@@ -16,6 +16,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-w001# kubectl get service -A | grep Load
+    ```
+
+    Example output:
+
+    ```
     ims            cray-ims-b9cdea70-223f-4968-a0f4-589518c89a80-service   LoadBalancer   10.17.97.66    <pending>      22:32678/TCP                 2d9h
     ims            cray-ims-eca49ecd-5434-46b2-9a3c-f4f0467f8ecb-service   LoadBalancer   10.18.171.14   <pending>      22:30821/TCP                 2d5h
     istio-system   istio-ingressgateway                                    LoadBalancer   10.26.49.253   10.92.100.50  80:30517/TCP,443:30754/TCP   3d5h
@@ -29,6 +34,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-w001# kubectl -n istio-system describe service istio-ingressgateway-can
+    ```
+
+    Example output:
+
+    ```
     Name:                     istio-ingressgateway-can
     Namespace:                istio-system
     Labels:                   app=istio-ingressgateway
@@ -58,6 +68,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-w001# kubectl -n metallb-system get cm config -o yaml
+    ```
+
+    Example output:
+
+    ```
     apiVersion: v1
     data:
       config: |

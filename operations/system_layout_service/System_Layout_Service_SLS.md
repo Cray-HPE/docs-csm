@@ -8,10 +8,10 @@ Interaction with SLS is required if the system setup changes. For example, if sy
 
 SLS is responsible for the following:
 
--   Providing an HTTP API to access site information
--   Storing a list of all hardware
--   Storing a list of all network links
--   Storing a list of all power links
+- Providing an HTTP API to access site information
+- Storing a list of all hardware
+- Storing a list of all network links
+- Storing a list of all power links
 
 
 

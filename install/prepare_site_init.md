@@ -146,7 +146,7 @@ with system-specific customizations.
         packaged with CSM to create a JKS file that includes a PEM-encoded
         CA certificate to verify the LDAP host(s) as follows:
 
-        This step builds an exmaple that will create (or update) `cert.jks` with the PEM-encoded CA certificate for an LDAP host and then prepares `certs.jks.b64` which will be injected into customizations.yaml.
+        This step builds an example that will create (or update) `cert.jks` with the PEM-encoded CA certificate for an LDAP host and then prepares `certs.jks.b64` which will be injected into customizations.yaml.
 
         1. Load the `openjdk` container image:
 
@@ -192,7 +192,7 @@ with system-specific customizations.
 
                 > **`NOTE`** The issuer DN is properly escaped as part of the
                 > `awk` pattern below. It must be changed to match the value 
-                > for emailAddress, CN, OU, etc. for your LDAP.  If the value
+                > for emailAddress, CN, OU, etc. for your LDAP. If the value
                 > you are using is different, be sure to escape it properly!
 
                 ```bash
@@ -358,11 +358,12 @@ with system-specific customizations.
            ldapSearchBase: dc=dcldap,dc=dit
            ```
 
-1.  Configure the Unbound DNS resolver.
+1.  Configure the Unbound DNS resolver (if needed)
 
-    If access to a site DNS server is required and this DNS server was specified using the CSI `--site-dns` option then no further action is required.
+    If access to a site DNS server is required **and** this DNS server was specified to `csi` using the `site-dns` option (either on the command line or in the `system_config.yaml` file), **then no further action is required** and this step should be skipped.
+
     The default configuration is as follows:
-    ```
+    ```yaml
     cray-dns-unbound:
         domain_name: '{{ network.dns.external }}'
         forwardZones:
@@ -373,12 +374,12 @@ with system-specific customizations.
 
     The configured site DNS server can be verified by inspecting the value set for `system_to_site_lookups`.
 
-    ```
+    ```bash
     linux# yq r /mnt/pitdata/prep/site-init/customizations.yaml spec.network.netstaticips.system_to_site_lookups
     172.30.84.40
     ``` 
 
-    If there is no requirement to resolve external hostnames or no upstream DNS server
+    If there is **no requirement to resolve external hostnames or no upstream DNS server**,
     then remove the DNS forwarding configuration from the `cray-dns-unbound` service. 
  
     1. Remove the `forwardZones` configuration for the `cray-dns-unbound` service:
@@ -395,7 +396,7 @@ with system-specific customizations.
 
         Expected output is:
 
-        ```
+        ```yaml
         domain_name: '{{ network.dns.external }}'
         ```
 
@@ -408,45 +409,6 @@ with system-specific customizations.
    * If DNSSEC is to be used then add the desired keys into the `dnssec` SealedSecret.
 
    Please see the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
-
-1.  Review `customizations.yaml` in the `site-init` directory and replace remaining `~FIXME~` values with
-    appropriate settings.
-
-    1. Create backup copy of `customizations.yaml`:
-        ```bash
-        linux# cp -v /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml-prefixme
-        ```
-
-    1. Edit `customizations.yaml`
-        For the following `~FIXME~` values, use the example provided and just remove the `~FIXME~ e.g.`
-
-        ```
-           sma-rsyslog-aggregator:
-             cray-service:
-               service:
-                 loadBalancerIP: ~FIXME~ e.g. 10.92.100.72
-             rsyslogAggregatorHmn:
-               service:
-                 loadBalancerIP: ~FIXME~ e.g. 10.94.100.2
-           sma-rsyslog-aggregator-udp:
-             cray-service:
-               service:
-                 loadBalancerIP: ~FIXME~ e.g. 10.92.100.75
-             rsyslogAggregatorUdpHmn:
-               service:
-                 loadBalancerIP: ~FIXME~ e.g. 10.94.100.3
-        ```
-
-    1. Review your changes:
-
-        ```bash
-        linux# diff /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml-prefixme
-        ```
-
-    1. Verify that no `FIXME` strings remain in the file:
-        ```bash
-        linux# grep FIXME /mnt/pitdata/prep/site-init/customizations.yaml
-        ```
 
 <a name="generate-sealed-secrets"></a>
 ### 4. Generate Sealed Secrets

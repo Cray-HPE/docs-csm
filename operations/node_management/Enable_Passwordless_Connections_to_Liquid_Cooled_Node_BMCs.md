@@ -8,8 +8,8 @@ Setting up SSH keys enables administrators to view recent console messages and i
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   This procedure requires administrative privileges.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- This procedure requires administrative privileges.
 
 ### Procedure
 
@@ -57,8 +57,8 @@ Setting up SSH keys enables administrators to view recent console messages and i
 
     Ensure the following are true before running the command below:
 
-    -   The xname list looks valid/appropriate
-    -   The `SSHKey` and `SSHConsoleKey` settings match the desired public key
+    - The xname list looks valid/appropriate
+    - The `SSHKey` and `SSHConsoleKey` settings match the desired public key
 
     ```bash
     ncn-w001# cray scsd bmc loadcfg create scsd\_cfg.json

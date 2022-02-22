@@ -27,7 +27,11 @@ This procedure requires administrative privileges.
         ```bash
         sw-spine-001 [standalone: master] > enable
         sw-spine-001 [standalone: master] # show ip bgp vrf all summary
+        ```
 
+        Example output:
+
+        ```
         VRF name                  : CAN
         BGP router identifier     : 10.101.8.2
         local AS number           : 65533
@@ -96,7 +100,11 @@ This procedure requires administrative privileges.
         ```bash
         sw-spine-001 [standalone: master] > enable
         sw-spine-001 [standalone: master] # show ip bgp vrf all summary
+        ```
 
+        Example output:
+
+        ```
         VRF name                  : CAN
         BGP router identifier     : 10.101.8.2
         local AS number           : 65533
@@ -150,6 +158,11 @@ This procedure requires administrative privileges.
 
         ```bash
         sw-spine-001# show bgp all-vrf all summary
+        ```
+
+        Example output:
+
+        ```
         VRF : default
         BGP Summary
         -----------
@@ -217,7 +230,12 @@ This procedure requires administrative privileges.
         It may take a few minutes for sessions to become Established.
 
         ```bash
-        sw-spine-001# show bgp all-vrf all summary
+        sw-spine-001# show bgp all-vrf all summary 
+        ```
+
+        Example output:
+
+        ```
         VRF : default
         BGP Summary
         -----------
@@ -271,6 +289,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-m001# helm ls -A -a | grep cray-metallb
+    ```
+
+    Example output:
+
+    ```
     cray-metallb   metallb-system   1   2021-02-10 14:58:43.902752441 -0600 CST  deployed  cray-metallb-0.12.2   0.8.1
     ```
 
@@ -337,6 +360,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-m001# kubectl get pods -n metallb-system
+    ```
+
+    Example output:
+
+    ```
     NAME                                       READY   STATUS    RESTARTS   AGE
     cray-metallb-controller-6d545b5ccc-mm4qz   1/1     Running   0          79m
     cray-metallb-speaker-4nrzq                 1/1     Running   0          76m

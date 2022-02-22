@@ -22,7 +22,6 @@ the number of storage and worker nodes.
 
    1. [Prepare for Management Node Deployment](#prepare_for_management_node_deployment)
       1. [Tokens and IPMI Password](#tokens-and-ipmi-password)
-      1. [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
       1. [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
    1. [Update Management Node Firmware](#update_management_node_firmware)
    1. [Deploy Management Nodes](#deploy_management_nodes)
@@ -30,7 +29,6 @@ the number of storage and worker nodes.
       1. [Deploy](#deploy)
       1. [Check LVM on Masters and Workers](#check-lvm-on-masters-and-workers)
       1. [Check for Unused Drives on Utility Storage Nodes](#check-for-unused-drives-on-utility-storage-nodes)
-      1. [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
    1. [Configure after Management Node Deployment](#configure_after_management_node_deployment)
       1. [LiveCD Cluster Authentication](#livecd-cluster-authentication)
       1. [Install Tests and Test Server on NCNs](#install-tests)
@@ -75,15 +73,8 @@ Preparation of the environment must be done before attempting to deploy the mana
    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
    ```
 
-<a name="apply-ncn-pre-boot-workarounds"></a>
-### 1.2 Apply NCN Pre-Boot Workarounds
-
-_There will be post-boot workarounds as well._
-
-Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
-
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
-### 1.3 Ensure Time Is Accurate Before Deploying NCNs
+### 1.2 Ensure Time Is Accurate Before Deploying NCNs
 
 **NOTE**: If you wish to use a timezone other than UTC, instead of step 1 below, follow
 [this procedure for setting a local timezone](../operations/node_management/Configure_NTP_on_NCNs.md#set-a-local-timezone), then
@@ -337,8 +328,6 @@ The configuration workflow described here is intended to help understand the exp
     ncn-w002-mgmt
     ncn-w003-mgmt
     ```
-
-    > **`IMPORTANT`** This is the administrator's _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds) (the `before-ncn-boot` breakpoint).
 
     > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 <a name="boot-the-storage-nodes"></a>
@@ -678,16 +667,10 @@ If there are LVM check failures, then the problem must be resolved before contin
 
 More information can be found at [the `cephadm` reference page](../operations/utility_storage/Cephadm_Reference_Material.md).
 
-<a name="apply-ncn-post-boot-workarounds"></a>
-### 3.5 Apply NCN Post-Boot Workarounds
-
-Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `after-ncn-boot` breakpoint.
-
 <a name="configure_after_management_node_deployment"></a>
 ## 4. Configure after Management Node Deployment
 
 After the management nodes have been deployed, configuration can be applied to the booted nodes.
-
 
 <a name="livecd-cluster-authentication"></a>
 ### 4.1 LiveCD Cluster Authentication

@@ -10,11 +10,11 @@ The procedures in section detail the high-level tasks required to power on an HP
 -   The Boot Orchestration Service \(BOS\) manages and configures power on and boot tasks.
 -   The System Admin Toolkit \(SAT\) automates boot and shutdown services by stage, for example: 
 
-    ```screen
+    ```bash
     sat bootsys boot --stage platform-services
     ```
 
-    ```screen
+    ```bash
     sat bootsys boot --stage bos-operations
     ```
 
@@ -23,7 +23,7 @@ The procedures in section detail the high-level tasks required to power on an HP
 
 -   Obtain user ID and password for all the system management network switches, for example:
 
-    ```screen
+    ```bash
     sw-spine-001.mtl
     sw-spine-002.mtl
     sw-leaf-001.mtl

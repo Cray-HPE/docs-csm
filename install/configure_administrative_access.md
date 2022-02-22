@@ -11,6 +11,7 @@ BMC/controller passwords.
 
    1. [Configure Keycloak Account](#configure_keycloak_account)
    1. [Configure the Cray Command Line Interface (cray CLI)](#configure_cray_cli)
+   1. [Set Management Role on the BMCs of Management Nodes](#set_bmc_management_role)
    1. [Lock Management Nodes](#lock_management_nodes)
    1. [Configure BMC and Controller Parameters with SCSD](#configure_with_scsd)
    1. [Configure Non-compute Nodes with CFS](#configure-ncns)
@@ -42,27 +43,39 @@ BMC/controller passwords.
       CLI configuration needs to be authorized for administrative actions.
    
       See [Configure the Cray Command Line Interface (cray CLI)](../operations/configure_cray_cli.md)
+   <a name="set_bmc_management_role"></a>
+   1. Set Management Role on the BMCs of Management Nodes
+
+      The BMCs that control management nodes will not have been marked with the *Management* role in HSM. It is important
+      to mark them with the *Management* role so they can be easily included in the locking/unlocking operations required
+      as protections for FAS and CAPMC actions.
+      **Set BMC Management Roles Now!**
+      
+      See [Set BMC Management Role](../operations/hardware_state_manager/Set_BMC_Management_Role.md)
+      
+      For more info on the importance of locking these components, see [Lock Management Nodes](#lock_management_nodes).
+    
    <a name="lock_management_nodes"></a>
    1. Lock Management Nodes
 
-      The management nodes are unlocked at this point in the installation. Locking them will prevent actions from FAS to
-      update their firmware or CAPMC to power off or do a power reset. Doing any of these by accident will take down a
-      management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects
-      on system operation.
+      The management nodes are unlocked at this point in the installation. Locking the management nodes and their BMCs will
+      prevent actions from FAS to update their firmware or CAPMC to power off or do a power reset. Doing any of these by
+      accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have
+      serious negative effects on system operation.
 
       If a single node is taken down by mistake, it is possible that things will recover. However, if all management
       nodes are taken down, or all Kubernetes worker nodes are taken down by mistake, the system is dead and has to be
       completely restarted.
       **Lock the management nodes now!**
 
-      Run the `lock_management_nodes.py` script to lock all management nodes that are not already locked:
+      Run the `lock_management_nodes.py` script to lock all management nodes and their BMCs that are not already locked:
       ```
       ncn# /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
       ```
 
-      The return value of the script is 0 if locking was successful. Otherwise, a non-zero return means that manual intervention may be needed to lock the nodes.
+      The return value of the script is 0 if locking was successful. Otherwise, a non-zero return means that manual intervention may be needed to lock the nodes and their BMCs.
 
-      For more inormation see [Lock and Unlock Nodes](../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
+      For more information see [Lock and Unlock Nodes](../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
    <a name="configure_with_scsd"></a>
    1. Configure BMC and Controller Parameters with SCSD
 

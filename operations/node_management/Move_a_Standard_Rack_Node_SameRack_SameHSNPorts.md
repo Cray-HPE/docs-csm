@@ -135,7 +135,7 @@ This procedure works with both application and compute nodes. This example moves
         ncn-m001# curl -i -X POST -H "Authorization: Bearer $(get_token)" \
             https://api-gw-service-nmn.local/apis/sls/v1/hardware -d @sls_node.json
         ```
-        > Note: If a 503 is returned, verify that get_token function has been defined.
+        > **NOTE:** If a 503 is returned, verify that get_token function has been defined.
 
         Expected output:
         

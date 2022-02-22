@@ -68,14 +68,26 @@ This procedure requires administrative privileges.
     For example:
 
     ```bash
-    ncn-m001:~ # nslookup uan01.can
+    ncn-m001# nslookup uan01.can
+    ```
+
+    Example output:
+
+    ```
     Server:	10.92.100.225
     Address:	10.92.100.225#53
 
     Name:	uan01.can
     Address: 10.103.2.24
+    ```
 
-    ncn-m001:~ # nslookup uan01-can.can
+    ```
+    ncn-m001# nslookup uan01-can.can
+    ```
+
+    Example output:
+
+    ```
     Server:	10.92.100.225
     Address:	10.92.100.225#53
 

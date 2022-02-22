@@ -10,26 +10,33 @@ The PowerDNS zone database is populated with data from two sources:
 Use the `cray-powerdns-visualizer` command to view the zone structure that cray-powerdns-manager will create.
 
 ```
-ncn-m001# kubectl -n services exec deployment/cray-powerdns-manager -c cray-powerdns-manager -- cray-powerdns-visualizer
+ncn-m001# kubectl -n services exec deployment/cray-powerdns-manager \
+-c cray-powerdns-manager -- cray-powerdns-visualizer
+```
+
+Example output:
+
+```
 .
 ├── 252.10.in-addr.arpa.
 │   ├── [PTR]  5.252.10.in-addr.arpa.
-│   │   └── sw-leaf-002.nmn.wasp.dev.cray.com.
+│   │   └── sw-leaf-002.nmn.system.dev.cray.com.
 │   ├── [PTR]  4.252.10.in-addr.arpa.
-│   │   └── sw-leaf-001.nmn.wasp.dev.cray.com.
+│   │   └── sw-leaf-001.nmn.system.dev.cray.com.
 │   ├── [PTR]  3.252.10.in-addr.arpa.
-│   │   └── sw-spine-002.nmn.wasp.dev.cray.com.
+│   │   └── sw-spine-002.nmn.system.dev.cray.com.
 │   ├── [PTR]  6.2.252.10.in-addr.arpa.
-│   │   └── pbs_comm_service.nmn.wasp.dev.cray.com.
+│   │   └── pbs_comm_service.nmn.system.dev.cray.com.
 │   ├── [PTR]  5.2.252.10.in-addr.arpa.
-│   │   └── pbs_service.nmn.wasp.dev.cray.com.
+│   │   └── pbs_service.nmn.system.dev.cray.com.
 │   ├── [PTR]  4.2.252.10.in-addr.arpa.
-│   │   └── slurmdbd_service.nmn.wasp.dev.cray.com.
+│   │   └── slurmdbd_service.nmn.system.dev.cray.com.
 │   ├── [PTR]  3.2.252.10.in-addr.arpa.
-│   │   └── slurmctld_service.nmn.wasp.dev.cray.com.
+│   │   └── slurmctld_service.nmn.system.dev.cray.com.
 │   ├── [PTR]  2.2.252.10.in-addr.arpa.
-│   │   └── uai_macvlan_bridge.nmn.wasp.dev.cray.com.
-...
+│   │   └── uai_macvlan_bridge.nmn.system.dev.cray.com.
+
+[...]
 ```
 
 For more information on External DNS and troubleshooting steps, see the [External DNS documentation](../external_dns/External_DNS.md).
@@ -62,6 +69,11 @@ When troubleshooting DNS problems, it may prove helpful to increase the level of
 
    ```
    ncn-m001# kubectl -n services rollout restart deployment cray-dns-powerdns
+   ```
+
+   Example output:
+
+   ```
    deployment.apps/cray-dns-powerdns restarted
    ```
 
@@ -74,68 +86,94 @@ Refer to the external [PowerDNS documentation](https://doc.powerdns.com/authorit
 Check that the required zone has a DNSKEY entry; this should match the public key portion of the zone signing key.
 
 ```
-ncn-m001# kubectl -n services exec deployment/cray-dns-powerdns -c cray-dns-powerdns -- pdnsutil show-zone wasp.dev.cray.com
+ncn-m001# kubectl -n services exec deployment/cray-dns-powerdns \
+-c cray-dns-powerdns -- pdnsutil show-zone system.dev.cray.com
+```
+
+Example output:
+
+```
 This is a Master zone
 Last SOA serial number we notified: 2021090901 == 2021090901 (serial in the database)
-Zone has following allowed TSIG key(s): wasp-key
-Zone uses following TSIG key(s): wasp-key
+Zone has following allowed TSIG key(s): system-key
+Zone uses following TSIG key(s): system-key
 Metadata items:
-	AXFR-MASTER-TSIG	wasp-key
+	AXFR-MASTER-TSIG	system-key
 	SOA-EDIT-API	DEFAULT
-	TSIG-ALLOW-AXFR	wasp-key
+	TSIG-ALLOW-AXFR	system-key
 Zone has NSEC semantics
 keys:
 ID = 1 (CSK), flags = 257, tag = 26690, algo = 13, bits = 256	  Active	 Published  ( ECDSAP256SHA256 )
-CSK DNSKEY = wasp.dev.cray.com. IN DNSKEY 257 3 13 TAi+aXL+Z8ZSFHxz+iEWB3MEdi1JWgM/tb3Q1M76yVOq5Kaur9k+oIAHXvCSR19Iuu+0ZUAyLB0vKkhScJp3Tw== ; ( ECDSAP256SHA256 )
-DS = wasp.dev.cray.com. IN DS 26690 13 1 8c926281afb822a2bea767f08c79b856a2427c26 ; ( SHA1 digest )
-DS = wasp.dev.cray.com. IN DS 26690 13 2 2bfd71e5403f99d25496f5f7f352e71747bb72ee6eb240dcaf8b56b95d18ef6c ; ( SHA256 digest )
-DS = wasp.dev.cray.com. IN DS 26690 13 4 df40f23a7ee051d7e3d40d4059640bda3558cd74a37110b25f7b8cf4e60506c77bf33a660400710d397df0a1cde26d70 ; ( SHA-384 digest )
+CSK DNSKEY = system.dev.cray.com. IN DNSKEY 257 3 13 TAi+aXL+Z8ZSFHxz+iEWB3MEdi1JWgM/tb3Q1M76yVOq5Kaur9k+oIAHXvCSR19Iuu+0ZUAyLB0vKkhScJp3Tw== ; ( ECDSAP256SHA256 )
+DS = system.dev.cray.com. IN DS 26690 13 1 8c926281afb822a2bea767f08c79b856a2427c26 ; ( SHA1 digest )
+DS = system.dev.cray.com. IN DS 26690 13 2 2bfd71e5403f99d25496f5f7f352e71747bb72ee6eb240dcaf8b56b95d18ef6c ; ( SHA256 digest )
+DS = system.dev.cray.com. IN DS 26690 13 4 df40f23a7ee051d7e3d40d4059640bda3558cd74a37110b25f7b8cf4e60506c77bf33a660400710d397df0a1cde26d70 ; ( SHA-384 digest )
 ```
 If the DNSKEY record is incorrect, verify that the zone name is correct in the `dnssec` SealedSecret in `customizations.yaml` and that the desired zone signing key was used. Please see the [PowerDNS Configuration Guide](./PowerDNS_Configuration.md) for more information.
 
 ### Verify TSIG Operation
 
-> **`IMPORTANT`** these examples are for informational purposes only. The use of the `dig` command `-y` option to present the key should be avoided in favour of the `-k` option with the secret in a file to avoid the key being displayed in `ps` command output or the shell history.
+> **IMPORTANT:** These examples are for informational purposes only. The use of the `dig` command `-y` option to present the key should be avoided in favor of the `-k` option with the secret in a file to avoid the key being displayed in `ps` command output or the shell history.
 
 1. Determine the IP address of the external DNS service.
 
    ```
    ncn-m001# kubectl -n services get service cray-dns-powerdns-can-tcp
+   ```
+
+   Example output:
+
+   ```
    NAME                        TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)        AGE
    cray-dns-powerdns-can-tcp   LoadBalancer   10.27.91.157   10.101.8.113   53:30726/TCP   6d
    ```
 
 2. Verify that an AXFR query to the external DNS service works when the correct TSIG key is presented.
 
+   ```
+   $ dig -t axfr system.dev.cray.com @10.101.8.113 -y \ "hmac-sha256:system-key:dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY=" +nocrypto | head
+   ```
+
+   Example output:
 
    ```
-   $ dig -t axfr wasp.dev.cray.com @10.101.8.113 -y "hmac-sha256:wasp-key:dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY=" +nocrypto | head
-
-   ; <<>> DiG 9.10.6 <<>> -t axfr wasp.dev.cray.com @10.101.8.113 -y hmac-sha256:wasp-key:dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY= +nocrypto
+   ; <<>> DiG 9.10.6 <<>> -t axfr system.dev.cray.com @10.101.8.113 -y hmac-sha256:system-key:dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY= +nocrypto
    ;; global options: +cmd
-   wasp.dev.cray.com.	3600	IN	SOA	a.misconfigured.dns.server.invalid. hostmaster.wasp.dev.cray.com. 2021090901 10800 3600 604800 3600
-   wasp.dev.cray.com.	3600	IN	RRSIG	SOA 13 4 3600 20210930000000 20210909000000 26690 wasp.dev.cray.com. [omitted]
-   wasp-key.		0	ANY	TSIG	hmac-sha256. 1632302505 300 32 XoySAOtCD52OzO/2MeFk0/x7MG6m93IxtWaNfhzaRkg= 44483 NOERROR 0
-   wasp.dev.cray.com.	3600	IN	DNSKEY	257 3 13 [key id = 26690]
-   wasp.dev.cray.com.	3600	IN	RRSIG	DNSKEY 13 4 3600 20210930000000 20210909000000 26690 wasp.dev.cray.com. [omitted]
-   sma-kibana.wasp.dev.cray.com. 300 IN	A	10.101.8.128
-   sma-kibana.wasp.dev.cray.com. 300 IN	RRSIG	A 13 5 300 20210930000000 20210909000000 26690 wasp.dev.cray.com. [omitted]
+   system.dev.cray.com.	3600	IN	SOA	a.misconfigured.dns.server.invalid. hostmaster.system.dev.cray.com. 2021090901 10800 3600 604800 3600
+   system.dev.cray.com.	3600	IN	RRSIG	SOA 13 4 3600 20210930000000 20210909000000 26690 system.dev.cray.com. [omitted]
+   system-key.		0	ANY	TSIG	hmac-sha256. 1632302505 300 32 XoySAOtCD52OzO/2MeFk0/x7MG6m93IxtWaNfhzaRkg= 44483 NOERROR 0
+   system.dev.cray.com.	3600	IN	DNSKEY	257 3 13 [key id = 26690]
+   system.dev.cray.com.	3600	IN	RRSIG	DNSKEY 13 4 3600 20210930000000 20210909000000 26690 system.dev.cray.com. [omitted]
+   sma-kibana.system.dev.cray.com. 300 IN	A	10.101.8.128
+   sma-kibana.system.dev.cray.com. 300 IN	RRSIG	A 13 5 300 20210930000000 20210909000000 26690 system.dev.cray.com. [omitted]
    ```
 
    When presented with an invalid key the transfer should fail.
 
    ```
-   $ dig -t axfr wasp.dev.cray.com @10.101.8.113 -y "hmac-sha256:wasp-key:B7n/sK74pa7r0ygOZkKpW9mWkPjq8fV71j1SaTpzJMQ="
+   $ dig -t axfr system.dev.cray.com @10.101.8.113 \
+   -y "hmac-sha256:system-key:B7n/sK74pa7r0ygOZkKpW9mWkPjq8fV71j1SaTpzJMQ="
+   ```
+
+   Example output:
+
+   ```
    ;; Couldn't verify signature: expected a TSIG or SIG(0)
 
-   ; <<>> DiG 9.10.6 <<>> -t axfr wasp.dev.cray.com @10.101.8.113 -y hmac-sha256:wasp-key:B7n/sK74pa7r0ygOZkKpW9mWkPjq8fV71j1SaTpzJMQ=
+   ; <<>> DiG 9.10.6 <<>> -t axfr system.dev.cray.com @10.101.8.113 -y hmac-sha256:system-key:B7n/sK74pa7r0ygOZkKpW9mWkPjq8fV71j1SaTpzJMQ=
    ;; global options: +cmd
    ; Transfer failed.
    ```
+   
    The `cray-dns-powerdns` pod log will also indicate that the request failed.
 
    ```
    ncn-m001# kubectl -n services logs cray-dns-powerdns-64fdf6597c-pqgdt -c cray-dns-powerdns
+   ```
+
+   Example output:
+
+   ```
    ---
-   Sep 22 09:31:17 Packet for 'wasp.dev.cray.com' denied: Signature with TSIG key 'wasp-key' failed to validate
+   Sep 22 09:31:17 Packet for 'system.dev.cray.com' denied: Signature with TSIG key 'system-key' failed to validate
    ```

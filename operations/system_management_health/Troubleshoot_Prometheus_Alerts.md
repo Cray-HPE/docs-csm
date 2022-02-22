@@ -1,14 +1,16 @@
 # Troubleshoot Prometheus Alerts
 
 General Prometheus Alert Troubleshooting Topics
-- [CephMgrIsAbsent and CephMgrIsMissingReplicas](#cephmgrmissing)
-- [CephNetworkPacketsDropped](#networkpatcketsdropped))
-- [CPUThrottlingHigh](#cputhrottlinghigh)
-- [KubePodNotReady](#kubepodnotready)
-- [PostgresqlFollowerReplicationLagSMA](#followerlagsma)
-- [PostgresqlHighRollbackRate](#highrollbackrate)
-- [PostgresqlInactiveReplicationSlot](#inactiveslot)
-- [PostgresqlNotEnoughConnections](#notenoughconnections)
+- [Troubleshoot Prometheus Alerts](#troubleshoot-prometheus-alerts)
+  - [CephMgrIsAbsent and CephMgrIsMissingReplicas](#cephmgrisabsent-and-cephmgrismissingreplicas)
+  - [CephNetworkPacketsDropped](#cephnetworkpacketsdropped)
+  - [CPUThrottlingHigh](#cputhrottlinghigh)
+  - [KubePodNotReady](#kubepodnotready)
+  - [PostgresqlFollowerReplicationLagSMA](#postgresqlfollowerreplicationlagsma)
+  - [PostgresqlHighRollbackRate](#postgresqlhighrollbackrate)
+  - [PostgresqlInactiveReplicationSlot](#postgresqlinactivereplicationslot)
+  - [PostgresqlNotEnoughConnections](#postgresqlnotenoughconnections)
+  - [CephNetworkPacketsDropped](#cephnetworkpacketsdropped-1)
 
 <a name="cephmgrmissing"></a>
 ## CephMgrIsAbsent and CephMgrIsMissingReplicas
@@ -17,6 +19,11 @@ If the CephMgrIsAbsent and/or CephMgrIsMissingReplicas alerts fire, use the foll
 
 ```bash
 ncn-s001# ceph mgr module ls | jq '.enabled_modules'
+```
+
+Example output:
+
+```
 [
   "cephadm",
   "iostat",
@@ -34,6 +41,11 @@ Confirm the module is now enabled:
 
 ```bash
 ncn-s001# ceph mgr module ls | jq '.enabled_modules'
+```
+
+Example output:
+
+```
 [
   "cephadm",
   "iostat",

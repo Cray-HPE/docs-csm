@@ -29,6 +29,11 @@ Use this procedure to troubleshoot Ceph MDS reporting slow requests after follow
 
    ```bash
    ncn-s003# cephadm shell
+   ```
+
+   Example output:
+
+   ```
    Inferring fsid 7350865a-0b21-11ec-b9fa-fa163e06c459
    Inferring config /var/lib/ceph/7350865a-0b21-11ec-b9fa-fa163e06c459/mon.ncn-s003/config
    Using recent ceph image arti.dev.cray.com/third-party-docker-stable-local/ceph/   ceph@sha256:70536e31b29a4241999ec4fd13d93e5860a5ffdc5467911e57e6bf04dfe68337
@@ -41,6 +46,11 @@ Use this procedure to troubleshoot Ceph MDS reporting slow requests after follow
 
    ```bash
    [ceph: root@ncn-s003 /]# ceph daemon mds.cephfs.ncn-s003.ihwkop dump_ops_in_flight
+   ```
+
+   Example output:
+
+   ```
    {
        "ops": [],
        "num_ops": 0

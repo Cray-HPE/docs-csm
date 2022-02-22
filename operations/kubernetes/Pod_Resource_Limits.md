@@ -2,9 +2,9 @@
 
 Kubernetes uses resource requests and Quality of Service \(QoS\) for scheduling pods. Resource requests can be provided explicitly for pods and containers, whereas pod QoS is implicit, based on the resource requests and limits of the containers in the pod. There are three types of QoS:
 
--   Guaranteed: All containers in a pod have explicit memory and CPU resource requests and limits. For each resource, the limit equals the request.
--   Burstable: Does not meet Guaranteed requirements, but some of the containers have explicit memory and CPU resource requests or limits.
--   BestEffort: None of the containers specify any resources.
+- Guaranteed: All containers in a pod have explicit memory and CPU resource requests and limits. For each resource, the limit equals the request.
+- Burstable: Does not meet Guaranteed requirements, but some of the containers have explicit memory and CPU resource requests or limits.
+- BestEffort: None of the containers specify any resources.
 
 Kubernetes will best be able to schedule pods when there are resources associated with each container in each pod.
 

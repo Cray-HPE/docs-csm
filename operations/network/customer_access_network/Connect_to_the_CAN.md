@@ -18,7 +18,7 @@ The CAN clients in the system require a routing topology that is setup to route 
 
 **Option 1: Point-to-Point**
 
-This option provides a point-to-point routing topology between the customer switch and the HPE Cray EX TOR Spine Switch. See [CAN with Dual-Spine Configuration](CAN_with_Dual-Spine_Configuration.md) for more information on using this topology for a dual-spine configuration.
+This option provides a point-to-point routing topology between the customer switch and the HPE Cray EX TOR Spine Switch. See [CAN with Dual-Spine Configuration](Dual_Spine_Configuration.md) for more information on using this topology for a dual-spine configuration.
 
 The diagram below shows how the point-to-point routing topology works:
 
@@ -30,7 +30,7 @@ The single gateway options requires the customer to provide an IP address that i
 
 For example, a customer could use the 192.168.30.0/24 network to connect via the HPE Cray EX CAN uplink connection. The customer also needs to provide an IP address on this network, such as 192.168.30.253. This IP address will be assigned to the uplink port on the HPE Cray EX TOR Spine Switch.
 
-For a dual-spine configuration, the admin would need to extended the customer network to both switches using one IP address for each switch. After extending the network, two equal routes need to be configured. The spine switches are configured to support multi-chassis link aggregation group \(MLAG\) from NCNs and UANs. These nodes are configured for bonding mode layer 2 and layer 3. See [CAN with Dual-Spine Configuration](CAN_with_Dual-Spine_Configuration.md) for more information.
+For a dual-spine configuration, the admin would need to extended the customer network to both switches using one IP address for each switch. After extending the network, two equal routes need to be configured. The spine switches are configured to support multi-chassis link aggregation group \(MLAG\) from NCNs and UANs. These nodes are configured for bonding mode layer 2 and layer 3. See [CAN with Dual-Spine Configuration](Dual_Spine_Configuration.md) for more information.
 
 The diagram below shows how the connection is established:
 

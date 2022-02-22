@@ -139,7 +139,11 @@ In the event that the Spire Postgres cluster is in a state that the cluster must
 
     ```bash
     ncn-w001# for secret in postgres.spire-postgres.credentials service-account.spire-postgres.credentials spire.spire-postgres.credentials standby.spire-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
+    ```
 
+    Example output:
+
+    ```
     secret postgres.spire-postgres.credentials username & password: postgres ABCXYZ
     secret service-account.spire-postgres.credentials username & password: service_account ABC123
     secret spire.spire-postgres.credentials username & password: spire XYZ123
@@ -780,7 +784,11 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
 
     ```bash 
     ncn-w001# for secret in postgres.capsules-warehouse-server-postgres.credentials service-account.capsules-warehouse-server-postgres.credentials standby.capsules-warehouse-server-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
+    ```
 
+    Example output:
+
+    ```
     secret postgres.capsules-warehouse-server-postgres.credentials username & password: postgres ABCXYZ
     secret service-account.capsules-warehouse-server-postgres.credentials username & password: service_account ABC123
     secret standby.capsules-warehouse-server-postgres.credentials username & password: standby 123456
@@ -843,7 +851,11 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
 
     ```bash
     ncn-w001# kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}"
+    ```
 
+    Example output:
+
+    ```
     NAME              READY   STATUS    RESTARTS   AGE
     capsules-warehouse-server-0   2/2     Running   0          35s
     capsules-warehouse-server-1   2/2     Running   0          35s
@@ -854,7 +866,11 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
 
     ```bash
     ncn-w001# capsule list
+    ```
 
+    Example output:
+
+    ```
     2 Capsules found:
       someusername/a-preexisting-capsule
       someusername/another-preexisting-capsule

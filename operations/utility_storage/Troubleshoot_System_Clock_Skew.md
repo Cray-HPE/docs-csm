@@ -20,6 +20,11 @@ This procedure requires admin privileges.
 
     ```bash
     ncn-m001# ceph -s
+    ```
+
+    Example output:
+
+    ```
     cluster:
        id:     b6d509e6-772e-4785-a421-e4a138b1780c
        health: HEALTH_WARN
@@ -42,7 +47,7 @@ This procedure requires admin privileges.
        client:   919 KiB/s wr, 0 op/s rd, 16 op/s wr
     ```
 
-    **`IMPORTANT:`** If you see this message in the ceph logs `unable to obtain rotating service keys; retrying` it will also indicate clock skew. You may have to utilize `xzgrep skew *.xz to see the skew` if you logs have rolled over.
+    **IMPORTANT:** If you see this message in the ceph logs `unable to obtain rotating service keys; retrying` it will also indicate clock skew. You may have to utilize `xzgrep skew *.xz to see the skew` if you logs have rolled over.
 
 
 2. View the Ceph health details.
@@ -75,6 +80,11 @@ This procedure requires admin privileges.
 
     ```bash
     ncn-m001# ceph -s
+    ```
+
+    Example output:
+
+    ```
     cluster:
       id:     5f3b4031-d6c0-4118-94c0-bffd90b534eb
       health: HEALTH_OK

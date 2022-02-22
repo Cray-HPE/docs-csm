@@ -8,8 +8,8 @@ CA material is injected as a start-up secret into Vault through a SealedSecret t
 
 Trusted CA certificates are distributed via two channels:
 
--   Cloud-init metadata
--   Kubernetes ConfigMaps
+- Cloud-init metadata
+- Kubernetes ConfigMaps
 
 Kubernetes-native workloads generally leverage ConfigMap-based distribution. The Cloud-init based method is used for non-compute node \(NCN\) OS distribution.
 
