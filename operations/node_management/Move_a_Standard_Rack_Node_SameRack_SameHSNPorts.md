@@ -2,9 +2,9 @@
 
 This procedure move standard rack UAN or compute node to a different location and uses the same Slingshot switch ports and management network ports.
 
-Update the location-based xname for a standard rack node within the system.
+Update the location-based component name (xname) for a standard rack node within the system.
 
-If a node has an incorrect xname based on its physical location, then this procedure can utilized to correct the xname of the node without the need to physically moving the node. 
+If a node has an incorrect component name (xname) based on its physical location, then this procedure can be used to correct the component name (xname) of the node without the need to physically move the node. 
 
 ### Prerequisites
 
@@ -20,7 +20,7 @@ If a node has an incorrect xname based on its physical location, then this proce
     ```
 
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   This procedure applies only to standard rack nodes. Liquid-cooled compute blades do not require the use of the MgmtSwitchConnector object in the System Layout Service \(SLS\) to perform discovery.
+-   This procedure applies only to standard rack nodes. Liquid-cooled compute blades do not require the use of the `MgmtSwitchConnector` object in the System Layout Service \(SLS\) to perform discovery.
 -   This procedure moves an application node or compute node to a different location in an HPE Cray standard rack.
 -   The node must use the **same Slingshot switch switch ports**.
 -   The node must use the **same management network switch ports**.
@@ -36,14 +36,14 @@ This procedure works with both application and compute nodes. This example moves
 1.  Shut down software and power off the node.
 
 2.  Disconnect the power cables, management network cables, and high-speed network \(HSN\) cables.
-    > If this procedure is being followed to correct a nodes xname, then this step can be skipped. 
+    > If this procedure is being followed to correct a node's component name (xname), then this step can be skipped. 
 
 3.  Move the node to the new location in the rack \(U27\), connect the management cables and HSN cables, but do not connect the power cables.
-    > If this procedure is being followed to correct a nodes xname, then this step can be skipped. 
+    > If this procedure is being followed to correct a node's component name (xname), then this step can be skipped. 
 
 #### Update Node in the System Layout Service \(SLS\)
 
-4.  Setup environment variables for the original node and node BMC xnames:
+4.  Setup environment variables for the original node and node BMC component names (xnames):
     
     ```bash
     ncn-m001# OLD_NODE_XNAME=x3000c0s17b1n0
@@ -57,7 +57,7 @@ This procedure works with both application and compute nodes. This example moves
     x3000c0s17b1
     ```
 
-5.  Setup environment variables for the new node and node BMC xnames:  
+5.  Setup environment variables for the new node and node BMC component names (xnames):  
     
     ```bash
     ncn-m001# NEW_NODE_XNAME=x3000c0s27b1n0
@@ -71,7 +71,7 @@ This procedure works with both application and compute nodes. This example moves
     x3000c0s27b1
     ```
 
-6.  Update SLS with the node's new xname.
+6.  Update SLS with the node's new component name (xname).
 	1.  Get Node from SLS:
        
        ```bash
@@ -99,7 +99,7 @@ This procedure works with both application and compute nodes. This example moves
         }
        ```
 
-    2.  Update SLS Node object with new xnames:
+    2.  Update the SLS Node object with the new component names (xnames):
        
         ```bash
         ncn-m001# jq --arg NODE_XNAME "$NEW_NODE_XNAME" --arg BMC_XNAME "$NEW_BMC_XNAME" \
@@ -163,7 +163,7 @@ This procedure works with both application and compute nodes. This example moves
         message = "deleted entry and its descendants"
         ```
 
-7.  Update MgmtSwitchConnector in SLS with the node BMC's new xname:
+7.  Update `MgmtSwitchConnector` in SLS with the node BMC's new component name (xname):
 
     1.  Get MgmtSwitchConnector object from SLS:
         
@@ -193,7 +193,7 @@ This procedure works with both application and compute nodes. This example moves
         ]
         ```
 
-    2.  Update MgmtSwitchConnector object with the new node BMC xname:
+    2.  Update `MgmtSwitchConnector` object with the new node BMC component name (xname):
         
         ```bash
         ncn-m001# jq --arg BMC_XNAME "$NEW_BMC_XNAME" \
@@ -222,7 +222,7 @@ This procedure works with both application and compute nodes. This example moves
         ```
         > Only the `NodeNics` field should have been updated.
 
-    3.  Determine the xname of the MgmtSwitchConnector:
+    3.  Determine the component name (xname) of the `MgmtSwitchConnector`:
         
         ```bash
         ncn-m001# MGMT_SWITCH_CONNECTOR_XNAME=$(jq -r .Xname sls_MgmtSwitchConnector.json)
@@ -230,7 +230,7 @@ This procedure works with both application and compute nodes. This example moves
         x3000c0w22j36
         ```
 
-    4.  Update the MgmtSwitchConnector in SLS:
+    4.  Update the `MgmtSwitchConnector` in SLS:
         
         ```bash
         ncn-m001# curl -i -X PUT -H "Authorization: Bearer $(get_token)" \
@@ -266,7 +266,7 @@ This procedure works with both application and compute nodes. This example moves
     ncn-m001# cray hsm state components delete $OLD_BMC_XNAME
     ```
 
-    Remove NodeEnclosure component form HSM. The xname for a NodeEnclosure is similar to the node BMC xname, but the `b` is replaced with a `e`.
+    Remove NodeEnclosure component form HSM. The component name (xname) for a NodeEnclosure is similar to the node BMC component name (xname), but the `b` is replaced with a `e`.
     
     ```bash
     ncn-m001# OLD_NODE_ENCLOSURE_XNAME=x3000c0s17e0
@@ -300,7 +300,7 @@ This procedure works with both application and compute nodes. This example moves
         ```
 
 10. Connect the power cables to the node to power on the BMC.
-    > If this procedure is being followed to correct a nodes xname, then this step can be skipped. 
+    > If this procedure is being followed to correct a node's component name (xname), then this step can be skipped. 
 
 11. Wait for 5 minutes for power on and the node BMCs to be discovered.
     ```bash
@@ -334,7 +334,7 @@ This procedure works with both application and compute nodes. This example moves
     -   When `LastDiscoveryStatus` displays as `DiscoverOK`, the node BMC has been successfully discovered.
     -   If the last discovery state is `DiscoveryStarted` then the BMC is currently being inventoried by HSM.
     -   If the last discovery state is `HTTPsGetFailed` or `ChildVerificationFailed` then an error occurred during the discovery process.
-        -   For `HTTPsGetFailed`, verify that the BMC is pingable by its xname. If the xname of the BMC is not resolveable it, more time may be needed for DNS to update.
+        -   For `HTTPsGetFailed`, verify that the BMC is pingable by its component name (xname). If the component name (xname) of the BMC is not resolveable it, more time may be needed for DNS to update.
 
             If hostname it does resolve, issue a discovery request to HSM:
             
