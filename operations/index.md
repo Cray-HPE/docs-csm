@@ -220,7 +220,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
        *   [Create and Populate a VCS Configuration Repository](configuration_management/Create_and_Populate_a_VCS_Configuration_Repository.md)
    *   [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
        *   [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
-   *   [CFS Key Management](CFS_Key_Management.md)
+   *   [CFS Key Management](configuration_management/CFS_Key_Management.md)
 
 <a name="kubernetes"></a>
 
@@ -290,7 +290,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
      * [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
      * [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md)
      * [Change Air-Cooled Node BMC Credentials](security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md)
-     * [Change SMNP Credentials on Leaf Switches](security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md)
+     * [Change SMNP Credentials on Leaf-BMC Switches](security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md)
      * [Update Default ServerTech PDU Credentials used by the Redfish Translation Service](security_and_authentication/Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md)
      * [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
      * [Add Root Service Account for Gigabyte Controllers](security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md)
@@ -393,7 +393,7 @@ Ceph is the utility storage platform that is used to enable pods to store persis
   * [Troubleshoot System Clock Skew](utility_storage/Troubleshoot_System_Clock_Skew.md)
   * [Troubleshoot an Unresponsive S3 Endpoint](utility_storage/Troubleshoot_an_Unresponsive_S3_Endpoint.md)
   * [Troubleshoot Ceph-Mon Processes Stopping and Exceeding Max Restarts](utility_storage/Troubleshoot_Ceph-Mon_Processes_Stopping_and_Exceeding_Max_Restarts.md)
-  * [Troubleshoot Pods Failing to Restart on Other Worker Nodes](utility_storage/Troubleshoot_Pods_Failing_to_Restart_on_Other_Worker_Nodes.md)
+  * [Troubleshoot Pods Multi-Attach Error](utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md)
   * [Troubleshoot Large Object Map Objects in Ceph Health](utility_storage/Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)
   * [Troubleshoot Failure of RGW Health Check](utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
   * [Troubleshooting Ceph MDS Reporting Slow Requests and Failure on Client](utility_storage/Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client.md)
@@ -423,6 +423,7 @@ The System Layout Service \(SLS\) holds information about the system design, suc
   * [Add Liquid-Cooled Cabinets to SLS](system_layout_service/Add_Liquid-Cooled_Cabinets_To_SLS.md)
   * [Add UAN CAN IP Addresses to SLS](system_layout_service/Add_UAN_CAN_IP_Addresses_to_SLS.md)
   * * [Update SLS with UAN Aliases](system_layout_service/Update_SLS_with_UAN_Aliases.md)
+  * [Add an alias to a service](system_layout_service/Add_an_alias_to_a_service.md)
   * [Create a Backup of the SLS Postgres Database](system_layout_service/Create_a_Backup_of_the_SLS_Postgres_Database.md)
   * [Restore SLS Postgres Database from Backup](system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
   * [Restore SLS Postgres without an Existing Backup](system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
@@ -463,6 +464,7 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
   * [Create a Backup of the HSM Postgres Database](hardware_state_manager/Create_a_Backup_of_the_HSM_Postgres_Database.md)
   * [Restore HSM Postgres from a Backup](hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
   * [Restore HSM Postgres without a Backup](hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
+  * [Set BMC Management Role](hardware_state_manager/Set_BMC_Management_Role.md)
 
 <a name=""></a>
 
@@ -513,8 +515,8 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs.md)
   * [Change Settings for HMS Collector Polling of Air Cooled Nodes](node_management/Change_Settings_for_HMS_Collector_Polling_of_Air_Cooled_Nodes.md)
   * [Use the Physical KVM](node_management/Use_the_Physical_KVM.md)
-  * [Launch a Virtual KVM on Gigabyte Nodes](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Nodes.md)
-  * [Launch a Virtual KVM on Intel Nodes](node_management/Launch_a_Virtual_KVM_on_Intel_Nodes.md)
+  * [Launch a Virtual KVM on Gigabyte Nodes](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Nodess.md)
+  * [Launch a Virtual KVM on Intel Nodes](node_management/Launch_a_Virtual_KVM_on_Intel_Nodess.md)
   * [Change Java Security Settings](node_management/Change_Java_Security_Settings.md)
   * [Configuration of NCN Bonding](node_management/Configuration_of_NCN_Bonding.md)
     * [Change Settings in the Bond](node_management/Change_Settings_in_the_Bond.md)
@@ -547,14 +549,13 @@ Overview of the several different networks supported by the HPE Cray EX system.
 
 ### Management Network
 
-HPE Cray EX systems can have network switches in many roles: spine switches, leaf switches, aggregation switches, and CDU switches. Newer systems have HPE Aruba switches, while older systems have Dell and Mellanox switches. Switch IP addresses are generated by Cray Site Init (CSI).
+HPE Cray EX systems can have network switches in many roles: spine switches, leaf switches, leaf-bmc switches, and CDU switches. Newer systems have HPE Aruba switches, while older systems have Dell and Mellanox switches. Switch IP addresses are generated by Cray Site Init (CSI).
 
-  * [Management Network Switch Rename](network/management_network/Management_Network_Switch_Rename.md)
-  * [Management Network ACL configuration](network/management_network/Management_Network_ACL_Configuration.md)
-  * [Management Network CAN setup](network/management_network/Management_Network_CAN_Setup.md)
-  * [Management Network Flow Control Settings](network/management_network/Management_Network_Flow_Control_Settings.md)
-  * [Management Network Access Port configurations](network/management_network/Management_Network_Access_Port_Configurations.md)
-  * [Update Management Network Firmware](network/management_network/Update_Management_Network_Firmware.md)
+  * [HPE Cray EX Management Network Installation and Configuration Guide](network/management_network/index.md)
+    * [Aruba Installation and Configuration](network/management_network/aruba/index.md)
+    * [Dell Installation and Configuration](network/management_network/dell/index.md)
+    * [Mellanox Installation and Configuration](network/management_network/mellanox/index.md)
+  * [Update Management Network Firmware](network/management_network/firmware/update_management_network_firmware.md)
 
 
 <a name="customer-access-network-can"></a>
@@ -567,7 +568,7 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
    * [Required Labels if CAN is Not Configured](network/customer_access_network/Required_Labels_if_CAN_is_Not_Configured.md)
    * [Externally Exposed Services](network/customer_access_network/Externally_Exposed_Services.md)
    * [Connect to the CAN](network/customer_access_network/Connect_to_the_CAN.md)
-   * [CAN with Dual-Spine Configuration](network/customer_access_network/CAN_with_Dual-Spine_Configuration.md)
+   * [CAN with Dual-Spine Configuration](network/customer_access_network/Dual_Spine_Configuration.md)
    * [Troubleshoot CAN Issues](network/customer_access_network/Troubleshoot_CAN_Issues.md)
 
 
@@ -575,10 +576,10 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
 
 ### Dynamic Host Configuration Protocol (DHCP)
 
-The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers.
+The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers. 
 
-  * [DHCP](/network/dhcp/DHCP.md)
-  * [Troubleshoot DHCP Issues](/network/dhcp/Troubleshoot_DHCP_Issues.md)
+  * [DHCP](network/dhcp/DHCP.md)
+  * [Troubleshoot DHCP Issues](network/dhcp/Troubleshoot_DHCP_Issues.md)
 
 <a name="domain-name-service-dns"></a>
 

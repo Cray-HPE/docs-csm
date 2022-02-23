@@ -13,7 +13,7 @@ Once the CSM installation has completed, other product streams for the HPE Cray 
 
 ### Topics:
 
-   1. [Validate Management Network Cabling](#validate_management_network_cabling)
+   1. [Validate SHCD](../operations/network/management_network/validate_shcd.md)
    1. [Prepare Configuration Payload](#prepare_configuration_payload)
    1. [Prepare Management Nodes](#prepare_management_nodes)
    1. [Bootstrap PIT Node](#bootstrap_pit_node)
@@ -40,14 +40,14 @@ sections, but there is also a general troubleshooting topic.
 
    <a name="validate_management_network_cabling"></a>
 
-   1. Validate Management Network Cabling
+   1. Validate SHCD
 
       The cabling should be validated between the nodes and the management network switches. The information in the
       Shasta Cabling Diagram (SHCD) can be used to confirm the cables which physically connect components of the system.
       Having the data in the SHCD which matches the physical cabling will be needed later in both
       [Prepare Configuration Payload](#prepare_configuration_payload) and [Configure Management Network](configure_management_network.md).
 
-      See [Validate Management Network Cabling](validate_management_network_cabling.md)
+      See [Validate SHCD](../operations/network/management_network/validate_shcd.md)
 
       **Note**: If a reinstall or fresh install of this software release is being done on this system and the management
       network cabling has already been validated, then this topic could be skipped and instead move to
@@ -93,10 +93,8 @@ sections, but there is also a general troubleshooting topic.
    1. Configure Management Network Switches
 
       Now that the PIT node has been booted with the LiveCD environment and CSI has generated the switch IP addresses,
-      the management network switches can be configured. This procedure will configure the spine switches, aggregation
-      switches (if present), CDU switches (if present), and the leaf switches.
-
-      See [Configure Management Network Switches](configure_management_network.md)
+      the management network switches can be configured.
+      [Management Net Docs](../operations/network/management_network/index.md)
 
       **Note**: If a reinstall of this software release is being done on this system and the management network switches
       have already been configured, then this topic could be skipped and instead move to

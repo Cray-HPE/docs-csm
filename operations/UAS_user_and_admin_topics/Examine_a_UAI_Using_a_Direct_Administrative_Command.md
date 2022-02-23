@@ -24,6 +24,7 @@ To examine an existing UAI use a command of the following form:
 ```
 cray uas admin uais describe <uai-name>
 ```
+
 For example:
 
 ```bash

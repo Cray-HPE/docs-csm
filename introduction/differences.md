@@ -64,6 +64,7 @@ The following features have been completely removed:
 
    * cray-conman pod. This has been replaced by cray-console-node.
    * The cray-externaldns-coredns, cray-externaldns-etcd, and cray-externaldns-wait-for-etcd pods have been removed. PowerDNS is now the provider of the external DNS service.
+   * CFS v1 API and CLI. The v2 API/CLI has been the default since CSM 0.9 (Shasta 1.4).
 
 <a name="other_changes"></a>
 ### Other Changes

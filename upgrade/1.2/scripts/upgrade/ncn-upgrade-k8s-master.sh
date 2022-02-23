@@ -76,25 +76,62 @@ if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
    fi
 fi
 
-${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
-
-if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
-    state_name="RESTORE_M001_NET_CONFIG"
-    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
-    if [[ $state_recorded == "0" ]]; then
-        echo "====> ${state_name} ..."
-
-        if [[ $ssh_keys_done == "0" ]]; then
-            ssh_keygen_keyscan "${upgrade_ncn}"
-            ssh_keys_done=1
+first_master_hostname=`curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | \
+     jq -r '.[] | ."cloud-init"."meta-data"."first-master-hostname"'`
+if [[ ${first_master_hostname} == ${upgrade_ncn} ]]; then
+   state_name="RECONFIGURE_FIRST_MASTER"
+   state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+   if [[ $state_recorded == "0" ]]; then
+      echo "====> ${state_name} ..."
+      promotingMaster="none"
+      masterNodes=$(kubectl get nodes| grep "ncn-m" | awk '{print $1}')
+      for node in $masterNodes; do
+        # skip upgrade_ncn
+        if [[ ${node} == ${upgrade_ncn} ]]; then
+            continue;
         fi
-        scp ifcfg-lan0 root@ncn-m001:/etc/sysconfig/network/
-        ssh root@ncn-m001 'wicked ifreload lan0'
-        record_state "${state_name}" ${upgrade_ncn}
-    else
-        echo "====> ${state_name} has been completed"
-    fi
+        # check if cloud-init data is healthy
+        ssh $node -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cloud-init query -a > /dev/null 2>&1'
+        rc=$?
+        if [[ "$rc" -eq 0 ]]; then
+            promotingMaster=$node
+            echo "Promote: ${promotingMaster} to be FIRST_MASTER"
+            break;
+        fi
+      done
+
+      if [[ ${promotingMaster} == "none" ]];then
+        echo "No master nodes has healthy cloud-init metadata, fail upgrade. You may try to upgrade another master node first. If that still fails, we do not have any master nodes that can be promoted."
+        exit 1
+      fi
+
+      VERBOSE=1 csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
+      ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
+      ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/1.2/scripts/k8s/promote-initial-master.sh"
+
+      record_state "${state_name}" ${upgrade_ncn}
+   else
+      echo "====> ${state_name} has been completed"
+   fi
 fi
+
+state_name="PREPARE_ETCD"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    csi automate ncn etcd --action remove-member --ncn $upgrade_ncn --kubeconfig /etc/kubernetes/admin.conf
+    ssh $upgrade_ncn 'systemctl daemon-reload'
+    ssh $upgrade_ncn 'systemctl stop etcd.service'
+    csi automate ncn etcd --action add-member --ncn $upgrade_ncn --kubeconfig /etc/kubernetes/admin.conf
+    record_state "${state_name}" ${upgrade_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+drain_node $upgrade_ncn
+
+csi handoff bss-update-param --set metal.no-wipe=0 --limit $UPGRADE_XNAME
+${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
 
 # Restore files used by the System Admin Toolkit (SAT) that were previously backed up
 state_name="RESTORE_SAT_LOCAL_FILES"
@@ -126,8 +163,21 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-cat <<EOF
+if [[ ${upgrade_ncn} != "ncn-m001" ]]; then
+   state_name="UPDATE_M001_KUBEAPI_SERVICE_ISSUER"
+   state_recorded=$(is_state_recorded "${state_name}" ncn-m001
+   if [[ $state_recorded == "0" ]]; then
+      echo "====> ${state_name} ..."
 
+      /usr/share/doc/csm/upgrade/1.2/scripts/k8s/update_kubeapi_service_issuer.sh ncn-m001
+
+      record_state "${state_name}" ncn-m001
+   else
+      echo "====> ${state_name} has been completed"
+   fi
+fi
+
+cat <<EOF
 NOTE:
     If below test failed, try to fix it based on test output. Then run current script again
 EOF

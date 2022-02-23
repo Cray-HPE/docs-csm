@@ -199,11 +199,11 @@ To manually run NCN personalization, first gather the following information:
 
    1.0.0:
       configuration:
-         clone_url: https://vcs.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git
+         clone_url: https://vcs.cmn.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git
          commit: 43ecfa8236bed625b54325ebb70916f55884b3a4
          import_branch: cray/csm/1.6.12
          import_date: 2021-07-28 03:26:01.869501
-         ssh_url: git@vcs.SYSTEM_DOMAIN_NAME:cray/csm-config-management.git
+         ssh_url: git@vcs.cmn.SYSTEM_DOMAIN_NAME:cray/csm-config-management.git
       ...
    ```
    The commit will be different for each system and version of CSM. For
@@ -269,4 +269,4 @@ The script also supports several flags to override these behaviors:
 - `clear-state`: Clears existing state from components to ensure CFS runs. This
    can be used if configuration needs to be re-run on successful nodes with no
    change to the git content since the previous run. For examples, if the ssh
-   keys have changed. 
+   keys have changed.

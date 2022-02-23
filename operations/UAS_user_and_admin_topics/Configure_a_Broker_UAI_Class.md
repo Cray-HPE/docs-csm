@@ -260,6 +260,6 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
     imagename = "registry.local/cray/cray-uai-broker:1.2.4"
     ```
 
-    __NOTE__: in some versions of UAS, SSSD will not start correctly when customized as described above because `/etc/sssd/sssd.conf` is mounted with the wrong mode in spite of being configured with the right mode. If SSSD is not working in a Broker UAI, refer to this [troubleshooting section](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md).
+    **NOTE:** In some versions of UAS, SSSD will not start correctly when customized as described above because `/etc/sssd/sssd.conf` is mounted with the wrong mode in spite of being configured with the right mode. If SSSD is not working in a Broker UAI, refer to this [troubleshooting section](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md).
 
 [Next Topic: Start a Broker UAI](Start_a_Broker_UAI.md)
