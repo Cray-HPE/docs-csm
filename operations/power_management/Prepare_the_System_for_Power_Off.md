@@ -255,7 +255,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
     2.   Clean up prior to BOA job deletion.
 
-         The BOA pod mounts a ConfigMap under the name ‘boot-session’ at the directory /mnt/boot_session inside the pod. This ConfigMap has a random UUID name like e0543eb5-3445-4ee0-93ec-c53e3d1832ce.
+         The BOA pod mounts a ConfigMap under the name `boot-session` at the directory `/mnt/boot_session` inside the pod. This ConfigMap has a random UUID name like `e0543eb5-3445-4ee0-93ec-c53e3d1832ce`.
          Prior to deleting a BOA job, delete its ConfigMap.
          Find the BOA job's ConfigMap with the following command:
          ```bash

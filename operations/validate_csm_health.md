@@ -457,11 +457,11 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
   - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to delete backups from a Kubernetes node to clear this situation. For example:
      1. Run the following to find the failed backup.
         ```bash
-        ncn# kubectl get backups -A -o json | jq -e ‘.items[] | select(.status.phase == “PartiallyFailed”) | .metadata.name’
+        ncn# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
         ```
      1. Delete the backup, where <backup> is replaced with a backup returned in the previous step.
         ```bash
-        ncn# kubectl delete backups <backup> -n velero
+        ncn# velero backup delete <backup> --confirm
         ```
 
 <a name="check-of-system-management-monitoring-tools"></a>

@@ -23,7 +23,7 @@ The following lists enumerate the improvements and enhancements since CSM 1.0.1
 ## CSM 1.0.1
 The following lists enumerate major improvements since CSM v0.9.x.
 
-### What’s New
+### What's New
 * Functionality
   - Scale up to 6000 Nodes is supported.
     - Conman has been updated to using a deployment model that handles a larger scale.
