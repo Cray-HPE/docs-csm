@@ -7,7 +7,7 @@ on:
  
 jobs:
   backport:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     if: github.event.issue.pull_request
     steps:
       - uses: Cray-HPE/backport-command-action@main
