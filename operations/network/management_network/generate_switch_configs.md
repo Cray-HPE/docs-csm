@@ -6,6 +6,7 @@
 - JSON output from validated SHCD.
     - [Validate SHCD](validate_shcd.md)
 - sls input file.
+    - If generating CSM 1.2 configs the SLS file will need to be updated prior to generating configs.
     - [Collect data](collect_data.md)
 
 Generating configuration files can be done for singular switch or for the full system. For example; in a case where you suspect a configuration issue on single switch you can generate just that one file for easier debugging purposes.  

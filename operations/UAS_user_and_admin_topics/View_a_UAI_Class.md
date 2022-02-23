@@ -30,6 +30,11 @@ Replace bb28a35a-6cbc-4c30-84b0-6050314af76b in the example command with the ID 
 
 ```bash
 ncn-m001-pit# cray uas admin config classes describe bdb4988b-c061-48fa-a005-34f8571b88b4 --format yaml
+```
+
+Example output:
+
+```
 class_id: bdb4988b-c061-48fa-a005-34f8571b88b4
 comment: UAI Class to Create Brokered End-User UAIs
 default: false

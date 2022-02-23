@@ -27,11 +27,11 @@ When CSI runs, it produces the following data structure in the `spec` section of
 ```
 spec:
 
-  ...
+  [...]
 
   wlm:
 
-    ...
+    [...]
 
     macvlansetup:
       nmn_subnet: 10.252.2.0/23
@@ -74,7 +74,9 @@ The inputs in the previous section tell the UAS Helm chart how to install the ne
 ```
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
-...
+
+[...]
+
 spec:
   config: '{
       "cniVersion": "0.3.0",
