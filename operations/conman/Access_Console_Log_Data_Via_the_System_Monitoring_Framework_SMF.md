@@ -37,7 +37,7 @@ This procedure requires the Kibana service to be up and running on a non-compute
 
     ![Kibana ClusterStor Logs](../../img/operations/Kibana_Clusterstor_Logs-Dropdown.png)
 
-4.  Identify the xname for individual consoles to search for specific logs.
+4.  Identify the component name (xname) for individual consoles to search for specific logs.
 
     Each line of the log data is prepended with "console.hostname: XNAME" where XNAME is the name of the node for the console log. This information can be used to identify each individual console.
 
@@ -48,7 +48,7 @@ This procedure requires the Kibana service to be up and running on a non-compute
     console.hostname: x3000c0s19b4n0 2020-10-09 15:11:39 Keepalived_vrrp[38]: bogus VRRP packet received on vlan002 !!!
     ```
 
-5.  Enter **Search** terms for the specific console xname using the "console.hostname: XNAME" string.
+5.  Enter **Search** terms for the specific console component name (xname) using the "console.hostname: XNAME" string.
 
 6.  Click the time range drop-down menu to select the time period for which logs are displayed.
 

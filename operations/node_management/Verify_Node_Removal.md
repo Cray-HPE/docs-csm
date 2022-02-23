@@ -5,7 +5,7 @@ Use this procedure to verify that a node has been successfully removed from the 
 ### Prerequisites
 
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   This procedure requires the xname of the removed node to be known.
+-   This procedure requires the component name (xname) of the removed node to be known.
 
 ### Procedure
 

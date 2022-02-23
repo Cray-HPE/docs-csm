@@ -24,7 +24,7 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
 
     2.  Add members to the group.
 
-        Add compute nodes to the group by using the xname for each node being added. The following is an example:
+        Add compute nodes to the group by using the component name (xname) for each node being added.
 
         ```bash
         ncn# cray hsm groups members create slurm-nodes --id XNAME

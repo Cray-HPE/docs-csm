@@ -31,7 +31,7 @@ Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
 x3000c0s9b0n0,Management,Storage,94:40:c9:37:77:26,14:02:ec:d9:76:88,14:02:ec:d9:76:88,94:40:c9:5f:b6:92
 ```
 
-For each management node, the xname, role, and subrole can be extracted from the SHCD in the HMN tab. However, the rest of the
+For each management node, the component name (xname), role, and subrole can be extracted from the SHCD in the HMN tab. However, the rest of the
 MAC address information needs to be collected another way.
 
 Check the description for component names while mapping names between the SHCD and the `ncn_metadata.csv` file.
