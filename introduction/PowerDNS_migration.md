@@ -39,6 +39,8 @@ The following examples assume the system was configured with a `system-name` of 
 | registry.local              | registry.nmnlb.shasta.dev.cray.com      | registry.nmnlb                                      |
 | packages.local              | packages.nmnlb.shasta.dev.cray.com      | packages.nmnlb                                      |
 | spire.local                 | spire.nmnlb.shasta.dev.cray.com         | spire.nmnlb                                         |
+| rgw-vip.nmn <br> rgw-vip.nmn.local | rgw-vip.nmn.shasta.dev.cray.com  | rgw-vip.nmn                                         |
+| rgw-vip.hmn <br> rgw-vip.hmn.local | rgw-vip.hmn.shasta.dev.cray.com  | rgw-vip.hmn                                         |
 | ncn-w001                    | ncn-w001.nmn.shasta.dev.cray.com        | ncn-w001.nmn                                        |
 | ncn-w001-mgmt               | ncn-w001-mgmt.hmn.shasta.dev.cray.com   | ncn-w001-mgmt.hmn                                   |
 | nid000001-nmn               | nid000001.nmn.shasta.dev.cray.com       | nid000001.nmn                                       |
