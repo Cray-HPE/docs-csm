@@ -69,6 +69,12 @@ In order for these scripts to work the following commands will need to be applie
     pit# /usr/local/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 "${CSI_PATH}"
     ```
 
+   `*WARNING*` The mellanox_set_bgp_peers.py script assumes that the prefix length of the CAN is `/24`. If that value is incorrect for the system being installed then update the script with the correct prefix length by editing the following line.
+
+    ```python
+    cmd_prefix_list_can = "ip prefix-list pl-can seq 30 permit {} /24 ge 24".format()
+    ```
+
 ### Verification
 
 After following the previous steps, you will need to verify the configuration and verify the BGP peers are `ESTABLISHED`. If it is early in the install process and the CSM services have not been deployed yet, there will not be speakers to peer with, so the peering sessions may not be `ESTABLISHED` yet. This is expected and not a problem.

@@ -144,27 +144,23 @@ sections, but there is also a general troubleshooting topic.
 
    1. Validate CSM Health Before PIT Node Redeploy
 
-      After installing all of the CSM services now would be an good time to validate the health of the
-      management nodes and all CSM services. The advantage in doing it now is that if there are any problems
-      detected with the core infrastructure or the nodes, it is easy to rewind the installation to
-      [Deploy Management Nodes](#deploy_management_nodes) because the PIT node has not yet been redeployed.
+      After installing all of the CSM services, now validate the health of the management nodes and all CSM services. 
+      The reason to do it now is that if there are any problems detected with the core infrastructure or the nodes, it is
+      easy to rewind the installation to [Deploy Management Nodes](#deploy_management_nodes) because the PIT node has not
+      yet been redeployed. In addition, redeploying the PIT node successfully requires several CSM services to be working
+      properly, so validating this is important.
 
-      After installing all of the CSM services, wait at least 15 minutes to let the various Kubernetes
-      resources get initialized and started before trying to validate CSM health. Because there are a number
-      of dependencies between them, some services are not expected to work immediately after the install
-      script completes. Some of the time waiting can be spent preparing the `cray` CLI.
+      **Note**: At this point of the install, the `cray` CLI has not yet been configured. Some of the tests (Hardware State
+      Manager Discovery Validation, Booting the CSM Barebones Image on compute nodes, UAS/UAI) require it to be configured
+      in order to run. These tests may be skipped until after the PIT node has been redeployed, but **this is not recommended**.
 
-      **Note**: If doing the CSM validation at this point, some of the tests which use the 'cray' CLI may fail
-      until these two procedures have been done. These tests, such as Hardware State Manager Discovery Validation,
-      Booting the CSM Barebones Image on compute nodes, or the UAS/UAI Tests can be skipped until after the PIT
-      node has been redeployed.
+      To enable the 'cray' CLI in order to execute those tests, follow these two procedures before performing the CSM health
+      validation:
 
-      To enable the 'cray' CLI, these two procedures could be done now.
+         1. [Configure Keycloak Account](configure_administrative_access.md#configure_keycloak_account)
+         1. [Configure the Cray Command Line Interface (cray CLI)](configure_administrative_access.md#configure_cray_cli)
 
-      * Optional [Configure Keycloak Account](configure_administrative_access.md#configure_keycloak_account)
-      * Optional [Configure the Cray Command Line Interface (cray CLI)](configure_administrative_access.md#configure_cray_cli)
-
-      To run the CSM health checks now, see [Validate CSM Health](../operations/validate_csm_health.md)
+      To run the CSM health checks, see [Validate CSM Health](../operations/validate_csm_health.md)
    <a name="redeploy_pit_node"></a>
 
    1. Redeploy PIT Node

@@ -90,6 +90,16 @@ This section applies to all node types. The commands in this section assume you 
            systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
     ```
 
+    **Rebuilt node with modified ssh key(s):** The cloud-init process can fail when accessing other nodes if ssh keys have been modified in the cluster.  If this occurs, the following steps can be used to repair the desired ssh keys on the newly rebuilt node:
+
+    1. Allow cloud-init to fail due to the non-matching keys.
+    1. Copy the correct ssh key(s) to the newly rebuilt node.
+    1. Re-run cloud-init on the newly rebuilt node:
+
+    ```bash
+    ncn-m# cloud-init clean; cloud-init init --local; cloud-init init
+    ```
+
 ### Step 4 - Confirm `vlan004` is up with the correct IP address on the rebuilt node.
 
 Run these commands on the rebuilt node.
@@ -199,11 +209,27 @@ Run these commands on the rebuilt node.
 
 ## Step 6 - Set the wipe flag back so it will not wipe the disk when the node is rebooted.
 
-1. Edit the XNAME.json file and set the `metal.no-wipe=1` value.
+1. Run the following commands from a node that has cray cli initialized:
 
-2. Do a PUT action for the edited JSON file.
+    ```bash
+    cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
+    ```
 
-    * This command can be run from any node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
+2. Edit the XNAME.json file and set the `metal.no-wipe=1` value.
+
+3. Get a token to interact with BSS using the REST API.
+
+    ```bash
+    ncn# TOKEN=$(curl -s -S -d grant_type=client_credentials \
+        -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
+        -o jsonpath='{.data.client-secret}' | base64 -d` \
+        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
+        | jq -r '.access_token')
+    ```
+
+4. Do a PUT action for the edited JSON file.
+
+    * This command can be run from any node.
 
     ```bash
     ncn# curl -i -s -k -H "Content-Type: application/json" \
@@ -212,7 +238,21 @@ Run these commands on the rebuilt node.
         -X PUT -d @./${XNAME}.json
     ```
 
-    * The output from the `ncnHealthChecks.sh` script \(run later in the "Validation" steps\) can be used to verify the `metal.no-wipe` value on every NCN.
+5. Verify the `bss bootparameters list` command returns the expected information.
+
+    * Export the list from BSS to a file with a different name.
+
+    ```bash
+    ncn# cray bss bootparameters list --name ${XNAME} --format=json |jq .[]> ${XNAME}.check.json
+    ```
+
+    * Compare the new JSON file with what was PUT to BSS.
+
+    ```bash
+    ncn# diff ${XNAME}.json ${XNAME}.check.json
+    ```
+
+    * The files should be identical
 
 For the next step please click the link for the node type you are rebuilding
 

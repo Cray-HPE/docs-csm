@@ -571,9 +571,7 @@ reboot into the LiveCD.
 Some systems will boot the USB device automatically if no other OS exists (bare-metal). Otherwise the
 administrator may need to use the BIOS Boot Selection menu to choose the USB device.
 
-If an administrator is rebooting a node into the LiveCD, versus booting a bare-metal or wiped node, then `efibootmgr` will deterministically set the boot order.
-
-See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information on this topic..
+If an administrator has the node booted with an operating system which will next be rebooting into the LiveCD, then use `efibootmgr` to set the boot order to be the USB device.  See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information about how to set the boot order to have the USB device first.
 
 > UEFI booting must be enabled to find the USB device's EFI bootloader.
 
@@ -729,8 +727,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    The following assumes the CSM_PATH environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "goss-servers*.rpm" | sort -V | tail -1)
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
    ```
 
 1. Verify the system:

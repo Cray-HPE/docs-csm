@@ -1,7 +1,29 @@
-# Cray System Management (CSM) 1.0 - Release Notes
+# Cray System Management (CSM) - Release Notes
+
+## CSM 1.0.10
+The following lists enumerate the improvements and enhancements since CSM 1.0.1
+
+### New Functionality
+* Adds hardware discovery and power control for Bard Peak Olympus blades. (Power-capping not supported yet.)
+
+### Bug Fixes
+* Fixes an intermittent issue where kernel dumps wouldn't deliver because the CA cert for Spire needed to be reset.
+* Fixes an intermittent issue where PXE booting of NCNs was timing out.
+* Fixes an intermittent UX issue where Console was replaying output.
+* Fixes an issue with FAS loader not handling the new Slingshot 1.6 firmware version scheme.
+* Fixes an issue where Ceph services were not auto-starting after a reboot of a storage node.
+* Fixes an issue where later ssh connections to Ceph were producing host key verification errors.
+* Fixes an issue where DNS requests would briefly fail during hardware discovery or an upgrade.
+* Fixes an issue preventing SCSD changing root credentials for DL325/385.
+* Fixes an intermittent issue where Gigabyte firmware updates via FAS would return an error.
+* Fixes a rare issue where Nexus would not be available when scaling down to two nodes.
+* Fixes an issue where the boot order for Gigabyte NCNs wasn't persisting after a reboot or reinstall.
+* Fixes an intermittent issue where storage nodes would have clock skew during fresh install.
+
+## CSM 1.0.1
 The following lists enumerate major improvements since CSM v0.9.x.
 
-## What’s New
+### What's New
 * Functionality
   - Scale up to 6000 Nodes is supported.
     - Conman has been updated to using a deployment model that handles a larger scale.
@@ -60,9 +82,10 @@ The following lists enumerate major improvements since CSM v0.9.x.
   - Helm charts should have a way to be automatically patched during Shasta installation.
   - HSM should add a timestamp to State Change Notifications (SCN) data before publishing to Kafka topic: cray-hmsstatechange-notifications.
   - End-of-Life Alpine and nginx container images must be removed for security purposes.
+  - CAPMC simulates reinit on hardware that does not support restart; see [CAPMC reinit and configuration](troubleshooting/capmc/CAPMC_reinit_and_config.md) for more information
 
-## Bug Fixes
-The following list enumerates the more important issues that were found and fixed in CSM v1.0.0. In total, there were more than 34 customer-reported issues and more than 350 development critical issues fixed in this release.
+### Bug Fixes
+The following list enumerates the more important issues that were found and fixed in CSM v1.0.1. In total, there were more than 34 customer-reported issues and more than 350 development critical issues fixed in this release.
 
 Critical Issues Resolved:
 * Prometheus cannot scrape kubelet/kube-proxy.
@@ -105,8 +128,21 @@ Critical Issues Resolved:
 * The UEFI Boot Order Reverts/Restores on every reboot on an HPE DL325.
 and many more...
         
-## Known Issues
+### Known Issues
 * Incorrect_output_for_bos_command_rerun: When a Boot Orchestration Service (BOS) session fails, it may output a message in the Boot Orchestration Agent (BOA) log associated with that session. This output contains a command that instructs the user how to re-run the failed session. It will only contain the nodes that failed during that session. The command is faulty, and this issue addresses correcting it.
 * Cfs_session_stuck_in_pending: Under some circumstances, Configuration Framework Service (CFS) sessions can get stuck in a `pending` state, never completing and potentially blocking other sessions. This addresses cleaning up those sessions.
 * The `branch` parameter in CFS configurations may not work, and setting it will instead return an error. Continue setting the git commit hash instead.
 * After a boot or reboot a few CFS Pods may continue running even after they have finished and never go away. For more information see [Orphaned CFS Pods After Booting or Rebooting](troubleshooting/known_issues/orphaned_cfs_pods.md).
+* Intermittently, kernel dumps do not deliver because the CA cert for Spire needed to be reset.
+* Intermittently, PXE booting of NCNs time out.
+* Intermittently, Console replays output.
+* FAS loader is not handling the new Slingshot 1.6 firmware update because of its new version scheme.
+* Ceph services do not auto-start after a reboot of a storage node.
+* Intermittently, ssh connections to Ceph show host key verification errors.
+* Intermittently, DNS requests briefly fail during hardware discovery or an upgrade.
+* SCSD is not able to change root credentials for DL325/385 due to a bug in the 11.2021 iLO firmware.
+* Intermittently, Gigabyte firmware updates via FAS show an error.
+* Rarely, Nexus is not available when scaling down NCN workers to two nodes.
+* The boot order for Gigabyte NCNs does not persist after a reboot or reinstall.
+* Intermittently, storage nodes have clock skew during fresh install.
+* Kube-multus pods may fail to restart due to ImagePullBackOff. For more information see [Kube-multus pod is in ImagePullBackOff](troubleshooting/known_issues/kube_multus_pod_in_ImagePullBackOff.md).

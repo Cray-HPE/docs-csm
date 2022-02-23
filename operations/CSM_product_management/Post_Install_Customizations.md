@@ -64,16 +64,16 @@ Use Grafana to investigate and analyze CPU Throttling and/or Memory Usage.
 
 In order to apply post-install customizations to a system, the affected Helm chart must exist on the system so that the same chart version can be redeployed with the desired customizations.
 
-This example unpacks the the csm-1.0.0 tarball under /root and lists the Helm charts that are now on your system. Set `PATH_TO_RELEASE` to the release directory where the Helm directory exists. `PATH_TO_RELEASE` will be used below when deploying a customization.
+This example unpacks the the csm-1.0.1 tarball under /root and lists the Helm charts that are now on your system. Set `PATH_TO_RELEASE` to the release directory where the Helm directory exists. `PATH_TO_RELEASE` will be used below when deploying a customization.
 
 These unpacked files can be safely removed after the customizations are deployed through `loftsman ship` in the examples below.
 
 ```bash
-## This example assumes the csm-1.0.0 release is currently running and the csm-1.0.0.tar.gz has been pulled down under /root
+## This example assumes the csm-1.0.1 release is currently running and the csm-1.0.1.tar.gz has been pulled down under /root
 ncn# cd /root
-ncn# tar -xzf csm-1.0.0.tar.gz
-ncn# rm csm-1.0.0.tar.gz
-ncn# PATH_TO_RELEASE=/root/csm-1.0.0
+ncn# tar -xzf csm-1.0.1.tar.gz
+ncn# rm csm-1.0.1.tar.gz
+ncn# PATH_TO_RELEASE=/root/csm-1.0.1
 ncn# ls $PATH_TO_RELEASE/helm
 ```
 

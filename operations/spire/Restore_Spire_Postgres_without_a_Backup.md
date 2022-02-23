@@ -36,11 +36,11 @@ The CSM release tarball is required as it contains the Spire helm chart.
 1. Extract the current release tarball.
 
    ```bash
-   ## This example assumes the csm-1.0.0 release is currently running and the csm-1.0.0.tar.gz has been pulled down under /root
+   ## This example assumes the csm-1.0.1 release is currently running and the csm-1.0.1.tar.gz has been pulled down under /root
    ncn# cd /root
-   ncn# tar -xzf csm-1.0.0.tar.gz
-   ncn# rm csm-1.0.0.tar.gz
-   ncn# PATH_TO_RELEASE=/root/csm-1.0.0
+   ncn# tar -xzf csm-1.0.1.tar.gz
+   ncn# rm csm-1.0.1.tar.gz
+   ncn# PATH_TO_RELEASE=/root/csm-1.0.1
    ```
 
 2. Get the current cached customizations.

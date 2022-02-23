@@ -2,6 +2,10 @@
 
 Use the Firmware Action Service (FAS) to update the firmware on supported hardware devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
 
+When updating an entire system, walk down the device hierarchy component type by component type, starting first with Routers (switches), proceeding to Chassis, and then finally to Nodes. While this is not strictly necessary, it does help eliminate confusion.
+
+Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
+
 1. [Update Liquid-Cooled Node](#liquidcooled)
 2. [Update Chassis Management Module (CMM) Firmware](#cmm)
 3. [Update NCN BIOS and BMC Firmware with FAS](#ncn-bios-bmc)
@@ -23,7 +27,7 @@ This procedure updates the following hardware:
 #### Prerequisites
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
-#### Example Recipes
+#### Example Procedures
 
 **Manufacturer: Cray | Device Type: NodeBMC | Target: BMC**
 
@@ -388,7 +392,12 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
     The `--prereq` option ensures all required components are powered on first. The `--continue` option allows the command to complete in systems without fully populated hardware.
 
-6.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
+6.  Bring up the Slingshot Fabric.
+    Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
+    -  The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
+    -  The *Slingshot Troubleshooting Guide* PDF.
+
+7.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
 ---
 
@@ -409,6 +418,8 @@ All of the example JSON files below are set to run a dry-run. Update the overrid
 **WARNING:** Rebooting more than one NCN at a time **MAY** cause system instability. Be sure to follow the correct process for updating NCNs. Firmware updates have the capacity to harm the system.
 
 After updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
+
+Due to networking FAS cannot update NCN m001.  See [Updating Frimware on m001](Updating_Firmware_m001.md)
 
 Procedure for updating NCNs:
 1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H x3000c0s10b0 -s` (x3000c0s10b0 is the xname of the NCN BMC)-
