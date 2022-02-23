@@ -28,26 +28,26 @@ An authentication token is required to access the API gateway and to use the `sa
 
 1.  Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
-    There will be a seperate session template for UANs and computes nodes.
+    There will be seperate session templates for UANs and computes nodes.
 
     1. List all the session templates.
 
        If it is unclear what session template is in use, proceed to the next substep.
 
        ```bash
-       ncn-m001# cray bos v1 sessiontemplate list
+       ncn# cray bos sessiontemplate list
        ```
 
     1. Find the xname with `sat status`.
 
        ```bash
-       ncn-m001# sat status | grep "Compute\|Application"
+       ncn# sat status | grep "Compute\|Application"
        ```
 
        Example output:
 
        ```bash
-       ncn-m001# sat status | grep "Compute\|Application"
+       ncn# sat status | grep "Compute\|Application"
 
        | x3000c0s19b1n0 | Node | 1        | On    | OK   | True    | X86  | River | Compute     | Sling    |
        | x3000c0s19b2n0 | Node | 2        | On    | OK   | True    | X86  | River | Compute     | Sling    |
@@ -59,7 +59,7 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Find the `bos_session` value via the Configuration Framework Service (CFS).
 
        ```bash
-       ncn-m001# cray cfs components describe XNAME | grep bos_session
+       ncn# cray cfs components describe XNAME | grep bos_session
        ```
 
        Example output:
@@ -71,7 +71,7 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Find the required `templateUuid` value with BOS.
 
        ```bash
-       ncn-m001# cray bos v1 session describe XNAME | grep templateUuid
+       ncn# cray bos session describe XNAME | grep templateUuid
        ```
 
        Example output:
@@ -83,7 +83,7 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Determine the list of xnames associated with the desired boot session template.
 
        ```bash
-       ncn-m001# cray bos v1 sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+       ncn# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
        ```
 
        Example output:
@@ -249,7 +249,7 @@ An authentication token is required to access the API gateway and to use the `sa
          ncn# for ID in $(cray bos session list --format json | jq .[] | tr -d \"); do
              result=$(cray bos session status list --format json $ID | jq .metadata.complete)
              if [[ $result == "false" ]]; then
-                 cray bos v1 session describe --format json $ID | jq .boa_job_name | tr -d \";
+                 cray bos session describe --format json $ID | jq .boa_job_name | tr -d \";
              fi
          done
          ```
@@ -345,13 +345,13 @@ An authentication token is required to access the API gateway and to use the `sa
          Use the following command to delete the BOS database entry.
          
          ```bash
-         ncn# cray bos v1 session delete <session ID>
+         ncn# cray bos session delete <session ID>
          ```
          
          Example:
          
          ```bash
-         ncn# cray bos v1 session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
+         ncn# cray bos session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
          ```
 
 1.  Coordinate with the site to prevent new sessions from starting in the services listed.

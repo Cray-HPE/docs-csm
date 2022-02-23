@@ -43,7 +43,7 @@ Usage: set_ssh_keys.py [options]
    --dryrun         Gather all info but don't set anything in HW.
    --exclude=list   Comma-separated list of target patterns to exclude.
                     Each item in the list is matched on the front
-                    of each target XName and excluded if there is a match.
+                    of each target component name (xname) and excluded if there is a match.
                     Example: x1000,x3000c0,x9000c1s0
                         This will exclude all BMCs in cabinet x1000,
                         all BMCs at or below x3000c0, and all BMCs
@@ -51,7 +51,7 @@ Usage: set_ssh_keys.py [options]
                     NOTE: --include and --exclude are mutually exclusive.
    --include=list   Comma-separated list of target patterns to include.
                     Each item in the list is matched on the front
-                    of each target XName and included is there is a match.
+                    of each target component name (xname) and included is there is a match.
                     NOTE: --include and --exclude are mutually exclusive.
    --sshkey=key     SSH key to set on BMCs. If none is specified, will use
 ```
@@ -66,8 +66,8 @@ After the script runs, verify that it worked:
 
 1. Test access to a node controller in the liquid-cooled cabinet.
 
-   SSH into the node controller for the host xname. For example, if the host xname is x1000c1s0b0n0, the
-   node controller xname would be x1000c1s0b0.
+   SSH into the node controller for the host component name (xname). For example, if the host component name (xname) is x1000c1s0b0n0, the
+   node controller component name (xname) would be x1000c1s0b0.
 
    If the node controller is not powered up, this SSH attempt will fail.
 
@@ -98,6 +98,6 @@ After the script runs, verify that it worked:
 If this script does not achieve the goal of setting SSH keys, check the following:
 
 * Make sure the SSH key is correct.
-* If `--exclude=` or `--include=` was used with the script, ensure the correct XNames were specified.
+* If `--exclude=` or `--include=` was used with the script, ensure the correct component names (xnames) were specified.
 * Re-run the script with `--debug=3` for verbose debugging output. Look for things like missing BMCs, bad authentication token, or bad communications with BMCs.
 

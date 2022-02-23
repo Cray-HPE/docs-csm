@@ -264,7 +264,7 @@ The script also supports several flags to override these behaviors:
   to `https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git`.
 - `ncn-config-file`: Sets a file other than `ncn-personalization.json` to be
   used for the configuration.
-- `xnames`: A comma-separated list xnames to deploy to. Defaults to all
+- `xnames`: A comma-separated list of component names (xnames) to deploy to. Defaults to all
   `Management` nodes in HSM.
 - `clear-state`: Clears existing state from components to ensure CFS runs. This
    can be used if configuration needs to be re-run on successful nodes with no

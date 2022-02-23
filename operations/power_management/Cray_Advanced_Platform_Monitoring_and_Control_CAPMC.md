@@ -9,7 +9,7 @@ Refer to the CAPMC API documentation for detailed API information.
 The current release of CAPMC supports the following power control features:
 
 - Retrieve Redfish power status and power management capabilities of components
-- Control single components via NID or xname
+- Control single components by NID or component name (xname)
 - Control grouped components
 - Control the entire system \(all or s0\)
 - Can specify ancestors \(`--prereq`\) and descendants \(`--recursive`\) of single component
@@ -22,7 +22,7 @@ Power management strategies may vary and can be simple or complex using 3rd part
 
 The `cray` CLI can be used from any system that has HTTPS access to [System Management Services](../network/Access_to_System_Management_Services.md). Refer to the CAPMC API documentation for detailed information about API options and features.
 
-The `cray capmc` command \(see `--help`\) can be used to control power to specific components by specifying the component NID, xname, or group.
+The `cray capmc` command \(see `--help`\) can be used to control power to specific components by specifying the component NID, component name (xname), or group.
 
 ### Components that Can be Controlled with CAPMC in Shasta v1.4
 
@@ -39,7 +39,7 @@ The `cray capmc` command \(see `--help`\) can be used to control power to specif
 
 ### Component Groups
 
-CAPMC uses xnames to specify entire cabinets or specific components throughout the system. By default, CAPMC controls power to only one component at a time. A `--recursive` option can be passed to CAPMC using the `cray` CLI. When the `--recursive` option is included in a request, all of the sub-components of the target component are included in the power command.
+CAPMC uses component names (xnames) to specify entire cabinets or specific components throughout the system. By default, CAPMC controls power to only one component at a time. A `--recursive` option can be passed to CAPMC using the `cray` CLI. When the `--recursive` option is included in a request, all of the sub-components of the target component are included in the power command.
 
 The cabinet naming convention assigns a number to each cabinet in the system. Cabinets can be located anywhere on the computer room floor, although manufacturing typically follows a sequential cabinet numbering scheme:
 
@@ -77,27 +77,27 @@ Air Cooled nodes support these power capping and monitoring API calls:
 **Get Node Energy**
 
 ```bash
-ncn-m001# cray capmc get_node_energy create --nids NID_LIST --start-time '2020-03-04 12:00:00' \
+ncn# cray capmc get_node_energy create --nids NID_LIST --start-time '2020-03-04 12:00:00' \
 --end-time '2020-03-04 12:10:00' --format json
 ```
 
 **Get Node Energy Stats**
 
 ```bash
-ncn-m001# cray capmc get_node_energy_stats create --nids NID_LIST --start-time \
+ncn# cray capmc get_node_energy_stats create --nids NID_LIST --start-time \
 '2020-03-04 12:00:00' --end-time '2020-03-04 12:10:00' --format json
 ```
 
 **Get Node Power Control and Limit Settings**
 
 ```bash
-ncn-m001# cray capmc get_power_cap create –-nids NID_LIST --format json
+ncn# cray capmc get_power_cap create –-nids NID_LIST --format json
 ```
 
 **Get System Power**
 
 ```bash
-ncn-m001# cray capmc get_system_power create --start-time \
+ncn# cray capmc get_system_power create --start-time \
 '2020-03-04 12:00:00' --window-len 30 --format json
 ```
 
@@ -106,19 +106,19 @@ ncn-m001# cray capmc get_system_power create --start-time \
 The supply field contains the Max limit for the node.
 
 ```bash
-ncn-m001# cray capmc get_power_cap_capabilities create –-nids NID_LIST --format json
+ncn# cray capmc get_power_cap_capabilities create –-nids NID_LIST --format json
 ```
 
 **Set Node Power Limit**
 
 ```bash
-ncn-m001# cray capmc set_power_cap create –-nids NID_LIST --node 225 --format json
+ncn# cray capmc set_power_cap create –-nids NID_LIST --node 225 --format json
 ```
 
 **Remove Node Power Limit \(Set to Default\)**
 
 ```bash
-ncn-m001# cray capmc set_power_cap create –-nids NID_LIST --node 0 --format json
+ncn# cray capmc set_power_cap create –-nids NID_LIST --node 0 --format json
 ```
 
 **Activate Node Power Limit**
@@ -142,31 +142,31 @@ ncn-m001# cray capmc set_power_cap create –-nids NID_LIST --node 0 --format js
 **Power Off a Cabinet**
 
 ```bash
-ncn-m001# cray capmc xname_off create --xnames x1000 --recursive --format json
+ncn# cray capmc xname_off create --xnames x1000 --recursive --format json
 ```
 
 **Power Off a Chassis 0 and Its Descendents**
 
 ```bash
-ncn-m001# cray capmc xname_off create --xnames x1000c0 --recursive --format json
+ncn# cray capmc xname_off create --xnames x1000c0 --recursive --format json
 ```
 
 **Power Off Node 0 in Cabinet 1000, Chassis, 0, Slot 0, Node Card 0**
 
 ```bash
-ncn-m001# cray capmc xname_off create --xnames x1000c0s0b0n0 --format json
+ncn# cray capmc xname_off create --xnames x1000c0s0b0n0 --format json
 ```
 
 **Emergency Power Off \(EPO\) CLI Command**
 
 ```bash
-ncn-m001#  cray capmc emergency_power_off –-xnames LIST_OF_CHASSIS --force --format json
+ncn# cray capmc emergency_power_off –-xnames LIST_OF_CHASSIS --force --format json
 ```
 
 To recover or "reset" the components after a software EPO, set the chassis to a known hardware state \(off\). The cabinet\(s\) can then be powered on normally after the EPO is cleared. For a complete procedure, see [Recover from a Liquid Cooled Cabinet EPO Event](Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md).
 
 ```bash
-ncn-m001# cray capmc xname_off create --xnames LIST_OF_CHASSIS --force true
+ncn# cray capmc xname_off create --xnames LIST_OF_CHASSIS --force true
 e = 0
 err_msg = ""
 ```

@@ -451,7 +451,7 @@ All of the example JSON files below are set to run a dry-run. Update the overrid
 After updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
 
 Procedure for updating NCNs:
-1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H x3000c0s10b0 -s` (x3000c0s10b0 is the xname of the NCN BMC)-
+1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H x3000c0s10b0 -s` (`x3000c0s10b0` is the component name (xname) of the NCN BMC)-
    See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc")
 2. Run a dryrun for all NCNs first to determine which NCNs and targets need updating.
 3. For each NCN requiring updates to target `BMC` or `iLO5`

@@ -30,7 +30,7 @@ The admin must be authenticated to the Cray CLI before proceeding.
 
    Ensure the following are true before running the command below:
 
-   * The xname list looks valid/appropriate
+   * The component name (xname) list looks valid/appropriate
    * The SSHKey settings match the desired public key
 
    ```bash
@@ -42,8 +42,8 @@ The admin must be authenticated to the Cray CLI before proceeding.
 
 1. Verify access to a node controller in a liquid-cooled cabinet.
 
-   SSH into the node controller for the host xname. For example, if the host xname is x1000c1s0b0n0, the
-   node controller xname would be x1000c1s0b0.
+   SSH into the node controller for the host component name (xname). For example, if the host component name (xname) is x1000c1s0b0n0, the
+   node controller component name (xname) would be x1000c1s0b0.
 
    If the node controller is not powered up, this SSH attempt will fail.
 

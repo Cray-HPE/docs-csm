@@ -192,7 +192,7 @@ ncn-w001# cray scsd bmc loadcfg create PAYLOAD_FILE --format json
 
 ### Set Parameters for a Single BMC or Controller
 
-Set the BMC configuration for a single target using a specific xname. If no form data is specified, all network protocol data is returned for the target; otherwise, only the requested data is returned.
+Set the BMC configuration for a single target using a specific component name (xname). If no form data is specified, all network protocol data is returned for the target; otherwise, only the requested data is returned.
 
 The following is an example payload file that was used to generate the output in the command below:
 
