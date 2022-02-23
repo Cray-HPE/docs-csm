@@ -18,7 +18,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 3. Use Boot Orchestration Services (BOS) to shut down the affected nodes. Specify the appropriate BOS template for the node type.
 
    ```bash
-   ncn-m001# cray bos v1 session create --template-uuid BOS_TEMPLATE \
+   ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE \
    --operation shutdown --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
    ```
 
@@ -269,7 +269,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
     Specify the appropriate BOS template for the node type.
 
     ```bash
-    ncn-m001# cray bos v1 session create --template-uuid BOS_TEMPLATE --operation reboot \
+    ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot \
     --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
     ```
 
