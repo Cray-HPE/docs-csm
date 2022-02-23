@@ -18,7 +18,7 @@ If the console log indicates the time between the rest of the system and the com
 
 The following steps should be repeated for each Gigabyte node which needs to have its BIOS time reset.
 
-1. Set the `XNAME` variable to the xname of the node whose console you wish to open.
+1. Set the `XNAME` variable to the component name (xname) of the node whose console you wish to open.
 
     ```bash
     ncn# XNAME=x1001c0s24b1n0
@@ -40,7 +40,7 @@ The following steps should be repeated for each Gigabyte node which needs to hav
     <ConMan> Connection to console [x1001c0s24b1] opened.
     ```
 
-1. Set the `BMC` variable to the xname of the BMC for the node.
+1. Set the `BMC` variable to the component name (xname) of the BMC for the node.
 
    ```bash
    ncn# BMC=x1001c0s24b1  # Change this to be each node in turn.

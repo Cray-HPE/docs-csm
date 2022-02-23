@@ -210,7 +210,7 @@ Before rebooting NCNs:
    BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
    ```
 
-    6. Retrieve the `XNAME` for the node being rebooted.
+    6. Retrieve the component name (xname) for the node being rebooted.
 
        This xname is available on the node being rebooted in the following file:
 
@@ -220,7 +220,7 @@ Before rebooting NCNs:
 
     7. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
-       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
+       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the component name (xname) of the node being rebooted.
 
        ```bash
        ncn# cray cfs components describe XNAME --format json
@@ -351,7 +351,7 @@ Before rebooting NCNs:
    BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
    ```
 
-    8. Retrieve the `XNAME` for the node being rebooted.
+    8. Retrieve the component name (xname) for the node being rebooted.
 
        This xname is available on the node being rebooted in the following file:
 
@@ -361,7 +361,7 @@ Before rebooting NCNs:
 
     9. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
-       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
+       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the component name (xname) of the node being rebooted.
 
        ```bash
        ncn# cray cfs components describe XNAME --format json
@@ -459,7 +459,7 @@ Before rebooting NCNs:
    BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
    ```
 
-    6. Retrieve the `XNAME` for the node being rebooted.
+    6. Retrieve the component name (xname) for the node being rebooted.
 
        This xname is available on the node being rebooted in the following file:
 
@@ -469,7 +469,7 @@ Before rebooting NCNs:
 
     7. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
-       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
+       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the component name (xname) of the node being rebooted.
 
        ```bash
        ncn# cray cfs components describe XNAME --format json
@@ -536,7 +536,7 @@ Before rebooting NCNs:
 
     5. Watch on the console until the node has successfully booted and the login prompt is reached.
 
-    6. Retrieve the `XNAME` for the node being rebooted.
+    6. Retrieve the component name (xname) for the node being rebooted.
 
         This xname is available on the node being rebooted in the following file:
 
@@ -546,7 +546,7 @@ Before rebooting NCNs:
 
     7. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
-       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the xname of the node being rebooted.
+       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the component name (xname) of the node being rebooted.
 
        ```bash
        ncn# cray cfs components describe XNAME --format json

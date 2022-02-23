@@ -19,7 +19,7 @@ There are several situations that will cause automatic configuration:
 
 ### View Component Configuration
 
-Configuration status of a given component \(using the xname\) is available through the `cray cfs components describe` command. The following fields are provided to determine the status and state of the component:
+Configuration status of a given component \(using the component name (xname)\) is available through the `cray cfs components describe` command. The following fields are provided to determine the status and state of the component:
 
 -   **configurationStatus**
 
@@ -51,7 +51,7 @@ Configuration status of a given component \(using the xname\) is available throu
     The list of configuration layers that have been applied to the component from the desiredConfig.
 
 
-To view the configuration state of a given component, use the `describe` command for a given xname:
+To view the configuration state of a given component, use the `describe` command for a given component name (xname):
 
 ```bash
 ncn# cray cfs components describe XNAME --format json
@@ -122,7 +122,7 @@ If a playbook exits early because of the Ansible any\_errors\_fatal setting, CFS
 To force a component which has a specific desiredConfig to a different configuration, use the `update` subcommand to change the configuration:
 
 ```bash
-# cray cfs components update XNAME --desired-config new-config
+ncn# cray cfs components update XNAME --desired-config new-config
 ```
 
 **IMPORTANT:** Ensure that the new configuration has been created with the `cray cfs configurations update new-config` command before assigning the configuration to any components.
@@ -130,7 +130,7 @@ To force a component which has a specific desiredConfig to a different configura
 To force a component to retry its configuration again after it failed, change the errorCount to less than the retryPolicy, or raise the retryPolicy. If the errorCount has not reached the retry limit, CFS will automatically keep attempting the configuration and no action is required.
 
 ```bash
-# cray cfs components update XNAME --error-count 0
+ncn# cray cfs components update XNAME --error-count 0
 ```
 
 ### Disable Component Configuration
@@ -140,7 +140,7 @@ To disable CFS configuration of a component, use the `--enabled` option:
 **WARNING:** When a node reboots and the state-reporter reports in to CFS, it will automatically enable configuration. The following command only disables configuration until a node reboots.
 
 ```bash
-# cray cfs components update XNAME --enabled false
+ncn# cray cfs components update XNAME --enabled false
 ```
 
 Use `--enabled true` to re-enable the component.
