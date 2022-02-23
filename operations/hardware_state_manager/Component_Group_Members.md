@@ -50,7 +50,7 @@ ncn-m# cray hsm groups members create --id x1c0s0b0n0 blue
 
 ### Remove Group Members
 
-Single members are removed with the component xname ID from the given group.
+Single members with the specified component name (xname) are removed from the given group.
 
 Remove a member from a group:
 

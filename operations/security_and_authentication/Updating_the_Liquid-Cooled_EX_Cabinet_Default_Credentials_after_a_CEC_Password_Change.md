@@ -199,7 +199,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 
     It will take some time for the above bash script to run. It will take approximately 5 minutes to update all of the credentials for a single fully populated cabinet.
 
-    > Alternatively, use the following command on each BMC. Replace `BMC_XNAME` with the BMC xname to update the credentials:
+    > Alternatively, use the following command on each BMC. Replace `BMC_XNAME` with the BMC component name (xname) to update the credentials:
     > ```bash
     > ncn-m001# cray hsm inventory redfishEndpoints update BMC_XNAME --user root --password ${CRED_PASSWORD}
     > ```
@@ -242,7 +242,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
         > The hms-discovery cronjob (if enabled) will trigger a discover on BMCs that are not currently in `DiscoverOK` or `DiscoveryStarted` every 3 minutes.
     - If the Redfish endpoint is `HTTPsGetFailed`, then HSM had issues contacting BMC.
     
-        1. Verify that the BMC xname is resolvable and pingable:
+        1. Verify that the BMC component name (xname) is resolvable and pingable:
            
            ```
            ncn-m001# ping x1001c1s0b0
@@ -302,7 +302,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 ### 3. Reapply BMC settings if a StatefulReset was performed on any BMC.
 This section only needs to be performed if any liquid-cooled Node or Chassis BMCs that had to be StatefulReset.
 
-1. For each liquid-cooled BMC that the StatefulReset action was applied delete the BMC from HSM. Replace `BMC_XNAME` with the BMC xname to delete.
+1. For each liquid-cooled BMC to which the StatefulReset action was applied, delete the BMC from HSM. Replace `BMC_XNAME` with the BMC component name (xname) to delete.
     > ```bash
     > ncn-m001# cray hsm inventory redfishEndpoints delete BMC_XNAME
     > ```
@@ -408,7 +408,7 @@ This section only needs to be performed if any liquid-cooled Node or Chassis BMC
 
     1. Inspect the generated `scsd_cfg.json` file. Ensure the following are true before running the `cray scsd` command below:
 
-       - The xname looks valid/appropriate. Limit the `scsd_cfg.json` file to NodeBMCs that have had the StatefulReset action applied to them.
+       - The component name (xname) looks valid/appropriate. Limit the `scsd_cfg.json` file to NodeBMCs that have had the StatefulReset action applied to them.
        - The `SSHConsoleKey` settings match the desired public key.
 
     2. Apply SSH Console key to the NodeBMCs:

@@ -152,7 +152,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    ncn-m001# cray hsm inventory redfishEndpoints update --enabled true --rediscover-on-update true
    ```
 
-   The updated xname(s) will be returned.
+   The updated component name(s) (xnames) will be returned.
 
 10. Wait for 3-5 minutes for the blade to power on and the node BMCs to be discovered.
 
