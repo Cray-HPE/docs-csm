@@ -33,8 +33,8 @@ Usage:
 
 $0 [enable | disable ]
 
-enable  - enables xname validation on the OPA gateway
-disable - disables xname validation on the OPA gateway
+enable  - enable component name (xname) validation on the OPA gateway
+disable - disable component name (xname) validation on the OPA gateway
 "
 }
 
@@ -173,14 +173,14 @@ wait_for_spire() {
 
 validate_disable() {
 	if [ "$(helm get values -n spire spire -o json | jq -r '.server.tokenService.enableXNameWorkloads')" = "true" ]; then
-		echo "xname validation is already enabled"
+		echo "component name (xname) validation is already enabled"
 		exit 1
 	fi
 }
 
 validate_enable() {
 	if [ ! "$(helm get values -n spire spire -o json | jq -r '.server.tokenService.enableXNameWorkloads')" = "true" ]; then
-		echo "xname validation is already disabled"
+		echo "component name (xname) validation is already disabled"
 		exit 1
 	fi
 }
@@ -239,7 +239,7 @@ enable_xnameValidation() {
 	update_customizations
 	wait_for_spire
 	enable_spire_on_NCNs
-	echo "xname validation has been enabled."
+	echo "component name (xname) validation has been enabled."
 }
 
 disable_xnameValidation() {
@@ -255,7 +255,7 @@ disable_xnameValidation() {
 	update_customizations
 	wait_for_spire
 	enable_spire_on_NCNs
-	echo "xname validation has been disabled."
+	echo "component name (xname) validation has been disabled."
 }
 
 # Main

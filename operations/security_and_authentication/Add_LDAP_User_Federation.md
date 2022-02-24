@@ -686,7 +686,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
        The Keycloak UI URL is typically similar to the following:
       
        ```
-       https://auth.<system_name>/keycloak
+       https://auth.cmn.<system_name>/keycloak
        ```
 
     3. Click on the "Users" tab in the navigation pane on the left.

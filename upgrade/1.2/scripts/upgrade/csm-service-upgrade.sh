@@ -63,6 +63,20 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="PRE_STRIMZI_UPGRADE"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    pushd /usr/share/doc/csm/upgrade/1.2/scripts/strimzi
+    ./kafka-prereq.sh
+    popd +0
+
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="CSM_SERVICE_UPGRADE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
@@ -82,6 +96,16 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/enable-psp.sh
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="POST_STRIMZI_UPGRADE"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    /usr/share/doc/csm/upgrade/1.2/scripts/strimzi/kafka-restart.sh
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"

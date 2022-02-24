@@ -178,6 +178,6 @@ as both an internal definition of the API contract and the external documentatio
 up-to-date reference available.
 
 The API Gateway URL for accessing the APIs on a site-specific system is
-https://api.SYSTEM-NAME.DOMAIN-NAME/apis/.
+https://api.cmn.SYSTEM-NAME.DOMAIN-NAME/apis/.
 
 The internal URL from a local console on any of the management nodes is https://api-gw-service-nmn.local/apis.

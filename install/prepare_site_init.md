@@ -410,45 +410,6 @@ with system-specific customizations.
 
    Please see the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
 
-1.  Review `customizations.yaml` in the `site-init` directory and replace remaining `~FIXME~` values with
-    appropriate settings.
-
-    1. Create backup copy of `customizations.yaml`:
-        ```bash
-        linux# cp -v /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml-prefixme
-        ```
-
-    1. Edit `customizations.yaml`
-        For the following `~FIXME~` values, use the example provided and just remove the `~FIXME~ e.g.`
-
-        ```
-           sma-rsyslog-aggregator:
-             cray-service:
-               service:
-                 loadBalancerIP: ~FIXME~ e.g. 10.92.100.72
-             rsyslogAggregatorHmn:
-               service:
-                 loadBalancerIP: ~FIXME~ e.g. 10.94.100.2
-           sma-rsyslog-aggregator-udp:
-             cray-service:
-               service:
-                 loadBalancerIP: ~FIXME~ e.g. 10.92.100.75
-             rsyslogAggregatorUdpHmn:
-               service:
-                 loadBalancerIP: ~FIXME~ e.g. 10.94.100.3
-        ```
-
-    1. Review your changes:
-
-        ```bash
-        linux# diff /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml-prefixme
-        ```
-
-    1. Verify that no `FIXME` strings remain in the file:
-        ```bash
-        linux# grep FIXME /mnt/pitdata/prep/site-init/customizations.yaml
-        ```
-
 <a name="generate-sealed-secrets"></a>
 ### 4. Generate Sealed Secrets
 

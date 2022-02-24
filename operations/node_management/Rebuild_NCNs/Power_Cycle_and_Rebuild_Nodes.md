@@ -79,7 +79,7 @@ This section applies to all node types. The commands in this section assume you 
 
 1. Then press enter on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console (**&** then **.**), and then use `ssh` to log in to the node to complete the remaining validation steps.
 
-    * **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file (see the step to [inspect and modify the JSON file](Identify_Nodes_and_Update_Metadata.md#Inspect-and-modify-the-JSON-file) and make sure these instructions were completed correctly.
+    * **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying the `XNAME.json` file (see the step to [inspect and modify the JSON file](Identify_Nodes_and_Update_Metadata.md#Inspect-and-modify-the-JSON-file) and make sure these instructions were completed correctly.
 
     * **Master nodes only:** If `cloud-init` did not complete the newly-rebuilt node will need to have its etcd service definition manually updated. Reconfigure the etcd service, and restart the cloud init on the newly rebuilt master:
 
@@ -215,7 +215,7 @@ Run these commands on the rebuilt node.
     cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
     ```
 
-2. Edit the XNAME.json file and set the `metal.no-wipe=1` value.
+2. Edit the `XNAME.json` file and set the `metal.no-wipe=1` value.
 
 3. Get a token to interact with BSS using the REST API.
 
