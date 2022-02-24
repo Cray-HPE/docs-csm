@@ -19,13 +19,13 @@
 1. Check to ensure the upgrade is possible.
 
    ```bash
-   ceph orch upgrade check --image registry.local/ceph/ceph:v15.2.15
+   ceph orch upgrade check --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
    ```
 
 1. Set the container image.
 
    ```bash
-   ceph config set global container_image registry.local/ceph/ceph:v15.2.15
+   ceph config set global container_image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
    ```
 
    Verify the change has occured:
@@ -37,13 +37,13 @@
    Expected result:
 
    ```text
-   "registry.local/ceph/ceph:v15.2.15"
+   "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15"
    ```
 
 1. Start the upgrade.
 
    ```bash
-   ceph orch upgrade start --image registry.local/ceph/ceph:v15.2.15
+   ceph orch upgrade start --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
    ```
 
 1. Monitor the upgrade.
