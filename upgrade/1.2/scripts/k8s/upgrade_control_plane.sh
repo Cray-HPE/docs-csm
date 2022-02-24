@@ -22,13 +22,19 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-echo "Updating imageRepository in kubeadm-config configmap"
+echo "Updating imageRepository and extraArgs in kubeadm-config configmap"
 echo ""
 kubectl get configmap kubeadm-config -n kube-system -o yaml > /tmp/kubeadm-config.yaml
 cp /tmp/kubeadm-config.yaml /tmp/kubeadm-config.yaml.back
 sed -i 's/imageRepository: k8s.gcr.io/imageRepository: artifactory.algol60.net\/csm-docker\/stable\/k8s.gcr.io/' /tmp/kubeadm-config.yaml
 if ! grep -q istio-ca /tmp/kubeadm-config.yaml; then
   sed -i '/      runtime-config/a\        api-audiences: "api,istio-ca"' /tmp/kubeadm-config.yaml
+fi
+if ! grep -A4 '    controllerManager' /tmp/kubeadm-config.yaml | grep -q bind-address; then
+  sed -i '/      flex-volume-plugin-dir/a\        bind-address: 0.0.0.0' /tmp/kubeadm-config.yaml
+fi
+if ! grep -A3 '    scheduler:' /tmp/kubeadm-config.yaml | grep -q bind-address; then
+  sed -i 's/    scheduler: {}/    scheduler:\n      extraArgs:\n        bind-address: 0.0.0.0/' /tmp/kubeadm-config.yaml
 fi
 kubectl -n kube-system apply -f /tmp/kubeadm-config.yaml
 
