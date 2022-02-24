@@ -709,7 +709,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
    1. Run CANU if you have Aruba switches.
      
-      CANU requires three parameters: the IP address of switch 1, the IP addresss of switch 2, and the path to the to directory containing the file ```sls_input_file.json```
+      CANU requires three parameters: the IP address of switch 1, the IP addresss of switch 2, and the path to the to directory containing the file `sls_input_file.json`
 
       The IP addresses in this example should be replaced by the IP addresses of the switches.
 
