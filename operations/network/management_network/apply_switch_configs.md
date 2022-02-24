@@ -64,26 +64,4 @@ sw-spine-001 [mlag-domain: standby] (config) # no cli default prefix-modes enabl
 ### Write memory
 
 - Once the configuration is applied you will need to save the configuration.
-- To keep track of what version of config is running on the switch create a new configuration file using the `csm version` and the `CANU version` from `motd banner` from the running config.
-
-##### Mellanox
-`sw-spine-002 [mlag-domain: master] (config) # configuration write to csm1.0.canu1.1.11`
-##### Dell
-get the csm and canu version.
-```
-sw-leaf-bmc-001# show running-configuration | grep motd
-banner motd ^C
- ###############################################################################
- # CSM version:  1.0
- # CANU version: 1.1.11
- ###############################################################################
- ```
-
-Create a config file with the correct versions.
-
- ```
-sw-leaf-bmc-001(config)# copy config://startup.xml config://csm1.0-canu1.1.11
-Copy completed
- ```
-##### Aruba
-
+  - [Saving Config](saving_config.md)
