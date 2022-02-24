@@ -13,11 +13,16 @@ All ports will be shutdown before applying switch configuration.  If the port is
 
 There are some caveats that are mentioned below.
 ### Aruba
+1. shutdown all ports. Use `show int physical` to see the range of ports.
+```
+switch(config)# int 1/1/1-1/1/52
+switch(config-if-<1/1/1-1/1/52# shut
+```
 1.  Be sure to type `auto-confirm` before pasting in the configuration.
 This will automatically accept prompts.
 
     `switch(config)# auto-confirm`
-2. Paste in generated config.
+1. Paste in generated config.
 
 
 ### Dell
@@ -27,7 +32,7 @@ sw-leaf-bmc-001(config)# interface range ethernet 1/1/1-1/1/52
 sw-leaf-bmc-001(conf-range-eth1/1/1-1/1/52)# shut
 ```
 
-2. Paste in generated config.
+1. Paste in generated config.
 
     - When pasting in the config be sure that all the commands were accepted.  In some cases you will need to back out of the current config context and back to global configuration for the commands to work as intended.
     - `banner motd` will need to be manually applied.
@@ -81,3 +86,4 @@ sw-leaf-bmc-001(config)# copy config://startup.xml config://csm1.0-canu1.1.11
 Copy completed
  ```
 ##### Aruba
+

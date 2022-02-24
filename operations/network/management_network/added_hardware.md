@@ -1,4 +1,4 @@
-### Added Hardware
+# Added Hardware
 
 New hardware was added to the system.
 
