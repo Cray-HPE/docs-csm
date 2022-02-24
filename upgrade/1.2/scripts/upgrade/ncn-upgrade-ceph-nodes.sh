@@ -62,6 +62,11 @@ if [[ $state_recorded == "0" ]]; then
         ssh_keygen_keyscan "${upgrade_ncn}"
         ssh_keys_done=1
     fi
+
+    ## TEMP - Remove ceph v15.2.12 from images before backups - CASMINST-4099
+    ssh ${upgrade_ncn} 'podman rmi registry.local/ceph/ceph:v15.2.12'
+    ## END TEMP - CASMINST-4099
+
     ssh ${upgrade_ncn} 'systemctl stop ceph.target;sleep 30;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /var/lib/containers /etc/ceph;systemctl start ceph.target'
     scp ${upgrade_ncn}:/tmp/${upgrade_ncn}-ceph.tgz .
 
