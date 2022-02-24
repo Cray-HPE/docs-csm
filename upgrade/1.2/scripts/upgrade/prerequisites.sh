@@ -338,9 +338,11 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         --data @cloud-init-global_update.json \
         https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
 
+    set -u
     csi upgrade metadata --1-0-to-1-2 \
         --k8s-version ${KUBERNETES_VERSION} \
         --storage-version ${CEPH_VERSION}
+    set +u
 
     record_state ${state_name} $(hostname)
     echo
