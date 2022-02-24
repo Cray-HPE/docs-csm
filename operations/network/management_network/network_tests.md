@@ -5,7 +5,7 @@
 - SLS file or SLS API access.
  
 
-Canu has the ability to run tests against the management network.  (Aruba Only)
+Canu has the ability to run tests against the management network.
 
 Canu has to be on version `1.1.4` or later. run `canu --version` to verify.
 
