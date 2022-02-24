@@ -110,8 +110,13 @@ if [[ $state_recorded == "0" ]]; then
     mkdir -p /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
     tar -xzf ${TARBALL_FILE} -C /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
     CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}
-    echo "export CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
     rm -rf ${TARBALL_FILE}
+
+    # if we have to untar a file, we assume this is a new upgrade
+    # remove existing myenv file just in case
+    rm -rf /etc/cray/upgrade/csm/myenv
+    echo "export CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
+    echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
 
     record_state ${state_name} $(hostname)
 else
@@ -243,6 +248,10 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     ${CSM_ARTI_DIR}/lib/setup-nexus.sh
+
+    # export URL of latest docs rpm in nexus
+    echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/docs-csm-latest.noarch.rpm" >> /etc/cray/upgrade/csm/myenv
+
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -302,6 +311,9 @@ if [[ $state_recorded == "0" ]]; then
 
     KUBERNETES_VERSION=`cat $temp_file | grep "export KUBERNETES_VERSION=" | awk -F'=' '{print $2}'`
     CEPH_VERSION=`cat $temp_file | grep "export CEPH_VERSION=" | awk -F'=' '{print $2}'`
+    echo "export CEPH_VERSION=${CEPH_VERSION}" >> /etc/cray/upgrade/csm/myenv
+    echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> /etc/cray/upgrade/csm/myenv
+
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -346,23 +358,6 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
 
     record_state ${state_name} $(hostname)
     echo
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-state_name="EXPORT_GLOBAL_ENV"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-
-    rm -rf /etc/cray/upgrade/csm/myenv
-    echo "export CEPH_VERSION=${CEPH_VERSION}" >> /etc/cray/upgrade/csm/myenv
-    echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> /etc/cray/upgrade/csm/myenv
-    echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
-    echo "export CSM_ARTI_DIR=${CSM_ARTI_DIR}" >> /etc/cray/upgrade/csm/myenv
-    echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/docs-csm-latest.noarch.rpm" >> /etc/cray/upgrade/csm/myenv
-    echo "export CSM_CONFIG_VERSION=${CSM_CONFIG_VERSION}" >> /etc/cray/upgrade/csm/myenv
-    record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
