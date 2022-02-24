@@ -208,6 +208,7 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
       ncn-s001:~ # umount -v /var/lib/containers
       umount: /var/lib/containers unmounted
+      ```
 
 1. Remove auxiliary LVMs
 

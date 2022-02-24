@@ -381,7 +381,6 @@ The configuration workflow described here is intended to help understand the exp
 
       > ```bash
       > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-      > ```
       > CASMINST-1093
       > ```
 
@@ -705,7 +704,8 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
       The IP addresses in this example should be replaced by the IP addresses of the switches.
 
       ```bash
-      pit# /usr/local/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/```
+      pit# /usr/local/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/
+      ```
 
    1. Run CANU if you have Aruba switches.
      
@@ -714,7 +714,8 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
       The IP addresses in this example should be replaced by the IP addresses of the switches.
 
       ```bash
-      pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/```
+      pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/
+      ```
 
    1. Check the status of the BGP peering sessions **on each switch**.
       - Aruba: `show bgp ipv4 unicast summary`
@@ -726,7 +727,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
       You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
    1. Check the BGP config ***on each switch*** to verify that the NCN neighbors are configured as passive.
-      - Aruba: ```show run bgp``` The passive neighbor configuration is required. ```neighbor 10.252.1.7 passive``` 
+      - Aruba: `show run bgp` The passive neighbor configuration is required. `neighbor 10.252.1.7 passive` 
       EXAMPLE ONLY
 
         ```
@@ -743,7 +744,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
         neighbor 10.252.1.9 remote-as 65533
         neighbor 10.252.1.9 passive
         ```
-      - Mellanox: ```show run protocol bgp``` The passive neighbor configuration is required. ```router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive``` 
+      - Mellanox: `show run protocol bgp` The passive neighbor configuration is required. `router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive` 
       EXAMPLE ONLY
 
         ```

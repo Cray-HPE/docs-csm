@@ -350,6 +350,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
                ```json
                {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
                {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
+               ```
 
       1. Skip the next step and continue with the [CSI Workarounds](#csi-workarounds).
 

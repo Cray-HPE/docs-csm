@@ -147,6 +147,7 @@ The session template below can be copied and used as the basis for the BOS sessi
      "enable_cfs": false,
      "name": "shasta-1.4-csm-bare-bones-image"
    }
+   ```
 
    **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones noted earlier in the `cray ims images list` command.
 

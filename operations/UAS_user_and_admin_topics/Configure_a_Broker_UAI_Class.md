@@ -82,6 +82,7 @@ This example, uses Kubernetes secrets and assumes that the broker UAIs run in th
 
         ```
         ncn-m001-pit# kubectl create secret generic -n uas broker-sssd-conf --from-file=sssd.conf
+        ```
 
   3. Make a volume for the secret in the UAS configuration.
 
@@ -139,6 +140,7 @@ This example, uses Kubernetes secrets and assumes that the broker UAIs run in th
    comment = "UAI User Class"
    class_id = "bb28a35a-6cbc-4c30-84b0-6050314af76b"
    comment = "Non-Brokered UAI User Class"
+   ```
 
 5. Create the broker UAI class with the content retrieved in the previous step.
 
@@ -182,7 +184,5 @@ This example, uses Kubernetes secrets and assumes that the broker UAIs run in th
    default = false
    image_id = "c5dcb261-5271-49b3-9347-afe7f3e31941"
    imagename = "dtr.dev.cray.com/cray/cray-uai-broker:latest"
-
-
-
+   ```
 

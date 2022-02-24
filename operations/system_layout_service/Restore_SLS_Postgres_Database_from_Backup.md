@@ -22,6 +22,7 @@ This procedure can be used to restore the SLS Postgres database from a previousl
     > ncn# cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("sls"))'
     > cray-sls-postgres-2021-07-11T23:10:08.manifest
     > cray-sls-postgres-2021-07-11T23:10:08.psql
+    > ```
 
 ## Procedure
 1. Retrieve a previously taken SLS Postgres backup. This can be either a previously taken manual SLS backup or an automatic Postgres backup in the `postgres-backup` S3 bucket.

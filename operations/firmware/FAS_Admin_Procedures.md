@@ -145,6 +145,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
            "overwriteSameImage":false
          }
        }
+   ```
 
 3. Verify the correct image ID was found.
 
