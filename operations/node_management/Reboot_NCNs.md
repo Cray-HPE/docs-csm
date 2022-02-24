@@ -21,9 +21,9 @@ This same procedure can be used to reboot a single management node as outlined a
 
 **`IMPORTANT`** whenever an NCN is rebooted the CASMINST-2015 script should be run to remove any dynamically assigned IP addresses that were not released automatically.
 
-```bash
-ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
-```
+  ```bash
+  ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+  ```
 
 ## Prerequisites
 
@@ -239,9 +239,9 @@ Before rebooting NCNs:
 
     8. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the CASMINST-2015 script:
 
-    ```bash
-    ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
-    ```
+       ```bash
+       ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+       ```
 
     9. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
@@ -394,9 +394,9 @@ Before rebooting NCNs:
 
     12. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the CASMINST-2015 script:
 
-    ```bash
-    ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
-    ```
+        ```bash
+        ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+        ```
 
     13. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
@@ -488,9 +488,9 @@ Before rebooting NCNs:
 
     8. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the CASMINST-2015 script:
 
-    ```bash
-    ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
-    ```
+       ```bash
+       ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+       ```
 
     9. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
 
@@ -569,9 +569,9 @@ Before rebooting NCNs:
 
 3. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the CASMINST-2015 script:
 
-```bash
-ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
-```
+   ```bash
+   ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+   ```
 
 4. Re-run the platform health checks and ensure that all BGP peering sessions are Established with both spine switches.
 
