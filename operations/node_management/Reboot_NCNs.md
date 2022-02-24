@@ -19,6 +19,12 @@ The time duration for this procedure \(if health checks are being executed in be
 
 This same procedure can be used to reboot a single management node as outlined above. Be sure to carry out the NCN pre-reboot checks and procedures before and after rebooting the node. Execute the rolling NCN reboot procedure steps for the particular node type being rebooted.
 
+**`IMPORTANT`** whenever an NCN is rebooted the CASMINST-2015 script should be run to remove any dynamically assigned IP addresses that were not released automatically.
+
+```bash
+ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+```
+
 ## Prerequisites
 
 The `kubectl` command is installed.
@@ -231,7 +237,13 @@ Before rebooting NCNs:
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
-    8. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
+    8. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the CASMINST-2015 script:
+
+    ```bash
+    ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+    ```
+
+    9. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
          **Troubleshooting:** If the slurmctld and slurmdbd pods do not start after powering back up the node, check for the following error:
 
@@ -250,9 +262,10 @@ Before rebooting NCNs:
          - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
          - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
 
-    9. Disconnect from the console.
+    10. Disconnect from the console.
 
-    10. Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
+
+    11. Repeat all of the sub-steps above for the remaining storage nodes, going from the highest to lowest number until all storage nodes have successfully rebooted.
 
     **Important:** Ensure `ceph -s` shows that Ceph is healthy (`HEALTH_OK`) **BEFORE MOVING ON** to reboot the next storage node. Once Ceph has recovered the downed mon,
     it may take a several minutes for Ceph to resolve clock skew.
@@ -379,15 +392,21 @@ Before rebooting NCNs:
          ncn-m# kubectl get pods -o wide -A | grep <node to be rebooted>
          ```
 
-    12. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
+    12. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the CASMINST-2015 script:
+
+    ```bash
+    ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+    ```
+
+    13. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
          Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.
 
          If terminating pods are reported when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.
 
-    13. Disconnect from the console.
+    14. Disconnect from the console.
 
-    14. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
+    15. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
 
 1. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
 
@@ -467,11 +486,17 @@ Before rebooting NCNs:
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
-    8. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
+    8. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the CASMINST-2015 script:
 
-    9. Disconnect from the console.
+    ```bash
+    ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+    ```
 
-    10. Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number until all master nodes have successfully rebooted.
+    9. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
+
+    10. Disconnect from the console.
+
+    11. Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number until all master nodes have successfully rebooted.
 
 2. Reboot `ncn-m001`.
 
