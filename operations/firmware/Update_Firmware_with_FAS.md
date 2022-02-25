@@ -33,7 +33,7 @@ FAS images contain the following information that is needed for a hardware devic
 
 ### Warning
 
-**WARNING:** Non-compute nodes (NCNs) should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
+**WARNING:** Non-compute nodes (NCNs) and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
 Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use the recipes listed in [FAS Recipes](FAS_Recipes.md) to update each supported type.
 
@@ -99,7 +99,7 @@ For each item in the `Hardware Precedence Order`:
 After identifying which hardware is in the system, start with the top most item on this list to update. If any of the following hardware is not in the system, skip it.
 
 **IMPORTANT:**
-* This process does not communicate the SAFE way to update NCNs. If the NCNs have not been locked, or FAS is blindly used to update NCNs without following the correct process, then **THE STABILITY OF THE SYSTEM WILL BE JEOPARDIZED**.
+* This process does not communicate the SAFE way to update NCNs. If the NCNs and their BMCs have not been locked, or FAS is blindly used to update NCNs without following the correct process, then **THE STABILITY OF THE SYSTEM WILL BE JEOPARDIZED**.
 * Read the corresponding recipes before updating. There are sometimes ancillary actions that must be completed in order to ensure update integrity.
 
 **NOTE** to update Switch Controllers \(sC\) or RouterBMC refer to the Rosetta Documentation
@@ -160,7 +160,7 @@ FAS operations will have one of the following states:
 - failed - An update was attempted, but FAS is unable to tell that the update succeeded in the allotted time.
 - noOperation - Firmware is at the correct version according to the images loaded into FAS.
 - noSolution - FAS does not have a suitable image for an update.
-- aborted - the operation was aborted before it could determine if it was successful.  If aborted after the update command was sent to the node, the node may still have updated.
+- aborted - the operation was aborted before it could determine if it was successful. If aborted after the update command was sent to the node, the node may still have updated.
 
 <a name="firmware-images"></a>
 
