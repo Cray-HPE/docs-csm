@@ -32,17 +32,13 @@ The following is a high-level overview of the NCN add workflow:
 
 2. [Update Networking](Add_Remove_Replace_NCNs/Update_Networking.md#update-networking-to-add-ncn)
 
-3. [Update SLS](Add_Remove_Replace_NCNs/Update_SLS.md#update-sls-to-add-ncn)
+3. [Add NCN data](Add_Remove_Replace_NCNs/Add_NCN_Data.md) for SLS, HMS and BSS
 
-4. [Update HMS](Add_Remove_Replace_NCNs/Update_HMS.md#update-hms-to-add-ncn)
+4. [Update Firmware](Add_Remove_Replace_NCNs/Update_Firmware.md) via FAS
 
-5. [Update BSS](Add_Remove_Replace_NCNs/Update_BSS.md#update-bss-to-add-ncn)
+5. [Boot NCN](Add_Remove_Replace_NCNs/Boot_NCN.md)
 
-6. [Update Firmware](Add_Remove_Replace_NCNs/Update_Firmware.md) via FAS
-
-7. [Boot NCN](Add_Remove_Replace_NCNs/Boot_NCN.md)
-
-8. [Validation](Add_Remove_Replace_NCNs/Validation.md#validate-added-ncn)
+6. [Validation](Add_Remove_Replace_NCNs/Validation.md#validate-added-ncn)
 
 
 <a name="remove-worker-storage-master"></a>
@@ -60,17 +56,13 @@ The following is a high-level overview of the NCN add workflow:
 
 1. [Remove NCN from Role](Add_Remove_Replace_NCNs/Remove_NCN_from_Role.md)
 
-2. [Update BSS](Add_Remove_Replace_NCNs/Update_BSS.md#update-bss-to-remove-ncn)
+2. [Remove NCN data](Add_Remove_Replace_NCNs/Remove_NCN_Data.md) from SLS, HMS and BSS
 
-3. [Update HMS](Add_Remove_Replace_NCNs/Update_HMS.md#update-hms-to-remove-ncn)
+3. [Update Networking](Add_Remove_Replace_NCNs/Update_Networking.md#update-networking-to-remove-ncn)
 
-4. [Update SLS](Add_Remove_Replace_NCNs/Update_SLS.md#update-sls-to-remove-ncn)
+4. [Validate SHCD](Add_Remove_Replace_NCNs/Validate_SHCD.md#validate-shcd-after-removing-ncn)
 
-5. [Update Networking](Add_Remove_Replace_NCNs/Update_Networking.md#update-networking-to-remove-ncn)
-
-6. [Validate SHCD](Add_Remove_Replace_NCNs/Validate_SHCD.md#validate-shcd-after-removing-ncn)
-
-7. [Validation](Add_Remove_Replace_NCNs/Validation.md#validate-removed-ncn)
+5. [Validation](Add_Remove_Replace_NCNs/Validation.md#validate-removed-ncn)
 
 
 <a name="replace-worker-storage-master"></a>

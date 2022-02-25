@@ -104,7 +104,7 @@ Run the following:
 ### Step 3 - Ensure all pods are stopped.
 
   ```bash
-  ncn-mw# kubectl get pods -A | grep $NODE
+  ncn-mw# kubectl get pods -A -o wide | grep $NODE
   ```
 
   If no pods are returned, proceed to the next step, otherwise wait for any remaining pods to Terminate.
@@ -127,7 +127,7 @@ Once the storage node role removal is complete; proceed to [wipe the drives](#wi
 <a name="wipe-the-drives"></a>
 ## Wipe the Drives
 
-Follow [Full Wipe](../../install/wipe_ncn_disks_for_reinstallation.md#3-full-wipe) Procedure to wipe the drives on the NCN.
+Follow [Full Wipe](../../../install/wipe_ncn_disks_for_reinstallation.md#3-full-wipe) Procedure to wipe the drives on the NCN that is being removed.
 
 Once the wipe of the drives is complete; proceed to [power off the node](#power-off-the-node).
 
