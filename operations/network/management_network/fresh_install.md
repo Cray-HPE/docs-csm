@@ -7,7 +7,7 @@ This is either a first time install or the previous CSM was wiped and requires a
 1. [Update management network firmware](firmware/update_management_network_firmware.md)
     - Upgrade switch firmware to specified firmware version.
 1. [Backup custom config](backup_custom_config.md)
-    - If the system had a previous version of CSM on it, you need to backup all custom configuration and credential configuration.
+    - If the system had a previous version of CSM on it, back up all of the custom configuration and credential configuration.
 1. [Wipe mgmt switches](wipe_mgmt_switches.md)
     - If the switches have any configuration, it is recommenced to erase it before adding any new configuration.
 1. [Validate the SHCD](validate_shcd.md)
