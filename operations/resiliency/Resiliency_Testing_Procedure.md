@@ -18,7 +18,7 @@ It is assumed that some procedures are already known by admins and thus does not
 <a name="prepare-for-resiliency-testing"></a>
 ### Prepare for Resiliency Testing
 
-* Confirm the xname mapping for each node on the system. This get dumped out by execution of the `/opt/cray/platform-utils/ncnGetXnames.sh` script.
+* Confirm the component name (xname) mapping for each node on the system. This get dumped out by execution of the `/opt/cray/platform-utils/ncnGetXnames.sh` script.
 
 * Verify that `metal.no-wipe=1` is set for each of the NCNs via ouptput from running the `ncnGetXnames.sh` script.
 
@@ -73,7 +73,7 @@ It is assumed that some procedures are already known by admins and thus does not
    To see a list of BOS templates that exist on the system:
    
    ```bash
-   ncn# cray bos v1 sessiontemplate list
+   ncn# cray bos sessiontemplate list
    ```
 
    For more information regarding management of BOS session templates, refer to [Manage a Session Template](../boot_orchestration/Manage_a_Session_Template.md).
@@ -115,7 +115,7 @@ In order to keep watch on various items during and after the fault has been intr
    ```
    
    ```bash
-   ncn# watch -n 5 "date; cray bos v1 session list"
+   ncn# watch -n 5 "date; cray bos session list"
    ```
 
 1. Monitor Ceph health, in a window, during and after a single NCN is taken down.
@@ -317,7 +317,7 @@ After the target NCN was shut down, assuming the command line windows that were 
    1. Use BOS to reboot the designated compute node(s).
    
       ```bash
-      ncn# cray bos v1 session create --template-uuid boot-nids-1-4 --operation reboot
+      ncn# cray bos session create --template-uuid boot-nids-1-4 --operation reboot
       ```
       
       Issuing this reboot command will spit out a Boot Orchestration Agent (BOA) "jobId", which can be used to find the new BOA pod that has been created for the boot. Then, the logs can be tailed to watch the compute boot proceed. 

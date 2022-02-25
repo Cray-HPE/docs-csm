@@ -26,7 +26,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     Identify the BOS session template names such as `"cos-2.0.x"`, `slurm`, `uan-slurm`, and choose the appropriate compute and UAN node templates for the power on and boot.
 
     ```bash
-    ncn-m001# cray bos v1 sessiontemplate list
+    ncn-m001# cray bos sessiontemplate list
     ``` 
 
     Example output:
@@ -47,7 +47,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 3.  To display more information about a session template, for example `cos-2.0.0`, use the `describe` option.
 
     ```bash
-    ncn-m001# cray bos v1 sessiontemplate describe cos-2.0.x
+    ncn-m001# cray bos sessiontemplate describe cos-2.0.x
     ```
 
 4.  Use `sat bootsys boot` to power on and boot UANs and compute nodes.

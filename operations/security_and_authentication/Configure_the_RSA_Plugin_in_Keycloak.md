@@ -94,7 +94,7 @@ Here are a couple of things to try after this is set up to verify that it is wor
 -   Point a browser at the following URL:
 
     ```screen
-    http://auth.SYSTEM_DOMAIN_NAME/keycloak/realms/shasta/account
+    http://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/realms/shasta/account
     ```
 
     The browser will be directed to the user login page. The first screen will ask for the username and password in Keycloak. After logging in this way, the next page will ask for the RSA username and token code.

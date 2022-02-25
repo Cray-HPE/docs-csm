@@ -27,25 +27,15 @@ echo ""
 kubectl get configmap kubeadm-config -n kube-system -o yaml > /tmp/kubeadm-config.yaml
 cp /tmp/kubeadm-config.yaml /tmp/kubeadm-config.yaml.back
 sed -i 's/imageRepository: k8s.gcr.io/imageRepository: artifactory.algol60.net\/csm-docker\/stable\/k8s.gcr.io/' /tmp/kubeadm-config.yaml
+if ! grep -q istio-ca /tmp/kubeadm-config.yaml; then
+  sed -i '/      runtime-config/a\        api-audiences: "api,istio-ca"' /tmp/kubeadm-config.yaml
+fi
 kubectl -n kube-system apply -f /tmp/kubeadm-config.yaml
 
 export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u)
 for master in $masters
 do
-  echo "Adding istio-ca api audience for kube-api on $master:"
-  pdsh -b -S -w $master "sed -i '/tls-private-key-file/a\    - --api-audiences=api,istio-ca' /etc/kubernetes/manifests/kube-apiserver.yaml"
-  rc=$?
-  if [ "$rc" -ne 0 ]; then
-    echo ""
-    echo "ERROR: Updating kube-apiserver manifest failed. The output from this script should be inspected"
-    echo "       and addressed before moving on with the upgrade. If unable to determine the issue"
-    echo "       and run this script without errors, discontinue the upgrade and contact HPE Service"
-    echo "       for support."
-    exit 1
-  fi
-  echo "Sleeping for one minute to let kube-apiserver restart on $master"
-  sleep 60
   echo "Upgrading kube-system pods for $master:"
   echo ""
   pdsh -b -S -w $master 'kubeadm upgrade apply v1.20.13 -y'

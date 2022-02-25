@@ -16,7 +16,7 @@ The scsd tool includes a REST API to facilitate operations to set parameters. It
 
 In all POST operation payloads, there is an optional "Force" parameter. If this parameter is present and set to "true", then HSM will not be contacted and the Redfish operations will be attempted without verifying they are present or in a good state. If the "Force" option is not present, or is present but set to "false", HSM will be used.
 
-The specified targets can be BMCs, controller xnames, or HSM group IDs. If BMCs and controllers are grouped in HSM, this service becomes much easier to use because single targets can be used rather than long lists.
+The specified targets can be BMCs, controller component names (xnames), or HSM group IDs. If BMCs and controllers are grouped in HSM, this service becomes much easier to use because single targets can be used rather than long lists.
 
 To view the current build version of the scsd service:
 

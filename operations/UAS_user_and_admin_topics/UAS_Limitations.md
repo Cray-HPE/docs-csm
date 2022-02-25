@@ -8,17 +8,17 @@ Functionality that is currently not supported while using UAS.
 
 ### Functionality Not Currently Supported by the User Access Service
 
--   Lustre \(lfs\) commands within the UAS service pod
--   Executing Singularity containers within the UAS service
--   Building Docker containers within the UAS environment
--   Building containerd containers within the UAS environment
--   `dmesg` cannot run inside a UAI because of container security limitations
--   Users cannot ssh from `ncn-w001` to a UAI. This is because UAIs use LoadBalancer IP addresses on the Customer Access Network \(CAN\) instead of NodePorts and the LoadBalancer IP addresses are not accessible from `ncn-w001`.
+- Lustre \(lfs\) commands within the UAS service pod
+- Executing Singularity containers within the UAS service
+- Building Docker containers within the UAS environment
+- Building containerd containers within the UAS environment
+- `dmesg` cannot run inside a UAI because of container security limitations
+- Users cannot ssh from `ncn-w001` to a UAI. This is because UAIs use LoadBalancer IP addresses on the Customer Access Network \(CAN\) instead of NodePorts and the LoadBalancer IP addresses are not accessible from `ncn-w001`.
 
 ### Other Limitations
 
--   There is a known issue where X11 traffic may not forward DISPLAY correctly if the user logs into an NCN node before logging into a UAI.
--   The `cray uas uais` commands are not restricted to operating on UAIs owned by the user authenticated with `cray auth login`.
+- There is a known issue where X11 traffic may not forward DISPLAY correctly if the user logs into an NCN node before logging into a UAI.
+- The `cray uas uais` commands are not restricted to operating on UAIs owned by the user authenticated with `cray auth login`.
 
 ### Limitations Related To Restarts
 
