@@ -13,7 +13,7 @@ All ports will be shutdown before applying switch configuration.  If the port is
 
 There are some caveats that are mentioned below.
 ### Aruba
-1. shutdown all ports. Use `show int physical` to see the range of ports.
+1. Shutdown all ports. Use `show int physical` to see the range of ports.
 ```
 switch(config)# int 1/1/1-1/1/52
 switch(config-if-<1/1/1-1/1/52# shut
@@ -63,5 +63,5 @@ sw-spine-001 [mlag-domain: standby] (config) # no cli default prefix-modes enabl
 
 ### Write memory
 
-- Once the configuration is applied you will need to save the configuration.
+- Save the configuration once the configuration is applied.
   - [Saving Config](saving_config.md)

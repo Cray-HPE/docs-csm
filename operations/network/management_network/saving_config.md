@@ -1,12 +1,12 @@
 # Saving Configuration
 
-## Write memory
+## Write Memory
 
 To keep track of what version of config is running on the switch create a new configuration file using the `csm version` and the `CANU version` from `motd banner` from the running config.
 
 ### Mellanox
 
-Get the csm and canu version from the motd banner.
+1. Get the CSM and CANU version from the motd banner.
 
 ```
 sw-spine-001 [mlag-domain: master] (config) # show banner 
@@ -20,7 +20,7 @@ Banners:
     ###############################################################################
 ```
 
-save a configuration file with the csm/canu versions.
+2. Save a configuration file with the CSM and CANU versions.
 
 ```
 sw-spine-001 [mlag-domain: master] (config) # configuration write to csm1.0-canu1.1.11
@@ -28,7 +28,7 @@ sw-spine-001 [mlag-domain: master] (config) # configuration write to csm1.0-canu
 
 ### Dell
 
-Get the csm and canu version from the motd banner.
+1. Get the csm and CANU version from the motd banner.
 
 ```
 sw-leaf-bmc-001# show running-configuration | grep motd
@@ -39,7 +39,7 @@ banner motd ^C
  ###############################################################################
  ```
 
-Create a config file with the csm/canu versions.
+2. Create a config file with the CSM/CANU versions.
 
  ```
 sw-leaf-bmc-001(config)# copy config://startup.xml config://csm1.0-canu1.1.11
@@ -48,7 +48,7 @@ Copy completed
 
 ### Aruba
 
-Get the csm and canu version from the motd banner.
+1. Get the csm and canu version from the motd banner.
 
  ```
 sw-leaf-bmc-001(config)# show banner motd 
@@ -58,7 +58,8 @@ sw-leaf-bmc-001(config)# show banner motd
 ###############################################################################
  ```
 
-Create a checkpoint with the csm/canu versions.
+2. Create a checkpoint with the csm/canu versions.
+
  ```
 sw-leaf-bmc-001(config)# copy running-config checkpoint CSM1_2_CANU_1_1_11
  ```

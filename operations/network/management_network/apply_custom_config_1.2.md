@@ -104,5 +104,5 @@ sw-spine-001 [standalone: master] # conf t
 
 ### Write memory
 
-- Once the configuration is applied you will need to save the configuration.
+- Save the configuration once the configuration is applied.
   - [Saving Config](saving_config.md)
