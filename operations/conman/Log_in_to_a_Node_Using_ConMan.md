@@ -19,7 +19,7 @@ The user performing this procedure needs to have access permission to the `cray-
     cray-console-operator-79bf95964-qpcpp
     ```
 
-1. Set the `XNAME` variable to the xname of the node whose console you wish to open.
+2. Set the `XNAME` variable to the component name (xname) of the node whose console you wish to open.
 
     ```bash
     ncn# XNAME=x123456789s0c0n0

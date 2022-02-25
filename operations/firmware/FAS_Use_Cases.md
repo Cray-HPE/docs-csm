@@ -422,8 +422,8 @@ After updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NC
 Due to networking FAS cannot update NCN m001.  See [Updating Frimware on m001](Updating_Firmware_m001.md)
 
 Procedure for updating NCNs:
-1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H x3000c0s10b0 -s` (x3000c0s10b0 is the xname of the NCN BMC)-
-   See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
+1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H x3000c0s10b0 -s` (`x3000c0s10b0` is the component name (xname) of the NCN BMC)-
+   See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc)
 2. Run a dryrun for all NCNs first to determine which NCNs and targets need updating.
 3. For each NCN requiring updates to target `BMC` or `iLO5`
    (Update of `BMC` and `iLO 5` will not affect the nodes):

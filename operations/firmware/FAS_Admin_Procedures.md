@@ -168,7 +168,7 @@ Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmwa
 
 It is likely that when performing a firmware update, that the current version of firmware will not be available. This means that after successfully upgrading, the firmware cannot be downgraded.
 
-This procedure includes information on how check the firmware versions for the entire system, as well as how to target specific manufacturers, xnames, and targets.
+This procedure includes information on how check the firmware versions for the entire system, as well as how to target specific manufacturers, component names (xnames), and targets.
 
 <a name="procedure-2"></a>
 
@@ -300,7 +300,7 @@ This procedure includes information on how check the firmware versions for the e
 
     2. View the details of an action to get more information on each operation in the FAS action.
 
-		In the example below, there is an operation for an xname in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is due to a missing firmware image file.
+		In the example below, there is an operation for an component name (xname) in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is due to a missing firmware image file.
 
        ```bash
        ncn# cray fas actions describe {actionID} --format json

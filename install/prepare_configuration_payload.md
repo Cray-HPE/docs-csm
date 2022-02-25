@@ -101,7 +101,7 @@ The `cabinets.yaml` file describes the type of cabinets in the system, the numbe
 and the starting cabinet ID for every cabinet in the system. This file can be used to indicate that a system
 has non-contiguous cabinet ID numbers or non-standard VLAN numbers.
 
-The xnames used in the other files should fit within the cabinet ids defined by the starting cabinet id for River
+The component names (xnames) used in the other files should fit within the cabinet ids defined by the starting cabinet id for River
 cabinets (modified by the number of cabinets). It is OK for management nodes not to be in x3000 (as the first River
 cabinet), but they must be in one of the River cabinets. For example, x3000 with 2 cabinets would mean x3000 or x3001
 should have all management nodes.
@@ -116,7 +116,7 @@ application nodes discovered in the `hmn_connections.json` file when building th
 
 Different node prefixes in the SHCD can be identified as Application nodes. Each node prefix
 can be mapped to a specific HSM sub role. These sub roles can then be used as the targets of Ansible
-plays run by CFS to configure these nodes. The xname for each Application node can be assigned one or
+plays run by CFS to configure these nodes. The component name (xname) for each Application node can be assigned one or
 more hostname aliases.
 
 See [Create Application Node YAML](create_application_node_config_yaml.md) for instructions about creating this file.
@@ -137,7 +137,7 @@ The information in the `ncn_metadata.csv` file identifies each of the management
 as a master, worker, or storage node, and provides the MAC address information needed to identify the BMC and
 the NIC which will be used to boot the node.
 
-For each management node, the xname, role, and subrole can be extracted from the SHCD. However, the rest of the
+For each management node, the component name (xname), role, and subrole can be extracted from the SHCD. However, the rest of the
 MAC address information needs to be collected another way. Collect as much information as possible
 before the PIT node is booted from the LiveCD and then get the rest later when directed. See the scenarios
 which enable partial data collection below in [First Time Install](#first_time_install).

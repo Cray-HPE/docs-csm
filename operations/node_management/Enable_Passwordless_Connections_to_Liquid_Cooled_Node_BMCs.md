@@ -57,8 +57,8 @@ Setting up SSH keys enables administrators to view recent console messages and i
 
     Ensure the following are true before running the command below:
 
-    -   The xname list looks valid/appropriate
-    -   The `SSHKey` and `SSHConsoleKey` settings match the desired public key
+    - The component name (xname) list looks valid/appropriate
+    - The `SSHKey` and `SSHConsoleKey` settings match the desired public key
 
     ```bash
     ncn-w001# cray scsd bmc loadcfg create scsd\_cfg.json

@@ -48,7 +48,7 @@ Gigabyte ncn-m001:
 
     a. To update BMC:
 
-    `m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d ‘{“ImageURI”:”http://ipaddressOfM001:8770/filename”, ”TransferProtocol”:”HTTP”, ”UpdateComponent”:”BMC”}’`
+    `m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'`
 
     * `passwd` = root password of BMC
     * `ipaddressOfBMC` = ipaddress of BMC
@@ -57,7 +57,7 @@ Gigabyte ncn-m001:
 
     b. To update BIOS:
 
-    `m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d ‘{“ImageURI”:”http://ipaddressOfM001:8770/filename”, ”TransferProtocol”:”HTTP”, ”UpdateComponent”:”BIOS”}’`
+    `m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'`
 
 
     * `passwd` = root password of BMC
@@ -79,11 +79,11 @@ The web interface will be used to update firmware on the HPE ncn-m001 node.
 
 3. Log in with root and the root password for the iLo device
 
-    1. Click on `“Firmware & OS Software”` on the left menu
-    2. Click on `“Update Firmware”` on the right menu
-    3. Check `“Local File”`
-    4. Click `“Choose File”` and select the iLO firmware file or BIOS file
-    5. Click `“Confirm TPM override”`
+    1. Click on `"Firmware & OS Software"` on the left menu
+    2. Click on `"Update Firmware"` on the right menu
+    3. Check `"Local File"`
+    4. Click `"Choose File"` and select the iLO firmware file or BIOS file
+    5. Click `"Confirm TPM override"`
     6. Click `"Flash"`
 
   After updating BIOS, ncn-m001 will need to be rebooted.  Follow instructions [Reboot NCNs](../node_management/Reboot_NCNs.md) for rebooting ncn-m001.

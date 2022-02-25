@@ -9,7 +9,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
   - Source system - Cray EX TDS cabinet x9000 with a healthy EX425 blade (Windom dual-injection) in chassis 3, slot 0
   - Destination system - Cray EX cabinet x1005 with a defective EX425 blade (Windom dual-injection) in chassis 3, slot 0
 
-- Substitute the correct xnames or other parameters in the command examples that follow.
+- Substitute the correct component names (xnames) or other parameters in the command examples that follow.
 
 - All the nodes in the blade must be specified using a comma separated list. For example, EX425 compute blades include two node cards, each with two logical nodes (4 nodes).
 
@@ -72,7 +72,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 1. Using the work load manager (WLM), drain running jobs from the affected nodes on the blade. Refer to the vendor documentation for the WLM for more information.
 
-2. Use Boot Orchestration Services (BOS) to shut down the affected nodes in the source blade (in this example, x9000c3s0). Specify the appropriate xname and BOS template for the node type in the following command.
+2. Use Boot Orchestration Services (BOS) to shut down the affected nodes in the source blade (in this example, `x9000c3s0`). Specify the appropriate component name (xname) and BOS template for the node type in the following command.
 
    ```bash
    ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
@@ -129,7 +129,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 
       ```bash
-      ncn-m001# cray capmc xname_off create --xnames x9000c3s0 --recursive true
+      ncn-m001# cray capmc component name (xname)_off create --xnames x9000c3s0 --recursive true
       ```
 
 
@@ -270,7 +270,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 17. Power off the chassis slot. This example powers off slot 0 in chassis 3 of cabinet 1005.
 
     ```bash
-    ncn-m001# cray capmc xname_off create --xnames x1005c3s0 --recursive true
+    ncn-m001# cray capmc component name (xname)_off create --xnames x1005c3s0 --recursive true
     ```
 
 
@@ -433,7 +433,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 31. Power on the chassis slot. The example powers on slot 0, chassis 3, in cabinet 1005.
 
     ```bash
-    ncn-m001# cray capmc xname_on create --xnames x1005c3s0 --recursive true
+    ncn-m001# cray capmc component name (xname)_on create --xnames x1005c3s0 --recursive true
     ```
 
 
