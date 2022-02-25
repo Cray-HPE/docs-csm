@@ -49,7 +49,7 @@ There are three different ways to specify the nodes inside a boot set in a BOS s
 
 -   **Node list**
 
-    The `"node_list"` value is a list of nodes identified by xnames.
+    The `"node_list"` value is a list of nodes identified by component names (xnames).
 
     For example:
 

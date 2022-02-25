@@ -22,6 +22,11 @@ This command returns output in TOML format by default. JSON or YAML formatted ou
 
 ```bash
 ncn-m001-pit# cray uas admin config volumes describe 11a4a22a-9644-4529-9434-d296eef2dc48 --format json
+```
+
+Example output:
+
+```
 {
   "mount_path": "/etc/localtime",
   "volume_description": {

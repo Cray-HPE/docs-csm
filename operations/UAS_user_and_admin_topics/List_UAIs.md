@@ -45,6 +45,11 @@ For Legacy Mode user procedures:
 
     ```bash
     ncn-m001-pit# cray uas admin uais list --owner broker
+    ```
+
+    Example output:
+
+    ```
     [[results]]
     uai_age = "5h3m"
     uai_connect_string = "ssh broker@34.136.140.107"
@@ -56,10 +61,16 @@ For Legacy Mode user procedures:
     uai_status = "Running: Ready"
     username = "broker"
     ```
-2. List the UAIs owned by an authorized user named `vers` in the Legacy Mode of UAI management.
+
+1. List the UAIs owned by an authorized user named `vers` in the Legacy Mode of UAI management.
 
     ```bash
     vers>  cray uas list
+    ```
+
+    Example output:
+    
+    ```
     [[results]]
     uai_age = "3m"
     uai_connect_string = "ssh vers@35.188.16.85"

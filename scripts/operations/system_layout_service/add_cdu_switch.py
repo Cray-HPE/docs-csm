@@ -76,13 +76,13 @@ def add_cdu_ip_reservation(sls_network, xname, alias):
 # Parse CLI Arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("sls_state_file", type=str, help="SLS State file to modify")
-parser.add_argument("--cdu-switch", type=str, required=True, help="CDU Switch xname to add, ex: d1w1")
+parser.add_argument("--cdu-switch", type=str, required=True, help="CDU Switch component name (xname) to add, ex: d1w1")
 parser.add_argument("--brand", type=str, required=True, help="Switch brand", choices={"Dell", "Aruba"})
 parser.add_argument("--alias", type=str, required=True, help="CDU Switch alias, ex: sw-cdu-003")
 args = parser.parse_args()
 
 if re.match(CDU_MGMT_SWITCH_XNAME_REGEX, args.cdu_switch) == None and re.match(MGMT_HL_SWITCH_XNAME_REGEX, args.cdu_switch) == None:
-    print("Invalid CDU Switch xname provided: ", args.cdu_switch)
+    print("Invalid CDU Switch component name (xname) provided: ", args.cdu_switch)
     exit(1)
 
 if re.match("^sw-cdu-[0-9][0-9][0-9]$", args.alias) == None:
@@ -137,7 +137,7 @@ else:
         }
     }
 
-# Verify the CDU switch has a unique xname
+# Verify the CDU switch has a unique component name (xname)
 if args.cdu_switch in allHardware:
     print("Error {} already exists in {}!".format(args.cdu_switch, args.sls_state_file))
     exit(1)

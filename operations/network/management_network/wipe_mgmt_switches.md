@@ -60,7 +60,9 @@ Create a new config file, when a new config file is created no data is written t
 ```
 (config) # configuration new csm1.2
 ```
-check that the configuration files contain the new csm1.2 blank config we just created.
+If that config exists you can either delete it with `configuration delete csm1.2` or reset to factor with `reset factory`
+
+Check that the configuration files contain the new csm1.2 blank config we just created.
 ```
 (config) # show configuration files
 files
@@ -96,5 +98,3 @@ Confirm:
 New password for 'monitor' account must be typed, please enter new password: 
 Confirm: 
 ```
-
-This will boot the switch to factory defaults, The next step is likely going to be [apply switch configs](apply_switch_configs.md).

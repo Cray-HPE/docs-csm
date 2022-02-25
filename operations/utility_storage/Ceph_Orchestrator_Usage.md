@@ -3,7 +3,7 @@
 The Ceph orchestrator provides a centralized interface for the management of the Ceph cluster. It orchestrates ceph-mgr modules that interface with external orchestration services.
 
 Refer to the external [Ceph documentation](https://docs.ceph.com/en/latest/mgr/orchestrator/) for more information.
- 
+
 The orchestrator manages Ceph clusters with the following capabilities:
 
 * Single command upgrades (assuming all images are in place)
@@ -30,8 +30,6 @@ ncn-s# ceph -W cephadm --watch-debug
 
 > **NOTE:** For use with orchestration tasks, this can be typically run from a node running the ceph mon process. In most cases, this is ncn-s00(1/2/3). There may be cases where a cephadm is run locally on a host and it will be more efficient to tail `/var/log/ceph/cephadm.log`.
 
-
-
 ## Usage Examples
 
 This section will provide some in-depth usage with examples of the more commonly used `ceph orch` subcommands.
@@ -44,7 +42,7 @@ ncn-s# ceph orch ls
 
 Example output:
 
-```
+```bash
 NAME                       RUNNING  REFRESHED  AGE  PLACEMENT                           IMAGE NAME                                       IMAGE ID
 alertmanager                   1/1  6m ago     4h   count:1                             registry.local/prometheus/alertmanager:v0.20.0   0881eb8f169f
 crash                          3/3  6m ago     4h   *                                   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c
@@ -64,7 +62,6 @@ rgw.site1.zone1                3/3  6m ago     4h   ncn-s001;ncn-s002;ncn-s003;c
 
 1. PLACEMENT - Represents a service deployed on all nodes. Otherwise the listed placement is where it is expected to be deployed.
 2. NAME - The deployment name. This is a generalized name to reference the deployment. This is being noted as additional subcommands the name is more specific to the actual deployed daemon.
-
 
 ### List Deployed Daemons
 
@@ -110,7 +107,6 @@ rgw.site1.zone1.ncn-s003.tzkxya  ncn-s003  running (5h)  5m ago     5h   15.2.8 
 
 **`FILTERS:`** Apply filters by adding any or all of [--hostname <hostname> --service_name <service_name> --daemon_type <daemon_type> --daemon_id <daemon_id>].
 
-
 ### Ceph Daemon start|stop|restart|reconfig
 
 > **NOTE:** The service name is from `ceph orch ps` **NOT** `ceph orch ls`.
@@ -138,7 +134,6 @@ A message stating "Scheduled alertmanager update..." will be returned.
 1. PLACEMENT - This will show the nodes and the count. If only specifying `--placement="2"`, then it will automatically pick where to put it.
 
 > **IMPORTANT:** There are several combinations available when working with the placement. For example, a placement of 1 can be specified, but then a list of a sub-set of nodes can be used. This is a good way to contain the process to those nodes.
-
 > **IMPORTANT:** This is not available for any deployments with a `PLACEMENT` of *
 
 ### List Hosts Known to Ceph Orchestrator
@@ -149,7 +144,7 @@ ncn-s# ceph orch host ls
 
 Example output:
 
-```
+```bash
 HOST      ADDR      LABELS  STATUS
 ncn-s001  ncn-s001
 ncn-s002  ncn-s002
@@ -164,7 +159,7 @@ ncn-s# ceph orch device ls
 
 Example output:
 
-```
+```bash
 Hostname  Path      Type  Serial                Size   Health   Ident  Fault  Available
 ncn-s001  /dev/vdb  hdd   fb794832-f402-4f4f-a   107G  Unknown  N/A    N/A    No
 ncn-s001  /dev/vdc  hdd   9bdef369-6bac-40ca-a   107G  Unknown  N/A    N/A    No
@@ -178,8 +173,6 @@ ncn-s003  /dev/vdd  hdd   3b2c090d-37a0-403b-a   107G  Unknown  N/A    N/A    No
 ```
 
 > **IMPORTANT:** If `--wide` is used, it will give the reasons a drive is not `Available`. This **DOES NOT** mean something is wrong. If Ceph already has the drive provisioned, there may be similar reasons.
-
-
 
 ## General Use
 
@@ -326,114 +319,113 @@ ncn-s# ceph orch host ok-to-stop <hostname>
 Remove a host:
 
 ```bash
-ncn-s# cephorch host rm <hostname>
+ncn-s# ceph orch host rm <hostname>
 ```
 
 Update a host address:
 
 ```bash
-ncn-s# cephorch host set-addr <hostname> <addr>
+ncn-s# ceph orch host set-addr <hostname> <addr>
 ```
 
 List services known to orchestrator:
 
 ```bash
-ncn-s# cephorch ls [<service_type>] [<service_name>] [--export] [plain|json|json-pretty|yaml] [--refresh]
+ncn-s# ceph orch ls [<service_type>] [<service_name>] [--export] [plain|json|json-pretty|yaml] [--refresh]
 ```
 
 Remove OSD services:
 
 ```bash
-ncn-s# cephorch osd rm <svc_id>... [--replace] [--force]
+ncn-s# ceph orch osd rm <svc_id>... [--replace] [--force]
 ```
 
 Status of OSD removal operation:
 
 ```bash
-ncn-s# cephorch osd rm status [plain|json|json-pretty|yaml]
+ncn-s# ceph orch osd rm status [plain|json|json-pretty|yaml]
 ```
 
 Remove OSD services:
 
 ```bash
-ncn-s# cephorch osd rm stop <svc_id>...
+ncn-s# ceph orch osd rm stop <svc_id>...
 ```
 
 Pause orchestrator background work:
 
 ```bash
-ncn-s# cephorch pause
+ncn-s# ceph orch pause
 ```
 
 List daemons known to orchestrator:
 
 ```bash
-ncn-s# cephorch ps [<hostname>] [<service_name>] [<daemon_type>] [<daemon_id>] [plain|json|json-pretty|yaml] [--refresh]
+ncn-s# ceph orch ps [<hostname>] [<service_name>] [<daemon_type>] [<daemon_id>] [plain|json|json-pretty|yaml] [--refresh]
 ```
 
 Resume orchestrator background work (if paused):
 
 ```bash
-ncn-s# cephorch resume
+ncn-s# ceph orch resume
 ```
 
 Remove a service:
 
 ```bash
-ncn-s# cephorch rm <service_name> [--force]
+ncn-s# ceph orch rm <service_name> [--force]
 ```
 
 Select orchestrator module backend:
 
 ```bash
-ncn-s# cephorch set backend <module_name>
+ncn-s# ceph orch set backend <module_name>
 ```
 
 Start, stop, restart, redeploy, or reconfig an entire service (i.e. all daemons):
 
 ```bash
-ncn-s# cephorch start|stop|restart|redeploy|reconfig <service_name>
+ncn-s# ceph orch start|stop|restart|redeploy|reconfig <service_name>
 ```
 
 Report configured backend and its status:
 
 ```bash
-ncn-s# cephorch status [plain|json|json-pretty|yaml]
+ncn-s# ceph orch status [plain|json|json-pretty|yaml]
 ```
 
 Check service versions vs available and target containers:
 
 ```bash
-ncn-s# cephorch upgrade check [<image>] [<ceph_version>]
+ncn-s# ceph orch upgrade check [<image>] [<ceph_version>]
 ```
 
 Pause an in-progress upgrade:
 
 ```bash
-ncn-s# cephorch upgrade pause
+ncn-s# ceph orch upgrade pause
 ```
 
 Resume paused upgrade:
 
 ```bash
-ncn-s# cephorch upgrade resume
+ncn-s# ceph orch upgrade resume
 ```
 
 Initiate upgrade:
 
 ```bash
-ncn-s# cephorch upgrade start [<image>] [<ceph_version>]
+ncn-s# ceph orch upgrade start [<image>] [<ceph_version>]
 ```
 
 Check service versions vs available and target containers:
 
 ```bash
-ncn-s# cephorch upgrade status
+ncn-s# ceph orch upgrade status
 ```
 
 Stop an in-progress upgrade:
 
 ```bash
-ncn-s# cephorch upgrade stop
+ncn-s# ceph orch upgrade stop
 ```
-

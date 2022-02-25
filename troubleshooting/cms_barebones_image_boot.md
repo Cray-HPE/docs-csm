@@ -196,7 +196,7 @@ Class = "River"
 
 > Troubleshooting: If any compute nodes are missing from HSM database, refer to [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) to troubleshoot any Node BMCs that have not been discovered.
 
-Choose a node from those listed and set `XNAME` to its ID. In this example, `x3000c0s17b2n0`:
+Choose a node from those listed and set `XNAME` to its component name (xname). In this example, `x3000c0s17b2n0`:
 ```bash
 ncn# export XNAME=x3000c0s17b2n0
 ```

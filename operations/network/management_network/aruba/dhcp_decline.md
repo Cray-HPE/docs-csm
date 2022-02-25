@@ -28,7 +28,7 @@ This indicates an issue with an IP address being allocated is already being used
 curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/18c04d13d73c
 ```
 
-* Check by Xname:
+* Check by component name (xname):
 
 ```
 curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces?ComponentID=x3000c0s25b0n0
