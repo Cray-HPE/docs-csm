@@ -498,4 +498,17 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="BACKUP_BSS_DATA"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    
+    cray bss bootparameters list --format=json > bss-backup-$(date +%Y-%m-%d).json
+    cray artifacts create vbis bss-backup-$(date +%Y-%m-%d).json bss-backup-$(date +%Y-%m-%d).json
+    
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 ok_report
