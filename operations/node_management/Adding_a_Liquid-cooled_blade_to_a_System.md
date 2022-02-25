@@ -109,7 +109,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
     If the slot is powered on, then power the chassis slot off.
     ```
-    ncn-m001# cray capmc xname_off create --xnames x1005c3s0 --recursive true
+    ncn-m001# cray capmc component name (xname)_off create --xnames x1005c3s0 --recursive true
     ``` 
 
 4.  Install the the blade into the system into the desired location.
@@ -122,8 +122,8 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
                           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-### Preserve node xname to IP address mapping
-6.  **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.** When DVS is operating over the NMN, and a blade is being replaced the mapping of node xname to node IP address must be preserved. Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes). To prevent from Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
+### Preserve node component name (xname) to IP address mapping
+6.  **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.** When DVS is operating over the NMN and a blade is being replaced, the mapping of node component name (xname) to node IP address must be preserved. Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes). To prevent from Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
 
     1.  Create an `eth_interfaces` file that contains the interface IDs for the `Node Maintenance Network` entries for the destination blade location. If there has not been a blade previously in the destination location there may not be any Ethernet Interfaces to delete from HSM.
       
@@ -245,7 +245,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 11. Power on the chassis slot. The example powers on slot 0, chassis 3, in cabinet 1005.
 
     ```bash
-    ncn-m001# cray capmc xname_on create --xnames x1005c3s0 --recursive true
+    ncn-m001# cray capmc component name (xname)_on create --xnames x1005c3s0 --recursive true
     ```
 
 12. Wait at least 3 minutes for the blade to power on and the node controllers (BMCs) to be discovered.
@@ -426,9 +426,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     [Tue Jul 21 13:09:54 2020] DVS: merge_one#358:   Ignoring.
     ```
 
-20. Make sure the Configuration Framework Service (CFS) finished successfully. Review *HPE Cray EX DVS Administration Guide 1.4.1 S-8004*.
-
-21. SSH to the node and check each DVS mount.
+20. SSH to the node and check each DVS mount.
 
     ```bash
     nid# mount | grep dvs | head -1
@@ -440,7 +438,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     ```
 #### Check the HSN for the affected nodes
 
-22. Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
+21. Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
 
     ```bash
     ncn-m001# kubectl exec -it -n services \
@@ -449,7 +447,8 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     ```
 
 #### Check for duplicate IP address entries
-23. Check for duplicate IP address entries in the Hardware State Management Database (HSM). Duplicate entries will cause DNS operations to fail.
+
+22. Check for duplicate IP address entries in the Hardware State Management Database (HSM). Duplicate entries will cause DNS operations to fail.
 
   1.  Verify each node hostname resolves to one IP address.
       ```bash
@@ -485,7 +484,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
       [{'result': 1, 'text': "Config reload failed: configuration error using file '/usr/local/kea/cray-dhcp-kea-dhcp4.conf': failed to add new host using the HW address '00:40:a6:83:50:a4 and DUID '(null)' to the IPv4 subnet id '0' for the address 10.100.0.105: There's already a reservation for this address"}]
       ```
 
-24. Use the following example curl command to check for active DHCP leases. If there are 0 DHCP leases, there is a configuration error.
+23. Use the following example curl command to check for active DHCP leases. If there are 0 DHCP leases, there is a configuration error.
 
     ```bash
     ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
@@ -504,7 +503,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     ]
     ```
 
-25. If there are duplicate entries in the HSM as a result of this procedure, (10.100.0.105 in this example), delete the duplicate entry.
+24. If there are duplicate entries in the HSM as a result of this procedure, (10.100.0.105 in this example), delete the duplicate entry.
 
     1. Show the `EthernetInterfaces` for the duplicate IP address:
 
@@ -542,7 +541,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
        ncn-m001# cray hsm inventory ethernetInterfaces delete 0040a68350a4
        ```
 
-26. Check DNS using `nslookup`.
+25. Check DNS using `nslookup`.
 
     ```bash
     ncn-m001# nslookup 10.100.0.105
@@ -552,7 +551,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     105.0.100.10.in-addr.arpa        name = x1005c3s0b0n0.local.
     ```
 
-27. Check SSH.
+26. Check SSH.
 
     ```bash
     ncn-m001# ssh x1005c3s0b0n0

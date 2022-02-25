@@ -39,7 +39,7 @@ echo "Backing up helm release cray-kafka-operator secret to /tmp/sh.helm.release
 kubectl get secret -n operators sh.helm.release.v1.cray-kafka-operator.v1 -o yaml >/tmp/sh.helm.release.v1.cray-kafka-operator.v1.yaml
 
 echo "Removing helm secret"
-kubectl delete secret -n operators sh.helm.release.v1.cray-kafka-operator.v1
+kubectl delete secret -n operators sh.helm.release.v1.cray-kafka-operator.v1 || true
 
 echo "Creating a snapshot file in zookeeper if one does not already exist"
 for i in $(kubectl get pods -A | grep zookeeper | awk '{print $1":"$2}'); do
