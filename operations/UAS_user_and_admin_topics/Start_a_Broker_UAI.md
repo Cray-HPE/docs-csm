@@ -31,6 +31,11 @@ The following is an example using the class created above:
 
 ```
 ncn-m001-pit# cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker
+```
+
+Example output:
+
+```
 uai_age = "0m"
 uai_connect_string = "ssh broker@35.226.246.154"
 uai_host = "ncn-w003"
@@ -48,6 +53,11 @@ When a UAI is created on an external IP address (as is always the case with Brok
 
 ```
 ncn-m001-pit# cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker --uai-name my-broker-uai
+```
+
+Example output:
+
+```
 uai_age = "0m"
 uai_connect_string = "ssh broker@35.226.246.154"
 uai_host = "ncn-w003"

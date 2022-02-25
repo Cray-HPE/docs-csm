@@ -8,9 +8,9 @@ The user performing this procedure needs to have access permission to the cray-c
 
 ### Procedure
 
-1. Check which cray-console-node pod the NCN is connected through using the xname of the NCN.
+1. Check which cray-console-node pod the NCN is connected through using the component name (xname) of the NCN.
 
-    If doing an NCN reboot, the xname can be gathered from the /opt/cray/platform-utils/ncnGetXnames.sh script.
+    If doing an NCN reboot, the component name (xname) can be gathered from the /opt/cray/platform-utils/ncnGetXnames.sh script.
 
     ```
     ncn-m001# CONPOD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}')

@@ -30,6 +30,11 @@ Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports 
 
     ```bash
     vers> cray uas create --publickey ~/.ssh/id_rsa.pub --ports 80,443,8888
+    ```
+
+    Example output:
+
+    ```
     uai_age = "0m"
     uai_connect_string = "ssh vers@34.68.41.239"
     uai_host = "ncn-w002"

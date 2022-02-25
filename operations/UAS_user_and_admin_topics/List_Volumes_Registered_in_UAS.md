@@ -23,6 +23,11 @@ List the details of all the volumes registered in UAS.
 
     ```bash
     ncn-m001-pit# cray uas admin config volumes list
+    ```
+
+    Example output:
+
+    ```
     [[results]]
     mount_path = "/etc/localtime"
     volume_id = "11a4a22a-9644-4529-9434-d296eef2dc48"
@@ -53,6 +58,11 @@ List the details of all the volumes registered in UAS.
 
     ```bash
     ncn-m001-pit# cray uas admin config volumes list --format yaml
+    ```
+
+    Example output:
+
+    ```
     - mount_path: /etc/localtime
       volume_description:
         host_path:
@@ -80,6 +90,11 @@ List the details of all the volumes registered in UAS.
 
     ```bash
     ncn-m001-pit# cray uas admin config volumes list --format json
+    ```
+
+    Example output:
+
+    ```
     [
       {
         "mount_path": "/etc/localtime",

@@ -51,7 +51,7 @@ The following features are no longer supported and are planned to be removed in 
    * The Boot Orchestration Service (BOS) API is changing in the upcoming CSM-1.2.0 release:
         * The `--template-body` option for the Cray CLI `bos` command will be deprecated.
         * Performing a GET on the session status for a boot set (i.e. `/v1/session/{session_id}/status/{boot_set_name}`) currently returns a status code of 201, but instead it should return a status code of 200. This will be corrected to return 200.
-   * PowerDNS will replace Unbound as the authoritative DNS source in CSM version 1.2.
+   * PowerDNS will replace Unbound as the authoritative DNS source in CSM version 1.3.
         * The cray-dns-unbound-manager CronJob will be deprecated in a future release once all DNS records are migrated to PowerDNS.
         * The introduction of PowerDNS and Bifurcated CAN will introduce some node and service naming changes.
         * Please see the [PowerDNS migration notice](../introduction/PowerDNS_migration.md) for more information.
