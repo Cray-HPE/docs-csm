@@ -18,6 +18,3 @@ The Data Helper Tools are used to update records, and takes in changes from the 
 The following figure shows a high-level overview of the various components used in the DNS infrastructure.
 
 ![DNS Architecture](../../../img/operations/DNS_architecture.PNG)
-
-
-

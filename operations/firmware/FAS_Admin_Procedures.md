@@ -26,7 +26,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ### Warning for Non-Compute Nodes (NCNs)</a>
 
-**WARNING:** NCNs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
+**WARNING:** NCNs and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
 ---
 
@@ -36,7 +36,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 The default configuration of FAS no longer ignores `management` nodes, which prevents FAS from firmware updating the NCNs. To reconfigure the FAS deployment to exclude non-compute nodes (NCNs) and ensure they cannot have their firmware upgraded, the `NODE_BLACKLIST` value must be manually enabled
 
-Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
+**Preferred Method:** Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
 
 <a name="procedure"></a>
 
@@ -168,7 +168,7 @@ Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmwa
 
 It is likely that when performing a firmware update, that the current version of firmware will not be available. This means that after successfully upgrading, the firmware cannot be downgraded.
 
-This procedure includes information on how check the firmware versions for the entire system, as well as how to target specific manufacturers, xnames, and targets.
+This procedure includes information on how check the firmware versions for the entire system, as well as how to target specific manufacturers, component names (xnames), and targets.
 
 <a name="procedure-2"></a>
 
@@ -300,7 +300,7 @@ This procedure includes information on how check the firmware versions for the e
 
     2. View the details of an action to get more information on each operation in the FAS action.
 
-		In the example below, there is an operation for an xname in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is due to a missing firmware image file.
+		In the example below, there is an operation for an component name (xname) in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is due to a missing firmware image file.
 
        ```bash
        ncn# cray fas actions describe {actionID} --format json

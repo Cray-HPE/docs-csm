@@ -124,7 +124,7 @@ The HSM includes two important components:
 -   Systems Layout Service \(SLS\): This is the expected state of the system, as populated by the networks.yaml and other sources.
 -   State Manager Daemon \(SMD\): This is the discovered or active state of the system during runtime.
 
-To view the information stored in SLS for a specific xname:
+To view the information stored in SLS for a specific component name (xname):
 
 ```bash
 ncn-w001# cray sls hardware describe XNAME

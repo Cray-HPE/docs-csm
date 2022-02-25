@@ -2,6 +2,10 @@
 
 Use the Firmware Action Service (FAS) to update the firmware on supported hardware devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
 
+When updating an entire system, walk down the device hierarchy component type by component type, starting first with Routers (switches), proceeding to Chassis, and then finally to Nodes. While this is not strictly necessary, it does help eliminate confusion.
+
+Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
+
 1. [Update Liquid-Cooled Node](#liquidcooled)
 2. [Update Chassis Management Module (CMM) Firmware](#cmm)
 3. [Update NCN BIOS and BMC Firmware with FAS](#ncn-bios-bmc)
@@ -23,7 +27,7 @@ This procedure updates the following hardware:
 #### Prerequisites
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
-#### Example Recipes
+#### Example Procedures
 
 **Manufacturer: Cray | Device Type: NodeBMC | Target: BMC**
 
@@ -415,9 +419,11 @@ All of the example JSON files below are set to run a dry-run. Update the overrid
 
 After updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
 
+Due to networking FAS cannot update NCN m001.  See [Updating Frimware on m001](Updating_Firmware_m001.md)
+
 Procedure for updating NCNs:
-1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H x3000c0s10b0 -s` (x3000c0s10b0 is the xname of the NCN BMC)-
-   See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc")
+1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H x3000c0s10b0 -s` (`x3000c0s10b0` is the component name (xname) of the NCN BMC)-
+   See [Configure DNS and NTP on Each BMC](../../install/redeploy_pit_node.md#configure-dns-and-ntp-on-each-bmc)
 2. Run a dryrun for all NCNs first to determine which NCNs and targets need updating.
 3. For each NCN requiring updates to target `BMC` or `iLO5`
    (Update of `BMC` and `iLO 5` will not affect the nodes):

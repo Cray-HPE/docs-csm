@@ -92,7 +92,7 @@ When a session is launched, the items below are created:
     -   Configuration has completed and the desired state needs to be cleaned up so that configuration does not happen on restart:
         1.  Unset the desired state for all components affected.
 
-            To find the impacted xnames for the components with the desired configuration matching what was applied:
+            To find the impacted component names (xnames) for the components with the desired configuration matching what was applied:
 
             ```bash
             ncn-m001# cray cfs components list
@@ -109,7 +109,7 @@ When a session is launched, the items below are created:
     -   Configuration was set/started and needs to be cancelled:
         1.  Unset the desired state for all components affected.
 
-            To find the impacted xnames for the components with the desired configuration matching what was applied:
+            To find the impacted component names (xnames) for the components with the desired configuration matching what was applied:
 
             ```bash
             ncn-m001# cray cfs components list

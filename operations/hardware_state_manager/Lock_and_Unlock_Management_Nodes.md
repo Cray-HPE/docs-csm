@@ -66,13 +66,21 @@ should once again be locked.
 
 Use the `cray hsm locks lock` command to perform locking.
 
-* To lock all nodes with the _Management_ role.
+***NOTE: When locking NCNs, you must lock their NodeBMCs as well.***
+
+#### To lock all nodes (and their BMCs) with the _Management_ role.
 
    The *processing-model rigid* parameter means that the operation must succeed on all
    target nodes or the entire operation will fail.
 
+1. Lock the management nodes.
    ```bash
    ncn# cray hsm locks lock create --role Management --processing-model rigid
+   ```
+
+   Example output:
+
+   ```bash
    Failure = []
 
    [Counts]
@@ -83,11 +91,36 @@ Use the `cray hsm locks lock` command to perform locking.
    [Success]
    ComponentIDs = [ "x3000c0s5b0n0", "x3000c0s4b0n0", "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0",]
    ```
+   
+1. Lock the NodeBMCs of those management nodes.
+   ```bash
+   ncn# cray hsm locks lock create --component-ids $(cray hsm state components list --role management --type node --format json | jq '.Components[].ID' | sed 's/n[0-9]*//;s/"//g' | tr '\n' ',' | sed 's/.$//')
+   ```
 
-* To lock single nodes or lists of specific nodes.
+   Example output:
 
    ```bash
+   Failure = []
+
+   [Counts]
+   Total = 8
+   Success = 8
+   Failure = 0
+
+   [Success]
+   ComponentIDs = [ "x3000c0s5b0", "x3000c0s4b0", "x3000c0s7b0", "x3000c0s6b0", "x3000c0s3b0", "x3000c0s2b0", "x3000c0s9b0", "x3000c0s8b0",]
+   ```
+
+#### To lock single nodes or lists of specific nodes (and their BMCs).
+
+1. Lock the management nodes.
+   ```bash
    ncn# cray hsm locks lock create --role Management --component-ids x3000c0s6b0n0 --processing-model rigid
+   ```
+
+   Example output:
+
+   ```bash
    Failure = []
 
    [Counts]
@@ -99,16 +132,44 @@ Use the `cray hsm locks lock` command to perform locking.
    ComponentIDs = [ "x3000c0s6b0n0",]
    ```
 
+1. Lock the BMC of those nodes.
+   ```bash
+   // Remove 'n0' from all of the xnames to get a list of the NodeBMCs that need to be locked.
+   ncn# cray hsm locks lock create --component-ids x3000c0s6b0 --processing-model rigid
+   ```
+
+   Example output:
+
+   ```bash
+   Failure = []
+
+   [Counts]
+   Total = 1
+   Success = 1
+   Failure = 0
+
+   [Success]
+   ComponentIDs = [ "x3000c0s6b0",]
+   ```
+
 <a name="how-to-unlock-management-nodes"></a>
 
 ### How To Unlock Management Nodes
 
 Use the `cray hsm locks unlock` command to perform unlocking.
 
-* To lock all nodes with the _Management_ role.
+***NOTE: When unlocking NCNs, you must unlock their NodeBMCs as well.***
 
+#### To unlock all nodes (and their BMCs) with the _Management_ role.
+
+1. Unlock the management nodes.
    ```bash
    ncn# cray hsm locks unlock create --role Management --processing-model rigid
+   ```
+
+   Example output:
+
+   ```bash
    Failure = []
 
    [Counts]
@@ -120,10 +181,35 @@ Use the `cray hsm locks unlock` command to perform unlocking.
    ComponentIDs = [ "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0", "x3000c0s5b0n0", "x3000c0s4b0n0",]
    ```
 
-* To unlock single nodes or lists of specific nodes.
+1. Unlock the BMCs of those management nodes.
+   ```bash
+   ncn# cray hsm locks unlock create --component-ids $(cray hsm state components list --role management --type node --format json | jq '.Components[].ID' | sed 's/n[0-9]*//;s/"//g' | tr '\n' ',' | sed 's/.$//')
+   ```
+
+   Example output:
 
    ```bash
+   Failure = []
+
+   [Counts]
+   Total = 8
+   Success = 8
+   Failure = 0
+
+   [Success]
+   ComponentIDs = [ "x3000c0s5b0", "x3000c0s4b0", "x3000c0s7b0", "x3000c0s6b0", "x3000c0s3b0", "x3000c0s2b0", "x3000c0s9b0", "x3000c0s8b0",]
+   ```
+
+#### To unlock single or lists of specific nodes (and their BMCs).
+
+1. Unlock the management nodes.
+   ```bash
    ncn# cray hsm locks unlock create --role Management --component-ids x3000c0s6b0n0 --processing-model rigid
+   ```
+
+   Example output:
+
+   ```bash
    Failure = []
 
    [Counts]
@@ -133,5 +219,25 @@ Use the `cray hsm locks unlock` command to perform unlocking.
 
    [Success]
    ComponentIDs = [ "x3000c0s6b0n0",]
+   ```
+   
+1. Unlock the BMCs of those management nodes.
+   ```bash
+   // Remove 'n0' from all of the xnames to get a list of the NodeBMCs that need to be locked.
+   ncn# cray hsm locks unlock create --component-ids x3000c0s6b0 --processing-model rigid
+   ```
+
+   Example output:
+
+   ```bash
+   Failure = []
+
+   [Counts]
+   Total = 1
+   Success = 1
+   Failure = 0
+
+   [Success]
+   ComponentIDs = [ "x3000c0s6b0",]
    ```
 
