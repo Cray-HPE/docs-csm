@@ -15,10 +15,3 @@ https://rgw-vip.local
 The RGW administrative interface \(`radosgw-admin`\) is available on non-compute nodes \(NCNs\).
 
 
-### Table of Contents
-
-Use the following procedures to manage artifacts with S3.
-
-- [Manage Artifacts with the Cray CLI](Manage_Artifacts_with_the_Cray_CLI.md)
-- [Use S3 Libraries and Clients](Use_S3_Libraries_and_Clients.md)
-- [Generate Temporary S3 Credentials](Generate_Temporary_S3_Credentials.md)

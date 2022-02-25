@@ -7,6 +7,8 @@ This document provides troubleshooting information for services and functionalit
     * [Hardware Discovery](#known-issues-hardware-discovery)
     * [initrd.img.xz not found](#initrd-not-found)
     * [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
+    * [BOS/BOA Incorrect command is output to rerun a failed operation.](known_issues/incorrect_output_for_bos_command_rerun.md)
+    * [CFS Sessions are Stuck in a Pending State](known_issues/cfs_sessions_stuck_in_pending.md)
  * Kubernetes troubleshooting
     * [General Kubernetes Commands for Troubleshooting](./kubernetes/Kubernetes_Troubleshooting_Information.md)
     * [Kubernetes Log File Locations](./kubernetes/Kubernetes_Log_File_Locations.md)

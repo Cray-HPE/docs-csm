@@ -25,8 +25,8 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
 
     Boot preparation information for other product streams can be found in the following locations:
 
-    -   UANs: refer to the UAN product stream repository and search for the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
-    -   Cray Operating System \(COS\): refer to the COS product stream repository and search for the "Create a Boot Session Template" header in the "Install or Upgrade COS" procedure.
+    -   UANs: Refer to the UAN product stream repository and search for the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
+    -   Cray Operating System \(COS\): Refer to the "Create a Boot Session Template" header in the "Boot COS" procedure in the COS product stream documentation.
 
 
 ### CPS
@@ -207,15 +207,22 @@ Data is repopulated in BSS when the REDS init job is run.
     1.  Resubscribe all compute nodes.
 
         ```bash
-        ncn-w001# pdsh -w nid00[0-9][0-9][0-9]-nmn "systemctl restart cray-dvs-orca"
+        ncn-m001# TMPFILE=$(mktemp)
+        ncn-m001# sat status --no-borders --no-headings | grep Ready | grep Compute | awk '{printf("nid%06d-nmn\n",$3);}' > $TMPFILE
+
+        ncn-m001# pdsh -w ^${TMPFILE} "systemctl restart cray-dvs-orca"
+
+        ncn-m001# rm -rf $TMPFILE
         ```
 
     2.  Resubscribe the NCNs.
 
         ```bash
-        ncn-w001# pdsh -w ncn[ws]00[0-4]-can.local "systemctl restart cray-dvs-orca"
+        ncn-m001# pdsh -w ncn-w00[0-4]-can.local "systemctl restart cray-dvs-orca"
+        ncn-m001# pdsh -w ncn-s00[0-4]-can.local "systemctl restart cray-dvs-orca"
         ```
 
+        Note: on larger systems, [0-4] may have to be a larger range.
 
 
 

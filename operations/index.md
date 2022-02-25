@@ -1,10 +1,10 @@
-# CSM Operational Activities
+# Cray System Management (CSM) Administration Guide
 
 The Cray System Management (CSM) operational activities are administrative procedures required to operate an HPE Cray EX system with CSM software installed.
 
 The following administrative topics can be found in this guide:
 
-- [CSM Operational Activities](#csm-operational-activities)
+- [Cray System Management (CSM) Administration Guide](#cray-system-management-csm-administration-guide)
     - [CSM Product Management](#csm-product-management)
   - [Image Management](#image-management)
   - [Boot Orchestration](#boot-orchestration)
@@ -26,7 +26,6 @@ The following administrative topics can be found in this guide:
   - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
   - [Hardware Management (HM) Collector](#hardware-management-hm-collector)
   - [Node Management](#node-management)
-  - [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
   - [Network](#network)
     - [Management Network](#management-network)
     - [Customer Access Network (CAN)](#customer-access-network-can)
@@ -45,11 +44,11 @@ The following administrative topics can be found in this guide:
    * [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
    * [Configure the Cray Command Line Interface (cray CLI)](configure_cray_cli.md)
    * [Change Passwords and Credentials](CSM_product_management/Change_Passwords_and_Credentials.md)
-   * [Manage a Configuration with CFS](CSM_product_management/Manage_a_Configuration_with_CFS.md)
+   * [Configure Non-Compute Nodes with CFS](CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md)
+   * [Perform NCN Personalization](CSM_product_management/Perform_NCN_Personalization.md)
    * [Access the LiveCD USB Device After Reboot](Access_LiveCD_USB_Device_After_Reboot.md)
    * [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
    * [Validate Signed RPMs](CSM_product_management/Validate_Signed_RPMs.md)
-
 
 <a name="image-management"></a>
 
@@ -65,7 +64,6 @@ Build and customize image recipes with the Image Management Service (IMS).
    * [Customize an Image Root Using IMS](image_management/Customize_an_Image_Root_Using_IMS.md)
      * [Create UAN Boot Images](image_management/Create_UAN_Boot_Images.md)
      * [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
-     * [Customize an Image Root to Install Singularity](image_management/Customize_an_Image_Root_to_Install_Singularity.md)
    * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
 
 <a name="boot-orchestration"></a>
@@ -313,6 +311,14 @@ Mechanisms used by the system to ensure the security and authentication of inter
       *   [Update NCN Passwords](security_and_authentication/Update_NCN_Passwords.md)
       *   [Change Root Passwords for Compute Nodes](security_and_authentication/Change_Root_Passwords_for_Compute_Nodes.md)
       *   [Change NCN Image Root Password and SSH Keys](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
+      *   [Change EX Liquid-Cooled Cabinet Global Default Password](security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
+      *   [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](security_and_authentication/Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md)
+      *   [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
+      *   [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md)
+      *   [Change Air-Cooled Node BMC Credentials](security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md)
+      *   [Change SMNP Credentials on Leaf Switches](security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md)
+      *   [Update Default ServerTech PDU Credentials used by the Redfish Translation Service](security_and_authentication/Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md)
+      *   [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
    *   [SSH Keys](security_and_authentication/SSH_Keys.md)
    *   [Authenticate an Account with the Command Line](security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md)
    *   [Default Keycloak Realms, Accounts, and Clients](security_and_authentication/Default_Keycloak_Realms_Accounts_and_Clients.md)
@@ -354,6 +360,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
        *   [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
    *   [Troubleshoot SPIRE Failing to Start on NCNs](security_and_authentication/Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md)
    *   [API Authorization](security_and_authentication/API_Authorization.md)
+   *   [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
 
 
 <a name="resiliency"></a>
@@ -503,8 +510,8 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Add a Standard Rack Node](node_management/Add_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node](node_management/Move_a_Standard_Rack_Node.md)
     * [Move a Standard Rack Node (Same Rack/Same HSN Ports)](node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
+    * [Verify Node Removal](node_management/Verify_Node_Removal.md)
   * [Clear Space in Root File System on Worker Nodes](node_management/Clear_Space_in_Root_File_System_on_Worker_Nodes.md)
-  * [Manually Wipe Boot Configuration on Nodes to be Reinstalled](node_management/Manually_Wipe_Boot_Configuration_on_Nodes_to_be_Reinstalled.md)
   * [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
   * [Reset Credentials on Redfish Devices](node_management/Reset_Credentials_on_Redfish_Devices_for_Reinstallation.md)
   * [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs.md)
@@ -513,9 +520,8 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Launch a Virtual KVM on Gigabyte Servers](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Servers.md)
   * [Launch a Virtual KVM on Intel Servers](node_management/Launch_a_Virtual_KVM_on_Intel_Servers.md)
   * [Change Java Security Settings](node_management/Change_Java_Security_Settings.md)
-  * [Verify Accuracy of the System Clock](node_management/Verify_Accuracy_of_the_System_Clock.md)
   * [Configuration of NCN Bonding](node_management/Configuration_of_NCN_Bonding.md)
-    * [Change Interfaces in the Bond](node_management/Change_Interfaces_in_the_Bond.md)
+    * [Change Settings in the Bond](node_management/Change_Settings_in_the_Bond.md)
     * [Troubleshoot Interfaces with IP Address Issues](node_management/Troubleshoot_Interfaces_with_IP_Address_Issues.md)
   * [Troubleshoot Loss of Console Connections and Logs on Gigabyte Nodes](node_management/Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
   * [Check the BMC Failover Mode](node_management/Check_the_BMC_Failover_Mode.md)
@@ -526,20 +532,6 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Enable Passwordless Connections to Liquid Cooled Node BMCs](node_management/Enable_Passwordless_Connections_to_Liquid_Cooled_Node_BMCs.md)
     * [View BIOS Logs for Liquid Cooled Nodes](node_management/View_BIOS_Logs_for_Liquid_Cooled_Nodes.md)
   * [Configure NTP on NCNs](node_management/Configure_NTP_on_NCNs.md)
-
-
-<a name="reds"></a>
-
-## River Endpoint Discovery Service (REDS)
-
-The River Endpoint Discovery Service \(REDS\) performs geolocation and initialization of compute nodes, based on a mapping file that is provided with each system.
-
-  * [Configure a Management Switch for REDS](river_endpoint_discovery_service/Configure_a_Management_Switch_for_REDS.md)
-  * [Initialize and Geolocate Nodes](river_endpoint_discovery_service/Initialize_and_Geolocate_Nodes.md)
-  * [Verify Node Removal](river_endpoint_discovery_service/Verify_Node_Removal.md)
-  * [Troubleshoot Common REDS Issues](river_endpoint_discovery_service/Troubleshoot_Common_REDS_Issues.md)
-    * [Troubleshot Common Error Messages in REDS Logs](river_endpoint_discovery_service/Troubleshoot_Common_Error_Messages_in_REDS_Logs.md)
-    * [Clear State and Restart REDS](river_endpoint_discovery_service/Clear_State_and_Restart_REDS.md)
 
 
 <a name="network"></a>
@@ -600,7 +592,7 @@ The central DNS infrastructure provides the structural networking hierarchy and 
   * [Manage the DNS Unbound Resolver](network/dns/Manage_the_DNS_Unbound_Resolver.md)
   * [Enable ncsd on UANs](network/dns/Enable_ncsd_on_UANs.md)
   * [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
-  * [Troubleshoot DNS Configuration Issues](network/dns/Troubleshoot_DNS_Configuration_Issues.md)
+  * [Troubleshoot PowerDNS](network/dns/Troubleshoot_PowerDNS.md)
 
 
 <a name="external-dns"></a>

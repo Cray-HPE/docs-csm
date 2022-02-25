@@ -103,7 +103,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-1. Set up the site-link, enabling SSH to work. You can reconnect with SSH after this step.
+1. <a name="set-up-site-link"></a>Set up the site-link, enabling SSH to work. You can reconnect with SSH after this step.
    > **`NOTICE REGARDING DHCP`** If your site's network authority or network administrator has already provisioned an IPv4 address for your master node(s) external NIC(s), **then skip this step**.
 
    1. Setup Variables.

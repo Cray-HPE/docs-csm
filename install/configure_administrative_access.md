@@ -13,7 +13,7 @@ BMC/controller passwords.
    1. [Configure the Cray Command Line Interface (cray CLI)](#configure_cray_cli)
    1. [Lock Management Nodes](#lock_management_nodes)
    1. [Configure BMC and Controller Parameters with SCSD](#configure_with_scsd)
-   1. [Manage a Configuration with CFS](#manage_a_configuration_with_CFS)
+   1. [Configure Non-compute Nodes with CFS](#configure-ncns)
    1. [Upload Olympus BMC Recovery Firmware into TFTP server](#cray_upload_recovery_images)
    1. [Next Topic](#next-topic)
 
@@ -59,33 +59,30 @@ BMC/controller passwords.
    <a name="configure_with_scsd"></a>
    1. Configure BMC and Controller Parameters with SCSD
 
+      Note: If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this step can be skipped.
+
       The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters for
       components in liquid-cooled cabinets. At this point in the install, SCSD should be used to set the
       SSH key in the node controllers (BMCs) to enable troubleshooting. If any of the nodes fail to power
       down or power up as part of the compute node booting process, it may be necessary to look at the logs
       on the BMC for node power down or node power up.
 
-      Note: If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this procedure can be skipped.
-
       See [Configure BMC and Controller Parameters with SCSD](../operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md)
-   <a name="manage_a_configuration_with_CFS"></a>
-   1. Manage a Configuration with CFS
+   <a name="configure-ncns"></a>
+   1. Configure Non-compute Nodes with CFS
 
-      The Configuration Framework Service (CFS) is used to apply post-boot configuration to all types of nodes.
-      Many of the software products installed on an HPE Cray EX system provide their own layer of configuration to be applied
-      by CFS either pre-boot or post-boot. When this configuration is applied post-boot to the management nodes, it is called
-      "NCN personalization". The CSM layer of configuration should be configured now, but this reference link does include
-      information about the layers from other software products which are installed after CSM during a first time installation
-      of software.
+      Non-compute Nodes (NCN) need to be configured after booting for administrative access, security, and other
+      purposes. The [Configuration Framework Service (CFS)](../operations/configuration_management/Configuration_Management.md)
+      is used to apply post-boot configuration in a decoupled, layered manner. Individual software products including
+      CSM provide one or more layers of configuration in a process called "NCN personalization".
 
-      See [Manage a Configuration with CFS](../operations/CSM_product_management/Manage_a_Configuration_with_CFS.md)
+      See [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md)
    <a name="cray_upload_recovery_images"></a>
    1. Upload Olympus BMC Recovery Firmware into TFTP server
 
       The Olympus hardware (NodeBMCs, ChassisBMCs, RouterBMCs) needs to have recovery firmware loaded to the cray-tftp server in case the BMC loses its firmware. The BMCs are configured to load a recovery firmware from a TFTP server. This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.
 
       See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
-
    <a name="next-topic"></a>
    1. Next Topic
 

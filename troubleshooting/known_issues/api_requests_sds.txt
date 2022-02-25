@@ -1,0 +1,54 @@
+# API request failures due to "TLS error: Secret is not supplied by SDS"
+
+There is a known issue where Istio's Envoy processes sometimes stop allowing outbound connections. This causes requests to fail. Depending on which Pod is affected the failures can show up as intermittent API request failures or as the failure of a particular API request.
+
+## Symptoms
+
+This may appear to clients as either of the following:
+
+- When making any REST API call, using either cURL or the `cray` CLI, some responses are a `503 Service Unavailable` error while others are successful.
+- A service running in the Shasta cluster is unable to make outbound requests.
+
+In either of these cases, the Envoy container will have a line similar to the following in its access log:
+
+```
+[2021-10-29T20:28:11.709Z] "POST /apis/dhcp-kea HTTP/2" 503 UF,URX "-" "TLS error: Secret is not supplied by SDS" 55 91 61 - "10.32.0.1" "curl/7.66.0" "aa675f53-6b77-470e-9ed7-825215784bf7" "api-gw-service-nmn.local" "10.42.0.42:8000" outbound|8000||cray-dhcp-kea-api.services.svc.cluster.local - 10.36.0.84:443 10.32.0.1:41865 api-gw-service-nmn.local -
+```
+
+The line will include `503 UF,URX` and `"TLS error: Secret is not supplied by SDS"`.
+
+The Envoy container is typically named `istio-proxy`, it runs as a sidecar for the Pods running in the Kubernetes cluster for Pods that are part of the Istio mesh. For these Pods, the logs can be viewed by running a command like:
+
+```
+ncn-m# kubectl get pods -n services -c istio-proxy cray-cfs-batcher-94877b679-lmhqf | grep SDS
+[2021-10-26T22:12:32.362Z] "GET /v2/sessions HTTP/1.1" 503 UF,URX "-" "TLS error: Secret is not supplied by SDS" 0 91 45 - "-" "python-requests/2.22.0" "94bcc7bd-b4ac-452b-8fa3-a296d9212833" "cray-cfs-api" "10.39.0.130:80" outbound|80||cray-cfs-api.services.svc.cluster.local - 10.16.104.208:80 10.39.0.140:36962 - default
+```
+
+In the case of the istio-ingressgateway Pods in the `istio-system` namespace, the Envoy container is the only container. The logs can be viewed by running a command similar to the following:
+
+```
+ncn-m# kubectl get pods -n istio-system -owide
+NAME                                       READY   STATUS    RESTARTS   AGE   IP           NODE       NOMINATED NODE   READINESS GATES
+istio-ingressgateway-6d66677d95-4hd8l      1/1     Running   0          46m   10.35.0.38   ncn-w004   <none>           <none>
+istio-ingressgateway-6d66677d95-6g7rj      1/1     Running   0          46m   10.42.0.35   ncn-w002   <none>           <none>
+istio-ingressgateway-6d66677d95-s2f67      1/1     Running   0          46m   10.36.0.84   ncn-w001   <none>           <none>
+
+ncn-m# kubectl logs -n istio-system istio-ingressgateway-6d66677d95-s2f67 | grep SDS
+[2021-10-29T20:28:11.709Z] "POST /apis/dhcp-kea HTTP/2" 503 UF,URX "-" "TLS error: Secret is not supplied by SDS" 55 91 61 - "10.32.0.1" "curl/7.66.0" "aa675f53-6b77-470e-9ed7-825215784bf7" "api-gw-service-nmn.local" "10.42.0.42:8000" outbound|8000||cray-dhcp-kea-api.services.svc.cluster.local - 10.36.0.84:443 10.32.0.1:41865 api-gw-service-nmn.local -
+```
+
+## Recovery
+
+Restart the Pod with the failing Envoy container. When there's a single replica of the Pod, the Pod can be deleted and Kubernetes will schedule a new instance to start up in its place:
+
+```
+ncn-m# kubectl delete pod -n services cray-cfs-batcher-94877b679-lmhqf
+```
+
+When there are multiple replicas of a Deployment or StatefulSet, it's best to do a rolling restart by running a command similar to the following:
+
+```
+ncn-m# kubectl rollout restart -n istio-system deployment istio-ingressgateway
+```
+
+The Pods will be restarted in a rolling fashion. This may take a few minutes.

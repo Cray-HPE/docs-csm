@@ -170,39 +170,19 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
     The points below will cover the data in the table above for Member, Role, State, and Lag in MB columns.
 
     For each Postgres cluster:
-      - Verify there are three cluster members (with the exception of sma-postgres-cluster where there should be only two cluster members).
+      1. Verify there are three cluster members (with the exception of sma-postgres-cluster where there should be only two cluster members).
       If the number of cluster members is not correct, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#missing).
 
-      - Verify there is one cluster member with the Leader Role and log output indicates expected status. Such as:
-         ```bash
-         i am the leader with the lock
-         ```
-         For example:
-         ```bash
-         --- Logs for services Leader Pod cray-sls-postgres-0 ---
-            ERROR: get_cluster
-            INFO: establishing a new patroni connection to the postgres cluster
-            INFO: initialized a new cluster
-            INFO: Lock owner: cray-sls-postgres-0; I am cray-sls-postgres-0
-            INFO: Lock owner: None; I am cray-sls-postgres-0
-            INFO: no action. i am the leader with the lock
-            INFO: No PostgreSQL configuration items changed, nothing to reload.
-            INFO: postmaster pid=87
-            INFO: running post_bootstrap
-            INFO: trying to bootstrap a new cluster
-         ```
-         Errors reported prior to the lock status can be ignored:
-         - **ERROR: get_cluster**
-         - **ERROR: ObjectCache.run ProtocolError('Connection broken: IncompleteRead(0 bytes read)', IncompleteRead(0 bytes read))**
-         - **ERROR: failed to update leader lock** 
-         
-         If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
+      2. Verify there is one cluster member with the Leader Role. 
+      If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
 
-      - Verify the State of each cluster member is 'running'.
+      3. Verify the State of each cluster member is 'running'.
       If any cluster members are found to be in a non 'running' state (such as 'start failed'), refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#diskfull).
 
-      - Verify there is no large or growing lag.
+      4. Verify there is no large or growing lag.
       If any cluster members are found to have lag or lag is 'unknown', refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#lag).
+
+      - **If all the above four checks indicate postgres clusters are healthy, the log output for the postgres pods can be ignored.** If possible health issues exist, re-check the health by re-running the ncnPostgresHealthChecks script in 15 minutes. If health issues persist, then review the log output and consult [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md). During NCN reboots, temporary errors related to re-election are common but should resolve upon the re-check.
 
 1. Check that all Kubernetes Postgres pods have a STATUS of Running.
     ```bash
@@ -452,7 +432,7 @@ There are multiple [Goss](https://github.com/aelsabbahy/goss) test suites availa
 
 Run the NCN health checks against the three different types of nodes with the following commands:
 
-**IMPORTANT:** These tests may only be successful while booted into the PIT node. Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
+**IMPORTANT:** These tests should only be run while booted into the PIT node. Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
 
 
 ```bash
@@ -475,7 +455,6 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
   - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * K8S Test: Kubernetes Velero No Failed Backups
   - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the `velero` command to delete backups from a Kubernetes node to clear this situation.
-
 
 <a name="optional-check-of-system-management-monitoring-tools"></a>
 ### 1.9 Optional Check of System Management Monitoring Tools
@@ -576,6 +555,18 @@ __For each__ of the BMCs that show up in either of mismatch lists use the follow
    ```bash
    =============== BMCs in SLS not in HSM components ===============
    x3000c0s1b0  # No mgmt port association
+   ```
+
+* The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depedning on the state of the system when the `hsm_discovery_verify.sh` script is ran. If the system is currently going through the process of installation, then this is an expected mistmatch as the [Preapre Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet. 
+   > For more information refer to [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
+
+   Example mistmatch for the BMC of a HPE Apollo XL654D:
+   ```bash
+   =============== BMCs in SLS not in HSM components ===============
+   x3000c0s30b1
+
+   =============== BMCs in SLS not in HSM Redfish Endpoints ===============
+   x3000c0s30b1
    ```
 
 * Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel server blades can be ignored. Gigabyte server blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.

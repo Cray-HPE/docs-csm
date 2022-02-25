@@ -160,7 +160,7 @@ FAS operations will have one of the following states:
 - failed - An update was attempted, but FAS is unable to tell that the update succeeded in the allotted time.
 - noOperation - Firmware is at the correct version according to the images loaded into FAS.
 - noSolution - FAS does not have a suitable image for an update.
-- aborted - the operation was aborted before it could determine if it was successful.  If aborted after the update command was sent to the node, the node may still have updated.
+- aborted - the operation was aborted before it could determine if it was successful. If aborted after the update command was sent to the node, the node may still have updated.
 
 <a name="firmware-images"></a>
 

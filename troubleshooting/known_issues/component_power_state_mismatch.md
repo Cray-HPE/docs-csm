@@ -3,8 +3,8 @@ Because of various hardware or communication issues, the node state reported by 
 
 ## Possible Causes
 Possible reasons the power state got out of sync include but are not limited to:
-* A known issue with Gigabyte nodes where power redfish events can get sent out of order when rebooting nodes.
-* Network issues preventing the flow of redfish events (telemetry will also be affected)
+* A known issue with Gigabyte nodes where power Redfish events can get sent out of order when rebooting nodes.
+* Network issues preventing the flow of Redfish events (telemetry will also be affected)
 * Issues with the cray-hms-hmcollector pod
 
 ## Fix

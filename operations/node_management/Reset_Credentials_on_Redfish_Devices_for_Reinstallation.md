@@ -8,9 +8,9 @@ Administrative privileges are required.
 
 ### Procedure
 
-1.  Create a SCSD payload file with the default credentials for the redfish devices that have been changed from the defaults.
+1.  Create a SCSD payload file with the default credentials for the Redfish devices that have been changed from the defaults.
 
-    The following example shows a payload file that will set the devices \`x0c0s0b0\` and \`x0c0s1b0\` back to the default redfish credentials.
+    The following example shows a payload file that will set the devices \`x0c0s0b0\` and \`x0c0s1b0\` back to the default Redfish credentials.
 
     ```json
     {
