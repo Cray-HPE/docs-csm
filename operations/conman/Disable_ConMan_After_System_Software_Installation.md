@@ -1,80 +1,77 @@
-## Disable ConMan After the System Software Installation
+# Disable ConMan After the System Software Installation
 
-The ConMan utility is enabled by default. This procedure provides instructions for disabling it after the system software has been installed.
+The ConMan utility is enabled by default. The first procedure provides instructions for disabling it after the system software has been installed, and the second procedure provides instructions on how to later re-enable it.
 
-### Prerequisites
+## Prerequisites
 
 This procedure requires administrative privileges.
 
-### Procedure
+## Disable Procedure
 
-1. Log on to a non-compute node (NCN) that acts as a Kubernetes master. This procedure assumes that it is being carried out on an NCN acting as a Kubernetes master.
+**Note:** this procedure has changed since the CSM 0.9 release.
 
-2. Scale the cray-console-operator pods to 0 replicas.
+1. Log on to a Kubernetes master or worker node.
 
+1. Scale the `cray-console-operator` pods to 0 replicas.
+
+    ```bash
+    ncn# kubectl -n services scale --replicas=0 deployment/cray-console-operator
     ```
-    ncn-m001# kubectl -n services scale --replicas=0 deployment/cray-console-operator
-    ```
-
-    The following output is expected:
-
-    ```
+    
+    Example output:
+    ```text
     deployment.apps/cray-console-operator scaled
     ```
 
-3. Verify the cray-console-operator service is no longer running.
+1. Verify the `cray-console-operator` service is no longer running.
 
-    ```
-    ncn-m001# kubectl -n services get pods | grep console-operator
-    ```
+    The following command will give no output when the service is no longer running.
 
-    No output is expected if the service is no longer running.
-
-4. Scale the cray-console-node pods to 0 replicas.
-
-    ```
-    ncn-m001# kubectl -n services scale --replicas=0 statefulset/cray-console-node
+    ```bash
+    ncn# kubectl -n services get pods | grep console-operator
     ```
 
-    The following output is expected:
+1. Scale the `cray-console-node` pods to 0 replicas.
 
+    ```bash
+    ncn# kubectl -n services scale --replicas=0 statefulset/cray-console-node
     ```
+    
+    Example output:
+    ```text
     statefulset.apps/cray-console-node scaled
     ```
 
-5. Verify the cray-console-node service is no longer running.
+1. Verify the `cray-console-node` service is no longer running.
 
-    ```
-    ncn-m001# kubectl -n services get pods | grep console-node
-    ```
+    The following command will give no output when the service is no longer running.
 
-    No output is expected if the service is no longer running.
-
-6. Restore the services.
-
-    Scale the cray-console-operator service back to 1 replica to restore the service at a later time. It will scale the cray-console-node pods after it starts operation.
-
-    ```
-    ncn-m001# kubectl -n services scale --replicas=1 deployment/cray-console-operator
+    ```bash
+    ncn# kubectl -n services get pods | grep console-node
     ```
 
-    The following output is expected:
+## Re-enable Procedure
 
+1. Scale the `cray-console-operator` service back to 1 replica. It will scale the `cray-console-node` pods after it starts operation.
+
+    ```bash
+    ncn# kubectl -n services scale --replicas=1 deployment/cray-console-operator
     ```
+    
+    Example output:
+    ```text
     deployment.apps/cray-console-operator scaled
     ```
 
-7. Verify services are running again.
+1. Verify services are running again.
 
+    ```bash
+    ncn# kubectl -n services get pods | grep -e console-operator -e console-node
     ```
-    ncn-m001# kubectl -n services get pods | grep -e console-operator -e console-node
-    ```
-
+    
     Example output:
-
-    ```
+    ```text
     cray-console-node-0                      3/3     Running      0      8m44s
     cray-console-node-1                      3/3     Running      0      8m18s
     cray-console-operator-79bf95964-lngpz    2/2     Running      0      9m29s
     ```
-
