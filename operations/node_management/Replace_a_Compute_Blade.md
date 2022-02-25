@@ -18,7 +18,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 3. Use Boot Orchestration Services (BOS) to shut down the affected nodes. Specify the appropriate BOS template for the node type.
 
    ```bash
-   ncn-m001# cray bos v1 session create --template-uuid BOS_TEMPLATE \
+   ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE \
    --operation shutdown --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
    ```
 
@@ -75,30 +75,30 @@ Replace an HPE Cray EX liquid-cooled compute blade.
       ```bash
       ncn-m001# cray hsm inventory ethernetInterfaces list \
       --component-id x1000c3s0b0n0 --format json
-      	[
-      		{
-      			"ID": "b42e99be1a2b",
-      			"Description": "Ethernet Interface Lan1",
-      			"MACAddress": "b4:2e:99:be:1a:2b",
-      			"LastUpdate": "2021-01-27T00:07:08.658927Z",
-      			"ComponentID": "x1000c3s0b0n0",
-      			"Type": "Node",
-      			"IPAddresses": [
-      			{
-      				"IPAddress": "10.252.1.26"
-      			}
-      			]
-      		},
-      		{
-      			"ID": "b42e99be1a2c",
-      			"Description": "Ethernet Interface Lan2",
-      			"MACAddress": "b4:2e:99:be:1a:2c",
-      			"LastUpdate": "2021-01-26T22:43:10.593193Z",
-      			"ComponentID": "x1000c3s0b0n0",
-      			"Type": "Node",
-      			"IPAddresses": []
-      		}
-      	]
+        [
+            {
+                "ID": "b42e99be1a2b",
+                "Description": "Ethernet Interface Lan1",
+                "MACAddress": "b4:2e:99:be:1a:2b",
+                "LastUpdate": "2021-01-27T00:07:08.658927Z",
+                "ComponentID": "x1000c3s0b0n0",
+                "Type": "Node",
+                "IPAddresses": [
+                {
+                    "IPAddress": "10.252.1.26"
+                }
+                ]
+            },
+            {
+                "ID": "b42e99be1a2c",
+                "Description": "Ethernet Interface Lan2",
+                "MACAddress": "b4:2e:99:be:1a:2c",
+                "LastUpdate": "2021-01-26T22:43:10.593193Z",
+                "ComponentID": "x1000c3s0b0n0",
+                "Type": "Node",
+                "IPAddresses": []
+            }
+        ]
       ```
 
       2. Delete each Node NIC MAC address the Hardware State Manager (HSM) Ethernet interfaces table.
@@ -143,6 +143,8 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    x1000c3s0b0
    ```
 
+   The updated component name(s) (xnames) will be returned.
+
 10. Wait for 3-5 minutes for the blade to power on and the node BMCs to be discovered.
 
 11. Verify that the affected nodes are enabled in the HSM.
@@ -159,24 +161,24 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe x1000c3s0b0 --format json
-    	{
-    		"ID": "x1000c3s0b0",
-    		"Type": "NodeBMC",
-    		"Hostname": "x1000c3s0b0",
-    		"Domain": "",
-    		"FQDN": "x1000c3s0b0",
-    		"Enabled": true,
-    		"UUID": "e005dd6e-debf-0010-e803-b42e99be1a2d",
-    		"User": "root",
-    		"Password": "",
-    		"MACAddr": "b42e99be1a2d",
-    		"RediscoverOnUpdate": true,
-    		"DiscoveryInfo": {
-    			"LastDiscoveryAttempt": "2021-01-29T16:15:37.643327Z",
-    			"LastDiscoveryStatus": "DiscoverOK",
-    			"RedfishVersion": "1.7.0"
-    		}
-    	}
+        {
+            "ID": "x1000c3s0b0",
+            "Type": "NodeBMC",
+            "Hostname": "x1000c3s0b0",
+            "Domain": "",
+            "FQDN": "x1000c3s0b0",
+            "Enabled": true,
+            "UUID": "e005dd6e-debf-0010-e803-b42e99be1a2d",
+            "User": "root",
+            "Password": "",
+            "MACAddr": "b42e99be1a2d",
+            "RediscoverOnUpdate": true,
+            "DiscoveryInfo": {
+                "LastDiscoveryAttempt": "2021-01-29T16:15:37.643327Z",
+                "LastDiscoveryStatus": "DiscoverOK",
+                "RedfishVersion": "1.7.0"
+            }
+        }
     ```
 
     - When `LastDiscoveryStatus` displays as `DiscoverOK`, the node BMC has been successfully discovered.
@@ -242,7 +244,8 @@ Replace an HPE Cray EX liquid-cooled compute blade.
     Specify the appropriate BOS template for the node type.
 
     ```bash
-    ncn-m001# cray bos v1 session create --template-uuid BOS_TEMPLATE --operation reboot --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
+    ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot \
+    --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
     ```
 
 

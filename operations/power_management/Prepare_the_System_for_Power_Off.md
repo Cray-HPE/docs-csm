@@ -202,7 +202,7 @@ An authentication token is required to access the API gateway and to use the `sa
     1.   Identify the BOS Sessions and associated BOA Kubernetes jobs to delete.
 
          Determine which BOS session(s) to cancel. To cancel a BOS session, kill
-	 its associated Boot Orchestration Agent (BOA) Kubernetes job.
+     its associated Boot Orchestration Agent (BOA) Kubernetes job.
          
          **Method #1: Use BOS Session Status**
 
@@ -215,19 +215,19 @@ An authentication token is required to access the API gateway and to use the `sa
          for ID in $(cray bos session list --format json | jq .[] | tr -d \"); do
              result=$(cray bos session status list --format json $ID | jq .metadata.complete)
              if [[ $result == "false" ]]; then
-                 cray bos v1 session describe --format json $ID | jq .boa_job_name | tr -d \";
+                 cray bos session describe --format json $ID | jq .boa_job_name | tr -d \";
              fi
          done
          ````
-	 
+     
          These IDs are the BOA Kubernetes job IDs. Delete these to cancel the BOS
-	 session.
+     session.
          
          However, the BOS status output can be buggy, and it may misidentify BOS
-	 sessions as still running when they have actually finished.
-	 If you only want to delete currently running jobs, then use Method #2. 
+     sessions as still running when they have actually finished.
+     If you only want to delete currently running jobs, then use Method #2. 
          Method #2 is a more reliable method for identifying running BOA jobs
-	 because it interacts directly with the BOA Kubernetes job.
+     because it interacts directly with the BOA Kubernetes job.
          
          **Method #2: Look at BOA Kubernetes jobs**
          
@@ -255,13 +255,13 @@ An authentication token is required to access the API gateway and to use the `sa
 
     2.   Clean up prior to BOA job deletion.
 
-         The BOA pod mounts a ConfigMap under the name ‘boot-session’ at the directory /mnt/boot_session inside the pod. This ConfigMap has a random UUID name like e0543eb5-3445-4ee0-93ec-c53e3d1832ce.
+         The BOA pod mounts a ConfigMap under the name `boot-session` at the directory `/mnt/boot_session` inside the pod. This ConfigMap has a random UUID name like `e0543eb5-3445-4ee0-93ec-c53e3d1832ce`.
          Prior to deleting a BOA job, delete its ConfigMap.
          Find the BOA job's ConfigMap with the following command:
          ```bash
          ncn-w001# kubectl -n services describe job <BOA Job ID> |grep ConfigMap -A 1 -B 1
          ```
-	 
+     
          Example:
          ```bash
          ncn-w001# kubectl -n services describe job boa-0216d2d9-b2bc-41b0-960d-165d2af7a742 |grep ConfigMap -A 1 -B 1
@@ -301,16 +301,16 @@ An authentication token is required to access the API gateway and to use the `sa
 
     4.   Delete the BOS session.
          BOS keeps track of sessions in its database. These entries need to be deleted.
-	 Note, you found the BOS Session ID earlier, but it is also invariably the same
-	 as the BOA Job ID minus the prepended 'boa-' string.
+     Note, you found the BOS Session ID earlier, but it is also invariably the same
+     as the BOA Job ID minus the prepended 'boa-' string.
          Use the following command to delete the BOS database entry.
          ```bash
-         cray bos v1 session delete <session ID>
+         ncn# cray bos session delete <session ID>
          ```
          
          Example:
          ```bash
-         ncn-w001# cray bos v1 session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
+         ncn# cray bos session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
          ```
 
 8.  Coordinate with the site to prevent new sessions from starting in the services listed.

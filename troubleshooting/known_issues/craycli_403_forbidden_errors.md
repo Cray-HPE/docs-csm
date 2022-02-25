@@ -6,7 +6,7 @@ There is a known issue where the keycloak configuration obtained from LDAP is in
 To recover from this situation, the following can be done. 
 
 1. Log into the Keycloak admin console. See [Access the Keycloak User Management UI](../../operations/security_and_authentication/Access_the_Keycloak_User_Management_UI.md)
-1. Delete the shasta-user-federation-ldap entry from the “User Federation” page.
+1. Delete the shasta-user-federation-ldap entry from the "User Federation" page.
 1. Wait three minutes for the configuration to resync.
 1. Check to see if the keycloak-users-localize job has completed.
    ```bash

@@ -7,7 +7,7 @@ This page provides directions on constructing the `switch_metadata.csv` file.
 This file is manually created to include information about all spine, leaf, CDU, and aggregation switches in the system.
 None of the Slingshot switches for the HSN should be included in this file.
 
-The file should have the following format, in ascending order by Xname:
+The file should have the following format, in ascending order by component name (xname):
 
 ```
 Switch Xname,Type,Brand

@@ -39,7 +39,7 @@ This procedure requires administrative privileges.
 
     4. Check that the BMC for this node is accessible from this worker.
 
-        The xname of the BMC is the same as the node, but with the node designation at the
+        The component name (xname) of the BMC is the same as the node, but with the node designation at the
         end removed. For example if the node is x3000c0s15b0n0, the BMC is x3000c0s15b0.
 
         ```

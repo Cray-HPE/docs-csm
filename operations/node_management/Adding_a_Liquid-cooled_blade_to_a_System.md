@@ -109,7 +109,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
     If the slot is powered on, then power the chassis slot off.
     ```
-    ncn-m001# cray capmc xname_off create --xnames x1005c3s0 --recursive true
+    ncn-m001# cray capmc component name (xname)_off create --xnames x1005c3s0 --recursive true
     ``` 
 
 4.  Install the the blade into the system into the desired location.
@@ -122,8 +122,8 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
                           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-### Preserve node xname to IP address mapping
-6.  **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.** When DVS is operating over the NMN, and a blade is being replaced the mapping of node xname to node IP address must be preserved. Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes). To prevent from Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
+### Preserve node component name (xname) to IP address mapping
+6.  **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.** When DVS is operating over the NMN and a blade is being replaced, the mapping of node component name (xname) to node IP address must be preserved. Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes). To prevent from Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
 
     1.  Create an `eth_interfaces` file that contains the interface IDs for the `Node Maintenance Network` entries for the destination blade location. If there has not been a blade previously in the destination location there may not be any Ethernet Interfaces to delete from HSM.
       
@@ -245,7 +245,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 11. Power on the chassis slot. The example powers on slot 0, chassis 3, in cabinet 1005.
 
     ```bash
-    ncn-m001# cray capmc xname_on create --xnames x1005c3s0 --recursive true
+    ncn-m001# cray capmc component name (xname)_on create --xnames x1005c3s0 --recursive true
     ```
 
 12. Wait at least 3 minutes for the blade to power on and the node controllers (BMCs) to be discovered.
@@ -345,13 +345,45 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
 #### Power on and boot the nodes
 
-16. Use boot orchestration to power on and boot the nodes. Specify the appropriate BOS template for the node type.
+Use boot orchestration to power on and boot the nodes. Specify the appropriate BOS template for the node type.
 
-    ```bash
-    ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-    ncn-m001# cray bos session create --template-uuid $BOS_TEMPLATE \
-      --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
-    ```
+16. Determine how the BOS Session template references compute hosts.
+    Typically, they are referenced by their "Compute" role. However, if they are referenced by xname, then these new nodes should added to the BOS Session template.
+      ```bash
+      ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+      ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json|jq '.boot_sets[] | select(.node_list)'
+      ```
+    If this query returns empty, then skip to sub-step 3.
+    If this query returns with data, then one or more boot sets within the BOS Session template reference nodes explicity by xname. Consider adding your new nodes to this list (sub-step 1) or adding them on the command line (sub-step 2).
+
+    1. Adding new nodes to your list.
+          1. Dump the current Session template.
+             ```bash
+             ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json > tmp.txt
+             ```	  
+          2. Edit the tmp.txt file adding the new nodes to the node_list.
+             ```bash
+             ncn-m001# vi tmp.txt
+             ```
+    2. Create the Session template.
+         1. The name of the Session template is determined by the name provided to the '--name' option on the command line. Use the current value of $BOS_TEMPLATE if you want to overwrite the existing Session template. If you want to use the current value, skip this sub-step and go on to sub-step 2. Otherwise, provide a different name for BOS_TEMPLATE which will be used the '--name' option. The name specified in tmp.txt is overridden by the value provided by the '--name' option.
+  	    ```bash
+	    ncn-m001# $BOS_TEMPLATE=<New Session Template name>
+	    ```
+	 2. Create the Session template.
+            ```bash	  
+            ncn-m001# cray bos sessiontemplate create --file tmp.txt --name $BOS_TEMPLATE
+            ```	  	  
+         3. Verify that the Session template contains the additional nodes and the proper name.
+            ```bash	  
+            ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json
+            ```	  	  
+	  
+    3. Boot the nodes.
+       ```bash
+       ncn-m001# cray bos session create --template-uuid $BOS_TEMPLATE \
+         --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+       ```
 
 #### Check firmware
 17. Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
