@@ -133,3 +133,6 @@ Only processes running the v15.2.8 image will be upgraded.  This will include `M
    Now the status of the cluster should show **HEALTH_OK**.  
 
    Please ***NOTE*** that this may take up to 30 seconds to apply and the health to return to **HEALTH_OK**.
+
+
+Once `Stage 4` upgrade is complete, proceed to [Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
