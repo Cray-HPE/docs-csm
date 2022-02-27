@@ -60,9 +60,11 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `vlan007`/CAN IP address t
 
         1. Install document RPM package:
 
+            > The install scripts will look for this RPM in `/root`, so it is important that you copy it there.
+
             ```bash
-            ncn-m002# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
-            ncn-m002# rpm -Uvh docs-csm-latest.noarch.rpm
+            ncn-m002# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm -P /root
+            ncn-m002# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
             ```
 
         1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release tarball.
@@ -87,10 +89,12 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `vlan007`/CAN IP address t
 
         1. Copy the docs-csm RPM package and CSM release tarball to `ncn-m002`.
 
+            > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
+
         1. Install document RPM package:
 
             ```bash
-            ncn-m002# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
+            ncn-m002# rpm -Uvh --force /root/docs-csm-*.noarch.rpm
             ```
 
         1. Set the `TAR_DIR` variable to the directory on `ncn-m002` containing the CSM release tarball.
@@ -128,7 +132,10 @@ After the above command has completed and pods have been restarted, execute the 
 
 ```bash
 ncn-m002# for i in `seq 3`; do echo "ncn-m00$i:"; kubectl get po -n kube-system kube-apiserver-ncn-m00${i} -o json | jq '.spec.containers[].image';   kubectl get po -n kube-system kube-controller-manager-ncn-m00${i} -o json | jq '.spec.containers[].image';   kubectl get po -n kube-system kube-scheduler-ncn-m00${i} -o json | jq '.spec.containers[].image'; done
+```
 
+Output should look like:
+```text
 ncn-m001:
 "k8s.gcr.io/kube-apiserver:v1.19.9"
 "docker.io/cray/kube-controller-manager:v1.19.9"
