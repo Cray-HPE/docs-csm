@@ -6,19 +6,20 @@
 
 1. Install latest document RPM package:
 
+    > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
+
     * Internet Connected
 
         ```bash
-        ncn-m001# cd /root/
-        ncn-m001# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm
-        ncn-m001# rpm -Uvh docs-csm-latest.noarch.rpm
+        ncn-m001# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm -P /root
+        ncn-m001# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
         ```
 
     * Air Gapped (replace the PATH_TO below with the location of the rpm)
 
         ```bash
         ncn-m001# cp [PATH_TO_docs-csm-*.noarch.rpm] /root
-        ncn-m001# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
+        ncn-m001# rpm -Uvh --force /root/docs-csm-*.noarch.rpm
         ```
 
 ## Stage 0.2 - Update SLS
@@ -44,16 +45,13 @@ At a minimum, answers to the following questions must be known prior to upgradin
 Several other flags in the migration script allow for user input, overrides and guidance to the upgrade process.  Taking time to review these options is important.  All current options can be seen by running:
 
 ```bash
-export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
-${DOCDIR}/sls_updater_csm_1.2.py --help
+ncn-m001# export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --help
 ```
 
-Example:
+Example output:
 
-```bash
-$ export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
-$ ${DOCDIR}/sls_updater_csm_1.2.py --help
-
+```text
 Usage: sls_updater_csm_1.2.py [OPTIONS]
 
   Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
@@ -88,32 +86,32 @@ Options:
 
 ### Retrieve SLS data as JSON
 
-Obtain a token:
+1. Obtain a token:
 
-```bash
-export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-```
+    ```bash
+    ncn-m001# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o    jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    ```
 
-Create a working directory:
+1. Create a working directory:
 
-```bash
-mkdir /root/sls_upgrade
-cd /root/sls_upgrade
-```
+    ```bash
+    ncn-m001# mkdir /root/sls_upgrade
+    ncn-m001# cd /root/sls_upgrade
+    ```
 
-Extract SLS data to a file:
+1. Extract SLS data to a file:
 
-```bash
-curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
-```
+    ```bash
+    ncn-m001# curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
+    ```
 
 ### Migrate SLS data JSON to CSM 1.2
 
 * Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
 ```bash
-export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
-${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+ncn-m001# export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
                          --bican-user-network-name CHN \
                          --customer-highspeed-network 5 10.103.11.192/26
 ```
@@ -121,8 +119,8 @@ ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
 * Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing external-dns entry.
 
 ```bash
-export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
-${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+ncn-m001# export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
                          --bican-user-network-name CAN \
                          --customer-access-network 6 10.103.15.192/26 \
                          --preserve-existing-subnet-for-cmn external-dns \
@@ -134,7 +132,7 @@ ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
 Upload migrated SLS file to SLS service:
 
 ```bash
-curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
+ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
 ```
 
 ## Stage 0.3 - Upgrade Management Network
