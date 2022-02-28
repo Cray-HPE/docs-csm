@@ -1,9 +1,9 @@
 # Mellanox lacp-individual limitations
 
-- Limitation
+## Description
 
-If you shut down a port while on an NCN via `ip link set dev mgmt0 down` and have lacp-individual running on either one or both the MLAG ports on a mellanox MLAG pair you will lose connection to that NCN.
+In some failover/maintenance scenarios admins may want to shutdown one port of the bond on an NCN.  Due to the way Mellanox handles `lacp-individual` mode the ports need to be shutdown from the switch instead of the NCN.
 
-- Workaround
+## Fix
 
 Shut down the port on the switch instead of the NCN.
