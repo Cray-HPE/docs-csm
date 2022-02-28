@@ -725,6 +725,37 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 
 After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IP addresses are incorrect on the switches. Follow the steps below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md) for more details on the BGP configuration.
 
+**`IMPORTANT:`** If the management switches are using CANU generated 1.0 (preconfig) this procedure should be skipped.
+
+* To check if the management switches are using the 1.0 (Preconfig) log into both spine switches and see if a `motd banner` exists that looks similar to the examples below.
+* The CSM version must be `1.0`.
+* The CANU version should not matter.
+
+Mellanox Example
+
+```text
+ncn-m001:~ # ssh admin@sw-spine-001
+NVIDIA Onyx Switch Management
+Password:
+Last login: Sat Feb 26 00:10:26 UTC 2022 from 10.252.1.5 on pts/0
+Number of total successful connections since last 1 days: 89
+
+###############################################################################
+# CSM version:  1.0
+# CANU version: 1.1.11
+###############################################################################
+```
+
+Aruba Example
+
+```text
+ncn-m001:~ # ssh admin@sw-spine-001
+###############################################################################
+# CSM version:  1.0
+# CANU version: 1.1.11
+###############################################################################
+```
+
 1. Make sure the SYSTEM_NAME variable is set to name of your system.
 
     ```bash
