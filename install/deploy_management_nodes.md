@@ -727,7 +727,7 @@ After the NCNs are booted, the BGP peers will need to be checked and updated if 
 
 **`IMPORTANT:`** If the management switches are using CANU generated 1.0 (preconfig) this procedure should be skipped.
 
-* To check if the management switches are using the 1.0 (Preconfig) log into both spine switches and see if a `motd banner` exists that looks similar to the examples below.
+* To check if the management switches are using the 1.0 (Preconfig) log into both spine switches and see if a `motd banner` exists and looks similar to the examples below.
 * The CSM version must be `1.0`.
 * The CANU version should not matter.
 
