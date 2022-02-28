@@ -60,9 +60,11 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use the `vlan007`/CAN IP addre
 
         1. Install the document RPM package:
 
+            > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
+
             ```bash
-            ncn-m002# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
-            ncn-m002# rpm -Uvh docs-csm-latest.noarch.rpm
+            ncn-m002# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm -P /root
+            ncn-m002# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
             ```
 
         1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release tarball.
@@ -87,10 +89,12 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use the `vlan007`/CAN IP addre
 
         1. Copy the docs-csm RPM package and CSM release tarball to `ncn-m002`.
 
-        1. Install document RPM package (replace the PATH_TO below with the location of the rpm):
+            > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
+
+        1. Install document RPM package
 
             ```bash
-            ncn-m002# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
+            ncn-m002# rpm -Uvh --force /root/docs-csm-*.noarch.rpm
             ```
 
         1. Set the `TAR_DIR` variable to the directory on `ncn-m002` containing the CSM release tarball.

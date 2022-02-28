@@ -2,16 +2,16 @@
 
 > **NOTE:** CSM-0.9.4 or later CSM 0.9.x is required in order to upgrade to CSM-1.0.1 (available with Shasta v1.5).
 >
-> **NOTE:** Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. 1.0.0 > 1.0.0-beta.19.
+> **NOTE:** Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. `1.0.0` > `1.0.0-beta.19`.
 >
 
 Use the following command can be used to check the CSM version on the system:
 
 ```bash
-ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
+ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm' | tee csm-version.txt
 ```
 
-This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-0.9.4 or CSM-0.9.5.
+This check will also be conducted in the `prerequisites.sh` script listed below and will fail if the system is not running CSM-0.9.4, CSM-0.9.5, or CSM-1.0.0.
 
 >**`IMPORTANT:`**
 > 
@@ -23,21 +23,22 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
 
 ## Stage 0.1 - Install latest docs RPM
 
-1. Install latest document RPM package:
+1. Copy the latest document RPM package to `/root` and install it.
+
+    The install scripts will look for this RPM in `/root`, so it is important that you copy it there.
 
     * Internet Connected
 
         ```bash
-        ncn-m001# cd /root/
-        ncn-m001# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
-        ncn-m001# rpm -Uvh docs-csm-latest.noarch.rpm
+        ncn-m001# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm -P /root
+        ncn-m001# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
         ```
 
     * Air Gapped (replace the PATH_TO below with the location of the rpm)
 
         ```bash
         ncn-m001# cp [PATH_TO_docs-csm-*.noarch.rpm] /root
-        ncn-m001# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
+        ncn-m001# rpm -Uvh --force /root/docs-csm-*.noarch.rpm
         ```
 
 ## Stage 0.2 - Update `customizations.yaml`
@@ -146,7 +147,7 @@ Perform these steps to update `customizations.yaml`:
 
 **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. 
 
-**IF** the upgrade `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
+**IF** the `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
 
 ## Stage 0.4 - Backup VCS Data
 
@@ -160,12 +161,10 @@ To prevent any possibility of losing Workload Manager configuration data or file
 
 ## Stage 0.6 - Update the Storage Node runcmds for reboots
 
-To prevent accidental storage cloud-init runs and also to ensure the Ceph services are set to auto-start on boot, please run the below script.
-
-On ncn-m001:
+To prevent accidental storage cloud-init runs and also to ensure the Ceph services are set to auto-start on boot, please run the below script on `ncn-m001`:
 
 ```bash
-python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
+ncn-m001# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
 ```
 
 ## Stage 0.6 - Backup BSS Data
