@@ -20,21 +20,22 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
 
 ## Stage 0.1 - Install the latest docs RPM
 
-1. Install latest document RPM package:
+1. Copy the latest document RPM package to `/root` and install it.
+
+    The install scripts will look for this RPM in `/root`, so it is important that you copy it there.
 
     * Internet Connected
 
         ```bash
-        ncn-m001# cd /root/
-        ncn-m001# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
-        ncn-m001# rpm -Uvh docs-csm-latest.noarch.rpm
+        ncn-m001# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm -P /root
+        ncn-m001# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
         ```
 
     * Air Gapped (replace the PATH_TO below with the location of the rpm)
 
         ```bash
         ncn-m001# cp [PATH_TO_docs-csm-*.noarch.rpm] /root
-        ncn-m001# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
+        ncn-m001# rpm -Uvh --force /root/docs-csm-*.noarch.rpm
         ```
 
 ## Stage 0.2 - Update `customizations.yaml`
@@ -45,7 +46,7 @@ Perform these steps to update `customizations.yaml`:
 
     ```bash
     ncn-m001# cd /tmp
-    ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
+    ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > /tmp/customizations.yaml
     ```
 
 1. Update `customizations.yaml`:
@@ -157,13 +158,20 @@ To prevent any possibility of losing Workload Manager configuration data or file
 
 ## Stage 0.6 - Update the Storage Node runcmds for reboots
 
-To prevent accidental storage cloud-init runs and also to ensure the Ceph services are set to auto-start on boot, please run the below script.
+1. Obtain an API token:
 
-On ncn-m001:
+    ```bash
+    ncn-m001# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
+                            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | 
+                        jq -r '.access_token')
+    ```
 
-```bash
-ncn-m001# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
-```
+1. To prevent accidental storage cloud-init runs and also to ensure the Ceph services are set to auto-start on boot, run the below script.
+
+    ```bash
+    ncn-m001# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
+    ```
 
 ## Stage 0.6 - Backup BSS Data
 

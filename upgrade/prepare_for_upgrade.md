@@ -21,7 +21,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
       **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
 
-      ```screen
+      ```bash
       ncn-m001# sdu --scenario triage --start_time '-4 hours' \
       --reason "saving state before powerdown/up"
       ```
@@ -29,22 +29,22 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    1. Check Ceph status.
 
-      ```screen
-      ncn-m001# ceph -s > ceph.status
+      ```bash
+      ncn-m001# ceph -s | tee ceph.status
       ```
 
    1. Check Kubernetes pod status for all pods.
 
-      ```screen
-      ncn-m001# kubectl get pods -o wide -A > k8s.pods
+      ```bash
+      ncn-m001# kubectl get pods -o wide -A | tee k8s.pods
       ```
 
       Additional Kubernetes status check examples :
 
-      ```screen
-      ncn-m001# kubectl get pods -o wide -A | egrep "CrashLoopBackOff" > k8s.pods.CLBO
-      ncn-m001# kubectl get pods -o wide -A | egrep "ContainerCreating" > k8s.pods.CC
-      ncn-m001# kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
+      ```bash
+      ncn-m001# egrep "CrashLoopBackOff" k8s.pods | tee k8s.pods.CLBO
+      ncn-m001# egrep "ContainerCreating" k8s.pods | tee k8s.pods.CC
+      ncn-m001# egrep -v "Run|Completed" k8s.pod | tee k8s.pods.errors
       ```
 
 1. Check for running sessions.
@@ -52,8 +52,12 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
     Ensure that these services do not have any sessions in progress: BOS, CFS, CRUS, FAS, or NMD.
     > This SAT command has `shutdown` as one of the command line options, but it will not start a shutdown process on the system.
 
-    ```screen
+    ```bash
     ncn-m001# sat bootsys shutdown --stage session-checks
+    ```
+    
+    Example output:
+    ```text
     Checking for active BOS sessions.
     Found no active BOS sessions.
     Checking for active CFS sessions.
@@ -82,9 +86,9 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
    application workloads. However, **it is recommended to do this test if possible**, because it validates that boot services
    are still working properly.
 
-   * If upgrading **from CSM 1.0.1 (Shasta 1.5)**, follow the [Validate CSM Health](../operations/validate_csm_health.md) procedures.
+   * If upgrading **from CSM 1.0 (Shasta 1.5)**, follow the [Validate CSM Health](../operations/validate_csm_health.md) procedures.
 
-   * If upgrading **from CSM 0.9 (Shasta 1.4)**, see the [CSM Install Validation and Health Checks](https://github.com/Cray-HPE/docs-csm/blob/release/0.9/008-CSM-VALIDATION.md) procedures **`in the CSM 0.9 documentation`**. The validation procedures in the CSM 1.0.1 documentation are not all intended to work on CSM 0.9.
+   * If upgrading **from CSM 0.9 (Shasta 1.4)**, see the [CSM Install Validation and Health Checks](https://github.com/Cray-HPE/docs-csm/blob/release/0.9/008-CSM-VALIDATION.md) procedures **`in the CSM 0.9 documentation`**. The validation procedures in the CSM 1.0 documentation are not all intended to work on CSM 0.9.
 
 1. Validate Lustre Health
 
@@ -95,14 +99,18 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
    1. SSH to the primary management node.
       For example, on system cls01234.
 
-      ```screen
+      ```bash
       remote$ ssh -l admin cls01234n000.systemname.com
       ```
 
    1. Check that the shared storage targets are available for the management nodes.
 
-      ```screen
+      ```bash
       [n000]$ pdsh -g mgmt cat /proc/mdstat | dshbak -c
+      ```
+      
+      Example output:
+      ```text
       ----------------
       cls01234n000
       ----------------
@@ -127,7 +135,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    1. Check HA status.
 
-      ```screen
+      ```bash
       [n000]$ sudo crm_mon -1r
       ```
 
@@ -135,8 +143,12 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    1. Check the status of the nodes.
 
-      ```screen
+      ```bash
       [n000]# pdsh -a date
+      ```
+      
+      Example output:
+      ```text
       cls01234n000: Thu Aug 7 01:29:28 PDT 2014
       cls01234n003: Thu Aug 7 01:29:28 PDT 2014
       cls01234n002: Thu Aug 7 01:29:28 PDT 2014
@@ -149,7 +161,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    1. Check the health of the Lustre file system.
 
-      ```screen
+      ```bash
       [n000]# cscli csinfo
       [n000]# cscli show_nodes
       [n000]# cscli fs_info
