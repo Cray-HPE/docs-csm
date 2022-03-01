@@ -7,13 +7,13 @@ The Domain Name System (DNS) translates domain and host names to and from IP add
 Enter a domain name in CONFIGURATION mode (up to 64 alphanumeric characters):
 
 ```
-ip domain-name name
+# ip domain-name NAME
 ```
 
 Add names to complete unqualified host names in CONFIGURATION mode:
 
 ```
-ip domain-list name
+# ip domain-list NAME
 ```
 
 ## Expected Results
