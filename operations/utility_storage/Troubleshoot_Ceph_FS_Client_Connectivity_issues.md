@@ -1,6 +1,6 @@
-# Troubleshooting Ceph MDS Client Connectivity Issues
+# Troubleshoot Ceph MDS Client Connectivity Issues
 
-Use this procedure to diagnose and fix clients not logging into Ceph fs.
+Use this procedure to diagnose and fix clients not logging into Ceph FS.
 
 **MOTE:** This section does not diagnose nor fix network issues.  Please ensure there that all networking if functional before proceeding.
 
@@ -11,7 +11,12 @@ Use this procedure to diagnose and fix clients not logging into Ceph fs.
 1. Identify if clients are not logged into Ceph FS.
 
    ```bash
-   # ceph fs status
+   ceph fs status
+   ```
+
+   Example output:
+
+   ```text
    cephfs - 0 clients    <---- This indicates we have no clients connected
    ======
    RANK      STATE                MDS               ACTIVITY     DNS    INOS
@@ -30,12 +35,17 @@ Use this procedure to diagnose and fix clients not logging into Ceph fs.
    ceph mds fail 0
    ```
 
-   NOTE: "0" refers to the active rank in our above output.
+   **NOTE:** "0" refers to the active rank in our above output.
 
 1. Verify clients have reconnected.
 
    ```bash
-   # ceph fs status
+   ceph fs status
+   ```
+
+   Example output:
+
+   ```text
    cephfs - 24 clients   <---- Shows our clients have reconnected
    ======
    RANK      STATE                MDS               ACTIVITY     DNS    INOS
