@@ -17,7 +17,7 @@ This is either a first time install or the previous CSM was wiped and requires a
 1. [Apply switch configs](apply_switch_configs.md)
     - Applying the configuration to switch.
 1. [Apply custom switch configs 1.0](apply_custom_config_1.0.md) or [Apply custom switch configs 1.2](apply_custom_config_1.2.md)  
-1. [Setup Site Connection](Customer_Access_network_CAN.md)
+1. [Setup Site Connection](../customer_access_network/Customer_Access_Network_CAN.md)
     - Instruction on how to setup connection to the site.  This may be covered in the previous step.
 1. [Validate switch configs](validate_switch_configs.md) 
     - Checks differences between generated configs and the configs on the system.

@@ -3,7 +3,7 @@
 #### Prerequisites 
 - access to the switches.
 - Custom Switch configs.
-    - [Backup Custom Config](baackup_custom_config.md)
+    - [Backup Custom Config](backup_custom_config.md)
 - Generated switch configs already applied.
     - [apply switch configs](apply_switch_configs.md)
 
