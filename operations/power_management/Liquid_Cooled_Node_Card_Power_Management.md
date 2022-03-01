@@ -3,7 +3,7 @@
 Liquid Cooled AMD EPYC compute blade node card power capabilities and capping.
 
 Liquid Cooled cabinet node card power features are supported by the node
-controller \(nC\) firmware and CPU vendor. The nC exposes the power control API
+controller (nC) firmware and CPU vendor. The nC exposes the power control API
 for each node via the node's Redfish Control schema. Out-of-band power
 management data is produced and collected by the nC hardware and firmware. This
 data can be published to a collector using the Redfish EventService, or
@@ -17,15 +17,13 @@ retrieved on-demand from the Redfish ChassisSensors resource.
 ## Redfish API
 
 The Redfish API for Liquid Cooled compute blades is the node's Control resource
-which is presented by the nC.  The Control resource presents the various power
+which is presented by the nC. The Control resource presents the various power
 management capabilities for the node and any associated accelerator cards.
 
 Each node has one or more power control resource that can be modified:
 
--   Node power control
--   CPU power control
--   Memory power control
--   Accelerator power control \(one resource per accelerator connected to the node\)
+-   Node power control (host CPU and memory)
+-   Accelerator power control (one resource per accelerator connected to the node)
 
 The Control resources will only manifest in the nC's Redfish endpoint after
 a node has been powered on and background processes have discovered the node's
@@ -156,13 +154,84 @@ The AMD EPYC node card supports these power capping and monitoring API calls:
 -   **Set Node Power Limit**
 
     ```
-    ncn-m001#  cray capmc set_power_cap create –-nids NID_LIST --format json
+    ncn-m001#  cray capmc set_power_cap create --nids NID_LIST --control CONTROL_NAME VALUE --format json
+    ```
+    Set the total power limit of the node by using the name of the node control.
+    The power provided to the host CPU and memory is the total node power limit
+    minus the power limits of each of the accelerators installed on the node.
+    ```
+    (venv) ncn-m001:~/mjendrysik # cray capmc set_power_cap create --nids 1160 --control "Node Power Limit" 1785
+    {
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 1160,
+                "e": 0,
+                "err_msg": ""
+            }
+        ]
+    }
+    ```
+    Multiple controls can be set at the same time on multiple nodes, but all
+    target nodes must have the same set of controls available, otherwise the
+    call will fail.
+    ```
+    (venv) ncn-m001:~/mjendrysik # cray capmc set_power_cap create \
+    --nids [1160-1163] \
+    --control "Node Power Limit" 1785 \
+    --control "Accelerator0 Power Limit" 300 \
+    --control "Accelerator1 Power Limit" 300 \
+    --control "Accelerator2 Power Limit" 300 \
+    --control "Accelerator3 Power Limit" 300
+    {
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 1160,
+                "e": 0,
+                "err_msg": ""
+            },
+            {
+                "nid": 1161,
+                "e": 0,
+                "err_msg": ""
+            },
+            {
+                "nid": 1162,
+                "e": 0,
+                "err_msg": ""
+            },
+            {
+                "nid": 1163,
+                "e": 0,
+                "err_msg": ""
+            }
+        ]
+    }
     ```
 
-
--   **Remove Node Power Limit \(Set to Default\)**
+-   **Remove Node Power Limit (Set to Default)**
 
     ```
-    ncn-m001#  cray capmc set_power_cap create –-nids NID_LIST \\
-    --node 0 --format json
+    ncn-m001#  cray capmc set_power_cap create --nids NID_LIST --control CONTROL_NAME 0 --format json
+    ```
+    Reset the power limit to the default maximum. Alternatively, using the max
+    value returned from get_power_cap_capabilities may also be used. Multiple
+    controls can be set at the same time on multiple nodes, but all target nodes
+    must have the same set of controls available, otherwise the call will fail.
+    ```
+    (venv) ncn-m001:~/mjendrysik # cray capmc set_power_cap create --nids 1160 --control "Node Power Limit" 0
+    {
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 1160,
+                "e": 0,
+                "err_msg": ""
+            }
+        ]
+    }
     ```
