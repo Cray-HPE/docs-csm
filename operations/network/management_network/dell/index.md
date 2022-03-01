@@ -75,9 +75,9 @@ __________________________________
 
   1. [Access Control Lists (ACLs)](./acl.md)
 
-### Quality of Service
+### Quality of Service (QoS)
 
-  1. [Qos)](./qos.md)
+  1. [Qos](./qos.md)
 
 ### Performing Upgrade on Dell Switches
 

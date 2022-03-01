@@ -8,7 +8,7 @@ A hostname is a human-friendly name used to identify a device. An example of a h
 Create a hostname:
 
 ```
-switch(config)# hostname <NAME>
+switch(config)# hostname NAME
 ```
 
 Show commands to validate functionality:
