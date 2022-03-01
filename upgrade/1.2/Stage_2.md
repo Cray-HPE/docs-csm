@@ -44,9 +44,11 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
 
         1. Install document RPM package:
 
+            > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
+
             ```bash
-            ncn-m002# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm
-            ncn-m002# rpm -Uvh docs-csm-latest.noarch.rpm
+            ncn-m002# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm -P /root
+            ncn-m002# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
             ```
 
         1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release tarball.
@@ -73,8 +75,10 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
 
         1. Install document RPM package:
 
+            > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
+
             ```bash
-            ncn-m002# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
+            ncn-m002# rpm -Uvh --force /root/docs-csm-*.noarch.rpm
             ```
 
         1. Set the `TAR_DIR` variable to the directory on `ncn-m002` containing the CSM release tarball.

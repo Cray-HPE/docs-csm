@@ -64,7 +64,10 @@ if [[ $state_recorded == "0" ]]; then
     fi
 
     ## TEMP - Remove ceph v15.2.12 from images before backups - CASMINST-4099
-    ssh ${upgrade_ncn} 'podman rmi registry.local/ceph/ceph:v15.2.12'
+    if [[ $(ssh ${upgrade_ncn} "podman images --format json|jq '.[].Names|.[]'|grep -q 15.2.12") ]]
+    then
+      ssh ${upgrade_ncn} 'podman rmi registry.local/ceph/ceph:v15.2.12'
+    fi
     ## END TEMP - CASMINST-4099
 
     ssh ${upgrade_ncn} 'systemctl stop ceph.target;sleep 30;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /var/lib/containers /etc/ceph;systemctl start ceph.target'

@@ -83,8 +83,7 @@ Example output:
 Use the following command to check the logs. Any logs with a message saying `ERROR` or `Exception` are an indication that the Unbound service is not healthy.
 
 ```bash
-ncn# kubectl logs -n services -l \
-app.kubernetes.io/instance=cray-dns-unbound -c unbound
+ncn# kubectl logs -n services -l app.kubernetes.io/instance=cray-dns-unbound -c cray-dns-unbound
 ```
 
 Example output:

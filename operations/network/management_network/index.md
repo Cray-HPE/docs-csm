@@ -18,10 +18,10 @@ __________________________________
 
 #### Switch config states
 
-To check what state the switches are see the [upgrade](./management_network//upgrade.md) page.
+To check what state the switches are see the [upgrade](upgrade.md) page.
 
 - 1.0 Config: Non generated switch configs.
-- 1.0 Preconfig: CANU generated configs for 1.0
+- 1.2 Preconfig: CANU generated configs for 1.0
 - 1.2 Config: CANU generated configs for 1.2
 
 
@@ -29,17 +29,17 @@ To check what state the switches are see the [upgrade](./management_network//upg
 
 - Current switch configs are not generated and need to upgrade to generated configs.
   - This can either be 1.0 generated or 1.2 generated.
-  - use the [upgrade](./management_network/upgrade.md) page.
+  - use the [upgrade](upgrade.md) page.
 - Current switch configs are generated and need to go to 1.2
-  - [1.0 (Preconfig) to 1.2](./management_network/1.0_to_1.2_upgrade.md)
+  - [1.2 (Preconfig) to 1.2](1.0_to_1.2_upgrade.md)
 - Switches have no config on them
-  - [Fresh Install](.management_network/fresh_install.md)
+  - [Fresh Install](fresh_install.md)
 - Reinstalling the same CSM version.
-  - [Re-install](./management_network/reinstall.md)
+  - [Re-install](reinstall.md)
 - New hardware was added to the system.
-  - [Added Hardware](./management_network/added_hardware.md)
+  - [Added Hardware](added_hardware.md)
 - Switch failed and needs to be replaced.
-  - [Replace Switch](./management_network/replace_switch.md)
+  - [Replace Switch](replace_switch.md)
 
 ### User guides
 
