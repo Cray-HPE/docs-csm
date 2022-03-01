@@ -1,4 +1,4 @@
-# Configure Virtual local access networks (VLANs)
+# Configure Virtual Local Access Networks (VLANs)
 
 VLANs allow for the logical grouping of switch interfaces, enabling communication as if all connected devices were on the same isolated network.
 

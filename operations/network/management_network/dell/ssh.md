@@ -7,10 +7,10 @@ SSH server enables an SSH client to make a secure and encrypted connection to a 
 
 The SSH server is enabled by default.
 
-Administrators can disable the SSH server using:  
+To disable the SSH server:  
 
 ```
-no ip ssh server enable.
+# no ip ssh server enable.
 ```
 
 ## Expected Results
