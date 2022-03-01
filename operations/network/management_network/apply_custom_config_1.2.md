@@ -104,6 +104,5 @@ sw-spine-001 [standalone: master] # conf t
 
 ### Write memory
 
-To keep track of what version of config is running on the switch create a new configuration file using the `csm version` and the `CANU version` from `motd banner` from the running config.
-
-`sw-spine-002 [mlag-domain: master] (config) # configuration write to csm1.0.canu1.1.11`
+- Save the configuration once the configuration is applied.
+  - [Saving Config](saving_config.md)

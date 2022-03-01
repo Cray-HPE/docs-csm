@@ -468,7 +468,7 @@ See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock
    3. Reboot the Node -
    See [Reboot NCNs](../node_management/Reboot_NCNs.md)
    4. For `HPE` NCNs, run the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` -
-   See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc")
+   See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc)
    5. Relock the NCN BMC -
 See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
 
@@ -583,7 +583,7 @@ Make sure you have waited for the current firmware to be updated before starting
 **Device Type: NodeBMC | Target: `System ROM` aka BIOS**
 
 **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than ncn-m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
-See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc")
+See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc)
 
 ```json
 {

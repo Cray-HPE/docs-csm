@@ -19,19 +19,19 @@
 1. Check to ensure the upgrade is possible.
 
    ```bash
-   ceph orch upgrade check --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+   ncn-s# ceph orch upgrade check --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
    ```
 
 1. Set the container image.
 
    ```bash
-   ceph config set global container_image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+   ncn-s# ceph config set global container_image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
    ```
 
    Verify the change has occured:
 
    ```bash
-   ceph config dump -f json-pretty|jq '.[]|select(.name=="container_image")|.value'
+   ncn-s# ceph config dump -f json-pretty|jq '.[]|select(.name=="container_image")|.value'
    ```
 
    Expected result:
@@ -43,7 +43,7 @@
 1. Start the upgrade.
 
    ```bash
-   ceph orch upgrade start --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+   ncn-s# ceph orch upgrade start --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
    ```
 
 1. Monitor the upgrade.
@@ -51,7 +51,7 @@
 ***NOTE***: You may want to split these commands into multiple windows depending on the size of your cluster.
 
    ```bash
-   watch "ceph -s; ceph orch ps"
+   ncn-s# watch "ceph -s; ceph orch ps"
    ```
 
 Expected Warnings:
@@ -127,9 +127,12 @@ Only processes running the v15.2.8 image will be upgraded.  This will include `M
 2. Disable `auth_allow_insecure_global_id_reclaim`
 
    ```bash
-   ceph config set mon auth_allow_insecure_global_id_reclaim false
+   ncn-s# ceph config set mon auth_allow_insecure_global_id_reclaim false
    ```
 
    Now the status of the cluster should show **HEALTH_OK**.  
 
    Please ***NOTE*** that this may take up to 30 seconds to apply and the health to return to **HEALTH_OK**.
+
+
+Once `Stage 4` upgrade is complete, proceed to [Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
