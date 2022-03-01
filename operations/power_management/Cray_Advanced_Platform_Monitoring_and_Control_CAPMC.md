@@ -1,6 +1,6 @@
-# Cray Advanced Platform Monitoring and Control \(CAPMC\)
+# Cray Advanced Platform Monitoring and Control (CAPMC)
 
-The Cray Advanced Platform Monitoring and Control \(CAPMC\) service enables
+The Cray Advanced Platform Monitoring and Control (CAPMC) service enables
 direct hardware control of nodes, compute blades, router modules, and liquid
 cooled chassis. CAPMC talks to BMCs via Redfish to control power, query status,
 and manage power capping on target components. These controls enable an
@@ -11,11 +11,11 @@ Administrators can use the `cray` CLI for power operations from any system that
 has HTTPS access to the
 [System Management Services](../network/Access_to_System_Management_Services.md).
 
-3rd party software can access the API directly. Refer to the [CAPMC
-API](https://github.com/Cray-HPE/hms-capmc/blob/release/csm-1.0/api/swagger.yaml)
+3rd party software can access the API directly. Refer to the
+[CAPMC API](https://github.com/Cray-HPE/hms-capmc/blob/release/csm-1.0/api/swagger.yaml)
 documentation for detailed information about API options and features.
 
-The `cray capmc` command \(see `--help`\) can be used to control power to
+The `cray capmc` command (see `--help`) can be used to control power to
 specific components by specifying the component NID, xname, or group.
 
 ## Power control and query by xname
@@ -29,8 +29,8 @@ breakers are on, and PDU controllers, BMCs, and other embedded controller are
 on, available, and have been discovered. Components have their power controlled
 in a pre-defined order to properly handle requests of dependent components.
 
-**Important:** Always use the Boot Orchestration Service \(BOS\) to power Off or
-power On compute nodes.
+**Important:** It is recommended to use the Boot Orchestration Service (BOS) to
+boot (power On), shutdown, and reboot compute nodes.
 
 ### Controllable Components
 **Air Cooled Cabinets**
@@ -50,23 +50,22 @@ the system. By default, CAPMC controls power to only one component at a time. A
 the target component are included in the power command.
 
 By the cabinet naming convention, each cabinet in the system is assigned a
-number. Cabinets can be located anywhere on the computer room floor, although
-manufacturing typically follows a sequential cabinet numbering scheme:
+unique number. Cabinet numbers can range from 0-9999 and contain from 1-4 digits
+only.
 
+Although manufacturing typically follows a sequential cabinet numbering scheme:
 - Liquid Cooled cabinet numbers: x1000–x2999
 - Air Cooled cabinet numbers: x3000–x4999
 - Liquid Cooled TDS cabinet numbers: x5000–5999
 
-Cabinet numbers can range from 0-9999 and contain from 1-4 digits only.
-
 **Examples of valid xnames:**
 - Full system: s0, all
 - Cabinet numbers: x1000, x3000, x5000
-- Chassis numbers 0-7: x1000c7, x3500c0 \(Air Cooled cabinets are always
-chassis 0\)
-- Compute Blade Slots 0-7: x1000c7s3, x3500c0s15 \(U15\)
+- Chassis numbers 0-7: x1000c7, x3500c0 (Air Cooled cabinets are always
+chassis 0)
+- Compute Blade Slots 0-7: x1000c7s3, x3500c0s15 (U15)
 - Compute Nodes: x1000c7s3b0n0, x3500c0s15b1n0
-- NCN Slots: x3200c0s9 \(U9\)
+- NCN Slots: x3200c0s9 (U9)
 - NCN Nodes: x3200c0s9b0n0
 
 ## Power capping
