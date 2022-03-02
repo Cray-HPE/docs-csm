@@ -37,15 +37,15 @@ At a minimum, answers to the following questions must be known prior to upgradin
 1. _Will user traffic (non-administrative) come in via the CAN, CHN or is the site Air-gapped?_
 2. _What is the internal VLAN and the site-routable IP subnet for the new CAN or CHN?_
 3. _Is there a need to preserve any existing IP address(es) during the CAN-to-CMN migration?_
-   1. One example would be the external-dns IP address used for DNS lookups of system resources from site DNS servers.  Changes to external-dns often require changes to site resources with requisite process and timeframes from other groups.  For preserving external-dns IPs, the flag is `--preserve-existing-subnet-for-cmn external-dns`.
+   1. One example would be the external-dns IP address used for DNS lookups of system resources from site DNS servers.  Changes to external-dns often require changes to site resources with requisite process and timeframes from other groups.  For preserving external-dns IPs, the flag is `--preserve-existing-subnet-for-cmn external-dns`. WARNING: It is up to the user to compare pre-upgraded and post-upgraded SLS files for sanity.  Specifically in the case of preserving external-dns values to prevent site-networking changes might result in NCN IP's overlapping during the upgrade process.  This requires network subnetting expertise and EXPERT mode below.
    2. Another, mutually exclusive example is the need to preserve all NCN IPs related to the old CAN whilst migrating the new CMN.  This preservation is not often needed as the transition of NCN IPs for the CAN-to-CMN is automatically handled during the upgrade.  The flag to preserve CAN-to-CMN NCN IPs is mutually exclusive with other preservations and the flag is `--preserve-existing-subnet-for-cmn ncns`.
    3. Should no preservation flag be set, the default behavior is to recalculate every IP on the existing CAN while migrating to the CMN.  The behavior in this case is to calculate the subnet sizes based on number of devices (with a bit of spare room), while maximizing IP pool sizes for (dynamic) services.
-   4. An expert mode of flags also exists whereby manually subnetted allocations can be assigned to the new CMN, bypassing several sanity checks.
+   4. An EXPERT mode of flags also exists whereby manually subnetted allocations can be assigned to the new CMN, bypassing several expectations, but not essential subnetting math. As a note for experts the "Remaining subnets" list from a run using `--preserve-existing-subnet-for-cmn` can be used as an aid in selecting subnets to override with `--cmn-subnet-override` or `--can-subnet-override` values and used to seed another run of the upgrader.
 
 Several other flags in the migration script allow for user input, overrides and guidance to the upgrade process.  Taking time to review these options is important.  All current options can be seen by running:
 
 ```bash
-ncn-m001# export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
 ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --help
 ```
 
@@ -65,7 +65,7 @@ Usage: sls_updater_csm_1.2.py [OPTIONS]
    7. Convert IPs of the CAN network.
    8. Create MetalLB Pools Names and ASN entries on CMN and NMN networks.
    9. Update uai_macvlan in NMN dhcp ranges and uai_macvlan VLAN.
-  10. Remove unused user networks (CAN or CHN) if requested [--retain-unused-user-network] to keep.
+  10. Remove unused user networks (CAN or CHN).
 
 Options:
   --sls-input-file FILENAME - Input SLS JSON file  [required]
@@ -80,7 +80,6 @@ Options:
   --preserve-existing-subnet-for-cmn [external-dns|ncns] -  When creating the CMN from the CAN, preserve the metallb_static_pool for external-dns IP, or bootstrap_dhcp for NCN IPs.  By default no subnet IPs from CAN will be preserved.
   --can-subnet-override <CHOICE IPV4NETWORK>... - [EXPERT] Manually/Statically assign CAN subnets to your choice of network_hardware bootstrap_dhcp, can_metallb_address_pool, and/or can_metallb_static_pool subnets.
   --cmn-subnet-override <CHOICE IPV4NETWORK>... - [EXPERT] Manually/Statically assign CMN subnets to your choice of network_hardware, bootstrap_dhcp, cmn_metallb_address_pool, and/or cmn_metallb_static_pool subnets.
-  --retain-unused-user-network BOOLEAN - If a CHN is selected, remove the CAN.  For development systems you probably want this enabled.  [default: True]
   --help - Show this message and exit.
 ```
 
@@ -110,7 +109,7 @@ Options:
 * Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
 ```bash
-ncn-m001# export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
 ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
                          --bican-user-network-name CHN \
                          --customer-highspeed-network 5 10.103.11.192/26
@@ -119,12 +118,11 @@ ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json 
 * Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing external-dns entry.
 
 ```bash
-ncn-m001# export DOC_DIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
 ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
                          --bican-user-network-name CAN \
                          --customer-access-network 6 10.103.15.192/26 \
-                         --preserve-existing-subnet-for-cmn external-dns \
-                         --retain-unused-user-network
+                         --preserve-existing-subnet-for-cmn external-dns
 ```
 
 * NOTE: A detailed review of the migrated/upgraded data (using vimdiff or otherwise) for production systems and for systems which have many add-on components (UAN, login nodes, storage integration points, etc...) is strongly recommended.  Particularly, ensure subnet reservations are correct to prevent any data mismatches.

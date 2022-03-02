@@ -117,9 +117,9 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
 @click.option(
     "--bgp-nmn-asn",
     required=False,
-    help="The autonomous system number for NMN BGP clients",
+    help="The autonomous system number for NMN BGP clients (preserve <= CSM 1.0 defaults)",
     type=click.IntRange(64512, 65534),
-    default=65531,
+    default=65533,
     show_default=True,
 )
 @click.option(
@@ -252,10 +252,6 @@ def main(
     remove_api_gw_from_hmnlb_reservations(networks)
 
     #
-    # Remove kube-api reservations from all networks except NMN.
-    remove_kube_api_reservations(networks)
-
-    #
     # Create BICAN network
     #   (not order dependent)
     create_bican_network(networks, default_route_network_name=bican_user_network_name)
@@ -278,6 +274,10 @@ def main(
     remove_can_static_pool(networks)
 
     #
+    # Remove kube-api reservations from all networks except NMN.
+    remove_kube_api_reservations(networks)
+
+    #
     # Create (new) CHN network
     #   (not order dependent)
     create_chn_network(networks, customer_highspeed_network)
@@ -290,7 +290,13 @@ def main(
     #
     # Add BGP peering data to CMN and NMN
     #   (ORDER DEPENDENT!!! - Must be run after CMN creation)
-    create_metallb_pools_and_asns(networks, bgp_asn, bgp_chn_asn, bgp_cmn_asn, bgp_nmn_asn)
+    create_metallb_pools_and_asns(
+        networks,
+        bgp_asn,
+        bgp_chn_asn,
+        bgp_cmn_asn,
+        bgp_nmn_asn,
+    )
 
     #
     # Update uai_macvlan dhcp ranges in the NMN network.
