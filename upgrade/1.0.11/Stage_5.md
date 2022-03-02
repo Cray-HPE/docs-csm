@@ -49,21 +49,21 @@
     ncn-m001:~ # kubectl describe pods cray-shared-kafka -n services |grep Image:
     Image:         strimzi/operator:0.15.0-noJndiLookupClass
     Image:         strimzi/operator:0.15.0-noJndiLookupClass
-    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
-    Image:         strimzi/kafka:0.15.0-kafka-2.2.1-noJSM-chainsaw
-    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
-    Image:         strimzi/kafka:0.15.0-kafka-2.2.1-noJSM-chainsaw
-    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
-    Image:         strimzi/kafka:0.15.0-kafka-2.2.1-noJSM-chainsaw
-    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
-    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
-    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
-    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
-    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
-    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
-    Image:         strimzi/kafka:0.15.0-kafka-2.3.1-noJSM-chainsaw
+    Image:         strimzi/kafka:0.15.0-noJSM-chainsaw-kafka-2.3.1
+    Image:         strimzi/kafka:0.15.0-noJSM-chainsaw-kafka-2.2.1
+    Image:         strimzi/kafka:0.15.0-noJSM-chainsaw-kafka-2.3.1
+    Image:         strimzi/kafka:0.15.0-noJSM-chainsaw-kafka-2.2.1
+    Image:         strimzi/kafka:0.15.0-noJSM-chainsaw-kafka-2.3.1
+    Image:         strimzi/kafka:0.15.0-noJSM-chainsaw-kafka-2.2.1
+    Image:         strimzi/kafka:0.15.0-noJSM-chainsaw-kafka-2.3.1
+    Image:         strimzi/kafka:0.15.0-noJSM-chainsaw-kafka-2.3.1
+    Image:         strimzi/kafka:0.15.0-noJSM-chainsaw-kafka-2.3.1
+    Image:         strimzi/kafka:0.15.0-noJSM-chainsaw-kafka-2.3.1
+    Image:         strimzi/kafka:0.15.0-noJSM-chainsaw-kafka-2.3.1
+    Image:         strimzi/kafka:0.15.0-noJSM-chainsaw-kafka-2.3.1
+    Image:         strimzi/kafka:0.15.0-noJSM-chainsaw-kafka-2.3.1
     ```
     
-    Version tag of installed strimzi/kafka image must be `0.15.0-kafka-2.2.1-noJSM-chainsaw` and `0.15.0-kafka-2.3.1-noJSM-chainsaw`. Note: previous version tag were `0.15.0-kafka-2.2.1` and `0.15.0-kafka-2.3.1`
+    Version tag of installed strimzi/kafka image must be `0.15.0-noJSM-chainsaw-kafka-2.2.1` and `0.15.0-noJSM-chainsaw-kafka-2.3.1`. Note: previous version tag were `0.15.0-kafka-2.2.1` and `0.15.0-kafka-2.3.1`
     
 [Return to main upgrade page](README.md)
