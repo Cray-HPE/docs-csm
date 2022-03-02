@@ -20,21 +20,30 @@ Run the command
 cray sls dumpstate list  --format json >> sls_file.json   
 ```
  
-* ***Step 3***: Retrieve switch running configs (log in to ncn-m001) 
+* ***Step 3***: Retrieve switch running configs.
 
-Log into the management network switches, you can get the ips/hostnames by running this command on a NCN:   
+CANU can backup all the management network switches using either the SLS input file or the SLS api.
+This can also be donw from outside the cluster using the CMN switch IPs.  
 
+```bash
+ncn-w001:~ # canu backup network --folder switch_backups/ --sls-file ./sls_input_file_1_2.json
+Enter the switch password:
+-
+Running Configs Saved
+---------------------
+sw-spine-001.cfg
+sw-spine-002.cfg
+sw-leaf-001.cfg
+sw-leaf-002.cfg
+sw-leaf-003.cfg
+sw-leaf-004.cfg
+sw-leaf-bmc-001.cfg
+sw-leaf-bmc-002.cfg
+sw-cdu-001.cfg
+sw-cdu-002.cfg
 ```
-cat /etc/hosts | grep sw- 
-```
 
-If /etc/hosts is not available because the system is being installed you will be on the pit and will need to run:  
-
-```
-cat /var/www/ephemeral/prep/redbull/sls_input_file.json | jq '.Networks | .HMN | .ExtraProperties.Subnets | .[] | select(.Name=="network_hardware")' 
-```
-
-Run the script below to automatically collect all switch configs.  If the command fails then log in to each individual switch and run show run. 
+If the SLS API is up you don't need to provide a sls file.
  
 
 * ***Step 4***: Retrieve customizations file. (log in from ncn-m001) 
