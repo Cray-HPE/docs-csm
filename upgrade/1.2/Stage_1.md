@@ -8,9 +8,12 @@
 
     > NOTE: You may need to reset the root password for each node after it is rebooted
 
+**IMPORTANT:** Ensure the Ceph cluster is healthy prior to continuing. If you have proecesses not running please refer to [Utility Storage Operations](../../operations/utility_storage/Utility_Storage.md) for operational and troubleshooting procedures.
+
 1. Repeat the previous step for each other storage node, one at a time.
 
 1. After `ncn-upgrade-ceph-nodes.sh` has successfully run for all storage nodes, rescan ssh keys on all storage nodes
+
     ```bash
     ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
 
@@ -31,7 +34,7 @@
         Scheduled alertmanager update...
         ```
 
-    1. Verify `node-exporter` and `alertmanager` are running:
+    2. Verify `node-exporter` and `alertmanager` are running:
 
         ```bash
         ncn-s# ceph orch ps --daemon_type node-exporter

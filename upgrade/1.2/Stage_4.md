@@ -1,62 +1,138 @@
-# Stage 4 - Upgrade Aruba switches to 10.08.1021
+# Stage 4 - Ceph Upgrade
 
-As part of the CSM 1.2 upgrade, you must upgrade Aruba switches to 10.08.1021.
+## Addresses CVEs
 
-With that new software level, the NAE script to address Mac learning issue with `8325` switches is no longer required and needs to be deleted from the system. 
+1. CVE-2021-3531: Swift API denial of service.
+1. CVE-2021-3524: HTTP header injects via CORS in RGW.
+1. CVE-2021-3509: Dashboard XSS via token cookie.
+1. CVE-2021-20288: Unauthorized global_id reuse in cephx.
 
-## 4.1 Removal of NAE script
+**IMPORTANT:**
 
-### Prerequisites
+> * This upgrade is performed using the ceph orchestrator.
+> * The upgrade includes all fixes from v15.2.9 through to v15.2.15 listed here [Ceph version index](https://docs.ceph.com/en/latest/releases/octopus/)
 
-1. The `nae_remove.py` script relies on the `/etc/hosts` file to pull the IP addresses of the switches. Without this information, the script will not run.
-2. You have an `8325` switch in your setup that is running software version 10.08.1021
-3. Script assumes you are using default username `admin` for the switch and it will prompt you for password.
+## Procedure
 
-NOTE: 	The nae_remover script automatically detects `8325` switches and only applies the fix to that platform.
+### Upgrade
 
-### Run The Removal Script
+1. Check to ensure the upgrade is possible.
 
-```bash
-ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/aruba/nae_remove.py
+   ```bash
+   ncn-s# ceph orch upgrade check --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+   ```
+
+1. Set the container image.
+
+   ```bash
+   ncn-s# ceph config set global container_image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+   ```
+
+   Verify the change has occured:
+
+   ```bash
+   ncn-s# ceph config dump -f json-pretty|jq '.[]|select(.name=="container_image")|.value'
+   ```
+
+   Expected result:
+
+   ```text
+   "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15"
+   ```
+
+1. Start the upgrade.
+
+   ```bash
+   ncn-s# ceph orch upgrade start --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+   ```
+
+1. Monitor the upgrade.
+
+***NOTE***: You may want to split these commands into multiple windows depending on the size of your cluster.
+
+   ```bash
+   ncn-s# watch "ceph -s; ceph orch ps"
+   ```
+
+Expected Warnings:
+
+From `ceph -s`
+
+```text
+health: HEALTH_WARN
+        clients are using insecure global_id reclaim
+        mons are allowing insecure global_id reclaim
 ```
 
-When prompted, type in your switch password.
+From `ceph health detail`
 
-## 4.2 Upgrade Switch Software
-
-### Pre-requisites
-
-* Choose which way you want to upload the new software to the switches.
-	* USB
-	* Web UI
-	* TFTP or SFTP
-
-NOTE: If you do not want to proceed with pre-staging, you can also upload the new software directly using `vsx update-software` command. However you will be limited to only using TFTP if you choose not to pre-stage the firmware.
-
-NOTE: VSX update-software is only available in VSX paired switches. For example, `6300` switches would not have this upgrade option.
-
-### Option 1: Upgrading with VSX update-software: 
-
-```
-switch# vsx update-software tftp://192.168.1.1/ArubaOS-CX_8325_10_08_1021.swi 
-Do you want to save the current configuration (y/n)? y
-The running configuration was saved to the startup configuration.
-
-This command will download new software to the %s image of both the VSX primary and secondary systems,
-then reboot them in sequence. The VSX secondary will reboot first, followed by the primary.
-Continue (y/n)? y
-VSX Primary Software Update Status     : <VSX primary software update status>
-VSX Secondary Software Update Status   : <VSX secondary software update status>
-VSX ISL Status                         : <VSX ISL status>
-Progress [..........................................................................................]
-Secondary VSX system updated completely. Rebooting primary.
+```text
+HEALTH_WARN clients are using insecure global_id reclaim; mons are allowing insecure global_id reclaim; 1 osds down
+[WRN] AUTH_INSECURE_GLOBAL_ID_RECLAIM: clients are using insecure global_id reclaim
+    osd.4 at [REDACTED] is using insecure global_id reclaim
+    mds.cephfs.ncn-s001.qcalye at [REDACTED] is using insecure global_id reclaim
+    client.rgw.site1.zone1.ncn-s001.lgfngf at [REDACTED] is using insecure global_id reclaim
+    client.rgw.site1.zone1.ncn-s001.lgfngf at [REDACTED] is using insecure global_id reclaim
+    osd.0 at [REDACTED] is using insecure global_id reclaim
+    client.rgw.site1.zone1.ncn-s003.wllbbx at [REDACTED] is using insecure global_id reclaim
+    osd.5 at [REDACTED] is using insecure global_id reclaim
+    osd.7 at [REDACTED] is using insecure global_id reclaim
+    client.rgw.site1.zone1.ncn-s002.aanqmw at [REDACTED] is using insecure global_id reclaim
+    client.rgw.site1.zone1.ncn-s002.aanqmw at [REDACTED] is using insecure global_id reclaim
+    client.rgw.site1.zone1.ncn-s002.aanqmw a [REDACTED] is using insecure global_id reclaim
+    osd.3 at [REDACTED]] is using insecure global_id reclaim
+    mds.cephfs.ncn-s002.tdrohq at [REDACTED]] is using insecure global_id reclaim
+    client.rgw.site1.zone1.ncn-s003.wllbbx a [REDACTED] is using insecure global_id reclaim
+    client.rgw.site1.zone1.ncn-s001.lgfngf a [REDACTED] is using insecure global_id reclaim
+    client.rgw.site1.zone1.ncn-s003.wllbbx a [REDACTED] is using insecure global_id reclaim
+    mds.cephfs.ncn-s003.ddbgzt at [REDACTED]] is using insecure global_id reclaim
+    osd.8 at [REDACTED]] is using insecure global_id reclaim
+    osd.1 at [REDACTED]] is using insecure global_id reclaim
+[WRN] AUTH_INSECURE_GLOBAL_ID_RECLAIM_ALLOWED: mons are allowing insecure global_id reclaim
+    mon.ncn-s001 has auth_allow_insecure_global_id_reclaim set to true
+    mon.ncn-s002 has auth_allow_insecure_global_id_reclaim set to true
+    mon.ncn-s003 has auth_allow_insecure_global_id_reclaim set to true
 ```
 
-### Option 2: Upgrading without VSX software 
+You will see the processes running the ceph container image go through the upgrade process.  This will involve stopping the old process running the v15.2.8 container and restarting the process with the new v15.2.15 container image.
 
-```
-switch# copy tftp://192.168.1.1/ArubaOS-CX_6400-6300_10_08_1021.swi secondary
-switch# boot system secondary
-```
+**IMPORTANT:**
+Only processes running the v15.2.8 image will be upgraded.  This will include `MON,MGR,MDS,RGW,OSD` processes only.
 
-[Return to main upgrade page](README.md)
+### Post Upgrade
+
+1. Verify the upgrade
+
+   ceph health detail should only show:
+
+   ```text
+   HEALTH_WARN mons are allowing insecure global_id reclaim
+   [WRN] AUTH_INSECURE_GLOBAL_ID_RECLAIM_ALLOWED: mons are allowing insecure global_id reclaim
+    mon.ncn-s001 has auth_allow_insecure_global_id_reclaim set to true
+    mon.ncn-s002 has auth_allow_insecure_global_id_reclaim set to true
+    mon.ncn-s003 has auth_allow_insecure_global_id_reclaim set to true
+    ```
+
+   ceph -s should show:
+
+   ```text
+       health: HEALTH_WARN
+            mons are allowing insecure global_id reclaim
+   ```
+
+   ceph orch ps should show:
+
+   `MON,MGR,MDS,RGW,OSD` processes running version `v15.2.15`.  There should be no processes running version `v15.2.8`
+
+2. Disable `auth_allow_insecure_global_id_reclaim`
+
+   ```bash
+   ncn-s# ceph config set mon auth_allow_insecure_global_id_reclaim false
+   ```
+
+   Now the status of the cluster should show **HEALTH_OK**.  
+
+   Please ***NOTE*** that this may take up to 30 seconds to apply and the health to return to **HEALTH_OK**.
+
+
+Once `Stage 4` upgrade is complete, proceed to [Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)

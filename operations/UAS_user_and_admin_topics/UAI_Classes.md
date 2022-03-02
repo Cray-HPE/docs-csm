@@ -14,12 +14,17 @@ This topic describes the content and purpose of the the fields in a UAI Class an
 
 The following is JSON-formatted example output from the cray uas admin config classes list command \(see [List Available UAI Classes](List_Available_UAI_Classes.md)\). This output contains examples of three UAI classes:
 
--   A brokered End-User UAI class
--   A UAI broker class
--   A non-brokered End-User UAI class
+- A brokered End-User UAI class
+- A UAI broker class
+- A non-brokered End-User UAI class
 
 ```
 ncn-m001-pit# cray uas admin config classes list --format json
+```
+
+Example output:
+
+```
 [
   {
     "class_id": "bdb4988b-c061-48fa-a005-34f8571b88b4",

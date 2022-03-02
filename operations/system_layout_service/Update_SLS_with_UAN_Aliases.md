@@ -20,7 +20,7 @@ is being monitored by conman for console logs.
    | jq -r '.access_token')
    ```
 
-1. Find the xname of the UAN by searching through all Application nodes until found.
+1. Find the component name (xname) of the UAN by searching through all Application nodes until found.
 
    ```bash
    curl -s -k -H "Authorization: Bearer ${TOKEN}" \
@@ -52,8 +52,8 @@ is being monitored by conman for console logs.
 
 1. Update the UAN object in SLS by adding Aliases array with the UAN's hostname.
 
-   Replace `UAN_XNAME` in the URL and JSON object with the UAN's xname.
-   Replace `UAN_PARENT_XNAME` in the JSON object with the UAN's parent xname.
+   Replace `UAN_XNAME` in the URL and JSON object with the UAN's component name (xname).
+   Replace `UAN_PARENT_XNAME` in the JSON object with the UAN's parent's component name (xname).
    Replace `UAN_ALIAS` in the Aliases array with the UAN's hostname.
    The `LastUpdated` and `LastUpdatedTime` fields are not required to be in the PUT payload.
 
@@ -138,5 +138,5 @@ is being monitored by conman for console logs.
 
    When this node boots, the DHCP request of its -nmn interface will cause the uan01 to be created and resolved.
 
-1. Confirm that the UAN is being monitored by the console services. Follow the procedure in [Manage Node Consoles](../conman/manage_node_consoles.md).
+2. Confirm that the UAN is being monitored by the console services. Follow the procedure in [Manage Node Consoles](../conman/Manage_Node_Consoles.md).
 

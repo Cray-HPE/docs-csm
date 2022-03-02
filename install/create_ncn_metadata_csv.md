@@ -30,7 +30,7 @@ Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
 x3000c0s9b0n0,Management,Storage,94:40:c9:37:77:26,14:02:ec:d9:76:88,14:02:ec:d9:76:88,94:40:c9:5f:b6:92
 ```
 
-For each management node, the xname, role, and subrole can be extracted from the SHCD in the HMN tab. However, the rest of the
+For each management node, the component name (xname), role, and subrole can be extracted from the SHCD in the HMN tab. However, the rest of the
 MAC address information needs to be collected another way.
 
 Check the description for component names while mapping names between the SHCD and the `ncn_metadata.csv` file.
@@ -136,8 +136,8 @@ x3000c0s1b0n0,Management,Master,94:40:c9:37:87:32,14:02:ec:da:b9:98,14:02:ec:da:
    [Collecting NCN MAC Addresses](collecting_ncn_mac_addresses.md).
 
 
-   * If the nodes are powered up and there is SSH access to the spine and leaf switches, it is possible to
-   collect information from the spine and leaf switches.
+   * If the nodes are powered up and there is SSH access to the spine and leaf-bmc switches, it is possible to
+   collect information from the spine and leaf-bmc switches.
       * The BMC MAC address can be collected from the switches using knowledge about the cabling of the HMN from the SHCD. See [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md).
       * The node MAC addresses cannot be collected until after the PIT node has booted from the LiveCD. At that point, a partial boot of the management nodes can be done to collect the remaining information from the conman console logs on the PIT node using the [Procedure: iPXE Consoles](collecting_ncn_mac_addresses.md#procedure-ipxe-consoles)
 

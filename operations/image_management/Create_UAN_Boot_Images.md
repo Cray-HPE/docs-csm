@@ -116,7 +116,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     Consult the individual Ansible role README.md files in the uan-config-management repository roles directory to configure individual role variables. Roles prefixed with uan\_ are specific to UAN configuration and include network interfaces, disk, LDAP, software packages, and message of the day roles.
 
-    Variables should be defined and overridden in the Ansible inventory locations of the repository as shown in the following example and **not** in the Ansible plays and roles defaults. See https://docs.ansible.com/ansible/2.9/user\_guide/playbooks\_best\_practices.html\#content-organization for directory layouts for inventory.
+    Variables should be defined and overridden in the Ansible inventory locations of the repository as shown in the following example and **not** in the Ansible plays and roles defaults. See https://docs.ansible.com/ansible/2.9/user_guide/playbooks_best_practices.html#content-organization for directory layouts for inventory.
 
     **WARNING** Never place sensitive information such as passwords in the git repository.
 
@@ -570,9 +570,9 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
 ### Prepare UAN Boot Session Templates
 
-19. Retrieve the xnames of the UAN nodes from the Hardware State Manager \(HSM\).
+19. Retrieve the component names (xnames) of the UAN nodes from the Hardware State Manager \(HSM\).
 
-    These xnames are needed for Step 20.
+    These component names (xnames) are needed for Step 20.
 
     ```bash
     ncn-m001# cray hsm state components list --role Application --subrole UAN --format json | jq -r .Components[].ID
@@ -600,7 +600,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
     1.  Populate the template with the following information:
 
         -   The value of the ifmap option for the `kernel_parameters` string that was determined in the previous step.
-        -   The xnames of Application nodes from Step 18
+        -   The component names (xnames) of Application nodes from Step 18
         -   The customized image ID from Step 17 for
         -   The CFS configuration session name from Step 17
     2.  Verify that the session template matches the format and structure in the following example:

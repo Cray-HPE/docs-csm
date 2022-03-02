@@ -100,8 +100,20 @@ errors=0
 peerindex=0
 
 # Gather the metallb peer information and add it to customizations
-for n in "NMN" "CMN"; do
+for n in "NMN" "CMN" "CHN"; do
 numpeers=0
+
+    netName=$(echo "${NETWORKSJSON}" | jq --arg n "$n" '.[] | select(.Name == $n) | .Name')
+
+    if [ -z "${netName}" ]; then
+        if [ "$n" == "CHN" ]; then
+            echo >&2 "info:  No CHN defined in SLS"
+        else
+            echo >&2 "error:  No ${n} defined in SLS"
+            errors=$((errors+1))
+        fi
+        continue
+    fi
 
     peerASN=$(echo "${NETWORKSJSON}" | jq --arg n "$n" '.[] | select(.Name == $n) | .ExtraProperties.PeerASN')
     myASN=$(echo "${NETWORKSJSON}" | jq --arg n "$n" '.[] | select(.Name == $n) | .ExtraProperties.MyASN')
@@ -118,7 +130,28 @@ numpeers=0
 
     subnets=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[].Name')
     for i in ${subnets}; do
-        if [ "${i}" == "network_hardware" ]; then
+        if [[ "${n}" == "CHN" && "${i}" == "bootstrap_dhcp" ]]; then
+            reservations=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" --arg i "$i" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[] | select(.Name == $i) | .IPReservations[].Name')
+            for j in ${reservations}; do
+                if [[ "${j}" =~ "chn-switch".* ]]; then
+                    numpeers=$((numpeers+1))
+                    peerIP=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" --arg i "$i" --arg j "$j" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[] | select(.Name == $i) | .IPReservations[] | select(.Name == $j) | .IPAddress')
+
+                    if [ -z "${peerIP}" -o "${peerIP}" == "null" -o "${peerIP}" == "" ]; then
+                        echo >&2 "error:  IPAddress missing in SLS for ${j} in network ${n}"
+                        errors=$((errors+1))
+                    fi
+
+                    if [ $errors -eq 0 ]; then
+                        yq w -i "$c" 'spec.network.metallb.peers['${peerindex}'].peer-address' "${peerIP}"
+                        yq w -i "$c" 'spec.network.metallb.peers['${peerindex}'].peer-asn' "${peerASN}"
+                        yq w -i "$c" 'spec.network.metallb.peers['${peerindex}'].my-asn' "${myASN}"
+                        peerindex=$((peerindex+1))
+                    fi
+                fi
+            done
+
+        elif [[ ("${n}" == "NMN" || "${n}" == "CMN")  && "${i}" == "network_hardware" ]]; then
             reservations=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" --arg i "$i" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[] | select(.Name == $i) | .IPReservations[].Name')
             for j in ${reservations}; do
                 if [[ "${j}" =~ .*"spine".* ]]; then
@@ -177,7 +210,7 @@ for n in ${networks}; do
             if [ $errors -eq 0 ]; then
                 yq w -i "$c" 'spec.network.metallb.address-pools['${poolindex}'].name' ${poolName}
                 yq w -i "$c" 'spec.network.metallb.address-pools['${poolindex}'].protocol' 'bgp'
-                yq w -i "$c" 'spec.network.metallb.address-pools['${poolindex}'].addresses[+]' ${poolCIDR}
+                yq w -i "$c" 'spec.network.metallb.address-pools['${poolindex}'].addresses[0]' ${poolCIDR}
                 poolindex=$((poolindex+1))
             fi
         fi
@@ -367,6 +400,7 @@ if [[ -z "$(yq r "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential')" 
         yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.url_safe' yes
     fi
 fi
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-nexus.sealedSecrets[+]' "{{ kubernetes.sealed_secrets['nexus-admin-credential'] | toYaml }}"
 
 # remove cray-keycloak-gatekeeper
 yq d -i "$c" 'spec.kubernetes.services.cray-keycloak-gatekeeper'
@@ -395,17 +429,17 @@ yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-spe
 
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-management.sealedSecrets[0]'  "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-management'] | toYaml }}"
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-management.hostAliases[0].ip' '{{ network.netstaticips.nmn_api_gw }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-management.hostAliases[0].hostnames[+]' 'auth.cmn.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-management.hostAliases[0].hostnames[0]' 'auth.cmn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-management.hosts' '{{ proxiedWebAppExternalHostnames.customerManagement }}'
 
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-access'] | toYaml }}"
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.hostAliases[0].ip' '{{ network.netstaticips.nmn_api_gw }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.hostAliases[0].hostnames[0]' 'auth.can.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.hostAliases[0].hostnames[0]' 'auth.cmn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-access.hosts' '{{ proxiedWebAppExternalHostnames.customerAccess }}'
 
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.sealedSecrets[0]' "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-high-speed'] | toYaml }}"
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.hostAliases[0].ip' '{{ network.netstaticips.nmn_api_gw }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.hostAliases[0].hostnames[0]' 'auth.chn.{{ network.dns.external }}'
+yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.hostAliases[0].hostnames[0]' 'auth.cmn.{{ network.dns.external }}'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-high-speed.hosts' '{{ proxiedWebAppExternalHostnames.customerHighSpeed }}'
 
 # cray-kiali

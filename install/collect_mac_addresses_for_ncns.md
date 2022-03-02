@@ -120,8 +120,6 @@ making a backup of them, in case they need to be examined at a later time.
          {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
 
 
-1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
-
 1. Copy the interface config files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
 
    ```bash
@@ -187,8 +185,6 @@ making a backup of them, in case they need to be examined at a later time.
         ```bash
         pit# systemctl restart basecamp nexus dnsmasq conman
         ```
-
-1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
 
 1. Verify that all BMCs can be pinged.
 
@@ -313,8 +309,6 @@ making a backup of them, in case they need to be examined at a later time.
          {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
 
 
-1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
-
 1. Copy the interface config files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
 
    ```bash
@@ -397,8 +391,6 @@ making a backup of them, in case they need to be examined at a later time.
    pit# alias yq="/var/www/ephemeral/prep/site-init/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
    pit# yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)
    ```
-
-1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
 
 <a name="next-topic"></a>
 # Next Topic

@@ -92,8 +92,8 @@ state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
-    ssh ${upgrade_ncn} 'wget -q http://rgw-vip.nmn/ncn-utils/csi;chmod 0755 csi; mv csi /usr/local/bin/csi'
-    ssh ${upgrade_ncn} 'csi pit validate --postgres'
+    wget -q http://rgw-vip.nmn/ncn-utils/csi;chmod 0755 csi; mv csi /usr/local/bin/csi
+    csi pit validate --postgres
 
     record_state "${state_name}" ${upgrade_ncn}
 else
@@ -156,28 +156,54 @@ EOF
     read -p "Read and act on above steps. Press Enter key to continue ..."
 fi
 
-### redeploy cps if required
+### redeploy CPS if required
 redeploy=$(cat /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot | grep $upgrade_ncn | wc -l)
 if [[ $redeploy == "1" ]];then
     cray cps deployment update --nodes $upgrade_ncn
-    while [[ $(cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="|grep -v "running" | wc -l) != 0 ]]
-    do
-        printf "%c" "."
-        counter=$((counter+1))
-        if [ $counter -gt 30 ]; then
-            counter=0
-            echo "ERROR: CPS is not running on $upgrade_ncn"
-            cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="
-            exit 1
+    # We will retry for a few minutes before giving up
+    tmpfile=/tmp/cray-cps-deployment-list.${upgrade_ncn}.$$.$(date +%Y-%m-%d_%H-%M-%S.%N).tmp
+    count=0
+    while [ true ]; do
+        if ! cray cps deployment list --nodes $upgrade_ncn > $tmpfile ; then
+            # This command can fail when a node is first being brought up and deploying its CPS pods.
+            if [[ $count -gt 30 ]]; then
+                rm -f "$tmpfile" >/dev/null 2>&1 || true
+                echo "ERROR: Command still failing after retries: Command failed: cray cps deployment list --nodes $upgrade_ncn"
+                exit 1
+            fi
+            echo "Command failed: cray cps deployment list --nodes $upgrade_ncn; retrying in 5 seconds"
+            sleep 5
+            let count += 1
+            continue
         fi
-        sleep 5
+        cps_state=$(grep -E "state =" "$tmpfile"|grep -v "running" | wc -l)
+        if [[ $cps_state -ne 0 ]];then
+            if [[ $count -gt 30 ]]; then
+                echo "ERROR: CPS is not running on $upgrade_ncn"
+                cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="
+                rm -f "$tmpfile" >/dev/null 2>&1 || true
+                exit 1
+            fi
+            echo "CPS not running yet on $upgrade_ncn; checking again in 5 seconds"
+            sleep 5
+            let count += 1
+            continue
+        fi
+        rm -f "$tmpfile" >/dev/null 2>&1 || true
+        cps_pod_assigned=$(kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $upgrade_ncn|wc -l)
+        if [[ $cps_pod_assigned -ne 1 ]];then
+            if [[ $count -gt 30 ]]; then
+                echo "ERROR: CPS pod is not assigned to $upgrade_ncn"
+                kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $upgrade_ncn
+                exit 1
+            fi
+            echo "CPS pod not assigned yet to $upgrade_ncn; checking again in 5 seconds"
+            sleep 5
+            let count += 1
+            continue
+        fi
+        break
     done
-    cps_pod_assigned=$(kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $upgrade_ncn|wc -l)
-    if [[ $cps_pod_assigned -ne 1 ]];then
-        echo "ERROR: CPS pod is not assigned to $upgrade_ncn"
-        kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $upgrade_ncn
-        exit 1
-    fi
 fi
 
 state_name="ENSURE_KEY_PODS_HAVE_STARTED"

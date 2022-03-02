@@ -5,7 +5,7 @@ the `rotate-ssh-keys-mgmt-nodes.yml` Ansible playbook provided by CSM or through
 NCN node personalization (`site.yml`).
 
 The NCNs deploy with ssh keys for the root user that are changed during the system
-install. See [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md)
+install. See [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 for more information on changing the default keys during install. It is a
 recommended best practice for system security to change the SSH keys after the
 install is complete on a schedule. This procedure defines how to change the keys

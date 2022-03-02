@@ -270,11 +270,7 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
     pit# yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)
     ```
 
-8. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
-   
-   Return to this procedure after applying the workaround instructions.
-
-9. Wipe the disks before relaunching the NCNs.
+8. Wipe the disks before relaunching the NCNs.
 
    See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
 

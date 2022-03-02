@@ -75,6 +75,7 @@ Here are some examples:
     ```
 
     Delete all UAIs belonging to a given UAI Class:
+    
     ```bash
     ncn-m001-pit# cray uas admin uais delete --class-id a630cbda-24b4-47eb-a1f7-be1c25965ead
     results = [ "Successfully deleted uai-vers-5ef890be", "Successfully deleted uai-vers-da65468d",]
@@ -89,7 +90,8 @@ An authorized user in Legacy Mode can delete any UAI created by that user using 
 vers> cray uas delete --uai-list UAI-NAMES
 ```
 
-To get a list of UIAs the user can delete, the user can use:
+To get a list of UAIs the user can delete:
+
 ```bash
 vers> cray uas list
 ```
@@ -119,8 +121,17 @@ uai_msg = ""
 uai_name = "uai-vers-ea57eb7b"
 uai_status = "Running: Ready"
 username = "vers"
+```
 
+To delete the UAI:
+
+```
 vers> cray uas delete --uai-list uai-vers-be3e219c,uai-vers-ea57eb7b
+```
+
+Output similar to the following is expected:
+
+```
 results = [ "Successfully deleted uai-vers-be3e219c", "Successfully deleted uai-vers-ea57eb7b",]
 ```
 

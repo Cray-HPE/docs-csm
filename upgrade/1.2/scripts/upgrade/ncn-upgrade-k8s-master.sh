@@ -163,6 +163,33 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+if [[ ${upgrade_ncn} != "ncn-m001" ]]; then
+   state_name="UPDATE_M001_KUBEAPI_SERVICE_ISSUER"
+   state_recorded=$(is_state_recorded "${state_name}" ncn-m001)
+   if [[ $state_recorded == "0" ]]; then
+      echo "====> ${state_name} ..."
+
+      /usr/share/doc/csm/upgrade/1.2/scripts/k8s/update_kubeapi_service_issuer.sh ncn-m001
+
+      record_state "${state_name}" ncn-m001
+   else
+      echo "====> ${state_name} has been completed"
+   fi
+fi
+
+# Update kubeapi istio-ca audience newly upgraded master
+state_name="UPDATE_KUBEAPI_ISTIO_CA"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+   echo "====> ${state_name} ..."
+
+   /usr/share/doc/csm/upgrade/1.2/scripts/k8s/update_kubeapi_istio_ca.sh ${upgrade_ncn}
+
+   record_state "${state_name}" ${upgrade_ncn}
+else
+   echo "====> ${state_name} has been completed"
+fi
+
 cat <<EOF
 NOTE:
     If below test failed, try to fix it based on test output. Then run current script again
