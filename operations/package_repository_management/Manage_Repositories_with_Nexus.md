@@ -2,13 +2,25 @@
 
 This section describes how to connect to Nexus with the Web UI, as well as how to access the REST API from non-compute nodes \(NCNs\) or compute nodes to manage repositories.
 
-## Using Keycloak to Create and Manage Accounts
+### Using Keycloak to Create and Manage Accounts
 
 To log into the Web UI or authenticate with the REST API a user account with approate permissions must be created. Accounts are managed in keycloak \(see keycloak account documentation [here](../CSM_product_management/Configure_Keycloak_Account.md)\). To add administrator permissions for nexus add the nx-admin role binding to the user from the system-nexus-client client \(see below\). To add an anonymous user add the nx-anonymous role binding to the user from the sysyem-nexus-client client \(see below\).
 
     ![Nexus Admin Account](../../img/operations/Nexus_Admin_Account.png "Nexus Admin Account")
 
     ![Nexus Anonymous Account](../../img/operations/Nexus_Anonymous_Account.png "Nexus Anonymous Account")
+
+### Using the Local Nexus Admin Account
+
+During the deployment or update of Nexus a local admin account is created. To access the local admin account for Nexus on any ncn run the following commands:
+
+```bash
+kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d; echo
+
+kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d; echo
+```
+
+The first command will return with username of the local admin account, and the second will return the password for the local admin account. \(Note the secret will not update or stay in sync if the username or password of the local account is changed.\). This account has the same permissions as an account creted in keycloak with the nx-admin role.
 
 ### Access Nexus with the Web UI
 
