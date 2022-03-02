@@ -40,7 +40,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
    export NODE=<node being removed>
    ```
 
-5. Reweigh the OSD\(s\) ***on the node being removed***qq to rebalance the cluster.
+5. Reweigh the OSD\(s\) ***on the node being removed*** to rebalance the cluster.
 
 
     1. Change the weight and crush weight of the OSD being removed to 0.
@@ -61,7 +61,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     for osd in $(ceph osd ls-tree $NODE); 
     do 
       ceph osd down osd.$osd; 
-      ceph osddestroy osd.$osd --force; 
+      ceph osd destroy osd.$osd --force; 
       ceph osd purge osd.$osd --force;
     done
     ```
