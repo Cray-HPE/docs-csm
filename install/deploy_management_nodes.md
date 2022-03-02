@@ -106,6 +106,13 @@ proceed to step 2.
 
    This ensures that the PIT is configured with an accurate date/time, which will be properly propagated to the NCNs during boot.
 
+   If you receive the error `Failed to set time: NTP unit is active` you will need to stop `chrony` first.
+
+   ```bash
+   pit# systemctl stop chronyd
+   ```
+   Then run the commands above to complete the process.
+
 1. Ensure the current time is set in BIOS for all management NCNs.
 
    > If each NCN is booted to the BIOS menu, you can check and set the current UTC time.

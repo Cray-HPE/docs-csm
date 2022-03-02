@@ -8,7 +8,7 @@ This procedure requires administrative privileges.
 
 ### Procedure
 
-1.  Set the date manually if the time on NCNs is off by more than an a few hours, days, or more.
+1.  Set the date manually if the time on NCNs is off by more than a few hours.
 
     For example:
 
