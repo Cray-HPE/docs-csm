@@ -171,6 +171,14 @@ Run check script:
    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
    ```
 
+**NOTE** During the UPDATE\_SSH\_KEYS phase, you will need to respond to interactive prompts for connecting to each NCN. Respond with yes to these prompts. Here is an example:
+
+```bash
+The authenticity of host 'ncn-m002 (10.252.1.5)' can't be established.
+ECDSA key fingerprint is SHA256:2vaDS/nR7pZ2VX1rl+HrHM0YsOSxvHtd2WptSNzNNqM.
+Are you sure you want to continue connecting (yes/no/[fingerprint])?
+```
+
 **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. **IF** the upgrade `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
 
 **`IMPORTANT:`** If the `NEXUS_PASSWORD` environment variable was set as previously mentioned, then remove it before continuing:
