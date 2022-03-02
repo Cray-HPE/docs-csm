@@ -94,10 +94,10 @@ function ssh_keygen_keyscan() {
     [ -n "${ncn_ip}" ]
     # Because we may be called without set -e, we should check return codes after running commands
     [ $? -ne 0 ] && return 1
-    echo "${upgrade_ncn} IP address is ${ncn_ip}"
-    ssh-keygen -R "${upgrade_ncn}" -f "${known_hosts}"
+    echo "Updating SSH keys for node ${upgrade_ncn} with IP address of ${ncn_ip}"
+    ssh-keygen -R "${upgrade_ncn}" -f "${known_hosts}" > /dev/null 2>&1
     [ $? -ne 0 ] && return 1
-    ssh-keygen -R "${ncn_ip}" -f "${known_hosts}"
+    ssh-keygen -R "${ncn_ip}" -f "${known_hosts}" > /dev/null 2>&1
     [ $? -ne 0 ] && return 1
     ssh-keyscan -H "${upgrade_ncn},${ncn_ip}" >> "${known_hosts}"
     return $?
