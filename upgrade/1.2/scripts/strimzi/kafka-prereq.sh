@@ -35,11 +35,13 @@ for i in $(kubectl get -n services kafkatopics | awk '{print $1}' | tail -n+2); 
 	kubectl label -n services kafkatopics.kafka.strimzi.io "$i" 'app.kubernetes.io/managed-by=Helm' --overwrite=true
 done
 
-echo "Backing up helm release cray-kafka-operator secret to /tmp/sh.helm.release.v1.cray-kafka-operator.v1.yaml"
-kubectl get secret -n operators sh.helm.release.v1.cray-kafka-operator.v1 -o yaml >/tmp/sh.helm.release.v1.cray-kafka-operator.v1.yaml
+for secret in $(kubectl get secrets -n operators -oname | grep sh.helm.release.v1.cray-kafka-operator | cut -d/ -f2); do
+	echo "Backing up helm release cray-kafka-operator secret to /tmp/$secret.yaml"
+	kubectl get secret -n operators "$secret" -o yaml >/tmp/"$secret".yaml
 
-echo "Removing helm secret"
-kubectl delete secret -n operators sh.helm.release.v1.cray-kafka-operator.v1 || true
+	echo "Removing helm secret $secret"
+	kubectl delete secret -n operators "$secret"
+done
 
 echo "Creating a snapshot file in zookeeper if one does not already exist"
 for i in $(kubectl get pods -A | grep zookeeper | awk '{print $1":"$2}'); do
