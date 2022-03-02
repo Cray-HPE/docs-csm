@@ -243,6 +243,7 @@ def create_bican_network(networks, default_route_network_name):
         bican = BicanNetwork(default_route_network_name=default_route_network_name)
         networks.update({bican.name(): bican})
 
+
 def remove_can_static_pool(networks):
     """Remove MetalLB Static pool in CAN (and CHN).
 
@@ -393,6 +394,16 @@ def migrate_can_to_cmn(networks, preserve=None, overrides=None):
         overrides,
     )
 
+    click.echo("    Cleaning up remnant CAN switch reservations in boostrap_dhcp")
+    network = networks.get(destination_network_name)
+    if network is None:
+        return
+    bootstrap_subnet = network.subnets().get("bootstrap_dhcp")
+    switches = ["cmn-switch-1", "cmn-switch-2"]
+    for switch in switches:
+        if bootstrap_subnet.reservations().get(switch) is not None:
+            del bootstrap_subnet.reservations()[switch]
+
 
 def convert_can_ips(networks, can_data, preserve=None, overrides=None):
     """Change subnet and IPs on the CAN.
@@ -539,6 +550,17 @@ def clone_subnet_and_pivot(
         # Clone the old subnet and change naming
         #
         new_subnet = Subnet.subnet_from_sls_data(old_subnet.to_sls())
+        if old_subnet.full_name().find("HMN") != -1:
+            new_subnet.full_name(
+                old_subnet.full_name().replace("HMN", f"{destination_network_name}"),
+            )
+        else:
+            new_subnet.full_name(
+                old_subnet.full_name().replace(
+                    f"{source_network_name}",
+                    f"{destination_network_name}",
+                ),
+            )
         new_subnet.name(new_subnet_name)
         for reservation in new_subnet.reservations().values():
             reservation.name(
@@ -639,7 +661,9 @@ def clone_subnet_and_pivot(
             new_subnet.ipv4_address(seed_subnet)
             click.echo("        Adding gateway IP address")
             new_subnet.ipv4_gateway(next_free_ipv4_address(new_subnet))
-            click.echo(f"        Adding IPs for {len(old_reservations.values())} Reservations")
+            click.echo(
+                f"        Adding IPs for {len(old_reservations.values())} Reservations",
+            )
             for old in old_reservations.values():
                 try:
                     new_subnet.reservations().update(
@@ -676,15 +700,6 @@ def clone_subnet_and_pivot(
                     fg="bright_yellow",
                 )
 
-            # Grugingly apply the supernet hack with a bit of trickery
-            if "metallb" not in new_subnet.name():
-                click.echo("        Applying supernet hack")
-                new_subnet.ipv4_gateway(
-                    next_free_ipv4_address(
-                        Subnet("temp", new_network.ipv4_network(), "0.0.0.0", 1),
-                    ),
-                )
-
         #
         # Add the new subnet to the network
         #
@@ -694,6 +709,20 @@ def clone_subnet_and_pivot(
             str(i) for i in sorted(free_ipv4_subnets(new_network), key=prefixlength)
         ]
         click.echo(f"    Remaining subnets: {remaining_subnets}")
+
+    #
+    # Grudgingly apply the supernet hack
+    #
+    for subnet in new_network.subnets().values():
+        if subnet.name().find("metallb") != -1:
+            continue
+        click.echo(f"    Applying supernet hack to {subnet.name()}")
+        subnet.ipv4_address(new_network.ipv4_address())
+        subnet.ipv4_gateway(
+            next_free_ipv4_address(
+                Subnet("temp", new_network.ipv4_network(), "0.0.0.0", 1),
+            ),
+        )
 
     #
     # Add the new (cloned) network to the list
@@ -732,7 +761,13 @@ def update_nmn_uai_macvlan_dhcp_ranges(networks):
     uai_macvlan_subnet.vlan(nmn_vlan)
 
 
-def create_metallb_pools_and_asns(networks, bgp_asn, bgp_chn_asn, bgp_cmn_asn, bgp_nmn_asn):
+def create_metallb_pools_and_asns(
+    networks,
+    bgp_asn,
+    bgp_chn_asn,
+    bgp_cmn_asn,
+    bgp_nmn_asn,
+):
     """Update the NMN and CMN by creating the BGP peering.
 
     Args:
