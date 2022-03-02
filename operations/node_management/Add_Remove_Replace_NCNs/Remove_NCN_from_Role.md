@@ -6,7 +6,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
 
 ## Procedure
 
-**IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#prerequisites) 
+**IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#remove-prerequisites) 
 
 - [Master node](#master-node-remove-roles)
 - [Worker node](#worker-node-remove-roles)
@@ -120,7 +120,7 @@ Run the following:
 <a name="storage-node-remove-roles"></a>
 ## Storage Node Procedure
 
-Follow [Remove Ceph Node](../utility_storage/Remove_Ceph_Node.md) to remove Ceph role from the storage node.
+Follow [Remove Ceph Node](../../utility_storage/Remove_Ceph_Node.md) to remove Ceph role from the storage node.
 
 Once the storage node role removal is complete; proceed to [wipe the drives](#wipe-the-drives).
 

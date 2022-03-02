@@ -16,7 +16,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 ### Step 2 - Set the PXE boot option and power on the node
 
-**IMPORTANT:** These commands assumes you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#prerequisites).
+**IMPORTANT:** These commands assumes you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#add-prerequisites).
 
 1. Set the BMC variable to the hostname of the BMC of the node being rebuilt.
 
@@ -119,7 +119,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 ### Step 5 - For the next step please click the link for the node type you are adding.
 
 - [Worker node]()
-- [Storage node](../../../operations/utility_storage/Add_Ceph_Node.md)
+- [Storage node](../../utility_storage/Add_Ceph_Node.md)
 - [Master node]()
 
 
