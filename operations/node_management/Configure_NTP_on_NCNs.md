@@ -1,6 +1,6 @@
 # Configure NTP on NCNs
 
-The management nodes serve Network Time Protocol (NTP) at stratum 10, except for ncn-m001, which serves at stratum 8 (or lower if an upstream NTP server is set), and all management nodes peer with each other. 
+The management nodes serve Network Time Protocol (NTP) at stratum 10, except for ncn-m001, which serves at stratum 8 (or lower if an upstream NTP server is set). All management nodes peer with each other. 
 
 Until an upstream NTP server is configured. The time on the NCNs may not match the current time at the site, but they will stay in sync with each other.
 
@@ -246,6 +246,9 @@ systemctl restart chronyd
 
 This procedure needs to be completed on the PIT node before the other management nodes are deployed.
 
+**WARNING**: UTC is the default and recommended setting for hardware and system clocks. It is not recommended to change
+timezones unless absolutely required.
+
 <a name="configure_ntp_on_pit_to_local_timezone"></a>
 #### Configure NTP on PIT to Local Timezone
 
@@ -259,7 +262,6 @@ there. You can find a list of timezones to use in the commands below by running 
    pit# export NEWTZ=America/Chicago
    pit# echo -e "\nTZ=${NEWTZ}" >> /etc/environment
    pit# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone ${NEWTZ}#" /root/bin/configure-ntp.sh
-   pit# sed -i 's/--utc/--localtime/' /root/bin/configure-ntp.sh
    pit# /root/bin/configure-ntp.sh
    ```
 
@@ -274,7 +276,7 @@ there. You can find a list of timezones to use in the commands below by running 
    200 OK
    NEW TIME SETTINGS
    rtc: 2021-03-26 06:35:16.576477-05:00
-   sys: 2021-03-26 06:35:17.004587-0500
+   sys: 2021-03-26 11:35:17.015647+0000
    ```
 
 1. Verify the new timezone setting by running `timedatectl` and `hwclock --verbose`.
@@ -302,21 +304,18 @@ there. You can find a list of timezones to use in the commands below by running 
    Example output:
 
    ```
-   hwclock from util-linux 2.33.1
-   System Time: 1616758841.688220
+   hwclock from util-linux 2.36.2
+   System Time: 1646252989.954801
    Trying to open: /dev/rtc0
    Using the rtc interface to the clock.
-   Last drift adjustment done at 1616758836 seconds after 1969
-   Last calibration done at 1616758836 seconds after 1969
-   Hardware clock is on local time
-   Assuming hardware clock is kept in local time.
+   Assuming hardware clock is kept in UTC time.
    Waiting for clock tick...
    ...got clock tick
-   Time read from Hardware Clock: 2021/03/26 06:40:42
-   Hw clock time : 2021/03/26 06:40:42 = 1616758842 seconds since 1969
-   Time since last adjustment is 6 seconds
+   Time read from Hardware Clock: 2022/03/02 20:32:05
+   Hw clock time : 2022/03/02 20:32:05 = 1646253125 seconds since 1969
+   Time since last adjustment is 1646253125 seconds
    Calculated Hardware Clock drift is 0.000000 seconds
-   2021-03-26 06:40:41.685618-05:00
+   2022-03-02 20:32:04.635091+00:00
    ```
 
 1. If the time is off and not accurate to your timezone, you will need to _manually_ set the date and then run the NTP script again.
@@ -328,6 +327,13 @@ there. You can find a list of timezones to use in the commands below by running 
    ```
 
    The PIT is now configured to your local timezone.
+
+   If you receive the error `Failed to set time: NTP unit is active` you will need to stop `chrony` first.
+
+   ```bash
+   pit# systemctl stop chronyd
+   ```
+   Then run the commands above to complete the process.
 
 <a name="configure_ncn_images_to_use_local_timezone"></a>
 #### Configure NCN Images to Use Local Timezone
@@ -363,7 +369,6 @@ You need to adjust the node images so that they also boot in the local timezone.
     ```bash
     pit-chroot# echo TZ=${NEWTZ} >> /etc/environment
     pit-chroot# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone $NEWTZ#" /srv/cray/scripts/metal/set-ntp-config.sh
-    pit-chroot# sed -i 's/--utc/--localtime/' /srv/cray/scripts/metal/set-ntp-config.sh
     pit-chroot# /srv/cray/scripts/common/create-kis-artifacts.sh
     pit-chroot# exit
     pit#
@@ -411,7 +416,6 @@ You need to adjust the node images so that they also boot in the local timezone.
     ```bash
     pit-chroot# echo TZ=${NEWTZ} >> /etc/environment
     pit-chroot# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone $NEWTZ#" /srv/cray/scripts/metal/set-ntp-config.sh
-    pit-chroot# sed -i 's/--utc/--localtime/' /srv/cray/scripts/metal/set-ntp-config.sh
     pit-chroot# /srv/cray/scripts/common/create-kis-artifacts.sh
     pit-chroot# exit
     pit#
