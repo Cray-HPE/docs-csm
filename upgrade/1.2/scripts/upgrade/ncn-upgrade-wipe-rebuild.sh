@@ -156,6 +156,11 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${TOKEN}" \
+            "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$UPGRADE_XNAME" \
+            | jq '.[]| select(.endpoint=="bootscript")|.last_epoch')
+
 state_name="POWER_CYCLE_NCN"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then
@@ -171,11 +176,6 @@ if [[ $state_recorded == "0" ]]; then
 else
     echo "====> ${state_name} has been completed"
 fi
-
-bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${TOKEN}" \
-            "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$UPGRADE_XNAME" \
-            | jq '.[]| select(.endpoint=="bootscript")|.last_epoch')
 
 state_name="WAIT_FOR_NCN_BOOT"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
