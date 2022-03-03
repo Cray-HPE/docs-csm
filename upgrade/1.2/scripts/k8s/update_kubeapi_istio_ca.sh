@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # MIT License
 #
@@ -21,16 +22,19 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: backport
- 
-on:
-  issue_comment:
-    types:
-      - created
- 
-jobs:
-  backport:
-    runs-on: ubuntu-latest
-    if: github.event.issue.pull_request
-    steps:
-      - uses: Cray-HPE/backport-command-action@main
+master=$1
+
+export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+echo "Adding istio-ca api audience for kube-api on $master:"
+pdsh -b -S -w $master "sed -i '/tls-private-key-file/a\    - --api-audiences=api,istio-ca' /etc/kubernetes/manifests/kube-apiserver.yaml"
+rc=$?
+if [ "$rc" -ne 0 ]; then
+  echo ""
+  echo "ERROR: Updating kube-apiserver manifest failed. The output from this script should be inspected"
+  echo "       and addressed before moving on with the upgrade. If unable to determine the issue"
+  echo "       and run this script without errors, discontinue the upgrade and contact HPE Service"
+  echo "       for support."
+  exit 1
+fi
+echo "Sleeping for one minute to let kube-apiserver restart on $master"
+sleep 60

@@ -25,10 +25,10 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
         ncn-m001# rpm -Uvh docs-csm-latest.noarch.rpm
         ```
 
-    * Air Gapped
+    * Air Gapped (replace the PATH_TO below with the location of the rpm)
 
         ```bash
-        ncn-m001# cd /root/
+        ncn-m001# cp [PATH_TO_docs-csm-*.noarch.rpm] /root
         ncn-m001# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
         ```
 
@@ -143,12 +143,13 @@ python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
 
 ## Stage 0.6 - Backup BSS Data
 
-In the event of a problem during the upgrade which may cause the loss of BSS data, perform the following to preserve this data.
+In the event of a problem during the upgrade which may cause the loss of BSS data, perform the following to preserve this data, and back it up to the vbis bucket in your Ceph cluster.
 
    ```bash
-   ncn-m001# cray bss bootparameters list --format=json >bss-backup-$(date +%Y-%m-%d).json
+   ncn-m001# cray bss bootparameters list --format=json > bss-backup-$(date +%Y-%m-%d).json
+   ncn-m001# cray artifacts create vbis bss-backup-$(date +%Y-%m-%d).json bss-backup-$(date +%Y-%m-%d).json
    ```
 
-The resulting file needs to be saved in the event that BSS data needs to be restored in the future.
+The resulting file will be available in the vbis bucket in the event that BSS data needs to be restored in the future.
 
 Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).
