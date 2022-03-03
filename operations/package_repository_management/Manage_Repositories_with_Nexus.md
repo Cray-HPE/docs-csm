@@ -48,6 +48,7 @@ The following actions are described in this section:
 -   Create a Blob Store
 -   Delete a Blob Store
 
+
 ### Pagination
 
 Various API endpoints use the external [pagination](https://help.sonatype.com/repomanager3/rest-and-integration-api/pagination) too to return results. When a `continuationToken` included in the results is non-null, it indicates additional items are available.
@@ -396,5 +397,39 @@ For example:
 # curl -sfkSL -X DELETE "https://packages.local/service/rest/v1/blobstores/NAME"
 ```
 
+### Authenticating to Access the REST API
+
+To access some of the REST API functions not listed above you need to authenticate using a username and password. This username and password is the same used to sign into the Web UI. Either the username and password of a properly permissioned Keycloak account or the nexus local admin account must be used. To get the nexus local admin account after a fresh install you can run the follow fuction:
+
+```bash
+function nexus-get-credential() {
+    
+    if ! command -v kubectl 1>&2 >/dev/null; then
+      echo "Requires kubectl"
+      return 1
+    fi 
+    if ! command -v base64 1>&2 >/dev/null ; then
+      echo "Requires base64"
+      return 1
+    fi 
+
+    [[ $# -gt 0 ]] || set -- -n nexus nexus-admin-credential
+
+    kubectl get secret "${@}" >/dev/null || return $?
+
+    NEXUS_USERNAME="$(kubectl get secret "${@}" --template {{.data.username}} | base64 -d)"
+    NEXUS_PASSWORD="$(kubectl get secret "${@}" --template {{.data.password}} | base64 -d)"
+}
+```
+
+Then to use the REST API you could use the following line \(The second line uses a keycloak account with username:USERNAME and password:PASSWORD this is only an example and they should be replaced with the proper username and password\):
+
+```bash
+# Nexus-local user
+curl -i -sfv -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" -H "accept: application/json" -X GET https://packages.local/service/rest/beta/security/user-sources
+
+# Keycloak user
+curl -i -sfv -u "USERNAME:PASSWORD" -H "accept: application/json" -X GET https://packages.local/service/rest/beta/security/user-sources
+```
 
 
