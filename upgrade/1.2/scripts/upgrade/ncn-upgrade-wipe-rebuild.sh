@@ -50,11 +50,10 @@ if [[ $state_recorded == "0" ]]; then
 EOF
     elif [[ $upgrade_ncn == ncn-m* ]]; then
     cat <<'EOF' > wipe_disk.sh
-    usb_device=$(lsblk -b -l -o TRAN,PATH | grep usb)
+    usb_device_path=$(lsblk -b -l -o TRAN,PATH | awk /usb/'{print $2}')
     usb_rc=$?
     set -e
     if [[ "$usb_rc" -eq 0 ]]; then
-      usb_device_path=$(echo $usb_device | awk '{print $2}')
       if blkid -p $usb_device_path; then
         have_mnt=0
         for mnt_point in /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata; do
@@ -72,8 +71,12 @@ EOF
     for md in /dev/md/*; do mdadm -S $md || echo nope ; done
     vgremove -f --select 'vg_name=~metal*' || true
     pvremove /dev/md124 || true
-    wipefs --all --force /dev/sd* /dev/disk/by-label/* || true
-    sgdisk --zap-all /dev/sd*
+    # Select the devices we care about; RAID, SATA, and NVME devices/handles (but *NOT* USB)
+    disk_list=$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(raid|sata|nvme|sas)' | sort -u | awk '{print "/dev/"$2}' | tr '\n' ' ')
+    for disk in $disk_list; do
+        wipefs --all --force wipefs --all --force "$disk" || true
+        sgdisk --zap-all "$disk"
+    done
 EOF
     else
     cat <<'EOF' > wipe_disk.sh
