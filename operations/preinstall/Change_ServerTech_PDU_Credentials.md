@@ -8,10 +8,11 @@ the same global credentials.
 ServerTech PDU hardware. No credentials are set in any management software.
 
 ## Prerequisites
+
 - The ServerTech PDUs must be accessible via a workstation or laptop.
-- Workstation or laptop has the 'curl' command installed.
+- Workstation or laptop has the `curl` command installed.
 - The ServerTech PDU hostnames or IP addresses must be known.
-- The default 'admn' user password must be known for each PDU.
+- The default `admn` user password must be known for each PDU.
 
 ## Procedure
 
@@ -37,7 +38,7 @@ For each ServerTech PDU:
    Pragma: JAWS v1.01
    ```
 
-   **NOTE**: After 5 minutes the previous credential should stop working, as the existing session timed out.
+   **NOTE:** After 5 minutes, the previous credential should stop working as the existing session timed out.
 
 1. Verify that the new password works:
    
