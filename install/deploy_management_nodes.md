@@ -306,7 +306,6 @@ The configuration workflow described here is intended to help understand the exp
     pit# csi pit validate --livecd-preflight
     ```
 
-    > Note: This check sometimes leaves the terminal in a state where input is not echoed to the screen. If this happens, running the `reset` command will correct it.
     > Note: You can ignore any errors about not being able resolve arti.dev.cray.com.
 
 1. Print the consoles available to you:
