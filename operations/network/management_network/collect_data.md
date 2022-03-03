@@ -1,48 +1,57 @@
 # Collect Data 
 
-#### Prerequisites 
+## Prerequisites 
+
 - SSH access to the switches.
 - SLS API access.
 
-* ***Step 1***: Retrieve the most up-to-date SHCD spreadsheet. Accuracy in this spreadsheet is critical. 
+1. Retrieve the most up-to-date SHCD spreadsheet. Accuracy in this spreadsheet is critical.
 
-For example: 
-* Internal repository
-* Customer reposotiry
+    For example:
+    - Internal repository
+    - Customer reposotiry
 
-* ***Step 2***: Retrieve SLS file from a Shasta system (log in to ncn-m001) on a NCN, this will output the sls file to a file called sls_file.json in your current working directory. 
+1. Retrieve SLS file from a Shasta system (log in to ncn-m001) on a NCN, this will output the sls file to a file called sls_file.json in your current working directory.
 
-##### If this is an upgrade SLS needs to be updated to the correct CSM version first.
+    **IMPORTANT:** If this is an upgrade SLS needs to be updated to the correct CSM version first
 
-Run the command  
+    Run the command  
 
-```
-cray sls dumpstate list  --format json >> sls_file.json   
-```
- 
-* ***Step 3***: Retrieve switch running configs (log in to ncn-m001) 
+    ```text
+    cray sls dumpstate list  --format json >> sls_file.json   
+    ```
 
-Log into the management network switches, you can get the ips/hostnames by running this command on a NCN:   
+1. Retrieve switch running configs.
 
-```
-cat /etc/hosts | grep sw- 
-```
+    CANU can backup all the management network switches using either the SLS input file or the SLS api.
+    This can also be done from outside the cluster using the CMN switch IPs.  
 
-If /etc/hosts is not available because the system is being installed you will be on the pit and will need to run:  
+    ```bash
+    ncn-w001# canu backup network --folder switch_backups/ --sls-file ./sls_input_file_1_2.json
+    Enter the switch password:
+    -
+    Running Configs Saved
+    ---------------------
+    sw-spine-001.cfg
+    sw-spine-002.cfg
+    sw-leaf-001.cfg
+    sw-leaf-002.cfg
+    sw-leaf-003.cfg
+    sw-leaf-004.cfg
+    sw-leaf-bmc-001.cfg
+    sw-leaf-bmc-002.cfg
+    sw-cdu-001.cfg
+    sw-cdu-002.cfg
+    ```
 
-```
-cat /var/www/ephemeral/prep/redbull/sls_input_file.json | jq '.Networks | .HMN | .ExtraProperties.Subnets | .[] | select(.Name=="network_hardware")' 
-```
+    If the SLS API is up, you do not need to provide an SLS file.
 
-Run the script below to automatically collect all switch configs.  If the command fails then log in to each individual switch and run show run. 
- 
+1. Retrieve customizations file. (log in from ncn-m001)
 
-* ***Step 4***: Retrieve customizations file. (log in from ncn-m001) 
+    Run the command  
 
-Run the command  
+    ```bash
+    kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml 
+    ```
 
-```
-kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml 
-```
- 
-This will output the customizations file to a file called ***customizations.yaml*** in your current working directory. 
+    This will output the customizations file to a file called ***customizations.yaml*** in your current working directory.
