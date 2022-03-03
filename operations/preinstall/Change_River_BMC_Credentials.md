@@ -28,7 +28,7 @@ each blade's BMC, and then use `curl` to set the root BMC account password to
 the desired password (which must match the one set in customizations.yaml).
 
 Each Redfish BMC will have at least one "account", and often several accounts.
-Each account has an ordinal number, and only one of the accounts is the *root*
+Each account has an ordinal number, and only one of the accounts is the `root`
 account. This account is the one that must have its password changed.
 
 #### Procedure
@@ -70,11 +70,11 @@ Use the following procedure for each BMC:
    }
    ```
 
-3. For each account listed, use *curl* to find the one which describes the *root* account ("UserName": "root").
+3. For each account listed, use `curl` to find the one which describes the `root` account ("UserName": "root").
    
    **NOTES:**
-   - The root account can be any of the listed accounts -- no guarantees as to which one it will be.
-   - - If the account information contains an *etag* entry, note this number, as it will be required when setting the password.
+   - The `root` account can be any of the listed accounts -- no guarantees as to which one it will be.
+   - If the account information contains an *etag* entry, note this number, as it will be required when setting the password.
    
    ```bash
    linux# curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts/1 | jq
