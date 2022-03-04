@@ -7,13 +7,13 @@ ARP is commonly used for mapping IPv4 addresses to MAC addresses.
 
 1. Configure static ARP on an interface.
 
-    ```bash
+    ```text
     switch(config-if)# arp ipv4 IP-ADDR mac MAC-ADDR
     ```
 
 1. Show commands to validate functionality: . 
 
-    ```bash
+    ```text
     switch# show arp
     ```
 

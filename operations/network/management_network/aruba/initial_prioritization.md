@@ -10,26 +10,26 @@ For most switches, the local-priority has eight levels (0-7). Zero is the lowest
 
 Map incoming 802.1p values to a local priority: 
 
-```bash
+```text
 switch(config)# qos cos-map <0-7> local-priority VALUE [color COLOR] [name NAME]
 ```
 
 Map incoming DSCP to a local priority:
 
-```bash
+```text
 switch(config)# qos dscp-map <0-63> local-priority VALUE [color COLOR] [name NAME]
 ```
 
 Configure QoS trust: 
 
-```bash
+```text
 switch(config)# qos trust [none|cos|dscp]
 switch(config-if)# qos trust [none|cos|dscp]
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show qos [cos-map|dscp-map|trust]
 ```
 
@@ -42,7 +42,7 @@ switch# show qos [cos-map|dscp-map|trust]
  
 ## Example Output 
 
-```bash
+```text
 switch(config)# qos dscp-map 46 local-priority 7 color green name VOICE
 switch # show qos cos-map
 code_point local_priority color   name

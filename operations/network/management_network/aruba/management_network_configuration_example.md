@@ -6,7 +6,7 @@ This section provides an example of how to configure the management network.
 
 1. Create the Customer Access Network (CAN) VRF for Aruba.
 
-    ```bash
+    ```text
     switch#config
     switch(config)#vrf CAN
     ```

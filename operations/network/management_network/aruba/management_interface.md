@@ -29,7 +29,7 @@ Secondary Nameserver
 
 Enable/disable the management interface: 
 
-```bash
+```text
 switch(config)# interface mgmt 
 switch(config-if-mgmt)# no shutdown
 switch(config)# interface mgmt 
@@ -38,20 +38,20 @@ switch(config-if-mgmt)# shutdown
 
 Assign an IP address to the interface:
 
-```bash
+```text
 switch(config-if-mgmt)# ip <dhcp|static IP-ADDR> 
 ```
 
 Show commands to validate functionality: 
 
-```bash
+```text
 switch# show interface mgmt
 switch# show interface loopback 0
 ```
 
 Create and configure loopback interface: 
 
-```bash
+```text
 switch(config)# interface loopback 0 
 8325-Core1(config-loopback-if)# ip address <IP-ADDR> 
 ```

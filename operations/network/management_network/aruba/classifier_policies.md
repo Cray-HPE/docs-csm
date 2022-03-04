@@ -58,7 +58,7 @@ switch# show policy [NAME]
 
 ## Example Output 
 
-```bash
+```text
 switch(config)# class ip BROWSER
 switch(config-class-ip)# match tcp any any eq 80
 switch(config-class-ip)# match tcp any any eq 8080

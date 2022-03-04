@@ -12,7 +12,7 @@ The Multicast Source Discovery Protocol (MSDP) describes a mechanism to connect 
 
 MSDP is typically run on an IP address bound to a loopback interface. In order for two devices to establish an MSDP neighbor relationship, L3 connectivity must already be established.
 
-```bash
+```text
 switch(config)# router msdp
 switch(config-msdp)# enable
 switch(config-msdp)# ip msdp peer <IP>
@@ -22,7 +22,7 @@ switch(config-msdp-peer)# connect-source <IFNAME>
 
 Show commands to validate functionality: 
 
-```bash
+```text
 switch# show ip msdp peer
 switch# show ip msdp count
 switch# show ip msdp sa-cache

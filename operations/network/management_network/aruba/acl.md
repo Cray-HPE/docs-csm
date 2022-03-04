@@ -10,45 +10,45 @@ For ACL filtering to take effect, configure an ACL and then assign it in the inb
 
 Create an ACL: 
 
-```bash
+```text
 switch(config)# access-list <ip|ipv6|mac> ACL
 ```
 
 Copy an existing ACL: 
 
-```bash
+```text
 switch(config)# access-list <ip|ipv6|mac> ACL copy NEW-ACL
 ```
 
 Resequence an ACL: 
 
-```bash
+```text
 switch(config)# access-list <ip|ipv6|mac> ACL resequence VALUE INC
 ```
 
 Apply an ACL to the control plane: 
 
-```bash
+```text
 switch(config)# apply access-list <ip|ipv6> ACL control-plane [vrf VRF]
 ```
 
 Add ACEs in the appropriate order: 
 
-```bash
+```text
 switch(config-acl-ip)#  [SEQ] <deny|permit> <any|PROTOCOL> <any|SRC> <any|DST> [count] [log]
 switch(config-acl-ip)#  [SEQ] comment TEXT
 ```
 
 Apply the ACL to a physical interface, a logical interface or a VLAN (please note: ACLs on L3 VLAN interfaces are not supported): 
 
-```bash
+```text
 switch(config-if)# apply access-list <ip|ipv6|mac> ACL <in|out>
 switch(config-vlan)# apply access-list <ip|ipv6|mac> ACL <in|out>
 ```
 
 Show commands to validate functionality: : 
 
-```bash
+```text
 switch# show access-list [hitcounts] [ip|ipv6|mac ACL] [control-plane vrf VRF]
 ```
 

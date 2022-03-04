@@ -15,7 +15,7 @@ Access to the spine switches is required.
    
     Check both spines if they are available (powered up):
 
-    ```bash
+    ```text
     # show ip bgp summary
     ```
 
@@ -45,7 +45,7 @@ Access to the spine switches is required.
 
     **Troubleshooting:** If the State/pfxrcd is `IDLE`, restart the BGP process with the following command:
 
-    ```bash
+    ```text
     sw-spine01 [standalone: master] # clear ip bgp all
     ```
 
