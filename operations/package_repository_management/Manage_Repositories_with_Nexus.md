@@ -10,15 +10,15 @@ Use the hostname set in `istio.ingress.hosts.ui.authority` \(see below\) to conn
 https://nexus.{{network.dns.external}}/
 ```
 
-### Using Keycloak to Create and Manage Accounts
+### Use Keycloak to Create and Manage Accounts
 
-To log into the Web UI or authenticate with the REST API a user account with approate permissions must be created. Accounts are managed in keycloak \(see keycloak account documentation [here](../CSM_product_management/Configure_Keycloak_Account.md)\). To add administrator permissions for nexus add the nx-admin role binding to the user from the system-nexus-client client \(see below\). To add an anonymous user add the nx-anonymous role binding to the user from the system-nexus-client client \(see below\).
+To log into the Web UI or authenticate with the REST API a user account with approate permissions must be created. Accounts are managed in Keycloak \(see Keycloak account documentation [here](../CSM_product_management/Configure_Keycloak_Account.md)\). To add administrator permissions for nexus add the nx-admin role binding to the user from the system-nexus-client client \(see below\). To add an anonymous user add the nx-anonymous role binding to the user from the system-nexus-client client \(see below\).
 
-    ![Nexus Admin Account](../../img/operations/Nexus_Admin_Account.png "Nexus Admin Account")
+  ![Nexus Admin Account](../../img/operations/Nexus_Admin_Account.png "Nexus Admin Account")
 
-    ![Nexus Anonymous Account](../../img/operations/Nexus_Anonymous_Account.png "Nexus Anonymous Account")
+  ![Nexus Anonymous Account](../../img/operations/Nexus_Anonymous_Account.png "Nexus Anonymous Account")
 
-### Using the Local Nexus Admin Account
+### Use the Local Nexus Admin Account
 
 During the deployment or update of Nexus a local admin account is created. To access the local admin account for Nexus on any ncn run the following commands:
 
@@ -27,11 +27,11 @@ kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}}
 kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d; echo
 ```
 
-The first command will return with username of the local admin account, and the second will return the password for the local admin account. \(Note the secret will not update or stay in sync if the username or password of the local account is changed.\). This account has the same permissions as an account created in keycloak with the nx-admin role.
+The first command will return with username of the local admin account, and the second will return the password for the local admin account. \(Note the secret will not update or stay in sync if the username or password of the local account is changed.\). This account has the same permissions as an account created in Keycloak with the nx-admin role.
 
 ### Access Nexus with the REST API
 
-The [REST API](https://help.sonatype.com/repomanager3/rest-and-integration-api) is available from NCNs or compute nodes at https://packages.local/service/rest, as well as over the CAN at https://nexus.\{\{network.dns.external\}\}/service/rest \(requires authentication with username and password\).
+The [REST API](https://help.sonatype.com/repomanager3/rest-and-integration-api) is available from NCNs or compute nodes at https://packages.local/service/rest, as well as over the Customer Access Network (CAN) at https://nexus.\{\{network.dns.external\}\}/service/rest \(requires authentication with username and password\).
 
 Download the Open API document at /service/rest/swagger.json for details about the API, including specific options to available endpoints. By default, the REST API endpoints return \(or accept\) JSON.
 
@@ -397,9 +397,11 @@ For example:
 # curl -sfkSL -X DELETE "https://packages.local/service/rest/v1/blobstores/NAME"
 ```
 
-### Authenticating to Access the REST API
+### Authenticate to Access the REST API
 
-To access some of the REST API functions not listed above you need to authenticate using a username and password. This username and password is the same used to sign into the Web UI. Either the username and password of a properly permissioned Keycloak account or the nexus local admin account must be used. To get the nexus local admin account after a fresh install you can run the follow fuction:
+An authenticated username and password are required to access some of the REST API functions not listed above. This username and password are the same used to sign into the Web UI. Either the username and password of a properly permissioned Keycloak account or the Nexus local admin account must be used.
+
+Use the following function to get the nexus local admin account after a fresh install:
 
 ```bash
 function nexus-get-credential() {
@@ -422,14 +424,24 @@ function nexus-get-credential() {
 }
 ```
 
-Then to use the REST API you could use the following line \(The second line uses a keycloak account with username:USERNAME and password:PASSWORD this is only an example and they should be replaced with the proper username and password\):
+Authenticate either the Keycloak or Nexus account to use the REST API.
+
+To authenticate the Nexus local admin account:
 
 ```bash
 # Nexus-local user
 curl -i -sfv -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" -H "accept: application/json" -X GET https://packages.local/service/rest/beta/security/user-sources
+```
 
+To authenticate a Keycloak account:
+
+This example uses a Keycloak account with username:USERNAME and password:PASSWORD. Replace these values with the proper username and password before running the command.
+
+```bash
 # Keycloak user
 curl -i -sfv -u "USERNAME:PASSWORD" -H "accept: application/json" -X GET https://packages.local/service/rest/beta/security/user-sources
 ```
+
+
 
 
