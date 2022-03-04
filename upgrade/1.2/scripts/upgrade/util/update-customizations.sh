@@ -25,7 +25,7 @@
 
 set -e
 basedir=$(dirname $0)
-. ${basedir}/../../common/upgrade-state.sh
+. ${basedir}/../common/upgrade-state.sh
 trap 'err_report' ERR
 set -o pipefail
 
