@@ -23,18 +23,18 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-set -e
+set -euo pipefail
 basedir=$(dirname $0)
-. ${basedir}/util/upgrade-state.sh
+. ${basedir}/../common/upgrade-state.sh
 trap 'err_report' ERR
 
-upgrade_ncn=$1
+target_ncn=$1
 
-. ${basedir}/util/ncn-upgrade-common.sh ${upgrade_ncn}
+. ${basedir}/../common/ncn-common.sh ${target_ncn}
 
 ssh_keygen_keyscan $1 || true # or true to unblock rerun
 
-cfs_config_status=$(cray cfs components describe $UPGRADE_XNAME --format json | jq -r '.configurationStatus')
+cfs_config_status=$(cray cfs components describe $TARGET_XNAME --format json | jq -r '.configurationStatus')
 echo "CFS configuration status: ${cfs_config_status}"
 if [[ $cfs_config_status != "configured" ]]; then
     echo "*************************************************"
@@ -46,7 +46,7 @@ EOF
 fi
 
 state_name="ENSURE_NEXUS_CAN_START_ON_ANY_NODE"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
@@ -54,7 +54,7 @@ if [[ $state_recorded == "0" ]]; then
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.images_to_cache' | while read image; do echo >&2 "+ caching $image"; pdsh -w "$workers" "crictl pull $image" 2>/dev/null; done
 
-    record_state "${state_name}" ${upgrade_ncn}
+    record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
@@ -62,7 +62,7 @@ fi
 # Ensure that the previously rebuilt worker node (if applicable) has started any etcd pods (if necessary).
 # We do not want to begin rebuilding the next worker node until etcd pods have reached quorum.
 state_name="ENSURE_ETCD_PODS_RUNNING"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
@@ -82,68 +82,68 @@ if [[ $state_recorded == "0" ]]; then
         fi
     done
 
-    record_state "${state_name}" ${upgrade_ncn}
+    record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="ENSURE_POSTGRES_HEALTHY"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
     wget -q http://rgw-vip.nmn/ncn-utils/csi;chmod 0755 csi; mv csi /usr/local/bin/csi
     csi pit validate --postgres
 
-    record_state "${state_name}" ${upgrade_ncn}
+    record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
 
-drain_node $upgrade_ncn
+drain_node $target_ncn
 
 state_name="BACKUP_CREDENTIAL_SSH_KEYS"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
     if [[ $ssh_keys_done == "0" ]]; then
-        ssh_keygen_keyscan "${upgrade_ncn}"
+        ssh_keygen_keyscan "${target_ncn}"
         ssh_keys_done=1
     fi
-    scp ${upgrade_ncn}:/root/.ssh/id_rsa /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn
-    scp ${upgrade_ncn}:/root/.ssh/authorized_keys /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn
-    scp ${upgrade_ncn}:/etc/shadow /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn
+    scp ${target_ncn}:/root/.ssh/id_rsa /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn
+    scp ${target_ncn}:/root/.ssh/authorized_keys /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn
+    scp ${target_ncn}:/etc/shadow /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn
 
-    record_state "${state_name}" ${upgrade_ncn}
+    record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
 
-csi handoff bss-update-param --set metal.no-wipe=0 --limit $UPGRADE_XNAME
-${basedir}/util/ncn-rebuild-common.sh $upgrade_ncn
+csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
+${basedir}/util/ncn-rebuild-common.sh $target_ncn
 
 # TODO: wait for k8s
 
 state_name="RESTORE_CREDENTIAL_SSH_KEYS"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
     if [[ $ssh_keys_done == "0" ]]; then
-        ssh_keygen_keyscan "${upgrade_ncn}"
+        ssh_keygen_keyscan "${target_ncn}"
         ssh_keys_done=1
     fi
-    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/id_rsa ${upgrade_ncn}:/root/.ssh/id_rsa 
-    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/authorized_keys ${upgrade_ncn}:/root/.ssh/authorized_keys
-    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/shadow ${upgrade_ncn}:/etc/shadow 
+    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/id_rsa ${target_ncn}:/root/.ssh/id_rsa 
+    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/authorized_keys ${target_ncn}:/root/.ssh/authorized_keys
+    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/shadow ${target_ncn}:/etc/shadow 
 
-    record_state "${state_name}" ${upgrade_ncn}
+    record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
 
-cfs_config_status=$(cray cfs components describe $UPGRADE_XNAME --format json | jq -r '.configurationStatus')
+cfs_config_status=$(cray cfs components describe $TARGET_XNAME --format json | jq -r '.configurationStatus')
 echo "CFS configuration status: ${cfs_config_status}"
 if [[ $cfs_config_status != "configured" ]]; then
     echo "*************************************************"
@@ -157,21 +157,21 @@ EOF
 fi
 
 ### redeploy CPS if required
-redeploy=$(cat /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot | grep $upgrade_ncn | wc -l)
+redeploy=$(cat /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot | grep $target_ncn | wc -l)
 if [[ $redeploy == "1" ]];then
-    cray cps deployment update --nodes $upgrade_ncn
+    cray cps deployment update --nodes $target_ncn
     # We will retry for a few minutes before giving up
-    tmpfile=/tmp/cray-cps-deployment-list.${upgrade_ncn}.$$.$(date +%Y-%m-%d_%H-%M-%S.%N).tmp
+    tmpfile=/tmp/cray-cps-deployment-list.${target_ncn}.$$.$(date +%Y-%m-%d_%H-%M-%S.%N).tmp
     count=0
     while [ true ]; do
-        if ! cray cps deployment list --nodes $upgrade_ncn > $tmpfile ; then
+        if ! cray cps deployment list --nodes $target_ncn > $tmpfile ; then
             # This command can fail when a node is first being brought up and deploying its CPS pods.
             if [[ $count -gt 30 ]]; then
                 rm -f "$tmpfile" >/dev/null 2>&1 || true
-                echo "ERROR: Command still failing after retries: Command failed: cray cps deployment list --nodes $upgrade_ncn"
+                echo "ERROR: Command still failing after retries: Command failed: cray cps deployment list --nodes $target_ncn"
                 exit 1
             fi
-            echo "Command failed: cray cps deployment list --nodes $upgrade_ncn; retrying in 5 seconds"
+            echo "Command failed: cray cps deployment list --nodes $target_ncn; retrying in 5 seconds"
             sleep 5
             let count += 1
             continue
@@ -179,25 +179,25 @@ if [[ $redeploy == "1" ]];then
         cps_state=$(grep -E "state =" "$tmpfile"|grep -v "running" | wc -l)
         if [[ $cps_state -ne 0 ]];then
             if [[ $count -gt 30 ]]; then
-                echo "ERROR: CPS is not running on $upgrade_ncn"
-                cray cps deployment list --nodes $upgrade_ncn |grep -E "state ="
+                echo "ERROR: CPS is not running on $target_ncn"
+                cray cps deployment list --nodes $target_ncn |grep -E "state ="
                 rm -f "$tmpfile" >/dev/null 2>&1 || true
                 exit 1
             fi
-            echo "CPS not running yet on $upgrade_ncn; checking again in 5 seconds"
+            echo "CPS not running yet on $target_ncn; checking again in 5 seconds"
             sleep 5
             let count += 1
             continue
         fi
         rm -f "$tmpfile" >/dev/null 2>&1 || true
-        cps_pod_assigned=$(kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $upgrade_ncn|wc -l)
+        cps_pod_assigned=$(kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $target_ncn|wc -l)
         if [[ $cps_pod_assigned -ne 1 ]];then
             if [[ $count -gt 30 ]]; then
-                echo "ERROR: CPS pod is not assigned to $upgrade_ncn"
-                kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $upgrade_ncn
+                echo "ERROR: CPS pod is not assigned to $target_ncn"
+                kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $target_ncn
                 exit 1
             fi
-            echo "CPS pod not assigned yet to $upgrade_ncn; checking again in 5 seconds"
+            echo "CPS pod not assigned yet to $target_ncn; checking again in 5 seconds"
             sleep 5
             let count += 1
             continue
@@ -207,12 +207,12 @@ if [[ $redeploy == "1" ]];then
 fi
 
 state_name="ENSURE_KEY_PODS_HAVE_STARTED"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
     while true; do
-      output=$(kubectl get po -A -o wide | grep -e etcd -e speaker | grep $upgrade_ncn | awk '{print $4}')
+      output=$(kubectl get po -A -o wide | grep -e etcd -e speaker | grep $target_ncn | awk '{print $4}')
       if [ ! -n "$output" ]; then
         #
         # No pods scheduled to start on this node, we are done
@@ -224,14 +224,14 @@ if [[ $state_recorded == "0" ]]; then
       rc=$?
       set -e
       if [[ "$rc" -eq 1 ]]; then
-        echo "All etcd and speaker pods are running on $upgrade_ncn"
+        echo "All etcd and speaker pods are running on $target_ncn"
         break
       fi
-      echo "Some etcd and speaker pods are not running on $upgrade_ncn -- sleeping for 10 seconds..."
+      echo "Some etcd and speaker pods are not running on $target_ncn -- sleeping for 10 seconds..."
       sleep 10
     done
-    ssh $upgrade_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
-    record_state "${state_name}" ${upgrade_ncn}
+    ssh $target_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
+    record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
@@ -247,7 +247,7 @@ NOTE:
     If below test failed, try to fix it based on test output. Then run current script again
 EOF
 
-ssh $upgrade_ncn -t "SW_ADMIN_PASSWORD=$SW_ADMIN_PASSWORD GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate"
+ssh $target_ncn -t "SW_ADMIN_PASSWORD=$SW_ADMIN_PASSWORD GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate"
 
 ok_report
 

@@ -53,7 +53,7 @@ do
   fi
 done
 
-export UPGRADE_NCN=$1
+export TARGET_NCN=$1
 export STABLE_NCN=$(hostname)
 
 export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
@@ -61,24 +61,24 @@ export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 
-export UPGRADE_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-     jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$UPGRADE_NCN\")) | .Xname")
+export TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+     jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
 
 
-export UPGRADE_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-     jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$UPGRADE_NCN\")) | .Parent")
+export TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+     jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Parent")
 
-export UPGRADE_IP_NMN=$(dig +short $UPGRADE_NCN.nmn)
+export TARGET_IP_NMN=$(dig +short $TARGET_NCN.nmn)
 
 function drain_node() {
-   upgrade_ncn=$1
+   target_ncn=$1
    state_name="DRAIN_NODE"
-   state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+   state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
    if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
-      csi automate ncn kubernetes --action delete-ncn --ncn ${upgrade_ncn} --kubeconfig /etc/kubernetes/admin.conf
+      csi automate ncn kubernetes --action delete-ncn --ncn ${target_ncn} --kubeconfig /etc/kubernetes/admin.conf
 
-      record_state "${state_name}" ${upgrade_ncn}
+      record_state "${state_name}" ${target_ncn}
       echo
    else
       echo "====> ${state_name} has been completed"
@@ -86,40 +86,40 @@ function drain_node() {
 }
 
 function ssh_keygen_keyscan() {
-    local upgrade_ncn ncn_ip known_hosts
+    local target_ncn ncn_ip known_hosts
     known_hosts="/root/.ssh/known_hosts"
     sed -i 's@pdsh.*@@' $known_hosts
-    upgrade_ncn="$1"
-    ncn_ip=$(host ${upgrade_ncn} | awk '{ print $NF }')
+    target_ncn="$1"
+    ncn_ip=$(host ${target_ncn} | awk '{ print $NF }')
     [ -n "${ncn_ip}" ]
     # Because we may be called without set -e, we should check return codes after running commands
     [ $? -ne 0 ] && return 1
-    echo "Updating SSH keys for node ${upgrade_ncn} with IP address of ${ncn_ip}"
-    ssh-keygen -R "${upgrade_ncn}" -f "${known_hosts}" > /dev/null 2>&1
+    echo "Updating SSH keys for node ${target_ncn} with IP address of ${ncn_ip}"
+    ssh-keygen -R "${target_ncn}" -f "${known_hosts}" > /dev/null 2>&1
     [ $? -ne 0 ] && return 1
     ssh-keygen -R "${ncn_ip}" -f "${known_hosts}" > /dev/null 2>&1
     [ $? -ne 0 ] && return 1
-    ssh-keyscan -H "${upgrade_ncn},${ncn_ip}" >> "${known_hosts}"
+    ssh-keyscan -H "${target_ncn},${ncn_ip}" >> "${known_hosts}"
     return $?
 }
 
 function wait_for_kubernetes() {
-  upgrade_ncn=$1
+  target_ncn=$1
   state_name="WAIT_FOR_K8S"
-  state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+  state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
   if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
       set +e
-      echo "waiting for k8s: $upgrade_ncn ..."
-      until csi automate ncn kubernetes --action is-member --ncn $upgrade_ncn --kubeconfig /etc/kubernetes/admin.conf
+      echo "waiting for k8s: $target_ncn ..."
+      until csi automate ncn kubernetes --action is-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
       do
           sleep 5
       done
       # Restore set -e
       set -e
-      echo "$upgrade_ncn joined k8s"
+      echo "$target_ncn joined k8s"
 
-      record_state "${state_name}" ${upgrade_ncn}
+      record_state "${state_name}" ${target_ncn}
   else
       echo "====> ${state_name} has been completed"
   fi

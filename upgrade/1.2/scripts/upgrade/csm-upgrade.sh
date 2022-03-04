@@ -25,7 +25,7 @@
 
 set -e
 basedir=$(dirname $0)
-. ${basedir}/util/upgrade-state.sh
+. ${basedir}/../common/upgrade-state.sh
 trap 'err_report' ERR
 
 . /etc/cray/upgrade/csm/myenv
@@ -42,7 +42,7 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="PRE_CEPH_CSI_UPGRADE_REQUIREMENTS"
+state_name="PRE_CEPH_CSI_TARGET_REQUIREMENTS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
