@@ -25,8 +25,8 @@
 
 set -e
 basedir=$(dirname $0)
-. ${basedir}/util/upgrade-state.sh
-. ${basedir}/util/ncn-upgrade-common.sh $(hostname)
+. ${basedir}/../common/upgrade-state.sh
+. ${basedir}/../common/ncn-common.sh $(hostname)
 trap 'err_report' ERR
 # array for paths to unmount after chrooting images
 declare -a UNMOUNTS=()
@@ -127,7 +127,7 @@ state_name="UPDATE_SSH_KEYS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    . ${basedir}/util/ncn-upgrade-common.sh ${upgrade_ncn}
+    . ${basedir}/util/ncn-common.sh ${target_ncn}
      grep -oP "(ncn-\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
 
      grep -oP "(ncn-\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
