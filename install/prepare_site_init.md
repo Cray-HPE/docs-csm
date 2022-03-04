@@ -548,3 +548,7 @@ applying a customer-specific customization used in a prior version, be sure the
 change still makes sense. It is common for options to change as new features are
 introduced and bugs are fixed.
 
+<a name="snmp-exporter-specific Customizations"></a>
+### 7. Snmp-exporter-Specific Customizations
+
+Please see the [prometheus-snmp-exporter](../operations/network/management_network/snmp_exporter_configs.md) for more information.
