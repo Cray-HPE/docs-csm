@@ -6,27 +6,27 @@ Multi-Chassis Link Aggregation Group (MCLAG) is a link aggregation technique whe
 
 Create the MCLAG interface: 
 
-```bash
+```text
 switch(config)# interface lag LAG multi-chassis 
 switch(config-lag-if)# no shutdown
 ```
 
 Associate member links with the MCLAG interface: 
 
-```bash
+```text
 switch(config)# interface IFACE 
 switch(config-if)# no shutdown switch(config-if)# lag LAG 
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show mclag <brief|configuration|status>
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch(config)# interface lag 23 multi-chassis
 switch(config-lag-if)# no shutdown
 switch(config-lag-if)# exit

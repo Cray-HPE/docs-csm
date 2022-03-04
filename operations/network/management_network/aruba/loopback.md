@@ -4,14 +4,14 @@ Loopbacks are essentially internal virtual interfaces. Loopback interfaces are n
 
 ## Configuration Commands
 
-```bash
+```text
 switch(config)# interface loopback LOOPBACK
 switch(config-loopback-if)# ip address IP-ADDR/<SUBNET|PREFIX>
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch(config)# interface loopback 1
 switch(config-loopback-if)# ip address 99.99.99.1/32
 switch(config-loopback-if)# end

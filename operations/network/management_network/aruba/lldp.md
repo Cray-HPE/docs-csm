@@ -8,19 +8,19 @@ LLDP is used to advertise the device’s identity and abilities and read other d
 
 Enable an interface to receive or transmit LLDP packets: 
 
-```bash
+```text
 switch(config-if)# lldp <receive|transmit>
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show lldp [local-device|neighbor-info|statistics]
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch# show lldp configuration
 LLDP Global Configuration:
 LLDP Enabled :Yes

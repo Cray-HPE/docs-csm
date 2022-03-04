@@ -6,7 +6,7 @@ Link Aggregation allows you to assign multiple physical links to one logical lin
 
 Create and configure the LAG interface: 
 
-```bash
+```text
 switch(config)# interface lag LAG 
 switch(config-lag-if)# no shutdown 
 switch(config-lag-if)# lacp mode active 
@@ -14,7 +14,7 @@ switch(config-lag-if)# lacp mode active
 
 Associate member links with the LAG interface:
 
-```bash
+```text
 switch(config)# interface IFACE
 switch(config-if)# no shutdown 
 switch(config-if)# lag LAG 
@@ -22,13 +22,13 @@ switch(config-if)# lag LAG
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show lacp <interfaces|aggregates|configuration>
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch# show interface lag1
 Aggregate-name lag1
 Aggregated-interfaces : 1/1/1 1/1/4

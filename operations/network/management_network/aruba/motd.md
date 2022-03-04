@@ -7,19 +7,19 @@ a custom delimiter to mark the end of message.
 
 Create a banner:
 
-```bash
+```text
 switch(config)# banner <motd|exec> DELIM
 ```
 
 Show commands to validate functionality: 
 
-```bash
+```text
 switch# show banner <motd|exec>
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch(config)# banner motd $
 Enter a new banner, when you are done enter a new line containing only your
 chosen delimeter.

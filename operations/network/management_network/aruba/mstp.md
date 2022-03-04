@@ -6,7 +6,7 @@ MSTP (802.1s) ensures that only one active path exists between any two nodes in 
 
 Enable MSTP (default mode for spanning-tree): 
 
-```bash
+```text
 switch(config)# spanning-tree
 switch(config)# spanning-tree config-name <NAME> 
 switch(config)# spanning-tree config-revision <VALUE> Configure an MSTP instance and priority
@@ -16,13 +16,13 @@ switch(config)# spanning-tree instance VALUE priority VALUE
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show spanning-tree mst detail
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch# show span
 Spanning tree status
 Extended System-id

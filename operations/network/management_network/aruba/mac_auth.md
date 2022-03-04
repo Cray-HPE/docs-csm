@@ -7,79 +7,79 @@ MAC Authentication (MAC Auth) is a method of authenticating devices for access t
 
 Enter MAC Auth context: 
 
-```bash
+```text
 switch(config)# aaa authentication port-access mac-auth
 ```
 
 Enable MAC Auth on all interfaces: 
 
-```bash
+```text
 switch(config-macauth)# enable
 ```
 
 Configure MAC Auth MAC address format: 
 
-```bash
+```text
 switch(config-macauth)# addr-format <no-delimiter|single-dash|multi-dash|multi-colon|no-delimiter
 ```
 
 Enable MAC Auth password: 
 
-```bash
+```text
 switch(config-macauth)# password <plaintext|ciphertext> PASSWORD
 ```
 
 Configure mac-auth RADIUS authentication method: 
 
-```bash
+```text
 switch(config-macauth)# aaa authentication port-access mac-auth auth-method <chap|pap>
 ```
 
 Configure mac-auth server group: 
 
-```bash
+```text
 switch(config-macauth)# radius server-group NAME
 ```
 
 Configure cached reauthentication period on a port: 
 
-```bash
+```text
 switch(config-macauth)# cached-reauth-period VALUE
 ```
 
 Configure the quiet period on a port: 
 
-```bash
+```text
 switch(config-macauth)# quiet-period VALUE
 ```
 
 Configure the reauthentication period on a port: 
 
-```bash
+```text
 switch(config-macauth)# reauth-period VALUE
 ```
 
 Enable reauthentication on the interface: 
 
-```bash
+```text
 switch(config-macauth)# reauth
 ```
 
 Enable authorized on the interface: 
 
-```bash
+```text
 switch(config-macauth)# authorized
 ```
 
 Enable cached reauthentication on the interface: 
 
-```bash
+```text
 switch(config-macauth)# cached-reauth
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show aaa authentication port-access mac-auth interface <IFACE|all> <port-statistics|client-status [mac MAC-ADDR]>
 ```
 

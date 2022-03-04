@@ -6,13 +6,13 @@ The Locator LED is an LED in the front of the chassis that you can turn on or ma
 
 Enable LED:
 
-```bash
+```text
 switch# led locator <flashing|off|on>
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show environment led
 ```
 
