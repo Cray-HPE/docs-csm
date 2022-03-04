@@ -145,6 +145,7 @@ if [[ $state_recorded == "0" ]]; then
         ssh_keys_done=1
     fi
     ssh ${upgrade_ncn} '/usr/share/doc/csm/upgrade/1.0.11/scripts/ceph/ceph-services-stage1.sh'
+    ssh ${upgrade_ncn} '/srv/cray/scripts/metal/ntp-upgrade-config.sh'
 
     record_state "${state_name}" ${upgrade_ncn}
 else
