@@ -88,72 +88,82 @@ if [ ! -z $cray_capmc_new_cpu_request ]; then
   echo ""
 fi
 
+esDeployed=$(kubectl get pods -A | grep elasticsearch-master | wc -l)
+if [[ $esDeployed -ne 0 ]]; then
+  if [ ! -z $elasticsearch_master_new_cpu_request ]; then
+    current_req=$(kubectl get statefulset elasticsearch-master -n sma -o json | jq -r '.spec.template.spec.containers[] | select(.name== "sma-elasticsearch") | .resources.requests.cpu')
+    echo "Patching elasticsearch-master statefulset with new cpu request of $elasticsearch_master_new_cpu_request (from $current_req)"
+    kubectl patch statefulset elasticsearch-master -n sma --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$elasticsearch_master_new_cpu_request\" }]"
+    kubectl rollout status statefulset -n sma elasticsearch-master
+    echo ""
+  fi
+fi
 
-if [ ! -z $elasticsearch_master_new_cpu_request ]; then
-  current_req=$(kubectl get statefulset elasticsearch-master -n sma -o json | jq -r '.spec.template.spec.containers[] | select(.name== "sma-elasticsearch") | .resources.requests.cpu')
-  echo "Patching elasticsearch-master statefulset with new cpu request of $elasticsearch_master_new_cpu_request (from $current_req)"
-  kubectl patch statefulset elasticsearch-master -n sma --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$elasticsearch_master_new_cpu_request\" }]"
-  kubectl rollout status statefulset -n sma elasticsearch-master
-  echo ""
+smaGrafanaDeployed=$(kubectl get pods -n services | grep sma-grafana | wc -l)
+if [[ $smaGrafanaDeployed -ne 0 ]]; then
+  if [ ! -z $sma_grafana_new_cpu_request ]; then
+    current_req=$(kubectl get deployment sma-grafana -n services -o json | jq -r '.spec.template.spec.containers[] | select(.name== "sma-grafana") | .resources.requests.cpu')
+    echo "Patching sma-grafana deployment with new cpu request of $sma_grafana_new_cpu_request (from $current_req)"
+    kubectl patch deployment sma-grafana -n services --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$sma_grafana_new_cpu_request\" }]"
+    kubectl rollout status deployment -n services sma-grafana
+    echo ""
+  fi
+fi
+
+smaKibanaDeployed=$(kubectl get pods -n services | grep sma-kibana | wc -l)
+if [[ $smaKibanaDeployed -ne 0 ]]; then
+  if [ ! -z $sma_kibana_new_cpu_request ]; then
+    current_req=$(kubectl get deployment sma-kibana -n services -o json | jq -r '.spec.template.spec.containers[] | select(.name== "sma-kibana") | .resources.requests.cpu')
+    echo "Patching sma-kibana deployment with new cpu request of $sma_kibana_new_cpu_request (from $current_req)"
+    kubectl patch deployment sma-kibana -n services --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$sma_kibana_new_cpu_request\" }]"
+    kubectl rollout status deployment -n services sma-kibana
+    echo ""
+  fi
+fi
+
+kafkaDeployed=$(kubectl get pods -n sma | grep kafka | wc -l)
+if [[ $kafkaDeployed -ne 0 ]]; then
+  if [ ! -z $cluster_kafka_new_cpu_request ]; then
+    current_req=$(kubectl get kafkas -n sma cluster -o json | jq -r '.spec.kafka.resources.requests.cpu')
+    echo "Patching cluster-kafka with new cpu request of $cluster_kafka_new_cpu_request (from $current_req)"
+    kubectl patch kafkas cluster -n sma --type=json -p="[{'op' : 'replace', 'path':'/spec/kafka/resources/requests/cpu', 'value' : \"$cluster_kafka_new_cpu_request\" }]"
+    sleep 10
+    until [[ $(kubectl -n sma get statefulset cluster-kafka -o json | jq -r '.status.updatedReplicas') -eq 3 ]]
+    do
+      echo "Waiting for cluster-kafka cluster to have three updated replicas..."
+      sleep 30
+    done
+    echo ""
+  fi
+
+  if [ ! -z $cluster_zookeeper_new_cpu_request ]; then
+    current_req=$(kubectl get kafkas -n sma cluster -o json | jq -r '.spec.zookeeper.resources.requests.cpu')
+    echo "Patching cluster-zookeeper statefulset with new cpu request of $cluster_zookeeper_new_cpu_request (from $current_req)"
+    kubectl patch kafkas cluster -n sma --type=json -p="[{'op' : 'replace', 'path':'/spec/zookeeper/resources/requests/cpu', 'value' : \"$cluster_zookeeper_new_cpu_request\" }]"
+    sleep 10
+    until [[ $(kubectl -n sma get statefulset cluster-zookeeper -o json | jq -r '.status.updatedReplicas') -eq 3 ]]
+    do
+      echo "Waiting for cluster-zookeeper cluster to have three updated replicas..."
+      sleep 30
+    done
+    echo ""
+  fi
 fi
 
 
-if [ ! -z $cluster_kafka_new_cpu_request ]; then
-  current_req=$(kubectl get kafkas -n sma cluster -o json | jq -r '.spec.kafka.resources.requests.cpu')
-  echo "Patching cluster-kafka with new cpu request of $cluster_kafka_new_cpu_request (from $current_req)"
-  kubectl patch kafkas cluster -n sma --type=json -p="[{'op' : 'replace', 'path':'/spec/kafka/resources/requests/cpu', 'value' : \"$cluster_kafka_new_cpu_request\" }]"
-  sleep 10
-  until [[ $(kubectl -n sma get statefulset cluster-kafka -o json | jq -r '.status.updatedReplicas') -eq 3 ]]
-  do
-    echo "Waiting for cluster-kafka cluster to have three updated replicas..."
-    sleep 30
-  done
-  echo ""
-fi
-
-
-if [ ! -z $sma_grafana_new_cpu_request ]; then
-  current_req=$(kubectl get deployment sma-grafana -n services -o json | jq -r '.spec.template.spec.containers[] | select(.name== "sma-grafana") | .resources.requests.cpu')
-  echo "Patching sma-grafana deployment with new cpu request of $sma_grafana_new_cpu_request (from $current_req)"
-  kubectl patch deployment sma-grafana -n services --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$sma_grafana_new_cpu_request\" }]"
-  kubectl rollout status deployment -n services sma-grafana
-  echo ""
-fi
-
-
-if [ ! -z $sma_kibana_new_cpu_request ]; then
-  current_req=$(kubectl get deployment sma-kibana -n services -o json | jq -r '.spec.template.spec.containers[] | select(.name== "sma-kibana") | .resources.requests.cpu')
-  echo "Patching sma-kibana deployment with new cpu request of $sma_kibana_new_cpu_request (from $current_req)"
-  kubectl patch deployment sma-kibana -n services --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$sma_kibana_new_cpu_request\" }]"
-  kubectl rollout status deployment -n services sma-kibana
-  echo ""
-fi
-
-
-if [ ! -z $cluster_zookeeper_new_cpu_request ]; then
-  current_req=$(kubectl get kafkas -n sma cluster -o json | jq -r '.spec.zookeeper.resources.requests.cpu')
-  echo "Patching cluster-zookeeper statefulset with new cpu request of $cluster_zookeeper_new_cpu_request (from $current_req)"
-  kubectl patch kafkas cluster -n sma --type=json -p="[{'op' : 'replace', 'path':'/spec/zookeeper/resources/requests/cpu', 'value' : \"$cluster_zookeeper_new_cpu_request\" }]"
-  sleep 10
-  until [[ $(kubectl -n sma get statefulset cluster-zookeeper -o json | jq -r '.status.updatedReplicas') -eq 3 ]]
-  do
-    echo "Waiting for cluster-zookeeper cluster to have three updated replicas..."
-    sleep 30
-  done
-  echo ""
-fi
-
-
-if [ ! -z $sma_postgres_cluster_new_cpu_request ]; then
-  current_req=$(kubectl get postgresql -n sma sma-postgres-cluster -o json | jq -r '.spec.resources.requests.cpu')
-  echo "Patching sma-postgres-cluster statefulset with new cpu request of $sma_postgres_cluster_new_cpu_request (from $current_req)"
-  kubectl patch postgresql -n sma sma-postgres-cluster --type=json -p="[{'op' : 'replace', 'path':'/spec/resources/requests/cpu', 'value' : \"$sma_postgres_cluster_new_cpu_request\" }]"
-  until [[ $(kubectl get postgresql -n sma sma-postgres-cluster -o json | jq -r '.status.PostgresClusterStatus') == "Running" ]]
-  do
-    echo "Waiting for sma-postgres-cluster cluster to reach running state..."
-    sleep 30
-  done
-  echo ""
+smaPgDeployed=$(kubectl get pods -n sma | grep sma-postgres-cluster | wc -l)
+if [[ $smaPgDeployed -ne 0 ]]; then
+  if [ ! -z $sma_postgres_cluster_new_cpu_request ]; then
+    current_req=$(kubectl get postgresql -n sma sma-postgres-cluster -o json | jq -r '.spec.resources.requests.cpu')
+    echo "Patching sma-postgres-cluster statefulset with new cpu request of $sma_postgres_cluster_new_cpu_request (from $current_req)"
+    kubectl patch postgresql -n sma sma-postgres-cluster --type=json -p="[{'op' : 'replace', 'path':'/spec/resources/requests/cpu', 'value' : \"$sma_postgres_cluster_new_cpu_request\" }]"
+    until [[ $(kubectl get postgresql -n sma sma-postgres-cluster -o json | jq -r '.status.PostgresClusterStatus') == "Running" ]]
+    do
+      echo "Waiting for sma-postgres-cluster cluster to reach running state..."
+      sleep 30
+    done
+    echo ""
+  fi
 fi
 
 
@@ -165,11 +175,13 @@ if [ ! -z $nexus_new_cpu_request ]; then
   echo ""
 fi
 
-
-if [ ! -z $cray_metallb_speaker_new_cpu_request ]; then
-  current_req=$(kubectl get daemonset cray-metallb-speaker -n metallb-system -o json | jq -r '.spec.template.spec.containers[] | select(.name== "speaker") | .resources.requests.cpu')
-  echo "Patching nexus deployment with new cpu request of $cray_metallb_speaker_new_cpu_request (from $current_req)"
-  kubectl patch daemonset cray-metallb-speaker -n metallb-system --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_metallb_speaker_new_cpu_request\" }]"
-  kubectl rollout status daemonset -n metallb-system cray-metallb-speaker
-  echo ""
+crayMetallbDeployed=$(kubectl get pods -n metallb-system | grep cray-metallb-speaker | wc -l)
+if [[ $crayMetallbDeployed -ne 0 ]]; then
+  if [ ! -z $cray_metallb_speaker_new_cpu_request ]; then
+    current_req=$(kubectl get daemonset cray-metallb-speaker -n metallb-system -o json | jq -r '.spec.template.spec.containers[] | select(.name== "speaker") | .resources.requests.cpu')
+    echo "Patching nexus deployment with new cpu request of $cray_metallb_speaker_new_cpu_request (from $current_req)"
+    kubectl patch daemonset cray-metallb-speaker -n metallb-system --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_metallb_speaker_new_cpu_request\" }]"
+    kubectl rollout status daemonset -n metallb-system cray-metallb-speaker
+    echo ""
+  fi
 fi
