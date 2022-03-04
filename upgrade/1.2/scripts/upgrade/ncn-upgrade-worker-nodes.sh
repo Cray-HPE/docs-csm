@@ -24,13 +24,13 @@
 #
 
 set -e
-BASEDIR=$(dirname $0)
-. ${BASEDIR}/upgrade-state.sh
+basedir=$(dirname $0)
+. ${basedir}/util/upgrade-state.sh
 trap 'err_report' ERR
 
 upgrade_ncn=$1
 
-. ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
+. ${basedir}/util/ncn-upgrade-common.sh ${upgrade_ncn}
 
 ssh_keygen_keyscan $1 || true # or true to unblock rerun
 
@@ -121,7 +121,7 @@ else
 fi
 
 csi handoff bss-update-param --set metal.no-wipe=0 --limit $UPGRADE_XNAME
-${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
+${basedir}/util/ncn-rebuild-common.sh $upgrade_ncn
 
 # TODO: wait for k8s
 

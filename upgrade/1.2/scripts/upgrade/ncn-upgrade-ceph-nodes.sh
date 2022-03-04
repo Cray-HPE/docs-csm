@@ -24,13 +24,13 @@
 #
 
 set -e
-BASEDIR=$(dirname $0)
-. ${BASEDIR}/upgrade-state.sh
+basedir=$(dirname $0)
+. ${basedir}/util/upgrade-state.sh
 trap 'err_report' ERR
 
 upgrade_ncn=$1
 
-. ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
+. ${basedir}/util/ncn-upgrade-common.sh ${upgrade_ncn}
 
 # Record this state locally instead of using is_state_recorded(),
 # because it does not hurt to re-do the ssh keys, and it is the
@@ -78,7 +78,7 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-${BASEDIR}/ncn-upgrade-wipe-rebuild.sh $upgrade_ncn
+${basedir}/util/ncn-rebuild-common.sh $upgrade_ncn
 
 state_name="INSTALL_UPGRADE_SCRIPT"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
@@ -167,7 +167,7 @@ if [[ ${upgrade_ncn} == "ncn-s001" ]]; then
             ssh_keygen_keyscan "${upgrade_ncn}"
             ssh_keys_done=1
         fi
-        scp /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/create_rgw_buckets.sh $upgrade_ncn:/tmp
+        scp /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ceph/create_rgw_buckets.sh $upgrade_ncn:/tmp
         ssh ${upgrade_ncn} '/tmp/create_rgw_buckets.sh'
 
         record_state "${state_name}" ${upgrade_ncn}
