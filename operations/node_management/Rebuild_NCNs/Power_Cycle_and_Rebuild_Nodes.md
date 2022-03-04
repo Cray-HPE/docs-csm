@@ -79,7 +79,7 @@ This section applies to all node types. The commands in this section assume you 
 
 1. Then press enter on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console (**&** then **.**), and then use `ssh` to log in to the node to complete the remaining validation steps.
 
-    * **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying XNAME.json file (see the step to [inspect and modify the JSON file](Identify_Nodes_and_Update_Metadata.md#Inspect-and-modify-the-JSON-file) and make sure these instructions were completed correctly.
+    * **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying the `XNAME.json` file (see the step to [inspect and modify the JSON file](Identify_Nodes_and_Update_Metadata.md#Inspect-and-modify-the-JSON-file) and make sure these instructions were completed correctly.
 
     * **Master nodes only:** If `cloud-init` did not complete the newly-rebuilt node will need to have its etcd service definition manually updated. Reconfigure the etcd service, and restart the cloud init on the newly rebuilt master:
 
@@ -100,114 +100,7 @@ This section applies to all node types. The commands in this section assume you 
     ncn-m# cloud-init clean; cloud-init init --local; cloud-init init
     ```
 
-### Step 4 - Confirm `vlan004` is up with the correct IP address on the rebuilt node.
-
-Run these commands on the rebuilt node.
-
-1. Find the desired IP address.
-
-    * This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
-
-        ```bash
-        ncn# dig +short ${NODE}.hmn
-        10.254.1.16
-        ```
-
-2. Confirm the output from the dig command matches the interface.
-
-    1. If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
-
-        ```bash
-        ncn# ip addr show vlan004
-        14: vlan004@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
-            link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
-            inet 10.254.1.16/17 brd 10.254.127.255 scope global vlan004
-               valid_lft forever preferred_lft forever
-            inet6 fe80::ba59:9fff:fe2b:2f9e/64 scope link
-               valid_lft forever preferred_lft forever
-        ```
-
-    1. Change the IP address for `vlan004` if necessary.
-
-        ```bash
-        ncn# vim /etc/sysconfig/network/ifcfg-vlan004
-        ```
-
-        1. Set the `IPADDR` line to the correct IP address with a `/17` mask. For example, if the correct IP address is `10.254.1.16`, the line should be:
-
-             ```bash
-             IPADDR='10.254.1.16/17'
-             ```
-
-    1. Restart the `vlan004` network interface.
-
-        ```bash
-        ncn# wicked ifreload vlan004
-        ```
-
-    1. Confirm the output from the dig command matches the interface.
-
-        ```bash
-        ncn# ip addr show vlan004
-        ```
-
-### Step 5 - Confirm that `vlan007` is up with the correct IP address on the rebuilt node.
-
-Run these commands on the rebuilt node.
-
-1. Find the desired IP address.
-
-    * This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
-
-        ```bash
-        ncn# dig +short ${NODE}.can
-        10.103.8.11
-        ```
-
-2. Confirm the output from the dig command matches the interface.
-
-   * If the IP addresses match, proceed to the next step. If they do not match, continue with the following sub-steps.
-
-        ```bash
-        ip addr show vlan007
-        ```
-
-        Example Output:
-
-        ```screen
-        15: vlan007@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
-            link/ether b8:59:9f:2b:2f:9e brd ff:ff:ff:ff:ff:ff
-            inet 10.103.8.11/24 brd 10.103.8.255 scope global vlan007
-               valid_lft forever preferred_lft forever
-            inet6 fe80::ba59:9fff:fe2b:2f9e/64 scope link
-               valid_lft forever preferred_lft forever
-        ```
-
-        1. Change the IP address for `vlan007` if necessary.
-
-            ```bash
-            vim /etc/sysconfig/network/ifcfg-vlan007
-            ```
-
-            Set the `IPADDR` line to the correct IP address with a `/24` mask. For example, if the correct IP address is `10.103.8.11`, the line should be:
-
-            ```bash
-            IPADDR='10.103.8.11/24'
-            ```
-
-        2. Restart the `vlan007` network interface.
-
-            ```bash
-            wicked ifreload vlan007
-            ```
-
-        3. Confirm the output from the dig command matches the interface.
-
-            ```bash
-            ip addr show vlan007
-            ```
-
-## Step 6 - Set the wipe flag back so it will not wipe the disk when the node is rebooted.
+## Step 4 - Set the wipe flag back so it will not wipe the disk when the node is rebooted.
 
 1. Run the following commands from a node that has cray cli initialized:
 
@@ -215,7 +108,7 @@ Run these commands on the rebuilt node.
     cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
     ```
 
-2. Edit the XNAME.json file and set the `metal.no-wipe=1` value.
+2. Edit the `XNAME.json` file and set the `metal.no-wipe=1` value.
 
 3. Get a token to interact with BSS using the REST API.
 
