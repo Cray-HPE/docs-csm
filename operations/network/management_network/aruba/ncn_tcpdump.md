@@ -5,7 +5,7 @@ If a host is not getting an IP address, run a packet capture to see if DHCP traf
 
 On ncn-w001 or a worker/manager with `kubectl`, run the following:
 
-```bash
+```text
 ncn# tcpdump -w dhcp.pcap -envli bond0.nmn0 port 67 or port 68
 ```
 
@@ -13,7 +13,7 @@ This will make a .pcap file named dhcp in the current directory. It will collect
 
 To view the DHCP traffic:
 
-```bash
+```text
 ncn# tcpdump -r dhcp.pcap -v -n
 ```
 
@@ -21,7 +21,7 @@ Use filters to sort the output if it is very long.
 
 To do a `tcpdump` for a specific MAC address:
 
-```bash
+```text
 ncn# tcpdump -i eth0 -vvv -s 1500 '((port 67 or port 68) and (udp[38:4] = 0x993b7030))'
 ```
 

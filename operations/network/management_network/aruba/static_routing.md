@@ -4,19 +4,19 @@
 
 ## Configuration Commands
 
-```bash
+```text
 switch(config)# <ip|ipv6> route IP-ADDR/<SUBNET|PREFIX> IP-ADDR
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show <ip|ipv6> route [static]
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch# show ip route
 Displaying ipv4 routes selected for forwarding
 '[x/y]' denotes [distance/metric]30.0.0.0/30,  1 (null) next-hops

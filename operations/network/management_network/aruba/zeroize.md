@@ -8,7 +8,7 @@ Erases customer data on the management modules in a secure manner. The command p
 
 ## Example Erasing Customer Data on the Management Modules in a Secure Manner
 
-```bash
+```text
 switch# erase all zeroize
 
 This will securely erase all customer data and reset the switch to factory defaults. This will initiate a reboot and render the. switch unavailable until the   zeroization is complete.This should take several minutes to one hour to complete.

@@ -2,7 +2,7 @@
 
 The following are common error messages when PXE fails:
 
-```bash
+```text
 2021-04-19 23:27:09   PXE-E18: Server response timeout.
 2021-02-02 17:06:13   PXE-E99: Unexpected network error.
 ```
@@ -21,7 +21,7 @@ The following are common error messages when PXE fails:
 
 1. Run connectivity tests.
 
-    ```bash
+    ```text
     ncn-w001# ping 10.1.0.1
     ```
 
@@ -35,7 +35,7 @@ The following are common error messages when PXE fails:
 
     If this fails, CAN may be misconfigured, or a route might need to be added to the MTL network.
 
-    ```bash
+    ```text
     ncn-w001# ip route add 10.1.0.0/16 via 10.252.0.1 dev bond0.nmn0
     ```
 

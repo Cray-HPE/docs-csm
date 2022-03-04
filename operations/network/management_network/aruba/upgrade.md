@@ -42,7 +42,7 @@ Specifies the TFTP URL for downloading the software.
 
 > **NOTE:** If the new software is already pre-staged, call the image bank where the new image is located instead of using the tftp.
 
-```bash
+```text
 switch# vsx update-software tftp://192.168.1.1/XL.10.0x.xxxx vrf mgmt
 Do you want to save the current configuration (y/n)? y
 The running configuration was saved to the startup configuration.

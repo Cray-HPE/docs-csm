@@ -6,25 +6,25 @@ SNMPv3 supports cryptographic security through a combination of authenticating a
 
 Configure a new SNMPv3 user (minimum eight characters for passwords): 
 
-```bash
+```text
 switch(config)# snmpv3 user <USER> auth md5 auth-pass <A-PSWD> priv aes priv-pass <P-PSWD>
 ```
 
 Remove an SNMPv3 user:
 
-```bash
+```text
 switch(config)# no snmpv3 user <USER>
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show snmpv3 users
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch(config)# snmp-server community public
 switch(config)# snmpv3 context public vrf default community public
 switch(config)# show snmpv3 context

@@ -6,14 +6,14 @@ Configure the physical interfaces for a switch.
 
 Enable the interface: 
 
-```bash
+```text
 switch(config)# interface IFACE
 switch(config-if)# no shutdown
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show interface IFACE [transceiver|brief|dom|extended]
 ```
 

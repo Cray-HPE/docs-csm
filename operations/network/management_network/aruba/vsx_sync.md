@@ -6,37 +6,37 @@ Configuration synchronization is one aspect of this VSX solution where the prima
 
 Synchronize VLANs: 
 
-```bash
+```text
 switch(config-vlan)# vsx-sync
 ```
 
 Synchronize ACLs: 
 
-```bash
+```text
 switch(config-acl-ip)# vsx-sync
 ```
 
 Synchronize classifier and policy: 
 
-```bash
+```text
 switch(config-class-ip)# vsx-sync
 ```
 
 Synchronize PBR: 
 
-```bash
+```text
 switch(config-pbr-action-list)# vsx-sync
 ```
 
 Synchronize VLAN memberships and ACLs on physical or LAG interfaces: 
 
-```bash
+```text
 switch(config-if)# vsx-sync access-lists vlans
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show run vsx-sync
 ```
 
@@ -44,7 +44,7 @@ switch# show run vsx-sync
 
 On the first switch: 
 
-```bash
+```text
 switch(config)# vlan 10
 switch(config-vlan-10)# vsx-sync
 switch(config)# access-list ip secure_mcast_sources
@@ -57,7 +57,7 @@ switch(config-acl-ip)# 30 permit any any
 
 On the secondary switch: 
 
-```bash
+```text
 switch2# show run vsx-sync
 Current vsx-sync configuration:
 vlan 10

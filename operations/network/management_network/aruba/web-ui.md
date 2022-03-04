@@ -6,25 +6,25 @@ A web-based management user interface provides a visual representation of a subs
 
 Enable the WebUI on a VRF: 
 
-```bash
+```text
 switch(config)# https-server vrf <mgmt|default|VRF>
 ```
 
 Configure REST API: 
 
-```bash
+```text
 switch(config)# https-server rest access-mode read-<only|write>
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show https-server
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch# config
 switch(config)# https-server
   rest  REST API configuration

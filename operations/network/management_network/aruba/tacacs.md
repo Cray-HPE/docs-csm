@@ -6,19 +6,19 @@
 
 Configure TACACS: 
 
-```bash
+```text
 switch(config)# tacacs-server host IP-ADDR [key <plain|cipher>text KEY]
 ```
 
 Depending on the TACACS server, change the auth-type from PAP to CHAP: 
 
-```bash
+```text
 switch(config)# tacacs-server auth-type [pap|chap]
 ```
 
 Configure AAA: 
 
-```bash
+```text
 switch(config)# aaa authentication login default group tacacs local
 switch(config)# aaa authorization commands default group tacacs
 switch(config)# aaa accounting all default start-stop group tacacs
@@ -26,7 +26,7 @@ switch(config)# aaa accounting all default start-stop group tacacs
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show tacacs-server [detail]
 ```
 

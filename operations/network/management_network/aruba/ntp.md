@@ -6,31 +6,31 @@ The Network Time Protocol (NTP) client is essential for syncing time on various 
 
 Specify a remote NTP server to use for time synchronization: 
 
-```bash
+```text
 switch(config)# ntp server <FQDN|IP-ADDR>
 ```
 
 Force NTP to use a specific VRF for requests: 
 
-```bash
+```text
 switch(config)# ntp vrf VRF
 ```
 
 Configure the system timezone: 
 
-```bash
+```text
 switch(config)# clock timezone TIMEZONE
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show ntp status
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch# show ntp status
 NTP is enabled.
 NTP authentication is enabled.

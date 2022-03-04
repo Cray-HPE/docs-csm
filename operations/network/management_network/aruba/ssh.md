@@ -6,25 +6,25 @@ SSH server enables an SSH client to make a secure and encrypted connection to a 
 
 Configure SSH authentication: 
 
-```bash
+```text
 switch(config)# ssh password-authentication
 ```
 
 Generate SSH server key: 
 
-```bash
+```text
 switch(config)# ssh host-key <rsa [bits 2048]|ecdsa CURVE|ed25519>
 ```
 
 Enable SSH on the VRF: 
 
-```bash
+```text
 switch(config)# ssh server vrf <default|mgmt|VRF>
 ```
 
 Configure SSH options: 
 
-```bash
+```text
 switch(config)# ssh certified-algorithms-only
 switch(config)# ssh maximum-auth-attempts VALUE
 switch(config)# ssh known-host remove <all|IP-ADDR>
@@ -32,13 +32,13 @@ switch(config)# ssh known-host remove <all|IP-ADDR>
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show ssh server [vrf VRF|all-vrfs]
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch# show ssh server all-vrfs
 SSH server configuration on VRF vrf_default :
 IP Version

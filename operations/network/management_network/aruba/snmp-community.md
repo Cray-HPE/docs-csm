@@ -6,25 +6,25 @@ The switch supports SNMPv2c community-based security for read-only access.
 
 Configure an SNMPv2c community name: 
 
-```bash
+```text
 switch(config)# snmp-server community NAME
 ```
 
 Bind the SNMP server to a VRF: 
 
-```bash
+```text
 switch(config)# snmp-server vrf <default|VRF>
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show snmp community
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch(config)# snmp-server community public
 switch(config)# snmp-server vrf default
 switch(config)# end

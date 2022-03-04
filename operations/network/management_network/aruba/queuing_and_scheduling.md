@@ -13,20 +13,20 @@ Schedule policies configure the order of the queues from which packets are remov
 
 Create a profile: 
 
-```bash
+```text
 switch(config)# qos queue-profile NAME
 switch(config)# qos schedule-profile NAME
 ```
 
 Apply a profile:
 
-```bash
+```text
 switch(config)# apply qos queue-profile NAME schedule-profile NAME 
 ```
 
 Configure a profile: 
 
-```bash
+```text
 switch(config-queue)# map queue <0-7> local-priority <0-7>
 switch(config-schedule)# strict queue <0-7>
 switch(config-schedule)# wfq queue <0-7> weight <0-253>
@@ -34,7 +34,7 @@ switch(config-schedule)# wfq queue <0-7> weight <0-253>
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show interface IFACE queues
 switch# show qos queue-profile [QUEUE-NAME]
 switch# show qos schedule-profile [SCHED-NAME]
@@ -49,7 +49,7 @@ switch# show qos schedule-profile [SCHED-NAME]
 
 ## Example Output 
 
-```bash
+```text
 switch(config)# qos queue-profile VOICE-Q-PROFILE
 switch(config-queue)# map queue 0 local-priority 0
 switch(config-queue)# map queue 1 local-priority 1

@@ -8,7 +8,7 @@ Configure remote logging to view log files from the switch on a remote server. T
 
 Configure logging: 
 
-```bash
+```text
 switch(config)# logging IP-ADDR
 ```
 

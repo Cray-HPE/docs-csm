@@ -11,7 +11,7 @@ Replace the VSX primary or the VSX secondary with the following steps.
 
 ## Example: 8320, 8325 
 
-```bash
+```text
 Switch# config
 Switch(config)# interface 1/1/1-1/1/52 shutdown
 ``` 
@@ -23,7 +23,7 @@ Switch(config)# interface 1/1/1-1/1/52 shutdown
 
 ## Example: 8320, 8325
 
-```bash
+```text
 Switch# config
 Switch(config)# no interface 1/1/1-1/1/52 shutdown
 ``` 

@@ -40,7 +40,7 @@ Use this procedure to verify the DNSMASQ config file on the NCNs is accurate.
 
 The following is an example Aruba configuration for the spine:
 
-```bash
+```text
 sw-spine-001# show run int vlan 1
 interface vlan1
     vsx-sync active-gateways

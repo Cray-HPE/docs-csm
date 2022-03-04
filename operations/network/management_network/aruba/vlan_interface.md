@@ -6,13 +6,13 @@ The switch also supports classic L3 VLAN interfaces.
 
 Configure the VLAN: 
 
-```bash
+```text
 switch(config)# vlan VLAN
 ```
 
 Create and enable the VLAN interface, and assign it an IP address: 
 
-```bash
+```text
 switch(config)# interface vlan VLAN
 switch(config-if-vlan)# ip address IP-ADDR/SUBNET
 switch(config-if-vlan)# no shutdown
@@ -20,13 +20,13 @@ switch(config-if-vlan)# no shutdown
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show vlan [VLAN|interface IFACE|summary]
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch(config)# vlan 10
 switch(config-vlan)# exit
 switch(config)# int 1/1/1

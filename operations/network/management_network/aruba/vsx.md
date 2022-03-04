@@ -8,43 +8,43 @@ Configuration synchronization is one aspect of this VSX solution where the prima
 
 Enable VSX: 
 
-```bash
+```text
 switch(config)# vsx
 ```
 
 Give the device a role of primary or secondary: 
 
-```bash
+```text
 switch(config-vsx)# role <primary|secondary>
 ```
 
 Configure the VSX keepalive between the two VSX peer switches: 
 
-```bash
+```text
 switch(config-vsx)# keepalive peer PEER-IP source SRC-IP
 ```
 
 Select a physical or LAG interface to become the inter-switch-link: 
 
-```bash
+```text
 switch(config-vsx)# inter-switch-link IFACE
 ```
 
 Create Multi-Chassis LAG interfaces: 
 
-```bash
+```text
 switch(config)# interface lag LAG multi-chassis
 ```
 
 Associate the physical interfaces with the LAG: 
 
-```bash
+```text
 switch(config-if)# lag LAG
 ```
 
 Synchronize global configurations: 
 
-```bash
+```text
 switch(config-vsx)# vsx-sync [aaa] [sflow] [snmp] [static-routes] [time] [copp-policy] [dns]
 [mclag-interfaces] [qos-global] [ssh]
 Synchronize interface memberships 
@@ -65,13 +65,13 @@ switch(config-addrgroup)# vsx-sync
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show vsx <brief|configuration|status> [config-sync]
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch(config)# int 1/1/49
 switch(config-if)# description VSX KEEPALIVE LINK
 switch(config-if)# no shut

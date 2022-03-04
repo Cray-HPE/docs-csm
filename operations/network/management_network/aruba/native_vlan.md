@@ -6,19 +6,19 @@ Untagged ingress packets are destined to the native VLAN. An interface can be co
 
 Configure a VLAN as native: 
 
-```bash
+```text
 switch(config-if)# vlan trunk native VLAN
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show vlan [VLAN]
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch(config)# vlan 100
 switch(config-vlan-100)# no shutdown
 switch(config-vlan-100)# end

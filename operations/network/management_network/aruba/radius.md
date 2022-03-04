@@ -6,21 +6,21 @@ RADIUS servers provide a method for remote users to access the switch. The follo
 
 Configure RADIUS server: 
 
-```bash
+```text
 switch(config)# radius-server host IP-ADDR [key <plain|cipher>text KEY] [timeout VALUE] [port
 PORT] [auth-type TYPE] [acct-port PORT] [retries VALUE] [vrf VRF] [tracking <enable|disable>]
 ```
 
 Configure AAA:
 
-```bash
+```text
 switch(config)# aaa authentication login default group radius local 
 switch(config)# aaa accounting all default start-stop group radius 
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show radius-server [detail]
 switch# show aaa <server-groups|authentication>
 ```

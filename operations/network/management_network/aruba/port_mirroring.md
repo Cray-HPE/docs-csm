@@ -6,37 +6,37 @@ Port mirroring, also known as Switched Port Analyzer (SPAN), enables traffic on 
 
 Create and enable a mirror session: 
 
-```bash
+```text
 switch(config)# mirror session <1-4> switch(config-mirror)# enable
 ```
 
 Configure a source interface:
 
-```bash
+```text
 switch(config-mirror)# source interface IFACE <both|tx|rx>
 ```
 
 Configure an interface as the mirror destination:
 
-```bash
+```text
 switch(config-mirror)# destination interface IFACE 
 ```
 
 Configure a tunnel as the mirror destination (ERSPAN): 
 
-```bash
+```text
 switch(config-mirror)# destination tunnel IP-ADDR source IP-ADDR [id VALUE> [vrf VRF]
 ```
 
 Configure CPU as the mirror destination:
 
-```bash 
+```text 
 switch(config-mirror)# destination cpu
 ```
 
 Generate and copy the internal packet capture: 
 
-```bash
+```text
 switch# diagnostics
 switch# diag utilities tshark [file]
 switch# copy tshark-pcap REMOTE-URL vrf VRF
@@ -44,7 +44,7 @@ switch# copy tshark-pcap REMOTE-URL vrf VRF
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show mirror <1-4>
 ```
  

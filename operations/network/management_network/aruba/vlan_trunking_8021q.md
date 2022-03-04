@@ -6,19 +6,19 @@ A trunk port carries packets on one or more VLANs specified. Packet that ingress
 
 Configure an interface as a trunk port: 
 
-```bash
+```text
 switch(config-if)# vlan trunk allowed VLANS
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show vlan [VLAN-ID]
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch(config)# vlan 10
 switch(config-vlan-10)# no shutdown
 switch(config-vlan-10)# exit

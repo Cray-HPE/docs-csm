@@ -18,20 +18,20 @@ Other than the primary and secondary members, no members can ever become master 
 
 Create a VSF Member: 
 	
-```bash
+```text
 switch(config)# vsf member <ID>
 switch(vsf-member)# link <ID> <IFACE-RANGE>
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show vsf <brief|configuration|status>
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch# show vsf topology
           Stby     Master
 CPU Utilization

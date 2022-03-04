@@ -6,37 +6,37 @@ Simple Network Management Protocol (SNMP) minimizes the number and complexity of
 
 Enable SNMP agent: 
 
-```bash
+```text
 switch(config)# snmp-server vrf VRF
 ```
 
 Configure the port to which the SNMP agent is bound: 
 
-```bash
+```text
 switch(config)# snmp-server agent-port PORT
 ```
 
 Configure an SNMPv2c community name: 
 
-```bash
+```text
 switch(config)# snmp-server community NAME
 ```
 
 Configure a SNMPv2c trap receiver host: 
 
-```bash
+```text
 switch(config)# snmp-server host IP-ADDR <trap|inform> version v2c [community NAME]
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show snmp [agent-port|community|trap|vrf] [vsx-peer]
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch(config)# snmp-server vrf default
 switch(config)# snmp-server agent-port 10601
 switch(config)# snmp-server community public

@@ -7,13 +7,13 @@ VLANs allow for the logical grouping of switch interfaces, enabling communicatio
 
 Create VLAN: 
 
-```bash
+```text
 switch(config)# vlan <VLAN> 
 ```
 
 Configure an interface to associate it with a VLAN: 
 
-```bash
+```text
 switch(config)# interface <IFACE> 
 switch(config-if)# no shutdown 
 switch(config-if)# no routing
@@ -21,13 +21,13 @@ switch(config-if)# no routing
 
 Configure an interface as an access port:
 
-```bash
+```text
 switch(config-if)# vlan access VLAN 
 ```
 
 Configure an interface as a trunk port: 
 
-```bash
+```text
 switch(config-if)# vlan trunk native <VLAN> 
 switch(config-if)# vlan trunk allowed <VLAN> 
 ```
@@ -36,20 +36,20 @@ Configure VLAN as Voice:
 
 > **NOTE:** To give a specific VLAN a voice designation and adding the proper hooks, you need to add voice command in the vlan context. This configuration is the same for all CX-series switches.
 
-```bash
+```text
 switch(config)# vlan <VLAN> 
 switch(config-vlan-100)# voice 
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show vlan [VLAN]
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch# show vlan
 --------------------------------------------------------------------------------------
 VLAN  Name                              Status  Reason          Type      Interfaces

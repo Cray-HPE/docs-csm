@@ -15,19 +15,19 @@
 
 Enable UDLD: 
 
-```bash
+```text
 switch(config-if)# udld
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show udld [interface IFACE]
 ```
 
 ## Example Output 
 
-```bash
+```text
 switch(config)# interface 1/1/1
 switch(config-if)# udld
 switch(config-if)# exit

@@ -20,44 +20,44 @@ The violation state of a port is reset with the port is administratively shutdow
 
 Enable port security globally: 
 
-```bash
+```text
 switch(config)# port-access port-security enable
 ```
 
 Enable port security on an interface: 
 
-```bash
+```text
 switch(config-if)# port-access port-security
 ```
 
 Configure port access security violation action: 
 
-```bash
+```text
 switch(config-if)# port-access security violation action <notify|shutdown>
 ```
 
 Configure port access security violation recovery timer: 
 
-```bash
+```text
 switch(config-if)# port-access security violation action shutdown recovery-timer <10-600>
 ```
 
 Configure port access security violation auto recovery: 
 
-```bash
+```text
 switch(config-if)# port-access security violation action shutdown auto-recovery enable
 ```
 
 Configure port security: 
 
-```bash
+```text
 switch(config-if-port-security)# mac-address <MAC-ADDR>
 switch(config-if-port-security)# client-limit <1-64>
 ```
 
 Show commands to validate functionality:  
 
-```bash
+```text
 switch# show port-access port-security interface <all|IFACE> <client-status|portstatistics>
 ```
 
