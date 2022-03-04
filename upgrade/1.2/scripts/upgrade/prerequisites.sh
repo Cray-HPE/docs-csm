@@ -511,4 +511,22 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="TDS_LOWER_CPU_REQUEST"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    
+    numOfActiveWokers=$(kubectl get nodes | grep "ncn-w" | grep "Ready" | wc -l)
+    minimal_count=4
+    if [[ $numOfActiveWokers -lt $minimal_count ]]; then
+        /usr/share/doc/csm/upgrade/1.2/scripts/k8s/tds_lower_cpu_requests.sh
+    else
+        echo "==> TDS: false"
+    fi
+    
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 ok_report
