@@ -23,7 +23,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-set -euo pipefail
+set -e
 basedir=$(dirname $0)
 . ${basedir}/../common/upgrade-state.sh
 trap 'err_report' ERR
@@ -131,7 +131,7 @@ fi
 drain_node $target_ncn
 
 csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
-${basedir}/util/ncn-rebuild-common.sh $target_ncn
+${basedir}/../common/ncn-rebuild-common.sh $target_ncn
 
 # Restore files used by the System Admin Toolkit (SAT) that were previously backed up
 state_name="RESTORE_SAT_LOCAL_FILES"

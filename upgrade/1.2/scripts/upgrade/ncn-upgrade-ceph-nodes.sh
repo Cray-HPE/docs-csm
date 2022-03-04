@@ -23,7 +23,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-set -euo pipefail
+set -e
 basedir=$(dirname $0)
 . ${basedir}/../common/upgrade-state.sh
 trap 'err_report' ERR
@@ -78,7 +78,7 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-${basedir}/util/ncn-rebuild-common.sh $target_ncn
+${basedir}/../common/ncn-rebuild-common.sh $target_ncn
 
 state_name="INSTALL_TARGET_SCRIPT"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
@@ -167,7 +167,7 @@ if [[ ${target_ncn} == "ncn-s001" ]]; then
             ssh_keygen_keyscan "${target_ncn}"
             ssh_keys_done=1
         fi
-        scp /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ceph/create_rgw_buckets.sh $target_ncn:/tmp
+        scp /usr/share/doc/csm/upgrade/1.2/scripts/ceph/create_rgw_buckets.sh $target_ncn:/tmp
         ssh ${target_ncn} '/tmp/create_rgw_buckets.sh'
 
         record_state "${state_name}" ${target_ncn}

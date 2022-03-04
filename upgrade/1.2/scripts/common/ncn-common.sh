@@ -70,6 +70,8 @@ export TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https
 
 export TARGET_IP_NMN=$(dig +short $TARGET_NCN.nmn)
 
+export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/docs-csm-latest.noarch.rpm
+
 function drain_node() {
    target_ncn=$1
    state_name="DRAIN_NODE"

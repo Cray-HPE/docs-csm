@@ -249,9 +249,6 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     ${CSM_ARTI_DIR}/lib/setup-nexus.sh
 
-    # export URL of latest docs rpm in nexus
-    echo "export DOC_RPM_NEXUS_URL=https://packages.local/repository/csm-sle-15sp2/docs-csm-latest.noarch.rpm" >> /etc/cray/upgrade/csm/myenv
-
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
