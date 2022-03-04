@@ -23,6 +23,19 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
+# Ensure etcd clusters have three running members before proceeding
+for cluster in $(kubectl get etcd -n services | grep -v NAME | awk '{print $1}')
+do
+  size=$(kubectl get etcd -n services $cluster -o json | jq '.status.size')
+  if [ $size -ne 3 ]; then
+    echo >&2 "ERROR: etcd cluster: $cluster does not have three running members."
+    echo >&2 "       This must be addressed prior to continuing with the install."
+    exit 1
+  else
+    echo "validated etcd cluster: $cluster has three running members..."
+  fi
+done
+
 DEPLOYMENTS="\
 cray-bss \
 cray-keycloak-gatekeeper-ingress \
