@@ -24,8 +24,8 @@
 #
 
 set -e
-BASEDIR=$(dirname $0)
-. ${BASEDIR}/upgrade-state.sh
+basedir=$(dirname $0)
+. ${basedir}/upgrade-state.sh
 trap 'err_report' ERR
 set -o pipefail
 
@@ -462,7 +462,7 @@ yq d -i "$c" 'spec.wlm.macvlansetup.nmn_vlan'
 # lower cpu request for tds systems (3 workers)
 num_workers=$(kubectl get nodes | grep ncn-w | wc -l)
 if [ $num_workers -le 3 ]; then
-  yq m -i --overwrite "$c" ${BASEDIR}/tds_cpu_requests.yaml
+  yq m -i --overwrite "$c" ${basedir}/tds_cpu_requests.yaml
 fi
 
 if [[ "$inplace" == "yes" ]]; then

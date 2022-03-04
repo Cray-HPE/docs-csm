@@ -24,9 +24,9 @@
 #
 
 set -e
-BASEDIR=$(dirname $0)
-. ${BASEDIR}/upgrade-state.sh
-. ${BASEDIR}/ncn-upgrade-common.sh $(hostname)
+basedir=$(dirname $0)
+. ${basedir}/util/upgrade-state.sh
+. ${basedir}/util/ncn-upgrade-common.sh $(hostname)
 trap 'err_report' ERR
 # array for paths to unmount after chrooting images
 declare -a UNMOUNTS=()
@@ -127,7 +127,7 @@ state_name="UPDATE_SSH_KEYS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    . ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
+    . ${basedir}/util/ncn-upgrade-common.sh ${upgrade_ncn}
      grep -oP "(ncn-\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
 
      grep -oP "(ncn-\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
@@ -229,7 +229,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
     kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
     set +o pipefail
-    . ${BASEDIR}/update-customizations.sh -i ${SITE_INIT_DIR}/customizations.yaml
+    . ${basedir}/util/update-customizations.sh -i ${SITE_INIT_DIR}/customizations.yaml
     yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
     yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
     yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials

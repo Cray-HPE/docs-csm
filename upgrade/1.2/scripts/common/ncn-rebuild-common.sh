@@ -24,12 +24,12 @@
 #
 
 set -e
-BASEDIR=$(dirname $0)
-. ${BASEDIR}/upgrade-state.sh
+basedir=$(dirname $0)
+. ${basedir}/../upgrade/utilupgrade-state.sh
 trap 'err_report' ERR
 upgrade_ncn=$1
 
-. ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
+. ${basedir}/ncn-upgrade-common.sh ${upgrade_ncn}
 
 state_name="WIPE_NODE_DISK"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
