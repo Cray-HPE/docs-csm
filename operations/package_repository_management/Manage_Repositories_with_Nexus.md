@@ -4,7 +4,7 @@ This section describes how to connect to Nexus with the Web UI, as well as how t
 
 ### Using Keycloak to Create and Manage Accounts
 
-To log into the Web UI or authenticate with the REST API a user account with approate permissions must be created. Accounts are managed in keycloak \(see keycloak account documentation [here](../CSM_product_management/Configure_Keycloak_Account.md)\). To add administrator permissions for nexus add the nx-admin role binding to the user from the system-nexus-client client \(see below\). To add an anonymous user add the nx-anonymous role binding to the user from the sysyem-nexus-client client \(see below\).
+To log into the Web UI or authenticate with the REST API a user account with approate permissions must be created. Accounts are managed in keycloak \(see keycloak account documentation [here](../CSM_product_management/Configure_Keycloak_Account.md)\). To add administrator permissions for nexus add the nx-admin role binding to the user from the system-nexus-client client \(see below\). To add an anonymous user add the nx-anonymous role binding to the user from the system-nexus-client client \(see below\).
 
     ![Nexus Admin Account](../../img/operations/Nexus_Admin_Account.png "Nexus Admin Account")
 
@@ -20,7 +20,7 @@ kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}}
 kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d; echo
 ```
 
-The first command will return with username of the local admin account, and the second will return the password for the local admin account. \(Note the secret will not update or stay in sync if the username or password of the local account is changed.\). This account has the same permissions as an account creted in keycloak with the nx-admin role.
+The first command will return with username of the local admin account, and the second will return the password for the local admin account. \(Note the secret will not update or stay in sync if the username or password of the local account is changed.\). This account has the same permissions as an account created in keycloak with the nx-admin role.
 
 ### Access Nexus with the Web UI
 
