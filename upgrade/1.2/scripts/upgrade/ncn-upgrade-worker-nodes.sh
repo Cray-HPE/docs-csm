@@ -23,7 +23,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-set -euo pipefail
+set -e
 basedir=$(dirname $0)
 . ${basedir}/../common/upgrade-state.sh
 trap 'err_report' ERR
@@ -121,7 +121,7 @@ else
 fi
 
 csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
-${basedir}/util/ncn-rebuild-common.sh $target_ncn
+${basedir}/../common/ncn-rebuild-common.sh $target_ncn
 
 # TODO: wait for k8s
 
