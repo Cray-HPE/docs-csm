@@ -261,12 +261,13 @@ def remove_can_static_pool(networks):
     can.subnets().pop("can_metallb_static_pool")
 
 
-def create_chn_network(networks, chn_data):
+def create_chn_network(networks, chn_data, number_of_chn_edge_switches):
     """Create a new SLS CHN data structure.
 
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
         chn_data (int, ipaddress.IPv4Network): VLAN and IPv4 CIDR for the CHN
+        number_of_chn_edge_switches (int): Number of switches to uplink for CHN
     """
     if networks.get("CHN") is not None:
         return
@@ -347,6 +348,16 @@ def create_chn_network(networks, chn_data):
 
         for reservation in subnet.reservations().values():
             reservation.ipv4_address(next_free_ipv4_address(subnet))
+
+    if number_of_chn_edge_switches != 2:
+        # Note that reservation keys above are still "can" so this is a hack
+        # This will leave a hole in the reservation IPs, but can be re-used.
+        click.echo(f"    Adjusting the number of edge switches from 2 to {number_of_chn_edge_switches}")
+        del_switches = [f"can-switch-{s}" for s in list(range(2, number_of_chn_edge_switches, -1))]
+        for switch in del_switches:
+            if switch not in bootstrap.reservations().keys():
+                continue
+            del bootstrap.reservations()[switch]
 
     networks.update({"CHN": chn})
 
