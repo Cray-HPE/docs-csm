@@ -17,7 +17,7 @@
 1. Run `ncn-upgrade-woker-nodes.sh` for `ncn-w001`. Follow output of the script carefully. The script will pause for manual interaction.
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-woker-nodes.sh ncn-w001
+    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001
     ```
     
     > NOTE: You may need to reset the root password for each node after it is rebooted
