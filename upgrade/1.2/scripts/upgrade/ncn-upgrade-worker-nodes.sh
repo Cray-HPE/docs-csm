@@ -34,16 +34,7 @@ target_ncn=$1
 
 ssh_keygen_keyscan $1 || true # or true to unblock rerun
 
-cfs_config_status=$(cray cfs components describe $TARGET_XNAME --format json | jq -r '.configurationStatus')
-echo "CFS configuration status: ${cfs_config_status}"
-if [[ $cfs_config_status != "configured" ]]; then
-    echo "*************************************************"
-    cat <<EOF
-If the state is pending, the administrator may want to tail the logs of the CFS pod running on that node to watch the CFS job finish before rebooting this node. If the state is failed for this node, then it is unrelated to the upgrade process, and can be addressed independent of rebuilding this worker node.
-EOF
-    echo "*************************************************"
-    read -p "Read and act on above steps. Press Enter key to continue ..."
-fi
+${basedir}/../cfs/wait_for_configuration.sh --xnames $TARGET_XNAME
 
 state_name="ENSURE_NEXUS_CAN_START_ON_ANY_NODE"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
@@ -143,18 +134,7 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-cfs_config_status=$(cray cfs components describe $TARGET_XNAME --format json | jq -r '.configurationStatus')
-echo "CFS configuration status: ${cfs_config_status}"
-if [[ $cfs_config_status != "configured" ]]; then
-    echo "*************************************************"
-    cat <<EOF
-Confirm the CFS configurationStatus after rebuilding the node. If the state is pending, the administrator may want to tail the logs of the CFS pod running on that node to watch the CFS job finish.
-IMPORTANT: 
-  The NCN personalization (CFS configuration) for a worker node which has been rebuilt should be complete before continuing in this process. If the state is failed for this node, it should be be addressed now.
-EOF
-    echo "*************************************************"
-    read -p "Read and act on above steps. Press Enter key to continue ..."
-fi
+${basedir}/../cfs/wait_for_configuration.sh --xnames $TARGET_XNAME
 
 ### redeploy CPS if required
 redeploy=$(cat /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot | grep $target_ncn | wc -l)
