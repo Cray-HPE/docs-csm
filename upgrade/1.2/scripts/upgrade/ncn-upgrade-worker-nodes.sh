@@ -215,11 +215,18 @@ if [[ $state_recorded == "0" ]]; then
 else
     echo "====> ${state_name} has been completed"
 fi
-echo "******************************************"
-echo "******************************************"
-echo "**** Enter SSH password of switches: ****"
-read -s -p "" SW_ADMIN_PASSWORD
-echo
+
+if [[ -z $SW_ADMIN_PASSWORD ]]; then
+    echo "******************************************"
+    echo "******************************************"
+    echo "**** You can export SW_ADMIN_PASSWORD ****"
+    echo "********* to avoid manual input  *********"
+    echo "******************************************"
+    echo "******************************************"
+    echo "**** Enter SSH password of switches: ****"
+    read -s -p "" SW_ADMIN_PASSWORD
+    echo
+fi
 
 cat <<EOF
 

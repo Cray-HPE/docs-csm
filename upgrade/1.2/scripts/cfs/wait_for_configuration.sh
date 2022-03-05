@@ -58,13 +58,13 @@ elif [[ -n $ROLE ]] || [[ -n $SUBROLE ]]; then
   if [[ -n $SUBROLE ]]; then
     SUBROLE_PARAMETER="--subrole $SUBROLE"
   fi
-  XNAMES=$(cray hsm state components list --type node $ROLE_PARAMETER $SUBROLE_PARAMETER\
+  XNAMES=$(cray hsm state components list --type node $ROLE_PARAMETER $SUBROLE_PARAMETER --format json \
     | jq -r '.Components | map(.ID) | join(",")')
   XNAME_PARAMETER="--ids ${XNAMES}"
 fi
 
 while true; do
-  RESULT=$(cray cfs components list --status pending $XNAME_PARAMETER | jq length)
+  RESULT=$(cray cfs components list --status pending $XNAME_PARAMETER --format json | jq length)
   if [[ "$RESULT" -eq 0 ]]; then
     break
   fi
@@ -72,11 +72,11 @@ while true; do
   sleep 30
 done
 
-CONFIGURED=$(cray cfs components list --status configured ${XNAME_PARAMETER} | jq length)
-FAILED=$(cray cfs components list --status failed ${XNAME_PARAMETER} | jq length)
+CONFIGURED=$(cray cfs components list --status configured ${XNAME_PARAMETER} --format json  | jq length)
+FAILED=$(cray cfs components list --status failed ${XNAME_PARAMETER} --format json | jq length)
 echo "Configuration complete. $CONFIGURED component(s) completed successfully.  $FAILED component(s) failed."
 if [ "$FAILED" -ne "0" ]; then
-   echo "The following components failed: $(cray cfs components list --status failed ${XNAME_PARAMETER} | jq -r '. | map(.id) | join(",")')"
+   echo "The following components failed: $(cray cfs components list --status failed ${XNAME_PARAMETER} --format json  | jq -r '. | map(.id) | join(",")')"
    exit 1
 fi
 
