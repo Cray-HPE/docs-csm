@@ -14,7 +14,7 @@
 
 ## Stage 2.2
 
-1. Run `ncn-upgrade-woker-nodes.sh` for `ncn-w001`. Follow output of the script carefully. The script will pause for manual interaction.
+1. Run `ncn-upgrade-worker-nodes.sh` for `ncn-w001`. Follow output of the script carefully. The script will pause for manual interaction.
 
     ```bash
     ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001
