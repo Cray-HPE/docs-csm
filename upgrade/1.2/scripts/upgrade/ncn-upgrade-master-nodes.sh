@@ -196,4 +196,6 @@ NOTE:
 EOF
 ssh $target_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
 
+move_state_file ${target_ncn}
+
 ok_report

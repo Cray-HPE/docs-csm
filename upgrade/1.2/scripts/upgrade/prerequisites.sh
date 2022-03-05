@@ -403,7 +403,7 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-tate_name="POD_ANTI_AFFINITY"
+state_name="POD_ANTI_AFFINITY"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
