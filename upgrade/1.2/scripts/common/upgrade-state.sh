@@ -65,6 +65,14 @@ function is_state_recorded () {
     fi
 }
 
+function move_state_file () {
+    # we only rename the state file
+    # this won't block another upgrade/rebuild/reboot
+    # it also leaves a trace of what happened before
+    target_ncn=$1
+    mv /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/state /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/state.bak
+}
+
 function err_report() {
     echo
     echo "[ERROR] - Unexpected errors, check output above"
