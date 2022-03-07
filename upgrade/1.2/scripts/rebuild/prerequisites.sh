@@ -24,34 +24,35 @@
 #
 
 set -e
-BASEDIR=$(dirname $0)
-. ${BASEDIR}/upgrade-state.sh
+basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+. ${basedir}/../common/upgrade-state.sh
+. ${basedir}/../common/ncn-common.sh $(hostname)
 trap 'err_report' ERR
+# array for paths to unmount after chrooting images
+declare -a UNMOUNTS=()
 
-upgrade_ncn="ncn-s001"
 
-. ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
-
-state_name="INSTALL_DOC_ON_STORAGE"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+state_name="CHECK_DOC_RPM"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
-    ssh $upgrade_ncn "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
-
-    record_state "${state_name}" ${upgrade_ncn}
+    if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
+        echo "ERROR: docs-csm-latest.noarch.rpm is missing under: /root -- halting..."
+        exit 1
+    fi
+    rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+    record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="CEPH_UPGRADE"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+state_name="SNAPSHOOT_CPS_DEPLOYMENT"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    ${basedir}/../cps/snapshot-cps-deployment.sh
 
-    ssh $upgrade_ncn "cd /usr/share/doc/csm/upgrade/1.2/scripts/ceph;./ceph-upgrade.sh"
-
-    record_state "${state_name}" ${upgrade_ncn}
+    record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi

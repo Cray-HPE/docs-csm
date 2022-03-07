@@ -54,13 +54,7 @@ This will cover the generic process for executing an action. For more specific e
 
     ```bash
     ncn# cray fas actions create {whole-system-dryrun.json}
-    ```
-
-    Example output:
-
-    ```
-    [...]
-
+    ...
     {
       "actionID": "e0cdd7c2-32b1-4a25-9b2a-8e74217eafa7",
       "overrideDryun": false
@@ -123,11 +117,6 @@ To view counts of operations, what state they are in, the overall state of the a
 
   ```
   ncn# cray fas actions status list {actionID}
-  ```
-
-  Example output:
-
-  ```
   actionID = "e6dc14cd-5e12-4d36-a97b-0dd372b0930f"
   snapshotID = "00000000-0000-0000-0000-000000000000"
   startTime = "2021-09-07 16:43:04.294233199 +0000 UTC"
@@ -165,12 +154,7 @@ To view counts of operations, what state they are in, the overall state of the a
 ##### Get Details of Action
 
   ```
-  ncn# cray fas actions describe {actionID} --format json
-  ```
-
-  Example output:
-  
-  ```
+    ncn# cray fas actions describe {actionID} --format json
     {
       "parameters": {
         "stateComponentFilter": {
@@ -267,11 +251,6 @@ Using the `operationID` listed in the actions array we can see the full detail o
 
   ```
   ncn# cray fas operations describe {operationID} --format json
-  ```
-
-  Example output:
-
-  ```
   {
   "fromFirmwareVersion": "", "fromTag": "",
   "fromImageURL": "",
@@ -310,7 +289,6 @@ A snapshot of the system captures the firmware version for every device that is 
 1. Determine what part of the system to take a snapshot.
 
    * Full System:
-         
          ```json
          {
          "name":"fullSystem_20200701"
@@ -318,7 +296,6 @@ A snapshot of the system captures the firmware version for every device that is 
          ```
 
    * Partial System
-         
          ```json
          {
            "name": "20200402_all_xnames",
@@ -364,11 +341,6 @@ A list of all snapshots can be viewed on the system. Any of the snapshots listed
 
     ```
     ncn# cray fas snapshots list --format json
-    ```
-
-    Example output:
-
-    ```
     {
       "snapshots": [
         {
@@ -410,11 +382,6 @@ View a snapshot to see which versions of firmware are set for each target. The c
 
     ```
     ncn# cray fas snapshots describe {snapshot_name} --format json
-    ```
-
-    Example output:
-
-    ```
     {
       "relatedActions": [],
       "name": "all",
@@ -493,11 +460,6 @@ Given the nature of the `model` field and its likelihood to not be standardized,
 
     ```bash
     ncn# cray fas images describe {imageID}
-    ```
-
-    Example output:
-
-    ```
     {
       "semanticFirmwareVersion": "0.2.6",
       "target": "Node0.BIOS",
@@ -525,11 +487,6 @@ Given the nature of the `model` field and its likelihood to not be standardized,
 
     ```
     ncn# cray fas actions describe {actionID} --format json
-    ```
-
-    Example output:
-
-    ```
     {
       "parameters": {
         "stateComponentFilter": {
@@ -674,11 +631,6 @@ Given the nature of the `model` field and its likelihood to not be standardized,
 
     ```bash
     ncn# cray fas operations describe {operationID} --format json
-    ```
-
-    Example output:
-
-    ```
     {
       "fromFirmwareVersion": "sc.1.3.307-prod-master.arm64.2020-06-13T00:28:26+00:00.f91edff",
       "fromTag": "",
@@ -733,16 +685,10 @@ Given the nature of the `model` field and its likelihood to not be standardized,
 ### FAS Loader Commands
 
 ##### Loader Status
-
 To check if the loader is currently busy and receive a list of loader run IDs:
-
 ```bash
 ncn# cray fas loader list
-```
 
-Example output:
-
-```
 loaderStatus = "ready"
 [[loaderRunList]]
 loaderRunID = "770af5a4-15bf-4e9f-9983-03069479dc23"
@@ -757,13 +703,9 @@ Firmware may be released and placed into the Nexus repository.
 FAS will return a loaderRunID.
 Use the loaderRunID to check the results of the loader run.
 To load the firmware from Nexus into FAS, use the following command:
-
 ```bash
 ncn# cray fas loader nexus create
-```
-Example output:
 
-```
 loaderRunID = "c2b7e9bb-f428-4e4c-aa83-d8fd8bcfd820"
 ```
 See [Load Firmware from Nexus in FAS Admin Procedures](./FAS_Admin_Procedures.md#loadNexus)
@@ -773,16 +715,10 @@ To load an RPM or ZIP into FAS on a system, copy the RPM or ZIP file to ncn-m001
 FAS will return a loaderRunID.
 Use the loaderRunID to check the results of the loader run.
 Run the following command (RPM is this case is firmware.rpm):
-
 **NOTE:** If firmware is not in the current directory, add the path to the filename.
-
 ```bash
 ncn# cray fas loader create --file firmware.rpm
-```
 
-Example output:
-
-```
 loaderRunID = "dd37dd45-84ec-4bd6-b3c9-7af480048966"
 ```
 See [Load Firmware from RPM or ZIP file in FAS Admin Procedures](./FAS_Admin_Procedures.md#loadRPM)
@@ -795,11 +731,7 @@ Using the loaderRunID returned from the loader upload command, run the following
 
 ```bash
 ncn# cray fas loader describe dd37dd45-84ec-4bd6-b3c9-7af480048966 --format json
-```
 
-Example output:
-
-```
 {
   "loaderRunOutput": [
     "2021-04-28T14:40:45Z-FWLoader-INFO-Starting FW Loader, LOG_LEVEL: INFO; value: 20",

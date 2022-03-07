@@ -9,7 +9,7 @@ To check if the management network is using generated switch configs, log onto a
 # CANU version: 1.1.10
 ###############################################################################
 ```
-To upgrade from CSM 1.0 preconfig (switch configs generated) to CSM 1.2 use this page [Management Network 1.0 (1.2 Preconfig) to 1.2](1.0_to_1.2_upgrade.md)
+To upgrade from CSM 1.2 preconfig (switch configs generated) to CSM 1.2 use this page [Management Network 1.0 (1.2 Preconfig) to 1.2](1.0_to_1.2_upgrade.md)
 
 If the configs have not been generated you will need to follow the steps below.
 

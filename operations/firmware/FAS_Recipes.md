@@ -1,8 +1,11 @@
 ## Recipes
 
+**NOTE:** This file contains a collection of various FAS recipes for preforming updates.
+For step by step directions and commands, see [FAS_Use_Cases](FAS_Use_Cases.md)
+
 The following example JSON files are useful to reference when updating specific hardware components. In all of these examples, the `overrideDryrun` field will be set to `false`; set them to `true` to perform a live update.
 
-When updating an entire system, walk down the device hierarchy component type by component type, starting first with 'Routers' (switches), proceeding to Chassis, and then finally to Nodes. While this is not strictly necessary, it does help eliminate confusion.
+When updating an entire system, walk down the device hierarchy component type by component type, starting first with Routers (switches), proceeding to Chassis, and then finally to Nodes. While this is not strictly necessary, it does help eliminate confusion.
 
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
 
@@ -193,7 +196,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 **IMPORTANT:**
 * If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than ncn-m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
-See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc")
+See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc)
 * Node should be powered on for System ROM update and will need to be rebooted to use the updated BIOS.
 
 

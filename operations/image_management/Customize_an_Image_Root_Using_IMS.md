@@ -438,10 +438,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         [root@POD ~]#
         ```
 
-        Once connected to the IMS image customization shell, perform any customizations required. If the SSH shell was created without using the `--ssh-containers-jail True` parameter, cd or chroot into the image root. Refer to the following sections for examples of custom configurations:
-
-        - "Running ML Applications Using Singularity" in the Analytics product stream documentation. 
-        - "Customize an Image Root to Install Compute Kubernetes" in the Cray Operating System (COS) product stream documentation.
+        Once connected to the IMS image customization shell, perform any customizations required. If the SSH shell was created without using the `--ssh-containers-jail True` parameter, cd or chroot into the image root. 
 
         After changes have been made, run the touch command on the `complete` file. The location of the complete file depends on whether or not the SSH job shell was created using the `--ssh-containers-jail True` parameter. See the table below for more information.
 
