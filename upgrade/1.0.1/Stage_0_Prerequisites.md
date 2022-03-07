@@ -41,7 +41,13 @@ This check will also be conducted in the `prerequisites.sh` script listed below 
         ncn-m001# rpm -Uvh --force /root/docs-csm-*.noarch.rpm
         ```
 
-## Stage 0.2 - Update `customizations.yaml`
+## Stage 0.2 - Reduce CPU Limits If Needed
+
+**`IMPORTANT`**
+
+For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed.  See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to accomplish this.
+
+## Stage 0.3 - Update `customizations.yaml`
 
 Perform these steps to update `customizations.yaml`:
 
@@ -85,7 +91,7 @@ Perform these steps to update `customizations.yaml`:
     ncn-m001# cd -
     ```
 
-## Stage 0.3 - Execute Prerequisites Check
+## Stage 0.4 - Execute Prerequisites Check
 
 >**`IMPORTANT:`**
 > 
@@ -149,17 +155,17 @@ Perform these steps to update `customizations.yaml`:
 
 **IF** the `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
 
-## Stage 0.4 - Backup VCS Data
+## Stage 0.5 - Backup VCS Data
 
 To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location. See [Version_Control_Service_VCS.md](../../operations/configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data) for these procedures.
 
 **`IMPORTANT:`** As part of this stage, **only perform the backup, not the restore**. The backup procedure is being done here as a precautionary step.
 
-## Stage 0.5 - Backup Workload Manager Data
+## Stage 0.6 - Backup Workload Manager Data
 
 To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting back-up data should be stored in a safe location off of the system.
 
-## Stage 0.6 - Update the Storage Node runcmds for reboots
+## Stage 0.7 - Update the Storage Node runcmds for reboots
 
 To prevent accidental storage cloud-init runs and also to ensure the Ceph services are set to auto-start on boot, please run the below script on `ncn-m001`:
 
@@ -167,7 +173,7 @@ To prevent accidental storage cloud-init runs and also to ensure the Ceph servic
 ncn-m001# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
 ```
 
-## Stage 0.6 - Backup BSS Data
+## Stage 0.8 - Backup BSS Data
 
 In the event of a problem during the upgrade which may cause the loss of BSS data, perform the following to preserve this data.
 
