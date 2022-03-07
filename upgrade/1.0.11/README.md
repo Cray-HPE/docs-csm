@@ -51,11 +51,6 @@ upgrade the "stable" NCN.
 
 ## Upgrade Stages
 
->**`IMPORTANT:`**
->
-> For TDS systems with only three worker nodes, prior to proceeding with this upgrade, CPU limits **MUST** be lowered on several services. This is necessary for this upgrade to succeed. See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to accomplish this.
->
-
 **`Important:`** Please see [Upgrade Troubleshooting](./upgrade_troubleshooting.md) for troubleshooting purposes in the case that you encounter issues.
 
 - [Stage 0 - Prerequisites](Stage_0_Prerequisites.md)
