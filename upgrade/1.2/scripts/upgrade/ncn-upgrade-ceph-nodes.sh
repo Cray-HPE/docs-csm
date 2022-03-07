@@ -89,7 +89,8 @@ if [[ $state_recorded == "0" ]]; then
         ssh_keygen_keyscan "${target_ncn}"
         ssh_keys_done=1
     fi
-    ssh $target_ncn "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
+    scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
+    ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
 
     record_state "${state_name}" ${target_ncn}
 else
