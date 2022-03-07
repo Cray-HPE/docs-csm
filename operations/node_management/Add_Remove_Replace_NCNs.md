@@ -10,6 +10,8 @@
 
 The system is fully installed and has transitioned off of the LiveCD.
 
+1. The system is in site maintenance.
+
 1. preq.py placeholder
 
 <a name="add-worker-storage-master"></a>
@@ -48,7 +50,7 @@ The following is a high-level overview of the NCN add workflow:
 
 5. [Boot NCN](Add_Remove_Replace_NCNs/Boot_NCN.md)
 
-6. [Validation](Add_Remove_Replace_NCNs/Validation.md#validate-added-ncn)
+6. [Validation](Add_Remove_Replace_NCNs/Validation.md)
 
 <a name="remove-worker-storage-master"></a>
 ## Remove Worker, Storage or Master NCNs
@@ -80,7 +82,7 @@ The following is a high-level overview of the NCN add workflow:
 
 4. [Validate SHCD](Add_Remove_Replace_NCNs/Validate_SHCD.md#validate-shcd-after-removing-ncn)
 
-5. [Validation](Add_Remove_Replace_NCNs/Validation.md#validate-removed-ncn)
+5. [Validation](Add_Remove_Replace_NCNs/Validation.md)
 
 
 <a name="replace-worker-storage-master"></a>

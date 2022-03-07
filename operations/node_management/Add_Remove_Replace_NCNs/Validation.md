@@ -2,16 +2,13 @@
 
 ## Description
 
-Validate that the NCN has been added or removed.
+Validate that the system is health
 
 ## Procedure
 
-- [Validate Added NCN](#validate-added-ncn)
-- [Validate Removed NCN](#validate-removed-ncn)
+1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
-<a name="validate-added-ncn"></a>
-### Validate Added NCN
-
-<a name="validate-removed-ncn"></a>
-### Validate Removed NCN
-
+  ```bash
+  ncn-mw# /opt/cray/platform-utils/ncnHealthChecks.sh
+  ncn-mw# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+  ```
