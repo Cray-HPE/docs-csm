@@ -206,6 +206,7 @@ An authentication token is required to access the API gateway and to use the `sa
          Determine which BOS session(s) to cancel. To cancel a BOS session, kill
 	 its associated Boot Orchestration Agent (BOA) Kubernetes job.
          
+<<<<<<< HEAD
          **Method #1: Use BOS Session Status**
 
          Use the following script to find the BOS session that have ended (true) or are still running (false)
@@ -233,6 +234,8 @@ An authentication token is required to access the API gateway and to use the `sa
          
          **Method #2: Look at BOA Kubernetes jobs**
          
+=======
+>>>>>>> 64568ee3fd8... CASMTRIAGE-3065: Removed unreliable method of finding running BOS sessions
          To find a list of BOA jobs that are still running:
          ```bash
          kubectl -n services get jobs|egrep -i "boa|Name"
@@ -303,9 +306,9 @@ An authentication token is required to access the API gateway and to use the `sa
 
     4.   Delete the BOS session.
          BOS keeps track of sessions in its database. These entries need to be deleted.
-	 Note, you found the BOS Session ID earlier, but it is also invariably the same
-	 as the BOA Job ID minus the prepended 'boa-' string.
-         Use the following command to delete the BOS database entry.
+	     The BOS Session ID is the same as the BOA Job ID minus the prepended 'boa-'
+	     string. Use the following command to delete the BOS database entry.
+         
          ```bash
          cray bos v1 session delete <session ID>
          ```
