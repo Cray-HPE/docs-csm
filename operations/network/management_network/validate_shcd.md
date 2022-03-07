@@ -2,6 +2,9 @@
 
 #### Prerequisites 
 - Up to date SHCD.
+- CANU installed with version 1.1.11 or greater.
+  - Run `canu --version` to see version.
+  - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](update_canu_from_csm_tarball.md)
 
 Use CANU (CSM Automated Network Utility) to validate the SHCD. SHCD validation is required to ensure Plan-of-Record network configurations are generated. This is an iterative process to create a model of the entire network topology connection-by-connection. 
 
@@ -33,8 +36,8 @@ In this example above the 10G_25G_40G_100G worksheet has the upper left and lowe
 
 Use CANU to validate this worksheet. 
 
-```
-canu validate shcd -a full --shcd ./HPE\ System\ Hela\ CCD.revA27.xlsx --tabs 10G_25G_40G_100G --corners I37,T107 
+```bash
+ncn# canu validate shcd -a full --shcd ./HPE\ System\ Hela\ CCD.revA27.xlsx --tabs 10G_25G_40G_100G --corners I37,T107 
 ```
 
 -a or –architecture can be tds, full or v1 (case insensitive) for: 
@@ -47,8 +50,8 @@ CANU will ensure that each cell has valid data and that the connections between 
 
 Once the worksheet is validated you can check for any errors: 
 
-```
-canu validate shcd -a full --shcd ./HPE\ System\ Hela\ CCD.revA27.xlsx --tabs 10G_25G_40G_100G,NMN --corners I37,T107,J15,T16 --log DEBUG 
+```bash
+ncn# canu validate shcd -a full --shcd ./HPE\ System\ Hela\ CCD.revA27.xlsx --tabs 10G_25G_40G_100G,NMN --corners I37,T107,J15,T16 --log DEBUG 
 ```
 
 #### Checks and Validations 
@@ -75,7 +78,7 @@ A clean run will have the following sections:
 
 ***Critically***, the Warnings output will contain a section headed "Node type could not be determined for the following".  This needs to be carefully reviewed because it may contain site uplinks that are not tracked by CANU but may also contain mis-spelled or mis-categorized nodes. As an example: 
 
-```
+```text
 Node type could not be determined for the following. 
 
 These nodes are not currently included in the model. 
@@ -141,4 +144,7 @@ After an SHCD has been validated it should be uploaded to an official storage lo
 - Once the SHCD is fully validate, the user will be able to output all the connection details to a `json` file.
 - This is used to generate switch configs.
 
-```canu validate shcd -a v1 --shcd ./test.xlsx --tabs 40G_10G,NMN,HMN --corners I12,S37,I9,S20,I20,S31  --json --out cabling.json```
+```bash
+ncn# canu validate shcd -a v1 --shcd ./test.xlsx --tabs 40G_10G,NMN,HMN --corners I12,S37,I9,S20,I20,S31  --json --out cabling.json
+```
+

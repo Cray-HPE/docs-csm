@@ -2,9 +2,7 @@
 
 The Version Control Service \(VCS\) includes a web interface for repository management, pull requests, and a visual view of all repositories and organizations. The following URL is for the VCS web interface:
 
-```
-https://vcs.SHASTA_CLUSTER_DNS_NAME
-```
+`https://vcs.SHASTA_CLUSTER_DNS_NAME`
 
 On cluster nodes, the VCS service can be accessed through the gateway. VCS credentials for the `crayvcs` user are required before cloning a repository \(see the "VCS Administrative User" section below\). To clone a repository in the `cray` organization, use the following command:
 
@@ -48,15 +46,11 @@ The `crayvcs` Gitea admin user that is created during CSM installation can log i
 
 1.  Log in to VCS as the `crayvcs` user on the system:
 
-    ```
-    https://vcs.SHASTA_CLUSTER_DNS_NAME
-    ```
+    `https://vcs.SHASTA_CLUSTER_DNS_NAME`
 
 2.  Navigate to the `cray` organization owners page at
 
-    ```
-    https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/cray/teams/owners
-    ```
+    `https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/cray/teams/owners`
 
 3.  Enter the username of the user who should have access to the organization in the **Search user...** text field, and click the **Add Team Member** button.
 
@@ -120,13 +114,13 @@ Data for gitea is stored in two places. Git content is stored directly in a PVC,
 3. Export each secret to a manifest file:
 
     ```
-    ncn-w001# SECRETS="postgres service-account standby"
-    ncn-w001# echo "---" > gitea-vcs-postgres.manifest
-    ncn-w001# for secret in $SECRETS; do
-    >   kubectl get secret "${secret}.gitea-vcs-postgres.credentials" -n services -o yaml >> gitea-vcs-postgres.manifest
-    >   echo "---" >> gitea-vcs-postgres.manifest
-    > done
-   ```
+    ncn# SECRETS="postgres service-account standby"
+    ncn# echo "---" > gitea-vcs-postgres.manifest
+    ncn# for secret in $SECRETS; do
+        kubectl get secret "${secret}.gitea-vcs-postgres.credentials" -n services -o yaml >> gitea-vcs-postgres.manifest
+        echo "---" >> gitea-vcs-postgres.manifest
+    done
+    ```
    
 4. Edit the manifest file to remove creationTimestamp, resourceVersion, selfLink, uid for each entry. Then, copy all files to a safe location.
 
@@ -137,10 +131,10 @@ The VCS postgres backups should be accompanied by backups of the VCS PVC. The ex
 
 Backup (save the resulting tar file to a safe location):
 
-```
-POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
-kubectl -n services exec ${POD} -- tar -cvf vcs.tar /data/
-kubectl -n services cp ${POD}:vcs.tar ./vcs.tar
+```bash
+ncn# POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
+ncn# kubectl -n services exec ${POD} -- tar -cvf vcs.tar /data/
+ncn# kubectl -n services cp ${POD}:vcs.tar ./vcs.tar
 ```
 
 #### Restore Postgres Data
@@ -153,11 +147,11 @@ When restoring the VCS postgres database, the PVC should also be restored to the
 
 Restore:
 
-```
-POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
-kubectl -n services cp ./vcs.tar ${POD}:vcs.tar
-kubectl -n services exec ${POD} -- tar -xvf vcs.tar
-kubectl -n services rollout restart deployment gitea-vcs
+```bash
+ncn# POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
+ncn# kubectl -n services cp ./vcs.tar ${POD}:vcs.tar
+ncn# kubectl -n services exec ${POD} -- tar -xvf vcs.tar
+ncn# kubectl -n services rollout restart deployment gitea-vcs
 ```
 
 #### Alternative Backup/Restore Strategy
@@ -168,15 +162,14 @@ The following scripts create/use a `vcs-content` directory that contains all git
 
 Export:
 
-```
-RESULTS=vcs-content
-mkdir $RESULTS
-VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
-VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-git config --global credential.helper store
-echo "https://${VCS_USER}:${VCS_PASSWORD}@api-gw-service-nmn.local" > ~/.git-credentials
-for repo in $(curl -s https://api-gw-service-nmn.local/vcs/api/v1/orgs/cray/repos -u ${VCS_USER}:${VCS_PASSWORD}| jq -r '.[] | .name')
-do
+```bash
+ncn# RESULTS=vcs-content
+ncn# mkdir $RESULTS
+ncn# VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+ncn# VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+ncn# git config --global credential.helper store
+ncn# echo "https://${VCS_USER}:${VCS_PASSWORD}@api-gw-service-nmn.local" > ~/.git-credentials
+ncn# for repo in $(curl -s https://api-gw-service-nmn.local/vcs/api/v1/orgs/cray/repos -u ${VCS_USER}:${VCS_PASSWORD}| jq -r '.[] | .name') ; do
     git clone --mirror https://api-gw-service-nmn.local/vcs/cray/${repo}.git
     cd ${repo}.git
     git bundle create ${repo}.bundle --all
@@ -188,14 +181,13 @@ done
 
 Import:
 
-```
-SOURCE=vcs-content
-VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
-VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-git config --global credential.helper store
-echo "https://${VCS_USER}:${VCS_PASSWORD}@api-gw-service-nmn.local" > ~/.git-credentials
-for file in $(ls $SOURCE)
-do
+```bash
+ncn# SOURCE=vcs-content
+ncn# VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+ncn# VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+ncn# git config --global credential.helper store
+ncn# echo "https://${VCS_USER}:${VCS_PASSWORD}@api-gw-service-nmn.local" > ~/.git-credentials
+ncn# for file in $(ls $SOURCE); do
     repo=$(echo $file | sed 's/.bundle$//')
     git clone --mirror ${SOURCE}/${repo}.bundle
     cd ${repo}.git
@@ -208,12 +200,11 @@ done
 
 Prior to import, the repo structure may need to be recreated if it has not already been by an install. (Adjust the repo list as necessary if any additional are present. Repo settings such as public/private will also need to be manually set if this is used.)
 
-```
-VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
-VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-REPOS="analytics-config-management cos-config-management cpe-config-management slurm-config-management sma-config-management uan-config-management csm-config-management"
-for repo in $REPOS
-do
+```bash
+ncn# VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+ncn# VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+ncn# REPOS="analytics-config-management cos-config-management cpe-config-management slurm-config-management sma-config-management uan-config-management csm-config-management"
+ncn# for repo in $REPOS ; do
    curl -X POST https://api-gw-service-nmn.local/vcs/api/v1/orgs/cray/repos -u ${VCS_USER}:${VCS_PASSWORD} -d name=${repo}
 done
 ```
