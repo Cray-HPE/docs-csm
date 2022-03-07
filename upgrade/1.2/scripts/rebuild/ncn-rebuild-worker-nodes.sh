@@ -217,27 +217,4 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-if [[ -z $SW_ADMIN_PASSWORD ]]; then
-    echo "******************************************"
-    echo "******************************************"
-    echo "**** You can export SW_ADMIN_PASSWORD ****"
-    echo "********* to avoid manual input  *********"
-    echo "******************************************"
-    echo "******************************************"
-    echo "**** Enter SSH password of switches: ****"
-    read -s -p "" SW_ADMIN_PASSWORD
-    echo
-fi
-
-cat <<EOF
-
-NOTE:
-    If below test failed, try to fix it based on test output. Then run current script again
-EOF
-
-ssh $target_ncn -t "SW_ADMIN_PASSWORD=$SW_ADMIN_PASSWORD GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate"
-
 move_state_file ${target_ncn}
-
-ok_report
-
