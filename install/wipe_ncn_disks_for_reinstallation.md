@@ -308,16 +308,6 @@ RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
 
    > **WARNING:** Do not run these commands on ncn-m001
 
-   1. Stop the RAIDs.
-
-       This step shows status before and after stopping the RAIDs.
-
-       ```bash
-       ncn# cat /proc/mdstat
-       ncn# for md in /dev/md/*; do mdadm -S -v $md || echo nope ; done
-       ncn# cat /proc/mdstat
-       ```
-
    1. List the disks for verification.
 
        ```bash
