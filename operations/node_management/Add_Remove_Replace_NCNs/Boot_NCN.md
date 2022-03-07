@@ -116,9 +116,13 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
     * The files should be identical
 
-### Step 5 - For the next step please click the link for the node type you are adding.
+### Step 5 - **For Storage nodes only**
 
-- [Worker node]()
-- [Storage node](../../utility_storage/Add_Ceph_Node.md)
-- [Master node]()
+     * Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added storage node to the Ceph cluster.
+
+### Step 6 - Validate the node that was added by following the 
+
+- [Worker node](Add_Worker_Node_Validation.md)
+- [Storage node](Add_Storage_Node_Validation.md)
+- [Master node](Add_Master_Node_Validation.md)
 
