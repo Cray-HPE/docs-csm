@@ -1,6 +1,6 @@
 ## Configuration Management
 
-The Configuration Framework Service \(CFS\) is available on systems for remote execution and configuration management of nodes and boot images. This includes nodes available in the Hardware State Manager \(HSM\) inventory \(compute, non-compute, application, and user access nodes\), and boot images hosted by the Image Management Service \(IMS\).
+The Configuration Framework Service \(CFS\) is available on systems for remote execution and configuration management of nodes and boot images. This includes nodes available in the Hardware State Manager \(HSM\) inventory \(compute, management, and application nodes\), and boot images hosted by the Image Management Service \(IMS\).
 
 CFS configures nodes and images via a gitops methodology. All configuration content is stored in a version control service \(VCS\), and is managed by authorized system administrators. CFS provides a scalable Ansible Execution Environment \(AEE\) for the configuration to be applied with flexible inventory and node targeting options.
 
