@@ -24,7 +24,7 @@
 #
 
 set -e
-basedir=$(dirname $0)
+basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${basedir}/../common/upgrade-state.sh
 . ${basedir}/../common/ncn-common.sh $(hostname)
 trap 'err_report' ERR

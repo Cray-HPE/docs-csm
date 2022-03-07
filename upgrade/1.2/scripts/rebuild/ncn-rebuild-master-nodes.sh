@@ -192,12 +192,4 @@ else
    echo "====> ${state_name} has been completed"
 fi
 
-cat <<EOF
-NOTE:
-    If below test failed, try to fix it based on test output. Then run current script again
-EOF
-ssh $target_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
-
 move_state_file ${target_ncn}
-
-ok_report
