@@ -76,7 +76,7 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
     ./utils/secrets-seed-customizations.sh customizations.yaml
     ```
 
-    If the above command complaints that it cannot find certs/sealed_secrets.crt then you can run the following commands to create it
+    If the above command complains that it cannot find certs/sealed_secrets.crt then you can run the following commands to create it
 
     ```bash
     mkdir -p certs
