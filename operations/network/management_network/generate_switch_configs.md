@@ -1,6 +1,9 @@
 # Generate switch configs
 
 #### Prerequisites 
+- CANU installed with version 1.1.11 or greater.
+  - Run `canu --version` to see version.
+  - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](update_canu_from_csm_tarball.md)
 - Validated SHCD.
     - [Validate SHCD](validate_shcd.md)
 - JSON output from validated SHCD.
@@ -13,14 +16,14 @@ Generating configuration files can be done for singular switch or for the full s
 
 * Generating configuration file for single switch:  
 
-```
-canu generate switch config --csm 1.2 -a full --ccj cabling.json  --sls-file sls_file.json --name sw-spine-001 --folder generated 
+```bash
+ncn# canu generate switch config --csm 1.2 -a full --ccj cabling.json  --sls-file sls_file.json --name sw-spine-001 --folder generated 
 ```
 
 * Generating configuration files for full system:  
 
-```
-canu generate switch config --csm 1.2 -a full --ccj cabling.json  --sls-file sls_file.json --folder generated 
+```bash
+ncn# canu generate switch config --csm 1.2 -a full --ccj cabling.json  --sls-file sls_file.json --folder generated 
 ```
  
 ***Again***, make sure that you select the correct (-a) architecture specific to your setup: 
