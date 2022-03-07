@@ -474,7 +474,6 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
                ```
 
       1. Continue with the next step to apply the csi-config workarounds.
-
 <a name="csi-workarounds"></a>
 1. CSI Workarounds
 
@@ -590,3 +589,4 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    * See [Configure Management Network Switches](index.md#configure_management_network)
 
+!vi
