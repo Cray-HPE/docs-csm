@@ -210,7 +210,8 @@ if [[ $state_recorded == "0" ]]; then
       echo "Some etcd and speaker pods are not running on $target_ncn -- sleeping for 10 seconds..."
       sleep 10
     done
-    ssh $target_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
+    scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
+    ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"

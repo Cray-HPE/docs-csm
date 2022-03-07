@@ -105,7 +105,8 @@ if [[ ${first_master_hostname} == ${target_ncn} ]]; then
         exit 1
       fi
 
-      ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
+      scp /root/docs-csm-latest.noarch.rpm $promotingMaster:/root/docs-csm-latest.noarch.rpm
+      ssh $promotingMaster "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
       ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/1.2/scripts/k8s/promote-initial-master.sh"
       VERBOSE=1 csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
 
@@ -158,7 +159,8 @@ state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     record_state "${state_name}" ${target_ncn}
-    ssh $target_ncn -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "rpm --force -Uvh ${DOC_RPM_NEXUS_URL}"
+    scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
+    ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
 else
     echo "====> ${state_name} has been completed"
 fi
