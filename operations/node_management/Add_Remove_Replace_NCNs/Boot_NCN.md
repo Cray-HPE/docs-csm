@@ -116,11 +116,17 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
     * The files should be identical
 
-### Step 5 - **For Storage nodes only**
+### Step 5 - Lock the node
 
-     * Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added storage node to the Ceph cluster.
+Follow [How to Lock Management Nodes](../../hardware_state_manager/Lock_and_Unlock_Managemenr_Nodes.md#how-to-lock-management-nodes). The management nodes are unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware or CAPMC to power off or do a power reset. Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
 
-### Step 6 - Validate the node that was added by following the 
+### Step 6 - **For Storage nodes only**
+
+Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added storage node to the Ceph cluster.
+
+### Step 7 - Validate the  node
+
+Follow the validation steps in the section for the node type that was added:
 
 - [Worker node](Add_Worker_Node_Validation.md)
 - [Storage node](Add_Storage_Node_Validation.md)

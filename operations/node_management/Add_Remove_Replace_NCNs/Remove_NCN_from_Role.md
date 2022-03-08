@@ -8,12 +8,10 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
 
 **IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#remove-prerequisites) 
 
-- [Master node](#master-node-remove-roles)
-- [Worker node](#worker-node-remove-roles)
-- [Storage node](#storage-node-remove-roles)
-
---
-
+- Remove Role
+  - [Master node](#master-node-remove-roles)
+  - [Worker node](#worker-node-remove-roles)
+  - [Storage node](#storage-node-remove-roles)
 - [Wipe the drives](#wipe-the-drives)
 - [Power off the node](#power-off-the-node)
 
@@ -27,10 +25,10 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
 
 1. Fetch the defined first-master-hostname
 
-    ```bash
-    ncn-m# craysys metadata get first-master-hostname
-    ncn-m002
-    ```
+   ```bash
+   ncn-m# cray bss bootparameters list --hosts Global --format json |jq -r '.[]."cloud-init"."meta-data"."first-master-hostname"'
+   ncn-m002
+   ```
   
     * If the node returned is not the one being removed, proceed to the step which [removes the node from the Kubenertes cluster](#remove-the-node-from-the-kubernetes-cluster) and skip the substeps here.
 
@@ -39,69 +37,96 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
     On any master or worker node:
 
     ```bash
-   cray bss bootparameters list --name Global --format=json | jq '.[]' > Global.json
-   ```
+    cray bss bootparameters list --name Global --format=json | jq '.[]' > Global.json
+    ```
 
 1. Edit the Global.json file and edit the indicated line.
 
     Change the `first-master-hostname` value to another node that will be promoted to the first master node. For example, if the first node is changing from `ncn-m002` to `ncn-m001`, the line would be changed to the following:
 
-    ```text
+   ```text
    "first-master-hostname": "ncn-m001",
    ```
 
 1. Get a token to interact with BSS using the REST API.
 
-    ```bash
-    ncn# TOKEN=$(curl -s -S -d grant_type=client_credentials \
+   ```bash
+   ncn# TOKEN=$(curl -s -S -d grant_type=client_credentials \
         -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
         -o jsonpath='{.data.client-secret}' | base64 -d` \
         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
         | jq -r '.access_token')
-    ```
+   ```
 
 1. Do a PUT action for the new JSON file.
 
-    ```bash
-    ncn# curl -i -s -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" \
-    "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" -X PUT -d @./Global.json
-    ```
+   ```bash
+   ncn# curl -i -s -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" \
+   "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" -X PUT -d @./Global.json
+   ```
 
     Ensure a good response, such as `HTTP CODE 200`, is returned in the `curl` output.
 
 1. Configure the newly promoted first master node so it is able to have other nodes join the cluster.
 
-    Use `ssh` to login to the newly-promoted master node chosen in the previous steps \(`ncn-m001` in this example\), copy/paste the following script to a file, and then execute it.
+   Use `ssh` to login to the newly-promoted master node chosen in the previous steps \(`ncn-m001` in this example\), copy/paste the following script to a file, and then execute it.
 
-    ```bash
-    #!/bin/bash
-    source /srv/cray/scripts/metal/lib.sh
-    export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"
-    echo $(kubeadm init phase upload-certs --upload-certs 2>&1 | tail -1) > /etc/cray/kubernetes/certificate-key
-    export CERTIFICATE_KEY=$(cat /etc/cray/kubernetes/certificate-key)
-    export MAX_PODS_PER_NODE=$(craysys metadata get kubernetes-max-pods-per-node)
-    export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
-    export SERVICES_CIDR=$(craysys metadata get kubernetes-services-cidr)
-    envsubst < /srv/cray/resources/common/kubeadm.yaml > /etc/cray/kubernetes/kubeadm.yaml
-    kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
-    echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" > /etc/cray/kubernetes/join-command-control-plane
-    mkdir -p /srv/cray/scripts/kubernetes
-    cat > /srv/cray/scripts/kubernetes/token-certs-refresh.sh <<'EOF'
-    #!/bin/bash
-    if [[ "$1" != "skip-upload-certs" ]]; then
-        kubeadm init phase upload-certs --upload-certs --config /etc/cray/kubernetes/kubeadm.yaml
-    fi
-    kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
-    echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" \
-        > /etc/cray/kubernetes/join-command-control-plane
-    EOF
-    chmod +x /srv/cray/scripts/kubernetes/token-certs-refresh.sh
-    /srv/cray/scripts/kubernetes/token-certs-refresh.sh skip-upload-certs
-    echo "0 */1 * * * root /srv/cray/scripts/kubernetes/token-certs-refresh.sh >> /var/log/cray/cron.log 2>&1" > /etc/cron.d/cray-k8s-token-certs-refresh
-    ```
+   ```bash
+   #!/bin/bash
+   source /srv/cray/scripts/metal/lib.sh
+   export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"
+   echo $(kubeadm init phase upload-certs --upload-certs 2>&1 | tail -1) > /etc/cray/kubernetes/certificate-key
+   export CERTIFICATE_KEY=$(cat /etc/cray/kubernetes/certificate-key)
+   export MAX_PODS_PER_NODE=$(craysys metadata get kubernetes-max-pods-per-node)
+   export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
+   export SERVICES_CIDR=$(craysys metadata get kubernetes-services-cidr)
+   envsubst < /srv/cray/resources/common/kubeadm.yaml > /etc/cray/kubernetes/kubeadm.yaml
+   kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
+   echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" > /etc/cray/kubernetes/join-command-control-plane
+   mkdir -p /srv/cray/scripts/kubernetes
+   cat > /srv/cray/scripts/kubernetes/token-certs-refresh.sh <<'EOF'
+   #!/bin/bash
+   if [[ "$1" != "skip-upload-certs" ]]; then
+       kubeadm init phase upload-certs --upload-certs --config /etc/cray/kubernetes/kubeadm.yaml
+   fi
+   kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
+   echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" \
+       > /etc/cray/kubernetes/join-command-control-plane
+   EOF
+   chmod +x /srv/cray/scripts/kubernetes/token-certs-refresh.sh
+   /srv/cray/scripts/kubernetes/token-certs-refresh.sh skip-upload-certs
+   echo "0 */1 * * * root /srv/cray/scripts/kubernetes/token-certs-refresh.sh >> /var/log/cray/cron.log 2>&1" > /etc/cron.d/cray-k8s-token-certs-refresh
+   ```
 
-<a name="remove-the-node-from-the-kubernetes-cluster"></a>
-### Step 2 - Remove the node from the Kubernetes cluster.
+<a name="reset-kubernetes-on-master"></a>
+### Step 2 - Reset Kubernetes on master node being removed.
+
+  ```bash
+  kubeadm reset --force
+  ```
+<a name="stop-running-containers-on-master"></a>
+### Step 3 - Stop running containers on master node being removed.
+ 
+1. List any containers running in `containerd`.
+
+   ```bash
+   crictl ps
+   CONTAINER           IMAGE               CREATED              STATE               NAME                                                ATTEMPT             POD ID
+   66a78adf6b4c2       18b6035f5a9ce       About a minute ago   Running             spire-bundle                                        1212                6d89f7dee8ab6
+   7680e4050386d       c8344c866fa55       24 hours ago         Running             speaker                                             0                   5460d2bffb4d7
+   b6467c907f063       8e6730a2b718c       3 days ago           Running             request-ncn-join-token                              0                   a3a9ca9e1ca78
+   e8ce2d1a8379f       64d4c06dc3fb4       3 days ago           Running             istio-proxy                                         0                   6d89f7dee8ab6
+   c3d4811fc3cd0       0215a709bdd9b       3 days ago           Running             weave-npc                                    0                   f5e25c12e617e
+   ```
+
+1. If there are any running containers from the output of the `crictl ps` command, stop them.
+
+   ```bash
+   crictl stop <container id from the CONTAINER column>
+   ```
+
+<a name="remove-the-master-node-from-the-kubernetes-cluster"></a>
+### Step 4 - Remove the master node from the Kubernetes cluster.
 
 **IMPORTANT:** Run this command from a node ***NOT*** being deleted.
 
@@ -109,7 +134,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
   ncn-mw# kubectl delete node $NODE
   ```
 
-### Step 3 - Remove the Node from Etcd.
+### Step 5 - Remove the Node from Etcd.
 
 1. Determine the member ID of the master node being removed.
 
@@ -131,23 +156,18 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
     ncn-m# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member remove <MEMBER_ID>
     ```
 
-### Step 4 - Stop kubelet and containerd services ***on the master node being removed***.
+### Step 6 - Stop kubelet, containerd and Etcd services ***on the master node being removed***.
 
   ```bash
   systemctl stop kubelet.service
   systemctl stop containerd.service
-  ```
-
-### Step 5 - Stop Etcd service ***on the master node being removed***.
-
-  ```bash
   systemctl stop etcd.service
   ```
 
-### Step 6 - Remove Etcd data directory ***on the master node being removed***.
+### Step 7 - Remove Etcd data directory ***on the master node being removed***.
 
   ```bash
-  rm -rf /var/lib/etcd
+  rm -rf /var/lib/etcd/*
   ```
 
   The master node role removal is complete; proceed to [wipe the drives](#wipe-the-drives).
@@ -179,12 +199,40 @@ Run the following:
 
 * This will delete the offending pod, and Kubernetes should schedule a replacement on another node. You can then rerun the `kubectl drain` command, and it should report that the node is drained
 
-### Step 2 - Remove the node from the Kubernetes cluster after the node is drained.
+<a name="reset-kubernetes-on-worker"></a>
+### Step 2 - Reset Kubernetes on worker node being removed.
+
+  ```bash
+  kubeadm reset --force
+  ```
+<a name="stop-running-containers-on-worker"></a>
+### Step 3 - Stop running containers on worker node being removed.
+ 
+1. List any containers running in `containerd`.
+
+   ```bash
+   crictl ps
+   CONTAINER           IMAGE               CREATED              STATE               NAME                                                ATTEMPT             POD ID
+   66a78adf6b4c2       18b6035f5a9ce       About a minute ago   Running             spire-bundle                                        1212                6d89f7dee8ab6
+   7680e4050386d       c8344c866fa55       24 hours ago         Running             speaker                                             0                   5460d2bffb4d7
+   b6467c907f063       8e6730a2b718c       3 days ago           Running             request-ncn-join-token                              0                   a3a9ca9e1ca78
+   e8ce2d1a8379f       64d4c06dc3fb4       3 days ago           Running             istio-proxy                                         0                   6d89f7dee8ab6
+   c3d4811fc3cd0       0215a709bdd9b       3 days ago           Running             weave-npc                                    0                   f5e25c12e617e
+   ```
+
+1. If there are any running containers from the output of the `crictl ps` command, stop them.
+
+   ```bash
+   crictl stop <container id from the CONTAINER column>
+   ```
+
+<a name="remove-the-worker-node-from-the-kubernetes-cluster"></a>
+### Step 4 - Remove the worker node from the Kubernetes cluster after the node is drained.
 
   ```bash
   ncn-mw# kubectl delete node $NODE
   ```
-### Step 3 - Ensure all pods are stopped.
+### Step 5 - Ensure all pods are stopped.
 
   ```bash
   ncn-mw# kubectl get pods -A -o wide | grep $NODE
@@ -192,7 +240,7 @@ Run the following:
 
   If no pods are returned, proceed to the next step, otherwise wait for any remaining pods to Terminate.
 
-### Step 4 - Ensure there are no mapped rbd devices ***on the worker node being removed***.
+### Step 6 - Ensure there are no mapped rbd devices ***on the worker node being removed***.
 
   ```bash
   rbd showmapped
@@ -210,7 +258,7 @@ Once the storage node role removal is complete; proceed to [wipe the drives](#wi
 <a name="wipe-the-drives"></a>
 ## Wipe the Drives
 
-Follow [Full Wipe](../../../install/wipe_ncn_disks_for_reinstallation.md#3-full-wipe) Procedure to wipe the drives on the NCN that is being removed.
+Follow [Wipe Drive](Wipe_Drives.md) Procedure to wipe the disks on the NCN that is being removed.
 
 Once the wipe of the drives is complete; proceed to [power off the node](#power-off-the-node).
 
@@ -221,27 +269,27 @@ Once the wipe of the drives is complete; proceed to [power off the node](#power-
 
 1. Set the BMC variable to the hostname of the BMC of the node being powered off.
 
-    ```bash
-    BMC=${NODE}-mgmt
-    ```
+   ```bash
+   BMC=${NODE}-mgmt
+   ```
 
 2. Export the root password of the BMC.
 
-    ```bash
-    export IPMI_PASSWORD=changeme
-    ```
+   ```bash
+   export IPMI_PASSWORD=changeme
+   ```
 
 3. Power off the node.
 
-     ```bash
-     ipmitool -I lanplus -U root -E -H $BMC chassis power off
-     ```
+   ```bash
+   ipmitool -I lanplus -U root -E -H $BMC chassis power off
+   ```
 
 4. Verify that the node is off.
 
-    ```bash
-    ipmitool -I lanplus -U root -E -H $BMC chassis power status
-    ```
+   ```bash
+   ipmitool -I lanplus -U root -E -H $BMC chassis power status
+   ```
 
-    * Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing any further commands.
+   * Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing any further commands.
 
