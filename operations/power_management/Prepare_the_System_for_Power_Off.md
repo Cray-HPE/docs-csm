@@ -205,37 +205,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
          Determine which BOS session(s) to cancel. To cancel a BOS session, kill
 	 its associated Boot Orchestration Agent (BOA) Kubernetes job.
-         
-<<<<<<< HEAD
-         **Method #1: Use BOS Session Status**
 
-         Use the following script to find the BOS session that have ended (true) or are still running (false)
-         ```bash
-         #! /bin/bash
-         # List all of the BOS sessions. Look for ones whose status says they are
-         # not complete, i.e. still running.
-         # Output the BOA Job ID for each BOS Session that is still running.
-         for ID in $(cray bos session list --format json | jq .[] | tr -d \"); do
-             result=$(cray bos session status list --format json $ID | jq .metadata.complete)
-             if [[ $result == "false" ]]; then
-                 cray bos v1 session describe --format json $ID | jq .boa_job_name | tr -d \";
-             fi
-         done
-         ````
-	 
-         These IDs are the BOA Kubernetes job IDs. Delete these to cancel the BOS
-	 session.
-         
-         However, the BOS status output can be buggy, and it may misidentify BOS
-	 sessions as still running when they have actually finished.
-	 If you only want to delete currently running jobs, then use Method #2. 
-         Method #2 is a more reliable method for identifying running BOA jobs
-	 because it interacts directly with the BOA Kubernetes job.
-         
-         **Method #2: Look at BOA Kubernetes jobs**
-         
-=======
->>>>>>> 64568ee3fd8... CASMTRIAGE-3065: Removed unreliable method of finding running BOS sessions
          To find a list of BOA jobs that are still running:
          ```bash
          kubectl -n services get jobs|egrep -i "boa|Name"
