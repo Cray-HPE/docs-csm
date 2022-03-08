@@ -24,31 +24,31 @@
 #
 
 set -e
-BASEDIR=$(dirname $0)
-. ${BASEDIR}/upgrade-state.sh
+basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+. ${basedir}/upgrade-state.sh
 trap 'err_report' ERR
-upgrade_ncn=$1
+target_ncn=$1
 
-. ${BASEDIR}/ncn-upgrade-common.sh ${upgrade_ncn}
+. ${basedir}/ncn-common.sh ${target_ncn}
 
 state_name="WIPE_NODE_DISK"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
     if [[ -z $NONINTERACTIVE ]]; then
-        echo " ****** DATA LOSS ON ${upgrade_ncn} - FRESH OS INSTALL UPON REBOOT ******"
-        echo " ****** BACKUP DATA ON ${upgrade_ncn} TO USB OR OTHER SAFE LOCATION ******"
+        echo " ****** DATA LOSS ON ${target_ncn} - FRESH OS INSTALL UPON REBOOT ******"
+        echo " ****** BACKUP DATA ON ${target_ncn} TO USB OR OTHER SAFE LOCATION ******"
         echo " ****** DATA MANAGED BY K8S/CEPH WILL BE BACKED UP/RESTORED AUTOMATICALLY ******"
         read -p "Read and act on above steps. Press Enter key to continue ..."
     fi
 
-    if [[ $upgrade_ncn == ncn-s* ]]; then
+    if [[ $target_ncn == ncn-s* ]]; then
     cat <<'EOF' > wipe_disk.sh
     set -e
     for d in $(lsblk | grep -B2 -F md1 | grep ^s | awk '{print $1}'); do wipefs -af "/dev/$d"; done
 EOF
-    elif [[ $upgrade_ncn == ncn-m* ]]; then
+    elif [[ $target_ncn == ncn-m* ]]; then
     cat <<'EOF' > wipe_disk.sh
     usb_device_path=$(lsblk -b -l -o TRAN,PATH | awk /usb/'{print $2}')
     usb_rc=$?
@@ -103,19 +103,19 @@ EOF
 EOF
     fi
     chmod +x wipe_disk.sh
-    scp wipe_disk.sh $upgrade_ncn:/tmp/wipe_disk.sh
-    ssh $upgrade_ncn '/tmp/wipe_disk.sh'
+    scp wipe_disk.sh $target_ncn:/tmp/wipe_disk.sh
+    ssh $target_ncn '/tmp/wipe_disk.sh'
 
-    record_state "${state_name}" ${upgrade_ncn}
+    record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
 
-upgrade_ncn_mgmt_host="${upgrade_ncn}-mgmt"
-if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
-    upgrade_ncn_mgmt_host=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ncn-m001 "ipmitool lan print | grep 'IP Address' | grep -v 'Source'"  | awk -F ": " '{print $2}')
+target_ncn_mgmt_host="${target_ncn}-mgmt"
+if [[ ${target_ncn} == "ncn-m001" ]]; then
+    target_ncn_mgmt_host=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ncn-m001 "ipmitool lan print | grep 'IP Address' | grep -v 'Source'"  | awk -F ": " '{print $2}')
 fi
-echo "mgmt IP/Host: ${upgrade_ncn_mgmt_host}"
+echo "mgmt IP/Host: ${target_ncn_mgmt_host}"
 
 # retrieve IPMI username/password from vault
 VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.data.vault-root} | base64 -d)
@@ -131,13 +131,13 @@ for VAULT_POD in $(kubectl get pods -n vault --field-selector status.phase=Runni
                     -o custom-columns=:.metadata.name | grep -E "^cray-vault-(0|[1-9][0-9]*)$") ; do
     IPMI_USERNAME=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
         "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
-        vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | 
+        vault kv get -format=json secret/hms-creds/$TARGET_MGMT_XNAME" | 
         jq -r '.data.Username')
     # If we are not able to get the username, no need to try and get the password.
     [[ -n ${IPMI_USERNAME} ]] || continue
     export IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
         "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
-        vault kv get -format=json secret/hms-creds/$UPGRADE_MGMT_XNAME" | 
+        vault kv get -format=json secret/hms-creds/$TARGET_MGMT_XNAME" | 
         jq -r '.data.Password')
     break
 done
@@ -145,40 +145,40 @@ done
 [[ -n ${IPMI_USERNAME} ]]
 
 state_name="SET_PXE_BOOT"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     
-    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $upgrade_ncn_mgmt_host chassis bootdev pxe options=efiboot
+    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $target_ncn_mgmt_host chassis bootdev pxe options=efiboot
 
-    record_state "${state_name}" ${upgrade_ncn}
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-state_name="POWER_CYCLE_NCN"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-
-    # power cycle node
-    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $upgrade_ncn_mgmt_host chassis power off
-    sleep 20
-    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $upgrade_ncn_mgmt_host chassis power status
-    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $upgrade_ncn_mgmt_host chassis power on
-
-    record_state "${state_name}" ${upgrade_ncn}
+    record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
 
 bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${TOKEN}" \
-            "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$UPGRADE_XNAME" \
+            "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
             | jq '.[]| select(.endpoint=="bootscript")|.last_epoch')
 
+state_name="POWER_CYCLE_NCN"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+
+    # power cycle node
+    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $target_ncn_mgmt_host chassis power off
+    sleep 20
+    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $target_ncn_mgmt_host chassis power status
+    ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $target_ncn_mgmt_host chassis power on
+
+    record_state "${state_name}" ${target_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="WAIT_FOR_NCN_BOOT"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     # inline tips for watching boot logs
@@ -188,12 +188,12 @@ TIPS:
 EOF
     # wait for boot
     counter=0
-    printf "%s" "waiting for boot: $upgrade_ncn ..."
+    printf "%s" "waiting for boot: $target_ncn ..."
     while true
     do
         tmp_bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${TOKEN}" \
-            "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$UPGRADE_XNAME" \
+            "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
             | jq '.[]| select(.endpoint=="bootscript")|.last_epoch')
         if [[ $tmp_bootscript_last_epoch -ne $bootscript_last_epoch ]]; then
             echo "bootscript fetched"
@@ -204,91 +204,91 @@ EOF
         counter=$((counter+1))
         if [ $counter -gt 300 ]; then
             counter=0
-            ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $upgrade_ncn_mgmt_host chassis power cycle
+            ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $target_ncn_mgmt_host chassis power cycle
             echo "Boot timeout, power cycle again"
         fi
         sleep 2
     done
-    printf "\n%s\n" "$upgrade_ncn is booted and online"
+    printf "\n%s\n" "$target_ncn is booted and online"
 
-    record_state "${state_name}" ${upgrade_ncn}
+    record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="WAIT_FOR_CLOUD_INIT"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     sleep 60
     # wait for cloud-init
     # ssh commands are expected to fail for a while, so we temporarily disable set -e
     set +e
-    printf "%s" "waiting for cloud-init: $upgrade_ncn ..."
+    printf "%s" "waiting for cloud-init: $target_ncn ..."
     while true ; do
-        if ssh_keygen_keyscan "${upgrade_ncn}" &> /dev/null ; then
+        if ssh_keygen_keyscan "${target_ncn}" &> /dev/null ; then
             ssh_keys_done=1
-            ssh "${upgrade_ncn}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cat /var/log/cloud-init-output.log | grep "The system is finally up"' &> /dev/null && break
+            ssh "${target_ncn}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cat /var/log/cloud-init-output.log | grep "The system is finally up"' &> /dev/null && break
         fi
         printf "%c" "."
         sleep 20
     done
     # Restore set -e
     set -e
-    printf "\n%s\n"  "$upgrade_ncn finished cloud-init"
+    printf "\n%s\n"  "$target_ncn finished cloud-init"
 
-    record_state "${state_name}" ${upgrade_ncn}
+    record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
 
-if [[ $upgrade_ncn != ncn-s* ]]; then
-    wait_for_kubernetes $upgrade_ncn
+if [[ $target_ncn != ncn-s* ]]; then
+    wait_for_kubernetes $target_ncn
 fi 
 
 state_name="SET_BSS_NO_WIPE"
-state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
-    csi handoff bss-update-param --set metal.no-wipe=1 --limit $UPGRADE_XNAME
+    csi handoff bss-update-param --set metal.no-wipe=1 --limit $TARGET_XNAME
 
-    record_state "${state_name}" ${upgrade_ncn}
+    record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
 
-if [[ ${upgrade_ncn} == "ncn-m001" ]]; then
+if [[ ${target_ncn} == "ncn-m001" ]]; then
     state_name="RESTORE_M001_NET_CONFIG"
-    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+    state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
     if [[ $state_recorded == "0" ]]; then
         echo "====> ${state_name} ..."
 
         if [[ $ssh_keys_done == "0" ]]; then
-            ssh_keygen_keyscan "${upgrade_ncn}"
+            ssh_keygen_keyscan "${target_ncn}"
             ssh_keys_done=1
         fi
         scp ifcfg-lan0 root@ncn-m001:/etc/sysconfig/network/
         ssh root@ncn-m001 'wicked ifreload lan0'
-        record_state "${state_name}" ${upgrade_ncn}
+        record_state "${state_name}" ${target_ncn}
     else
         echo "====> ${state_name} has been completed"
     fi
 fi
 
-if [[ ${upgrade_ncn} != ncn-s* ]]; then
+if [[ ${target_ncn} != ncn-s* ]]; then
     state_name="CRAY_INIT"
-    state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+    state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
     if [[ $state_recorded == "0" ]]; then
         echo "====> ${state_name} ..."
 
         if [[ $ssh_keys_done == "0" ]]; then
-            ssh_keygen_keyscan "${upgrade_ncn}"
+            ssh_keygen_keyscan "${target_ncn}"
             ssh_keys_done=1
         fi
-        ssh ${UPGRADE_NCN} 'cray init --no-auth --overwrite --hostname https://api-gw-service-nmn.local'
+        ssh ${TARGET_NCN} 'cray init --no-auth --overwrite --hostname https://api-gw-service-nmn.local'
 
-        record_state "${state_name}" ${upgrade_ncn}
+        record_state "${state_name}" ${target_ncn}
     else
         echo "====> ${state_name} has been completed"
     fi

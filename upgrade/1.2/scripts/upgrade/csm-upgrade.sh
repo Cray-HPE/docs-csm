@@ -24,8 +24,8 @@
 #
 
 set -e
-BASEDIR=$(dirname $0)
-. ${BASEDIR}/upgrade-state.sh
+basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+. ${basedir}/../common/upgrade-state.sh
 trap 'err_report' ERR
 
 . /etc/cray/upgrade/csm/myenv
@@ -35,14 +35,14 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
 
-    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/verify-k8s-nodes-upgraded.sh
+    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/util/verify-k8s-nodes-upgraded.sh
 
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="PRE_CEPH_CSI_UPGRADE_REQUIREMENTS"
+state_name="PRE_CEPH_CSI_TARGET_REQUIREMENTS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
@@ -95,7 +95,7 @@ state_name="POST_CSM_ENABLE_PSP"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/enable-psp.sh
+    /usr/share/doc/csm/upgrade/1.2/scripts/k8s/enable-psp.sh
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"

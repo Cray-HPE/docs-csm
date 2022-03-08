@@ -37,7 +37,7 @@ sections, but there is also a general troubleshooting topic.
 1. Validate CSM Health
 
      > **`IMPORTANT:`** Wait at least 15 minutes after
-     > [`csm-service-upgrade.sh`](1.2/Stage_3.md) in stage 3 completes to let the various Kubernetes
+     > [`csm-upgrade.sh`](1.2/Stage_3.md) in stage 3 completes to let the various Kubernetes
      > resources get initialized and started.
   
      Run the following validation checks to ensure that everything is still working

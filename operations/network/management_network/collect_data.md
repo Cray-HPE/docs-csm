@@ -11,23 +11,23 @@
     - Internal repository
     - Customer reposotiry
 
-1. Retrieve SLS file from a Shasta system (log in to ncn-m001) on a NCN, this will output the sls file to a file called sls_file.json in your current working directory.
+1. Retrieve SLS file from a Shasta system (log in to ncn-m001) on a NCN, this will output the SLS file to a file called sls_file.json in your current working directory.
 
     **IMPORTANT:** If this is an upgrade SLS needs to be updated to the correct CSM version first
 
     Run the command  
 
-    ```text
-    cray sls dumpstate list  --format json >> sls_file.json   
+    ```bash
+    ncn# cray sls dumpstate list  --format json >> sls_file.json   
     ```
 
 1. Retrieve switch running configs.
 
-    CANU can backup all the management network switches using either the SLS input file or the SLS api.
-    This can also be done from outside the cluster using the CMN switch IPs.  
+    CANU can backup all the management network switches using either the SLS input file or the SLS API.
+    This can also be done from outside the cluster using the CMN switch IP addresses.
 
     ```bash
-    ncn-w001# canu backup network --folder switch_backups/ --sls-file ./sls_input_file_1_2.json
+    ncn# canu backup network --folder switch_backups/ --sls-file ./sls_input_file_1_2.json
     Enter the switch password:
     -
     Running Configs Saved
@@ -46,12 +46,12 @@
 
     If the SLS API is up, you do not need to provide an SLS file.
 
-1. Retrieve customizations file. (log in from ncn-m001)
+1. Retrieve the customizations file. (log in from `ncn-m001`)
 
     Run the command  
 
     ```bash
-    kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml 
+    ncn# kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml 
     ```
 
-    This will output the customizations file to a file called ***customizations.yaml*** in your current working directory.
+    This will output the customizations file to a file called `customizations.yaml` in your current working directory.

@@ -21,8 +21,10 @@ The system is fully installed.
     ```bash
     https://nexus.{{network.dns.external}}/
     ```
-
-    Users will be redirected to Keycloak to log in, and based on the default OPA policy, only admin users will be authorized. Scripts may connect by first obtaining a JWT token from Keycloak and passing it in the HTTP Authorization header.
+    
+    Users will need to login through nexus UI. The account is configured through Keycloak with a role mapping for Nexus authentication. The role needed for admin permissions is nx-admin in the system-nexus-client role. Scripts may connect by using a username and password in the request.
+    
+    ![Keycloak Adding Permissions](../../img/operations/Keycloak_add_nexus_permission.png "Keycloak Adding Permissions")
 
     ![Nexus Web UI](../../img/operations/Nexus_Web_UI.png "Nexus Web UI")
 
