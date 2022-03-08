@@ -1,0 +1,40 @@
+{
+    "ignorePatterns": [
+        {
+            "pattern": "https?://localhost(:[0-9]+)?(/.*)?"
+        },
+        {
+            "pattern": "https?://[^/]+\\.local(/.*)?"
+        },
+        {
+            "pattern": "https?://[^/]+\\.SYSTEM_DOMAIN_NAME(/.*)?"
+        },
+        {
+            "pattern": "https?://[^/]+\\.SHASTA\\\\_EXTERNAL\\\\_DOMAIN\\.com"
+        },
+        {
+            "pattern": "https?://[^/]+\\.SYSTEM-NAME\\.DOMAIN-NAME(/.*)?"
+        },
+        {
+            "pattern": "https?://[^/]+\\.SYSTEM-NAME_DOMAIN-NAME(/.*)?"
+        },
+        {
+            "pattern": "https?://[^/]+\\.SYSTEM-NAME\\.SITE-DOMAIN(/.*)?"
+        },
+        {
+            "pattern": "https?://pit\\.nmn:5000(/.*)?"
+        },
+        {
+            "pattern": "https?://[^/]+\\.\\{\\{shasta_domain\\}\\}(/.*)?"
+        },
+        {
+            "pattern": "https?://[^/]+\\.\\\\{\\\\{network\\.dns\\.external\\\\}\\\\}(/.*)?"
+        },
+        {
+            "pattern": "^https://www\\.hpe\\.com/support/ex-gsg"
+        },
+        {
+            "pattern": "https://jira-pro\\.its\\.hpecorp\\.net:8443(/.*)?"
+        }
+    ]
+}

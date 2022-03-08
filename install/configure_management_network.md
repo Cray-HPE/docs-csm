@@ -53,7 +53,7 @@ On a typical system, the Mellanox switches are Spine switches and the Dell switc
    1. [Configure Dell Aggregation Switch](configure_dell_aggregation_switch.md) (if present)
    1. [Configure Dell CDU Switch](configure_dell_cdu_switch.md) (if present)
    1. [Configure Dell Leaf Switch](configure_dell_leaf_switch.md)
-   1. [Update Management Network Firmware](../operations/network/management_network/Update_Management_Network_Firmware.md)
+   2. [Update Management Network Firmware](../operations/network/management_network/update_management_network_firmware.md)
 
 <a name="next-topic"></a>
 # Next Topic
