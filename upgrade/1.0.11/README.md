@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document is intended to guide an administrator through the process going from Cray Systems Management v1.0.1 or v1.0.10 to v1.0.11. If you are at an earlier version, you must first upgrade to at least v1.0.1. For information on how to do that, see [Upgrade CSM](../index.md).
+This document is intended to guide an administrator through the process going to Cray Systems Management v1.0.11 from v1.0.0, v1.0.1, or v1.0.10. If you are at an earlier version, you must first upgrade. For information on how to do that, see [Upgrade CSM](../index.md).
 
 This top-level `README.md` file should be followed top to bottom.
 
