@@ -241,29 +241,6 @@ An authentication token is required to access the API gateway and to use the `sa
          Determine which BOS session(s) to cancel. To cancel a BOS session, kill
 	     its associated Boot Orchestration Agent (BOA) Kubernetes job.
          
-         **Method #1: Use BOS Session Status**
-
-         Use the following script to find the BOS session that have ended (true) or are still running (false):
-         
-         ```bash
-         ncn# for ID in $(cray bos session list --format json | jq .[] | tr -d \"); do
-             result=$(cray bos session status list --format json $ID | jq .metadata.complete)
-             if [[ $result == "false" ]]; then
-                 cray bos session describe --format json $ID | jq .boa_job_name | tr -d \";
-             fi
-         done
-         ```
-	 
-         These IDs are the BOA Kubernetes job IDs. Delete these to cancel the BOS session.
-         
-         However, the BOS status output can be buggy, and it may misidentify BOS
-	     sessions as still running when they have actually finished.
-	     If you only want to delete currently running jobs, then use Method #2. 
-         Method #2 is a more reliable method for identifying running BOA jobs
-	     because it interacts directly with the BOA Kubernetes job.
-         
-         **Method #2: Look at BOA Kubernetes jobs**
-         
          To find a list of BOA jobs that are still running:
          
          ```bash
@@ -340,9 +317,8 @@ An authentication token is required to access the API gateway and to use the `sa
 
     1.   Delete the BOS session.
          BOS keeps track of sessions in its database. These entries need to be deleted.
-	     Note, you found the BOS Session ID earlier, but it is also invariably the same
-	     as the BOA Job ID minus the prepended 'boa-' string.
-         Use the following command to delete the BOS database entry.
+	     The BOS Session ID is the same as the BOA Job ID minus the prepended 'boa-'
+	     string. Use the following command to delete the BOS database entry.
          
          ```bash
          ncn# cray bos session delete <session ID>
