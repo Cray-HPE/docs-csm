@@ -29,20 +29,26 @@ The procedure you follow depends on the new CSM version to which you are upgradi
    
 * Upgrading **to CSM 1.0.1**
 
-    The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
+    **IMPORTANT**: You must be at CSM 0.9 (0.9.4 or later) or CSM 1.0.0 in order to upgrade to CSM 1.0.1.
 
-    The upgrade is a guided process starting with [Upgrade Management Nodes and CSM Services](1.0.1/README.md).
+    The upgrade is a guided process starting with [CSM 1.0.1 Upgrade Instructions](1.0.1/README.md).
 
 * Upgrading **to CSM 1.0.10**
    
-    **IMPORTANT**: You must already be at CSM 1.0.1 in order to upgrade to CSM 1.0.10.
+    **IMPORTANT**: You must be at CSM 1.0.1 in order to upgrade to CSM 1.0.10.
   
-    The upgrade is a guided process starting with [CSM 1.0.10 Patch Installation Instructions](1.0.10/README.md).
+    The upgrade is a guided process starting with [CSM 1.0.10 Upgrade Instructions](1.0.10/README.md).
+
+* Upgrading **to CSM 1.0.11**
+   
+    **IMPORTANT**: You must be at CSM 1.0.0, CSM 1.0.1, or CSM 1.0.10 in order to upgrade to CSM 1.0.11.
+  
+    The upgrade is a guided process starting with [CSM 1.0.11 Upgrade Instructions](1.0.11/README.md).
 
 <a name="update_management_network"></a>
 ## Update Management Network
 
-**IMPORTANT**: Only do this step if upgrading from CSM 0.9 (Shasta 1.4). If upgrading from CSM 1.0.1 (Shasta 1.5), skip this step.
+**IMPORTANT**: Only do this step if upgrading from CSM 0.9 (Shasta 1.4). If upgrading from CSM 1.0 (Shasta 1.5), skip this step.
 
 There are new features and functions with Shasta v1.5. Some of these changes were available as patches and hotfixes
 for Shasta v1.4, so may already be applied.
