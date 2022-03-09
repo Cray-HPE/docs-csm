@@ -42,7 +42,7 @@ case $key in
     shift # past value
     ;;
     --endpoint)
-    SEARCHPATH="$2"
+    ENDPOINT="$2"
     shift # past argument
     shift # past value
     ;;
