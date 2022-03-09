@@ -43,7 +43,7 @@ Port | SHCD                   | Cabling
 
 What you would be looking from here is the differences between the SHCD and actual network configuration. 
 
-In the above example, incorrect cabling was detected oh the sw-spine-001 switch on port 1:
+In the above example, incorrect cabling was detected on the sw-spine-001 switch on port 1:
 
 .........ncn-w001:***pcie-slot1:1***    ncn-w001:***pcie-slot1:2***
 
