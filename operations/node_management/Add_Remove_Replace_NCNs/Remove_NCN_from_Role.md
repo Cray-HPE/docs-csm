@@ -27,6 +27,11 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
 
    ```bash
    ncn-m# cray bss bootparameters list --hosts Global --format json |jq -r '.[]."cloud-init"."meta-data"."first-master-hostname"'
+   ```
+
+   Example Output:
+
+   ```screen
    ncn-m002
    ```
   
@@ -111,6 +116,11 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
 
    ```bash
    crictl ps
+   ```
+
+   Example Output:
+
+   ```screen
    CONTAINER           IMAGE               CREATED              STATE               NAME                                                ATTEMPT             POD ID
    66a78adf6b4c2       18b6035f5a9ce       About a minute ago   Running             spire-bundle                                        1212                6d89f7dee8ab6
    7680e4050386d       c8344c866fa55       24 hours ago         Running             speaker                                             0                   5460d2bffb4d7
@@ -212,6 +222,11 @@ Run the following:
 
    ```bash
    crictl ps
+   ```
+
+   Example Output:
+
+   ```screen
    CONTAINER           IMAGE               CREATED              STATE               NAME                                                ATTEMPT             POD ID
    66a78adf6b4c2       18b6035f5a9ce       About a minute ago   Running             spire-bundle                                        1212                6d89f7dee8ab6
    7680e4050386d       c8344c866fa55       24 hours ago         Running             speaker                                             0                   5460d2bffb4d7
