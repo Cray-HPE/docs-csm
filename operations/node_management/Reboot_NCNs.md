@@ -137,6 +137,27 @@ The `kubectl` command is installed.
         This check will need to be run after all worker node have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the spine switches \(instructions will vary for Aruba and Mellanox switches\)
 
         If there are BGP Peering sessions that are not ESTABLISHED on either switch, refer to [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
+        
+1. Ensure that no nodes are in a `failed` state in CFS.
+    Nodes that are in a failed state prior to the reboot will not be automatically
+    configured once they have been rebooted.  To get a list of nodes in the failed state:
+   ```
+   ncn-m001# cray cfs components list --status failed | jq .[].id
+   ```
+   If there are any nodes in this list, they can be reset with:
+   ```
+   ncn-m001# cray cfs components update <xname> --enabled False --error-count 0
+   ```
+   Or, to reset the error count for all nodes:
+   ```
+   ncn-m001# cray cfs components list --status failed | jq .[].id -r | while read -r xname ; do
+       echo "$xname"
+       cray cfs components update $xname --enabled False --error-count 0
+   done
+   ```
+   This will leave the nodes in a disabled state in CFS.  CFS will automatically
+   re-enable them when they reboot, this is just so that CFS doesn't immediately
+   start retrying configuration against the failed node.
 
 ### NCN Rolling Reboot
 
