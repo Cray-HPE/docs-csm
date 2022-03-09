@@ -51,7 +51,7 @@ Another option when compute nodes are booted is to download their rootfs into RA
 
     -   **interface\[,<interface\>\[,<interface\>\]...\]**
 
-        A comma separated list of interfaces to support. A minimum of one interface must be specified.
+        A comma-separated list of interfaces to support. A minimum of one interface must be specified.
 
         The first interface specified must exist on the node or the module will exit with an error. Any other specified interface that is not found on the node will be ignored. The module will wait until all specified and existing interfaces are up before proceeding with boot. The first interface specified will be passed to the CPS mount command to identify the interface to be used for mounting.
 

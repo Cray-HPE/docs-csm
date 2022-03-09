@@ -197,7 +197,7 @@ CFS configures nodes and images via a gitops methodology. All configuration cont
 <a name="content-projection-service"></a>
 ## Content Projection Service (CPS)
 
-The Content Projection Service (CPS) provides the root filesystem for compute nodes and application nodes in conjunction with the Data Virtualization Service (DVS). Also, the Cray Programming Environment (CPE) and Analytics products are provided as a separately-mounted filesystems to compute nodes, Applicationn nodes like the UANs, and worker nodes hosting UAI pods via CPS and DVS.
+The Content Projection Service (CPS) provides the root filesystem for compute nodes and application nodes in conjunction with the Data Virtualization Service (DVS). Using CPS and DVS, the Cray Programming Environment (CPE) and Analytics products are provided as separately mounted filesystems to compute nodes, application nodes (such as UANs), and worker nodes hosting UAI pods.
 
 <a name="cray-site-init"></a>
 ## Cray Site Init (CSI)
@@ -329,7 +329,7 @@ worker functions where most of the containerized workload is scheduled by Kubern
 <a name="mountain-cabinet"></a>
 ## Mountain Cabinet
 
-See Olympus cabinet. Some softwware and documentation refers to the Olympus cabinet as a Mountain cabinet.
+See Olympus cabinet. Some software and documentation refers to the Olympus cabinet as a Mountain cabinet.
 
 <a name="mountain-endpoint-discovery-service"></a>
 ## Mountain Endpoint Discovery Service (MEDS)
@@ -373,8 +373,8 @@ management nodes and application nodes.
 The Olympus cabinet is a liquid-cooled dense compute cabinet that supports 64 compute
 blades and 64 high-speed network (HSN) switches. Every HPE Cray EX system with Olympus
 cabinets will also have at least one River cabinet to house non-compute node components 
-such as management nodes, managenet network switches, storage nodes, application nodes,
-and possibly other air-cooled compute nodes. Some softwware and documentation refers to
+such as management nodes, management network switches, storage nodes, application nodes,
+and possibly other air-cooled compute nodes. Some software and documentation refers to
 the Olympus cabinet as a Mountain cabinet.
 
 <a name="power-distribution-unit"></a>

@@ -300,7 +300,7 @@ To adjust the SNMP credentials, perform the following tasks:
 
 2. Update the credentials actively being used for existing leaf switches.
    
-   * See [Change SNMP Credentials on Leaf Switches](Change_SMNP_Credentials_on_Leaf_Switches.md)
+   * See [Change SNMP Credentials on Leaf Switches](Change_SNMP_Credentials_on_Leaf_Switches.md)
 
 
 
