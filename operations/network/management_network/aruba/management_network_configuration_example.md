@@ -262,7 +262,7 @@ This section provides an example of how to configure the management network.
       ncn-w001# ip route replace default via 10.101.10.1 dev hsn0
       ```
 
-   1. To make it persistent we'll need to create a ifcfg file for hsn0 and remove the old vlan7 default route.
+   1. To make it persistent we will need to create a ifcfg file for hsn0 and remove the old vlan7 default route.
       
       ```
       ncn-w001# mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old

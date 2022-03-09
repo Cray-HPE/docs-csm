@@ -28,7 +28,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
 1.  Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
-    There will be seperate session templates for UANs and computes nodes.
+    There will be separate session templates for UANs and computes nodes.
 
     1. List all the session templates.
 

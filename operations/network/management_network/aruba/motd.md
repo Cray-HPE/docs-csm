@@ -22,7 +22,7 @@ switch# show banner <motd|exec>
 ```text
 switch(config)# banner motd $
 Enter a new banner, when you are done enter a new line containing only your
-chosen delimeter.
+chosen delimiter.
 (banner-motd)# This is an example of a custom pre-login banner
 (banner-motd)# that spans multiple lines.
 (banner-motd)# $

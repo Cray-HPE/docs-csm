@@ -68,7 +68,7 @@ Documentation for CANU can be found at https://github.com/Cray-HPE/canu
 
    1. [Network Types – Naming and segment Function](./network_naming_function.md)
    1. [Network traffic pattern inside of the system](./network_traffic_pattern.md)
-   1. [System management network functions in more detail](./manegement_network_function_in_detail.md)
+   1. [System management network functions in more detail](management_network_function_in_detail.md)
 
 ### Key Features Used in the Management Network Configuration
 

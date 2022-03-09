@@ -479,7 +479,7 @@ def clone_subnet_and_pivot(
     """
     #
     # Pin ordering of subnet creation and override based on requested preservation
-    # Really if IPAM were good and/or we didn't have to expect wonky data this wouldn't be required
+    # Really if IPAM were good and/or we did not have to expect wonky data this would not be required
     #
     if subnet_names is None:
         subnet_names = [
