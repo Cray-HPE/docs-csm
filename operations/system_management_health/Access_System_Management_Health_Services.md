@@ -30,7 +30,7 @@ This procedure enables administrators to set up the service and access its compo
 
         Prometheus generates alerts based on metrics and reports them to the alertmanager. The 'Alerts' link at the top of the page will show all of the inactive, pending, and firing alerts on the system. Clicking on any of the alerts will expand them, enabling users to use the 'Labels' data to discern the details of the alert. The details will also show the state of the alert, how long it has been active, and the value for the alert.
 
-        For more information regarding the use of the Prometheus interface, see [https://prometheus.io/docs/prometheus/latest/getting\_started/](https://prometheus.io/docs/prometheus/latest/getting_started/).
+        For more information regarding the use of the Prometheus interface, see [https://prometheus.io/docs/prometheus/latest/getting_started/](https://prometheus.io/docs/prometheus/latest/getting_started/).
 
         Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet. See [Troubleshoot Prometheus Alerts](Troubleshoot_Prometheus_Alerts.md).
 
