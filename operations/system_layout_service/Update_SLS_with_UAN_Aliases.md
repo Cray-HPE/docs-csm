@@ -133,5 +133,5 @@ is being monitored by conman for console logs.
 
    When this node boots, the DHCP request of its -nmn interface will cause the uan01 to be created and resolved.
 
-1. Confirm that the UAN is being monitored by the console services. Follow the procedure in [Manage Node Consoles](../conman/manage_node_consoles.md).
+1. Confirm that the UAN is being monitored by the console services. Follow the procedure in [Manage Node Consoles](../conman/Manage_Node_Consoles.md).
 
