@@ -271,7 +271,9 @@ Firmware is located on the LiveCD (versions 1.4.6 or higher).
    7. Cold boot the node, or momentarily press the button (GUI button) to power it on.
 
 3. After the other nodes are completed, the PIT node can be upgraded. (Alternatively this could be done first):
+   <!-- markdown-link-check-disable-next-line -->
    - Repeat the same process, using the external BMC URL for the PIT node's BMC (e.g. https://system-ncn-m001-mgmt)
+   <!-- markdown-link-check-disable-next-line -->
    - For the `Remote File URL` use `127.0.0.1` instead of `pit` (e.g. http://127.0.0.1/fw/river/hpe/A42_1.38_10_30_2020.signed.flash)
    - Before rebooting the node, save any work and set the `BootNext` to the current boot sessions device:
 
@@ -359,7 +361,7 @@ For Gigabyte upgrades a tftp server needs to be referred to.
        > **`IMPORTANT`** Make sure to check off "Preserve all configuration" otherwise network connectivity may be lost after reset.
 
       ![Screen Shot of Gigabyte Select Firmware Image for BMC](../img/fw-gb-1.png)
-
+<!-- markdown-link-check-disable-next-line -->
 3. Now repeat this for ncn-m001, however for every location `http://pit` is used we need to use `127.0.0.1` instead.
 
 4. Reboot the PIT node back into itself:

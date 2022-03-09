@@ -54,6 +54,7 @@ If you cannot see your device in `/dev/tty*` then follow `dmesg -w` and try rese
 - [USB-B to USB-C adapter][5]
 
 [1]: https://asp.arubanetworks.com/downloads;search=8325;fileContents=User%20Guide
+<!-- markdown-link-check-disable-next-line -->
 [2]: https://www.dell.com/support/article/en-us/sln316328/dell-emc-networking-os10-info-hub?lang=en#bs_One
 [3]: https://docs.mellanox.com/display/MLNXOSv381000/MLNX-OS+User+Manual+v3.8.1000
 [4]: https://www.amazon.com/OIKWAN-Essential-Accesory-Ubiquity-Switches/dp/B082VZTB57/ref=sr_1_5?dchild=1&keywords=usb+to+rj-45+serial&qid=1605474086&sr=8-5
