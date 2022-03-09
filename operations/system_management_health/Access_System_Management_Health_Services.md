@@ -32,7 +32,7 @@ This procedure enables administrators to set up the service and access its compo
 
         For more information regarding the use of the Prometheus interface, see [https://prometheus.io/docs/prometheus/latest/getting\_started/](https://prometheus.io/docs/prometheus/latest/getting_started/).
 
-        Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet. See [Troubleshoot Prometheus Alerts](operations/system_management_health/Troubleshoot_Prometheus_Alerts.md).
+        Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet. See [Troubleshoot Prometheus Alerts](Troubleshoot_Prometheus_Alerts.md).
 
     -   **https://alertmanager.\{\{shasta\_domain\}\}/**
 
@@ -40,7 +40,7 @@ This procedure enables administrators to set up the service and access its compo
 
         The alertmanager manages the alerts it receives and generates notifications to users or applications. For more information about `alert-manager`, refer to the following documentation: [https://prometheus.io/docs/prometheus/latest/getting\_started/](https://prometheus.io/docs/prometheus/latest/getting_started/).
 
-        Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet. See [Troubleshoot Prometheus Alerts](operations/system_management_health/Troubleshoot_Prometheus_Alerts.md).
+        Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet. See [Troubleshoot Prometheus Alerts](Troubleshoot_Prometheus_Alerts.md).
 
     -   **https://grafana.\{\{shasta\_domain\}\}/**
 
