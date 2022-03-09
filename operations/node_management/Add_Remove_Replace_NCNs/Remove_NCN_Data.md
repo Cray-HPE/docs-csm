@@ -10,5 +10,18 @@ Remove NCN data to System Layout Service (SLS), Hardware Management Services (HM
 
 ``` bash
 ncn-mw# cd /usr/share/docs/csm/scripts/operations/node_management
+
+ncn-mw# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+            -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
+            -o jsonpath='{.data.client-secret}' | base64 -d` \
+            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
+            | jq -r '.access_token')
+
+ncn-mw# ncn_status.py --all
+ncn-mw# ncn_status.py --xname $XNAME
+
 ncn-mw# remove_management_ncn.py --xname $XNAME
+
+ncn-mw# ncn_status.py --all
+ncn-mw# ncn_status.py --xname $XNAME
 ```
