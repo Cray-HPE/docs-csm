@@ -5,7 +5,7 @@ the `rotate-ssh-keys-mgmt-nodes.yml` Ansible playbook provided by CSM or through
 NCN node personalization (`site.yml`).
 
 The NCNs deploy with ssh keys for the root user that are changed during the system
-install. See [Change NCN Image Root Password and SSH Keys](change_ncn_image_root_password_and_ssh_keys.md)
+install. See [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 for more information.
 
 It is a recommended best practice for system security to change the SSH keys
@@ -16,10 +16,10 @@ instance, and applied with the `csm.ssh_keys` Ansible role via a CFS session. If
 no keys are added to Vault as in the procedure below, this Ansible role will
 skip any updates.
 
-NOTE: The root SSH keys are also updated when applying the CSM Configuration
+**NOTE:** The root SSH keys are also updated when applying the CSM Configuration
 Layer during NCN personalization using the `site.yml` playbook if the keys have
 been added to [Hashicorp Vault](HashiCorp_Vault.md). See the
-[Managing Configuration with CFS](operations/managing_configuration_with_CFS.md)
+[Perfrom NCN Personalization](../CSM_product_management/Perform_NCN_Personalization.md)
 procedure for more information.
 
 Use the following procedure with the `rotate-ssh-keys-mgmt-nodes.yml` playbook

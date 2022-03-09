@@ -102,7 +102,7 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
 ## Customize cray-hms-hmcollector resource limits and requests in customizations.yaml
 
 1. If the [`site-init` repository is available as a remote
-   repository](../../../067-SHASTA-CFG.md#push-to-a-remote-repository) then clone
+   repository](../../install/prepare_site_init.md#push-to-a-remote-repository) then clone
    it on the host orchestrating the upgrade:
 
    ```bash
@@ -194,7 +194,7 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
    ```
 
 6. Review the changes to `customizations.yaml` and verify [baseline system
-   customizations](../../../067-SHASTA-CFG.md#create-baseline-system-customizations)
+   customizations](../../install/prepare_site_init.md#create-baseline-system-customizations)
    and any customer-specific settings are correct.
 
    ```
