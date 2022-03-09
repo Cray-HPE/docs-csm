@@ -9,7 +9,7 @@
 
     For example:
     - Internal repository
-    - Customer reposotiry
+    - Customer repository
 
 1. Retrieve SLS file from a Shasta system (log in to ncn-m001) on a NCN, this will output the SLS file to a file called sls_file.json in your current working directory.
 

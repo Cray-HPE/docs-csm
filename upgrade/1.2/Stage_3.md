@@ -2,7 +2,7 @@
 
 **IMPORTANT:**
 
->During this stage there will be a brief approximately 5 minute window where pods with PVCs will not be able to migrate between nodes. This is due to a redeployment of the ceph csi provisioners into namespaces to accomodate the newer charts and a better upgrade strategy.
+> During this stage there will be a brief (approximately 5 minutes) window where pods with PVCs will not be able to migrate between nodes. This is due to a redeployment of the Ceph csi provisioners into namespaces to accommodate the newer charts and a better upgrade strategy.
 
 Run `csm-upgrade.sh` to deploy upgraded CSM applications and services:
 

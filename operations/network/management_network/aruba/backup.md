@@ -10,7 +10,7 @@ Create a copy of a running comfiguration or the startup configuration using the 
 copy {running-config | startup-config} <REMOTE-URL> {cli | json} [vrf <VRF-NAME>]
 ```
 
-The paramters/syntax of the `copy` command are described below:
+The parameters/syntax of the `copy` command are described below:
 
 * ``` {running-config | startup-config}```
   

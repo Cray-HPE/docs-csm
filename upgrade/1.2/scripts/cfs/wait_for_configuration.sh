@@ -9,7 +9,7 @@ usage()
    echo "                            [ --role role ] [ --subrole subrole ]"
    echo
    echo "Options:"
-   echo "xnames      A comma seperated list xnames to watch."
+   echo "xnames      A comma-separated list xnames to watch."
    echo "role        An hsm node role to watch."
    echo "subrole     An hsm node subrole to watch."
    echo

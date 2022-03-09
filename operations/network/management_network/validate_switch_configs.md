@@ -12,7 +12,7 @@
 
 Next compare the current running configuration with the generated configuration.  
 
-For the comparison, since we've pulled the configuration to our working directory we can compare the files locally. You can also have CANU pull the configuration from the switch by defining using the `--ip`, `--username`, and `--password` arguments.
+For the comparison, since we have pulled the configuration to our working directory we can compare the files locally. You can also have CANU pull the configuration from the switch by defining using the `--ip`, `--username`, and `--password` arguments.
 
 Example of CANU pulling configuration.  
 

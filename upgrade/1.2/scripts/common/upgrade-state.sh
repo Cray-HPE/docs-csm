@@ -67,7 +67,7 @@ function is_state_recorded () {
 
 function move_state_file () {
     # we only rename the state file
-    # this won't block another upgrade/rebuild/reboot
+    # this will not block another upgrade/rebuild/reboot
     # it also leaves a trace of what happened before
     target_ncn=$1
     mv /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/state /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/state.bak
