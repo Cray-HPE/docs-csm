@@ -116,7 +116,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     Consult the individual Ansible role README.md files in the uan-config-management repository roles directory to configure individual role variables. Roles prefixed with uan\_ are specific to UAN configuration and include network interfaces, disk, LDAP, software packages, and message of the day roles.
 
-    Variables should be defined and overridden in the Ansible inventory locations of the repository as shown in the following example and **not** in the Ansible plays and roles defaults. See https://docs.ansible.com/ansible/2.9/user\_guide/playbooks\_best\_practices.html\#content-organization for directory layouts for inventory.
+    Variables should be defined and overridden in the Ansible inventory locations of the repository as shown in the following example and **not** in the Ansible plays and roles defaults. See https://docs.ansible.com/ansible/2.9/user_guide/playbooks_best_practices.html#content-organization for directory layouts for inventory.
 
     **Warning:** Never place sensitive information such as passwords in the git repository.
 

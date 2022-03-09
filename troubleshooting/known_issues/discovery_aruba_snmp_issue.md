@@ -108,6 +108,6 @@ ncn# /opt/cray/csm/scripts/hms_verification/arubafix.sh -d -d -d
 
 If this doesn't show anything significant, then the switches may not be 
 responding to an SNMP reset.  Apply the workaround described 
-in [the following procedure](../../install/install/configure_aruba_aggregation_switch.md) 
+in [the following procedure](../../install/configure_aruba_aggregation_switch.md) 
 -- particuarly the "Configure SNMP" section -- to the Aruba leaf switches in the system.
 

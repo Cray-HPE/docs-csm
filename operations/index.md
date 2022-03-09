@@ -391,7 +391,7 @@ Ceph is the utility storage platform that is used to enable pods to store persis
   * [Troubleshoot System Clock Skew](utility_storage/Troubleshoot_System_Clock_Skew.md)
   * [Troubleshoot an Unresponsive S3 Endpoint](utility_storage/Troubleshoot_an_Unresponsive_S3_Endpoint.md)
   * [Troubleshoot Ceph-Mon Processes Stopping and Exceeding Max Restarts](utility_storage/Troubleshoot_Ceph-Mon_Processes_Stopping_and_Exceeding_Max_Restarts.md)
-  * [Troubleshoot Pods Failing to Restart on Other Worker Nodes](utility_storage/Troubleshoot_Pods_Failing_to_Restart_on_Other_Worker_Nodes.md)
+  * [Troubleshoot Pods Failing to Restart on Other Worker Nodes](utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md)
   * [Troubleshoot Large Object Map Objects in Ceph Health](utility_storage/Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)
   * [Troubleshoot Failure of RGW Health Check](utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
   * [Troubleshooting Ceph MDS Reporting Slow Requests and Failure on Client](utility_storage/Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client.md)
@@ -553,7 +553,7 @@ HPE Cray EX systems can have network switches in many roles: spine switches, lea
   * [Management Network CAN setup](network/management_network/Management_Network_CAN_Setup.md)
   * [Management Network Flow Control Settings](network/management_network/Management_Network_Flow_Control_Settings.md)
   * [Management Network Access Port configurations](network/management_network/Management_Network_Access_Port_Configurations.md)
-  * [Update Management Network Firmware](network/management_network/Update_Management_Network_Firmware.md)
+  * [Update Management Network Firmware](network/management_network/update_management_network_firmware.md)
 
 
 <a name="customer-access-network-can"></a>
@@ -576,8 +576,8 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
 
 The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers.
 
-  * [DHCP](/network/dhcp/DHCP.md)
-  * [Troubleshoot DHCP Issues](/network/dhcp/Troubleshoot_DHCP_Issues.md)
+  * [DHCP](network/dhcp/DHCP.md)
+  * [Troubleshoot DHCP Issues](network/dhcp/Troubleshoot_DHCP_Issues.md)
 
 <a name="domain-name-service-dns"></a>
 
@@ -601,7 +601,7 @@ External DNS, along with the Customer Access Network \(CAN\), Border Gateway Pro
   * [External DNS](network/external_dns/External_DNS.md)
   * [External DNS csi config init Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
   * [Update the system-name.site-domain Value Post-Installation](network/external_dns/Update_the_system-name_site-domain_Value_Post-Installation.md)
-  * [Update the cmn-external-dns Value Post-Installation](network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md)
+  * [Update the cmn-external-dns Value Post-Installation](network/external_dns/Update_the_can-external-dns_Value_Post-Installation.md)
   * [Ingress Routing](network/external_dns/Ingress_Routing.md)
   * [Add NCNs and UANs to External DNS](network/external_dns/Add_NCNs_and_UANs_to_External_DNS.md)
   * [External DNS Failing to Discover Services Workaround](network/external_dns/External_DNS_Failing_to_Discover_Services_Workaround.md)
@@ -631,7 +631,7 @@ MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manag
 Spire provides the ability to authenticate nodes and workloads, and to securely distribute and manage their identities along with the credentials associated with them.
 
   * [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
-  * [Troubleshoot Spire Failing to Start on NCNs](spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
+  * [Troubleshoot Spire Failing to Start on NCNs](security_and_authentication/Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md)
 
 
 <a name="update-firmware-with-fas"></a>
