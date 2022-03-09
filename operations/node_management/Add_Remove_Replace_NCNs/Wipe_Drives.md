@@ -62,7 +62,8 @@ Only follow the steps in the section for the node type that is being removed:
 1. Wipe Drives
 
     ```bash
-    wipefs --all --force /dev/sd* /dev/disk/by-label/*
+    wipefs --all --force /dev/disk/by-label/*
+    wipefs --all --force /dev/sd*
     ```
 
 ## Wipe Disks: Utility Storage Node
@@ -92,5 +93,6 @@ Only follow the steps in the section for the node type that is being removed:
 4. Wipe the disks and RAIDs.
 
     ```bash
-    wipefs --all --force /dev/sd* /dev/disk/by-label/*
+    wipefs --all --force /dev/disk/by-label/*
+    wipefs --all --force /dev/sd*
     ```
