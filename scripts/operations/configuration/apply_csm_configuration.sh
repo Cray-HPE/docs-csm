@@ -158,7 +158,7 @@ fi
 ## RUNNING CFS ##
 if [[ -z $XNAMES ]]; then
     echo "Retrieving a list of all management node component names (xnames)"
-    XNAMES=$(cray hsm state components list --role Management --format json | jq -r '.Components | map(.ID) | join(",")')
+    XNAMES=$(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
 fi
 XNAME_LIST=${XNAMES//,/ }
 
