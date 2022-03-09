@@ -25,7 +25,7 @@
             "pattern": "https?://pit\\.nmn:5000(/.*)?"
         },
         {
-            "pattern": "https?://[^/]+\\.\\{\\{shasta_domain\\}\\}(/.*)?"
+            "pattern": "https?://[^/]+\\.\\{\\{shasta\\_domain\\}\\}(/.*)?"
         },
         {
             "pattern": "https?://[^/]+\\.\\\\{\\\\{network\\.dns\\.external\\\\}\\\\}(/.*)?"

@@ -378,7 +378,7 @@ You are now finished with firmware updates.
 ### 3. Component Firmware Checkout
 
 This covers PCIe devices.
-
+<!-- markdown-link-check-disable-next-line -->
 > Note: The Mellanox firmware can be updated to minimum spec. using `mlxfwmanager`. The `mlxfwmanager` will fetch updates from online, or it can use a local file (or local web server such as http://pit/).
 
 Find more information for each vendor below:
