@@ -45,7 +45,7 @@ Each boot set needs its own set of S3 parameters \(path, type, and optionally et
 
 ### Specify Nodes in a BOS Session Template
 
-There are three different ways to specify the nodes inside a boot set in a BOS session template. The node list, node groups, or node role groups values can be used. Each can be specified as a comma separated list.
+There are three different ways to specify the nodes inside a boot set in a BOS session template. The node list, node groups, or node role groups values can be used. Each can be specified as a comma-separated list.
 
 -   **Node list**
 
