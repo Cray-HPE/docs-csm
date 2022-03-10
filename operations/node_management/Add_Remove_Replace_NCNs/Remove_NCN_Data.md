@@ -10,7 +10,7 @@ Remove NCN data to System Layout Service (SLS), Hardware Management Services (HM
 
 1. Setup
 ``` bash
-ncn-mw# cd /usr/share/docs/csm/scripts/operations/node_management
+ncn-mw# cd /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs
 
 ncn-mw# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
             -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
@@ -21,20 +21,20 @@ ncn-mw# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
 
 1. Fetch the status of the nodes
 ``` bash
-ncn-mw# ncn_status.py --all
+ncn-mw# ./ncn_status.py --all
 
-ncn-mw# ncn_status.py --xname $XNAME
+ncn-mw# ./ncn_status.py --xname $XNAME
 ```
 
 1. Remove the node
 ``` bash
-ncn-mw# remove_management_ncn.py --xname $XNAME
+ncn-mw# ./remove_management_ncn.py --xname $XNAME
 ```
 
 1. Verify the results by fetching the status of the nodes
 
 ``` bash
-ncn-mw# ncn_status.py --all
+ncn-mw# ./ncn_status.py --all
 
-ncn-mw# ncn_status.py --xname $XNAME
+ncn-mw# ./ncn_status.py --xname $XNAME
 ```
