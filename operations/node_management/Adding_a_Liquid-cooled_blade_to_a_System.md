@@ -354,7 +354,7 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
       ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json|jq '.boot_sets[] | select(.node_list)'
       ```
     If this query returns empty, then skip to sub-step 3.
-    If this query returns with data, then one or more boot sets within the BOS Session template reference nodes explicity by xname. Consider adding your new nodes to this list (sub-step 1) or adding them on the command line (sub-step 2).
+    If this query returns with data, then one or more boot sets within the BOS Session template reference nodes explicitly by xname. Consider adding your new nodes to this list (sub-step 1) or adding them on the command line (sub-step 2).
 
     1. Adding new nodes to your list.
           1. Dump the current Session template.

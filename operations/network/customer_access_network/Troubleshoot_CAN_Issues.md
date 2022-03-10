@@ -25,7 +25,7 @@ Example output:
        valid_lft forever preferred_lft forever
 ```
 
-If there is not an address specified, make sure the can- values have been defined in csi config init input.
+If there is not an address specified, make sure the `can-` values have been defined in `csi config init` input.
 
 ### Does the NCN have a Default Gateway Configured?
 
@@ -41,7 +41,7 @@ Example output:
 default via 10.102.5.27 dev bond0.cmn0
 ```
 
-If there is not an address specified, make sure the can- values have been defined in csi config init input.
+If there is not an address specified, make sure the `can-` values have been defined in `csi config init` input.
 
 ### Can the Node Reach the Default CAN Gateway?
 

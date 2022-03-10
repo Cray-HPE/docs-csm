@@ -23,7 +23,7 @@ Canonical name: `hostname`.`network-path`.`system-name`.`site-domain`
 
 It will be possible to refer to a hostname via a short name consisting of `hostname`.`network-path`, for example `ncn-w001.nmn`.
 
-Underscores (`_`) will be removed from all names in favour of hyphens (`-`) to ensure compliance with RFC 1035.
+Underscores (`_`) will be removed from all names in favor of hyphens (`-`) to ensure compliance with RFC 1035.
 
 Network paths such as `-nmn` and `-hmn` in the hostname will be removed. The fully qualified domain name will be used to define the network path.
 

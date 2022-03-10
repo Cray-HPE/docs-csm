@@ -7,7 +7,7 @@ The intent here is to show case very basic MLAG link configuration and your conf
 <td>
 <pre>
 interface mlag-port-channel 1
-nterface mlag-port-channel 1 mtu 9216 force
+interface mlag-port-channel 1 mtu 9216 force
 interface ethernet 1/1 mlag-channel-group 1 mode active
 interface mlag-port-channel 1 switchport mode hybrid
 interface mlag-port-channel 1
@@ -22,7 +22,7 @@ interface mlag-port-channel 1 switchport hybrid allowed-vlan add 10
 <td>
 <pre>
 interface mlag-port-channel 1
-nterface mlag-port-channel 1 mtu 9216 force
+interface mlag-port-channel 1 mtu 9216 force
 interface ethernet 1/1 mlag-channel-group 1 mode active
 interface mlag-port-channel 1 switchport mode hybrid
 interface mlag-port-channel 1

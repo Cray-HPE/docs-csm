@@ -268,7 +268,7 @@ Maximum number of checkpoints:
 
     ```
     Note: checkpoint name with special characters not allowed (only
-    alphanumerical, hyphen and underscore are allowed)
+    alphanumeric, hyphen, and underscore are allowed)
     ```
 
 1. Check the saved checkpoints:

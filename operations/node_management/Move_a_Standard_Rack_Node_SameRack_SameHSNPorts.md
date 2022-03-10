@@ -334,7 +334,7 @@ This procedure works with both application and compute nodes. This example moves
     -   When `LastDiscoveryStatus` displays as `DiscoverOK`, the node BMC has been successfully discovered.
     -   If the last discovery state is `DiscoveryStarted` then the BMC is currently being inventoried by HSM.
     -   If the last discovery state is `HTTPsGetFailed` or `ChildVerificationFailed` then an error occurred during the discovery process.
-        -   For `HTTPsGetFailed`, verify that the BMC is pingable by its component name (xname). If the component name (xname) of the BMC is not resolveable it, more time may be needed for DNS to update.
+        -   For `HTTPsGetFailed`, verify that the BMC is pingable by its component name (xname). If the component name (xname) of the BMC is not resolvable, then more time may be needed for DNS to update.
 
             If hostname it does resolve, issue a discovery request to HSM:
             

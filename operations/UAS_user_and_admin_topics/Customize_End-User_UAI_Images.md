@@ -8,7 +8,7 @@ The provided End-User UAI image is a basic UAI image that includes an up-to-date
 
 A custom End-User UAI image can be any container image set up with the End-User UAI entrypoint script. Experimentation with the wide range of possible UAI images is beyond the scope of this document, but the example given here should offer a starting point for that kind of experimentation.
 
-The example provided here covers the most comon use-case, which is building a UAI image from the squashfs image used on compute nodes on the host system to support application development, workload management and analytics workflows. Some of the steps are specific to that activity, others would be common to or similar to steps needed to create special purpose UAIs.
+The example provided here covers the most common use-case, which is building a UAI image from the squashfs image used on compute nodes on the host system to support application development, workload management and analytics workflows. Some of the steps are specific to that activity, others would be common to or similar to steps needed to create special purpose UAIs.
 
 ### Prerequisites
 

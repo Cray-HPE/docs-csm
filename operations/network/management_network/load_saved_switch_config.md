@@ -63,4 +63,4 @@ sw-spine-001 [standalone: master] (config) # configuration switch-to csm1.0
 This requires a reboot.
 Type 'yes' to confirm: yes
 ```
-The switch will then reboot to choosen configuration.
+The switch will then reboot to the chosen configuration.
