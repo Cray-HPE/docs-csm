@@ -104,7 +104,7 @@ function ssh_keygen_keyscan() {
 }
 
 function wait_for_kubernetes() {
-  target_ncn=$1
+  local target_ncn=$1
   state_name="WAIT_FOR_K8S"
   state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
   if [[ $state_recorded == "0" ]]; then
