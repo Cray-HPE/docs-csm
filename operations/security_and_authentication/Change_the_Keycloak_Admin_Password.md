@@ -33,6 +33,7 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
 1. Log on to `ncn-w001`.
 1. Download and extract the CSM tarball if you have not already done so.
 1. Change your current directory to be where you've extracted the CSM install tarball
+   Note: If you do not wish to download the entire CSM tarball then you can clone the `https://github.com/Cray-HPE/csm.git` repo, change the branch to `release/1.2` and copy the `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` directory to your desired working directory and follow the steps from there.
 1. Save a local copy of the customizations.yaml file
 
     ```bash
