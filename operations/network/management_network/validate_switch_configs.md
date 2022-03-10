@@ -1,6 +1,7 @@
-# Validate switch configs
+# Validate Switch Configs
 
 #### Prerequisites 
+
 - SSH access to the switches or the running config file.
 - Generated Switch configs.
     - [Generate Switch Config](generate_switch_configs.md)
