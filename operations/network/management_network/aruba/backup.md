@@ -4,7 +4,7 @@ Copies the running configuration or the startup configuration to a remote locati
 
 ## Procedure
 
-Create a copy of a running comfiguration or the startup configuration using the following command:
+Create a copy of a running configuration or the startup configuration using the following command:
 
 ```
 copy {running-config | startup-config} <REMOTE-URL> {cli | json} [vrf <VRF-NAME>]

@@ -157,7 +157,7 @@
 
 1. Deploy Rados Gateway containers to the new nodes.
 
-   - If running Rados Gateway on all nodes is the desired conifugration then do:
+   - If running Rados Gateway on all nodes is the desired configuration, then do:
 
       ```bash
       ceph orch apply rgw site1 zone1 --placement="*"

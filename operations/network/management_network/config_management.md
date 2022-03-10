@@ -26,7 +26,7 @@ Maximum number of checkpoints
 ```
 sw-spine-001(config)# copy running-config checkpoint CSM1_0
 Note: checkpoint name with special characters not allowed (only
-alphanumerical, hyphen and underscore are allowed)
+alphanumeric, hyphen, and underscore are allowed)
 ```
 - Checking on your saved checkpoints:
 ```

@@ -17,7 +17,7 @@ Use the following command from a non-compute node \(NCN\) to see which boot arti
 ncn-m001# cray bss bootparameters list
 ```
 
-Each boot artifact has a download URL, as shown in the following example outpu:
+Each boot artifact has a download URL, as shown in the following example output:
 
 ```
 [[results]]

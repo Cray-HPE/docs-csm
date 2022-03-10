@@ -43,7 +43,7 @@ To successfully PXE boot nodes, the following is required:
     sw-spine-001(config-if-vlan-<1,2,4,7>)# show run current-context
     ```
 
-    Example ouput:
+    Example output:
 
     ```
     interface vlan 1

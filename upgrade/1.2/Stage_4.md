@@ -28,7 +28,7 @@
    ncn-s# ceph config set global container_image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
    ```
 
-   Verify the change has occured:
+   Verify the change has occurred:
 
    ```bash
    ncn-s# ceph config dump -f json-pretty|jq '.[]|select(.name=="container_image")|.value'

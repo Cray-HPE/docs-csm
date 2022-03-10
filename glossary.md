@@ -6,7 +6,7 @@ Glossary of terms used in CSM documentation.
 * [Baseboard Management Controller (BMC)](#baseboard-management-controller)
 * [Blade Switch Controller (sC)](#blade-switch-controller)
 * [Boot Script Service (BSS)](#boot-script-service)
-* [Boot Orchesstration Service (BOS)](#boot-orchestration-service)
+* [Boot Orchestration Service (BOS)](#boot-orchestration-service)
 * [Cabinet Cooling Group](#cabinet-cooling-group)
 * [Cabinet Environmental Controller (CEC)](#cabinet-environmental-controller)
 * [CEC microcontroller (eC)](#cec-microcontroller)
@@ -98,7 +98,7 @@ ASIC, FPGA buffer/interfaces, and firmware.
 The Boot Script Service stores the configuration information that is used to boot each hardware component. Nodes consult BSS for their boot artifacts and boot parameters when nodes boot or reboot.
 
 <a name="boot-orchestration-service"></a>
-## Boot Orchesstration Service (BOS)
+## Boot Orchestration Service (BOS)
 
 The Boot Orchestration Service (BOS) is responsible for booting, configuring, and shutting down collections of nodes. This is accomplished using BOS components, such as boot orchestration session templates and sessions, as well as launching a Boot Orchestration Agent (BOA) that fulfills boot requests. BOS uses other services which provide boot artifact configuration (BSS), power control (CAPMC), node status (HSM), and configuration (CFS).
 

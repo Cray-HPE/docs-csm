@@ -10,7 +10,7 @@ A primary member will become Master under normal circumstances (no member / link
 
 The primary member is member number “1”. This is not configurable. Also note that “1” is the default member number. A factory-default switch boots up as a VSF enabled switch, with member number “1”. a it behaves as a 1-member stack, of which it is master. 
 
-The secondary member number is user configurable, and there is no default secondary member. It is strongly recom- mended that the customer configure a secondary member in the stack, since a stack with a standby offers resiliency and high-availability. 
+The secondary member number is user configurable, and there is no default secondary member. It is strongly recommended that the customer configure a secondary member in the stack, since a stack with a standby offers resiliency and high-availability. 
 
 Other than the primary and secondary members, no members can ever become master / standby of the stack. 
 

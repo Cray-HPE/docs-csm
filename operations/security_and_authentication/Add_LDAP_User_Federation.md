@@ -117,7 +117,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         * ldapEditMode : If you want to be able to create or change users in Keycloak and have them created or modified in the LDAP server, and the LDAP server allows it, then this can be changed.
           - default: READ_ONLY
           - type: string
-          - allowed values: READ_ONLY, WRITEABLE, or UNSYNCED
+          - allowed values: `READ_ONLY`, `WRITEABLE`, or `UNSYNCED`
         * ldapSyncRegistrations : If true, then newly created users will be created in the LDAP server.
           - default: false
           - type: string
