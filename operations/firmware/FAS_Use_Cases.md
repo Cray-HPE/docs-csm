@@ -788,7 +788,7 @@ All of the example JSON files below are set to run a dry-run. Update the overrid
 
 After updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
 
-Due to networking, FAS cannot update ncn-m001.  See [Updating Frimware on m001](Updating_Firmware_m001.md)
+Due to networking, FAS cannot update `ncn-m001`.  See [Updating Firmware on m001](Updating_Firmware_m001.md)
 
 #### Gigabyte
 
