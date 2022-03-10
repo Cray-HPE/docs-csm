@@ -1,4 +1,4 @@
-# Backup Custom Config
+# Backup a Custom Configuration
 
 ## Prerequisites
 

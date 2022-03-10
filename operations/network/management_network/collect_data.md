@@ -1,9 +1,13 @@
 # Collect Data 
 
+Collect the input data needed to generate switch configs.
+
 ## Prerequisites 
 
-- SSH access to the switches.
-- SLS API access.
+- SSH access to the switches
+- System Layout Service (SLS) API access
+
+## Procedure
 
 1. Retrieve the most up-to-date SHCD spreadsheet. Accuracy in this spreadsheet is critical.
 
@@ -28,6 +32,11 @@
 
     ```bash
     ncn# canu backup network --folder switch_backups/ --sls-file ./sls_input_file_1_2.json
+    ```
+
+    Example output:
+
+    ```
     Enter the switch password:
     -
     Running Configs Saved
@@ -44,14 +53,14 @@
     sw-cdu-002.cfg
     ```
 
-    If the SLS API is up, you do not need to provide an SLS file.
+    If the SLS API is up, an SLS file does not need to be provided.
 
-1. Retrieve the customizations file. (log in from `ncn-m001`)
+3. Retrieve the customizations file.
 
-    Run the command  
+    Log in from `ncn-m001` and run the following command:  
 
     ```bash
     ncn# kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml 
     ```
 
-    This will output the customizations file to a file called `customizations.yaml` in your current working directory.
+    This will output the customizations file to a file called `customizations.yaml` in the current working directory.

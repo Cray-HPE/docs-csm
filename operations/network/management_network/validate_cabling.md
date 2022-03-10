@@ -1,16 +1,14 @@
-# Validate cabling 
+# Validate Cabling 
 
-***Warning:***  If this step is completed when NCNs are offline or shutdown, the 
-information compared here would not match the actual connections. Therefore this 
-step should be re-run once whole system is up. 
+> **Warning:**  If this step is completed when NCNs are offline or shutdown, the information compared here will not match the actual connections. Therefore, this step should be re-run again once the whole system is up. 
 
-To validate the cabling, you can run a command similar to the following:
+To validate the cabling you can run command similar to below: 
 
-```bash
-linux# canu validate shcd-cabling --shcd ./SHCD.xlsx --tabs 40G_10G --corners J12,T36 --ips 10.252.0.2,10.252.0.3 
+```
+canu validate shcd-cabling --shcd ./SHCD.xlsx --tabs 40G_10G --corners J12,T36 --ips 10.252.0.2,10.252.0.3 
 ```
 
-***Note:*** Modify the command to have your SHCD file and the correct `--tabs`, `--corners`, and IP addresses. 
+> **NOTE:** Modify the command to use the correct SHCD file and correct `--tabs`, `--corners`, and IP addresses. 
 
 The output should look as follows: 
 
@@ -38,7 +36,7 @@ Port | SHCD                   | Cabling
 3     ncn-w003:pcie-slot1:2    ncn-w003:pcie-slot1:2
 ```
 
-Look for the differences between the SHCD and the actual network configuration.
+In the returned output, look for differences between the SHCD and actual network configuration. 
 
 In the above example, incorrect cabling was detected on the `sw-spine-001` switch on port 1:
 
