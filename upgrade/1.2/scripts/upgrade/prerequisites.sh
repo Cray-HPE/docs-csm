@@ -492,7 +492,16 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     
     cray bss bootparameters list --format=json > bss-backup-$(date +%Y-%m-%d).json
-    cray artifacts create vbis bss-backup-$(date +%Y-%m-%d).json bss-backup-$(date +%Y-%m-%d).json
+
+    backupBucket="config-data"
+    set +e
+    cray artifacts list config-data
+    if [[ $? -ne 0 ]]; then
+        backupBucket="vbis"
+    fi
+    set -e
+
+    cray artifacts create ${backupBucket} bss-backup-$(date +%Y-%m-%d).json bss-backup-$(date +%Y-%m-%d).json
     
     record_state ${state_name} $(hostname)
 else
