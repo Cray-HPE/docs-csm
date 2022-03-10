@@ -11,7 +11,7 @@ In order to provide data to the Grafana SNMP dashboards the SNMP Exporter must b
 linux# SYSTEM_NAME=eniac
 ```
 
-1. Obtain the list of switches to use as targets using CANU (CSM Automatic Network Utility)
+1. Obtain the list of switches to use as targets using CSM Automatic Network Utility (CANU).
 
 ```bash
 linux# canu init --sls-file /var/www/ephemeral/prep/${SYSTEM_NAME}/sls_input_file.json --out -
@@ -22,7 +22,7 @@ linux# canu init --sls-file /var/www/ephemeral/prep/${SYSTEM_NAME}/sls_input_fil
 4 IP addresses saved to <stdout>
 ```
 
-1. Update customizations.yaml with the list of switches
+1. Update customizations.yaml with the list of switches.
 
 ```bash
 linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
@@ -45,7 +45,7 @@ linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
 EOF
 ```
 
-1. Review the SNMP Exporter configuration
+1. Review the SNMP Exporter configuration.
 
 ```bash
 linux# yq r /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter
