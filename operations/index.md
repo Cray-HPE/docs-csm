@@ -5,7 +5,8 @@ The Cray System Management (CSM) operational activities are administrative proce
 The following administrative topics can be found in this guide:
 
 - [Cray System Management (CSM) Administration Guide](#cray-system-management-csm-administration-guide)
-    - [CSM Product Management](#csm-product-management)
+  - [CSM Product Management](#csm-product-management)
+  - [Pre-Install](#pre-install)
   - [Image Management](#image-management)
   - [Boot Orchestration](#boot-orchestration)
   - [System Power Off Procedures](#system-power-off-procedures)
@@ -39,7 +40,7 @@ The following administrative topics can be found in this guide:
 
 <a name="csm-product-management"></a>
 
-### CSM Product Management
+## CSM Product Management
 
    * [Validate CSM Health](validate_csm_health.md)
    * [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
@@ -50,6 +51,16 @@ The following administrative topics can be found in this guide:
    * [Access the LiveCD USB Device After Reboot](Access_LiveCD_USB_Device_After_Reboot.md)
    * [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
    * [Validate Signed RPMs](CSM_product_management/Validate_Signed_RPMs.md)
+
+<a name="pre-install"></a>
+
+## Pre-Install
+
+General information on what needs to be done before the initial install of CSM.
+
+   * [Pre-Install Steps](preinstall/Preinstall.md)
+   * [Change Air-Cooled BMC Credentials](preinstall/Change_River_BMC_Credentials.md)
+   * [Change ServerTech PDU Credentials](preinstall/Change_ServerTech_PDU_Credentials.md)
 
 <a name="image-management"></a>
 
