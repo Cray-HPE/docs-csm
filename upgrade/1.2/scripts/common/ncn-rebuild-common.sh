@@ -191,10 +191,19 @@ EOF
     printf "%s" "waiting for boot: $target_ncn ..."
     while true
     do
-        tmp_bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${TOKEN}" \
-            "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
-            | jq '.[]| select(.endpoint=="bootscript")|.last_epoch')
+        set +e
+        while true
+        do
+            tmp_bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
+                -H "Authorization: Bearer ${TOKEN}" \
+                "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
+                | jq '.[]| select(.endpoint=="bootscript")|.last_epoch')
+            if [[ $? -eq 0 ]]; then
+                break
+            fi
+        done
+        set -e
+
         if [[ $tmp_bootscript_last_epoch -ne $bootscript_last_epoch ]]; then
             echo "bootscript fetched"
             break
