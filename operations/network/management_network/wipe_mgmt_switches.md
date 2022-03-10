@@ -1,4 +1,4 @@
-# Wipe Switch Config
+# Wipe Management Switch Config
 
 #### Prerequisites 
 - Out of band access to the switches (console).
