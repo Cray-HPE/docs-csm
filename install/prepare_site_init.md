@@ -415,12 +415,11 @@ with system-specific customizations.
 
    Please see the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
 
-<a name="snmp-exporter-specific Customizations"></a>
 1. snmp-exporter Configuration (optional)
 
-The Prometheus snmp-exporter needs to be configured with a list of management network switches to scrape metrics from in order to populate the System Health Service Grafana dashboards.
+   The Prometheus snmp-exporter needs to be configured with a list of management network switches to scrape metrics from in order to populate the System Health Service Grafana dashboards.
 
-Please see the [prometheus-snmp-exporter](../operations/network/management_network/snmp_exporter_configs.md) for more information.
+   Please see the [prometheus-snmp-exporter](../operations/network/management_network/snmp_exporter_configs.md) for more information.
 
 <a name="generate-sealed-secrets"></a>
 ### 4. Generate Sealed Secrets
