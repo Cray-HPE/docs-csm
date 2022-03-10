@@ -410,6 +410,13 @@ with system-specific customizations.
 
    Please see the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
 
+<a name="snmp-exporter-specific Customizations"></a>
+1. snmp-exporter Configuration (optional)
+
+The Prometheus snmp-exporter needs to be configured with a list of management network switches to scrape metrics from in order to populate the System Health Service Grafana dashboards.
+
+Please see the [prometheus-snmp-exporter](../operations/network/management_network/snmp_exporter_configs.md) for more information.
+
 <a name="generate-sealed-secrets"></a>
 ### 4. Generate Sealed Secrets
 
@@ -542,8 +549,3 @@ examine differences to ensure all changes are relevant. For example, when
 applying a customer-specific customization used in a prior version, be sure the
 change still makes sense. It is common for options to change as new features are
 introduced and bugs are fixed.
-
-<a name="snmp-exporter-specific Customizations"></a>
-### 7. Snmp-exporter-Specific Customizations
-
-Please see the [prometheus-snmp-exporter](../operations/network/management_network/snmp_exporter_configs.md) for more information.
