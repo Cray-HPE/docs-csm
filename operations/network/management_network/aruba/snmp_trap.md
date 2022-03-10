@@ -2,21 +2,21 @@
 
 The SNMP agent can send trap notifications to a receiver. The receiver's host IP address and port number can be defined along with the notification type, version, and community string. 
 
-Relevant Configuration 
+## Configuration Commands 
 
-Configure a SNMPv2c trap receiver host 
+Configure a SNMPv2c trap receiver host: 
 
 ```
 switch(config)# snmp-server host IP-ADDR trap version v2c community xxx
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality: 
 
 ```
 switch# show snmp trap
 ```
 
-Example Output 
+## Example Output 
 
 ```
 switch# show snmp trap
@@ -31,10 +31,10 @@ default
 default
 ```
 
-Expected Results 
+## Expected Results 
 
-* Step 1: You can configure a trap host for your SNMP Manager
-* Step 2: You can log trap events
-* Step 3: You can successfully trigger a trap event
+1. Administrators can configure a trap host for your SNMP Manager
+2. Administrators can log trap events
+3. Administrators can successfully trigger a trap event
 
 [Back to Index](../index.md)

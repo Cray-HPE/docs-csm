@@ -1,42 +1,42 @@
-# Simple network management protocol (SNMP) agent 
+# Simple Network Management Protocol (SNMP) Agent 
 
-Simple Network Management Protocol (SNMP) minimizes the number and complexity of management functions. For mon- itoring and control it is extensible to accommodate additional, possibly unanticipated aspects of network operation and management. SNMP is universal and independent of the architecture and mechanisms of particular hosts or particular gateways. SNMP server is supported either on the default or mgmt VRF. 
+Simple Network Management Protocol (SNMP) minimizes the number and complexity of management functions. For monitoring and control, it is extensible to accommodate additional, possibly unanticipated aspects of network operation and management. SNMP is universal and independent of the architecture and mechanisms of particular hosts or particular gateways. SNMP server is supported either on the default or mgmt VRF. 
 
-Relevant Configuration 
+## Configuration Commands
 
-Enable SNMP agent 
+Enable SNMP agent: 
 
-```
+```text
 switch(config)# snmp-server vrf VRF
 ```
 
-Configure the port to which the SNMP agent is bound 
+Configure the port to which the SNMP agent is bound: 
 
-```
+```text
 switch(config)# snmp-server agent-port PORT
 ```
 
-Configure an SNMPv2c community name 
+Configure an SNMPv2c community name: 
 
-```
+```text
 switch(config)# snmp-server community NAME
 ```
 
-Configure a SNMPv2c trap receiver host 
+Configure a SNMPv2c trap receiver host: 
 
-```
+```text
 switch(config)# snmp-server host IP-ADDR <trap|inform> version v2c [community NAME]
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:  
 
-```
+```text
 switch# show snmp [agent-port|community|trap|vrf] [vsx-peer]
 ```
 
-Example Output 
+## Example Output 
 
-```
+```text
 switch(config)# snmp-server vrf default
 switch(config)# snmp-server agent-port 10601
 switch(config)# snmp-server community public
@@ -64,10 +64,10 @@ Host                     Port  Type      Version SecName                        
 1.2.3.4                  162   inform    v2c     public                        default
 ```
 
-Expected Results 
+## Expected Results 
 
-* Step 1: You can configure the port number
-* Step 2: The output of all show commands is correct
-* Step 3: You can connect to the switch from the workstation 
+1. Administrators can configure the port number
+2. The output of all `show` commands is correct
+3. Administrators can connect to the switch from the workstation 
 
 [Back to Index](../index.md)
