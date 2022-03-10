@@ -11,6 +11,6 @@ CANU reads switch version information from the `canu.yaml` file in the root dire
 
 CANU documentation can be found here https://github.com/Cray-HPE/canu
 
-If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](update_canu_from_csm_tarball.md)
+If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](../update_canu_from_csm_tarball.md)
 
 [Back to Index](index.md)

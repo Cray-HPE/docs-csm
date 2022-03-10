@@ -1,5 +1,5 @@
 
-# Change SMNP Credentials on Leaf Switches
+# Change SNMP Credentials on Leaf Switches
 
 This procedure changes the SNMP credentials on management leaf switches in the system. All SNMP credentials need to be the same as those found in the customizations.yaml sealed secret cray_reds_credentials.
 

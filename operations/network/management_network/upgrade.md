@@ -25,6 +25,8 @@ If the configs have not been generated you will need to follow the steps below.
     - Backup switch configs.
 1. [Validate the SHCD](validate_shcd.md)
     - The SHCD defines the topology of a Shasta system, this is needed when generating switch configs.
+1. [Validate cabling](validate_cabling.md)
+    - Validate cabling between SHCD generated data and actual switch configuration.
 1. [Generate switch configs](generate_switch_configs.md)
     - Generate the switch configuration file(s)
 1. [Wipe mgmt switches](wipe_mgmt_switches.md)

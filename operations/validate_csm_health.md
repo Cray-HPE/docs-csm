@@ -103,7 +103,7 @@ There are multiple Goss test suites available that cover a variety of subsystems
         ```bash
         ncn/pit# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
         ```
-     1. Delete the backup, where <backup> is replaced with a backup returned in the previous step.
+     1. Delete the backup, where `<backup>` is replaced with a backup returned in the previous step.
         ```bash
         ncn# velero backup delete <backup> --confirm
         ```

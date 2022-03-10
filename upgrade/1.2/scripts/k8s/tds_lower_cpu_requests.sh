@@ -25,7 +25,7 @@
 
 #
 # Edit the following values as needed to suit specific system
-# requirements, ensuring pods run well and aren't being throttled
+# requirements, ensuring pods run well and are not being throttled
 # at an unacceptable level.  Comment out any of the following lines
 # if changing the CPU request for that particular service is not
 # desired.

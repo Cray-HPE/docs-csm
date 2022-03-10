@@ -129,7 +129,7 @@ sw-spine-001 [standalone: master] # show run | include username
 
 #### Backup SNMP credentials
 
-SNMP is currently only used on sw-leaf-bmc switches, these credentials can be retrieved from vault.  More info on SNMP creds can be found on the [Change SNMP Credentials on Leaf Switches](../../../operations/security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md) page.
+SNMP is currently only used on sw-leaf-bmc switches, these credentials can be retrieved from vault.  More info on SNMP creds can be found on the [Change SNMP Credentials on Leaf Switches](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_Switches.md) page.
 
 Once these credentials are retrieved from Vault you can fill in the `xxxxxx` fields below.
 

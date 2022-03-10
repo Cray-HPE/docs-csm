@@ -45,7 +45,7 @@ Restart the Pod with the failing Envoy container. When there's a single replica 
 ncn-m# kubectl delete pod -n services cray-cfs-batcher-94877b679-lmhqf
 ```
 
-When there are multiple replicas of a Deployment or StatefulSet, it's best to do a rolling restart by running a command similar to the following:
+When there are multiple replicas of a Deployment or StatefulSet, it is best to do a rolling restart by running a command similar to the following:
 
 ```
 ncn-m# kubectl rollout restart -n istio-system deployment istio-ingressgateway
