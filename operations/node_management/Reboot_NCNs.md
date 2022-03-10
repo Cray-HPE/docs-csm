@@ -143,7 +143,7 @@ The `kubectl` command is installed.
     Nodes that are in a failed state prior to the reboot will not be automatically
     configured once they have been rebooted.  To get a list of nodes in the failed state:
    ```
-   ncn-m001# cray cfs components list --status failed | jq .[].id
+   ncn-m001# cray cfs components list --status failed --format json | jq .[].id
    ```
    If there are any nodes in this list, they can be reset with:
    ```
@@ -295,7 +295,7 @@ Before rebooting NCNs:
     2. Failover any postgres leader that is running on the worker node you are rebooting.
 
        ```bash
-       ncn-m# /usr/share/doc/csm/upgrade/1.0/scripts/k8s/failover-leader.sh <node to be rebooted>
+       ncn-m# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/failover-leader.sh <node to be rebooted>
        ```
 
     3. Cordon and Drain the node
