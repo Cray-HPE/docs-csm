@@ -4,37 +4,40 @@
 - SSH access to the switches or the running config file.
 - Generated Switch configs.
     - [Generate Switch Config](generate_switch_configs.md)
+- CANU installed with version 1.1.11 or greater.
+  - Run `canu --version` to see version.
+  - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](update_canu_from_csm_tarball.md)
 
 #### Compare CSM 1.2 switch configs with running configs 
 
- Next you would want to compare the current running configuration with the generated configuration.  
+Next compare the current running configuration with the generated configuration.  
 
-For the comparison, since we've pulled the configuration to our working directory we can compare the files locally. You can also have Canu pull the configuration from the switch by defining ip list and username &  password field.  
+For the comparison, since we have pulled the configuration to our working directory we can compare the files locally. You can also have CANU pull the configuration from the switch by defining using the `--ip`, `--username`, and `--password` arguments.
 
-Example of Canu pulling configuration.  
+Example of CANU pulling configuration.  
 
-```
-canu validate switch config --ip 192.168.1.1 --username USERNAME --password PASSWORD --generated ./generated/sw-spine-001.cfg 
+```bash
+ncn# canu validate switch config --ip 192.168.1.1 --username USERNAME --password PASSWORD --generated ./generated/sw-spine-001.cfg 
 ```
 
 Doing file comparisons on your local machine:  
 
 * Comparing configuration file for single switch:  
 
-```
-canu validate switch config --running ./running/sw-spine-001.cfg --generated sw-spine-001.cfg  
+```bash
+ncn# canu validate switch config --running ./running/sw-spine-001.cfg --generated sw-spine-001.cfg  
 ```
 
 Please enter the vendor (Aruba, Dell, Mellanox): Aruba  
 
 * Comparing configuration files for full system:  
 
-```
-canu validate network config --csm 1.2 --running ./running/ --generated ./generated/ 
+```bash
+ncn# canu validate network config --csm 1.2 --running ./running/ --generated ./generated/ 
 ```
  
 
-CANU generated switch configurations will not include any ports or devices not defined in the model. These were previously discussed in the Validate the SHCD section but include edge uplinks (CAN/CMN) and custom configurations applied by the customer..  When looking at the generated configurations being applied against existing running configurations CANU will recommend removal of some critical configurations. It is vital that these devices and configurations be identified and protected. This can be accomplished in three ways: 
+CANU-generated switch configurations will not include any ports or devices not defined in the model. These were previously discussed in the Validate the SHCD section but include edge uplinks (CAN/CMN) and custom configurations applied by the customer..  When looking at the generated configurations being applied against existing running configurations CANU will recommend removal of some critical configurations. It is vital that these devices and configurations be identified and protected. This can be accomplished in three ways: 
 
 * Provide CANU validation of generated configurations against running configurations with an override or "blackout" configuration – a yaml file which tells CANU to ignore customer-specific configurations. The process of creating this file was previously described in the This file will be custom to every site and must be distributed with the analysis and configuration file bundle to be used in the future. 
 
@@ -63,7 +66,7 @@ Always before making configuration changes, analyze the changes shown in the abo
 
 For example:  
 
-```
+```text
 Config differences between running config and generated config 
 
 Safe Commands

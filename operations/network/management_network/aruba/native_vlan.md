@@ -37,10 +37,10 @@ VLAN  Name                              Status  Reason          Type      Interf
 
 Expected Results 
 
-* Step 1: You can create a VLAN
-* Step 2: You can assign a native VLAN to the physical interface
-* Step 3: You can configure an IP address on the VLAN interface
-* Step 4: You can successfully ping the other switch's VLAN interface  
+* Step 1: Administrators can create a VLAN
+* Step 2: Administrators can assign a native VLAN to the physical interface
+* Step 3: Administrators can configure an IP address on the VLAN interface
+* Step 4: Administrators can successfully ping the other switch's VLAN interface  
 
 [Back to Index](../index.md)
 

@@ -12,6 +12,8 @@ This is either a first time install or the previous CSM was wiped and requires a
     - If the switches have any configuration, it is recommenced to erase it before adding any new configuration.
 1. [Validate the SHCD](validate_shcd.md)
     - The SHCD defines the topology of a Shasta system, this is needed when generating switch configs.
+1. [Validate cabling](validate_cabling.md)
+    - Validate cabling between SHCD generated data and actual switch configuration.
 1. [Generate switch configs](generate_switch_configs.md)
     - Generate the switch configuration file(s)
 1. [Apply switch configs](apply_switch_configs.md)

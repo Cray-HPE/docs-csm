@@ -66,7 +66,7 @@ $ dig +short primary.system.dev.cray.com
 **CSI command line argument:** `--secondary-servers`  
 **Default value:** `""`  
 **Description:**  
-A comma separated list of DNS servers to notify in the format `server name/ip address`. 
+A comma-separated list of DNS servers to notify in the format `server name/ip address`. 
 
 ```
 externaldns1.my.domain/1.1.1.1,externaldns2.my.domain/2.2.2.2
@@ -78,7 +78,7 @@ If the default value is used no servers to notify on zone update will be configu
 **CSI command line argument:** `--notify-zones`  
 **Default value:** `""`  
 **Description:**  
-A comma separated list of zones to transfer.
+A comma-separated list of zones to transfer.
 
 ```
 system.dev.cray.com,8.101.10.in-addr.arpa

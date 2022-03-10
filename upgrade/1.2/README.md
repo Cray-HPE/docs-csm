@@ -15,18 +15,14 @@ When doing a rolling upgrade of the entire cluster, at some point you will need 
 responsibility of the "stable" NCN to another master node. However, you do not need to do this before you are ready to
 upgrade that node.
 
->**`IMPORTANT:`**
->
-> For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed. See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to accomplish this. Independently, the `customizations.yaml` file will be edited automatically during upgrade for TDS systems prior to deploying new CSM services. See the file: `/usr/share/doc/csm/upgrade/1.2/scripts/upgrade/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified (prior to proceeding with this upgrade) with different values if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/CSM_product_management/Post_Install_Customizations.md).
->
-
 ## Upgrade Stages
 
 - [Stage 0 - Prerequisites](Stage_0_Prerequisites.md)
 - [Stage 1 - Ceph Node Image Upgrade](Stage_1.md)
 - [Stage 2 - Kubernetes Upgrade](Stage_2.md)
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
-- [Stage 4 - Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
+- [Stage 4 - Ceph Upgrade](Stage_4.md)
+- [Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
 
 **`Important:`** Please take note of the below content for troubleshooting purposes in the case that you encounter issues.
 
@@ -66,6 +62,15 @@ Please see [Troubleshoot Postgres Database](../../operations/kubernetes/Troubles
 
 Please see [Troubleshoot Spire Failing to Start on NCNs](../../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md).
 
+### Troubleshooting CFS Sessions That Can't Find Playbooks
+
+Due to an issue with the Ansible content import logic, the git commit ids for some
+release branches may have changed, making old CFS configurations invalid.  If CFS
+fails to find the specified playbook, or fails to checkout the appropriate commit
+in the `git-clone` containers, check that the commit still exists by manually
+cloning the git repo and attempting to checkout the commit.  If it no longer exists,
+find the most recent commit id for the desired branch and update the configuration
+as usual for CFS.  This will be fixed in a future version.
 
 ### Rerun a step/script
 

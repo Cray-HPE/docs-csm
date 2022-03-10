@@ -60,7 +60,7 @@ For Legacy Mode user procedures:
     
     The following OPTIONS are available for use:
     * `--publickey <path>` - the path to a file containing the public SSH key to be used to talk to this UAI. This option is required and must specify a valid public key file name.
-    * `--ports <port-list>` - a comma separated list of TCP [port numbers to be opened on the newly created UAI](Create_a_UAI_with_Additional_Ports.md). This option is not required and will be overridden by a default UAI Class if a default UAI Class is configured.
+    * `--ports <port-list>` - a comma-separated list of TCP [port numbers to be opened on the newly created UAI](Create_a_UAI_with_Additional_Ports.md). This option is not required and will be overridden by a default UAI Class if a default UAI Class is configured.
     * `--imagename <uai-image-name>` - The name of the UAI container image to be used to create the UAI. This option is not required. If omitted the default UAI image will be used. Both the default UAI image and anything specified here will be overridden by a default UAI Class if a default UAI Class is configured.
 
 [Next Topic: Examining a UAI Using a Direct Administrative Command](Examine_a_UAI_Using_a_Direct_Administrative_Command.md)

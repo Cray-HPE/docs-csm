@@ -146,7 +146,7 @@ In order to keep watch on various items during and after the fault has been intr
 
 1. Detect the change in state of the various Postgres instances running.
    
-   Run the following in a seperate window:
+   Run the following in a separate window:
 
    ```bash
    ncn# watch -n 30 "date; kubectl get postgresql -A"

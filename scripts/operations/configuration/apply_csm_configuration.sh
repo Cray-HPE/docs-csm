@@ -38,7 +38,7 @@ usage()
    echo "git-commit           The git commit hash for CFS to use."
    echo "git-clone-url        The git clone url for CFS to use."
    echo "ncn-config-file      A file containing the NCN CFS configuration."
-   echo "xnames               A comma seperated list of component names (xnames) to deploy to. All management nodes will be included if not set."
+   echo "xnames               A comma-separated list of component names (xnames) to deploy to. All management nodes will be included if not set."
    echo "clear-state          Clears existing state from components to ensure CFS runs."
    echo
 }

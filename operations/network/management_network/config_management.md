@@ -69,7 +69,7 @@ Continuing without saving system configuration
 Proceed to reboot the system? [confirm yes/no]:yes
 ```
 - This will boot the switch to factory defaults, this is when you will paste in the new CANU generated config.
-- Once that's complete you'll want to save the config and verify that both configs exist.
+- Once that's complete you will want to save the config and verify that both configs exist.
 ```
 sw-cdu-001(config)# do write memory
 sw-cdu-001(config)# copy config://startup.xml config://csm1.2.xml

@@ -27,42 +27,50 @@ mkdir -p /etc/cray/upgrade/csm/$CSM_RELEASE
 
 function record_state () {
     state_name=$1
-    upgrade_ncn=$2
+    target_ncn=$2
 
-    mkdir -p /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn
+    mkdir -p /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn
 
     if [[ -z ${state_name} ]]; then
         echo "state name is not specified"
         exit 1
     fi
-    if [[ -z ${upgrade_ncn} ]]; then
+    if [[ -z ${target_ncn} ]]; then
         echo "upgrade ncn is not specified"
         exit 1
     fi
-    state_recorded=$(is_state_recorded $state_name $upgrade_ncn)
+    state_recorded=$(is_state_recorded $state_name $target_ncn)
     if [[ $state_recorded == "0" ]]; then
-        printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "${state_name}" >> /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/state
+        printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "${state_name}" >> /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/state
     fi
 }
 
 function is_state_recorded () {
     state_name=$1
-    upgrade_ncn=$2
-    mkdir -p /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn
+    target_ncn=$2
+    mkdir -p /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn
     if [[ -z ${state_name} ]]; then
         echo "state name is not specified"
         exit 1
     fi
-    if [[ -z ${upgrade_ncn} ]]; then
+    if [[ -z ${target_ncn} ]]; then
         echo "upgrade ncn is not specified"
         exit 1
     fi
-    state_recorded=$(cat /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn/state 2>/dev/null | grep "${state_name}" | wc -l)
+    state_recorded=$(cat /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/state 2>/dev/null | grep "${state_name}" | wc -l)
     if [[ ${state_recorded} != 0 ]]; then
         echo "1"
     else
         echo "0"
     fi
+}
+
+function move_state_file () {
+    # we only rename the state file
+    # this will not block another upgrade/rebuild/reboot
+    # it also leaves a trace of what happened before
+    target_ncn=$1
+    mv /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/state /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/state.bak
 }
 
 function err_report() {
