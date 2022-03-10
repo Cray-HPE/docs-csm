@@ -50,7 +50,4 @@ This procedure does not work if the pod is in either "Error" or "Terminating" st
     As root in the user's UAI, an administrator will have the user's UID, GID, and full access to their file system mounts.
 
 
-Assist the user with issues, and use exit to exit the UAI.
-
-
-
+Assist the user with issues, and use `exit` to exit the UAI.

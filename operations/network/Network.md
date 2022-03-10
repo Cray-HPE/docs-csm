@@ -26,7 +26,7 @@ There are several different networks supported by the HPE Cray EX system. The fo
         -   Kubernetes worker nodes
         -   UANs
         -   ClusterStor controller data interfaces of all ClusterStor components \(SMU, MMU, and SSU\)
-        -   There must be at least two NCN's whose BMCs are on the HMN. If these are not present, there cannot be multiple DVS servers that function correctly, which will have an effect on compute node root file system and PE scaling/performance/reliability.
+        -   There must be at least two NCNs whose BMCs are on the HMN. If these are not present, there cannot be multiple DVS servers that function correctly, which will have an effect on compute node root file system and PE scaling/performance/reliability.
 
 During initial installation, several of those networks are created with default IP address ranges. See [Default IP Address Ranges](Default_IP_Address_Ranges.md).
 
