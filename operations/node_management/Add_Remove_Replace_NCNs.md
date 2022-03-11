@@ -36,6 +36,20 @@ ncn# XNAME=<xname>
 ncn# echo $XNAME
 ```
 
+> TODO insert this here
+1. Determine the xname of the NCN by referring to River Rack Layout tab of the systems SHCD.
+        | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
+        | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
+        | wn01            | x3000 | u04      | -   |                 |     | j3   | sw-smn01    | x3000  | u14      | -   | j48  |
+
+        The Slot of the node is determined by the bottom most rack U that node occupies.
+    
+        Xname format: xXcCsSbBnN
+        - X - cabinet = 3000
+        - C - chassis = 0, for River nodes this is always 0
+        - S - slot/Rack U = 38
+        - B - bmc = 0, for Management NCNs this is always 0
+        - N - node = 0, for Management NCNs this is always 0 
 ### Procedure
 
 The following is a high-level overview of the NCN add workflow:
