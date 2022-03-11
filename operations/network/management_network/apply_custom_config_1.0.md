@@ -1,14 +1,16 @@
 # Apply Custom Switch Config CSM 1.0
 
-## Prerequisites 
+Apply the backed up site connection configuration with a couple modifications. Since virtual routing and forwarding (VRF) is now used to separate customer traffic, the site ports and default routes must be added to that VRF.
 
-- access to the switches.
-- Custom Switch configs.
-  - [Backup Custom Config](backup_custom_config.md)
-- Generated switch configs already applied.
-  - [apply switch configs](apply_switch_configs.md)
 
- You will need to apply the backed up site connection configuration with a couple modifications. Since we are now using a VRF to separate customer traffic we will need to add the site ports and the default routes to that VRF.
+#### Prerequisites 
+
+- Access to the switches
+- Custom Switch configs
+    - [Backup Custom Config](backup_custom_config.md)
+- Generated switch configs already applied
+    - [Apply Switch Configs](apply_switch_configs.md)
+
 
 ### Aruba
 
@@ -81,16 +83,17 @@ sw-spine-002 [mlag-domain: master] # conf t
 
 ### Apply users/password
 
-All that is required to re-apply the users is get into global configuration mode `conf t` and paste in the config that was copied from the previous step.
+All that is required to re-apply the users is to get into global configuration mode with `conf t` and to paste in the config that was copied from the previous step.
  
 ##### Aruba
 
 ```
 sw-leaf-bmc-001# conf t
 user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
- ```
+```
 
 ##### Dell
+
 ```
 sw-leaf-001# conf t
 system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -103,9 +106,8 @@ username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin p
 sw-spine-001 [standalone: master] # conf t
    username admin password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    username monitor password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-   ```
+```
 
 ### Write memory
 
-- Save the configuration once the configuration is applied.
-  - [Saving Config](saving_config.md)
+Save the configuration once the configuration is applied. See [Saving Config](saving_config.md).

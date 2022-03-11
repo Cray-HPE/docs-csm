@@ -51,13 +51,14 @@ Note:  A roadmap item for CANU is the ability to "inject" customer configuration
  
 #### Analyze CSM 1.2 configuration upgrade 
 
- Configuration updates depending on the current version of network configuration may be as easy as adding few lines or be complete rip & replace operation which may lead you to choosing to wipe the existing configuration or just simply adding few lines in the configuration.  
+Configuration updates depending on the current version of network configuration may be as easy as adding few lines or be complete rip & replace operation which may lead you to choosing to wipe the existing configuration or just simply adding few lines in the configuration.  
 
 Always before making configuration changes, analyze the changes shown in the above configuration diff section.
 
 :exclamation: All of these steps should be done using an out of band connection. This process is disruptive and will require downtime :exclamation:  
 
 #### Caveats and known issues
+
 - Mellanox and Dell support is limited.
 - Some configuration may need to be applied in a certain order.
   - Example: `Customer VRF` needs to be applied before adding interfaces/routes to the VRF.

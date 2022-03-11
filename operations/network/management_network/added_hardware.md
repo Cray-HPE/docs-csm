@@ -7,6 +7,7 @@ Follow this procedure when new hardware is added to the system.
 1. Validate the SHCD.
    
    The SHCD defines the topology of a Shasta system, this is needed when generating switch configs.
+   
    Refer to [Validate the SHCD](validate_shcd.md).
 
 2. Generate the switch configuration file(s).
