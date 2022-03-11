@@ -2,19 +2,19 @@
 
 Apply the backed up site connection configuration with a couple modifications. Since virtual routing and forwarding (VRF) is now used to separate customer traffic, the site ports and default routes must be added to that VRF.
 
+
 #### Prerequisites 
 
 - Access to the switches
 - Custom Switch configs
     - [Backup Custom Config](backup_custom_config.md)
 - Generated switch configs already applied
-    - [apply switch configs](apply_switch_configs.md)
+    - [Apply Switch Configs](apply_switch_configs.md)
 
 
 ##### Aruba
 
-- `vrf attach Customer` will be added to the port configuration that connects to the site.
-- This has to be applied before the `ip address` configuration.
+`vrf attach Customer` will be added to the port configuration that connects to the site. This has to be applied before the `ip address` configuration.
 
 ```
 sw-spine-001# conf t
@@ -61,8 +61,7 @@ sw-spine-002(config)# ip route 0.0.0.0/0 10.101.15.189 vrf Customer
 
 ##### Mellanox
 
-- `vrf forwarding Customer` will be added to the port config.  
-- This has to be applied before the `ip address` configuration.
+`vrf forwarding Customer` will be added to the port config. This has to be applied before the `ip address` configuration.
 
 ```
 sw-spine-001 [mlag-domain: master] # conf t
@@ -123,5 +122,4 @@ sw-spine-001 [standalone: master] # conf t
 
 ### Write memory
 
-- Save the configuration once the configuration is applied.
-  - [Saving Config](saving_config.md)
+Save the configuration once the configuration is applied. See [Saving Config](saving_config.md).
