@@ -69,7 +69,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 1. Then press enter on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console (**&** then **.**), and then use `ssh` to log in to the node to complete any remaining steps based on the node type.
 
-## Step 4 - Set the wipe flag to safeguard against the disk being wiped when the node is rebooted.
+### Step 4 - Set the wipe flag to safeguard against the disk being wiped when the node is rebooted.
 
 1. Run the following commands from a node that has cray cli initialized:
 
@@ -116,11 +116,17 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
     * The files should be identical
 
-### Step 5 - **For Storage nodes only**
+### Step 5 - Lock the management nodes
 
-     * Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added storage node to the Ceph cluster.
+Follow [How to Lock Management Nodes](../../../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#how-to-lock-management-nodes). The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware or CAPMC to power off or do a power reset. Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
 
-### Step 6 - Validate the node that was added by following the 
+### Step 6 - **For Storage nodes only**
+
+Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added storage node to the Ceph cluster.
+
+### Step 7 - Validate the  node
+
+Follow the validation steps in the section for the node type that was added:
 
 - [Worker node](Add_Worker_Node_Validation.md)
 - [Storage node](Add_Storage_Node_Validation.md)
