@@ -139,18 +139,26 @@ The `kubectl` command is installed.
 
         If there are BGP Peering sessions that are not ESTABLISHED on either switch, refer to [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
         
-    1. Check for components that have `failed` status in CFS.
-
-        If there are any components with that status, this command will list them:
-        ```bash
-        ncn-m001# cray cfs components list --status failed
-        ```
-
-        For any NCN components found, reset the error count to 0. Each component will also have to be disabled in CFS in order to not immediately trigger configuration. The components will be re-enabled when they reboot.
-        **NOTE:** Be sure to replace the `<xname>` in the following command with the xname of the NCN component to be reset and disabled.
-        ```bash
-        ncn-m001# cray cfs components update <xname> --error-count 0 --enabled false
-        ```
+1. Ensure that no nodes are in a `failed` state in CFS.
+    Nodes that are in a failed state prior to the reboot will not be automatically
+    configured once they have been rebooted.  To get a list of nodes in the failed state:
+   ```
+   ncn-m001# cray cfs components list --status failed | jq .[].id
+   ```
+   If there are any nodes in this list, they can be reset with:
+   ```
+   ncn-m001# cray cfs components update <xname> --enabled False --error-count 0
+   ```
+   Or, to reset the error count for all nodes:
+   ```
+   ncn-m001# cray cfs components list --status failed | jq .[].id -r | while read -r xname ; do
+       echo "$xname"
+       cray cfs components update $xname --enabled False --error-count 0
+   done
+   ```
+   This will leave the nodes in a disabled state in CFS.  CFS will automatically
+   re-enable them when they reboot, this is just so that CFS doesn't immediately
+   start retrying configuration against the failed node.
 
 ### NCN Rolling Reboot
 
