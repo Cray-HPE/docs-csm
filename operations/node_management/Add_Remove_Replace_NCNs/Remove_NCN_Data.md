@@ -20,8 +20,8 @@ ncn-mw# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
 ```
 
 1. Optional Setup
-Set the username and password to the BMC for the NCN. This step is optional. The NCN can be successfully be removed without this.
-Setting this enables the scripts to print the BMC's MAC address, which is information needed when the hardware is added back into the env
+    Set the username and password to the BMC for the NCN. This step is optional. The NCN can be successfully be removed without this.
+    Setting this enables the scripts to print the BMC's MAC address, which is information needed when the hardware is added back into the env
 ```
 ncn-mw# export IPMI_USERNAME=root
 ncn-mw# export IPMI_PASSWORD=changeme
