@@ -174,7 +174,18 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
   systemctl stop etcd.service
   ```
 
-### Step 7 - Remove Etcd data directory ***on the master node being removed***.
+### Step 7 - Add the node back into the etcd cluster
+
+  This will allow the node to rejoin the cluster automatically when it gets added back.
+
+  * The IP and hostname of the rebuilt node is needed for the following command.
+  * Replace the `<IP_ADDRESS>` address value with the IP address you noted in an earlier step from the `etcdctl` command.
+
+  ```bash
+  etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member add $NODE --peer-urls=https://<IP_ADDRESS>:2380
+  ```
+
+### Step 8 - Remove Etcd data directory ***on the master node being removed***.
 
   ```bash
   rm -rf /var/lib/etcd/*
