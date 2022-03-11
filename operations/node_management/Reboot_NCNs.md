@@ -48,57 +48,6 @@ The `kubectl` command is installed.
 
         **`NOTE`**: If the ncnHealthChecks script output indicates any `kube-multus-ds-` pods are in a `Terminating` state, that can indicate a previous restart of these pods did not complete. In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command. After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
 
-    1. Check the status of the Kubernetes nodes.
-
-        Ensure all Kubernetes nodes are in the Ready state.
-
-        ```bash
-        ncn-m001# kubectl get nodes
-        ```
-
-        **Troubleshooting:** If the node that was rebooted is in a Not Ready state, run the following command to get more information.
-
-        ```bash
-        ncn-m001# kubectl describe node NCN_HOSTNAME
-        ```
-
-        If that file is empty, run the following work-around to populate this file:
-
-        ```bash
-        ncn-m001# cp /srv/cray/resources/common/containerd/00-multus.conf \
-        /etc/cni/net.d/00-multus.conf
-        ncn-m001# cat /etc/cni/net.d/00-multus.conf
-        ```
-
-        Verify the worker or master node is now in a Ready state:
-
-        ```bash
-        ncn-m001# kubectl get nodes
-        ```
-
-    1. Check the status of the Kubernetes pods.
-
-        The bottom of the output returned after running the /opt/cray/platform-utils/ncnHealthChecks.sh script will show a list of pods that may be in a bad state. The following command can also be used to look for any pods that are not in a Running or Completed state:
-
-        ```bash
-        ncn-m001# kubectl get pods -o wide -A | grep -Ev 'Running|Completed'
-        ```
-
-        It is important to pay attention to that list, but it is equally important to note what pods are in that list before and after node reboots to determine if the reboot caused any new issues.
-
-        There are pods that may normally be in an Error, Not Ready, or Init state, and this may not indicate any problems caused by the NCN reboots. Error states can indicate that a job pod ran and ended in an Error. That means that there may be a problem with that job, but does not necessarily indicate that there is an overall health issue with the system. The key takeaway \(for health purposes\) is understanding the statuses of pods prior to doing an action like rebooting all of the NCNs. Comparing the pod statuses in between each NCN reboot will give a sense of what is new or different with respect to health.
-
-    1. Verify Ceph health (the command mentioned below can be run on any master or storage node).
-
-        This output is included in the /opt/cray/platform-utils/ncnHealthChecks.sh script
-
-        Run the following command during NCN reboots:
-
-        ```bash
-        ncn-m001# watch -n 10 'ceph -s'
-        ```
-
-        This window can be kept up throughout the reboot process to ensure Ceph remains healthy and to watch if Ceph goes into a WARN state when rebooting storage node.
 
     1. Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
 
@@ -131,9 +80,11 @@ The `kubectl` command is installed.
 
     1. Check that the BGP peering sessions are established.
 
-        This check will need to be run after all worker node have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the spine switches \(instructions will vary for Aruba and Mellanox switches\)
+        This check will need to be run after all worker node have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the spine switches 
 
-        If there are BGP Peering sessions that are not ESTABLISHED on either switch, refer to [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
+        ```
+        ncn-m001# SW_ADMIN_PASSWORD='SWITCH_PASSWROD' GOSS_BASE=/opt/cray/tests/install/ncn goss -g  /opt/cray/tests/install/ncn/tests/goss-switch-bgp-neighbor-aruba-or-mellanox.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+        ```
         
 1. Ensure that no nodes are in a `failed` state in CFS.
     Nodes that are in a failed state prior to the reboot will not be automatically
