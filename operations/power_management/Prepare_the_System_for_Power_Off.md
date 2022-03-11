@@ -16,7 +16,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
     1.  Obtain user ID and passwords for all the system management network switches. For example:
 
-        ```bash
+        ```text
         sw-leaf-001
         sw-leaf-002
         sw-spine-001.nmn

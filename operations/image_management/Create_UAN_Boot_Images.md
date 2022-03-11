@@ -436,7 +436,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         }
         ```
 
-        Alternatively, a manifest.json can be created from scratch. In that case, create a new hexadecimal value for the `etag` if the image referred to by the manifest does not already have one. The `etag` field cannot be left blank.
+        Alternatively, a `manifest.json` can be created from scratch. In that case, create a new hexadecimal value for the `etag` if the image referred to by the manifest does not already have one. The `etag` field cannot be left blank.
 
     17. Replace the path and md5 values of the initrd, kernel, and rootfs with the values obtained in substeps m and n.
 

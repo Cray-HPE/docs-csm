@@ -191,10 +191,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Quit the typescript session with the `exit` command, copy the file (csm-install-remoteis.<date>.txt) from its initial location to the newly created directory, and restart the typescript.
 
     ```bash
-    pit# mkdir -pv /mnt/pitdata/prep/admin
     pit# exit # The typescript
-    pit# cp ~/csm-install-remoteiso.*.txt /mnt/pitdata/prep/admin
-    pit# cd /mnt/pitdata/prep/admin
+    pit# cp -v ~/csm-install-remoteiso.*.txt /var/www/ephemeral/prep/admin
+    pit# cd /var/www/ephemeral/prep/admin
     pit# script -af $(ls -tr csm-install-remoteiso* | head -n 1)
     pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     pit# pushd /var/www/ephemeral
@@ -589,4 +588,3 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    * See [Configure Management Network Switches](index.md#configure_management_network)
 
-!vi

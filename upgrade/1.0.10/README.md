@@ -1,5 +1,9 @@
 # CSM 1.0.10 Patch Installation Instructions
 
+## Introduction
+
+This document is intended to guide an administrator through the process going to Cray Systems Management v1.0.10 from v1.0.1. If you are at an earlier version, you must first upgrade to at least v1.0.1. For information on how to do that, see [Upgrade CSM](../index.md).
+
 ## Steps
 
 1. [Preparation](#preparation)

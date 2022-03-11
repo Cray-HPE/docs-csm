@@ -1,5 +1,5 @@
 
-# Change SMNP Credentials on Leaf Switches
+# Change SNMP Credentials on Leaf Switches
 
 This procedure changes the SNMP credentials on management leaf switches in the system. Either a single leaf switch can be updated to use new SNMP credentials, or update all leaf switches in the system to use the same global SNMP credentials.
 

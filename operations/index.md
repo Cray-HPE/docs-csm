@@ -292,7 +292,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
      * [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
      * [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md)
      * [Change Air-Cooled Node BMC Credentials](security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md)
-     * [Change SMNP Credentials on Leaf Switches](security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md)
+     * [Change SMNP Credentials on Leaf Switches](security_and_authentication/Change_SNMP_Credentials_on_Leaf_Switches.md)
      * [Update Default ServerTech PDU Credentials used by the Redfish Translation Service](security_and_authentication/Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md)
      * [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
    * [SSH Keys](security_and_authentication/SSH_Keys.md)
@@ -595,7 +595,6 @@ External DNS, along with the Customer Access Network \(CAN\), Border Gateway Pro
 
   * [External DNS](network/external_dns/External_DNS.md)
   * [External DNS csi config init Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
-  * [Update the system-name.site-domain Value Post-Installation](network/external_dns/Update_the_system-name_site-domain_Value_Post-Installation.md)
   * [Update the can-external-dns Value Post-Installation](network/external_dns/Update_the_can-external-dns_Value_Post-Installation.md)
   * [Ingress Routing](network/external_dns/Ingress_Routing.md)
   * [Add NCNs and UANs to External DNS](network/external_dns/Add_NCNs_and_UANs_to_External_DNS.md)

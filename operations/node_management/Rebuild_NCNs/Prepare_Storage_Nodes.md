@@ -6,7 +6,7 @@ Prepare a storage node before rebuilding it.
 
 **IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed. For example, if this is a rebuild in place, then Ceph components will not be reporting down, in contrast to a failed node rebuild.
 
-## Prequisites
+## Prerequisites
 
 If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` has been removed from the `runcmd` in BSS.
 
