@@ -1,11 +1,13 @@
-# Metallb peering with arista edge router
+# MetalLB Peering with Arista Edge Router
 
-This is an example configuration of how to connect a pair of Arista switches to metallb running inside of kubernetes.
+This is an example configuration of how to connect a pair of Arista switches to MetalLB running inside of Kubernetes.
 
 ## Prerequisites
 
-- Pair of arista switches already connected to the high speed network.
-- Updated SLS file that has the `CHN` network configured.
+- Pair of Arista switches already connected to the high-speed network.
+- Updated System Layout Service (SLS) file that has the `CHN` network configured.
+
+## Example Configuration
 
 Below is a snippet from an upgraded SLS.
 
@@ -92,7 +94,7 @@ Below is a snippet from an upgraded SLS.
 
 In this example, `chn-switch-1` and `chn-switch-2` will be the Arista pair.
 
-SLS entries from the above output
+SLS entries from the above output:
 
 ```json
                 "IPAddress": "10.103.9.2",
@@ -103,13 +105,13 @@ SLS entries from the above output
                 "Name": "chn-switch-2"
 ```
 
-Below will be the config needed on both switches.
+The following config is needed on both switches:
 
 - The prefix list will be the subnet of the CHN, the `ge` will equal the cidr.
   - This prevents routes from other networks being installed into the routing table.
 
-- `router bgp 65533` will match the ASN from sls.`"MyASN": 65533,`
-- the `neighbor` will match every worker node.
+- `router bgp 65533` will match the ASN from SLS.`"MyASN": 65533,`
+- The `neighbor` will match every worker node.
 
 ```text
 ip prefix-list CHN seq 10 permit 10.103.9.64/27 ge 27
