@@ -27,7 +27,7 @@ mkdir -p /etc/cray/upgrade/csm/$CSM_RELEASE
 
 function record_state () {
     state_name=$1
-    upgrade_ncn=$2
+    local upgrade_ncn=$2
 
     mkdir -p /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn
 
@@ -47,7 +47,7 @@ function record_state () {
 
 function is_state_recorded () {
     state_name=$1
-    upgrade_ncn=$2
+    local upgrade_ncn=$2
     mkdir -p /etc/cray/upgrade/csm/$CSM_RELEASE/$upgrade_ncn
     if [[ -z ${state_name} ]]; then
         echo "state name is not specified"
