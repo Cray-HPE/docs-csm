@@ -91,6 +91,15 @@ function wait_for_running_pods() {
     current_running_num=$(kubectl get po -n $ns | grep $etcd_cluster | grep Running | wc -l)
     if [[ "$desired_size" -eq "$current_running_num" ]]; then
       echo "Found $desired_size running pods in $etcd_cluster etcd cluster"
+      while true; do
+        operator_num_ready=$(kubectl get etcd $etcd_cluster -n $ns -o jsonpath='{.status.members.ready}' | jq .[] | wc -l)
+        if [[ "$desired_size" -eq "$operator_num_ready" ]]; then
+          echo "Found $desired_size ready members in $etcd_cluster etcd cluster"
+          break
+        fi
+        echo "Sleeping for ten seconds waiting for $desired_size ready members $etcd_cluster etcd cluster"
+        sleep 10
+      done
       break
     fi
     echo "Sleeping for ten seconds waiting for $desired_size pods in $etcd_cluster etcd cluster"
