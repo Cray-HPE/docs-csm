@@ -51,10 +51,15 @@ class Logger:
     def __init__(self):
         self.log_file = None
 
-    def init_logger(self, log_file):
+    def init_logger(self, log_file, verbose=False):
         self.log_file = log_file
         if log_file:
-            logging.basicConfig(filename=log_file, filemode='w', level=logging.INFO, format='%(levelname)s: %(message)s')
+            if verbose:
+                logging.basicConfig(filename=log_file, filemode='w', level=logging.DEBUG,
+                                    format='%(levelname)s: %(message)s')
+            else:
+                logging.basicConfig(filename=log_file, filemode='w', level=logging.INFO,
+                                    format='%(levelname)s: %(message)s')
             # encoding arg is not in python 3.6.15
             # logging.basicConfig(filename=log_file, filemode='w', encoding='utf-8', level=logging.INFO, format='%(levelname)s: %(message)s')
 
@@ -78,7 +83,7 @@ log = Logger()
 
 
 class State:
-    def __init__(self, xname=None, directory=None, dry_run=False):
+    def __init__(self, xname=None, directory=None, dry_run=False, verbose=False):
         self.xname = xname
         self.parent = None
         self.ncn_name = ""
@@ -88,6 +93,10 @@ class State:
         self.workers = set()
         self.remove_ips = True
         self.ifnames = []
+        self.bmc_mac = None
+        self.verbose = verbose
+        self.ipmi_username = None
+        self.ipmi_password = None
 
         if directory and xname:
             self.directory = os.path.join(directory, xname)
@@ -127,12 +136,13 @@ class State:
 
 
 class CommandAction:
-    def __init__(self, command):
+    def __init__(self, command, verbose=False):
         self.command = command
         self.has_run = False
         self.return_code = -1
         self.stdout = None
         self.stderr = None
+        self.verbose = verbose
 
 
 def setup_urls(args):
@@ -178,12 +188,14 @@ def print_urls():
     log.info(f'KEA_URL: {KEA_URL}')
 
 
-def print_final_result(state):
-    log.info('Results:')
-    log.info(f'Logs: {state.directory}')
-    log.info(f'ifnames: {state.ifnames}')
-    log.info(f'xname: {state.xname}')
-    log.info(f'ncn_name: {state.ncn_name}')
+def print_summary(state):
+    log.info('Summary:')
+    log.info(f'    Logs: {state.directory}')
+    log.info(f'    xname: {state.xname}')
+    log.info(f'    ncn_name: {state.ncn_name}')
+    log.info(f'    ncn_macs:')
+    log.info(f'        ifnames: {", ".join(state.ifnames)}')
+    log.info(f'        bmc_mac: {state.bmc_mac if state.bmc_mac else "Unknown"}')
 
 
 def print_action(action):
@@ -214,6 +226,10 @@ def print_command_action(action):
             log.error(f'         Failed: {action.return_code}')
             log.info(f'         stdout:\n{action.stdout}')
             log.info(f'         stderr:\n{action.stderr}')
+        elif action.verbose:
+            log.info(f'         stdout:\n{action.stdout}')
+            if action.stderr:
+                log.info(f'         stderr:\n{action.stderr}')
     else:
         log.info(f'Planned: {" ".join(action.command)}')
 
@@ -642,6 +658,44 @@ def create_update_etc_hosts_actions(state):
     return command_actions
 
 
+def create_ipmitool_actions(state):
+    command_actions = []
+    if state.ncn_name and state.ipmi_password and state.ipmi_username:
+        mc_info_action = CommandAction([
+            'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
+            'mc', 'info'],
+            verbose=state.verbose)
+        command_actions.append(mc_info_action)
+        run_command_action(mc_info_action)
+        lan = '1'
+        if mc_info_action.stdout:
+            manufacturer_lines = [line for line in mc_info_action.stdout.split('\n') if 'manufacturer name' in line.lower()]
+            for line in manufacturer_lines:
+                if 'intel' in line.lower():
+                    lan = '3'
+        mac_action = CommandAction([
+            'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
+            'lan', 'print', lan],
+            verbose=state.verbose)
+        command_actions.append(mac_action)
+        run_command_action(mac_action)
+        if mac_action.return_code == 0 and mac_action.stdout:
+            mac_lines = [line for line in mac_action.stdout.split('\n') if 'mac address' in line.lower()]
+            for line in mac_lines:
+                key_value = line.split(':', 1)
+                if len(key_value) == 2:
+                    state.bmc_mac = key_value[1].strip()
+    elif state.ncn_name:
+        # ncn_name
+        log.info('Not running the ipmitool. This will not affect the successful removal of the ncn.')
+        if not state.ipmi_username:
+            log.info(f'         Environment variable IPMI_USERNAME was not set. The ipmitool requires this.')
+        if not state.ipmi_password:
+            log.info(f'         Environment variable IPMI_PASSWORD was not set. The ipmitool requires this.')
+
+    return command_actions
+
+
 def is_2xx(http_status):
     return http_status // 200 == 1
 
@@ -684,6 +738,7 @@ def main(argv):
     parser.add_argument('--dry-run', action='store_true', help='Do a dry run where nothing is modified')
     parser.add_argument('--log-dir', '-l', default='/tmp/remove_management_ncn',
                         help='Directory where to log and save current state.')
+    parser.add_argument("-v", action="store_true", help="Print verbose output")
 
     # hidden arguments used for testing
     parser.add_argument('--base-url', help=argparse.SUPPRESS)  # Base url.
@@ -697,8 +752,8 @@ def main(argv):
 
     args = parser.parse_args()
 
-    state = State(xname=args.xname, directory=args.log_dir, dry_run=args.dry_run)
-    log.init_logger(os.path.join(state.directory, 'log'))
+    state = State(xname=args.xname, directory=args.log_dir, dry_run=args.dry_run, verbose=args.v)
+    log.init_logger(os.path.join(state.directory, 'log'), verbose=state.verbose)
 
     setup_urls(args)
     print_urls()
@@ -721,6 +776,9 @@ def main(argv):
             sys.exit(1)
 
         session.headers.update({'Content-Type': 'application/json'})
+
+        state.ipmi_username = os.environ.get('IPMI_USERNAME')
+        state.ipmi_password = os.environ.get('IPMI_PASSWORD')
 
         sls_actions = create_sls_actions(session, state)
         print_actions(sls_actions)
@@ -745,7 +803,13 @@ def main(argv):
             etc_hosts_actions = create_update_etc_hosts_actions(state)
             print_command_actions(etc_hosts_actions)
 
+        ipmitool_actions = create_ipmitool_actions(state)
+        print_command_actions(ipmitool_actions)
+
         check_for_running_pods_on_ncn(state)
+
+        log.info('')
+        print_summary(state)
 
         if not args.dry_run:
             if not args.force:
@@ -771,8 +835,9 @@ def main(argv):
 
             run_command_actions(etc_hosts_actions)
 
-        log.info('')
-        print_final_result(state)
+            log.info('')
+            print_summary(state)
+
         if not args.dry_run:
             log.info('')
             log.info(f'Successfully removed {state.xname} - {state.ncn_name}')
