@@ -31,7 +31,6 @@ import requests
 import subprocess
 import sys
 import urllib3
-import yaml
 import collections
 
 BASE_URL = ''
@@ -156,8 +155,9 @@ class Ncns:
 
 
 class State:
-    def __init__(self, xname=None):
+    def __init__(self, xname=None, verbose=False):
         self.xname = xname
+        self.verbose = verbose
         self.parent = None
         self.ncn_name = ""
         self.aliases = set()
@@ -167,6 +167,9 @@ class State:
         self.remove_ips = True
         self.ncns = Ncns()
         self.components = collections.OrderedDict()
+        self.ipmi_password = None
+        self.ipmi_username = None
+        self.bmc_mac = None
 
     def add_ip_reservation(self, ip, name, aliases):
         self.ip_reservation_ips.add(ip)
@@ -222,16 +225,30 @@ class State:
                 lines.append(f'{asked_for_component.xname}:')
                 lines.append(asked_for_component.to_str(indent=4))
 
+                # The following info is needed by add_management_ncn.py when adding the given hardware as an ncn
+                lines.append('ncn_macs:')
+                lines.append(f'    ifnames: {", ".join(asked_for_component.ifnames)}')
+                if self.ipmi_password and self.ipmi_username:
+                    if self.bmc_mac:
+                        lines.append(f'    bmc_mac: {self.bmc_mac}')
+                    else:
+                        lines.append('    bmc_mac: Unknown. something unexpected happened running ipmitool. ' +
+                                     'Rerun ncn_sts.py with the option -v')
+                else:
+                    lines.append('    bmc_mac: # Unknown. To get this value set the environment variables: ' +
+                                 'IPMI_USERNAME, IPMI_PASSWORD with the correct values for the BMC')
+
         return '\n'.join(lines)
 
 
 class CommandAction:
-    def __init__(self, command):
+    def __init__(self, command, verbose=False):
         self.command = command
         self.has_run = False
         self.return_code = -1
         self.stdout = None
         self.stderr = None
+        self.verbose = verbose
 
 
 def setup_urls(args):
@@ -305,6 +322,11 @@ def print_command_action(action):
             log.error(f'         Failed: {action.return_code}')
             log.info(f'         stdout:\n{action.stdout}')
             log.info(f'         stderr:\n{action.stderr}')
+        elif action.verbose:
+            log.info(f'         stdout:\n{action.stdout}')
+            if action.stderr:
+                log.info(f'         stderr:\n{action.stderr}')
+
     else:
         log.debug(f'Planned: {" ".join(action.command)}')
 
@@ -362,17 +384,6 @@ def node_bmc_to_enclosure(xname_for_bmc):
         enclosure = re.sub(p, r'\1e\3', xname_for_bmc)
         return enclosure
     return None
-
-
-def add_delete_action_if_component_present(actions, state, session, url, save_file):
-    action = http_get(session, actions, url, exit_on_error=False)
-    if action.get('success'):
-        pass
-        # actions.append(action_create('delete', url))
-    not_found = action.get('response').status_code == http.HTTPStatus.NOT_FOUND
-    if not_found:
-        action['success'] = True
-        action_log(action, 'The item does not need to be deleted, because it does not exist.')
 
 
 def create_sls_actions(session, state):
@@ -613,21 +624,8 @@ def create_bss_actions(session, state):
     return actions
 
 
-def create_kea_actions(session, state):
-    actions = []
-
-    for ip in sorted(state.ip_reservation_ips):
-        pass
-        # todo do lease4-get instead
-        # request_body = '{"command": "lease4-del", "service": [ "dhcp4" ], "arguments": {"ip-address": "' + ip + '"}}'
-        # action = action_create('post', f'{KEA_URL}', request_body=request_body)
-        # actions.append(action)
-        # action_log(action, f'Request body: {request_body}')
-
-    return actions
-
-
 def run_command(command):
+    log.debug(f'Running: {" ".join(command)}')
     cmd = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     result = cmd.communicate()
     stdout = None if not result[0] else result[0].decode('utf-8')
@@ -677,33 +675,46 @@ def check_for_running_pods_on_ncn(state):
                     sys.exit(1)
             else:
                 log.warning(
-                    f'Warning: Could not determine if {alias} is running services. Command did not return the expected json')
+                    f'Warning: Could not determine if {alias} is running services. ' +
+                    'Command did not return the expected json')
         else:
             log.warning(f'Warning: Could not determine if {alias} is running services. Command returned no output.')
 
 
-def create_restart_bss_actions():
-    return [
-        CommandAction(['kubectl', '-n', 'services', 'rollout', 'restart', 'deployment', 'cray-bss']),
-        CommandAction(['kubectl', '-n', 'services', 'rollout', 'status', 'deployment', 'cray-bss']),
-    ]
-
-
-def create_update_etc_hosts_actions(state):
+def create_ipmitool_actions(state):
     command_actions = []
-
-    if state.remove_ips:
-        sorted_workers = sorted(state.workers)
-
-        # hosts = ','.join(sorted_workers)
-        # cp_backup_action = CommandAction(['pdsh', '-w', hosts,
-        #                                   'cp', '/etc/hosts', f'/tmp/hosts.backup.{state.xname}.{state.ncn_name}'])
-        # command_actions.append(cp_backup_action)
-
-        # for ip in sorted(state.ip_reservation_ips):
-        #     sed_action = CommandAction(['pdsh', '-w', hosts,
-        #                                 'sed', '-i', f'/^{ip}/d', f'/etc/hosts'])
-        #     command_actions.append(sed_action)
+    if state.ncn_name and state.ipmi_password and state.ipmi_username:
+        mc_info_action = CommandAction([
+            'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
+            'mc', 'info'],
+             verbose=state.verbose)
+        command_actions.append(mc_info_action)
+        run_command_action(mc_info_action)
+        lan = '1'
+        if mc_info_action.stdout:
+            manufacturer_lines = [line for line in mc_info_action.stdout.split('\n') if 'manufacturer name' in line.lower()]
+            for line in manufacturer_lines:
+                if 'intel' in line.lower():
+                    lan = '3'
+        mac_action = CommandAction([
+            'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
+            'lan', 'print', lan],
+            verbose=state.verbose)
+        command_actions.append(mac_action)
+        run_command_action(mac_action)
+        if mac_action.return_code == 0 and mac_action.stdout:
+            mac_lines = [line for line in mac_action.stdout.split('\n') if 'mac address' in line.lower()]
+            for line in mac_lines:
+                key_value = line.split(':', 1)
+                if len(key_value) == 2:
+                    state.bmc_mac = key_value[1].strip()
+    elif state.ncn_name:
+        # a specific ncn was requested and found, but the ipmi password and username were not set.
+        log.debug(f'Not running the ipmitool. This command supplies the bmc_mac information.')
+        if not state.ipmi_username:
+            log.debug(f'         Environment variable IPMI_USERNAME was not set. The ipmitool requires this.')
+        if not state.ipmi_password:
+            log.debug(f'         Environment variable IPMI_PASSWORD was not set. The ipmitool requires this.')
 
     return command_actions
 
@@ -763,7 +774,7 @@ def main(argv):
         print('Bad arguments: Must have specify either --all or --xname')
         sys.exit(1)
 
-    state = State(xname=args.xname)
+    state = State(xname=args.xname, verbose=args.v)
     setup_urls(args)
     print_urls()
 
@@ -783,7 +794,11 @@ def main(argv):
     | jq -r '.access_token')
                 ''')
             sys.exit(1)
+
         session.headers.update({'Content-Type': 'application/json'})
+
+        state.ipmi_username = os.environ.get('IPMI_USERNAME')
+        state.ipmi_password = os.environ.get('IPMI_PASSWORD')
 
         sls_actions = create_sls_actions(session, state)
         print_actions(sls_actions)
@@ -794,23 +809,9 @@ def main(argv):
         bss_actions = create_bss_actions(session, state)
         print_actions(bss_actions)
 
-        kea_actions = create_kea_actions(session, state)
-        print_actions(kea_actions)
+        ipmitool_actions = create_ipmitool_actions(state)
+        print_command_actions(ipmitool_actions)
 
-        restart_bss_actions = create_restart_bss_actions()
-        print_command_actions(restart_bss_actions)
-
-        etc_hosts_actions = create_update_etc_hosts_actions(state)
-        print_command_actions(etc_hosts_actions)
-
-        # d = state.to_dict()
-        # log.info('-----------')
-        # log.info(json.dumps(dict(d), indent=2))
-
-        # log.info('-----------')
-        # log.info(yaml.safe_dump(dict(d), default_flow_style=False, indent=4, sort_keys=False))
-
-        # log.info('-----------')
         log.info(state.to_str(args))
 
 
