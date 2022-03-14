@@ -692,7 +692,6 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Verify the system:
 
    ```bash
-   pit# csi pit validate --network
    pit# csi pit validate --services
    ```
 
