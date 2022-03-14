@@ -11,7 +11,7 @@ Run `csm-upgrade.sh` to deploy upgraded CSM applications and services:
 ```bash
 ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/csm-upgrade.sh
 ```
-## Update the CSM configuration management repository
+## Update the CSM Configuration Management Repository
 
 1. Obtain the VCS login credentials.
 
