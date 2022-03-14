@@ -566,7 +566,6 @@ Finally, cleanup the shim:
 1. Verify the system:
 
    ```bash
-   pit# csi pit validate --network
    pit# csi pit validate --services
    ```
 
