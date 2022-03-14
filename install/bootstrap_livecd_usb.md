@@ -689,14 +689,6 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit:/var/www/ephemeral# cd
    ```
 
-1. Verify the system:
-
-   ```bash
-   pit# csi pit validate --services
-   ```
-
-1. Follow directions in the output from the 'csi pit validate' commands for failed validations before continuing.
-
 <a name="next-topic"></a>
 # Next Topic
 
