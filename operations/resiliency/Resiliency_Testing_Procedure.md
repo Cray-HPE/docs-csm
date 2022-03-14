@@ -20,7 +20,7 @@ It is assumed that some procedures are already known by admins and thus does not
 
 * Confirm the component name (xname) mapping for each node on the system. This get dumped out by execution of the `/opt/cray/platform-utils/ncnGetXnames.sh` script.
 
-* Verify that `metal.no-wipe=1` is set for each of the NCNs via ouptput from running the `ncnGetXnames.sh` script.
+* Verify that `metal.no-wipe=1` is set for each of the NCNs using output from running the `ncnGetXnames.sh` script.
 
 * Ensure the user account in use is an authorized user on the Cray CLI.
   
@@ -146,7 +146,7 @@ In order to keep watch on various items during and after the fault has been intr
 
 1. Detect the change in state of the various Postgres instances running.
    
-   Run the following in a seperate window:
+   Run the following in a separate window:
 
    ```bash
    ncn# watch -n 30 "date; kubectl get postgresql -A"

@@ -82,7 +82,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
 
     Specify the desired default RTS Redfish interface credentials:
     ```bash
-    ncn-m001# echo '{"Username":"root", "Password":"supersecert"}' | base64 > rts.redfish.creds.json.b64
+    ncn-m001# echo '{"Username":"root", "Password":"supersecret"}' | base64 > rts.redfish.creds.json.b64
     ```
 
 
@@ -118,7 +118,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     ncn-m001# ./utils/secrets-decrypt.sh cray_hms_rts_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_rts_defaults -r | base64 -d | jq
     {
       "Username": "root",
-      "Password": "supersecert"
+      "Password": "supersecret"
     }
     ```
 
