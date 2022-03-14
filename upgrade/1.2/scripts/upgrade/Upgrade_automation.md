@@ -13,4 +13,4 @@ Detailed implementation of how each type of node is being upgraded.
 >
 > Depends on the type of node, we have to deal with backup/restore/health check differently. So each type of ncn has its own script for special handling
 ## CSM Services Upgrade
-Everything we do after storage/k8s nodes are upgraded. The most important part here is to deploy new charts but we also have other actions depends on a particular upgrade here. For example, kafka cluster might need some extra logic to upgrade which can't be done within helm chart, we will put such logic here and run it before charts upgrade.
+Everything we do after storage/k8s nodes are upgraded. The most important part here is to deploy new charts but we also have other actions depends on a particular upgrade here. For example, kafka cluster might need some extra logic to upgrade which cannot be done within helm chart, we will put such logic here and run it before charts upgrade.

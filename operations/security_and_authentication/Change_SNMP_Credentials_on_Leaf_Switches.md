@@ -1,5 +1,5 @@
 
-# Change SMNP Credentials on Leaf Switches
+# Change SNMP Credentials on Leaf Switches
 
 This procedure changes the SNMP credentials on management leaf switches in the system. All SNMP credentials need to be the same as those found in the customizations.yaml sealed secret cray_reds_credentials.
 
@@ -11,9 +11,9 @@ This procedure changes the SNMP credentials on management leaf switches in the s
 
 ## Procedure
 
-There are three steps involved. The first two steps involve running the *leaf_switch_snmp_creds.sh* script. This script can be used to check for undesireable SNMP user IDs/creds, and also to set new ones. The default behavior is to check first and then set new creds. The script can be run either interactively (no env vars or command line options) or non-interactively (using env vars on the command line). The following examples use the env var method.
+There are three steps involved. The first two steps involve running the *leaf_switch_snmp_creds.sh* script. This script can be used to check for undesirable SNMP user IDs/creds, and also to set new ones. The default behavior is to check first and then set new creds. The script can be run either interactively (no env vars or command line options) or non-interactively (using env vars on the command line). The following examples use the env var method.
 
-1. (Optional) Check if undesireable SNMP user IDs/creds are present on leaf switches.
+1. (Optional) Check if undesirable SNMP user IDs/creds are present on leaf switches.
 
    ```bash
    ncn-m001# SNMPDELUSER=<OLDID> SNMPMGMTPW=<MGMTPW> \

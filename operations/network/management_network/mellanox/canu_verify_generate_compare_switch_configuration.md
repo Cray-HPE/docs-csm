@@ -13,7 +13,7 @@ canu --shasta 1.4 switch firmware --ip 192.168.1.1 --username USERNAME --passwor
 
 ### Check Firmware of Multiple Switches
 
-Multiple Aruba switches on a network can be checked for their firmware versions. The IPv4 addresses of the switches can either be entered comma separated, or be read from a file. To enter a comma separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
+Multiple Aruba switches on a network can be checked for their firmware versions. The IPv4 addresses of the switches can either be entered comma-separated, or be read from a file. To enter a comma-separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
 
 An example of checking the firmware of multiple switches: 
 
@@ -124,7 +124,7 @@ Entries in the table will be colored based on what they are. For example: Neighb
 
 ### Check Cabling of Multiple Switches
 
-The cabling of multiple Aruba switches on a network can be checked at the same time using LLDP. The IPv4 addresses of the switches can either be entered comma separated, or be read from a file. To enter a comma separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
+The cabling of multiple Aruba switches on a network can be checked at the same time using LLDP. The IPv4 addresses of the switches can either be entered comma-separated, or be read from a file. To enter a comma-separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
 
 An example of checking the cabling of multiple switches: 
 
@@ -202,7 +202,7 @@ CANU can be used to validate that network cabling passes basic validation checks
 
 The `--architecture / -a` flag is used to set the architecture of the system, either **TDS**, or **Full**.
 
-To enter a comma separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
+To enter a comma-separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
 
 To validate the cabling run: 
 
@@ -256,7 +256,7 @@ Use the `--tabs` flag to select which tabs on the spreadsheet will be included.
 
 The `--corners` flag is used to input the upper left and lower right corners of the table on each tab of the worksheet. The table should contain the 11 headers: **Source, Rack, Location, Slot, (Blank), Port, Destination, Rack, Location, (Blank), Port**. If the corners are not specified, you will be prompted to enter them for each tab.
 
-To enter a comma separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
+To enter a comma-separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
 
 To validate an SHCD against the cabling run: 
 
@@ -341,7 +341,7 @@ The output of the `validate shcd-cabling` command will show the results for `val
 
 CANU can be used to validate BGP neighbors. All neighbors of a switch must return status **Established** or the verification will fail.
 
-To enter a comma separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
+To enter a comma-separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
 
 The default **asn** is set to _65533_ if it needs to be changed, use the flag `--asn NEW_ASN_NUMBER` to set the new number
 

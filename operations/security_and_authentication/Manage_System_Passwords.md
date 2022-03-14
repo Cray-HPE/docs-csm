@@ -302,7 +302,7 @@ To adjust the SNMP credentials, perform the following tasks:
 
 2. Update the credentials actively being used for existing leaf switches.
    
-   * See [Change SNMP Credentials on Leaf Switches](Change_SMNP_Credentials_on_Leaf_Switches.md)
+   * See [Change SNMP Credentials on Leaf Switches](Change_SNMP_Credentials_on_Leaf_Switches.md)
 
 
 
@@ -310,7 +310,7 @@ To adjust the SNMP credentials, perform the following tasks:
 
 Change the global default credential on HPE Cray EX liquid-cooled cabinet embedded controllers (BMCs). The chassis management module (CMM) controller (cC), node controller (nC), and Slingshot switch controller (sC) are generically referred to as "BMCs" in these procedures.
 
-* See [Change EX Liquid-Cooled Cabinet Global Defualt Password](Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
+* See [Change EX Liquid-Cooled Cabinet Global Default Password](Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
 
 Provision a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish default global credential to access the CMM controllers and node controllers (BMCs).
 

@@ -1,6 +1,6 @@
 ## Build NCN Images Locally
 
-Build and test NCN images locally by using the following procedure. This prodecure can be done on any x86 machine with the following prerequisites.
+Build and test NCN images locally by using the following procedure. This procedure can be done on any x86 machine with the following prerequisites.
 
 ### Necessary Software
 

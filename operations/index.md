@@ -5,7 +5,8 @@ The Cray System Management (CSM) operational activities are administrative proce
 The following administrative topics can be found in this guide:
 
 - [Cray System Management (CSM) Administration Guide](#cray-system-management-csm-administration-guide)
-    - [CSM Product Management](#csm-product-management)
+  - [CSM Product Management](#csm-product-management)
+  - [Pre-Install](#pre-install)
   - [Image Management](#image-management)
   - [Boot Orchestration](#boot-orchestration)
   - [System Power Off Procedures](#system-power-off-procedures)
@@ -39,7 +40,7 @@ The following administrative topics can be found in this guide:
 
 <a name="csm-product-management"></a>
 
-### CSM Product Management
+## CSM Product Management
 
    * [Validate CSM Health](validate_csm_health.md)
    * [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
@@ -50,6 +51,16 @@ The following administrative topics can be found in this guide:
    * [Access the LiveCD USB Device After Reboot](Access_LiveCD_USB_Device_After_Reboot.md)
    * [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
    * [Validate Signed RPMs](CSM_product_management/Validate_Signed_RPMs.md)
+
+<a name="pre-install"></a>
+
+## Pre-Install
+
+General information on what needs to be done before the initial install of CSM.
+
+   * [Pre-Install Steps](preinstall/Preinstall.md)
+   * [Change Air-Cooled BMC Credentials](preinstall/Change_River_BMC_Credentials.md)
+   * [Change ServerTech PDU Credentials](preinstall/Change_ServerTech_PDU_Credentials.md)
 
 <a name="image-management"></a>
 
@@ -290,7 +301,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
      * [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
      * [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md)
      * [Change Air-Cooled Node BMC Credentials](security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md)
-     * [Change SMNP Credentials on Leaf-BMC Switches](security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md)
+     * [Change SNMP Credentials on Leaf-BMC Switches](security_and_authentication/Change_SNMP_Credentials_on_Leaf_Switches.md)
      * [Update Default ServerTech PDU Credentials used by the Redfish Translation Service](security_and_authentication/Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md)
      * [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
      * [Add Root Service Account for Gigabyte Controllers](security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md)
@@ -298,6 +309,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
    * [Authenticate an Account with the Command Line](security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md)
    * [Default Keycloak Realms, Accounts, and Clients](security_and_authentication/Default_Keycloak_Realms_Accounts_and_Clients.md)
        * [Certificate Types](security_and_authentication/Certificate_Types.md)
+       * [Change Keycloak Token Lifetime](security_and_authentication/Change_Keycloak_Token_Lifetime.md)
        * [Change the Keycloak Admin Password](security_and_authentication/Change_the_Keycloak_Admin_Password.md)
        * [Create a Service Account in Keycloak](security_and_authentication/Create_a_Service_Account_in_Keycloak.md)
        * [Retrieve the Client Secret for Service Accounts](security_and_authentication/Retrieve_the_Client_Secret_for_Service_Accounts.md)
@@ -515,8 +527,8 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs.md)
   * [Change Settings for HMS Collector Polling of Air Cooled Nodes](node_management/Change_Settings_for_HMS_Collector_Polling_of_Air_Cooled_Nodes.md)
   * [Use the Physical KVM](node_management/Use_the_Physical_KVM.md)
-  * [Launch a Virtual KVM on Gigabyte Nodes](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Nodess.md)
-  * [Launch a Virtual KVM on Intel Nodes](node_management/Launch_a_Virtual_KVM_on_Intel_Nodess.md)
+  * [Launch a Virtual KVM on Gigabyte Nodes](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Nodes.md)
+  * [Launch a Virtual KVM on Intel Nodes](node_management/Launch_a_Virtual_KVM_on_Intel_Nodes.md)
   * [Change Java Security Settings](node_management/Change_Java_Security_Settings.md)
   * [Configuration of NCN Bonding](node_management/Configuration_of_NCN_Bonding.md)
     * [Change Settings in the Bond](node_management/Change_Settings_in_the_Bond.md)
@@ -602,7 +614,6 @@ External DNS, along with the Customer Access Network \(CAN\), Border Gateway Pro
 
   * [External DNS](network/external_dns/External_DNS.md)
   * [External DNS csi config init Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
-  * [Update the system-name.site-domain Value Post-Installation](network/external_dns/Update_the_system-name_site-domain_Value_Post-Installation.md)
   * [Update the cmn-external-dns Value Post-Installation](network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md)
   * [Ingress Routing](network/external_dns/Ingress_Routing.md)
   * [Add NCNs and UANs to External DNS](network/external_dns/Add_NCNs_and_UANs_to_External_DNS.md)

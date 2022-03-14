@@ -504,7 +504,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         }
         ```
 
-        Alternatively, a mainfest.json can be created from scratch.
+        Alternatively, a `manifest.json` can be created from scratch.
 
     18. Replace the path, md5, and etag values of the initrd, kernel, and rootfs with the values obtained in substeps above.
 

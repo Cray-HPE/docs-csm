@@ -115,7 +115,7 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
      * The secret is mounted on the directory `/etc/sssd` not the file `/etc/sssd/sssd.conf` because Kubernetes does not permit the replacement of an existing regular file with a volume but does allow overriding a directory
      * The value `384` is used here for the default mode of the file instead of `0600`, which would be easier to read, because JSON does not accept octal numbers in the leading zero form
 
-4. Make a volume to hold an empty and writeable `/etc/sssd/conf.d` in the Broker UAI:
+4. Make a volume to hold an empty and writable `/etc/sssd/conf.d` in the Broker UAI:
 
    ```
    ncn-m001# cray uas admin config volumes create --mount-path /etc/sssd/conf.d --volume-description '{"empty_dir": {"medium": "Memory"}}' --volumename sssd-conf-d --format yaml

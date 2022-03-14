@@ -27,7 +27,7 @@ mkdir -p /etc/cray/upgrade/csm/$CSM_RELEASE
 
 function record_state () {
     state_name=$1
-    target_ncn=$2
+    local target_ncn=$2
 
     mkdir -p /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn
 
@@ -47,7 +47,7 @@ function record_state () {
 
 function is_state_recorded () {
     state_name=$1
-    target_ncn=$2
+    local target_ncn=$2
     mkdir -p /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn
     if [[ -z ${state_name} ]]; then
         echo "state name is not specified"
@@ -67,9 +67,9 @@ function is_state_recorded () {
 
 function move_state_file () {
     # we only rename the state file
-    # this won't block another upgrade/rebuild/reboot
+    # this will not block another upgrade/rebuild/reboot
     # it also leaves a trace of what happened before
-    target_ncn=$1
+    local target_ncn=$1
     mv /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/state /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/state.bak
 }
 

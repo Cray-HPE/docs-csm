@@ -1,6 +1,6 @@
 # Multiple spanning tree protocol (MSTP)
 
-MSTP (802.1s) ensures that only one active path exists between any two nodes in a spanning-tree instance. A spanning- tree instance comprises a unique set of VLANs. MSTP instances significantly improve network resource utilization while maintaining a loop-free environment.
+MSTP (802.1s) ensures that only one active path exists between any two nodes in a spanning-tree instance. A spanning-tree instance comprises a unique set of VLANs. MSTP instances significantly improve network resource utilization while maintaining a loop-free environment.
 
 Relevant Configuration
 

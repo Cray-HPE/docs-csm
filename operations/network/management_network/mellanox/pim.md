@@ -10,7 +10,7 @@ Enable PIM protocol
 switch(config)# router pim
 ```
 
-Configuring static address of rendevouz point for multicast group:   
+Configuring static address of rendezvous point for multicast group:   
 
 ```
 switch (config) # ip pim rp-address 10.10.10.10

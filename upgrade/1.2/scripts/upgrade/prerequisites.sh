@@ -24,9 +24,9 @@
 #
 
 set -e
-basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-. ${basedir}/../common/upgrade-state.sh
-. ${basedir}/../common/ncn-common.sh $(hostname)
+locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+. ${locOfScript}/../common/upgrade-state.sh
+. ${locOfScript}/../common/ncn-common.sh $(hostname)
 trap 'err_report' ERR
 # array for paths to unmount after chrooting images
 declare -a UNMOUNTS=()
@@ -228,7 +228,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
     kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
     set +o pipefail
-    . ${basedir}/util/update-customizations.sh -i ${SITE_INIT_DIR}/customizations.yaml
+    . ${locOfScript}/util/update-customizations.sh -i ${SITE_INIT_DIR}/customizations.yaml
     yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
     yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
     yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
@@ -436,7 +436,7 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-${basedir}/../cps/snapshot-cps-deployment.sh
+${locOfScript}/../cps/snapshot-cps-deployment.sh
 
 state_name="ADD_MTL_ROUTES"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
@@ -452,10 +452,12 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     SUBNET=$(cray sls networks describe MTL --format json | \
         jq -r '.ExtraProperties.Subnets[]|select(.FullName=="MTL Management Network Infrastructure")|.CIDR')
     DEVICE="vlan002"
+    set +e
     ip addr show | grep $DEVICE
     if [[ $? -ne 0 ]]; then
         DEVICE="bond0.nmn0"
     fi
+    set -e
     pdsh -w $HOSTS ip route add $SUBNET via $GATEWAY dev $DEVICE
     Rcount=$(pdsh -w $HOSTS ip route show | grep $SUBNET | wc -l)
     pdsh -w $HOSTS ip route show | grep $SUBNET
@@ -490,7 +492,16 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     
     cray bss bootparameters list --format=json > bss-backup-$(date +%Y-%m-%d).json
-    cray artifacts create vbis bss-backup-$(date +%Y-%m-%d).json bss-backup-$(date +%Y-%m-%d).json
+
+    backupBucket="config-data"
+    set +e
+    cray artifacts list config-data
+    if [[ $? -ne 0 ]]; then
+        backupBucket="vbis"
+    fi
+    set -e
+
+    cray artifacts create ${backupBucket} bss-backup-$(date +%Y-%m-%d).json bss-backup-$(date +%Y-%m-%d).json
     
     record_state ${state_name} $(hostname)
 else

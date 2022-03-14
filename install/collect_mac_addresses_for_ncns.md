@@ -130,6 +130,8 @@ making a backup of them, in case they need to be examined at a later time.
 
 1. Check that IP addresses are set for each interface and investigate any failures.
 
+  > Note that bond0.can0 is optional in CSM 1.2+
+
     1. Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
 
        ```bash
@@ -164,11 +166,6 @@ making a backup of them, in case they need to be examined at a later time.
        addr:     ipv4 10.254.1.4/17 [static]
        ```
 
-    1. Run tests; inspect failures.
-
-       ```bash
-       pit# csi pit validate --network
-       ```
 1. Copy the service config files generated earlier by `csi config init` for DNSMasq, Metal
    Basecamp (cloud-init), and Conman.
 
@@ -319,6 +316,8 @@ making a backup of them, in case they need to be examined at a later time.
 
 1. Check that IP addresses are set for each interface and investigate any failures.
 
+  > Note that bond0.can0 is optional in CSM 1.2+
+  
     1. Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
 
        ```bash
@@ -353,11 +352,6 @@ making a backup of them, in case they need to be examined at a later time.
        addr:     ipv4 10.254.1.4/17 [static]
        ```
 
-    1. Run tests; inspect failures.
-
-       ```bash
-       pit# csi pit validate --network
-       ```
 1. Copy the service config files generated earlier by `csi config init` for DNSMasq, Metal
    Basecamp (cloud-init), and Conman.
 

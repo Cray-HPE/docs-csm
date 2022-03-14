@@ -40,7 +40,7 @@ To delete a list of UAIs as an administrator use a command of the following form
 ncn-m001-pit# cray uas admin uais delete --uai-list UAI-NAMES
 ```
 
-where `UAI-NAMES` is a comma separated list of UAI Names of targeted UAIs.
+where `UAI-NAMES` is a comma-separated list of UAI Names of targeted UAIs.
 
 To deleted all UAIs owned by a given user, use a command of the form:
 
