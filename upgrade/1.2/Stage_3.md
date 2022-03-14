@@ -83,7 +83,7 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/csm-upgrade.sh
 
 1. Update the CFS configuration and perform NCN personalization.
 
-   Please follow the procedure from [Perform\_NCN\_Personalization.md](../../operations/CSM_product_management/Perform_NCN_Personalization.md) to update the CFS configuration and run NCN Personalization.
+   Refer to the [Perform NCN Personalization](../../operations/CSM_product_management/Perform_NCN_Personalization.md) procedure to update the CFS configuration and run NCN Personalization.
 
    If multiple products are being upgraded then it may be desirable to delay running NCN personalization until all products are installed and have had their CFS layers updated.
 
