@@ -31,9 +31,9 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
 1. Click the **Password** tab on the left side of the page.
 1. Enter the existing password, new password and confirmation, and then click **Save**.
 1. Log on to `ncn-w001`.
-1. git clone `https://github.com/Cray-HPE/csm.git`
-1. copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` to your desired working directory and run the following commands from that work directory (not the utils directory)
-1. Save a local copy of the customizations.yaml file
+1. git clone `https://github.com/Cray-HPE/csm.git`.
+1. copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` to your desired working directory and run the following commands from that work directory (not the utls directory).
+1. Save a local copy of the customizations.yaml file.
 
     ```bash
     kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
@@ -83,7 +83,7 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
     ./utils/bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > certs/sealed_secrets.crt
     ```
 
-1. Create a local copy of the platform.yaml file
+1. Create a local copy of the platform.yaml file.
 
     ```bash
     kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
@@ -136,7 +136,7 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
     --template={{.data.password}} | base64 --decode
     ```
 
-1. Save an updated copy of customizations.yaml to the site-init secret in the loftsman kubernetes namespace
+1. Save an updated copy of customizations.yaml to the site-init secret in the loftsman kubernetes namespace.
 
     ```bash
     CUSTOMIZATIONS=$(base64 < customizations.yaml  | tr -d '\n')
