@@ -28,7 +28,7 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/csm-upgrade.sh
 
 1. Obtain import_branch of new release from the cray-product-catalog Kubernetes ConfigMap
 
-   In the below example the import branch is `cray/csm/1.9.21`
+   In the following example, the import branch is `cray/csm/1.9.21`.
 
    ```bash
    ncn-m002# kubectl -n services get cm cray-product-catalog -o json | jq -r '.data.csm'
