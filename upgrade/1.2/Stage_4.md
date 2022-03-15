@@ -134,5 +134,5 @@ Only processes running the v15.2.8 image will be upgraded.  This will include `M
 
    Please ***NOTE*** that this may take up to 30 seconds to apply and the health to return to **HEALTH_OK**.
 
+Once the above steps have been completed, proceed to [Stage 5](Stage_5.md).
 
-Once `Stage 4` upgrade is complete, proceed to [Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
