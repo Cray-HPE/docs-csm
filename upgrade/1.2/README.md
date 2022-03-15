@@ -62,15 +62,6 @@ Please see [Troubleshoot Postgres Database](../../operations/kubernetes/Troubles
 
 Please see [Troubleshoot Spire Failing to Start on NCNs](../../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md).
 
-### Troubleshooting CFS Sessions That Can't Find Playbooks
-
-Due to an issue with the Ansible content import logic, the git commit ids for some
-release branches may have changed, making old CFS configurations invalid.  If CFS
-fails to find the specified playbook, or fails to checkout the appropriate commit
-in the `git-clone` containers, check that the commit still exists by manually
-cloning the git repo and attempting to checkout the commit.  If it no longer exists,
-find the most recent commit id for the desired branch and update the configuration
-as usual for CFS.  This will be fixed in a future version.
 
 ### Rerun a step/script
 
