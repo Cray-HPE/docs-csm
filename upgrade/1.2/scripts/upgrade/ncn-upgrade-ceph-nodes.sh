@@ -66,11 +66,11 @@ if [[ $state_recorded == "0" ]]; then
     ## TEMP - Remove ceph v15.2.12 from images before backups - CASMINST-4099
     if [[ $(ssh ${target_ncn} "podman images --format json|jq '.[].Names|.[]'|grep -q 15.2.12") ]]
     then
-      ssh ${target_ncn} 'podman rmi registry.local/ceph/ceph:v15.2.12'
+      ssh ${target_ncn} 'podman rmi -af'
     fi
     ## END TEMP - CASMINST-4099
 
-    ssh ${target_ncn} 'systemctl stop ceph.target;sleep 30;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /var/lib/containers /etc/ceph;systemctl start ceph.target'
+    ssh ${target_ncn} 'systemctl stop ceph.target;sleep 30;podman prune -af;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /var/lib/containers /etc/ceph;systemctl start ceph.target'
     scp ${target_ncn}:/tmp/${target_ncn}-ceph.tgz .
 
     record_state "${state_name}" ${target_ncn}
@@ -122,7 +122,7 @@ if [[ $state_recorded == "0" ]]; then
 
     # sleep 30s before redeploy ceph
     sleep 30
-    
+    ## Added
     ceph cephadm get-pub-key > ~/ceph.pub
     ssh-copy-id -f -i ~/ceph.pub root@${target_ncn}
     ceph orch host add ${target_ncn}
@@ -187,7 +187,7 @@ if [[ $ssh_keys_done == "0" ]]; then
     ssh_keygen_keyscan "${target_ncn}"
     ssh_keys_done=1
 fi
-ssh $target_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
+ssh $target_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate' || true 
 
 move_state_file ${target_ncn}
 
