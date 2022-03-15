@@ -48,27 +48,32 @@ Set NODE to the hostname of the node being added (e.g. `ncn-w001`, `ncn-s002`, e
 ncn# NODE=ncn-x00n
 ```
 
-Follow the procedure to determine the [Component Name (xname)](../Component_Names_xnames.md) and set the variable accordingly.
+Determine the xname of the NCN by referring to the HMN of the systems SHCD if it has not been determined yet yet.
+
+   Sample row from the HMN tab of a SHCD:
+   | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
+   | --------------- | ----------------- | --------------------- | ----- | ------------ | ---- | ----------------- | ----------------- | ---------------------- | -------------------------- | ----- | ---------------------- |
+   | wn01            | x3000             | u04                   | -     |              |      | j3                | sw-smn01          | x3000                  | u14                        | -     | j48                    |
+
+   Xname format: xXcCsSbBnN
+   |   |                |                       | Description
+   | - | -------------- | --------------------- | ----------- 
+   | X | Cabinet number | SourceRack (K20)      |
+   | C | Chassis number |                       | For River nodes the chassis is 0.
+   | S | Slot/Rack U    | Source Location (L20) | The Slot of the node is determined by the bottom most rack U that node occupies.
+   | B | BMC number     |                       | For Management NCNs the BMC number is 0.
+   | N | Node number    |                       | For Management NCNs the Node number is 0.
+
+   From the sample HMN Row the corresponding NCN Node xname is x3000c0s4b0n0.
 
 ```bash
 ncn# XNAME=<xname>
 ncn# echo $XNAME
 ```
 
-> TODO insert this here
-1. Determine the xname of the NCN by referring to River Rack Layout tab of the systems SHCD.
-        | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
-        | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
-        | wn01            | x3000 | u04      | -   |                 |     | j3   | sw-smn01    | x3000  | u14      | -   | j48  |
-
-        The Slot of the node is determined by the bottom most rack U that node occupies.
-    
-        Xname format: xXcCsSbBnN
-        - X - cabinet = 3000
-        - C - chassis = 0, for River nodes this is always 0
-        - S - slot/Rack U = 38
-        - B - bmc = 0, for Management NCNs this is always 0
-        - N - node = 0, for Management NCNs this is always 0 
+```bash
+ncn-m# export XNAME=x3000c0s4b0n0
+```
 ### Procedure
 
 The following is a high-level overview of the NCN add workflow:
