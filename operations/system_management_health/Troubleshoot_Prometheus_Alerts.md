@@ -70,6 +70,8 @@ Alerts for CPUThrottlingHigh on gatekeeper-audit can be ignored. This pod is not
 
 Alerts for CPUThrottlingHigh on CFS services such as cfs-batcher and cfs-trust can be ignored. Because CFS is idle most of the time these services have low CPU requests, and it is normal for CFS service resource usage to spike when it is in use.
 
+Alerts for CPUThrottlingHigh on smartmon pods can be ignored. it is normal for smartmon pods resource usage to spike when it is polling.
+
 
 <a name="kubepodnotready"></a>
 ## KubePodNotReady
