@@ -276,11 +276,10 @@ if [[ -z "$(yq r "$c" 'spec.kubernetes.sealed_secrets.dnssec')" ]]; then
 fi
 
 # Remove unused cray-externaldns configuration and add domain filters required for bifurcated CAN.
-if [[ ! -z "$(yq r "$c" 'spec.kubernetes.services.cray-externaldns.coredns')" ]]; then
-    yq d -i "$c" 'spec.kubernetes.services.cray-externaldns.coredns'
-    yq d -i "$c" 'spec.kubernetes.services.cray-externaldns.sharedIPServices'
-fi
 if [[ -z "$(yq r "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters')" ]]; then
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[]'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'cmn.{{ network.dns.external }}'
     yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'cmn.{{ network.dns.external }}'
     yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'can.{{ network.dns.external }}'
     yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'chn.{{ network.dns.external }}'
@@ -288,6 +287,10 @@ if [[ -z "$(yq r "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.do
     yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'hmn.{{ network.dns.external }}'
     yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'nmnlb.{{ network.dns.external }}'
     yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'hmnlb.{{ network.dns.external }}'
+fi
+if [[ ! -z "$(yq r "$c" 'spec.kubernetes.services.cray-externaldns.coredns')" ]]; then
+    yq d -i "$c" 'spec.kubernetes.services.cray-externaldns.coredns'
+    yq d -i "$c" 'spec.kubernetes.services.cray-externaldns.sharedIPServices'
 fi
 
 # Add required PowerDNS and Unbound configuration
