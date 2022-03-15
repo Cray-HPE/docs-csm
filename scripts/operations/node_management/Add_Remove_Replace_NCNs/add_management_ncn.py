@@ -564,10 +564,10 @@ def main(argv):
     parser.add_argument("--alias", type=str, required=True, help="The alias of the NCN. Ex: ncn-m001, ncn-w001, ncn-m001")
     parser.add_argument("--bmc-mgmt-switch-connector", type=str, required=False, help="Xname of the MgmtSwitchConnector connecting that the NCN BMC connected to")
     parser.add_argument("--mac-bmc",   type=str, required=True,  help="MAC address of of the NCN")
-    parser.add_argument("--mac-mgmt0", type=str, required=True,  help="MAC address of mgmt0 - MAC0 of Bond0")
-    parser.add_argument("--mac-mgmt1", type=str, required=False, help="MAC address of mgmt1 - MAC0 of Bond0")
-    parser.add_argument("--mac-sun0",  type=str, required=False, help="MAC address of sun0 - MAC0 of Bond1")
-    parser.add_argument("--mac-sun1",  type=str, required=False, help="MAC address of sun1 - MAC1 of Bond1")
+    parser.add_argument("--mac-mgmt0", type=str, required=True,  help="MAC address of mgmt0")
+    parser.add_argument("--mac-mgmt1", type=str, required=True, help="MAC address of mgmt1")
+    parser.add_argument("--mac-mgmt2",  type=str, required=False, help="MAC address of mgmt2")
+    parser.add_argument("--mac-mgmt3",  type=str, required=False, help="MAC address of mgmt3")
     parser.add_argument("--mac-lan0",  type=str, required=False, help="MAC address of lan0")
     parser.add_argument("--mac-lan1",  type=str, required=False, help="MAC address of lan1")
     parser.add_argument("--mac-hsn0",  type=str, required=False, help="MAC address of hsn0")
@@ -647,9 +647,9 @@ def main(argv):
         macs["mgmt0"] = args.mac_mgmt0
     if args.mac_mgmt1 != None:
         macs["mgmt1"] = args.mac_mgmt1
-    if args.mac_sun0 != None:
+    if args.mac_mgmt2 != None:
         macs["mgmt2"] = args.mac_mgmt2
-    if args.mac_sun0 != None:
+    if args.mac_mgmt3 != None:
         macs["mgmt3"] = args.mac_mgmt3
     if args.mac_lan0 != None:
         macs["lan0"] = args.mac_lan0
@@ -1568,7 +1568,7 @@ def main(argv):
         print('')
         print(f'{args.xname} ({args.alias}) has been added to SLS/HSM/BSS')
         if existing_bmc_ei != None and not existing_bmc_ip_matches:
-            existing_bmc_ip = ",".join(existing_bmc_ei["IPAddresses"])
+            existing_bmc_ip = ",".join(list(map(lambda element: element["IPAddress"], existing_bmc_ei["IPAddresses"])))
             print(f'        WARNING The NCN BMC currently has the IP address: {existing_bmc_ip}, and needs to have IP Address {bmc_ip}')
 
 if __name__ == "__main__":
