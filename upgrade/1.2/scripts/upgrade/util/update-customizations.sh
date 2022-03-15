@@ -276,14 +276,22 @@ if [[ -z "$(yq r "$c" 'spec.kubernetes.sealed_secrets.dnssec')" ]]; then
 fi
 
 # Remove unused cray-externaldns configuration and add domain filters required for bifurcated CAN.
-yq d -i "$c" 'spec.kubernetes.services.cray-externaldns'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'cmn.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'can.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'chn.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'nmn.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'hmn.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'nmnlb.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'hmnlb.{{ network.dns.external }}'
+if [[ -z "$(yq r "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters')" ]]; then
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[]'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'cmn.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'cmn.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'can.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'chn.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'nmn.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'hmn.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'nmnlb.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-externaldns.external-dns.domainFilters[+]' 'hmnlb.{{ network.dns.external }}'
+fi
+if [[ ! -z "$(yq r "$c" 'spec.kubernetes.services.cray-externaldns.coredns')" ]]; then
+    yq d -i "$c" 'spec.kubernetes.services.cray-externaldns.coredns'
+    yq d -i "$c" 'spec.kubernetes.services.cray-externaldns.sharedIPServices'
+fi
 
 # Add required PowerDNS and Unbound configuration
 yq w -i "$c" 'spec.kubernetes.services.cray-dns-unbound.domain_name' '{{ network.dns.external }}'
@@ -296,19 +304,24 @@ yq w -i "$c" 'spec.kubernetes.services.cray-dns-powerdns.service.cmn.loadBalance
 yq w -i "$c" 'spec.kubernetes.services.cray-dns-powerdns.cray-service.sealedSecrets[0]' '{{ kubernetes.sealed_secrets.powerdns | toYaml }}'
 
 # Add proxiedWebAppExternalHostnames
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['gatekeeper-policy-manager']['gatekeeper-policy-manager'].externalAuthority }}"
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-istio'].istio.tracing.externalAuthority }}"
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-kiali'].externalAuthority }}"
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-sysmgmt-health']['prometheus-operator'].prometheus.prometheusSpec.externalAuthority }}"
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-sysmgmt-health']['prometheus-operator'].alertmanager.alertmanagerSpec.externalAuthority }}"
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-sysmgmt-health']['prometheus-operator'].grafana.externalAuthority }}"
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' '{{ kubernetes.services.gitea.externalHostname }}'
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' 'sma-grafana.cmn.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' 'sma-kibana.cmn.{{network.dns.external}}'
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' 'csms.cmn.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerAccess[+]' 'capsules.can.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerHighSpeed[+]' 'capsules.chn.{{ network.dns.external }}'
-
+if [[ -z "$(yq r "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement')" ]]; then
+    yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['gatekeeper-policy-manager']['gatekeeper-policy-manager'].externalAuthority }}"
+    yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-istio'].istio.tracing.externalAuthority }}"
+    yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-kiali'].externalAuthority }}"
+    yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-sysmgmt-health']['prometheus-operator'].prometheus.prometheusSpec.externalAuthority }}"
+    yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-sysmgmt-health']['prometheus-operator'].alertmanager.alertmanagerSpec.externalAuthority }}"
+    yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' "{{ kubernetes.services['cray-sysmgmt-health']['prometheus-operator'].grafana.externalAuthority }}"
+    yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' '{{ kubernetes.services.gitea.externalHostname }}'
+    yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' 'sma-grafana.cmn.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' 'sma-kibana.cmn.{{network.dns.external}}'
+    yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement[+]' 'csms.cmn.{{ network.dns.external }}'
+fi
+if [[ -z "$(yq r "$c" 'spec.proxiedWebAppExternalHostnames.customerAccess')" ]]; then
+    yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerAccess[+]' 'capsules.can.{{ network.dns.external }}'
+fi
+if [[ -z "$(yq r "$c" 'spec.proxiedWebAppExternalHostnames.customerHighSpeed')" ]]; then
+    yq w -i --style=single "$c" 'spec.proxiedWebAppExternalHostnames.customerHighSpeed[+]' 'capsules.chn.{{ network.dns.external }}'
+fi
 
 # Add network to externalAuthority names
 yq w -i "$c" 'spec.kubernetes.services.cray-nexus.istio.ingress.hosts.ui.authority' 'nexus.cmn.{{ network.dns.external }}'
@@ -345,13 +358,15 @@ yq d -i "$c" 'spec.kubernetes.services.cray-istio.istio.prometheus'
 yq d -i "$c" 'spec.kubernetes.services.cray-istio.istio.kiali'
 yq d -i "$c" 'spec.kubernetes.services.cray-istio.istio.grafana'
 yq d -i "$c" 'spec.kubernetes.services.cray-istio.istio.gateways'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.cmn.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.can.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.chn.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.nmn.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.hmn.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.nmnlb.{{ network.dns.external }}'
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.hmnlb.{{ network.dns.external }}'
+if [[ -z "$(yq r "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames(.==*.cmn.{{ network.dns.external }})')" ]]; then
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.cmn.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.can.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.chn.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.nmn.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.hmn.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.nmnlb.{{ network.dns.external }}'
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' '*.hmnlb.{{ network.dns.external }}'
+fi
 yq d -i "$c" 'spec.kubernetes.services.cray-istio.extraIngressServices'
 yq d -i "$c" 'spec.kubernetes.services.cray-istio.ingressgatewayhmn'
 
@@ -400,8 +415,9 @@ if [[ -z "$(yq r "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential')" 
         yq w -i "$c" 'spec.kubernetes.sealed_secrets.nexus-admin-credential.generate.data[1].args.url_safe' yes
     fi
 fi
-yq w -i --style=single "$c" 'spec.kubernetes.services.cray-nexus.sealedSecrets[+]' "{{ kubernetes.sealed_secrets['nexus-admin-credential'] | toYaml }}"
-
+if [[ -z "$(yq r "$c" 'spec.kubernetes.services.cray-nexus.sealedSecrets')" ]]; then
+    yq w -i --style=single "$c" 'spec.kubernetes.services.cray-nexus.sealedSecrets[+]' "{{ kubernetes.sealed_secrets['nexus-admin-credential'] | toYaml }}"
+fi
 # remove cray-keycloak-gatekeeper
 yq d -i "$c" 'spec.kubernetes.services.cray-keycloak-gatekeeper'
 
@@ -450,14 +466,15 @@ yq w -i "$c" 'spec.kubernetes.services.cray-kiali.kiali-operator.cr.spec.externa
 # cray-uas-mgr changes
 yq w -i "$c" 'spec.kubernetes.services.cray-uas-mgr.uasConfig.require_bican' 'false'
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-uas-mgr.uasConfig.dns_domain' '{{ network.dns.external }}'
-yq w -i "$c" 'spec.kubernetes.services.cray-uas-mgr.images.images[+]' 'cray/cray-uai-sles15sp1:latest'
-yq w -i "$c" 'spec.kubernetes.services.cray-uas-mgr.images.defaultImage' 'cray/cray-uai-sles15sp1:latest'
 
 # cray-metallb
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-metallb.metallb.configInline' '{{ network.metallb | toYaml }}'
 
 # wlm.macvlan
-yq d -i "$c" 'spec.wlm.macvlansetup.nmn_vlan'
+yq w -i "$c" 'spec.wlm.macvlansetup.nmn_vlan' 'bond0.nmn0'
+yq w -i "$c" 'spec.kubernetes.services.cray-slurmctld.macvlan.master' '{{ wlm.macvlansetup.nmn_vlan }}'
+yq w -i "$c" 'spec.kubernetes.services.cray-slurmdbd.macvlan.master' '{{ wlm.macvlansetup.nmn_vlan }}'
+yq w -i "$c" 'spec.kubernetes.services.cray-pbs.macvlan.master' '{{ wlm.macvlansetup.nmn_vlan }}'
 
 # lower cpu request for tds systems (3 workers)
 num_workers=$(kubectl get nodes | grep ncn-w | wc -l)

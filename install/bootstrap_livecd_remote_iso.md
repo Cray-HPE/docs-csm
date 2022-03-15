@@ -563,14 +563,6 @@ Finally, cleanup the shim:
    pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)   
    ```
 
-1. Verify the system:
-
-   ```bash
-   pit# csi pit validate --services
-   ```
-
-1. Follow directions in the output from the 'csi pit validate' commands for failed validations before continuing.
-
 <a name="next-topic"></a>
 # Next Topic
 
