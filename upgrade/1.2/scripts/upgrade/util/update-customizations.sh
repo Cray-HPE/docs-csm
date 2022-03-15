@@ -276,7 +276,7 @@ if [[ -z "$(yq r "$c" 'spec.kubernetes.sealed_secrets.dnssec')" ]]; then
 fi
 
 # Remove unused cray-externaldns configuration and add domain filters required for bifurcated CAN.
-if [[ -z "$(yq r "$c" 'spec.kubernetes.services.cray-externaldns.coredns')" ]]; then
+if [[ ! -z "$(yq r "$c" 'spec.kubernetes.services.cray-externaldns.coredns')" ]]; then
     yq d -i "$c" 'spec.kubernetes.services.cray-externaldns.coredns'
     yq d -i "$c" 'spec.kubernetes.services.cray-externaldns.sharedIPServices'
 fi
