@@ -29,9 +29,10 @@ Scenarios where this procedure is applicable:
         | wn01            | x3000             | u04                   | -     |              |      | j3                | sw-smn01          | x3000                  | u14                        | -     | j48                    |
 
         Node xname format: xXcCsSbBnN
-        |   |                |                       | Description
+
+        |   |                | SHCD Column           | Description
         | - | -------------- | --------------------- | ----------- 
-        | X | Cabinet number | SourceRack (K20)      |
+        | X | Cabinet number | SourceRack (K20)      | 
         | C | Chassis number |                       | For air-cooled nodes the chassis is 0.
         | S | Slot/Rack U    | Source Location (L20) | The Slot of the node is determined by the bottom most rack U that node occupies.
         | B | BMC number     |                       | For Management NCNs the BMC number is 0.
