@@ -2,7 +2,7 @@
 
 ## Description
 
-Add NCN data to System Layout Service (SLS), Hardware Management Services (HMS) and Boot Script Service (BSS) as needed to add an NCN.
+Add NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Hardware State Manager (HSM)  as needed to add an NCN.
 
 Scenarios where this procedure is applicable:
 1. Adding a Management NCN that has not previously been in the system before:
