@@ -217,6 +217,10 @@ state_name="UPDATE_CUSTOMIZATIONS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
+    
+    # update podman config
+    sed -i 's/.*mount_program =.*/mount_program = "\/usr\/bin\/fuse-overlayfs"/' /etc/containers/storage.conf
+
     SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/site-init
     mkdir -p ${SITE_INIT_DIR}
     pushd ${SITE_INIT_DIR}
