@@ -116,15 +116,56 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
     * The files should be identical
 
-### Step 5 - Lock the management nodes
+### Step 5 - Run NCN Personalizations using CFS as desired
+
+1. Run the following commands to list the available configurations.
+
+    ```bash
+    ncn-mw# cray cfs configurations list
+    ```
+
+    Example Output:
+
+    ```
+    [[results]]
+    lastUpdated = "2022-03-14T20:59:44Z"
+    name = "ncn-personalization"
+    [[results.layers]]
+    cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+    commit = "1dc4038615cebcfad3e8230caecc885d987e8148"
+    name = "csm-ncn-1.6.28"
+    playbook = "site.yml"
+    ```
+    
+2. Select the appropriate configuration from the above list and configure the added NCN. In this example, the `ncn-personalization` config is used.
+
+    ```bash
+    ncn-mw# cray cfs components update $XNAME --desired-config ncn-personalization
+    ```
+
+3. Wait for `configurationStatus` to transistion from `pending` to `configured`
+
+    ```bash
+    ncn-mw# cray cfs components describe $XNAME
+    ```
+
+    Example Output:
+
+    ```
+    configurationStatus = "configured"
+    desiredConfig = "ncn-personalization"
+    ...
+    ```
+
+### Step 6 - Lock the management nodes
 
 Follow [How to Lock Management Nodes](../../../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#how-to-lock-management-nodes). The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware or CAPMC to power off or do a power reset. Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
 
-### Step 6 - **For Storage nodes only**
+### Step 7 - **For Storage nodes only**
 
 Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added storage node to the Ceph cluster.
 
-### Step 7 - Validate the  node
+### Step 8 - Validate the node
 
 Follow the validation steps in the section for the node type that was added:
 

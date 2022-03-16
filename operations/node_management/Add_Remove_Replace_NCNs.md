@@ -48,41 +48,22 @@ Set NODE to the hostname of the node being added (e.g. `ncn-w001`, `ncn-s002`, e
 ncn# NODE=ncn-x00n
 ```
 
-Determine the xname of the NCN by referring to the HMN of the systems SHCD if it has not been determined yet yet.
-
-   Sample row from the HMN tab of a SHCD:
-   | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
-   | --------------- | ----------------- | --------------------- | ----- | ------------ | ---- | ----------------- | ----------------- | ---------------------- | -------------------------- | ----- | ---------------------- |
-   | wn01            | x3000             | u04                   | -     |              |      | j3                | sw-smn01          | x3000                  | u14                        | -     | j48                    |
-
-   Xname format: xXcCsSbBnN
-   |   |                |                       | Description
-   | - | -------------- | --------------------- | ----------- 
-   | X | Cabinet number | SourceRack (K20)      |
-   | C | Chassis number |                       | For River nodes the chassis is 0.
-   | S | Slot/Rack U    | Source Location (L20) | The Slot of the node is determined by the bottom most rack U that node occupies.
-   | B | BMC number     |                       | For Management NCNs the BMC number is 0.
-   | N | Node number    |                       | For Management NCNs the Node number is 0.
-
-   From the sample HMN Row the corresponding NCN Node xname is x3000c0s4b0n0.
+If the XNAME is known, set it now. Otherwise it will be determined in a later step.
 
 ```bash
 ncn# XNAME=<xname>
 ncn# echo $XNAME
 ```
 
-```bash
-ncn-m# export XNAME=x3000c0s4b0n0
-```
 ### Procedure
 
-The following is a high-level overview of the NCN add workflow:
+The following is a high-level overview of the add NCN workflow:
 
 1. [Validate SHCD](Add_Remove_Replace_NCNs/Validate_SHCD.md#validate-shcd-before-adding-ncn)
 
 2. [Update Networking](Add_Remove_Replace_NCNs/Update_Networking.md#update-networking-to-add-ncn)
 
-3. [Add NCN data](Add_Remove_Replace_NCNs/Add_NCN_Data.md) for SLS, HMS and BSS
+3. [Add NCN data](Add_Remove_Replace_NCNs/Add_NCN_Data.md) for SLS, BSS and HSM
 
 4. [Update Firmware](Add_Remove_Replace_NCNs/Update_Firmware.md) via FAS
 
@@ -127,11 +108,11 @@ ncn# echo $XNAME
 
 ### Procedure
 
-The following is a high-level overview of the NCN add workflow:
+The following is a high-level overview of the remove NCN workflow:
 
 1. [Remove NCN from Role](Add_Remove_Replace_NCNs/Remove_NCN_from_Role.md)
 
-2. [Remove NCN data](Add_Remove_Replace_NCNs/Remove_NCN_Data.md) from SLS, HMS and BSS
+2. [Remove NCN data](Add_Remove_Replace_NCNs/Remove_NCN_Data.md) from SLS, BSS and HSM
 
 3. [Update Networking](Add_Remove_Replace_NCNs/Update_Networking.md#update-networking-to-remove-ncn)
 
@@ -149,6 +130,8 @@ Moving an NCN is defined as removing an NCN of a given type from one cabinet and
 Use the [Remove Worker, Storage or Master NCNs](#remove-worker-storage-master) followed by the [Add Worker, Storage or Master NCNs](#add-worker-storage-master) to replace a worker, storage or master node (NCN). Generally scaling master nodes is not recommended since it can cause Etcd latency.
 
 ### Procedure
+
+The following is a high-level overview of the replace NCN workflow:
 
 1. [Remove Worker, Storage or Master NCNs](#remove-worker-storage-master)
 
