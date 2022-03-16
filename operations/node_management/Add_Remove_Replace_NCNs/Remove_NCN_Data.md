@@ -2,7 +2,7 @@
 
 ## Description
 
-Remove NCN data to System Layout Service (SLS), Hardware Management Services (HMS) and Boot Script Service (BSS) as needed to remove an NCN.
+Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Hardware State Manager (HSM) as needed to remove an NCN.
 
 ## Procedure
 
