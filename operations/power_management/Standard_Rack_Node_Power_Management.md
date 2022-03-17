@@ -13,177 +13,212 @@ Power limiting of a node must be enabled and may require additional licenses to
 use. Refer to vendor documentation for instructions on how to enable power
 limiting and what licenses, if any, are needed.
 
-CAPMC only handles power capping of one hardware type at a time. Each vendor and
-server model has their own power capping capabilities. Therefore a different
-power cap request will be needed for each vendor and model that needs to have
+CAPMC only handles power limiting of one hardware type at a time. Each vendor and
+server model has their own power limiting capabilities. Therefore a different
+power limit request will be needed for each vendor and model that needs to have
 its power limited.
 
-## Interfaces
--   get_power_cap_capabilities
--   get_power_cap
--   set_power_cap
+## Requirements
+* Hardware State Manager (cray-hms-smd) >= v1.30.16
+* CAPMC (cray-hms-capmc) >= 1.31.0
+* CrayCLI >= 0.44.0
 
 ## Deprecated interfaces
 [CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md)
--   get_node_energy \(Deprecated\)
--   get_node_energy_stats \(Deprecated\)
--   get_system_power \(Deprecated\)
+-   get_node_energy (Deprecated)
+-   get_node_energy_stats (Deprecated)
+-   get_system_power (Deprecated)
 
 ## Redfish API
 
 The Redfish API for rack-mounted nodes is the node's Power resource which is
-presented by the BMC. OEM properties may be used to augment the Power schema and
-allow for feature parity with previous Cray system power management
-capabilities.
+presented by the BMC. OEM properties may be used to augment the Power schema to
+provide additional power management capabilities.
 
-## CrayCLI Examples
-### Get Node Power Limit Capabilities
-Query the power capping control bounds, grouped by node type. Control values
-which are returned as zero indicate the respective control is unconstrained or
-not enabled. 
-#### Example of a node with 4 GPUs
-```
-ncn-m001# cray capmc get_power_cap_capabilities create --nids 1995 --format json
-{
-  "e": 0,
-  "err_msg": "",
-  "groups": [
+## Power Limiting
+
+CAPMC power limiting controls for compute nodes can query component capabilities
+and manipulate the node power constraints. This functionality enables external
+software to establish an upper bound, or estimate a minimum bound, on the amount
+of power a system or a select subset of the system may consume.
+
+CAPMC API calls provide means for third party software to implement advanced
+power management strategies using JSON data structures.
+
+The rack-mounted compute nodes support these power limiting and monitoring API
+calls:
+-   get_power_cap_capabilities
+-   get_power_cap
+-   set_power_cap
+
+In general, rack-mounted compute nodes do not allow for power limiting of any
+installed accelerators separately from the node limit.
+
+Power limit control will only be valid on a compute node when power limiting is
+enabled, the node is booted, and the node is in the Ready state as seen via the
+Hardware State Manager.
+
+## Cray CLI Examples for Standard Rack Compute Node Power Management
+
+-   **Get Node Power Control and Limit Settings**
+
+    ```
+    ncn-m001# cray capmc get_power_cap create –-nids NID_LIST --format json
+    ```
+    Return the current power limit settings for a node and any accelerators that
+    are installed. Valid settings are only returned if power limiting is enabled
+    on the target nodes.
+    ```
+    ncn-m001# cray capmc get_power_cap create --nids 4
     {
-      "name": "3_AuthenticAMD_64c_256GiB_3200MHz_NodeAccel.NVIDIA",
-      "desc": "3_AuthenticAMD_64c_256GiB_3200MHz_NodeAccel.NVIDIA",
-      "host_limit_max": 1985,
-      "host_limit_min": 595,
-      "static": 0,
-      "supply": 0,
-      "powerup": 250,
-      "nids": [
-        1995
-      ],
-      "controls": [
-        {
-          "name": "Node Power Control",
-          "desc": "Node Power Control",
-          "max": 1985,
-          "min": 595
-        },
-        {
-          "name": "Accelerator 0 Power Control",
-          "desc": "Accelerator 0 Power Control",
-          "max": 400,
-          "min": 100
-        },
-        {
-          "name": "Accelerator 1 Power Control",
-          "desc": "Accelerator 1 Power Control",
-          "max": 400,
-          "min": 100
-        },
-        {
-          "name": "Accelerator 1 Power Control",
-          "desc": "Accelerator 1 Power Control",
-          "max": 400,
-          "min": 100
-        },
-        {
-          "name": "Accelerator 1 Power Control",
-          "desc": "Accelerator 1 Power Control",
-          "max": 400,
-          "min": 100
-        }
-      ]
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 4,
+                "controls": [
+                    {
+                        "name": "Chassis Power Control",
+                        "val": 500
+                    }
+                ]
+            }
+        ]
     }
-  ]
-}
-```
-The maximum power draw for a node is the host_limit_max. The host_limit_max
-minus the power limit of the 4 GPUs is the power remaining for the host CPU and
-memory. If all 4 GPUs are set to 400 watt limit, there would be 385 watts left
-for the host CPU and memory. The node power control limit controls the host
-CPU and memory power as well as the aceelerator power. If the node power limit
-is set to 1000 watts, and the accelerators max limit was set to 200 watts, that
-would leave 200 watts for the host CPU and memory. The minumum power draw is the
-sum of the GPU minimums and the host CPU and memory minimums. The minumum power
-draw for the host CPU and memory is 195 watts.
-### Get Node Power Limit
-Query the nodes for their currently set power limits. CAPMC will only return
-power limit informaiton for computes nodes that are in the Ready state. This
-guarnatees that the power limiting infrastructure has been properly configured
-on the node.
-#### No limits set, unconstrained
-ncn-m001:~ # cray capmc get_power_cap create --nids 9
-{
-  "e": 0,
-  "err_msg": "",
-  "nids": [
+    ````
+
+-   **Get Power Limiting Capabilities**
+
+    ```
+    ncn-m001# cray capmc get_power_cap_capabilities create –-nids NID_LIST --format json
+    ```
+    Return the min and max power limit settings for the node list and any
+    accelerators that are installed. 
+    ```
+    ncn-m001# cray capmc get_power_cap_capabilities create --nids 4 --format json
     {
-      "nid": 9,
-      "controls": [
-        {
-          "name": "node",
-          "val": 0
-        }
-      ]
+        "e": 0,
+        "err_msg": "",
+        "groups": [
+            {
+                "name": "3_AuthenticAMD_64c_244GiB_3200MHz_NoAccel",
+                "desc": "3_AuthenticAMD_64c_244GiB_3200MHz_NoAccel",
+                "host_limit_max": 0,
+                "host_limit_min": 0,
+                "static": 0,
+                "supply": 900,
+                "powerup": 0,
+                "nids": [
+                    4
+                ],
+                "controls": [
+                    {
+                        "name": "Chassis Power Control",
+                        "desc": "Chassis Power Control",
+                        "max": 900,
+                        "min": 61
+                    }
+                ]
+            }
+        ]
     }
-  ]
-}
-This shows there is no power limit set on the node, which means there is no
-power constraint on the node and it can use up to the host_limit_max power.
-#### Limits set
-ncn-m001:~ # cray capmc get_power_cap create --nids 1995
-{
-  "e": 0,
-  "err_msg": "",
-  "nids": [
+    ```
+
+-   **Set Node Power Limit**
+
+    ```
+    ncn-m001#  cray capmc set_power_cap create --nids NID_LIST --control CONTROL_NAME VALUE --format json
+    ```
+    Set the total power limit of the node by using the name of the node control.
+    The power provided to the host CPU and memory is the total node power limit
+    minus the power limits of each of the accelerators installed on the node.
+    ```
+    ncn-m001# cray capmc set_power_cap create --nids 4 --control "Chassis Power Control" 600
     {
-      "nid": 1995,
-      "controls": [
-        {
-          "name": "node",
-          "val": 1985
-        },
-        {
-          "name": "Accelerator 0 Power Control",
-          "val": 400
-        },
-        {
-          "name": "Accelerator 1 Power Control",
-          "val": 400
-        },
-        {
-          "name": "Accelerator 2 Power Control",
-          "val": 400
-        },
-        {
-          "name": "Accelerator 3 Power Control",
-          "val": 400
-        }
-      ]
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 4,
+                "e": 0,
+                "err_msg": ""
+            }
+        ]
     }
-  ]
-}
-Related to the get_power_cap_capabilities above, this node is set to allow the
-accelerators to use the maximum 400 watts of power per GPU. The host CPU and
-memory can use up to 385 watts.
-### Set Node Power Limit
+    ```
+    Multiple controls can be set at the same time on multiple nodes, but all
+    target nodes must have the same set of controls available, otherwise the
+    call will fail.
+    ```
+    ncn-m001# cray capmc set_power_cap create \
+    --nids [1-4] --control "Chassis Power Control" 600
+    {
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 1,
+                "e": 0,
+                "err_msg": ""
+            },
+            {
+                "nid": 2,
+                "e": 0,
+                "err_msg": ""
+            },
+            {
+                "nid": 3,
+                "e": 0,
+                "err_msg": ""
+            },
+            {
+                "nid": 4,
+                "e": 0,
+                "err_msg": ""
+            }
+        ]
+    }
+    ```
 
-Set the node power limit to 600 Watts:
+-   **Remove Node Power Limit (Set to Default)**
 
-```
-# cray capmc set_power_cap create --nids 1,2,3 --node 600
-```
+    ```
+    ncn-m001#  cray capmc set_power_cap create --nids NID_LIST --control CONTROL_NAME 0 --format json
+    ```
+    Reset the power limit to the default maximum. Alternatively, using the max
+    value returned from get_power_cap_capabilities may also be used. Multiple
+    controls can be set at the same time on multiple nodes, but all target nodes
+    must have the same set of controls available, otherwise the call will fail.
+    ```
+    ncn-m001# cray capmc set_power_cap create --nids 4 --control "Node Power Limit" 0
+    {
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 4,
+                "e": 0,
+                "err_msg": ""
+            }
+        ]
+    }
+    ```
 
-## Hardware Specific Information
+## Enable and Disable Power Limiting
+
 ### Gigabyte
-#### Enable power limiting
-```
-ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" \
--X POST https://$BMC/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
---data '{"PowerLimitTrigger": "Activate"}'
-```
 
-#### Deactivate Node Power Limit
-```
-ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" \
--X POST https://$BMC/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
---data '{"PowerLimitTrigger": "Deactivate"}'
-```
+-   **Enable power limiting**
+
+    ```
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" \
+    -X POST https://${BMC}/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
+    --data '{"PowerLimitTrigger": "Activate"}'
+    ```
+
+-   **Deactivate Node Power Limit**
+    ```
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" \
+    -X POST https://${BMC}/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
+    --data '{"PowerLimitTrigger": "Deactivate"}'
+    ```
