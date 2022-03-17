@@ -55,7 +55,10 @@ function copy {
     echo "Copying ${WORKING_DIR}/mini-install.sh and ${WORKING_DIR}/metal-lib.sh ${WORKING_DIR}/lib.sh to ..."
     for ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do
         echo "$ncn:/srv/cray/scripts/metal/mini-install.sh"
-        scp ${WORKING_DIR}/scripts/mini-install.sh ${ncn}:/srv/cray/scripts/metal/ >/dev/null
+        if ! scp ${WORKING_DIR}/scripts/mini-install.sh ${ncn}:/srv/cray/scripts/metal/ >/dev/null; then
+            echo "WARNING: unable to copy files to $ncn, skipping"
+            continue
+        fi
         echo "$ncn:/srv/cray/scripts/metal/metal-lib.sh"
         scp ${WORKING_DIR}/scripts/metal-lib.sh ${ncn}:/srv/cray/scripts/metal/ >/dev/null
         echo "$ncn:/srv/cray/scripts/common/lib.sh"
