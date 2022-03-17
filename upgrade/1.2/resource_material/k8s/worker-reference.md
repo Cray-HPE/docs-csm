@@ -1,8 +1,8 @@
 # Worker-Specific Manual Steps
 
 1. Determine if the worker being rebuilt is running a `cray-cps-cm-pm` pod, by running the `cray cps deployment list`
-   command below. If so, there is a final step to redeploy this pod once the worker is rebuilt. In the example below
-   nodes ncn-w001, ncn-w002, and ncn-w003 have the pod.
+   command below. If so, there is a final step to redeploy this pod once the worker is rebuilt. In the example below,
+   nodes `ncn-w001`, `ncn-w002`, and `ncn-w003` have the pod.
 
    > NOTE: If the command below does not return any pod names, proceed to step 2.
 
@@ -28,7 +28,7 @@
 
    If the node being rebuilt is in the output from the `cray cps deployment list` command above, then the `cray cps deployment update` command should be run **after** the node has been upgraded and is back online.
 
-   > Do not run this command now. It is part of the manual instructions for upgrading a worker node. This example uses ncn-w002.
+   > Do not run this command now. It is part of the manual instructions for upgrading a worker node. This example uses `ncn-w002`.
 
    ```bash
    ncn# cray cps deployment update --nodes "ncn-w002"
@@ -39,7 +39,7 @@
    before rebooting this node. If the state is `failed` for this node, then you will know that the failed CFS job state
    preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.
 
-   This example uses ncn-w002.
+   This example uses `ncn-w002`.
 
    ```bash
    ncn# export NODE=ncn-w002

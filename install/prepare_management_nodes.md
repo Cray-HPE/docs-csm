@@ -50,7 +50,7 @@ ncn# kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
 
 If any of the management nodes are booted with Linux, then they have previous installations data on them which should be wiped.
 
->**REQUIRED** If the above is true, then for each management node, **excluding** ncn-m001, log in and do a full wipe of the of the node.
+>**REQUIRED** If the above is true, then for each management node, **excluding** `ncn-m001`, log in and do a full wipe of the of the node.
 >
 > See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe)
 
@@ -194,7 +194,7 @@ If intending to boot the PIT node from the Remote ISO and there is a USB device 
 
 > **`Skip this step if`** you are planning to use this node as a staging area to create the USB LiveCD.
 
-Shut down the LiveCD or ncn-m001 node.
+Shut down the LiveCD or `ncn-m001` node.
 ```bash
 ncn-m001# poweroff
 ```

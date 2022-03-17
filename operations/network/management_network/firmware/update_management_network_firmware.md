@@ -265,7 +265,7 @@ BIOS Version       : GL-01-0013
 
 1. SSH into the switch being upgraded.
 
-1. Fetch the image from ncn-m001.
+1. Fetch the image from `ncn-m001`.
 
    ```
    sw-spine-001 [standalone: master] # image fetch scp://root@10.252.1.4/root/onyx-X86_64-3.9.3210.img
@@ -315,7 +315,7 @@ BIOS Version       : GL-01-0013
 
 1. SSH into the switch being upgraded.
 
-1. Fetch the image from ncn-m001.
+1. Fetch the image from `ncn-m001`.
 
    ```
    sw-leaf-001# image install http://10.252.1.4/fw/network/OS10_Enterprise_10.5.1.4.stable.tar

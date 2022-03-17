@@ -4,7 +4,7 @@ Use the Kea API to retrieve data from the DHCP lease database.
 
 ## Prerequisites
 
-An auth token is set up. If one has not been set up, log on to ncn-w001 or a worker/manager with `kubectl` and run the following:
+An auth token is set up. If one has not been set up, log on to `ncn-w001` or a worker/manager with `kubectl` and run the following:
 
 ```
 export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')

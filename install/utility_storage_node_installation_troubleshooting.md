@@ -45,7 +45,7 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 
 1. SSH to the node(s) where the issue exists.
 
-2. Run the following commands on the nodes: 
+1. Run the following commands on the nodes: 
 
    ```bash
    ncn-s# systemctl stop ceph-osd.target
@@ -55,18 +55,18 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 
    This will vary node to node. Use `lsblk` to identify all drives available to Ceph.
 
-3. Manually create OSDs on the problematic nodes.
+1. Manually create OSDs on the problematic nodes.
    
    ```bash
    ncn-s# for i in {g..n}; do ceph-volume lvm create --data /dev/sd$i  --bluestore; done
    ```
    
-   > **NOTE:** The remaining steps must be run from ncn-s001.
+   > **NOTE:** The remaining steps must be run from `ncn-s001`.
 
-4. Verify the `/etc/cray/ceph` directory is empty. If there are any files there, then delete them.
+1. Verify the `/etc/cray/ceph` directory is empty. If there are any files there, then delete them.
    
-5. Put in safeguard.
-       
+1. Put in safeguard.
+ 
    * Edit `/srv/cray/scripts/metal/lib.sh`
    * Comment out the below lines
 
@@ -76,7 +76,7 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
    24   fi
    ```
 
-6. Run the cloud init script.
+1. Run the cloud init script.
 
    ```bash
    ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
@@ -88,7 +88,7 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 **IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY):** If the Ceph install failed, check the following:
 
 ```bash
-ncn-s001# ceph osd tree
+ncn-s# ceph osd tree
 ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
 -1         31.43875  root default
 -3         10.47958      host ncn-s001
@@ -117,7 +117,7 @@ ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
 Get more information using the host and OSD.
 
 ```bash
-ceph orch ps --daemon-type osd ncn-s002
+ncn-s# ceph orch ps --daemon-type osd ncn-s002
 NAME    HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE ID      CONTAINER ID
 osd.0   ncn-s002  running (23h)  7m ago     2d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  98859a09a946
 osd.10  ncn-s002  running (23h)  7m ago     2d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  808162b421b8
@@ -134,7 +134,7 @@ In order to zap a single OSD, it is necessary to gather some information.
 1. List the devices on that host with `ceph orch device ls <hostname>`.
 
    ```bash
-   ncn-s00[123]:~ # ceph orch device ls ncn-s002 --wide
+   ncn-s# ceph orch device ls ncn-s002 --wide
    Hostname  Path      Type  Transport  RPM      Vendor  Model             Serial          Size   Health   Ident  Fault  Available  Reject Reasons
    ncn-s002  /dev/sdc  ssd   Unknown    Unknown  ATA     SAMSUNG MZ7LH1T9  S455NY0M811867  1920G  Unknown  N/A    N/A    No         locked, LVM detected, Insufficient space (<10 extents) on vgs
    ncn-s002  /dev/sdd  ssd   Unknown    Unknown  ATA     SAMSUNG MZ7LH1T9  S455NY0M812407  1920G  Unknown  N/A    N/A    No         locked, LVM detected, Insufficient space (<10 extents) on vgs
@@ -146,11 +146,10 @@ In order to zap a single OSD, it is necessary to gather some information.
 
    The locked status in the Reject column is likely the result of a wipe failure.
 
-2. Find the drive path.
+1. Find the drive path.
 
    ```bash
-   cephadm ceph-volume lvm list
-   ncn-s002:~ #  cephadm ceph-volume lvm list
+   ncn-s#  cephadm ceph-volume lvm list
    Inferring fsid 8f4dd38b-ee84-4d29-8305-1ef24e61a5d8
    Using recent Ceph image docker.io/ceph/ceph@sha256:16d37584df43bd6545d16e5aeba527de7d6ac3da3ca7b882384839d2d86acc7d
    /usr/bin/podman: stdout
@@ -173,13 +172,13 @@ In order to zap a single OSD, it is necessary to gather some information.
    /usr/bin/podman: stdout       vdo                       0
    /usr/bin/podman: stdout       devices                   /dev/sdf  <--the path
    /usr/bin/podman: stdout
-
-   # Shortened output for example
    ```
 
-3. Zap a single device with `ceph orch device zap (hostname) (device path)`.
+   > Above output truncated for the purposes of this example.
+
+1. Zap a single device with `ceph orch device zap (hostname) (device path)`.
 
    ```bash
-   ncn-s00[123] ceph orch device zap ncn-s002 /dev/sdf
+   ncn-s# ceph orch device zap ncn-s002 /dev/sdf
    ```
 

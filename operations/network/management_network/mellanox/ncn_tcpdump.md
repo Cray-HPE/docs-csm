@@ -2,7 +2,7 @@
 
 If your host is not getting an IP address you can run a packet capture to see if DHCP traffic is being transmitted.
 
-On ncn-w001 or a worker/manager with kubectl, run:
+On `ncn-w001` or a worker/manager with `kubectl`, run:
 
 ```
 tcpdump -w dhcp.pcap -envli bond0.nmn0 port 67 or port 68

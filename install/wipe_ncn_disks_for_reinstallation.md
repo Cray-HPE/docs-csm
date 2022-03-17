@@ -293,9 +293,9 @@ If a node type is not specified, the step should be run regardless of node type.
 
 1. Group these commands together for each node.
 
-    This group of commands should be done in succession on one node before moving to do the same set of commands on the next node. The nodes would be addressed in descending order for each type of node. Start with the utility storage nodes, then the worker nodes, then ncn-m003, then ncn-m002.
+    This group of commands should be done in succession on one node before moving to do the same set of commands on the next node. The nodes would be addressed in descending order for each type of node. Start with the utility storage nodes, then the worker nodes, then `ncn-m003`, then `ncn-m002`.
 
-    > **WARNING:** Do not run these commands on ncn-m001
+    > **WARNING:** Do not run these commands on `ncn-m001`
     1. List the disks for verification.
 
         ```bash
