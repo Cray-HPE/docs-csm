@@ -30,20 +30,25 @@ Scenarios where this procedure is applicable:
 
         Node xname format: xXcCsSbBnN
 
-        |   |                | SHCD Column           | Description
-        | - | -------------- | --------------------- | ----------- 
-        | X | Cabinet number | SourceRack (K20)      | 
-        | C | Chassis number |                       | For air-cooled nodes the chassis is 0.
-        | S | Slot/Rack U    | Source Location (L20) | The Slot of the node is determined by the bottom most rack U that node occupies.
-        | B | BMC number     |                       | For Management NCNs the BMC number is 0.
-        | N | Node number    |                       | For Management NCNs the Node number is 0.
+        |   |                | SHCD Column to reference | Description
+        | - | -------------- | ------------------------ | ----------- 
+        | X | Cabinet number | SourceRack (K20)         | The Cabinet or rack number containing the Management NCN.
+        | C | Chassis number |                          | For air-cooled nodes the chassis is 0.
+        | S | Slot/Rack U    | Source Location (L20)    | The Slot of the node is determined by the bottom most rack U that node occupies.
+        | B | BMC number     |                          | For Management NCNs the BMC number is 0.
+        | N | Node number    |                          | For Management NCNs the Node number is 0.
 
 
         ```bash
         ncn-m# export XNAME=x3000c0s4b0n0
         ```
+    
+    2.  Determine the NCN BMC xname by removing the trailing `n0` from the NCN node xname:
+        ```bash
+        ncn-m# export BMC_XNAME=x3000c0s4b0
+        ```
 
-    2.  Determine the xname of the MgmtSwitchConnector (switch port of the management switch the BMC is connected to). This is not required for ncn-m001, as its BMC is typically connected to the site network.
+    3.  Determine the xname of the MgmtSwitchConnector (switch port of the management switch the BMC is connected to). This is not required for ncn-m001, as its BMC is typically connected to the site network.
 
         Sample row from the HMN tab of a SHCD:
         | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
@@ -51,18 +56,23 @@ Scenarios where this procedure is applicable:
         | wn01            | x3000             | u04                   | -     |              |      | j3                | sw-smn01          | x3000                  | u14                        | -     | j48                    |
 
         MgmtSwitchConnector Xname format: xXcCwWjJ
-        |   |                    |                            |
+        |   |                    | SHCD Column to reference   | Description
         | - | ------------------ | -------------------------- | ----
-        | X | Cabinet number     | Destination Rack (R20)     |
+        | X | Cabinet number     | Destination Rack (R20)     | The Cabinet or rack number containing the Management NCN. 
         | C | Chassis number     |                            | For air-cooled management switches the chassis is 0.
-        | W | Slot/Rack U        | Destination Location (S20) |
-        | J | Switch port number | Destination Port (U20)     |
+        | W | Slot/Rack U        | Destination Location (S20) | The Slot/Rack U that the management switch occupies.
+        | J | Switch port number | Destination Port (U20)     | The switch port on the switch that the NCN BMC is cabled to.
 
         ```bash
         ncn-m# export MGMT_SWITCH_CONNECTOR=x3000c0w14j48
         ```
 
-    3.  Collect NCN MAC Addresses for the following interfaces if they are present. Depending on the hardware present not all of the following interfaces will be present.
+    4.  Determine the xanem of the management switch xname by removing the trailing `jJ` from the MgmtSwitchConnector xname:
+        ```bash
+        ncn-m# export MGMT_SWITCH=x3000c0w14
+        ```
+
+    5.  Collect NCN MAC Addresses for the following interfaces if they are present. Depending on the hardware present not all of the following interfaces will be present.
         | Interface |   | Description
         | --------- | - | ----------
         | mgmt0     |   | MAC Address of Management network interface
@@ -75,7 +85,7 @@ Scenarios where this procedure is applicable:
         | lan1      |   |
 
         Depending on the hardware present in the NCN not all of these interfaces may not present.
-        -   NCNs will have either 2 or 4 management NIC ports.
+        -   NCNs will have either 2 or 4 management NIC ports (1 or 2 PCIe NIC cards). 
         -   It is expected that only worker NCNs have HSN Interfaces.
 
         __NCN with a single PCIe card (1 card with 2 ports)__
@@ -116,6 +126,7 @@ Scenarios where this procedure is applicable:
             ifname=mgmt1:a4:bf:01:65:6a:ab
             ```
 
+            Using the sample output from above we can deterive the following CLI flags for a worker NCN:
             | Interface | MAC Address         | CLI Flag
             | --------- | ------------------- | -------- 
             | mgmt0     | `a4:bf:01:65:6a:aa` | `--mac-mgmt0=a4:bf:01:65:6a:aa`
@@ -124,9 +135,11 @@ Scenarios where this procedure is applicable:
             | lan1      | `b8:59:9f:d9:9d:e9` | `--mac-lan1=b8:59:9f:d9:9d:e9`
             | hsn0      | `50:6b:4b:23:9f:7c` | `--mac-hsn0=50:6b:4b:23:9f:7c`
 
+            TODO Should I include examples for master/storage NCNs? What about different NIC card counts?
+
         2. **Otherwise** the MACs for the NCN needs to be collected from the NCN using [this procedure](TODO).
 
-    4.  Collect the BMC MAC Address.
+    6.  Collect the BMC MAC Address.
         -   If the NCN was previously in the system recall the record BMC MAC Address recorded from the [Remove NCN Data](Remove_NCN_Data.md) procedure.
         -   If the BMC is reachable by IP, then ipmitool can be used to determine the MAC Address of the BMC:
 
@@ -149,13 +162,33 @@ Scenarios where this procedure is applicable:
 
         -   Alternatively view the MAC Address table on the management switch the BMC is cabled to.
             
-            TODO
-            1.  SSH into the management switch the BMC is connected
-            2.  View the MAC Address table on the switch 
-            3.  Locate the switch port the BMC is connected to record the MAC Address
+            1.  Determine the alias of the management switch the BMC is connected to:
+                ```bash
+                ncn-m# cray sls hardware describe $MGMT_SWITCH --format json | jq .ExtraProperties.Aliases[] -r
                 ```
-                sw-leaf-bmc-001# show mac address-table | grep ethernet1/1/39
+
+                Example output:
+                ```              
+                sw-leaf-001
+                ```
+
+            2.  SSH into the management switch the BMC is connected to:
+                ```
+                ssh admin@sw-leaf-001.hmn
+                ```
+
+            3.  Locate the switch port the BMC is connected to record the MAC Address
+
+                __Dell__
+                ```
+                sw-leaf-001# show mac address-table | grep ethernet1/1/39
                 4	a4:bf:01:65:68:54	dynamic		ethernet1/1/39
+                ```
+
+                __Aruba__
+                ```
+                sw-leaf-001# show mac-address-table | include 1/1/39
+                a4:bf:01:65:68:54    4        dynamic                   1/1/39
                 ```
   
 2. Perform a dry run of the `add_management_ncn.py` script to determine if any validation failures occur:
@@ -172,6 +205,16 @@ Scenarios where this procedure is applicable:
         --mac-lan1 b8:59:9f:d9:9d:e9 \
         --mac-bmc a4:bf:01:65:68:54
     ```
+    > For each MAC Address/interfaces that was collected from the NCN append them to the command above
+
+    - __Master or Storage Node with 1 PCIe Card__
+    - __Worker Node with 1 PCIe Card__
+    - __Worker Node with 1 PCIe Cards and 1 HSN NIC__
+    - __Worker Node with 1 PCIe Cards and 2 HSN NIC__
+    - __Master or Storage Node with 2 PCIe Cards__
+    - __Worker Node with 2 PCIe Cards and 1 HSN NIC__
+    - __Worker Node with 2 PCIe Cards and 2 HSN - NIC__
+
 
 3.  Run the `add_management_ncn.py` script to add the NCN to SLS, HSM and BSS by adding the `--perform-changes` argument to the command ran in the previous step:
     ```bash
@@ -188,7 +231,7 @@ Scenarios where this procedure is applicable:
         --perform-changes
     ```
 
-4.  If the following was present at the end of the add_management_ncn.py script output, then the NCN BMC was given an IP address via DHCP and is not at the expected IP address.
+4.  **If the following was present** at the end of the add_management_ncn.py script output, then the NCN BMC was given an IP address via DHCP and is not at the expected IP address.
     Sample output when the BMC has an unexpected IP address.
     ```
     x3000c0s3b0n0 (ncn-m002) has been added to SLS/HSM/BSS
@@ -197,7 +240,9 @@ Scenarios where this procedure is applicable:
 
     Restart the BMC to pick up the expected IP Address:
     ```bash
-    ncn-m# ipmitool -U root -I lanplus -P initial0 -H 10.254.1.20 mc reset cold
+    ncn-m# export USERNAME=root
+    ncn-m# export IPMI_PASSWORD=changeme
+    ncn-m# ipmitool -U $USERNAME -I lanplus -E -H 10.254.1.20 mc reset cold
     ncn-m# sleep 60
     ```
 
@@ -211,16 +256,17 @@ Scenarios where this procedure is applicable:
     ncn-m# kubectl -n services rollout restart deployment cray-reds
     ```
 
+    Expected output:
     ```
     deployment.apps/cray-reds restarted
     ```
 
 7.  Wait for REDS to restart:
     ```bash
-    ncn-m## kubectl -n services rollout status  deployment cray-reds
+    ncn-m# kubectl -n services rollout status  deployment cray-reds
     ```
 
-    Example output:
+    Expected output:
     ```
     Waiting for deployment "cray-reds" rollout to finish: 1 old replicas are pending termination...
     Waiting for deployment "cray-reds" rollout to finish: 1 old replicas are pending termination...
@@ -254,8 +300,29 @@ Scenarios where this procedure is applicable:
     }
     ```
     The RedfishEndpoint may cycle between DiscoveryStarted and HTTPsGetFailed before the endpoint becomes DiscoverOK. If the BMC is in HTTPSGetFailed for a long period of time verify the following to help determine the cause:
-    - BMC is reachable at the expected IP address.
-    - Credentials are correct
+    -   Verify the xname of the BMC resolves in DNS:
+        ```bash
+        ncn-m# nslookup x3000c0s38b0
+        ```
+
+        Expected output:
+        ```
+        Server:		10.92.100.225
+        Address:	10.92.100.225#53
+
+        Name:	x3000c0s38b0.hmn
+        Address: 10.254.1.13
+        ```
+    
+    -   Verify the BMC is reachable at the expected IP address:
+        ```bash
+        ncn-m# ping $NODE-mgmt
+        ```
+
+    -   Verify the BMC is configured with the expected:
+        ```bash
+        ncn-m# curl -k -u root:changeme https://x3000c0s38b0/redfish/v1/Managers
+        ```
 
 9.  Verify the NCN IPs are populated in HSM EthernetInterfaces using the mgmt0 MAC Address.
     ```bash
