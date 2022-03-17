@@ -38,7 +38,7 @@ Only follow the steps in the section for the node type that is being rebuilt:
 
 ## Wipe Disks: Worker Node
 
-1. Stop contianerd and wipe drives.
+1. Stop `containerd` and wipe drives.
 
     ```bash
     systemctl stop containerd.service
@@ -90,4 +90,4 @@ Only follow the steps in the section for the node type that is being rebuilt:
 
 [Click Here for the Next Step](Power_Cycle_and_Rebuild_Nodes.md)
 
-Or [CLick Here to Return to the Main Page](../Rebuild_NCNs.md)
+Or [Return to the Main Page](../Rebuild_NCNs.md)

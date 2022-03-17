@@ -459,7 +459,7 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
         ```bash
         ncn# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
         ```
-     1. Delete the backup, where <backup> is replaced with a backup returned in the previous step.
+     1. Delete the backup, where `<backup>` is replaced with a backup returned in the previous step.
         ```bash
         ncn# velero backup delete <backup> --confirm
         ```

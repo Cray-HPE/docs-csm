@@ -44,7 +44,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       ```bash
       ncn-m001# egrep "CrashLoopBackOff" k8s.pods | tee k8s.pods.CLBO
       ncn-m001# egrep "ContainerCreating" k8s.pods | tee k8s.pods.CC
-      ncn-m001# egrep -v "Run|Completed" k8s.pod | tee k8s.pods.errors
+      ncn-m001# egrep -v "Run|Completed" k8s.pods | tee k8s.pods.errors
       ```
 
 1. Check for running sessions.
@@ -166,3 +166,5 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       [n000]# cscli show_nodes
       [n000]# cscli fs_info
       ```
+
+After completing the above steps, proceed to [Upgrade Management Nodes and CSM Services](index.md#upgrade_management_nodes_csm_services).

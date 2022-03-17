@@ -12,7 +12,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
 **IMPORTANT NOTES:**
 
-> * Removal ncn-s001/2/3 permantly is **NOT SUPPORTED**. They can only be rebuilt in place or replaced with new hardware.
+> * Permanent removal of `ncn-s001, `ncn-s002`, or `ncn-s003` is **NOT SUPPORTED**. They can only be rebuilt in place or replaced with new hardware.
 >   * This is due to the ceph mon and mgr processes running on them.
 > * Always ensure you have the free capacity to remove the node(s) prior to performing this task.
 > * When removing a node other than ncn-s001/2/3, then you will have to adjust the SMF pools quotas accordingly.
@@ -40,7 +40,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
    export NODE=<node being removed>
    ```
 
-5. Reweigh the OSD\(s\) ***on the node being removed***qq to rebalance the cluster.
+5. Reweigh the OSD\(s\) ***on the node being removed*** to rebalance the cluster.
 
 
     1. Change the weight and crush weight of the OSD being removed to 0.
@@ -61,7 +61,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     for osd in $(ceph osd ls-tree $NODE); 
     do 
       ceph osd down osd.$osd; 
-      ceph osddestroy osd.$osd --force; 
+      ceph osd destroy osd.$osd --force; 
       ceph osd purge osd.$osd --force;
     done
     ```

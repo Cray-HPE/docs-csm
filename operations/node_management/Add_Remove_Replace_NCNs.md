@@ -1,26 +1,36 @@
 # Alpha Framework to Add, Remove or Replace NCNs
 
+- [Prerequisites](#prerequisites)
 - [Add Worker, Storage or Master NCNs](#add-worker-storage-master)
 - [Remove Worker, Storage or Master NCNs](#remove-worker-storage-master)
-- [Replace Worker, Storage or Master NCNs](#replace-worker-storage-master)
+- [Replace or Move Worker, Storage or Master NCNs](#replace-worker-storage-master)
+
+<a name="prerequisites"></a>
+### Prerequisites
+
+The system is fully installed and has transitioned off of the LiveCD.
+
+1. preq.py placeholder
 
 <a name="add-worker-storage-master"></a>
 ## Add Worker, Storage or Master NCNs
 
 Use this procedure to add a worker, storage or master non-compute node (NCN).
 
-<a name="prerequisites"></a>
+<a name="add-prerequisites"></a>
 ### Prerequisites
 
-The system is fully installed and has transitioned off of the LiveCD.
-For several of the commands in this section, you will need to have variables set with the name of the node being rebuilt and its xname.
-
-Set NODE to the hostname of the node being rebuilt (e.g. `ncn-w001`, `ncn-w002`, etc).
-Set XNAME to the xname of that node.
+For several of the commands in this section, you will need to have variables set with the name of the node being added and its xname.
+Set NODE to the hostname of the node being added (e.g. `ncn-w001`, `ncn-s002`, etc).
 
 ```bash
-ncn# NODE=ncn-w00n
-ncn# XNAME=$(ssh $NODE cat /etc/cray/xname)
+ncn# NODE=ncn-x00n
+```
+
+Follow the procedure to determine the [Component Name (xname)](../Component_Names_xnames.md) and set the variable accordingly.
+
+```bash
+ncn# XNAME=<xname>
 ncn# echo $XNAME
 ```
 
@@ -40,15 +50,23 @@ The following is a high-level overview of the NCN add workflow:
 
 6. [Validation](Add_Remove_Replace_NCNs/Validation.md#validate-added-ncn)
 
-
 <a name="remove-worker-storage-master"></a>
 ## Remove Worker, Storage or Master NCNs
 
 Use this procedure to remove a worker, storage or master node (NCN).
 
+<a name="remove-prerequisites"></a>
 ### Prerequisites
 
-The system is fully installed and has transitioned off of the LiveCD.
+For several of the commands in this section, you will need to have variables set with the name of the node being removed and its xname.
+Set NODE to the hostname of the node being removed (e.g. `ncn-w001`, `ncn-s002`, etc).
+Set XNAME to the xname of that node.
+
+```bash
+ncn# NODE=ncn-x00n
+ncn# XNAME=$(ssh $NODE cat /etc/cray/xname)
+ncn# echo $XNAME
+```
 
 ### Procedure
 
@@ -66,17 +84,16 @@ The following is a high-level overview of the NCN add workflow:
 
 
 <a name="replace-worker-storage-master"></a>
-## Replace Worker, Storage or Master NCNs
+## Replace or Move Worker, Storage or Master NCNs
 
-Use the [Remove Worker, Storage or Master NCNs](#remove-worker-storage-master) followed by the [Add Worker, Storage or Master NCNs](#remove-worker-storage-master) to replace a worker, storage or master node (NCN). Generally scaling master nodes is not recommended since it can cause etcd latency.
+Replacing an NCN is defined as removing an NCN of a given type and adding a different NCN of the same type back into the same cabinet slot.
+Moving an NCN is defined as removing an NCN of a given type from one cabinet and adding it back into a different cabinet.
 
-### Prerequisites
-
-The system is fully installed and has transitioned off of the LiveCD.
+Use the [Remove Worker, Storage or Master NCNs](#remove-worker-storage-master) followed by the [Add Worker, Storage or Master NCNs](#add-worker-storage-master) to replace a worker, storage or master node (NCN). Generally scaling master nodes is not recommended since it can cause Etcd latency.
 
 ### Procedure
 
 1. [Remove Worker, Storage or Master NCNs](#remove-worker-storage-master)
 
-2. [Add Worker, Storage or Master NCNs](#remove-worker-storage-master)
+2. [Add Worker, Storage or Master NCNs](#add-worker-storage-master)
 

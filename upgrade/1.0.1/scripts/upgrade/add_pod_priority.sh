@@ -23,6 +23,19 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
+# Ensure etcd clusters have three running members before proceeding
+for cluster in $(kubectl get etcd -n services | grep -v NAME | awk '{print $1}')
+do
+  size=$(kubectl get etcd -n services $cluster -o json | jq '.status.size')
+  if [ $size -ne 3 ]; then
+    echo >&2 "ERROR: etcd cluster: $cluster does not have three running members."
+    echo >&2 "       This must be addressed prior to continuing with the install."
+    exit 1
+  else
+    echo "validated etcd cluster: $cluster has three running members..."
+  fi
+done
+
 DEPLOYMENTS="\
 cray-bss \
 cray-keycloak-gatekeeper-ingress \
@@ -78,6 +91,15 @@ function wait_for_running_pods() {
     current_running_num=$(kubectl get po -n $ns | grep $etcd_cluster | grep Running | wc -l)
     if [[ "$desired_size" -eq "$current_running_num" ]]; then
       echo "Found $desired_size running pods in $etcd_cluster etcd cluster"
+      while true; do
+        operator_num_ready=$(kubectl get etcd $etcd_cluster -n $ns -o jsonpath='{.status.members.ready}' | jq .[] | wc -l)
+        if [[ "$desired_size" -eq "$operator_num_ready" ]]; then
+          echo "Found $desired_size ready members in $etcd_cluster etcd cluster"
+          break
+        fi
+        echo "Sleeping for ten seconds waiting for $desired_size ready members $etcd_cluster etcd cluster"
+        sleep 10
+      done
       break
     fi
     echo "Sleeping for ten seconds waiting for $desired_size pods in $etcd_cluster etcd cluster"

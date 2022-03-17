@@ -1,5 +1,9 @@
 # CSM 1.0.10 Patch Installation Instructions
 
+## Introduction
+
+This document is intended to guide an administrator through the process going to Cray Systems Management v1.0.10 from v1.0.1. If you are at an earlier version, you must first upgrade to at least v1.0.1. For information on how to do that, see [Upgrade CSM](../index.md).
+
 ## Steps
 
 1. [Preparation](#preparation)
@@ -141,6 +145,9 @@ Waiting for deployment "cray-dns-unbound" rollout to finish: 1 old replicas are 
 Waiting for deployment "cray-dns-unbound" rollout to finish: 1 old replicas are pending termination...
 deployment "cray-dns-unbound" successfully rolled out
 ```
+
+* If cray-dns-unbound goes into CLBO after deployment restart. 
+Please see [Unbound in CrashLoopBackOff after deployment restart](../../troubleshooting/known_issues/unbound_clbo.md)
 <a name="apply-pod-priorities"></a>
 
 ## Apply Pod Priorities

@@ -12,6 +12,7 @@ This document provides troubleshooting information for services and functionalit
     * [CFS Sessions are Stuck in a Pending State](known_issues/cfs_sessions_stuck_in_pending.md)
     * [Orphaned CFS Pods After Booting or Rebooting](known_issues/orphaned_cfs_pods.md)
     * [Wait_for_unbound or cray-dns-unbound-manager hangs](known_issues/wait_for_unbound_hang.md)
+    * [Unbound in CrashLoopBackOff after deployment restart](known_issues/unbound_clbo.md)
  * Kubernetes troubleshooting
     * [General Kubernetes Commands for Troubleshooting](./kubernetes/Kubernetes_Troubleshooting_Information.md)
     * [Kubernetes Log File Locations](./kubernetes/Kubernetes_Log_File_Locations.md)
