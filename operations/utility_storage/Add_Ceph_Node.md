@@ -4,12 +4,12 @@
 
 ## Add Join Script
 
-1. There is a script located at `/srv/cray/scripts/common/join_ceph_cluster.sh` that will need to be copied to the node that was rebuilt.  
+1. There is a script located at `/usr/share/doc/csm/scripts/join_ceph_cluster.sh` that will need to be copied to the node that was rebuilt or added.  
 
 2. Change the mode of the script.
 
    ```bash
-   chmod u+x /srv/cray/scripts/common/join_ceph_cluster.sh
+   chmod u+x /usr/share/doc/csm/scripts/join_ceph_cluster.sh
    ```
 
 3. In a separate window log into one of the following ncn-s00(1/2/3) and execute the following:
@@ -21,14 +21,14 @@
 4. Execute the script.
 
    ```bash
-   /srv/cray/scripts/common/join_ceph_cluster.sh
+   /usr/share/doc/csm/scripts/join_ceph_cluster.sh
    ```
 
    **IMPORTANT:** While watching your window running `watch ceph -s` you will see the health go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about "failed to probe daemons or devices" and this will clear.
 
 ## Zapping OSDs
 
-   **IMPORTANT:** Only do this if you were not able to wipe the node prior to rebuild.
+   **IMPORTANT:** Only do this if you were not able to wipe the node prior to rebuild. This step is not needed if a node was added.
 
    **NOTE:** The commands in the Zapping OSDs section will need to be run from a node running ceph-mon. Typically ncn-s00(1/2/3).
 
@@ -86,13 +86,13 @@
    - If running Rados Gateway on all nodes is the desired conifugration then do:
 
       ```bash
-      ceph orch apply rgw site1 zone1 --placement="*"
+      ceph orch apply rgw site1 zone1 --placement="*" --port=8080
       ```
 
    - If deploying to select nodes then do:
   
      ```bash
-     ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
+     ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >" --port=8080
      ```
 
 1. Verify Rados Gateway is running on the desired nodes.
@@ -107,9 +107,61 @@
 
 1. Add nodes into HAproxy and KeepAlived.
 
-   ```bash
-   source /srv/cray/scripts/metal/update_apparmor.sh; reconfigure-apparmor
-   pdsh -w ncn-s00[1..(end node number)] -f 2 '/srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg; systemctl restart haproxy.service; /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf; systemctl restart keepalived.service'
-   ```
+   - If the node was rebuilt then do:
+
+     ```bash
+     source /srv/cray/scripts/metal/update_apparmor.sh; reconfigure-apparmor
+     pdsh -w ncn-s00[1-(end node number)] -f 2 '/srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg; systemctl restart haproxy.service; /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf; systemctl restart keepalived.service'
+     ```
+
+   - If the node was added then do:
+
+     Determine the IP address of the added node.
+   
+     ```bash
+     NODE=`hostname`
+     cloud-init query ds | jq -r ".meta_data[].host_records[] | select(.aliases[]? == \"$NODE\") | .ip" 2>/dev/null
+     ```
+
+     Example Output:
+
+     ```
+     10.252.1.14
+     ```
+
+     Update the existing HAproxy config on ncn-s001 to include the added node.
+
+     ```
+     ncn-s001# vi /etc/haproxy/haproxy.cfg
+     ```
+
+     This example adds `ncn-s004` with the IP address `10.252.1.14` to `backend rgw-backend`.
+
+     ```bash
+     ...
+     backend rgw-backend
+         option forwardfor
+         balance static-rr
+         option httpchk GET /
+             server server-ncn-s001-rgw0 10.252.1.6:8080 check weight 100
+             server server-ncn-s002-rgw0 10.252.1.5:8080 check weight 100
+             server server-ncn-s003-rgw0 10.252.1.4:8080 check weight 100
+             server server-ncn-s004-rgw0 10.252.1.14:8080 check weight 100   <--- Added line
+     ...
+     ```
+
+     Copy the HAproxy config from ncn-s001 to all the storage nodes.
+
+     ```bash
+     ncn-s001# pdcp -w ncn-s00[2-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
+     ```
+      
+     Configure apparmor and KeepAlived on the added node and restart the services across all the storage nodes.
+
+     ```bash
+     source /srv/cray/scripts/metal/update_apparmor.sh; reconfigure-apparmor
+     /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf
+     pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service; systemctl restart keepalived.service'
+     ```
 
 [Next Step - Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md)
