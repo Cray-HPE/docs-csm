@@ -514,7 +514,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
        Then, change the name of the manifest being deployed from platform to cray-keycloak:
       
        ```bash
-       ncn-m001:# sed -i 's/name: platform/name: cray-keycloak/' platform.yaml
+       ncn-m001# sed -i 's/name: platform/name: cray-keycloak/' platform.yaml
        ```
 
     3. Populate the platform manifest with data from the customizations.yaml file.
@@ -678,7 +678,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
     1. Retrieve the admin password for Keycloak.
 
        ```bash
-       ncn-m001: # kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
+       ncn-m001# kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
        ```
    
     2. Login to the Keycloak UI using the `admin` user and the password obtained in the previous step.

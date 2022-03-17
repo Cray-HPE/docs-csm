@@ -1,19 +1,18 @@
-
 # Collecting the BMC MAC Addresses
 
-This guide will detail how to collect BMC MAC Addresses from an HPE Cray EX system with configured switches.
-The BMC MAC Address is the exclusive, dedicated LAN for the onboard BMC.
+This guide will detail how to collect BMC MAC addresses from an HPE Cray EX system with configured switches.
+The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
 
 Results may vary if an unconfigured switch is being used.
 
 ## Prerequisites
 
 * There is a configured switch with SSH access _or_ unconfigured with COM access (serial-over-lan/DB-9).
-* Another file is available to record the collected BMC information.
+* A file is available to record the collected BMC information.
 
 ## Procedure
 
-1. Establish an SSH or [Connect to Switch over USB-Serial Cable](connect_to_switch_over_usb_serial_cable.md) to the leaf switch.
+1. Start a session on the leaf switch, either using SSH or a USB serial cable (see [Connect to Switch over USB-Serial Cable](connect_to_switch_over_usb_serial_cable.md) for details on how to do that).
     
     > **NOTE:** These IP addresses are examples; 10.X.0.4 may or may not match the setup.
     
@@ -125,16 +124,16 @@ Results may vary if an unconfigured switch is being used.
     ec:eb:b8:3d:89:41    1        dynamic                   1/1/42
     ```
 
-1. Ensure the management NCNs are present in the ncn_metadata.csv file.
+1. Ensure the management NCNs are present in the `ncn_metadata.csv` file.
    
-   The output from the previous `show mac address-table` command will display information for all management NCNs that do not have an external connection for their BMC, such as ncn-m001.
+   The output from the previous `show mac address-table` command will display information for all management NCNs that do not have an external connection for their BMC, such as `ncn-m001`.
    
-   All of the management NCNs should be present in the ncn_metadata.csv file.
+   All of the management NCNs should be present in the `ncn_metadata.csv` file.
 
-   Fill in the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns with a placeholder value, such as `de:ad:be:ef:00:00`,
+   Fill in the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1` columns with a placeholder value, such as `de:ad:be:ef:00:00`,
    as a marker that the correct value is not in this file yet.
 
-   **IMPORTANT:** Mind the index for each group of nodes (3, 2, 1.... ; not 1, 2, 3). If storage nodes are ncn-s001 x3000c0s7b0n0, ncn-s002 x3000c0s8b0n0, ncn-s003 x3000c0s9b0n0, then their portion of the file would be ordered x3000c0s9b0n0, x3000c0s8b0n0, x3000c0s7b0n0.
+   **IMPORTANT:** Mind the index for each group of nodes (3, 2, 1.... ; not 1, 2, 3). If storage nodes are `ncn-s001 x3000c0s7b0n0`, `ncn-s002 x3000c0s8b0n0`, `ncn-s003 x3000c0s9b0n0`, then their portion of the file would be ordered `x3000c0s9b0n0`, `x3000c0s8b0n0`, `x3000c0s7b0n0`.
 
    ```
    Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
@@ -160,7 +159,7 @@ Results may vary if an unconfigured switch is being used.
 
    > **NOTE:** An Intel node needs to use `ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt lan print` instead of the above command.
 
-   Add this information for ncn-m001 to the `ncn_metadata.csv` file. There should be ncn-m003, then ncn-m002, and this new entry for ncn-m001 as the last line in the file.
+   Add this information for `ncn-m001` to the `ncn_metadata.csv` file. There should be `ncn-m003`, then `ncn-m002`, and this new entry for `ncn-m001` as the last line in the file.
    
    ```
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
@@ -170,8 +169,8 @@ Results may vary if an unconfigured switch is being used.
    
    There may be placeholder entries for some MAC addresses.
 
-   Sample file showing storage nodes 3,2,1, then worker nodes 3,2,1, then master nodes 3,2,1 with valid BMC
-   MAC addresses, but placeholder values `de:ad:be:ef:00:00` for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1.
+   Sample file showing storage nodes 3, 2, and 1, then worker nodes 3, 2, and 1, and finally master nodes 3, 2, and 1 with valid `BMC MAC`
+  addresses, but placeholder value `de:ad:be:ef:00:00` for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1`.
 
    ```
    Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
@@ -184,6 +183,5 @@ Results may vary if an unconfigured switch is being used.
    x3000c0s3b0n0,Management,Master,a4:bf:01:48:1f:70,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    x3000c0s2b0n0,Management,Master,a4:bf:01:4d:d9:9a,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
-
    ```
 

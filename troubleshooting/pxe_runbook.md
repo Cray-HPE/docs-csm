@@ -1,10 +1,10 @@
 # PXE Booting Runbook
 
-PXE booting is a key component of a working Shasta system. There are a lot of different components involved which increases the complexity.
-This guide runs through the most common issues and shows the user what is needed in order to have a successful PXE boot.
+PXE booting is a key component of a working Shasta system. There are a lot of different components involved, which increases the complexity.
+This guide runs through the most common issues and shows what is needed in order to have a successful PXE boot.
 
 1. [NCNs on install](#ncns-on-install)<br>
-2. [ncn-m001 on reboot or NCN boot](#ncn-m001-on-reboot)<br>
+2. [`ncn-m001` on reboot or NCN boot](#ncn-m001-on-reboot)<br>
     2.1. [Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)](#Verify-DHCP-packets)<br>
     2.2. [Verify BGP](#verify-bgp)<br>
     2.3. [Verify route to TFTP](#verify-route-to-tftp)<br>
@@ -20,11 +20,11 @@ This guide runs through the most common issues and shows the user what is needed
 
 
 * Verify the DNSMASQ configuration file matches what is configured on the switches.
-    * Here is a DNSMASQ configuration file for the Metal network (VLAN1). As you can see, the router is `10.1.0.1`. This has to match what the IP address is on the switches doing the routing for the MTL network. This is most commonly on the spines. This configuration is commonly missed on the CSI input file.
+    * Here is a DNSMASQ configuration file for the Metal network (VLAN1). As you can see, the router IP address is `10.1.0.1`. This has to match what the IP address is on the switches doing the routing for the MTL network. This is most commonly on the spines. This configuration is commonly missed on the CSI input file.
 
 >MTL dnsmasq file
 
-```
+```text
 # MTL:
 server=/mtl/
 address=/mtl/
@@ -40,7 +40,7 @@ dhcp-option=interface:bond0,option:router,10.1.0.
 dhcp-range=interface:bond0,10.1.1.33,10.1.1.233,10m
 ```
 
-* Here is an example of what the Spine switch configuration should be.
+* Here is an example of what the spine switch configuration should be.
 
 
 
@@ -92,21 +92,17 @@ ip mtu 9198
 ip helper-address 10.92.100.
 exit
 ```
-* You should be able to ping the MTL router from ncn-m001.
+* You should be able to ping the MTL router from `ncn-m001`.
 
 <a name="ncn-m001-on-reboot"></a>
 
-## 2. ncn-m001 on reboot or NCN boot
+## 2. `ncn-m001` on reboot or NCN boot
 
 
 * Common Error messages.
 
-```bash
-2021-04-19 23:27:09 PXE-E18: Server response timeout.
-```
-```bash
-2021-02-02 17:06:13 PXE-E99: Unexpected network error.
-```
+    * `2021-04-19 23:27:09 PXE-E18: Server response timeout.`
+    * `2021-02-02 17:06:13 PXE-E99: Unexpected network error.`
 
 * Verify the ip helper-address on VLAN 1 on the switches. This is the same configuration as above ^ "Mellanox Config" and "Aruba Config"
 
@@ -120,7 +116,7 @@ exit
 * TEST
 
 ```bash
-ncn-w001:~ # ping 10.1.0.
+ncn-w# ping 10.1.0.
 PING 10.1.0.1 (10.1.0.1) 56(84) bytes of data.
 64 bytes from 10.1.0.1: icmp_seq=1 ttl=64 time=0.361 ms
 64 bytes from 10.1.0.1: icmp_seq=2 ttl=64 time=0.145 ms
@@ -129,7 +125,7 @@ PING 10.1.0.1 (10.1.0.1) 56(84) bytes of data.
 * If this fails you may have a misconfigured CAN or need to add a route to the MTL network.
 
 ```bash
-ncn-w001:~ # ip route add 10.1.0.0/16 via 10.252.0.1 dev vlan
+ncn-w# ip route add 10.1.0.0/16 via 10.252.0.1 dev vlan
 ```
 
 <a name="verify-bgp"></a>
@@ -137,8 +133,6 @@ ncn-w001:~ # ip route add 10.1.0.0/16 via 10.252.0.1 dev vlan
 
 
 * Verify the BGP neighbors are in the established state on BOTH the switches.
-
-
 
 >Aruba BGP
 
@@ -186,11 +180,10 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 
 ## 2.3. Verify route to TFTP
 
-
 * On BOTH Aruba switches we need a single route to the TFTP server 10.92.100.60. This is needed because there are issues with Aruba
 ECMP hashing and TFTP traffic.
 
-```bash
+```
 sw-spine-002# show ip route 10.92.100.60
 
 Displaying ipv4 routes selected for forwarding
@@ -213,7 +206,7 @@ Displaying ipv4 routes selected for forwarding
 * Log into the leaf switch and try to download the iPXE binary.
 * This requires that the leaf switch can talk to the TFTP server "10.92.100.60"
 
-```bash
+```
 sw-leaf-001# start-shell
 sw-leaf-001:~$ sudo su
 sw-leaf-001:/home/admin# tftp 10.92.100.
@@ -233,17 +226,16 @@ would fail intermittently.
 
 * Check the KEA logs and verify that the lease is getting allocated.
 ```bash
-kubectl logs -n services pod/$(kubectl get -n services pods |
-grep kea | head -n1 | cut -f 1 -d ' ') -c cray-dhcp-kea
+ncn# kubectl logs -n services pod/$(kubectl get -n services pods |
+         grep kea | head -n1 | cut -f 1 -d ' ') -c cray-dhcp-kea
 ```
 
 ```
 2021-04-21 00:13:05.416 INFO  [kea-dhcp4.leases/24.139710796402304] DHCP4_LEASE_ALLOC [hwtype=1 02:23:28:01:30:10], cid=[00:78:39:30:30:30:63:31:73:30:62:31], tid=0x21f2433a: lease 10.104.0.23 has been allocated for 300 seconds
-
 ```
 
-* Here we can see that KEA is allocating a lease to 10.104.0.23.
-* The lease MUST say DHCP4_LEASE_ALLOC. If it says DHCP4_LEASE_ADVERT, there is likely a problem. Restarting KEA will fix this issue most of the time.
+* Here we can see that KEA is allocating a lease to `10.104.0.23`.
+* The lease MUST say `DHCP4_LEASE_ALLOC`. If it says `DHCP4_LEASE_ADVERT`, there is likely a problem. Restarting KEA will fix this issue most of the time.
 
 ```
 2021-06-21 16:44:31.124 INFO  [kea-dhcp4.leases/18.139837089017472] DHCP4_LEASE_ADVERT [hwtype=1 14:02:ec:d9:79:88], cid=[no info], tid=0xe87fad10: lease 10.252.1.16 will be advertised
@@ -254,18 +246,17 @@ grep kea | head -n1 | cut -f 1 -d ' ') -c cray-dhcp-kea
 
 
 * We have ran into issues on HPE servers and Aruba switches where the source address of the DHCP Offer is the Metallb address
-of KEA "10.92.100.222". The source address of the DHCP Reply/Offer NEEDS to be the address of the VLAN interface on the
+of KEA `10.92.100.222`. The source address of the DHCP Reply/Offer **needs** to be the address of the VLAN interface on the
 Worker.
 * Here is how to look at DHCP traffic on the workers.
 
 ```bash
-ncn-w001:~ # tcpdump -envli bond0 port 67 or 68
+ncn-w# tcpdump -envli bond0 port 67 or 68
 ```
 
 * You are looking for the source IP address of the DHCP Reply/Offer.
 
 ```
-
 10.252.1.9.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 309, hops 1, xid 0x98b0982e, Flags [Broadcast]
       Your-IP 10.252.1.17
       Server-IP 10.92.100.60
@@ -274,7 +265,7 @@ ncn-w001:~ # tcpdump -envli bond0 port 67 or 68
       file "ipxe.efi"[|bootp]
 ```
 
-* If the Source IP address of the DHCP Reply/Offer is the MetalLB IP address, the DHCP packet will never make it out of the NCN An example of
+* If the Source IP address of the DHCP Reply/Offer is the MetalLB IP address, the DHCP packet will never make it out of the NCN. An example of
 this is below.
 
 ```
@@ -292,13 +283,12 @@ worker. We believe this has something to do with conntrack.
 <a name="verify-the-switches"></a>
 ## 2.7. Verify the switches are forwarding DHCP traffic.
 
-* If you made it this far and still cannot pxe boot, you may have run into the IP-Helper breaking on the switch.
-* On all our switch vendors (Aruba, Dell, Mellanox) we have seen the IP-Helpers get stuck and stop forwarding DHCP traffic to the client.
-    * The solutions vary from Vendor to Vendor so your mileage may vary on this.
-    * On the Arubas we have had to delete the entire VLAN configuration and re-apply it in order for the DHCP traffic to come back. This was even after a reboot.
-    * On the Dells we have had to do reboots in order to restore DHCP traffic.
-    * On the Mellanox we have had to delete the VLAN configuration and re-apply it in order for the DHCP traffic to come back.
-    * There seems to be something inherently wrong with how the IP-helper is implemented on switches, or we are doing DHCP so backwards that it breaks every switch...
+* If you still cannot PXE boot, the IP-Helper may be breaking on the switch.
+* On Aruba, Dell, and Mellanox switches we have seen the IP-Helpers get stuck and stop forwarding DHCP traffic to the client.
+    * The solutions vary from vendor to vendor.
+    * On an Aruba or Mellanox switch, delete the entire VLAN configuration and re-apply it, in order for the DHCP traffic to come back.
+    * On a Dell switch, do a reboot in order to restore DHCP traffic.
+* The underlying cause of IP-Helper breaking is not yet known.
 
 <a name="computes-uans-applications-nodes"></a>
 ## 3. Compute Nodes/UANs/Application Nodes

@@ -10,7 +10,7 @@ This is a new Ceph service script that will check the status of ceph and then ve
 
 ## Usage:
 
-```bash
+```text
 usage:  ceph-service-status.sh # runs a simple ceph health check
         ceph-service-status.sh -n <node> -s <service> # checks a single service on a single node
         ceph-service-status.sh -n <node> -a true # checks all Ceph services on a node
@@ -27,7 +27,7 @@ usage:  ceph-service-status.sh # runs a simple ceph health check
 ### Simple Ceph Health Check
 
 ```bash
- # /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating ssh keys..
@@ -37,7 +37,7 @@ Tests run: 1  Tests Passed: 1
 ### Service Check for a Single Service on a Single Node
 
 ```bash
- # /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -v true -s mon.ncn-s001
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -v true -s mon.ncn-s001
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating ssh keys..
@@ -53,7 +53,7 @@ Tests run: 2  Tests Passed: 2
 ### Service Check for All Services on a Single Node
 
 ```bash
-# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -a true -v true
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -a true -v true
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating ssh keys..
@@ -109,7 +109,7 @@ Tests run: 12  Tests Passed: 12
 ### Service Check for a Service Type
 
 ```bash
-# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -s mon
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -s mon
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating ssh keys..
@@ -137,7 +137,7 @@ Tests run: 4  Tests Passed: 4
 ### Service Check for All Services and All Nodes
 
 ```bash
-# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -A true
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -A true
 ```
 
 Note: The output is similar to the above output, but all services on all nodes. We are not showing this to keep the document usable.

@@ -1,37 +1,55 @@
-# CEPH Reference Material
+# CEPHADM
+`cephadm` is a new function introduced in Ceph Octopus 15. It allows for an easier method to install and manage Ceph nodes.
 
+## Traditional Ceph commands
 
-## CEPHADM
-cephadm is a new function introduced in Ceph Octopus 15. It allows for an easier method to install and manage Ceph nodes.
-
-Common Examples:
-
-**Invoking shells to run traditional Ceph commands**
-
-On ncn-s001/2/3:
+On `ncn-s001`, `ncn-s002`, or `ncn-s003`:
 ```bash
-ncn-s00[123]# cephadm shell  # creates a container with access to run Ceph commands the traditional way
+ncn-s# cephadm shell
 ```
 
-or optionally, you can execute your command
+The previous command creates a container and opens an interactive shell with access to run Ceph commands the traditional way.
+
+Or optionally, you can execute your command as follos:
 ```bash
-ncn-s00[123]# cephadm shell -- ceph -s
+ncn-s# cephadm shell -- ceph -s
 ```
 
-**CEPH-VOLUME**
+## Ceph Device Operations
 
 There are multiple ways to do Ceph device operations now.
 
-***via cephadm***
+### Using `cephadm`
+
 ```bash
 ncn-s# cephadm ceph-volume
 ```
-***via cephadm shell***
+
+### Using `cephadm shell`
+
 ```bash
-ncn-s# cephadm shell -- ceph-volume  # optionally you can do a cephadm shell, then run ceph-volume commands from there
+ncn-s# cephadm shell -- ceph-volume
 ```
 
-***via ceph orch***
+Optionally you can start a `cephadm shell`, then run `ceph-volume` commands from there. The following example shows doing this on `ncn-s002`:
+
+```bash
+ncn-s002# cephadm shell
+Inferring fsid 503633ce-a0ac-11ec-b2ae-b8599ff91d22
+Inferring config /var/lib/ceph/503633ce-a0ac-11ec-b2ae-b8599ff91d22/mon.ncn-s002/config
+Using recent ceph image registry.local/ceph/ceph@sha256:4506cf7b74fd97978cb130cb7a390a9a06d6d68d48c84aa41eb516507b66009c
+[ceph: root@ncn-s002 /]# ceph-volume
 ```
-ncn-s00[123]# ceph orch device ls #  optionally you can specify a single node name to just list that nodes drives
+
+### Using `ceph orch`
+
+```bash
+ncn-s# ceph orch device ls
 ```
+
+Optionally you can specify a single node name to just list that node's drives:
+
+```bash
+ncn-s# ceph orch device ls ncn-s002
+```
+

@@ -163,7 +163,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 
     The above output identified MAC0 and MAC1 of the bond as 94:40:c9:5f:b5:df and 14:02:ec:da:b9:99 respectively.
 
-9. Collect the NCN MAC address for the PIT node. This information will be used to populate the MAC addresses for ncn-m001.
+9. Collect the NCN MAC address for the PIT node. This information will be used to populate the MAC addresses for `ncn-m001`.
 
    ```bash
    pit# cat /proc/net/bonding/bond0  | grep Perm

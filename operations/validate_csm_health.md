@@ -549,7 +549,7 @@ ALL OK
 Both sections `BMCs in SLS not in HSM components` and `BMCs in SLS not in HSM Redfish Endpoints` have the same format for mismatches between SLS and HSM. Each row starts with the xname of the BMC. If the BMC does not have an associated `MgmtSwitchConnector` in SLS, then `# No mgmt port association` will be displayed alongside the BMC xname.
 > MgmtSwitchConnectors in SLS are used to represent the switch port on a leaf switch that an the BMC of an air cooled device is connected to.
 
-```bash
+```
 =============== BMCs in SLS not in HSM components ===============
 x3000c0s1b0  # No mgmt port association
 ```
@@ -562,7 +562,7 @@ __For each__ of the BMCs that show up in either of mismatch lists use the follow
    >   jq '.[] | { Xname: .Xname, Aliases: .ExtraProperties.Aliases }' -c
    > ```
 
-   Example mismatch for the BMC of ncn-m001:
+   Example mismatch for the BMC of `ncn-m001`:
    ```bash
    =============== BMCs in SLS not in HSM components ===============
    x3000c0s1b0  # No mgmt port association
