@@ -8,7 +8,7 @@ A new Ceph service script that will check the status of ceph and then verify tha
 
 ## Usage
 
-```bash
+```text
 usage:  ceph-service-status.sh # runs a simple ceph health check
         ceph-service-status.sh -n <node> -s <service> # checks a single service on a single node
         ceph-service-status.sh -n <node> -a true # checks all Ceph services on a node
@@ -25,7 +25,7 @@ usage:  ceph-service-status.sh # runs a simple ceph health check
 ### Simple Ceph Health Check
 
 ```bash
-# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
 ```
 
 Example output:
@@ -40,7 +40,7 @@ Tests run: 1  Tests Passed: 1
 ### Service Check for a Single Service on a Single Node
 
 ```bash
-# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -v true -s mon.ncn-s001
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -v true -s mon.ncn-s001
 ```
 
 Example output:
@@ -61,7 +61,7 @@ Tests run: 2  Tests Passed: 2
 ### Service Check for All Services on a Single Node
 
 ```bash
-# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -a true -v true
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -a true -v true
 ```
 
 Example output:
@@ -122,7 +122,7 @@ Tests run: 12  Tests Passed: 12
 ### Service Check for a Service Type
 
 ```bash
-# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -s mon
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -s mon
 ```
 
 Example output:
@@ -158,7 +158,7 @@ The output of the following command is similar to the above output, except it sh
 It is excluded in this case for brevity. 
 
 ```bash
-# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -A true
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -A true
 ```
 
 > **IMPORTANT:** This script can be run without the verbose flag and with an echo for the return code `echo $?`.  rc = 0 clean check, rc = 1 or greater then there was an issue and re-run with the `-v true` flag.

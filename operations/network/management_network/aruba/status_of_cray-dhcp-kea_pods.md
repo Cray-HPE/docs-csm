@@ -1,6 +1,6 @@
 # Confirm the Status of the cray-dhcp-kea Pods
 
-Use this procedure to verify the status of the cray-dhcp-kea pods and services. The commands in this procedure must be run on ncn-w001 or a worker/manager NCN with `kubectl` installed.
+Use this procedure to verify the status of the `cray-dhcp-kea` pods and services. The commands in this procedure must be run on `ncn-w001` or a worker/manager NCN with `kubectl` installed.
 
 ## Procedure
 

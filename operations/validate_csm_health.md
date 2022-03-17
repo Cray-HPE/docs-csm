@@ -278,7 +278,7 @@ The Cabinet Checks output is divided into three sections:
 
 In the River section, any hardware found in SLS and not discovered by HSM is
 considered a failure, with the exception of PDU controllers, which is a
-warning. Also, the BMC of one of the management NCNs (typically 'ncn-m001')
+warning. Also, the BMC of one of the management NCNs (typically `ncn-m001`)
 will not be connected to the HSM HW network and thus will show up as being not
 discovered and/or not having any mgmt network connection. This is treated as
 a warning.
@@ -295,7 +295,7 @@ For each of the BMCs that show up as not being present in HSM components or
 Redfish Endpoints use the following notes to determine whether the issue with the
 BMC can be safely ignored or needs to be addressed before proceeding.
 
-* The node BMC of 'ncn-m001' will not typically be present in HSM component data, as it is typically connected to the site network instead of the HMN network.
+* The node BMC of `ncn-m001` will not typically be present in HSM component data, as it is typically connected to the site network instead of the HMN network.
 
 * The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depending on the state of the system when the `hsm_discovery_verify.sh` script is run. If the system is currently going through the process of installation, then this is an expected mismatch as the [Prepare Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet. 
    > For more information refer to [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.

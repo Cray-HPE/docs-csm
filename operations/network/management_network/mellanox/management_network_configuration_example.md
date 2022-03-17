@@ -258,21 +258,21 @@ Configure default routes on Workers
 
 * The default route will need to change on the workers so they send their traffic out the HSN interface.
 
-> ncn-w001:/ # ip route replace default via 10.101.10.1 dev hsn0
+> ncn-w001# ip route replace default via 10.101.10.1 dev hsn0
 
 * To make it persistent we will need to create a ifcfg file for hsn0 and remove the old vlan7 default route.
 
-> ncn-w001:/ # mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old
+> ncn-w001# mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old
 > 
-> ncn-w001:/ # echo "default 10.101.10.1 - -" > /etc/sysconfig/network/ifroute-hsn0
+> ncn-w001# echo "default 10.101.10.1 - -" > /etc/sysconfig/network/ifroute-hsn0
 
 * Verify the routing table and external connectivity.
 
 ```
-ncn-w001:/ # ip route
+ncn-w001# ip route
 default via 10.101.10.1 dev hsn0
 
-ncn-w001:/ # ping 8.8.8.8 -c 1
+ncn-w001# ping 8.8.8.8 -c 1
 PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 64 bytes from 8.8.8.8: icmp_seq=1 ttl=110 time=13.6 ms
 ```
@@ -301,7 +301,7 @@ traceroute to 10.101.8.113 (10.101.8.113), 64 hops max, 52 byte packets
 * You can also listen on all the HSN interfaces for ping/traceroute while you ping the external facing iP, in this example 10.101.8.113.
  
 ```
-ncn-m001:~ # nodes=$(kubectl get nodes| awk '{print $1}' | grep  ncn-w | awk -vORS=, '{print $1}'); pdsh -w ${nodes} "tcpdump -envli hsn0 icmp"
+ncn-m001# nodes=$(kubectl get nodes| awk '{print $1}' | grep  ncn-w | awk -vORS=, '{print $1}'); pdsh -w ${nodes} "tcpdump -envli hsn0 icmp"
 
 ncn-w002: tcpdump: listening on hsn0, link-type EN10MB (Ethernet), capture size 262144 bytes
 ncn-w003: tcpdump: listening on hsn0, link-type EN10MB (Ethernet), capture size 262144 bytes

@@ -11,17 +11,17 @@
     - Internal repository
     - Customer repository
 
-1. Retrieve SLS file from a Shasta system (log in to ncn-m001) on a NCN, this will output the SLS file to a file called sls_file.json in your current working directory.
+1. Get an SLS file from a Shasta system.
 
-    **IMPORTANT:** If this is an upgrade SLS needs to be updated to the correct CSM version first
+    Log into any NCN where the Cray CLI is configured. Then run this command to create an SLS file named `sls_file.json` in the current directory.
 
-    Run the command  
+    **IMPORTANT:** If this is an upgrade SLS needs to be updated to the correct CSM version first.
 
     ```bash
     ncn# cray sls dumpstate list  --format json >> sls_file.json   
     ```
 
-1. Retrieve switch running configs.
+1. Retrieve switch running configurations.
 
     CANU can backup all the management network switches using either the SLS input file or the SLS API.
     This can also be done from outside the cluster using the CMN switch IP addresses.

@@ -7,7 +7,7 @@ The source address of the DHCP Reply/Offer NEEDS to be the address of the vlan i
 Here's how to look at DHCP traffic on the workers:
 
 ```
-ncn-w001:~ # tcpdump -envli bond0 port 67 or 68
+ncn-w001# tcpdump -envli bond0 port 67 or 68
 ```
 
 You are looking for the source IP address of the DHCP Reply/Offer, this is an example of working offer:
