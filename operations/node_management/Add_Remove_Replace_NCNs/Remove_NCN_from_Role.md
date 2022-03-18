@@ -277,11 +277,9 @@ Run the following:
 <a name="storage-node-remove-roles"></a>
 ## Storage Node Procedure
 
-1. Follow [Remove Ceph Node](../../utility_storage/Remove_Ceph_Node.md) to remove Ceph role from the storage node.
+Follow [Remove Ceph Node](../../utility_storage/Remove_Ceph_Node.md) to remove Ceph role from the storage node.
 
-2. Follow [Redeploy Services](./Redeploy_Services.md) to update service endpoints to exclude the removed storage node.
-
-Once the storage node role removal is complete and the services have been redeployed; proceed to [wipe the drives](#wipe-the-drives).
+Once the storage node role removal is complete; proceed to [wipe the drives](#wipe-the-drives).
 
 <a name="wipe-the-drives"></a>
 ## Wipe the Drives
