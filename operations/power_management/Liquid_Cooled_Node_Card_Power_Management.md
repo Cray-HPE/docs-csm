@@ -337,7 +337,7 @@ Hardware State Manager.
     -d '{"ControlMode":"Automatic","SetPoint":'${limit}'}'
     ```
 
--   **Disable Power limiting**
+-   **Disable Power Limiting**
 
     Each control at the Redfish endpoint needs to be disabled.
     ```
