@@ -14,8 +14,9 @@ retrieved on-demand from the Redfish ChassisSensors resource.
 * CAPMC (cray-hms-capmc) >= 1.31.0
 * CrayCLI >= 0.44.0
 
-## Deprecated interfaces
-[CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md)
+## Deprecated Interfaces
+Seet the [CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md) for
+more information.
 -   get_node_energy (Deprecated)
 -   get_node_energy_stats (Deprecated)
 -   get_system_power (Deprecated)
@@ -309,7 +310,7 @@ Hardware State Manager.
         ]
     }
     ```
-    Selecting a value that is in the min to max range, make a curl call to the
+    Selecting a value that is in the min to max range, make a `curl` call to the
     Redfish endpoint to enable power limiting for each control. Be aware that
     the power limit for accelerators will be much lower than the power limit for
     the node.

@@ -23,8 +23,9 @@ its power limited.
 * CAPMC (cray-hms-capmc) >= 1.31.0
 * CrayCLI >= 0.44.0
 
-## Deprecated interfaces
-[CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md)
+## Deprecated Interfaces
+See the [CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md) for
+more information.
 -   get_node_energy (Deprecated)
 -   get_node_energy_stats (Deprecated)
 -   get_system_power (Deprecated)
@@ -56,7 +57,7 @@ installed accelerators separately from the node limit.
 
 Power limit control will only be valid on a compute node when power limiting is
 enabled, the node is booted, and the node is in the Ready state as seen via the
-Hardware State Manager.
+Hardware State Manager (HSM).
 
 ## Cray CLI Examples for Standard Rack Compute Node Power Management
 
@@ -208,7 +209,7 @@ Hardware State Manager.
 
 ### Gigabyte
 
--   **Enable power limiting**
+-   **Enable Power Limiting**
 
     ```
     ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" \
