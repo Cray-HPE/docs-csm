@@ -1567,9 +1567,32 @@ def main(argv):
 
         print('')
         print(f'{args.xname} ({args.alias}) has been added to SLS/HSM/BSS')
+        if not args.perform_changes:
+            print('        WARNING A Dryrun was performed, and no changes were performed to the system')
         if existing_bmc_ei != None and not existing_bmc_ip_matches:
             existing_bmc_ip = ",".join(list(map(lambda element: element["IPAddress"], existing_bmc_ei["IPAddresses"])))
             print(f'        WARNING The NCN BMC currently has the IP address: {existing_bmc_ip}, and needs to have IP Address {bmc_ip}')
+
+        print("")
+        print("        =================================")
+        print("        Management NCN IP Allocation")
+        print("        =================================")
+    
+        print("        Network | IP Address")
+        print("        --------|-----------")
+        for network, ip in ncn_ips.items():
+            print(f'        {network:<8}| {ip}')
+
+        print("")
+        print("        =================================")
+        print("        Management NCN BMC IP Allocation")
+        print("        =================================")
+    
+        print("        Network | IP Address")
+        print("        --------|-----------")
+        print(f'        HMN     | {bmc_ip}')
+        print("")
+
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv))
