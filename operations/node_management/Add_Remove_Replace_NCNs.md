@@ -10,9 +10,9 @@
 
 The system is fully installed and has transitioned off of the LiveCD.
 
-1. All activities required for site  maintenence are complete.
+1. All activities required for site maintenance are complete.
 
-1. Run the ncn_add_remove_replace_ncn_pre-req.py
+2. Run the ncn_add_remove_replace_ncn_pre-req.py
 
    1. Script will ask 3 questions:
 
@@ -22,9 +22,9 @@ The system is fully installed and has transitioned off of the LiveCD.
 
       3. How many NCNs would you like to add? Do not include NCNs to be removed or moved.
 
-2. When adding new NCNs, there will be network configuration changes that will impact changing IPs on computes.  __**That will require DVS restart to update the IPs in the DVS node_map.**__
+3. When adding new NCNs, there will be network configuration changes that will impact changing IPs on computes.  __**That will require DVS restart to update the IPs in the DVS node_map.**__
 
-3. ncn_add_remove_replace_ncn_pre-req.py will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted.  See exmple below:
+4. ncn_add_remove_replace_ncn_pre-req.py will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted.  See exmple below:
    ```bash
    Please restart DVS and rebooting the following nodes:["x3000c0s1b0n0", "x3000c0s19b3", "x3000c0s19b1n0", "x3000c0s19b3n0"]
    prerequisite to prepare NCNs for removal, move and add
@@ -54,6 +54,30 @@ If the XNAME is known, set it now. Otherwise it will be determined in a later st
 ncn# XNAME=<xname>
 ncn# echo $XNAME
 ```
+
+**Important** if the node being added to the system TODO... want to make sure it is already setup
+* If adding a NCN that was not previously in the system follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md).
+* Ensure the NCN BMC is configured to use DHCP.
+* Ensure the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](../../instal/../install/switch_pxe_boot_from_onboard_nic_to_pcie.md) procedure.
+* Ensure the NCN BMC is configure with the expected root user credentials.
+   
+   The NCN BMC credentials needs to match the current global air-cooled BMC default credentials. This can be viewed with the following command:
+    ```bash
+    ncn-m# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+    ncn-m# kubectl -n vault exec -it cray-vault-0 -c vault -- env \
+      VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 \
+      vault kv get secret/reds-creds/defaults
+    ```
+
+    Example output:
+    ```bash
+    ==== Data ====
+    Key     Value
+    ---     -----
+    Cray    map[password:foobar username:root] 
+    ```
+
+* If adding an HPE NCN, ensure IPMI is enabled. 
 
 ### Procedure
 
