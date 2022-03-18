@@ -70,6 +70,13 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
                   value: https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token
     ```
 
+1. Upload the modified customizations.yaml file to Kubernetes.
+
+   ```bash
+   ncn-m001# kubectl delete secret -n loftsman site-init
+   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+
 1. Encrypt the values after changing the customizations.yaml file.
 
     ```bash
