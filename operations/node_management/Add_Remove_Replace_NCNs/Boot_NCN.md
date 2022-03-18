@@ -167,7 +167,7 @@ Follow [How to Lock Management Single Node](../../../operations/hardware_state_m
 
 1. Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added storage node to the Ceph cluster.
 
-2. Follow [Redeploy Services](./Redeploy_Services.md) to update service endpoints to include the newly added storage node.
+2. Follow [Redeploy Services](./Redeploy_Services.md) to update service endpoints for the added storage node.
 
 ### Step 8 - Validate the node
 
