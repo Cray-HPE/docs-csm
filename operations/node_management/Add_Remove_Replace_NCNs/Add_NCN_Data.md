@@ -231,6 +231,30 @@ Scenarios where this procedure is applicable:
         --perform-changes
     ```
 
+    Example output:
+    ```
+    ...
+    x3000c0s3b0n0 (ncn-m002) has been added to SLS/HSM/BSS
+        WARNING A Dryrun was performed, and no changes were performed to the system
+
+        =================================
+        Management NCN IP Allocation
+        =================================
+        Network | IP Address
+        --------|-----------
+        HMN     | 10.254.1.14
+        MTL     | 10.1.1.7
+        NMN     | 10.252.1.9
+        CAN     | 10.102.4.10
+
+        =================================
+        Management NCN BMC IP Allocation
+        =================================
+        Network | IP Address
+        --------|-----------
+        HMN     | 10.254.1.13
+    ```
+
 4.  **If the following was present** at the end of the add_management_ncn.py script output, then the NCN BMC was given an IP address via DHCP and is not at the expected IP address.
     Sample output when the BMC has an unexpected IP address.
     ```
