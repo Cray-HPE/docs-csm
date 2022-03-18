@@ -63,8 +63,10 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 1. Wait until `cloud-init` displays messages similar to these on the console to indicate that cloud-init has finished with the module called `modules:final`.
 
     ```screen
-    [  295.466827] cloud-init[9333]: Cloud-init v. 20.2-8.45.1 running 'modules:final' at Thu, 26 Aug2021  15:23:20 +0000. Up 125.72 seconds.
-    [  295.467037] cloud-init[9333]: Cloud-init v. 20.2-8.45.1 finished at Thu, 26 Aug 2021 15:26:12+0000. Datasource DataSourceNoCloudNet [seed=cmdline,http://10.92.100.81:8888/][dsmode=net].  Up 29546 seconds
+    [  300.390000] cloud-init[7110]: 2022-03-16 18:30:59,449 - util.py[DEBUG]: cloud-init mode 'modules' took 244.143 seconds (198.87)
+    [  300.390106] cloud-init[7110]: 2022-03-16 18:30:59,449 - handlers.py[DEBUG]: finish: modules-final: SUCCESS: running modules for final
+    [  OK  ] Started Execute cloud user/final scripts.
+    [  OK  ] Reached target Cloud-init target.
     ```
 
 1. Then press enter on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console (**&** then **.**), and then use `ssh` to log in to the node to complete any remaining steps based on the node type.
@@ -146,7 +148,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 3. Wait for `configurationStatus` to transistion from `pending` to `configured`
 
     ```bash
-    ncn-mw# cray cfs components describe $XNAME
+    ncn-mw# watch "cray cfs components describe $XNAME"
     ```
 
     Example Output:
@@ -159,7 +161,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 ### Step 6 - Lock the management nodes
 
-Follow [How to Lock Management Nodes](../../../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#how-to-lock-management-nodes). The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware or CAPMC to power off or do a power reset. Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
+Follow [How to Lock Management Single Node](../../../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs). The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware or CAPMC to power off or do a power reset. Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
 
 ### Step 7 - **For Storage nodes only**
 
