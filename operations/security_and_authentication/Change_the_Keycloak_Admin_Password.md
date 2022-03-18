@@ -67,17 +67,23 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
                   value: https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token
     ```
 
-8.  Encrypt the values after changing the customizations.yaml file.
+8. Upload the modified customizations.yaml file to Kubernetes.
+
+   ```bash
+   ncn-m001# kubectl delete secret -n loftsman site-init
+   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+9.  Encrypt the values after changing the customizations.yaml file.
 
     ```bash
     ncn-w001# utils/secrets-seed-customizations.sh customizations.yaml
     ```
 
-9.  Re-apply the cray-keycloak Helm chart with the updated customizations.yaml file.
+10. Re-apply the cray-keycloak Helm chart with the updated customizations.yaml file.
 
     This will update the keycloak-master-admin-auth SealedSecret which will cause the SealedSecret controller to update the Secret.
 
-10. Verify that the Secret has been updated.
+11. Verify that the Secret has been updated.
 
     Give the SealedSecret controller a few seconds to update the Secret, then run the following command to see the current value of the Secret:
 
