@@ -1,109 +1,362 @@
+# Liquid Cooled Node Power Management
 
+Liquid Cooled AMD EPYC compute blade node card power capabilities and limits.
 
-## Liquid Cooled Node Power Management
+Liquid Cooled cabinet node card power features are supported by the node
+controller (nC) firmware and CPU vendor. The nC exposes the power control API
+for each node via the node's Redfish Control schema. Out-of-band power
+management data is produced and collected by the nC hardware and firmware. This
+data can be published to a collector using the Redfish EventService, or
+retrieved on-demand from the Redfish ChassisSensors resource.
 
-Liquid Cooled AMD EPYC compute blade node card power capabilities and capping.
+## Requirements
+* Hardware State Manager (cray-hms-smd) >= v1.30.16
+* CAPMC (cray-hms-capmc) >= 1.31.0
+* CrayCLI >= 0.44.0
 
-Liquid Cooled cabinet node card power features are supported by the node controller \(nC\) firmware and CPU vendor. The nC exposes the power control API for each node via the node's Redfish ChassisPower schema. Out-of-band power management data is produced and collected by the nC hardware and firmware. This data can be published to a collector using the Redfish EventService, or retrieved on-demand from the Redfish ChassisSensors resource.
+## Deprecated Interfaces
+Seet the [CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md) for
+more information.
+-   get_node_energy (Deprecated)
+-   get_node_energy_stats (Deprecated)
+-   get_system_power (Deprecated)
 
-The Cray Advanced Platform Management and Control \(CAPMC\) API facilitates power control and enables power-aware WLMs such as Slurm to perform power management and power capping tasks.
+## Redfish API
 
-**NOTE:** Power capping via CAPMC is not supported for Bard Peak liquid cooled blades.
+The Redfish API for Liquid Cooled compute blades is the node's Control resource
+which is presented by the nC. The Control resource presents the various power
+management capabilities for the node and any associated accelerator cards.
 
-**Always use the Boot Orchestration Service \(BOS\) to power off or power on compute nodes.**
+Each node has one or more power control resource that can be modified:
 
-### Redfish API
+-   Node power control (host CPU and memory)
+-   Accelerator power control (one resource per accelerator connected to the node)
 
-The Redfish API for Liquid Cooled compute blades is the node's Chassis Power resource which is presented by the nC. OEM properties are used to augment the Power schema and allow for feature parity with previous Cray system power management capabilities. A PowerControl resource presents the various power management capabilities for the node.
+The Control resources will only manifest in the nC's Redfish endpoint after
+a node has been powered on and background processes have discovered the node's
+power management capabilities.
 
-Each node has three or more power control resources:
+## Power Limiting
 
--   Node power control
--   CPU power control
--   Memory power control
--   Accelerator power control \(one resource per accelerator connected to the node\)
+CAPMC power limit controls for compute nodes can query component capabilities
+and manipulate the node power constraints. This functionality enables external
+software to establish an upper bound, or estimate a minimum bound, on the amount
+of power a system or a select subset of the system may consume.
 
-The PowerControl resources will only manifest in the nC's Redfish endpoint after a node has been powered on and background processes have discovered the node's power management capabilities.
+CAPMC API calls provide means for third party software to implement advanced
+power management strategies using JSON data structures.
 
-### Power Capping
+The AMD EPYC node card supports these power limiting and monitoring API calls:
 
-CAPMC power capping controls for compute nodes can query component capabilities and manipulate the node power constraints. This functionality enables external software to establish an upper bound, or estimate a minimum bound, on the amount of power a system or a select subset of the system may consume.
+-   get_power_cap_capabilities
+-   get_power_cap
+-   set_power_cap
 
-CAPMC API calls provide means for third party software to implement advanced power management strategies and JSON functionality can send and receive customized JSON data structures.
+Power limit control will only be valid on a compute node when power limiting is
+enabled, the node is booted, and the node is in the Ready state as seen via the
+Hardware State Manager.
 
-The AMD EPYC node card supports these power capping and monitoring API calls:
-
--   get\_power\_cap\_capabilities
--   get\_power\_cap
--   set\_power\_cap
--   get\_node\_energy
--   get\_node\_energy\_stats
--   get\_node\_energy\_counter
--   get\_system\_power
--   get\_system\_power\_details
-
-### Cray CLI Examples for Liquid Cooled Compute Node Power Management
-
--   **Get Node Energy**
-
-    ```screen
-    ncn-m001# cray capmc get\_node\_energy create --nids NID\_LIST \\
-    --start-time '2020-03-04 12:00:00' --end-time '2020-03-04 12:10:00' --format json
-    ```
-
--   **Get Node Energy Stats**
-
-    ```screen
-    ncn-m001# cray capmc get\_node\_energy\_stats create --nids NID\_LIST \\
-    --start-time '2020-03-04 12:00:00' --end-time '2020-03-04 12:10:00' --format json
-    ```
-
-
--   **Get Node Energy Counter**
-
-    ```screen
-    ncn-m001# cray capmc get\_node\_energy\_counter create --nids NID\_LIST \\
-    --time '2020-03-04 12:00:00' --format json
-    ```
+## Cray CLI Examples for Liquid Cooled Compute Node Power Management
 
 -   **Get Node Power Control and Limit Settings**
 
-    ```screen
-    ncn-m001# cray capmc get\_power\_cap create –-nids NID\_LIST \\
-    --format json
+    ```
+    ncn-m001# cray capmc get_power_cap create –-nids NID_LIST --format json
+    ```
+    Return the current power cap settings for a node and any accelerators that
+    are installed. Valid settings are only returned if power limiting is enabled
+    on the target nodes, those nodes are booted, and the nodes are in the Ready
+    state.
+    ```
+    ncn-m001# cray capmc get_power_cap create --nids 1160 --format json
+    {
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 1160,
+                "controls": [
+                    {
+                        "name": "Node Power Limit",
+                        "val": 1000 
+                    },
+                    {
+                        "name": "Accelerator3 Power Limit",
+                        "val": 200
+                    },
+                    {
+                        "name": "Accelerator2 Power Limit",
+                        "val": 200
+                    },
+                    {
+                        "name": "Accelerator0 Power Limit",
+                        "val": 200
+                    },
+                    {
+                        "name": "Accelerator1 Power Limit",
+                        "val": 200
+                    }
+                ]
+            }
+        ]
+    }
     ```
 
--   **Get System Power**
+-   **Get Power Limit Capabilities**
 
-    ```screen
-    ncn-m001# cray capmc get\_system\_power create \\
-    --start-time '2020-03-04 12:00:00' --window-len 30 --format json
     ```
-
-    ```screen
-    ncn-m001# cray capmc get\_system\_power\_details create \\
-    --start-time '2020-03-04 12:00:00' --window-len 30 --format json
+    ncn-m001#  cray capmc get_power_cap_capabilities create –-nids NID_LIST --format json
     ```
-
--   **Get Power Capping Capabilities**
-
-    ```screen
-    ncn-m001#  cray capmc get\_power\_cap\_capabilities create –-nids NID\_LIST \\
-    --format json
+    Return the min and max power cap settings for the node list and any
+    accelerators that are installed. 
+    ```
+    ncn-m001# cray capmc get_power_cap_capabilities create --nids 1160 --format json
+    {
+        "e": 0,
+        "err_msg": "",
+        "groups": [
+            {
+                "name": "3_AuthenticAMD_64c_256GiB_3200MHz_NodeAccel.NVIDIA.6922G5060202000.1321020042737",
+                "desc": "3_AuthenticAMD_64c_256GiB_3200MHz_NodeAccel.NVIDIA.6922G5060202000.1321020042737",
+                "host_limit_max": 1985,
+                "host_limit_min": 595,
+                "static": 0,
+                "supply": 1985,
+                "powerup": 0,
+                "nids": [
+                    1160
+                ],
+                "controls": [
+                    {
+                        "name": "Node Power Limit",
+                        "desc": "Node Power Limit",
+                        "max": 1985,
+                        "min": 595
+                    },
+                    {
+                        "name": "Accelerator0 Power Limit",
+                        "desc": "Accelerator0 Power Limit",
+                        "max": 400,
+                        "min": 100
+                    },
+                    {
+                        "name": "Accelerator1 Power Limit",
+                        "desc": "Accelerator1 Power Limit",
+                        "max": 400,
+                        "min": 100
+                    },
+                    {
+                        "name": "Accelerator2 Power Limit",
+                        "desc": "Accelerator2 Power Limit",
+                        "max": 400,
+                        "min": 100
+                    },
+                    {
+                        "name": "Accelerator3 Power Limit",
+                        "desc": "Accelerator3 Power Limit",
+                        "max": 400,
+                        "min": 100
+                    }
+                ]
+            }
+        ]
+    }
     ```
 
 -   **Set Node Power Limit**
 
-    ```screen
-    ncn-m001#  cray capmc set\_power\_cap create –-nids NID\_LIST \\
-    --node 225 --format json
+    ```
+    ncn-m001#  cray capmc set_power_cap create --nids NID_LIST --control CONTROL_NAME VALUE --format json
+    ```
+    Set the total power limit of the node by using the name of the node control.
+    The power provided to the host CPU and memory is the total node power limit
+    minus the power limits of each of the accelerators installed on the node.
+    ```
+    ncn-m001# cray capmc set_power_cap create --nids 1160 --control "Node Power Limit" 1785
+    {
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 1160,
+                "e": 0,
+                "err_msg": ""
+            }
+        ]
+    }
+    ```
+    Multiple controls can be set at the same time on multiple nodes, but all
+    target nodes must have the same set of controls available, otherwise the
+    call will fail.
+    ```
+    ncn-m001# cray capmc set_power_cap create \
+    --nids [1160-1163] \
+    --control "Node Power Limit" 1785 \
+    --control "Accelerator0 Power Limit" 300 \
+    --control "Accelerator1 Power Limit" 300 \
+    --control "Accelerator2 Power Limit" 300 \
+    --control "Accelerator3 Power Limit" 300
+    {
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 1160,
+                "e": 0,
+                "err_msg": ""
+            },
+            {
+                "nid": 1161,
+                "e": 0,
+                "err_msg": ""
+            },
+            {
+                "nid": 1162,
+                "e": 0,
+                "err_msg": ""
+            },
+            {
+                "nid": 1163,
+                "e": 0,
+                "err_msg": ""
+            }
+        ]
+    }
     ```
 
+-   **Remove Node Power Limit (Set to Default)**
 
--   **Remove Node Power Limit \(Set to Default\)**
-
-    ```screen
-    ncn-m001#  cray capmc set\_power\_cap create –-nids NID\_LIST \\
-    --node 0 --format json
+    ```
+    ncn-m001#  cray capmc set_power_cap create --nids NID_LIST --control CONTROL_NAME 0 --format json
+    ```
+    Reset the power limit to the default maximum. Alternatively, using the max
+    value returned from get_power_cap_capabilities may also be used. Multiple
+    controls can be set at the same time on multiple nodes, but all target nodes
+    must have the same set of controls available, otherwise the call will fail.
+    ```
+    ncn-m001# cray capmc set_power_cap create --nids 1160 --control "Node Power Limit" 0
+    {
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 1160,
+                "e": 0,
+                "err_msg": ""
+            }
+        ]
+    }
     ```
 
+## Enable and Disable Power Limiting
+
+-   **Enable Power Limiting**
+
+    Determine the valid power limit range for the target control by using the
+    get_power_cap_capabilities Cray CLI option.
+    ```
+    ncn-m001#  cray capmc get_power_cap_capabilities create –-nids NID_LIST --format json
+    ```
+    ```
+    ncn-m001# cray capmc get_power_cap_capabilities create --nids 1160 --format json
+    {
+        "e": 0,
+        "err_msg": "",
+        "groups": [
+            {
+                "name": "3_AuthenticAMD_64c_256GiB_3200MHz_NodeAccel.NVIDIA.6922G5060202000.1321020042737",
+                "desc": "3_AuthenticAMD_64c_256GiB_3200MHz_NodeAccel.NVIDIA.6922G5060202000.1321020042737",
+                "host_limit_max": 1985,
+                "host_limit_min": 595,
+                "static": 0,
+                "supply": 1985,
+                "powerup": 0,
+                "nids": [
+                    1160
+                ],
+                "controls": [
+                    {
+                        "name": "Node Power Limit",
+                        "desc": "Node Power Limit",
+                        "max": 1985,
+                        "min": 595
+                    },
+                    {
+                        "name": "Accelerator0 Power Limit",
+                        "desc": "Accelerator0 Power Limit",
+                        "max": 400,
+                        "min": 100
+                    },
+                    {
+                        "name": "Accelerator1 Power Limit",
+                        "desc": "Accelerator1 Power Limit",
+                        "max": 400,
+                        "min": 100
+                    },
+                    {
+                        "name": "Accelerator2 Power Limit",
+                        "desc": "Accelerator2 Power Limit",
+                        "max": 400,
+                        "min": 100
+                    },
+                    {
+                        "name": "Accelerator3 Power Limit",
+                        "desc": "Accelerator3 Power Limit",
+                        "max": 400,
+                        "min": 100
+                    }
+                ]
+            }
+        ]
+    }
+    ```
+    Selecting a value that is in the min to max range, make a `curl` call to the
+    Redfish endpoint to enable power limiting for each control. Be aware that
+    the power limit for accelerators will be much lower than the power limit for
+    the node.
+    ```
+    ncn-m001# limit=1985
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
+    https://${BMC}/redfish/v1/Chassis/${node}/Controls/NodePowerLimit \
+    -d '{"ControlMode":"Automatic","SetPoint":'${limit}'}'
+    ```
+    If there are accelerators installed, enabled power limiting on those as well.
+    ```
+    ncn-m001# limit=400
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
+    https://${BMC}/redfish/v1/Chassis/${node}/Controls/Accelerator0PowerLimit \
+    -d '{"ControlMode":"Automatic","SetPoint":'${limit}'}'
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
+    https://${BMC}/redfish/v1/Chassis/${node}/Controls/Accelerator1PowerLimit \
+    -d '{"ControlMode":"Automatic","SetPoint":'${limit}'}'
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
+    https://${BMC}/redfish/v1/Chassis/${node}/Controls/Accelerator2PowerLimit \
+    -d '{"ControlMode":"Automatic","SetPoint":'${limit}'}'
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
+    https://${BMC}/redfish/v1/Chassis/${node}/Controls/Accelerator3PowerLimit \
+    -d '{"ControlMode":"Automatic","SetPoint":'${limit}'}'
+    ```
+
+-   **Disable Power Limiting**
+
+    Each control at the Redfish endpoint needs to be disabled.
+    ```
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" \
+    -X PATCH https://${BMC}/redfish/v1/Chassis/${node}/Controls/NodePowerLimit \
+    -d '{"ControlMode":"Disabled"}'
+    ```
+    If there are accelerators installed, disable power limiting on those as well.
+    ```
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
+    https://${BMC}/redfish/v1/Chassis/${node}/Controls/Accelerator0PowerLimit \
+    -d '{"ControlMode":"Disabled"}'
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
+    https://${BMC}/redfish/v1/Chassis/${node}/Controls/Accelerator1PowerLimit \
+    -d '{"ControlMode":"Disabled"}'
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
+    https://${BMC}/redfish/v1/Chassis/${node}/Controls/Accelerator2PowerLimit \
+    -d '{"ControlMode":"Disabled"}'
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
+    https://${BMC}/redfish/v1/Chassis/${node}/Controls/Accelerator3PowerLimit \
+    -d '{"ControlMode":"Disabled"}'
+    ```

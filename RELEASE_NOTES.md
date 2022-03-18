@@ -146,4 +146,4 @@ and many more...
 * The boot order for Gigabyte NCNs does not persist after a reboot or reinstall.
 * Intermittently, storage nodes have clock skew during fresh install.
 * Kube-multus pods may fail to restart due to ImagePullBackOff. For more information see [Kube-multus pod is in ImagePullBackOff](troubleshooting/known_issues/kube_multus_pod_in_ImagePullBackOff.md).
-* Power capping Olympus hardware via CAPMC is not supported.
+* Power capping Olympus and River compute hardware via CAPMC is not supported.
