@@ -9,7 +9,7 @@ The following lists enumerate the improvements and enhancements since CSM 1.0.10
 ### Bug Fixes
 * SECURITY: CVE-2022-0185: Linux kernel buffer overflow/container escape
 * SECURITY: CVE-2021-4034: pwnkit: Local Privilege Escalation in polkit's pkexec
-* SECURITY: Address log4j vulnerabilities wrt kafka in the CSM-1.0.11 patch
+* SECURITY: Address log4j vulnerabilities with regards to kafka in the CSM-1.0.11 patch
 * SECURITY: Update strimzi operator 0.15.0 to use patched kafka images
 * Bug Fix: csm upgrade incorrectly records CPS nodes
 * Bug Fix: update_bss_metadata.sh is not executable
@@ -21,7 +21,7 @@ The following lists enumerate the improvements and enhancements since CSM 1.0.10
 * Bug Fix: Reboot of storage node (s003) halted for raid sync/health
 * Bug Fix: Clock skew on storage node during reboot test
 * Bug Fix: csm-1.0 Broker UAI Image 1.2.3 is missing openssh
-* Documentation Fix: Procedure to set metal.nowipe before and after a management node rebuild missing steps in the after
+* Documentation Fix: Procedure to set metal.nowipe before and after a management node rebuild missing steps
 * Documentation Fix: First curl command update_management_network.md has incorrect output
 * Documentation Fix: ncn rebuild procedure missing a WAR to prevent dupe IPs on NCNs
 * Documentation Fix: csm-1.0.0 to csm-1.0.11 update is supported
