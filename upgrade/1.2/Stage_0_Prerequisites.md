@@ -8,6 +8,7 @@
 * [Stage 0.4 - Upgrade Management Network](#update-management-network)
 * [Stage 0.5 - Prerequisites Check](#prerequisites-check)
 * [Stage 0.6 - Backup VCS Data](#backup-vcs-data)
+* [Stage 0.7 - Suspend NCN Configuration](#suspend-ncn-config)
 
 <a name="install-latest-docs"></a>
 ## Stage 0.1 - Install latest docs RPM
@@ -220,5 +221,20 @@ Run check script:
 To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location. See [Version_Control_Service_VCS.md](../../operations/configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data) for these procedures.
 
 **`IMPORTANT:`** As part of this stage, **only perform the backup, not the restore**. The backup procedure is being done here as a precautionary step.
+
+<a name="suspend-ncn-config"></a>
+## Stage 0.7 - Suspend NCN Configuration
+
+Suspend automatic reconfiguration on NCNs to ensure that previous CSM version
+configuration is not applied during the upgrade. Automatic reconfiguration
+will be re-enabled in [Stage 5](Stage_5.md).
+
+   ```bash
+   ncn# export CRAY_FORMAT=json
+   ncn# for xname in $(cray hsm state components list --role Management --type node | jq -r .Components[].ID)
+   do
+       cray cfs components update --enabled false $xname
+   done
+```
 
 Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).
