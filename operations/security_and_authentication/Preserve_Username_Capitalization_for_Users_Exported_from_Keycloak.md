@@ -19,9 +19,16 @@ The LDAP server that provides password resolution and user account federation su
     ncn-w001# vi customizations.yaml
     ```
 
-2.  Re-apply the cray-keycloak-users-localize Helm chart.
+1.  Re-apply the cray-keycloak-users-localize Helm chart.
 
     Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
+
+1. Upload the modified customizations.yaml file to Kubernetes.
+
+   ```bash
+   ncn-m001# kubectl delete secret -n loftsman site-init
+   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
 
 
 
