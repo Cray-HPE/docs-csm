@@ -2,7 +2,7 @@
 
 **Warning:** This is the point of no return. 
 
-All commands in this section must be run on the node being removed \(unless otherwise indicated\). These commands can be done from the ConMan console window.
+All commands in this section must be run **on the node being removed** \(unless otherwise indicated\). These commands can be done from the ConMan console window.
 
 Only follow the steps in the section for the node type that is being removed:
 
