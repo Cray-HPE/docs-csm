@@ -11,14 +11,14 @@ Administrators can use the `cray` CLI for power operations from any system that
 has HTTPS access to the
 [System Management Services](../network/Access_to_System_Management_Services.md).
 
-3rd party software can access the API directly. Refer to the
+Third party software can access the API directly. Refer to the
 [CAPMC API](https://github.com/Cray-HPE/hms-capmc/blob/release/csm-1.0/api/swagger.yaml)
 documentation for detailed information about API options and features.
 
 The `cray capmc` command (see `--help`) can be used to control power to
 specific components by specifying the component NID, xname, or group.
 
-## Power control and query by xname
+## Power Control and Query by xname
 - xname_on
 - xname_off
 - xname_reinit
@@ -68,7 +68,7 @@ chassis 0)
 - NCN Slots: x3200c0s9 (U9)
 - NCN Nodes: x3200c0s9b0n0
 
-## Power capping
+## Power Capping
 - get_power_cap_capabilities
 - get_power_cap
 - set_power_cap
@@ -84,31 +84,32 @@ node type has its own power capping capabilities.
 modules, compute blades, and any non-compute nodes (NCNs) in air cooled
 cabinets.
 
-## Deprecated interfaces
-[CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md)
+## Deprecated Interfaces
+See the [CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md) for
+more information
 
-### Power control and query by NID
-Use the interfaces from [Power control and query by xname](#power-control-and-query-by-xname)
+### Power Control and Query by NID
+Use the interfaces from [Power control and query by xname](#power-control-and-query-by-xname):
 - node_on
 - node_off
 - node_reinit
 - get_node_status
 
-### Power control and query by group
-Use the interfaces from [Power control and query by xname](#power-control-and-query-by-xname)
+### Power Control and Query by group
+Use the interfaces from [Power control and query by xname](#power-control-and-query-by-xname):
 - group_on
 - group_off
 - group_reinit
 - get_group_status
 
-### Node energy
-Use the System Monitoring Application (SMA) Grafana instance
+### Node Energy
+Use the System Monitoring Application (SMA) Grafana instance:
 - get_node_energy
 - get_node_energy_stats
 - get_node_energy_counters
 
-### System monitor
-Use the System Monitoring Application (SMA) Grafana instance
+### System Monitor
+Use the System Monitoring Application (SMA) Grafana instance:
 - get_system_parameters
 - get_system_power
 - get_system_power_details
