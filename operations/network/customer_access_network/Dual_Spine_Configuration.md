@@ -1,6 +1,6 @@
 ## CAN/CMN with Dual-Spine Configuration
 
-The Customer Access Network \(CAN\) and Customer Management Network \(CAN\) needs to be connected to both spines in a dual-spine configuration so that each spine can access the outside network. However, the NCNs should only have one default gateway. Therefore, the multi-active gateway protocol \(MAGP\) on the Mellanox spines can be used to create a virtual router gateway IP address that can direct to either of the spines, depending on the state of the spines. The Virtual Switching Extension \(VSX\) for Aruba spines serve the same purpose.
+The Customer Access Network \(CAN\) and Customer Management Network \(CMN\) needs to be connected to both spines in a dual-spine configuration so that each spine can access the outside network. However, the NCNs should only have one default gateway. Therefore, the multi-active gateway protocol \(MAGP\) on the Mellanox spines can be used to create a virtual router gateway IP address that can direct to either of the spines, depending on the state of the spines. The Virtual Switching Extension \(VSX\) for Aruba spines serve the same purpose.
 
 For more information:
 <!-- markdown-link-check-disable-next-line -->
