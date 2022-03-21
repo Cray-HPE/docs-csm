@@ -833,6 +833,29 @@ def main(argv):
             log.info('Do not kill this script. The wait will timeout in 10 minutes if bss does not fully start up.')
             run_command_actions(restart_bss_wait_actions)
 
+
+            # Set the BMC to DHCP
+            mc_info_action = CommandAction([
+                'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
+                'mc', 'info'],
+                verbose=state.verbose)
+            run_command_action(mc_info_action)
+            print_command_action(mc_info_action)
+            lan = '1'
+            if mc_info_action.stdout:
+                manufacturer_lines = [line for line in mc_info_action.stdout.split('\n') if 'manufacturer name' in line.lower()]
+                for line in manufacturer_lines:
+                    if 'intel' in line.lower():
+                        lan = '3'
+                        
+            change_dhcp_action = CommandAction([
+                'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
+                'lan', 'set', lan, "ipsrc", "dhcp"], 
+                verbose=state.verbose)
+            run_command_action(change_dhcp_action)
+            print_command_action(change_dhcp_action)
+
+
             run_command_actions(etc_hosts_actions)
 
             log.info('')
