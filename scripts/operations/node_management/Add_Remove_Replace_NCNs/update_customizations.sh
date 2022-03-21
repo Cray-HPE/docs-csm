@@ -29,35 +29,35 @@ if [[ -z "$TOKEN" ]]; then
 fi
 
 # Create tempory working directory
-tmp_dir=$(mktemp -d -t ncn-update-customizations-XXXX)
+tmp_dir="/tmp"
 echo "Working directory $tmp_dir"
 pushd "$tmp_dir"
 
 # Grab customizations.yaml
 kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
-cp customizations.yaml customizations.orginal.yaml
+cp customizations.yaml customizations.original.yaml
 
 # Update Storage NCN IPs
 storage_ips=$(curl --fail -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks/NMN | 
     jq '[.ExtraProperties.Subnets[] |  select(.Name == "bootstrap_dhcp").IPReservations[] | select(.Name | startswith("ncn-s")).IPAddress] | sort')
 
-yq merge -xP -i customizations.yaml <(echo "$storage_ips" | yq prefix -P - spec.network.netstaticips.nmn_ncn_storage)
+yq merge -a overwrite -xP -i customizations.yaml <(echo "$storage_ips" | yq prefix -P - spec.network.netstaticips.nmn_ncn_storage)
 
 # Update Master NCN IPs
 master_ips=$(curl --fail -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks/NMN | 
     jq '[.ExtraProperties.Subnets[] |  select(.Name == "bootstrap_dhcp").IPReservations[] | select(.Name | startswith("ncn-m")).IPAddress] | sort')
 
-yq merge -xP -i customizations.yaml <(echo "$master_ips" | yq prefix -P - spec.network.netstaticips.nmn_ncn_masters)
+yq merge -a overwrite -xP -i customizations.yaml <(echo "$master_ips" | yq prefix -P - spec.network.netstaticips.nmn_ncn_masters)
 
-echo "Orginal customizations.yaml is located at $tmp_dir/customizations.orginal.yaml"
+echo "Original customizations.yaml is located at $tmp_dir/customizations.original.yaml"
 echo "Updated customizations.yaml is located at $tmp_dir/customizations.yaml"
 
 # Notes - Next steps
 # Compare cusotmizations.yaml
-# yq r customizations.orginal.yaml -P   > customizations.orginal.yaml.pretty
-# diff customizations.orginal.yaml.pretty customizations.yaml
+# yq r customizations.original.yaml -P   > customizations.original.yaml.pretty
+# diff customizations.original.yaml.pretty customizations.yaml
 # 
-# ncn-m001:/tmp/ncn-update-customizations-8qfC # diff customizations.orginal.yaml.pretty customizations.yaml
+# ncn-m001:/tmp/ncn-update-customizations-8qfC # diff customizations.original.yaml.pretty customizations.yaml
 # 24a25
 # >         - 10.252.1.14
 
