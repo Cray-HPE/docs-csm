@@ -39,7 +39,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 
 #### 1.2 Modify the customizations to include the added or removed storage node.
 
-1. Get a token
+1. Retrieve an API token.
 
    ```bash
    ncn-m001# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
@@ -63,7 +63,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
    ncn-m001# diff /tmp/customizations.original.yaml.pretty /tmp/customizations.yaml
    ```
 
-3. Check in changes made to `customizations.yaml`
+3. Check in changes made to `customizations.yaml`.
 
    ```bash
    ncn-m001# cd site-init
