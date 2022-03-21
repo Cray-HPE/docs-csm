@@ -37,7 +37,17 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
    ncn-m001# git commit -m 'Add customizations.yaml from site-init secret'
    ```
 
-#### 1.2 Modify the customizations to include the added or removed storage node .
+#### 1.2 Modify the customizations to include the added or removed storage node.
+
+1. Get a token
+
+   ```bash
+   ncn-m001# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+       -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
+       -o jsonpath='{.data.client-secret}' | base64 -d` \
+       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
+       | jq -r '.access_token')
+   ```
 
 1. Update the customizations `spec.network.netstaticips.nmn_ncn_storage` for the added or removed storage IP.
 
@@ -49,15 +59,15 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 2. Check that the updated customizations.yaml contains the change to add or remove a storage IP.
    
    ```bash
-   ncn-m001# yq r /tmp/customizations.orginal.yaml -P > /tmp/customizations.orginal.yaml.pretty
-   ncn-m001# diff /tmp/customizations.orginal.yaml.pretty /tmp/customizations.yaml
+   ncn-m001# yq r /tmp/customizations.original.yaml -P > /tmp/customizations.original.yaml.pretty
+   ncn-m001# diff /tmp/customizations.original.yaml.pretty /tmp/customizations.yaml
    ```
 
 3. Check in changes made to `customizations.yaml`
 
    ```bash
    ncn-m001# cd site-init
-   ncn-m001# mv /tmp/customizations.yaml customizations.yaml
+   ncn-m001# cp /tmp/customizations.yaml customizations.yaml
    ncn-m001# git diff
    ncn-m001# git add customizations.yaml
    ncn-m001# git commit -m 'Update customizations.yaml nmn_ncn_storage storage IPs'
@@ -103,7 +113,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 3. Merge `customizations.yaml` with `s3-manifest.yaml`:
 
     ```bash
-    ncn-m001# manifestgen -c customizations.yaml -i ./s3-manifest.yaml > ./s3-manifest.out.yaml
+    ncn-m001# manifestgen -c /tmp/customizations.yaml -i s3-manifest.yaml > s3-manifest.out.yaml
     ```
 
 4. Redeploy the S3 helm chart:
@@ -117,7 +127,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 5. Check that the new endpoint has been added.
 
     ```bash
-    ncn-m001#  kubectl get endpoints -l app.kubernetes.io/instance=cray-s3 -n ceph-rgw
+    ncn-m001# kubectl get endpoints -l app.kubernetes.io/instance=cray-s3 -n ceph-rgw
     ```
 
 #### 1.4 Redeploy SYSMGMT_HEALTH to pick up any changes for storage node endpoints.
@@ -132,7 +142,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 2. Determine the current resources and retention settings:
 
     ```bash
-    ncn-m001#  kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.resources'
+    ncn-m001# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.resources'
     ```
 
     Example Output:
@@ -147,7 +157,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
     ```
 
     ```bash
-    ncn-m001#  kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.retention'
+    ncn-m001# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.retention'
     ```
 
     Example Output:
@@ -186,7 +196,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 3. Merge `customizations.yaml` with `sysmgmt-health-manifest.yaml`:
 
     ```bash
-    ncn-m001# manifestgen -c customizations.yaml -i ./sysmgmt-health-manifest.yaml > ./sysmgmt-health-manifest.out.yaml
+    ncn-m001# manifestgen -c /tmp/customizations.yaml -i sysmgmt-health-manifest.yaml > sysmgmt-health-manifest.out.yaml
     ```
 
 4. Redeploy the SYSMGMT_HEALTH helm chart:
@@ -200,6 +210,14 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 5. Check that the new endpoint has been added.
 
     ```bash
-    ncn-m001#  kubectl get endpoints -l app=cray-sysmgmt-health-ceph-exporter -n sysmgmt-health
-    ncn-m001#  kubectl get endpoints -l app=cray-sysmgmt-health-ceph-node-exporter -n sysmgmt-health
+    ncn-m001# kubectl get endpoints -l app=cray-sysmgmt-health-ceph-exporter -n sysmgmt-health
+    ncn-m001# kubectl get endpoints -l app=cray-sysmgmt-health-ceph-node-exporter -n sysmgmt-health
     ```
+
+#### 1.5 Cleanup
+ 
+1. Remove temporary files
+
+   ```bash
+   ncn-m001# rm /tmp/customizations.yaml /tmp/customizations.original.yaml /tmp/customizations.original.yaml.pretty
+   ```
