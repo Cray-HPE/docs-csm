@@ -44,7 +44,7 @@ storage_ips=$(curl --fail -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-
 yq merge -a overwrite -xP -i customizations.yaml <(echo "$storage_ips" | yq prefix -P - spec.network.netstaticips.nmn_ncn_storage)
 
 # Update Master NCN IPs
-storage_ips=$(curl --fail -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks/NMN | 
+master_ips=$(curl --fail -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks/NMN | 
     jq '[.ExtraProperties.Subnets[] |  select(.Name == "bootstrap_dhcp").IPReservations[] | select(.Name | startswith("ncn-m")).IPAddress] | sort')
 
 yq merge -a overwrite -xP -i customizations.yaml <(echo "$storage_ips" | yq prefix -P - spec.network.netstaticips.nmn_ncn_masters)
