@@ -161,8 +161,13 @@ with system-specific customizations.
 
         1. Load the `openjdk` container image:
 
-           > **`NOTE`** Requires a properly configured Docker or Podman
-           > environment.
+           > **`NOTE`** Requires a properly configured Docker or Podman environment.
+           >
+           > If this step fails with an "overlay is not supported" error, run the following
+           > command and then re-run the `load-container-image.sh` script:
+           >
+           > `sed -i 's/skopeo_dest=.*/skopeo_dest="${transport}:${image}"/' /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh`
+           >
 
            ```bash
            linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
@@ -412,6 +417,12 @@ encrypted.
 1.  Load the `zeromq` container image required by Sealed Secret Generators:
 
     > **`NOTE`** Requires a properly configured Docker or Podman environment.
+    >
+    > If this step fails with an "overlay is not supported" error, run the following
+    > command and then re-run the `load-container-image.sh` script:
+    >
+    > `sed -i 's/skopeo_dest=.*/skopeo_dest="${transport}:${image}"/' /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh`
+    >
 
     ```bash
     linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
