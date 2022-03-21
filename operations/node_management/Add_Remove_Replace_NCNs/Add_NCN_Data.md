@@ -6,21 +6,24 @@ Add NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Hardw
 
 Scenarios where this procedure is applicable:
 1. Adding a Management NCN that has not previously been in the system before:
-   - Add an additional NCN to an existing cabinet (requires ...)
+   - Add an additional NCN to an existing cabinet
    - Add an NCN that is being replaced by another NCN of the same type and in the same slot
    - Adding a new NCN that to replace a NCN removed from the system in to a new location
 
 2. Adding a Management NCN that has been previously present in the system before:
    - Adding an NCN that was previously removed from the system to move it to a new location
 
-## Perquisites
-
-* If adding a NCN that was not previously in the system follow the [Access and Update the Settings for Replacement NCNs](../Access_and_Update_the_Settings_for_Replacement_NCNs.md).
-
-* The NCN being added is currently rack and cabled into the system.
-
 ## Procedure
-1.  Collect the following information from the NCN:
+1.  Retrieve an API token:
+    ```bash
+    ncn-m# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+            -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
+            -o jsonpath='{.data.client-secret}' | base64 -d` \
+            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
+            | jq -r '.access_token')
+    ```
+
+2.  Collect the following information from the NCN:
     1.  Determine the xname of the NCN by referring to the HMN of the systems SHCD if it has not been determined yet yet.
 
         Sample row from the HMN tab of a SHCD:
@@ -67,79 +70,12 @@ Scenarios where this procedure is applicable:
         ncn-m# export MGMT_SWITCH_CONNECTOR=x3000c0w14j48
         ```
 
-    4.  Determine the xanem of the management switch xname by removing the trailing `jJ` from the MgmtSwitchConnector xname:
+    4.  Determine the xname of the management switch xname by removing the trailing `jJ` from the MgmtSwitchConnector xname:
         ```bash
         ncn-m# export MGMT_SWITCH=x3000c0w14
         ```
-
-    5.  Collect NCN MAC Addresses for the following interfaces if they are present. Depending on the hardware present not all of the following interfaces will be present.
-        | Interface |   | Description
-        | --------- | - | ----------
-        | mgmt0     |   | MAC Address of Management network interface
-        | mgmt1     |   | First MAC Address of Bond 1
-        | mgmt2     |   | Second MAC Address of Bond 0
-        | mgmt3     |   | Second MAC address of Bond 1
-        | hsn0      |   | MAC Address of the first High Speed Network NIC
-        | hsn1      |   | MAC Address of the second High Speed Network NIC
-        | lan0      |   |
-        | lan1      |   |
-
-        Depending on the hardware present in the NCN not all of these interfaces may not present.
-        -   NCNs will have either 2 or 4 management NIC ports (1 or 2 PCIe NIC cards). 
-        -   It is expected that only worker NCNs have HSN Interfaces.
-
-        __NCN with a single PCIe card (1 card with 2 ports)__
-        | Interface | Required MAC Address     | Description
-        | --------- | ------------------------ | ----------
-        | mgmt0     | Required                 | First MAC Address of Bond 1
-        | mgmt1     | Required                 | Second MAC Address of Bond 0
-        | hsn0      | Required for Worker NCNs | MAC Address of the first High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
-        | hsn1      | Optional for Worker NCNs | MAC Address of the second High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
-        | lan0      | Optional                 | MAC Address for the first bond or HSN related interface.
-        | lan1      | Optional                 | MAC Address for the second bond or HSN related interface.
-
-        __NCN with a dual PCIe cards (2 cards with 2 ports each for 4 ports total)__
-        | Interface | Required MAC Address     | Description
-        | --------- | ------------------------ | ----------
-        | mgmt0     | Required                 | First MAC Address of Bond 1
-        | mgmt1     | Required                 | First MAC Address of Bond 1
-        | mgmt2     | Required                 | Second MAC Address of Bond 0
-        | mgmt3     | Required                 | Second MAC address of Bond 1
-        | hsn0      | Required for Worker NCNs | MAC Address of the first High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
-        | hsn1      | Optional for Worker NCNs | MAC Address of the second High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
-        | lan0      | Optional                 | MAC Address for the first bond or HSN related interface.
-        | lan1      | Optional                 | MAC Address for the second bond or HSN related interface.
-
-        
-        1.  **If the NCN added was previously in the system**, then these MAC addresses can be retrieved backup files generated by the [Remove NCN Data](Remove_NCN_Data.md) procedure.
-
-            ```bash
-            ncn-m# cat /tmp/remove_management_ncn/$XNAME/bss-bootparameters-$XNAME.json | jq .[].params -r | tr " " "\n" | grep ifname
-            ```
-
-            Sample output:
-            ```
-            ifname=hsn0:50:6b:4b:23:9f:7c
-            ifname=lan1:b8:59:9f:d9:9d:e9
-            ifname=lan0:b8:59:9f:d9:9d:e8
-            ifname=mgmt0:a4:bf:01:65:6a:aa
-            ifname=mgmt1:a4:bf:01:65:6a:ab
-            ```
-
-            Using the sample output from above we can deterive the following CLI flags for a worker NCN:
-            | Interface | MAC Address         | CLI Flag
-            | --------- | ------------------- | -------- 
-            | mgmt0     | `a4:bf:01:65:6a:aa` | `--mac-mgmt0=a4:bf:01:65:6a:aa`
-            | mgmt1     | `a4:bf:01:65:6a:ab` | `--mac-mgmt1=a4:bf:01:65:6a:ab`
-            | lan0      | `b8:59:9f:d9:9d:e8` | `--mac-lan0=b8:59:9f:d9:9d:e8`
-            | lan1      | `b8:59:9f:d9:9d:e9` | `--mac-lan1=b8:59:9f:d9:9d:e9`
-            | hsn0      | `50:6b:4b:23:9f:7c` | `--mac-hsn0=50:6b:4b:23:9f:7c`
-
-            TODO Should I include examples for master/storage NCNs? What about different NIC card counts?
-
-        2. **Otherwise** the MACs for the NCN needs to be collected from the NCN using [this procedure](TODO).
-
-    6.  Collect the BMC MAC Address.
+    
+    5.  Collect the BMC MAC Address.
         -   If the NCN was previously in the system recall the record BMC MAC Address recorded from the [Remove NCN Data](Remove_NCN_Data.md) procedure.
         -   If the BMC is reachable by IP, then ipmitool can be used to determine the MAC Address of the BMC:
 
@@ -177,57 +113,116 @@ Scenarios where this procedure is applicable:
                 ssh admin@sw-leaf-001.hmn
                 ```
 
-            3.  Locate the switch port the BMC is connected to record the MAC Address
+            3.  Locate the switch port the BMC is connected to record the MAC Address. 
 
-                __Dell__
+                TODO need to explain that the 1/1/39 needs to change.
+
+                __Dell Management Switch__
                 ```
                 sw-leaf-001# show mac address-table | grep ethernet1/1/39
+                ```
+
+                ```
                 4	a4:bf:01:65:68:54	dynamic		ethernet1/1/39
                 ```
 
-                __Aruba__
+                __Aruba Management Switch__
                 ```
                 sw-leaf-001# show mac-address-table | include 1/1/39
+                ```
+
+                ```
                 a4:bf:01:65:68:54    4        dynamic                   1/1/39
                 ```
+
+        1.  Set the `BMC_MAC` environment variable with the BMC MAC Address:  
+            ```bash
+            export BMC_MAC=a4:bf:01:65:68:54
+            ```
+
+    6.  Collect NCN MAC Addresses for the following interfaces if they are present. Depending on the hardware present not all of the following interfaces will be present. The collected MAC addresses will be later used in this procedure with the add_management_ncn.py script.
+
+        Depending on the hardware present in the NCN not all of these interfaces may not present.
+        -   NCNs will have either 1 or 2 management PCIe NIC cards (2 or 4 PCIe NIC ports). 
+        -   It is expected that only worker NCNs have HSN Interfaces.
+
+        __NCN with a single PCIe card (1 card with 2 ports)__
+        | Interface | CLI Flag      | Required MAC Address     | Description
+        | --------- | ------------- | ------------------------ | ----------
+        | mgmt0     | `--mac-mgmt0` | Required                 | First MAC Address of Bond 1
+        | mgmt1     | `--mac-mgmt1` | Required                 | Second MAC Address of Bond 0
+        | hsn0      | `--mac-hsn0`  | Required for Worker NCNs | MAC Address of the first High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
+        | hsn1      | `--mac-hsn1`  | Optional for Worker NCNs | MAC Address of the second High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
+        | lan0      | `--mac-lan0`  | Optional                 | MAC Address for the first non bond or HSN related interface.
+        | lan1      | `--mac-lan1`  | Optional                 | MAC Address for the second non bond or HSN related interface.
+
+        __NCN with a dual PCIe cards (2 cards with 2 ports each for 4 ports total)__
+        | Interface | CLI Flag      | Required MAC Address     | Description
+        | --------- | ------------- | ------------------------ | ----------
+        | mgmt0     | `--mac-mgmt0` | Required                 | First MAC Address of Bond 1
+        | mgmt1     | `--mac-mgmt1` | Required                 | First MAC Address of Bond 1
+        | mgmt2     | `--mac-mgmt2` | Required                 | Second MAC Address of Bond 0
+        | mgmt3     | `--mac-mgmt3` | Required                 | Second MAC address of Bond 1
+        | hsn0      | `--mac-hsn0`  | Required for Worker NCNs | MAC Address of the first High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
+        | hsn1      | `--mac-hsn1`  | Optional for Worker NCNs | MAC Address of the second High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
+        | lan0      | `--mac-lan0`  | Optional                 | MAC Address for the first non bond or HSN related interface.
+        | lan1      | `--mac-lan1`  | Optional                 | MAC Address for the second non bond or HSN related interface.
+
+        
+        1.  **If the NCN added was previously in the system**, then these MAC addresses can be retrieved backup files generated by the [Remove NCN Data](Remove_NCN_Data.md) procedure.
+
+            ```bash
+            ncn-m# cat /tmp/remove_management_ncn/$XNAME/bss-bootparameters-$XNAME.json | jq .[].params -r | tr " " "\n" | grep ifname
+            ```
+
+            Sample output for a worker node with a single management PCIe NIC card:
+            ```
+            ifname=hsn0:50:6b:4b:23:9f:7c
+            ifname=lan1:b8:59:9f:d9:9d:e9
+            ifname=lan0:b8:59:9f:d9:9d:e8
+            ifname=mgmt0:a4:bf:01:65:6a:aa
+            ifname=mgmt1:a4:bf:01:65:6a:ab
+            ```
+
+            Using the sample output from above we can derive the following CLI flags for a worker NCN:
+            | Interface | MAC Address         | CLI Flag
+            | --------- | ------------------- | -------- 
+            | mgmt0     | `a4:bf:01:65:6a:aa` | `--mac-mgmt0=a4:bf:01:65:6a:aa`
+            | mgmt1     | `a4:bf:01:65:6a:ab` | `--mac-mgmt1=a4:bf:01:65:6a:ab`
+            | lan0      | `b8:59:9f:d9:9d:e8` | `--mac-lan0=b8:59:9f:d9:9d:e8`
+            | lan1      | `b8:59:9f:d9:9d:e9` | `--mac-lan1=b8:59:9f:d9:9d:e9`
+            | hsn0      | `50:6b:4b:23:9f:7c` | `--mac-hsn0=50:6b:4b:23:9f:7c`
+
+        2. **Otherwise** the NCN MAC addresses need to be collected using [Collect NCN MAC Addresses](Collect_NCN_MAC_Addresses.md) procedure.
   
-2. Perform a dry run of the `add_management_ncn.py` script to determine if any validation failures occur:
+3. Perform a dry run of the `add_management_ncn.py` script to determine if any validation failures occur:
     ```bash
     ncn-m# cd /usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/
     ncn-m# ./add_management_ncn.py \
         --xname $XNAME \
         --alias $NODE \
         --bmc-mgmt-switch-connector $MGMT_SWITCH_CONNECTOR \
+        --mac-bmc $BMC_MAC \
         --mac-mgmt0 a4:bf:01:65:6a:aa \
         --mac-mgmt1 a4:bf:01:65:6a:ab \
         --mac-hsn0 50:6b:4b:23:9f:7c \
         --mac-lan0 b8:59:9f:d9:9d:e8 \
-        --mac-lan1 b8:59:9f:d9:9d:e9 \
-        --mac-bmc a4:bf:01:65:68:54
+        --mac-lan1 b8:59:9f:d9:9d:e9
     ```
     > For each MAC Address/interfaces that was collected from the NCN append them to the command above
 
-    - __Master or Storage Node with 1 PCIe Card__
-    - __Worker Node with 1 PCIe Card__
-    - __Worker Node with 1 PCIe Cards and 1 HSN NIC__
-    - __Worker Node with 1 PCIe Cards and 2 HSN NIC__
-    - __Master or Storage Node with 2 PCIe Cards__
-    - __Worker Node with 2 PCIe Cards and 1 HSN NIC__
-    - __Worker Node with 2 PCIe Cards and 2 HSN - NIC__
-
-
-3.  Run the `add_management_ncn.py` script to add the NCN to SLS, HSM and BSS by adding the `--perform-changes` argument to the command ran in the previous step:
+4.  Run the `add_management_ncn.py` script to add the NCN to SLS, HSM and BSS by adding the `--perform-changes` argument to the command ran in the previous step:
     ```bash
     ncn-m# ./add_management_ncn.py \
         --xname $XNAME \
         --alias $NODE \
         --bmc-mgmt-switch-connector $MGMT_SWITCH_CONNECTOR \
+        --mac-bmc $BMC_MAC \
         --mac-mgmt0 a4:bf:01:65:6a:aa \
         --mac-mgmt1 a4:bf:01:65:6a:ab \
         --mac-hsn0 50:6b:4b:23:9f:7c \
         --mac-lan0 b8:59:9f:d9:9d:e8 \
         --mac-lan1 b8:59:9f:d9:9d:e9 \
-        --mac-bmc a4:bf:01:65:68:54 \
         --perform-changes
     ```
 
@@ -235,7 +230,7 @@ Scenarios where this procedure is applicable:
     ```
     ...
     x3000c0s3b0n0 (ncn-m002) has been added to SLS/HSM/BSS
-        WARNING A Dryrun was performed, and no changes were performed to the system
+        WARNING The NCN BMC currently has the IP address: 10.254.1.20, and needs to have IP Address 10.254.1.13
 
         =================================
         Management NCN IP Allocation
@@ -255,7 +250,7 @@ Scenarios where this procedure is applicable:
         HMN     | 10.254.1.13
     ```
 
-4.  **If the following was present** at the end of the add_management_ncn.py script output, then the NCN BMC was given an IP address via DHCP and is not at the expected IP address.
+5.  **If the following was present** at the end of the add_management_ncn.py script output, then the NCN BMC was given an IP address via DHCP and is not at the expected IP address.
     Sample output when the BMC has an unexpected IP address.
     ```
     x3000c0s3b0n0 (ncn-m002) has been added to SLS/HSM/BSS
@@ -270,12 +265,12 @@ Scenarios where this procedure is applicable:
     ncn-m# sleep 60
     ```
 
-5.  Verify the BMC is reachable at the expected IP address
+6.  Verify the BMC is reachable at the expected IP address
     ```bash
     ncn-m# ping $NODE-mgmt
     ```
 
-6.  Restart the REDS deployment:
+7.  Restart the REDS deployment:
     ```
     ncn-m# kubectl -n services rollout restart deployment cray-reds
     ```
@@ -285,7 +280,7 @@ Scenarios where this procedure is applicable:
     deployment.apps/cray-reds restarted
     ```
 
-7.  Wait for REDS to restart:
+8.  Wait for REDS to restart:
     ```bash
     ncn-m# kubectl -n services rollout status  deployment cray-reds
     ```
@@ -297,7 +292,7 @@ Scenarios where this procedure is applicable:
     deployment "cray-reds" successfully rolled out
     ```
 
-8.  Wait for the NCN BMC to get discovered by HSM:
+9.  Wait for the NCN BMC to get discovered by HSM:
     ```bash
     ncn-m# export BMC_XNAME=x3000c0s38b0
     ncn-m# watch -n 0.2 "cray hsm inventory redfishEndpoints describe $BMC_XNAME --format json" 
@@ -323,6 +318,8 @@ Scenarios where this procedure is applicable:
         }
     }
     ```
+    
+    __Discovery troubleshooting__
     The RedfishEndpoint may cycle between DiscoveryStarted and HTTPsGetFailed before the endpoint becomes DiscoverOK. If the BMC is in HTTPSGetFailed for a long period of time verify the following to help determine the cause:
     -   Verify the xname of the BMC resolves in DNS:
         ```bash
@@ -348,7 +345,7 @@ Scenarios where this procedure is applicable:
         ncn-m# curl -k -u root:changeme https://x3000c0s38b0/redfish/v1/Managers
         ```
 
-9.  Verify the NCN IPs are populated in HSM EthernetInterfaces using the mgmt0 MAC Address.
+10. Verify the NCN IPs are populated in HSM EthernetInterfaces using the mgmt0 MAC Address.
     ```bash
     ncn-m# export MGMT0_MAC="98:03:9b:bb:a9:94"
     ncn-m# cray hsm inventory ethernetInterfaces list --mac-address $MGMT0_MAC --format json
