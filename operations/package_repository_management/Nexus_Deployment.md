@@ -12,6 +12,13 @@ For a complete set of available settings, consult the values.yaml file for the `
 |`istio.ingress.hosts.ui.authority`|`nexus.{{ network.dns.external }}`|Sets the CAN hostname \(default chart value is `nexus.local`\)|
 |`sonatype-nexus.persistence.storageSize`|`1000Gi`|Nexus storage size, may be increased after installation; critical if `spec.kubernetes.services.cray-nexus-setup.s3.enabled` is `false`|
 
+If modifying the customizations.yaml file, ensure to upload the new file to Kubernetes so the changes persist in future installs or upgrades.
+
+```bash
+ncn-m001# kubectl delete secret -n loftsman site-init
+ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+```
+
 ### Common Nexus Deployments
 
 A typical deployment will look similar to the following:
