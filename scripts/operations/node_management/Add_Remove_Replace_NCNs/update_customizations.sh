@@ -28,7 +28,7 @@ if [[ -z "$TOKEN" ]]; then
     exit 1
 fi
 
-# Create tempory working directory
+# Set temporary working directory
 tmp_dir="/tmp"
 echo "Working directory $tmp_dir"
 pushd "$tmp_dir"
