@@ -63,6 +63,12 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
    ncn-m001# diff /tmp/customizations.original.yaml.pretty /tmp/customizations.yaml
    ```
 
+   Example output:
+
+   ```
+   10.252.1.13
+   ```
+
 3. Check in changes made to `customizations.yaml`.
 
    ```bash
@@ -124,10 +130,19 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
         --manifest-path s3-manifest.out.yaml
     ```
 
-5. Check that the new endpoint has been added.
+5. Check that the new endpoint has been updated.
 
     ```bash
-    ncn-m001# kubectl get endpoints -l app.kubernetes.io/instance=cray-s3 -n ceph-rgw
+    ncn-m001# kubectl get endpoints -l app.kubernetes.io/instance=cray-s3 -n ceph-rgw -o jsonpath='{.items[*].subsets[].addresses}' | jq -r '.[] | .ip'
+    ```
+
+    Example output:
+
+    ```
+    10.252.1.13
+    10.252.1.4
+    10.252.1.5
+    10.252.1.6
     ```
 
 #### 1.4 Redeploy SYSMGMT_HEALTH to pick up any changes for storage node endpoints.
@@ -207,12 +222,21 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
         --manifest-path sysmgmt-health-manifest.out.yaml
     ```
 
-5. Check that the new endpoint has been added.
+5. Check that the new endpoint has been updated.
 
     ```bash
-    ncn-m001# kubectl get endpoints -l app=cray-sysmgmt-health-ceph-exporter -n sysmgmt-health
-    ncn-m001# kubectl get endpoints -l app=cray-sysmgmt-health-ceph-node-exporter -n sysmgmt-health
+    ncn-m001# kubectl get endpoints -l app=cray-sysmgmt-health-ceph-exporter -n sysmgmt-health -o jsonpath='{.items[*].subsets[].addresses}' | jq -r '.[] | .ip'
+    ncn-m001# kubectl get endpoints -l app=cray-sysmgmt-health-ceph-node-exporter -n sysmgmt-health -o jsonpath='{.items[*].subsets[].addresses}' | jq -r '.[] | .ip'
     ```
+
+    Example output:
+
+    ```
+    10.252.1.13
+    10.252.1.4
+    10.252.1.5
+    10.252.1.6
+    ``` 
 
 #### 1.5 Cleanup
  
