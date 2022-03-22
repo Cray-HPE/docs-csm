@@ -28,7 +28,7 @@ function on_error() {
     exit 1
 }
 
-[[ -n ${TOKEN} ]] || on_error "Enviroment varaible TOKEN is not set"
+[[ -n ${TOKEN} ]] || on_error "Environment varaible TOKEN is not set"
 
 # Collect network information from SLS
 echo "Collecting networking information from SLS"
