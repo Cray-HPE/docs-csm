@@ -43,7 +43,9 @@
        changes, use the `--git-commit` option to override the commit to the
        commit on your branch.
    > * If you are using the default CSM configuration found in the product
-       catalog above, you may omit this option.
+       catalog above, you may omit this option, but you should use the `--csm-release`
+       option to explicitly set the release version, otherwise the latest available
+       release will be applied.
 
    ```bash
    ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh [--git-commit COMMIT]
