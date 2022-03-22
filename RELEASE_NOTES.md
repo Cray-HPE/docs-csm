@@ -87,9 +87,9 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * fixed issues causing PXE boot failures during installs, upgrades, and NCN rebuilds
 
 ##  Deprecations
-CRUS has been deprecated and will be removed in a future release and replaced with BOSv2 that will provide similar functionality.
+CRUS has been deprecated and will be removed in a future release and replaced with BOSv2 that will provide similar functionality
 
 ## Removals
-The V1 version of the CFS API was removed.
+The V1 version of the CFS API was removed
 
 ## Known Issues
