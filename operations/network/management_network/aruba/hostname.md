@@ -1,6 +1,6 @@
 # Configure Hostnames
 
-A hostname is a human-friendly name used to identify a device. An example of a hostname could be the name “Test.” 
+A hostname is a human-friendly name used to identify a device. An example of a hostname could be the name "Test." 
 
 ## Configuration Commands
 

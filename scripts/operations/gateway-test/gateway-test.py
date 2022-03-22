@@ -280,7 +280,7 @@ if __name__ == '__main__':
             print("SKIP - [{}]: {}".format(svcname, url))
             continue
 
-        # Otherwise, we get the gateways from the test defininition file (which may become stale)
+        # Otherwise, we get the gateways from the test definition file (which may become stale)
         else:
             if "gateways" in svcs['ingress_api_services'][i]:
                 svcgws = svcs['ingress_api_services'][i]['gateways']

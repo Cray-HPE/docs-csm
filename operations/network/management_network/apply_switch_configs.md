@@ -9,7 +9,7 @@
 
 This process is generally straight forward and requires the user to copy and paste the generated switch configuration into the terminal.
 
-All ports will be shutdown before applying switch configuration.  If the port is in the SHCD and being used, it will be enabled when the configuration is applied.
+All ports will be shutdown before applying switch configuration. If the port is in the SHCD and being used, it will be enabled when the configuration is applied.
 
 There are some caveats that are mentioned below.
 ### Aruba
@@ -34,7 +34,7 @@ sw-leaf-bmc-001(conf-range-eth1/1/1-1/1/52)# shut
 
 1. Paste in generated config.
 
-    - When pasting in the config be sure that all the commands were accepted.  In some cases you will need to back out of the current config context and back to global configuration for the commands to work as intended.
+    - When pasting in the config be sure that all the commands were accepted. In some cases you will need to back out of the current config context and back to global configuration for the commands to work as intended.
     - `banner motd` will need to be manually applied.
 
         An example

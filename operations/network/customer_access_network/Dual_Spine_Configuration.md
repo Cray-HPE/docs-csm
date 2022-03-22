@@ -42,7 +42,7 @@ ip route 10.103.9.0/25 10.101.15.150
 ip route 10.103.9.0/25 10.101.15.152
 ```
 
-The next hop IP `10.101.15.150` would be the interface IP address on the Spine switch.
+The next hop IP address `10.101.15.150` would be the interface IP address on the Spine switch.
 
 There must be a default route on each spine switch that will direct traffic that does not match other routes to the endpoint on the customer switch. The following examples are for the route configuration on sw-spine-001.
 

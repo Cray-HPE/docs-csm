@@ -16,7 +16,7 @@ The following services need their data repopulated in the etcd cluster:
 
 ### Prerequisites
 
-A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
+An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
 
 
 ### BOS

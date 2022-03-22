@@ -7,7 +7,7 @@
 - Generated switch configs already applied.
     - [apply switch configs](apply_switch_configs.md)
 
- You will need to apply the backed up site connection configuration with a couple modifications.  Since we are now using a VRF to separate customer traffic we will need to add the site ports and the default routes to that VRF.
+ You will need to apply the backed up site connection configuration with a couple modifications. Since we are now using a VRF to separate customer traffic we will need to add the site ports and the default routes to that VRF.
 
  ##### Aruba
 - `vrf attach Customer` will be added to the port configuration that connects to the site.
@@ -81,7 +81,7 @@ sw-spine-002 [mlag-domain: master] # conf t
 
  #### Apply users/password
 
-All that's required to re-apply the users is get into global configuration mode `conf t` and paste in the config that was copied from the previous step.
+All that is required to re-apply the users is get into global configuration mode `conf t` and paste in the config that was copied from the previous step.
  
 ##### Aruba
 ```

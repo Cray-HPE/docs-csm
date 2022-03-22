@@ -16,6 +16,6 @@ A sign of a duplicate IP address is seeing a DECLINE message from the client to 
          Circuit-ID SubOption 1, length 20: vlan2-ethernet1/1/12
 ```
 
-To test for Duplicate IPs you can ping the suspected address while you turn off the node, if you continue to get responses, then you have a duplicate IP.
+To test for Duplicate IP addresses you can ping the suspected address while you turn off the node, if you continue to get responses, then you have a duplicate IP.
 
 [Back to Index](../index.md)

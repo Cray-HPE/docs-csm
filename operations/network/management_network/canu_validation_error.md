@@ -7,7 +7,7 @@
 validate_shcd - CRITICAL: A port number must be specified. Please correct the SHCD for HMN:V36 with an empty value 
 ```
 
-***SOLUTION***: 	Blank cell.  Minimally the Source or Destination and Port needs to be specified. 
+***SOLUTION***: 	Blank cell. Minimally the Source or Destination and Port needs to be specified. 
 
 * Example 2:  
 ```

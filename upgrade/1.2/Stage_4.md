@@ -94,10 +94,10 @@ HEALTH_WARN clients are using insecure global_id reclaim; mons are allowing inse
     mon.ncn-s003 has auth_allow_insecure_global_id_reclaim set to true
 ```
 
-You will see the processes running the ceph container image go through the upgrade process.  This will involve stopping the old process running the v15.2.8 container and restarting the process with the new v15.2.15 container image.
+You will see the processes running the ceph container image go through the upgrade process. This will involve stopping the old process running the v15.2.8 container and restarting the process with the new v15.2.15 container image.
 
 **IMPORTANT:**
-Only processes running the v15.2.8 image will be upgraded.  This will include `MON,MGR,MDS,RGW,OSD` processes only.
+Only processes running the v15.2.8 image will be upgraded. This will include `MON,MGR,MDS,RGW,OSD` processes only.
 
 ### Post Upgrade
 

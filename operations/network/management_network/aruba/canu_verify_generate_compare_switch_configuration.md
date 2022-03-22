@@ -405,7 +405,7 @@ Expected. Results:
 	192.168.1.2
 
 
-To print extra details (prefixes, NCN names, IPs), add the `--verbose` flag
+To print extra details (prefixes, NCN names, IP addresses), add the `--verbose` flag
 
 ### Generate Switch Config
 

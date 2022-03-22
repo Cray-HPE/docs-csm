@@ -17,7 +17,7 @@ This includes:
 - default routes
 - any other customized config for this system
 
-This configuration will likely vary from site to site.  This guide will cover the most common site setup.
+This configuration will likely vary from site to site. This guide will cover the most common site setup.
 
 ### Backup site connection configuration
 
@@ -30,7 +30,7 @@ CAN switch	cfcanb6s1	 	 	-	46	sw-25g02	x3000	u40	-	j36
 
 With this info we know that we need to back the config on port 36 on both spine switches.
 
-log onto the switches and get the configs of the ports and the default route config.  Save this output, this will be used after we apply the generated configs.
+log onto the switches and get the configs of the ports and the default route config. Save this output, this will be used after we apply the generated configs.
 
 #### Aruba
 
@@ -129,7 +129,7 @@ sw-spine-001 [standalone: master] # show run | include username
 
 #### Backup SNMP credentials
 
-SNMP is currently only used on sw-leaf-bmc switches, these credentials can be retrieved from vault.  More info on SNMP creds can be found on the [Change SNMP Credentials on Leaf Switches](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_Switches.md) page.
+SNMP is currently only used on sw-leaf-bmc switches, these credentials can be retrieved from vault. More info on SNMP creds can be found on the [Change SNMP Credentials on Leaf Switches](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_Switches.md) page.
 
 Once these credentials are retrieved from Vault you can fill in the `xxxxxx` fields below.
 
