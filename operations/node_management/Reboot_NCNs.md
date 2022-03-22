@@ -147,7 +147,7 @@ The `kubectl` command is installed.
         
 1. Ensure that no nodes are in a `failed` state in CFS.
     Nodes that are in a failed state prior to the reboot will not be automatically
-    configured once they have been rebooted.  To get a list of nodes in the failed state:
+    configured once they have been rebooted. To get a list of nodes in the failed state:
    ```
    ncn-m001# cray cfs components list --status failed | jq .[].id
    ```
@@ -163,7 +163,7 @@ The `kubectl` command is installed.
    done
    ```
    This will leave the nodes in a disabled state in CFS.  CFS will automatically
-   re-enable them when they reboot, this is just so that CFS doesn't immediately
+   re-enable them when they reboot, this is just so that CFS does not immediately
    start retrying configuration against the failed node.
 
     1. Check for components that have `failed` status in CFS.
