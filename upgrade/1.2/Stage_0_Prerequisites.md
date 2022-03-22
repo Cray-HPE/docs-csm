@@ -164,6 +164,12 @@ ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw
 
 Run check script:
 
+   Set the `SW_ADMIN_PASSWORD` environment variable to the admin password for the switches.   This is needed for preflight tests within the check script.
+
+   ```bash
+   ncn-m001# export SW_ADMIN_PASSWORD=sw1tCH@DM1Np4s5w0rd
+   ```
+
    > **`IMPORTANT:`** If the password for the local Nexus `admin` account has
    > been changed from the default `admin123` (not typical), then set the
    > `NEXUS_PASSWORD` environment variable to the correct `admin` password
