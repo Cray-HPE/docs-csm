@@ -90,6 +90,6 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 CRUS has been deprecated. It will be removed in a future release and replaced with BOSv2, which will provide similar functionality.
 
 ## Removals
-The V1 version of the CFS API was removed.
+The V1 version of the CFS API was removed
 
 ## Known Issues
