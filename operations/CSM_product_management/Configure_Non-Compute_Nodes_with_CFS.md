@@ -166,11 +166,13 @@ set and managed in Vault.
 After completing the previous procedures, apply the configuration to the NCNs
 by running NCN personalization with [CFS](../configuration_management/Configuration_Management.md).
 This can be accomplished by running the `apply_csm_configuration.sh` script, or
-running the steps manually. For more information on the script, see
+running the steps manually. By default the script will select the latest available 
+csm release.  However for clarity it is recommended that the user provide the csm release using the
+`--csm-release` parameter.  For more detailed information on the script, see
 [Automatically Apply CSM Configuration to NCNs](#auto_apply_csm_config).
 
 ```bash
-ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh
+ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh --csm-release <version e.g. 1.0.11> 
 ```
 
 To manually run NCN personalization, first gather the following information: 
@@ -245,6 +247,7 @@ ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configur
  
 By default the script will perform the following steps:
 1. Finds the latest installed release version of the CSM product stream.
+1. Finds the CSM configuration version associated with the given release.
 1. Finds the latest commit on the release branch of the `csm-config-management` repo.
 1. Creates or updates the `ncn-personalization.json` configuration file.
 1. Finds all nodes in HSM with the `Management` role.
@@ -257,7 +260,12 @@ By default the script will perform the following steps:
 
 The script also supports several flags to override these behaviors:
 - `csm-release:` Overrides the version of the CSM release that is used. Defaults
-  to the latest version.
+  to the latest version.  Available versions can be found in the cray-product-catalog.
+  ```bash
+  ncn-m001# kubectl -n services get cm cray-product-catalog
+  ```
+- `csm-config-version:` Overrides the version of the CSM configuration.  This corresponds
+  to the version of a branch starting with `cray/csm/` in the csm repo in VCS.
 - `git-commit`: Overrides the git commit cloned for the configuration content.
   Defaults to the latest commit on the csm-release branch.
 - `git-clone-url`: Overrides the source of the configuration content. Defaults
