@@ -27,32 +27,15 @@ To create new accounts, refer to [Create Internal User Accounts in the Keycloak 
 
 ### Gitea
 
-The initial Gitea login credentials for the `crayvcs` username are stored in three places:
+The default Gitea user credentials is `crayvcs`. The password is randomly generated at install time
+and can be found in the vcs-user-credentials secret.
 
-- vcs-user-credentials Kubernetes secret - This is used to initialize the other two locations, as well as providing a place where users can query for the password.
-  
-  The password can be obtained using this command:
+```bash
+ncn-w001# kubectl get secret -n services vcs-user-credentials \
+--template={{.data.vcs_password}} | base64 --decode
+```
 
-  ```bash
-  ncn-w001# kubectl get secret -n services vcs-user-credentials \
-  --template={{.data.vcs_password}} | base64 --decode
-  ```
-
-  The password can be changed using this command:
-
-  ```bash
-  ncn-w001# kubectl create secret generic vcs-user-credentials \
-  --save-config --from-literal=vcs_username="crayvcs" --from-literal=vcs_password="NEW_PASSWORD" \
-  --dry-run -o yaml | kubectl apply -f -
-  ```
-
-- Gitea - These credentials are used when pushing to Git using the default username and password. The password should be changed through the Gitea UI.
-
-- Keycloak - These credentials are used to allow access to the Gitea UI. They must be changed through Keycloak.
-
-> **IMPORTANT:** These three sources of credentials are not currently synced by any mechanism, and so changing the default password requires that it be changed in all three places. Changing only one many result in difficulty determining the password at a later date, or may result in lost access to Gitea.
-
-
+For more information on Gitea, including how to change the password, see [Version Control Service VCS](../configuration_management/Version_Control_Service_VCS.md).
 
 ### System Management Health Service
 
