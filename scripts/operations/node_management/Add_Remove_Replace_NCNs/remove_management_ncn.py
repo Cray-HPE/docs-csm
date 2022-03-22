@@ -90,6 +90,7 @@ class State:
         self.aliases = set()
         self.ip_reservation_aliases = set()
         self.ip_reservation_ips = set()
+        self.hsm_macs = set()
         self.workers = set()
         self.remove_ips = True
         self.ifnames = []
@@ -457,9 +458,12 @@ def create_hsm_actions(session, state):
 
     ethernet_list = json.loads(ethernet_xname_action.get('response_body'))
     for ethernet in ethernet_list:
-        mac = ethernet.get('ID')
-        actions.append(action_create('delete', f'{HSM_URL}/Inventory/EthernetInterfaces/{mac}'))
-        state.save(f'hsm-ethernet-interface-{mac}', ethernet)
+        ethernet_id = ethernet.get('ID')
+        actions.append(action_create('delete', f'{HSM_URL}/Inventory/EthernetInterfaces/{ethernet_id}'))
+        state.save(f'hsm-ethernet-interface-{ethernet_id}', ethernet)
+        mac = ethernet.get('MACAddress')
+        if mac:
+            state.hsm_macs.add(mac)
 
     # bmc (parent) ethernet interfaces
     ethernet_parent_action = http_get(session, actions,
@@ -467,9 +471,12 @@ def create_hsm_actions(session, state):
 
     ethernet_list = json.loads(ethernet_parent_action.get('response_body'))
     for ethernet in ethernet_list:
-        mac = ethernet.get('ID')
-        actions.append(action_create('delete', f'{HSM_URL}/Inventory/EthernetInterfaces/{mac}'))
-        state.save(f'hsm-ethernet-interface-{mac}', ethernet)
+        ethernet_id = ethernet.get('ID')
+        actions.append(action_create('delete', f'{HSM_URL}/Inventory/EthernetInterfaces/{ethernet_id}'))
+        state.save(f'hsm-ethernet-interface-{ethernet_id}', ethernet)
+        mac = ethernet.get('MACAddress')
+        if mac:
+            state.hsm_macs.add(mac)
 
     # delete parent redfish endpoints
     add_delete_action_if_component_present(
@@ -572,6 +579,26 @@ def create_bss_actions(session, state):
 
 def create_kea_actions(session, state):
     actions = []
+
+    for mac in sorted(state.hsm_macs):
+        request_body = '{"command": "lease4-get-by-hw-address", "service": [ "dhcp4" ], "arguments": {"hw-address": "' + mac + '"}}'
+        action = action_create('post', f'{KEA_URL}', request_body=request_body)
+        actions.append(action)
+        action_log(action, f'Request body: {request_body}')
+        run_action(session, action)
+        if state.verbose:
+            action_log(action, f'Response body: {action.get("response_body")}')
+        if action.get('success'):
+            response = action.get('response_body', '[]')
+            response_json = json.loads(response)
+            for r in response_json:
+                leases = r.get("arguments", {}).get("leases", [])
+                for lease in leases:
+                    ip = lease.get('ip-address')
+                    if ip:
+                        if ip not in state.ip_reservation_ips:
+                            state.ip_reservation_ips.add(ip)
+                            action_log(action, f'Added {ip} to the list of kea leases to remove')
 
     for ip in sorted(state.ip_reservation_ips):
         request_body = '{"command": "lease4-del", "service": [ "dhcp4" ], "arguments": {"ip-address": "' + ip + '"}}'
