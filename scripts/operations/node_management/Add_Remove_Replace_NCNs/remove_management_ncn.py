@@ -97,6 +97,7 @@ class State:
         self.verbose = verbose
         self.ipmi_username = None
         self.ipmi_password = None
+        self.run_ipmitool = False
 
         if directory and xname:
             self.directory = os.path.join(directory, xname)
@@ -298,6 +299,20 @@ def add_delete_action_if_component_present(actions, state, session, url, save_fi
     if not_found:
         action['success'] = True
         action_log(action, 'The item does not need to be deleted, because it does not exist.')
+
+
+def validate_ipmi_config(state):
+    if state.run_ipmitool:
+        if not state.ipmi_password:
+            log.error('IPMI_PASSWORD not set')
+            log.error('The environment variable IPMI_PASSWORD is required')
+            log.error('It should be set to the password of the BMC that is being removed')
+            sys.exit(1)
+        if not state.ipmi_username:
+            log.error('IPMI_USERNAME not set')
+            log.error('The environment variable IPMI_USERNAME is required')
+            log.error('It should be set to the username of the BMC that is being removed')
+            sys.exit(1)
 
 
 def create_sls_actions(session, state):
@@ -658,40 +673,87 @@ def create_update_etc_hosts_actions(state):
     return command_actions
 
 
-def create_ipmitool_actions(state):
+def create_ipmitool_set_bmc_to_dhcp_actions(state):
     command_actions = []
-    if state.ncn_name and state.ipmi_password and state.ipmi_username:
-        mc_info_action = CommandAction([
-            'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
-            'mc', 'info'],
-            verbose=state.verbose)
-        command_actions.append(mc_info_action)
-        run_command_action(mc_info_action)
-        lan = '1'
-        if mc_info_action.stdout:
-            manufacturer_lines = [line for line in mc_info_action.stdout.split('\n') if 'manufacturer name' in line.lower()]
-            for line in manufacturer_lines:
-                if 'intel' in line.lower():
-                    lan = '3'
-        mac_action = CommandAction([
-            'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
-            'lan', 'print', lan],
-            verbose=state.verbose)
-        command_actions.append(mac_action)
-        run_command_action(mac_action)
-        if mac_action.return_code == 0 and mac_action.stdout:
-            mac_lines = [line for line in mac_action.stdout.split('\n') if 'mac address' in line.lower()]
-            for line in mac_lines:
-                key_value = line.split(':', 1)
-                if len(key_value) == 2:
-                    state.bmc_mac = key_value[1].strip()
-    elif state.ncn_name:
-        # ncn_name
-        log.info('Not running the ipmitool. This will not affect the successful removal of the ncn.')
-        if not state.ipmi_username:
-            log.info(f'         Environment variable IPMI_USERNAME was not set. The ipmitool requires this.')
-        if not state.ipmi_password:
-            log.info(f'         Environment variable IPMI_PASSWORD was not set. The ipmitool requires this.')
+    if not state.run_ipmitool:
+        return command_actions
+
+    if not state.ncn_name or not state.ipmi_password or not state.ipmi_username:
+        # hitting this case is a programming error.
+        # these values should have been checked by calling validate_ipmi_config(state)
+        log.error('Unexpected state. Missing one of these values: ncn_name: ' +
+                  f'"{state.ncn_name}", ipmi_username: "{state.ipmi_username}", ipmi_password: "****"')
+        return command_actions
+
+    mc_info_action = CommandAction([
+        'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
+        'mc', 'info'],
+        verbose=state.verbose)
+    command_actions.append(mc_info_action)
+    run_command_action(mc_info_action)
+
+    lan = '1'
+    if mc_info_action.stdout:
+        manufacturer_lines = [line for line in mc_info_action.stdout.split('\n') if 'manufacturer name' in line.lower()]
+        for line in manufacturer_lines:
+            if 'intel' in line.lower():
+                lan = '3'
+
+    # Set the BMC to DHCP
+    change_dhcp_action = CommandAction([
+        'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
+        'lan', 'set', lan, "ipsrc", "dhcp"],
+        verbose=state.verbose)
+    command_actions.append(change_dhcp_action)
+
+    # Restart BMC
+    restart_bmc_action = CommandAction([
+        'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
+        'mc', 'reset', "cold"],
+        verbose=state.verbose)
+    command_actions.append(restart_bmc_action)
+
+    return command_actions
+
+
+def create_ipmitool_bmc_mac_actions(state):
+    command_actions = []
+    if not state.run_ipmitool:
+        return command_actions
+
+    if not state.ncn_name or not state.ipmi_password or not state.ipmi_username:
+        # hitting this case is a programming error.
+        # these values should have been checked by calling validate_ipmi_config(state)
+        log.error('Unexpected state. Missing one of these values: ncn_name: ' +
+                  f'"{state.ncn_name}", ipmi_username: "{state.ipmi_username}", ipmi_password: "****"')
+        return command_actions
+
+    mc_info_action = CommandAction([
+        'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
+        'mc', 'info'],
+        verbose=state.verbose)
+    command_actions.append(mc_info_action)
+    run_command_action(mc_info_action)
+
+    lan = '1'
+    if mc_info_action.stdout:
+        manufacturer_lines = [line for line in mc_info_action.stdout.split('\n') if 'manufacturer name' in line.lower()]
+        for line in manufacturer_lines:
+            if 'intel' in line.lower():
+                lan = '3'
+    mac_action = CommandAction([
+        'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
+        'lan', 'print', lan],
+        verbose=state.verbose)
+    command_actions.append(mac_action)
+    run_command_action(mac_action)
+
+    if mac_action.return_code == 0 and mac_action.stdout:
+        mac_lines = [line for line in mac_action.stdout.split('\n') if 'mac address' in line.lower()]
+        for line in mac_lines:
+            key_value = line.split(':', 1)
+            if len(key_value) == 2:
+                state.bmc_mac = key_value[1].strip()
 
     return command_actions
 
@@ -783,11 +845,15 @@ def main(argv):
         sls_actions = create_sls_actions(session, state)
         print_actions(sls_actions)
 
-        hsm_actions = create_hsm_actions(session, state)
-        print_actions(hsm_actions)
+        # ncn-m001 does not use DHCP. It is assigned a static IP.
+        state.run_ipmitool = state.ncn_name != 'ncn-m001'
+        validate_ipmi_config(state)
 
         bss_actions = create_bss_actions(session, state)
         print_actions(bss_actions)
+
+        hsm_actions = create_hsm_actions(session, state)
+        print_actions(hsm_actions)
 
         kea_actions = create_kea_actions(session, state)
         if not args.skip_kea:
@@ -803,8 +869,11 @@ def main(argv):
             etc_hosts_actions = create_update_etc_hosts_actions(state)
             print_command_actions(etc_hosts_actions)
 
-        ipmitool_actions = create_ipmitool_actions(state)
-        print_command_actions(ipmitool_actions)
+        ipmitool_bmc_mac_actions = create_ipmitool_bmc_mac_actions(state)
+        print_command_actions(ipmitool_bmc_mac_actions)
+
+        ipmitool_set_dhcp_actions = create_ipmitool_set_bmc_to_dhcp_actions(state)
+        print_command_actions(ipmitool_set_dhcp_actions)
 
         check_for_running_pods_on_ncn(state)
 
@@ -820,9 +889,9 @@ def main(argv):
                     exit(0)
             print()
             log.info(f'Removing {args.xname}')
-            run_actions(session, sls_actions)
-            run_actions(session, hsm_actions)
             run_actions(session, bss_actions)
+            run_actions(session, hsm_actions)
+            run_actions(session, sls_actions)
 
             if not args.skip_kea:
                 run_actions(session, kea_actions)
@@ -833,28 +902,8 @@ def main(argv):
             log.info('Do not kill this script. The wait will timeout in 10 minutes if bss does not fully start up.')
             run_command_actions(restart_bss_wait_actions)
 
-
             # Set the BMC to DHCP
-            mc_info_action = CommandAction([
-                'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
-                'mc', 'info'],
-                verbose=state.verbose)
-            run_command_action(mc_info_action)
-            print_command_action(mc_info_action)
-            lan = '1'
-            if mc_info_action.stdout:
-                manufacturer_lines = [line for line in mc_info_action.stdout.split('\n') if 'manufacturer name' in line.lower()]
-                for line in manufacturer_lines:
-                    if 'intel' in line.lower():
-                        lan = '3'
-                        
-            change_dhcp_action = CommandAction([
-                'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
-                'lan', 'set', lan, "ipsrc", "dhcp"], 
-                verbose=state.verbose)
-            run_command_action(change_dhcp_action)
-            print_command_action(change_dhcp_action)
-
+            run_command_actions(ipmitool_set_dhcp_actions)
 
             run_command_actions(etc_hosts_actions)
 
