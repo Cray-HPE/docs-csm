@@ -36,7 +36,7 @@ The hung jobs should be deleted using one of the following options:
         echo $job_id
         job_status=$(echo $job_entry| awk '{ print $2 }')
         echo $job_status
-    	if [[ "$job_status" -eq "0/1" ]];then
+    	if [[ "$job_status" == "0/1" ]];then
             echo "deleting stale job"
     		kubectl delete jobs -n services $job_id
             echo "kubectl delete jobs -n services $job_id"
