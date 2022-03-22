@@ -5,7 +5,7 @@ To save switch configurations see the [config management](config_management.md) 
 
 ### Aruba
 
-View the checkpoints.  Make sure that `CSM1_0` and `CSM1_2` exist.  If they do you can proceed.
+View the checkpoints. Make sure that `CSM1_0` and `CSM1_2` exist. If they do you can proceed.
 ```
 sw-spine-001# show checkpoint
 NAME TYPE WRITER DATE(YYYY/MM/DD) IMAGE VERSION
@@ -20,7 +20,7 @@ sw-spine-001# checkpoint rollback CSM1_0
 
 ### Dell
 
-View the configuration files.  Make sure that `csm1.0` and `csm1.2` exist.  If they do you can proceed.
+View the configuration files. Make sure that `csm1.0` and `csm1.2` exist. If they do you can proceed.
 
 ```
 sw-leaf-001# dir config
@@ -43,7 +43,7 @@ System configuration has been modified. Save? [yes/no]:no
 ```
 ### Mellanox
 
-View the configuration files.  Make sure that `csm1.0` and `csm1.2` exist.  If they do you can proceed.
+View the configuration files. Make sure that `csm1.0` and `csm1.2` exist. If they do you can proceed.
 ```
 sw-spine-001 [standalone: master] (config) # show configuration files
 

@@ -1,6 +1,6 @@
 # Unidirectional Link Detection (UDLD)
 
-“The purpose of the UDLD protocol is to detect the presence of anomalous conditions in the Layer 2 communication channel, while relying on the mechanisms defined by the IEEE in the 802.3 standard to properly handle conditions inherent to the physical layer.” –rfc5171 
+"The purpose of the UDLD protocol is to detect the presence of anomalous conditions in the Layer 2 communication channel, while relying on the mechanisms defined by the IEEE in the 802.3 standard to properly handle conditions inherent to the physical layer." –rfc5171 
 
 * Compatible with existing HPE products:
 	* Forward-then-verify: Packets are forwarded until the link is considered unidirectional
@@ -49,7 +49,7 @@ Interface 1/1/1
 ## Expected Results 
 
 1. Administrators can enable UDLD on an interface
-1. UDLD state should be “Unblocked | UDLD determined the link is bidirectional” 
+1. UDLD state should be "Unblocked | UDLD determined the link is bidirectional" 
 
 > **NOTE:** With SFP+ XCVERS, Aruba Switches automatically detect a broken bidirectional link, rendering the port into a down state.
 

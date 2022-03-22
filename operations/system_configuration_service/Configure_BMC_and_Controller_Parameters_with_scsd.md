@@ -40,7 +40,7 @@ Setting the SSH keys for mountain controllers is done by running the `/opt/cray/
 Usage: set_ssh_keys.py [options]
 
    --debug=level    Set debug level
-   --dryrun         Gather all info but don't set anything in HW.
+   --dryrun         Gather all info but do not set anything in HW.
    --exclude=list   Comma-separated list of target patterns to exclude.
                     Each item in the list is matched on the front
                     of each target component name (xname) and excluded if there is a match.

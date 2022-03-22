@@ -2,7 +2,7 @@
 
 Verify the DNSMASQ config file matches what is configured on the switches.
 
-Here's a DNSMASQ config file for the Metal network (VLAN1). As you can see the router is 10.1.0.1, this has to match what the IP address is on the switches doing the routing for the MTL network.  
+Here is a DNSMASQ config file for the Metal network (VLAN1). As you can see the router is 10.1.0.1, this has to match what the IP address is on the switches doing the routing for the MTL network.  
 
 This is most commonly on the spines.  
 
@@ -34,7 +34,7 @@ dhcp-option=interface:bond0,option:router,10.1.0.1
 dhcp-range=interface:bond0,10.1.1.33,10.1.1.233,10m
 ```
 
-Here's an example of what the Spine config should be.
+Here is an example of what the Spine config should be.
 
 Aruba configuration: 
 

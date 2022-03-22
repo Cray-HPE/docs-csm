@@ -7,7 +7,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
 -   Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 
--   Blade is being added to a existing liquid-cooled cabinet in the system.
+-   Blade is being added to an existing liquid-cooled cabinet in the system.
 
 -   The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
 

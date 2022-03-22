@@ -1215,7 +1215,7 @@ spec:
                                 annotations:
                                   type: object
                                   description: Annotations added to the resource template. Can be applied to different resources such as `StatefulSets`, `Deployments`, `Pods`, and `Services`.
-                              description: Metadata to apply to the `PodDistruptionBugetTemplate` resource.
+                              description: Metadata to apply to the `PodDisruptionBudget` resource.
                             maxUnavailable:
                               type: integer
                               minimum: 0
@@ -2027,7 +2027,7 @@ spec:
                                 annotations:
                                   type: object
                                   description: Annotations added to the resource template. Can be applied to different resources such as `StatefulSets`, `Deployments`, `Pods`, and `Services`.
-                              description: Metadata to apply to the `PodDistruptionBugetTemplate` resource.
+                              description: Metadata to apply to the `PodDisruptionBudget` resource.
                             maxUnavailable:
                               type: integer
                               minimum: 0
@@ -3713,7 +3713,7 @@ spec:
                                 annotations:
                                   type: object
                                   description: Annotations added to the resource template. Can be applied to different resources such as `StatefulSets`, `Deployments`, `Pods`, and `Services`.
-                              description: Metadata to apply to the `PodDistruptionBugetTemplate` resource.
+                              description: Metadata to apply to the `PodDisruptionBudget` resource.
                             maxUnavailable:
                               type: integer
                               minimum: 0
@@ -7176,7 +7176,7 @@ spec:
                                 annotations:
                                   type: object
                                   description: Annotations added to the resource template. Can be applied to different resources such as `StatefulSets`, `Deployments`, `Pods`, and `Services`.
-                              description: Metadata to apply to the `PodDistruptionBugetTemplate` resource.
+                              description: Metadata to apply to the `PodDisruptionBudget` resource.
                             maxUnavailable:
                               type: integer
                               minimum: 0
@@ -8291,7 +8291,7 @@ spec:
                                 annotations:
                                   type: object
                                   description: Annotations added to the resource template. Can be applied to different resources such as `StatefulSets`, `Deployments`, `Pods`, and `Services`.
-                              description: Metadata to apply to the `PodDistruptionBugetTemplate` resource.
+                              description: Metadata to apply to the `PodDisruptionBudget` resource.
                             maxUnavailable:
                               type: integer
                               minimum: 0
@@ -10806,7 +10806,7 @@ spec:
                                 annotations:
                                   type: object
                                   description: Annotations added to the resource template. Can be applied to different resources such as `StatefulSets`, `Deployments`, `Pods`, and `Services`.
-                              description: Metadata to apply to the `PodDistruptionBugetTemplate` resource.
+                              description: Metadata to apply to the `PodDisruptionBudget` resource.
                             maxUnavailable:
                               type: integer
                               minimum: 0
@@ -14272,7 +14272,7 @@ spec:
                                 annotations:
                                   type: object
                                   description: Annotations added to the resource template. Can be applied to different resources such as `StatefulSets`, `Deployments`, `Pods`, and `Services`.
-                              description: Metadata to apply to the `PodDistruptionBugetTemplate` resource.
+                              description: Metadata to apply to the `PodDisruptionBudget` resource.
                             maxUnavailable:
                               type: integer
                               minimum: 0
@@ -15387,7 +15387,7 @@ spec:
                                 annotations:
                                   type: object
                                   description: Annotations added to the resource template. Can be applied to different resources such as `StatefulSets`, `Deployments`, `Pods`, and `Services`.
-                              description: Metadata to apply to the `PodDistruptionBugetTemplate` resource.
+                              description: Metadata to apply to the `PodDisruptionBudget` resource.
                             maxUnavailable:
                               type: integer
                               minimum: 0
@@ -17902,7 +17902,7 @@ spec:
                                 annotations:
                                   type: object
                                   description: Annotations added to the resource template. Can be applied to different resources such as `StatefulSets`, `Deployments`, `Pods`, and `Services`.
-                              description: Metadata to apply to the `PodDistruptionBugetTemplate` resource.
+                              description: Metadata to apply to the `PodDisruptionBudget` resource.
                             maxUnavailable:
                               type: integer
                               minimum: 0
