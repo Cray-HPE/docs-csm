@@ -112,7 +112,7 @@ Another important topic, once administrators are familiar with setting up UAS to
     * [Troubleshoot UAIs with Administrative Access](Troubleshoot_UAIs_with_Administrative_Access.md)
     * [Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
     * [Troubleshoot UAS / CLI Authentication Issues](Troubleshoot_UAI_Authentication_Issues.md)
-    * [Troubleshoot Broker UAI SSSD Can't Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
+    * [Troubleshoot Broker UAI SSSD Cannot Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
 * [Clear UAS Configuration](Reset_the_UAS_Configuration_to_Original_Installed_Settings.md)
 
 [Next Topic: UAS Limitations](UAS_Limitations.md)

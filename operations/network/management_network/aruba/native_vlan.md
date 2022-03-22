@@ -40,7 +40,7 @@ VLAN  Name                              Status  Reason          Type      Interf
 1. Administrators can create a VLAN
 2. Administrators can assign a native VLAN to the physical interface
 3. Administrators can configure an IP address on the VLAN interface
-4. Administrators can successfully ping the other switch’s VLAN interface  
+4. Administrators can successfully ping the other switch's VLAN interface  
 
 [Back to Index](../index.md)
 

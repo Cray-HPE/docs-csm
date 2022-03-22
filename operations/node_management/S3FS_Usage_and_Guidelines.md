@@ -12,7 +12,7 @@ S3FS is being deployed as tool to provide temporary relief of space usage as wel
 ## When NOT to Use
 
 * For long term storage of code, test images, test rpms, or tar files.
-  * This is ONLY meant to provide temporary relief.  Exercising a vigilant practice of cleaning up unused files should be enforced.
+  * This is ONLY meant to provide temporary relief. Exercising a vigilant practice of cleaning up unused files should be enforced.
 * As a landing point to uncompress tar files.
   * This will put unnecessary load on the storage cluster as uncompressing a tar file will require a lot of reads and writes back to the object storage endpoints.
   * Running programs from the S3FS mount point.
@@ -50,7 +50,7 @@ S3FS is being deployed as tool to provide temporary relief of space usage as wel
 
    2. Mount w/ cache
 
-      ***IMPORTANT:*** To use this option there must be a dedicated landing spacethat is a partition.  This ensures the usage does not impact the root drive.
+      ***IMPORTANT:*** To use this option there must be a dedicated landing spacethat is a partition. This ensures the usage does not impact the root drive.
 
       ```text
       s3fs <radosgw-user> <mount path>  -o passwd_file=${HOME}/.<filename>.s3fs,url=http://rgw-vip.nmn,use_path_request_style,use_cache=<dedicated_cache_partition_location>,check_cache_dir_exist=true

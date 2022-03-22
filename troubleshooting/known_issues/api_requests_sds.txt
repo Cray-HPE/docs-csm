@@ -39,7 +39,7 @@ ncn-m# kubectl logs -n istio-system istio-ingressgateway-6d66677d95-s2f67 | grep
 
 ## Recovery
 
-Restart the Pod with the failing Envoy container. When there's a single replica of the Pod, the Pod can be deleted and Kubernetes will schedule a new instance to start up in its place:
+Restart the Pod with the failing Envoy container. When there is a single replica of the Pod, the Pod can be deleted and Kubernetes will schedule a new instance to start up in its place:
 
 ```
 ncn-m# kubectl delete pod -n services cray-cfs-batcher-94877b679-lmhqf

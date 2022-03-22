@@ -4,7 +4,7 @@ Example issue: Source address of the DHCP Offer is the MetalLB address of KEA "1
 
 The source address of the DHCP Reply/Offer NEEDS to be the address of the vlan interface on the Worker.
 
-Here's how to look at DHCP traffic on the workers:
+Here is how to look at DHCP traffic on the workers:
 
 ```
 ncn-w001# tcpdump -envli bond0 port 67 or 68

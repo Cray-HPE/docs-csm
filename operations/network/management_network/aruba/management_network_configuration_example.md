@@ -47,9 +47,9 @@ This section provides an example of how to configure the management network.
 
 1. Create a new BGP process in CAN VRF.
    
-   A new BGP process will need to be running in the CAN VRF, this will peer with the CAN IPs on the NCN workers.
+   A new BGP process will need to be running in the CAN VRF, this will peer with the CAN IP addresses on the NCN workers.
    
-   These are example configs only. The neighbors below are the IPs of the CAN interface on the NCN workers. 
+   These are example configs only. The neighbors below are the IP addresses of the CAN interface on the NCN workers. 
 
    Aruba configuration:
 
@@ -108,7 +108,7 @@ This section provides an example of how to configure the management network.
       ip address 10.101.10.1/24
     ```
       
-    The following is the Arista BGP configuration for peering over the HSN. The BGP neighbor IPs used are HSN IPs of Worker nodes.
+    The following is the Arista BGP configuration for peering over the HSN. The BGP neighbor IP addresses used are HSN IP addresses of Worker nodes.
     
     Example HSN IP:
 
@@ -211,7 +211,7 @@ This section provides an example of how to configure the management network.
       10.101.10.12     4  65533             23        11    0    0 00:03:49 Estab  14     14
     ```
 
-    * The Arista routing table should now include the external IPs exposed by MetalLB
+    * The Arista routing table should now include the external IP addresses exposed by MetalLB
     * The on-site network team will be responsible for distributing these routes to the rest of their network
 
     ```
@@ -262,7 +262,7 @@ This section provides an example of how to configure the management network.
       ncn-w001# ip route replace default via 10.101.10.1 dev hsn0
       ```
 
-   1. To make it persistent we will need to create a ifcfg file for hsn0 and remove the old vlan7 default route.
+   1. To make it persistent we will need to create an ifcfg file for hsn0 and remove the old vlan7 default route.
       
       ```
       ncn-w001# mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old
@@ -302,7 +302,7 @@ This section provides an example of how to configure the management network.
         11  10.101.8.113 (10.101.8.113)  39.937 ms  38.565 ms  36.524 ms
         ```
 
-    1. Listen on all the HSN interfaces for ping/traceroute while you ping the external facing IP. In this example, the IP is 10.101.8.113.
+    1. Listen on all the HSN interfaces for ping/traceroute while you ping the external facing IP address. In this example, the IP address is 10.101.8.113.
     
         ```
         ncn-m001# nodes=$(kubectl get nodes| awk '{print $1}' | grep  ncn-w | awk -vORS=, '{print $1}'); pdsh -w ${nodes} "tcpdump -envli hsn0 icmp"

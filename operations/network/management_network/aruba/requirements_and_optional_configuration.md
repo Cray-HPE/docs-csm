@@ -6,7 +6,7 @@ Requirements and optional configuration:
 
 * System needs to be completely installed and running
 * The edge router  should be cabled either to the management network or Highspeed network switch
-* An IP range on the management or high-speed network switch that is routable to the campus network
+* An IP address range on the management or high-speed network switch that is routable to the campus network
 * Other configuration items that may be required to facilitate remote connectivity:
 	* Configuration may require a new LAG
 	* Configuration may require a new VLAN

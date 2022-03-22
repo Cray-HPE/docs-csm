@@ -46,8 +46,8 @@ interface vlan 7
 
 Create BGP process in CAN VRF
 
-* A new BGP process will need to be running in the CAN VRF, this will peer with the CAN IPs on the NCN-Workers.
-* These are example configs only, the neighbors below are the IPs of the CAN interface on the Workers. 
+* A new BGP process will need to be running in the CAN VRF, this will peer with the CAN IP addresses on the NCN-Workers.
+* These are example configs only, the neighbors below are the IP addresses of the CAN interface on the Workers. 
 
 Aruba Config
 
@@ -106,7 +106,7 @@ interface Vlan2
 ```
    
 * The following is the Arista BGP config for peering over the HSN.
-	* The BGP neighbor IPs used are HSN IPs of Worker Nodes.
+	* The BGP neighbor IP addresses used are HSN IP addresses of Worker Nodes.
 	
 Example HSN IP
 
@@ -211,7 +211,7 @@ Neighbor Status Codes: m - Under maintenance
   10.101.10.12     4  65533             23        11    0    0 00:03:49 Estab  14     14
 ```
 
-* The Arista routing table should now include the external IPs exposed by metalLB.
+* The Arista routing table should now include the external IP addresses exposed by metalLB.
 * The onsite network team will be responsible for distributing these routes to the rest of their network.
 
 ```
@@ -260,7 +260,7 @@ Configure default routes on Workers
 
 > ncn-w001# ip route replace default via 10.101.10.1 dev hsn0
 
-* To make it persistent we will need to create a ifcfg file for hsn0 and remove the old vlan7 default route.
+* To make it persistent we will need to create an ifcfg file for hsn0 and remove the old vlan7 default route.
 
 > ncn-w001# mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old
 > 

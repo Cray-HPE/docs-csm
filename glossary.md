@@ -226,7 +226,7 @@ the process of making a file system available on nodes where it does not physica
 DVS-specific configuration settings enable clients to access a file system projected by DVS
 servers. These clients include compute nodes, User Access Nodes (UANs), and other management
 nodes running User Access Instances (UAIs). Thus DVS, while not a file system, represents a
-software layer that provides scalable transport for file system services.  DVS is integrated
+software layer that provides scalable transport for file system services. DVS is integrated
 with the Content Projection Service (CPS).
 
 <a name="ex-compute-cabinet"></a>
