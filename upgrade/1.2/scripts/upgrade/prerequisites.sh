@@ -63,6 +63,11 @@ if [[ -z ${CSM_RELEASE} ]]; then
     exit 1
 fi
 
+if [[ -z ${SW_ADMIN_PASSWORD} ]]; then
+    echo "SW_ADMIN_PASSWORD environment variable has not been set"
+    exit 1
+fi
+
 if [[ -z ${TARBALL_FILE} ]]; then
     # Download tarball from internet
 
