@@ -1,5 +1,5 @@
 # Wipe Disks
-
+(#wipe-disks-utility-storage-node
 **Warning:** This is the point of no return. 
 
 All commands in this section must be run **on the node being removed** \(unless otherwise indicated\). These commands can be done from the ConMan console window.
@@ -7,11 +7,12 @@ All commands in this section must be run **on the node being removed** \(unless 
 Only follow the steps in the section for the node type that is being removed:
 
 - [Wipe Disks](#wipe-disks)
-  - [Wipe Disks: Master](#wipe-disks-master)
+  - [Wipe Disks: Master Node](#wipe-disks-master-node)
   - [Wipe Disks: Worker Node](#wipe-disks-worker-node)
   - [Wipe Disks: Utility Storage Node](#wipe-disks-utility-storage-node)
 
-## Wipe Disks: Master
+<a name="wipe-disks-master-node"></a>
+## Wipe Disks: Master Node
 
 1. Unmount the etcd volume and remove the volume group.
 
@@ -36,6 +37,7 @@ Only follow the steps in the section for the node type that is being removed:
    wipefs --all --force $mdisks
    ```
 
+<a name="wipe-disks-worker-node"></a>
 ## Wipe Disks: Worker Node
 
 1. Stop contianerd and wipe drives.
@@ -66,6 +68,7 @@ Only follow the steps in the section for the node type that is being removed:
     wipefs --all --force /dev/sd*
     ```
 
+<a name="wipe-disks-utility-storage-node"></a>
 ## Wipe Disks: Utility Storage Node
 
 1. Make sure the OSDs (if any) are not running.
@@ -74,7 +77,7 @@ Only follow the steps in the section for the node type that is being removed:
     podman ps
     ```
 
-    Examine the output. There should be no running `ceph-osd` processes or containers.
+    Examine the output. There should be no running ceph processes or containers.
 
 2. Remove the Volume Groups.
 
