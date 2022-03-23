@@ -68,13 +68,15 @@ Only follow the steps in the section for the node type that is being removed:
 
 ## Wipe Disks: Utility Storage Node
 
-1. Stop running OSDs on the node being wiped
+1. Make sure the OSDs (if any) are not running.
 
     ```bash
-    systemctl stop ceph-osd.target
+    podman ps
     ```
 
-2. Make sure the OSDs (if any) are not running after running the first command.
+    Examine the output. There should be no running `ceph-osd` processes or containers.
+
+2. Remove the Volume Groups.
 
     ```bash
     ls -1 /dev/sd* /dev/disk/by-label/*
