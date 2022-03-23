@@ -6,7 +6,7 @@ The procedures described on this page are being done before any node is booted w
 
  1. [Quiesce Compute and Application Nodes](#quiesce_compute_and_application_nodes)
  1. [Disable DHCP Service](#disable_dhcp_service) (if any management nodes are booted)
- 1. . [Wipe Disks on Booted Nodes](#wipe_disks_on_booted_nodes)
+ 1. [Wipe Disks on Booted Nodes](#wipe_disks_on_booted_nodes)
  1. [Power Off Booted Nodes](#power_off_booted_nodes)
  1. [Set Node BMCs to DHCP](#set_node_bmcs_to_dhcp)
  1. [Wipe USB Device on PIT Node](#wipe_usb_device_on_pit_node) (**Only if** switching from USB LiveCD method to RemoteISO LiveCD method)
