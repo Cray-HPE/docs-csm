@@ -140,14 +140,11 @@ then
      fi
   fi
 fi
-echo “loop counter: $loop_counter”
 done
 
 truncate --size=0 ~/.ssh/known_hosts  2>&1
-echo "*** num of storage nodes $num_storage_nodes"
 for node in $(seq 1 $num_storage_nodes); do
  nodename=$(printf "ncn-s%03d.nmn" $node)
- echo "****** ssh-keyscan $nodename"
  ssh-keyscan -t rsa -H $nodename >> ~/.ssh/known_hosts
 done
 
