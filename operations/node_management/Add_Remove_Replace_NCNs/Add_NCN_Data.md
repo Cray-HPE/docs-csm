@@ -78,7 +78,7 @@ Scenarios where this procedure is applicable:
         ncn-m# export MGMT_SWITCH=x3000c0w14
         ```
  
-    5.  Collect the BMC MAC Address.
+    5.  **Skip if adding ncn-m001 and its BMC is connected to the site network** Collect the BMC MAC Address.
         -   If the NCN was previously in the system recall the record BMC MAC Address recorded from the [Remove NCN Data](Remove_NCN_Data.md) procedure.
         -   If the BMC is reachable by IP, then ipmitool can be used to determine the MAC Address of the BMC:
 
@@ -150,12 +150,91 @@ Scenarios where this procedure is applicable:
                 a4:bf:01:65:68:54    4        dynamic                   1/1/48
                 ```
 
-        1.  Set the `BMC_MAC` environment variable with the BMC MAC Address:  
+    6.  **Skip if adding ncn-m001 and its BMC is connected to the site network** Set the `BMC_MAC` environment variable with the BMC MAC Address:  
+        ```bash
+        ncn-m# export BMC_MAC=a4:bf:01:65:68:54
+        ```
+    
+    7.  **Skip if adding ncn-m001 and its BMC is connected to the site network** Determine the current IP Address of the NCN BMC:
+
+        1.  Query HSM EthernetInterfaces with the BMC MAC address to determine its current IP Address:
             ```bash
-            export BMC_MAC=a4:bf:01:65:68:54
+            ncn-m# cray hsm inventory ethernetInterfaces list --mac-address $BMC_MAC --format json
             ```
 
-    6.  Collect NCN MAC Addresses for the following interfaces if they are present. Depending on the hardware present not all of the following interfaces will be present. The collected MAC addresses will be later used in this procedure with the add_management_ncn.py script.
+            Example output:
+            ```
+            [
+                {
+                    "ID": "a4bf01656854",
+                    "Description": "",
+                    "MACAddress": "a4:bf:01:65:68:54",
+                    "LastUpdate": "2022-03-18T20:18:56.860271Z",
+                    "ComponentID": "",
+                    "Type": "",
+                    "IPAddresses": [
+                        {
+                            "IPAddress": "10.254.1.20"
+                        }
+                    ]
+                }
+            ]
+            ```
+
+            **Troubleshooting**
+            If the MAC addresses of the BMC is not present in HSM, then check for the following items:
+            1. Verify the BMC is powered up and has an active connection to the network.
+            2. Verify the BMC is set to DHCP instead of an static IP address.
+
+        2.  Set the `BMC_IP` environment variable based on the output the pervious step:
+            ```bash
+            ncn-m# export BMC_IP=10.254.1.28
+            ```
+
+        3.  Ping the BMC to see if it is reachable:
+            ```bash
+            ncn-m# ping $BMC_IP
+            ```
+
+            **Troubleshooting**
+            If the BMC is not reachable by the IP address present in HSM, then check for the following items:
+            1.  Check the KEA logs for duplicate IP errors related to the BMC:
+                ```bash
+                ncn-m001# kubectl -n services get pod  -l app.kubernetes.io/name=cray-dhcp-kea
+                NAME                             READY   STATUS    RESTARTS   AGE
+                cray-dhcp-kea-59947cf664-n69df   3/3     Running   0          8d
+                ``` 
+
+                Search the KEA logs to find references to the BMC MAC address:
+                ```bash
+                ncn-m001# kubectl -n services logs cray-dhcp-kea-59947cf664-n69df cray-dhcp-kea | grep $BMC_MAC
+                ```
+
+                The following message means that is enable to update HSM:
+                ```
+                we tried adding an a dupe ip for an new interface {'ID': 'a4bf01656337', 'Description': '', 'MACAddress': 'a4:bf:01:65:63:37', 'IPAddress': '10.254.1.21', 'LastUpdate': '2022-03-22T20:49:56.698001Z', 'ComponentID': '', 'Type': ''} {'ID': 'b8599fd99da8', 'Description': '', 'MACAddress': 'b8:59:9f:d9:9d:a8', 'IPAddress': '10.254.1.28', 'LastUpdate': '2022-03-22T20:49:56.664621Z', 'ComponentID': '', 'Type': ''}
+                ```
+
+                Inspect the two ethernet interfaces to see if they have a component ID associated with them. 
+                ```bash
+                ncn-m# cray hsm ethernetInterfaces describe a4bf01656337
+                ncn-m# cray hsm ethernetInterfaces describe b8599fd99da8
+                ```
+
+                If both MAC addresses do not have an component id associated with them, then remove them:
+                ```bash
+                ncn-m# cray hsm ethernetInterfaces delete a4bf01656337
+                ncn-m# cray hsm ethernetInterfaces delete b8599fd99da8
+                ```
+
+                Then wait for KEA to repopulate HSM EthernetInterfaces with the current IP address of the BMC, and by trying this step again to determine the BMC IP address.
+
+    9.  **If adding ncn-m001 and its BMC is connected to the site network** set the `BMC_IP` environment variable to current IP address or hostname of the BMC:
+        ```bash
+        ncn-m# export BMC_IP=10.0.0.10
+        ```
+
+    11. Collect NCN MAC Addresses for the following interfaces if they are present. Depending on the hardware present not all of the following interfaces will be present. The collected MAC addresses will be later used in this procedure with the add_management_ncn.py script.
 
         Depending on the hardware present in the NCN not all of these interfaces may not present.
         -   NCNs will have either 1 or 2 management PCIe NIC cards (2 or 4 PCIe NIC ports). 
@@ -229,6 +308,18 @@ Scenarios where this procedure is applicable:
         --mac-lan1 b8:59:9f:d9:9d:e9
     ```
     > For each MAC Address/interfaces that was collected from the NCN update the command above with them.
+
+    If adding ncn-m001 omit the `--bmc-mgmt-switch-connector` and `--mac-bmc` arguments its BMC is connected to the site network:
+    ```bash
+    ncn-m# cd /usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/
+    ncn-m# ./add_management_ncn.py ncn-data \
+        --xname $XNAME \
+        --alias $NODE \
+        --mac-mgmt0 a4:bf:01:65:6a:aa \
+        --mac-mgmt1 a4:bf:01:65:6a:ab \
+        --mac-lan0 b8:59:9f:d9:9d:e8 \
+        --mac-lan1 b8:59:9f:d9:9d:e9
+    ```
 
 4.  Run the `add_management_ncn.py` script to add the NCN to SLS, HSM and BSS by adding the `--perform-changes` argument to the command ran in the previous step:
     ```bash
@@ -310,7 +401,8 @@ Scenarios where this procedure is applicable:
     deployment "cray-reds" successfully rolled out
     ```
 
-9.  Wait for the NCN BMC to get discovered by HSM:
+9.  **Skip if adding ncn-m001 and its BMC is connected to the site network** Wait for the NCN BMC to get discovered by HSM:
+    > If the BMC of ncn-m001 is connected to the site network, then we will be unable to discover the BMC as it is not connected via the HMN network.
     ```bash
     ncn-m# watch -n 0.2 "cray hsm inventory redfishEndpoints describe $BMC_XNAME --format json" 
     ```
@@ -362,7 +454,29 @@ Scenarios where this procedure is applicable:
         ncn-m# curl -k -u root:changeme https://x3000c0s38b0/redfish/v1/Managers
         ```
 
-10. Verify the NCN IPs are populated in HSM EthernetInterfaces using the mgmt0 MAC Address.
+10. Verify the NCN exists under HSM State Components:
+    ```bash
+    ncn-m# cray hsm state components describe $XNAME
+    ```
+
+    Example output:
+    ```
+    ID = "x3000c0s11b0n0"
+    Type = "Node"
+    State = "Ready"
+    Flag = "OK"
+    Enabled = true
+    Role = "Management"
+    SubRole = "Worker"
+    NID = 100006
+    NetType = "Sling"
+    Arch = "X86"
+    Class = "River"
+    Locked = true
+    ```
+    > TODO updated with correct example output the above with right after it was added by REDS.
+
+11. Verify the NCN IPs are populated in HSM EthernetInterfaces using the mgmt0 MAC Address.
     ```bash
     ncn-m# export MGMT0_MAC="98:03:9b:bb:a9:94"
     ncn-m# cray hsm inventory ethernetInterfaces list --mac-address $MGMT0_MAC --format json
