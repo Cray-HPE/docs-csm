@@ -120,7 +120,7 @@ The Kubernetes image ```k8s-image``` is used by the master and worker nodes.
          chroot-ncn-m# grep -i utc /srv/cray/scripts/metal/ntp-upgrade-config.sh
          ```
 
-         Change only if the grep command shows these lines set to UTC.
+         Change only if the `grep` command shows these lines set to UTC.
 
          ```bash
          chroot-ncn-m# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone $NEWTZ#" /srv/cray/scripts/metal/ntp-upgrade-config.sh
@@ -290,7 +290,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
          chroot-ncn-m# grep -i utc /srv/cray/scripts/metal/ntp-upgrade-config.sh
          ```
 
-         Change only if the grep command shows these lines set to UTC.
+         Change only if the `grep` command shows these lines set to UTC.
 
          ```bash
          chroot-ncn-m# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone $NEWTZ#" /srv/cray/scripts/metal/ntp-upgrade-config.sh
