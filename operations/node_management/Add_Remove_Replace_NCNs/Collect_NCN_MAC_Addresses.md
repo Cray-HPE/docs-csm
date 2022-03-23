@@ -53,10 +53,11 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
     
     4.  Wait for the updated iPXE binary to be built:
         ```bash
+        ncn-m# sleep 30
         ncn-m# kubectl -n services logs  -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
         ```
 
-        The following output means the new ipxe binary has been built:
+        The following output means the new ipxe binary has been built. Make sure the timestamp in the logs are fairly recent:
         ```
         2022-03-17 22:16:14,648 - INFO    - __main__ - Build completed.
         2022-03-17 22:16:14,653 - INFO    - __main__ - Newly created ipxe binary created: '/shared_tftp/ipxe.efi'
@@ -71,9 +72,12 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
 
     2.  In another terminal capture the NCN's Serial Over Lan (SOL) console:
         ```bash
+        ncn-m# export BMC_IP=10.254.1.28
         ncn-m# export IPMI_PASSWORD=changeme
         ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP sol activate
         ```
+
+        > Note when disconnecting from the ipmi sol console you can perform the key sequence `~~.` to exist ipmitool without exiting your SSH session. 
 
     3.  Power up the NCN:
         ```bash
@@ -115,10 +119,11 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
     
     2.  Wait for the updated iPXE binary to be built:
         ```bash
+        ncn-m# sleep 30
         ncn-m# kubectl -n services logs  -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
         ```
 
-        The following output means the updated ipxe binary has been built. Make sure the timestamp in the logs is fairly recent:
+        The following output means the updated ipxe binary has been built. Make sure the timestamp in the logs are fairly recent:
         ```
         2022-03-17 22:16:14,648 - INFO    - __main__ - Build completed.
         2022-03-17 22:16:14,653 - INFO    - __main__ - Newly created ipxe binary created: '/shared_tftp/ipxe.efi'
