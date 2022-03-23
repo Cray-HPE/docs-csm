@@ -1205,7 +1205,7 @@ def allocate_ips_command(session: requests.Session, args, state: State):
             run_command_actions(etc_hosts_actions)
 
     print('')
-    print(f'IP Addressses have been allocated for {args.xname} ({args.alias}) and been added to SLS and BSS')
+    print(f'IP Addresses have been allocated for {args.xname} ({args.alias}) and been added to SLS and BSS')
     if not args.perform_changes:
         print('        WARNING A Dryrun was performed, and no changes were performed to the system')
 
