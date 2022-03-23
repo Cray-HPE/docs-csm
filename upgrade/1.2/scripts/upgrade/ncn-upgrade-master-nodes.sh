@@ -120,10 +120,10 @@ state_name="PREPARE_ETCD"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    csi automate ncn etcd --action remove-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
+    run_csi_etcd_retry "remove-member" "${target_ncn}"
     ssh $target_ncn 'systemctl daemon-reload'
     ssh $target_ncn 'systemctl stop etcd.service'
-    csi automate ncn etcd --action add-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
+    run_csi_etcd_retry "add-member" "${target_ncn}"
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"

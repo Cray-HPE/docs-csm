@@ -124,3 +124,24 @@ function wait_for_kubernetes() {
       echo "====> ${state_name} has been completed"
   fi
 }
+
+function run_csi_etcd_retry() {
+  local etcd_action=$1
+  local target_ncn=$2
+  local etcd_cmd="csi automate ncn etcd --action $etcd_action --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf"
+
+  local count=0
+  while [ true ]; do
+    if ! $etcd_cmd; then
+      if [[ $count -ge 3 ]]; then
+        echo "ERROR: Command still failing after retries: ${etcd_cmd}"
+        exit 1
+      fi
+      echo "Command failed: ${etcd_cmd}; retrying in 5 seconds"
+      sleep 5
+      let count+=1
+      continue
+    fi
+    break
+  done
+}
