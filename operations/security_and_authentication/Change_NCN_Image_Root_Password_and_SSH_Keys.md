@@ -1,50 +1,71 @@
-## Change NCN Image Root Password and SSH Keys
+## Change NCN Image Root Password and SSH Keys 
 
 Customize the NCN images by changing the root password or adding different ssh keys for the root account.
-This procedure shows this process being done on the PIT node during a first time installation of the CSM
-software.
+This procedure shows this process being done any time after the first time installation of the CSM
+software has been completed and the PIT node is booted as a regular master node. To change the NCN image
+during an installation while the PIT node is booted as the PIT node,
+see [Change_NCN_Image_Root_Password_and_SSH_Keys_PIT](#Change_NCN_Image_Root_Password_and_SSH_Keys_PIT.md).
 
-There is some common preparation before making the Kuberentes image for master nodes and worker nodes and making the Ceph image for utility storage nodes and some common cleanup afterwards.
+There is some common preparation before making the Kubernetes image for master nodes and worker nodes, making the Ceph image for utility storage nodes, and then some common cleanup afterwards.
 
-
-***Note:*** This procedure can only be done before the PIT node is rebuilt to become a normal master node.
+***Note:*** This procedure can only be done after the PIT node is rebuilt to become a normal master node.
 
 ### Common Preparation
 
-1. Prepare new ssh keys on the PIT node for the root account in advance.  The same key information will be added to both k8s-image and ceph-image.
+1. Prepare new ssh keys for the root account in advance.  The same key information will be added to both k8s-image and ceph-image.
 
    Either replace the root public and private ssh keys with your own previously generated keys or generate a new pair with `ssh-keygen(1)`.  By default `ssh-keygen` will create an RSA key, but other types could be chosen and different filenames would need to be substituted in later steps.
 
    ```bash
-   pit# mkdir /root/.ssh
-   pit# ssh-keygen -f /root/.ssh/id_rsa -t rsa
-   pit# ls -l /root/.ssh/id_rsa*
-   pit# chmod 600 /root/.ssh/id_rsa
+   ncn-m# mkdir /root/.ssh
+   ncn-m# ssh-keygen -f /root/.ssh/id_rsa -t rsa
+   ncn-m# ls -l /root/.ssh/id_rsa*
+   ncn-m# chmod 600 /root/.ssh/id_rsa
+   ```
+
+1. Change to a working directory with enough space to hold the images once they have been expanded.
+
+   ```bash
+   ncn-m# cd /run/initramfs/overlayfs
+   ncn-m# mkdir workingarea
+   ncn-m# cd workingarea
    ```
 
 ### Kubernetes Image
 
-The Kubernetes image is used by the master and worker nodes.
+The Kubernetes image ```k8s-image``` is used by the master and worker nodes.
 
-1. Change to the working directory for the Kubernetes image.
+1. Decide which k8s-image is to be modified
 
    ```bash
-   pit# cd /var/www/ephemeral/data/k8s
+   ncn-m# cray artifacts list ncn-images --format json | jq '.artifacts[] .Key' | grep k8s | grep squashfs
+   "k8s-filesystem.squashfs"
+   "k8s/0.1.107/filesystem.squashfs"
+   "k8s/0.1.109/filesystem.squashfs"
+   "k8s/0.1.48/filesystem.squashfs"
+   ```
+
+   This example uses k8s/0.1.109 for the current version and adds a suffix for the new version.
+
+   ncn-m# export K8SVERSION=0.1.109
+   ncn-m# export K8SNEW=0.1.109-2
+
+1. Make a temporary directory for the k8s-image using the current version string.
+
+   ```bash
+   ncn-m# mkdir -p k8s/${K8SVERSION}
+   ```
+
+1. Get the image.
+
+   ```bash
+   ncn-m# cray artifacts get ncn-images k8s/${K8SVERSION}/filesystem.squashfs k8s/${K8SVERSION}/filesystem.squashfs.orig
    ```
 
 1. Open the image.
 
-   The Kubernetes image will be of the form "kubernetes-0.1.69.squashfs" in /var/www/ephemeral/data/k8s, but the version number may be different.
-
    ```bash
-   pit# unsquashfs kubernetes-0.1.69.squashfs
-   ```
-
-1. Save the old SquashFS image, kernel, and initrd.
-
-   ```bash
-   pit# mkdir -v old
-   pit# mv -v *squashfs *kernel initrd* old
+   ncn-m# unsquashfs -d k8s/${K8SVERSION}/filesystem.squashfs k8s/${K8SVERSION}/filesystem.squashfs.orig
    ```
 
 1. Copy the generated public and private ssh keys for the root account into the image.
@@ -52,7 +73,7 @@ The Kubernetes image is used by the master and worker nodes.
    This example assumes that an RSA key was generated.
 
    ```bash
-   pit# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub squashfs-root/root/.ssh
+   ncn-m# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub k8s/${K8SVERSION}/filesystem.squashfs/root/.ssh
    ```
 
 1. Add the public ssh key for the root account to `authorized_keys`.
@@ -60,146 +81,161 @@ The Kubernetes image is used by the master and worker nodes.
    This example assumes that an RSA key was generated so it adds the id_rsa.pub file to authorized_keys.
 
    ```bash
-   pit# cat /root/.ssh/id_rsa.pub >> squashfs-root/root/.ssh/authorized_keys
-   pit# chmod 640 squashfs-root/root/.ssh/authorized_keys
+   ncn-m# cat /root/.ssh/id_rsa.pub >> k8s/${K8SVERSION}/filesystem.squashfs/root/.ssh/authorized_keys
+   ncn-m# chmod 640 k8s/${K8SVERSION}/filesystem.squashfs/root/.ssh/authorized_keys
    ```
 
-1. Chroot into the image root
+1. Change root into the image root.
 
    ```bash
-   pit# chroot ./squashfs-root
+   ncn-m# chroot k8s/${K8SVERSION}/filesystem.squashfs
    ```
 
-1. Change the password
+1. Change the password.
 
    ```bash
-   chroot-pit# passwd
+   chroot-ncn-m# passwd
    ```
 
 1. If there are any other things to be changed in the image, they could also be done at this point.
 
    For example, some sites may want to change the timezone.
 
-   1. (Optional) Set defalt timezone on management nodes.
+   1. (Optional) Set default timezone on management nodes.
 
       1. Check whether TZ variable is already set in `/etc/environment`.  The setting for NEWTZ must be a valid timesone from the set under /usr/share/zoneinfo.
 
          ```bash
-         chroot-pit# NEWTZ=US/Pacific
-         chroot-pit# grep TZ /etc/environment
+         chroot-ncn-m# NEWTZ=US/Pacific
+         chroot-ncn-m# grep TZ /etc/environment
          ```
 
          Add only if TZ is not present
 
          ```bash
-         chroot-pit# echo TZ=${NEWTZ} >> /etc/environment
+         chroot-ncn-m# echo TZ=${NEWTZ} >> /etc/environment
          ```
 
       1. Check for `utc` setting.
 
-         chroot-pit# grep -i utc /srv/cray/scripts/metal/ntp-upgrade-config.sh
+         chroot-ncn-m# grep -i utc /srv/cray/scripts/metal/ntp-upgrade-config.sh
 
          Change only if the grep command shows these lines set to UTC.
 
          ```bash
-         chroot-pit# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone $NEWTZ#" /srv/cray/scripts/metal/ntp-upgrade-config.sh
-         chroot-pit# sed -i 's/--utc/--localtime/' /srv/cray/scripts/metal/ntp-upgrade-config.sh
+         chroot-ncn-m# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone $NEWTZ#" /srv/cray/scripts/metal/ntp-upgrade-config.sh
+         chroot-ncn-m# sed -i 's/--utc/--localtime/' /srv/cray/scripts/metal/ntp-upgrade-config.sh
          ```
 
-1. Create the new SquashFS artifact
+1. Create the new SquashFS artifact.
 
    ```bash
-   chroot-pit# /srv/cray/scripts/common/create-kis-artifacts.sh
+   chroot-ncn-m# /srv/cray/scripts/common/create-kis-artifacts.sh
    ```
 
-1. Exit the chroot
+1. Exit the chroot environment.
 
    ```bash
-   chroot-pit# exit
+   chroot-ncn-m# exit
    ```
 
-1. Clean up the SquashFS creation
-
-   The Kubernetes image directory is /var/www/ephemeral/data/k8s.
+1. Clean up the SquashFS creation.
 
    ```bash
-   pit# umount -v /var/www/ephemeral/data/k8s/squashfs-root/mnt/squashfs
+   ncn-m# umount -v k8s/${K8SVERSION}/filesystem.squashfs/mnt/squashfs
    ```
 
 1. Move new SquashFS image, kernel, and initrd into place.
 
    ```bash
-   pit# mv -v squashfs-root/squashfs/* .
+   ncn-m# mkdir k8s/${K8SNEW}
+   ncn-m# mv -v k8s/${K8SVERSION}/filesystem.squashfs/squashfs/* k8s/${K8SNEW}
    ```
 
-1. Update file permissions on initrd
+1. Update file permissions on initrd.
 
    ```bash
-   pit# chmod -v 644 initrd.img.xz
+   ncn-m# chmod -v 644 k8s/${K8SNEW}/initrd.img.xz
    ```
 
-1. Rename the new squashfs, kernel, and initrd to include a new version string.
+1. Put the new squashfs, kernel, and initrd into S3
 
-   If the old name of the squashfs was kubernetes-0.1.69.squashfs, then its version was '0.1.69', so the newly created version should be renamed to include a version of '0.1.69-1' with an additional dash and a build iteration number of 1. This will help to track what base version was used.
+   1. If not already available, get this sript which will put a file into S3 with public read setting.
 
    ```bash
-   pit# ls -l old/*squashfs
-   -rw-r--r--  1 root root 5135859712 Aug 19 19:10 kubernetes-0.1.69.squashfs
+   ncn-m# wget https://github.com/Cray-HPE/s3_examples/blob/main/no_STS/ceph-upload-file-public-read.py
+   ncn-m# chmod +x ceph-upload-file-public-read.py
    ```
 
-   Set the VERSION variable based on the version string displayed by the above command with an incremented suffix added to show a build iteration.
+   1. Get info to add to credentials.json for the SDS user
 
-   ```bash
-   pit# export VERSION=0.1.69-1
-   pit# mv filesystem.squashfs kubernetes-${VERSION}.squashfs
-   pit# mv initrd.img.xz initrd.img-${VERSION}.xz
-   ```
+      ```bash
+      ncn-m# ssh ncn-s001 radosgw-admin user info --uid SDS | grep key
+      "keys": [
+              "access_key": "FKZWSIY92VBC4LPGXW9I",
+              "secret_key": "mYcViYWwXDT7PAR5JOwzsT5vjkKhWHUb8MGJpjsm"
+      "swift_keys": [],
+      "temp_url_keys": [],
+      ```
 
-   The kernel file will have a name with the kernel version but not this new $VERSION.
+   1. Using the access_key and secret_key, construct a `credentials.json` file with contents similar to this.
 
-   ```bash
-   pit# ls -l *kernel
-   -rw-r--r--  1 root root    8552768 Aug 19 19:09 5.3.18-24.75-default.kernel
-   ```
+      ```bash
+      ncn-m# cat credentials.json
+      {
+          "access_key": "KJ1B22VP2MBKYPALP8VW",
+          "secret_key": "EJbDkvoaHEcMfhkMeDSA3tEM6DwBSmuGzVYkuUOv",
+          "endpoint_url": "http://10.252.1.11:8080"
+      }
+      ```
 
-   Rename it to include the version string.
+   1. Upload the boot artifacts to S3.
 
-   ```bash
-   pit# mv 5.3.18-24.75-default.kernel 5.3.18-24.75-default-${VERSION}.kernel
-   ```
+      ```bash
+      ncn-m# cp -p credentials.json ceph-upload-file-public-read.py. k8s/${K8SNEW}
+      cd k8s/${K8SNEW}
+      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/filesystem.squashfs' --file-name filesystem.squashfs
+      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/initrd' --file-name initrd.img.xz
+      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
+      ```
 
-1. Set the boot links.
-
-   ```bash
-   pit# cd
-   pit# set-sqfs-links.sh
-   ```
-
-The Kubernetes image will have the new password for the next boot.
+The Kubernetes image will have the image changes for the next boot.
 
 ### Ceph Image
 
-The Ceph image is used by the utility storage nodes.
+The Ceph image `ceph-image` is used by the utility storage nodes.
 
-1. Change to the working directory for the Ceph image.
+1. Decide which ceph-image is to be modified
 
    ```bash
-   pit# cd /var/www/ephemeral/data/ceph
+   ncn-m# cray artifacts list ncn-images --format json | jq '.artifacts[] .Key' | grep ceph | grep squashfs
+   "ceph-filesystem.squashfs"
+   "ceph/0.1.107/filesystem.squashfs"
+   "ceph/0.1.113/filesystem.squashfs"
+   "ceph/0.1.48/filesystem.squashfs"
+   ```
+
+   This example uses ceph/0.1.113 for the current version and adds a suffix for the new version.
+
+   ncn-m# export CEPHVERSION=0.1.113
+   ncn-m# export CEPHNEW=0.1.113-2
+
+1. Make a temporary directory for the ceph-image using the current version string.
+
+   ```bash
+   ncn-m# mkdir -p ceph/${CEPHVERSION}
+   ```
+
+1. Get the image.
+
+   ```bash
+   ncn-m# cray artifacts get ncn-images ceph/${CEPHVERSION}/filesystem.squashfs ceph/${CEPHVERSION}/filesystem.squashfs.orig
    ```
 
 1. Open the image.
 
-   The Ceph image will be of the form "storage-ceph-0.1.69.squashfs" in /var/www/ephemeral/data/ceph, but the version number may be different.
-
    ```bash
-   pit# unsquashfs storage-ceph-0.1.69.squashfs
-   ```
-
-1. Save the old SquashFS image, kernel, and initrd.
-
-   ```bash
-   pit# mkdir -v old
-   pit# mv -v *squashfs *kernel initrd* old
+   ncn-m# unsquashfs -d ceph/${CEPHVERSION}/filesystem.squashfs ceph/${CEPHVERSION}/filesystem.squashfs.orig
    ```
 
 1. Copy the generated public and private ssh keys for the root account into the image.
@@ -207,7 +243,7 @@ The Ceph image is used by the utility storage nodes.
    This example assumes that an RSA key was generated.
 
    ```bash
-   pit# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub squashfs-root/root/.ssh
+   ncn-m# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub ceph/${CEPHVERSION}/filesystem.squashfs/root/.ssh
    ```
 
 1. Add the public ssh key for the root account to `authorized_keys`.
@@ -215,107 +251,125 @@ The Ceph image is used by the utility storage nodes.
    This example assumes that an RSA key was generated so it adds the id_rsa.pub file to authorized_keys.
 
    ```bash
-   pit# cat /root/.ssh/id_rsa.pub >> squashfs-root/root/.ssh/authorized_keys
-   pit# chmod 640 squashfs-root/root/.ssh/authorized_keys
+   ncn-m# cat /root/.ssh/id_rsa.pub >> ceph/${CEPHVERSION}/filesystem.squashfs/root/.ssh/authorized_keys
+   ncn-m# chmod 640 ceph/${CEPHVERSION}/filesystem.squashfs/root/.ssh/authorized_keys
    ```
 
-1. Change into the image root
+1. Change into the image root.
 
    ```bash
-   pit# chroot ./squashfs-root
+   ncn-m# chroot ceph/${CEPHVERSION}/filesystem.squashfs
    ```
 
-1. Change the password
+1. Change the password.
 
    ```bash
-   chroot-pit# passwd
+   chroot-ncn-m# passwd
    ```
 
-1. Create the new SquashFS artifact
+1. If there are any other things to be changed in the image, they could also be done at this point.
+
+   For example, some sites may want to change the timezone.
+
+   1. (Optional) Set default timezone on management nodes.
+
+      1. Check whether TZ variable is already set in `/etc/environment`.  The setting for NEWTZ must be a valid timesone from the set under /usr/share/zoneinfo.
+
+         ```bash
+         chroot-ncn-m# NEWTZ=US/Pacific
+         chroot-ncn-m# grep TZ /etc/environment
+         ```
+
+         Add only if TZ is not present
+
+         ```bash
+         chroot-ncn-m# echo TZ=${NEWTZ} >> /etc/environment
+         ```
+
+      1. Check for `utc` setting.
+
+         chroot-ncn-m# grep -i utc /srv/cray/scripts/metal/ntp-upgrade-config.sh
+
+         Change only if the grep command shows these lines set to UTC.
+
+         ```bash
+         chroot-ncn-m# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone $NEWTZ#" /srv/cray/scripts/metal/ntp-upgrade-config.sh
+         chroot-ncn-m# sed -i 's/--utc/--localtime/' /srv/cray/scripts/metal/ntp-upgrade-config.sh
+         ```
+
+1. Create the new SquashFS artifact.
 
    ```bash
-   chroot-pit# /srv/cray/scripts/common/create-kis-artifacts.sh
+   chroot-ncn-m# /srv/cray/scripts/common/create-kis-artifacts.sh
    ```
 
-1. Exit the chroot
+1. Exit the chroot environment.
 
    ```bash
-   chroot-pit# exit
+   chroot-ncn-m# exit
    ```
 
-1. Clean up the SquashFS creation
-
-   The Ceph image directory is /var/www/ephemeral/data/ceph.
+1. Clean up the SquashFS creation.
 
    ```bash
-   pit# umount -v /var/www/ephemeral/data/ceph/squashfs-root/mnt/squashfs
+   ncn-m# umount -v ceph/${CEPHVERSION}/filesystem.squashfs/mnt/squashfs
    ```
 
-1. Save old SquashFS image.
+1. Update file permissions on initrd.
 
    ```bash
-   pit# mkdir -v old
-   pit# mv -v *squashfs old
+   ncn-m# chmod -v 644 ceph/${CEPHNEW}/initrd.img.xz
    ```
 
-1. Move new SquashFS image, kernel, and initrd into place.
+1. Put the new initrd.img.xz, kernel, and squashfs into S3
+
+   1. If not already available, get this sript which will put a file into S3 with public read setting.
 
    ```bash
-   pit# mv -v squashfs-root/squashfs/* .
+   ncn-m# wget https://github.com/Cray-HPE/s3_examples/blob/main/no_STS/ceph-upload-file-public-read.py
+   ncn-m# chmod +x ceph-upload-file-public-read.py
    ```
 
-1. Update file permissions on initrd
+   1. Get info to add to credentials.json for the SDS user
 
-   ```bash
-   pit# chmod -v 644 initrd.img.xz
-   ```
+      ```bash
+      ncn-m# ssh ncn-s001 radosgw-admin user info --uid SDS | grep key
+      "keys": [
+              "access_key": "FKZWSIY92VBC4LPGXW9I",
+              "secret_key": "mYcViYWwXDT7PAR5JOwzsT5vjkKhWHUb8MGJpjsm"
+      "swift_keys": [],
+      "temp_url_keys": [],
+      ```
 
-1. Rename the new squashfs, kernel, and initrd to include a new version string.
+   1. Using the `access_key` and `secret_key`, construct a `credentials.json` file with contents similar to this.
 
-   If the old name of the squashfs was storage-ceph-0.1.69.squashfs, then its version was '0.1.69', so the newly created version should be renamed to include a version of '0.1.69-1' with an additional dash and a build iteration number of 1. This will help to track what base version was used.
+      ```bash
+      ncn-m# cat credentials.json
+      {
+          "access_key": "KJ1B22VP2MBKYPALP8VW",
+          "secret_key": "EJbDkvoaHEcMfhkMeDSA3tEM6DwBSmuGzVYkuUOv",
+          "endpoint_url": "http://10.252.1.11:8080"
+      }
+      ```
 
-   ```bash
-   pit# ls -l old/*squashfs
-   -rw-r--r--  1 root root 5135859712 Aug 19 19:10 storage-ceph-0.1.69.squashfs
-   ```
+   1. Upload the boot artifacts to S3.
 
-   Set the VERSION variable based on the version string displayed by the above command with an incremented suffix added to show a build iteration.
+      ***Note:*** The version string for the kernel file may be different.
 
-   ```bash
-   pit# VERSION=0.1.69-1
-   pit# mv filesystem.squashfs storage-ceph-${VERSION}.squashfs
-   pit# mv initrd.img.xz initrd.img-${VERSION}.xz
-   ```
+      ```bash
+      ncn-m# cp -p credentials.json ceph-upload-file-public-read.py. ceph/${CEPHNEW}
+      cd ceph/${CEPHNEW}
+      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/filesystem.squashfs' --file-name filesystem.squashfs
+      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/initrd' --file-name initrd.img.xz
+      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
+      ```
 
-   The kernel file will have a name with the kernel version but not this new $VERSION.
-
-   ```bash
-   pit# ls -l *kernel
-   -rw-r--r--  1 root root    8552768 Aug 19 19:09 5.3.18-24.75-default.kernel
-   ```
-
-   Rename it to include the version string.
-
-   ```bash
-   pit# mv 5.3.18-24.75-default.kernel 5.3.18-24.75-default-${VERSION}.kernel
-   ```
-
-1. Set the boot links.
-
-   ```bash
-   pit# cd
-   pit# set-sqfs-links.sh
-   ```
-
-The Ceph image will have the new password for the next boot.
+The Ceph image will have the image changes for the next boot.
 
 ### Common Cleanup
 
-1. Clean up temporary storage used to prepare images.
-
-   These could be removed now or after verification that the nodes are able to boot successfully with the new images.
+1. Remove the workarea so the space can be reused.
 
    ```bash
-   pit# cd /var/www/ephemeral/data
-   pit# rm -rf ceph/old k8s/old
+   ncn-m# rm -rf /run/initramfs/overlayfs/workingarea
    ```
