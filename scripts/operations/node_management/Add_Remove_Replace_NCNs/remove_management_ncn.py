@@ -61,8 +61,9 @@ class Logger:
             else:
                 logging.basicConfig(filename=log_file, filemode='w', level=logging.INFO,
                                     format='%(levelname)s: %(message)s')
-            # encoding arg is not in python 3.6.15
-            # logging.basicConfig(filename=log_file, filemode='w', encoding='utf-8', level=logging.INFO, format='%(levelname)s: %(message)s')
+            # the encoding argument is not in python 3.6.15
+            # logging.basicConfig(filename=log_file, filemode='w', level=logging.INFO, encoding='utf-8',
+            #                     format='%(levelname)s: %(message)s')
 
     def info(self, message):
         print(message)
@@ -391,13 +392,13 @@ def create_sls_actions(session, state):
     else:
         log_error_and_exit(actions, f'Failed to find sls hardware entry for xname: {state.xname}')
 
-    # Find network references to aliases and parent
+    # Find network references for the aliases and the parent
     networks = json.loads(networks_action.response_body)
     state.save('sls-networks', networks)
     for network in networks:
         network_name = network.get("Name")
         if network_name == 'HSN':
-            # Skip the HSN network. It is owned by slingshot
+            # Skip the HSN network. This network is owned by slingshot.
             continue
 
         logs = []
@@ -688,7 +689,7 @@ def create_update_etc_hosts_actions(state):
 
         for ip in sorted(state.ip_reservation_ips):
             sed_action = CommandAction(['pdsh', '-w', hosts,
-                                        'sed', '-i', f'/^{ip}/d', f'/etc/hosts'])
+                                        'sed', '-i', f'/^{ip}[[:blank:]]/d', f'/etc/hosts'])
             command_actions.append(sed_action)
     else:
         print('Leaving /etc/hosts unchanged')
