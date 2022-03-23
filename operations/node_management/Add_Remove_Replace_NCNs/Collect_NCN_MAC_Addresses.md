@@ -6,33 +6,9 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
 **WARNING** This procedure will temporally break the system's ability to properly boot nodes in the system.
 
 ## Procedure
-1.  Verify the BMC_MAC environment variable is set:
+1.  Verify the BMC_MAC environment variable is set.
     ```bash
-    ncn-m# echo $BMC_MAC
-    ```
-
-2.  Determine the BMC IP Address:
-    ```bash
-    ncn-m# cray hsm inventory ethernetInterfaces list --mac-address $BMC_MAC --format json
-    [
-        {
-            "ID": "a4bf01656337",
-            "Description": "",
-            "MACAddress": "a4:bf:01:65:63:37",
-            "LastUpdate": "2022-03-18T20:18:56.860271Z",
-            "ComponentID": "",
-            "Type": "",
-            "IPAddresses": [
-                {
-                    "IPAddress": "10.254.1.28"
-                }
-            ]
-        }
-    ]
-    ```
-
-    ```bash
-    ncn-m# export BMC_IP=10.254.1.28
+    ncn-m# echo $BMC_IP
     ```
 
 2.  Put the MAC Address collection iPXE script in place:
@@ -54,7 +30,7 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
     4.  Wait for the updated iPXE binary to be built:
         ```bash
         ncn-m# sleep 30
-        ncn-m# kubectl -n services logs  -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
+        ncn-m# kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
         ```
 
         The following output means the new ipxe binary has been built. Make sure the timestamp in the logs are fairly recent:
@@ -120,7 +96,7 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
     2.  Wait for the updated iPXE binary to be built:
         ```bash
         ncn-m# sleep 30
-        ncn-m# kubectl -n services logs  -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
+        ncn-m# kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
         ```
 
         The following output means the updated ipxe binary has been built. Make sure the timestamp in the logs are fairly recent:
