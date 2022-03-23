@@ -198,6 +198,66 @@ peer ncn-w003 minpoll -2 maxpoll 9 iburst
 
 ##### Quick Fixes
 
+###### Fix BSS Metadata
+
+If nodes are missing metadata for NTP, you will be required to generate the data using `csi` and your system's `system_config.yaml`. If you do not have your seed data in the `system_config.yaml` then you will need to open a ticket to help generate the NTP data.
+
+The following steps are structured to be executed on one node at a time. However, step #3 will generate all relevant files for each node. If multiple nodes are missing NTP data in BSS, you can apply this fix to each node.
+
+1. Update system_config.yaml to have the correct NTP settings:
+    ```yaml
+    ntp-servers:
+      - ncn-m001
+      - time.nist.gov
+    ntp-timezone: UTC
+    ```
+2. Generate new configs:
+    ```bash
+    ncn# csi config init
+    ```
+3. In the newly created `system/basecamp` directory, copy in and execute the metadata script that is included in the upgrade scripts of this documentation:
+    ```bash
+    ncn# ./upgrade_ntp_timezone_metadata.sh
+    ```
+4. Find the relevant file(s) to the node(s) with missing metadata, such as `upgrade-metadata-000000000000.json` based on the mac address of the node.
+5. Find the xname for the node that needs to be fixed:
+    ```bash
+    ncn# cat /etc/cray/xname
+    ```
+6. From `ncn-m001` execute the following command to update BSS:
+    ```bash
+    ncn# csi handoff bss-update-cloud-init --user-data="upgrade-metadata-000000000000.json" --limit=<xname>`
+    ```
+7. Obtain the updated cloud-init code and template files from the scripts directory in the CSM documentation RPM:
+    ```bash
+    ncn# cp ./usr/share/doc/csm/scripts/cc_ntp.py /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py
+    ncn# cp ./usr/share/doc/csm/scripts/chrony.conf.cray.tmpl /etc/cloud/templates/chrony.conf.cray.tmpl
+    ```
+
+Alternatively, you can download the latest versions from Github:
+    ```bash
+    ncn# wget -O /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/cloudinit/config/cc_ntp.py`
+    ncn# wget -O /etc/cloud/templates/chrony.conf.cray.tmpl https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/config/cray.conf.j2`
+    ```
+10. Continue with the upgrade.
+11. When the upgrade is completed there might be extra files and configurations, execute the following steps to clean up NTP if required:
+    1. Remove `pool.conf` on all nodes:
+       ```bash
+       ncn# rm /etc/chrony.d/pool.conf
+       ```
+    2. Remove `cray.conf.dist` on all nodes:
+       ```bash
+       ncn# rm /etc/chrony.d/cray.conf.dist
+       ```
+    3. Comment out the default pool line in `/etc/chrony.conf` on all nodes:
+       ```bash
+       ncn# sed -i 's/^\!/#/' /etc/chrony.conf
+       ```
+    4. Restart chronyd on all nodes:
+       ```bash
+       ncn# systemctl restart chronyd
+       ```
+
 ###### Fix ncn-m001
 
 Most of the bugs from 0.9.x+ carried forward with upgrades.  Most commonly, ncn-m001 is the problem as it either does not have a valid upstream, or has a bad config.  This can be quickly remedied by running three commands to download the latest `cc_ntp` module, downloading an updated template, and re-running cloud-init.
