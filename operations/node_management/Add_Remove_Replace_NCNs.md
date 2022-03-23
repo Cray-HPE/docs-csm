@@ -85,15 +85,17 @@ The following is a high-level overview of the add NCN workflow:
 
 1. [Validate SHCD](Add_Remove_Replace_NCNs/Validate_SHCD.md#validate-shcd-before-adding-ncn)
 
-2. [Update Networking](Add_Remove_Replace_NCNs/Update_Networking.md#update-networking-to-add-ncn)
+2. [Allocate NCN IP Addresses](Add_Remove_Replace_NCNs/Allocate_NCN_IP_Addresses.md)
 
-3. [Add NCN data](Add_Remove_Replace_NCNs/Add_NCN_Data.md) for SLS, BSS and HSM
+3. [Update Networking](Add_Remove_Replace_NCNs/Update_Networking.md#update-networking-to-add-ncn)
 
-4. [Update Firmware](Add_Remove_Replace_NCNs/Update_Firmware.md) via FAS
+4. [Add NCN data](Add_Remove_Replace_NCNs/Add_NCN_Data.md) for SLS, BSS and HSM
 
-5. [Boot NCN](Add_Remove_Replace_NCNs/Boot_NCN.md)
+5. [Update Firmware](Add_Remove_Replace_NCNs/Update_Firmware.md) via FAS
 
-6. [Validation](Add_Remove_Replace_NCNs/Validation.md)
+6. [Boot NCN](Add_Remove_Replace_NCNs/Boot_NCN.md)
+
+7. [Validation](Add_Remove_Replace_NCNs/Validation.md)
 
 <a name="remove-worker-storage-master"></a>
 ## Remove Worker, Storage or Master NCNs

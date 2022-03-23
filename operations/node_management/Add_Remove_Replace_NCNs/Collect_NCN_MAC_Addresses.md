@@ -36,7 +36,7 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
     ```
 
 2.  Put the MAC Address collection iPXE script in place:
-    1.  Save a backup of the current ipxe BSS bootscript:
+    1.  Save a backup of the current iPXE BSS bootscript:
         ```bash
         ncn-m# kubectl -n services get cm cray-ipxe-bss-ipxe -o yaml > cray-ipxe-bss-ipxe.backup.yaml
         ```
@@ -77,7 +77,7 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
         ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP sol activate
         ```
 
-        > Note when disconnecting from the ipmi sol console you can perform the key sequence `~~.` to exist ipmitool without exiting your SSH session. 
+        > Note when disconnecting from the IPMI SOL console you can perform the key sequence `~~.` to exit ipmitool without exiting your SSH session. 
 
     3.  Power up the NCN:
         ```bash
