@@ -2,15 +2,18 @@
 
 The procedures described on this page are being done before any node is booted with the Cray Pre-Install Toolkit. When the PIT node is referenced during these procedures, it means the node that will be be booted as the PIT node.
 
-## Topics:
+## Topics
 
-1. [Quiesce Compute and Application Nodes](#quiesce_compute_and_application_nodes)
-1. [Disable DHCP Service](#disable_dhcp_service) (if any management nodes are booted)
-1. [Wipe Disks on Booted Nodes](#wipe_disks_on_booted_nodes)
-1. [Power Off Booted Nodes](#power_off_booted_nodes)
-1. [Set Node BMCs to DHCP](#set_node_bmcs_to_dhcp)
-1. [Wipe USB Device on PIT Node](#wipe_usb_device_on_pit_node) (**Only if** switching from USB LiveCD method to RemoteISO LiveCD method)
-1. [Power Off PIT Node](#power_off_pit_node)
+- [Prepare Management Nodes](#prepare-management-nodes)
+  - [Topics](#topics)
+  - [Quiesce compute nodes and application nodes.](#quiesce-compute-nodes-and-application-nodes)
+  - [Disable DHCP Service](#disable-dhcp-service)
+  - [Wipe Disks on Booted Nodes](#wipe-disks-on-booted-nodes)
+  - [Power Off Booted Nodes](#power-off-booted-nodes)
+  - [Set Node BMCs to DHCP](#set-node-bmcs-to-dhcp)
+  - [Wipe USB Device on PIT Node](#wipe-usb-device-on-pit-node)
+  - [Power Off PIT Node](#power-off-pit-node)
+  - [Next Topic](#next-topic)
 
 <a name="quiesce_compute_and_application_nodes"></a>
 ## Quiesce compute nodes and application nodes.
