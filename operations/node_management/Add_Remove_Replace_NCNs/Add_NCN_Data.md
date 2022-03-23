@@ -2,7 +2,7 @@
 
 ## Description
 
-Add NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Hardware State Manager (HSM)  as needed to add an NCN.
+Add NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Hardware State Manager (HSM) as needed to add an NCN to the system.
 
 Scenarios where this procedure is applicable:
 1. Adding a Management NCN that has not previously been in the system before:
@@ -30,6 +30,9 @@ Scenarios where this procedure is applicable:
         | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
         | --------------- | ----------------- | --------------------- | ----- | ------------ | ---- | ----------------- | ----------------- | ---------------------- | -------------------------- | ----- | ---------------------- |
         | wn01            | x3000             | u04                   | -     |              |      | j3                | sw-smn01          | x3000                  | u14                        | -     | j48                    |
+
+        > The Source name for the a worker NCN would be in the format of `wn01`, master NCNs are `mn01`, and storage NCNs have `sn01`.
+
 
         Node xname format: xXcCsSbBnN
 
@@ -74,27 +77,8 @@ Scenarios where this procedure is applicable:
         ```bash
         ncn-m# export MGMT_SWITCH=x3000c0w14
         ```
-
-    5.  Perform a dry-run of allocating IP addresses for the NCN:
-        ```bash
-        ./add_management_ncn.py allocate-ips \
-            --xname $XNAME \
-            --alias $NODE
-        ```
-
-    6.  Allocate IP addresses for the NCN in SLS and HSM by adding the `--perform-changes` argument to the command ran in the previous step:
-
-        ```bash
-        ./add_management_ncn.py allocate-ips \
-            --xname $XNAME \
-            --alias $NODE \
-            --perform-changes
-        ```
-
-    7.  Configure network
-        > TODO Placeholder
-    
-    8.  Collect the BMC MAC Address.
+ 
+    5.  Collect the BMC MAC Address.
         -   If the NCN was previously in the system recall the record BMC MAC Address recorded from the [Remove NCN Data](Remove_NCN_Data.md) procedure.
         -   If the BMC is reachable by IP, then ipmitool can be used to determine the MAC Address of the BMC:
 
@@ -132,26 +116,38 @@ Scenarios where this procedure is applicable:
                 ssh admin@sw-leaf-001.hmn
                 ```
 
-            3.  Locate the switch port the BMC is connected to record the MAC Address. 
+            3.  Locate the switch port the BMC is connected to record the MAC Address. Int he commands below change the value of `1/1/39` to match the BMC switch port number (The BMC Switch port number is the `J` value in the in the MgmtSwitchConnector xname `xXwWjJ`).
+                > For example with the following `$MGMT_SWITCH_CONNECTOR` value: 
+                > ```bash
+                > ncn-m# echo $MGMT_SWITCH_CONNECTOR
+                > ```
+                >
+                > Example output: 
+                > ```
+                > x3000c0w14j39
+                > ```
+                > 
+                > The switch port number for the above MgmtSwitchConnector xname would be 39, so would use `1/1/39` instead of `1/1/48` in the commands below. 
 
-                TODO need to explain that the 1/1/39 needs to change.
 
                 __Dell Management Switch__
                 ```
-                sw-leaf-001# show mac address-table | grep ethernet1/1/39
+                sw-leaf-001# show mac address-table | grep 1/1/48
                 ```
 
+                Example output:
                 ```
-                4	a4:bf:01:65:68:54	dynamic		ethernet1/1/39
+                4	a4:bf:01:65:68:54	dynamic		1/1/48
                 ```
 
                 __Aruba Management Switch__
                 ```
-                sw-leaf-001# show mac-address-table | include 1/1/39
+                sw-leaf-001# show mac-address-table | include 1/1/48
                 ```
 
+                Example output:
                 ```
-                a4:bf:01:65:68:54    4        dynamic                   1/1/39
+                a4:bf:01:65:68:54    4        dynamic                   1/1/48
                 ```
 
         1.  Set the `BMC_MAC` environment variable with the BMC MAC Address:  
@@ -159,7 +155,7 @@ Scenarios where this procedure is applicable:
             export BMC_MAC=a4:bf:01:65:68:54
             ```
 
-    9.  Collect NCN MAC Addresses for the following interfaces if they are present. Depending on the hardware present not all of the following interfaces will be present. The collected MAC addresses will be later used in this procedure with the add_management_ncn.py script.
+    6.  Collect NCN MAC Addresses for the following interfaces if they are present. Depending on the hardware present not all of the following interfaces will be present. The collected MAC addresses will be later used in this procedure with the add_management_ncn.py script.
 
         Depending on the hardware present in the NCN not all of these interfaces may not present.
         -   NCNs will have either 1 or 2 management PCIe NIC cards (2 or 4 PCIe NIC ports). 
@@ -232,7 +228,7 @@ Scenarios where this procedure is applicable:
         --mac-lan0 b8:59:9f:d9:9d:e8 \
         --mac-lan1 b8:59:9f:d9:9d:e9
     ```
-    > For each MAC Address/interfaces that was collected from the NCN append them to the command above
+    > For each MAC Address/interfaces that was collected from the NCN update the command above with them.
 
 4.  Run the `add_management_ncn.py` script to add the NCN to SLS, HSM and BSS by adding the `--perform-changes` argument to the command ran in the previous step:
     ```bash
