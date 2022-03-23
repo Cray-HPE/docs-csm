@@ -48,11 +48,11 @@ On a typical system, the Mellanox switches are Spine switches and the Dell switc
 
 Currently CANU ***does not*** automatically create site connections (LAGs/uplink interfaces or default routes). 
 
-Hence you need to manually configure the uplinks for site connections as well as default routes. 
+Hence, administrators need to manually configure the uplinks for site connections as well as default routes. 
 
 Example configuration: 
 
-NOTE: these are very simplistic examples and depending on your install scenario you may need to also configure LAG's etc. 
+**NOTE:** These are very simplistic examples and depending on the install scenario, administrators may need to also configure LAGs, etc. 
 
 ***Mellanox***
 
