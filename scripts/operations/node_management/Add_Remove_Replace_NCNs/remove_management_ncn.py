@@ -40,6 +40,7 @@ HSM_URL = ''
 SLS_URL = ''
 KEA_URL = ''
 
+# This is the list of NCNs for which the IPs should not be removed from /etc/hosts
 NCN_DO_NOT_REMOVE_IPS = [
     'ncn-m001', 'ncn-m002', 'ncn-m003',
     'ncn-w001', 'ncn-w002', 'ncn-w003',
@@ -147,6 +148,28 @@ class CommandAction:
         self.verbose = verbose
 
 
+class HttpAction:
+    def __init__(self, method, url, logs=None, request_body="", response_body="", completed=False, success=False):
+        self.method = method
+        self.url = url
+        self.logs = [] if logs is None else logs
+        self.request_body = request_body
+        self.response_body = response_body
+        self.completed = completed
+        self.success = success
+        self.response = None
+
+    def log(self, message):
+        self.logs.append(message)
+
+    def get_response_body(self, default_value=None):
+        if default_value is None:
+            return self.response_body
+        if self.response_body:
+            return self.response_body
+        return default_value
+
+
 def setup_urls(args):
     global BASE_URL
     global BSS_URL
@@ -201,18 +224,16 @@ def print_summary(state):
 
 
 def print_action(action):
-    if action['completed']:
-        if action['success']:
-            log.info(f"Called:  {action['method'].upper()} {action['url']}")
+    if action.completed:
+        if action.success:
+            log.info(f"Called:  {action.method.upper()} {action.url}")
         else:
-            log.error(f"Failed:  {action['method'].upper()} {action['url']}")
-            log.info(json.dumps(action.get('response_body'), indent=2))
+            log.error(f"Failed:  {action.method.upper()} {action.url}")
+            log.info(json.dumps(action.response_body, indent=2))
     else:
-        log.info(f"Planned: {action['method'].upper()} {action['url']}")
+        log.info(f"Planned: {action.method.upper()} {action.url}")
 
-    # if action.get('body'):
-    #     print(json.dumps(action.get('body'), indent=2))
-    for a_log in action.get('logs'):
+    for a_log in action.logs:
         log.info('         ' + a_log)
 
 
@@ -241,36 +262,13 @@ def print_command_actions(actions):
         print_command_action(action)
 
 
-def action_create(method, url, logs=None, request_body="", response_body="", completed=False, success=False):
-    if logs is None:
-        logs = []
-
-    return {
-        "method": method,
-        "url": url,
-        "logs": logs,
-        "request_body": request_body,
-        "response_body": response_body,
-        "completed": completed,
-        "success": success,
-    }
-
-
-def action_set(action, name, value):
-    action[name] = value
-
-
-def action_log(action, message):
-    action.get('logs').append(message)
-
-
 def http_get(session, actions, url, exit_on_error=True):
     r = session.get(url)
-    action = action_create('get', url, response_body=r.text, completed=True)
+    action = HttpAction('get', url, response_body=r.text, completed=True)
     actions.append(action)
-    action_set(action, 'response', r)
+    action.response = r
     if r.status_code == http.HTTPStatus.OK:
-        action_set(action, 'success', True)
+        action.success = True
     elif exit_on_error:
         log_error_and_exit(actions, str(action))
     return action
@@ -293,13 +291,13 @@ def node_bmc_to_enclosure(xname_for_bmc):
 
 def add_delete_action_if_component_present(actions, state, session, url, save_file):
     action = http_get(session, actions, url, exit_on_error=False)
-    if action.get('success'):
-        state.save(save_file, json.loads(action.get('response_body')))
-        actions.append(action_create('delete', url))
-    not_found = action.get('response').status_code == http.HTTPStatus.NOT_FOUND
+    if action.success:
+        state.save(save_file, json.loads(action.response_body))
+        actions.append(HttpAction('delete', url))
+    not_found = action.response.status_code == http.HTTPStatus.NOT_FOUND
     if not_found:
-        action['success'] = True
-        action_log(action, 'The item does not need to be deleted, because it does not exist.')
+        action.success = True
+        action.log('The item does not need to be deleted, because it does not exist.')
 
 
 def validate_ipmi_config(state):
@@ -324,7 +322,7 @@ def create_sls_actions(session, state):
 
     # Find xname in hardware and get aliases
     found_hardware_for_xname = False
-    hardware_list = json.loads(hardware_action.get('response_body'))
+    hardware_list = json.loads(hardware_action.response_body)
     for hardware in hardware_list:
         extra_properties = hardware.get('ExtraProperties', {})
 
@@ -342,14 +340,14 @@ def create_sls_actions(session, state):
             state.save(f'sls-hardware-{state.xname}', hardware)
 
             state.parent = hardware.get('Parent')
-            action_log(hardware_action,
+            hardware_action.log(
                        f'Found Hardware: Xname: {state.xname}, ' +
                        f'Parent: {state.parent}, ' +
                        f'TypeString: {hardware["TypeString"]}, ' +
                        f'Role: {hardware.get("ExtraProperties").get("Role")}')
 
             state.aliases.update(extra_properties.get('Aliases', []))
-            action_log(hardware_action, f'Aliases: {state.aliases}')
+            hardware_action.log(f'Aliases: {state.aliases}')
 
     alias_count = len(state.aliases)
     if alias_count != 1:
@@ -373,9 +371,7 @@ def create_sls_actions(session, state):
             if nic == state.parent:
                 hardware_connectors.append(hardware.get('Xname'))
                 state.save(f'sls-hardware-{hardware.get("Xname")}', hardware)
-                action_log(
-                    hardware_action,
-                    f'Found Connector Hardware: Xname: {hardware.get("Xname")}, NodeNic: {nic}')
+                hardware_action.log(f'Found Connector Hardware: Xname: {hardware.get("Xname")}, NodeNic: {nic}')
 
         type_string = hardware.get('TypeString')
         role = extra_properties.get('Role')
@@ -387,16 +383,16 @@ def create_sls_actions(session, state):
                     state.workers.add(alias)
 
     for connector in hardware_connectors:
-        actions.append(action_create('delete', f'{SLS_URL}/hardware/{connector}'))
+        actions.append(HttpAction('delete', f'{SLS_URL}/hardware/{connector}'))
 
     if found_hardware_for_xname:
-        actions.append(action_create('delete', f'{SLS_URL}/hardware/{state.xname}'))
+        actions.append(HttpAction('delete', f'{SLS_URL}/hardware/{state.xname}'))
         state.save('sls-hardware', hardware_list)
     else:
         log_error_and_exit(actions, f'Failed to find sls hardware entry for xname: {state.xname}')
 
     # Find network references to aliases and parent
-    networks = json.loads(networks_action.get('response_body'))
+    networks = json.loads(networks_action.response_body)
     state.save('sls-networks', networks)
     for network in networks:
         network_name = network.get("Name")
@@ -443,7 +439,7 @@ def create_sls_actions(session, state):
                 subnet['IPReservations'] = new_ip_reservations
         if state.remove_ips and network_has_changes:
             request_body = json.dumps(network)
-            action = action_create(
+            action = HttpAction(
                 'put', f'{SLS_URL}/networks/{network["Name"]}', logs=logs, request_body=request_body)
             actions.append(action)
     return actions
@@ -456,10 +452,10 @@ def create_hsm_actions(session, state):
     ethernet_xname_action = http_get(session, actions,
                                      f'{HSM_URL}/Inventory/EthernetInterfaces?ComponentId={state.xname}')
 
-    ethernet_list = json.loads(ethernet_xname_action.get('response_body'))
+    ethernet_list = json.loads(ethernet_xname_action.response_body)
     for ethernet in ethernet_list:
         ethernet_id = ethernet.get('ID')
-        actions.append(action_create('delete', f'{HSM_URL}/Inventory/EthernetInterfaces/{ethernet_id}'))
+        actions.append(HttpAction('delete', f'{HSM_URL}/Inventory/EthernetInterfaces/{ethernet_id}'))
         state.save(f'hsm-ethernet-interface-{ethernet_id}', ethernet)
         mac = ethernet.get('MACAddress')
         if mac:
@@ -469,10 +465,10 @@ def create_hsm_actions(session, state):
     ethernet_parent_action = http_get(session, actions,
                                       f'{HSM_URL}/Inventory/EthernetInterfaces?ComponentId={state.parent}')
 
-    ethernet_list = json.loads(ethernet_parent_action.get('response_body'))
+    ethernet_list = json.loads(ethernet_parent_action.response_body)
     for ethernet in ethernet_list:
         ethernet_id = ethernet.get('ID')
-        actions.append(action_create('delete', f'{HSM_URL}/Inventory/EthernetInterfaces/{ethernet_id}'))
+        actions.append(HttpAction('delete', f'{HSM_URL}/Inventory/EthernetInterfaces/{ethernet_id}'))
         state.save(f'hsm-ethernet-interface-{ethernet_id}', ethernet)
         mac = ethernet.get('MACAddress')
         if mac:
@@ -516,7 +512,7 @@ def create_bss_actions(session, state):
 
     global_bp_action = http_get(session, actions, f'{BSS_URL}/bootparameters?name=Global')
 
-    global_bp = json.loads(global_bp_action.get('response_body'))
+    global_bp = json.loads(global_bp_action.response_body)
     if len(global_bp) == 0:
         log_error_and_exit(actions, "Failed to find Global bootparameters")
     elif len(global_bp) > 1:
@@ -532,7 +528,7 @@ def create_bss_actions(session, state):
                            'Cannot remove the first master. ' +
                            f'xname: {state.xname}, ncn-name: {state.ncn_name}, first-master-hostname: {first_master}')
     else:
-        action_log(global_bp_action, f'first-master-hostname: {first_master}')
+        global_bp_action.log(f'first-master-hostname: {first_master}')
 
     # remove host records from Global boot parameters
     if state.remove_ips:
@@ -554,19 +550,19 @@ def create_bss_actions(session, state):
             boot_parameter.get('cloud-init').get('meta-data')['host_records'] = new_host_records
             global_request_body = json.dumps(boot_parameter)
             state.save('new-bss-bootparameters-global', boot_parameter)
-            actions.append(action_create('put', f'{BSS_URL}/bootparameters', request_body=global_request_body))
+            actions.append(HttpAction('put', f'{BSS_URL}/bootparameters', request_body=global_request_body))
 
     # remove boot parameters for xname
     xname_bp_action = http_get(session, actions, f'{BSS_URL}/bootparameters?name={state.xname}')
-    if xname_bp_action.get('success'):
-        xname_bp_list = json.loads(xname_bp_action.get('response_body'))
+    if xname_bp_action.success:
+        xname_bp_list = json.loads(xname_bp_action.response_body)
         xname_bp = xname_bp_list[0] if len(xname_bp_list) > 0 else {}
         state.save(f'bss-bootparameters-{state.xname}', xname_bp_list)
 
         # create delete action
         delete_request_body = '{ "hosts" : [ "' + state.xname + '" ] }'
-        xname_bp_delete_action = action_create('delete', f'{BSS_URL}/bootparameters', request_body=delete_request_body)
-        action_log(xname_bp_delete_action, delete_request_body)
+        xname_bp_delete_action = HttpAction('delete', f'{BSS_URL}/bootparameters', request_body=delete_request_body)
+        xname_bp_delete_action.log(delete_request_body)
         actions.append(xname_bp_delete_action)
 
         # save interfaces from params
@@ -582,14 +578,14 @@ def create_kea_actions(session, state):
 
     for mac in sorted(state.hsm_macs):
         request_body = '{"command": "lease4-get-by-hw-address", "service": [ "dhcp4" ], "arguments": {"hw-address": "' + mac + '"}}'
-        action = action_create('post', f'{KEA_URL}', request_body=request_body)
+        action = HttpAction('post', f'{KEA_URL}', request_body=request_body)
         actions.append(action)
-        action_log(action, f'Request body: {request_body}')
+        action.log(f'Request body: {request_body}')
         run_action(session, action)
         if state.verbose:
-            action_log(action, f'Response body: {action.get("response_body")}')
-        if action.get('success'):
-            response = action.get('response_body', '[]')
+            action.log(f'Response body: {action.response_body}')
+        if action.success:
+            response = action.get_response_body('[]')
             response_json = json.loads(response)
             for r in response_json:
                 leases = r.get("arguments", {}).get("leases", [])
@@ -598,13 +594,13 @@ def create_kea_actions(session, state):
                     if ip:
                         if ip not in state.ip_reservation_ips:
                             state.ip_reservation_ips.add(ip)
-                            action_log(action, f'Added {ip} to the list of kea leases to remove')
+                            action.log(f'Added {ip} to the list of kea leases to remove')
 
     for ip in sorted(state.ip_reservation_ips):
         request_body = '{"command": "lease4-del", "service": [ "dhcp4" ], "arguments": {"ip-address": "' + ip + '"}}'
-        action = action_create('post', f'{KEA_URL}', request_body=request_body)
+        action = HttpAction('post', f'{KEA_URL}', request_body=request_body)
         actions.append(action)
-        action_log(action, f'Request body: {request_body}')
+        action.log(f'Request body: {request_body}')
 
     return actions
 
@@ -790,31 +786,31 @@ def is_2xx(http_status):
 
 
 def run_action(session, action):
-    method = action.get('method')
-    url = action.get('url')
+    method = action.method
+    url = action.url
     r = None
     if method == 'get':
         r = session.get(url)
     elif method == 'delete':
-        r = session.delete(url, data=action.get('request_body'))
+        r = session.delete(url, data=action.request_body)
     elif method == 'put':
-        r = session.put(url, action.get('request_body'))
+        r = session.put(url, action.request_body)
     elif method == 'post':
-        r = session.post(url, action.get('request_body'))
+        r = session.post(url, action.request_body)
     else:
         print(f"Unknown method {method}")
         print("FAILED")
         sys.exit(1)
 
     if r:
-        action_set(action, 'response_body', r.text)
-        action_set(action, 'completed', True)
-        action_set(action, 'success', is_2xx(r.status_code))
+        action.response_body = r.text
+        action.completed = True
+        action.success = is_2xx(r.status_code)
 
 
 def run_actions(session, actions):
     for action in actions:
-        if action.get('completed'):
+        if action.completed:
             print_action(action)
         else:
             run_action(session, action)
@@ -882,8 +878,9 @@ def main(argv):
         hsm_actions = create_hsm_actions(session, state)
         print_actions(hsm_actions)
 
-        kea_actions = create_kea_actions(session, state)
+        kea_actions = []
         if not args.skip_kea:
+            kea_actions = create_kea_actions(session, state)
             print_actions(kea_actions)
 
         restart_bss_restart_actions = create_restart_bss_restart_actions()
@@ -920,8 +917,7 @@ def main(argv):
             run_actions(session, hsm_actions)
             run_actions(session, sls_actions)
 
-            if not args.skip_kea:
-                run_actions(session, kea_actions)
+            run_actions(session, kea_actions)
 
             log.info('Restarting cray-bss')
             run_command_actions(restart_bss_restart_actions)
