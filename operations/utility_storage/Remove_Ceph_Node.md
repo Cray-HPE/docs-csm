@@ -42,6 +42,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
 5. Reweigh the OSD\(s\) ***on the node being removed*** to rebalance the cluster.
 
+    Run from ncn-s001/2/3:
 
     1. Change the weight and crush weight of the OSD being removed to 0.
 
@@ -53,9 +54,11 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
         done
         ```
 
-    2. Watch the session running your watch `ceph -s` until the cluster status is **HEALTH_OK**
+    2. Watch the session running your watch `ceph -s` until the cluster status is **HEALTH_OK** and the **Rebalancing** has completed.
 
 6. Remove the OSD after the reweighing work is complete.
+
+    Run from ncn-s001/2/3:
 
     ```bash
     for osd in $(ceph osd ls-tree $NODE);
@@ -66,7 +69,83 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     done
     ```
 
-7. Remove the ceph configuration from the node
+7. Regenerate Rados-GW Load Balancer Configuration
+
+    1. Update the existing HAProxy config to remove the node from the configuration.
+
+        ```bash
+        ncn-s001# vi /etc/haproxy/haproxy.cfg
+        ```
+
+        This example removes `ncn-s004` from the `backend rgw-backend`.
+
+        ```bash
+        ...
+        backend rgw-backend
+            option forwardfor
+            balance static-rr
+            option httpchk GET /
+                server server-ncn-s001-rgw0 10.252.1.6:8080 check weight 100
+                server server-ncn-s002-rgw0 10.252.1.5:8080 check weight 100
+                server server-ncn-s003-rgw0 10.252.1.4:8080 check weight 100
+                server server-ncn-s004-rgw0 10.252.1.13:8080 check weight 100   <--- Line to remove
+        ...
+        ```
+
+    2. Copy the HAproxy config from ncn-s001 to all the storage nodes. Adjust the command based on the number of storage nodes.
+
+        ```bash
+        ncn-s001# pdcp -w ncn-s00[2-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
+        ```
+
+   3. Restart the services on all the storage nodes and stop on the node that is being removed.
+
+        ```bash
+        ncn-s001# pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service'
+        ncn-s001# pdsh -w $NODE 'systemctl stop haproxy.service'
+        ```
+
+   
+    4. Redeploy the Rados Gateway containers to adjust the placement group.
+
+        Run from ncn-s001/2/3:
+
+        ```bash
+        ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
+        ```
+
+        For example:
+
+        ```bash
+        ceph orch apply rgw site1 zone1 --placement="3 ncn-s001 ncn-s002 ncn-s003" --port=8080
+        ```
+
+    5. Verify Rados Gateway is running on the desired nodes.
+
+        Run from ncn-s001/2/3:
+
+        ```bash
+        ceph orch ps --daemon_type rgw
+        ```
+
+        Example output:
+
+        ```bash
+        NAME                             HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                         IMAGE ID      CONTAINER ID
+        rgw.site1.zone1.ncn-s001.kvskqt  ncn-s001  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8   553b0cb212c   6e323878db46
+        rgw.site1.zone1.ncn-s002.tisuez  ncn-s002  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8   553b0cb212c   278830a273d3
+        rgw.site1.zone1.ncn-s003.nnwuqy  ncn-s003  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8   553b0cb212c   a9706e6d7a69
+        ```
+  
+8. Remove the node from the cluster.
+
+    Run from ncn-s001/2/3:
+
+    ```bash
+    ceph orch host rm $NODE
+    ```
+
+9. Remove the ceph configuration from the node.
 
    On the ***node being removed***
 
@@ -74,10 +153,12 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     cephadm rm-cluster --fsid $(cephadm ls|jq -r .[1].fsid) --force
     ```
 
-8. Remove the node from the crush map
+10. Remove the node from the crush map
 
-   ```bash
-   ceph osd crush rm $NODE
-   ```
+    Run from ncn-s001/2/3:
+
+    ```bash
+    ceph osd crush rm $NODE
+    ```
 
 9. On session running `ceph -s` verify that the status is HEALTH_OK, if so, then you are finished.
