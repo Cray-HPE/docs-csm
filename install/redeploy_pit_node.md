@@ -121,17 +121,8 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         **IMPORTANT**: The variables set depend on whether or not the default NCN images are customized. The most
         common procedures that involve customizing the images are
         [Configuring NCN Images to Use Local Timezone](../operations/node_management/Configure_NTP_on_NCNs.md#configure_ncn_images_to_use_local_timezone) and
-        [Changing NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md).
+        [Changing NCN Image Root Password and SSH Keys on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
         The two paths forward are listed below:
-
-        * If the NCN images were **not** customized, set the following variables (this is the default path):
-
-            ```bash
-            pit# export CSM_RELEASE=csm-x.y.z
-            pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
-            pit# export k8sdir=$artdir/kubernetes
-            pit# export cephdir=$artdir/storage-ceph
-            ```
 
         * If the NCN images were customized, set the following variables:
 
@@ -139,6 +130,15 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
             pit# export artdir=/var/www/ephemeral/data
             pit# export k8sdir=$artdir/k8s
             pit# export cephdir=$artdir/ceph
+            ```
+
+        * If the NCN images were **not** customized, set the following variables:
+
+            ```bash
+            pit# export CSM_RELEASE=csm-x.y.z
+            pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
+            pit# export k8sdir=$artdir/kubernetes
+            pit# export cephdir=$artdir/storage-ceph
             ```
 
     1. After setting the variables in the previous step, run the following command.

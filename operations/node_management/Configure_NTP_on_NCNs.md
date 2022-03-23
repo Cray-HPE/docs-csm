@@ -306,110 +306,14 @@ there. You can find a list of timezones to use in the commands below by running 
 <a name="configure_ncn_images_to_use_local_timezone"></a>
 #### Configure NCN Images to Use Local Timezone
 
-You need to adjust the node images so that they also boot in the local timezone. This is accomplished by `chroot`ing into the unsquashed images, making some modifications, and then squashing it back up and moving the new images into place.
+Adjust the node images so that they also boot in the local timezone. This is accomplished by `chroot`ing into the unsquashed images, making some modifications, and then squashing it back up and moving the new images into place.  This is included as an optional image modification step in the two procedures below.
 
-1. Set some variables.
+1. If the PIT node is booted, see
+[Change NCN Image Root Password and SSH Keys on PIT Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_node.md)
+for more information.
 
-   This example uses `IMGTYPE=ceph` for the utility storage nodes, but the same process should also be done
-   with `IMGTYPE=k8s` for the Kubernetes master and worker nodes.
+1. If the PIT node is not booted, see
+[Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
+for more information.
 
-   ```bash
-   pit# export NEWTZ=America/Chicago
-   pit# export IMGTYPE=ceph
-   pit# export IMGDIR=/var/www/ephemeral/data/${IMGTYPE}
-   ```
-
-1. Go to the Ceph image directory and unsquash the image.
-
-    ```bash
-    pit# cd ${IMGDIR}
-    pit# unsquashfs *.squashfs
-    ```
-
-1. Start a chroot session inside the unsquashed image. Your prompt may change to reflect that you are now in the root directory of the image.
-
-    ```bash
-    pit# chroot ./squashfs-root
-    ```
-
-1. Inside the chroot session, you will modify a few files by running the following commands, and then exit from the chroot session.
-
-    ```bash
-    pit-chroot# echo TZ=${NEWTZ} >> /etc/environment
-    pit-chroot# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone $NEWTZ#" /srv/cray/scripts/metal/set-ntp-config.sh
-    pit-chroot# sed -i 's/--utc/--localtime/' /srv/cray/scripts/metal/set-ntp-config.sh
-    pit-chroot# /srv/cray/scripts/common/create-kis-artifacts.sh
-    pit-chroot# exit
-    pit#
-    ```
-
-1. Back outside the chroot session, you will now back up the original images and copy the new ones into place.
-
-    ```bash
-    pit# mkdir -v ${IMGDIR}/orig
-    pit# mv -v *.kernel *.xz *.squashfs ${IMGDIR}/orig/
-    pit# cp -v squashfs-root/squashfs/* .
-    pit# chmod -v 644 ${IMGDIR}/initrd.img.xz
-    ```
-
-1. Unmount the squashfs mount (which was mounted by the earlier unsquashfs command).
-
-    ```bash
-    pit# umount -v ${IMGDIR}/squashfs-root/mnt/squashfs
-    ```
-
-1. Repeat all of the previous steps, with this change to the IMGTYPE variable.
-
-   This example uses `IMGTYPE=k8s` for the Kubernetes master and worker nodes.
-
-   ```bash
-   pit# export IMGTYPE=k8s
-   pit# export IMGDIR=/var/www/ephemeral/data/${IMGTYPE}
-   ```
-
-1. Go to the k8s image directory and unsquash the image.
-
-    ```bash
-    pit# cd ${IMGDIR}
-    pit# unsquashfs *.squashfs
-    ```
-
-1. Start a chroot session inside the unsquashed image. Your prompt may change to reflect that you are now in the root directory of the image.
-
-    ```bash
-    pit# chroot ./squashfs-root
-    ```
-
-1. Inside the chroot session, you will modify a few files by running the following commands, and then exit from the chroot session.
-
-    ```bash
-    pit-chroot# echo TZ=${NEWTZ} >> /etc/environment
-    pit-chroot# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone $NEWTZ#" /srv/cray/scripts/metal/set-ntp-config.sh
-    pit-chroot# sed -i 's/--utc/--localtime/' /srv/cray/scripts/metal/set-ntp-config.sh
-    pit-chroot# /srv/cray/scripts/common/create-kis-artifacts.sh
-    pit-chroot# exit
-    pit#
-    ```
-
-1. Back outside the chroot session, you will now back up the original images and copy the new ones into place.
-
-    ```bash
-    pit# mkdir -v ${IMGDIR}/orig
-    pit# mv -v *.kernel *.xz *.squashfs ${IMGDIR}/orig/
-    pit# cp -v squashfs-root/squashfs/* .
-    pit# chmod -v 644 ${IMGDIR}/initrd.img.xz
-    ```
-
-1. Unmount the squashfs mount (which was mounted by the earlier unsquashfs command)
-
-    ```bash
-    pit# umount -v ${IMGDIR}/squashfs-root/mnt/squashfs
-    ```
-
-1. Now link the new images so that the NCNs will get them from the LiveCD node when they boot.
-
-    ```bash
-    pit# set-sqfs-links.sh
-    ```
-
-1. Make a note that when performing the [csi handoff of NCN boot artifacts in Redeploy PIT Node](../../install/redeploy_pit_node.md#ncn-boot-artifacts-hand-off), you must be sure to specify these new images. Otherwise ncn-m001 will use the default timezone when it boots, and subsequent reboots of the other NCNs will also lose the customized timezone changes.
+1. Make a note that when performing the [csi handoff of NCN boot artifacts in Redeploy PIT Node](../../install/redeploy_pit_node.md#ncn-boot-artifacts-hand-off), these new images are specified. Otherwise ncn-m001 will use the default timezone when it boots, and subsequent reboots of the other NCNs will also lose the customized timezone changes.
