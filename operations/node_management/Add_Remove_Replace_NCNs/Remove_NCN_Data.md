@@ -19,10 +19,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
                 | jq -r '.access_token')
     ```
 
-1.  Optional Setup:
-
-    Set the username and password to the BMC for the NCN. This step is optional. The NCN can be successfully be removed without this.
-    Setting this enables the scripts to print the BMC's MAC address, which is information needed when the hardware is added back into the system.
+    Set the username and password to the BMC for the NCN. This step is required for every NCN except ncn-m001.
 
     ```bash
     ncn-mw# export IPMI_USERNAME=root

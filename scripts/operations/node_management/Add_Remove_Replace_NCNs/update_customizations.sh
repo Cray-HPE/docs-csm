@@ -28,7 +28,7 @@ if [[ -z "$TOKEN" ]]; then
     exit 1
 fi
 
-# Create tempory working directory
+# Set temporary working directory
 tmp_dir="/tmp"
 echo "Working directory $tmp_dir"
 pushd "$tmp_dir"
@@ -51,20 +51,4 @@ yq merge -a overwrite -xP -i customizations.yaml <(echo "$master_ips" | yq prefi
 
 echo "Original customizations.yaml is located at $tmp_dir/customizations.original.yaml"
 echo "Updated customizations.yaml is located at $tmp_dir/customizations.yaml"
-
-# Notes - Next steps
-# Compare cusotmizations.yaml
-# yq r customizations.original.yaml -P   > customizations.original.yaml.pretty
-# diff customizations.original.yaml.pretty customizations.yaml
-# 
-# ncn-m001:/tmp/ncn-update-customizations-8qfC # diff customizations.original.yaml.pretty customizations.yaml
-# 24a25
-# >         - 10.252.1.14
-
-# Update `site-init` sealed secret in `loftsman` namespace:
-
-# ```bash
-# ncn-m001# kubectl delete secret -n loftsman site-init
-# ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-# ```
 

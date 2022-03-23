@@ -28,7 +28,7 @@
 
 ## Zapping OSDs
 
-   **IMPORTANT:** Only do this if you were not able to wipe the node prior to rebuild. This step is not needed if a node was added.
+   **IMPORTANT:** Only do this if you are 100% certain you need to erase data from a previous install.
 
    **NOTE:** The commands in the Zapping OSDs section will need to be run from a node running ceph-mon. Typically ncn-s00(1/2/3).
 
@@ -83,16 +83,16 @@
 
 1. Deploy Rados Gateway containers to the new nodes.
 
-   - If running Rados Gateway on all nodes is the desired conifugration then do:
+   - If running Rados Gateway on all nodes is the desired configuration then do:
 
       ```bash
-      ceph orch apply rgw site1 zone1 --placement="*" --port=8080
+      ncn-s00(1/2/3)# ceph orch apply rgw site1 zone1 --placement="*" --port=8080
       ```
 
    - If deploying to select nodes then do:
   
      ```bash
-     ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >" --port=8080
+     ncn-s00(1/2/3)# ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
      ```
 
 1. Verify Rados Gateway is running on the desired nodes.
@@ -105,7 +105,7 @@
     rgw.site1.zone1.ncn-s003.nnwuqy  ncn-s003  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8   553b0cb212c   a9706e6d7a69
     ```
 
-1. Add nodes into HAproxy and KeepAlived.
+1. Add nodes into HAproxy and KeepAlived. Adjust the command based on the number of storage nodes.
 
    - If the node was rebuilt then do:
 
@@ -119,14 +119,13 @@
      Determine the IP address of the added node.
    
      ```bash
-     NODE=`hostname`
-     cloud-init query ds | jq -r ".meta_data[].host_records[] | select(.aliases[]? == \"$NODE\") | .ip" 2>/dev/null
+     cloud-init query ds | jq -r ".meta_data[].host_records[] | select(.aliases[]? == \"$(hostname)\") | .ip" 2>/dev/null
      ```
 
      Example Output:
 
      ```
-     10.252.1.14
+     10.252.1.13
      ```
 
      Update the existing HAproxy config on ncn-s001 to include the added node.
@@ -135,7 +134,7 @@
      ncn-s001# vi /etc/haproxy/haproxy.cfg
      ```
 
-     This example adds `ncn-s004` with the IP address `10.252.1.14` to `backend rgw-backend`.
+     This example adds or updates `ncn-s004` with the IP address `10.252.1.13` to `backend rgw-backend`.
 
      ```bash
      ...
@@ -146,22 +145,26 @@
              server server-ncn-s001-rgw0 10.252.1.6:8080 check weight 100
              server server-ncn-s002-rgw0 10.252.1.5:8080 check weight 100
              server server-ncn-s003-rgw0 10.252.1.4:8080 check weight 100
-             server server-ncn-s004-rgw0 10.252.1.14:8080 check weight 100   <--- Added line
+             server server-ncn-s004-rgw0 10.252.1.13:8080 check weight 100   <--- Added or updated line
      ...
      ```
 
-     Copy the HAproxy config from ncn-s001 to all the storage nodes.
+     Copy the HAproxy config from ncn-s001 to all the storage nodes. Adjust the command based on the number of storage nodes.
 
      ```bash
      ncn-s001# pdcp -w ncn-s00[2-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
      ```
       
-     Configure apparmor and KeepAlived on the added node and restart the services across all the storage nodes.
+     Configure apparmor and KeepAlived **on the added node** and restart the services across all the storage nodes.
 
      ```bash
      source /srv/cray/scripts/metal/update_apparmor.sh; reconfigure-apparmor
      /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf
+     export  PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no"
      pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service; systemctl restart keepalived.service'
      ```
 
-[Next Step - Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md)
+Next Step:
+
+- [If Rebuilding the Storage Node - Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md)
+- [If Adding the Storage Node - Return to Step 7 to Redeploy Services](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#step-7---for-storage-nodes-only)
