@@ -199,7 +199,32 @@ The Kubernetes image ```k8s-image``` is used by the master and worker nodes.
       ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
       ```
 
-The Kubernetes image will have the image changes for the next boot.
+1. The Kubernetes image now has the image changes.
+
+1. Update BSS with the new image for the master nodes and worker nodes.
+
+   **WARNING:** If doing a CSM software upgrade, skip this section to continue with Ceph Image.
+
+   > If not doing a CSM software upgrade, this process will update the entries in BSS for the master nodes and worker nodes to use the new `k8s-image`.
+   > 
+   > 1. Set all master nodes and worker nodes to use newly created k8s-image.
+   >
+   >     This will use the K8SVERSION and K8SNEW variables defined earlier.
+   >
+   >     ```bash
+   >     ncn-m# for node in $(grep -oP "(ncn-[mw]\w+)" /etc/hosts | sort -u) 
+   >     do
+   >       echo $node
+   >       xname=$(ssh $node cat /etc/cray/xname)
+   >       echo $xname
+   >       cray bss bootparameters list --name $xname --format json > bss_$xname.json
+   >       sed -i.old "s@k8s/${K8SVERSION}@k8s/${K8SNEW}@g" bss_$xname.json 
+   >       kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
+   >       initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
+   >       params=$(cat bss_$xname.json | jq '.[]  .params')
+   >       cray bss bootparameters update --initrd $initrd --kernel $kernel --params $params --name $xname --format json
+   >     done
+   >     ```
 
 ### Ceph Image
 
@@ -362,9 +387,35 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
       ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/filesystem.squashfs' --file-name filesystem.squashfs
       ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/initrd' --file-name initrd.img.xz
       ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
+      cd ../..
       ```
 
-The Ceph image will have the image changes for the next boot.
+1. The Ceph image now has the image changes.
+
+1. Update BSS with the new image for utility storage nodes.
+
+   **WARNING:** If doing a CSM software upgrade, skip this section to continue with Common Cleanup.
+
+   > If not doing a CSM software upgrade, this process will update the entries in BSS for the utiltity storage nodes to use the new `ceph-image`.
+   > 
+   > 1. Set all utility storage nodes to use newly created ceph-image.
+   >
+   >     This will use the CEPHVERSION and CEPHNEW variables defined earlier.
+   >
+   >     ```bash
+   >     ncn-m# for node in $(grep -oP "(ncn-s\w+)" /etc/hosts | sort -u) 
+   >     do
+   >       echo $node
+   >       xname=$(ssh $node cat /etc/cray/xname)
+   >       echo $xname
+   >       cray bss bootparameters list --name $xname --format json > bss_$xname.json
+   >       sed -i.old "s@ceph/${CEPHVERSION}@ceph/${CEPHNEW}@g" bss_$xname.json 
+   >       kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
+   >       initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
+   >       params=$(cat bss_$xname.json | jq '.[]  .params')
+   >       cray bss bootparameters update --initrd $initrd --kernel $kernel --params $params --name $xname --format json
+   >     done
+   >     ```
 
 ### Common Cleanup
 
@@ -373,3 +424,9 @@ The Ceph image will have the image changes for the next boot.
    ```bash
    ncn-m# rm -rf /run/initramfs/overlayfs/workingarea
    ```
+
+1. Rebuild nodes.
+
+   **WARNING:** If doing a CSM software upgrade, skip this step since the upgrade process does a rolling rebuild with some additional steps.
+
+   > If not doing a CSM software upgrade, follow the procedure to do a [Rolling Rebuild](../operations/node_management/Rebuild_NCNs.md) of all management nodes.
