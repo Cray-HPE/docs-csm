@@ -12,7 +12,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
 **IMPORTANT NOTES:**
 
-> * Removal ncn-s001/2/3 permantly is **NOT SUPPORTED**. They can only be rebuilt in place or replaced with new hardware.
+> * Removal ncn-s001/2/3 permanently is **NOT SUPPORTED**. They can only be rebuilt in place or replaced with new hardware.
 >   * This is due to the ceph mon and mgr processes running on them.
 > * Always ensure you have the free capacity to remove the node(s) prior to performing this task.
 > * When removing a node other than ncn-s001/2/3, then you will have to adjust the SMF pools quotas accordingly.
@@ -71,10 +71,12 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
 7. Regenerate Rados-GW Load Balancer Configuration
 
+    Run the following from ncn-s001/2/3:
+
     1. Update the existing HAProxy config to remove the node from the configuration.
 
         ```bash
-        ncn-s001# vi /etc/haproxy/haproxy.cfg
+        vi /etc/haproxy/haproxy.cfg
         ```
 
         This example removes `ncn-s004` from the `backend rgw-backend`.
@@ -95,20 +97,18 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     2. Copy the HAproxy config from ncn-s001 to all the storage nodes. Adjust the command based on the number of storage nodes.
 
         ```bash
-        ncn-s001# pdcp -w ncn-s00[2-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
+        pdcp -w ncn-s00[2-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
         ```
 
    3. Restart the services on all the storage nodes and stop on the node that is being removed.
 
         ```bash
-        ncn-s001# pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service'
-        ncn-s001# pdsh -w $NODE 'systemctl stop haproxy.service'
+        pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service'
+        pdsh -w $NODE 'systemctl stop haproxy.service'
         ```
 
    
     4. Redeploy the Rados Gateway containers to adjust the placement group.
-
-        Run from ncn-s001/2/3:
 
         ```bash
         ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
@@ -121,8 +121,6 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
         ```
 
     5. Verify Rados Gateway is running on the desired nodes.
-
-        Run from ncn-s001/2/3:
 
         ```bash
         ceph orch ps --daemon_type rgw
