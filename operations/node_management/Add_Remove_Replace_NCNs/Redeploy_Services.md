@@ -89,7 +89,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 
     ```bash
     ncn-m001# kubectl delete secret -n loftsman site-init
-    ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+    ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=/tmp/customizations.yaml
     ```
 
 #### 1.3 Redeploy S3 to pick up any changes for storage node endpoints.
