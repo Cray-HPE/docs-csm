@@ -186,16 +186,30 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server="10.92.100.225 10.94.100.225" --limit Global
     ```
 
-1.  Preserve the ConMan console logs for the other NCNs if desired. (optional)
+1.  Preserve logs and configuration files if desired (optional).
 
-    You may wish to preserve them for later examination, but it is not required. However, **this is the last chance to do so**. They will be lost after rebooting the PIT node.
-    
-    The following commands will copy them into a directory that will be backed up before the PIT node reboot.
-    
+    After the PIT node is redeployed, **all files on its local drives will be lost**. It is recommended that you retain some of the log files and
+    configuration files, because they may be useful if issues are encountered during the remainder of the install.
+
+    The following commands create a tar archive of these files, storing it in a directory that will be backed up in the next step.
+
     ```bash
-    
     pit# mkdir -pv /var/www/ephemeral/prep/logs &&
-            cp -prv /var/log/conman /var/www/ephemeral/prep/logs/conman.$(date +%Y-%m-%d_%H-%M-%S)
+         ls -d \
+                    /etc/dnsmasq.d \
+                    /etc/os-release \
+                    /etc/sysconfig/network \
+                    /opt/cray/tests/cmsdev.log \
+                    /opt/cray/tests/install/logs \
+                    /opt/cray/tests/logs \
+                    /root/.canu \
+                    /root/.config/cray/logs \
+                    /root/csm*.{log,txt} \
+                    /tmp/*.log \
+                    /var/log/conman \
+                    /var/log/zypper.log 2>/dev/null |
+         sed 's_^/__' |
+         xargs tar -C / -czvf /var/www/ephemeral/prep/logs/pit-backup-$(date +%Y-%m-%d_%H-%M-%S).tgz
     ```
 
 1. <a name="backup-bootstrap-information"></a>Backup the bootstrap information from `ncn-m001`.
