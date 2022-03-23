@@ -10,9 +10,9 @@ There is some common preparation before making the Kubernetes image for master n
 
 ### Common Preparation
 
-1. Prepare new ssh keys on the PIT node for the root account in advance.  The same key information will be added to both k8s-image and ceph-image.
+1. Prepare new ssh keys on the PIT node for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
 
-   Either replace the root public and private ssh keys with your own previously generated keys or generate a new pair with `ssh-keygen(1)`.  By default `ssh-keygen` will create an RSA key, but other types could be chosen and different filenames would need to be substituted in later steps.
+   Either replace the root public and private ssh keys with your own previously generated keys or generate a new pair with `ssh-keygen(1)`. By default `ssh-keygen` will create an RSA key, but other types could be chosen and different filenames would need to be substituted in later steps.
 
    ```bash
    pit# mkdir /root/.ssh
@@ -63,7 +63,7 @@ The Kubernetes image is used by the master and worker nodes.
    pit# chmod 640 squashfs-root/root/.ssh/authorized_keys
    ```
 
-1. Change root into the image root.
+1. Change into the image root.
 
    ```bash
    pit# chroot ./squashfs-root
@@ -75,20 +75,18 @@ The Kubernetes image is used by the master and worker nodes.
    chroot-pit# passwd
    ```
 
-1. If there are any other things to be changed in the image, they could also be done at this point.
-
-   For example, some sites may want to change the timezone.
+1. (Optional) If there are any other things to be changed in the image, they could also be done at this point.
 
    1. (Optional) Set default timezone on management nodes.
 
-      1. Check whether TZ variable is already set in `/etc/environment`.  The setting for NEWTZ must be a valid timesone from the set under /usr/share/zoneinfo.
+      1. Check whether TZ variable is already set in `/etc/environment`. The setting for NEWTZ must be a valid timezone from the set under `/usr/share/zoneinfo`.
 
          ```bash
          chroot-pit# NEWTZ=US/Pacific
          chroot-pit# grep TZ /etc/environment
          ```
 
-         Add only if TZ is not present
+         Add only if TZ is not present.
 
          ```bash
          chroot-pit# echo TZ=${NEWTZ} >> /etc/environment
@@ -96,7 +94,9 @@ The Kubernetes image is used by the master and worker nodes.
 
       1. Check for `utc` setting.
 
+         ```bash
          chroot-pit# grep -i utc /srv/cray/scripts/metal/ntp-upgrade-config.sh
+         ```
 
          Change only if the grep command shows these lines set to UTC.
 
@@ -230,20 +230,18 @@ The Ceph image is used by the utility storage nodes.
    chroot-pit# passwd
    ```
 
-1. If there are any other things to be changed in the image, they could also be done at this point.
-
-   For example, some sites may want to change the timezone.
+1. (Optional) If there are any other things to be changed in the image, they could also be done at this point.
 
    1. (Optional) Set default timezone on management nodes.
 
-      1. Check whether TZ variable is already set in `/etc/environment`.  The setting for NEWTZ must be a valid timesone from the set under /usr/share/zoneinfo.
+      1. Check whether TZ variable is already set in `/etc/environment`. The setting for NEWTZ must be a valid timezone from the set under `/usr/share/zoneinfo`.
 
          ```bash
          chroot-pit# NEWTZ=US/Pacific
          chroot-pit# grep TZ /etc/environment
          ```
 
-         Add only if TZ is not present
+         Add only if TZ is not present.
 
          ```bash
          chroot-pit# echo TZ=${NEWTZ} >> /etc/environment
@@ -251,7 +249,9 @@ The Ceph image is used by the utility storage nodes.
 
       1. Check for `utc` setting.
 
+         ```bash
          chroot-pit# grep -i utc /srv/cray/scripts/metal/ntp-upgrade-config.sh
+         ```
 
          Change only if the grep command shows these lines set to UTC.
 
