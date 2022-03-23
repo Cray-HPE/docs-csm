@@ -18,7 +18,7 @@ POST faster than others or vary based on BIOS setting. After powering on a set o
 an administrator can expect a healthy boot session to take about 60 minutes depending on
 the number of storage and worker nodes.
 
-## Topics:
+## Topics
 
    1. [Prepare for Management Node Deployment](#prepare_for_management_node_deployment)
       1. [Tokens and IPMI Password](#tokens-and-ipmi-password)

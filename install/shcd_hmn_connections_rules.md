@@ -1,24 +1,26 @@
 # SHCD HMN Tab/HMN Connections Rules
-## Table of contents:
-1. [Introduction](#introduction)
-2. [Compute Node](#compute-node)
-    1. [Dense 4 node chassis - Gigabyte or Intel chassis](#compute-node-dense)
-    2. [Single node chassis - Apollo 6500 XL675D](#compute-node-single)
-    3. [Dual node chassis - Apollo 6500 XL645D](#compute-node-dual)
-3. [Chassis Management Controller (CMC)](#chassis-management-controller)
-4. [Management Node](#management-node)
-    1. [Master](#management-node-master)
-    2. [Worker](#management-node-worker)
-    3. [Storage](#management-node-storage)
-5. [Application Node](#application-node)
-    1. [Single Node Chassis](#application-node-single-node-chassis)
-        1. [Building component names (xnames) for nodes in a single application node chassis](#application-node-single-node-chassis-xname)
-    2. [Dual Node Chassis](#application-node-dual-node-chassis)
-        1. [Building component names (xnames) for nodes in a dual application node chassis](#application-node-dual-node-chassis-xname)
-6. [Columbia Slingshot Switch](#columbia-slingshot-switch)
-7. [PDU Cabinet Controller](#pdu-cabinet-controller)
-8. [Cooling Door](#cooling-door)
-9. [Management Switches](#management-switches)
+
+## Table of Contents
+
+  1. [Introduction](#introduction)
+  2. [Compute Node](#compute-node)
+      1. [Dense 4 node chassis - Gigabyte or Intel chassis](#compute-node-dense)
+      2. [Single node chassis - Apollo 6500 XL675D](#compute-node-single)
+      3. [Dual node chassis - Apollo 6500 XL645D](#compute-node-dual)
+  3. [Chassis Management Controller (CMC)](#chassis-management-controller)
+  4. [Management Node](#management-node)
+      1. [Master](#management-node-master)
+      2. [Worker](#management-node-worker)
+      3. [Storage](#management-node-storage)
+  5. [Application Node](#application-node)
+      1. [Single Node Chassis](#application-node-single-node-chassis)
+          1. [Building component names (xnames) for nodes in a single application node chassis](#application-node-single-node-chassis-xname)
+      2. [Dual Node Chassis](#application-node-dual-node-chassis)
+          1. [Building component names (xnames) for nodes in a dual application node chassis](#application-node-dual-node-chassis-xname)
+  6. [Columbia Slingshot Switch](#columbia-slingshot-switch)
+  7. [PDU Cabinet Controller](#pdu-cabinet-controller)
+  8. [Cooling Door](#cooling-door)
+  9. [Management Switches](#management-switches)
 
 <a name="introduction"></a>
 ## Introduction
@@ -518,7 +520,7 @@ The `Source` field needs to match both of the following conditions:
 
 The integer number after the prefix is used to determine the hostname of the master node. For example, `mn02` corresponds to host name `ncn-m002`.
 
-Typically, the BMC of the first master node is not connected to the HMN network, as its BMC is connected to the site network.
+Typically, the BMC of the first master node is not connected to the HMN, as its BMC is connected to the site network.
 
 #### SHCD
 Example master node where its BMC is connected to the HMN. The master node is in slot 2 in cabinet 3000, and its BMC is connected to port 25 in the management leaf-bmc switch in slot 14 of cabinet 3000.
@@ -712,7 +714,7 @@ The `Source` field needs to match these conditions to be considered an applicati
   * `uan`
   * `gn`
   * `ln`
-  > The naming conventions for application nodes can be unique to a system. Refer to the [application node config procedure](create_application_node_config_yaml.md) for the process to to adding additional `Source` name prefixes for application nodes.
+  > The naming conventions for application nodes can be unique to a system. Refer to the [Create Application Node Config YAML](create_application_node_config_yaml.md) procedure for the process to add additional `Source` name prefixes for application nodes.
 
 
 <a name="application-node-single-node-chassis"></a>
