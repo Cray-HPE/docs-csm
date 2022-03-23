@@ -23,7 +23,7 @@ The initial VCS login credentials for the `crayvcs` user are stored in three pla
 
 -   `vcs-user-credentials` Kubernetes secret: This is used to initialize the other two locations, as well as providing a place where other users can query for the password.
 -   VCS \(Gitea\): These credentials are used when pushing to Git using the default username and password. The password should be changed through the Gitea UI.
--   Keycloak: These credentials are used to access the VCS UI. They must be changed through Keycloak.  For more information on accessing Keycloak, see [Access the Keycloak User Management UI](../security_and_authentication/Access_the_Keycloak_User_Management_UI.md)
+-   Keycloak: These credentials are used to access the VCS UI. They must be changed through Keycloak. For more information on accessing Keycloak, see [Access the Keycloak User Management UI](../security_and_authentication/Access_the_Keycloak_User_Management_UI.md).
 
 **WARNING:** These three sources of credentials are not synced by any mechanism. Changing the default password requires that is it changed in all three places. Changing only one may result in difficulty determining the password at a later date, or may result in losing access to VCS altogether.
 
