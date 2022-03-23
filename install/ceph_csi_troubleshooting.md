@@ -12,15 +12,16 @@ If there has been a failure to initialize all Ceph CSI components on `ncn-s001`,
 <a name="verify_ceph_csi"></a>
 ### 1. Verify Ceph CSI
 
-Verify that the ceph-csi requirements are in place
+Verify that the ceph-csi requirements are in place.
 
-   1. Log in to `ncn-s001` and run this command
+   1. Log in to `ncn-s001` and run the following command.
 
       ```bash
       ncn-s001# ceph -s
       ```
       If it returns a connection error, then assume Ceph is not installed. See [Rerun Storage Node `cloud-init`](#rerun_storage_node_cloud-init).
-   1. Verify all post-Ceph-install tasks have run
+   
+   1. Verify all post-Ceph-install tasks have run.
 
       Log in to `ncn-s001` and check `/etc/cray/ceph` for completed task files `ceph_k8s_initialized` and `csi_initialized`.
 
@@ -31,7 +32,7 @@ Verify that the ceph-csi requirements are in place
 
       Check your results against this example.
 
-      If any components are missing, See [Rerun Storage Node `cloud-init`](#rerun_storage_node_cloud-init).
+      If any components are missing, see [Rerun Storage Node `cloud-init`](#rerun_storage_node_cloud-init).
 
    1. Check to see if ceph-csi prerequisites have been created in Kubernetes.
 

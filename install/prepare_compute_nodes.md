@@ -34,7 +34,7 @@ on. The node indicator is always a 0. For example, `x3000c0s30b1n0` or
 
    <a name="gather_information"></a>
 
-1. Gather information
+1. Gather information.
 
    The following is an example using `x3000c0s30b1n0` as the target compute node
    component name (xname):
