@@ -44,7 +44,7 @@ This procedure will perform an verify the following:
 
 3.  Perform a dry-run of allocating IP addresses for the NCN:
     ```bash
-    ./add_management_ncn.py allocate-ips \
+    ncn-m# ./add_management_ncn.py allocate-ips \
         --xname $XNAME \
         --alias $NODE
     ```
@@ -76,7 +76,7 @@ This procedure will perform an verify the following:
 4.  Allocate IP addresses for the NCN in SLS and HSM by adding the `--perform-changes` argument to the command ran in the previous step:
 
     ```bash
-    ./add_management_ncn.py allocate-ips \
+    ncn-m# ./add_management_ncn.py allocate-ips \
         --xname $XNAME \
         --alias $NODE \
         --perform-changes
