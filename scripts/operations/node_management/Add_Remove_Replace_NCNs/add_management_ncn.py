@@ -298,8 +298,22 @@ def search_hsm_state_components(session: requests.Session, nid: int):
 
     return action, action["response"]["Components"]
 
+def create_hsm_state_component(session: requests.Session, component: dict):
+    print(f'Creating component {component["ID"]} in HSM State Component...')
+
+    payload = {"Components": [component]}
+    r = session.post(f'{HSM_URL}/State/Components', json=payload)
+
+    if r.status_code != http.HTTPStatus.NO_CONTENT:
+        print(f'Error failed to create  {component["ID"]}, unexpected status code {r.status_code}')
+        sys.exit(1)
+
+    print(f'Created {component["ID"]} in HSM State Components')
+    print(json.dumps(payload, indent=2))
+
+
 def create_hsm_inventory_ethernet_interfaces(session: requests.Session, ei: dict):
-    print(f'Creating {ei["MACAddress"]} in HSM...')
+    print(f'Creating {ei["MACAddress"]} in HSM Ethernet Interfaces...')
     r = session.post(f'{HSM_URL}/Inventory/EthernetInterfaces', json=ei)
 
     if r.status_code != http.HTTPStatus.CREATED:
@@ -1258,18 +1272,19 @@ def ncn_data_command(session: requests.Session, args, state: State):
         macs["mgmt2"] = args.mac_mgmt2
     if args.mac_mgmt3 is not None:
         macs["mgmt3"] = args.mac_mgmt3
-    if args.mac_lan0 is not None:
-        macs["lan0"] = args.mac_lan0
-    if args.mac_lan1 is not None:
-        macs["lan1"] = args.mac_lan1
-    if args.mac_lan2 is not None:
-        macs["lan2"] = args.mac_lan2
-    if args.mac_lan3 is not None:
-        macs["lan3"] = args.mac_lan3
-    if args.mac_hsn0 is not None:
-        macs["hsn0"] = args.mac_hsn0
-    if args.mac_hsn1 is not None:
-        macs["hsn1"] = args.mac_hsn1
+    if not is_m001:
+        if args.mac_lan0 is not None:
+            macs["lan0"] = args.mac_lan0
+        if args.mac_lan1 is not None:
+            macs["lan1"] = args.mac_lan1
+        if args.mac_lan2 is not None:
+            macs["lan2"] = args.mac_lan2
+        if args.mac_lan3 is not None:
+            macs["lan3"] = args.mac_lan3
+        if args.mac_hsn0 is not None:
+            macs["hsn0"] = args.mac_hsn0
+        if args.mac_hsn1 is not None:
+            macs["hsn1"] = args.mac_hsn1
 
     # Normalize MACs
     for interface in macs:
@@ -1747,6 +1762,40 @@ def ncn_data_command(session: requests.Session, args, state: State):
 
 
     #
+    # Create an try under HSM State Components for ncn-m001. 
+    # The other NCNs will be populated by the normal HSM Discovery/Invnetory process, but since 
+    # the BMC of ncn-m001 is not connected to the HMN, we need to manually do this.
+    #
+    if is_m001:
+        #     component := base.Component{
+		# 	ID:      ncn.Xname,
+		# 	Type:    "Node",
+		# 	Flag:    "OK",
+		# 	State:   "Ready",
+		# 	Enabled: &true,
+		# 	Role:    extraProperties.Role,
+		# 	SubRole: extraProperties.SubRole,
+		# 	NID:     json.Number(strconv.Itoa(extraProperties.NID)),
+		# 	NetType: "Sling",
+		# 	Arch:    "X86",
+		# 	Class:   "River",
+		# }
+        component = {
+            "ID": state.ncn_xname,
+            "Flag": "OK",
+            "State": "Ready",
+            "Enabled": True,
+            "Role": "Management",
+            "SubRole": state.ncn_subrole,
+            "NID": nid,
+            "NetType": "Sling",
+            "Arch": "X86",
+            "Class": "River"
+        }
+
+        create_hsm_state_component(session, component)
+
+    #
     # Update Global host_records in BSS with IPs
     #
     if not state.use_existing_ip_addresses:
@@ -1755,7 +1804,6 @@ def ncn_data_command(session: requests.Session, args, state: State):
     #
     # Create new Bootparameters in BSS
     #
-
     print(f"Adding bootparameters for {state.ncn_xname} in BSS ")
     print(json.dumps(bootparams, indent=2))
     if args.perform_changes:
