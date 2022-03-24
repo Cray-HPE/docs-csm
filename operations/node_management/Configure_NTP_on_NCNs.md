@@ -312,8 +312,8 @@ Adjust the node images so that they also boot in the local timezone. This is acc
 [Change NCN Image Root Password and SSH Keys on PIT Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_node.md)
 for more information.
 
+   **Note:** Make a note that when performing the [csi handoff of NCN boot artifacts in Redeploy PIT Node](../../install/redeploy_pit_node.md#ncn-boot-artifacts-hand-off), these new images are specified. Otherwise ncn-m001 will use the default timezone when it boots, and subsequent reboots of the other NCNs will also lose the customized timezone changes.
+
 1. If the PIT node is not booted, see
 [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 for more information.
-
-1. Make a note that when performing the [csi handoff of NCN boot artifacts in Redeploy PIT Node](../../install/redeploy_pit_node.md#ncn-boot-artifacts-hand-off), these new images are specified. Otherwise ncn-m001 will use the default timezone when it boots, and subsequent reboots of the other NCNs will also lose the customized timezone changes.
