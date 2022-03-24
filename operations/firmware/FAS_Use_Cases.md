@@ -1,4 +1,4 @@
-## FAS Use Cases
+# FAS Use Cases
 
 Use the Firmware Action Service (FAS) to update the firmware on supported hardware devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
 

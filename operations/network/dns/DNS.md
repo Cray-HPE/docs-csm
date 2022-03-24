@@ -1,4 +1,4 @@
-## Domain Name Service (DNS)
+# Domain Name Service (DNS)
 
 The central DNS infrastructure provides the structural networking hierarchy and datastore for the system. All DNS requests are managed by resolvers, not by the central DNS infrastructure. Resolvers provide the following within DNS:
 

@@ -1,10 +1,8 @@
-
-## End-User UAIs
+# End-User UAIs
 
 UAIs used for interactive logins are called end-user UAIs. End-user UAIs can be seen as lightweight User Access Nodes (UANs), but there are important differences between UAIs and UANs. First, end-user UAIs are not dedicated hardware like UANs. They are implemented as containers orchestrated by Kubernetes, which makes them subject to Kubernetes scheduling and resource management rules. One key element of Kubernetes orchestration is impermanence. While end-user UAIs are often long running, Kubernetes can reschedule or recreate them as needed to meet resource and node availability constraints. UAIs can also be removed administratively. When either of these things happen, a new UAI may be created, but that new UAI reverts to its initial state, discarding any internal changes that might have been made in its previous incarnation. An administratively removed end-user UAI may or may not ever be re-created, and an end-user UAI that is preempted because of resource pressure may become unavailable for an extended time until the pressure is relieved.
 
 The impermanence of end-user UAIs makes them suitable for tasks that are immediate and interactive over relatively short time frames, such as building and testing software or launching workloads. It makes them unsuitable for unattended activities like executing cron jobs or monitoring progress of a job in a logged-in shell unless those activities are built into the UAI image itself (more on custom UAI images later). These kinds of activities are more suited to UANs, which are more permanent and, unless they are re-installed, retain modified state through reboots and so forth.
 
 Another way end-user UAIs differ from UANs is that any given end-user UAI is restricted to serving a single user. This protects users from interfering with each other within UAIs and means that any user who wants to use a UAI has to arrange for the UAI to be created and assigned. Once a user has an end-user UAI assigned, the user may initiate any number of SSH sessions to that UAI, but no other user will be recognized by the UAI when attempting to connect.
-
 

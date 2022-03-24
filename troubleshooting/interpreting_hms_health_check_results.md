@@ -1,4 +1,4 @@
-## Interpreting HMS Health Check Results
+# Interpreting HMS Health Check Results
 
 ### Table of contents:
 1. [Introduction](#introduction)

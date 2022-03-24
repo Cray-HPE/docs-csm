@@ -1,5 +1,4 @@
-
-## Troubleshoot UAIs with Administrative Access
+# Troubleshoot UAIs with Administrative Access
 
 Sometimes there is no better way to figure out a problem with a UAI than to get inside it and look around as an administrator. This is done using `kubectl exec` to start a shell inside the running container as "root" (in the container). With this an administrator can diagnose problems, make changes to the running UAI and find solutions. It is important to remember that any change made inside a UAI is transitory. These changes only last as long as the UAI is running. To make a permanent change, either the UAI image has to be changed or external customizations must be applied.
 

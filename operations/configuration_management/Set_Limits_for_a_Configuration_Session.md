@@ -1,4 +1,4 @@
-## Set Limits for a Configuration Session
+# Set Limits for a Configuration Session
 
 The configuration layers and session hosts can be limited when running a Configuration Framework Service \(CFS\) session.
 
@@ -81,5 +81,4 @@ ncn# cray cfs sessions create --name example \
   }
 }
 ```
-
 

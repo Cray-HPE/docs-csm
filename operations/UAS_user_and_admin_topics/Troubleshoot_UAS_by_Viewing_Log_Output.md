@@ -1,5 +1,4 @@
-
-## Troubleshoot UAS by Viewing Log Output
+# Troubleshoot UAS by Viewing Log Output
 
 At times there will be problems with UAS. Usually this takes the form of errors showing up on CLI commands that are not immediately interpretable as some sort of input error. It is sometimes useful to examine the UAS service logs to find out what is wrong.
 
@@ -49,5 +48,4 @@ kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v '"
 ```
 
 If an error had occurred in UAS that error would likely show up here. Because there are two replicas of `cray-uas-mgr` running, the logging of interest may be in the other pod, so apply the same command to the other pod if the information is not here.
-
 

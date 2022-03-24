@@ -1,5 +1,4 @@
-
-## Delete a UAI Image Registration
+# Delete a UAI Image Registration
 
 Unregister a UAI image from UAS.
 
@@ -24,5 +23,4 @@ Deleting a UAI image from UAS effectively unregisters the UAI image from UAS. Th
     ```
     ncn-m001-pit# cray uas admin config images delete 8fdf5d4a-c190-24c1-2b96-74ab98c7ec07
     ```
-
 

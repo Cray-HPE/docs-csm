@@ -1,4 +1,4 @@
-## Troubleshoot Common DNS Issues
+# Troubleshoot Common DNS Issues
 
 The Domain Name Service \(DNS\) is part of an integrated infrastructure set designed to provide dynamic host discovery, addressing, and naming. There are several different place to look for troubleshooting as DNS interacts with Dynamic Host Configuration Protocol \(DHCP\), the Hardware Management Service \(HMS\), the System Layout Service \(SLS\), and the State Manager Daemon \(SMD\).
 
@@ -219,6 +219,4 @@ If there is not a DHCP lease found, then:
 
 -   Ensure the system is running and that its DHCP client is still sending requests. Reboot the system via Redfish/IPMI if required.
 -   See [Troubleshoot DHCP Issues](../dhcp/Troubleshoot_DHCP_Issues.md) for more information.
-
-
 

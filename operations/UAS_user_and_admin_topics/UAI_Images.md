@@ -1,5 +1,4 @@
-
-## UAI Images
+# UAI Images
 
 There are three kinds of UAI images used by UAS:
 

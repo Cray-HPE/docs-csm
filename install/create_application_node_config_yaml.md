@@ -1,5 +1,3 @@
-
-
 # Create Application Node Config YAML
 
 This topic provides directions on constructing the `application_node_config.yaml` file. This file controls how the `csi config init` command finds and treats application nodes discovered in the `hmn_connections.json` file when generating configuration files for the system.
@@ -190,5 +188,4 @@ Example `hmn_connections.json` row representing an application node with SourceN
       x3113c0s25b0n0: ["visualization01", "vn02"]
       x3113c0s23b0n0: ["uan01"]
     ```
-
 

@@ -1,4 +1,4 @@
-## Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials
+# Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials
 
 This procedure provisions a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish default global credential to access the CMM controllers and node controllers (BMCs).
 

@@ -122,4 +122,3 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 - [Storage node](../../utility_storage/Add_Ceph_Node.md)
 - [Master node]()
 
-

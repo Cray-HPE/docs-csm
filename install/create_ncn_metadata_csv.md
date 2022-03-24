@@ -1,4 +1,3 @@
-
 # Create NCN Metadata CSV
 
 The information in the `ncn_metadata.csv` file identifies each of the management nodes, assigns the function

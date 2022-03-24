@@ -1,5 +1,4 @@
-
-## Retrieve Resource Specification Details
+# Retrieve Resource Specification Details
 
 Display a specific resource specification using the `resource_id` of that specification.
 
@@ -26,5 +25,4 @@ Install and initialize the `cray` administrative CLI.
     request = "{"cpu": "300m", "memory": "250Mi"}"
     resource_id = "85645ff3-1ce0-4f49-9c23-05b8a2d31849"
     ```
-
 

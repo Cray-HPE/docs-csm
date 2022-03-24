@@ -1,4 +1,4 @@
-## Save Management Network Switch Configuration Settings
+# Save Management Network Switch Configuration Settings
 
 Switches must be powered on and operating. This procedure is optional if switch configurations have not changed.
 
@@ -63,7 +63,4 @@ Switches must be powered on and operating. This procedure is optional if switch 
     r0-100gb-sw01# write memory
     r0-100gb-sw01# exit
     ```
-
-
-
 

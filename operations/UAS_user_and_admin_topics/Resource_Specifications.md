@@ -1,5 +1,4 @@
-
-## Resource Specifications
+# Resource Specifications
 
 Kubernetes uses [resource limits and resource requests](https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource), to manage the system resources available to pods. Because UAIs run as pods under Kubernetes, UAS takes advantage of Kubernetes to manage the system resources available to UAIs.
 

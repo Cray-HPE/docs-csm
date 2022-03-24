@@ -1,6 +1,4 @@
-
-
-## System Power Off Procedures
+# System Power Off Procedures
 
 The procedures in section detail the high-level tasks required to power off an HPE Cray EX system.
 
@@ -44,9 +42,4 @@ Power off the external Lustre file system (ClusterStor), see [Power Off the Exte
 ### Lockout Tagout Facility Power
 
 If facility power must be removed from a single cabinet or cabinet group for maintenance, follow proper lockout-tagout procedures for the site.
-
-
-
-
-
 

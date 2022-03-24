@@ -1,6 +1,4 @@
-
-
-## Power On and Boot Compute and User Access Nodes
+# Power On and Boot Compute and User Access Nodes
 
 Use Boot Orchestration Service \(BOS\) and choose the appropriate session template to power on and boot compute and UANs.
 
@@ -107,6 +105,4 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     ```
 
 9. Make nodes available to customers and refer to [Validate CSM Health](../validate_csm_health.md) to check system health and status.
-
-
 

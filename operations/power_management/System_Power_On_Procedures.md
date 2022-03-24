@@ -1,6 +1,4 @@
-
-
-## System Power On Procedures
+# System Power On Procedures
 
 The procedures in section detail the high-level tasks required to power on an HPE Cray EX system.
 
@@ -71,6 +69,4 @@ To power on and boot compute nodes and UANs, refer to [Power On and Boot Compute
 ### Run System Health Checks
 
 After power on, refer to [Validate CSM Health](../validate_csm_health.md) to check system health and status.
-
-
 

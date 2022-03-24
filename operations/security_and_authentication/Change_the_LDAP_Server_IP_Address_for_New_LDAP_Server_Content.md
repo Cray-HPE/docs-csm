@@ -1,4 +1,4 @@
-## Change the LDAP Server IP Address for New LDAP Server Content
+# Change the LDAP Server IP Address for New LDAP Server Content
 
 Delete the old LDAP user federation and create a new one. This procedure should only be done if the LDAP server is being replaced by a different LDAP server that has different contents.
 
@@ -17,5 +17,4 @@ The LDAP server is being replaced by a different LDAP server that has different 
 2.  Re-add the LDAP user federation in Keycloak.
 
     Follow the procedure in [Add LDAP User Federation](Add_LDAP_User_Federation.md).
-
 

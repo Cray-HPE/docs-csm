@@ -1,4 +1,4 @@
-## Troubleshoot Loss of Console Connections and Logs on Gigabyte Nodes
+# Troubleshoot Loss of Console Connections and Logs on Gigabyte Nodes
 
 Gigabyte console log information will no longer be collected, and if attempting to initiate a console session through the `cray-conman` pod, there will be an error reported. This error will occur every time the node is rebooted unless this workaround is applied.
 
@@ -36,5 +36,4 @@ Console log information is no longer being collected for Gigabyte nodes or ConMa
     ```bash
     [root@cray-conman-POD_ID app]# conman -j XNAME
     ```
-
 

@@ -1,4 +1,4 @@
-## Recover from Postgres WAL Event
+# Recover from Postgres WAL Event
 
 A WAL event can occur because of lag, network communication, or bandwidth issues. This can cause the PVC hosted by Ceph and mounted inside the container on /home/postgres/pgdata to fill and the database to stop running. If no database dump exists, the disk space issue needs to be fixed so that a dump can be taken. Then the dump can be restored to a newly created postgresql cluster. If a dump already exists, skip to [Rebuild the cluster and Restore the data](#rebuild-restore).
 

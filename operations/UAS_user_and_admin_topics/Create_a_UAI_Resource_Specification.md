@@ -1,5 +1,4 @@
-
-## Create a UAI Resource Specification
+# Create a UAI Resource Specification
 
 Add a resource specification to UAS. Once added, a resource specification can be used to limit UAI resource consumption on host nodes and enable UAIs to access external data.
 
@@ -28,6 +27,4 @@ Install and initialize the `cray` administrative CLI.
     The example above specifies a request / limit pair that requests and is constrained to 300 milli-CPUs (0.3 CPUs) and 250 MiB of memory (`250 * 1024 * 1024` bytes) for any UAI created with this limit specification. By keeping the request and the limit the same, this ensures that a host node will not be oversubscribed by UAIs. It is also legitimate to request less than the limit, though that risks over-subscription and is not recommended in most cases. If the request is greater than the limit, UAIs created with the request specification will never be scheduled because they will not be able to provide the requested resources.
 
     All of the configurable parts are optional when adding a resource specification. If none are provided, an empty resource specification with only a `resource_id` will be created.
-
-
 

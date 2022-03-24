@@ -1,5 +1,3 @@
-
-
 # Cray System Management (CSM) Administration Guide
 
 The Cray System Management (CSM) operational activities are administrative procedures required to operate an HPE Cray EX system with CSM software installed.

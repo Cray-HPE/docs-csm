@@ -1,4 +1,4 @@
-## Troubleshoot CAN Issues
+# Troubleshoot CAN Issues
 
 Various connection points to check when using the CAN and how to fix any issues that arise.
 
@@ -109,6 +109,4 @@ round-trip min/avg/max/stddev = 51.960/57.045/65.902/4.776 ms
 ```
 
 If the CAN gateway cannot be reached from outside, check the spine switch configuration and the connection to the customer network.
-
-
 

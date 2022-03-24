@@ -1,4 +1,4 @@
-## Troubleshoot DHCP Issues
+# Troubleshoot DHCP Issues
 
 There are several things to check for when troubleshooting issues with Dynamic Host Configuration Protocol \(DHCP\) servers.
 
@@ -237,5 +237,4 @@ VRF Name default:
                                       c        10.252.0.5        vlan2            bgp        200/0
                                       c        10.252.0.6        vlan2            bgp        200/0
 ```
-
 

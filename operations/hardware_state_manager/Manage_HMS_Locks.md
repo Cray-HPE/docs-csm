@@ -1,4 +1,4 @@
-## Manage HMS Locks
+# Manage HMS Locks
 
 This section describes how to check the status of a lock, disable reservations, and repair reservations. The disable and repair operations only affect the ability to make reservations on hardware devices.
 

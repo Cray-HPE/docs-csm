@@ -1,5 +1,4 @@
-
-## Reset the UAS Configuration to Original Installed Settings
+# Reset the UAS Configuration to Original Installed Settings
 
 How to remove a customized UAS configuration and restore the base installed configuration.
 
@@ -32,5 +31,4 @@ This procedure requires administrator privileges.
     ```bash
     ncn-w001 # cray uas admin config delete -y
     ```
-
 

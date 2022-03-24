@@ -1,15 +1,15 @@
-## Updating BMC Firmware and BIOS for ncn-m001
+# Updating BMC Firmware and BIOS for ncn-m001
 
 **NOTE:** ON HPE nodes, the BMC is iLO 5 and BIOS is System ROM
 
-**The commands in the procedure must be run on ncn-m001**
+**The commands in the procedure must be run on `ncn-m001`**
 
 **Prerequisite:**
 
 The following information is needed:
-* IP Address of ncn-m001 bmc
-* IP Address of ncn-m001
-* Root password for ncn-m001 bmc
+* IP Address of `ncn-m001` bmc
+* IP Address of `ncn-m001`
+* Root password for `ncn-m001` bmc
 
 ### Find the Model Name
 Use one of the following commands to find the model name for the node type in use.

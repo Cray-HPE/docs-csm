@@ -1,6 +1,4 @@
-
-
-## Restore Spire Postgres without an Existing Backup
+# Restore Spire Postgres without an Existing Backup
 
 Reinstall the Spire helm chart in the
 event that spire-postgres databases cannot be restored from a backup.

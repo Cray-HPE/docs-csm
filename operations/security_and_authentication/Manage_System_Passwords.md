@@ -1,6 +1,4 @@
-
-
-## Manage System Passwords
+# Manage System Passwords
 
 Many system services require login credentials to gain access to them. The information below is a comprehensive list of system passwords and how to change them.
 
@@ -316,5 +314,3 @@ Refer to the following product stream documentation for detailed procedures abou
 **Cray Operating System (COS):** To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the COS product stream documentation for more information. 
 
 **User Access Node (UAN):** Refer to "Create UAN Boot Images" in the UAN product stream documenation for the steps required to change the password on UANs. The "uan_shadow" header in the "UAN Ansible Roles" section includes more context on setting the root password on UANS.
-
-

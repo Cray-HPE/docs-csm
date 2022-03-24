@@ -1,4 +1,4 @@
-## Add TLS Certificates to BMCs
+# Add TLS Certificates to BMCs
 
 Use the System Configuration Service \(SCSD\) tool to create TLS certificates and store them in Vault secure storage. Once certificates are created, they are placed on to the target BMCs.
 
@@ -242,6 +242,4 @@ At any point the TLS certs can be re-generated and replaced on Redfish BMCs. The
 
 2.  Regenerate the TLS cabinet-level certificates as done is the preceding step.
 3.  Place the TLS certificates onto the Redfish BMCs as in the preceding step.
-
-
 

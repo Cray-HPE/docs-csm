@@ -180,4 +180,3 @@ In order to zap a single OSD, it is necessary to gather some information.
    ncn-s# ceph orch device zap ncn-s002 /dev/sdf
    ```
 
-

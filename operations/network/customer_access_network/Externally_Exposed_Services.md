@@ -1,4 +1,4 @@
-## Externally Exposed Services
+# Externally Exposed Services
 
 The following services are exposed on the Customer Access Network \(CAN\). Each of these services requires an IP address on the CAN subnet so they are reachable on the CAN. This IP address is allocated by the MetalLB component.
 
@@ -29,6 +29,4 @@ See [External DNS](../external_dns/External_DNS.md) for more information.
 |Rsyslog Aggregator|rsyslog|customer-access|Yes|514/8514| |
 |UAI| |customer-access|Yes \(multiple\)|22|Can be several of these each with a unique ID|
 |IMS|<uid\>.ims|customer-access|Yes \(multiple\)|22|Can be several of these each with a unique ID|
-
-
 

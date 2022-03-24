@@ -1,5 +1,4 @@
-
-## UAI Classes
+# UAI Classes
 
 This topic explains all the fields in a User Access Instance (UAI) class and gives guidance on setting them when creating UAI classes.
 

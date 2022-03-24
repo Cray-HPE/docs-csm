@@ -1,4 +1,4 @@
-## Change the LDAP Server IP Address for Existing LDAP Server Content
+# Change the LDAP Server IP Address for Existing LDAP Server Content
 
 The IP address that Keycloak is using for the LDAP server can be changed. In the case where the new LDAP server has the same contents as the previous LDAP server, edit the LDAP user federation to switch Keycloak to use the new LDAP server.
 
@@ -104,6 +104,4 @@ Follow the steps in only one of the sections below depending on if it is preferr
     HTTP/2 204
     ...
     ```
-
-
 

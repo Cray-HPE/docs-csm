@@ -1,4 +1,4 @@
-## Restore an etcd Cluster from a Backup
+# Restore an etcd Cluster from a Backup
 
 Use an existing backup of a healthy etcd cluster to restore an unhealthy cluster to a healthy state.
 
@@ -62,7 +62,3 @@ A backup of a healthy etcd cluster has been created.
         ncn-w001# kubectl -n services delete etcdrestore.etcd.database.coreos.com/cray-bos-etcd
         etcdrestore.etcd.database.coreos.com "cray-bos-etcd" deleted
         ```
-
-
-
-

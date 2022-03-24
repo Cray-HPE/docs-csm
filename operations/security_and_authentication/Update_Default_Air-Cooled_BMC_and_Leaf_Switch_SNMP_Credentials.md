@@ -220,4 +220,3 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     SNMPUsername        testuser
     ```
 
-    
