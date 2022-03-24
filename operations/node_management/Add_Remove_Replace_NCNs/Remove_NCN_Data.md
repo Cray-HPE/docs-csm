@@ -19,10 +19,10 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
                 | jq -r '.access_token')
     ```
 
-    Set the username and password to the BMC for the NCN. This step is required for every NCN except ncn-m001.
+    Set the IPMI password for the BMC for the NCN. This step is required for every NCN except ncn-m001. The default username will be root.
+    Set IPMI_USERNAME if this needs to be different for the given BMC.
 
     ```bash
-    ncn-mw# export IPMI_USERNAME=root
     ncn-mw# export IPMI_PASSWORD=changeme
     ```
 
