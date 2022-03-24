@@ -446,4 +446,3 @@ This example uses a Keycloak account with username `USERNAME` and password `PASS
 # Keycloak user
 # curl -i -sfv -u "USERNAME:PASSWORD" -H "accept: application/json" -X GET https://packages.local/service/rest/beta/security/user-sources
 ```
-
