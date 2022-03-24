@@ -50,7 +50,7 @@ S3FS is being deployed as tool to provide temporary relief of space usage as wel
 
    2. Mount w/ cache
 
-      ***IMPORTANT:*** To use this option there must be a dedicated landing spacethat is a partition. This ensures the usage does not impact the root drive.
+      ***IMPORTANT:*** To use this option there must be a dedicated landing space that is a partition. This ensures that the usage does not impact the root drive.
 
       ```text
       s3fs <radosgw-user> <mount path>  -o passwd_file=${HOME}/.<filename>.s3fs,url=http://rgw-vip.nmn,use_path_request_style,use_cache=<dedicated_cache_partition_location>,check_cache_dir_exist=true
