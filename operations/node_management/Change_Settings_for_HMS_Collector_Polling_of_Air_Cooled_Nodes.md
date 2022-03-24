@@ -1,4 +1,4 @@
-## Change Settings for HMS Collector Polling of Air Cooled Nodes
+# Change Settings for HMS Collector Polling of Air Cooled Nodes
 
 The cray-hms-hmcollector service polls all Air Cooled hardware to gather the necessary telemetry information for use by other services, such as the Cray Advanced Platform Monitoring and Control \(CAPMC\) service. This polling occurs every 10 seconds on a continual basis. Instabilities with the AMI Redfish implementation in the Gigabyte BMCs requires a less significant approach when gathering power and temperature telemetry data. If the BMCs are overloaded, they can become unresponsive, return incorrect data, or encounter other errors.
 
@@ -93,6 +93,4 @@ If the reset does not recover the BMCs, then use the following steps to shut dow
     ```
 
 After these steps, the nodes should be ready to be booted again with the Boot Orchestration Service (BOS).
-
-
 

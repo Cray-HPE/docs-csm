@@ -1,4 +1,3 @@
-
 # Scenario B: Network Connection via High-Speed Network
 
 This example covers outside connections achieved via highspeed network. 

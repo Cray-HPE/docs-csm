@@ -1,6 +1,4 @@
-
-
-## Power Off Compute and IO Cabinets
+# Power Off Compute and IO Cabinets
 
 Power off HPE Cray EX liquid-cooled and standard racks.
 
@@ -148,6 +146,4 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 5.  To power off Motivair liquid-cooled chilled doors and CDU, locate the power off switch on the CDU control panel and set it to OFF as shown in step 8.
 
     Refer to vendor documentation for the chilled-door cooling system for power control procedures when chilled doors are installed on standard racks.
-
-
 

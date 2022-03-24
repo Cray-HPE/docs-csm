@@ -65,6 +65,3 @@ For each ServerTech PDU:
    }
    ```
 
-
-
-

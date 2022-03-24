@@ -151,4 +151,3 @@ x3000c0h33s1,Spine,Mellanox
 x3000c0h33s2,Spine,Mellanox
 ```
 
-

@@ -1,4 +1,4 @@
-## Reset Credentials on Redfish Devices
+# Reset Credentials on Redfish Devices
 
 Before re-installing or upgrading the system the credentials need to be changed back to their defaults for any devices that had their credentials changed post-install. This is necessary for the installation process to properly discover and communicate with these devices.
 

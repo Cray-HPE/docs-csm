@@ -1,4 +1,4 @@
-## Update Compute Node Mellanox HSN NIC Firmware
+# Update Compute Node Mellanox HSN NIC Firmware
 
 This procedure updates liquid-cooled or standard rack compute node NIC mezzanine cards \(NMC\) firmware for Slingshot 10 Mellanox ConnectX-5 NICs. The deployed RPM on compute nodes contains the scripts and firmware images required to perform the firmware and configuration updates.
 

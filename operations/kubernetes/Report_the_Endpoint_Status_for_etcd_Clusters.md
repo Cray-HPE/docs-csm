@@ -1,4 +1,4 @@
-## Report the Endpoint Status for etcd Clusters
+# Report the Endpoint Status for etcd Clusters
 
 Report etcd cluster end point status. The report includes a cluster's endpoint, database size, and leader status.
 
@@ -125,7 +125,4 @@ This procedure provides the ability to view the etcd cluster endpoint status.
     +----------------+------------------+---------+---------+-----------+-----------+------------+
 
     ```
-
-
-
 

@@ -115,4 +115,3 @@ Currently, only `smf` includes a quota.
       default.rgw.buckets.non-ec     11         0 B           0         0 B         0       9.9 TiB     N/A               N/A                   0            0 B             0 B
     ```
 
-

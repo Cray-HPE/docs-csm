@@ -185,4 +185,3 @@ Results may vary if an unconfigured switch is being used.
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    ```
 
-   

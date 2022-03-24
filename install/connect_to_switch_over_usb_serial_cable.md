@@ -1,5 +1,3 @@
-
-
 # Connect to Switch over USB-Serial Cable
 
 In the event that network plumbing is lacking, down, or unconfigured for procuring devices, then it is
@@ -69,5 +67,4 @@ Observe the `dmesg -w` output. Does it show errors pertaining to USB? The cable 
 [3]: https://docs.mellanox.com/display/MLNXOSv381000/MLNX-OS+User+Manual+v3.8.1000
 [4]: https://www.amazon.com/OIKWAN-Essential-Accesory-Ubiquity-Switches/dp/B082VZTB57/ref=sr_1_5?dchild=1&keywords=usb+to+rj-45+serial&qid=1605474086&sr=8-5
 [5]: https://www.amazon.com/dp/B086JKTYCR/ref=cm_sw_em_r_mt_dp_FEzSFbE6MSPHW?_encoding=UTF8&psc=1
-
 

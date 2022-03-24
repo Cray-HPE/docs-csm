@@ -1,4 +1,4 @@
-## Required Labels if CAN is Not Configured
+# Required Labels if CAN is Not Configured
 
 Some services on the system are required to access services outside of the HPE Cray EX system. If the Customer Access Network \(CAN\) is not configured on the system, these services will need to be pinned to `ncn-m001` because that is the only node that has external access. See [Customer Access Network \(CAN\)](Customer_Access_Network_CAN.md) for more implications if CAN is not configured.
 
@@ -50,5 +50,4 @@ To view the labels applied to each node:
 ```bash
 ncn-m001# kubectl get nodes --show-labels
 ```
-
 

@@ -1,4 +1,4 @@
-## Track the Status of a Session
+# Track the Status of a Session
 
 A configuration session can be a long-running process, and depends on many system factors, as well as the number of configuration layers and Ansible tasks that are run in each layer. The Configuration Framework Service \(CFS\) provides the session status through the session metadata to allow for tracking progress and session state.
 
@@ -66,6 +66,4 @@ The `.status.session` mapping shows the overall status of the configuration sess
 `"none"` occurs if the session has not yet completed, and `"unknown"` occurs when the session is deleted mid-run, there is an error creating the session and it never starts, or any similar case where checking the session status would fail to find the underlying Kubernetes job running the CFS session.
 
 Values of `.status` can be `"pending"`, `"running"`, or `"complete"`.
-
-
 

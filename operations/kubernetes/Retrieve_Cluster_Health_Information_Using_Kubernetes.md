@@ -1,4 +1,4 @@
-## Retrieve Cluster Health Information Using Kubernetes
+# Retrieve Cluster Health Information Using Kubernetes
 
 The `kubectl` CLI commands can be used to retrieve information about the Kubernetes cluster components.
 
@@ -151,7 +151,4 @@ weave-net-xnlm9                  2/2       Running   30         11d
 ```bash
 ncn# kubectl logs -n NAMESPACE_NAME POD_NAME
 ```
-
-
-
 

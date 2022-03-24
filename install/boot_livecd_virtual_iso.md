@@ -1,5 +1,3 @@
-
-
 # Boot LiveCD Virtual ISO
 
 This page will walk-through booting the LiveCD `.iso` file directly onto a BMC.
@@ -128,5 +126,4 @@ mount -o remount /
 ```
 
 If the `squashfs` files were excluded from the backup, repopulate them following the configuration section.
-
 

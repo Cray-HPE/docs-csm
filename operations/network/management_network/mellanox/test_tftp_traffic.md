@@ -1,4 +1,3 @@
-
 # Test TFTP traffic (Aruba Only)
 
 * You can test the TFTP traffic by trying to download the ipxe.efi binary.

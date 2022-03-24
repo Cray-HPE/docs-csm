@@ -1,4 +1,4 @@
-## Updating BMC Firmware and BIOS for ncn-m001
+# Updating BMC Firmware and BIOS for ncn-m001
 
 **NOTE:** On HPE nodes, the BMC Firmware is iLO 5 and BIOS is System ROM
 

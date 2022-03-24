@@ -1,4 +1,4 @@
-## Manage Repositories with Nexus
+# Manage Repositories with Nexus
 
 This section describes how to connect to Nexus with the Web UI, as well as how to access the REST API from non-compute nodes \(NCNs\) or compute nodes to manage repositories.
 

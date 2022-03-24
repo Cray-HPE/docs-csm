@@ -1,4 +1,4 @@
-## Update the cmn-external-dns Value Post-Installation
+# Update the cmn-external-dns Value Post-Installation
 
 By default, the `services/cray-externaldns-coredns-tcp` and `services/cray-externaldns-coredns-udp` services both share the same Customer Management Network \(CMN\) external IP as defined by the `cmn-external-dns` value. This value is specified during the `csi config init` input.
 
@@ -38,5 +38,4 @@ The system is installed.
         ```bash
         ncn-w001# kubectl -n services edit svc cray-externaldns-coredns-udp
         ```
-
 

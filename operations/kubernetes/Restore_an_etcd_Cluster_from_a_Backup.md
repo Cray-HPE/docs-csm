@@ -1,4 +1,4 @@
-## Restore an etcd Cluster from a Backup
+# Restore an etcd Cluster from a Backup
 
 Use an existing backup of a healthy etcd cluster to restore an unhealthy cluster to a healthy state.
 
@@ -122,6 +122,4 @@ etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
         ```
         etcdrestore.etcd.database.coreos.com "cray-bos-etcd" deleted
         ```
-
-
 

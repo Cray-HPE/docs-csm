@@ -1,5 +1,4 @@
-
-## Shut Down and Power Off the Management Kubernetes Cluster
+# Shut Down and Power Off the Management Kubernetes Cluster
 
 Shut down management services and power off the HPE Cray EX management Kubernetes cluster.
 
@@ -294,6 +293,4 @@ An authentication token is required to access the API gateway and to use the `sa
     **CAUTION:** The modular coolant distribution unit \(MDCU\) in a liquid-cooled HPE Cray EX2000 cabinet (also referred to as a Hill or TDS cabinet) typically receives power from its management cabinet PDUs. If the system includes an EX2000 cabinet, **do not power off** the management cabinet PDUs, Powering off the MDCU will cause an emergency power off \(EPO\) of the cabinet and may result in data loss or equipment damage.
 
 12. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, power off the PDU circuit breakers or disconnect the PDUs from facility power and follow lockout/tagout procedures for the site.
-
-
 

@@ -1,5 +1,4 @@
-
-## Remove Artifacts from Product Installations
+# Remove Artifacts from Product Installations
 
 Remove product artifacts that were imported from various Cray products. These instructions provide guidance for removing Image Management Service (IMS) images, IMS recipes, and Git repositories present in the Cray Product Catalog from the system.
 

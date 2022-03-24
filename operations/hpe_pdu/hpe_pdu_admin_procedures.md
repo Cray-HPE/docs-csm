@@ -1,4 +1,4 @@
-## HPE PDU Admin Procedures
+# HPE PDU Admin Procedures
 
 The following procedures are used to manage the HPE Power Distribution Unit (PDU):
 

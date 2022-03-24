@@ -82,6 +82,3 @@ __________________________________
 ### Factory reset
   1. [Reset configuration](./reset.md)
  
-
-
-

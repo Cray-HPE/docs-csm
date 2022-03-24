@@ -1,5 +1,4 @@
-
-## Troubleshoot Compute Node Boot Issues Related to the Boot Script Service \(BSS\)
+# Troubleshoot Compute Node Boot Issues Related to the Boot Script Service \(BSS\)
 
 Boot Script Service \(BSS\) delivers a boot script to a node based on its MAC address. This boot script tells the node where to obtain its boot artifacts, which include:
 
@@ -71,7 +70,4 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     ```bash
     ncn-m001# cray bss bootscript list --nid NODE_ID
     ```
-
-
-
 
