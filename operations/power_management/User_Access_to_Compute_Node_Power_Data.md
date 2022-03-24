@@ -1,6 +1,4 @@
-
-
-## User Access to Compute Node Power Data
+# User Access to Compute Node Power Data
 
 Shasta Liquid Cooled AMD EPYC compute node power management data available to users.
 
@@ -35,8 +33,4 @@ Access to compute node power and energy data is provided by a set of files locat
 |version|Version number for power management counter support.|
 |power\_cap|Current power cap limit in Watts; 0 indicates no capping. When accelerators are present, includes accel\_power\_cap.|
 |raw\_scan\_hz|The power management scanning rate for all data in pm\_counters.|
-
-
-
-
 

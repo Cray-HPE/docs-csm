@@ -1,4 +1,3 @@
-
 # Address Resolution Protocol (ARP) 
 
 ARP is commonly used for mapping IPv4 addresses to MAC addresses. 

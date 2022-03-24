@@ -1,4 +1,4 @@
-## Containerd
+# Containerd
 
 Containerd is a daemonset that runs on the host. It is used to run containers on the Kubernetes platform.
 

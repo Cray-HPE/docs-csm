@@ -1,4 +1,4 @@
-## FAS Filters
+# FAS Filters
 
 FAS uses five primary filters for `actions` and `snapshots` to determine what operations to create. The filters are listed below:
 

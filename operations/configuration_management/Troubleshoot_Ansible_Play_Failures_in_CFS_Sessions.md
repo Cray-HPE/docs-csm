@@ -1,4 +1,4 @@
-## Troubleshoot Ansible Play Failures in CFS Sessions
+# Troubleshoot Ansible Play Failures in CFS Sessions
 
 View the Kubernetes logs for a Configuration Framework Service \(CFS\) pod in an error state to determine whether the error resulted from the CFS infrastructure or from an Ansible play that was run by a specific configuration layer in a CFS session.
 
@@ -115,6 +115,4 @@ A configuration session exists for CFS.
 
 
 Run the Ansible play again once the underlying issue has been resolved.
-
-
 

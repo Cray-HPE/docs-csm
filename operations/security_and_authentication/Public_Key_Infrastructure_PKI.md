@@ -1,4 +1,4 @@
-## Public Key Infrastructure \(PKI\)
+# Public Key Infrastructure \(PKI\)
 
 Public Key Infrastructure \(PKI\) represents the algorithms, infrastructure, policies, and processes required to leverage applied public key cryptography methods for operational security use cases. The Rivest-Shamir-Adleman \(RSA\) and Elliptic-curve \(ECC\) are some example algorithm systems.
 
@@ -52,6 +52,4 @@ The following limitations exist within the PKI implementation:
 
 -   Key Escrow
     -   The platform does not provide any key escrow services.
-
-
 

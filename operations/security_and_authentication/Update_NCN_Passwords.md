@@ -1,4 +1,4 @@
-## Update NCN User Passwords
+# Update NCN User Passwords
 
 The management nodes deploy with a default password in the image, so it is a recommended best
 practice for system security to change the root password in the image so that it is

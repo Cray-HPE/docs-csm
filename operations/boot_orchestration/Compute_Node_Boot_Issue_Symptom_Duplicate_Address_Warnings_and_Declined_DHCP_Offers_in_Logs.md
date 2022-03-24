@@ -1,5 +1,4 @@
-
-## Compute Node Boot Issue Symptom: Duplicate Address Warnings and Declined DHCP Offers in Logs
+# Compute Node Boot Issue Symptom: Duplicate Address Warnings and Declined DHCP Offers in Logs
 
 If the DHCP and node logs show duplicate address warnings and indicate declined DHCP offers, it may be because another component owns the IP address that DHCP is trying to assign to a node. If this happens, the node will not accept the IP address and will repeatedly submit a DHCP discover request. As a result, the node and DHCP become entangled in a loop of requesting and rejecting. This often happens when DHCP is statically assigning IP addresses to nodes, but the assigned IP address for a node has already been assigned to another component.
 

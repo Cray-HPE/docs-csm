@@ -1,5 +1,3 @@
-
-
 # Reinstall LiveCD
 
 Setup a re-install of LiveCD on a node using the previous configuration.

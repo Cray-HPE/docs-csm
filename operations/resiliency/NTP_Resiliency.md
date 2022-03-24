@@ -1,4 +1,4 @@
-## NTP Resiliency
+# NTP Resiliency
 
 Sync the time on all non-compute nodes \(NCNs\) via Network Time Protocol \(NTP\). Avoid a single point of failure for NTP when testing system resiliency.
 

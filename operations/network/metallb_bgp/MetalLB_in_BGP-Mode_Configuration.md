@@ -1,4 +1,4 @@
-## MetalLB in BGP-Mode Configuration
+# MetalLB in BGP-Mode Configuration
 
 MetalLB in BGP-mode provides a more robust configuration for the Node Management Network \(NMN\), Hardware Management Network \(HMN\), and Customer Access Network \(CAN\). This configuration is generated from the `csi config init` input values. BGP-mode is enabled by updating the protocols in these configuration files.
 
@@ -58,5 +58,4 @@ linux# csi config init
 .
 .
 ```
-
 

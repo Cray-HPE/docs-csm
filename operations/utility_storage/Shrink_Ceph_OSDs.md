@@ -99,4 +99,3 @@ This procedure requires administrative privileges.
     ncn-m001# ceph -s
     ```
 
-

@@ -1,4 +1,4 @@
-## Update NCN User SSH Keys
+# Update NCN User SSH Keys
 
 Change the SSH keys for users on non-compute nodes (NCNs) on the system using
 the `rotate-ssh-keys-mgmt-nodes.yml` Ansible playbook provided by CSM or through

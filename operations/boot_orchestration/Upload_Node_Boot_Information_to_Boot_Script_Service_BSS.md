@@ -1,5 +1,4 @@
-
-## Upload Node Boot Information to Boot Script Service \(BSS\)
+# Upload Node Boot Information to Boot Script Service \(BSS\)
 
 The following information must be uploaded to BSS as a prerequisite to booting a node via iPXE:
 

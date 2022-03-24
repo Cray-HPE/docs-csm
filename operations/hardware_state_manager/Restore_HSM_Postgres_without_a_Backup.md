@@ -1,4 +1,4 @@
-## Restore Hardware State Manager (HSM) Postgres without an Existing Backup
+# Restore Hardware State Manager (HSM) Postgres without an Existing Backup
 
 This procedure is intended to repopulate HSM in the event when no Postgres backup exists.
 
@@ -90,5 +90,4 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
     
     * [Manage Component Groups](Manage_Component_Groups.md)
     * [Manage Component Partitions](Manage_Component_Partitions.md)
-
 

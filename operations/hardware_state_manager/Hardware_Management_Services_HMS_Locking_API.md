@@ -1,4 +1,4 @@
-## Hardware Management Services \(HMS\) Locking API
+# Hardware Management Services \(HMS\) Locking API
 
 The locking feature is a part of the Hardware State Manager \(HSM\) API. The locking API enables administrators to lock components on the system. Locking components ensures other system actors, such as administrators or running services, cannot perform a firmware update with the Firmware Action Service \(FAS\) or a power state change with the Cray Advanced Platform Monitoring and Control \(CAPMC\). Locks only constrain FAS and CAPMC from each other and help ensure that a firmware update action will not be interfered with by a request to power off the device through CAPMC. Locks only work with HMS services and will not impact other system services.
 

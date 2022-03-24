@@ -1,5 +1,3 @@
-
-
 # Utility Storage
 
 Utility storage is designed to support Kubernetes and the System Management Services (SMS) it orchestrates. Utility storage is a cost-effective solution for storing the large amounts of telemetry and log data collected.

@@ -1,4 +1,3 @@
-
 # System Management Network Functions
 
 The following is a description of the system management network functions:

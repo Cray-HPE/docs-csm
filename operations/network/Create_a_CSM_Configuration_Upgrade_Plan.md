@@ -1,4 +1,3 @@
-
 # Create a CSM Configuration Upgrade Plan 
  
 Creating an upgrade plan is unique and dependent on the requirements of the upgrade path. Some release versions of the network configuration require coupled upgrade of software to enable new software functionality, or bug fixes that may add time required to do the full upgrade.  

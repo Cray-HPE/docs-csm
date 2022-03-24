@@ -1,4 +1,4 @@
-## Move a Standard Rack Node
+# Move a Standard Rack Node
 
 Update the location-based component name (xname) for a standard rack node within the system.
 

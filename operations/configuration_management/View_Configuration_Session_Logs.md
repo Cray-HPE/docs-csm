@@ -1,4 +1,4 @@
-## View Configuration Session Logs
+# View Configuration Session Logs
 
 Logs for the individual steps of a session are available via the kubectl log command for each container of a Configuration Framework Service \(CFS\) session. Refer to [Configuration Sessions](Configuration_Sessions.md) for more info about these containers.
 
@@ -46,6 +46,4 @@ ncn# kubectl logs -n services ${CFS_POD_NAME} -c ansible-0
 ```
 
 The `git-clone-#` and `ansible-#` containers may not start at 0 and may not be numbered sequentially if the session was created with the `--configuration-limit` option.
-
-
 

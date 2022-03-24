@@ -1,4 +1,4 @@
-## Retrieve an Authentication Token
+# Retrieve an Authentication Token
 
 Retrieve a token for authenticating to one of the API gateways.
 
@@ -122,6 +122,4 @@ The appropriate token must be retrieved from the gateway to access services on t
         "min_off_time":-1
     }
     ```
-
-
 

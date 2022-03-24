@@ -1,4 +1,3 @@
-
 # Verify the DHCP Traffic on the Worker Nodes
 
 This section is an example issue of where the source address of the DHCP Offer is the Metallb address of KEA "10.92.100.222".  

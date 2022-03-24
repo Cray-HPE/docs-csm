@@ -1,4 +1,4 @@
-## TLS Certificates for Redfish BMCs
+# TLS Certificates for Redfish BMCs
 
 Redfish HTTP communications are capable of using TLS certificates and Certificate Authority \(CA\) trust bundles to improve security. Several Hardware Management Services \(HMS\) have been modified to enable the HTTP transports used for Redfish communications to use a CA trust bundle.
 

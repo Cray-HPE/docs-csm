@@ -1,4 +1,4 @@
-## Version Control Service \(VCS\)
+# Version Control Service \(VCS\)
 
 The Version Control Service \(VCS\) includes a web interface for repository management, pull requests, and a visual view of all repositories and organizations. The following URL is for the VCS web interface:
 
