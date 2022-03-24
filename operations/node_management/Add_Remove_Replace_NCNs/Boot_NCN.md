@@ -173,7 +173,7 @@ Follow [How to Lock Management Single Node](../../../operations/hardware_state_m
 
 1. Restore and verify the site link for ncn-m001.
 
-**IMPORTANT:** If the vendor of the replaced master node has changed, before the config is reloaded, verify that the `BRIDGE_PORTS` setting in /etc/sysconfig/network/ifcfg-lan0 is based on the actual NIC names for the external site interface.
+    **IMPORTANT:** If the vendor of the replaced master node has changed, before the config is reloaded, verify that the `BRIDGE_PORTS` setting in `/etc/sysconfig/network/ifcfg-lan0` is based on the actual NIC names for the external site interface.
 
     ```bash
     ncn-m002# rsync /tmp/ifcfg-lan0-m001 ncn-m001:/etc/sysconfig/network/ifcfg-lan0

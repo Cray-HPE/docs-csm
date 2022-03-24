@@ -22,9 +22,9 @@ The system is fully installed and has transitioned off of the LiveCD.
 
       3. How many NCNs would you like to add? Do not include NCNs to be removed or moved.
 
-3. When adding new NCNs, there will be network configuration changes that will impact changing IPs on computes.  __**That will require DVS restart to update the IPs in the DVS node_map.**__
+3. When adding new NCNs, there will be network configuration changes that will impact changing IPs on computes. __**That will require DVS restart to update the IPs in the DVS node_map.**__
 
-4. ncn_add_remove_replace_ncn_pre-req.py will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted.  See exmple below:
+4. ncn_add_remove_replace_ncn_pre-req.py will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted. See example below:
    ```bash
    Please restart DVS and rebooting the following nodes:["x3000c0s1b0n0", "x3000c0s19b3", "x3000c0s19b1n0", "x3000c0s19b3n0"]
    prerequisite to prepare NCNs for removal, move and add
@@ -114,23 +114,6 @@ ncn# NODE=ncn-x00n
 ncn# XNAME=$(ssh $NODE cat /etc/cray/xname)
 ncn# echo $XNAME
 ```
-
-1. Run the ncn_add_remove_replace_ncn_pre-req.py
-   1. Script will ask 3 questions:
-      1. How many NCNs would you like to remove?  Do not include NCNs to be add or moved.
-
-      2. How many NCNs would you like to move? Do not include NCNs to be add or remove.
-
-      3. How many NCNs would you like to add? Do not include NCNs to be removed or moved.
-2. When adding new NCNs, there will be network configuration changes that will impact changing IPs on computes.  __**That will require DVS restart to update the IPs in the DVS node_map.**__
-3. ncn_add_remove_replace_ncn_pre-req.py will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted.  See exmple below:
-   ```bash
-   Please restart DVS and rebooting the following nodes:["x3000c0s1b0n0", "x3000c0s19b3", "x3000c0s19b1n0", "x3000c0s19b3n0"]
-   prerequisite to prepare NCNs for removal, move and add
-   COMPLETED
-   Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-02-25_22-59-06
-   ncn-m001:~/ # 
-   ```
 
 ### Procedure
 
