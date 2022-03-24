@@ -2,7 +2,7 @@
 
 ## Description:
 
-This is a new Ceph service script that will check the status of ceph and then verify that status against the individual Ceph storage nodes.
+This is a new Ceph service script that will check the status of Ceph and then verify that status against the individual Ceph storage nodes.
 
 ## Location:
 
@@ -11,7 +11,7 @@ This is a new Ceph service script that will check the status of ceph and then ve
 ## Usage:
 
 ```text
-usage:  ceph-service-status.sh # runs a simple ceph health check
+usage:  ceph-service-status.sh # runs a simple Ceph health check
         ceph-service-status.sh -n <node> -s <service> # checks a single service on a single node
         ceph-service-status.sh -n <node> -a true # checks all Ceph services on a node
         ceph-service-status.sh -A true # checks all Ceph services on all nodes in a rolling fashion

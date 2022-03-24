@@ -182,7 +182,7 @@ server ncn-m001 iburst trust
 
 # this allows the clock to step itself during a restart without affecting running apps if it drifts more than 1 second
 initstepslew 1 ncn-m001
-# the ncns peer with each other at a high stratum, and choose ncn-m001 (statum 8 or lower) in the event of a tie
+# the ncns peer with each other at a high stratum, and choose ncn-m001 (stratum 8 or lower) in the event of a tie
 local stratum 10 orphan
 
 # The nodes should have a max of 9 peers and should not include themselves in the list
