@@ -191,6 +191,12 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
   rm -rf /var/lib/etcd/*
   ```
 
+### Step 9 - Save a copy the lan0 config from m001 **only if ncn-m001 is being removed**
+
+  ```bash
+  ncn-m001# rsync /etc/sysconfig/network/ifcfg-lan0 ncn-m002:/tmp/ifcfg-lan0-m001
+  ```
+
   The master node role removal is complete; proceed to [wipe the drives](#wipe-the-drives).
 
 <a name="worker-node-remove-roles"></a>
