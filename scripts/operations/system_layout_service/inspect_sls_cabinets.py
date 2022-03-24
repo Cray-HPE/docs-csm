@@ -48,7 +48,7 @@ def find_cabinet_nids(allHardware, cabinetXname):
 
 def get_nid_ranges(nids):
     '''
-    Create a nicely formated array of nid ranges
+    Create a nicely formatted array of nid ranges
     '''
     ranges = []
 

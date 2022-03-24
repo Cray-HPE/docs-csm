@@ -3,7 +3,7 @@
 These procedures guide administrators through setting up the `site-init`
 directory which contains important customizations for various products.
 
-  **Note:** There are two media available to bootstrap the PIT node--the RemoteISO or a bootable USB device. Both of those can use this procedure.  The only difference in this procedure is that the RemoteISO method will execute these commands on the `PIT` node with command prompt `pit#` while the USB method could be done on any Linux system with the command prompt `linux#`. This procedure works for both methods, but has the command prompt of `linux#`, even though it would normally be `pit#` for the RemoteISO method.
+   **Note:** There are two media available to bootstrap the PIT node--the RemoteISO or a bootable USB device. Both of those can use this procedure. The only difference in this procedure is that the RemoteISO method will execute these commands on the `PIT` node with command prompt `pit#` while the USB method could be done on any Linux system with the command prompt `linux#`. This procedure works for both methods, but has the command prompt of `linux#`, even though it would normally be `pit#` for the RemoteISO method.
 
 ### Topics:
    1. [Background](#background)
@@ -161,8 +161,13 @@ with system-specific customizations.
 
         1. Load the `openjdk` container image:
 
-           > **`NOTE`** Requires a properly configured Docker or Podman
-           > environment.
+           > **`NOTE`** Requires a properly configured Docker or Podman environment.
+           >
+           > If this step fails with an "overlay is not supported" error, run the following
+           > command and then re-run the `load-container-image.sh` script:
+           >
+           > `sed -i 's/skopeo_dest=.*/skopeo_dest="${transport}:${image}"/' /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh`
+           >
 
            ```bash
            linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
@@ -412,6 +417,12 @@ encrypted.
 1.  Load the `zeromq` container image required by Sealed Secret Generators:
 
     > **`NOTE`** Requires a properly configured Docker or Podman environment.
+    >
+    > If this step fails with an "overlay is not supported" error, run the following
+    > command and then re-run the `load-container-image.sh` script:
+    >
+    > `sed -i 's/skopeo_dest=.*/skopeo_dest="${transport}:${image}"/' /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh`
+    >
 
     ```bash
     linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5

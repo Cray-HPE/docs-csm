@@ -176,3 +176,4 @@ and many more...
 * Intermittently, storage nodes have clock skew during fresh install.
 * Kube-multus pods may fail to restart due to ImagePullBackOff. For more information see [Kube-multus pod is in ImagePullBackOff](troubleshooting/known_issues/kube_multus_pod_in_ImagePullBackOff.md).
 * Power capping Olympus and River compute hardware via CAPMC is not supported.
+* On fresh install, API calls to Gitea/VCS may give 401 Errors. See [Gitea/VCS 401 Errors](troubleshooting/known_issues/gitea_vcs_401_errors.md) for more information.

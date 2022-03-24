@@ -36,6 +36,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [3 Software Management Services Health Checks](#sms-health-checks)
     - [3.1 SMS Test Execution](#sms-checks)
     - [3.2 Interpreting cmsdev Results](#cmsdev-results)
+    - [3.3 Known Issues](#sms-checks-known-issues)
   - [4. Booting CSM Barebones Image](#booting-csm-barebones-image)
     - [4.1 Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
     - [4.2 Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
@@ -666,6 +667,19 @@ If one or more checks failed:
         ```
 
 Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
+
+<a name="sms-checks-known-issues"></a>
+### 3.3 Known Issues
+
+#### Failed To Create VCS Organization
+
+On a fresh install, it is possible that `cmsdev` reports an error similar to the following:
+```text
+ERROR (run tag zl7ak-vcs): POST https://api-gw-service-nmn.local/vcs/api/v1/orgs: expected status code 201, got 401
+ERROR (run tag zl7ak-vcs): Failed to create vcs organization
+```
+
+In this case, follow the [Gitea/VCS 401 Errors](../troubleshooting/known_issues/gitea_vcs_401_errors.md) troubleshooting procedure.
 
 <a name="booting-csm-barebones-image"></a>
 ## 4. Booting CSM Barebones Image
