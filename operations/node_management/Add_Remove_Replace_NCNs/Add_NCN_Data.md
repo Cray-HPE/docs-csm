@@ -78,7 +78,7 @@ Scenarios where this procedure is applicable:
         ncn-m# export MGMT_SWITCH=x3000c0w14
         ```
  
-    5.  **Skip if adding ncn-m001 and its BMC is connected to the site network** Collect the BMC MAC Address.
+    5.  **Skip if adding ncn-m001:** Collect the BMC MAC Address.
         -   If the NCN was previously in the system recall the record BMC MAC Address recorded from the [Remove NCN Data](Remove_NCN_Data.md) procedure.
         -   If the BMC is reachable by IP, then ipmitool can be used to determine the MAC Address of the BMC:
 
@@ -150,12 +150,12 @@ Scenarios where this procedure is applicable:
                 a4:bf:01:65:68:54    4        dynamic                   1/1/48
                 ```
 
-    6.  **Skip if adding ncn-m001 and its BMC is connected to the site network** Set the `BMC_MAC` environment variable with the BMC MAC Address:  
+    6.  **Skip if adding ncn-m001:** Set the `BMC_MAC` environment variable with the BMC MAC Address:  
         ```bash
         ncn-m# export BMC_MAC=a4:bf:01:65:68:54
         ```
     
-    7.  **Skip if adding ncn-m001 and its BMC is connected to the site network** Determine the current IP Address of the NCN BMC:
+    7. **Skip if adding ncn-m001:** Determine the current IP Address of the NCN BMC:
 
         1.  Query HSM EthernetInterfaces with the BMC MAC address to determine its current IP Address:
             ```bash
@@ -229,12 +229,12 @@ Scenarios where this procedure is applicable:
 
                 Then wait for KEA to repopulate HSM EthernetInterfaces with the current IP address of the BMC, and by trying this step again to determine the BMC IP address.
 
-    9.  **If adding ncn-m001 and its BMC is connected to the site network** set the `BMC_IP` environment variable to current IP address or hostname of the BMC:
+    8.  **Perform this step if adding ncn-m001, otherwise skip:** set the `BMC_IP` environment variable to current IP address or hostname of the BMC:
         ```bash
         ncn-m# export BMC_IP=10.0.0.10
         ```
 
-    11. Collect NCN MAC Addresses for the following interfaces if they are present. Depending on the hardware present not all of the following interfaces will be present. The collected MAC addresses will be later used in this procedure with the add_management_ncn.py script.
+    9.  Collect NCN MAC Addresses for the following interfaces if they are present. Depending on the hardware present not all of the following interfaces will be present. The collected MAC addresses will be later used in this procedure with the add_management_ncn.py script.
 
         Depending on the hardware present in the NCN not all of these interfaces may not present.
         -   NCNs will have either 1 or 2 management PCIe NIC cards (2 or 4 PCIe NIC ports). 
@@ -374,7 +374,7 @@ Scenarios where this procedure is applicable:
     ncn-m# sleep 60
     ```
 
-6.  Verify the BMC is reachable at the expected IP address
+6.  **Skip if adding ncn-m001:** Verify the BMC is reachable at the expected IP address
     ```bash
     ncn-m# ping $NODE-mgmt
     ```
@@ -401,7 +401,7 @@ Scenarios where this procedure is applicable:
     deployment "cray-reds" successfully rolled out
     ```
 
-9.  **Skip if adding ncn-m001 and its BMC is connected to the site network** Wait for the NCN BMC to get discovered by HSM:
+9.  **Skip if adding ncn-m001:** Wait for the NCN BMC to get discovered by HSM:
     > If the BMC of ncn-m001 is connected to the site network, then we will be unable to discover the BMC as it is not connected via the HMN network.
     ```bash
     ncn-m# watch -n 0.2 "cray hsm inventory redfishEndpoints describe $BMC_XNAME --format json" 
@@ -474,7 +474,6 @@ Scenarios where this procedure is applicable:
     Class = "River"
     Locked = true
     ```
-    > TODO updated with correct example output the above with right after it was added by REDS.
 
 11. Verify the NCN IPs are populated in HSM EthernetInterfaces using the mgmt0 MAC Address.
     ```bash
