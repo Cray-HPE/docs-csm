@@ -22,7 +22,7 @@ The system is fully installed.
     https://nexus.{{network.dns.external}}/
     ```
     
-    Users will need to login through nexus UI. The account is configured through Keycloak with a role mapping for Nexus authentication. The role needed for admin permissions is nx-admin in the system-nexus-client role. Scripts may connect by using a username and password in the request.
+    Users will need to login through Nexus UI. The account is configured through Keycloak with a role mapping for Nexus authentication. The role needed for admin permissions is nx-admin in the system-nexus-client role. Scripts may connect by using a username and password in the request.
     
     ![Keycloak Adding Permissions](../../img/operations/Keycloak_add_nexus_permission.png "Keycloak Adding Permissions")
 
