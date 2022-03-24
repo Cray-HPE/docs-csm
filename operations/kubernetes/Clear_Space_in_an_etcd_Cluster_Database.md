@@ -1,4 +1,4 @@
-## Clear Space in an etcd Cluster Database
+# Clear Space in an etcd Cluster Database
 
 Use this procedure to clear the etcd cluster NOSPACE alarm. Once it is set it will remain set. If needed, defrag the database cluster before clearing the NOSPACE alarm.
 
@@ -240,6 +240,4 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
         memberID:10060051157615504224 alarm:NOSPACE
         memberID:9418794810465807950 alarm:NOSPACE
         ```
-
-
 

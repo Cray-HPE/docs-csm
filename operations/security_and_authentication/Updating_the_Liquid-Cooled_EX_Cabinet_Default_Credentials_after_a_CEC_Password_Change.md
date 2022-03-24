@@ -1,4 +1,4 @@
-## Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials after a CEC Password Change
+# Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials after a CEC Password Change
 
 This procedure changes the credential for liquid-cooled EX cabinet chassis controllers and node controller (BMCs) used by CSM services after the CECs have been set to a new global default credential.
 

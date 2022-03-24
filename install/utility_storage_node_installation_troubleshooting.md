@@ -1,5 +1,3 @@
-
-
 # Utility Storage Installation Troubleshooting
 
 If there is a failure in the creation of Ceph storage on the utility storage nodes for one of these scenarios,

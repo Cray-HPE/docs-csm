@@ -1,4 +1,4 @@
-## Backup and Restore Vault Clusters
+# Backup and Restore Vault Clusters
 
 View the existing Vault backups on the system and use a completed backup to perform a restore operation.
 
@@ -368,6 +368,4 @@ View the existing Vault backups on the system and use a completed backup to perf
         cray-vault-2                             5/5     Running   2          38s
         cray-vault-configurer-56df7f768d-c7mk2   2/2     Running   0          2m21s
         ```
-
-
 

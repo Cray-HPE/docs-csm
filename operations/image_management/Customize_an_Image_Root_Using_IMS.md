@@ -1,6 +1,4 @@
-
-
-## Customize an Image Root Using IMS
+# Customize an Image Root Using IMS
 
 The Image Management Service \(IMS\) customization workflow sets up a temporary image customization environment within a Kubernetes pod and mounts the image to be customized in that environment. A system administrator then makes the desired changes to the image root within the customization environment. 
 
@@ -662,5 +660,4 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 
 The image root has been modified, compressed, and uploaded to S3, along with its associated initrd and kernel files. The image customization environment has also been cleaned up.
-
 

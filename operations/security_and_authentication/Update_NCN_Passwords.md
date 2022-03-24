@@ -1,4 +1,4 @@
-## Update NCN User Passwords
+# Update NCN User Passwords
 
 The NCNs deploy with a default password, which are changed during the system
 install. See [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)

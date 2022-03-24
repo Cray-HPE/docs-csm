@@ -1,4 +1,4 @@
-## Configuration Layers
+# Configuration Layers
 
 The Configuration Framework Service \(CFS\) uses configuration layers to specify the location of configuration content that will be applied. Configurations may include one or more layers. Each layer is defined by a Git repository clone URL, a Git commit, a name \(optional\), and the path in the repository to an Ansible playbook to execute.
 
@@ -147,5 +147,4 @@ Use the `cray cfs configurations --help` command to manage CFS configurations on
 -   `describe`: Display info about a single configuration and its layer\(s\).
 -   `update`: Create a new configuration or modify an existing configuration.
 -   `delete`: Delete an existing configuration.
-
 

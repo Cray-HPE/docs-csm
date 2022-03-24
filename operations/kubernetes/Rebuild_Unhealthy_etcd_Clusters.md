@@ -1,4 +1,4 @@
-## Rebuild Unhealthy etcd Clusters
+# Rebuild Unhealthy etcd Clusters
 
 Rebuild any cluster that does not have healthy pods by deleting and redeploying unhealthy pods. This procedure includes examples for rebuilding etcd clusters in the services namespace. This procedure must be used for each unhealthy cluster, not just the services used in the following examples.
 
@@ -214,6 +214,4 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
 
 
 Rerun the etcd cluster health check \(see [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md)\) after recovering one or more clusters. Ensure that the clusters are healthy and have the correct number of pods.
-
-
 

@@ -1,5 +1,4 @@
-
-## Validate Signed RPMs
+# Validate Signed RPMs
 
 The HPE Cray EX system signs RPMs to provide an extra level of security. Use the following procedure to import a key from either CrayPort or a Kubernetes Secret, and then use that key to validate the RPM package signatures on each node type.
 
@@ -185,4 +184,3 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
     D: closed   db environment /var/lib/rpm
     ```
 
-    

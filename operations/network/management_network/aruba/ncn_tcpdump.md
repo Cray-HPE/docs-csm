@@ -1,4 +1,3 @@
-
 # NCN TCPDUMP
 
 If a host is not getting an IP address, run a packet capture to see if DHCP traffic is being transmitted.

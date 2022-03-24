@@ -1,4 +1,4 @@
-## Node Management Workflows
+# Node Management Workflows
 
 The following workflows are intended to be high-level overviews of node management tasks. These workflows depict how services interact with each other during node management and help to provide a quicker and deeper understanding of how the system functions.
 

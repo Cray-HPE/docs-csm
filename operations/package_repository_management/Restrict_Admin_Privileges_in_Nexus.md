@@ -1,4 +1,4 @@
-## Restrict Admin Privileges in Nexus
+# Restrict Admin Privileges in Nexus
 
 Prior to making the system available to users, change the ingress settings to disable connections to `packages.local` and `registry.local` from automatically gaining `admin` privileges.
 
@@ -121,6 +121,4 @@ ncn# kubectl patch virtualservice -n nexus nexus --type merge \
 [{"destination":{"host":"nexus","port":{"number":80}},"headers":\
 {"request":{"add":{"X-WEBAUTH-USER":"admin"},"remove":["Authorization"]}}}]}]}}'
 ```
-
-
 

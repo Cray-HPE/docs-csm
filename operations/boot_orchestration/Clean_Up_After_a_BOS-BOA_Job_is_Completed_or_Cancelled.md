@@ -1,4 +1,4 @@
-## Clean Up After a BOS/BOA Job is Completed or Cancelled
+# Clean Up After a BOS/BOA Job is Completed or Cancelled
 
 When a BOS session is created, there are a number of items created on the system. When a session is cancelled or completed, these items need to be cleaned up to ensure there is not lingering content from the session on the system.
 

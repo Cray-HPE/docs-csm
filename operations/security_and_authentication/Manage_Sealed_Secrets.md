@@ -1,6 +1,4 @@
-
-
-## Manage Sealed Secrets
+# Manage Sealed Secrets
 
 Sealed secrets are essential for managing sensitive information on the system. The following procedures for managing sealed secrets are included in this section:
 

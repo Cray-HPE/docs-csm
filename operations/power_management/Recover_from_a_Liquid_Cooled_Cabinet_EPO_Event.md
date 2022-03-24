@@ -1,4 +1,4 @@
-## Recover from a Liquid Cooled Cabinet EPO Event
+# Recover from a Liquid Cooled Cabinet EPO Event
 
 Identify an emergency power off \(EPO\) has occurred and restore cabinets to a healthy state.
 

@@ -1,4 +1,4 @@
-## Configuration Management of System Components
+# Configuration Management of System Components
 
 The configuration of individual system components is managed with the `cray cfs components` command. The Configuration Framework Service \(CFS\) contains a database of the configuration state of available hardware known to the Hardware State Manager \(HSM\). When new nodes are added to the HSM database, a CFS Hardware Sync Agent enters the component into the CFS database with a null state of configuration.
 
@@ -149,5 +149,4 @@ ncn# cray cfs components update XNAME --enabled false
 ```
 
 Use `--enabled true` to re-enable the component.
-
 

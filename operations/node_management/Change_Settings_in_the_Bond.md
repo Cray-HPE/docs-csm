@@ -1,4 +1,4 @@
-## Change Settings in the Bond
+# Change Settings in the Bond
 
 iPXE is used to setup udev rules for interface names and bond members. The configuration of these are dynamic on boot until node customization runs (cloud-init) and sets up the conventional `/etc/sysconfig/network/ifcfg-bond0` and other neighboring files.
 

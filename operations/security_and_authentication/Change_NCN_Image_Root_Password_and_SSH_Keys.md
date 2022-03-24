@@ -1,4 +1,4 @@
-## Change NCN Image Root Password and SSH Keys
+# Change NCN Image Root Password and SSH Keys
 
 Customize the NCN image by changing the root password or adding different ssh keys for the root account.
 This procedure shows this process being done on the PIT node during a first time installation of the CSM
