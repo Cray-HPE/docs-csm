@@ -18,7 +18,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 **IMPORTANT:** These commands assumes you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#add-prerequisites).
 
-1. Set the BMC variable to the hostname of the BMC of the node being rebuilt.
+1. Set the BMC variable to the hostname of the BMC of the node being rebuilt. If booting ncn-m001, set this to the FQDN or IP.
 
     ```bash
     BMC=${NODE}-mgmt
@@ -169,7 +169,36 @@ Follow [How to Lock Management Single Node](../../../operations/hardware_state_m
 
 2. Follow [Redeploy Services](./Redeploy_Services.md) to update service endpoints for the added storage node.
 
-### Step 8 - Validate the node
+### Step 8 - **For ncn-m001 only**
+
+1. Restore and verify the site link for ncn-m001.
+
+    **IMPORTANT:** If the vendor of the replaced master node has changed, before the config is reloaded, verify that the `BRIDGE_PORTS` setting in `/etc/sysconfig/network/ifcfg-lan0` is based on the actual NIC names for the external site interface.
+
+    ```bash
+    ncn-m002# rsync /tmp/ifcfg-lan0-m001 ncn-m001:/etc/sysconfig/network/ifcfg-lan0
+    ncn-m002# ssh ncn-m001 "wicked ifreload lan0"
+    ncn-m002# ssh ncn-m001 "wicked ifstatus lan0"
+    ```
+
+    Example output:
+
+    ```screen
+    lan0            up
+      link:     #30, state up, mtu 1500
+      type:     bridge, hwaddr a4:bf:01:5a:a9:ff
+      config:   compat:suse:/etc/sysconfig/network/ifcfg-lan0
+      leases:   ipv4 static granted
+      addr:     ipv4 172.30.52.72/20 [static]
+    ```
+
+2. Run `ip a` to show the lan0 IP address, verify the site link.
+
+    ```bash
+    ncn-m001# ip a show lan0
+    ```
+
+### Step 9 - Validate the node
 
 Follow the validation steps in the section for the node type that was added:
 

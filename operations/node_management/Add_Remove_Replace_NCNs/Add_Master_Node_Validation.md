@@ -17,8 +17,6 @@ Validate the master node added successfully.
     ncn-w003   Ready    <none>   112m   v1.19.9
     ```
 
-1. Ensure there is proper routing set up for liquid-cooled hardware.
-
 1. Confirm the `sdc` disk has the correct lvm on the rebuilt node.
 
     ```bash
