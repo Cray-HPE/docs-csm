@@ -863,8 +863,12 @@ def main(argv):
 
         session.headers.update({'Content-Type': 'application/json'})
 
-        state.ipmi_username = os.environ.get('IPMI_USERNAME')
         state.ipmi_password = os.environ.get('IPMI_PASSWORD')
+        state.ipmi_username = os.environ.get('IPMI_USERNAME')
+        if not state.ipmi_username:
+            state.ipmi_username = 'root'
+            log.info(f'Using the default IPMI username. Set the IPMI_USERNAME environment variable to change this.')
+        log.info(f'ipmi username: {state.ipmi_username}')
 
         sls_actions = create_sls_actions(session, state)
         print_actions(sls_actions)
