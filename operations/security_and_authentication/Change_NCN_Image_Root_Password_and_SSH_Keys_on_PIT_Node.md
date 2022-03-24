@@ -1,8 +1,7 @@
-## Change NCN Image Root Password and SSH Keys on PIT Node
+## Set NCN Image Root Password and add NCN SSH Keys on PIT Node
 
-Customize the NCN images by changing the root password or adding different ssh keys for the root account.
-This procedure shows this process being done on the PIT node during a first time installation of the CSM
-software.
+Customize the NCN images by setting the root password and adding ssh keys for the root account.
+This procedure shows this process being done on the PIT node during a first time installation of the CSM software. This step is not optional. There is no default root password set and there are no default ssh keys for the root user.
 
 There is some common preparation before making the Kubernetes image for master nodes and worker nodes, making the Ceph image for utility storage nodes, and then some common cleanup afterwards.
 
@@ -10,9 +9,9 @@ There is some common preparation before making the Kubernetes image for master n
 
 ### Common Preparation
 
-1. Prepare new ssh keys on the PIT node for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
+1. Prepare the ssh keys on the PIT node for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
 
-   Either replace the root public and private ssh keys with your own previously generated keys or generate a new pair with `ssh-keygen(1)`. By default `ssh-keygen` will create an RSA key, but other types could be chosen and different filenames would need to be substituted in later steps.
+   Either add root public and private ssh keys with your own previously generated keys or generate a new pair with `ssh-keygen(1)`. By default `ssh-keygen` will create an RSA key, but other types could be chosen and different filenames would need to be substituted in later steps.
 
    ```bash
    pit# mkdir /root/.ssh
@@ -69,7 +68,7 @@ The Kubernetes image is used by the master and worker nodes.
    pit# chroot ./squashfs-root
    ```
 
-1. Change the password.
+1. Set the password.
 
    ```bash
    chroot-pit# passwd
@@ -224,7 +223,7 @@ The Ceph image is used by the utility storage nodes.
    pit# chroot ./squashfs-root
    ```
 
-1. Change the password.
+1. Set the password.
 
    ```bash
    chroot-pit# passwd
