@@ -10,9 +10,9 @@ To add administrator permissions for Nexus, add the `nx-admin` role binding to t
 client (see below).
 To add an anonymous user, add the `nx-anonymous` role binding to the user from the `system-nexus-client` client (see below).
 
-    ![Nexus Admin Account](../../img/operations/Nexus_Admin_Account.png "Nexus Admin Account")
+![Nexus Admin Account](../../img/operations/Nexus_Admin_Account.png "Nexus Admin Account")
 
-    ![Nexus Anonymous Account](../../img/operations/Nexus_Anonymous_Account.png "Nexus Anonymous Account")
+![Nexus Anonymous Account](../../img/operations/Nexus_Anonymous_Account.png "Nexus Anonymous Account")
 
 ### Using the Local Nexus Admin Account
 
