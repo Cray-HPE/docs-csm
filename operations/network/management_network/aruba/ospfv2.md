@@ -71,4 +71,3 @@ switch# show ip route ospf
 
 [Back to Index](../index.md)
 
-

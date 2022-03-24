@@ -1,6 +1,4 @@
-
-
-## Set the Turbo Boost Limit
+# Set the Turbo Boost Limit
 
 Turbo boost limiting is supported on the Intel® and AMD® processors. Because processors have a high degree of variability in the amount of turbo boost each processor can supply, limiting the amount of turbo boost can reduce performance variability and reduce power consumption.
 
@@ -53,6 +51,4 @@ Modify the Boot Orchestration Service \(BOS\) template for the node\(s\). This e
 "partition": "p1"
 }
 ```
-
-
 

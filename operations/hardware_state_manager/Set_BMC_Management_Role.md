@@ -1,4 +1,4 @@
-## Set BMC Management Roles
+# Set BMC Management Roles
 
 The ability to ignore non-compute nodes (NCNs) is turned off by default. Management nodes and NCNs are also not locked by
 default. The administrator must lock the NCNs and their BMCs to prevent unwanted actions from affecting these nodes. To more

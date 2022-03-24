@@ -1,4 +1,4 @@
-## Get a Long-Lived Token for a Service Account
+# Get a Long-Lived Token for a Service Account
 
 et up a long-lived offline token for a service account using the Keycloak REST API. Keycloak implements the OpenID Connect protocol, so this is a standard procedure for any OpenID Connect server.
 
@@ -76,5 +76,4 @@ Refer to [https://www.keycloak.org/docs/latest/server\_admin/index.html\#\_offli
       "scope": "profile offline_access email"
     }
     ```
-
 

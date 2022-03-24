@@ -1,4 +1,3 @@
-
 # Kubernetes and Bare Metal EtcD Certificate Renewal
 
 As part of the installation, Kubernetes generates certificates for the required subcomponents. This document will help walk through the process of renewing the certificates.

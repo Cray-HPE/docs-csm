@@ -1,4 +1,4 @@
-## Lock and Unlock Management Nodes
+# Lock and Unlock Management Nodes
 
 The ability to ignore non-compute nodes (NCNs) is turned off by default. Management nodes, NCNs, and their BMCs are also not locked by default. The administrator must lock the NCNs and their BMCs to prevent unwanted actions from affecting these nodes.
 

@@ -1,4 +1,4 @@
-## Image Management Workflows
+# Image Management Workflows
 
 Overview of how to create an image and how to customize and image.
 

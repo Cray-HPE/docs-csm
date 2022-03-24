@@ -1,4 +1,4 @@
-## View the Status of a BOS Session
+# View the Status of a BOS Session
 
 The Boot Orchestration Service \(BOS\) supports a status endpoint that reports the status for individual BOS sessions. The status can be retrieved for each boot set within the session, as well as the individual items within a boot set.
 

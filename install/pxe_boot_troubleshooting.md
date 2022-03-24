@@ -1,5 +1,3 @@
-
-
 # PXE Boot Troubleshooting
 
 This page is designed to cover various issues that arise when trying to PXE boot nodes in an HPE Cray EX system.

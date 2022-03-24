@@ -1,5 +1,4 @@
-
-## HSM Roles and Subroles
+# HSM Roles and Subroles
 
 The Hardware State Manager (HSM) contains several pre-defined roles and subroles that can be assigned to components and used to target specific hardware devices.
 

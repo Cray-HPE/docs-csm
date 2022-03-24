@@ -1,4 +1,4 @@
-## Recreate StatefulSet Pods on Another Node
+# Recreate StatefulSet Pods on Another Node
 
 Some pods are members of StatefulSets, meaning that there is a very specific number of them, each likely running on a different node. Similar to DaemonSets, these pods will never be recreated on another node as long as they are sitting in a `Terminating` state.
 
@@ -96,6 +96,4 @@ This procedure prevents services from being taken out of service when a node goe
     ```
 
     The StatefulSet will then recreate cray-vault-0 on a node that is in `Ready` state.
-
-
 

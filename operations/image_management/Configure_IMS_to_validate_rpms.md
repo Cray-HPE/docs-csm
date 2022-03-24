@@ -1,5 +1,4 @@
-
-## Configure IMS to validate RPMS
+# Configure IMS to validate RPMS
 
 Configuring IMS to validate the GPG signatures of RPMs during IMS Build operations involves two steps.
 
@@ -268,5 +267,4 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
     ncn# cd ..
     ncn# rm -rf recipe/
     ```
-
 

@@ -1,4 +1,4 @@
-## Fresh Install: Setting NodeBMC and RouterBMC Redfish Credentials
+# Fresh Install: Setting NodeBMC and RouterBMC Redfish Credentials
 
 These steps are performed before the installation of Shasta System Management
 or HPCM management software stacks. The goal is to set the BMC Redfish 
@@ -152,5 +152,4 @@ the procedure above can be used to set the Redfish root account passwords to
 the new value.
 
 **NOTE:** The default credentials for both air-cooled and liquid-cooled high-speed network switch BMCs should be identical.
-
 

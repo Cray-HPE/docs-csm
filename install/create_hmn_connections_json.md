@@ -1,4 +1,3 @@
-
 # Create HMN Connections JSON
 
 ### About this task
@@ -56,5 +55,4 @@ The [SHCD/HMN Connections Rules document](shcd_hmn_connections_rules.md) explain
     ```bash
     linux# podman run --rm -it --name hms-shcd-parser -v "$(realpath "$SHCD_FILE")":/input/shcd_file.xlsx -v "$(pwd)":/output artifactory.algol60.net/csm-docker/stable/hms-shcd-parser:$SHCD_PARSER_VERSION
     ```
-
 

@@ -1,4 +1,4 @@
-## Git Operations
+# Git Operations
 
 Use the `git` command to manage repository content in the Version Control Service \(VCS\).
 

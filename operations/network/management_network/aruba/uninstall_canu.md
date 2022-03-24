@@ -1,4 +1,3 @@
-
 # Uninstall CANU
 
 Uninstalling CANU can be achieved by: 

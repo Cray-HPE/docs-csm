@@ -1,4 +1,4 @@
-## Troubleshoot Interfaces with IP Address Issues
+# Troubleshoot Interfaces with IP Address Issues
 
 Correct NCNs that are failing to assigning a static IP address or detect a duplicate IP address.
 

@@ -121,4 +121,3 @@ This procedure requires admin privileges.
 
     Wait for Ceph health to return to OK before moving between nodes.
 
-    

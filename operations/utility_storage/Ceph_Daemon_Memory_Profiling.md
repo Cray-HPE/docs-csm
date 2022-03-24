@@ -1,5 +1,3 @@
-
-
 # Ceph Daemon Memory Profiling
 
 This procedure is meant as an instructional guide to provide information back to HPE Cray to assist in tuning and troubleshooting exercises.

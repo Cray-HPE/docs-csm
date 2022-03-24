@@ -1,4 +1,4 @@
-## Repair Yum Repository Metadata
+# Repair Yum Repository Metadata
 
 Nexus may have trouble \(re\)generating repository metadata \(for example, repodata/repomd.xml\), especially for larger repositories. Configure the `Repair - Rebuild Yum repository metadata (repodata)` task in Nexus to create the metadata if the standard generation fails. This is not typically needed, which makes it a repair task.
 
@@ -316,6 +316,4 @@ Caused by: java.net.SocketTimeoutException: Read timed out
     at org.sonatype.nexus.repository.yum.internal.rpm.YumRpmParser.parse(YumRpmParser.java:97)
     ... 26 common frames omitted
 ```
-
-
 

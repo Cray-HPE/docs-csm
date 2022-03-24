@@ -1,4 +1,4 @@
-## Enable Nodes
+# Enable Nodes
 
 Use the Hardware State Manager \(HSM\) Cray CLI commands to enable nodes on the system.
 
@@ -47,5 +47,4 @@ Enabling nodes that are available provides an accurate system configuration and 
     Arch = "X86"
     ID = "x5000c1s0b1n2"
     ```
-
 

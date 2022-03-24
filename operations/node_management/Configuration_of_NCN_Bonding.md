@@ -1,4 +1,4 @@
-## Configuration of NCN Bonding
+# Configuration of NCN Bonding
 
 Non-compute nodes \(NCNs\) have network interface controllers \(NICs\) connected to the management network that are configured in a redundant manner via Link Aggregation Control Protocol \(LACP\) link aggregation. The link aggregation configuration can be modified by editing and applying various configuration files either through Ansible or the interfaces directly.
 
@@ -92,6 +92,4 @@ bond0           device-not-running
       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0
       leases:   ipv4 static failed
 ```
-
-
 

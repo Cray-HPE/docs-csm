@@ -1,4 +1,4 @@
-## Package Repository Management with Nexus
+# Package Repository Management with Nexus
 
 Overview of RPM repositories and container registry in Nexus.
 
@@ -131,6 +131,4 @@ Writing manifest to image destination
 Storing signatures
 5779738096ecb47dd7192d44ceef7032110edd38204f66c9ca4e35fca952975c
 ```
-
-
 
