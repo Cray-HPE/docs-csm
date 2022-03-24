@@ -14,9 +14,21 @@ Only follow the steps in the section for the node type that is being removed:
 <a name="wipe-disks-master-node"></a>
 ## Wipe Disks: Master Node
 
-1. Unmount the etcd volume and remove the volume group.
+**NOTE:** etcd should already be stopped as part of the "Remove NCN from Role" steps.
 
-   **NOTE:** etcd should already be stopped as part of the "Remove NCN from Role" steps.
+1. Remove the etcd device mapper.
+
+    ```bash
+    dmsetup remove $(dmsetup ls | grep -i etcd | awk '{print $1}')
+    ```
+
+    > **Note:** The following output  means the etcd volume  mapper is not present.
+    ```bash
+    No device specified.
+    Command failed.
+    ```
+
+1. Unmount the etcd volume and remove the volume group.
 
    ```bash
    umount /run/lib-etcd
