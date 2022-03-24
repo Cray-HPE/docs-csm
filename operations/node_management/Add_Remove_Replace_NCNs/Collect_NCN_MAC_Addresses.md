@@ -55,6 +55,12 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
 
         > Note when disconnecting from the IPMI SOL console you can perform the key sequence `~~.` to exit ipmitool without exiting your SSH session. 
 
+    4.  Set the PXE/efiboot option:
+
+        ```bash
+        ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP chassis bootdev pxe options=efiboot
+        ```
+
     3.  Power up the NCN:
         ```bash
         ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP chassis power on
