@@ -189,8 +189,6 @@ In the event of a problem during the upgrade which may cause the loss of BSS dat
 
 The resulting file needs to be saved in the event that BSS data needs to be restored in the future.
 
-Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).
-
 ## Stage 0.9 - Modify NCN Images
 
 Any site modifications to the images used to boot the management nodes need to be done again
@@ -239,4 +237,8 @@ of CSM software, but if was not done then, it should be done now. See
 [Update NCN Passwords](../../operations/security_and_authentication/Update_NCN_Passwords.md) and
 [full NCN personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password)
 for more information.
+
+## Stage 0.10 - Continue to Stage 1
+
+Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).
 
