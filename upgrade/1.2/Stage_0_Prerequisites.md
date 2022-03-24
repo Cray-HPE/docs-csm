@@ -9,8 +9,9 @@
 * [Stage 0.5 - Prerequisites Check](#prerequisites-check)
 * [Stage 0.6 - Backup VCS Data](#backup-vcs-data)
 * [Stage 0.7 - Suspend NCN Configuration](#suspend-ncn-config)
-* [Stage 0.8 - Modify NCN Images](#modify_ncn_images)
-* [Stage 0.9 - Continue to Stage 1](#continue_to_stage1)
+* [Stage 0.8 - Backup Workload Manager Data](#backup_workload_manager)
+* [Stage 0.9 - Modify NCN Images](#modify_ncn_images)
+* [Stage 0.10 - Continue to Stage 1](#continue_to_stage1)
 
 <a name="install-latest-docs"></a>
 ## Stage 0.1 - Install latest docs RPM
@@ -245,8 +246,13 @@ will be re-enabled in [Stage 5](Stage_5.md).
    done
 ```
 
+<a name="backup_workload_manager"></a>
+## Stage 0.8 - Backup Workload Manager Data
+
+To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting back-up data should be stored in a safe location off of the system.
+
 <a name="modify_ncn_images"></a>
-## Stage 0.8 - Modify NCN Images
+## Stage 0.9 - Modify NCN Images
 
 Any site modifications to the images used to boot the management nodes need to be done again
 as part of this upgrade. These may include changing the root password, adding different ssh
@@ -296,6 +302,6 @@ of CSM software, but if was not done then, it should be done now. See
 for more information.
 
 <a name="continue_to_stage1"></a>
-## Stage 0.9 - Continue to Stage 1
+## Stage 0.10 - Continue to Stage 1
 
 Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).
