@@ -67,7 +67,7 @@ sections, but there is also a general troubleshooting topic.
     After completion of the validation of CSM health, the CSM product stream has been fully upgraded and
     configured. Refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_ 
     on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg 
-    more information on other product streams to be upgraded and configured after CSM.
+    for more information on other product streams to be upgraded and configured after CSM.
 
     > **Note:** If a newer version of the HPE Cray EX HPC Firmware Pack (HFP) is available, then the next step
     would be to install HFP which will inform the Firmware Action Services (FAS) of the newest firmware
