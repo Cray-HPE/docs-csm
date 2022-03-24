@@ -143,7 +143,7 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
     --template={{.data.password}} | base64 --decode
     ```
 
-1. Save an updated copy of customizations.yaml to the site-init secret in the loftsman kubernetes namespace.
+1. Save an updated copy of `customizations.yaml` to the `site-init` secret in the `loftsman` Kubernetes namespace.
 
     ```bash
     CUSTOMIZATIONS=$(base64 < customizations.yaml  | tr -d '\n')
