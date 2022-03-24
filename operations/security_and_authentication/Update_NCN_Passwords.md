@@ -12,7 +12,7 @@ NCN personalization has been run, then the password in Vault should be used for 
 Use one of these methods to change the root pasword in the image.
 
 1. If the PIT node is booted, see
-[Change NCN Image Root Password and SSH Keys on PIT Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_node.md)
+[Change NCN Image Root Password and SSH Keys on PIT Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
 for more information.
 
 1. If the PIT node is not booted, see
