@@ -150,7 +150,7 @@ The following is a high-level overview of the remove NCN workflow:
 <a name="replace-worker-storage-master"></a>
 ## Replace or Move Worker, Storage or Master NCNs
 
-Replacing an NCN is defined as removing an NCN of a given type and adding a different NCN of the same type back into the same cabinet slot.
+Replacing an NCN is defined as removing an NCN of a given type and adding a different NCN of the same type but with different MAC addresses back into the same cabinet slot.
 Moving an NCN is defined as removing an NCN of a given type from one cabinet and adding it back into a different cabinet.
 
 Use the [Remove Worker, Storage or Master NCNs](#remove-worker-storage-master) followed by the [Add Worker, Storage or Master NCNs](#add-worker-storage-master) to replace a worker, storage or master node (NCN). Generally scaling master nodes is not recommended since it can cause Etcd latency.
