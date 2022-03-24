@@ -593,7 +593,7 @@ def clone_subnet_and_pivot(
             # Cheap trick to seed when subnetting when info is unknown
             #
             remaining_ipv4_addresses = free_ipv4_subnets(new_network)
-            remaining_subnets_to_proccess = len(subnet_names) - len(
+            remaining_subnets_to_process = len(subnet_names) - len(
                 new_network.subnets(),
             )
 
@@ -602,7 +602,7 @@ def clone_subnet_and_pivot(
                 key=prefixlength,
                 reverse=False,
             )[0]
-            if len(remaining_ipv4_addresses) < remaining_subnets_to_proccess:
+            if len(remaining_ipv4_addresses) < remaining_subnets_to_process:
                 click.echo(
                     "    Calculating seed/start prefix based on devices in case no further guidance is given\n"
                     "        INFO:  Overrides may be provided on the command line with --<can|cmn>-subnet-override.",
