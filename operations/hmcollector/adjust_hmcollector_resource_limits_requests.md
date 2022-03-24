@@ -53,7 +53,7 @@ Containers:
 ```
 > In the above example output the `cray-hms-hmcollector` container was previously OOMKilled, but the container is currently running.
 
-Look for the `isitio-proxy` container and check its `Last State` (if present) to see if the container has been previously terminated due to it running out of memory:
+Look for the `istio-proxy` container and check its `Last State` (if present) to see if the container has been previously terminated due to it running out of memory:
 ```
 ...
  istio-proxy:

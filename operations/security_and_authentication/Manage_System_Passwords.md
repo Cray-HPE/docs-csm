@@ -313,4 +313,4 @@ Refer to the following product stream documentation for detailed procedures abou
 
 **Cray Operating System (COS):** To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the COS product stream documentation for more information. 
 
-**User Access Node (UAN):** Refer to "Create UAN Boot Images" in the UAN product stream documenation for the steps required to change the password on UANs. The "uan_shadow" header in the "UAN Ansible Roles" section includes more context on setting the root password on UANS.
+**User Access Node (UAN):** Refer to "Create UAN Boot Images" in the UAN product stream documentation for the steps required to change the password on UANs. The "uan_shadow" header in the "UAN Ansible Roles" section includes more context on setting the root password on UANS.
