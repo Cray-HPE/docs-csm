@@ -1,5 +1,4 @@
-
-## List Registered UAI Images
+# List Registered UAI Images
 
 Administrators can use the `cray uas admin config images list` command to see the list of registered images. This command also displays the UAS registration information about each image.
 
@@ -36,5 +35,4 @@ This procedure requires administrator privileges and the `cray` administrative C
     **NOTE:** Simply registering a UAI image name does not make the image available. The image must also be created and stored in the container registry. See [Customize End-User UAI Images](Customize_End-User_UAI_Images.md).
 
     There is also a `default` flag. If this flag is `true`, the image will be used whenever a UAI is created without specifying an image or UAI class as part of the creation. Finally, there is an `image_id`, which identifies this image registration for later inspection, update, or deletion and for linking the image to a UAI class.
-
 

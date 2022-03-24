@@ -1,4 +1,4 @@
-## Troubleshoot Liveliness or Readiness Probe Failures
+# Troubleshoot Liveliness or Readiness Probe Failures
 
 Identify and troubleshoot Readiness or Liveliness probes that report services as unhealthy intermittently.
 
@@ -44,7 +44,4 @@ This procedure requires administrative privileges.
 
 
 If there is an unhealthy event where the pod still exists and the curl test still fails, please contact support.
-
-
-
 

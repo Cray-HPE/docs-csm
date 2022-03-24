@@ -1,4 +1,4 @@
-## Manage Parameters with the scsd Service
+# Manage Parameters with the scsd Service
 
 The System Configuration Service commands below enable administrators to set various BMC and controller parameters. These parameters are controlled with the scsd command in the Cray CLI.
 

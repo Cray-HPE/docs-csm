@@ -1,4 +1,4 @@
-## Update the Privacy Settings for Gitea Configuration Content Repositories
+# Update the Privacy Settings for Gitea Configuration Content Repositories
 
 Change the visibility of Gitea configuration content repositories from public to private. All Cray-provided repositories are created as private by default.
 
@@ -33,7 +33,4 @@ Change the visibility of Gitea configuration content repositories from public to
     1.  Click the **Visibility** check box to make the repository private.
 
     2.  Click the **Update Settings** button to save the change for the repository.
-
-
-
 

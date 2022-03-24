@@ -1,6 +1,4 @@
-
-
-## Power Off the External Lustre File System
+# Power Off the External Lustre File System
 
 General procedure for powering off an external ClusterStor system.
 
@@ -143,8 +141,4 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     ```bash
     n000# shutdown -h now
     ```
-
-
-
-
 

@@ -1,5 +1,4 @@
-
-## Examine a UAI Using a Direct Administrative Command
+# Examine a UAI Using a Direct Administrative Command
 
 Print out information about a UAI.
 
@@ -32,5 +31,4 @@ Install and initialize the `cray` administrative CLI.
 
     [uai_portmap]
     ```
-
 

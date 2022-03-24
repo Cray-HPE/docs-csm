@@ -1,4 +1,4 @@
-## Relevant Troubleshooting Links for Upgrade Related Issues
+# Relevant Troubleshooting Links for Upgrade Related Issues
 
 ### General Kubernetes Commands for Troubleshooting
 

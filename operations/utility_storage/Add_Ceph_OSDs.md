@@ -143,4 +143,3 @@ This procedure requires administrative privileges and will require at least two 
    ncn-s00(1/2/3)# deactivate
    ```
 
-

@@ -1,4 +1,4 @@
-## Dump a Non-Compute Node
+# Dump a Non-Compute Node
 
 Trigger an NCN memory dump and send the dump for analysis. This procedure is helpful for debugging NCN crashes.
 
@@ -30,5 +30,4 @@ A non-compute node \(NCN\) has crashed or an admin has triggered a node crash.
     ```
 
     Refer to the [https://documentation.suse.com/](https://documentation.suse.com/) for more information on memory dumps or crash dumps.
-
 

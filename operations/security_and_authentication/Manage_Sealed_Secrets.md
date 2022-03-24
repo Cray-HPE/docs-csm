@@ -1,6 +1,4 @@
-
-
-## Manage Sealed Secrets
+# Manage Sealed Secrets
 
 Sealed secrets are essential for managing sensitive information on the system. The following procedures for managing sealed secrets are included in this section:
 
@@ -276,5 +274,4 @@ ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_swi
    ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
    {"SNMPUsername": "testuser", "SNMPAuthPassword": "testpass1", "SNMPPrivPassword": "testpass2"}
    ```
-
 

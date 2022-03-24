@@ -1,5 +1,4 @@
-
-## Update a Resource Specification
+# Update a Resource Specification
 
 Modify a specific UAI resource specification using the `resource_id` of that specification.
 
@@ -26,5 +25,4 @@ The \[OPTIONS\] used by this command are the same options used to create resourc
     ncn-m001-pit# cray uas admin config resources update \
     --limit '{"cpu": "100m", "memory": "10Mi"}' 85645ff3-1ce0-4f49-9c23-05b8a2d31849
     ```
-
 

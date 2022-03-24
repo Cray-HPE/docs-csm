@@ -1,5 +1,4 @@
-
-## Troubleshoot UAI Stuck in "ContainerCreating"
+# Troubleshoot UAI Stuck in "ContainerCreating"
 
 Resolve an issue causing UAIs to show a `uai_status` field of `Waiting`, and a `uai_msg` field of `ContainerCreating`. It is possible that this is just a matter of starting the UAI taking longer than normal, perhaps as it pulls in a new UAI image from a registry. If the issue persists for a long time, it is worth investigating.
 

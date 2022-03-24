@@ -1,5 +1,4 @@
-
-## Customize End-User UAI Images
+# Customize End-User UAI Images
 
 The provided end-user UAI image is a basic UAI image that includes an up-to-date version of the Sles Linux Distribution and client support for both the Slurm and PBS Professional workload managers. It provides an entrypoint to using UAIs and doing workload management from UAIs. This UAI image is not suitable for use with the Cray PE because it cannot be assured of being up-to-date with what is running on Shasta compute nodes at a given site. To support building software to be run in compute nodes, it is necessary to create a custom end-user UAI image and use that.
 
@@ -146,5 +145,4 @@ A custom end-user UAI image can be any container image set up with the end-user 
     #       path a more cautious approach is taken.
     ncn-w001# rm -fv ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
     ```
-
 

@@ -1,6 +1,4 @@
-
-
-## Compute Rolling Upgrades
+# Compute Rolling Upgrades
 
 The Compute Rolling Upgrade Service \(CRUS\) upgrades sets of compute nodes without requiring an entire set of nodes to be out of service at once. CRUS manages the workload management status of nodes, handling each of the following steps required to upgrade compute nodes:
 
@@ -16,5 +14,4 @@ CRUS is built upon a few basic features of the system:
 -   The grouping of nodes by label provided by the Hardware State Manager \(HSM\) groups mechanism.
 -   Workload management that can gracefully take nodes out of service \(quiesce nodes\), declare nodes as failed, and return nodes to service.
 -   The Boot Orchestration Service \(BOS\) and boot session templates.
-
 

@@ -1,6 +1,4 @@
-
-
-## Add LDAP User Federation
+# Add LDAP User Federation
 
 Add LDAP user federation using the Keycloak localization tool.
 
@@ -741,6 +739,3 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
        Verify the `preferred_username` is the expected LDAP user and the
        role is `admin` (or other role based on the user).
   
-
-
-

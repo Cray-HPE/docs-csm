@@ -1,5 +1,4 @@
-
-## Configure End-User UAI Classes for Broker Mode
+# Configure End-User UAI Classes for Broker Mode
 
 Each UAI broker will create and manage a single class of end-user UAIs. Setting up UAI classes for this is similar to [Configure a Default UAI Class for Legacy Mode](Configure_a_Default_UAI_Class_for_Legacy_Mode.md) with the following exceptions:
 

@@ -1,5 +1,4 @@
-
-## Log in to a User's UAI to Troubleshoot Issues
+# Log in to a User's UAI to Troubleshoot Issues
 
 Log in to a user's User Access Instance \(UAI\) to help the user troubleshoot issues.
 

@@ -1,4 +1,4 @@
-## BOS Session Templates
+# BOS Session Templates
 
 Describes the contents of a BOS session template.
 
@@ -86,5 +86,4 @@ There are three different ways to specify the nodes inside a boot set in a BOS s
     -   Application
     -   Storage
     -   Management
-
 

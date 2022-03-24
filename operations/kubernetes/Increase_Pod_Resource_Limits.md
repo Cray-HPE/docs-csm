@@ -1,4 +1,4 @@
-## Increase Pod Resource Limits
+# Increase Pod Resource Limits
 
 Increase the appropriate resource limits for pods after determining if a pod is being CPU throttled or OOMKilled.
 
@@ -112,6 +112,4 @@ Return Kubernetes pods to a healthy state with resources available.
     cray-hbtd-etcd-qvz4zzjzw2 1/1 Running 0 32s
     cray-hbtd-etcd-vzjzmbn6nr 1/1 Running 0 98s
     ```
-
-
 

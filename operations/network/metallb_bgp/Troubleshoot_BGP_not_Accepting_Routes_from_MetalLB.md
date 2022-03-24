@@ -1,4 +1,4 @@
-## Troubleshoot BGP not Accepting Routes from MetalLB
+# Troubleshoot BGP not Accepting Routes from MetalLB
 
 Check the number of routes that the Border Gateway Protocol \(BGP\) Router is accepting in the peering session. This procedure is useful if Kubernetes LoadBalancer services in the NMN, HMN, or CAN address pools are not accessible from outside the cluster.
 
@@ -167,6 +167,4 @@ This procedure requires administrative privileges.
         ```
 
         There should be a route for each unique LoadBalancer IP addresses configured in the cluster.
-
-
 

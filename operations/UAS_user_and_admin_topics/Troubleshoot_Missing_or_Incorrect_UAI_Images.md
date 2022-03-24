@@ -1,4 +1,4 @@
-## Troubleshoot Missing or Incorrect UAI Images
+# Troubleshoot Missing or Incorrect UAI Images
 
 If a UAI shows a `uai_status` of `Waiting` and a `uai_msg` of `ImagePullBackOff`, that indicates that the UAI or the UAI class is configured to use an image that is not in the image registry.
 

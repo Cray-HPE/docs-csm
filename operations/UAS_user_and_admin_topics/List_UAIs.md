@@ -1,5 +1,4 @@
-
-## List UAIs
+# List UAIs
 
 View the details of every UAI that is running by using a direct UAS administrative command.
 

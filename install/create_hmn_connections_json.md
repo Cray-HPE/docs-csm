@@ -1,5 +1,3 @@
-
-
 # Create HMN Connections JSON
 
 Use this procedure to generate the `hmn_connections.json` from the system's SHCD Excel document. This process is typically needed when generating the `hmn_connections.json` file for a new system, or regenerating it when a system's SHCD is changed (specifically the HMN tab). The `hms-shcd-parser` tool can be used to generate the `hmn_connections.json` file.
@@ -55,4 +53,3 @@ The [SHCD/HMN Connections Rules document](shcd_hmn_connections_rules.md) explain
     ```bash
     linux# podman run --rm -it --name hms-shcd-parser -v "$(realpath "$SHCD_FILE")":/input/shcd_file.xlsx -v "$(pwd)":/output dtr.dev.cray.com/cray/hms-shcd-parser:$SHCD_PARSER_VERSION
     ```
-

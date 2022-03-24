@@ -1,4 +1,4 @@
-## Node Management
+# Node Management
 
 The HPE Cray EX systems include two node types:
 
@@ -18,5 +18,4 @@ Application nodes \(AN\) are any NCN that is not providing system management fun
 -   Data movers between two different network file systems
 -   Visualization servers
 -   Other special-purpose nodes
-
 

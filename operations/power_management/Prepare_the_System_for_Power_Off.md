@@ -1,6 +1,4 @@
-
-
-## Prepare the System for Power Off
+# Prepare the System for Power Off
 
 This procedure prepares the system to remove power from all system cabinets. Be sure the system is healthy and ready to be shut down and powered off.
 
@@ -291,6 +289,4 @@ An authentication token is required to access the API gateway and to use the `sa
     In version 1.4.x, there is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
 9.  Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, the see `scontrol` man page and for PBS Professional, see the `pbsnodes` man page.
-
-
 

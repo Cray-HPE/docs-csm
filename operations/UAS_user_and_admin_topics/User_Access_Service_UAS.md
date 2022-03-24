@@ -1,5 +1,4 @@
-
-## User Access Service \(UAS\)
+# User Access Service \(UAS\)
 
 The User Access Service \(UAS\) is a containerized service managed by Kubernetes that enables application developers to create and run user applications. UAS runs on a non-compute node \(NCN\) that is acting as a Kubernetes worker node.
 

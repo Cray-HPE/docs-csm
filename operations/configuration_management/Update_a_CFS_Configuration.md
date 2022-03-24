@@ -1,4 +1,4 @@
-## Update a CFS Configuration
+# Update a CFS Configuration
 
 Modify a Configuration Framework Service \(CFS\) configuration by specifying the JSON of the configuration and its layers. Use the cray cfs configurations update command, similar to creating a configuration.
 
@@ -45,7 +45,4 @@ Modify a Configuration Framework Service \(CFS\) configuration by specifying the
       "name": "configurations-example"
     }
     ```
-
-
-
 

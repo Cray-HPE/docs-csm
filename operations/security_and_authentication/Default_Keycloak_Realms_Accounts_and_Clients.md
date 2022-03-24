@@ -1,4 +1,4 @@
-## Default Keycloak Realms, Accounts, and Clients
+# Default Keycloak Realms, Accounts, and Clients
 
 The following default realms, accounts, and clients are created when the system software is installed:
 
@@ -31,6 +31,4 @@ Users authenticate to Keycloak on behalf of a client. Keycloak clients own confi
 |`gatekeeper`|Private|The `gatekeeper` client is used by the `keycloak-gatekeeper` to authenticate web UIs using OAUTH.|
 |`system-compute-client`|Private|The `system-compute-client` client is used by the Cray Operating System \(COS\) for compute nodes and some NCN services for boot orchestration and management.|
 |`system-pxe-client`|Private|The `system-pxe-client` client is used by the cray-ipxe service to communicate with cray-bss to prepare boot scripts and other boot-related content.|
-
-
 

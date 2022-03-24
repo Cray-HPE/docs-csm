@@ -1,5 +1,4 @@
-
-## UAS Limitations
+# UAS Limitations
 
 Functionality that is currently not supported while using UAS.
 
@@ -24,5 +23,4 @@ Changes made to a running UAI will be lost if the UAI is restarted or deleted. T
 A UAI may restart because of an issue on the physical node, scheduled node maintenance, or intentional restarts by a site administrator. In this case, any running processes \(such as compiles\), Slurm interactive jobs, or changes made to the UAI \(such as package installations\) are lost.
 
 If a UAI restarts on a node that was recently rebooted, some of the configured volumes may not be ready and it could appear that content in the UAI is missing. In this case, restart the UAI.
-
 

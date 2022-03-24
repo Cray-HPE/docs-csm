@@ -1,4 +1,4 @@
-## Resilience of System Management Services
+# Resilience of System Management Services
 
 HPE Cray EX systems are designed so that system management services \(SMS\) are fully resilient and that there is no single point of failure. The design of the system allows for resiliency in the following ways:
 
@@ -83,5 +83,4 @@ In a future release, strides will be made to further improve the resiliency of t
 -   Rebalancing of pods/workloads after an NCN worker node that was down, comes back up.
 -   Analysis/improvements wrt outages of the Node Management Network \(NMN\) and the impact to critical system management services.
 -   Expanded analysis/improvements of resiliency of noncritical services \(those that are not directly related to job launch, application run, or compute boot\).
-
 

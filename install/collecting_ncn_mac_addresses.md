@@ -1,4 +1,3 @@
-
 # Collecting NCN MAC Addresses
 
 This procedure will detail how to collect the NCN MAC addresses from an HPE Cray EX system. The MAC addresses needed for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns in `ncn_metadata.csv` will be collected.
@@ -277,5 +276,3 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
 9. Wipe the disks before relaunching the NCNs.
 
    See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
-
-

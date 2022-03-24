@@ -69,5 +69,3 @@ If there are duplicate email addresses for LDAP users, it can cause Keycloak to 
 
     The **Synchronize all users** button will be at the bottom of the page.
 
-
-

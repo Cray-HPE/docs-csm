@@ -1,4 +1,4 @@
-## Build NCN Images Locally
+# Build NCN Images Locally
 
 Build and test NCN images locally by using the following procedure. This procedure can be done on any x86 machine with the following prerequisites.
 
@@ -142,5 +142,4 @@ packer build -only=qemu.sles15-base -var "artifact_version=`git rev-parse --shor
 ````
 
 * If no version is passed to the builder then the version `none` is used when generating the archive.
-
 

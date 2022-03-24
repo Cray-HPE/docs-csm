@@ -1,5 +1,4 @@
-
-## Create a Backup of the HSM Postgres Database
+# Create a Backup of the HSM Postgres Database
 
 Perform a manual backup of the contents of the Hardware State Manager (HSM) Postgres database. This backup can be used to restore the contents of the HSM Postgres database at a later point in time using the [Restore HSM Postgres from Backup](Restore_HSM_Postgres_from_Backup.md) procedure.
 

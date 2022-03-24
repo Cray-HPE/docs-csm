@@ -1,4 +1,4 @@
-## CFS Global Options
+# CFS Global Options
 
 The Configuration Framework Service \(CFS\) provides a global service options endpoint for modifying the base configuration of the service itself.
 
@@ -67,7 +67,4 @@ The following are the CFS global options:
 
 
 The default values for all CFS global options can be modified with the `cray cfs options update` command.
-
-
-
 

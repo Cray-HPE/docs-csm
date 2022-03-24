@@ -483,4 +483,3 @@ To display the running configuration:
    sw-cdu-001# show running-config
    ```
 
-

@@ -385,4 +385,3 @@ To display a running configuration:
    sw-agg-001# show running-config
    ```
 
-

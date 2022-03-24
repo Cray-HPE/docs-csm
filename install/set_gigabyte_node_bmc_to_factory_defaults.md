@@ -1,4 +1,4 @@
-## Set Gigabyte Node BMC to Factory Defaults
+# Set Gigabyte Node BMC to Factory Defaults
 
 ### Prerequisites
 
@@ -108,6 +108,4 @@ Use the management scripts and text files to reset Gigabyte BMC to factory defau
    ncn-w001# sleep 300
    ncn-w001# sh do_bmc_root_account.sh
    ```
-
-
 

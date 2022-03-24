@@ -1,5 +1,4 @@
-
-## Update a UAI Image Registration
+# Update a UAI Image Registration
 
 Modify the UAS registration information of a UAI image.
 
@@ -22,5 +21,4 @@ Once an allowable UAI image has been created, it may be necessary to change its 
     ```
     ncn-m001-pit# cray uas admin config images update --default yes 8fdf5d4a-c190-24c1-2b96-74ab98c7ec07
     ```
-
 

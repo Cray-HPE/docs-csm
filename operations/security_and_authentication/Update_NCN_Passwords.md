@@ -1,4 +1,4 @@
-## Update NCN Passwords
+# Update NCN Passwords
 
 The management nodes deploy with a default password in the image, so it is a recommended best
 practice for system security to change the root password in the image so that it is
@@ -91,4 +91,3 @@ procedure above.
    HashiCorp Vault and create the CFS session as long as the commit in the CSM
    configuration management repository has not changed. If the commit has changed,
    repeat this procedure from the beginning.
-

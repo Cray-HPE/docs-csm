@@ -1,4 +1,4 @@
-## Access and Update Settings for Replacement NCNs
+# Access and Update Settings for Replacement NCNs
 
 When a new NCN is added to the system as a hardware replacement, it might use the default credentials. Contact HPE Cray service to learn what these are.
 

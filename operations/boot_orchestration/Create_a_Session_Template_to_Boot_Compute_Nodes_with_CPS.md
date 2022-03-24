@@ -1,4 +1,4 @@
-## Create a Session Template to Boot Compute Nodes with CPS
+# Create a Session Template to Boot Compute Nodes with CPS
 
 When compute nodes are booted, the Content Projection Service \(CPS\) and Data Virtualization Service \(DVS\) project the root file system \(rootfs\) over the network to the compute nodes by default.
 

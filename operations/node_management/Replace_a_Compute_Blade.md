@@ -1,6 +1,4 @@
-
-
-## Replace a Compute Blade
+# Replace a Compute Blade
 
 Replace an HPE Cray EX liquid-cooled compute blade.
 
@@ -247,8 +245,4 @@ Replace an HPE Cray EX liquid-cooled compute blade.
     ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot \
     --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
     ```
-
-
-
-
 

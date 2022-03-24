@@ -1,5 +1,4 @@
-
-## Legacy Mode User-Driven UAI Management
+# Legacy Mode User-Driven UAI Management
 
 In the legacy mode, users create and manage their own UAIs through the Cray CLI. A user may create, list and delete only UAIs owned by the user. The user may not create a UAI for another user, nor may the user see or delete UAIs owned by another user. Once created, the information describing the UAI gives the user the information needed to reach the UAI using SSH and log into it.
 

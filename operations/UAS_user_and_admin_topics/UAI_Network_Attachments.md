@@ -1,5 +1,4 @@
-
-## UAI Network Attachments
+# UAI Network Attachments
 
 The UAI network attachment configuration flows from the CRAY Site Initializer (CSI) localization data through `customizations.yaml` into the UAS Helm chart and, ultimately, into Kubernetes in the form of a "network-attachment-definition".
 
@@ -149,5 +148,4 @@ In this example, Kubernetes will assign UAI IP addresses in the range `10.252.2.
     - `10.92.100.0/24`
     - `10.106.0.0/17`
     - `10.104.0.0/17`
-
 

@@ -587,4 +587,3 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    After completing this procedure the next step is to configure the management network switches.
 
    * See [Configure Management Network Switches](index.md#configure_management_network)
-

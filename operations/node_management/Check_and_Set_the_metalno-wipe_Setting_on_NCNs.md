@@ -1,4 +1,4 @@
-## Check and Set the `metal.no-wipe` Setting on NCNs
+# Check and Set the `metal.no-wipe` Setting on NCNs
 
 Configure the `metal.no-wipe` setting on non-compute nodes \(NCNs\) to preserve data on the nodes before doing an NCN reboot.
 
@@ -94,6 +94,4 @@ This procedure requires administrative privileges.
 
         ncn-s003: x3000c0s9b0n0 - metal.no-wipe=1
         ```
-
-
 

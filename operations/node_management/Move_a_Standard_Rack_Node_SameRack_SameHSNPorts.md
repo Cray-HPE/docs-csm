@@ -1,4 +1,4 @@
-## Move a Standard Rack Node \(Same Rack/Same HSN Ports\)
+# Move a Standard Rack Node \(Same Rack/Same HSN Ports\)
 
 This procedure move standard rack UAN or compute node to a different location and uses the same Slingshot switch ports and management network ports.
 
@@ -366,5 +366,4 @@ This procedure works with both application and compute nodes. This example moves
     ncn-m001# cray bos session create --template-uuid cle-VERSION \
     --operation reboot --limit x3000c0s27b1n0,x3000c0s27b2n0,x3000c0s27b3n0,x3000c0s27b4n0
     ```
-
 

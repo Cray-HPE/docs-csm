@@ -1,4 +1,4 @@
-## Post-Install Customizations
+# Post-Install Customizations
 
 Post-install customizations may be needed as systems scale. These customizations also need to persist across future installs or upgrades. Not all resources can be customized post-install; common scenarios are documented in the following sections.
 

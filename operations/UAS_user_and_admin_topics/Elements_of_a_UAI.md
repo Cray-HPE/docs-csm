@@ -1,5 +1,4 @@
-
-## Elements of a UAI
+# Elements of a UAI
 
 All UAIs can have the following attributes associated with them:
 

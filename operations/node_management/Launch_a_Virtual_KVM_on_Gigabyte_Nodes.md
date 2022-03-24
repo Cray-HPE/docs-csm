@@ -1,4 +1,4 @@
-## Launch a Virtual KVM on Gigabyte Nodes
+# Launch a Virtual KVM on Gigabyte Nodes
 
 This procedure shows how to launch a virtual KVM to connect to Gigabyte node. The virtual KVM can be launched on any host that is on the same network as the node's BMC. This method of connecting to a node is frequently used during system installation.
 
@@ -40,6 +40,3 @@ This procedure shows how to launch a virtual KVM to connect to Gigabyte node. Th
     The virtual KVM is ready to use. There is now a virtual KVM session connected to the node that enables control via the web similar to standing directly in front of the physical KVM.
 
     **Troubleshooting:** If the interface appears to lock up while working in the BMC menus \(often encountered when creating virtual drives\), it may be necessary to reset the node using **Power Control** \> **Power Reset**.
-
-
-

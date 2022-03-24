@@ -1,5 +1,4 @@
-
-## Create and Use Default UAIs in Legacy Mode
+# Create and Use Default UAIs in Legacy Mode
 
 Create a UAI using the default UAI image or the default UAI class in legacy mode.
 

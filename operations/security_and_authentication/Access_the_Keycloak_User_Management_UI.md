@@ -1,4 +1,4 @@
-## Access the Keycloak User Management UI
+# Access the Keycloak User Management UI
 
 This procedure can be used to access the interface to manage Keycloak users. Users can be added with this interface \(see [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal_User_Accounts_in_the_Keycloak_Shasta_Realm.md)\).
 
@@ -43,5 +43,4 @@ This procedure can be used to access the interface to manage Keycloak users. Use
 
 
 New users can be added with this interface \(see [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal_User_Accounts_in_the_Keycloak_Shasta_Realm.md)\).
-
 

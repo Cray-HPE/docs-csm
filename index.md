@@ -1,6 +1,6 @@
 # Cray System Management Documentation
 
-### Scope and Audience
+## Scope and Audience
 
 The documentation included here describes the Cray System Management (CSM) software, how to install
 or upgrade CSM software, and related supporting operational procedures to manage an HPE Cray EX system.
@@ -99,7 +99,7 @@ scripts, revision control with git, configuration management with Ansible, YAML,
 
    This chapter provides explanations of terms and acronyms used throughout the rest of this documentation.
    
-### Copyright and License
+## Copyright and License
 
 MIT License
 
