@@ -6,7 +6,7 @@
 
 1. Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh`
 
-   **NOTE:** This script may also available in the `/usr/share/doc/csm/scripts` directory where the latest ***docs-csm*** rpm is installed. If so, it can be copied from that node to the new storage node being rebuilt and skip to step 2.
+   **NOTE:** This script may also available in the `/usr/share/doc/csm/scripts` directory where the latest ***`docs-csm`*** RPM is installed. If so, it can be copied from that node to the new storage node being rebuilt and skip to step 2.
 
    ```bash
    #!/bin/bash
@@ -157,7 +157,7 @@
 
 1. Deploy Rados Gateway containers to the new nodes.
 
-   - If running Rados Gateway on all nodes is the desired conifugration then do:
+   - If running Rados Gateway on all nodes is the desired configuration, then do:
 
       ```bash
       ceph orch apply rgw site1 zone1 --placement="*"

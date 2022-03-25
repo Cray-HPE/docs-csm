@@ -1,4 +1,4 @@
-## Change the LDAP Server IP Address for Existing LDAP Server Content
+# Change the LDAP Server IP Address for Existing LDAP Server Content
 
 The IP address that Keycloak is using for the LDAP server can be changed. In the case where the new LDAP server has the same contents as the previous LDAP server, edit the LDAP user federation to switch Keycloak to use the new LDAP server.
 
@@ -66,7 +66,11 @@ Follow the steps in only one of the sections below depending on if it is preferr
     ncn-w001# curl -s -H "Authorization: Bearer $(get_master_token)" \
     https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components/$COMPONENT_ID \
     | jq . > keycloak_ldap.json
+    ```
 
+    Example output:
+
+    ```
     {
       "id": "57817383-e4a0-4717-905a-ea343c2b5722",
       "name": "shasta-user-federation-ldap",
@@ -80,11 +84,13 @@ Follow the steps in only one of the sections below depending on if it is preferr
         "fullSyncPeriod": [
           "-1"
         ],
-    ...
+    
+    [...]
         "connectionUrl": [
           "ldap://10.248.0.59"
         ],
-    ...
+    
+    [...]
     ```
 
 4.  Edit the keycloak\_ldap.json file and set the connectionUrl string to the new URL with the new IP address.
@@ -95,15 +101,11 @@ Follow the steps in only one of the sections below depending on if it is preferr
 
 5.  Apply the updated keycloak\_ldap.json file to the Keycloak server.
 
-    The output should show the response code is 204.
+    The output should show the response code is `HTTP/2 204`.
 
     ```bash
     ncn-w001# curl -i -XPUT -H "Authorization: Bearer $(get_master_token)" -H \
     "Content-Type: application/json" -d @keycloak_ldap.json \
     https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components/$COMPONENT_ID
-    HTTP/2 204
-    ...
     ```
-
-
 

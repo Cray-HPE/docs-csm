@@ -40,7 +40,7 @@ screen output, file/path names, and other software constructs.
 
 The host name in a command prompt indicates where the command must be run. The account that must run the command is also indicated in the prompt.
 - The root or super-user account always has the # character at the end of the prompt
-- Any non-root account is indicated with account@hostname>. A non-privileged account is referred to as user.
+- Any non-root account is indicated with `account@hostname`. A non-privileged account is referred to as user.
 
 #### Node abbreviations
 The following list contains abbreviations for nodes used below

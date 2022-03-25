@@ -1,4 +1,4 @@
-## Resilience of System Management Services
+# Resilience of System Management Services
 
 HPE Cray EX systems are designed so that system management services \(SMS\) are fully resilient and that there is no single point of failure. The design of the system allows for resiliency in the following ways:
 
@@ -59,7 +59,7 @@ However, it is important to note that some pods, when running on a worker NCN th
         # kubectl describe pod -n nexus NEXUS_FULL_POD_NAME
         ```
 
-    -   If the event data at the bottom of the describe command output indicates that a Multi-Attach PVC error has occurred. See the [Troubleshoot Pods Failing to Restart on Other Worker Nodes](../utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md) procedure to unmount the PVC. This will allow the Nexus pod to begin successfully running on the new NCN worker node.
+    -   If the event data at the bottom of the describe command output indicates that a Multi-Attach PVC error has occurred. See the [Troubleshoot Pods Multi-Attach Error](../utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md) procedure to unmount the PVC. This will allow the Nexus pod to begin successfully running on the new NCN worker node.
 
 -   **High-speed network resiliency after `ncn-w001` goes down**
     -   The slingshot-fabric-manager pod running on one of NCNs does not rely on `ncn-w001`. If `ncn-w001` goes down, the slingshot-fabric-manager pods should not be impacted as the pod is runs on other NCNs, such as `ncn-w002`.
@@ -83,5 +83,4 @@ In a future release, strides will be made to further improve the resiliency of t
 -   Rebalancing of pods/workloads after an NCN worker node that was down, comes back up.
 -   Analysis/improvements wrt outages of the Node Management Network \(NMN\) and the impact to critical system management services.
 -   Expanded analysis/improvements of resiliency of noncritical services \(those that are not directly related to job launch, application run, or compute boot\).
-
 

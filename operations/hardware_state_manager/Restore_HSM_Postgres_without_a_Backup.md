@@ -1,4 +1,4 @@
-## Restore Hardware State Manager (HSM) Postgres without an Existing Backup
+# Restore Hardware State Manager (HSM) Postgres without an Existing Backup
 
 This procedure is intended to repopulate HSM in the event when no Postgres backup exists.
 
@@ -12,6 +12,11 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
 
   ```bash
   ncn# kubectl -n services get pods -l cluster-name=cray-smd-postgres
+  ```
+
+  Example output:
+
+  ```
   NAME                  READY   STATUS    RESTARTS   AGE
   cray-smd-postgres-0   3/3     Running   0          18d
   cray-smd-postgres-1   3/3     Running   0          18d 
@@ -36,6 +41,11 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
     
     ```bash
     ncn# cray hsm service ready
+    ```
+
+    Example output:
+
+    ```
     code = 0
     message = "HSM is healthy"
     ```
@@ -44,7 +54,6 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
     
     ```bash
     ncn# cray hsm state components list --type node --format json | jq .[].ID | wc -l
-    0
     ```
 
 4. Restart MEDS and REDS.
@@ -81,5 +90,4 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
     
     * [Manage Component Groups](Manage_Component_Groups.md)
     * [Manage Component Partitions](Manage_Component_Partitions.md)
-
 

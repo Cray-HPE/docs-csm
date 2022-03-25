@@ -1,4 +1,4 @@
-## FAS Filters
+# FAS Filters
 
 FAS uses five primary filters for `actions` and `snapshots` to determine what operations to create. The filters are listed below:
 
@@ -18,11 +18,11 @@ All filters are logically connected with `AND` logic. Only the `stateComponentFi
 ### Selection Filters
 
 #### `stateComponentFilter`
-The state component filter allows users to select hardware to update. Hardware can be selected individually with xnames, or in groups by leveraging the Hardware State Manager (HSM) groups and partitions features.
+The state component filter allows users to select hardware to update. Hardware can be selected individually with component names (xnames), or in groups by leveraging the Hardware State Manager (HSM) groups and partitions features.
 
 ##### Parameters
 
-* `xnames` - A list of xnames to target.
+* `xnames` - A list of component names (xnames) to target.
 * `partitions` - A partition to target.
 * `groups`- A group to target.
 * `deviceTypes` Set to NodeBMC, RouterBMC, or ChassisBMC. These are the ONLY three allowed types and come from the Hardware State Manager (HSM).
@@ -44,9 +44,9 @@ The inventory hardware filter takes place after the state component filter has b
 
 ####  `imageFilter`
 
-FAS applies images to xname/targets. The image filter is a way to specify an explicit image that should be used. When included with other filters, the image filter reduces the devices considered to only those devices where the image can be applied.
+FAS applies images to component name (xname)/targets. The image filter is a way to specify an explicit image that should be used. When included with other filters, the image filter reduces the devices considered to only those devices where the image can be applied.
 
-For example, if a user specifies an image that only applies to gigabyte, nodeBMCs, BIOS targets. If all hardware in the system is targeted with an empty stateComponentFilter, FAS would find all devices in the system that can be updated via Redfish, and then the image filter would remove all xname/ targets that this image could not be applied. In this example, FAS would remove any device that is not a Gigabyte nodeBMC, as well as any target that is not BIOS.
+For example, if a user specifies an image that only applies to gigabyte, nodeBMCs, BIOS targets. If all hardware in the system is targeted with an empty stateComponentFilter, FAS would find all devices in the system that can be updated via Redfish, and then the image filter would remove all component name (xname)/ targets that this image could not be applied. In this example, FAS would remove any device that is not a Gigabyte nodeBMC, as well as any target that is not BIOS.
 
 ##### Parameters
 
@@ -77,7 +77,7 @@ The target filter selects targets that match against the list. For example, if t
 
 The command group is the most important part of an action command and controls if the action is executed as dry-run or a live update.
 
-It also determines whether or not to override an operation that would normally not be executed if there is no way to return the xname/target to the previous firmware version. This happens if an image does not exist in the image repository.
+It also determines whether or not to override an operation that would normally not be executed if there is no way to return the component name (xname)/target to the previous firmware version. This happens if an image does not exist in the image repository.
 
 These filters are then applied; and then `command` parameter applies settings for the overall action. The swagger file is a great reference.
 

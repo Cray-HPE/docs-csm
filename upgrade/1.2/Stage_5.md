@@ -1,47 +1,59 @@
-# Stage 5 - Workaround for MAC-learning issue with Aruba 8325 switches
-
-Issue description:
-
-> **Aruba CR:**          90598
->
-> **Affected platform:** Aruba 8325 switches
->
-> **Symptom:**           MAC learning stops
->
-> **Scenario:**          Under extremely rare DMA stress conditions, an L2 learning thread may timeout and exit, preventing future MAC learning
->
-> **Workaround:**        Reboot the switch or monitor the L2 thread and restart it with an NAE script
->
-> **Fixed in:**        10.06.0130, 10.7.0010, and above
->
-> [Aruba release notes](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches;productSeries=Aruba%208325%20Switch%20Series)
-
-## Overview
-
-**`NOTE:`** If you do not have Aruba 8325 switches in your system, skip this stage and [return to main upgrade page](README.md).
-
-You can run the NAE script on the 8325 platform switches to resolve a MAC learning issue. An install script is provided to automate this process.
-
-The file locations:
-* NAE script: [scripts/aruba/L2X-Watchdog-creates-bash-script.py](scripts/aruba/L2X-Watchdog-creates-bash-script.py)
-* Automatic NAE install script: [scripts/aruba/nae_upload.py](scripts/aruba/nae_upload.py)
-
-## Prerequisites
-
-* You have an 8325 in your setup that is running software version below 10.06.0130.
-* Additionally, the install script used in this procedure makes the following assumptions:
-	* The switches (and their IP addresses) are in the `/etc/hosts` file with hostnames containing the string "sw".
-	* You are using default username `admin` for the switches.
-	* All of the switches use the same password for the `admin` user (the install script will prompt you for the password).
+# Stage 5 - Perform NCN Personalization
 
 ## Procedure
+1. Set the root user password and SSH keys before running NCN personalization.
+   The location where the password is stored in Vault has changed since previous
+   CSM versions. See [Configure the Root Password and Root SSH Keys in Vault](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#configure-the-root-password-and-root-ssh-keys-in-vault).
 
-1. Run the NAE install script:
+1. If custom configuration content was merged with content from a previous CSM
+   installation, merge the new CSM configuration in with it in the `csm-config-management`
+   git repository. This is not necessary if the NCN personalization configuration
+   was using a commit on a `cray/csm/VERSION` branch (i.e using default
+   configuration).
 
-	```bash
-	ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/aruba/nae_upload.py
-	```
-	
-1. Type in your switch password and the script will upload and enable the NAE script.
+   The new CSM configuration content is found in the `cray-product-catalog`
+   config map. If using the default CSM configuration, simply note the value in
+   the `commit` field.
 
-[Return to main upgrade page](README.md)
+   ```bash
+   ncn# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
+
+   1.2.0:
+     configuration:
+       clone_url: https://vcs.cmn.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git
+       commit: 43ecfa8236bed625b54325ebb70916f55884b3a4
+       import_branch: cray/csm/1.9.24
+       import_date: 2022-07-28 03:26:01.869501
+       ssh_url: git@vcs.cmn.SYSTEM_DOMAIN_NAME:cray/csm-config-management.git
+   ...
+   ```
+
+   The specific dates, commits, and other values may not be the same as the output above.
+
+1. Write out the current `ncn-personalization` configuration to a JSON file.
+
+   ```bash
+   ncn-m001# cray cfs configurations describe ncn-personalization --format json > ncn-personalization.json
+   ```
+
+1. Run the `apply_csm_configuration.sh` script. This script will update the CSM
+   layer in the `ncn-personalization` configuration, enable configuration of
+   the NCNs, and monitor the progress of the NCN personalization process.
+
+   **IMPORTANT:**
+
+   > * If you are using a different branch than the default to include custom
+       changes, use the `--git-commit` option to override the commit to the
+       commit on your branch.
+   > * If you are using the default CSM configuration found in the product
+       catalog above, you may omit this option, but you should use the `--csm-release`
+       option to explicitly set the release version, otherwise the latest available
+       release will be applied.
+
+   ```bash
+   ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh [--git-commit COMMIT]
+   ```
+
+   For more information on this script, see [Automatically Apply CSM Configuration to NCNs](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#automatically-apply-csm-configuration-to-ncns)
+
+Once `Stage 5` upgrade is complete, proceed to [*Validate CSM Health*](../index.md#validate_csm_health) on the main upgrade page.

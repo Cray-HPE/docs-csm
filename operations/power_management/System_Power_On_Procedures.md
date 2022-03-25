@@ -1,6 +1,4 @@
-
-
-## System Power On Procedures
+# System Power On Procedures
 
 The procedures in section detail the high-level tasks required to power on an HPE Cray EX system.
 
@@ -10,11 +8,11 @@ The procedures in section detail the high-level tasks required to power on an HP
 -   The Boot Orchestration Service \(BOS\) manages and configures power on and boot tasks.
 -   The System Admin Toolkit \(SAT\) automates boot and shutdown services by stage, for example: 
 
-    ```screen
+    ```bash
     sat bootsys boot --stage platform-services
     ```
 
-    ```screen
+    ```bash
     sat bootsys boot --stage bos-operations
     ```
 
@@ -23,7 +21,7 @@ The procedures in section detail the high-level tasks required to power on an HP
 
 -   Obtain user ID and password for all the system management network switches, for example:
 
-    ```screen
+    ```bash
     sw-spine-001.mtl
     sw-spine-002.mtl
     sw-leaf-001.mtl
@@ -71,6 +69,4 @@ To power on and boot compute nodes and UANs, refer to [Power On and Boot Compute
 ### Run System Health Checks
 
 After power on, refer to [Validate CSM Health](../validate_csm_health.md) to check system health and status.
-
-
 

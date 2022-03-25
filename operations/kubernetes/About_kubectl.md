@@ -1,4 +1,4 @@
-## About kubectl
+# About kubectl
 
 `kubectl` is a CLI that can be used to run commands against a Kubernetes cluster. The format of the `kubectl` command is shown below:
 
@@ -6,7 +6,7 @@
 ncn# kubectl COMMAND RESOURCE_TYPE RESOURCE_NAME FLAGS
 ```
 
-An example of using kubectl to retrieve information about a pod is shown below:
+An example of using `kubectl` to retrieve information about a pod is shown below:
 
 ```bash
 ncn# kubectl get pod POD_NAME1 POD_NAME2

@@ -1,5 +1,4 @@
-
-## Compute Node Boot Issue Symptom: Message About Invalid EEPROM Checksum in Node Console or Log
+# Compute Node Boot Issue Symptom: Message About Invalid EEPROM Checksum in Node Console or Log
 
 On rare occasions, the processor hardware may lose the Serial Over Lan \(SOL\) connections and may need to be reseated to allow the node to successfully boot.
 
@@ -18,10 +17,15 @@ The following figure shows that the EEPROM checksum errors lead to a `dracut-ini
 
 ### Problem Detection
 
-Run dmidecode from the compute node to identify its model. H87926-500 is the silver model that may exhibit this issue, whereas the production model, H87926-550, does not exhibit SOL connection issues.
+Run `dmidecode` from the compute node to identify its model. H87926-500 is the silver model that may exhibit this issue, whereas the production model, H87926-550, does not exhibit SOL connection issues.
 
 ```bash
 cmp4:~ # dmidecode|grep H87926
+```
+
+Example output:
+
+```
         Version: H87926-550
 ```
 

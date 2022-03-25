@@ -1,4 +1,4 @@
-## Troubleshoot UAN Boot Issues
+# Troubleshoot UAN Boot Issues
 
 Use this topic to guide troubleshooting of UAN boot issues.
 
@@ -26,7 +26,7 @@ Most failures to PXE are the result of misconfigured network switches and/or BIO
 
 ### Initrd \(Dracut\) Issues
 
-Dracut failures are often caused by the wrong interface being named `nmn0`, or to multiple entries for the UAN xname in DNS. The latter is a result of multiple interfaces making DHCP requests. Either condition can cause IP address mismatches in the dvs\_node\_map. DNS configures entries based on DHCP leases.
+Dracut failures are often caused by the wrong interface being named `nmn0`, or by having multiple entries for the UAN component name (xname) in DNS. The latter is a result of multiple interfaces making DHCP requests. Either condition can cause IP address mismatches in the dvs\_node\_map. DNS configures entries based on DHCP leases.
 
 When dracut starts, it renames the network device named by the `ifmap=netX:nmn0` kernel parameter to `nmn0`. This interface is the only one dracut will enable DHCP on. The `ip=nmn0:dhcp` kernel parameter limits dracut to DHCP only `nmn0`. The ifmap value must be set correctly in the kernel\_parameters field of the BOS session template.
 
@@ -36,10 +36,23 @@ UANs require CPS and DVS to boot from images. These services are configured in d
 
 ```bash
 ncn-m001#  kubectl get nodes -l cps-pm-node=True -o custom-columns=":metadata.name" --no-headers
+```
+
+Example output:
+
+```
 ncn-w001
 ncn-w002
+```
+
+```bash
 ncn-m001#  for node in `kubectl get nodes -l cps-pm-node=True -o custom-columns=":metadata.name" --no-headers`; do
 ssh $node "lsmod | grep '^dvs '"
+```
+
+Example output:
+
+```
 done
 ncn-w001
 ncn-w002
@@ -49,23 +62,38 @@ If DVS and CPS are both healthy, then both of these commands will return all the
 
 ### Image Boot Issues
 
-Once dracut exits, the UAN will boot the rootfs image. Failures seen in this phase tend to be failures of `spire-agent`, `cfs-state-reporter`, or both, to start. The `cfs-state-reporter` tells BOA that the node is ready and allows BOA to start CFS for Node Personalization. If `cfs-state-reporter` does not start, check if the `spire-agent` has started. The `cfs-state-reporter` depends on the `spire-agent`. Running systemctl status spire-agent will show that that service is enabled and running if there are no issues with that service. Similarly, running `systemctl status cfs-state-reporter` will show a status of SUCCESS.
+Once dracut exits, the UAN will boot the rootfs image. Failures seen in this phase tend to be failures of `spire-agent`, `cfs-state-reporter`, or both, to start. The `cfs-state-reporter` tells BOA that the node is ready and allows BOA to start CFS for Node Personalization. If `cfs-state-reporter` does not start, check if the `spire-agent` has started. The `cfs-state-reporter` depends on the `spire-agent`. Running `systemctl status spire-agent` will show that that service is enabled and running if there are no issues with that service. Similarly, running `systemctl status cfs-state-reporter` will show a status of SUCCESS.
 
-```
-uan# systemctl status spire-agent
-● spire-agent.service - SPIRE Agent
-   Loaded: loaded (/usr/lib/systemd/system/spire-agent.service; enabled; vendor preset: enabled)
-   Active: active (running) since Wed 2021-02-24 14:27:33 CST; 19h ago
- Main PID: 3581 (spire-agent)
-    Tasks: 57
-   CGroup: /system.slice/spire-agent.service
-           └─3581 /usr/bin/spire-agent run -expandEnv -config /root/spire/conf/spire-agent.conf
+1. Verify the `spire-agent` service is enabled and running.
 
-uan# systemctl status cfs-state-reporter
-● cfs-state-reporter.service - cfs-state-reporter reports configuration level of the system
-   Loaded: loaded (/usr/lib/systemd/system/cfs-state-reporter.service; enabled; vendor preset: enabled)
-   Active: inactive (dead) since Wed 2021-02-24 14:29:51 CST; 19h ago
- Main PID: 3827 (code=exited, status=0/SUCCESS)
-```
+   ```
+   uan# systemctl status spire-agent
+   ```
 
+   Example output:
+
+   ```
+   ● spire-agent.service - SPIRE Agent
+      Loaded: loaded (/usr/lib/systemd/system/spire-agent.service; enabled; vendor preset: enabled)
+      Active: active (running) since Wed 2021-02-24 14:27:33 CST; 19h ago
+   Main PID: 3581 (spire-agent)
+      Tasks: 57
+      CGroup: /system.slice/spire-agent.service
+            └─3581 /usr/bin/spire-agent run -expandEnv -config /root/spire/conf/spire-agent.conf
+   ```
+
+1. Verify `cfs-state-reporter` is healthy and returns SUCCESS.
+   
+   ```
+   uan# systemctl status cfs-state-reporter
+   ```
+
+   Example output:
+
+   ```
+   ● cfs-state-reporter.service - cfs-state-reporter reports configuration level of the system
+      Loaded: loaded (/usr/lib/systemd/system/cfs-state-reporter.service; enabled; vendor preset: enabled)
+      Active: inactive (dead) since Wed 2021-02-24 14:29:51 CST; 19h ago
+   Main PID: 3827 (code=exited, status=0/SUCCESS)
+   ```
 

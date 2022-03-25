@@ -1,5 +1,4 @@
-
-## Tools for Resolving Compute Node Boot Issues
+# Tools for Resolving Compute Node Boot Issues
 
 A number of tools can be used to analyze and debug issues encountered during the compute node boot process. The underlying issue and symptoms dictate the type of tool required.
 
@@ -74,13 +73,29 @@ ncn-m001# zypper install atftp
 
 The `atftp` TFTP client can be used to request files from the TFTP server. The TFTP server is on the NMN and listens on port 69. The TFTP server sends the ipxe.efi file as the response in this example.
 
+Request the files:
+
 ```bash
 ncn-m001# atftp
-ncn-m001# atftp
+```
+
+Example output:
+
+```
 tftp> connect 10.100.160.2 69
 tftp> get ipxe.efi test-ipxe.efi
 tftp> quit
+```
+
+List the files:
+
+```bash
 ncn-m001# ls -l test-ipxe.efi
+```
+
+Example output:
+
+```
 -rw-r--r-- 1 root root 951904 Sep 11 10:44 test-ipxe.efi
 ```
 
@@ -106,5 +121,4 @@ There are two tools that can be used to access a BMC's console via SOL:
     ```
 
 -   ConMan - The ConMan tool is used to collect logs from nodes. It is also used to attach to the node's SOL console. For more information, refer to [ConMan](../conman/ConMan.md) and [Access Compute Node Logs](../conman/Access_Compute_Node_Logs.md).
-
 

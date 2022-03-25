@@ -1,5 +1,3 @@
-
-
 # Create Application Node Config YAML
 
 This topic provides directions on constructing the `application_node_config.yaml` file. This file controls how the `csi config init` command finds and treats application nodes discovered in the `hmn_connections.json` file when generating configuration files for the system.
@@ -29,7 +27,7 @@ For a detailed mapping between the data in the SHCD and the equivalent informati
 
 ### What is a Source Name?
 
-The source name is the name of the device that is being connected to the HMN network.  In the SHCD HMN tab, this is in a column with the header `Source` or the `Source` field in the element of the `hmn_connections.json` for this device. From this source name, the `csi config init` command can infer the type of hardware that is connected to the HMN network (Node BMC, PDU, HSN Switch, BMC, and more).
+The source name is the name of the device that is being connected to the HMN network. In the SHCD HMN tab, this is in a column with the header `Source` or the `Source` field in the element of the `hmn_connections.json` for this device. From this source name, the `csi config init` command can infer the type of hardware that is connected to the HMN network (Node BMC, PDU, HSN Switch, BMC, and more).
 
 Example SHCD row from HMN tab with column headers representing an application node with SourceName `uan01` in cabinet `x3000` in slot 19. Its BMC is connected to port 37 of the management leaf switch in x3000 in slot 14.
 
@@ -142,14 +140,14 @@ Example `hmn_connections.json` row representing an application node with SourceN
 
 5. Add application node aliases.
 
-    The `aliases` field is an map of xnames (strings) to an array of aliases (strings).
-    > For guidance on building application node xnames follow one of the following:
-    > * [Building xnames for nodes in a single application node chassis](shcd_hmn_connections_rules.md#application-node-single-node-chassis-xname)
-    > * [Building xnames for nodes in a dual application node chassis](shcd_hmn_connections_rules.md#application-node-dual-node-chassis-xname)
+    The `aliases` field is an map of component name (xname) strings to an array of alias strings.
+    > For guidance on building application node component names (xnames), follow one of the following:
+    > * [Building component names (xnames) for nodes in a single application node chassis](shcd_hmn_connections_rules.md#application-node-single-node-chassis-xname)
+    > * [Building component names (xnames) for nodes in a dual application node chassis](shcd_hmn_connections_rules.md#application-node-dual-node-chassis-xname)
 
     By default, the `csi config init` command does not set the `ExtraProperties.Alias` field for application nodes in the SLS input file.
 
-    For each application node add its alias mapping under the `aliases` field. Where the key is the xname of the application node, and the value is an array of aliases (strings) which allows for one or more aliases to be specified for an application node.
+    For each application node, add its alias mapping under the `aliases` field. Where the key is the component name (xname) of the application node, and the value is an array of aliases (strings) which allows for one or more aliases to be specified for an application node.
 
     From the HMN example above, the following application node aliases are required:
 
@@ -162,7 +160,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
       x3113c0s25b0n0: ["visualization01", "vn02"]
       x3113c0s23b0n0: ["uan01"]
     ```
-    > The ordering of xnames under `aliases` does not matter.
+    > The ordering of component names (xnames) under `aliases` does not matter.
 
 6. Final information in the example `application_node_config.yaml` built from the HMN example above.
     
@@ -190,5 +188,4 @@ Example `hmn_connections.json` row representing an application node with SourceN
       x3113c0s25b0n0: ["visualization01", "vn02"]
       x3113c0s23b0n0: ["uan01"]
     ```
-
 

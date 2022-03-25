@@ -11,44 +11,39 @@ will join Kubernetes after it is rebooted later in
 [Deploy Final NCN](index.md#deploy_final_ncn).
 
 <a name="timing-of-deployments"></a>
-### Timing of Deployments
+## Timing of Deployments
 
 The timing of each set of boots varies based on hardware. Nodes from some manufacturers will
 POST faster than others or vary based on BIOS setting. After powering on a set of nodes,
 an administrator can expect a healthy boot session to take about 60 minutes depending on
 the number of storage and worker nodes.
 
-### Topics:
+## Topics
 
    1. [Prepare for Management Node Deployment](#prepare_for_management_node_deployment)
       1. [Tokens and IPMI Password](#tokens-and-ipmi-password)
-      1. [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
       1. [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
    1. [Update Management Node Firmware](#update_management_node_firmware)
    1. [Deploy Management Nodes](#deploy_management_nodes)
       1. [Deploy Workflow](#deploy-workflow)
       1. [Deploy](#deploy)
+      1. [Check LVM on Masters and Workers](#check-lvm-on-masters-and-workers)
       1. [Check for Unused Drives on Utility Storage Nodes](#check-for-unused-drives-on-utility-storage-nodes)
-      1. [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
    1. [Configure after Management Node Deployment](#configure_after_management_node_deployment)
       1. [LiveCD Cluster Authentication](#livecd-cluster-authentication)
-      1. [BGP Routing](#bgp-routing)
-      1. [Configure and Trim UEFI Entries](#configure-and-trim-uefi-entries)
       1. [Install Tests and Test Server on NCNs](#install-tests)
    1. [Validate Management Node Deployment](#validate_management_node_deployment)
       1. [Validation](#validation)
       1. [Optional Validation](#optional-validation)
    1. [Next Topic](#next-topic)
 
-## Details
-
 <a name="prepare_for_management_node_deployment"></a>
-### 1. Prepare for Management Node Deployment
+## 1. Prepare for Management Node Deployment
 
 Preparation of the environment must be done before attempting to deploy the management nodes.
 
 <a name="tokens-and-ipmi-password"></a>
-#### 1.1 Tokens and IPMI Password
+### 1.1 Tokens and IPMI Password
 
 1. Define shell environment variables that will simplify later commands to deploy management nodes.
 
@@ -78,15 +73,8 @@ Preparation of the environment must be done before attempting to deploy the mana
    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
    ```
 
-<a name="apply-ncn-pre-boot-workarounds"></a>
-#### 1.2 Apply NCN Pre-Boot Workarounds
-
-_There will be post-boot workarounds as well._
-
-Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
-
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
-#### 1.3 Ensure Time Is Accurate Before Deploying NCNs
+### 1.2 Ensure Time Is Accurate Before Deploying NCNs
 
 **NOTE**: If you wish to use a timezone other than UTC, instead of step 1 below, follow
 [this procedure for setting a local timezone](../operations/node_management/Configure_NTP_on_NCNs.md#set-a-local-timezone), then
@@ -117,6 +105,13 @@ proceed to step 2.
    ```
 
    This ensures that the PIT is configured with an accurate date/time, which will be properly propagated to the NCNs during boot.
+
+   If you receive the error `Failed to set time: NTP unit is active` you will need to stop `chrony` first.
+
+   ```bash
+   pit# systemctl stop chronyd
+   ```
+   Then run the commands above to complete the process.
 
 1. Ensure the current time is set in BIOS for all management NCNs.
 
@@ -177,7 +172,7 @@ proceed to step 2.
    Repeat the above process for each NCN.
 
 <a name="update_management_node_firmware"></a>
-### 2. Update Management Node Firmware
+## 2. Update Management Node Firmware
 
 > All firmware can be found in the HFP package provided with the Shasta release.
 
@@ -194,7 +189,7 @@ firmware requirement before starting.
    after the firmware has been updated.
 
    See the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
-   on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for information about the HPE Cray EX HPC Firmware Pack (HFP) product.
+   on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for more information about the HPE Cray EX HPC Firmware Pack (HFP) product.
 
    In the HFP documentation there is information about the recommended firmware packages to be installed.
    See "Product Details" in the HPE Cray EX HPC Firmware Pack Installation Guide.
@@ -216,8 +211,6 @@ firmware requirement before starting.
 1. The firmware on the management nodes should be checked for compliance with the minimum required version
    and updated, if necessary, at this point.
 
-   See [Update NCN Firmware](update_ncn_firmware.md).
-
    > **`WARNING:`** Gigabyte NCNs running BIOS version C20 can become unusable
    > when Shasta 1.5 is installed. This is a result of a bug in the Gigabyte
    > firmware. This bug has not been observed in BIOS version C17.
@@ -229,7 +222,7 @@ firmware requirement before starting.
    * See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
 
 <a name="deploy_management_nodes"></a>
-### 3. Deploy Management Nodes
+## 3. Deploy Management Nodes
 
 Deployment of the nodes starts with booting the storage nodes first. Then, the master nodes and worker nodes should be booted together.
 After the operating system boots on each node, there are some configuration actions which take place. Watching the
@@ -238,7 +231,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
 
 <a name="deploy-workflow"></a>
-##### 3.1 Deploy Workflow
+### 3.1 Deploy Workflow
 The configuration workflow described here is intended to help understand the expected path for booting and configuring. The actual steps you will be performing are in the [Deploy](#deploy) section.
 
 1. Start watching the consoles for `ncn-s001` and at least one other storage node
@@ -256,7 +249,7 @@ The configuration workflow described here is intended to help understand the exp
 1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plane, then it will join the Kubernetes cluster.  
     - Now `ncn-s001` should notice this from any one of the worker nodes and move forward with creation of ConfigMaps and running the post-Ceph playbooks (s3, OSD pools, quotas, etc.)
 1. Once `ncn-s001` creates etcd-backup-s3-credentials during the ceph-rgw-users role which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward
-   > **`NOTE`**: If several hours have elapsed between storage and master nodes booting, or if there were issues PXE booting master nodes, the cloud init script on `ncn-s001` may not complete successfully.  This can cause the `/var/log/cloud-init-output.log` on master node(s) to continue to output the following message:
+   > **`NOTE`**: If several hours have elapsed between storage and master nodes booting, or if there were issues PXE booting master nodes, the cloud init script on `ncn-s001` may not complete successfully. This can cause the `/var/log/cloud-init-output.log` on master node(s) to continue to output the following message:
    >
    > [ 1328.351558] cloud-init[8472]: Waiting for storage node to create etcd-backup-s3-credentials secret...
    >
@@ -268,16 +261,20 @@ The configuration workflow described here is intended to help understand the exp
    >
 
 <a name="deploy"></a>
-##### 3.2 Deploy
+### 3.2 Deploy
 
 1. Change the default root password and SSH keys
-   > If you want to avoid using the default install root password and SSH keys for the NCNs, follow the
-   > NCN image customization steps in [Change NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 
-   This step is **strongly encouraged** for all systems.
+   The management nodes deploy with a default password in the image, so it is a recommended best
+   practice for system security to change the root password in the image so that it is
+   not the documented default password.
 
-1. Create boot directories for any NCN in DNS:
-    > This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
+   It is **strongly encouraged** to change the default root password and SSH keys in the images used to boot the management nodes.
+   Follow the NCN image customization steps in [Change NCN Image Root Password and SSH Keys on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
+
+1. Create boot directories for any NCN in DNS This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
+
+    > **`NOTE`** This script depends on `IPMI_PASSWORD` being set, this is done in [Tokens and IPMI Password](#tokens-and-ipmi-password)
 
     ```bash
     pit# /root/bin/set-sqfs-links.sh
@@ -287,13 +284,17 @@ The configuration workflow described here is intended to help understand the exp
     - **kubernetes-worker nodes** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd)
     - A brief overview of what is expected is here, in [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline)
 
-1. Run the BIOS Baseline script to apply a configs to BMCs. The script will apply helper configs to facilitate more deterministic network booting on any NCN port. The script depends on 
+1. Run the BIOS Baseline script to apply a configs to BMCs. The script will apply helper configs to facilitate more deterministic network booting on any NCN port. **This runs against any server vendor**, some settings are not applied for certain vendors. 
+   
+    > **`NOTE`** This script depends on `IPMI_PASSWORD` being set, this is done in [Tokens and IPMI Password](#tokens-and-ipmi-password)
+   
+    > **`NOTE`** This script will enable DCMI/IPMI on Hewlett-Packard Enterprise servers equipped with ILO. If `ipmitool` is not working at this time, it will after running this script.
 
     ```bash
     pit# /root/bin/bios-baseline.sh
     ```
 
-1. Set each node to always UEFI Network Boot, and ensure they are powered off
+1. <a name="set-uefi-and-power-off"></a>Set each node to always UEFI Network Boot, and ensure they are powered off
 
     ```bash
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot,persistent
@@ -337,8 +338,6 @@ The configuration workflow described here is intended to help understand the exp
     ncn-w003-mgmt
     ```
 
-    > **`IMPORTANT`** This is the administrators _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds) (the `before-ncn-boot` breakpoint).
-
     > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
 <a name="boot-the-storage-nodes"></a>
 1. Boot the **Storage Nodes**
@@ -348,7 +347,6 @@ The configuration workflow described here is intended to help understand the exp
         ```bash
         pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | grep -v "ncn-s001-" | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on; \
                  sleep 60; ipmitool -I lanplus -U $USERNAME -E -H ncn-s001-mgmt power on
- 
         ```
 
 1. Wait. Observe the installation through `ncn-s001-mgmt`'s console:
@@ -376,14 +374,6 @@ The configuration workflow described here is intended to help understand the exp
     **`NOTE`**: Watch the storage node consoles carefully for error messages. If any are seen, consult [Ceph-CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
     **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary), see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
-
-    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname), see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
-
-      > ```bash
-      > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-      > ```
-      > CASMINST-1093
-      > ```
 
 1. Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
 
@@ -425,13 +415,6 @@ The configuration workflow described here is intended to help understand the exp
 
     **`NOTE`**: If one of the master nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [CEPH CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
-    **`NOTE`**: If other issues arise, such as cloud-init (e.g. NCNs come up to Linux with no hostname) see the CSM workarounds for fixes around mutual symptoms. If there is a workaround here, the output will look similar to the following.
-
-    > ```bash
-    > pit# ls /opt/cray/csm/workarounds/after-ncn-boot
-    > CASMINST-1093
-    > ```
-
 1. Refer to [timing of deployments](#timing-of-deployments). It should take no more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the master nodes and worker nodes aside from the PIT node booted from the LiveCD are `Ready`:
 
     ```bash
@@ -442,12 +425,12 @@ The configuration workflow described here is intended to help understand the exp
     Expected output looks similar to the following:
 
     ```text
-    NAME       STATUS   ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
-    ncn-m002   Ready    master   14m     v1.18.6   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-m003   Ready    master   13m     v1.18.6   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w001   Ready    <none>   6m30s   v1.18.6   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w002   Ready    <none>   6m16s   v1.18.6   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+    NAME       STATUS   ROLES                  AGE   VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
+    ncn-m002   Ready    control-plane,master   2h    v1.20.13   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-m003   Ready    control-plane,master   2h    v1.20.13   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w001   Ready    <none>                 2h    v1.20.13   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w002   Ready    <none>                 2h    v1.20.13   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w003   Ready    <none>                 2h    v1.20.13   10.252.1.9    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
     ```
 
 1.  Stop watching the console from `ncn-m002`.
@@ -525,7 +508,7 @@ If needed, the LVM checks can be performed manually on the master and worker nod
 The manual checks are considered successful if all of the `blkid` commands report a disk device (such as `/dev/sdc` -- the particular device is unimportant). If any of the `lsblk` commands return no output, then the check is a failure. **Any failures must be resolved before continuing.** See the following section for details on how to do so.
 
 <a name="lvm-check-failure-recovery"></a>
-#### 3.3.3 LVM Check Failure Recovery
+#### 3.3.4 LVM Check Failure Recovery
 
 If there are LVM check failures, then the problem must be resolved before continuing with the install.
 
@@ -542,7 +525,7 @@ If there are LVM check failures, then the problem must be resolved before contin
         * Note: The `ipmitool` command will give errors trying to power on the unaffected nodes, because they are already powered on -- this is expected and not a problem.
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
-#### 3.4 Check for Unused Drives on Utility Storage Nodes
+### 3.4 Check for Unused Drives on Utility Storage Nodes
 
  > **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware.
  > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning. 
@@ -556,7 +539,7 @@ If there are LVM check failures, then the problem must be resolved before contin
 | GigaByte              | 12 |
 | HPE                   | 8  |
 
-##### Option 1
+#### Option 1
 
   If you have OSDs on each node (`ceph osd tree` can show this), then you have all your nodes in Ceph. That means you can utilize the orchestrator to look for the devices.
 
@@ -567,11 +550,11 @@ If there are LVM check failures, then the problem must be resolved before contin
     24
     ```
 
-   **`IMPORTANT:`** If the returned number of OSDs is equal to total_osds calculated, then you can skip the following steps.  If not, then please proceed with the below additional checks and remediation steps.
+   **`IMPORTANT:`** If the returned number of OSDs is equal to total_osds calculated, then you can skip the following steps. If not, then please proceed with the below additional checks and remediation steps.
 
 1. Compare your number of OSDs to your output which should resemble the example below. The number of drives will depend on the server hardware.
 
-   > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the below command to limit the results.
+    > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the below command to limit the results.
 
     ```bash
     ncn-s# ceph orch device ls
@@ -637,7 +620,7 @@ If there are LVM check failures, then the problem must be resolved before contin
 
     * If it has an LVM volume like above, then it may be in use and you should do the option 2 check below to make sure we can wipe the drive.
 
-##### Option 2
+#### Option 2
 
 1. Log into **each** ncn-s node and check for unused drives.
 
@@ -686,18 +669,13 @@ If there are LVM check failures, then the problem must be resolved before contin
 
 More information can be found at [the `cephadm` reference page](../operations/utility_storage/Cephadm_Reference_Material.md).
 
-<a name="apply-ncn-post-boot-workarounds"></a>
-#### 3.4 Apply NCN Post-Boot Workarounds
-
-Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `after-ncn-boot` breakpoint.
-
 <a name="configure_after_management_node_deployment"></a>
-### 4. Configure after Management Node Deployment
+## 4. Configure after Management Node Deployment
 
 After the management nodes have been deployed, configuration can be applied to the booted nodes.
 
 <a name="livecd-cluster-authentication"></a>
-#### 4.1 LiveCD Cluster Authentication
+### 4.1 LiveCD Cluster Authentication
 
 The LiveCD needs to authenticate with the cluster to facilitate the rest of the CSM installation.
 
@@ -730,16 +708,16 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
     Expected output looks similar to the following:
 
     ```text
-    NAME       STATUS   ROLES    AGE     VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
-    ncn-m002   Ready    master   14m     v1.18.6   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-m003   Ready    master   13m     v1.18.6   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w001   Ready    <none>   6m30s   v1.18.6   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w002   Ready    <none>   6m16s   v1.18.6   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
-    ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
+    NAME       STATUS   ROLES                  AGE   VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
+    ncn-m002   Ready    control-plane,master   2h    v1.20.13   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-m003   Ready    control-plane,master   2h    v1.20.13   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w001   Ready    <none>                 2h    v1.20.13   10.252.1.7    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w002   Ready    <none>                 2h    v1.20.13   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
+    ncn-w003   Ready    <none>                 2h    v1.20.13   10.252.1.9    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
     ```
 
 <a name="install-tests"></a>
-#### 4.4 Install Tests and Test Server on NCNs
+### 4.4 Install Tests and Test Server on NCNs
 
 Run the following commands on the PIT node.
 
@@ -751,12 +729,12 @@ pit# popd
 ```
 
 <a name="validate_management_node_deployment"></a>
-### 5. Validate Management Node Deployment
+## 5. Validate Management Node Deployment
 
 Do all of the validation steps. The optional validation steps are manual steps which could be skipped.
 
 <a name="validation"></a>
-#### 5.1 Validation
+### 5.1 Validation
 
 The following `csi pit validate` commands will run a series of remote tests on the other nodes to validate they are healthy and configured correctly.
 
@@ -781,7 +759,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
 1. Check the master and worker nodes.
 
-   **`Note`**: Throughout the output of the `csi pit validate` command there will be a test total for each node where the tests run. Be sure to check all of them and not just the final one.
+   **`Note`**: Throughout the output of the `csi pit validate` command there will be a test total for each node where the tests run. **Be sure to check all of them and not just the final one.** (a `grep` command is provided to help with this)
 
    ```bash
    pit# csi pit validate --k8s | tee csi-pit-validate-k8s.log
@@ -789,7 +767,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
    Once that command has finished, the following will extract the test totals reported for each node:
    ```bash
-   pit# grep "Total" csi-pit-validate-k8s.log
+   pit# grep "Total Test" csi-pit-validate-k8s.log
    ```
 
    Example output for a system with 5 master and worker nodes (other than the PIT node):
@@ -819,13 +797,7 @@ Observe the output of the checks and note any failures, then remediate them.
    1. Return to the 'Boot the **Storage Nodes**' step of [Deploy Management Nodes](#deploy_management_nodes) section above.
 
 <a name="optional-validation"></a>
-#### 5.2 Optional Validation
-
-   All validation should be taken care of by the CSI validate commands. The following checks can be
-   done for sanity-checking:
-
-   **Important common issues should be checked by tests, new pains in these areas should entail requests for
-   new tests.**
+### 5.2 Optional Validation
 
    1. Verify `etcd` is running outside Kubernetes on master nodes
 

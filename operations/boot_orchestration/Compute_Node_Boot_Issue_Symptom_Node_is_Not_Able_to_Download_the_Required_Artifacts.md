@@ -1,5 +1,4 @@
-
-## Compute Node Boot Issue Symptom: Node is Not Able to Download the Required Artifacts
+# Compute Node Boot Issue Symptom: Node is Not Able to Download the Required Artifacts
 
 If either or both of the `kernel` or the `initrd` boot artifacts are missing from the artifact repository, Boot Script Service \(BSS\), or both, the node will not be able to download the required boot artifacts and will fail to boot.
 
@@ -17,10 +16,9 @@ Use the following command from a non-compute node \(NCN\) to see which boot arti
 ncn-m001# cray bss bootparameters list
 ```
 
-Each boot artifact has a download URL, as shown in the following examples:
+Each boot artifact has a download URL, as shown in the following example output:
 
-```bash
-ncn-m001# cray bss bootparameters list
+```
 [[results]]
 kernel = "s3://boot-images/dc87a741-f7cc-4167-afae-592c5a8ca7ec/vmlinuz-4.12.14-197.29_9.1.14-cray_shasta_c"
 
@@ -71,6 +69,4 @@ This command will return 404 errors if the specified object does not exist in th
 ### Resolution
 
 Ensure that the required boot artifacts are stored in the artifact repository and/or BSS. If the artifact's name is different than what is already in BSS, then BSS needs to be updated to match.
-
-
 

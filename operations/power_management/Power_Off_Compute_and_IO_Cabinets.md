@@ -1,6 +1,4 @@
-
-
-## Power Off Compute and IO Cabinets
+# Power Off Compute and IO Cabinets
 
 Power off HPE Cray EX liquid-cooled and standard racks.
 
@@ -51,6 +49,11 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
     ```bash
     ncn-m001# kubectl get cronjobs -n services hms-discovery
+    ```
+
+    Example output:
+
+    ```
     NAME            SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE^M
     hms-discovery   */3 * * * *   True      0        117s            15d
     ```
@@ -69,7 +72,7 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
     ![Liquid-cooled Cabinet PDU](../../img/operations/Liquid_Cooled_Cabinet_PDU.svg)
 
-    **Note:** If the TDS cabinet rack-mounted coolant distribution unit \(MCDU\) is receiving power from the PDUs in the management cabinet, the MCDU may stay on after the TDS cabinet PDU circuit breakers are set to OFF. This is expected.
+    **NOTE:** If the TDS cabinet rack-mounted coolant distribution unit \(MCDU\) is receiving power from the PDUs in the management cabinet, the MCDU may stay on after the TDS cabinet PDU circuit breakers are set to OFF. This is expected.
 
     ![Liquid-cooled TDS Cabinet PDU](../../img/operations/Liquid_Cooled_TDS_Cabinet_PDU.svg)
 
@@ -93,6 +96,11 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
     ```bash
     ncn-m001# cray capmc get_xname_status create --filter show_all
+    ```
+
+    Example output:
+
+    ```
     {
       "e": 0,
       "err_msg": "",
@@ -144,6 +152,4 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 5.  To power off Motivair liquid-cooled chilled doors and CDU, locate the power off switch on the CDU control panel and set it to OFF as shown in step 8.
 
     Refer to vendor documentation for the chilled-door cooling system for power control procedures when chilled doors are installed on standard racks.
-
-
 

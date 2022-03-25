@@ -1,4 +1,4 @@
-## Limit the Scope of a BOS Session
+# Limit the Scope of a BOS Session
 
 The Boot Orchestration Service \(BOS\) supports an optional --limit parameter when creating a session. This parameter can be used to further limit the nodes that BOS runs against, and is applied to all boot sets.
 

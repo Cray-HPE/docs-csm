@@ -1,4 +1,4 @@
-## Certificate Types
+# Certificate Types
 
 The system software installation process creates an X.509 Certificate Authority \(CA\) on the primary non-compute node \(NCN\) and uses the CA to create an NCN host X.509 certificate. This host certificate is used during the installation process to configure the API gateway for TLS so that communications to the gateway can use HTTPS.
 
@@ -26,5 +26,4 @@ This document does not cover the process for updating any of the certificates de
 -   **IAM Service `Shasta` realm JWT certificate** - The IAM Service \(Keycloak\) `Shasta` realm contains an RSA certificate. This is known as the realm certificate. The realm certificate is used by the API gateway during JWT validation.
 
     The installer adds a `Shasta` realm to the IAM service. The RSA realm certificate is created as part of that process. This certificate can be viewed from the Keycloak **Admin Console** by selecting the **Shasta** realm, then clicking on the **Realm Settings** link and then on the **Keys** tab. The certificate can be viewed by clicking the **Public Key** button for the RSA certificate. The key length is 2048 bits.
-
 

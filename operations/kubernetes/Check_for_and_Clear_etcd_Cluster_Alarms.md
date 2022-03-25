@@ -1,4 +1,4 @@
-## Check for and Clear etcd Cluster Alarms
+# Check for and Clear etcd Cluster Alarms
 
 Check for any etcd cluster alarms and clear them as needed. An etcd cluster alarm must be manually cleared.
 
@@ -34,6 +34,11 @@ For example, a cluster's database "NOSPACE" alarm is set when database storage s
         -o jsonpath='{.items[*].metadata.name}'); \
         do echo "### ${pod} Alarms Set: ###"; kubectl -n services exec ${pod} -- /bin/sh -c \
         "ETCDCTL_API=3 etcdctl alarm list"; done
+        ```
+
+        Example output:
+
+        ```
         ### cray-bos-etcd-7cxq6qrhz5 Alarms Set: ###
         ### cray-bos-etcd-b9m4k5qfrd Alarms Set: ###
         ### cray-bos-etcd-tnpv8x6cxv Alarms Set: ###
@@ -48,22 +53,8 @@ For example, a cluster's database "NOSPACE" alarm is set when database storage s
         ### cray-crus-etcd-tpclqfln67 Alarms Set: ###
         ### cray-externaldns-etcd-2vnb5t4657 Alarms Set: ###
         ### cray-externaldns-etcd-sc4b88ptg2 Alarms Set: ###
-        ### cray-externaldns-etcd-smhxd9mb8n Alarms Set: ###
-        ### cray-fas-etcd-j9qmtrxnhh Alarms Set: ###
-        ### cray-fas-etcd-w8xl7vbn84 Alarms Set: ###
-        ### cray-fas-etcd-zr2vnvhdwk Alarms Set: ###
-        ### cray-hbtd-etcd-jcxl65xwwd Alarms Set: ###
-        ### cray-hbtd-etcd-rpwx7qdtxb Alarms Set: ###
-        ### cray-hbtd-etcd-vswmwrmhpl Alarms Set: ###
-        ### cray-hmnfd-etcd-2rpvswtpd2 Alarms Set: ###
-        ### cray-hmnfd-etcd-6pm4tm5d6x Alarms Set: ###
-        ### cray-hmnfd-etcd-776b2g5d4l Alarms Set: ###
-        ### cray-reds-etcd-m8wgp24k9p Alarms Set: ###
-        ### cray-reds-etcd-wghvvfbnjp Alarms Set: ###
-        ### cray-reds-etcd-zpzw8mpkfk Alarms Set: ###
-        ### cray-uas-mgr-etcd-4xq5swfsr2 Alarms Set: ###
-        ### cray-uas-mgr-etcd-kfd64zwpbz Alarms Set: ###
-        ### cray-uas-mgr-etcd-nmqkdh8n2d Alarms Set: ###
+
+        [...]
         ```
 
     -   Check if any etcd alarms are set for a particular etcd cluster in the services namespace.
@@ -83,6 +74,11 @@ For example, a cluster's database "NOSPACE" alarm is set when database storage s
         -n services -o jsonpath='{.items[*].metadata.name}'); do echo "### \
         ${pod} Alarms Set: ###"; kubectl -n services exec ${pod} -- /bin/sh -c \
         "ETCDCTL_API=3 etcdctl alarm list"; done
+        ```
+
+        Example output:
+
+        ```
         ### cray-bos-etcd-7cxq6qrhz5 Alarms Set: ###
         ### cray-bos-etcd-b9m4k5qfrd Alarms Set: ###
         ### cray-bos-etcd-tnpv8x6cxv Alarms Set: ###
@@ -109,6 +105,11 @@ For example, a cluster's database "NOSPACE" alarm is set when database storage s
         jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} Disarmed Alarms: \
         ###"; kubectl -n services exec ${pod} -- /bin/sh -c \
         "ETCDCTL_API=3 etcdctl alarm disarm"; done
+        ```
+
+        Example output:
+
+        ```
         ### cray-bos-etcd-7cxq6qrhz5 Disarmed Alarms: ###
         ### cray-bos-etcd-b9m4k5qfrd Disarmed Alarms: ###
         ### cray-bos-etcd-tnpv8x6cxv Disarmed Alarms: ###
@@ -117,28 +118,8 @@ For example, a cluster's database "NOSPACE" alarm is set when database storage s
         ### cray-bss-etcd-xprv5ht5d4 Disarmed Alarms: ###
         ### cray-cps-etcd-8hpztfkjdp Disarmed Alarms: ###
         ### cray-cps-etcd-fp4kfsf799 Disarmed Alarms: ###
-        ### cray-cps-etcd-g6gz9vmmdn Disarmed Alarms: ###
-        ### cray-crus-etcd-6z9zskl6cr Disarmed Alarms: ###
-        ### cray-crus-etcd-krp255f97q Disarmed Alarms: ###
-        ### cray-crus-etcd-tpclqfln67 Disarmed Alarms: ###
-        ### cray-externaldns-etcd-2vnb5t4657 Disarmed Alarms: ###
-        ### cray-externaldns-etcd-sc4b88ptg2 Disarmed Alarms: ###
-        ### cray-externaldns-etcd-smhxd9mb8n Disarmed Alarms: ###
-        ### cray-fas-etcd-j9qmtrxnhh Disarmed Alarms: ###
-        ### cray-fas-etcd-w8xl7vbn84 Disarmed Alarms: ###
-        ### cray-fas-etcd-zr2vnvhdwk Disarmed Alarms: ###
-        ### cray-hbtd-etcd-jcxl65xwwd Disarmed Alarms: ###
-        ### cray-hbtd-etcd-rpwx7qdtxb Disarmed Alarms: ###
-        ### cray-hbtd-etcd-vswmwrmhpl Disarmed Alarms: ###
-        ### cray-hmnfd-etcd-2rpvswtpd2 Disarmed Alarms: ###
-        ### cray-hmnfd-etcd-6pm4tm5d6x Disarmed Alarms: ###
-        ### cray-hmnfd-etcd-776b2g5d4l Disarmed Alarms: ###
-        ### cray-reds-etcd-m8wgp24k9p Disarmed Alarms: ###
-        ### cray-reds-etcd-wghvvfbnjp Disarmed Alarms: ###
-        ### cray-reds-etcd-zpzw8mpkfk Disarmed Alarms: ###
-        ### cray-uas-mgr-etcd-4xq5swfsr2 Disarmed Alarms: ###
-        ### cray-uas-mgr-etcd-kfd64zwpbz Disarmed Alarms: ###
-        ### cray-uas-mgr-etcd-nmqkdh8n2d Disarmed Alarms: ###
+        
+        [...]
         ```
 
     -   Clear all alarms in one particular etcd cluster.
@@ -158,6 +139,11 @@ For example, a cluster's database "NOSPACE" alarm is set when database storage s
         -n services -o jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} \
         Disarmed Alarms:  ###"; kubectl -n services exec ${pod} -- /bin/sh \
         -c "ETCDCTL_API=3 etcdctl alarm disarm"; done
+        ```
+
+        Example output:
+
+        ```
         ### cray-bos-etcd-7cxq6qrhz5 Disarmed Alarms:  ###
         memberID:14039380531903955557 alarm:NOSPACE
         memberID:10060051157615504224 alarm:NOSPACE
@@ -165,6 +151,4 @@ For example, a cluster's database "NOSPACE" alarm is set when database storage s
         ### cray-bos-etcd-b9m4k5qfrd Disarmed Alarms:  ###
         ### cray-bos-etcd-tnpv8x6cxv Disarmed Alarms:  ###
         ```
-
-
 

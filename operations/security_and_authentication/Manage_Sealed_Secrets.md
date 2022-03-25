@@ -1,6 +1,4 @@
-
-
-## Manage Sealed Secrets
+# Manage Sealed Secrets
 
 Sealed secrets are essential for managing sensitive information on the system. The following procedures for managing sealed secrets are included in this section:
 
@@ -65,21 +63,22 @@ If LDAP user federation is required, refer to [Add LDAP User Federation](../secu
    1. Extract the certificate and key used to create the sealed secrets.
 
       ```bash
+      ncn-m001# mkdir -p certs
       ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
       ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
       ```
 
 1. (Optional) Prevent tracked sealed secrets from being regenerated.
     
-    1. Remove the sealed secrets not being regenerated from the `spec.kubernetes.tracked_sealed_secrets` list in `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml` prior to executing the remaining steps in this section.
+   Remove the sealed secrets not being regenerated from the `spec.kubernetes.tracked_sealed_secrets` list in `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml` prior to executing the remaining steps in this section.
 
-    2. Retain the REDS/MEDS/RTS credentials.
+   Retain the REDS/MEDS/RTS credentials.
 
-       ```bash
-       linux# yq delete -i ./${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
-       linux# yq delete -i ./${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
-       linux# yq delete -i ./${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
-       ```
+   ```bash
+   ncn-m001# yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
+   ncn-m001# yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
+   ncn-m001# yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
+   ```
 
 2. Prepare to generate sealed secrets.
    
@@ -200,7 +199,7 @@ The general process outlined in the following steps can be followed if a differe
 
 ```bash
 ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
-{"SNMPUsername": "testuser", "SNMPAuthPassword": "testpas1", "SNMPPrivPassword": "testpass2"}
+{"SNMPUsername": "<USERID>", "SNMPAuthPassword": "<A-PASS>", "SNMPPrivPassword": "<P-PASS>"}
 ```
 
 1. Decrypt the cray_reds_credentials secret.
@@ -248,7 +247,7 @@ ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_swi
 3. Correct the password in the vault_switch_defaults.json file.
 
    ```json
-   {"SNMPUsername": "testuser", "SNMPAuthPassword": "testpass1", "SNMPPrivPassword": "testpass2"}
+   {"SNMPUsername": "<USERID>", "SNMPAuthPassword": "<A-PASS>", "SNMPPrivPassword": "<P-PASS>"}
    ```
 
 4. Update cray_reds_credentials.json with an encoded version of the new password.
@@ -261,7 +260,7 @@ ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_swi
 
    ```bash
    ncn-m# jq -r '.data.vault_switch_defaults' cray_reds_credentials.json | base64 --decode
-   {"SNMPUsername": "testuser", "SNMPAuthPassword": "testpass1", "SNMPPrivPassword": "testpass2"}
+   {"SNMPUsername": "<USERID>", "SNMPAuthPassword": "<A-PASS>", "SNMPPrivPassword": "<P-PASS>"}
    ```
 
 6. Replace the cray_reds_credentials secret in customizations.yaml with one containing the new credentials.
@@ -274,6 +273,6 @@ ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_swi
 
    ```bash
    ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
-   {"SNMPUsername": "testuser", "SNMPAuthPassword": "testpass1", "SNMPPrivPassword": "testpass2"}
+   {"SNMPUsername": "<USERID>", "SNMPAuthPassword": "<A-PASS>", "SNMPPrivPassword": "<P-PASS>"}
    ```
 

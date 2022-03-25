@@ -1,4 +1,4 @@
-## Change Java Security Settings
+# Change Java Security Settings
 
 If Java will not allow a connection to an Intel node via SOL or iKVM, change Java security settings to add an exception for the node's BMC IP address.
 
@@ -21,5 +21,4 @@ The following figures show examples of the **Security** tab of the **Java Contro
 ### Windows Java Control Panel Security Tab
 
 ![Java Control Panel Security Tab: Windows](../../img/operations/Java_Control_Panel_Security_Tab_Windows.png "Java Control Panel Security Tab: Windows")
-
 

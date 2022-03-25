@@ -1,4 +1,4 @@
-## Set Limits for a Configuration Session
+# Set Limits for a Configuration Session
 
 The configuration layers and session hosts can be limited when running a Configuration Framework Service \(CFS\) session.
 
@@ -16,6 +16,11 @@ Use the following command to create a CFS session to run on all hosts in the `Co
 ncn# cray cfs sessions create --name example \
 --configuration-name configurations-example \
 --ansible-limit 'Compute:!dev'
+```
+
+Example output:
+
+```
 {
   "ansible": {
     "config": "cfs-default-ansible-cfg",
@@ -56,6 +61,11 @@ Use the following command to create a CFS session to run only on `example-layer1
 ncn# cray cfs sessions create --name example \
 --configuration-name configurations-example \
 --configuration-limit 'example-layer1,example-layer5'
+```
+
+Example output:
+
+```
 {
   "ansible": {
     "config": "cfs-default-ansible-cfg",
@@ -81,5 +91,4 @@ ncn# cray cfs sessions create --name example \
   }
 }
 ```
-
 

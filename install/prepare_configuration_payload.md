@@ -11,7 +11,7 @@ advantage of being able to use the configuration payload from the previous CSM i
 and an extra configuration file which that installation generated.
 
 
-### Topics:
+### Topics
 
    * [Command Line Configuration Payload](#command_line_configuration_payload)
    * [Configuration Payload Files](#configuration_payload_files)
@@ -26,12 +26,12 @@ and an extra configuration file which that installation generated.
 
 This information from a site survey can be given to the `csi` command as command line arguments.
 The information is shown here to explain what data is needed. It will not be used until moving
-to the procedure [Bootstrap PIT Node](index.md#bootstrap_pit_node)
+to the [Bootstrap PIT Node](index.md#bootstrap_pit_node) procedure.
 
 The air-cooled cabinet is known to `csi` as a `river` cabinet. The liquid-cooled cabinets are either
 `mountain` or `hill` (if a TDS system).
 
-For more description of these settings and the default values, see [Default IP Address Ranges](../introduction/csm_overview.md#default_ip_address_ranges) and the other topics in [CSM Overview](../introduction/csm_overview.md)
+For more description of these settings and the default values, see [Default IP Address Ranges](../introduction/csm_overview.md#default_ip_address_ranges) and the other topics in [CSM Overview](../introduction/csm_overview.md).
 
 | CSI option | Information |
 | --- | --- |
@@ -43,10 +43,14 @@ For more description of these settings and the default values, see [Default IP A
 | --hill-cabinets 0 | Number of Hill cabinets, but this could also be in `cabinets.yaml` |
 | --river-cabinets 1 | Number of River cabinets, but this could also be in `cabinets.yaml` |
 | --can-cidr 10.103.11.0/24 | IP subnet for the CAN assigned to this system |
-| --can-external-dns 10.103.11.113 | IP address on CAN for this system's DNS server |
 | --can-gateway 10.103.11.1 | Virtual IP address for the CAN (on the spine switches) |
 | --can-static-pool 10.103.11.112/28 | MetalLB static pool on CAN |
 | --can-dynamic-pool 10.103.11.128/25 | MetalLB dynamic pool on CAN |
+| --cmn-cidr 10.103.12.0/24 | IP subnet for the CMN assigned to this system |
+| --cmn-external-dns 10.103.12.113 | IP address on CMN for this system's DNS server |
+| --cmn-gateway 10.103.12.1 | Virtual IP address for the CMN (on the spine switches) |
+| --cmn-static-pool 10.103.12.112/28 | MetalLB static pool on CMN |
+| --cmn-dynamic-pool 10.103.12.128/25 | MetalLB dynamic pool on CMN |
 | --hmn-cidr 10.254.0.0/17 | Override the default cabinet IPv4 subnet for River HMN |
 | --nmn-cidr 10.252.0.0/17 | Override the default cabinet IPv4 subnet for River NMN |
 | --hmn-mtn-cidr 10.104.0.0/17 | Override the default cabinet IPv4 subnet for Mountain HMN |
@@ -60,10 +64,9 @@ For more description of these settings and the default values, see [Default IP A
 | --install-ncn-bond-members p1p1,p10p1 | NICs on each management node to become bond0 |
 | --application-node-config-yaml application_node_config.yaml | Name of `application_node_config.yaml` |
 | --cabinets-yaml cabinets.yaml | Name of `cabinets.yaml` |
-| --bgp-peers aggregation | Override the default BGP peers, using aggregation switches instead of spines |
 | --primary-server-name primary | Desired name for the primary DNS server |
-| --secondary-servers "" | Comma seperated list of FQDN/IP for all DNS servers to be notified on DNS zone update |
-| --notify-zones "" | A comma separated list of DNS zones to transfer |
+| --secondary-servers "" | Comma-separated list of FQDN/IP for all DNS servers to be notified on DNS zone update |
+| --notify-zones "" | A comma-separated list of DNS zones to transfer |
 
    * This is a long list of options. It can be helpful to create a Bash script file to call the `csi` command with all of these options, and then edit that file to adjust the values for the particular system being installed.
    * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management nodes.
@@ -74,7 +77,8 @@ For more description of these settings and the default values, see [Default IP A
       * `p801p1,p801p2` for Intel nodes
    * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help` output for more information.
    * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
-   * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `can-external-dns` is the static IP address assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `can-external-dns` IP address must be within the `can-static-pool` range.
+   * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN.
+   * Several parameters (`cmn-gateway`, `cmn-cidr`, `cmn-static-pool`, `cmn-dynamic-pool`) describe the CMN (Customer Management network). The `cmn-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CMN. The `cmn-cidr` is the IP subnet for the CMN assigned to this system. The `cmn-static-pool` and `cmn-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `cmn-external-dns` is the static IP address assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `cmn-external-dns` IP address must be within the `cnn-static-pool` range.
    * Set `ntp-pool` to a reachable NTP server.
    * The `application_node_config.yaml` file is required. It is used to describe the mapping between prefixes in `hmn_connections.csv` and HSM subroles. This file also defines aliases application nodes. For details, see [Create Application Node YAML](create_application_node_config_yaml.md).
    * For systems that use non-sequential cabinet id numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. See [Create Cabinets YAML](create_cabinets_yaml.md).
@@ -92,7 +96,7 @@ command during the installation process.
 | [`application_node_config.yaml`](#application_node_config_yaml) | SHCD | The number and type of application nodes with mapping from the name in the SHCD to the desired hostname |
 | [`hmn_connections.json`](#hmn_connections_json) | SHCD | The network topology for HMN of the entire system |
 | [`ncn_metadata.csv`](#ncn_metadata_csv) | SHCD, other| The number of master, worker, and storage nodes and MAC address information for BMC and bootable NICs |
-| [`switch_metadata.csv`](#switch_metadata_csv) | SHCD | Inventory of all spine, aggregation, CDU, and leaf switches |
+| [`switch_metadata.csv`](#switch_metadata_csv) | SHCD | Inventory of all spine, leaf, CDU, and leaf-bmc switches |
 
 Although some information in these files can be populated from site survey information, the SHCD prepared by
 HPE Cray Manufacturing is the best source of data for `hmn_connections.json`. The `ncn_metadata.csv` does
@@ -105,7 +109,7 @@ The `cabinets.yaml` file describes the type of cabinets in the system, the numbe
 and the starting cabinet ID for every cabinet in the system. This file can be used to indicate that a system
 has non-contiguous cabinet ID numbers or non-standard VLAN numbers.
 
-The xnames used in the other files should fit within the cabinet ids defined by the starting cabinet id for River
+The component names (xnames) used in the other files should fit within the cabinet ids defined by the starting cabinet id for River
 cabinets (modified by the number of cabinets). It is OK for management nodes not to be in x3000 (as the first River
 cabinet), but they must be in one of the River cabinets. For example, x3000 with 2 cabinets would mean x3000 or x3001
 should have all management nodes.
@@ -120,7 +124,7 @@ application nodes discovered in the `hmn_connections.json` file when building th
 
 Different node prefixes in the SHCD can be identified as Application nodes. Each node prefix
 can be mapped to a specific HSM sub role. These sub roles can then be used as the targets of Ansible
-plays run by CFS to configure these nodes. The xname for each Application node can be assigned one or
+plays run by CFS to configure these nodes. The component name (xname) for each Application node can be assigned one or
 more hostname aliases.
 
 See [Create Application Node YAML](create_application_node_config_yaml.md) for instructions about creating this file.
@@ -141,7 +145,7 @@ The information in the `ncn_metadata.csv` file identifies each of the management
 as a master, worker, or storage node, and provides the MAC address information needed to identify the BMC and
 the NIC which will be used to boot the node.
 
-For each management node, the xname, role, and subrole can be extracted from the SHCD. However, the rest of the
+For each management node, the component name (xname), role, and subrole can be extracted from the SHCD. However, the rest of the
 MAC address information needs to be collected another way. Collect as much information as possible
 before the PIT node is booted from the LiveCD and then get the rest later when directed. See the scenarios
 which enable partial data collection below in [First Time Install](#first_time_install).
@@ -151,8 +155,8 @@ See [Create NCN Metadata CSV](create_ncn_metadata_csv.md) for instructions about
 <a name="switch_metadata_csv"></a>
 #### `switch_metadata.csv`
 
-The `switch_metadata.csv` file is manually created to include information about all spine, aggregation, CDU,
-and leaf switches in the system. None of the Slingshot switches for the HSN should be included in this file.
+The `switch_metadata.csv` file is manually created to include information about all spine, leaf, CDU,
+and leaf-bmc switches in the system. None of the Slingshot switches for the HSN should be included in this file.
 
 See [Create Switch Metadata CSV](create_switch_metadata_csv.md) for instructions about creating this file.
 
@@ -161,19 +165,19 @@ See [Create Switch Metadata CSV](create_switch_metadata_csv.md) for instructions
 
 The process to install for the first time must collect the information needed to create these files.
 
-1. Collect data for `cabinets.yaml`
+1. Collect data for `cabinets.yaml`.
 
    See [Create Cabinets YAML](create_cabinets_yaml.md) for instructions about creating this file.
 
-1. Collect data for `application_node_config.yaml`
+1. Collect data for `application_node_config.yaml`.
 
    See [Create Application Node YAML](create_application_node_config_yaml.md) for instructions about creating this file.
 
-1. Collect data for `ncn_metadata.csv`
+1. Collect data for `ncn_metadata.csv`.
 
    See [Create NCN Metadata CSV](create_ncn_metadata_csv.md) for instructions about creating this file.
 
-1. Collect data for `switch_metadata.csv`
+1. Collect data for `switch_metadata.csv`.
 
    See [Create Switch Metadata CSV](create_switch_metadata_csv.md) for instructions about creating this file.
 
@@ -182,7 +186,7 @@ The process to install for the first time must collect the information needed to
 
 The process to reinstall must have the configuration payload files available.
 
-1. Collect Payload for Reinstall
+1. Collect Payload for Reinstall.
 
    1. These files from a previous install are needed to do a reinstall.
 

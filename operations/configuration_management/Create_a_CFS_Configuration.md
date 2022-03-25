@@ -1,4 +1,4 @@
-## Create a CFS Configuration
+# Create a CFS Configuration
 
 Create a Configuration Framework Service (CFS) configuration, which contains an
 ordered list of layers. Each layer is defined by a Git repository clone URL, a
@@ -14,6 +14,11 @@ Git commit, a name, and the path in the repository to an Ansible playbook to exe
 
     ```bash
     ncn# cat configurations-example.json
+    ```
+
+    Example configuration:
+
+    ```
      {
       "layers": [
         {
@@ -38,12 +43,15 @@ Git commit, a name, and the path in the repository to an Ansible playbook to exe
     ```bash
     ncn# cray cfs configurations update configurations-example \
     --file ./configurations-example.json --format json
+    ```
+
+    Example output:
+
+    ```
     {
       "lastUpdated": "2021-07-28T03:26:00:37Z",
       "layers": [ ... ],
       "name": "configurations-example"
     }
     ```
-
-
 

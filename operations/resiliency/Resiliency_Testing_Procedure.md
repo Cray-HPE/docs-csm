@@ -18,9 +18,9 @@ It is assumed that some procedures are already known by admins and thus does not
 <a name="prepare-for-resiliency-testing"></a>
 ### Prepare for Resiliency Testing
 
-* Confirm the xname mapping for each node on the system. This get dumped out by execution of the `/opt/cray/platform-utils/ncnGetXnames.sh` script.
+* Confirm the component name (xname) mapping for each node on the system. This get dumped out by execution of the `/opt/cray/platform-utils/ncnGetXnames.sh` script.
 
-* Verify that `metal.no-wipe=1` is set for each of the NCNs via ouptput from running the `ncnGetXnames.sh` script.
+* Verify that `metal.no-wipe=1` is set for each of the NCNs using output from running the `ncnGetXnames.sh` script.
 
 * Ensure the user account in use is an authorized user on the Cray CLI.
   
@@ -62,7 +62,7 @@ It is assumed that some procedures are already known by admins and thus does not
    ncn# ipmitool -I lanplus -U root -P <password> -H <ncn-node-name> chassis power status
    ```
    
-   If `ncn-m001` is the node to be brought down, note that it has the external connection so it will be important to establish that `ipmitool` commands will be able to be run from a node external to the system, in order to get the ipmitool power staus of `ncn-m001`.
+   If `ncn-m001` is the node to be brought down, note that it has the external network connection. Therefore it is important to establish that `ipmitool` commands are able to be run from a node external to the system, in order to get the power status of `ncn-m001`.
 
 * If `ncn-m001` is the node to take down, establish Customer Access Network (CAN) links to bypass `ncn-m001` (because it will be down) in order to enable an external connection to one of the other master NCNs before, during, and after `ncn-m001` is brought down.
 
@@ -73,7 +73,7 @@ It is assumed that some procedures are already known by admins and thus does not
    To see a list of BOS templates that exist on the system:
    
    ```bash
-   ncn# cray bos v1 sessiontemplate list
+   ncn# cray bos sessiontemplate list
    ```
 
    For more information regarding management of BOS session templates, refer to [Manage a Session Template](../boot_orchestration/Manage_a_Session_Template.md).
@@ -115,7 +115,7 @@ In order to keep watch on various items during and after the fault has been intr
    ```
    
    ```bash
-   ncn# watch -n 5 "date; cray bos v1 session list"
+   ncn# watch -n 5 "date; cray bos session list"
    ```
 
 1. Monitor Ceph health, in a window, during and after a single NCN is taken down.
@@ -146,7 +146,7 @@ In order to keep watch on various items during and after the fault has been intr
 
 1. Detect the change in state of the various Postgres instances running.
    
-   Run the following in a seperate window:
+   Run the following in a separate window:
 
    ```bash
    ncn# watch -n 30 "date; kubectl get postgresql -A"
@@ -317,7 +317,7 @@ After the target NCN was shut down, assuming the command line windows that were 
    1. Use BOS to reboot the designated compute node(s).
    
       ```bash
-      ncn# cray bos v1 session create --template-uuid boot-nids-1-4 --operation reboot
+      ncn# cray bos session create --template-uuid boot-nids-1-4 --operation reboot
       ```
       
       Issuing this reboot command will spit out a Boot Orchestration Agent (BOA) "jobId", which can be used to find the new BOA pod that has been created for the boot. Then, the logs can be tailed to watch the compute boot proceed. 

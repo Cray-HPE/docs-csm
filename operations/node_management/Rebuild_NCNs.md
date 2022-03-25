@@ -23,10 +23,10 @@ The following is a high-level overview of the NCN rebuild workflow:
 
 The system is fully installed and has transitioned off of the LiveCD.
 
-For several of the commands in this section, you will need to have variables set with the name of the node being rebuilt and its xname.
+For several of the commands in this section, you will need to have variables set with the name of the node being rebuilt and its component name (xname).
 
 Set NODE to the hostname of the node being rebuilt (e.g. `ncn-w001`, `ncn-w002`, etc).
-Set XNAME to the xname of that node.
+Set `XNAME` to the component name (xname) of that node.
 
 ```bash
 ncn# NODE=ncn-w00n
@@ -42,8 +42,18 @@ ncn# echo $XNAME
 
 Only follow the steps in the section for the node type that is being rebuilt:
 
-* [Worker node](Rebuild_NCNs/Prepare_Worker_Nodes.md)
-* [Master node](Rebuild_NCNs/Prepare_Master_Nodes.md)
+* Worker node
+
+```
+ncn-m001:# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-worker-nodes.sh ncn-w001
+```
+
+* Master node
+
+```
+ncn-m001:# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
+```
+
 * [Storage node](Rebuild_NCNs/Prepare_Storage_Nodes.md)
 
 ## Validation

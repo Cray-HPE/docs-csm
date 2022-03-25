@@ -356,7 +356,7 @@ rd.live.overlay.reset=0
 There are two options one can leave enabled to accomplish this:
 
 1. `rd.live.overlay.reset=1` will eradicate/recreate the overlay every reboot.
-2. `rd.live.overlayr.readonly=1` will clear the overlay on every reboot.
+2. `rd.live.overlay.readonly=1` will clear the overlay on every reboot.
 
 For long-term usage, `rd.live.overlay.readonly=1` should be added to the command line.
 

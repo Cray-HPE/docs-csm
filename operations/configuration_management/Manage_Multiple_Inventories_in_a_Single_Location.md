@@ -1,4 +1,4 @@
-## Manage Multiple Inventories in a Single Location
+# Manage Multiple Inventories in a Single Location
 
 Many configuration layers may be present in a single configuration for larger systems that configure multiple Cray products. When values for each of these layers need to be customized, it can be tedious to override values in each of the respective repositories. The CFS additionalInventoryUrl option allows for static inventory files to be automatically added to the hosts directory of each configuration layer before it is applied by Ansible. It is then possible to add this additional Ansible inventory information to all configuration sessions so it can be used simultaneously with other inventory types, including the CFS dynamic inventory type, across all configuration layers in a session.
 
@@ -37,8 +37,4 @@ Use the following command to unset the additionalInventoryUrl value:
 ```bash
 ncn# cray cfs options update --additional-inventory-url ""
 ```
-
-
-
-
 

@@ -1,4 +1,4 @@
-## Troubleshoot Nodes Failing to Upgrade in a CRUS Session
+# Troubleshoot Nodes Failing to Upgrade in a CRUS Session
 
 Troubleshoot compute nodes failing to upgrade during a Compute Rolling Upgrade Service \(CRUS\) session and rerun the session on the failed nodes.
 
@@ -9,8 +9,8 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
 
 ### Prerequisites
 
--   A CRUS upgrade session has completed with a group of nodes that failed to upgrade.
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- A CRUS upgrade session has completed with a group of nodes that failed to upgrade.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 
 ### Procedure
@@ -19,6 +19,11 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
 
     ```bash
     ncn# cray hsm groups describe FAILED_NODES_GROUP
+    ```
+
+    Example output:
+
+    ```
     label = "failed-nodes"
     description = ""
 
@@ -30,9 +35,9 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
 
     Failed nodes result from the following:
 
-    -   Failure of the BOS upgrade session for a given step of the upgrade causes all of the nodes in that step to be marked as failed.
-    -   Failure of any given node in a step to reach a ready state in the workload manager within 10 minutes of detecting that the BOS boot session has completed causes that node to be marked as failed.
-    -   Deletion of a CRUS session while the current step is at or beyond the 'Booting' stage causes all of the nodes in that step that have not reached a ready state in the workload manager to be marked as failed.
+    - Failure of the BOS upgrade session for a given step of the upgrade causes all of the nodes in that step to be marked as failed.
+    - Failure of any given node in a step to reach a ready state in the workload manager within 10 minutes of detecting that the BOS boot session has completed causes that node to be marked as failed.
+    - Deletion of a CRUS session while the current step is at or beyond the 'Booting' stage causes all of the nodes in that step that have not reached a ready state in the workload manager to be marked as failed.
 
 3.  Create a new CRUS session on the failed nodes.
 
@@ -57,6 +62,11 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
         --upgrade-step-size 50 \
         --workload-manager-type slurm \
         --upgrade-template-id boot-template
+        ```
+
+        Example output:
+
+        ```
         api_version = "1.0.0"
         completed = false
         failed_label = "NEW_FAILED_NODES_GROUP"
@@ -70,6 +80,4 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
         upgrading_label = "node-group"
         workload_manager_type = "slurm"
         ```
-
-
 

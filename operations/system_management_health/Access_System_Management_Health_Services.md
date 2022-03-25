@@ -1,11 +1,11 @@
-## Access System Management Health Services
+# Access System Management Health Services
 
 All System Management Health services are exposed outside the cluster through the Keycloak gatekeeper and Istio's ingress gateway to enforce the authentication and authorization policies. The URLs to access these services are available on any system with CAN, BGP, MetalLB, and external DNS properly configured.
 
 The `{{shasta_domain}}` value in the examples below is an Ansible variable defined as follows and is expected to be the systems' FQDN from the CAN.
 
 ```screen
-ncn-m001# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' \
+ncn-m001# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations.yaml}' \
 | base64 -d | grep "external:"
       external: SHASTA_EXTERNAL_DOMAIN
 ```
@@ -26,7 +26,7 @@ This procedure enables administrators to set up the service and access its compo
 
     -   **https://prometheus.{{shasta_domain}}/**
 
-        Central Prometheus instance scrapes metrics from Kubernetes, Ceph, and the hosts \(part of `prometheus-operator` Helm chart\).
+        Central Prometheus instance scrapes metrics from Kubernetes, Ceph, and the hosts (part of `prometheus-operator` Helm chart).
 
         Prometheus generates alerts based on metrics and reports them to the alertmanager. The 'Alerts' link at the top of the page will show all of the inactive, pending, and firing alerts on the system. Clicking on any of the alerts will expand them, enabling users to use the 'Labels' data to discern the details of the alert. The details will also show the state of the alert, how long it has been active, and the value for the alert.
 
@@ -38,7 +38,7 @@ This procedure enables administrators to set up the service and access its compo
 
         Central Alertmanager instance that manages Prometheus alerts.
 
-        The alertmanager manages the alerts it receives and generates notifications to users or applications. For more information about `alert-manager`, refer to the following documentation: [https://prometheus.io/docs/prometheus/latest/getting\_started/](https://prometheus.io/docs/prometheus/latest/getting_started/).
+        The alertmanager manages the alerts it receives and generates notifications to users or applications. For more information about `alert-manager`, refer to the following documentation: [https://prometheus.io/docs/prometheus/latest/getting_started/](https://prometheus.io/docs/prometheus/latest/getting_started/).
 
         Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet. See [Troubleshoot Prometheus Alerts](Troubleshoot_Prometheus_Alerts.md).
 
@@ -71,5 +71,4 @@ This procedure enables administrators to set up the service and access its compo
         Prometheus instance that collects Istio metrics \(included as part of `istio` Helm chart\).
 
         For more information regarding the use of the Prometheus interface, see [https://prometheus.io/docs/alerting/overview/](https://prometheus.io/docs/alerting/overview/).
-
 

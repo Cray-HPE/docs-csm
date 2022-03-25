@@ -1,4 +1,4 @@
-## Create an Image Customization CFS Session
+# Create an Image Customization CFS Session
 
 A configuration session that is meant to customize image roots tracked by the Image Management Service \(IMS\) can be created using the `--target-definition` image option. This option will instruct the Configuration Framework Service \(CFS\) to prepare the image IDs specified and assign them to the groups specified in Ansible inventory. IMS will then provide SSH connection information to each image root that CFS will use to configure Ansible.
 
@@ -21,6 +21,11 @@ ncn# cray cfs sessions create --name example \
 --configuration-name configurations-example \
 --target-definition image \
 --target-group Compute IMS_IMAGE_ID
+```
+
+Example output:
+
+```
 {
   "ansible": {
     "config": "cfs-default-ansible-cfg",
@@ -60,6 +65,11 @@ When an image customization CFS session is complete, use the CFS `describe` comm
 
 ```bash
 ncn# cray cfs sessions describe example --format json | jq .status.artifacts
+```
+
+Example output:
+
+```
 [
   {
     "image_id": "<IMS IMAGE ID>",
@@ -70,7 +80,4 @@ ncn# cray cfs sessions describe example --format json | jq .status.artifacts
 ```
 
 This resultant image ID can be used to be further customized pre-boot, or if it is ready, in a Boot Orchestration Service \(BOS\) boot session template.
-
-
-
 
