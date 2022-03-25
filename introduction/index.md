@@ -48,7 +48,7 @@ See [Scenarios for Shasta v1.5](scenarios.md)
 <a name="product-stream-updates"></a>
 ## CSM Product Stream Updates
 
-   The software included in the CSM product stream is released in more than one way. The initial product release may be augmented with late-breaking workarounds and documentation updates or hotfixes after the release.
+   The software included in the CSM product stream is released in more than one way. The initial product release may be augmented with late-breaking documentation updates or hotfixes after the release.
 
    See [CSM Product Stream Updates](../update_product_stream/index.md)
 

@@ -1,4 +1,4 @@
-## Artifact Management
+# Artifact Management
 
 The Ceph Object Gateway Simple Storage Service \(S3\) API is used for artifact management. The RESTful API that Ceph provides via the gateway is compatible with the basic data access model of the Amazon S3 API. See the [https://docs.ceph.com/en/pacific/radosgw/s3/](https://docs.ceph.com/en/pacific/radosgw/s3/) for more information about compatibility. The object gateway is also referred to as the RADOS gateway or simply RGW.
 
@@ -14,11 +14,3 @@ https://rgw-vip.local
 
 The RGW administrative interface \(`radosgw-admin`\) is available on non-compute nodes \(NCNs\).
 
-
-### Table of Contents
-
-Use the following procedures to manage artifacts with S3.
-
-- [Manage Artifacts with the Cray CLI](Manage_Artifacts_with_the_Cray_CLI.md)
-- [Use S3 Libraries and Clients](Use_S3_Libraries_and_Clients.md)
-- [Generate Temporary S3 Credentials](Generate_Temporary_S3_Credentials.md)

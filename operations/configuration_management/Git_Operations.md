@@ -1,4 +1,4 @@
-## Git Operations
+# Git Operations
 
 Use the `git` command to manage repository content in the Version Control Service \(VCS\).
 
@@ -8,9 +8,13 @@ When pushing changes to the VCS server using the `crayvcs` user, input the passw
 
 ```bash
 ncn# git push
+```
+
+Enter the appropriate credentials when prompted:
+
+```
 Username for 'https://api-gw-service-nmn.local': crayvcs
 Password for 'https://crayvcs@api-gw-service-nmn.local': <input password here>
-...
 ```
 
 For more information on how to use the Git command line tools, refer to the external [Git User Manual](https://git-scm.com/docs/user-manual.html).

@@ -1,4 +1,4 @@
-## FAS Use Cases
+# FAS Use Cases
 
 Use the Firmware Action Service (FAS) to update the firmware on supported hardware devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
 
@@ -6,7 +6,7 @@ When updating an entire system, walk down the device hierarchy component type by
 
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
 
-1. [Update Liquid-Cooled Compute Node BMC, FPGA, and Node BIOS](#liquidcooled)
+1. [Update Liquid-Cooled Compute Node BMC, FPGA, and BIOS](#liquidcooled)
 1. [Update Air-Cooled Compute Node BMC, BIOS, iLO 5, and System ROM](#aircooled)
 2. [Update Chassis Management Module (CMM) Firmware](#cmm)
 3. [Update NCN BIOS and BMC Firmware with FAS](#ncn-bios-bmc)
@@ -461,8 +461,31 @@ After updating the BIOS or System ROM, the compute node will need to be rebooted
 This procedure updates the following hardware:
 -   Node controller \(nC\) firmware
 
+
 #### Prerequisites
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+
+Procedure for updating NCNs:
+1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H x3000c0s10b0 -s` (`x3000c0s10b0` is the component name (xname) of the NCN BMC)-
+   See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc)
+2. Run a dryrun for all NCNs first to determine which NCNs and targets need updating.
+3. For each NCN requiring updates to target `BMC` or `iLO5`
+   (Update of `BMC` and `iLO 5` will not affect the nodes):
+   1. Unlock the NCN BMC -
+See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
+   2. Run the FAS action on the NCN
+   3. Relock the NCN BMC -
+See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
+4. For each NCN requiring updates to target `BIOS` or `System ROM`:
+   1. Unlock the NCN BMC -
+See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
+   2. Run the FAS action on the NCN
+   3. Reboot the Node -
+   See [Reboot NCNs](../node_management/Reboot_NCNs.md)
+   4. For `HPE` NCNs, run the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` -
+   See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc)
+   5. Relock the NCN BMC -
+See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
 
 #### Gigabyte
 
@@ -576,6 +599,10 @@ Make sure you have waited for the current firmware to be updated before starting
 ```
 
 **Device Type: NodeBMC | Target: `System ROM` aka BIOS**
+
+**IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than ncn-m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
+See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc)
+
 
 ```json
 {
@@ -761,7 +788,7 @@ All of the example JSON files below are set to run a dry-run. Update the overrid
 
 After updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
 
-Due to networking, FAS cannot update ncn-m001.  See [Updating Frimware on m001](Updating_Firmware_m001.md)
+Due to networking, FAS cannot update `ncn-m001`.  See [Updating Firmware on m001](Updating_Firmware_m001.md)
 
 #### Gigabyte
 

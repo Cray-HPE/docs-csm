@@ -4,6 +4,11 @@ In rare cases, if a Ceph upgrade is not completed successfully and has issues, t
 
 ```bash
 ncn-s002# ceph -s
+```
+
+Example output:
+
+```
   cluster:
     id:     7ed70f4c-852e-494a-b9e7-5f722af6d6e7
     health: HEALTH_ERR
@@ -32,6 +37,11 @@ The commands in this procedure should be run from a master NCN (unless otherwise
       
       ```bash
       ncn-m001# ls /mnt/pitdata/csm-0.9.4/helm/*nexus*
+      ```
+
+      Expected output:
+
+      ```
       /mnt/pitdata/csm-0.9.4/helm/cray-nexus-0.6.0.tgz <-- this is the helm chart to use
       ```
    
@@ -39,6 +49,11 @@ The commands in this procedure should be run from a master NCN (unless otherwise
       
       ```bash
       ncn-m001# ls /mnt/pitdata/csm-0.9.4/manifests/nexus.yaml
+      ```
+
+      Expected output:
+
+      ```
       /mnt/pitdata/csm-0.9.4/manifests/nexus.yaml <-- this is the manifest to use
       ```
       

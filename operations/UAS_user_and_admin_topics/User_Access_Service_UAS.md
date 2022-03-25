@@ -1,26 +1,27 @@
+[Next Topic: UAS Limitations](UAS_Limitations.md)
 
 ## User Access Service \(UAS\)
 
-The User Access Service \(UAS\) is a containerized service managed by Kubernetes that enables application developers to create and run user applications. UAS runs on a non-compute node \(NCN\) that is acting as a Kubernetes worker node.
+The User Access Service \(UAS\) is a service that manages User Access Instances \(UAIs\) which are containerized services under Kubernetes that provide application developers and users with a lightweight login environment in which to create and run user applications. UAIs run on non-compute nodes \(NCN\), specifically Kubernetes Worker nodes.
 
-Users launch a User Access Instance \(UAI\) using the cray command. Users can also transfer data between the Cray system and external systems using the UAI.
+At a high level, there are two ways to configure UAS with respect to allowing users access to UAIs. The standard configuration involves the use of [Broker UAIs](Broker_Mode_UAI_Management.md) through which users establish SSH login sessions. When a login session is established to a Broker UAI the Broker UAI either locates or creates a new UAI on behalf of the user and forwards the user's SSH connection to that UAI. A [legacy configuration](Legacy_Mode_User-Driven_UAI_Management.md) requires users to create their own UAIs through the `cray` CLI. Once a UAI is created in this way, the users can use SSH to log into the UAI directly. The legacy configuration will soon be deprecated. Sites using it should migrate to the Broker UAI based configuration.
 
-When a user requests a new UAI, the UAS service returns status and connection information to the newly created UAI. External access to UAS is routed through a node that hosts gateway services.
+Once logged into a UAI, users can use most of the facilities found on a User Access Node \(UAN\) with certain [limitations](UAS_Limitations.md). Users can also use UAIs to transfer data between the Cray system and external systems.
 
-The timezone inside the UAI container matches the timezone on the host on which it is running, For example, if the timezone on the host is set to CDT, the UAIs on that host will also be set to CDT.
+By default, the timezone inside the UAI container is configured to match the timezone on the host NCN on which it is running, For example, if the timezone on the host NCN is set to CDT, the UAIs on that host will also be set to CDT.
 
 |Component|Function/Description|
 |---------|--------------------|
 |User Access Instance \(UAI\)|An instance of UAS container.|
-|`uas-mgr`|Manages UAI life cycles.|
+|`cray-uas-mgr`|Manages UAI life cycles.|
 
 |Container Element|Components|
 |-----------------|----------|
-|Operating system|SLES15 SP1|
+|Operating system|SLES15 SP2|
 |kubectl command|Utility to interact with Kubernetes.|
 |cray command|Command that allows users to create, describe, and delete UAIs.|
 
-Use `cray uas list` to list the following parameters for a UAI.
+Administrative users use `cray uas admin uais list` to list the following parameters for all existing UAIs:
 
 **Note:** The example values below are used throughout the UAS procedures. They are used as examples only. Users should substitute with site-specific values.
 
@@ -34,21 +35,25 @@ Use `cray uas list` to list the following parameters for a UAI.
 |`uai_age`|The age of the UAI.|`11m`|
 |`uai_host`|The node hosting the UAI.|`ncn-w001`|
 
+Authorized users in [Legacy UAI Management](Legacy_Mode_User-Driven_UAI_Management.md) use `cray uas list` to see the same information on all existing UAIs owned by the user (if any).
+
 ### Getting started
 
-UAS is highly configurable and it is recommended that administrators familiarize themselves with the service by reading this topic before allowing users to use UAIs.
+UAS is highly configurable and it is recommended that administrators familiarize themselves with, at least, the major concepts covered in the Table of Contents below before allowing users to use UAIs. In particular, the concepts of [End-User UAIs](End_User_UAIs.md) and [Broker UAIs](Broker_Mode_UAI_Management.md), and the procedures for setting up and customizing Broker UAIs are critical to setting up UAS properly.
 
-Once administrators are familiar with the configurable options of UAS, they may want to create a UAI image that matches the booted compute nodes by following the procedure [Customize End-User UAI Images](Customize_End-User_UAI_Images.md).
+Another important topic, once administrators are familiar with setting up UAS to provide basic UAIs, is customizing the UAI image to support user workflows. At the simplest level, administrators will want to create and use a UAI image that matches the booted compute nodes. This can be done by following the [Customize End-User UAI Images](Customize_End-User_UAI_Images.md) procedure.
 
 ### Table of Contents
 
+* [UAS Limitations](UAS_Limitations.md)
+* [List UAS Version Information](List_UAS_Information.md)
 * [End-User UAIs](End_User_UAIs.md)
 * [Special Purpose UAIs](Special_Purpose_UAIs.md)
 * [Elements of a UAI](Elements_of_a_UAI.md)
 * [UAI Host Nodes](UAI_Host_Nodes.md)
-* [UAI macvlans Network Attachments](UAI_macvlans_Network_Attachments.md)
 * [UAI Host Node Selection](UAI_Host_Node_Selection.md)
-* [UAI Network Attachments](UAI_Network_Attachments.md)
+* [UAI macvlans Network Attachments](UAI_macvlans_Network_Attachments.md)
+* [UAI Network Attachment Customization](UAI_Network_Attachments.md)
 * [Configure UAIs in UAS](Configure_UAIs_in_UAS.md)
     * [UAI Images](UAI_Images.md)
         * [Listing Registered UAI Images](List_Registered_UAI_Images.md)
@@ -79,19 +84,24 @@ Once administrators are familiar with the configurable options of UAS, they may 
     * [Creating a UAI](Create_a_UAI.md)
     * [Examining a UAI Using a Direct Administrative Command](Examine_a_UAI_Using_a_Direct_Administrative_Command.md)
     * [Deleting a UAI](Delete_a_UAI.md)
-* [Legacy Mode User-Driven UAI Management](Legacy_Mode_User-Driven_UAI_Management.md)
-    * [Configure A Default UAI Class for Legacy Mode](Configure_a_Default_UAI_Class_for_Legacy_Mode.md)
-    * [Create and Use Default UAIs in Legacy Mode](Create_and_Use_Default_UAIs_in_Legacy_Mode.md)
-    * [List Available UAI Images in Legacy Mode](List_Available_UAI_Images_in_Legacy_Mode.md)
-    * [Create UAIs From Specific UAI Images in Legacy Mode](Create_UAIs_From_Specific_UAI_Images_in_Legacy_Mode.md)
+* [Common UAI Configurations](Common_UAI_Config.md)
+    * [Choosing UAI Resource Settings](Choosing_UAI_Resource_Settings.md)
+    * [Setting End-User UAI Timeouts](Setting_UAI_Timeouts.md)
+    * [Broker UAI Resiliency and Load Balancing](Setting_Up_Multi-Replica_Brokers.md)
 * [Broker Mode UAI Management](Broker_Mode_UAI_Management.md)
     * [Configure End-User UAI Classes for Broker Mode](Configure_End-User_UAI_Classes_for_Broker_Mode.md)
     * [Configure a Broker UAI class](Configure_a_Broker_UAI_Class.md)
     * [Start a Broker UAI](Start_a_Broker_UAI.md)
     * [Log in to a Broker UAI](Log_in_to_a_Broker_UAI.md)
-* [UAI Images](UAI_Images.md)
+* [UAI Image Customization](UAI_Image_Customization.md)
     * [Customize the Broker UAI Image](Customize_the_Broker_UAI_Image.md)
     * [Customize End-User UAI Images](Customize_End-User_UAI_Images.md)
+* [Legacy Mode User-Driven UAI Management](Legacy_Mode_User-Driven_UAI_Management.md)
+    * [Configure A Default UAI Class for Legacy Mode](Configure_a_Default_UAI_Class_for_Legacy_Mode.md)
+    * [Create and Use Default UAIs in Legacy Mode](Create_and_Use_Default_UAIs_in_Legacy_Mode.md)
+    * [List Available UAI Images in Legacy Mode](List_Available_UAI_Images_in_Legacy_Mode.md)
+    * [Create UAIs From Specific UAI Images in Legacy Mode](Create_UAIs_From_Specific_UAI_Images_in_Legacy_Mode.md)
+    * [UAS and UAI Legacy Mode Health Checks](UAS_and_UAI_Health_Checks.md)
 * [Troubleshoot UAS Issues](Troubleshoot_UAS_Issues.md)
     * [Troubleshoot UAS by Viewing Log Output](Troubleshoot_UAS_by_Viewing_Log_Output.md)
     * [Troubleshoot UAIs by Viewing Log Output](Troubleshoot_UAIs_by_Viewing_Log_Output.md)
@@ -101,3 +111,8 @@ Once administrators are familiar with the configurable options of UAS, they may 
     * [Troubleshoot Missing or Incorrect UAI Images](Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
     * [Troubleshoot UAIs with Administrative Access](Troubleshoot_UAIs_with_Administrative_Access.md)
     * [Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
+    * [Troubleshoot UAS / CLI Authentication Issues](Troubleshoot_UAI_Authentication_Issues.md)
+    * [Troubleshoot Broker UAI SSSD Cannot Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
+* [Clear UAS Configuration](Reset_the_UAS_Configuration_to_Original_Installed_Settings.md)
+
+[Next Topic: UAS Limitations](UAS_Limitations.md)

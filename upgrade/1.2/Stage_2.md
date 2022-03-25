@@ -4,20 +4,20 @@
 
 ## Stage 2.1
 
-1. Run `ncn-upgrade-k8s-master.sh` for `ncn-m002`. Follow output of the script carefully. The script will pause for manual interaction.
+1. Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`. Follow output of the script carefully. The script will pause for manual interaction.
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002
+    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
     ```
     
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
 ## Stage 2.2
 
-1. Run `ncn-upgrade-k8s-worker.sh` for `ncn-w001`. Follow output of the script carefully. The script will pause for manual interaction.
+1. Run `ncn-upgrade-worker-nodes.sh` for `ncn-w001`. Follow output of the script carefully. The script will pause for manual interaction.
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w001
+    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001
     ```
     
     > NOTE: You may need to reset the root password for each node after it is rebooted
@@ -44,9 +44,11 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
 
         1. Install document RPM package:
 
+            > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
+
             ```bash
-            ncn-m002# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm
-            ncn-m002# rpm -Uvh docs-csm-latest.noarch.rpm
+            ncn-m002# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm -P /root
+            ncn-m002# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
             ```
 
         1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release tarball.
@@ -73,8 +75,10 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
 
         1. Install document RPM package:
 
+            > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
+
             ```bash
-            ncn-m002# rpm -Uvh [PATH_TO_docs-csm-*.noarch.rpm]
+            ncn-m002# rpm -Uvh --force /root/docs-csm-*.noarch.rpm
             ```
 
         1. Set the `TAR_DIR` variable to the directory on `ncn-m002` containing the CSM release tarball.
@@ -94,7 +98,7 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
 1. Upgrade `ncn-m001`
 
     ```bash
-    ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m001
+    ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
     ```
 
 ## Stage 2.4

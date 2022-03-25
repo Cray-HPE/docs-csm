@@ -1,51 +1,52 @@
-## Troubleshoot ConMan Asking for Password on SSH Connection
+# Troubleshoot ConMan Asking for Password on SSH Connection
 
 If ConMan starts to ask for a password when there is an SSH connection to the node on liquid-cooled hardware, that usually indicates there is a problem with the SSH key that was established on the node BMC. The key may have been replaced or overwritten on the hardware.
 
 Use this procedure to renew or reinstall the SSH key on the BMCs.
 
-### Prerequisites
+## Prerequisites
 
 This procedure requires administrative privileges.
 
-### Procedure
+## Procedure
 
-1. Scale the cray-console-operator pods to 0 replicas.
+**Note:** this procedure has changed since the CSM 0.9 release.
 
+1. Scale the `cray-console-operator` pods to 0 replicas.
+
+    ```bash
+    ncn# kubectl -n services scale --replicas=0 deployment/cray-console-operator
     ```
-    ncn-m001# kubectl -n services scale --replicas=0 deployment/cray-console-operator
+    
+    Example output:
+    ```text
     deployment.apps/cray-console-operator scaled
     ```
 
-2. Verify that the cray-console-operator service is no longer running.
+1. Verify that the `cray-console-operator` service is no longer running.
 
-    ```
-    ncn-m001# kubectl -n services get pods | grep console-operator
-    ncn-m001#
-    ```
+    The following command will give no output when the pod is no longer running.
 
-3. Exec into a cray-console-node pod.
-
-    ```
-    ncn-m001# kubectl -n services exec -it cray-console-node-0 -- /bin/bash
-    cray-console-node-0:/ #
+    ```bash
+    ncn# kubectl -n services get pods | grep console-operator
     ```
 
-4. Delete the SSH keys and exit from the pod.
+1. Delete the SSH keys in a `cray-console-node` pod.
 
-    ```
-    cray-console-node-0:/ # rm /var/log/console/conman.key
-    cray-console-node-0:/ # rm /var/log/console/conman.key.pub
-    cray-console-node-0:/ # exit
-    ncn-m001#
+    ```bash
+    ncn# kubectl -n services exec -it cray-console-node-0 -- rm -v /var/log/console/conman.key /var/log/console/conman.key.pub
     ```
 
-5. Restart the cray-console-operator pod.
+1. Restart the `cray-console-operator` pod.
 
+    ```bash
+    ncn# kubectl -n services scale --replicas=1 deployment/cray-console-operator
     ```
-    ncn-m001# kubectl -n services scale --replicas=1 deployment/cray-console-operator
+
+    Example output:
+    ```
     deployment.apps/cray-console-operator scaled
     ```
 
-    It may take some time to regenerate the keys and get them deployed to the BMCs, but in a while the console connections using SSH should be reestablished. Note that it may be worthwhile to determine how the SSH key was modified and establish site procedures to coordinate SSH key use or they may be overwritten again at a later time.
+    It may take some time to regenerate the keys and get them deployed to the BMCs, but in a while the console connections using SSH should be reestablished. Note that it may be worthwhile to determine how the SSH key was modified and establish site procedures to coordinate SSH key use; otherwise they may be overwritten again at a later time.
 

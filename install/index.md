@@ -13,7 +13,7 @@ Once the CSM installation has completed, other product streams for the HPE Cray 
 
 ### Topics:
 
-   1. [Validate Management Network Cabling](#validate_management_network_cabling)
+   1. [Validate SHCD](../operations/network/management_network/validate_shcd.md)
    1. [Prepare Configuration Payload](#prepare_configuration_payload)
    1. [Prepare Management Nodes](#prepare_management_nodes)
    1. [Bootstrap PIT Node](#bootstrap_pit_node)
@@ -40,14 +40,14 @@ sections, but there is also a general troubleshooting topic.
 
    <a name="validate_management_network_cabling"></a>
 
-   1. Validate Management Network Cabling
+   1. Validate SHCD
 
       The cabling should be validated between the nodes and the management network switches. The information in the
       Shasta Cabling Diagram (SHCD) can be used to confirm the cables which physically connect components of the system.
       Having the data in the SHCD which matches the physical cabling will be needed later in both
-      [Prepare Configuration Payload](#prepare_configuration_payload) and [Configure Management Network Switches](#configure_management_network).
+      [Prepare Configuration Payload](#prepare_configuration_payload) and [Configure Management Network](configure_management_network.md).
 
-      See [Validate Management Network Cabling](validate_management_network_cabling.md)
+      See [Validate SHCD](../operations/network/management_network/validate_shcd.md)
 
       **Note**: If a reinstall or fresh install of this software release is being done on this system and the management
       network cabling has already been validated, then this topic could be skipped and instead move to
@@ -93,10 +93,8 @@ sections, but there is also a general troubleshooting topic.
    1. Configure Management Network Switches
 
       Now that the PIT node has been booted with the LiveCD environment and CSI has generated the switch IP addresses,
-      the management network switches can be configured. This procedure will configure the spine switches, aggregation
-      switches (if present), CDU switches (if present), and the leaf switches.
-
-      See [Configure Management Network Switches](configure_management_network.md)
+      the management network switches can be configured.
+      [Management Net Docs](../operations/network/management_network/index.md)
 
       **Note**: If a reinstall of this software release is being done on this system and the management network switches
       have already been configured, then this topic could be skipped and instead move to
@@ -145,16 +143,6 @@ sections, but there is also a general troubleshooting topic.
       easy to rewind the installation to [Deploy Management Nodes](#deploy_management_nodes) because the PIT node has not
       yet been redeployed. In addition, redeploying the PIT node successfully requires several CSM services to be working
       properly, so validating this is important.
-
-      **Note**: At this point of the install, the `cray` CLI has not yet been configured. Some of the tests (Hardware State
-      Manager Discovery Validation, Booting the CSM Barebones Image on compute nodes, UAS/UAI) require it to be configured
-      in order to run. These tests may be skipped until after the PIT node has been redeployed, but **this is not recommended**.
-
-      To enable the 'cray' CLI in order to execute those tests, follow these two procedures before performing the CSM health
-      validation:
-
-         1. [Configure Keycloak Account](configure_administrative_access.md#configure_keycloak_account)
-         1. [Configure the Cray Command Line Interface (cray CLI)](configure_administrative_access.md#configure_cray_cli)
 
       To run the CSM health checks, see [Validate CSM Health](../operations/validate_csm_health.md)
    <a name="deploy_final_ncn"></a>
@@ -214,11 +202,10 @@ sections, but there is also a general troubleshooting topic.
 
       >**IMPORTANT:** 
       Before FAS can be used to update firmware, refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
-      on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for information about how to install
+      on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for more information about how to install
       the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
       available. Once FAS is aware that new firmware is available, then see
       [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
-
    <a name="prepare_compute_nodes"></a>
 
    1. Prepare Compute Nodes
@@ -232,12 +219,12 @@ sections, but there is also a general troubleshooting topic.
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
    <a name="next_topic"></a>
+
    1. Next Topic
 
       After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
       been fully installed and configured. Refer to the _HPE Cray EX System Software Getting Started Guide S-8000_
-      on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for more information on other product
-      streams to be installed and configured after CSM.
+      on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for more information on other product streams to be installed and configured after CSM.
    <a name="troubleshooting_installation"></a>
 
    1. Troubleshooting Installation Problems

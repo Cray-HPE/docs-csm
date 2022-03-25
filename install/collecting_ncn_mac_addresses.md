@@ -1,5 +1,3 @@
-
-
 # Collecting NCN MAC Addresses
 
 This procedure will detail how to collect the NCN MAC addresses from an HPE Cray EX system. The MAC addresses needed for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns in `ncn_metadata.csv` will be collected.
@@ -57,7 +55,9 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     ```bash
     pit# mv /var/www/boot/script.ipxe /var/www/boot/script.ipxe.bak
     ```
-2. Verify consoles are active with `conman -q`.  The following command lists all nodes that ConMan is configured for,
+
+2. Verify consoles are active with `conman -q`. The following command lists all nodes that ConMan is configured for,
+
     ```bash
     pit# conman -q
     ncn-m002-mgmt
@@ -161,7 +161,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 
     The above output identified MAC0 and MAC1 of the bond as 94:40:c9:5f:b5:df and 14:02:ec:da:b9:99 respectively.
 
-9. Collect the NCN MAC address for the PIT node. This information will be used to populate the MAC addresses for ncn-m001.
+9. Collect the NCN MAC address for the PIT node. This information will be used to populate the MAC addresses for `ncn-m001`.
 
    ```bash
    pit# cat /proc/net/bonding/bond0  | grep Perm
@@ -268,12 +268,7 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
     pit# yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)
     ```
 
-8. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
-   
-   Return to this procedure after applying the workaround instructions.
-
-9. Wipe the disks before reluanching the NCNs.
+8. Wipe the disks before relaunching the NCNs.
 
    See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
-
 

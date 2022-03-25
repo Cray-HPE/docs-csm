@@ -1,4 +1,4 @@
-## Clear Space in an etcd Cluster Database
+# Clear Space in an etcd Cluster Database
 
 Use this procedure to clear the etcd cluster NOSPACE alarm. Once it is set it will remain set. If needed, defrag the database cluster before clearing the NOSPACE alarm.
 
@@ -7,8 +7,8 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
 
 ### Prerequisites
 
--   This procedure requires root privileges.
--   The etcd clusters are in a healthy state.
+- This procedure requires root privileges
+- The etcd clusters are in a healthy state
 
 
 ### Procedure
@@ -17,12 +17,16 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
 
     1.  Verify that the attempt to store a new key-value fails.
 
-        ```bash
-        kubectl -n services exec -it hbtd-etcd-h59j42knjv -- sh
-        ```
+        Replace *hbtd-ETCD_CLUSTER* before running the following command.
+        `hbtd-etcd-h59j42knjv` is an example replacement value.
 
         ```bash
         ncn-w001# kubectl -n services exec -it hbtd-ETCD_CLUSTER -- sh
+        ```
+
+        Example output:
+
+        ```
         # export ETCDCTL_API=3
         # etcdctl put foo bar
         {"level":"warn","ts":"2020-10-23T23:56:48.408Z","caller":"clientv3/retry_interceptor.go:62","msg":"retrying of unary invoker failed","target":"endpoint://client-208534eb-2ab4-4c58-8853-58bff088c394/127.0.0.1:2379","attempt":0,"error":"rpc error: code = ResourceExhausted desc = etcdserver: mvcc: database space exceeded"}
@@ -33,12 +37,16 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
 
         In the following example, the disk usage is 375.5 M, which means the disk space has not been exceeded.
 
-        ```bash
-        kubectl -n services exec -it hbtd-etcd-h59j42knjv -- sh
-        ```
+        Replace *hbtd-ETCD_CLUSTER* before running the following command.
+        `hbtd-etcd-h59j42knjv` is an example replacement value.
 
         ```bash
         ncn-w001# kubectl -n services exec -it hbtd-ETCD_CLUSTER -- sh
+        ```
+
+        Example output:
+
+        ```
         # df -h
         Filesystem                Size      Used Available Use% Mounted on
         overlay                 396.3G     59.6G    316.5G  16% /
@@ -62,11 +70,18 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
         done
         ```
 
+        Example of command being entered:
+
         ```bash
         ncn-w001# for pod in $(kubectl get pods -l etcd_cluster=hbtd-etcd \
         -n services -o jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} ###"; \
         kubectl -n services exec ${pod} -- /bin/sh \
         -c "ETCDCTL_API=3 etcdctl alarm disarm"; done
+        ```
+
+        Example output:
+
+        ```
         ### hbtd-etcd-h59j42knjv ###
         memberID:6004340417806974740 alarm:NOSPACE
         memberID:10618826089438871005 alarm:NOSPACE
@@ -77,9 +92,8 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
 
     4.  Verify a new key-value can now be successfully stored.
 
-        ```bash
-        kubectl -n services exec -it hbtd-etcd-h59j42knjv -- sh
-        ```
+        Replace *hbtd-ETCD_CLUSTER* before running the following command.
+        `hbtd-etcd-h59j42knjv` is an example replacement value.
 
         ```bash
         ncn-w001# kubectl -n services exec -it hbtd-ETCD_CLUSTER -- sh
@@ -93,12 +107,13 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
     1.  Confirm the "database space exceeded" message is present.
 
         ```bash
-        kubectl logs -n services --tail=-1 --prefix=true -l "app.kubernetes.io/name=cray-hbtd" -c cray-hbtd | grep "x3005c0s19b1n0"
-        ```
-
-        ```bash
         ncn-w001# kubectl logs -n services --tail=-1 --prefix=true -l \
         "app.kubernetes.io/name=cray-hbtd" -c cray-hbtd | grep "x3005c0s19b1n0"
+        ```
+
+        Example output:
+
+        ```
         [pod/cray-hbtd-56bc4f6fdb-92bqx/cray-hbtd] 2020/09/15 20:00:44 INTERNAL ERROR storing key  {"Component":"x3005c0s19b1n0","Last_hb_rcv_time":"5f611d6c","Last_hb_timestamp":"2020-09-15T15:00:44.878876-06:00","Last_hb_status":"OK","Had_warning":""} :  etcdserver: mvcc: database space exceeded
         [pod/cray-hbtd-56bc4f6fdb-92bqx/cray-hbtd] 2020/09/15 20:00:47 INTERNAL ERROR storing key  {"Component":"x3005c0s19b1n0","Last_hb_rcv_time":"5f611d6f","Last_hb_timestamp":"2020-09-15T15:00:47.893757-06:00","Last_hb_status":"OK","Had_warning":""} :  etcdserver: mvcc: database space exceeded
         [pod/cray-hbtd-56bc4f6fdb-92bqx/cray-hbtd] 2020/09/15 20:00:53 INTERNAL ERROR storing key  {"Component":"x3005c0s19b1n0","Last_hb_rcv_time":"5f611d75","Last_hb_timestamp":"2020-09-15T15:00:53.926195-06:00","Last_hb_status":"OK","Had_warning":""} :  etcdserver: mvcc: database space exceeded
@@ -108,12 +123,16 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
 
     2.  Check if the default 2G \(unless defined different in the helm chart\) disk usage has been exceeded.
 
-        ```bash
-        kubectl exec -it -n services cray-hbtd-etcd-6p4tc4jdgm -- sh
-        ```
+        Replace *ETCD_CLUSTER_NAME* before running the following command.
+        For example, `cray-hbtd-etcd-6p4tc4jdgm` could be used.
 
         ```bash
         ncn-w001# kubectl exec -it -n services ETCD_CLUSTER_NAME -- sh
+        ```
+
+        Example output:
+        
+        ```
         # df -h
         Filesystem                Size      Used Available Use% Mounted on
         overlay                 439.1G     15.2G    401.5G   4% /
@@ -129,21 +148,22 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
         -   Increase the frequency of the kube-etcd-defrag from every 24 hours to 12 hours.
 
             ```bash
-            kubectl edit -n operators cronjob.batch/kube-etcd-defrag
+            ncn-w001# kubectl edit -n operators cronjob.batch/kube-etcd-defrag
             ```
 
-            ```bash
-            ncn-w001# kubectl edit -n operators cronjob.batch/kube-etcd-defrag
-            ...
-            ...
+            Example output:
+
+            ```
+            [...]
+
                           name: etcd-defrag
                         name: etcd-defrag
               schedule: 0 */12 * * *
               successfulJobsHistoryLimit: 1
               suspend: false
             status:
-            ...
-            ...
+            
+            [...]
             ```
 
         -   Trigger the job manually.
@@ -161,6 +181,11 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
 
         ```bash
         ncn-w001# kubectl logs -f -n operators pod/kube-etcd-defrag-1600171200-fxpn7
+        ```
+
+        Example output:
+
+        ```
         Defragging cray-bos-etcd-j7czpr9pbr
         Defragging cray-bos-etcd-k4qtjtgqjb
         Defragging cray-bos-etcd-wcm8cs7dvc
@@ -174,34 +199,22 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
         Defragging cray-crus-etcd-hldtxr6f9s
         Defragging cray-crus-etcd-sfsckpv4vw
         Defragging cray-externaldns-etcd-6l772b2cdv
-        Defragging cray-externaldns-etcd-khbgl45pf7
-        Defragging cray-externaldns-etcd-qphz6lmhns
-        Defragging cray-fas-etcd-7ktd4h47jv
-        Defragging cray-fas-etcd-b27mknzs2q
-        Defragging cray-fas-etcd-vccgfhcnnt
-        Defragging cray-hbtd-etcd-6p4tc4jdgm
-        Defragging cray-hbtd-etcd-j4xs7zj6v5
-        Defragging cray-hbtd-etcd-pb9tnrj6bw
-        Defragging cray-hmnfd-etcd-558sqc22lw
-        Defragging cray-hmnfd-etcd-prt7k224br
-        Defragging cray-hmnfd-etcd-rf2x7sth84
-        Defragging cray-reds-etcd-h94pq6w7cv
-        Defragging cray-reds-etcd-hgxdbgc65j
-        Defragging cray-reds-etcd-qxfh756zhm
-        Defragging cray-uas-mgr-etcd-5548zzfw8w
-        Defragging cray-uas-mgr-etcd-ngbm48qz2g
-        Defragging cray-uas-mgr-etcd-qnrlg6r4n6
+        
+        [...]
         ```
 
     5.  Verify the disk space is less than the size limit.
 
-        ```bash
-        kubectl exec -it -n services cray-hbtd-etcd-6p4tc4jdgm -- sh
-        / # df -h
-        ```
+        Replace *ETCD_CLUSTER_NAME* before running the following command.
+        For example, `cray-hbtd-etcd-6p4tc4jdgm` could be used.
 
         ```bash
         ncn-w001# kubectl exec -it -n services ETCD_CLUSTER_NAME -- sh
+        ```
+
+        Example output:
+
+        ```
         # df -h
         Filesystem                Size      Used Available Use% Mounted on
         overlay                 439.1G     15.2G    401.5G   4% /
@@ -212,17 +225,19 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
 
     6.  Turn off the NOSPACE alarm.
 
+        Replace *ETCD_CLUSTER_NAME* before running the following command.
+        For example, `cray-hbtd-etcd-6p4tc4jdgm` could be used.
+
         ```bash
-        kubectl exec -it -n services cray-hbtd-etcd-6p4tc4jdgm -- sh
+        ncn-w001# kubectl exec -it -n services ETCD_CLUSTER_NAME -- sh
         ```
 
-        ```screen
-        ncn-w001# kubectl exec -it -n services ETCD_CLUSTER_NAME -- sh
+        Example output:
+
+        ```
         # ETCDCTL_API=3 etcdctl alarm disarm
         memberID:14039380531903955557 alarm:NOSPACE
         memberID:10060051157615504224 alarm:NOSPACE
         memberID:9418794810465807950 alarm:NOSPACE
         ```
-
-
 

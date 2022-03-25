@@ -21,6 +21,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
+
 NAME ?= ${GIT_REPO_NAME}
 VERSION ?= $(shell cat .version)
 # FIXME: When does this switch to release or when it is omitted?
@@ -48,3 +49,6 @@ rpm_build_source:
 
 rpm_build:
 	BUILD_METADATA=$(BUILD_METADATA) rpmbuild -ba $(SPEC_FILE) --define "_topdir $(BUILD_DIR)"
+
+rpm_latest: 
+	cp $(wildcard $(BUILD_DIR)/RPMS/noarch/docs-csm-$(VERSION)-*.noarch.rpm) "$(BUILD_DIR)/RPMS/noarch/docs-csm-latest.noarch.rpm" 

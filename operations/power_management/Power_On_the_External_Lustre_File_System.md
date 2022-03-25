@@ -1,6 +1,4 @@
-
-
-## Power On the External Lustre File System
+# Power On the External Lustre File System
 
 Use this procedure as a general guide to power on an external ClusterStor system. Refer to the detailed procedures that support each ClusterStor hardware and software release:
 
@@ -42,6 +40,11 @@ Power up storage nodes in the following sequence:
 
     ```bash
     [n000]$ pdsh -g mgmt cat /proc/mdstat | dshbak -c
+    ```
+
+    Example output:
+
+    ```
     ----------------
     cls01234n000
     ----------------
@@ -96,6 +99,11 @@ Power up storage nodes in the following sequence:
 
     ```bash
     [n000]# pdsh -a date
+    ```
+
+    Example output:
+    
+    ```
     cls01234n000: Thu Aug 7 01:29:28 PDT 2014
     cls01234n003: Thu Aug 7 01:29:28 PDT 2014
     cls01234n002: Thu Aug 7 01:29:28 PDT 2014
@@ -131,6 +139,4 @@ Power up storage nodes in the following sequence:
     ```bash
     [n000]# cscli mount -f cls01234
     ```
-
-
 

@@ -47,7 +47,7 @@ ports on the nodes and how to cable the nodes to the management network switches
 |:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
 | OCP | 1 |  mgmt0 | primary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
 | OCP | 2 |  mgmt1 | secondary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| ILO | 1 |  None | HMN Leaf |  N/A |  HMN  |  N/A |
+| ILO | 1 |  None | HMN leaf-bmc |  N/A |  HMN  |  N/A |
 
 <br>
 NOTES:
@@ -78,14 +78,14 @@ The table below describes the cabling of dual card configurations. Also read not
 | OCP | 2 |  mgmt1 | site |  N/A |  N/A  |  N/A |
 | PCIE-SLOT1 | 1 |  mgmt2 | secondary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
 | PCIE-SLOT1 | 2 |  mgmt3 | None |  N/A |  N/A  |  N/A |
-| ILO | 1 |  None | HMN Leaf |  N/A |  HMN  |  N/A |
+| ILO | 1 |  None | HMN leaf-bmc |  N/A |  HMN  |  N/A |
 
 <br>
 NOTES:
 
-* REQUIRED:  Master 001 (ncn-m001) is required to have a site connection on OCP Port 2 for installation and maintenance.
+* REQUIRED:  Master 001 (`ncn-m001`) is required to have a site connection on OCP Port 2 for installation and maintenance.
 * RECOMMENDED: Masters 002 and 003 may optionally have a site connection on OCP Port 2 for emergency system access.
-* REQUIRED:  Master 001 (ncn-m001) is required to have it's BMC/iLO connected to the site.
+* REQUIRED:  Master 001 (`ncn-m001`) is required to have its BMC/iLO connected to the site.
 <br>
 <br>
 
@@ -98,10 +98,10 @@ NOTES:
 
 ![Diagram of HPE Master Node Cabling](../img/network/HPE_Master.png)
 
-**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access. This can have several configurations depending on customer requirements/equipment:
+**NOTE**: Master 1 (`ncn-m001`) is required to have a site connection for installation and non-CAN system access. This can have several configurations depending on customer requirements/equipment:
 
 * Dual 10/25Gb card configurations as described in the table above should use PCIe Slot 1, Port 2 as a site connection if the customer supports 10/25Gb.
-* If the customer does not support 10/25Gb speeds (or connection type) and requires RJ45 copper or 1Gb, then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.
+* If the customer does not support 10/25Gb speeds (or connection type) and requires RJ45 copper or 1Gb, then a new and separate card will be installed on `ncn-m001` and that card will provide site connectivity.
 * Another possibility (non-HPE hardware mainly) is that a built-in 1Gb port will be used if available (similar to Shasta v1.3 PoR on Gigabyte hardware).
 
 <a name="hpe_storage_node_cabling"></a>
@@ -113,7 +113,7 @@ NOTES:
 | OCP | 2 |  mgmt1 | primary |  N/A |  SUN  |  MLAG-LACP |
 | PCIE-SLOT1 | 1 |  mgmt2 | secondary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
 | PCIE-SLOT1 | 2 |  mgmt3 | secondary |  N/A |  SUN  |  MLAG-LACP |
-| ILO | 1 |  None | HMN Leaf |  N/A |  HMN  |  N/A |
+| ILO | 1 |  None | HMN leaf-bmc |  N/A |  HMN  |  N/A |
 
 <br>
 NOTES:
@@ -135,11 +135,11 @@ NOTES:
 The OCP ports go to the First switch and the PCIe ports go to the Second switch. OCP port 1 and PCIe port 1 form a Bond. OCP port 2 and PCIe port 2 form a Bond.
 ![Diagram of HPE Storage Node Cabling for Small System](../img/network/HPE_Storage.png)
 
-For systems that include 4 aggregation switches the cabling will look like the following.
+For systems that include 4 leaf switches the cabling will look like the following.
 
 ![Diagram of HPE Storage Node Cabling for Large System](../img/network/HPE_Storage_large.png)
 
-#### SHCD Example with four aggregation switches.
+#### SHCD Example with four leaf switches.
 |hostname|Source          |Destination   |Destination |
 |--------|----------------|--------------|------------|
 | sn01	 | x3000u10ocp-j2 | x3000u36-j5	 | sw-25g04   |
@@ -156,7 +156,7 @@ For systems that include 4 aggregation switches the cabling will look like the f
 | OCP | 2 |  mgmt1 | primary |  N/A |  CAN  |  MLAG-LACP |
 | PCIE-SLOT1 | 1 |  mgmt2 | secondary |  N/A |  N/A  |  N/A |
 | PCIE-SLOT1 | 2 |  mgmt3 | secondary |  N/A |  CAN  |  MLAG-LACP |
-| ILO | 1 |  None | HMN Leaf |  N/A |  HMN  |  N/A |
+| ILO | 1 |  None | HMN leaf-bmc |  N/A |  HMN  |  N/A |
 
 <br>
 NOTES:
@@ -193,11 +193,11 @@ NOTES:
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration         |
 |--------------------|--------------------------------|-------|-----------------------------|
-| OCP port 1         | 1G leaf switch                 |  1Gb  | Management Network NMN      |
+| OCP port 1         | 1G leaf-bmc switch                 |  1Gb  | Management Network NMN      |
 | OCP port 2         | None                           | None  | None                        |
 | OCP port 3         | None                           | None  | None                        |
 | OCP port 4         | None                           | None  | None                        |
-| iLO                | 1G leaf switch                 |  1Gb  | Management Network HMN      |
+| iLO                | 1G leaf-bmc switch                 |  1Gb  | Management Network HMN      |
 
 <a name="hpe_apollo_6500_xl675d"></a>
 ### HPE Apollo 6500 XL675D
@@ -213,11 +213,11 @@ NOTES:
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration         |
 |--------------------|--------------------------------|-------|-----------------------------|
-| PCIe port 1        | 1G leaf switch                 |  1Gb  | Management Network NMN      |
+| PCIe port 1        | 1G leaf-bmc switch                 |  1Gb  | Management Network NMN      |
 | PCIe port 2        | None                           | None  | None                        |
 | PCIe port 3        | None                           | None  | None                        |
 | PCIe port 4        | None                           | None  | None                        |
-| iLO                | 1G leaf switch                 |  1Gb  | Management Network HMN      |
+| iLO                | 1G leaf-bmc switch                 |  1Gb  | Management Network HMN      |
 
 <a name="gigabyte-hardware"></a>
 ## Gigabyte/Intel Hardware
@@ -228,8 +228,8 @@ NOTES:
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
-| PCIe Slot 1 port 1 | spine or aggregation pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
-| PCIe Slot 1 port 2 | spine or aggregation pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 1 | spine or leaf pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 2 | spine or leaf pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
 
 #### SHCD Example
 
@@ -240,7 +240,7 @@ NOTES:
 
 ![Diagram of Gigabyte Worker Node Cabling](../img/network/Gigaintel_Worker.png)
 
-**NOTE**: Cabling of ncn-w001 has changed in Shasta v1.4. Please see ncn-m001 note below.
+**NOTE**: Cabling of `ncn-w001` has changed in Shasta v1.4. Please see `ncn-m001` note below.
 
 <a name="master_node_cabling"></a>
 ### Master Node Cabling
@@ -248,9 +248,9 @@ NOTES:
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
-| PCIe Slot 1 port 1 | spine or aggregation pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
-| PCIe Slot 1 port 2 | spine or aggregation pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
-| LAN0 port 1        | NONE (See note below for ncn-m001) | NONE  | Site (See note below for ncn-m001) |
+| PCIe Slot 1 port 1 | spine or leaf pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 2 | spine or leaf pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| LAN0 port 1        | NONE (See note below for `ncn-m001`) | NONE  | Site (See note below for `ncn-m001`) |
 
 #### SHCD Example
 
@@ -261,10 +261,10 @@ NOTES:
 
 ![Diagram of Gigabyte Master Node Cabling](../img/network/Gigaintel_Master.png)
 
-**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access. In Shasta versions <=1.3 this connection was on ncn-w001. This can have several configurations depending on customer requirements/equipment:
+**NOTE**: Master 1 (`ncn-m001`) is required to have a site connection for installation and non-CAN system access. In Shasta versions <=1.3 this connection was on `ncn-w001`. This can have several configurations depending on customer requirements/equipment:
 
-* The default configuration for Gigabyte systems uses the built-in 1Gb lan0 port for site connection on ncn-m001.
-* If the customer requires connectivity greater than 1Gb (or a different connection type), then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.
+* The default configuration for Gigabyte systems uses the built-in 1Gb lan0 port for site connection on `ncn-m001`.
+* If the customer requires connectivity greater than 1Gb (or a different connection type), then a new and separate card will be installed on `ncn-m001` and that card will provide site connectivity.
 
 <a name="storage_node_cabling"></a>
 ### Storage Node Cabling
@@ -272,8 +272,8 @@ NOTES:
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration            |
 |--------------------|--------------------------------|-------|--------------------------------|
-| PCIe Slot 1 port 1 | spine or aggregation pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
-| PCIe Slot 1 port 2 | spine or aggregation pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 1 | spine or leaf pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
+| PCIe Slot 1 port 2 | spine or leaf pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
 
 #### SHCD Example
 
@@ -289,9 +289,9 @@ NOTES:
 
 | Server Port        | Management Network Port        | Speed | Use / Configuration         |
 |--------------------|--------------------------------|-------|-----------------------------|
-| LAN0 port 1        | leaf (see note)                |  1Gb  | Management Network NMN      |
-| PCIe Slot 1 port 1 | spine or aggregation pair, switch 1/2 | 40Gb  | Management Network CAN bond |
-| PCIe Slot 1 port 2 | spine or aggregation pair, switch 2/2 | 40Gb  | Management Network CAN bond |
+| LAN0 port 1        | leaf-bmc (see note)                |  1Gb  | Management Network NMN      |
+| PCIe Slot 1 port 1 | spine or leaf pair, switch 1/2 | 40Gb  | Management Network CAN bond |
+| PCIe Slot 1 port 2 | spine or leaf pair, switch 2/2 | 40Gb  | Management Network CAN bond |
 
 #### SHCD Example
 
@@ -303,6 +303,6 @@ NOTES:
 ![Diagram of Gigabyte UAN Cabling](../img/network/Gigaintel_UAN.png)
 
 NOTE that there are a couple configurations possible for LAN0:
-* Existing Gigabyte systems on Dell and Mellanox network hardware will use the (existing) Dell leaf port.
+* Existing Gigabyte systems on Dell and Mellanox network hardware will use the (existing) Dell leaf-bmc port.
 * Any Gigabyte system on Aruba network hardware will use an Aruba 6300 (for the 1Gb port).
 * Optionally a 10/25Gb card could be added in an Aruba hardware system to match the HPE UANs.

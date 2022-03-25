@@ -1,4 +1,4 @@
-## Boot UANs
+# Boot UANs
 
 Boot UANs with an image so that they are ready for user logins.
 
@@ -13,6 +13,11 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
     ```bash
     ncn-m001# cray bos session create --template-uuid uan-sessiontemplate-PRODUCT_VERSION \
     --operation reboot --format json | tee session.json
+    ```
+
+    Example output:
+
+    ```
     {
      "links": [
        {
@@ -62,14 +67,17 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
 
         ```bash
         ncn-m001# ssh uan01-nmn
-        Last login: Wed Mar 17 19:10:12 2021 from 10.252.1.12
-        uan01#
         ```
 
     2.  Verify that the DVS RPM versions match what exists in the 1.4.0-p2/rpms directory.
 
         ```bash
         uan01# rpm -qa | grep 'cray-dvs.*2.12' | sort
+        ```
+
+        Example output:
+
+        ```
         cray-dvs-compute-2.12_4.0.102-7.0.1.0_8.1__g30d29e7a.x86_64
         cray-dvs-devel-2.12_4.0.102-7.0.1.0_8.1__g30d29e7a.x86_64
         cray-dvs-kmp-cray_shasta_c-2.12_4.0.102_k4.12.14_197.78_9.1.58-7.0.1.0_8.1__g30d29e7a.x86_64
@@ -85,7 +93,7 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
 
     ```bash
     ncn-m001# export BOS_SESSION=$(jq -r '.links[] | select(.rel=="session") | .href' session.json | cut -d '/' -f4)
-
+    
     ncn-m001# echo $BOS_SESSION
     89680d0a-3a6b-4569-a1a1-e275b71fce7d
     ```
@@ -118,5 +126,4 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
     ```bash
     ncn-m001# cray cfs sessions list --tags bos_session=$BOS_SESSION --status running --format json
     ```
-
 

@@ -1,4 +1,4 @@
-## Recover from a Liquid Cooled Cabinet EPO Event
+# Recover from a Liquid Cooled Cabinet EPO Event
 
 Identify an emergency power off \(EPO\) has occurred and restore cabinets to a healthy state.
 
@@ -14,6 +14,11 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
     ```bash
     ncn-m001# cray capmc get_xname_status create --xnames x9000c[1,3]
+    ```
+
+    Example output:
+
+    ```
     e = 0
     err_msg = ""
     off = [ "x9000c1", "x9000c3",]
@@ -26,6 +31,11 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     ```bash
     ncn-m001# kubectl logs -n services -l app.kubernetes.io/name=cray-capm \
     -c cray-capmc --tail -1 | grep EPO -A 10
+    ```
+
+    Example output:
+
+    ```
     2019/10/24 02:37:30 capmcd.go:805: Message: Can not issue Enclosure Chassis.Reset 'On'|'Off' while in EPO state
     2019/10/24 02:37:30 capmcd.go:808: ExtendedInfo.Message: Can not issue Enclosure Chassis.Reset 'On'|'Off' while in EPO state
     2019/10/24 02:37:30 capmcd.go:809: ExtendedInfo.Resolution: Verify physical hardware, issue Enclosure Chassis.Reset --> 'ForceOff', and resubmit the request
@@ -48,6 +58,11 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
     ```bash
     ncn-m001# cray capmc xname_off create --xnames x[1000-1003]c[0-7] --force true
+    ```
+
+    Example output:
+
+    ```
     e = 0
     err_msg = ""
     ```
@@ -56,6 +71,11 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
     ```bash
     ncn-m001# cray capmc xname_off create --xnames x9000c[1,3] --force true
+    ```
+
+    Example output:
+
+    ```
     e = 0
     err_msg = ""
     ```
@@ -71,6 +91,11 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     ```bash
     ncn-m001# cray capmc xname_on create \
     --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
+    ```
+
+    Example output:
+
+    ```
     e = 0
     err_msg = ""
     ```

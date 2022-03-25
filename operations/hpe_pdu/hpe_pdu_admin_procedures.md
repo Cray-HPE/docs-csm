@@ -1,4 +1,4 @@
-## HPE PDU Admin Procedures
+# HPE PDU Admin Procedures
 
 The following procedures are used to manage the HPE Power Distribution Unit (PDU):
 
@@ -14,7 +14,7 @@ The following procedures are used to manage the HPE Power Distribution Unit (PDU
 ### Connect to HPE PDU Web Interface
 The following is needed before running this procedure:
 * IP address or Domain Name of `ncn-m001`
-* Xname of the HPE PDU
+* Component name (xname) of the HPE PDU
 * Root password for `ncn-m001`
 * Admin password for HPE PDU _(default: 12345678)_
 
@@ -22,7 +22,7 @@ The following is needed before running this procedure:
     ```bash
     > ssh -L 8443:{PDU_xname}:443 -N root@{ncn-m001_ip}
     ```
-    Where `{PDU_xname}` is the xname of the PDU and `{ncn-m001_ip}` is the ip address of `ncn-m001`.
+    Where `{PDU_xname}` is the component name (xname) of the PDU and `{ncn-m001_ip}` is the ip address of `ncn-m001`.
     You will need to enter the root password for `ncn-m001`.
 
 1. Connect to: [`https://localhost:8443`](https://localhost:8443) using a web browser.

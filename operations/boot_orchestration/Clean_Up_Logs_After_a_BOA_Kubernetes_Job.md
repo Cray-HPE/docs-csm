@@ -1,14 +1,12 @@
-## Clean Up Logs After a BOA Kubernetes Job
+# Clean Up Logs After a BOA Kubernetes Job
 
 Delete log entries from previous boot orchestration jobs. The Boot Orchestration Service \(BOS\) launches a Boot Orchestration Agent \(BOA\) Kubernetes job. BOA then launches a Configuration Framework Service \(CFS\) session, resulting in a CFS-BOA Kubernetes job. Thus, there are two separate sets of jobs that can be removed.
 
 Deleting log entries creates more space and helps improve the usability of viewing logs.
 
-
 ### Prerequisites
 
--   A Boot Orchestration Service \(BOS\) session has finished.
-
+- A Boot Orchestration Service \(BOS\) session has finished.
 
 ### Procedure
 
@@ -18,6 +16,11 @@ Deleting log entries creates more space and helps improve the usability of viewi
 
     ```bash
     ncn-m001# kubectl get jobs -n services | grep boa
+    ```
+
+    Example output:
+
+    ```
     boa-2c2211aa-9876-4aa7-92e2-c8a64d9bd9a6                    1/1           6m58s      13d
     boa-51918dbd-bde2-4836-9500-2a7bad93787c                    1/1           65s        9d
     boa-6fc198cc-486b-4340-81e0-f17c199a1ec6                    1/1           97s        9d
@@ -34,5 +37,4 @@ Deleting log entries creates more space and helps improve the usability of viewi
     ```bash
     ncn-m001# kubectl delete jobs BOA_JOB_ID
     ```
-
 

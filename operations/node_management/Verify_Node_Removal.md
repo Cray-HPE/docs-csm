@@ -1,11 +1,11 @@
-## Verify Node Removal
+# Verify Node Removal
 
 Use this procedure to verify that a node has been successfully removed from the system.
 
 ### Prerequisites
 
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   This procedure requires the xname of the removed node to be known.
+-   This procedure requires the component name (xname) of the removed node to be known.
 
 ### Procedure
 
@@ -13,6 +13,11 @@ Use this procedure to verify that a node has been successfully removed from the 
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe x3000c0s19b4
+    ```
+
+    Example output:
+
+    ```
     Domain = ""
     MACAddr = "a4bf012b71a9"
     UUID = "61b3843b-9d33-4986-ba03-1b8acd0bfd9c"
@@ -36,6 +41,11 @@ Use this procedure to verify that a node has been successfully removed from the 
 
     ```bash
     ncn-m001# cray hsm state components describe x3000c0s19b4n0
+    ```
+
+    Example output:
+
+    ```
     ID = "x3000c0s19b4n0"
     Type = "Node"
     State = "Off"
@@ -49,6 +59,4 @@ Use this procedure to verify that a node has been successfully removed from the 
     ```
 
 3.  If a River node will not be replaced, update SLS to omit it.
-
-
 

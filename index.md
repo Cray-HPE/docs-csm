@@ -1,6 +1,6 @@
 # Cray System Management Documentation
 
-### Scope and Audience
+## Scope and Audience
 
 The documentation included here describes the Cray System Management (CSM) software, how to install
 or upgrade CSM software, and related supporting operational procedures to manage an HPE Cray EX system.
@@ -30,11 +30,17 @@ scripts, revision control with git, configuration management with Ansible, YAML,
    of the HPE Cray EX system, differences between previous release and this release, and conventions
    used in this documentation.
 
+1. [Pre-Install Steps](operations/preinstall/Preinstall.md)
+
+   This chapter outlines how to set up default credentials for River BMCs and
+   ServerTech PDUs, which must be done before the initial installation of
+   CSM, in order to enable HSM software to interact with River Redfish BMCs
+   and PDUs.
+
 1. [Update CSM Product Stream](update_product_stream/index.md)
 
-   This chapter explains how to get the CSM product release, any patches, update to the latest set of
-   documenation and any installation workarounds, and check for any Field Notices or Hotfixes.
-
+   This chapter explains how to get the CSM product release, get any patches, update to the latest 
+   documentation, and check for any Field Notices or Hotfixes.
 
 1. [Install CSM](install/index.md)
 
@@ -97,9 +103,9 @@ scripts, revision control with git, configuration management with Ansible, YAML,
 
 1. [Glossary](glossary.md)
 
-   This chapter provides a explanations of terms and acronyms used throughout the rest of this documentation.
+   This chapter provides explanations of terms and acronyms used throughout the rest of this documentation.
 
-### Copyright and License
+## Copyright and License
 
 MIT License
 

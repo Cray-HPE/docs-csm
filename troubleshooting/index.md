@@ -7,6 +7,8 @@ This document provides troubleshooting information for services and functionalit
     * [Hardware Discovery](#known-issues-hardware-discovery)
     * [initrd.img.xz not found](#initrd-not-found)
     * [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
+    * [Wait_for_unbound or `cray-dns-unbound-manager` hangs](known_issues/wait_for_unbound_hang.md)
+
  * Kubernetes troubleshooting
     * [General Kubernetes Commands for Troubleshooting](./kubernetes/Kubernetes_Troubleshooting_Information.md)
     * [Kubernetes Log File Locations](./kubernetes/Kubernetes_Log_File_Locations.md)
@@ -23,18 +25,19 @@ Listing of known issues and procedures to workaround them in this CSM release.
 
 ### Hardware Discovery
 Known issues related to hardware discovery in a system.
- * [Air cooled hardware is not getting properly discovered with Aruba leaf switches](known_issues/discovery_aruba_snmp_issue.md)
  * [HMS Discovery job not creating RedfishEndpoints in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
 
 <a name="initrd-not-found"></a>
-### ``error: file  `/boot/grub2/../initrd.img.xz' not found.Press any key to continue...``
+### `initrd.img.xz` Not Found
 
 This is a problem that is fixed in CSM 1.0+, but if your system was upgraded from CSM 0.9.x you may run into this. Below is the full error seen when attempting to boot:
 
 ```
 Loading Linux  ...
 Loading initial ramdisk ...
-error: file `/boot/grub2/../initrd.img.xz' not found.Press any key to continue...
+error: file `/boot/grub2/../initrd.img.xz' not found.
+
+Press any key to continue...
 [    2.528752] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
 [    2.537264] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.3.18-24.64-default #1 SLE15-SP2
 [    2.545499] Hardware name: Cray Inc. R272-Z30-00/MZ32-AR0-00, BIOS C27 05/12/2021
@@ -56,19 +59,20 @@ error: file `/boot/grub2/../initrd.img.xz' not found.Press any key to continue..
 
 Follow these steps on any NCN to fix the issue:
 
-   1. Run the `CASMINST-2689.sh` script from the `CASMINST-2689` workaround at the `livecd-post-reboot` breakpoint.
+   1. Install the Shasta 1.4 (a.k.a. CSM 0.9) install workaround RPM. See the CSM 0.9 documentation for details on how to do this.
 
-      Follow the usual [workaround instructions](../update_product_stream/index.md#apply-workarounds) **with the following exceptions**:
-         * Use the latest Shasta 1.4 install workaround RPM, **not** the Shasta 1.5 install workaround RPM
-         * For the  `livecd-post-reboot` breakpoint, ignore any workarounds other than `CASMINST-2689`
-         * Do not follow the workaround `README.md` instructions -- only run the `CASMINST-2689.sh` script in the `CASMINST-2689` subdirectory
+   1. Run the `CASMINST-2689.sh` script from the `CASMINST-2689` workaround at the `livecd-post-reboot` breakpoint:
+   
+      ```bash
+      ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh
+      ```
 
    1. Run these commands:
 
       ```bash
       ncn# for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' '); do
-         scp -r csm-install-workarounds/workarounds/livecd-post-reboot/CASMINST-2689/ $i:/opt/cray/csm/workarounds/livecd-post-reboot/
-      done
+               scp -r /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689 $i:/opt/cray/csm/workarounds/livecd-post-reboot/
+            done
       ncn# pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh'
       ```
 

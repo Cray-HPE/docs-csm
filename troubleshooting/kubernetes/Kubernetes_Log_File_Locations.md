@@ -1,4 +1,4 @@
-## Kubernetes Log File Locations
+# Kubernetes Log File Locations
 
 Locations of various K8s log types on the system.
 

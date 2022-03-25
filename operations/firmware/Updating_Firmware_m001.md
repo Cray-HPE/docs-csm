@@ -1,4 +1,4 @@
-## Updating BMC Firmware and BIOS for ncn-m001
+# Updating BMC Firmware and BIOS for ncn-m001
 
 **NOTE:** On HPE nodes, the BMC Firmware is iLO 5 and BIOS is System ROM
 
@@ -50,7 +50,7 @@ Gigabyte ncn-m001:
 
     a. To update BMC:
 
-    `m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d ‘{“ImageURI”:”http://ipaddressOfM001:8770/filename”, ”TransferProtocol”:”HTTP”, ”UpdateComponent”:”BMC”}’`
+    `m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'`
 
     * `passwd` = root password of BMC
     * `ipaddressOfBMC` = ipaddress of BMC
@@ -59,7 +59,7 @@ Gigabyte ncn-m001:
 
     b. To update BIOS:
 
-    `m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d ‘{“ImageURI”:”http://ipaddressOfM001:8770/filename”, ”TransferProtocol”:”HTTP”, ”UpdateComponent”:”BIOS”}’`
+    `m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'`
 
 
     * `passwd` = root password of BMC
@@ -67,7 +67,7 @@ Gigabyte ncn-m001:
     * `ipaddressOfM001` = ipaddress of ncn-m001 node
     * `filename` = filename of the image you downloaded above.
 
-    After updating BIOS, ncn-m001 will need to be rebooted.  Follow instructions [Reboot NCNs](../node_management/Reboot_NCNs.md) for rebooting ncn-m001.
+    After updating BIOS, ncn-m001 will need to be rebooted. Follow instructions [Reboot NCNs](../node_management/Reboot_NCNs.md) for rebooting ncn-m001.
 
 HPE ncn-m001:
 
@@ -81,11 +81,11 @@ The web interface will be used to update iLO 5 (BMC) firmware and/or System ROM 
 
 3. Log in with root and the root password for the iLO device
 
-    1. Click on `“Firmware & OS Software”` on the left menu
-    2. Click on `“Update Firmware”` on the right menu
-    3. Check `“Local File”`
-    4. Click `“Choose File”` and select the iLO firmware file or System ROM file
-    5. Click `“Confirm TPM override”`
+    1. Click on `"Firmware & OS Software"` on the left menu
+    2. Click on `"Update Firmware"` on the right menu
+    3. Check `"Local File"`
+    4. Click `"Choose File"` and select the iLO firmware file or System ROM file
+    5. Click `"Confirm TPM override"`
     6. Click `"Flash"`
 
-  After updating the System ROM (BIOS), ncn-m001 will need to be rebooted.  Follow instructions [Reboot NCNs](../node_management/Reboot_NCNs.md) for rebooting ncn-m001.
+  After updating the System ROM (BIOS), ncn-m001 will need to be rebooted. Follow instructions [Reboot NCNs](../node_management/Reboot_NCNs.md) for rebooting ncn-m001.

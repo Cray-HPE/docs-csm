@@ -1,4 +1,4 @@
-## Rebuild Unhealthy etcd Clusters
+# Rebuild Unhealthy etcd Clusters
 
 Rebuild any cluster that does not have healthy pods by deleting and redeploying unhealthy pods. This procedure includes examples for rebuilding etcd clusters in the services namespace. This procedure must be used for each unhealthy cluster, not just the services used in the following examples.
 
@@ -38,6 +38,11 @@ An example using the automation script is below.
 
 ```
 ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -s cray-uas-mgr-etcd
+```
+
+Example output:
+
+```
 The following etcd clusters will be restored/rebuilt:
 cray-uas-mgr-etcd
 You will be accepting responsibility for any missing data if there is a restore/rebuild over a running etcd k/v. HPE assumes no responsibility.
@@ -157,6 +162,11 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
 
     ```bash
     ncn-w001# kubectl get pods -n services | grep bos-etcd
+    ```
+
+    Example output:
+
+    ```
     cray-bos-etcd-hwcw4429b9                  1/1     Running         1          7d18h
     cray-bos-etcd-mdnl28vq9c                  1/1     Running         0          36h
     cray-bos-etcd-w5vv7j4ghh                  1/1     Running         0          18h
@@ -204,6 +214,4 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
 
 
 Rerun the etcd cluster health check \(see [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md)\) after recovering one or more clusters. Ensure that the clusters are healthy and have the correct number of pods.
-
-
 

@@ -1,4 +1,4 @@
-## View Postgres Information for System Databases
+# View Postgres Information for System Databases
 
 Postgres uses SQL language to store and manage databases on the system. This procedure describes how to view and obtain helpful information about system databases, as well as the types of data being stored.
 
@@ -14,6 +14,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-w001# kubectl -n services exec -it cray-smd-postgres-0 -- bash
+    ```
+    
+    Example output:
+
+    ```
     Defaulting container name to postgres.
     Use 'kubectl describe pod/cray-smd-postgres-0 -n services' to see all of the containers in this pod.
 
@@ -42,6 +47,11 @@ This procedure requires administrative privileges.
 
     ```bash
     root@cray-smd-postgres-0:/home/postgres# psql -U postgres
+    ```
+
+    Example output:
+
+    ```
     psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))
     Type "help" for help.
 
@@ -52,6 +62,11 @@ This procedure requires administrative privileges.
 
     ```bash
     postgres=# \l
+    ```
+
+    Example output:
+
+    ```
                                           List of databases
         Name    |      Owner      | Encoding |   Collate   |    Ctype    |   Access privileges
     ------------+-----------------+----------+-------------+-------------+-----------------------
@@ -71,6 +86,11 @@ This procedure requires administrative privileges.
 
     ```bash
     postgres=# \c hmsds
+    ```
+
+    Example output:
+
+    ```
     psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))
     You are now connected to database "hmsds" as user "postgres".
     hmsds=#
@@ -80,6 +100,11 @@ This procedure requires administrative privileges.
 
     ```bash
     hmsds-# \dt
+    ```
+
+    Example output:
+
+    ```
                       List of relations
      Schema |          Name           | Type  |   Owner
     --------+-------------------------+-------+-----------
@@ -105,6 +130,4 @@ This procedure requires administrative privileges.
      public | system                  | table | hmsdsuser
     (20 rows)
     ```
-
-
 
