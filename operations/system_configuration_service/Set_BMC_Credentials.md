@@ -83,15 +83,61 @@ Use the System Configuration Service \(SCSD\) to set the BMCs credentials to uni
 
     -   Apply global credentials to BMCs with the same credentials.
 
-        ```bash
-        ncn-m001# cray scsd bmc globalcreds create ./bmc_creds_glb.json
-        ```
+        1.  Apply the new BMC credentials:
+            ```bash
+            ncn-m001# cray scsd bmc globalcreds create ./bmc_creds_glb.json
+            ```
+
+        1.  Perform a rediscovery on the BMCs that had their credentials changed:
+            ```bash
+            ncn-m001# cray hsm inventory discover create --xnames $(cat bmc_creds_glb.json | jq '.Targets | join(",")' -r)
+            ```
+
+        2.  Wait for DiscoverOK for all of the BMCs that had their credentials changed. You may need to re-run the command below until all BMCs are DiscoverOK:
+            ```bash
+            ncn-m001# for bmc in $(cat bmc_creds_glb.json | jq '.Targets[]' -r); do
+                echo "Checking Discovery Status for $bmc"
+                cray hsm inventory redfishEndpoints describe $bmc --format json | 
+                    jq .DiscoveryInfo.LastDiscoveryStatus -r
+            done
+            ```
+
+            Example output:
+            ```
+            Checking Discovery Status for x0c0s0b0
+            DiscoverOK
+            Checking Discovery Status for x0c0s1b0
+            DiscoverOK
+            ```
 
     -   Apply discrete credentials to BMCs with different credentials.
 
-        ```bash
-        ncn-m001# cray scsd bmc discreetcreds create ./bmc_creds_dsc.json
-        ```
+        1.  Apply the new BMC credentials:
+            ```bash
+            ncn-m001# cray scsd bmc discreetcreds create ./bmc_creds_dsc.json
+            ```
+
+        2.  Perform a rediscovery on the BMCs that had their credentials changed:
+            ```bash
+            ncn-m001# cray hsm inventory discover create --xnames $(cat bmc_creds_glb.json | jq '[.Targets[].Xname] | join(",")' -r)
+            ```
+
+        3.  Wait for DiscoverOK for all of the BMCs that had their credentials changed. You may need to re-run the command below until all BMCs are DiscoverOK:
+            ```bash
+            ncn-m001# for bmc in $(cat bmc_creds_glb.json | jq '[.Targets[].Xname] | join(",")' -r); do
+                echo "Checking Discovery Status for $bmc"
+                cray hsm inventory redfishEndpoints describe $bmc --format json | 
+                    jq .DiscoveryInfo.LastDiscoveryStatus -r
+            done
+            ```
+
+            Example output:
+            ```
+            Checking Discovery Status for x0c0s0b0
+            DiscoverOK
+            Checking Discovery Status for x0c0s0b1
+            DiscoverOK
+            ```
 
     **Troubleshooting:** If either command has any components that do not have the status of OK, they must be retried until they work, or the retries are exhausted and noted as failures. Failed modules need to be taken out of the system until they are fixed.
 

@@ -38,3 +38,25 @@ All air-cooled and liquid-cooled BMCs share the same global credentials. The air
     ```
 
     **Troubleshooting:** If the above command has any components that do not have the status of OK, they must be retried until they work, or the retries are exhausted and noted as failures. Failed modules need to be taken out of the system until they are fixed.
+
+3.  Perform a rediscovery on the BMCs that had their credentials changed:
+    ```bash
+    ncn-m001# cray hsm inventory discover create --xnames $(cat bmc_creds_glb.json | jq '.Targets | join(",")' -r)
+    ```
+
+4.  Wait for DiscoverOK for all of the BMCs that had their credentials changed. You may need to re-run the command below until all BMCs are DiscoverOK:
+    ```bash
+    ncn-m001# for bmc in $(cat bmc_creds_glb.json | jq '.Targets[]' -r); do
+        echo "Checking Discovery Status for $bmc"
+        cray hsm inventory redfishEndpoints describe $bmc --format json | 
+            jq .DiscoveryInfo.LastDiscoveryStatus -r
+    done
+    ```
+
+    Example output:
+    ```
+    Checking Discovery Status for x3000c0s20b0
+    DiscoverOK
+    Checking Discovery Status for x3000c0s3b0
+    DiscoverOK
+    ```
