@@ -48,13 +48,6 @@ pit# rpm -Uvh /var/www/ephemeral/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/ya
 
     > **NOTE**: If you want to force a rerun, you can use `--no-cache`: `yapl -f install.yaml execute --no-cache`
 
-1. Copy `yapl` log files so they can be retained with other install logs:
-
-    ```bash
-    pit# mkdir -pv /var/www/ephemeral/prep/logs &&
-         cp -v /usr/share/doc/csm/install/scripts/csm_services/yapl.log /var/www/ephemeral/prep/logs
-    ```
-
 <a name="wait-for-everything-to-settle"></a>
 ### 3. Wait For Everything To Settle
 
