@@ -111,7 +111,17 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
+set +e
+while true ; do    
+    csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
+    if [[ $? -eq 0 ]]; then
+        break
+    else
+        sleep 5
+    fi
+done
+set -e
+
 ${basedir}/../common/ncn-rebuild-common.sh $target_ncn
 
 # TODO: wait for k8s
