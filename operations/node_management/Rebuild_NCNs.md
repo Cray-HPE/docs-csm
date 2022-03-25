@@ -56,7 +56,7 @@ ncn-m001:# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nod
 
 * [Storage node](Rebuild_NCNs/Prepare_Storage_Nodes.md)
 ```
-ncn-m001:# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-storage-nodes.sh
+ncn-m001:# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-storage-nodes.sh ncn-s002
 ```
 
 ## Validation
