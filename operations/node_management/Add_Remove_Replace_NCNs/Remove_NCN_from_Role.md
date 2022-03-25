@@ -8,7 +8,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
 
 **IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#remove-ncn-prerequisites) 
 
-- Remove Role
+- [Remove Role](#remove-roles)
   - [Master node](#master-node-remove-roles)
   - [Worker node](#worker-node-remove-roles)
   - [Storage node](#storage-node-remove-roles)
@@ -19,10 +19,13 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
 - [Power off the node](#power-off-the-node)
 
 
-<a name="master-node-remove-roles"></a>
-## Master Node Remove Roles
+<a name="remove-roles"></a>
+## Remove Roles
 
-### Step 1 - Determine if the master node being removed is the first master node.
+<a name="master-node-remove-roles"></a>
+### Master Node Remove Roles
+
+#### Step 1 - Determine if the master node being removed is the first master node.
 
 ***IMPORTANT:*** The first master node is the node others contact to join the Kubernetes cluster. If this is the node being removed, promote another master node to the initial node before proceeding.
 
@@ -107,13 +110,13 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
    ```
 
 <a name="reset-kubernetes-on-master"></a>
-### Step 2 - Reset Kubernetes on master node being removed.
+#### Step 2 - Reset Kubernetes on master node being removed.
 
   ```bash
   kubeadm reset --force
   ```
 <a name="stop-running-containers-on-master"></a>
-### Step 3 - Stop running containers on master node being removed.
+#### Step 3 - Stop running containers on master node being removed.
  
 1. List any containers running in `containerd`.
 
@@ -139,7 +142,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
    ```
 
 <a name="remove-the-master-node-from-the-kubernetes-cluster"></a>
-### Step 4 - Remove the master node from the Kubernetes cluster.
+#### Step 4 - Remove the master node from the Kubernetes cluster.
 
 **IMPORTANT:** Run this command from a node ***NOT*** being deleted.
 
@@ -147,7 +150,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
   ncn-mw# kubectl delete node $NODE
   ```
 
-### Step 5 - Remove the Node from Etcd.
+#### Step 5 - Remove the Node from Etcd.
 
 1. Determine the member ID of the master node being removed.
 
@@ -169,7 +172,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
     ncn-m# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member remove <MEMBER_ID>
     ```
 
-### Step 6 - Stop kubelet, containerd and Etcd services ***on the master node being removed***.
+#### Step 6 - Stop kubelet, containerd and Etcd services ***on the master node being removed***.
 
   ```bash
   systemctl stop kubelet.service
@@ -177,7 +180,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
   systemctl stop etcd.service
   ```
 
-### Step 7 - Add the node back into the etcd cluster
+#### Step 7 - Add the node back into the etcd cluster
 
   This will allow the node to rejoin the cluster automatically when it gets added back.
 
@@ -188,13 +191,13 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
   etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member add $NODE --peer-urls=https://<IP_ADDRESS>:2380
   ```
 
-### Step 8 - Remove Etcd data directory ***on the master node being removed***.
+#### Step 8 - Remove Etcd data directory ***on the master node being removed***.
 
   ```bash
   rm -rf /var/lib/etcd/*
   ```
 
-### Step 9 - Save a copy the lan0 config from m001 **only if ncn-m001 is being removed**
+#### Step 9 - Save a copy the lan0 config from m001 **only if ncn-m001 is being removed**
 
   ```bash
   ncn-m001# rsync /etc/sysconfig/network/ifcfg-lan0 ncn-m002:/tmp/ifcfg-lan0-m001
@@ -203,9 +206,9 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
   The master node role removal is complete; proceed to [wipe the drives](#wipe-disks-master-node).
 
 <a name="worker-node-remove-roles"></a>
-## Worker Node Remove Roles
+### Worker Node Remove Roles
 
-### Step 1 - Drain the node to clear any pods running on the node.
+#### Step 1 - Drain the node to clear any pods running on the node.
 
 **IMPORTANT:** The following command will cordon and drain the node.
 
@@ -230,13 +233,13 @@ Run the following:
 * This will delete the offending pod, and Kubernetes should schedule a replacement on another node. You can then rerun the `kubectl drain` command, and it should report that the node is drained
 
 <a name="reset-kubernetes-on-worker"></a>
-### Step 2 - Reset Kubernetes on worker node being removed.
+#### Step 2 - Reset Kubernetes on worker node being removed.
 
   ```bash
   kubeadm reset --force
   ```
 <a name="stop-running-containers-on-worker"></a>
-### Step 3 - Stop running containers on worker node being removed.
+#### Step 3 - Stop running containers on worker node being removed.
  
 1. List any containers running in `containerd`.
 
@@ -262,12 +265,12 @@ Run the following:
    ```
 
 <a name="remove-the-worker-node-from-the-kubernetes-cluster"></a>
-### Step 4 - Remove the worker node from the Kubernetes cluster after the node is drained.
+#### Step 4 - Remove the worker node from the Kubernetes cluster after the node is drained.
 
   ```bash
   ncn-mw# kubectl delete node $NODE
   ```
-### Step 5 - Ensure all pods are stopped.
+#### Step 5 - Ensure all pods are stopped.
 
   ```bash
   ncn-mw# kubectl get pods -A -o wide | grep $NODE
@@ -275,7 +278,7 @@ Run the following:
 
   If no pods are returned, proceed to the next step, otherwise wait for any remaining pods to Terminate.
 
-### Step 6 - Ensure there are no mapped rbd devices ***on the worker node being removed***.
+#### Step 6 - Ensure there are no mapped rbd devices ***on the worker node being removed***.
 
   ```bash
   rbd showmapped
@@ -284,7 +287,7 @@ Run the following:
   If no devices are returned, then the worker node role removal is complete; proceed to [wipe the drives](#wipe-disks-worker-node). If mapped devices still exist, re-check Step 3, then Step 4 again. If devices are still mapped, they can be forceability unmapped using `rbd unmap -o force /dev/rbd#`, where /dev/rbd# is the device that is still returned as mapped.
 
 <a name="storage-node-remove-roles"></a>
-## Storage Node Remove Roles
+### Storage Node Remove Roles
 
 Follow [Remove Ceph Node](../../utility_storage/Remove_Ceph_Node.md) to remove Ceph role from the storage node.
 
