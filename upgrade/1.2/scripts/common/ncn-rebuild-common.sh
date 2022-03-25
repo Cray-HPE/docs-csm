@@ -33,7 +33,7 @@ target_ncn=$1
 
 state_name="CSI_VALIDATE_BSS_NTP"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
+if [[ $state_recorded == "0" && $2 != "--rebuild" ]]; then
     echo "====> ${state_name} ..."
 
     if ! cray bss bootparameters list --hosts $target_ncn --format json | jq '.[] |."cloud-init"."user-data".ntp' | grep -q '/etc/chrony.d/cray.conf'; then
