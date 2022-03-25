@@ -165,9 +165,7 @@ Follow [How to Lock Management Single Node](../../../operations/hardware_state_m
 
 ### Step 7 - **For Storage nodes only**
 
-1. Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added storage node to the Ceph cluster.
-
-2. Follow [Redeploy Services](./Redeploy_Services.md) to update service endpoints for the added storage node.
+Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added storage node to the Ceph cluster.
 
 ### Step 8 - **For ncn-m001 only**
 
@@ -198,12 +196,4 @@ Follow [How to Lock Management Single Node](../../../operations/hardware_state_m
     ncn-m001# ip a show lan0
     ```
 
-### Step 9 - Validate the node
-
-Follow the validation steps in the section for the node type that was added:
-
-- [Worker node](Add_Worker_Node_Validation.md)
-- [Storage node](Add_Storage_Node_Validation.md)
-- [Master node](Add_Master_Node_Validation.md)
-
-
+[Next Step Redeploy Services](Redeploy_Services.md)

@@ -325,3 +325,4 @@ Once the wipe of the drives is complete; proceed to [power off the node](#power-
 
    * Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing any further commands.
 
+[Next Step Remove NCN Data](Remove_NCN_Data.md)

@@ -461,3 +461,5 @@ Scenarios where this procedure is applicable:
     Arch = "X86"
     Class = "River"
     ```
+
+[Next Step Update Firmware](Update_Firmware.md)

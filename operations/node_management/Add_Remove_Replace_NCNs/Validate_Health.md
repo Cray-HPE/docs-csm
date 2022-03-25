@@ -1,4 +1,4 @@
-# Validate NCN
+# Validate Health
 
 ## Description
 
@@ -38,3 +38,4 @@ The following procedures can be run from any master or worker node.
    **NOTE:**
    The following errors can be ignored `Server URL: http://$NODE ... ERROR: Server endpoint could not be reached`, if $NODE has been removed and it is one of the first three worker, master or storage nodes.
 
+The procedure is complete. [Return to Main Page](../Add_Remove_Replace_NCNs.md). 

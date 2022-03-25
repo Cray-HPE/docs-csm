@@ -130,4 +130,4 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
     Not found: x3000c0s26b0n0
     ```
 
-1.  For storage nodes, follow [Redeploy Services](./Redeploy_Services.md) to update service endpoints.
+[Next Step Remove Switch Config](Remove_Switch_Config.md)
