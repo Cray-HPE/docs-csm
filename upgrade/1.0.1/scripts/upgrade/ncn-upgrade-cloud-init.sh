@@ -274,8 +274,7 @@ cat <<EOF>first-ceph-runcmd-user-data.json
           "/srv/cray/scripts/metal/disable-cloud-init.sh",
           "/srv/cray/scripts/common/update_ca_certs.py",
           "/srv/cray/scripts/metal/install-rpms.sh",
-          "/srv/cray/scripts/common/pre-load-images.sh",
-          "/srv/cray/scripts/common/storage-ceph-cloudinit.sh"
+          "/srv/cray/scripts/common/pre-load-images.sh"
       ]
   }
 }
