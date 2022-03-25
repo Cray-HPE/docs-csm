@@ -2,101 +2,83 @@
 
 This document provides troubleshooting information for services and functionality provided by CSM.
 
-### Topics
+### Known Issues
  * [Known Issues](#known-issues)
-    * [Hardware Discovery](#known-issues-hardware-discovery)
-    * [initrd.img.xz not found](#initrd-not-found)
+    * [Hardware Discovery](Hardware_Discovery.md)
     * [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
+
+### Troubleshoot Topics
  * Kubernetes troubleshooting
     * [General Kubernetes Commands for Troubleshooting](./kubernetes/Kubernetes_Troubleshooting_Information.md)
     * [Kubernetes Log File Locations](./kubernetes/Kubernetes_Log_File_Locations.md)
     * [Troubleshoot Liveliness or Readiness Probe Failures](./kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
     * [Troubleshoot Unresponsive kubectl Commands](./kubernetes/Troubleshoot_Unresponsive_kubectl_Commands.md)
     * [Troubleshoot Kubernetes Node NotReady](./kubernetes/Troubleshoot_Kubernetes_Node_NotReady.md)
-
+    * [Troubleshoot Postgres Database](kubernetes/Troubleshoot_Postgres_Database.md)
+    * [Recover from Postgres WAL Event](kubernetes/Recover_from_Postgres_WAL_Event.md)
+    * [Restore Postgres](kubernetes/Restore_Postgres.md)
+    * [Disaster Recovery for Postgres](kubernetes/Disaster_Recovery_Postgres.md)
+ * Troubleshoot UAS Issues
+      * [Troubleshoot UAS by Viewing Log Output](UAS_user_and_admin_topics/Troubleshoot_UAS_by_Viewing_Log_Output.md)
+      * [Troubleshoot UAIs by Viewing Log Output](UAS_user_and_admin_topics/Troubleshoot_UAIs_by_Viewing_Log_Output.md)
+      * [Troubleshoot Stale Brokered UAIs](UAS_user_and_admin_topics/Troubleshoot_Stale_Brokered_UAIs.md)
+      * [Troubleshoot UAI Stuck in "ContainerCreating"](UAS_user_and_admin_topics/Troubleshoot_UAI_Stuck_in_ContainerCreating.md)
+      * [Troubleshoot Duplicate Mount Paths in a UAI](UAS_user_and_admin_topics/Troubleshoot_Duplicate_Mount_Paths_in_a_UAI.md)
+      * [Troubleshoot Missing or Incorrect UAI Images](UAS_user_and_admin_topics/Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
+      * [Troubleshoot UAIs with Administrative Access](UAS_user_and_admin_topics/Troubleshoot_UAIs_with_Administrative_Access.md)
+      * [Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](UAS_user_and_admin_topics/Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
+ * Troubleshoot Boot issues
+      * [Troubleshoot UAN Boot Issues](boot_orchestration/Troubleshoot_UAN_Boot_Issues.md)
+      * [Troubleshoot Booting Nodes with Hardware Issues](boot_orchestration/Troubleshoot_Booting_Nodes_with_Hardware_Issues.md)
+      * [Troubleshoot Compute Node Boot Issues Related to Unified Extensible Firmware Interface (UEFI)](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Unified_Extensible_Firmware_Interface_UEFI.md)
+      * [Troubleshoot Compute Node Boot Issues Related to Dynamic Host Configuration Protocol (DHCP)](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Dynamic_Host_Configuration_Protocol_DHCP.md)
+      * [Troubleshoot Compute Node Boot Issues Related to the Boot Script Service](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_the_Boot_Script_Service_BSS.md)
+      * [Troubleshoot Compute Node Boot Issues Related to Trivial File Transfer Protocol (TFTP)](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Trivial_File_Transfer_Protocol_TFTP.md)
+      * [Troubleshoot Compute Node Boot Issues Using Kubernetes](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Using_Kubernetes.md)
+      * [Log File Locations and Ports Used in Compute Node Boot Troubleshooting](boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
+      * [Troubleshoot Compute Node Boot Issues Related to Slow Boot Times](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
+ * Troubleshoot Compute Rolling Upgrades
+      * [Troubleshoot Nodes Failing to Upgrade in a CRUS Session](compute_rolling_upgrades/Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
+      * [Troubleshoot a Failed CRUS Session Because of Unmet Conditions](compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
+      * [Troubleshoot a Failed CRUS Session Because of Bad Parameters](compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)
+ * Troubleshoot Configuration Management
+      * [Troubleshoot Ansible Play Failures in CFS Sessions](configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
+      * [Troubleshoot CFS Session Failing to Complete](configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
+ * Troubleshoot Security and Authentication
+      * [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
+ * Troubleshoot ConMan
+      * [Troubleshoot ConMan Blocking Access to a Node BMC](conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
+      * [Troubleshoot ConMan Failing to Connect to a Console](conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
+      * [Troubleshoot ConMan Asking for Password on SSH Connection](conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
+ * Troubleshoot Utility Storage
+      * [Troubleshoot Failure to Get Ceph Health](utility_storage/Troubleshoot_Failure_to_Get_Ceph_Health.md)
+      * [Troubleshoot a Down OSD](utility_storage/Troubleshoot_a_Down_OSD.md)
+      * [Troubleshoot Ceph OSDs Reporting Full](utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md)
+      * [Troubleshoot System Clock Skew](utility_storage/Troubleshoot_System_Clock_Skew.md)
+      * [Troubleshoot an Unresponsive S3 Endpoint](utility_storage/Troubleshoot_an_Unresponsive_S3_Endpoint.md)
+      * [Troubleshoot Ceph-Mon Processes Stopping and Exceeding Max Restarts](utility_storage/Troubleshoot_Ceph-Mon_Processes_Stopping_and_Exceeding_Max_Restarts.md)
+      * [Troubleshoot Pods Failing to Restart on Other Worker Nodes](utility_storage/Troubleshoot_Pods_Failing_to_Restart_on_Other_Worker_Nodes.md)
+      * [Troubleshoot Large Object Map Objects in Ceph Health](utility_storage/Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)
+      * [Troubleshoot Failure of RGW Health Check](utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
+ * Troubleshoot Node Management
+      * [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
+      * [Troubleshoot Interfaces with IP Address Issues](node_management/Troubleshoot_Interfaces_with_IP_Address_Issues.md)
+      * [Troubleshoot Loss of Console Connections and Logs on Gigabyte Nodes](node_management/Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
+ * Troubleshoot Customer Access Network (CAN)
+      * [Troubleshoot CAN Issues](network/customer_access_network/Troubleshoot_CAN_Issues.md)
+ * Troubleshoot Dynamic Host Configuration Protocol (DHCP)
+      * [Troubleshoot DHCP Issues](/network/dhcp/Troubleshoot_DHCP_Issues.md)
+ * Domain Name Service (DNS)
+      * [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
+      * [Troubleshoot DNS Configuration Issues](network/dns/Troubleshoot_DNS_Configuration_Issues.md)
+      * [Troubleshoot Connectivity to Services with External IP addresses](network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
+      * [Troubleshoot DNS Configuration Issues](network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
+ * MetalLB in BGP-Mode
+      * [Troubleshoot Services without an Allocated IP Address](network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
+      * [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
+ * Spire
+      * [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
+      * [Troubleshoot Spire Failing to Start on NCNs](spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
 <a name="known-issues"></a>
 
-## Known Issues
-Listing of known issues and procedures to workaround them in this CSM release.
 
-<a name="known-issues-hardware-discovery"></a>
-
-### Hardware Discovery
-Known issues related to hardware discovery in a system.
- * [Air cooled hardware is not getting properly discovered with Aruba leaf switches](known_issues/discovery_aruba_snmp_issue.md)
- * [HMS Discovery job not creating RedfishEndpoints in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
-
-<a name="initrd-not-found"></a>
-### ``error: file  `/boot/grub2/../initrd.img.xz' not found.Press any key to continue...``
-
-This is a problem that is fixed in CSM 1.0+, but if your system was upgraded from CSM 0.9.x you may run into this. Below is the full error seen when attempting to boot:
-
-```
-Loading Linux  ...
-Loading initial ramdisk ...
-error: file `/boot/grub2/../initrd.img.xz' not found.Press any key to continue...
-[    2.528752] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
-[    2.537264] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.3.18-24.64-default #1 SLE15-SP2
-[    2.545499] Hardware name: Cray Inc. R272-Z30-00/MZ32-AR0-00, BIOS C27 05/12/2021
-[    2.553196] Call Trace:
-[    2.555716]  dump_stack+0x66/0x8b
-[    2.559127]  panic+0xfe/0x2d7
-[    2.562184]  mount_block_root+0x27d/0x2e1
-[    2.566306]  ? set_debug_rodata+0x11/0x11
-[    2.570431]  prepare_namespace+0x130/0x166
-[    2.574645]  kernel_init_freeable+0x23f/0x26b
-[    2.579125]  ? rest_init+0xb0/0xb0
-[    2.582623]  kernel_init+0xa/0x110
-[    2.586127]  ret_from_fork+0x22/0x40
-[    2.590747] Kernel Offset: 0x0 from 0xffffffff81000000 (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-[    2.690969] ---[ end Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0) ]---
-```
-
-#### Fix
-
-Follow these steps on any NCN to fix the issue:
-
-   1. Run the `CASMINST-2689.sh` script from the `CASMINST-2689` workaround at the `livecd-post-reboot` breakpoint.
-
-      Follow the usual [workaround instructions](../update_product_stream/index.md#apply-workarounds) **with the following exceptions**:
-         * Use the latest Shasta 1.4 install workaround RPM, **not** the Shasta 1.5 install workaround RPM
-         * For the  `livecd-post-reboot` breakpoint, ignore any workarounds other than `CASMINST-2689`
-         * Do not follow the workaround `README.md` instructions -- only run the `CASMINST-2689.sh` script in the `CASMINST-2689` subdirectory
-
-   1. Run these commands:
-
-      ```bash
-      ncn# for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' '); do
-         scp -r csm-install-workarounds/workarounds/livecd-post-reboot/CASMINST-2689/ $i:/opt/cray/csm/workarounds/livecd-post-reboot/
-      done
-      ncn# pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh'
-      ```
-
-   1. Remove the Shasta 1.4 install workaround RPM from the NCN.
-
-      ```bash
-      ncn# rpm -e csm-install-workarounds
-      ```
-
-##### Validate
-
-Running the script again will produce this output:
-
-```
-Examining /metal/boot/boot/kernel...kernel is OK.
-Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
-Examining /metal/boot/boot/kernel...kernel is OK.
-Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
-Examining /metal/boot/boot/kernel...kernel is OK.
-Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
-Examining /metal/boot/boot/kernel...kernel is OK.
-Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
-Examining /metal/boot/boot/kernel...kernel is OK.
-Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
-Examining /metal/boot/boot/kernel...kernel is OK.
-Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
-Examining /metal/boot/boot/kernel...kernel is OK.
-Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
-Examining /metal/boot/boot/kernel...kernel is OK.
-Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
-```
