@@ -16,7 +16,6 @@ kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" 
 
 ## How to replace the Spire intermediate CA certificate with a new one
 
-certificate you need to delete the secret that stores the certificate and then
 In order to replace the expired or soon to expire Spire intermediate CA
 certificate you need to delete the secret that stores the certificate and then
 re-run the job that obtains the certificate and creates the secret.
