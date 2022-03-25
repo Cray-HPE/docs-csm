@@ -421,7 +421,7 @@ Enable system administrators to assess the health of their system. Operators nee
   * [System Management Health Checks and Alerts](system_management_health/System_Management_Health_Checks_and_Alerts.md)
   * [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md)
   * [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
-
+  * [Troubleshoot Grafana Dashboard](system_management_health/Troubleshoot_Grafana_Dashboard.md)
 
 <a name="system-layout-service-sls"></a>
 

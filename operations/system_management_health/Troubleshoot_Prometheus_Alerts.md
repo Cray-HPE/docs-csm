@@ -11,6 +11,7 @@ General Prometheus Alert Troubleshooting Topics
   - [PostgresqlInactiveReplicationSlot](#postgresqlinactivereplicationslot)
   - [PostgresqlNotEnoughConnections](#postgresqlnotenoughconnections)
   - [CephNetworkPacketsDropped](#cephnetworkpacketsdropped-1)
+  - [TargetDown](#targetdown)
 
 <a name="cephmgrmissing"></a>
 ## CephMgrIsAbsent and CephMgrIsMissingReplicas
@@ -70,6 +71,8 @@ Alerts for CPUThrottlingHigh on gatekeeper-audit can be ignored. This pod is not
 
 Alerts for CPUThrottlingHigh on CFS services such as cfs-batcher and cfs-trust can be ignored. Because CFS is idle most of the time these services have low CPU requests, and it is normal for CFS service resource usage to spike when it is in use.
 
+Alerts for CPUThrottlingHigh on smartmon pods can be ignored. It is normal for smartmon pods resource usage to spike when it is polling. This will be fixed in a future release.
+
 
 <a name="kubepodnotready"></a>
 ## KubePodNotReady
@@ -105,4 +108,10 @@ Alerts for PostgresqlNotEnoughConnections for datname="foo" and datname="bar" ca
 ## CephNetworkPacketsDropped
 
 The CephNetworkPacketsDropped alert does not necessarily indicate there are packets being dropped on an interface on a storage node. In a future release this alert will be renamed to be more generic. If this alert fires, inspect the IP address in the details of the alert to determine the node in question (can be storage, master or worker node). If the interface in question is determined to be healthy, this alert can be ignored.
+
+
+<a name="targetdown"></a>
+## TargetDown
+
+Many of the Alerts for Target Down for sysmgmt-health/cray-sysmgmt-health-kubernetes-pods/0 are due to job pods that have Completed and no longer have an active endpoint that can be scraped. If the target that is down is from a job pods that has completed, the target down alert for that pod can be ignored. This is being fixed in a future release.
 
