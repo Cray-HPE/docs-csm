@@ -132,7 +132,7 @@ fi
 drain_node $target_ncn
 
 csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
-${basedir}/../common/ncn-rebuild-common.sh $target_ncn
+${basedir}/../common/ncn-rebuild-common.sh $target_ncn --rebuild
 
 # Restore files used by the System Admin Toolkit (SAT) that were previously backed up
 state_name="RESTORE_SAT_LOCAL_FILES"
