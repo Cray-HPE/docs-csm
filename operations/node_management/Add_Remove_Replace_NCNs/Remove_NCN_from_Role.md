@@ -305,6 +305,31 @@ Once the wipe of the drives is complete; proceed to [power off the node](#power-
    BMC=${NODE}-mgmt
    ```
 
+   1. **For ncn-m001 only** : Collect and record the BMC IP for ncn-m001 and the CAN IP for m002 before the node is powered off. These will be needed later.
+
+      ```bash
+      ncn-m001# BMC_IP=$(ipmitool lan print | grep 'IP Address' | grep -v 'Source'  | awk -F ": " '{print $2}')
+      ncn-m001# echo $BMC_IP
+      ```
+
+      Example output:
+
+      ```screen
+      172.30.52.74
+      ```
+     
+      ```bash
+      ncn-m001# ssh ncn-m002
+      ncn-m002# CAN_IP=$(ip addr show vlan007 | grep "inet " | awk '{print $2}' | cut -f1 -d'/')
+      ncn-m002# echo $CAN_IP
+      ```
+
+      Example output:
+
+      ```screen
+      10.102.4.9 
+      ```
+
 2. Export the root password of the BMC.
 
    ```bash
