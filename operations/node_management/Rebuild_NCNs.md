@@ -42,17 +42,17 @@ ncn# echo $XNAME
 
 Only follow the steps in the section for the node type that is being rebuilt:
 
-* [Worker node](Rebuild_NCNs/Prepare_Worker_Nodes.md)
+* [Worker node]
 ```
-ncn-m001:# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-worker-nodes.sh
+ncn-m001:# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-worker-nodes.sh ncn-w001
 ```
-* [Master node](Rebuild_NCNs/Prepare_Master_Nodes.md)
+* [Master node]
 ```
-ncn-m001:# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nodes.sh
+ncn-m001:# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nodes.sh nnc-m002
 ```
-* [Storage node](Rebuild_NCNs/Prepare_Storage_Nodes.md)
+* [Storage node]
 ```
-ncn-m001:# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-storage-nodes.sh
+ncn-m001:# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-storage-nodes.sh ncn-s002
 ```
 
 ## Validation
