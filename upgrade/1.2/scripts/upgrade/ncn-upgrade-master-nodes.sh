@@ -123,7 +123,18 @@ if [[ $state_recorded == "0" ]]; then
     csi automate ncn etcd --action remove-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
     ssh $target_ncn 'systemctl daemon-reload'
     ssh $target_ncn 'systemctl stop etcd.service'
-    csi automate ncn etcd --action add-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
+
+    set +e
+    while true ; do    
+        csi automate ncn etcd --action add-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
+        if [[ $? -eq 0 ]]; then
+            break
+        else
+            sleep 5
+        fi
+    done
+    set -e
+
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
