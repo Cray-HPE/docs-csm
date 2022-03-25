@@ -1,4 +1,4 @@
-# Remove Networking
+# Remove Switch Config for NCN
 
 ## Description
 
@@ -67,3 +67,5 @@ no router bgp 65533 vrf default neighbor 10.252.1.13 route-map ncn-w004
 no router bgp 65533 vrf default neighbor 10.252.1.13 timers 1 3
 no router bgp 65533 vrf default neighbor 10.252.1.13 transport connection-mode passive
 ```
+
+[Next Step Redeploy Services](Redeploy_Services.md)

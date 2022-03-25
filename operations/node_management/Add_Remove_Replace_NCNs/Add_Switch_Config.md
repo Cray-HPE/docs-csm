@@ -1,4 +1,4 @@
-# Add Networking
+# Add Switch Config for NCN
 
 ## Description
 
@@ -68,3 +68,5 @@ router bgp 65533 vrf default neighbor 10.252.1.13 route-map ncn-w004
 router bgp 65533 vrf default neighbor 10.252.1.13 timers 1 3
 router bgp 65533 vrf default neighbor 10.252.1.13 transport connection-mode passive
 ```
+
+[Next Step Add NCN Data](Add_NCN_Data.md)
