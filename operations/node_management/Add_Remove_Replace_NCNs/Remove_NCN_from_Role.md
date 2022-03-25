@@ -13,6 +13,9 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
   - [Worker node](#worker-node-remove-roles)
   - [Storage node](#storage-node-remove-roles)
 - [Wipe the drives](#wipe-the-drives)
+  - [Master node](#wipe-disks-master-node)
+  - [Worker node](#wipe-disks-worker-node)
+  - [Storage node](#wipe-disks-utility-storage-node)
 - [Power off the node](#power-off-the-node)
 
 
@@ -197,7 +200,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
   ncn-m001# rsync /etc/sysconfig/network/ifcfg-lan0 ncn-m002:/tmp/ifcfg-lan0-m001
   ```
 
-  The master node role removal is complete; proceed to [wipe the drives](#wipe-the-drives).
+  The master node role removal is complete; proceed to [wipe the drives](#wipe-disks-master-node).
 
 <a name="worker-node-remove-roles"></a>
 ## Worker Node Remove Roles
@@ -278,19 +281,126 @@ Run the following:
   rbd showmapped
   ```
 
-  If no devices are returned, then the worker node role removal is complete; proceed to [wipe the drives](#wipe-the-drives). If mapped devices still exist, re-check Step 3, then Step 4 again. If devices are still mapped, they can be forceability unmapped using `rbd unmap -o force /dev/rbd#`, where /dev/rbd# is the device that is still returned as mapped.
+  If no devices are returned, then the worker node role removal is complete; proceed to [wipe the drives](#wipe-disks-worker-node). If mapped devices still exist, re-check Step 3, then Step 4 again. If devices are still mapped, they can be forceability unmapped using `rbd unmap -o force /dev/rbd#`, where /dev/rbd# is the device that is still returned as mapped.
 
 <a name="storage-node-remove-roles"></a>
-## Storage Node Procedure
+## Storage Node Remove Roles
 
 Follow [Remove Ceph Node](../../utility_storage/Remove_Ceph_Node.md) to remove Ceph role from the storage node.
 
-Once the storage node role removal is complete; proceed to [wipe the drives](#wipe-the-drives).
+Once the storage node role removal is complete; proceed to [wipe the drives](#wipe-disks-utility-storage-node).
 
 <a name="wipe-the-drives"></a>
 ## Wipe the Drives
 
-Follow [Wipe Drive](Wipe_Drives.md) Procedure to wipe the disks on the NCN that is being removed.
+<a name="wipe-disks-master-node"></a>
+### Wipe Disks: Master Node
+
+**NOTE:** etcd should already be stopped as part of the "Remove NCN from Role" steps.
+
+All commands in this section must be run **on the node being removed** \(unless otherwise indicated\). These commands can be done from the ConMan console window.
+
+1. Remove the etcd device mapper.
+
+    ```bash
+    dmsetup remove $(dmsetup ls | grep -i etcd | awk '{print $1}')
+    ```
+
+    > **Note:** The following output  means the etcd volume  mapper is not present.
+    ```bash
+    No device specified.
+    Command failed.
+    ```
+
+1. Unmount the etcd volume and remove the volume group.
+
+   ```bash
+   umount /run/lib-etcd
+   vgremove -f etcdvg0-ETCDK8S
+   ```
+
+1. Unmount the `SDU` mountpoint and remove the volume group.
+
+   ```bash
+   umount /var/lib/sdu
+   vgremove -f -v --select 'vg_name=~metal*'
+   ```
+
+1. Wipe the drives
+
+   ```bash
+   mdisks=$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '   {print "/dev/" $2}')
+   wipefs --all --force $mdisks
+   ```
+
+<a name="wipe-disks-worker-node"></a>
+### Wipe Disks: Worker Node
+
+All commands in this section must be run **on the node being removed** \(unless otherwise indicated\). These commands can be done from the ConMan console window.
+
+1. Stop contianerd and wipe drives.
+
+    ```bash
+    systemctl stop containerd.service
+    ```
+
+1. Unmount partitions.
+
+    ```bash
+    umount /var/lib/kubelet
+    umount /run/lib-containerd
+    umount /run/containerd
+    ```
+
+1. Unmount the `SDU` mountpoint and remove the volume group.
+
+   ```bash
+   umount /var/lib/sdu
+   vgremove -f -v --select 'vg_name=~metal*'
+   ```
+
+1. Wipe Drives
+
+    ```bash
+    wipefs --all --force /dev/disk/by-label/*
+    wipefs --all --force /dev/sd*
+    ```
+
+<a name="wipe-disks-utility-storage-node"></a>
+### Wipe Disks: Utility Storage Node
+
+All commands in this section must be run **on the node being removed** \(unless otherwise indicated\). These commands can be done from the ConMan console window.
+
+1. Make sure the OSDs (if any) are not running.
+
+    ```bash
+    podman ps
+    ```
+
+    Examine the output. There should be no running ceph processes or containers.
+
+2. Remove the Volume Groups.
+
+    ```bash
+    ls -1 /dev/sd* /dev/disk/by-label/*
+    vgremove -f --select 'vg_name=~ceph*'
+    ```
+
+3. Unmount and remove the metalvg0 volume group
+
+   ```bash
+   umount /etc/ceph
+   umount /var/lib/ceph
+   umount /var/lib/containers
+   vgremove -f metalvg0
+   ```
+
+4. Wipe the disks and RAIDs.
+
+    ```bash
+    wipefs --all --force /dev/disk/by-label/*
+    wipefs --all --force /dev/sd*
+    ```
 
 Once the wipe of the drives is complete; proceed to [power off the node](#power-off-the-node).
 
@@ -305,7 +415,7 @@ Once the wipe of the drives is complete; proceed to [power off the node](#power-
    BMC=${NODE}-mgmt
    ```
 
-   1. **For ncn-m001 only** : Collect and record the BMC IP for ncn-m001 and the CAN IP for m002 before the node is powered off. These will be needed later.
+   1. **For ncn-m001 only** : Collect and record the BMC IP for ncn-m001 and the CAN IP for m002 before the node is powered off. These may be needed later.
 
       ```bash
       ncn-m001# BMC_IP=$(ipmitool lan print | grep 'IP Address' | grep -v 'Source'  | awk -F ": " '{print $2}')
