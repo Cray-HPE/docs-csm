@@ -6,7 +6,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
 
 ## Procedure
 
-**IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#remove-prerequisites)
+**IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#remove-ncn-prerequisites) 
 
 - Remove Role
   - [Master node](#master-node-remove-roles)
