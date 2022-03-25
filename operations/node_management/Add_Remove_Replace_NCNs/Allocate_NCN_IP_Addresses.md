@@ -103,3 +103,5 @@ This procedure will perform an verify the following:
         --------|-----------
         HMN     | 10.254.1.21
     ```
+
+[Next Step Add Switch Config](Add_Switch_Config.md)

@@ -2,6 +2,16 @@
 
 This procedure redeploys S3 and SYSMGMT_HEALTH services to add or remove storage node endpoints.
 
+This procedure can be skipped if a worker or master node have been added. 
+
+- Proceed to [Next Step Validate NCN](Validate_NCN.md)
+
+This procedure can be skipped if a worker or master node have been removed. 
+
+- Proceed to [Next Step Validate Health](Validate_Health.md)
+
+Otherwise proceed with the following if a storage node has been added or removed.
+
 ### Procedure
 
 ### 1. Update the `nmn_ncn_storage` list to include the IPs for any added or removed storage nodes.
@@ -245,3 +255,8 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
    ```bash
    ncn-m001# rm /tmp/customizations.yaml /tmp/customizations.original.yaml /tmp/customizations.original.yaml.pretty
    ```
+
+Proceed to the next steps:
+
+- Added Storage NCN : [Next Step Validate NCN](Validate_NCN.md)
+- Removed Storage NCN : [Next Step Validate Health](Validate_Health.md)

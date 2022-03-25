@@ -1,4 +1,12 @@
-# Alpha Framework to Add, Remove or Replace NCNs
+# Alpha Framework to Add, Remove, Replace or Move NCNs
+
+Add, Remove, Replace or Move worker, storage or master node (NCN). Use this procedure in the event that:
+
+- Worker, storage or master nodes are being replaced and the MAC address is changing.
+- Worker or storage nodes are being added.
+- Worker, storage or master nodes are being moved to a different cabinet.
+
+The following workflows are available:
 
 - [Prerequisites](#prerequisites)
 - [Add Worker, Storage or Master NCNs](#add-worker-storage-master)
@@ -14,9 +22,16 @@
 
 The system is fully installed and has transitioned off of the LiveCD.
 
-1. All activities required for site maintenence are complete.
+All activities required for site maintenance are complete.
 
-2. Run the ncn_add_remove_replace_ncn_pre-req.py
+The latest csm-docs RPM has been installed on ncn-m001.
+
+1. Run ncn_add_remove_replace_ncn_pre-req.py to adjust the network.
+
+   ```bash
+   ncn-m# cd /usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/
+   ncn-m# ./ncn_add_remove_replace_ncn_pre-req.py 
+   ```
 
    1. Script will ask 3 questions:
 
@@ -26,16 +41,17 @@ The system is fully installed and has transitioned off of the LiveCD.
 
       3. How many NCNs would you like to add? Do not include NCNs to be removed or moved.
 
-3. When adding new NCNs, there will be network configuration changes that will impact changing IPs on computes. __**That will require DVS restart to update the IPs in the DVS node_map.**__
+   2. When adding new NCNs, there will be network configuration changes that will impact changing IPs on computes. __**That will require DVS restart to update the IPs in the DVS node_map.**__
 
-4. ncn_add_remove_replace_ncn_pre-req.py will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted. See example below:
-   ```bash
-   Please restart DVS and rebooting the following nodes:["x3000c0s1b0n0", "x3000c0s19b3", "x3000c0s19b1n0", "x3000c0s19b3n0"]
-   prerequisite to prepare NCNs for removal, move and add
-   COMPLETED
-   Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-02-25_22-59-06
-   ncn-m001:~/ # 
-   ```
+   3. ncn_add_remove_replace_ncn_pre-req.py will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted. See example below:
+
+      ```bash
+      Please restart DVS and rebooting the following nodes:["x3000c0s1b0n0", "x3000c0s19b3", "x3000c0s19b1n0", "x3000c0s19b3n0"]
+      prerequisite to prepare NCNs for removal, move and add
+      COMPLETED
+      Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-02-25_22-59-06
+      ncn-m001:~/ # 
+      ```
 
 <a name="add-worker-storage-master"></a>
 ## Add Worker, Storage or Master NCNs
@@ -91,7 +107,7 @@ The following is a high-level overview of the add NCN workflow:
 
 1. [Allocate NCN IP Addresses](Add_Remove_Replace_NCNs/Allocate_NCN_IP_Addresses.md)
 
-2. [Add Networking](Add_Remove_Replace_NCNs/Add_Networking.md)
+2. [Add Switch Config](Add_Remove_Replace_NCNs/Add_Switch_Config.md)
 
 3. [Add NCN data](Add_Remove_Replace_NCNs/Add_NCN_Data.md) for SLS, BSS and HSM
 
@@ -99,7 +115,11 @@ The following is a high-level overview of the add NCN workflow:
 
 5. [Boot NCN and Configure](Add_Remove_Replace_NCNs/Boot_NCN.md)
 
-6. [Validation](Add_Remove_Replace_NCNs/Validation.md)
+6. [Redeploy Services](Add_Remove_Replace_NCNs/Redeploy_Services.md)
+
+7. [Validate NCN](Add_Remove_Replace_NCNs/Validate_NCN.md)
+
+8. [Validate Health](Add_Remove_Replace_NCNs/Validate_Health.md)
 
 <a name="remove-worker-storage-master"></a>
 ## Remove Worker, Storage or Master NCNs
@@ -127,9 +147,11 @@ The following is a high-level overview of the remove NCN workflow:
 
 2. [Remove NCN data](Add_Remove_Replace_NCNs/Remove_NCN_Data.md) from SLS, BSS and HSM
 
-3. [Remove Networking](Add_Remove_Replace_NCNs/Remove_Networking.md)
+3. [Remove Switch Config](Add_Remove_Replace_NCNs/Remove_Switch_Config.md)
 
-4. [Validation](Add_Remove_Replace_NCNs/Validation.md)
+4. [Redeploy Services](Add_Remove_Replace_NCNs/Redeploy_Services.md)
+
+5. [Validate Health](Add_Remove_Replace_NCNs/Validate_Health.md)
 
 **IMPORTANT:** Update the SHCD to remove the device. This is only needed if no NCN device will be added back to same location with the same cabling.
 
