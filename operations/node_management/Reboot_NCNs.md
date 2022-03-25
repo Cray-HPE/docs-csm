@@ -10,8 +10,11 @@ The following is a high-level overview of the non-compute node \(NCN\) reboot wo
 - Run the rolling NCN reboot procedure:
   - Loop through reboots on storage nodes, worker nodes, and master nodes, where each boot consists of the following workflow:
          - Establish console session with node to reboot
+
          - Execute a Linux graceful shutdown or power off/on sequence to the node to allow it to boot up to completion
+
          - Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN
+         
          -   Disconnect console session with the node that was rebooted
 - Re-run all platform health checks, including checks on BGP peering sessions
 
