@@ -2,7 +2,11 @@
 
 - [Prerequisites](#prerequisites)
 - [Add Worker, Storage or Master NCNs](#add-worker-storage-master)
+   - [Add NCN Prerequisites](#add-ncn-prerequisites)
+   - [Add NCN Procedure](#add-ncn-procedure)
 - [Remove Worker, Storage or Master NCNs](#remove-worker-storage-master)
+   - [Remove NCN Prerequisites](#remove-ncn-prerequisites)
+   - [Remove NCN Procedure](#remove-ncn-procedure)
 - [Replace or Move Worker, Storage or Master NCNs](#replace-worker-storage-master)
 
 <a name="prerequisites"></a>
@@ -38,8 +42,8 @@ The system is fully installed and has transitioned off of the LiveCD.
 
 Use this procedure to add a worker, storage or master non-compute node (NCN).
 
-<a name="add-prerequisites"></a>
-### Prerequisites
+<a name="add-ncn-prerequisites"></a>
+### Add NCN Prerequisites
 
 For several of the commands in this section, you will need to have variables set with the name of the node being added and its xname.
 Set NODE to the hostname of the node being added (e.g. `ncn-w001`, `ncn-s002`, etc).
@@ -55,11 +59,12 @@ ncn# XNAME=<xname>
 ncn# echo $XNAME
 ```
 
-**Important** if the node being added to the system TODO... want to make sure it is already setup
+**IMPORTANT:** if the node being added to the system TODO... want to make sure it is already setup
 * If adding a NCN that was not previously in the system follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md).
 * Ensure the NCN BMC is configured to use DHCP. (This does not apply to the BMC for ncn-m001 since it is statically configured for the site.)
 * Ensure the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](../../instal/../install/switch_pxe_boot_from_onboard_nic_to_pcie.md) procedure.
 * Ensure the NCN BMC is configure with the expected root user credentials.
+* Ensure that the NCN device to be added has been racked and cabled per the SHCD.
    
    The NCN BMC credentials needs to match the current global air-cooled BMC default credentials. This can be viewed with the following command:
     ```bash
@@ -79,31 +84,30 @@ ncn# echo $XNAME
 
 * If adding an HPE NCN, ensure IPMI is enabled. 
 
-### Procedure
+<a name="add-ncn-procedure"></a>
+### Add NCN Procedure
 
 The following is a high-level overview of the add NCN workflow:
 
-1. [Validate SHCD](Add_Remove_Replace_NCNs/Validate_SHCD.md#validate-shcd-before-adding-ncn)
+1. [Allocate NCN IP Addresses](Add_Remove_Replace_NCNs/Allocate_NCN_IP_Addresses.md)
 
-2. [Allocate NCN IP Addresses](Add_Remove_Replace_NCNs/Allocate_NCN_IP_Addresses.md)
+2. [Add Networking](Add_Remove_Replace_NCNs/Add_Networking.md)
 
-3. [Update Networking](Add_Remove_Replace_NCNs/Update_Networking.md#update-networking-to-add-ncn)
+3. [Add NCN data](Add_Remove_Replace_NCNs/Add_NCN_Data.md) for SLS, BSS and HSM
 
-4. [Add NCN data](Add_Remove_Replace_NCNs/Add_NCN_Data.md) for SLS, BSS and HSM
+4. [Update Firmware](Add_Remove_Replace_NCNs/Update_Firmware.md) via FAS
 
-5. [Update Firmware](Add_Remove_Replace_NCNs/Update_Firmware.md) via FAS
+5. [Boot NCN and Configure](Add_Remove_Replace_NCNs/Boot_NCN.md)
 
-6. [Boot NCN](Add_Remove_Replace_NCNs/Boot_NCN.md)
-
-7. [Validation](Add_Remove_Replace_NCNs/Validation.md)
+6. [Validation](Add_Remove_Replace_NCNs/Validation.md)
 
 <a name="remove-worker-storage-master"></a>
 ## Remove Worker, Storage or Master NCNs
 
 Use this procedure to remove a worker, storage or master node (NCN).
 
-<a name="remove-prerequisites"></a>
-### Prerequisites
+<a name="remove-ncn-prerequisites"></a>
+### Remove NCN Prerequisites
 
 For several of the commands in this section, you will need to have variables set with the name of the node being removed and its xname.
 Set NODE to the hostname of the node being removed (e.g. `ncn-w001`, `ncn-s002`, etc).
@@ -114,21 +118,20 @@ ncn# NODE=ncn-x00n
 ncn# XNAME=$(ssh $NODE cat /etc/cray/xname)
 ncn# echo $XNAME
 ```
-
-### Procedure
+<a name="remove-ncn-procedure"></a>
+### Remove NCN Procedure
 
 The following is a high-level overview of the remove NCN workflow:
 
-1. [Remove NCN from Role](Add_Remove_Replace_NCNs/Remove_NCN_from_Role.md)
+1. [Remove NCN from Role, Wipe the Disks and Power Down](Add_Remove_Replace_NCNs/Remove_NCN_from_Role.md)
 
 2. [Remove NCN data](Add_Remove_Replace_NCNs/Remove_NCN_Data.md) from SLS, BSS and HSM
 
-3. [Update Networking](Add_Remove_Replace_NCNs/Update_Networking.md#update-networking-to-remove-ncn)
+3. [Remove Networking](Add_Remove_Replace_NCNs/Remove_Networking.md)
 
-4. [Validate SHCD](Add_Remove_Replace_NCNs/Validate_SHCD.md#validate-shcd-after-removing-ncn)
+4. [Validation](Add_Remove_Replace_NCNs/Validation.md)
 
-5. [Validation](Add_Remove_Replace_NCNs/Validation.md)
-
+**IMPORTANT:** Update the SHCD to remove the device. This is only needed if no NCN device will be added back to same location with the same cabling.
 
 <a name="replace-worker-storage-master"></a>
 ## Replace or Move Worker, Storage or Master NCNs
