@@ -33,7 +33,7 @@ Validate the worker node added successfully.
 
 1. Confirm the pods are beginning to get scheduled and reach a `Running` state on the worker node.
 
-    Run this command on any master or worker node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
+    Run this command on any master or worker node. This command assumes you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#add-ncn-prerequisites).
 
     ```bash
     ncn# kubectl get po -A -o wide | grep $NODE
