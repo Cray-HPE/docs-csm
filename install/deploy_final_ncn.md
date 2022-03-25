@@ -206,6 +206,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
                     /root/.config/cray/logs \
                     /root/csm*.{log,txt} \
                     /tmp/*.log \
+                    /usr/share/doc/csm/install/scripts/csm_services/yapl.log \
                     /var/log/conman \
                     /var/log/zypper.log 2>/dev/null |
          sed 's_^/__' |
