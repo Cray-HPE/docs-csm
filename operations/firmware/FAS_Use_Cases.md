@@ -1,4 +1,4 @@
-## FAS Use Cases
+# FAS Use Cases
 
 Use the Firmware Action Service (FAS) to update the firmware on supported hardware devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
 
@@ -6,7 +6,7 @@ When updating an entire system, walk down the device hierarchy component type by
 
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
 
-1. [Update Liquid-Cooled Compute Node BMC, FPGA, and Node BIOS](#liquidcooled)
+1. [Update Liquid-Cooled Compute Node BMC, FPGA, and BIOS](#liquidcooled)
 1. [Update Air-Cooled Compute Node BMC, BIOS, iLO 5, and System ROM](#aircooled)
 2. [Update Chassis Management Module (CMM) Firmware](#cmm)
 3. [Update NCN BIOS and BMC Firmware with FAS](#ncn-bios-bmc)

@@ -1,4 +1,4 @@
-## Manage a Session Template
+# Manage a Session Template
 
 A session template must be created before starting a session with the Boot Orchestration Service \(BOS\). Session templates are managed via the Cray CLI with the cray bos sessiontemplate commands.
 

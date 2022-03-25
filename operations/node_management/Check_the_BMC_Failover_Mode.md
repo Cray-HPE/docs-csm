@@ -1,4 +1,4 @@
-## Check the BMC Failover Mode
+# Check the BMC Failover Mode
 
 Gigabyte BMCs must have their failover mode disabled to prevent incorrect network assignment.
 
@@ -23,6 +23,4 @@ If Gigabyte BMC failover mode is not disabled, some BMCs may receive incorrect I
     - `11 00 00` – failover mode is disabled \(this is the desired state\).
     
     Please note that if a Gigabyte BMC is reset to defaults for any reason, or upgraded, the failover mode will need to be disabled again to switch the BMC to manual mode as the default setting is for failover mode to be enabled.
-
-
 

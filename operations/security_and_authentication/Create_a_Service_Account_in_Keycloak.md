@@ -1,4 +1,4 @@
-## Create a Service Account in Keycloak
+# Create a Service Account in Keycloak
 
 Set up a Keycloak service account using the Keycloak administration console or the Keycloak REST API. A service account can be used to get a long-lived token that is used by automation tools.
 
@@ -113,7 +113,4 @@ Follow the steps in only one of the following sections depending on if it is pre
   location: https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients/bd8084d2-08bf-45cb-ab94-ee81e39921be
   content-length: 0
   ```
-
-
-
 

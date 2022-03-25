@@ -1,4 +1,4 @@
-## Disaster Recovery for Postgres
+# Disaster Recovery for Postgres
 
 In the event that the Postgres cluster has failed to the point that it must be recovered and there is no dump available to restore the data, a full service specific disaster recovery is needed.
 
@@ -177,7 +177,7 @@ cray-console-data service.
       cray-console-data-postgres-2           3/3     Terminating  0          4d20h
       ```
       
-      This may take several minutes to complete. When all of the serivces have terminated and nothing
+      This may take several minutes to complete. When all of the services have terminated and nothing
       is displayed any longer, use **ctl-C** to exit from the watch command.
    
    1. Check that the data PVC instances have been removed using the command:

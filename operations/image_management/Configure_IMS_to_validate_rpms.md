@@ -1,5 +1,4 @@
-
-## Configure IMS to validate RPMS
+# Configure IMS to validate RPMS
 
 Configuring IMS to validate the GPG signatures of RPMs during IMS Build operations involves two steps.
 
@@ -56,7 +55,7 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
     ncn# cat entrypoint.sh
     ...
     # Call kiwi to build the image recipe. Note that the command line --add-bootstrap-package
-    # causes kiwi to install the cray-ca-cert rpm into the image root.
+    # causes kiwi to install the cray-ca-cert RPM into the image root.
     kiwi-ng $DEBUG_FLAGS --logfile=$PARAMETER_FILE_KIWI_LOGFILE --type tbz system build --description $RECIPE_ROOT_PARENT \
     --target $IMAGE_ROOT_PARENT --add-bootstrap-package file:///mnt/ca-rpm/cray_ca_cert-1.0.1-1.x86_64.rpm \
     --signing-key /signing-keys/my-signing-key.asc   # <--- ADD SIGNING-KEY FILE
@@ -268,5 +267,4 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
     ncn# cd ..
     ncn# rm -rf recipe/
     ```
-
 

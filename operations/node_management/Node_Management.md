@@ -1,4 +1,4 @@
-## Node Management
+# Node Management
 
 The HPE Cray EX systems include two node types:
 

@@ -1,4 +1,4 @@
-## Introduction
+# Introduction
 
 The intent for the this documentation is to help install and manage Aruba CX network devices in an HPE Cray EX system installation.
 

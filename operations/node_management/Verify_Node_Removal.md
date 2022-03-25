@@ -1,4 +1,4 @@
-## Verify Node Removal
+# Verify Node Removal
 
 Use this procedure to verify that a node has been successfully removed from the system.
 
@@ -59,6 +59,4 @@ Use this procedure to verify that a node has been successfully removed from the 
     ```
 
 3.  If a River node will not be replaced, update SLS to omit it.
-
-
 

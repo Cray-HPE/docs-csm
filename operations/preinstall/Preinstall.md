@@ -1,4 +1,4 @@
-## Pre-Install Steps
+# Pre-Install Steps
 
 This section provides information on what needs to be done before
 an initial install of CSM.
@@ -24,5 +24,4 @@ abstracted by the HMS Redfish Translation Service.
 
 To set ServerTech PDU default credentials, follow the procedure outlined in
 [Change ServerTech PDU Credentials](Change_ServerTech_PDU_Credentials.md).
-
 

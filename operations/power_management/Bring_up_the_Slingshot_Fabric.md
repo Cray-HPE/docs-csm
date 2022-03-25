@@ -1,7 +1,4 @@
-
-
-
-## Bring Up the Slingshot Fabric
+# Bring Up the Slingshot Fabric
 
 This procedure assumes the Slingshot fabric is installed an configured. The slingshot-fabric-manager software controls the fabric. On systems running Kubernetes, the slingshot-fabric-manager pod controls the fabric. 
 
@@ -52,6 +49,4 @@ The fabric manager software is installed and configured.
     ncn-m001# kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
     -c slingshot-fabric-manager -- fmn_status --details > fabric.status
     ```
-
-
 

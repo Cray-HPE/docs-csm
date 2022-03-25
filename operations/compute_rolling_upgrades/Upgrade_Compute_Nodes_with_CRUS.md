@@ -1,4 +1,4 @@
-## Upgrade Compute Nodes with CRUS
+# Upgrade Compute Nodes with CRUS
 
 Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\). Manage the workload management status of nodes and quiesce each node before taking the node out of service and upgrading it. Then reboot it into the upgraded state and return it to service within the workload manager \(WLM\).
 
@@ -158,5 +158,4 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
     ```
 
     The session may be visible briefly after it is deleted. This allows for orderly cleanup of the session.
-
 

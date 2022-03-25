@@ -1,4 +1,4 @@
-## BI-CAN Aruba/Arista Config
+# BI-CAN Aruba/Arista Config
 
 This is an example configuration of how to connect two Aruba spine switches to two Arista switches. This example is from a running system utilizing the bifurcated CAN feature offered in CSM 1.2.
 

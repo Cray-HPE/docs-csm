@@ -1,5 +1,4 @@
-
-## Troubleshoot Compute Node Boot Issues Using Kubernetes
+# Troubleshoot Compute Node Boot Issues Using Kubernetes
 
 A number of Kubernetes commands can be used to debug issues related to the node boot process. All of the traffic bound for the DHCP server, TFTP server, and Boot Script Service \(BSS\) is sent on the Node Management Network \(NMN\).
 
@@ -60,5 +59,4 @@ In the current arrangement, all three services are located on a non-compute node
     ```bash
     ncn-m001# kubectl exec -A -it cray-dhcp-kea-6b78789fc4-lzmff /bin/sh
     ```
-
 

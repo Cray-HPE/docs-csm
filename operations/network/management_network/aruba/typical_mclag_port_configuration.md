@@ -1,4 +1,3 @@
-
 # Typical Configuration of MCLAG Link
 
 The following is a very basic MCLAG link configuration connecting to NCNs. An administrators configuration may differ. 

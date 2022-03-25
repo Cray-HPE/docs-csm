@@ -1,4 +1,4 @@
-## Add UAN CAN IP Addresses to SLS
+# Add UAN CAN IP Addresses to SLS
 
 Add the Customer Access Network \(CAN\) IP addresses for User Access Nodes \(UANs\) to the IP address reservations in the System Layout Service \(SLS\). Adding these IP addresses will propagate the data needed for the Domain Name Service \(DNS\).
 

@@ -1,7 +1,7 @@
 # Cray System Management (CSM) - Release Notes
 
 ## CSM 1.2.0
-CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature development, and documentation improvements.  Below are some of the highlights
+CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature development, and documentation improvements. Below are some of the highlights
 
 ## What's New
 
@@ -9,7 +9,7 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * New Dashboard for network traffic dashboard
 * New Dashboard for Kubernetes and microservice health dashboard
 * New Dashboard for Boot Dashboard
-* New Dashboard for command line dashboard for critical services like smd, smd-posgres, capmc and hbtd
+* New Dashboard for command line dashboard for critical services like smd, smd-postgres, capmc and hbtd
 * New Dashboard for Grafana dashboard for critical services like smd,capmc,smd-postgres and hbtd
 * Management nodes sample SMART data and publish it to SMA/SMF
 * Support for HPE PDU telemetry

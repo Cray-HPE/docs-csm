@@ -32,7 +32,7 @@ curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/api
                          --retain-unused-user-network
 ```
 
-* NOTE: A detailed review of the migrated/upgraded data (using vimdiff or otherwise) for production systems and for systems which have many add-on components (UAN, login nodes, storage integration points, etc...) is strongly recommended. Particlarly, ensure subnet reservations are correct to prevent any data loss.
+* NOTE: A detailed review of the migrated/upgraded data (using `vimdiff` or otherwise) for production systems and for systems which have many add-on components (UAN, login nodes, storage integration points, etc.) is strongly recommended. Particularly, ensure subnet reservations are correct to prevent any data loss.
 
 * Upload migrated SLS file to SLS service:
 
@@ -77,7 +77,7 @@ These aliases provided DNS records and are being removed.
 
 ## Create the BICAN network "toggle"
 
-New for CSM 1.2 the BICAN network ExtraProperties value of SystemDefaultRoute is used to point to the CAN, CHN or CMN and used by utilities to systemically toggle routes.
+New for CSM 1.2 the BICAN network ExtraProperties value of SystemDefaultRoute is used to point to the CAN, CHN or CMN and used by utilities to systematically toggle routes.
 
 ## Migrate (existing) CAN to (new) CMN
 

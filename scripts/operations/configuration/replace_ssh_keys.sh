@@ -93,7 +93,7 @@ if [[ -n "${PUBLIC_KEY}" ]]; then
 fi
 
 if [[ -n "${PRIVATE_KEY}" ]]; then
-  echo "Updatating private key..."
+  echo "Updating private key..."
   kubectl get secret -n services csm-private-key -o json | \
     jq --arg value "$(cat ${PRIVATE_KEY_FILE} | base64)" \
     '.data["value"]=$value' | kubectl apply -f -

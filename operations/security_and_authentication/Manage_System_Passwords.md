@@ -1,5 +1,4 @@
-
-## Manage System Passwords
+# Manage System Passwords
 
 Many system services require login credentials to gain access to them. The information below is a comprehensive list of system passwords and how to change them.
 

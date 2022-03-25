@@ -1,4 +1,4 @@
-## Default IP Address Ranges
+# Default IP Address Ranges
 
 The initial installation of the system creates default networks with default settings and with no external exposure. These IP address default ranges ensure that no nodes in the system attempt to use the same IP address as a Kubernetes service or pod, which would result in undefined behavior that is extremely difficult to reproduce or debug.
 

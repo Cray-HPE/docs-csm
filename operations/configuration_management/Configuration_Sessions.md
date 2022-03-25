@@ -1,4 +1,4 @@
-## Configuration Sessions
+# Configuration Sessions
 
 Once configurations have been created with the required layers and values set in the configuration repositories \(or the additional inventory repository\), create a Configuration Framework Session \(CFS\) session to apply the configuration to the targets.
 
@@ -57,7 +57,4 @@ CFS progresses through a session by running a series of commands in containers l
 -   **`teardown`**
 
     This container waits for the last `ansible-*` to complete and subsequently calls IMS to package up customized image roots. The container only exists when the session `--target-definition` is `image`.
-
-
-
 

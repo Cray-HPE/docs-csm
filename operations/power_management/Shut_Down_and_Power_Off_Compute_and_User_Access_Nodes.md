@@ -1,6 +1,4 @@
-
-
-## Shut Down and Power Off Compute and User Access Nodes
+# Shut Down and Power Off Compute and User Access Nodes
 
 Shut down and power off compute and user access nodes \(UANs\). This procedure powers off all compute nodes in the context of an entire system shutdown.
 
@@ -134,8 +132,4 @@ The `cray` and `sat` commands must be initialized and authenticated with valid c
     
     [...]
     ```
-
-
-
-
 

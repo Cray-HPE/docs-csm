@@ -1,5 +1,4 @@
-
-## Kernel Boot Parameters
+# Kernel Boot Parameters
 
 The Image Management Service (IMS) extracts kernel boot parameters from the /boot/kernel-parameters file in the image, if that file exists, and stores them in S3. IMS already stores the other boot artifacts (kernel, initrd, and rootfs) in S3. When told to boot an image, the Boot Orchestration Service (BOS) will extract these parameters and deliver them to the Boot Script Service (BSS) so they can be used during the next boot of a node.
 

@@ -18,7 +18,7 @@ POST faster than others or vary based on BIOS setting. After powering on a set o
 an administrator can expect a healthy boot session to take about 60 minutes depending on
 the number of storage and worker nodes.
 
-## Topics:
+## Topics
 
    1. [Prepare for Management Node Deployment](#prepare_for_management_node_deployment)
       1. [Tokens and IPMI Password](#tokens-and-ipmi-password)
@@ -189,7 +189,7 @@ firmware requirement before starting.
    after the firmware has been updated.
 
    See the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
-   on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for information about the HPE Cray EX HPC Firmware Pack (HFP) product.
+   on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for more information about the HPE Cray EX HPC Firmware Pack (HFP) product.
 
    In the HFP documentation there is information about the recommended firmware packages to be installed.
    See "Product Details" in the HPE Cray EX HPC Firmware Pack Installation Guide.
@@ -264,10 +264,13 @@ The configuration workflow described here is intended to help understand the exp
 ### 3.2 Deploy
 
 1. Change the default root password and SSH keys
-   > If you want to avoid using the default install root password and SSH keys for the NCNs, follow the
-   > NCN image customization steps in [Change NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 
-   This step is **strongly encouraged** for all systems.
+   The management nodes deploy with a default password in the image, so it is a recommended best
+   practice for system security to change the root password in the image so that it is
+   not the documented default password.
+
+   It is **strongly encouraged** to change the default root password and SSH keys in the images used to boot the management nodes.
+   Follow the NCN image customization steps in [Change NCN Image Root Password and SSH Keys on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
 
 1. Create boot directories for any NCN in DNS This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
 
@@ -339,18 +342,11 @@ The configuration workflow described here is intended to help understand the exp
 <a name="boot-the-storage-nodes"></a>
 1. Boot the **Storage Nodes**
 
-    1. Boot all storage nodes except `ncn-s001`:
+    Boot all the storage nodes. `ncn-s001` will start 1 minute after the other storage nodes.
 
         ```bash
-        pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | grep -v "ncn-s001-" | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
-        ```
-
-    1. Wait approximately 1 minute.
-
-    1. Boot `ncn-s001`:
-
-        ```bash
-        pit# ipmitool -I lanplus -U $USERNAME -E -H ncn-s001-mgmt power on
+        pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | grep -v "ncn-s001-" | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on; \
+                 sleep 60; ipmitool -I lanplus -U $USERNAME -E -H ncn-s001-mgmt power on
         ```
 
 1. Wait. Observe the installation through `ncn-s001-mgmt`'s console:

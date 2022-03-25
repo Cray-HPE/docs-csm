@@ -11,7 +11,7 @@ advantage of being able to use the configuration payload from the previous CSM i
 and an extra configuration file which that installation generated.
 
 
-### Topics:
+### Topics
 
    * [Command Line Configuration Payload](#command_line_configuration_payload)
    * [Configuration Payload Files](#configuration_payload_files)
@@ -26,12 +26,12 @@ and an extra configuration file which that installation generated.
 
 This information from a site survey can be given to the `csi` command as command line arguments.
 The information is shown here to explain what data is needed. It will not be used until moving
-to the procedure [Bootstrap PIT Node](index.md#bootstrap_pit_node)
+to the [Bootstrap PIT Node](index.md#bootstrap_pit_node) procedure.
 
 The air-cooled cabinet is known to `csi` as a `river` cabinet. The liquid-cooled cabinets are either
 `mountain` or `hill` (if a TDS system).
 
-For more description of these settings and the default values, see [Default IP Address Ranges](../introduction/csm_overview.md#default_ip_address_ranges) and the other topics in [CSM Overview](../introduction/csm_overview.md)
+For more description of these settings and the default values, see [Default IP Address Ranges](../introduction/csm_overview.md#default_ip_address_ranges) and the other topics in [CSM Overview](../introduction/csm_overview.md).
 
 | CSI option | Information |
 | --- | --- |
@@ -165,19 +165,19 @@ See [Create Switch Metadata CSV](create_switch_metadata_csv.md) for instructions
 
 The process to install for the first time must collect the information needed to create these files.
 
-1. Collect data for `cabinets.yaml`
+1. Collect data for `cabinets.yaml`.
 
    See [Create Cabinets YAML](create_cabinets_yaml.md) for instructions about creating this file.
 
-1. Collect data for `application_node_config.yaml`
+1. Collect data for `application_node_config.yaml`.
 
    See [Create Application Node YAML](create_application_node_config_yaml.md) for instructions about creating this file.
 
-1. Collect data for `ncn_metadata.csv`
+1. Collect data for `ncn_metadata.csv`.
 
    See [Create NCN Metadata CSV](create_ncn_metadata_csv.md) for instructions about creating this file.
 
-1. Collect data for `switch_metadata.csv`
+1. Collect data for `switch_metadata.csv`.
 
    See [Create Switch Metadata CSV](create_switch_metadata_csv.md) for instructions about creating this file.
 
@@ -186,7 +186,7 @@ The process to install for the first time must collect the information needed to
 
 The process to reinstall must have the configuration payload files available.
 
-1. Collect Payload for Reinstall
+1. Collect Payload for Reinstall.
 
    1. These files from a previous install are needed to do a reinstall.
 

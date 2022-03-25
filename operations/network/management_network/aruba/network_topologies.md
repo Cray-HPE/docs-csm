@@ -1,5 +1,4 @@
-
-## Network Topologies
+# Network Topologies
 
 The following images are example network topologies for systems of various sizes. 
 

@@ -54,4 +54,3 @@ The admin must be authenticated to the Cray CLI before proceeding.
 
    Notice that the command prompt includes the hostname for this node controller
 
-

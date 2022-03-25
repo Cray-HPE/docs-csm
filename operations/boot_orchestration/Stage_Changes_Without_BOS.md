@@ -1,4 +1,4 @@
-## Stage Changes Without BOS
+# Stage Changes Without BOS
 
 Sometimes there is a need to stages changes to take place on a reboot, without immediately rebooting a node. When this is called for, users can bypass BOS, and set boot artifacts or configuration that will only take place when a node is later booted, whether that occurs manually, or triggered by a task manager.
 

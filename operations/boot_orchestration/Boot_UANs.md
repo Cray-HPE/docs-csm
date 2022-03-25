@@ -1,4 +1,4 @@
-## Boot UANs
+# Boot UANs
 
 Boot UANs with an image so that they are ready for user logins.
 
@@ -126,5 +126,4 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
     ```bash
     ncn-m001# cray cfs sessions list --tags bos_session=$BOS_SESSION --status running --format json
     ```
-
 

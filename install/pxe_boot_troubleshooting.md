@@ -1,5 +1,3 @@
-
-
 # PXE Boot Troubleshooting
 
 This page is designed to cover various issues that arise when trying to PXE boot nodes in an HPE Cray EX system.
@@ -21,7 +19,7 @@ In order for PXE booting to work successfully, the management network switches n
 
 To successfully PXE boot nodes, the following is required:
 
-- The IP helper-address must be configured on VLAN 1,2,4,7. This will be where the layer 3 gateway exists (Spine or Leaf)
+- The IP helper-address must be configured on VLAN 1,2,4,7. This will be where the layer 3 gateway exists (Spine or Leaf).
 - The virtual-IP/VSX/MAGP IP address must be configured on VLAN 1,2,4,7.
 - spine01/spine02 needs an active gateway on VLAN1 this can be identified from MTL.yaml generated from CSI.
 - spine01/spine02 needs an IP helper-address on VLAN1 pointing to 10.92.100.222.

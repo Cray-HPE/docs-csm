@@ -1,6 +1,4 @@
-
-
-## Build a New UAN Image Using the Default Recipe
+# Build a New UAN Image Using the Default Recipe
 
 Build or rebuild the UAN image using either the default UAN image or image recipe. Both of these are supplied by the User Access Node (UAN) product stream installer.
 

@@ -28,7 +28,7 @@ The above file would lead to this pairing between component name and hostname:
 | sw-cdu-001 | d0w1 |
 | sw-cdu-002 | d0w2 |
 
-The hostname's are automatically generated in ascending order by switch type.
+The hostnames are automatically generated in ascending order by switch type.
 
 The Brand name of the management switches can be determined from one of two places. The Device Diagrams or River Device Diagrams tab of the SHCD has pictures and diagrams of the components of the system including the management network switches. This will have a long name which shows the part number and the vendor name. The Rack Layout or River Rack Layout tab shows the part number in the context of its location within the cabinet.
 
@@ -64,7 +64,7 @@ Spine and leaf switches use the format `xXcChHsS`. leaf-bmc switches use `xXcCwW
 
 1. Identify the switches in the SHCD.
     
-    Look for the following :
+    Look for the following:
     
     - The slot number(s) for the leaf-bmc switches (usually 48-port switches)
         
@@ -75,7 +75,7 @@ Spine and leaf switches use the format `xXcChHsS`. leaf-bmc switches use `xXcCwW
         - In the above diagram this is x3000u23R and x3000u23L (two side-by-side switches)
         - Newer side-by-side switches use slot numbers of s1 and s2 instead of R and L
 
-2. Each spine or leaf switch will follow this format: `xXcChHsS`
+2. Each spine or leaf switch will follow this format: `xXcChHsS`:
     
     > This format also applies to CDU switches that are in a River cabinet that make connections to an adjacent Hill cabinet.
 
@@ -150,5 +150,4 @@ x3000c0w36,leafBMC,Dell
 x3000c0h33s1,Spine,Mellanox
 x3000c0h33s2,Spine,Mellanox
 ```
-
 

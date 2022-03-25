@@ -1,4 +1,4 @@
-## Add Root Service Account for Gigabyte Controllers
+# Add Root Service Account for Gigabyte Controllers
 
 By default, Gigabyte BMC and CMC controllers have the `admin` service
 account configured. In order to discover this type of hardware, the

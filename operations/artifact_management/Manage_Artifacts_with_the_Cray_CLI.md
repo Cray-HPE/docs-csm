@@ -1,4 +1,4 @@
-## Manage Artifacts with the Cray CLI
+# Manage Artifacts with the Cray CLI
 
 The artifacts \(objects\) available for use on the system are created and managed with the Cray CLI. The cray artifacts command provides the ability to manage any given artifact. The Cray CLI automatically authenticates users and provides Simple Storage Service \(S3\) credentials.
 
@@ -129,6 +129,4 @@ ETag = "\"e3f195c20a2399bf1b5a20df12416115\""
 [artifact.Metadata]
 md5sum = "e3f195c20a2399bf1b5a20df12416115"
 ```
-
-
 

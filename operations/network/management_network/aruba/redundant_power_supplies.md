@@ -1,4 +1,3 @@
-
 # Redundant Power Supplies 
  
 There are no configuration commands for switch power supply functionality. 
