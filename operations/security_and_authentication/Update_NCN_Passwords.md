@@ -1,15 +1,8 @@
-# Update NCN User Passwords
+# Set NCN User Passwords
 
-The management nodes deploy with a default password in the image, so it is a recommended best
-practice for system security to change the root password in the image so that it is
-not the documented default password. In addition to the root password in the image, NCN
-personalization should be used to change the password as part of post-boot CFS.  The password
-in the image should be used when console access is desired during the network boot of a management
-node that is being rebuilt, but this password should be different than the one stored in Vault
-that is applied by CFS during post-boot NCN personalization to change the on-disk password. Once
-NCN personalization has been run, then the password in Vault should be used for console access.
+The management node image do not contain a default root password or default ssh keys.
 
-Use one of these methods to change the root pasword in the image.
+Use one of these methods to change or set the root pasword in the image.
 
 1. If the PIT node is booted, see
 [Change NCN Image Root Password and SSH Keys on PIT Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)

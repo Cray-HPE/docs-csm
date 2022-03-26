@@ -255,17 +255,11 @@ To prevent any possibility of losing Workload Manager configuration data or file
 ## Stage 0.9 - Modify NCN Images
 
 Any site modifications to the images used to boot the management nodes need to be done again
-as part of this upgrade. These may include changing the root password, adding different ssh
-keys for the root account, or setting a default timezone.
+as part of this upgrade. This include setting the root password, adding ssh keys for the root
+account, and setting a default timezone.
 
-The management nodes deploy with a default password in the image, so it is a recommended best
-practice for system security to change the root password in the image so that it is
-not the documented default password. In addition to the root password in the image, NCN
-personalization should be used to change the password as part of post-boot CFS. The password
-in the image should be used when console access is desired during the network boot of a management
-node that is being rebuilt, but this password should be different than the one stored in Vault
-that is applied by CFS during post-boot NCN personalization to change the on-disk password. Once
-NCN personalization has been run, then the password in Vault should be used for console access.
+The management nodes images do not contain a default password or ssh keys, so it is a requirement
+that they be set and added at this time.
 
 1. Use this procedure to change the k8s-image used for master nodes and worker nodes and the ceph-image
 used by utility storage nodes. See
