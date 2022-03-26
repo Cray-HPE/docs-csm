@@ -263,13 +263,11 @@ The configuration workflow described here is intended to help understand the exp
 <a name="deploy"></a>
 ### 3.2 Deploy
 
-1. Change the default root password and SSH keys
+1. Set the default root password and SSH keys and optionally change the timezone
 
-   The management nodes deploy with a default password in the image, so it is a recommended best
-   practice for system security to change the root password in the image so that it is
-   not the documented default password.
+   The management nodes images do not contain a default password or default ssh keys.
 
-   It is **strongly encouraged** to change the default root password and SSH keys in the images used to boot the management nodes.
+   It is **required** to set the default root password and SSH keys in the images used to boot the management nodes.
    Follow the NCN image customization steps in [Change NCN Image Root Password and SSH Keys on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
 
 1. Create boot directories for any NCN in DNS This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
