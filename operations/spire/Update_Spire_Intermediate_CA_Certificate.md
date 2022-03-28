@@ -15,7 +15,7 @@ following command on a node that has access to `kubectl` (such as `ncn-m001`):
 kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
 ```
 
-## How to replace the Spire intermediate CA certificate with a new one
+## Replace the Spire Intermediate CA Certificate
 
 In order to replace the expired or soon to expire Spire intermediate CA
 certificate you need to delete the secret that stores the certificate and then
