@@ -76,25 +76,26 @@ There are multiple Goss test suites available that cover a variety of subsystems
     ncn/pit# export SW_ADMIN_PASSWORD='changeme'
     ```
 
-1. Run the NCN health checks.
+2. Run the NCN health checks.
 
     ```bash
     ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck
     ```
 
-1. Run the Kubernetes checks.
+3. Run the Kubernetes checks.
 
     ```bash
     ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
     ```
 
-1. Review results.
+4. Review results.
 
     Review the output for `Result: FAIL` and follow the instructions provided to resolve any such test failures. With the exception of the [Known Test Issues](#autogoss-issues), all health checks are expected to pass.
 
 <a name="autogoss-issues"></a>
 #### 1.1.1 Known Test Issues
 
+* It is possible that the first pass of running these tests may fail due to could-init not being completed on the storage nodes.  In this case please wait 5 minutes and re-run the tests.
 * Kubernetes Query BSS Cloud-init for ca-certs
   - This test may fail immediately after platform install. It should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * Kubernetes Velero No Failed Backups
