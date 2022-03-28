@@ -437,7 +437,7 @@ Run the NCN health checks against the three different types of nodes with the fo
 
 **IMPORTANT:** These tests should only be run while booted into the PIT node. Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
 
-**IMPORTANT:** It is possible that the first pass of running these tests may fail due to could-init not being completed on the storage nodes.  In this case please wait 5 minutes and re-run the tests. 
+**IMPORTANT:** It is possible that the first pass of running these tests may fail due to could-init not being completed on the storage nodes.  In this case please wait 5 minutes and re-run the tests.
 
 ```bash
 pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-master
