@@ -17,7 +17,7 @@ kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" 
 
 ## Replace the Spire Intermediate CA Certificate
 
-1. Delete the secret that stores the certificate
+1. Delete the secret that stores the certificate.
 
    ```bash
    SPIRE_INTERMEDIATE_JOB=$(kubectl get job -n vault -o name| grep 'spire-intermediate' | tail -n1)
@@ -25,7 +25,7 @@ kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" 
    kubectl delete secret -n spire spire.spire.ca-tls
    ```
 
-1. Rerun the job that obtains the secret and creates the certificate
+1. Re-run the job that obtains the secret and creates the certificate.
 
    ```bash
    kubectl get -n vault "$SPIRE_INTERMEDIATE_JOB" -o json | jq 'del(.spec.selector,.spec.template.metadata.labels)' | kubectl replace --force -f -
@@ -45,7 +45,7 @@ kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" 
    one to start up in its place.
 
 1. Re-run the command to get the certificate's expiration date to verify that
-   it's been updated
+   it's been updated.
 
    ```bash
    kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
