@@ -23,18 +23,6 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-# Ensure etcd clusters have three running members before proceeding
-for cluster in $(kubectl get etcd -n services | grep -v NAME | awk '{print $1}')
-do
-  size=$(kubectl get etcd -n services $cluster -o json | jq '.status.size')
-  if [ $size -ne 3 ]; then
-    echo >&2 "ERROR: etcd cluster: $cluster does not have three running members."
-    echo >&2 "       This must be addressed prior to continuing with the install."
-    exit 1
-  else
-    echo "validated etcd cluster: $cluster has three running members..."
-  fi
-done
 
 DEPLOYMENTS="\
 cray-bss \
@@ -95,9 +83,13 @@ function wait_for_running_pods() {
         operator_num_ready=$(kubectl get etcd $etcd_cluster -n $ns -o jsonpath='{.status.members.ready}' | jq .[] | wc -l)
         if [[ "$desired_size" -eq "$operator_num_ready" ]]; then
           echo "Found $desired_size ready members in $etcd_cluster etcd cluster"
+        fi
+        op_state=$(kubectl get etcd $etcd_cluster -n $ns -o jsonpath='{.status.phase}')
+        if [ $op_state == "Running" ]; then
+          echo "Found status of $op_state for $etcd_cluster etcd cluster"
           break
         fi
-        echo "Sleeping for ten seconds waiting for $desired_size ready members $etcd_cluster etcd cluster"
+        echo "Sleeping for ten seconds waiting for $desired_size ready members and 'Running' state for $etcd_cluster etcd cluster"
         sleep 10
       done
       break
@@ -106,6 +98,14 @@ function wait_for_running_pods() {
     sleep 10
   done
 }
+
+# Ensure etcd clusters have three running members before proceeding
+for etcdcluster in $ETCDCLUSTERS; do
+  ns=$(kubectl get etcdcluster -A | grep " $etcdcluster " | awk '{print $1}')
+  if [ ! -z "$ns" ]; then
+    wait_for_running_pods $ns $etcdcluster 3
+  fi
+done
 
 function restart_etcd_pods() {
   ns=$1
