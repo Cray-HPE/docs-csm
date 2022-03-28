@@ -185,7 +185,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     ```bash
     pit# mount -v -L PITDATA
     pit# pushd /var/www/ephemeral
-    pit/var/www/ephemeral# mkdir -v prep configs data
+    pit/var/www/ephemeral# mkdir -v admin prep prep/admin configs data
     ```
 
 1. Quit the typescript session with the `exit` command, copy the file (csm-install-remoteis.<date>.txt) from its initial location to the newly created directory, and restart the typescript.
