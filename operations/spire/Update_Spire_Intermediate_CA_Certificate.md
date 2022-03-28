@@ -1,4 +1,4 @@
-# Update Spire intermediate CA certificate
+# Update Spire Intermediate CA Certificate
 
 Starting with CSM 1.2.5, there is a cronjob in the `vault` namespace named
 `spire-intermediate` that runs once a week. If the Spire intermediate CA
