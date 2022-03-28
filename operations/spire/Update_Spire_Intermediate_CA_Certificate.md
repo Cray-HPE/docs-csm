@@ -9,7 +9,7 @@ take the manual steps listed below in order to update the certificate.
 ## Obtain the Expiration Date for the Spire Intermediate CA
 
 To obtain the expiration date of the Spire intermediate CA certificate, run the
-following command on a node that has access to kubectl (Such as ncn-m001)
+following command on a node that has access to `kubectl` (such as `ncn-m001`):
 
 ```bash
 kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
