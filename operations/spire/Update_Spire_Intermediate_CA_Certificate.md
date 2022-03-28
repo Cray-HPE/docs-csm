@@ -6,7 +6,7 @@ certificate is set to expire in less than a month when that job runs, then it
 will replace the certificate with a new one. If this process fails you can
 take the manual steps listed below in order to update the certificate.
 
-## How to obtain the expiration date for the Spire intermediate CA
+## Obtain the Expiration Date for the Spire Intermediate CA
 
 To obtain the expiration date of the Spire intermediate CA certificate, run the
 following command on a node that has access to kubectl (Such as ncn-m001)
