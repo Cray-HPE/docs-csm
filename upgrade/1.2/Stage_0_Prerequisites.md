@@ -235,14 +235,16 @@ To prevent any possibility of losing configuration data, backup the VCS data and
 ## Stage 0.7 - Suspend NCN Configuration
 
 Suspend automatic reconfiguration on NCNs to ensure that previous CSM version
-configuration is not applied during the upgrade. Automatic reconfiguration
-will be re-enabled in [Stage 5](Stage_5.md).
+configuration is not applied during the upgrade. The desired configuration is
+also unset so that actions that re-enable CFS, such as rebooting nodes, do 
+not trigger configuration early.  Automatic reconfiguration will be re-enabled,
+and the desired configuration will be set again in [Stage 5](Stage_5.md).
 
    ```bash
    ncn# export CRAY_FORMAT=json
    ncn# for xname in $(cray hsm state components list --role Management --type node | jq -r .Components[].ID)
    do
-       cray cfs components update --enabled false $xname
+       cray cfs components update --enabled false --desired-config "" $xname
    done
 ```
 
