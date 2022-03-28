@@ -76,19 +76,19 @@ There are multiple Goss test suites available that cover a variety of subsystems
     ncn/pit# export SW_ADMIN_PASSWORD='changeme'
     ```
 
-2. Run the NCN health checks.
+1. Run the NCN health checks.
 
     ```bash
     ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck
     ```
 
-3. Run the Kubernetes checks.
+1. Run the Kubernetes checks.
 
     ```bash
     ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
     ```
 
-4. Review results.
+1. Review results.
 
     Review the output for `Result: FAIL` and follow the instructions provided to resolve any such test failures. With the exception of the [Known Test Issues](#autogoss-issues), all health checks are expected to pass.
 
