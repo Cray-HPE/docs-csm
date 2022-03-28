@@ -51,6 +51,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
       - [5.3.2 UAS Cannot Access Keycloak](#uas-uai-validate-debug-keycloak)
       - [5.3.3 UAI Images not in Registry](#uas-uai-validate-debug-registry)
       - [5.3.4 Missing Volumes and other Container Startup Issues](#uas-uai-validate-debug-container)
+
 <a name="platform-health-checks"></a>
 ## 1. Platform Health Checks
 
