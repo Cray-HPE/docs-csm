@@ -606,6 +606,14 @@ Perform the following steps **on `ncn-m001`**.
     ncn-m001# /opt/cray/tests/install/ncn/scripts/validate-bootraid-artifacts.sh
     ```
 
+1. If the above fails with messages about ` Host key verification failed`, clear them from the `known_hosts`:
+
+    This script will perform the check on all NCNs, including `ncn-m001`.
+
+    ```
+    ncn-m001# for ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do ssh-keygen -R $ncn;done
+    ```
+
 <a name="next-topic"></a>
 # Next Topic
 
