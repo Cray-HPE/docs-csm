@@ -108,7 +108,9 @@ To validate that xname validation is enabled, request a test JWT using the
 
 ```bash
 /usr/bin/heartbeat-spire-agent api fetch jwt -socketPath=/root/spire/agent.sock -audience test | head -n1
+```
 
+```bash
 token(spiffe://shasta/ncn/x3000c0s2b0n0/workload/heartbeat):
 ```
 
@@ -208,6 +210,8 @@ To validate that xname validation is disabled, request a test JWT using the
 
 ```bash
 /usr/bin/heartbeat-spire-agent api fetch jwt -socketPath=/root/spire/agent.sock -audience test | head -n1
+```
 
+```bash
 token(spiffe://shasta/ncn/workload/heartbeat):
 ```
