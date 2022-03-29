@@ -5,19 +5,19 @@ Rebuild a master, worker, or storage non-compute node (NCN). Use this procedure 
 The following is a high-level overview of the NCN rebuild workflow:
 
 1. Prepare Node
-    * There is a different procedure for each type of node (worker, master, and storage).
+    * There is a different procedure for each type of node (worker, master, and storage)
 2. Identify Node and Update Metadata
-    * Same procedure for all node types.
+    * Same procedure for all node types
 3. Wipe Disks
-    * Same for master and worker nodes, but different for storage nodes.
+    * Same for master and worker nodes, but different for storage nodes
 4. Power Cycle Node
-    * Same procedure for all node types.
+    * Same procedure for all node types
 5. Rebuild Storage Node
     * Only needed for storage nodes
 6. Validate `BOOTRAID` artifacts
     * Run from ncn-m001
 7. Validation
-    * There is a different procedure for each type of node (worker, master, and storage).
+    * There is a different procedure for each type of node (worker, master, and storage)
 
 ## Prerequisites
 
@@ -36,7 +36,7 @@ ncn# echo $XNAME
 
 ## Procedure
 
-   Choose the appropriate node type in the **Prepare Node** section
+Choose the appropriate node type in the **Prepare Node** section.
 
 ### Prepare Node (prepare_node)
 
@@ -44,20 +44,18 @@ Only follow the steps in the section for the node type that is being rebuilt:
 
 * Worker node
 
-```
-ncn-m001:# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-worker-nodes.sh ncn-w001
-```
+  ```
+  ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-worker-nodes.sh ncn-w001
+  ```
 
 * Master node
 
-```
-ncn-m001:# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
-```
+  ```
+  ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
+  ```
 
 * [Storage node](Rebuild_NCNs/Prepare_Storage_Nodes.md)
 
 ## Validation
 
-After you have completed all the steps, then please run the **Final Validation** steps.
-
-[Final Validation](rebuild_ncns/../Rebuild_NCNs/Final_Validation_Steps.md)
+After completing all of the steps, run the [Final Validation](rebuild_ncns/../Rebuild_NCNs/Final_Validation_Steps.md) steps.
