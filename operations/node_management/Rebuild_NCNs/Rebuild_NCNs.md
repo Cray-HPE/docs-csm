@@ -14,7 +14,7 @@ The following is a high-level overview of the NCN rebuild workflow:
     * Same procedure for all node types
 5. Rebuild Storage Node
     * Only needed for storage nodes
-6. Validate `BOOTRAID` artifacts
+6. Validate `BOOTRAID` Artifacts
     * Run from ncn-m001
 7. Validation
     * There is a different procedure for each type of node (worker, master, and storage)
@@ -36,9 +36,9 @@ ncn# echo $XNAME
 
 ## Procedure
 
-Choose the appropriate node type in the **Prepare Node** section.
+Choose the appropriate node type in the **Prepare Node** section below.
 
-### Prepare Node (prepare_node)
+### Prepare Node
 
 Only follow the steps in the section for the node type that is being rebuilt:
 
@@ -54,8 +54,8 @@ Only follow the steps in the section for the node type that is being rebuilt:
   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
   ```
 
-* [Storage node](Rebuild_NCNs/Prepare_Storage_Nodes.md)
+* [Storage node](Prepare_Storage_Nodes.md)
 
 ## Validation
 
-After completing all of the steps, run the [Final Validation](rebuild_ncns/../Rebuild_NCNs/Final_Validation_Steps.md) steps.
+After completing all of the steps, run the [Final Validation](Final_Validation_Steps.md) steps.
