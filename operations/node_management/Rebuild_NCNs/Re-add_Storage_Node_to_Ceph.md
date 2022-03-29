@@ -100,11 +100,11 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    /srv/cray/scripts/common/join_ceph_cluster.sh
    ```
 
-   **IMPORTANT:** While watching your window running `watch ceph -s` you will see the health go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about "failed to probe daemons or devices" and this will clear.
+   **IMPORTANT:** While watching the window running `watch ceph -s`, the health will go to a `HEALTH_WARN` state. This is expected. Most commonly, there will be an alert about "failed to probe daemons or devices" and this will clear.
 
 ## Zap OSDs
 
-**IMPORTANT:** Only do this if you were not able to wipe the node prior to rebuild.
+**IMPORTANT:** Only do this if unable to wipe the node prior to rebuild.
 
 **NOTE:** The commands in the Zapping OSDs section will need to be run from a node running ceph-mon. Typically ncn-s00(1/2/3).
 
@@ -128,9 +128,9 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
    **IMPORTANT:** In the above example the drives on our rebuilt node are showing "Available = no". This is expected because the check is based on the presence of an LVM on the volume.
 
-   **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that you are not seeing OS drives. These will have a size of 480G.
+   **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that there are no OS drives. These will have a size of 480G.
 
-1. Zap the drives.
+2. Zap the drives.
 
    ```bash
    for drive in $(ceph orch device ls $NODE --format json-pretty |jq -r '.[].devices[].path')
@@ -139,15 +139,15 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    done
    ```
 
-1. Validate the drives are being added to the cluster.
+3. Validate the drives are being added to the cluster.
 
    ```bash
    watch ceph -s
    ```
 
-   You will see the OSD count UP and IN counts increase. **If** you see your **IN** count increase but not reflect the amount of drives being added back in, then you will need to fail over the ceph mgr daemon. This is a known bug and is addressed in newer releases.
+   The returned output will have the OSD count UP and IN counts increase. **If** the **IN** count increases but does not reflect the amount of drives being added back in, an administrator must fail over the ceph mgr daemon. This is a known bug and is addressed in newer releases.
 
-   If you need to fail over the ceph-mgr daemon please run:
+   If necessary, fail over the ceph-mgr daemon with the following command:
 
    ```bash
    ceph mgr fail
@@ -155,7 +155,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
 ## Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
 
-**IMPORTANT:** Radosgw by default is deployed to the first 3 storage nodes. This includes haproxy and keepalived. This is automated as part of the install, but you may have to regenerate the configuration if you are not running on the first 3 storage nodes or all nodes. Please see the 2 examples in step 1.
+**IMPORTANT:** Radosgw by default is deployed to the first 3 storage nodes. This includes haproxy and keepalived. This is automated as part of the install, but administrators may have to regenerate the configuration if they are not running on the first 3 storage nodes or all nodes. Please see the 2 examples in step 1.
 
 1. Deploy Rados Gateway containers to the new nodes.
 

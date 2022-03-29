@@ -23,7 +23,7 @@ The following is a high-level overview of the NCN rebuild workflow:
 
 The system is fully installed and has transitioned off of the LiveCD.
 
-For several of the commands in this section, you will need to have variables set with the name of the node being rebuilt and its component name (xname).
+Variables set with the name of the node being rebuilt and its component name (xname) are required for several of the commands in this section.
 
 Set NODE to the hostname of the node being rebuilt (e.g. `ncn-w001`, `ncn-w002`, etc).
 Set `XNAME` to the component name (xname) of that node.
