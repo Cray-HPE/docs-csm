@@ -1,6 +1,5 @@
-# Prepare Storage Node
 
-## Description
+# Prepare Storage Nodes
 
 Prepare a storage node before rebuilding it.
 
@@ -50,12 +49,19 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
    ncn# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
    ```
 
-## Step 1 - Check the status of Ceph
+## Procedure
+
+Check the status of Ceph.
 
 1. Check the OSD status, weight, and location:
 
     ```bash
     ncn-s# ceph osd tree
+    ```
+
+    Example output:
+
+    ```
     ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
     -1       20.95917 root default
     -3        6.98639     host ncn-s001
@@ -79,6 +85,11 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
 
     ```screen
     ncn-s# ceph -s
+    ```
+
+    Example output:
+
+    ```
       cluster:
         id:     184b8c56-172d-11ec-aa96-a4bf0138ee14
         health: HEALTH_WARN
@@ -137,8 +148,13 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
 
     The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
-    ```screen
+     ```screen
      ncn-s# ceph osd tree down
+     ```
+
+     Example output:
+
+     ```
      ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
      -1         62.87750  root default
      -9         10.47958      host ncn-s003
@@ -152,27 +168,27 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
 
     1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives. By default, if the OSD reference is not removed, then there will still a reference to them in the crush map. This will result in OSDs that no longer exist appearing to be down.
 
-    This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
+      This command assumes you have set the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites).
 
-    This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
+      This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
 
-    ```bash
-    ncn-s# for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
-    ```
+      ```bash
+      ncn-s# for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
+      ```
 
-    Example Output:
+      Example Output:
 
-    ```screen
-    destroyed osd.1
-    purged osd.1
-    destroyed osd.3
-    purged osd.3
-    destroyed osd.6
-    purged osd.6
-    destroyed osd.9
-    purged osd.9
-    ```
+      ```screen
+      destroyed osd.1
+      purged osd.1
+      destroyed osd.3
+      purged osd.3
+      destroyed osd.6
+      purged osd.6
+      destroyed osd.9
+      purged osd.9
+      ```
 
 [Click Here to Proceed to the Next Step](Identify_Nodes_and_Update_Metadata.md)
 
-Or [Click Here to Return to Main page](../Rebuild_NCNs.md)
+Or [Click Here to Return to Main Page](Rebuild_NCNs.md)
