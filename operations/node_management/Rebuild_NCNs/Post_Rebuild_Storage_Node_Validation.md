@@ -80,4 +80,6 @@ Skip this section if a master or worker node was rebuilt.
     <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
     ```
 
-   [Return to Main Page](Rebuild_NCNs.md#Validation)
+## Next Step
+
+Return to the main [Rebuild NCNs](Rebuild_NCNs.md#validation) page.

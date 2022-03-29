@@ -146,6 +146,7 @@ This section applies to all node types. The commands in this section assume the 
 
       The files should be identical
 
-For the next step, follow the link for the node type being rebuilt.
 
-[Next Step Validate Boot Raid](Validate_Boot_Raid.md)
+## Next Step
+
+Proceed to the next step to [Validate Boot Raid](Validate_Boot_Raid.md).
