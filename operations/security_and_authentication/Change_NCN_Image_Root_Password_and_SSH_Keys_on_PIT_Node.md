@@ -1,12 +1,12 @@
 ## Set NCN Image Root Password, SSH Keys, and timezone (optional) on PIT Node
 
 Modify the NCN images by setting the root password and adding ssh keys for the root account.
-Changing the timezone for the NCNs can also be done at this time.  This procedure shows this process being
+Changing the timezone for the NCNs can also be done at this time. This procedure shows this process being
 done on the PIT node during a first time installation of the CSM software.
 
 ***Note:*** This procedure can must be done before management nodes are deployed for the first time.
 
-### Set the root password and add ssh keys to the NCN images
+### Set the root password and add SSH keys to the NCN images
 
 This step is required. There is no default root password and no default ssh keys in the NCN images.
 
@@ -16,7 +16,7 @@ This step is required. There is no default root password and no default ssh keys
    copy an existing set of keys and `authorized_hosts` file into a directory for reference in the following step. It is assumed
    that public keys have a `.pub` extension.
 
-   Invoke the `ncn-image-modification.sh` script located at the top level of the CSM release tarball to add ssh key and set the root password. Optaionally, set a local timezone (UTC is the default). If you chose to create new SSH keys above, invoke this script with `-d ~/.ssh` in addition to the other required options.
+   Invoke the `ncn-image-modification.sh` script located at the top level of the CSM release tarball to add SSH key and set the root password. Optionally, set a local timezone (UTC is the default). If you chose to create new SSH keys above, invoke this script with `-d ~/.ssh` in addition to the other required options.
 
    ```bash
    pit# ncn-image-modification.sh -h
@@ -34,7 +34,7 @@ This step is required. There is no default root password and no default ssh keys
           The process can be fully automated by using the SQUASHFS_ROOT_PW_HASH
           environment variable (see below) along with either -d or -N.
 
-          -a             Do *not* modifify the authorized_keys file in the squashfs.
+          -a             Do *not* modify the authorized_keys file in the squashfs.
                          If modifying a previously modified image, or an
                          authorized_keys file that contains the public key is already
                          included in the directory used with the -d option, you may

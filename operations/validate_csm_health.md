@@ -95,7 +95,7 @@ There are multiple Goss test suites available that cover a variety of subsystems
 <a name="autogoss-issues"></a>
 #### 1.1.1 Known Test Issues
 
-* It is possible that the first pass of running these tests may fail due to could-init not being completed on the storage nodes.  In this case please wait 5 minutes and re-run the tests.
+* It is possible that the first pass of running these tests may fail due to could-init not being completed on the storage nodes. In this case please wait 5 minutes and re-run the tests.
 * Kubernetes Query BSS Cloud-init for ca-certs
   - This test may fail immediately after platform install. It should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * Kubernetes Velero No Failed Backups

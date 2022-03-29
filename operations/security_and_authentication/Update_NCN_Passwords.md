@@ -15,7 +15,7 @@ for more information.
 The rest of this procedure describes how to change the root password stored in the HashiCorp
 Vault instance and then apply it immediately to management nodes with the `csm.password` Ansible
 role via a CFS session. The same root password from Vault will be applied anytime that the NCN
-personalization including the CSM layer is run.  If no password is added to Vault as in the
+personalization including the CSM layer is run. If no password is added to Vault as in the
 procedure below, this Ansible role will skip any password updates.
 
 ### New in CSM Release 1.2.0
