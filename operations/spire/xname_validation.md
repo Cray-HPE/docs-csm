@@ -9,7 +9,8 @@ spire-server statefulset to be increased.
 
 In order to enable xname validation you need the docs-csm RPM installed and the
 CSM 1.2.5 or newer tarball extracted somewhere on the node you are enabling it
-from.
+from. In the command example below the CSM 1.2.5 tarball is extracted to
+`/etc/cray/upgrade/csm/csm-1.2.5/tarball`.
 
 Enabling xname validation requires the reinstallation of the spire server and
 rejoining all nodes to spire. The `xnamevalidation.sh` script handles this for
@@ -17,7 +18,7 @@ NCNs and Storage nodes. Compute and UAN nodes will need to be restarted after
 the `xnamevalidaiton.sh` script has finished running. If you do not restart
 these nodes then they will be unable to acquire JWTs from spire.
 
-### Commands to Enable Xname Validation
+### Example Commands
 
 ```bash
 cd /etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5
@@ -113,7 +114,8 @@ cd /etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5
 
 In order to disable xname validation you need the docs-csm RPM installed and the
 CSM 1.2.5 or newer tarball extracted somewhere on the node you are enabling it
-from.
+from. In the command example below the CSM 1.2.5 tarball is extracted to
+`/etc/cray/upgrade/csm/csm-1.2.5/tarball`.
 
 Disabling xname validation requires the reinstallation of the spire server and
 rejoining all nodes to spire. The `xnamevalidation.sh` script handles this for
@@ -121,7 +123,7 @@ NCNs and Storage nodes. Compute and UAN nodes will need to be restarted after
 the `xnamevalidaiton.sh` script has finished running. If you do not restart
 these nodes then they will be unable to acquire JWTs from spire.
 
-### Commands to Disable Xname Validation
+### Example Commands
 
 ```bash
 cd /etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5
@@ -131,7 +133,7 @@ cd /etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5
 ### Example Output
 
 ```bash
-ncn-m002:/etc/cray/upgrade/csm/csm-1.2.0-beta.82/tarball/csm-1.2.0-beta.82 # /usr/share/doc/csm/scripts/operations/xnamevalidation.sh disable
+ncn-m002:/etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5 # /usr/share/doc/csm/scripts/operations/xnamevalidation.sh disable
 Backup copy of the site-init secret has been saved to /tmp/tmp.HbfRHgiQzP/site-init.yaml
 Stopping spire on NCNs
 Warning: Permanently added 'ncn-s001,10.252.1.6' (ECDSA) to the list of known hosts.
@@ -157,7 +159,7 @@ persistentvolumeclaim "spire-data-spire-server-2" deleted
   ~~~~~~\_____/~~~~~~~
 
 2022-03-29T18:27:14Z INF Ensuring that the loftsman namespace exists command=ship
-2022-03-29T18:27:15Z INF Loftsman will use the packaged charts at /etc/cray/upgrade/csm/csm-1.2.0-beta.82/tarball/csm-1.2.0-beta.82/helm as the Helm install source command=ship
+2022-03-29T18:27:15Z INF Loftsman will use the packaged charts at /etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5/helm as the Helm install source command=ship
 2022-03-29T18:27:15Z INF Running a release for the provided manifest at /tmp/tmp.HbfRHgiQzP/manifest.yaml command=ship
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
