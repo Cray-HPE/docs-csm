@@ -28,6 +28,8 @@ cd /etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5
 ### Example Output
 
 ```bash
+ncn:/etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5 # /usr/share/doc/csm/scripts/operations/xnamevalidation.sh enable
+
 Backup copy of the site-init secret has been saved to /tmp/tmp.rsDPG4zZf6/site-init.yaml
 Stopping spire on NCNs
 Warning: Permanently added 'ncn-s001,10.252.1.6' (ECDSA) to the list of known hosts.
@@ -105,11 +107,6 @@ ncn# /usr/bin/heartbeat-spire-agent api fetch jwt -socketPath=/root/spire/agent.
 token(spiffe://shasta/ncn/x3000c0s2b0n0/workload/heartbeat):
 ```
 
-```bash
-cd /etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5
-/usr/share/doc/csm/scripts/operations/xnamevalidation.sh disable
-```
-
 ## Disable Xname Validation
 
 In order to disable xname validation you need the docs-csm RPM installed and the
@@ -133,7 +130,8 @@ cd /etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5
 ### Example Output
 
 ```bash
-ncn-m002:/etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5 # /usr/share/doc/csm/scripts/operations/xnamevalidation.sh disable
+ncn:/etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5 # /usr/share/doc/csm/scripts/operations/xnamevalidation.sh disable
+
 Backup copy of the site-init secret has been saved to /tmp/tmp.HbfRHgiQzP/site-init.yaml
 Stopping spire on NCNs
 Warning: Permanently added 'ncn-s001,10.252.1.6' (ECDSA) to the list of known hosts.
