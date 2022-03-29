@@ -497,15 +497,11 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Node Management Workflows](node_management/Node_Management_Workflows.md)
   * [Rebuild NCNs](node_management/Rebuild_NCNs.md)
     * [Identify Nodes and Update Metadata](node_management/Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md)
-    * [Prepare Master Nodes](node_management/Rebuild_NCNs/Prepare_Master_Nodes.md)
-    * [Prepare Worker Nodes](node_management/Rebuild_NCNs/Prepare_Worker_Nodes.md)
     * [Prepare Storage Nodes](node_management/Rebuild_NCNs/Prepare_Storage_Nodes.md)
     * [Wipe Drives](node_management/Rebuild_NCNs/Wipe_Drives.md)
     * [Power Cycle and Rebuild Nodes](node_management/Rebuild_NCNs/Power_Cycle_and_Rebuild_Nodes.md)
     * [Adding a Ceph Node to the Ceph Cluster](node_management/Rebuild_NCNs/Re-add_Storage_Node_to_Ceph.md)
     * [Validate Boot Raid](node_management/Rebuild_NCNs/Validate_Boot_Raid.md)
-    * [Validate Master Node](node_management/Rebuild_NCNs/Post_Rebuild_Master_Node_Validation.md)
-    * [Validate Worker Node](node_management/Rebuild_NCNs/Post_Rebuild_Worker_Node_Validation.md)
     * [Validate Storage Node](node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
     * [Final Validation Steps](node_management/Rebuild_NCNs/Final_Validation_Steps.md)
   * [Reboot NCNs](node_management/Reboot_NCNs.md)
@@ -647,6 +643,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 
   * [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
   * [Troubleshoot Spire Failing to Start on NCNs](spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
+  * [Update Spire Intermediate CA Certificate](spire/Update_Spire_Intermediate_CA_Certificate.md)
 
 
 <a name="update-firmware-with-fas"></a>

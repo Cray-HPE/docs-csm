@@ -24,8 +24,4 @@ ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
 
 Once that is done only follow the steps in the section for the node type that was rebuilt:
 
-[Master Node](Post_Rebuild_Master_Node_Validation.md)
-
-[Worker Node](Post_Rebuild_Worker_Node_Validation.md)
-
 [Storage Node](Re-add_Storage_Node_to_Ceph.md)

@@ -39,6 +39,12 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
     This command suspends the hms-discovery cron job and recursively powers off the liquid-cooled cabinet chassis.
 
+    The `sat bootsys shutdown` command may fail to power off some cabinets and indicate that requests to CAPMC have timed out. In this case, the `sat` command may be run with an increased `--api-timeout` option.
+
+    ```bash
+    ncn-m001# sat --api-timeout 180 bootsys shutdown --stage cabinet-power
+    ```
+
 5.  Verify that the hms-discovery cron job has been suspended \(`SUSPEND` column = true\).
 
     ```bash
