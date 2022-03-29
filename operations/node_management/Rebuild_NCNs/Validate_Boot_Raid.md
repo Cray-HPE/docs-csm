@@ -24,4 +24,4 @@ ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
 
 Once that is done only follow the steps in the section for the node type that was rebuilt:
 
-[Storage Node](Re-add_Storage_Node_to_Ceph.md)
+* [Storage Node](Re-add_Storage_Node_to_Ceph.md)

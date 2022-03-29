@@ -189,6 +189,6 @@ Check the status of Ceph.
       purged osd.9
       ```
 
-[Click Here to Proceed to the Next Step](Identify_Nodes_and_Update_Metadata.md)
+## Next Step
 
-Or [Click Here to Return to Main Page](Rebuild_NCNs.md)
+Proceed to the next step to [Identify Nodes and Update Metadata](Identify_Nodes_and_Update_Metadata.md) or return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.

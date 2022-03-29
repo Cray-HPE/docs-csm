@@ -57,7 +57,6 @@ This section applies to all node types. The commands in this section assume the 
 
        The files should be identical
 
+## Next Step
 
-[Click here for the Next Step](Wipe_Drives.md)
-
-Or [return to the Main Page](Rebuild_NCNs.md)
+Proceed to the next step to [Wipe Drives](Wipe_Drives.md) or return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
