@@ -1,13 +1,21 @@
-# 6.3. Validate Storage Node
+
+# Post Rebuild Storage Node Validation
 
 Validate the storage node rebuilt successfully.
 
 Skip this section if a master or worker node was rebuilt.
 
-1. Verify there are 3 mons, 3 mds, 3 mgr processes, and rgws
+## Procedure
+
+1. Verify there are 3 mons, 3 mds, 3 mgr processes, and rgws.
 
     ```bash
     ncn-m# ceph -s
+    ```
+
+    Example output:
+
+    ```
       cluster:
         id:     22d01fcd-a75b-4bfc-b286-2ed8645be2b5
         health: HEALTH_OK
@@ -34,6 +42,11 @@ Skip this section if a master or worker node was rebuilt.
 
     ```bash
     ncn-m# ceph osd tree
+    ```
+
+    Example output:
+
+    ```
     ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
     -1       20.95917 root default
     -3        6.98639     host ncn-s001
@@ -59,7 +72,12 @@ Skip this section if a master or worker node was rebuilt.
 
     ```bash
     ncn# curl -k https://rgw-vip.nmn
+    ```
+
+    Example output:
+
+    ```
     <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
     ```
 
-   [Return to Main Page](../Rebuild_NCNs.md#Validation)
+   [Return to Main Page](Rebuild_NCNs.md#Validation)
