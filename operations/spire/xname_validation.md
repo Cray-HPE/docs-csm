@@ -1,9 +1,13 @@
 # Xname Validation
 
-CSM 1.2.5 Supports the ability to require API calls that contain xnames to be
+CSM 1.2.5 supports the ability to require API calls that contain xnames to be
 from the node with that xname. This is done by assigning unique workloads per
 node. This may impact performance and require the replica count of the
 spire-server statefulset to be increased.
+
+Note: While spire is being reinstalled during the enable or disable process the
+OPA validation will fail. This will cause all API requests that go through the
+API Gateway to fail until the spire-jwks service is running again.
 
 ## Enable Xname Validation
 
@@ -15,7 +19,7 @@ from. In the command example below the CSM 1.2.5 tarball is extracted to
 Enabling xname validation requires the reinstallation of the spire server and
 rejoining all nodes to spire. The `xnamevalidation.sh` script handles this for
 NCNs and Storage nodes. Compute and UAN nodes will need to be restarted after
-the `xnamevalidaiton.sh` script has finished running. If you do not restart
+the `xnamevalidation.sh` script has finished running. If you do not restart
 these nodes then they will be unable to acquire JWTs from spire.
 
 ### Example Commands
@@ -117,7 +121,7 @@ from. In the command example below the CSM 1.2.5 tarball is extracted to
 Disabling xname validation requires the reinstallation of the spire server and
 rejoining all nodes to spire. The `xnamevalidation.sh` script handles this for
 NCNs and Storage nodes. Compute and UAN nodes will need to be restarted after
-the `xnamevalidaiton.sh` script has finished running. If you do not restart
+the `xnamevalidation.sh` script has finished running. If you do not restart
 these nodes then they will be unable to acquire JWTs from spire.
 
 ### Example Commands
