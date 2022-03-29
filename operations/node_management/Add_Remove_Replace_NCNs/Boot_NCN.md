@@ -170,13 +170,17 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
 ### Step 8 - **For ncn-m001 only**
 
 1. Restore and verify the site link for ncn-m001.
+ 
+    Use the $CAN_IP that was recorded prior to powering down ncn-m001 to access ncn-m002.
 
     **IMPORTANT:** If the vendor of the replaced master node has changed, before the config is reloaded, verify that the `BRIDGE_PORTS` setting in `/etc/sysconfig/network/ifcfg-lan0` is based on the actual NIC names for the external site interface.
 
     ```bash
+    remote# ssh root@$CAN_IP
     ncn-m002# rsync /tmp/ifcfg-lan0-m001 ncn-m001:/etc/sysconfig/network/ifcfg-lan0
-    ncn-m002# ssh ncn-m001 "wicked ifreload lan0"
-    ncn-m002# ssh ncn-m001 "wicked ifstatus lan0"
+    ncn-m002# ssh ncn-m001
+    ncn-m001# wicked ifreload lan0
+    ncn-m001# wicked ifstatus lan0
     ```
 
     Example output:
