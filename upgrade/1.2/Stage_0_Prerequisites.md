@@ -237,7 +237,7 @@ To prevent any possibility of losing configuration data, backup the VCS data and
 Suspend automatic reconfiguration on NCNs to ensure that previous CSM version
 configuration is not applied during the upgrade. The desired configuration is
 also unset so that actions that re-enable CFS, such as rebooting nodes, do 
-not trigger configuration early.  Automatic reconfiguration will be re-enabled,
+not trigger configuration early. Automatic reconfiguration will be re-enabled,
 and the desired configuration will be set again in [Stage 5](Stage_5.md).
 
    ```bash
@@ -297,7 +297,7 @@ for more information.
       ```
 
 2. Use this procedure to change the root password in Vault and the CSM layer of configuration
-applied during NCN Personalizaion. Usually this configuration is done during the first time installation
+applied during NCN Personalization. Usually this configuration is done during the first time installation
 of CSM software, but if was not done then, it should be done now. See
 [Update NCN Passwords](../../operations/security_and_authentication/Update_NCN_Passwords.md) and
 [full NCN personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password)
