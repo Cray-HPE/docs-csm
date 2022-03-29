@@ -88,7 +88,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    chmod u+x /srv/cray/scripts/common/join_ceph_cluster.sh
    ```
 
-1. In a separate window log into one of the following ncn-s00(1/2/3) and execute the following:
+1. In a separate window, log into one of the following ncn-s00(1/2/3) and execute the following:
 
    ```bash
    watch ceph -s
@@ -108,7 +108,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
 **NOTE:** The commands in the Zapping OSDs section will need to be run from a node running ceph-mon. Typically ncn-s00(1/2/3).
 
-1. Find the devices on the node being rebuilt
+1. Find the devices on the node being rebuilt.
 
    ```bash
    ceph orch device ls $NODE
@@ -130,7 +130,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
    **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that you are not seeing OS drives. These will have a size of 480G.
 
-1. Zap the drives
+1. Zap the drives.
 
    ```bash
    for drive in $(ceph orch device ls $NODE --format json-pretty |jq -r '.[].devices[].path')
@@ -159,13 +159,13 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
 1. Deploy Rados Gateway containers to the new nodes.
 
-   - If running Rados Gateway on all nodes is the desired configuration, then do:
+   - If running Rados Gateway on all nodes is the desired configuration:
 
       ```bash
       ceph orch apply rgw site1 zone1 --placement="*"
       ```
 
-   - If deploying to select nodes then do:
+   - If deploying to select nodes:
   
      ```bash
      ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
