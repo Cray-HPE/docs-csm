@@ -168,7 +168,7 @@ Check the status of Ceph.
 
     1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives. By default, if the OSD reference is not removed, then there will still a reference to them in the crush map. This will result in OSDs that no longer exist appearing to be down.
 
-      This command assumes you have set the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites).
+      The following command assumes the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) are set.
 
       This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
 
