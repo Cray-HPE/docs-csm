@@ -429,4 +429,4 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
 
    **WARNING:** If doing a CSM software upgrade, skip this step since the upgrade process does a rolling rebuild with some additional steps.
 
-   > If not doing a CSM software upgrade, follow the procedure to do a [Rolling Rebuild](../node_management/Rebuild_NCNs.md) of all management nodes.
+   > If not doing a CSM software upgrade, follow the procedure to do a [Rolling Rebuild](../node_management/rebuild_ncns/Rebuild_NCNs.md) of all management nodes.
