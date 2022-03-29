@@ -17,7 +17,8 @@ platform-ca.
 
 ```bash
 mv /var/lib/ca-certificates/ca-bundle.pem /root/ca-bundle.pem.bak
-curl http://10.92.100.71:8888/meta-data | jq -r  '.Global."ca-certs".trusted[]' > /etc/pki/trust/anchors/platform-ca-certs.crt
+curl http://10.92.100.71:8888/meta-data | jq -r  '.Global."ca-certs".trusted[]' \
+> /etc/pki/trust/anchors/platform-ca-certs.crt
 update-ca-certificates
 systemctl restart containerd
 ```
