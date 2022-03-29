@@ -8,6 +8,30 @@ longer be valid. This is due to the platform-ca only being pulled via cloud-init
 on first boot. You can run the following goss test to validate this is the
 case.
 
+### Example Error Messages
+
+```bash
+ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
+and get
+{"ID":"x3007c0s12b0","LastDiscoveryStatus":"HTTPsGetFailed"}
+{"ID":"x3007c0s15b0","LastDiscoveryStatus":"HTTPsGetFailed"}
+{"ID":"x3007c0s16b0","LastDiscoveryStatus":"HTTPsGetFailed"}
+FAIL: smd_discovery_status_test found no successfully discovered endpoints
+'/opt/cray/tests/ncn-smoke/hms/hms-smd/smd_discovery_status_test_ncn-smoke.sh' exited with status code: 1
+```
+
+```bash
+ncn# curl https://api-gw-services-nmn.local/PATH
+curl: (60) SSL certificate problem: self signed certificate in certificate chain
+More details here: https://curl.haxx.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+```
+
+### Resolution
+
 ```bash
 goss -g /opt/cray/tests/install/ncn/tests/goss-platform-ca-certs-match-cloud-init.yaml v
 ```
@@ -30,6 +54,20 @@ CA bundle if the file exists.
 
 ## SSL Validation Only Fails in Python Applications
 
+### Example Error Messages
+
+```bash
+python3[3705657]: Unable to contact CFS to report component status: HTTPSConnectionPool(host='api-gw-service-nmn.local', port=443):
+Max retries exceeded with url: /apis/cfs/v2/components/XNAME (Caused by SSLError(SSLError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate
+verify failed (_ssl.c:852)'),))
+```
+
+```bash
+Error calling https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token: HTTPSConnectionPool(host='api-gw-service-nmn.local', port=443): Max retries exceeded with url: /keycloak/realms/shasta/protocol/openid-connect/token (Caused by SSLError(SSLError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:852)'),))
+```
+
+### Resolution
+
 Python3 applications, such as CFS, will fail to validate the API Gateway's SSL
 certificate if a non-SuSE provided certifi python package is used. This is due
 to the official certifi package using its own CA certificate bundle instead
@@ -38,7 +76,7 @@ install an application with a certifi dependency. To see what version of certifi
 you are using, run `pip show certifi`.
 
 ```bash
-ncn-m001:~ # pip show certifi
+ncn# pip show certifi
 Name: certifi
 Version: 2021.10.8
 Summary: Python package for providing Mozilla's CA Bundle.
@@ -57,7 +95,7 @@ platform CA. The following command shows the expected output on a `1.2.5`
 system.
 
 ```bash
-ncn-m001:~ # pip show certifi
+ncn# pip show certifi
 Name: certifi
 Version: 2018.1.18
 Summary: Python package for providing Mozilla's CA Bundle.
@@ -75,7 +113,19 @@ Required-by: kubernetes, requests
 If the platform CA wasn't available in the system's CA certificate bundle when
 containerd started then the system will show SSL validation errors when talking
 to `https://registry.local`. This is due to containerd caching the CA bundle on
-startup. In order to fix this you will need to restart the `containerd` service.
+startup.
+
+### Example Error Message
+
+```bash
+Get https://registry.local/v2/: x509: certificate signed by unknown authority
+Error: unable to pull registry.local/IMAGE:TAG: Error initializing source docker://registry.local/IMAGE:TAG: error pinging docker registry
+registry.local: Get https://registry.local/v2/: x509: certificate signed by unknown authority
+```
+
+### Resolution
+
+Restart the `containerd` service.
 
 ```bash
 systemctl restart containerd
