@@ -87,6 +87,6 @@ Only follow the steps in the section for the node type that is being rebuilt:
     wipefs --all --force /dev/sd* /dev/disk/by-label/*
     ```
 
-[Click Here for the Next Step](Power_Cycle_and_Rebuild_Nodes.md)
+## Next Step 
 
-Or [Return to the Main Page](Rebuild_NCNs.md)
+Proceed to the next step to [Power Cycle and Rebuild Nodes](Power_Cycle_and_Rebuild_Nodes.md) or return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
