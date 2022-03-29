@@ -1793,7 +1793,12 @@ def ncn_data_command(session: requests.Session, args, state: State):
             "Class": "River"
         }
 
-        create_hsm_state_component(session, component)
+        print(f"Creating component {state.ncn_xname} to HSM State Components")
+        print(json.dumps(component, indent=2))
+        if args.perform_changes:
+            create_hsm_state_component(session, component)
+        else:
+            print("Skipping due to dry run!")
 
     #
     # Update Global host_records in BSS with IPs
