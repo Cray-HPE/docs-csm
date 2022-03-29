@@ -289,7 +289,7 @@ Run the following:
 <a name="storage-node-remove-roles"></a>
 ### Storage Node Remove Roles
 
-Follow [Remove Ceph Node](../../utility_storage/Remove_Ceph_Node.md) to remove Ceph role from the storage node.
+Open a new tab and follow [Remove Ceph Node](../../utility_storage/Remove_Ceph_Node.md) to remove Ceph role from the storage node.
 
 Once the storage node role removal is complete; proceed to [wipe the drives](#wipe-disks-utility-storage-node).
 
@@ -303,29 +303,10 @@ Once the storage node role removal is complete; proceed to [wipe the drives](#wi
 
 All commands in this section must be run **on the node being removed** \(unless otherwise indicated\). These commands can be done from the ConMan console window.
 
-1. Remove the etcd device mapper.
-
-    ```bash
-    dmsetup remove $(dmsetup ls | grep -i etcd | awk '{print $1}')
-    ```
-
-    > **Note:** The following output  means the etcd volume  mapper is not present.
-    ```bash
-    No device specified.
-    Command failed.
-    ```
-
-1. Unmount the etcd volume and remove the volume group.
+1. Unmount the etcd and `SDU` and remove the volume group
 
    ```bash
-   umount /run/lib-etcd
-   vgremove -f etcdvg0-ETCDK8S
-   ```
-
-1. Unmount the `SDU` mountpoint and remove the volume group.
-
-   ```bash
-   umount /var/lib/sdu
+   umount -v /run/lib-etcd /var/lib/etcd /var/lib/sdu
    vgremove -f -v --select 'vg_name=~metal*'
    ```
 
