@@ -302,16 +302,24 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     temp_file=$(mktemp)
     artdir=${CSM_ARTI_DIR}/images
+
+    export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
+    DEBUG=1 ${CSM_ARTI_DIR}/ncn-image-modification.sh \
+        -d /root/.ssh \
+        -k $artdir/kubernetes/kubernetes*.squashfs \
+        -s $artdir/storage-ceph/storage-ceph*.squashfs \
+        -p
+
     radosgw-admin bucket link --uid=STS --bucket=ncn-images
     set -o pipefail
     csi handoff ncn-images \
           --kubeconfig /etc/kubernetes/admin.conf \
           --k8s-kernel-path $artdir/kubernetes/*.kernel \
           --k8s-initrd-path $artdir/kubernetes/initrd*.xz \
-          --k8s-squashfs-path $artdir/kubernetes/kubernetes*.squashfs \
+          --k8s-squashfs-path $artdir/kubernetes/secure-kubernetes*.squashfs \
           --ceph-kernel-path $artdir/storage-ceph/*.kernel \
           --ceph-initrd-path $artdir/storage-ceph/initrd*.xz \
-          --ceph-squashfs-path $artdir/storage-ceph/storage-ceph*.squashfs | tee $temp_file
+          --ceph-squashfs-path $artdir/storage-ceph/secure-storage-ceph*.squashfs | tee $temp_file
     set +o pipefail
 
     KUBERNETES_VERSION=`cat $temp_file | grep "export KUBERNETES_VERSION=" | awk -F'=' '{print $2}'`
@@ -517,6 +525,42 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="BACKUP_VCS_DATA"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    
+    pgLeaderPod=$(kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list | grep Leader | awk -F'|' '{print $2}')
+    kubectl exec -it ${pgLeaderPod} -n services -c postgres -- pg_dumpall -c -U postgres > gitea-vcs-postgres.sql
+
+    SECRETS="postgres service-account standby"
+    echo "---" > gitea-vcs-postgres.manifest
+    for secret in $SECRETS; do
+        kubectl get secret "${secret}.gitea-vcs-postgres.credentials" -n services -o yaml >> gitea-vcs-postgres.manifest
+        echo "---" >> gitea-vcs-postgres.manifest
+    done
+
+    POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
+    kubectl -n services exec ${POD} -- tar -cvf vcs.tar /data/
+    kubectl -n services cp ${POD}:vcs.tar ./vcs.tar
+
+    backupBucket="config-data"
+    set +e
+    cray artifacts list config-data
+    if [[ $? -ne 0 ]]; then
+        backupBucket="vbis"
+    fi
+    set -e
+
+    cray artifacts create ${backupBucket} gitea-vcs-postgres.sql gitea-vcs-postgres.sql
+    cray artifacts create ${backupBucket} gitea-vcs-postgres.manifest gitea-vcs-postgres.manifest
+    cray artifacts create ${backupBucket} vcs.tar vcs.tar
+    
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="TDS_LOWER_CPU_REQUEST"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
@@ -535,4 +579,23 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="SUSPEND_NCN_CONFIGURATION"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    
+    export CRAY_FORMAT=json
+    for xname in $(cray hsm state components list --role Management --type node | jq -r .Components[].ID)
+    do
+        cray cfs components update --enabled false --desired-config "" $xname
+    done
+    
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 ok_report
+
+
+    
