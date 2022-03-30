@@ -86,7 +86,7 @@ An authentication token is required to access the API gateway and to use the `sa
     4. Find the required `templateUuid` value with BOS.
 
        ```bash
-       ncn-m001# cray bos v1 session describe bos_session | grep templateUuid
+       ncn-m001# cray bos v1 session describe BOS_SESSION | grep templateUuid
        ```
 
        Example output:
