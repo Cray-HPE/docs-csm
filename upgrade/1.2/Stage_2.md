@@ -48,6 +48,9 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
 
    scp ncn-m001:${csi_rpm} /tmp/cray-site-init.rpm
 
+   scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-*.noarch.rpm
+
+
    rpm -Uvh --force /tmp/cray-site-init.rpm
    ```
 
