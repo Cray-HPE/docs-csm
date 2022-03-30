@@ -37,33 +37,6 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
    ```bash
    ncn-m002# CSM_RELEASE=csm-1.2.0
    ```
-
-1. Install document RPM and run check script on `ncn-m002`
-
-   - Option 1 - Internet Connected Environment
-
-     1. Install document RPM package:
-
-        > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
-
-        ```bash
-        wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm -P /root
-
-        rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-        ```
-
-   - Option 2 - Air Gapped Environment
-
-     1. Copy the docs-csm RPM package and CSM release tarball to `ncn-m002`.
-
-     1. Install document RPM package:
-
-        > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
-
-        ```bash
-        rpm -Uvh --force /root/docs-csm-*.noarch.rpm
-        ```
-
 1. Copy arfifacts from `ncn-m001`
 
    ```bash
