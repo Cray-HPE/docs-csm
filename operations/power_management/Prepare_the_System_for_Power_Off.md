@@ -1,5 +1,3 @@
-
-
 # Prepare the System for Power Off
 
 This procedure prepares the system to remove power from all system cabinets. Be sure the system is healthy and ready to be shut down and powered off.
@@ -337,4 +335,3 @@ An authentication token is required to access the API gateway and to use the `sa
 1.  Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, see the `scontrol` man page. For PBS Professional, see the `pbsnodes` man page.
 
 #####  Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
-
