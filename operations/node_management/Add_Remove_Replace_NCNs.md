@@ -94,11 +94,11 @@ ncn# echo $XNAME
    ---     -----
    Cray    map[password:foobar username:root] 
    ```
-*   If adding a NCN that was not previously in the system follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md).
-*   Ensure the NCN BMC is configured to use DHCP. (This does not apply to the BMC for ncn-m001 since it is statically configured for the site.)
-*   Ensure the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](../../instal/../install/switch_pxe_boot_from_onboard_nic_to_pcie.md) procedure.
+*  If adding a NCN that was not previously in the system follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md).
+*  Ensure the NCN BMC is configured to use DHCP. (This does not apply to the BMC for ncn-m001 since it is statically configured for the site.)
+*  Ensure the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](../../instal/../install/switch_pxe_boot_from_onboard_nic_to_pcie.md) procedure.
 
-*   If adding an HPE NCN, ensure IPMI is enabled.
+*  If adding an HPE NCN, ensure IPMI is enabled.
 
    1. Check to see if IPMI is enabled:
       ```bash

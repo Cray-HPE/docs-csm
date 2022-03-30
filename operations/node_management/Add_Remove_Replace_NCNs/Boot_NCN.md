@@ -200,4 +200,4 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
     ncn-m001# ip a show lan0
     ```
 
-[Next Step Redeploy Services](Redeploy_Services.md)
+Proceed to the next step to [Redeploy Services](Redeploy_Services.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
