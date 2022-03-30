@@ -265,7 +265,7 @@ The configuration workflow described here is intended to help understand the exp
 
 1. Set the default root password and SSH keys and optionally change the timezone
 
-   The management nodes images do not contain a default password or default ssh keys.
+   The management nodes images do not contain a default password or default SSH keys.
 
    It is **required** to set the default root password and SSH keys in the images used to boot the management nodes.
    Follow the NCN image customization steps in [Change NCN Image Root Password and SSH Keys on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)

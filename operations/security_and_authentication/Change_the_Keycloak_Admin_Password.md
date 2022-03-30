@@ -32,7 +32,7 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
 1. Enter the existing password, new password and confirmation, and then click **Save**.
 1. Log on to `ncn-w001`.
 1. git clone `https://github.com/Cray-HPE/csm.git`.
-1. copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` to your desired working directory and run the following commands from that work directory (not the utls directory).
+1. copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` to your desired working directory and run the following commands from that work directory (not the `utils` directory).
 1. Save a local copy of the customizations.yaml file.
 
     ```bash
