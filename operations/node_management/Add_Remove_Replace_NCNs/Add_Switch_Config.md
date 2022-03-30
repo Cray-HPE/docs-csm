@@ -30,6 +30,8 @@ ncn-w004 IP data
 
 The configuration will be the same across both switches.
 
+This is for workers only.
+
 For more info see [Update BGP Neighbors](../../network/metallb_bgp/Update_BGP_Neighbors.md)
 
 ```text
@@ -58,6 +60,8 @@ router bgp 65533 vrf default neighbor 10.252.1.13 transport connection-mode pass
 ### Spine BGP updates
 
 The configuration will be the same across both switches.
+
+This is for workers only.
 
 For more info see [Update BGP Neighbors](../../network/metallb_bgp/Update_BGP_Neighbors.md)
 
