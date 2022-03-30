@@ -22,7 +22,7 @@ Update the network switches for the NCN that is being added.
 
 ### Spine/Agg switch updates
 
-[spine/agg edge port configuration](../../../install/configure_mellanox_spine_switch.md#Configure-Edge-Port)
+[spine/agg edge port configuration](../../../install/configure_mellanox_spine_switch.md#Configure-MLAG)
 
 ### only workers
 
