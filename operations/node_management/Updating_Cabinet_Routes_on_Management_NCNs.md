@@ -64,7 +64,7 @@ This procedure will use config from System Layout Service (SLS) to set up the pr
     RTNETLINK answers: File exists
     ```
 
-3.  Create payload to update the cloud-init user data for management NCNs in BSS to contain the updated cabinet route information:
+3.  Create payload to update the `cloud-init` user data for management NCNs in BSS to contain the updated cabinet route information:
     ```bash
     ncn-m001# cat <<EOF >write-files-user-data.json
     {
@@ -87,7 +87,7 @@ This procedure will use config from System Layout Service (SLS) to set up the pr
     EOF
     ```
 
-4.  Update BSS cloud init user data for the management NCNs:
+4.  Update BSS `cloud-init` user data for the management NCNs:
     ```bash
     ncn-m001# ncn_xnames=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?type=comptype_node&extra_properties.Role=Management" | jq -r '.[] | .Xname' | sort)
     ncn-m001# for ncn in $ncn_xnames; do 

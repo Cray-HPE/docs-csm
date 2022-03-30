@@ -1,6 +1,6 @@
-# Change NCN Image Root Password and SSH Keys 
+# Change NCN Image Root Password and SSH Keys
 
-Customize the NCN images by changing the root password or adding different ssh keys for the root account.
+Customize the NCN images by changing the root password or adding different SSH keys for the root account.
 This procedure shows this process being done any time after the first time installation of the CSM
 software has been completed and the PIT node is booted as a regular master node. To change the NCN image
 during an installation while the PIT node is booted as the PIT node,
@@ -12,9 +12,9 @@ There is some common preparation before making the Kubernetes image for master n
 
 ### Common Preparation
 
-1. Prepare new ssh keys for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
+1. Prepare new SSH keys for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
 
-   Either replace the root public and private ssh keys with your own previously generated keys or generate a new pair with `ssh-keygen(1)`. By default `ssh-keygen` will create an RSA key, but other types could be chosen and different filenames would need to be substituted in later steps.
+   Either replace the root public and private SSH keys with your own previously generated keys or generate a new pair with `ssh-keygen(1)`. By default `ssh-keygen` will create an RSA key, but other types could be chosen and different filenames would need to be substituted in later steps.
 
    ```bash
    ncn-m# mkdir /root/.ssh
@@ -68,7 +68,7 @@ The Kubernetes image ```k8s-image``` is used by the master and worker nodes.
    ncn-m# unsquashfs -d k8s/${K8SVERSION}/filesystem.squashfs k8s/${K8SVERSION}/filesystem.squashfs.orig
    ```
 
-1. Copy the generated public and private ssh keys for the root account into the image.
+1. Copy the generated public and private SSH keys for the root account into the image.
 
    This example assumes that an RSA key was generated.
 
@@ -76,7 +76,7 @@ The Kubernetes image ```k8s-image``` is used by the master and worker nodes.
    ncn-m# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub k8s/${K8SVERSION}/filesystem.squashfs/root/.ssh
    ```
 
-1. Add the public ssh key for the root account to `authorized_keys`.
+1. Add the public SSH key for the root account to `authorized_keys`.
 
    This example assumes that an RSA key was generated so it adds the id_rsa.pub file to authorized_keys.
 
@@ -263,7 +263,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    ncn-m# unsquashfs -d ceph/${CEPHVERSION}/filesystem.squashfs ceph/${CEPHVERSION}/filesystem.squashfs.orig
    ```
 
-1. Copy the generated public and private ssh keys for the root account into the image.
+1. Copy the generated public and private SSH keys for the root account into the image.
 
    This example assumes that an RSA key was generated.
 
@@ -271,7 +271,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    ncn-m# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub ceph/${CEPHVERSION}/filesystem.squashfs/root/.ssh
    ```
 
-1. Add the public ssh key for the root account to `authorized_keys`.
+1. Add the public SSH key for the root account to `authorized_keys`.
 
    This example assumes that an RSA key was generated so it adds the id_rsa.pub file to authorized_keys.
 
@@ -396,7 +396,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
 
    **WARNING:** If doing a CSM software upgrade, skip this section to continue with Common Cleanup.
 
-   > If not doing a CSM software upgrade, this process will update the entries in BSS for the utiltity storage nodes to use the new `ceph-image`.
+   > If not doing a CSM software upgrade, this process will update the entries in BSS for the utility storage nodes to use the new `ceph-image`.
    > 
    > 1. Set all utility storage nodes to use newly created ceph-image.
    >

@@ -70,7 +70,7 @@ This section applies to all node types. The commands in this section assume you 
 
 1. After a bit, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output which indicates that the PXE boot has begun the TFTP download of the ipxe program. Later messages will appear as the Linux kernel loads and then the scripts in the initrd begin to run, including `cloud-init`.
 
-1. Wait until `cloud-init` displays messages similar to these on the console to indicate that cloud-init has finished with the module called `modules:final`.
+1. Wait until `cloud-init` displays messages similar to these on the console, indicating that `cloud-init` has finished with the module called `modules:final`.
 
     ```screen
     [  295.466827] cloud-init[9333]: Cloud-init v. 20.2-8.45.1 running 'modules:final' at Thu, 26 Aug2021  15:23:20 +0000. Up 125.72 seconds.
@@ -81,7 +81,7 @@ This section applies to all node types. The commands in this section assume you 
 
     * **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying the `XNAME.json` file (see the step to [inspect and modify the JSON file](Identify_Nodes_and_Update_Metadata.md#Inspect-and-modify-the-JSON-file) and make sure these instructions were completed correctly.
 
-    * **Master nodes only:** If `cloud-init` did not complete the newly-rebuilt node will need to have its etcd service definition manually updated. Reconfigure the etcd service, and restart the cloud init on the newly rebuilt master:
+    * **Master nodes only:** If `cloud-init` did not complete the newly rebuilt node will need to have its `etcd` service definition manually updated. Reconfigure the `etcd` service, and restart `cloud-init` on the newly rebuilt master:
 
     ```bash
     ncn-m# systemctl stop etcd.service; sed -i 's/new/existing/' \
@@ -90,11 +90,11 @@ This section applies to all node types. The commands in this section assume you 
            systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
     ```
 
-    **Rebuilt node with modified ssh key(s):** The cloud-init process can fail when accessing other nodes if ssh keys have been modified in the cluster. If this occurs, the following steps can be used to repair the desired ssh keys on the newly rebuilt node:
+    **Rebuilt node with modified SSH key(s):** The `cloud-init` process can fail when accessing other nodes if SSH keys have been modified in the cluster. If this occurs, the following steps can be used to repair the desired SSH keys on the newly rebuilt node:
 
-    1. Allow cloud-init to fail due to the non-matching keys.
-    1. Copy the correct ssh key(s) to the newly rebuilt node.
-    1. Re-run cloud-init on the newly rebuilt node:
+    1. Allow `cloud-init` to fail due to the non-matching keys.
+    1. Copy the correct SSH key(s) to the newly rebuilt node.
+    1. Re-run `cloud-init` on the newly rebuilt node:
 
     ```bash
     ncn-m# cloud-init clean; cloud-init init --local; cloud-init init
