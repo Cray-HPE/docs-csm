@@ -208,7 +208,6 @@ ncn-m001# export SW_ADMIN_PASSWORD=sw1tCH@DM1Np4s5w0rd
 **`IMPORTANT:`** If the `NEXUS_PASSWORD` environment variable was set as previously mentioned, then remove it before continuing:
 
 ```bash
-ncn-m001# export -n NEXUS_PASSWORD
 ncn-m001# unset NEXUS_PASSWORD
 ```
 
