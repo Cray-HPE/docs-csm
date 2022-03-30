@@ -25,7 +25,7 @@
 usage()
 {
    # Display Help
-   echo "Removes the ssh keys in Kubernetes to restore their value from vault"
+   echo "Removes the SSH keys in Kubernetes to restore their value from vault"
    echo "NOTE: This does not update deployed keys"
    echo
    echo "Usage: restore_ssh_keys.sh"

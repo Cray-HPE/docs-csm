@@ -23,7 +23,7 @@ Expected Responses: 2xx, 3xx
    Curl Response Code for ncn-s003: 200
    ```
 
-   **Troubleshooting:** If an error occurs with the above script, then `echo $num_storage_nodes`. If it is not an integer that matches the known configuration of the number of Utility Storage nodes, then run `cloud-init init` to refresh the cloud-init cache. Alternatively, manually set that number if the number of Utility Storage nodes is known.
+   **Troubleshooting:** If an error occurs with the above script, then `echo $num_storage_nodes`. If it is not an integer that matches the known configuration of the number of Utility Storage nodes, then run `cloud-init init` to refresh the `cloud-init` cache. Alternatively, manually set that number if the number of Utility Storage nodes is known.
 
 2. Check the HAProxy endpoint.
 

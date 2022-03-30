@@ -33,7 +33,7 @@ target_ncn=$1
 . ${basedir}/../common/ncn-common.sh ${target_ncn}
 
 # Record this state locally instead of using is_state_recorded(),
-# because it does not hurt to re-do the ssh keys, and it is the
+# because it does not hurt to re-do the SSH keys, and it is the
 # kind of thing which may need to be re-done in case of problems.
 ssh_keys_done=0
 

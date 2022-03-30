@@ -110,6 +110,8 @@ Cell: P16      Name: SITE
 2. Critically, Cell I38 has a name of "sw-spinx-002". This should be noted as a misspelling of "sw-spine-002" and corrected. 
 
 
+#### Check SHCD Port Usage
+
 Today CANU validates many things, but a future feature is full cable specification checking of nodes (e.g. what NCN ports go to which switches to properly form bonds).  There are several CANU roadmap items, but today a manual review of the "SHCD Port Usage" connections list is vital. Specifically, check: 
 
 * K8S NCN cabling (manager, worker, storage) follows PoR cabling https://github.com/Cray-HPE/docs-csm/blob/main/install/cable_management_network_servers.md 
