@@ -69,7 +69,7 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Find the required `templateUuid` value with BOS.
 
        ```bash
-       ncn# cray bos session describe XNAME | grep templateUuid
+       ncn# cray bos session describe boss_session | grep templateUuid
        ```
 
        Example output:
@@ -334,3 +334,4 @@ An authentication token is required to access the API gateway and to use the `sa
 
 1.  Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, see the `scontrol` man page. For PBS Professional, see the `pbsnodes` man page.
 
+#####  Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
