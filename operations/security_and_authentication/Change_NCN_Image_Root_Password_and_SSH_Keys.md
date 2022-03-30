@@ -151,14 +151,13 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
                                     -d ~/.ssh/
    ```
 
-   In this example, the timezone in the squashfs is being changed to Americas/Chicago and injecting
-   the current root .ssh directory into the squshfs. The root password will **not** be changed
-   because `-p` was not provided on the command line. It will copy the existing keys in `~/.ssh/`
-   into the image.
+   In the above example, the timezone in the Squashfs is being changed to Americas/Chicago.
+   The root password will **not** be changed because `-p` was not provided on the command line.
+   It will copy the existing keys in `~/.ssh/` into the image.
 
    Example:
    ```bash
-   ncn-m# export SQUASHFS_ROOT_PW_HASH='<root_password_hash>'
+   ncn-m# export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
    ncn-m# ncn-image-modification.sh -p -t rsa \
                                     -N "" \
                                     -k k8s/${K8SVERSION}/filesystem.squashfs \
@@ -166,8 +165,9 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    ```
 
    In this example the root password hash in `/etc/shadow` in the NCN image will be replaced with the contents
-   of the `$SQUASHFS_ROOT_PW_HASH` variable. Ensure you use single quotes when setting the environment variable.
-   This invocation aslo creates new ssh keys. 
+   of the `$SQUASHFS_ROOT_PW_HASH` variable. Ensure single quotes are used when setting the environment variable
+   so that any `$` characters are not interpreted by bash. In the example above, `SQUASHFS_ROOT_PW_HASH` is being
+   set to match the root password hash that exists on the current node.  This invocation also creates new SSH keys. 
 
    The newly created images will have a `secure-` prefix. The original images are retained in an `./old` directory
    at the same level in the filesystem as the squashfs files.

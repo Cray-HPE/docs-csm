@@ -4,7 +4,7 @@ Modify the NCN images by setting the root password and adding ssh keys for the r
 Changing the timezone for the NCNs can also be done at this time.  This procedure shows this process being
 done on the PIT node during a first time installation of the CSM software.
 
-***Note:*** This procedure can only be done before the PIT node is rebuilt to become a normal master node.
+***Note:*** This procedure can must be done before management nodes are deployed for the first time.
 
 ### Set the root password and add ssh keys to the NCN images
 
@@ -12,10 +12,11 @@ This step is required. There is no default root password and no default ssh keys
 
 1. Add ssh keys and set the password in the squashfs. Optionally, set the timezone.
 
-   Either use the following script to create new ssh keys or copy exiting keys into a directory for use by the script. It is assumed
+   If desired, create new SSH keys on the PIT. These will be copied into the NCN Squashfs images in the next step. Alternately,
+   copy an existing set of keys and `authorized_hosts` file into a directory for reference in the following step. It is assumed
    that public keys have a `.pub` extension.
 
-   Invoke the `ncn-image-modification.sh` script located at the top level of the CSM release tarball to add ssh key and set the root password. Optaionally, set a local timezone (UTC is the default).
+   Invoke the `ncn-image-modification.sh` script located at the top level of the CSM release tarball to add ssh key and set the root password. Optaionally, set a local timezone (UTC is the default). If you chose to create new SSH keys above, invoke this script with `-d ~/.ssh` in addition to the other required options.
 
    ```bash
    pit# ncn-image-modification.sh -h
@@ -83,11 +84,12 @@ This step is required. There is no default root password and no default ssh keys
    ```
 
    An example generating new keys with an empty passphrase and the `$SQUASHFS_ROOT_PW_HASH` variable set.
+   The variable will be set to reuse the same root password hash that exists on the PIT node.
    This example will not prompt the admin for any input after it is invoked.
 
    ```bash
    pit# cd /var/www/ephemeral/data/
-   pit# export SQUASHFS_ROOT_PW_HASH='<root_password_hash>'
+   pit# export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
    pit# ${CSM_PATH}/ncn-image-modification.sh -p \
                                               -t rsa \
                                               -N "" \
