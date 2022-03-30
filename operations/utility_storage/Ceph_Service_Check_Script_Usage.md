@@ -20,7 +20,7 @@ usage:  ceph-service-status.sh # runs a simple Ceph health check
 
 **`Important:`** By default this output of this command will not be verbose. This is to accommodate goss testing. For manual runs, please use the `-v true` flag.
 
-**`Important:`** If you encounter this message `parse error: Invalid numeric literal at line 1, column 5` that is indicating that the cached ssh keys in known_hosts are no longer valid. The simple fix is to empty the `~/.ssh/known_hosts` file and re-run the script. It will update the keys.
+**`Important:`** If you encounter this message `parse error: Invalid numeric literal at line 1, column 5` that is indicating that the cached SSH keys in known_hosts are no longer valid. The simple fix is to empty the `~/.ssh/known_hosts` file and re-run the script. It will update the keys.
 
 ## Examples
 
@@ -30,7 +30,7 @@ usage:  ceph-service-status.sh # runs a simple Ceph health check
 ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
-Updating ssh keys..
+Updating SSH keys..
 Tests run: 1  Tests Passed: 1
 ```
 
@@ -40,7 +40,7 @@ Tests run: 1  Tests Passed: 1
 ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -v true -s mon.ncn-s001
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
-Updating ssh keys..
+Updating SSH keys..
 
 HOST: ncn-s001#######################
 Service mon.ncn-s001 on ncn-s001 has been restarted and up for 9280 seconds
@@ -56,7 +56,7 @@ Tests run: 2  Tests Passed: 2
 ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -a true -v true
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
-Updating ssh keys..
+Updating SSH keys..
 
 HOST: ncn-s001#######################
 Service mds.cephfs.ncn-s001.rmisfx on ncn-s001 has been restarted and up for 9206 seconds
@@ -112,7 +112,7 @@ Tests run: 12  Tests Passed: 12
 ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -s mon
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
-Updating ssh keys..
+Updating SSH keys..
 
 HOST: ncn-s001#######################
 Service mon on ncn-s001 has been restarted and up for 9547 seconds

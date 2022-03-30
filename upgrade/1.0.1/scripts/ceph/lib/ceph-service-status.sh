@@ -227,7 +227,7 @@ check_ceph_health_basic
 
 if [[ $verbose == "true" ]]
 then
-  echo "Updating ssh keys.."
+  echo "Updating SSH keys.."
 fi
 
 for node_num in $(seq 1 "$num_storage_nodes"); do
