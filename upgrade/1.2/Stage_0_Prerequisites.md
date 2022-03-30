@@ -14,22 +14,28 @@
 
 ## Stage 0.1 - Install latest docs RPM
 
-1. Install latest document RPM package:
+1. Install latest document RPM package and prepare assets:
 
    > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
 
    - Internet Connected
 
      ```bash
-     ncn-m001# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm -P /root
-     ncn-m001# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+     wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm -P /root
+     
+     rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+
+     /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
      ```
 
    - Air Gapped (replace the PATH_TO below with the location of the rpm)
 
      ```bash
-     ncn-m001# cp [PATH_TO_docs-csm-*.noarch.rpm] /root
-     ncn-m001# rpm -Uvh --force /root/docs-csm-*.noarch.rpm
+     cp [PATH_TO_docs-csm-*.noarch.rpm] /root
+     
+     rpm -Uvh --force /root/docs-csm-*.noarch.rpm
+
+     /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
      ```
 
 <a name="reduce-cpu-limits"></a>
@@ -189,18 +195,8 @@ ncn-m001# export SW_ADMIN_PASSWORD=sw1tCH@DM1Np4s5w0rd
 > Otherwise, a random 32-character base64-encoded string will be generated
 > and updated as the default `admin` password when Nexus is upgraded.
 
-- Internet Connected
-
-  ```bash
-  ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
-  ```
-
-  **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default.
-
-- Air Gapped
-
-  ```bash
-  ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
+- ```bash
+  /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE]
   ```
 
 **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. **IF** the upgrade `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
