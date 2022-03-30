@@ -45,7 +45,7 @@ router bgp 65533 vrf default neighbor 10.252.1.13 timers 1 3
 router bgp 65533 vrf default neighbor 10.252.1.13 transport connection-mode passive
 ```
 
-### Dell BMC port configuration
+### BMC port configuration
 
 [Dell edge port configuration](../../../install/configure_dell_leaf_switch.md#Configure-Edge-Port)
 
