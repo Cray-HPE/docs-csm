@@ -30,7 +30,7 @@ __________________________________
 
 ## Introduction
 
-   1. [Introduction](../index.md)
+   1. [Introduction](../index.md#introduction)
    1. [Notice](../index.md)
    1. [Index](../index.md)
 
@@ -46,7 +46,7 @@ __________________________________
   1. [Secure Shell (SSH)](./ssh.md)
   1. [Remote Logging](./remote_logging.md)
   1. [SNMPv2c Community](./snmp-community.md)
-  1. [System images](./system_images.md)
+  1. [System Images](./system_images.md)
 
 ### Layer One Features
 
@@ -83,11 +83,11 @@ __________________________________
 
   1. [Software upgrade](./upgrade.md)
 
-### Back Up Switch Configuration
+### Back Up a Switch Configuration
 
-  1. [Backing up switch configuration](./backup.md)
+  1. [Back Up a Switch Configuration](./backup.md)
 
-### Factory reset
+### Factory Reset
 
-  1. [Reset configuration](./reset.md)
-
+  1. [Reset Configuration](./reset.md)
+ 
