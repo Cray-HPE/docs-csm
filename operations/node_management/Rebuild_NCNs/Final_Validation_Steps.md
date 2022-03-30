@@ -17,7 +17,7 @@ Use this procedure to finish validating the success of a rebuilt NCN(s).
 
    Example output:
 
-   ```
+   ```json
    {
      "configurationStatus": "configured",
      "desiredConfig": "ncn-personalization-full",
