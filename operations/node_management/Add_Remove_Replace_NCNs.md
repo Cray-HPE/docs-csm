@@ -24,7 +24,7 @@ The system is fully installed and has transitioned off of the LiveCD.
 
 All activities required for site maintenance are complete.
 
-The latest csm-docs RPM has been installed on ncn-m001.
+The latest docs-csm RPM has been installed on the master nodes.
 
 1. Run ncn_add_remove_replace_ncn_pre-req.py to adjust the network.
 
@@ -129,6 +129,7 @@ Use this procedure to remove a worker, storage or master node (NCN).
 <a name="remove-ncn-prerequisites"></a>
 ### Remove NCN Prerequisites
 
+Open two sessions, one on the node that is to be removed and another on a different master or worker node.
 For several of the commands in this section, you will need to have variables set with the name of the node being removed and its xname.
 Set NODE to the hostname of the node being removed (e.g. `ncn-w001`, `ncn-s002`, etc).
 Set XNAME to the xname of that node.
