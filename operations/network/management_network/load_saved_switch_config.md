@@ -43,24 +43,39 @@ System configuration has been modified. Save? [yes/no]:no
 ```
 ### Mellanox
 
-View the configuration files. Make sure that `csm1.0` and `csm1.2` exist. If they do you can proceed.
-```
-sw-spine-001 [standalone: master] (config) # show configuration files
+1. View the configuration files.
+   
+    Ensure that `csm1.0` and `csm1.2` exist. If they exist, proceed to the next step.
 
-csm1.0 (active)
-csm1.0.bak
-csm1.2
-csm1.2.bak
-initial
-initial.bak
+    ```
+    sw-spine-001 [standalone: master] (config) # show configuration files
+    ```
 
-Active configuration: csm1.0
-Unsaved changes     : yes
-```
-switch to desired configuration.
-```
-sw-spine-001 [standalone: master] (config) # configuration switch-to csm1.0
-This requires a reboot.
-Type 'yes' to confirm: yes
-```
-The switch will then reboot to the chosen configuration.
+    Example output:
+
+    ```
+    csm1.0 (active)
+    csm1.0.bak
+    csm1.2
+    csm1.2.bak
+    initial
+    initial.bak
+
+    Active configuration: csm1.0
+    Unsaved changes     : yes
+    ```
+
+2. Switch to desired configuration.
+
+    ```
+    sw-spine-001 [standalone: master] (config) # configuration switch-to csm1.0
+    ```
+
+    Example output:
+
+    ```
+    This requires a reboot.
+    Type 'yes' to confirm: yes
+    ```
+
+The switch will then reboot to chosen configuration.

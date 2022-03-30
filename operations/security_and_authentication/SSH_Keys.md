@@ -4,7 +4,7 @@ Change the SSH keys for users on non-compute nodes (NCNs) on the system using
 the `rotate-ssh-keys-mgmt-nodes.yml` Ansible playbook provided by CSM or through
 NCN node personalization (`site.yml`).
 
-The NCNs deploy with ssh keys for the root user that are changed during the system
+The NCNs deploy with SSH keys for the root user that are changed during the system
 install. See [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 for more information on changing the default keys during install. It is a
 recommended best practice for system security to change the SSH keys after the
@@ -56,7 +56,7 @@ skip any updates.
    > secret that you are also update the other fields, for example the user's
    > [password](Update_NCN_Passwords.md#configure_root_password_in_vault).
 
-   The path to the secret and the ssh key fields are configurable locations in
+   The path to the secret and the SSH key fields are configurable locations in
    the CSM `csm.ssh_keys` Ansible role located in the CSM configuration
    management Git repository that is in use. If not using the defaults as shown
    in the command above, ensure that the paths are consistent between Vault and
@@ -71,7 +71,7 @@ running a [full NCN personalization](../CSM_product_management/Configure_Non-Com
 where keys are also applied using the secrets stored in Vault set in the
 procedure above.
 
-1. Create a CFS configuration layer to run the ssh key change Ansible playbook.
+1. Create a CFS configuration layer to run the SSH key change Ansible playbook.
    Replace the branch name in the JSON below with the branch in the CSM
    configuration management Git repository that is in use.
 
@@ -90,7 +90,7 @@ procedure above.
    ncn# cray cfs configurations update ncn-root-keys-update --file ./config.json
    ```
 
-1. Create a CFS configuration session to apply the ssh keypair update.
+1. Create a CFS configuration session to apply the SSH keypair update.
 
    ```bash
    ncn# cray cfs sessions create --name ncn-root-keys-update-`date +%Y%m%d%H%M%S` --configuration-name ncn-root-keys-update
@@ -106,6 +106,6 @@ procedure above.
 The `csm.ssh_key` Ansible role supports setting SSH keys for non-root users.
 Make a copy of the `rotate-ssh-keys-mgmt-nodes.yml` Ansible playbook and modify
 the role variables to specify a different `ssh_keys_username` and use that
-username when adding the ssh keypair content to Vault as in the procedure above.
+username when adding the SSH keypair content to Vault as in the procedure above.
 Follow the procedure to create a configuration layer using the new Ansible
 playbook and create a CFS session using that layer.
