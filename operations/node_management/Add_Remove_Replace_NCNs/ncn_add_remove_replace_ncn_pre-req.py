@@ -263,6 +263,7 @@ def get_network_list(sls_networks):
                 for subnet in network['ExtraProperties']['Subnets']:
                     if 'FullName' in subnet and 'Bootstrap' in subnet['FullName']:
                         network_list.add(network['Name'])
+    return network_list
 
 def delete_kea_lease(ip, token):
     """
