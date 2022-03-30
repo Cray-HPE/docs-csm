@@ -9,6 +9,7 @@ Use the Firmware Action Service (FAS) to update the firmware on supported hardwa
 5. [Compute Node BIOS Workaround for HPE CRAY EX425](#cn-workaround)
 
 *NOTE* to update Switch Controllers \(sC\) or RouterBMC refer to the Rosetta Documentation
+
 ---
 
 <a name="liquidcooled"></a>
