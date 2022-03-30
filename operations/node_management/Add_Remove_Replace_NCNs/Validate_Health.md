@@ -38,4 +38,8 @@ The following procedures can be run from any master or worker node.
    **NOTE:**
    The following errors can be ignored `Server URL: http://$NODE ... ERROR: Server endpoint could not be reached`, if $NODE has been removed and it is one of the first three worker, master or storage nodes.
 
+   **NOTE:**
+   If workers have been removed and the worker count is currently at two, the following failures can be ignored. A re-check will be needed once workers are added and the count returns to three or above.
+   - Verify cray etcd is healthy
+
 The procedure is complete. [Return to Main Page](../Add_Remove_Replace_NCNs.md). 
