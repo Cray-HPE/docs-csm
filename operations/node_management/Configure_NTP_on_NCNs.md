@@ -34,6 +34,11 @@ recommended method.
       ```bash
       ncn-m001# vi data.json
       ncn-m001# systemctl restart basecamp
+      ```
+      
+      Run the NTP script on each node.
+      
+      ```bash
       ncn# /srv/cray/scripts/metal/set-ntp-config.sh
       ```
 
@@ -174,7 +179,7 @@ These issues all relate to certain nodes not being in a correct state.
 
 ##### Correct State
 
-ncn-m001 should have these important settings in `/etc/chrony.d/cray.conf`:
+`ncn-m001` should have these important settings in `/etc/chrony.d/cray.conf`:
 
 ```
 server time.nist.gov iburst trust
@@ -214,7 +219,7 @@ peer ncn-w003 minpoll -2 maxpoll 9 iburst
 
 ##### Quick Fixes
 
-###### Fix ncn-m001
+###### Fix `ncn-m001`
 
 Most of the bugs from 0.9.x+ carried forward with upgrades. Most commonly, ncn-m001 is the problem as it either does not have a valid upstream, or has a bad config. This can be quickly remedied by running three commands to download the latest `cc_ntp` module, downloading an updated template, and re-running cloud-init.
 
@@ -228,13 +233,19 @@ cloud-init single --name ntp --frequency always
 
 The other NCNs sometimes have the wrong stratum set or are missing the `initstepslew` directive. These can be added in fairly quickly with some `sed` commands:
 
+Increase the stratum on NCNs (other than `ncn-m001`):
+```bash
+ncn# sed -i "s/local stratum 3 orphan/local stratum 10 orphan/" /etc/chrony.d/cray.conf
 ```
-# increase the stratum on non-ncn-m001 NCNs
-sed -i "s/local stratum 3 orphan/local stratum 10 orphan/" /etc/chrony.d/cray.conf
-# add a new line after the logchange directive
-sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 ncn-m001" /etc/chrony.d/cray.conf
-# restart
-systemctl restart chronyd
+
+Add a new line after the logchange directive
+```bash
+ncn# sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 ncn-m001" /etc/chrony.d/cray.conf
+```
+
+Restart `chronyd`
+```bash
+ncn# systemctl restart chronyd
 ```
 
 
@@ -338,7 +349,7 @@ there. You can find a list of timezones to use in the commands below by running 
 <a name="configure_ncn_images_to_use_local_timezone"></a>
 #### Configure NCN Images to Use Local Timezone
 
-Adjust the node images so that they also boot in the local timezone. This is accomplished by `chroot`ing into the unsquashed images, making some modifications, and then squashing it back up and moving the new images into place.  This is included as an optional image modification step in the two procedures below.
+Adjust the node images so that they also boot in the local timezone. This is accomplished by `chroot`ing into the unsquashed images, making some modifications, and then squashing it back up and moving the new images into place. This is included as an optional image modification step in the two procedures below.
 
 1. If the PIT node is booted, see
 [Change NCN Image Root Password and SSH Keys on PIT Node](../security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)

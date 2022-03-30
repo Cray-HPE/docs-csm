@@ -297,7 +297,7 @@ for more information.
       ```
 
 2. Use this procedure to change the root password in Vault and the CSM layer of configuration
-applied during NCN Personalizaion. Usually this configuration is done during the first time installation
+applied during NCN Personalization. Usually this configuration is done during the first time installation
 of CSM software, but if was not done then, it should be done now. See
 [Update NCN Passwords](../../operations/security_and_authentication/Update_NCN_Passwords.md) and
 [full NCN personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password)
