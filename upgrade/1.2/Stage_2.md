@@ -40,18 +40,18 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
 1. Copy arfifacts from `ncn-m001`
 
    ```bash
-   mkdir -p /etc/cray/upgrade/csm/${$CSM_RELEASE}
+   ncn-m002# mkdir -p /etc/cray/upgrade/csm/${$CSM_RELEASE}
 
-   scp ncn-m001:/etc/cray/upgrade/csm/${$CSM_RELEASE}/myenv /etc/cray/upgrade/csm/${$CSM_RELEASE}/myenv
+   ncn-m002# scp ncn-m001:/etc/cray/upgrade/csm/${$CSM_RELEASE}/myenv /etc/cray/upgrade/csm/${$CSM_RELEASE}/myenv
 
-   csi_rpm=$(ssh ncn-m001 "find /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}/rpm/cray/csm/ -name 'cray-site-init*.rpm'")
+   ncn-m002# csi_rpm=$(ssh ncn-m001 "find /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}/rpm/cray/csm/ -name 'cray-site-init*.rpm'")
 
-   scp ncn-m001:${csi_rpm} /tmp/cray-site-init.rpm
+   ncn-m002# scp ncn-m001:${csi_rpm} /tmp/cray-site-init.rpm
 
-   scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-*.noarch.rpm
+   ncn-m002# scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-*.noarch.rpm
 
 
-   rpm -Uvh --force /tmp/cray-site-init.rpm
+   ncn-m002# rpm -Uvh --force /tmp/cray-site-init.rpm
    ```
 
 1. Upgrade `ncn-m001`

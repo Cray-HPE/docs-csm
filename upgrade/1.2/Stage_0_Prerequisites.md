@@ -200,7 +200,7 @@ ncn-m001# export SW_ADMIN_PASSWORD=sw1tCH@DM1Np4s5w0rd
 > and updated as the default `admin` password when Nexus is upgraded.
 
 - ```bash
-  /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE]
+  ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE]
   ```
 
 **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. **IF** the upgrade `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
