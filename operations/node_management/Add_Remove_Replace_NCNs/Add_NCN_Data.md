@@ -170,7 +170,7 @@ Scenarios where this procedure is applicable:
 
         2.  Set the `BMC_IP` environment variable based on the output the previous step:
             ```bash
-            ncn-m# export BMC_IP=10.254.1.28
+            ncn-m# export BMC_IP=10.254.1.20
             ```
 
         3.  Ping the BMC to see if it is reachable:
@@ -367,6 +367,8 @@ Scenarios where this procedure is applicable:
     ncn-m# ping $NODE-mgmt
     ```
 
+    Wait 5 minutes for kea and state manager to sync. If ping continues to fail, re-run the above step to restart the BMC.
+
 7.  Restart the REDS deployment:
     ```
     ncn-m# kubectl -n services rollout restart deployment cray-reds
@@ -451,7 +453,7 @@ Scenarios where this procedure is applicable:
     ```
     ID = "x3000c0s11b0n0"
     Type = "Node"
-    State = "Ready"
+    State = "Off"
     Flag = "OK"
     Enabled = true
     Role = "Management"
