@@ -4,7 +4,7 @@ This CSM Overview describes the Cray System Management ecosystem with its hardwa
 
 The CSM installation prepares and deploys a distributed system across a group of management nodes organized into a Kubernetes cluster which uses Ceph for utility storage. These nodes perform their function as Kubernetes master nodes, Kubernetes worker nodes, or utility storage nodes with the Ceph storage.
 
-System services on these nodes are provided as containerized micro-services packaged for deployment via Helm charts. Kubernetes orchestrates these services and schedules them on Kubernetes worker nodes with horizontal scaling. Horizontal scales increases or decreases the number of services instances demand for them varies, such as when booting many compute nodes or application nodes.
+System services on these nodes are provided as containerized micro-services packaged for deployment via Helm charts. Kubernetes orchestrates these services and schedules them on Kubernetes worker nodes with horizontal scaling. Horizontal scaling increases or decreases the number of services' instances as demand for them varies, such as when booting many compute nodes or application nodes.
 
 ### Topics:
    1. [System Nodes and Networks](#system_nodes_and_networks)
@@ -139,8 +139,8 @@ is no single point of failure. The design of the system allows for resiliency in
    the total balance of pods. It is less significant to lose one of the worker nodes if the system has more
    than three worker nodes because there are more worker nodes able to handle the pod load.
    * The state and configuration of the Kubernetes cluster are stored in an etcd cluster distributed across the
-   Kubernetes master nodes. This cluster is also backed up on an interval, and backups are pushed to Ceph
-   Rados Gateway (S3).
+   Kubernetes master nodes. This cluster is also backed up on an interval, and backups are pushed to the
+   local cluster's Ceph Rados Gateway (S3).
    * A micro-service can run on any node that meets the requirements for that micro-service, such as appropriate
    hardware attributes, which are indicated by Kubernetes labels and taints.
    * All micro-services have shared persistent storage so that they can be restarted on any worker node in the Kubernetes

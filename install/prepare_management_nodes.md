@@ -1,6 +1,6 @@
 # Prepare Management Nodes
 
-The procedures described on this page are being done before any node is booted with the Cray Pre-Install Toolkit. When the PIT node is referenced during these procedures, it means the node that will be be booted as the PIT node.
+The procedures described on this page must be completed before any node is booted with the Cray Pre-Install Toolkit which is performed in a later document. When the PIT node is referenced during these procedures, it means the node that will be booted as the PIT node.
 
 ## Topics
 

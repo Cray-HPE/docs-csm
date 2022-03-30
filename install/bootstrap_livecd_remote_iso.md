@@ -1,7 +1,7 @@
 # Bootstrap PIT Node from LiveCD Remote ISO
 
-The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available
-to bootstrap the PIT node--the RemoteISO or a bootable USB device. This procedure describes using the
+The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two install medias available
+to bootstrap the PIT node: the RemoteISO or a bootable USB device. This procedure describes using the
 RemoteISO. If not using the RemoteISO, see [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
 
 The installation process is similar to the USB based installation with adjustments to account for the
@@ -122,7 +122,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    ```
 
 1. <a name="set-up-site-link"></a>Set up the site-link, enabling SSH to work. You can reconnect with SSH after this step.
-   > **`NOTICE REGARDING DHCP`** If your site's network authority or network administrator has already provisioned an IPv4 address for your master node(s) external NIC(s), **then skip this step**.
+   > **`Note:`** If your site's network authority or network administrator has already provisioned a DHCP given IPv4 address for your master node(s) external NIC(s), **then skip this step**.
+
 
    1. Setup Variables.
 
@@ -137,8 +138,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# site_nics=em1
       ```
 
-   1. Run the link setup script.
-      > **`NOTE : USAGE`** All of the `/root/bin/csi-*` scripts are harmless to run without parameters, doing so will dump usage statements.
+   1. Run the site-link setup script.
+      > **`Note:`** All of the `/root/bin/csi-*` scripts are harmless to run without parameters, doing so will dump usage statements.
 
       ```bash
       pit# /root/bin/csi-setup-lan0.sh $site_ip $site_gw $site_dns $site_nics
@@ -169,7 +170,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       ```bash
       pit# hostnamectl
       ```
-      > **`NOTE`** If the hostname returned by the `hostnamectl` command is still `pit`, then re-run the above script with the same parameters. Otherwise an administrator should feel free to set the hostname by hand with `hostnamectl`, please continue to use the `-pit` suffix to prevent masquerading a PIT node as a real NCN to administrators and automation.
+      > **`Note:`** If the hostname returned by the `hostnamectl` command is still `pit`, then re-run the above csi-set-hostname.sh script with the same parameters. Otherwise an administrator should feel free to set the hostname by hand with `hostnamectl`, please continue to use the `-pit` suffix to prevent masquerading a PIT node as a real NCN to administrators and automation.
 
 1. Find a local disk for storing product installers.
 
@@ -186,10 +187,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     because it/they are in use. As a result, the old partition(s) will remain in use. You should reboot now before making 
     further changes.
     ```
-
     In that case, the following steps may resolve the problem without needing to reboot. These commands will remove 
-    volume groups and raid arrays that may be using the disk. **These commands only need to be run if the earlier 
-    `parted` command failed.**
+    volume groups and raid arrays that may be using the disk.
+    **`Note:`** These commands only need to be run if the earlier `parted` command failed.
     
     ```bash
     pit# RAIDS=$(grep "${disk}[0-9]" /proc/mdstat | awk '{ print "/dev/"$1 }')
@@ -204,7 +204,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 1. Mount local disk, check the output of each command as it goes.
    
-   > **`NOTE`** The FSLabel `PITDATA` is already in `/etc/fstab`, so the path is omitted in the following calls to `mount`.
+   > **`Note:`** The FSLabel `PITDATA` is already in `/etc/fstab`, so the path is omitted in the following calls to `mount`.
 
     ```bash
     pit# mount -v -L PITDATA
@@ -225,7 +225,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Download the CSM software release to the PIT node.
 
    **Important:** In an earlier step, the CSM release plus any patches or hotfixes
-   was downloaded to a system using the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
+   was downloaded to a system using the instructions in [Update CSM Product Stream](../update_product_stream/index.md).
    Either copy from that system to the PIT node or set the ENDPOINT variable to URL and use `wget`.
 
    1. Set helper variables
@@ -270,7 +270,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
             rsync -a -P --delete ${CSM_PATH}/images/storage-ceph/ /var/www/ephemeral/data/ceph/
       ```
 
-   > The PIT ISO, Helm charts/images, and bootstrap RPMs are now available in the extracted CSM tar.
+   > **`Note:`** The PIT ISO, Helm charts/images, and bootstrap RPMs are now available in the extracted CSM tar.
 
 1. Install/upgrade CSI; check if a newer version was included in the tar-ball.
 
@@ -312,12 +312,12 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 <a name="generate-installation-files"></a>
 #### 4.1 Generate Installation Files
 
-Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if one has not already prepared the information for this system.
+Some files are needed for generating the configuration payload. See the [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload) and [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files) topics if one has not already prepared the information for this system.
 
 * [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload)
 * [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files)
 
-1. At this time see [Create HMN Connections JSON](create_hmn_connections_json.md) for instructions about creating the `hmn_connections.json`.
+1. At this time see [Create HMN Connections JSON](create_hmn_connections_json.md) for instructions about creating the `hmn_connections.json`. Return to this section when completed.
 
 1. Change into the preparation directory plus necessary PIT directories (for later):
 
@@ -347,7 +347,7 @@ Some files are needed for generating the configuration payload. See these topics
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
 
-   > **`SKIP STEP IF`** if the `system_config.yaml` file is unavailable please skip this step and move onto the next one in order to generate the first configuration payload.
+   > **`Warning:`** if the `system_config.yaml` file is unavailable please skip this step and move onto the next one 4.1.b in order to generate the first configuration payload.
 
    1. Check for the configuration files. The needed files should be in the current directory.
 
@@ -374,20 +374,20 @@ Some files are needed for generating the configuration payload. See these topics
 
    1. Generate the system configuration
 
-      > **`NOTE`** for those more familiar with a CSM Install, this step may be skipped entirely by simple invoking pit-intas detailed in the [#first time](#bring---up-the-pit-services-and-validate-pit-health) section.
+      > **`Note:`** for those more familiar with a CSM Install, this step may be skipped entirely by simple invoking pit-intas detailed in the [#first time](#bring---up-the-pit-services-and-validate-pit-health) section.
 
       ```bash
       pit:/var/www/ephemeral/prep/# csi config init
 
       # Verify the newly generated configuration payload's `system_config.yaml` matches the current version of CSI.
-      # NOTE: Keep this new system_config.yaml somewhere safe to facilitate re-installs.
+      # Note: Keep this new system_config.yaml somewhere safe to facilitate re-installs.
       pit:/var/www/ephemeral/prep/# cat ${SYSTEM_NAME}/system_config.yaml
       pit:/var/www/ephemeral/prep/# csi version
       ```
 
       A new directory matching your `--system-name` argument will now exist in your working directory.
 
-      > **`NOTE`** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
+      > **`Note:`** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
       >
       > 1. The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
       >   ```bash
@@ -417,21 +417,21 @@ Some files are needed for generating the configuration payload. See these topics
 
    1. Check for the configuration files. The needed files should be in the current directory.
 
-      > **`NOTE`** for those more familiar with a CSM Install, this step may be skipped entirely by simple invoking pit-intas detailed in the [#first time](#bring---up-the-pit-services-and-validate-pit-health) section.
+      > **`Note:`** for those more familiar with a CSM Install, this step may be skipped entirely by simple invoking pit-intas detailed in the [#first time](#bring---up-the-pit-services-and-validate-pit-health) section.
 
       ```bash
       pit:/var/www/ephemeral/prep/# ls -1
       ```
 
-   Expected output looks similar to the following:
+       1. Expected output looks similar to the following:
 
-      ```
-      application_node_config.yaml
-      cabinets.yaml
-      hmn_connections.json
-      ncn_metadata.csv
-      switch_metadata.csv
-      ```
+          ```
+          application_node_config.yaml
+          cabinets.yaml
+          hmn_connections.json
+          ncn_metadata.csv
+          switch_metadata.csv
+          ```
 
    1. Verify that the `SYSTEM_NAME` variable is set.
 
@@ -440,7 +440,7 @@ Some files are needed for generating the configuration payload. See these topics
       ```
 
    1. Generate the system config:
-      > **`NOTE`** the provided command below is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary significatnly depending on ones system and site configuration.
+      > **`Note:`** the provided command below is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary significatnly depending on ones system and site configuration.
 
       ```bash
       pit:/var/www/ephemeral/prep/# csi config init \
@@ -519,28 +519,28 @@ Some files are needed for generating the configuration payload. See these topics
 <a name="prepare-site-init"></a>
 #### 4.2 Prepare Site Init
 
-First, prepare a shim to facilitate going through the site-init guide:
+1. First, prepare a shim to facilitate going through the site-init guide:
 
- ```bash
- pit# mkdir -vp /mnt/pitdata
- pit# mount -v --bind /var/www/ephemeral/ /mnt/pitdata/
- ```
+    ```bash
+    pit# mkdir -vp /mnt/pitdata
+    pit# mount -v --bind /var/www/ephemeral/ /mnt/pitdata/
+    ```
 
-Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for your system.
+1. Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for your system.
 
-Finally, cleanup the shim:
- ```bash
- pit# cd ~
- # this uses `rmdir` to safely remove the directory, preventing accidental removal if one does not notice a `umount` command failure.
- pit# umount -v /mnt/pitdata/
- pit# rmdir -v /mnt/pitdata
- ```
+1. Finally, cleanup the shim:
+    ```bash
+    pit# cd ~
+    # this uses `rmdir` to safely remove the directory, preventing accidental removal if one does not notice a `umount` command failure.
+     pit# umount -v /mnt/pitdata/
+     pit# rmdir -v /mnt/pitdata
+     ```
 
 <a name="bring---up-the-pit-services-and-validate-pit-health"></a>
 ### 5. Bring-up the PIT Services and Validate PIT Health
 
 1. Set the same variables from the `csi config init` step from earlier, and then invoke "PIT init" to setup the PIT server for deploying NCNs.
-   > **`NOTE`** `pit-init` will re-run `csi config init`, copy all generated files into place, apply the CA patch, and finally restart daemons. This will also re-print the `metalid.sh` content in case it was skipped in the previous step. **Re-installs** can skip running `csi config init` entirely and simply run `pit-init.sh` after gathering CSI input files into `/var/www/ephemeral/prep`.
+   > **`Note`** `pit-init` will re-run `csi config init`, copy all generated files into place, apply the CA patch, and finally restart daemons. This will also re-print the `metalid.sh` content in case it was skipped in the previous step. **Re-installs** can skip running `csi config init` entirely and simply run `pit-init.sh` after gathering CSI input files into `/var/www/ephemeral/prep`.
 
     ```bash
     pit# export USERNAME=root

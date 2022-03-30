@@ -52,7 +52,7 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC Addresses, so seve
 1. Remove the incorrectly generated configs. Before deleting the incorrectly generated configs consider
 making a backup of them, in case they need to be examined at a later time.
 
-   > **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set.
+   > **`Warning`** Ensure that the `SYSTEM_NAME` environment variable is correctly set.
 
    ```bash
    pit# export SYSTEM_NAME=eniac
@@ -130,11 +130,11 @@ making a backup of them, in case they need to be examined at a later time.
 
 1. Check that IP addresses are set for each interface and investigate any failures.
 
-  > Note that bond0.can0 is optional in CSM 1.2+
+    > **`Note:`** Note that bond0.can0 is optional in CSM 1.2+
 
-    1. Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
+    ```bash
+    Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
 
-       ```bash
        pit# wicked show bond0 bond0.nmn0 bond0.hmn0 bond0.can0
        bond0           up
        link:     #7, state up, mtu 1500
@@ -164,7 +164,7 @@ making a backup of them, in case they need to be examined at a later time.
        config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.hmn0
        leases:   ipv4 static granted
        addr:     ipv4 10.254.1.4/17 [static]
-       ```
+    ```
 
 1. Copy the service config files generated earlier by `csi config init` for DNSMasq, Metal
    Basecamp (cloud-init), and Conman.
@@ -278,7 +278,7 @@ making a backup of them, in case they need to be examined at a later time.
    system_config.yaml
    ```
 
-   Regenerate the system configuration. The `system_config.yaml` file contains all of the options that where used to generate the initial system configuration, and can be used in place of specifying CLI flags to CSI.
+   Regenerate the system configuration. The `system_config.yaml` file contains all of the options that were used to generate the initial system configuration, and can be used in place of specifying CLI flags to CSI.
    ```bash
    pit# csi config init
    ```
@@ -316,11 +316,11 @@ making a backup of them, in case they need to be examined at a later time.
 
 1. Check that IP addresses are set for each interface and investigate any failures.
 
-  > Note that bond0.can0 is optional in CSM 1.2+
-  
-    1. Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
+    > **`Note:`** Note that bond0.can0 is optional in CSM 1.2+
 
-       ```bash
+    ```bash
+    Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
+
        pit# wicked show bond0 bond0.nmn0 bond0.hmn0 bond0.can0
        bond0           up
        link:     #7, state up, mtu 1500
@@ -350,7 +350,7 @@ making a backup of them, in case they need to be examined at a later time.
        config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.hmn0
        leases:   ipv4 static granted
        addr:     ipv4 10.254.1.4/17 [static]
-       ```
+    ```
 
 1. Copy the service config files generated earlier by `csi config init` for DNSMasq, Metal
    Basecamp (cloud-init), and Conman.
