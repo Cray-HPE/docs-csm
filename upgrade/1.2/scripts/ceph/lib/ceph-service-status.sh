@@ -225,7 +225,7 @@ check_ceph_health_basic
 
 if [[ $verbose == "true" ]]
 then
-  echo "Updating ssh keys.."
+  echo "Updating SSH keys.."
 fi
 
 truncate --size=0 ~/.ssh/known_hosts  2>&1

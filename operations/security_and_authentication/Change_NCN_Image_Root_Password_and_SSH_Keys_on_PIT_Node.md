@@ -1,6 +1,6 @@
 ## Change NCN Image Root Password and SSH Keys on PIT Node
 
-Customize the NCN images by changing the root password or adding different ssh keys for the root account.
+Customize the NCN images by changing the root password or adding different SSH keys for the root account.
 This procedure shows this process being done on the PIT node during a first time installation of the CSM
 software.
 
@@ -10,9 +10,9 @@ There is some common preparation before making the Kubernetes image for master n
 
 ### Common Preparation
 
-1. Prepare new ssh keys on the PIT node for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
+1. Prepare new SSH keys on the PIT node for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
 
-   Either replace the root public and private ssh keys with your own previously generated keys or generate a new pair with `ssh-keygen(1)`. By default `ssh-keygen` will create an RSA key, but other types could be chosen and different filenames would need to be substituted in later steps.
+   Either replace the root public and private SSH keys with your own previously generated keys or generate a new pair with `ssh-keygen(1)`. By default `ssh-keygen` will create an RSA key, but other types could be chosen and different filenames would need to be substituted in later steps.
 
    ```bash
    pit# mkdir /root/.ssh
@@ -46,7 +46,7 @@ The Kubernetes image is used by the master and worker nodes.
    pit# mv -v *squashfs *kernel initrd* old
    ```
 
-1. Copy the generated public and private ssh keys for the root account into the image.
+1. Copy the generated public and private SSH keys for the root account into the image.
 
    This example assumes that an RSA key was generated.
 
@@ -54,7 +54,7 @@ The Kubernetes image is used by the master and worker nodes.
    pit# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub squashfs-root/root/.ssh
    ```
 
-1. Add the public ssh key for the root account to `authorized_keys`.
+1. Add the public SSH key for the root account to `authorized_keys`.
 
    This example assumes that an RSA key was generated so it adds the id_rsa.pub file to authorized_keys.
 
@@ -201,7 +201,7 @@ The Ceph image is used by the utility storage nodes.
    pit# mv -v *squashfs *kernel initrd* old
    ```
 
-1. Copy the generated public and private ssh keys for the root account into the image.
+1. Copy the generated public and private SSH keys for the root account into the image.
 
    This example assumes that an RSA key was generated.
 
@@ -209,7 +209,7 @@ The Ceph image is used by the utility storage nodes.
    pit# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub squashfs-root/root/.ssh
    ```
 
-1. Add the public ssh key for the root account to `authorized_keys`.
+1. Add the public SSH key for the root account to `authorized_keys`.
 
    This example assumes that an RSA key was generated so it adds the id_rsa.pub file to authorized_keys.
 
