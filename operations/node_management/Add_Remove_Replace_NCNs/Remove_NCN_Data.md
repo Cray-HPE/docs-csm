@@ -130,4 +130,4 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
     Not found: x3000c0s26b0n0
     ```
 
-[Next Step Remove Switch Config](Remove_Switch_Config.md)
+Proceed to the next step to [Remove Switch Config](Remove_Switch_Config.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.

@@ -200,7 +200,6 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
     ncn-m001# ip a show lan0
     ```
 
-<<<<<<< HEAD
 ### Step 9 - Validate the node
 
 Follow the validation steps in the section for the node type that was added:
@@ -209,6 +208,4 @@ Follow the validation steps in the section for the node type that was added:
 - [Storage node](Add_Storage_Node_Validation.md)
 - [Master node](Add_Master_Node_Validation.md)
 
-=======
-[Next Step Redeploy Services](Redeploy_Services.md)
->>>>>>> Refactored the docs - adjusted steps, refactored some files, and provided links between steps
+Proceed to the next step to [Redeploy Services](Redeploy_Services.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.

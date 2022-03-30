@@ -4,11 +4,11 @@ This procedure redeploys S3 and SYSMGMT_HEALTH services to add or remove storage
 
 **This procedure can be skipped if a worker or master node have been added.** 
 
-- Proceed to [Next Step Validate NCN](Validate_NCN.md)
+- Proceed to the next step to [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
 
 **This procedure can be skipped if a worker or master node have been removed.**
 
-- Proceed to [Next Step Validate Health](Validate_Health.md)
+- Proceed to the next step to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
 
 Otherwise proceed with the following if a storage node has been added or removed.
 
@@ -264,7 +264,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
    ncn-mw# rm /tmp/customizations.yaml /tmp/customizations.original.yaml /tmp/customizations.original.yaml.pretty
    ```
 
-Proceed to the next steps:
+Proceed to the next step:
 
-- Added Storage NCN : [Next Step Validate NCN](Validate_NCN.md)
-- Removed Storage NCN : [Next Step Validate Health](Validate_Health.md)
+- Added Storage NCN : [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
+- Removed Storage NCN : [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page. 

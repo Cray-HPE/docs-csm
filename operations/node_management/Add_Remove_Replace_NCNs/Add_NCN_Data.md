@@ -462,4 +462,4 @@ Scenarios where this procedure is applicable:
     Class = "River"
     ```
 
-[Next Step Update Firmware](Update_Firmware.md)
+Proceed to the next step to [Update Firmware](Update_Firmware.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
