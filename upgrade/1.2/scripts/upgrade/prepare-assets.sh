@@ -76,7 +76,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
     reqSpace=80000000 # ~80GB
     availSpace=$(df "$HOME" | awk 'NR==2 { print $4 }')
     if (( availSpace < reqSpace )); then
-        echo "Not enough space, required: $reqSpace, available space: $availSpace" >&2
+        echo "Not enough space; required: $reqSpace, available space: $availSpace" >&2
         exit 1
     fi
 
