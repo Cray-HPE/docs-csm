@@ -140,3 +140,4 @@ Power up storage nodes in the following sequence:
     [n000]# cscli mount -f cls01234
     ```
 
+##### Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.
