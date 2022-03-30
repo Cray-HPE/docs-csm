@@ -258,15 +258,10 @@ def get_network_list(sls_networks):
     network_list = set()
 
     for network in sls_networks:
-        print ('1')
         if 'ExtraProperties' in network:
-            print ('2')
             if 'Subnets' in network['ExtraProperties']:
-                print ('3')
                 for subnet in network['ExtraProperties']['Subnets']:
-                    print (f'4 {subnet}')
                     if 'FullName' in subnet and 'Bootstrap' in subnet['FullName']:
-                        print ('5')
                         network_list.add(network['Name'])
 
 def delete_kea_lease(ip, token):
