@@ -4,7 +4,7 @@ The procedures in this section detail the high-level tasks required to power on 
 
 **Important:** If an emergency power off \(EPO\) event occurred, see [Recover from a Liquid Cooled Cabinet EPO Event](Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) for recovery procedures.
 
-If user id's and/or passwords are needed, see Procedure, Step 1 of [Prepare_the_System_for_Power_Off](Prepare_the_System_for_Power_Off.md#procedure).
+If user id's and/or passwords are needed, see Procedure, Step 1 of the [Prepare_the_System_for_Power_Off](Prepare_the_System_for_Power_Off.md#procedure).
 
 ### Note about Services Used During System Power On
 
@@ -26,7 +26,7 @@ To power on the management cabinet and bring up the management Kubernetes cluste
 
 ### Power on Compute and IO Cabinets
 
-To power on all liquid-cooled cabinet CDUs and cabinet PDUs, refer to [Power On Compute and IO Cabinets](Power_On_Compute_and_IO_Cabinets.md)
+To power on all liquid-cooled cabinet CDUs and cabinet PDUs, refer to [Power On Compute and IO Cabinets](Power_On_Compute_and_IO_Cabinets.md).
 
 ### Power on the External Lustre File System
 
