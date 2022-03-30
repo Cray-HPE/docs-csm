@@ -40,15 +40,15 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
 1. Copy arfifacts from `ncn-m001`
 
    ```bash
-   ncn-m002# mkdir -p /etc/cray/upgrade/csm/${$CSM_RELEASE}
+   ncn-m002# mkdir -p /etc/cray/upgrade/csm/${CSM_RELEASE}
 
-   ncn-m002# scp ncn-m001:/etc/cray/upgrade/csm/${$CSM_RELEASE}/myenv /etc/cray/upgrade/csm/${$CSM_RELEASE}/myenv
+   ncn-m002# scp ncn-m001:/etc/cray/upgrade/csm/myenv /etc/cray/upgrade/csm/myenv
 
    ncn-m002# csi_rpm=$(ssh ncn-m001 "find /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}/rpm/cray/csm/ -name 'cray-site-init*.rpm'")
 
    ncn-m002# scp ncn-m001:${csi_rpm} /tmp/cray-site-init.rpm
 
-   ncn-m002# scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-*.noarch.rpm
+   ncn-m002# scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-latest.noarch.rpm
 
 
    ncn-m002# rpm -Uvh --force /tmp/cray-site-init.rpm
