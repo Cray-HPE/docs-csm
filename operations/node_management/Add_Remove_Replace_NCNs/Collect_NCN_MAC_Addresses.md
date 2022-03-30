@@ -48,7 +48,7 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
 
     2.  In another terminal capture the NCN's Serial Over Lan (SOL) console:
         ```bash
-        ncn-m# export BMC_IP=10.254.1.28
+        ncn-m# export BMC_IP=10.254.1.20
         ncn-m# export IPMI_PASSWORD=changeme
         ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP sol activate
         ```
@@ -69,10 +69,12 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
     4.  Watch the NCN SOL console and wait for the following output to appear. The output below shows the mapping of MAC addresses to interfaces names (mgmt0, mgmt1, hsn0, lan0, etc..)
         ```
         ====DEVICE NAMING=======================================================
-        net0 MAC b8:59:9f:d9:9d:a8
-        net0 is mgmt0
-        net1 MAC b8:59:9f:d9:9d:a9
-        net1 is mgmt1
+        net0 MAC ec:0d:9a:d4:2b:d8
+        net0 is hsn0
+        net1 MAC 98:03:9b:bb:a9:94
+        net1 is mgmt0
+        net2 MAC 98:03:9b:bb:a9:95
+        net2 is mgmt1
         MAC Address collection completed. Please power the node off now via ipmitool.
         ```
 
@@ -80,8 +82,9 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
 
         | Interface | MAC Address         | CLI Flag
         | --------- | ------------------- | -------- 
-        | mgmt0     | `b8:59:9f:d9:9d:a8` | `--mac-mgmt0=b8:59:9f:d9:9d:a8`
-        | mgmt1     | `b8:59:9f:d9:9d:a9` | `--mac-mgmt1=b8:59:9f:d9:9d:a9`
+        | mgmt0     | `98:03:9b:bb:a9:94` | `--mac-mgmt0=98:03:9b:bb:a9:94`
+        | mgmt1     | `98:03:9b:bb:a9:95` | `--mac-mgmt1=98:03:9b:bb:a9:95`
+        | hsn0      | `ec:0d:9a:d4:2b:d8` | `--mac-hsn0=ec:0d:9a:d4:2b:d8`
         
     5.  Power off the NCN:
         ```bash
