@@ -68,6 +68,8 @@ The CephNetworkPacketsDropped alert does not necessarily indicate there are pack
 
 Alerts for CPUThrottlingHigh on gatekeeper-audit can be ignored. This pod is not utilized in this release.
 
+Alerts for CPUThrottlingHigh on gatekeeper-controller-manager can be ignored. This has low CPU requests, and it is normal for it to spike when it is in use.
+
 Alerts for CPUThrottlingHigh on CFS services such as cfs-batcher and cfs-trust can be ignored. Because CFS is idle most of the time these services have low CPU requests, and it is normal for CFS service resource usage to spike when it is in use.
 
 
@@ -86,7 +88,7 @@ Alerts for PostgresqlFollowerReplicationLagSMA on sma-postgres-cluster pods with
 <a name="highrollbackrate"></a>
 ## PostgresqlHighRollbackRate
 
-Alerts for PostgresqlHighRollbackRate on spire-postgres pods can be ignored. This is caused by an idle session that requires a timeout. This will be fixed in a future release.
+Alerts for PostgresqlHighRollbackRate on spire-postgres and smd-postgres pods can be ignored. This is caused by an idle session that requires a timeout. This will be fixed in a future release.
 
 
 <a name="inactiveslot"></a>
