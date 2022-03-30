@@ -6,21 +6,21 @@
 
 1. Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`. Follow output of the script carefully. The script will pause for manual interaction.
 
-    ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
-    ```
-    
+   ```bash
+   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
+   ```
+
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
 ## Stage 2.2
 
 1. Run `ncn-upgrade-worker-nodes.sh` for `ncn-w001`. Follow output of the script carefully. The script will pause for manual interaction.
 
-    ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001
-    ```
-    
-    > NOTE: You may need to reset the root password for each node after it is rebooted
+   ```bash
+   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001
+   ```
+
+   > NOTE: You may need to reset the root password for each node after it is rebooted
 
 1. Repeat the previous step for each other worker node, one at a time.
 
@@ -30,76 +30,59 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
 
 1. Authenticate with the Cray CLI on `ncn-m002`.
 
-    See [Configure the Cray Command Line Interface](../../operations/configure_cray_cli.md) for details on how to do this.
+   See [Configure the Cray Command Line Interface](../../operations/configure_cray_cli.md) for details on how to do this.
 
 1. Set the `CSM_RELEASE` variable to the correct value for the CSM release upgrade being applied.
 
-    ```bash
-    ncn-m002# CSM_RELEASE=csm-1.2.0
-    ```
+   ```bash
+   ncn-m002# CSM_RELEASE=csm-1.2.0
+   ```
 
 1. Install document RPM and run check script on `ncn-m002`
 
-    * Option 1 - Internet Connected Environment
+   - Option 1 - Internet Connected Environment
 
-        1. Install document RPM package:
+     1. Install document RPM package:
 
-            > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
+        > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
 
-            ```bash
-            ncn-m002# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm -P /root
-            ncn-m002# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-            ```
+        ```bash
+        wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm -P /root
 
-        1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release tarball.
-        
-            In other words, the full URL to the CSM release tarball will be `${ENDPOINT}${CSM_RELEASE}.tar.gz`
-        
-            **NOTE** This step is optional for Cray/HPE internal installs.
-        
-            ```bash
-            ncn-m002# ENDPOINT=https://put.the/url/here/
-            ```
+        rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+        ```
 
-        1. Run the script
-        
-            **NOTE** The `--endpoint` argument is optional for Cray/HPE internal use.
+   - Option 2 - Air Gapped Environment
 
-            ```bash
-            ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --endpoint $ENDPOINT
-            ```
+     1. Copy the docs-csm RPM package and CSM release tarball to `ncn-m002`.
 
-    * Option 2 - Air Gapped Environment
+     1. Install document RPM package:
 
-        1. Copy the docs-csm RPM package and CSM release tarball to `ncn-m002`.
+        > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
 
-        1. Install document RPM package:
+        ```bash
+        rpm -Uvh --force /root/docs-csm-*.noarch.rpm
+        ```
 
-            > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
+1. Copy arfifacts from `ncn-m001`
 
-            ```bash
-            ncn-m002# rpm -Uvh --force /root/docs-csm-*.noarch.rpm
-            ```
+   ```bash
+   mkdir -p /etc/cray/upgrade/csm/${$CSM_RELEASE}
 
-        1. Set the `TAR_DIR` variable to the directory on `ncn-m002` containing the CSM release tarball.
-        
-            In other words, the full path to the CSM release tarball will be `${TAR_DIR}/${CSM_RELEASE}.tar.gz`
+   scp ncn-m001:/etc/cray/upgrade/csm/${$CSM_RELEASE}/myenv /etc/cray/upgrade/csm/${$CSM_RELEASE}/myenv
 
-            ```bash
-            ncn-m002# TAR_DIR=/path/to/tarball/dir
-            ```
+   csi_rpm=$(ssh ncn-m001 "find /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}/rpm/cray/csm/ -name 'cray-site-init*.rpm'")
 
-        1. Run the script
+   scp ncn-m001:${csi_rpm} /tmp/cray-site-init.rpm
 
-            ```bash
-            ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --tarball-file ${TAR_DIR}/${CSM_RELEASE}.tar.gz
-            ```
+   rpm -Uvh --force /tmp/cray-site-init.rpm
+   ```
 
 1. Upgrade `ncn-m001`
 
-    ```bash
-    ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
-    ```
+   ```bash
+   ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
+   ```
 
 ## Stage 2.4
 
