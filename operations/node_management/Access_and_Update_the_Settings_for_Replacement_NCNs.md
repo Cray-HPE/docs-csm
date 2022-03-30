@@ -22,6 +22,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     ```
 
 2.  Connect to the BMC with the default login credentials. Contact service for the default credentials.
+    > Default credentials for the Administrator user on HPE NCNs can be found on the serial label pull out tab attached to the server. See [this page for more information](https://support.hpe.com/hpesc/public/docDisplay?docId=sf000046874en_us&docLocale=en_US).
 
     ```bash
     ncn# export USERNAME=defaultuser
@@ -31,14 +32,17 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     ```
 
     **Troubleshooting:** Follow the steps below if the credentials are not available:
+    1. Gigabyte NCN Troubleshooting
+       1. Power cycle the replacement NCN.
+       2. Boot into Linux.
+       3. Use the factory reset command to regain access to the BMC login credentials.
 
-    1.  Power cycle the replacement NCN.
-    2.  Boot into Linux.
-    3.  Use the factory reset command to regain access to the BMC login credentials.
-
-        ```bash
-        ncn# ipmitool raw 0x32 0x66
-        ```
+           ```bash
+           linux# ipmitool raw 0x32 0x66
+           ```
+    2.  HPE NCN Troubleshooting
+        
+        __Coming soon__
 
 3.  Determine if the root user is configured.
 
@@ -103,7 +107,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
         ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt sol payload enable 1 4
         ```
 
-5.  Verify the root credentials have been configured.
+9.  Verify the root credentials have been configured.
 
     ```bash
     ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user list 1
