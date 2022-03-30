@@ -1,3 +1,5 @@
+
+
 # Power On the External Lustre File System
 
 Use this procedure as a general guide to power on an external ClusterStor system. Refer to the detailed procedures that support each ClusterStor hardware and software release:
@@ -139,4 +141,8 @@ Power up storage nodes in the following sequence:
     ```bash
     [n000]# cscli mount -f cls01234
     ```
+
+##### Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.
+
+
 

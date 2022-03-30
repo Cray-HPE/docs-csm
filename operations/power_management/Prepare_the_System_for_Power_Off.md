@@ -1,3 +1,5 @@
+
+
 # Prepare the System for Power Off
 
 This procedure prepares the system to remove power from all system cabinets. Be sure the system is healthy and ready to be shut down and powered off.
@@ -69,7 +71,7 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Find the required `templateUuid` value with BOS.
 
        ```bash
-       ncn# cray bos session describe XNAME | grep templateUuid
+       ncn# cray bos session describe boss_session | grep templateUuid
        ```
 
        Example output:
@@ -333,4 +335,6 @@ An authentication token is required to access the API gateway and to use the `sa
     There is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
 1.  Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, see the `scontrol` man page. For PBS Professional, see the `pbsnodes` man page.
+
+#####  Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
 

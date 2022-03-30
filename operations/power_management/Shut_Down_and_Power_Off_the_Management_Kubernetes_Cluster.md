@@ -1,3 +1,4 @@
+
 # Shut Down and Power Off the Management Kubernetes Cluster
 
 Shut down management services and power off the HPE Cray EX management Kubernetes cluster.
@@ -20,32 +21,6 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 ### Prerequisites
 
 An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
-
-- A work-around may be required to set an SSH key when running the `sat bootsys shutdown --stage platform-services` command below if performing a re-install of a 1.4.x system.
-
-- If the following error message is displayed:
-
-  ```screen
-  ERROR: Failed to create etcd snapshot on ncn-m001: Failed to connect to ncn-m001: Server 'ncn-m001' not found in known_hosts
-  ERROR: Fatal error in step "Create etcd snapshot on all Kubernetes manager NCNs." of platform services stop: Failed to create etcd snapshot on hosts: ncn-m001
-  ```
-
-- Then SSH to the management NCN that reported the problem, in this case ncn-m001 and add the host's key to `known_hosts` file and repeat the preceding command.
-
-  ```bash
-  ncn-m001# ssh ncn-m001
-  The authenticity of host 'ncn-m001 (10.252.1.4)' can't be established.
-  ECDSA key fingerprint is SHA256:Mh43bU2iYDkOnQuI7Y067nV7no4btIE/OuYeHLh+n/4.
-  Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-  
-  Warning: Permanently added 'ncn-m001,10.252.1.4' (ECDSA) to the list of known hosts.
-  Last login: Thu Jul 22 16:38:58 2021 from 172.25.66.163
-  ncn-m001#
-  ncn-m001# logout
-  Connection to ncn-m001 closed
-  ```
-
-
 
 ### Procedure
 
@@ -293,4 +268,6 @@ An authentication token is required to access the API gateway and to use the `sa
     **CAUTION:** The modular coolant distribution unit \(MDCU\) in a liquid-cooled HPE Cray EX2000 cabinet (also referred to as a Hill or TDS cabinet) typically receives power from its management cabinet PDUs. If the system includes an EX2000 cabinet, **do not power off** the management cabinet PDUs, Powering off the MDCU will cause an emergency power off \(EPO\) of the cabinet and may result in data loss or equipment damage.
 
 12. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, power off the PDU circuit breakers or disconnect the PDUs from facility power and follow lockout/tagout procedures for the site.
+
+##### Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
 

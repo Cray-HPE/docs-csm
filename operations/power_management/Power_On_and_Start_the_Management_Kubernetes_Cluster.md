@@ -5,19 +5,15 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 ## Prerequisites
 
 * All management rack PDUs are connected to facility power and facility power is ON.
-* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the System Admin Tookit product stream documentation.
+* An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
 
 ## Procedure
-
-First run `sat bootsys boot --stage ncn-power` to power on and boot the management NCNs. Then the run `sat bootsys boot --stage platform-services` to start platform services on the system.
 
 1. If necessary, power on the management cabinet CDU and chilled doors.
 
 2. Set all management cabinet PDU circuit breakers to ON \(all cabinets that contain Kubernetes master nodes, worker nodes, or storage nodes\).
 
 3. Power on the HPE Cray EX cabinets and standard rack cabinet PDUs.
-
-    See [Power On Compute and IO Cabinets](Power_On_Compute_and_IO_Cabinets.md).
 
     Be sure that management switches in all racks and CDU cabinets are powered on and healthy.
 
@@ -128,9 +124,9 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 
 ### VERIFY ACCESS TO LUSTRE FILE SYSTEM
 
-1. Verify that the Lustre file system is available from the management cluster.
+Verify that the Lustre file system is available from the management cluster.
 
-    **START KUBERNETES \(k8s\)**
+### START KUBERNETES \(k8s\) and OTHER SERVICES
 
 1. Use `sat bootsys` to start the k8s cluster. Note that the default timeout
     for Ceph to become healthy is 600 seconds, which is excessive. To work
@@ -147,6 +143,8 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
     The following Non-compute Nodes (NCNs) will be included in this operation:
     managers:
     - ncn-m001
+    - ncn-m002
+    - ncn-m003
     storage:
     - ncn-s001
     - ncn-s002
@@ -555,3 +553,6 @@ First run `sat bootsys boot --stage ncn-power` to power on and boot the manageme
 1. To check the health and status of the management cluster after a power cycle, refer to the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
 
 1. If NCNs must have access to Lustre, start the Lustre file system. See [Power On the External Lustre File System](Power_On_the_External_Lustre_File_System.md).
+
+
+##### Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.

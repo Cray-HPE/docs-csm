@@ -1,3 +1,5 @@
+
+
 # Power Off Compute and IO Cabinets
 
 Power off HPE Cray EX liquid-cooled and standard racks.
@@ -14,7 +16,7 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
 ### Prerequisites
 
-* An authentication token is required to access the API gateway. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) for more information.
+* An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
 * This procedure assumes all system software and user jobs were shut down using the [Shut Down and Power Off Compute and User Access Nodes (UAN)](Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md) procedure.
 
 ### Procedure
@@ -153,3 +155,6 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
     Refer to vendor documentation for the chilled-door cooling system for power control procedures when chilled doors are installed on standard racks.
 
+
+
+##### Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
