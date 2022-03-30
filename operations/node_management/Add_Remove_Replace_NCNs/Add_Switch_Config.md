@@ -29,6 +29,7 @@ ncn-w004 IP data
 ### Spine BGP updates
 
 The configuration will be the same across both switches.
+
 For more info see [Update BGP Neighbors](../../network/metallb_bgp/Update_BGP_Neighbors.md)
 
 ```text
@@ -55,6 +56,10 @@ router bgp 65533 vrf default neighbor 10.252.1.13 transport connection-mode pass
 [spine/agg edge port configuration](../../../install/configure_aruba_spine_switch.md#Configure-Edge-Port)
 
 ### Spine BGP updates
+
+The configuration will be the same across both switches.
+
+For more info see [Update BGP Neighbors](../../network/metallb_bgp/Update_BGP_Neighbors.md)
 
 ```
 route-map ncn-w004 permit seq 10
