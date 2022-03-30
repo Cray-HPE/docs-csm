@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -33,29 +33,29 @@ declare -a UNMOUNTS=()
 
 while [[ $# -gt 0 ]]
 do
-key="$1"
+    key="$1"
 
-case $key in
-    --csm-version)
-    CSM_RELEASE="$2"
-    shift # past argument
-    shift # past value
-    ;;
-    --endpoint)
-    ENDPOINT="$2"
-    shift # past argument
-    shift # past value
-    ;;
-    --tarball-file)
-    TARBALL_FILE="$2"
-    shift # past argument
-    shift # past value
-    ;;
-    *)    # unknown option
-    echo "[ERROR] - unknown options"
-    exit 1
-    ;;
-esac
+    case $key in
+        --csm-version)
+        CSM_RELEASE="$2"
+        shift # past argument
+        shift # past value
+        ;;
+        --endpoint)
+        ENDPOINT="$2"
+        shift # past argument
+        shift # past value
+        ;;
+        --tarball-file)
+        TARBALL_FILE="$2"
+        shift # past argument
+        shift # past value
+        ;;
+        *)    # unknown option
+        echo "[ERROR] - unknown options"
+        exit 1
+        ;;
+    esac
 done
 
 if [[ -z ${CSM_RELEASE} ]]; then
@@ -87,7 +87,6 @@ if [[ -z ${TARBALL_FILE} ]]; then
         # Because we are getting a new tarball
         # this has to be a new upgrade
         # clean up myenv 
-        # this is block/breaking 1.0 to 1.0 upgrade
         rm -rf /etc/cray/upgrade/csm/myenv || true
         touch /etc/cray/upgrade/csm/myenv
         echo "====> ${state_name} ..."
