@@ -87,5 +87,4 @@ Example:
  r0-100gb-sw01# exit
  ```
 
-
 ##### Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.

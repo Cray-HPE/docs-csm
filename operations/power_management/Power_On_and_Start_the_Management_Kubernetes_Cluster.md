@@ -554,5 +554,4 @@ Verify that the Lustre file system is available from the management cluster.
 
 1. If NCNs must have access to Lustre, start the Lustre file system. See [Power On the External Lustre File System](Power_On_the_External_Lustre_File_System.md).
 
-
 ##### Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.

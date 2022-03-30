@@ -108,4 +108,3 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 8.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
     See [Power On and Boot Compute and User Access Nodes](Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md).
-

@@ -1,5 +1,3 @@
-
-
 # Power Off the External Lustre File System
 
 General procedure for powering off an external ClusterStor system.
@@ -165,6 +163,3 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     ```
 
 ##### Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
-
-
-

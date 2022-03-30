@@ -1,4 +1,3 @@
-
 # Shut Down and Power Off the Management Kubernetes Cluster
 
 Shut down management services and power off the HPE Cray EX management Kubernetes cluster.
@@ -270,4 +269,3 @@ An authentication token is required to access the API gateway and to use the `sa
 12. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, power off the PDU circuit breakers or disconnect the PDUs from facility power and follow lockout/tagout procedures for the site.
 
 ##### Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
-
