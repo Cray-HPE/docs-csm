@@ -171,33 +171,51 @@ Unsaved changes : yes
 ##### Reloading switch to a different CSM version config.
 
 This process should be used when config files for the desired CSM version are currently on the switch.
-In this example we will be going from CSM 1.2 to CSM 1.0 switch config
-- Verify that the correct configuration file exists on the switch.
-```
-sw-spine-001 [mlag-domain: master] (config) # show configuration files
-csm1.0
-csm1.2 (active)
-csm1.2.bak
-initial
-initial.bak
-Active configuration: csm1.2
-Unsaved changes : no
-```
-- Switch to desired config version.
-```
-(config) # configuration switch-to csm1.0
-This requires a reboot.
-Type 'yes' to confirm: yes
-```
--The switch should boot to the config version typed in the previous command. You can verify that by running the following command after
-the switch is booted.
-```
-show configuration files
-csm1.0 (active)
-csm1.2
-csm1.2.bak
-initial
-initial.bak
-Active configuration: csm1.0
-Unsaved changes : yes
-```
+
+In the following example, the switch config will go from CSM 1.2 to CSM 1.0.
+
+1. Verify that the correct configuration file exists on the switch.
+    
+    ```
+    sw-spine-001 [mlag-domain: master] (config) # show configuration files
+    ```
+
+    Example output:
+
+    ```
+    csm1.0
+    csm1.2 (active)
+    csm1.2.bak
+    initial
+    initial.bak
+    Active configuration: csm1.2
+    Unsaved changes : no
+    ```
+
+1. Switch to desired config version, which requires a reboot.
+
+    ```
+    (config) # configuration switch-to csm1.0
+    This requires a reboot.
+    Type 'yes' to confirm: yes
+    ```
+    
+    The switch should boot to the config version typed in the previous command. 
+    
+1. Verify the config version after the switch is booted.
+
+    ```
+    # show configuration files
+    ```
+
+    Example output:
+
+    ```
+    csm1.0 (active)
+    csm1.2
+    csm1.2.bak
+    initial
+    initial.bak
+    Active configuration: csm1.0
+    Unsaved changes : yes
+    ```

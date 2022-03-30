@@ -33,7 +33,7 @@ Example output:
 ```
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
-Updating ssh keys..
+Updating SSH keys..
 Tests run: 1  Tests Passed: 1
 ```
 
@@ -48,7 +48,7 @@ Example output:
 ```
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
-Updating ssh keys..
+Updating SSH keys..
 
 HOST: ncn-s001#######################
 Service mon.ncn-s001 on ncn-s001 has been restarted and up for 9280 seconds
@@ -69,7 +69,7 @@ Example output:
 ```
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
-Updating ssh keys..
+Updating SSH keys..
 
 HOST: ncn-s001#######################
 Service mds.cephfs.ncn-s001.rmisfx on ncn-s001 has been restarted and up for 9206 seconds
@@ -130,7 +130,7 @@ Example output:
 ```
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
-Updating ssh keys..
+Updating SSH keys..
 
 HOST: ncn-s001#######################
 Service mon on ncn-s001 has been restarted and up for 9547 seconds
