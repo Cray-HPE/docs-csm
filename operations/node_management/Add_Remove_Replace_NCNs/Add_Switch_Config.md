@@ -69,4 +69,4 @@ router bgp 65533 vrf default neighbor 10.252.1.13 timers 1 3
 router bgp 65533 vrf default neighbor 10.252.1.13 transport connection-mode passive
 ```
 
-[Next Step Add NCN Data](Add_NCN_Data.md)
+Proceed to the next step to [Add NCN Data](Add_NCN_Data.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
