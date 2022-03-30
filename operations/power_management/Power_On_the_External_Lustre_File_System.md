@@ -40,6 +40,11 @@ Power up storage nodes in the following sequence:
 
     ```bash
     [n000]$ pdsh -g mgmt cat /proc/mdstat | dshbak -c
+    ```
+
+    Example output:
+
+    ```
     ----------------
     cls01234n000
     ----------------
@@ -94,6 +99,11 @@ Power up storage nodes in the following sequence:
 
     ```bash
     [n000]# pdsh -a date
+    ```
+
+    Example output:
+    
+    ```
     cls01234n000: Thu Aug 7 01:29:28 PDT 2014
     cls01234n003: Thu Aug 7 01:29:28 PDT 2014
     cls01234n002: Thu Aug 7 01:29:28 PDT 2014
@@ -130,3 +140,4 @@ Power up storage nodes in the following sequence:
     [n000]# cscli mount -f cls01234
     ```
 
+##### Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.

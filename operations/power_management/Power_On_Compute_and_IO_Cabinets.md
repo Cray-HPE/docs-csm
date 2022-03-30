@@ -11,7 +11,7 @@ After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers
 ### Prerequisites
 
 * The cabinet PDUs and coolant distribution units are connected to facility power and are healthy.
-* An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the System Admin Toolkit (SAT) product documentation.
+* An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
 
 ### Procedure
 
@@ -74,3 +74,5 @@ After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers
     Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
     -  The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
     -  The *Slingshot Troubleshooting Guide* PDF.
+
+##### Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.

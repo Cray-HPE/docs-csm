@@ -55,6 +55,11 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 
     ```bash
     [n000]# ssh NODENAME crm_mon -r1 | grep fsys
+    ```
+
+    Example output:
+
+    ```
     cls01234n006_md0-fsys (ocf::heartbeat:XYMNTR): Stopped
     cls01234n006_md1-fsys (ocf::heartbeat:XYMNTR): Stopped
     cls01234n006_md2-fsys (ocf::heartbeat:XYMNTR): Stopped
@@ -78,6 +83,11 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 
     ```bash
     [MGS]# crm_mon -1r | grep fsys
+    ```
+
+    Example output:
+
+    ```
     cls01234n003_md66-fsys (ocf::heartbeat:XYMNTR): Stopped
     cls01234n003_md65-fsys (ocf::heartbeat:XYMNTR): Started
     ```
@@ -108,6 +118,11 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 
     ```bash
     n000# pm –q
+    ``` 
+
+    Example output:
+
+    ```
     on: cls01234n[000-001]
     on: cls01234n[002-015]
     unknown:
@@ -123,6 +138,11 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 
     ```bash
     n000# pm –q
+    ``` 
+
+    Example output:
+
+    ```
     on: cls01234n[000-001]
     off: cls01234n[002-015]
     unknown:
@@ -142,3 +162,4 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     n000# shutdown -h now
     ```
 
+##### Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.

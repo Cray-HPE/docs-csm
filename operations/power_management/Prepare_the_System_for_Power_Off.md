@@ -6,7 +6,7 @@ The `sat bootsys shutdown` and `sat bootsys boot` commands are used to shut down
 
 ### Prerequisites
 
-An authentication token is required to access the API gateway and to use the `sat` command. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) and "SAT Authentication" in the System Admin Toolkit (SAT) product documentation.
+An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
 
 ### Procedure
 
@@ -14,7 +14,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
     1.  Obtain user ID and passwords for all the system management network switches. For example:
 
-        ```text
+        ```bash
         sw-leaf-001
         sw-leaf-002
         sw-spine-001.nmn
@@ -35,45 +35,82 @@ An authentication token is required to access the API gateway and to use the `sa
 
     3.  If the Slingshot network includes edge switches, obtain the user ID and password for these switches.
 
-2.  Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs. You can list all the session templates using `cray bos v1 sessiontemplate list`. If you are unsure of which template is in use, you can call `sat status` to find the xname, then use `cray cfs components describe XNAME` to find the bos_session, and use `cray bos v1 session describe BOS_SESSION` to find the `templateUuid`. Then finally use `cray bos v1 sessiontemplate describe TEMPLATE_UUID` to determine the list of xnames associated with a given template. For example:
+2.  Use `sat auth` to authenticate to the API gateway within SAT.
 
-    ```bash
-    ncn-m001# sat status | grep "Compute\|Application"
+    If SAT has already been authenticated to the API gateway, this step may be skipped.
 
-    | x3000c0s19b1n0 | Node | 1        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-    | x3000c0s19b2n0 | Node | 2        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-    | x3000c0s19b3n0 | Node | 3        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-    | x3000c0s19b4n0 | Node | 4        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-    | x3000c0s27b0n0 | Node | 49169248 | On    | OK   | True    | X86  | River | Application | Sling    |
+    See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
 
-    ncn-m001# cray cfs components describe x3000c0s19b1n0 | grep bos_session
-    bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
+3.  Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
-    ncn-m001# cray bos v1 session describe e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f | grep templateUuid
-    templateUuid = "compute-nid1-4-sessiontemplate"
+    There will be separate session template for UANs and computes nodes.
 
-    ncn-m001# cray bos v1 sessiontemplate describe Nid1-4session-compute | grep node_list
-    node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
+    1. List all the session templates.
 
-    ncn-m001# cray cfs components describe x3000c0s27b0n0 | grep bos_session
-    bos_session = "b969c25a-3811-4a61-91d5-f1c194625748"
+       If it is unclear what session template is in use, proceed to the next substep.
 
-    # cray bos v1 session describe b969c25a-3811-4a61-91d5-f1c194625748 | grep templateUuid
-    templateUuid = "uan-sessiontemplate"
-    ```
+       ```bash
+       ncn-m001# cray bos v1 sessiontemplate list
+       ```
 
-    Compute nodes: `compute-nid1-4-sessiontemplate`
+    2. Find the xname with `sat status`.
 
-    UANs: `uan-sessiontemplate`
+       ```bash
+       ncn-m001# sat status | grep "Compute\|Application"
+       ```
 
-3.  Use `sat auth` to authenticate to the API gateway within SAT.
+       Example output:
 
-    See [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md), [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md), and "SAT Authentication" in the System Admin Toolkit (SAT) product documentation.
+       ```bash
+       ncn-m001# sat status | grep "Compute\|Application"
+
+       | x3000c0s19b1n0 | Node | 1        | On    | OK   | True    | X86  | River | Compute     | Sling    |
+       | x3000c0s19b2n0 | Node | 2        | On    | OK   | True    | X86  | River | Compute     | Sling    |
+       | x3000c0s19b3n0 | Node | 3        | On    | OK   | True    | X86  | River | Compute     | Sling    |
+       | x3000c0s19b4n0 | Node | 4        | On    | OK   | True    | X86  | River | Compute     | Sling    |
+       | x3000c0s27b0n0 | Node | 49169248 | On    | OK   | True    | X86  | River | Application | Sling    |
+       ```
+
+    3. Find the `bos_session` value via the Configuration Framework Service (CFS).
+
+       ```bash
+       ncn-m001# cray cfs components describe XNAME | grep bos_session
+       ```
+
+       Example output:
+
+       ```
+       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
+       ```
+
+    4. Find the required `templateUuid` value with BOS.
+
+       ```bash
+       ncn-m001# cray bos v1 session describe bos_session | grep templateUuid
+       ```
+
+       Example output:
+
+       ```bash
+       templateUuid = "compute-nid1-4-sessiontemplate"
+       ```
+
+    5. Determine the list of xnames associated with the desired boot session template.
+
+       ```bash
+       ncn-m001# cray bos v1 sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+       ```
+
+       Example output:
+
+       ```bash
+       node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
+       ```
 
 4.  Use sat to capture state of the system before the shutdown.
 
     ```bash
-    ncn-m001# sat bootsys shutdown --stage capture-state | tee sat.capture-state
+    ncn-m001# sat bootsys shutdown --stage capture-state 
     ```
 
 5.  Optional system health checks.
@@ -143,6 +180,11 @@ An authentication token is required to access the API gateway and to use the `sa
 
         ```bash
         ncn-m001# kubectl get pods -l app.kubernetes.io/name=slingshot-fabric-manager -n services
+        ```
+
+        Example output:
+
+        ```bash
         NAME                                        READY   STATUS    RESTARTS   AGE
         slingshot-fabric-manager-5dc448779c-d8n6q   2/2     Running   0          4d21h
         ```
@@ -157,10 +199,15 @@ An authentication token is required to access the API gateway and to use the `sa
     10. Check management switches to verify they are reachable \(switch host names depend on system configuration\).
 
         ```bash
-        ncn-m001# for switch in sw-leaf-00{1,2}.mtl sw-spine-00{1,2}.mtl sw-cdu-00{1,2}.mtl; \
-        do while true; do ping -c 1 $switch > /dev/null; if [[ $? == 0 ]]; then echo \
-        "switch $switch is up"; break; else echo "switch $switch is not yet up"; fi; sleep 5; done; done | tee switches
-        ```
+        ncn-m001# for switch in sw-leaf-00{1,2} sw-spine-00{1,2} sw-cdu-00{1,2}; do
+                 while true; do
+                     ping -c 1 $switch > /dev/null && break
+                     echo "switch $switch is not yet up"
+                     sleep 5
+                 done
+                 echo "switch $switch is up"
+             done | tee switches
+        ```bash
 
     11. Check Lustre server health.
 
@@ -200,11 +247,11 @@ An authentication token is required to access the API gateway and to use the `sa
     1.   Identify the BOS Sessions and associated BOA Kubernetes jobs to delete.
 
          Determine which BOS session(s) to cancel. To cancel a BOS session, kill
-     its associated Boot Orchestration Agent (BOA) Kubernetes job.
+         its associated Boot Orchestration Agent (BOA) Kubernetes job.
          
          To find a list of BOA jobs that are still running:
          ```bash
-         kubectl -n services get jobs|egrep -i "boa|Name"
+         ncn-m001# kubectl -n services get jobs|egrep -i "boa|Name"
          ```
          
          Output similar to the following will be returned:
@@ -230,12 +277,12 @@ An authentication token is required to access the API gateway and to use the `sa
          Prior to deleting a BOA job, delete its ConfigMap.
          Find the BOA job's ConfigMap with the following command:
          ```bash
-         ncn-w001# kubectl -n services describe job <BOA Job ID> |grep ConfigMap -A 1 -B 1
+         ncn-m001# kubectl -n services describe job <BOA Job ID> |grep ConfigMap -A 1 -B 1
          ```
      
          Example:
          ```bash
-         ncn-w001# kubectl -n services describe job boa-0216d2d9-b2bc-41b0-960d-165d2af7a742 |grep ConfigMap -A 1 -B 1
+         ncn-m001# kubectl -n services describe job boa-0216d2d9-b2bc-41b0-960d-165d2af7a742 |grep ConfigMap -A 1 -B 1
             boot-session:
              Type:      ConfigMap (a volume populated by a ConfigMap)
              Name:      e0543eb5-3445-4ee0-93ec-c53e3d1832ce    <<< ConfigMap name. Delete this one.
@@ -249,19 +296,19 @@ An authentication token is required to access the API gateway and to use the `sa
          
          To delete the ConfigMap:
          ```bash
-         kubectl -n services delete cm <ConfigMap name>
+         ncn-m001# kubectl -n services delete cm <ConfigMap name>
          ```
          
          Example:
          ```bash
-         ncn-w001# kubectl -n services delete cm e0543eb5-3445-4ee0-93ec-c53e3d1832ce
+         ncn-m001# kubectl -n services delete cm e0543eb5-3445-4ee0-93ec-c53e3d1832ce
          configmap "e0543eb5-3445-4ee0-93ec-c53e3d1832ce" deleted
          ```
          
     3.   Delete the BOA job(s).
 
          ```bash
-         kubectl -n services delete job <BOA JOB ID>
+         ncn-m001# kubectl -n services delete job <BOA JOB ID>
          ```
          
          This will cancel (i.e. kill) the BOA job and the BOS session associated with it.
@@ -274,19 +321,20 @@ An authentication token is required to access the API gateway and to use the `sa
          BOS keeps track of sessions in its database. These entries need to be deleted.
 	     The BOS Session ID is the same as the BOA Job ID minus the prepended 'boa-'
 	     string. Use the following command to delete the BOS database entry.
-         
+  
          ```bash
-         ncn# cray bos session delete <session ID>
+         ncn-m001# cray bos session delete <session ID>
          ```
          
          Example:
          ```bash
-         ncn# cray bos session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
+         ncn-m001# cray bos session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
          ```
 
 8.  Coordinate with the site to prevent new sessions from starting in the services listed.
 
-    In version 1.4.x, there is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
+    There is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
 9.  Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, the see `scontrol` man page and for PBS Professional, see the `pbsnodes` man page.
 
+##### Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
