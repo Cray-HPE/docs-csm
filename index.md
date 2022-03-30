@@ -12,8 +12,8 @@ perform their function as Kubernetes master nodes, Kubernetes worker nodes, or u
 nodes with the Ceph storage.
 
 System services on these nodes are provided as containerized micro-services packaged for deployment
-as helm charts. These services are orchestrated by Kubernetes to be scheduled on Kubernetes worker
-nodes with horizontal scaling to increase or decrease the number of instances of some services as
+via Helm charts. Kubernetes orchestrates these services and schedules them on Kubernetes worker
+nodes with horizontal scaling. Horizontal scales increases or decreases the number of service instances as
 demand for them varies, such as when booting many compute nodes or application nodes.
 
 This information is intended for system installers, system administrators, and network administrators
@@ -33,7 +33,7 @@ scripts, revision control with git, configuration management with Ansible, YAML,
 1. [Update CSM Product Stream](update_product_stream/index.md)
 
    This chapter explains how to get the CSM product release, any patches, update to the latest set of
-   documentation and any installation workarounds, and check for any Field Notices or Hotfixes.
+   documenation and any installation workarounds, and check for any Field Notices or Hotfixes.
 
 
 1. [Install CSM](install/index.md)

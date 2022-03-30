@@ -14,7 +14,7 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
 ### Prerequisites
 
-* An authentication token is required to access the API gateway. See the [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md) for more information.
+* An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
 * This procedure assumes all system software and user jobs were shut down using the [Shut Down and Power Off Compute and User Access Nodes (UAN)](Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md) procedure.
 
 ### Procedure
@@ -44,11 +44,16 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
     ```bash
     ncn-m001# sat --api-timeout 180 bootsys shutdown --stage cabinet-power
     ```
-
+    
 5.  Verify that the hms-discovery cron job has been suspended \(`SUSPEND` column = true\).
 
     ```bash
     ncn-m001# kubectl get cronjobs -n services hms-discovery
+    ```
+
+    Example output:
+
+    ```
     NAME            SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE^M
     hms-discovery   */3 * * * *   True      0        117s            15d
     ```
@@ -67,7 +72,7 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
     ![Liquid-cooled Cabinet PDU](../../img/operations/Liquid_Cooled_Cabinet_PDU.svg)
 
-    **Note:** If the TDS cabinet rack-mounted coolant distribution unit \(MCDU\) is receiving power from the PDUs in the management cabinet, the MCDU may stay on after the TDS cabinet PDU circuit breakers are set to OFF. This is expected.
+    **NOTE:** If the TDS cabinet rack-mounted coolant distribution unit \(MCDU\) is receiving power from the PDUs in the management cabinet, the MCDU may stay on after the TDS cabinet PDU circuit breakers are set to OFF. This is expected.
 
     ![Liquid-cooled TDS Cabinet PDU](../../img/operations/Liquid_Cooled_TDS_Cabinet_PDU.svg)
 
@@ -91,6 +96,11 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
     ```bash
     ncn-m001# cray capmc get_xname_status create --filter show_all
+    ```
+
+    Example output:
+
+    ```
     {
       "e": 0,
       "err_msg": "",
@@ -118,7 +128,6 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
     }
     ```
 
-
 2.  Use CAPMC to power off **non-management** nodes HPE Cray standard racks.
 
     CAUTION: **Do not power off the management cabinet**. Verify the components names \(xnames\) specified in the following command line do not accidentally power off management cabinets.
@@ -143,3 +152,4 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
     Refer to vendor documentation for the chilled-door cooling system for power control procedures when chilled doors are installed on standard racks.
 
+##### Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
