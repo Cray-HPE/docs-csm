@@ -68,7 +68,7 @@ for storage_component in components_json['Components']:
     if cloudinit_script in run_cmd:
         run_cmd.remove(cloudinit_script)
 
-    # ...and in with the new (if it's not already there)
+    # ...and in with the new (if it is not already there)
     enable_script = "/srv/cray/scripts/common/ceph-enable-services.sh"
     if enable_script not in run_cmd:
         run_cmd.append(enable_script)

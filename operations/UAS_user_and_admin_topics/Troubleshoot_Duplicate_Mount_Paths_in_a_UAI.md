@@ -1,5 +1,4 @@
-
-## Troubleshoot Duplicate Mount Paths in a UAI
+# Troubleshoot Duplicate Mount Paths in a UAI
 
 If a user attempts to create a UAI in the legacy mode and cannot create the UAI at all, a good place to look is at volumes. Duplicate `mount_path` specifications in the list of volumes in a UAI will cause a failure that looks like this:
 

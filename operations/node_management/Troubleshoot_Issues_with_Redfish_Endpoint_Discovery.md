@@ -1,4 +1,4 @@
-## Troubleshoot Issues with Redfish Endpoint Discovery
+# Troubleshoot Issues with Redfish Endpoint Discovery
 
 If a Redfish endpoint is in the HTTPsGetFailed status, the endpoint does not need to be fully rediscovered. The error indicates an issue in the inventory process done by the Hardware State Manager \(HSM\). Restart the inventory process to fix this issue.
 
@@ -169,5 +169,4 @@ LastDiscoveryStatus = "HTTPsGetFailed"
         ```
 
     **Troubleshooting:** If there was no indication of a firmware issue, there may be an issue with Vault or the credentials stored in Vault.
-
 

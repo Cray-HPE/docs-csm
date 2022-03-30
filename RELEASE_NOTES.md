@@ -1,5 +1,34 @@
 # Cray System Management (CSM) - Release Notes
 
+## CSM 1.0.11
+The following lists enumerate the improvements and enhancements since CSM 1.0.10
+
+### New Functionality
+* Backport current cabinet expansion procedure from CSM 1.2 into the CSM 1.0 docs
+
+### Bug Fixes
+* SECURITY: CVE-2022-0185: Linux kernel buffer overflow/container escape
+* SECURITY: CVE-2021-4034: pwnkit: Local Privilege Escalation in polkit's pkexec
+* SECURITY: Address log4j vulnerabilities with regards to kafka in the CSM-1.0.11 patch
+* SECURITY: Update strimzi operator 0.15.0 to use patched kafka images
+* Bug Fix: csm upgrade incorrectly records CPS nodes
+* Bug Fix: update_bss_metadata.sh is not executable
+* Bug Fix: Upgrade waiting for boot error
+* Bug Fix: Upgrade to csm-1.0.11, m002 upgrade fails to join k8s
+* Bug Fix: Automate reinit of cluster members found to be lagging in csm 1.0 ncn-upgrade-k8s-worker.sh
+* Bug Fix: USB device wiped on ncn-m001 during csm-1.0.0 -> csm-1.0.1 upgrade
+* Bug Fix: cray-dns-unbound in CLBO after restart during csm-1.0.0 -> 1.0.11 upgrade
+* Bug Fix: Reboot of storage node (s003) halted for raid sync/health
+* Bug Fix: Clock skew on storage node during reboot test
+* Bug Fix: csm-1.0 Broker UAI Image 1.2.3 is missing openssh
+* Documentation Fix: Procedure to set metal.nowipe before and after a management node rebuild missing steps
+* Documentation Fix: First curl command update_management_network.md has incorrect output
+* Documentation Fix: ncn rebuild procedure missing a WAR to prevent dupe IPs on NCNs
+* Documentation Fix: csm-1.0.0 to csm-1.0.11 update is supported
+* Documentation Fix: bootstrap_livecd_remote_iso.md - Copy of typescript log uses incorrect directory path
+* Documentation Fix: CFS ncn-personalization will always fail on 1.0.11 if coming from 1.0.10
+* Documentation Fix: Goss server rpm is missing in desired location
+
 ## CSM 1.0.10
 The following lists enumerate the improvements and enhancements since CSM 1.0.1
 
@@ -146,4 +175,5 @@ and many more...
 * The boot order for Gigabyte NCNs does not persist after a reboot or reinstall.
 * Intermittently, storage nodes have clock skew during fresh install.
 * Kube-multus pods may fail to restart due to ImagePullBackOff. For more information see [Kube-multus pod is in ImagePullBackOff](troubleshooting/known_issues/kube_multus_pod_in_ImagePullBackOff.md).
-* Power capping Olympus hardware via CAPMC is not supported.
+* Power capping Olympus and River compute hardware via CAPMC is not supported.
+* On fresh install, API calls to Gitea/VCS may give 401 Errors. See [Gitea/VCS 401 Errors](troubleshooting/known_issues/gitea_vcs_401_errors.md) for more information.

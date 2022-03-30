@@ -1,4 +1,4 @@
-## Component Partition Members
+# Component Partition Members
 
 The members object in the partition definition has additional actions available for managing the members after the partition has been created.
 
@@ -51,6 +51,4 @@ For example:
 ```screen
 ncn-m# cray hsm partitions members delete x1c0s0b0n0 partition1
 ```
-
-
 

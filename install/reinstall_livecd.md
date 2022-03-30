@@ -67,4 +67,3 @@ Setup a re-install of LiveCD on a node using the previous configuration.
 
 The LiveCD is now re-installed with the previous configuration.
 
-

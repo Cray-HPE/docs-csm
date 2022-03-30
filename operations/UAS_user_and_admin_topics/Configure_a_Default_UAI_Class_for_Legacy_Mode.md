@@ -1,5 +1,4 @@
-
-## Configure a Default UAI Class for Legacy Mode
+# Configure a Default UAI Class for Legacy Mode
 
 Using a default UAI class is optional but recommended for any site using the legacy UAI management mode that wants to have some control over UAIs created by users. UAI classes used for this purpose need to have certain minimum configuration in them:
 
@@ -207,5 +206,4 @@ default = true
 image_id = "ff86596e-9699-46e8-9d49-9cb20203df8c"
 imagename = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 ```
-
 

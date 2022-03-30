@@ -1,4 +1,4 @@
-## Customize the Broker UAI Image
+# Customize the Broker UAI Image
 
 The broker UAI image that comes with UAS is the image used to construct broker UAIs.
 
@@ -366,5 +366,4 @@ Here is a banner that will be displayed before login to SSH
 on Broker UAIs
 Password:
 ```
-
 

@@ -1,5 +1,4 @@
-
-## Create a UAI Class
+# Create a UAI Class
 
 Add a new User Access Instance (UAI) class to the User Access Service (UAS) so that the class can be used to configure UAIs.
 
@@ -31,6 +30,4 @@ Install and initialize the `cray` administrative CLI.
     * `--comment 'text'` set a free-form text comment on the UAI class
 
     Only the `--image-id` option is required to create a UAI class. In that case, a UAI class with the specified UAI Image and no volumes will be created.
-
-
 

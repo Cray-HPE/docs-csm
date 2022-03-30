@@ -1,5 +1,4 @@
-
-## Delete a Volume Configuration
+# Delete a Volume Configuration
 
 Delete an existing volume configuration. This procedure does not delete the underlying object referred to by the UAS volume configuration.
 
@@ -25,6 +24,4 @@ Delete an existing volume configuration. This procedure does not delete the unde
     ```
 
 If wanted, perform [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) to confirm that the UAS volume has been deleted.
-
-
 

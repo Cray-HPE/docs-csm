@@ -1,4 +1,4 @@
-## Customer Access Network
+# Customer Access Network
 
 The Customer Access Network \(CAN\) provides access from outside the customer network to services, non-compute nodes \(NCNs\), and User Access Nodes \(UANs\) in the system. This allows for the following:
 
@@ -72,5 +72,4 @@ linux# csi config init
 .
 .
 ```
-
 

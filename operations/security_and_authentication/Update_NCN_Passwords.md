@@ -1,14 +1,28 @@
-## Update NCN Passwords
+# Update NCN Passwords
 
-The NCNs deploy with a default password, which are changed during the system
-install. See [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
+The management nodes deploy with a default password in the image, so it is a recommended best
+practice for system security to change the root password in the image so that it is
+not the documented default password. In addition to the root password in the image, NCN
+personalization should be used to change the password as part of post-boot CFS.  The password
+in the image should be used when console access is desired during the network boot of a management
+node that is being rebuilt, but this password should be different than the one stored in Vault
+that is applied by CFS during post-boot NCN personalization to change the on-disk password. Once
+NCN personalization has been run, then the password in Vault should be used for console access.
+
+Use one of these methods to change the root pasword in the image.
+
+1. If the PIT node is booted, see 
+[Change NCN Image Root Password and SSH Keys on PIT Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
 for more information.
 
-It is a recommended best practice for system security to change the root
-password after the install is complete.
+1. If the PIT node is not booted, see 
+[Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
+for more information.
 
-The NCN root user password is stored in the HashiCorp Vault instance, and
-applied with the `csm.password` Ansible role via a CFS session.
+The rest of this procedure describes how to change the root password stored in the HashiCorp
+Vault instance and then apply it immediately to management nodes with the `csm.password` Ansible
+role via a CFS session. The same root password from Vault will be applied anytime that the NCN
+personalization including the CSM layer is run.
 
 ### Procedure: Configure Root Password in Vault
 
@@ -77,4 +91,3 @@ procedure above.
    HashiCorp Vault and create the CFS session as long as the commit in the CSM
    configuration management repository has not changed. If the commit has changed,
    repeat this procedure from the beginning.
-

@@ -1,4 +1,4 @@
-## Troubleshoot UAN Boot Issues
+# Troubleshoot UAN Boot Issues
 
 Use this topic to guide troubleshooting of UAN boot issues.
 
@@ -67,5 +67,4 @@ uan# systemctl status cfs-state-reporter
    Active: inactive (dead) since Wed 2021-02-24 14:29:51 CST; 19h ago
  Main PID: 3827 (code=exited, status=0/SUCCESS)
 ```
-
 

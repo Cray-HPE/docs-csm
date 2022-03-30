@@ -1,4 +1,4 @@
-## Upload and Register an Image Recipe
+# Upload and Register an Image Recipe
 
 Download and expand recipe archives from S3 and IMS. Modify and upload a recipe archive, and then register that recipe archive with IMS.
 
@@ -134,4 +134,3 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     etag = ""
     type = "s3"
     ```
-

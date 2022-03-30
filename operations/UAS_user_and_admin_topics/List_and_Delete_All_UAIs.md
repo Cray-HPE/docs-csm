@@ -1,5 +1,4 @@
-
-## List and Delete All UAIs
+# List and Delete All UAIs
 
 Delete all UAIs currently on the system.
 
@@ -91,6 +90,4 @@ At least one UAI is running.
     ncn-m001# cray uas uais list
     [[results]]
     ```
-
-
 

@@ -1,4 +1,4 @@
-## Ingress Routing
+# Ingress Routing
 
 Ingress routing to services via Istio's ingress gateway is configured by VirtualService custom resource definitions \(CRD\). When using external hostnames, there needs to be a VirtualService CRD that matches the external hostname to the desired destination.
 
@@ -51,5 +51,4 @@ By matching the external hostname in the authority field, Istio's ingress gatewa
 Web apps intended to be accessed via the browser, such as Prometheus, Alertmanager, Grafana, Kiali, Jaeger, Kibana, Elasticsearch, should go through the Keycloak Gatekeeper reverse proxy. Browser sessions are automatically configured to use a JSON Web Token \(JWT\) for authorization to Istio's ingress gateway, enabling a central enforcement point of Open Policy Agent \(OPA\) policies for system management traffic.
 
 The Keycloak Gatekeeper will inject HTTP headers so that an upstream endpoint can identify the user and customize access as needed. To enable ingress via Keycloak Gatekeeper external hostnames, web apps need to be added to the `keycloak_gatekeeper_proxied_hosts` Ansible variable.
-
 

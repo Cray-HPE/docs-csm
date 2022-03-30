@@ -1,5 +1,4 @@
-
-## Troubleshoot UAI Authentication Issues
+# Troubleshoot UAI Authentication Issues
 
 Several troubleshooting steps related to authentication in a UAI.
 

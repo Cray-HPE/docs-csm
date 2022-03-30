@@ -1,4 +1,4 @@
-## Move a Standard Rack Node \(Same Rack/Same HSN Ports\)
+# Move a Standard Rack Node \(Same Rack/Same HSN Ports\)
 
 This procedure move standard rack UAN or compute node to a different location and uses the same Slingshot switch ports and management network ports.
 
@@ -334,7 +334,7 @@ This procedure works with both application and compute nodes. This example moves
     -   When `LastDiscoveryStatus` displays as `DiscoverOK`, the node BMC has been successfully discovered.
     -   If the last discovery state is `DiscoveryStarted` then the BMC is currently being inventoried by HSM.
     -   If the last discovery state is `HTTPsGetFailed` or `ChildVerificationFailed` then an error occurred during the discovery process.
-        -   For `HTTPsGetFailed`, verify that the BMC is pingable by its component name (xname). If the component name (xname) of the BMC is not resolveable it, more time may be needed for DNS to update.
+        -   For `HTTPsGetFailed`, verify that the BMC is pingable by its component name (xname). If the component name (xname) of the BMC is not resolvable, then more time may be needed for DNS to update.
 
             If hostname it does resolve, issue a discovery request to HSM:
             
@@ -366,5 +366,4 @@ This procedure works with both application and compute nodes. This example moves
     ncn-m001# cray bos session create --template-uuid cle-VERSION \
     --operation reboot --limit x3000c0s27b1n0,x3000c0s27b2n0,x3000c0s27b3n0,x3000c0s27b4n0
     ```
-
 

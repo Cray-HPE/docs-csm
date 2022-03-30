@@ -1,5 +1,3 @@
-
-
 # Create Switch Metadata CSV
 
 This page provides directions on constructing the `switch_metadata.csv` file.

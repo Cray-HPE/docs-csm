@@ -1,4 +1,3 @@
-
 # Configure Aruba Aggregation Switch
 
 This page describes how Aruba aggregation switches are configured.

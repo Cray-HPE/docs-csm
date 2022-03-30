@@ -1,4 +1,4 @@
-## Re-Sync Keycloak Users to Compute Nodes
+# Re-Sync Keycloak Users to Compute Nodes
 
 Resubmit the `keycloak-users-localize` job and run the keycloak-users-compute.yml Ansible play to sync the users and groups from Keycloak to the compute nodes. This procedure alters the /etc/passwd and /etc/group files used on compute nodes.
 
@@ -78,7 +78,4 @@ Use this procedure to quickly synchronize changes made in Keycloak to the comput
         ```bash
         ncn-w001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
         ```
-
-
-
 

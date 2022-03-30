@@ -1,5 +1,4 @@
-
-## Log in to a User's UAI to Troubleshoot Issues
+# Log in to a User's UAI to Troubleshoot Issues
 
 Log in to a user's User Access Instance \(UAI\) to help the user troubleshoot issues.
 
@@ -50,7 +49,4 @@ This procedure does not work if the pod is in either "Error" or "Terminating" st
     As root in the user's UAI, an administrator will have the user's UID, GID, and full access to their file system mounts.
 
 
-Assist the user with issues, and use exit to exit the UAI.
-
-
-
+Assist the user with issues, and use `exit` to exit the UAI.

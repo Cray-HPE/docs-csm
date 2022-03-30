@@ -1,4 +1,4 @@
-## Restore Hardware State Manager (HSM) Postgres Database from Backup
+# Restore Hardware State Manager (HSM) Postgres Database from Backup
 
 This procedure can be used to restore the HSM Postgres database from a previously taken backup. This can be a manual backup created by the [Create a Backup of the HSM Postgres Database](Create_a_Backup_of_the_HSM_Postgres_Database.md) procedure, or an automatic backup created by the `cray-smd-postgresql-db-backup` Kubernetes cronjob.
 

@@ -99,4 +99,4 @@ router bgp 65533
 
 [Aruba edge port configuration](../../../install/configure_aruba_leaf_switch.md#Configure-Edge-Port)
 
-Proceed to the next step to [Add NCN Data](Add_NCN_Data.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
+Proceed to the next step to [Add NCN Data](Add_NCN_Data.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.

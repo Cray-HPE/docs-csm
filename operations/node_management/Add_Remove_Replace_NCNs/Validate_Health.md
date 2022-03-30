@@ -2,7 +2,7 @@
 
 ## Description
 
-Validate that the system is health
+Validate that the system is healthy
 
 ## Procedure
 

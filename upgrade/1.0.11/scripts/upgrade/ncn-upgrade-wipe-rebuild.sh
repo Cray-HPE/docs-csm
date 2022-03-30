@@ -67,6 +67,20 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="CSI_VALIDATE_BSS_NTP"
+state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    if ! cray bss bootparameters list --hosts $UPGRADE_XNAME --format json | jq '.[] |."cloud-init"."user-data".ntp' | grep -q '/etc/chrony.d/cray.conf'; then
+      echo "$(UPGRADE_XNAME) is missing NTP data in BSS. Please see the procedure which can be found in the 'Known Issues and Bugs' section titled 'Fix BSS Metadata' on the 'Configure NTP on NCNs' page of the CSM documentation."
+      exit 1
+    else
+      record_state "${state_name}" ${upgrade_ncn}
+    fi
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="WIPE_NODE_DISK"
 state_recorded=$(is_state_recorded "${state_name}" ${upgrade_ncn})
 if [[ $state_recorded == "0" ]]; then

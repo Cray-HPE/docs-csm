@@ -1,4 +1,4 @@
-## View BIOS Logs for Liquid Cooled Nodes
+# View BIOS Logs for Liquid Cooled Nodes
 
 SSH to a Liquid Cooled node and view the BIOS logs. The BIOS logs for Liquid Cooled node controllers \(nC\) are stored in the `/var/log/n0/current` and `/var/log/n1/current` directories.
 
@@ -52,5 +52,4 @@ This procedure requires administrative privileges.
     ```bash
     # tail current
     ```
-
 

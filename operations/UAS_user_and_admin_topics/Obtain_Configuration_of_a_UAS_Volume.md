@@ -1,5 +1,4 @@
-
-## Obtain the Configuration of a UAS Volume
+# Obtain the Configuration of a UAS Volume
 
 View the configuration information of a specific UAS volume. This procedure requires the `volume_ID` of that volume.
 
@@ -29,5 +28,4 @@ View the configuration information of a specific UAS volume. This procedure requ
       "volumename": "my-volume-with-passwd-from-the-host-node"
     }
     ```
-
 

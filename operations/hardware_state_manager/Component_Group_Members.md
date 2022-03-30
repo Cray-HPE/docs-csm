@@ -1,4 +1,4 @@
-## Component Group Members
+# Component Group Members
 
 The members object in the group definition has additional actions available for managing the members after the group has been created.
 
@@ -63,6 +63,4 @@ For example:
 ```bash
 ncn-m# cray hsm groups members delete x1c0s0b0n0 blue
 ```
-
-
 

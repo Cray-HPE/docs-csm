@@ -1,5 +1,4 @@
-
-## Create a UAI Using a Direct Administrative Command
+# Create a UAI Using a Direct Administrative Command
 
 Administrators can use this method to manually create UAIs. This method is intended more for creating broker UAIs than for creating end-user UAIs.
 

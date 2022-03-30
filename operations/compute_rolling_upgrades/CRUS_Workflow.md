@@ -1,4 +1,4 @@
-## CRUS Workflow
+# CRUS Workflow
 
 The following workflow is intended to be a high-level overview of how to upgrade compute nodes. This workflow depicts how services interact with each other during the compute node upgrade process, and helps to provide a quicker and deeper understanding of how the system functions.
 
@@ -92,6 +92,4 @@ Mentioned in this workflow:
 11. **CRUS repeats steps for remaining nodes, then updates status**
 
     CRUS repeats steps **5-10** until all of the nodes from the starting\_label group have gone through these steps. After this, CRUS marks the session status as "complete".
-
-
 

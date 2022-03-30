@@ -1,5 +1,4 @@
-
-## Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image
+# Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image
 
 There a several problems that may occur while making or working with a custom end-user UAI images. The following are some basic troubleshooting questions to ask:
 

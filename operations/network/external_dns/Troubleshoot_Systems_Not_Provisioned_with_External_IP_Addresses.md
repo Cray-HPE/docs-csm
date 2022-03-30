@@ -1,4 +1,4 @@
-## Troubleshoot Connectivity to Services with External IP addresses
+# Troubleshoot Connectivity to Services with External IP addresses
 
 Systems that do not support CAN will not have services provisioned with external IP addresses on CAN. Kubernetes will report a `<pending>` status for the external IP address of the service experiencing connectivity issues.
 
@@ -54,5 +54,4 @@ The Customer Access Network \(CAN\) is not supported on the system.
     ```
 
 4.  Visit http://localhost:9090/ in a laptop or workstation browser.
-
 

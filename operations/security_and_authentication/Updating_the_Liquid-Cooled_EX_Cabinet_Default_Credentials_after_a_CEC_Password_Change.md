@@ -1,4 +1,4 @@
-## Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials after a CEC Password Change
+# Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials after a CEC Password Change
 
 This procedure changes the credential for liquid-cooled EX cabinet chassis controllers and node controller (BMCs) used by CSM services after the CECs have been set to a new global default credential.
 
@@ -21,7 +21,7 @@ The MEDS sealed secret contains the default global credential used by MEDS when 
 #### 1.1 Acquire site-init.
 Before redeploying MEDS, update the `customizations.yaml` file in the `site-init` secret in the `loftsman` namespace.
 
-1. If the `site-init` repository is available as a remote repository [as described here](../../install/prepare_site_init.md#push-to-a-remote-repository), then clone it to ncn-m001. Otherwise, ensure that the `site-init` repository is available on ncn-m001.
+1. If the `site-init` repository is available as a remote repository [as described here](../../install/prepare_site_init.md#push-to-a-remote-repository), then clone it to `ncn-m001`. Otherwise, ensure that the `site-init` repository is available on `ncn-m001`.
 
    ```bash
    ncn-m001# git clone "$SITE_INIT_REPO_URL" site-init

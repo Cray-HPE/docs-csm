@@ -2,7 +2,7 @@
 
 This hot-fix applies the CSM 1.2 boot order tooling to the non-compute nodes.
 
-## Requirments
+## Requirements
 
 All dependencies and necessities are included in this directory.
 

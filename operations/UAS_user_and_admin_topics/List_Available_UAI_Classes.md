@@ -1,5 +1,4 @@
-
-## List Available UAI Classes
+# List Available UAI Classes
 
 View all the details of every available UAI class. Use this information to select a class to apply to one or more UAIs.
 

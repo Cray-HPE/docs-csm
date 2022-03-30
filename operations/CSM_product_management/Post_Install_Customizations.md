@@ -1,4 +1,4 @@
-## Post-Install Customizations
+# Post-Install Customizations
 
 Post-install customizations may be needed as systems scale. These customizations also need to persist across future installs or upgrades. Not all resources can be customized post-install; common scenarios are documented in the following sections.
 
@@ -163,6 +163,11 @@ Update resources associated with Prometheus in the `sysmgmt-health` namespace. T
    ```
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
+   
+   ```bash
+   ncn# kubectl delete secret -n loftsman site-init
+   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
 
 <a name="postgres_resources"></a>
 ### Postgres Pods are `OOMKilled` or CPU Throttled
@@ -257,6 +262,11 @@ A similar flow can be used to update the resources for `cray-sls-postgres`, `cra
    ```
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
+   
+   ```bash
+   ncn# kubectl delete secret -n loftsman site-init
+   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
 
 **IMPORTANT:** If `cray-sls-postgres`, `cray-smd-postgres`, or `gitea-vcs-postgres` resources need to be adjusted, the same procedure as above can be used with the following changes:
 
@@ -351,6 +361,11 @@ Scale the replica count associated with the `cray-bss` service in the `services`
    ```
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
+   
+   ```bash
+   ncn# kubectl delete secret -n loftsman site-init
+   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
 
 <a name="postgres_pvc_resize"></a>
 ### Postgres PVC Resize
@@ -424,6 +439,11 @@ A similar flow can be used to update the volume size for `cray-sls-postgres`, `g
 1. If the status on the above command is `SyncFailed` instead of `Running`, refer to *Case 1* in the *SyncFailed* section of [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md#syncfailed). At this point the Postgres cluster is healthy, but additional steps are required to complete the resize of the Postgres PVCs.
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
+   
+   ```bash
+   ncn# kubectl delete secret -n loftsman site-init
+   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
 
 **IMPORTANT:** If `cray-sls-postgres`, `gitea-vcs-postgres`, or `spire-postgres` `volumeSize` need to be adjusted, the same procedure as above can be used with the following changes:
 

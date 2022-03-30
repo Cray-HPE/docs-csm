@@ -1,4 +1,4 @@
-## Ansible Execution Environments
+# Ansible Execution Environments
 
 Configuration Framework Service \(CFS\) sessions are comprised of a single Kubernetes pod with several containers. Inventory and Git clone setup containers run first, and a teardown container runs last \(if the session is running an image customization\).
 
@@ -34,6 +34,4 @@ The following modules and plug-ins are available:
     ```
 
     The access key is available at "\{\{ creds.access\_key \}\}" and the secret key is at "\{\{ creds.secret\_key \}\}".
-
-
 

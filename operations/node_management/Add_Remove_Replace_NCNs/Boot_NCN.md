@@ -16,7 +16,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 ### Step 2 - Set the PXE boot option and power on the node
 
-**IMPORTANT:** These commands assumes you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#add-ncn-prerequisites).
+**IMPORTANT:** These commands assumes you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#add-ncn-prerequisites).
 
 1. Set the BMC variable to the hostname of the BMC of the node being rebuilt. If booting ncn-m001, set this to the FQDN or IP.
 
@@ -200,4 +200,4 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
     ncn-m001# ip a show lan0
     ```
 
-Proceed to the next step to [Redeploy Services](Redeploy_Services.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
+Proceed to the next step to [Redeploy Services](Redeploy_Services.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.

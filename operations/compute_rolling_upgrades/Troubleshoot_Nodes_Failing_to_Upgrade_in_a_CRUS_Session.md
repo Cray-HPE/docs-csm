@@ -1,4 +1,4 @@
-## Troubleshoot Nodes Failing to Upgrade in a CRUS Session
+# Troubleshoot Nodes Failing to Upgrade in a CRUS Session
 
 Troubleshoot compute nodes failing to upgrade during a Compute Rolling Upgrade Service \(CRUS\) session and rerun the session on the failed nodes.
 
@@ -70,6 +70,4 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
         upgrading_label = "node-group"
         workload_manager_type = "slurm"
         ```
-
-
 

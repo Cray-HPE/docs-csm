@@ -1,11 +1,11 @@
 # SAT/HSM/CAPMC Component Power State Mismatch
-Because of various hardware or communication issues, the node state reported by SAT and HSM (Hardware State Manager) may become out of sync with the actual hardware state reported by CAPMC or via redfish. In most cases this will be noticed when trying to power on or off nodes with BOS/BOA and will present as SAT or HSM reporting nodes are 'On' while CAPMC reports them as 'Off' (or vice versa).
+Because of various hardware or communication issues, the node state reported by SAT and HSM (Hardware State Manager) may become out of sync with the actual hardware state reported by CAPMC or via redfish. In most cases this will be noticed when trying to power on or off nodes with BOS/BOA and will present as SAT or HSM reporting nodes are `On` while CAPMC reports them as `Off` (or vice versa).
 
 ## Possible Causes
 Possible reasons the power state got out of sync include but are not limited to:
 * A known issue with Gigabyte nodes where power Redfish events can get sent out of order when rebooting nodes.
 * Network issues preventing the flow of Redfish events (telemetry will also be affected)
-* Issues with the cray-hms-hmcollector pod
+* Issues with the `cray-hms-hmcollector` pod
 
 ## Fix
 In most cases, once the underlying cause has been corrected, this should correct itself when the node boots OS, starts heartbeating, and goes to the 'Ready' state. If not, the power state for the affected nodes can be re-synced by kicking off HSM re-discovery of those nodes' BMCs.

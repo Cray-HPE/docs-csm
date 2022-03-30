@@ -4,11 +4,11 @@ This procedure redeploys S3 and SYSMGMT_HEALTH services to add or remove storage
 
 **This procedure can be skipped if a worker or master node have been added.** 
 
-- Proceed to the next step to [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
+- Proceed to the next step to [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
 
 **This procedure can be skipped if a worker or master node have been removed.**
 
-- Proceed to the next step to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
+- Proceed to the next step to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
 
 Otherwise proceed with the following if a storage node has been added or removed.
 
@@ -28,7 +28,7 @@ The docs-csm RPM has been installed on the NCN. Verify that the following file e
 
 Before redeploying the desired charts, update the `customizations.yaml` file in the `site-init` secret in the `loftsman` namespace.
 
-1. If the `site-init` repository is available as a remote repository [as described here](../../install/prepare_site_init.md#push-to-a-remote-repository), then clone it to ncn-m001. Otherwise, ensure that the `site-init` repository is available on ncn-m001.
+1. If the `site-init` repository is available as a remote repository [as described here](../../../install/prepare_site_init.md#push-to-a-remote-repository), then clone it to ncn-m001. Otherwise, ensure that the `site-init` repository is available on ncn-m001.
 
    ```bash
    ncn-mw# git clone "$SITE_INIT_REPO_URL" site-init
@@ -266,5 +266,5 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 
 Proceed to the next step:
 
-- Added Storage NCN : [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
-- Removed Storage NCN : [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page. 
+- Added Storage NCN : [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+- Removed Storage NCN : [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page. 

@@ -1,4 +1,4 @@
-## Create UAN Boot Images
+# Create UAN Boot Images
 
 Update configuration management git repository to match the installed version of the UAN product. Then use that updated configuration to create UAN boot images and a BOS session template.
 
@@ -436,7 +436,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         }
         ```
 
-        Alternatively, a manifest.json can be created from scratch. In that case, create a new hexadecimal value for the `etag` if the image referred to by the manifest does not already have one. The `etag` field cannot be left blank.
+        Alternatively, a `manifest.json` can be created from scratch. In that case, create a new hexadecimal value for the `etag` if the image referred to by the manifest does not already have one. The `etag` field cannot be left blank.
 
     17. Replace the path and md5 values of the initrd, kernel, and rootfs with the values obtained in substeps m and n.
 
@@ -568,5 +568,4 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
 
 Perform [Boot UANs](../boot_orchestration/Boot_UANs.md) to boot the UANs with the new image and BOS session template.
-
 

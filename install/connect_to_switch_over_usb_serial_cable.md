@@ -1,5 +1,3 @@
-
-
 # Connect to Switch over USB-Serial Cable
 
 In the event that network plumbing is lacking, down, or unconfigured for procuring devices, then it is

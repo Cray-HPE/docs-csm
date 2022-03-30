@@ -1,4 +1,4 @@
-## VCS Branching Strategy
+# VCS Branching Strategy
 
 Individual products import configuration content \(Ansible plays, roles, and more\) into a repository in the Version Control Service \(VCS\) through their installation process. Typically, this repository is of the following form and exists in the `cray` organization in VCS:
 
@@ -25,5 +25,4 @@ When a product upgrade occurs \(cray/product/1.4.0 in the above diagram\), the p
 **Important:** If the Cray product has specific instructions for installing and upgrading configuration content, those should take precedence over this generic workflow.
 
 The "Branch Workflow" diagram is an example workflow that can be used to manage new product content being introduced during upgrades. However, CFS and VCS do not require any specific branching strategy. Users are free to manage the branches as they see fit with the exception of the pristine branches imported by individual Cray products. CFS configuration layers \(see [Configuration Layers](Configuration_Layers.md)\) only require a Git commit ID, a Git repository clone URL, and the path to an Ansible playbook to run the configuration content in the repository.
-
 

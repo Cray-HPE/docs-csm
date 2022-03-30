@@ -1,5 +1,4 @@
-
-## Broker Mode UAI Management
+# Broker Mode UAI Management
 
 A UAI broker is a special kind of UAI whose job is not to host users directly but to field attempts to reach a UAI, locate or create a UAI for the user making the attempt, and then pass the connection on to the correct UAI. Multiple UAI brokers can be created, each serving a UAI of a different class, making it possible to set up UAIs for varying workflows and environments as needed. The following illustrates a system using the UAI broker mode of UAI management:
 

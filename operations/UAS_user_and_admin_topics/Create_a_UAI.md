@@ -1,5 +1,4 @@
-
-## Create a UAI
+# Create a UAI
 
 It is rare that an an administrator would hand-craft a UAI in this way, but it is possible. This is the mechanism used to create broker UAIs for the broker mode of UAI management.
 

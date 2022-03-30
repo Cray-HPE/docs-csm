@@ -1,5 +1,4 @@
-
-## Create and Register a Custom UAI Image
+# Create and Register a Custom UAI Image
 
 Create a custom UAI image based on the current compute node image. This UAI image can then be used to build compute node software with the Cray Programming Environment (PE).
 
@@ -130,5 +129,4 @@ The default end-user UAI is not suitable for use with the Cray PE. The generic i
     ncn# rm $SESSION_ID.tar rootfs.squashfs
     ncn# if [ -f ./usr/bin/uai-ssh.sh ]; then rm -f ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr; fi
     ```
-
 

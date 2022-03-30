@@ -1,5 +1,4 @@
-
-## Create a UAI with Additional Ports
+# Create a UAI with Additional Ports
 
 An option is available to expose UAI ports to the customer user network in addition to the the port used for SSH access. These ports are restricted to ports 80, 443, and 8888. This procedure allows a user or administrator to create a new UAI with these additional ports.
 
@@ -47,5 +46,4 @@ Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports 
     ```bash
     $ ssh USERNAME@UAI_IP_ADDRESS -i ~/.ssh/id_rsa
     ```
-
 

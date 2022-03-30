@@ -1,5 +1,4 @@
-
-## Configure UAIs in UAS
+# Configure UAIs in UAS
 
 The four main items of UAI configuration in UAS. Links to procedures for listing, adding, examining, updating, and deleting each item.
 
@@ -38,5 +37,4 @@ The following procedures provide instructions for creating, updating, examining,
     -   [Create a UAI Class](Create_a_UAI_Class.md)
     -   [Modify a UAI Class](Modify_a_UAI_Class.md)
     -   [Delete a UAI Class](Delete_a_UAI_Class.md)
-
 

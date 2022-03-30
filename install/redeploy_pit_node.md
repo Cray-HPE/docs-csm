@@ -121,17 +121,8 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         **IMPORTANT**: The variables set depend on whether or not the default NCN images are customized. The most
         common procedures that involve customizing the images are
         [Configuring NCN Images to Use Local Timezone](../operations/node_management/Configure_NTP_on_NCNs.md#configure_ncn_images_to_use_local_timezone) and
-        [Changing NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md).
+        [Changing NCN Image Root Password and SSH Keys on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
         The two paths forward are listed below:
-
-        * If the NCN images were **not** customized, set the following variables (this is the default path):
-
-            ```bash
-            pit# export CSM_RELEASE=csm-x.y.z
-            pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
-            pit# export k8sdir=$artdir/kubernetes
-            pit# export cephdir=$artdir/storage-ceph
-            ```
 
         * If the NCN images were customized, set the following variables:
 
@@ -139,6 +130,15 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
             pit# export artdir=/var/www/ephemeral/data
             pit# export k8sdir=$artdir/k8s
             pit# export cephdir=$artdir/ceph
+            ```
+
+        * If the NCN images were **not** customized, set the following variables:
+
+            ```bash
+            pit# export CSM_RELEASE=csm-x.y.z
+            pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
+            pit# export k8sdir=$artdir/kubernetes
+            pit# export cephdir=$artdir/storage-ceph
             ```
 
     1. After setting the variables in the previous step, run the following command.
@@ -183,16 +183,30 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
     ```
 
-1.  Preserve the ConMan console logs for the other NCNs if desired. (optional)
+1.  Preserve logs and configuration files if desired (optional).
 
-    You may wish to preserve them for later examination, but it is not required. However, **this is the last chance to do so**. They will be lost after rebooting the PIT node.
-    
-    The following commands will copy them into a directory that will be backed up before the PIT node reboot.
-    
+    After the PIT node is redeployed, **all files on its local drives will be lost**. It is recommended that you retain some of the log files and
+    configuration files, because they may be useful if issues are encountered during the remainder of the install.
+
+    The following commands create a tar archive of these files, storing it in a directory that will be backed up in the next step.
+
     ```bash
-    
-    pit# mkdir -pv /var/www/ephemeral/prep/logs
-    pit# cp -prv /var/log/conman /var/www/ephemeral/prep/logs/conman.$(date +%Y-%m-%d_%H-%M-%S)
+    pit# mkdir -pv /var/www/ephemeral/prep/logs &&
+         ls -d \
+                    /etc/dnsmasq.d \
+                    /etc/os-release \
+                    /etc/sysconfig/network \
+                    /opt/cray/tests/cmsdev.log \
+                    /opt/cray/tests/install/logs \
+                    /opt/cray/tests/logs \
+                    /root/.canu \
+                    /root/.config/cray/logs \
+                    /root/csm*.{log,txt} \
+                    /tmp/*.log \
+                    /var/log/conman \
+                    /var/log/zypper.log 2>/dev/null |
+         sed 's_^/__' |
+         xargs tar -C / -czvf /var/www/ephemeral/prep/logs/pit-backup-$(date +%Y-%m-%d_%H-%M-%S).tgz
     ```
 
 1. Upload the bootstrap information.
@@ -590,6 +604,14 @@ Perform the following steps **on `ncn-m001`**.
 
     ```bash
     ncn-m001# /opt/cray/tests/install/ncn/scripts/validate-bootraid-artifacts.sh
+    ```
+
+1. If the above fails with messages about ` Host key verification failed`, clear them from the `known_hosts`:
+
+    This script will perform the check on all NCNs, including `ncn-m001`.
+
+    ```
+    ncn-m001# for ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do ssh-keygen -R $ncn;done
     ```
 
 <a name="next-topic"></a>

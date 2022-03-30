@@ -1,4 +1,4 @@
-## Troubleshoot a Failed CRUS Session Because of Bad Parameters
+# Troubleshoot a Failed CRUS Session Because of Bad Parameters
 
 A CRUS session must be deleted and recreated if it does not start or complete because of parameters having incorrect values.
 
@@ -60,6 +60,4 @@ The following are examples of incorrect parameters:
     upgrading_label = "node-group"
     workload_manager_type = "slurm"
     ```
-
-
 

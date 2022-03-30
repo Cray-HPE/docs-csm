@@ -1,4 +1,4 @@
-## Manage the DNS Unbound Resolver
+# Manage the DNS Unbound Resolver
 
 The unbound DNS instance is used to resolve names for the physical equipment on the management networks within the system, such as NCNs, UANs, switches, compute nodes, and more. This instance is accessible only within the HPE Cray EX system.
 
@@ -134,5 +134,4 @@ The following clears the \(DNS Helper\) Manager generated data in the ConfigMap.
 ncn-w001# kubectl -n services patch configmaps cray-dns-unbound \
 --type merge -p '{"binaryData":{"records.json.gz":"H4sICLQ/Z2AAA3JlY29yZHMuanNvbgCLjuUCAETSaHADAAAA"}}'
 ```
-
 

@@ -1,5 +1,4 @@
-
-## Delete a UAI Using an Administrative Command
+# Delete a UAI Using an Administrative Command
 
 Manually delete one or more UAIs.
 
@@ -28,5 +27,4 @@ Install and initialize the `cray` administrative CLI.
     'uai-vers-715fa89d,uai-ctuser-0aed4970'
     results = [ "Successfully deleted uai-vers-715fa89d", "Successfully deleted uai-ctuser-0aed4970",]
     ```
-
 
