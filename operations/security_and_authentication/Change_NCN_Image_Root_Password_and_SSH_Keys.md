@@ -1,6 +1,6 @@
 # Set NCN Image Root Password and SSH Keys and optional modify the timezone
 
-Customize the NCN images by setting the root password and adding ssh keys for the root account. Optionally,
+Customize the NCN images by setting the root password and adding SSH keys for the root account. Optionally,
 change the the timezone (UTC is the default).
 
 This procedure shows this process being done any time after the first time installation of the CSM
@@ -14,9 +14,9 @@ There is some common preparation before making the Kubernetes image for master n
 
 ### Common Preparation
 
-1. Prepare new ssh keys for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
+1. Prepare new SSH keys for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
 
-   Either replace the root public and private ssh keys with your own previously generated keys or generate a new pair using the `ncn-image-modification.sh` script described below.
+   Either replace the root public and private SSH keys with your own previously generated keys or generate a new pair using the `ncn-image-modification.sh` script described below.
 
 1. Change to a working directory with enough space to hold the images once they have been expanded.
 
@@ -95,7 +95,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    Usage: ncn-image-modification.sh [-p] [-d dir] [ -z timezone] [-k kubernetes-squashfs-file] [-s storage-squashfs-file] [ssh-keygen arguments]
 
           This script semi-automates the process of changing the timezone, root
-          password, and adding new ssh keys for the root user to the NCN squashfs
+          password, and adding new SSH keys for the root user to the NCN squashfs
           image(s).
 
           The script will immediately prompt for a new passphrase for ssh-keygen.
@@ -256,7 +256,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
 
    **WARNING:** If doing a CSM software upgrade, skip this section to continue with Cleanup.
 
-   > If not doing a CSM software upgrade, this process will update the entries in BSS for the utiltity storage nodes to use the new `ceph-image`.
+   > If not doing a CSM software upgrade, this process will update the entries in BSS for the utility storage nodes to use the new `ceph-image`.
    > 
    > 1. Set all utility storage nodes to use newly created ceph-image.
    >

@@ -1,6 +1,6 @@
 ## Set NCN Image Root Password, SSH Keys, and timezone (optional) on PIT Node
 
-Modify the NCN images by setting the root password and adding ssh keys for the root account.
+Modify the NCN images by setting the root password and adding SSH keys for the root account.
 Changing the timezone for the NCNs can also be done at this time. This procedure shows this process being
 done on the PIT node during a first time installation of the CSM software.
 
@@ -8,9 +8,9 @@ done on the PIT node during a first time installation of the CSM software.
 
 ### Set the root password and add SSH keys to the NCN images
 
-This step is required. There is no default root password and no default ssh keys in the NCN images.
+This step is required. There is no default root password and no default SSH keys in the NCN images.
 
-1. Add ssh keys and set the password in the squashfs. Optionally, set the timezone.
+1. Add SSH keys and set the password in the squashfs. Optionally, set the timezone.
 
    If desired, create new SSH keys on the PIT. These will be copied into the NCN Squashfs images in the next step. Alternately,
    copy an existing set of keys and `authorized_hosts` file into a directory for reference in the following step. It is assumed
@@ -23,7 +23,7 @@ This step is required. There is no default root password and no default ssh keys
    Usage: ncn-image-modification.sh [-p] [-d dir] [ -z timezone] [-k kubernetes-squashfs-file] [-s storage-squashfs-file] [ssh-keygen arguments]
 
           This script semi-automates the process of changing the timezone, root
-          password, and adding new ssh keys for the root user to the NCN squashfs
+          password, and adding new SSH keys for the root user to the NCN squashfs
           image(s).
 
           The script will immediately prompt for a new passphrase for ssh-keygen.

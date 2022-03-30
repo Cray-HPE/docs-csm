@@ -22,14 +22,14 @@ Until an upstream NTP server is configured. The time on the NCNs may not match t
 There are three different methods for configuring NTP, which are described below. The first option is the
 recommended method.
 
-   * Edit /etc/chrony.d/cray.conf and restart chronyd on each node.
+   * Edit `/etc/chrony.d/cray.conf` and restart `chronyd` on each node.
 
       ```bash
       ncn# vi /etc/chrony.d/cray.conf
       ncn# systemctl restart chronyd
       ```
 
-   * Edit the data.json file, restart basecamp, and run the NTP script on each node.
+   * Edit the `data.json` file, restart `basecamp`, and run the NTP script on each node.
 
       ```bash
       ncn-m001# vi data.json
@@ -42,7 +42,7 @@ recommended method.
       ncn# /srv/cray/scripts/metal/set-ntp-config.sh
       ```
 
-   * Edit the data.json file, restart basecamp, and restart nodes so cloud-init runs on boot.
+   * Edit the `data.json` file, restart `basecamp`, and restart nodes so `cloud-init` runs on boot.
 
       ```bash
       ncn-m001# vi data.json
@@ -55,7 +55,7 @@ recommended method.
       ncn# reboot
       ```
 
-      Cloud-init caches data, so there could be inconsistent results with this method.
+      `cloud-init` caches data, so there could be inconsistent results with this method.
 
 <a name="troubleshooting_ntp"></a>
 ### Troubleshooting NTP
@@ -64,7 +64,7 @@ Verify NTP is configured correctly and troubleshoot any issues.
 
 The `chronyc` command can be used to gather information on the state of NTP.
 
-1. Check if a host is allowed to use NTP from HOST. This example sets HOST to 10.252.0.7
+1. Check if a host is allowed to use NTP from HOST. This example sets HOST to `10.252.0.7`
 
    ```bash
    ncn# chronyc accheck 10.252.0.7
@@ -143,7 +143,7 @@ The `chronyc` command can be used to gather information on the state of NTP.
 <a name="chrony_log_files"></a>
 #### chrony Log Files
 
-The `chrony` logs are stored at `/var/log/chrony/`
+The `chrony` logs are stored in `/var/log/chrony/`
 
 <a name="force_a_time_sync"></a>
 #### Force a Time Sync
@@ -173,7 +173,7 @@ The `chrony` logs are stored at `/var/log/chrony/`
 
 #### Known Issues and Bugs
 
-As the NTP setup switched from a homegrown shell script into a native cloud-init module, there were some bugs that ended up shipping with older versions of CSM. If customers upgraded, these bugs carried forward and can present problems with time syncing correctly. This section aims to describe how to diagnose and fix these.
+As the NTP setup switched from a homegrown shell script into a native `cloud-init` module, there were some bugs that ended up shipping with older versions of CSM. If customers upgraded, these bugs carried forward and can present problems with time syncing correctly. This section describes how to diagnose and fix these.
 
 These issues all relate to certain nodes not being in a correct state.
 
@@ -193,7 +193,7 @@ initstepslew 1 time.nist.gov
 local stratum 8 orphan
 ```
 
-These settings ensure there is a low-stratum NTP server that ncn-m001 has access to. ncn-m001 also has the following:
+These settings ensure there is a low-stratum NTP server that `ncn-m001` has access to. `ncn-m001` also has the following:
 
 ```
 # all non-ncn-m001 NCNs use ncn-m001 as their server, and they trust it
@@ -221,12 +221,12 @@ peer ncn-w003 minpoll -2 maxpoll 9 iburst
 
 ###### Fix `ncn-m001`
 
-Most of the bugs from 0.9.x+ carried forward with upgrades. Most commonly, ncn-m001 is the problem as it either does not have a valid upstream, or has a bad config. This can be quickly remedied by running three commands to download the latest `cc_ntp` module, downloading an updated template, and re-running cloud-init.
+Most of the bugs from 0.9.x+ carried forward with upgrades. Most commonly, `ncn-m001` is the problem as it either does not have a valid upstream server, or has a bad configuration. This can be quickly remedied by running three commands to download the latest `cc_ntp` module, downloading an updated template, and re-running `cloud-init`.
 
-```
-wget -O /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/cloudinit/config/cc_ntp.py
-wget -O /etc/cloud/templates/chrony.conf.cray.tmpl https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/config/cray.conf.j2
-cloud-init single --name ntp --frequency always
+```bash
+ncn-m001# wget -O /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/cloudinit/config/cc_ntp.py
+ncn-m001# wget -O /etc/cloud/templates/chrony.conf.cray.tmpl https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/config/cray.conf.j2
+ncn-m001# cloud-init single --name ntp --frequency always
 ```
 
 ###### Fix other NCNs
@@ -238,7 +238,7 @@ Increase the stratum on NCNs (other than `ncn-m001`):
 ncn# sed -i "s/local stratum 3 orphan/local stratum 10 orphan/" /etc/chrony.d/cray.conf
 ```
 
-Add a new line after the logchange directive
+Add a new line after the `logchange` directive
 ```bash
 ncn# sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 ncn-m001" /etc/chrony.d/cray.conf
 ```
@@ -275,10 +275,15 @@ there. You can find a list of timezones to use in the commands below by running 
    pit# /root/bin/configure-ntp.sh
    ```
 
-1. The configure-ntp.sh script should have the information for your local timezone in the output.
+1. The `configure-ntp.sh` script should have the information for your local timezone in the output.
+
+   ```bash
+   pit# /root/bin/configure-ntp.sh
+   ```
+
+   Example output:
 
    ```
-   pit# /root/bin/configure-ntp.sh
    CURRENT TIME SETTINGS
    rtc: 2021-03-26 11:34:45.873331+00:00
    sys: 2021-03-26 11:34:46.015647+0000
@@ -330,15 +335,21 @@ there. You can find a list of timezones to use in the commands below by running 
 
 1. If the time is off and not accurate to your timezone, you will need to _manually_ set the date and then run the NTP script again.
 
+   Manually set the time as close as possible to the real time.
+
    ```bash
-   # Set as close as possible to the real time
    pit# timedatectl set-time "2021-03-26 00:00:00"
+   ```
+
+   Run the NTP script.
+
+   ```bash
    pit# /root/bin/configure-ntp.sh
    ```
 
    The PIT is now configured to your local timezone.
 
-   If you receive the error `Failed to set time: NTP unit is active` you will need to stop `chrony` first.
+   If you receive the error `Failed to set time: NTP unit is active` you will need to stop `chronyd` first.
 
    ```bash
    pit# systemctl stop chronyd

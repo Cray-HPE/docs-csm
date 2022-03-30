@@ -102,4 +102,4 @@ To save switch configurations, refer to the [Configuration Management](config_ma
     Type 'yes' to confirm: yes
     ```
 
-The switch will then reboot to choosen configuration.
+The switch will then reboot to chosen configuration.
