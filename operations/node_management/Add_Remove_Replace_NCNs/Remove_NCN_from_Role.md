@@ -303,7 +303,7 @@ Once the storage node role removal is complete; proceed to [wipe the drives](#wi
 
 All commands in this section must be run **on the node being removed** \(unless otherwise indicated\). These commands can be done from the ConMan console window.
 
-1. Unmount the etcd and `SDU` and remove the volume group
+1. Unmount etcd and `SDU` and remove the volume group
 
    ```bash
    umount -v /run/lib-etcd /var/lib/etcd /var/lib/sdu
@@ -328,20 +328,12 @@ All commands in this section must be run **on the node being removed** \(unless 
     systemctl stop containerd.service
     ```
 
-1. Unmount partitions.
+1. Unmount partitions and remove the volume group.
 
     ```bash
-    umount /var/lib/kubelet
-    umount /run/lib-containerd
-    umount /run/containerd
+    umount /var/lib/kubelet /run/lib-containerd /run/containerd /var/lib/sdu
+    vgremove -f -v --select 'vg_name=~metal*'
     ```
-
-1. Unmount the `SDU` mountpoint and remove the volume group.
-
-   ```bash
-   umount /var/lib/sdu
-   vgremove -f -v --select 'vg_name=~metal*'
-   ```
 
 1. Wipe Drives
 

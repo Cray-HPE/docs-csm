@@ -164,4 +164,4 @@ Validate the storage node added successfully. The following examples are based o
     <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
     ```
 
-[Next Step Validate_Health.md](Validate_Health.md)
+[Next Step Validate_Health](Validate_Health.md)
