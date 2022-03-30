@@ -478,8 +478,8 @@ def main():
         json.dump(smd_ethernet_interfaces, outfile)
 
         # list networks we want to check
-        network_list = get_network_list(sls_networks)
-#        network_list = {'CAN', 'HMN', 'MTL', 'NMN'}
+#        network_list = get_network_list(sls_networks)
+        network_list = {'CAN', 'HMN', 'MTL', 'NMN'}
 
     log.debug(f'sls_networks dump:'
               f'{json.dumps(sls_networks)}')
