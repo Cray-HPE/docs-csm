@@ -27,12 +27,12 @@ Scenarios where this procedure is applicable:
     1.  Determine the xname of the NCN by referring to the HMN of the systems SHCD if it has not been determined yet yet.
 
         Sample row from the HMN tab of a SHCD:
+
         | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
         | --------------- | ----------------- | --------------------- | ----- | ------------ | ---- | ----------------- | ----------------- | ---------------------- | -------------------------- | ----- | ---------------------- |
         | wn01            | x3000             | u04                   | -     |              |      | j3                | sw-smn01          | x3000                  | u14                        | -     | j48                    |
 
         > The Source name for the a worker NCN would be in the format of `wn01`, master NCNs are `mn01`, and storage NCNs have `sn01`.
-
 
         Node xname format: xXcCsSbBnN
 
@@ -44,24 +44,26 @@ Scenarios where this procedure is applicable:
         | B | BMC number     |                          | For Management NCNs the BMC number is 0.
         | N | Node number    |                          | For Management NCNs the Node number is 0.
 
-
         ```bash
         ncn-m# export XNAME=x3000c0s4b0n0
         ```
     
-    2.   **Skip if adding ncn-m001:** Determine the NCN BMC xname by removing the trailing `n0` from the NCN node xname:
+    2.  **Skip if adding ncn-m001:** Determine the NCN BMC xname by removing the trailing `n0` from the NCN node xname:
+
         ```bash
         ncn-m# export BMC_XNAME=x3000c0s4b0
         ```
 
-    3.   **Skip if adding ncn-m001:** Determine the xname of the MgmtSwitchConnector (switch port of the management switch the BMC is connected to). This is not required for ncn-m001, as its BMC is typically connected to the site network.
+    3.  **Skip if adding ncn-m001:** Determine the xname of the MgmtSwitchConnector (switch port of the management switch the BMC is connected to). This is not required for ncn-m001, as its BMC is typically connected to the site network.
 
         Sample row from the HMN tab of a SHCD:
+
         | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
         | --------------- | ----------------- | --------------------- | ----- | ------------ | ---- | ----------------- | ----------------- | ---------------------- | -------------------------- | ----- | ---------------------- |
         | wn01            | x3000             | u04                   | -     |              |      | j3                | sw-smn01          | x3000                  | u14                        | -     | j48                    |
 
         MgmtSwitchConnector Xname format: xXcCwWjJ
+
         |   |                    | SHCD Column to reference   | Description
         | - | ------------------ | -------------------------- | ----
         | X | Cabinet number     | Destination Rack (R20)     | The Cabinet or rack number containing the Management NCN. 
@@ -73,7 +75,7 @@ Scenarios where this procedure is applicable:
         ncn-m# export MGMT_SWITCH_CONNECTOR=x3000c0w14j48
         ```
 
-    4.   **Skip if adding ncn-m001:** Determine the xname of the management switch xname by removing the trailing `jJ` from the MgmtSwitchConnector xname:
+    4.  **Skip if adding ncn-m001:** Determine the xname of the management switch xname by removing the trailing `jJ` from the MgmtSwitchConnector xname:
         ```bash
         ncn-m# export MGMT_SWITCH=x3000c0w14
         ```
@@ -453,7 +455,7 @@ Scenarios where this procedure is applicable:
     ```
     ID = "x3000c0s11b0n0"
     Type = "Node"
-    State = "Off"
+    State = "On"
     Flag = "OK"
     Enabled = true
     Role = "Management"
