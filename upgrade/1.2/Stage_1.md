@@ -12,7 +12,7 @@
 
     ```text
     ====> REDEPLOY_CEPH ...
-    /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/root/ceph.pub"Number of key(s) added: Now try logging into the machine, with:   "ssh 'root@ncn-s003'"
+    /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/root/ceph.pub"Number of key(s) added: 1 Now try logging into the machine, with:   "ssh 'root@ncn-s003'"
     and check to make sure that only the key(s) you wanted were added.Error EINVAL: Traceback (most recent call last):
     ```
 
