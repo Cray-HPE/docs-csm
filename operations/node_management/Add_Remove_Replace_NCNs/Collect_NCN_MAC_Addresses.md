@@ -17,7 +17,7 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
         ncn-m# kubectl -n services get cm cray-ipxe-bss-ipxe -o yaml > cray-ipxe-bss-ipxe.backup.yaml
         ```
 
-    2.  Delete the cray-ipxe-bss-ipxe config map:
+    2.  Delete the cray-ipxe-bss-ipxe ConfigMap:
         ```bash
         ncn-m# kubectl -n services delete cm cray-ipxe-bss-ipxe
         ```
@@ -33,7 +33,7 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
         ncn-m# kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
         ```
 
-        The following output means the new ipxe binary has been built. Make sure the timestamp in the logs are fairly recent:
+        The following output means the new iPXE binary has been built. Make sure the timestamp in the logs are fairly recent:
         ```
         2022-03-17 22:16:14,648 - INFO    - __main__ - Build completed.
         2022-03-17 22:16:14,653 - INFO    - __main__ - Newly created ipxe binary created: '/shared_tftp/ipxe.efi'
@@ -61,12 +61,12 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
         ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP chassis bootdev pxe options=efiboot
         ```
 
-    3.  Power up the NCN:
+    3.  Power on the NCN:
         ```bash
         ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP chassis power on
         ```
 
-    4.  Watch the NCN SOL console and wait for the following output to appear. The output below shows the mapping of MAC addresses to interfaces names (mgmt0, mgmt1, hsn0, lan0, etc..)
+    4.  Watch the NCN SOL console and wait for the following output to appear. The output below shows the mapping of MAC addresses to interfaces names (mgmt0, mgmt1, hsn0, lan0, etc).
         ```
         ====DEVICE NAMING=======================================================
         net0 MAC ec:0d:9a:d4:2b:d8
@@ -108,7 +108,7 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
         ncn-m# kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
         ```
 
-        The following output means the updated ipxe binary has been built. Make sure the timestamp in the logs are fairly recent:
+        The following output means the updated iPXE binary has been built. Make sure the timestamp in the logs are fairly recent:
         ```
         2022-03-17 22:16:14,648 - INFO    - __main__ - Build completed.
         2022-03-17 22:16:14,653 - INFO    - __main__ - Newly created ipxe binary created: '/shared_tftp/ipxe.efi'

@@ -50,7 +50,7 @@ The latest docs-csm RPM has been installed on the master nodes.
       prerequisite to prepare NCNs for removal, move and add
       COMPLETED
       Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-02-25_22-59-06
-      ncn-m001:~/ # 
+      ncn-m# 
       ```
 
 <a name="add-worker-storage-master"></a>
@@ -68,7 +68,7 @@ Set NODE to the hostname of the node being added (e.g. `ncn-w001`, `ncn-s002`, e
 ncn# NODE=ncn-x00n
 ```
 
-If the XNAME is known, set it now. Otherwise it will be determined in a later step.
+If the component name (xname) is known, set it now. Otherwise it will be determined in a later step.
 
 ```bash
 ncn# XNAME=<xname>
@@ -94,9 +94,9 @@ ncn# echo $XNAME
    ---     -----
    Cray    map[password:foobar username:root] 
    ```
-*   If adding a NCN that was not previously in the system follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md).
-*   Ensure the NCN BMC is configured to use DHCP. (This does not apply to the BMC for ncn-m001 since it is statically configured for the site.)
-*   Ensure the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](../../instal/../install/switch_pxe_boot_from_onboard_nic_to_pcie.md) procedure.
+*  If adding an NCN that was not previously in the system, follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md).
+*  Ensure the NCN BMC is configured to use DHCP. (This does not apply to the BMC for ncn-m001 since it is statically configured for the site.)
+*  Ensure the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](../../instal/../install/switch_pxe_boot_from_onboard_nic_to_pcie.md) procedure.
 
 *   If adding an HPE NCN, ensure IPMI is enabled.
 

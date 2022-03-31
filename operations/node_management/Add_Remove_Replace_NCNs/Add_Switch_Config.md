@@ -10,7 +10,7 @@ Update the network switches for the NCN that is being added.
 
 ## Example
 
-ncn-w004 IP data
+`ncn-w004` IP data:
 
 ```text
 10.102.4.15     ncn-w004.can
@@ -22,17 +22,17 @@ ncn-w004 IP data
 
 ## Mellanox & Dell
 
-### Spine/Agg switch updates
+### Spine/Agg Switch Updates
 
 [spine/agg edge port configuration](../../../install/configure_mellanox_spine_switch.md#Configure-MLAG)
 
-### Spine BGP updates
+### Spine BGP Updates
 
 The configuration will be the same across both switches.
 
 This is for workers only.
 
-For more info see [Update BGP Neighbors](../../network/metallb_bgp/Update_BGP_Neighbors.md)
+For more information, see [Update BGP Neighbors](../../network/metallb_bgp/Update_BGP_Neighbors.md).
 
 ```text
 route-map ncn-w004 permit 10 match ip address pl-can
@@ -47,23 +47,23 @@ router bgp 65533 vrf default neighbor 10.252.1.13 timers 1 3
 router bgp 65533 vrf default neighbor 10.252.1.13 transport connection-mode passive
 ```
 
-### BMC port configuration
+### BMC Port Configuration
 
 [Dell edge port configuration](../../../install/configure_dell_leaf_switch.md#Configure-Edge-Port)
 
 ## Aruba
 
-### Spine/Agg switch updates
+### Spine/Agg Switch Updates
 
 [spine/agg edge port configuration](../../../install/configure_aruba_spine_switch.md#Configure-Edge-Port)
 
-### Spine BGP updates
+### Spine BGP Updates
 
 The configuration will be the same across both switches.
 
 This is for workers only.
 
-For more info see [Update BGP Neighbors](../../network/metallb_bgp/Update_BGP_Neighbors.md)
+For more information, see [Update BGP Neighbors](../../network/metallb_bgp/Update_BGP_Neighbors.md).
 
 - The tftp route maps will only include the first 3 workers.
 
@@ -97,8 +97,8 @@ router bgp 65533
         neighbor 10.252.1.13 ($worker4.nmn.ip) route-map ncn-w004 in
 ```
 
-### BMC port configuration
+### BMC Port Configuration
 
-[Aruba edge port configuration](../../../install/configure_aruba_leaf_switch.md#Configure-Edge-Port)
+Refer to [Aruba edge port configuration](../../../install/configure_aruba_leaf_switch.md#Configure-Edge-Port) for more information.
 
 Proceed to the next step to [Add NCN Data](Add_NCN_Data.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
