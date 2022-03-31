@@ -1,4 +1,4 @@
-## Change NCN Image Root Password and SSH Keys on PIT Node
+# Change NCN Image Root Password and SSH Keys on PIT Node
 
 Customize the NCN images by changing the root password or adding different SSH keys for the root account.
 This procedure shows this process being done on the PIT node during a first time installation of the CSM
@@ -8,7 +8,7 @@ There is some common preparation before making the Kubernetes image for master n
 
 ***Note:*** This procedure can only be done before the PIT node is rebuilt to become a normal master node.
 
-### Common Preparation
+## Common Preparation
 
 1. Prepare new SSH keys on the PIT node for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
 
@@ -21,7 +21,7 @@ There is some common preparation before making the Kubernetes image for master n
    pit# chmod 600 /root/.ssh/id_rsa
    ```
 
-### Kubernetes Image
+## Kubernetes Image
 
 The Kubernetes image is used by the master and worker nodes.
 
@@ -176,7 +176,7 @@ The Kubernetes image is used by the master and worker nodes.
 
 The Kubernetes image will have the image changes for the next boot.
 
-### Ceph Image
+## Ceph Image
 
 The Ceph image is used by the utility storage nodes.
 
@@ -338,7 +338,7 @@ The Ceph image is used by the utility storage nodes.
 
 The Ceph image will have the image changes for the next boot.
 
-### Common Cleanup
+## Common Cleanup
 
 1. Clean up temporary storage used to prepare images.
 

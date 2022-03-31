@@ -24,7 +24,7 @@ Vault instance and then apply it immediately to management nodes with the `csm.p
 role via a CFS session. The same root password from Vault will be applied anytime that the NCN
 personalization including the CSM layer is run.
 
-### Procedure: Configure Root Password in Vault
+## Procedure: Configure Root Password in Vault
 
 1. Generate a new password hash for the root user. Replace `PASSWORD` with the
    root password that will be used.
@@ -56,7 +56,7 @@ personalization including the CSM layer is run.
    cray-vault-0# exit
    ```
 
-### Procedure: Apply Root Password to NCNs (Standalone)
+## Procedure: Apply Root Password to NCNs (Standalone)
 
 Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to
 **only** change the root password on NCNs. This is a quick alternative to
@@ -68,6 +68,10 @@ procedure above.
 
    ```bash
    ncn# cat ncn-password-update-config.json
+   ```
+
+   Example output:
+   ```json
    {
      "layers": [
        {
@@ -78,6 +82,9 @@ procedure above.
        }
      ]
    }
+   ```
+
+   ```bash
    ncn# cray cfs configurations update ncn-password-update --file ./ncn-password-update-config.json
    ```
 
@@ -89,5 +96,5 @@ procedure above.
 
    **NOTE:** Subsequent password changes need only update the password hash in
    HashiCorp Vault and create the CFS session as long as the commit in the CSM
-   configuration management repository has not changed. If the commit has changed,
-   repeat this procedure from the beginning.
+   configuration management repository has not changed. If the commit has
+   changed, repeat this procedure from the beginning.

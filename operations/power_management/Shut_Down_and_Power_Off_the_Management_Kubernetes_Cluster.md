@@ -6,22 +6,22 @@ Understand the following concepts before powering off the management non-compute
 
 - The etcd cluster provides storage for the state of the management Kubernetes cluster. The three node etcd cluster runs on the same nodes that are configured as Kubernetes Master nodes. The management cluster state must be frozen when powering off the Kubernetes cluster. When one member is unavailable, the two other members continue to provide full access to the data. When two members are down, the remaining member will switch to only providing read-only access to the data.
 - **Avoid Unnecessary Data Movement with Ceph** - The Ceph cluster runs not only on the dedicated storage nodes, but also on the nodes configured as Kubernetes Master nodes. Specifically, the `mon` processes. If one of the storage nodes goes down, Ceph can rebalance the data onto the remaining nodes and object storage daemons \(OSDs\) to regain full protection.
-- **Avoid Spinning up Replacement Pods on Worker Nodes** - Kubernetes keeps all pods running on the management cluster. The `kubelet` process on each node retrieves information from the etcd cluster about what pods must be running. If a node becomes unavailable for more than five minutes, Kubernetes creates replacement pods on other management nodes.
+- **Avoid Spinning up Replacement Pods on Worker Nodes** - Kubernetes keeps all pods running on the management cluster. The `kubelet` process on each node retrieves information from the `etcd` cluster about what pods must be running. If a node becomes unavailable for more than five minutes, Kubernetes creates replacement pods on other management nodes.
 - **High-Speed Network \(HSN\)** - When the management cluster is shut down the HSN is also shut down.
 
 The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes management cluster and performs these tasks:
 
-- Stops etcd and which freezes the state of the Kubernetes cluster on each management node.
+- Stops `etcd` and which freezes the state of the Kubernetes cluster on each management node.
 - Stops **and disables** the kubelet on each management and worker node.
 - Stops all containers on each management and worker node.
 - Stop `containerd` on each management and worker node.
 - Stops Ceph from rebalancing on the management node that is running a `mon` process.
 
-### Prerequisites
+## Prerequisites
 
 An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
 
-### Procedure
+## Procedure
 
 **CHECK HEALTH OF THE MANAGEMENT CLUSTER**
 
@@ -65,11 +65,9 @@ An authentication token is required to access the API gateway and to use the `sa
    root@ncn-m001 2021-03-18 20:58:21 ~ #
    ```
 
+### SHUT DOWN THE KUBERNETES MANAGEMENT CLUSTER
 
-
-**SHUT DOWN THE KUBERNETES MANAGEMENT CLUSTER**
-
-4. Shut down platform services.
+1. Shut down platform services.
 
    ```bash
    ncn-m001# sat bootsys shutdown --stage platform-services
@@ -170,7 +168,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
    If the process continues to report errors due to `Failed to stop containers`, iterate on the above step. Each iteration should reduce the number of containers running. If necessary, containers can be manually stopped using `crictl stop CONTAINER`. If containers are stopped manually, re-run the above procedure to complete any final steps in the process.
 
-5. Shut down and power off all management NCNs except ncn-m001.
+1. Shut down and power off all management NCNs except `ncn-m001`.
 
    ```bash
    ncn-m001# sat bootsys shutdown --stage ncn-power
@@ -205,7 +203,7 @@ An authentication token is required to access the API gateway and to use the `sa
    Are the above NCN groupings and exclusions correct? [yes,no] yes
    ```
 
-6. Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
+1. Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
 
    Alternately attach to the screen session \(screen sessions real time, but not saved\):
 
@@ -231,15 +229,22 @@ An authentication token is required to access the API gateway and to use the `sa
    ncn-m001# screen -x 26745.SAT-console-ncn-m003-mgmt
    ```
 
-7. Use `ipmitool` to check the power off status of management nodes.
+1. Use `ipmitool` to check the power off status of management nodes.
+
+    > NOTE: `read -s` is used to read the password in order to prevent it from being
+    > echoed to the screen or preserved in the shell history.
 
     ```bash
     ncn-m001# export USERNAME=root
-    ncn-m001# export IPMI_PASSWORD=changeme
-    ncn-m001# for ncn in ncn-m00{2,3} ncn-w00{1,2,3} ncn-s00{1,2,3}; do echo -n "$ncn: "; ipmitool -U $USERNAME -H ${ncn}-mgmt -E -I lanplus chassis power status; done
+    ncn-m001# read -s IPMI_PASSWORD
+    ncn-m001# export IPMI_PASSWORD
+    ncn-m001# for ncn in ncn-m00{2,3} ncn-w00{1,2,3} ncn-s00{1,2,3}; do
+                  echo -n "$ncn: "
+                  ipmitool -U $USERNAME -H ${ncn}-mgmt -E -I lanplus chassis power status
+              done
     ```
 
-8. From a remote system, activate the serial console for ncn-m001.
+1. From a remote system, activate the serial console for `ncn-m001`.
 
     ```bash
     remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME sol activate
@@ -248,15 +253,15 @@ An authentication token is required to access the API gateway and to use the `sa
     Password:
     ```
 
-9. From the serial console, shut down Linux.
+1. From the serial console, shut down Linux.
 
     ```bash
     ncn-m001# shutdown -h now
     ```
 
-10. Wait until the console indicates that the node has shut down.
+1. Wait until the console indicates that the node has shut down.
 
-11. From a remote system that has access to the management plane, use IPMI tool to power off ncn-m001.
+1. From a remote system that has access to the management plane, use IPMI tool to power off `ncn-m001`.
 
     ```bash
     remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME chassis power status
@@ -266,6 +271,8 @@ An authentication token is required to access the API gateway and to use the `sa
 
     **CAUTION:** The modular coolant distribution unit \(MDCU\) in a liquid-cooled HPE Cray EX2000 cabinet (also referred to as a Hill or TDS cabinet) typically receives power from its management cabinet PDUs. If the system includes an EX2000 cabinet, **do not power off** the management cabinet PDUs, Powering off the MDCU will cause an emergency power off \(EPO\) of the cabinet and may result in data loss or equipment damage.
 
-12. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, power off the PDU circuit breakers or disconnect the PDUs from facility power and follow lockout/tagout procedures for the site.
+1. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, power off the PDU circuit breakers or disconnect the PDUs from facility power and follow lockout/tagout procedures for the site.
 
-##### Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
+## Next Step
+
+Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
