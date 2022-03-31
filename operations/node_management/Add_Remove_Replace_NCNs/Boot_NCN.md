@@ -30,10 +30,11 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
     export IPMI_PASSWORD=changeme
     ```
 
-3. Verify you can access the BMC by checking the power status.
+3. Check the power status. Power the BMC off if `Chassis Power is on`.
 
     ```bash
     ipmitool -I lanplus -U root -E -H $BMC chassis power status
+    ipmitool -I lanplus -U root -E -H $BMC chassis power off
     ```
 
 4. Set the PXE/efiboot option.
@@ -71,12 +72,31 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 1. Then press enter on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console (**&** then **.**), and then use `ssh` to log in to the node to complete any remaining steps based on the node type.
 
-### Step 4 - Set the wipe flag to safeguard against the disk being wiped when the node is rebooted
+### Step 4 - Verify the added master or worker $NODE has joined the cluster
+
+  ```bash
+  ncn-mw# kubectl get nodes
+  ```
+
+  Example output:
+
+  ```screen
+  NAME       STATUS   ROLES    AGE    VERSION
+  ncn-m001   Ready    master   2d7h   v1.19.9
+  ncn-m002   Ready    master   20d    v1.19.9
+  ncn-m003   Ready    master   20d    v1.19.9
+  ncn-w001   Ready    <none>   27h    v1.19.9
+  ncn-w002   Ready    <none>   20d    v1.19.9
+  ncn-w003   Ready    <none>   20d    v1.19.9
+  ncn-w004   Ready    <none>    1h    v1.19.9
+  ```
+
+### Step 5 - Set the wipe flag to safeguard against the disk being wiped when the node is rebooted
 
 1. Run the following commands from a node that has cray cli initialized:
 
     ```bash
-    cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
+    ncn-mw# cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
     ```
 
 2. Edit the XNAME.json file and set the `metal.no-wipe=1` value.
@@ -84,7 +104,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 3. Get a token to interact with BSS using the REST API.
 
     ```bash
-    ncn# TOKEN=$(curl -s -S -d grant_type=client_credentials \
+    ncn-mw# TOKEN=$(curl -s -S -d grant_type=client_credentials \
         -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
         -o jsonpath='{.data.client-secret}' | base64 -d` \
         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
@@ -96,7 +116,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
     * This command can be run from any node.
 
     ```bash
-    ncn# curl -i -s -k -H "Content-Type: application/json" \
+    ncn-mw# curl -i -s -k -H "Content-Type: application/json" \
         -H "Authorization: Bearer ${TOKEN}" \
         "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" \
         -X PUT -d @./${XNAME}.json
@@ -107,18 +127,18 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
     * Export the list from BSS to a file with a different name.
 
     ```bash
-    ncn# cray bss bootparameters list --name ${XNAME} --format=json |jq .[]> ${XNAME}.check.json
+    ncn-mw# cray bss bootparameters list --name ${XNAME} --format=json |jq .[]> ${XNAME}.check.json
     ```
 
     * Compare the new JSON file with what was PUT to BSS.
 
     ```bash
-    ncn# diff ${XNAME}.json ${XNAME}.check.json
+    ncn-mw# diff ${XNAME}.json ${XNAME}.check.json
     ```
 
     * The files should be identical
 
-### Step 5 - Run NCN Personalizations using CFS as desired
+### Step 6 - Run NCN Personalizations using CFS as desired
 
 1. Run the following commands to list the available configurations.
 
@@ -128,7 +148,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
     Example Output:
 
-    ```
+    ```screen
     [[results]]
     lastUpdated = "2022-03-14T20:59:44Z"
     name = "ncn-personalization"
@@ -139,13 +159,35 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
     playbook = "site.yml"
     ```
     
-2. Select the appropriate configuration from the above list and configure the added NCN. In this example, the `ncn-personalization` config is used.
+2. Or determine the configuration applied another NCN of the same type. This example checks the configuration on `ncn-w002`.
+
+    ```bash
+    ncn-mw# cray cfs components describe $(ssh ncn-w002 cat /etc/cray/xname)
+    ```
+
+    Example Output:
+
+    ```screen
+    configurationStatus = "configured"
+    desiredConfig = "ncn-personalization"
+    enabled = true
+    errorCount = 0
+    id = "x3000c0s9b0n0"
+    [[state]]
+    cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+    commit = "1dc4038615cebcfad3e8230caecc885d987e8148"
+    lastUpdated = "2022-03-15T15:29:20Z"
+    playbook = "site.yml"
+    sessionName = "batcher-5e431205-a4b4-4a2e-8be3-21cf058774cc"
+    ```
+
+3. Select the appropriate configuration based on the above steps to personalize the added NCN. In this example, the `ncn-personalization` configuration is used.
 
     ```bash
     ncn-mw# cray cfs components update $XNAME --desired-config ncn-personalization
     ```
 
-3. Wait for `configurationStatus` to transistion from `pending` to `configured`
+4. Wait for `configurationStatus` to transistion from `pending` to `configured`
 
     ```bash
     ncn-mw# watch "cray cfs components describe $XNAME"
@@ -159,15 +201,15 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
     ...
     ```
 
-### Step 6 - Lock the management nodes
+### Step 7 - Lock the management nodes
 
 Follow [How to Lock Management Single Node](../../../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs). The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware or CAPMC to power off or do a power reset. Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
 
-### Step 7 - **For Storage nodes only**
+### Step 8 - **For Storage nodes only**
 
 Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added storage node to the Ceph cluster.
 
-### Step 8 - **For ncn-m001 only**
+### Step 9 - **For ncn-m001 only**
 
 1. Restore and verify the site link for ncn-m001.
  
