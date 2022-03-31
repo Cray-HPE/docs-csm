@@ -47,6 +47,8 @@ mkdir -p /srv/cray/scripts/kubernetes
 cat > /srv/cray/scripts/kubernetes/token-certs-refresh.sh <<'EOF'
 #!/bin/bash
 
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
 if [[ "$1" != "skip-upload-certs" ]]; then
   kubeadm init phase upload-certs --upload-certs --config /etc/cray/kubernetes/kubeadm.yaml
 fi

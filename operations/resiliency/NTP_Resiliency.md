@@ -53,5 +53,5 @@ This procedure requires administrative privileges.
 
 4.  Reboot each node.
 
-    If manually adjust the time is not effective, reboot each node to trigger the NTP script to run on first boot from cloud-init.
+    If manually adjust the time is not effective, reboot each node to trigger the NTP script to run on first boot from `cloud-init`.
 

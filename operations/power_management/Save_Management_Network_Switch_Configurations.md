@@ -2,65 +2,89 @@
 
 Switches must be powered on and operating. This procedure is optional if switch configurations have not changed.
 
-**Optional Task:** Save management spine and leaf switch configurations, and other network switch configurations before removing power from cabinets or the CDU. Management switch names are listed in the `/etc/hosts` file.
+**Optional Task:** Save management network switch configurations before removing power from cabinets or the CDU. Management switch names are listed in the `/etc/hosts` file.
 
-### Procedure
+### Obtain the list of switches
 
-1.  Connect to all management network Dell leaf switches and write memory configuration to startup.xml.
+From the command line on NCN m001 run:
 
-    The management switches in CDU cabinets are leaf switches.
+```bash
+grep 'sw-' /etc/hosts
+```
 
-    Dell leaf switches, for example `sw-leaf-001`:
+Example:
 
-    ```bash
-    ncn-m001# ssh admin@sw-leaf-001
-    admin@sw-leaf-001s password:
-    sw-leaf-001# write memory
-    sw-leaf-001# dir config
-    sw-leaf-001# exit
-    ```
+```bash
+ncn-m001:~ # grep 'sw-' /etc/hosts
+10.252.0.2 sw-spine-001
+10.252.0.3 sw-spine-002
+10.252.0.4 sw-leaf-001
+ncn-m001:~ #
+```
 
-    Use a for loop:
+### Save switch configs
 
-    ```bash
-    ncn-m001# for sw in sw-leaf-001 sw-leaf-002 sw-cdu-001 sw-cdu-002; \
-    do ssh admin@$sw; done
-    ```
+#### Aruba Switch and HPE Server Systems
 
-2.  Connect to all management network Mellanox spine switches and write memory configuration.
+On Aruba-based systems all management network switches will be Aruba and the following procedure.
+For each switch:
 
-    Mellanox spine switches, for example `sw-spine-001.nmn`:
+1. ssh to the switch
+2. Execute the `write memory` command
+3. Exit the switch shell
 
-    ```bash
-    ncn-m001# ssh admin@sw-spine-001.nmn
-    admin@sw-spine-001 password:
+Example:
 
-    sw-spine-001# enable
-    sw-spine-001# write memory
-    sw-spine-001# exit
-    ```
+ ```bash
+ ncn-m001# ssh admin@sw-spine-001.nmn
+ admin@sw-spine-001 password:
+ sw-spine-001# write memory
+ sw-spine-001# exit
+ ```
 
-3.  Connect to all management network Aruba switches and write memory configuration.
+#### Dell and Mellanox Switch and Gigabyte/Intel Server Systems
 
-    ```bash
-    ncn-m001# ssh admin@sw-spine-001.nmn
-    admin@sw-spine-001 password:
+On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any leaf-bmc and cdu switches will be Dell.  The overall procedure is the same but the specifics of execution are slightly different.
 
-    sw-spine-001# write memory
-    sw-spine-001# exit
-    ```
+1. ssh to the switch
+2. Enter enable mode (Mellanox only)
+3. Execute the `write memory` command
+4. Exit the switch shell
 
-4.  Save configuration settings on link aggregation group \(LAG\) switches that connect customer storage networks to the Slingshot network.
+Mellanox Example:
 
-    LAG switches are accessible from the ClusterStor management network.
+ ```bash
+ ncn-m001# ssh admin@sw-spine-001.nmn
+ admin@sw-spine-001 password:
+ sw-spine-001# enable
+ sw-spine-001# write memory
+ sw-spine-001# exit
+ ```
 
-    ```bash
-    ncn-m001# ssh admin@cls01053n00
-    admin@cls01053n00 password:
+Dell Example:
 
-    cls01053n00# ssh r0-100gb-sw01
-    r0-100gb-sw01# enable
-    r0-100gb-sw01# write memory
-    r0-100gb-sw01# exit
-    ```
+ ```bash
+ ncn-m001# ssh admin@sw-leaf-bmc-001
+ admin@sw-leaf-bmc-001s password:
+ sw-leaf-001# write memory
+ sw-leaf-001# exit
+ ```
 
+#### Edge Routers and Storage Switches
+
+Save configuration settings on Edge Router switches (Arista, Aruba or Juniper) that connect customer storage networks to the Slingshot network if these switches exist in the site and the configurations have changed.
+Edge switches are accessible from the ClusterStor management network and the CSM management network.
+
+Example:
+
+ ```bash
+ ncn-m001# ssh admin@cls01053n00
+ admin@cls01053n00 password:
+
+ cls01053n00# ssh r0-100gb-sw01
+ r0-100gb-sw01# enable
+ r0-100gb-sw01# write memory
+ r0-100gb-sw01# exit
+ ```
+
+##### Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
