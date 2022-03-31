@@ -265,6 +265,36 @@ def get_network_list(sls_networks):
                         network_list.add(network['Name'])
     return network_list
 
+
+def restart_kubernetes_deployment(deployment, namespace):
+
+    # setup kubernetes client
+    config.load_kube_config()
+    v1 = client.CoreV1Api()
+    v1_apps = client.AppsV1Api()
+
+
+    # get kubernetes admin secret
+    secret = v1.read_namespaced_secret("admin-client-auth", "default").data
+    now = datetime.utcnow()
+    now = str(now.isoformat("T") + "Z")
+    body = {
+        'spec': {
+            'template':{
+                'metadata': {
+                    'annotations': {
+                        'kubectl.kubernetes.io/restartedAt': now
+                    }
+                }
+            }
+        }
+    }
+    try:
+        v1_apps.patch_namespaced_deployment(deployment, namespace, body, pretty='true')
+    except ApiException as e:
+        print("Exception when calling AppsV1Api->read_namespaced_deployment_status: %s\n" % e)
+
+
 def delete_kea_lease(ip, token):
     """
     delete active leases from Kea via Kea api
@@ -323,11 +353,11 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
         print(f'Checking {network}.')
         print(f'last_reserved_ip: {last_reserved_ip}    start_dhcp_pool:{start_dhcp_pool}')
         print(f'The space between last_reserved_ip and start_dhcp_pool is {ip_white_space} IP.\n')
-        log.debug(f'Unsorted static ips:'
+        log.info(f'Unsorted static ips:'
                   f' {ip_set}')
-        log.debug(f'Sorted static ips:'
+        log.info(f'Sorted static ips:'
                   f'{sorted_ip_set}')
-        log.debug(f'Last IP index of sorted static IP: {len(sorted_ip_set)-1}')
+        log.info(f'Last IP index of sorted static IP: {len(sorted_ip_set)-1}')
 
 
         ips_to_delete_from_smd[network] = set()
@@ -364,16 +394,16 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
     for network in networks_data:
         network_update = []
         network_update.append(networks_data[network])
-        #        print (network_update)
         for i in range(len(network_update[0]['ExtraProperties']['Subnets'])):
             if 'Bootstrap' in network_update[0]['ExtraProperties']['Subnets'][i]['FullName']:
-                print(network_update[0]['ExtraProperties']['Subnets'][i]['DHCPStart'])
+                log.info('Checking for boot strap network')
+                log.info(f"Network: {network_update[0]['Name']} dhcp_start: {network_update[0]['ExtraProperties']['Subnets'][i]['DHCPStart']}")
                 network_update[0]['ExtraProperties']['Subnets'][i]['DHCPStart'] = new_ip_dhcp_pool_start[network]
-                print(network_update[0]['ExtraProperties']['Subnets'][i]['DHCPStart'])
+                log.info(f"Network: {network_update[0]['Name']} dhcp_end: {network_update[0]['ExtraProperties']['Subnets'][i]['DHCPStart']}")
 
         # update sls data
         # place holder print out
-        print(f"sls_network_update = put_api_request('/apis/sls/v1/networks/' + {network}, {api_header}, {json.dumps(network_update[0])}")
+        log.info(f"sls_network_update = put_api_request('/apis/sls/v1/networks/' + {network}, {api_header}, {json.dumps(network_update[0])}")
         # sls update
         sls_network_update = put_api_request('/apis/sls/v1/networks/' + network, api_header, network_update[0])
 
@@ -477,13 +507,13 @@ def main():
 #        network_list = get_network_list(sls_networks)
         network_list = {'CAN', 'HMN', 'MTL', 'NMN'}
 
-    log.debug(f'sls_networks dump:'
+    log.info(f'sls_networks dump:'
               f'{json.dumps(sls_networks)}')
-    log.debug(f'smd_ethernet_interfaces dump:'
+    log.info(f'smd_ethernet_interfaces dump:'
               f'{json.dumps(smd_ethernet_interfaces)}')
-    log.debug(f'remove_ncn_count: {remove_ncn_count}')
-    log.debug(f'move_ncn_count: {move_ncn_count}')
-    log.debug(f'add_ncn_count: {add_ncn_count}')
+    log.info(f'remove_ncn_count: {remove_ncn_count}')
+    log.info(f'move_ncn_count: {move_ncn_count}')
+    log.info(f'add_ncn_count: {add_ncn_count}')
 
     # make changes to network data for NCN add
     if add_ncn_count > 0:
@@ -496,7 +526,9 @@ def main():
               f'{json.dumps(xname_list)}')
     print(f'prerequisite to prepare NCNs for removal, move and add\n'
           f'Network expansion COMPLETED\n'
-          f'Log and backup of SLS, BSS and SMD can be found at: {backup_folder}')
+          f'Log and backup of SLS, BSS and SMD can be found at: {backup_folder}\n')
+    print(f'Restarting cray-dhcp-kea')
+    restart_kubernetes_deployment('cray-dhcp-kea', 'services')
     stop_log()
 
 if __name__ == '__main__':
