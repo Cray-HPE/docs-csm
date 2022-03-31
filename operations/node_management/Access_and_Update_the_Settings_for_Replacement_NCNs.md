@@ -32,7 +32,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     ```
 
     **Troubleshooting:** Follow the steps below if the credentials are not available:
-    1. Gigabyte NCN Troubleshooting
+    1. Troubleshoot Gigabyte NCNs.
        1. Power cycle the replacement NCN.
        2. Boot into Linux.
        3. Use the factory reset command to regain access to the BMC login credentials.
@@ -40,7 +40,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
            ```bash
            linux# ipmitool raw 0x32 0x66
            ```
-    2.  HPE NCN Troubleshooting
+    2. Troubleshoot HPE NCNs.
         
         __Coming soon__
 

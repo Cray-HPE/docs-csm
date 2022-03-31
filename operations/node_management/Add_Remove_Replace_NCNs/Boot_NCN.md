@@ -18,7 +18,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 **IMPORTANT:** These commands assumes you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#add-ncn-prerequisites).
 
-1. Set the BMC variable to the hostname of the BMC of the node being rebuilt. If booting ncn-m001, set this to the FQDN or IP.
+1. Set the BMC variable to the hostname of the BMC of the node being rebuilt. If booting `ncn-m001`, set this to the FQDN or IP.
 
     ```bash
     BMC=${NODE}-mgmt
@@ -71,7 +71,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 1. Then press enter on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console (**&** then **.**), and then use `ssh` to log in to the node to complete any remaining steps based on the node type.
 
-### Step 4 - Set the wipe flag to safeguard against the disk being wiped when the node is rebooted.
+### Step 4 - Set the wipe flag to safeguard against the disk being wiped when the node is rebooted
 
 1. Run the following commands from a node that has cray cli initialized:
 

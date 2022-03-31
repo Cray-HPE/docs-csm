@@ -133,7 +133,7 @@ Use the `cray hsm locks lock` command to perform locking.
    ```
 
 1. Lock the BMC of those nodes.
-   > **Note:** The BMC of ncn-m001 typically does not exist in HSM under HSM State Components, and therefore cannot be locked as it does not exist.
+   > **Note:** The BMC of `ncn-m001` typically does not exist in HSM under HSM State Components, and therefore cannot be locked as it does not exist.
 
    ```bash
    // Remove 'n0' from all of the xnames to get a list of the NodeBMCs that need to be locked.
