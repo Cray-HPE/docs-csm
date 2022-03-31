@@ -18,7 +18,7 @@ This procedure will perform an verify the following:
             | jq -r '.access_token')
     ```
 
-2.  Determine the xname of the NCN by referring to the HMN of the systems SHCD if it has not been determined yet.
+2.  Determine the component name (xname) of the NCN by referring to the HMN of the systems SHCD if it has not been determined yet.
 
     Sample row from the HMN tab of a SHCD:
     | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |

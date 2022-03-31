@@ -17,6 +17,11 @@ Validate the master node added successfully.
 
     ```bash
     ncn-mw# kubectl get nodes
+    ```
+
+    Example output:
+
+    ```screen
     NAME       STATUS   ROLES    AGE    VERSION
     ncn-m001   Ready    master   113m   v1.19.9
     ncn-m002   Ready    master   113m   v1.19.9
@@ -30,6 +35,11 @@ Validate the master node added successfully.
 
     ```bash
     ncn-m# lsblk | grep -A2 ^sdc
+    ```
+
+    Example output:
+
+    ```screen
     sdc                   8:32   0 447.1G  0 disk
      └─ETCDLVM           254:0    0 447.1G  0 crypt
        └─etcdvg0-ETCDK8S 254:1    0    32G  0 lvm   /run/lib-etcd
@@ -51,18 +61,23 @@ Validate the worker node added successfully.
 
 1. Verify the new node is in the cluster.
 
-      Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly added node to join the cluster. This should occur within 10 to 20 minutes.
+    Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly added node to join the cluster. This should occur within 10 to 20 minutes.
 
-      ```bash
-      ncn-mw# kubectl get nodes
-      NAME       STATUS   ROLES    AGE    VERSION
-      ncn-m001   Ready    master   113m   v1.19.9
-      ncn-m002   Ready    master   113m   v1.19.9
-      ncn-m003   Ready    master   112m   v1.19.9
-      ncn-w001   Ready    <none>   112m   v1.19.9
-      ncn-w002   Ready    <none>   112m   v1.19.9
-      ncn-w003   Ready    <none>   112m   v1.19.9
-      ```
+    ```bash
+    ncn-mw# kubectl get nodes
+    ```
+
+    Example output:
+
+    ```screen
+    NAME       STATUS   ROLES    AGE    VERSION
+    ncn-m001   Ready    master   113m   v1.19.9
+    ncn-m002   Ready    master   113m   v1.19.9
+    ncn-m003   Ready    master   112m   v1.19.9
+    ncn-w001   Ready    <none>   112m   v1.19.9
+    ncn-w002   Ready    <none>   112m   v1.19.9
+    ncn-w003   Ready    <none>   112m   v1.19.9
+    ```
 
 1. Confirm /var/lib/containerd is on overlay on the node which was added.
 
@@ -70,6 +85,11 @@ Validate the worker node added successfully.
 
     ```bash
     ncn-w# df -h /var/lib/containerd
+    ```
+
+    Example output:
+
+    ```screen
     Filesystem            Size  Used Avail Use% Mounted on
     containerd_overlayfs  378G  245G  133G  65% /var/lib/containerd
     ```
@@ -97,6 +117,11 @@ Validate the storage node added successfully. The following examples are based o
 
     ```bash
     ncn-m# ceph -s
+    ```
+
+    Example output:
+
+    ```screen
       ceph -s
         cluster:
           id:     b13f1282-9b7d-11ec-98d9-b8599f2b2ed2
@@ -125,6 +150,11 @@ Validate the storage node added successfully. The following examples are based o
 
     ```bash
     ncn-m# ceph osd tree
+    ```
+
+    Example output:
+
+    ```screen
     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
     -1         31.43875  root default
     -7          6.98639      host ncn-s001
@@ -159,6 +189,11 @@ Validate the storage node added successfully. The following examples are based o
 
     ```bash
     ncn-s# curl -k https://rgw-vip.nmn
+    ```
+
+    Example output:
+
+    ```screen
     <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
     ```
 

@@ -7,7 +7,7 @@ Update the network switches for the NCN that was removed.
 ## Procedure
 
 ### Update Networking to Remove NCN
-#### ncn-w004 IP data
+#### `ncn-w004` IP data:
 ```
 10.102.4.15     ncn-w004.can
 10.254.1.22     ncn-w004.hmn
@@ -52,7 +52,7 @@ no interface mlag-port-channel 12 switchport hybrid allowed-vlan add 7
 no interface mlag-port-channel 12 description "sw-spine-002:12==>ncn-w004:pcie-slot1:2"
 no interface mlag-port-channel 12 no shutdown
 ```
-### only workers
+### Only Worker Nodes
 #### spine-01 switch updates
 ```
 no router bgp 65533 vrf default neighbor 10.252.1.13 remote-as 65533
