@@ -35,7 +35,7 @@ ncn-w001# kubectl get endpoints keycloak-postgres -n services
 
 Example output:
 
-```
+```text
 NAME                ENDPOINTS         AGE
 keycloak-postgres   <none>            3d22h
 ```
@@ -113,7 +113,7 @@ ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patron
 
 Example output:
 
-```
+```text
 +-------------------+---------------------+------------+--------+---------+----+-----------+
 |      Cluster      |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
 +-------------------+---------------------+------------+--------+---------+----+-----------+
@@ -148,7 +148,7 @@ root@keycloak-postgres-1:/home/postgres# patronictl reinit keycloak-postgres key
 
 Example output:
 
-```
+```text
 Are you sure you want to reinitialize members keycloak-postgres-0? [y/N]: y
 Failed: reinitialize for member keycloak-postgres-0, status code=503, (restarting after failure already in progress)
 Do you want to cancel it and reinitialize anyway? [y/N]: y
@@ -161,7 +161,7 @@ root@keycloak-postgres-1:/home/postgres# patronictl reinit keycloak-postgres key
 
 Example output:
 
-```
+```text
 Are you sure you want to reinitialize members keycloak-postgres-2? [y/N]: y
 Failed: reinitialize for member keycloak-postgres-2, status code=503, (restarting after failure already in progress)
 Do you want to cancel it and reinitialize anyway? [y/N]: y
@@ -176,7 +176,7 @@ ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patron
 
 Example output:
 
-```
+```text
 +-------------------+---------------------+--------------+--------+---------+----+-----------+
 |      Cluster      |        Member       |     Host     |  Role  |  State  | TL | Lag in MB |
 +-------------------+---------------------+--------------+--------+---------+----+-----------+
@@ -186,105 +186,154 @@ Example output:
 +-------------------+---------------------+--------------+--------+---------+----+-----------+
 ```
 
-If a cluster member is `stopped` after a successful reinitialization, check for pg_internal.init.* files that may need to be cleaned up. This can occur if the pgdata disk was full prior to the reinitialization, leaving truncated pg_internal.init.* files in the pgdata directory.
+**Troubleshooting:**
 
-```bash
-ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list
-```
+- If `patronictl reinit` fails with `Failed: reinitialize for member` ... `status code=503, (Cluster has no leader, can not reinitialize)`:
 
-Example output:
+    For example:
 
-```
-+-------------------+---------------------+--------------+--------+---------+----+-----------+
-|      Cluster      |        Member       |     Host     |  Role  |  State  | TL | Lag in MB |
-+-------------------+---------------------+--------------+--------+---------+----+-----------+
-| keycloak-postgres | keycloak-postgres-0 | 10.42.10.22  |        | running | 47 |         0 |
-| keycloak-postgres | keycloak-postgres-1 | 10.40.11.191 | Leader | running | 47 |           |
-| keycloak-postgres | keycloak-postgres-2 | 10.40.11.190 |        | stopped |    |   unknown |
-+-------------------+---------------------+--------------+--------+---------+----+-----------+
-```
+    ```bash
+    ncn-w001# kubectl exec cray-console-data-postgres-0 -n services -- bash
+    root@cray-console-data-postgres-0:~# patronictl reinit cray-console-data-postgres cray-console-data-postgres-1
+    ```
+
+    Example output:
+
+    ```text
+    + Cluster: cray-console-data-postgres (7072784871993835594) ---+----+-----------+
+    |            Member            |    Host    |  Role  |  State  | TL | Lag in MB |
+    +------------------------------+------------+--------+---------+----+-----------+
+    | cray-console-data-postgres-0 | 10.39.0.74 | Leader | running |  1 |           |
+    | cray-console-data-postgres-1 | 10.36.0.37 |        | running |  1 |        16 |
+    | cray-console-data-postgres-2 | 10.32.0.1  |        | running |  1 |        16 |
+    +------------------------------+------------+--------+---------+----+-----------+
+    Are you sure you want to reinitialize members cray-console-data-postgres-1? [y/N]: y
+    Failed: reinitialize for member cray-console-data-postgres-1, status code=503, (Cluster has no leader, can not reinitialize)
+    ```
  
-Exec into that pod that is `stopped` and check the most recent postgres log for any `invalid segment number 0` errors relating to pg_internal.init.* files.
+    1. Delete the postgres leader pod and wait for the leader to restart.
+    
+        ```bash
+        ncn-w001# kubectl delete pod cray-console-data-postgres-0 -n services
+        ```
+    
+        ```bash
+        ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list
+        ```
+    
+        Example output:
+    
+        ```text
+        + Cluster: cray-console-data-postgres (7072784871993835594) ---+----+-----------+
+        |            Member            |    Host    |  Role  |  State  | TL | Lag in MB |
+        +------------------------------+------------+--------+---------+----+-----------+
+        | cray-console-data-postgres-0 | 10.39.0.80 | Leader | running |  2 |           |
+        | cray-console-data-postgres-1 | 10.36.0.37 |        | running |  1 |        49 |
+        | cray-console-data-postgres-2 | 10.32.0.1  |        | running |  1 |        49 |
+        +------------------------------+------------+--------+---------+----+-----------+
+        ```
 
-```bash
-ncn-w001# kubectl exec keycloak-postgres-2 -n services -it -- bash
-postgres@keycloak-postgres-2:~$ export LOG=`ls -t /home/postgres/pgdata/pgroot/pg_log/*.csv | head -1`
-postgres@keycloak-postgres-2:~$ grep pg_internal.init $LOG | grep "invalid segment number 0" | tail -1
-```
+    2. Re-run [Is Replication Lagging?](#lag) for any lagging members.
 
-Example output:
+- If a cluster member is `stopped` after a successful reinitialization, check for pg_internal.init.* files that may need to be cleaned up. This can occur if the pgdata disk was full prior to the reinitialization, leaving truncated pg_internal.init.* files in the pgdata directory.
 
-```
-2022-02-01 16:59:35.529 UTC,"standby","",227600,"127.0.0.1:42264",61f966f7.37910,3,"sending backup ""pg_basebackup base backup""",2022-02-01 16:59:35 UTC,7/0,0,ERROR,XX000,"invalid segment number 0 in file ""pg_internal.init.2239188""",,,,,,,,,"pg_basebackup"
-```
+    ```bash
+    ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list
+    ```
 
-If the check above finds such files, first find any zero length pg_internal.init.* files.
-```bash
-postgres@keycloak-postgres-2:~$ find /home/postgres/pgdata -name pg_internal.init.* -size 0 
-```
+    Example output:
 
-Example output:
+    ```text
+    +-------------------+---------------------+--------------+--------+---------+----+-----------+
+    |      Cluster      |        Member       |     Host     |  Role  |  State  | TL | Lag in MB |
+    +-------------------+---------------------+--------------+--------+---------+----+-----------+
+    | keycloak-postgres | keycloak-postgres-0 | 10.42.10.22  |        | running | 47 |         0 |
+    | keycloak-postgres | keycloak-postgres-1 | 10.40.11.191 | Leader | running | 47 |           |
+    | keycloak-postgres | keycloak-postgres-2 | 10.40.11.190 |        | stopped |    |   unknown |
+    +-------------------+---------------------+--------------+--------+---------+----+-----------+
+    ```
+ 
+    Exec into that pod that is `stopped` and check the most recent postgres log for any `invalid segment number 0` errors relating to pg_internal.init.* files.
 
-```
-./pgroot/data/base/16622/pg_internal.init.2239004
-...
-./pgroot/data/base/16622/pg_internal.init.2239010
-```
+    ```bash
+    ncn-w001# kubectl exec keycloak-postgres-2 -n services -it -- bash
+    postgres@keycloak-postgres-2:~$ export LOG=`ls -t /home/postgres/pgdata/pgroot/pg_log/*.csv | head -1`
+    postgres@keycloak-postgres-2:~$ grep pg_internal.init $LOG | grep "invalid segment number 0" | tail -1
+    ```
 
-Then delete the zero length pg_internal.init.* files. Double check the syntax of the command in this step before executing it `-size 0 -exec rm {} \;`.
+    Example output:
 
+    ```text
+    2022-02-01 16:59:35.529 UTC,"standby","",227600,"127.0.0.1:42264",61f966f7.37910,3,"sending backup ""pg_basebackup base backup""",2022-02-01 16:59:35 UTC,7/0,0,ERROR,XX000,"invalid segment number 0 in file ""pg_internal.init.2239188""",,,,,,,,,"pg_basebackup"
+    ```
 
-```bash
-postgres@keycloak-postgres-2:~$ find /home/postgres/pgdata -name pg_internal.init.* -size 0 -exec rm {} \;
-```
+    If the check above finds such files, first find any zero length pg_internal.init.* files.
 
-Next find any non-zero length pg_internal.init.* files that were truncated when the file system filled up.
+    ```bash
+    postgres@keycloak-postgres-2:~$ find /home/postgres/pgdata -name pg_internal.init.* -size 0 
+    ```
 
-```bash
-postgres@keycloak-postgres-2:~$ grep pg_internal.init $LOG | grep "invalid segment number 0" | tail -1
-```
+    Example output:
 
-Example output:
+    ```text
+    ./pgroot/data/base/16622/pg_internal.init.2239004
+    ...
+    ./pgroot/data/base/16622/pg_internal.init.2239010
+    ```
 
-```
-2022-02-01 16:59:35.529 UTC,"standby","",227600,"127.0.0.1:42264",61f966f7.37910,3,"sending backup ""pg_basebackup base backup""",2022-02-01 16:59:35 UTC,7/0,0,ERROR,XX000,"invalid segment number 0 in file ""pg_internal.init.2239188""",,,,,,,,,"pg_basebackup"
-```
+    Then delete the zero length pg_internal.init.* files. Double check the syntax of the command in this step before executing it `-size 0 -exec rm {} \;`.
 
-Locate the non-zero length pg_internal.init.* file.
+    ```bash
+    postgres@keycloak-postgres-2:~$ find /home/postgres/pgdata -name pg_internal.init.* -size 0 -exec rm {} \;
+    ```
 
-```bash
-postgres@keycloak-postgres-2:~$ find ~/pgdata -name pg_internal.init.2239188
-```
+    Next find any non-zero length pg_internal.init.* files that were truncated when the file system filled up.
 
-Example output:
+    ```bash
+    postgres@keycloak-postgres-2:~$ grep pg_internal.init $LOG | grep "invalid segment number 0" | tail -1
+    ```
 
-```
-/home/postgres/pgdata/pgroot/data/base/16622/pg_internal.init.2239188
-```
+    Example output:
 
-Then delete (or move to a different location) the non-zero length pg_internal.init.* file.
+    ```text
+    2022-02-01 16:59:35.529 UTC,"standby","",227600,"127.0.0.1:42264",61f966f7.37910,3,"sending backup ""pg_basebackup base backup""",2022-02-01 16:59:35 UTC,7/0,0,ERROR,XX000,"invalid segment number 0 in file ""pg_internal.init.2239188""",,,,,,,,,"pg_basebackup"
+    ```
 
-```bash
-postgres@keycloak-postgres-2:~$ rm /home/postgres/pgdata/pgroot/data/base/16622/pg_internal.init.2239188
-```
+    Locate the non-zero length pg_internal.init.* file.
 
-Iterate over the above steps to find, locate and delete non-zero length pg_internal.init.* files until there are no more new `invalid segment number 0` messages. At this point, verify that the cluster member has started.
+    ```bash
+    postgres@keycloak-postgres-2:~$ find ~/pgdata -name pg_internal.init.2239188
+    ```
 
-```bash
-ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list
-```
+    Example output:
 
-Example output:
+    ```text
+    /home/postgres/pgdata/pgroot/data/base/16622/pg_internal.init.2239188
+    ```
 
-```
-+-------------------+---------------------+--------------+--------+---------+----+-----------+
-|      Cluster      |        Member       |     Host     |  Role  |  State  | TL | Lag in MB |
-+-------------------+---------------------+--------------+--------+---------+----+-----------+
-| keycloak-postgres | keycloak-postgres-0 | 10.42.10.22  |        | running | 47 |         0 |
-| keycloak-postgres | keycloak-postgres-1 | 10.40.11.191 | Leader | running | 47 |           |
-| keycloak-postgres | keycloak-postgres-2 | 10.40.11.190 |        | running | 47 |         0 |
-+-------------------+---------------------+--------------+--------+---------+----+-----------+
-```
+    Then delete (or move to a different location) the non-zero length pg_internal.init.* file.
+
+    ```bash
+    postgres@keycloak-postgres-2:~$ rm /home/postgres/pgdata/pgroot/data/base/16622/pg_internal.init.2239188
+    ```
+
+    Iterate over the above steps to find, locate and delete non-zero length pg_internal.init.* files until there are no more new `invalid segment number 0` messages. At this point, verify that the cluster member has started.
+
+    ```bash
+    ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list
+    ```
+
+    Example output:
+
+    ```text
+    +-------------------+---------------------+--------------+--------+---------+----+-----------+
+    |      Cluster      |        Member       |     Host     |  Role  |  State  | TL | Lag in MB |
+    +-------------------+---------------------+--------------+--------+---------+----+-----------+
+    | keycloak-postgres | keycloak-postgres-0 | 10.42.10.22  |        | running | 47 |         0 |
+    | keycloak-postgres | keycloak-postgres-1 | 10.40.11.191 | Leader | running | 47 |           |
+    | keycloak-postgres | keycloak-postgres-2 | 10.40.11.190 |        | running | 47 |         0 |
+    +-------------------+---------------------+--------------+--------+---------+----+-----------+
+    ```
 
 ### Setup Alerts for Replication Lag
 
@@ -314,7 +363,7 @@ Other `STATUS` values such as `Updating` are a non issue. It is expected that th
 
     Example output:
 
-    ```
+    ```text
     NAMESPACE   NAME                         TEAM                VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE     STATUS
     services    cray-console-data-postgres   cray-console-data   11        3      2Gi                                     4h10m   Running
     services    cray-sls-postgres            cray-sls            11        3      1Gi                                     4h12m   SyncFailed
@@ -332,7 +381,7 @@ Other `STATUS` values such as `Updating` are a non issue. It is expected that th
 
     Example output:
 
-    ```
+    ```text
     NAME                                      READY   STATUS    RESTARTS   AGE
     cray-postgres-operator-6fffc48b4c-mqz7z   2/2     Running   0          5h26m
     ```
@@ -543,7 +592,7 @@ If the number of Postgres pods for the given cluster is more or less than expect
 
         Example output:
 
-        ```
+        ```text
         NAMESPACE   NAME                  READY   STATUS    RESTARTS   AGE
         services    keycloak-postgres-0   0/3     Pending   0          36m
         services    keycloak-postgres-1   3/3     Running   0          35m
@@ -584,7 +633,7 @@ If a Postgres cluster no longer has a leader, the database will need to be recov
 
     Example output:
 
-    ```
+    ```text
     +-------------------+---------------------+------------+------+--------------+----+-----------+
     |      Cluster      |        Member       |    Host    | Role |    State     | TL | Lag in MB |
     +-------------------+---------------------+------------+------+--------------+----+-----------+
