@@ -4,7 +4,9 @@ Shut down and power off compute and user access nodes \(UANs\). This procedure p
 
 ### Prerequisites
 
-The `cray` and `sat` commands must be initialized and authenticated with valid credentials for Keycloak. If these have not been prepared, then see [Configure the Cray Command Line Interface (cray CLI)](../configure_cray_cli.md) and refer to "SAT Authentication" in the System Admin Toolkit (SAT) product stream documentation.
+The `cray` and `sat` commands must be initialized and authenticated with valid credentials for Keycloak. If these have not been prepared, then see
+[Configure the Cray Command Line Interface (cray CLI)](../configure_cray_cli.md) and refer to the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
+
 
 ### Procedure
 
@@ -133,3 +135,4 @@ The `cray` and `sat` commands must be initialized and authenticated with valid c
     [...]
     ```
 
+##### Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
