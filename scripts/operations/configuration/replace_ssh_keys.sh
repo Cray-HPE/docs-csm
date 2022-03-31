@@ -26,7 +26,7 @@
 usage()
 {
    # Display Help
-   echo "Replaces the ssh keys in Kubernetes"
+   echo "Replaces the SSH keys in Kubernetes"
    echo "At least one option must be specified"
    echo "NOTE: This does not update deployed keys"
    echo

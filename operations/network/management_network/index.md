@@ -67,9 +67,9 @@ Documentation for CANU can be found at:
   - Shows how the HMN tab on the SHCD should be formatted.
 - [SHCD Connection Rules](../../../install/shcd_hmn_connections_rules.md)
   - Shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.
-- [Backup custom config](backup_custom_config.md)
-  - Shows users how to backup configuration that is custom to their system, this include site connections and credentials.
-- [Config management](config_management.md)
+- [Backup Custom Config](backup_custom_config.md)
+  - Shows users how to backup configuration that is custom to their system; this includes site connections and credentials.
+- [Configuration Management](config_management.md)
   - Shows users how to save a running config to the switch for backup purposes or to switch between different switch configs.
 - [Validate switch config](validate_switch_configs.md)
   - Compares the configuration on a running system to what is generated.
