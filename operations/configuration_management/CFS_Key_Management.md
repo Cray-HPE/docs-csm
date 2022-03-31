@@ -1,4 +1,4 @@
-## CFS Key Management and Permission Denied Errors
+# CFS Key Management and Permission Denied Errors
 
 Configuration Framework Service \(CFS\) manages its own keys separate from keys for communication between CFS and the components or images that it is configuring.  These are separate from the keys used by users and should not need to be managed.
 

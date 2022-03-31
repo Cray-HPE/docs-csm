@@ -1,4 +1,4 @@
-## Launch a Virtual KVM on Intel Servers
+# Launch a Virtual KVM on Intel Servers
 
 This procedure shows how to launch a virtual KVM to connect to an Intel node. The virtual KVM can be launched on any host that is on the same network as the nodes's BMC. This method of connecting to a nodes is frequently used during system installation.
 
@@ -47,6 +47,4 @@ This procedure shows how to launch a virtual KVM to connect to an Intel node. Th
     The virtual KVM \(iKVM Viewer\) is ready to use. There is now a virtual iKVM session connected to the nodes that enables control via the web similar to standing directly in front of the physical KVM.
 
     **Troubleshooting:** If the interface appears to lock up while working in the BMC menus \(often encountered when creating virtual drives\), it may be necessary to reset the nodes using **Power Control** \> **Power Reset**.
-
-
 

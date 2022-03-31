@@ -75,31 +75,90 @@ ncn# XNAME=<xname>
 ncn# echo $XNAME
 ```
 
-**IMPORTANT:** if the node being added to the system TODO... want to make sure it is already setup
-* If adding a NCN that was not previously in the system follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md).
-* Ensure the NCN BMC is configured to use DHCP. (This does not apply to the BMC for ncn-m001 since it is statically configured for the site.)
-* Ensure the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](../../instal/../install/switch_pxe_boot_from_onboard_nic_to_pcie.md) procedure.
-* Ensure the NCN BMC is configure with the expected root user credentials.
-* Ensure that the NCN device to be added has been racked and cabled per the SHCD.
+**IMPORTANT:** Ensure the node being added to the system has been properly configured. If the node being added to the system has not been perviously in the system several settings need to be verified. 
+*  Ensure that the NCN device to be added has been racked and cabled per the SHCD.
+*  Ensure the NCN BMC is configure with the expected root user credentials.
    
    The NCN BMC credentials needs to match the current global air-cooled BMC default credentials. This can be viewed with the following command:
-    ```bash
-    ncn-m# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
-    ncn-m# kubectl -n vault exec -it cray-vault-0 -c vault -- env \
+   ```bash
+   ncn-m# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+   ncn-m# kubectl -n vault exec -it cray-vault-0 -c vault -- env \
       VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 \
       vault kv get secret/reds-creds/defaults
-    ```
+   ```
 
-    Example output:
-    ```bash
-    ==== Data ====
-    Key     Value
-    ---     -----
-    Cray    map[password:foobar username:root] 
-    ```
+   Example output:
+   ```bash
+   ==== Data ====
+   Key     Value
+   ---     -----
+   Cray    map[password:foobar username:root] 
+   ```
+*  If adding a NCN that was not previously in the system follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md).
+*  Ensure the NCN BMC is configured to use DHCP. (This does not apply to the BMC for ncn-m001 since it is statically configured for the site.)
+*  Ensure the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](../../instal/../install/switch_pxe_boot_from_onboard_nic_to_pcie.md) procedure.
 
-* If adding an HPE NCN, ensure IPMI is enabled. 
+*  If adding an HPE NCN, ensure IPMI is enabled.
 
+   1. Check to see if IPMI is enabled:
+      ```bash
+      ncn# export IPMI_PASSWORD=changeme
+      ncn# curl -k -u root:$IPMI_PASSWORD https://NCN_NODE-mgmt/redfish/v1/Managers/1/NetworkProtocol | jq .IPMI
+      ```
+
+      Expected output:
+      ```json
+      {
+         "Port": 623,
+         "ProtocolEnabled": true
+      }
+      ```
+
+   2. If disabled is disabled, then enable IPMI:
+      ```bash
+      ncn# curl -k -u root:$IPMI_PASSWORD -X PATCH \
+         -H 'Content-Type: application/json' \
+         -d '{"IPMI": {"Port": 623, "ProtocolEnabled": true}}' \
+         https://NCN_NODE-mgmt/redfish/v1/Managers/1/NetworkProtocol | jq
+      ```
+
+      Expected output:
+      ```
+      {
+         "error": {
+            "code": "iLO.0.10.ExtendedInfo",
+            "message": "See @Message.ExtendedInfo for more information.",
+            "@Message.ExtendedInfo": [
+               {
+               "MessageId": "iLO.2.14.ResetRequired"
+               }
+            ]
+         }
+      }
+      ```
+
+   3. If disabled IPMI was disabled, then restart the BMC:
+      ```bash
+      ncn# curl -k -u root:$IPMI_PASSWORD -X POST \
+         -H 'Content-Type: application/json' \
+         -d '{"ResetType": "GracefulRestart"}' \
+         https://NCN_NODE-mgmt/redfish/v1/Managers/1/Actions/Manager.Reset | jq
+      ```
+
+      Expected output:
+      ```json
+      {
+         "error": {
+            "code": "iLO.0.10.ExtendedInfo",
+            "message": "See @Message.ExtendedInfo for more information.",
+            "@Message.ExtendedInfo": [
+               {
+               "MessageId": "iLO.2.14.ResetInProgress"
+               }
+            ]
+         }
+         }
+      ```
 <a name="add-ncn-procedure"></a>
 ### Add NCN Procedure
 

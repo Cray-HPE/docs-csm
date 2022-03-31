@@ -1,4 +1,4 @@
-## Troubleshoot Services without an Allocated IP Address
+# Troubleshoot Services without an Allocated IP Address
 
 Check if a given service has an IP address allocated for it if the Kubernetes LoadBalancer services in the NMN, HMN, or CAN address pools are not accessible from outside the cluster.
 
@@ -87,7 +87,4 @@ This procedure requires administrative privileges.
     selfLink: /api/v1/namespaces/metallb-system/configmaps/config
     uid: 49967541-331f-11ea-9421-b42e993a2608
     ```
-
-
-
 

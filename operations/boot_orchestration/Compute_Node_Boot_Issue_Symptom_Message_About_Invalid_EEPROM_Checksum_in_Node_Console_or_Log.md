@@ -1,5 +1,4 @@
-
-## Compute Node Boot Issue Symptom: Message About Invalid EEPROM Checksum in Node Console or Log
+# Compute Node Boot Issue Symptom: Message About Invalid EEPROM Checksum in Node Console or Log
 
 On rare occasions, the processor hardware may lose the Serial Over Lan \(SOL\) connections and may need to be reseated to allow the node to successfully boot.
 

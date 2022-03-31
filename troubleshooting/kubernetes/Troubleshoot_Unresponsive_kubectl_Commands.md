@@ -1,4 +1,4 @@
-## Troubleshoot Unresponsive kubectl Commands
+# Troubleshoot Unresponsive kubectl Commands
 
 Use this procedure to check if any kworkers are in an error state because of a high load. Once the error has been identified, workaround the issue by returning the high load to a normal level.
 
@@ -153,5 +153,4 @@ The `kubectl` command is not responsive on a node.
 
 
 Try running a `kubectl` command on the node where it was previously unresponsive.
-
 

@@ -32,7 +32,7 @@ Describe the collector-hms-hmcollector pod to determine if it has been OOMKilled
 ncn-m001# kubectl -n services describe pod -l app.kubernetes.io/name=cray-hms-hmcollector
 ```
 
-Look for the `cray-hms-hmcollector` container and check its `Last State` (if present) to see if the container has been perviously terminated due to it running out of memory:
+Look for the `cray-hms-hmcollector` container and check its `Last State` (if present) to see if the container has been previously terminated due to it running out of memory:
 ```
 ...
 Containers:
@@ -51,9 +51,9 @@ Containers:
       Finished:     Tue, 21 Sep 2021 20:52:12 +0000
 ...
 ```
-> In the above example output the `cray-hms-hmcollector` container was perviously OOMKilled, but the container is currently running.
+> In the above example output the `cray-hms-hmcollector` container was previously OOMKilled, but the container is currently running.
 
-Look for the `isitio-proxy` container and check its `Last State` (if present) to see if the container has been perviously terminated due to it running out of memory:
+Look for the `istio-proxy` container and check its `Last State` (if present) to see if the container has been previously terminated due to it running out of memory:
 ```
 ...
  istio-proxy:
@@ -83,7 +83,7 @@ Look for the `isitio-proxy` container and check its `Last State` (if present) to
       Finished:     Tue, 21 Sep 2021 20:52:12 +0000
 ...
 ```
-> In the above example output the `istio-proxy` container was perviously OOMKilled, but the container is currently running.
+> In the above example output the `istio-proxy` container was previously OOMKilled, but the container is currently running.
 
 ### How to adjust CPU and Memory limits
 If the `cray-hms-hmcollector` container is hitting its CPU limit and memory usage is steadily increasing till it gets OOMKilled, then the CPU limit for the `cray-hms-hmcollector` should be increased. It can be increased in increments of `8` or `8000m` This is a situation were the collector is unable to process events fast enough and they start to collect build up inside of it.

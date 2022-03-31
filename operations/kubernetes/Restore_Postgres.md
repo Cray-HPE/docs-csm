@@ -1,4 +1,4 @@
-## Restore Postgres
+# Restore Postgres
 
 Below are the service specific steps required to restore data to a Postgres cluster.
 

@@ -1,4 +1,4 @@
-## Repopulate Data in etcd Clusters When Rebuilding Them
+# Repopulate Data in etcd Clusters When Rebuilding Them
 
 When an etcd cluster is not healthy, it needs to be rebuilt. During that process, the pods that rely on etcd clusters lose data. That data needs to be repopulated in order for the cluster to go back to a healthy state.
 
@@ -16,7 +16,7 @@ The following services need their data repopulated in the etcd cluster:
 
 ### Prerequisites
 
-A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
+An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
 
 
 ### BOS
@@ -223,7 +223,4 @@ Data is repopulated in BSS when the REDS init job is run.
         ```
 
         Note: on larger systems, [0-4] may have to be a larger range.
-
-
-
 

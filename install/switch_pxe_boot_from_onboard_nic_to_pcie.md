@@ -181,4 +181,3 @@ If the connection must be disabled, log in to the respective leaf switch.
 
 [1]: http://www.mellanox.com/page/management_tools
 
-

@@ -1,5 +1,4 @@
-
-## Troubleshoot UAS Issues
+# Troubleshoot UAS Issues
 
 This section provides examples of some commands that can be used to troubleshoot UAS-related issues.
 

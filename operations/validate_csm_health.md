@@ -36,6 +36,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [3 Software Management Services Health Checks](#sms-health-checks)
     - [3.1 SMS Test Execution](#sms-checks)
     - [3.2 Interpreting cmsdev Results](#cmsdev-results)
+    - [3.3 Known Issues](#sms-checks-known-issues)
   - [4. Booting CSM Barebones Image](#booting-csm-barebones-image)
     - [4.1 Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
     - [4.2 Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
@@ -434,6 +435,7 @@ Run the NCN health checks against the three different types of nodes with the fo
 
 **IMPORTANT:** These tests should only be run while booted into the PIT node. Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
 
+**IMPORTANT:** It is possible that the first pass of running these tests may fail due to could-init not being completed on the storage nodes. In this case please wait 5 minutes and re-run the tests.
 
 ```bash
 pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-master
@@ -459,7 +461,7 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
         ```bash
         ncn# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
         ```
-     1. Delete the backup, where <backup> is replaced with a backup returned in the previous step.
+     1. Delete the backup, where `<backup>` is replaced with a backup returned in the previous step.
         ```bash
         ncn# velero backup delete <backup> --confirm
         ```
@@ -549,7 +551,7 @@ ALL OK
 Both sections `BMCs in SLS not in HSM components` and `BMCs in SLS not in HSM Redfish Endpoints` have the same format for mismatches between SLS and HSM. Each row starts with the xname of the BMC. If the BMC does not have an associated `MgmtSwitchConnector` in SLS, then `# No mgmt port association` will be displayed alongside the BMC xname.
 > MgmtSwitchConnectors in SLS are used to represent the switch port on a leaf switch that an the BMC of an air cooled device is connected to.
 
-```bash
+```
 =============== BMCs in SLS not in HSM components ===============
 x3000c0s1b0  # No mgmt port association
 ```
@@ -562,7 +564,7 @@ __For each__ of the BMCs that show up in either of mismatch lists use the follow
    >   jq '.[] | { Xname: .Xname, Aliases: .ExtraProperties.Aliases }' -c
    > ```
 
-   Example mismatch for the BMC of ncn-m001:
+   Example mismatch for the BMC of `ncn-m001`:
    ```bash
    =============== BMCs in SLS not in HSM components ===============
    x3000c0s1b0  # No mgmt port association
@@ -666,6 +668,19 @@ If one or more checks failed:
         ```
 
 Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
+
+<a name="sms-checks-known-issues"></a>
+### 3.3 Known Issues
+
+#### Failed To Create VCS Organization
+
+On a fresh install, it is possible that `cmsdev` reports an error similar to the following:
+```text
+ERROR (run tag zl7ak-vcs): POST https://api-gw-service-nmn.local/vcs/api/v1/orgs: expected status code 201, got 401
+ERROR (run tag zl7ak-vcs): Failed to create vcs organization
+```
+
+In this case, follow the [Gitea/VCS 401 Errors](../troubleshooting/known_issues/gitea_vcs_401_errors.md) troubleshooting procedure.
 
 <a name="booting-csm-barebones-image"></a>
 ## 4. Booting CSM Barebones Image

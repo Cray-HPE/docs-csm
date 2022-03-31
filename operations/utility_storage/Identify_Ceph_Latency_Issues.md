@@ -66,7 +66,7 @@ Based on the output from ceph -s (using our example above) we can correlate some
 
 2. When reporting slow ops for `MONs`, then it is typically an issue with the process.
    1. The most common cause here is either an abrupt clock skew or a hung mon/mgr process.
-      1. The recommended remediation is to do a rolling restart of the ceph `MON` and `MGR` daemons.
+      1. The recommended remediation is to do a rolling restart of the Ceph `MON` and `MGR` daemons.
 
 3. When reporting slow ops for `MDS`, then it could be due to a couple of different reasons.
    1. If listed in addition to `OSDs`, then the root cause for this will typically be the `OSDs` and the process above should be used followed by restarting the `MDS` daemons

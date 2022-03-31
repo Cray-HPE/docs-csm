@@ -1,4 +1,4 @@
-## Restore System Functionality if a Kubernetes Worker Node is Down
+# Restore System Functionality if a Kubernetes Worker Node is Down
 
 Services running on Kubernetes worker nodes can be properly restored if downtime occurs. Use this procedure to ensure that if a Kubernetes worker node is lost or restored after being down, certain features the node was providing can also be restored or recovered on another node.
 

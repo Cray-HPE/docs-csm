@@ -1,4 +1,4 @@
-## Containerd
+# Containerd
 
 Containerd is a daemonset that runs on the host. It is used to run containers on the Kubernetes platform.
 
@@ -28,11 +28,11 @@ In older versions of containerd, there are cases where the `/var/lib/containerd`
    ncn-w001 # crictl rmi --prune
    ```
 
-   Any unused images will be pruned.  Finally, if still encountering disk space issues in `/var/lib/containerd`, proceed to the next step to reboot the NCN.
+   Any unused images will be pruned. Finally, if still encountering disk space issues in `/var/lib/containerd`, proceed to the next step to reboot the NCN.
 
 1. Reboot the NCN:
 
-   Follow the [Reboot_NCNs](../node_management/Reboot_NCNs.md) process to properly cordon/drain the NCN and reboot.  Generally this final step will free up space in `/var/lib/containerd`.
+   Follow the [Reboot_NCNs](../node_management/Reboot_NCNs.md) process to properly cordon/drain the NCN and reboot. Generally this final step will free up space in `/var/lib/containerd`.
 
 ### Restarting containerd
 

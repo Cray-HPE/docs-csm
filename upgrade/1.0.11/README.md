@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document is intended to guide an administrator through the process going from Cray Systems Management v1.0.1 or v1.0.10 to v1.0.11. If you are at an earlier version, you must first upgrade to at least v1.0.1. For information on how to do that, see [Upgrade CSM](../index.md).
+This document is intended to guide an administrator through the process going to Cray Systems Management v1.0.11 from v1.0.0, v1.0.1, or v1.0.10. If you are at an earlier version, you must first upgrade. For information on how to do that, see [Upgrade CSM](../index.md).
 
 This top-level `README.md` file should be followed top to bottom.
 
@@ -50,11 +50,6 @@ responsibility of the "stable" NCN to another master NCN. However, you do not ne
 upgrade the "stable" NCN.
 
 ## Upgrade Stages
-
->**`IMPORTANT:`**
->
-> For TDS systems with only three worker nodes, prior to proceeding with this upgrade, CPU limits **MUST** be lowered on several services. This is necessary for this upgrade to succeed. See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to accomplish this.
->
 
 **`Important:`** Please see [Upgrade Troubleshooting](./upgrade_troubleshooting.md) for troubleshooting purposes in the case that you encounter issues.
 

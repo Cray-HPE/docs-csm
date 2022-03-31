@@ -1,5 +1,4 @@
-
-## Log in to a Broker UAI
+# Log in to a Broker UAI
 
 SSH to log into a broker UAI and reach the end-user UAIs on demand.
 

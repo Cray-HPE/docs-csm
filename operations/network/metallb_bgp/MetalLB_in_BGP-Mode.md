@@ -1,4 +1,4 @@
-## MetalLB in BGP-Mode
+# MetalLB in BGP-Mode
 
 MetalLB is a component in Kubernetes that manages access to LoadBalancer services from outside the Kubernetes cluster. There are LoadBalancer services on the Node Management Network \(NMN\), Hardware Management Network \(HMN\), and Customer Access Network \(CAN\).
 
@@ -31,6 +31,4 @@ ims        cray-ims-bd0698b4-a104-48eb-9714-5b5889ad7b52-service  LoadBalancer  
 MetalLB does not manage access to any of the NCNs, UANs, or compute nodes.
 
 ![BGP Peering](../../../img/operations/BGP_Peering.PNG "BGP Peering")
-
-
 

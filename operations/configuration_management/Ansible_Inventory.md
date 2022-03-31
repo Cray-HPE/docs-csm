@@ -1,4 +1,4 @@
-## Ansible Inventory
+# Ansible Inventory
 
 The Configuration Framework Service \(CFS\) provides several options for targeting nodes or boot images for configuration by Ansible. The contents of the Ansible inventory determine which nodes are available for configuration in each CFS session and how default configuration values can be customized.
 
@@ -57,5 +57,4 @@ The process can be used to include any nodes in the system reachable over the No
 CFS handles inventory for image customization differently because this type of configuration session does not target live nodes. When creating a configuration session meant to customize a boot image, the Image Management Service \(IMS\) image IDs are used as hosts and grouped according to input to the session creation.
 
 See [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for more information.
-
 

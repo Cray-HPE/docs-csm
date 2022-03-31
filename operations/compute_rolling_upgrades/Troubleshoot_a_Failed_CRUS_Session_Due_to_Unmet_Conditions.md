@@ -1,4 +1,4 @@
-## Troubleshoot a Failed CRUS Session Because of Unmet Conditions
+# Troubleshoot a Failed CRUS Session Because of Unmet Conditions
 
 If a CRUS session has any unmet conditions, adding or fixing them will cause the session to continue from wherever it got stuck. Updating other parts of the system to meet the required conditions of a CRUS session will unblock the upgrade session.
 
@@ -64,6 +64,4 @@ The following are examples of unmet conditions:
     ```
 
     The messages value states that the job has resumed now that the error has been fixed.
-
-
 

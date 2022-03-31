@@ -1,4 +1,4 @@
-## Add an NCN to the HSM Database
+# Add an NCN to the HSM Database
 
 This procedure details how to customize the bare-metal non-compute node \(NCN\) on a system and add the NCN to the Hardware State Manager \(HSM\) database.
 

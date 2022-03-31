@@ -12,7 +12,8 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
 **IMPORTANT NOTES:**
 
-> * Removal ncn-s001/2/3 permanently is **NOT SUPPORTED**. They can only be rebuilt in place or replaced with new hardware.
+> * Permanent removal of `ncn-s001, `ncn-s002`, or `ncn-s003` is **NOT SUPPORTED**. They can only be rebuilt in place or replaced with new hardware.
+
 >   * This is due to the ceph mon and mgr processes running on them.
 > * Always ensure you have the free capacity to remove the node(s) prior to performing this task.
 > * When removing a node other than ncn-s001/2/3, then you will have to adjust the SMF pools quotas accordingly.

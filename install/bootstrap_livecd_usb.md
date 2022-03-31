@@ -479,7 +479,7 @@ This will enable SSH, and other services when the LiveCD starts.
     ```
 
 1. Set the hostname and print it into the hostname file.
-   > Do not confuse other administrators and name the LiveCD "ncn-m001", please append the "-pit" suffix
+   > **`NOTE`** Do not confuse other administrators by naming the LiveCD `ncn-m001`. Please append the `-pit` suffix,
    > which will indicate that the node is booted from the LiveCD.
 
    ```bash
@@ -575,7 +575,7 @@ If an administrator has the node booted with an operating system which will next
 
 > UEFI booting must be enabled to find the USB device's EFI bootloader.
 
-1. Start a typescript on an external system, such as a laptop or Linux system, to record this section of activities done on the console of ncn-m001 via IPMI.
+1. Start a typescript on an external system, such as a laptop or Linux system, to record this section of activities done on the console of `ncn-m001` via IPMI.
 
    ```bash
    external# script -a boot.livecd.$(date +%Y-%m-%d).txt
@@ -660,7 +660,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     pit# mount -vL PITDATA
     ```
 
-1. Start a typescript to record this section of activities done on ncn-m001 while booted from the LiveCD.
+1. Start a typescript to record this section of activities done on `ncn-m001` while booted from the LiveCD.
 
    ```bash
    pit# mkdir -pv /var/www/ephemeral/prep/admin

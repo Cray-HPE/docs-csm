@@ -1,4 +1,4 @@
-## Power On Compute and IO Cabinets
+# Power On Compute and IO Cabinets
 
 Power on liquid-cooled and standard rack cabinet PDUs.
 

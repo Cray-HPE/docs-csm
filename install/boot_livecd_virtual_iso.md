@@ -1,5 +1,3 @@
-
-
 # Boot LiveCD Virtual ISO
 
 This page will walk-through booting the LiveCD `.iso` file directly onto a BMC.

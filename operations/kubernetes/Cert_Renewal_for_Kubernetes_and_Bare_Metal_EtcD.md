@@ -6,7 +6,7 @@ As part of the installation, Kubernetes generates certificates for the required 
 
 **`IMPORTANT:`** Depending on the version of Kubernetes, the command may or may not reside under the alpha category. Use `kubectl certs --help` and `kubectl alpha certs --help` to determine this. The overall command syntax should be the same and this is just whether or not the command structure will require `alpha` in it.
 
-**`IMPORTANT:`** When you pick your master node to renew the certificatess on, that is the node that will be referenced in this document as `ncn-m`.
+**`IMPORTANT:`** When you pick your master node to renew the certificates on, that is the node that will be referenced in this document as `ncn-m`.
 
 **`IMPORTANT:`** This document is based off a base hardware configuration of 3 masters and 3 workers (We are leaving off utility storage because they are not running Kubernetes). Please make sure to update any commands that run on multiple nodes accordingly.
 

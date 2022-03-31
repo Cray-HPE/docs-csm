@@ -1,4 +1,4 @@
-## Retrieve an Authentication Token
+# Retrieve an Authentication Token
 
 Retrieve a token for authenticating to the API gateway.
 
@@ -114,6 +114,4 @@ The API gateway uses OAuth2 for authentication. A token is required to authentic
         "min_off_time":-1
     }
     ```
-
-
 

@@ -1,4 +1,4 @@
-## Configure the RSA Plugin in Keycloak
+# Configure the RSA Plugin in Keycloak
 
 Use Keycloak to configure a plugin that enables RSA token authentication.
 

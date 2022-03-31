@@ -1,5 +1,4 @@
-
-## List Available UAI Images in Legacy Mode
+# List Available UAI Images in Legacy Mode
 
 A user can list the UAI images available for creating a UAI with a command of the form:
 

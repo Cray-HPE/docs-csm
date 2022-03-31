@@ -1,4 +1,4 @@
-## Set the `ansible.cfg` for a Session
+# Set the `ansible.cfg` for a Session
 
 View and update the Ansible configuration used by CFS.
 
@@ -19,5 +19,4 @@ ncn# kubectl get cm -n services cfs-default-ansible-cfg \
 The default `ansible.cfg` file ConfigMap can be changed to a custom ConfigMap \(within the services Kubernetes namespace\) by updating it in the CFS service options. This will update all CFS sessions to use this file for `ansible.cfg`.
 
 To use a different `ansible.cfg` on a per-session basis, use the `--ansible-config` option when creating a CFS session. Refer to [Use a Custom ansible-cfg File](Use_a_Custom_ansible-cfg_File.md) for more information.
-
 

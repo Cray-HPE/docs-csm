@@ -1,4 +1,4 @@
-## System Layout Service \(SLS\)
+# System Layout Service \(SLS\)
 
 The System Layout Service \(SLS\) holds information about the system design, such as the physical locations of network hardware, compute nodes, and cabinets. It also stores information about the network, such as which port on which switch should be connected to each compute node.
 
@@ -12,6 +12,4 @@ SLS is responsible for the following:
 -   Storing a list of all hardware
 -   Storing a list of all network links
 -   Storing a list of all power links
-
-
 

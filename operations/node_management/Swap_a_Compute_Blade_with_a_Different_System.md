@@ -1,6 +1,4 @@
-
-
-## Swap a Compute Blade with a Different System
+# Swap a Compute Blade with a Different System
 
 Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
@@ -11,7 +9,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 - Substitute the correct component names (xnames) or other parameters in the command examples that follow.
 
-- All the nodes in the blade must be specified using a comma separated list. For example, EX425 compute blades include two node cards, each with two logical nodes (4 nodes).
+- All the nodes in the blade must be specified using a comma-separated list. For example, EX425 compute blades include two node cards, each with two logical nodes (4 nodes).
 
 
 
@@ -753,8 +751,4 @@ ncn-m001#
 - Review the *Remove a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173* for detailed instructions for replacing liquid-cooled blades (https://internal.support.hpe.com/).
 
 53. Repeat steps 26 through 50 to power on the nodes in the source system.
-
-
-
-
 

@@ -1,8 +1,8 @@
-## External DNS Failing to Discover Services Workaround
+# External DNS Failing to Discover Services Workaround
 
 Many external DNS issues can be worked around by directly connecting to the desired backend service. This can circumvent authentication and authorization protections, but it may be necessary to access specific services when mitigating critical issues.
 
-Istio's ingress gateway uses Gateway and VirtualService objects to configure how traffic is routed to backend services. Currently, there is only one Gateway supporting the Customer Access Network \(CAN\), which is services/services-gateway. It is configured to support traffic for any host. Consequently, it is the VirtualService objects that ultimately control routing based on hostname.
+Istio's ingress gateway uses Gateway and VirtualService objects to configure how traffic is routed to backend services. Currently, there is only one gateway supporting the Customer Access Network \(CAN\), which is services/services-gateway. It is configured to support traffic for any host. Consequently, it is the VirtualService objects that ultimately control routing based on hostname.
 
 Use this procedure to resolve any external DNS routing issues with backend services.
 
@@ -74,5 +74,4 @@ This procedure requires administrative privileges.
 
 
 External DNS will now be connected to the back-end service.
-
 

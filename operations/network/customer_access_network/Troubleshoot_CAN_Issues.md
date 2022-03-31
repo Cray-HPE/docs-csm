@@ -1,4 +1,4 @@
-## Troubleshoot CAN Issues
+# Troubleshoot CAN Issues
 
 Various connection points to check when using the CAN and how to fix any issues that arise.
 
@@ -20,7 +20,7 @@ ncn-w002# ip addr show vlan007
        valid_lft forever preferred_lft forever
 ```
 
-If there is not an address specified, make sure the can- values have been defined in csi config init input.
+If there is not an address specified, make sure the `can-` values have been defined in `csi config init` input.
 
 ### Does the NCN have a Default Gateway Configured?
 
@@ -31,7 +31,7 @@ ncn-w002# ip route | grep default
 default via 10.102.5.27 dev vlan007
 ```
 
-If there is not an address specified, make sure the can- values have been defined in csi config init input.
+If there is not an address specified, make sure the `can-` values have been defined in `csi config init` input.
 
 ### Can the Node Reach the Default CAN Gateway?
 
@@ -109,6 +109,4 @@ round-trip min/avg/max/stddev = 51.960/57.045/65.902/4.776 ms
 ```
 
 If the CAN gateway cannot be reached from outside, check the spine switch configuration and the connection to the customer network.
-
-
 

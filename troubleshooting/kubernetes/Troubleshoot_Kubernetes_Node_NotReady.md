@@ -1,4 +1,4 @@
-## Troubleshoot Kubernetes Master or Worker node in NotReady state
+# Troubleshoot Kubernetes Master or Worker node in NotReady state
 
 Use this procedure to check if a Kubernetes master or worker node is in a NotReady state.
 

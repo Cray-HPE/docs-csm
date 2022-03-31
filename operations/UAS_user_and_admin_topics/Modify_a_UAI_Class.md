@@ -1,5 +1,4 @@
-
-## Modify a UAI Class
+# Modify a UAI Class
 
 Update a UAI class with a modified configuration.
 
@@ -35,5 +34,4 @@ cray uas admin config classes update OPTIONS UAI_CLASS_ID
     Any change made using this command affects only UAIs that are both created using the modified class and are created after the modification. Existing UAIs using the class will not change.
 
 2.  **Optional:** Update currently running UAIs by deleting and recreating them.
-
 

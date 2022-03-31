@@ -1,6 +1,4 @@
-
-
-## Replace a Compute Blade
+# Replace a Compute Blade
 
 Replace an HPE Cray EX liquid-cooled compute blade.
 
@@ -22,7 +20,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    --operation shutdown --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
    ```
 
-   Specify all the nodes in the blade using a comma separated list. This example shows the command to shut down an EX425 compute blade (Windom) in cabinet 1000, chassis 3, slot 5. This blade type includes two node cards, each with two logical nodes (4 processors).
+   Specify all the nodes in the blade using a comma-separated list. This example shows the command to shut down an EX425 compute blade (Windom) in cabinet 1000, chassis 3, slot 5. This blade type includes two node cards, each with two logical nodes (4 processors).
 
 4. Disable the chassis slot in the Hardware State Manager (HSM).
 
@@ -247,8 +245,4 @@ Replace an HPE Cray EX liquid-cooled compute blade.
     ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot \
     --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
     ```
-
-
-
-
 

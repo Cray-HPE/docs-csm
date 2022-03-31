@@ -4,7 +4,7 @@ This procedure updates the default credentials used when new air-cooled hardware
 
 **IMPORTANT:** After this procedure is completed, **all future air-cooled hardware** added to the system will be assumed to be configured with the new global default credential.
 
-**NOTE:** This procedure will not update the Redfish or SNMP credentials for existing air-cooled devices. To change the credentials on existing air-cooled hardware follow the [Change Air-Cooled Node BMC Credentials](Change_Air-Cooled_Node_BMC_Credentials.md) and [Change SMNP Credentials on Leaf Switches](Change_SMNP_Credentials_on_Leaf_Switches.md) procedures. 
+**NOTE:** This procedure will not update the Redfish or SNMP credentials for existing air-cooled devices. To change the credentials on existing air-cooled hardware follow the [Change Air-Cooled Node BMC Credentials](Change_Air-Cooled_Node_BMC_Credentials.md) and [Change SNMP Credentials on Leaf Switches](Change_SNMP_Credentials_on_Leaf_Switches.md) procedures. 
 
 
 ## Limitation
@@ -21,7 +21,7 @@ The default global credentials used for liquid-cooled BMCs in the [Change Cray E
 #### 1.1 Acquire site-init.
 Before redeploying the River Endpoint Discovery Service (REDS), update the `customizations.yaml` file in the `site-init` secret in the `loftsman` namespace.
 
-1.  If the `site-init` repository is available as a remote repository [as described here](../../install/prepare_site_init.md#push-to-a-remote-repository), then clone it to ncn-m001. Otherwise, ensure that the `site-init` repository is available on ncn-m001.
+1.  If the `site-init` repository is available as a remote repository [as described here](../../install/prepare_site_init.md#push-to-a-remote-repository), then clone it to `ncn-m001`. Otherwise, ensure that the `site-init` repository is available on `ncn-m001`.
 
     ```bash
     ncn-m001# git clone "$SITE_INIT_REPO_URL" site-init
@@ -220,4 +220,3 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     SNMPUsername        testuser
     ```
 
-    

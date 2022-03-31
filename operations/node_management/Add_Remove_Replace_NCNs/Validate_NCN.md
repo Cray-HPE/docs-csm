@@ -64,8 +64,6 @@ Validate the worker node added successfully.
       ncn-w003   Ready    <none>   112m   v1.19.9
       ```
 
-1. Ensure there is proper routing set up for liquid-cooled hardware.
-
 1. Confirm /var/lib/containerd is on overlay on the node which was added.
 
     Run the following command on the added node.
@@ -164,4 +162,4 @@ Validate the storage node added successfully. The following examples are based o
     <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
     ```
 
-Proceed to the next step to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
+Proceed to the next step to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.

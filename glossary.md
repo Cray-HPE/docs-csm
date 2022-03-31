@@ -5,32 +5,48 @@ Glossary of terms used in CSM documentation.
 * [Application Node (AN)](#application-node)
 * [Baseboard Management Controller (BMC)](#baseboard-management-controller)
 * [Blade Switch Controller (sC)](#blade-switch-controller)
+* [Boot Script Service (BSS)](#boot-script-service)
+* [Boot Orchestration Service (BOS)](#boot-orchestration-service)
 * [Cabinet Cooling Group](#cabinet-cooling-group)
 * [Cabinet Environmental Controller (CEC)](#cabinet-environmental-controller)
 * [CEC microcontroller (eC)](#cec-microcontroller)
+* [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control)
 * [Customer Access Network](#customer-access-network)
 * [Chassis Management Module (CMM)](#chassis-management-module)
 * [Compute Node (CN)](#compute-node)
+* [Configuration Framework Service (CFS)](#configuration-framework-service)
+* [Content Projection Service (CPS)](#content-projection-service)
+* [Cray CLI (cray)](#cray-cli)
 * [Cray Site Init (CSI)](#cray-site-init)
 * [Cray System Management (CSM)](#cray-system-management)
+* [Data Virtualization Service (DVS)](#data-virtualization-service)
 * [EX Compute Cabinet](#ex-compute-cabinet)
 * [EX TDS Cabinet](#ex-tds-cabinet)
 * [Fabric](#fabric)
 * [Floor Standing CDU](#floor-standing-cdu)
 * [Hardware Management Network (HMN)](#hardware-management-network)
+* [Hardware Management Notification Fanout Daemon (HMNFD)](#hardware-management-notification-fanout-daemon)
+* [Hardware State Manager (HSM)](#hardware-state-manager)
+* [Heartbeat Tracker Daemon (HBTD)](#heartbeat-tracker-daemon)
 * [High Speed Network (HSN)](#high-speed-network)
+* [Image Management Service (IMS)](#image-management-service)
 * [Kubernetes NCNs](#kubernetes-ncns)
 * [LiveCD](#livecd)
 * [Management Cabinet](#management-cabinet)
 * [Management Nodes](#management-nodes)
+* [Mountain Endpoint Discovery Service (MEDS)](#mountain-endpoint-discovery-service)
 * [NIC Mezzanine Card (NMC)](#nic-mezzanine-card)
 * [Node Controller (nC)](#node-controller)
 * [Node Management Network](#node-management-network)
 * [Non-Compute Node (NCN)](#non-compute-node)
+* [Olympus Cabinet](#olympus-cabinet)
 * [Power Distribution Unit (PDU)](#power-distribution-unit)
 * [Pre-Install Toolkit (PIT) node](#pre-install-toolkit-node)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
+* [Redfish Translation Service (RTS)](#redfish-translation-service)
+* [River Cabinet](#river-cabinet)
+* [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service)
 * [Rosetta ASIC](#rosetta-asic)
 * [Service/IO Cabinet](#service-io-cabinet)
 * [Slingshot](#slingshot)
@@ -38,18 +54,22 @@ Glossary of terms used in CSM documentation.
 * [Slingshot Top of Rack (ToR) Switch](#slingshot-top-of-rack-switch)
 * [Shasta Cabling Diagram (SHCD)](#shasta-cabling-diagram)
 * [Supply/Return Cutoff Valves](#supply-return-cutoff-valves)
+* [System Admin Toolkit (SAT)](#system-admin-toolkit)
+* [System Layout Service (SLS)](#system-layout-service)
 * [System Management Network (SMNet)](#system-management-network)
 * [System Management Services (SMS)](#system-management-services-sms)
 * [System Management Services (SMS) nodes](#system-management-services-nodes)
 * [Top of Rack Switch Controller (sC-ToR)](#top-of-rack-switch-controller)
 * [User Access Instance (UAI)](#user-access-instance)
 * [User Access Node (UAN)](#user-access-node)
+* [User Access Service (UAS)](#user-access-service)
+* [Version Control Service (VCS)](#version-control-service)
 * [xname](#xname)
 
 <a name="application-node"></a>
 ## Application Node (AN)
 
-An application node (AN) is an NCN which is not providing management functions for the Cray EX system.
+An application node (AN) is an NCN which is not providing management functions for the HPE Cray EX system.
 The AN is not part of the Kubernetes cluster to which management nodes belong. One special type of AN
 is the UAN (User Access Node), but different systems may have need for other types of ANs, such as:
 * nodes which provide a Lustre routing function (LNet router)
@@ -72,9 +92,19 @@ The Slingshot blade switch embedded controller (sC) provides a hardware manageme
 REST endpoint to monitor environmental conditions and manage the blade power, switch
 ASIC, FPGA buffer/interfaces, and firmware.
 
+<a name="boot-script-service"></a>
+## Boot Script Service (BSS)
+
+The Boot Script Service stores the configuration information that is used to boot each hardware component. Nodes consult BSS for their boot artifacts and boot parameters when nodes boot or reboot.
+
+<a name="boot-orchestration-service"></a>
+## Boot Orchestration Service (BOS)
+
+The Boot Orchestration Service (BOS) is responsible for booting, configuring, and shutting down collections of nodes. This is accomplished using BOS components, such as boot orchestration session templates and sessions, as well as launching a Boot Orchestration Agent (BOA) that fulfills boot requests. BOS uses other services which provide boot artifact configuration (BSS), power control (CAPMC), node status (HSM), and configuration (CFS).
+
 <a name="cabinet-cooling-group"></a>
 ## Cabinet Cooling Group
-A cabinet cooling group is a group of cabinets that are connected to a floor-standing coolant
+A cabinet cooling group is a group of Olympus cabinets that are connected to a floor-standing coolant
 distribution unit (CDU). Management network CDU switches in the CDU aggregate all the
 node management network (NMN) and hardware management network (HMN) connections
 for the cabinet group.
@@ -82,7 +112,7 @@ for the cabinet group.
 <a name="cabinet-environmental-controller"></a>
 ## Cabinet Environmental Controller (CEC)
 
-The Liquid-Cooled cabinet environmental controller (CEC) sets the cabinet's geolocation,
+The Liquid-Cooled Olympus cabinet environmental controller (CEC) sets the cabinet's geolocation,
 monitors environmental sensors, and communicates status to the cooling distribution unit
 (CDU). The CEC microcontroller (eC) signals the cooling distribution unit (CDU) to start
 liquid cooling and then enables the DC rectifiers so that a chassis can be powered on. The
@@ -100,6 +130,16 @@ environmental sensors, and communicates cabinet status to the cooling distributi
 (CDU). The eC does not provide a REST endpoint on SMNet as do other embedded
 controllers, but simply monitors the cabinet sensors and provides the cabinet environmental
 and CDU status to the CMMs for evaluation and/or action.
+
+<a name="cray-advanced-platform-monitoring-and-control"></a>
+## Cray Advanced Platform Monitoring and Control (CAPMC)
+
+The Cray Advanced Platform Monitoring and Control (CAPMC) service enables direct hardware control of power on/off, power monitoring, or system-wide power telemetry and configuration parameters from Redfish. CAPMC implements a simple interface for powering on/off compute nodes and application nodes, querying node state information, and querying site-specific service usage rules. These controls enable external software to more intelligently manage system-wide power consumption or configuration parameters.
+
+<a name="cray-cli"></a>
+## Cray CLI (cray)
+
+The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST APIs into easily usable commands.
 
 <a name="customer-access-network"></a>
 ## Customer Access Network
@@ -144,10 +184,25 @@ The compute node (CN) is where high performance computing application are run. T
 hostnames that are of the form "nidXXXXXX", that is, "nid" followed by six digits.
 where the XXXXXX is a six digit number starting with zero padding.
 
+<a name="configuration-framework-service"></a>
+## Configuration Framework Service (CFS)
+
+The Configuration Framework Service (CFS) is available on systems for remote execution and
+configuration management of nodes and boot images. This includes nodes available in the
+Hardware State Manager (HSM) service inventory (compute, management, and application nodes),
+and boot images hosted by the Image Management Service (IMS).
+
+CFS configures nodes and images via a gitops methodology. All configuration content is stored in a version control service \(VCS\), and is managed by authorized system administrators. CFS provides a scalable Ansible Execution Environment \(AEE\) for the configuration to be applied with flexible inventory and node targeting options.
+
+<a name="content-projection-service"></a>
+## Content Projection Service (CPS)
+
+The Content Projection Service (CPS) provides the root filesystem for compute nodes and application nodes in conjunction with the Data Virtualization Service (DVS). Using CPS and DVS, the Cray Programming Environment (CPE) and Analytics products are provided as separately mounted filesystems to compute nodes, application nodes (such as UANs), and worker nodes hosting UAI pods.
+
 <a name="cray-site-init"></a>
 ## Cray Site Init (CSI)
 
-The Cray Site Init (CSI) program creates, validates, installs, and upgrades a Cray EX system.
+The Cray Site Init (CSI) program creates, validates, installs, and upgrades an HPE Cray EX system.
 CSI can prepare the LiveCD for booting the PIT node and then is used from a booted PIT node
 to do its other functions during an installation. During an upgrade, CSI is installed on
 one of the nodes to facilitate the CSM software upgrade.
@@ -156,17 +211,36 @@ one of the nodes to facilitate the CSM software upgrade.
 ## Cray System Management (CSM)
 
 Cray System Management (CSM) refers to the product stream which provides the infrastructure to
-manage a Cray EX system using Kubernetes to manage the containerized workload of layered
+manage an HPE Cray EX system using Kubernetes to manage the containerized workload of layered
 micro-services with well-defined REST APIs which provide the ability to discover and control the
 hardware platform, manage configuration of the system, configure the network, boot nodes, gather
 log and telemetry data, connect API access and user level access to Identity Providers (IdPs),
-and provide a method for system administrators and end-users to access the Cray EX system.
+and provide a method for system administrators and end-users to access the HPE Cray EX system.
+
+<a name="data-virtualization-service"></a>
+## Data Virtualization Service (DVS)
+
+The Data Virtualization Service (DVS) is a distributed network service that projects file systems
+mounted on non-compute nodes (NCN) to other nodes within the HPE Cray EX system. Projecting is
+the process of making a file system available on nodes where it does not physically reside.
+DVS-specific configuration settings enable clients to access a file system projected by DVS
+servers. These clients include compute nodes, User Access Nodes (UANs), and other management
+nodes running User Access Instances (UAIs). Thus DVS, while not a file system, represents a
+software layer that provides scalable transport for file system services. DVS is integrated
+with the Content Projection Service (CPS).
 
 <a name="ex-compute-cabinet"></a>
 ## EX Compute Cabinet
 
-A Liquid-Cooled cabinet is a dense compute cabinet that supports 64 compute blades and 64
+A Liquid-Cooled Olympus cabinet is a dense compute cabinet that supports 64 compute blades and 64
 high-speed network (HSN) switches.
+
+<a name="image-management-service"></a>
+## Image Management Service (IMS)
+
+The Image Management Service (IMS) uses the open source Kiwi-NG tool to build image roots from 
+recipes. IMS also uses CFS to apply image customization for pre-boot configuration of the image root.
+These images are bootable on compute nodes and application nodes.
 
 <a name="ex-tds-cabinet"></a>
 ## EX TDS Cabinet
@@ -192,11 +266,26 @@ group or cabinet chilled doors.
 
 The hardware management network (HMN) includes HMS embedded controllers. This
 includes chassis controllers (cC), node controllers (nC) and switch controllers (sC), for
-Liquid-Cooled TDS and Liquid-Cooled systems. For standard rack systems, this includes
+Liquid-Cooled TDS and Liquid-Cooled Olympus systems. For standard rack systems, this includes
 iPDUs, COTS server BMCs, or any other equipment that requires hardware-management
 with Redfish. The hardware management network is isolated from all other node
 management networks. An out-of-band Ethernet management switch and hardware
 management VLAN is used for customer access and administration of hardware.
+
+<a name="hardware-management-notification-fanout-daemon"></a>
+## Hardware Management Notification Fanout Daemon (HMNFD)
+
+The Hardware Management Notification Fanout Daemon (HMNFD) service receives component state change notifications from the HSM. It fans notifications out to subscribers (typically compute nodes).
+
+<a name="hardware-state-manager"></a>
+## Hardware State Manager (HSM)
+
+Hardware State Manager (HSM) service monitors and interrogates hardware components in an HPE Cray EX system, tracking hardware state and inventory information, and making it available via REST queries and message bus events when changes occur.
+
+<a name="heartbeat-tracker-daemon"></a>
+## Heartbeat Tracker Daemon (HBTD)
+
+The Heartbeat Tracker Daemon (HBTD) service listens for heartbeats from components (mainly compute nodes). It tracks changes in heartbeats and conveys changes to HSM.
 
 <a name="high-speed-network"></a>
 ## High Speed Network (HSN)
@@ -221,7 +310,7 @@ from it during the install is known as the [PIT node](#pre-install-toolkit-node)
 <a name="management-cabinet"></a>
 ## Management Cabinet
 
-At least one 19-in IEA management cabinet is required for every HPE Cray EX system to
+At least one 19 inch IEA management cabinet is required for every HPE Cray EX system to
 support the management non-compute nodes (NCN), system management network, utility
 storage, and other support equipment. This cabinet serves as the primary customer access
 point for managing the system.
@@ -236,6 +325,16 @@ digit number starting with zero padding. The utility storage nodes provide Ceph 
 by the management nodes. The master nodes provide Kubernetes master functions and have the
 etcd cluster which provides a datastore for Kubernetes. The worker nodes provide Kubernetes
 worker functions where most of the containerized workload is scheduled by Kubernetes.
+
+<a name="mountain-cabinet"></a>
+## Mountain Cabinet
+
+See Olympus cabinet. Some software and documentation refers to the Olympus cabinet as a Mountain cabinet.
+
+<a name="mountain-endpoint-discovery-service"></a>
+## Mountain Endpoint Discovery Service (MEDS)
+
+The Mountain Endpoint Discovery Service (MEDS) manages initial discovery, configuration, and geolocation of Redfish-enabled BMCs in liquid-cooled Olympus cabinets. It periodically makes Redfish requests to determine if hardware is present or missing.
 
 <a name="nic-mezzanine-card"></a>
 ## NIC Mezzanine Card (NMC)
@@ -267,6 +366,16 @@ general access to management REST APIs.
 
 Any node which is not a compute node may be called a Non-Compute Node (NCN). The NCNs include
 management nodes and application nodes.
+
+<a name="olympus-cabinet"></a>
+## Olympus Cabinet
+
+The Olympus cabinet is a liquid-cooled dense compute cabinet that supports 64 compute
+blades and 64 high-speed network (HSN) switches. Every HPE Cray EX system with Olympus
+cabinets will also have at least one River cabinet to house non-compute node components 
+such as management nodes, management network switches, storage nodes, application nodes,
+and possibly other air-cooled compute nodes. Some software and documentation refers to
+the Olympus cabinet as a Mountain cabinet.
 
 <a name="power-distribution-unit"></a>
 ## Power Distribution Unit (PDU)
@@ -301,6 +410,24 @@ Liquid-Cooled TDS cabinet coolant manifolds.
 
 Air-Cooled compute cabinets house a cluster of compute nodes, Slingshot ToR switches,
 and SMNet ToR switches.
+
+<a name="redfish-translation-service"></a>
+## Redfish Translation Service (RTS)
+
+The Redfish Translation Service (RTS) aids in management of any hardware components which are not managed by Redfish, such as a ServerTech PDU in a River Cabinet.
+
+<a name="river-cabinet"></a>
+## River Cabinet
+
+At least one 19 inch IEA management cabinet is required for every HPE Cray EX system to
+support the management non-compute nodes (NCN), system management network, utility
+storage, and other support equipment. Additional River cabinets may be included to 
+house storage storage or compute nodes which are not in an Olympus liquid-cooled cabinet.
+
+<a name="river-endpoint-discovery-services"></a>
+## River Endpoint Discovery Service (REDS)
+
+The River Endpoint Discovery Service (REDS) manages initial discovery, configuration, and geolocation of Redfish-enabled BMCs in air-cooled River cabinets. It periodically makes Redfish requests to determine if hardware is present or missing.
 
 <a name="rosetta-asic"></a>
 ## Rosetta ASIC
@@ -342,7 +469,7 @@ networks.
 <a name="slingshot-blade-switch"></a>
 ## Slingshot Blade Switch
 
-The Liquid-Cooled cabinet blade switch supports one switch ASIC and 48 fabric ports. Eight
+The Liquid-Cooled Olympus cabinet blade switch supports one switch ASIC and 48 fabric ports. Eight
 connectors on the rear panel connect orthogonally to each compute blade then to NIC
 mezzanine cards (NMCs) inside the compute blade. Each rear panel EXAMAX connector
 supports two switch ports (a total of 16 fabric ports per blade). Twelve QSFP-DD cages on
@@ -354,7 +481,7 @@ blade enclosure.
 <a name="slingshot-top-of-rack-switch"></a>
 ## Slingshot Top of Rack (ToR) Switch
 
-A standard cabinet can support one, two, or four, rack-mounted Slingshot ToR switches.
+A standard River cabinet can support one, two, or four, rack-mounted Slingshot ToR switches.
 Each switch supports a total of 64 fabric ports. 32 QSFP-DD connectors on the front panel
 connect 64 ports to the fabric. All front-panel connectors support either passive electrical
 cables (PEC) or active optical cables (AOC).
@@ -376,6 +503,16 @@ Manual coolant supply and return shutoff valves at the top of each cabinet can b
 isolate a single cabinet from the other cabinets in the cooling group for maintenance. If the
 valves are closed during operation, the action automatically causes the CMMs to remove
 ±190VDC from each chassis in the cabinet because of the loss of coolant pressure.
+
+<a name="system-admin-toolkit"></a>
+## System Admin Toolkit (SAT)
+
+The System Admin Toolkit (SAT) product provides the `sat` command line interface which interacts with the REST APIs of many services to perform more complex system management tasks.
+
+<a name="system-layout-service"></a>
+## System Layout Service (SLS)
+
+The System Layout Service (SLS) serves as a "single source of truth" for the system design. It details the physical locations of network hardware, management nodes, application nodes, compute nodes, and cabinets. It also stores information about the network, such as which port on which switch should be connected to each node.
 
 <a name="system-management-network"></a>
 ## System Management Network (SMNet)
@@ -411,16 +548,33 @@ manage the switch power, HSN ASIC, and FPGA interfaces.
 
 The User Access Instance (UAI) is a lightweight, disposable platform that runs under Kubernetes orchestration
 on worker nodes. The UAI provides a single user containerized environment for users on a Cray Ex system to
-develop, build, and execute their applications on the Cray EX compute node. See UAN for another
+develop, build, and execute their applications on the HPE Cray EX compute node. See UAN for another
 way for users to gain access.
 
 <a name="user-access-node"></a>
 ## User Access Node (UAN)
 
-The User Access Node (UAN) is an NCN, but is really one of the special types of Application nodes.
+The User Access Node (UAN) is an NCN, but is really one of the special types of application nodes.
 The UAN provides a traditional multi-user Linux environment for users on a Cray Ex system to
-develop, build, and execute their applications on the Cray EX compute node. See UAI for another
+develop, build, and execute their applications on the HPE Cray EX compute node. See UAI for another
 way for users to gain access. Some sites refer to their UANs as Login nodes.
+
+<a name="user-access-service"></a>
+## User Access Service (UAS)
+
+The User Access Service (UAS) is a containerized service managed by Kubernetes that enables users to
+create and run user applications inside a UAI. UAS runs on a management node that is acting as a
+Kubernetes worker node. When a user requests a new UAI, the UAS service returns status and connection
+information to the newly created UAI. External access to UAS is routed through a node that hosts
+gateway services.
+
+<a name="version-control-service"></a>
+## Version Control Service (VCS)
+
+The Version Control Service (VCS) provides configuration content to CFS via a gitops methodology
+based on a `git` server (`gitea`) that can be accessed by the `git` command but also includes a
+web interface for repository management, pull requests, and a visual view of all repositories
+and organizations. 
 
 <a name="xname"></a>
 ## xname
