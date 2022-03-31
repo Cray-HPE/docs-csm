@@ -123,7 +123,7 @@ if [[ $state_recorded == "0" ]]; then
     csi automate ncn etcd --action remove-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
     ssh $target_ncn 'systemctl daemon-reload'
     ssh $target_ncn 'systemctl stop etcd.service'
-
+    
     set +e
     while true ; do    
         csi automate ncn etcd --action add-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
@@ -153,7 +153,7 @@ while true ; do
 done
 set -e
 
-${basedir}/../common/ncn-rebuild-common.sh $target_ncn
+${basedir}/../common/ncn-rebuild-common.sh $target_ncn --rebuild
 
 # Restore files used by the System Admin Toolkit (SAT) that were previously backed up
 state_name="RESTORE_SAT_LOCAL_FILES"
@@ -232,7 +232,7 @@ NOTE:
     If below test failed, try to fix it based on test output. Then run current script again
 EOF
 ssh $target_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
-
+/usr/share/doc/csm/scripts/CASMINST-2015.sh
 move_state_file ${target_ncn}
 
 ok_report

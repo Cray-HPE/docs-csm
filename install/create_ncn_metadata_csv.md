@@ -8,7 +8,7 @@ Some of the data in the `ncn_metadata.csv` can be found in the SHCD in the HMN t
 to collect is the MAC addresses for the node's BMC, the node's bootable network interface, and the
 pair of network interfaces which will become the bonded interface `bond0`.
 
-### Topics:
+### Topics
 
    * [Introduction](#introduction)
       * [LACP Bonding](#lacp_bonding)

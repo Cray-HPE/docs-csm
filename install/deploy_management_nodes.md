@@ -18,7 +18,7 @@ POST faster than others or vary based on BIOS setting. After powering on a set o
 an administrator can expect a healthy boot session to take about 60 minutes depending on
 the number of storage and worker nodes.
 
-## Topics:
+## Topics
 
    1. [Prepare for Management Node Deployment](#prepare_for_management_node_deployment)
       1. [Tokens and IPMI Password](#tokens-and-ipmi-password)
@@ -264,10 +264,13 @@ The configuration workflow described here is intended to help understand the exp
 ### 3.2 Deploy
 
 1. Change the default root password and SSH keys
-   > If you want to avoid using the default install root password and SSH keys for the NCNs, follow the
-   > NCN image customization steps in [Change NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 
-   This step is **strongly encouraged** for all systems.
+   The management nodes deploy with a default password in the image, so it is a recommended best
+   practice for system security to change the root password in the image so that it is
+   not the documented default password.
+
+   It is **strongly encouraged** to change the default root password and SSH keys in the images used to boot the management nodes.
+   Follow the NCN image customization steps in [Change NCN Image Root Password and SSH Keys on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
 
 1. Create boot directories for any NCN in DNS This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
 

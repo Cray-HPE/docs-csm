@@ -52,6 +52,30 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
 
 ## Step 1 - Check the status of Ceph
 
+1. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
+
+    On the node being rebuilt run:
+
+    ```bash
+    ncn-s# for service in $(cephadm ls |jq -r '.[].systemd_unit'); do systemctl stop $service; systemctl disable $service; done
+    ```
+
+    Example output:
+
+    ```screen
+    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.39.service.
+    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mgr.ncn-s003.tjuyhj.service.
+    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mon.ncn-s003.service.
+    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.41.service.
+    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.36.service.
+    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.37.service.
+    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mds.cephfs.ncn-s003.jcnovs.    service.
+    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.40.service.
+    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@crash.ncn-s003.service.
+    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@node-exporter.ncn-s003.service.
+    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.38.service.
+    ```
+
 1. Check the OSD status, weight, and location:
 
     ```bash
@@ -109,31 +133,7 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
         client:   6.2 KiB/s rd, 280 KiB/s wr, 2 op/s rd, 49 op/s wr
     ```
 
-2. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
-
-    On the node being rebuilt run:
-
-    ```bash
-    ncn-s# for service in $(cephadm ls |jq -r '.[].systemd_unit'); do systemctl stop $service; systemctl disable $service; done
-    ```
-
-    Example output:
-
-    ```screen
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.39.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mgr.ncn-s003.tjuyhj.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mon.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.41.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.36.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.37.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mds.cephfs.ncn-s003.jcnovs.    service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.40.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@crash.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@node-exporter.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.38.service.
-    ```
-
-3. Remove Ceph OSDs.
+1. Remove Ceph OSDs.
 
     The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 

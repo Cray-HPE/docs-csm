@@ -9,6 +9,9 @@
 * [Stage 0.5 - Prerequisites Check](#prerequisites-check)
 * [Stage 0.6 - Backup VCS Data](#backup-vcs-data)
 * [Stage 0.7 - Suspend NCN Configuration](#suspend-ncn-config)
+* [Stage 0.8 - Backup Workload Manager Data](#backup_workload_manager)
+* [Stage 0.9 - Modify NCN Images](#modify_ncn_images)
+* [Stage 0.10 - Continue to Stage 1](#continue_to_stage1)
 
 <a name="install-latest-docs"></a>
 ## Stage 0.1 - Install latest docs RPM
@@ -232,15 +235,75 @@ To prevent any possibility of losing configuration data, backup the VCS data and
 ## Stage 0.7 - Suspend NCN Configuration
 
 Suspend automatic reconfiguration on NCNs to ensure that previous CSM version
-configuration is not applied during the upgrade. Automatic reconfiguration
-will be re-enabled in [Stage 5](Stage_5.md).
+configuration is not applied during the upgrade. The desired configuration is
+also unset so that actions that re-enable CFS, such as rebooting nodes, do 
+not trigger configuration early. Automatic reconfiguration will be re-enabled,
+and the desired configuration will be set again in [Stage 5](Stage_5.md).
 
    ```bash
    ncn# export CRAY_FORMAT=json
    ncn# for xname in $(cray hsm state components list --role Management --type node | jq -r .Components[].ID)
    do
-       cray cfs components update --enabled false $xname
+       cray cfs components update --enabled false --desired-config "" $xname
    done
 ```
+
+<a name="backup_workload_manager"></a>
+## Stage 0.8 - Backup Workload Manager Data
+
+To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting back-up data should be stored in a safe location off of the system.
+
+<a name="modify_ncn_images"></a>
+## Stage 0.9 - Modify NCN Images
+
+Any site modifications to the images used to boot the management nodes need to be done again
+as part of this upgrade. These may include changing the root password, adding different ssh
+keys for the root account, or setting a default timezone.
+
+The management nodes deploy with a default password in the image, so it is a recommended best
+practice for system security to change the root password in the image so that it is
+not the documented default password. In addition to the root password in the image, NCN
+personalization should be used to change the password as part of post-boot CFS. The password
+in the image should be used when console access is desired during the network boot of a management
+node that is being rebuilt, but this password should be different than the one stored in Vault
+that is applied by CFS during post-boot NCN personalization to change the on-disk password. Once
+NCN personalization has been run, then the password in Vault should be used for console access.
+
+1. Use this procedure to change the k8s-image used for master nodes and worker nodes and the ceph-image
+used by utility storage nodes. See
+[Change NCN Image Root Password and SSH Keys](../../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
+for more information.
+
+1. Adjust the version variables used later in the upgrade.
+
+   1. The previous procedure to create the site-customized `k8s-image` and `ceph-image` should have set these variables.
+
+      ```bash
+      ncn-m001# echo $CEPHNEW
+      ncn-m001# echo $K8sNEW
+      ```
+
+    2. Check current versions in `/etc/cray/upgrade/csm/myenv`.
+
+      ```bash
+      ncn-m001# grep CEPH_VERSION /etc/cray/upgrade/csm/myenv
+      ncn-m001# grep KUBERNETES_VERSION /etc/cray/upgrade/csm/myenv
+      ```
+
+    3. If the `CEPH_VERSION` or `KUBERNETES_VERSION` does not match the `CEPHNEW` and `K8SNEW` settings, edit the file.
+
+      ```bash
+      ncn-m001# vi /etc/cray/upgrade/csm/myenv
+      ```
+
+2. Use this procedure to change the root password in Vault and the CSM layer of configuration
+applied during NCN Personalization. Usually this configuration is done during the first time installation
+of CSM software, but if was not done then, it should be done now. See
+[Update NCN Passwords](../../operations/security_and_authentication/Update_NCN_Passwords.md) and
+[full NCN personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password)
+for more information.
+
+<a name="continue_to_stage1"></a>
+## Stage 0.10 - Continue to Stage 1
 
 Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).

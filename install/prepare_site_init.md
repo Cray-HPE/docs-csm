@@ -363,7 +363,7 @@ with system-specific customizations.
            ldapSearchBase: dc=dcldap,dc=dit
            ```
 
-1.  Configure the Unbound DNS resolver (if needed)
+1.  Configure the Unbound DNS resolver (if needed).
 
     If access to a site DNS server is required **and** this DNS server was specified to `csi` using the `site-dns` option (either on the command line or in the `system_config.yaml` file), **then no further action is required** and this step should be skipped.
 
@@ -407,7 +407,7 @@ with system-specific customizations.
 
         > **`IMPORTANT`** **Do not** remove the `domain_name` entry, it is required for Unbound to forward requests to PowerDNS correctly.
 
-1. Configure PowerDNS zone transfer and DNSSEC (optional)
+1. (Optional) Configure PowerDNS zone transfer and DNSSEC.
 
    * If zone transfer is to be configured review `customizations.yaml` and ensure the `primary_server`, `secondary_servers`, and `notify_zones` values are set correctly.
 
@@ -415,7 +415,7 @@ with system-specific customizations.
 
    Please see the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
 
-1. Prometheus snmp-exporter Configuration (optional)
+1. (Optional) Configure Prometheus snmp-exporter.
 
    The Prometheus snmp-exporter needs to be configured with a list of management network switches to scrape metrics from in order to populate the System Health Service Grafana dashboards.
 

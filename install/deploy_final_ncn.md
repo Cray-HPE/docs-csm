@@ -128,19 +128,19 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         **IMPORTANT:** The variables you set depend on whether you customized the default NCN images. The most
         common procedures that involve customizing the images are
         [Configuring NCN Images to Use Local Timezone](../operations/node_management/Configure_NTP_on_NCNs.md#configure_ncn_images_to_use_local_timezone) and
-        [Changing NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md).
+        [Changing NCN Image Root Password and SSH Keys on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
         The two paths forward are listed below:
-
-        * If the NCN images were **not** customized, set the following variables (this is the default path):
-
-            ```bash
-            pit# artdir=${CSM_PATH}/images ; k8sdir=$artdir/kubernetes ; cephdir=$artdir/storage-ceph
-            ```
 
         * If the NCN images were customized, set the following variables:
 
             ```bash
             pit# artdir=/var/www/ephemeral/data ; k8sdir=$artdir/k8s ; cephdir=$artdir/ceph
+            ```
+
+        * If the NCN images were **not** customized, set the following variables:
+
+            ```bash
+            pit# artdir=${CSM_PATH}/images ; k8sdir=$artdir/kubernetes ; cephdir=$artdir/storage-ceph
             ```
 
     1. Run the following command.
@@ -206,6 +206,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
                     /root/.config/cray/logs \
                     /root/csm*.{log,txt} \
                     /tmp/*.log \
+                    /usr/share/doc/csm/install/scripts/csm_services/yapl.log \
                     /var/log/conman \
                     /var/log/zypper.log 2>/dev/null |
          sed 's_^/__' |
