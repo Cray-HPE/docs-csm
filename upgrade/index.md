@@ -30,14 +30,13 @@ sections, but there is also a general troubleshooting topic.
 
     The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
 
-    The upgrade is a guided process Starting with [Upgrade Management Nodes and CSM Services](1.2/README.md)
+    The upgrade is a guided process Starting with [Upgrade Management Nodes and CSM Services](1.3/README.md)
 
     <a name="validate_csm_health"></a>
 
 1. Validate CSM Health
 
-     > **`IMPORTANT:`** Wait at least 15 minutes after
-     > [`csm-upgrade.sh`](1.2/Stage_3.md) in stage 3 completes to let the various Kubernetes
+     > **`IMPORTANT:`** Wait at least 15 minutes after the previous step completes to let the various Kubernetes
      > resources get initialized and started.
   
      Run the following validation checks to ensure that everything is still working
