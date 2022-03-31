@@ -65,34 +65,36 @@ This is for workers only.
 
 For more info see [Update BGP Neighbors](../../network/metallb_bgp/Update_BGP_Neighbors.md)
 
+- The tftp route maps will only include the first 3 workers.
+
 ```
 route-map ncn-w004 permit seq 10
      match ip address prefix-list tftp
-     match ip next-hop $worker1
+     match ip next-hop $worker1.nmn.ip
      set local-preference 1000
 route-map ncn-w004 permit seq 20
      match ip address prefix-list tftp
-     match ip next-hop $worker2
+     match ip next-hop $worker2.nmn.ip
      set local-preference 1100
 route-map ncn-w004 permit seq 30
      match ip address prefix-list tftp
-     match ip next-hop $worker3
+     match ip next-hop $worker3.nmn.ip
      set local-preference 1200
 route-map ncn-w004 permit seq 40
-     match ip address prefix-list pl-cmn
-     set ip next-hop 10.102.4.15
+     match ip address prefix-list pl-can
+     set ip next-hop 10.102.4.15 ($worker4.can.ip)
 route-map ncn-w004 permit seq 50
      match ip address prefix-list pl-hmn
-     set ip next-hop 10.254.1.13
+     set ip next-hop 10.254.1.13 ($worker4.hmn.ip)
 route-map ncn-w004 permit seq 60
      match ip address prefix-list pl-nmn
-     set ip next-hop 10.252.1.13
+     set ip next-hop 10.252.1.13 ($worker4.nmn.ip)
 router bgp 65533
-    neighbor 10.252.1.13 passive
-    neighbor 10.252.1.13 remote-as 65533
+    neighbor 10.252.1.13 ($worker4.nmn.ip) remote-as 65533
+    neighbor 10.252.1.13 ($worker4.nmn.ip) passive
     address-family ipv4 unicast
-        neighbor 10.252.1.13 activate
-        neighbor 10.252.1.13 route-map ncn-w004 in
+        neighbor 10.252.1.13 ($worker4.nmn.ip) activate
+        neighbor 10.252.1.13 ($worker4.nmn.ip) route-map ncn-w004 in
 ```
 
 ### BMC port configuration
