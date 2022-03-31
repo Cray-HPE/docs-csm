@@ -12,7 +12,7 @@
 
 1. Repeat the previous step for each other storage node, one at a time.
 
-1. After `ncn-upgrade-ceph-nodes.sh` has successfully run for all storage nodes, rescan ssh keys on all storage nodes
+1. After `ncn-upgrade-ceph-nodes.sh` has successfully run for all storage nodes, rescan SSH keys on all storage nodes
 
     ```bash
     ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
