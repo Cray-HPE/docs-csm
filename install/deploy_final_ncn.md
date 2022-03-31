@@ -253,7 +253,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
 1. Set and trim the boot order on the PIT node.
 
-    This only needs to be done for the PIT node, not for any of the other NCNs. For the procedures to do this, see [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
+    This only needs to be done for the PIT node, not for any of the other NCNs. For the procedures to do this, see [Setting Boot Order](https://github.com/Cray-HPE/docs-ncn/blob/main/009-Boot-Workflow.md#setting-order) and [Trimming Boot Order](https://github.com/Cray-HPE/docs-ncn/blob/main/009-Boot-Workflow.md#trimming_boot_order).
 
 1. Tell the PIT node to PXE boot on the next boot.
 

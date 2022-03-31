@@ -2,7 +2,7 @@
 
 Interfaces within the network stack can be reloaded or reset to fix wedged interfaces.
 The NCNs have network device names set during first boot. The names vary based on the
-available hardware. For more information, see [NCN Networking](../background/ncn_networking.md).
+available hardware. For more information, see [NCN Networking](https://github.com/Cray-HPE/docs-ncn/blob/main/014-Networking.md).
 Any process covered on this page will be covered by the installer.
 
 The use cases for resetting services:

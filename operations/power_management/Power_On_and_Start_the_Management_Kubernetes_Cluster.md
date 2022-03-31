@@ -35,7 +35,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
     Wait for the login prompt.
 
-    If `ncn-m001` boots into the PIT (ncn-m001-pit), [Set Boot Order](../../background/ncn_boot_workflow.md) to boot from disk, shutdown the PIT node, and power cycle again to boot into `ncn-m001`.
+    If the m001 node boots into the PIT (ncn-m001-pit), [Set Boot Order](https://github.com/Cray-HPE/docs-ncn/blob/main/009-Boot-Workflow.md#set-boot-order) to boot from disk, shutdown the PIT node and power cycle again to boot to into ncn-m001.
 
     ```bash
     ncn-m001-pit:~ # shutdown -h now

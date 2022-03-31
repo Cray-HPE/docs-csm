@@ -108,7 +108,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 
    **The 2nd MAC for `bond0` is the first port of the 2nd PCIe card, or 2nd port of the first when only one card exists**.
 
-   Use the table provided on [NCN Networking](../background/ncn_networking.md) for referencing commonly seen devices.
+   Use the table provided on [NCN Networking](https://github.com/Cray-HPE/docs-ncn/blob/main/014-Networking.md) for referencing commonly seen devices.
 
    Worker nodes also have the high-speed network cards. If these cards are known, filter their device IDs out from the above output using this snippet:
 

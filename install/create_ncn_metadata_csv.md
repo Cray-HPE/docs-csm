@@ -55,7 +55,7 @@ permutations (for redundancy minimums within Shasta cluster):
 - One bond with 4 interfaces (`bond0`)
 - Two bonds with 2 interfaces each (`bond0` and `bond1`)
 
-For more information, see [NCN Networking](../background/ncn_networking.md) page for NCNs.
+For more information, see [NCN Networking](https://github.com/Cray-HPE/docs-ncn/blob/main/014-Networking.md) page for NCNs.
 
 <a name="pxe_or_bootstrap_mac"></a>
 ### PXE or BOOTSTRAP MAC

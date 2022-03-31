@@ -3,10 +3,10 @@
 The following is a high-level overview of the non-compute node \(NCN\) reboot workflow:
 
 - Run the NCN pre-reboot checks and procedures:
-   - Ensure `ncn-m001` is not running in "LiveCD" or install mode
-   - Check the `metal.no-wipe` settings for all NCNs
-   - Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions
-   - [Validate the current boot order](../../background/ncn_boot_workflow.md#determine-the-current-boot-order) (or [specify the boot order](../../background/ncn_boot_workflow.md#set-boot-order))
+  - Ensure `ncn-m001` is not running in "LiveCD" or install mode
+  - Check the `metal.no-wipe` settings for all NCNs
+  - Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions
+  - [Validate the current boot order](https://github.com/Cray-HPE/docs-ncn/blob/main/009-Boot-Workflow.md#determine-the-current-boot-order) (or [specify the boot order](https://github.com/Cray-HPE/docs-ncn/blob/main/009-Boot-Workflow.md#set-boot-order))
 - Run the rolling NCN reboot procedure:
    - Loop through reboots on storage nodes, worker nodes, and master nodes, where each boot consists of the following workflow:
       - Establish console session with node to reboot
@@ -120,8 +120,8 @@ Before rebooting NCNs:
     1. Establish a console session to each storage node.
 
         Use the [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) procedure referenced in step 4.
-
-    2. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
+ 
+    2. If booting from disk is desired then [set the boot order](https://github.com/Cray-HPE/docs-ncn/blob/main/009-Boot-Workflow.md#set-boot-order).
 
     3. Reboot the selected node.
 
@@ -269,7 +269,7 @@ Before rebooting NCNs:
        ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
        ```
 
-    4. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
+    4. If booting from disk is desired then [set the boot order](https://github.com/Cray-HPE/docs-ncn/blob/main/009-Boot-Workflow.md#set-boot-order).
 
     5. Reboot the selected node.
 
@@ -376,7 +376,7 @@ Before rebooting NCNs:
 
         See step [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
 
-    2. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
+    2. If booting from disk is desired then [set the boot order](https://github.com/Cray-HPE/docs-ncn/blob/main/009-Boot-Workflow.md#set-boot-order).
 
     3. Reboot the selected node.
 
@@ -458,8 +458,8 @@ Before rebooting NCNs:
     1. Determine the CAN IP address for one of the other NCNs in the system to establish an SSH session with that NCN.
 
     2. Establish a console session to `ncn-m001` from a remote system, as `ncn-m001` is the NCN that has an externally facing IP address.
-
-    3. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
+ 
+    3. If booting from disk is desired then [set the boot order](https://github.com/Cray-HPE/docs-ncn/blob/main/009-Boot-Workflow.md#set-boot-order).
 
     4. Power cycle the node
 

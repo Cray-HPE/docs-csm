@@ -202,7 +202,7 @@ firmware requirement before starting.
 
    If booted into the PIT node, the firmware can be found with HFP package provided with the Shasta release.
 
-1. (optional) Check these BIOS settings on management nodes [NCN BIOS](../background/ncn_bios.md).
+1. (optional) Check these BIOS settings on management nodes [NCN BIOS](https://github.com/Cray-HPE/docs-ncn/blob/main/011-BIOS.md).
 
     > This is _optional_, the BIOS settings (or lack thereof) do not prevent deployment. The NCN Installation will work with the CMOS' default BIOS. There may be settings that facilitate the speed of deployment, but they may be tuned at a later time.
 
@@ -281,8 +281,8 @@ The configuration workflow described here is intended to help understand the exp
     ```
 
 1. Customize boot scripts for any out-of-baseline NCNs
-    - **kubernetes-worker nodes** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd)
-    - A brief overview of what is expected is here, in [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline)
+    - **kubernetes-worker nodes** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](https://github.com/Cray-HPE/docs-ncn/blob/main/013-Mounts-and-FileSystems.md#worker-nodes-with-etcd)
+    - A brief overview of what is expected is here, in [disk plan of record / baseline](https://github.com/Cray-HPE/docs-ncn/blob/main/013-Mounts-and-FileSystems.md#plan-of-record--baseline)
 
 1. Run the BIOS Baseline script to apply a configs to BMCs. The script will apply helper configs to facilitate more deterministic network booting on any NCN port. **This runs against any server vendor**, some settings are not applied for certain vendors.
 
@@ -301,7 +301,7 @@ The configuration workflow described here is intended to help understand the exp
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     ```
 
-    > **`NOTE`**:The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
+    > **`NOTE`**:The NCN boot order is further explained in [NCN Boot Workflow](https://github.com/Cray-HPE/docs-ncn/blob/main/009-Boot-Workflow.md).
 
 1. Validate that the LiveCD is ready for installing NCNs.
    > Observe the output of the checks and note any failures, then remediate them.
