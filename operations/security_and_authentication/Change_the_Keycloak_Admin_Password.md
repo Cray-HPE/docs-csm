@@ -10,44 +10,40 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
 
     Point a browser at `https://auth.SYSTEM_DOMAIN_NAME/keycloak/admin`, replacing SYSTEM\_DOMAIN\_NAME with the actual NCN's DNS name.
 
-    The following is an example URL for a system:
-
-   ```screen
-    auth.system1.us.cray.com/keycloak/admin
-    ```
+    The following is an example URL for a system: 'auth.cmn.system1.us.cray.com/keycloak/admin`
 
     Use the following admin login credentials:
 
-    - Username: admin
+    - Username: `admin`
     - The password can be obtained with the following command:
 
     ```bash
-    ncn-w001# kubectl get secret -n services keycloak-master-admin-auth \
-    --template={{.data.password}} | base64 --decode
+    ncn# kubectl get secret -n services keycloak-master-admin-auth \
+                 --template={{.data.password}} | base64 --decode
     ```
 
-1. Click the **Admin** drop-down menu in the upper-right corner of the page.
-1. Select **Manage Account**.
-1. Click the **Password** tab on the left side of the page.
-1. Enter the existing password, new password and confirmation, and then click **Save**.
+1. Click the `Admin` drop-down menu in the upper-right corner of the page.
+1. Select `Manage Account`.
+1. Click the `Password` tab on the left side of the page.
+1. Enter the existing password, new password and confirmation, and then click `Save`.
 1. Log on to `ncn-w001`.
-1. git clone `https://github.com/Cray-HPE/csm.git`.
-1. copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` to your desired working directory and run the following commands from that work directory (not the `utils` directory).
-1. Save a local copy of the customizations.yaml file.
+1. Run `git clone https://github.com/Cray-HPE/csm.git`.
+1. Copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` to your desired working directory, and run the following commands from that work directory (not the `utils` directory).
+1. Save a local copy of the `customizations.yaml` file.
 
     ```bash
-    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+    ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' |
+         base64 -d > customizations.yaml
     ```
 
-1. Change the password in the customizations.yaml file.
+1. Change the password in the `customizations.yaml` file.
 
-    The Keycloak master admin password is also stored in the keycloak-master-admin-auth Secret in the services namespace. This needs to be updated so that clients that need to make requests as the master admin can authenticate with the new password.
+    The Keycloak master admin password is also stored in the `keycloak-master-admin-auth` Kubernetes Secret in the `services` namespace. This must be updated so that clients which need to make requests as the master admin can authenticate with the new password.
 
-    In the customizations.yaml file, set the values for the keycloak\_master\_admin\_auth keys in the spec.kubernetes.sealed\_secrets field. The value in the data element where the name is password needs to be changed to the new Keycloak master admin password. The section below will replace the existing sealed secret data in the customizations.yaml.
+    In the `customizations.yaml` file, set the values for the `keycloak_master_admin_auth` keys in the `spec.kubernetes.sealed_secrets` field. The value in the data element where the name is `password` needs to be changed to the new Keycloak master admin password. The section below will replace the existing sealed secret data in the `customizations.yaml` file.
 
     For example:
-
-    ```bash
+    ```yaml
           keycloak_master_admin_auth:
             generate:
               name: keycloak-master-admin-auth
@@ -70,37 +66,37 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
                   value: https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token
     ```
 
-1. Upload the modified customizations.yaml file to Kubernetes.
+1. Upload the modified `customizations.yaml` file to Kubernetes.
 
    ```bash
-   ncn-m001# kubectl delete secret -n loftsman site-init
-   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ncn# kubectl delete secret -n loftsman site-init
+   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
-1. Encrypt the values after changing the customizations.yaml file.
+1. Encrypt the values after changing the `customizations.yaml` file.
 
     ```bash
-    ./utils/secrets-seed-customizations.sh customizations.yaml
+    ncn# ./utils/secrets-seed-customizations.sh customizations.yaml
     ```
 
-    If the above command complains that it cannot find certs/sealed_secrets.crt then you can run the following commands to create it
+    If the above command complains that it cannot find `certs/sealed_secrets.crt` then you can run the following commands to create it:
 
     ```bash
-    mkdir -p certs
-    ./utils/bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > certs/sealed_secrets.crt
+    ncn# mkdir -p certs &&
+         ./utils/bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > certs/sealed_secrets.crt
     ```
 
-1. Create a local copy of the platform.yaml file.
+1. Create a local copy of the `platform.yaml` file.
 
     ```bash
-    kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
+    ncn# kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
     ```
 
-1. Edit the platform.yaml to only include the cray-keycloak chart and all its current data.
+1. Edit the `platform.yaml` to only include the `cray-keycloak` chart and all its current data.
 
     Example:
 
-    ```bash
+    ```yaml
     apiVersion: manifests/v1beta1
       metadata:
         name: platform
@@ -123,15 +119,15 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
 1. Generate the manifest that will be used to redeploy the chart with the modified resources.
 
     ```bash
-    manifestgen -c customizations.yaml -i platform.yaml -o manifest.yaml
+    ncn# manifestgen -c customizations.yaml -i platform.yaml -o manifest.yaml
     ```
 
-1. Re-apply the cray-keycloak Helm chart with the updated customizations.yaml file.
+1. Re-apply the `cray-keycloak` Helm chart with the updated `customizations.yaml` file.
 
-    This will update the keycloak-master-admin-auth SealedSecret which will cause the SealedSecret controller to update the Secret.
+    This will update the `keycloak-master-admin-auth` SealedSecret which will cause the SealedSecret controller to update the Secret.
 
     ```bash
-    loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
+    ncn# loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ./manifest.yaml
     ```
 
 1. Verify that the Secret has been updated.
@@ -139,14 +135,15 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
     Give the SealedSecret controller a few seconds to update the Secret, then run the following command to see the current value of the Secret:
 
     ```bash
-    kubectl get secret -n services keycloak-master-admin-auth \
-    --template={{.data.password}} | base64 --decode
+    ncn# kubectl get secret -n services keycloak-master-admin-auth \
+                 --template={{.data.password}} | base64 --decode
     ```
 
 1. Save an updated copy of `customizations.yaml` to the `site-init` secret in the `loftsman` Kubernetes namespace.
 
     ```bash
-    CUSTOMIZATIONS=$(base64 < customizations.yaml  | tr -d '\n')
-    kubectl get secrets -n loftsman site-init -o json | \
-    jq ".data.\"customizations.yaml\" |= \"$CUSTOMIZATIONS\"" | kubectl apply -f -
+    ncn# CUSTOMIZATIONS=$(base64 < customizations.yaml  | tr -d '\n')
+    ncn# kubectl get secrets -n loftsman site-init -o json |
+            jq ".data.\"customizations.yaml\" |= \"$CUSTOMIZATIONS\"" |
+            kubectl apply -f -
     ```
