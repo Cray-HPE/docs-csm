@@ -160,6 +160,22 @@ def http_post(session: requests.Session, url, payload, expected_status=http.HTTP
         action["error"] = e
         return action
 
+def http_delete(session: requests.Session, url, payload, expected_status=http.HTTPStatus.OK):
+    action = action_create('delete', url)
+    try:
+        r = session.delete(url, json=payload)
+        action["status"] = r.status_code
+        if r.status_code == http.HTTPStatus.OK and len(r.text) != 0:
+            action["response"] = r.json()
+
+        if r.status_code != expected_status:
+            action["error"] = f'Unexpected status {r.status_code}, expected {expected_status}'
+
+        return action
+    except ConnectionError as e:
+        action["error"] = e
+        return action
+
 #
 # SLS API Helpers
 #
@@ -236,14 +252,14 @@ def create_sls_hardware(session: requests.Session, hardware: dict):
 #
 # HSM API Helpers
 #
-def verify_hsm_inventory_ethernet_interface_not_found(session: requests.Session, component_id: str=None, ip_address: str=None, mac_address: str=None) -> dict:
+def search_hsm_inventory_ethernet_interfaces(session: requests.Session, component_id: str=None, ip_address: str=None, mac_address: str=None):
     search_params = {}
     if component_id is not None:
         search_params["ComponentID"] = component_id
     if ip_address is not None:
-        search_params={"IPAddress": ip_address}
+        search_params["IPAddress"] = ip_address
     if mac_address is not None:
-        search_params={"MACAddress": mac_address}
+        search_params["MACAddress"] = mac_address
     if search_params == {}:
         print("Error no parameters provided to to query HSM for EthernetInterfaces")
         sys.exit(1)
@@ -254,8 +270,14 @@ def verify_hsm_inventory_ethernet_interface_not_found(session: requests.Session,
         print_action(action)
         sys.exit(1)
 
-    if len(action["response"]) != 0:
-        action_log(action, f'Error found EthernetInterfaces for matching {search_params} in HSM: {action["response"]}')
+    action["search_params"] = search_params
+    return action, action["response"]
+
+def verify_hsm_inventory_ethernet_interface_not_found(session: requests.Session, component_id: str=None, ip_address: str=None, mac_address: str=None) -> dict:
+    action, results = search_hsm_inventory_ethernet_interfaces(session, component_id, ip_address, mac_address)
+
+    if len(results) != 0:
+        action_log(action, f'Error found EthernetInterfaces for matching {action["search_params"]} in HSM: {results}')
         print_action(action)
         sys.exit(1)
 
@@ -342,6 +364,21 @@ def patch_hsm_inventory_ethernet_interfaces(session: requests.Session, ei: dict)
     print_action(action)
 
     print(f'Patched {id} in HSM Inventory Ethernet Interfaces')
+    print(json.dumps(ei, indent=2))
+
+def delete_hsm_inventory_ethernet_interfaces(session: requests.Session, ei: dict):
+    id = ei["MACAddress"].replace(":", "").lower()
+    if len(id) == "":
+        print("Error unable to delete EthernetInterface from HSM as a empty value was provided as the MAC Address")
+        sys.exit(1)
+    action = http_delete(session, f'{HSM_URL}/Inventory/EthernetInterfaces/{id}', payload=ei)
+    if action["error"] is not None:
+        action_log(action, f'Error failed to delete HSM Ethernet Interface {id} from HSM. {action["error"]}')
+        print_action(action)
+        sys.exit(1)
+    print_action(action)
+
+    print(f'Deleted {id} from HSM Inventory Ethernet Interfaces')
     print(json.dumps(ei, indent=2))
 
 #
@@ -1158,8 +1195,25 @@ def allocate_ips_command(session: requests.Session, args, state: State):
 
     # Validate allocated IPs are not in use in the HSM EthernetInterfaces table
     for network, ip in state.ncn_ips.items():
-        action = verify_hsm_inventory_ethernet_interface_not_found(session, ip_address=ip)
-        action_log(action, f"Pass {network} IP address {ip} is not currently in use in HSM Ethernet Interfaces")
+        action, found_ethernet_interfaces = search_hsm_inventory_ethernet_interfaces(session, ip_address=ip)
+        if len(found_ethernet_interfaces) == 0:
+            action_log(action, f"Pass {network} IP address {ip} is not currently in use in HSM Ethernet Interfaces")
+        else:
+            # An IP address that has been allocated for the NCN is present in HSM. 
+            # If the component ID is not set, then this is not a real IP reservation and can be removed, as it is most likely 
+            # cruft from the past that was not cleaned up.
+            for found_ie in found_ethernet_interfaces:
+                if found_ie["ComponentID"] == "":
+                    print(f'Removing stale Ethernet Interface from HSM: {found_ie}')
+                    if state.perform_changes:
+                        delete_hsm_inventory_ethernet_interfaces(session, found_ie)
+                    else:
+                        print("Skipping due to dry run!")
+                else:
+                    action_log(action, f'Error found EthernetInterfaces with allocated IP address {ip} in HSM: {found_ie}')
+                    print_action(action)
+                    sys.exit(1)
+
         print_action(action)
 
     # Validate NCN does not exist under state components
@@ -1436,8 +1490,25 @@ def ncn_data_command(session: requests.Session, args, state: State):
 
     # Validate allocated IPs are not in use in the HSM EthernetInterfaces table
     for network, ip in state.ncn_ips.items():
-        action = verify_hsm_inventory_ethernet_interface_not_found(session, ip_address=ip)
-        action_log(action, f"Pass {network} IP address {ip} is not currently in use in HSM Ethernet Interfaces")
+        action, found_ethernet_interfaces = search_hsm_inventory_ethernet_interfaces(session, ip_address=ip)
+        if len(found_ethernet_interfaces) == 0:
+            action_log(action, f"Pass {network} IP address {ip} is not currently in use in HSM Ethernet Interfaces")
+        else:
+            # An IP address that has been allocated for the NCN is present in HSM. 
+            # If the component ID is not set, then this is not a real IP reservation and can be removed, as it is most likely 
+            # cruft from the past that was not cleaned up.
+            for found_ie in found_ethernet_interfaces:
+                if found_ie["ComponentID"] == "":
+                    print(f'Removing stale Ethernet Interface from HSM: {found_ie}')
+                    if state.perform_changes:
+                        delete_hsm_inventory_ethernet_interfaces(session, found_ie)
+                    else:
+                        print("Skipping due to dry run!")
+                else:
+                    action_log(action, f'Error found EthernetInterfaces with allocated IP address {ip} in HSM: {found_ie}')
+                    print_action(action)
+                    sys.exit(1)
+
         print_action(action)
 
     # Check to see if the BMC MAC address exists in HSM
@@ -1570,9 +1641,10 @@ def ncn_data_command(session: requests.Session, args, state: State):
     bootparams["params"] = " ".join(kernel_params)
     bootparams["cloud-init"]["user-data"]["hostname"] = state.ncn_alias
     bootparams["cloud-init"]["user-data"]["local_hostname"] = state.ncn_alias
-    bootparams["cloud-init"]["user-data"]["ntp"]["allow"] = []
-    for network_name, ip_cidr in ncn_cidrs.items():
-        bootparams["cloud-init"]["user-data"]["ntp"]["allow"].append(ip_cidr)
+    if "ntp" in bootparams["cloud-init"]["user-data"]:
+        bootparams["cloud-init"]["user-data"]["ntp"]["allow"] = []
+        for network_name, ip_cidr in ncn_cidrs.items():
+            bootparams["cloud-init"]["user-data"]["ntp"]["allow"].append(ip_cidr)
     bootparams["cloud-init"]["meta-data"]["availability-zone"] = cabinet_xname
     bootparams["cloud-init"]["meta-data"]["instance-id"] = generate_instance_id()
     bootparams["cloud-init"]["meta-data"]["local-hostname"] = state.ncn_alias
