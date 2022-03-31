@@ -121,16 +121,16 @@ Check the status of Ceph.
                 6 osds down
                 1 host (6 osds) down
                 Degraded data redundancy: 21624/131171 objects degraded (16.485%),     522 pgs degraded, 763 pgs undersized
-    
+
       services:
         mon: 3 daemons, quorum ncn-s001,ncn-s002 (age 3m), out of quorum: ncn-s003
         mgr: ncn-s001.afiqwl(active, since 14h), standbys: ncn-s002.nafbdr
         mds: cephfs:1 {0=cephfs.ncn-s001.nzsgxr=up:active} 1 up:standby-replay
         osd: 36 osds: 30 up (since 3m), 36 in (since 14h)
         rgw: 3 daemons active (site1.zone1.ncn-s002.tipbuf, site1.zone1.ncn-s004.    uvzcms, site1.zone1.ncn-s005.twisxx)
-    
+
       task status:
-    
+
       data:
         pools:   12 pools, 1641 pgs
         objects: 43.72k objects, 81 GiB
@@ -139,7 +139,7 @@ Check the status of Ceph.
                  878 active+clean
                  522 active+undersized+degraded
                  241 active+undersized
-    
+
       io:
         client:   6.2 KiB/s rd, 280 KiB/s wr, 2 op/s rd, 49 op/s wr
     ```
