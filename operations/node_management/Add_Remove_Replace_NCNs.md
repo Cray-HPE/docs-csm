@@ -48,7 +48,7 @@ The latest docs-csm RPM has been installed on the master nodes.
       ```bash
       Please restart DVS and rebooting the following nodes:["x3000c0s1b0n0", "x3000c0s19b3", "x3000c0s19b1n0", "x3000c0s19b3n0"]
       prerequisite to prepare NCNs for removal, move and add
-      COMPLETED
+      Network expansion COMPLETED
       Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-02-25_22-59-06
       ncn-m# 
       ```

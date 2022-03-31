@@ -167,4 +167,4 @@
 Next Step:
 
 - [If Rebuilding the Storage Node - Storage Node Validation](../node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
-- [If Adding the Storage Node - Return to Step 7 to Redeploy Services](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#step-7---for-storage-nodes-only)
+- [If Adding the Storage Node - Return to Boot NCN Step 8](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#step-7---for-storage-nodes-only)
