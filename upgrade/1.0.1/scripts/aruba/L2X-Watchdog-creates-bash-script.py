@@ -65,8 +65,3 @@ class Policy(NAE):
             '''echo "fi" >> /tmp/topbcm.sh\n'''
             '''chmod 755 /tmp/topbcm.sh \n''')
 
-
-
-
-
-
