@@ -13,9 +13,9 @@ Results may vary if an unconfigured switch is being used.
 ## Procedure
 
 1. Start a session on the leaf switch, either using SSH or a USB serial cable (see [Connect to Switch over USB-Serial Cable](connect_to_switch_over_usb_serial_cable.md) for details on how to do that).
-    
+
     > **NOTE:** These IP addresses are examples; 10.X.0.4 may or may not match the setup.
-    
+
     ```bash
     # SSH over METAL MANAGEMENT
     pit# ssh admin@10.1.0.4
@@ -37,7 +37,7 @@ Results may vary if an unconfigured switch is being used.
     > Please reference the CLI for more information (press `?` or `tab` to assist on-the-fly).
 
     Print using the VLAN ID:
-    
+
     DellOS 10
     ```bash
     # DellOS 10
@@ -55,8 +55,8 @@ Results may vary if an unconfigured switch is being used.
     ```
     Aruba AOS-CX
     ```bash
-    # Aruba AOS-CX 
-    sw-leaf-bmc-001# show mac-address-table vlan 4 
+    # Aruba AOS-CX
+    sw-leaf-bmc-001# show mac-address-table vlan 4
     MAC age-time            : 300 seconds
     Number of MAC addresses : 21
 
@@ -78,7 +78,7 @@ Results may vary if an unconfigured switch is being used.
     ```
 
     Print using the interface and trunk:
-    
+
     DellOS 10
     ```bash
     # DellOS 10
@@ -101,7 +101,7 @@ Results may vary if an unconfigured switch is being used.
     ```
 
     Print everything:
-    
+
     DellOS 10
     ```bash
     # DellOS 10
@@ -125,9 +125,9 @@ Results may vary if an unconfigured switch is being used.
     ```
 
 1. Ensure the management NCNs are present in the `ncn_metadata.csv` file.
-   
+
    The output from the previous `show mac address-table` command will display information for all management NCNs that do not have an external connection for their BMC, such as `ncn-m001`.
-   
+
    All of the management NCNs should be present in the `ncn_metadata.csv` file.
 
    Fill in the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1` columns with a placeholder value, such as `de:ad:be:ef:00:00`,
@@ -146,7 +146,7 @@ Results may vary if an unconfigured switch is being used.
    The column heading must match that shown above for `csi` to parse it correctly.
 
 1. Collect the BMC MAC address information for the PIT node.
-   
+
    The PIT node BMC is not connected to the switch like the other management nodes.
 
    ```bash
@@ -160,13 +160,13 @@ Results may vary if an unconfigured switch is being used.
    > **NOTE:** An Intel node needs to use `ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt lan print` instead of the above command.
 
    Add this information for `ncn-m001` to the `ncn_metadata.csv` file. There should be `ncn-m003`, then `ncn-m002`, and this new entry for `ncn-m001` as the last line in the file.
-   
+
    ```
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    ```
 
 1. Verify the `ncn_metadata.csv` file has a row for every management node in the SHCD.
-   
+
    There may be placeholder entries for some MAC addresses.
 
    Sample file showing storage nodes 3, 2, and 1, then worker nodes 3, 2, and 1, and finally master nodes 3, 2, and 1 with valid `BMC MAC`

@@ -80,9 +80,9 @@ Data for gitea is stored in two places. Git content is stored directly in a PVC,
     | gitea-vcs-postgres-1 | 10.46.128.19 |        | running |  1 |         0 |
     | gitea-vcs-postgres-2 |  10.47.0.21  |        | running |  1 |         0 |
     +----------------------+--------------+--------+---------+----+-----------+
-    
+
     ncn-w001# POSTGRES_LEADER=gitea-vcs-postgres-0
-    
+
     ncn-w001# kubectl exec -it ${POSTGRES_LEADER} -n services -c postgres -- pg_dumpall -c -U postgres > gitea-vcs-postgres.sql
     ```
 

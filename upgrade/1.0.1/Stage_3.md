@@ -3,7 +3,7 @@
 > NOTE: During the CSM-0.9 install the LiveCD containing the initial install files for this system should have been unmounted from the master node when rebooting into the Kubernetes cluster. The scripts run in this section will also attempt to unmount/eject it if found to ensure the USB stick does not get erased.
 
 >**`IMPORTANT:`**
-> 
+>
 > Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
 >
 >```bash
@@ -17,7 +17,7 @@
     ```bash
     ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/ncn-upgrade-k8s-master.sh ncn-m002
     ```
-    
+
     > NOTE: You may need to reset the root password for each node after it is rebooted
 
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
@@ -33,7 +33,7 @@
     ```bash
     ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/ncn-upgrade-k8s-worker.sh ncn-w001
     ```
-    
+
     > NOTE: You may need to reset the root password for each node after it is rebooted
 
 1. Repeat the previous step for each other worker node, one at a time.
@@ -68,17 +68,17 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `vlan007`/CAN IP address t
             ```
 
         1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release tarball.
-        
+
             In other words, the full URL to the CSM release tarball will be `${ENDPOINT}${CSM_RELEASE}.tar.gz`
-        
+
             **NOTE** This step is optional for Cray/HPE internal installs.
-        
+
             ```bash
             ncn-m002# ENDPOINT=https://put.the/url/here/
             ```
 
         1. Run the script
-        
+
             **NOTE** The `--endpoint` argument is optional for Cray/HPE internal use.
 
             ```bash
@@ -98,7 +98,7 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `vlan007`/CAN IP address t
             ```
 
         1. Set the `TAR_DIR` variable to the directory on `ncn-m002` containing the CSM release tarball.
-        
+
             In other words, the full path to the CSM release tarball will be `${TAR_DIR}/${CSM_RELEASE}.tar.gz`
 
             ```bash

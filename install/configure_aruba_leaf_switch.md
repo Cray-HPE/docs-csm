@@ -27,7 +27,7 @@ The uplinks are port 49 and 50 on the leaf. They connect to Aggregation switch 1
 The uplink ports are the ports connecting the leaf switches to the upstream switch.
 
 1. Create the LAG.
-   
+
    ```bash
    sw-leaf-001(config)#
    interface lag 99
@@ -40,7 +40,7 @@ The uplink ports are the ports connecting the leaf switches to the upstream swit
    ```
 
 1. Add ports to the LAG.
-   
+
    ```bash
    sw-leaf-001(config)#
    interface 1/1/49 - 1/1/50
@@ -56,7 +56,7 @@ The uplink ports are the ports connecting the leaf switches to the upstream swit
 The VLAN information is located in the network YAML files. Below are examples.
 
 1. View the VLAN interfaces for the leaf switches in the Node Management Network (NMN) and the Hardware Management Network (HMN).
-   
+
    Example of NMN.yaml:
 
    ```bash
@@ -115,7 +115,7 @@ The VLAN information is located in the network YAML files. Below are examples.
 SNMP configuration is required for hardware discovery of the HPE Cray EX system.
 
 1. Configure SNMP.
-   
+
    ```bash
    snmp-server vrf default
    snmpv3 user testuser auth md5 auth-pass plaintext testpass1 priv des priv-pass plaintext testpass2
@@ -177,7 +177,7 @@ It provides reachability from the leaf switch to k8s
 The router-id used here is the NMN IP address. (VLAN 2 IP)
 
 1. Configure OSPF.
-   
+
    ```bash
    sw-leaf-001(config)#
        router ospf 1
@@ -206,7 +206,7 @@ These can be found in the NMN.yaml file.
 ## Configure DNS
 
 1. Configure DNS.
-   
+
    This will point to the unbound DNS server.
 
    ```bash

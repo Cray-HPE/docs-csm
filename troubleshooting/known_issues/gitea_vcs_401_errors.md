@@ -18,14 +18,14 @@ If you see the above, first verify that this is due to the user creation issue d
 
     ```bash
     ncn-mw# GITEA_VCS_POD=$(
-                kubectl get pods -n services | 
-                grep "^gitea-vcs-" | 
-                grep -v "^gitea-vcs-postgres-" | 
-                grep -w Running | 
+                kubectl get pods -n services |
+                grep "^gitea-vcs-" |
+                grep -v "^gitea-vcs-postgres-" |
+                grep -w Running |
                 awk '{ print $1 }')
     ncn-mw# echo $GITEA_VCS_POD
     ```
-    
+
     The output should look similar to the following:
     ```text
     gitea-vcs-7c6f5b5c45-4wjcl
@@ -38,12 +38,12 @@ If you see the above, first verify that this is due to the user creation issue d
     ```
 
     * `command terminated with exit code 1`
-        
+
         If the command gives this output, it means that the problem being investigated is **NOT** the problem documented on this page.
 
     * `Incorrect Usage: flag provided but not defined:`
 
-        If the command gives this output, then the problem being investigated **IS** the problem documented on this page. In this case, 
+        If the command gives this output, then the problem being investigated **IS** the problem documented on this page. In this case,
         complete the following remediation steps to manually create the admin user.
 
 ## Remediation
@@ -67,7 +67,7 @@ If you see the above, first verify that this is due to the user creation issue d
                     --admin \
                     --must-change-password=false \
                     --email "${CRAYVCS_USER_EMAIL}" \
-                    --password "${CRAYVCS_PASSWORD}" 2>&1 | 
+                    --password "${CRAYVCS_PASSWORD}" 2>&1 |
                         tee -a /data/gitea/setup'
     ```
 

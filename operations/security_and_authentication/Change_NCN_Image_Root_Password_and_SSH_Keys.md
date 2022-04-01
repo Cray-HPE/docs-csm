@@ -206,19 +206,19 @@ The Kubernetes image ```k8s-image``` is used by the master and worker nodes.
    **WARNING:** If doing a CSM software upgrade, skip this section to continue with Ceph Image.
 
    > If not doing a CSM software upgrade, this process will update the entries in BSS for the master nodes and worker nodes to use the new `k8s-image`.
-   > 
+   >
    > 1. Set all master nodes and worker nodes to use newly created k8s-image.
    >
    >     This will use the K8SVERSION and K8SNEW variables defined earlier.
    >
    >     ```bash
-   >     ncn-m# for node in $(grep -oP "(ncn-[mw]\w+)" /etc/hosts | sort -u) 
+   >     ncn-m# for node in $(grep -oP "(ncn-[mw]\w+)" /etc/hosts | sort -u)
    >     do
    >       echo $node
    >       xname=$(ssh $node cat /etc/cray/xname)
    >       echo $xname
    >       cray bss bootparameters list --name $xname --format json > bss_$xname.json
-   >       sed -i.old "s@k8s/${K8SVERSION}@k8s/${K8SNEW}@g" bss_$xname.json 
+   >       sed -i.old "s@k8s/${K8SVERSION}@k8s/${K8SNEW}@g" bss_$xname.json
    >       kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
    >       initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
    >       params=$(cat bss_$xname.json | jq '.[]  .params')
@@ -397,19 +397,19 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    **WARNING:** If doing a CSM software upgrade, skip this section to continue with Common Cleanup.
 
    > If not doing a CSM software upgrade, this process will update the entries in BSS for the utility storage nodes to use the new `ceph-image`.
-   > 
+   >
    > 1. Set all utility storage nodes to use newly created ceph-image.
    >
    >     This will use the CEPHVERSION and CEPHNEW variables defined earlier.
    >
    >     ```bash
-   >     ncn-m# for node in $(grep -oP "(ncn-s\w+)" /etc/hosts | sort -u) 
+   >     ncn-m# for node in $(grep -oP "(ncn-s\w+)" /etc/hosts | sort -u)
    >     do
    >       echo $node
    >       xname=$(ssh $node cat /etc/cray/xname)
    >       echo $xname
    >       cray bss bootparameters list --name $xname --format json > bss_$xname.json
-   >       sed -i.old "s@ceph/${CEPHVERSION}@ceph/${CEPHNEW}@g" bss_$xname.json 
+   >       sed -i.old "s@ceph/${CEPHVERSION}@ceph/${CEPHNEW}@g" bss_$xname.json
    >       kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
    >       initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
    >       params=$(cat bss_$xname.json | jq '.[]  .params')

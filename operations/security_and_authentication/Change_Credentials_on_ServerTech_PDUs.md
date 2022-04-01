@@ -30,8 +30,8 @@ This procedure changes password used by the `admn` user on ServerTech PDUs. Eith
     ncn-m001# NEW_PDU_PASSWORD=supersecret
     ```
 
-4.  Change password for the `admn` user on the ServerTech PDU. 
-    
+4.  Change password for the `admn` user on the ServerTech PDU.
+
     Either change the credentials on a single PDU or change all ServerTech PDUs to the same global default value:
     -   To update the password on a single ServerTech PDU in the system:
         ```bash
@@ -53,7 +53,7 @@ This procedure changes password used by the `admn` user on ServerTech PDUs. Eith
 
     -   To update all ServerTech PDUs in the system to the same password:
         ```bash
-        ncn-m001# for PDU in $(cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json | 
+        ncn-m001# for PDU in $(cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
           jq -r '.RedfishEndpoints[] | select(.FQDN | contains("rts")).ID'); do
             echo "Updating password on $PDU"
             curl -i -k -u admn:$OLD_PDU_PASSWORD -X PATCH https://$PDU/jaws/config/users/local/admn \
@@ -93,22 +93,22 @@ This procedure changes password used by the `admn` user on ServerTech PDUs. Eith
     -   To update Vault for a single PDU:
         ```bash
         ncn-m001# PDU=x3000m0
-        ncn-m001# vault kv get secret/pdu-creds/$PDU | 
+        ncn-m001# vault kv get secret/pdu-creds/$PDU |
             jq --arg PASSWORD "$NEW_PDU_PASSWORD" '.data | .Password=$PASSWORD' |
             vault kv put secret/pdu-creds/$PDU -
         ```
-    
+
     -   To update Vault for all ServerTech PDUs in the system to the same password:
         ```bash
-        ncn-m001# for PDU in $(cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json | 
+        ncn-m001# for PDU in $(cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
           jq -r '.RedfishEndpoints[] | select(.FQDN | contains("rts")).ID'); do
             echo "Updating password on $PDU"
-            vault kv get secret/pdu-creds/$PDU | 
+            vault kv get secret/pdu-creds/$PDU |
                 jq --arg PASSWORD "$NEW_PDU_PASSWORD" '.data | .Password=$PASSWORD' |
                 vault kv put secret/pdu-creds/$PDU -
         done
         ```
-        
+
 6.  Restart the Redfish Translation Service (RTS) to pickup the new PDU credentials:
 
     ```bash
@@ -126,7 +126,7 @@ This procedure changes password used by the `admn` user on ServerTech PDUs. Eith
     ncn-m001# kubectl -n services exec -it deployment/cray-hms-rts -c cray-hms-rts-redis -- redis-cli keys '*/redfish/v1/Managers'
     ```
 
-    Expected output for a system with 2 PDUs. 
+    Expected output for a system with 2 PDUs.
     ```
     1) "x3000m0/redfish/v1/Managers"
     2) "x3001m0/redfish/v1/Managers"

@@ -150,7 +150,7 @@ cray-console-data service.
 1. Install the helm chart.
    1. Install the helm chart from the file downloaded previously:
       ```
-      ncn-m# helm install -n services cray-console-data ./cray-console-data-1.0.8.tgz 
+      ncn-m# helm install -n services cray-console-data ./cray-console-data-1.0.8.tgz
       NAME: cray-console-data
       LAST DEPLOYED: Mon Oct 25 22:44:49 2021
       NAMESPACE: services

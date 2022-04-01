@@ -144,7 +144,7 @@ The `kubectl` command is installed.
         This check will need to be run after all worker node have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the spine switches \(instructions will vary for Aruba and Mellanox switches\)
 
         If there are BGP Peering sessions that are not ESTABLISHED on either switch, refer to [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
-        
+
 1. Ensure that no nodes are in a `failed` state in CFS.
     Nodes that are in a failed state prior to the reboot will not be automatically
     configured once they have been rebooted. To get a list of nodes in the failed state:
@@ -192,7 +192,7 @@ Before rebooting NCNs:
     1. Establish a console session to each storage node.
 
         Use the [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) procedure referenced in step 4.
-   
+
     2. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
 
     3. Reboot the selected node.
@@ -223,9 +223,9 @@ Before rebooting NCNs:
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
     4. Watch on the console until the node has successfully booted and the login prompt is reached.
-   
+
     5. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
-   
+
    ```bash
    ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
    BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
@@ -334,7 +334,7 @@ Before rebooting NCNs:
        ```
 
     4. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
-   
+
     5. Reboot the selected node.
 
         ```bash
@@ -364,9 +364,9 @@ Before rebooting NCNs:
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
     6. Watch on the console until the node has successfully booted and the login prompt is reached.
-   
+
     7. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
-   
+
    ```bash
    ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
    BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
@@ -442,7 +442,7 @@ Before rebooting NCNs:
         See step [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
 
     2. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
-   
+
     3. Reboot the selected node.
 
         ```bash
@@ -472,9 +472,9 @@ Before rebooting NCNs:
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
     4. Watch on the console until the node has successfully booted and the login prompt is reached.
-   
+
     5. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
-   
+
    ```bash
    ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
    BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
@@ -524,7 +524,7 @@ Before rebooting NCNs:
     1. Determine the CAN IP address for one of the other NCNs in the system to establish an SSH session with that NCN.
 
     2. Establish a console session to `ncn-m001` from a remote system, as `ncn-m001` is the NCN that has an externally facing IP address.
-   
+
     3. If booting from disk is desired then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
 
     4. Power cycle the node

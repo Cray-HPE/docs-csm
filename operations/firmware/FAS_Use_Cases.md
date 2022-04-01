@@ -99,7 +99,7 @@ If the nodes are not off when the update command is issued, the update will get 
 **Manufacturer: Cray | Device Type : NodeBMC | Target : NodeBIOS**
 
 There are two nodes that must be updated on each BMC, these have the targets `Node0.BIOS` and `Node1.BIOS`.
-The targets can be run in the same action (as shown in the example) or run separately by only including one target in the action.  
+The targets can be run in the same action (as shown in the example) or run separately by only including one target in the action.
 On larger systems, it is recommended to run as two actions one after each other as the output will be shorter.
 
 #### Prerequisites

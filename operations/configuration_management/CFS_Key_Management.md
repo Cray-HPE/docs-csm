@@ -6,7 +6,7 @@ Configuration Framework Service \(CFS\) manages its own keys separate from keys 
 
 If Ansible is unable to connect with its target and fails with an `Unreachable - Permission denied` error, the first place to check is the `cfs-state-reporter` on the target node.
 
-Every booted node should be running a copy of cfs-state-reporter.  This service is responsible for pulling down the public key.  To check the status of this service, ssh to the node that CFS can't communicate with, and run `systemctl status cfs-state-reporter`. 
+Every booted node should be running a copy of cfs-state-reporter.  This service is responsible for pulling down the public key.  To check the status of this service, ssh to the node that CFS can't communicate with, and run `systemctl status cfs-state-reporter`.
 
 ```
 ncn-m001# systemctl status cfs-state-reporter

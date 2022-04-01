@@ -2,7 +2,7 @@
 
 This procedure adds one or more liquid-cooled cabinets and associated CDU management switches to SLS.
 
-**NOTE:** This procedure is intended to be used in conjunction with the top level [Add additional Liquid-Cooled Cabinets to a System](../node_management/Add_additional_Liquid-Cooled_Cabinets_to_a_System.md) procedure. 
+**NOTE:** This procedure is intended to be used in conjunction with the top level [Add additional Liquid-Cooled Cabinets to a System](../node_management/Add_additional_Liquid-Cooled_Cabinets_to_a_System.md) procedure.
 
 ## Prerequisites
 
@@ -36,7 +36,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 
     > The inspect_sls_cabinets.py script can be used to help display information about existing cabinets present in the system:
     > ```bash
-    > ncn# /usr/share/doc/csm/scripts/operations/system_layout_service/inspect_sls_cabinets.py sls_dump.json    
+    > ncn# /usr/share/doc/csm/scripts/operations/system_layout_service/inspect_sls_cabinets.py sls_dump.json
     > ```
     > Example Output with a system with 1 Air-cooled cabinet and 4 liquid-cooled cabinets:
     > ```
@@ -45,12 +45,12 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     > =================================
     > Cabinet             | NID Ranges
     > --------------------|---------------------
-    > x1000 (Mountain)    | 1000-1255 
-    > x1001 (Mountain)    | 1256-1511 
-    > x1002 (Mountain)    | 1512-1767 
-    > x1003 (Mountain)    | 1768-2023 
+    > x1000 (Mountain)    | 1000-1255
+    > x1001 (Mountain)    | 1256-1511
+    > x1002 (Mountain)    | 1512-1767
+    > x1003 (Mountain)    | 1768-2023
     > x3000 (River)       | 100001-100011
-    > 
+    >
     > =================================
     > Cabinet Subnet & VLAN Allocations
     > =================================
@@ -64,7 +64,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     > ```
 
 3.  **For each** new liquid-cooled cabinet add it to the previously taken SLS state dump in __ascending order__:
-    
+
     Command line flags for `add_liquid_cooled_cabinet.py`:
     | Argument             | Description                                                       | Example value        |
     | -------------------- | ----------------------------------------------------------------- | -------------------- |
@@ -136,11 +136,11 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     | Duplicate Cabinet Xname        | `Error x1000 already exists in sls_dump.json!`                        | The cabinet has already present in SLS. Ensure the new cabinet has a unique component name (xname), or the cabinet is already present in SLS. |
     | Duplicate NID values           | `Error found duplicate NID 3000`                                      | Need to choose a different starting NID value for the cabinet that does not overlap with existing nodes. |
     | Duplicate Cabinet HMN VLAN ID: | `Error found duplicate VLAN 3022 with subnet cabinet_1001 in HMN_MTN` | Ensure that the this new cabinet has an unique HMN VLAN ID. |
-    | Duplicate Cabinet NMN VLAN ID  | `Error found duplicate VLAN 3023 with subnet cabinet_1001 in NMN_MTN` | Ensure that the this new cabinet has an unique NMN VLAN ID. | 
+    | Duplicate Cabinet NMN VLAN ID  | `Error found duplicate VLAN 3023 with subnet cabinet_1001 in NMN_MTN` | Ensure that the this new cabinet has an unique NMN VLAN ID. |
 
 4.  Inspect cabinet subnet and VLAN allocations in the system after adding the new cabinets cabinets:
     ```bash
-    ncn# /usr/share/doc/csm/scripts/operations/system_layout_service/inspect_sls_cabinets.py sls_dump.json 
+    ncn# /usr/share/doc/csm/scripts/operations/system_layout_service/inspect_sls_cabinets.py sls_dump.json
     ```
 
     Example output:
@@ -150,11 +150,11 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     =================================
     Cabinet             | NID Ranges
     --------------------|---------------------
-    x1000 (Mountain)    | 1000-1255 
-    x1001 (Mountain)    | 1256-1511 
-    x1002 (Mountain)    | 1512-1767 
-    x1003 (Mountain)    | 1768-2023 
-    x1004 (Mountain)    | 2024-2279 
+    x1000 (Mountain)    | 1000-1255
+    x1001 (Mountain)    | 1256-1511
+    x1002 (Mountain)    | 1512-1767
+    x1003 (Mountain)    | 1768-2023
+    x1004 (Mountain)    | 2024-2279
     x3000 (River)       | 100001-100011
 
     =================================
@@ -235,7 +235,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     ```
 
 8.  Perform a SLS load state operation to replace the contents of SLS with the data from the `sls_dump.json` file.
-    
+
     Get an API Token:
     ```bash
     ncn# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
@@ -250,6 +250,6 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
         https://api-gw-service-nmn.local/apis/sls/v1/loadstate
     ```
 
-9.  MEDS will automatically start looking for potential hardware in the newly added liquid-cooled cabinets. 
+9.  MEDS will automatically start looking for potential hardware in the newly added liquid-cooled cabinets.
 
     **Note**: No hardware in these new cabinets will be discovered until the management network has been reconfigured to support the new cabinets, and routes has been added to the management NCNs in the system.

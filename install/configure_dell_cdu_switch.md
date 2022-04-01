@@ -48,7 +48,7 @@ The VLAN information is located in the network YAML files. The following are exa
 1. Verify the CDU switches have VLAN interfaces in the NMN, HMN, NMN_MTN, and HMN_MTN.
 
    Example NMN.yaml:
-   
+
    ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    SNIPPET
@@ -68,7 +68,7 @@ The VLAN information is located in the network YAML files. The following are exa
    ```
 
    Example HMN.yaml:
-   
+
    ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml
 
@@ -87,7 +87,7 @@ The VLAN information is located in the network YAML files. The following are exa
      comment: ""
      gateway: 10.254.0.1
    ```
-   
+
    Example NMN_MTN.yaml:
 
    ```bash
@@ -118,7 +118,7 @@ The VLAN information is located in the network YAML files. The following are exa
    ```
 
    Example HMN_MTN.yaml:
-   
+
    ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN_MTN.yaml
 
@@ -175,7 +175,7 @@ The VLAN information is located in the network YAML files. The following are exa
    | 3002 | 10.104.8.2/22| 10.104.8.3/22 | Mountain Hardware Management
 
 1. View the output of the SHCD.
-   
+
    The components in the x1000 cabinet would get their own NMN and HMN VLAN and components in the x1001 would also get their own NMN and HMN VLAN.
    The CECs will be on the HMN VLAN of that cabinet.
 
@@ -381,7 +381,7 @@ The IP addresses used are the first three worker nodes on the NMN network. These
 ## Configure DNS
 
 1. Configure DNS.
-   
+
    This will point to the unbound DNS server.
 
    ```bash
@@ -415,7 +415,7 @@ The IP addresses used are the first three worker nodes on the NMN network. These
 - The CEC will not need to be programmed in order to support the LAG configuration as it was required in previous versions. The updated firmware takes care of this.
 
 1. Configure ports going to CMM switches.
-   
+
    The VLANs used are the cabinet VLANs that are generated from CSI.
    The description should be changed to match the cabinet number.
 

@@ -44,7 +44,7 @@ ncn-w001 # systemctl restart containerd
 ncn-w001 # ncn-w001:~ # kubectl get pods -l name=sonar-jobs-watcher -n services -o wide | grep ncn-w001
 sonar-jobs-watcher-8z6th   1/1     Running   0          95d   10.42.0.6    ncn-w001   <none>           <none>
 
-ncn-w001 # kubectl logs sonar-jobs-watcher-8z6th -n services 
+ncn-w001 # kubectl logs sonar-jobs-watcher-8z6th -n services
 Found pod cray-dns-unbound-manager-1631116980-h69h6 with restartPolicy 'Never' and container 'manager' with status 'Completed'
 All containers of job pod cray-dns-unbound-manager-1631116980-h69h6 has completed. Killing istio-proxy (1c65dacb960c2f8ff6b07dfc9780c4621beb8b258599453a08c246bbe680c511) to allow job to complete
 time="2021-09-08T16:44:18Z" level=fatal msg="failed to connect: failed to connect, make sure you are running as root and the runtime has been started: context deadline exceeded"

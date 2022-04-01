@@ -69,7 +69,7 @@ configuration layer requires special placement in the layer list.
               "playbook": "site.yml",
               "commit": "<git commit>"
             },
-            # ... 
+            # ...
           ]
         }
         ```

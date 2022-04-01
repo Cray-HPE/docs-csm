@@ -1,7 +1,7 @@
 # Stage 1 - Ceph Image Upgrade
 
 >**`IMPORTANT:`**
-> 
+>
 > Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
 >
 >```bash

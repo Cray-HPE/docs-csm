@@ -1,7 +1,7 @@
 # Stage 2 - Ceph image upgrade
 
 >**`IMPORTANT:`**
-> 
+>
 > Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
 >
 >```bash
@@ -22,13 +22,13 @@
 
 1. After `ncn-upgrade-ceph-nodes.sh` has successfully run for all storage nodes, rescan SSH keys on all storage nodes by running the following commands on `ncn-m001`:
     ```bash
-    ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | 
-                sort -u | 
+    ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts |
+                sort -u |
                 xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
-    ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | 
-                sort -u | 
-                xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | 
-                                    sort -u | 
+    ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts |
+                sort -u |
+                xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts |
+                                    sort -u |
                                     xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
     ```
 

@@ -24,7 +24,7 @@ The ISL ports are port 32 on both spine switches.
 The VLAN information is located in the network YAML files. The following are examples.
 
 1. Verify the spine switches have VLAN interfaces in NMN, HMN, and CAN networks.
-   
+
    Example NMN.yaml:
 
    ```bash
@@ -132,7 +132,7 @@ It provides reachability from the MTN networks to NMN/Kubernetes networks.
 The router-id used here is the NMN IP address (VLAN 2 IP).
 
 1. Configure OSPF.
-   
+
    ```bash
    sw-spine-001 & sw-spine-002 (config)#
    protocol ospf
@@ -391,8 +391,8 @@ These ACLs are designed to block traffic from the Node Management Network (NMN) 
 Spanning-tree will need to be applied to each MAGP pair. Spine01 will have a lower priority making it the root bridge.
 Spanning-tree configuration has not changed from 1.3 to 1.5.
 
-1. Apply the following configuration to the Mellanox spine switches. 
-   
+1. Apply the following configuration to the Mellanox spine switches.
+
    This is an example of a switch-to-switch connection.
 
    ```bash
@@ -502,7 +502,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 ## Configure DNS
 
 1. Configure DNS.
-   
+
    This will point to the unbound DNS server.
 
    ```bash
