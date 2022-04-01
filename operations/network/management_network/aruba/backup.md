@@ -13,19 +13,19 @@ copy {running-config | startup-config} <REMOTE-URL> {cli | json} [vrf <VRF-NAME>
 The parameters/syntax of the `copy` command are described below:
 
 * ``` {running-config | startup-config}```
-  
-  Selects whether the running configuration or the startup configuration will be copied to a remote location as a file. 
+
+  Selects whether the running configuration or the startup configuration will be copied to a remote location as a file.
 
 * ```<REMOTE-URL>```
-  
-  Specifies the remote target for copying the file. 
-  
+
+  Specifies the remote target for copying the file.
+
 * ```{tftp | sftp}://<IP-ADDRESS>[:<PORT-NUMBER>][;blocksize=<BLOCKSIZE-VALUE>]/<FILE-NAME>{cli | json}```
-  
-  Selects whether the export file is in CLI or JSON format. 
+
+  Selects whether the export file is in CLI or JSON format.
 
 * ```vrf <VRF-NAME>```
-  
+
   Specifies the VRF to receive the interface configuration. If a VRF is not specified, the default VRF is used.
 
 

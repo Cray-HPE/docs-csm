@@ -34,7 +34,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
     ```
 
     Example output:
-    
+
     ```
     PRODUCT_VERSION:
       configuration:
@@ -158,7 +158,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
     ```bash
     ncn-m001# git push --set-upstream origin integration
     ```
-    
+
     Enter the appropriate credentials when prompted:
 
     ```
@@ -365,7 +365,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         ```
         Parallel mksquashfs: Using 64 processors
         Creating 4.0 filesystem on UAN-1.4.0-day-zero.squashfs, block size 131072.
-        
+
         [...]
         ```
 
@@ -403,7 +403,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         Key = "ac31e971-f990-4b5f-821d-c0c18daefb6e/UAN-1.4.0-day-zero.kernel"
         ```
 
-    14. After uploading the new image, initrd, and kernel to S3, use the `cray artifacts` 
+    14. After uploading the new image, initrd, and kernel to S3, use the `cray artifacts`
         command to get the s3 generated etag value for each artifact.
 
         ```bash
@@ -414,20 +414,20 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         ContentLength = 1647050752
         ETag = "\"db5582fd817c8a8dc084e1b8b4f0ea3b-197\""  <---
         ContentType = "binary/octet-stream"
-         
+
         [artifact.Metadata]
         md5sum = "cb6a8934ad3c483e740c648238800e93"
 
         ncn-m001# cray artifacts describe boot-images ${NEW_IMAGE_ID}/initrd
         [...]
-        
+
         ncn-m001# cray artifacts describe boot-images ${NEW_IMAGE_ID}/kernel
-        
+
         [...]
         ```
 
-        Note that when adding the etag to the IMS manifest below, remove the quotation 
-        marks from the etag value. So, for the above artifact, the etag would be 
+        Note that when adding the etag to the IMS manifest below, remove the quotation
+        marks from the etag value. So, for the above artifact, the etag would be
         `db5582fd817c8a8dc084e1b8b4f0ea3b-197`.
 
     15. Obtain the md5sum of the squashfs image, initrd, and kernel.
@@ -456,7 +456,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         created = "2021-03-24T18:00:24.464755+00:00"
         id = "c880251d-b275-463f-8279-e6033f61578b"
         name = "cray-shasta-uan-cos-sles15sp1.x86_64-0.1.32"
-        
+
         [link]
         etag = "d4e09fb028d5d99e4a0d4d9b9d930e13"
         path = "s3://boot-images/c880251d-b275-463f-8279-e6033f61578b/manifest.json"

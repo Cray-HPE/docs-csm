@@ -5,7 +5,7 @@ Create the CAN VRF
 Aruba
 
 > switch#config
-> 
+>
 > switch(config)#vrf CAN
 
 
@@ -47,7 +47,7 @@ interface vlan 7
 Create BGP process in CAN VRF
 
 * A new BGP process will need to be running in the CAN VRF, this will peer with the CAN IP addresses on the NCN-Workers.
-* These are example configs only, the neighbors below are the IP addresses of the CAN interface on the Workers. 
+* These are example configs only, the neighbors below are the IP addresses of the CAN interface on the Workers.
 
 Aruba Config
 
@@ -66,7 +66,7 @@ vrf CAN
 
 Setup Customer Edge Router
 
-* The customer Edge router has to be certified by the Slingshot team.  
+* The customer Edge router has to be certified by the Slingshot team.
 * The configuration for this is going to be unique for most customers.
 * Below is an example configuration of a single Arista switch with a static LAG to a single Slingshot switch.
 
@@ -80,7 +80,7 @@ interface Ethernet24/1
    speed forced 100gfull
    error-correction encoding reed-solomon
    channel-group 1 mode on
- 
+
 interface Ethernet25/1
    mtu 9214
    flowcontrol send on
@@ -88,7 +88,7 @@ interface Ethernet25/1
    speed forced 100gfull
    error-correction encoding reed-solomon
    channel-group 1 mode on
- 
+
 interface Port-Channel1
    mtu 9214
    switchport access vlan 2
@@ -104,10 +104,10 @@ VLAN 2 config
 interface Vlan2
    ip address 10.101.10.1/24
 ```
-   
+
 * The following is the Arista BGP config for peering over the HSN.
 	* The BGP neighbor IP addresses used are HSN IP addresses of Worker Nodes.
-	
+
 Example HSN IP
 
 ```
@@ -116,20 +116,20 @@ ncn-w001:~ # ip a show hsn0
     link/ether 02:00:00:00:00:0d brd ff:ff:ff:ff:ff:ff
     inet 10.101.10.10/24 scope global hsn0
        valid_lft forever preferred_lft forever
-    inet6 fe80::ff:fe00:d/64 scope link 
+    inet6 fe80::ff:fe00:d/64 scope link
        valid_lft forever preferred_lft forever
 ```
-       
+
 * We are creating a prefix list and route-map to only accept routes from the HSN network.
 
 Arista BGP Config
 
 ```
-ip prefix-list HSN seq 10 permit 10.101.10.0/24 ge 24 
- 
+ip prefix-list HSN seq 10 permit 10.101.10.0/24 ge 24
+
 route-map HSN permit 5
    match ip address prefix-list HSN
- 
+
  router bgp 65534
    maximum-paths 32
    neighbor 10.101.10.10 remote-as 65533
@@ -215,7 +215,7 @@ Neighbor Status Codes: m - Under maintenance
 * The onsite network team will be responsible for distributing these routes to the rest of their network.
 
 ```
-sw-edge01(config)#show ip route 
+sw-edge01(config)#show ip route
 B E    10.101.8.113/32 [200/0] via 10.101.10.10, Vlan2
                                 via 10.101.10.11, Vlan2
                                 via 10.101.10.12, Vlan2
@@ -235,8 +235,8 @@ B E    10.101.8.113/32 [200/0] via 10.101.10.10, Vlan2
 Example of how BGP routes would look like in the switch located in Highspeed network.
 
 ```
-sw-spine-001 [standalone: master] # show ip bgp vrf CAN summary 
- 
+sw-spine-001 [standalone: master] # show ip bgp vrf CAN summary
+
 VRF name                  : CAN
 BGP router identifier     : 192.168.75.1
 local AS number           : 65533
@@ -245,9 +245,9 @@ Main routing table version: 665
 IPV4 Prefixes             : 44
 IPV6 Prefixes             : 0
 L2VPN EVPN Prefixes       : 0
- 
+
 ------------------------------------------------------------------------------------------------------------------
-Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd        
+Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
 ------------------------------------------------------------------------------------------------------------------
 10.101.8.8        4    65536        24725     27717     665       0      0      0:11:52:43    ESTABLISHED/14
 10.101.8.9        4    65536        24836     27692     665       0      0      0:08:44:20    ESTABLISHED/16
@@ -263,7 +263,7 @@ Configure default routes on Workers
 * To make it persistent we will need to create an ifcfg file for hsn0 and remove the old vlan7 default route.
 
 > ncn-w001# mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old
-> 
+>
 > ncn-w001# echo "default 10.101.10.1 - -" > /etc/sysconfig/network/ifroute-hsn0
 
 * Verify the routing table and external connectivity.
@@ -299,7 +299,7 @@ traceroute to 10.101.8.113 (10.101.8.113), 64 hops max, 52 byte packets
 ```
 
 * You can also listen on all the HSN interfaces for ping/traceroute while you ping the external facing iP, in this example 10.101.8.113.
- 
+
 ```
 ncn-m001# nodes=$(kubectl get nodes| awk '{print $1}' | grep  ncn-w | awk -vORS=, '{print $1}'); pdsh -w ${nodes} "tcpdump -envli hsn0 icmp"
 

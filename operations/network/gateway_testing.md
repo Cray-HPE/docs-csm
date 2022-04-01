@@ -1,9 +1,9 @@
-# Gateway Testing 
+# Gateway Testing
 
 With the introduction of BiCAN, service APIs are now available on one or more networks depending on who is allowed access to the services and from where.
 The services are accessed via three different ingress gateways using a token that can be retrieved from keycloak.
 
-This page describes how to run a set of tests to determine if the gateways are functioning properly. The gateway test will obtain an API token from keycloak and then use that token to attempt to access a set of service APIs on one or more networks as defined in the gateway test definition file (gateway-test-defn.yaml).  The test will check the return code to make sure it gets the expected response. 
+This page describes how to run a set of tests to determine if the gateways are functioning properly. The gateway test will obtain an API token from keycloak and then use that token to attempt to access a set of service APIs on one or more networks as defined in the gateway test definition file (gateway-test-defn.yaml).  The test will check the return code to make sure it gets the expected response.
 
 When the nmnlb network is specified, it will use `api-gw-service-nmn.local` as an override for `nmnlb.<system-domain>` in 1.2.   You can set `use-api-gw-override: false` in gateway-test-defn.yaml if you would like to disable that override and use `nmnlb.<system-domain>`.
 
@@ -44,8 +44,8 @@ The results of running the tests will show the following
 * Retrieval of a token on the CMN network in order to get SLS data to determine which networks are defined on the system
 * Retrieval of a token on the network specified on the command line to use for testing the APIs
 * Results from each of the networks defined in `gateway-test-defn.yaml`.  It will attempt to access each of the services on the network and check the expected results.
-  * It will show PASS or FAIL depending on the expected response for the service and the token being used. 
-  * It will show SKIP for services that are not expected to be installed on the system. 
+  * It will show PASS or FAIL depending on the expected response for the service and the token being used.
+  * It will show SKIP for services that are not expected to be installed on the system.
 * The return code of the test will be non-zero if any of the tests fail or we are unable to retrieve a token on any of the networks that are expected to be accessible.
 
 NOTE: In this example we are running from a server outside the cluster. It is expected that `api-gw-service-nmn.local` is unreachable from this location.

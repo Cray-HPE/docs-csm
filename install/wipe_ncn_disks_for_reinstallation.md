@@ -196,7 +196,7 @@ If a node type is not specified, the step should be run regardless of node type.
 1. Unmount volumes.
 
     > **NOTE:** Some of the following `umount` commands may fail or have warnings depending on the state of the NCN. Failures in this section can be ignored and will not inhibit the wipe process.
-    
+
     > **NOTE:** There is an edge case where the overlay may keep the drive from being unmounted. If this is a rebuild, ignore this.
 
     * Master nodes
@@ -256,7 +256,7 @@ If a node type is not specified, the step should be run regardless of node type.
     1. This `dmsetup` command will determine whether an etcd volume is present.
 
         ```bash
-        ncn-m# dmsetup ls 
+        ncn-m# dmsetup ls
         ```
 
         Expected output when the etcd volume is present will show `ETCDLVM`, but the numbers might be different.

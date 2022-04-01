@@ -47,7 +47,7 @@ There may be other switches in a specific SHCD, but the general guidelines for a
 #### Prerequisites
 
 - The SHCD for the system
-    
+
     Check the description for component names while mapping names between the SHCD and the `switch_metadata.csv` file.
     See [Component Names (xnames)](../operations/Component_Names_xnames.md).
 
@@ -63,20 +63,20 @@ Spine and leaf switches use the format `xXcChHsS`. leaf-bmc switches use `xXcCwW
 #### Directions
 
 1. Identify the switches in the SHCD.
-    
+
     Look for the following:
-    
+
     - The slot number(s) for the leaf-bmc switches (usually 48-port switches)
-        
+
         - In the above diagram this is x3000u22
-    
+
     - The slot number(s) for the spine switches
-        
+
         - In the above diagram this is x3000u23R and x3000u23L (two side-by-side switches)
         - Newer side-by-side switches use slot numbers of s1 and s2 instead of R and L
 
 2. Each spine or leaf switch will follow this format: `xXcChHsS`:
-    
+
     > This format also applies to CDU switches that are in a River cabinet that make connections to an adjacent Hill cabinet.
 
     - xX : where "X" is the River cabinet identification number (the figure above is "3000")
@@ -85,15 +85,15 @@ Spine and leaf switches use the format `xXcChHsS`. leaf-bmc switches use `xXcCwW
     - sS : where "S" is the horizontal space number'
 
 3. Each leaf-bmc switch will follow this format: `xXcCwW`:
-    
+
     - xX : where "X" is the River cabinet identification number (the figure above is "3000")
     - cC : where "C" is the chassis identification number. This should be "0".
     - wW : where "W" is the slot number in the cabinet (height)
 
 4. Each CDU switch will follow this format: `dDwW`:
-    
+
     > If a CDU switch is in a River cabinet, then follow the naming convention in step 2 instead.
-    
+
     - dD : where "D" is the Coolant Distribution Unit (CDU)
     - wW : where "W" is the management switch in a CDU
 

@@ -7,7 +7,7 @@ Summary:
 - Two Arista 7060CX2-32S running MLAG.
 - The Aristas are connected to the Slingshot/HSN network via static MLAG.
 - The Aruba Spine switches are connected to the Aristas with point-to-point OSPF links.
-- The Arista Edge switches are redistributing the default route to the Arubas via OSPF.  This allows the Shasta cluster to have external access. 
+- The Arista Edge switches are redistributing the default route to the Arubas via OSPF.  This allows the Shasta cluster to have external access.
 - The Aristas are utilizing a static default route.
 
 #### Topology

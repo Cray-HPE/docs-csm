@@ -158,7 +158,7 @@ The example provided here covers the most common use-case, which is building a U
     # NOTE: The next step could be done as an `rm -rf` but, because the user
     #       is `root` and the path is very similar to an important system
     #       path a more cautious approach is taken.
-    
+
     ncn-w001# rm -fv ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
     ```
 

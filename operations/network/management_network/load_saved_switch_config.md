@@ -6,8 +6,8 @@ To save switch configurations, refer to the [Configuration Management](config_ma
 
 ### Aruba
 
-1. View the checkpoints. 
-   
+1. View the checkpoints.
+
     Ensure that `CSM1_0` and `CSM1_2` exist. If they exist, proceed to the next step.
 
     ```
@@ -32,7 +32,7 @@ To save switch configurations, refer to the [Configuration Management](config_ma
 ### Dell
 
 1. View the configuration files.
-   
+
     Ensure that `csm1.0` and `csm1.2` exist. If they exist, proceed to the next step.
 
     ```
@@ -59,7 +59,7 @@ To save switch configurations, refer to the [Configuration Management](config_ma
     `Copy completed` will be returned if successful.
 
 3. Reboot the switch without saving configuration.
-    
+
     ```
     sw-leaf-001# reload
     System configuration has been modified. Save? [yes/no]:no
@@ -68,7 +68,7 @@ To save switch configurations, refer to the [Configuration Management](config_ma
 ### Mellanox
 
 1. View the configuration files.
-   
+
     Ensure that `csm1.0` and `csm1.2` exist. If they exist, proceed to the next step.
 
     ```

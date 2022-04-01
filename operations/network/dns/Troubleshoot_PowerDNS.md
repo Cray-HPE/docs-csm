@@ -164,7 +164,7 @@ If the DNSKEY record is incorrect, verify that the zone name is correct in the `
    ;; global options: +cmd
    ; Transfer failed.
    ```
-   
+
    The `cray-dns-powerdns` pod log will also indicate that the request failed.
 
    ```

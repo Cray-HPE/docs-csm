@@ -17,7 +17,7 @@ The Domain Name Service \(DNS\) is not configured properly.
 1.  View the DNS configuration on the system.
 
     ```bash
-    ncn-w001# kubectl -n services get svc cray-dns-powerdns-cmn-udp 
+    ncn-w001# kubectl -n services get svc cray-dns-powerdns-cmn-udp
     ```
 
     Example output:

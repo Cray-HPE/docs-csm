@@ -1,7 +1,7 @@
 # Message-Of-The-Day (MOTD)
 
-Banners are custom messages displayed to users attempting to connect to the management interfaces. MOTD banners are displayed pre-login while exec banners are displayed post-login. Multiple lines of text can be stored using 
-a custom delimiter to mark the end of message. 
+Banners are custom messages displayed to users attempting to connect to the management interfaces. MOTD banners are displayed pre-login while exec banners are displayed post-login. Multiple lines of text can be stored using
+a custom delimiter to mark the end of message.
 
 ## Configuration Commands
 
@@ -11,13 +11,13 @@ Create a banner:
 switch(config)# banner <motd|exec> DELIM
 ```
 
-Show commands to validate functionality: 
+Show commands to validate functionality:
 
 ```text
 switch# show banner <motd|exec>
 ```
 
-## Example Output 
+## Example Output
 
 ```text
 switch(config)# banner motd $
@@ -36,7 +36,7 @@ that spans multiple lines.
 ## Expected Results
 
 1. Administrators can create the MOTD banner
-1. The output of the MOTD banner looks correct 
+1. The output of the MOTD banner looks correct
 
 
 [Back to Index](../index.md)
