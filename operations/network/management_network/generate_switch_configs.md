@@ -41,4 +41,3 @@ Select one of the following commands to generate a configuration file for a sing
   ncn# canu generate switch config --csm 1.2 -a full --ccj cabling.json  --sls-file sls_file.json --folder generated
   ```
 
-
