@@ -110,10 +110,12 @@ configuration layer requires special placement in the layer list.
    `configured` when the configuration has completed.
 
    ```bash
-   ncn# export CRAY_FORMAT=json
-   ncn# for xname in $(cray hsm state components list --role Management | jq -r .Components[].ID)
+   ncn# for xname in $(cray hsm state components list \
+                               --role Management --format json |
+                           jq -r .Components[].ID)
    do
-       cray cfs components describe $xname | jq -r ' .id+" status="+.configurationStatus'
+       cray cfs components describe --format json $xname |
+           jq -r ' .id+" status="+.configurationStatus'
    done
    x3000c0s17b0n0 status=configured
    x3000c0s19b0n0 status=pending
@@ -140,30 +142,22 @@ Re-run the configuration for an NCN by clearing the state of the node. Clearing
 the node state will cause CFS to reconfigure the node, so long as the desired
 configuration was [set previously](#ncn_personalization_set_component_config).
 
-1. Clear the state of the node using CFS.
+1. Clear the state and error count of the node using CFS.
 
-   Replace the XNAME value in the following command with the xname of the node
+   Replace the `<XNAME>` string in the following command with the xname of the node
    being reconfigured.
 
    ```bash
-   ncn# cray cfs components update --state '[]' <XNAME>
-   ```
-
-1. Clear the error count for the node in CFS.
-
-   Replace the XNAME value in the following command with the xname of the node
-   being reconfigured.
-   ```bash
-   ncn# cray cfs components update --error-count 0 <XNAME>
+   ncn# cray cfs components update --error-count 0 --state '[]' --format json <XNAME>
    ```
 
 1. (Optional) To re-run NCN personalization on all NCNs at once, use the
    following loop:
    ```bash
-   ncn# export CRAY_FORMAT=json
-   ncn# for xname in $(cray hsm state components list --role Management | jq -r .Components[].ID)
+   ncn# for xname in $(cray hsm state components list \
+                               --role Management --format json |
+                           jq -r .Components[].ID)
    do
-       cray cfs components update --error-count 0 $xname
-       cray cfs components update --state '[]' $xname
+       cray cfs components update --error-count 0 --state '[]' --format json $xname
    done
    ```
