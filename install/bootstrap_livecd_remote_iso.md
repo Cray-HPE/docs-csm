@@ -160,22 +160,22 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
     In some cases the `parted` command may give an error similar to the following:
     ```text
-    Error: Partition(s) 4 on /dev/sda have been written, but we have been unable to inform the kernel of the change, probably 
-    because it/they are in use.  As a result, the old partition(s) will remain in use.  You should reboot now before making 
+    Error: Partition(s) 4 on /dev/sda have been written, but we have been unable to inform the kernel of the change, probably
+    because it/they are in use.  As a result, the old partition(s) will remain in use.  You should reboot now before making
     further changes.
     ```
 
-    In that case, the following steps may resolve the problem without needing to reboot. These commands will remove 
-    volume groups and raid arrays that may be using the disk. **These commands only need to be run if the earlier 
+    In that case, the following steps may resolve the problem without needing to reboot. These commands will remove
+    volume groups and raid arrays that may be using the disk. **These commands only need to be run if the earlier
     `parted` command failed.**
-    
+
     ```bash
     pit# RAIDS=$(grep "${disk}[0-9]" /proc/mdstat | awk '{ print "/dev/"$1 }')
     pit# echo $RAIDS
     pit# VGS=$(echo $RAIDS | xargs -r pvs --noheadings -o vg_name 2>/dev/null)
     pit# echo $VGS
     pit# echo $VGS | xargs -r -t -n 1 vgremove -f -v
-    pit# echo $RAIDS | xargs -r -t -n 1 mdadm -S -f -v 
+    pit# echo $RAIDS | xargs -r -t -n 1 mdadm -S -f -v
     ```
 
     After running the above procedure, retry the `parted` command which failed. If it succeeds, resume the install from that point.

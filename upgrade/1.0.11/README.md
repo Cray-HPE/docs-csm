@@ -10,7 +10,7 @@ This top-level `README.md` file should be followed top to bottom.
 
 CSM v1.0.11 is a security patch release, which addresses the following CVEs:
 
-### CVE-2022-0185: Linux kernel buffer overflow/container escape 
+### CVE-2022-0185: Linux kernel buffer overflow/container escape
 More info: https://nvd.nist.gov/vuln/detail/CVE-2022-0185 \
 Remediation: upgrade Linux kernel to patched version `5.3.18-24.99`.
 

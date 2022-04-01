@@ -13,7 +13,7 @@ Ceph is the utility storage platform that is used to enable pods to store persis
 ## Key Concepts
 
 > - **Shrink:** This only pertains to removing nodes from a cluster. Since Octopus and the move to utilize ceph orchestrator, the ceph cluster is probing nodes and adding unused drives. So removing a drive will only work if the actual drive is removed from aserver.
-> - **Add:** This will most commonly pertain to adding a node with its full allotment of drives.  
+> - **Add:** This will most commonly pertain to adding a node with its full allotment of drives.
 > - **Replace:** This will most commonly pertain to replacing a drive or a node after hardware repairs.
 
 ## Table of Contents

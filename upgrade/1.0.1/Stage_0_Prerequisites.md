@@ -14,7 +14,7 @@ ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
 This check will also be conducted in the `prerequisites.sh` script listed below and will fail if the system is not running CSM-0.9.4, CSM-0.9.5, or CSM-1.0.0.
 
 >**`IMPORTANT:`**
-> 
+>
 > Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
 >
 >```bash
@@ -73,7 +73,7 @@ Perform these steps to update `customizations.yaml`:
 
 1. If [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
    clone a local working tree and commit appropriate changes to `customizations.yaml`.
-   
+
     For example:
 
     ```bash
@@ -94,7 +94,7 @@ Perform these steps to update `customizations.yaml`:
 ## Stage 0.4 - Execute Prerequisites Check
 
 >**`IMPORTANT:`**
-> 
+>
 > Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
 >
 >```bash
@@ -118,17 +118,17 @@ Perform these steps to update `customizations.yaml`:
     * Option 1 - Internet Connected Environment
 
         1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release tarball.
-        
+
             In other words, the full URL to the CSM release tarball will be `${ENDPOINT}${CSM_RELEASE}.tar.gz`
-        
+
             **NOTE** This step is optional for Cray/HPE internal installs.
-        
+
             ```bash
             ncn-m001# ENDPOINT=https://put.the/url/here/
             ```
 
         1. Run the script
-        
+
             **NOTE** The `--endpoint` argument is optional for Cray/HPE internal use.
 
             ```bash
@@ -138,7 +138,7 @@ Perform these steps to update `customizations.yaml`:
     * Option 2 - Air Gapped Environment
 
         1. Set the `TAR_DIR` variable to the directory on `ncn-m001` containing the CSM release tarball.
-        
+
             In other words, the full path to the CSM release tarball will be `${TAR_DIR}/${CSM_RELEASE}.tar.gz`
 
             ```bash
@@ -151,7 +151,7 @@ Perform these steps to update `customizations.yaml`:
             ncn-m001# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --tarball-file ${TAR_DIR}/${CSM_RELEASE}.tar.gz
             ```
 
-**`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. 
+**`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred.
 
 **IF** the `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
 

@@ -163,7 +163,7 @@ Update resources associated with Prometheus in the `sysmgmt-health` namespace. T
    ```
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
-   
+
    ```bash
    ncn# kubectl delete secret -n loftsman site-init
    ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
@@ -262,7 +262,7 @@ A similar flow can be used to update the resources for `cray-sls-postgres`, `cra
    ```
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
-   
+
    ```bash
    ncn# kubectl delete secret -n loftsman site-init
    ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
@@ -361,7 +361,7 @@ Scale the replica count associated with the `cray-bss` service in the `services`
    ```
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
-   
+
    ```bash
    ncn# kubectl delete secret -n loftsman site-init
    ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
@@ -439,7 +439,7 @@ A similar flow can be used to update the volume size for `cray-sls-postgres`, `g
 1. If the status on the above command is `SyncFailed` instead of `Running`, refer to *Case 1* in the *SyncFailed* section of [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md#syncfailed). At this point the Postgres cluster is healthy, but additional steps are required to complete the resize of the Postgres PVCs.
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
-   
+
    ```bash
    ncn# kubectl delete secret -n loftsman site-init
    ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml

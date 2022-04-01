@@ -98,7 +98,7 @@ scripts, revision control with git, configuration management with Ansible, YAML,
 1. [Glossary](glossary.md)
 
    This chapter provides explanations of terms and acronyms used throughout the rest of this documentation.
-   
+
 ## Copyright and License
 
 MIT License

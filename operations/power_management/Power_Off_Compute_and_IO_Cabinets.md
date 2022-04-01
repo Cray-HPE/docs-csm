@@ -44,7 +44,7 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
     ```bash
     ncn-m001# sat --api-timeout 180 bootsys shutdown --stage cabinet-power
     ```
-    
+
 1.  Verify that the `hms-discovery` cron job has been suspended \(`SUSPEND` column = `True`\).
 
     ```bash

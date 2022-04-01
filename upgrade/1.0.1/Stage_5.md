@@ -37,7 +37,7 @@ The file locations:
 ## Procedure
 
 >**`IMPORTANT:`**
-> 
+>
 > Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
 >
 >```bash
@@ -49,7 +49,7 @@ The file locations:
 	```bash
 	ncn-m002# /usr/share/doc/csm/upgrade/1.0.1/scripts/aruba/nae_upload.py
 	```
-	
+
 1. Type in your switch password and the script will upload and enable the NAE script.
 
 [Return to main upgrade page](README.md)

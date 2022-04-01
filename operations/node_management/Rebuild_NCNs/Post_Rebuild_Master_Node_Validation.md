@@ -2,7 +2,7 @@
 
 Validate the master node rebuilt successfully.
 
-Skip this section if a worker or storage node was rebuilt. 
+Skip this section if a worker or storage node was rebuilt.
 
 1. Verify the new node is in the cluster.
 

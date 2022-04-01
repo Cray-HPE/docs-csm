@@ -14,7 +14,7 @@ services            cray-dns-unbound-manager-1635448860                  1/1    
 services            cray-dns-unbound-manager-1635449040                  1/1           61s        2m35s
 ```
 
-If one of the jobs shows `0/1` for more than 10 minutes and there are others with `1/1`, then that means the `0/1` job is hung. 
+If one of the jobs shows `0/1` for more than 10 minutes and there are others with `1/1`, then that means the `0/1` job is hung.
 
 The hung jobs should be deleted using one of the following options:
 

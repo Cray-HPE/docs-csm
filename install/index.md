@@ -144,7 +144,7 @@ sections, but there is also a general troubleshooting topic.
 
    1. Validate CSM Health Before PIT Node Redeploy
 
-      After installing all of the CSM services, now validate the health of the management nodes and all CSM services. 
+      After installing all of the CSM services, now validate the health of the management nodes and all CSM services.
       The reason to do it now is that if there are any problems detected with the core infrastructure or the nodes, it is
       easy to rewind the installation to [Deploy Management Nodes](#deploy_management_nodes) because the PIT node has not
       yet been redeployed. In addition, redeploying the PIT node successfully requires several CSM services to be working
@@ -216,7 +216,7 @@ sections, but there is also a general troubleshooting topic.
       with many devices on the system. FAS can be used to update the firmware for all of the devices it
       communicates with at once, or specific devices can be targeted for a firmware update.
 
-      >**IMPORTANT:** 
+      >**IMPORTANT:**
       Before FAS can be used to update firmware, refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
       on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for information about how to install
       the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
@@ -232,7 +232,7 @@ sections, but there is also a general troubleshooting topic.
 
       These compute node types require preparation.
          * HPE Apollo 6500 XL645d Gen10 Plus
-         * Gigabyte 
+         * Gigabyte
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
    <a name="next_topic"></a>

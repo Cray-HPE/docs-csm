@@ -6,7 +6,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
 
 ## Procedure
 
-**IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#remove-prerequisites) 
+**IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#remove-prerequisites)
 
 - [Master node](#master-node-remove-roles)
 - [Worker node](#worker-node-remove-roles)
@@ -74,7 +74,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
 
 ### Step 1 - Drain the node to clear any pods running on the node.
 
-**IMPORTANT:** The following command will cordon and drain the node. 
+**IMPORTANT:** The following command will cordon and drain the node.
 
 Run the following:
 

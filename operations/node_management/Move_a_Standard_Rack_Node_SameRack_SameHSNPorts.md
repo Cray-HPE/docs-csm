@@ -4,7 +4,7 @@ This procedure move standard rack UAN or compute node to a different location an
 
 Update the location-based component name (xname) for a standard rack node within the system.
 
-If a node has an incorrect component name (xname) based on its physical location, then this procedure can be used to correct the component name (xname) of the node without the need to physically move the node. 
+If a node has an incorrect component name (xname) based on its physical location, then this procedure can be used to correct the component name (xname) of the node without the need to physically move the node.
 
 ### Prerequisites
 
@@ -36,15 +36,15 @@ This procedure works with both application and compute nodes. This example moves
 1.  Shut down software and power off the node.
 
 2.  Disconnect the power cables, management network cables, and high-speed network \(HSN\) cables.
-    > If this procedure is being followed to correct a node's component name (xname), then this step can be skipped. 
+    > If this procedure is being followed to correct a node's component name (xname), then this step can be skipped.
 
 3.  Move the node to the new location in the rack \(U27\), connect the management cables and HSN cables, but do not connect the power cables.
-    > If this procedure is being followed to correct a node's component name (xname), then this step can be skipped. 
+    > If this procedure is being followed to correct a node's component name (xname), then this step can be skipped.
 
 #### Update Node in the System Layout Service \(SLS\)
 
 4.  Setup environment variables for the original node and node BMC component names (xnames):
-    
+
     ```bash
     ncn-m001# OLD_NODE_XNAME=x3000c0s17b1n0
     ncn-m001# echo $OLD_NODE_XNAME
@@ -57,8 +57,8 @@ This procedure works with both application and compute nodes. This example moves
     x3000c0s17b1
     ```
 
-5.  Setup environment variables for the new node and node BMC component names (xnames):  
-    
+5.  Setup environment variables for the new node and node BMC component names (xnames):
+
     ```bash
     ncn-m001# NEW_NODE_XNAME=x3000c0s27b1n0
     ncn-m001# echo $NEW_NODE_XNAME
@@ -73,13 +73,13 @@ This procedure works with both application and compute nodes. This example moves
 
 6.  Update SLS with the node's new component name (xname).
 	1.  Get Node from SLS:
-       
+
        ```bash
        ncn-m001# cray sls hardware describe "$OLD_NODE_XNAME" --format json > sls_node.original.json
        ```
 
        Sample contents of `sls_node.original.json`
-       
+
        ```json
         {
           "Parent": "x3000c0s17b1",
@@ -100,7 +100,7 @@ This procedure works with both application and compute nodes. This example moves
        ```
 
     2.  Update the SLS Node object with the new component names (xnames):
-       
+
         ```bash
         ncn-m001# jq --arg NODE_XNAME "$NEW_NODE_XNAME" --arg BMC_XNAME "$NEW_BMC_XNAME" \
             '.Parent = $BMC_XNAME | .Xname = $NODE_XNAME' sls_node.original.json \
@@ -108,7 +108,7 @@ This procedure works with both application and compute nodes. This example moves
         ```
 
         Expected content of `sls_node.original.json`:
-        
+
         ```json
         {
           "Parent": "x3000c0s19b1",
@@ -130,7 +130,7 @@ This procedure works with both application and compute nodes. This example moves
         > Only the fields `Parent` and `Xname` should have been updated.
 
     3.  Create new Node object in SLS:
-        
+
         ```bash
         ncn-m001# curl -i -X POST -H "Authorization: Bearer $(get_token)" \
             https://api-gw-service-nmn.local/apis/sls/v1/hardware -d @sls_node.json
@@ -138,9 +138,9 @@ This procedure works with both application and compute nodes. This example moves
         > Note: If a 503 is returned, verify that get_token function has been defined.
 
         Expected output:
-        
+
         ```
-        HTTP/2 200 
+        HTTP/2 200
         content-type: application/json
         date: Mon, 18 Oct 2021 20:30:02 GMT
         content-length: 42
@@ -151,13 +151,13 @@ This procedure works with both application and compute nodes. This example moves
         ```
 
     4.  Delete old Node object from SLS:
-        
+
         ```bash
         ncn-m001# cray sls hardware delete $OLD_NODE_XNAME
         ```
 
         Expected output:
-        
+
         ```
         code = 0
         message = "deleted entry and its descendants"
@@ -166,13 +166,13 @@ This procedure works with both application and compute nodes. This example moves
 7.  Update `MgmtSwitchConnector` in SLS with the node BMC's new component name (xname):
 
     1.  Get MgmtSwitchConnector object from SLS:
-        
+
         ```bash
         ncn-m001# cray sls search hardware list --node-nics "$OLD_BMC_XNAME" --format json > sls_MgmtSwitchConnector.original.json
         ```
 
         Sample contents of `sls_MgmtSwitchConnector.original.json`
-        
+
         ```json
         [
           {
@@ -194,7 +194,7 @@ This procedure works with both application and compute nodes. This example moves
         ```
 
     2.  Update `MgmtSwitchConnector` object with the new node BMC component name (xname):
-        
+
         ```bash
         ncn-m001# jq --arg BMC_XNAME "$NEW_BMC_XNAME" \
             '.[0] | .ExtraProperties.NodeNics = [ $BMC_XNAME ]' sls_MgmtSwitchConnector.original.json \
@@ -202,7 +202,7 @@ This procedure works with both application and compute nodes. This example moves
         ```
 
         Expected content of `sls_MgmtSwitchConnector.json`:
-        
+
         ```json
         {
           "Parent": "x3000c0w22",
@@ -223,7 +223,7 @@ This procedure works with both application and compute nodes. This example moves
         > Only the `NodeNics` field should have been updated.
 
     3.  Determine the component name (xname) of the `MgmtSwitchConnector`:
-        
+
         ```bash
         ncn-m001# MGMT_SWITCH_CONNECTOR_XNAME=$(jq -r .Xname sls_MgmtSwitchConnector.json)
         ncn-m001# echo $MGMT_SWITCH_CONNECTOR_XNAME
@@ -231,16 +231,16 @@ This procedure works with both application and compute nodes. This example moves
         ```
 
     4.  Update the `MgmtSwitchConnector` in SLS:
-        
+
         ```bash
         ncn-m001# curl -i -X PUT -H "Authorization: Bearer $(get_token)" \
             https://api-gw-service-nmn.local/apis/sls/v1/hardware/$MGMT_SWITCH_CONNECTOR_XNAME -d @sls_MgmtSwitchConnector.json
         ```
 
         Expected output:
-        
+
         ```
-        HTTP/2 200 
+        HTTP/2 200
         content-type: application/json
         date: Mon, 18 Oct 2021 20:33:36 GMT
         content-length: 301
@@ -255,19 +255,19 @@ This procedure works with both application and compute nodes. This example moves
 8.  Remove previously discovered components from HSM:
 
     Remove Node component from HSM:
-    
+
     ```bash
     ncn-m001# cray hsm state components delete $OLD_NODE_XNAME
     ```
 
     Remove NodeBMC component from HSM:
-    
+
     ```bash
     ncn-m001# cray hsm state components delete $OLD_BMC_XNAME
     ```
 
     Remove NodeEnclosure component form HSM. The component name (xname) for a NodeEnclosure is similar to the node BMC component name (xname), but the `b` is replaced with a `e`.
-    
+
     ```bash
     ncn-m001# OLD_NODE_ENCLOSURE_XNAME=x3000c0s17e0
     ncn-m001# cray hsm state components delete $OLD_NODE_ENCLOSURE_XNAME
@@ -280,7 +280,7 @@ This procedure works with both application and compute nodes. This example moves
         ```bash
         ncn-m001# for ID in $(cray hsm inventory ethernetInterfaces list --component-id $OLD_NODE_XNAME --format json | jq -r .[].ID); do
             echo "Deleting MAC address: $ID"
-            cray hsm inventory ethernetInterfaces delete $ID; 
+            cray hsm inventory ethernetInterfaces delete $ID;
         done
         ```
 
@@ -289,22 +289,22 @@ This procedure works with both application and compute nodes. This example moves
         ```bash
         ncn-m001# for ID in $(cray hsm inventory ethernetInterfaces list --component-id $OLD_BMC_XNAME --format json | jq -r .[].ID); do
             echo "Deleting MAC address: $ID"
-            cray hsm inventory ethernetInterfaces delete $ID; 
+            cray hsm inventory ethernetInterfaces delete $ID;
         done
         ```
 
     3.  Delete the Redfish endpoint for the removed node.
-        
+
         ```bash
         ncn-m001# cray hsm inventory redfishEndpoints delete $OLD_BMC_XNAME
         ```
 
 10. Connect the power cables to the node to power on the BMC.
-    > If this procedure is being followed to correct a node's component name (xname), then this step can be skipped. 
+    > If this procedure is being followed to correct a node's component name (xname), then this step can be skipped.
 
 11. Wait for 5 minutes for power on and the node BMCs to be discovered.
     ```bash
-    ncn-m001# sleep 300 
+    ncn-m001# sleep 300
     ```
 
 12. Verify the node BMC has been discovered by the HSM.
@@ -337,7 +337,7 @@ This procedure works with both application and compute nodes. This example moves
         -   For `HTTPsGetFailed`, verify that the BMC is pingable by its component name (xname). If the component name (xname) of the BMC is not resolvable, then more time may be needed for DNS to update.
 
             If hostname it does resolve, issue a discovery request to HSM:
-            
+
             ```bash
             ncn-m001# cray hsm inventory discover create --xnames $NEW_BMC_XNAME
             ```

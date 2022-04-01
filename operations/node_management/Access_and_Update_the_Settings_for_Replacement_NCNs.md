@@ -15,8 +15,8 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
 1.  Determine if ipmitool access is configured for root on the BMC.
 
     ```bash
-    ncn# export USERNAME=root   
-    ncn# export IPMI_PASSWORD=changeme   
+    ncn# export USERNAME=root
+    ncn# export IPMI_PASSWORD=changeme
     ncn# ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt power status
     Error: Unable to establish IPMI v2 / RMCP+ session
     ```

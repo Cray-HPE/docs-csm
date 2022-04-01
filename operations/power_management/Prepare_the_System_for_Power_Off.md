@@ -139,8 +139,8 @@ An authentication token is required to access the API gateway and to use the `sa
         ncn# sat status --filter State=Off | tee sat.status.off
         ```
 
-    1.  Capture the state of nodes in the workload manager. 
-    
+    1.  Capture the state of nodes in the workload manager.
+
         For example, if the system uses Slurm:
 
         ```bash
@@ -148,7 +148,7 @@ An authentication token is required to access the API gateway and to use the `sa
         ```
 
     1.  Capture the list of down nodes in the workload manager and the reason.
-    
+
         For example, if the system uses Slurm:
 
         ```bash

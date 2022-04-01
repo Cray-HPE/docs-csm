@@ -91,7 +91,7 @@ Use the `cray hsm locks lock` command to perform locking.
    [Success]
    ComponentIDs = [ "x3000c0s5b0n0", "x3000c0s4b0n0", "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0",]
    ```
-   
+
 1. Lock the NodeBMCs of those management nodes.
    ```bash
    ncn# cray hsm locks lock create --component-ids $(cray hsm state components list --role management --type node --format json | jq '.Components[].ID' | sed 's/n[0-9]*//;s/"//g' | tr '\n' ',' | sed 's/.$//')
@@ -220,7 +220,7 @@ Use the `cray hsm locks unlock` command to perform unlocking.
    [Success]
    ComponentIDs = [ "x3000c0s6b0n0",]
    ```
-   
+
 1. Unlock the BMCs of those management nodes.
    ```bash
    // Remove 'n0' from all of the xnames to get a list of the NodeBMCs that need to be locked.

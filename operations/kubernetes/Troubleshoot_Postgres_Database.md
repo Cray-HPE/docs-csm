@@ -357,7 +357,7 @@ Check for any postgresql resource that has a `STATUS` of `SyncFailed`. `SyncFail
 Other `STATUS` values such as `Updating` are a non issue. It is expected that this will eventually change to `Running` or possibly `SyncFailed` if the `postgres-operator` encounters issues syncing updates to the postgresql cluster.
 
 1. Check for any postgresql resource that has a `STATUS` of `SyncFailed`.
-   
+
     ```bash
     ncn-w001# kubectl get postgresql -A
     ```
@@ -562,7 +562,7 @@ ncn-w001# kubectl get pods -A -l "application=spilo,cluster-name=${POSTGRESQL}"
 If the number of Postgres pods for the given cluster is more or less than expected, increase or decrease as needed. This example will patch the keycloak-postgres cluster resource so that three pods should be running.
 
 1. Set the POSTGRESQL and NAMESPACE variables.
-    
+
     ```bash
     ncn-w001# POSTGRESQL=keycloak-postgres
     ncn-w001# NAMESPACE=services
@@ -586,7 +586,7 @@ If the number of Postgres pods for the given cluster is more or less than expect
 1. If a pod is starting but remains in Pending, CrashLoopBackOff, ImagePullBackOff or other non Running states, describe the pod and/or get logs from the pod for further analysis.
 
     1. Find the pod name.
-    
+
         ```bash
         ncn-w001# kubectl get pods -A -l "application=spilo,cluster-name=${POSTGRESQL}"
         ```
@@ -601,13 +601,13 @@ If the number of Postgres pods for the given cluster is more or less than expect
         ```
 
     1. Describe the pod.
-    
+
         ```
         ncn-w001# kubectl describe pod "${POSTGRESQL}-0" -n ${NAMESPACE}
         ```
 
     1. View the pod logs.
-    
+
         ```
         ncn-w001# kubectl logs "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE}
         ```
@@ -620,14 +620,14 @@ If a Postgres cluster no longer has a leader, the database will need to be recov
 ### Determine if the Postgres Leader is missing
 
 1. Set the POSTGRESQL and NAMESPACE variables.
-   
+
     ```bash
     ncn-w001# POSTGRESQL=cray-smd-postgres
     ncn-w001# NAMESPACE=services
     ```
 
 1. Check if the leader is missing.
-    
+
     ```
     ncn-w001# kubectl exec ${POSTGRESQL}-0 -n ${NAMESPACE} -c postgres -- patronictl list
     ```

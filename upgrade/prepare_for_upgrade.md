@@ -55,7 +55,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
     ```bash
     ncn-m001# sat bootsys shutdown --stage session-checks
     ```
-    
+
     Example output:
     ```text
     Checking for active BOS sessions.
@@ -79,7 +79,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
 1. Validate CSM Health
 
-   Run the CSM health checks to ensure that everything is working properly before the upgrade starts. It is always best to 
+   Run the CSM health checks to ensure that everything is working properly before the upgrade starts. It is always best to
    perform all possible health checks. Be sure to run the validation procedures appropriate for your **current** CSM version.
 
    **NOTE**: Booting the barebones image on the compute nodes may be skipped if all compute nodes are currently running
@@ -108,7 +108,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       ```bash
       [n000]$ pdsh -g mgmt cat /proc/mdstat | dshbak -c
       ```
-      
+
       Example output:
       ```text
       ----------------
@@ -146,7 +146,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       ```bash
       [n000]# pdsh -a date
       ```
-      
+
       Example output:
       ```text
       cls01234n000: Thu Aug 7 01:29:28 PDT 2014

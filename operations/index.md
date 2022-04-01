@@ -468,7 +468,7 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
 
 ## Hardware Management (HM) Collector
 
-The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system. 
+The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system.
 
  * [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
 

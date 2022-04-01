@@ -187,8 +187,8 @@ firmware requirement before starting.
    the firmware because that service has not yet been installed. However, at this point, it would be possible to use
    the HPE Cray EX HPC Firmware Pack (HFP) product on the PIT node to learn about the firmware versions available in HFP.
 
-   If the firmware is not updated at this point in the installation workflow, it can be done with FAS after CSM and HFP have 
-   both been installed and configured, however, at that point a rolling reboot procedure for the management nodes will be needed 
+   If the firmware is not updated at this point in the installation workflow, it can be done with FAS after CSM and HFP have
+   both been installed and configured, however, at that point a rolling reboot procedure for the management nodes will be needed
    after the firmware has been updated.
 
    See the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
@@ -197,9 +197,9 @@ firmware requirement before starting.
    In the HFP documentation there is information about the recommended firmware packages to be installed.
    See "Product Details" in the _HPE Cray EX HPC Firmware Pack Installation Guide_.
 
-   Some of the component types have manual procedures to check firmware versions and update firmware. 
+   Some of the component types have manual procedures to check firmware versions and update firmware.
    See "Upgrading Firmware Without FAS" in the _HPE Cray EX HPC Firmware Pack Installation Guide_.
-   It will be possible to extract the files from the product tarball, but the install.sh script from that product 
+   It will be possible to extract the files from the product tarball, but the install.sh script from that product
    will be unable to load the firmware versions into the Firmware Action Services (FAS) because the management nodes
    are not booted and running Kubernetes and FAS cannot be used until Kubernetes is running.
 
@@ -532,7 +532,7 @@ If there are LVM check failures, then the problem must be resolved before contin
 > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning.
 
 > **`IMPORTANT:`** Estimate the expected number of OSDs using the following table and using this equation:
-> 
+>
 >  total_osds = (num of utility storage/ceph nodes) * (OSD count from table below for the appropriate hardware)
 
 | Hardware Manufacturer | OSD Drive Count (not including OS drives)|
@@ -691,7 +691,7 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
    If you are provisioning your HPE Cray EX system from `ncn-m001` (i.e. it is your PIT node), then most likely this will be `ncn-m002`.
 
    Run the following commands on the PIT node to extract the value of the `first-master-hostname` field from your `/var/www/ephemeral/configs/data.json` file:
-   
+
    ```bash
    pit# FM=$(cat /var/www/ephemeral/configs/data.json | jq -r '."Global"."meta-data"."first-master-hostname"')
    pit# echo $FM
@@ -799,7 +799,7 @@ ncn-m001# ssh admin@sw-spine-001
        ```
 
     * If you have Aruba switches, run CANU.
-     
+
         CANU requires three parameters: the IP address of switch 1, the IP address of switch 2, and the path to the to directory containing the file `sls_input_file.json`
 
         The IP addresses in this example should be replaced by the IP addresses of the switches.
@@ -811,10 +811,10 @@ ncn-m001# ssh admin@sw-spine-001
 1. Do the following steps ***for each of the switch IP addresses that you found previously***:
 
     1. Log in to the switch as the `admin` user:
-      
+
         ```bash
         pit# ssh admin@<switch_ip_address>
-        ```   
+        ```
 
     1. Check the status of the BGP peering sessions
         * Aruba: `show bgp ipv4 unicast summary`
@@ -845,7 +845,7 @@ ncn-m001# ssh admin@sw-spine-001
             neighbor 10.252.1.9 passive
             ```
 
-        * Mellanox: `show run protocol bgp` The passive neighbor configuration is required. `router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive` 
+        * Mellanox: `show run protocol bgp` The passive neighbor configuration is required. `router bgp 65533 vrf default neighbor 10.252.1.7 transport connection-mode passive`
 
             EXAMPLE ONLY
             ```text
@@ -941,7 +941,7 @@ Observe the output of the checks and note any failures, then remediate them.
    ```bash
    ncn# weave --local status connections | grep failed
    ```
-   
+
    If the check is successful, there will be no output. If you see messages like `IP allocation was seeded by different peers`, then weave looks to have split-brained. At this point it is necessary to wipe the NCNs and start the PXE boot again:
 
    1. Wipe the NCNs using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
@@ -957,9 +957,9 @@ Observe the output of the checks and note any failures, then remediate them.
       ```bash
       ncn-m# systemctl status etcd.service
       ```
-   
+
       The second two lines of the expected output should look similar to the following:
-   
+
       ```text
          Loaded: loaded (/etc/systemd/system/etcd.service; enabled; vendor preset: disabled)
          Active: active (running) since Mon 2021-12-13 20:12:00 UTC; 51min 6s ago
@@ -972,11 +972,11 @@ Observe the output of the checks and note any failures, then remediate them.
       ```bash
       ncn-mw/pit# kubectl get pods -o wide -n kube-system | grep -Ev '(Running|Completed)'
       ```
-   
+
       If any pods are listed by this command, it means they are not in the `Running` or `Completed` state. That needs to be investigated before proceeding.
 
    1. Verify that the ceph-csi requirements are in place.
-   
+
       See [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md) for details.
 
 # Important Checkpoint

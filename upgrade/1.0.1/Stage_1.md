@@ -1,7 +1,7 @@
 # Stage 1 - Ceph upgrade from Nautilus (14.2.x) to Octopus (15.2.x)
 
 >**`IMPORTANT:`**
-> 
+>
 > Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
 >
 >```bash
@@ -23,7 +23,7 @@
 **`IMPORTANT:`** We scale down the `conman` deployments during this stage, so all console sessions will be down for this portion of the upgrade.
 
 > **`IMPORTANT`** If you have to repeat the `ncn-upgrade-ceph.sh` script, the following checkpoint files may need to be deleted:
-> 
+>
 > ```text
 > /etc/cray/ceph/images_pre_pulled
 > /etc/cray/ceph/radosgw_converted
@@ -37,7 +37,7 @@
 > /etc/cray/ceph/rgws_upgraded
 > ```
 >
-> **`NOTE:`** You can delete all these files and re-run, or you can just delete any files from your last step. You may end up with checkpoint files if the upgrade was aborted by the 
+> **`NOTE:`** You can delete all these files and re-run, or you can just delete any files from your last step. You may end up with checkpoint files if the upgrade was aborted by the
 > user. But if you know you exited out of OSDs and it was not a clean exit, then you would only need to remove `osd_upgraded`, `mds_upgraded`, and `rgw_upgraded`.
 
 1. Start the Ceph upgrade.
@@ -67,7 +67,7 @@
     ```bash
     ncn# kubectl get pods -n services | grep cray-console-
     ```
-    
+
     Example output:
     ```text
     cray-console-data-5cd59677d9-ph4dh                             2/2     Running     0          21h
@@ -87,7 +87,7 @@
     ```bash
     ncn# kubectl get pods -n user -o wide
     ```
-    
+
     Example output:
     ```text
     slurmctld-659bddd779-swhr8               3/3     Running             0          20h    10.39.3.53    ncn-w001   <none>           <none>

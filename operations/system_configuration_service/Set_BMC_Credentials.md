@@ -97,7 +97,7 @@ Use the System Configuration Service \(SCSD\) to set the BMCs credentials to uni
             ```bash
             ncn-m001# for bmc in $(cat bmc_creds_glb.json | jq '.Targets[]' -r); do
                 echo "Checking Discovery Status for $bmc"
-                cray hsm inventory redfishEndpoints describe $bmc --format json | 
+                cray hsm inventory redfishEndpoints describe $bmc --format json |
                     jq .DiscoveryInfo.LastDiscoveryStatus -r
             done
             ```
@@ -126,7 +126,7 @@ Use the System Configuration Service \(SCSD\) to set the BMCs credentials to uni
             ```bash
             ncn-m001# for bmc in $(cat bmc_creds_glb.json | jq '[.Targets[].Xname] | join(",")' -r); do
                 echo "Checking Discovery Status for $bmc"
-                cray hsm inventory redfishEndpoints describe $bmc --format json | 
+                cray hsm inventory redfishEndpoints describe $bmc --format json |
                     jq .DiscoveryInfo.LastDiscoveryStatus -r
             done
             ```

@@ -79,7 +79,7 @@ system is **booting over onboard NICs then the "bootstrap MAC" and the "bond0 MA
 The following are sample rows from a `ncn_metadata.csv` file:
 
 * __Use case__: NCN with a single PCIe card (1 card with 2 ports):
-    
+
     > Notice how the MAC address for `Bond0 MAC0` and `Bond0 MAC1` are only off by 1, which indicates that
     > they are on the same 2 port card.
 
@@ -89,7 +89,7 @@ The following are sample rows from a `ncn_metadata.csv` file:
     ```
 
 * __Use case__: NCN with a dual PCIe cards (2 cards with 2 ports each for 4 ports total):
-    
+
     > Notice how the MAC address for `Bond0 MAC0` and `Bond0 MAC1` have a difference greater than 1, which
     > indicates that they are on not on the same 2 port same card.
 

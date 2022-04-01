@@ -22,7 +22,7 @@ systems with onboard connections to their leaf switches and NCNs need to disable
 
 This onboard NCN port came from before spine-switches were added to the shasta-network topology. The onboard connection
 was responsible for every network (MTL/NMN/HMN/CAN) and was the sole driver of PXE booting for. Now, NCNs use bond interfaces and spine switches for those networks;
-however, some older systems still have this legacy connection to their leaf switches and solely use it for PXE booting. 
+however, some older systems still have this legacy connection to their leaf switches and solely use it for PXE booting.
 This NIC is not used during runtime, and NCNs in this state should enable PXE within their PCIe devices' OpROMs and disable/remove this onboard connection.
 
 <a name="enabling-uefi-pxe-mode"></a>
@@ -80,7 +80,7 @@ For worker nodes with High-Speed network attachments, the PXE and SR-IOV feature
 disabled.
 
 1. Run `mlxfwmanager` to probe and dump the Mellanox PCIe cards.
-    
+
     ```bash
     ncn# mlxfwmanager
     ```
@@ -88,7 +88,7 @@ disabled.
 2. Find the device path for the HSN card, assuming it is a ConnectX-5 or other 100GB card, this should be easy to pick out.
 
 3. Run the following commands, swapping the `MST` variable for the actual card path.
-    
+
     ```bash
     # Set UEFI to YES
 
@@ -146,7 +146,7 @@ If the connection must be disabled, log in to the respective leaf switch.
 1. Connect to the leaf switch using serial or SSH connections.
 
    Select one of the connection options below. The IP addresses and device names may vary in the commands below.
-    
+
    ```bash
    # SSH over METAL MANAGEMENT
    pit# ssh admin@10.1.0.4
@@ -154,28 +154,28 @@ If the connection must be disabled, log in to the respective leaf switch.
    pit# ssh admin@10.252.0.4
    # SSH over HARDWARE MANAGEMENT
    pit# ssh admin@10.254.0.4
-   
+
    # or.. serial (device name will vary).
    pit# minicom -b 115200 -D /dev/tty.USB1
    ```
 
 2. Enter configuration mode.
-    
+
    ```sh
    sw-leaf-001> configure terminal
    sw-leaf-001(config)#>
    ```
 
 3. Disable the NCN interfaces.
-   
+
    Check the SHCD for reference before continuing so that the interfaces connected to management NCNs are being changed. Ports 2 to 10 are commonly the master, worker, and storage nodes when there are 3 of each. Some systems may have more worker nodes or utility storage nodes, or may be racked and cabled differently.
-   
+
    ```bash
    sw-leaf-001(config)#> interface range 1/1/2-1/1/10
    sw-leaf-001(config)#> shutdown
    sw-leaf-001(config)#> write memory
    ```
-   
+
    Enable the interfaces again at anytime by switching the `shutdown` command out for `no shutdown`.
 
 

@@ -10,13 +10,13 @@
 
    ```bash
    #!/bin/bash
-   
+
    (( counter=0 ))
-   
+
    host=$(hostname)
-   
+
    > ~/.ssh/known_hosts
-   
+
    for node in ncn-s001 ncn-s002 ncn-s003; do
      ssh-keyscan -H "$node" >> ~/.ssh/known_hosts
      pdsh -w $node > ~/.ssh/known_hosts
@@ -32,7 +32,7 @@
        else
          scp $node:/etc/ceph/rgw.pem /etc/ceph/rgw.pem
        fi
-   
+
        if [[ ! $(pdsh -w $node "/srv/cray/scripts/common/pre-load-images.sh; ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-keyscan -H $host >> ~/.ssh/known_hosts ;ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
        then
          (( counter+1 ))
@@ -46,7 +46,7 @@
        fi
      fi
    done
-   
+
    sleep 30
    (( ceph_mgr_failed_restarts=0 ))
    (( ceph_mgr_successful_restarts=0 ))
@@ -73,7 +73,7 @@
        fi
      done
    done
-   
+
    for service in $(cephadm ls | jq -r '.[].systemd_unit')
    do
      systemctl enable $service
@@ -164,7 +164,7 @@
       ```
 
    - If deploying to select nodes then do:
-  
+
      ```bash
      ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
      ```
