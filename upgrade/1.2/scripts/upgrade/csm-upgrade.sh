@@ -121,6 +121,9 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
- GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+state_name="POST CSM Upgrade Validation"
+echo "====> ${state_name} ..."
+GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+echo "====> ${state_name} has been completed"
 
 ok_report
