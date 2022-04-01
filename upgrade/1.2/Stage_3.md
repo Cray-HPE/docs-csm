@@ -2,7 +2,6 @@
 
 1. Prepare assets:
 
-   > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
 
    ```bash
     ncn-m002# CSM_RELEASE=csm-1.2.0
