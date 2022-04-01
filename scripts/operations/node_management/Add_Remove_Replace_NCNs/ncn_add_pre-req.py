@@ -30,6 +30,8 @@ import requests
 import os
 import logging
 from urllib.parse import urljoin
+
+from kubernetes.client import ApiException
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import ipaddress
@@ -383,22 +385,27 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
 
         ips_to_delete_from_smd[network] = set()
         new_ip_dhcp_pool_start[network] = ''
+        ip_shift = 0
         if add_ncn_count >= ip_white_space-1:
             print('There is not enough static IP space to add an NCN.'
                   'Adjusting DHCP pool start.')
             # for all networks other than HMN
             if network != 'HMN':
                 for i in range(1, add_ncn_count + 1):
+                    # create list of ips to check for conflicts in SMD
                     ip = ipaddress.IPv4Address(last_reserved_ip) + i
                     ips_to_delete_from_smd[network].add(str(ip))
-                add_ncn_count += 1
+                # number of ips to add to shift the start of the dhcp pool
+                ip_shift = add_ncn_count +  1
             # HMN networks needs an extra HMN IP since the NCN BMC and NCN node each need an HMN IP
             if network == 'HMN':
-                for i in range(1, add_ncn_count + 2):
+                for i in range(1, add_ncn_count * 2 + 1):
+                    # create list of ips to check for conflicts in SMD
                     ip = ipaddress.IPv4Address(last_reserved_ip) + i
                     ips_to_delete_from_smd[network].add(str(ip))
-                add_ncn_count += 2
-            temp = ipaddress.IPv4Address(start_dhcp_pool) + add_ncn_count
+                # number of ips to add to shift the start of the dhcp pool
+                ip_shift = add_ncn_count * 2 + 1
+            temp = ipaddress.IPv4Address(start_dhcp_pool) + ip_shift
             new_ip_dhcp_pool_start[network] = str(temp)
 
         if new_ip_dhcp_pool_start[network] == '':
@@ -444,9 +451,9 @@ def update_smd_and_kea(ips_update_in_smd, api_header, token):
 
     for network in ips_update_in_smd:
         for ip in ips_update_in_smd[network]:
-            print(f'Checking {ip} in SMD EthernetInterfaces')
+            log.info (f'Checking {ip} in SMD EthernetInterfaces')
             search_result = get_api_request('/apis/smd/hsm/v2/Inventory/EthernetInterfaces?IPAddress=' + ip, api_header)
-            print(f'Results from searching SMD EthernetInterfaces table:'
+            log.info (f'Results from searching SMD EthernetInterfaces table:'
                   f'{search_result}')
             log.debug(f'Number of results found: {len(search_result)}')
             if len(search_result) == 1:
@@ -457,11 +464,12 @@ def update_smd_and_kea(ips_update_in_smd, api_header, token):
                 if smd_xname != '':
                     xname_list.append(smd_xname)
                 # placeholder print out
-                print(f"post_api_request('/apis/smd/hsm/v2/Inventory/EthernetInterfaces/' + {smd_id}, {api_header}, {json.dumps(post_data)}")
+                log.info (f"post_api_request('/apis/smd/hsm/v2/Inventory/EthernetInterfaces/' + {smd_id}, {api_header}, {json.dumps(post_data)}")
                 # smd update
                 post_result = post_api_request('/apis/smd/hsm/v2/Inventory/EthernetInterfaces/' + smd_id, api_header, post_data)
                 # placeholder print out
-                print(f'delete_kea_lease({ip}, {token})')
+                log.warning (f'Deleting {json.dumps(post_data)} from SMD EthernetInterfaces.')
+                log.warning (f'Deleting {ip} from kea active leases.')
                 #kea lease delete
                 delete_kea_lease(ip, token)
             if len(search_result) > 1:
@@ -483,20 +491,13 @@ def main():
 
     start_log(backup_folder + '/ncn_pre-req.log')
 
-    print('The is prerequisite script to prepare NCNs for removal, move and add.\n\n')
+    print('The prerequisite script prepares adding NCNs by adjusting SLS network configurations.\n\n')
 
-    question_1 = '1. How many NCNs would you like to remove?  Do not include NCNs to be add or moved.'
-    remove_ncn_count = integer_question(question_1)
-
-    question_2 = '2. How many NCNs would you like to move? Do not include NCNs to be add or remove.'
-    move_ncn_count = integer_question(question_2)
-
-    question_3 = '3. How many NCNs would you like to add? Do not include NCNs to be removed or moved.'
-    add_ncn_count = integer_question(question_3)
+    question = 'How many NCNs would you like to add? Do not include NCNs to be removed or moved.'
+    add_ncn_count = integer_question(question)
 
     # list networks we want to check
-#    network_list = get_network_list(sls_networks)
-    network_list = {'CAN', 'HMN', 'MTL', 'NMN'}
+    network_list = get_network_list(sls_networks)
 
     # get token
     token = get_token()
@@ -532,9 +533,8 @@ def main():
               f'{json.dumps(sls_networks)}')
     log.info(f'smd_ethernet_interfaces dump:'
               f'{json.dumps(smd_ethernet_interfaces)}')
-    log.info(f'remove_ncn_count: {remove_ncn_count}')
-    log.info(f'move_ncn_count: {move_ncn_count}')
     log.info(f'add_ncn_count: {add_ncn_count}')
+    log.info(f'network_list {network_list}')
 
     # make changes to network data for NCN add
     if add_ncn_count > 0:
