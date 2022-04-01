@@ -24,6 +24,12 @@
 
     > During this stage there will be a brief (approximately 5 minutes) window where pods with PVCs will not be able to migrate between nodes. This is due to a redeployment of the Ceph csi provisioners into namespaces to accommodate the newer charts and a better upgrade strategy.
 
+    > Set the `SW_ADMIN_PASSWORD` environment variable to the admin password for the switches. This is needed for post upgrade tests.
+
+    ```bash
+    ncn-m002# export SW_ADMIN_PASSWORD=sw1tCH@DM1Np4s5w0rd
+    ```
+
     ```bash
     ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/csm-upgrade.sh
     ```
