@@ -76,7 +76,9 @@ function drain_node() {
    state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
    if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
+      {
       csi automate ncn kubernetes --action delete-ncn --ncn ${target_ncn} --kubeconfig /etc/kubernetes/admin.conf
+      } >> ${LOG_FILE} 2>&1
 
       record_state "${state_name}" ${target_ncn}
       echo
@@ -109,6 +111,7 @@ function wait_for_kubernetes() {
   state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
   if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
+      {
       set +e
       echo "waiting for k8s: $target_ncn ..."
       until csi automate ncn kubernetes --action is-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
@@ -118,6 +121,7 @@ function wait_for_kubernetes() {
       # Restore set -e
       set -e
       echo "$target_ncn joined k8s"
+      } >> ${LOG_FILE} 2>&1
 
       record_state "${state_name}" ${target_ncn}
   else
