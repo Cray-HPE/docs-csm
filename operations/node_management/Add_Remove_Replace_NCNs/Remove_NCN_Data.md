@@ -32,7 +32,8 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
     ```
     
     Example output:
-    ```
+
+    ```text
     first_master_hostname: ncn-m002
     ncns:
         ncn-m001 x3000c0s1b0n0 master
@@ -53,8 +54,9 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
     ncn-mw# ./ncn_status.py --xname $XNAME
     ```
 
-    Example output
-    ```
+    Example output:
+
+    ```text
     ...
     x3000c0s26b0n0:
         xname: x3000c0s26b0n0
@@ -74,12 +76,14 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
     **Important**: Save the ifnames and bmc_mac information if you plan to add this NCN back at some time in the future.
 
 1.  Remove the node from SLS, HSM, and BSS:
+
     ```bash
     ncn-mw# ./remove_management_ncn.py --xname $XNAME
     ```
 
-    Example output
-    ```
+    Example output:
+
+    ```text
     ...
 
     Permanently remove x3000c0s26b0n0 - ncn-s004 (y/n)? y
@@ -104,7 +108,8 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
     ```
 
     Example output:
-    ```
+
+    ```text
     first_master_hostname: ncn-m002
     ncns:
         ncn-m001 x3000c0s1b0n0 master
@@ -126,7 +131,8 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
     ```
 
     Example output:
-    ```
+
+    ```text
     Not found: x3000c0s26b0n0
     ```
 

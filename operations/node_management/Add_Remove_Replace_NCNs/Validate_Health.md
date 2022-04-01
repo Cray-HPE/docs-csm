@@ -2,7 +2,7 @@
 
 ## Description
 
-Validate that the system is health
+Validate that the system is healthy.
 
 ## Procedure
 
@@ -20,7 +20,7 @@ The following procedures can be run from any master or worker node.
    - the ncnPostgresHealthChecks may report `Unable to determine a leader` and one of the three Postgres pods may be in Pending state.
    - the ncnHealthChecks may report `Error from server...FAILED - Pod Not Healthy`, `FAILED DATABASE CHECK` and one of the three Etcd pods may be in Pending state.
 
-1. Restart the goss server on all the NCNs. Adjust the commands based on the number of master, worker and storage nodes.
+1. Restart the Goss server on all the NCNs. Adjust the commands based on the number of master, worker, and storage nodes.
 
    ```bash
    ncn-mw# pdsh -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] systemctl restart goss-servers

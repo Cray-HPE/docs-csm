@@ -1,10 +1,10 @@
 # Alpha Framework to Add, Remove, Replace or Move NCNs
 
-Add, Remove, Replace or Move worker, storage or master node (NCN). Use this procedure in the event that:
+Add, remove, replace or move NCNs. This applies to worker, storage, or master nodes. Use this procedure in the event that:
 
-- Worker, storage or master nodes are being replaced and the MAC address is changing.
+- Worker, storage, or master nodes are being replaced and the MAC address is changing.
 - Worker or storage nodes are being added.
-- Worker, storage or master nodes are being moved to a different cabinet.
+- Worker, storage, or master nodes are being moved to a different cabinet.
 
 The following workflows are available:
 
@@ -26,7 +26,7 @@ All activities required for site maintenance are complete.
 
 The latest docs-csm RPM has been installed on the master nodes.
 
-1. Run ncn_add_remove_replace_ncn_pre-req.py to adjust the network.
+1. Run `ncn_add_remove_replace_ncn_pre-req.py` to adjust the network.
 
    ```bash
    ncn-m# cd /usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/
@@ -41,9 +41,58 @@ The latest docs-csm RPM has been installed on the master nodes.
 
       3. How many NCNs would you like to add? Do not include NCNs to be removed or moved.
 
+   Example output: 
+
+   ```text
+   The prerequisite script prepares NCNs for removal, move and add.
+
+   Please enter answer as an integer.
+   1. How many NCNs would you like to remove?  Do not include NCNs to be add or moved.
+   0
+
+   Please enter answer as an integer.
+   2. How many NCNs would you like to move? Do not include NCNs to be add or remove.
+   0
+
+   Please enter answer as an integer.
+   3. How many NCNs would you like to add? Do not include NCNs to be removed or moved.
+   1
+
+   You are about to make DESTRUCTIVE changes to the system and will need to restart DVS.
+   
+   If you are sure you want to proceed.  Please type: PROCEED
+
+   If you want to stop.  Type: exit or press ctrl-c
+
+   PROCEED
+
+   Checking NMN.
+   last_reserved_ip: 10.252.1.12    start_dhcp_pool:10.252.1.20
+   The space between last_reserved_ip and start_dhcp_pool is 8 IP.
+
+   Checking MTL.
+   last_reserved_ip: 10.1.1.10    start_dhcp_pool:10.1.1.17
+   The space between last_reserved_ip and start_dhcp_pool is 7 IP.
+
+   Checking CAN.
+   last_reserved_ip: 10.102.4.14    start_dhcp_pool:10.102.4.22
+   The space between last_reserved_ip and start_dhcp_pool is 8 IP.
+
+   Checking HMN.
+   last_reserved_ip: 10.254.1.20    start_dhcp_pool:10.254.1.26
+   The space between last_reserved_ip and start_dhcp_pool is 6 IP.
+
+   Please restart DVS and rebooting the following nodes:["x3000c0s1b0n0", "x3000c0s19b3", "x3000c0s19b1n0", "x3000c0s19b3n0"]
+   prerequisite to prepare NCNs for removal, move and add
+   Network expansion COMPLETED
+   Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-03-31_19-53-49
+
+   Restarting cray-dhcp-kea
+   ```
+
    2. When adding new NCNs, there will be network configuration changes that will impact changing IPs on computes. __**That will require DVS restart to update the IPs in the DVS node_map.**__
 
-   3. ncn_add_remove_replace_ncn_pre-req.py will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted. See example below:
+   3. `ncn_add_remove_replace_ncn_pre-req.py` will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted. See example below:
 
       ```bash
       Please restart DVS and rebooting the following nodes:["x3000c0s1b0n0", "x3000c0s19b3", "x3000c0s19b1n0", "x3000c0s19b3n0"]
@@ -77,7 +126,7 @@ ncn# echo $XNAME
 
 **IMPORTANT:** Ensure the node being added to the system has been properly configured. If the node being added to the system has not been perviously in the system several settings need to be verified. 
 *  Ensure that the NCN device to be added has been racked and cabled per the SHCD.
-*  Ensure the NCN BMC is configure with the expected root user credentials.
+*  Ensure the NCN BMC is configured with the expected root user credentials.
    
    The NCN BMC credentials needs to match the current global air-cooled BMC default credentials. This can be viewed with the following command:
    ```bash
@@ -94,8 +143,8 @@ ncn# echo $XNAME
    ---     -----
    Cray    map[password:foobar username:root] 
    ```
-*  If adding an NCN that was not previously in the system, follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md).
-*  Ensure the NCN BMC is configured to use DHCP. (This does not apply to the BMC for ncn-m001 since it is statically configured for the site.)
+*  If adding an NCN that was not previously in the system, follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md) procedure.
+*  Ensure the NCN BMC is configured to use DHCP. (This does not apply to the BMC for `ncn-m001` since it is statically configured for the site.)
 *  Ensure the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](../../instal/../install/switch_pxe_boot_from_onboard_nic_to_pcie.md) procedure.
 
 *   If adding an HPE NCN, ensure IPMI is enabled.
@@ -114,7 +163,7 @@ ncn# echo $XNAME
       }
       ```
 
-   2. If disabled is disabled, then enable IPMI:
+   2. If IPMI is disabled, then enable IPMI:
       ```bash
       ncn# curl -k -u root:$IPMI_PASSWORD -X PATCH \
          -H 'Content-Type: application/json' \
@@ -137,7 +186,7 @@ ncn# echo $XNAME
       }
       ```
 
-   3. If disabled IPMI was disabled, then restart the BMC:
+   3. If IPMI was disabled, then restart the BMC:
       ```bash
       ncn# curl -k -u root:$IPMI_PASSWORD -X POST \
          -H 'Content-Type: application/json' \
@@ -218,7 +267,7 @@ The following is a high-level overview of the remove NCN workflow:
 <a name="replace-worker-storage-master"></a>
 ## Replace or Move Worker, Storage or Master NCNs
 
-Replacing an NCN is defined as removing an NCN of a given type and adding a different NCN of the same type but with different MAC addresses back into the same cabinet slot.
+Replacing an NCN is defined as removing an NCN of a given type and adding a different NCN of the same type, but with different MAC addresses back into the same cabinet slot.
 Moving an NCN is defined as removing an NCN of a given type from one cabinet and adding it back into a different cabinet.
 
 Use the [Remove Worker, Storage or Master NCNs](#remove-worker-storage-master) followed by the [Add Worker, Storage or Master NCNs](#add-worker-storage-master) to replace a worker, storage or master node (NCN). Generally scaling master nodes is not recommended since it can cause Etcd latency.
