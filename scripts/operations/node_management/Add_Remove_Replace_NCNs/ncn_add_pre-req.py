@@ -496,9 +496,6 @@ def main():
     question = 'How many NCNs would you like to add? Do not include NCNs to be removed or moved.'
     add_ncn_count = integer_question(question)
 
-    # list networks we want to check
-    network_list = get_network_list(sls_networks)
-
     # get token
     token = get_token()
     os.system(f'export TOKEN={token}')
@@ -525,9 +522,8 @@ def main():
     with open(backup_folder + '/smd_ethernet_interfaces.json', 'w') as outfile:
         json.dump(smd_ethernet_interfaces, outfile)
 
-        # list networks we want to check
-#        network_list = get_network_list(sls_networks)
-        network_list = {'CAN', 'HMN', 'MTL', 'NMN'}
+    # list networks we want to check
+    network_list = get_network_list(sls_networks)
 
     log.info(f'sls_networks dump:'
               f'{json.dumps(sls_networks)}')
