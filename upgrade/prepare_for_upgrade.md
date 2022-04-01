@@ -86,7 +86,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
 1. Validate Lustre Health
 
-   If a Lustre file system is being used, see the ClustreStor documentation for details on how to check
+   If a Lustre file system is being used, see the ClusterStor documentation for details on how to check
    for Lustre health. Here are a few commands which could be used to validate Lustre health. This example
    is for a ClusterStor providing the cls01234 filesystem.
 

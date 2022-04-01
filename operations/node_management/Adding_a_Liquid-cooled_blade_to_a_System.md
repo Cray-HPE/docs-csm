@@ -297,7 +297,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
         ncn-m001# cray capmc get_xname_status create --xnames x1005c3s0
         ```
 
-    - If the redfish endpoint is in `HTTPSsGetFailed`:
+    - If the redfish endpoint is in `HTTPsGetFailed`:
 
         Verify the Node BMC is pingable:
         ```bash
