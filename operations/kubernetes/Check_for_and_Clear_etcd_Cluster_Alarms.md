@@ -118,7 +118,7 @@ For example, a cluster's database "NOSPACE" alarm is set when database storage s
         ### cray-bss-etcd-xprv5ht5d4 Disarmed Alarms: ###
         ### cray-cps-etcd-8hpztfkjdp Disarmed Alarms: ###
         ### cray-cps-etcd-fp4kfsf799 Disarmed Alarms: ###
-        
+
         [...]
         ```
 

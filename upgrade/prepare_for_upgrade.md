@@ -55,7 +55,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
     ```bash
     ncn-m001# sat bootsys shutdown --stage session-checks
     ```
-    
+
     Example output:
     ```text
     Checking for active BOS sessions.
@@ -102,7 +102,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       ```bash
       [n000]$ pdsh -g mgmt cat /proc/mdstat | dshbak -c
       ```
-      
+
       Example output:
       ```text
       ----------------
@@ -140,7 +140,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       ```bash
       [n000]# pdsh -a date
       ```
-      
+
       Example output:
       ```text
       cls01234n000: Thu Aug 7 01:29:28 PDT 2014

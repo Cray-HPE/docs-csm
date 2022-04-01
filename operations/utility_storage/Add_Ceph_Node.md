@@ -4,7 +4,7 @@
 
 ## Add Join Script
 
-1. There is a script located at `/srv/cray/scripts/common/join_ceph_cluster.sh` that will need to be copied to the node that was rebuilt.  
+1. There is a script located at `/srv/cray/scripts/common/join_ceph_cluster.sh` that will need to be copied to the node that was rebuilt.
 
 2. Change the mode of the script.
 
@@ -90,7 +90,7 @@
       ```
 
    - If deploying to select nodes then do:
-  
+
      ```bash
      ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
      ```

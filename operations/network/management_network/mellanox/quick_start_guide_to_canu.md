@@ -2,7 +2,7 @@
 
 ## Usage
 
-To run, type `canu`. It should run and display help. 
+To run, type `canu`. It should run and display help.
 
 To see a list of commands and arguments, just append `--help`.
 

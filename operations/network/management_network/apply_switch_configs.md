@@ -6,7 +6,7 @@ All ports will be shutdown before applying switch configuration. If the port is 
 
 There are some caveats that are mentioned below.
 
-#### Prerequisites 
+#### Prerequisites
 
 - Switch without any configuration
     - [Wipe Mgmt Switches](wipe_mgmt_switches.md)
@@ -44,9 +44,9 @@ There are some caveats that are mentioned below.
 
     - When pasting in the config be sure that all the commands were accepted. In some cases you will need to back out of the current config context and back to global configuration for the commands to work as intended.
     - `banner motd` will need to be manually applied.
-      
+
       For example:
-      
+
       ```
       sw-leaf-bmc-001(config)# router ospf 1
       sw-leaf-bmc-001(config-router-ospf-1)# router-id 10.2.0.4
@@ -54,9 +54,9 @@ There are some caveats that are mentioned below.
       % Error: Illegal parameter.
       sw-leaf-bmc-001(config-router-ospf-1)# router-id 10.2.0.4
       ```
-      
+
       To fix:
-      
+
       ```
       sw-leaf-bmc-001(config)# router ospf 1
       sw-leaf-bmc-001(config-router-ospf-1)# router-id 10.2.0.4

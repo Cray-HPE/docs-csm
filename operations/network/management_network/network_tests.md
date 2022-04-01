@@ -6,10 +6,10 @@ If doing a CSM install or upgrade, a CANU RPM is located in the release tarball.
 
 The switch inventory is dynamically created from either a System Layout Service (SLS) file `--sls-file`, or it will automatically query the SLS API if an SLS file is not specified.
 
-Tests are found here: https://github.com/Cray-HPE/canu/blob/main/canu/test/aruba/test_suite.yaml 
+Tests are found here: https://github.com/Cray-HPE/canu/blob/main/canu/test/aruba/test_suite.yaml
 More documentation can be found here: https://github.com/Cray-HPE/canu/tree/main#test-the-network
 
-### Prerequisites 
+### Prerequisites
 
 - SSH access to the switches
 - SLS file or SLS API access
@@ -18,19 +18,19 @@ More documentation can be found here: https://github.com/Cray-HPE/canu/tree/main
 ### Examples
 
 - Pulling switch inventory from SLS and logging to screen, this requires the API gateway to be up.
-   
+
     ```bash
     ncn# canu test --log
     ```
 
 - Pulling switch inventory from SLS file and connecting to the switches via their CMN IP addresses, this can be done outside the shasta cluster.
-    
+
     ```bash
     ncn# canu test --sls-file ../Hela/sls_input_file.json --network CMN
     ```
 
 - Pulling switch inventory from SLS and having the output be in JSON format.
-    
+
     ```bash
     ncn# canu test --json
     ```

@@ -19,7 +19,7 @@ An NCN has an interface that is failing to assign a static IP address or that ha
         ```
 
         Example output:
-        
+
         ```
         warn:2020-08-04T19:22:02.434775+00:00 ncn-w001 wickedd[2188]: bond0: IPv4 duplicate address 10.1.1.1 detected (in use by 00:30:48:bb:e8:d2)!
         ```

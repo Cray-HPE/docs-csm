@@ -1,12 +1,12 @@
 # Perform a VSX Upgrade on Aruba Switches
 
-The `vsx update-software` command is used to update the switch software with minimal to no downtime. This command gives administrators the option to save the running configuration on the primary and secondary VSX switches. After the command saves the running configuration, it downloads new software from the TFTP server and verifies the download. After a successful verification, the command installs the software to the alternative image of both the VSX primary and secondary switches. 
+The `vsx update-software` command is used to update the switch software with minimal to no downtime. This command gives administrators the option to save the running configuration on the primary and secondary VSX switches. After the command saves the running configuration, it downloads new software from the TFTP server and verifies the download. After a successful verification, the command installs the software to the alternative image of both the VSX primary and secondary switches.
 
-The command displays the status of the VSX primary and secondary switches during the upgrade. The command also refreshes the progress bar as the image update progresses. Do not interrupt the VSX primary CLI session until the software updates completes; however, software update process can be stopped. 
+The command displays the status of the VSX primary and secondary switches during the upgrade. The command also refreshes the progress bar as the image update progresses. Do not interrupt the VSX primary CLI session until the software updates completes; however, software update process can be stopped.
 
 If you stop the upgrade when the secondary switch has already installed the image in its flash memory or the secondary switch has started the reboot the process, it comes up with the new software.
- 
-The primary switch continues to have with older software. Administrators can stop the software update process by pressing **ctrl+c**. 
+
+The primary switch continues to have with older software. Administrators can stop the software update process by pressing **ctrl+c**.
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ The primary switch continues to have with older software. Administrators can sto
 	* Via WEB UI
 	* Via TFTP or SFTP
 
-> **NOTE:** If you do not want to proceed with pre-staging you can also upload the new software directly using `vsx update-software` command. However, you will be limited to only using TFTP if you choose not to pre-stage the firmware. 
+> **NOTE:** If you do not want to proceed with pre-staging you can also upload the new software directly using `vsx update-software` command. However, you will be limited to only using TFTP if you choose not to pre-stage the firmware.
 
 ## VSX Upgrade Command
 
@@ -31,12 +31,12 @@ vsx update-software <REMOTE-URL> [vrf <VRF-NAME>]
 
 ```<REMOTE-URL>```
 
-Specifies the TFTP URL for downloading the software. 
+Specifies the TFTP URL for downloading the software.
 
 
 ```vrf <VRF-NAME>```
 
-(Optional) Specifies the VRF name for downloading the software. 
+(Optional) Specifies the VRF name for downloading the software.
 
 ## Example of Updating Software via TFTP
 
@@ -47,7 +47,7 @@ switch# vsx update-software tftp://192.168.1.1/XL.10.0x.xxxx vrf mgmt
 Do you want to save the current configuration (y/n)? y
 The running configuration was saved to the startup configuration.
 
-This command will download new software to the %s image of both the VSX primary and secondary systems, 
+This command will download new software to the %s image of both the VSX primary and secondary systems,
 then reboot them in sequence. The VSX secondary will reboot first, followed by the primary.
 Continue (y/n)? y
 VSX Primary Software Update Status     : <VSX primary software update status>

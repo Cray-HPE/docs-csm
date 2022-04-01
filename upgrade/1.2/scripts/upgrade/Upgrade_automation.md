@@ -5,9 +5,9 @@ This document describes how we automate upgrade process. In a nutshell, an upgra
 Everything we need before upgrade a ncn.
 > NOTE:
 >
->   The prereq script is required to run on both m001 and m002. If an action is only needed to run once, developers should add logic to avoid running such action again on m002. 
+>   The prereq script is required to run on both m001 and m002. If an action is only needed to run once, developers should add logic to avoid running such action again on m002.
 ## NCN Node upgrade
-Detailed implementation of how each type of node is being upgraded. 
+Detailed implementation of how each type of node is being upgraded.
 
 > NOTE:
 >

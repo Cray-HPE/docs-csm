@@ -171,7 +171,7 @@ Documentation for CANU can be found at https://github.com/Cray-HPE/canu
 ### Erase All zeroize
 
   1. [Erase all zeroize](./zeroize.md)
- 
+
 ### Troubleshooting
 
 ### Port Mirroring on Aruba CX

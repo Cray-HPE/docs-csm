@@ -5,7 +5,7 @@ The intent here is to showcase a complete inter-switch-link (ISL) link failure s
 The following is a visualization of a disconnected ISL link and how the traffic pattern would look:
 
 ![](../../../../img/network/management_network/vsx_split.png)
- 
+
 The following is expected in this scenario:
 
 * After disconnecting both ISL Links and Keepalive is up and properly configured the VSX Secondary Switch should put all its MCLAGs into lacp-blocked state and traffic should only flow through VSX Primary.

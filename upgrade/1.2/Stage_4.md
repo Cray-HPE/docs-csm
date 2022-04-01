@@ -128,7 +128,7 @@ Only processes running the v15.2.8 image will be upgraded. This will include `MO
    ncn-s# ceph config set mon auth_allow_insecure_global_id_reclaim false
    ```
 
-   Now the status of the cluster should show **`HEALTH_OK`**.  
+   Now the status of the cluster should show **`HEALTH_OK`**.
 
    Please ***NOTE*** that this may take up to 30 seconds to apply and the health to return to **`HEALTH_OK`**.
 

@@ -138,7 +138,7 @@ The commands are the same for all hardware vendors, except where noted.
         ```bash
         ncn/pit# efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
         ```
-        
+
     * Hewlett-Packard Enterprise
 
         ```bash
@@ -156,7 +156,7 @@ The commands are the same for all hardware vendors, except where noted.
     ```bash
     ncn/pit# efibootmgr | grep -i cray | tee /tmp/bbs2
     ```
-    
+
 1. Set the boot order to first PXE boot, with disk boot as the fallback options.
 
     ```bash

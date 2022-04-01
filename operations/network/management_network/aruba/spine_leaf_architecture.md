@@ -1,6 +1,6 @@
 # Spine-Leaf Architecture
 
-The network design used in majority of HPE Cray EX installations is spine leaf architecture. In more sizeable systems, we also utilize super-spine to accommodate the number of spines that connect the network to provide additional HA capabilities. 
+The network design used in majority of HPE Cray EX installations is spine leaf architecture. In more sizeable systems, we also utilize super-spine to accommodate the number of spines that connect the network to provide additional HA capabilities.
 
 ## What is Spine-Leaf Architecture?
 
@@ -17,7 +17,7 @@ Traditionally, data center networks were based on a three-tier model:
 At the most basic level, a spine-leaf architecture collapses one of these tiers, as depicted in these diagrams.
 
 ![](../../../../img/network/management_network/architecture_comparison.png)
- 
+
 Other common differences in spine-leaf topologies include:
 
 * The removal of Spanning Tree Protocol (STP) where feasible

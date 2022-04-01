@@ -3,7 +3,7 @@
 Apply the backed up site connection configuration with a couple modifications. Since virtual routing and forwarding (VRF) is now used to separate customer traffic, the site ports and default routes must be added to that VRF.
 
 
-#### Prerequisites 
+#### Prerequisites
 
 - Access to the switches
 - Custom Switch configs
@@ -16,7 +16,7 @@ Apply the backed up site connection configuration with a couple modifications. S
 
 ```
 sw-spine-001# conf t
-interface 1/1/36 
+interface 1/1/36
     no shutdown
     description to:CANswitch_cfcanb6s1-31:from:sw-25g01_x3000u39-j36
     ip address 10.101.15.142/30
@@ -30,8 +30,8 @@ sw-spine-001(config)# system interface-group 3 speed 10g
 
 ```
 sw-spine-002# conf t
-interface 1/1/36 
-    no shutdown 
+interface 1/1/36
+    no shutdown
     description to:CANswitch_cfcanb6s1-46:from:sw-25g02_x3000u40-j36
     ip address 10.101.15.190/30
     exit
@@ -84,7 +84,7 @@ sw-spine-002 [mlag-domain: master] # conf t
 ### Apply users/password
 
 All that is required to re-apply the users is to get into global configuration mode with `conf t` and to paste in the config that was copied from the previous step.
- 
+
 ##### Aruba
 
 ```

@@ -8,7 +8,7 @@ S3FS is being deployed as tool to provide temporary relief of space usage as wel
 
 * If the need is a landing point for large files that may fill up the root volume.
 * Short term storage of large files or rpms.
-  
+
 ## When NOT to Use
 
 * For long term storage of code, test images, test rpms, or tar files.
@@ -31,7 +31,7 @@ S3FS is being deployed as tool to provide temporary relief of space usage as wel
 
    ***NOTES:***
 
-   * Please replace \<radosgw-user> below with the UID for the radosgw/s3 user id.  
+   * Please replace \<radosgw-user> below with the UID for the radosgw/s3 user id.
    * Make sure to use a meaningful filename for storing the credentials and replace \<filename> below.
    * Make sure to create a mount location and use that below to replace \<mount path>
 
@@ -61,4 +61,3 @@ S3FS is being deployed as tool to provide temporary relief of space usage as wel
    ```bash
    umount <mount path>
    ```
-   

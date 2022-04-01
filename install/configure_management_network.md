@@ -46,13 +46,13 @@ On a typical system, the Mellanox switches are Spine switches and the Dell switc
 
 ## Site Connections
 
-Currently CANU ***does not*** automatically create site connections (LAGs/uplink interfaces or default routes). 
+Currently CANU ***does not*** automatically create site connections (LAGs/uplink interfaces or default routes).
 
-Hence, administrators need to manually configure the uplinks for site connections as well as default routes. 
+Hence, administrators need to manually configure the uplinks for site connections as well as default routes.
 
-Example configuration: 
+Example configuration:
 
-**NOTE:** These are very simplistic examples and depending on the install scenario, administrators may need to also configure LAGs, etc. 
+**NOTE:** These are very simplistic examples and depending on the install scenario, administrators may need to also configure LAGs, etc.
 
 ***Mellanox***
 
@@ -63,7 +63,7 @@ sw-spine-001 [standalone: master] (config) # interface ethernet 1/16 no switchpo
 sw-spine-001 [standalone: master] (config) # interface ethernet 1/16 speed 10G force
 sw-spine-001 [standalone: master] (config) # interface ethernet 1/16 vrf forwarding Customer
 sw-spine-001 [standalone: master] (config) # interface ethernet 1/16 ip address 10.102.255.10/30 primary
-sw-spine-001 [standalone: master] (config) # ip route vrf Customer 0.0.0.0/0 10.102.3.3 
+sw-spine-001 [standalone: master] (config) # ip route vrf Customer 0.0.0.0/0 10.102.3.3
 sw-spine-001 [standalone: master] (config) # ip route vrf Customer 0.0.0.0/0 10.102.255.9
 ```
 ***Aruba***
