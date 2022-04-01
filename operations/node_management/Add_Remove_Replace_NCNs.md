@@ -26,11 +26,11 @@ All activities required for site maintenance are complete.
 
 The latest docs-csm RPM has been installed on the master nodes.
 
-1. Run `ncn_add_remove_replace_ncn_pre-req.py` to adjust the network.
+1. Run `ncn_add_pre-req.py` to adjust the network.
 
    ```bash
    ncn-m# cd /usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/
-   ncn-m# ./ncn_add_remove_replace_ncn_pre-req.py 
+   ncn-m# ./ncn_add_pre-req.py 
    ```
 
    1. Script will ask 3 questions:
@@ -92,7 +92,7 @@ The latest docs-csm RPM has been installed on the master nodes.
 
    2. When adding new NCNs, there will be network configuration changes that will impact changing IPs on computes. __**That will require DVS restart to update the IPs in the DVS node_map.**__
 
-   3. `ncn_add_remove_replace_ncn_pre-req.py` will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted. See example below:
+   3. `ncn_add_pre-req.py` will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted. See example below:
 
       ```bash
       Please restart DVS and rebooting the following nodes:["x3000c0s1b0n0", "x3000c0s19b3", "x3000c0s19b1n0", "x3000c0s19b3n0"]
