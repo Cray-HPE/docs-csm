@@ -468,7 +468,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
 
     backupBucket="config-data"
     set +e
-    cray artifacts list config-data
+    cray artifacts list config-data 2> /dev/null
     if [[ $? -ne 0 ]]; then
         backupBucket="vbis"
     fi

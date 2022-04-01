@@ -121,5 +121,6 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+ GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
 
 ok_report
