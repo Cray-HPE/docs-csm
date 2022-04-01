@@ -174,7 +174,7 @@ fi
 bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${TOKEN}" \
             "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
-            | jq '.[]| select(.endpoint=="bootscript")|.last_epoch')
+            | jq '.[]| select(.endpoint=="bootscript")|.last_epoch' 2> /dev/null)
 
 state_name="POWER_CYCLE_NCN"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
@@ -212,7 +212,7 @@ EOF
             tmp_bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
                 -H "Authorization: Bearer ${TOKEN}" \
                 "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
-                | jq '.[]| select(.endpoint=="bootscript")|.last_epoch')
+                | jq '.[]| select(.endpoint=="bootscript")|.last_epoch' 2> /dev/null)
             if [[ $? -eq 0 ]]; then
                 break
             fi
