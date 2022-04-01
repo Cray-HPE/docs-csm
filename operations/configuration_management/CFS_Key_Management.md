@@ -42,4 +42,3 @@ If `cfs-state-reporter` is complete but has failed, it can safely be restarted w
 If the log messages indicate problems communicating with Spire, checking the health of the Spire service on the node is the next step. See [Troubleshoot Spire Failing to Start on NCNs](../spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md) for more information on troubleshooting Spire.
 
 If there are errors indicating failure to communicate with the Boot Script Service (BSS) or the metadata service, check the health of BSS with `kubectl -n services logs deployment/cray-bss -c cray-bss` and the health of `cfs-trust` with `kubectl -n services logs deployment/cfs-trust -c cfs-trust`.
-
