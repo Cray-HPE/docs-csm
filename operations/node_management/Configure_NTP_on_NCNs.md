@@ -272,7 +272,7 @@ ncn-m001# cloud-init single --name ntp --frequency always
 
 ##### Fix other NCNs
 
-The other NCNs sometimes have the wrong stratum set or are missing the `initstepslew` directive.  These can be added in fairly quickly with some `sed` commands:
+The other NCNs sometimes have the wrong stratum set or are missing the `initstepslew` directive. These can be added in fairly quickly with some `sed` commands:
 
 Increase the stratum on NCNs (other than `ncn-m001`):
 ```bash

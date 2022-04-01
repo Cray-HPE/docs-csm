@@ -36,7 +36,7 @@ The following lists enumerate the improvements and enhancements since CSM 1.0.1
 * Adds hardware discovery and power control for Bard Peak Olympus blades. (Power-capping not supported yet.)
 
 ### Bug Fixes
-* Fixes an intermittent issue where kernel dumps wouldn't deliver because the CA cert for Spire needed to be reset.
+* Fixes an intermittent issue where kernel dumps would not deliver because the CA cert for Spire needed to be reset.
 * Fixes an intermittent issue where PXE booting of NCNs was timing out.
 * Fixes an intermittent UX issue where Console was replaying output.
 * Fixes an issue with FAS loader not handling the new Slingshot 1.6 firmware version scheme.
@@ -46,7 +46,7 @@ The following lists enumerate the improvements and enhancements since CSM 1.0.1
 * Fixes an issue preventing SCSD changing root credentials for DL325/385.
 * Fixes an intermittent issue where Gigabyte firmware updates via FAS would return an error.
 * Fixes a rare issue where Nexus would not be available when scaling down to two nodes.
-* Fixes an issue where the boot order for Gigabyte NCNs wasn't persisting after a reboot or reinstall.
+* Fixes an issue where the boot order for Gigabyte NCNs was not persisting after a reboot or reinstall.
 * Fixes an intermittent issue where storage nodes would have clock skew during fresh install.
 
 ## CSM 1.0.1
