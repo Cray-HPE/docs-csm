@@ -8,7 +8,7 @@
 
     > NOTE: You may need to reset the root password for each node after it is rebooted
 
-    **IMPORTANT:** You may encounter an error like shown below.  If this is the case, just re-run the same command for the node upgrade and it will pick up at that point and conitune.
+    **IMPORTANT:** You may encounter an error like the one shown below. If this is the case, just re-run the same command for the node upgrade and it will pick up at that point and continue.
 
     ```text
     ====> REDEPLOY_CEPH ...
