@@ -2,13 +2,13 @@
 
 This procedure describes how to wipe Aruba, Dell, and Mellanox switch configurations.
 
-#### Prerequisites
+## Prerequisites
 
 Out-of-band access to the switches (console)
 
-### Aruba
+## Aruba
 
-1. Create a checkpoint before erasing the switch config.
+1. Create a checkpoint before erasing the switch configuration.
 
    More information related to backing up configuration can be found on the [Configuration Management](config_management.md) procedure.
 
@@ -29,14 +29,14 @@ Out-of-band access to the switches (console)
    CSM1_0                       latest      User    2022-01-27T18:52:31Z  GL.10.08.1021
    ```
 
-1. Erase the startup config.
+1. Erase the startup configuration.
 
    ```
    sw-spine-002# erase startup-config
    Erase checkpoint startup-config ? (y/n): y
    ```
 
-1. Reboot after erasing the startup config.
+1. Reboot after erasing the startup configuration.
 
    ```
    sw-spine-001# boot system
@@ -45,28 +45,28 @@ Out-of-band access to the switches (console)
    Do you want to save the current configuration (y/n)? n
    ```
 
-   The switch will reboot without any config.
+   The switch will reboot without any configuration.
 
    The default user is `admin` without any password.
 
 1. Follow the [Apply Switch Configs](apply_switch_configs.md) procedure.
 
-### Dell
+## Dell
 
-1. Save startup config to new XML config.
+1. Save startup configuration to a new XML configuration file.
 
    ```
    sw-leaf-bmc-001# copy config://startup.xml config://csm1.2.xml
    ```
 
-1. Erase the startup config.
+1. Erase the startup configuration.
 
    ```
    sw-leaf-bmc-001# delete startup-configuration
    Proceed to delete startup-configuration [confirm yes/no(default)]:yes
    ```
 
-1. Reboot after erasing the startup config.
+1. Reboot after erasing the startup configuration.
 
    ```
    sw-leaf-bmc-001# reload
@@ -80,19 +80,19 @@ Out-of-band access to the switches (console)
 
 1. Follow the [Apply Switch Configs](apply_switch_configs.md) procedure.
 
-### Mellanox
+## Mellanox
 
-1. Create a new config file.
+1. Create a new configuration file.
 
-   When a new config file is created, no data is written to it. We will boot to this new config file, which will be blank.
+   When a new configuration file is created, no data is written to it. We will boot to this new, blank configuration file.
 
    ```
    (config) # configuration new csm1.2
    ```
 
-   If that config exists already, delete it with `configuration delete csm1.2` or reset to factory with `reset factory`
+   If that configuration exists already, delete it with `configuration delete csm1.2`, or reset to factory defaults with `reset factory`.
 
-1. Check that the configuration files contain the new csm1.2 blank config that was just created.
+1. Check that the configuration files contain the new `csm1.2` blank configuration that was just created.
 
    ```
    (config) # show configuration files
@@ -110,7 +110,7 @@ Out-of-band access to the switches (console)
    Unsaved changes : no
    ```
 
-1. Switch to the new config, which requires a reboot.
+1. Switch to the new configuration, which requires a reboot.
 
    ```
    (config) # configuration switch-to csm1.2

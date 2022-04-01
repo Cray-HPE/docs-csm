@@ -45,4 +45,3 @@ In the above example, incorrect cabling was detected on the `sw-spine-001` switc
 The SHCD has the correct information on port 1 but the actual switch configuration is mismatched.
 
 To fix this issue, re-cable `ncn-w001` so that it is correctly connected to `sw-spine-001`.
-

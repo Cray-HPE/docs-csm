@@ -1,6 +1,6 @@
 # Collect Data
 
-Collect the input data needed to generate switch configs.
+Collect the input data needed to generate switch configurations.
 
 ## Prerequisites
 
@@ -55,9 +55,9 @@ Collect the input data needed to generate switch configs.
 
     If the SLS API is up, an SLS file does not need to be provided.
 
-3. Retrieve the customizations file.
+1. Retrieve the customizations file.
 
-    Log in from `ncn-m001` and run the following command:
+    Log into `ncn-m001` and run the following command:
 
     ```bash
     ncn# kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml

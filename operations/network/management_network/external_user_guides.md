@@ -2,14 +2,14 @@
 
 Refer to the following vendor-specific user guides for more information on Aruba, Dell, and Mellanox switches.
 
-### Aruba
+## Aruba
 
 - https://asp.arubanetworks.com/downloads
 
-### Dell
+## Dell
 <!-- markdown-link-check-disable-next-line -->
 - https://www.dell.com/support/manuals/en-us/force10-s4048-on/smartfabric-os-user-guide-10-5-1
 
-### Mellanox
+## Mellanox
 
 - https://docs.nvidia.com/networking/spaces/viewspace.action?key=Onyxv393210

@@ -2,8 +2,7 @@
 
 Apply the backed up site connection configuration with a couple modifications. Since virtual routing and forwarding (VRF) is now used to separate customer traffic, the site ports and default routes must be added to that VRF.
 
-
-#### Prerequisites
+## Prerequisites
 
 - Access to the switches
 - Custom Switch configs
@@ -11,8 +10,7 @@ Apply the backed up site connection configuration with a couple modifications. S
 - Generated switch configs already applied
     - [Apply Switch Configs](apply_switch_configs.md)
 
-
-### Aruba
+## Aruba
 
 ```
 sw-spine-001# conf t
@@ -53,7 +51,7 @@ sw-spine-002# conf t
 sw-spine-002(config)# ip route 0.0.0.0/0 10.101.15.189 vrf default
 ```
 
-#### Mellanox
+## Mellanox
 
 ```
 sw-spine-001 [mlag-domain: master] # conf t
@@ -81,18 +79,18 @@ sw-spine-002 [mlag-domain: master] # conf t
    ip route vrf default 0.0.0.0/0 10.102.255.85
 ```
 
-### Apply users/password
+## Apply users/password
 
 All that is required to re-apply the users is to get into global configuration mode with `conf t` and to paste in the config that was copied from the previous step.
 
-##### Aruba
+### Aruba
 
 ```
 sw-leaf-bmc-001# conf t
 user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-##### Dell
+### Dell
 
 ```
 sw-leaf-001# conf t
@@ -100,7 +98,7 @@ system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
  ```
 
-##### Mellanox
+### Mellanox
 
 ```
 sw-spine-001 [standalone: master] # conf t
@@ -108,6 +106,6 @@ sw-spine-001 [standalone: master] # conf t
    username monitor password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-### Write memory
+## Write memory
 
 Save the configuration once the configuration is applied. See [Saving Config](saving_config.md).

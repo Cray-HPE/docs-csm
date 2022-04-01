@@ -27,7 +27,7 @@ The following are the different architectures that can be specified:
 * ***Full*** – Aruba-based Leaf-Spine systems, usually customer production systems.
 * ***V1*** – Dell and Mellanox based systems of either a TDS or Full layout.
 
-Select one of the following commands to generate a configuration file for a singular switch, or for the full system.
+Select one of the following commands to generate a configuration file for a single switch, or for the full system.
 
 * Generate a configuration file for single switch:
 
@@ -40,4 +40,3 @@ Select one of the following commands to generate a configuration file for a sing
   ```bash
   ncn# canu generate switch config --csm 1.2 -a full --ccj cabling.json  --sls-file sls_file.json --folder generated
   ```
-

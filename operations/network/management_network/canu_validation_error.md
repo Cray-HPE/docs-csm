@@ -2,7 +2,6 @@
 
 Typical CANU validation errors and how to fix them.
 
-
 ## Example 1
 
 ```
@@ -22,7 +21,6 @@ Available tabs: ['Config. Summary', 'HPE Cables', 'RiverRackLayout ', 'Arista', 
 
 **SOLUTION:** PDU has an extra space in the tab name.
 
-
 ## Example 3
 
 ```
@@ -30,7 +28,6 @@ validate_shcd - ERROR:  On tab PDU, header column Slot not found.
 ```
 
 **SOLUTION:** Make sure the header descriptions include the name Slot.
-
 
 ## Example 4
 
@@ -46,7 +43,6 @@ Columns must exist in the following order, but may have other columns in between
 
 **SOLUTION:** Fix the header naming to match the expected output.
 
-
 ## Example 5
 
 ```
@@ -56,5 +52,4 @@ Failed to connect sw-leaf-002 to sw-leaf-bmc-002 bi-directionally while working 
 validate_shcd - CRITICAL: None
 ```
 
-**SOLUTION:** Remove the connections going from sw-leaf-002 > sw-leaf-bmc-002, at this time CSM does not utilize these ports.
-
+**SOLUTION:** Remove the connections going from `sw-leaf-002` to `sw-leaf-bmc-002`, because at this time CSM does not utilize these ports.

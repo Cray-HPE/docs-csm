@@ -1,15 +1,15 @@
 # Validate Switch Configs
 
-#### Prerequisites
+## Prerequisites
 
-- SSH access to the switches or the running config file.
-- Generated Switch configs.
+- SSH access to the switches or the running configuration file.
+- Generated switch configurations.
     - [Generate Switch Config](generate_switch_configs.md)
 - CANU installed with version 1.1.11 or greater.
   - Run `canu --version` to see version.
   - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](update_canu_from_csm_tarball.md)
 
-#### Compare CSM 1.2 switch configs with running configs
+## Compare CSM 1.2 switch configurations with running configurations
 
 Next compare the current running configuration with the generated configuration.
 
@@ -48,8 +48,7 @@ CANU-generated switch configurations will not include any ports or devices not d
 
 Note:  A roadmap item for CANU is the ability to "inject" customer configurations into CANU and provide solid, repeatable configuration customization.
 
-
-#### Analyze CSM 1.2 configuration upgrade
+## Analyze CSM 1.2 configuration upgrade
 
 Configuration updates depending on the current version of network configuration may be as easy as adding few lines or be complete rip & replace operation which may lead you to choosing to wipe the existing configuration or just simply adding few lines in the configuration.
 
@@ -57,14 +56,13 @@ Always before making configuration changes, analyze the changes shown in the abo
 
 :exclamation: All of these steps should be done using an out of band connection. This process is disruptive and will require downtime :exclamation:
 
-#### Caveats and known issues
+## Caveats and known issues
 
 - Mellanox and Dell support is limited.
 - Some configuration may need to be applied in a certain order.
   - Example: `Customer VRF` needs to be applied before adding interfaces/routes to the VRF.
 - When applying certain configuration it may wipe out pre-existing configuration.
   - An example of this would be adding a VRF to a port.
-
 
 For example:
 
@@ -131,4 +129,3 @@ Total Additions:                 6  |  Total Deletions:                33
 Interface:                       1  |  Interface:                       3
 Router:                          1  |  Router:                          2
 ```
-

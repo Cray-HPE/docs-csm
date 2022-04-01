@@ -67,6 +67,8 @@ The `CephNetworkPacketsDropped` alert does not necessarily indicate there are pa
 
 Alerts for `CPUThrottlingHigh` on `gatekeeper-audit` can be ignored. This pod is not utilized in this release.
 
+Alerts for `CPUThrottlingHigh` on `gatekeeper-controller-manager` can be ignored. This has low CPU requests, and it is normal for it to spike when it is in use.
+
 Alerts for `CPUThrottlingHigh` on CFS services such as `cfs-batcher` and `cfs-trust` can be ignored. Because CFS is idle most of the time, these services have low CPU requests, and it is normal for CFS service resource usage to spike when it is in use.
 
 <a name="kubepodnotready"></a>

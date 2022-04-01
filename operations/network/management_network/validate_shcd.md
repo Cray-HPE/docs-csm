@@ -2,14 +2,14 @@
 
 Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validation is required to ensure Plan-of-Record network configurations are generated. This is an iterative process to create a model of the entire network topology connection-by-connection.
 
-### Prerequisites
+## Prerequisites
 
 - Up to date SHCD.
 - CANU installed with version 1.1.11 or greater.
   - Run `canu --version` to see version.
   - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](update_canu_from_csm_tarball.md)
 
-### Prepare to Validate
+## Prepare to Validate
 
 1. Open existing SHCD in Excel.
 
@@ -17,17 +17,17 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
 
 Several worksheets (tabs) are used to store the topology of the management network.
 
-### Begin Validation
+## Begin Validation
 
 The SHCD must be validated in the following order:
 
   1. 10G_25G_40G_100G tab (or some variation thereof) contains switch-to-switch connections, as well as NCN server connections to the switch
-  2. Node Management Network (NMN) contains network management nodes
-  3. Hardware Management Network (HMN) contains device BMCs and other 1G management ports
-  4. MTN_TDS, Mountain-TDS-Management, or some variation thereof for Mountain cabinets
-  5. PDU
+  1. Node Management Network (NMN) contains network management nodes
+  1. Hardware Management Network (HMN) contains device BMCs and other 1G management ports
+  1. MTN_TDS, Mountain-TDS-Management, or some variation thereof for Mountain cabinets
+  1. PDU
 
-#### Validation Steps
+### Validation Steps
 
 1. Validate the 10G_25G_40G_100G tab and select the upper left corner and lower right corner of the spreadsheet with the Source Rack Location Slot Port Destination Rack Location Port information.
 
@@ -81,10 +81,9 @@ A clean run will have the following sections:
 
     * A list of cell-by-cell warnings of misspellings and other nit-picking items that CANU has autocorrected on the system.
 
-
 #### Check Warnings
 
-***Critically***, the Warnings output will contain a section headed "Node type could not be determined for the following". This needs to be carefully reviewed because it may contain site uplinks that are not tracked by CANU, but may also contain mis-spelled or mis-categorized nodes.
+***Critically***, the Warnings output will contain a section headed "Node type could not be determined for the following". This needs to be carefully reviewed because it may contain site uplinks that are not tracked by CANU, but may also contain mis-spelled or miscategorized nodes.
 
 For example:
 
@@ -117,10 +116,10 @@ Cell: P16      Name: SITE
 
 1. CAN and SITE uplinks are not in the "clean run" model. This means that these ports will not be configured.
 
-2. Critically, Cell I38 has a name of "sw-spinx-002". This should be noted as a misspelling of "sw-spine-002" and corrected.
+1. Critically, Cell I38 has a name of "sw-spinx-002". This should be noted as a misspelling of "sw-spine-002" and corrected.
 
 
-#### Check SHCD Port Usage
+## Check SHCD Port Usage
 
 Today CANU validates many things, but a future feature is full cable specification checking of nodes (e.g. what NCN ports go to which switches to properly form bonds).  There are several CANU roadmap items, but today a manual review of the "SHCD Port Usage" connections list is vital. Specifically, check:
 
@@ -134,8 +133,7 @@ Today CANU validates many things, but a future feature is full cable specificati
 
 * "Other" nodes on the network seem sane.
 
-
-### Logging and Updates
+## Logging and Updates
 
 Once the SHCD has run cleanly through CANU and CANU output has been manually validated, changes to the SHCD should be "committed" so that work is not lost, and other users can take advantage of the CANU changes.
 
@@ -154,13 +152,12 @@ Once the SHCD has run cleanly through CANU and CANU output has been manually val
    * customer communication (CAST ticket for customers)
    * SharePoint (internal systems and sometimes customer systems)
 
-### Output SHCD to JSON
+## Output SHCD to JSON
 
 Once the SHCD is fully validate, the user will be able to output all the connection details to a `json` file.
 
-This is used to generate switch configs.
+This is used to generate switch configurations.
 
 ```bash
 ncn# canu validate shcd -a v1 --shcd ./test.xlsx --tabs 40G_10G,NMN,HMN --corners I12,S37,I9,S20,I20,S31  --json --out cabling.json
 ```
-

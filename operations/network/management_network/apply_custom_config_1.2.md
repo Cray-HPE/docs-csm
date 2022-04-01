@@ -2,17 +2,15 @@
 
 Apply the backed up site connection configuration with a couple modifications. Since virtual routing and forwarding (VRF) is now used to separate customer traffic, the site ports and default routes must be added to that VRF.
 
-
-#### Prerequisites
+## Prerequisites
 
 - Access to the switches
-- Custom Switch configs
+- Custom switch configurations
     - [Backup Custom Config](backup_custom_config.md)
-- Generated switch configs already applied
+- Generated switch configurations already applied
     - [Apply Switch Configs](apply_switch_configs.md)
 
-
-##### Aruba
+## Aruba
 
 `vrf attach Customer` will be added to the port configuration that connects to the site. This has to be applied before the `ip address` configuration.
 
@@ -59,7 +57,7 @@ sw-spine-002# conf t
 sw-spine-002(config)# ip route 0.0.0.0/0 10.101.15.189 vrf Customer
 ```
 
-##### Mellanox
+## Mellanox
 
 `vrf forwarding Customer` will be added to the port config. This has to be applied before the `ip address` configuration.
 
@@ -93,18 +91,18 @@ sw-spine-002 [mlag-domain: master] # conf t
    ip route vrf Customer 0.0.0.0/0 10.102.255.85
 ```
 
-#### Apply users/password
+## Apply users/password
 
-All that is required to re-apply the users is get into global configuration mode `conf t` and paste in the config that was copied from the previous step.
+All that is required to re-apply the users is to get into the global configuration mode using `conf t` and paste in the configuration that was copied from the previous step.
 
-##### Aruba
+### Aruba
 
 ```
 sw-leaf-bmc-001# conf t
 user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-##### Dell
+### Dell
 
 ```
 sw-leaf-001# conf t
@@ -112,7 +110,7 @@ system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
 ```
 
-##### Mellanox
+### Mellanox
 
 ```
 sw-spine-001 [standalone: master] # conf t
@@ -120,6 +118,6 @@ sw-spine-001 [standalone: master] # conf t
    username monitor password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-### Write memory
+## Write memory
 
 Save the configuration once the configuration is applied. See [Saving Config](saving_config.md).
