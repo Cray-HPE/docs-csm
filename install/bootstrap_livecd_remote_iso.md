@@ -161,7 +161,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     In some cases the `parted` command may give an error similar to the following:
     ```text
     Error: Partition(s) 4 on /dev/sda have been written, but we have been unable to inform the kernel of the change, probably
-    because it/they are in use.  As a result, the old partition(s) will remain in use.  You should reboot now before making
+    because it/they are in use. As a result, the old partition(s) will remain in use. You should reboot now before making
     further changes.
     ```
 

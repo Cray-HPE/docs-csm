@@ -43,7 +43,7 @@ Example:
 
 ### Dell and Mellanox Switch and Gigabyte/Intel Server Systems
 
-On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any leaf-bmc and cdu switches will be Dell.  The overall procedure is the same but the specifics of execution are slightly different.
+On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any leaf-bmc and cdu switches will be Dell. The overall procedure is the same but the specifics of execution are slightly different.
 
 1. `ssh` to the switch
 1. Enter `enable` mode (Mellanox only)

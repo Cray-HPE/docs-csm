@@ -174,7 +174,7 @@ cray-console-data service.
       console services to settle and rebuild the database.
    1. Query cray-console-operator for a node location.
       After a few minutes you should be able to again query cray-console-operator to
-      find the pod a particular node is connected to.  Using the cray-console-operator
+      find the pod a particular node is connected to. Using the cray-console-operator
       pod on your system and node that is up on your system call:
       ```
       ncn-m# kubectl -n services exec -it cray-console-operator-7fdc797f9f-xz8rt -- sh -c '/app/get-node x9000c3s3b0n1'
