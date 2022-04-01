@@ -4,11 +4,11 @@ The management node image do not contain a default root password or default SSH 
 
 Use one of these methods to change or set the root pasword in the image.
 
-1. If the PIT node is booted, see
+* If the PIT node is booted, see
 [Change NCN Image Root Password and SSH Keys on PIT Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
 for more information.
 
-1. If the PIT node is not booted, see
+* If the PIT node is not booted, see
 [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 for more information.
 

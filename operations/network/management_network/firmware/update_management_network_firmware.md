@@ -2,7 +2,8 @@
 
 This page describes how to update firmware on the management network switches.
 More details and other options to upgrade firmware can be found in the switch [External User Guides](../external_user_guides.md).
-#### Prerequisites
+
+## Prerequisites
 - Access to the switches.
 - Firmware in a location that the switches can reach.
 

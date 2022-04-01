@@ -165,7 +165,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
       ceph orch apply rgw site1 zone1 --placement="*"
       ```
 
-   - If deploying to select nodes, then do:
+   - If deploying to select nodes:
 
      ```bash
      ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"

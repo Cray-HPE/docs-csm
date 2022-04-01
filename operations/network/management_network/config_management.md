@@ -2,14 +2,14 @@
 
 This page is designed for:
 
-- Showing users how initially save switch configs so they can be used again
-- Switching between saved configurations
+- Showing users how initially save switch configurationss so they can be used again.
+- Switching between saved configurations.
 
 > **CAUTION** All of these steps should be done using an out of band connection. This process is disruptive and will require downtime.
 
-All this info can be found in the switch [External User Guides](external_user_guides.md).
+All this information can be found in the switch [External User Guides](external_user_guides.md).
 
-### Prerequisites
+## Prerequisites
 
 It is recommended to do a `show run` on each switch and save that configuration before attempting the following procedures.
 
@@ -141,13 +141,13 @@ The following example is a 1.0 system that is going to 1.2.
    2022-01-12T22:33:47Z 97654 startup.xml
    ```
 
-#### Reload the switch to a different CSM version config
+#### Reload the switch to a different CSM version configuration
 
-This process should be used when config files for the desired CSM version are currently on the switch.
+This process should be used when configuration files for the desired CSM version are currently on the switch.
 
-The following example shows going from CSM 1.2 to CSM 1.0 switch config.
+The following example shows going from CSM 1.2 to CSM 1.0 switch configuration.
 
-1. View the current switch config files.
+1. View the current switch configuration files.
 
     ```
     OS10(config)# dir config
@@ -173,7 +173,7 @@ The following example shows going from CSM 1.2 to CSM 1.0 switch config.
     System configuration has been modified. Save? [yes/no]:no
     ```
 
-The switch will then boot to the desired config.
+The switch will then boot to the desired configuration.
 
 
 ## Mellanox
@@ -266,11 +266,11 @@ The following example is a 1.0 system that is going to 1.2.
     (config) # write memory
     ```
 
-#### Reload a switch to a different CSM version config
+#### Reload a switch to a different CSM version configuration
 
-This process should be used when config files for the desired CSM version are currently on the switch.
+This process should be used when configuration files for the desired CSM version are currently on the switch.
 
-In the following example, the switch config will go from CSM 1.2 to CSM 1.0.
+In the following example, the switch configuration will go from CSM 1.2 to CSM 1.0.
 
 1. Verify that the correct configuration file exists on the switch.
 

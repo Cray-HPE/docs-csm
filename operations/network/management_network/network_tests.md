@@ -9,13 +9,13 @@ The switch inventory is dynamically created from either a System Layout Service 
 Tests are found here: https://github.com/Cray-HPE/canu/blob/main/canu/test/aruba/test_suite.yaml
 More documentation can be found here: https://github.com/Cray-HPE/canu/tree/main#test-the-network
 
-### Prerequisites
+## Prerequisites
 
 - SSH access to the switches
 - SLS file or SLS API access
 - CANU has to be on version `1.1.4` or later; run `canu --version` to verify
 
-### Examples
+## Examples
 
 - Pulling switch inventory from SLS and logging to screen, this requires the API gateway to be up.
 

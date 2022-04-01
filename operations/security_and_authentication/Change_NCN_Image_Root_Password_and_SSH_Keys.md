@@ -12,7 +12,7 @@ There is some common preparation before making the Kubernetes image for master n
 
 ***Note:*** This procedure can only be done after the PIT node is rebuilt to become a normal master node.
 
-### Common Preparation
+## Common Preparation
 
 1. Prepare new SSH keys for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
 
@@ -181,7 +181,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    ncn-m# chmod +x ceph-upload-file-public-read.py
    ```
 
-   1. Get info to add to credentials.json for the SDS user
+   1. Get info to add to `credentials.json` for the SDS user
 
       ```bash
       ncn-m# ssh ncn-s001 radosgw-admin user info --uid SDS | grep key
@@ -209,19 +209,19 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
 
       ```bash
       ncn-m# cp -p credentials.json ceph-upload-file-public-read.py k8s/${K8SNEW}
-      cd k8s/${K8SNEW}
-      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/filesystem.squashfs' --file-name secure-filesystem.squashfs
-      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/initrd' --file-name initrd.img.xz
-      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
+      ncn-m# cd k8s/${K8SNEW}
+      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/filesystem.squashfs' --file-name secure-filesystem.squashfs
+      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/initrd' --file-name initrd.img.xz
+      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
       ```
 
       ```bash
       ncn-m# cp -p credentials.json ceph-upload-file-public-read.py ceph/${CEPHNEW}
-      cd ceph/${CEPHNEW}
-      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/filesystem.squashfs' --file-name secure-filesystem.squashfs
-      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/initrd' --file-name initrd.img.xz
-      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
-      cd ../..
+      ncn-m# cd ceph/${CEPHNEW}
+      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/filesystem.squashfs' --file-name secure-filesystem.squashfs
+      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/initrd' --file-name initrd.img.xz
+      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
+      ncn-m# cd ../..
       ```
 
 1. The Kubernetes and Storage images now have the image changes.
@@ -251,7 +251,6 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    >     done
    >     ```
 
-
 1. Update BSS with the new image for utility storage nodes.
 
    **WARNING:** If doing a CSM software upgrade, skip this section to continue with Cleanup.
@@ -277,7 +276,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    >     done
    >     ```
 
-### Cleanup
+## Cleanup
 
 1. Remove the workarea so the space can be reused.
 
