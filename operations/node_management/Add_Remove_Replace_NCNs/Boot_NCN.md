@@ -16,7 +16,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 ### Step 2 - Set the PXE boot option and power on the node
 
-**IMPORTANT:** These commands assumes you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#add-ncn-prerequisites).
+**IMPORTANT:** These commands assumes the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#add-ncn-prerequisites) have been set.
 
 1. Set the BMC variable to the hostname of the BMC of the node being rebuilt. If booting `ncn-m001`, set this to the FQDN or IP.
 
@@ -187,7 +187,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
     ncn-mw# cray cfs components update $XNAME --desired-config ncn-personalization
     ```
 
-4. Wait for `configurationStatus` to transistion from `pending` to `configured`
+4. Wait for `configurationStatus` to transistion from `pending` to `configured`.
 
     ```bash
     ncn-mw# watch "cray cfs components describe $XNAME"
@@ -203,7 +203,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 ### Step 7 - Lock the management nodes
 
-Follow [How to Lock Management Single Node](../../../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs). The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware or CAPMC to power off or do a power reset. Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
+Follow the [How to Lock Management Single Node](../../../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs) procedure. The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware or CAPMC to power off or do a power reset. Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
 
 ### Step 8 - **For Storage nodes only**
 
@@ -211,9 +211,9 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
 
 ### Step 9 - **For ncn-m001 only**
 
-1. Restore and verify the site link for ncn-m001.
+1. Restore and verify the site link for `ncn-m001`.
  
-    Use the $CAN_IP that was recorded prior to powering down ncn-m001 to access ncn-m002.
+    Use the $CAN_IP that was recorded prior to powering down `ncn-m001` to access `ncn-m002`.
 
     **IMPORTANT:** If the vendor of the replaced master node has changed, before the config is reloaded, verify that the `BRIDGE_PORTS` setting in `/etc/sysconfig/network/ifcfg-lan0` is based on the actual NIC names for the external site interface.
 

@@ -144,7 +144,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     ceph orch host rm $NODE
     ```
 
-9. Remove the ceph configuration from the node.
+9. Remove the Ceph configuration from the node.
 
    On the ***node being removed***
 

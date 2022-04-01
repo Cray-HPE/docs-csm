@@ -107,14 +107,14 @@
 
 1. Add nodes into HAproxy and KeepAlived. Adjust the command based on the number of storage nodes.
 
-   - If the node was rebuilt then do:
+   - If the node was rebuilt:
 
      ```bash
      source /srv/cray/scripts/metal/update_apparmor.sh; reconfigure-apparmor
      pdsh -w ncn-s00[1-(end node number)] -f 2 '/srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg; systemctl restart haproxy.service; /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf; systemctl restart keepalived.service'
      ```
 
-   - If the node was added then do:
+   - If the node was added:
 
      Determine the IP address of the added node.
    
@@ -128,7 +128,7 @@
      10.252.1.13
      ```
 
-     Update the existing HAproxy config on ncn-s001 to include the added node.
+     Update the existing HAproxy config on `ncn-s001` to include the added node.
 
      ```
      ncn-s001# vi /etc/haproxy/haproxy.cfg
@@ -149,7 +149,7 @@
      ...
      ```
 
-     Copy the HAproxy config from ncn-s001 to all the storage nodes. Adjust the command based on the number of storage nodes.
+     Copy the HAproxy config from `ncn-s001` to all the storage nodes. Adjust the command based on the number of storage nodes.
 
      ```bash
      ncn-s001# pdcp -w ncn-s00[2-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg

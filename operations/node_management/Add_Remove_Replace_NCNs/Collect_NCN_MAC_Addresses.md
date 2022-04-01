@@ -78,7 +78,7 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
         MAC Address collection completed. Please power the node off now via ipmitool.
         ```
 
-        Using the above output from the MAC Collection iPXE script we can derive the following add_management_ncn.py CLI arguments.
+        Using the above output from the MAC Collection iPXE script we can derive the following `add_management_ncn.py` CLI arguments.
 
         | Interface | MAC Address         | CLI Flag
         | --------- | ------------------- | -------- 
@@ -92,7 +92,7 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
         ```
 
 4. Restore existing iPXE bootscript:
-   1.   Delete the cray-ipxe-bss-ipxe config map:
+   1.   Delete the cray-ipxe-bss-ipxe ConfigMap:
         ```bash
         ncn-m# kubectl -n services delete cm cray-ipxe-bss-ipxe
         ```
