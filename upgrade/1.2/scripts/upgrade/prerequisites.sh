@@ -48,17 +48,6 @@ case $key in
 esac
 done
 
-if [[ -z ${LOG_FILE} ]]; then
-    LOG_FILE="$(pwd)/output.log"
-    echo
-    echo
-    echo " ************"
-    echo " *** NOTE ***"
-    echo " ************"
-    echo "LOG_FILE is not specified; use default location: ${LOG_FILE}"
-    echo
-fi
-
 if [[ -z ${CSM_RELEASE} ]]; then
     echo "CSM RELEASE is not specified"
     exit 1

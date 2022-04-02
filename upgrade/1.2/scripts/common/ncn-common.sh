@@ -30,6 +30,17 @@ trap 'err_report' ERR
 touch /etc/cray/upgrade/csm/myenv
 . /etc/cray/upgrade/csm/myenv
 
+if [[ -z ${LOG_FILE} ]]; then
+    LOG_FILE="$(pwd)/output.log"
+    echo
+    echo
+    echo " ************"
+    echo " *** NOTE ***"
+    echo " ************"
+    echo "LOG_FILE is not specified; use default location: ${LOG_FILE}"
+    echo
+fi
+
 # make an array of all the csm versions that are installed
 IFS=$'\n' \
   read -r -d '' \
