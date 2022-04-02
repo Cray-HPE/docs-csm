@@ -92,6 +92,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     do
         echo "Node: $host"
         counter=0
+        ssh_keygen_keyscan $host
         until ssh $host test -f /run/cloud-init/instance-data.json
         do
             ssh $host cloud-init init 2>&1 >/dev/null
@@ -110,6 +111,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     do
         echo "Node: $host"
         counter=0
+        ssh_keygen_keyscan $host
         until ssh $host test -f /run/cloud-init/instance-data.json
         do
             ssh $host cloud-init init 2>&1 >/dev/null
