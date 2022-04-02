@@ -88,6 +88,7 @@ function drain_node() {
 }
 
 function ssh_keygen_keyscan() {
+    set +e
     local target_ncn ncn_ip known_hosts
     known_hosts="/root/.ssh/known_hosts"
     sed -i 's@pdsh.*@@' $known_hosts
@@ -101,8 +102,10 @@ function ssh_keygen_keyscan() {
     [ $? -ne 0 ] && return 1
     ssh-keygen -R "${ncn_ip}" -f "${known_hosts}" > /dev/null 2>&1
     [ $? -ne 0 ] && return 1
-    ssh-keyscan -H "${target_ncn},${ncn_ip}" >> "${known_hosts}"
-    return $?
+    ssh-keyscan -H "${target_ncn},${ncn_ip}" >> "${known_hosts}"  > /dev/null 2>&1
+    res=$?
+    set -e
+    return $res
 }
 
 function wait_for_kubernetes() {

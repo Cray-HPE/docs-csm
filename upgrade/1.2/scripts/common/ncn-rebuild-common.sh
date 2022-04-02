@@ -199,7 +199,6 @@ state_name="WAIT_FOR_NCN_BOOT"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    {
     # inline tips for watching boot logs
     cat <<EOF
 TIPS:
@@ -210,6 +209,7 @@ EOF
     printf "%s" "waiting for boot: $target_ncn ..."
     while true
     do
+        {
         set +e
         while true
         do
@@ -222,7 +222,7 @@ EOF
             fi
         done
         set -e
-
+        } >> ${LOG_FILE} 2>&1
         if [[ $tmp_bootscript_last_epoch -ne $bootscript_last_epoch ]]; then
             echo "bootscript fetched"
             break
@@ -238,7 +238,7 @@ EOF
         sleep 2
     done
     printf "\n%s\n" "$target_ncn is booted and online"
-    } >> ${LOG_FILE} 2>&1
+    
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -248,7 +248,7 @@ state_name="WAIT_FOR_CLOUD_INIT"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    {
+    
     sleep 60
     # wait for cloud-init
     # ssh commands are expected to fail for a while, so we temporarily disable set -e
@@ -265,7 +265,7 @@ if [[ $state_recorded == "0" ]]; then
     # Restore set -e
     set -e
     printf "\n%s\n"  "$target_ncn finished cloud-init"
-    } >> ${LOG_FILE} 2>&1
+    
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
