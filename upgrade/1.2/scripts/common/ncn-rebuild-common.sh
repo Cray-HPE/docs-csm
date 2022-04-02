@@ -54,10 +54,10 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     if [[ -z $NONINTERACTIVE ]]; then
-        echo " ****** DATA LOSS ON ${target_ncn} - FRESH OS INSTALL UPON REBOOT ******"
-        echo " ****** BACKUP DATA ON ${target_ncn} TO USB OR OTHER SAFE LOCATION ******"
-        echo " ****** DATA MANAGED BY K8S/CEPH WILL BE BACKED UP/RESTORED AUTOMATICALLY ******"
-        echo "Read and act on above steps. Press Enter key to continue ..."
+        echo " ****** DATA LOSS ON ${target_ncn} - FRESH OS INSTALL UPON REBOOT ******"  >/dev/tty
+        echo " ****** BACKUP DATA ON ${target_ncn} TO USB OR OTHER SAFE LOCATION ******" >/dev/tty
+        echo " ****** DATA MANAGED BY K8S/CEPH WILL BE BACKED UP/RESTORED AUTOMATICALLY ******" >/dev/tty
+        echo "Read and act on above steps. Press Enter key to continue ..." >/dev/tty
         read
     fi
 
