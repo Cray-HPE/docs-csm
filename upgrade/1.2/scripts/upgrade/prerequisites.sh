@@ -102,12 +102,11 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     for host in $(kubectl get nodes -o json |jq -r '.items[].metadata.name')
     do
         echo "Node: $host"
-        (( counter=0 ))
-        ssh_keygen_keyscan $host
+        counter=0
         until ssh $host test -f /run/cloud-init/instance-data.json
         do
             ssh $host cloud-init init 2>&1 >/dev/null
-            (( counter++ ))
+            counter=$((counter+1))
             sleep 10
             if [[ $counter > 5 ]]
             then
@@ -120,19 +119,18 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     ## Ceph nodes
     for host in $(ceph node ls|jq -r '.osd|keys[]')
     do
-    echo "Node: $host"
-    (( counter=0 ))
-    ssh_keygen_keyscan $host
-    until ssh $host test -f /run/cloud-init/instance-data.json
-    do
-        ssh $host cloud-init init 2>&1 >/dev/null
-        (( counter++ ))
-        sleep 10
-        if [[ $counter > 5 ]]
-        then
-            echo "Cloud init data is missing and cannot be recreated. Existing upgrade.."
-        fi
-    done
+        echo "Node: $host"
+        counter=0
+        until ssh $host test -f /run/cloud-init/instance-data.json
+        do
+            ssh $host cloud-init init 2>&1 >/dev/null
+            counter=$((counter+1))
+            sleep 10
+            if [[ $counter > 5 ]]
+            then
+                echo "Cloud init data is missing and cannot be recreated. Existing upgrade.."
+            fi
+        done
     done
 
     set -e

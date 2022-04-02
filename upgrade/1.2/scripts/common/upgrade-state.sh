@@ -43,6 +43,7 @@ function record_state () {
     if [[ $state_recorded == "0" ]]; then
         printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "${state_name}" >> /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/state
     fi
+    echo "====> ${state_name} has been completed"
 }
 
 function is_state_recorded () {
