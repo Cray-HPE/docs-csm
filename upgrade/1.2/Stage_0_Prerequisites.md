@@ -149,7 +149,7 @@ ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json 
                          --customer-highspeed-network 5 10.103.11.192/26
 ```
 
-- Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing external-dns entry.
+- Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing `external-dns` entry.
 
 ```bash
 ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
@@ -159,7 +159,7 @@ ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json 
                          --preserve-existing-subnet-for-cmn external-dns
 ```
 
-- NOTE: A detailed review of the migrated/upgraded data (using vimdiff or otherwise) for production systems and for systems which have many add-on components (UAN, login nodes, storage integration points, etc...) is strongly recommended. Particularly, ensure subnet reservations are correct to prevent any data mismatches.
+- NOTE: A detailed review of the migrated/upgraded data (using `vimdiff` or otherwise) for production systems and for systems which have many add-on components (UAN, login nodes, storage integration points, etc.) is strongly recommended. Particularly, ensure that subnet reservations are correct in order to prevent any data mismatches.
 
 Upload migrated SLS file to SLS service:
 

@@ -259,12 +259,12 @@ By default the script will perform the following steps:
 ### Automatic CSM Configuration Overrides
 
 The script also supports several flags to override these behaviors:
-- `csm-release:` Overrides the version of the CSM release that is used. Defaults
-  to the latest version. Available versions can be found in the cray-product-catalog.
+- `csm-release`: Overrides the version of the CSM release that is used. Defaults
+  to the latest version. Available versions can be found in the `cray-product-catalog`.
   ```bash
   ncn-m001# kubectl -n services get cm cray-product-catalog
   ```
-- `csm-config-version:` Overrides the version of the CSM configuration. This corresponds
+- `csm-config-version`: Overrides the version of the CSM configuration. This corresponds
   to the version of a branch starting with `cray/csm/` in the csm repo in VCS.
 - `git-commit`: Overrides the git commit cloned for the configuration content.
   Defaults to the latest commit on the csm-release branch.
@@ -276,5 +276,5 @@ The script also supports several flags to override these behaviors:
   `Management` nodes in HSM.
 - `clear-state`: Clears existing state from components to ensure CFS runs. This
    can be used if configuration needs to be re-run on successful nodes with no
-   change to the git content since the previous run. For examples, if the ssh
+   change to the git content since the previous run. For examples, if the SSH
    keys have changed.

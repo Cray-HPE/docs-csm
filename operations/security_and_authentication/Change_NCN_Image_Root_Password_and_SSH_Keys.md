@@ -14,7 +14,7 @@ There is some common preparation before making the Kubernetes image for master n
 
 ## Common Preparation
 
-1. Prepare new SSH keys for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
+1. Prepare new SSH keys for the root account in advance. The same key information will be added to both `k8s-image` and `ceph-image`.
 
    Either replace the root public and private SSH keys with your own previously generated keys or generate a new pair using the `ncn-image-modification.sh` script described below.
 
@@ -26,9 +26,9 @@ There is some common preparation before making the Kubernetes image for master n
    ncn-m# cd workingarea
    ```
 
-The Kubernetes image ```k8s-image``` is used by the master and worker nodes.
+The Kubernetes image `k8s-image` is used by the master and worker nodes.
 
-1. Decide which k8s-image is to be modified
+1. Decide which `k8s-image` is to be modified
 
    ```bash
    ncn-m# cray artifacts list ncn-images --format json | jq '.artifacts[] .Key' | grep k8s | grep squashfs
