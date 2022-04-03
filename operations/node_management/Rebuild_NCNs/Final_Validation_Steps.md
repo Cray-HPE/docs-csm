@@ -1,4 +1,3 @@
-
 # Final Validation Steps
 
 Use this procedure to finish validating the success of a rebuilt NCN(s).

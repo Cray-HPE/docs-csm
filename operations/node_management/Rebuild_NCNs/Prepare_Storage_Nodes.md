@@ -1,4 +1,3 @@
-
 # Prepare Storage Nodes
 
 Prepare a storage node before rebuilding it.

@@ -1,4 +1,3 @@
-
 # Identify Nodes and Update Metadata
 
 Use the following procedure to inspect and modify the Boot Script Service \(BSS\) boot parameters JSON file.
