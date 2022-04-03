@@ -16,7 +16,7 @@ The following is a high-level overview of the non-compute node \(NCN\) reboot wo
 
     - Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN
 
-    -   Disconnect console session with the node that was rebooted
+    - Disconnect console session with the node that was rebooted
 - Re-run all platform health checks, including checks on BGP peering sessions
 
 The time duration for this procedure \(if health checks are being executed in between each boot, as recommended\) could take between two to four hours for a system with nine management nodes.
