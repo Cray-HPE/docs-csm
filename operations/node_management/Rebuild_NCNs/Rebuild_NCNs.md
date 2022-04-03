@@ -40,13 +40,13 @@ Only follow the steps in the section for the node type that is being rebuilt:
 
 * Worker node
 
-  ```
+  ```bash
   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-worker-nodes.sh ncn-w001
   ```
 
 * Master node
 
-  ```
+  ```bash
   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
   ```
 
