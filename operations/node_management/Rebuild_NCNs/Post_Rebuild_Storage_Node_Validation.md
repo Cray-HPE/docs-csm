@@ -1,4 +1,3 @@
-
 # Post Rebuild Storage Node Validation
 
 Validate the storage node rebuilt successfully.
