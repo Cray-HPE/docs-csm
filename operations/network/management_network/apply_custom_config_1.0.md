@@ -5,9 +5,9 @@ Apply the backed up site connection configuration with a couple modifications. S
 ## Prerequisites
 
 - Access to the switches
-- Custom Switch configs
+- Custom switch configurations
     - [Backup Custom Config](backup_custom_config.md)
-- Generated switch configs already applied
+- Generated switch configurations already applied
     - [Apply Switch Configs](apply_switch_configs.md)
 
 ## Aruba
@@ -81,7 +81,7 @@ sw-spine-002 [mlag-domain: master] # conf t
 
 ## Apply users/password
 
-All that is required to re-apply the users is to get into global configuration mode with `conf t` and to paste in the config that was copied from the previous step.
+All that is required to re-apply the users is to get into global configuration mode with `conf t` and to paste in the configuration that was copied from the previous step.
 
 ### Aruba
 
