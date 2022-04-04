@@ -2,7 +2,7 @@
 
 This procedure updates the default credentials used by the Redfish Translation Service (RTS) for when new ServerTech PDUs are discovered in a system.
 
-The Redfish Translation Service provides a Redfish interface that the Hardware State Manager (HSM) and Cray Advanced Platform Monitoring and Control (CAPMC) services can use interact with ServerTech PDUs which do not natively support Redfish. 
+The Redfish Translation Service provides a Redfish interface that the Hardware State Manager (HSM) and Cray Advanced Platform Monitoring and Control (CAPMC) services can use interact with ServerTech PDUs which do not natively support Redfish.
 
 There are two sets of default credentials that are required for RTS to function:
 1. The default credentials to use when new ServerTech PDUs are discovered in the system.
@@ -74,7 +74,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     ```
 
 2.  Update the default credentials in `customizations.yaml` for RTS:
-    
+
     Specify the desired default ServerTech PDU credentials:
     ```bash
     ncn-m001# echo '{"Username":"admn", "Password":"foobar"}' | base64 > rts.pdu.creds.json.b64
@@ -103,7 +103,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     ```
 
 4.  Decrypt generated secret for review.
-    
+
     Default ServerTech PDU credentials:
     ```bash
     ncn-m001# ./utils/secrets-decrypt.sh cray_hms_rts_credentials ./certs/sealed_secrets.key ./customizations.yaml | jq .data.vault_pdu_defaults -r | base64 -d | jq
@@ -138,7 +138,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
 
 2.  Create `rts-manifest.yaml`:
     ```bash
-    ncn-m001# cat > rts-manifest.yaml << EOF 
+    ncn-m001# cat > rts-manifest.yaml << EOF
     apiVersion: manifests/v1beta1
     metadata:
         name: rts

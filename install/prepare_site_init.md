@@ -207,7 +207,7 @@ with system-specific customizations.
             2.  Extract the issuer's certificate using `awk`:
 
                 > **`NOTE`** The issuer DN is properly escaped as part of the
-                > `awk` pattern below. It must be changed to match the value 
+                > `awk` pattern below. It must be changed to match the value
                 > for emailAddress, CN, OU, etc. for your LDAP. If the value
                 > you are using is different, be sure to escape it properly!
 

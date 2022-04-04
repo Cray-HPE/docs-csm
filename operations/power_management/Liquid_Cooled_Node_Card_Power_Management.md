@@ -78,7 +78,7 @@ Hardware State Manager.
                 "controls": [
                     {
                         "name": "Node Power Limit",
-                        "val": 1000 
+                        "val": 1000
                     },
                     {
                         "name": "Accelerator3 Power Limit",
@@ -108,7 +108,7 @@ Hardware State Manager.
     ncn-m001#  cray capmc get_power_cap_capabilities create –-nids NID_LIST --format json
     ```
     Return the min and max power cap settings for the node list and any
-    accelerators that are installed. 
+    accelerators that are installed.
     ```
     ncn-m001# cray capmc get_power_cap_capabilities create --nids 1160 --format json
     {

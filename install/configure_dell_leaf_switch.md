@@ -119,7 +119,7 @@ The VLAN information is located in the network YAML files. The following are exa
 ## Configure SNMP
 
 1. Configure SNMP.
-   
+
    This configuration is required for hardware discovery of the HPE Cray EX system.
 
    ```bash
@@ -203,7 +203,7 @@ It provides reachability from the leaf switch to Kubernetes.
 The router-id used here is the NMN IP address (VLAN 2 IP).
 
 1. Configure OSPF.
-   
+
    ```bash
    sw-leaf-001(config)#
        router ospf 1
@@ -260,7 +260,7 @@ The IP addresses used are the first three worker nodes on the NMN network. These
 ## Configure DNS
 
 1. Configure DNS.
-   
+
    This will point to the unbound DNS server.
 
    ```bash

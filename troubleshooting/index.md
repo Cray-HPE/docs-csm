@@ -2,7 +2,7 @@
 
 This document provides troubleshooting information for services and functionality provided by CSM.
 
-### Topics
+**Topics**
  * [Known Issues](#known-issues)
     * [Hardware Discovery](#known-issues-hardware-discovery)
     * [initrd.img.xz not found](#initrd-not-found)
@@ -36,7 +36,7 @@ Known issues related to hardware discovery in a system.
 <a name="initrd-not-found"></a>
 ### `initrd.img.xz` Not Found
 
-This is a problem that is fixed in CSM 1.0+, but if your system was upgraded from CSM 0.9.x you may run into this. Below is the full error seen when attempting to boot:
+This is a problem that is fixed in CSM 1.0+, but if your system was upgraded from CSM 0.9 you may run into this. Below is the full error seen when attempting to boot:
 
 ```
 Loading Linux  ...
@@ -76,8 +76,9 @@ Follow these steps on any NCN to fix the issue:
 
       ```bash
       ncn# for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' '); do
-         scp -r csm-install-workarounds/workarounds/livecd-post-reboot/CASMINST-2689/ $i:/opt/cray/csm/workarounds/livecd-post-reboot/
-      done
+               scp -r csm-install-workarounds/workarounds/livecd-post-reboot/CASMINST-2689/ \
+                   $i:/opt/cray/csm/workarounds/livecd-post-reboot/
+           done
       ncn# pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh'
       ```
 
@@ -87,7 +88,7 @@ Follow these steps on any NCN to fix the issue:
       ncn# rpm -e csm-install-workarounds
       ```
 
-##### Validate
+#### Validate
 
 Running the script again will produce this output:
 

@@ -53,9 +53,9 @@ sw-cdu-002
 
 One way to get the IP addresses for the two spine switches is from the `metallb-system` configmap in Kubernetes:
 ```bash
-ncn# kubectl get cm config -n metallb-system -o json | 
-        jq -r '.data | .config' | 
-        yq r -  -j | 
+ncn# kubectl get cm config -n metallb-system -o json |
+        jq -r '.data | .config' |
+        yq r -  -j |
         jq -r '.peers | .[]."peer-address"'
 ```
 
@@ -113,7 +113,7 @@ For systems with Mountain cabinets ONLY, one must verify the version of the Moun
     ```bash
     ncn# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
                             -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-                            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | 
+                            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
                         jq -r '.access_token')
     ```
 
@@ -127,28 +127,28 @@ For systems with Mountain cabinets ONLY, one must verify the version of the Moun
     ```text
     Retrieving list of Mountain CMM xnames
     Making GET request to https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?type=comptype_chassis_bmc&class=Mountain
-    
+
     Found 3 Mountain CMM(s) in the system: x1001c5, x1001c4, x1000c5
-    
+
     Retrieving list of Redfish endpoint FQDNs of the Mountain CMM(s)
     Making GET request to https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/ComponentEndpoints?id=x1001c5&id=x1001c4&id=x1000c5
-    
+
     Found 3 Mountain CMM Redfish FQDN(s) in the system: x1001c5b0, x1000c5b0, x1001c4b0
-    
+
     Checking firmware version of x1001c5b0
     Making GET request to https://x1001c5b0/redfish/v1/UpdateService/FirmwareInventory/BMC
-    
+
     Checking firmware version of x1000c5b0
     Making GET request to https://x1000c5b0/redfish/v1/UpdateService/FirmwareInventory/BMC
-    
+
     Checking firmware version of x1001c4b0
     Making GET request to https://x1001c4b0/redfish/v1/UpdateService/FirmwareInventory/BMC
-    
+
     Mountain CMM | Firmware Version
     x1000c5b0    | cc.1.5-31-shasta-release.arm64.2021-11-03T03:50:18+00:00.b9ced71
     x1001c4b0    | cc.1.5-31-shasta-release.arm64.2021-11-03T03:50:18+00:00.b9ced71
     x1001c5b0    | cc.1.5-31-shasta-release.arm64.2021-11-03T03:50:18+00:00.b9ced71
-    
+
     Firmware versions successfully reported
     ```
 
@@ -387,8 +387,8 @@ When the configuration is correct, if any configuration changes were made, run `
 <a name="apollo-server-configuration"></a>
 ## 5. Apollo Server Configuration
 
-If the system has Apollo servers, the required configuration can be found in the 
-[Management Network Access Port Configurations page](../operations/network/management_network/Management_Network_Access_Port_Configurations.md), 
+If the system has Apollo servers, the required configuration can be found in the
+[Management Network Access Port Configurations page](../operations/network/management_network/Management_Network_Access_Port_Configurations.md),
 under the section "Apollo Server Port Configuration".
 
 [Return to main upgrade page](index.md)

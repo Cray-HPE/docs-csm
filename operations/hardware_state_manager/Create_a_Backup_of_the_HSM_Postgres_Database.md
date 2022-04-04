@@ -5,9 +5,9 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
 ### Prerequisites
 
 - Healthy HSM Postgres Cluster.
-  
+
   Use `patronictl list` on the HSM Postgres cluster to determine the current state of the cluster, and a healthy cluster will look similar to the following:
-    
+
   ```bash
   ncn# kubectl exec cray-smd-postgres-0 -n services -c postgres -it -- patronictl list
   + Cluster: cray-smd-postgres (6975238790569058381) ---+----+-----------+
@@ -20,7 +20,7 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
   ```
 
 - Healthy HSM Service.
-  
+
   Verify all 3 HSM replicas are up and running:
 
   ```bash
@@ -34,7 +34,7 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
 ### Procedure
 
 1. Create a directory to store the HSM backup files.
-    
+
     ```bash
     ncn# BACKUP_LOCATION="/root"
     ncn# export BACKUP_NAME="cray-smd-postgres-backup_`date '+%Y-%m-%d_%H-%M-%S'`"
@@ -50,7 +50,7 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
     ```
 
 2. Run the `backup_smd_postgres.sh` script to take a backup of the HSM Postgres.
-    
+
     ```bash
     ncn# /usr/share/doc/csm/operations/hardware_state_manager/scripts/backup_smd_postgres.sh
     ~/cray-smd-postgres-backup_2021-07-07_16-39-44 ~
@@ -78,14 +78,14 @@ Perform a manual backup of the contents of the Hardware State Manager (HSM) Post
 3. Copy the backup folder off of the cluster, and store it in a secure location.
 
     The `BACKUP_FOLDER` environment variable is the name of the folder to backup.
-    
+
     ```bash
     ncn# echo $BACKUP_FOLDER
     /root/cray-smd-postgres-backup_2021-07-07_16-39-44
     ```
 
     Optionally, create a tarball of the Postgres backup files:
-    
+
     ```bash
     ncn# cd $BACKUP_FOLDER && cd ..
     ncn# tar -czvf $BACKUP_NAME.tar.gz $BACKUP_NAME

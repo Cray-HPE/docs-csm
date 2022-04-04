@@ -1,4 +1,4 @@
-# Ceph Service Check Script Usage page
+# Ceph Service Check Script Usage
 
 ## Description:
 
@@ -136,10 +136,11 @@ Tests run: 4  Tests Passed: 4
 
 ### Service Check for All Services and All Nodes
 
+The output of the following command is similar to the above output, except it shows all services on all nodes.
+It is excluded in this case for brevity.
+
 ```bash
 ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -A true
 ```
 
-Note: The output is similar to the above output, but all services on all nodes. We are not showing this to keep the document usable.
-
-**`IMPORTANT:`** You can always run this script without the verbose flag and echo the return code `echo $?`.  rc = 0 clean check, rc = 1 or greater then there was an issue and re-run with the `-v true` flag.
+> **IMPORTANT:** This script can be run without the verbose flag and with an echo for the return code `echo $?`.  A return code of `0` means the check was clean. A return code of `1` or greater means that there was an issue. In the latter case, re-run the command with the `-v true` flag.

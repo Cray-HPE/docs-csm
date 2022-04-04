@@ -1,14 +1,14 @@
 # Stage 1 - Ceph Image Upgrade
 
 >**`IMPORTANT:`**
-> 
+>
 > Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
 >
 >```bash
 > ncn# unset CRAY_FORMAT
 >```
 
-1. In order for nodes to properly PXE boot, Border Gateway Protocol \(BGP\) must be healthy.  Before proceeding, check the status of BGP as described in the [Check BGP Status and Reset Sessions](../../operations/network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) procedure.
+1. In order for nodes to properly PXE boot, Border Gateway Protocol \(BGP\) must be healthy. Before proceeding, check the status of BGP as described in the [Check BGP Status and Reset Sessions](../../operations/network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) procedure.
 
 1. Run `ncn-upgrade-ceph-nodes.sh` for `ncn-s001`. Follow output of the script carefully. The script will pause for manual interaction.
 

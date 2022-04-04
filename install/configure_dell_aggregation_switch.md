@@ -32,7 +32,7 @@ The VLAN information is located in the network YAML files. Below are examples.
 1. Verify the aggregation switches have VLAN interfaces in Node Management Network (NMN) and Hardware Management Network (HMN).
 
    Example NMN.yaml:
-   
+
    ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    SNIPPET
@@ -179,7 +179,7 @@ It provides reachability from the MTN networks to NMN/Kubernetes networks.
 The router-id used here is the NMN IP address (VLAN 2 IP).
 
 1. Configure OSPF.
-   
+
    ```bash
    sw-agg-001 & sw-agg-002 (config)#
        router ospf 1
@@ -237,7 +237,7 @@ The IP addresses used are the first three worker nodes on the NMN. These can be 
 ## Configure DNS
 
 1. Configure DNS.
-   
+
    This will point to the unbound DNS server.
 
    ```bash
@@ -265,7 +265,7 @@ The IP addresses used are the first three worker nodes on the NMN. These can be 
 These are ports that are connected to management nodes.
 
 1. Set the worker node and master node configuration.
-   
+
    Refer to [Cable Management Network Servers](cable_management_network_servers.md) for cabling specs.
 
    ```bash
@@ -291,7 +291,7 @@ These are ports that are connected to management nodes.
    ```
 
 1. Set the Dell storage port configuration (future use).
-   
+
    These will be configured, but the ports will be shut down until needed.
    These are OCP and PCIe port 2 on storage nodes.
 

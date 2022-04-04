@@ -146,7 +146,7 @@ Waiting for deployment "cray-dns-unbound" rollout to finish: 1 old replicas are 
 deployment "cray-dns-unbound" successfully rolled out
 ```
 
-* If cray-dns-unbound goes into CLBO after deployment restart. 
+* If cray-dns-unbound goes into CLBO after deployment restart.
 Please see [Unbound in CrashLoopBackOff after deployment restart](../../troubleshooting/known_issues/unbound_clbo.md)
 <a name="apply-pod-priorities"></a>
 

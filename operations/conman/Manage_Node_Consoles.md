@@ -20,7 +20,7 @@ by ConMan and to connect to a console.
 **Note:** this procedure has changed since the CSM 0.9 release.
 
 1. Find the `cray-console-operator` pod.
-    
+
     ```bash
     ncn# OP_POD=$(kubectl get pods -n services \
             -o wide|grep cray-console-operator|awk '{print $1}')
@@ -33,7 +33,7 @@ by ConMan and to connect to a console.
     ```
 
 1. Find the cray-console-node pod that is connected to the node. Be sure to substitute the actual component name (xname) of the node in the command below.
-    
+
     ```bash
     ncn# XNAME=<xname>
     ncn# NODEPOD=$(kubectl -n services exec $OP_POD -c cray-console-operator -- sh -c "/app/get-node $XNAME" | jq .podname | sed 's/"//g')
@@ -77,7 +77,7 @@ by ConMan and to connect to a console.
 1. Compute nodes or UANs are automatically added to this list a short time after they are discovered.
 
 1. To access the node's console, run the following command from within the pod. Again, remember to substitute the actual component name (xname) of the node.
-    
+
     ```bash
     cray-console-node# conman -j <xname>
     ```

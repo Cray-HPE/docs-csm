@@ -49,7 +49,7 @@ The Keepalive is port 48.
    ```
 
 1. Setup the keepalive link.
-   
+
    This will require a unique IP address on both switches. The IP address is in its own VRF so this address will not be reachable from anywhere besides the CDU pair.
 
    ```bash
@@ -86,7 +86,7 @@ The Keepalive is port 48.
 1. Add the ISL ports to the LAG.
 
    These are two of the ports connected between the switches.
-   
+
    ```bash
    sw-cdu-001 & sw-cdu-002 (config)#
        int 1/1/49-1/1/50
@@ -184,7 +184,7 @@ The VLAN information is located in the network YAML files. The following are exa
      comment: ""
      gateway: 10.252.0.1
    ```
-   
+
    HMN configuration:
 
    ```bash
@@ -204,7 +204,7 @@ The VLAN information is located in the network YAML files. The following are exa
      comment: ""
      gateway: 10.254.0.1
    ```
-   
+
    NMN_MTN configuration:
 
    ```bash
@@ -232,7 +232,7 @@ The VLAN information is located in the network YAML files. The following are exa
      iprange-end: 10.100.3.254
    name: NMN_MTN
    ```
-   
+
    HMN_MTN configuration:
 
    ```bash
@@ -290,9 +290,9 @@ The VLAN information is located in the network YAML files. The following are exa
    | 3002 | 10.104.8.2/22| 10.104.8.3/22 | Mountain Hardware Management
 
 1. View the output of the SHCD to prepare to configure the VLANs on the switches.
-   
+
    The components in the x1000 cabinet would get their own NMN and HMN VLAN,
-   and components in the x1001 would also get their own NMN and HMN VLAN. 
+   and components in the x1001 would also get their own NMN and HMN VLAN.
    The CECs will be on the HMN VLAN of that cabinet.
 
    For example:
@@ -318,7 +318,7 @@ The VLAN information is located in the network YAML files. The following are exa
        ip mtu 9198
        exit
    ```
-   
+
    HMN VLAN configuration:
 
    ```bash
@@ -336,7 +336,7 @@ The VLAN information is located in the network YAML files. The following are exa
        ip mtu 9198
        exit
    ```
-   
+
    NMN MTN VLAN configuration:
 
    ```bash
@@ -432,7 +432,7 @@ ACLs are designed to block traffic from the NMN to and from the HMN.
 ## Configure Spanning-Tree
 
 1. Apply the following configuration to the Aruba CDU switches.
-   
+
    If there are more 2xxx or 3xxx VLANs, add them to the `spanning-tree vlan` list.
 
    ```bash
@@ -447,8 +447,8 @@ ACLs are designed to block traffic from the NMN to and from the HMN.
 
 ## Configure OSPF
 
-1. Configure OSPF. 
-   
+1. Configure OSPF.
+
    OSPF is a dynamic routing protocol used to exchange routes.
    It provides reachability from the MTN networks to NMN/Kubernetes networks.
    The router-id used here is the NMN IP address (VLAN 2 IP).
@@ -472,7 +472,7 @@ ACLs are designed to block traffic from the NMN to and from the HMN.
 ## Configure NTP
 
 1. Configure NTP.
-   
+
    The IP addresses used are the first three worker nodes on the NMN network. These can be found in NMN.yaml.
 
    ```bash
@@ -504,7 +504,7 @@ ACLs are designed to block traffic from the NMN to and from the HMN.
 - The CEC will not need to be programmed in order to support the LAG configuration as it was required in previous versions. The updated firmware takes care of this.
 
 1. Configure ports going to CMM switches.
-   
+
    The VLANs used are the cabinet VLANs that are generated from CSI.
    The Description should be changed to match the cabinet number.
 

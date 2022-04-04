@@ -123,7 +123,7 @@ The table below represents all recognizable FS labels on any given management no
 
 | k8s-master | k8s-worker | storage-ceph | FS Label | Partitions | Device |  Partition Size | OverlayFS | Memo
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| ✅ | ✅ | ✅ | `BOOTRAID` | `/metal/recovery` | 2 small disks in RAID1 | `500 MiB` | ❌ | 
+| ✅ | ✅ | ✅ | `BOOTRAID` | `/metal/recovery` | 2 small disks in RAID1 | `500 MiB` | ❌ |
 | ✅ | ✅ | ✅ | `SQFSRAID` | `/run/initramfs/live` | 2 small disks in RAID1 | `25 GiB` | ✅ | squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G)
 | ✅ | ✅ | ✅ | `ROOTRAID` | `/run/initramfs/overlayfs` | 2 small disks in RAID1 | `150 GiB` | ✅ | The persistent image file is loaded from this partition, when the image file is loaded the underlying drive is lazily unmounted (`umount -l`) so that when the overlay closes the disk follows suit. |
 | ✅ | ✅ | ✅ | `AUX` | `/dev/md/AUX` _(Not Mounted)_ | 2 small disks in RAID1 | `150 GiB` | ❌ | Auxiliary RAID array for cloud-init to use. |

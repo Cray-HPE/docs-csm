@@ -11,31 +11,31 @@ This procedure changes the SNMP credentials on management leaf switches in the s
 ## Procedure
 
 1. List Leaf switches in system:
-    
+
     ```bash
-    ncn-m001# cray sls search hardware list --type comptype_mgmt_switch --format json | 
+    ncn-m001# cray sls search hardware list --type comptype_mgmt_switch --format json |
         jq -r '["Xname", "Brand", "Alias"], (.[] | [.Xname, .ExtraProperties.Brand, .ExtraProperties.Aliases[0]]) | @tsv' | column -t
     ```
 
     Sample output for a system with 1 Aruba leaf switch:
-    
+
     ```
     Xname       Brand  Alias
     x3000c0w14  Aruba  sw-leaf-001
     ```
 
     Sample output for a system with 2 Dell leaf switches:
-    
+
     ```
     Xname       Brand  Alias
     x3000c0w14  Dell   sw-leaf-002
     x3000c0w13  Dell   sw-leaf-001
     ```
-    
-2. Update SNMP credentials for the `testuser` user on each leaf switch in the system. The SNMP `testuser` user requires 2 password to be provided for the SNMP Authentication and Privacy protocol passwords. Both of these passwords must be 8 characters or longer. In the examples below, `foobar01` is the new SNMP Authentication password, and `foobar02` is the new SNMP Privacy password. 
+
+2. Update SNMP credentials for the `testuser` user on each leaf switch in the system. The SNMP `testuser` user requires 2 password to be provided for the SNMP Authentication and Privacy protocol passwords. Both of these passwords must be 8 characters or longer. In the examples below, `foobar01` is the new SNMP Authentication password, and `foobar02` is the new SNMP Privacy password.
 
     1.  Configure the Aruba leaf switch:
-        
+
         ```bash
         ncn-m001# ssh admin@sw-leaf-001
         sw-leaf-001# configure terminal
@@ -46,7 +46,7 @@ This procedure changes the SNMP credentials on management leaf switches in the s
         ```
 
     2.  Configure the Dell leaf switch:
-        
+
         ```bash
         ncn-m001# ssh admin@sw-leaf-001
         sw-leaf-001# configure terminal
@@ -57,7 +57,7 @@ This procedure changes the SNMP credentials on management leaf switches in the s
         ```
 
 3.  Update Vault with new SNMP credentials:
-    
+
     ```bash
     ncn-m001# SNMP_AUTH_PASS=foobar01
     ncn-m001# SNMP_PRIV_PASS=foobar02
@@ -66,28 +66,28 @@ This procedure changes the SNMP credentials on management leaf switches in the s
     ```
 
     Either update the credentials in Vault for a single leaf switch or update Vault for all leaf switches to have same global default value:
-    
+
     -   To update Vault for a single leaf switch:
-        
+
         ```bash
         ncn-m001# XNAME=x3000c0w22
-        ncn-m001# vault kv get secret/hms-creds/$XNAME | 
+        ncn-m001# vault kv get secret/hms-creds/$XNAME |
             jq --arg SNMP_AUTH_PASS "$SNMP_AUTH_PASS" --arg SNMP_PRIV_PASS "$SNMP_PRIV_PASS" \
                 '.data | .SNMPAuthPass=$SNMP_AUTH_PASS | .SNMPPrivPass=$SNMP_PRIV_PASS' |
             vault kv put secret/hms-creds/$XNAME -
         ```
 
     -   To update Vault for all leaf switches in the system to the same password:
-        
+
         ```bash
         for XNAME in $(cray sls search hardware list --type comptype_mgmt_switch --format json | jq -r .[].Xname); do
             echo "Updating SNMP creds for $XNAME"
-            vault kv get secret/hms-creds/$XNAME | 
+            vault kv get secret/hms-creds/$XNAME |
                 jq --arg SNMP_AUTH_PASS "$SNMP_AUTH_PASS" --arg SNMP_PRIV_PASS "$SNMP_PRIV_PASS" \
                     '.data | .SNMPAuthPass=$SNMP_AUTH_PASS | .SNMPPrivPass=$SNMP_PRIV_PASS' |
                 vault kv put secret/hms-creds/$XNAME -
         done
-        ``` 
+        ```
 
 4.  Restart the River Endpoint Discovery Service (REDS) to pickup the new SNMP credentials:
 
@@ -97,7 +97,7 @@ This procedure changes the SNMP credentials on management leaf switches in the s
     ```
 
 5.  Wait for REDS to initialize itself:
-    
+
     ```bash
     ncn-m001# sleep 2m
     ```
@@ -105,7 +105,7 @@ This procedure changes the SNMP credentials on management leaf switches in the s
 6.  Verify REDS was able to communicate with the leaf switches with the updated credentials:
 
     Determine the name of the REDS pods:
-    
+
     ```bash
     ncn-m001# kubectl -n services get pods -l app.kubernetes.io/name=cray-reds
     NAME                         READY   STATUS    RESTARTS   AGE
@@ -113,15 +113,15 @@ This procedure changes the SNMP credentials on management leaf switches in the s
     ```
 
     Check the logs of the REDS pod for SNMP communication issues. Replace `CRAY_REDS_POD_NAME` with the currently running pod for REDS:
-    
+
     ```bash
     ncn-m001# kubectl -n services logs CRAY_REDS_POD_NAME cray-reds | grep "Failed to get ifIndex<->name map"
     ```
 
     If nothing is returned, then REDS is able to successfully communicate to the leaf switches in the system via SNMP.
 
-    Errors like the following occur when SNMP credentials in Vault to not match what is configured on the leaf switch. 
-    
+    Errors like the following occur when SNMP credentials in Vault to not match what is configured on the leaf switch.
+
     ```
     2021/10/26 20:03:21 WARNING: Failed to get ifIndex<->name map (1.3.6.1.2.1.31.1.1.1.1) for x3000c0w22: Received a report from the agent - UsmStatsWrongDigests(1.3.6.1.6.3.15.1.1.5.0)
     ```

@@ -155,7 +155,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         changed: [cle_default_rootfs_cfs_066bc062-7fc3-11ea-970e-a4bf0138f2ba]
 
         ...
-        
+
         ```
 
 

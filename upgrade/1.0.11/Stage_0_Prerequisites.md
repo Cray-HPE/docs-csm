@@ -11,7 +11,7 @@ ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
 This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-1.0.1 or CSM-1.0.10.
 
 >**`IMPORTANT:`**
-> 
+>
 > Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
 >
 >```bash
@@ -42,7 +42,7 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
 
 **`IMPORTANT`**
 
-For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed.  See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to accomplish this.
+For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed. See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to accomplish this.
 
 ## Stage 0.3 - Update `customizations.yaml`
 
@@ -70,7 +70,7 @@ Perform these steps to update `customizations.yaml`:
 
 1. If [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
    clone a local working tree and commit appropriate changes to `customizations.yaml`.
-   
+
     For example:
 
     ```bash
@@ -91,7 +91,7 @@ Perform these steps to update `customizations.yaml`:
 ## Stage 0.4 - Execute Prerequisites Check
 
 >**`IMPORTANT:`**
-> 
+>
 > Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
 >
 >```bash
@@ -115,17 +115,17 @@ Perform these steps to update `customizations.yaml`:
     * Option 1 - Internet Connected Environment
 
         1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release tarball.
-        
+
             In other words, the full URL to the CSM release tarball will be `${ENDPOINT}${CSM_RELEASE}.tar.gz`
-        
+
             **NOTE** This step is optional for Cray/HPE internal installs.
-        
+
             ```bash
             ncn-m001# ENDPOINT=https://put.the/url/here/
             ```
 
         1. Run the script
-        
+
             **NOTE** The `--endpoint` argument is optional for Cray/HPE internal use.
 
             ```bash
@@ -135,7 +135,7 @@ Perform these steps to update `customizations.yaml`:
     * Option 2 - Air Gapped Environment
 
         1. Set the `TAR_DIR` variable to the directory on `ncn-m001` containing the CSM release tarball.
-        
+
             In other words, the full path to the CSM release tarball will be `${TAR_DIR}/${CSM_RELEASE}.tar.gz`
 
             ```bash
@@ -148,7 +148,7 @@ Perform these steps to update `customizations.yaml`:
             ncn-m001# /usr/share/doc/csm/upgrade/1.0.11/scripts/upgrade/prerequisites.sh --csm-version $CSM_RELEASE --tarball-file ${TAR_DIR}/${CSM_RELEASE}.tar.gz
             ```
 
-**`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. 
+**`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred.
 
 **IF** the upgrade `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
 
@@ -169,7 +169,7 @@ To prevent any possibility of losing Workload Manager configuration data or file
     ```bash
     ncn-m001# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
                             -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-                            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | 
+                            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
                         jq -r '.access_token')
     ```
 
@@ -205,7 +205,7 @@ that is applied by CFS during post-boot NCN personalization to change the on-dis
 NCN personalization has been run, then the password in Vault should be used for console access.
 
 1. Use this procedure to change the k8s-image used for master nodes and worker nodes and the ceph-image
-used by utility storage nodes. See 
+used by utility storage nodes. See
 [Change NCN Image Root Password and SSH Keys](../../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 for more information.
 

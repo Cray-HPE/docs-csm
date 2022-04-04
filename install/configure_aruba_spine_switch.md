@@ -37,7 +37,7 @@ The keepalive is port 27.
    ```
 
 1. Setup the keepalive link.
-   
+
    This will require a unique IP address on both switches. The IP address is in its own VRF so this address will not be reachable from anywhere besides the spine pair.
 
    ```bash
@@ -124,7 +124,7 @@ The VLAN information is located in the network YAML files. The following are exa
 1. View the spine switch VLAN interfaces in NMN, HMN, and CAN networks.
 
    Example NMN.yaml:
-   
+
    ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
    SNIPPET
@@ -142,9 +142,9 @@ The VLAN information is located in the network YAML files. The following are exa
      comment: ""
      gateway: 10.252.0.1
    ```
-   
+
    Example HMN.yaml:
-   
+
    ```bash
    pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml
    SNIPPET
@@ -349,7 +349,7 @@ It provides reachability from the MTN networks to NMN/Kubernetes networks.
 The router-id used here is the NMN IP address. (VLAN 2 IP)
 
 1. Configure OSPF.
-   
+
    ```bash
    sw-spine-001 & sw-spine-002 (config)#
        router ospf 1
@@ -364,7 +364,7 @@ The router-id used here is the NMN IP address. (VLAN 2 IP)
 ## Configure NTP
 
 1. Configure NTP.
-   
+
    The IP addresses used are the first three worker nodes on the NMN. These can be found in NMN.yaml.
 
    ```bash
@@ -379,7 +379,7 @@ The router-id used here is the NMN IP address. (VLAN 2 IP)
 ## Configure DNS
 
 1. Configure DNS.
-   
+
    This will point to the unbound DNS server.
 
    ```bash
@@ -393,7 +393,7 @@ The router-id used here is the NMN IP address. (VLAN 2 IP)
 Edge ports are connected to non-compute nodes (NCNs).
 
 1. Set the worker and master node configuration.
-   
+
    Refer to [Cable Management Network Servers](cable_management_network_servers.md) for cabling specs.
 
    ```bash
@@ -419,7 +419,7 @@ Edge ports are connected to non-compute nodes (NCNs).
    ```
 
 1. Set the Aruba Storage port configuration (future use).
-   
+
    These will be configured, but the ports will be shut down until needed.
    These are OCP and PCIe port 2 on storage nodes.
 
@@ -455,7 +455,7 @@ Edge ports are connected to non-compute nodes (NCNs).
 - One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be a TRUNK port for the CAN connection.
 
 1. Set the Aruba UAN NMN configuration.
-   
+
    One port is shutdown.
 
    ```bash

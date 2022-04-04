@@ -19,7 +19,7 @@ The [REST API](https://help.sonatype.com/repomanager3/rest-and-integration-api) 
 Download the Open API document at `/service/rest/swagger.json` for details about the API, including specific options
 to available endpoints. By default, the REST API endpoints return (or accept) JSON.
 
-The examples in the following sections use `curl` to exercise the REST API endpoints and `jq` to parse and manipulate the 
+The examples in the following sections use `curl` to exercise the REST API endpoints and `jq` to parse and manipulate the
 output. It is reasonable to use `curl` and `jq` to facilitate management tasks when necessary, but more complex actions may
 warrant development of more full-featured tools.
 

@@ -12,7 +12,7 @@ Default Keycloak admin user login credentials:
 
 - Username: admin
 - The password can be obtained with the following command:
-  
+
   ```bash
   ncn-w001# kubectl get secret -n services keycloak-master-admin-auth \
   --template={{.data.password}} | base64 --decode
@@ -46,7 +46,7 @@ The default username is admin.
 
 ### Management Network Switches
 
-Each rack type includes a different set of passwords. During different stages of installation, these passwords are subject to change. 
+Each rack type includes a different set of passwords. During different stages of installation, these passwords are subject to change.
 
 > **NOTE:** Contact HPE Cray service in order to obtain the default passwords.
 
@@ -107,9 +107,9 @@ The System Configuration Service (SCSD) is used to set the credentials for Redfi
 Refer to [Set BMC Credentials](../system_configuration_service/Set_BMC_Credentials.md) for more information.
 
 The account database is automatically saved to the non-volatile settings partition
-\(/nvram/redfish/redfish-accounts\) any time an account or account policy is modified. 
+\(/nvram/redfish/redfish-accounts\) any time an account or account policy is modified.
 The file is stored as a redis command dump and is replayed \(if it exists\) anytime the core Redfish
-schema is loaded via the init script. If default accounts must be restored, 
+schema is loaded via the init script. If default accounts must be restored,
 delete the redis command dump and reboot the controller.
 
 **List accounts:**
@@ -167,7 +167,7 @@ GET /redfish/v1/AccountService/Accounts/1
 **Add accounts:**
 
 If an account is successfully created, then the account information data structure will be returned.
-The most important bit returned is the Id because it is part of the URL used for any further manipulation of the account. 
+The most important bit returned is the Id because it is part of the URL used for any further manipulation of the account.
 
 Use the following API path to add accounts:
 
@@ -276,11 +276,11 @@ In both cases, a `running-config` must be saved out to non-volatile storage in a
 To adjust the SNMP credentials, perform the following tasks:
 
 1. Update the default credentials specified in the customizations.yaml file.
-   
+
    * See [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md)
 
 2. Update the credentials actively being used for existing leaf switches.
-   
+
    * See [Change SNMP Credentials on Leaf Switches](Change_SNMP_Credentials_on_Leaf_Switches.md)
 
 
@@ -311,6 +311,6 @@ The default username is admin.
 
 Refer to the following product stream documentation for detailed procedures about updating passwords for compute nodes and User Access Nodes (UANs).
 
-**Cray Operating System (COS):** To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the COS product stream documentation for more information. 
+**Cray Operating System (COS):** To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the COS product stream documentation for more information.
 
 **User Access Node (UAN):** Refer to "Create UAN Boot Images" in the UAN product stream documentation for the steps required to change the password on UANs. The "uan_shadow" header in the "UAN Ansible Roles" section includes more context on setting the root password on UANS.

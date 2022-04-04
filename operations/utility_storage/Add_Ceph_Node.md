@@ -90,7 +90,7 @@
       ```
 
    - If deploying to select nodes then do:
-  
+
      ```bash
      ncn-s00(1/2/3)# ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
      ```

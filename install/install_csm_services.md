@@ -389,7 +389,7 @@ command executed by `install.sh`, but administrators will need to appropriately
 modify `install.sh` to pick up where the previous run left off. (Note: The
 `install.sh` script runs with `set -x`, so each command will be printed to
 stderr prefixed with the expanded value of PS4, namely, `+ `.)
- 
+
 The following error may occur when running `./install.sh`:
   ```
   + csi upload-sls-file --sls-file /var/www/ephemeral/prep/eniac/sls_input_file.json
@@ -418,7 +418,7 @@ The following error may occur when running `./install.sh`:
      NAME                 TYPE     DATA   AGE
      sls-s3-credentials   Opaque   7      20s
      ```
-  
+
   4. Running `install.sh` again is expected to succeed.
 
 <a name="next-topic"></a>

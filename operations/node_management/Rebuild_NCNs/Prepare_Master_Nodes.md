@@ -33,7 +33,7 @@ Prepare a master node before rebuilding it.
     ncn-m# craysys metadata get first-master-hostname
     ncn-m002
     ```
-  
+
     * If the node returned is not the one being rebuilt, proceed to the step which [stops etcd](#stop-the-etcd-service-on-the-master-node-being-removed) and skip the substeps here.
 
 1. Reconfigure the Boot Script Service \(BSS\) to point to a new first master node.

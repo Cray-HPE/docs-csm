@@ -27,7 +27,7 @@ For a detailed mapping between the data in the SHCD and the equivalent informati
 
 ### What is a Source Name?
 
-The source name is the name of the device that is being connected to the HMN network.  In the SHCD HMN tab, this is in a column with the header `Source` or the `Source` field in the element of the `hmn_connections.json` for this device. From this source name, the `csi config init` command can infer the type of hardware that is connected to the HMN network (Node BMC, PDU, HSN Switch, BMC, and more).
+The source name is the name of the device that is being connected to the HMN network. In the SHCD HMN tab, this is in a column with the header `Source` or the `Source` field in the element of the `hmn_connections.json` for this device. From this source name, the `csi config init` command can infer the type of hardware that is connected to the HMN network (Node BMC, PDU, HSN Switch, BMC, and more).
 
 Example SHCD row from HMN tab with column headers representing an application node with SourceName `uan01` in cabinet `x3000` in slot 19. Its BMC is connected to port 37 of the management leaf switch in x3000 in slot 14.
 
@@ -45,9 +45,9 @@ Example `hmn_connections.json` row representing an application node with SourceN
 ## Directions
 
 1. Create a file called `application_node_config.yaml` with the following contents.
-   
+
    This is a base application node config file for CSI that does not add any additional prefixes, HSM SubRole mappings, or aliases.
-    
+
    ```yaml
    ---
    # Additional application node prefixes to match in the hmn_connections.json file
@@ -73,7 +73,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
     | uan01        | x3000      | u23            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j39        |
 
     If the `hmn_connections.json` file is available, then the following command can be used to show the HMN rows that are application nodes.
-    
+
     ```bash
     linux# cat hmn_connections.json | jq -rc '.[] | select(.Source |
       test("^((mn|wn|sn|nid|cn|cn\\-|pdu)\\d+|.*(cmc|rcm|kvm|door).*|x\\d+p\\d*|sw-.+|columbia$)"; "i") | not)'
@@ -81,7 +81,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
 
     <a name="hmn-connections-example-output"></a>
     Example `hmn_connections.json` output:
-    
+
     ```json
     {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u29","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j42"},
     {"Source":"login02","SourceRack":"x3000","SourceLocation":"u28","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j43"}
@@ -163,7 +163,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
     > The ordering of component names (xnames) under `aliases` does not matter.
 
 6. Final information in the example `application_node_config.yaml` built from the HMN example above.
-    
+
     ```yaml
     ---
     # Additional application node prefixes to match in the hmn_connections.json file

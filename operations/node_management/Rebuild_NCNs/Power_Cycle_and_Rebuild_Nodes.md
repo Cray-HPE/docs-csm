@@ -8,8 +8,8 @@ This section applies to all node types. The commands in this section assume you 
 
 ### Step 1 - Open and Watch the console for the node being rebuilt
 
-1. Login to a second session to use it to watch the console using the instructions at the link below: 
-   
+1. Login to a second session to use it to watch the console using the instructions at the link below:
+
    ***Please open this link in a new tab or page*** [Log in to a Node Using ConMan](../../conman/Log_in_to_a_Node_Using_ConMan.md)
 
    The first session will be needed to run the commands in the following Rebuild Node steps.

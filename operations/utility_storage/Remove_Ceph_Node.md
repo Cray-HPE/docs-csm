@@ -17,7 +17,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 >   * This is due to the ceph mon and mgr processes running on them.
 > * Always ensure you have the free capacity to remove the node(s) prior to performing this task.
 > * When removing a node other than ncn-s001/2/3, then you will have to adjust the SMF pools quotas accordingly.
-> * Removal of more than one node at a time is **NOT SUPPORTED** due to the SMA telemetry pool only having 2 copies.  
+> * Removal of more than one node at a time is **NOT SUPPORTED** due to the SMA telemetry pool only having 2 copies.
 
 ## Procedure
 
@@ -49,7 +49,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
         ```bash
         for osd in $(ceph osd ls-tree $NODE);
-        do 
+        do
           ceph osd reweight osd.$osd 0;
           ceph osd crush reweight osd.$osd 0;
         done
@@ -62,10 +62,10 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     Run from ncn-s001/2/3:
 
     ```bash
-    for osd in $(ceph osd ls-tree $NODE); 
-    do 
-      ceph osd down osd.$osd; 
-      ceph osd destroy osd.$osd --force; 
+    for osd in $(ceph osd ls-tree $NODE);
+    do
+      ceph osd down osd.$osd;
+      ceph osd destroy osd.$osd --force;
       ceph osd purge osd.$osd --force;
     done
     ```

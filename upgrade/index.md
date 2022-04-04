@@ -26,7 +26,7 @@ See [Prepare for Upgrade](prepare_for_upgrade.md)
 ## Upgrade Management Nodes and CSM Services
 
 The procedure you follow depends on the new CSM version to which you are upgrading:
-   
+
 * Upgrading **to CSM 1.0.1**
 
     **IMPORTANT**: You must be at CSM 0.9 (0.9.4 or later) or CSM 1.0.0 in order to upgrade to CSM 1.0.1.
@@ -34,15 +34,15 @@ The procedure you follow depends on the new CSM version to which you are upgradi
     The upgrade is a guided process starting with [CSM 1.0.1 Upgrade Instructions](1.0.1/README.md).
 
 * Upgrading **to CSM 1.0.10**
-   
+
     **IMPORTANT**: You must be at CSM 1.0.1 in order to upgrade to CSM 1.0.10.
-  
+
     The upgrade is a guided process starting with [CSM 1.0.10 Upgrade Instructions](1.0.10/README.md).
 
 * Upgrading **to CSM 1.0.11**
-   
+
     **IMPORTANT**: You must be at CSM 1.0.0, CSM 1.0.1, or CSM 1.0.10 in order to upgrade to CSM 1.0.11.
-  
+
     The upgrade is a guided process starting with [CSM 1.0.11 Upgrade Instructions](1.0.11/README.md).
 
 <a name="update_management_network"></a>
@@ -64,24 +64,24 @@ See [Update Management Network](update_management_network.md)
 
 > **`IMPORTANT:`** Wait at least 15 minutes after completing the previous steps to let the updated
 > CSM Kubernetes resources initialize and start.
-  
+
 It is always recommended to run all possible CSM health validation procedures. At a minimum, run the
 following validation checks to ensure that everything is still working properly after the upgrade.
-  
+
 > **`IMPORTANT:`** If your site does not use UAIs, skip UAS and UAI validation. If you do use
 > UAIs, there are products that configure UAS like Cray Analytics and Cray Programming Environment that
 > must be working correctly with UAIs and should be validated and corrected (the procedures for this are
 > beyond the scope of this document) prior to validating UAS and UAI. Failures in UAI creation that result
 > from incorrect or incomplete installation of these products will generally take the form of UAIs stuck in
 > waiting state trying to set up volume mounts.
-  
+
 1. [Platform Health Checks](../operations/validate_csm_health.md#platform-health-checks)
 2. [Hardware Management Services Health Checks](../operations/validate_csm_health.md#hms-health-checks)
 3. [Software Management Services Validation Utility](../operations/validate_csm_health.md#sms-health-checks)
 4. [Validate UAS and UAI Functionality](../operations/validate_csm_health.md#uas-uai-validate)
-  
+
 See [Validate CSM Health](../operations/validate_csm_health.md)
-  
+
 <a name="update_firmware_with_fas"></a>
 ## Update Firmware with FAS
 
@@ -92,7 +92,7 @@ See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.m
 
 
 After completion of the firmware update with FAS, the CSM product stream has been fully upgraded and
-configured. Refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_ 
-on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg 
+configured. Refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
+on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg
 more information on other product streams to be upgraded and configured after CSM.
 
