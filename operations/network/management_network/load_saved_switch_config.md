@@ -1,6 +1,6 @@
 # Load Saved Switch Configuration
 
-This procedures shows how to switch between already saved switch configurations.
+This procedure shows how to switch between already saved switch configurations.
 
 To save switch configurations, refer to the [Configuration Management](config_management.md) procedure.
 
