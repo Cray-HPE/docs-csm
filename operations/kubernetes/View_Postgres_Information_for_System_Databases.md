@@ -15,7 +15,7 @@ This procedure requires administrative privileges.
     ```bash
     ncn-w001# kubectl -n services exec -it cray-smd-postgres-0 -- bash
     ```
-    
+
     Example output:
 
     ```

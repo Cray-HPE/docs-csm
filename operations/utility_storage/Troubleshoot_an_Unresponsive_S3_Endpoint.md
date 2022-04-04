@@ -25,7 +25,7 @@ Expected Responses: 2xx, 3xx
 
    **Troubleshooting:** If an error occurs with the above script, then `echo $num_storage_nodes`. If it is not an integer that matches the known configuration of the number of Utility Storage nodes, then run `cloud-init init` to refresh the `cloud-init` cache. Alternatively, manually set that number if the number of Utility Storage nodes is known.
 
-2. Check the HAProxy endpoint.
+1. Check the `HAProxy` endpoint.
 
    ```bash
    ncn# response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://rgw-vip)|echo "Curl Response Code: $response"
@@ -33,7 +33,7 @@ Expected Responses: 2xx, 3xx
    Curl Response Code: 200
    ```
 
-3. Verify HAProxy and KeepAlived status.
+1. Verify `HAProxy` and `KeepAlived` status.
 
    `KeepAlived:`
 
@@ -67,11 +67,11 @@ Expected Responses: 2xx, 3xx
 
    `active` should be returned in the output.
 
-## Issue 2: Ceph Reports HEALTH_OK but S3 Operations Not Functioning
+## Issue 2: Ceph Reports `HEALTH_OK` but S3 Operations Not Functioning
 
-Restart Ceph OSDs to help make the rgw.local:8080 endpoint responsive.
+Restart Ceph OSDs to help make the `rgw.local:8080` endpoint responsive.
 
-**Ceph has an issue where it appears healthy but the rgw.local:8080 endpoint is unresponsive.**
+**Ceph has an issue where it appears healthy but the `rgw.local:8080` endpoint is unresponsive.**
 
 This issue occurs when `ceph -s` is run and produces a very high reads per second output:
 
@@ -80,7 +80,7 @@ io:
     client:   103 TiB/s rd, 725 KiB/s wr, 2 op/s rd, 44 op/s wr
 ```
 
-The rgw.local endpoint needs to be responsive in order to interact directly with the Simple Storage Service \(S3\) RESTful API.
+The `rgw.local` endpoint needs to be responsive in order to interact directly with the Simple Storage Service \(S3\) RESTful API.
 
 ### Prerequisites
 

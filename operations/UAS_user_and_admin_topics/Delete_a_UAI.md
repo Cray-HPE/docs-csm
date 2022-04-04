@@ -75,12 +75,12 @@ Here are some examples:
     ```
 
     Delete all UAIs belonging to a given UAI Class:
-    
+
     ```bash
     ncn-m001-pit# cray uas admin uais delete --class-id a630cbda-24b4-47eb-a1f7-be1c25965ead
     results = [ "Successfully deleted uai-vers-5ef890be", "Successfully deleted uai-vers-da65468d",]
     ```
-    
+
 
 #### Delete UAIs as an Authorized User in Legacy Mode
 

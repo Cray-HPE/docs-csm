@@ -1,6 +1,6 @@
 # Large number of DHCP declines during a node boot
 
-If you are seeing something similar too this in your logs; 
+If you are seeing something similar too this in your logs;
 
 ```
 dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.56

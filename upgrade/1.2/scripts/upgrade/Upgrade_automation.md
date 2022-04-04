@@ -1,16 +1,25 @@
-# Upgrade automation
-This document describes how we automate upgrade process. In a nutshell, an upgrade is to upload new artifacts into a running system, then rebuild each ncn with newer images we uploaded and deploy new charts after storage/k8s nodes are upgraded.
+# Upgrade Automation
+
+This document describes how we automate upgrade process. In a nutshell, an upgrade is:
+1. Upload new artifacts into a running system
+1. Rebuild each NCN with the newly uploaded images
+1. Deploy new charts after all NCNs are upgraded.
 
 ## Prerequisites
-Everything we need before upgrade a ncn.
+
+Everything we need before upgrading an NCN.
 > NOTE:
 >
->   The prereq script is required to run on both m001 and m002. If an action is only needed to run once, developers should add logic to avoid running such action again on m002. 
-## NCN Node upgrade
-Detailed implementation of how each type of node is being upgraded. 
+>   The `prerequisites.sh` script is required to run on both `ncn-m001` and `ncn-m002`. If an action is only needed to run once, developers must add logic to avoid running this action both times the script is executed.
+
+## NCN Upgrade
+
+Detailed implementation of how each type of node is being upgraded.
 
 > NOTE:
 >
-> Depends on the type of node, we have to deal with backup/restore/health check differently. So each type of ncn has its own script for special handling
+> Depending on the type of node, we have to deal with backup/restore/health check differently. So each type of NCN has its own script for special handling
+
 ## CSM Services Upgrade
-Everything we do after storage/k8s nodes are upgraded. The most important part here is to deploy new charts but we also have other actions depends on a particular upgrade here. For example, kafka cluster might need some extra logic to upgrade which cannot be done within helm chart, we will put such logic here and run it before charts upgrade.
+
+Everything we do after the NCNs are upgraded. The most important part here is to deploy new charts, but depending on the specific upgrade being performed, there may also be other required actions. For example, the kafka cluster might need some extra logic to upgrade which cannot be done within its helm chart. Such logic is done during this portion of the upgrade.

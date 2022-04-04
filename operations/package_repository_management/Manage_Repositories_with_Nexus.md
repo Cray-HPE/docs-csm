@@ -37,7 +37,7 @@ The [Nexus REST API](https://help.sonatype.com/repomanager3/rest-and-integration
 Download the Open API document at `/service/rest/swagger.json` for details about the API, including specific options
 to available endpoints. By default, the REST API endpoints return (or accept) JSON.
 
-The examples in the following sections use `curl` to exercise the REST API endpoints and `jq` to parse and manipulate the 
+The examples in the following sections use `curl` to exercise the REST API endpoints and `jq` to parse and manipulate the
 output. It is reasonable to use `curl` and `jq` to facilitate management tasks when necessary, but more complex actions may
 warrant development of more full-featured tools.
 
@@ -410,15 +410,15 @@ Use the following function to get the Nexus local admin account after a fresh in
 
 ```bash
 function nexus-get-credential() {
-    
+
     if ! command -v kubectl 1>&2 >/dev/null; then
       echo "Requires kubectl"
       return 1
-    fi 
+    fi
     if ! command -v base64 1>&2 >/dev/null ; then
       echo "Requires base64"
       return 1
-    fi 
+    fi
 
     [[ $# -gt 0 ]] || set -- -n nexus nexus-admin-credential
 

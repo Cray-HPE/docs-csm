@@ -4,7 +4,7 @@ Use this procedure to diagnose and fix clients not logging into Ceph FS.
 
 **NOTE:** This section does not diagnose nor fix network issues. Please ensure that all networking is functional before proceeding.
 
-***IMPORTANT:*** The following commands can be run from ncn-m001/2/3 or ncn-s001/2/3. 
+***IMPORTANT:*** The following commands can be run from ncn-m001/2/3 or ncn-s001/2/3.
 
 ## Procedure
 
