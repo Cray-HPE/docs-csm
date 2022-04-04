@@ -13,9 +13,19 @@ All air-cooled and liquid-cooled BMCs share the same global credentials. The air
 
 ### Procedure
 
-1.  Create an SCSD payload file to change all air-cooled node BMCs to the same global credential:
+1.  Set the `NEW_BMC_CREDENTIAL` to specify the new root user password for air-cooled node BMCs:
     ```bash
-    ncn-m001# export NEW_BMC_CREDENTIAL=new.root.password
+    ncn-m001# read -s NEW_BMC_CREDENTIAL
+    ncn-m001# echo $NEW_BMC_CREDENTIAL
+    ```
+
+    Expected output:
+    ```
+    new.root.password
+    ```
+
+2.  Create an SCSD payload file to change all air-cooled node BMCs to the same global credential:
+    ```bash
     ncn-m001# cat > bmc_creds_glb.json <<DATA
     {
         "Force":false,
@@ -32,7 +42,7 @@ All air-cooled and liquid-cooled BMCs share the same global credentials. The air
     ncn-m001# cat bmc_creds_glb.json | jq
     ```
 
-2.  Apply the new BMC credentials:
+3.  Apply the new BMC credentials:
     ```bash
     ncn-m001# cray scsd bmc globalcreds create ./bmc_creds_glb.json
     ```
