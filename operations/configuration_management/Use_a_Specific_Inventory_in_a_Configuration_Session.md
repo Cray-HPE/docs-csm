@@ -12,7 +12,7 @@ ncn-m001# cat configurations-example-additional-inventory.json
 
 Example configuration:
 
-```
+```json
 {
   "layers": [
     {
