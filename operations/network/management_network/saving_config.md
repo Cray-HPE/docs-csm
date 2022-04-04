@@ -17,7 +17,7 @@ To keep track of what configuration version is running on the switch, create a n
     ```
     Banners:
       Message of the Day (MOTD):
-        
+
         ###############################################################################
         # CSM version:  1.0
         # CANU version: 1.1.11
@@ -62,6 +62,7 @@ To keep track of what configuration version is running on the switch, create a n
 
     ```
     sw-leaf-bmc-001(config)# show banner exec
+
     ```
 
     Example output:

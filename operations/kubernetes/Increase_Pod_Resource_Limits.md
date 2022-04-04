@@ -68,7 +68,7 @@ Return Kubernetes pods to a healthy state with resources available.
         Labels:       app=etcd
                       etcd_cluster=cray-hbtd-etcd
                       etcd_node=cray-hbtd-etcd-8r2scmpb58
-        
+
         [...]
         ```
 

@@ -6,17 +6,17 @@ The following is a high-level overview of the NCN rebuild workflow:
 
 1. Prepare Node
     * There is a different procedure for each type of node (worker, master, and storage)
-2. Identify Node and Update Metadata
+1. Identify Node and Update Metadata
     * Same procedure for all node types
-3. Wipe Disks
+1. Wipe Disks
     * Same for master and worker nodes, but different for storage nodes
-4. Power Cycle Node
+1. Power Cycle Node
     * Same procedure for all node types
-5. Rebuild Storage Node
+1. Rebuild Storage Node
     * Only needed for storage nodes
-6. Validate `BOOTRAID` Artifacts
+1. Validate `BOOTRAID` Artifacts
     * Run from ncn-m001
-7. Validation
+1. Validation
     * There is a different procedure for each type of node (worker, master, and storage)
 
 ## Prerequisites
@@ -36,21 +36,17 @@ ncn# echo $XNAME
 
 ## Procedure
 
-Choose the appropriate node type in the **Prepare Node** section below.
-
-### Prepare Node
-
 Only follow the steps in the section for the node type that is being rebuilt:
 
 * Worker node
 
-  ```
+  ```bash
   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-worker-nodes.sh ncn-w001
   ```
 
 * Master node
 
-  ```
+  ```bash
   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
   ```
 

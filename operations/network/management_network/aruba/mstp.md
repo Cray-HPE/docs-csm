@@ -1,26 +1,26 @@
-# Multiple Spanning Tree Protocol (MSTP) 
+# Multiple Spanning Tree Protocol (MSTP)
 
-MSTP (802.1s) ensures that only one active path exists between any two nodes in a spanning-tree instance. A spanning-tree instance comprises a unique set of VLANs. MSTP instances significantly improve network resource utilization while maintaining a loop-free environment. 
+MSTP (802.1s) ensures that only one active path exists between any two nodes in a spanning-tree instance. A spanning-tree instance comprises a unique set of VLANs. MSTP instances significantly improve network resource utilization while maintaining a loop-free environment.
 
 ## Configuration Commands
 
-Enable MSTP (default mode for spanning-tree): 
+Enable MSTP (default mode for spanning-tree):
 
 ```text
 switch(config)# spanning-tree
-switch(config)# spanning-tree config-name <NAME> 
+switch(config)# spanning-tree config-name <NAME>
 switch(config)# spanning-tree config-revision <VALUE> Configure an MSTP instance and priority
-switch(config)# spanning-tree instance VALUE vlan VLANS 
-switch(config)# spanning-tree instance VALUE priority VALUE 
+switch(config)# spanning-tree instance VALUE vlan VLANS
+switch(config)# spanning-tree instance VALUE priority VALUE
 ```
 
-Show commands to validate functionality:  
+Show commands to validate functionality:
 
 ```text
 switch# show spanning-tree mst detail
 ```
 
-## Example Output 
+## Example Output
 
 ```text
 switch# show span
@@ -28,7 +28,7 @@ Spanning tree status
 Extended System-id
 Ignore PVID Inconsistency : Disabled
 Path cost method          : Long
-VLAN1 Root ID 
+VLAN1 Root ID
 Priority   : 32769
 MAC-Address: 70:72:cf:1d:32:04
 This bridge is the root
@@ -44,7 +44,7 @@ Port         Role           State        Cost    Priority   Type
 ------------ -------------- ------------ ------- ---------- ----------
 ```
 
-## Expected Results 
+## Expected Results
 
 1. Spanning-tree mode is configured
 2. Spanning-tree is enabled, if loops are detected ports should go blocked state

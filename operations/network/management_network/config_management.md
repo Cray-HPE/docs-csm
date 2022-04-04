@@ -2,14 +2,14 @@
 
 This page is designed for:
 
-- Showing users how initially save switch configs so they can be used again
-- Switching between saved configurations
+- Showing users how initially save switch configurationss so they can be used again.
+- Switching between saved configurations.
 
 > **CAUTION** All of these steps should be done using an out of band connection. This process is disruptive and will require downtime.
 
-All this info can be found in the switch [External User Guides](external_user_guides.md).
+All this information can be found in the switch [External User Guides](external_user_guides.md).
 
-### Prerequisites
+## Prerequisites
 
 It is recommended to do a `show run` on each switch and save that configuration before attempting the following procedures.
 
@@ -25,7 +25,7 @@ Maximum number of checkpoints:
 #### Save the current configuration into a checkpoint (needs be done when in both CSM1.0 and CSM1.2)
 
 1. Save the configuration to a checkpoint.
-   
+
     ```
     sw-spine-001(config)# copy running-config checkpoint CSM1_0
     ```
@@ -38,7 +38,7 @@ Maximum number of checkpoints:
     ```
 
 1. Check on the saved checkpoints.
-    
+
     ```
     sw-spine-001(config)# show checkpoint
     ```
@@ -53,15 +53,15 @@ Maximum number of checkpoints:
     ```
 
 1. Copying the existing checkpoint point to the startup config to switch between CSM 1.0 and CSM 1.2 configuration.
-   
+
    1. Copying the checkpoint to startup:
-      
+
       ```
       sw-spine-001(config)# copy checkpoint CSM1_2 startup-config
       ```
-   
+
    1. Boot the system to start with configuration from different CSM version.
-      
+
       ```
       sw-spine-001(config)# boot system
       ```
@@ -77,27 +77,27 @@ This should only need to be done once (unless hardware is added or PoR config ha
 The following example is a 1.0 system that is going to 1.2.
 
 1. Save the startup config to new XML config.
-   
+
    ```
    sw-leaf-bmc-001(config)# copy config://startup.xml config://csm1.0.xml
    ```
 
 1. Erase the startup config and reboot.
-   
+
    1. Erase the startup config.
-      
+
       ```
       sw-leaf-bmc-001# delete startup-configuration
       ```
-      
+
       Example output:
-      
+
       ```
       Proceed to delete startup-configuration [confirm yes/no(default)]:yes
       ```
-   
-   1. Reboot after erasing the config. 
-      
+
+   1. Reboot after erasing the config.
+
       ```
       sw-leaf-bmc-001# reload
       ```
@@ -109,13 +109,13 @@ The following example is a 1.0 system that is going to 1.2.
       Continuing without saving system configuration
       Proceed to reboot the system? [confirm yes/no]:yes
       ```
-      
+
       This will boot the switch to factory defaults.
 
 1. Paste in the new CANU generated config once the switch boots into the factory defaults.
 
 1. Save the config.
-   
+
    ```
    sw-cdu-001(config)# do write memory
    sw-cdu-001(config)# copy config://startup.xml config://csm1.2.xml
@@ -123,8 +123,8 @@ The following example is a 1.0 system that is going to 1.2.
 
    `Copy completed` will be returned if successful.
 
-1. Verify that both configs exist.  
-   
+1. Verify that both configs exist.
+
    ```
    sw-cdu-001(config)# dir config
    ```
@@ -141,14 +141,14 @@ The following example is a 1.0 system that is going to 1.2.
    2022-01-12T22:33:47Z 97654 startup.xml
    ```
 
-#### Reload the switch to a different CSM version config
+#### Reload the switch to a different CSM version configuration
 
-This process should be used when config files for the desired CSM version are currently on the switch.
+This process should be used when configuration files for the desired CSM version are currently on the switch.
 
-The following example shows going from CSM 1.2 to CSM 1.0 switch config.
+The following example shows going from CSM 1.2 to CSM 1.0 switch configuration.
 
-1. View the current switch config files.
-    
+1. View the current switch configuration files.
+
     ```
     OS10(config)# dir config
     ```
@@ -166,14 +166,14 @@ The following example shows going from CSM 1.2 to CSM 1.0 switch config.
     ```
 
 1. Copy the desired switch config to the startup config and reload.
-    
+
     ```
     (config)# copy config://csm1.0.xml config://startup.xml
     (config)# reload
     System configuration has been modified. Save? [yes/no]:no
     ```
 
-The switch will then boot to the desired config.
+The switch will then boot to the desired configuration.
 
 
 ## Mellanox
@@ -208,15 +208,15 @@ The following example is a 1.0 system that is going to 1.2.
     ```
 
 1. Create a new config file for CSM 1.2.
-   
+
     When a new config file is created, no data is written to it. The administrator will boot to this new config file and paste the CANU generated config to it.
-    
+
     ```
     (config) # configuration new csm1.2
     ```
 
 1. Check that the configuration files contain the new csm1.2 blank config that was just created.
-    
+
     ```
     (config) # show configuration
     ```
@@ -234,7 +234,7 @@ The following example is a 1.0 system that is going to 1.2.
     ```
 
 1. Switch to the new config, which requires a reboot.
-    
+
     ```
     (config) # configuration switch-to csm1.2
     This requires a reboot.
@@ -242,7 +242,7 @@ The following example is a 1.0 system that is going to 1.2.
     ```
 
 1. Once the switch is rebooted, verify the config file is correct. It should reboot without any configuration.
-    
+
     ```
     switch-cc30b4 [standalone: master] # show configuration files
     ```
@@ -266,14 +266,14 @@ The following example is a 1.0 system that is going to 1.2.
     (config) # write memory
     ```
 
-#### Reload a switch to a different CSM version config
+#### Reload a switch to a different CSM version configuration
 
-This process should be used when config files for the desired CSM version are currently on the switch.
+This process should be used when configuration files for the desired CSM version are currently on the switch.
 
-In the following example, the switch config will go from CSM 1.2 to CSM 1.0.
+In the following example, the switch configuration will go from CSM 1.2 to CSM 1.0.
 
 1. Verify that the correct configuration file exists on the switch.
-    
+
     ```
     sw-spine-001 [mlag-domain: master] (config) # show configuration files
     ```
@@ -297,9 +297,9 @@ In the following example, the switch config will go from CSM 1.2 to CSM 1.0.
     This requires a reboot.
     Type 'yes' to confirm: yes
     ```
-    
-    The switch should boot to the config version typed in the previous command. 
-    
+
+    The switch should boot to the config version typed in the previous command.
+
 1. Verify the config version after the switch is booted.
 
     ```

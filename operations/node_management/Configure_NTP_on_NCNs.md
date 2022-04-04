@@ -1,25 +1,22 @@
 # Configure NTP on NCNs
 
-The management nodes serve Network Time Protocol (NTP) at stratum 10, except for ncn-m001, which serves at stratum 8 (or lower if an upstream NTP server is set). All management nodes peer with each other. 
+The management nodes serve Network Time Protocol (NTP) at stratum 10, except for `ncn-m001`, which serves at stratum 8 (or lower if an upstream NTP server is set). All management nodes peer with each other.
 
-Until an upstream NTP server is configured. The time on the NCNs may not match the current time at the site, but they will stay in sync with each other.
+Until an upstream NTP server is configured, the time on the NCNs may not match the current time at the site, but they will stay in sync with each other.
 
-### Topics:
+**Topics**
    * [Change NTP Config](#change_ntp_config)
    * [Troubleshooting NTP](#troubleshooting_ntp)
       * [chrony Log Files](#chrony_log_files)
       * [Force a Time Sync](#force_a_time_sync)
+      * [Known Issues and Bugs](#known-issues-and-bugs)
    * [Customize NTP](#customize_ntp)
       * [Set A Local Timezone](#set-a-local-timezone)
-      * [Configure NTP on PIT to Local Timezone](#configure_ntp_on_pit_to_local_timezone)
-      * [Configure NCN Images to Use Local Timezone](#configure_ncn_images_to_use_local_timezone)
-
-## Details
 
 <a name="change_ntp_config"></a>
-### Change NTP Config
+## Change NTP Config
 
-There are three different methods for configuring NTP, which are described below. The first option is the
+The three different methods for configuring NTP are described below. The first option is the
 recommended method.
 
    * Edit `/etc/chrony.d/cray.conf` and restart `chronyd` on each node.
@@ -58,7 +55,7 @@ recommended method.
       `cloud-init` caches data, so there could be inconsistent results with this method.
 
 <a name="troubleshooting_ntp"></a>
-### Troubleshooting NTP
+## Troubleshooting NTP
 
 Verify NTP is configured correctly and troubleshoot any issues.
 
@@ -141,12 +138,12 @@ The `chronyc` command can be used to gather information on the state of NTP.
    ```
 
 <a name="chrony_log_files"></a>
-#### chrony Log Files
+### `chrony` Log Files
 
 The `chrony` logs are stored in `/var/log/chrony/`
 
 <a name="force_a_time_sync"></a>
-#### Force a Time Sync
+### Force a Time Sync
 
 1. If the time is out of sync, force a sync of NTP.
 
@@ -171,19 +168,19 @@ The `chrony` logs are stored in `/var/log/chrony/`
 
 <a name="known-issues-and-bugs"></a>
 
-#### Known Issues and Bugs
+### Known Issues and Bugs
 
-As the NTP setup switched from a homegrown shell script into a native `cloud-init` module, there were some bugs that ended up shipping with older versions of CSM. If customers upgraded, these bugs carried forward and can present problems with time syncing correctly. This section describes how to diagnose and fix these.
+Older versions of CSM contained some NTP bugs that can carry forward through CSM upgrades. This can result in problems with time syncing correctly. This section describes how to diagnose and fix these.
 
 These issues all relate to certain nodes not being in a correct state.
 
-##### Correct State
+#### Correct State
 
 `ncn-m001` should have these important settings in `/etc/chrony.d/cray.conf`:
 
 ```
 server time.nist.gov iburst trust
-# or 
+# or
 pool time.nist.gov iburst
 # ncn-m001 should NOT use itself as a server and is known to cause issues
 
@@ -217,11 +214,11 @@ peer ncn-w002 minpoll -2 maxpoll 9 iburst
 peer ncn-w003 minpoll -2 maxpoll 9 iburst
 ```
 
-##### Quick Fixes
+#### Quick Fixes
 
-###### Fix `ncn-m001`
+##### Fix `ncn-m001`
 
-Most of the bugs from 0.9.x+ carried forward with upgrades. Most commonly, `ncn-m001` is the problem as it either does not have a valid upstream server, or has a bad configuration. This can be quickly remedied by running three commands to download the latest `cc_ntp` module, downloading an updated template, and re-running `cloud-init`.
+Most of the bugs from CSM 0.9 carried forward with upgrades. Most commonly, `ncn-m001` is the problem because it either does not have a valid upstream server, or it has a bad configuration. This can be quickly remedied by running three commands to download the latest `cc_ntp` module, download an updated template, and re-run `cloud-init`.
 
 ```bash
 ncn-m001# wget -O /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/cloudinit/config/cc_ntp.py
@@ -229,7 +226,7 @@ ncn-m001# wget -O /etc/cloud/templates/chrony.conf.cray.tmpl https://raw.githubu
 ncn-m001# cloud-init single --name ntp --frequency always
 ```
 
-###### Fix other NCNs
+##### Fix other NCNs
 
 The other NCNs sometimes have the wrong stratum set or are missing the `initstepslew` directive. These can be added in fairly quickly with some `sed` commands:
 
@@ -249,14 +246,14 @@ ncn# systemctl restart chronyd
 ```
 
 <a name="customize_ntp"></a>
-### Customize NTP
+## Customize NTP
 
 <a name="set-a-local-timezone"></a>
-#### Set A Local Timezone
+### Set A Local Timezone
 
 This procedure needs to be completed on the PIT node before the other management nodes are deployed.
 
-**WARNING**: UTC is the default and recommended setting for hardware and system clocks. It is not recommended to change
+**WARNING**: UTC is the default and is the recommended setting for hardware and system clocks. It is not recommended to change
 timezones unless absolutely required.
 
 <a name="configure_ntp_on_pit_to_local_timezone"></a>
@@ -359,13 +356,12 @@ there. You can find a list of timezones to use in the commands below by running 
 <a name="configure_ncn_images_to_use_local_timezone"></a>
 #### Configure NCN Images to Use Local Timezone
 
-Adjust the node images so that they also boot in the local timezone. This is accomplished by `chroot`ing into the unsquashed images, making some modifications, and then squashing it back up and moving the new images into place. This is included as an optional image modification step in the two procedures below.
+Adjust the node images so that they also boot in the local timezone. This is accomplished by `chroot`ing into the unsquashed images, making some modifications, re-squashing them, and moving the new images into place. This is included as an optional image modification step in the two procedures below.
 
-1. If the PIT node is booted, see
+* If the PIT node is booted, see
 [Change NCN Image Root Password and SSH Keys on PIT Node](../security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
 for more information.
 
 1. If the PIT node is not booted, see
 [Change NCN Image Root Password and SSH Keys](../security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 for more information.
-

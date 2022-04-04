@@ -1,6 +1,6 @@
 # Bring Up the Slingshot Fabric
 
-This procedure assumes the Slingshot fabric is installed an configured. The slingshot-fabric-manager software controls the fabric. On systems running Kubernetes, the slingshot-fabric-manager pod controls the fabric. 
+This procedure assumes the Slingshot fabric is installed an configured. The slingshot-fabric-manager software controls the fabric. On systems running Kubernetes, the slingshot-fabric-manager pod controls the fabric.
 
 ### Prerequisites
 

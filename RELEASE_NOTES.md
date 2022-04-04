@@ -9,7 +9,7 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * New Dashboard for network traffic dashboard
 * New Dashboard for Kubernetes and microservice health dashboard
 * New Dashboard for Boot Dashboard
-* New Dashboard for command line dashboard for critical services like smd, smd-postgres, capmc and hbtd
+* New command line Dashboard for critical services like smd, smd-postgres, capmc and hbtd
 * New Dashboard for Grafana dashboard for critical services like smd,capmc,smd-postgres and hbtd
 * Management nodes sample SMART data and publish it to SMA/SMF
 * Support for HPE PDU telemetry
@@ -30,7 +30,7 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * CAPMC support for new power schema for BardPeak power capping
 * CAPMC support for HPE G2 Metered 3Ph 39.9kVA 60A 480/277V FIO PDU
 * Improved CAPMC error handling in BOA 
-* Root user password and SSH keys now handled by NCN personalization after initial install, locations of data changed in Hashicorp Vault from previous releases
+* Root user password and SSH keys now handled by NCN personalization after initial install; locations of data changed in Hashicorp Vault from previous releases
 * Generic Ansible passthrough parameter added to CFS session API
 * Improved CFS session resiliency after power outages
 * Pod priority class additions to improve upgrades and fail-over
@@ -86,8 +86,8 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * sonar-jobs-watcher not stopping orphaned CFS pods
 * fixed issues causing PXE boot failures during installs, upgrades, and NCN rebuilds
 
-##  Deprecations
-CRUS has been deprecated and will be removed in a future release and replaced with BOSv2 that will provide similar functionality
+## Deprecations
+CRUS has been deprecated. It will be removed in a future release and replaced with BOSv2, which will provide similar functionality.
 
 ## Removals
 The V1 version of the CFS API was removed

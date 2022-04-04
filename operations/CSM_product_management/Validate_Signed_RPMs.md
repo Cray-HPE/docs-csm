@@ -13,7 +13,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
     * **CrayPort:**
 
     1. Find the signing key.
-       
+
        ```bash
        ncn-m001# curl LINK_TO_KEY_IN_CRAYPORT
        ```

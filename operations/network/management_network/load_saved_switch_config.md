@@ -23,6 +23,7 @@ This procedure needs to be done on all mgmt switches.
    
     Ensure that the proper checkpoints exist. `CSM1_0` and `CSM1_2` are used in this example.
 
+
     Example:
 
     ```
@@ -32,17 +33,17 @@ This procedure needs to be done on all mgmt switches.
     CSM1_0_CANU_1_2_4                                   checkpoint  User    2022-03-15T21:37:11Z  GL.10.09.0010
     ```
 
-2. Rollback to desired checkpoint.
+1. Rollback to desired checkpoint.
 
     ```
     sw-spine-001# checkpoint rollback CSM1_2_UPGRADE_CANU_1_3_2    
     ```
 
-### Dell
+## Dell
 
-1. View the configuration files.
-   
+
     Ensure that the proper config files exist. `CSM1_0` and `CSM1_2` are used in this example.
+
 
     ```
     sw-leaf-001# dir config
@@ -59,7 +60,7 @@ This procedure needs to be done on all mgmt switches.
     2022-02-08T16:30:23Z   112189        startup.xml
     ```
 
-2. Copy the desired configuration to the startup configuration.
+1. Copy the desired configuration to the startup configuration.
 
     ```
     sw-leaf-001# copy config://csm1.0.xml config://startup.xml
@@ -67,18 +68,19 @@ This procedure needs to be done on all mgmt switches.
 
     `Copy completed` will be returned if successful.
 
-3. Reboot the switch without saving configuration.
-    
+1. Reboot the switch without saving configuration.
+
     ```
     sw-leaf-001# reload
     System configuration has been modified. Save? [yes/no]:no
     ```
 
-### Mellanox
+## Mellanox
 
 1. View the configuration files.
    
     Ensure that the proper checkpoints exist. `CSM1_0` and `CSM1_2` are used in this example.
+
 
     ```
     sw-spine-001 [standalone: master] (config) # show configuration files
@@ -102,7 +104,7 @@ This procedure needs to be done on all mgmt switches.
     Unsaved changes     : yes
     ```
 
-2. Switch to desired configuration.
+1. Switch to desired configuration.
 
     ```
     sw-spine-001 [standalone: master] (config) # configuration switch-to csm1.2.upgrade_canu1.1.21

@@ -1,7 +1,7 @@
 # Backing up switch configuration
 
 
-Copies the running configuration or the startup configuration to a remote location as a file. 
+Copies the running configuration or the startup configuration to a remote location as a file.
 
 Relevant configuration
 

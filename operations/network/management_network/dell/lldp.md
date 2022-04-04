@@ -1,7 +1,7 @@
 # Link layer discovery protocol (LLDP)
 
-By default, LLDP is enabled for each interface and globally. You can disable LLDP on an interface or globally. If you disable LLDP globally, 
-LLDP is disabled on all interfaces irrespective of whether LLDP is previously enabled or disabled on an interface. When you enable LLDP 
+By default, LLDP is enabled for each interface and globally. You can disable LLDP on an interface or globally. If you disable LLDP globally,
+LLDP is disabled on all interfaces irrespective of whether LLDP is previously enabled or disabled on an interface. When you enable LLDP
 globally, the LLDP configuration at the interface level takes precedence over the global LLDP configuration.
 
 

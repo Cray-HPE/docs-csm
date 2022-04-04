@@ -7,8 +7,8 @@
     ```bash
     kubectl get jobs -n services | grep cray-dns-unbound-manager
     ```
-	
-	
+
+
 	```bash
     services            cray-dns-unbound-manager-1635352560                  0/1           26h        26h
     services            cray-dns-unbound-manager-1635448680                  1/1           35s        8m37s

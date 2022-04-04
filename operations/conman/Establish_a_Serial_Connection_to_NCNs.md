@@ -20,7 +20,7 @@ The user performing this procedure needs to have access permission to the `cray-
 **Note:** this procedure has changed since the CSM 0.9 release.
 
 1. Find the `cray-console-operator` pod.
-    
+
     ```bash
     ncn# OP_POD=$(kubectl get pods -n services \
             -o wide|grep cray-console-operator|awk '{print $1}')
@@ -59,7 +59,7 @@ The user performing this procedure needs to have access permission to the `cray-
     ncn# WNODE=$(kubectl get pods -o custom-columns=:.spec.nodeName -n services --no-headers $NODE_POD)
     ncn# echo $WNODE
     ```
-        
+
     Example output:
     ```text
     ncn-w003
@@ -88,7 +88,7 @@ The user performing this procedure needs to have access permission to the `cray-
         It may take several minutes even after the pod is running for the console connections to be re-established.
 
     1. Find the `cray-console-node` pod that is connecting with the console.
-    
+
         While the pod was being terminated and restarted, there is a small chance that the console connection was
         moved to a different `cray-console-node` pod.
 

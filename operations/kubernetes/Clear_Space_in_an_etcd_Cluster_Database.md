@@ -131,7 +131,7 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
         ```
 
         Example output:
-        
+
         ```
         # df -h
         Filesystem                Size      Used Available Use% Mounted on
@@ -162,7 +162,7 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
               successfulJobsHistoryLimit: 1
               suspend: false
             status:
-            
+
             [...]
             ```
 
@@ -199,7 +199,7 @@ Defragging the database cluster and clearing the etcd cluster NOSPACE alarm will
         Defragging cray-crus-etcd-hldtxr6f9s
         Defragging cray-crus-etcd-sfsckpv4vw
         Defragging cray-externaldns-etcd-6l772b2cdv
-        
+
         [...]
         ```
 

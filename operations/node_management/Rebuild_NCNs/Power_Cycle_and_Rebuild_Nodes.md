@@ -1,4 +1,3 @@
-
 # Power Cycle and Rebuild Nodes
 
 This section applies to all node types. The commands in this section assume the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) have been set.
@@ -7,9 +6,9 @@ This section applies to all node types. The commands in this section assume the 
 
 1. Open and Watch the console for the node being rebuilt.
 
-   Login to a second session to use it to watch the console using the instructions at the link below: 
-   
-   ***Please open this link in a new tab or page:*** [Log in to a Node Using ConMan](../../conman/Log_in_to_a_Node_Using_ConMan.md)
+1. Log in to a second session to use it to watch the console using the instructions at the link below:
+
+   ***Please open this link in a new tab or page*** [Log in to a Node Using ConMan](../../conman/Log_in_to_a_Node_Using_ConMan.md)
 
    The first session will be needed to run the commands in the following Rebuild Node steps.
 
@@ -22,39 +21,43 @@ This section applies to all node types. The commands in this section assume the 
     1. Set the BMC variable to the hostname of the BMC of the node being rebuilt.
 
         ```bash
-        BMC=${NODE}-mgmt
+        linux# BMC=${NODE}-mgmt
         ```
 
-    1. Export the root password of the BMC.
+    1. Set and export the root password of the BMC.
+
+        > NOTE: `read -s` is used to prevent the password from echoing to the screen or
+        > being saved in the shell history.
 
         ```bash
-        export IPMI_PASSWORD=changeme
+        linux# read -s IPMI_PASSWORD
+        linux# export IPMI_PASSWORD
         ```
 
     1. Set the PXE/efiboot option.
 
         ```bash
-        ipmitool -I lanplus -U root -E -H $BMC chassis bootdev pxe options=efiboot
+        linux# ipmitool -I lanplus -U root -E -H $BMC chassis bootdev pxe options=efiboot
         ```
 
     1. Power off the node.
 
         ```bash
-        ipmitool -I lanplus -U root -E -H $BMC chassis power off
+        linux# ipmitool -I lanplus -U root -E -H $BMC chassis power off
         ```
 
     1. Verify that the node is off.
 
         ```bash
-        ipmitool -I lanplus -U root -E -H $BMC chassis power status
+        linux# ipmitool -I lanplus -U root -E -H $BMC chassis power status
         ```
 
-        Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30seconds after receiving the correct power status before issuing the next command.
+        Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
     1. Power on the node.
 
         ```bash
-        ipmitool -I lanplus -U root -E -H $BMC chassis power on
+        linux# ipmitool -I lanplus -U root -E -H $BMC chassis power on
         ```
 
     1. Verify that the node is on.
@@ -62,7 +65,7 @@ This section applies to all node types. The commands in this section assume the 
        Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
        ```bash
-       ipmitool -I lanplus -U root -E -H $BMC chassis power status
+       linux# ipmitool -I lanplus -U root -E -H $BMC chassis power status
        ```
 
 1. Observe the boot.
@@ -76,7 +79,7 @@ This section applies to all node types. The commands in this section assume the 
        [  295.467037] cloud-init[9333]: Cloud-init v. 20.2-8.45.1 finished at Thu, 26 Aug 2021 15:26:12+0000. Datasource DataSourceNoCloudNet [seed=cmdline,http://10.92.100.81:8888/][dsmode=net].  Up 29546 seconds
        ```
 
-   1. Press enter on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console (**&** then **.**), and then use `ssh` to log in to the node to complete the remaining validation steps.
+   1. Press enter on the console to ensure that the the login prompt is displayed including the correct hostname of this node. Then exit the ConMan console (`&` then `.`), and then use `ssh` to log in to the node to complete the remaining validation steps.
 
        * **Troubleshooting:** If the `NBP file...` output never appears, or something else goes wrong, go back to the steps for modifying the `XNAME.json` file (see the step to [inspect and modify the JSON file](Identify_Nodes_and_Update_Metadata.md#Inspect-and-modify-the-JSON-file) and make sure these instructions were completed correctly.
 
@@ -104,7 +107,7 @@ This section applies to all node types. The commands in this section assume the 
    1. Run the following commands from a node that has `cray` CLI initialized:
 
        ```bash
-       cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
+       ncn# cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
        ```
 
    1. Edit the `XNAME.json` file and set the `metal.no-wipe=1` value.
@@ -119,7 +122,7 @@ This section applies to all node types. The commands in this section assume the 
            | jq -r '.access_token')
        ```
 
-   1. Do a PUT action for the edited JSON file.
+   1. Do a `PUT` action for the edited JSON file.
 
       This command can be run from any node.
 
@@ -138,14 +141,13 @@ This section applies to all node types. The commands in this section assume the 
         ncn# cray bss bootparameters list --name ${XNAME} --format=json |jq .[]> ${XNAME}.check.json
         ```
 
-      * Compare the new JSON file with what was PUT to BSS.
+      * Compare the new JSON file with what was put into BSS.
 
         ```bash
         ncn# diff ${XNAME}.json ${XNAME}.check.json
         ```
 
-      The files should be identical
-
+      The files should be identical.
 
 ## Next Step
 

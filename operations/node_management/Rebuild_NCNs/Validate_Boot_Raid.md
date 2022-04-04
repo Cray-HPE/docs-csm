@@ -1,6 +1,6 @@
 # Validate `BOOTRAID` Artifacts
 
-Perform the following steps **on ncn-m001**.
+Perform the following steps **on `ncn-m001`**.
 
 1. Initialize the `cray` command and follow the prompts (required for the next step).
 
