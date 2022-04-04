@@ -4,7 +4,7 @@ This procedure shows how to switch between already saved switch configurations.
 
 To save switch configurations, refer to the [Configuration Management](config_management.md) procedure.
 
-This procedure is intended for internal use only.  It's used to quickly switch between configurations that are already loaded on the switches.
+This procedure is intended for internal use only. It is used to quickly switch between configurations that are already loaded on the switches.
 
 This procedure needs to be done on all mgmt switches.
 
