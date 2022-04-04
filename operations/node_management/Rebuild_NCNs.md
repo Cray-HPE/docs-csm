@@ -36,7 +36,7 @@ ncn# echo $XNAME
 
 ## Procedure
 
-   Choose the appropriate node type in the **Prepare Node** section
+Choose the appropriate node type in the **Prepare Node** section
 
 ### Prepare Node (prepare_node)
 
@@ -48,6 +48,4 @@ Only follow the steps in the section for the node type that is being rebuilt:
 
 ## Validation
 
-After you have completed all the steps, then please run the **Final Validation** steps.
-
-[Final Validation](rebuild_ncns/../Rebuild_NCNs/Final_Validation_Steps.md)
+After completing all of the steps, run the [Final Validation](Final_Validation_Steps.md) steps.

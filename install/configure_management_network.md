@@ -5,9 +5,11 @@ Newer systems have HPE Aruba switches, while older systems have Dell and Mellano
 
 The configuration steps are different for these switch vendors. The switch configuration procedures for HPE Aruba will be grouped separately from the switch configuration procedures for other vendors.
 
-It is assumed that the administrator configuring the Management Network has a basic understanding of networking protocols (STP, VLAN, OSPF, LAG/MLAG), and knows how to configure network equipment. It is also assumed that they understand and know how to read an SHCD file.
+It is assumed that the administrator configuring the Management Network has a basic understanding of networking protocols (STP, VLAN, OSPF, LAG/MLAG, BGP, etc.), and knows how to configure network equipment. It is also assumed that they understand and know how to read an SHCD file.
 
-Before configuring/reconfiguring any switches, make sure to get the current running config and save that in case you need to revert the config.
+Before configuring/reconfiguring any switches, make sure to get the current running configuration and save that in case the configuration must be reverted.
+
+All switch configuration should be done with a console or out of band connection.
 
 Save the output of the following:
 
@@ -15,12 +17,11 @@ Save the output of the following:
 # show run
 ```
 
-### Topics:
+***Topics***
 
-   * [HPE Aruba switch configuration](#hpe_aruba_switch_configuration)
-   * [Dell and Mellanox switch configuration](#dell_and_mellanox_switch_configuration)
-   * [Next Topic](#next-topic)
-
+* [HPE Aruba switch configuration](#hpe_aruba_switch_configuration)
+* [Dell and Mellanox switch configuration](#dell_and_mellanox_switch_configuration)
+* [Next Topic](#next-topic)
 
 ## Details
 
@@ -59,4 +60,3 @@ On a typical system, the Mellanox switches are Spine switches and the Dell switc
    After completing this procedure, the next step is to collect MAC Addresses for the management nodes using the PIT node and the management network switches configured in this procedure.
 
    * See [Collect Mac Addresses](index.md#collect_mac_addresses_for_ncns)
-

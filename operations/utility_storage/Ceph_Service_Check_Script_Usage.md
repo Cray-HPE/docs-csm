@@ -143,4 +143,4 @@ It is excluded in this case for brevity.
 ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -A true
 ```
 
-> **IMPORTANT:** This script can be run without the verbose flag and with an echo for the return code `echo $?`.  A return code of `0` means the check was clean. A return code of `1` or greater means that there was an issue. In the latter case, re-run the command with the `-v true` flag.
+> **IMPORTANT:** This script can be run without the verbose flag and with an echo for the return code `echo $?`. A return code of `0` means the check was clean. A return code of `1` or greater means that there was an issue. In the latter case, re-run the command with the `-v true` flag.
