@@ -177,6 +177,7 @@ ncn# echo $XNAME
 *  Ensure the NCN BMC is configured with the expected root user credentials.
    
    The NCN BMC credentials needs to match the current global air-cooled BMC default credentials. This can be viewed with the following command:
+
    ```bash
    ncn-m# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
    ncn-m# kubectl -n vault exec -it cray-vault-0 -c vault -- env \
@@ -192,6 +193,7 @@ ncn# echo $XNAME
    ---     -----
    Cray    map[password:foobar username:root] 
    ```
+
 *  If adding an NCN that was not previously in the system, follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md) procedure.
 *  Ensure the NCN BMC is configured to use DHCP. (This does not apply to the BMC for `ncn-m001` since it is statically configured for the site.)
 *  Ensure the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](../../instal/../install/switch_pxe_boot_from_onboard_nic_to_pcie.md) procedure.
@@ -199,6 +201,7 @@ ncn# echo $XNAME
 *  If adding an HPE NCN, ensure IPMI is enabled.
 
    1. Check to see if IPMI is enabled:
+
       ```bash
       ncn# export IPMI_PASSWORD=changeme
       ncn# curl -k -u root:$IPMI_PASSWORD https://NCN_NODE-mgmt/redfish/v1/Managers/1/NetworkProtocol | jq .IPMI
@@ -215,11 +218,11 @@ ncn# echo $XNAME
 
    2. If IPMI is disabled, then enable IPMI:
 
-      ```curl
+      ```bash
       ncn# curl -k -u root:$IPMI_PASSWORD -X PATCH \
          -H 'Content-Type: application/json' \
          -d '{"IPMI": {"Port": 623, "ProtocolEnabled": true}}' \
-         https://NCN_NODE-mgmt/redfish/v1/Managers/1/NetworkProtocol | jq
+         https://${NODE}-mgmt/redfish/v1/Managers/1/NetworkProtocol | jq
       ```
 
       Expected output:
@@ -240,11 +243,11 @@ ncn# echo $XNAME
 
    3. If IPMI was disabled, then restart the BMC:
 
-      ```curl
+      ```bash
       ncn# curl -k -u root:$IPMI_PASSWORD -X POST \
          -H 'Content-Type: application/json' \
          -d '{"ResetType": "GracefulRestart"}' \
-         https://NCN_NODE-mgmt/redfish/v1/Managers/1/Actions/Manager.Reset | jq
+         https://${NODE}-mgmt/redfish/v1/Managers/1/Actions/Manager.Reset | jq
       ```
 
       Expected output:
