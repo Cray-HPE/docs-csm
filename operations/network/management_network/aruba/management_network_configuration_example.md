@@ -1,6 +1,6 @@
 # Example of How to Configure Scenario A or B
 
-This section provides an example of how to configure the management network. 
+This section provides an example of how to configure the management network.
 
 ## Procedure
 
@@ -12,11 +12,11 @@ This section provides an example of how to configure the management network.
     ```
 
 1. Move the interfaces into CAN VRF.
-   
+
    If you have existing CAN interface configuration, it will be deleted once you move the interface into the new VRF.  You will have to re-apply it.
-   
+
    > **NOTE:** These are example configs only, most implementations of Bi-CAN will be different.
-   
+
    Example Aruba primary configuration:
 
       ```
@@ -30,7 +30,7 @@ This section provides an example of how to configure the management network.
           active-gateway ip 128.55.176.1
           ip ospf 2 area 0.0.0.210
       ```
-   
+
    Example Aruba secondary configuration:
 
       ```
@@ -46,10 +46,10 @@ This section provides an example of how to configure the management network.
       ```
 
 1. Create a new BGP process in CAN VRF.
-   
+
    A new BGP process will need to be running in the CAN VRF, this will peer with the CAN IP addresses on the NCN workers.
-   
-   These are example configs only. The neighbors below are the IP addresses of the CAN interface on the NCN workers. 
+
+   These are example configs only. The neighbors below are the IP addresses of the CAN interface on the NCN workers.
 
    Aruba configuration:
 
@@ -70,7 +70,7 @@ This section provides an example of how to configure the management network.
 
    * The customer Edge router must be certified by the Slingshot team
    * The configuration will be unique for most customers
-    
+
     The following is an example configuration of a single Arista switch with a static LAG to a single Slingshot switch.
 
     Arista LAG configuration:
@@ -83,7 +83,7 @@ This section provides an example of how to configure the management network.
       speed forced 100gfull
       error-correction encoding reed-solomon
       channel-group 1 mode on
-    
+
     interface Ethernet25/1
       mtu 9214
       flowcontrol send on
@@ -91,7 +91,7 @@ This section provides an example of how to configure the management network.
       speed forced 100gfull
       error-correction encoding reed-solomon
       channel-group 1 mode on
-    
+
     interface Port-Channel1
       mtu 9214
       switchport access vlan 2
@@ -107,9 +107,9 @@ This section provides an example of how to configure the management network.
     interface Vlan2
       ip address 10.101.10.1/24
     ```
-      
+
     The following is the Arista BGP configuration for peering over the HSN. The BGP neighbor IP addresses used are HSN IP addresses of Worker nodes.
-    
+
     Example HSN IP:
 
     ```
@@ -118,20 +118,20 @@ This section provides an example of how to configure the management network.
         link/ether 02:00:00:00:00:0d brd ff:ff:ff:ff:ff:ff
         inet 10.101.10.10/24 scope global hsn0
           valid_lft forever preferred_lft forever
-        inet6 fe80::ff:fe00:d/64 scope link 
+        inet6 fe80::ff:fe00:d/64 scope link
           valid_lft forever preferred_lft forever
     ```
-          
+
     In this example, a prefix list and route-map are created to only accept routes from the HSN.
 
     Example Arista BGP configuration:
 
     ```
-    ip prefix-list HSN seq 10 permit 10.101.10.0/24 ge 24 
-    
+    ip prefix-list HSN seq 10 permit 10.101.10.0/24 ge 24
+
     route-map HSN permit 5
       match ip address prefix-list HSN
-    
+
     router bgp 65534
       maximum-paths 32
       neighbor 10.101.10.10 remote-as 65533
@@ -195,7 +195,7 @@ This section provides an example of how to configure the management network.
     ```
 
 1. Verify BGP and routes.
-   
+
    Once MetalLB is configured the BGP peers on the customer Edge router and the CAN VRF should be established.
 
    Arista Edge Router:
@@ -215,7 +215,7 @@ This section provides an example of how to configure the management network.
     * The on-site network team will be responsible for distributing these routes to the rest of their network
 
     ```
-    sw-edge01(config)#show ip route 
+    sw-edge01(config)#show ip route
     B E    10.101.8.113/32 [200/0] via 10.101.10.10, Vlan2
                                     via 10.101.10.11, Vlan2
                                     via 10.101.10.12, Vlan2
@@ -235,8 +235,8 @@ This section provides an example of how to configure the management network.
     Example of how BGP routes look like in the switch located in the HSN:
 
     ```
-    sw-spine-001 [standalone: master] # show ip bgp vrf CAN summary 
-    
+    sw-spine-001 [standalone: master] # show ip bgp vrf CAN summary
+
     VRF name                  : CAN
     BGP router identifier     : 192.168.75.1
     local AS number           : 65533
@@ -245,9 +245,9 @@ This section provides an example of how to configure the management network.
     IPV4 Prefixes             : 44
     IPV6 Prefixes             : 0
     L2VPN EVPN Prefixes       : 0
-    
+
     ------------------------------------------------------------------------------------------------------------------
-    Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd        
+    Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
     ------------------------------------------------------------------------------------------------------------------
     10.101.8.8        4    65536        24725     27717     665       0      0      0:11:52:43    ESTABLISHED/14
     10.101.8.9        4    65536        24836     27692     665       0      0      0:08:44:20    ESTABLISHED/16
@@ -255,20 +255,20 @@ This section provides an example of how to configure the management network.
     ```
 
 1. Configure default routes on NCN workers.
-   
+
    1. The default route will need to change on the workers so they send their traffic out the HSN interface.
-      
+
       ```
       ncn-w001# ip route replace default via 10.101.10.1 dev hsn0
       ```
 
    1. To make it persistent we will need to create an ifcfg file for hsn0 and remove the old vlan7 default route.
-      
+
       ```
       ncn-w001# mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old
       ncn-w001# echo "default 10.101.10.1 - -" > /etc/sysconfig/network/ifroute-hsn0
       ```
-   
+
    1. Verify the routing table and external connectivity.
 
       ```
@@ -283,7 +283,7 @@ This section provides an example of how to configure the management network.
 1. Verify external connectivity.
 
     You should now have external connectivity from outside the system to the external services offered by MetalLB over the HSN
-    
+
     1. Verify the connection is going over the HSN with a traceroute:
 
         ```
@@ -303,7 +303,7 @@ This section provides an example of how to configure the management network.
         ```
 
     1. Listen on all the HSN interfaces for ping/traceroute while you ping the external facing IP address. In this example, the IP address is 10.101.8.113.
-    
+
         ```
         ncn-m001# nodes=$(kubectl get nodes| awk '{print $1}' | grep  ncn-w | awk -vORS=, '{print $1}'); pdsh -w ${nodes} "tcpdump -envli hsn0 icmp"
 

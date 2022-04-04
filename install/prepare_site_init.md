@@ -196,7 +196,7 @@ with system-specific customizations.
             2.  Extract the issuer's certificate using `awk`:
 
                 > **`NOTE`** The issuer DN is properly escaped as part of the
-                > `awk` pattern below. It must be changed to match the value 
+                > `awk` pattern below. It must be changed to match the value
                 > for emailAddress, CN, OU, etc. for your LDAP. If the value
                 > you are using is different, be sure to escape it properly!
 
@@ -382,11 +382,11 @@ with system-specific customizations.
     ```bash
     linux# yq r /mnt/pitdata/prep/site-init/customizations.yaml spec.network.netstaticips.system_to_site_lookups
     172.30.84.40
-    ``` 
+    ```
 
     If there is **no requirement to resolve external hostnames or no upstream DNS server**,
-    then remove the DNS forwarding configuration from the `cray-dns-unbound` service. 
- 
+    then remove the DNS forwarding configuration from the `cray-dns-unbound` service.
+
     1. Remove the `forwardZones` configuration for the `cray-dns-unbound` service:
 
         ```bash

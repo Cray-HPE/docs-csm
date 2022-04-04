@@ -1,6 +1,6 @@
-# Management Interface 
+# Management Interface
 
-The management interface can be used to gain remote management access to the switch. The management interface is accessible using the "mgmt" VRF and is separate from the data plane interfaces, which are in the "default" VRF. 
+The management interface can be used to gain remote management access to the switch. The management interface is accessible using the "mgmt" VRF and is separate from the data plane interfaces, which are in the "default" VRF.
 
 Alternatively, a loopback interface can be configured to be used as management interface.
 
@@ -27,39 +27,39 @@ Secondary Nameserver
 
 ## Configuration Commands
 
-Enable/disable the management interface: 
+Enable/disable the management interface:
 
 ```text
-switch(config)# interface mgmt 
+switch(config)# interface mgmt
 switch(config-if-mgmt)# no shutdown
-switch(config)# interface mgmt 
+switch(config)# interface mgmt
 switch(config-if-mgmt)# shutdown
 ```
 
 Assign an IP address to the interface:
 
 ```text
-switch(config-if-mgmt)# ip <dhcp|static IP-ADDR> 
+switch(config-if-mgmt)# ip <dhcp|static IP-ADDR>
 ```
 
-Show commands to validate functionality: 
+Show commands to validate functionality:
 
 ```text
 switch# show interface mgmt
 switch# show interface loopback 0
 ```
 
-Create and configure loopback interface: 
+Create and configure loopback interface:
 
 ```text
-switch(config)# interface loopback 0 
-8325-Core1(config-loopback-if)# ip address <IP-ADDR> 
+switch(config)# interface loopback 0
+8325-Core1(config-loopback-if)# ip address <IP-ADDR>
 ```
 
-## Expected Results 
+## Expected Results
 
 1. Administrators can enable/disable the management interface.
-2. Administrators can assign an IP address to the management interface 
-3. Administrators can configure a loopback interface to be use for Switch management. 
+2. Administrators can assign an IP address to the management interface
+3. Administrators can configure a loopback interface to be use for Switch management.
 
 [Back to Index](../index.md)

@@ -83,7 +83,7 @@ Once dracut exits, the UAN will boot the rootfs image. Failures seen in this pha
    ```
 
 1. Verify `cfs-state-reporter` is healthy and returns SUCCESS.
-   
+
    ```
    uan# systemctl status cfs-state-reporter
    ```

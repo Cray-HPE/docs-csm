@@ -1,6 +1,6 @@
 # Physical interfaces
 
-Ethernet port interfaces are enabled by default. 
+Ethernet port interfaces are enabled by default.
 
 Relevant Configuration
 

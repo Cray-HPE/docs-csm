@@ -4,10 +4,10 @@ This procedures shows how to switch between saved switch configurations.
 
 To save switch configurations, refer to the [Configuration Management](config_management.md) procedure.
 
-### Aruba
+## Aruba
 
-1. View the checkpoints. 
-   
+1. View the checkpoints.
+
     Ensure that `CSM1_0` and `CSM1_2` exist. If they exist, proceed to the next step.
 
     ```
@@ -23,16 +23,16 @@ To save switch configurations, refer to the [Configuration Management](config_ma
     startup-config startup User 2021-12-20T17:35:58Z GL.10.08.1021
     ```
 
-2. Rollback to desired checkpoint.
+1. Rollback to desired checkpoint.
 
     ```
     sw-spine-001# checkpoint rollback CSM1_0
     ```
 
-### Dell
+## Dell
 
 1. View the configuration files.
-   
+
     Ensure that `csm1.0` and `csm1.2` exist. If they exist, proceed to the next step.
 
     ```
@@ -50,7 +50,7 @@ To save switch configurations, refer to the [Configuration Management](config_ma
     2022-02-08T16:30:23Z   112189        startup.xml
     ```
 
-2. Copy the desired configuration to the startup configuration.
+1. Copy the desired configuration to the startup configuration.
 
     ```
     sw-leaf-001# copy config://csm1.0.xml config://startup.xml
@@ -58,17 +58,17 @@ To save switch configurations, refer to the [Configuration Management](config_ma
 
     `Copy completed` will be returned if successful.
 
-3. Reboot the switch without saving configuration.
-    
+1. Reboot the switch without saving configuration.
+
     ```
     sw-leaf-001# reload
     System configuration has been modified. Save? [yes/no]:no
     ```
 
-### Mellanox
+## Mellanox
 
 1. View the configuration files.
-   
+
     Ensure that `csm1.0` and `csm1.2` exist. If they exist, proceed to the next step.
 
     ```
@@ -89,7 +89,7 @@ To save switch configurations, refer to the [Configuration Management](config_ma
     Unsaved changes     : yes
     ```
 
-2. Switch to desired configuration.
+1. Switch to desired configuration.
 
     ```
     sw-spine-001 [standalone: master] (config) # configuration switch-to csm1.0

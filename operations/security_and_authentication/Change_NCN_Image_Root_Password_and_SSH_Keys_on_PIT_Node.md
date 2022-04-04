@@ -1,4 +1,4 @@
-## Set NCN Image Root Password, SSH Keys, and timezone (optional) on PIT Node
+# Set NCN Image Root Password, SSH Keys, and timezone (optional) on PIT Node
 
 Modify the NCN images by setting the root password and adding SSH keys for the root account.
 Changing the timezone for the NCNs can also be done at this time. This procedure shows this process being
@@ -6,7 +6,7 @@ done on the PIT node during a first time installation of the CSM software.
 
 ***Note:*** This procedure can must be done before management nodes are deployed for the first time.
 
-### Set the root password and add SSH keys to the NCN images
+## Set the root password and add SSH keys to the NCN images
 
 This step is required. There is no default root password and no default SSH keys in the NCN images.
 
@@ -16,7 +16,7 @@ This step is required. There is no default root password and no default SSH keys
    copy an existing set of keys and `authorized_hosts` file into a directory for reference in the following step. It is assumed
    that public keys have a `.pub` extension.
 
-   Invoke the `ncn-image-modification.sh` script located at the top level of the CSM release tarball to add SSH key and set the root password. Optionally, set a local timezone (UTC is the default). If you chose to create new SSH keys above, invoke this script with `-d ~/.ssh` in addition to the other required options.
+   Execute the `ncn-image-modification.sh` script located at the top level of the CSM release tarball to add SSH key and set the root password. Optionally, set a local timezone (UTC is the default). If you chose to create new SSH keys above, execute this script with `-d ~/.ssh` in addition to the other required options.
 
    ```bash
    pit# ncn-image-modification.sh -h
@@ -70,7 +70,7 @@ This step is required. There is no default root password and no default SSH keys
 
           DEBUG                    If set, the script will be run with 'set -x'
    pit#
-```
+   ```
 
    An example referencing a directory with existing keys and setting the timezone to America/Chicago.
    This example will prompt the admin to enter a root password after each squash is unsquashed.
@@ -100,7 +100,6 @@ This step is required. There is no default root password and no default SSH keys
    The script will save the original squashfs images in `./{k8s,ceph}/old`.  The new images will have a `secure-` prefix.
    The initrd and kernel will retain their original names.
 
-
 1. Set the boot links.
 
    ```bash
@@ -108,7 +107,7 @@ This step is required. There is no default root password and no default SSH keys
    pit# set-sqfs-links.sh
    ```
 
-### Cleanup
+## Cleanup
 
 1. Clean up temporary storage used to prepare images.
 

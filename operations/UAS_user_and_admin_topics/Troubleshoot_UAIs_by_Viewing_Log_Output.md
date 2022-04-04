@@ -6,8 +6,8 @@
 
 Sometimes a UAI will come up and run but will not work correctly. It is possible to see errors reported by elements of the UAI entrypoint script using the `kubectl logs` command.
 
-1. Find the UAI of interest. 
-   
+1. Find the UAI of interest.
+
     This starts by identifying the UAI name using the CLI:
 
     ```
@@ -43,7 +43,7 @@ Sometimes a UAI will come up and run but will not work correctly. It is possible
 1. Find the UAI in question, remembering that End-User UAIs run in the `user` Kubernetes namespace and Broker UAIs run in the `uas` Kubernetes namespace.
 
     * End-User:
-        
+
         ```
         ncn-m001-pit# kubectl get po -n user | grep uai-vers-6da50e7a
         ```

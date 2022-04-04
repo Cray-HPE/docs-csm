@@ -41,7 +41,7 @@ BMC/controller passwords.
       Later procedures in the installation workflow use the `cray` command to interact with multiple services.
       The `cray` CLI configuration needs to be initialized for the Linux account. The Keycloak user who initializes the
       CLI configuration needs to be authorized for administrative actions.
-   
+
       See [Configure the Cray Command Line Interface (cray CLI)](../operations/configure_cray_cli.md)
    <a name="set_bmc_management_role"></a>
    1. Set Management Role on the BMCs of Management Nodes
@@ -50,11 +50,11 @@ BMC/controller passwords.
       to mark them with the *Management* role so they can be easily included in the locking/unlocking operations required
       as protections for FAS and CAPMC actions.
       **Set BMC Management Roles Now!**
-      
+
       See [Set BMC Management Role](../operations/hardware_state_manager/Set_BMC_Management_Role.md)
-      
+
       For more info on the importance of locking these components, see [Lock Management Nodes](#lock_management_nodes).
-    
+
    <a name="lock_management_nodes"></a>
    1. Lock Management Nodes
 

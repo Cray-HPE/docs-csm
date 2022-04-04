@@ -1,19 +1,19 @@
 # Apply Switch Configs
 
-This process is generally straight forward and requires the user to copy and paste the generated switch configuration into the terminal.
+This process is generally straightforward and requires the user to copy and paste the generated switch configuration into the terminal.
 
 All ports will be shutdown before applying switch configuration. If the port is in the SHCD and being used, it will be enabled when the configuration is applied.
 
 There are some caveats that are mentioned below.
 
-#### Prerequisites 
+## Prerequisites
 
 - Switch without any configuration
     - [Wipe Mgmt Switches](wipe_mgmt_switches.md)
-- Generated Switch configs
+- Generated switch configurations
     - [Generate Switch Config](generate_switch_configs.md)
 
-### Aruba
+## Aruba
 
 1. Shutdown all ports. Use `show int physical` to see the range of ports.
 
@@ -31,7 +31,7 @@ There are some caveats that are mentioned below.
 1. Paste in the generated config.
 
 
-### Dell
+## Dell
 
 1. Shut down all ports.
 
@@ -44,9 +44,9 @@ There are some caveats that are mentioned below.
 
     - When pasting in the config be sure that all the commands were accepted. In some cases you will need to back out of the current config context and back to global configuration for the commands to work as intended.
     - `banner motd` will need to be manually applied.
-      
+
       For example:
-      
+
       ```
       sw-leaf-bmc-001(config)# router ospf 1
       sw-leaf-bmc-001(config-router-ospf-1)# router-id 10.2.0.4
@@ -54,9 +54,9 @@ There are some caveats that are mentioned below.
       % Error: Illegal parameter.
       sw-leaf-bmc-001(config-router-ospf-1)# router-id 10.2.0.4
       ```
-      
+
       To fix:
-      
+
       ```
       sw-leaf-bmc-001(config)# router ospf 1
       sw-leaf-bmc-001(config-router-ospf-1)# router-id 10.2.0.4
@@ -65,7 +65,7 @@ There are some caveats that are mentioned below.
       sw-leaf-bmc-001(config-router-ospf-2)# router-id 10.2.0.4
       ```
 
-### Mellanox
+## Mellanox
 
 Verify that `no cli default prefix-modes enable` is configured on the switch before applying any configuration.
 
@@ -73,7 +73,7 @@ Verify that `no cli default prefix-modes enable` is configured on the switch bef
 sw-spine-001 [mlag-domain: standby] (config) # no cli default prefix-modes enable
 ```
 
-### Write memory
+## Write memory
 
 Save the configuration once the configuration is applied.
 

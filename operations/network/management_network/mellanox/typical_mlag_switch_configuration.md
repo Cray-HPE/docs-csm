@@ -1,6 +1,6 @@
 # Typical configuration of MLAG between switches
 
-The intent here is to show case very basic mlag configuration between two spine switches. 
+The intent here is to show case very basic mlag configuration between two spine switches.
 
 <table>
 

@@ -112,8 +112,8 @@ There are multiple Goss test suites available that cover a variety of subsystems
   - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker nodes and master nodes), logging errors (via `journalctl`) similar to "join token does not exist or has already been used" or the last logs containing multiple lines of "systemd[1]: spire-agent.service: Start request repeated too quickly.". Deleting the `request-ncn-join-token` daemonset pod running on the node may clear the issue. Even though the `spire-agent` systemctl service on the Kubernetes node should eventually restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.
      1. Define the following function
         ```bash
-        ncn/pit# function renewncnjoin() { 
-            for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do 
+        ncn/pit# function renewncnjoin() {
+            for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do
                 if kubectl describe -n spire pods $pod | grep -q "Node:.*$1"; then
                     echo "Restarting $pod running on $1"
                     kubectl delete -n spire pod "$pod"
@@ -298,7 +298,7 @@ BMC can be safely ignored or needs to be addressed before proceeding.
 
 * The node BMC of `ncn-m001` will not typically be present in HSM component data, as it is typically connected to the site network instead of the HMN network.
 
-* The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depending on the state of the system when the `hsm_discovery_verify.sh` script is run. If the system is currently going through the process of installation, then this is an expected mismatch as the [Prepare Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet. 
+* The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depending on the state of the system when the `hsm_discovery_verify.sh` script is run. If the system is currently going through the process of installation, then this is an expected mismatch as the [Prepare Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet.
    > For more information refer to [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
 
    Example mismatch for the BMC of a HPE Apollo XL654D:

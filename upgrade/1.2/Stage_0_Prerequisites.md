@@ -71,7 +71,7 @@ At a minimum, answers to the following questions must be known prior to upgradin
 1. _Will user traffic (non-administrative) come in via the CAN, CHN or is the site Air-gapped?_
 2. _What is the internal VLAN and the site-routable IP subnet for the new CAN or CHN?_
 3. _Is there a need to preserve any existing IP address(es) during the CAN-to-CMN migration?_
-   1. One example would be the external-dns IP address used for DNS lookups of system resources from site DNS servers. Changes to external-dns often require changes to site resources with requisite process and timeframes from other groups. For preserving external-dns IP addresses, the flag is `--preserve-existing-subnet-for-cmn external-dns`. WARNING: It is up to the user to compare pre-upgraded and post-upgraded SLS files for sanity. Specifically in the case of preserving external-dns values to prevent site-networking changes might result in NCN IP addresses overlapping during the upgrade process. This requires network subnetting expertise and EXPERT mode below.
+   1. One example would be the `external-dns` IP address used for DNS lookups of system resources from site DNS servers. Changes to `external-dns` often require changes to site resources with requisite process and timeframes from other groups. For preserving `external-dns` IP addresses, the flag is `--preserve-existing-subnet-for-cmn external-dns`. WARNING: It is up to the user to compare pre-upgraded and post-upgraded SLS files for sanity. Specifically, in the case of preserving `external-dns` values, to prevent site-networking changes that might result in NCN IP addresses overlapping during the upgrade process. This requires network subnetting expertise and EXPERT mode below.
    2. Another, mutually exclusive example is the need to preserve all NCN IP addresses related to the old CAN whilst migrating the new CMN. This preservation is not often needed as the transition of NCN IP addresses for the CAN-to-CMN is automatically handled during the upgrade. The flag to preserve CAN-to-CMN NCN IP addresses is mutually exclusive with other preservations and the flag is `--preserve-existing-subnet-for-cmn ncns`.
    3. Should no preservation flag be set, the default behavior is to recalculate every IP address on the existing CAN while migrating to the CMN. The behavior in this case is to calculate the subnet sizes based on number of devices (with a bit of spare room), while maximizing IP address pool sizes for (dynamic) services.
    4. An EXPERT mode of flags also exists whereby manually subnetted allocations can be assigned to the new CMN, bypassing several expectations, but not essential subnetting math. As a note for experts the "Remaining subnets" list from a run using `--preserve-existing-subnet-for-cmn` can be used as an aid in selecting subnets to override with `--cmn-subnet-override` or `--can-subnet-override` values and used to seed another run of the upgrader.
@@ -149,7 +149,7 @@ ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json 
                          --customer-highspeed-network 5 10.103.11.192/26
 ```
 
-- Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing external-dns entry.
+- Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing `external-dns` entry.
 
 ```bash
 ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
@@ -159,7 +159,7 @@ ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json 
                          --preserve-existing-subnet-for-cmn external-dns
 ```
 
-- NOTE: A detailed review of the migrated/upgraded data (using vimdiff or otherwise) for production systems and for systems which have many add-on components (UAN, login nodes, storage integration points, etc...) is strongly recommended. Particularly, ensure subnet reservations are correct to prevent any data mismatches.
+- NOTE: A detailed review of the migrated/upgraded data (using `vimdiff` or otherwise) for production systems and for systems which have many add-on components (UAN, login nodes, storage integration points, etc.) is strongly recommended. Particularly, ensure that subnet reservations are correct in order to prevent any data mismatches.
 
 Upload migrated SLS file to SLS service:
 
@@ -211,7 +211,7 @@ ncn-m001# export SW_ADMIN_PASSWORD=sw1tCH@DM1Np4s5w0rd
 ncn-m001# unset NEXUS_PASSWORD
 ```
 
-**`OPTIONAL:`** Customizations.yaml has been updated in this step. If [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
+**`OPTIONAL:`** `customizations.yaml` has been updated in this step. If [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
 clone a local working tree and commit appropriate changes to `customizations.yaml`.
 
 For example:
@@ -234,5 +234,3 @@ To prevent any possibility of losing Workload Manager configuration data or file
 <a name="continue_to_stage1"></a>
 
 ## Stage 0.7 - Continue to Stage 1
-
-Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).

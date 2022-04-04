@@ -1,7 +1,7 @@
 # Collect MAC Addresses for NCNs
 
 Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
-the actual MAC addresses for the management nodes can be collected. This process will include repetition of some 
+the actual MAC addresses for the management nodes can be collected. This process will include repetition of some
 of the steps done up to this point because `csi config init` will need to be run with the proper
 MAC addresses and some services will need to be restarted.
 
@@ -317,7 +317,7 @@ making a backup of them, in case they need to be examined at a later time.
 1. Check that IP addresses are set for each interface and investigate any failures.
 
   > Note that bond0.can0 is optional in CSM 1.2+
-  
+
     1. Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
 
        ```bash

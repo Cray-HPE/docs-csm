@@ -4,11 +4,11 @@ The management node image do not contain a default root password or default SSH 
 
 Use one of these methods to change or set the root pasword in the image.
 
-1. If the PIT node is booted, see
+* If the PIT node is booted, see
 [Change NCN Image Root Password and SSH Keys on PIT Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
 for more information.
 
-1. If the PIT node is not booted, see
+* If the PIT node is not booted, see
 [Change NCN Image Root Password and SSH Keys](Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 for more information.
 
@@ -18,7 +18,7 @@ role via a CFS session. The same root password from Vault will be applied anytim
 personalization including the CSM layer is run. If no password is added to Vault as in the
 procedure below, this Ansible role will skip any password updates.
 
-### New in CSM Release 1.2.0
+## New in CSM Release 1.2.0
 
 The location of the password secret in Vault has changed in CSM version 1.2. The
 previous location (`secret/csm/management_nodes root_password=...`) has been
@@ -27,7 +27,7 @@ the new location using the _Configure Root Password in Vault_ procedure below
 for it to be applied to the NCNs.
 
 <a name="configure_root_password_in_vault"></a>
-### Procedure: Configure Root Password in Vault
+## Procedure: Configure Root Password in Vault
 
 1. Generate a new password hash for the root user. Replace `PASSWORD` with the
    root password that will be used.
@@ -74,7 +74,7 @@ for it to be applied to the NCNs.
    the values in the Ansible role. See `roles/csm.password/README.md` in the
    repository for more information.
 
-### Procedure: Apply Root Password to NCNs (Standalone)
+## Procedure: Apply Root Password to NCNs (Standalone)
 
 Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to
 **only** change the root password on NCNs. This is a quick alternative to
@@ -88,6 +88,10 @@ procedure above.
 
    ```bash
    ncn# cat ncn-password-update-config.json
+   ```
+
+   Example output:
+   ```json
    {
      "layers": [
        {
@@ -98,6 +102,9 @@ procedure above.
        }
      ]
    }
+   ```
+
+   ```bash
    ncn# cray cfs configurations update ncn-password-update --file ./ncn-password-update-config.json
    ```
 
@@ -112,11 +119,11 @@ procedure above.
    configuration management repository has not changed. If the commit has
    changed, repeat this procedure from the beginning.
 
-### Procedure for Other Users
+## Procedure for Other Users
 
 The `csm.password` Ansible role supports setting passwords for non-root users.
 Make a copy of the `rotate-pw-mgmt-nodes.yml` Ansible playbook and modify the
 role variables to specify a different `password_username` and use that username
 when adding the hashed password to Vault as in the _Configure Root Password in Vault_
-above. Follow the procedure and then create a configuration layer using the new 
+above. Follow the procedure and then create a configuration layer using the new
 Ansible playbook and create a CFS session using that layer.

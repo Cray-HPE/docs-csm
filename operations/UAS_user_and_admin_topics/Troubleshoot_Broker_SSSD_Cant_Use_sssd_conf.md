@@ -161,7 +161,7 @@ While this problem will be resolved in an upcoming release of UAS, if this behav
 4. Apply this new configuration to Kubernetes:
 
    ```
-   ncn-m001# kubectl apply -f /tmp/uas-default-psp.yaml 
+   ncn-m001# kubectl apply -f /tmp/uas-default-psp.yaml
    ```
 
 5. Delete and re-create the offending Broker UAI(s) and they should come up and SSSD should run properly.
