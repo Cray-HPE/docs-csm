@@ -7,7 +7,7 @@
     ncn-m002# CSM_RELEASE=csm-1.2.0
    ```
 
-   - Internet Connected
+   - Internet connected:
 
      ```bash
      ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint [ENDPOINT]
