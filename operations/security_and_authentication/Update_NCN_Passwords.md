@@ -1,6 +1,6 @@
 # Set NCN User Passwords
 
-The management node image do not contain a default root password or default SSH keys.
+The management node images do not contain a default root password or default SSH keys.
 
 Use one of these methods to change or set the root pasword in the image.
 
