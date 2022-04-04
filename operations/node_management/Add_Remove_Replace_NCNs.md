@@ -205,6 +205,7 @@ ncn# echo $XNAME
       ```
 
       Expected output:
+
       ```json
       {
          "Port": 623,
@@ -213,7 +214,8 @@ ncn# echo $XNAME
       ```
 
    2. If IPMI is disabled, then enable IPMI:
-      ```bash
+
+      ```curl
       ncn# curl -k -u root:$IPMI_PASSWORD -X PATCH \
          -H 'Content-Type: application/json' \
          -d '{"IPMI": {"Port": 623, "ProtocolEnabled": true}}' \
@@ -221,7 +223,8 @@ ncn# echo $XNAME
       ```
 
       Expected output:
-      ```
+
+      ```json
       {
          "error": {
             "code": "iLO.0.10.ExtendedInfo",
@@ -236,7 +239,8 @@ ncn# echo $XNAME
       ```
 
    3. If IPMI was disabled, then restart the BMC:
-      ```bash
+
+      ```curl
       ncn# curl -k -u root:$IPMI_PASSWORD -X POST \
          -H 'Content-Type: application/json' \
          -d '{"ResetType": "GracefulRestart"}' \
@@ -244,6 +248,7 @@ ncn# echo $XNAME
       ```
 
       Expected output:
+
       ```json
       {
          "error": {
@@ -257,6 +262,7 @@ ncn# echo $XNAME
          }
       }
       ```
+
 <a name="add-ncn-procedure"></a>
 ### Add NCN Procedure
 
