@@ -28,7 +28,7 @@ switch(conf-if-eth1/1/1)#channel-group 10 mode active
 Show Commands to Validate Functionality
 
 ```
-switch# show interface port-channel 
+switch# show interface port-channel
 ```
 
 Expected Results

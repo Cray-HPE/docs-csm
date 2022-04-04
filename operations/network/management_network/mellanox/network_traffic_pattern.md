@@ -1,7 +1,7 @@
 # Network traffic pattern inside of the system
 
 ![](../../../../img/network/management_network/network_traffic_pattern.png)
- 
+
 Internal Networks:
 
 * Node Management Network (NMN) - Provides the internal control plane for systems management and jobs control.

@@ -1,6 +1,6 @@
 # Scenario A: Network Connection via Management Network
 
-The example here covers outside connections achieved with the management network. 
+The example here covers outside connections achieved with the management network.
 
 ### Summary
 

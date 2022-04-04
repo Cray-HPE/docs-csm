@@ -1,11 +1,11 @@
-# Cable diagnostics 
+# Cable diagnostics
 
 Cable plugin collects various information from the cables attached to the fabric ports.
 
 --get_cable_info	Gets cable info from the fabric ports.
 --cable_info_disconnected	Gets cable info on disconnected ports (the cable is attached only to the switch port). This option is applicable with the "get-cable-info" flag.
 
-Relevant Configuration 
+Relevant Configuration
 
 Example:
 
@@ -49,9 +49,9 @@ TX3 Power: 0.000 mW, -999.999 dBm
 TX4 Power: 0.000 mW, -999.999 dBm
 ```
 
-Expected Results 
+Expected Results
 
 * Step 1: You can enter diagnostics mode successfully
-* Step 2: You can test the cable and see the results in the CLI output 
+* Step 2: You can test the cable and see the results in the CLI output
 
 [Back to Index](../index.md)

@@ -38,7 +38,7 @@ Modify a Configuration Framework Service \(CFS\) configuration by specifying the
     ncn# cray cfs configurations update configurations-example \
     --file ./configurations-example.json --format json
     ```
-    
+
     Example output:
 
     ```

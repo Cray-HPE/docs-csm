@@ -79,7 +79,7 @@ The Cray EX User Access Node \(UAN\) recipe currently requires the Slingshot Dia
         ```
 
         Example output:
-        
+
         ```
         {
           "created": "2021-02-18T17:17:44.168655+00:00",

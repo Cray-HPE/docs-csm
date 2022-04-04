@@ -9,7 +9,7 @@ Sometimes there is no better way to figure out a problem with a UAI than to get 
 Here is an example session showing a `ps` command inside the container of a UAI by an administrator:
 
 1. List the UAIs.
-   
+
     ```
     ncn-m001-pit# cray uas admin uais list
     ```
@@ -53,7 +53,7 @@ Here is an example session showing a `ps` command inside the container of a UAI 
     ```
 
 1. Exec into the pod.
-   
+
     ```
     ncn-m001-pit# kubectl exec -it -n user uai-vers-4ebe1966-77b7c9c84f-xgqm4 -c uai-vers-4ebe1966 -- /bin/sh
     ```

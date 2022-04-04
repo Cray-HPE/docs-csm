@@ -2,9 +2,9 @@
 
 Verify the DNSMASQ config file matches what is configured on the switches.
 
-Here is a DNSMASQ config file for the Metal network (VLAN1). As you can see the router is 10.1.0.1, this has to match what the IP address is on the switches doing the routing for the MTL network.  
+Here is a DNSMASQ config file for the Metal network (VLAN1). As you can see the router is 10.1.0.1, this has to match what the IP address is on the switches doing the routing for the MTL network.
 
-This is most commonly on the spines.  
+This is most commonly on the spines.
 
 This configuration is commonly missed on the CSI input file.
 
@@ -36,7 +36,7 @@ dhcp-range=interface:bond0,10.1.1.33,10.1.1.233,10m
 
 Here is an example of what the Spine config should be.
 
-Aruba configuration: 
+Aruba configuration:
 
 ````
 sw-spine-001# show run int vlan 1
@@ -49,7 +49,7 @@ interface vlan1
     ip bootp-gateway 10.1.0.2
     ip helper-address 10.92.100.222
     exit
- 
+
 sw-spine-002# show run int vlan 1
 interface vlan1
     vsx-sync active-gateways

@@ -94,7 +94,7 @@ Hardware State Manager (HSM).
     ncn-m001# cray capmc get_power_cap_capabilities create –-nids NID_LIST --format json
     ```
     Return the min and max power limit settings for the node list and any
-    accelerators that are installed. 
+    accelerators that are installed.
     ```
     ncn-m001# cray capmc get_power_cap_capabilities create --nids 4 --format json
     {

@@ -57,7 +57,7 @@ For Legacy Mode user procedures:
     ```
     cray uas create OPTIONS
     ```
-    
+
     The following OPTIONS are available for use:
     * `--publickey <path>` - the path to a file containing the public SSH key to be used to talk to this UAI. This option is required and must specify a valid public key file name.
     * `--ports <port-list>` - a comma-separated list of TCP [port numbers to be opened on the newly created UAI](Create_a_UAI_with_Additional_Ports.md). This option is not required and will be overridden by a default UAI Class if a default UAI Class is configured.

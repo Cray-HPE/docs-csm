@@ -531,7 +531,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
     ```
 
 2. Scale the VCS service to 0.
-    
+
     ```bash
     ncn-w001# SERVICE=gitea-vcs
     ncn-w001# SERVICELABEL=vcs
@@ -590,7 +590,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
 
     Based off the three `gitea-vcs-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
-    ```bash 
+    ```bash
     ncn-w001# for secret in postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials gitea.gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
 
     secret postgres.gitea-vcs-postgres.credentials username & password: postgres ABCXYZ
@@ -612,7 +612,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
     ALTER ROLE
     postgres=#
     ```
-  
+
   - Re-create secrets in Kubernetes.
 
     If the Postgres secrets were auto-backed up, then re-create the secrets in Kubernetes.
@@ -624,11 +624,11 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
 
     ncn-w001# kubectl delete secret postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials -n services
 
-    ncn-w001# kubectl apply -f ${MANIFEST} 
+    ncn-w001# kubectl apply -f ${MANIFEST}
     ```
 
 8. Restart the Postgres cluster.
-     
+
     ```bash
     ncn-w001# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
 
@@ -660,7 +660,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
 
 #### Capsules Warehouse Server
 
-In the event that the Capsules Warehouse Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists. 
+In the event that the Capsules Warehouse Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists.
 
 1. Copy the database dump to an accessible location.
 
@@ -724,7 +724,7 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
     ```
 
 2. Scale the capsules-warehouse-server service to 0.
-    
+
     ```bash
     ncn-w001# CLIENT=capsules-warehouse-server
     ncn-w001# NAMESPACE=services
@@ -782,7 +782,7 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
 
     Based off the four `capsules-warehouse-server-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
-    ```bash 
+    ```bash
     ncn-w001# for secret in postgres.capsules-warehouse-server-postgres.credentials service-account.capsules-warehouse-server-postgres.credentials standby.capsules-warehouse-server-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
     ```
 
@@ -805,7 +805,7 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
     ALTER ROLE
     postgres=#
     ```
-  
+
   - Re-create secrets in Kubernetes.
 
     If the Postgres secrets were auto-backed up, then re-create the secrets in Kubernetes.
@@ -817,11 +817,11 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
 
     ncn-w001# kubectl delete secret postgres.capsules-warehouse-server-postgres.credentials service-account.capsules-warehouse-server-postgres.credentials standby.capsules-warehouse-server-postgres.credentials -n ${NAMESPACE}
 
-    ncn-w001# kubectl apply -f ${MANIFEST} 
+    ncn-w001# kubectl apply -f ${MANIFEST}
     ```
 
 8. Restart the Postgres cluster.
-     
+
     ```bash
     ncn-w001# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
 
@@ -875,7 +875,7 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
       someusername/a-preexisting-capsule
       someusername/another-preexisting-capsule
     ```
-    
+
 #### Capsules Dispatch Server
 
 The Capsules Dispatch Server can be restored in the same manner as the warehouse server by substituting the keyword `warehouse` with `dispatch`; however, the dispatch server maintains temporary information for running Capsules Environments. Therefore, restoring data to this service is not necessary. Using the analytics docs, you can instead cleanup existing jobs and skip this step.

@@ -43,7 +43,7 @@ View the existing Vault backups on the system and use a completed backup to perf
     vault-daily-backup-20210217020038   Completed   0        0          2021-02-17 02:00:38 +0000 UTC   29d       default            vault_cr=cray-vault
     vault-daily-backup-20210216020035   Completed   0        0          2021-02-16 02:00:35 +0000 UTC   28d       default            vault_cr=cray-vault
     vault-daily-backup-20210215020035   Completed   0        0          2021-02-15 02:00:35 +0000 UTC   27d       default            vault_cr=cray-vault
-    
+
     [...]
     ```
 

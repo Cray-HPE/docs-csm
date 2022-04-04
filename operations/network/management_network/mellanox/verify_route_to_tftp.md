@@ -1,16 +1,16 @@
 # Verify route to TFTP
 
-On BOTH Aruba switches we need a single route to the TFTP server 10.92.100.60 (your configuration may differ).  
+On BOTH Aruba switches we need a single route to the TFTP server 10.92.100.60 (your configuration may differ).
 
 This is needed because there are issues with Aruba ECMP hashing and TFTP traffic.
 
 ```
 sw-spine-002# show ip route 10.92.100.60
- 
+
 Displaying ipv4 routes selected for forwarding
- 
+
 '[x/y]' denotes [distance/metric]
- 
+
 10.92.100.60/32, vrf default, tag 0
     via  10.252.1.9,  [70/0],  bgp
 ```

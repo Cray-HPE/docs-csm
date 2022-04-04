@@ -31,7 +31,7 @@ This procedure requires admin privileges.
     ```
 
 1. Restart the down OSDs.
-   
+
    * **Option 1:**
 
      1. Restart the OSD utilizing `ceph orch`

@@ -9,7 +9,7 @@ A special use case is also included for the Content Projection Service \(CPS\) a
 ---
 **NOTE**
 
-Etcd Clusters can be rebuilt using the automation script or the manual procedure below. The automation script follows the same steps as the manual procedure. If the automation script fails at any step, continue rebuilding the cluster using the manual procedure. 
+Etcd Clusters can be rebuilt using the automation script or the manual procedure below. The automation script follows the same steps as the manual procedure. If the automation script fails at any step, continue rebuilding the cluster using the manual procedure.
 
 ---
 

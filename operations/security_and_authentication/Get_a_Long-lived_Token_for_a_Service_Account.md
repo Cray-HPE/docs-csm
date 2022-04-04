@@ -53,7 +53,7 @@ Refer to [https://www.keycloak.org/docs/latest/server\_admin/index.html\#\_offli
     - Replace the REFRESH\_TOKEN value with the string returned in the previous step
     - The grant\_type option is set to refresh\_token
     - The $CLIENT\_SECRET variable is set
-    
+
     To refresh the access token, use a grant\_type of refresh\_token and provide the client ID, client secret, and refresh token.
 
     ```bash

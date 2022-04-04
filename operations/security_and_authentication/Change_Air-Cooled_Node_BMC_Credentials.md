@@ -1,6 +1,6 @@
 # Change Air-Cooled Node BMC Credentials
 
-This procedure will use the System Configuration Service (SCSD) to change all air-cooled Node BMCs in the system to the same global credential. 
+This procedure will use the System Configuration Service (SCSD) to change all air-cooled Node BMCs in the system to the same global credential.
 
 ### Limitations
 

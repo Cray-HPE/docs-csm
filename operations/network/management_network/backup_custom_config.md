@@ -1,4 +1,4 @@
-# Backup Custom Config
+# Backup a Custom Configuration
 
 ## Prerequisites
 
@@ -36,8 +36,8 @@ log onto the switches and get the configs of the ports and the default route con
 
 ```
 sw-spine-001# show run int 1/1/36
-interface 1/1/36 
-    no shutdown 
+interface 1/1/36
+    no shutdown
     description to:CANswitch_cfcanb6s1-31:from:sw-25g01_x3000u39-j36
     ip address 10.101.15.142/30
     exit
@@ -50,8 +50,8 @@ system interface-group 3 speed 10g
 
 ```
 sw-spine-002# show run int 1/1/36
-interface 1/1/36 
-    no shutdown 
+interface 1/1/36
+    no shutdown
     description to:CANswitch_cfcanb6s1-46:from:sw-25g02_x3000u40-j36
     ip address 10.101.15.190/30
     exit
