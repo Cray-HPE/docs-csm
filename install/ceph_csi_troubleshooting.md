@@ -20,7 +20,7 @@ Verify that the ceph-csi requirements are in place.
       ncn-s001# ceph -s
       ```
       If it returns a connection error, then assume Ceph is not installed. See [Rerun Storage Node `cloud-init`](#rerun_storage_node_cloud-init).
-   
+
    1. Verify all post-Ceph-install tasks have run.
 
       Log in to `ncn-s001` and check `/etc/cray/ceph` for completed task files `ceph_k8s_initialized` and `csi_initialized`.

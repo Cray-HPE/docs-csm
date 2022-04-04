@@ -22,7 +22,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     ```
 
     Example output:
-    
+
     ```
     services cray-dhcp-kea-554698bb69-r9wwt          3/3 Running   0 13h
     services cray-dhcp-kea-postgres-0                2/2 Running   0 10d

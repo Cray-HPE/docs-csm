@@ -20,7 +20,7 @@ At times there will be problems with UAS. Usually this takes the form of errors 
     ```
 
 1. View the logs for the pods running UAS.
-   
+
     The logs are collected in the pods, and can be seen using the `kubectl logs` command on each of the pods. The pods produce a lot of debug logging in the form:
 
     ```

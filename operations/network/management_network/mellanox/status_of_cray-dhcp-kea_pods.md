@@ -1,6 +1,6 @@
 # Confirm the status of the cray-dhcp-kea pods/services
 
-Check if the kea DHCP services are running. 
+Check if the kea DHCP services are running.
 On `ncn-w001` or a worker/manager with `kubectl`, run:
 
 ```

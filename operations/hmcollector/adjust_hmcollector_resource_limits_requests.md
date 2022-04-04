@@ -146,7 +146,7 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
 4. Update `customizations.yaml` with the existing `cray-hms-hmcollector` resource limits and requests settings:
 
    Persist resource requests and limits from the cray-hms-hmcollector deployment:
-   
+
    ```bash
    ncn-m001# kubectl -n services get deployments cray-hms-hmcollector \
       -o jsonpath='{.spec.template.spec.containers[].resources}' | yq r -P - | \
@@ -154,7 +154,7 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
    ```
 
    Persist annotations manually added to `cray-hms-hmcollector` deployment:
-   
+
    ```bash
    ncn-m001# kubectl -n services get deployments cray-hms-hmcollector \
       -o jsonpath='{.spec.template.metadata.annotations}' | \
@@ -163,7 +163,7 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
    ```
 
    View the updated overrides added to `customizations.yaml`. If the value overrides look different to the sample output below then the resource limits and requests have been manually modified in the past.
-   
+
    ```bash
    ncn-m001# yq r ./customizations.yaml spec.kubernetes.services.cray-hms-hmcollector
    ```
@@ -200,7 +200,7 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
    ```
 
    To specify a non-default memory limit for the Istio proxy used by the `cray-hms-hmcollector` to pod annotation `sidecar.istio.io/proxyMemoryLimit` can added under `podAnnotations`. By default the Istio proxy memory limit is `1Gi`.
-   
+
    ```yaml
          cray-hms-hmcollector:
             podAnnotations:
@@ -240,14 +240,14 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
 <a name="redeploy-cray-hms-hmcollector"></a>
 ## Redeploy cray-hms-hmcollector with new resource limits and requests
 1. Determine the version of HM Collector:
-    
+
     ```bash
     ncn-m001# HMCOLLECTOR_VERSION=$(kubectl -n loftsman get cm loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-hms-hmcollector).version')
     ncn-m001# echo $HMCOLLECTOR_VERSION
     ```
 
 2. Create `hmcollector-manifest.yaml`:
-    
+
     ```bash
     ncn-m001# cat > hmcollector-manifest.yaml << EOF
     apiVersion: manifests/v1beta1
@@ -268,13 +268,13 @@ For reference, on a system with 4 fully populated liquid cooled cabinets the cra
    ```
 
 4. Merge `customizations.yaml` with `hmcollector-manifest.yaml`:
-    
+
     ```bash
     ncn-m001# manifestgen -c customizations.yaml -i ./hmcollector-manifest.yaml > ./hmcollector-manifest.out.yaml
     ```
 
 5. Redeploy the HM Collector helm chart:
-    
+
     ```bash
     ncn-m001# loftsman ship \
         --charts-repo https://packages.local/repository/charts \

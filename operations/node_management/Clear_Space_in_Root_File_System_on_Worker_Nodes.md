@@ -39,7 +39,7 @@ An NCN worker node has a full disk.
     ```bash
     ncn-w001# du -sh /var/lib/docker
     ```
-    
+
     Example output:
 
     ```

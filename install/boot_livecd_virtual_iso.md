@@ -72,7 +72,7 @@ Gigabyte BMCs allow for booting over HTTP.
    > **NOTE:** The Gigabyte URL appears to not allow certain characters and has a limit on path length. You may need to move or rename the ISO to a location with a smaller file name.
 
 1. Navigate to `Image Redirection` -> `Remote Images`.
-  
+
 1. Click on the `Start` button to start the Virtual ISO mount.
 
    ![Screen Shot of Gigabyte BMC Start](../img/bmc-virtual-media-start-gigabyte.png)

@@ -2,15 +2,15 @@
 
 The Internet Group Multicast Protocol (IGMP) is a communications protocol used by hosts and adjacent routers on IP networks to establish multicast group memberships. The host joins a multicast-group by sending a join request message towards the network router, and responds to queries sent from the network router by dispatching a join report.
 
-Relevant Configuration 
+Relevant Configuration
 
-Enable IGMP snooping globally. Run: 
+Enable IGMP snooping globally. Run:
 
 ```
 switch (config) # ip igmp snooping
 ```
 
-Enable IGMP snooping on a VLAN. Run: 
+Enable IGMP snooping on a VLAN. Run:
 
 ```
 switch (config) # vlan 2

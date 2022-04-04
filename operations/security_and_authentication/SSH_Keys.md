@@ -17,7 +17,7 @@ no keys are added to Vault as in the procedure below, this Ansible role will
 skip any updates.
 
 <a name="configure_root_keys_in_vault"></a>
-### Procedure: Configure Root SSH Keys in Vault
+## Procedure: Configure Root SSH Keys in Vault
 
 1. Generate a new SSH key pair for the root user. Use `ssh-keygen` to generate a
    a new pair or stage an existing pair as desired as per your security policies
@@ -47,7 +47,7 @@ skip any updates.
    cray-vault-0# vault write secret/csm/users/root ssh_private_key='...' ssh_public_key='...' [... other fields (see warning below) ...]
    cray-vault-0# vault read secret/csm/users/root
    cray-vault-0# exit
-   ncn# 
+   ncn#
    ```
 
    > ***WARNING***: The CSM instance of [HashiCorp Vault](HashiCorp_Vault.md) does
@@ -63,7 +63,7 @@ skip any updates.
    the values in the Ansible role. See `roles/csm.ssh_keys/README.md` in the
    repository for more information.
 
-### Procedure: Apply Root SSH Keys to NCNs (Standalone)
+## Procedure: Apply Root SSH Keys to NCNs (Standalone)
 
 Use the following procedure with the `rotate-ssh-keys-mgmt-nodes.yml` playbook to
 **only** change the root SSH keys on NCNs. This is a quick alternative to
@@ -77,6 +77,10 @@ procedure above.
 
    ```bash
    ncn# cat config.json
+   ```
+
+   Example output:
+   ```json
    {
      "layers": [
        {
@@ -87,6 +91,9 @@ procedure above.
        }
      ]
    }
+   ```
+
+   ```bash
    ncn# cray cfs configurations update ncn-root-keys-update --file ./config.json
    ```
 
@@ -101,7 +108,7 @@ procedure above.
    configuration management repository has not changed. If the commit has
    changed, repeat this procedure from the beginning.
 
-### Procedure for Other Users
+## Procedure for Other Users
 
 The `csm.ssh_key` Ansible role supports setting SSH keys for non-root users.
 Make a copy of the `rotate-ssh-keys-mgmt-nodes.yml` Ansible playbook and modify

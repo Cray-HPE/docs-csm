@@ -69,7 +69,7 @@ This procedure requires administrative privileges and will require at least two 
     ```
 
 1. In the second window, list your available drives on the node(s) where the OSDs are missing
-   
+
    The following example is utilizing ncn-s001. Ensure the correct host for the situation is used.
 
    ```bash
@@ -156,9 +156,9 @@ This procedure requires administrative privileges and will require at least two 
    ```
 
 1. Reset the pool quotas.
-   
+
    This step is only necessary when the cluster capacity has increased.
-   
+
    ```bash
    ncn-s00(1/2/3)# source /srv/cray/scripts/common/fix_ansible_inv.sh
    ncn-s00(1/2/3)# fix_inventory

@@ -1,28 +1,28 @@
-# Secure Shell (SSH) 
+# Secure Shell (SSH)
 
-SSH server enables an SSH client to make a secure and encrypted connection to a switch. Currently, switch supports SSH version 2.0 only. The user authentication mechanisms supported for SSH are public key authentication and password authentication (RADIUS, TACACS+ or locally stored password). Secure File Transfer Protocol (SFTP) provides file transfer. SSH Server and sftp-client via the copy command are supported for managing the router. 
+SSH server enables an SSH client to make a secure and encrypted connection to a switch. Currently, switch supports SSH version 2.0 only. The user authentication mechanisms supported for SSH are public key authentication and password authentication (RADIUS, TACACS+ or locally stored password). Secure File Transfer Protocol (SFTP) provides file transfer. SSH Server and sftp-client via the copy command are supported for managing the router.
 
 ## Configuration Commands
 
-Configure SSH authentication: 
+Configure SSH authentication:
 
 ```text
 switch(config)# ssh password-authentication
 ```
 
-Generate SSH server key: 
+Generate SSH server key:
 
 ```text
 switch(config)# ssh host-key <rsa [bits 2048]|ecdsa CURVE|ed25519>
 ```
 
-Enable SSH on the VRF: 
+Enable SSH on the VRF:
 
 ```text
 switch(config)# ssh server vrf <default|mgmt|VRF>
 ```
 
-Configure SSH options: 
+Configure SSH options:
 
 ```text
 switch(config)# ssh certified-algorithms-only
@@ -30,13 +30,13 @@ switch(config)# ssh maximum-auth-attempts VALUE
 switch(config)# ssh known-host remove <all|IP-ADDR>
 ```
 
-Show commands to validate functionality:  
+Show commands to validate functionality:
 
 ```text
 switch# show ssh server [vrf VRF|all-vrfs]
 ```
 
-## Example Output 
+## Example Output
 
 ```text
 switch# show ssh server all-vrfs
@@ -58,7 +58,7 @@ MACs      :  umac-64-etm@openssh.com,umac-128-etm@openssh.com,
              hmac-sha2-256,hmac-sha2-512,hmac-sha1
 ```
 
-## Expected Results 
+## Expected Results
 
 1. Administrators can create the user account
 2. Administrators can generate working SSH keys
