@@ -3,20 +3,16 @@
 The following is a high-level overview of the non-compute node \(NCN\) reboot workflow:
 
 - Run the NCN pre-reboot checks and procedures:
-  - Ensure `ncn-m001` is not running in "LiveCD" or install mode
-  - Check the `metal.no-wipe` settings for all NCNs
-  - Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions
-  - [Validate the current boot order](../../background/ncn_boot_workflow.md#determine-the-current-boot-order) (or [specify the boot order](../../background/ncn_boot_workflow.md#set-boot-order))
+   - Ensure `ncn-m001` is not running in "LiveCD" or install mode
+   - Check the `metal.no-wipe` settings for all NCNs
+   - Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions
+   - [Validate the current boot order](../../background/ncn_boot_workflow.md#determine-the-current-boot-order) (or [specify the boot order](../../background/ncn_boot_workflow.md#set-boot-order))
 - Run the rolling NCN reboot procedure:
-  - Loop through reboots on storage nodes, worker nodes, and master nodes, where each boot consists of the following workflow:
-
-    - Establish console session with node to reboot
-
-    - Execute a Linux graceful shutdown or power off/on sequence to the node to allow it to boot up to completion
-
-    - Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN
-
-    - Disconnect console session with the node that was rebooted
+   - Loop through reboots on storage nodes, worker nodes, and master nodes, where each boot consists of the following workflow:
+      - Establish console session with node to reboot
+      - Execute a Linux graceful shutdown or power off/on sequence to the node to allow it to boot up to completion
+      - Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN
+      - Disconnect console session with the node that was rebooted
 - Re-run all platform health checks, including checks on BGP peering sessions
 
 The time duration for this procedure \(if health checks are being executed in between each boot, as recommended\) could take between two to four hours for a system with nine management nodes.
@@ -107,7 +103,7 @@ The `kubectl` command is installed.
        cray cfs components update $xname --enabled False --error-count 0
    done
    ```
-   This will leave the nodes in a disabled state in CFS.  CFS will automatically
+   This will leave the nodes in a disabled state in CFS. CFS will automatically
    re-enable them when they reboot, this is just so that CFS does not immediately
    start retrying configuration against the failed node.
 
