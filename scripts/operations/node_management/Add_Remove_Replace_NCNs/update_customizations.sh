@@ -47,7 +47,7 @@ yq merge -a overwrite -xP -i customizations.yaml <(echo "$storage_ips" | yq pref
 master_ips=$(curl --fail -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks/NMN | 
     jq '[.ExtraProperties.Subnets[] |  select(.Name == "bootstrap_dhcp").IPReservations[] | select(.Name | startswith("ncn-m")).IPAddress] | sort')
 
-yq merge -a overwrite -xP -i customizations.yaml <(echo "$storage_ips" | yq prefix -P - spec.network.netstaticips.nmn_ncn_masters)
+yq merge -a overwrite -xP -i customizations.yaml <(echo "$master_ips" | yq prefix -P - spec.network.netstaticips.nmn_ncn_masters)
 
 echo "Original customizations.yaml is located at $tmp_dir/customizations.original.yaml"
 echo "Updated customizations.yaml is located at $tmp_dir/customizations.yaml"

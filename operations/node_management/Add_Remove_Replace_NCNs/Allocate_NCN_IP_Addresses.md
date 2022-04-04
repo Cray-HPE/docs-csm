@@ -104,4 +104,4 @@ This procedure will perform an verify the following:
         HMN     | 10.254.1.21
     ```
 
-Proceed to the next step to [Add Switch Config](Add_Switch_Config.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
+Proceed to the next step to [Add Switch Config](Add_Switch_Config.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
