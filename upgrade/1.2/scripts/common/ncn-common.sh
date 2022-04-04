@@ -30,6 +30,17 @@ trap 'err_report' ERR
 touch /etc/cray/upgrade/csm/myenv
 . /etc/cray/upgrade/csm/myenv
 
+if [[ -z ${LOG_FILE} ]]; then
+    export LOG_FILE="$(pwd)/output.log"
+    echo
+    echo
+    echo " ************"
+    echo " *** NOTE ***"
+    echo " ************"
+    echo "LOG_FILE is not specified; use default location: ${LOG_FILE}"
+    echo
+fi
+
 # make an array of all the csm versions that are installed
 IFS=$'\n' \
   read -r -d '' \
@@ -76,7 +87,9 @@ function drain_node() {
    state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
    if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
+      {
       csi automate ncn kubernetes --action delete-ncn --ncn ${target_ncn} --kubeconfig /etc/kubernetes/admin.conf
+      } >> ${LOG_FILE} 2>&1
 
       record_state "${state_name}" ${target_ncn}
       echo
@@ -86,6 +99,7 @@ function drain_node() {
 }
 
 function ssh_keygen_keyscan() {
+    set +e
     local target_ncn ncn_ip known_hosts
     known_hosts="/root/.ssh/known_hosts"
     sed -i 's@pdsh.*@@' $known_hosts
@@ -99,8 +113,10 @@ function ssh_keygen_keyscan() {
     [ $? -ne 0 ] && return 1
     ssh-keygen -R "${ncn_ip}" -f "${known_hosts}" > /dev/null 2>&1
     [ $? -ne 0 ] && return 1
-    ssh-keyscan -H "${target_ncn},${ncn_ip}" >> "${known_hosts}"
-    return $?
+    ssh-keyscan -H "${target_ncn},${ncn_ip}" >> "${known_hosts}"  > /dev/null 2>&1
+    res=$?
+    set -e
+    return $res
 }
 
 function wait_for_kubernetes() {
@@ -109,6 +125,7 @@ function wait_for_kubernetes() {
   state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
   if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
+      {
       set +e
       echo "waiting for k8s: $target_ncn ..."
       until csi automate ncn kubernetes --action is-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
@@ -118,6 +135,7 @@ function wait_for_kubernetes() {
       # Restore set -e
       set -e
       echo "$target_ncn joined k8s"
+      } >> ${LOG_FILE} 2>&1
 
       record_state "${state_name}" ${target_ncn}
   else
