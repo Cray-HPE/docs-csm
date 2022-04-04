@@ -280,11 +280,11 @@ To adjust the SNMP credentials, perform the following tasks:
 
 1. Update the default credentials specified in the customizations.yaml file.
 
-   * See [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md)
+   * See [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
 
 2. Update the credentials actively being used for existing leaf switches.
 
-   * See [Change SNMP Credentials on Leaf Switches](Change_SNMP_Credentials_on_Leaf_Switches.md)
+   * See [Change SNMP Credentials on Leaf BMC Switches](Change_SNMP_Credentials_on_Leaf_BMC_Switches.md)
 
 
 
