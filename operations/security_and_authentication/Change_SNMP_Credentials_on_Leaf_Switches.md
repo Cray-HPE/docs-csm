@@ -56,11 +56,34 @@ This procedure changes the SNMP credentials on management leaf switches in the s
         sw-leaf-001# exit
         ```
 
-3.  Update Vault with new SNMP credentials:
+3.  Set environment variables containing the new SNMP credentials:
+    > `read -s` is used to prevent the password from appearing in the command history.
+
+    1.  Set the SNMP auth password environment variable:
+        ```bash
+        ncn-m001# read -s SNMP_AUTH_PASS 
+        ncn-m001# echo $SNMP_AUTH_PASS
+        ```
+
+        Expected output:
+        ```
+        foobar01
+        ```
+
+    2.  Set the SNMP priv password environment variable:
+        ```bash
+        ncn-m001# read -s SNMP_PRIV_PASS
+        ncn-m001# echo $SNMP_PRIV_PASS
+        ```
+
+        Expected output:
+        ```
+        foobar02
+        ```
+
+4.  Update Vault with new SNMP credentials:
 
     ```bash
-    ncn-m001# SNMP_AUTH_PASS=foobar01
-    ncn-m001# SNMP_PRIV_PASS=foobar02
     ncn-m001# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
     ncn-m001# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
     ```
@@ -89,20 +112,20 @@ This procedure changes the SNMP credentials on management leaf switches in the s
         done
         ```
 
-4.  Restart the River Endpoint Discovery Service (REDS) to pickup the new SNMP credentials:
+5.  Restart the River Endpoint Discovery Service (REDS) to pickup the new SNMP credentials:
 
     ```bash
     ncn-m001# kubectl -n services rollout restart deployment cray-reds
     ncn-m001# kubectl -n services rollout status deployment cray-reds
     ```
 
-5.  Wait for REDS to initialize itself:
+6.  Wait for REDS to initialize itself:
 
     ```bash
     ncn-m001# sleep 2m
     ```
 
-6.  Verify REDS was able to communicate with the leaf switches with the updated credentials:
+7.  Verify REDS was able to communicate with the leaf switches with the updated credentials:
 
     Determine the name of the REDS pods:
 
