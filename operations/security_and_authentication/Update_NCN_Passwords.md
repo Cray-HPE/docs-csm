@@ -3,7 +3,7 @@
 The management nodes deploy with a default password in the image, so it is a recommended best
 practice for system security to change the root password in the image so that it is
 not the documented default password. In addition to the root password in the image, NCN
-personalization should be used to change the password as part of post-boot CFS.  The password
+personalization should be used to change the password as part of post-boot CFS. The password
 in the image should be used when console access is desired during the network boot of a management
 node that is being rebuilt, but this password should be different than the one stored in Vault
 that is applied by CFS during post-boot NCN personalization to change the on-disk password. Once
