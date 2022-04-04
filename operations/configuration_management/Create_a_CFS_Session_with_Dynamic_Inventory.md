@@ -9,7 +9,7 @@ ncn# cray cfs sessions create --name example \
 
 Example output:
 
-```
+```json
 {
   "ansible": {
     "config": "cfs-default-ansible-cfg",
