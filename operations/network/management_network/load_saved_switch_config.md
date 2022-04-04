@@ -78,7 +78,7 @@ This procedure needs to be done on all mgmt switches.
 
 1. View the configuration files.
    
-    Ensure that the proper checkpoints exist. In this example we will be using `CSM1_0` and `CSM1_2`
+    Ensure that the proper checkpoints exist. `CSM1_0` and `CSM1_2` are used in this example.
 
     ```
     sw-spine-001 [standalone: master] (config) # show configuration files
