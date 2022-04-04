@@ -8,8 +8,8 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 ### Step 1 - Open and Watch the console for the node being rebuilt
 
-1. Login to a second session to use it to watch the console using the instructions at the link below:
-
+1. Login to a second session to use it to watch the console using the instructions at the link below: 
+   
    ***Please open this link in a new tab or page*** [Log in to a Node Using ConMan](../../conman/Log_in_to_a_Node_Using_ConMan.md)
 
    The first session will be needed to run the commands in the following Rebuild Node steps.
@@ -242,12 +242,4 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
     ncn-m001# ip a show lan0
     ```
 
-### Step 9 - Validate the node
-
-Follow the validation steps in the section for the node type that was added:
-
-- [Worker node](Add_Worker_Node_Validation.md)
-- [Storage node](Add_Storage_Node_Validation.md)
-- [Master node](Add_Master_Node_Validation.md)
-
-Proceed to the next step to [Redeploy Services](Redeploy_Services.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
+Proceed to the next step to [Redeploy Services](Redeploy_Services.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.

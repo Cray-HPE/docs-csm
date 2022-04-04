@@ -6,7 +6,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
 
 ## Procedure
 
-**IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace.md#remove-ncn-prerequisites) 
+**IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#remove-ncn-prerequisites) 
 
 - [Remove Role](#remove-roles)
   - [Master node](#master-node-remove-roles)
@@ -210,7 +210,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
 
 #### Step 1 - Drain the node to clear any pods running on the node.
 
-**IMPORTANT:** The following command will cordon and drain the node.
+**IMPORTANT:** The following command will cordon and drain the node. 
 
 Run the following:
 
@@ -436,4 +436,4 @@ Once the wipe of the drives is complete; proceed to [power off the node](#power-
 
    * Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing any further commands.
 
-Proceed to the next step to [Remove NCN Data](Remove_NCN_Data.md) or return to the main [Add, Remove, Replace or Move NCNs](Add_Remove_Replace_NCNs.md) page.
+Proceed to the next step to [Remove NCN Data](Remove_NCN_Data.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
