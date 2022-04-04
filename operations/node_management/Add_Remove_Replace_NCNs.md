@@ -18,7 +18,7 @@ The following workflows are available:
 - [Replace or Move Worker, Storage or Master NCNs](#replace-worker-storage-master)
 
 <a name="prerequisites"></a>
-### Prerequisites
+## Prerequisites
 
 The system is fully installed and has transitioned off of the LiveCD.
 
@@ -33,61 +33,109 @@ The latest docs-csm RPM has been installed on the master nodes.
    ncn-m# ./ncn_add_pre-req.py 
    ```
 
-   1. Script will ask 3 questions:
+   1. Script the following question
 
-      1. How many NCNs would you like to remove?  Do not include NCNs to be add or moved.
-
-      2. How many NCNs would you like to move? Do not include NCNs to be add or remove.
-
-      3. How many NCNs would you like to add? Do not include NCNs to be removed or moved.
+      1. How many NCNs would you like to add? Do not include NCNs to be removed or moved.
 
    Example output: 
 
    ```text
-   The prerequisite script prepares NCNs for removal, move and add.
+    The prerequisite script prepares adding NCNs by adjusting SLS network configurations.
 
-   Please enter answer as an integer.
-   1. How many NCNs would you like to remove?  Do not include NCNs to be add or moved.
-   0
 
-   Please enter answer as an integer.
-   2. How many NCNs would you like to move? Do not include NCNs to be add or remove.
-   0
+    Please enter answer as an integer.
+    How many NCNs would you like to add? Do not include NCNs to be removed or moved.
+    10
 
-   Please enter answer as an integer.
-   3. How many NCNs would you like to add? Do not include NCNs to be removed or moved.
-   1
+    You are about to make DESTRUCTIVE changes to the system and will need to restart DVS.
 
-   You are about to make DESTRUCTIVE changes to the system and will need to restart DVS.
-   
-   If you are sure you want to proceed.  Please type: PROCEED
+    If you are sure you want to proceed.  Please type: PROCEED
 
-   If you want to stop.  Type: exit or press ctrl-c
+    If you want to stop.  Type: exit or press ctrl-c
 
-   PROCEED
+    PROCEED
 
-   Checking NMN.
-   last_reserved_ip: 10.252.1.12    start_dhcp_pool:10.252.1.20
-   The space between last_reserved_ip and start_dhcp_pool is 8 IP.
+    Checking HMN.
+    last_reserved_ip: 10.254.1.20    start_dhcp_pool:10.254.1.26
+    The space between last_reserved_ip and start_dhcp_pool is 6 IP.
 
-   Checking MTL.
-   last_reserved_ip: 10.1.1.10    start_dhcp_pool:10.1.1.17
-   The space between last_reserved_ip and start_dhcp_pool is 7 IP.
+    There is not enough static IP space to add an NCN.Adjusting DHCP pool start.
+    {'HMN': {'10.254.1.33', '10.254.1.35', '10.254.1.36', '10.254.1.38', '10.254.1.34', '10.254.1.39', '10.254.1.22', '10.254.1.29', '10.254.1.40', '10.254.1.27', '10.254.1.21', '10.254.1.28', '10.254.1.26', '10.254.1.30', '10.254.1.31', '10.254.1.32', '10.254.1.25', '10.254.1.24', '10.254.1.23', '10.254.1.37'}}
 
-   Checking CAN.
-   last_reserved_ip: 10.102.4.14    start_dhcp_pool:10.102.4.22
-   The space between last_reserved_ip and start_dhcp_pool is 8 IP.
+    add_ncn_count: 10
+    ip_dhcp_pool_start:
+    {'MTL': '10.1.1.17', 'NMN': '10.252.1.20', 'CAN': '10.102.4.22', 'HMN': '10.254.1.26'}
+    new_ip_dhcp_pool_start: 
+    {'HMN': '10.254.1.47'}
 
-   Checking HMN.
-   last_reserved_ip: 10.254.1.20    start_dhcp_pool:10.254.1.26
-   The space between last_reserved_ip and start_dhcp_pool is 6 IP.
 
-   Please restart DVS and rebooting the following nodes:["x3000c0s1b0n0", "x3000c0s19b3", "x3000c0s19b1n0", "x3000c0s19b3n0"]
-   prerequisite to prepare NCNs for removal, move and add
-   Network expansion COMPLETED
-   Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-03-31_19-53-49
+    Checking CAN.
+    last_reserved_ip: 10.102.4.14    start_dhcp_pool:10.102.4.22
+    The space between last_reserved_ip and start_dhcp_pool is 8 IP.
 
-   Restarting cray-dhcp-kea
+    There is not enough static IP space to add an NCN.Adjusting DHCP pool start.
+    {'HMN': {'10.254.1.33', '10.254.1.35', '10.254.1.36', '10.254.1.38', '10.254.1.34', '10.254.1.39', '10.254.1.22', '10.254.1.29', '10.254.1.40', '10.254.1.27', '10.254.1.21', '10.254.1.28', '10.254.1.26', '10.254.1.30', '10.254.1.31', '10.254.1.32', '10.254.1.25', '10.254.1.24', '10.254.1.23', '10.254.1.37'}, 'CAN': {'10.102.4.23', '10.102.4.15', '10.102.4.16', '10.102.4.24', '10.102.4.19', '10.102.4.21', '10.102.4.20', '10.102.4.17', '10.102.4.22', '10.102.4.18'}}
+
+    add_ncn_count: 10
+    ip_dhcp_pool_start:
+    {'MTL': '10.1.1.17', 'NMN': '10.252.1.20', 'CAN': '10.102.4.22', 'HMN': '10.254.1.26'}
+    new_ip_dhcp_pool_start: 
+    {'HMN': '10.254.1.47', 'CAN': '10.102.4.33'}
+
+
+    Checking MTL.
+    last_reserved_ip: 10.1.1.10    start_dhcp_pool:10.1.1.17
+    The space between last_reserved_ip and start_dhcp_pool is 7 IP.
+
+    There is not enough static IP space to add an NCN.Adjusting DHCP pool start.
+    {'HMN': {'10.254.1.33', '10.254.1.35', '10.254.1.36', '10.254.1.38', '10.254.1.34', '10.254.1.39', '10.254.1.22', '10.254.1.29', '10.254.1.40', '10.254.1.27', '10.254.1.21', '10.254.1.28', '10.254.1.26', '10.254.1.30', '10.254.1.31', '10.254.1.32', '10.254.1.25', '10.254.1.24', '10.254.1.23', '10.254.1.37'}, 'CAN': {'10.102.4.23', '10.102.4.15', '10.102.4.16', '10.102.4.24', '10.102.4.19', '10.102.4.21', '10.102.4.20', '10.102.4.17', '10.102.4.22', '10.102.4.18'}, 'MTL': {'10.1.1.16', '10.1.1.18', '10.1.1.20', '10.1.1.12', '10.1.1.17', '10.1.1.13', '10.1.1.19', '10.1.1.15', '10.1.1.14', '10.1.1.11'}}
+
+    add_ncn_count: 10
+    ip_dhcp_pool_start:
+    {'MTL': '10.1.1.17', 'NMN': '10.252.1.20', 'CAN': '10.102.4.22', 'HMN': '10.254.1.26'}
+    new_ip_dhcp_pool_start: 
+    {'HMN': '10.254.1.47', 'CAN': '10.102.4.33', 'MTL': '10.1.1.28'}
+
+
+    Checking NMN.
+    last_reserved_ip: 10.252.1.12    start_dhcp_pool:10.252.1.20
+    The space between last_reserved_ip and start_dhcp_pool is 8 IP.
+
+    There is not enough static IP space to add an NCN.Adjusting DHCP pool start.
+    {'HMN': {'10.254.1.33', '10.254.1.35', '10.254.1.36', '10.254.1.38', '10.254.1.34', '10.254.1.39', '10.254.1.22', '10.254.1.29', '10.254.1.40', '10.254.1.27', '10.254.1.21', '10.254.1.28', '10.254.1.26', '10.254.1.30', '10.254.1.31', '10.254.1.32', '10.254.1.25', '10.254.1.24', '10.254.1.23', '10.254.1.37'}, 'CAN': {'10.102.4.23', '10.102.4.15', '10.102.4.16', '10.102.4.24', '10.102.4.19', '10.102.4.21', '10.102.4.20', '10.102.4.17', '10.102.4.22', '10.102.4.18'}, 'MTL': {'10.1.1.16', '10.1.1.18', '10.1.1.20', '10.1.1.12', '10.1.1.17', '10.1.1.13', '10.1.1.19', '10.1.1.15', '10.1.1.14', '10.1.1.11'}, 'NMN': {'10.252.1.21', '10.252.1.14', '10.252.1.19', '10.252.1.18', '10.252.1.16', '10.252.1.15', '10.252.1.13', '10.252.1.22', '10.252.1.20', '10.252.1.17'}}
+
+    add_ncn_count: 10
+    ip_dhcp_pool_start:
+    {'MTL': '10.1.1.17', 'NMN': '10.252.1.20', 'CAN': '10.102.4.22', 'HMN': '10.254.1.26'}
+    new_ip_dhcp_pool_start: 
+    {'HMN': '10.254.1.47', 'CAN': '10.102.4.33', 'MTL': '10.1.1.28', 'NMN': '10.252.1.31'}
+
+    2022-04-01 21:21:08,859 - __main__ - WARNING - Deleting {"ID": "a4bf013efa5d", "MACAddress": "a4:bf:01:3e:fa:5d", "IPAddress": []} from SMD EthernetInterfaces.
+    2022-04-01 21:21:08,859 - __main__ - WARNING - Deleting 10.254.1.39 from kea active leases.
+    2022-04-01 21:21:08,930 - __main__ - WARNING - Deleting {"ID": "a4bf0138ed46", "MACAddress": "a4:bf:01:38:ed:46", "IPAddress": []} from SMD EthernetInterfaces.
+    2022-04-01 21:21:08,931 - __main__ - WARNING - Deleting 10.254.1.29 from kea active leases.
+    2022-04-01 21:21:09,001 - __main__ - WARNING - Deleting {"ID": "a4bf013ef0c6", "MACAddress": "a4:bf:01:3e:f0:c6", "IPAddress": []} from SMD EthernetInterfaces.
+    2022-04-01 21:21:09,001 - __main__ - WARNING - Deleting 10.254.1.27 from kea active leases.
+    2022-04-01 21:21:09,067 - __main__ - WARNING - Deleting {"ID": "a4bf01656337", "MACAddress": "a4:bf:01:65:63:37", "IPAddress": []} from SMD EthernetInterfaces.
+    2022-04-01 21:21:09,068 - __main__ - WARNING - Deleting 10.254.1.28 from kea active leases.
+    2022-04-01 21:21:09,117 - __main__ - WARNING - Deleting {"ID": "a4bf01656854", "MACAddress": "a4:bf:01:65:68:54", "IPAddress": []} from SMD EthernetInterfaces.
+    2022-04-01 21:21:09,118 - __main__ - WARNING - Deleting 10.254.1.26 from kea active leases.
+    2022-04-01 21:21:09,229 - __main__ - WARNING - Deleting {"ID": "a4bf013eeb53", "MACAddress": "a4:bf:01:3e:eb:53", "IPAddress": []} from SMD EthernetInterfaces.
+    2022-04-01 21:21:09,229 - __main__ - WARNING - Deleting 10.254.1.25 from kea active leases.
+    2022-04-01 21:21:09,327 - __main__ - WARNING - Deleting {"ID": "a4bf013edd72", "MACAddress": "a4:bf:01:3e:dd:72", "IPAddress": []} from SMD EthernetInterfaces.
+    2022-04-01 21:21:09,327 - __main__ - WARNING - Deleting 10.254.1.37 from kea active leases.
+    2022-04-01 21:21:09,703 - __main__ - WARNING - Deleting {"ID": "a4bf013edd6e", "MACAddress": "a4:bf:01:3e:dd:6e", "IPAddress": []} from SMD EthernetInterfaces.
+    2022-04-01 21:21:09,703 - __main__ - WARNING - Deleting 10.252.1.21 from kea active leases.
+    2022-04-01 21:21:09,869 - __main__ - WARNING - Deleting {"ID": "a4bf013ef0c2", "MACAddress": "a4:bf:01:3e:f0:c2", "IPAddress": []} from SMD EthernetInterfaces.
+    2022-04-01 21:21:09,870 - __main__ - WARNING - Deleting 10.252.1.22 from kea active leases.
+    2022-04-01 21:21:09,934 - __main__ - WARNING - Deleting {"ID": "a4bf013eeb4f", "MACAddress": "a4:bf:01:3e:eb:4f", "IPAddress": []} from SMD EthernetInterfaces.
+    2022-04-01 21:21:09,935 - __main__ - WARNING - Deleting 10.252.1.20 from kea active leases.
+    Please restart DVS and rebooting the following nodes before proceeding to the next step.:["x3000c0s21b4", "x3000c0s19b0", "x3000c0s21b3", "x3000c0s21b1", "x3000c0s21b2", "x3000c0s21b2n0", "x3000c0s21b3n0", "x3000c0s21b1n0"]
+    prerequisite to prepare NCNs for removal, move and add
+    Network expansion COMPLETED
+    Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-04-01_21-21-04
+
+    Restarting cray-dhcp-kea
    ```
 
    2. When adding new NCNs, there will be network configuration changes that will impact changing IPs on computes. __**That will require DVS restart to update the IPs in the DVS node_map.**__
@@ -95,10 +143,10 @@ The latest docs-csm RPM has been installed on the master nodes.
    3. `ncn_add_pre-req.py` will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted. See example below:
 
       ```bash
-      Please restart DVS and rebooting the following nodes:["x3000c0s1b0n0", "x3000c0s19b3", "x3000c0s19b1n0", "x3000c0s19b3n0"]
+      Please restart DVS and rebooting the following nodes before proceeding to the next step.:["x3000c0s21b4", "x3000c0s19b0", "x3000c0s21b3", "x3000c0s21b1", "x3000c0s21b2", "x3000c0s21b2n0", "x3000c0s21b3n0", "x3000c0s21b1n0"]
       prerequisite to prepare NCNs for removal, move and add
       Network expansion COMPLETED
-      Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-02-25_22-59-06
+      Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-04-01_21-21-04
       ncn-m# 
       ```
 
@@ -137,7 +185,8 @@ ncn# echo $XNAME
    ```
 
    Example output:
-   ```bash
+
+   ```text
    ==== Data ====
    Key     Value
    ---     -----
@@ -206,7 +255,7 @@ ncn# echo $XNAME
                }
             ]
          }
-         }
+      }
       ```
 <a name="add-ncn-procedure"></a>
 ### Add NCN Procedure
