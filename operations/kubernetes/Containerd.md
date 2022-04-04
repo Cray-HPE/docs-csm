@@ -40,7 +40,7 @@ In older versions of containerd, there are cases where the `/var/lib/containerd`
 If the containerd service is restarted on a worker node, this may cause the sonar-jobs-watcher pod running on that worker node to fail when attempting to cleanup unneeded containers. For example:
 
 1. Restart containerd.
-    
+
     ```bash
     ncn-w001# systemctl restart containerd
     ```
@@ -52,7 +52,7 @@ If the containerd service is restarted on a worker node, this may cause the sona
     ```
 
     Example output:
-    
+
     ```
     sonar-jobs-watcher-8z6th   1/1     Running   0          95d   10.42.0.6    ncn-w001   <none>           <none>
     ```
@@ -60,21 +60,21 @@ If the containerd service is restarted on a worker node, this may cause the sona
 1. View the logs for the sonar-jobs-watcher pod.
 
     ```
-    ncn-w001# kubectl logs sonar-jobs-watcher-8z6th -n services 
+    ncn-w001# kubectl logs sonar-jobs-watcher-8z6th -n services
     ```
 
     Example output:
-    
+
     ```
     Found pod cray-dns-unbound-manager-1631116980-h69h6 with restartPolicy 'Never' and container 'manager' with status 'Completed'
     All containers of job pod cray-dns-unbound-manager-1631116980-h69h6 has completed. Killing istio-proxy (1c65dacb960c2f8ff6b07dfc9780c4621beb8b258599453a08c246bbe680c511) to allow job to complete
     time="2021-09-08T16:44:18Z" level=fatal msg="failed to connect: failed to connect, make sure you are running as root and the runtime has been started: context deadline exceeded"
     ```
 
-    When this occurs, pods that are running on the node where containerd was restarted may remain in a `NotReady` state and never complete. 
+    When this occurs, pods that are running on the node where containerd was restarted may remain in a `NotReady` state and never complete.
 
 1. Check if pods are stuck in a `NotReady` state.
-   
+
     ```bash
     ncn-w001 # kubectl get pods -o wide -A | cray-dns-unbound-manager
     ```
@@ -85,8 +85,8 @@ If the containerd service is restarted on a worker node, this may cause the sona
     services      cray-dns-unbound-manager-1631116980-h69h6             1/2   NotReady  0     10m   10.42.0.100  ncn-w001  <none>      <none>
     ```
 
-1. If pods are stuck in a `NotReady` state, restart the sonar-jobs-watcher daemonset to resolve the issue. 
-   
+1. If pods are stuck in a `NotReady` state, restart the sonar-jobs-watcher daemonset to resolve the issue.
+
     Once the sonar-jobs-watcher pods restart, the pod(s) that were in a `NotReady` state should complete within about a minute.
 
     ```bash

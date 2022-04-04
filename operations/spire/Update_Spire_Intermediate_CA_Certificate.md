@@ -39,9 +39,9 @@ ncn# kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.
    ncn# kubectl rollout restart -n spire statefulset spire-server
    ```
 
-   Any spire-agents in the CLBO state should come back into a Running state the
+   Any `spire-agent`s in the `CrashLoopBackOff` state should come back into a `Running` state the
    next time they are started. If you do not wish to wait for them to be restarted
-   automatically then you can delete the spire-agent pod, which will cause a new
+   automatically, then you can delete the `spire-agent` pod, which will cause a new
    one to start up in its place.
 
 1. Re-run the command to get the certificate's expiration date to verify that

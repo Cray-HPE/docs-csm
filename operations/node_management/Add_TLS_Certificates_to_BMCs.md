@@ -125,11 +125,11 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
         ...
       hms_ca_info:
         hms_svc_ca_uri: "/usr/local/cray-pki/certificate_authority.crt"
-    
+
     [...]
 
     services:
-    
+
     [...]
 
       cray-hms-reds:
@@ -200,7 +200,7 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
           - cray-service.imagesHost="{repos[docker]}"
           values:
             hms_ca_uri: /usr/local/cray-pki/certificate_authority.crt  **\#\#\#\# only need to copy this line**
-        
+
         [...]
         ```
 
@@ -208,7 +208,7 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
 
         ```bash
         [...]
-        
+
         - name: cray-hms-reds
           namespace: services
           overrides:

@@ -15,7 +15,7 @@ switch(conf-mstp)# revision 0
 Show Commands to Validate Functionality
 
 ```
-switch# show spanning-tree mst 
+switch# show spanning-tree mst
 ```
 
 Expected Results

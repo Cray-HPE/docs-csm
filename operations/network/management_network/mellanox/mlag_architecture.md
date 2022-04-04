@@ -7,13 +7,13 @@ What are the benefits of MLAG
 
 
 * Increased bandwidth achieved by dual connection to node.
-    
+
 * High availability (HA) for servers while allowing full use of the bandwidth of both links
 
 * To achieve HA on a switch level without the using of STP
 
 
-Key limitations of MLAG in mellanox: 
+Key limitations of MLAG in mellanox:
 
 * Only one MLAG domain supported per device
 
@@ -21,7 +21,7 @@ Key limitations of MLAG in mellanox:
 
 * At least one port per switch (in MLAG domain) MUST be reserved for inter-switch link.
 
-More details, requirements and limitations on Mellanox devices can be found from: 
+More details, requirements and limitations on Mellanox devices can be found from:
 
 [https://docs.mellanox.com/display/ONYXv381174/MLAG]()
 

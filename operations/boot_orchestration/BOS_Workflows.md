@@ -41,7 +41,7 @@ Mentioned in this workflow:
     ```
 
     Example output:
-    
+
     ```
     {
     "lastUpdated": "2020-09-22T19:56:32Z",
