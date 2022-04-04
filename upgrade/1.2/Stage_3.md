@@ -13,7 +13,7 @@
      ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint [ENDPOINT]
      ```
 
-   - Air Gapped (replace the PATH_TO below with the location of the rpm)
+   - Air gapped (replace the PATH_TO below with the location of the RPM):
 
      ```bash
      ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file [PATH_TO_CSM_TARBALL_FILE]
