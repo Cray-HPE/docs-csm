@@ -1,4 +1,4 @@
-## Check BGP Status and Reset Sessions
+# Check BGP Status and Reset Sessions
 
 Check the Border Gateway Protocol \(BGP\) status on the Aruba and Mellanox switches and verify that all sessions are in an Established state. If the state of any session in the table is Idle, the BGP sessions needs to be reset.
 
@@ -230,7 +230,7 @@ This procedure requires administrative privileges.
         It may take a few minutes for sessions to become Established.
 
         ```bash
-        sw-spine-001# show bgp all-vrf all summary 
+        sw-spine-001# show bgp all-vrf all summary
         ```
 
         Example output:
@@ -377,5 +377,4 @@ This procedure requires administrative privileges.
     Refer to substeps [1-3](#mellanox-ssh) for Mellanox.
 
     Refer to substeps [1-2](#aruba-ssh) for Aruba.
-
 

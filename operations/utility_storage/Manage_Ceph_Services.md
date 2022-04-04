@@ -207,7 +207,7 @@ Ceph has the ability to deploy/scale/reconfigure/redeploy Ceph processes down an
 
 The following example shows scaling the mgr service down and back up.
 
-### Prerequisites 
+### Prerequisites
 
 Two SSH sessions are required. One to do the work from and another that is running `watch ceph -s` to monitor the progress.
 
@@ -233,7 +233,7 @@ Two SSH sessions are required. One to do the work from and another that is runni
      ```
 
      (Optional) Limit the results.
-       
+
       Syntax: `ceph orch [<service_type>] [<service_name>] [--export] [plain|json|json-pretty|yaml] [--refresh]`
 
       ```bash
@@ -250,7 +250,7 @@ Two SSH sessions are required. One to do the work from and another that is runni
       The placement of the services is retrieved with this command.
 
   2. Choose the service to scale. ***(reminder the example will use the MGR service)***
-     
+
      1. If scaling mds or mgr daemons, make sure to fail over the active mgr/mds daemon so there is always one running.
 
          ```bash
@@ -326,7 +326,7 @@ Two SSH sessions are required. One to do the work from and another that is runni
      The returned output will be "Scheduled mgr update...".
 
   6. When the Ceph status output shows there are 3 running mgr daemons, scale the last daemon back down and up.
-      
+
      **If it is the MDS or MGR daemons, then REMEMBER we have to fail over the active daemon.**
 
       ```bash
@@ -340,7 +340,7 @@ Two SSH sessions are required. One to do the work from and another that is runni
      ```
 
   7. Scale the service back to its original deployment size.
-     
+
      ```bash
      ncn-s001# ceph orch apply mgr  --placement="3 ncn-s001 ncn-s002 ncn-s003"
      ```

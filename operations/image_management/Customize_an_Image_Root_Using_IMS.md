@@ -1,8 +1,6 @@
+# Customize an Image Root Using IMS
 
-
-## Customize an Image Root Using IMS
-
-The Image Management Service \(IMS\) customization workflow sets up a temporary image customization environment within a Kubernetes pod and mounts the image to be customized in that environment. A system administrator then makes the desired changes to the image root within the customization environment. 
+The Image Management Service \(IMS\) customization workflow sets up a temporary image customization environment within a Kubernetes pod and mounts the image to be customized in that environment. A system administrator then makes the desired changes to the image root within the customization environment.
 
 Afterwards, the IMS customization workflow automatically copies the NCN CA public key to */etc/cray/ca/certificate\_authority.crt* within the image root being customized to enable secure communications between NCNs and client nodes. IMS then compresses the customized image root and uploads it and its associated initrd image and kernel image \(needed to boot a node\) to the artifact repository.
 
@@ -50,7 +48,7 @@ Afterwards, the IMS customization workflow automatically copies the NCN CA publi
     id = "a252ff6f-c087-4093-a305-122b41824a3e"
     name = "username public key"
     created = "2018-11-21T17:19:07.830000+00:00"
-    
+
     [...]
     ```
 
@@ -253,7 +251,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     type = "s3"
     path = "/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
     etag = ""
-    
+
     [...]
     ```
 
@@ -370,7 +368,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
     ```
     Name: cray-ims-cfa864b3-4e08-49b1-9c57-04573228fd3f-customize
     Namespace: default
-    
+
     [...]
 
     Events:
@@ -438,7 +436,7 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
         [root@POD ~]#
         ```
 
-        Once connected to the IMS image customization shell, perform any customizations required. If the SSH shell was created without using the `--ssh-containers-jail True` parameter, cd or chroot into the image root. 
+        Once connected to the IMS image customization shell, perform any customizations required. If the SSH shell was created without using the `--ssh-containers-jail True` parameter, cd or chroot into the image root.
 
         After changes have been made, run the touch command on the `complete` file. The location of the complete file depends on whether or not the SSH job shell was created using the `--ssh-containers-jail True` parameter. See the table below for more information.
 
@@ -662,5 +660,4 @@ Cray uses a manifest file that associates multiple related boot artifacts \(kern
 
 
 The image root has been modified, compressed, and uploaded to S3, along with its associated initrd and kernel files. The image customization environment has also been cleaned up.
-
 

@@ -24,7 +24,7 @@ primary way to manage passwordless SSH configuration between management nodes.
 Passwordless SSH from downstream nodes into CSM management nodes is not intended
 or supported.
 
-Passwordless SSH keypairs for the Cray System Management (CSM) are created 
+Passwordless SSH keypairs for the Cray System Management (CSM) are created
 automatically and maintained with a Kubernetes deployment and staged into
 Kubernetes secrets (`csm-private-key`) and ConfigMaps (`csm-public-key`) in the
 `services` namespace. Administrators can use these provided keys, provide their
@@ -52,7 +52,7 @@ ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/replace_ssh_keys.s
 --public-key-file ./id_rsa-csm.pub --private-key-file ./id_rsa-csm
 ```
 
-Alternatively, the keys stored in Kubernetes can be updated directly. 
+Alternatively, the keys stored in Kubernetes can be updated directly.
 
 1. Replace the private key half:
    ```bash
@@ -87,7 +87,7 @@ csm-config-management repository directory:
     ```
     ncn# grep csm_passwordless_ssh_enabled roles/trust-csm-ssh-keys/defaults/main.yaml
     ```
-    
+
     Example output:
 
     ```
@@ -104,7 +104,7 @@ information regarding these role-specific flags. Please reference any role speci
 documents for additional information, as role documentation is updated more frequently as
 changes are introduced.
 
-Consult the manual for each product to change the default configuration by 
+Consult the manual for each product to change the default configuration by
 referring to the [1.5 HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-gsg)
 on the HPE Customer Support Center. Similar configuration values for disabling the
 role will be required in these product specific configuration repositories.
@@ -166,14 +166,16 @@ set and managed in Vault.
 After completing the previous procedures, apply the configuration to the NCNs
 by running NCN personalization with [CFS](../configuration_management/Configuration_Management.md).
 This can be accomplished by running the `apply_csm_configuration.sh` script, or
-running the steps manually. For more information on the script, see
+running the steps manually. By default the script will select the latest available
+csm release. However for clarity it is recommended that the user provide the csm release using the
+`--csm-release` parameter. For more detailed information on the script, see
 [Automatically Apply CSM Configuration to NCNs](#auto_apply_csm_config).
 
 ```bash
-ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh
+ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh --csm-release <version e.g. 1.0.11>
 ```
 
-To manually run NCN personalization, first gather the following information: 
+To manually run NCN personalization, first gather the following information:
 
 * HTTP clone URL for the configuration repository in [VCS](../configuration_management/Version_Control_Service_VCS.md)
 * Path to the Ansible play to run in the repository
@@ -185,11 +187,11 @@ To manually run NCN personalization, first gather the following information:
 | cloneUrl | https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git | CSM configuration repo |
 | commit  | **Example:** `5081c1ecea56002df41218ee39f6030c3eebdf27` | CSM configuration commit hash |
 | name | **Example:** `csm-ncn-<version>` | CSM Configuration layer name |
-| playbook | `site.yml` | Default site-wide Ansible playbook for CSM | 
+| playbook | `site.yml` | Default site-wide Ansible playbook for CSM |
 
 1. Retrieve the commit in the repository to use for configuration. If changes
    have been made to the default branch that was imported during a CSM
-   installation or upgrade, use the commit containing the changes. 
+   installation or upgrade, use the commit containing the changes.
 
 1. If no changes have been made, the latest commit on the default branch for
    this version of CSM should be used. Find the commit in the
@@ -242,9 +244,10 @@ ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configur
 ```
 
 ### Automatic CSM Configuration Steps
- 
+
 By default the script will perform the following steps:
 1. Finds the latest installed release version of the CSM product stream.
+1. Finds the CSM configuration version associated with the given release.
 1. Finds the latest commit on the release branch of the `csm-config-management` repo.
 1. Creates or updates the `ncn-personalization.json` configuration file.
 1. Finds all nodes in HSM with the `Management` role.
@@ -256,8 +259,13 @@ By default the script will perform the following steps:
 ### Automatic CSM Configuration Overrides
 
 The script also supports several flags to override these behaviors:
-- `csm-release:` Overrides the version of the CSM release that is used. Defaults
-  to the latest version.
+- `csm-release`: Overrides the version of the CSM release that is used. Defaults
+  to the latest version. Available versions can be found in the `cray-product-catalog`.
+  ```bash
+  ncn-m001# kubectl -n services get cm cray-product-catalog
+  ```
+- `csm-config-version`: Overrides the version of the CSM configuration. This corresponds
+  to the version of a branch starting with `cray/csm/` in the csm repo in VCS.
 - `git-commit`: Overrides the git commit cloned for the configuration content.
   Defaults to the latest commit on the csm-release branch.
 - `git-clone-url`: Overrides the source of the configuration content. Defaults
@@ -268,5 +276,5 @@ The script also supports several flags to override these behaviors:
   `Management` nodes in HSM.
 - `clear-state`: Clears existing state from components to ensure CFS runs. This
    can be used if configuration needs to be re-run on successful nodes with no
-   change to the git content since the previous run. For examples, if the ssh
+   change to the git content since the previous run. For examples, if the SSH
    keys have changed.

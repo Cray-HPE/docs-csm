@@ -93,46 +93,18 @@ fi
 
 drain_node $target_ncn
 
-state_name="BACKUP_CREDENTIAL_SSH_KEYS"
-state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-
-    if [[ $ssh_keys_done == "0" ]]; then
-        ssh_keygen_keyscan "${target_ncn}"
-        ssh_keys_done=1
+set +e
+while true ; do    
+    csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
+    if [[ $? -eq 0 ]]; then
+        break
+    else
+        sleep 5
     fi
-    scp ${target_ncn}:/root/.ssh/id_rsa /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn
-    scp ${target_ncn}:/root/.ssh/authorized_keys /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn
-    scp ${target_ncn}:/etc/shadow /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn
+done
+set -e
 
-    record_state "${state_name}" ${target_ncn}
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
 ${basedir}/../common/ncn-rebuild-common.sh $target_ncn
-
-# TODO: wait for k8s
-
-state_name="RESTORE_CREDENTIAL_SSH_KEYS"
-state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-
-    if [[ $ssh_keys_done == "0" ]]; then
-        ssh_keygen_keyscan "${target_ncn}"
-        ssh_keys_done=1
-    fi
-    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/id_rsa ${target_ncn}:/root/.ssh/id_rsa 
-    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/authorized_keys ${target_ncn}:/root/.ssh/authorized_keys
-    scp /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/shadow ${target_ncn}:/etc/shadow 
-
-    record_state "${state_name}" ${target_ncn}
-else
-    echo "====> ${state_name} has been completed"
-fi
 
 ${basedir}/../cfs/wait_for_configuration.sh --xnames $TARGET_XNAME
 

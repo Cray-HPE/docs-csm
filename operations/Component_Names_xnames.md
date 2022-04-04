@@ -1,4 +1,4 @@
-## Component Names \(xnames\)
+# Component Names \(xnames\)
 
 Component names \(xnames\) identify the geolocation for hardware components in the HPE Cray EX system. Every component is uniquely identified by these component names. Some, like the system cabinet number or the CDU number, can be changed by site needs. There is no geolocation encoded within the cabinet number, such as an X-Y coordinate system to relate to the floor layout of the cabinets. Other component names refer to the location within a cabinet and go down to the port on a card or switch or the socket holding a processor or a memory DIMM location.
 
@@ -54,5 +54,4 @@ Component names \(xnames\) identify the geolocation for hardware components in t
 |xXcCsSbBnNaA|A: 0-7|GPU: Accelerator \(GPU\) associated with a node. Example: x16c3s0b1n0a1 is accelerator 1, node 0, of node card 1, compute blade 0, of chassis 3, of cabinet 1016.|
 |xXcCsSbBnNgG|G: 0-63|Storage Group or Group of Disk Drives for a Node: Example: x1016c3s0b0n1g3 is storage group 3 of node 1, node card 0, compute blade in slot 0, chassis 3, cabinet 1016.|
 |xXcCsSbBnNgGkK|K: 0-63|Storage Group Disk: Example: x1016c3s0b0n1g3k1 is disk 1 of storage group 3, node 1, node card 0, of compute blade in slot 0, chassis 3, cabinet 1016.|
-
 

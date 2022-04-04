@@ -1,6 +1,4 @@
-
-
-## Convert TGZ Archives to SquashFS Images
+# Convert TGZ Archives to SquashFS Images
 
 If customizing a pre-built image root archive compressed as a txz or other non-SquashFS format, convert the image root to SquashFS and upload the SquashFS archive to S3.
 

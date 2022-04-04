@@ -1,4 +1,4 @@
-## Repair Yum Repository Metadata
+# Repair Yum Repository Metadata
 
 Nexus may have trouble \(re\)generating repository metadata \(for example, repodata/repomd.xml\), especially for larger repositories. Configure the `Repair - Rebuild Yum repository metadata (repodata)` task in Nexus to create the metadata if the standard generation fails. This is not typically needed, which makes it a repair task.
 
@@ -21,9 +21,9 @@ The system is fully installed.
     ```bash
     https://nexus.{{network.dns.external}}/
     ```
-    
-    Users will need to login through nexus UI. The account is configured through Keycloak with a role mapping for Nexus authentication. The role needed for admin permissions is nx-admin in the system-nexus-client role. Scripts may connect by using a username and password in the request.
-    
+
+    Users will need to login through Nexus UI. The account is configured through Keycloak with a role mapping for Nexus authentication. The role needed for admin permissions is nx-admin in the system-nexus-client role. Scripts may connect by using a username and password in the request.
+
     ![Keycloak Adding Permissions](../../img/operations/Keycloak_add_nexus_permission.png "Keycloak Adding Permissions")
 
     ![Nexus Web UI](../../img/operations/Nexus_Web_UI.png "Nexus Web UI")
@@ -316,6 +316,4 @@ Caused by: java.net.SocketTimeoutException: Read timed out
     at org.sonatype.nexus.repository.yum.internal.rpm.YumRpmParser.parse(YumRpmParser.java:97)
     ... 26 common frames omitted
 ```
-
-
 

@@ -9,7 +9,7 @@
 
 **IMPORTANT:**
 
-> * This upgrade is performed using the ceph orchestrator.
+> * This upgrade is performed using the `ceph` orchestrator.
 > * The upgrade includes all fixes from v15.2.9 through to v15.2.15 listed here [Ceph version index](https://docs.ceph.com/en/latest/releases/octopus/)
 
 ## Procedure
@@ -94,16 +94,16 @@ HEALTH_WARN clients are using insecure global_id reclaim; mons are allowing inse
     mon.ncn-s003 has auth_allow_insecure_global_id_reclaim set to true
 ```
 
-You will see the processes running the ceph container image go through the upgrade process.  This will involve stopping the old process running the v15.2.8 container and restarting the process with the new v15.2.15 container image.
+You will see the processes running the Ceph container image go through the upgrade process. This will involve stopping the old process running the v15.2.8 container and restarting the process with the new v15.2.15 container image.
 
 **IMPORTANT:**
-Only processes running the v15.2.8 image will be upgraded.  This will include `MON,MGR,MDS,RGW,OSD` processes only.
+Only processes running the v15.2.8 image will be upgraded. This will include `MON`, `MGR`, `MDS`, `RGW`, and `OSD` processes only.
 
 ### Post Upgrade
 
 1. Verify the upgrade
 
-   ceph health detail should only show:
+   `ceph health detail` should only show:
 
    ```text
    HEALTH_WARN mons are allowing insecure global_id reclaim
@@ -113,16 +113,14 @@ Only processes running the v15.2.8 image will be upgraded.  This will include `M
     mon.ncn-s003 has auth_allow_insecure_global_id_reclaim set to true
     ```
 
-   ceph -s should show:
+   `ceph -s` should show:
 
    ```text
        health: HEALTH_WARN
             mons are allowing insecure global_id reclaim
    ```
 
-   ceph orch ps should show:
-
-   `MON,MGR,MDS,RGW,OSD` processes running version `v15.2.15`.  There should be no processes running version `v15.2.8`
+   `ceph orch ps` should show `MON`, `MGR`, `MDS`, `RGW`, and `OSD` processes running version `v15.2.15`.  There should be no processes running version `v15.2.8`
 
 2. Disable `auth_allow_insecure_global_id_reclaim`
 
@@ -130,9 +128,9 @@ Only processes running the v15.2.8 image will be upgraded.  This will include `M
    ncn-s# ceph config set mon auth_allow_insecure_global_id_reclaim false
    ```
 
-   Now the status of the cluster should show **HEALTH_OK**.  
+   Now the status of the cluster should show **`HEALTH_OK`**.
 
-   Please ***NOTE*** that this may take up to 30 seconds to apply and the health to return to **HEALTH_OK**.
+   Please ***NOTE*** that this may take up to 30 seconds to apply and the health to return to **`HEALTH_OK`**.
 
 Once the above steps have been completed, proceed to [Stage 5](Stage_5.md).
 

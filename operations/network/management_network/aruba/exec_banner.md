@@ -10,13 +10,13 @@ Create a banner:
 switch(config)# banner <motd|exec> DELIM
 ```
 
-Show commands to validate functionality: 
+Show commands to validate functionality:
 
 ```
 switch# show banner <motd|exec>
 ```
 
-## Example Output 
+## Example Output
 
 ```
 switch(config)# banner exec $
@@ -28,9 +28,9 @@ chosen delimiter.
 switch(config)# do show banner exec
 ```
 
-## Expected Results 
+## Expected Results
 
 1. Administrators can create the Exec banner
-2. The output of the Exec banner looks correct 
+2. The output of the Exec banner looks correct
 
 [Back to Index](../index.md)

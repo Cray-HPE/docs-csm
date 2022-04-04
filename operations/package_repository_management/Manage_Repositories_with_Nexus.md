@@ -1,42 +1,34 @@
-## Manage Repositories with Nexus
+# Manage Repositories with Nexus
 
 This section describes how to connect to Nexus with the Web UI, as well as how to access the REST API from non-compute nodes \(NCNs\) or compute nodes to manage repositories.
-
-### Using Keycloak to Create and Manage Accounts
-
-In order to log into the Web UI or authenticate with the REST API, a user account with appropriate permissions must be created.
-Accounts are managed in Keycloak (see [Configure Keycloak Accounts](../CSM_product_management/Configure_Keycloak_Account.md)).
-To add administrator permissions for Nexus, add the `nx-admin` role binding to the user from the `system-nexus-client` 
-client (see below).
-To add an anonymous user, add the `nx-anonymous` role binding to the user from the `system-nexus-client` client (see below).
-
-    ![Nexus Admin Account](../../img/operations/Nexus_Admin_Account.png "Nexus Admin Account")
-
-    ![Nexus Anonymous Account](../../img/operations/Nexus_Anonymous_Account.png "Nexus Anonymous Account")
-
-### Using the Local Nexus Admin Account
-
-During the deployment or update of Nexus, a local admin account is created. To access the local admin account for Nexus
-on any NCN, run the following commands:
-
-```bash
-ncn# kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d; echo
-```
-
-```bash
-ncn# kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d; echo
-```
-
-The first command will print the username of the local admin account. The second command will print the 
-password for the local admin account. (Note that the secret will not update or stay in sync if the username
-or password of the local account is changed.). This account has the same permissions as an account created
-in Keycloak with the `nx-admin` role.
 
 ### Access Nexus with the Web UI
 
 Use the hostname set in `istio.ingress.hosts.ui.authority` (see below) to connect to Nexus over the Customer Access Network (CAN) using a web browser. For example:
 
-`https://nexus.{{network.dns.external}}/`
+```bash
+https://nexus.{{network.dns.external}}/
+```
+
+### Use Keycloak to Create and Manage Accounts
+
+In order to log into the Web UI or authenticate with the REST API, a user account with appropriate permissions must be created. Accounts are managed in Keycloak (see [Configure Keycloak Accounts](../CSM_product_management/Configure_Keycloak_Account.md)). To add administrator permissions for Nexus, add the `nx-admin` role binding to the user from the `system-nexus-client` client (see below). To add an anonymous user, add the `nx-anonymous` role binding to the user from the `system-nexus-client` client (see below).
+
+  ![Nexus Admin Account](../../img/operations/Nexus_Admin_Account.png "Nexus Admin Account")
+
+  ![Nexus Anonymous Account](../../img/operations/Nexus_Anonymous_Account.png "Nexus Anonymous Account")
+
+### Use the Local Nexus Admin Account
+
+During the deployment or update of Nexus, a local admin account is created. To access the local admin account for Nexus on any NCN, run the following commands:
+
+```bash
+ncn# kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d; echo
+
+ncn# kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d; echo
+```
+
+The first command will print the username of the local admin account. The second command will print the password for the local admin account. (Note that the secret will not update or stay in sync if the username or password of the local account is changed.). This account has the same permissions as an account created in Keycloak with the `nx-admin` role.
 
 ### Access Nexus with the REST API
 
@@ -45,7 +37,7 @@ The [Nexus REST API](https://help.sonatype.com/repomanager3/rest-and-integration
 Download the Open API document at `/service/rest/swagger.json` for details about the API, including specific options
 to available endpoints. By default, the REST API endpoints return (or accept) JSON.
 
-The examples in the following sections use `curl` to exercise the REST API endpoints and `jq` to parse and manipulate the 
+The examples in the following sections use `curl` to exercise the REST API endpoints and `jq` to parse and manipulate the
 output. It is reasonable to use `curl` and `jq` to facilitate management tasks when necessary, but more complex actions may
 warrant development of more full-featured tools.
 
@@ -418,15 +410,15 @@ Use the following function to get the Nexus local admin account after a fresh in
 
 ```bash
 function nexus-get-credential() {
-    
+
     if ! command -v kubectl 1>&2 >/dev/null; then
       echo "Requires kubectl"
       return 1
-    fi 
+    fi
     if ! command -v base64 1>&2 >/dev/null ; then
       echo "Requires base64"
       return 1
-    fi 
+    fi
 
     [[ $# -gt 0 ]] || set -- -n nexus nexus-admin-credential
 
@@ -454,4 +446,3 @@ This example uses a Keycloak account with username `USERNAME` and password `PASS
 # Keycloak user
 # curl -i -sfv -u "USERNAME:PASSWORD" -H "accept: application/json" -X GET https://packages.local/service/rest/beta/security/user-sources
 ```
-

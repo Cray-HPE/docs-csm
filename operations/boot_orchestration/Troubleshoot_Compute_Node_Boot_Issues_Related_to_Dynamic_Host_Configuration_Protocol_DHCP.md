@@ -1,5 +1,4 @@
-
-## Troubleshoot Compute Node Boot Issues Related to Dynamic Host Configuration Protocol \(DHCP\)
+# Troubleshoot Compute Node Boot Issues Related to Dynamic Host Configuration Protocol \(DHCP\)
 
 DHCP issues can result in node boot failures. This procedure helps investigate and resolve such issues.
 
@@ -23,7 +22,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     ```
 
     Example output:
-    
+
     ```
     services cray-dhcp-kea-554698bb69-r9wwt          3/3 Running   0 13h
     services cray-dhcp-kea-postgres-0                2/2 Running   0 10d
@@ -65,6 +64,4 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     **Troubleshooting Information:**
 
     If the DHCP Discover request is not visible on the NCN, it may be due to a firewall issue. If the DHCP Discover request is not visible inside the pod, double check if the request was issued over the correct interface for the Node Management Network \(NMN\). If it was, it could indicate a firewall issue.
-
-
 

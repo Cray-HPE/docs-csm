@@ -25,7 +25,7 @@ switch(config-if)# switchport trunk native vlan-id 1
 Show Commands to Validate Functionality
 
 ```
-switch# show interfaces switchport 
+switch# show interfaces switchport
 ```
 
 Expected Results
@@ -35,6 +35,4 @@ Expected Results
 
 
 [Back to Index](../index.md)
-
-
 

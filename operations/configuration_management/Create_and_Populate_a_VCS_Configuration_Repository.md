@@ -1,4 +1,4 @@
-## Create and Populate a VCS Configuration Repository
+# Create and Populate a VCS Configuration Repository
 
 Create a new repository in the VCS and populate it with content for site customizations in a custom Configuration Framework Service \(CFS\) configuration layer.
 
@@ -44,5 +44,4 @@ Create a new repository in the VCS and populate it with content for site customi
     ```bash
     ncn# git rev-parse --verify HEAD
     ```
-
 

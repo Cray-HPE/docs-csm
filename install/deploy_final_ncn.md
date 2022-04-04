@@ -46,9 +46,9 @@ These services must be healthy before the reboot of the LiveCD can take place. I
 >
 > - The NCN **will never wipe a USB device** during installation
 
-> 
-> - Prior to shutting down the PIT, learning the CMN IP addresses of the other NCNs will be a benefit if troubleshooting is required 
-> 
+>
+> - Prior to shutting down the PIT, learning the CMN IP addresses of the other NCNs will be a benefit if troubleshooting is required
+>
 > This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
 > **unavailable**.
 
@@ -65,7 +65,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 #### 3.1 Start Hand-Off
 
 1. Start a new typescript (quit).
-    
+
     1. Exit the current typescript if one has arrived here from the prior pages:
 
         ```bash
@@ -85,7 +85,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         ```
 
 1. Upload SLS file.
-    
+
     > **NOTE:** The system name environment variable `SYSTEM_NAME` must be set.
 
     ```bash
@@ -128,19 +128,19 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         **IMPORTANT:** The variables you set depend on whether you customized the default NCN images. The most
         common procedures that involve customizing the images are
         [Configuring NCN Images to Use Local Timezone](../operations/node_management/Configure_NTP_on_NCNs.md#configure_ncn_images_to_use_local_timezone) and
-        [Changing NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md).
+        [Changing NCN Image Root Password and SSH Keys on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
         The two paths forward are listed below:
-
-        * If the NCN images were **not** customized, set the following variables (this is the default path):
-
-            ```bash
-            pit# artdir=${CSM_PATH}/images ; k8sdir=$artdir/kubernetes ; cephdir=$artdir/storage-ceph
-            ```
 
         * If the NCN images were customized, set the following variables:
 
             ```bash
             pit# artdir=/var/www/ephemeral/data ; k8sdir=$artdir/k8s ; cephdir=$artdir/ceph
+            ```
+
+        * If the NCN images were **not** customized, set the following variables:
+
+            ```bash
+            pit# artdir=${CSM_PATH}/images ; k8sdir=$artdir/kubernetes ; cephdir=$artdir/storage-ceph
             ```
 
     1. Run the following command.
@@ -166,7 +166,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     1. Run the `export` commands listed at the end of the output from the previous step.
 
 
-1. <a name="csi-handoff-bss-metadata"></a>Upload the `data.json` file to BSS, our Kubernetes cloud-init DataSource. 
+1. <a name="csi-handoff-bss-metadata"></a>Upload the `data.json` file to BSS, our Kubernetes cloud-init DataSource.
 
     __If you have made any changes__ to this file (for example, as a result of any customizations or workarounds), use the path to that file instead. This step will prompt for the root password of the NCNs.
 
@@ -186,20 +186,35 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server="10.92.100.225 10.94.100.225" --limit Global
     ```
 
-1.  Preserve the ConMan console logs for the other NCNs if desired. (optional)
+1.  Preserve logs and configuration files if desired (optional).
 
-    You may wish to preserve them for later examination, but it is not required. However, **this is the last chance to do so**. They will be lost after rebooting the PIT node.
-    
-    The following commands will copy them into a directory that will be backed up before the PIT node reboot.
-    
+    After the PIT node is redeployed, **all files on its local drives will be lost**. It is recommended that you retain some of the log files and
+    configuration files, because they may be useful if issues are encountered during the remainder of the install.
+
+    The following commands create a tar archive of these files, storing it in a directory that will be backed up in the next step.
+
     ```bash
-    
     pit# mkdir -pv /var/www/ephemeral/prep/logs &&
-            cp -prv /var/log/conman /var/www/ephemeral/prep/logs/conman.$(date +%Y-%m-%d_%H-%M-%S)
+         ls -d \
+                    /etc/dnsmasq.d \
+                    /etc/os-release \
+                    /etc/sysconfig/network \
+                    /opt/cray/tests/cmsdev.log \
+                    /opt/cray/tests/install/logs \
+                    /opt/cray/tests/logs \
+                    /root/.canu \
+                    /root/.config/cray/logs \
+                    /root/csm*.{log,txt} \
+                    /tmp/*.log \
+                    /usr/share/doc/csm/install/scripts/csm_services/yapl.log \
+                    /var/log/conman \
+                    /var/log/zypper.log 2>/dev/null |
+         sed 's_^/__' |
+         xargs tar -C / -czvf /var/www/ephemeral/prep/logs/pit-backup-$(date +%Y-%m-%d_%H-%M-%S).tgz
     ```
 
 1. <a name="backup-bootstrap-information"></a>Backup the bootstrap information from `ncn-m001`.
-   
+
     > **NOTE:** This denotes information that should always be kept together in order to fresh-install the system again.
 
     1. Log in; setup passwordless SSH _to_ the PIT node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the PIT (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
@@ -240,8 +255,8 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
     This only needs to be done for the PIT node, not for any of the other NCNs. For the procedures to do this, see [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
 
-1. Tell the PIT node to PXE boot on the next boot. 
-   
+1. Tell the PIT node to PXE boot on the next boot.
+
     Use `efibootmgr` to set the next boot device to the first PXE boot option. This step assumes the boot order was set up in the previous step.
 
     ```bash
@@ -331,7 +346,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     1. Back up the completed typescript file by re-running the `rsync` commands in the [Backup Bootstrap Information](#backup-bootstrap-information) section.
 
 1.  (Optional) Setup ConMan or serial console, if not already on, from any laptop or other system with network connectivity to the cluster.
-    
+
     ```bash
     external# script -a boot.livecd.$(date +%Y-%m-%d).txt
     external# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
@@ -381,7 +396,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     ```
 
 1. Change the root password on `ncn-m001` if the pre-NCN deployment password change method was not used.
-   
+
    Run `passwd` on `ncn-m001` and complete the prompts.
 
     ```bash
@@ -389,9 +404,9 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     ```
 
 1. Run `kubectl get nodes` to see the full Kubernetes cluster.
-    
+
     > **NOTE:** If the new node fails to join the cluster after running other cloud-init items, refer to the `handoff`.
-    
+
     ```bash
     ncn-m001# kubectl get nodes
     ```
@@ -518,13 +533,13 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
  > **NOTE:** If the system uses Gigabyte or Intel hardware, skip this section.
 
-Configure DNS and NTP on the BMC for each management node **except `ncn-m001`**. 
+Configure DNS and NTP on the BMC for each management node **except `ncn-m001`**.
 However, the commands in this section are all run **on** `ncn-m001`.
 
 1. Set environment variables.
 
     Set the `IPMI_PASSWORD` and `USERNAME` variables to the BMC credentials for your NCNs.
-    
+
     > Using `read -s` for this prevents the credentials from being echoed to the screen
 
     ```bash
@@ -533,13 +548,13 @@ However, the commands in this section are all run **on** `ncn-m001`.
     ncn-m001# export IPMI_PASSWORD USERNAME
     ```
 
-1. Set `BMCS` variable to list of the BMCs for all master nodes, worker nodes, and storage nodes, 
+1. Set `BMCS` variable to list of the BMCs for all master nodes, worker nodes, and storage nodes,
    except `ncn-m001-mgmt`:
 
     ```bash
-    ncn-m001# BMCS=$(grep -Eo "[[:space:]]ncn-[msw][0-9][0-9][0-9]-mgmt([.]|[[:space:]]|$)" /etc/hosts | 
-                        sed 's/^.*\(ncn-[msw][0-9][0-9][0-9]-mgmt\).*$/\1/' | 
-                        sort -u | 
+    ncn-m001# BMCS=$(grep -Eo "[[:space:]]ncn-[msw][0-9][0-9][0-9]-mgmt([.]|[[:space:]]|$)" /etc/hosts |
+                        sed 's/^.*\(ncn-[msw][0-9][0-9][0-9]-mgmt\).*$/\1/' |
+                        sort -u |
                         grep -v "^ncn-m001-mgmt$")
     ncn-m001# echo $BMCS
     ```

@@ -1,4 +1,4 @@
-## Recipes
+# Recipes
 
 **NOTE:** This file contains a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS_Use_Cases](FAS_Use_Cases.md)

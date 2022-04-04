@@ -1,5 +1,3 @@
-
-
 # Utility Storage Installation Troubleshooting
 
 If there is a failure in the creation of Ceph storage on the utility storage nodes for one of these scenarios,
@@ -45,7 +43,7 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 
 1. SSH to the node(s) where the issue exists.
 
-1. Run the following commands on the nodes: 
+1. Run the following commands on the nodes:
 
    ```bash
    ncn-s# systemctl stop ceph-osd.target
@@ -56,17 +54,17 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
    This will vary node to node. Use `lsblk` to identify all drives available to Ceph.
 
 1. Manually create OSDs on the problematic nodes.
-   
+
    ```bash
    ncn-s# for i in {g..n}; do ceph-volume lvm create --data /dev/sd$i  --bluestore; done
    ```
-   
+
    > **NOTE:** The remaining steps must be run from `ncn-s001`.
 
 1. Verify the `/etc/cray/ceph` directory is empty. If there are any files there, then delete them.
-   
+
 1. Put in safeguard.
- 
+
    * Edit `/srv/cray/scripts/metal/lib.sh`
    * Comment out the below lines
 

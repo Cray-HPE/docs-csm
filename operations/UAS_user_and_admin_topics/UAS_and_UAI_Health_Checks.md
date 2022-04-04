@@ -153,8 +153,8 @@ The following are needed for this procedure:
 
     The UAI is now created and in the process of initializing and running.
 
-1. View the state of the UAI. 
-   
+1. View the state of the UAI.
+
     The following can be repeated as many times as desired. If the results appear like the following, the UAI is ready for use.
 
     ```bash
@@ -179,7 +179,7 @@ The following are needed for this procedure:
 1. Log into the UAI \(without a password\) as follows:
 
     1. SSH to the UAI.
-        
+
         ```bash
         ncn-w003# ssh vers@10.16.234.10
         ```
@@ -212,7 +212,7 @@ The following are needed for this procedure:
         vers          68      67  0 18:51 pts/0    00:00:00 -bash
         vers         120      68  0 18:52 pts/0    00:00:00 ps -afe
         ```
-    
+
     1. Exit the connection.
 
         ```
@@ -225,7 +225,7 @@ The following are needed for this procedure:
     ncn-w003# cray uas delete --uai-list uai-vers-a00fb46b
     ```
 
-    In this example, `results = [ "Successfully deleted uai-vers-a00fb46b",]` will be returned if successful. 
+    In this example, `results = [ "Successfully deleted uai-vers-a00fb46b",]` will be returned if successful.
 
 ### Troubleshoot UAS and UAI Operations Issues
 

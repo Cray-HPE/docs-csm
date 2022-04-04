@@ -1,5 +1,4 @@
-
-## About kubectl
+# About kubectl
 
 `kubectl` is a CLI that can be used to run commands against a Kubernetes cluster. The format of the `kubectl` command is shown below:
 

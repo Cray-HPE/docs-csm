@@ -1,6 +1,9 @@
 # Stage 5 - Perform NCN Personalization
 
 ## Procedure
+1. Set the root user password and SSH keys before running NCN personalization.
+   The location where the password is stored in Vault has changed since previous
+   CSM versions. See [Configure the Root Password and Root SSH Keys in Vault](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#configure-the-root-password-and-root-ssh-keys-in-vault).
 
 1. If custom configuration content was merged with content from a previous CSM
    installation, merge the new CSM configuration in with it in the `csm-config-management`
@@ -43,7 +46,9 @@
        changes, use the `--git-commit` option to override the commit to the
        commit on your branch.
    > * If you are using the default CSM configuration found in the product
-       catalog above, you may omit this option.
+       catalog above, you may omit this option, but you should use the `--csm-release`
+       option to explicitly set the release version, otherwise the latest available
+       release will be applied.
 
    ```bash
    ncn-m001# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh [--git-commit COMMIT]

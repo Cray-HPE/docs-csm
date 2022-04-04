@@ -152,7 +152,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# exit # exit the typescript started earlier
       pit# exit # log out of the pit node
       # Close the console session by entering &. or ~.
-      # Then ssh back into the PIT node     
+      # Then ssh back into the PIT node
       external# ssh root@${SYSTEM_NAME}-ncn-m001
       ```
 
@@ -182,28 +182,28 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
     In some cases the `parted` command may give an error similar to the following:
     ```text
-    Error: Partition(s) 4 on /dev/sda have been written, but we have been unable to inform the kernel of the change, probably 
-    because it/they are in use. As a result, the old partition(s) will remain in use. You should reboot now before making 
+    Error: Partition(s) 4 on /dev/sda have been written, but we have been unable to inform the kernel of the change, probably
+    because it/they are in use. As a result, the old partition(s) will remain in use. You should reboot now before making
     further changes.
     ```
 
-    In that case, the following steps may resolve the problem without needing to reboot. These commands will remove 
-    volume groups and raid arrays that may be using the disk. **These commands only need to be run if the earlier 
+    In that case, the following steps may resolve the problem without needing to reboot. These commands will remove
+    volume groups and raid arrays that may be using the disk. **These commands only need to be run if the earlier
     `parted` command failed.**
-    
+
     ```bash
     pit# RAIDS=$(grep "${disk}[0-9]" /proc/mdstat | awk '{ print "/dev/"$1 }')
     pit# echo $RAIDS
     pit# VGS=$(echo $RAIDS | xargs -r pvs --noheadings -o vg_name 2>/dev/null)
     pit# echo $VGS
     pit# echo $VGS | xargs -r -t -n 1 vgremove -f -v
-    pit# echo $RAIDS | xargs -r -t -n 1 mdadm -S -f -v 
+    pit# echo $RAIDS | xargs -r -t -n 1 mdadm -S -f -v
     ```
 
     After running the above procedure, retry the `parted` command which failed. If it succeeds, resume the install from that point.
 
 1. Mount local disk, check the output of each command as it goes.
-   
+
    > **`NOTE`** The FSLabel `PITDATA` is already in `/etc/fstab`, so the path is omitted in the following calls to `mount`.
 
     ```bash
@@ -467,7 +467,7 @@ Some files are needed for generating the configuration payload. See these topics
           --cabinets-yaml cabinets.yaml \
           --hmn-mtn-cidr 10.104.0.0/17 \
           --nmn-mtn-cidr 10.100.0.0/17 \
-            
+
       # Verify the newly generated configuration payload's `system_config.yaml` matches the current version of CSI.
       # NOTE: Keep this new system_config.yaml somewhere safe to facilitate re-installs.
       pit:/var/www/ephemeral/prep/# cat ${SYSTEM_NAME}/system_config.yaml
@@ -493,7 +493,7 @@ Some files are needed for generating the configuration payload. See these topics
       > 1. An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
 
       > **`SPECIAL/IGNORABLE WARNINGS`** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored:
-      > 
+      >
       > 1. The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
       >
       >    ```
@@ -531,7 +531,7 @@ Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for
 Finally, cleanup the shim:
  ```bash
  pit# cd ~
- # this uses rmdir to safely remove the directory, preventing accidental removal if one does not notice a umount command failure.
+ # this uses `rmdir` to safely remove the directory, preventing accidental removal if one does not notice a `umount` command failure.
  pit# umount -v /mnt/pitdata/
  pit# rmdir -v /mnt/pitdata
  ```
@@ -560,7 +560,7 @@ Finally, cleanup the shim:
 
    ```bash
    pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)   
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
    ```
 
 <a name="next-topic"></a>
@@ -569,5 +569,4 @@ Finally, cleanup the shim:
 After completing this procedure the next step is to configure the management network switches.
 
 * See [Configure Management Network Switches](index.md#configure_management_network)
-
 

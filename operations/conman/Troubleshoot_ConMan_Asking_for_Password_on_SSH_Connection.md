@@ -17,7 +17,7 @@ This procedure requires administrative privileges.
     ```bash
     ncn# kubectl -n services scale --replicas=0 deployment/cray-console-operator
     ```
-    
+
     Example output:
     ```text
     deployment.apps/cray-console-operator scaled

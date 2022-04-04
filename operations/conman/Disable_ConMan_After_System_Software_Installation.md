@@ -17,7 +17,7 @@ This procedure requires administrative privileges.
     ```bash
     ncn# kubectl -n services scale --replicas=0 deployment/cray-console-operator
     ```
-    
+
     Example output:
     ```text
     deployment.apps/cray-console-operator scaled
@@ -36,7 +36,7 @@ This procedure requires administrative privileges.
     ```bash
     ncn# kubectl -n services scale --replicas=0 statefulset/cray-console-node
     ```
-    
+
     Example output:
     ```text
     statefulset.apps/cray-console-node scaled
@@ -57,7 +57,7 @@ This procedure requires administrative privileges.
     ```bash
     ncn# kubectl -n services scale --replicas=1 deployment/cray-console-operator
     ```
-    
+
     Example output:
     ```text
     deployment.apps/cray-console-operator scaled
@@ -68,7 +68,7 @@ This procedure requires administrative privileges.
     ```bash
     ncn# kubectl -n services get pods | grep -e console-operator -e console-node
     ```
-    
+
     Example output:
     ```text
     cray-console-node-0                      3/3     Running      0      8m44s

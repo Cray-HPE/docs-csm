@@ -1,4 +1,4 @@
-## Configuration Management with the CFS Batcher
+# Configuration Management with the CFS Batcher
 
 Creating configuration sessions with the Configuration Framework Service \(CFS\) enables remote execution for configuring live nodes and boot images prior to booting. CFS also provides its Batcher component for configuration management of registered system components. The CFS Batcher periodically examines the aggregated configuration state of registered components and schedules CFS sessions against those that have not been configured to their desired state. The frequency of scheduling, the maximum number of components to schedule in the same CFS session, and the expiration time for scheduling less than full sessions are configurable.
 

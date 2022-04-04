@@ -8,7 +8,7 @@ management nodes can be deployed with an operating system and the software to cr
 utilizing Ceph storage. The CSM services provide essential software infrastructure including the API gateway
 and many micro-services with REST APIs for managing the system. Once administrative access has been configured,
 the installation of CSM software can be validated with health checks before doing operational tasks
-like the checking and updating of firmware on system components or the preparation of compute nodes. 
+like the checking and updating of firmware on system components or the preparation of compute nodes.
 Once the CSM installation has completed, other product streams for the HPE Cray EX system can be installed.
 
 ### Topics:
@@ -74,14 +74,14 @@ sections, but there is also a general troubleshooting topic.
 
       See [Prepare Management Nodes](prepare_management_nodes.md)
    <a name="bootstrap_pit_node"></a>
-   
-   1. Bootstrap PIT Node  
+
+   1. Bootstrap PIT Node
    The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available
    to bootstrap the PIT node--the RemoteISO or a bootable USB device. The recommended media is the RemoteISO
    because it does not require any physical media to prepare. However, remotely mounting an ISO on a BMC does not
-   work smoothly for nodes from all vendors. It is recommended to try the RemoteISO first.  
-   
-      Use one of these procedures to bootstrap the PIT node from the LiveCD.  
+   work smoothly for nodes from all vendors. It is recommended to try the RemoteISO first.
+
+      Use one of these procedures to bootstrap the PIT node from the LiveCD.
       * [Bootstrap PIT Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
          * **Gigabyte BMCs** should not use the RemoteISO method.
          * **Intel BMCs** should not use the RemoteISO method.
@@ -101,7 +101,7 @@ sections, but there is also a general troubleshooting topic.
       [Collect MAC Addresses for NCNs](#collect_mac_addresses_for_ncns)
    <a name="collect_mac_addresses_for_ncns"></a>
 
-   1. Collect MAC Addresses for NCNs  
+   1. Collect MAC Addresses for NCNs
    Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
    the actual MAC addresses for the management nodes can be collected. This process will include repetition of some
    of the steps done up to this point because `csi config init` will need to be run with the proper
@@ -118,27 +118,27 @@ sections, but there is also a general troubleshooting topic.
       this topic could be skipped and instead move to [Deploy Management Nodes](#deploy_management_nodes).
    <a name="deploy_management_nodes"></a>
 
-   1. Deploy Management Nodes  
+   1. Deploy Management Nodes
    Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
    the other management nodes can be deployed. This procedure will boot all of the management nodes, initialize
    Ceph storage on the storage nodes, and start the Kubernetes cluster on all of the worker nodes and the master nodes,
-   except for the PIT node. The PIT node will join Kubernetes after it is rebooted later in 
-   [Deploy Final NCN](#deploy_final_ncn).  
-   
-      See [Deploy Management Nodes](deploy_management_nodes.md)  
+   except for the PIT node. The PIT node will join Kubernetes after it is rebooted later in
+   [Deploy Final NCN](#deploy_final_ncn).
+
+      See [Deploy Management Nodes](deploy_management_nodes.md)
    <a name="install_csm_services"></a>
- 
-   1. Install CSM Services  
+
+   1. Install CSM Services
    Now that deployment of management nodes is complete with initialized Ceph storage and a running Kubernetes
    cluster on all worker and master nodes, except the PIT node, the CSM services can be installed. The Nexus
-   repository will be populated with artifacts; containerized CSM services will be installed; and a few other configuration steps taken.  
-   
+   repository will be populated with artifacts; containerized CSM services will be installed; and a few other configuration steps taken.
+
       See [Install CSM Services](install_csm_services.md)
    <a name="validate_csm_health_before_final_ncn_deploy"></a>
 
    1. Validate CSM Health Before Final NCN Deployment
 
-      After installing all of the CSM services, now validate the health of the management nodes and all CSM services. 
+      After installing all of the CSM services, now validate the health of the management nodes and all CSM services.
       The reason to do it now is that if there are any problems detected with the core infrastructure or the nodes, it is
       easy to rewind the installation to [Deploy Management Nodes](#deploy_management_nodes) because the PIT node has not
       yet been redeployed. In addition, redeploying the PIT node successfully requires several CSM services to be working
@@ -200,9 +200,9 @@ sections, but there is also a general troubleshooting topic.
       with many devices on the system. FAS can be used to update the firmware for all of the devices it
       communicates with at once, or specific devices can be targeted for a firmware update.
 
-      >**IMPORTANT:** 
+      >**IMPORTANT:**
       Before FAS can be used to update firmware, refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
-      on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for information about how to install
+      on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for more information about how to install
       the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
       available. Once FAS is aware that new firmware is available, then see
       [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
@@ -215,7 +215,7 @@ sections, but there is also a general troubleshooting topic.
 
       These compute node types require preparation.
          * HPE Apollo 6500 XL645d Gen10 Plus
-         * Gigabyte 
+         * Gigabyte
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
    <a name="next_topic"></a>

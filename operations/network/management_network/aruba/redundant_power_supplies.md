@@ -1,28 +1,27 @@
+# Redundant Power Supplies
 
-# Redundant Power Supplies 
- 
-There are no configuration commands for switch power supply functionality. 
+There are no configuration commands for switch power supply functionality.
 
-> **NOTE:** HA will be covered in HA section. 
+> **NOTE:** HA will be covered in HA section.
 
-Show commands to validate functionality:  
+Show commands to validate functionality:
 
 ```bash
 switch# show environment power-supply
 ```
 
-## Expected Results 
+## Expected Results
 
 1. Validate the switch recognizes the additional power supplies
 2. Validate system remains powered after removing power from all but one power supply
 3. Validate all power supplies are operational
 
-## Example Output 
+## Example Output
 
 ```bash
 switch# show environment power-supply
          Product  Serial           PSU
-Wattage 
+Wattage
 Mbr/PSU  Number   Number           Status
 ---------------------------------------------------------
 1/1      JL372A   M031SS004TAPC    OK            2701

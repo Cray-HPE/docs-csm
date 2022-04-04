@@ -92,7 +92,7 @@ MDS version: ceph version 14.2.0-300-gacd2f2b9e1 (acd2f2b9e196222b0350b3b59af998
 
 ## Ceph RadosGW \(object/s3\)
 
-**List the services to learn more about the radosgw service:** 
+**List the services to learn more about the radosgw service:**
 
 The following command lists more than just the radosgw service, so ensure the correct sections are used.
 

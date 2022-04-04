@@ -39,7 +39,7 @@ spec:
       nmn_supernet_gateway: 10.252.0.1
       nmn_vlan: bond0.nmn0
       # NOTE: the term DHCP here is misleading, this is merely
-      #       a range of reserved IPs for UAIs that should not
+      #       a range of reserved IP addresses for UAIs that should not
       #       be handed out to others because the network
       #       attachment will hand them out to UAIs.
       nmn_dhcp_start: 10.252.2.10

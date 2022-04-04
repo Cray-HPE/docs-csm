@@ -1,4 +1,3 @@
-
 # System Management Network Functions
 
 The following is a description of the system management network functions:
@@ -14,7 +13,7 @@ The following is a description of the system management network functions:
 			* LDAP authentication
 			* System installation and upgrade media (e.g. Nexus)
 	* System - Access by the machine to external (Customer and/or Internet) resources. E.g. Internal DNS lookups may resolve to an external DNS
-	
+
 * **Internal** - Node-to-node communication inside the system
 	* Administrative
 		* Hardware - Hardware Management Network (HMN)

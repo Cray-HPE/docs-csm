@@ -1,4 +1,4 @@
-## Nexus Deployment
+# Nexus Deployment
 
 Nexus is deployed with the `cray-nexus` chart to the `nexus` namespace as part of the Cray System Management \(CSM\) release. Nexus is deployed after critical platform services are up and running. Product installers configure and populate Nexus blob stores and repositories using the `cray-nexus-setup` container image. As a result, there is no singular product that provides all Nexus repositories or assets; instead, individual products must be installed. However, CSM configures the `charts` Helm repository and the `registry` Docker repository, which all products may use.
 
@@ -89,6 +89,4 @@ clean-install-deps
 ```
 
 Product installers also load and clean up the install tools used to facilitate installation. By convention, vendored tools will be in the `vendor` directory. In case something goes wrong, it may be useful to manually load them into the install environment to help with debugging.
-
-
 

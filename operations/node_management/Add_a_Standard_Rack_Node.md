@@ -1,5 +1,4 @@
-
-## Add a Standard Rack Node
+# Add a Standard Rack Node
 
 These procedures are intended for trained technicians and support personnel only. Always follow ESD precautions when handling this equipment.
 
@@ -128,7 +127,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
     ncn-m001# ping x3000c0s27b0
     ```
 
-8. Verify that discovery has completed. The 
+8. Verify that discovery has completed. The
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe x3000c0s27b0
@@ -234,6 +233,4 @@ For this procedure, a new object must be created in the SLS and modifications wi
     ```
 
 14. Verify the chassis status LEDs indicate normal operation.
-
-
 

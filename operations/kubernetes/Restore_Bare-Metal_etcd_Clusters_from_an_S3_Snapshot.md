@@ -1,4 +1,4 @@
-## Restore Bare-Metal etcd Clusters from an S3 Snapshot
+# Restore Bare-Metal etcd Clusters from an S3 Snapshot
 
 The etcd cluster that serves Kubernetes on master nodes is backed up every 10 minutes. These backups are pushed to Ceph Rados Gateway \(S3\).
 
@@ -257,7 +257,4 @@ The Kubernetes cluster on master nodes is being rebuilt.
     986f6ff2a30b01cb, started, ncn-m002, https://10.252.1.8:2380, https://10.252.1.8:2379,https://127.0.0.1:2379
     d5a8e497e2788510, started, ncn-m003, https://10.252.1.9:2380, https://10.252.1.9:2379,https://127.0.0.1:2379
     ```
-
-
-
 

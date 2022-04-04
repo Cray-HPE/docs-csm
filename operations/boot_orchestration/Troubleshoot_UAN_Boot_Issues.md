@@ -1,4 +1,4 @@
-## Troubleshoot UAN Boot Issues
+# Troubleshoot UAN Boot Issues
 
 Use this topic to guide troubleshooting of UAN boot issues.
 
@@ -83,7 +83,7 @@ Once dracut exits, the UAN will boot the rootfs image. Failures seen in this pha
    ```
 
 1. Verify `cfs-state-reporter` is healthy and returns SUCCESS.
-   
+
    ```
    uan# systemctl status cfs-state-reporter
    ```
@@ -96,5 +96,4 @@ Once dracut exits, the UAN will boot the rootfs image. Failures seen in this pha
       Active: inactive (dead) since Wed 2021-02-24 14:29:51 CST; 19h ago
    Main PID: 3827 (code=exited, status=0/SUCCESS)
    ```
-
 

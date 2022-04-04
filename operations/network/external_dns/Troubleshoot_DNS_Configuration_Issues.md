@@ -1,4 +1,4 @@
-## Troubleshoot DNS Configuration Issues
+# Troubleshoot DNS Configuration Issues
 
 Troubleshoot issues when DNS is not properly configured to delegate name resolution to the core DNS instance on a specific cluster. Although the CMN/CAN/CHN IP address may still be routable using the IP address directly, it may not work because Istio's ingress gateway depends on the hostname \(or SNI\) to route traffic. For command line tools like cURL, using the --resolve option to force correct resolution can be used to work around this issue.
 
@@ -17,7 +17,7 @@ The Domain Name Service \(DNS\) is not configured properly.
 1.  View the DNS configuration on the system.
 
     ```bash
-    ncn-w001# kubectl -n services get svc cray-dns-powerdns-cmn-udp 
+    ncn-w001# kubectl -n services get svc cray-dns-powerdns-cmn-udp
     ```
 
     Example output:
@@ -78,5 +78,4 @@ The Domain Name Service \(DNS\) is not configured properly.
     10.94.100.222   cray-dhcp-kea
     10.94.100.225   cray-dns-unbound
     ```
-
 

@@ -1,4 +1,4 @@
-## Determine if Pods are Hitting Resource Limits
+# Determine if Pods are Hitting Resource Limits
 
 Determine if a pod is being CPU throttled or hitting its memory limits \(OOMKilled\). Use the detect\_cpu\_throttling.sh script to determine if any pods are being CPU throttled, and check the Kubernetes events to see if any pods are hitting a memory limit.
 
@@ -102,7 +102,7 @@ Identify pods that are hitting resource limits in order to increase the resource
         Checking benji-k8s-postgresql-0
 
         Checking benji-k8s-pushgateway-777fd86545-qrmbr
-        
+
         [...]
         ```
 
@@ -131,6 +131,4 @@ Identify pods that are hitting resource limits in order to increase the resource
 
 
 Follow the procedure to increase the resource limits for the pods identified in this procedure. See [Increase Pod Resource Limits](Increase_Pod_Resource_Limits.md).
-
-
 

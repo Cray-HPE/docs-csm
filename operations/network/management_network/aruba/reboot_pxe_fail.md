@@ -9,7 +9,7 @@ The following are common error messages when PXE fails:
 
 ## Procedure
 
-1. Verify the IP helper-address on VLAN 1 on the switches.  
+1. Verify the IP helper-address on VLAN 1 on the switches.
 
     This is the same configuration as above "Aruba Configuration".
 
@@ -17,7 +17,7 @@ The following are common error messages when PXE fails:
 
     * If the worker nodes cannot reach the Metal (MTL) network DHCP will fail
     * ALL **WORKERS** need to be able to reach the MTL network
-    * This can normally be achieved by having a default route 
+    * This can normally be achieved by having a default route
 
 1. Run connectivity tests.
 

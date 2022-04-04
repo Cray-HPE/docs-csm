@@ -1,4 +1,4 @@
-## Prometheus SNMP Exporter 
+# Prometheus SNMP Exporter
 The Prometheus SNMP Exporter is deployed by the the `cray-sysmgmt-health` chart to the `sysmgmt-health` namespace as part of the Cray System Management \(CSM\) release.
 
 ### Configuration

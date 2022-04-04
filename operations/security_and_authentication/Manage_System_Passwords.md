@@ -1,5 +1,4 @@
-
-## Manage System Passwords
+# Manage System Passwords
 
 Many system services require login credentials to gain access to them. The information below is a comprehensive list of system passwords and how to change them.
 
@@ -13,7 +12,7 @@ Default Keycloak admin user login credentials:
 
 - Username: admin
 - The password can be obtained with the following command:
-  
+
   ```bash
   ncn-w001# kubectl get secret -n services keycloak-master-admin-auth \
   --template={{.data.password}} | base64 --decode
@@ -27,32 +26,15 @@ To create new accounts, refer to [Create Internal User Accounts in the Keycloak 
 
 ### Gitea
 
-The initial Gitea login credentials for the `crayvcs` username are stored in three places:
+The default Gitea user credentials is `crayvcs`. The password is randomly generated at install time
+and can be found in the vcs-user-credentials secret.
 
-- vcs-user-credentials Kubernetes secret - This is used to initialize the other two locations, as well as providing a place where users can query for the password.
-  
-  The password can be obtained using this command:
+```bash
+ncn-w001# kubectl get secret -n services vcs-user-credentials \
+--template={{.data.vcs_password}} | base64 --decode
+```
 
-  ```bash
-  ncn-w001# kubectl get secret -n services vcs-user-credentials \
-  --template={{.data.vcs_password}} | base64 --decode
-  ```
-
-  The password can be changed using this command:
-
-  ```bash
-  ncn-w001# kubectl create secret generic vcs-user-credentials \
-  --save-config --from-literal=vcs_username="crayvcs" --from-literal=vcs_password="NEW_PASSWORD" \
-  --dry-run -o yaml | kubectl apply -f -
-  ```
-
-- Gitea - These credentials are used when pushing to Git using the default username and password. The password should be changed through the Gitea UI.
-
-- Keycloak - These credentials are used to allow access to the Gitea UI. They must be changed through Keycloak.
-
-> **IMPORTANT:** These three sources of credentials are not currently synced by any mechanism, and so changing the default password requires that it be changed in all three places. Changing only one many result in difficulty determining the password at a later date, or may result in lost access to Gitea.
-
-
+For more information on Gitea, including how to change the password, see [Version Control Service VCS](../configuration_management/Version_Control_Service_VCS.md).
 
 ### System Management Health Service
 
@@ -64,7 +46,7 @@ The default username is admin.
 
 ### Management Network Switches
 
-Each rack type includes a different set of passwords. During different stages of installation, these passwords are subject to change. 
+Each rack type includes a different set of passwords. During different stages of installation, these passwords are subject to change.
 
 > **NOTE:** Contact HPE Cray service in order to obtain the default passwords.
 
@@ -128,9 +110,9 @@ The System Configuration Service (SCSD) is used to set the credentials for Redfi
 Refer to [Set BMC Credentials](../system_configuration_service/Set_BMC_Credentials.md) for more information.
 
 The account database is automatically saved to the non-volatile settings partition
-\(/nvram/redfish/redfish-accounts\) any time an account or account policy is modified. 
+\(/nvram/redfish/redfish-accounts\) any time an account or account policy is modified.
 The file is stored as a redis command dump and is replayed \(if it exists\) anytime the core Redfish
-schema is loaded via the init script. If default accounts must be restored, 
+schema is loaded via the init script. If default accounts must be restored,
 delete the redis command dump and reboot the controller.
 
 **List accounts:**
@@ -188,7 +170,7 @@ GET /redfish/v1/AccountService/Accounts/1
 **Add accounts:**
 
 If an account is successfully created, then the account information data structure will be returned.
-The most important bit returned is the Id because it is part of the URL used for any further manipulation of the account. 
+The most important bit returned is the Id because it is part of the URL used for any further manipulation of the account.
 
 Use the following API path to add accounts:
 
@@ -297,11 +279,11 @@ In both cases, a `running-config` must be saved out to non-volatile storage in a
 To adjust the SNMP credentials, perform the following tasks:
 
 1. Update the default credentials specified in the customizations.yaml file.
-   
+
    * See [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md)
 
 2. Update the credentials actively being used for existing leaf switches.
-   
+
    * See [Change SNMP Credentials on Leaf Switches](Change_SNMP_Credentials_on_Leaf_Switches.md)
 
 
@@ -332,7 +314,7 @@ The default username is admin.
 
 Refer to the following product stream documentation for detailed procedures about updating passwords for compute nodes and User Access Nodes (UANs).
 
-**Cray Operating System (COS):** To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the COS product stream documentation for more information. 
+**Cray Operating System (COS):** To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the COS product stream documentation for more information.
 
 **User Access Node (UAN):** Refer to "Create UAN Boot Images" in the UAN product stream documentation for the steps required to change the password on UANs. The "uan_shadow" header in the "UAN Ansible Roles" section includes more context on setting the root password on UANS.
 

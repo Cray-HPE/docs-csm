@@ -8,7 +8,7 @@ Some of the data in the `ncn_metadata.csv` can be found in the SHCD in the HMN t
 to collect is the MAC addresses for the node's BMC, the node's bootable network interface, and the
 pair of network interfaces which will become the bonded interface `bond0`.
 
-### Topics:
+### Topics
 
    * [Introduction](#introduction)
       * [LACP Bonding](#lacp_bonding)
@@ -87,7 +87,7 @@ The following are sample rows from a `ncn_metadata.csv` file:
     ```
 
 * __Use case__: NCN with a dual PCIe cards (2 cards with 2 ports each for 4 ports total):
-* 
+*
     > Notice how the MAC address for `Bond0 MAC0` and `Bond0 MAC1` have a difference greater than 1, which
     > indicates that they are on not on the same 2 port same card.
 
@@ -101,7 +101,7 @@ Example `ncn_metadata.csv` file for a system that has been configured as follows
  * Management NCNs are configured to boot over the PCIe NICs
  * Master and Storage management NCNs have two 2 port PCIe cards
  * Worker management NCNs have one 2 port PCIe card
-  
+
 > Because the NCNs have been configured to boot over their PCIe NICs, the `Bootstrap MAC` and `Bond0 MAC0` columns have the same value.
 
 **IMPORTANT:** Mind the index for each group of nodes (3, 2, 1.... ; not 1, 2, 3). If storage nodes are `ncn-s001 x3000c0s7b0n0`, `ncn-s002 x3000c0s8b0n0`, `ncn-s003 x3000c0s9b0n0`, then their portion of the file would be ordered `x3000c0s9b0n0`, `x3000c0s8b0n0`, `x3000c0s7b0n0`.
@@ -156,6 +156,6 @@ x3000c0s1b0n0,Management,Master,94:40:c9:37:87:32,14:02:ec:da:b9:98,14:02:ec:da:
 
    * Unless the system does not use or does not have onboard NICs on the management nodes, then this topic
    may be necessary before constructing the `ncn_metadata.csv` file.
-      
+
       * See [Switch PXE Boot from Onboard NIC to PCIe](switch_pxe_boot_from_onboard_nic_to_pcie.md) for more information.
 

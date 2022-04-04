@@ -39,35 +39,35 @@ sections, but there is also a general troubleshooting topic.
      > **`IMPORTANT:`** Wait at least 15 minutes after
      > [`csm-upgrade.sh`](1.2/Stage_3.md) in stage 3 completes to let the various Kubernetes
      > resources get initialized and started.
-  
+
      Run the following validation checks to ensure that everything is still working
      properly after the upgrade:
-  
+
      > **`IMPORTANT:`** If your site does not use UAIs, skip UAS and UAI validation. If you do use
      > UAIs, there are products that configure UAS like Cray Analytics and Cray Programming Environment that
      > must be working correctly with UAIs and should be validated and corrected (the procedures for this are
      > beyond the scope of this document) prior to validating UAS and UAI. Failures in UAI creation that result
      > from incorrect or incomplete installation of these products will generally take the form of UAIs stuck in
      > waiting state trying to set up volume mounts.
-  
+
      1. [Platform Health Checks](../operations/validate_csm_health.md#platform-health-checks)
      2. [Hardware Management Services Health Checks](../operations/validate_csm_health.md#hms-health-checks)
      3. [Software Management Services Validation Utility](../operations/validate_csm_health.md#sms-health-checks)
      4. [Validate UAS and UAI Functionality](../operations/validate_csm_health.md#uas-uai-validate)
-  
+
      Booting the barebones image on the compute nodes should be skipped if the compute nodes have been running
      application workload during the the CSM upgrade.
-  
+
      See [Validate CSM Health](../operations/validate_csm_health.md)
-  
+
     <a name="next_topic"></a>
 
 1. Next Topic
 
     After completion of the validation of CSM health, the CSM product stream has been fully upgraded and
-    configured. Refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_ 
-    on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg 
-    more information on other product streams to be upgraded and configured after CSM.
+    configured. Refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
+    on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg
+    for more information on other product streams to be upgraded and configured after CSM.
 
     > **Note:** If a newer version of the HPE Cray EX HPC Firmware Pack (HFP) is available, then the next step
     would be to install HFP which will inform the Firmware Action Services (FAS) of the newest firmware

@@ -1,4 +1,4 @@
-## Component Memberships
+# Component Memberships
 
 Memberships are a read-only resource that is generated automatically by changes to groups and partitions. Each component in `/hsm/v2/State/Components` is represented. Filter options are available to prune the list, or a specific component name (xname) can be given. All groups and the partition \(if any\) of each component are listed.
 
@@ -43,6 +43,4 @@ Any components in `/hsm/v2/State/Components` can have its group and memberships 
 ```bash
 ncn-m# cray hsm memberships describe MEMBER_ID
 ```
-
-
 

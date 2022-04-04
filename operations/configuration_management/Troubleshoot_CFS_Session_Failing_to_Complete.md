@@ -1,4 +1,4 @@
-## Troubleshoot CFS Session Failing to Complete
+# Troubleshoot CFS Session Failing to Complete
 
 Troubleshoot issues where Configuration Framework Service \(CFS\) sessions/pods fail and Ansible hangs. These issues can be resolved by modifying Ansible to produce less output.
 
@@ -40,6 +40,4 @@ The steps in this procedure are independent from each other and are used to trou
     -   Adjust the use of flags used when running Ansible commands.
 
         The display\_ok\_hosts and display\_skipped\_hosts are examples of settings that can be disabled to reduce output. Refer to the Ansible documentation for more information on what flags can be used.
-
-
 

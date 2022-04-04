@@ -1,4 +1,4 @@
-## Restore System Functionality if a Kubernetes Worker Node is Down
+# Restore System Functionality if a Kubernetes Worker Node is Down
 
 Services running on Kubernetes worker nodes can be properly restored if downtime occurs. Use this procedure to ensure that if a Kubernetes worker node is lost or restored after being down, certain features the node was providing can also be restored or recovered on another node.
 
@@ -27,7 +27,7 @@ This procedure requires administrative privileges.
         jhub              claim-user01                                                                                         Bound    pvc-c5df3ba1-4db3-11ea-b8e1-a4bf01581d70   10Gi       RWO            ceph-rbd-external      14d
         jhub              hub-db-dir                                                                                           Bound    pvc-b41675c6-4d4e-11ea-b8e1-a4bf01581d70   1Gi        RWO            ceph-rbd-external      15d
         loftsman          loftsman-chartmuseum-data-pvc                                                                        Bound    pvc-7d45b88b-4575-11ea-bf78-a4bf01684f9e   1Gi        RWO            ceph-rbd-external      25d
-        
+
         [...]
         ```
 
@@ -79,7 +79,7 @@ This procedure requires administrative privileges.
     istio-system   istio-pilot-9d769b86c-mzshz                                      2/2   Running      0  4m54s  10.40.1.38   ncn-w001  <none>  <none>
     istio-system   istio-pilot-9d769b86c-t8mtg                                      2/2   Running      0  5m10s  10.40.1.51   ncn-w001  <none>  <none>
     istio-system   istio-sidecar-injector-b887db765-td7db                           1/1   Running      0  12d    10.40.0.173  ncn-w001  <none>  <none>
-    
+
     [...]
     ```
 
@@ -116,7 +116,7 @@ This procedure requires administrative privileges.
     services    boa-cf973765-92e7-4c5e-b52a-e904088976b8-cplj6         0/2     Error   0          5d23h   10.42.0.158   ncn-w002   <none>           <none>
     services    boa-f6f86426-58bf-4c6f-b3cd-e25010aa9ff6-s7zph         0/2     Error   0          4d2h    10.36.0.191   ncn-w003   <none>           <none>
     services    cfs-0336105c-e697-4d9d-a129-badde6da3218-vn6n4         0/3     Error   0          6d20h   10.42.0.98    ncn-w002   <none>           <none>
-    
+
     [...]
     ```
 

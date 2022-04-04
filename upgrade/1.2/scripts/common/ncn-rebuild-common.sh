@@ -31,6 +31,21 @@ target_ncn=$1
 
 . ${basedir}/ncn-common.sh ${target_ncn}
 
+state_name="CSI_VALIDATE_BSS_NTP"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" && $2 != "--rebuild" ]]; then
+    echo "====> ${state_name} ..."
+
+    if ! cray bss bootparameters list --hosts $TARGET_XNAME --format json | jq '.[] |."cloud-init"."user-data".ntp' | grep -q '/etc/chrony.d/cray.conf'; then
+        echo "${target_ncn} is missing NTP data in BSS. Please see the procedure which can be found in the 'Known Issues and Bugs' section titled 'Fix BSS Metadata' on the 'Configure NTP on NCNs' page of the CSM documentation."
+        exit 1
+    else
+        record_state "${state_name}" ${target_ncn}
+    fi
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="WIPE_NODE_DISK"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
@@ -255,17 +270,16 @@ if [[ $target_ncn != ncn-s* ]]; then
     wait_for_kubernetes $target_ncn
 fi 
 
-state_name="SET_BSS_NO_WIPE"
-state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-
+set +e
+while true ; do    
     csi handoff bss-update-param --set metal.no-wipe=1 --limit $TARGET_XNAME
-
-    record_state "${state_name}" ${target_ncn}
-else
-    echo "====> ${state_name} has been completed"
-fi
+    if [[ $? -eq 0 ]]; then
+        break
+    else
+        sleep 5
+    fi
+done
+set -e
 
 if [[ ${target_ncn} == "ncn-m001" ]]; then
     state_name="RESTORE_M001_NET_CONFIG"

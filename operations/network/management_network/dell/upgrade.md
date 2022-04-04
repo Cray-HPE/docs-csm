@@ -1,4 +1,3 @@
-
 # Performing upgrade on Dell switches
 
 How to perform an upgrade on the Dell switches.

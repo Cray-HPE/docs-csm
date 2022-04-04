@@ -1,4 +1,4 @@
-## Use a Custom ansible-cfg File
+# Use a Custom ansible-cfg File
 
 The Configuration Framework Service \(CFS\) allows for flexibility with the Ansible Execution Environment \(AEE\) by allowing for changes to included ansible.cfg file. When installed, CFS imports a custom ansible.cfg file into the cfs-default-ansible-cfg Kubernetes ConfigMap in the services namespace.
 
@@ -12,6 +12,4 @@ ncn# kubectl create configmap custom-ansible-cfg -n services --from-file=ansible
 ```
 
 To use this Ansible configuration file for a specific session, set `--ansible-config custom-ansible-cfg` when creating a session, or set `--default-ansible-config custom-ansible-cfg` when setting global CFS options with the `cray cfs options update` command.
-
-
 

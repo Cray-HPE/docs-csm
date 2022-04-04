@@ -1,40 +1,40 @@
-# Gateway Testing 
+# Gateway Testing
 
 With the introduction of BiCAN, service APIs are now available on one or more networks depending on who is allowed access to the services and from where.
 The services are accessed via three different ingress gateways using a token that can be retrieved from keycloak.
 
-This page describes how to run a set of tests to determine if the gateways are functioning properly.  The gateway test will obtain an API token from keycloak and then use that token to attempt to access a set of service APIs on one or more networks as defined in the gateway test definition file (gateway-test-defn.yaml).  The test will check the return code to make sure it gets the expected response. 
+This page describes how to run a set of tests to determine if the gateways are functioning properly. The gateway test will obtain an API token from Keycloak and then use that token to attempt to access a set of service APIs on one or more networks as defined in the gateway test definition file (`gateway-test-defn.yaml`). The test will check the return code to make sure it gets the expected response.
 
-When the nmnlb network is specified, it will use `api-gw-service-nmn.local` as an override for `nmnlb.<system-domain>` in 1.2.   You can set `use-api-gw-override: false` in gateway-test-defn.yaml if you would like to disable that override and use `nmnlb.<system-domain>`.
+When the nmnlb network is specified, it will use `api-gw-service-nmn.local` as an override for `nmnlb.<system-domain>` in 1.2. You can set `use-api-gw-override: false` in gateway-test-defn.yaml if you would like to disable that override and use `nmnlb.<system-domain>`.
 
 ## Running gateway tests from an NCN
 
-The gateway test script can be found in `/usr/share/doc/csm/scripts/operations/gateway-test`.   When `gateway-test.py` is run from an NCN, it has access to the admin client secret using kubectl.   It will use the admin client secret to get the token for accessing the APIs.
+The gateway test script can be found in `/usr/share/doc/csm/scripts/operations/gateway-test`. When `gateway-test.py` is run from an NCN, it has access to the admin client secret using `kubectl`. It will use the admin client secret to get the token for accessing the APIs.
 
-You can run the test by executing the following command.  You will need to specify the system domain (e.g. eniac.dev.cray.com) and the network you would like to use to obtain the token (e.g. nmnlb, can, cmn, chn)
+You can run the test by executing the following command. You will need to specify the system domain (for example, `eniac.dev.cray.com`) and the network you would like to use to obtain the token (for example, `nmnlb`, `can`, `cmn`, or `chn`)
 
-``` bash
-    ncn# /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com nmnlb
+```bash
+ncn# /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com nmnlb
 ```
 
 ## Running gateway tests from UAN, Compute Node, or a device outside of the cluster
 
-You will need to install the docs-csm rpm on a device outside the cluster or copy both the `gateway-test.py` and `gateway-test-defn.yaml` files to a system that has python3 installed. Because we don't have access to kubectl outside the cluster, you will need to obtain the admin client secret from the system by the following command on an NCN.
+You will need to install the `docs-csm` RPM on a device outside the cluster or copy both the `gateway-test.py` and `gateway-test-defn.yaml` files to a system that has `python3` installed. Because we do not have access to `kubectl` outside the cluster, you will need to obtain the admin client secret from the system by running the following command on an NCN.
 
-``` bash
-    ncn# kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d
-    26947343-d4ab-403b-14e937dbd700
+```bash
+ncn# kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d
+26947343-d4ab-403b-14e937dbd700
 ```
 You will then need to set the ADMIN_CLIENT_SECRET environment variable to the admin-client-auth secret you obtained.
 
-``` bash
-    linux# export ADMIN_CLIENT_SECRET=26947343-d4ab-403b-14e937dbd700
+```bash
+linux# export ADMIN_CLIENT_SECRET=26947343-d4ab-403b-14e937dbd700
 ```
 
-You can run the tests by executing the following the command.  You will need to specify the system domain (e.g. eniac.dev.cray.com) and the network you would like to use to obtain the token (e.g. nmnlb, can.cmn, chn).
+You can run the tests by executing the following the command. You will need to specify the system domain (e.g. eniac.dev.cray.com) and the network you would like to use to obtain the token (e.g. nmnlb, can.cmn, chn).
 
-``` bash
-    linux# /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com cmn
+```bash
+linux# /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com cmn
 ```
 
 ## Example results
@@ -43,14 +43,14 @@ The results of running the tests will show the following
 
 * Retrieval of a token on the CMN network in order to get SLS data to determine which networks are defined on the system
 * Retrieval of a token on the network specified on the command line to use for testing the APIs
-* Results from each of the networks defined in `gateway-test-defn.yaml`.  It will attempt to access each of the services on the network and check the expected results.
-  * It will show PASS or FAIL depending on the expected response for the service and the token being used. 
-  * It will show SKIP for services that are not expected to be installed on the system. 
+* Results from each of the networks defined in `gateway-test-defn.yaml`. It will attempt to access each of the services on the network and check the expected results.
+  * It will show PASS or FAIL depending on the expected response for the service and the token being used.
+  * It will show SKIP for services that are not expected to be installed on the system.
 * The return code of the test will be non-zero if any of the tests fail or we are unable to retrieve a token on any of the networks that are expected to be accessible.
 
-NOTE: In this example we are running from a server outside the cluster.  It is expected that `api-gw-service-nmn.local` is unreachable from this location.
+NOTE: In this example we are running from a server outside the cluster. It is expected that `api-gw-service-nmn.local` is unreachable from this location.
 
-``` bash
+```bash
 # export ADMIN_CLIENT_SECRET=26947343-d4ab-403b-14e937dbd700
 # ./gateway-test.py eniac.dev.cray.com cmn
 auth.cmn.eniac.dev.cray.com is reachable
@@ -144,4 +144,3 @@ SKIP - [sma-telemetry]: https://api.chn.eniac.dev.cray.com/apis/sma-telemetry-ap
  # echo $?
 1
 ```
-

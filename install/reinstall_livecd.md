@@ -1,5 +1,3 @@
-
-
 # Reinstall LiveCD
 
 Setup a re-install of LiveCD on a node using the previous configuration.
@@ -31,7 +29,7 @@ Setup a re-install of LiveCD on a node using the previous configuration.
     ```
 
 1. Follow the directions in [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md), and then return here and move onto the next step.
-   
+
    The new tar.gz file can be stored anywhere, and can be used to reinitialize the LiveCD.
 
 1. Delete the existing content on the USB device and create a new LiveCD on that same USB device.
@@ -47,7 +45,7 @@ Setup a re-install of LiveCD on a node using the previous configuration.
    The tarball should have extracted everything into the install-data partition.
 
 1. Retrieve the SquashFS artifacts.
-   
+
    The artifacts can be retrieved at the following locations:
 
    * `/mnt/var/www/ephemeral/k8s/`

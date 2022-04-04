@@ -1,4 +1,4 @@
-## Add TLS Certificates to BMCs
+# Add TLS Certificates to BMCs
 
 Use the System Configuration Service \(SCSD\) tool to create TLS certificates and store them in Vault secure storage. Once certificates are created, they are placed on to the target BMCs.
 
@@ -125,11 +125,11 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
         ...
       hms_ca_info:
         hms_svc_ca_uri: "/usr/local/cray-pki/certificate_authority.crt"
-    
+
     [...]
 
     services:
-    
+
     [...]
 
       cray-hms-reds:
@@ -200,7 +200,7 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
           - cray-service.imagesHost="{repos[docker]}"
           values:
             hms_ca_uri: /usr/local/cray-pki/certificate_authority.crt  **\#\#\#\# only need to copy this line**
-        
+
         [...]
         ```
 
@@ -208,7 +208,7 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
 
         ```bash
         [...]
-        
+
         - name: cray-hms-reds
           namespace: services
           overrides:
@@ -275,6 +275,4 @@ At any point the TLS certs can be re-generated and replaced on Redfish BMCs. The
 
 2.  Regenerate the TLS cabinet-level certificates as done is the preceding step.
 3.  Place the TLS certificates onto the Redfish BMCs as in the preceding step.
-
-
 

@@ -1,6 +1,6 @@
 [Top: User Access Service (UAS)](User_Access_Service_UAS.md)
 
-[Next Topic: Troubleshoot Broker UAI SSSD Can't Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
+[Next Topic: Troubleshoot Broker UAI SSSD Cannot Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
 
 ## Troubleshoot UAS / CLI Authentication Issues
 
@@ -114,4 +114,4 @@ uai_age = "11m"
 uai_name = ""
 ```
 
-[Next Topic: Troubleshoot Broker UAI SSSD Can't Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
+[Next Topic: Troubleshoot Broker UAI SSSD Cannot Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)

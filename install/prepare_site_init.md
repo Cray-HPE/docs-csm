@@ -3,7 +3,7 @@
 These procedures guide administrators through setting up the `site-init`
 directory which contains important customizations for various products.
 
-   **Note:** There are two media available to bootstrap the PIT node--the RemoteISO or a bootable USB device. Both of those can use this procedure.  The only difference in this procedure is that the RemoteISO method will execute these commands on the `PIT` node with command prompt `pit#` while the USB method could be done on any Linux system with the command prompt `linux#`. This procedure works for both methods, but has the command prompt of `linux#`, even though it would normally be `pit#` for the RemoteISO method.
+   **Note:** There are two media available to bootstrap the PIT node--the RemoteISO or a bootable USB device. Both of those can use this procedure. The only difference in this procedure is that the RemoteISO method will execute these commands on the `PIT` node with command prompt `pit#` while the USB method could be done on any Linux system with the command prompt `linux#`. This procedure works for both methods, but has the command prompt of `linux#`, even though it would normally be `pit#` for the RemoteISO method.
 
 ### Topics:
    1. [Background](#background)
@@ -196,7 +196,7 @@ with system-specific customizations.
             2.  Extract the issuer's certificate using `awk`:
 
                 > **`NOTE`** The issuer DN is properly escaped as part of the
-                > `awk` pattern below. It must be changed to match the value 
+                > `awk` pattern below. It must be changed to match the value
                 > for emailAddress, CN, OU, etc. for your LDAP. If the value
                 > you are using is different, be sure to escape it properly!
 
@@ -363,7 +363,7 @@ with system-specific customizations.
            ldapSearchBase: dc=dcldap,dc=dit
            ```
 
-1.  Configure the Unbound DNS resolver (if needed)
+1.  Configure the Unbound DNS resolver (if needed).
 
     If access to a site DNS server is required **and** this DNS server was specified to `csi` using the `site-dns` option (either on the command line or in the `system_config.yaml` file), **then no further action is required** and this step should be skipped.
 
@@ -382,11 +382,11 @@ with system-specific customizations.
     ```bash
     linux# yq r /mnt/pitdata/prep/site-init/customizations.yaml spec.network.netstaticips.system_to_site_lookups
     172.30.84.40
-    ``` 
+    ```
 
     If there is **no requirement to resolve external hostnames or no upstream DNS server**,
-    then remove the DNS forwarding configuration from the `cray-dns-unbound` service. 
- 
+    then remove the DNS forwarding configuration from the `cray-dns-unbound` service.
+
     1. Remove the `forwardZones` configuration for the `cray-dns-unbound` service:
 
         ```bash
@@ -407,7 +407,7 @@ with system-specific customizations.
 
         > **`IMPORTANT`** **Do not** remove the `domain_name` entry, it is required for Unbound to forward requests to PowerDNS correctly.
 
-1. Configure PowerDNS zone transfer and DNSSEC (optional)
+1. (Optional) Configure PowerDNS zone transfer and DNSSEC.
 
    * If zone transfer is to be configured review `customizations.yaml` and ensure the `primary_server`, `secondary_servers`, and `notify_zones` values are set correctly.
 
@@ -415,7 +415,7 @@ with system-specific customizations.
 
    Please see the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
 
-1. Prometheus snmp-exporter Configuration (optional)
+1. (Optional) Configure Prometheus snmp-exporter.
 
    The Prometheus snmp-exporter needs to be configured with a list of management network switches to scrape metrics from in order to populate the System Health Service Grafana dashboards.
 

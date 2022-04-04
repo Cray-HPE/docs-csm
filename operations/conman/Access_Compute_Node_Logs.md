@@ -17,7 +17,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 1. Log on to a Kubernetes master or worker node.
 
 1. Find the `cray-console-operator` pod.
-    
+
     ```bash
     ncn# OP_POD=$(kubectl get pods -n services \
             -o wide|grep cray-console-operator|awk '{print $1}')
@@ -45,7 +45,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     -rw------- 1 root root 1415 Nov 30 20:00 console.XNAME
     ...
     ```
-    
+
     > The log directory is also accessible from the `cray-console-node` pods.
 
 1. The log files are plain text files which can be viewed with commands like `cat` or `tail`.

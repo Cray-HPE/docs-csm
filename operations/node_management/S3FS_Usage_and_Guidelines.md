@@ -8,11 +8,11 @@ S3FS is being deployed as tool to provide temporary relief of space usage as wel
 
 * If the need is a landing point for large files that may fill up the root volume.
 * Short term storage of large files or rpms.
-  
+
 ## When NOT to Use
 
 * For long term storage of code, test images, test rpms, or tar files.
-  * This is ONLY meant to provide temporary relief.  Exercising a vigilant practice of cleaning up unused files should be enforced.
+  * This is ONLY meant to provide temporary relief. Exercising a vigilant practice of cleaning up unused files should be enforced.
 * As a landing point to uncompress tar files.
   * This will put unnecessary load on the storage cluster as uncompressing a tar file will require a lot of reads and writes back to the object storage endpoints.
   * Running programs from the S3FS mount point.
@@ -31,7 +31,7 @@ S3FS is being deployed as tool to provide temporary relief of space usage as wel
 
    ***NOTES:***
 
-   * Please replace \<radosgw-user> below with the UID for the radosgw/s3 user id.  
+   * Please replace \<radosgw-user> below with the UID for the radosgw/s3 user id.
    * Make sure to use a meaningful filename for storing the credentials and replace \<filename> below.
    * Make sure to create a mount location and use that below to replace \<mount path>
 
@@ -50,7 +50,7 @@ S3FS is being deployed as tool to provide temporary relief of space usage as wel
 
    2. Mount w/ cache
 
-      ***IMPORTANT:*** To use this option there must be a dedicated landing spacethat is a partition.  This ensures the usage does not impact the root drive.
+      ***IMPORTANT:*** To use this option there must be a dedicated landing space that is a partition. This ensures that the usage does not impact the root drive.
 
       ```text
       s3fs <radosgw-user> <mount path>  -o passwd_file=${HOME}/.<filename>.s3fs,url=http://rgw-vip.nmn,use_path_request_style,use_cache=<dedicated_cache_partition_location>,check_cache_dir_exist=true
@@ -61,4 +61,3 @@ S3FS is being deployed as tool to provide temporary relief of space usage as wel
    ```bash
    umount <mount path>
    ```
-   

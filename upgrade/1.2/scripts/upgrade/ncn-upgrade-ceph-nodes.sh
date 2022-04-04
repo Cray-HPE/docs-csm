@@ -33,7 +33,7 @@ target_ncn=$1
 . ${basedir}/../common/ncn-common.sh ${target_ncn}
 
 # Record this state locally instead of using is_state_recorded(),
-# because it does not hurt to re-do the ssh keys, and it is the
+# because it does not hurt to re-do the SSH keys, and it is the
 # kind of thing which may need to be re-done in case of problems.
 ssh_keys_done=0
 
@@ -158,6 +158,19 @@ fi
 . /usr/share/doc/csm/upgrade/1.2/scripts/ceph/lib/ceph-health.sh
 wait_for_health_ok
 
+# Wait for rgw to start before executing goss tests
+target_ncn=ncn-s001
+rgw_counter=0
+until [[ $(ceph orch ps --daemon_type rgw ${target_ncn} --format json-pretty|jq -r '.[].status_desc') == "running" ]]
+do
+  sleep 30
+  let rgw_counter+=1
+  if rgw_counter -gt 10
+  then
+    exit 1
+  fi
+done
+
 if [[ ${target_ncn} == "ncn-s001" ]]; then
     state_name="POST_CEPH_IMAGE_UPGRADE_BUCKETS"
     state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
@@ -187,7 +200,7 @@ if [[ $ssh_keys_done == "0" ]]; then
     ssh_keygen_keyscan "${target_ncn}"
     ssh_keys_done=1
 fi
-ssh $target_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate' || true 
+ssh $target_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate' 
 
 move_state_file ${target_ncn}
 

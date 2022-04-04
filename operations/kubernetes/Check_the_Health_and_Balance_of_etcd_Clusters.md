@@ -1,4 +1,4 @@
-## Check the Health and Balance of etcd Clusters
+# Check the Health and Balance of etcd Clusters
 
 Check to see if all of the etcd clusters have healthy pods, are balanced, and have a healthy cluster database. There needs to be the same number of pods running on each worker node for the etcd clusters to be balanced. If the number of pods is not the same for each worker node, the cluster is not balanced.
 
@@ -223,6 +223,4 @@ This procedure requires root privileges.
 
     - Refer to [Check for and Clear etcd Cluster Alarms](Check_for_and_Clear_etcd_Cluster_Alarms.md)
     - Refer to [Clear Space in an etcd Cluster Database](Clear_Space_in_an_etcd_Cluster_Database.md)
-
-
 

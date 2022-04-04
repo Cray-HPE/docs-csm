@@ -1,6 +1,4 @@
-
-
-## Delete or Recover Deleted IMS Content
+# Delete or Recover Deleted IMS Content
 
 The Image Management System \(IMS\) manages user supplied SSH public Keys, customizable image recipes, images, and IMS jobs that are used to build or customize images. In previous versions of IMS, deleting an IMS public key, recipe, or image resulted in that item being permanently deleted. Additionally, IMS recipes and images store linked artifacts in the Simple Storage Service \(S3\) datastore. These artifacts are referenced by the IMS recipe and image records. The default option when deleting an IMS recipe and image record was to also delete these linked S3 artifacts.
 
@@ -100,7 +98,7 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         type = "s3"
         path = "/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
         etag = ""
-        
+
         [...]
         ```
 
@@ -137,7 +135,7 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         type = "s3"
         path = "/deleted/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs" <<-- S3 path to linked artifact was renamed
         etag = ""
-        
+
         [...]
         ```
 
@@ -152,7 +150,7 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         ```bash
         ncn# cray ims deleted images list
         ```
-        
+
         Example output:
 
         ```
@@ -168,7 +166,7 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         type = "s3"
         path = "/deleted/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
         etag = ""
-        
+
         [...]
         ```
 
@@ -221,7 +219,7 @@ The steps in this procedure assume that a deleted image is being recovered. The 
     type = "s3"
     path = "/deleted/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
     etag = ""
-    
+
     [...]
     ```
 
@@ -257,11 +255,7 @@ The steps in this procedure assume that a deleted image is being recovered. The 
     type = "s3"
     path = "/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"  <<-- The restored artifact path
     etag = ""
-    
+
     [...]
     ```
-
-
-
-
 

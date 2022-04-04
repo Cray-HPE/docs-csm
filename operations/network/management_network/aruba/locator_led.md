@@ -1,8 +1,8 @@
-# Locator LED 
+# Locator LED
 
-The Locator LED is an LED in the front of the chassis that you can turn on or make flash. This is a handy feature when guiding someone to your switch during a “remote hands” situation, such as asking data center engineer to run a cable to your switch. 
+The Locator LED is an LED in the front of the chassis that you can turn on or make flash. This is a handy feature when guiding someone to your switch during a "remote hands" situation, such as asking data center engineer to run a cable to your switch.
 
-## Configuration Commands 
+## Configuration Commands
 
 Enable LED:
 
@@ -10,13 +10,13 @@ Enable LED:
 switch# led locator <flashing|off|on>
 ```
 
-Show commands to validate functionality:  
+Show commands to validate functionality:
 
 ```text
 switch# show environment led
 ```
 
-## Example Output 
+## Example Output
 
 ```
 switch# show environment led
@@ -44,7 +44,7 @@ locator        off           ok
 
 1. The Locator LED should be in the off state
 2. The Locator LED is now flashing
-3. The `show` command shows the LED is in the flashing state 
+3. The `show` command shows the LED is in the flashing state
 4. The Locator LED is lit a solid color and it does not flash
 5. The `show` command shows the LED is in the on state
 6. The LED is no longer lit

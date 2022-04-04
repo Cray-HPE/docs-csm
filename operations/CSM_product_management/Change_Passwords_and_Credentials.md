@@ -1,4 +1,4 @@
-## Change Passwords and Credentials
+# Change Passwords and Credentials
 
 This is an overarching procedure to change all credentials managed by Cray System Management (CSM) in HPE Cray EX system to new values.
 

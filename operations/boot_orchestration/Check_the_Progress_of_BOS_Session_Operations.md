@@ -1,4 +1,4 @@
-## Check the Progress of BOS Session Operations
+# Check the Progress of BOS Session Operations
 
 Describes how to view the logs of BOS operations with Kubernetes.
 

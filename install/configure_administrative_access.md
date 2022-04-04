@@ -7,7 +7,7 @@ services via commands. The management nodes can be locked from accidental manipu
 management nodes. The `cray scsd` command can change the SSH keys, NTP server, syslog server, and
 BMC/controller passwords.
 
-### Topics:
+### Topics
 
    1. [Configure Keycloak Account](#configure_keycloak_account)
    1. [Configure the Cray Command Line Interface (cray CLI)](#configure_cray_cli)
@@ -18,7 +18,7 @@ BMC/controller passwords.
    1. [Upload Olympus BMC Recovery Firmware into TFTP server](#cray_upload_recovery_images)
    1. [Next Topic](#next-topic)
 
-   Note: The procedures in this section of installation documentation are intended to be done in order, even though the topics are
+   **NOTE:** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
    administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
 
 ## Details
@@ -41,7 +41,7 @@ BMC/controller passwords.
       Later procedures in the installation workflow use the `cray` command to interact with multiple services.
       The `cray` CLI configuration needs to be initialized for the Linux account. The Keycloak user who initializes the
       CLI configuration needs to be authorized for administrative actions.
-   
+
       See [Configure the Cray Command Line Interface (cray CLI)](../operations/configure_cray_cli.md)
    <a name="set_bmc_management_role"></a>
    1. Set Management Role on the BMCs of Management Nodes
@@ -50,11 +50,11 @@ BMC/controller passwords.
       to mark them with the *Management* role so they can be easily included in the locking/unlocking operations required
       as protections for FAS and CAPMC actions.
       **Set BMC Management Roles Now!**
-      
+
       See [Set BMC Management Role](../operations/hardware_state_manager/Set_BMC_Management_Role.md)
-      
+
       For more info on the importance of locking these components, see [Lock Management Nodes](#lock_management_nodes).
-    
+
    <a name="lock_management_nodes"></a>
    1. Lock Management Nodes
 
@@ -79,7 +79,7 @@ BMC/controller passwords.
    <a name="configure_with_scsd"></a>
    1. Configure BMC and Controller Parameters with SCSD
 
-      Note: If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this step can be skipped.
+      **NOTE:** If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this step can be skipped.
 
       The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters for
       components in liquid-cooled cabinets. At this point in the install, SCSD should be used to set the

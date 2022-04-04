@@ -131,13 +131,14 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
 Procedures required for a full power off of an HPE Cray EX system.
 
   * [System Power Off Procedures](power_management/System_Power_Off_Procedures.md)
+
+Additional links to *power off sub procedures* provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
   * [Prepare the System for Power Off](power_management/Prepare_the_System_for_Power_Off.md)
   * [Shut Down and Power Off Compute and User Access Nodes](power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md)
   * [Save Management Network Switch Configuration Settings](power_management/Save_Management_Network_Switch_Configurations.md)
   * [Power Off Compute and IO Cabinets](power_management/Power_Off_Compute_and_IO_Cabinets.md)
   * [Shut Down and Power Off the Management Kubernetes Cluster](power_management/Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md)
   * [Power Off the External Lustre File System](power_management/Power_Off_the_External_Lustre_File_System.md)
-
 
 <a name="system-power-on-procedures"></a>
 
@@ -146,9 +147,11 @@ Procedures required for a full power off of an HPE Cray EX system.
 Procedures required for a full power on of an HPE Cray EX system.
 
   * [System Power On Procedures](power_management/System_Power_On_Procedures.md)
+
+Additional links to *power on sub procedures* provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
   * [Power On and Start the Management Kubernetes Cluster](power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
-  * [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
   * [Power On Compute and IO Cabinets](power_management/Power_On_Compute_and_IO_Cabinets.md)
+  * [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
   * [Bring Up the Slingshot Fabric](power_management/Bring_up_the_Slingshot_Fabric.md)
   * [Power On and Boot Compute and User Access Nodes](power_management/Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md)
   * [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md)
@@ -295,6 +298,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
    * [Manage System Passwords](security_and_authentication/Manage_System_Passwords.md)
      * [Update NCN Passwords](security_and_authentication/Update_NCN_Passwords.md)
      * [Change Root Passwords for Compute Nodes](security_and_authentication/Change_Root_Passwords_for_Compute_Nodes.md)
+     * [Change NCN Image Root Password and SSH Keys on Pit Node](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
      * [Change NCN Image Root Password and SSH Keys](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
      * [Change EX Liquid-Cooled Cabinet Global Default Password](security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
      * [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](security_and_authentication/Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md)
@@ -482,7 +486,7 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
 
 ## Hardware Management (HM) Collector
 
-The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system. 
+The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system.
 
  * [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
 
@@ -494,17 +498,13 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 
   * [Node Management](node_management/Node_Management.md)
   * [Node Management Workflows](node_management/Node_Management_Workflows.md)
-  * [Rebuild NCNs](node_management/Rebuild_NCNs.md)
+  * [Rebuild NCNs](node_management/Rebuild_NCNs/Rebuild_NCNs.md)
     * [Identify Nodes and Update Metadata](node_management/Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md)
-    * [Prepare Master Nodes](node_management/Rebuild_NCNs/Prepare_Master_Nodes.md)
-    * [Prepare Worker Nodes](node_management/Rebuild_NCNs/Prepare_Worker_Nodes.md)
     * [Prepare Storage Nodes](node_management/Rebuild_NCNs/Prepare_Storage_Nodes.md)
     * [Wipe Drives](node_management/Rebuild_NCNs/Wipe_Drives.md)
     * [Power Cycle and Rebuild Nodes](node_management/Rebuild_NCNs/Power_Cycle_and_Rebuild_Nodes.md)
     * [Adding a Ceph Node to the Ceph Cluster](node_management/Rebuild_NCNs/Re-add_Storage_Node_to_Ceph.md)
     * [Validate Boot Raid](node_management/Rebuild_NCNs/Validate_Boot_Raid.md)
-    * [Validate Master Node](node_management/Rebuild_NCNs/Post_Rebuild_Master_Node_Validation.md)
-    * [Validate Worker Node](node_management/Rebuild_NCNs/Post_Rebuild_Worker_Node_Validation.md)
     * [Validate Storage Node](node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
     * [Final Validation Steps](node_management/Rebuild_NCNs/Final_Validation_Steps.md)
   * [Reboot NCNs](node_management/Reboot_NCNs.md)
@@ -544,7 +544,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Configure NTP on NCNs](node_management/Configure_NTP_on_NCNs.md)
   * [Swap a Compute Blade with a Different System](node_management/Swap_a_Compute_Blade_with_a_Different_System.md)
   * [Update the Gigabyte Node BIOS Time](node_management/Update_the_Gigabyte_Node_BIOS_Time.md)
-  * [S3FS Usage Guidlines](node_management/S3FS_Usage_and_Guidelines.md)
+  * [S3FS Usage Guidelines](node_management/S3FS_Usage_and_Guidelines.md)
 
 
 <a name="network"></a>
@@ -589,7 +589,7 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
 
 ### Dynamic Host Configuration Protocol (DHCP)
 
-The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers. 
+The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers.
 
   * [DHCP](network/dhcp/DHCP.md)
   * [Troubleshoot DHCP Issues](network/dhcp/Troubleshoot_DHCP_Issues.md)
@@ -646,6 +646,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 
   * [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
   * [Troubleshoot Spire Failing to Start on NCNs](spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
+  * [Update Spire Intermediate CA Certificate](spire/Update_Spire_Intermediate_CA_Certificate.md)
 
 
 <a name="update-firmware-with-fas"></a>

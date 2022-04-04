@@ -2,7 +2,7 @@
 
 Mellanox switches can hold two firmware images. These images, once uploaded, are called the Running and Image available for install.
 
-Relevant Configuration 
+Relevant Configuration
 
 Copy an image from a local server using sftp
 
@@ -17,16 +17,16 @@ Boot the switch into the new firmware
 ```
 switch (config)#image boot next
 switch (config)#configuration write
-switch (config)#reload 
+switch (config)#reload
 ```
 
-Show Commands to Validate Functionality 
+Show Commands to Validate Functionality
 
 ```
 switch# show version
 ```
 
-Expected Results 
+Expected Results
 
 * Step 1: You can upload an image to the switch
 * Step 2: You can see the versions of code for the primary and secondary images

@@ -1,4 +1,4 @@
-## Set Gigabyte Node BMC to Factory Defaults
+# Set Gigabyte Node BMC to Factory Defaults
 
 ### Prerequisites
 
@@ -33,7 +33,7 @@ Use the management scripts and text files to reset Gigabyte BMC to factory defau
     ```
 
 2. Use Redfish to reset the BMC to factory default, the BMC is running 12.84.01 or later version, run:
-      
+
       ```bash
       ncn-w001# sh do_Redfish_BMC_Factory.sh
       ```
@@ -93,7 +93,7 @@ Use the management scripts and text files to reset Gigabyte BMC to factory defau
    ```
 
 7. If the BMC is in a booted management NCN running v1.4+ or v1.3, reapply the static IP address and clear the DHCP address from HSM/KEA.
-   
+
    Determine the MAC address in HSM for the DHCP address for the BMC, then delete it from HSM and restart KEA.
 
 8. Reboot or power cycle the target nodes.
@@ -106,6 +106,4 @@ Use the management scripts and text files to reset Gigabyte BMC to factory defau
    ncn-w001# sleep 300
    ncn-w001# sh do_bmc_root_account.sh
    ```
-
-
 

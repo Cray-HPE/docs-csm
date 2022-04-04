@@ -1,5 +1,4 @@
-
-## Healthy Compute Node Boot Process
+# Healthy Compute Node Boot Process
 
 In order to investigate node boot-related issues, it is important to understand the flow of a healthy boot process and the associated components. This section outlines the normal flow of components that play a role in booting compute nodes, including DHCP, BSS, and TPTP.
 
@@ -56,5 +55,4 @@ boot || goto boot_retry
 sleep 30
 chain https://api-gw-service-nmn.local/apis/bss/boot/v1/bootscript?mac=a4:bf:01:3e:f9:28&retry=1
 ```
-
 

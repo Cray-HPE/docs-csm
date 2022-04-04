@@ -1,4 +1,4 @@
-## Version Control Service \(VCS\)
+# Version Control Service \(VCS\)
 
 The Version Control Service \(VCS\) includes a web interface for repository management, pull requests, and a visual view of all repositories and organizations. The following URL is for the VCS web interface:
 
@@ -23,7 +23,7 @@ The initial VCS login credentials for the `crayvcs` user are stored in three pla
 
 -   `vcs-user-credentials` Kubernetes secret: This is used to initialize the other two locations, as well as providing a place where other users can query for the password.
 -   VCS \(Gitea\): These credentials are used when pushing to Git using the default username and password. The password should be changed through the Gitea UI.
--   Keycloak: These credentials are used to access the VCS UI. They must be changed through Keycloak.
+-   Keycloak: These credentials are used to access the VCS UI. They must be changed through Keycloak. For more information on accessing Keycloak, see [Access the Keycloak User Management UI](../security_and_authentication/Access_the_Keycloak_User_Management_UI.md).
 
 **WARNING:** These three sources of credentials are not synced by any mechanism. Changing the default password requires that is it changed in all three places. Changing only one may result in difficulty determining the password at a later date, or may result in losing access to VCS altogether.
 
@@ -35,7 +35,6 @@ ncn# kubectl create secret generic vcs-user-credentials --save-config \
 --from-literal=vcs_password="NEW_PASSWORD" \
 --dry-run=client -o yaml | kubectl apply -f -
 ```
-
 The `NEW_PASSWORD` value must be replaced with the updated password.
 
 ### Access the `cray` Gitea Organization
@@ -75,7 +74,7 @@ Data for gitea is stored in two places. Git content is stored directly in a PVC,
 #### Backup Postgres Data
 
 1. Determine which Postgres member is the leader and exec into the leader pod to dump the data to a local file:
-    
+
     ```
     ncn-w001# kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list
     ```
@@ -93,7 +92,7 @@ Data for gitea is stored in two places. Git content is stored directly in a PVC,
 
     ```bash
     ncn-w001# POSTGRES_LEADER=gitea-vcs-postgres-0
-    
+
     ncn-w001# kubectl exec -it ${POSTGRES_LEADER} -n services -c postgres -- pg_dumpall -c -U postgres > gitea-vcs-postgres.sql
     ```
 
@@ -121,7 +120,7 @@ Data for gitea is stored in two places. Git content is stored directly in a PVC,
         echo "---" >> gitea-vcs-postgres.manifest
     done
     ```
-   
+
 4. Edit the manifest file to remove creationTimestamp, resourceVersion, selfLink, uid for each entry. Then, copy all files to a safe location.
 
 

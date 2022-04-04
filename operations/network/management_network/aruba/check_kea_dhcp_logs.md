@@ -5,7 +5,7 @@ Use this procedure to check the logs for a cray-dhcp-kea pod.
 ## Procedure
 
 1. Retrieve the pod name.
-   
+
    The pod name is required to check the logs for the pod in question.
 
     ```

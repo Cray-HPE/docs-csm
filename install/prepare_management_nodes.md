@@ -2,15 +2,15 @@
 
 The procedures described on this page are being done before any node is booted with the Cray Pre-Install Toolkit. When the PIT node is referenced during these procedures, it means the node that will be be booted as the PIT node.
 
-## Topics:
+## Topics
 
-1. [Quiesce Compute and Application Nodes](#quiesce_compute_and_application_nodes)
-1. [Disable DHCP Service](#disable_dhcp_service) (if any management nodes are booted)
-1. [Wipe Disks on Booted Nodes](#wipe_disks_on_booted_nodes)
-1. [Power Off Booted Nodes](#power_off_booted_nodes)
-1. [Set Node BMCs to DHCP](#set_node_bmcs_to_dhcp)
-1. [Wipe USB Device on PIT Node](#wipe_usb_device_on_pit_node) (**Only if** switching from USB LiveCD method to RemoteISO LiveCD method)
-1. [Power Off PIT Node](#power_off_pit_node)
+ 1. [Quiesce Compute and Application Nodes](#quiesce_compute_and_application_nodes)
+ 1. [Disable DHCP Service](#disable_dhcp_service) (if any management nodes are booted)
+ 1. [Wipe Disks on Booted Nodes](#wipe_disks_on_booted_nodes)
+ 1. [Power Off Booted Nodes](#power_off_booted_nodes)
+ 1. [Set Node BMCs to DHCP](#set_node_bmcs_to_dhcp)
+ 1. [Wipe USB Device on PIT Node](#wipe_usb_device_on_pit_node) (**Only if** switching from USB LiveCD method to RemoteISO LiveCD method)
+ 1. [Power Off PIT Node](#power_off_pit_node)
 
 <a name="quiesce_compute_and_application_nodes"></a>
 ## Quiesce compute nodes and application nodes.
@@ -92,7 +92,7 @@ Power each NCN off using `ipmitool` from `ncn-m001` (or the booted LiveCD if rei
 
 Set the BMCs on the management nodes to DHCP.
 > **`NOTE`** During the install of the management nodes their BMCs get set to static IP addresses. The installation expects these BMCs to be set back to DHCP before proceeding.
-   
+
 1. Set the `LAN` variable.
     * If you have Intel nodes, set it to 3.
         ```bash
@@ -184,7 +184,7 @@ Set the BMCs on the management nodes to DHCP.
 If intending to boot the PIT node from the Remote ISO and there is a USB device which was previously used with LiveCD data, it should be wiped to avoid having two devices with disk labels claiming to be the LiveCD. Alternatively, the USB device could be removed from the PIT node.
 
 1. If not removing the USB device from `ncn-m001`, then wipe its USB storage with the following command:
-    
+
     ```bash
     ncn-m001# wipefs --all --force /dev/disk/by-label/cow /dev/disk/by-label/PITDATA /dev/disk/by-label/BOOT /dev/disk/by-label/CRAYLIVE
     ```
