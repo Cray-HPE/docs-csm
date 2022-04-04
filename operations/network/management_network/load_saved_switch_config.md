@@ -21,7 +21,7 @@ This procedure needs to be done on all mgmt switches.
 
 1. View the checkpoints. 
    
-    Ensure that the proper checkpoints exist. In this example we will be using `CSM1_0` and `CSM1_2`
+    Ensure that the proper checkpoints exist. `CSM1_0` and `CSM1_2` are used in this example.
 
     Example:
 
