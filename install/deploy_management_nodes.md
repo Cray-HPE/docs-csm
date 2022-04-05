@@ -35,6 +35,7 @@ the number of storage and worker nodes.
       1. [LiveCD Cluster Authentication](#livecd-cluster-authentication)
       1. [BGP Routing](#bgp-routing)
       1. [Install Tests and Test Server on NCNs](#install-tests)
+      1. [Remove the default NTP pool](#remove-the-default-ntp-pool)
    1. [Validate Management Node Deployment](#validate_management_node_deployment)
       1. [Validation](#validation)
       1. [Optional Validation](#optional-validation)
@@ -877,6 +878,15 @@ pit# export CSM_RELEASE=csm-x.y.z
 pit# pushd /var/www/ephemeral
 pit# ${CSM_RELEASE}/lib/install-goss-tests.sh
 pit# popd
+```
+
+<a name="remove-default-ntp-pool"></a>
+### 4.5 Remove the default NTP pool
+
+Run the following command on the PIT node to remove the default pool, which can cause contention issues with NTP.
+
+```bash
+pit# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',')" 'sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf'
 ```
 
 <a name="validate_management_node_deployment"></a>
