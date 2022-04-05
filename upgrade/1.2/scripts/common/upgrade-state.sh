@@ -43,6 +43,7 @@ function record_state () {
     if [[ $state_recorded == "0" ]]; then
         printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "${state_name}" >> /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/state
     fi
+    echo "====> ${state_name} has been completed"
 }
 
 function is_state_recorded () {
@@ -74,11 +75,13 @@ function move_state_file () {
 }
 
 function err_report() {
-    echo
-    echo "[ERROR] - Unexpected errors, check output above"
+    # force output to console regardless of redirection
+    echo >/dev/tty 
+    echo "[ERROR] - Unexpected errors, check logs: ${LOG_FILE}" >/dev/tty 
 }
 
 function ok_report() {
-    echo
-    echo "[OK] - Successfully completed"
+    # force output to console regardless of redirection
+    echo >/dev/tty 
+    echo "[OK] - Successfully completed" >/dev/tty
 }

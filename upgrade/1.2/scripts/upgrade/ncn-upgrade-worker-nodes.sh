@@ -39,12 +39,12 @@ ${basedir}/../cfs/wait_for_configuration.sh --xnames $TARGET_XNAME
 state_name="ENSURE_NEXUS_CAN_START_ON_ANY_NODE"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-
+    echo "====> ${state_name} ..."  
+    {
     workers="$(kubectl get node --selector='!node-role.kubernetes.io/master' -o name | sed -e 's,^node/,,' | paste -sd,)"
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.images_to_cache' | while read image; do echo >&2 "+ caching $image"; pdsh -w "$workers" "crictl pull $image" 2>/dev/null; done
-
+    } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -56,7 +56,7 @@ state_name="ENSURE_ETCD_PODS_RUNNING"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    {
     while [[ "$(kubectl get po -A -l 'app=etcd' | grep -v "Running"| wc -l)" != "1" ]]; do
         echo "Some etcd pods are not in running state, wait for 5s ..."
         kubectl get po -A -l 'app=etcd' | grep -v "Running"
@@ -72,7 +72,7 @@ if [[ $state_recorded == "0" ]]; then
             exit 1
         fi
     done
-
+    } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -82,10 +82,10 @@ state_name="ENSURE_POSTGRES_HEALTHY"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    {
     wget -q http://rgw-vip.nmn/ncn-utils/csi;chmod 0755 csi; mv csi /usr/local/bin/csi
     csi pit validate --postgres
-
+    } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -93,6 +93,7 @@ fi
 
 drain_node $target_ncn
 
+{
 set +e
 while true ; do    
     csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
@@ -103,9 +104,11 @@ while true ; do
     fi
 done
 set -e
+} >> ${LOG_FILE} 2>&1
 
 ${basedir}/../common/ncn-rebuild-common.sh $target_ncn
 
+{
 ${basedir}/../cfs/wait_for_configuration.sh --xnames $TARGET_XNAME
 
 ### redeploy CPS if required
@@ -157,12 +160,13 @@ if [[ $redeploy == "1" ]];then
         break
     done
 fi
+} >> ${LOG_FILE} 2>&1
 
 state_name="ENSURE_KEY_PODS_HAVE_STARTED"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    {
     while true; do
       output=$(kubectl get po -A -o wide | grep -e etcd -e speaker | grep $target_ncn | awk '{print $4}')
       if [ ! -n "$output" ]; then
@@ -184,6 +188,7 @@ if [[ $state_recorded == "0" ]]; then
     done
     scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
     ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
+    } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
