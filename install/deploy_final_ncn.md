@@ -533,7 +533,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
 ### 6. Remove the default NTP pool
 
-Run the following commands on ncn-m001 to remove the default pool, which can cause contention issues with NTP.
+Run the following commands on `ncn-m001` to remove the default pool, which can cause contention issues with NTP.
 
 ```
 ncn-m001# sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf
