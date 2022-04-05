@@ -76,6 +76,16 @@ function move_state_file () {
 
 function err_report() {
     # force output to console regardless of redirection
+    echo "$(caller)"
+    echo "$BASH_COMMAND"
+
+    # ignore some internal expected errors
+    local ignoreCmd="cray artifacts list config-data"
+    shouldIgnore=$(echo "$BASH_COMMAND" | grep "${ignoreCmd}" | wc -l)
+    if [[ ${shouldIgnore} -eq 1 ]]; then
+        return 0
+    fi
+
     echo >/dev/tty 
     echo "[ERROR] - Unexpected errors, check logs: ${LOG_FILE}" >/dev/tty 
 }
