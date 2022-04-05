@@ -17,6 +17,7 @@ Topics:
    * [Reboot](#reboot)
    * [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
    * [Fix NTP on ncn-m001](#fix-ntp-config-on-ncn-m001)
+   * [Remove the default NTP pool](#remove-the-default-ntp-pool)
    * [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
    * [Validate `BOOTRAID` artifacts](#validate-bootraid-artifacts)
    * [Next Topic](#next-topic)
@@ -522,15 +523,14 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
 > **`CSI NOTE`** `/tmp/csi` will delete itself on the next reboot. The `/tmp` directory is `tmpfs` and runs in memory, it normally will not persist on restarts.
 
-<a name="fix-ntp-config-on-ncn-m001"></a>
-### 6. Fix the NTP Configuration on `ncn-m001`
+<a name="remove-the-default-ntp-pool"></a>
 
-Run the following commands on `ncn-m001` **only**:
+### 6. Remove the default NTP pool
 
-```bash
-ncn-m001# cp /usr/share/doc/csm/scripts/cc_ntp.py /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py
-ncn-m001# cp /usr/share/doc/csm/scripts/chrony.conf.cray.tmpl /etc/cloud/templates/chrony.conf.cray.tmpl
-ncn-m001# cloud-init single --name ntp --frequency always
+Run the following commands on ncn-m001 to remove the default pool, which can cause contention issues with NTP.
+
+```
+ncn-m001# sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf
 ```
 
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
