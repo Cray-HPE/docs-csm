@@ -2,11 +2,11 @@
 
 ## Description
 
-This procedure allocates IP addresses for a NCN being added to a system to the applicable networks (HMN, NMN, MTL, CAN, etc...) to the System Layout Service (SLS) and the Boot Script Service (BSS).
+This procedure allocates IP addresses for an NCN being added to a system to the applicable networks (HMN, NMN, MTL, CAN, etc.) to the System Layout Service (SLS) and the Boot Script Service (BSS).
 
-This procedure will perform an verify the following:
-1. If the NCN being added is ncn-m00[1-3], ncn-w00[1-3], or ncn-s00[1-3] are expected to be already present and consistent between SLS and BSS.
-2. Otherwise new IP addresses for the NCN will be allocated and verified to be within the static IP address pool in the bootstrap_dhcp subnet for the various networks in system.  
+This procedure will perform and verify the following:
+1. If the NCN being added is ncn-m00[1-3], ncn-w00[1-3], or ncn-s00[1-3], it is expected to already be present and consistent between SLS and BSS.
+1. Otherwise, new IP addresses for the NCN will be allocated and verified to be within the static IP address pool in the `bootstrap_dhcp` subnet for the various networks in system.
 
 ## Procedure
 1.  Retrieve an API token:
@@ -18,9 +18,9 @@ This procedure will perform an verify the following:
             | jq -r '.access_token')
     ```
 
-2.  Determine the component name (xname) of the NCN by referring to the HMN of the systems SHCD if it has not been determined yet.
+1.  Determine the component name (xname) of the NCN by referring to the HMN of the systems SHCD, if it has not been determined yet.
 
-    Sample row from the HMN tab of a SHCD:
+    Sample row from the `HMN` tab of a SHCD:
     | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
     | --------------- | ----------------- | --------------------- | ----- | ------------ | ---- | ----------------- | ----------------- | ---------------------- | -------------------------- | ----- | ---------------------- |
     | wn01            | x3000             | u04                   | -     |              |      | j3                | sw-smn01          | x3000                  | u14                        | -     | j48                    |
@@ -42,7 +42,7 @@ This procedure will perform an verify the following:
     ncn-m# export XNAME=x3000c0s4b0n0
     ```
 
-3.  Perform a dry-run of allocating IP addresses for the NCN:
+1.  Perform a dry-run of allocating IP addresses for the NCN:
     ```bash
     ncn-m# ./add_management_ncn.py allocate-ips \
         --xname $XNAME \
@@ -73,7 +73,7 @@ This procedure will perform an verify the following:
         HMN     | 10.254.1.21
     ```
 
-4.  Allocate IP addresses for the NCN in SLS and HSM by adding the `--perform-changes` argument to the command ran in the previous step:
+1.  Allocate IP addresses for the NCN in SLS and HSM by adding the `--perform-changes` argument to the command in the previous step:
 
     ```bash
     ncn-m# ./add_management_ncn.py allocate-ips \
@@ -104,4 +104,4 @@ This procedure will perform an verify the following:
         HMN     | 10.254.1.21
     ```
 
-Proceed to the next step to [Add Switch Config](Add_Switch_Config.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+Proceed to the next step to [Add Switch Config](Add_Switch_Config.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.

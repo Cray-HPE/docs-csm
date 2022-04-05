@@ -1,30 +1,24 @@
-## Redeploy Services Impacted by Adding or Permanently Removing Storage Nodes
+# Redeploy Services Impacted by Adding or Permanently Removing Storage Nodes
 
-This procedure redeploys S3 and SYSMGMT_HEALTH services to add or remove storage node endpoints.
+This procedure redeploys S3 and `sysmgmt-health` services to add or remove storage node endpoints.
 
-**This procedure can be skipped if a worker or master node have been added.** 
+**This procedure can be skipped if a worker or master node has been added.** In that case, proceed to the next step to [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
 
-- Proceed to the next step to [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+**This procedure can be skipped if a worker or master node have been removed.** In that case, proceed to the next step to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
 
-**This procedure can be skipped if a worker or master node have been removed.**
+Otherwise, if a storage node has been added or removed, proceed with the following steps.
 
-- Proceed to the next step to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
-
-Otherwise, proceed with the following if a storage node has been added or removed.
-
-### Prerequisite
+## Prerequisite
 
 The docs-csm RPM has been installed on the NCN. Verify that the following file exists:
 
 ```bash
-   ncn-m# ls /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/update_customizations.sh
+ncn-m# ls /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/update_customizations.sh
 ```
 
-### Procedure
+## Update the `nmn_ncn_storage` list to include the IP addresses for any added or removed storage nodes
 
-### 1. Update the `nmn_ncn_storage` list to include the IPs for any added or removed storage nodes.
-
-#### 1.1 Acquire site-init.
+### Acquire `site-init`
 
 Before redeploying the desired charts, update the `customizations.yaml` file in the `site-init` secret in the `loftsman` namespace.
 
@@ -34,13 +28,13 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
    ncn-m# git clone "$SITE_INIT_REPO_URL" site-init
    ```
 
-2. Acquire `customizations.yaml` from the currently running system.
+1. Acquire `customizations.yaml` from the currently running system.
 
    ```bash
    ncn-m# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > site-init/customizations.yaml
    ```
 
-3. Review, add, and commit `customizations.yaml` to the local `site-init` repository as appropriate.
+1. Review, add, and commit `customizations.yaml` to the local `site-init` repository as appropriate.
 
    > **`NOTE:`** If `site-init` was cloned from a remote repository in step 1,
    > there may not be any differences and hence nothing to commit. This is
@@ -55,7 +49,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
    ncn-m# git commit -m 'Add customizations.yaml from site-init secret'
    ```
 
-#### 1.2 Modify the customizations to include the added or removed storage node.
+### Modify the customizations to include the added or removed storage node
 
 1. Retrieve an API token.
 
@@ -67,14 +61,14 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
        | jq -r '.access_token')
    ```
 
-1. Update the customizations `spec.network.netstaticips.nmn_ncn_storage` for the added or removed storage IP.
+1. Update the customizations `spec.network.netstaticips.nmn_ncn_storage` for the added or removed storage IP address.
 
    ```bash
    ncn-m# cd /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs
    ncn-m# ./update_customizations.sh
    ```
 
-2. Check that the updated customizations.yaml contains the change to add or remove a storage IP.
+1. Check that the updated `customizations.yaml` contains the change to add or remove a storage IP address.
    
    ```bash
    ncn-m# yq r /tmp/customizations.original.yaml -P > /tmp/customizations.original.yaml.pretty
@@ -87,7 +81,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
    10.252.1.13
    ```
 
-3. Check in changes made to `customizations.yaml`.
+1. Check in changes made to `customizations.yaml`.
 
    ```bash
    ncn-m# cd site-init
@@ -97,29 +91,30 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
    ncn-m# git commit -m 'Update customizations.yaml nmn_ncn_storage storage IPs'
    ```
 
-4. Push to the remote repository as appropriate.
+1. Push to the remote repository as appropriate.
 
     ```bash
     ncn-m# git push
     ```
 
-5. Update `site-init` sealed secret in `loftsman` namespace.
+1. Update `site-init` sealed secret in `loftsman` namespace.
 
     ```bash
     ncn-m# kubectl delete secret -n loftsman site-init
     ncn-m# kubectl create secret -n loftsman generic site-init --from-file=/tmp/customizations.yaml
     ```
 
-#### 1.3 Redeploy S3 to pick up any changes for storage node endpoints.
+#### Redeploy S3 to pick up any changes for storage node endpoints
 
 1. Determine the version of S3:
 
     ```bash
-    ncn-m# S3_VERSION=$(kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-s3).version')
+    ncn-m# S3_VERSION=$(kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' |
+                        yq r - 'spec.charts.(name==cray-s3).version')
     ncn-m# echo $S3_VERSION
     ```
 
-2. Create `s3-manifest.yaml`:
+1. Create `s3-manifest.yaml`:
 
     ```bash
     ncn-m# cat > s3-manifest.yaml << EOF
@@ -134,13 +129,13 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
     EOF
     ```
 
-3. Merge `customizations.yaml` with `s3-manifest.yaml`:
+1. Merge `customizations.yaml` with `s3-manifest.yaml`:
 
     ```bash
     ncn-m# manifestgen -c /tmp/customizations.yaml -i s3-manifest.yaml > s3-manifest.out.yaml
     ```
 
-4. Redeploy the S3 helm chart:
+1. Redeploy the S3 helm chart:
 
     ```bash
     ncn-m# loftsman ship \
@@ -148,7 +143,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
         --manifest-path s3-manifest.out.yaml
     ```
 
-5. Check that the new endpoint has been updated.
+1. Check that the new endpoint has been updated.
 
     ```bash
     ncn-m# kubectl get endpoints -l app.kubernetes.io/instance=cray-s3 -n ceph-rgw -o jsonpath='{.items[*].subsets[].addresses}' | jq -r '.[] | .ip'
@@ -163,24 +158,26 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
     10.252.1.6
     ```
 
-#### 1.4 Redeploy SYSMGMT_HEALTH to pick up any changes for storage node endpoints.
+### Redeploy `sysmgmt-health` to pick up any changes for storage node endpoints
 
-1. Determine the version of SYSMGMT_HEALTH:
+1. Determine the version of `sysmgmt-health`:
 
     ```bash
-    ncn-m# SYSMGMT_VERSION=$(kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-sysmgmt-health).version')
+    ncn-m# SYSMGMT_VERSION=$(kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' |
+                             yq r - 'spec.charts.(name==cray-sysmgmt-health).version')
     ncn-m# echo $SYSMGMT_VERSION
     ```
 
-2. Determine the current resources and retention settings:
+1. Determine the current resources.
 
     ```bash
-    ncn-m# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.resources'
+    ncn-m# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | 
+              yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.resources'
     ```
 
     Example Output:
 
-    ```
+    ```yaml
     limits:
       cpu: '6'
       memory: 30Gi
@@ -188,6 +185,8 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
       cpu: '2'
       memory: 15Gi
     ```
+
+1. Determine the current retention settings.
 
     ```bash
     ncn-m# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.retention'
@@ -199,7 +198,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
     48h
     ```
 
-3. Create `sysmgmt-health-manifest.yaml` and update the `resources` and `retention` sections as needed based up the data from the above step:
+1. Create `sysmgmt-health-manifest.yaml` and update the `resources` and `retention` sections as needed based upon the data from the previous steps:
 
     ```bash
     ncn-m# cat > sysmgmt-health-manifest.yaml << EOF
@@ -226,13 +225,13 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
     EOF
     ```
 
-3. Merge `customizations.yaml` with `sysmgmt-health-manifest.yaml`:
+1. Merge `customizations.yaml` with `sysmgmt-health-manifest.yaml`:
 
     ```bash
     ncn-m# manifestgen -c /tmp/customizations.yaml -i sysmgmt-health-manifest.yaml > sysmgmt-health-manifest.out.yaml
     ```
 
-4. Redeploy the SYSMGMT_HEALTH helm chart:
+1. Redeploy the `sysmgmt-health` helm chart:
 
     ```bash
     ncn-m# loftsman ship \
@@ -240,7 +239,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
         --manifest-path sysmgmt-health-manifest.out.yaml
     ```
 
-5. Check that the new endpoint has been updated.
+1. Check that the new endpoint has been updated.
 
     ```bash
     ncn-m# kubectl get endpoints -l app=cray-sysmgmt-health-ceph-exporter -n sysmgmt-health -o jsonpath='{.items[*].subsets[].addresses}' | jq -r '.[] | .ip'
@@ -256,15 +255,17 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
     10.252.1.6
     ``` 
 
-#### 1.5 Cleanup
- 
-1. Remove temporary files.
+### Cleanup
 
-   ```bash
-   ncn-m# rm /tmp/customizations.yaml /tmp/customizations.original.yaml /tmp/customizations.original.yaml.pretty
-   ```
+Remove temporary files.
+
+```bash
+ncn-m# rm /tmp/customizations.yaml /tmp/customizations.original.yaml /tmp/customizations.original.yaml.pretty
+```
+
+## Next Step
 
 Proceed to the next step:
 
-- Added Storage NCN : [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
-- Removed Storage NCN : [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page. 
+- If a storage NCN was added, proceed to [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+- If a storage NCN was removed, proceed to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page. 

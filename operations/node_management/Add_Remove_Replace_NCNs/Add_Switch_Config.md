@@ -20,7 +20,7 @@ Update the network switches for the NCN that is being added.
 10.254.1.21     ncn-w004-mgmt
 ```
 
-## Mellanox & Dell
+## Mellanox and Dell
 
 ### Spine/Agg Switch Updates
 
@@ -65,7 +65,7 @@ This is for workers only.
 
 For more information, see [Update BGP Neighbors](../../network/metallb_bgp/Update_BGP_Neighbors.md).
 
-- The tftp route maps will only include the first 3 workers.
+- The `tftp` route maps will only include the first 3 workers.
 
 ```
 route-map ncn-w004 permit seq 10
@@ -101,4 +101,4 @@ router bgp 65533
 
 Refer to [Aruba edge port configuration](../../../install/configure_aruba_leaf_switch.md#Configure-Edge-Port) for more information.
 
-Proceed to the next step to [Add NCN Data](Add_NCN_Data.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+Proceed to the next step to [Add NCN Data](Add_NCN_Data.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.

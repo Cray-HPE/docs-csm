@@ -1,13 +1,10 @@
 # Remove Switch Config for NCN
 
-## Description
-
 Update the network switches for the NCN that was removed.
 
-## Procedure
+## Update Networking to Remove NCN
 
-### Update Networking to Remove NCN
-#### `ncn-w004` IP data:
+### `ncn-w004` IP data:
 ```
 10.102.4.15     ncn-w004.can
 10.254.1.22     ncn-w004.hmn
@@ -15,7 +12,8 @@ Update the network switches for the NCN that was removed.
 10.252.1.13     ncn-w004.nmn ncn-w004
 10.254.1.21     ncn-w004-mgmt
 ```
-#### spine-01 switch updates
+
+### spine-01 switch updates
 ```
 no route-map ncn-w004 permit 10 match ip address pl-can
 no route-map ncn-w004 permit 10 set ip next-hop 10.102.4.15 
@@ -34,7 +32,7 @@ no interface mlag-port-channel 12 description "sw-spine-001:12==>ncn-w004:pcie-s
 no interface mlag-port-channel 12 no shutdown
 ```
 
-#### spine-02 switch updates
+### spine-02 switch updates
 ```
 no route-map ncn-w004 permit 10 match ip address pl-can
 no route-map ncn-w004 permit 10 set ip next-hop 10.102.4.15 
@@ -52,15 +50,12 @@ no interface mlag-port-channel 12 switchport hybrid allowed-vlan add 7
 no interface mlag-port-channel 12 description "sw-spine-002:12==>ncn-w004:pcie-slot1:2"
 no interface mlag-port-channel 12 no shutdown
 ```
-### Only Worker Nodes
-#### spine-01 switch updates
-```
-no router bgp 65533 vrf default neighbor 10.252.1.13 remote-as 65533
-no router bgp 65533 vrf default neighbor 10.252.1.13 route-map ncn-w004
-no router bgp 65533 vrf default neighbor 10.252.1.13 timers 1 3
-no router bgp 65533 vrf default neighbor 10.252.1.13 transport connection-mode passive
-```
-#### spine-02 switch updates
+
+## Worker Nodes
+
+**These steps only need to be performed when the node removed was a worker node.**
+
+### spine-01 switch updates
 ```
 no router bgp 65533 vrf default neighbor 10.252.1.13 remote-as 65533
 no router bgp 65533 vrf default neighbor 10.252.1.13 route-map ncn-w004
@@ -68,4 +63,14 @@ no router bgp 65533 vrf default neighbor 10.252.1.13 timers 1 3
 no router bgp 65533 vrf default neighbor 10.252.1.13 transport connection-mode passive
 ```
 
-Proceed to the next step to [Redeploy Services](Redeploy_Services.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+### spine-02 switch updates
+```
+no router bgp 65533 vrf default neighbor 10.252.1.13 remote-as 65533
+no router bgp 65533 vrf default neighbor 10.252.1.13 route-map ncn-w004
+no router bgp 65533 vrf default neighbor 10.252.1.13 timers 1 3
+no router bgp 65533 vrf default neighbor 10.252.1.13 transport connection-mode passive
+```
+
+## Next Step
+
+Proceed to the next step to [Redeploy Services](Redeploy_Services.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
