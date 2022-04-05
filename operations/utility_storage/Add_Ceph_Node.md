@@ -13,13 +13,15 @@
            scp -p ncn-m001:/usr/share/doc/csm/scripts/join_ceph_cluster.sh /usr/share/doc/csm/scripts
     ```
 
-1. In a separate window, run the following command on `ncn-s001`, `ncn-s002`, or `ncn-s003` (but not the same node that was rebuilt or added):
+1. Start monitoring the Ceph health alongside the main procedure.
+
+    In a separate window, run the following command on `ncn-s001`, `ncn-s002`, or `ncn-s003` (but not the same node that was rebuilt or added):
 
     ```bash
     ncn-s# watch ceph -s
     ```
 
-1. Execute the script from step 1
+1. Execute the script from the first step.
 
     > Run this command on the storage node that was rebuilt or added.
 
@@ -35,7 +37,7 @@
 
 **NOTE:** The commands in this section will need to be run from a node running `ceph-mon`. Typically `ncn-s001`, `ncn-s002`, or `ncn-s003`.
 
-1. Find the devices on the node being rebuilt
+1. Find the devices on the node being rebuilt.
 
    ```bash
    ncn-s# ceph orch device ls $NODE
@@ -57,7 +59,7 @@
 
    **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that you are not seeing OS drives. These will have a size of `480G`.
 
-1. Zap the drives
+1. Zap the drives.
 
    ```bash
    ncn-s# for drive in $(ceph orch device ls $NODE --format json-pretty |jq -r '.[].devices[].path') ; do
@@ -170,7 +172,7 @@
      ncn-s# pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service; systemctl restart keepalived.service'
      ```
 
-Next Step:
+## Next Step
 
 - If rebuilding the storage node, proceed to [Storage Node Validation](../node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
 - If adding the storage node, proceed to [Boot NCN Step 8](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#step-7---for-storage-nodes-only)
