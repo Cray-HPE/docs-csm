@@ -1,12 +1,12 @@
 # Bootstrap PIT Node from LiveCD USB
 
 The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available
-to bootstrap the PIT node--the RemoteISO or a bootable USB device. This procedure describes using the USB
+to bootstrap the PIT node: the RemoteISO or a bootable USB device. This procedure describes using the USB
 device. If not using the USB device, see [Bootstrap PIT Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md).
 
 There are 5 overall steps that provide a bootable USB with SSH enabled, capable of installing Shasta v1.5 (or higher).
 
-### Topics
+## Topics
    1. [Download and Expand the CSM Release](#download-and-expand-the-csm-release)
    1. [Create the Bootable Media](#create-the-bootable-media)
    1. [Configuration Payload](#configuration-payload)
@@ -22,7 +22,7 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
 <a name="download-and-expand-the-csm-release"></a>
 ### 1. Download and Expand the CSM Release
 
-Fetch the base installation CSM tarball and extract it, installing the contained CSI tool.
+Fetch the base installation CSM tarball, extract it, and install the contained CSI tool.
 
 1. Create a working area for this procedure:
 
@@ -31,7 +31,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    linux# cd usb
    ```
 
-1. Set up the Typescript directory as well as the initial typescript. This directory will be returned to for every typescript in the entire CSM installation.
+1. Set up the initial typescript.
 
    ```bash
    linux# script -af csm-install-usb.$(date +%Y-%m-%d).txt
@@ -57,9 +57,9 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    linux# CSM_PATH=$(pwd)/${CSM_RELEASE}
    ```
 
-   The ISO and other files are now available in the directory from the extracted CSM tar.
+   The ISO and other files are now available in the directory from the extracted CSM tarball.
 
-1. Install/upgrade CSI; check if a newer version was included in the tar-ball.
+1. Install/upgrade CSI; check if a newer version was included in the tarball.
 
    ```bash
    linux# rpm -Uvh $(find ./${CSM_RELEASE}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
@@ -88,13 +88,13 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    App. Version   : 1.5.18
     ```
 
-1. Configure zypper with the `embedded` repository from the CSM release.
+1. Configure `zypper` with the `embedded` repository from the CSM release.
 
    ```bash
    linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
    ```
 
-1. Install podman or docker to support container tools required to generated
+1. Install Podman or Docker to support container tools required to generate
    sealed secrets.
 
    Podman RPMs are included in the `embedded` repository in the CSM release and
@@ -102,43 +102,45 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    * Install `podman` and `podman-cni-config` packages:
 
-     ```bash
-     linux# zypper in --repo ${CSM_RELEASE}-embedded -y podman podman-cni-config
-     ```
+      ```bash
+      linux# zypper in --repo ${CSM_RELEASE}-embedded -y podman podman-cni-config
+      ```
 
-   Or one may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `${CSM_PATH}/rpm/embedded` directory.
-   ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/x86_64/podman-*.x86_64.rpm
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/noarch/podman-cni-config-*.noarch.rpm
-   ```
+   * Alternatively, one may use `rpm -Uvh` to install RPMs (and their dependencies) manually
+     from the `${CSM_PATH}/rpm/embedded` directory.
 
-1. Install lsscsi to view attached storage devices.
+      ```bash
+      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/x86_64/podman-*.x86_64.rpm
+      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/noarch/podman-cni-config-*.noarch.rpm
+      ```
 
-   lsscsi RPMs are included in the `embedded` repository in the CSM release and
+1. Install `lsscsi` to view attached storage devices.
+
+   `lsscsi` RPMs are included in the `embedded` repository in the CSM release and
    may be installed in your pre-LiveCD environment using `zypper` as follows:
 
    * Install `lsscsi` package:
 
-     ```bash
-     linux# zypper in --repo ${CSM_RELEASE}-embedded -y lsscsi
-     ```
+      ```bash
+      linux# zypper in --repo ${CSM_RELEASE}-embedded -y lsscsi
+      ```
 
-   Or one may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `${CSM_PATH}/rpm/embedded` directory.
-   ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/x86_64/lsscsi-*.x86_64.rpm
-   ```
+   * Alternatively, one may use `rpm -Uvh` to install RPMs (and their dependencies) manually
+     from the `${CSM_PATH}/rpm/embedded` directory.
+
+      ```bash
+      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/x86_64/lsscsi-*.x86_64.rpm
+      ```
 
 <a name="create-the-bootable-media"></a>
 ### 2. Create the Bootable Media
 
-Cray Site Init will create the bootable LiveCD. Before creating the media, we need to identify
-which device that is.
+Cray Site Init will create the bootable LiveCD. Before creating the media, identify
+which device will be used for it.
 
 1. Identify the USB device.
 
-    This example shows the USB device is /dev/sdd on the host.
+    This example shows the USB device is `/dev/sdd` on the host.
 
     ```bash
     linux# lsscsi
@@ -158,34 +160,34 @@ which device that is.
     Set a variable with your disk to avoid mistakes:
 
     ```bash
-    linux# export USB=/dev/sd<disk_letter>
+    linux# USB=/dev/sd<disk_letter>
     ```
 
 1. Format the USB device
 
-    On Linux using the CSI application:
+    * On Linux, use the CSI application to do this:
 
-    ```bash
-    linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
-    ```
+        ```bash
+        linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+        ```
 
-    > Note: If the previous command fails with this error message, this indicates that this Linux computer does not have the checkmedia RPM installed. In that case, the RPM can be installed and `csi pit format` can be run again
-    > ```
-    > ERROR: Unable to validate ISO. Please install checkmedia
-    > ```
-    >
-    >   1.  Install the missing rpms
-    >
-    >   ```bash
-    >   linux# zypper in --repo ${CSM_RELEASE}-embedded -y libmediacheck5 checkmedia
-    >   linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
-    >   ```
+        > Note: If the previous command fails with the following error message, it indicates that this Linux computer does not have the checkmedia RPM installed. In that case, the RPM can be installed and `csi pit format` can be run again
+        > ```
+        > ERROR: Unable to validate ISO. Please install checkmedia
+        > ```
+        >
+        >   1.  Install the missing RPMs
+        >
+        >   ```bash
+        >   linux# zypper in --repo ${CSM_RELEASE}-embedded -y libmediacheck5 checkmedia
+        >   linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+        >   ```
 
-    On MacOS using the bash script:
+    * On MacOS, use the `write-livecd.sh` script to do this:
 
-    ```bash
-    macos# ./cray-site-init/write-livecd.sh $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
-    ```
+        ```bash
+        macos# ./cray-site-init/write-livecd.sh $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+        ```
 
     > NOTE: At this point the USB device is usable in any server with an x86_64 architecture based CPU. The remaining steps help add the installation data and enable SSH on boot.
 
@@ -196,13 +198,14 @@ which device that is.
     linux# mount -vL cow /mnt/cow && mount -vL PITDATA /mnt/pitdata
     ```
 
-1.  Copy and extract the tarball (compressed) into the USB:
+1.  Copy and extract the tarball into the USB:
     ```bash
     linux# cp -v ${CSM_PATH}.tar.gz /mnt/pitdata/
     linux# tar -zxvf ${CSM_PATH}.tar.gz -C /mnt/pitdata/
     ```
 
-The USB device is now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
+The USB device is now bootable and contains the CSM artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
+
 <a name="configuration-payload"></a>
 ### 3. Configuration Payload
 
@@ -640,7 +643,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    = PIT Identification = COPY/CUT END =========================================
    ```
 
-   Note: The hostname should be similar to eniac-ncn-m001-pit when booted from the LiveCD, but it will be shown as "pit#" in the command prompts from this point onward until the PIT server is setup.
+   Note: The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#` in the command prompts from this point onward.
 
 <a name="configure-the-running-livecd"></a>
 ### 6. Configure the Running LiveCD
