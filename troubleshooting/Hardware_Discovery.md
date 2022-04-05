@@ -4,7 +4,7 @@ Known issues related to hardware discovery in a system.
  * [HMS Discovery job not creating RedfishEndpoints in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
 
 <a name="initrd-not-found"></a>
-### ``error: file  `/boot/grub2/../initrd.img.xz' not found.Press any key to continue...``
+## ``error: file  `/boot/grub2/../initrd.img.xz' not found.Press any key to continue...``
 
 This is a problem that is fixed in CSM 1.0+, but if your system was upgraded from CSM 0.9.x you may run into this. Below is the full error seen when attempting to boot:
 
