@@ -55,7 +55,7 @@ Follow these steps on any NCN to fix the issue:
       ncn# rpm -e csm-install-workarounds
       ```
 
-##### Validate
+### Validate
 
 Running the script again will produce this output:
 
