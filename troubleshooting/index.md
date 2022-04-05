@@ -4,11 +4,11 @@ This document provides troubleshooting information for services and functionalit
 
 ### Known Issues
  * [Known Issues](#known-issues)
-    * [Hardware Discovery](Hardware_Discovery.md)
+    * [Hardware Discovery](known_issues/Hardware_Discovery.md)
     * [SAT/HSM/CAPMC Component Power State Mismatch](https://github.com/Cray-HPE/docs-csm/blob/CASMINS-4311/troubleshooting/known_issues/component_power_state_mismatch.md)
 
 ### Troubleshoot Topics
- * Kubernetes troubleshooting
+ * Troubleshoot Kubernetes
     * [General Kubernetes Commands for Troubleshooting](https://github.com/Cray-HPE/docs-csm/blob/CASMINS-4311/troubleshooting/kubernetes/Kubernetes_Troubleshooting_Information.md)
     * [Kubernetes Log File Locations](https://github.com/Cray-HPE/docs-csm/blob/CASMINS-4311/troubleshooting/kubernetes/Kubernetes_Log_File_Locations.md)
     * [Troubleshoot Liveliness or Readiness Probe Failures](https://github.com/Cray-HPE/docs-csm/blob/CASMINS-4311/troubleshooting/kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
@@ -27,9 +27,8 @@ This document provides troubleshooting information for services and functionalit
       * [Troubleshoot Missing or Incorrect UAI Images](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/UAS_user_and_admin_topics/Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
      
       * [Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/UAS_user_and_admin_topics/Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
- * Troubleshoot Boot issues
+ * Troubleshoot Boot Issues
       * [Troubleshoot UAN Boot Issues](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/boot_orchestration/Troubleshoot_UAN_Boot_Issues.md)
-      * 
       * [Troubleshoot Compute Node Boot Issues Related to Unified Extensible Firmware Interface (UEFI)](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Unified_Extensible_Firmware_Interface_UEFI.md)
       * [Troubleshoot Compute Node Boot Issues Related to Dynamic Host Configuration Protocol (DHCP)](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Dynamic_Host_Configuration_Protocol_DHCP.md)
       * [Troubleshoot Compute Node Boot Issues Related to the Boot Script Service](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_the_Boot_Script_Service_BSS.md)
@@ -57,7 +56,6 @@ This document provides troubleshooting information for services and functionalit
       * [Troubleshoot System Clock Skew](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/utility_storage/Troubleshoot_System_Clock_Skew.md)
       * [Troubleshoot an Unresponsive S3 Endpoint](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/utility_storage/Troubleshoot_an_Unresponsive_S3_Endpoint.md)
       * [Troubleshoot Ceph-Mon Processes Stopping and Exceeding Max Restarts](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/utility_storage/Troubleshoot_Ceph-Mon_Processes_Stopping_and_Exceeding_Max_Restarts.md)
- 
       * [Troubleshoot Large Object Map Objects in Ceph Health](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/utility_storage/Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)
       * [Troubleshoot Failure of RGW Health Check](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
  * Troubleshoot Node Management
@@ -69,7 +67,6 @@ This document provides troubleshooting information for services and functionalit
  * Troubleshoot Dynamic Host Configuration Protocol (DHCP)
       
  * Domain Name Service (DNS)
-      
       * [Troubleshoot Connectivity to Services with External IP addresses](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
       * [Troubleshoot DNS Configuration Issues](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
  * MetalLB in BGP-Mode

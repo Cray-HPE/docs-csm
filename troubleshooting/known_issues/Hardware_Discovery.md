@@ -1,7 +1,7 @@
 ### Hardware Discovery
 Known issues related to hardware discovery in a system.
- * [Air cooled hardware is not getting properly discovered with Aruba leaf switches](known_issues/discovery_aruba_snmp_issue.md)
- * [HMS Discovery job not creating RedfishEndpoints in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
+ * [Air cooled hardware is not getting properly discovered with Aruba leaf switches](discovery_aruba_snmp_issue.md)
+ * [HMS Discovery job not creating RedfishEndpoints in Hardware State Manager](discovery_job_not_creating_redfish_endpoints.md)
 
 <a name="initrd-not-found"></a>
 ### ``error: file  `/boot/grub2/../initrd.img.xz' not found.Press any key to continue...``
@@ -35,7 +35,7 @@ Follow these steps on any NCN to fix the issue:
 
    1. Run the `CASMINST-2689.sh` script from the `CASMINST-2689` workaround at the `livecd-post-reboot` breakpoint.
 
-      Follow the usual [workaround instructions](../update_product_stream/index.md#apply-workarounds) **with the following exceptions**:
+      Follow the usual [workaround instructions](../../update_product_stream/index.md#apply-workarounds) **with the following exceptions**:
          * Use the latest Shasta 1.4 install workaround RPM, **not** the Shasta 1.5 install workaround RPM
          * For the  `livecd-post-reboot` breakpoint, ignore any workarounds other than `CASMINST-2689`
          * Do not follow the workaround `README.md` instructions -- only run the `CASMINST-2689.sh` script in the `CASMINST-2689` subdirectory
