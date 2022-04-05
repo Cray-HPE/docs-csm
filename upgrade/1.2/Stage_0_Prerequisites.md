@@ -24,23 +24,39 @@
 
    - Internet Connected
 
-     ```bash
-     ncn-m001# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm -P /root
+     1. Set the ENDPOINT variable to the URL of the directory containing the CSM release tarball.
 
-     ncn-m001# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+        In other words, the full URL to the CSM release tarball will be ${ENDPOINT}${CSM_RELEASE}.tar.gz
 
-     ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
-     ```
+        **NOTE** This step is optional for Cray/HPE internal installs.
+
+        ```bash
+        ncn-m001# ENDPOINT=https://put.the/url/here/
+        ```
+
+     1. Run the script
+
+        ```bash
+        ncn-m001# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm -P /root
+
+        ncn-m001# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+
+        ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
+        ```
 
    - Air Gapped (replace the PATH_TO below with the location of the rpm)
 
-     ```bash
-     ncn-m001# cp [PATH_TO_docs-csm-*.noarch.rpm] /root
+     1. Copy the docs-csm RPM package and CSM release tarball to `ncn-m001`.
+     
+     1. Run the script
 
-     ncn-m001# rpm -Uvh --force /root/docs-csm-*.noarch.rpm
+        ```bash
+        ncn-m001# cp [PATH_TO_docs-csm-*.noarch.rpm] /root
 
-     ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
-     ```
+        ncn-m001# rpm -Uvh --force /root/docs-csm-*.noarch.rpm
+
+        ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
+        ```
 
 <a name="reduce-cpu-limits"></a>
 

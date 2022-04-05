@@ -58,6 +58,17 @@ do
     esac
 done
 
+if [[ -z ${LOG_FILE} ]]; then
+    LOG_FILE="$(pwd)/output.log"
+    echo
+    echo
+    echo " ************"
+    echo " *** NOTE ***"
+    echo " ************"
+    echo "LOG_FILE is not specified; use default location: ${LOG_FILE}"
+    echo
+fi
+
 if [[ -z ${CSM_RELEASE} ]]; then
     echo "CSM RELEASE is not specified"
     exit 1
@@ -94,10 +105,11 @@ if [[ -z ${TARBALL_FILE} ]]; then
         rm -rf /etc/cray/upgrade/csm/myenv || true
         touch /etc/cray/upgrade/csm/myenv
         echo "====> ${state_name} ..."
+        {
         wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
         # set TARBALL_FILE to newly downloaded file
         TARBALL_FILE=${CSM_RELEASE}.tar.gz
-
+        } >> ${LOG_FILE} 2>&1
         record_state ${state_name} $(hostname)
         echo
     else
@@ -110,6 +122,7 @@ state_name="UNTAR_CSM_TARBALL_FILE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    {
     mkdir -p /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
     tar -xzf ${TARBALL_FILE} -C /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
     CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}
@@ -120,7 +133,7 @@ if [[ $state_recorded == "0" ]]; then
     rm -rf /etc/cray/upgrade/csm/myenv
     echo "export CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
-
+    } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -130,11 +143,12 @@ state_name="INSTALL_CSI"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    {
     rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "cray-site-init*.rpm") 
 
     # upload csi to s3
     csi handoff upload-utils --kubeconfig /etc/kubernetes/admin.conf
-
+    } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -144,8 +158,9 @@ state_name="INSTALL_CANU"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    {
     rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "canu*.rpm") 
-
+    } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
