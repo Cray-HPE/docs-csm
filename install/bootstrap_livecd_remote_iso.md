@@ -346,6 +346,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
          ```
 
       1. Generate the system configuration.
+      > **`NOTE`** ensure you select a reachable NTP pool/server passed in via the `--ntp-pools`/`--ntp-servers` flags, respectively. Adding an uncreachable server can cause clock skew as chrony tries to continually reach out to a server it can never reach.
+
+      ```bash
+      pit:/var/www/ephemeral/prep/# csi config init
 
          ```bash
          linux# csi config init
