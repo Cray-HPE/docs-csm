@@ -34,7 +34,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     ncn# ceph osd tree
     ```
 
-1. Set the `NODE` variable
+1. Set the `NODE` variable.
 
    ```bash
    ncn# export NODE=<node being removed>
@@ -75,7 +75,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     ncn-s# cephadm rm-cluster --fsid $(cephadm ls|jq -r .[1].fsid) --force
     ```
 
-1. Remove the node from the crush map
+1. Remove the node from the crush map.
 
     Run from `ncn-s001`, `ncn-s002`, or `ncn-s003`:
 
