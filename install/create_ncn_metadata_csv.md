@@ -8,7 +8,7 @@ Some of the data in the `ncn_metadata.csv` can be found in the SHCD in the HMN t
 to collect is the MAC addresses for the node's BMC, the node's bootable network interface, and the
 pair of network interfaces which will become the bonded interface `bond0`.
 
-### Topics:
+### Topics
 
    * [Introduction](#introduction)
       * [LACP Bonding](#lacp_bonding)
@@ -24,15 +24,16 @@ pair of network interfaces which will become the bonded interface `bond0`.
 Each of the management nodes is represented as a row in the `ncn_metadata.csv` file.
 
 For example:
+
 ```
 Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
 x3000c0s9b0n0,Management,Storage,94:40:c9:37:77:26,14:02:ec:d9:76:88,14:02:ec:d9:76:88,94:40:c9:5f:b6:92
 ```
 
-For each management node, the xname, role, and subrole can be extracted from the SHCD in the HMN tab. However, the rest of the
+For each management node, the component name (xname), role, and subrole can be extracted from the SHCD in the HMN tab. However, the rest of the
 MAC address information needs to be collected another way.
 
-Check the description for component names while mapping names between the SHCD and your `ncn_metadata.csv` file.
+Check the description for component names while mapping names between the SHCD and the `ncn_metadata.csv` file.
 See [Component Names (xnames)](../operations/Component_Names_xnames.md).
 
 There are two interesting parts to the NCN metadata file:
@@ -46,12 +47,13 @@ The "shasta-network interface" is the interfaces, one or more, that comprise the
 
 NCNs may have one or more bond interfaces, which may be comprised from one or more physical interfaces. The
 preferred default configuration is two physical network interfaces per bond. The number
-of bonds themselves depends on your systems network topology.
+of bonds themselves depends on the systems network topology.
 
 For example, systems with 4 network interfaces on a given node could configure either of these
 permutations (for redundancy minimums within Shasta cluster):
-- one bond with 4 interfaces (`bond0`)
-- two bonds with 2 interfaces each (`bond0` and `bond1`)
+
+- One bond with 4 interfaces (`bond0`)
+- Two bonds with 2 interfaces each (`bond0` and `bond1`)
 
 For more information, see [NCN Networking](../background/ncn_networking.md) page for NCNs.
 
@@ -65,7 +67,7 @@ If the system is **booting over PCIe then the "bootstrap MAC" and the "bond0 MAC
 system is **booting over onboard NICs then the "bootstrap MAC" and the "bond0 MAC0" will be different.**
 
 > Other Nomenclature
-- "BOND MACS" are the MAC addresses for the physical interfaces that your node will use for the various VLANs.
+- "BOND MACS" are the MAC addresses for the physical interfaces that the node will use for the various VLANs.
 - BOND0 MAC0 and BOND0 MAC1 should **not** be on the same physical network card to establish redundancy for failed chips.
 - On the other hand, if any nodes' capacity prevents it from being redundant, then MAC1 and MAC0 will still produce a valid configuration if they do reside on the same physical chip/card.
 - The BMC MAC is the exclusive, dedicated LAN for the onboard BMC. It should not be swapped with any other device.
@@ -74,6 +76,7 @@ system is **booting over onboard NICs then the "bootstrap MAC" and the "bond0 MA
 ### Sample `ncn_metadata.csv`
 
 The following are sample rows from a `ncn_metadata.csv` file:
+
 * __Use case__: NCN with a single PCIe card (1 card with 2 ports):
     > Notice how the MAC address for `Bond0 MAC0` and `Bond0 MAC1` are only off by 1, which indicates that
     > they are on the same 2 port card.
@@ -82,7 +85,9 @@ The following are sample rows from a `ncn_metadata.csv` file:
     Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
     x3000c0s6b0n0,Management,Worker,94:40:c9:37:77:b8,14:02:ec:da:bb:00,14:02:ec:da:bb:00,14:02:ec:da:bb:01
     ```
+
 * __Use case__: NCN with a dual PCIe cards (2 cards with 2 ports each for 4 ports total):
+*
     > Notice how the MAC address for `Bond0 MAC0` and `Bond0 MAC1` have a difference greater than 1, which
     > indicates that they are on not on the same 2 port same card.
 
@@ -92,12 +97,14 @@ The following are sample rows from a `ncn_metadata.csv` file:
     ```
 
 Example `ncn_metadata.csv` file for a system that has been configured as follows:
+
  * Management NCNs are configured to boot over the PCIe NICs
  * Master and Storage management NCNs have two 2 port PCIe cards
  * Worker management NCNs have one 2 port PCIe card
+
 > Because the NCNs have been configured to boot over their PCIe NICs, the `Bootstrap MAC` and `Bond0 MAC0` columns have the same value.
 
-**IMPORTANT:** Mind the index for each group of nodes (3, 2, 1.... ; not 1, 2, 3). If storage nodes are ncn-s001 x3000c0s7b0n0, ncn-s002 x3000c0s8b0n0, ncn-s003 x3000c0s9b0n0, then their portion of the file would be ordered x3000c0s9b0n0, x3000c0s8b0n0, x3000c0s7b0n0.
+**IMPORTANT:** Mind the index for each group of nodes (3, 2, 1.... ; not 1, 2, 3). If storage nodes are `ncn-s001 x3000c0s7b0n0`, `ncn-s002 x3000c0s8b0n0`, `ncn-s003 x3000c0s9b0n0`, then their portion of the file would be ordered `x3000c0s9b0n0`, `x3000c0s8b0n0`, `x3000c0s7b0n0`.
 
 ```
 Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
@@ -129,8 +136,8 @@ x3000c0s1b0n0,Management,Master,94:40:c9:37:87:32,14:02:ec:da:b9:98,14:02:ec:da:
    [Collecting NCN MAC Addresses](collecting_ncn_mac_addresses.md).
 
 
-   * If the nodes are powered up and there is SSH access to the spine and leaf switches, it is possible to
-   collect information from the spine and leaf switches.
+   * If the nodes are powered up and there is SSH access to the spine and leaf-bmc switches, it is possible to
+   collect information from the spine and leaf-bmc switches.
       * The BMC MAC address can be collected from the switches using knowledge about the cabling of the HMN from the SHCD. See [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md).
       * The node MAC addresses cannot be collected until after the PIT node has booted from the LiveCD. At that point, a partial boot of the management nodes can be done to collect the remaining information from the conman console logs on the PIT node using the [Procedure: iPXE Consoles](collecting_ncn_mac_addresses.md#procedure-ipxe-consoles)
 
@@ -144,9 +151,11 @@ x3000c0s1b0n0,Management,Master,94:40:c9:37:87:32,14:02:ec:da:b9:98,14:02:ec:da:
    until after the PIT node has been booted from the LiveCD. Having incorrect MAC addresses
    in the `ncn_metadata.csv` file as placeholders is acceptable until the point during the install at which the management
    network switches have been configured and the PIT node can be used to collect the information.
-      * At that point in the installation workflow, you will be directed to see [Collect MAC Addresses for NCNs](collect_mac_addresses_for_ncns.md).
 
-   * Unless your system does not use or does not have onboard NICs on the management nodes, then this topic
+      * At that point in the installation workflow, the [Collect MAC Addresses for NCNs](collect_mac_addresses_for_ncns.md) procedure will be used.
+
+   * Unless the system does not use or does not have onboard NICs on the management nodes, then this topic
    may be necessary before constructing the `ncn_metadata.csv` file.
-      1. [Switch PXE Boot from Onboard NIC to PCIe](switch_pxe_boot_from_onboard_nic_to_pcie.md)
+
+      * See [Switch PXE Boot from Onboard NIC to PCIe](switch_pxe_boot_from_onboard_nic_to_pcie.md) for more information.
 

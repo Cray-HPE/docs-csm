@@ -1,5 +1,4 @@
-
-## Use a Specific Inventory in a Configuration Session
+# Use a Specific Inventory in a Configuration Session
 
 A special repository can be added to a Configuration Framework Service (CFS) configuration to help with certain scenarios, specifically when developing Ansible plays for use on the system. A static inventory often changes along with the Ansible content, and CFS users may need to test different configuration values simultaneously and not be forced to use the global `additionalInventoryUrl`.
 
@@ -9,7 +8,11 @@ For example:
 
 ```bash
 ncn-m001# cat configurations-example-additional-inventory.json
+```
 
+Example configuration:
+
+```
 {
   "layers": [
     {
@@ -25,5 +28,4 @@ ncn-m001# cat configurations-example-additional-inventory.json
   }
 }
 ```
-
 

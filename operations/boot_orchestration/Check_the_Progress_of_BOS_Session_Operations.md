@@ -1,4 +1,4 @@
-## Check the Progress of BOS Session Operations
+# Check the Progress of BOS Session Operations
 
 Describes how to view the logs of BOS operations with Kubernetes.
 
@@ -6,6 +6,11 @@ When a Boot Orchestration Service \(BOS\) session is created, it will return a j
 
 ```bash
 ncn-m001# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation Boot
+```
+
+Example output:
+
+```
 operation = "Boot"
 templateUuid = "TEMPLATE_UUID"
 [[links]]
@@ -125,6 +130,11 @@ Use the Kubernetes CFS job ID in the returned output above to find the CFS pod I
 
 ```bash
 ncn-m001# kubectl -n services get pods|grep KUBERNETES_CFS_JOB_ID
+```
+
+Example output:
+
+```
 cfs-85e3e48f-6795-4570-b379-347b05b39dbe-59645667b-ffznt     2/2   Running     0   3h57m
 cfs-85e3e48f-6795-4570-b379-347b05b39dbe-cvr54               0/3   Completed   0   3h57m
 ```
@@ -144,6 +154,11 @@ The BOS Kubernetes pod ID can be found with the following command:
 
 ```bash
 ncn-m001# kubectl get pods -n services | grep bos | grep -v etcd
+```
+
+Example output:
+
+```
 cray-bos-d97cf465c-klcrw                             2/2     Running     0          90s
 ```
 

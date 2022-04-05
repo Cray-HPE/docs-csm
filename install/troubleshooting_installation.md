@@ -72,8 +72,8 @@ for additional information on system hardware, troubleshooting, and administrati
 
    1. Ceph CSI Troubleshooting
 
-      If there has been a failure to initialize all Ceph CSI components on ncn-s001, then the storage node
-      cloud-init may need to be rerun.
+      If there has been a failure to initialize all Ceph CSI components on `ncn-s001`, then the storage node
+      `cloud-init` may need to be rerun.
          * Verify Ceph CSI
          * Rerun Storage Node cloud-init
 

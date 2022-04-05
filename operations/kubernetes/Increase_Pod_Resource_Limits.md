@@ -1,4 +1,4 @@
-## Increase Pod Resource Limits
+# Increase Pod Resource Limits
 
 Increase the appropriate resource limits for pods after determining if a pod is being CPU throttled or OOMKilled.
 
@@ -6,8 +6,8 @@ Return Kubernetes pods to a healthy state with resources available.
 
 ### Prerequisites
 
--   `kubectl` is installed.
--   The names of the pods hitting their resource limits are known. See [Determine if Pods are Hitting Resource Limits](Determine_if_Pods_are_Hitting_Resource_Limits.md).
+- `kubectl` is installed.
+- The names of the pods hitting their resource limits are known. See [Determine if Pods are Hitting Resource Limits](Determine_if_Pods_are_Hitting_Resource_Limits.md).
 
 ### Procedure
 
@@ -17,9 +17,12 @@ Return Kubernetes pods to a healthy state with resources available.
 
     ```bash
     ncn-w001# kubectl get po -n services POD_ID -o yaml
-    ...
+    ```
 
-    **(look for this section)**
+    Look for the following section returned in the output:
+
+    ```
+    [...]
 
         resources:
           limits:
@@ -41,6 +44,11 @@ Return Kubernetes pods to a healthy state with resources available.
         ```bash
         ncn-w001# kubectl get deployment,statefulset,etcdcluster,postgresql,daemonsets \
         -A | grep hbtd-etcd
+        ```
+
+        Example output:
+
+        ```
         services    etcdcluster.etcd.database.coreos.com/cray-hbtd-etcd               32d
         ```
 
@@ -50,15 +58,18 @@ Return Kubernetes pods to a healthy state with resources available.
 
         ```bash
         ncn-w001# kubectl describe pod -n services POD_ID
+        ```
 
-        .
-        .
-        .
+        Example output:
+
+        ```
+        [...]
+
         Labels:       app=etcd
                       etcd_cluster=cray-hbtd-etcd
                       etcd_node=cray-hbtd-etcd-8r2scmpb58
-        .
-        .
+
+        [...]
         ```
 
 3.  Edit the entity.
@@ -91,6 +102,11 @@ Return Kubernetes pods to a healthy state with resources available.
 
     ```bash
     ncn-w001# kubectl get po -n services | grep CLUSTER_NAME
+    ```
+
+    Example output:
+
+    ```
     cray-hbtd-etcd-8r2scmpb58 1/1 Running 0 5d11h
     cray-hbtd-etcd-qvz4zzjzw2 1/1 Running 0 5d11h
     cray-hbtd-etcd-vzjzmbn6nr 1/1 Running 0 5d11h
@@ -108,10 +124,13 @@ Return Kubernetes pods to a healthy state with resources available.
 
     ```bash
     ncn-w001# kubectl get po -n services | grep CLUSTER_NAME
+    ```
+
+    Example output:
+
+    ```
     cray-hbtd-etcd-8r2scmpb58 1/1 Running 0 12s
     cray-hbtd-etcd-qvz4zzjzw2 1/1 Running 0 32s
     cray-hbtd-etcd-vzjzmbn6nr 1/1 Running 0 98s
     ```
-
-
 

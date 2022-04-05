@@ -1,4 +1,4 @@
-## CAPMC Deprecation Notice: many CAPMC v1 features are being partially deprecated
+# CAPMC Deprecation Notice: many CAPMC v1 features are being partially deprecated
 
 ### Deprecated Features in CSM 1.0
 

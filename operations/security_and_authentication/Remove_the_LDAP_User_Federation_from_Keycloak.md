@@ -1,4 +1,4 @@
-## Remove the LDAP User Federation from Keycloak
+# Remove the LDAP User Federation from Keycloak
 
 Use the Keycloak UI or Keycloak REST API to remove the LDAP user federation from Keycloak.
 
@@ -58,6 +58,4 @@ Follow the steps in only one of the sections below depending on if it is preferr
     HTTP/2 204
     ...
     ```
-
-
 

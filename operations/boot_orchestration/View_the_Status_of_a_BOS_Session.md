@@ -1,4 +1,4 @@
-## View the Status of a BOS Session
+# View the Status of a BOS Session
 
 The Boot Orchestration Service \(BOS\) supports a status endpoint that reports the status for individual BOS sessions. The status can be retrieved for each boot set within the session, as well as the individual items within a boot set.
 
@@ -52,6 +52,11 @@ The BOS session ID is required to view the status of a session. To list the avai
 
 ```bash
 ncn-m001# cray bos session list --format json
+```
+
+Example output:
+
+```
 [
   "99a192c2-050e-41bc-a576-548610851742",
   "4374f3e6-e8ed-4e66-bf63-3ebe0e618db2",
@@ -73,6 +78,11 @@ It is recommended to describe the session using the session ID above to verify t
 
 ```bash
 ncn-m001# cray bos session describe SESSION_ID
+```
+
+Example output:
+
+```
 status_link = "/v1/session/f4eebe51-a217-46d0-8733-b9499a092042/status"
 complete = false
 start_time = "2020-07-22 13:39:07.706774"
@@ -89,6 +99,11 @@ To display the status for the session:
 
 ```bash
 ncn-m001# cray bos session status list SESSION_ID -–format json
+```
+
+Example output:
+
+```
 {
   "boot_sets": [
     "computes"
@@ -138,6 +153,11 @@ Run the following command to view the status for a specific boot set in a sessio
 
 ```bash
 ncn-m001# cray bos session status describe BOOT_SET_NAME SESSION_ID --format json
+```
+
+Example output:
+
+```
 {
   "phases": [
     {

@@ -6,7 +6,7 @@ Glossary of terms used in CSM documentation.
 * [Baseboard Management Controller (BMC)](#baseboard-management-controller)
 * [Blade Switch Controller (sC)](#blade-switch-controller)
 * [Boot Script Service (BSS)](#boot-script-service)
-* [Boot Orchesstration Service (BOS)](#boot-orchestration-service)
+* [Boot Orchestration Service (BOS)](#boot-orchestration-service)
 * [Cabinet Cooling Group](#cabinet-cooling-group)
 * [Cabinet Environmental Controller (CEC)](#cabinet-environmental-controller)
 * [CEC microcontroller (eC)](#cec-microcontroller)
@@ -98,7 +98,7 @@ ASIC, FPGA buffer/interfaces, and firmware.
 The Boot Script Service stores the configuration information that is used to boot each hardware component. Nodes consult BSS for their boot artifacts and boot parameters when nodes boot or reboot.
 
 <a name="boot-orchestration-service"></a>
-## Boot Orchesstration Service (BOS)
+## Boot Orchestration Service (BOS)
 
 The Boot Orchestration Service (BOS) is responsible for booting, configuring, and shutting down collections of nodes. This is accomplished using BOS components, such as boot orchestration session templates and sessions, as well as launching a Boot Orchestration Agent (BOA) that fulfills boot requests. BOS uses other services which provide boot artifact configuration (BSS), power control (CAPMC), node status (HSM), and configuration (CFS).
 
@@ -197,7 +197,7 @@ CFS configures nodes and images via a gitops methodology. All configuration cont
 <a name="content-projection-service"></a>
 ## Content Projection Service (CPS)
 
-The Content Projection Service (CPS) provides the root filesystem for compute nodes and application nodes in conjunction with the Data Virtualization Service (DVS). Also, the Cray Programming Environment (CPE) and Analytics products are provided as a separately-mounted filesystems to compute nodes, Applicationn nodes like the UANs, and worker nodes hosting UAI pods via CPS and DVS.
+The Content Projection Service (CPS) provides the root filesystem for compute nodes and application nodes in conjunction with the Data Virtualization Service (DVS). Using CPS and DVS, the Cray Programming Environment (CPE) and Analytics products are provided as separately mounted filesystems to compute nodes, application nodes (such as UANs), and worker nodes hosting UAI pods.
 
 <a name="cray-site-init"></a>
 ## Cray Site Init (CSI)
@@ -226,7 +226,7 @@ the process of making a file system available on nodes where it does not physica
 DVS-specific configuration settings enable clients to access a file system projected by DVS
 servers. These clients include compute nodes, User Access Nodes (UANs), and other management
 nodes running User Access Instances (UAIs). Thus DVS, while not a file system, represents a
-software layer that provides scalable transport for file system services.  DVS is integrated
+software layer that provides scalable transport for file system services. DVS is integrated
 with the Content Projection Service (CPS).
 
 <a name="ex-compute-cabinet"></a>
@@ -238,7 +238,7 @@ high-speed network (HSN) switches.
 <a name="image-management-service"></a>
 ## Image Management Service (IMS)
 
-The Image Management Service (IMS) uses the open source Kiwi-NG tool to build image roots from 
+The Image Management Service (IMS) uses the open source Kiwi-NG tool to build image roots from
 recipes. IMS also uses CFS to apply image customization for pre-boot configuration of the image root.
 These images are bootable on compute nodes and application nodes.
 
@@ -329,7 +329,7 @@ worker functions where most of the containerized workload is scheduled by Kubern
 <a name="mountain-cabinet"></a>
 ## Mountain Cabinet
 
-See Olympus cabinet. Some softwware and documentation refers to the Olympus cabinet as a Mountain cabinet.
+See Olympus cabinet. Some software and documentation refers to the Olympus cabinet as a Mountain cabinet.
 
 <a name="mountain-endpoint-discovery-service"></a>
 ## Mountain Endpoint Discovery Service (MEDS)
@@ -372,9 +372,9 @@ management nodes and application nodes.
 
 The Olympus cabinet is a liquid-cooled dense compute cabinet that supports 64 compute
 blades and 64 high-speed network (HSN) switches. Every HPE Cray EX system with Olympus
-cabinets will also have at least one River cabinet to house non-compute node components 
-such as management nodes, managenet network switches, storage nodes, application nodes,
-and possibly other air-cooled compute nodes. Some softwware and documentation refers to
+cabinets will also have at least one River cabinet to house non-compute node components
+such as management nodes, management network switches, storage nodes, application nodes,
+and possibly other air-cooled compute nodes. Some software and documentation refers to
 the Olympus cabinet as a Mountain cabinet.
 
 <a name="power-distribution-unit"></a>
@@ -393,7 +393,7 @@ installation which is booted from a [LiveCD](#livecd). This is the node that wil
 The node running the Pre-Install Toolkit is known as the PIT node during the installation process
 until it reboots from a normal management node image like the other master nodes.
 
-Early in the install process, before the Pre-Install Toolkit has been installed or booted, the 
+Early in the install process, before the Pre-Install Toolkit has been installed or booted, the
 documents may still refer to the PIT node. In this case, they are referring to the node which
 will eventually become the PIT node.
 
@@ -421,7 +421,7 @@ The Redfish Translation Service (RTS) aids in management of any hardware compone
 
 At least one 19 inch IEA management cabinet is required for every HPE Cray EX system to
 support the management non-compute nodes (NCN), system management network, utility
-storage, and other support equipment. Additional River cabinets may be included to 
+storage, and other support equipment. Additional River cabinets may be included to
 house storage storage or compute nodes which are not in an Olympus liquid-cooled cabinet.
 
 <a name="river-endpoint-discovery-services"></a>
@@ -574,7 +574,7 @@ gateway services.
 The Version Control Service (VCS) provides configuration content to CFS via a gitops methodology
 based on a `git` server (`gitea`) that can be accessed by the `git` command but also includes a
 web interface for repository management, pull requests, and a visual view of all repositories
-and organizations. 
+and organizations.
 
 <a name="xname"></a>
 ## xname

@@ -1,4 +1,4 @@
-## Add UAN CAN IP Addresses to SLS
+# Add UAN CAN IP Addresses to SLS
 
 Add the Customer Access Network \(CAN\) IP addresses for User Access Nodes \(UANs\) to the IP address reservations in the System Layout Service \(SLS\). Adding these IP addresses will propagate the data needed for the Domain Name Service \(DNS\).
 
@@ -68,14 +68,26 @@ This procedure requires administrative privileges.
     For example:
 
     ```bash
-    ncn-m001:~ # nslookup uan01.can
+    ncn-m001# nslookup uan01.can
+    ```
+
+    Example output:
+
+    ```
     Server:	10.92.100.225
     Address:	10.92.100.225#53
 
     Name:	uan01.can
     Address: 10.103.2.24
+    ```
 
-    ncn-m001:~ # nslookup uan01-can.can
+    ```
+    ncn-m001# nslookup uan01-can.can
+    ```
+
+    Example output:
+
+    ```
     Server:	10.92.100.225
     Address:	10.92.100.225#53
 

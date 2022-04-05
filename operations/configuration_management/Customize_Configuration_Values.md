@@ -1,4 +1,4 @@
-## Customize Configuration Values
+# Customize Configuration Values
 
 In general, most systems will require some customization from the default values provided by Cray products. As stated in the previous section, these changes cannot be made on the pristine product branches that are imported during product installation and upgrades. Changes can only be made in Git branches that are based on the pristine branches.
 
@@ -6,9 +6,9 @@ Changing or overriding default values should be done in accordance with Ansible 
 
 The following practices should also be followed:
 
--   When it is necessary to add more functionality beyond an Ansible playbook provided by a Cray product, include the product playbook in a new playbook instead of modifying it directly. Any modifications to a product playbook will result in a merge being required during a product upgrade.
--   Do not modify default Ansible role variables, override all values using inventory \(group\_vars and host\_vars directories\). Cray products do not import any content to inventory locations, so merges of new product content will not cause conflicts if variables are located in inventory.
--   Do not put any sensitive or secret information, such as passwords, in the Git repository. These values should be pulled during runtime from an external key management system.
+- When it is necessary to add more functionality beyond an Ansible playbook provided by a Cray product, include the product playbook in a new playbook instead of modifying it directly. Any modifications to a product playbook will result in a merge being required during a product upgrade.
+- Do not modify default Ansible role variables, override all values using inventory \(group\_vars and host\_vars directories\). Cray products do not import any content to inventory locations, so merges of new product content will not cause conflicts if variables are located in inventory.
+- Do not put any sensitive or secret information, such as passwords, in the Git repository. These values should be pulled during runtime from an external key management system.
 
 ### Handling Sensitive Information
 
@@ -65,6 +65,4 @@ See the external [Ansible documentation on re-using playbooks](https://docs.ansi
 To remove a role from a provided playbook, the best practice is to determine if the role provides a variable to skip the roles tasks altogether. See the `roles/[role name]/README` file for a listing of the role variables.
 
 If changes to role variables are not able to skip the role, the role may be commented out in the playbook. However, note that an upgrade to the configuration will result in a merge conflict because of the changes made in the playbook if the upgrade pristine branch is merged with the branch containing the commented playbook.
-
-
 

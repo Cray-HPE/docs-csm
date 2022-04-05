@@ -5,7 +5,8 @@ The Cray System Management (CSM) operational activities are administrative proce
 The following administrative topics can be found in this guide:
 
 - [Cray System Management (CSM) Administration Guide](#cray-system-management-csm-administration-guide)
-    - [CSM Product Management](#csm-product-management)
+  - [CSM Product Management](#csm-product-management)
+  - [Pre-Install](#pre-install)
   - [Image Management](#image-management)
   - [Boot Orchestration](#boot-orchestration)
   - [System Power Off Procedures](#system-power-off-procedures)
@@ -39,7 +40,7 @@ The following administrative topics can be found in this guide:
 
 <a name="csm-product-management"></a>
 
-### CSM Product Management
+## CSM Product Management
 
    * [Validate CSM Health](validate_csm_health.md)
    * [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
@@ -50,6 +51,16 @@ The following administrative topics can be found in this guide:
    * [Access the LiveCD USB Device After Reboot](Access_LiveCD_USB_Device_After_Reboot.md)
    * [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
    * [Validate Signed RPMs](CSM_product_management/Validate_Signed_RPMs.md)
+
+<a name="pre-install"></a>
+
+## Pre-Install
+
+General information on what needs to be done before the initial install of CSM.
+
+   * [Pre-Install Steps](preinstall/Preinstall.md)
+   * [Change Air-Cooled BMC Credentials](preinstall/Change_River_BMC_Credentials.md)
+   * [Change ServerTech PDU Credentials](preinstall/Change_ServerTech_PDU_Credentials.md)
 
 <a name="image-management"></a>
 
@@ -120,13 +131,14 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
 Procedures required for a full power off of an HPE Cray EX system.
 
   * [System Power Off Procedures](power_management/System_Power_Off_Procedures.md)
+
+Additional links to *power off sub procedures* provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
   * [Prepare the System for Power Off](power_management/Prepare_the_System_for_Power_Off.md)
   * [Shut Down and Power Off Compute and User Access Nodes](power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md)
   * [Save Management Network Switch Configuration Settings](power_management/Save_Management_Network_Switch_Configurations.md)
   * [Power Off Compute and IO Cabinets](power_management/Power_Off_Compute_and_IO_Cabinets.md)
   * [Shut Down and Power Off the Management Kubernetes Cluster](power_management/Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md)
   * [Power Off the External Lustre File System](power_management/Power_Off_the_External_Lustre_File_System.md)
-
 
 <a name="system-power-on-procedures"></a>
 
@@ -135,9 +147,11 @@ Procedures required for a full power off of an HPE Cray EX system.
 Procedures required for a full power on of an HPE Cray EX system.
 
   * [System Power On Procedures](power_management/System_Power_On_Procedures.md)
+
+Additional links to *power on sub procedures* provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
   * [Power On and Start the Management Kubernetes Cluster](power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
-  * [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
   * [Power On Compute and IO Cabinets](power_management/Power_On_Compute_and_IO_Cabinets.md)
+  * [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
   * [Bring Up the Slingshot Fabric](power_management/Bring_up_the_Slingshot_Fabric.md)
   * [Power On and Boot Compute and User Access Nodes](power_management/Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md)
   * [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md)
@@ -220,6 +234,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
        *   [Create and Populate a VCS Configuration Repository](configuration_management/Create_and_Populate_a_VCS_Configuration_Repository.md)
    *   [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
        *   [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
+   *   [CFS Key Management](configuration_management/CFS_Key_Management.md)
 
 <a name="kubernetes"></a>
 
@@ -283,19 +298,22 @@ Mechanisms used by the system to ensure the security and authentication of inter
    * [Manage System Passwords](security_and_authentication/Manage_System_Passwords.md)
      * [Update NCN Passwords](security_and_authentication/Update_NCN_Passwords.md)
      * [Change Root Passwords for Compute Nodes](security_and_authentication/Change_Root_Passwords_for_Compute_Nodes.md)
+     * [Change NCN Image Root Password and SSH Keys on Pit Node](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
      * [Change NCN Image Root Password and SSH Keys](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
      * [Change EX Liquid-Cooled Cabinet Global Default Password](security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
      * [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](security_and_authentication/Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md)
      * [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
      * [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md)
      * [Change Air-Cooled Node BMC Credentials](security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md)
-     * [Change SMNP Credentials on Leaf Switches](security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md)
+     * [Change SNMP Credentials on Leaf-BMC Switches](security_and_authentication/Change_SNMP_Credentials_on_Leaf_Switches.md)
      * [Update Default ServerTech PDU Credentials used by the Redfish Translation Service](security_and_authentication/Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md)
      * [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
+     * [Add Root Service Account for Gigabyte Controllers](security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md)
    * [SSH Keys](security_and_authentication/SSH_Keys.md)
    * [Authenticate an Account with the Command Line](security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md)
    * [Default Keycloak Realms, Accounts, and Clients](security_and_authentication/Default_Keycloak_Realms_Accounts_and_Clients.md)
        * [Certificate Types](security_and_authentication/Certificate_Types.md)
+       * [Change Keycloak Token Lifetime](security_and_authentication/Change_Keycloak_Token_Lifetime.md)
        * [Change the Keycloak Admin Password](security_and_authentication/Change_the_Keycloak_Admin_Password.md)
        * [Create a Service Account in Keycloak](security_and_authentication/Create_a_Service_Account_in_Keycloak.md)
        * [Retrieve the Client Secret for Service Accounts](security_and_authentication/Retrieve_the_Client_Secret_for_Service_Accounts.md)
@@ -391,7 +409,7 @@ Ceph is the utility storage platform that is used to enable pods to store persis
   * [Troubleshoot System Clock Skew](utility_storage/Troubleshoot_System_Clock_Skew.md)
   * [Troubleshoot an Unresponsive S3 Endpoint](utility_storage/Troubleshoot_an_Unresponsive_S3_Endpoint.md)
   * [Troubleshoot Ceph-Mon Processes Stopping and Exceeding Max Restarts](utility_storage/Troubleshoot_Ceph-Mon_Processes_Stopping_and_Exceeding_Max_Restarts.md)
-  * [Troubleshoot Pods Failing to Restart on Other Worker Nodes](utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md)
+  * [Troubleshoot Pods Multi-Attach Error](utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md)
   * [Troubleshoot Large Object Map Objects in Ceph Health](utility_storage/Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)
   * [Troubleshoot Failure of RGW Health Check](utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
   * [Troubleshooting Ceph MDS Reporting Slow Requests and Failure on Client](utility_storage/Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client.md)
@@ -462,12 +480,13 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
   * [Create a Backup of the HSM Postgres Database](hardware_state_manager/Create_a_Backup_of_the_HSM_Postgres_Database.md)
   * [Restore HSM Postgres from a Backup](hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
   * [Restore HSM Postgres without a Backup](hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
+  * [Set BMC Management Role](hardware_state_manager/Set_BMC_Management_Role.md)
 
 <a name=""></a>
 
 ## Hardware Management (HM) Collector
 
-The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system. 
+The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system.
 
  * [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
 
@@ -479,17 +498,13 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 
   * [Node Management](node_management/Node_Management.md)
   * [Node Management Workflows](node_management/Node_Management_Workflows.md)
-  * [Rebuild NCNs](node_management/Rebuild_NCNs.md)
+  * [Rebuild NCNs](node_management/Rebuild_NCNs/Rebuild_NCNs.md)
     * [Identify Nodes and Update Metadata](node_management/Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md)
-    * [Prepare Master Nodes](node_management/Rebuild_NCNs/Prepare_Master_Nodes.md)
-    * [Prepare Worker Nodes](node_management/Rebuild_NCNs/Prepare_Worker_Nodes.md)
     * [Prepare Storage Nodes](node_management/Rebuild_NCNs/Prepare_Storage_Nodes.md)
     * [Wipe Drives](node_management/Rebuild_NCNs/Wipe_Drives.md)
     * [Power Cycle and Rebuild Nodes](node_management/Rebuild_NCNs/Power_Cycle_and_Rebuild_Nodes.md)
     * [Adding a Ceph Node to the Ceph Cluster](node_management/Rebuild_NCNs/Re-add_Storage_Node_to_Ceph.md)
     * [Validate Boot Raid](node_management/Rebuild_NCNs/Validate_Boot_Raid.md)
-    * [Validate Master Node](node_management/Rebuild_NCNs/Post_Rebuild_Master_Node_Validation.md)
-    * [Validate Worker Node](node_management/Rebuild_NCNs/Post_Rebuild_Worker_Node_Validation.md)
     * [Validate Storage Node](node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
     * [Final Validation Steps](node_management/Rebuild_NCNs/Final_Validation_Steps.md)
   * [Reboot NCNs](node_management/Reboot_NCNs.md)
@@ -529,6 +544,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Configure NTP on NCNs](node_management/Configure_NTP_on_NCNs.md)
   * [Swap a Compute Blade with a Different System](node_management/Swap_a_Compute_Blade_with_a_Different_System.md)
   * [Update the Gigabyte Node BIOS Time](node_management/Update_the_Gigabyte_Node_BIOS_Time.md)
+  * [S3FS Usage Guidelines](node_management/S3FS_Usage_and_Guidelines.md)
 
 
 <a name="network"></a>
@@ -546,14 +562,13 @@ Overview of the several different networks supported by the HPE Cray EX system.
 
 ### Management Network
 
-HPE Cray EX systems can have network switches in many roles: spine switches, leaf switches, aggregation switches, and CDU switches. Newer systems have HPE Aruba switches, while older systems have Dell and Mellanox switches. Switch IP addresses are generated by Cray Site Init (CSI).
+HPE Cray EX systems can have network switches in many roles: spine switches, leaf switches, leaf-bmc switches, and CDU switches. Newer systems have HPE Aruba switches, while older systems have Dell and Mellanox switches. Switch IP addresses are generated by Cray Site Init (CSI).
 
-  * [Management Network Switch Rename](network/management_network/Management_Network_Switch_Rename.md)
-  * [Management Network ACL configuration](network/management_network/Management_Network_ACL_Configuration.md)
-  * [Management Network CAN setup](network/management_network/Management_Network_CAN_Setup.md)
-  * [Management Network Flow Control Settings](network/management_network/Management_Network_Flow_Control_Settings.md)
-  * [Management Network Access Port configurations](network/management_network/Management_Network_Access_Port_Configurations.md)
-  * [Update Management Network Firmware](network/management_network/update_management_network_firmware.md)
+  * [HPE Cray EX Management Network Installation and Configuration Guide](network/management_network/index.md)
+    * [Aruba Installation and Configuration](network/management_network/aruba/index.md)
+    * [Dell Installation and Configuration](network/management_network/dell/index.md)
+    * [Mellanox Installation and Configuration](network/management_network/mellanox/index.md)
+  * [Update Management Network Firmware](network/management_network/firmware/update_management_network_firmware.md)
 
 
 <a name="customer-access-network-can"></a>
@@ -566,7 +581,7 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
    * [Required Labels if CAN is Not Configured](network/customer_access_network/Required_Labels_if_CAN_is_Not_Configured.md)
    * [Externally Exposed Services](network/customer_access_network/Externally_Exposed_Services.md)
    * [Connect to the CAN](network/customer_access_network/Connect_to_the_CAN.md)
-   * [CAN with Dual-Spine Configuration](network/customer_access_network/CAN_with_Dual-Spine_Configuration.md)
+   * [CAN with Dual-Spine Configuration](network/customer_access_network/Dual_Spine_Configuration.md)
    * [Troubleshoot CAN Issues](network/customer_access_network/Troubleshoot_CAN_Issues.md)
 
 
@@ -600,7 +615,7 @@ External DNS, along with the Customer Access Network \(CAN\), Border Gateway Pro
 
   * [External DNS](network/external_dns/External_DNS.md)
   * [External DNS csi config init Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
-  * [Update the cmn-external-dns Value Post-Installation](network/external_dns/Update_the_can-external-dns_Value_Post-Installation.md)
+  * [Update the cmn-external-dns Value Post-Installation](network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md)
   * [Ingress Routing](network/external_dns/Ingress_Routing.md)
   * [Add NCNs and UANs to External DNS](network/external_dns/Add_NCNs_and_UANs_to_External_DNS.md)
   * [External DNS Failing to Discover Services Workaround](network/external_dns/External_DNS_Failing_to_Discover_Services_Workaround.md)
@@ -630,7 +645,9 @@ MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manag
 Spire provides the ability to authenticate nodes and workloads, and to securely distribute and manage their identities along with the credentials associated with them.
 
   * [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
-  * [Troubleshoot Spire Failing to Start on NCNs](security_and_authentication/Troubleshoot_SPIRE_Failing_to_Start_on_NCNs.md)
+  * [Troubleshoot Spire Failing to Start on NCNs](spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
+  * [Update Spire Intermediate CA Certificate](spire/Update_Spire_Intermediate_CA_Certificate.md)
+  * [Xname Validation](spire/xname_validation.md)
 
 
 <a name="update-firmware-with-fas"></a>

@@ -4,6 +4,11 @@ In rare cases, if a Ceph upgrade is not completed successfully and has issues, t
 
 ```bash
 ncn-s002# ceph -s
+```
+
+Example output:
+
+```
   cluster:
     id:     7ed70f4c-852e-494a-b9e7-5f722af6d6e7
     health: HEALTH_ERR
@@ -23,25 +28,35 @@ The commands in this procedure should be run from a master NCN (unless otherwise
    During normal installs, the initial artifacts (docker images and helm charts) are available on `ncn-m001` in `/mnt/pitdata` after it has been rebooted out of `PIT` mode. The administrator may need to re-mount this volume (first step below):
 
    1. Re-mount the volume.
-      
+
       ```bash
       ncn-m001# mount -vL PITDATA /mnt/pitdata
       ```
 
    1. Find the Nexus helm chart to use.
-      
+
       ```bash
       ncn-m001# ls /mnt/pitdata/csm-0.9.4/helm/*nexus*
+      ```
+
+      Expected output:
+
+      ```
       /mnt/pitdata/csm-0.9.4/helm/cray-nexus-0.6.0.tgz <-- this is the helm chart to use
       ```
-   
+
    1. Find the Nexus manifest to use.
-      
+
       ```bash
       ncn-m001# ls /mnt/pitdata/csm-0.9.4/manifests/nexus.yaml
+      ```
+
+      Expected output:
+
+      ```
       /mnt/pitdata/csm-0.9.4/manifests/nexus.yaml <-- this is the manifest to use
       ```
-      
+
       >**NOTE:** Do not proceed with further steps until these two files are located, as they are necessary to re-install the helm chart after deletion.
 
 1. Uninstall the Nexus helm chart.

@@ -1,4 +1,4 @@
-## Manage a BOS Session
+# Manage a BOS Session
 
 Once there is a Boot Orchestration Service \(BOS\) session template created, users can perform operations on nodes, such as `boot`, `reboot`, `configure`, and `shutdown`. Managing sessions through the Cray CLI can be accomplished using the `cray bos session` commands.
 
@@ -10,10 +10,15 @@ Creating a new BOS session requires the following command-line options:
 -   `--template-uuid`: Use this option to specify the name value returned in the `cray bos sessiontemplate list` command.
 -   `--operation`: Use this option to indicate if a `boot`, `reboot`, `configure`, or `shutdown` action is being taken.
 
-The following is an example of a boot operation:
+The following is a boot operation:
 
 ```bash
 ncn-m001# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation Boot
+```
+
+Example output:
+
+```
 operation = "Boot"
 templateUuid = "TEMPLATE_UUID"
 [[links]]
@@ -30,6 +35,11 @@ List all existing BOS sessions with the following command:
 
 ```bash
 ncn-m001# cray bos session list
+```
+
+Example output:
+
+```
 results = [ "fc469e41-6419-4367-a571-d5fd92893398", "st3-d6730dd5-f0f8-4229-b224-24df005cae52",]
 ```
 
@@ -38,8 +48,13 @@ results = [ "fc469e41-6419-4367-a571-d5fd92893398", "st3-d6730dd5-f0f8-4229-b224
 
 Get details for a BOS session using the session ID returned in the `cray bos session list` command output.
 
-```screen
+```bash
 ncn-m001# cray bos session describe BOS_SESSION_JOB_ID
+```
+
+Example output:
+
+```
 computes = "boot_finished"
 boa_finish = "2019-12-13 17:07:23.501674"
 bos_launch = "2019-12-13 17:02:24.000324"

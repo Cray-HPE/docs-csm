@@ -1,7 +1,7 @@
 # Collect MAC Addresses for NCNs
 
 Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
-the actual MAC addresses for the management nodes can be collected. This process will include repetition of some 
+the actual MAC addresses for the management nodes can be collected. This process will include repetition of some
 of the steps done up to this point because `csi config init` will need to be run with the proper
 MAC addresses and some services will need to be restarted.
 
@@ -120,8 +120,6 @@ making a backup of them, in case they need to be examined at a later time.
          {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
 
 
-1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
-
 1. Copy the interface config files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
 
    ```bash
@@ -131,6 +129,8 @@ making a backup of them, in case they need to be examined at a later time.
    ```
 
 1. Check that IP addresses are set for each interface and investigate any failures.
+
+  > Note that bond0.can0 is optional in CSM 1.2+
 
     1. Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
 
@@ -166,11 +166,6 @@ making a backup of them, in case they need to be examined at a later time.
        addr:     ipv4 10.254.1.4/17 [static]
        ```
 
-    1. Run tests; inspect failures.
-
-       ```bash
-       pit# csi pit validate --network
-       ```
 1. Copy the service config files generated earlier by `csi config init` for DNSMasq, Metal
    Basecamp (cloud-init), and Conman.
 
@@ -187,8 +182,6 @@ making a backup of them, in case they need to be examined at a later time.
         ```bash
         pit# systemctl restart basecamp nexus dnsmasq conman
         ```
-
-1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
 
 1. Verify that all BMCs can be pinged.
 
@@ -313,8 +306,6 @@ making a backup of them, in case they need to be examined at a later time.
          {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
 
 
-1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
-
 1. Copy the interface config files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
 
    ```bash
@@ -324,6 +315,8 @@ making a backup of them, in case they need to be examined at a later time.
    ```
 
 1. Check that IP addresses are set for each interface and investigate any failures.
+
+  > Note that bond0.can0 is optional in CSM 1.2+
 
     1. Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
 
@@ -359,11 +352,6 @@ making a backup of them, in case they need to be examined at a later time.
        addr:     ipv4 10.254.1.4/17 [static]
        ```
 
-    1. Run tests; inspect failures.
-
-       ```bash
-       pit# csi pit validate --network
-       ```
 1. Copy the service config files generated earlier by `csi config init` for DNSMasq, Metal
    Basecamp (cloud-init), and Conman.
 
@@ -397,8 +385,6 @@ making a backup of them, in case they need to be examined at a later time.
    pit# alias yq="/var/www/ephemeral/prep/site-init/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
    pit# yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)
    ```
-
-1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
 
 <a name="next-topic"></a>
 # Next Topic

@@ -1,4 +1,4 @@
-## Use the Physical KVM
+# Use the Physical KVM
 
 For those who prefer to stand in front of the system and use a physically connected keyboard, mouse, and monitor, Cray provides a rack-mount-extendable KVM unit installed in rack unit slot 23 \(RU23\) of the management cabinet. It is connected to the first non-compute node \(NCN\) by default.
 
@@ -15,5 +15,4 @@ Each node in the system \(except ClusterStor\) appears in the main menu associat
 To move to any node in the system, use the arrow keys and press **Enter**. The login screen for that node will appear.
 
 ![KVM Main Menu](../../img/operations/KVM_Main_Menu.png "KVM Main Menu")
-
 

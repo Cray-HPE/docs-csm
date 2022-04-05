@@ -1,5 +1,8 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
 
-## Troubleshoot UAI Authentication Issues
+[Next Topic: Troubleshoot Broker UAI SSSD Cannot Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
+
+## Troubleshoot UAS / CLI Authentication Issues
 
 Several troubleshooting steps related to authentication in a UAI.
 
@@ -76,8 +79,8 @@ Error: Invalid Credentials
 
 To resolve this issue:
 
--   Log in to Keycloak and verify the user exists.
--   Make sure the username and password are correct.
+- Log in to Keycloak and verify the user exists.
+- Make sure the username and password are correct.
 
 
 ### `cray uas describe <user>` Does Not Work
@@ -96,6 +99,11 @@ Use `cray uas list` instead.
 
 ```bash
 # cray uas list
+```
+
+Example output:
+
+```
 [[results]]
 username = ""
 uai_host = ""
@@ -106,3 +114,4 @@ uai_age = "11m"
 uai_name = ""
 ```
 
+[Next Topic: Troubleshoot Broker UAI SSSD Cannot Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)

@@ -6,6 +6,11 @@ Check to ensure you have OSD auto-discovery enabled.
 
 ```bash
 ncn-s00(1/2/3)# ceph orch ls osd
+```
+
+Example output:
+
+```
 NAME                       RUNNING  REFRESHED  AGE  PLACEMENT  IMAGE NAME                        IMAGE ID
 osd.all-available-devices      9/9  4m ago     3d   *          registry.local/ceph/ceph:v15.2.8  5553b0cb212c
 ```
@@ -30,6 +35,11 @@ This procedure requires administrative privileges and will require at least two 
 
     ```bash
     ncn-m001# watch -n 10 ceph -s
+    ```
+
+    Example output:
+
+    ```
       cluster:
         id: 5b359a58-e6f7-4f0c-98b8-f528f620896a
         health: HEALTH_OK
@@ -60,20 +70,29 @@ This procedure requires administrative privileges and will require at least two 
 
 1. In the second window, list your available drives on the node(s) where the OSDs are missing
 
-   ```bash
-   # Our example is utilizing ncn-s001 so make sure you are on the correct host for your situation
+   The following example is utilizing ncn-s001. Ensure the correct host for the situation is used.
 
+   ```bash
    ncn-s001# ceph orch device ls
+   ```
+
+   Example output:
+
+   ```
    ceph orch device ls ncn-s001
    Hostname  Path      Type  Serial                Size   Health   Ident  Fault  Available
    ncn-s001  /dev/sdb  hdd   f94bd091-cc25-476b-9  48.3G  Unknown  N/A    N/A    No
    ```
 
-   >**Note** that our drive in question is reporting available. The following steps are going to erase that drive so PLEASE make sure you know that drive is not being used.
+   > **NOTE:** The drive in question is reporting available. The following steps are going to erase that drive so PLEASE make sure to verify that drive is not being used.
 
    ```bash
-   ncn-s001:~ # podman ps
+   ncn-s001# podman ps
+   ```
 
+   Example output:
+
+   ```
    CONTAINER ID  IMAGE                             COMMAND               CREATED                 STATUS                     PORTS   NAMES
    596d1c235da8  registry.local/ceph/ceph:v15.2.8  -n client.rgw.sit...  Less than a second ago  Up Less than a second ago          ceph-11d5d552-cfac-11eb-ab69-fa163ec012bf-rgw.site1.zone1.ncn-s001.oztynu
    eecfac35fe7c  registry.local/ceph/ceph:v15.2.8  -n mon.ncn-s001 -...  2 seconds ago           Up 2 seconds ago                   ceph-11d5d552-cfac-11eb-ab69-fa163ec012bf-mon.ncn-s001
@@ -126,15 +145,20 @@ This procedure requires administrative privileges and will require at least two 
     ```
 
    ```bash
-   ncn-s001:~ # ceph orch ps --daemon_type osd ncn-s001
+   ncn-s001# ceph orch ps --daemon_type osd ncn-s001
+   ```
+
+   Example output:
+
+   ```
    NAME   HOST      STATUS        REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE ID      CONTAINER ID
    osd.2  ncn-s001  running (4d)  20s ago    4d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  4ebd6db27d08
    ```
 
 1. Reset the pool quotas.
-   
+
    This step is only necessary when the cluster capacity has increased.
-   
+
    ```bash
    ncn-s00(1/2/3)# source /srv/cray/scripts/common/fix_ansible_inv.sh
    ncn-s00(1/2/3)# fix_inventory

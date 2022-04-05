@@ -1,4 +1,4 @@
-## Node Management Workflows
+# Node Management Workflows
 
 The following workflows are intended to be high-level overviews of node management tasks. These workflows depict how services interact with each other during node management and help to provide a quicker and deeper understanding of how the system functions.
 
@@ -33,7 +33,7 @@ Mentioned in this workflow:
 
 1.  **Administrator updates SLS**
 
-    Administrator creates a new hardware entry for the select xnames in SLS. Enter the node xnames in the SLS input file.
+    Administrator creates a new hardware entry for the select component names (xnames) in SLS. Enter the node component names (xnames) in the SLS input file.
 
 2.  **Administrator adds compute nodes**
 
@@ -51,17 +51,17 @@ Mentioned in this workflow:
 
     REDS/MEDS query SLS database for information about the new node.
 
-    For example: "What xname is connected to port XX on switch Y?"
+    For example: "What component name (xname) is connected to port XX on switch Y?"
 
 5.  **SLS to REDS/MEDS**
 
-    SLS updates the discovery service with the new compute node and its xname.
+    SLS updates the discovery service with the new compute node and its component name (xname).
 
-    For example: "XName x0c0... is connected to port XX".
+    For example: "xname x0c0... is connected to port XX".
 
 6.  **REDS/MEDS to HSM**
 
-    Discovery services update HSM about the new Redfish endpoint for the node. Details like xname and IP address of the new node are updated in HSM.
+    Discovery services update HSM about the new Redfish endpoint for the node. Details like component name (xname) and IP address of the new node are updated in HSM.
 
     For example: "x0c0... at IP address AAA.BBB.CCC.DDD"
 
@@ -107,7 +107,7 @@ Mentioned in this workflow:
 
 1.  **Administrator updates SLS**
 
-    Administrator deletes the node entries with the specific xname from SLS. Note that if deleting a parent object, then the children are also deleted from SLS. If the child object happens to be a parent, then the deletion can cascade down levels. If deleting a child object, it does not affect the parent.
+    Administrator deletes the node entries with the specific component name (xname) from SLS. Note that if deleting a parent object, then the children are also deleted from SLS. If the child object happens to be a parent, then the deletion can cascade down levels. If deleting a child object, it does not affect the parent.
 
 2.  **Administrator physically removes the compute nodes**
 

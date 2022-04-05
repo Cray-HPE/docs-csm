@@ -1,4 +1,4 @@
-## System Management Health Checks and Alerts
+# System Management Health Checks and Alerts
 
 A health check corresponds to a Prometheus query against metrics aggregated to the Prometheus instance. Core platform components like Kubernetes and Istio collect service-related metrics by default, which enables the System Management Health service to implement generic service health checks without custom instrumentation. Health checks are intended to be coarse-grained and comprehensive, as opposed to fine-grained and exhaustive. Health checks related to infrastructure adhere to the Utilization Saturation Errors \(USE\) method whereas services follow the Rate Errors Duration \(RED\) method.
 
@@ -18,6 +18,11 @@ Obtain the cluster IP address:
 
 ```bash
 ncn-w001# kubectl -n sysmgmt-health get svc cray-sysmgmt-health-promet-prometheus
+```
+
+Example output:
+
+```
 NAME                                    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
 cray-sysmgmt-health-promet-prometheus   ClusterIP   10.16.201.80   <none>        9090/TCP   2d6h
 ```
@@ -26,6 +31,11 @@ Get active alerts, which includes `KubeletTooManyPods` if it is going off:
 
 ```bash
 ncn-w001# curl -s http://CLUSTER-IP:PORT/api/v1/alerts | jq . | grep -B 10 -A 20 KubeletTooManyPods
+```
+
+Example output:
+
+```
 {
   "status": "success",
   "data": {
@@ -58,5 +68,4 @@ ncn-w001# curl -s http://CLUSTER-IP:PORT/api/v1/alerts | jq . | grep -B 10 -A 20
 In the example above, the alert actually indicates it is getting close to the limit, but the value included in the alert is the actual number of pods on `ncn-w003`.
 
 **Troubleshooting:** If an alert titled `KubeCronJobRunning` is encountered, this could be an indication that a Kubernetes cronjob is misbehaving. The Labels section under the firing alert will indicate the name of the cronjob that is taking longer than expected to complete. Refer to the "CHECK CRON JOBS" header in the [Power On and Start the Management Kubernetes Cluster](../power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md) procedure for instructions on how to troubleshoot the cronjob, as well as how to restart \(export and reapply\) the cronjob.
-
 

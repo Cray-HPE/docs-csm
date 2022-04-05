@@ -4,7 +4,7 @@
 
 ## Add Join Script
 
-1. There is a script located at `/srv/cray/scripts/common/join_ceph_cluster.sh` that will need to be copied to the node that was rebuilt.  
+1. There is a script located at `/srv/cray/scripts/common/join_ceph_cluster.sh` that will need to be copied to the node that was rebuilt.
 
 2. Change the mode of the script.
 
@@ -24,13 +24,13 @@
    /srv/cray/scripts/common/join_ceph_cluster.sh
    ```
 
-   **IMPORTANT:** While watching your window running `watch ceph -s` you will see the health go to a  HEALTH_WARN state.  This is expected.  Most commonly you will see an alert about "failed to probe daemons or devices" and this will clear.
+   **IMPORTANT:** While watching your window running `watch ceph -s` you will see the health go to a  HEALTH_WARN state. This is expected. Most commonly you will see an alert about "failed to probe daemons or devices" and this will clear.
 
 ## Zapping OSDs
 
    **IMPORTANT:** Only do this if you were not able to wipe the node prior to rebuild.
 
-   **NOTE:** The commands in the Zapping OSDs section will need to be run from a node running ceph-mon.  Typically ncn-s00(1/2/3).
+   **NOTE:** The commands in the Zapping OSDs section will need to be run from a node running ceph-mon. Typically ncn-s00(1/2/3).
 
 1. Find the devices on the node being rebuilt
 
@@ -50,9 +50,9 @@
    ncn-s003  /dev/sdh  ssd   S455NY0MB42468  1920G  Unknown  N/A    N/A    No
    ```
 
-   **IMPORTANT:** In the above example the drives on our rebuilt node are showing "Available = no".  This is expected since the check is based on the presence of an lvm on the volume.
+   **IMPORTANT:** In the above example the drives on our rebuilt node are showing "Available = no". This is expected since the check is based on the presence of an lvm on the volume.
 
-   **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS.  Please double check that you are not seeing OS drives.  These will have a size of 480G.
+   **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that you are not seeing OS drives. These will have a size of 480G.
 
 1. Zap the drives
 
@@ -69,7 +69,7 @@
    watch ceph -s
    ```
 
-   You will see the OSD count UP and IN counts increase.  **If** you see your **IN** count increase but not reflect the amount of drives being added back in, then you will need to fail over the ceph mgr daemon.  This is a known bug and is addressed in newer releases.
+   You will see the OSD count UP and IN counts increase.  **If** you see your **IN** count increase but not reflect the amount of drives being added back in, then you will need to fail over the ceph mgr daemon. This is a known bug and is addressed in newer releases.
 
    If you need to fail over the ceph-mgr daemon please run:
 
@@ -79,18 +79,18 @@
 
 ## Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
 
-   **IMPORTANT:** Radosgw by default is deployed to the first 3 storage nodes.  This includes haproxy and keepalived.  This is automated as part of the install, but you may have to regenerate the configuration if you are not running on the first 3 storage nodes or all nodes.  Please see the 2 examples in step 1.
+   **IMPORTANT:** Radosgw by default is deployed to the first 3 storage nodes. This includes haproxy and keepalived. This is automated as part of the install, but you may have to regenerate the configuration if you are not running on the first 3 storage nodes or all nodes. Please see the 2 examples in step 1.
 
 1. Deploy Rados Gateway containers to the new nodes.
 
-   - If running Rados Gateway on all nodes is the desired conifugration then do:
+   - If running Rados Gateway on all nodes is the desired configuration then do:
 
       ```bash
       ceph orch apply rgw site1 zone1 --placement="*"
       ```
 
    - If deploying to select nodes then do:
-  
+
      ```bash
      ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
      ```
@@ -99,13 +99,18 @@
 
     ```bash
     ncn-s00(1/2/3)# ceph orch ps --daemon_type rgw
+    ```
+
+    Example output:
+
+    ```
     NAME                             HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                         IMAGE ID      CONTAINER ID
     rgw.site1.zone1.ncn-s001.kvskqt  ncn-s001  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8   553b0cb212c   6e323878db46
     rgw.site1.zone1.ncn-s002.tisuez  ncn-s002  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8   553b0cb212c   278830a273d3
     rgw.site1.zone1.ncn-s003.nnwuqy  ncn-s003  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8   553b0cb212c   a9706e6d7a69
     ```
 
-1. Add nodes into HAproxy and KeepAlived.
+1. Add nodes into HAProxy and KeepAlived.
 
    ```bash
    source /srv/cray/scripts/metal/update_apparmor.sh; reconfigure-apparmor

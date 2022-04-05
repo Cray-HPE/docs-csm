@@ -1,9 +1,12 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
 
-## UAI Network Attachments
+[Next Topic: Configure UAIs in UAS](Configure_UAIs_in_UAS.md)
+
+## UAI Network Attachment Customization
 
 The UAI network attachment configuration flows from the CRAY Site Initializer (CSI) localization data through `customizations.yaml` into the UAS Helm chart and, ultimately, into Kubernetes in the form of a "network-attachment-definition".
 
-This section describes the data at each of those stages to show how the final network attachment gets created.
+This section describes the data at each of those stages to show how the final network attachment gets created. Customization of the network attachments may be needed by some sites to, for example, increase the size of the reserved sub-net used for UAI macvlan attachments.
 
 ### CSI Localization Data
 
@@ -24,11 +27,11 @@ When CSI runs, it produces the following data structure in the `spec` section of
 ```
 spec:
 
-  ...
+  [...]
 
   wlm:
 
-    ...
+    [...]
 
     macvlansetup:
       nmn_subnet: 10.252.2.0/23
@@ -36,7 +39,7 @@ spec:
       nmn_supernet_gateway: 10.252.0.1
       nmn_vlan: bond0.nmn0
       # NOTE: the term DHCP here is misleading, this is merely
-      #       a range of reserved IPs for UAIs that should not
+      #       a range of reserved IP addresses for UAIs that should not
       #       be handed out to others because the network
       #       attachment will hand them out to UAIs.
       nmn_dhcp_start: 10.252.2.10
@@ -66,14 +69,14 @@ These values, in turn, feed into the following translation to UAS Helm chart set
 
 ### UAS Helm Chart
 
-The inputs in the previous section tell the UAS Helm chart how to install the network attachment for UAIs. While the actual template used for this is more complex, the following is a simplified view of the template used to generate the network attachment.
-
-If reading this document from the UAS source code, the real template in the Helm chart is located there.
+The inputs in the previous section tell the UAS Helm chart how to install the network attachment for UAIs. While the [actual template](https://github.com/Cray-HPE/uas-mgr/blob/master/kubernetes/cray-uas-mgr/templates/macvlan.yaml) used for this is more complex, the following is a simplified view of the template used to generate the network attachment.
 
 ```
 apiVersion: "k8s.cni.cncf.io/v1"
 kind: NetworkAttachmentDefinition
-...
+
+[...]
+
 spec:
   config: '{
       "cniVersion": "0.3.0",
@@ -150,4 +153,4 @@ In this example, Kubernetes will assign UAI IP addresses in the range `10.252.2.
     - `10.106.0.0/17`
     - `10.104.0.0/17`
 
-
+[Next Topic: Configure UAIs in UAS](Configure_UAIs_in_UAS.md)

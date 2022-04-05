@@ -1,6 +1,4 @@
-
-
-## Add LDAP User Federation
+# Add LDAP User Federation
 
 Add LDAP user federation using the Keycloak localization tool.
 
@@ -33,7 +31,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       ncn-m001# cp -r ${CSM_DISTDIR}/shasta-cfg/* /root/site-init
       ncn-m001# cd /root/site-init
       ```
-  
+
    2. Extract customizations.yaml from the site-init secret.
 
       ```bash
@@ -51,13 +49,13 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
 2. Repopulate the keycloak_users_localize and cray-keycloak Sealed Secrets in the customizations.yaml file with the desired configuration.
 
-   Update the LDAP settings with the desired configuration. LDAP connection information 
+   Update the LDAP settings with the desired configuration. LDAP connection information
    is stored in the keycloak-users-localize Secret in the customizations.yaml file.
 
    -   The ldap_connection_url key is required and is set to an LDAP URL.
    -   The ldap_bind_dn and ldap_bind_credentials keys are optional.
    -   If the LDAP server requires authentication. then the bind DN and credentials are set in these keys respectively.
-      
+
    For example:
 
       ```bash
@@ -69,7 +67,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
                       args:
                         name: certs.jks
                         value: /u3+7QAAAAIAAAAA5yXvSDt11bGXyBA9M2iy0/5i1Tg=
-        
+
             keycloak_users_localize:
                 generate:
                   name: keycloak-users-localize
@@ -87,12 +85,12 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
                         name: ldap_bind_credentials
                         value: "my_ldap_admin_password"
       ```
-     
+
      The example above puts an empty certs.jks in the cray-keycloak Sealed Secret.
      The next step will generate certs.jks.
 
-     Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file. 
-        
+     Other LDAP configuration settings are set in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file.
+
      The fields are as follows:
 
       ```
@@ -117,7 +115,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         * ldapEditMode : If you want to be able to create or change users in Keycloak and have them created or modified in the LDAP server, and the LDAP server allows it, then this can be changed.
           - default: READ_ONLY
           - type: string
-          - allowed values: READ_ONLY, WRITEABLE, or UNSYNCED
+          - allowed values: `READ_ONLY`, `WRITEABLE`, or `UNSYNCED`
         * ldapSyncRegistrations : If true, then newly created users will be created in the LDAP server.
           - default: false
           - type: string
@@ -262,12 +260,12 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       ```
 
 3. (Optional) Add the LDAP CA certificate in the certs.jks section of customizations.yaml.
-   
-   If LDAP requires TLS (recommended), update the `cray-keycloak` Sealed 
+
+   If LDAP requires TLS (recommended), update the `cray-keycloak` Sealed
    Secret value by supplying a base64 encoded Java KeyStore (JKS) that
    contains the CA certificate that signed the LDAP server's host key. The
    password for the JKS file must be `password`.
-   
+
    Administrators may use the `keytool` command from the `openjdk:11-jre-slim` container image
    packaged with CSM to create a JKS file that includes a PEM-encoded
    CA certificate to verify the LDAP host(s).
@@ -280,8 +278,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
         ```
 
-        **Troubleshooting:** 
-        
+        **Troubleshooting:**
+
         * If the output shows the skopeo.tar file cannot be found, ensure that the $CSM_DISTDIR directory looks correct, and contains the `dtr.dev.cray.com` directory that includes the originally installed docker images.
 
           The following is an example of the skopeo.tar file not being found:
@@ -316,7 +314,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks \
         -storepass password -noprompt
         ```
-   
+
    3. Set variables for the LDAP server.
 
         In the following example, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
@@ -347,8 +345,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         > from the output of the above `openssl s_client` example if the
         > following commands are unsuccessful.
 
-        Observe the issuer's DN. 
-        
+        Observe the issuer's DN.
+
         For example:
 
         ```bash
@@ -437,23 +435,23 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ```
 
 4. Upload the modified customizations.yaml file to Kubernetes.
-   
+
    ```bash
    ncn-m001# kubectl delete secret -n loftsman site-init
    ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
-   
+
 5. Prepare to generate Sealed Secrets.
-   
-   Secrets are stored in customizations.yaml as `SealedSecret` resources 
+
+   Secrets are stored in customizations.yaml as `SealedSecret` resources
    (encrypted secrets), which are deployed by specific charts and decrypted by the
    Sealed Secrets operator. But first, those Secrets must be seeded, generated, and
    encrypted.
-   
+
    ```bash
    ncn-m001# ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
    ```
-      
+
 6. Encrypt the static values in the customizations.yaml file after making changes.
 
    The following command must be run within the site-init directory.
@@ -500,46 +498,46 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       ```
 
 7. Decrypt the Sealed Secret to verify it was generated correctly.
-   
+
    ```bash
    ncn-m001# ./utils/secrets-decrypt.sh keycloak_users_localize | jq -r '.data.ldap_connection_url' | base64 --decode
    ldaps://my_ldap.my_org.test
    ```
 
 8. Re-apply the cray-keycloak Helm chart with the updated customizations.yaml file.
-   
+
     1. Retrieve the current platform.yaml manifest.
-       
+
        ```bash
        ncn-m001# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' > platform.yaml
        ```
 
     2. Remove all charts from the platform.yaml except for cray-keycloak.
-   
+
        Edit the platform.yaml file and delete all sections starting with `-name: <chart_name>`, except for the cray-keycloak section.
 
        Then, change the name of the manifest being deployed from platform to cray-keycloak:
-      
+
        ```bash
-       ncn-m001:# sed -i 's/name: platform/name: cray-keycloak/' platform.yaml
+       ncn-m001# sed -i 's/name: platform/name: cray-keycloak/' platform.yaml
        ```
 
     3. Populate the platform manifest with data from the customizations.yaml file.
-       
+
        ```bash
        ncn-m001# manifestgen -i platform.yaml -c customizations.yaml -o new-platform.yaml
        ```
 
     4. Re-apply the platform manifest with the updated cray-keycloak chart.
-   
+
        ```bash
        ncn-m001# loftsman ship --manifest-path ./new-platform.yaml --charts-repo https://packages.local/repository/charts
        ```
 
     5. Wait for the keycloak-certs secret to reflect the new `cert.jks`.
-       
+
        Run the following command until there is a non-empty value in the secret (this can take a minute or two):
-       
+
        ```bash
        ncn-m001# kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks
          certs.jks: <REDACTED>
@@ -552,14 +550,14 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
        ```
 
     7. Wait for the Keycloak pods to restart before moving on to the next step.
-       
+
        Once the `cray-keycloak-[012]` pods have restarted, proceed to the next step.
 
        ```bash
        ncn-m001# kubectl get po -n services | grep cray-keycloak
        ```
 
-9. Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
+9.  Re-apply the cray-keycloak-users-localize Helm chart with the updated customizations.yaml file.
 
     1.  Determine the cray-keycloak-users-localize chart version that is currently deployed.
 
@@ -594,7 +592,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ```bash
         ncn-m001# manifestgen -i cray-keycloak-users-localize-manifest.yaml -c customizations.yaml -o deploy.yaml
         ```
-   
+
     5. Reapply the cray-keycloak-users-localize chart.
 
         ```bash
@@ -654,7 +652,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ncn-m001# git commit -m "Configure keycloak on computes"
         ncn-m001# git push origin integration
         ```
-    
+
     5. Update the Configuration Framework Service (CFS) configuration.
 
         ```bash
@@ -681,19 +679,19 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         ```
 
 11. Validate that LDAP integration was added successfully.
-   
+
     1. Retrieve the admin password for Keycloak.
 
        ```bash
-       ncn-m001: # kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
+       ncn-m001# kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
        ```
-   
+
     2. Login to the Keycloak UI using the `admin` user and the password obtained in the previous step.
-      
+
        The Keycloak UI URL is typically similar to the following:
-      
+
        ```
-       https://auth.<system_name>/keycloak
+       https://auth.cmn.<system_name>/keycloak
        ```
 
     3. Click on the "Users" tab in the navigation pane on the left.
@@ -740,7 +738,4 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
        Verify the `preferred_username` is the expected LDAP user and the
        role is `admin` (or other role based on the user).
-  
-
-
 
