@@ -70,7 +70,7 @@ should once again be locked.
 
 Use the `cray hsm locks lock` command to perform locking.
 
-***NOTE: When locking NCNs, you must lock their NodeBMCs as well.***
+**NOTE:** When locking NCNs, you must lock their NodeBMCs as well.
 
 ### To lock all nodes (and their BMCs) with the _Management_ role
 
