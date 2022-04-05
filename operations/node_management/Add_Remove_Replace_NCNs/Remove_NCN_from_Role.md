@@ -41,7 +41,7 @@ Remove master, worker or storage NCN from current roles. Select the procedure be
    ncn-m002
    ```
   
-    * If the node returned is not the one being removed, proceed to the step which [removes the node from the Kubenertes cluster](#remove-the-node-from-the-kubernetes-cluster) and skip the substeps here.
+    * If the node returned is not the one being removed, proceed to the step which [removes the node from the Kubernetes cluster](#remove-the-node-from-the-kubernetes-cluster) and skip the substeps here.
 
 1. Reconfigure the Boot Script Service \(BSS\) to point to a new first master node.
 

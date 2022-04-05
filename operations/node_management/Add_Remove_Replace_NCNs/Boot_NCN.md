@@ -187,7 +187,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
     ncn-mw# cray cfs components update $XNAME --desired-config ncn-personalization
     ```
 
-4. Wait for `configurationStatus` to transistion from `pending` to `configured`.
+4. Wait for `configurationStatus` to transition from `pending` to `configured`.
 
     ```bash
     ncn-mw# watch "cray cfs components describe $XNAME"
