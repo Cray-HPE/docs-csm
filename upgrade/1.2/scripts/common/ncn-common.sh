@@ -106,7 +106,7 @@ function ssh_keygen_keyscan() {
     target_ncn="$1"
     ncn_ip=$(host ${target_ncn} | awk '{ print $NF }')
     [ -n "${ncn_ip}" ]
-    # Because we may be called without set -e, we should check return codes after running commands
+    # Because we run with set +e in this function, check return codes after running commands
     [ $? -ne 0 ] && return 1
     echo "Updating SSH keys for node ${target_ncn} with IP address of ${ncn_ip}"
     ssh-keygen -R "${target_ncn}" -f "${known_hosts}" > /dev/null 2>&1
@@ -115,6 +115,15 @@ function ssh_keygen_keyscan() {
     [ $? -ne 0 ] && return 1
     ssh-keyscan -H "${target_ncn},${ncn_ip}" >> "${known_hosts}"  > /dev/null 2>&1
     res=$?
+
+    # remove the old authorized_hosts entry for the target NCN cluster-wide
+    {
+        NCNS=$(grep -oP 'ncn-w\w\d+|ncn-s\w\d+' /etc/hosts | sort -u)
+        HOSTS=$(echo $NCNS | tr -t ' ' ',')
+        pdsh -w $HOSTS ssk-keygen -R ${target-ncn}
+        pdsh -w $HOSTS ssk-keygen -R ${ncn_ip}
+    } >& /dev/null
+
     set -e
     return $res
 }
