@@ -103,7 +103,7 @@ The commands in this procedure need to be run on a ceph-mon node.
 
 1. Use the `ceph osd reweight` command on the OSD to move data from the drive and get it back under the warning threshold of 85 percent.
 
-    This command tells Ceph that the drive can now only hold 80 percent of the usable space \(crush weight\).
+    This command tells Ceph that the drive can now only hold 80 percent of the usable space \(CRUSH weight\).
 
     ```bash
     ncn-m001# ceph osd reweight osd.9 0.80

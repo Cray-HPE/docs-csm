@@ -44,7 +44,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
     Run from `ncn-s001`, `ncn-s002`, or `ncn-s003`:
 
-    1. Change the weight and crush weight of the OSD being removed to 0.
+    1. Change the weight and CRUSH weight of the OSD being removed to 0.
 
         ```bash
         ncn-s# for osd in $(ceph osd ls-tree $NODE); do
@@ -148,7 +148,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     ncn-s# cephadm rm-cluster --fsid $(cephadm ls|jq -r .[1].fsid) --force
     ```
 
-1. Remove the node from the crush map.
+1. Remove the node from the CRUSH map.
 
     Run from `ncn-s001`, `ncn-s002`, or `ncn-s003`:
 
