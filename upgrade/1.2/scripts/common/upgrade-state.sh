@@ -75,7 +75,7 @@ function move_state_file () {
 }
 
 function err_report() {
-    # force output to console regardless of redirection
+    # add more logging to capture next where exactly the error happened
     echo "$(caller)"
     echo "$BASH_COMMAND"
 
@@ -85,7 +85,8 @@ function err_report() {
     if [[ ${shouldIgnore} -eq 1 ]]; then
         return 0
     fi
-
+    
+    # force output to console regardless of redirection
     echo >/dev/tty 
     echo "[ERROR] - Unexpected errors, check logs: ${LOG_FILE}" >/dev/tty 
 }
