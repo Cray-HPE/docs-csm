@@ -281,6 +281,9 @@ Some files are needed for generating the configuration payload. See these topics
 
    > **`NOTE`** if it is desirable to expedite booting into the USB, this step may be skipped. Instead, after logging into the PIT for [#first time](#51-first-login) and running `pit-init` the USB will gain connectivity and SSH. As long as the required files are present then one may continue to the first time boot.
 
+   > **`NOTE`** ensure you select a reachable NTP pool/server passed in via the `--ntp-pools`/`--ntp-servers` flags, respectively.  Adding an uncreachable server can cause clock skew as chrony tries to continually reach out to a server it can never reach.
+
+
       ```bash
       linux:/mnt/pitdata/prep# csi config init
 
