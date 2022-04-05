@@ -29,7 +29,7 @@ error: file `/boot/grub2/../initrd.img.xz' not found.Press any key to continue..
 [    2.690969] ---[ end Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0) ]---
 ```
 
-#### Fix
+### Fix
 
 Follow these steps on any NCN to fix the issue:
 
