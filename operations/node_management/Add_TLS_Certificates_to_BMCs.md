@@ -1,10 +1,10 @@
-## Add TLS Certificates to BMCs
+# Add TLS Certificates to BMCs
 
 Use the System Configuration Service \(SCSD\) tool to create TLS certificates and store them in Vault secure storage. Once certificates are created, they are placed on to the target BMCs.
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 ### Limitations
 
@@ -27,6 +27,11 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
 
         ```bash
         ncn-m001# cray scsd bmc createcerts create --format json cert_create.json
+        ```
+
+        Example output:
+
+        ```
         {
           "DomainIDs": [
             {
@@ -71,6 +76,11 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
 
         ```bash
         ncn-m001# cray scsd bmc setcerts create --format json cert_set.json
+        ```
+
+        Example output:
+
+        ```
         {
           "Targets": [
             {
@@ -103,15 +113,25 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
 
     ```bash
     ncn-m001# vi customizations.yaml
-    ...
+    ```
+
+    Example customizations.yaml:
+
+    ```
+    [...]
+
     spec:
       network:
         ...
       hms_ca_info:
         hms_svc_ca_uri: "/usr/local/cray-pki/certificate_authority.crt"
-    ...
+
+    [...]
+
     services:
-    ...
+
+    [...]
+
       cray-hms-reds:
     #   hms_ca_uri: "vault://pki_common/ca_chain"     # NOTE: this specifies the use of the Vault PKI directly
         hms_ca_uri: "{{ hms_ca_info.hms_svc_ca_uri}}"
@@ -135,6 +155,11 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
 
         ```bash
         ncn-m001# vi manifest.yaml
+        ```
+
+        Example manifest.yaml:
+
+        ```
         ## Example manifest for a single service upgrade
         ---
         schema: v2
@@ -162,20 +187,28 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
         ncn-m001# manifestgen -i /opt/cray/site-info/manifests/sysmgmt.yaml \
         -c /opt/cray/site-info/customizations.yaml > sysman.yaml
         ncn-m001# vi sysman.yaml
-        ...
+        ```
+
+        Example sysman.yaml:
+
+        ```
+        [...]
+
         - name: cray-hms-scsd
           namespace: services
           overrides:
           - cray-service.imagesHost="{repos[docker]}"
           values:
             hms_ca_uri: /usr/local/cray-pki/certificate_authority.crt  **\#\#\#\# only need to copy this line**
-        ...
+
+        [...]
         ```
 
         The Mountain Endpoint Discovery Service \(MEDS\) and River Endpoint Discovery Service \(REDS\) have sealed secret information in the values: section that need to be copied as well. For example:
 
         ```bash
-        ...
+        [...]
+
         - name: cray-hms-reds
           namespace: services
           overrides:
@@ -242,6 +275,4 @@ At any point the TLS certs can be re-generated and replaced on Redfish BMCs. The
 
 2.  Regenerate the TLS cabinet-level certificates as done is the preceding step.
 3.  Place the TLS certificates onto the Redfish BMCs as in the preceding step.
-
-
 

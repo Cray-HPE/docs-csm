@@ -1,8 +1,8 @@
-## Troubleshoot Interfaces with IP Address Issues
+# Troubleshoot Interfaces with IP Address Issues
 
 Correct NCNs that are failing to assigning a static IP address or detect a duplicate IP address.
 
-The Wicked network manager tool will fail to bring an interface up if its assigned IP address already exists in the respective LAN. This can be detected by checking for signs of duplicate IP messages in the log.
+The Wicked network manager tool will fail to bring an interface up if its assigned IP address already exists in the respective LAN. This can be detected by checking for signs of duplicate IP address messages in the log.
 
 ### Prerequisites
 
@@ -16,6 +16,11 @@ An NCN has an interface that is failing to assign a static IP address or that ha
 
         ```bash
         ncn-w001# grep duplicate /var/log/*
+        ```
+
+        Example output:
+
+        ```
         warn:2020-08-04T19:22:02.434775+00:00 ncn-w001 wickedd[2188]: bond0: IPv4 duplicate address 10.1.1.1 detected (in use by 00:30:48:bb:e8:d2)!
         ```
 
@@ -59,6 +64,11 @@ An NCN has an interface that is failing to assign a static IP address or that ha
 
             ```bash
             ncn-w001# ip a s bond0
+            ```
+
+            Example output:
+
+            ```
             8: bond0: <BROADCAST,MULTICAST,MASTER,UP,LOWER_UP> mtu 9238 qdisc noqueue state UP group default qlen 1000
                 link/ether b8:59:9f:c7:11:12 brd ff:ff:ff:ff:ff:ff
                 inet 10.1.1.1/16 brd 10.1.255.255 scope global bond0

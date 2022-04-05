@@ -1,4 +1,4 @@
-## Add an alias to a service
+# Add an alias to a service
 
 Add an alias for an existing service to the IP address reservations in the System Layout Service \(SLS\). Adding these IP addresses will propagate the data needed for the Domain Name Service \(DNS\).
 

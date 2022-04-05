@@ -4,7 +4,7 @@ Known issues related to hardware discovery in a system.
  * [HMS Discovery job not creating RedfishEndpoints in Hardware State Manager](discovery_job_not_creating_redfish_endpoints.md)
 
 <a name="initrd-not-found"></a>
-### ``error: file  `/boot/grub2/../initrd.img.xz' not found.Press any key to continue...``
+## ``error: file  `/boot/grub2/../initrd.img.xz' not found.Press any key to continue...``
 
 This is a problem that is fixed in CSM 1.0+, but if your system was upgraded from CSM 0.9.x you may run into this. Below is the full error seen when attempting to boot:
 
@@ -29,7 +29,7 @@ error: file `/boot/grub2/../initrd.img.xz' not found.Press any key to continue..
 [    2.690969] ---[ end Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0) ]---
 ```
 
-#### Fix
+### Fix
 
 Follow these steps on any NCN to fix the issue:
 
@@ -55,7 +55,7 @@ Follow these steps on any NCN to fix the issue:
       ncn# rpm -e csm-install-workarounds
       ```
 
-##### Validate
+### Validate
 
 Running the script again will produce this output:
 

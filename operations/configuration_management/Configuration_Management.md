@@ -1,4 +1,4 @@
-## Configuration Management
+# Configuration Management
 
 The Configuration Framework Service \(CFS\) is available on systems for remote execution and configuration management of nodes and boot images. This includes nodes available in the Hardware State Manager \(HSM\) inventory \(compute, management, and application nodes\), and boot images hosted by the Image Management Service \(IMS\).
 
@@ -38,42 +38,4 @@ Additionally, configuration management of specific components \(nodes\) can also
 1.  Creating a configuration with one or more layers within a specific Git repository, and committing it to be executed by Ansible.
 2.  Setting the desired configuration state of a node to the prescribed layers.
 3.  Enabling the CFS Batcher to automatically configure nodes by creating one or more configuration sessions to apply the configuration layer\(s\).
-
-### Table of Contents
-
-Use the following procedures to manage configurations with CFS.
-
--   [Configuration Layers](Configuration_Layers.md)
-    -   [Create a CFS Configuration](Create_a_CFS_Configuration.md)
-    -   [Update a CFS Configuration](Update_a_CFS_Configuration.md)
--   [Ansible Inventory](Ansible_Inventory.md)
-    -   [Manage Multiple Inventories in a Single Location](Manage_Multiple_Inventories_in_a_Single_Location.md)
--   [Configuration Sessions](Configuration_Sessions.md)
-    -   [Create a CFS Session with Dynamic Inventory](Create_a_CFS_Session_with_Dynamic_Inventory.md)
-    -   [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md)
-    -   [Set Limits for a Configuration Session](Set_Limits_for_a_Configuration_Session.md)
-    -   [Use a Specific Inventory in a Configuration Session](Use_a_Specific_Inventory_in_a_Configuration_Session.md)
-    -   [Change the Ansible Verbosity Logs](Change_the_Ansible_Verbosity_Logs.md)
-    -   [Set the ansible.cfg for a Session](Set_the_ansible-cfg_for_a_Session.md)
-    -   [Delete CFS Sessions](Delete_CFS_Sessions.md)
-    -   [Automatic Session Deletion with sessionTTL](Automatic_Session_Deletion_with_sessionTTL.md)
-    -   [Track the Status of a Session](Track_the_Status_of_a_Session.md)
-    -   [View Configuration Session Logs](View_Configuration_Session_Logs.md)
-    -   [Troubleshoot Ansible Play Failures in CFS Sessions](Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
-    -   [Troubleshoot CFS Session Failing to Complete](Troubleshoot_CFS_Session_Failing_to_Complete.md)
--   [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md)
--   [Configuration Management of System Components](Configuration_Management_of_System_Components.md)
--   [Ansible Execution Environments](Ansible_Execution_Environments.md)
-    -   [Use a Custom ansible-cfg File](Use_a_Custom_ansible-cfg_File.md)
-    -   [Enable Ansible Profiling](Enable_Ansible_Profiling.md)
--   [CFS Global Options](CFS_Global_Options.md)
--   [Version Control Service \(VCS\)](Version_Control_Service_VCS.md)
-    -   [Git Operations](Git_Operations.md)
-    -   [VCS Branching Strategy](VCS_Branching_Strategy.md)
-    -   [Customize Configuration Values](Customize_Configuration_Values.md)
-    -   [Update the Privacy Settings for Gitea Configuration Content Repositories](Update_the_Privacy_Settings_for_Gitea_Configuration_Content_Repositories.md)
-    -   [Create and Populate a VCS Configuration Repository](Create_and_Populate_a_VCS_Configuration_Repository.md)
--   [Write Ansible Code for CFS](Write_Ansible_Code_for_CFS.md)
-    -   [Target Ansible Tasks for Image Customization](Target_Ansible_Tasks_for_Image_Customization.md)
-
 

@@ -14,6 +14,11 @@ This procedure requires admin privileges.
 
     ```bash
     ncn-m/s(001/2/3)# ceph osd tree down
+    ```
+
+    Example output:
+
+    ```
     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
     -1         62.87558  root default
     -7         20.95853      host ncn-s002
@@ -26,7 +31,7 @@ This procedure requires admin privileges.
     ```
 
 1. Restart the down OSDs.
-   
+
    * **Option 1:**
 
      1. Restart the OSD utilizing `ceph orch`
@@ -59,6 +64,11 @@ This procedure requires admin privileges.
 
     ```bash
     # ceph osd tree down
+    ```
+
+    Example output:
+
+    ```
     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
     -1         62.87558  root default
     -7         20.95853      host ncn-s002

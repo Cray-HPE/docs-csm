@@ -1,4 +1,4 @@
-## Troubleshoot Issues with Redfish Endpoint Discovery
+# Troubleshoot Issues with Redfish Endpoint Discovery
 
 If a Redfish endpoint is in the HTTPsGetFailed status, the endpoint does not need to be fully rediscovered. The error indicates an issue in the inventory process done by the Hardware State Manager \(HSM\). Restart the inventory process to fix this issue.
 
@@ -8,6 +8,11 @@ The following is an example of the HSM error:
 
 ```bash
 ncn-m001# cray hsm inventory redfishEndpoints describe x3000c0s15b0
+```
+
+Example output:
+
+```
 Domain = ""
 MACAddr = "b42e993b70ac"
 Enabled = true
@@ -27,7 +32,7 @@ LastDiscoveryStatus = "HTTPsGetFailed"
 
 ### Prerequisites
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 ### Procedure
 
@@ -41,6 +46,11 @@ LastDiscoveryStatus = "HTTPsGetFailed"
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe XNAME
+    ```
+
+    Example output:
+
+    ```
     Domain = ""
     MACAddr = "b42e993b70ac"
     Enabled = true
@@ -94,6 +104,11 @@ LastDiscoveryStatus = "HTTPsGetFailed"
         ```bash
         ncn-m001# curl -ku USERNAME:PASSWORD \
         https://BMC_XNAME/redfish/v1/Systems/Node0 | jq .
+        ```
+
+        Example output:
+
+        ```
           % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                          Dload  Upload   Total   Spent    Left  Speed
         100  1330  100  1330    0     0   5708      0 --:--:-- --:--:-- --:--:--  5708
@@ -105,6 +120,11 @@ LastDiscoveryStatus = "HTTPsGetFailed"
         ```bash
         ncn-m001# curl -ku USERNAME:PASSWORD \
         https://BMC_XNAME/redfish/v1/Managers/Self
+        ```
+
+        Example output:
+
+        ```
         <pre style="font-size:12px; font-family:monospace; color:#8B0000;">[web.lua] Error in RequestHandler, thread: 0xb60670d8 is dead.
         ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
         .&#47;redfish-handler.lua:0: attempt to index a nil value
@@ -122,6 +142,11 @@ LastDiscoveryStatus = "HTTPsGetFailed"
         ```bash
         ncn-m001# curl -ku USERNAME:PASSWORD \
         https://BMC_XNAME/redfish/v1/Systems | jq .
+        ```
+
+        Example output:
+
+        ```
           % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                          Dload  Upload   Total   Spent    Left  Speed
         100   421  100   421    0     0   1427      0 --:--:-- --:--:-- --:--:--  1422
@@ -149,6 +174,11 @@ LastDiscoveryStatus = "HTTPsGetFailed"
         ```bash
         ncn-m001# curl -ku USERNAME:PASSWORD \
         https://BMC_XNAME/redfish/v1/Systems | jq .
+        ```
+
+        Example output:
+
+        ```
           % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                          Dload  Upload   Total   Spent    Left  Speed
         100   421  100   421    0     0   1427      0 --:--:-- --:--:-- --:--:--  1422
@@ -169,5 +199,4 @@ LastDiscoveryStatus = "HTTPsGetFailed"
         ```
 
     **Troubleshooting:** If there was no indication of a firmware issue, there may be an issue with Vault or the credentials stored in Vault.
-
 

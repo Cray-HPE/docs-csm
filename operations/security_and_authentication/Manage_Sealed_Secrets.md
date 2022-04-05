@@ -1,6 +1,4 @@
-
-
-## Manage Sealed Secrets
+# Manage Sealed Secrets
 
 Sealed secrets are essential for managing sensitive information on the system. The following procedures for managing sealed secrets are included in this section:
 
@@ -11,22 +9,22 @@ Sealed secrets are essential for managing sensitive information on the system. T
    - [Fix an Incorrect Value in a Sealed Secret](#fix-an-incorrect-value-in-a-sealed-secret)
 
 In the following sections, the term "tracked sealed secrets" is used to describe
-any existing secrets stored in `spec.kubernetes.tracked_sealed_secrets` that are available to be regenerated. 
+any existing secrets stored in `spec.kubernetes.tracked_sealed_secrets` that are available to be regenerated.
 
 Many of the examples in this section assume the USB stick used to install the system
 is still available. If site-init is no longer available on the USB stick and a backup
 has not been made, a new site-init will need to be created following step 1 in the [Generate Sealed Secrets Post-Install](#generate-sealed-secrets-post-install) section.
 
-The customizations.yaml file used in this procedure will be located in one of the following 
-locations depending on the state of the system: 
+The customizations.yaml file used in this procedure will be located in one of the following
+locations depending on the state of the system:
 
 * Fresh install location: `/mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml`
 * Post-install location: `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml`
-  
+
 
 ### Generate Sealed Secrets Post-Install
 
-Sealed secrets are stored in customizations.yaml as `SealedSecret` resources 
+Sealed secrets are stored in customizations.yaml as `SealedSecret` resources
 (encrypted secrets), which are deployed by specific charts and decrypted by the
 sealed secrets operator. First, those secrets must be seeded, generated, and
 encrypted.
@@ -55,7 +53,7 @@ If LDAP user federation is required, refer to [Add LDAP User Federation](../secu
       ncn-m001# cp -r ${CSM_DISTDIR}/shasta-cfg/* /root/site-init
       ncn-m001# cd /root/site-init
       ```
-  
+
    1. Extract customizations.yaml from the site-init secret.
 
       ```bash
@@ -65,28 +63,29 @@ If LDAP user federation is required, refer to [Add LDAP User Federation](../secu
    1. Extract the certificate and key used to create the sealed secrets.
 
       ```bash
+      ncn-m001# mkdir -p certs
       ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
       ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
       ```
 
 1. (Optional) Prevent tracked sealed secrets from being regenerated.
-    
-    1. Remove the sealed secrets not being regenerated from the `spec.kubernetes.tracked_sealed_secrets` list in `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml` prior to executing the remaining steps in this section.
 
-    2. Retain the REDS/MEDS/RTS credentials.
+   Remove the sealed secrets not being regenerated from the `spec.kubernetes.tracked_sealed_secrets` list in `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml` prior to executing the remaining steps in this section.
 
-       ```bash
-       linux# yq delete -i ./${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
-       linux# yq delete -i ./${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
-       linux# yq delete -i ./${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
-       ```
+   Retain the REDS/MEDS/RTS credentials.
+
+   ```bash
+   ncn-m001# yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
+   ncn-m001# yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
+   ncn-m001# yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
+   ```
 
 2. Prepare to generate sealed secrets.
-   
+
    ```bash
    ncn-m001# ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
    ```
-      
+
 3. Encrypt the static values in the customizations.yaml file after making changes.
 
    The following command must be run within the site-init directory.
@@ -136,11 +135,11 @@ If LDAP user federation is required, refer to [Add LDAP User Federation](../secu
 
 ### Prevent Regeneration of Tracked Sealed Secrets
 
-Before performing the task to generate or regenerate sealed secrets, 
+Before performing the task to generate or regenerate sealed secrets,
 administrators are able to prevent existing tracked sealed secrets from being regenerated.
 
-To prevent regeneration, sealed secrets **MUST BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets` 
-list in the customizations.yaml file prior to executing the 
+To prevent regeneration, sealed secrets **MUST BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets`
+list in the customizations.yaml file prior to executing the
 "Generate Sealed Secrets" section of the [Prepare Site Init](../../install/prepare_site_init.md) procedure.
 
 To retain the REDS/MEDS/RTS credentials:
@@ -200,7 +199,7 @@ The general process outlined in the following steps can be followed if a differe
 
 ```bash
 ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
-{"SNMPUsername": "testuser", "SNMPAuthPassword": "testpas1", "SNMPPrivPassword": "testpass2"}
+{"SNMPUsername": "<USERID>", "SNMPAuthPassword": "<A-PASS>", "SNMPPrivPassword": "<P-PASS>"}
 ```
 
 1. Decrypt the cray_reds_credentials secret.
@@ -248,7 +247,7 @@ ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_swi
 3. Correct the password in the vault_switch_defaults.json file.
 
    ```json
-   {"SNMPUsername": "testuser", "SNMPAuthPassword": "testpass1", "SNMPPrivPassword": "testpass2"}
+   {"SNMPUsername": "<USERID>", "SNMPAuthPassword": "<A-PASS>", "SNMPPrivPassword": "<P-PASS>"}
    ```
 
 4. Update cray_reds_credentials.json with an encoded version of the new password.
@@ -261,7 +260,7 @@ ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_swi
 
    ```bash
    ncn-m# jq -r '.data.vault_switch_defaults' cray_reds_credentials.json | base64 --decode
-   {"SNMPUsername": "testuser", "SNMPAuthPassword": "testpass1", "SNMPPrivPassword": "testpass2"}
+   {"SNMPUsername": "<USERID>", "SNMPAuthPassword": "<A-PASS>", "SNMPPrivPassword": "<P-PASS>"}
    ```
 
 6. Replace the cray_reds_credentials secret in customizations.yaml with one containing the new credentials.
@@ -274,6 +273,6 @@ ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_swi
 
    ```bash
    ncn-m# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
-   {"SNMPUsername": "testuser", "SNMPAuthPassword": "testpass1", "SNMPPrivPassword": "testpass2"}
+   {"SNMPUsername": "<USERID>", "SNMPAuthPassword": "<A-PASS>", "SNMPPrivPassword": "<P-PASS>"}
    ```
 

@@ -1,3 +1,6 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: Troubleshoot UAS by Viewing Log Output](Troubleshoot_UAS_by_Viewing_Log_Output.md)
 
 ## Troubleshoot UAS Issues
 
@@ -21,6 +24,11 @@ ServerAliveCountMax 720
 
 ```bash
 ncn-w001 # cray auth login --username USER --password WRONGPASSWORD
+```
+
+Example output:
+
+```
 Usage: cray auth login [OPTIONS]
 Try "cray auth login --help" for help.
 
@@ -29,8 +37,8 @@ Error: Invalid Credentials
 
 To resolve this issue:
 
--   Log in to Keycloak and verify the user exists.
--   Make sure the username and password are correct.
+- Log in to Keycloak and verify the user exists.
+- Make sure the username and password are correct.
 
 ### Retrieve UAS Logs
 
@@ -82,6 +90,11 @@ The system administrator can use the `kubectl` command to check the status of th
 
 ```bash
 ncn-w001# kubectl get pod -n user -l uas=managed -o wide
+```
+
+Example output:
+
+```
 NAME                                    READY   STATUS              RESTARTS   AGE    IP       NODE    NOMINATED NODE   READINESS GATES
 uai-user-603d55f1-85d5ddb4b7-zk6nl   0/1     ContainerCreating   0          109s   <none>   sms-2   <none>           <none>
 uai-user-d7f8d2e7-6dbdc64d98-7h5t5   0/1     ContainerCreating   0          116s   <none>   sms-2   <none>           <none>
@@ -92,8 +105,13 @@ If UAS pods are stuck in the `Pending` state, the admin needs to ensure the Kube
 
 ```bash
 ncn-w001# kubectl get nodes -l uas
+```
+
+Example output:
+
+```
 NAME        STATUS   ROLES    AGE   VERSION
-ncn-w001   Ready    master   11d   v1.13.3
+ncn-w001   Ready    <none>   11d   v1.20.13
 ```
 
 If none of the nodes are found or if the nodes listed are marked as `NotReady`, the UAI pods will not be scheduled and will not start.
@@ -113,9 +131,14 @@ Specify the location of the Kubernetes certificate with `KUBECONFIG`.
 
 ```bash
 [user@uai-user-be3a6770-6876c88676-2p2lk ~]# KUBECONFIG=/tmp/CONFIG kubectl get nodes
+```
+
+Example output:
+
+```
 NAME STATUS ROLES AGE VERSION
-ncn-m001 Ready master 16d v1.13.3
-ncn-m002 Ready master 16d v1.13.3
+ncn-m001 Ready control-plane,master 16d v1.20.13
+ncn-m002 Ready control-plane,master 16d v1.20.13
 ```
 
 Users must specify `KUBECONFIG` with every kubectl command or specify the kubeconfig file location for the life of the UAI. To do this, either set the `KUBECONFIG` environment variable or set the `--kubeconfig` flag .
@@ -126,6 +149,11 @@ The system may return the following error if the user attempts to use an applica
 
 ```bash
 $ ssh user@203.0.113.0 -i ~/.ssh/id_rsa
+```
+
+Example output:
+
+```
    ______ ____   ___ __  __   __  __ ___     ____
   / ____// __ \ /   |\ \/ /  / / / //   |   /  _/
  / /    / /_/ // /| | \  /  / / / // /| |   / /
@@ -140,6 +168,11 @@ To resolve this issue, pass the -X option with the ssh command as show below:
 
 ```bash
 $ ssh UAI_USERNAME@UAI_IP_ADDRESS -i ~/.ssh/id_rsa -X
+```
+
+Example output:
+
+```
    ______ ____   ___ __  __   __  __ ___     ____
   / ____// __ \ /   |\ \/ /  / / / //   |   /  _/
  / /    / /_/ // /| | \  /  / / / // /| |   / /
@@ -195,7 +228,13 @@ Determine the hard limit on Kubernetes pods with `kubectl describe node` and loo
 
 ```
 # kubectl describe node NODE_NAME -o yaml
-...
+```
+
+Example output:
+
+```
+[...]
+
 capacity:
     cpu: "16"
     ephemeral-storage: 1921298528Ki
@@ -203,14 +242,21 @@ capacity:
     hugepages-2Mi: "0"
     memory: 181009640Ki
     pods: "110"
-...
+
+[...]
 ```
 
 When UAIs are created, some UAIs might left in the "Pending" state. The Kubernetes scheduler is unable to schedule them to a node, because of CPU, memory, or pod limit constraints. Use kubectl describe pod to check why the pod is pending. For example, this pod is "Pending" because the node has reached the hard limit of 110 pods.
 
 ```
 # kubectl describe pod UAI-POD
+```
+
+Example output:
+
+```
 Warning  Failed
 Scheduling  21s (x20 over 4m31s)  default-scheduler  0/4 nodes are available: 1 Insufficient pods, 3 node(s) didn't match node selector.
 ```
 
+[Next Topic: Troubleshoot UAS by Viewing Log Output](Troubleshoot_UAS_by_Viewing_Log_Output.md)

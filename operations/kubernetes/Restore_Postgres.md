@@ -1,20 +1,21 @@
-## Restore Postgres
+# Restore Postgres
 
 Below are the service specific steps required to restore data to a Postgres cluster.
 
 Restore Postgres Procedures by Service:
-- [Restore Postgres for Spire](#spire)
-- [Restore Postgres for Keycloak](#keycloak)
-- [Restore Postgres for HSM (Hardware State Manager)](../hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
-- [Restore Postgres for SLS (System Layout Service)](../system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
-- [Restore Postgres for VCS](#vcs)
-- [Restore Postgres for Capsules Services](#capsules)
+- [Restore Postgres](#restore-postgres)
+  - [Restore Postgres for Spire](#restore-postgres-for-spire)
+  - [Restore Postgres for Keycloak](#restore-postgres-for-keycloak)
+  - [Restore Postgres for VCS](#restore-postgres-for-vcs)
+  - [Restore Postgres for Capsules](#restore-postgres-for-capsules)
+    - [Capsules Warehouse Server](#capsules-warehouse-server)
+    - [Capsules Dispatch Server](#capsules-dispatch-server)
 
 
 <a name="spire"> </a>
 ### Restore Postgres for Spire
 
-In the event that the spire Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists.
+In the event that the Spire Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists.
 
 1. Copy the database dump to an accessible location.
 
@@ -28,7 +29,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
     ncn-w001# export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
     ```
 
-    list.py:
+    **list.py:**
 
     ```python
     import io
@@ -52,7 +53,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
    	    print(file.key)
     ```
 
-    download.py:
+    **download.py:**
 
     Update the script for the specific .manifest and .psql files you wish to download from S3.
 
@@ -77,7 +78,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
     response = s3_client.download_file('postgres-backup', 'spire-postgres-2021-07-21T19:03:18.psql', 'spire-postgres-2021-07-21T19:03:18.psql')
     ```
 
-2. Scale the spire service to 0.
+2. Scale the Spire service to 0.
 
     ```bash
     ncn-w001# CLIENT=spire-server
@@ -90,7 +91,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
     ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
-3. Delete the spire Postgres cluster.
+3. Delete the Spire Postgres cluster.
 
     ```bash
     ncn-w001# kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.json
@@ -101,7 +102,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
     ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
-4. Create a new single instance spire Postgres cluster.
+4. Create a new single instance Spire Postgres cluster.
 
     ```bash
     ncn-w001# cp postgres-cr.json postgres-orig-cr.json
@@ -138,7 +139,11 @@ In the event that the spire Postgres cluster is in a state that the cluster must
 
     ```bash
     ncn-w001# for secret in postgres.spire-postgres.credentials service-account.spire-postgres.credentials spire.spire-postgres.credentials standby.spire-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
+    ```
 
+    Example output:
+
+    ```
     secret postgres.spire-postgres.credentials username & password: postgres ABCXYZ
     secret service-account.spire-postgres.credentials username & password: service_account ABC123
     secret spire.spire-postgres.credentials username & password: spire XYZ123
@@ -191,7 +196,7 @@ In the event that the spire Postgres cluster is in a state that the cluster must
     ncn-w001# while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
     ```
 
-10. Scale the spire service back to 3 replicas.
+10. Scale the Spire service back to 3 replicas.
 
     ```bash
     ncn-w001# kubectl scale statefulset ${CLIENT} -n ${NAMESPACE} --replicas=3
@@ -231,7 +236,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ncn-w001# export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
     ```
 
-    list.py:
+    **list.py:**
 
     ```python
     import io
@@ -255,7 +260,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
    	    print(file.key)
     ```
 
-    download.py:
+    **download.py:**
 
     Update the script for the specific .manifest and .psql files you wish to download from S3.
 
@@ -280,7 +285,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     response = s3_client.download_file('postgres-backup', 'keycloak-postgres-2021-07-29T17:56:07.psql', 'keycloak-postgres-2021-07-29T17:56:07.psql')
     ```
 
-2. Scale the keycloak service to 0.
+2. Scale the Keycloak service to 0.
 
     ```bash
     ncn-w001# CLIENT=cray-keycloak
@@ -293,7 +298,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
-3. Delete the keycloak Postgres cluster.
+3. Delete the Keycloak Postgres cluster.
 
     ```bash
     ncn-w001# kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.json
@@ -304,7 +309,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
-4. Create a new single instance keycloak Postgres cluster.
+4. Create a new single instance Keycloak Postgres cluster.
 
     ```bash
     ncn-w001# cp postgres-cr.json postgres-orig-cr.json
@@ -391,7 +396,7 @@ In the event that the keycloak Postgres cluster is in a state that the cluster m
     ncn-w001# while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
     ```
 
-10. Scale the keycloak service back to 3 replicas.
+10. Scale the Keycloak service back to 3 replicas.
 
     ```bash
     ncn-w001# kubectl scale statefulset ${CLIENT} -n ${NAMESPACE} --replicas=3
@@ -477,7 +482,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
     ncn-w001# export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
     ```
 
-    list.py:
+    **list.py:**
 
     ```python
     import io
@@ -501,7 +506,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
    	    print(file.key)
     ````
 
-    download.py:
+    **download.py:**
 
     Update the script for the specific .manifest and .psql files you wish to download from S3.
 
@@ -526,7 +531,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
     ```
 
 2. Scale the VCS service to 0.
-    
+
     ```bash
     ncn-w001# SERVICE=gitea-vcs
     ncn-w001# SERVICELABEL=vcs
@@ -550,7 +555,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
     ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
-4. Create a new single instance vcs Postgres cluster.
+4. Create a new single instance VCS Postgres cluster.
 
     ```bash
     ncn-w001# cp postgres-cr.json postgres-orig-cr.json
@@ -585,7 +590,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
 
     Based off the three `gitea-vcs-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
-    ```bash 
+    ```bash
     ncn-w001# for secret in postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials gitea.gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
 
     secret postgres.gitea-vcs-postgres.credentials username & password: postgres ABCXYZ
@@ -607,7 +612,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
     ALTER ROLE
     postgres=#
     ```
-  
+
   - Re-create secrets in Kubernetes.
 
     If the Postgres secrets were auto-backed up, then re-create the secrets in Kubernetes.
@@ -619,11 +624,11 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
 
     ncn-w001# kubectl delete secret postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials -n services
 
-    ncn-w001# kubectl apply -f ${MANIFEST} 
+    ncn-w001# kubectl apply -f ${MANIFEST}
     ```
 
 8. Restart the Postgres cluster.
-     
+
     ```bash
     ncn-w001# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
 
@@ -655,7 +660,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
 
 #### Capsules Warehouse Server
 
-In the event that the Capsules Warehouse Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists. 
+In the event that the Capsules Warehouse Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists.
 
 1. Copy the database dump to an accessible location.
 
@@ -669,7 +674,7 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
     ncn-w001# export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
     ```
 
-    list.py:
+    **list.py:**
 
     ```python
     import io
@@ -691,9 +696,9 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
 	backup_bucket = s3.Bucket('postgres-backup')
 	for file in backup_bucket.objects.filter(Prefix='capsules-warehouse-server-postgres'):
    	    print(file.key)
-    ````
+    ```
 
-    download.py:
+    **download.py:**
 
     Update the script for the specific .manifest and .psql files you wish to download from S3.
 
@@ -719,7 +724,7 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
     ```
 
 2. Scale the capsules-warehouse-server service to 0.
-    
+
     ```bash
     ncn-w001# CLIENT=capsules-warehouse-server
     ncn-w001# NAMESPACE=services
@@ -777,9 +782,13 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
 
     Based off the four `capsules-warehouse-server-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
-    ```bash 
+    ```bash
     ncn-w001# for secret in postgres.capsules-warehouse-server-postgres.credentials service-account.capsules-warehouse-server-postgres.credentials standby.capsules-warehouse-server-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
+    ```
 
+    Example output:
+
+    ```
     secret postgres.capsules-warehouse-server-postgres.credentials username & password: postgres ABCXYZ
     secret service-account.capsules-warehouse-server-postgres.credentials username & password: service_account ABC123
     secret standby.capsules-warehouse-server-postgres.credentials username & password: standby 123456
@@ -796,7 +805,7 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
     ALTER ROLE
     postgres=#
     ```
-  
+
   - Re-create secrets in Kubernetes.
 
     If the Postgres secrets were auto-backed up, then re-create the secrets in Kubernetes.
@@ -808,11 +817,11 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
 
     ncn-w001# kubectl delete secret postgres.capsules-warehouse-server-postgres.credentials service-account.capsules-warehouse-server-postgres.credentials standby.capsules-warehouse-server-postgres.credentials -n ${NAMESPACE}
 
-    ncn-w001# kubectl apply -f ${MANIFEST} 
+    ncn-w001# kubectl apply -f ${MANIFEST}
     ```
 
 8. Restart the Postgres cluster.
-     
+
     ```bash
     ncn-w001# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
 
@@ -842,7 +851,11 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
 
     ```bash
     ncn-w001# kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}"
+    ```
 
+    Example output:
+
+    ```
     NAME              READY   STATUS    RESTARTS   AGE
     capsules-warehouse-server-0   2/2     Running   0          35s
     capsules-warehouse-server-1   2/2     Running   0          35s
@@ -853,12 +866,16 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
 
     ```bash
     ncn-w001# capsule list
+    ```
 
+    Example output:
+
+    ```
     2 Capsules found:
       someusername/a-preexisting-capsule
       someusername/another-preexisting-capsule
     ```
-    
+
 #### Capsules Dispatch Server
 
 The Capsules Dispatch Server can be restored in the same manner as the warehouse server by substituting the keyword `warehouse` with `dispatch`; however, the dispatch server maintains temporary information for running Capsules Environments. Therefore, restoring data to this service is not necessary. Using the analytics docs, you can instead cleanup existing jobs and skip this step.

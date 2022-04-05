@@ -1,11 +1,11 @@
-## Write Ansible Code for CFS
+# Write Ansible Code for CFS
 
 Cray provides Ansible plays and roles for software products deemed necessary for the system to function. Customers are free to write their own Ansible plays and roles to augment what Cray provides or implement new features. Basic knowledge of Ansible is needed to write plays and roles. The information below includes recommendations and best practices for writing and running Ansible code on the system successfully with the Configuration Framework Service \(CFS\).
 
 Help with Ansible can be found in the external Ansible documentation:
 
--   [Ansible playbook best practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html)
--   [Ansible examples](https://github.com/ansible/ansible-examples)
+- [Ansible playbook best practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html)
+- [Ansible examples](https://github.com/ansible/ansible-examples)
 
 ### Ansible Code Structure
 
@@ -25,10 +25,8 @@ See the [Ansible Inventory](Ansible_Inventory.md) section for more information a
 
 CFS will handle scaling up Ansible to run on many hosts, but there are still places where performance can be improved by correctly writing Ansible plays.
 
--   Use image customization when possible to limit how many times a task is run and improve boot times. Configuration that is the same for all nodes of the same type will benefit from image customization. See the next section for how to target specific tasks for running only during image customization.
--   Import roles rather than playbooks. Each time a new playbook starts, Ansible automatically gathers facts for all the systems it is running against. This is not necessary more than once and can slow down Ansible execution.
--   Turn off facts that are not needed in a playbook by setting `gather_facts: false`. If only a few facts are required, it is also possible to limit fact gathering by setting `gather_subset`. For more information on `gather_subset`, see the external [Ansible module setup](https://docs.ansible.com/ansible/latest/modules/setup_module.html) documentation.
--   Use loops rather than individual tasks where modules are called multiple times. Some Ansible modules will optimize the command, such as grouping package installations into a single transaction \(Refer to the external [Ansible playbook loops](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html) documentation\).
-
-
+- Use image customization when possible to limit how many times a task is run and improve boot times. Configuration that is the same for all nodes of the same type will benefit from image customization. See the next section for how to target specific tasks for running only during image customization.
+- Import roles rather than playbooks. Each time a new playbook starts, Ansible automatically gathers facts for all the systems it is running against. This is not necessary more than once and can slow down Ansible execution.
+- Turn off facts that are not needed in a playbook by setting `gather_facts: false`. If only a few facts are required, it is also possible to limit fact gathering by setting `gather_subset`. For more information on `gather_subset`, see the external [Ansible module setup](https://docs.ansible.com/ansible/latest/modules/setup_module.html) documentation.
+- Use loops rather than individual tasks where modules are called multiple times. Some Ansible modules will optimize the command, such as grouping package installations into a single transaction \(Refer to the external [Ansible playbook loops](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html) documentation\).
 

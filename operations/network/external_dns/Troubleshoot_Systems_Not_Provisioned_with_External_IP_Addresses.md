@@ -1,10 +1,10 @@
-## Troubleshoot Connectivity to Services with External IP addresses
+# Troubleshoot Connectivity to Services with External IP addresses
 
-Systems that do not support CAN will not have services provisioned with external IP addresses on CAN. Kubernetes will report a `<pending>` status for the external IP address of the service experiencing connectivity issues.
+Systems that do not support CMN/CAN/CHN will not have services provisioned with external IP addresses on CMN/CAN/CHN. Kubernetes will report a `<pending>` status for the external IP address of the service experiencing connectivity issues.
 
 If SSH access to a non-compute node \(NCN\) is available, it is possible to override resolution of external hostnames and forward local ports into the cluster for the cluster IP address of the corresponding service.
 
-**Warning:** This will bypass the Keycloak gatekeeper and Istio ingress gateway, which handle authentication and authorization.
+**WARNING:** This will bypass the Keycloak gatekeeper and Istio ingress gateway, which handle authentication and authorization.
 
 Enable systems without CAN to provision services with external hostnames.
 
@@ -20,17 +20,21 @@ The Customer Access Network \(CAN\) is not supported on the system.
 
     ```bash
     ncn-w001# kubectl get vs -A | grep -v '[*]'
-    NAMESPACE        NAME                              GATEWAYS                       HOSTS                                                      AGE
-    istio-system     kiali                             [services/services-gateway]    [kiali-istio.SYSTEM_DOMAIN_NAME]                           2d16h
-    istio-system     prometheus                        [services/services-gateway]    [prometheus-istio.SYSTEM_DOMAIN_NAME]                      2d16h
-    istio-system     tracing                           [services/services-gateway]    [jaeger-istio.SYSTEM_DOMAIN_NAME]                          2d16h
-    nexus            nexus                             [services/services-gateway]    [packages.local registry.local nexus.SYSTEM_DOMAIN_NAME]   2d16h
-    services         gitea-vcs-external                [services/services-gateway]    [vcs.SYSTEM_DOMAIN_NAME]                                   2d16h
-    services         sma-grafana                       [services-gateway]             [sma-grafana.SYSTEM_DOMAIN_NAME]                           2d16h
-    services         sma-kibana                        [services-gateway]             [sma-kibana.SYSTEM_DOMAIN_NAME]                            2d16h
-    sysmgmt-health   cray-sysmgmt-health-alertmanager  [services/services-gateway]    [alertmanager.SYSTEM_DOMAIN_NAME]                          2d16h
-    sysmgmt-health   cray-sysmgmt-health-grafana       [services/services-gateway]    [grafana.SYSTEM_DOMAIN_NAME]                               2d16h
-    sysmgmt-health   cray-sysmgmt-health-prometheus    [services/services-gateway]    [prometheus.SYSTEM_DOMAIN_NAME]                            2d16h
+    ```
+
+    Example output:
+
+    ```
+    NAMESPACE        NAME                              GATEWAYS                       HOSTS                                                          AGE
+    istio-system     kiali                             [services/services-gateway]    [kiali-istio.cmn.SYSTEM_DOMAIN_NAME]                           2d16h
+    istio-system     tracing                           [services/services-gateway]    [jaeger-istio.cmn.SYSTEM_DOMAIN_NAME]                          2d16h
+    nexus            nexus                             [services/services-gateway]    [packages.local registry.local nexus.cmn.SYSTEM_DOMAIN_NAME]   2d16h
+    services         gitea-vcs-external                [services/services-gateway]    [vcs.cmn.SYSTEM_DOMAIN_NAME]                                   2d16h
+    services         sma-grafana                       [services-gateway]             [sma-grafana.cmn.SYSTEM_DOMAIN_NAME]                           2d16h
+    services         sma-kibana                        [services-gateway]             [sma-kibana.cmn.SYSTEM_DOMAIN_NAME]                            2d16h
+    sysmgmt-health   cray-sysmgmt-health-alertmanager  [services/services-gateway]    [alertmanager.cmn.SYSTEM_DOMAIN_NAME]                          2d16h
+    sysmgmt-health   cray-sysmgmt-health-grafana       [services/services-gateway]    [grafana.cmn.SYSTEM_DOMAIN_NAME]                               2d16h
+    sysmgmt-health   cray-sysmgmt-health-prometheus    [services/services-gateway]    [prometheus.cmn.SYSTEM_DOMAIN_NAME]                            2d16h
     ```
 
 2.  Lookup the cluster IP and port for service.
@@ -39,6 +43,11 @@ The Customer Access Network \(CAN\) is not supported on the system.
 
     ```bash
     ncn-w001# kubectl -n sysmgmt-health get service cray-sysmgmt-health-promet-prometheus
+    ```
+
+    Example output:
+
+    ```
     NAME                                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
     cray-sysmgmt-health-promet-prometheus   ClusterIP   10.25.124.159   <none>        9090/TCP   23h
     ```
@@ -54,5 +63,4 @@ The Customer Access Network \(CAN\) is not supported on the system.
     ```
 
 4.  Visit http://localhost:9090/ in a laptop or workstation browser.
-
 

@@ -1,4 +1,4 @@
-## Access the Keycloak User Management UI
+# Access the Keycloak User Management UI
 
 This procedure can be used to access the interface to manage Keycloak users. Users can be added with this interface \(see [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal_User_Accounts_in_the_Keycloak_Shasta_Realm.md)\).
 
@@ -14,15 +14,15 @@ This procedure can be used to access the interface to manage Keycloak users. Use
 
 ### Procedure
 
-1.  Point a browser at https://auth.SYSTEM_DOMAIN_NAME/keycloak/, replacing SYSTEM\_DOMAIN\_NAME with the actual NCN's DNS name.
+1.  Point a browser at https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/, replacing SYSTEM\_DOMAIN\_NAME with the actual NCN's DNS name.
 
     The following is an example URL for a system:
 
     ```screen
-    auth.system1.us.cray.com/keycloak
+    auth.cmn.system1.us.cray.com/keycloak
     ```
 
-    The browser may return an error message similar to the following when auth.SYSTEM\_DOMAIN\_NAME/keycloak is launched for the first time:
+    The browser may return an error message similar to the following when auth.cmn.SYSTEM\_DOMAIN\_NAME/keycloak is launched for the first time:
 
     ```screen
     This Connection Is Not Private
@@ -43,5 +43,4 @@ This procedure can be used to access the interface to manage Keycloak users. Use
 
 
 New users can be added with this interface \(see [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal_User_Accounts_in_the_Keycloak_Shasta_Realm.md)\).
-
 

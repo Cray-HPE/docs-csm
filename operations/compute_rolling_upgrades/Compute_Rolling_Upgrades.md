@@ -1,4 +1,4 @@
-## Compute Rolling Upgrades
+# Compute Rolling Upgrades
 
 The Compute Rolling Upgrade Service \(CRUS\) upgrades sets of compute nodes without requiring an entire set of nodes to be out of service at once. CRUS manages the workload management status of nodes, handling each of the following steps required to upgrade compute nodes:
 
@@ -15,12 +15,3 @@ CRUS is built upon a few basic features of the system:
 -   Workload management that can gracefully take nodes out of service \(quiesce nodes\), declare nodes as failed, and return nodes to service.
 -   The Boot Orchestration Service \(BOS\) and boot session templates.
 
-### Table of Contents
-
-The following procedures are required to upgrade compute nodes with CRUS.
-
-- [CRUS Workflow](CRUS_Workflow.md)
-- [Upgrade Compute Nodes with CRUS](Upgrade_Compute_Nodes_with_CRUS.md)
-- [Troubleshoot Nodes Failing to Upgrade in a CRUS Session](Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
-- [Troubleshoot a Failed CRUS Session Because of Unmet Conditions](Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
-- [Troubleshoot a Failed CRUS Session Because of Bad Parameters](Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)

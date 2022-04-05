@@ -1,4 +1,4 @@
-## Restore an etcd Cluster from a Backup
+# Restore an etcd Cluster from a Backup
 
 Use an existing backup of a healthy etcd cluster to restore an unhealthy cluster to a healthy state.
 
@@ -7,8 +7,8 @@ The commands in this procedure can be run on any master node \(`ncn-mXXX`\) or w
 ---
 **NOTE**
 
-Etcd Clusters can be restored using the automation script or the manual procedure below. The automation script follows the same steps as the manual procedure. 
-If the automation script fails to get the date from backups, follow the manual procedure. 
+Etcd Clusters can be restored using the automation script or the manual procedure below. The automation script follows the same steps as the manual procedure.
+If the automation script fails to get the date from backups, follow the manual procedure.
 
 ---
 
@@ -18,11 +18,11 @@ A backup of a healthy etcd cluster has been created.
 
 ### Restore with Automation Script
 
-The automated script will restore the cluster from the most recent backup if it finds a backup created within the last 7 days. 
+The automated script will restore the cluster from the most recent backup if it finds a backup created within the last 7 days.
 If it does not discover a backup within the last 7 days, it will ask the user if they would like to rebuild the cluster.
 
 ```
-ncn-w001 # cd /opt/cray/platform-utils/etcd_restore_rebuild_util
+ncn-w001# cd /opt/cray/platform-utils/etcd_restore_rebuild_util
 
 # rebuild/restore a single cluster
 ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -s cray-bos-etcd
@@ -61,6 +61,11 @@ etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
     ncn-w001# kubectl exec -it -n operators \
     $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
     -c boto3 -- list_backups cray-bos
+    ```
+
+    Example output:
+
+    ```
     cray-bos/etcd.backup_v108497_2020-03-20-23:42:37
     cray-bos/etcd.backup_v125815_2020-03-21-23:42:37
     cray-bos/etcd.backup_v143095_2020-03-22-23:42:38
@@ -78,8 +83,11 @@ etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
     ncn-w001# kubectl exec -it -n operators \
     $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
     -c util -- restore_from_backup cray-bos etcd.backup_v277935_2020-03-30-23:52:54
+    ```
 
+    Example output:
 
+    ```
     etcdrestore.etcd.database.coreos.com/cray-bos-etcd created
     ```
 
@@ -91,6 +99,11 @@ etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
 
         ```bash
         ncn-w001# kubectl -n services get pod | grep SERVICE_NAME
+        ```
+
+        Example output:
+
+        ```
         cray-bos-etcd-498jn7th6p             1/1     Running              0          4h1m
         cray-bos-etcd-dj7d894227             1/1     Running              0          3h59m
         cray-bos-etcd-tk4pr4kgqk             1/1     Running              0          4
@@ -102,8 +115,11 @@ etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
 
         ```bash
         ncn-w001# kubectl -n services delete etcdrestore.etcd.database.coreos.com/cray-bos-etcd
-        etcdrestore.etcd.database.coreos.com "cray-bos-etcd" deleted
         ```
 
+        Example output:
 
+        ```
+        etcdrestore.etcd.database.coreos.com "cray-bos-etcd" deleted
+        ```
 

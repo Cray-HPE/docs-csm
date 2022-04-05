@@ -8,7 +8,6 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 1.  [Install Yapl](#install-yapl)
 1.  [Install CSM Services](#install-csm-services)
-1.  [Apply After Sysmgmt Manifest Workarounds](#apply-after-sysmgmt-manifest-workarounds)
 1.  [Wait For Everything To Settle](#wait-for-everything-to-settle)
 1.  [Known Issues](#known-issues)
     - [install.sh known issues](#known-issues-install-sh)
@@ -18,57 +17,48 @@ This procedure will install CSM applications and services into the CSM Kubernete
 ## Details
 
 <a name="install-yapl"></a>
-
 ### 1. Install Yapl
 
 ```bash
-   linux# rpm -Uvh /var/www/ephemeral/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/yapl-*.x86_64.rpm
+pit# rpm -Uvh /var/www/ephemeral/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/yapl-*.x86_64.rpm
 ```
 
 <a>install-csm-services</a>
-
 ### 2. Install CSM Services
 
 > **NOTE**: During this step, on (only) TDS systems with three worker nodes the `customizations.yaml` file will be edited (automatically) to lower pod CPU requests for some services in order to better facilitate scheduling on smaller systems. See the file: `/var/www/ephemeral/${CSM_RELEASE}/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified with different values (prior to executing the `yapl` command below) if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/CSM_product_management/Post_Install_Customizations.md).
 
-Setup password-less SSH for the pit node:
+1. Setup passwordless SSH for the pit node:
 
-```bash
-   linux# rsync -av ncn-m002:.ssh/ /root/.ssh/
-```
+    ```bash
+    pit# rsync -av ncn-m002:.ssh/ /root/.ssh/
+    ```
 
-Install csm services using `yapl`:
+1. Install csm services using `yapl`:
 
-```bash
-   linux# cd /usr/share/doc/csm/install/scripts/csm_services
-   linux# yapl -f install.yaml execute
-```
+    ```bash
+    pit# pushd /usr/share/doc/csm/install/scripts/csm_services
+    pit# yapl -f install.yaml execute
+    pit# popd
+    ```
 
-> **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. You can rerun above command any time.
+    > **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. You can rerun above command any time.
 
-> **NOTE**: stdout is redirected to `/usr/share/doc/csm/install/scripts/csm_services/yapl.log` . If you would like to show stdout in the terminal, you can use `yapl -f install.yaml --console-output execute`
+    > **NOTE**: stdout is redirected to `/usr/share/doc/csm/install/scripts/csm_services/yapl.log` . If you would like to show stdout in the terminal, you can use `yapl -f install.yaml --console-output execute`
 
-> **NOTE**: If you want to force a rerun, you can use `--no-cache`: `yapl -f install.yaml execute --no-cache`
-
-<a name="apply-after-sysmgmt-manifest-workarounds"></a>
-
-### 3. Apply After Sysmgmt Manifest Workarounds
-
-Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `after-sysmgmt-manifest` breakpoint.
-
-<a name="known-issues"></a>
+    > **NOTE**: If you want to force a rerun, you can use `--no-cache`: `yapl -f install.yaml execute --no-cache`
 
 <a name="wait-for-everything-to-settle"></a>
-### 4. Wait For Everything To Settle
+### 3. Wait For Everything To Settle
 
 Wait **at least 15 minutes** to let the various Kubernetes resources get initialized and started before proceeding with the rest of the install.
 Because there are a number of dependencies between them, some services are not expected to work immediately after the install script completes.
 
-### 5. Known Issues
+<a name="known-issues"></a>
+### 4. Known Issues
 
 <a name="known-issues-install-sh"></a>
-
-#### 5.1 install.sh known issues
+#### 4.1 install.sh known issues
 
 The `install.sh` script changes cluster state and should not simply be rerun
 in the event of a failure without careful consideration of the specific
@@ -94,7 +84,7 @@ The following error may occur when running `./install.sh`:
    sls-s3-credentials   Opaque   7      28d
    ```
 
-2. Check for running sonar-sync jobs. If there are no sonar-sync jobs, then wait for one to complete. The sonar-sync cronjob is responsible for copying the `sls-s3-credentials` secret from the `default` to `services` namespaces.
+1. Check for running sonar-sync jobs. If there are no sonar-sync jobs, then wait for one to complete. The sonar-sync cronjob is responsible for copying the `sls-s3-credentials` secret from the `default` to `services` namespaces.
 
    ```bash
    pit# kubectl -n services get pods -l cronjob-name=sonar-sync
@@ -103,7 +93,7 @@ The following error may occur when running `./install.sh`:
    sonar-sync-1634322900-pnvl6   1/1     Running     0          13s
    ```
 
-3. Verify the `sls-s3-credentials` secret now exists in the `services` namespaces.
+1. Verify the `sls-s3-credentials` secret now exists in the `services` namespaces.
 
    ```bash
    pit# kubectl -n services get secret sls-s3-credentials
@@ -111,17 +101,15 @@ The following error may occur when running `./install.sh`:
    sls-s3-credentials   Opaque   7      20s
    ```
 
-4. Running `install.sh` again is expected to succeed.
+1. Running `install.sh` again is expected to succeed.
 
 <a name="known-issues-setup-nexus"></a>
-
-#### 5.2 Setup Nexus known issues
+#### 4.2 Setup Nexus known issues
 
 Known potential issues with suggested fixes are listed in [Troubleshoot Nexus](../operations/package_repository_management/Troubleshoot_Nexus.md).
 
 <a name="next-topic"></a>
-
-### 6. Next Topic
+### 5. Next Topic
 
 After completing this procedure the next step is to validate CSM health before redeploying the final NCN.
 

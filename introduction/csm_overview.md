@@ -84,12 +84,12 @@ The following table shows the default IP address ranges
 
 | Network | IP Address Range |
 | --- | --- |
-| Kubernetes service network | 10.16.0.0/12 | 
-| Kubernetes pod network | 10.32.0.0/12 | 
-| Install Network (MTL) | 10.1.0.0/16 | 
-| Node Management Network (NMN) | 10.252.0.0/17 | 
-| High Speed Network (HSN) | 10.253.0.0/16 | 
-| Hardware Management Network (HMN) | 10.254.0.0/17 | 
+| Kubernetes service network | 10.16.0.0/12 |
+| Kubernetes pod network | 10.32.0.0/12 |
+| Install Network (MTL) | 10.1.0.0/16 |
+| Node Management Network (NMN) | 10.252.0.0/17 |
+| High Speed Network (HSN) | 10.253.0.0/16 |
+| Hardware Management Network (HMN) | 10.254.0.0/17 |
 | Mountain NMN Allocate a /22 from this range per liquid cooled cabinet: * cabinet 1 * cabinet 2 * cabinet 3 * ...  | 10.100.0.0/17 Example IP address in the allocated ranges: * 10.100.0.0/22 * 10.100.4.0/22 * 10.100.8.0/22 * ... |
 | Mountain HMN Allocate a /22 from this range per liquid cooled cabinet: * cabinet 1 * cabinet 2 * cabinet 3 * ... | 10.104.0.0/17 Example IP address in the allocated ranges: * 10.104.0.0/22 * 10.104.4.0/22 * 10.104.8.0/22 * ... |
 | River NMN | 10.106.0.0/17 |
@@ -178,6 +178,6 @@ as both an internal definition of the API contract and the external documentatio
 up-to-date reference available.
 
 The API Gateway URL for accessing the APIs on a site-specific system is
-https://api.SYSTEM-NAME.DOMAIN-NAME/apis/.
+https://api.cmn.SYSTEM-NAME.DOMAIN-NAME/apis/.
 
 The internal URL from a local console on any of the management nodes is https://api-gw-service-nmn.local/apis.

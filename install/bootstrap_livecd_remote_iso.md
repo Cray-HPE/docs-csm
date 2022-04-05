@@ -15,11 +15,9 @@ lack of removable storage.
    1. [Attaching and Booting the LiveCD with the BMC](#attaching-and-booting-the-livecd-with-the-bmc)
    1. [First Login](#first-login)
    1. [Configure the Running LiveCD](#configure-the-running-livecd)
-      1. [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
       1. [Generate Installation Files](#generate-installation-files)
          1. [Subsequent Fresh-Installs (Re-Installs)](#subsequent-fresh-installs-re-installs)
          1. [First-Time/Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal)
-      1. [CSI Workarounds](#csi-workarounds)
       1. [Prepare Site Init](#prepare-site-init)
    1. [Bring-up the PIT Services and Validate PIT Health](#bring---up-the-pit-services-and-validate-pit-health)
    1. [Next Topic](#next-topic)
@@ -44,8 +42,8 @@ the instructions for attaching to the BMC will differ.
 
 1. The CSM software release should be downloaded and expanded for use.
 
-   **Important:** To ensure that the CSM release plus any patches, workarounds, or hotfixes are included
-   follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
+   **Important:** Ensure that you have the CSM release plus any patches or hotfixes by
+   following the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
 
    The cray-pre-install-toolkit ISO and other files are now available in the directory from the extracted CSM tar.
    The ISO will have a name similar to
@@ -146,16 +144,19 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# /root/bin/csi-setup-lan0.sh $site_ip $site_gw $site_dns $site_nics
       ```
 
-   1. (recommended) print `lan0`, and if it has an IP address then exit console and log in again using SSH. The SSH connection will provide larger window sizes and better buffer-handling (screen wrapping). Finally also attempt to auto-set the hostname based on the local/on-prem DNS (this script will always append `-pit` to the end of the hostname as a means to mitigate confusing the session with an actual, deployed NCN).
+   1. Check if `lan0` has an IP address and attempt to auto-set the hostname based on DNS (this script appends `-pit` to the end of the hostname as a means to mitigate confusing the PIT node with an actual, deployed NCN). Then exit the typescript, exit the console session, and log in again using SSH.
 
       ```bash
       pit# ip a show lan0
       pit# /root/bin/csi-set-hostname.sh # this will attempt to set the hostname based on the site's own DNS records.
-      pit# exit
+      pit# exit # exit the typescript started earlier
+      pit# exit # log out of the pit node
+      # Close the console session by entering &. or ~.
+      # Then ssh back into the PIT node
       external# ssh root@${SYSTEM_NAME}-ncn-m001
       ```
 
-   1. (recommended) After reconnecting, resume the typescript (the `-a` appends to an existing script).
+   1. After reconnecting, resume the typescript (the `-a` appends to an existing script).
 
        ```bash
       pit# cd ~
@@ -174,56 +175,78 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
     ```bash
     pit# disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print $2}' | head -n 1 | tr -d '\n')"
+    pit# echo $disk
     pit# parted --wipesignatures -m --align=opt --ignore-busy -s /dev/$disk -- mklabel gpt mkpart primary ext4 2048s 100%
     pit# mkfs.ext4 -L PITDATA "/dev/${disk}1"
     ```
 
+    In some cases the `parted` command may give an error similar to the following:
+    ```text
+    Error: Partition(s) 4 on /dev/sda have been written, but we have been unable to inform the kernel of the change, probably
+    because it/they are in use. As a result, the old partition(s) will remain in use. You should reboot now before making
+    further changes.
+    ```
+
+    In that case, the following steps may resolve the problem without needing to reboot. These commands will remove
+    volume groups and raid arrays that may be using the disk. **These commands only need to be run if the earlier
+    `parted` command failed.**
+
+    ```bash
+    pit# RAIDS=$(grep "${disk}[0-9]" /proc/mdstat | awk '{ print "/dev/"$1 }')
+    pit# echo $RAIDS
+    pit# VGS=$(echo $RAIDS | xargs -r pvs --noheadings -o vg_name 2>/dev/null)
+    pit# echo $VGS
+    pit# echo $VGS | xargs -r -t -n 1 vgremove -f -v
+    pit# echo $RAIDS | xargs -r -t -n 1 mdadm -S -f -v
+    ```
+
+    After running the above procedure, retry the `parted` command which failed. If it succeeds, resume the install from that point.
+
 1. Mount local disk, check the output of each command as it goes.
-   
+
    > **`NOTE`** The FSLabel `PITDATA` is already in `/etc/fstab`, so the path is omitted in the following calls to `mount`.
 
     ```bash
     pit# mount -v -L PITDATA
     pit# pushd /var/www/ephemeral
-    pit:/var/www/ephemeral# mkdir -v admin prep configs data
+    pit# mkdir -v admin prep prep/admin configs data
     ```
 
-1. Quit the typescript session with the `exit` command, copy the file (csm-install-remoteis.<date>.txt) from its initial location to the newly created directory, and restart the typescript.
+1. Quit the typescript session with the `exit` command, copy the file (csm-install-remoteiso.<date>.txt) from its initial location to the newly created directory, and restart the typescript.
 
     ```bash
     pit# exit # The typescript
-    pit# cp ~/csm-install-remoteiso.*.txt /mnt/pitdata/prep/admin
-    pit# cd /mnt/pitdata/prep/admin
+    pit# cp -v ~/csm-install-remoteiso.*.txt /var/www/ephemeral/prep/admin
+    pit# cd /var/www/ephemeral/prep/admin
     pit# script -af $(ls -tr csm-install-remoteiso* | head -n 1)
     pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
-    pit# pushd /var/www/ephemeral
     ```
 
 1. Download the CSM software release to the PIT node.
 
-   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
-   were downloaded to a system using the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
+   **Important:** In an earlier step, the CSM release plus any patches or hotfixes
+   was downloaded to a system using the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
    Either copy from that system to the PIT node or set the ENDPOINT variable to URL and use `wget`.
 
    1. Set helper variables
 
       ```bash
-      pit:/var/www/ephemeral# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm
-      pit:/var/www/ephemeral# export CSM_RELEASE=csm-x.y.z
-      pit:/var/www/ephemeral# export SYSTEM_NAME=eniac
+      pit# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm
+      pit# export CSM_RELEASE=csm-x.y.z
+      pit# export SYSTEM_NAME=eniac
       ```
 
-   1. Save the `CSM_RELEASE` for usage later; all subsequent shell sessions will have this var set.
+   1. Save the `CSM_RELEASE` and `SYSTEM_NAME` variable for usage later; all subsequent shell sessions will have this var set.
 
       ```bash
       # Prepend a new line to assure we add on a unique line and not at the end of another.
-      pit:/var/www/ephemeral# echo -e "\nCSM_RELEASE=$CSM_RELEASE" >>/etc/environment
+      pit# echo -e "\nCSM_RELEASE=$CSM_RELEASE\nSYSTEM_NAME=$SYSTEM_NAME" >>/etc/environment
       ```
 
    1. Fetch the release tarball.
 
       ```bash
-      pit:/var/www/ephemeral# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz -O /var/www/ephemeral/${CSM_RELEASE}.tar.gz
+      pit# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz -O /var/www/ephemeral/${CSM_RELEASE}.tar.gz
       ```
 
    1. Expand the tarball on the PIT node.
@@ -232,16 +255,19 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 
       ```bash
-      pit:/var/www/ephemeral# tar -zxvf ${CSM_RELEASE}.tar.gz
-      pit:/var/www/ephemeral# ls -l ${CSM_RELEASE}
+      pit# tar -C /var/www/ephemeral -zxvf /var/www/ephemeral/${CSM_RELEASE}.tar.gz
+      pit# CSM_PATH=/var/www/ephemeral/${CSM_RELEASE}
+      pit# echo $CSM_PATH
+      pit# echo -e "\nCSM_PATH=$CSM_PATH" >>/etc/environment
+      pit# ls -l ${CSM_PATH}
       ```
 
    1. Copy the artifacts into place.
 
       ```bash
-      pit:/var/www/ephemeral# mkdir -pv data/{k8s,ceph}
-      pit:/var/www/ephemeral# rsync -a -P --delete ./${CSM_RELEASE}/images/kubernetes/ ./data/k8s/
-      pit:/var/www/ephemeral# rsync -a -P --delete ./${CSM_RELEASE}/images/storage-ceph/ ./data/ceph/
+      pit# mkdir -pv /var/www/ephemeral/data/{k8s,ceph} &&
+            rsync -a -P --delete ${CSM_PATH}/images/kubernetes/ /var/www/ephemeral/data/k8s/ &&
+            rsync -a -P --delete ${CSM_PATH}/images/storage-ceph/ /var/www/ephemeral/data/ceph/
       ```
 
    > The PIT ISO, Helm charts/images, and bootstrap RPMs are now available in the extracted CSM tar.
@@ -249,13 +275,18 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Install/upgrade CSI; check if a newer version was included in the tar-ball.
 
    ```bash
-   pit:/var/www/ephemeral# rpm -Uvh $(find ./${CSM_RELEASE}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh $(find ${CSM_PATH}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
+
+1. Download and install/upgrade the documentation RPM. If this machine does not have direct internet
+   access this RPM will need to be externally downloaded and then copied to this machine.
+
+   See [Check for Latest Documentation](../update_product_stream/index.md#documentation)
 
 1. Show the version of CSI installed.
 
    ```bash
-   pit:/var/www/ephemeral# /root/bin/metalid.sh
+   pit# /root/bin/metalid.sh
    ```
 
    Expected output looks similar to the following:
@@ -278,13 +309,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    = PIT Identification = COPY/CUT END =========================================
    ```
 
-<a name="before-configuration-payload-workarounds"></a>
-#### 4.1 Before Configuration Payload Workarounds
-
-Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-configuration-payload` breakpoint.
-
 <a name="generate-installation-files"></a>
-#### 4.2 Generate Installation Files
+#### 4.1 Generate Installation Files
 
 Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if one has not already prepared the information for this system.
 
@@ -296,7 +322,7 @@ Some files are needed for generating the configuration payload. See these topics
 1. Change into the preparation directory plus necessary PIT directories (for later):
 
    ```bash
-   pit:/var/www/ephemeral# cd prep
+   pit# cd /var/www/ephemeral/prep
    ```
 
 1. Pull these files into the current working directory, or create them if this is a first-time/initial install:
@@ -317,11 +343,11 @@ Some files are needed for generating the configuration payload. See these topics
    After gathering the files into this working directory, move on to [Subsequent Fresh-Installs (Re-Installs)](#subsequent-fresh-installs-re-installs).
 
 <a name="subsequent-fresh-installs-re-installs"></a>
-##### 4.2.a Subsequent Fresh-Installs (Re-Installs)
+##### 4.1.a Subsequent Fresh-Installs (Re-Installs)
 
-1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration (see [avoiding parameters](../background/index.md#cray_site_init_files)).
+1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
 
-   > **`SKIP STEP IF`** if the `system_config.yaml` file is unavailable please skip this step and move onto the next one in order to generate the first configuration payload..
+   > **`SKIP STEP IF`** if the `system_config.yaml` file is unavailable please skip this step and move onto the next one in order to generate the first configuration payload.
 
    1. Check for the configuration files. The needed files should be in the current directory.
 
@@ -340,10 +366,10 @@ Some files are needed for generating the configuration payload. See these topics
       system_config.yaml
       ```
 
-   1. Set an environment variable so this system name can be used in later commands.
+   1. Verify that the `SYSTEM_NAME` variable is set.
 
       ```bash
-      pit:/var/www/ephemeral/prep/# export SYSTEM_NAME=eniac
+      pit:/var/www/ephemeral/prep/# echo $SYSTEM_NAME
       ```
 
    1. Generate the system configuration
@@ -382,10 +408,10 @@ Some files are needed for generating the configuration payload. See these topics
       >   {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >   ```
 
-   1. Skip the next step and continue with the [CSI Workarounds](#csi-workarounds).
+   1. Skip the next step and continue to [prepare site init](#prepare-site-init).
 
 <a name="first-timeinitial-installs-bare-metal"></a>
-##### 4.2.b First-Time/Initial Installs (bare-metal)
+##### 4.1.b First-Time/Initial Installs (bare-metal)
 
 1. **For first-time/initial installs (without a `system_config.yaml`file)**, generate the system configuration. See below for an explanation of the command line parameters and some common settings.
 
@@ -407,14 +433,14 @@ Some files are needed for generating the configuration payload. See these topics
       switch_metadata.csv
       ```
 
-   1. Set an environment variable so this system name can be used in later commands.
+   1. Verify that the `SYSTEM_NAME` variable is set.
 
       ```bash
-      pit:/var/www/ephemeral/prep/# export SYSTEM_NAME=eniac
+      pit:/var/www/ephemeral/prep/# echo $SYSTEM_NAME
       ```
 
    1. Generate the system config:
-      > **`NOTE`** the provided command below is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary sifnificatnly depending on ones system and site configuration.
+      > **`NOTE`** the provided command below is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary significatnly depending on ones system and site configuration.
 
       ```bash
       pit:/var/www/ephemeral/prep/# csi config init \
@@ -441,8 +467,7 @@ Some files are needed for generating the configuration payload. See these topics
           --cabinets-yaml cabinets.yaml \
           --hmn-mtn-cidr 10.104.0.0/17 \
           --nmn-mtn-cidr 10.100.0.0/17 \
-          --bgp-peers aggregation
-            
+
       # Verify the newly generated configuration payload's `system_config.yaml` matches the current version of CSI.
       # NOTE: Keep this new system_config.yaml somewhere safe to facilitate re-installs.
       pit:/var/www/ephemeral/prep/# cat ${SYSTEM_NAME}/system_config.yaml
@@ -466,10 +491,9 @@ Some files are needed for generating the configuration payload. See these topics
       > 1. The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help`
       > 1. For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. If one are using a `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
       > 1. An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
-      > 1. By default, spine switches are used as MetalLB peers. Use `--bgp-peers aggregation` to use aggregation switches instead.
 
       > **`SPECIAL/IGNORABLE WARNINGS`** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored:
-      > 
+      >
       > 1. The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
       >
       >    ```
@@ -490,17 +514,12 @@ Some files are needed for generating the configuration payload. See these topics
       >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >    ```
 
-   1. Continue with the next step to apply the [csi-config workarounds](#33-csi-workarounds).
+   1. Continue with the next step to [prepare site init](#prepare-site-init).
 
-<a name="csi-workarounds"></a>
-#### 4.3 CSI Workarounds
+<a name="prepare-site-init"></a>
+#### 4.2 Prepare Site Init
 
-Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
-
-<a name="prepare_site_init"></a>
-#### 4.4 Prepare Site Init
-
-First, prepare a shim to faciliate going through the site-init guide:
+First, prepare a shim to facilitate going through the site-init guide:
 
  ```bash
  pit# mkdir -vp /mnt/pitdata
@@ -511,19 +530,19 @@ Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for
 
 Finally, cleanup the shim:
  ```bash
- # this uses rmdir to safely remove the directory, preventing accidentaly removals if one does not notice the umount command fail.
- pit# umount /mnt/pitdata/
- pit# rmdir /mnt/pitdata
+ pit# cd ~
+ # this uses `rmdir` to safely remove the directory, preventing accidental removal if one does not notice a `umount` command failure.
+ pit# umount -v /mnt/pitdata/
+ pit# rmdir -v /mnt/pitdata
  ```
 
 <a name="bring---up-the-pit-services-and-validate-pit-health"></a>
 ### 5. Bring-up the PIT Services and Validate PIT Health
 
 1. Set the same variables from the `csi config init` step from earlier, and then invoke "PIT init" to setup the PIT server for deploying NCNs.
-   > **`NOTE`** `pit-init` will re-run `csi config init`, copy all generated files into place, apply the CA patch, and finally restart daemons. This will also re-print the `metalid.sh` content incase it was skipped in the previous step. **Re-installs** can skip running `csi config init` entirely and simply run `pit-init.sh` after gathering CSI input files into `/var/www/ephemeral/prep`.
+   > **`NOTE`** `pit-init` will re-run `csi config init`, copy all generated files into place, apply the CA patch, and finally restart daemons. This will also re-print the `metalid.sh` content in case it was skipped in the previous step. **Re-installs** can skip running `csi config init` entirely and simply run `pit-init.sh` after gathering CSI input files into `/var/www/ephemeral/prep`.
 
     ```bash
-    pit# export SYSTEM_NAME=eniac
     pit# export USERNAME=root
     pit# export IPMI_PASSWORD=changeme
     pit# /root/bin/pit-init.sh
@@ -535,36 +554,14 @@ Finally, cleanup the shim:
    pit# /root/bin/configure-ntp.sh
    ```
 
-1. Set shell environment variables.
-
-   The CSM_RELEASE and CSM_PATH variables will be used later.
-
-   ```bash
-   pit# cd /var/www/ephemeral
-   pit:/var/www/ephemeral# export CSM_RELEASE=csm-x.y.z
-   pit:/var/www/ephemeral# echo $CSM_RELEASE
-   pit:/var/www/ephemeral# export CSM_PATH=$(pwd)/${CSM_RELEASE}
-   pit:/var/www/ephemeral# echo $CSM_PATH
-   ```
-
 1. Install Goss Tests and Server
 
    The following assumes the CSM_PATH environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
-   pit:/var/www/ephemeral# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
-   pit:/var/www/ephemeral# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)   
-   pit:/var/www/ephemeral# cd
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
    ```
-
-1. Verify the system:
-
-   ```bash
-   pit# csi pit validate --network
-   pit# csi pit validate --services
-   ```
-
-1. Follow directions in the output from the 'csi pit validate' commands for failed validations before continuing.
 
 <a name="next-topic"></a>
 # Next Topic
@@ -572,5 +569,4 @@ Finally, cleanup the shim:
 After completing this procedure the next step is to configure the management network switches.
 
 * See [Configure Management Network Switches](index.md#configure_management_network)
-
 

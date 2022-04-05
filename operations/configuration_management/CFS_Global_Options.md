@@ -1,4 +1,4 @@
-## CFS Global Options
+# CFS Global Options
 
 The Configuration Framework Service \(CFS\) provides a global service options endpoint for modifying the base configuration of the service itself.
 
@@ -6,6 +6,11 @@ View the options with the following command:
 
 ```bash
 ncn# cray cfs options list --format json
+```
+
+Example output:
+
+```
 {
   "additionalInventoryUrl": "",
   "batchSize": 25,
@@ -67,7 +72,4 @@ The following are the CFS global options:
 
 
 The default values for all CFS global options can be modified with the `cray cfs options update` command.
-
-
-
 

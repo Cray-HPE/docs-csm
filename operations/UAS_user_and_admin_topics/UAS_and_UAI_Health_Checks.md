@@ -1,7 +1,15 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
 
-## UAS and UAI Health Checks
+[Next Topic: Troubleshoot UAS Issues](Troubleshoot_UAS_Issues.md)
 
-Initialize and authorize the CLI so a user may run procedures on any given node.
+
+## UAS and UAI Legacy Mode Health Checks
+
+Check the health of UAS and UAI to validate installation / upgrade of an HPE Cray EX system. This is a legacy mode procedure that can be run at installation / upgrade time to make sure that the following are true:
+
+* UAS is installed and running correctly
+* UAI images are installed and registered correctly
+* UAIs can be created in legacy mode
 
 ### Initialize and Authorize the CLI
 
@@ -64,11 +72,11 @@ Success!
 
 If initialization or authorization fails in any of the preceding steps, there are several common causes.
 
--   DNS failure looking up api-gw-service-nmn.local may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
--   Network connectivity issues with the NMN may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
--   Certificate mismatch or trust issues may be preventing a secure connection to the API Gateway
--   Istio failures may be preventing traffic from reaching Keycloak
--   Keycloak may not yet be set up to authorize you as a user
+- DNS failure looking up api-gw-service-nmn.local may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
+- Network connectivity issues with the NMN may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
+- Certificate mismatch or trust issues may be preventing a secure connection to the API Gateway
+- Istio failures may be preventing traffic from reaching Keycloak
+- Keycloak may not yet be set up to authorize you as a user
 
 While resolving these issues is beyond the scope of this section, adding -vvvvv to the cray auth or cray init commands may offer clues as to why the initialization or authorization is failing.
 
@@ -78,10 +86,22 @@ This procedure and the following procedures run on separate nodes on the system 
 
 ```bash
 ncn-m002# cray uas mgr-info list
+```
+
+Example output:
+
+```
 service_name = "cray-uas-mgr"
 version = "1.11.5"
+```
 
+```
 ncn-m001-pit# cray uas list
+```
+
+Example output:
+
+```
 results = []
 ```
 
@@ -91,83 +111,121 @@ To verify that the pre-made UAI images are registered with UAS, run the followin
 
 ```bash
 ncn-m002# cray uas images list
+```
+
+Example output:
+
+```
 default_image = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 image_list = [ "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest",]
 ```
 
-The output shows that the pre-made end-user UAI image, cray/cray-uai-sles15sp1:latest, is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use. If other UAI images have been created and registered, they may also appear in the output.
+The output shows that the pre-made End-User UAI image, cray/cray-uai-sles15sp1:latest, is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use. If other UAI images have been created and registered, they may also appear in the output.
 
 ### Validate UAI Creation
 
-This procedure:
+The following are needed for this procedure:
 
--   Must run on a master or worker node \(and not ncn-w001\).
--   Must run on the HPE Cray EX system \(or from an external host, but the procedure for that is not covered here\).
--   Requires that the CLI be initialized and authorized as for the current user.
+- Must run on a master or worker node \(and not ncn-w001\).
+- Must run on the HPE Cray EX system \(or from an external host, but the procedure for that is not covered here\).
+- Requires that the CLI be initialized and authorized as for the current user.
 
-To verify that the user account can create a UAI, use the following command.
+1. Verify that the user account can create a UAI.
 
-```bash
-ncn-w003# cray uas create --publickey ~/.ssh/id_rsa.pub
-uai_connect_string = "ssh vers@10.16.234.10"
-uai_host = "ncn-w001"
-uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
-uai_ip = "10.16.234.10"
-uai_msg = ""
-uai_name = "uai-vers-a00fb46b"
-uai_status = "Pending"
-username = "vers"
+    ```bash
+    ncn-w003# cray uas create --publickey ~/.ssh/id_rsa.pub
+    ```
 
-[uai_portmap]
-```
+    Example output:
 
-The UAI is now created and in the process of initializing and running.
+    ```
+    uai_connect_string = "ssh vers@10.16.234.10"
+    uai_host = "ncn-w001"
+    uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
+    uai_ip = "10.16.234.10"
+    uai_msg = ""
+    uai_name = "uai-vers-a00fb46b"
+    uai_status = "Pending"
+    username = "vers"
 
-The following can be repeated as needed to view the UAIs state. If the results appear like the following, the UAI is ready for use.
+    [uai_portmap]
+    ```
 
-```bash
-ncn-w003# cray uas list
-[[results]]
-uai_age = "0m"
-uai_connect_string = "ssh vers@10.16.234.10"
-uai_host = "ncn-w001"
-uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
-uai_ip = "10.16.234.10"
-uai_msg = ""
-uai_name = "uai-vers-a00fb46b"
-uai_status = "Running: Ready"
-username = "vers"
-```
+    The UAI is now created and in the process of initializing and running.
 
-Log into the UAI \(without a password\) as follows:
+1. View the state of the UAI.
 
-```bash
-ncn-w003# ssh vers@10.16.234.10
-The authenticity of host '10.16.234.10 (10.16.234.10)' can't be established.
-ECDSA key fingerprint is SHA256:BifA2Axg5O0Q9wqESkLqK4z/b9e1usiDUZ/puGIFiyk.
-Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-Warning: Permanently added '10.16.234.10' (ECDSA) to the list of known hosts.
-vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> ps -afe
-UID          PID    PPID  C STIME TTY          TIME CMD
-root           1       0  0 18:51 ?        00:00:00 /bin/bash /usr/bin/uai-ssh.sh
-munge         36       1  0 18:51 ?        00:00:00 /usr/sbin/munged
-root          54       1  0 18:51 ?        00:00:00 su vers -c /usr/sbin/sshd -e -f /etc/uas/ssh/sshd_config -D
-vers          55      54  0 18:51 ?        00:00:00 /usr/sbin/sshd -e -f /etc/uas/ssh/sshd_config -D
-vers          62      55  0 18:51 ?        00:00:00 sshd: vers [priv]
-vers          67      62  0 18:51 ?        00:00:00 sshd: vers@pts/0
-vers          68      67  0 18:51 pts/0    00:00:00 -bash
-vers         120      68  0 18:52 pts/0    00:00:00 ps -afe
-vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> exit
-logout
-Connection to 10.16.234.10 closed.
-```
+    The following can be repeated as many times as desired. If the results appear like the following, the UAI is ready for use.
 
-Clean up the UAI and note that the UAI name used is the same as the name in the output from `cray uas create` above.
+    ```bash
+    ncn-w003# cray uas list
+    ```
 
-```bash
-ncn-w003# cray uas delete --uai-list uai-vers-a00fb46b
-results = [ "Successfully deleted uai-vers-a00fb46b",]
-```
+    Example output:
+
+    ```
+    [[results]]
+    uai_age = "0m"
+    uai_connect_string = "ssh vers@10.16.234.10"
+    uai_host = "ncn-w001"
+    uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
+    uai_ip = "10.16.234.10"
+    uai_msg = ""
+    uai_name = "uai-vers-a00fb46b"
+    uai_status = "Running: Ready"
+    username = "vers"
+    ```
+
+1. Log into the UAI \(without a password\) as follows:
+
+    1. SSH to the UAI.
+
+        ```bash
+        ncn-w003# ssh vers@10.16.234.10
+        ```
+
+        Example output:
+
+        ```
+        The authenticity of host '10.16.234.10 (10.16.234.10)' can't be established.
+        ECDSA key fingerprint is SHA256:BifA2Axg5O0Q9wqESkLqK4z/b9e1usiDUZ/puGIFiyk.
+        Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+        Warning: Permanently added '10.16.234.10' (ECDSA) to the list of known hosts.
+        ```
+
+    1. List the processes.
+
+        ```
+        vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> ps -afe
+        ```
+
+        Example output:
+
+        ```
+        UID          PID    PPID  C STIME TTY          TIME CMD
+        root           1       0  0 18:51 ?        00:00:00 /bin/bash /usr/bin/uai-ssh.sh
+        munge         36       1  0 18:51 ?        00:00:00 /usr/sbin/munged
+        root          54       1  0 18:51 ?        00:00:00 su vers -c /usr/sbin/sshd -e -f /etc/uas/ssh/sshd_config -D
+        vers          55      54  0 18:51 ?        00:00:00 /usr/sbin/sshd -e -f /etc/uas/ssh/sshd_config -D
+        vers          62      55  0 18:51 ?        00:00:00 sshd: vers [priv]
+        vers          67      62  0 18:51 ?        00:00:00 sshd: vers@pts/0
+        vers          68      67  0 18:51 pts/0    00:00:00 -bash
+        vers         120      68  0 18:52 pts/0    00:00:00 ps -afe
+        ```
+
+    1. Exit the connection.
+
+        ```
+        vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> exit
+        ```
+
+1. Clean up the UAI and note that the UAI name used is the same as the name in the output from `cray uas create` above.
+
+    ```bash
+    ncn-w003# cray uas delete --uai-list uai-vers-a00fb46b
+    ```
+
+    In this example, `results = [ "Successfully deleted uai-vers-a00fb46b",]` will be returned if successful.
 
 ### Troubleshoot UAS and UAI Operations Issues
 
@@ -203,6 +261,11 @@ There are typically two UAS pods. View logs from both pods to identify the speci
 
 ```bash
 ncn-w003# kubectl get po -n services | grep uas-mgr | grep -v etcd
+```
+
+Example output:
+
+```
 cray-uas-mgr-6bbd584ccb-zg8vx            2/2     Running            0          12d
 ncn-w003# kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v 'GET ' | tail -25
 2021-02-08 15:32:41,211 - uas_mgr - INFO - getting deployment uai-vers-87a0ff6e in namespace user
@@ -234,10 +297,15 @@ ncn-w003# kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | 
 
 ### UAI Images not in Registry
 
-If output is similar to the following, the pre-made end-user UAI image is not in the user's local registry \(or whatever registry it is being pulled from, see the uai\_img value for details\). Locate and the image and push / import it to the registry.
+If output is similar to the following, the pre-made End-User UAI image is not in the user's local registry \(or whatever registry it is being pulled from, see the uai\_img value for details\). Locate and the image and push / import it to the registry.
 
 ```bash
 ncn-w003# cray uas list
+```
+
+Example output:
+
+```
 [[results]]
 uai_age = "0m"
 uai_connect_string = "ssh vers@10.103.13.172"
@@ -269,3 +337,4 @@ ncn-w003# kubectl describe -n user <pod-name>
 If volumes are missing, they will be in the Events:section of the output. Other problems may show up there as well. The names of the missing volumes or other issues should indicate what needs to be fixed to enable the UAI.
 
 
+[Next Topic: Troubleshoot UAS Issues](Troubleshoot_UAS_Issues.md)

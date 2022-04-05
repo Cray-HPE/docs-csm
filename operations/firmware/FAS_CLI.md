@@ -1,6 +1,4 @@
-
-
-## FAS CLI
+# FAS CLI
 
 This section describes the basic capabilities of the Firmware Action Service (FAS) CLI commands. These commands can be used to manage firmware for system hardware supported by FAS. Refer to the prerequisites section before proceeding to any of the sections for the supported operations.
 
@@ -25,7 +23,7 @@ The Cray command line interface (CLI) tool is initialized and configured on the 
 
 ### Execute an Action
 
-Use FAS to execute an action. An action produces a set of firmware operations. Each operation represents an xname + target on that xname that will be targeted for update. There are two of firmware action modes: : `dryrun` or `liveupdate`; the parameters used when creating either are completely identical except for the `overrideDryrun` setting. `overrideDryrun` will determine if feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware
+Use FAS to execute an action. An action produces a set of firmware operations. Each operation represents an component name (xname) + target on that component name (xname) that will be targeted for update. There are two of firmware action modes: : `dryrun` or `liveupdate`; the parameters used when creating either are completely identical except for the `overrideDryrun` setting. `overrideDryrun` will determine if feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware
 
 **WARNING**: It is crucial that an admin is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The admin assumes full responsibility for this knowledge. It is also likely that when performing a firmware update, the current version of firmware will not be available. This means that after successfully upgrading, the firmware cannot be reverted or downgraded to a previous version.
 
@@ -35,7 +33,7 @@ This will cover the generic process for executing an action. For more specific e
 
 1. Identify the selection of filters to apply.
 
-  Filters narrow the scope of FAS to target specific xnames, manufacturers, targets, and so on. For this example, FAS will run with no selection filters applied.
+  Filters narrow the scope of FAS to target specific component names (xnames), manufacturers, targets, and so on. For this example, FAS will run with no selection filters applied.
 
 2. Create a JSON file {whole-system-dryrun.json}; to make this a `live update` set `"overrideDryrun": true`.
 
@@ -101,11 +99,11 @@ For the steps below, the following returned messages will help determine if a fi
 *	`NoOp`: Nothing to do, already at version.
 *	`NoSol`: No image is available.
 *	`succeeded`:
-	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an xname + target with the declared strategy.
-	*	IF `live update`: the operation succeeded, and has updated the xname + target to the identified version.
+	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an component name (xname) + target with the declared strategy.
+	*	IF `live update`: the operation succeeded, and has updated the component name (xname) + target to the identified version.
 *	`failed`:
 	*	IF `dryrun` : There is something that FAS could do, but it likely would fail; most likely because the file is missing.
-	*	IF `live update` : the operation failed, the identified version could not be put on the xname + target.
+	*	IF `live update` : the operation failed, the identified version could not be put on the component name (xname) + target.
 
 Data can be viewed at several levels of information:
 
