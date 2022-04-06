@@ -75,7 +75,7 @@ For each item in the `Hardware Precedence Order`:
      *	`NoOp`: Nothing to do, already at version.
      *	`NoSol`: No viable image is available; this will not be updated.
      *	`succeeded`:
-     	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update an component name (xname) + target with the declared strategy.
+     	*	IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update a component name (xname) + target with the declared strategy.
      	*	IF `live update`: the operation succeeded, and has updated the component name (xname) + target to the identified version.
      *	`failed`:
      	*	IF `dryrun`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
@@ -124,17 +124,17 @@ After identifying which hardware is in the system, start with the top most item 
 
 There are several use cases for using the FAS to update firmware on the system. These use cases are intended to be run by system administrators with a good understanding of firmware. Under no circumstances should non-administrator users attempt to use FAS or perform a firmware update.
 
--   Perform a firmware update: Update the firmware of an component name (xname)'s target to the latest, earliest, or an explicit version.
+-   Perform a firmware update: Update the firmware of a component name (xname)'s target to the latest, earliest, or an explicit version.
 -   Determine what hardware can be updated by performing a dry-run: This is the easiest way to determine what can be updated.
 -   Take a snapshot of the system: Record the firmware versions present on each target for the identified component names (xnames). If the firmware version corresponds to an image available in the images repository, link the `imageID` to the record.
 -   Restore the snapshot of the system: Take the previously recorded snapshot and use the related `imageIDs` to put the component name (xname)/targets back to the firmware version they were at, at the time of the snapshot.
--   Provide firmware for updating: FAS can only update an component name (xname)/target if it has an image record that is applicable. Most administrators will not encounter this use case.
+-   Provide firmware for updating: FAS can only update a component name (xname)/target if it has an image record that is applicable. Most administrators will not encounter this use case.
 
 <a name="firmware-actions"></a>
 
 ### Firmware Actions
 
-An action is collection of operations, which are individual firmware update tasks. Only one FAS action can be run at a time. Any other attempted action will be queued. Additionally, only one operation can be run on an component name (xname) at a time. For example, if there are 1000 component names (xnames) with 5 targets each to be updated, all 1000 component names (xnames) can be updating a target, but only 1 target on each component name (xname) will be updated at a time.
+An action is collection of operations, which are individual firmware update tasks. Only one FAS action can be run at a time. Any other attempted action will be queued. Additionally, only one operation can be run on a component name (xname) at a time. For example, if there are 1000 component names (xnames) with 5 targets each to be updated, all 1000 component names (xnames) can be updating a target, but only 1 target on each component name (xname) will be updated at a time.
 
 The life cycle of any action can be divided into the static and dynamic portions of the life cycle.
 
