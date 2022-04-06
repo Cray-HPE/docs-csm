@@ -2,23 +2,20 @@
 
 Download and expand recipe archives from S3 and IMS. Modify and upload a recipe archive, and then register that recipe archive with IMS.
 
+## Prerequisites
 
-### Prerequisites
+* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+* System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployment:
+  * `cray-ims`, the Image Management Service \(IMS\)
+* The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
+* A token providing Simple Storage Service \(S3\) credentials has been generated.
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
-- System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployment:
-    - `cray-ims`, the Image Management Service \(IMS\)
-- The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
-- A token providing Simple Storage Service \(S3\) credentials has been generated.
+## Limitations
 
+* The commands in this procedure must be run as the `root` user.
+* The IMS tool currently only supports Kiwi-NG recipe types.
 
-### Limitations
-
-- The commands in this procedure must be run as the `root` user.
-- The IMS tool currently only supports Kiwi-NG recipe types.
-
-
-### Procedure
+## Procedure
 
 1.  Locate the desired recipe to download from S3.
 
@@ -73,9 +70,10 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
 
     A Kiwi recipe consists of multiple files and directories, which together define the repositories, packages and post-install actions to take during the Kiwi build process.
 
-    - Edit the config.xml file to modify the name of the recipe, the set of RPM packages being installed or the RPM repositories being referenced.
-    - Kiwi-NG supports multiple ways to modify the post-install configuration of the image root, including several shell scripts \(config.sh, images.sh\) and the root/overlay directory. To learn how these can be used to add specific configuration to the image root, reference the Kiwi-NG documentation. See [https://doc.opensuse.org/projects/kiwi/doc/](https://doc.opensuse.org/projects/kiwi/doc/).
-    - Recipes built by IMS are required to reference repositories that are hosted on the NCN by the Nexus.
+    * Edit the config.xml file to modify the name of the recipe, the set of RPM packages being installed or the RPM repositories being referenced.
+    * Kiwi-NG supports multiple ways to modify the post-install configuration of the image root, including several shell scripts \(`config.sh`, `images.sh`\) and the root/overlay directory. To learn how these can be used to add specific configuration to the image root, reference the Kiwi-NG documentation. See [https://doc.opensuse.org/projects/kiwi/doc/](https://doc.opensuse.org/projects/kiwi/doc/).
+    * Recipes built by IMS are required to reference repositories that are hosted on the NCN by the Nexus.
+
 5.  Locate the directory containing the Kiwi-NG image description files.
 
     This step should be done after the recipe has been changed.
