@@ -218,6 +218,7 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
 Follow the [How to Lock Management Single Node](../../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs) procedure. The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware, or from CAPMC to power off or do a power reset. Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
 
+<a name="boot-ncn-storage-nodes-only"></a>
 ### Add storage node to the Ceph cluster
 
 **Skip this section if the node being added is NOT a storage node.**

@@ -47,47 +47,49 @@ function apply_ceph_conf () {
 
 for node in ncn-s001 ncn-s002 ncn-s003; do
 
-  if [[ $counter -eq 0 ]] && nc -z -w 10 $node 22 
-    then
-      ssh-keygen -R "$node"
-      ssh-keyscan -H "$node" >> ~/.ssh/known_hosts
-      if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]] && [[ "$host" != "$node" ]]
+  if [[ $node != $(hostname) ]]
+  then
+    if [[ $counter -eq 0 ]] && nc -z -w 10 $node 22
       then
-        scp $node:/etc/ceph/* /etc/ceph
-      else
-        scp $node:/etc/ceph/rgw.pem /etc/ceph/rgw.pem
-      fi
-
-      gather_ceph_conf
-      apply_ceph_conf
-
-      if $WAS_OSD
-      then
-        if [[ $counter_a -eq 0 ]] && [[ $(ssh $node "ceph orch host rm $host") ]]
+        ssh-keygen -R "$node"
+        ssh-keyscan -H "$node" >> ~/.ssh/known_hosts
+        if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]] && [[ "$host" != "$node" ]]
         then
-          (( counter_a+=1 ))
-        fi
-      fi
-
-      if $WAS_MON
-      then
-	ssh $node "ceph mon rm $host"
-      fi
-
-      if [[ ! $(ssh -o StrictHostKeyChecking=no $node "ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-keygen -R $host; ssh-keyscan -H $host >> ~/.ssh/known_hosts ;ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
-      then
-        if [[ "$node" =~ "ncn-s003" ]]
-        then
-          echo "Unable to access ceph monitor nodes"
-          exit 1
+          scp $node:/etc/ceph/* /etc/ceph
         else
-          continue
+          scp $node:/etc/ceph/rgw.pem /etc/ceph/rgw.pem
         fi
-      else
-        (( counter+=1 ))
-      fi
-  fi
 
+        gather_ceph_conf
+        apply_ceph_conf
+
+        if $WAS_OSD
+        then
+          if [[ $counter_a -eq 0 ]] && [[ $(ssh $node "ceph orch host rm $host") ]]
+          then
+            (( counter_a+=1 ))
+          fi
+        fi
+
+        if $WAS_MON
+        then
+          ssh $node "ceph mon rm $host"
+        fi
+
+        if [[ ! $(ssh -o StrictHostKeyChecking=no $node "ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-keygen -R $host; ssh-keyscan -H $host >> ~/.ssh/known_hosts ;ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
+        then
+          if [[ "$node" =~ "ncn-s003" ]]
+          then
+            echo "Unable to access ceph monitor nodes"
+            exit 1
+          else
+            continue
+          fi
+        else
+          (( counter+=1 ))
+        fi
+    fi
+  fi
 sleep 30
 
 if ! $WAS_OSD
