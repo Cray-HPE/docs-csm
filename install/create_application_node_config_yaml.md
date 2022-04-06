@@ -140,7 +140,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
 
 5. Add application node aliases.
 
-    The `aliases` field is an map of component name (xname) strings to an array of alias strings.
+    The `aliases` field is a map of component name (xname) strings to an array of alias strings.
     > For guidance on building application node component names (xnames), follow one of the following:
     > * [Building component names (xnames) for nodes in a single application node chassis](shcd_hmn_connections_rules.md#application-node-single-node-chassis-xname)
     > * [Building component names (xnames) for nodes in a dual application node chassis](shcd_hmn_connections_rules.md#application-node-dual-node-chassis-xname)

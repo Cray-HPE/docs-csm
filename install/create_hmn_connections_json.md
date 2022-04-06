@@ -11,7 +11,7 @@ The [SHCD/HMN Connections Rules document](shcd_hmn_connections_rules.md) explain
 * SHCD Excel file for the system
 * Podman is available
 
-    > Podman is available on the CSM LiveCD, and is installed onto a NCN when being used as an environment to create the CSM PIT in the [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md) or [Bootstrap PIT Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) procedures.
+    > Podman is available on the CSM LiveCD, and is installed onto an NCN when being used as an environment to create the CSM PIT in the [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md) or [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) procedures.
 
 ### Procedure
 
