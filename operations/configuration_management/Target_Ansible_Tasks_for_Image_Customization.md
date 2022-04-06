@@ -1,6 +1,6 @@
 # Target Ansible Tasks for Image Customization
 
-The Configuration Framework Service \(CFS\) enables Ansible playbooks to run against both running nodes and images. See the "Use Cases" header in the [Configuration Management](Configuration_Management.md) section for more information about image customization and when it should be used.
+The Configuration Framework Service \(CFS\) enables Ansible playbooks to run against both running nodes and images. See the "Use Cases" header in the [Configuration Management](Configuration_Management.md#use-cases) section for more information about image customization and when it should be used.
 
 CFS uses the `cray_cfs_image` variable to distinguish between node personalization \(running on live nodes\) and image customization \(configuring an image prior to boot\). When this variable is set to true, it indicates that the CFS session is an image customization type and the playbook is targeting an image.
 

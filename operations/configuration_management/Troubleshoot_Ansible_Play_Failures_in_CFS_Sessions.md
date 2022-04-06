@@ -4,11 +4,11 @@ View the Kubernetes logs for a Configuration Framework Service \(CFS\) pod in an
 
 Use this procedure to obtain important triage information for Ansible plays being called by CFS.
 
-### Prerequisites
+## Prerequisites
 
-A configuration session exists for CFS.
+* A configuration session exists for CFS.
 
-### Procedure
+## Procedure
 
 1.  Find the CFS pod that is in an error state.
 
@@ -20,7 +20,7 @@ A configuration session exists for CFS.
 
     Example output:
 
-    ```
+    ```text
     NAME                                             READY   STATUS   RESTARTS   AGE
     cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn   0/3     Error    0          25h
     ```
@@ -33,7 +33,7 @@ A configuration session exists for CFS.
 
     Example output:
 
-    ```
+    ```text
     Error from server (BadRequest): a container name must be specified for pod cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn, choose one of: [inventory ansible-0 istio-proxy] or one of the init containers: [git-clone-0 istio-init]
     ```
 
@@ -55,7 +55,7 @@ A configuration session exists for CFS.
 
         Example output:
 
-        ```
+        ```text
           % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                          Dload  Upload   Total   Spent    Left  Speed
           0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0curl: (7) Failed to connect to localhost port 15000: Connection refused
@@ -88,7 +88,7 @@ A configuration session exists for CFS.
 
         Example output:
 
-        ```
+        ```text
         Waiting for Inventory
         Waiting for Inventory
         Inventory available
