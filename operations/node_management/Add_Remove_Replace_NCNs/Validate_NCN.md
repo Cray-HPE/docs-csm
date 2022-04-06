@@ -123,28 +123,27 @@ Validate the storage node added successfully. The following examples are based o
         Example output:
 
         ```screen
-          ceph -s
-            cluster:
-              id:     b13f1282-9b7d-11ec-98d9-b8599f2b2ed2
-              health: HEALTH_OK
+        cluster:
+          id:     b13f1282-9b7d-11ec-98d9-b8599f2b2ed2
+          health: HEALTH_OK
 
-            services:
-              mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 4h)
-              mgr: ncn-s001.pdeosn(active, since 4h), standbys: ncn-s002.wjnqvu, ncn-s003.avkrzl
-              mds: cephfs:1 {0=cephfs.ncn-s001.ldlvfj=up:active} 1 up:standby-replay 1 up:standby
-              osd: 18 osds: 18 up (since 4h), 18 in (since 4h)
-              rgw: 4 daemons active (site1.zone1.ncn-s001.ktslgl, site1.zone1.ncn-s002.inynsh, site1.zone1.ncn-s003.dvyhak, site1.zone1.ncn-s004.jnhqvt)
+        services:
+          mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 4h)
+          mgr: ncn-s001.pdeosn(active, since 4h), standbys: ncn-s002.wjnqvu, ncn-s003.avkrzl
+          mds: cephfs:1 {0=cephfs.ncn-s001.ldlvfj=up:active} 1 up:standby-replay 1 up:standby
+          osd: 18 osds: 18 up (since 4h), 18 in (since 4h)
+          rgw: 4 daemons active (site1.zone1.ncn-s001.ktslgl, site1.zone1.ncn-s002.inynsh, site1.zone1.ncn-s003.dvyhak, site1.zone1.ncn-s004.jnhqvt)
 
-            task status:
+        task status:
 
-              data:
-                pools:   12 pools, 713 pgs
-                objects: 37.20k objects, 72 GiB
-                usage:   212 GiB used, 31 TiB / 31 TiB avail
-                pgs:     713 active+clean
+          data:
+            pools:   12 pools, 713 pgs
+            objects: 37.20k objects, 72 GiB
+            usage:   212 GiB used, 31 TiB / 31 TiB avail
+            pgs:     713 active+clean
 
-              io:
-                client:   7.0 KiB/s rd, 300 KiB/s wr, 2 op/s rd, 49 op/s wr
+          io:
+            client:   7.0 KiB/s rd, 300 KiB/s wr, 2 op/s rd, 49 op/s wr
           ```
 
     1. Verify that the status shows the following:
