@@ -1,16 +1,17 @@
 # Keycloak User Management with kcadm.sh
 
-The Cray CLI requires a valid Keycloak JWT token.  If the token is not present it must be obtained by supplying valid user credentials at the time of CLI initialization.  During the installation or upgrade of a Shasta system the Keycloak user LDAP federation state or credentials may not be known or the external LDAP system for which the user may have been federated may not be available.  These scenarios make it impossible to initialize the Cray CLI with a previously valid Keycloak user or LDAP federated Keycloak user.  If for whatever reason the Keycloak UI is not available to the admin to verify the state of the user, using Keycloak's kcadm.sh utility from the command line will be required.
+The Cray CLI requires a valid Keycloak JWT token. If the token is not present it must be obtained by supplying valid user credentials at the time of CLI initialization. During the installation or upgrade of a Shasta system the Keycloak user LDAP federation state or credentials may not be known or the external LDAP system for which the user may have been federated may not be available. These scenarios make it impossible to initialize the Cray CLI with a previously valid Keycloak user or LDAP federated Keycloak user. If for whatever reason the Keycloak UI is not available to the admin to verify the state of the user, using Keycloak's kcadm.sh utility from the command line will be required.
 
-The kcadm.sh utility is included with the Shasta Keycloak container image and can be used as described below to perform troubleshooting operations that can verify the existence of a user, determine if the user is federated, change the user credential (for a keycloak-local account only) or create a new local Keycloak user that is compatible (has the correct role mappings) with the Cray CLI.  All the operations described below must be run as root from the ncn-m001 node.
+The `kcadm.sh` utility is included with the Shasta Keycloak container image and can be used as described below to perform troubleshooting operations that can verify the existence of a user, determine if the user is federated, change the user credential (for a keycloak-local account only) or create a new local Keycloak user that is compatible (has the correct role mappings) with the Cray CLI. All the operations described below must be run as root from the `ncn-m001` node.
 
-Usage of the bash function(s) provided below will require addition into the Linux environment.  This can be accomplished by pasting the function(s) into your shell or pasting the function(s) into a file and then sourcing the file before running the indicated function(s).
+Usage of the bash function(s) provided below will require making additions to the Linux environment. This can be accomplished by pasting the function(s) into your shell or pasting the function(s) into a file and then sourcing the file before running the indicated function(s).
 
-## Checking the Status of a Keycloak User
+## Check the Status of a Keycloak User
 
-Use this procedure to determine if a user both exists in Keycloak and if the user is LDAP federated or not.  If the user is LDAP federated and the credential is not known, update the user credential in LDAP.  It will not be possible to use a federated user account to initialize the Cray CLI if LDAP is not available.  In this case you may create a local Keycloak user for use with the Cray CLI by following the procedure below for creating a local Keycloak Cray CLI user.  The credential for a local account may be updated if needed by following the procedure below for updating a local Keycloak account credential.
+Use this procedure to determine if a user both exists in Keycloak and if the user is LDAP federated or not.  If the user is LDAP federated and the credential is not known, update the user credential in LDAP. It will not be possible to use a federated user account to initialize the Cray CLI if LDAP is not available. In this case, create a local Keycloak user for use with the Cray CLI by following the procedure below for creating a local Keycloak Cray CLI user. The credential for a local account may be updated if needed by following the procedure below for updating a local Keycloak account credential.
 
 Add the following bash function to your environment:
+
 ```bash
 kc-find-user(){
   # Note that filtering doesn’t use exact matching. For example, the below would match the value of username attribute against "*$1*" pattern.
@@ -34,8 +35,9 @@ kc-find-user(){
 ```
 
 Example when the user account is LDAP federated as indicated by the presence of the 'federationLink' attribute:
+
 ```bash
-ncn-m001:~ # kc-find-user vers
+ncn-m001# kc-find-user vers
 Looking for the Keycloak user: vers
 Logging into http://localhost:8080/keycloak as user admin of realm master
 [ {
@@ -75,8 +77,9 @@ Logging into http://localhost:8080/keycloak as user admin of realm master
 If the user is a local Keycloak user and the credential is not known, follow the procedure to update a local Keycloak user credential.
 
 Example when the user account is a local Keycloak user (no 'federationLink' attribute):
+
 ```bash
-ncn-m001:~ # kc-find-user localcli
+ncn-m001# kc-find-user localcli
 Looking for the Keycloak user: localcli
 Logging into http://localhost:8080/keycloak as user admin of realm master
 [ {
@@ -102,19 +105,21 @@ Logging into http://localhost:8080/keycloak as user admin of realm master
 If the user does not exist and it is necessary to create a local Keycloak user for use with the Cray CLI, you may follow the procedure below for creating a local Keycloak Cray CLI user.
 
 Example when the user account is not known to Keycloak:
+
 ```bash
-ncn-m001:~ # kc-find-user nouser
+ncn-m001# kc-find-user nouser
 Looking for the Keycloak user: nouser
 Logging into http://localhost:8080/keycloak as user admin of realm master
 
-[ ]ncn-m001:~ #
+[ ]ncn-m001#
 ```
 
-## Updating a Local Keycloak User Credential
+## Update a Local Keycloak User Credential
 
-Use this procedure to reset the credential for a local Keycloak user.  This procedure will not work if the user is LDAP federated.  You may set KC_USER_PASSWORD to override the default before calling the function.
+Use this procedure to reset the credential for a local Keycloak user. This procedure will not work if the user is LDAP federated. You may set KC_USER_PASSWORD to override the default before calling the function.
 
 Add the following bash function to your environment:
+
 ```bash
 kc-set-local-user-password(){
 
@@ -144,15 +149,17 @@ kc-set-local-user-password(){
 ```
 
 Example of updating the credential with an overridden password:
+
 ```bash
-ncn-m001:~ # KC_USER_NEWPASSWD=wax0nwax0ff && kc-set-local-user-password localcli
+ncn-m001# KC_USER_NEWPASSWD=wax0nwax0ff && kc-set-local-user-password localcli
 Resetting password for the Keycloak user: localcli
 Logging into http://localhost:8080/keycloak as user admin of realm master
 ```
 
 If the user can not be found by username, the account credential will not be updated as in this example:
+
 ```bash
-ncn-m001:~ # kc-set-local-user-password localc
+ncn-m001# kc-set-local-user-password localc
 Resetting password for the Keycloak user: localc
 Logging into http://localhost:8080/keycloak as user admin of realm master
 User not found for username: localc
@@ -160,19 +167,21 @@ command terminated with exit code 1
 ```
 
 If the user is LDAP federated, the account credential will not be updated as in this example:
+
 ```bash
-ncn-m001:~ # KC_USER_NEWPASSWD=wax0nwax0ff && kc-set-local-user-password vers
+ncn-m001# KC_USER_NEWPASSWD=wax0nwax0ff && kc-set-local-user-password vers
 Resetting password for the Keycloak user: vers
 Logging into http://localhost:8080/keycloak as user admin of realm master
 null [Can't reset password as account is read only]
 command terminated with exit code 1
 ```
 
-## Creating a Local Keycloak Cray CLI User
+## Create a Local Keycloak Cray CLI User
 
-Use this procedure to create a new local Keycloak user that is compatible with the Cray CLI.  You may set KC_USER_PASSWORD to override the default before calling the function.
+Use this procedure to create a new local Keycloak user that is compatible with the Cray CLI. You may set KC_USER_PASSWORD to override the default before calling the function.
 
 Add the following bash function to your environment:
+
 ```bash
 kc-create-local-cli-user(){
   if [ $# -eq 0 ]; then
@@ -209,7 +218,7 @@ kc-create-local-cli-user(){
 Example of creating a user:
 
 ```bash
-ncn-m001:~ # kc-create-local-cli-user localcli
+ncn-m001# kc-create-local-cli-user localcli
 Creating the Keycloak user: localcli
 Logging into http://localhost:8080/keycloak as user admin of realm master
 Created new user with id 'b49abdcc-a314-4355-89d7-44f4d8d33ab8'
@@ -221,22 +230,24 @@ Adding the Shasta client admin role to the user: localcli
 Logging into http://localhost:8080/keycloak as user admin of realm master
 ```
 
-You can optionally search for the user using kc-find-user to check that the user has been created.  It will also be possible to initialize the Cray CLI using this new user and credential.  Refer to the Cray CLI documentation for details.
+You can optionally search for the user using `kc-find-user` to check that the user has been created. It will also be possible to initialize the Cray CLI using this new user and credential. Refer to the Cray CLI documentation for details.
 
 If the user exists, the function will just exit as in this example:
+
 ```bash
-ncn-m001:~ # kc-create-local-cli-user localcli
+ncn-m001# kc-create-local-cli-user localcli
 Creating the Keycloak user: localcli
 Logging into http://localhost:8080/keycloak as user admin of realm master
 User exists with same username
 command terminated with exit code 1
 ```
 
-## Deleting a Local Keycloak User
+## Delete a Local Keycloak User
 
-Use this procedure if it is necessary to delete a local Keycloak user.  This procedure will not work if the user is LDAP federated.
+Use this procedure if it is necessary to delete a local Keycloak user. This procedure will not work if the user is LDAP federated.
 
 Add the following bash function to your environment:
+
 ```bash
 kc-delete-local-user(){
   if [ $# -eq 0 ]; then
@@ -261,8 +272,9 @@ kc-delete-local-user(){
 ```
 
 Example usage:
+
 ```bash
-ncn-m001:~ # kc-find-user localcli
+ncn-m001# kc-find-user localcli
 Looking for the Keycloak user: localcli
 Logging into http://localhost:8080/keycloak as user admin of realm master
 [ {
@@ -283,11 +295,11 @@ Logging into http://localhost:8080/keycloak as user admin of realm master
     "manage" : true
   }
 } ]
-ncn-m001:~ # kc-delete-local-user b49abdcc-a314-4355-89d7-44f4d8d33ab8
+ncn-m001# kc-delete-local-user b49abdcc-a314-4355-89d7-44f4d8d33ab8
 This will delete the Keycloak userID b49abdcc-a314-4355-89d7-44f4d8d33ab8. Continue? (y/N): y
 Deleting the Keycloak user UUID: b49abdcc-a314-4355-89d7-44f4d8d33ab8
 Logging into http://localhost:8080/keycloak as user admin of realm master
-ncn-m001:~ # kc-find-user localcli
+ncn-m001# kc-find-user localcli
 Looking for the Keycloak user: localcli
 Logging into http://localhost:8080/keycloak as user admin of realm master
 
@@ -295,8 +307,9 @@ Logging into http://localhost:8080/keycloak as user admin of realm master
 ```
 
 If the user can not be found by ID, it will not be removed as in this example:
+
 ```bash
-ncn-m001:~ # kc-delete-local-user b49abdcc-a314-4355-89d7-44f4d8d33ab8
+ncn-m001# kc-delete-local-user b49abdcc-a314-4355-89d7-44f4d8d33ab8
 This will delete the Keycloak userID b49abdcc-a314-4355-89d7-44f4d8d33ab8. Continue? (y/N): y
 Deleting the Keycloak user UUID: b49abdcc-a314-4355-89d7-44f4d8d33ab8
 Logging into http://localhost:8080/keycloak as user admin of realm master
