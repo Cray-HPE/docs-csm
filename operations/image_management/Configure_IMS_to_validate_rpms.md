@@ -125,7 +125,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     ncn# podman push registry.local/cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7-validate --creds="$NEXUS_USERNAME:$NEXUS_PASSWORD"
     ```
 
-4. Update the IMS `cray-configmap-ims-v2-image-create-kiwi-ng` configmap to use this new image.
+4. Update the IMS `cray-configmap-ims-v2-image-create-kiwi-ng` ConfigMap to use this new image.
 
     ```bash
     ncn# kubectl -n services edit cm cray-configmap-ims-v2-image-create-kiwi-ng
