@@ -39,7 +39,7 @@ scripts, revision control with git, configuration management with Ansible, YAML,
 
 1. [Update CSM Product Stream](update_product_stream/index.md)
 
-   This chapter explains how to get the CSM product release, get any patches, update to the latest 
+   This chapter explains how to get the CSM product release, get any patches, update to the latest
    documentation, and check for any Field Notices or Hotfixes.
 
 1. [Install CSM](install/index.md)

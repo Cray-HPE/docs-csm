@@ -102,7 +102,7 @@ Identify pods that are hitting resource limits in order to increase the resource
         Checking benji-k8s-postgresql-0
 
         Checking benji-k8s-pushgateway-777fd86545-qrmbr
-        
+
         [...]
         ```
 

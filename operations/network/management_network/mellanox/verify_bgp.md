@@ -14,7 +14,7 @@ BGP Summary
  Peers                  : 4            Log Neighbor Changes   : No
  Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
  Confederation Id       : 0
- 
+
  Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
  10.252.0.2      65533       45052   45044   02m:02w:02d  Established   Up
  10.252.1.7      65533       78389   90090   02m:02w:02d  Established   Up

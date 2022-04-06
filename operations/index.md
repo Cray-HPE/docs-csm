@@ -131,13 +131,14 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
 Procedures required for a full power off of an HPE Cray EX system.
 
   * [System Power Off Procedures](power_management/System_Power_Off_Procedures.md)
+
+Additional links to *power off sub procedures* provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
   * [Prepare the System for Power Off](power_management/Prepare_the_System_for_Power_Off.md)
   * [Shut Down and Power Off Compute and User Access Nodes](power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md)
   * [Save Management Network Switch Configuration Settings](power_management/Save_Management_Network_Switch_Configurations.md)
   * [Power Off Compute and IO Cabinets](power_management/Power_Off_Compute_and_IO_Cabinets.md)
   * [Shut Down and Power Off the Management Kubernetes Cluster](power_management/Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md)
   * [Power Off the External Lustre File System](power_management/Power_Off_the_External_Lustre_File_System.md)
-
 
 <a name="system-power-on-procedures"></a>
 
@@ -146,9 +147,11 @@ Procedures required for a full power off of an HPE Cray EX system.
 Procedures required for a full power on of an HPE Cray EX system.
 
   * [System Power On Procedures](power_management/System_Power_On_Procedures.md)
+
+Additional links to *power on sub procedures* provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
   * [Power On and Start the Management Kubernetes Cluster](power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
-  * [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
   * [Power On Compute and IO Cabinets](power_management/Power_On_Compute_and_IO_Cabinets.md)
+  * [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
   * [Bring Up the Slingshot Fabric](power_management/Bring_up_the_Slingshot_Fabric.md)
   * [Power On and Boot Compute and User Access Nodes](power_management/Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md)
   * [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md)
@@ -483,7 +486,7 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
 
 ## Hardware Management (HM) Collector
 
-The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system. 
+The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system.
 
  * [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
 
@@ -495,7 +498,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 
   * [Node Management](node_management/Node_Management.md)
   * [Node Management Workflows](node_management/Node_Management_Workflows.md)
-  * [Rebuild NCNs](node_management/Rebuild_NCNs.md)
+  * [Rebuild NCNs](node_management/Rebuild_NCNs/Rebuild_NCNs.md)
     * [Identify Nodes and Update Metadata](node_management/Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md)
     * [Prepare Storage Nodes](node_management/Rebuild_NCNs/Prepare_Storage_Nodes.md)
     * [Wipe Drives](node_management/Rebuild_NCNs/Wipe_Drives.md)
@@ -586,7 +589,7 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
 
 ### Dynamic Host Configuration Protocol (DHCP)
 
-The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers. 
+The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers.
 
   * [DHCP](network/dhcp/DHCP.md)
   * [Troubleshoot DHCP Issues](network/dhcp/Troubleshoot_DHCP_Issues.md)

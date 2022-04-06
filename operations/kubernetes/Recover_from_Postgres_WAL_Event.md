@@ -97,7 +97,7 @@ The following example is based on `cray-smd-postgres`.
     ```
 
 6. Check if the database is running.
-    
+
     ```
     ncn-w001# kubectl exec "${POSTGRESQL}-1" -n ${NAMESPACE} -c postgres -it -- psql -U postgres
     psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))
@@ -114,7 +114,7 @@ The following example is based on `cray-smd-postgres`.
 The following example is based on `cray-smd-postgres`, where the postgresql `cray-smd-postgres` resource and the `pgdata-cray-smd-postgres` PVCs will be resized from `100Gi` to `120Gi`.
 
 1. Determine the current size of the Postgres PVCs and set PGRESIZE to the desired new size (it must be larger than the current size).
-    
+
     ```
     ncn-w001# kubectl get postgresql -A | grep "smd\|NAME"
     NAMESPACE   NAME                         TEAM                VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE   STATUS
@@ -237,7 +237,7 @@ The following example is based on `cray-smd-postgres`, where the postgresql `cra
     ```
 
     Example output:
-    
+
     ```
     psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))
     Type "help" for help.
@@ -252,7 +252,7 @@ The following example is based on `cray-smd-postgres`, where the postgresql `cra
     ```
 
     Example output:
-    
+
     ```
     postgresql.acid.zalan.do/cray-smd-postgres patched
     ```
@@ -292,7 +292,7 @@ If the recovery was successful such that the database is now running, then conti
 2. Dump all of the data.
 
     Determine which Postgres member is the leader and exec into the leader pod to dump the data to a local file:
-    
+
     ```
     ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
     +-------------------+---------------------+------------+--------+---------+----+-----------+
@@ -370,7 +370,7 @@ The following example restores the dump to the `cray-smd-postgres` cluster.
     Once the dump has been restored onto the newly built postgresql cluster, the current Kubernetes secrets need to be updated in the postgresql cluster, otherwise the service will experience readiness and liveness probe failures because it will be unable to authenticate to the database.
 
     1. Determine which Postgres member is the leader.
-    
+
         ```
         ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
         +-------------------+---------------------+------------+--------+---------+----+-----------+
@@ -385,7 +385,7 @@ The following example restores the dump to the `cray-smd-postgres` cluster.
         ```
 
     2. Determine what secrets are associated with the postgresql credentials.
-    
+
         ```
         ncn-w001# kubectl get secrets -n ${NAMESPACE} | grep "${POSTGRESQL}.credentials"
         ```
@@ -398,9 +398,9 @@ The following example restores the dump to the `cray-smd-postgres` cluster.
         services            service-account.cray-smd-postgres.credentials                 Opaque                                2      31m
         services            standby.cray-smd-postgres.credentials                         Opaque                                2      31m
         ```
-    
+
     3. For each secret above, get the username and password from Kubernetes and update the Postgres database with this information.
-   
+
         For example (hmsdsuser.cray-smd-postgres.credentials):
 
         ```
@@ -410,9 +410,9 @@ The following example restores the dump to the `cray-smd-postgres` cluster.
         ncn-w001# kubectl get secret hmsdsuser.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d
         ABCXYZ
         ```
-    
+
     4. Exec into the leader pod to reset the user's password:
-        
+
         ```
         ncn-w001# kubectl exec ${POSTGRES_LEADER} -n ${NAMESPACE} -c postgres -it -- bash
         root@cray-smd-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
@@ -420,11 +420,11 @@ The following example restores the dump to the `cray-smd-postgres` cluster.
         ALTER ROLE
         postgres=#
         ```
-    
+
     5. Repeat the previous sub-steps until all ${POSTGRESQL}.credentials secrets have been updated in the database.
 
 6. Restart the postgresql cluster.
-    
+
     ```
     ncn-w001# kubectl delete pod "${POSTGRESQL}-0" "${POSTGRESQL}-1" "${POSTGRESQL}-2" -n ${NAMESPACE}
 

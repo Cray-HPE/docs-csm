@@ -2,7 +2,7 @@
 
 This document provides troubleshooting information for services and functionality provided by CSM.
 
-### Topics
+**Topics**
  * [Known Issues](#known-issues)
     * [Hardware Discovery](#known-issues-hardware-discovery)
     * [initrd.img.xz not found](#initrd-not-found)
@@ -31,7 +31,7 @@ Known issues related to hardware discovery in a system.
 <a name="initrd-not-found"></a>
 ### `initrd.img.xz` Not Found
 
-This is a problem that is fixed in CSM 1.0+, but if your system was upgraded from CSM 0.9.x you may run into this. Below is the full error seen when attempting to boot:
+This is a problem that is fixed in CSM 1.0+, but if your system was upgraded from CSM 0.9 you may run into this. Below is the full error seen when attempting to boot:
 
 ```
 Loading Linux  ...
@@ -60,10 +60,10 @@ Press any key to continue...
 
 Follow these steps on any NCN to fix the issue:
 
-   1. Install the Shasta 1.4 (a.k.a. CSM 0.9) install workaround RPM. See the CSM 0.9 documentation for details on how to do this.
+   1. Install the Shasta 1.4 (a.k.a. CSM 0.9) `csm-install-workarounds` RPM. See the CSM 0.9 documentation for details on how to do this.
 
    1. Run the `CASMINST-2689.sh` script from the `CASMINST-2689` workaround at the `livecd-post-reboot` breakpoint:
-   
+
       ```bash
       ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh
       ```
@@ -83,7 +83,7 @@ Follow these steps on any NCN to fix the issue:
       ncn# rpm -e csm-install-workarounds
       ```
 
-##### Validate
+#### Validate
 
 Running the script again will produce this output:
 

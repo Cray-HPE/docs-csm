@@ -35,7 +35,7 @@ In CSM 1.2 the Customer VRF is introduced, this requires the interface that is c
     ```
 
 
-There must then be two routes on the customer's switch directing traffic for the `customer_access_network` and `customer_management_network` subnet to the endpoint on the spine switch. The following is an example of the route configuration on the customer switch.  
+There must then be two routes on the customer's switch directing traffic for the `customer_access_network` and `customer_management_network` subnet to the endpoint on the spine switch. The following is an example of the route configuration on the customer switch.
 
 ```
 ip route 10.103.9.0/25 10.101.15.150
@@ -59,7 +59,7 @@ There must be a default route on each spine switch that will direct traffic that
     ```
 
 
-### Distribution/Site Spine Switch Connection 
+### Distribution/Site Spine Switch Connection
 
 The connection between the distribution/site switch and the spines require two separate uplinks from the spine switch to the distribution switch. Two static routes need to be created on the distribution switch to route the CAN subnet to each of the spine switches. These routes will have equal cost \(ECMP\) to split the load across the two spines and provide redundancy if one of the spines should go down.
 

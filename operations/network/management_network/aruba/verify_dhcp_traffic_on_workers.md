@@ -1,6 +1,6 @@
 # Verify the DHCP Traffic on the Worker Nodes
 
-This section is an example issue of where the source address of the DHCP Offer is the Metallb address of KEA "10.92.100.222".  
+This section is an example issue of where the source address of the DHCP Offer is the Metallb address of KEA "10.92.100.222".
 
 The source address of the DHCP Reply/Offer **MUST** be the address of the VLAN interface on the worker node.
 
@@ -30,6 +30,6 @@ If the Source IP address of the DHCP Reply/Offer is the MetalLB IP, the DHCP pac
 
 ## Resolution
 
-If this issue occurs, the only solution is to restart KEA and making sure that it gets moved to a different worker node.  
+If this issue occurs, the only solution is to restart KEA and making sure that it gets moved to a different worker node.
 
 [Back to Index](../index.md)

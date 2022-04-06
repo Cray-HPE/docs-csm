@@ -1,6 +1,6 @@
 # Key features used in the management network configuration
 
-This section is to list and define the key features used in the management network configuration. 
+This section is to list and define the key features used in the management network configuration.
 
 Feature list:
 

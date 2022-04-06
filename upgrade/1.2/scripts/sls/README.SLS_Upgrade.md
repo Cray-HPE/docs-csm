@@ -32,7 +32,7 @@ curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/api
                          --retain-unused-user-network
 ```
 
-* NOTE: A detailed review of the migrated/upgraded data (using `vimdiff` or otherwise) for production systems and for systems which have many add-on components (UAN, login nodes, storage integration points, etc.) is strongly recommended. Particularly, ensure that subnet reservations are correct to prevent any data loss.
+* NOTE: A detailed review of the migrated/upgraded data (using `vimdiff` or otherwise) for production systems and for systems which have many add-on components (UAN, login nodes, storage integration points, etc.) is strongly recommended. Particularly, ensure subnet reservations are correct to prevent any data loss.
 
 * Upload migrated SLS file to SLS service:
 

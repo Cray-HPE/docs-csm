@@ -43,7 +43,7 @@ The commands in this procedure must be run as the `root` user.
     id = "a252ff6f-c087-4093-a305-122b41824a3e"
     name = "username public key"
     created = "2018-11-21T17:19:07.830000+00:00"
-    
+
     [...]
     ```
 
@@ -102,7 +102,7 @@ The commands in this procedure must be run as the `root` user.
     path = "s3://ims/recipes/2233c82a-5081-4f67-bec4-4b59a60017a6/my_recipe.tgz"
     etag = "28f3d78c8cceca2083d7d3090d96bbb7"
     type = "s3"
-    
+
     [...]
     ```
 
@@ -301,7 +301,7 @@ The commands in this procedure must be run as the `root` user.
     + IMAGE_ROOT_PARENT=/mnt/image
     + PARAMETER_FILE_BUILD_FAILED=/mnt/image/build_failed
     + PARAMETER_FILE_KIWI_LOGFILE=/mnt/image/kiwi.log
-    
+
     [...]
 
     + kiwi-ng --logfile=/mnt/image/kiwi.log --type tbz system build --description /mnt/recipe --target /mnt/image
@@ -322,7 +322,7 @@ The commands in this procedure must be run as the `root` user.
     [ INFO    ]: 16:14:32 | --> Type: rpm-md
     [ INFO    ]: 16:14:32 | --> Translated: http://api-gw-service-nmn.local/repositories/cray-sle15
     [ INFO    ]: 16:14:32 | --> Alias: DST_built_rpms
-    
+
     [...]
 
     [ INFO    ]: 16:19:19 | Calling images.sh script
@@ -370,7 +370,7 @@ The commands in this procedure must be run as the `root` user.
 
     Exportable Squashfs 4.0 filesystem, gzip compressed, data block size 131072
     	compressed data, compressed metadata, compressed fragments, compressed xattrs
-    
+
     [...]
 
     + python -m ims_python_helper image upload_artifacts sles15_barebones_image 7de80ccc-1e7d-43a9-a6e4-02cad10bb60b \
@@ -445,7 +445,7 @@ The commands in this procedure must be run as the `root` user.
         },
         "result": "success"
     }
-    
+
     [...]
     ```
 

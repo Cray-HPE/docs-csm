@@ -34,7 +34,7 @@ Check if the `nf_nat_tftp` kernel module has been loaded. The kernel module is l
     ```
 
 1. Restart the `cray-tftp` service.
-    
+
     ```bash
     ncn-m001# kubectl delete pod cray-tftp-885cc65c4-fk8bm
     ```

@@ -135,7 +135,7 @@ The following is an example of replacing the entrypoint script with a new entryp
     ```
 
 2. Create a new ConfigMap with the content from the script.
-    
+
     ```
     ncn-m001-pit# kubectl create configmap -n uas broker-entrypoint --from-file=entrypoint.sh
     ```
@@ -179,7 +179,7 @@ The following is an example of replacing the entrypoint script with a new entryp
     ```
 
 5. Describe the desired UAI class.
-   
+
     ```
     ncn-m001-pit# cray uas admin config classes describe d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
     ```
@@ -235,7 +235,7 @@ The following is an example of replacing the entrypoint script with a new entryp
       volumename: lustre
     ```
 
-6. Update the UAI class. 
+6. Update the UAI class.
 
     ```
     ncn-m001-pit# cray uas admin config classes update --volume-list '11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,2246bbb1-4006-4b11-ba57-6588a7b7c02f,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a' d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
@@ -370,7 +370,7 @@ The following is an example that follows on from the previous section and config
 
 
 1. Create a new pre-login `banner` file.
-   
+
     **NOTE:** A special "here document" form is used to prevent variable substitution in the file.
 
     ```
@@ -520,7 +520,7 @@ The following is an example that follows on from the previous section and config
         Output similar to `results = [ "Successfully deleted uai-vers-e937b810",]` will be returned for each command.
 
     2. Restart the broker.
-        
+
         ```
         ncn-m001-pit# cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker
         ```

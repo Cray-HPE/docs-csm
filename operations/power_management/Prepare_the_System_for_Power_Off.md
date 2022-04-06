@@ -4,11 +4,11 @@ This procedure prepares the system to remove power from all system cabinets. Be 
 
 The `sat bootsys shutdown` and `sat bootsys boot` commands are used to shut down the system.
 
-### Prerequisites
+## Prerequisites
 
 An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
 
-### Procedure
+## Procedure
 
 1.  Obtain the user ID and passwords for system components:
 
@@ -44,9 +44,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
        Example output:
 
-       ```bash
-       ncn# sat status | grep "Compute\|Application"
-
+       ```
        | x3000c0s19b1n0 | Node | 1        | On    | OK   | True    | X86  | River | Compute     | Sling    |
        | x3000c0s19b2n0 | Node | 2        | On    | OK   | True    | X86  | River | Compute     | Sling    |
        | x3000c0s19b3n0 | Node | 3        | On    | OK   | True    | X86  | River | Compute     | Sling    |
@@ -69,12 +67,12 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Find the required `templateUuid` value with BOS.
 
        ```bash
-       ncn# cray bos session describe XNAME | grep templateUuid
+       ncn# cray bos session describe BOS_SESSION | grep templateUuid
        ```
 
        Example output:
 
-       ```bash
+       ```
        templateUuid = "compute-nid1-4-sessiontemplate"
        ```
 
@@ -86,7 +84,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
        Example output:
 
-       ```bash
+       ```
        node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
        ```
 
@@ -104,7 +102,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
         ```bash
         ncn# sdu --scenario triage --start_time '-4 hours' \
-             --reason "saving state before powerdown/up"
+                 --reason "saving state before powerdown"
         ```
 
     1.  Capture the state of all nodes.
@@ -143,13 +141,13 @@ An authentication token is required to access the API gateway and to use the `sa
         ncn# ceph -s | tee ceph.status
         ```
 
-    1.  Check k8s pod status for all pods.
+    1.  Check Kubernetes pod status for all pods.
 
         ```bash
         ncn# kubectl get pods -o wide -A | tee k8s.pods
         ```
 
-        Additional k8s status check examples:
+        Additional Kubernetes status check examples:
 
         ```bash
         ncn# kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" > k8s.pods.CLBO
@@ -159,7 +157,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
     1.  Check HSN status.
 
-        Determine the name of the slingshot-fabric-manager pod:
+        Determine the name of the `slingshot-fabric-manager` pod:
 
         ```bash
         ncn# kubectl get pods -l app.kubernetes.io/name=slingshot-fabric-manager -n services
@@ -172,11 +170,11 @@ An authentication token is required to access the API gateway and to use the `sa
         slingshot-fabric-manager-5dc448779c-d8n6q   2/2     Running   0          4d21h
         ```
 
-        Run `fmn_status` in the slingshot-fabric-manager pod and save the output to a file:
+        Run `fmn_status` in the `slingshot-fabric-manager` pod and save the output to a file:
 
         ```bash
         ncn# kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
-             -c slingshot-fabric-manager -- fmn_status --details | tee fabric.status
+                     -c slingshot-fabric-manager -- fmn_status --details | tee fabric.status
         ```
 
     1. Check management switches to verify they are reachable \(switch host names depend on system configuration\).
@@ -237,14 +235,14 @@ An authentication token is required to access the API gateway and to use the `sa
     1.   Identify the BOS Sessions and associated BOA Kubernetes jobs to delete.
 
          Determine which BOS session(s) to cancel. To cancel a BOS session, kill
-	     its associated Boot Orchestration Agent (BOA) Kubernetes job.
-         
+         its associated Boot Orchestration Agent (BOA) Kubernetes job.
+
          To find a list of BOA jobs that are still running:
-         
+
          ```bash
          ncn# kubectl -n services get jobs|egrep -i "boa|Name"
          ```
-         
+
          Output similar to the following will be returned:
 
          ```
@@ -260,7 +258,7 @@ An authentication token is required to access the API gateway and to use the `sa
          boa-e0fca5e3-b671-4184-aa21-84feba50e85f   1/1           36m        3d5h
          ```
 
-         Any job with a 0/1 COMPLETIONS column is still running and is a candidate to be forcibly deleted.
+         Any job with a `0/1` `COMPLETIONS` column is still running and is a candidate to be forcibly deleted.
          The BOA Job ID appears in the NAME column.
 
     1.   Clean up prior to BOA job deletion.
@@ -268,13 +266,13 @@ An authentication token is required to access the API gateway and to use the `sa
          The BOA pod mounts a ConfigMap under the name `boot-session` at the directory `/mnt/boot_session` inside the pod. This ConfigMap has a random UUID name like `e0543eb5-3445-4ee0-93ec-c53e3d1832ce`.
          Prior to deleting a BOA job, delete its ConfigMap.
          Find the BOA job's ConfigMap with the following command:
-         
+
          ```bash
          ncn# kubectl -n services describe job <BOA Job ID> |grep ConfigMap -A 1 -B 1
          ```
-	 
+
          Example:
-         
+
          ```bash
          ncn# kubectl -n services describe job boa-0216d2d9-b2bc-41b0-960d-165d2af7a742 |grep ConfigMap -A 1 -B 1
             boot-session:
@@ -285,45 +283,45 @@ An authentication token is required to access the API gateway and to use the `sa
              Type:      ConfigMap (a volume populated by a ConfigMap)
              Name:      cray-configmap-ca-public-key
          ```
-         
+
          Delete the ConfigMap associated with the boot-session, not the ca-pubkey.
-         
+
          To delete the ConfigMap:
-         
+
          ```bash
          ncn# kubectl -n services delete cm <ConfigMap name>
          ```
-         
+
          Example:
-         
+
          ```bash
          ncn# kubectl -n services delete cm e0543eb5-3445-4ee0-93ec-c53e3d1832ce
          configmap "e0543eb5-3445-4ee0-93ec-c53e3d1832ce" deleted
          ```
-         
+
     1.   Delete the BOA job(s).
 
          ```bash
          ncn# kubectl -n services delete job <BOA JOB ID>
          ```
-         
-         This will cancel (i.e. kill) the BOA job and the BOS session associated with it.
-         
+
+         This will kill the BOA job and the BOS session associated with it.
+
          When a job is killed, BOA will no longer attempt to execute the operation it was attempting to perform. This does not mean that
          nothing continues to happen. If BOA has instructed a node to power on, the node will continue to power even after the BOA job
          has been killed.
 
     1.   Delete the BOS session.
          BOS keeps track of sessions in its database. These entries need to be deleted.
-	     The BOS Session ID is the same as the BOA Job ID minus the prepended 'boa-'
-	     string. Use the following command to delete the BOS database entry.
-         
+         The BOS Session ID is the same as the BOA Job ID minus the prepended 'boa-'
+         string. Use the following command to delete the BOS database entry.
+
          ```bash
          ncn# cray bos session delete <session ID>
          ```
-         
+
          Example:
-         
+
          ```bash
          ncn# cray bos session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
          ```
@@ -334,3 +332,6 @@ An authentication token is required to access the API gateway and to use the `sa
 
 1.  Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, see the `scontrol` man page. For PBS Professional, see the `pbsnodes` man page.
 
+## Next Step
+
+Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.

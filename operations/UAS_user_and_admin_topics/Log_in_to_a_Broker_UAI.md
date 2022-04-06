@@ -33,7 +33,7 @@ SSH to log into a Broker UAI and reach the End-User UAIs on demand.
     ```
 
     There are several things to notice here:
-    
+
     * The first time the user logs in the Broker UAI's SSH host key is unknown, as is normal for SSH.
     * The user is asked for a password in this example. If the user's home directory, as defined in LDAP had been mounted in the Broker UAI and a `.ssh/authorized_keys` entry had been present, there would not have been a password prompt. Home directory trees can be mounted as volumes just as any other directory can.
     * The broker mechanism in the Broker UAI creates a new UAI because `vers` has never logged into this Broker UAI before.

@@ -1,10 +1,11 @@
 # Update Management Network Firmware
 
 This page describes how to update firmware on the management network switches.
-More details and other options to upgrade firmware can be found in the switch [user guides](../user_guides.md).
-#### Prerequisites 
+More details and other options to upgrade firmware can be found in the switch [External User Guides](../external_user_guides.md).
+
+## Prerequisites
 - Access to the switches.
-- Firmware in a location that the switches can reach. 
+- Firmware in a location that the switches can reach.
 
 All firmware can be found in the HFP package provided with the Shasta release.
 
@@ -73,28 +74,28 @@ Console into the switch being upgraded.
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
-   Version : FL.10.06.0010                 
-   Size    : 658 MB                        
-   Date    : 2020-12-14 11:49:52 PST       
-   SHA-256 : 9e03da5697ef40d261b4a2920a19197ab64ea338533578ce576e5ca1a6849285    
+   Version : FL.10.06.0010
+   Size    : 658 MB
+   Date    : 2020-12-14 11:49:52 PST
+   SHA-256 : 9e03da5697ef40d261b4a2920a19197ab64ea338533578ce576e5ca1a6849285
 
    ---------------------------------------------------------------------------
    ArubaOS-CX Secondary Image
    ---------------------------------------------------------------------------
-   Version : FL.10.04.0010                 
-   Size    : 722 MB                        
-   Date    : 2019-12-03 10:41:01 PST       
-   SHA-256 : 2f00ca2d86338701225aadf4b9aa9b076e929b2b4620239b44122f300ff29e2d    
+   Version : FL.10.04.0010
+   Size    : 722 MB
+   Date    : 2019-12-03 10:41:01 PST
+   SHA-256 : 2f00ca2d86338701225aadf4b9aa9b076e929b2b4620239b44122f300ff29e2d
 
-   Default Image : primary                       
+   Default Image : primary
    Boot Profile Timeout : 5 seconds
 
    ------------------------------------------------------
    Management Module 1/1 (Active)
    ------------------------------------------------------
-   Active Image       : primary                       
-   Service OS Version : FL.01.07.0002                 
-   BIOS Version       : FL.01.0002  
+   Active Image       : primary
+   Service OS Version : FL.01.07.0002
+   BIOS Version       : FL.01.0002
    ```
 1. Upload the firmware to the desired image.
 In this example we are uploading it to the secondary.
@@ -111,28 +112,28 @@ In this example we are uploading it to the secondary.
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
-   Version : FL.10.06.0010                 
-   Size    : 658 MB                        
-   Date    : 2020-12-14 11:49:52 PST       
-   SHA-256 : 9e03da5697ef40d261b4a2920a19197ab64ea338533578ce576e5ca1a6849285    
+   Version : FL.10.06.0010
+   Size    : 658 MB
+   Date    : 2020-12-14 11:49:52 PST
+   SHA-256 : 9e03da5697ef40d261b4a2920a19197ab64ea338533578ce576e5ca1a6849285
 
    ---------------------------------------------------------------------------
    ArubaOS-CX Secondary Image
    ---------------------------------------------------------------------------
-   Version : FL.10.08.1021                 
-   Size    : 812 MB                        
-   Date    : 2021-11-08 02:09:58 UTC       
-   SHA-256 : 3e7f5e22843b49438d2eab19f0e6df8ebccef053e38d6cd65110cfeb37d707fc    
+   Version : FL.10.08.1021
+   Size    : 812 MB
+   Date    : 2021-11-08 02:09:58 UTC
+   SHA-256 : 3e7f5e22843b49438d2eab19f0e6df8ebccef053e38d6cd65110cfeb37d707fc
 
-   Default Image : primary                       
+   Default Image : primary
    Boot Profile Timeout : 5 seconds
 
    ------------------------------------------------------
    Management Module 1/1 (Active)
    ------------------------------------------------------
-   Active Image       : primary                       
-   Service OS Version : FL.01.07.0002                 
-   BIOS Version       : FL.01.0002 
+   Active Image       : primary
+   Service OS Version : FL.01.07.0002
+   BIOS Version       : FL.01.0002
    ```
 1. After the firmware is uploaded, boot the switch to the correct image.
 
@@ -169,27 +170,27 @@ In this example we are pre-staging the firmware to `sw-spine-001` and `sw-spine-
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
-   Version : GL.10.06.0010                 
-   Size    : 444 MB                        
-   Date    : 2020-12-14 11:55:16 PST       
-   SHA-256 : 4157d15a5cad6efce4d0e8b35f75b4d6212de5af0c5c9bf3ad8f74853df67733    
+   Version : GL.10.06.0010
+   Size    : 444 MB
+   Date    : 2020-12-14 11:55:16 PST
+   SHA-256 : 4157d15a5cad6efce4d0e8b35f75b4d6212de5af0c5c9bf3ad8f74853df67733
 
    ---------------------------------------------------------------------------
    ArubaOS-CX Secondary Image
    ---------------------------------------------------------------------------
-   Version : GL.10.02.0020                 
-   Size    : 360 MB                        
-   Date    : 2019-03-12 09:26:31 PDT       
-   SHA-256 : da629a197e6acbdd805bc7cb85f1decff772ce25223ea20f7c55d426df03fcbe    
+   Version : GL.10.02.0020
+   Size    : 360 MB
+   Date    : 2019-03-12 09:26:31 PDT
+   SHA-256 : da629a197e6acbdd805bc7cb85f1decff772ce25223ea20f7c55d426df03fcbe
 
-   Default Image : primary                       
+   Default Image : primary
    Boot Profile Timeout : 5 seconds
 
    ------------------------------------------------------
    Management Module 1/1 (Active)
    ------------------------------------------------------
-   Active Image       : primary                       
-   Service OS Version : GL.01.08.0002                             
+   Active Image       : primary
+   Service OS Version : GL.01.08.0002
    BIOS Version       : GL-01-0013
    ```
 
@@ -209,28 +210,28 @@ In this example we are uploading it to the secondary.
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
-   Version : GL.10.06.0010                 
-   Size    : 444 MB                        
-   Date    : 2020-12-14 11:55:16 PST       
-   SHA-256 : 4157d15a5cad6efce4d0e8b35f75b4d6212de5af0c5c9bf3ad8f74853df67733    
+   Version : GL.10.06.0010
+   Size    : 444 MB
+   Date    : 2020-12-14 11:55:16 PST
+   SHA-256 : 4157d15a5cad6efce4d0e8b35f75b4d6212de5af0c5c9bf3ad8f74853df67733
 
    ---------------------------------------------------------------------------
    ArubaOS-CX Secondary Image
    ---------------------------------------------------------------------------
-   Version : GL.10.08.1021                 
-   Size    : 473 MB                        
-   Date    : 2021-11-08 01:48:56 UTC       
-   SHA-256 : c16dc680333eaf72188061209e56cd24854cb291e6babe2333110ff6029e8227    
+   Version : GL.10.08.1021
+   Size    : 473 MB
+   Date    : 2021-11-08 01:48:56 UTC
+   SHA-256 : c16dc680333eaf72188061209e56cd24854cb291e6babe2333110ff6029e8227
 
-   Default Image : primary                       
+   Default Image : primary
    Boot Profile Timeout : 5 seconds
 
    ------------------------------------------------------
    Management Module 1/1 (Active)
    ------------------------------------------------------
-   Active Image       : primary                       
-   Service OS Version : GL.01.08.0002                 
-   BIOS Version       : GL-01-0013 
+   Active Image       : primary
+   Service OS Version : GL.01.08.0002
+   BIOS Version       : GL-01-0013
    ```
 
 1. After the firmware is uploaded to both VSX switches, you will need to start the software update from the VSX primary member.
@@ -249,13 +250,13 @@ sw-spine-002# show version
 ArubaOS-CX
 (c) Copyright 2017-2021 Hewlett Packard Enterprise Development LP
 -----------------------------------------------------------------------------
-Version      : GL.10.08.1021                                                 
-Build Date   : 2021-11-08 01:48:56 UTC                                       
-Build ID     : ArubaOS-CX:GL.10.08.1021:befed610d5e5:202111080115            
-Build SHA    : befed610d5e59c29e3cfb6e163fa45af615a2bd3                      
-Active Image : secondary                     
+Version      : GL.10.08.1021
+Build Date   : 2021-11-08 01:48:56 UTC
+Build ID     : ArubaOS-CX:GL.10.08.1021:befed610d5e5:202111080115
+Build SHA    : befed610d5e59c29e3cfb6e163fa45af615a2bd3
+Active Image : secondary
 
-Service OS Version : GL.01.08.0002                 
+Service OS Version : GL.01.08.0002
 BIOS Version       : GL-01-0013
 ```
 

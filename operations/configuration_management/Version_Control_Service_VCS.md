@@ -74,7 +74,7 @@ Data for gitea is stored in two places. Git content is stored directly in a PVC,
 #### Backup Postgres Data
 
 1. Determine which Postgres member is the leader and exec into the leader pod to dump the data to a local file:
-    
+
     ```
     ncn-w001# kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list
     ```
@@ -92,7 +92,7 @@ Data for gitea is stored in two places. Git content is stored directly in a PVC,
 
     ```bash
     ncn-w001# POSTGRES_LEADER=gitea-vcs-postgres-0
-    
+
     ncn-w001# kubectl exec -it ${POSTGRES_LEADER} -n services -c postgres -- pg_dumpall -c -U postgres > gitea-vcs-postgres.sql
     ```
 
@@ -120,7 +120,7 @@ Data for gitea is stored in two places. Git content is stored directly in a PVC,
         echo "---" >> gitea-vcs-postgres.manifest
     done
     ```
-   
+
 4. Edit the manifest file to remove creationTimestamp, resourceVersion, selfLink, uid for each entry. Then, copy all files to a safe location.
 
 
