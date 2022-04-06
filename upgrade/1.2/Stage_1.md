@@ -16,7 +16,7 @@
       /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/root/ceph.pub"Number of key(s) added: 1Now try logging into the machine, with:   "ssh 'root@ncn-s003'"
       and check to make sure that only the key(s) you wanted were added.Error EINVAL: Traceback (most recent call last):
       ```
-    * During the storage node rebuild, it is possible that ceph health may report ***HEALTH_WARN 1 daemons have recently crashed***.  This can occur occasionally as part of the shutdown process of the node being rebuilt.  Please refer to the [Dump Ceph Crash Data](operations/../../../operations/utility_storage/Dump_Ceph_Crash_Data.md) located in the Operations/Utility Storage section of the guide.
+    * During the storage node rebuild, it is possible that Ceph health may report ***HEALTH_WARN 1 daemons have recently crashed***.  This can occur occasionally as part of the shutdown process of the node being rebuilt. Please refer to the [Dump Ceph Crash Data](operations/../../../operations/utility_storage/Dump_Ceph_Crash_Data.md) procedure for more information.
 
 **IMPORTANT:** Ensure the Ceph cluster is healthy prior to continuing. If you have processes not running, then refer to [Utility Storage Operations](../../operations/utility_storage/Utility_Storage.md) for operational and troubleshooting procedures.
 
