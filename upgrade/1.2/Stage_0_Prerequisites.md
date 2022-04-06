@@ -37,7 +37,7 @@
      1. Run the script
 
         ```bash
-        ncn-m001# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm -P /root
+        ncn-m001# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm -P /root
 
         ncn-m001# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
 
