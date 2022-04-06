@@ -549,7 +549,7 @@ ALL OK
 #### 2.2.1 Interpreting results
 
 Both sections `BMCs in SLS not in HSM components` and `BMCs in SLS not in HSM Redfish Endpoints` have the same format for mismatches between SLS and HSM. Each row starts with the xname of the BMC. If the BMC does not have an associated `MgmtSwitchConnector` in SLS, then `# No mgmt port association` will be displayed alongside the BMC xname.
-> MgmtSwitchConnectors in SLS are used to represent the switch port on a leaf switch that an the BMC of an air cooled device is connected to.
+> `MgmtSwitchConnector`s in SLS are used to represent the switch port on a leaf switch that is connected to the BMC of an air-cooled device.
 
 ```
 =============== BMCs in SLS not in HSM components ===============

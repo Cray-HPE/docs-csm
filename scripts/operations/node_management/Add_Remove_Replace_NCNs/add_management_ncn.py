@@ -1368,7 +1368,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
         print(f'Error BMC MAC Address {bmc_mac} provided is not unique')
         sys.exit(1)
 
-    # If this an worker, then a MAC address for hsn0 needs to be provided
+    # If this a worker, then a MAC address for hsn0 needs to be provided
     if (state.ncn_subrole == "Worker") and ("hsn0" not in macs):
         print("Error hsn0 MAC address not provided for worker management NCN. At least 1 HSN MAC address is required")
         sys.exit(1)
@@ -1570,7 +1570,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
     state.validate_global_bss_bootparameters(action)
 
     #
-    # Validate BSS contains bootparameters for a NCN of a similar type
+    # Validate BSS contains bootparameters for an NCN of a similar type
     #
     donor_ncn = None
     for ncn in existing_management_ncns:
@@ -1834,7 +1834,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
 
 
     #
-    # Create an try under HSM State Components for ncn-m001. 
+    # Create an entry under HSM State Components for ncn-m001. 
     # The other NCNs will be populated by the normal HSM Discovery/Invnetory process, but since 
     # the BMC of ncn-m001 is not connected to the HMN, we need to manually do this.
     #
@@ -1984,7 +1984,7 @@ def main():
     if not os.path.exists(log_directory):
         os.makedirs(log_directory)
 
-    # Start the actual process of adding a NCN...
+    # Start the actual process of adding an NCN...
     state = State(
         ncn_xname=args.xname,
         ncn_alias=args.alias,
