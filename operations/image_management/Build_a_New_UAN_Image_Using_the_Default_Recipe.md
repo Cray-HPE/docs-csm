@@ -1,15 +1,13 @@
 # Build a New UAN Image Using the Default Recipe
 
-Build or rebuild the UAN image using either the default UAN image or image recipe. Both of these are supplied by the User Access Node (UAN) product stream installer.
+Build or rebuild the User Access Node (UAN) image using either the default UAN image or image recipe. Both of these are supplied by the UAN product stream installer.
 
+## Prerequisites
 
-### Prerequisites
+* Both the Cray Operation System (COS) and UAN product streams must be installed.
+* The Cray administrative CLI must be initialized.
 
-- Both the Cray Operation System (COS) and UAN product streams must be installed.
-- The Cray administrative CLI must be initialized.
-
-
-### Procedure
+## Procedure
 
 The Cray EX User Access Node \(UAN\) recipe currently requires the Slingshot Diagnostics package, which is not installed with the UAN product itself. Therefore, the UAN recipe can only be built after either the Slingshot product is installed, or the Slingshot Diagnostics package is removed from the recipe.
 
@@ -67,7 +65,7 @@ The Cray EX User Access Node \(UAN\) recipe currently requires the Slingshot Dia
         ncn-m001# export IMS_RECIPE_ID=4a5d1178-80ad-4151-af1b-bbe1480958d1
         ```
 
-    3.  Use the saved IMS recipe id in the procedure [Build an Image Using IMS REST Service](Build_an_Image_Using_IMS_REST_Service.md) to build the UAN image.
+    3.  Use the saved IMS recipe ID in the procedure [Build an Image Using IMS REST Service](Build_an_Image_Using_IMS_REST_Service.md) to build the UAN image.
 
 
 4. (Optional) Build the UAN image by customizing it manually. Skip this step if the UAN image was built automatically in the previous step.
