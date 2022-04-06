@@ -46,7 +46,7 @@ do
         new_master="$podbasename-1"
     fi
 
-    # An http 200 response code is returned only if the pod is the master of the postgres cluster
+    # An HTTP 200 response code is returned only if the pod is the master of the postgres cluster
     master="$(kubectl exec $podname -c postgres -n $namespace -- curl -sL -w "%{http_code}" -I -X GET http://localhost:8008/master -o /dev/null)"
 
     if [ "$master" == "200" ]
