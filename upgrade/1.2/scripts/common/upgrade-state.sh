@@ -92,6 +92,12 @@ function err_report() {
     if [[ ${shouldIgnore} -eq 1 ]]; then
         return 0
     fi
+
+    ignoreCmd="csi automate ncn etcd --action add-member --ncn"
+    shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l)
+    if [[ ${shouldIgnore} -eq 1 ]]; then
+        return 0
+    fi
     
     # force output to console regardless of redirection
     echo >/dev/tty 
