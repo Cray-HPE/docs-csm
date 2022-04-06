@@ -1,6 +1,6 @@
 # Configure IMS to Validate RPMs
 
-Configuring IMS to validate the GPG signatures of RPMs during IMS Build operations involves two steps.
+Configuring the Image Management Service (IMS) to validate the GPG signatures of RPMs during IMS Build operations involves the following two steps:
 
 1. Create and update IMS to use a new Kiwi-NG Image with the Signing Keys embedded.
 
