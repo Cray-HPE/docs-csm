@@ -16,6 +16,7 @@ Topics:
       * [Start Hand-Off](#start-hand-off)
    * [Reboot](#reboot)
    * [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
+   * [Remove the default NTP pool](#remove-the-default-ntp-pool)
    * [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
    * [Next Topic](#next-topic)
 
@@ -528,8 +529,18 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
 > **`CSI NOTE`** `/tmp/csi` will delete itself on the next reboot. The `/tmp` directory is `tmpfs` and runs in memory, it normally will not persist on restarts.
 
+<a name="remove-the-default-ntp-pool"></a>
+
+### 6. Remove the default NTP pool
+
+Run the following commands on ncn-m001 to remove the default pool, which can cause contention issues with NTP.
+
+```
+ncn-m001# sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf
+```
+
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
-### 6. Configure DNS and NTP on each BMC
+### 7. Configure DNS and NTP on each BMC
 
  > **NOTE:** If the system uses Gigabyte or Intel hardware, skip this section.
 
@@ -579,7 +590,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
     ```
 
 <a name="next-topic"></a>
-### 7. Next Topic
+### 8. Next Topic
 
    After completing this procedure, the next step is to configure administrative access.
 

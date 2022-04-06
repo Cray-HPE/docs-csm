@@ -4,12 +4,11 @@ The Configuration Framework Service \(CFS\) provides several options for targeti
 
 The following are the inventory options provided by CFS:
 
-- Dynamic inventory
-- Static inventory
-- Image Customization
+* Dynamic inventory
+* Static inventory
+* Image Customization
 
-
-### Dynamic Inventory and Host Groups
+## Dynamic Inventory and Host Groups
 
 Dynamic inventory is the default inventory when creating a CFS session. CFS automatically generates an Ansible hosts file with data provided by the Hardware State Manager \(HSM\) when using a dynamic inventory. CFS automatically generates Ansible hosts groups for each group defined in HSM and creates Ansible host groups for nodes based on hardware roles and sub-roles.
 
@@ -29,8 +28,7 @@ During a CFS session, the dynamic inventory is generated and placed in the hosts
 
 CFS prefixes its dynamic inventory file with `01-` so that its variables can be easily overridden as needed because Ansible reads inventory files in lexicographic order.
 
-
-### Static Inventory
+## Static Inventory
 
 Even though CFS uses dynamic inventory and the HSM groups, roles, and sub-roles to enable specific targeting of groups of nodes, it is also possible to target nodes within the system using a static inventory file. To do so, each node must be listed in an inventory file itself. This approach is useful for testing configuration changes on a small scale.
 
@@ -50,7 +48,7 @@ ncn# git push
 
 The process can be used to include any nodes in the system reachable over the Node Management Network \(NMN\), which contains the public SSH key pair provisioned by the install process. This inventory information will only be located in the repository to which it is added. If the desired configuration contains multiple layers, use the additionalInventoryUrl option in CFS to provide inventory information on a per-session level instead of a per-repository level. Refer to [Manage Multiple Inventories in a Single Location](Manage_Multiple_Inventories_in_a_Single_Location.md) for more information.
 
-### Image Customization
+## Image Customization
 
 CFS handles inventory for image customization differently because this type of configuration session does not target live nodes. When creating a configuration session meant to customize a boot image, the Image Management Service \(IMS\) image IDs are used as hosts and grouped according to input to the session creation.
 
