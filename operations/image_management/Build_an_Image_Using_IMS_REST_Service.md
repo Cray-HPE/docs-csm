@@ -447,7 +447,7 @@ The commands in this procedure must be run as the `root` user.
     [...]
     ```
 
-    **IMPORTANT:** The IMS image creation workflow automatically copies the NCN Certificate Authority's public certificate to /etc/cray/ca/certificate\_authority.crt within the image root being built. This can be used to enable secure communications between the NCN and the client node.
+    > **IMPORTANT:** The IMS image creation workflow automatically copies the NCN Certificate Authority's public certificate to /etc/cray/ca/certificate\_authority.crt within the image root being built. This can be used to enable secure communications between the NCN and the client node.
 
     If the image creation operation fails, the build artifacts will not be uploaded to S3. If enable\_debug is set to true, the IMS creation job will enable a debug SSH shell that is accessible by one or more dynamic host names. The user needs to know if they will SSH from inside or outside the Kubernetes cluster to determine which host name to use. Typically, customers access the system from outside the Kubernetes cluster using the Customer Access Network \(CAN\).
 
@@ -503,7 +503,7 @@ The commands in this procedure must be run as the `root` user.
 
     To access the debug shell, SSH to the container using the private key that matches the public key used to create the IMS Job.
 
-    **IMPORTANT:** The following command will not work when run on a node within the Kubernetes cluster.
+    > **IMPORTANT:** The following command will not work when run on a node within the Kubernetes cluster.
 
     ```bash
     ncn# ssh -p IMS_SSH_PORT root@IMS_SSH_HOST
