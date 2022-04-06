@@ -1,6 +1,6 @@
-# Upgrade Switches From 1.0 to 1.0 Preconfig
+# Upgrade Switches From 1.0 to 1.2 Preconfig
 
-Use the following procedure to upgrade switches from 1.0 to 1.0 preconfig.
+Use the following procedure to upgrade switches from 1.0 to 1.2 preconfig.
 
 To check if the management network is using generated switch configs, log onto a management switch and check for a banner with a `CANU version`. This indicates the switch config has been generated.
 
