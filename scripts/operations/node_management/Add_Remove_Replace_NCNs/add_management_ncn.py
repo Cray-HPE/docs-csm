@@ -183,8 +183,8 @@ def http_delete(session: requests.Session, url, payload, expected_status=http.HT
 def verify_sls_hardware_not_found(session: requests.Session, xname: str):
     action = http_get(session, f'{SLS_URL}/hardware/{xname}', expected_status=http.HTTPStatus.NOT_FOUND)
     if action["status"] == http.HTTPStatus.OK:
-        if "Aliass" in action["response"]["ExtraProperties"]:
-            alias = ", ".join(action["response"]["ExtraProperties"]["Aliass"])
+        if "Aliases" in action["response"]["ExtraProperties"]:
+            alias = ", ".join(action["response"]["ExtraProperties"]["Aliases"])
             action_log(action, f"Error {xname} ({alias}) already exists in SLS")
         else:
             action_log(action, f"Error {xname} already exists in SLS")
@@ -211,7 +211,7 @@ def get_sls_management_ncns(session: requests.Session):
         print_action(action)
         sys.exit(1)
 
-    return action, sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliass"][0])
+    return action, sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliases"][0])
 
 def get_sls_hardware(session: requests.Session, xname: str):
     action = http_get(session, f'{SLS_URL}/hardware/{xname}', expected_status=http.HTTPStatus.OK)
@@ -587,7 +587,7 @@ def run_command_actions(command_actions):
 def create_update_etc_hosts_actions(existing_management_ncns, ncn_alias, ncn_xname, ncn_ips, bmc_ip, log_dir):
     command_actions = []
 
-    ncn_aliases = list(map(lambda ncn: ncn["ExtraProperties"]["Aliass"][0], existing_management_ncns))
+    ncn_aliases = list(map(lambda ncn: ncn["ExtraProperties"]["Aliases"][0], existing_management_ncns))
     for alias in ncn_aliases:
         scp_action = CommandAction(['scp', f'{alias}:/etc/hosts', f'{log_dir}/etc-hosts-{alias}'])
         command_actions.append(scp_action)
@@ -725,7 +725,7 @@ class State:
         bmc_ip = allocate_ip_address_in_subnet(action, self.sls_networks, "HMN", "bootstrap_dhcp")
 
         # Add BMC IP reservation to the HMN network.
-        # Example: {"Aliass":["ncn-s001-mgmt"],"Comment":"x3000c0s13b0","IPAddress":"10.254.1.31","Name":"x3000c0s13b0"}
+        # Example: {"Aliases":["ncn-s001-mgmt"],"Comment":"x3000c0s13b0","IPAddress":"10.254.1.31","Name":"x3000c0s13b0"}
         bmc_ip_reservation = IPReservation(self.bmc_xname, bmc_ip, comment=self.bmc_xname, aliases=[self.bmc_alias])
         action_log(action, f"Temporally adding NCN BMC IP reservation to bootstrap_dhcp subnet in the HMN network: {bmc_ip_reservation.to_sls()}")
 
@@ -932,9 +932,9 @@ class State:
         for network_name, ip in self.ncn_ips.items():
             sls_network = self.sls_networks[network_name]
             # CAN
-            # Master:  {"Aliass":["ncn-m002-can","time-can","time-can.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.134","Name":"ncn-m002"}
-            # Worker:  {"Aliass":["ncn-w001-can","time-can","time-can.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.101.5.136","Name":"ncn-w001"}
-            # Storage: {"Aliass":["ncn-s001-can","time-can","time-can.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.101.5.147","Name":"ncn-s001"}
+            # Master:  {"Aliases":["ncn-m002-can","time-can","time-can.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.134","Name":"ncn-m002"}
+            # Worker:  {"Aliases":["ncn-w001-can","time-can","time-can.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.101.5.136","Name":"ncn-w001"}
+            # Storage: {"Aliases":["ncn-s001-can","time-can","time-can.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.101.5.147","Name":"ncn-s001"}
 
             # CHN
             # Master:  {"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.198","Name":"x3000c0s3b0n0"}
@@ -942,24 +942,24 @@ class State:
             # Storage: {"Comment":"x3000c0s13b0n0","IPAddress":"10.101.5.211","Name":"x3000c0s13b0n0"}
 
             # CMN
-            # Master:  {"Aliass":["ncn-m002-cmn","time-cmn","time-cmn.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.20","Name":"ncn-m002"}
-            # Worker:  {"Aliass":["ncn-w001-cmn","time-cmn","time-cmn.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.101.5.22","Name":"ncn-w001"}
-            # Storage: {"Aliass":["ncn-s001-cmn","time-cmn","time-cmn.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.101.5.33","Name":"ncn-s001"}
+            # Master:  {"Aliases":["ncn-m002-cmn","time-cmn","time-cmn.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.20","Name":"ncn-m002"}
+            # Worker:  {"Aliases":["ncn-w001-cmn","time-cmn","time-cmn.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.101.5.22","Name":"ncn-w001"}
+            # Storage: {"Aliases":["ncn-s001-cmn","time-cmn","time-cmn.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.101.5.33","Name":"ncn-s001"}
 
             # HMN
-            # Master:  {"Aliass":["ncn-m002-hmn","time-hmn","time-hmn.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.254.1.6","Name":"ncn-m002"}
-            # Worker:  {"Aliass":["ncn-w001-hmn","time-hmn","time-hmn.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.254.1.10","Name":"ncn-w001"}
-            # Storage: {"Aliass":["ncn-s001-hmn","time-hmn","time-hmn.local","rgw-vip.hmn"],"Comment":"x3000c0s13b0n0","IPAddress":"10.254.1.32","Name":"ncn-s001"}
+            # Master:  {"Aliases":["ncn-m002-hmn","time-hmn","time-hmn.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.254.1.6","Name":"ncn-m002"}
+            # Worker:  {"Aliases":["ncn-w001-hmn","time-hmn","time-hmn.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.254.1.10","Name":"ncn-w001"}
+            # Storage: {"Aliases":["ncn-s001-hmn","time-hmn","time-hmn.local","rgw-vip.hmn"],"Comment":"x3000c0s13b0n0","IPAddress":"10.254.1.32","Name":"ncn-s001"}
 
             # MTL
-            # Master:  {"Aliass":["ncn-m002-mtl","time-mtl","time-mtl.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.1.1.3","Name":"ncn-m002"}
-            # Worker:  {"Aliass":["ncn-w001-mtl","time-mtl","time-mtl.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.1.1.5","Name":"ncn-w001"}
-            # Storage: {"Aliass":["ncn-s001-mtl","time-mtl","time-mtl.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.1.1.16","Name":"ncn-s001"}
+            # Master:  {"Aliases":["ncn-m002-mtl","time-mtl","time-mtl.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.1.1.3","Name":"ncn-m002"}
+            # Worker:  {"Aliases":["ncn-w001-mtl","time-mtl","time-mtl.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.1.1.5","Name":"ncn-w001"}
+            # Storage: {"Aliases":["ncn-s001-mtl","time-mtl","time-mtl.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.1.1.16","Name":"ncn-s001"}
 
             # NMN
-            # Master:  {"Aliass":["ncn-m002-nmn","time-nmn","time-nmn.local","x3000c0s3b0n0","ncn-m002.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.252.1.5","Name":"ncn-m002"}
-            # Worker:  {"Aliass":["ncn-w001-nmn","time-nmn","time-nmn.local","x3000c0s7b0n0","ncn-w001.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.252.1.7","Name":"ncn-w001"}
-            # Storage: {"Aliass":["ncn-s001-nmn","time-nmn","time-nmn.local","x3000c0s13b0n0","ncn-s001.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.252.1.18","Name":"ncn-s001"}
+            # Master:  {"Aliases":["ncn-m002-nmn","time-nmn","time-nmn.local","x3000c0s3b0n0","ncn-m002.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.252.1.5","Name":"ncn-m002"}
+            # Worker:  {"Aliases":["ncn-w001-nmn","time-nmn","time-nmn.local","x3000c0s7b0n0","ncn-w001.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.252.1.7","Name":"ncn-w001"}
+            # Storage: {"Aliases":["ncn-s001-nmn","time-nmn","time-nmn.local","x3000c0s13b0n0","ncn-s001.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.252.1.18","Name":"ncn-s001"}
 
             # Generalizations
             # - All IP reservations have the NCN xname for the comment
@@ -1020,7 +1020,7 @@ class State:
 
             if network_name == "HMN":
                 # Add BMC IP reservation to the HMN network.
-                # Example: {"Aliass":["ncn-s001-mgmt"],"Comment":"x3000c0s13b0","IPAddress":"10.254.1.31","Name":"x3000c0s13b0"}
+                # Example: {"Aliases":["ncn-s001-mgmt"],"Comment":"x3000c0s13b0","IPAddress":"10.254.1.31","Name":"x3000c0s13b0"}
                 bmc_ip_reservation = IPReservation(self.bmc_xname, self.bmc_ip, comment=self.bmc_xname, aliases=[self.bmc_alias])
                 print("Adding NCN BMC IP reservation to bootstrap_dhcp subnet in the HMN network")
                 print(json.dumps(bmc_ip_reservation.to_sls(), indent=2))
@@ -1109,9 +1109,9 @@ def allocate_ips_command(session: requests.Session, args, state: State):
     action, existing_management_ncns = get_sls_management_ncns(session)
 
     # Verify that the alias is unique
-    existing_management_ncns = sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliass"][0])
+    existing_management_ncns = sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliases"][0])
     for node in existing_management_ncns:
-        for alias in node["ExtraProperties"]["Aliass"]:
+        for alias in node["ExtraProperties"]["Aliases"]:
             if alias == args.alias:
                 action_log(action, f'Error the provided alias {state.ncn_alias} is already in use by {node["Xname"]}')
                 print_action(action)
@@ -1124,9 +1124,9 @@ def allocate_ips_command(session: requests.Session, args, state: State):
     action, existing_management_ncns = get_sls_management_ncns(session)
 
     # Verify that the alias is unique
-    existing_management_ncns = sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliass"][0])
+    existing_management_ncns = sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliases"][0])
     for node in existing_management_ncns:
-        for alias in node["ExtraProperties"]["Aliass"]:
+        for alias in node["ExtraProperties"]["Aliases"]:
             if alias == args.alias:
                 action_log(action, f'Error the provided alias {state.ncn_alias} is already in use by {node["Xname"]}')
                 print_action(action)
@@ -1429,9 +1429,9 @@ def ncn_data_command(session: requests.Session, args, state: State):
     action, existing_management_ncns = get_sls_management_ncns(session)
 
     # Verify that the alias is unique
-    existing_management_ncns = sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliass"][0])
+    existing_management_ncns = sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliases"][0])
     for node in existing_management_ncns:
-        for alias in node["ExtraProperties"]["Aliass"]:
+        for alias in node["ExtraProperties"]["Aliases"]:
             if alias == args.alias:
                 action_log(action, f'Error the provided alias {state.ncn_alias} is already in use by {node["Xname"]}')
                 print_action(action)
@@ -1449,7 +1449,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
         action, mgmt_switch = get_sls_hardware(session, mgmt_switch_xname)
 
         mgmt_switch_brand = mgmt_switch["ExtraProperties"]["Brand"]
-        mgmt_switch_alias = mgmt_switch["ExtraProperties"]["Aliass"][0]
+        mgmt_switch_alias = mgmt_switch["ExtraProperties"]["Aliases"][0]
 
         action_log(action, f'Management Switch Xname: {mgmt_switch_xname}')
         action_log(action, f'Management Switch Brand: {mgmt_switch_brand}')
@@ -1610,7 +1610,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
         print(f"Failed to find a Management NCN with subrole {state.ncn_subrole} to donate bootparameters")
         sys.exit(1)
 
-    donor_alias = donor_ncn["ExtraProperties"]["Aliass"][0]
+    donor_alias = donor_ncn["ExtraProperties"]["Aliases"][0]
     print(f'Found existing NCN {donor_ncn["Xname"]} ({donor_alias}) of the same type to donate bootparameters to {state.ncn_xname} ({state.ncn_alias})')
 
     action, donor_bootparameters = get_bss_bootparameters(session,  donor_ncn["Xname"])
@@ -1714,7 +1714,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
             "NID": nid,
             "Role": "Management",
             "SubRole": state.ncn_subrole,
-            "Aliass": [state.ncn_alias]
+            "Aliases": [state.ncn_alias]
         }
     }
 
