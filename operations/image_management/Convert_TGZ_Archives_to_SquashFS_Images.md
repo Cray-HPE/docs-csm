@@ -4,13 +4,11 @@ If customizing a pre-built image root archive compressed as a txz or other non-S
 
 The steps in this section only apply if the image root is not in SquashFS format.
 
-
-### Prerequisites
+## Prerequisites
 
 There is a pre-built image that is not currently in SquashFS format.
 
-
-### Procedure
+## Procedure
 
 1.  Locate the image root to be converted to SquashFS.
 

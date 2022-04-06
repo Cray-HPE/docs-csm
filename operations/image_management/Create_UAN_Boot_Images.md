@@ -1,27 +1,28 @@
 # Create UAN Boot Images
 
-Update configuration management git repository to match the installed version of the UAN product. Then use that updated configuration to create UAN boot images and a BOS session template.
+Update configuration management Git repository to match the installed version of the UAN product. Then use that updated configuration to create UAN boot images and a BOS session template.
 
 This is the overall workflow for preparing UAN images for booting UANs:
 
-1.  Clone the UAN configuration git repository and create a branch based on the branch imported by the UAN installation.
-2.  Update the configuration content and push the changes to the newly created branch.
-3.  Create a Configuration Framework Service \(CFS\) configuration for the UANs, specifying the git configuration and the UAN image to apply the configuration to. More Cray products can also be added to the CFS configuration so that the UANs can install multiple Cray products into the UAN image at the same time.
-4.  Configure the UAN image using CFS and generate a newly configured version of the UAN image.
-5.  Create a Boot Orchestration Service \(BOS\) boot session template for the UANs. This template maps the configured image, the CFS configuration to be applied post-boot, and the nodes which will receive the image and configuration.
+1. Clone the UAN configuration Git repository and create a branch based on the branch imported by the UAN installation.
+2. Update the configuration content and push the changes to the newly created branch.
+3. Create a Configuration Framework Service \(CFS\) configuration for the UANs, specifying the Git configuration and the UAN image to apply the configuration to. More Cray products can also be added to the CFS configuration so that the UANs can install multiple Cray products into the UAN image at the same time.
+4. Configure the UAN image using CFS and generate a newly configured version of the UAN image.
+5. Create a Boot Orchestration Service \(BOS\) boot session template for the UANs. This template maps the configured image, the CFS configuration to be applied post-boot, and the nodes which will receive the image and configuration.
 
 Once the UAN BOS session template is created, the UANs will be ready to be booted by a BOS session.
 
-Replace PRODUCT\_VERSION and CRAY\_EX\_HOSTNAME in the example commands in this procedure with the current UAN product version installed \(See Step 1\) and the hostname of the HPE Cray EX system, respectively.
+Replace *PRODUCT\_VERSION* and *CRAY\_EX\_HOSTNAME* in the example commands in this procedure with the current UAN product version installed \(See Step 1\) and the hostname of the HPE Cray EX system, respectively.
 
-### Prerequisites
+## Prerequisites
 
 The UAN product stream must be installed.
 
-### Limitations
+## Limitations
 
 This guide only details how to apply UAN-specific configuration to the UAN image and nodes. Consult the manuals for the individual HPE products \(for example, workload managers and the HPE Cray Programming Environment\) that must be configured on the UANs.
 
+## Procedure
 
 ### UAN Image Pre-Boot Configuration
 
@@ -51,7 +52,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
           id: cbd5cdf6-eac3-47e6-ace4-aa1aecb1359a                         # <--- IMS recipe id
     ```
 
-2.  Generate the password hash for the `root` user. Replace PASSWORD with the `root` password you wish to use.
+2.  Generate the password hash for the `root` user. Replace PASSWORD with the desired `root` password.
 
     ```bash
     ncn-m001# openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) PASSWORD
@@ -118,7 +119,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     Variables should be defined and overridden in the Ansible inventory locations of the repository as shown in the following example and **not** in the Ansible plays and roles defaults. See https://docs.ansible.com/ansible/2.9/user_guide/playbooks_best_practices.html#content-organization for directory layouts for inventory.
 
-    **WARNING** Never place sensitive information such as passwords in the git repository.
+    > **WARNING:** Never place sensitive information such as passwords in the Git repository.
 
     The following example shows how to add a vars.yml file containing site-specific configuration values to the `Application` group variable location.
 
@@ -146,7 +147,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
           ignore_errors: yes
         ```
 
-    2.  Stage and commit the network name change
+    2.  Stage and commit the network name change.
 
         ```bash
         ncn-m# git add roles/uan_interfaces/tasks/main.yml
@@ -182,13 +183,13 @@ This guide only details how to apply UAN-specific configuration to the UAN image
     ncn-m001# cd ..
     ```
 
-    The configuration parameters have been stored in a branch in the UAN git repository. The next phase of the process is initiating the Configuration Framework Service \(CFS\) to customize the image.
+    The configuration parameters have been stored in a branch in the UAN Git repository. The next phase of the process is initiating the Configuration Framework Service \(CFS\) to customize the image.
 
 ### Configure UAN Images
 
 14. Create a JSON input file for generating a CFS configuration for the UAN.
 
-    Gather the git repository clone URL, commit, and top-level play for each configuration layer \(that is, Cray product\). Add them to the CFS configuration for the UAN, if wanted.
+    Gather the Git repository clone URL, commit, and top-level play for each configuration layer \(that is, Cray product\). Add them to the CFS configuration for the UAN, if wanted.
 
     For the commit value for the UAN layer, use the Git commit value obtained in the previous step.
 
@@ -272,7 +273,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     2.  Download the rootfs image specified in the UAN product catalog.
 
-        Replace IMAGE\_ID in the following export command with the IMS image id recorded in Step 1.
+        Replace IMAGE\_ID in the following export command with the IMS image ID recorded in Step 1.
 
         ```bash
         ncn-m001# export UAN_IMAGE_ID=IMAGE_ID
@@ -318,7 +319,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         cray-network-config-1.1.7-20210318094806_b409053-sles15sp1.x86_64.rpm
         ```
 
-    7.  Generate a new initrd to match the updated image by running the /tmp/images.sh script. Then wait for this script to complete before continuing.
+    7.  Generate a new initrd to match the updated image by running the `/tmp/images.sh` script. Then wait for this script to complete before continuing.
 
         ```bash
         chroot-ncn-m001# /tmp/images.sh
@@ -326,7 +327,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
         The output of this script will contain error messages. These error messages can be ignored as long as the message dracut: \*\*\* Creating initramfs image file appears at the end.
 
-    8.  Copy the /boot/initrd and /boot/vmlinuz files out of the chroot environment and into a temporary location on the file system of the node.
+    8.  Copy the `/boot/initrd` and `/boot/vmlinuz` files out of the chroot environment and into a temporary location on the file system of the node.
 
     9.  Exit the chroot environment and delete the packages.
 
@@ -337,7 +338,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         ncn-m001# cd ..
         ```
 
-    10. Verify that there is only one subdirectory in the lib/modules directory of the image.
+    10. Verify that there is only one subdirectory in the `lib/modules` directory of the image.
 
         The existence of more than one subdirectory indicates a mismatch between the kernel of the image and the DVS RPMs that were installed in the previous step.
 
@@ -404,7 +405,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         ```
 
     14. After uploading the new image, initrd, and kernel to S3, use the `cray artifacts`
-        command to get the s3 generated etag value for each artifact.
+        command to get the S3 generated etag value for each artifact.
 
         ```bash
         ncn-m001# cray artifacts describe boot-images ${NEW_IMAGE_ID}/rootfs
@@ -430,7 +431,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         marks from the etag value. So, for the above artifact, the etag would be
         `db5582fd817c8a8dc084e1b8b4f0ea3b-197`.
 
-    15. Obtain the md5sum of the squashfs image, initrd, and kernel.
+    15. Obtain the md5sum of the SquashFS image, initrd, and kernel.
 
         ```bash
         ncn-m001# md5sum UAN-1.4.0-day-zero.squashfs initrd vmlinuz
@@ -444,7 +445,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         5edcf3fd42ab1eccfbf1e52008dac5b9  vmlinuz
         ```
 
-    16. Use the image id from Step 1 to print out all the IMS details about the current UAN image.
+    16. Use the image ID from Step 1 to print out all the IMS details about the current UAN image.
 
         ```bash
         ncn-m001# cray ims images describe c880251d-b275-463f-8279-e6033f61578b
@@ -463,7 +464,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         type = "s3"
         ```
 
-    17. Use the path of the manifest.json file to download that JSON to a local file.
+    17. Use the path of the `manifest.json` file to download that JSON to a local file.
 
         ```bash
         ncn-m001# cray artifacts get boot-images \
@@ -522,14 +523,14 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     21. Save the changes to the file.
 
-    22. Upload the updated manifest.json file.
+    22. Upload the updated `manifest.json` file.
 
         ```bash
         ncn-m001# cray artifacts create boot-images \
         ${NEW_IMAGE_ID}/manifest.json uan-manifest.json
         ```
 
-    23. Update the IMS image to use the new uan-manifest.json file.
+    23. Update the IMS image to use the new `uan-manifest.json` file.
 
         ```bash
         ncn-m001# cray ims images update ${NEW_IMAGE_ID} \
@@ -589,21 +590,23 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
 20. Determine the correct value for the ifmap option in the `kernel_parameters` string for the type of UAN.
 
-    -   Use ifmap=net0:nmn0,lan0:hsn0,lan1:hsn1 if the UANs are:
-        -   Either HPE DL325 or DL385 nodes that have a single OCP PCIe card installed.
-        -   Gigabyte nodes that do not have additional PCIe network cards installed other than the built-in LOM ports.
-    -   Use ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 if the UANs are:
-        -   Either HPE DL325 or DL385 nodes which have a second OCP PCIe card installed, regardless if it is being used or not.
-        -   Gigabyte nodes that have a PCIe network card installed in addition to the built-in LOM ports, regardless if it is being used or not.
+    * Use ifmap=net0:nmn0,lan0:hsn0,lan1:hsn1 if the UANs are:
+      * Either HPE DL325 or DL385 nodes that have a single OCP PCIe card installed.
+      * Gigabyte nodes that do not have additional PCIe network cards installed other than the built-in LOM ports.
+    * Use ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 if the UANs are:
+      * Either HPE DL325 or DL385 nodes which have a second OCP PCIe card installed, regardless if it is being used or not.
+      * Gigabyte nodes that have a PCIe network card installed in addition to the built-in LOM ports, regardless if it is being used or not.
+
 21. Construct a JSON BOS boot session template for the UAN.
 
     1.  Populate the template with the following information:
 
-        -   The value of the ifmap option for the `kernel_parameters` string that was determined in the previous step.
-        -   The component names (xnames) of Application nodes from Step 18
-        -   The customized image ID from Step 17 for
-        -   The CFS configuration session name from Step 17
-    2.  Verify that the session template matches the format and structure in the following example:
+        * The value of the ifmap option for the `kernel_parameters` string that was determined in the previous step.
+        * The component names (xnames) of Application nodes from step 18.
+        * The customized image ID from step 17.
+        * The CFS configuration session name from step 17.
+    
+    1.  Verify that the session template matches the format and structure in the following example:
 
         ```bash
         {
@@ -629,7 +632,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
          }
         ```
 
-    3.  Save the template with a descriptive name, such as uan-sessiontemplate-PRODUCT\_VERSION.json.
+    2.  Save the template with a descriptive name, such as uan-sessiontemplate-PRODUCT\_VERSION.json.
 
 22. Register the session template with BOS.
 
@@ -642,6 +645,4 @@ This guide only details how to apply UAN-specific configuration to the UAN image
     /sessionTemplate/uan-sessiontemplate-PRODUCT_VERSION
     ```
 
-
 Perform [Boot UANs](../boot_orchestration/Boot_UANs.md) to boot the UANs with the new image and BOS session template.
-
