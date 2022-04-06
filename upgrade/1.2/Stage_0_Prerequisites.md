@@ -3,12 +3,11 @@
 > **NOTE:** CSM-1.0.1 or higher is required in order to upgrade to CSM-1.2.0
 
 - [Stage 0.1 - Install latest docs RPM](#install-latest-docs)
-- [Stage 0.2 - Reduce CPU Limits If Needed](#reduce-cpu-limits)
-- [Stage 0.3 - Update SLS](#update-sls)
-- [Stage 0.4 - Upgrade Management Network](#update-management-network)
-- [Stage 0.5 - Prerequisites Check](#prerequisites-check)
-- [Stage 0.6 - Backup Workload Manager Data](#backup_workload_manager)
-- [Stage 0.7 - Continue to Stage 1](#continue_to_stage1)
+- [Stage 0.2 - Update SLS](#update-sls)
+- [Stage 0.3 - Upgrade Management Network](#update-management-network)
+- [Stage 0.4 - Prerequisites Check](#prerequisites-check)
+- [Stage 0.5 - Backup Workload Manager Data](#backup_workload_manager)
+- [Stage 0.6 - Continue to Stage 1](#continue_to_stage1)
 
 <a name="install-latest-docs"></a>
 
@@ -60,19 +59,7 @@
 
 <a name="reduce-cpu-limits"></a>
 
-## Stage 0.2 - Reduce CPU Limits If Needed
-
-**`IMPORTANT`**
-
-For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed. This step is executed automatically as part of [Stage 0.5](#prerequisites-check). See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more information.
-
-Independently, the `customizations.yaml` file will be edited automatically during upgrade for TDS systems prior to deploying new CSM services. See the file: `/usr/share/doc/csm/upgrade/1.2/scripts/upgrade/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified (prior to proceeding with this upgrade) with different values if other settings are desired in the `customizations.yaml` file for this system.
-
-For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/CSM_product_management/Post_Install_Customizations.md).
-
-<a name="update-sls"></a>
-
-## Stage 0.3 - Update SLS
+## Stage 0.2 - Update SLS
 
 CSM 1.2 introduces the bifurcated CAN as well as network configuration controlled by data in SLS. An offline upgrade of SLS data is performed. More details on the upgrade and its sequence of events can be found in the [README.SLS_upgrade.md](./scripts/sls/README.SLS_Upgrade.md).
 
@@ -185,13 +172,13 @@ ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw
 
 <a name="update-management-network"></a>
 
-## Stage 0.4 - Upgrade Management Network
+## Stage 0.3 - Upgrade Management Network
 
 - See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
 
 <a name="prerequisites-check"></a>
 
-## Stage 0.5 - Prerequisites Check
+## Stage 0.4 - Prerequisites Check
 
 Run check script:
 
@@ -243,10 +230,10 @@ ncn-m001# git push
 
 <a name="backup_workload_manager"></a>
 
-## Stage 0.6 - Backup Workload Manager Data
+## Stage 0.5 - Backup Workload Manager Data
 
 To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
 
 <a name="continue_to_stage1"></a>
 
-## Stage 0.7 - Continue to Stage 1
+## Stage 0.6 - Continue to Stage 1
