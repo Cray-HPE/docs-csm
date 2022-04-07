@@ -22,6 +22,7 @@
 """Functions used to update SLS from CSM 1.0.x to CSM 1.2."""
 from collections import defaultdict
 import ipaddress
+import sys
 
 import click
 from sls_utils.ipam import (
@@ -118,6 +119,31 @@ def sls_and_input_data_checks(
             "         This is EXPERT mode requiring manual subnetting of the CMN and bypasses sanity checks.",
             fg="bright_yellow",
         )
+
+    # Old CAN migrates to CMN.  New CAN must not have overlaps.
+    old_can_vlan = can.subnets().get("bootstrap_dhcp").vlan()
+    old_can_net = can.subnets().get("bootstrap_dhcp").ipv4_network()
+    new_can_vlan = can_data[0]
+    new_can_net = can_data[1]
+    overlap_errors = False
+    if old_can_vlan == new_can_vlan:
+        click.secho(
+            f"    ERROR: New CMN VLAN {old_can_vlan} overlaps with New CAN VLAN {new_can_vlan}.\n"
+            "         Please correct the --customer-access-network input values on the command line.",
+            fg="red",
+        )
+        overlap_errors = True
+
+    if old_can_net.overlaps(new_can_net):
+        click.secho(
+            f"    ERROR: New CMN Network {old_can_net} overlaps with New CAN Network {new_can_net}.\n"
+            "         Please correct the --customer-access-network input values on the command line.",
+            fg="red",
+        )
+        overlap_errors = True
+
+    if overlap_errors:
+        sys.exit(1)
 
 
 def migrate_switch_names(networks, hardware):
@@ -261,12 +287,13 @@ def remove_can_static_pool(networks):
     can.subnets().pop("can_metallb_static_pool")
 
 
-def create_chn_network(networks, chn_data):
+def create_chn_network(networks, chn_data, number_of_chn_edge_switches):
     """Create a new SLS CHN data structure.
 
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
         chn_data (int, ipaddress.IPv4Network): VLAN and IPv4 CIDR for the CHN
+        number_of_chn_edge_switches (int): Number of switches to uplink for CHN
     """
     if networks.get("CHN") is not None:
         return
@@ -347,6 +374,20 @@ def create_chn_network(networks, chn_data):
 
         for reservation in subnet.reservations().values():
             reservation.ipv4_address(next_free_ipv4_address(subnet))
+
+    if number_of_chn_edge_switches != 2:
+        # Note that reservation keys above are still "can" so this is a hack
+        # This will leave a hole in the reservation IPs, but can be re-used.
+        click.echo(
+            f"    Adjusting the number of edge switches from 2 to {number_of_chn_edge_switches}",
+        )
+        del_switches = [
+            f"can-switch-{s}" for s in list(range(2, number_of_chn_edge_switches, -1))
+        ]
+        for switch in del_switches:
+            if switch not in bootstrap.reservations().keys():
+                continue
+            del bootstrap.reservations()[switch]
 
     networks.update({"CHN": chn})
 
@@ -479,7 +520,7 @@ def clone_subnet_and_pivot(
     """
     #
     # Pin ordering of subnet creation and override based on requested preservation
-    # Really if IPAM were good and/or we did not have to expect wonky data this would not be required
+    # Really if IPAM were good and/or we didn't have to expect wonky data this wouldn't be required
     #
     if subnet_names is None:
         subnet_names = [
