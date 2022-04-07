@@ -174,6 +174,23 @@ ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw
 
 ## Stage 0.3 - Upgrade Management Network
 
+#### Verify if Switches have 1.2 Configuration in place.
+
+  1. Login to each management switch `ssh admin@1.2.3.4`
+
+  1. After logging into each switch, you will see output like the below in your prompt if the switches have a CANU generated config for CSM 1.2 in place.
+
+   ```
+##################################################################################
+    # CSM version:  1.2
+    # CANU version: 1.3.2
+##################################################################################
+   ```
+
+  3. If the switch does show the banner like the above, then follow the steps in the [Management Network 1.0 (1.2 Preconfig) to 1.2
+](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/network/management_network/1.0_to_1.2_upgrade.md). If the banner does NOT show like the above, then please reach out to support to get the 1.2 preconfigs applied to the system.
+
+
 - See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
 
 <a name="prerequisites-check"></a>
@@ -185,7 +202,7 @@ Run check script:
 Set the `SW_ADMIN_PASSWORD` environment variable to the admin password for the switches. This is needed for preflight tests within the check script.
 
 ```bash
-ncn-m001# export SW_ADMIN_PASSWORD=sw1tCH@DM1Np4s5w0rd
+ncn-m001# export SW_ADMIN_PASSWORD=PutYourOwnPasswordHere
 ```
 
 > **`IMPORTANT:`** If the password for the local Nexus `admin` account has
@@ -196,7 +213,7 @@ ncn-m001# export SW_ADMIN_PASSWORD=sw1tCH@DM1Np4s5w0rd
 > For example:
 >
 > ```bash
-> ncn-m001# export NEXUS_PASSWORD=cu$t0m@DM1Np4s5w0rd
+> ncn-m001# export NEXUS_PASSWORD=PutYourOwnPasswordHered
 > ```
 >
 > Otherwise, a random 32-character base64-encoded string will be generated
