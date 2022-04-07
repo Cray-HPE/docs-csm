@@ -120,7 +120,7 @@ Only processes running the v15.2.8 image will be upgraded. This will include `MO
             mons are allowing insecure global_id reclaim
    ```
 
-   `ceph orch ps` should show `MON`, `MGR`, `MDS`, `RGW`, and `OSD` processes running version `v15.2.15`.  There should be **NO** processes running version `v15.2.8`
+   `ceph orch ps` should show `MON`, `MGR`, `MDS`, `RGW`, and `OSD` processes running version `v15.2.15`.  There should be **NO** processes running version `v15.2.8`.
 
    A handy command to verify you are not running any older versions of ceph:
 
@@ -140,7 +140,7 @@ Only processes running the v15.2.8 image will be upgraded. This will include `MO
    ceph orch upgrade status
    ```
 
-   > This will give you a summary and if the upgrade is failed or stil in progress
+   > This will give you a summary and if the upgrade is failed or still in progress.
 
    ```bash
    ceph -W cephadm
