@@ -132,7 +132,31 @@ Only processes running the v15.2.8 image will be upgraded. This will include `MO
 
    > If the above command shows any number other than 0, then the ugprade is not complete.  You can refer to [Ceph_Orchestrator_Usage.md](../operation/../../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting. 
 
-2. Disable `auth_allow_insecure_global_id_reclaim`
+   Some addtional commands to run to check the ceph upgrade:
+
+   on ncn-m00/1/2/3 or ncn-s001/2/3:
+
+   ```bash
+   ceph orch upgrade status
+   ```
+
+   > This will give you a summary and if the upgrade is failed or stil in progress
+
+   ```bash
+   ceph -W cephadm
+   ```
+
+   > This will watch the cephadm process.  This will be the most helpful, but can be slow as events will have to retry in order to see which part failed and why.  
+
+**IMPORTANT:** If you have any ceph mon/mgr/mds/osd/rgw processes still running 15.2.8 then do the following:
+
+```bash
+ceph orch upgrade stop
+```
+
+> DO NOT proceed past this point.  Contact support for indepth troubleshooting.
+
+1. Disable `auth_allow_insecure_global_id_reclaim`
 
    ```bash
    ncn-s# ceph config set mon auth_allow_insecure_global_id_reclaim false
