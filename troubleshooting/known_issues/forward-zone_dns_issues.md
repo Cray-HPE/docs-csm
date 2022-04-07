@@ -14,7 +14,6 @@ Unbound is a free, open source validating, recursive, caching DNS resolver softw
 
 When DNS forwarder hangs or is offline, all dns lookups hangs since at Cray/HPE we don't do fqdn requests.
 Example issue CASMTRIAGE-3125 (spire issue with dns lookups and remediation)
-
 ### Procedure to fix
 
 

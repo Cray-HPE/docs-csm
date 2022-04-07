@@ -15,8 +15,7 @@ This document provides troubleshooting information for services and functionalit
     * [Troubleshoot Liveliness or Readiness Probe Failures](https://github.com/Cray-HPE/docs-csm/blob/CASMINS-4311/troubleshooting/kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
     * [Troubleshoot Unresponsive kubectl Commands](https://github.com/Cray-HPE/docs-csm/blob/CASMINS-4311/troubleshooting/kubernetes/Troubleshoot_Unresponsive_kubectl_Commands.md)
     * [Troubleshoot Kubernetes Node NotReady](https://github.com/Cray-HPE/docs-csm/blob/CASMINS-4311/troubleshooting/kubernetes/Troubleshoot_Kubernetes_Node_NotReady.md)
-    * [Troubleshoot Postgres Database](https://github.com/Cray-HPE/docs-csm/bl
-    * ob/release/1.0/operations/kubernetes/Troubleshoot_Postgres_Database.md)
+    * [Troubleshoot Postgres Database](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/kubernetes/Troubleshoot_Postgres_Database.md)
     * [Recover from Postgres WAL Event](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/kubernetes/Troubleshoot_Postgres_Database.md)
     * [Restore Postgres](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/kubernetes/Restore_Postgres.md)
     * [Disaster Recovery for Postgres](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/kubernetes/Disaster_Recovery_Postgres.md)
