@@ -443,7 +443,7 @@ Some files are needed for generating the configuration payload. See the [Command
       ```
 
    1. Generate the system config:
-      > **`Note:`** the provided command below is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary significatnly depending on ones system and site configuration.
+      > **`Note:`** The following command is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary significantly depending on the system and site configuration in use.
 
       ```bash
       pit:/var/www/ephemeral/prep/# csi config init \
