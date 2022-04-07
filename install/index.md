@@ -38,7 +38,7 @@ Once the CSM installation has completed, other product streams for the HPE Cray 
 
 The topics in this chapter need to be done as part of an ordered procedure so are shown here with numbered topics.
 
-**Note**: If problems are encountered during the installation, some topics have their own [troubleshooting sections found in the operations index](../operations/index.md)
+**`Note`**: If problems are encountered during the installation, some topics have their own [troubleshooting sections found in the operations index](../operations/index.md).
 sections, but there is also a general troubleshooting topic.
 
 ## Details
