@@ -120,7 +120,17 @@ Only processes running the v15.2.8 image will be upgraded. This will include `MO
             mons are allowing insecure global_id reclaim
    ```
 
-   `ceph orch ps` should show `MON`, `MGR`, `MDS`, `RGW`, and `OSD` processes running version `v15.2.15`.  There should be no processes running version `v15.2.8`
+   `ceph orch ps` should show `MON`, `MGR`, `MDS`, `RGW`, and `OSD` processes running version `v15.2.15`.  There should be **NO** processes running version `v15.2.8`
+
+   A handy command to verify you are not running any older versions of ceph:
+
+   on ncn-m001/2/3 or ncn-s001/2/3:
+
+   ```bash
+   ceph orch ps -f json-pretty|jq -r '.[]|select(.version=="15.2.8")|.version'|wc -l
+   ```
+
+   > If the above command shows any number other than 0, then the ugprade is not complete.
 
 2. Disable `auth_allow_insecure_global_id_reclaim`
 
