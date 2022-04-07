@@ -165,7 +165,7 @@ ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw
   1. After logging into each switch, you will see output like the below in your prompt if the switches have a CANU generated config for CSM 1.2 in place.
 
    ```
-##############################################################################$
+##################################################################################
     # CSM version:  1.2
     # CANU version: 1.3.2
     ##############################################################################
