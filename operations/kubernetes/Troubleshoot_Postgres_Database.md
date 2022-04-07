@@ -218,7 +218,7 @@ Example output:
         ```
     
         ```bash
-        ncn-w001# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list
+        ncn-w001# kubectl exec cray-console-postgres-0 -c postgres -n services -it -- patronictl list
         ```
     
         Example output:
@@ -233,7 +233,43 @@ Example output:
         +------------------------------+------------+--------+---------+----+-----------+
         ```
 
-    2. Re-run [Is Replication Lagging?](#lag) for any lagging members.
+    2. Re-run [Is Replication Lagging?](#lag) to `reinit` any lagging members.
+
+    3. If the `reinit` still fails, then delete member pods that are still reporting lag. This should clear up any remaining lag.
+
+       ```bash
+        ncn-w001# kubectl exec cray-console-postgres-0 -c postgres -n services -it -- patronictl list
+        ```
+
+        Example output:
+
+        ```text
+        + Cluster: cray-console-data-postgres (7072784871993835594) ---+----+-----------+
+        |            Member            |    Host    |  Role  |  State  | TL | Lag in MB |
+        +------------------------------+------------+--------+---------+----+-----------+
+        | cray-console-data-postgres-0 | 10.39.0.80 | Leader | running |  2 |           |
+        | cray-console-data-postgres-1 | 10.36.0.37 |        | running |  1 |        49 |
+        | cray-console-data-postgres-2 | 10.32.0.1  |        | running |  1 |        49 |
+        +------------------------------+------------+--------+---------+----+-----------+
+        ```
+
+        ```bash
+        ncn-w001# kubectl delete pod cray-console-data-postgres-1 cray-console-data-postgres-2 -n services
+        ```
+
+        Once the pods restart, check that the lag has resolved:
+
+        Example output:
+
+        ```text
+        + Cluster: cray-console-data-postgres (7072784871993835594) ---+----+-----------+
+        |            Member            |    Host    |  Role  |  State  | TL | Lag in MB |
+        +------------------------------+------------+--------+---------+----+-----------+
+        | cray-console-data-postgres-0 | 10.39.0.80 | Leader | running |  2 |           |
+        | cray-console-data-postgres-1 | 10.36.0.37 |        | running |  2 |         0 |
+        | cray-console-data-postgres-2 | 10.32.0.1  |        | running |  2 |         0 |
+        +------------------------------+------------+--------+---------+----+-----------+
+        ```
 
 - If a cluster member is `stopped` after a successful reinitialization, check for pg_internal.init.* files that may need to be cleaned up. This can occur if the pgdata disk was full prior to the reinitialization, leaving truncated pg_internal.init.* files in the pgdata directory.
 
