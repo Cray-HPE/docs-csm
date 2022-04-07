@@ -317,7 +317,7 @@ Some files are needed for generating the configuration payload. See the [Command
 * [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload)
 * [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files)
 
-1. At this time see [Create HMN Connections JSON](create_hmn_connections_json.md) for instructions about creating the `hmn_connections.json`. Return to this section when completed.
+1. Create the `hmn_connections.json` file by following the [Create HMN Connections JSON](create_hmn_connections_json.md)  procedure. Return to this section when completed.
 
 1. Change into the preparation directory plus necessary PIT directories (for later):
 
