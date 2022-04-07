@@ -374,7 +374,7 @@ Some files are needed for generating the configuration payload. See the [Command
 
    1. Generate the system configuration
 
-      > **`Note:`** for those more familiar with a CSM Install, this step may be skipped entirely by simple invoking pit-intas detailed in the [#first time](#bring---up-the-pit-services-and-validate-pit-health) section.
+      > **`Note:`** For those more familiar with a CSM install, this step may be skipped entirely by simple invoking `pit-intas` detailed in the [#first time](#bring---up-the-pit-services-and-validate-pit-health) section.
 
       ```bash
       pit:/var/www/ephemeral/prep/# csi config init
