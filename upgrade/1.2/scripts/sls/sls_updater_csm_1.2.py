@@ -176,6 +176,13 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
     default=True,
     show_default=True,
 )
+@click.option(
+    "--number-of-chn-edge-switches",
+    help="Allow specification of the number of edge switches.  Typically a dev-only option.",
+    default=2,
+    type=click.IntRange(0, 2),
+    show_default=True,
+)
 @click.pass_context
 def main(
     ctx,
@@ -191,6 +198,7 @@ def main(
     preserve_existing_subnet_for_cmn,
     can_subnet_override,
     cmn_subnet_override,
+    number_of_chn_edge_switches,
     retain_unused_user_network,
 ):
     """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
@@ -209,6 +217,7 @@ def main(
         preserve_existing_subnet_for_cmn (str|None): Whether to preserve static pool or bootstrap_dhcp (or neither)
         can_subnet_override (str, ipaddress.IPv4Network): Manually override CAN subnetting
         cmn_subnet_override (str, ipaddress.IPv4Network): Manually override CMN subnetting
+        number_of_chn_edge_switches (str): Flat to override default edge switch (Arista usually) qty of 2
         retain_unused_user_network (flag): Flag to remove unused user network (e.g. remove CAN if CHN)
 
     """
@@ -280,7 +289,11 @@ def main(
     #
     # Create (new) CHN network
     #   (not order dependent)
-    create_chn_network(networks, customer_highspeed_network)
+    create_chn_network(
+        networks,
+        customer_highspeed_network,
+        number_of_chn_edge_switches,
+    )
 
     #
     # Re-IP the (existing) CAN network
