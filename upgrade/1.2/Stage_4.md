@@ -130,7 +130,7 @@ Only processes running the v15.2.8 image will be upgraded. This will include `MO
    ceph orch ps -f json-pretty|jq -r '.[]|select(.version=="15.2.8")|.version'|wc -l
    ```
 
-   > If the above command shows any number other than 0, then the ugprade is not complete.
+   > If the above command shows any number other than 0, then the ugprade is not complete.  You can refer to [Ceph_Orchestrator_Usage.md](../operation/../../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting. 
 
 2. Disable `auth_allow_insecure_global_id_reclaim`
 
