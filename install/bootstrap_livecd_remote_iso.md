@@ -347,7 +347,7 @@ Some files are needed for generating the configuration payload. See the [Command
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
 
-   > **`Warning:`** if the `system_config.yaml` file is unavailable please skip this step and move onto the next one 4.1.b in order to generate the first configuration payload.
+   > **`Warning:`** If the `system_config.yaml` file is unavailable, please skip this step and move onto the next one in step 4.1.b to generate the first configuration payload.
 
    1. Check for the configuration files. The needed files should be in the current directory.
 
