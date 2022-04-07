@@ -172,7 +172,7 @@ ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw
    ```
 
   3. If the switch does show the banner like the above, then follow the steps in the [Management Network 1.0 (1.2 Preconfig) to 1.2
-](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/network/management_network/1.0_to_1.2_upgrade.md). If the banner does NOT show like the above, then you have to reach out to support to get the 1.2 preconfigs applied to the system.
+](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/network/management_network/1.0_to_1.2_upgrade.md). If the banner does NOT show like the above, then please reach out to support to get the 1.2 preconfigs applied to the system.
 
 
 - See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
