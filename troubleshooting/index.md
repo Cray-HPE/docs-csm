@@ -66,8 +66,6 @@ This document provides troubleshooting information for services and functionalit
       * [Troubleshoot Loss of Console Connections and Logs on Gigabyte Nodes](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/node_management/Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
  * Troubleshoot Customer Access Network (CAN)
       * [Troubleshoot CAN Issues](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/network/customer_access_network/Troubleshoot_CAN_Issues.md)
- * Troubleshoot Dynamic Host Configuration Protocol (DHCP)
-      
  * Domain Name Service (DNS)
       * [Troubleshoot Connectivity to Services with External IP addresses](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
       * [Troubleshoot DNS Configuration Issues](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
