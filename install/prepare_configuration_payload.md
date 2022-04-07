@@ -8,7 +8,7 @@ Information gathered from a site survey is needed to feed into the CSM installat
 How the configuration payload is prepared depends on whether this is a first time installation of CSM
 software on this system or the CSM software is being reinstalled. The *reinstall scenario* has the
 advantage of being able to use the configuration payload from the previous CSM installation
-and an additional configuration file which that installation generated. The *first time* install scenario requires using the csi config tool to pass arguments to csi as well as the creation of a number of [Configuration Payload Files}(#configuration-payload-files).
+and an additional configuration file which that installation generated. The *first time* install scenario requires using the csi config tool to pass arguments to CSI as well as the creation of a number of [Configuration Payload Files}(#configuration-payload-files).
 
 
 ### Topics
