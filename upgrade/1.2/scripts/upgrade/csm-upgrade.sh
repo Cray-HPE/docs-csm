@@ -30,6 +30,17 @@ trap 'err_report' ERR
 
 . /etc/cray/upgrade/csm/myenv
 
+if [[ -z ${LOG_FILE} ]]; then
+    export LOG_FILE="$(pwd)/output.log"
+    echo
+    echo
+    echo " ************"
+    echo " *** NOTE ***"
+    echo " ************"
+    echo "LOG_FILE is not specified; use default location: ${LOG_FILE}"
+    echo
+fi
+
 state_name="VERIFY_K8S_NODES_UPGRADED"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
