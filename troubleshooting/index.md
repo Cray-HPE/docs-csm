@@ -15,7 +15,8 @@ This document provides troubleshooting information for services and functionalit
     * [Troubleshoot Liveliness or Readiness Probe Failures](https://github.com/Cray-HPE/docs-csm/blob/CASMINS-4311/troubleshooting/kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
     * [Troubleshoot Unresponsive kubectl Commands](https://github.com/Cray-HPE/docs-csm/blob/CASMINS-4311/troubleshooting/kubernetes/Troubleshoot_Unresponsive_kubectl_Commands.md)
     * [Troubleshoot Kubernetes Node NotReady](https://github.com/Cray-HPE/docs-csm/blob/CASMINS-4311/troubleshooting/kubernetes/Troubleshoot_Kubernetes_Node_NotReady.md)
-    * [Troubleshoot Postgres Database](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/kubernetes/Troubleshoot_Postgres_Database.md)
+    * [Troubleshoot Postgres Database](https://github.com/Cray-HPE/docs-csm/bl
+    * ob/release/1.0/operations/kubernetes/Troubleshoot_Postgres_Database.md)
     * [Recover from Postgres WAL Event](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/kubernetes/Troubleshoot_Postgres_Database.md)
     * [Restore Postgres](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/kubernetes/Restore_Postgres.md)
     * [Disaster Recovery for Postgres](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/kubernetes/Disaster_Recovery_Postgres.md)
@@ -73,6 +74,7 @@ This document provides troubleshooting information for services and functionalit
  * MetalLB in BGP-Mode
       * [Troubleshoot Services without an Allocated IP Address](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
       * [Troubleshoot BGP not Accepting Routes from MetalLB](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
+      * [Troubleshoot forward-zone DNS issue](known_issues/forward-zone_dns_issues.md)
  * Spire
       * [Restore Spire Postgres without a Backup](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/spire/Restore_Spire_Postgres_without_a_Backup.md)
       * [Troubleshoot Spire Failing to Start on NCNs](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
