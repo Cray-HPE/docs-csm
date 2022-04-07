@@ -52,11 +52,11 @@ This procedure requires administrative privileges.
     NEW TIME SETTINGS
     rtc: 2021-02-19 13:03:06.515083+00:00
     sys: 2021-02-19 13:03:07.184846+0000
-    
+
     [...]
     ```
 
 4.  Reboot each node.
 
-    If manually adjust the time is not effective, reboot each node to trigger the NTP script to run on first boot from cloud-init.
+    If manually adjust the time is not effective, reboot each node to trigger the NTP script to run on first boot from `cloud-init`.
 

@@ -8,7 +8,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
 - Physical access to the CEC LCD panel to enable privileged command mode. The CEC does not enable users to set, display, or clear the password hash in restricted command mode.
 
-- A laptop with a terminal program such as Netcat (`nc`), `telnet`, or PuTTY that supports 10/100 IPv6 Ethernet connectivity to the CEC Ethernet port is required. 
+- A laptop with a terminal program such as Netcat (`nc`), `telnet`, or PuTTY that supports 10/100 IPv6 Ethernet connectivity to the CEC Ethernet port is required.
 
 - A generated SHA-512 hash for the CEC credentials:
 
@@ -16,20 +16,20 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
    - See the `man 3 crypt` page for a description: https://man7.org/linux/man-pages/man3/crypt.3.html
 
   ```screen
-  remote# passhash PASSWORD 
+  remote# passhash PASSWORD
   $6$v5YlqfghB$scBci.GbT8...
   ```
-  
+
   **Note**: The example password hash is truncated to prevent using this example value. The password hash is a SHA-512 hash.
 
 ### Procedure
 
 1. Disconnect the CEC Ethernet cable from the Ethernet port.
-   
+
 2. Connect an Ethernet cable from an Apple Mac or Linux laptop to the CEC Ethernet port. The CEC Ethernet PHY will auto negotiate to either 10/100Mb speed and it supports auto crossover functionality. Any standard Ethernet patch cord should work for this.
-   
+
    ![](../../img/CEC_Front_Panel.svg)
-   
+
 3. Use the Right Arrow on the display controls to select the CEC Network Settings Menu. The IPv6 link local address is displayed on this menu.
 
 4. Start the terminal program and use Netcat (`nc`), `telnet`, or PuTTY to connect to CEC command shell and provide the CEC IPv6 link local address.
@@ -107,7 +107,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
     ![Front Panel Controls](../../img/CEC_Display_Controls_CEC_Actions.svg)
 
-    
+
 
 13. **Important!**: Power cycle the compute blade slots in each chassis.
 
@@ -134,16 +134,16 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
        ```
        > ssh root@x9000c1
        x9000c1:> redfish -h
-       
+
        "redfish" -- redfish API debugging tool
-       <snip>    
+       <snip>
                redfish chassis status
                redfish chassis power [on|off|forceoff]
                redfish [blade|perif] [0-7] [on|off|forceoff]
                redfish node status
                redfish node [0-1] [on|off|forceoff]
        <snip>
-       x9000c1:> 
+       x9000c1:>
        ```
 
 14. To test the password, connect to the CMM serial console though the CEC. The IPv6 address is the same, but the port numbers are different as described below.
@@ -161,6 +161,6 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
 15. Perform this procedure for each CEC in all system cabinets.
 
-    - HPE Cray EX3000 and EX4000 cabinets have two CECs per cabinet.  
+    - HPE Cray EX3000 and EX4000 cabinets have two CECs per cabinet.
 
     - HPE Cray EX2000 cabinets have a single CEC per cabinet.

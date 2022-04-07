@@ -230,7 +230,7 @@ This procedure requires administrative privileges.
         It may take a few minutes for sessions to become Established.
 
         ```bash
-        sw-spine-001# show bgp all-vrf all summary 
+        sw-spine-001# show bgp all-vrf all summary
         ```
 
         Example output:

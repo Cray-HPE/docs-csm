@@ -13,7 +13,7 @@ Description
 			* LDAP authentication.
 			* System installation and upgrade media (e.g. Nexus).
 	* System - access by the machine to external (Customer and/or Internet) resources. E.g. Internal DNS lookups may resolve to an external DNS.
-	
+
 * **Internal** - node-to-node communication inside the system.
 	* Administrative
 		* Hardware (Hardware Management Network - HMN)

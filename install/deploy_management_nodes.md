@@ -32,6 +32,7 @@ the number of storage and worker nodes.
    1. [Configure after Management Node Deployment](#configure_after_management_node_deployment)
       1. [LiveCD Cluster Authentication](#livecd-cluster-authentication)
       1. [Install Tests and Test Server on NCNs](#install-tests)
+      1. [Remove the default NTP pool](#remove-the-default-ntp-pool)
    1. [Validate Management Node Deployment](#validate_management_node_deployment)
       1. [Validation](#validation)
       1. [Optional Validation](#optional-validation)
@@ -184,8 +185,8 @@ firmware requirement before starting.
    the firmware because that service has not yet been installed. However, at this point, it would be possible to use
    the HPE Cray EX HPC Firmware Pack (HFP) product on the PIT node to learn about the firmware versions available in HFP.
 
-   If the firmware is not updated at this point in the installation workflow, it can be done with FAS after CSM and HFP have 
-   both been installed and configured, however, at that point a rolling reboot procedure for the management nodes will be needed 
+   If the firmware is not updated at this point in the installation workflow, it can be done with FAS after CSM and HFP have
+   both been installed and configured, however, at that point a rolling reboot procedure for the management nodes will be needed
    after the firmware has been updated.
 
    See the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
@@ -194,9 +195,9 @@ firmware requirement before starting.
    In the HFP documentation there is information about the recommended firmware packages to be installed.
    See "Product Details" in the HPE Cray EX HPC Firmware Pack Installation Guide.
 
-   Some of the component types have manual procedures to check firmware versions and update firmware. 
+   Some of the component types have manual procedures to check firmware versions and update firmware.
    See "Upgrading Firmware Without FAS" in the HPE Cray EX HPC Firmware Pack Installation Guide.
-   It will be possible to extract the files from the product tarball, but the install.sh script from that product 
+   It will be possible to extract the files from the product tarball, but the install.sh script from that product
    will be unable to load the firmware versions into the Firmware Action Services (FAS) because the management nodes
    are not booted and running Kubernetes and FAS cannot be used until Kubernetes is running.
 
@@ -246,7 +247,7 @@ The configuration workflow described here is intended to help understand the exp
     - The third master node `ncn-m003` boots and waits for `ncn-m002` to create the `/etc/cray/kubernetes/join-command-control-plane` so it can join Kubernetes
     - The second master node `ncn-m002` boots, runs the kubernetes-cloudinit.sh which will create /etc/kubernetes/admin.conf and /etc/cray/kubernetes/join-command-control-plane, then waits for the storage node to create etcd-backup-s3-credentials
 1. Once `ncn-s001` notices that `ncn-m002` has created /etc/kubernetes/admin.conf, then `ncn-s001` waits for any worker node to become available.
-1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plane, then it will join the Kubernetes cluster.  
+1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plane, then it will join the Kubernetes cluster.
     - Now `ncn-s001` should notice this from any one of the worker nodes and move forward with creation of ConfigMaps and running the post-Ceph playbooks (s3, OSD pools, quotas, etc.)
 1. Once `ncn-s001` creates etcd-backup-s3-credentials during the ceph-rgw-users role which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward
    > **`NOTE`**: If several hours have elapsed between storage and master nodes booting, or if there were issues PXE booting master nodes, the cloud init script on `ncn-s001` may not complete successfully. This can cause the `/var/log/cloud-init-output.log` on master node(s) to continue to output the following message:
@@ -263,11 +264,13 @@ The configuration workflow described here is intended to help understand the exp
 <a name="deploy"></a>
 ### 3.2 Deploy
 
-1. Set the default root password and SSH keys and optionally change the timezone
+1. Change the default root password and SSH keys
 
-   The management nodes images do not contain a default password or default ssh keys.
+   The management nodes deploy with a default password in the image, so it is a recommended best
+   practice for system security to change the root password in the image so that it is
+   not the documented default password.
 
-   It is **required** to set the default root password and SSH keys in the images used to boot the management nodes.
+   It is **strongly encouraged** to change the default root password and SSH keys in the images used to boot the management nodes.
    Follow the NCN image customization steps in [Change NCN Image Root Password and SSH Keys on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
 
 1. Create boot directories for any NCN in DNS This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
@@ -282,10 +285,10 @@ The configuration workflow described here is intended to help understand the exp
     - **kubernetes-worker nodes** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd)
     - A brief overview of what is expected is here, in [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline)
 
-1. Run the BIOS Baseline script to apply a configs to BMCs. The script will apply helper configs to facilitate more deterministic network booting on any NCN port. **This runs against any server vendor**, some settings are not applied for certain vendors. 
-   
+1. Run the BIOS Baseline script to apply a configs to BMCs. The script will apply helper configs to facilitate more deterministic network booting on any NCN port. **This runs against any server vendor**, some settings are not applied for certain vendors.
+
     > **`NOTE`** This script depends on `IPMI_PASSWORD` being set, this is done in [Tokens and IPMI Password](#tokens-and-ipmi-password)
-   
+
     > **`NOTE`** This script will enable DCMI/IPMI on Hewlett-Packard Enterprise servers equipped with ILO. If `ipmitool` is not working at this time, it will after running this script.
 
     ```bash
@@ -526,10 +529,10 @@ If there are LVM check failures, then the problem must be resolved before contin
 ### 3.4 Check for Unused Drives on Utility Storage Nodes
 
  > **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware.
- > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning. 
+ > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning.
 
 > **`IMPORTANT:`** Estimate the expected number of OSDs using the following table and using this equation:
-> 
+>
 >  total_osds = (num of utility storage/ceph nodes) * (OSD count from table below for the appropriate hardware)
 
 | Hardware Manufacturer | OSD Drive Count (not including OS drives)|
@@ -682,7 +685,7 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
    If you are provisioning your HPE Cray EX system from `ncn-m001` (i.e. it is your PIT node), then most likely this will be `ncn-m002`.
 
    Run the following commands on the PIT node to extract the value of the `first-master-hostname` field from your `/var/www/ephemeral/configs/data.json` file:
-   
+
    ```bash
    pit# FM=$(cat /var/www/ephemeral/configs/data.json | jq -r '."Global"."meta-data"."first-master-hostname"')
    pit# echo $FM
@@ -724,6 +727,15 @@ pit# export CSM_RELEASE=csm-x.y.z
 pit# pushd /var/www/ephemeral
 pit# ${CSM_RELEASE}/lib/install-goss-tests.sh
 pit# popd
+```
+
+<a name="remove-default-ntp-pool"></a>
+### 4.5 Remove the default NTP pool
+
+Run the following command on the PIT node to remove the default pool, which can cause contention issues with NTP.
+
+```bash
+pit# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',')" 'sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf'
 ```
 
 <a name="validate_management_node_deployment"></a>
@@ -788,7 +800,7 @@ Observe the output of the checks and note any failures, then remediate them.
    ```bash
    ncn# weave --local status connections | grep failed
    ```
-   
+
    If the check is successful, there will be no output. If you see messages like `IP allocation was seeded by different peers`, then weave looks to have split-brained. At this point, it is necessary to wipe the NCNs and start the PXE boot again:
 
    1. Wipe the NCNs using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
@@ -804,9 +816,9 @@ Observe the output of the checks and note any failures, then remediate them.
       ```bash
       ncn-m# systemctl status etcd.service
       ```
-   
+
       The second two lines of the expected output should look similar to the following:
-   
+
       ```text
          Loaded: loaded (/etc/systemd/system/etcd.service; enabled; vendor preset: disabled)
          Active: active (running) since Mon 2021-12-13 20:12:00 UTC; 51min 6s ago
@@ -819,11 +831,11 @@ Observe the output of the checks and note any failures, then remediate them.
       ```bash
       ncn-mw/pit# kubectl get pods -o wide -n kube-system | grep -Ev '(Running|Completed)'
       ```
-   
+
       If any pods are listed by this command, it means they are not in the `Running` or `Completed` state. That needs to be investigated before proceeding.
 
    1. Verify that the ceph-csi requirements are in place.
-   
+
       See [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md) for details.
 
 # Important Checkpoint

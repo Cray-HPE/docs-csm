@@ -11,7 +11,7 @@ This procedure requires administrative privileges.
 **Note:** this procedure has changed since the CSM 0.9 release.
 
 1. Find the `cray-console-operator` pod.
-    
+
     ```bash
     ncn# OP_POD=$(kubectl get pods -n services \
             -o wide|grep cray-console-operator|awk '{print $1}')
@@ -53,7 +53,7 @@ This procedure requires administrative privileges.
         ncn# WNODE=$(kubectl get pods -o custom-columns=:.spec.nodeName -n services --no-headers $NODE_POD)
         ncn# echo $WNODE
         ```
-        
+
         Example output:
         ```text
         ncn-w003
@@ -107,7 +107,7 @@ This procedure requires administrative privileges.
     1. Force the connection to become available again.
 
         The BMC username and password must be known for this command to work.
-        
+
         > `read -s` is used to prevent the password from appearing in the command history.
 
         ```bash

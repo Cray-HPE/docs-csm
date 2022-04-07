@@ -1,48 +1,48 @@
-# VSX Sync 
+# VSX Sync
 
-Configuration synchronization is one aspect of this VSX solution where the primary switch configuration is synced to the secondary switch. This allows for pseudo single pane of glass configuration and helps keep key configuration pieces in sync as operational changes are made. Since the solution is primarily for HA, it is expected that the vast majority of configuration policy is the same across both peers. 
+Configuration synchronization is one aspect of this VSX solution where the primary switch configuration is synced to the secondary switch. This allows for pseudo single pane of glass configuration and helps keep key configuration pieces in sync as operational changes are made. Since the solution is primarily for HA, it is expected that the vast majority of configuration policy is the same across both peers.
 
-## Configuration Commands 
+## Configuration Commands
 
-Synchronize VLANs: 
+Synchronize VLANs:
 
 ```text
 switch(config-vlan)# vsx-sync
 ```
 
-Synchronize ACLs: 
+Synchronize ACLs:
 
 ```text
 switch(config-acl-ip)# vsx-sync
 ```
 
-Synchronize classifier and policy: 
+Synchronize classifier and policy:
 
 ```text
 switch(config-class-ip)# vsx-sync
 ```
 
-Synchronize PBR: 
+Synchronize PBR:
 
 ```text
 switch(config-pbr-action-list)# vsx-sync
 ```
 
-Synchronize VLAN memberships and ACLs on physical or LAG interfaces: 
+Synchronize VLAN memberships and ACLs on physical or LAG interfaces:
 
 ```text
 switch(config-if)# vsx-sync access-lists vlans
 ```
 
-Show commands to validate functionality:  
+Show commands to validate functionality:
 
 ```text
 switch# show run vsx-sync
 ```
 
-## Example Output 
+## Example Output
 
-On the first switch: 
+On the first switch:
 
 ```text
 switch(config)# vlan 10
@@ -55,7 +55,7 @@ switch(config-acl-ip)# 20 deny any any 224.0.0.0/4
 switch(config-acl-ip)# 30 permit any any
 ```
 
-On the secondary switch: 
+On the secondary switch:
 
 ```text
 switch2# show run vsx-sync
@@ -76,10 +76,10 @@ access-list ip secure_mcast_sources
     30 permit any any any
 ```
 
-## Expected Results 
+## Expected Results
 
 1. Administrators can configure the VLAN
 2. Administrators can create the ACL
-3. Everything synchronized on the primary is now on the secondary    
+3. Everything synchronized on the primary is now on the secondary
 
 [Back to Index](../index.md)

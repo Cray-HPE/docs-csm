@@ -27,12 +27,12 @@ This procedure can be used to restore the SLS Postgres database from a previousl
 1. Retrieve a previously taken SLS Postgres backup. This can be either a previously taken manual SLS backup or an automatic Postgres backup in the `postgres-backup` S3 bucket.
     - From a previous manual backup:
         1. Copy over the folder or tarball containing the Postgres back up to be restored. If it is a tarball extract it.
-        
+
         2. Set the environment variable `POSTGRES_SQL_FILE` to point toward the `.psql` file in the backup folder:
             ```bash
             ncn# export POSTGRES_SQL_FILE=/root/cray-sls-postgres-backup_2021-07-07_16-39-44/cray-sls-postgres-backup_2021-07-07_16-39-44.psql
             ```
-        
+
         3. Set the environment variable `POSTGRES_SECRET_MANIFEST` to point toward the `.manifest` file in the backup folder:
             ```bash
             ncn# export POSTGRES_SECRET_MANIFEST=/root/cray-sls-postgres-backup_2021-07-07_16-39-44/cray-sls-postgres-backup_2021-07-07_16-39-44.manifest
@@ -53,12 +53,12 @@ This procedure can be used to restore the SLS Postgres database from a previousl
             ```
         2. Download the `.psql` file for the postgres backup:
             ```bash
-            ncn# cray artifacts get postgres-backup "$POSTGRES_SQL_FILE_NAME" "$POSTGRES_SQL_FILE_NAME" 
+            ncn# cray artifacts get postgres-backup "$POSTGRES_SQL_FILE_NAME" "$POSTGRES_SQL_FILE_NAME"
             ```
 
         3. Download the `.manifest` file for the SLS backup:
             ```bash
-            ncn# cray artifacts get postgres-backup "$POSTGRES_SECRET_MANIFEST_NAME" "$POSTGRES_SECRET_MANIFEST_NAME" 
+            ncn# cray artifacts get postgres-backup "$POSTGRES_SECRET_MANIFEST_NAME" "$POSTGRES_SECRET_MANIFEST_NAME"
             ```
         4. Setup environment variables pointing to the full path of the `.psql` and `.manifest` files:
             ```bash
@@ -99,7 +99,7 @@ This procedure can be used to restore the SLS Postgres database from a previousl
 5. Determine the database schema version of the currently running SLS database and verify that it matches the database schema version from the Postgres backup:
 
     Database schema of the currently running SLS Postgres instance.
-    
+
     ```bash
     ncn# kubectl exec $POSTGRES_LEADER -n services -c postgres -it -- bash -c "psql -U slsuser -d sls -c 'SELECT * FROM schema_migrations'"
     ```
@@ -115,7 +115,7 @@ This procedure can be used to restore the SLS Postgres database from a previousl
     > The output above shows the database schema is at version 3.
 
     Database schema version from the Postgres backup:
-    
+
     ```bash
     ncn# cat "$POSTGRES_SQL_FILE" | grep "COPY public.schema_migrations" -A 2
     ```
@@ -144,7 +144,7 @@ This procedure can be used to restore the SLS Postgres database from a previousl
 
 
 8. Verify that the service is functional:
-    
+
     ```bash
     ncn# cray sls version list
     ```
@@ -157,15 +157,15 @@ This procedure can be used to restore the SLS Postgres database from a previousl
     ```
 
     Get the number of hardware objects stored in SLS:
-    
+
     ```bash
     ncn# cray sls hardware list --format json | jq .[].Xname | wc -l
     ```
 
     Get the name of networks stored in SLS:
-    
+
     > If the system does not have liquid cooled hardware, the `HMN_MTN` and `NMN_MTN` networks may not be present.
-    
+
     ```bash
     ncn# cray sls networks list --format json | jq -r .[].Name
     ```

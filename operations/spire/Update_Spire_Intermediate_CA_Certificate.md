@@ -11,7 +11,7 @@ To obtain the expiration date of the Spire intermediate CA certificate, run the
 following command on a node that has access to `kubectl` (such as `ncn-m001`):
 
 ```bash
-kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
+ncn# kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
 ```
 
 ## Replace the Spire Intermediate CA Certificate
@@ -19,15 +19,15 @@ kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" 
 1. Delete the secret that stores the certificate.
 
    ```bash
-   SPIRE_INTERMEDIATE_JOB=$(kubectl get job -n vault -o name| grep 'spire-intermediate' | tail -n1)
-   kubectl get secrets -n spire spire.spire.ca-tls -o yaml > spire.spire.ca-tls.yaml.bak
-   kubectl delete secret -n spire spire.spire.ca-tls
+   ncn# SPIRE_INTERMEDIATE_JOB=$(kubectl get job -n vault -o name| grep 'spire-intermediate' | tail -n1)
+   ncn# kubectl get secrets -n spire spire.spire.ca-tls -o yaml > spire.spire.ca-tls.yaml.bak
+   ncn# kubectl delete secret -n spire spire.spire.ca-tls
    ```
 
 1. Re-run the job that obtains the secret and creates the certificate.
 
    ```bash
-   kubectl get -n vault "$SPIRE_INTERMEDIATE_JOB" -o json | jq 'del(.spec.selector,.spec.template.metadata.labels)' | kubectl replace --force -f -
+   ncn# kubectl get -n vault "$SPIRE_INTERMEDIATE_JOB" -o json | jq 'del(.spec.selector,.spec.template.metadata.labels)' | kubectl replace --force -f -
    ```
 
 1. After the `spire.spire.ca-tls` secret in the `spire` namespace has been
@@ -35,17 +35,17 @@ kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" 
    the new CA.
 
    ```bash
-   kubectl rollout restart -n spire statefulset spire-server
+   ncn# kubectl rollout restart -n spire statefulset spire-server
    ```
 
-   Any spire-agents in the CLBO state should come back into a Running state the
-   next time they're started. If you don't wish to wait for them to be restarted
-   automatically then you can delete the spire-agent pod, which will cause a new
+   Any `spire-agent`s in the `CrashLoopBackOff` state should come back into a `Running` state the
+   next time they are started. If you do not wish to wait for them to be restarted
+   automatically, then you can delete the `spire-agent` pod, which will cause a new
    one to start up in its place.
 
 1. Re-run the command to get the certificate's expiration date to verify that
-   it's been updated.
+   it has been updated.
 
    ```bash
-   kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
+   ncn# kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
    ```

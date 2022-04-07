@@ -7,7 +7,7 @@ Common Error messages.
 2021-02-02 17:06:13   PXE-E99: Unexpected network error.
 ```
 
-Verify the ip helper-address on VLAN 1 on the switches.  
+Verify the ip helper-address on VLAN 1 on the switches.
 
 This is the same configuration as above "Aruba Configuration".
 
@@ -15,7 +15,7 @@ Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)
 
 * If the Worker nodes cannot reach the metal network DHCP will fail.
 * ALL WORKERS need to be able to reach the MTL network!
-* This can normally be achieved by having a default route 
+* This can normally be achieved by having a default route
 
 Simple connectivity tests below:
 

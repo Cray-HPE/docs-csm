@@ -4,9 +4,9 @@ SSH server enables an SSH client to make a secure and encrypted connection to a 
 
 Relevant Configuration
 
-The SSH server is enabled by default. 
+The SSH server is enabled by default.
 
-You can disable the SSH server using:  
+You can disable the SSH server using:
 
 ```
 no ip ssh server enable.

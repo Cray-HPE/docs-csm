@@ -2,51 +2,64 @@
 
 > **NOTE:** CSM-1.0.1 or higher is required in order to upgrade to CSM-1.2.0
 
-* [Stage 0.1 - Install latest docs RPM](#install-latest-docs)
-* [Stage 0.2 - Reduce CPU Limits If Needed](#reduce-cpu-limits)
-* [Stage 0.3 - Update SLS](#update-sls)
-* [Stage 0.4 - Upgrade Management Network](#update-management-network)
-* [Stage 0.5 - Prerequisites Check](#prerequisites-check)
-* [Stage 0.6 - Backup VCS Data](#backup-vcs-data)
-* [Stage 0.7 - Suspend NCN Configuration](#suspend-ncn-config)
-* [Stage 0.8 - Backup Workload Manager Data](#backup_workload_manager)
-* [Stage 0.9 - Modify NCN Images](#modify_ncn_images)
-* [Stage 0.10 - Continue to Stage 1](#continue_to_stage1)
+- [Stage 0.1 - Install latest docs RPM](#install-latest-docs)
+- [Stage 0.2 - Update SLS](#update-sls)
+- [Stage 0.3 - Upgrade Management Network](#update-management-network)
+- [Stage 0.4 - Prerequisites Check](#prerequisites-check)
+- [Stage 0.5 - Backup Workload Manager Data](#backup_workload_manager)
+- [Stage 0.6 - Continue to Stage 1](#continue_to_stage1)
 
 <a name="install-latest-docs"></a>
+
 ## Stage 0.1 - Install latest docs RPM
 
-1. Install latest document RPM package:
+1. Install latest document RPM package and prepare assets:
 
-    > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
+   > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
 
-    * Internet Connected
+   ```bash
+    ncn-m001# CSM_RELEASE=csm-1.2.0
+   ```
+
+   - Internet Connected
+
+     1. Set the ENDPOINT variable to the URL of the directory containing the CSM release tarball.
+
+        In other words, the full URL to the CSM release tarball will be ${ENDPOINT}${CSM_RELEASE}.tar.gz
+
+        **NOTE** This step is optional for Cray/HPE internal installs.
 
         ```bash
-        ncn-m001# wget https://storage.googleapis.com/csm-release-public/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm -P /root
-        ncn-m001# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+        ncn-m001# ENDPOINT=https://put.the/url/here/
         ```
 
-    * Air Gapped (replace the PATH_TO below with the location of the rpm)
+     1. Run the script
+
+        ```bash
+        ncn-m001# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm -P /root
+
+        ncn-m001# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+
+        ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
+        ```
+
+   - Air Gapped (replace the PATH_TO below with the location of the rpm)
+
+     1. Copy the docs-csm RPM package and CSM release tarball to `ncn-m001`.
+     
+     1. Run the script
 
         ```bash
         ncn-m001# cp [PATH_TO_docs-csm-*.noarch.rpm] /root
+
         ncn-m001# rpm -Uvh --force /root/docs-csm-*.noarch.rpm
+
+        ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
         ```
 
 <a name="reduce-cpu-limits"></a>
-## Stage 0.2 - Reduce CPU Limits If Needed
 
-**`IMPORTANT`**
-
-For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed. This step is executed automatically as part of [Stage 0.5](#prerequisites-check). See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more information. 
-
-Independently, the `customizations.yaml` file will be edited automatically during upgrade for TDS systems prior to deploying new CSM services. See the file: `/usr/share/doc/csm/upgrade/1.2/scripts/upgrade/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified (prior to proceeding with this upgrade) with different values if other settings are desired in the `customizations.yaml` file for this system.
-
-For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/CSM_product_management/Post_Install_Customizations.md).
-
-<a name="update-sls"></a>
-## Stage 0.3 - Update SLS
+## Stage 0.2 - Update SLS
 
 CSM 1.2 introduces the bifurcated CAN as well as network configuration controlled by data in SLS. An offline upgrade of SLS data is performed. More details on the upgrade and its sequence of events can be found in the [README.SLS_upgrade.md](./scripts/sls/README.SLS_Upgrade.md).
 
@@ -61,7 +74,7 @@ At a minimum, answers to the following questions must be known prior to upgradin
 1. _Will user traffic (non-administrative) come in via the CAN, CHN or is the site Air-gapped?_
 2. _What is the internal VLAN and the site-routable IP subnet for the new CAN or CHN?_
 3. _Is there a need to preserve any existing IP address(es) during the CAN-to-CMN migration?_
-   1. One example would be the external-dns IP address used for DNS lookups of system resources from site DNS servers. Changes to external-dns often require changes to site resources with requisite process and timeframes from other groups. For preserving external-dns IP addresses, the flag is `--preserve-existing-subnet-for-cmn external-dns`. WARNING: It is up to the user to compare pre-upgraded and post-upgraded SLS files for sanity. Specifically in the case of preserving external-dns values to prevent site-networking changes might result in NCN IP addresses overlapping during the upgrade process. This requires network subnetting expertise and EXPERT mode below.
+   1. One example would be the `external-dns` IP address used for DNS lookups of system resources from site DNS servers. Changes to `external-dns` often require changes to site resources with requisite process and timeframes from other groups. For preserving `external-dns` IP addresses, the flag is `--preserve-existing-subnet-for-cmn external-dns`. WARNING: It is up to the user to compare pre-upgraded and post-upgraded SLS files for sanity. Specifically, in the case of preserving `external-dns` values, to prevent site-networking changes that might result in NCN IP addresses overlapping during the upgrade process. This requires network subnetting expertise and EXPERT mode below.
    2. Another, mutually exclusive example is the need to preserve all NCN IP addresses related to the old CAN whilst migrating the new CMN. This preservation is not often needed as the transition of NCN IP addresses for the CAN-to-CMN is automatically handled during the upgrade. The flag to preserve CAN-to-CMN NCN IP addresses is mutually exclusive with other preservations and the flag is `--preserve-existing-subnet-for-cmn ncns`.
    3. Should no preservation flag be set, the default behavior is to recalculate every IP address on the existing CAN while migrating to the CMN. The behavior in this case is to calculate the subnet sizes based on number of devices (with a bit of spare room), while maximizing IP address pool sizes for (dynamic) services.
    4. An EXPERT mode of flags also exists whereby manually subnetted allocations can be assigned to the new CMN, bypassing several expectations, but not essential subnetting math. As a note for experts the "Remaining subnets" list from a run using `--preserve-existing-subnet-for-cmn` can be used as an aid in selecting subnets to override with `--cmn-subnet-override` or `--can-subnet-override` values and used to seed another run of the upgrader.
@@ -111,26 +124,26 @@ Options:
 
 1. Obtain a token:
 
-    ```bash
-    ncn-m001# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o    jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-    ```
+   ```bash
+   ncn-m001# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o    jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+   ```
 
 1. Create a working directory:
 
-    ```bash
-    ncn-m001# mkdir /root/sls_upgrade
-    ncn-m001# cd /root/sls_upgrade
-    ```
+   ```bash
+   ncn-m001# mkdir /root/sls_upgrade
+   ncn-m001# cd /root/sls_upgrade
+   ```
 
 1. Extract SLS data to a file:
 
-    ```bash
-    ncn-m001# curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
-    ```
+   ```bash
+   ncn-m001# curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
+   ```
 
 ### Migrate SLS data JSON to CSM 1.2
 
-* Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
+- Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
 ```bash
 ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
@@ -139,7 +152,7 @@ ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json 
                          --customer-highspeed-network 5 10.103.11.192/26
 ```
 
-* Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing external-dns entry.
+- Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing `external-dns` entry.
 
 ```bash
 ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
@@ -149,7 +162,7 @@ ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json 
                          --preserve-existing-subnet-for-cmn external-dns
 ```
 
-* NOTE: A detailed review of the migrated/upgraded data (using vimdiff or otherwise) for production systems and for systems which have many add-on components (UAN, login nodes, storage integration points, etc...) is strongly recommended. Particularly, ensure subnet reservations are correct to prevent any data mismatches.
+- NOTE: A detailed review of the migrated/upgraded data (using `vimdiff` or otherwise) for production systems and for systems which have many add-on components (UAN, login nodes, storage integration points, etc.) is strongly recommended. Particularly, ensure that subnet reservations are correct in order to prevent any data mismatches.
 
 Upload migrated SLS file to SLS service:
 
@@ -158,146 +171,69 @@ ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw
 ```
 
 <a name="update-management-network"></a>
-## Stage 0.4 - Upgrade Management Network
 
-* See the  [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
+## Stage 0.3 - Upgrade Management Network
+
+- See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
 
 <a name="prerequisites-check"></a>
-## Stage 0.5 - Prerequisites Check
+
+## Stage 0.4 - Prerequisites Check
 
 Run check script:
 
-   Set the `SW_ADMIN_PASSWORD` environment variable to the admin password for the switches. This is needed for preflight tests within the check script.
+Set the `SW_ADMIN_PASSWORD` environment variable to the admin password for the switches. This is needed for preflight tests within the check script.
 
-   ```bash
-   ncn-m001# export SW_ADMIN_PASSWORD=sw1tCH@DM1Np4s5w0rd
-   ```
+```bash
+ncn-m001# export SW_ADMIN_PASSWORD=sw1tCH@DM1Np4s5w0rd
+```
 
-   > **`IMPORTANT:`** If the password for the local Nexus `admin` account has
-   > been changed from the default `admin123` (not typical), then set the
-   > `NEXUS_PASSWORD` environment variable to the correct `admin` password
-   > before running prerequisites.sh!
-   >
-   > For example:
-   >
-   > ```bash
-   > ncn-m001# export NEXUS_PASSWORD=cu$t0m@DM1Np4s5w0rd
-   > ```
-   >
-   > Otherwise, a random 32-character base64-encoded string will be generated
-   > and updated as the default `admin` password when Nexus is upgraded.
+> **`IMPORTANT:`** If the password for the local Nexus `admin` account has
+> been changed from the default `admin123` (not typical), then set the
+> `NEXUS_PASSWORD` environment variable to the correct `admin` password
+> before running prerequisites.sh!
+>
+> For example:
+>
+> ```bash
+> ncn-m001# export NEXUS_PASSWORD=cu$t0m@DM1Np4s5w0rd
+> ```
+>
+> Otherwise, a random 32-character base64-encoded string will be generated
+> and updated as the default `admin` password when Nexus is upgraded.
 
-* Internet Connected
-
-    ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
-    ```
-
-    **NOTE** ENDPOINT is optional for internal use. It is pointing to internal arti by default.
-
-* Air Gapped
-
-   ```bash
-   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
-   ```
+- ```bash
+  ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version [CSM_RELEASE]
+  ```
 
 **`IMPORTANT:`** If any errors are encountered, then potential fixes should be displayed where the error occurred. **IF** the upgrade `prerequisites.sh` script fails and does not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
 
 **`IMPORTANT:`** If the `NEXUS_PASSWORD` environment variable was set as previously mentioned, then remove it before continuing:
 
-   ```bash
-   ncn-m001# export -n NEXUS_PASSWORD
-   ncn-m001# unset NEXUS_PASSWORD
-   ```
+```bash
+ncn-m001# unset NEXUS_PASSWORD
+```
 
-**`OPTIONAL:`** Customizations.yaml has been updated in this step. If [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
-   clone a local working tree and commit appropriate changes to `customizations.yaml`.
+**`OPTIONAL:`** `customizations.yaml` has been updated in this step. If [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
+clone a local working tree and commit appropriate changes to `customizations.yaml`.
 
-   For example:
+For example:
 
-   ```bash
-   ncn-m001# git clone <URL> site-init
-   ncn-m001# cd site-init
-   ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
-   ncn-m001# git add customizations.yaml
-   ncn-m001# git commit -m 'CSM 1.2 upgrade - customizations.yaml'
-   ncn-m001# git push
-   ```
-
-<a name="backup-vcs-data"></a>
-## Stage 0.6 - Backup VCS Data
-
-To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location. See [Version_Control_Service_VCS.md](../../operations/configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data) for these procedures.
-
-**`IMPORTANT:`** As part of this stage, **only perform the backup, not the restore**. The backup procedure is being done here as a precautionary step.
-
-<a name="suspend-ncn-config"></a>
-## Stage 0.7 - Suspend NCN Configuration
-
-Suspend automatic reconfiguration on NCNs to ensure that previous CSM version
-configuration is not applied during the upgrade. The desired configuration is
-also unset so that actions that re-enable CFS, such as rebooting nodes, do 
-not trigger configuration early.  Automatic reconfiguration will be re-enabled,
-and the desired configuration will be set again in [Stage 5](Stage_5.md).
-
-   ```bash
-   ncn# export CRAY_FORMAT=json
-   ncn# for xname in $(cray hsm state components list --role Management --type node | jq -r .Components[].ID)
-   do
-       cray cfs components update --enabled false --desired-config "" $xname
-   done
+```bash
+ncn-m001# git clone <URL> site-init
+ncn-m001# cd site-init
+ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
+ncn-m001# git add customizations.yaml
+ncn-m001# git commit -m 'CSM 1.2 upgrade - customizations.yaml'
+ncn-m001# git push
 ```
 
 <a name="backup_workload_manager"></a>
-## Stage 0.8 - Backup Workload Manager Data
 
-To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting back-up data should be stored in a safe location off of the system.
+## Stage 0.5 - Backup Workload Manager Data
 
-<a name="modify_ncn_images"></a>
-## Stage 0.9 - Modify NCN Images
-
-Any site modifications to the images used to boot the management nodes need to be done again
-as part of this upgrade. This include setting the root password, adding ssh keys for the root
-account, and setting a default timezone.
-
-The management nodes images do not contain a default password or ssh keys, so it is a requirement
-that they be set and added at this time.
-
-1. Use this procedure to change the k8s-image used for master nodes and worker nodes and the ceph-image
-used by utility storage nodes. See
-[Change NCN Image Root Password and SSH Keys](../../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
-for more information.
-
-1. Adjust the version variables used later in the upgrade.
-
-   1. The previous procedure to create the site-customized `k8s-image` and `ceph-image` should have set these variables.
-
-      ```bash
-      ncn-m001# echo $CEPHNEW
-      ncn-m001# echo $K8sNEW
-      ```
-
-    2. Check current versions in `/etc/cray/upgrade/csm/myenv`.
-
-      ```bash
-      ncn-m001# grep CEPH_VERSION /etc/cray/upgrade/csm/myenv
-      ncn-m001# grep KUBERNETES_VERSION /etc/cray/upgrade/csm/myenv
-      ```
-
-    3. If the `CEPH_VERSION` or `KUBERNETES_VERSION` does not match the `CEPHNEW` and `K8SNEW` settings, edit the file.
-
-      ```bash
-      ncn-m001# vi /etc/cray/upgrade/csm/myenv
-      ```
-
-2. Use this procedure to change the root password in Vault and the CSM layer of configuration
-applied during NCN Personalizaion. Usually this configuration is done during the first time installation
-of CSM software, but if was not done then, it should be done now. See
-[Update NCN Passwords](../../operations/security_and_authentication/Update_NCN_Passwords.md) and
-[full NCN personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password)
-for more information.
+To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
 
 <a name="continue_to_stage1"></a>
-## Stage 0.10 - Continue to Stage 1
 
-Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).
+## Stage 0.6 - Continue to Stage 1

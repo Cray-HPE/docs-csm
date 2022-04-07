@@ -1,57 +1,57 @@
-# Virtual Switching Extension (VSX) 
+# Virtual Switching Extension (VSX)
 
 Aruba's Virtual Switching Extension (VSX) is a solution that integrates two independent ArubaOS-CX switches into an active/active virtualized high availability (HA) solution. The two switch peers utilize a connected link for control and data. This solution allows the switches to present as one virtualized switch in critical areas.
 
-Configuration synchronization is one aspect of this VSX solution where the primary switch configuration is synced to the secondary switch. This allows for pseudo-single pane of glass configuration and helps keep key configuration pieces in sync as operational changes are made. Since the solution is primarily for HA, it is expected that the vast majority of configuration policy is the same across both peers. 
+Configuration synchronization is one aspect of this VSX solution where the primary switch configuration is synced to the secondary switch. This allows for pseudo-single pane of glass configuration and helps keep key configuration pieces in sync as operational changes are made. Since the solution is primarily for HA, it is expected that the vast majority of configuration policy is the same across both peers.
 
-## Configuration Commands 
+## Configuration Commands
 
-Enable VSX: 
+Enable VSX:
 
 ```text
 switch(config)# vsx
 ```
 
-Give the device a role of primary or secondary: 
+Give the device a role of primary or secondary:
 
 ```text
 switch(config-vsx)# role <primary|secondary>
 ```
 
-Configure the VSX keepalive between the two VSX peer switches: 
+Configure the VSX keepalive between the two VSX peer switches:
 
 ```text
 switch(config-vsx)# keepalive peer PEER-IP source SRC-IP
 ```
 
-Select a physical or LAG interface to become the inter-switch-link: 
+Select a physical or LAG interface to become the inter-switch-link:
 
 ```text
 switch(config-vsx)# inter-switch-link IFACE
 ```
 
-Create Multi-Chassis LAG interfaces: 
+Create Multi-Chassis LAG interfaces:
 
 ```text
 switch(config)# interface lag LAG multi-chassis
 ```
 
-Associate the physical interfaces with the LAG: 
+Associate the physical interfaces with the LAG:
 
 ```text
 switch(config-if)# lag LAG
 ```
 
-Synchronize global configurations: 
+Synchronize global configurations:
 
 ```text
 switch(config-vsx)# vsx-sync [aaa] [sflow] [snmp] [static-routes] [time] [copp-policy] [dns]
 [mclag-interfaces] [qos-global] [ssh]
-Synchronize interface memberships 
+Synchronize interface memberships
 switch(config-if)# vsx-sync [access-lists] [policies] [qos] [vlans] [rate-limits]
-Synchronize VLAN interface memberships 
+Synchronize VLAN interface memberships
 switch(config-if-vlan)# vsx-sync [active-gateways] [policies]
-Synchronize feature configurations 
+Synchronize feature configurations
 switch(config-vlan)# vsx-sync
 switch(config-acl-ip)# vsx-sync
 switch(config-class-ip)# vsx-sync
@@ -63,13 +63,13 @@ switch(config-portgroup)# vsx-sync
 switch(config-addrgroup)# vsx-sync
 ```
 
-Show commands to validate functionality:  
+Show commands to validate functionality:
 
 ```text
 switch# show vsx <brief|configuration|status> [config-sync]
 ```
 
-## Example Output 
+## Example Output
 
 ```text
 switch(config)# int 1/1/49
@@ -187,12 +187,12 @@ access-list ip secure_mcast_sources
     30 permit any any any
 ```
 
-## Expected Results 
+## Expected Results
 
 1. Administrators can configure VSX
 2. Administrators can create a multi-chassis interface
 3. Administrators can add ports to the multi-chassis interface
 4. Administrators can configure the VLANs and ACLs for synchronization
-5. Everything is synchronized from the primary to the secondary    
-	
+5. Everything is synchronized from the primary to the secondary
+
 [Back to Index](../index.md)

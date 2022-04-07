@@ -1,8 +1,8 @@
 # Adding a Liquid-cooled blade to a System
 
-This procedure will add a liquid-cooled blades from a HPE Cray EX system. 
+This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
-## Perquisites 
+## Perquisites
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 -   Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
@@ -89,10 +89,10 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
     Enabled = true
     NetType = "Sling"
     Arch = "X86"
-    Class = "Mountain" 
+    Class = "Mountain"
     ```
 
-    If the state of the slot is `On` or `Off`, then the chassis slot is populated. 
+    If the state of the slot is `On` or `Off`, then the chassis slot is populated.
     If the state of the slot is `Empty`, then the chassis slot is not populated.
 
 3.  **Skip this step if the chassis slot is unpopulated**. Verify the chassis slot is powered off.
@@ -110,7 +110,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
     If the slot is powered on, then power the chassis slot off.
     ```
     ncn-m001# cray capmc component name (xname)_off create --xnames x1005c3s0 --recursive true
-    ``` 
+    ```
 
 4.  Install the the blade into the system into the desired location.
 
@@ -126,8 +126,8 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 6.  **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.** When DVS is operating over the NMN and a blade is being replaced, the mapping of node component name (xname) to node IP address must be preserved. Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes). To prevent from Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
 
     1.  Create an `eth_interfaces` file that contains the interface IDs for the `Node Maintenance Network` entries for the destination blade location. If there has not been a blade previously in the destination location there may not be any Ethernet Interfaces to delete from HSM.
-      
-        The `blade_query.sh` script from the perquisites section can help determine the IDs for the HSM Ethernet Interfaces associated with the blade if any. It is expected that if a blade has not been populated in the slot before that no HSM Ethernet Interfaces IDs would be found.   
+
+        The `blade_query.sh` script from the perquisites section can help determine the IDs for the HSM Ethernet Interfaces associated with the blade if any. It is expected that if a blade has not been populated in the slot before that no HSM Ethernet Interfaces IDs would be found.
 
         ```bash
         ncn-m001# cat eth_interfaces
@@ -148,7 +148,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
     3.  **Skip this step if the destination blade location has not been previously populated with a blade** Add the MAC and IP addresses and also the `Node Maintenance Network` description to the interfaces. The ComponentID and IPAddress must be the values recorded from the blade previously in the destination location and the MACAddress must be the value recorded from the blade. These values were recorded if the blade was removed via the [Removing a Liquid-cooled blade from a System](Removing_a_Liquid-cooled_blade_from_a_System.md) procedure.
 
-        Values recorded from the blade that was was previously in the slot.  
+        Values recorded from the blade that was was previously in the slot.
         ```bash
         ComponentID: "x1005c3s0b0n0"
         MACAddress: "00:40:a6:83:63:99"
@@ -156,10 +156,10 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
         ```
 
         ```bash
-        ncn-m001# MAC=NEW_BLADE_MAC_ADDRESS 
+        ncn-m001# MAC=NEW_BLADE_MAC_ADDRESS
         ncn-m001# IP_ADDRESS=DESTLOCATION_IP_ADDRESS
         ncn-m001# XNAME=DESTLOCATION_XNAME
-       
+
         ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "{
             \"Description\": \"Node Maintenance Network\",
             \"MACAddress\": \"$MAC\",
@@ -286,23 +286,23 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
     **Troubleshooting**:
     - If the redfish endpoint does not exist for a BMC verify the following:
-        
+
         Verify the Node BMC is pingable:
         ```bash
         ncn-m001# ping x1005c3s0b0
-        ``` 
+        ```
 
         If the BMC is not pingable, verify the chassis slot has power.
         ```bash
         ncn-m001# cray capmc get_xname_status create --xnames x1005c3s0
-        ``` 
+        ```
 
-    - If the redfish endpoint is in `HTTPSsGetFailed`:
-        
+    - If the redfish endpoint is in `HTTPsGetFailed`:
+
         Verify the Node BMC is pingable:
         ```bash
         ncn-m001# ping x1005c3s0b0
-        ``` 
+        ```
 
         If the BMC is pingable, verify the node BMC is configured with expected credentials.
         ```bash
@@ -311,12 +311,12 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
 14. Enable the nodes in the HSM database.
 
-    For a blade with four nodes per blade: 
+    For a blade with four nodes per blade:
     ```bash
     ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
-    For a blade with two nodes per blade: 
+    For a blade with two nodes per blade:
     ```bash
     ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b1n0
     ```
@@ -326,7 +326,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
     ```bash
     ncn-m001# cray hsm state components query create --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
-    
+
     Example output:
     ```
     [[Components]]
@@ -360,7 +360,7 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
           1. Dump the current Session template.
              ```bash
              ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json > tmp.txt
-             ```	  
+             ```
           2. Edit the tmp.txt file adding the new nodes to the node_list.
              ```bash
              ncn-m001# vi tmp.txt
@@ -371,14 +371,14 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
 	    ncn-m001# $BOS_TEMPLATE=<New Session Template name>
 	    ```
 	 2. Create the Session template.
-            ```bash	  
+            ```bash
             ncn-m001# cray bos sessiontemplate create --file tmp.txt --name $BOS_TEMPLATE
-            ```	  	  
+            ```
          3. Verify that the Session template contains the additional nodes and the proper name.
-            ```bash	  
+            ```bash
             ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json
-            ```	  	  
-	  
+            ```
+
     3. Boot the nodes.
        ```bash
        ncn-m001# cray bos session create --template-uuid $BOS_TEMPLATE \

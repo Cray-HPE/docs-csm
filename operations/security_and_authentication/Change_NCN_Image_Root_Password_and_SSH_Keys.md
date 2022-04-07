@@ -1,6 +1,6 @@
 # Set NCN Image Root Password and SSH Keys and optional modify the timezone
 
-Customize the NCN images by setting the root password and adding ssh keys for the root account. Optionally,
+Customize the NCN images by setting the root password and adding SSH keys for the root account. Optionally,
 change the the timezone (UTC is the default).
 
 This procedure shows this process being done any time after the first time installation of the CSM
@@ -12,11 +12,11 @@ There is some common preparation before making the Kubernetes image for master n
 
 ***Note:*** This procedure can only be done after the PIT node is rebuilt to become a normal master node.
 
-### Common Preparation
+## Common Preparation
 
-1. Prepare new ssh keys for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
+1. Prepare new SSH keys for the root account in advance. The same key information will be added to both `k8s-image` and `ceph-image`.
 
-   Either replace the root public and private ssh keys with your own previously generated keys or generate a new pair using the `ncn-image-modification.sh` script described below.
+   Either replace the root public and private SSH keys with your own previously generated keys or generate a new pair using the `ncn-image-modification.sh` script described below.
 
 1. Change to a working directory with enough space to hold the images once they have been expanded.
 
@@ -26,9 +26,9 @@ There is some common preparation before making the Kubernetes image for master n
    ncn-m# cd workingarea
    ```
 
-The Kubernetes image ```k8s-image``` is used by the master and worker nodes.
+The Kubernetes image `k8s-image` is used by the master and worker nodes.
 
-1. Decide which k8s-image is to be modified
+1. Decide which `k8s-image` is to be modified
 
    ```bash
    ncn-m# cray artifacts list ncn-images --format json | jq '.artifacts[] .Key' | grep k8s | grep squashfs
@@ -95,7 +95,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    Usage: ncn-image-modification.sh [-p] [-d dir] [ -z timezone] [-k kubernetes-squashfs-file] [-s storage-squashfs-file] [ssh-keygen arguments]
 
           This script semi-automates the process of changing the timezone, root
-          password, and adding new ssh keys for the root user to the NCN squashfs
+          password, and adding new SSH keys for the root user to the NCN squashfs
           image(s).
 
           The script will immediately prompt for a new passphrase for ssh-keygen.
@@ -106,7 +106,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
           The process can be fully automated by using the SQUASHFS_ROOT_PW_HASH
           environment variable (see below) along with either -d or -N
 
-          -a             Do *not* modifify the authorized_keys file in the squashfs.
+          -a             Do *not* modify the authorized_keys file in the squashfs.
                          If modifying a previously modified image, or an
                          authorized_keys file that contains the public key is already
                          included in the directory used with the -d option, you may
@@ -151,14 +151,13 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
                                     -d ~/.ssh/
    ```
 
-   In this example, the timezone in the squashfs is being changed to Americas/Chicago and injecting
-   the current root .ssh directory into the squshfs. The root password will **not** be changed
-   because `-p` was not provided on the command line. It will copy the existing keys in `~/.ssh/`
-   into the image.
+   In the above example, the timezone in the Squashfs is being changed to Americas/Chicago.
+   The root password will **not** be changed because `-p` was not provided on the command line.
+   It will copy the existing keys in `~/.ssh/` into the image.
 
    Example:
    ```bash
-   ncn-m# export SQUASHFS_ROOT_PW_HASH='<root_password_hash>'
+   ncn-m# export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
    ncn-m# ncn-image-modification.sh -p -t rsa \
                                     -N "" \
                                     -k k8s/${K8SVERSION}/filesystem.squashfs \
@@ -166,8 +165,9 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    ```
 
    In this example the root password hash in `/etc/shadow` in the NCN image will be replaced with the contents
-   of the `$SQUASHFS_ROOT_PW_HASH` variable. Ensure you use single quotes when setting the environment variable.
-   This invocation aslo creates new ssh keys. 
+   of the `$SQUASHFS_ROOT_PW_HASH` variable. Ensure single quotes are used when setting the environment variable
+   so that any `$` characters are not interpreted by Bash. In the example above, `SQUASHFS_ROOT_PW_HASH` is being
+   set to match the root password hash that exists on the current node. This invocation also creates new SSH keys.
 
    The newly created images will have a `secure-` prefix. The original images are retained in an `./old` directory
    at the same level in the filesystem as the squashfs files.
@@ -181,7 +181,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    ncn-m# chmod +x ceph-upload-file-public-read.py
    ```
 
-   1. Get info to add to credentials.json for the SDS user
+   1. Get info to add to `credentials.json` for the SDS user
 
       ```bash
       ncn-m# ssh ncn-s001 radosgw-admin user info --uid SDS | grep key
@@ -209,19 +209,19 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
 
       ```bash
       ncn-m# cp -p credentials.json ceph-upload-file-public-read.py k8s/${K8SNEW}
-      cd k8s/${K8SNEW}
-      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/filesystem.squashfs' --file-name secure-filesystem.squashfs
-      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/initrd' --file-name initrd.img.xz
-      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
+      ncn-m# cd k8s/${K8SNEW}
+      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/filesystem.squashfs' --file-name secure-filesystem.squashfs
+      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/initrd' --file-name initrd.img.xz
+      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
       ```
 
       ```bash
       ncn-m# cp -p credentials.json ceph-upload-file-public-read.py ceph/${CEPHNEW}
-      cd ceph/${CEPHNEW}
-      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/filesystem.squashfs' --file-name secure-filesystem.squashfs
-      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/initrd' --file-name initrd.img.xz
-      ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
-      cd ../..
+      ncn-m# cd ceph/${CEPHNEW}
+      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/filesystem.squashfs' --file-name secure-filesystem.squashfs
+      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/initrd' --file-name initrd.img.xz
+      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
+      ncn-m# cd ../..
       ```
 
 1. The Kubernetes and Storage images now have the image changes.
@@ -231,45 +231,44 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    **WARNING:** If doing a CSM software upgrade, skip this section to continue with Ceph Image.
 
    > If not doing a CSM software upgrade, this process will update the entries in BSS for the master nodes and worker nodes to use the new `k8s-image`.
-   > 
+   >
    > 1. Set all master nodes and worker nodes to use newly created k8s-image.
    >
    >     This will use the K8SVERSION and K8SNEW variables defined earlier.
    >
    >     ```bash
-   >     ncn-m# for node in $(grep -oP "(ncn-[mw]\w+)" /etc/hosts | sort -u) 
+   >     ncn-m# for node in $(grep -oP "(ncn-[mw]\w+)" /etc/hosts | sort -u)
    >     do
    >       echo $node
    >       xname=$(ssh $node cat /etc/cray/xname)
    >       echo $xname
    >       cray bss bootparameters list --name $xname --format json > bss_$xname.json
-   >       sed -i.old "s@k8s/${K8SVERSION}@k8s/${K8SNEW}@g" bss_$xname.json 
+   >       sed -i.old "s@k8s/${K8SVERSION}@k8s/${K8SNEW}@g" bss_$xname.json
    >       kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
    >       initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
    >       params=$(cat bss_$xname.json | jq '.[]  .params')
    >       cray bss bootparameters update --initrd $initrd --kernel $kernel --params $params --name $xname --format json
    >     done
    >     ```
-
 
 1. Update BSS with the new image for utility storage nodes.
 
    **WARNING:** If doing a CSM software upgrade, skip this section to continue with Cleanup.
 
-   > If not doing a CSM software upgrade, this process will update the entries in BSS for the utiltity storage nodes to use the new `ceph-image`.
-   > 
+   > If not doing a CSM software upgrade, this process will update the entries in BSS for the utility storage nodes to use the new `ceph-image`.
+   >
    > 1. Set all utility storage nodes to use newly created ceph-image.
    >
    >     This will use the CEPHVERSION and CEPHNEW variables defined earlier.
    >
    >     ```bash
-   >     ncn-m# for node in $(grep -oP "(ncn-s\w+)" /etc/hosts | sort -u) 
+   >     ncn-m# for node in $(grep -oP "(ncn-s\w+)" /etc/hosts | sort -u)
    >     do
    >       echo $node
    >       xname=$(ssh $node cat /etc/cray/xname)
    >       echo $xname
    >       cray bss bootparameters list --name $xname --format json > bss_$xname.json
-   >       sed -i.old "s@ceph/${CEPHVERSION}@ceph/${CEPHNEW}@g" bss_$xname.json 
+   >       sed -i.old "s@ceph/${CEPHVERSION}@ceph/${CEPHNEW}@g" bss_$xname.json
    >       kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
    >       initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
    >       params=$(cat bss_$xname.json | jq '.[]  .params')
@@ -277,7 +276,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    >     done
    >     ```
 
-### Cleanup
+## Cleanup
 
 1. Remove the workarea so the space can be reused.
 
@@ -289,4 +288,4 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
 
    **WARNING:** If doing a CSM software upgrade, skip this step since the upgrade process does a rolling rebuild with some additional steps.
 
-   > If not doing a CSM software upgrade, follow the procedure to do a [Rolling Rebuild](../node_management/Rebuild_NCNs.md) of all management nodes.
+   > If not doing a CSM software upgrade, follow the procedure to do a [Rolling Rebuild](../node_management/Rebuild_NCNs/Rebuild_NCNs.md) of all management nodes.

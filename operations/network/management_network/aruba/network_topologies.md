@@ -1,8 +1,8 @@
 # Network Topologies
 
-The following images are example network topologies for systems of various sizes. 
+The following images are example network topologies for systems of various sizes.
 
-### Very Large 
+### Very Large
 
 ![](../../../../img/network/management_network/exascale.png)
 

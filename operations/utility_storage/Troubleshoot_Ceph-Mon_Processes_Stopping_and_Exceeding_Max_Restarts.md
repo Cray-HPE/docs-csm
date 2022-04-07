@@ -25,7 +25,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
         ```bash
         ncn-m001# ps -ef |grep ceph-mon
         ```
-        
+
         Example output:
 
         ```

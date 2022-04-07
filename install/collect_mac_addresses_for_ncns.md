@@ -1,7 +1,7 @@
 # Collect MAC Addresses for NCNs
 
 Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
-the actual MAC addresses for the management nodes can be collected. This process will include repetition of some 
+the actual MAC addresses for the management nodes can be collected. This process will include repetition of some
 of the steps done up to this point because `csi config init` will need to be run with the proper
 MAC addresses and some services will need to be restarted.
 

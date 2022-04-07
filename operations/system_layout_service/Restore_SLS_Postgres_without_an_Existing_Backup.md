@@ -5,9 +5,9 @@ This procedure is intended to repopulate SLS in the event when no Postgres backu
 ## Prerequisite
 
 - Healthy SLS Service.
-    
+
     Verify all 3 SLS replicas are up and running:
-    
+
     ```
     ncn# kubectl -n services get pods -l cluster-name=cray-sls-postgres
     ```

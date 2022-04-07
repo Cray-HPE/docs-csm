@@ -69,7 +69,7 @@ For Legacy Mode user procedures:
     ```
 
     Example output:
-    
+
     ```
     [[results]]
     uai_age = "3m"

@@ -1,8 +1,8 @@
 # Removing a Liquid-cooled blade from a System
 
-This procedure will remove a liquid-cooled blades from a HPE Cray EX system. 
+This procedure will remove a liquid-cooled blades from a HPE Cray EX system.
 
-## Perquisites 
+## Perquisites
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 -   Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
@@ -74,7 +74,7 @@ This procedure will remove a liquid-cooled blades from a HPE Cray EX system.
         ```
 
 #### Disable the chassis slot
-6.  Disable the chassis slot. Disabling the slot prevents hms-discovery from automatically powering on the slot. This example disables slot 0, chassis 3, in cabinet 9000. 
+6.  Disable the chassis slot. Disabling the slot prevents hms-discovery from automatically powering on the slot. This example disables slot 0, chassis 3, in cabinet 9000.
 
     ```bash
     ncn# cray hsm state components enabled update --enabled false x9000c3s0
@@ -160,7 +160,7 @@ The NodeBMC MAC and IP addresses are assigned algorithmically and *must not be d
 14.  Drain the coolant from the blade and fill with fresh coolant to minimize cross-contamination of cooling systems.
     - Review *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, review procedures in the *HPE Cray EX Hand Pump User Guide H-6200* (https://internal.support.hpe.com/).
 
-15. Install the blade from the source system in a storage rack or leave it on the cart. 
+15. Install the blade from the source system in a storage rack or leave it on the cart.
 
 16. Un-suspend the hms-discovery cron job if no more liquid-cooled blades are planned to be removed from the system.
 

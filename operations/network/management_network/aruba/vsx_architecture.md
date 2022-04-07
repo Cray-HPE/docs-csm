@@ -12,14 +12,14 @@ To address this requirement, Aruba's Virtual Switching Extension (VSX) has been 
 
 High-availability (HA) refers to a system or component that is continuously operational for extended periods of time. For organizations today, this translates to 24x7 uptime, without disruption to network access or performance.
 
-Planning for high availability of campus and data center switches involves complex tasks for addressing backup and failover processing. This includes copying and accessing the real-time networking state, including routing and forwarding tables. 
+Planning for high availability of campus and data center switches involves complex tasks for addressing backup and failover processing. This includes copying and accessing the real-time networking state, including routing and forwarding tables.
 
 Aruba VSX takes a new and innovative approach to solving high availability challenges by combining the best aspects of existing HA technologies such as multi-chassis link aggregation (MC-LAG) and equal-cost multi-path (ECMP) routing. This combination provides a distributed and redundant architecture that is highly available, with minimal to zero traffic loss, even during software upgrades.
 
 Aruba VSX benefits:
 
 * HA design with live upgrades and no downtime
-* Built for redundancy across campus and data center networks 
+* Built for redundancy across campus and data center networks
 * Continuous config synchronization via AOS-CX
 * Flexible active-active network designs at L2 and L3
 * Operational simplicity for configuration and troubleshooting

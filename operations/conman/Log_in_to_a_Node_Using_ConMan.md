@@ -13,7 +13,7 @@ The user performing this procedure needs to have access permission to the `cray-
 1. Log on to a Kubernetes master or worker node.
 
 1. Find the `cray-console-operator` pod.
-    
+
     ```bash
     ncn# OP_POD=$(kubectl get pods -n services \
             -o wide|grep cray-console-operator|awk '{print $1}')
@@ -39,7 +39,7 @@ The user performing this procedure needs to have access permission to the `cray-
         sh -c "/app/get-node $XNAME" | jq .podname | sed 's/"//g')
     ncn# echo $NODEPOD
     ```
-    
+
     Example output:
     ```text
     cray-console-node-1
@@ -50,7 +50,7 @@ The user performing this procedure needs to have access permission to the `cray-
     ```bash
     ncn# kubectl exec -it -n services $NODEPOD -- conman -j $XNAME
     ```
-    
+
     Example output:
     ```text
     <ConMan> Connection to console [x3000c0s25b1] opened.

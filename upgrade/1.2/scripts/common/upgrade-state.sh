@@ -43,6 +43,7 @@ function record_state () {
     if [[ $state_recorded == "0" ]]; then
         printf '[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "${state_name}" >> /etc/cray/upgrade/csm/$CSM_RELEASE/$target_ncn/state
     fi
+    echo "====> ${state_name} has been completed"
 }
 
 function is_state_recorded () {
@@ -74,11 +75,37 @@ function move_state_file () {
 }
 
 function err_report() {
-    echo
-    echo "[ERROR] - Unexpected errors, check output above"
+    # add more logging to capture next where exactly the error happened
+    echo "$(caller)"
+    echo "$BASH_COMMAND"
+    local cmd="$BASH_COMMAND"
+
+    # ignore some internal expected errors
+    local ignoreCmd="cray artifacts list config-data"
+    shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l)
+    if [[ ${shouldIgnore} -eq 1 ]]; then
+        return 0
+    fi
+
+    ignoreCmd="https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history"
+    shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l)
+    if [[ ${shouldIgnore} -eq 1 ]]; then
+        return 0
+    fi
+
+    ignoreCmd="csi automate ncn etcd --action add-member --ncn"
+    shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l)
+    if [[ ${shouldIgnore} -eq 1 ]]; then
+        return 0
+    fi
+    
+    # force output to console regardless of redirection
+    echo >/dev/tty 
+    echo "[ERROR] - Unexpected errors, check logs: ${LOG_FILE}" >/dev/tty 
 }
 
 function ok_report() {
-    echo
-    echo "[OK] - Successfully completed"
+    # force output to console regardless of redirection
+    echo >/dev/tty 
+    echo "[OK] - Successfully completed" >/dev/tty
 }
