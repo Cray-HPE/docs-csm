@@ -171,7 +171,7 @@ ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw
 ##################################################################################
    ```
 
-  3. **`Warning:`** If the switch does NOT show like the above output, stop, and go perform the switch config upgrade steps in the [Upgrade Switches From 1.0 to 1.2 Preconfig](../../operations/network/managemenet_network/upgrade.md#upgrade-switches-from-10-to-12-preconfig). Once you've completed each step, return to tthis page.
+  3. **`Warning:`** If the switch does NOT show like the above output, stop, and go perform the switch config upgrade steps in the [Upgrade Switches From 1.0 to 1.2 Preconfig](../../operations/network/managemenet_network/upgrade.md#upgrade-switches-from-10-to-12-preconfig). Once you've completed each step, return to this page.
 
 
 - See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
