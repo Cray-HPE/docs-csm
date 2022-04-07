@@ -154,7 +154,7 @@ Only processes running the v15.2.8 image will be upgraded. This will include `MO
 ceph orch upgrade stop
 ```
 
-> DO NOT proceed past this point. Contact support for indepth troubleshooting.
+> DO NOT proceed past this point if the upgrade has not completed and been verified. Contact support for indepth troubleshooting.
 
 1. Disable `auth_allow_insecure_global_id_reclaim`
 
