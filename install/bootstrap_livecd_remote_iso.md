@@ -528,7 +528,7 @@ Some files are needed for generating the configuration payload. See the [Command
 
 1. Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for your system.
 
-1. Finally, cleanup the shim:
+1. Clean-up the shim:
     ```bash
     pit# cd ~
     # this uses `rmdir` to safely remove the directory, preventing accidental removal if one does not notice a `umount` command failure.
