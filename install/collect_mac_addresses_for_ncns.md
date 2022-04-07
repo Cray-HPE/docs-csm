@@ -316,7 +316,7 @@ making a backup of them, in case they need to be examined at a later time.
 
 1. Check that IP addresses are set for each interface and investigate any failures.
 
-    > **`Note:`** Note that bond0.can0 is optional in CSM 1.2+
+    > **`Note:`** The bond0.can0 interface is optional in CSM 1.2+
 
     ```bash
     Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
