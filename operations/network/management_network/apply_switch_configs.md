@@ -43,7 +43,7 @@ There are some caveats that are mentioned below.
 1. Paste in the generated config.
 
     - When pasting in the config be sure that all the commands were accepted. In some cases you will need to back out of the current config context and back to global configuration for the commands to work as intended.
-    - `banner motd` will need to be manually applied.
+    - `banner exec` will need to be manually applied.
 
       For example:
 
