@@ -82,7 +82,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    Run the CSM health checks to ensure that everything is working properly before the upgrade starts.
 
-   **`IMPORTANT`**: See the `CSM Install Validation and Health Checks` procedures in the documentation for your **`CURRENT`** CSM version. The validation procedures in the CSM 1.2 documentation are not all intended to work on previous versions of CSM.
+   **`IMPORTANT`**: See the `CSM Install Validation and Health Checks` procedures in the documentation for your **`CURRENT`** CSM version. The validation procedures in the current CSM documentation are not all intended to work on previous versions of CSM.
 
 1. Validate Lustre Health
 

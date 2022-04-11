@@ -1,6 +1,6 @@
-# Loopback Interface 
+# Loopback Interface
 
-Loopbacks are essentially internal virtual interfaces. Loopback interfaces are not bound to a physical port and are used for device management and routing protocols. 
+Loopbacks are essentially internal virtual interfaces. Loopback interfaces are not bound to a physical port and are used for device management and routing protocols.
 
 ## Configuration Commands
 
@@ -9,7 +9,7 @@ switch(config)# interface loopback LOOPBACK
 switch(config-loopback-if)# ip address IP-ADDR/<SUBNET|PREFIX>
 ```
 
-## Example Output 
+## Example Output
 
 ```text
 switch(config)# interface loopback 1
@@ -27,7 +27,7 @@ Interface loopback1 is up
  IPv4 address 99.99.99.1/32
 ```
 
-## Expected Results 
+## Expected Results
 
 1. Administrators can create a loopback interface
 2. Administrators can give a loopback interface an IP address

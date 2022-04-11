@@ -93,7 +93,7 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
 
     ```bash
     ncn-m001# export BOS_SESSION=$(jq -r '.links[] | select(.rel=="session") | .href' session.json | cut -d '/' -f4)
-    
+
     ncn-m001# echo $BOS_SESSION
     89680d0a-3a6b-4569-a1a1-e275b71fce7d
     ```

@@ -16,6 +16,7 @@ Topics:
       * [Start Hand-Off](#start-hand-off)
    * [Reboot](#reboot)
    * [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
+   * [Remove the default NTP pool](#remove-the-default-ntp-pool)
    * [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
    * [Next Topic](#next-topic)
 
@@ -46,9 +47,9 @@ These services must be healthy before the reboot of the LiveCD can take place. I
 >
 > - The NCN **will never wipe a USB device** during installation
 
-> 
-> - Prior to shutting down the PIT, learning the CMN IP addresses of the other NCNs will be a benefit if troubleshooting is required 
-> 
+>
+> - Prior to shutting down the PIT, learning the CMN IP addresses of the other NCNs will be a benefit if troubleshooting is required
+>
 > This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
 > **unavailable**.
 
@@ -65,7 +66,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 #### 3.1 Start Hand-Off
 
 1. Start a new typescript (quit).
-    
+
     1. Exit the current typescript if one has arrived here from the prior pages:
 
         ```bash
@@ -85,7 +86,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
         ```
 
 1. Upload SLS file.
-    
+
     > **NOTE:** The system name environment variable `SYSTEM_NAME` must be set.
 
     ```bash
@@ -166,7 +167,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     1. Run the `export` commands listed at the end of the output from the previous step.
 
 
-1. <a name="csi-handoff-bss-metadata"></a>Upload the `data.json` file to BSS, our Kubernetes cloud-init DataSource. 
+1. <a name="csi-handoff-bss-metadata"></a>Upload the `data.json` file to BSS, our Kubernetes cloud-init DataSource.
 
     __If you have made any changes__ to this file (for example, as a result of any customizations or workarounds), use the path to that file instead. This step will prompt for the root password of the NCNs.
 
@@ -214,7 +215,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     ```
 
 1. <a name="backup-bootstrap-information"></a>Backup the bootstrap information from `ncn-m001`.
-   
+
     > **NOTE:** This denotes information that should always be kept together in order to fresh-install the system again.
 
     1. Log in; setup passwordless SSH _to_ the PIT node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the PIT (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
@@ -255,8 +256,8 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
     This only needs to be done for the PIT node, not for any of the other NCNs. For the procedures to do this, see [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
 
-1. Tell the PIT node to PXE boot on the next boot. 
-   
+1. Tell the PIT node to PXE boot on the next boot.
+
     Use `efibootmgr` to set the next boot device to the first PXE boot option. This step assumes the boot order was set up in the previous step.
 
     ```bash
@@ -346,7 +347,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     1. Back up the completed typescript file by re-running the `rsync` commands in the [Backup Bootstrap Information](#backup-bootstrap-information) section.
 
 1.  (Optional) Setup ConMan or serial console, if not already on, from any laptop or other system with network connectivity to the cluster.
-    
+
     ```bash
     external# script -a boot.livecd.$(date +%Y-%m-%d).txt
     external# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
@@ -396,7 +397,7 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     ```
 
 1. Change the root password on `ncn-m001` if the pre-NCN deployment password change method was not used.
-   
+
    Run `passwd` on `ncn-m001` and complete the prompts.
 
     ```bash
@@ -404,9 +405,9 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
     ```
 
 1. Run `kubectl get nodes` to see the full Kubernetes cluster.
-    
+
     > **NOTE:** If the new node fails to join the cluster after running other cloud-init items, refer to the `handoff`.
-    
+
     ```bash
     ncn-m001# kubectl get nodes
     ```
@@ -528,18 +529,28 @@ the Kubernetes cluster as the final of three master nodes forming a quorum.
 
 > **`CSI NOTE`** `/tmp/csi` will delete itself on the next reboot. The `/tmp` directory is `tmpfs` and runs in memory, it normally will not persist on restarts.
 
+<a name="remove-the-default-ntp-pool"></a>
+
+### 6. Remove the default NTP pool
+
+Run the following commands on ncn-m001 to remove the default pool, which can cause contention issues with NTP.
+
+```
+ncn-m001# sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf
+```
+
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
-### 6. Configure DNS and NTP on each BMC
+### 7. Configure DNS and NTP on each BMC
 
  > **NOTE:** If the system uses Gigabyte or Intel hardware, skip this section.
 
-Configure DNS and NTP on the BMC for each management node **except `ncn-m001`**. 
+Configure DNS and NTP on the BMC for each management node **except `ncn-m001`**.
 However, the commands in this section are all run **on** `ncn-m001`.
 
 1. Set environment variables.
 
     Set the `IPMI_PASSWORD` and `USERNAME` variables to the BMC credentials for your NCNs.
-    
+
     > Using `read -s` for this prevents the credentials from being echoed to the screen
 
     ```bash
@@ -548,13 +559,13 @@ However, the commands in this section are all run **on** `ncn-m001`.
     ncn-m001# export IPMI_PASSWORD USERNAME
     ```
 
-1. Set `BMCS` variable to list of the BMCs for all master nodes, worker nodes, and storage nodes, 
+1. Set `BMCS` variable to list of the BMCs for all master nodes, worker nodes, and storage nodes,
    except `ncn-m001-mgmt`:
 
     ```bash
-    ncn-m001# BMCS=$(grep -Eo "[[:space:]]ncn-[msw][0-9][0-9][0-9]-mgmt([.]|[[:space:]]|$)" /etc/hosts | 
-                        sed 's/^.*\(ncn-[msw][0-9][0-9][0-9]-mgmt\).*$/\1/' | 
-                        sort -u | 
+    ncn-m001# BMCS=$(grep -Eo "[[:space:]]ncn-[msw][0-9][0-9][0-9]-mgmt([.]|[[:space:]]|$)" /etc/hosts |
+                        sed 's/^.*\(ncn-[msw][0-9][0-9][0-9]-mgmt\).*$/\1/' |
+                        sort -u |
                         grep -v "^ncn-m001-mgmt$")
     ncn-m001# echo $BMCS
     ```
@@ -579,7 +590,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
     ```
 
 <a name="next-topic"></a>
-### 7. Next Topic
+### 8. Next Topic
 
    After completing this procedure, the next step is to configure administrative access.
 

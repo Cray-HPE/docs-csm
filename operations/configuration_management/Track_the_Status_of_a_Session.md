@@ -10,7 +10,7 @@ To view the session status of a session named *example*, use the following comma
 
 Example output:
 
-```
+```json
 {
   "ansible": {
     "config": "cfs-default-ansible-cfg",
@@ -49,7 +49,7 @@ The `jq` tool, along with the `--format json` output option of the CLI, are help
 
 Example output:
 
-```
+```json
 {
   "completionTime": "2020-07-28T03:26:30",
   "job": "cfs-8c8d628b-ebac-4946-a8b7-f1f167b35b0d",

@@ -84,12 +84,12 @@ Follow the steps in only one of the sections below depending on if it is preferr
         "fullSyncPeriod": [
           "-1"
         ],
-    
+
     [...]
         "connectionUrl": [
           "ldap://10.248.0.59"
         ],
-    
+
     [...]
     ```
 

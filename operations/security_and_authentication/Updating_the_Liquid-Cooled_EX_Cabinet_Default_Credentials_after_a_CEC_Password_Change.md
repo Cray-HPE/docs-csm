@@ -186,7 +186,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
     ncn-m001# \
     REDFISH_ENDPOINTS=$(cray hsm inventory redfishEndpoints list --type '!RouterBMC' --format json | jq .RedfishEndpoints[].ID -r | sort -V )
     cray hsm state components list --format json  > /tmp/components.json
-    
+
     for RF in $REDFISH_ENDPOINTS; do
         echo "$RF: Checking..."
         CLASS=$(jq -r --arg XNAME "$RF" '.Components[] | select(.ID == $XNAME).Class' /tmp/components.json)
@@ -224,7 +224,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
     ncn-m001# \
     cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --type '!RouterBMC' --format json > /tmp/redfishEndpoints.json
     cray hsm state components list --format json  > /tmp/components.json
-    
+
     REDFISH_ENDPOINTS=$(jq .RedfishEndpoints[].ID -r /tmp/redfishEndpoints.json | sort -V)
     for RF in $REDFISH_ENDPOINTS; do
         CLASS=$(jq -r --arg XNAME "$RF" '.Components[] | select(.ID == $XNAME).Class' /tmp/components.json)
@@ -246,16 +246,16 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 
     For each Redfish endpoint that is reported use the following to troubleshoot why it is not `DiscoverOK` or `DiscoveryStarted`:
     - If the Redfish endpoint is `DiscoveryStarted`, then that BMC is currently in the process of being inventoried by HSM. Wait a few minutes and re-try the bash script above to re-check the current discovery status of the RedfishEndpoints.
-      
+
         > The hms-discovery cronjob (if enabled) will trigger a discover on BMCs that are not currently in `DiscoverOK` or `DiscoveryStarted` every 3 minutes.
     - If the Redfish endpoint is `HTTPsGetFailed`, then HSM had issues contacting BMC.
-    
+
         1. Verify that the BMC component name (xname) is resolvable and pingable:
-           
+
            ```
            ncn-m001# ping x1001c1s0b0
            ```
-           
+
         2. If a NodeBMC is not pingable, then verify that the slot powering the BMC is powered on. If this is a ChassisBMC, skip this step. For example, the NodeBMC x1001c1s0b0 is in slot x1001c1s0.
             ```bash
             ncn-m001# cray capmc get_xname_status create --xnames x1001c1s0
@@ -263,20 +263,20 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
             err_msg = ""
             on = [ "x1001c1s0b0",]
             ```
-        
+
             If the slot is off, power it on:
             ```bash
             ncn-m001# cray capmc xname_on create --xnames x1001c1s0
             ```
-        
-        3. If the BMC is reachable and in `HTTPsGetFailed`, then verify that the BMC is accessible with the new default global credential. Replace `BMC_XNAME` with the hostname of the Redfish Endpoint. 
-           
+
+        3. If the BMC is reachable and in `HTTPsGetFailed`, then verify that the BMC is accessible with the new default global credential. Replace `BMC_XNAME` with the hostname of the Redfish Endpoint.
+
             ```bash
             ncn-m001# curl -k -u root:$CRED_PASSWORD https://BMC_XNAME/redfish/v1/Managers | jq
             ```
-            
+
             If the error message below is returned, then the BMC must have a StatefulReset action performed on it. The StatefulReset action clears previously user defined credentials that are taking precedence over the CEC supplied credential. It also clears NTP, Syslog, and SSH Key configurations on the BMC.
-            
+
             ```json
             {
                 "error": {
@@ -297,14 +297,14 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
                 }
             }
             ```
-            
+
             Perform a StatefulReset on the liquid-cooled BMC replace `BMC_XNAME` with the hostname of the BMC. The `OLD_DEFAULT_PASSWORD` must match the credential that was previously set on the BMC. This is mostly likely the previous global default credential for liquid-cooled BMCs.
             ```bash
             ncn-m001# curl -k -u root:OLD_DEFAULT_PASSWORD -X POST -H 'Content-Type: application/json' -d \
             '{"ResetType": "StatefulReset"}' \
             https://BMC_XNAME/redfish/v1/Managers/BMC/Actions/Manager.Reset
             ```
-            
+
             After the StatefulReset action has been issued, the BMC will be unreachable for a few minutes as it performs the StatefulReset.
 
 ### 3. Reapply BMC settings if a StatefulReset was performed on any BMC.
@@ -336,13 +336,13 @@ This section only needs to be performed if any liquid-cooled Node or Chassis BMC
     ```
 
 4. Verify all expected hardware has been discovered:
-   
+
     The following bash script will find all Redfish endpoints for the liquid-cooled BMCs that are not in `DiscoverOK`, and display their last Discovery Status.
     ```bash
     ncn-m001# \
     cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --type '!RouterBMC' --format json > /tmp/redfishEndpoints.json
     cray hsm state components list --format json  > /tmp/components.json
-      
+
     REDFISH_ENDPOINTS=$(jq .RedfishEndpoints[].ID -r /tmp/redfishEndpoints.json | sort -V)
     for RF in $REDFISH_ENDPOINTS; do
         CLASS=$(jq -r --arg XNAME "$RF" '.Components[] | select(.ID == $XNAME).Class' /tmp/components.json)
@@ -356,17 +356,17 @@ This section only needs to be performed if any liquid-cooled Node or Chassis BMC
 
 5. Restore SSH Keys configured by cray-conman on liquid-cooled Node BMCs.
     Get the SSH Console private key from Vault:
-    
+
     ```bash
     ncn-m001# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys \
     -o json | jq -r '.data["vault-root"]' |  base64 -d)
-    
+
     ncn-m001# kubectl -n vault exec -t cray-vault-0 -c vault \
     -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 \
     VAULT_FORMAT=json vault read transit/export/signing-key/mountain-bmc-console \
-    | jq -r .data.keys[]  > ssh-console.key 
+    | jq -r .data.keys[]  > ssh-console.key
     ```
-    
+
 6. Generate the SSH public key:
     ```bash
     ncn-m001# chmod 0600 ssh-console.key

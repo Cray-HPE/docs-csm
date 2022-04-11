@@ -1,6 +1,6 @@
-# Address Resolution Protocol (ARP) 
+# Address Resolution Protocol (ARP)
 
-ARP is commonly used for mapping IPv4 addresses to MAC addresses. 
+ARP is commonly used for mapping IPv4 addresses to MAC addresses.
 
 ## Procedure
 
@@ -10,16 +10,16 @@ ARP is commonly used for mapping IPv4 addresses to MAC addresses.
     switch(config-if)# arp ipv4 IP-ADDR mac MAC-ADDR
     ```
 
-1. Show commands to validate functionality: . 
+1. Show commands to validate functionality: .
 
     ```text
     switch# show arp
     ```
 
-## Expected Results 
+## Expected Results
 
-1. Administrators are able to ping the connected device 
-1. Administrators can view the ARP entries 
+1. Administrators are able to ping the connected device
+1. Administrators can view the ARP entries
 
 
 [Back to Index](index.md)

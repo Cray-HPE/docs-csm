@@ -26,9 +26,9 @@ This procedure will use config from System Layout Service (SLS) to set up the pr
         Autorefresh    : On
         Keep Packages  : Off
         Type           : rpm-md
-        GPG Key URI    : 
-        Path Prefix    : 
-        Parent Service : 
+        GPG Key URI    :
+        Path Prefix    :
+        Parent Service :
         Keywords       : ---
         Repo Info Path : /etc/zypp/repos.d/csm-sle-15sp2.repo
         MD Cache Path  : /var/cache/zypp/raw/csm-sle-15sp2
@@ -90,7 +90,7 @@ This procedure will use config from System Layout Service (SLS) to set up the pr
 4.  Update BSS `cloud-init` user data for the management NCNs:
     ```bash
     ncn-m001# ncn_xnames=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | jq -r '.[] | .Xname' | sort)
-    ncn-m001# for ncn in $ncn_xnames; do 
+    ncn-m001# for ncn in $ncn_xnames; do
         echo "Updating BSS for $ncn"
         csi handoff bss-update-cloud-init --user-data=write-files-user-data.json --limit=${ncn}
     done

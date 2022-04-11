@@ -16,6 +16,6 @@ Requirements and optional configuration:
 		* Stubby OSPF area
 		* Route restrictions i.e. only provide default route
 
-> **IMPORTANT:** As there are multiple ways of achieving the connectivity these are just simple examples of how remote access could be achieved. And more complex configurations such as security etc. are up to the site network administrators. 
+> **IMPORTANT:** As there are multiple ways of achieving the connectivity these are just simple examples of how remote access could be achieved. And more complex configurations such as security etc. are up to the site network administrators.
 
 [Back to Index](../index.md)

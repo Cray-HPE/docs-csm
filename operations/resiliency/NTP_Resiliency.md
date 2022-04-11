@@ -52,7 +52,7 @@ This procedure requires administrative privileges.
     NEW TIME SETTINGS
     rtc: 2021-02-19 13:03:06.515083+00:00
     sys: 2021-02-19 13:03:07.184846+0000
-    
+
     [...]
     ```
 

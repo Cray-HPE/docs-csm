@@ -333,6 +333,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
        * [Change the LDAP Server IP Address for New LDAP Server Content](security_and_authentication/Change_the_LDAP_Server_IP_Address_for_New_LDAP_Server_Content.md)
        * [Remove the LDAP User Federation from Keycloak](security_and_authentication/Remove_the_LDAP_User_Federation_from_Keycloak.md)
        * [Add LDAP User Federation](security_and_authentication/Add_LDAP_User_Federation.md)
+       * [Keycloak User Management with kcadm.sh](security_and_authentication/Keycloak_User_Management_with_Kcadm.md)
    * [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
        * [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
        * [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
@@ -486,7 +487,7 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
 
 ## Hardware Management (HM) Collector
 
-The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system. 
+The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system.
 
  * [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
 
@@ -498,12 +499,14 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 
   * [Node Management](node_management/Node_Management.md)
   * [Node Management Workflows](node_management/Node_Management_Workflows.md)
-  * [Rebuild NCNs](node_management/Rebuild_NCNs.md)
+  * [Rebuild NCNs](node_management/Rebuild_NCNs/Rebuild_NCNs.md)
     * [Identify Nodes and Update Metadata](node_management/Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md)
     * [Prepare Storage Nodes](node_management/Rebuild_NCNs/Prepare_Storage_Nodes.md)
     * [Wipe Drives](node_management/Rebuild_NCNs/Wipe_Drives.md)
     * [Power Cycle and Rebuild Nodes](node_management/Rebuild_NCNs/Power_Cycle_and_Rebuild_Nodes.md)
     * [Adding a Ceph Node to the Ceph Cluster](node_management/Rebuild_NCNs/Re-add_Storage_Node_to_Ceph.md)
+    * [Customize PCIe Hardware](node_management/customize_pcie_hardware.md)
+    * [Customize Disk Hardware](node_management/customize_disk_hardware.md)
     * [Validate Boot Raid](node_management/Rebuild_NCNs/Validate_Boot_Raid.md)
     * [Validate Storage Node](node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
     * [Final Validation Steps](node_management/Rebuild_NCNs/Final_Validation_Steps.md)
@@ -589,7 +592,7 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
 
 ### Dynamic Host Configuration Protocol (DHCP)
 
-The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers. 
+The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers.
 
   * [DHCP](network/dhcp/DHCP.md)
   * [Troubleshoot DHCP Issues](network/dhcp/Troubleshoot_DHCP_Issues.md)
@@ -646,6 +649,8 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 
   * [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
   * [Troubleshoot Spire Failing to Start on NCNs](spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
+  * [Update Spire Intermediate CA Certificate](spire/Update_Spire_Intermediate_CA_Certificate.md)
+  * [Xname Validation](spire/xname_validation.md)
 
 
 <a name="update-firmware-with-fas"></a>

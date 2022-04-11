@@ -1,34 +1,34 @@
-# Network Time Protocol (NTP) Client 
+# Network Time Protocol (NTP) Client
 
 The Network Time Protocol (NTP) client is essential for syncing time on various clients in the system. The following commands show how to configure NTP.
 
 ## Configuration Commands
 
-Specify a remote NTP server to use for time synchronization: 
+Specify a remote NTP server to use for time synchronization:
 
 ```text
 switch(config)# ntp server <FQDN|IP-ADDR>
 ```
 
-Force NTP to use a specific VRF for requests: 
+Force NTP to use a specific VRF for requests:
 
 ```text
 switch(config)# ntp vrf VRF
 ```
 
-Configure the system timezone: 
+Configure the system timezone:
 
 ```text
 switch(config)# clock timezone TIMEZONE
 ```
 
-Show commands to validate functionality:  
+Show commands to validate functionality:
 
 ```text
 switch# show ntp status
 ```
 
-## Example Output 
+## Example Output
 
 ```text
 switch# show ntp status
@@ -43,7 +43,7 @@ Time accuracy is within 0.994 seconds
 Reference time: Thu Jan 28 2016 0:57:06.647 (UTC)
 ```
 
-## Expected Results 
+## Expected Results
 
 1. Administrators can configure the NTP client
 2. Administrators can validate the functionality using the `show` command

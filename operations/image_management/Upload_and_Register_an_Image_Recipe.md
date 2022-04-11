@@ -42,7 +42,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     path = "s3://ims/recipes/76ef564d-47d5-415a-bcef-d6022a416c3c/cray-sles15-barebones.tgz"
     etag = "28f3d78c8cceca2083d7d3090d96bbb7"
     type = "s3"
-    
+
     [...]
     ```
 

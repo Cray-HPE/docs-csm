@@ -76,7 +76,7 @@ The firmware will be updated and the PDU management processor will restart.
 
 #### Discover HPE PDU after Upgrading CSM
 **This procedure is only needed when upgrading CSM, not performing a fresh install. This procedure should be run after CSM has been fully upgraded including the discovery job.**
-1.  In CSM 1.0 and before, the `hms-discovery` job and Redfish Translation Service (RTS) treated all PDUs as if were made by ServerTech. After the upgrade to CSM 1.2, RTS will still think the HPE PDUs in the system are ServerTech PDUs. These erroneous HPE PDU entries for RTS need to get removed from Vault.  
+1.  In CSM 1.0 and before, the `hms-discovery` job and Redfish Translation Service (RTS) treated all PDUs as if were made by ServerTech. After the upgrade to CSM 1.2, RTS will still think the HPE PDUs in the system are ServerTech PDUs. These erroneous HPE PDU entries for RTS need to get removed from Vault.
     1. Get Vault password and create Vault alias.
         ```bash
         ncn# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
@@ -118,4 +118,3 @@ The firmware will be updated and the PDU management processor will restart.
     ```bash
     ncn# cray hsm inventory redfishEndpoints list --type CabinetPDUController
     ```
-

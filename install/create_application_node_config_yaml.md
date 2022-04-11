@@ -45,9 +45,9 @@ Example `hmn_connections.json` row representing an application node with SourceN
 ## Directions
 
 1. Create a file called `application_node_config.yaml` with the following contents.
-   
+
    This is a base application node config file for CSI that does not add any additional prefixes, HSM SubRole mappings, or aliases.
-    
+
    ```yaml
    ---
    # Additional application node prefixes to match in the hmn_connections.json file
@@ -73,7 +73,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
     | uan01        | x3000      | u23            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j39        |
 
     If the `hmn_connections.json` file is available, then the following command can be used to show the HMN rows that are application nodes.
-    
+
     ```bash
     linux# cat hmn_connections.json | jq -rc '.[] | select(.Source |
       test("^((mn|wn|sn|nid|cn|cn\\-|pdu)\\d+|.*(cmc|rcm|kvm|door).*|x\\d+p\\d*|sw-.+|columbia$)"; "i") | not)'
@@ -81,7 +81,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
 
     <a name="hmn-connections-example-output"></a>
     Example `hmn_connections.json` output:
-    
+
     ```json
     {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u29","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j42"},
     {"Source":"login02","SourceRack":"x3000","SourceLocation":"u28","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j43"}
@@ -140,7 +140,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
 
 5. Add application node aliases.
 
-    The `aliases` field is an map of component name (xname) strings to an array of alias strings.
+    The `aliases` field is a map of component name (xname) strings to an array of alias strings.
     > For guidance on building application node component names (xnames), follow one of the following:
     > * [Building component names (xnames) for nodes in a single application node chassis](shcd_hmn_connections_rules.md#application-node-single-node-chassis-xname)
     > * [Building component names (xnames) for nodes in a dual application node chassis](shcd_hmn_connections_rules.md#application-node-dual-node-chassis-xname)
@@ -163,7 +163,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
     > The ordering of component names (xnames) under `aliases` does not matter.
 
 6. Final information in the example `application_node_config.yaml` built from the HMN example above.
-    
+
     ```yaml
     ---
     # Additional application node prefixes to match in the hmn_connections.json file
