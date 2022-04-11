@@ -54,7 +54,6 @@ set -- "${args[@]}"
 
 [[ $# -eq 1 ]] || usage
 
-set -o xtrace
 
 customizations="$1"
 
@@ -504,4 +503,3 @@ else
     cat "$c"
 fi
 
-ok_report

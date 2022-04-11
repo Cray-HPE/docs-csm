@@ -58,10 +58,11 @@ To keep track of what configuration version is running on the switch, create a n
 
 ### Aruba
 
-1. Get the CSM and CANU versions from the MOTD banner.
+1. Get the CSM and CANU versions from the EXEC banner.
 
     ```
-    sw-leaf-bmc-001(config)# show banner motd
+    sw-leaf-bmc-001(config)# show banner exec
+
     ```
 
     Example output:

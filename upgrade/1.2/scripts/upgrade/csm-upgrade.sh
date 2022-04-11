@@ -30,13 +30,24 @@ trap 'err_report' ERR
 
 . /etc/cray/upgrade/csm/myenv
 
+if [[ -z ${LOG_FILE} ]]; then
+    export LOG_FILE="$(pwd)/output.log"
+    echo
+    echo
+    echo " ************"
+    echo " *** NOTE ***"
+    echo " ************"
+    echo "LOG_FILE is not specified; use default location: ${LOG_FILE}"
+    echo
+fi
+
 state_name="VERIFY_K8S_NODES_UPGRADED"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    {
     /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/util/verify-k8s-nodes-upgraded.sh
-
+    } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -46,6 +57,7 @@ state_name="PRE_CEPH_CSI_TARGET_REQUIREMENTS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    {
     scp ncn-s001:/srv/cray/scripts/common/csi-configuration.sh /tmp/csi-configuration.sh
     mkdir -p /srv/cray/tmp
     . /tmp/csi-configuration.sh
@@ -57,7 +69,7 @@ if [[ $state_recorded == "0" ]]; then
     create_k8s_1.2_storage_class
     create_sma_1.2_storage_class
     create_cephfs_1.2_storage_class
-
+    } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -67,11 +79,11 @@ state_name="PRE_STRIMZI_UPGRADE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    {
     pushd /usr/share/doc/csm/upgrade/1.2/scripts/strimzi
     ./kafka-prereq.sh
     popd +0
-
+    } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -81,11 +93,11 @@ state_name="CSM_SERVICE_UPGRADE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    {
     pushd ${CSM_ARTI_DIR}
     ./upgrade.sh
     popd +0
-
+    } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -95,7 +107,9 @@ state_name="POST_CSM_ENABLE_PSP"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    {
     /usr/share/doc/csm/upgrade/1.2/scripts/k8s/enable-psp.sh
+    } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -105,7 +119,9 @@ state_name="POST_STRIMZI_UPGRADE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    {
     /usr/share/doc/csm/upgrade/1.2/scripts/strimzi/kafka-restart.sh
+    } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -115,11 +131,17 @@ state_name="FIX_SPIRE_ON_STORAGE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    {
     /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
+    } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="POST CSM Upgrade Validation"
+echo "====> ${state_name} ..."
+GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-post-csm-service-upgrade-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+echo "====> ${state_name} has been completed"
 
 ok_report

@@ -41,13 +41,13 @@ state_name="CEPH_NODES_SET_NO_WIPE"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    {
     csi handoff bss-update-cloud-init --set meta-data.wipe-ceph-osds=no --limit Global
     
     csi handoff bss-update-param \
         --set metal.no-wipe=1 \
         --limit $TARGET_XNAME
-
+    } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -57,7 +57,7 @@ state_name="BACKUP_CEPH_DATA"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    {
     if [[ $ssh_keys_done == "0" ]]; then
         ssh_keygen_keyscan "${target_ncn}"
         ssh_keys_done=1
@@ -72,7 +72,7 @@ if [[ $state_recorded == "0" ]]; then
 
     ssh ${target_ncn} 'systemctl stop ceph.target;sleep 30;podman prune -af;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /var/lib/containers /etc/ceph;systemctl start ceph.target'
     scp ${target_ncn}:/tmp/${target_ncn}-ceph.tgz .
-
+    } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -84,14 +84,14 @@ state_name="INSTALL_TARGET_SCRIPT"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    {
     if [[ $ssh_keys_done == "0" ]]; then
         ssh_keygen_keyscan "${target_ncn}"
         ssh_keys_done=1
     fi
     scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
     ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
-
+    } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -101,7 +101,7 @@ state_name="RESTORE_CEPH"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    {
     if [[ $ssh_keys_done == "0" ]]; then
         ssh_keygen_keyscan "${target_ncn}"
         ssh_keys_done=1
@@ -109,7 +109,7 @@ if [[ $state_recorded == "0" ]]; then
     scp ./${target_ncn}-ceph.tgz $target_ncn:/
     ssh ${target_ncn} 'cd /; tar -xvf ./$(hostname)-ceph.tgz; rm /$(hostname)-ceph.tgz'
     ssh ${target_ncn} '/srv/cray/scripts/common/pre-load-images.sh'
-
+    } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -119,7 +119,7 @@ state_name="REDEPLOY_CEPH"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    {
     # sleep 30s before redeploy ceph
     sleep 30
     ## Added
@@ -128,7 +128,7 @@ if [[ $state_recorded == "0" ]]; then
     ceph orch host add ${target_ncn}
     sleep 20
     for s in $(ceph orch ps | grep ${target_ncn} | awk '{print $1}'); do  ceph orch daemon redeploy $s; done    
-
+    } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -138,7 +138,7 @@ state_name="POST_CEPH_IMAGE_UPGRADE_CONFIG"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-
+    {
     if [[ $ssh_keys_done == "0" ]]; then
         ssh_keygen_keyscan "${target_ncn}"
         ssh_keys_done=1
@@ -149,12 +149,13 @@ if [[ $state_recorded == "0" ]]; then
     fi
 
     ssh ${target_ncn} '/usr/share/doc/csm/upgrade/1.2/scripts/ceph/ceph-services-stage2.sh'
-
+    } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
 
+{
 . /usr/share/doc/csm/upgrade/1.2/scripts/ceph/lib/ceph-health.sh
 wait_for_health_ok
 
@@ -170,20 +171,21 @@ do
     exit 1
   fi
 done
+} >> ${LOG_FILE} 2>&1
 
 if [[ ${target_ncn} == "ncn-s001" ]]; then
     state_name="POST_CEPH_IMAGE_UPGRADE_BUCKETS"
     state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
     if [[ $state_recorded == "0" ]]; then
         echo "====> ${state_name} ..."
-
+        {
         if [[ $ssh_keys_done == "0" ]]; then
             ssh_keygen_keyscan "${target_ncn}"
             ssh_keys_done=1
         fi
         scp /usr/share/doc/csm/upgrade/1.2/scripts/ceph/create_rgw_buckets.sh $target_ncn:/tmp
         ssh ${target_ncn} '/tmp/create_rgw_buckets.sh'
-
+        } >> ${LOG_FILE} 2>&1
         record_state "${state_name}" ${target_ncn}
     else
         echo "====> ${state_name} has been completed"
