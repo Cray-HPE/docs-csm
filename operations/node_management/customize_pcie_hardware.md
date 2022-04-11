@@ -90,7 +90,7 @@ Identify the hardware configuration by PXE booting a node.
         -----
         ```
 
-1. Use the information returned in the previous step to compare the `PCI.DeviceID` and `PCI.VendorID` values to what is in [NCN Networking Vendor and Bus ID Identification](../background/ncn_networking.md#vendor-and-bus-id-identification).
+1. Use the information returned in the previous step to compare the `PCI.DeviceID` and `PCI.VendorID` values to what is in [NCN Networking Vendor and Bus ID Identification](../../background/ncn_networking.md#vendor-and-bus-id-identification).
 
 1. Since PoR systems are handled with defaults, at this point one should notice differing `PCI.DeviceID` values than the bolded entries in the Vendor and Bus ID table.
 
