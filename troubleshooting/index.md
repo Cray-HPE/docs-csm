@@ -25,7 +25,6 @@ This document provides troubleshooting information for services and functionalit
       * [Troubleshoot UAI Stuck in "ContainerCreating"](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/UAS_user_and_admin_topics/Troubleshoot_UAI_Stuck_in_ContainerCreating.md)
       * [Troubleshoot Duplicate Mount Paths in a UAI](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/UAS_user_and_admin_topics/Troubleshoot_Duplicate_Mount_Paths_in_a_UAI.md)
       * [Troubleshoot Missing or Incorrect UAI Images](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/UAS_user_and_admin_topics/Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
-     
       * [Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/UAS_user_and_admin_topics/Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
  * Troubleshoot Boot Issues
       * [Troubleshoot UAN Boot Issues](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/boot_orchestration/Troubleshoot_UAN_Boot_Issues.md)
