@@ -29,7 +29,7 @@
     ncn-s# /usr/share/doc/csm/scripts/join_ceph_cluster.sh
     ```
 
-    **IMPORTANT:** In the output from `watch ceph -s` the health should go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about `failed to probe daemons or devices`, but this should clear on its own.
+    **IMPORTANT:** In the output from `watch ceph -s` the health should go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about `failed to probe daemons or devices`, but this should clear on its own. In addition, it may take up to 5 minutes for the added OSDs to report as `up`.  This is dependent on the Ceph Orchestrator performing an inventory and completing batch processing to add the OSDs.
 
 ## Zapping OSDs
 
@@ -136,10 +136,10 @@
      10.252.1.13
      ```
 
-     Update the existing HAproxy config on `ncn-s001` to include the added node.
+     Update the HAproxy config to include the added node. Select a storage node `ncn-s00x` from `ncn-s001`, `ncn-s002`, or `ncn-s003`. This cannot be done from the added node.
 
      ```
-     ncn-s001# vi /etc/haproxy/haproxy.cfg
+     ncn-s00x# vi /etc/haproxy/haproxy.cfg
      ```
 
      This example adds or updates `ncn-s004` with the IP address `10.252.1.13` to `backend rgw-backend`.
@@ -157,10 +157,10 @@
      ...
      ```
 
-     Copy the HAproxy config from `ncn-s001` to all the storage nodes. Adjust the command based on the number of storage nodes.
+     Copy the updated HAproxy config to all the storage nodes. Adjust the command based on the number of storage nodes.
 
      ```bash
-     ncn-s001# pdcp -w ncn-s00[2-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
+     ncn-s00x# pdcp -w ncn-s00[1-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
      ```
       
      Configure `apparmor` and KeepAlived **on the added node** and restart the services across all the storage nodes.
