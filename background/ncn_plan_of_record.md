@@ -2,8 +2,8 @@
 
 This document outlines the hardware necessary to meet CSM's Plan of Record (PoR). This serves the **minimum, necessary** pieces required per each server in the management plane.
 
-1. If the system's NICs do not align to the PoR NICs outlined below (e.g. Onboard NICs are used instead of PCIe), then follow [Customize PCIe Hardware](../operations/customize_pcie_hardware.md) before booting the NCN(s).
-1. If there are more disks than what is listed below in the PoR for disks, then follow [Customize Disk Hardware](../operations/customize_disk_hardware.md) before booting the NCN(s).
+1. If the system's NICs do not align to the PoR NICs outlined below (e.g. Onboard NICs are used instead of PCIe), then follow [Customize PCIe Hardware](../operations/node_management/customize_pcie_hardware.md) before booting the NCN(s).
+1. If there are more disks than what is listed below in the PoR for disks, then follow [Customize Disk Hardware](../operations/node_management/customize_disk_hardware.md) before booting the NCN(s).
 
 ## Table of Contents
 
