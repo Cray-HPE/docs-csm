@@ -577,7 +577,7 @@ If there are LVM check failures, then the problem must be resolved before contin
 
 1. Check to see if the number of devices is less than the number of listed drives or your output from step 1.
 
-   ```bash
+    ```bash
     ncn-s# ceph orch device ls|grep dev|wc -l
     24
     ```

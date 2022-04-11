@@ -333,7 +333,7 @@ Run the following steps on each master node.
       ncn-w001   Ready    <none>   370d   v1.18.6
       ncn-w002   Ready    <none>   370d   v1.18.6
       ncn-w003   Ready    <none>   370d   v1.18.6
-   ```
+      ```
 
 2. Distribute the client certificate to the rest of the cluster.
 

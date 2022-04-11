@@ -9,16 +9,16 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 ### Topics
 
 - [FAS Admin Procedures](#fas-admin-procedures)
-  - [Topics](#topics)
-  - [Warning for Non-Compute Nodes (NCNs)</a>](#warning-for-non-compute-nodes-ncns)
-  - [Ignore Nodes within FAS](#ignore-nodes-within-fas)
-    - [Procedure](#procedure)
-  - [Override an Image for an Update](#override-an-image-for-an-update)
-  - [Procedure](#procedure-1)
-  - [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
-    - [Procedure](#procedure-2)
-  - [Load Firmware from Nexus](#load-firmware-from-nexus)
-  - [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file)
+    - [Topics](#topics)
+    - [Warning for Non-Compute Nodes (NCNs)</a>](#warning-for-non-compute-nodes-ncnsa)
+    - [Ignore Nodes within FAS](#ignore-nodes-within-fas)
+      - [Procedure](#procedure)
+    - [Override an Image for an Update](#override-an-image-for-an-update)
+    - [Procedure](#procedure-1)
+    - [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
+      - [Procedure](#procedure-2)
+    - [Load Firmware from Nexus](#load-firmware-from-nexus)
+    - [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file)
 
 ---
 
@@ -145,6 +145,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
            "overwriteSameImage":false
          }
        }
+   ```
 
 3. Verify the correct image ID was found.
 
@@ -421,7 +422,7 @@ This procedure includes information on how check the firmware versions for the e
        "xname": "x9000c1s3b1",
        "toFirmwareVersion": ""
        }
-       ```
+   ```
 
 Update the firmware on any devices indicating a new version is needed.
 

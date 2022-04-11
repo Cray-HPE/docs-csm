@@ -38,7 +38,7 @@ Here is an example of what the Spine config should be.
 
 Aruba configuration:
 
-````
+```
 sw-spine-001# show run int vlan 1
 interface vlan1
     vsx-sync active-gateways

@@ -29,12 +29,15 @@ vsx update-software <REMOTE-URL> [vrf <VRF-NAME>]
 
 ### Parameters
 
-```<REMOTE-URL>```
+```
+<REMOTE-URL>
+```
 
 Specifies the TFTP URL for downloading the software.
 
-
-```vrf <VRF-NAME>```
+```
+vrf <VRF-NAME>
+```
 
 (Optional) Specifies the VRF name for downloading the software.
 

@@ -12,17 +12,19 @@ lack of removable storage.
 
 ## Topics
 
-1. [Known Compatibility Issues](#known-compatibility-issues)
-1. [Attaching and Booting the LiveCD with the BMC](#attaching-and-booting-the-livecd-with-the-bmc)
-1. [First Login](#first-login)
-1. [Configure the Running LiveCD](#configure-the-running-livecd)
-   1. [Generate Installation Files](#generate-installation-files)
-      * [Subsequent Installs (Reinstalls)](#subsequent-fresh-installs-re-installs)
-      * [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal)
-   1. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
-   1. [Prepare Site Init](#prepare-site-init)
-1. [Bring-up the PIT Services and Validate PIT Health](#bring---up-the-pit-services-and-validate-pit-health)
-1. [Next Topic](#next-topic)
+- [Bootstrap PIT Node from LiveCD Remote ISO](#bootstrap-pit-node-from-livecd-remote-iso)
+  - [Topics](#topics)
+  - [1. Known Compatibility Issues](#1-known-compatibility-issues)
+  - [2. Attaching and Booting the LiveCD with the BMC](#2-attaching-and-booting-the-livecd-with-the-bmc)
+  - [3. First Login](#3-first-login)
+  - [4. Configure the Running LiveCD](#4-configure-the-running-livecd)
+    - [4.1 Generate Installation Files](#41-generate-installation-files)
+      - [4.1.a Subsequent Installs (Reinstalls)](#41a-subsequent-installs-reinstalls)
+      - [4.1.b Initial Installs (bare-metal)](#41b-initial-installs-bare-metal)
+    - [4.2 Verify and Backup `system_config.yaml`](#42-verify-and-backup-system_configyaml)
+    - [4.3 Prepare Site Init](#43-prepare-site-init)
+  - [5. Bring-up the PIT Services and Validate PIT Health](#5-bring-up-the-pit-services-and-validate-pit-health)
+  - [Next Topic](#next-topic)
 
 <a name="known-compatibility-issues"></a>
 ## 1. Known Compatibility Issues

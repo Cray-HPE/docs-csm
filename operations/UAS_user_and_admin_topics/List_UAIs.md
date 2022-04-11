@@ -81,6 +81,6 @@ For Legacy Mode user procedures:
     uai_name = "uai-vers-4a38a807"
     uai_status = "Running: Ready"
     username = "vers"
-    ````
+    ```
 
 [Next Topic: Creating a UAI](Create_a_UAI.md)

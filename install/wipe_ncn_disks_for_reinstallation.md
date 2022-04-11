@@ -148,7 +148,7 @@ If a node type is not specified, the step should be run regardless of node type.
 
    1. If there are any running containers from the output of the `crictl ps` command, stop them.
 
-        ```bash
+       ```bash
        ncn-m# crictl stop <container id from the CONTAINER column>
        ```
 
