@@ -258,7 +258,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    1. After reconnecting, resume the typescript (the `-a` appends to an existing script).
 
-       ```bash
+      ```bash
       pit# script -af $(ls -tr ~/csm-install-remoteiso*.txt | head -n 1)
       pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
       ```
