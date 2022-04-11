@@ -81,6 +81,7 @@ ip bootp-gateway 10.1.0.
 ip helper-address 10.92.100.
 exit
 ```
+
 ```
 sw-spine-002# show run int vlan 1
 interface vlan

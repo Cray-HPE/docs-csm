@@ -10,13 +10,13 @@ To recover from this situation, the following can be done.
 1. Wait three minutes for the configuration to resync.
 1. Re-run the keycloak localize job.
    ```bash
-    ncn# kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
-    -ojson | jq '.items[0]' > keycloak-users-localize-job.json
+   ncn# kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
+   -ojson | jq '.items[0]' > keycloak-users-localize-job.json
 
-    ncn# cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
-    jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
-    job.batch "keycloak-users-localize-1" deleted
-    job.batch/keycloak-users-localize-1 replaced
+   ncn# cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
+   jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
+   job.batch "keycloak-users-localize-1" deleted
+   job.batch/keycloak-users-localize-1 replaced
    ```
 1. Check to see if the keycloak-users-localize job has completed.
    ```bash
@@ -32,13 +32,13 @@ To recover from this situation, the following can be done.
 1. Wait three minutes for the configuration to resync.
 1. Re-run the keycloak localize job.
    ```bash
-    ncn# kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
-    -ojson | jq '.items[0]' > keycloak-users-localize-job.json
+   ncn# kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
+   -ojson | jq '.items[0]' > keycloak-users-localize-job.json
 
-    ncn# cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
-    jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
-    job.batch "keycloak-users-localize-1" deleted
-    job.batch/keycloak-users-localize-1 replaced
+   ncn# cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
+   jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
+   job.batch "keycloak-users-localize-1" deleted
+   job.batch/keycloak-users-localize-1 replaced
    ```
 1. Check again to make sure the job has now completed.
    ```bash
