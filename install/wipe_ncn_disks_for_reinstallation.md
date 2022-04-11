@@ -159,7 +159,7 @@ wiping a different type of node than what a step specifies, then skip that step.
 
    1. If there are any running containers from the output of the `crictl ps` command, stop them.
 
-        ```bash
+       ```bash
        ncn-m# crictl stop <container id from the CONTAINER column>
        ```
 

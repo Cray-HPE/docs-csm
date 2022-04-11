@@ -100,7 +100,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
    Git Version    : b3ed3046a460d804eb545d21a362b3a5c7d517a3
    Platform       : linux/amd64
    App. Version   : 1.5.18
-    ```
+   ```
 
 1. Configure `zypper` with the `embedded` repository from the CSM release.
 

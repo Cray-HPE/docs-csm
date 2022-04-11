@@ -89,20 +89,26 @@ The `kubectl` command is installed.
 1. Ensure that no nodes are in a `failed` state in CFS.
     Nodes that are in a failed state prior to the reboot will not be automatically
     configured once they have been rebooted. To get a list of nodes in the failed state:
+   
    ```
    ncn-m001# cray cfs components list --status failed --format json | jq .[].id
    ```
+   
    If there are any nodes in this list, they can be reset with:
+   
    ```
    ncn-m001# cray cfs components update <xname> --enabled False --error-count 0
    ```
+   
    Or, to reset the error count for all nodes:
+   
    ```
    ncn-m001# cray cfs components list --status failed | jq .[].id -r | while read -r xname ; do
        echo "$xname"
        cray cfs components update $xname --enabled False --error-count 0
    done
    ```
+   
    This will leave the nodes in a disabled state in CFS. CFS will automatically
    re-enable them when they reboot, this is just so that CFS does not immediately
    start retrying configuration against the failed node.
@@ -131,33 +137,34 @@ Before rebooting NCNs:
 
         **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
 
-        To power off the node:
-
-        1. ```bash
+        1. To power off the node:
+           
+           ```bash
            ncn-m001# export USERNAME=root
            ncn-m001# export IPMI_PASSWORD=changeme
            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
            ```
 
-            Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
+           Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
-        To power back on the node:
+        2. To power back on the node:
+           
+           ```bash
+           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
+           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+           ```
 
-        1. ```bash
-            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
-            ```
+           Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
-        Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
     4. Watch on the console until the node has successfully booted and the login prompt is reached.
 
     5. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
 
-   ```bash
-   ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
-   BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
-   ```
+       ```bash
+       ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
+       BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
+       ```
 
     6. Retrieve the component name (xname) for the node being rebooted.
 
@@ -279,34 +286,34 @@ Before rebooting NCNs:
 
         **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
 
-        To power off the node:
-
-        1. ```bash
+        1. To power off the node:
+           
+           ```bash
            ncn-m001# export USERNAME=root
            ncn-m001# export IPMI_PASSWORD=changeme
            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
            ```
 
-            Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
+           Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
-        To power back on the node:
+        2. To power back on the node:
+           
+           ```bash
+           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
+           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+           ```
 
-        1. ```bash
-            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
-            ```
-
-        Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
+           Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
     6. Watch on the console until the node has successfully booted and the login prompt is reached.
 
     7. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
 
-   ```bash
-   ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
-   BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
-   ```
+       ```bash
+       ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
+       BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
+       ```
 
     8. Retrieve the component name (xname) for the node being rebooted.
 
@@ -340,13 +347,13 @@ Before rebooting NCNs:
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
-    10. Uncordon the node
+    10.  Uncordon the node.
 
         ```bash
         ncn-m# kubectl uncordon <node you just rebooted>
         ```
 
-    11. Verify pods are running on the rebooted node.
+    11.  Verify pods are running on the rebooted node.
 
          Within a minute or two, the following command should begin to show pods in a `Running` state (replace NCN in the command below with the name of the worker node):
 
@@ -354,17 +361,17 @@ Before rebooting NCNs:
          ncn-m# kubectl get pods -o wide -A | grep <node to be rebooted>
          ```
 
-    12. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
+    12.  Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
          Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.
 
          If terminating pods are reported when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.
 
-    13. Disconnect from the console.
+    13.  Disconnect from the console.
 
-    14. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
+    14.  Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
 
-1. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
+2. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
 
    See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
