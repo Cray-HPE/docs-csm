@@ -1,39 +1,49 @@
 # Load Saved Switch Configuration
 
-This procedures shows how to switch between saved switch configurations.
+This procedure shows how to switch between already saved switch configurations.
 
 To save switch configurations, refer to the [Configuration Management](config_management.md) procedure.
 
-## Aruba
+This procedure is intended for internal use only. It is used to quickly switch between configurations that are already loaded on the switches.
 
-1. View the checkpoints.
+This procedure needs to be done on all mgmt switches.
 
-    Ensure that `CSM1_0` and `CSM1_2` exist. If they exist, proceed to the next step.
+-  Spine switches will have three total configuration files/checkpoints.
+    -  1.2 fresh install
+    -  1.2 upgrade
+    -  1.0
+  
+-  Leaf-BMC switches will have have two configuration files/checkpoints.
+    - 1.2
+    - 1.0
+  
+### Aruba
+
+1. View the checkpoints. 
+   
+    Ensure that the proper checkpoints exist. `CSM1_0` and `CSM1_2` are used in this example.
+
+
+    Example:
 
     ```
-    sw-spine-001# show checkpoint
-    ```
-
-    Example output:
-
-    ```
-    NAME TYPE WRITER DATE(YYYY/MM/DD) IMAGE VERSION
-    CSM1_0 latest User 2022-01-13T16:51:37Z GL.10.08.1021
-    CSM1_2 latest User 2022-01-13T16:51:48Z GL.10.08.1021
-    startup-config startup User 2021-12-20T17:35:58Z GL.10.08.1021
+    sw-spine-001# show checkpoint | include CSM
+    CSM1_2_FRESH_INSTALL_CANU_1_3_2                     latest      User    2022-04-01T20:11:57Z  GL.10.09.0010
+    CSM1_2_UPGRADE_CANU_1_3_2                           checkpoint  User    2022-04-01T18:57:06Z  GL.10.09.0010
+    CSM1_0_CANU_1_2_4                                   checkpoint  User    2022-03-15T21:37:11Z  GL.10.09.0010
     ```
 
 1. Rollback to desired checkpoint.
 
     ```
-    sw-spine-001# checkpoint rollback CSM1_0
+    sw-spine-001# checkpoint rollback CSM1_2_UPGRADE_CANU_1_3_2    
     ```
 
 ## Dell
 
-1. View the configuration files.
 
-    Ensure that `csm1.0` and `csm1.2` exist. If they exist, proceed to the next step.
+    Ensure that the proper config files exist. `CSM1_0` and `CSM1_2` are used in this example.
+
 
     ```
     sw-leaf-001# dir config
@@ -68,8 +78,9 @@ To save switch configurations, refer to the [Configuration Management](config_ma
 ## Mellanox
 
 1. View the configuration files.
+   
+    Ensure that the proper checkpoints exist. `CSM1_0` and `CSM1_2` are used in this example.
 
-    Ensure that `csm1.0` and `csm1.2` exist. If they exist, proceed to the next step.
 
     ```
     sw-spine-001 [standalone: master] (config) # show configuration files
@@ -78,21 +89,25 @@ To save switch configurations, refer to the [Configuration Management](config_ma
     Example output:
 
     ```
-    csm1.0 (active)
-    csm1.0.bak
-    csm1.2
-    csm1.2.bak
+    sw-spine-001 [mlag-domain: master] # show configuration files
+
+    csm1.0.canu1.1.21 (active)
+    csm1.0.canu1.1.21.bak
+    csm1.2.fresh_install_canu1.1.21
+    csm1.2.fresh_install_canu1.1.21.bak
+    csm1.2.upgrade_canu1.1.21
+    csm1.2.upgrade_canu1.1.21.bak
     initial
     initial.bak
 
-    Active configuration: csm1.0
+    Active configuration: csm1.0.canu1.1.21
     Unsaved changes     : yes
     ```
 
 1. Switch to desired configuration.
 
     ```
-    sw-spine-001 [standalone: master] (config) # configuration switch-to csm1.0
+    sw-spine-001 [standalone: master] (config) # configuration switch-to csm1.2.upgrade_canu1.1.21
     ```
 
     Example output:

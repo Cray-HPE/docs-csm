@@ -23,7 +23,7 @@ for an HPE Cray EX system.
 
    System services on these nodes are provided as containerized micro-services packaged for deployment
    via Helm charts. Kubernetes orchestrates these services and schedules them on Kubernetes worker
-   nodes with horizontal scaling. Horizontal scales increases or decreases the number of services instances
+   nodes with horizontal scaling. Horizontal scaling increases or decreases the number of services' instances as
    demand for them varies, such as when booting many compute nodes or application nodes.
 
    There is much more information available in the [CSM Overview](csm_overview.md) about the hardware,
@@ -55,9 +55,8 @@ See [Scenarios for Shasta v1.5](scenarios.md)
 <a name="operations"></a>
 ## CSM Operational Activities
 
-   Procedures which are used during either installation or upgrading of software or in both, but which
-   may also be used for general operation of the system reside here. They are referenced in the context
-   of the installation workflow. For example, updating firmware with FAS or running the CSM health checks.
+   Procedures which are used during either installation, upgrading or general operation of the system reside here. They are referenced in the context
+   of the specific workflow. For example, updating firmware with FAS or running the CSM health checks.
 
    See [CSM Operational Activities](../operations/index.md)
 
