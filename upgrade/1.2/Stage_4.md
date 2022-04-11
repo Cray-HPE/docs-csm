@@ -152,7 +152,7 @@ Only processes running the v15.2.8 image will be upgraded. This will include `MO
     mon.ncn-s001 has auth_allow_insecure_global_id_reclaim set to true
     mon.ncn-s002 has auth_allow_insecure_global_id_reclaim set to true
     mon.ncn-s003 has auth_allow_insecure_global_id_reclaim set to true
-    ```
+   ```
 
    `ceph -s` should show:
 
