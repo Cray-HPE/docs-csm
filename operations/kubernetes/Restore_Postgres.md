@@ -205,7 +205,19 @@ In the event that the Spire Postgres cluster is in a state that the cluster must
     ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start"; sleep 2; done
     ```
 
-11. Restart the `spire-agent` on all the nodes.
+11. Restart the `spire-agent` daemonset and the `spire-jwks` service.
+
+    ```bash
+    ncn-w001# kubectl rollout restart daemonset spire-agent -n ${NAMESPACE} 
+    # Wait for the restart to complete
+    ncn-w001# kubectl rollout status daemonset spire-agent -n ${NAMESPACE}
+
+    ncn-w001# kubectl rollout restart deployment spire-jwks -n ${NAMESPACE} 
+    # Wait for the restart to complete
+    ncn-w001# kubectl rollout status deployment spire-jwks -n ${NAMESPACE} 
+    ```
+
+12. Restart the `spire-agent` on all the nodes.
 
     ```bash
     ncn-w001# pdsh -w ncn-m00[1-3] 'systemctl restart spire-agent'
@@ -213,7 +225,7 @@ In the event that the Spire Postgres cluster is in a state that the cluster must
     ncn-w001# pdsh -w ncn-s00[1-3] 'systemctl restart spire-agent'
     ```
 
-12. Verify the service is working. The following should return a token.
+13. Verify the service is working. The following should return a token.
 
     ```bash
     ncn-w001:# /usr/bin/heartbeat-spire-agent api fetch jwt -socketPath=/root/spire/agent.sock -audience test
