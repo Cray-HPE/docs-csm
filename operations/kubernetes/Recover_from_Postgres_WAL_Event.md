@@ -127,7 +127,7 @@ postgresql.acid.zalan.do/cray-smd-postgres patched
 ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
 ```
 
-4. Delete the PVCs from the non running Postgres pods.
+4. Delete the PVCs from the non-running Postgres pods.
 ```
 ncn-w001# kubectl delete pvc "${PGDATA}-1" "${PGDATA}-2" -n ${NAMESPACE}
 persistentvolumeclaim "pgdata-cray-smd-postgres-1" deleted

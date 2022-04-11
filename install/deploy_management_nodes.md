@@ -161,8 +161,8 @@ proceed to step 2.
       >
       > For HPE NCNs the date configuration menu can be found at the following path: `System Configuration -> BIOS/Platform Configuration (RBSU) -> Date and Time`
       >
-      > Alternatively for HPE NCNs you can log in to the BMC's web interface and access the HTML5 console for the node to interact with the graphical BIOS.
-      > From the administrators own machine create a SSH tunnel (-L creates the tunnel, and -N prevents a shell and stubs the connection):
+      > Alternatively, for HPE NCNs you can log in to the BMC's web interface and access the HTML5 console for the node, in order to interact with the graphical BIOS.
+      > From the administrator's own machine, create an SSH tunnel (`-L` creates the tunnel; `-N` prevents a shell and stubs the connection):
       >
       > ```bash
       > linux# bmc=ncn-w001-mgmt # Change this to be each node in turn.
@@ -188,12 +188,12 @@ firmware requirement before starting.
    the firmware because that service has not yet been installed. However, at this point, it would be possible to use
    the HPE Cray EX HPC Firmware Pack (HFP) product on the PIT node to learn about the firmware versions available in HFP.
 
-   If the firmware is not updated at this point in the installation workflow, it can be done with FAS after CSM and HFP have
-   both been installed and configured, however, at that point a rolling reboot procedure for the management nodes will be needed
+   If the firmware is not updated at this point in the installation workflow, then it can be done with FAS after CSM and HFP have
+   both been installed and configured. However, at that point a rolling reboot procedure for the management nodes will be needed,
    after the firmware has been updated.
 
    See the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
-   on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for information about the HPE Cray EX HPC Firmware Pack (HFP) product.
+   on the [HPE Customer Support Center](https://www.hpe.com/support/ex-gsg) for information about the _HPE Cray EX HPC Firmware Pack_ (HFP) product.
 
    In the HFP documentation there is information about the recommended firmware packages to be installed.
    See "Product Details" in the _HPE Cray EX HPC Firmware Pack Installation Guide_.
@@ -996,6 +996,6 @@ Observe the output of the checks and note any failures, then remediate them.
 <a name="next-topic"></a>
 # Next Topic
 
-   After completing the deployment of the management nodes, the next step is to install the CSM services.
+After completing the deployment of the management nodes, the next step is to install the CSM services.
 
-   See [Install CSM Services](index.md#install_csm_services)
+See [Install CSM Services](index.md#install_csm_services)

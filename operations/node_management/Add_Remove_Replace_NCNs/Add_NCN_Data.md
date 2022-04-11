@@ -27,7 +27,7 @@ Scenarios where this procedure is applicable:
 1.  Collect the following information from the NCN:
     1.  Determine the xname of the NCN by referring to the HMN of the system's SHCD file, if it has not been determined yet.
 
-        Sample row from the `HMN` tab of a SHCD file:
+        Sample row from the `HMN` tab of an SHCD file:
 
         | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
         | --------------- | ----------------- | --------------------- | ----- | ------------ | ---- | ----------------- | ----------------- | ---------------------- | -------------------------- | ----- | ---------------------- |
@@ -57,7 +57,7 @@ Scenarios where this procedure is applicable:
 
     1.  **Skip if adding `ncn-m001`:** Determine the xname of the `MgmtSwitchConnector` (the switch port of the management switch that the BMC is connected to). This is not required for `ncn-m001`, because its BMC is typically connected to the site network.
 
-        Sample row from the HMN tab of a SHCD:
+        Sample row from the HMN tab of an SHCD:
 
         | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
         | --------------- | ----------------- | --------------------- | ----- | ------------ | ---- | ----------------- | ----------------- | ---------------------- | -------------------------- | ----- | ---------------------- |

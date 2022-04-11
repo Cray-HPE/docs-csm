@@ -32,7 +32,7 @@ conman_node=$(kubectl get po -n services -l 'app.kubernetes.io/name=cray-conman'
 conman_pod=$(kubectl get po -n services -l 'app.kubernetes.io/name=cray-conman' -o wide | grep -v NAME | awk '{print $1}')
 
 echo ""
-echo "Boot related pod locations:"
+echo "Boot-related pod locations:"
 echo ""
 echo "  kea pod is running on:    $kea_node ($kea_pod)"
 echo "  nexus pod is running on:  $nexus_node ($nexus_pod)"
