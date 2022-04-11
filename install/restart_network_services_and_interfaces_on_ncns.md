@@ -135,6 +135,7 @@ sorted by safest to touch relative to keeping an SSH connection up.
          route:    ipv6 fe80::/64 type unicast table main scope universe protocol kernel priority 256
 
    eth0            no-device
+   ```
 
 
 * Print real devices (ignore no-device):

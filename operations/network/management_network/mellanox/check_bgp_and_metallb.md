@@ -4,7 +4,9 @@ Log in to the spine switches if you have access and check that MetalLB is peerin
 
 Check both spines if they are available (powered up):
 
-```show ip bgp summary```
+```
+show ip bgp summary
+```
 
 Example working state:
 
