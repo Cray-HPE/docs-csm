@@ -735,7 +735,7 @@ pit# popd
 Run the following command on the PIT node to remove the default pool, which can cause contention issues with NTP.
 
 ```bash
-pit# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',')" 'sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf'
+pit# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | sort -u |  tr -t '\n' ',')" 'sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf'
 ```
 
 <a name="validate_management_node_deployment"></a>
