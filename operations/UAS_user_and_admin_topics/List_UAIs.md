@@ -77,7 +77,7 @@ For Legacy Mode user procedures:
     uai_name = "uai-vers-4a38a807"
     uai_status = "Running: Ready"
     username = "vers"
-    ````
+    ```
 
 [Top: User Access Service (UAS)](index.md)
 
