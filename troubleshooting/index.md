@@ -6,8 +6,7 @@ This document provides troubleshooting information for services and functionalit
  * [Known Issues](#known-issues)
     * [Hardware Discovery](known_issues/Hardware_Discovery.md)
     * [SAT/HSM/CAPMC Component Power State Mismatch](https://github.com/Cray-HPE/docs-csm/blob/CASMINS-4311/troubleshooting/known_issues/component_power_state_mismatch.md)
-
-
+    
 ### Troubleshoot Topics
  * Troubleshoot Kubernetes
     * [General Kubernetes Commands for Troubleshooting](https://github.com/Cray-HPE/docs-csm/blob/CASMINS-4311/troubleshooting/kubernetes/Kubernetes_Troubleshooting_Information.md)
