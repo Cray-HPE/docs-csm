@@ -142,6 +142,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
            "overwriteSameImage":false
          }
        }
+   ```
 
 3. Verify the correct image ID was found.
 
@@ -417,7 +418,7 @@ This procedure includes information on how check the firmware versions for the e
        "xname": "x9000c1s3b1",
        "toFirmwareVersion": ""
        }
-       ```
+   ```
 
 Update the firmware on any devices indicating a new version is needed.
 

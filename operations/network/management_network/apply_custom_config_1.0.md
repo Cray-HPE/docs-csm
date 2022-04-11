@@ -96,7 +96,7 @@ user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 sw-leaf-001# conf t
 system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
- ```
+```
 
 ### Mellanox
 
