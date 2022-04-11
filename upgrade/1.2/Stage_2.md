@@ -1,7 +1,5 @@
 # Stage 2 - Kubernetes Upgrade from 1.19.9 to 1.20.13
 
-> NOTE: During the CSM-0.9 install the LiveCD containing the initial install files for this system should have been unmounted from the master node when rebooting into the Kubernetes cluster. The scripts run in this section will also attempt to unmount/eject it if found to ensure the USB stick does not get erased.
-
 ## Stage 2.1
 
 1. Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`. Follow output of the script carefully. The script will pause for manual interaction.
@@ -25,6 +23,8 @@
 1. Repeat the previous step for each other worker node, one at a time.
 
 ## Stage 2.3
+
+Up to this point, we have already upgraded all worker, storage and master nodes except `ncn-m001`. `ncn-m001` has been our stable node that we logged into the cluster with to upgrade the other nodes. The procedure at this stage will now use `ncn-m002` as a new **stable** node, to login to the cluster, and from it upgrade `ncn-m001`. During this process, ensure `ncn-m001` does not have its power state affected.
 
 For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP address to `ssh` to `ncn-m002` for this `ncn-m001` install
 
