@@ -222,6 +222,24 @@ if [ $errors -gt 0 ]; then
     exit 1
 fi
 
+NMN_GW=$(echo "${NETWORKSJSON}" | jq -r '.[] | select(.Name == "NMN") | .ExtraProperties.Subnets[0].Gateway')
+if [ -z $NMN_GW ]; then
+    echo >&2 "error:  Could not find NMN Gateway"
+    exit 1
+fi
+
+CMN_CIDR=$(echo "${NETWORKSJSON}" | jq -r '.[] | select(.Name == "CMN") | .ExtraProperties.CIDR')
+if [ -z $CMN_CIDR ]; then
+    echo >&2 "error:  Could not find CMN CIDR"
+    exit 1
+fi
+
+# Add the CMN route to macvlan routes if it is not already there
+if [[ -z "$(yq r "$c" "spec.wlm.macvlansetup.routes.(dst==${CMN_CIDR})")" ]]; then
+    yq w -i "$c" "spec.wlm.macvlansetup.routes[+].dst" "${CMN_CIDR}"
+    yq w -i "$c" "spec.wlm.macvlansetup.routes.(dst==${CMN_CIDR}).gw" "${NMN_GW}"
+fi
+
 # Ensure Gitea's PVC configuration has been removed (stop gap for potential upgrades from CSM 0.9.4)
 yq d -i "$c" 'spec.kubernetes.services.gitea.cray-service.persistentVolumeClaims'
 
@@ -414,26 +432,32 @@ fi
 yq d -i "$c" 'spec.kubernetes.services.cray-keycloak-gatekeeper'
 
 # Add oauth2-proxies
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-management.generate.name' 'cray-oauth2-proxy-customer-management'
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-management.generate.data[0].type' randstr
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-management.generate.data[0].args.name' cookie-secret
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-management.generate.data[0].args.length' 32
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-management.generate.data[0].args.encoding' base64
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-management.generate.data[0].args.url_safe' yes
+if [[ -z "$(yq r "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-management')" ]]; then
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-management.generate.name' 'cray-oauth2-proxy-customer-management'
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-management.generate.data[0].type' randstr
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-management.generate.data[0].args.name' cookie-secret
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-management.generate.data[0].args.length' 32
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-management.generate.data[0].args.encoding' base64
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-management.generate.data[0].args.url_safe' yes
+fi
 
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-access.generate.name' 'cray-oauth2-proxy-customer-access'
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-access.generate.data[0].type' randstr
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-access.generate.data[0].args.name' cookie-secret
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-access.generate.data[0].args.length' 32
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-access.generate.data[0].args.encoding' base64
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-access.generate.data[0].args.url_safe' yes
+if [[ -z "$(yq r "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-access')" ]]; then
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-access.generate.name' 'cray-oauth2-proxy-customer-access'
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-access.generate.data[0].type' randstr
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-access.generate.data[0].args.name' cookie-secret
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-access.generate.data[0].args.length' 32
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-access.generate.data[0].args.encoding' base64
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-access.generate.data[0].args.url_safe' yes
+fi
 
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-speed.generate.name' 'cray-oauth2-proxy-customer-high-speed'
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-speed.generate.data[0].type' randstr
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-speed.generate.data[0].args.name' cookie-secret
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-speed.generate.data[0].args.length' 32
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-speed.generate.data[0].args.encoding' base64
-yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-speed.generate.data[0].args.url_safe' yes
+if [[ -z "$(yq r "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-speed')" ]]; then
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-speed.generate.name' 'cray-oauth2-proxy-customer-high-speed'
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-speed.generate.data[0].type' randstr
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-speed.generate.data[0].args.name' cookie-secret
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-speed.generate.data[0].args.length' 32
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-speed.generate.data[0].args.encoding' base64
+    yq w -i "$c" 'spec.kubernetes.sealed_secrets.cray-oauth2-proxy-customer-high-speed.generate.data[0].args.url_safe' yes
+fi
 
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-management.sealedSecrets[0]'  "{{ kubernetes.sealed_secrets['cray-oauth2-proxy-customer-management'] | toYaml }}"
 yq w -i --style=single "$c" 'spec.kubernetes.services.cray-oauth2-proxies.customer-management.hostAliases[0].ip' '{{ network.netstaticips.nmn_api_gw }}'
