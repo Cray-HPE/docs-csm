@@ -41,13 +41,13 @@ ncn-m001# cray scsd bmc dumpcfg create PAYLOAD_FILE --format json
         {
               "NTPServerInfo":
               {
-                  "NTPServers": "sms-ncn-w001",
+                  "NTPServers": ["sms-ncn-w001"],
                   "Port": 123,
                   "ProtocolEnabled": true
               },
               "SyslogServerInfo":
               {
-                  "SyslogServers": "sms-ncn-w001",
+                  "SyslogServers": ["sms-ncn-w001"],
                   "Port":514,
                   "ProtocolEnabled": true
               },
@@ -64,13 +64,13 @@ ncn-m001# cray scsd bmc dumpcfg create PAYLOAD_FILE --format json
         {
               "NTPServerInfo":
               {
-                  "NTPServers": "sms-ncn-w001",
+                  "NTPServers": ["sms-ncn-w001"],
                   "Port": 123,
                   "ProtocolEnabled": true
               },
               "SyslogServerInfo":
               {
-                  "SyslogServers": "sms-ncn-w001",
+                  "SyslogServers": ["sms-ncn-w001"],
                   "Port":514,
                   "ProtocolEnabled": true
               },
@@ -153,13 +153,13 @@ The following is an example payload file that was used to generate the output in
     {
         "NTPServerInfo":
         {
-            "NTPServers": "sms-ncn-w001",
+            "NTPServers": ["sms-ncn-w001"],
             "Port": 123,
             "ProtocolEnabled": true
         },
         "SyslogServerInfo":
         {
-            "SyslogServers": "sms-ncn-w001",
+            "SyslogServers": ["sms-ncn-w001"],
             "Port":514,
             "ProtocolEnabled": true
         },
@@ -203,13 +203,13 @@ The following is an example payload file that was used to generate the output in
     {
         "NTPServerInfo":
         {
-            "NTPServers": "sms-ncn-w001",
+            "NTPServers": ["sms-ncn-w001"],
             "Port": 123,
             "ProtocolEnabled": true
         },
         "SyslogServerInfo":
         {
-            "SyslogServers": "sms-ncn-w001",
+            "SyslogServers": ["sms-ncn-w001"],
             "Port":514,
             "ProtocolEnabled": true
         },
@@ -310,4 +310,3 @@ Example output:
     "StatusMsg": "OK"
 }
 ```
-
