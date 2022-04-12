@@ -376,6 +376,8 @@ Some files are needed for generating the configuration payload. See these topics
 
       > **`NOTE`** for those more familiar with a CSM Install, this step may be skipped entirely by simple invoking pit-intas detailed in the [#first time](#bring---up-the-pit-services-and-validate-pit-health) section.
 
+      > **NOTE:** Ensure to select a reachable NTP pool/server passed in via the `--ntp-pools`/`--ntp-servers` flags, respectively. Adding an unreachable server can cause clock skew as chrony tries to continually reach out to a server it can never reach.
+
       ```bash
       pit:/var/www/ephemeral/prep/# csi config init
 
