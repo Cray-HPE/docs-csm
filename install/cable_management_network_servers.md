@@ -45,9 +45,9 @@ ports on the nodes and how to cable the nodes to the management network switches
 
 | Device | Port | Linux Device | Destination | Name | VLAN | LAG |
 |:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
-| OCP | 1 |  mgmt0 | primary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| OCP | 2 |  mgmt1 | secondary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| ILO | 1 |  None | HMN leaf-bmc |  N/A |  HMN  |  N/A |
+| OCP | 1 |  mgmt0  | primary      |  N/A  |  HMN, NMN, CAN  |  MLAG-LACP  |
+| OCP | 2 |  mgmt1  | secondary    |  N/A  |  HMN, NMN, CAN  |  MLAG-LACP  |
+| ILO | 1 |  None   | HMN leaf-bmc |  N/A  |  HMN            |  N/A        |
 
 <br>
 NOTES:
@@ -60,8 +60,8 @@ NOTES:
 
 |hostname|Source         |Destination   |Destination |
 |--------|---------------|--------------|------------|
-| wn01	 | x3000u04ocp-j1 | x3000u12-j7 | sw-25g01   |
-| wn01	 | x3000u04ocp-j2 | x3000u13-j7	| sw-25g02   |
+| wn01	 | x3000u04ocp-j1 | x3000u12-j7 | sw-25g01 |
+| wn01	 | x3000u04ocp-j2 | x3000u13-j7	| sw-25g02 |
 
 ![Diagram of HPE Worker Node Cabling](../img/network/HPE_Worker.png)
 
@@ -74,11 +74,11 @@ The table below describes the cabling of dual card configurations. Also read not
 
 | Device | Port | Linux Device | Destination | Name | VLAN | LAG |
 |:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
-| OCP | 1 |  mgmt0 | primary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| OCP | 2 |  mgmt1 | site |  N/A |  N/A  |  N/A |
-| PCIE-SLOT1 | 1 |  mgmt2 | secondary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| PCIE-SLOT1 | 2 |  mgmt3 | None |  N/A |  N/A  |  N/A |
-| ILO | 1 |  None | HMN leaf-bmc |  N/A |  HMN  |  N/A |
+| OCP        | 1 | mgmt0  | primary      |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| OCP        | 2 | sun0   | N/A          |  N/A |  N/A            |  N/A       |
+| PCIE-SLOT1 | 1 | mgmt1  | secondary    |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| PCIE-SLOT1 | 2 | sun1   | N/A          |  N/A |  N/A  |  N/A    |
+| ILO        | 1 | None   | HMN leaf-bmc |  N/A |  HMN  |  N/A    |
 
 <br>
 NOTES:
@@ -109,11 +109,11 @@ NOTES:
 
 | Device | Port | Linux Device | Destination | Name | VLAN | LAG |
 |:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
-| OCP | 1 |  mgmt0 | primary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| OCP | 2 |  mgmt1 | primary |  N/A |  SUN  |  MLAG-LACP |
-| PCIE-SLOT1 | 1 |  mgmt2 | secondary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| PCIE-SLOT1 | 2 |  mgmt3 | secondary |  N/A |  SUN  |  MLAG-LACP |
-| ILO | 1 |  None | HMN leaf-bmc |  N/A |  HMN  |  N/A |
+| OCP        | 1 |  mgmt0 | primary      |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| OCP        | 2 |  sun0  | primary      |  N/A |  SUN            |  MLAG-LACP |
+| PCIE-SLOT1 | 1 |  mgmt1 | secondary    |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| PCIE-SLOT1 | 2 |  sun1  | secondary    |  N/A |  SUN            |  MLAG-LACP |
+| ILO        | 1 |  None  | HMN leaf-bmc |  N/A |  HMN            |  N/A       |
 
 <br>
 NOTES:
@@ -152,11 +152,11 @@ For systems that include 4 leaf switches the cabling will look like the followin
 
 | Device | Port | Linux Device | Destination | Name | VLAN | LAG |
 |:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
-| OCP | 1 |  mgmt0 | primary |  N/A |  NMN  |  N/A |
-| OCP | 2 |  mgmt1 | primary |  N/A |  CAN  |  MLAG-LACP |
-| PCIE-SLOT1 | 1 |  mgmt2 | secondary |  N/A |  N/A  |  N/A |
-| PCIE-SLOT1 | 2 |  mgmt3 | secondary |  N/A |  CAN  |  MLAG-LACP |
-| ILO | 1 |  None | HMN leaf-bmc |  N/A |  HMN  |  N/A |
+| OCP        | 1 |  mgmt0 | primary      |  N/A |  NMN  |  N/A       |
+| OCP        | 2 |  mgmt1 | primary      |  N/A |  CAN  |  MLAG-LACP |
+| PCIE-SLOT1 | 1 |  mgmt2 | secondary    |  N/A |  N/A  |  N/A       |
+| PCIE-SLOT1 | 2 |  mgmt3 | secondary    |  N/A |  CAN  |  MLAG-LACP |
+| ILO        | 1 |  None  | HMN leaf-bmc |  N/A |  HMN  |  N/A       |
 
 <br>
 NOTES:

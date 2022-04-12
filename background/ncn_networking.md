@@ -57,6 +57,7 @@ the PCI busses and sort network interfaces into 3 buckets:
 The source code for the rule generation is in [metal-ipxe][1], but for technical information on the PCI configuration/reading please read on.
 
 <a name="vendor-and-bus-id-identification"></a>
+
 ### Vendor and Bus ID Identification
 
 The initial boot of an NCN sets interface `udev` rules because it has no discovery method yet.

@@ -8,19 +8,21 @@
 
     > NOTE: You may need to reset the root password for each node after it is rebooted
 
-    **IMPORTANT:** You may encounter an error like shown below.  If this is the case, just re-run the same command for the node upgrade and it will pick up at that point and conitune.
+    **Known Issues:**
+    * It is possible to encounter an error like shown below.  If this is the case, just re-run the same command for the node upgrade and it will pick up at that point and conitune.
 
-    ```text
-    ====> REDEPLOY_CEPH ...
-    /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/root/ceph.pub"Number of key(s) added: 1 Now try logging into the machine, with:   "ssh 'root@ncn-s003'"
-    and check to make sure that only the key(s) you wanted were added.Error EINVAL: Traceback (most recent call last):
-    ```
+      ```text
+      ====> REDEPLOY_CEPH ...
+      /usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/root/ceph.pub"Number of key(s) added: 1Now try logging into the machine, with:   "ssh 'root@ncn-s003'"
+      and check to make sure that only the key(s) you wanted were added.Error EINVAL: Traceback (most recent call last):
+      ```
+    * During the storage node rebuild, it is possible that ceph health may report ***HEALTH_WARN 1 daemons have recently crashed***.  This can occur occasionally as part of the shutdown process of the node being rebuilt.  Please refer to the [Dump Ceph Crash Data](operations/../../../operations/utility_storage/Dump_Ceph_Crash_Data.md) located in the Operations/Utility Storage section of the guide.
 
 **IMPORTANT:** Ensure the Ceph cluster is healthy prior to continuing. If you have processes not running, then refer to [Utility Storage Operations](../../operations/utility_storage/Utility_Storage.md) for operational and troubleshooting procedures.
 
 1. Repeat the previous step for each other storage node, one at a time.
 
-1. After `ncn-upgrade-ceph-nodes.sh` has successfully run for all storage nodes, rescan SSH keys on all storage nodes
+2. After `ncn-upgrade-ceph-nodes.sh` has successfully run for all storage nodes, rescan SSH keys on all storage nodes
 
     ```bash
     ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
@@ -28,7 +30,7 @@
     ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
     ```
 
-1. Deploy `node-exporter` and `alertmanager`.
+3. Deploy `node-exporter` and `alertmanager`.
 
     **NOTE:** This process will need to run on a node running `ceph-mon`, which in most cases will be `ncn-s001`, `ncn-s002`, and `ncn-s003`. It only needs to be run once, not on every one of these nodes.
 
@@ -58,7 +60,7 @@
 
         **IMPORTANT:** There should be a `node-exporter` container per Ceph node and a single `alertmanager` container for the cluster.
 
-1. Update BSS to ensure the Ceph images are loaded if a node is rebuilt.
+4. Update BSS to ensure the Ceph images are loaded if a node is rebuilt.
 
     ```bash
     ncn-m001# . /usr/share/doc/csm/upgrade/1.2/scripts/ceph/lib/update_bss_metadata.sh
