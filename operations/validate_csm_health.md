@@ -549,7 +549,7 @@ ALL OK
 #### 2.2.1 Interpreting results
 
 Both sections `BMCs in SLS not in HSM components` and `BMCs in SLS not in HSM Redfish Endpoints` have the same format for mismatches between SLS and HSM. Each row starts with the xname of the BMC. If the BMC does not have an associated `MgmtSwitchConnector` in SLS, then `# No mgmt port association` will be displayed alongside the BMC xname.
-> MgmtSwitchConnectors in SLS are used to represent the switch port on a leaf switch that an the BMC of an air cooled device is connected to.
+> `MgmtSwitchConnector`s in SLS are used to represent the switch port on a leaf switch that is connected to the BMC of an air-cooled device.
 
 ```
 =============== BMCs in SLS not in HSM components ===============
@@ -573,7 +573,7 @@ __For each__ of the BMCs that show up in either of mismatch lists use the follow
 * The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depending on the state of the system when the `hsm_discovery_verify.sh` script is run. If the system is currently going through the process of installation, then this is an expected mismatch as the [Prepare Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet.
    > For more information refer to [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
 
-   Example mismatch for the BMC of a HPE Apollo XL654D:
+   Example mismatch for the BMC of an HPE Apollo XL654D:
    ```bash
    =============== BMCs in SLS not in HSM components ===============
    x3000c0s30b1

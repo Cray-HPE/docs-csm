@@ -1,12 +1,12 @@
 # Bootstrap PIT Node from LiveCD USB
 
 The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. There are two media available
-to bootstrap the PIT node--the RemoteISO or a bootable USB device. This procedure describes using the USB
+to bootstrap the PIT node: the RemoteISO or a bootable USB device. This procedure describes using the USB
 device. If not using the USB device, see [Bootstrap Pit Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md).
 
 There are 5 overall steps that provide a bootable USB with SSH enabled, capable of installing Shasta v1.5 (or higher).
 
-### Topics
+## Topics
    1. [Download and Expand the CSM Release](#download-and-expand-the-csm-release)
    1. [Create the Bootable Media](#create-the-bootable-media)
    1. [Configuration Payload](#configuration-payload)
@@ -24,9 +24,9 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
 <a name="download-and-expand-the-csm-release"></a>
 ### 1. Download and Expand the CSM Release
 
-Fetch the base installation CSM tarball and extract it, installing the contained CSI tool.
+Fetch the base installation CSM tarball, extract it, and install the contained CSI tool.
 
-1. Set up the Typescript directory as well as the initial typescript. This directory will be returned to for every typescript in the entire CSM installation.
+1. Set up the initial typescript.
 
    ```bash
    linux# cd ~
@@ -36,14 +36,14 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
 1. The CSM software release should be downloaded and expanded for use.
 
-   **Important:** To ensure that the CSM release plus any patches, workarounds, or hotfixes are included
+   **Important:** In order to ensure that the CSM release plus any patches, workarounds, or hotfixes are included,
    follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
 
    **Important:** Download to a location that has sufficient space for both the tarball and the expanded tarball.
 
    > Note: Expansion of the tarball may take more than 45 minutes.
 
-   The rest of this procedure will use the CSM_RELEASE variable and expect to have the
+   The rest of this procedure will use the `CSM_RELEASE` variable and expects to have the
    contents of the CSM software release tarball plus any patches, workarounds, or hotfixes.
 
    ```bash
@@ -54,9 +54,9 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    linux# CSM_PATH=$(pwd)/${CSM_RELEASE}
    ```
 
-   The ISO and other files are now available in the directory from the extracted CSM tar.
+   The ISO and other files are now available in the directory from the extracted CSM tarball.
 
-1. Install/upgrade the CSI RPM
+1. Install/upgrade the CSI RPM.
 
    ```bash
    linux# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
@@ -65,7 +65,7 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 1. Download and install/upgrade the workaround and documentation RPMs. If this machine does not have direct internet
    access these RPMs will need to be externally downloaded and then copied to this machine.
 
-   **Important:** To ensure that the latest workarounds and documentation updates are available,
+   **Important:** In order to ensure that the latest workarounds and documentation updates are available,
    see [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds)
 
 1. Show the version of CSI installed.
@@ -86,13 +86,13 @@ Fetch the base installation CSM tarball and extract it, installing the contained
    App. Version   : 1.5.18
     ```
 
-1. Configure zypper with the `embedded` repository from the CSM release.
+1. Configure `zypper` with the `embedded` repository from the CSM release.
 
    ```bash
    linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
    ```
 
-1. Install podman or docker to support container tools required to generated
+1. Install Podman or Docker to support container tools required to generate
    sealed secrets.
 
    Podman RPMs are included in the `embedded` repository in the CSM release and
@@ -100,34 +100,35 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    * Install `podman` and `podman-cni-config` packages:
 
-     ```bash
-     linux# zypper in --repo ${CSM_RELEASE}-embedded -y podman podman-cni-config
-     ```
+      ```bash
+      linux# zypper in --repo ${CSM_RELEASE}-embedded -y podman podman-cni-config
+      ```
 
-   Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `${CSM_PATH}/rpm/embedded` directory.
-   ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/x86_64/podman-*.x86_64.rpm
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/noarch/podman-cni-config-*.noarch.rpm
-   ```
+   * Alternatively, you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
+     from the `${CSM_PATH}/rpm/embedded` directory.
 
-1. Install lsscsi to view attached storage devices.
+      ```bash
+      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/x86_64/podman-*.x86_64.rpm
+      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/noarch/podman-cni-config-*.noarch.rpm
+      ```
 
-   lsscsi RPMs are included in the `embedded` repository in the CSM release and
+1. Install `lsscsi` to view attached storage devices.
+
+   `lsscsi` RPMs are included in the `embedded` repository in the CSM release and
    may be installed in your pre-LiveCD environment using `zypper` as follows:
 
    * Install `lsscsi` package:
 
-     ```bash
-     linux# zypper in --repo ${CSM_RELEASE}-embedded -y lsscsi
-     ```
+      ```bash
+      linux# zypper in --repo ${CSM_RELEASE}-embedded -y lsscsi
+      ```
 
-   Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
-   from the `${CSM_PATH}/rpm/embedded` directory.
-   ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/x86_64/lsscsi-*.x86_64.rpm
-   ```
+   * Alternatively, you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
+     from the `${CSM_PATH}/rpm/embedded` directory.
 
+      ```bash
+      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/x86_64/lsscsi-*.x86_64.rpm
+      ```
 
 1. Although not strictly required, the procedures for setting up the
    `site-init` directory recommend persisting `site-init` files in a Git
@@ -138,26 +139,27 @@ Fetch the base installation CSM tarball and extract it, installing the contained
 
    * Install `git` package:
 
-     ```bash
-     linux# zypper in --repo ${CSM_RELEASE}-embedded -y git
-     ```
+      ```bash
+      linux# zypper in --repo ${CSM_RELEASE}-embedded -y git
+      ```
 
-   Or you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
+   * Alternatively, you may use `rpm -Uvh` to install RPMs (and their dependencies) manually
    from the `${CSM_PATH}/rpm/embedded` directory.
-   ```bash
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/x86_64/git-core-*.x86_64.rpm
-   linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Development-Tools/15-SP2/x86_64/update/x86_64/git-*.x86_64.rpm
-   ```
+
+      ```bash
+      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/x86_64/git-core-*.x86_64.rpm
+      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Development-Tools/15-SP2/x86_64/update/x86_64/git-*.x86_64.rpm
+      ```
 
 <a name="create-the-bootable-media"></a>
 ### 2. Create the Bootable Media
 
-Cray Site Init will create the bootable LiveCD. Before creating the media, we need to identify
-which device that is.
+Cray Site Init will create the bootable LiveCD. Before creating the media, identify
+which device will be used for it.
 
 1. Identify the USB device.
 
-    This example shows the USB device is /dev/sdd on the host.
+    This example shows the USB device is `/dev/sdd` on the host.
 
     ```bash
     linux# lsscsi
@@ -177,34 +179,34 @@ which device that is.
     Set a variable with your disk to avoid mistakes:
 
     ```bash
-    linux# export USB=/dev/sd<disk_letter>
+    linux# USB=/dev/sd<disk_letter>
     ```
 
 1. Format the USB device
 
-    On Linux using the CSI application:
+    * On Linux, use the CSI application to do this:
 
-    ```bash
-    linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
-    ```
+        ```bash
+        linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+        ```
 
-    > Note: If the previous command fails with this error message, this indicates that this Linux computer does not have the checkmedia RPM installed. In that case, the RPM can be installed and `csi pit format` can be run again
-    > ```
-    > ERROR: Unable to validate ISO. Please install checkmedia
-    > ```
-    >
-    >   1.  Install the missing rpms
-    >
-    >   ```bash
-    >   linux# zypper in --repo ${CSM_RELEASE}-embedded -y libmediacheck5 checkmedia
-    >   linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
-    >   ```
+        > Note: If the previous command fails with the following error message, it indicates that this Linux computer does not have the checkmedia RPM installed. In that case, the RPM can be installed and `csi pit format` can be run again
+        > ```
+        > ERROR: Unable to validate ISO. Please install checkmedia
+        > ```
+        >
+        >   1.  Install the missing RPMs
+        >
+        >   ```bash
+        >   linux# zypper in --repo ${CSM_RELEASE}-embedded -y libmediacheck5 checkmedia
+        >   linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+        >   ```
 
-    On MacOS using the bash script:
+    * On MacOS, use the `write-livecd.sh` script to do this:
 
-    ```bash
-    macos# ./cray-site-init/write-livecd.sh $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
-    ```
+        ```bash
+        macos# ./cray-site-init/write-livecd.sh $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+        ```
 
     > NOTE: At this point the USB device is usable in any server with an x86_64 architecture based CPU. The remaining steps help add the installation data and enable SSH on boot.
 
@@ -215,13 +217,14 @@ which device that is.
     linux# mount -vL cow /mnt/cow && mount -vL PITDATA /mnt/pitdata
     ```
 
-1.  Copy and extract the tarball (compressed) into the USB:
+1.  Copy and extract the tarball into the USB:
     ```bash
     linux# cp -v ${CSM_PATH}.tar.gz /mnt/pitdata/
     linux# tar -zxvf ${CSM_PATH}.tar.gz -C /mnt/pitdata/
     ```
 
-The USB device is now bootable and contains our artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
+The USB device is now bootable and contains the CSM artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
+
 <a name="configuration-payload"></a>
 ### 3. Configuration Payload
 
@@ -301,6 +304,9 @@ Some files are needed for generating the configuration payload. See these topics
       ```
 
    1. Generate the system configuration.
+
+   > **`NOTE`** ensure you select a reachable NTP pool/server passed in via the `--ntp-pools`/`--ntp-servers` flags, respectively. Adding an uncreachable server can cause clock skew as chrony tries to continually reach out to a server it can never reach.
+
 
       ```bash
       linux# csi config init
@@ -400,7 +406,7 @@ Some files are needed for generating the configuration payload. See these topics
          * `p801p1,p801p2` for Intel nodes
       * If you are not using a `cabinets-yaml` file, set the three cabinet parameters (`mountain-cabinets`, `hill-cabinets`, and `river-cabinets`) to the number of each cabinet which are part of this system.
       * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help`
-      * For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. If you are using a `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
+      * For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the ID of every cabinet in the system. If you are using a `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
       * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
       * By default, spine switches are used as MetalLB peers. Use `--bgp-peers aggregation` to use aggregation switches instead.
       * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CAN. The `can-cidr` is the IP subnet for the CAN assigned to this system. The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN. The `can-external-dns` is the static IP address assigned to the DNS instance running in the cluster to which requests the cluster subdomain will be forwarded. The `can-external-dns` IP address must be within the `can-static-pool` range.
@@ -648,7 +654,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit#
    ```
 
-   Note: The hostname should be similar to eniac-ncn-m001-pit when booted from the LiveCD, but it will be shown as "pit#" in the command prompts from this point onward.
+   Note: The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#` in the command prompts from this point onward.
 
 <a name="configure-the-running-livecd"></a>
 ### 6. Configure the Running LiveCD

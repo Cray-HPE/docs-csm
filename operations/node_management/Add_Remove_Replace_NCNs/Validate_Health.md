@@ -17,8 +17,8 @@ The following procedures can be run from any master or worker node.
 
    **NOTE:**
    If workers have been removed and the worker count is currently at two, the following failures can be ignored. A re-check will be needed once workers are added and the count returns to three or above.
-   - the ncnPostgresHealthChecks may report `Unable to determine a leader` and one of the three Postgres pods may be in Pending state.
-   - the ncnHealthChecks may report `Error from server...FAILED - Pod Not Healthy`, `FAILED DATABASE CHECK` and one of the three Etcd pods may be in Pending state.
+   - the `ncnPostgresHealthChecks` may report `Unable to determine a leader` and one of the three Postgres pods may be in `Pending` state.
+   - the `ncnHealthChecks` may report `Error from server...FAILED - Pod Not Healthy`, `FAILED DATABASE CHECK` and one of the three Etcd pods may be in `Pending` state.
 
 1. Restart the Goss server on all the NCNs. Adjust the commands based on the number of master, worker, and storage nodes.
 
@@ -26,7 +26,7 @@ The following procedures can be run from any master or worker node.
    ncn-mw# pdsh -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] systemctl restart goss-servers
    ```
 
-1. Collect data about the various sub-systems.
+1. Collect data about the various subsystems.
 
    ```bash
    ncn-mw# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-master
@@ -36,10 +36,11 @@ The following procedures can be run from any master or worker node.
    ```
 
    **NOTE:**
-   The following errors can be ignored `Server URL: http://$NODE ... ERROR: Server endpoint could not be reached`, if $NODE has been removed and it is one of the first three worker, master or storage nodes.
+   The following errors can be ignored if `<NODE>` has been removed and it is one of the first three worker, master, or storage nodes:
+   `Server URL: http://<NODE> ... ERROR: Server endpoint could not be reached`
 
    **NOTE:**
-   If workers have been removed and the worker count is currently at two, the following failures can be ignored. A re-check will be needed once workers are added and the count returns to three or above.
-   - Verify cray etcd is healthy
+   If workers have been removed and the worker count is currently at two, failures of the following tests can be ignored. A re-check will be needed once workers are added and the count returns to three or above.
+   - `Verify cray etcd is healthy`
 
 The procedure is complete. [Return to Main Page](../Add_Remove_Replace_NCNs.md). 

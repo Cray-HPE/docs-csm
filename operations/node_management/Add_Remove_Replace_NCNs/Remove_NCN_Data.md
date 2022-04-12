@@ -19,11 +19,14 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
                 | jq -r '.access_token')
     ```
 
-    Set the IPMI password for the BMC for the NCN. This step is required for every NCN except ncn-m001. The default username will be root.
-    Set IPMI_USERNAME if this needs to be different for the given BMC.
+    Set the IPMI password for the BMC for the NCN. This step is required for every NCN except `ncn-m001`.
+    The default username is root.
+    Set and export `IPMI_USERNAME` if this needs to be different for the given BMC.
+    > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
 
     ```bash
-    ncn-mw# export IPMI_PASSWORD=changeme
+    ncn-mw# read -s IPMI_PASSWORD
+    ncn-mw# export IPMI_PASSWORD
     ```
 
 1.  Fetch the status of the nodes:
@@ -73,7 +76,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
         bmc_mac: a4:bf:01:38:f4:54
     ```
 
-    **Important**: Save the ifnames and bmc_mac information if you plan to add this NCN back at some time in the future.
+    **Important**: Save the `ifnames` and `bmc_mac` information if you plan to add this NCN back at some time in the future.
 
 1.  Remove the node from SLS, HSM, and BSS:
 
@@ -103,7 +106,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
 
 1.  Verify the results by fetching the status of the management nodes:
 
-    ``` bash
+    ```bash
     ncn-mw# ./ncn_status.py --all
     ```
 
@@ -136,4 +139,4 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
     Not found: x3000c0s26b0n0
     ```
 
-Proceed to the next step to [Remove Switch Config](Remove_Switch_Config.md) or return to the main [Add, Remove, Replace or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+Proceed to the next step to [Remove Switch Config](Remove_Switch_Config.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.

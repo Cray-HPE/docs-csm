@@ -326,7 +326,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     10. Verify that there is only one subdirectory in the lib/modules directory of the image.
 
-        The existence of more than one subdirectory indicates a mismatch between the kernel of the image and the DVS RPMS that were installed in the previous step.
+        The existence of more than one subdirectory indicates a mismatch between the kernel of the image and the DVS RPMs that were installed in the previous step.
 
         ```bash
         ncn-m001# la UAN-1.4.0-day-zero/lib/modules/
