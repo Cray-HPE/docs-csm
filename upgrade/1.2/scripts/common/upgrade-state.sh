@@ -98,6 +98,12 @@ function err_report() {
     if [[ ${shouldIgnore} -eq 1 ]]; then
         return 0
     fi
+
+    ignoreCmd="grep -v -e Running -e Completed > /dev/null"
+    shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l)
+    if [[ ${shouldIgnore} -eq 1 ]]; then
+        return 0
+    fi
     
     # force output to console regardless of redirection
     echo >/dev/tty 
