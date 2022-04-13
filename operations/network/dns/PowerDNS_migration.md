@@ -1,4 +1,4 @@
-# PowerDNS Migration Notice
+# PowerDNS Migration Guide
 
 The migration to PowerDNS as the authoritative DNS source and the introduction of Bifurcated CAN (Customer Access Network) will result in some changes to the node and service naming conventions.
 
