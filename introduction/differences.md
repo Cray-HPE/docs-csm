@@ -32,10 +32,6 @@ The following features are new in this release:
          * Rome-Based HPE DL 385(v1) Gen10
    * Node consoles are now managed by cray-console-node which is based on conman.
    * HSM now has a v2 REST API
-   * PowerDNS authoritative DNS server
-      * Introduces the cray-dns-powerdns, cray-dns-powerdns-postgres, and cray-powerdns-manager pods
-      * Supports zone transfer to external DNS servers via AXFR query and DNSSEC
-      * Please refer to the [DNS overview](../operations/network/dns/DNS.md) and [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for further information.
    * NCN user password and SSH key management is available for both root and
      non-root users via NCN personalization. Please refer to [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md).
 
@@ -51,10 +47,6 @@ The following features are no longer supported and are planned to be removed in 
    * The Boot Orchestration Service (BOS) API is changing in the upcoming CSM-1.2.0 release:
         * The `--template-body` option for the Cray CLI `bos` command will be deprecated.
         * Performing a GET on the session status for a boot set (i.e. `/v1/session/{session_id}/status/{boot_set_name}`) currently returns a status code of 201, but instead it should return a status code of 200. This will be corrected to return 200.
-   * PowerDNS will replace Unbound as the authoritative DNS source in CSM version 1.3.
-        * The cray-dns-unbound-manager CronJob will be deprecated in a future release once all DNS records are migrated to PowerDNS.
-        * The introduction of PowerDNS and Bifurcated CAN will introduce some node and service naming changes.
-        * Please see the [PowerDNS migration notice](../introduction/PowerDNS_migration.md) for more information.
    * The Compute Rolling Upgrade Service (CRUS) will be deprecated in the CSM-1.3.0 release. Enhanced BOS functionality will replace CRUS. This includes the ability to stage changes to nodes that can be acted upon later when the node reboots. It also includes the ability to reboot nodes without specifying any boot artifacts. This latter ability relies on the artifacts already having been staged.
 
 <a name="removed_features"></a>
@@ -63,7 +55,6 @@ The following features are no longer supported and are planned to be removed in 
 The following features have been completely removed:
 
    * cray-conman pod. This has been replaced by cray-console-node.
-   * The cray-externaldns-coredns, cray-externaldns-etcd, and cray-externaldns-wait-for-etcd pods have been removed. PowerDNS is now the provider of the external DNS service.
    * CFS v1 API and CLI. The v2 API/CLI has been the default since CSM 0.9 (Shasta 1.4).
 
 <a name="other_changes"></a>
