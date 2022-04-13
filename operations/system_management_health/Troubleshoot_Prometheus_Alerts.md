@@ -1,14 +1,14 @@
 # Troubleshoot Prometheus Alerts
 
 General Prometheus Alert Troubleshooting Topics
-- [CephMgrIsAbsent and CephMgrIsMissingReplicas](#cephmgrmissing)
-- [CephNetworkPacketsDropped](#networkpatcketsdropped))
-- [CPUThrottlingHigh](#cputhrottlinghigh)
-- [KubePodNotReady](#kubepodnotready)
-- [PostgresqlFollowerReplicationLagSMA](#followerlagsma)
-- [PostgresqlHighRollbackRate](#highrollbackrate)
-- [PostgresqlInactiveReplicationSlot](#inactiveslot)
-- [PostgresqlNotEnoughConnections](#notenoughconnections)
+- [`CephMgrIsAbsent` and `CephMgrIsMissingReplicas`](#cephmgrmissing)
+- [`CephNetworkPacketsDropped`](#networkpatcketsdropped))
+- [`CPUThrottlingHigh`](#cputhrottlinghigh)
+- [`KubePodNotReady`](#kubepodnotready)
+- [`PostgresqlFollowerReplicationLagSMA`](#followerlagsma)
+- [`PostgresqlHighRollbackRate`](#highrollbackrate)
+- [`PostgresqlInactiveReplicationSlot`](#inactiveslot)
+- [`PostgresqlNotEnoughConnections`](#notenoughconnections)
 
 <a name="cephmgrmissing"></a>
 ## `CephMgrIsAbsent` and `CephMgrIsMissingReplicas`
@@ -92,7 +92,3 @@ Alerts for `PostgresqlInactiveReplicationSlot` on `sma-postgres-cluster` pods wi
 
 Alerts for `PostgresqlNotEnoughConnections` for `datname="foo"` and `datname="bar"` can be ignored. These databases are not used and will be removed in a future release.
 
-<a name="networkpacketsdropped"></a>
-## `CephNetworkPacketsDropped`
-
-The `CephNetworkPacketsDropped` alert does not necessarily indicate there are packets being dropped on an interface on a storage node. In a future release this alert will be renamed to be more generic. If this alert fires, inspect the IP address in the details of the alert to determine the node in question (it can be storage, master or worker node). If the interface in question is determined to be healthy, this alert can be ignored.
