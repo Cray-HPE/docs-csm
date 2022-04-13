@@ -77,7 +77,7 @@ Build and customize image recipes with the Image Management Service (IMS).
      * [Create UAN Boot Images](image_management/Create_UAN_Boot_Images.md)
      * [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
    * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
-   * [Configure IMS to validate RPMS](image_management/Configure_IMS_to_validate_rpms.md)
+   * [Configure IMS to Validate RPMs](image_management/Configure_IMS_to_validate_rpms.md)
 
 <a name="boot-orchestration"></a>
 
@@ -333,7 +333,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
        * [Change the LDAP Server IP Address for New LDAP Server Content](security_and_authentication/Change_the_LDAP_Server_IP_Address_for_New_LDAP_Server_Content.md)
        * [Remove the LDAP User Federation from Keycloak](security_and_authentication/Remove_the_LDAP_User_Federation_from_Keycloak.md)
        * [Add LDAP User Federation](security_and_authentication/Add_LDAP_User_Federation.md)
-       * [Keycloak User Management with kcadm.sh](security_and_authentication/Keycloak_User_Management_with_Kcadm.md)
+       * [Keycloak User Management with `kcadm.sh`](security_and_authentication/Keycloak_User_Management_with_Kcadm.md)
    * [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
        * [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
        * [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)

@@ -13,27 +13,25 @@ this topic could be skipped and instead move to [Deploy Management Nodes](index.
 file already had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then this
 topic could be skipped and instead move to [Deploy Management Nodes](index.md#deploy_management_nodes).
 
-### Topics
+## Topics
 
-   1. [Collect the BMC MAC addresses](#collect_the_bmc_mac_addresses)
-   1. [Restart Services after BMC MAC Addresses Collected](#restart_services_after_bmc_mac_addresses_collected)
-   1. [Collect the NCN MAC addresses](#collect_the_ncn_mac_addresses)
-   1. [Restart Services after NCN MAC Addresses Collected](#restart_services_after_ncn_mac_addresses_collected)
-   1. [Next Topic](#next-topic)
-
-## Details
+1. [Collect the BMC MAC addresses](#collect_the_bmc_mac_addresses)
+1. [Restart Services after BMC MAC Addresses Collected](#restart_services_after_bmc_mac_addresses_collected)
+1. [Collect the NCN MAC addresses](#collect_the_ncn_mac_addresses)
+1. [Restart Services after NCN MAC Addresses Collected](#restart_services_after_ncn_mac_addresses_collected)
+1. [Next Topic](#next-topic)
 
 <a name="collect_the_bmc_mac_addresses"></a>
-### 1. Collect the BMC MAC addresses
+## 1. Collect the BMC MAC addresses
 
 The BMC MAC address can be collected from the switches using knowledge about the cabling of the NMN from the SHCD.
 
 See [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md).
 
 <a name="restart_services_after_bmc_mac_addresses_collected"></a>
-### 2. Restart Services after BMC MAC Addresses Collected
+## 2. Restart Services after BMC MAC Addresses Collected
 
-The previous step updated `ncn_metadata.csv` with the BMC MAC Addresses, so several earlier steps need to be repeated.
+The previous step updated `ncn_metadata.csv` with the BMC MAC addresses, so several earlier steps need to be repeated.
 
 1. Change into the preparation directory.
 
@@ -42,14 +40,14 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC Addresses, so seve
    ```
 
 1. Confirm that the `ncn_metadata.csv` file in this directory has the new information.
-   There should be no remaining dummy data (de:ad:be:ef:00:00) for the BMC MAC column in the file, but that string may
-   be present for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns.
+   There should be no remaining dummy data (`de:ad:be:ef:00:00`) for the `BMC MAC` column in the file, but that string may
+   be present for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1` columns.
 
    ```bash
    pit# cat ncn_metadata.csv
    ```
 
-1. Remove the incorrectly generated configs. Before deleting the incorrectly generated configs consider
+1. Remove the incorrectly generated configurations. Before deleting the incorrectly generated configurations, consider
 making a backup of them, in case they need to be examined at a later time.
 
    > **`Warning`** Ensure that the `SYSTEM_NAME` environment variable is correctly set.
@@ -130,44 +128,44 @@ making a backup of them, in case they need to be examined at a later time.
 
 1. Check that IP addresses are set for each interface and investigate any failures.
 
-    > **`Note:`** The bond0.can0 interface is optional in CSM 1.2+
+    > **`Note:`** The `bond0.can0` interface is optional in CSM 1.2+
+
+    Check IP addresses. Do not run tests if these are missing and instead triage the issue.
 
     ```bash
-    Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
+    pit# wicked show bond0 bond0.nmn0 bond0.hmn0 bond0.can0
+    bond0           up
+    link:     #7, state up, mtu 1500
+    type:     bond, mode ieee802-3ad, hwaddr b8:59:9f:fe:49:d4
+    config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0
+    leases:   ipv4 static granted
+    addr:     ipv4 10.1.1.2/16 [static]
 
-       pit# wicked show bond0 bond0.nmn0 bond0.hmn0 bond0.can0
-       bond0           up
-       link:     #7, state up, mtu 1500
-       type:     bond, mode ieee802-3ad, hwaddr b8:59:9f:fe:49:d4
-       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0
-       leases:   ipv4 static granted
-       addr:     ipv4 10.1.1.2/16 [static]
+    bond0.nmn0      up
+    link:     #8, state up, mtu 1500
+    type:     vlan bond0[2], hwaddr b8:59:9f:fe:49:d4
+    config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.nmn0
+    leases:   ipv4 static granted
+    addr:     ipv4 10.252.1.4/17 [static]
+    route:    ipv4 10.92.100.0/24 via 10.252.0.1 proto boot
 
-       bond0.nmn0      up
-       link:     #8, state up, mtu 1500
-       type:     vlan bond0[2], hwaddr b8:59:9f:fe:49:d4
-       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.nmn0
-       leases:   ipv4 static granted
-       addr:     ipv4 10.252.1.4/17 [static]
-       route:    ipv4 10.92.100.0/24 via 10.252.0.1 proto boot
+    bond0.can0      up
+    link:     #9, state up, mtu 1500
+    type:     vlan bond0[7], hwaddr b8:59:9f:fe:49:d4
+    config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.can0
+    leases:   ipv4 static granted
+    addr:     ipv4 10.102.9.5/24 [static]
 
-       bond0.can0      up
-       link:     #9, state up, mtu 1500
-       type:     vlan bond0[7], hwaddr b8:59:9f:fe:49:d4
-       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.can0
-       leases:   ipv4 static granted
-       addr:     ipv4 10.102.9.5/24 [static]
-
-       bond0.hmn0      up
-       link:     #10, state up, mtu 1500
-       type:     vlan bond0[4], hwaddr b8:59:9f:fe:49:d4
-       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.hmn0
-       leases:   ipv4 static granted
-       addr:     ipv4 10.254.1.4/17 [static]
+    bond0.hmn0      up
+    link:     #10, state up, mtu 1500
+    type:     vlan bond0[4], hwaddr b8:59:9f:fe:49:d4
+    config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.hmn0
+    leases:   ipv4 static granted
+    addr:     ipv4 10.254.1.4/17 [static]
     ```
 
-1. Copy the service config files generated earlier by `csi config init` for DNSMasq, Metal
-   Basecamp (cloud-init), and Conman.
+1. Copy the service configuration files generated earlier by `csi config init` for DNSMasq, Metal
+   Basecamp (cloud-init), and ConMan.
 
     1. Copy files (files only, `-r` is expressly not used).
 
@@ -198,7 +196,7 @@ making a backup of them, in case they need to be examined at a later time.
    ```
 
 <a name="collect_the_ncn_mac_addresses"></a>
-### 3. Collect the NCN MAC addresses
+## 3. Collect the NCN MAC addresses
 
 Now that the BMC MAC addresses are correct in `ncn_metadata.csv` and the PIT node services have been restarted,
 a partial boot of the management nodes can be done to collect the remaining information from the conman console
@@ -304,9 +302,9 @@ making a backup of them, in case they need to be examined at a later time.
          ```json
          {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
          {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
+         ```
 
-
-1. Copy the interface config files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
+1. Copy the interface configuration files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
 
    ```bash
    pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
@@ -316,44 +314,44 @@ making a backup of them, in case they need to be examined at a later time.
 
 1. Check that IP addresses are set for each interface and investigate any failures.
 
-    > **`Note:`** The bond0.can0 interface is optional in CSM 1.2+
+    > **`Note:`** The `bond0.can0` interface is optional in CSM 1.2+
+
+    Check IP addresses. Do not run tests if these are missing and instead triage the issue.
 
     ```bash
-    Check IP addresses. Do not run tests if these are missing and instead start triaging the issue.
+    pit# wicked show bond0 bond0.nmn0 bond0.hmn0 bond0.can0
+    bond0           up
+    link:     #7, state up, mtu 1500
+    type:     bond, mode ieee802-3ad, hwaddr b8:59:9f:fe:49:d4
+    config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0
+    leases:   ipv4 static granted
+    addr:     ipv4 10.1.1.2/16 [static]
 
-       pit# wicked show bond0 bond0.nmn0 bond0.hmn0 bond0.can0
-       bond0           up
-       link:     #7, state up, mtu 1500
-       type:     bond, mode ieee802-3ad, hwaddr b8:59:9f:fe:49:d4
-       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0
-       leases:   ipv4 static granted
-       addr:     ipv4 10.1.1.2/16 [static]
+    bond0.nmn0      up
+    link:     #8, state up, mtu 1500
+    type:     vlan bond0[2], hwaddr b8:59:9f:fe:49:d4
+    config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.nmn0
+    leases:   ipv4 static granted
+    addr:     ipv4 10.252.1.4/17 [static]
+    route:    ipv4 10.92.100.0/24 via 10.252.0.1 proto boot
 
-       bond0.nmn0      up
-       link:     #8, state up, mtu 1500
-       type:     vlan bond0[2], hwaddr b8:59:9f:fe:49:d4
-       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.nmn0
-       leases:   ipv4 static granted
-       addr:     ipv4 10.252.1.4/17 [static]
-       route:    ipv4 10.92.100.0/24 via 10.252.0.1 proto boot
+    bond0.can0      up
+    link:     #9, state up, mtu 1500
+    type:     vlan bond0[7], hwaddr b8:59:9f:fe:49:d4
+    config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.can0
+    leases:   ipv4 static granted
+    addr:     ipv4 10.102.9.5/24 [static]
 
-       bond0.can       up
-       link:     #9, state up, mtu 1500
-       type:     vlan bond0[7], hwaddr b8:59:9f:fe:49:d4
-       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.can0
-       leases:   ipv4 static granted
-       addr:     ipv4 10.102.9.5/24 [static]
-
-       bond0.hmn0      up
-       link:     #10, state up, mtu 1500
-       type:     vlan bond0[4], hwaddr b8:59:9f:fe:49:d4
-       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.hmn0
-       leases:   ipv4 static granted
-       addr:     ipv4 10.254.1.4/17 [static]
+    bond0.hmn0      up
+    link:     #10, state up, mtu 1500
+    type:     vlan bond0[4], hwaddr b8:59:9f:fe:49:d4
+    config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.hmn0
+    leases:   ipv4 static granted
+    addr:     ipv4 10.254.1.4/17 [static]
     ```
 
-1. Copy the service config files generated earlier by `csi config init` for DNSMasq, Metal
-   Basecamp (cloud-init), and Conman.
+1. Copy the service configuration files generated earlier by `csi config init` for DNSMasq, Metal
+   Basecamp (cloud-init), and ConMan.
 
     1. Copy files (files only, `-r` is expressly not used).
 
@@ -378,19 +376,18 @@ making a backup of them, in case they need to be examined at a later time.
         pit# systemctl restart basecamp nexus dnsmasq conman
         ```
 
-1. Ensure system-specific settings generated by CSI are merged into `customizations.yaml`:
-   > The `yq` tool used in the following procedures is available under `/var/www/ephemeral/prep/site-init/utils/bin` once the SHASTA-CFG repo has been cloned.
+1. Ensure system-specific settings generated by CSI are merged into `customizations.yaml`.
+    > The `yq` tool used in the following procedures is available under `/var/www/ephemeral/prep/site-init/utils/bin` once the SHASTA-CFG repo has been cloned.
 
-   ```bash
-   pit# alias yq="/var/www/ephemeral/prep/site-init/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
-   pit# yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)
-   ```
+    ```bash
+    pit# alias yq="/var/www/ephemeral/prep/site-init/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
+    pit# yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)
+    ```
 
 <a name="next-topic"></a>
-# Next Topic
+## Next Topic
 
-   After completing the collection of BMC MAC addresses and NCN MAC address to update `ncn_metadata.csv` and restarting
-   the services dependent on correct data in `ncn_metadata.csv`, the next step is deployment of the management nodes.
+After completing the collection of BMC MAC addresses and NCN MAC addresses in order to update `ncn_metadata.csv`, and after restarting
+the services dependent on correct data in `ncn_metadata.csv`, the next step is deployment of the management nodes.
 
-   See [Deploy Management Nodes](index.md#deploy_management_nodes)
-
+See [Deploy Management Nodes](index.md#deploy_management_nodes)

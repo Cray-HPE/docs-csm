@@ -20,7 +20,7 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
    1. [Next Topic](#next-topic)
 
 <a name="download-and-expand-the-csm-release"></a>
-### 1. Download and Expand the CSM Release
+## 1. Download and Expand the CSM Release
 
 Fetch the base installation CSM tarball, extract it, and install the contained CSI tool.
 
@@ -38,7 +38,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
    linux# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-1. The CSM software release should be downloaded and expanded for use.
+1. Download and expand the CSM software release.
 
    **Important:** In order to ensure that the CSM release plus any patches, documentation updates,
    or hotfixes are included, follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
@@ -133,7 +133,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
       ```
 
 <a name="create-the-bootable-media"></a>
-### 2. Create the Bootable Media
+## 2. Create the Bootable Media
 
 Cray Site Init will create the bootable LiveCD. Before creating the media, identify
 which device will be used for it.
@@ -207,7 +207,7 @@ which device will be used for it.
 The USB device is now bootable and contains the CSM artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
 
 <a name="configuration-payload"></a>
-### 3. Configuration Payload
+## 3. Configuration Payload
 
 The SHASTA-CFG structure and other configuration files will be prepared, then `csi` will generate system-unique configuration payload used for the rest of the CSM installation on the USB device.
 
@@ -215,7 +215,7 @@ The SHASTA-CFG structure and other configuration files will be prepared, then `c
 * [Prepare Site Init](#prepare-site-init)
 
 <a name="generate-installation-files"></a>
-#### 3.1 Generate Installation Files
+### 3.1 Generate Installation Files
 
 Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if one has not already prepared the information for this system.
 
@@ -251,7 +251,7 @@ Some files are needed for generating the configuration payload. See these topics
    After gathering the files into this working directory, move on to [Subsequent Fresh-Installs (Re-Installs)](#subsequent-fresh-installs-re-installs).
 
 <a name="subsequent-fresh-installs-re-installs"></a>
-##### 3.1.a Subsequent Fresh-Installs (Re-Installs)
+#### 3.1.a Subsequent Fresh-Installs (Re-Installs)
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
 
@@ -300,29 +300,29 @@ Some files are needed for generating the configuration payload. See these topics
 
       > **`NOTE`** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
       >
-      > 1. The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
-      >   ```bash
-      >   "Couldn't find switch port for NCN: x3000c0s1b0"
-      >   ```
+      > * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
+      >    ```
+       >   "Couldn't find switch port for NCN: x3000c0s1b0"
+      >    ```
       >
-      > 1. An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
+      > * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
       >
-      >   ```json
-      >   {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
-      >   {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
-      >   ```
+      >    ```json
+      >    {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
+      >    {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
+      >    ```
       >
-      > 1. If a cooling door is found in `hmn_connections.json`, there may be a message like the following. It can be safely ignored.
+      > * If a cooling door is found in `hmn_connections.json`, there may be a message like the following. It can be safely ignored.
       >
-      >   ```json
-      >   {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
-      >   {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
-      >   ```
+      >    ```json
+      >    {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
+      >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
+      >    ```
 
    1. Skip the next step and continue to [prepare site init](#prepare-site-init).
 
 <a name="first-timeinitial-installs-bare-metal"></a>
-##### 3.1.b First-Time/Initial Installs (bare-metal)
+#### 3.1.b First-Time/Initial Installs (bare-metal)
 
 1. **For first-time/initial installs (without a `system_config.yaml`file)**, generate the system configuration. See below for an explanation of the command line parameters and some common settings.
 
@@ -391,34 +391,34 @@ Some files are needed for generating the configuration payload. See these topics
 
       > **`SPECIAL NOTES`** Certain parameters to `csi config init` may be hard to grasp on first-time configuration generations:
       >
-      > 1. The `application_node_config.yaml` file is optional, but if one has one describing the mapping between prefixes in `hmn_connections.csv` that should be mapped to HSM subroles, one needs to include a command line option to have it used. See [Create Application Node YAML](create_application_node_config_yaml.md).
-      > 1. The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management NCNs.
-      > 1. Set site parameters (`site-domain`, `site-ip`, `site-gw`, `site-nic`, `site-dns`) for the information which connects `ncn-m001` (the PIT node) to the site. The `site-nic` is the interface on this node connected to the site.
-      > 1. There are other interfaces possible, but the `install-ncn-bond-members` are typically:
+      > * The `application_node_config.yaml` file is optional, but if one has one describing the mapping between prefixes in `hmn_connections.csv` that should be mapped to HSM subroles, one needs to include a command line option to have it used. See [Create Application Node YAML](create_application_node_config_yaml.md).
+      > * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management NCNs.
+      > * Set site parameters (`site-domain`, `site-ip`, `site-gw`, `site-nic`, `site-dns`) for the information which connects `ncn-m001` (the PIT node) to the site. The `site-nic` is the interface on this node connected to the site.
+      > * There are other interfaces possible, but the `install-ncn-bond-members` are typically:
       >    * `p1p1,p10p1` for HPE nodes
       >    * `p1p1,p1p2` for Gigabyte nodes
       >    * `p801p1,p801p2` for Intel nodes
-      > 1. If one are not using a `cabinets-yaml` file, set the three cabinet parameters (`mountain-cabinets`, `hill-cabinets`, and `river-cabinets`) to the number of each cabinet which are part of this system.
-      > 1. The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help`
-      > 1. For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. If one are using a `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
-      > 1. An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
+      > * If not using a `cabinets-yaml` file, set the three cabinet parameters (`mountain-cabinets`, `hill-cabinets`, and `river-cabinets`) to the number of each cabinet which are part of this system.
+      > * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help`
+      > * For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. If one are using a `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
+      > * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
 
       > **`SPECIAL/IGNORABLE WARNINGS`** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored:
       >
-      > 1. The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
+      > * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
       >
       >    ```
       >    "Couldn't find switch port for NCN: x3000c0s1b0"
       >    ```
       >
-      > 1. An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md).
+      > * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
       >
       >    ```json
       >    {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
       >    {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
       >    ```
       >
-      > 1. If a cooling door is found in `hmn_connections.json`, there may be a message like the following. It can be safely ignored.
+      > * If a cooling door is found in `hmn_connections.json`, there may be a message like the following. It can be safely ignored.
       >
       >    ```json
       >    {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
@@ -428,7 +428,7 @@ Some files are needed for generating the configuration payload. See these topics
    1. Continue to the next step to [prepare site init](#prepare-site-init).
 
 <a name="prepare-site-init"></a>
-#### 3.2 Prepare Site Init
+### 3.2 Prepare Site Init
 
 > **`NOTE`**: It is assumed at this point that `/mnt/pitdata` is still mounted on the linux system, this is important as the following procedure depends on that mount existing.
 
@@ -441,7 +441,7 @@ Some files are needed for generating the configuration payload. See these topics
 1. Follow all of the [Prepare Site Init](prepare_site_init.md) procedures.
 
 <a name="prepopulate-livecd-daemons-configuration-and-ncn-artifacts"></a>
-### 4. Prepopulate LiveCD Daemons Configuration and NCN Artifacts
+## 4. Prepopulate LiveCD Daemons Configuration and NCN Artifacts
 
 Now that the configuration is generated, we can populate the LiveCD with the generated files.
 
@@ -545,7 +545,7 @@ Now the USB device may be reattached to the management node, or if it was made o
 reboot into the LiveCD.
 
 <a name="boot-the-livecd"></a>
-### 5. Boot the LiveCD
+## 5. Boot the LiveCD
 
 Some systems will boot the USB device automatically if no other OS exists (bare-metal). Otherwise the
 administrator may need to use the BIOS Boot Selection menu to choose the USB device.
@@ -589,7 +589,7 @@ The typescript can be discarded, otherwise if issues arise then it should be sub
 > **An integrity check** runs before Linux starts by default, it can be skipped by selecting "OK" in its prompt.
 
 <a name="first-login"></a>
-#### 5.1 First Login
+### 5.1 First Login
 
 On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.
 
@@ -646,7 +646,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    Note: The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#` in the command prompts from this point onward.
 
 <a name="configure-the-running-livecd"></a>
-### 6. Configure the Running LiveCD
+## 6. Configure the Running LiveCD
 
 1. Start a typescript to record this section of activities done on `ncn-m001` while booted from the LiveCD.
 
@@ -696,9 +696,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    ```
 
 <a name="next-topic"></a>
-# Next Topic
+## Next Topic
 
-After completing this procedure the next step is to configure the management network switches.
+After completing this procedure, proceed to configure the management network switches.
 
-* See [Configure Management Network Switches](index.md#configure_management_network)
-
+See [Configure Management Network Switches](index.md#configure_management_network).
