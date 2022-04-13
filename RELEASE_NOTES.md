@@ -55,20 +55,20 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 ### Base Platform Component Upgrades
 * istio V1.8 from istio V1.7
 * Release of Loftsman V1.2.0-1
-* K8S V1.20.13 from K8S V1.19.9
+* Kubernetes V1.20.13 from Kubernetes V1.19.9
 * Ceph V15.2.15 from V15.2.8
 
 ### Security Improvements
-* Switch to non-root containers - A significant number of root user container images have been removed - the remainder have been identified for a future release
-* Verification of signed RPMS
-* CVE Remediation - A significant number of CVE's have been addressed, including a majority of the critical and High CVEs like polkit and log4j
+* Switch to non-root containers - A significant number of root user container images have been removed. The remainder have been identified for a future release
+* Verification of signed RPMs
+* CVE Remediation - A significant number of CVEs have been addressed, including a majority of the critical and High CVEs like `polkit` and `log4j`
 * Updates to Nexus require authentication
-* Remove of code injection vulnerability in CFS configuration API commit and cloneURL fields
+* Remove of code injection vulnerability in `commit` and `cloneURL` fields of CFS configuration API
 * Further restrictions on allowed HTTP verbs in API requests coming from compute nodes
 * Option to restrict compute to only call URIs by machine identity
 
 ### Customer Requested Enhancements
-* Ability to turn off slots without hms-discovery powering them on
+* Ability to turn off slots without `hms-discovery` powering them on
 * Resilient way to reboot a compute node into its current configuration with a single API call
 
 ## Bug Fixes

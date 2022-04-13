@@ -25,7 +25,7 @@ For more information about modifying `customizations.yaml` and tuning based on s
 
 **`Important:`** Please take note of the below content for troubleshooting purposes in the case that you encounter issues.
 
-## Relevant Troubleshooting Links for Upgrade Related Issues
+## Relevant Troubleshooting Links for Upgrade-Related Issues
 
 1. General Kubernetes Commands for Troubleshooting
 
