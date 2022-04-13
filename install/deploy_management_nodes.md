@@ -264,7 +264,7 @@ The configuration workflow described here is intended to help understand the exp
 <a name="deploy"></a>
 ### 3.2 Deploy
 
-1. Set the default root password and SSH keys and optionally change the timezone
+1. Set the default root password and SSH keys and optionally change the timezone.
 
    The management nodes images do not contain a default password or default ssh keys.
 
