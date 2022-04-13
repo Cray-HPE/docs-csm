@@ -51,11 +51,12 @@ Preparation of the environment must be done before attempting to deploy the mana
     **Notice** that one of them is the `IPMI_PASSWORD`. Replace `changeme` with the real root password for BMCs.
 
    ```bash
-   pit# export mtoken='ncn-m(?!001)\w+-mgmt'
-   pit# export stoken='ncn-s\w+-mgmt'
-   pit# export wtoken='ncn-w\w+-mgmt'
-   pit# export USERNAME=root
-   pit# export IPMI_PASSWORD=changeme
+   pit# \
+   export mtoken='ncn-m(?!001)\w+-mgmt'
+   export stoken='ncn-s\w+-mgmt'
+   export wtoken='ncn-w\w+-mgmt'
+   export USERNAME=root
+   export IPMI_PASSWORD=changeme
    ```
 
    Throughout the guide, simple one-liners can be used to query status of expected nodes. If the shell or environment is terminated, these environment variables should be re-exported.
