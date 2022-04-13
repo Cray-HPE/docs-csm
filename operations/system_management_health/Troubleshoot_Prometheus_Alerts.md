@@ -1,17 +1,15 @@
 # Troubleshoot Prometheus Alerts
 
 General Prometheus Alert Troubleshooting Topics
-- [Troubleshoot Prometheus Alerts](#troubleshoot-prometheus-alerts)
-  - [CephMgrIsAbsent and CephMgrIsMissingReplicas](#cephmgrisabsent-and-cephmgrismissingreplicas)
-  - [CephNetworkPacketsDropped](#cephnetworkpacketsdropped)
-  - [CPUThrottlingHigh](#cputhrottlinghigh)
-  - [KubePodNotReady](#kubepodnotready)
-  - [PostgresqlFollowerReplicationLagSMA](#postgresqlfollowerreplicationlagsma)
-  - [PostgresqlHighRollbackRate](#postgresqlhighrollbackrate)
-  - [PostgresqlInactiveReplicationSlot](#postgresqlinactivereplicationslot)
-  - [PostgresqlNotEnoughConnections](#postgresqlnotenoughconnections)
-  - [CephNetworkPacketsDropped](#cephnetworkpacketsdropped)
-  - [TargetDown](#targetdown)
+- [`CephMgrIsAbsent` and `CephMgrIsMissingReplicas`](#cephmgrisabsent-and-cephmgrismissingreplicas)
+- [`CephNetworkPacketsDropped`](#cephnetworkpacketsdropped)
+- [`CPUThrottlingHigh`](#cputhrottlinghigh)
+- [`KubePodNotReady`](#kubepodnotready)
+- [`PostgresqlFollowerReplicationLagSMA`](#postgresqlfollowerreplicationlagsma)
+- [`PostgresqlHighRollbackRate`](#postgresqlhighrollbackrate)
+- [`PostgresqlInactiveReplicationSlot`](#postgresqlinactivereplicationslot)
+- [`PostgresqlNotEnoughConnections`](#postgresqlnotenoughconnections)
+- [`TargetDown`](#targetdown)
 
 <a name="cephmgrmissing"></a>
 ## `CephMgrIsAbsent` and `CephMgrIsMissingReplicas`
@@ -57,20 +55,19 @@ Example output:
 
 The `CephMgrIsAbsent` and `CephMgrIsMissingReplicas` alerts should now clear in Prometheus.
 
-
 <a name="networkpacketsdropped"></a>
 ## `CephNetworkPacketsDropped`
 
-The `CephNetworkPacketsDropped` alert does not necessarily indicate there are packets being dropped on an interface on a storage node. In a future release this alert will be renamed to be more generic. If this alert fires, inspect the IP address in the details of the alert to determine the node in question (it can be storage, master, or worker node). If the interface in question is determined to be healthy, this alert can be ignored.
+The `CephNetworkPacketsDropped` alert does not necessarily indicate there are packets being dropped on an interface on a storage node. In a future release this alert will be renamed to be more generic. If this alert fires, inspect the IP address in the details of the alert to determine the node in question (it can be storage, master, or worker node). If the interface in question is determined to be healthy, then this alert can be ignored.
 
 <a name="cputhrottlinghigh"></a>
 ## `CPUThrottlingHigh`
 
 Alerts for `CPUThrottlingHigh` on `gatekeeper-audit` can be ignored. This pod is not utilized in this release.
 
-Alerts for `CPUThrottlingHigh` on `gatekeeper-controller-manager` can be ignored. This has low CPU requests, and it is normal for it to spike when it is in use.
+Alerts for `CPUThrottlingHigh` on `gatekeeper-controller-manager` can be ignored. These have low CPU requests, and it is normal for resource usage to spike when it is in use.
 
-Alerts for CPUThrottlingHigh on smartmon pods can be ignored. It is normal for smartmon pods resource usage to spike when it is polling. This will be fixed in a future release.
+Alerts for `CPUThrottlingHigh` on `smartmon` pods can be ignored. It is normal for `smartmon` pods' resource usage to spike when it is polling. This will be fixed in a future release.
 
 Alerts for `CPUThrottlingHigh` on CFS services such as `cfs-batcher` and `cfs-trust` can be ignored. Because CFS is idle most of the time, these services have low CPU requests, and it is normal for CFS service resource usage to spike when it is in use.
 
@@ -99,12 +96,7 @@ Alerts for `PostgresqlInactiveReplicationSlot` on `sma-postgres-cluster` pods wi
 
 Alerts for `PostgresqlNotEnoughConnections` for `datname="foo"` and `datname="bar"` can be ignored. These databases are not used and will be removed in a future release.
 
-<a name="networkpacketsdropped"></a>
-## `CephNetworkPacketsDropped`
-
-The `CephNetworkPacketsDropped` alert does not necessarily indicate there are packets being dropped on an interface on a storage node. In a future release this alert will be renamed to be more generic. If this alert fires, inspect the IP address in the details of the alert to determine the node in question (it can be storage, master or worker node). If the interface in question is determined to be healthy, this alert can be ignored.
-
 <a name="targetdown"></a>
-## TargetDown
+## `TargetDown`
 
-Many of the Alerts for Target Down for sysmgmt-health/cray-sysmgmt-health-kubernetes-pods/0 are due to job pods that have Completed and no longer have an active endpoint that can be scraped. If the target that is down is from a job pods that has completed, the target down alert for that pod can be ignored. This is being fixed in a future release.
+Many of the alerts for `TargetDown` for `sysmgmt-health/cray-sysmgmt-health-kubernetes-pods/0` are due to job pods that have `Completed` and no longer have an active endpoint that can be scraped. If the target that is down is from a job pod that has completed, the `TargetDown` alert for that pod can be ignored. This is being fixed in a future release.

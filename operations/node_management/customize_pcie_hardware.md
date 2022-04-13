@@ -1,8 +1,8 @@
 # Customize PCIe Hardware
 
-This page will assist an admin with changing the NCN udev rules for varying PCIe hardware.
+This page will assist an administrator with changing the NCN udev rules for varying PCIe hardware.
 
-> **`NOTE:`** If a system's hardware is Plan of Record (PoR) then this page is not needed.
+> **`NOTE:`** If a system's hardware is Plan of Record (PoR), then this page is not needed.
 
 ## Procedure
 
@@ -14,22 +14,22 @@ Identify the hardware configuration by PXE booting a node.
     pit# rm /var/www/ncn-*/{initrd.img.xz,kernel,filesystem.squashfs}
     ```
 
-    The NCNs will fetch the iPXE binary and then pause, this pause prevents the NCN from continuing to boot while we collect information from it.
+    The NCNs will fetch the iPXE binary and then pause; this pause prevents the NCN from continuing to boot while we collect information from it.
 
-1. Go through each NCN and PXE boot it, replace `username` and `IPMI_PASSWORD` with the present values for the system's BMCs:
+1. Go through each NCN and PXE boot it; replace `username` and `IPMI_PASSWORD` with the present values for the system's BMCs:
+
+    > `read -s` is used to prevent the password from being echoed to the screen or preserved in the shell history.
 
     ```bash
-    pit# \
-    export mtoken='ncn-m(?!001)\w+-mgmt'
-    export stoken='ncn-s\w+-mgmt'
-    export wtoken='ncn-w\w+-mgmt'
-    export username=$(whoami)
-    export IPMI_PASSWORD=changeme
-    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
-    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
+    pit# read -s IPMI_PASSWORD ; export IPMI_PASSWORD
+    pit# mtoken='ncn-m(?!001)\w+-mgmt' ; stoken='ncn-s\w+-mgmt' ; wtoken='ncn-w\w+-mgmt' ; username=$(whoami)
+    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
+            xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
+    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
+            xargs -t -i ipmitool -I lanplus -U $username -E -H {} power on
     ```
 
-1. Each node will attempt to PXE boot, successful netboots will dump their PCI-SIG to console. This data can be cross-referenced with the NCN networking page, the directions for this come next.
+1. Each node will attempt to PXE boot; successful netboots will dump their PCI-SIG to the console. This data can be cross-referenced with the NCN networking page; the directions for this come next.
 
     - Collect the PIT's device IDs:
 
@@ -41,10 +41,14 @@ Identify the hardware configuration by PXE booting a node.
         p801p2 15B3:1013
         ```
 
-    - Collect the other NCN's PCI Device and PCI Vendor IDs:
+    - Collect the other NCNs' PCI Device and PCI Vendor IDs:
 
         ```bash
-        pit# for file in /var/log/conman/console*ncn*; do echo $file; grep -Eoh '(net[0-9] MAC .*)' $file | sort -u | grep PCI && echo -----; done
+        pit# for file in /var/log/conman/console*ncn*; do 
+                echo $file
+                grep -Eoh '(net[0-9] MAC .*)' $file | sort -u |
+                    grep PCI && echo -----
+             done
         /var/log/conman/console.ncn-m001-mgmt
         /var/log/conman/console.ncn-m002-mgmt
         net0 MAC b8:59:9f:f9:1c:8e PCI.DeviceID 1013 PCI.VendorID 15b3
@@ -94,7 +98,7 @@ Identify the hardware configuration by PXE booting a node.
 
 1. Since PoR systems are handled with defaults, at this point one should notice differing `PCI.DeviceID` values than the bolded entries in the Vendor and Bus ID table.
 
-1. After identifying which cards should be used for the management NICs, follow either of the below bullets depending on the scope of the PCIe card change:
+1. After identifying which cards should be used for the management NICs, follow either of the below options, depending on the scope of the PCIe card change:
 
     - If all NCNs have the same, common change (e.g. all NCNs use ConnectX-5s for their management NICs), update the main `/var/www/boot/script.ipxe` file and re-run `set-sqfs-links.sh`.
 
@@ -118,7 +122,7 @@ Identify the hardware configuration by PXE booting a node.
 
     Now the boot scripts are set up for booting differing PCIe cards or onboard NICs.
 
-1. In some cases the cards used for HSN NICs are used for mgmt interfaces, e.g. the system's storage and master nodes use ConnectX-5s. In this case this would ensure the mgmt NICs do not get labeled as HSN NICs:
+1. In some cases the cards used for HSN NICs are used for mgmt interfaces, e.g. the system's storage and master nodes use ConnectX-5s. In this case, this would ensure the mgmt NICs do not get labeled as HSN NICs:
 
     > **Note:** The HSN NICs key off of the Device ID, not the Vendor ID.
 
