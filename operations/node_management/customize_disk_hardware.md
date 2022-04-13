@@ -2,7 +2,7 @@
 
 This page will assist an admin with changing the kernel parameters for NCNs that have extra disks.
 
-> **`NOTE:`** If a system's hardware is Plan of Record (PoR) then this page is not needed.
+> **`NOTE:`** If a system's hardware is Plan of Record (PoR), then this page is not needed.
 
 For any procedure below, it is assumed that the extra disks are going to be utilized. If they are undesired, then the only action item to do is to yank/remove/pull the disks from the NCN.
 

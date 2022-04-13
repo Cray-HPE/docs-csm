@@ -1,6 +1,6 @@
 # Removing a Liquid-cooled blade from a System
 
-This procedure will remove a liquid-cooled blades from a HPE Cray EX system.
+This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 
 ## Perquisites
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.

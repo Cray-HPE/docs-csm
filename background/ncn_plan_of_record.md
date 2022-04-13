@@ -1,6 +1,6 @@
 # Plan of Record
 
-This document outlines the hardware necessary to meet CSM's Plan of Record (PoR). This serves the **minimum, necessary** pieces required per each server in the management plane.
+This document outlines the hardware necessary to meet CSM's Plan of Record (PoR). This serves as the **minimum, necessary** pieces required per each server in the management plane.
 
 1. If the system's NICs do not align to the PoR NICs outlined below (e.g. Onboard NICs are used instead of PCIe), then follow [Customize PCIe Hardware](../operations/node_management/customize_pcie_hardware.md) before booting the NCN(s).
 1. If there are more disks than what is listed below in the PoR for disks, then follow [Customize Disk Hardware](../operations/node_management/customize_disk_hardware.md) before booting the NCN(s).
@@ -52,7 +52,7 @@ This document outlines the hardware necessary to meet CSM's Plan of Record (PoR)
 <a name="worker-nics"></a>
 #### Worker NICs 
 
-> **`NOTE:`** There is no PCIe redundancy for the mangement network for worker NCNs. The only redundancy set up for workers is port redundancy.
+> **`NOTE:`** There is no PCIe redundancy for the management network for worker NCNs. The only redundancy set up for workers is port redundancy.
 
 - _Management Network:_ 1x PCIe card with 2 heads/ports for a total of 2 ports dedicated to a single PCIe card
 - _High-Speed Network:_ 1x PCIe card capable of 100Gbps (e.g. ConnectX-5 or Cassini), with 1 or 2 heads/ports
@@ -66,7 +66,7 @@ This document outlines the hardware necessary to meet CSM's Plan of Record (PoR)
 - _Operating System:_ 2x SSDs of equal size, and less than 500GiB (524288000000 bytes)
 - _CEPH:_ 8x SSDs of any size 
 
-> **`NOTE:`** Any available disk that isn't consumed by the operating system will be used for CEPH, but a node needs a minimum of 8 disks for making an ideal CEPH pool for CSM.
+> **`NOTE:`** Any available disk that is not consumed by the operating system will be used for CEPH, but a node needs a minimum of 8 disks for making an ideal CEPH pool for CSM.
 
 <a name="storage-nics"></a>
 #### Storage NICs

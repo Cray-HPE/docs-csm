@@ -151,7 +151,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
                                     -d ~/.ssh/
    ```
 
-   In the above example, the timezone in the Squashfs is being changed to Americas/Chicago.
+   In the above example, the timezone in the squashfs is being changed to `Americas/Chicago`.
    The root password will **not** be changed because `-p` was not provided on the command line.
    It will copy the existing keys in `~/.ssh/` into the image.
 
@@ -174,7 +174,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
 
 1. Put the new squashfs, kernel, and initrd into S3
 
-   1. If not already available, get this sript which will put a file into S3 with public read setting.
+   1. If not already available, get this script which will put a file into S3 with public read setting.
 
    ```bash
    ncn-m# wget https://github.com/Cray-HPE/s3_examples/blob/main/no_STS/ceph-upload-file-public-read.py
@@ -192,10 +192,9 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
       "temp_url_keys": [],
       ```
 
-   1. Using the access_key and secret_key, construct a `credentials.json` file with contents similar to this.
+   1. Using the `access_key` and `secret_key`, construct a `credentials.json` file with contents similar to this.
 
-      ```bash
-      ncn-m# cat credentials.json
+      ```json
       {
           "access_key": "KJ1B22VP2MBKYPALP8VW",
           "secret_key": "EJbDkvoaHEcMfhkMeDSA3tEM6DwBSmuGzVYkuUOv",

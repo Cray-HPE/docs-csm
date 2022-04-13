@@ -69,29 +69,28 @@ The SHCD must be validated in the following order:
 
 A worksheet that runs "cleanly" will have checked that:
 
-   * Nodes are "architecturally allowed" to connect to each other.
+* Nodes are "architecturally allowed" to connect to each other.
 
-   * No overlapping ports specified.
+* No overlapping ports specified.
 
 A worksheet that runs *cleanly* will have checked that: 
 
 * Nodes are *architecturally allowed* to connect to each other. 
 
-	* No overlapping ports specified. 
+* No overlapping ports specified. 
 
-	* Node connections can be made at the appropriate speeds. 
+* Node connections can be made at the appropriate speeds. 
 
 In addition, a clean run will have the following sections: 
 
-  * SHCD Node Connections – A high level list of all node connections on the system.
+* SHCD Node Connections – A high level list of all node connections on the system.
 
-  * SHCD Port Usage – A Port-by-port detailed listing of all node connections on the system.
+* SHCD Port Usage – A Port-by-port detailed listing of all node connections on the system.
 
-  * Warnings:
-
+* Warnings:
     * A list of nodes found that are not categorized on the system.
 
-      **`Note`:** This list is important as it could include misspellings of nodes that should be included!
+        **`Note`:** This list is important as it could include misspellings of nodes that should be included!
 
     * A list of cell-by-cell warnings of misspellings and other nit-picking items that CANU has autocorrected on the system.
 
@@ -132,7 +131,6 @@ Cell: P16      Name: SITE
 
 1. Critically, Cell I38 has a name of "sw-spinx-002". This should be noted as a misspelling of "sw-spine-002" and corrected.
 
-
 ## Check SHCD Port Usage
 
 Today CANU validates many things, but a future feature is full cable specification checking of nodes (e.g. what NCN ports go to which switches to properly form bonds).  There are several CANU roadmap items, but today a manual review of the "SHCD Port Usage" connections list is vital. Specifically, check:
@@ -145,7 +143,7 @@ Today CANU validates many things, but a future feature is full cable specificati
 
 * Switch-to-switch cabling is appropriate for LAG formation.
 
-* *Other* nodes on the network seem sane. 
+* **Other** nodes on the network seem sane. 
 
 ## Logging and Updates
 
@@ -163,13 +161,13 @@ Once the SHCD has run cleanly through CANU and CANU output has been manually val
 
    Either of the following options can be used:
 
-   * customer communication (CAST ticket for customers)
+   * `customer communication` (CAST ticket for customers)
    * SharePoint (internal systems and sometimes customer systems)
 
 ## Output SHCD to JSON
 
 - Once the SHCD is fully validated, the user will be able to output all the connection details to a `json` file.
-- This output `json` file is used to generate switch configs.
+- This output `json` file is used to generate switch configurations.
 
 ```bash
 ncn# canu validate shcd -a v1 --shcd ./test.xlsx --tabs 40G_10G,NMN,HMN --corners I12,S37,I9,S20,I20,S31  --json --out cabling.json
