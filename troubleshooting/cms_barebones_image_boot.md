@@ -5,9 +5,7 @@ describes how the barebonesImageTest script works and how to interpret the resul
 unavailable, the manual steps for reproducing the barebones image boot test are provided.
 
 ## Topics
-
-- [Troubleshoot the CMS Barebones Image Boot Test](#troubleshoot-the-cms-barebones-image-boot-test)
-  - [Topics](#topics)
+  
   - [1. Steps the Script Performs](#1-steps-the-script-performs)
   - [2. Controlling Which Node Is Used](#2-controlling-which-node-is-used)
   - [3. Controlling Test Script Output Level](#3-controlling-test-script-output-level)
@@ -86,8 +84,6 @@ cray.barebones-boot-test: DEBUG    Creating bos session template with etag:bc390
 The following manual steps may be performed to reproduce the actions of this script. The result should
 be the same as running the script.
 
-- [Troubleshoot the CMS Barebones Image Boot Test](#troubleshoot-the-cms-barebones-image-boot-test)
-  - [Topics](#topics)
   - [1. Steps the Script Performs](#1-steps-the-script-performs)
   - [2. Controlling Which Node Is Used](#2-controlling-which-node-is-used)
   - [3. Controlling Test Script Output Level](#3-controlling-test-script-output-level)
