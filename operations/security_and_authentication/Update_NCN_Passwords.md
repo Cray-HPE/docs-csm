@@ -2,7 +2,7 @@
 
 The management node images do not contain a default root password or default SSH keys.
 
-Use one of these methods to change or set the root pasword in the image.
+Use one of these methods to change or set the root password in the image.
 
 * If the PIT node is booted, see
 [Change NCN Image Root Password and SSH Keys on PIT Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
@@ -29,11 +29,14 @@ for it to be applied to the NCNs.
 <a name="configure_root_password_in_vault"></a>
 ## Procedure: Configure Root Password in Vault
 
-1. Generate a new password hash for the root user. Replace `PASSWORD` with the
-   root password that will be used.
+1. Generate a new password hash for the root user. Type in your new password
+   after running the `read` command. The echo will verify that the hash is set
+   to the password you expect.
 
    ```bash
-   ncn# openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) PASSWORD
+   ncn# read -s NEWPASSWORD
+   ncn# openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) "$NEWPASSWORD"
+   ncn# echo "Password: $NEWPASSWORD"
    ```
 
 1. Get the [HashiCorp Vault](HashiCorp_Vault.md) root token:
@@ -91,6 +94,7 @@ procedure above.
    ```
 
    Example output:
+
    ```json
    {
      "layers": [
