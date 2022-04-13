@@ -61,9 +61,9 @@ The following table of examples assumes that the system was configured with a `s
 | grafana.shasta.dev.cray.com        | grafana.cmn.shasta.dev.cray.com         |                       | No                          |
 | prometheus.shasta.dev.cray.com     | prometheus.cmn.shasta.dev.cray.com      |                       | No                          |
 | alertmanager.shasta.dev.cray.com   | alertmanager.cmn.shasta.dev.cray.com    |                       | No                          |
-| vcs.shasta.dev.cray.com            | vcs.shasta.dev.cray.com                 |                       | No                          |
-| kiali-istio.shasta.dev.cray.com    | kiali-istio.shasta.dev.cray.com         |                       | No                          |
-| s3.shasta.dev.cray.com             | s3.shasta.dev.cray.com                  |                       | No                          |
-| sma-grafana.shasta.dev.cray.com    | sma-grafana.shasta.dev.cray.com         |                       | No                          |
-| sma-kibana.shasta.dev.cray.com     | sma-kibana.shasta.dev.cray.com          |                       | No                          |
+| vcs.shasta.dev.cray.com            | vcs.cmn.shasta.dev.cray.com             |                       | No                          |
+| kiali-istio.shasta.dev.cray.com    | kiali-istio.cmn.shasta.dev.cray.com     |                       | No                          |
+| s3.shasta.dev.cray.com             | s3.cmn.shasta.dev.cray.com              |                       | No                          |
+| sma-grafana.shasta.dev.cray.com    | sma-grafana.cmn.shasta.dev.cray.com     |                       | No                          |
+| sma-kibana.shasta.dev.cray.com     | sma-kibana.cmn.shasta.dev.cray.com      |                       | No                          |
 | api.shasta.dev.cray.com            | api.cmn.shasta.dev.cray.com<br>api.chn.shasta.dev.cray.com<br>api.can.shasta.dev.cray.com | | No |
