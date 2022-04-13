@@ -347,13 +347,13 @@ Before rebooting NCNs:
 
        If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
-    10.  Uncordon the node.
+    10. Uncordon the node.
 
         ```bash
         ncn-m# kubectl uncordon <node you just rebooted>
         ```
 
-    11.  Verify pods are running on the rebooted node.
+    11. Verify pods are running on the rebooted node.
 
          Within a minute or two, the following command should begin to show pods in a `Running` state (replace NCN in the command below with the name of the worker node):
 
@@ -361,15 +361,15 @@ Before rebooting NCNs:
          ncn-m# kubectl get pods -o wide -A | grep <node to be rebooted>
          ```
 
-    12.  Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
+    12. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
          Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.
 
          If terminating pods are reported when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.
 
-    13.  Disconnect from the console.
+    13. Disconnect from the console.
 
-    14.  Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
+    14. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
 
 2. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
 
