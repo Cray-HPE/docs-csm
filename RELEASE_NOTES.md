@@ -30,11 +30,11 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
   | grafana.shasta.dev.cray.com      | grafana.cmn.shasta.dev.cray.com         |
   | prometheus.shasta.dev.cray.com   | prometheus.cmn.shasta.dev.cray.com      |
   | alertmanager.shasta.dev.cray.com | alertmanager.cmn.shasta.dev.cray.com    |
-  | vcs.shasta.dev.cray.com          | vcs.shasta.dev.cray.com                 |
-  | kiali-istio.shasta.dev.cray.com  | kiali-istio.shasta.dev.cray.com         |
-  | s3.shasta.dev.cray.com           | s3.shasta.dev.cray.com                  |
-  | sma-grafana.shasta.dev.cray.com  | sma-grafana.shasta.dev.cray.com         |
-  | sma-kibana.shasta.dev.cray.com   | sma-kibana.shasta.dev.cray.com          |
+  | vcs.shasta.dev.cray.com          | vcs.cmn.shasta.dev.cray.com             |
+  | kiali-istio.shasta.dev.cray.com  | kiali-istio.cmn.shasta.dev.cray.com     |
+  | s3.shasta.dev.cray.com           | s3.cmn.shasta.dev.cray.com              |
+  | sma-grafana.shasta.dev.cray.com  | sma-grafana.cmn.shasta.dev.cray.com     |
+  | sma-kibana.shasta.dev.cray.com   | sma-kibana.cmn.shasta.dev.cray.com      |
   | api.shasta.dev.cray.com          | api.cmn.shasta.dev.cray.com<br>api.chn.shasta.dev.cray.com<br>api.can.shasta.dev.cray.com |
 
 * PowerDNS authoritative DNS server
