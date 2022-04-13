@@ -160,7 +160,7 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
 
 1. Put the new squashfs, kernel, and initrd into S3
 
-   1. If not already available, get this sript which will put a file into S3 with public read setting.
+   1. If not already available, get this script which will put a file into S3 with public read setting.
 
    ```bash
    ncn-m# wget https://github.com/Cray-HPE/s3_examples/blob/main/no_STS/ceph-upload-file-public-read.py
@@ -178,10 +178,9 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
       "temp_url_keys": [],
       ```
 
-   1. Using the access_key and secret_key, construct a `credentials.json` file with contents similar to this.
+   1. Using the `access_key` and `secret_key`, construct a `credentials.json` file with contents similar to this.
 
-      ```bash
-      ncn-m# cat credentials.json
+      ```json
       {
           "access_key": "KJ1B22VP2MBKYPALP8VW",
           "secret_key": "EJbDkvoaHEcMfhkMeDSA3tEM6DwBSmuGzVYkuUOv",
@@ -348,7 +347,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
 
 1. Put the new initrd.img.xz, kernel, and squashfs into S3
 
-   1. If not already available, get this sript which will put a file into S3 with public read setting.
+   1. If not already available, get this script which will put a file into S3 with public read setting.
 
    ```bash
    ncn-m# wget https://github.com/Cray-HPE/s3_examples/blob/main/no_STS/ceph-upload-file-public-read.py

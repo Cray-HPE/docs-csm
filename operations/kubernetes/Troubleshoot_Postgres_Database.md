@@ -238,12 +238,12 @@ Example output:
         +------------------------------+------------+--------+---------+----+-----------+
         ```
 
-    2. Re-run [Is Replication Lagging?](#lag) to `reinit` any lagging members.
+    1. Re-run [Is Replication Lagging?](#lag) to `reinit` any lagging members.
 
-    3. If the `reinit` still fails, then delete member pods that are still reporting lag. This should clear up any remaining lag.
+    1. If the `reinit` still fails, then delete member pods that are still reporting lag. This should clear up any remaining lag.
 
        ```bash
-        ncn-w001# kubectl exec cray-console-postgres-0 -c postgres -n services -it -- patronictl list
+        ncn-mw# kubectl exec cray-console-postgres-0 -c postgres -n services -it -- patronictl list
         ```
 
         Example output:
@@ -259,10 +259,10 @@ Example output:
         ```
 
         ```bash
-        ncn-w001# kubectl delete pod cray-console-data-postgres-1 cray-console-data-postgres-2 -n services
+        ncn-mw# kubectl delete pod cray-console-data-postgres-1 cray-console-data-postgres-2 -n services
         ```
 
-        Once the pods restart, check that the lag has resolved:
+        Once the pods restart, verify that the lag has resolved:
 
         Example output:
 
@@ -276,7 +276,7 @@ Example output:
         +------------------------------+------------+--------+---------+----+-----------+
         ```
 
-- If a cluster member is `stopped` after a successful reinitialization, check for pg_internal.init.* files that may need to be cleaned up. This can occur if the pgdata disk was full prior to the reinitialization, leaving truncated pg_internal.init.* files in the pgdata directory.
+- If a cluster member is `stopped` after a successful reinitialization, check for `pg_internal.init.*` files that may need to be cleaned up. This can occur if the `pgdata` disk was full prior to the reinitialization, leaving truncated `pg_internal.init.*` files in the `pgdata` directory.
 
     ```bash
     ncn-mw# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list
@@ -463,11 +463,11 @@ function resize-postgresql-pvc
 
     # Check for required arguments
     if [ $# -ne 4 ]; then
-        echo "Illegal number of parameters"
+        echo "Illegal number of parameters ($#). Function requires exactly 4 arguments."
         exit 2
     fi
 
-    ## Check PGRESIZE matches current postgresql volume size
+    ## Check that PGRESIZE matches current postgresql volume size
     postgresql_volume_size=$(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o jsonpath="{.spec.volume.size}")
     if [ "${postgresql_volume_size}" != "${PGRESIZE}" ]; then
          echo "Invalid resize ${PGRESIZE}, expected ${postgresql_volume_size}"
@@ -476,16 +476,25 @@ function resize-postgresql-pvc
 
     ## Scale the postgres cluster to 1 member
     kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 1}]'
-    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n "${NAMESPACE}" | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n "${NAMESPACE}" | grep -v NAME | wc -l) != 1 ] ; do
+        echo "  waiting for pods to terminate"
+        sleep 2
+    done
 
-    ## Delete the inactive PVCs, resize the active PVC and wait for the resize to complete
+    ## Delete the inactive PVCs, resize the active PVC, and wait for the resize to complete
     kubectl delete pvc "${PGDATA}-1" "${PGDATA}-2" -n "${NAMESPACE}"
     kubectl patch -p '{"spec": {"resources": {"requests": {"storage": "'${PGRESIZE}'"}}}}' "pvc/${PGDATA}-0" -n "${NAMESPACE}"
-    while [ -z '$(kubectl describe pvc "{PGDATA}-0" -n "${NAMESPACE}" | grep FileSystemResizeSuccessful' ] ; do echo "  waiting for PVC to resize"; sleep 2; done
+    while [ -z '$(kubectl describe pvc "{PGDATA}-0" -n "${NAMESPACE}" | grep FileSystemResizeSuccessful' ] ; do
+        echo "  waiting for PVC to resize"
+        sleep 2
+    done
 
     ## Scale the postgres cluster back to 3 members
     kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
-    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n "${NAMESPACE}" | grep -v NAME | grep -c "Running") != 3 ] ; do echo "  waiting for pods to restart"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n "${NAMESPACE}" | grep -v NAME | grep -c "Running") != 3 ] ; do
+        echo "  waiting for pods to restart"
+        sleep 2
+    done
 }
 ```
 
@@ -539,73 +548,82 @@ ncn-mw# kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=1
 
 This generally means that the password for the given user is not the same as that specified in the Kubernetes secret. This can occur if the `postgresql` cluster was rebuilt and the data was restored, leaving the Kubernetes secrets out of sync with the Postgres cluster. To resolve this `SyncFailed` case, gather the username and password for the credential from Kubernetes, and update the database with these values. For example, if the user `postgres` is failing to authenticate between the `cray-smd` services and the `cray-smd-postgres` cluster, then get the password for the `postgres` user from the Kubernetes secret and update the password in the database.
 
-```bash
-ncn-mw# CLIENT=cray-smd
-ncn-mw# POSTGRESQL=cray-smd-postgres
-ncn-mw# NAMESPACE=services
-```
+1. Set necessary variables.
 
-Scale the service to 0
+    ```bash
+    ncn-mw# CLIENT=cray-smd
+    ncn-mw# POSTGRESQL=cray-smd-postgres
+    ncn-mw# NAMESPACE=services
+    ```
 
-```bash
-ncn-mw# kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=0
-ncn-mw# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
-```
+1. Scale the service to 0
 
-Determine what secrets are associated with the `postgresql` credentials
-```bash
-ncn-mw# kubectl get secrets -n ${NAMESPACE} | grep "${POSTGRESQL}.credentials"
-services            hmsdsuser.cray-smd-postgres.credentials                       Opaque                                2      31m
-services            postgres.cray-smd-postgres.credentials                        Opaque                                2      31m
-services            service-account.cray-smd-postgres.credentials                 Opaque                                2      31m
-services            standby.cray-smd-postgres.credentials                         Opaque                                2      31m
-```
+    ```bash
+    ncn-mw# kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=0
+    ncn-mw# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do
+                echo "  waiting for pods to terminate"
+                sleep 2
+            done
+    ```
 
-Gather the decoded username and password for the user that is failing to authenticate - for example:
-`postgres.cray-smd-postgres.credentials`:
-```bash
-ncn-mw# kubectl get secret postgres.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d
-postgres
+1. Determine what secrets are associated with the `postgresql` credentials.
 
-ncn-mw# kubectl get secret postgres.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d
-ABCXYZ
-```
+    ```bash
+    ncn-mw# kubectl get secrets -n ${NAMESPACE} | grep "${POSTGRESQL}.credentials"
+    services            hmsdsuser.cray-smd-postgres.credentials                       Opaque                                2      31m
+    services            postgres.cray-smd-postgres.credentials                        Opaque                                2      31m
+    services            service-account.cray-smd-postgres.credentials                 Opaque                                2      31m
+    services            standby.cray-smd-postgres.credentials                         Opaque                                2      31m
+    ```
 
-`kubectl exec` into the postgres leader, and update the username and password in the database.
+1. Gather the decoded username and password for the user that is failing to authenticate - for example:
 
-```bash
-ncn-mw# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
-+-------------------+---------------------+------------+--------+---------+----+-----------+
-|      Cluster      |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
-+-------------------+---------------------+------------+--------+---------+----+-----------+
-| cray-smd-postgres | cray-smd-postgres-0 | 10.42.0.25 | Leader | running |  1 |           |
-| cray-smd-postgres | cray-smd-postgres-1 | 10.44.0.34 |        | running |    |         0 |
-| cray-smd-postgres | cray-smd-postgres-2 | 10.36.0.44 |        | running |    |         0 |
-+-------------------+---------------------+------------+--------+---------+----+-----------+
-ncn-mw# POSTGRES_LEADER=cray-smd-postgres-0
+    `postgres.cray-smd-postgres.credentials`:
+    ```bash
+    ncn-mw# kubectl get secret postgres.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d
+    postgres
+    ncn-mw# kubectl get secret postgres.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d
+    ABCXYZ
+    ```
 
-ncn-mw# kubectl exec ${POSTGRES_LEADER} -n ${NAMESPACE} -c postgres -it -- bash
-root@cray-smd-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
-postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
-ALTER ROLE
-postgres=#
-```
+1. `kubectl exec` into the postgres leader, and update the username and password in the database.
 
-Restart the `postgresql` cluster.
+    ```bash
+    ncn-mw# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
+    +-------------------+---------------------+------------+--------+---------+----+-----------+
+    |      Cluster      |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
+    +-------------------+---------------------+------------+--------+---------+----+-----------+
+    | cray-smd-postgres | cray-smd-postgres-0 | 10.42.0.25 | Leader | running |  1 |           |
+    | cray-smd-postgres | cray-smd-postgres-1 | 10.44.0.34 |        | running |    |         0 |
+    | cray-smd-postgres | cray-smd-postgres-2 | 10.36.0.44 |        | running |    |         0 |
+    +-------------------+---------------------+------------+--------+---------+----+-----------+
+    ncn-mw# POSTGRES_LEADER=cray-smd-postgres-0
+    ncn-mw# kubectl exec ${POSTGRES_LEADER} -n ${NAMESPACE} -c postgres -it -- bash
+    root@cray-smd-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
+    postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
+    ALTER ROLE
+    postgres=#
+    ```
 
-```bash
-ncn-mw# kubectl delete pod "${POSTGRESQL}-0" "${POSTGRESQL}-1" "${POSTGRESQL}-2" -n ${NAMESPACE}
+1. Restart the `postgresql` cluster.
 
-ncn-mw# while [ $(kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq -r '.status.PostgresClusterStatus') != "Running" ]; do echo "waiting for ${POSTGRESQL} to start running"; sleep 2; done
-```
+    ```bash
+    ncn-mw# kubectl delete pod "${POSTGRESQL}-0" "${POSTGRESQL}-1" "${POSTGRESQL}-2" -n ${NAMESPACE}
+    ncn-mw# while [ $(kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq -r '.status.PostgresClusterStatus') != "Running" ]; do
+                echo "waiting for ${POSTGRESQL} to start running"
+                sleep 2
+            done
+    ```
 
-Scale the service back to 3
+1. Scale the service back to 3
 
-```bash
-ncn-mw# kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=3
-
-ncn-mw# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start running"; sleep 2; done
-```
+    ```bash
+    ncn-mw# kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=3
+    ncn-mw# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do
+                echo "  waiting for pods to start running"
+                sleep 2
+            done
+    ```
 
 <a name="missing"></a>
 ## Is a Cluster Member missing?

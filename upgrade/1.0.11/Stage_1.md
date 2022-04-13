@@ -29,35 +29,51 @@
 
 1. Deploy `node-exporter` and `alertmanager`.
 
-    **NOTE:** This process will need to run on a node running `ceph-mon`, which in most cases will be `ncn-s001`, `ncn-s002`, and `ncn-s003`. It only needs to be run once, not on every one of these nodes.
+    **NOTE:** This procedure will need to run on a node running `ceph-mon`, which in most cases will be `ncn-s001`, `ncn-s002`, and `ncn-s003`. It only needs to be run once, not on every one of these nodes.
 
-    1. Deploy `node-exporter` and `alertmanager`:
+    1. Deploy `node-exporter` and `alertmanager`.
 
         ```bash
-        ncn-s# ceph orch apply node-exporter
+        ncn-s# ceph orch apply node-exporter && ceph orch apply alertmanager
+        ```
+        
+        Expected output should look similar to the following:
+        ```
         Scheduled node-exporter update...
-
-        ncn-s# ceph orch apply alertmanager
         Scheduled alertmanager update...
         ```
 
-    1. Verify `node-exporter` and `alertmanager` are running:
+    1. Verify that `node-exporter` is running.
+
+        > **IMPORTANT:** There should be a `node-exporter` container per Ceph node.
 
         ```bash
         ncn-s# ceph orch ps --daemon_type node-exporter
+        ```
+        
+        Expected output on a system with three Ceph nodes should look similar to the following:
+        ```
         NAME                    HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                       IMAGE ID           CONTAINER ID
         node-exporter.ncn-s001  ncn-s001  running (57m)  3m ago     67m  0.18.1   docker.io/prom/node-exporter:v0.18.1             e5a616e4b9cf       3465eade21da
         node-exporter.ncn-s002  ncn-s002  running (57m)  3m ago     67m  0.18.1   registry.local/prometheus/node-exporter:v0.18.1  e5a616e4b9cf       7ed9b6cc9991
         node-exporter.ncn-s003  ncn-s003  running (57m)  3m ago     67m  0.18.1   registry.local/prometheus/node-exporter:v0.18.1  e5a616e4b9cf       1078d9e555e4
+        ```
 
+    1. Verify that `alertmanager` is running.
+
+        > **IMPORTANT:** There should be a single `alertmanager` container for the cluster.
+
+        ```bash
         ncn-s# ceph orch ps --daemon_type alertmanager
+        ```
+        
+        Expected output should look similar to the following:
+        ```
         NAME                   HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                      IMAGE ID           CONTAINER ID
         alertmanager.ncn-s001  ncn-s001  running (66m)  3m ago     68m  0.20.0   registry.local/prometheus/alertmanager:v0.20.0  0881eb8f169f       775aa53f938f
         ```
 
-        **IMPORTANT:** There should be a `node-exporter` container per Ceph node and a single `alertmanager` container for the cluster.
-
-1. Update BSS to ensure the Ceph images are loaded if a node is rebuilt.
+1. Update BSS to ensure that the Ceph images are loaded if a node is rebuilt.
 
     ```bash
     ncn-m001# . /usr/share/doc/csm/upgrade/1.0.11/scripts/ceph/lib/update_bss_metadata.sh
@@ -66,10 +82,10 @@
 
 1. Ensure the Ceph services are set to autostart
 
-   On ncn-s001:
+   On `ncn-s001`:
 
    ```bash
-   /srv/cray/scripts/common/ceph-enable-services.sh
+   ncn-s001# /srv/cray/scripts/common/ceph-enable-services.sh
    ```
 
- Once `Stage 1` is successfully completed, all the Ceph nodes have been rebooted into the new image. Now proceed to [Stage 2](Stage_2.md).
+Once `Stage 1` is successfully completed, all the Ceph nodes have been rebooted into the new image. Proceed to [Stage 2](Stage_2.md).

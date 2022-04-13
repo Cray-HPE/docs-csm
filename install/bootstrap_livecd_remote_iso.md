@@ -10,16 +10,15 @@ lack of removable storage.
 **Important:** Before starting this procedure be sure to complete the procedure to
 [Prepare Configuration Payload](prepare_configuration_payload.md) for the relevant installation scenario.
 
-### Topics:
-   * [Known Compatibility Issues](#known-compatibility-issues)
-   * [Attaching and Booting the LiveCD with the BMC](#attaching-and-booting-the-livecd-with-the-bmc)
-   * [First Login](#first-login)
-   * [Configure the Running LiveCD](#configure-the-running-livecd)
-   * [Next Topic](#next-topic)
+## Topics
+   1. [Known Compatibility Issues](#known-compatibility-issues)
+   1. [Attaching and Booting the LiveCD with the BMC](#attaching-and-booting-the-livecd-with-the-bmc)
+   1. [First Login](#first-login)
+   1. [Configure the Running LiveCD](#configure-the-running-livecd)
+   1. [Next Topic](#next-topic)
 
-## Details
 <a name="known-compatibility-issues"></a>
-### 1. Known Compatibility Issues
+## 1. Known Compatibility Issues
 
 The LiveCD Remote ISO has known compatibility issues for nodes from certain vendors.
 
@@ -27,7 +26,7 @@ The LiveCD Remote ISO has known compatibility issues for nodes from certain vend
    * Gigabyte nodes should not attempt to bootstrap using the LiveCD Remote ISO method. Instead use [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
 
 <a name="attaching-and-booting-the-livecd-with-the-bmc"></a>
-### 2. Attaching and Booting the LiveCD with the BMC
+## 2. Attaching and Booting the LiveCD with the BMC
 
 > **Warning:** If this is a re-installation on a system that still has a USB device from a prior
 > installation then that USB device must be wiped before continuing. Failing to wipe the USB, if present, may result in confusion.
@@ -45,14 +44,10 @@ the instructions for attaching to the BMC will differ.
    The ISO will have a name similar to
    `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`
 
-
-
 1. Prepare a server on the network to host the cray-pre-install-toolkit ISO.
 
    This release of CSM software, the cray-pre-install-toolkit ISO should be placed on a server which the PIT node
-   will be able to contact via http or https.
-
-      * HPE nodes can use http or https.
+   will be able to contact using HTTP or HTTPS.
 
    **Note:** A shorter path name is better than a long path name on the webserver.
 
@@ -68,7 +63,7 @@ the instructions for attaching to the BMC will differ.
 1. The chosen procedure should have rebooted the server. Observe the server boot into the LiveCD.
 
 <a name="first-login"></a>
-### 3. First Login
+## 3. First Login
 
 On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.
 
@@ -91,10 +86,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    ```
 
 <a name="configure-the-running-livecd"></a>
-### 4. Configure the Running LiveCD
+## 4. Configure the Running LiveCD
 
-1. Set up the Typescript directory as well as the initial typescript. This directory will be returned to for every typescript in the entire CSM installation.
-
+1. Set up the initial typescript.
 
    ```bash
    pit# cd ~
@@ -105,7 +99,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. <a name="set-up-site-link"></a>Set up the site-link, enabling SSH to work. You can reconnect with SSH after this step.
    > **`NOTICE REGARDING DHCP`** If your site's network authority or network administrator has already provisioned an IPv4 address for your master node(s) external NIC(s), **then skip this step**.
 
-   1. Setup Variables.
+   1. Setup variables.
 
       ```bash
       # The IPv4 Address for the nodes external interface(s); this will be provided if not already by the site's network administrator or network authority.
@@ -185,7 +179,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     ```bash
     pit# mount -v -L PITDATA
     pit# pushd /var/www/ephemeral
-    pit/var/www/ephemeral# mkdir -v admin prep prep/admin configs data
+    pit# mkdir -v admin prep prep/admin configs data
     ```
 
 1. Quit the typescript session with the `exit` command, copy the file (csm-install-remoteis.<date>.txt) from its initial location to the newly created directory, and restart the typescript.
@@ -208,40 +202,41 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    1. Set helper variables
 
       ```bash
-      pit:/var/www/ephemeral# export ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm
-      pit:/var/www/ephemeral# export CSM_RELEASE=csm-x.y.z
-      pit:/var/www/ephemeral# export SYSTEM_NAME=eniac
+      pit# ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm
+      pit# export CSM_RELEASE=csm-x.y.z
+      pit# export SYSTEM_NAME=eniac
       ```
 
-   1. Save the `CSM_RELEASE` for usage later; all subsequent shell sessions will have this var set.
+   1. Save the `CSM_RELEASE` for usage later; all subsequent shell sessions will have this variable set.
 
-      ```bash
-      # Prepend a new line to assure we add on a unique line and not at the end of another.
-      pit:/var/www/ephemeral# echo -e "\nCSM_RELEASE=$CSM_RELEASE" >>/etc/environment
+      > The `echo` prepends a newline to ensure that the variable assignment occurs on a unique line,
+      > and not at the end of another.
+
+      ```bash      
+      pit# echo -e "\nCSM_RELEASE=$CSM_RELEASE" >>/etc/environment
       ```
 
    1. Fetch the release tarball.
 
       ```bash
-      pit:/var/www/ephemeral# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz -O /var/www/ephemeral/${CSM_RELEASE}.tar.gz
+      pit# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz -O /var/www/ephemeral/${CSM_RELEASE}.tar.gz
       ```
 
    1. Expand the tarball on the PIT node.
 
       > Note: Expansion of the tarball may take more than 45 minutes.
 
-
       ```bash
-      pit:/var/www/ephemeral# tar -zxvf ${CSM_RELEASE}.tar.gz
-      pit:/var/www/ephemeral# ls -l ${CSM_RELEASE}
+      pit# tar -zxvf ${CSM_RELEASE}.tar.gz
+      pit# ls -l ${CSM_RELEASE}
       ```
 
    1. Copy the artifacts into place.
 
       ```bash
-      pit/var/www/ephemeral# mkdir -pv data/{k8s,ceph}
-      pit/var/www/ephemeral# rsync -a -P --delete ./${CSM_RELEASE}/images/kubernetes/ ./data/k8s/
-      pit/var/www/ephemeral# rsync -a -P --delete ./${CSM_RELEASE}/images/storage-ceph/ ./data/ceph/
+      pit# mkdir -pv data/{k8s,ceph}
+      pit# rsync -a -P --delete ./${CSM_RELEASE}/images/kubernetes/ ./data/k8s/
+      pit# rsync -a -P --delete ./${CSM_RELEASE}/images/storage-ceph/ ./data/ceph/
       ```
 
    > The PIT ISO, Helm charts/images, and bootstrap RPMs are now available in the extracted CSM tar.
@@ -249,9 +244,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Install/upgrade the CSI and testing RPMs.
 
    ```bash
-   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
-   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
-   pit:/var/www/ephemeral# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ./${CSM_RELEASE}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
    ```
 
 1. Show the version of CSI installed.
@@ -346,10 +341,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
          ```
 
       1. Generate the system configuration.
-      > **`NOTE`** ensure you select a reachable NTP pool/server passed in via the `--ntp-pools`/`--ntp-servers` flags, respectively. Adding an uncreachable server can cause clock skew as chrony tries to continually reach out to a server it can never reach.
-
-      ```bash
-      pit:/var/www/ephemeral/prep/# csi config init
+         > **NOTE:** Make sure to select a reachable NTP pool/server (passed in via the `--ntp-pools`/`--ntp-servers` flags, respectively). 
+         > Adding an unreachable server can cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
 
          ```bash
          linux# csi config init
@@ -360,22 +353,23 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
          These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
             * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
 
-            ```
-            "Couldn't find switch port for NCN: x3000c0s1b0"
-            ```
+               ```
+               "Couldn't find switch port for NCN: x3000c0s1b0"
+               ```
 
             * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
 
-            ```json
-            {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
-            {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
-            ```
+               ```json
+               {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
+               {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
+               ```
 
             * If a cooling door is found in `hmn_connections.json`, there may be a message like the following. It can be safely ignored.
 
                ```json
                {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
                {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
+               ```
 
       1. Skip the next step and continue with the [CSI Workarounds](#csi-workarounds).
 
@@ -502,7 +496,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 1. Check that IP addresses are set for each interface and investigate any failures.
 
-    1. Check IP addresses, do not run tests if these are missing and instead start triage.
+    1. Check IP addresses. Do not run tests if these are missing and instead triage the issue.
 
        ```bash
        pit# wicked show bond0 vlan002 vlan004 vlan007
@@ -542,8 +536,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
        pit# csi pit validate --network
        ```
 
-1. Copy the service config files generated earlier by `csi config init` for DNSMasq, Metal
-   Basecamp (cloud-init), and Conman.
+1. Copy the service configuration files generated earlier by `csi config init` for DNSMasq, Metal
+   Basecamp (cloud-init), and ConMan.
 
     1. Copy files (files only, `-r` is expressly not used).
 
@@ -584,10 +578,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    * [Prepare Site-Init](prepare_site_init.md) to create and prepare the `site-init` directory for your system.
 
-
 <a name="next-topic"></a>
-# Next Topic
+## Next Topic
 
-   After completing this procedure the next step is to configure the management network switches.
+After completing this procedure, the next step is to configure the management network switches.
 
-   * See [Configure Management Network Switches](index.md#configure_management_network)
+See [Configure Management Network Switches](index.md#configure_management_network)

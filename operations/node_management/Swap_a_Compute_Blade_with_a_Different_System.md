@@ -74,7 +74,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 ### Disable the Redfish endpoints for the nodes
 
-3. Temporarily disable endpoint discovery service (MEDS) for each compute node. Disabling the slot prevents hms-discovery from automatically powering on the slot.
+3. Temporarily disable endpoint discovery service (MEDS) for each compute node. Disabling the slot prevents `hms-discovery` from automatically powering on the slot.
 
    ```bash
    ncn-m001# cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0
@@ -121,7 +121,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 ### Disable the chassis slot
 
-6. Disable the chassis slot. This example disables slot 0, chassis 3, in cabinet 9000.
+6. Disable the chassis slot. Disabling the slot prevents `hms-discovery` from automatically powering on the slot. This example disables slot 0, chassis 3, in cabinet 9000.
 
    ```bash
    ncn-m001# cray hsm state components enabled update --enabled false x9000c3s0
@@ -424,9 +424,9 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
 33. Wait for 3 minutes for the blade to power on and the node controllers (BMCs) to be discovered.
 
-       ```bash
-        ncn-m001# sleep 180
-       ```
+    ```bash
+    ncn-m001# sleep 180
+    ```
 
 ### Verify discovery has completed
 
@@ -584,7 +584,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
 
 ### Check DNS
 
-Check for duplicate IP entries in the State Management Database (SMD). Duplicate entries will cause DNS operations to fail.
+Check for duplicate IP address entries in the State Management Database (SMD). Duplicate entries will cause DNS operations to fail.
 
 ```bash
 ncn-m001:~ # ssh uan01
