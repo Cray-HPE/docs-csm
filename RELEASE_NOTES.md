@@ -19,7 +19,7 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * Performance improvements to Unbound and DHCP Helper
 * Initial Release of Bifurcated CAN
 
-  The user and administrative traffic segregation introduced by Bifurcated CAN has changed the URLs for certain services as it is now necessary to include the network path in the fully qualified domain name.
+  The user and administrative traffic segregation introduced by Bifurcated CAN has changed the URLs for certain services as it is now necessary to include the network path in the fully qualified domain name. Access to administrative services is now restricted to the Customer Management Network (CMN). API access is available via the Customer Management Network (CMN), Customer Access Network (CAN), and Customer Highspeed Network (CHN).
 
   The following table assumes the system was configured with a `system-name` of `shasta` and a `site-domain` of `dev.cray.com`.
 
