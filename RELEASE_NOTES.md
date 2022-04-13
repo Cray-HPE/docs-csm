@@ -112,7 +112,7 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * PowerDNS will replace Unbound as the authoritative DNS source in a future CSM release.
   * The cray-dns-unbound-manager CronJob will be deprecated in a future release once all DNS records are migrated to PowerDNS.
   * The introduction of PowerDNS and Bifurcated CAN will introduce some node and service naming changes.
-  * Please see the [PowerDNS migration notice](../introduction/PowerDNS_migration.md) for more information.
+  * Please see the [PowerDNS Migration Guide](./operations/network/dns/PowerDNS_migration.md) for more information.
 ## Removals
 * The V1 version of the CFS API was removed
 * The cray-externaldns-coredns, cray-externaldns-etcd, and cray-externaldns-wait-for-etcd pods have been removed. PowerDNS is now the provider of the external DNS service.
