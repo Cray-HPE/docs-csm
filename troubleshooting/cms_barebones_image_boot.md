@@ -5,18 +5,16 @@ describes how the barebonesImageTest script works and how to interpret the resul
 unavailable, the manual steps for reproducing the barebones image boot test are provided.
 
 ## Topics
-
-- [Troubleshoot the CMS Barebones Image Boot Test](#troubleshoot-the-cms-barebones-image-boot-test)
-  - [Topics](#topics)
-  - [1. Steps the Script Performs](#1-steps-the-script-performs)
-  - [2. Controlling Which Node Is Used](#2-controlling-which-node-is-used)
-  - [3. Controlling Test Script Output Level](#3-controlling-test-script-output-level)
-  - [4. Manual Steps To Reproduce This Script](#4-manual-steps-to-reproduce-this-script)
-    - [4.1 Locate CSM Barebones Image in IMS](#41-locate-csm-barebones-image-in-ims)
-    - [4.2 Create a BOS Session Template for the CSM Barebones Image](#42-create-a-bos-session-template-for-the-csm-barebones-image)
-    - [4.3 Find an Available Compute Node](#43-find-an-available-compute-node)
-    - [4.4 Reboot the Node Using a BOS Session Template](#44-reboot-the-node-using-a-bos-session-template)
-    - [4.5 Connect to the Node's Console and Watch the Boot](#45-connect-to-the-nodes-console-and-watch-the-boot)
+  
+- [1. Steps the Script Performs](#csm-boot-script-steps)
+- [2. Controlling Which Node Is Used](#csm-boot-compute-node)
+- [3. Controlling Output](#csm-boot-output-level)
+- [4. Manual Steps](#csm-boot-manual-steps)
+  - [4.1 Locate CSM Barebones Image in IMS](#csm-boot-steps-locate-barebones-image-in-ims)
+  - [4.2 Create a BOS Session Template for the CSM Barebones Image](#csm-boot-steps-bos-session-template)
+  - [4.3 Find an available compute node](#csm-boot-steps-node)
+  - [4.4 Reboot the node using a BOS session template](#csm-boot-steps-reboot)
+  - [4.5 Connect to the node's console and watch the boot](#csm-boot-steps-watch-boot)
 
 <a name="csm-boot-script-steps"></a>
 ## 1. Steps the Script Performs
@@ -86,17 +84,11 @@ cray.barebones-boot-test: DEBUG    Creating bos session template with etag:bc390
 The following manual steps may be performed to reproduce the actions of this script. The result should
 be the same as running the script.
 
-- [Troubleshoot the CMS Barebones Image Boot Test](#troubleshoot-the-cms-barebones-image-boot-test)
-  - [Topics](#topics)
-  - [1. Steps the Script Performs](#1-steps-the-script-performs)
-  - [2. Controlling Which Node Is Used](#2-controlling-which-node-is-used)
-  - [3. Controlling Test Script Output Level](#3-controlling-test-script-output-level)
-  - [4. Manual Steps To Reproduce This Script](#4-manual-steps-to-reproduce-this-script)
-    - [4.1 Locate CSM Barebones Image in IMS](#41-locate-csm-barebones-image-in-ims)
-    - [4.2 Create a BOS Session Template for the CSM Barebones Image](#42-create-a-bos-session-template-for-the-csm-barebones-image)
-    - [4.3 Find an Available Compute Node](#43-find-an-available-compute-node)
-    - [4.4 Reboot the Node Using a BOS Session Template](#44-reboot-the-node-using-a-bos-session-template)
-    - [4.5 Connect to the Node's Console and Watch the Boot](#45-connect-to-the-nodes-console-and-watch-the-boot)
+1. [Locate CSM Barebones Image in IMS](#csm-boot-steps-locate-barebones-image-in-ims)
+1. [Create a BOS Session Template for the CSM Barebones Image](#csm-boot-steps-bos-session-template)
+1. [Find an available compute node](#csm-boot-steps-node)
+1. [Reboot the node using a BOS session template](#csm-boot-steps-reboot)
+1. [Watch Boot on Console](#csm-boot-steps-watch-boot)
 
 <a name="csm-boot-steps-locate-barebones-image-in-ims"></a>
 ### 4.1 Locate CSM Barebones Image in IMS
@@ -176,7 +168,7 @@ The session template below can be copied and used as the basis for the BOS sessi
 
 <a name="csm-boot-steps-node"></a>
 ### 4.3 Find an Available Compute Node
-To list hte compute nodes managed by HSM:
+To list the compute nodes managed by HSM:
 
 ```bash
 ncn# cray hsm state components list --role Compute --enabled true

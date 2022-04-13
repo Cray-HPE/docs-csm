@@ -3,13 +3,13 @@
 Below are the service specific steps required to restore data to a Postgres cluster.
 
 Restore Postgres Procedures by Service:
-- [Restore Postgres](#restore-postgres)
-  - [Restore Postgres for Spire](#restore-postgres-for-spire)
-  - [Restore Postgres for Keycloak](#restore-postgres-for-keycloak)
-  - [Restore Postgres for VCS](#restore-postgres-for-vcs)
-  - [Restore Postgres for Capsules](#restore-postgres-for-capsules)
-    - [Capsules Warehouse Server](#capsules-warehouse-server)
-    - [Capsules Dispatch Server](#capsules-dispatch-server)
+* [Restore Postgres](#restore-postgres)
+    * [Restore Postgres for Spire](#restore-postgres-for-spire)
+    * [Restore Postgres for Keycloak](#restore-postgres-for-keycloak)
+    * [Restore Postgres for VCS](#restore-postgres-for-vcs)
+    * [Restore Postgres for Capsules](#restore-postgres-for-capsules)
+      * [Capsules Warehouse Server](#capsules-warehouse-server)
+      * [Capsules Dispatch Server](#capsules-dispatch-server)
 
 
 <a name="spire"> </a>
@@ -516,7 +516,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
 	backup_bucket = s3.Bucket('postgres-backup')
 	for file in backup_bucket.objects.filter(Prefix='vcs-postgres'):
    	    print(file.key)
-    ````
+    ```
 
     **download.py:**
 

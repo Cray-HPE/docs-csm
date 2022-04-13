@@ -86,23 +86,23 @@ The `kubectl` command is installed.
         ncn-m001# SW_ADMIN_PASSWORD='SWITCH_PASSWORD' GOSS_BASE=/opt/cray/tests/install/ncn goss -g  /opt/cray/tests/install/ncn/tests/goss-switch-bgp-neighbor-aruba-or-mellanox.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
         ```
 
-1. Ensure that no nodes are in a `failed` state in CFS.
-    Nodes that are in a failed state prior to the reboot will not be automatically
-    configured once they have been rebooted. To get a list of nodes in the failed state:
+1. Ensure that no nodes are in the `failed` state in CFS.
+    Nodes that are in the `failed` state prior to the reboot will not be automatically
+    configured once they have been rebooted. To get a list of nodes in the `failed` state:
    
-   ```
+   ```bash
    ncn-m001# cray cfs components list --status failed --format json | jq .[].id
    ```
    
    If there are any nodes in this list, they can be reset with:
    
-   ```
+   ```bash
    ncn-m001# cray cfs components update <xname> --enabled False --error-count 0
    ```
    
    Or, to reset the error count for all nodes:
    
-   ```
+   ```bash
    ncn-m001# cray cfs components list --status failed | jq .[].id -r | while read -r xname ; do
        echo "$xname"
        cray cfs components update $xname --enabled False --error-count 0
@@ -110,7 +110,7 @@ The `kubectl` command is installed.
    ```
    
    This will leave the nodes in a disabled state in CFS. CFS will automatically
-   re-enable them when they reboot, this is just so that CFS does not immediately
+   re-enable them when they reboot; this is just so that CFS does not immediately
    start retrying configuration against the failed node.
 
 ### NCN Rolling Reboot
@@ -159,7 +159,7 @@ Before rebooting NCNs:
 
     4. Watch on the console until the node has successfully booted and the login prompt is reached.
 
-    5. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
+    5. If desired, verify that the method of boot is as expected. If the `/proc/cmdline` begins with `BOOT_IMAGE`, then this NCN booted from disk:
 
        ```bash
        ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
@@ -281,10 +281,10 @@ Before rebooting NCNs:
     5. Reboot the selected node.
 
         ```bash
-         ncn-w# shutdown -r now
+        ncn-w# shutdown -r now
         ```
 
-        **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
+        **IMPORTANT:** If the node does not shut down after 5 minutes, then proceed with the power reset below.
 
         1. To power off the node:
            
@@ -308,7 +308,7 @@ Before rebooting NCNs:
 
     6. Watch on the console until the node has successfully booted and the login prompt is reached.
 
-    7. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
+    7. If desired, verify that the method of boot is as expected. If the `/proc/cmdline` begins with `BOOT_IMAGE`, then this NCN booted from disk:
 
        ```bash
        ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
@@ -343,17 +343,17 @@ Before rebooting NCNs:
          "retryPolicy": 3,
        ```
 
-       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+       If the `configurationStatus` is `pending`, then wait for the job to finish before continuing. If the `configurationStatus` is `failed`, then the unsuccessful CFS job should be addressed now for this node. If the `configurationStatus` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
 
-       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
+       If `configurationStatus` is `failed`, then see [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from `cray-cfs` to determine why the configuration may not have completed successfully.
 
-    10.  Uncordon the node.
+    10. Uncordon the node.
 
         ```bash
         ncn-m# kubectl uncordon <node you just rebooted>
         ```
 
-    11.  Verify pods are running on the rebooted node.
+    11. Verify pods are running on the rebooted node.
 
          Within a minute or two, the following command should begin to show pods in a `Running` state (replace NCN in the command below with the name of the worker node):
 
@@ -361,17 +361,17 @@ Before rebooting NCNs:
          ncn-m# kubectl get pods -o wide -A | grep <node to be rebooted>
          ```
 
-    12.  Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
+    12. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
          Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.
 
          If terminating pods are reported when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.
 
-    13.  Disconnect from the console.
+    13. Disconnect from the console.
 
-    14.  Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
+    14. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
 
-2. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
+2. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an `ESTABLISHED` state.
 
    See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 

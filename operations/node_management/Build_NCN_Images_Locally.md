@@ -139,7 +139,7 @@ Each layer creates a certain set of artifacts that can be used in different ways
 
 ```bash
 packer build -only=qemu.sles15-base -var "artifact_version=`git rev-parse --short HEAD`" -var 'ssh_password=$SLES15_INITIAL_ROOT_PASSWORD' -var 'headless=false' boxes/sles15-base/
-````
+```
 
-* If no version is passed to the builder then the version `none` is used when generating the archive.
+* If no version is passed to the builder, then the version `none` is used when generating the archive.
 

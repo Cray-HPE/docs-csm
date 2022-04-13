@@ -348,7 +348,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 Use boot orchestration to power on and boot the nodes. Specify the appropriate BOS template for the node type.
 
 16. Determine how the BOS Session template references compute hosts.
-    Typically, they are referenced by their "Compute" role. However, if they are referenced by xname, then these new nodes should added to the BOS Session template.
+    Typically, they are referenced by their `Compute` role. However, if they are referenced by component name (xname), then these new nodes should added to the BOS Session template.
     
     ```bash
     ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
@@ -366,7 +366,7 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
           ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json > tmp.txt
           ```
        
-       2. Edit the tmp.txt file adding the new nodes to the node_list.
+       2. Edit the `tmp.txt` file, adding the new nodes to the `node_list`.
           
           ```bash
           ncn-m001# vi tmp.txt
@@ -374,25 +374,25 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
 
     2. Create the Session template.
        
-       1. The name of the Session template is determined by the name provided to the '--name' option on the command line. Use the current value of $BOS_TEMPLATE if you want to overwrite the existing Session template. If you want to use the current value, skip this sub-step and go on to sub-step 2. Otherwise, provide a different name for BOS_TEMPLATE which will be used the '--name' option. The name specified in tmp.txt is overridden by the value provided by the '--name' option.
+       1. The name of the Session template is determined by the name provided to the `--name` option on the command line. Use the current value of `$BOS_TEMPLATE` if you want to overwrite the existing Session template. If you want to use the current value, skip this sub-step and go on to sub-step 2. Otherwise, provide a different name for `BOS_TEMPLATE` which will be used with the `--name` option. The name specified in `tmp.txt` is overridden by the value provided to the `--name` option.
   	      
           ```bash
-          ncn-m001# $BOS_TEMPLATE=<New Session Template name>
+          ncn-m001# BOS_TEMPLATE="New-Session-Template-Name"
           ```
 
-	 3. Create the Session template.
+       1. Create the Session template.
         
         ```bash
         ncn-m001# cray bos sessiontemplate create --file tmp.txt --name $BOS_TEMPLATE
         ```
         
-        1. Verify that the Session template contains the additional nodes and the proper name.
+       1. Verify that the Session template contains the additional nodes and the proper name.
            
            ```bash
            ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json
            ```
 
-    4. Boot the nodes.
+    3. Boot the nodes.
        
        ```bash
        ncn-m001# cray bos session create --template-uuid $BOS_TEMPLATE \

@@ -137,7 +137,6 @@ sorted by safest to touch relative to keeping an SSH connection up.
    eth0            no-device
    ```
 
-
 * Print real devices (ignore no-device):
 
    ```bash

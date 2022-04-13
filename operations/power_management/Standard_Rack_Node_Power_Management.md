@@ -90,15 +90,20 @@ Hardware State Manager (HSM).
 
 -   **Get Power Limiting Capabilities**
 
-    ```
+    ```bash
     ncn-m001# cray capmc get_power_cap_capabilities create –-nids NID_LIST --format json
     ```
 
     Return the min and max power limit settings for the node list and any
     accelerators that are installed.
 
-    ```
+    ```bash
     ncn-m001# cray capmc get_power_cap_capabilities create --nids 4 --format json
+    ```
+
+    Expected output looks similar to the following:
+
+    ```json
     {
         "e": 0,
         "err_msg": "",
@@ -129,7 +134,7 @@ Hardware State Manager (HSM).
 
 -   **Set Node Power Limit**
 
-    ```
+    ```bash
     ncn-m001#  cray capmc set_power_cap create --nids NID_LIST --control CONTROL_NAME VALUE --format json
     ```
 
@@ -137,8 +142,13 @@ Hardware State Manager (HSM).
     The power provided to the host CPU and memory is the total node power limit
     minus the power limits of each of the accelerators installed on the node.
 
-    ```
+    ```bash
     ncn-m001# cray capmc set_power_cap create --nids 4 --control "Chassis Power Control" 600
+    ```
+
+    Expected output looks similar to the following:
+
+    ```json
     {
         "e": 0,
         "err_msg": "",
@@ -156,9 +166,14 @@ Hardware State Manager (HSM).
     target nodes must have the same set of controls available, otherwise the
     call will fail.
 
-    ```
+    ```bash
     ncn-m001# cray capmc set_power_cap create \
-    --nids [1-4] --control "Chassis Power Control" 600
+            --nids [1-4] --control "Chassis Power Control" 600
+    ```
+
+    Expected output looks similar to the following:
+
+    ```json
     {
         "e": 0,
         "err_msg": "",
@@ -189,17 +204,22 @@ Hardware State Manager (HSM).
 
 -   **Remove Node Power Limit (Set to Default)**
 
-    ```
+    ```bash
     ncn-m001#  cray capmc set_power_cap create --nids NID_LIST --control CONTROL_NAME 0 --format json
     ```
 
     Reset the power limit to the default maximum. Alternatively, using the max
-    value returned from get_power_cap_capabilities may also be used. Multiple
+    value returned from `get_power_cap_capabilities` may also be used. Multiple
     controls can be set at the same time on multiple nodes, but all target nodes
     must have the same set of controls available, otherwise the call will fail.
 
-    ```
+    ```bash
     ncn-m001# cray capmc set_power_cap create --nids 4 --control "Node Power Limit" 0
+    ```
+
+    Expected output looks similar to the following:
+
+    ```json
     {
         "e": 0,
         "err_msg": "",
@@ -227,8 +247,8 @@ Hardware State Manager (HSM).
 
 -   **Deactivate Node Power Limit**
     
-    ```
+    ```bash
     ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" \
-    -X POST https://${BMC}/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
-    --data '{"PowerLimitTrigger": "Deactivate"}'
+            -X POST https://${BMC}/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
+            --data '{"PowerLimitTrigger": "Deactivate"}'
     ```
