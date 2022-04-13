@@ -54,6 +54,47 @@
    ncn-s# watch "ceph -s; ceph orch ps"
    ```
 
+**IMPORTANT:** If the `ceph -s` has a warning with "UPGRADE_FAILED_PULL: Upgrade: failed to pull target image" as the description, then follow the below procedure.
+
+**Perform the below steps from one of these nodes (ncn-s001/2/3):**
+ 1. check the upgrade status.
+
+    ```bash
+    ceph orch upgrade status
+    ```
+    ***Sample Output***
+    ```bash
+    {
+       "target_image": "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15",
+       "in_progress": true,
+       "services_complete": [],
+       "message": "Error: UPGRADE_FAILED_PULL: Upgrade: failed to pull target image"
+     }
+     ```
+ 2. Pause and resume the upgrade.
+   
+    ```bash
+    ceph orch upgrade pause
+    ceph orch upgrade resume
+    ```
+
+1.  Watch cephadm
+
+    ```bash
+    ceph -W cephadm
+    ```
+
+    ***Note:*** This will watch the cephadm logs and if the occurence occurs again it will give you more detail as to which node may be having an issue.
+
+2. If the issue occurs again then log into each of the storage nodes and perform a podman pull of the image.
+
+    ```bash
+    podman pull registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+    ```
+
+    * If a node cannot pulled from any of the nodes then please contact support for further assistance.  
+
+
 Expected Warnings:
 
 From `ceph -s`
