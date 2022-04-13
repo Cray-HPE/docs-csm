@@ -8,6 +8,7 @@ This document provides troubleshooting information for services and functionalit
     * [initrd.img.xz not found](#initrd-not-found)
     * [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
     * [Wait_for_unbound or `cray-dns-unbound-manager` hangs](known_issues/wait_for_unbound_hang.md)
+    * [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)
 
  * Kubernetes troubleshooting
     * [General Kubernetes Commands for Troubleshooting](./kubernetes/Kubernetes_Troubleshooting_Information.md)
