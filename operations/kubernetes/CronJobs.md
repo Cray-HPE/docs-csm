@@ -4,7 +4,7 @@ Kubernetes CronJobs create Kubernetes jobs on a repeating schedule, specified in
 
 ### CronJobs Not Scheduled
 
-In some cases CronJobs can fail to get scheduled (such as the cray-dns-unbound-manager job) if a previously run job didn't finish properly.  In order to alleviate this condition, CSM deploys a traditional cronjob on one of the master NCNs to perform cleanup such that jobs continue to get rescheduled.
+In some cases, CronJobs can fail to get scheduled (such as the cray-dns-unbound-manager job) if a previously run job did not finish properly. In order to alleviate this condition, CSM deploys a traditional CronJob on one of the master NCNs to perform cleanup such that jobs continue to get rescheduled.
 
 In the event jobs aren't running, ensure the CronJob is specified properly using the following steps.
 
