@@ -61,7 +61,7 @@ Stage 0 has several critical procedures which prepares and verify if the environ
          ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version [CSM_RELEASE] --tarball-file [PATH_TO_CSM_TARBALL_FILE]
          ```
 
-<a name="reduce-cpu-limits"></a>
+<a name="update-sls"></a>
 
 ## Stage 0.2 - Update SLS
 
