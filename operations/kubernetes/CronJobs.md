@@ -18,7 +18,7 @@ In the event jobs aren't running, ensure the CronJob is specified properly using
 1. Verify the crontab schedule.
 
    This cronjob is intended to run once every two hours.  However, in some CSM 1.x
-   releases, the cronjob schedule can run too frequently, preventing jobs from being
+   releases, the CronJob schedule can run too frequently, preventing jobs from being
    properly scheuled.  Ensure the schedule looks as follows:
 
    ```bash
