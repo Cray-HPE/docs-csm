@@ -8,7 +8,7 @@ In some cases, CronJobs can fail to get scheduled (such as the cray-dns-unbound-
 
 In the event jobs aren't running, ensure the CronJob is specified properly using the following steps.
 
-1. Determine the master NCN hosting the cronjob-kicker (typically ncn-m001 or ncn-m002):
+1. Determine the master NCN hosting the cronjob-kicker (typically `ncn-m001` or `ncn-m002`):
 
    ```bash
    ncn-m001# ls  /etc/cron.d/cronjob-kicker
