@@ -573,7 +573,7 @@ __For each__ of the BMCs that show up in either of mismatch lists use the follow
 * The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depending on the state of the system when the `hsm_discovery_verify.sh` script is run. If the system is currently going through the process of installation, then this is an expected mismatch as the [Prepare Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet.
    > For more information refer to [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
 
-   Example mismatch for the BMC of a HPE Apollo XL654D:
+   Example mismatch for the BMC of an HPE Apollo XL654D:
    ```bash
    =============== BMCs in SLS not in HSM components ===============
    x3000c0s30b1

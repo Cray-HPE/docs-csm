@@ -374,7 +374,7 @@ def patch_hsm_inventory_ethernet_interfaces(session: requests.Session, ei: dict)
 def delete_hsm_inventory_ethernet_interfaces(session: requests.Session, ei: dict):
     id = ei["MACAddress"].replace(":", "").lower()
     if len(id) == "":
-        print("Error unable to delete EthernetInterface from HSM as a empty value was provided as the MAC Address")
+        print("Error unable to delete EthernetInterface from HSM as an empty value was provided as the MAC Address")
         sys.exit(1)
     action = http_delete(session, f'{HSM_URL}/Inventory/EthernetInterfaces/{id}', payload=ei)
     if action["error"] is not None:
@@ -671,7 +671,7 @@ class State:
             print_action(action)
             sys.exit(1)
 
-        # Validate each network that has a bootstrap_dhcp subnet that a IP Reservation exists for this NCN
+        # Validate each network that has a bootstrap_dhcp subnet that an IP Reservation exists for this NCN
         failed_to_find_ip = False
         for network_name, ncn_ip in ncn_ips.items():
             network = self.sls_networks[network_name]
@@ -693,7 +693,7 @@ class State:
                 failed_to_find_ip = True
 
 
-        # Validate the HMN network has a BMC IP  that has a bootstrap_dhcp subnet has a IP Reservation for this NCN
+        # Validate the HMN network has a BMC IP  that has a bootstrap_dhcp subnet has an IP Reservation for this NCN
         reservation_found = False
         hmn_dhcp_bootstrap = self.sls_networks["HMN"].subnets()["bootstrap_dhcp"]
         for name, reservation in hmn_dhcp_bootstrap.reservations().items():
@@ -757,7 +757,7 @@ class State:
         self.action_log_ncn_ips(action)
 
         # Only for new IP addresses that have been allocated:
-        # Validate the NCN and its BMC to be added does not have a IP reservation already defined for it
+        # Validate the NCN and its BMC to be added does not have an IP reservation already defined for it
         # Also validate that none of the IP addresses we have allocated are currently in use in SLS.
         fail_sls_network_check = False
         for network_name, sls_network in self.sls_networks.items():
@@ -1164,7 +1164,7 @@ def allocate_ips_command(session: requests.Session, args, state: State):
 
     if not state.use_existing_ip_addresses:
         # Only for new IP addresses that have been allocated:
-        # Validate the NCN and its BMC to be added does not have a IP reservation already defined for it
+        # Validate the NCN and its BMC to be added does not have an IP reservation already defined for it
         # Also validate that none of the IP addresses we have allocated are currently in use in SLS.
         fail_sls_network_check = False
         for network_name, sls_network in sls_networks.items():

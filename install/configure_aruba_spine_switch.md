@@ -450,7 +450,7 @@ Edge ports are connected to non-compute nodes (NCNs).
 
 ## Configure User Access/Login/Application Node Port
 
-- One connection will go to a NMN(VLAN2) access port; this is where the UAN will pxe boot and communicate with internal systems (see SHCD for UAN cabling).
+- One connection will go to an NMN (VLAN2) access port; this is where the UAN will PXE boot and communicate with internal systems (see SHCD for UAN cabling).
 - ONE OF THESE PORTS IS SHUTDOWN.
 - One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be a TRUNK port for the CAN connection.
 
