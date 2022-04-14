@@ -12,7 +12,6 @@ Stage 0 has several critical procedures which prepares and verify if the environ
 - [Stage 0.3 - Upgrade Management Network](#update-management-network)
 - [Stage 0.4 - Prerequisites Check](#prerequisites-check)
 - [Stage 0.5 - Backup Workload Manager Data](#backup_workload_manager)
-- [Stage 0.6 - Modify NCN Images](#modify_ncn_images)
 - [Stage Completed](#stage_completed)
 
 <a name="install-latest-docs"></a>
@@ -217,51 +216,6 @@ then clone a local working tree and commit appropriate changes to `customization
 ## Stage 0.5 - Backup Workload Manager Data
 
 To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
-
-<a name="modify_ncn_images"></a>
-## Stage 0.6 - Modify NCN Images
-
-Any site modifications to the images used to boot the management nodes need to be done again
-as part of this upgrade. This includes setting the root password, adding SSH keys for the root
-account, and setting a default timezone.
-
-The management nodes images **do not** contain a default password or SSH keys, so **it is a requirement**
-that they be set and added at this time.
-
-1. Use this procedure to change the `k8s-image` used for master nodes and worker nodes, and the `ceph-image`
-used by utility storage nodes. See
-[Change NCN Image Root Password and SSH Keys](../../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
-for more information.
-
-1. Adjust the version variables used later in the upgrade.
-
-    1. The previous procedure to create the site-customized `k8s-image` and `ceph-image` should have set these variables.
-
-      ```bash
-      ncn-m001# echo $CEPHNEW
-      ncn-m001# echo $K8sNEW
-      ```
-
-    1. Check current versions in `/etc/cray/upgrade/csm/myenv`.
-
-        ```bash
-        ncn-m001# grep CEPH_VERSION /etc/cray/upgrade/csm/myenv
-        ncn-m001# grep KUBERNETES_VERSION /etc/cray/upgrade/csm/myenv
-        ```
-
-    1. If the `CEPH_VERSION` or `KUBERNETES_VERSION` does not match the `CEPHNEW` and `K8SNEW` values, edit the file.
-
-        ```bash
-        ncn-m001# vi /etc/cray/upgrade/csm/myenv
-        ```
-
-1. Change the root password in Vault and the CSM layer of configuration applied during NCN personalizaion, if not done previously.
-
-    Usually this configuration is done during the first time installation of CSM software, but if was not 
-    done at that time, then it should be done now. See
-    [Update NCN Passwords](../../operations/security_and_authentication/Update_NCN_Passwords.md) and
-    [full NCN personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password)
-    for more information.
 
 <a name="stage_completed"></a>
 
