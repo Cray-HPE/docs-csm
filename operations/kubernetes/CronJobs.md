@@ -26,7 +26,7 @@ In the event jobs aren't running, ensure the CronJob is specified properly using
    0 */2 * * * root KUBECONFIG=/etc/kubernetes/admin.conf /usr/bin/cronjob_kicker.py
    ```
 
-   `NOTE:` Ensure the first character is `0` and not `*`, which will cause the cronjob
+   > **NOTE:** Ensure the first character is `0` and not `*`, which will cause the CronJob
            to run every minute past the second hour, instead of once every two hours.
 
 To learn more in general about Kubernetes CronJobs, refer to [https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/).
