@@ -18,7 +18,28 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * Release Cray Automated Network Utility - CANU V1.0.0
 * Performance improvements to Unbound and DHCP Helper
 * Initial Release of Bifurcated CAN
-* PowerDNS including PowerDNS Manager and Troubleshooting Guide
+
+  The user and administrative traffic segregation introduced by Bifurcated CAN has changed the URLs for certain services as it is now necessary to include the network path in the fully qualified domain name. Access to administrative services is now restricted to the Customer Management Network (CMN). API access is available via the Customer Management Network (CMN), Customer Access Network (CAN), and Customer Highspeed Network (CHN).
+
+  The following table assumes the system was configured with a `system-name` of `shasta` and a `site-domain` of `dev.cray.com`.
+
+  | Old Name                         | New Name                                |
+  |----------------------------------|-----------------------------------------|
+  | auth.shasta.dev.cray.com         | auth.cmn.shasta.dev.cray.com            |
+  | nexus.shasta.dev.cray.com        | nexus.cmn.shasta.dev.cray.com           |
+  | grafana.shasta.dev.cray.com      | grafana.cmn.shasta.dev.cray.com         |
+  | prometheus.shasta.dev.cray.com   | prometheus.cmn.shasta.dev.cray.com      |
+  | alertmanager.shasta.dev.cray.com | alertmanager.cmn.shasta.dev.cray.com    |
+  | vcs.shasta.dev.cray.com          | vcs.cmn.shasta.dev.cray.com             |
+  | kiali-istio.shasta.dev.cray.com  | kiali-istio.cmn.shasta.dev.cray.com     |
+  | s3.shasta.dev.cray.com           | s3.cmn.shasta.dev.cray.com              |
+  | sma-grafana.shasta.dev.cray.com  | sma-grafana.cmn.shasta.dev.cray.com     |
+  | sma-kibana.shasta.dev.cray.com   | sma-kibana.cmn.shasta.dev.cray.com      |
+  | api.shasta.dev.cray.com          | api.cmn.shasta.dev.cray.com<br>api.chn.shasta.dev.cray.com<br>api.can.shasta.dev.cray.com |
+
+* PowerDNS authoritative DNS server
+  * Supports zone transfer to external DNS servers via AXFR query and DNSSEC
+  * Please refer to the [PowerDNS Migration Guide](./operations/network/dns/PowerDNS_migration.md) and [PowerDNS Configuration Guide](./operations/network/dns/PowerDNS_Configuration.md) for further information.
 
 ### Miscellaneous Functionality
 * SLES15 SP3 Support for NCNs, UANs, Compute Nodes, and Barebones validation image
@@ -87,9 +108,13 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * fixed issues causing PXE boot failures during installs, upgrades, and NCN rebuilds
 
 ## Deprecations
-CRUS has been deprecated. It will be removed in a future release and replaced with BOSv2, which will provide similar functionality.
-
+* CRUS has been deprecated. It will be removed in a future release and replaced with BOSv2, which will provide similar functionality.
+* PowerDNS will replace Unbound as the authoritative DNS source in a future CSM release.
+  * The cray-dns-unbound-manager CronJob will be deprecated in a future release once all DNS records are migrated to PowerDNS.
+  * The introduction of PowerDNS and Bifurcated CAN will introduce some node and service naming changes.
+  * Please see the [PowerDNS Migration Guide](./operations/network/dns/PowerDNS_migration.md) for more information.
 ## Removals
-The V1 version of the CFS API was removed
+* The V1 version of the CFS API was removed
+* The cray-externaldns-coredns, cray-externaldns-etcd, and cray-externaldns-wait-for-etcd pods have been removed. PowerDNS is now the provider of the external DNS service.
 
 ## Known Issues
