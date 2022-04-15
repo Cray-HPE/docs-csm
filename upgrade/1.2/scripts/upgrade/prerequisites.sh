@@ -211,6 +211,61 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="REMOVE_DUPLICATE_BMC_DNS_RECORDS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    {
+        # Find a pod that works.
+        # List names of all Running vault pods, grep for just the cray-vault-# pods, and try them in
+        # turn until one of them has the IPMI credentials.
+        USERNAME=""
+        IPMI_PASSWORD=""
+        VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.data.vault-root} | base64 -d)
+        for VAULT_POD in $(kubectl get pods -n vault --field-selector status.phase=Running --no-headers \
+                            -o custom-columns=:.metadata.name | grep -E "^cray-vault-(0|[1-9][0-9]*)$") ; do
+            USERNAME=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
+                "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
+                vault kv get -format=json secret/hms-creds/$TARGET_MGMT_XNAME" |
+                jq -r '.data.Username')
+            # If we are not able to get the username, no need to try and get the password.
+            [[ -n ${USERNAME} ]] || continue
+            export IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
+                "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
+                vault kv get -format=json secret/hms-creds/$TARGET_MGMT_XNAME" |
+                jq -r '.data.Password')
+            break
+        done
+        # Make sure we found a pod that worked
+        [[ -n ${USERNAME} ]]
+
+        # Install our pit-init RPM and pull in any dependencies it has.
+        zypper --no-gpg-checks in -y pit-init
+        /root/bin/bios-baseline.sh -y
+
+        # Remove our pit-init RPM and any dependencies it had.
+        zypper rm -u -y pit-init
+
+        # Check for and remove any duplicate DNS entries for BMCs
+        bmc_duplicate_error=0
+        for ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do
+            if [[ "$(dig +short ${ncn}-mgmt | wc -l)" > "1" ]]; then
+                bmc_duplicate_error=1
+            fi
+        done
+        if [ $bmc_duplicate_error = 1 ]; then
+            export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+                              -d client_id=admin-client \
+                              -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                              https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+            /usr/share/doc/csm/scripts/CASMINST-1309.sh
+        fi
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPGRADE_BSS"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
