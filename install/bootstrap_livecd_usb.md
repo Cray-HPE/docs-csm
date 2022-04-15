@@ -106,8 +106,8 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
      from the `${CSM_PATH}/rpm/embedded` directory.
 
       ```bash
-      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/x86_64/podman-*.x86_64.rpm
-      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/noarch/podman-cni-config-*.noarch.rpm
+      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/podman-*.x86_64.rpm
+      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/podman-cni-config-*.noarch.rpm
       ```
 
 1. Install `lsscsi` to view attached storage devices.
@@ -125,7 +125,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
      from the `${CSM_PATH}/rpm/embedded` directory.
 
       ```bash
-      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/x86_64/lsscsi-*.x86_64.rpm
+      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/lsscsi-*.x86_64.rpm
       ```
 
 1. Although not strictly required, the procedures for setting up the
