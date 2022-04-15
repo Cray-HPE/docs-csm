@@ -144,7 +144,7 @@ snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plai
 ### Dell
 
 ```
-sw-leaf-001# show running-configuration | include snmp
+sw-leaf-001# show running-configuration | grep snmp
 snmp-server group cray-reds-group 3 noauth read cray-reds-view
 snmp-server user xxxxxx cray-reds-group 3 auth md5 xxxxxx priv des xxxxxx
 snmp-server view cray-reds-view 1.3.6.1.2 included
