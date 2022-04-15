@@ -32,17 +32,23 @@ ncn# kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.
    ```
 
 1. After the `spire.spire.ca-tls` secret in the `spire` namespace has been
-   repopulated you should roll the spire-server to make sure all of them pick up
+   repopulated, roll the spire-server to make sure all of them pick up
    the new CA.
 
    ```bash
    ncn# kubectl rollout restart -n spire statefulset spire-server
    ```
 
-   Any `spire-agent`s in the `CrashLoopBackOff` state should come back into a `Running` state the
+   Any `spire-agent` in the `CrashLoopBackOff` state should come back into a `Running` state the
    next time they are started. If you do not wish to wait for them to be restarted
    automatically, then you can delete the `spire-agent` pod, which will cause a new
    one to start up in its place.
+
+1. Enable the NCNs to rejoin Spire.
+   
+   ```bash
+   ncn# kubectl rollout restart -n spire daemonset request-ncn-join-token 
+   ```
 
 1. Re-run the command to get the certificate's expiration date to verify that
    it has been updated.
