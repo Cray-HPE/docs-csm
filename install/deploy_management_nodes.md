@@ -869,10 +869,27 @@ pit# popd
 <a name="remove-default-ntp-pool"></a>
 ### 4.5 Remove the default NTP pool
 
-Run the following command on the PIT node to remove the default pool, which can cause contention issues with NTP.
+Run the following command on the PIT node to remove the default pool, which can cause contention issues with NTP. When it prompts you for a password, enter the root password for `ncn-m002`.
 
 ```bash
-pit# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | grep -v m001 | sort -u |  tr -t '\n' ',')" 'sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf'
+pit# ssh ncn-m002 "\
+        PDSH_SSH_ARGS_APPEND='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' \
+        pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | 
+            grep -v m001 | sort -u |  tr -t '\n' ,) \
+        sed -i \'s/^! pool pool[.]ntp[.]org.*//\' /etc/chrony.conf"
+```
+
+Expected output looks similar to the following:
+```
+Password:
+ncn-m002: Warning: Permanently added 'ncn-m002,10.252.1.11' (ECDSA) to the list of known hosts.
+ncn-s001: Warning: Permanently added 'ncn-s001,10.252.1.6' (ECDSA) to the list of known hosts.
+ncn-s002: Warning: Permanently added 'ncn-s002,10.252.1.5' (ECDSA) to the list of known hosts.
+ncn-s003: Warning: Permanently added 'ncn-s003,10.252.1.4' (ECDSA) to the list of known hosts.
+ncn-m003: Warning: Permanently added 'ncn-m003,10.252.1.10' (ECDSA) to the list of known hosts.
+ncn-w002: Warning: Permanently added 'ncn-w002,10.252.1.8' (ECDSA) to the list of known hosts.
+ncn-w001: Warning: Permanently added 'ncn-w001,10.252.1.9' (ECDSA) to the list of known hosts.
+ncn-w003: Warning: Permanently added 'ncn-w003,10.252.1.7' (ECDSA) to the list of known hosts.
 ```
 
 <a name="validate_management_node_deployment"></a>
