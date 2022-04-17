@@ -337,7 +337,8 @@ The configuration workflow described here is intended to help understand the exp
     ncn-w003-mgmt
     ```
 
-    > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
+    > **`NOTE`**: All console logs are located at `/var/log/conman/console*`
+
 <a name="boot-the-storage-nodes"></a>
 1. Boot the **Storage Nodes**
 
@@ -349,31 +350,17 @@ The configuration workflow described here is intended to help understand the exp
          sleep 60; ipmitool -I lanplus -U $USERNAME -E -H ncn-s001-mgmt power on
     ```
 
-1. Wait. Observe the installation through `ncn-s001-mgmt`'s console:
-
-    Print the console name:
-
-    ```bash
-    pit# conman -q | grep s001
-    ```
-
-    Expected output looks similar to the following:
-
-    ```text
-    ncn-s001-mgmt
-    ```
-
-    Then join the console:
+1. Observe the installation through the console of `ncn-s001-mgmt`.
 
     ```bash
     pit# conman -j ncn-s001-mgmt
     ```
 
-    From there an administrator can witness console-output for the cloud-init scripts.
+    From there an administrator can witness console output for the `cloud-init` scripts.
 
-    **`NOTE`**: Watch the storage node consoles carefully for error messages. If any are seen, consult [Ceph-CSI Troubleshooting](ceph_csi_troubleshooting.md)
+    **`NOTE`**: Watch the storage node consoles carefully for error messages. If any are seen, consult [Ceph-CSI Troubleshooting](ceph_csi_troubleshooting.md).
 
-    **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary), see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
+    **`NOTE`**: If the nodes have PXE boot issues (for example, getting PXE errors, or not pulling the `ipxe.efi` binary), see [PXE boot troubleshooting](pxe_boot_troubleshooting.md).
 
 1. Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
 
@@ -446,7 +433,7 @@ The configuration workflow described here is intended to help understand the exp
 
 #### 3.3.1 Run The Check
 
-Run the following command on the PIT node to validate that the expected LVM labels are present on disks on the master and worker nodes. When it prompts you for a password, enter the password for `ncn-m002`.
+Run the following command on the PIT node to validate that the expected LVM labels are present on disks on the master and worker nodes. When it prompts you for a password, enter the root password for `ncn-m002`.
 
 ```bash
 pit# /usr/share/doc/csm/install/scripts/check_lvm.sh
