@@ -70,6 +70,12 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
 
+    test -f /root/.ssh/config && mv /root/.ssh/config /root/.ssh/config.bak
+    cat <<EOF> /root/.ssh/config
+Host *
+    StrictHostKeyChecking no
+EOF
+
     grep -oP "(ncn-\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
 
     grep -oP "(ncn-\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
@@ -610,6 +616,10 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
 else
     echo "====> ${state_name} has been completed"
 fi
+
+# restore previous ssh config if there was one, remove ours
+rm -f /root/.ssh/config
+test -f /root/.ssh/config.bak && mv /root/.ssh/config.bak /root/.ssh/config
 
 ok_report
 
