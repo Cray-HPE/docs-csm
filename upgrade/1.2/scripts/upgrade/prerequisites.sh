@@ -216,6 +216,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
+        set +e
         # Find a pod that works.
         # List names of all Running vault pods, grep for just the cray-vault-# pods, and try them in
         # turn until one of them has the IPMI credentials.
@@ -240,7 +241,7 @@ if [[ $state_recorded == "0" ]]; then
         [[ -n ${USERNAME} ]]
 
         # Install our pit-init RPM and pull in any dependencies it has.
-        zypper --no-gpg-checks in -y pit-init
+        zypper --no-gpg-checks --plus-repo=https://packages.local/repository/csm-sle-15sp2 in -y pit-init
         /root/bin/bios-baseline.sh -y
 
         # Remove our pit-init RPM and any dependencies it had.
@@ -260,6 +261,7 @@ if [[ $state_recorded == "0" ]]; then
                               https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
             /usr/share/doc/csm/scripts/CASMINST-1309.sh
         fi
+        set -e
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
 else
