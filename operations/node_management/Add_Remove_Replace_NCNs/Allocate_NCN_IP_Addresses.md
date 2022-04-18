@@ -60,10 +60,11 @@ This procedure will perform and verify the following:
         =================================
         Network | IP Address
         --------|-----------
-        CAN     | 10.102.4.15
-        HMN     | 10.254.1.22
-        MTL     | 10.1.1.11
-        NMN     | 10.252.1.13
+        CMN     | 10.103.11.42
+        CAN     | 10.102.4.10
+        HMN     | 10.254.1.14
+        MTL     | 10.1.1.7
+        NMN     | 10.252.1.9
 
         =================================
         Management NCN BMC IP Allocation
@@ -72,8 +73,10 @@ This procedure will perform and verify the following:
         --------|-----------
         HMN     | 10.254.1.21
     ```
+    > Depending on the networking configuration of the system the CMN or CAN networks may not be present in SLS network data. If CMN or CAN networks do not exist in SLS, then no IP will be allocated for that network. 
 
-1.  Allocate IP addresses for the NCN in SLS and HSM by adding the `--perform-changes` argument to the command in the previous step:
+
+2.  Allocate IP addresses for the NCN in SLS and HSM by adding the `--perform-changes` argument to the command in the previous step:
 
     ```bash
     ncn-m# ./add_management_ncn.py allocate-ips \
@@ -91,10 +94,11 @@ This procedure will perform and verify the following:
         =================================
         Network | IP Address
         --------|-----------
-        CAN     | 10.102.4.15
-        HMN     | 10.254.1.22
-        MTL     | 10.1.1.11
-        NMN     | 10.252.1.13
+        CMN     | 10.103.11.42
+        CAN     | 10.102.4.10
+        HMN     | 10.254.1.14
+        MTL     | 10.1.1.7
+        NMN     | 10.252.1.9
 
         =================================
         Management NCN BMC IP Allocation

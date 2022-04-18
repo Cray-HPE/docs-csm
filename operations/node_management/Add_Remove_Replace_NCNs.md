@@ -196,7 +196,7 @@ ncn# echo $XNAME
 
 *  If adding an NCN that was not previously in the system, follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md) procedure.
 *  Ensure the NCN BMC is configured to use DHCP. (This does not apply to the BMC for `ncn-m001`, because it is statically configured for the site.)
-*  Ensure that the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](../../instal/../install/switch_pxe_boot_from_onboard_nic_to_pcie.md) procedure.
+*  Ensure that the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](../../install/switch_pxe_boot_from_onboard_nic_to_pcie.md) procedure.
 
 *  If adding an HPE NCN, ensure that IPMI is enabled.
 
@@ -221,7 +221,7 @@ ncn# echo $XNAME
       }
       ```
 
-   1. If IPMI is disabled, then enable IPMI:
+   2. If IPMI is disabled, then enable IPMI:
 
       ```bash
       ncn# curl -k -u root:$IPMI_PASSWORD -X PATCH \
@@ -246,7 +246,7 @@ ncn# echo $XNAME
       }
       ```
 
-   1. If IPMI was disabled, then restart the BMC:
+   3. If IPMI was disabled, then restart the BMC:
 
       ```bash
       ncn# curl -k -u root:$IPMI_PASSWORD -X POST \
