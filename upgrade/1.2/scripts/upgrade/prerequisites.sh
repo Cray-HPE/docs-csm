@@ -104,7 +104,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
             ssh $host cloud-init init 2>&1 >/dev/null
             counter=$((counter+1))
             sleep 10
-            if [[ $counter > 5 ]]
+            if [[ $counter -gt 5 ]]
             then
             echo "Cloud init data is missing and cannot be recreated. Existing upgrade.."
             fi
