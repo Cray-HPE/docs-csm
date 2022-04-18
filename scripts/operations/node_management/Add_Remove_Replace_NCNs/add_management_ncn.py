@@ -815,7 +815,8 @@ class State:
 
         action_log(action, "Network | IP Address")
         action_log(action, "--------|-----------")
-        for network, ip in self.ncn_ips.items():
+        for network in sorted(self.ncn_ips):
+            ip = self.ncn_ips[network]
             action_log(action, f'{network:<8}| {ip}')
 
         action_log(action, "")
@@ -836,7 +837,8 @@ class State:
 
         print("        Network | IP Address")
         print("        --------|-----------")
-        for network, ip in self.ncn_ips.items():
+        for network in sorted(self.ncn_ips):
+            ip = self.ncn_ips[network]
             print(f'        {network:<8}| {ip}')
 
         print("")

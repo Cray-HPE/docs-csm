@@ -94,12 +94,12 @@ Scenarios where this procedure is applicable:
                 Example output:
 
                 ```text              
-                sw-leaf-001
+                sw-leaf-bmc-001
                 ```
 
             1.  SSH into the management switch that the BMC is connected to:
                 ```bash
-                ncn-m# ssh admin@sw-leaf-001.hmn
+                ncn-m# ssh admin@sw-leaf-bmc-001.hmn
                 ```
 
             1.  Locate the switch port that the BMC is connected to and record its MAC address. In the commands below, change the value of `1/1/39` to match the BMC switch port number (the BMC Switch port number is the `J` value in the in the `MgmtSwitchConnector` xname `xXwWjJ`).
@@ -118,7 +118,7 @@ Scenarios where this procedure is applicable:
                 __Dell Management Switch__
 
                 ```
-                sw-leaf-001# show mac address-table | grep 1/1/48
+                sw-leaf-bmc-001# show mac address-table | grep 1/1/48
                 ```
 
                 Example output:
@@ -130,7 +130,7 @@ Scenarios where this procedure is applicable:
                 __Aruba Management Switch__
 
                 ```
-                sw-leaf-001# show mac-address-table | include 1/1/48
+                sw-leaf-bmc-001# show mac-address-table | include 1/1/48
                 ```
 
                 Example output:
@@ -199,10 +199,10 @@ Scenarios where this procedure is applicable:
 
         | Interface   | CLI Flag      | Required MAC Address     | Description
         | ----------- | ------------- | ------------------------ | ----------
-        | `mgmt0`     | `--mac-mgmt0` | Required                 | First MAC address of Bond 1.
-        | `mgmt1`     | `--mac-mgmt1` | Required                 | First MAC address of Bond 1.
-        | `mgmt2`     | `--mac-mgmt2` | Required                 | Second MAC address of Bond 0.
-        | `mgmt3`     | `--mac-mgmt3` | Required                 | Second MAC address of Bond 1.
+        | `mgmt0`     | `--mac-mgmt0` | Required                 | TODO
+        | `mgmt1`     | `--mac-mgmt1` | Required                 | TODO
+        | `sun0`      | `--mac-sun0`  | Required                 | TODO
+        | `sun1`      | `--mac-sun0`  | Required                 | TODO
         | `hsn0`      | `--mac-hsn0`  | Required for Worker NCNs | MAC address of the first High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
         | `hsn1`      | `--mac-hsn1`  | Optional for Worker NCNs | MAC address of the second High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
         | `lan0`      | `--mac-lan0`  | Optional                 | MAC address for the first non-bond or HSN-related interface.
@@ -240,15 +240,15 @@ Scenarios where this procedure is applicable:
 
             | Interface | MAC Address         | CLI Flag
             | --------- | ------------------- | -------- 
-            | `mgmt0`     | `a4:bf:01:65:6a:aa` | `--mac-mgmt0=a4:bf:01:65:6a:aa`
-            | `mgmt1`     | `a4:bf:01:65:6a:ab` | `--mac-mgmt1=a4:bf:01:65:6a:ab`
-            | `lan0`      | `b8:59:9f:d9:9d:e8` | `--mac-lan0=b8:59:9f:d9:9d:e8`
-            | `lan1`      | `b8:59:9f:d9:9d:e9` | `--mac-lan1=b8:59:9f:d9:9d:e9`
-            | `hsn0`      | `50:6b:4b:23:9f:7c` | `--mac-hsn0=50:6b:4b:23:9f:7c`
+            | `mgmt0`   | `a4:bf:01:65:6a:aa` | `--mac-mgmt0=a4:bf:01:65:6a:aa`
+            | `mgmt1`   | `a4:bf:01:65:6a:ab` | `--mac-mgmt1=a4:bf:01:65:6a:ab`
+            | `lan0`    | `b8:59:9f:d9:9d:e8` | `--mac-lan0=b8:59:9f:d9:9d:e8`
+            | `lan1`    | `b8:59:9f:d9:9d:e9` | `--mac-lan1=b8:59:9f:d9:9d:e9`
+            | `hsn0`    | `50:6b:4b:23:9f:7c` | `--mac-hsn0=50:6b:4b:23:9f:7c`
 
-        1. **Otherwise** the NCN MAC addresses need to be collected using the [Collect NCN MAC Addresses](Collect_NCN_MAC_Addresses.md) procedure.
+        2. **Otherwise** the NCN MAC addresses need to be collected using the [Collect NCN MAC Addresses](Collect_NCN_MAC_Addresses.md) procedure.
   
-1. Perform a dry run of the `add_management_ncn.py` script in order to determine if any validation failures occur:
+2. Perform a dry run of the `add_management_ncn.py` script in order to determine if any validation failures occur:
 
     > Update the following command with the MAC addresses and interfaces that were collected from the NCN.
 
@@ -281,7 +281,7 @@ Scenarios where this procedure is applicable:
                     --mac-lan1 b8:59:9f:d9:9d:e9
         ```
 
-1.  Add the NCN to SLS, HSM, and BSS.
+3.  Add the NCN to SLS, HSM, and BSS.
 
     Run the `add_management_ncn.py` script again, adding the `--perform-changes` argument to the command run in the previous step:
 
@@ -311,10 +311,11 @@ Scenarios where this procedure is applicable:
         =================================
         Network | IP Address
         --------|-----------
+        CMN     | 10.103.11.42
+        CAN     | 10.102.4.10
         HMN     | 10.254.1.14
         MTL     | 10.1.1.7
         NMN     | 10.252.1.9
-        CAN     | 10.102.4.10
 
         =================================
         Management NCN BMC IP Allocation
@@ -323,8 +324,10 @@ Scenarios where this procedure is applicable:
         --------|-----------
         HMN     | 10.254.1.13
     ```
+    > Depending on the networking configuration of the system the CMN or CAN networks may not be present in SLS network data. If CMN or CAN networks do not exist in SLS, then no IP will be allocated for that network. 
 
-1.  **If the following text is present** at the end of the `add_management_ncn.py` script output, then the NCN BMC was given an IP address by DHCP, and it is not at the expected IP address.
+
+4.  **If the following text is present** at the end of the `add_management_ncn.py` script output, then the NCN BMC was given an IP address by DHCP, and it is not at the expected IP address.
     Sample output when the BMC has an unexpected IP address.
 
     ```text
@@ -343,14 +346,14 @@ Scenarios where this procedure is applicable:
     ncn-m# sleep 60
     ```
 
-1.  **Skip if adding `ncn-m001`:** Verify that the BMC is reachable at the expected IP address:
+5.  **Skip if adding `ncn-m001`:** Verify that the BMC is reachable at the expected IP address:
     ```bash
     ncn-m# ping $NODE-mgmt
     ```
 
     Wait 5 minutes for Kea and the Hardware State Manager to sync. If `ping` continues to fail, re-run the previous step to restart the BMC.
 
-1.  Restart the REDS deployment:
+6.  Restart the REDS deployment:
     ```bash
     ncn-m# kubectl -n services rollout restart deployment cray-reds
     ```
@@ -361,7 +364,7 @@ Scenarios where this procedure is applicable:
     deployment.apps/cray-reds restarted
     ```
 
-1.  Wait for REDS to restart:
+7.  Wait for REDS to restart:
     ```bash
     ncn-m# kubectl -n services rollout status  deployment cray-reds
     ```
@@ -374,7 +377,7 @@ Scenarios where this procedure is applicable:
     deployment "cray-reds" successfully rolled out
     ```
 
-1.  **Skip if adding `ncn-m001`:** Wait for the NCN BMC to get discovered by HSM:
+8.  **Skip if adding `ncn-m001`:** Wait for the NCN BMC to get discovered by HSM:
     > If the BMC of `ncn-m001` is connected to the site network, then we will be unable to discover the BMC, because it is not connected via the HMN network.
     ```bash
     ncn-m# watch -n 0.2 "cray hsm inventory redfishEndpoints describe $BMC_XNAME --format json" 
@@ -428,7 +431,7 @@ Scenarios where this procedure is applicable:
         ncn-m# curl -k -u root:changeme https://x3000c0s38b0/redfish/v1/Managers
         ```
 
-1. Verify that the NCN exists under HSM State Components:
+9. Verify that the NCN exists under HSM State Components:
     ```bash
     ncn-m# cray hsm state components describe $XNAME
     ```
