@@ -11,7 +11,7 @@
 Update Loftsman to version 1.2 if not present:
 
 ```bash
-ncn-m# [[ $(loftsman --version | grep 1.2) ]] || zypper --plus-repo=https://packages.local/repository/csm-sle-15sp2 in loftsman
+ncn-m# [[ $(loftsman --version | grep 1.2) ]] || zypper --plus-repo=https://packages.local/repository/csm-sle-15sp2 in --no-gpg-checks -y loftsman
 ```
 
 Run `csm-service-upgrade.sh` to deploy upgraded CSM applications and services:
