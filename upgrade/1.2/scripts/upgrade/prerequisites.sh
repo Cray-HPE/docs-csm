@@ -240,7 +240,7 @@ if [[ $state_recorded == "0" ]]; then
         [[ -n ${USERNAME} ]]
 
         # Install our pit-init RPM and pull in any dependencies it has.
-        zypper --no-gpg-checks in -y pit-init
+        zypper --no-gpg-checks --plus-repo=https://packages.local/repository/csm-sle-15sp2 in -y pit-init
         /root/bin/bios-baseline.sh -y
 
         # Remove our pit-init RPM and any dependencies it had.
