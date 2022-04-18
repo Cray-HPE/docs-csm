@@ -334,7 +334,6 @@ def create_hsm_state_component(session: requests.Session, component: dict):
     print(f'Created {component["ID"]} in HSM State Components')
     print(json.dumps(payload, indent=2))
 
-
 def create_hsm_inventory_ethernet_interfaces(session: requests.Session, ei: dict):
     print(f'Creating {ei["MACAddress"]} in HSM Ethernet Interfaces...')
     r = session.post(f'{HSM_URL}/Inventory/EthernetInterfaces', json=ei)
@@ -499,7 +498,7 @@ def find_next_available_ip(sls_subnet: SLSSubnet, cidr_override: IPv4Address=Non
     # Exhausted available IP address
     return None
 
-def allocate_ip_address_in_subnet(action: dict, networks: NetworkManager, network_name: str, subnet_name: str):
+def allocate_ip_address_in_subnet(action: dict, networks: NetworkManager, network_name: str, subnet_name: str, networks_allowed_in_dhcp_range: list=[]):
     fail_ip_address_allocation = False
 
     network = networks[network_name]
@@ -518,7 +517,20 @@ def allocate_ip_address_in_subnet(action: dict, networks: NetworkManager, networ
     # The start of the static range begins two host IP addresses into the subnet, except for the CMN
     starting_ip = None
     if network_name == "CMN":
-        starting_ip = netaddr.IPAddress(str(bootstrap_dhcp_subnet.reservations()["kubeapi-vip"].ipv4_address()))
+        starting_ip = None
+        if "kubeapi-vip" in bootstrap_dhcp_subnet.reservations():
+            # Fresh install case.
+            starting_ip = netaddr.IPAddress(str(bootstrap_dhcp_subnet.reservations()["kubeapi-vip"].ipv4_address()))
+        else:
+            # Upgraded system case
+
+            # Build up a list of IP addresses currently allocated in the Bootstrap DHCP subnet
+            existing_ips = []
+            for ip_reservation in bootstrap_dhcp_subnet.reservations().values():
+                existing_ips.append(netaddr.IPAddress(str(ip_reservation.ipv4_address())))
+
+            # First the first IP in the list
+            starting_ip = existing_ips[0]
 
     # As the function says, find the next available IP in the bootstrap_dhcp subnet
     next_free_ip = find_next_available_ip(bootstrap_dhcp_subnet, cidr_override=unhacked_cidr, starting_ip=starting_ip)
@@ -531,8 +543,11 @@ def allocate_ip_address_in_subnet(action: dict, networks: NetworkManager, networ
         # The static range for NCNs is allocated at the beginning of the subnet till the first DHCPStart IP address
         dhcp_start = netaddr.IPAddress(str(bootstrap_dhcp_subnet.dhcp_start_address()))
         if dhcp_start <= next_free_ip:
-            fail_ip_address_allocation = True
-            action_log(action, f'Error the allocated IP {next_free_ip} is outside of the static IP address range for the bootstrap_dhcp subnet in the {network_name} network')
+            if network_name in networks_allowed_in_dhcp_range:
+                action_log(action, f'Warning the allocated IP {next_free_ip} is outside of the static IP address range for the bootstrap_dhcp subnet in the {network_name} network')
+            else:
+                fail_ip_address_allocation = True
+                action_log(action, f'Error the allocated IP {next_free_ip} is outside of the static IP address range for the bootstrap_dhcp subnet in the {network_name} network')
 
     if fail_ip_address_allocation:
         print_action(action)
@@ -619,7 +634,7 @@ def create_update_etc_hosts_actions(existing_management_ncns, ncn_alias, ncn_xna
 # Logic that is shared between the allocate-ip and ncn-data sub-commands
 #
 class State:
-    def __init__(self, ncn_xname: str=None, ncn_alias: str=None, ncn_subrole: str=None, log_directory: str=None, perform_changes: bool=False):
+    def __init__(self, ncn_xname: str=None, ncn_alias: str=None, ncn_subrole: str=None, log_directory: str=None, perform_changes: bool=False, networks_allowed_in_dhcp_range: list=[]):
         # NCN Information
         self.ncn_xname = ncn_xname
         self.ncn_alias = ncn_alias
@@ -638,6 +653,7 @@ class State:
         self.use_existing_ip_addresses = None
         self.log_directory = log_directory
         self.perform_changes = perform_changes
+        self.networks_allowed_in_dhcp_range = networks_allowed_in_dhcp_range
 
     def retrive_existing_ncn_ips(self, action: dict):
         #
@@ -693,7 +709,7 @@ class State:
                 failed_to_find_ip = True
 
 
-        # Validate the HMN network has a BMC IP  that has a bootstrap_dhcp subnet has an IP Reservation for this NCN
+        # Validate the HMN network has a BMC IP that has a bootstrap_dhcp subnet has an IP Reservation for this NCN
         reservation_found = False
         hmn_dhcp_bootstrap = self.sls_networks["HMN"].subnets()["bootstrap_dhcp"]
         for name, reservation in hmn_dhcp_bootstrap.reservations().items():
@@ -714,8 +730,6 @@ class State:
         # Update State
         self.ncn_ips = ncn_ips
         self.bmc_ip = bmc_ip
-
-        self.action_log_ncn_ips(action)
 
     def allocate_ncn_ips(self, action: dict,):
         #
@@ -746,7 +760,7 @@ class State:
             if network_name not in self.sls_networks:
                 continue
 
-            ncn_ips[network_name] = allocate_ip_address_in_subnet(action, self.sls_networks, network_name, "bootstrap_dhcp")
+            ncn_ips[network_name] = allocate_ip_address_in_subnet(action, self.sls_networks, network_name, "bootstrap_dhcp", self.networks_allowed_in_dhcp_range)
 
         action_log(action, "Removing temporary NCN BMC IP reservation in the bootstrap_dhcp subnet for the HMN network")
         del self.sls_networks["HMN"].subnets()["bootstrap_dhcp"].reservations()[bmc_ip_reservation.name()]
@@ -937,9 +951,9 @@ class State:
             # Storage: {"Aliases":["ncn-s001-can","time-can","time-can.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.101.5.147","Name":"ncn-s001"}
 
             # CHN
-            # Master:  {"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.198","Name":"x3000c0s3b0n0"}
-            # Worker:  {"Comment":"x3000c0s7b0n0","IPAddress":"10.101.5.200","Name":"x3000c0s7b0n0"}
-            # Storage: {"Comment":"x3000c0s13b0n0","IPAddress":"10.101.5.211","Name":"x3000c0s13b0n0"}
+            # Master:  {"Aliases":["ncn-m002-chn","time-chn","time-chn.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.198","Name":"ncn-m002"}
+            # Worker:  {"Aliases":["ncn-w001-chn","time-chn","time-chn.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.101.5.200","Name":"ncn-w001"}
+            # Storage: {"Aliases":["ncn-s001-chn","time-chn","time-chn.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.101.5.211","Name":"ncn-s001"}
 
             # CMN
             # Master:  {"Aliases":["ncn-m002-cmn","time-cmn","time-cmn.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.20","Name":"ncn-m002"}
@@ -979,21 +993,19 @@ class State:
 
             # All networks except for the CHN have the NCNs alias as the name for the reservation. The CHN has the node xname.
             name = self.ncn_alias
-            if network_name == "CHN":
-                name = self.ncn_xname
 
-            # All NCN types have their xname as the comment for their IP reservation
+            # All NCN types have thier xname as the comment for their IP reservation
             comment = self.ncn_xname
 
             # For all networks except the CHN the following aliases are present
             #   - ncn-{*}-{network}
             #   - time-{network}
             #   - time-{network}.local
-            aliases = []
-            if network_name != "CHN":
-                aliases.append(f'{self.ncn_alias}-{network_name.lower()}')
-                aliases.append(f'time-{network_name.lower()}')
-                aliases.append(f'time-{network_name.lower()}.local')
+            aliases = [
+                f'{self.ncn_alias}-{network_name.lower()}',
+                f'time-{network_name.lower()}',
+                f'time-{network_name.lower()}.local'
+            ]
 
             # Storage nodes on the HMN have additional alias rgw-vip.hmn
             if network_name == "HMN" and self.ncn_subrole == "Storage":
@@ -1223,8 +1235,8 @@ def allocate_ips_command(session: requests.Session, args, state: State):
         if len(found_ethernet_interfaces) == 0:
             action_log(action, f"Pass {network} IP address {ip} is not currently in use in HSM Ethernet Interfaces")
         else:
-            # An IP address that has been allocated for the NCN is present in HSM. 
-            # If the component ID is not set, then this is not a real IP reservation and can be removed, as it is most likely 
+            # An IP address that has been allocated for the NCN is present in HSM.
+            # If the component ID is not set, then this is not a real IP reservation and can be removed, as it is most likely
             # cruft from the past that was not cleaned up.
             for found_ie in found_ethernet_interfaces:
                 if found_ie["ComponentID"] == "":
@@ -1317,6 +1329,9 @@ def ncn_data_command(session: requests.Session, args, state: State):
         # This is acceptable as typically the BMC of ncn-m001 does not have a connection to the HMN, but the HMN.
         print("The BMC of ncn-m001 is not connected to the HMN")
         bmc_connected_to_hmn = False
+    elif args.bmc_mgmt_switch_connector is None:
+        print(f'Error --bmc-mgmt-switch-connector not provided, the BMC of {state.ncn_alias} is expected to be connected to the HMN')
+        sys.exit(1)
     elif re.match("^x([0-9]{1,4})c([0-7])w([1-9][0-9]*)j([1-9][0-9]*)$", args.bmc_mgmt_switch_connector) is None:
         # All NCNs except for ncn-m001 need to has a MgmtSwitchConnector provided for its BMC.
         print("Invalid MgmtSwitchConnector xname provided: ", state.xname, ", expected format xXcCwWjJ")
@@ -1346,10 +1361,10 @@ def ncn_data_command(session: requests.Session, args, state: State):
         macs["mgmt0"] = args.mac_mgmt0
     if args.mac_mgmt1 is not None:
         macs["mgmt1"] = args.mac_mgmt1
-    if args.mac_mgmt2 is not None:
-        macs["mgmt2"] = args.mac_mgmt2
-    if args.mac_mgmt3 is not None:
-        macs["mgmt3"] = args.mac_mgmt3
+    if args.mac_sun0 is not None:
+        macs["sun0"] = args.mac_sun0
+    if args.mac_sun0 is not None:
+        macs["sun1"] = args.mac_sun1
     if not is_m001:
         if args.mac_lan0 is not None:
             macs["lan0"] = args.mac_lan0
@@ -1365,7 +1380,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
             macs["hsn1"] = args.mac_hsn1
 
     # Normalize MACs
-    for interface in macs:
+    for interface in macs.copy():
         macs[interface] = macs[interface].lower()
 
     # Validate MAC addresses format
@@ -1392,28 +1407,30 @@ def ncn_data_command(session: requests.Session, args, state: State):
         print(f'Error BMC MAC Address {bmc_mac} provided is not unique')
         sys.exit(1)
 
+    if not is_m001 and bmc_mac is None:
+        print(f'Error a BMC MAC address is required for {state.ncn_alias}')
+        sys.exit(1)
+
     # If this a worker, then a MAC address for hsn0 needs to be provided
     if (state.ncn_subrole == "Worker") and ("hsn0" not in macs):
         print("Error hsn0 MAC address not provided for worker management NCN. At least 1 HSN MAC address is required")
         sys.exit(1)
 
-    # Either mgmt0 and mgmt1, or mgmt0, mgmt1, mgmt2, mgmt3 need to be provided
+    # Either mgmt0 and mgmt1, or mgmt0, mgmt1, sun0, sun1 need to be provided
     # TODO Do we want to use the wording for BOND0 MAC 0, and BOND0 MAC 1?
     # TODO the naming of interfaces changes between CSM 1.0 and CSM 1.2. The following is for CSM 1.0.
-    bond_across_two_cards = False
     if ("mgmt0" in macs) and ("mgmt1" in macs):
         # Both ports of a single card are used to form bond0
         # TODO mgmt0 < mgmt1
         print("Bond0 will be formed across mgmt0 and mgmt1")
-    elif ("mgmt0" in macs) and ("mgmt1" in macs) and ("mgmt2" in macs) and ("mgmt3" in macs):
-        # The lower MAC address of each card is used to form bond0 for mgmt0/mgmt1
-        # The higher MAC address of each card is used to form bond1 for mgmt2/mgmt3
-        # TODO mgmt0 < mgmt1
-        # TODO mgmt1 < mgmt2
-        bond_across_two_cards = True
+    elif ("mgmt0" in macs) and ("mgmt1" in macs) and ("sun0" in macs) and ("sun1" in macs):
+        # The lower MAC address of each card is used to form bond0 for mgmt0/sun0
+        # The higher MAC address of each card is used to form bond1 for mgmt1/sun1
+        # TODO mgmt0 < sun0
+        # TODO mgmt1 < sun1
         print("Bond0 will be formed across mgmt0 and mgmt2")
     else:
-        print("Invalid combination of mgmt MAC addresses provided")
+        print("Invalid combination of mgmt/sun MAC addresses provided")
         sys.exit(1)
 
 
@@ -1518,8 +1535,8 @@ def ncn_data_command(session: requests.Session, args, state: State):
         if len(found_ethernet_interfaces) == 0:
             action_log(action, f"Pass {network} IP address {ip} is not currently in use in HSM Ethernet Interfaces")
         else:
-            # An IP address that has been allocated for the NCN is present in HSM. 
-            # If the component ID is not set, then this is not a real IP reservation and can be removed, as it is most likely 
+            # An IP address that has been allocated for the NCN is present in HSM.
+            # If the component ID is not set, then this is not a real IP reservation and can be removed, as it is most likely
             # cruft from the past that was not cleaned up.
             for found_ie in found_ethernet_interfaces:
                 if found_ie["ComponentID"] == "":
@@ -1557,9 +1574,21 @@ def ncn_data_command(session: requests.Session, args, state: State):
         existing_bmc_ip_matches = existing_bmc_ip == str(state.bmc_ip)
 
     if not existing_bmc_ip_matches:
-        action = verify_hsm_inventory_ethernet_interface_not_found(session, ip_address=state.bmc_ip)
-        action_log(action, f"Pass BMC IP address {state.bmc_ip} is not currently in use in HSM Ethernet Interfaces")
-        print_action(action)
+        action, found_ethernet_interfaces = search_hsm_inventory_ethernet_interfaces(session, ip_address=state.bmc_ip)
+        # An IP address that has been allocated for the NCN BMC is present in HSM.
+        # If the component ID is not set, then this is not a real IP reservation and can be removed, as it is most likely
+        # cruft from the past that was not cleaned up.
+        for found_ie in found_ethernet_interfaces:
+            if found_ie["ComponentID"] == "":
+                print(f'Removing stale Ethernet Interface from HSM: {found_ie}')
+                if state.perform_changes:
+                    delete_hsm_inventory_ethernet_interfaces(session, found_ie)
+                else:
+                    print("Skipping due to dry run!")
+            else:
+                action_log(action, f'Error found EthernetInterfaces with allocated BMC IP address {state.bmc_ip} in HSM: {found_ie}')
+                print_action(action)
+                sys.exit(1)
     else:
         print("         Pass the BMC MAC address is currently associated with the allocated IP Address")
 
@@ -1628,31 +1657,22 @@ def ncn_data_command(session: requests.Session, args, state: State):
     chassis_xname = get_component_parent(slot_xname)
     cabinet_xname = get_component_parent(chassis_xname)
 
-    # Build up the kernel command line parameters
-    interface_kernel_params = []
-    for interface, mac in macs.items():
-        interface_kernel_params.append(f'ifname={interface}:{mac}')
-        interface_kernel_params.append(f'ip={interface}:auto6')
-
     # Update kernel command line params
     donor_kernel_params = donor_bootparameters["params"].split()
     kernel_params = []
 
+    # Build up the kernel command line parameters
+    interface_kernel_params = []
+    for interface, mac in macs.items():
+        interface_kernel_params.append(f'ifname={interface}:{mac}')
+    kernel_params.extend(interface_kernel_params)
+
     for param in donor_kernel_params:
         if param.startswith("hostname="):
             kernel_params.append(f'hostname={args.alias}')
-        elif param.startswith("ifname=") or (param.startswith("ip=") and (not param.startswith("ip=vlan"))):
+        elif param.startswith("ifname="):
             # Ignore MAC specific params.
             pass
-        elif param.startswith("bond="):
-            if bond_across_two_cards:
-                # Form the bond across mgmt0 and mgmt2
-                kernel_params.append("bond=bond0:mgmt0,mgmt2:mode=802.3ad,miimon=100,lacp_rate=fast,xmit_hash_policy=layer2+3:9000")
-            else:
-                # Form the bond across mgmt0 and mgmt1
-                kernel_params.append("bond=bond0:mgmt0,mgmt1:mode=802.3ad,miimon=100,lacp_rate=fast,xmit_hash_policy=layer2+3:9000")
-
-            kernel_params.extend(interface_kernel_params)
         elif param.startswith("metal.no-wipe"):
             kernel_params.append("metal.no-wipe=0")
         else:
@@ -1825,13 +1845,13 @@ def ncn_data_command(session: requests.Session, args, state: State):
     # },
     for interface, mac in macs.items():
         ei = {}
-        #ei["ID"] = mac.lower().replace(":", "")
         ei["MACAddress"] = mac
         ei["ComponentID"] = args.xname
         ei["IPAddresses"] = []
 
         if interface == "mgmt0":
-            ei["IPAddresses"].append({"IPAddress": str(state.ncn_ips["NMN"])})
+            for network in ["NMN", "CAN", "MTL", "HMN"]:
+                ei["IPAddresses"].append({"IPAddress": str(state.ncn_ips[network])})
 
         print(f"Adding MAC Addresses {mac} to HSM Inventory EthernetInterfaces")
         print(json.dumps(ei, indent=2))
@@ -1859,8 +1879,8 @@ def ncn_data_command(session: requests.Session, args, state: State):
 
 
     #
-    # Create an entry under HSM State Components for ncn-m001. 
-    # The other NCNs will be populated by the normal HSM Discovery/Invnetory process, but since 
+    # Create an entry under HSM State Components for ncn-m001.
+    # The other NCNs will be populated by the normal HSM Discovery/Invnetory process, but since
     # the BMC of ncn-m001 is not connected to the HMN, we need to manually do this.
     #
     if is_m001:
@@ -1952,6 +1972,7 @@ def main():
     base_parser.add_argument("--url-sls", type=str, required=False, default="https://api-gw-service-nmn.local/apis/sls/v1")
     base_parser.add_argument("--url-kea", type=str, required=False, default="https://api-gw-service-nmn.local/apis/dhcp-kea")
     base_parser.add_argument("--log-dir", help="Directory where to log and save current state.", default='/tmp/add_management_ncn')
+    base_parser.add_argument("--network-allowed-in-dhcp-range", action="append", type=str, required=False, default=[])
 
     # allocate-ip arguments
     allocate_ips_parser = subparsers.add_parser("allocate-ips", parents=[base_parser])
@@ -1964,8 +1985,8 @@ def main():
     ncn_data_parser.add_argument("--mac-bmc",   type=str, required=False, help="MAC address of of the NCN")
     ncn_data_parser.add_argument("--mac-mgmt0", type=str, required=True,  help="MAC address of mgmt0")
     ncn_data_parser.add_argument("--mac-mgmt1", type=str, required=True,  help="MAC address of mgmt1")
-    ncn_data_parser.add_argument("--mac-mgmt2", type=str, required=False, help="MAC address of mgmt2")
-    ncn_data_parser.add_argument("--mac-mgmt3", type=str, required=False, help="MAC address of mgmt3")
+    ncn_data_parser.add_argument("--mac-sun0",  type=str, required=False, help="MAC address of sun0")
+    ncn_data_parser.add_argument("--mac-sun1",  type=str, required=False, help="MAC address of sun1")
     ncn_data_parser.add_argument("--mac-lan0",  type=str, required=False, help="MAC address of lan0")
     ncn_data_parser.add_argument("--mac-lan1",  type=str, required=False, help="MAC address of lan1")
     ncn_data_parser.add_argument("--mac-lan2",  type=str, required=False, help="MAC address of lan2")
@@ -2011,13 +2032,14 @@ def main():
     if not os.path.exists(log_directory):
         os.makedirs(log_directory)
 
-    # Start the actual process of adding an NCN...
+    # Start the actual process of adding a NCN...
     state = State(
         ncn_xname=args.xname,
         ncn_alias=args.alias,
         ncn_subrole=subrole,
         log_directory=log_directory,
-        perform_changes=args.perform_changes
+        perform_changes=args.perform_changes,
+        networks_allowed_in_dhcp_range=args.network_allowed_in_dhcp_range
     )
     with requests.Session() as session:
         session.verify = False
