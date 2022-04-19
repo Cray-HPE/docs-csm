@@ -129,7 +129,7 @@ Use the following procedure to ensure the `hms-discovery` job and Redfish Transl
 
         Example output:
 
-        ```
+        ```json
         [
           "global/",
           "x3000m0",
