@@ -1,6 +1,6 @@
 # Adding a Liquid-cooled blade to a System
 
-This procedure will add a liquid-cooled blades from a HPE Cray EX system.
+This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
 ## Perquisites
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.

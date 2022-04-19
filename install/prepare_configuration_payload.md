@@ -6,9 +6,9 @@ can be passed to the `csi` (Cray Site Init) program during the CSM installation 
 Information gathered from a site survey is needed to feed into the CSM installation process, such as system name, system size, site network information for the CAN, site DNS configuration, site NTP configuration, network information for the node used to bootstrap the installation. More detailed component level information about the system hardware is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadsheet prepared by HPE Cray Manufacturing to assemble the components of the system and connect appropriately labeled cables.
 
 How the configuration payload is prepared depends on whether this is a first time installation of CSM
-software on this system or the CSM software is being reinstalled. The reinstall scenario has the
+software on this system or the CSM software is being reinstalled. The *reinstall scenario* has the
 advantage of being able to use the configuration payload from the previous CSM installation
-and an extra configuration file which that installation generated.
+and an additional configuration file which that installation generated. The *first time* install scenario requires using the csi config tool to pass arguments to CSI as well as the creation of a number of [Configuration Payload Files}(#configuration-payload-files).
 
 
 ### Topics
@@ -24,14 +24,14 @@ and an extra configuration file which that installation generated.
 <a name="command_line_configuration_payload"></a>
 ### Command Line Configuration Payload
 
-This information from a site survey can be given to the `csi` command as command line arguments.
-The information is shown here to explain what data is needed. It will not be used until moving
+The information from a site survey can be given to the `csi` command as command line arguments.
+The information and options shown below are to explain what data is needed. It will not be used until moving
 to the [Bootstrap PIT Node](index.md#bootstrap_pit_node) procedure.
 
 The air-cooled cabinet is known to `csi` as a `river` cabinet. The liquid-cooled cabinets are either
 `mountain` or `hill` (if a TDS system).
 
-For more description of these settings and the default values, see [Default IP Address Ranges](../introduction/csm_overview.md#default_ip_address_ranges) and the other topics in [CSM Overview](../introduction/csm_overview.md).
+For more description of these settings and the default values, see [Default IP Address Ranges](../introduction/csm_overview.md#default_ip_address_ranges) and the other topics in [CSM Overview](../introduction/csm_overview.md). There are additional options not shown on this page that can be seen by running `csi config init --help`.
 
 | CSI option | Information |
 | --- | --- |
@@ -209,6 +209,22 @@ The process to reinstall must have the configuration payload files available.
       When you are ready to bootstrap the LiveCD, it will indicate when to run this command without any
       extra command line options. It will expect to find all of the above files in the current working
       directory.
+
+      > **`NOTE`**: For fresh installs and reinstalls of 1.2.X+ it is recommended that the `install-ncn-bond-members` option be double-checked. Systems 
+      > with Mellanox PCIe cards will have new interface names.
+      > 1. Compare the output of `lid` with the background document here for PCIe devices. Cross-reference the Vendor ID with the IDs in the table in [Vendor and Bus ID Identification](../background/ncn_networking.md#vendor-and-bus-id-identification).
+      >
+      >     ```bash
+      >     <lan> <vid>:<did>
+      >     pit# lid
+      >     p238p1 8086:1521
+      >     p238p2 8086:1521
+      >     p238p3 15B3:1013
+      >     p238p4 15B3:1013
+      >     ```
+      >
+      > * Update `system_config.yaml`'s `install-ncn-bond-members` value with the interface names cross-referenced from the `lid` output.
+      > * _Alternatively_, run `csi config init --install-ncn-bond-members` with the discovered interface names.
 
       ```bash
       linux# csi config init

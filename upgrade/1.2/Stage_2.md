@@ -1,7 +1,5 @@
 # Stage 2 - Kubernetes Upgrade from 1.19.9 to 1.20.13
 
-> NOTE: During the CSM-0.9 install the LiveCD containing the initial install files for this system should have been unmounted from the master node when rebooting into the Kubernetes cluster. The scripts run in this section will also attempt to unmount/eject it if found to ensure the USB stick does not get erased.
-
 ## Stage 2.1
 
 1. Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`. Follow output of the script carefully. The script will pause for manual interaction.
@@ -26,6 +24,8 @@
 
 ## Stage 2.3
 
+Up to this point, we have already upgraded all worker, storage and master nodes except `ncn-m001`. `ncn-m001` has been our stable node that we logged into the cluster with to upgrade the other nodes. The procedure at this stage will now use `ncn-m002` as a new **stable** node, to login to the cluster, and from it upgrade `ncn-m001`. During this process, ensure `ncn-m001` does not have its power state affected.
+
 For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP address to `ssh` to `ncn-m002` for this `ncn-m001` install
 
 1. Authenticate with the Cray CLI on `ncn-m002`.
@@ -43,6 +43,10 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
    ncn-m002# mkdir -p /etc/cray/upgrade/csm/${CSM_RELEASE}
 
    ncn-m002# scp ncn-m001:/etc/cray/upgrade/csm/myenv /etc/cray/upgrade/csm/myenv
+   
+   ncn-m002# scp ncn-m001:/root/output.log /root/pre-m001-reboot-upgrade.log
+   
+   ncn-m002# cray artifacts create config-data pre-m001-reboot-upgrade.log /root/pre-m001-reboot-upgrade.log
 
    ncn-m002# csi_rpm=$(ssh ncn-m001 "find /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}/rpm/cray/csm/ -name 'cray-site-init*.rpm'")
 

@@ -2,18 +2,14 @@
 
 Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.
 
-1. Graceful Shutdown of Workloads affected by CSM Upgrade
+1. Understand that management service resiliency is reduced during the upgrade.
 
    **Warning:** Although it is expected that compute nodes and application nodes will continue to provide their services
-   without interruption when the management nodes and services are being upgraded by CSM, it is important to
-   be aware of the possibility of interruption of running jobs. The management nodes will undergo a rolling upgrade
-   that should maintain enough nodes of each type to continue to provide services. However, while one node is being upgraded,
-   if another node of the same type has an unplanned fault that removes it from service, there may be a degraded system. For
-   example, if there are three Kubernetes master nodes and one is being upgraded, the quorum is maintained by the remaining
-   two nodes. If one of those two nodes has a fault before the third node completes its upgrade, then quorum would be lost.
-   There is a similar issue on small systems which have only three worker nodes for some services which have a data store that
-   is based on three copies of `etcd` or `postgres` because some of those pods have anti-affinity to avoid two pods of that type
-   being on the same worker node.
+   without interruption, it is important to be aware that the degree of management services resiliency is reduced during the 
+   upgrade. If, while one node is being upgraded, another node of the same type has an unplanned fault that removes it from service,
+   there may be a degraded system. For example, if there are three Kubernetes master nodes and one is being upgraded, the quorum is
+   maintained by the remaining two nodes. If one of those two nodes has a fault before the third node completes its upgrade,
+   then quorum would be lost.
 
 1. Optional system health checks.
 

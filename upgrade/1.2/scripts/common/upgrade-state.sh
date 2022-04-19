@@ -80,6 +80,10 @@ function err_report() {
     echo "$BASH_COMMAND"
     local cmd="$BASH_COMMAND"
 
+    # restore previous ssh config if there was one, remove ours
+    rm -f /root/.ssh/config
+    test -f /root/.ssh/config.bak && mv /root/.ssh/config.bak /root/.ssh/config
+
     # ignore some internal expected errors
     local ignoreCmd="cray artifacts list config-data"
     shouldIgnore=$(echo "$cmd" | grep "${ignoreCmd}" | wc -l)

@@ -26,7 +26,6 @@
        import_date: 2022-07-28 03:26:01.869501
        ssh_url: git@vcs.cmn.SYSTEM_DOMAIN_NAME:cray/csm-config-management.git
    ...
-   ```
 
    The specific dates, commits, and other values may not be the same as the output above.
 

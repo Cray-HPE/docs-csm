@@ -176,7 +176,13 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 ### 2. Update credentials for existing EX hardware in the system
 1. Set `CRED_PASSWORD` to the new updated password:
     ```bash
-    ncn-m001# CRED_PASSWORD=foobar
+    ncn-m001# read -s CRED_PASSWORD
+    ncn-m001# echo $CRED_PASSWORD
+    ```
+
+    Expected output:
+    ```
+    foobar
     ```
 
 2. Update the credentials used by CSM services for all previously discovered EX cabinet BMCs to the new global default:
