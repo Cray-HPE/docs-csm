@@ -179,8 +179,8 @@ if __name__ == '__main__':
     TEST_FAILED = 0
 
     # Process the arguments
-    if numarg < 3: 
-      print("Usage: {} <system-domain> <token-network>".format(sys.argv[0]))
+    if numarg < 2:
+      print("Usage: {} <system-domain> [<user-network>]".format(sys.argv[0]))
       logging.critical("Wrong number of arguments passed. Args = {}.".format(sys.argv))
       sys.exit(1)
 
@@ -190,18 +190,11 @@ if __name__ == '__main__':
       sys.exit(1)
 
     SYSTEM_DOMAIN = (sys.argv[1]).lower() 
-    TOKEN_NET = (sys.argv[2]).lower()
     ADMIN_SECRET = os.environ.get("ADMIN_CLIENT_SECRET", "")
 
     # Load the service definitions
     with open(test_defn_file, 'r') as f:
         svcs = yaml.load(f, Loader=yaml.FullLoader)
-
-    # Validate the TOKEN_NET argument
-    if not any(d['name'] == TOKEN_NET for d in svcs['networks']):
-      print("{} is not a valid network".format(sys.argv[2]))
-      logging.critical("{} is not a valid network".format(sys.argv[2]))
-      sys.exit(1)
 
     # initialize k8s if we are running from an NCN
     if os.path.exists("/bin/craysys"):
@@ -214,108 +207,130 @@ if __name__ == '__main__':
         print("ADMIN_CLIENT_SECRET not defined")
         sys.exit(1)
 
-    # Determine which user networks are defined
-    snets = get_sls_networks(ADMIN_SECRET, SYSTEM_DOMAIN, svcs['networks'])
+    # Get the user network
+    if numarg == 3:
+      USER_NET = (sys.argv[2]).lower()
+      if USER_NET not in ["can", "chn"]:
+        print("{} is not a valid network".format(USER_NET))
+        sys.exit(1)
+      reachnets = svcs['reachable-networks']
+    else:
+      reachnets = get_sls_networks(ADMIN_SECRET, SYSTEM_DOMAIN, svcs['test-networks'])
+      if "can" in reachnets:
+        USER_NET = "can"
+      if "chn" in reachnets:
+        USER_NET = "chn"
 
-    mytok = get_access_token(ADMIN_SECRET, TOKEN_NET, svcs['use-api-gw-override'])
- 
-    if not mytok:
-      # If we are not on an NCN and the token net is NMNLB, then it is expected
-      # that we cannot get the token
-      if TOKEN_NET == "nmnlb" and not os.path.exists("/bin/craysys"):
-          sys.exit(0)
-      else:
-          sys.exit(1)
+    for tokennet in svcs['test-networks']:
 
-    for net in svcs['networks']:
+      tokname = tokennet['name']
+      print("\nGetting token for {}".format(tokname))
+      mytok = get_access_token(ADMIN_SECRET, tokname, svcs['use-api-gw-override'])
 
-      netname = net['name'].lower()
-      if netname.lower() == "nmnlb" and svcs['use-api-gw-override']:
-         domain = "api-gw-service-nmn.local"
-      else:
-         domain = "api.{}.{}".format(netname, SYSTEM_DOMAIN)
-
-      print("\n------------- {} -------------------".format(domain))
-
-      if not reachable(domain):
-          if netname in snets:
-              if netname != "nmnlb" :
-                  print("{} is not reachable but defined in SLS".format(netname))
-                  TEST_FAILED = 1
-          else:
-              print("{} is not reachable and not defined in SLS".format(netname))
-          continue
-
-      if netname not in snets:
-          print("{} is reachable but not defined in SLS".format(netname))
-          TEST_FAILED = 1
-          continue
-
-      for i in range(len(svcs['ingress_api_services'])):
-        svcname = svcs['ingress_api_services'][i]['name']
-        svcpath = svcs['ingress_api_services'][i]['path']
-        svcport = svcs['ingress_api_services'][i]['port']
-        svcexp = svcs['ingress_api_services'][i]['expected-result']
-        svcproject = svcs['ingress_api_services'][i]['project']
-
-        if svcport == 443:
-            scheme = "https"
-        else:
-            scheme = "http"
-
-        url = scheme + "://" + domain + "/" + svcpath 
-
-        if os.path.exists("/bin/craysys"):
-        # Getting the gateways from the Virtual Service definitions
-        # This can only be done if we are running the tests from an NCN
-        # The best way I could find to determine if we are running on an NCN is to see if craysys is installed.
-        # There may be a better way
-            vsyaml = get_vs(svcs['ingress_api_services'][i])
-            if vsyaml is None:
-               print("SKIP - [" + svcname + "]: " + url + " - virtual service not found")
-               continue
-        
-            svcgws = get_vs_gateways(vsyaml)
-        elif svcproject != "CSM":
-            print("SKIP - [{}]: {}".format(svcname, url))
+      if not mytok:
+        # if the network in not in the set of reachable networks then it is expected
+        # that we cannot get the token
+        if tokname not in reachnets:
             continue
-
-        # Otherwise, we get the gateways from the test definition file (which may become stale)
         else:
-            if "gateways" in svcs['ingress_api_services'][i]:
-                svcgws = svcs['ingress_api_services'][i]['gateways']
+            sys.exit(1)
+      else:
+        if tokname not in reachnets:
+            sys.exit(1)
+
+      for net in svcs['test-networks']:
+
+        netname = net['name'].lower()
+        if netname.lower() == "nmnlb" and svcs['use-api-gw-override']:
+           domain = "api-gw-service-nmn.local"
+        else:
+           domain = "api.{}.{}".format(netname, SYSTEM_DOMAIN)
+
+        print("\n------------- {} -------------------".format(domain))
+
+        if not reachable(domain):
+            if netname in reachnets:
+                    print("{} is expected to be reachable but is not".format(netname))
+                    TEST_FAILED = 1
             else:
-                print("SKIP - [" + svcname + "]: " + url + " - gateways not found")
+                print("{} is not reachable and is not expected to be".format(netname))
                 continue
 
-        if net['gateway'] not in svcgws:
-          svcexp = 404
-        # if the token we have does not match the network we are testing, we expect a 403
-        # CMN tokens will work with NMN and vice versa, because they are using the same gateway in 1.2.
-        elif TOKEN_NET == "cmn" and netname != TOKEN_NET and netname != "nmnlb":
-          svcexp = 403
-        elif TOKEN_NET == "nmnlb" and netname != TOKEN_NET and netname != "cmn":
-          svcexp = 403
-        elif TOKEN_NET not in ["cmn","nmnlb"] and TOKEN_NET != netname:
-          svcexp = 403
+        if netname not in reachnets:
+            print("{} is reachable but is not expected to be".format(netname))
+            TEST_FAILED = 1
+            continue
 
-        headers = {
-            'Authorization': "Bearer " + mytok
-        }
+        for i in range(len(svcs['ingress_api_services'])):
+          svcname = svcs['ingress_api_services'][i]['name']
+          svcpath = svcs['ingress_api_services'][i]['path']
+          svcport = svcs['ingress_api_services'][i]['port']
+          svcexp = svcs['ingress_api_services'][i]['expected-result']
+          svcproject = svcs['ingress_api_services'][i]['project']
+
+          if svcport == 443:
+              scheme = "https"
+          else:
+              scheme = "http"
+
+          url = scheme + "://" + domain + "/" + svcpath
+
+          if os.path.exists("/bin/craysys"):
+          # Getting the gateways from the Virtual Service definitions
+          # This can only be done if we are running the tests from an NCN
+          # The best way I could find to determine if we are running on an NCN is to see if craysys is installed.
+          # There may be a better way
+              vsyaml = get_vs(svcs['ingress_api_services'][i])
+              if vsyaml is None:
+                 print("SKIP - [" + svcname + "]: " + url + " - virtual service not found")
+                 continue
+
+              svcgws = get_vs_gateways(vsyaml)
+          elif svcproject != "CSM":
+              print("SKIP - [{}]: {}".format(svcname, url))
+              continue
+
+          # Otherwise, we get the gateways from the test defininition file (which may become stale)
+          else:
+              if "gateways" in svcs['ingress_api_services'][i]:
+                  svcgws = svcs['ingress_api_services'][i]['gateways']
+              else:
+                  print("SKIP - [" + svcname + "]: " + url + " - gateways not found")
+                  continue
+
+          if net['gateway'] not in svcgws:
+            svcexp = 404
+          # if the token we have does not match the network we are testing, we expect a 403
+          # CMN tokens will work with NMN and vice versa, because they are using the same gateway in 1.2.
+          elif tokname == "cmn" and netname != tokname and netname != "nmnlb":
+            svcexp = 403
+          elif tokname == "nmnlb" and netname != tokname and netname != "cmn":
+            svcexp = 403
+          elif tokname not in ["cmn","nmnlb"] and tokname != netname:
+            svcexp = 403
+
+          headers = {
+              'Authorization': "Bearer " + mytok
+          }
 
    
-        try:    
-            response = requests.request("GET", url, headers=headers, verify = False)
-        except Exception as err:
-            print("{}".format(err))
-            logging.error(f"An unanticipated exception occurred while retrieving {url} {err}")
-            break
+          try:
+              response = requests.request("GET", url, headers=headers, verify = False)
+          except Exception as err:
+              print("{}".format(err))
+              logging.error(f"An unanticipated exception occurred while retrieving {url} {err}")
+              break
     
-        if response.status_code == svcexp:
-            print("PASS - [" + svcname + "]: " + url + " - " + str(response.status_code))
-        else:
-            print("FAIL - [" + svcname + "]: " + url + " - " + str(response.status_code))
-            TEST_FAILED = 1
+          if response.status_code == svcexp:
+              print("PASS - [" + svcname + "]: " + url + " - " + str(response.status_code))
+          else:
+              print("FAIL - [" + svcname + "]: " + url + " - " + str(response.status_code))
+              TEST_FAILED = 1
+
+    if TEST_FAILED:
+        print("\nOverall Gateway Test Status:  FAIL")
+    else:
+        print("\nOverall Gateway Test Status:  PASS")
 
     sys.exit(TEST_FAILED)
 
