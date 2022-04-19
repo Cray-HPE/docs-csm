@@ -42,7 +42,7 @@ The following is needed before running this procedure:
 
 ## HPE PDU Initial Set-up
 
-Use this procedure to do the following:
+Set up an HPE PDU for administrative use by completing the following tasks:
 
 * Ensure Redfish is enabled
 * Add the default user
@@ -70,13 +70,17 @@ Use this procedure to do the following:
 
 ## Update HPE PDU Firmware
 
-### Check Firmware Version
+Verify that the firmware version for the HPE PDU is **2.0.0.L**. If it is not, a firmware update is required.
+
+### Procedure
+
+#### Check Firmware Version
 
 1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
 1. Check which version of firmware is installed by selecting the **"Home"** icon (House in the top right corner) and navigating to **"Identification"**.
 1. The _"Version"_ will be displayed. If the version is not the _"2.0.0.L"_, update firmware.
 
-### Update Firmware
+#### Update Firmware
 
 1. Download version **2.0.0.L** firmware from: [https://support.hpe.com/connect/s/search?language=en_US#q=P9S23A&t=All&sort=%40hpescuniversaldate%20descending&numberOfResults=25&f:@contenttype=[Drivers%20and%20Software]](https://support.hpe.com/connect/s/search?language=en_US#q=P9S23A&t=All&sort=%40hpescuniversaldate%20descending&numberOfResults=25&f:@contenttype=[Drivers%20and%20Software])
 This will download an .exe file, which is a self extracting zip file.
@@ -91,6 +95,10 @@ The firmware will be updated and the PDU management processor will restart.
 
 ## Change HPE PDU User Passwords
 
+Change the password of any existing user account using the HPE PDU web interface.
+
+### Procedure
+
 1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
 1. Use the **"admin"** menu (top right corner) to navigate to **"User Accounts"**.
 1. Click on the **"Edit"** icon (pencil) next to the user.
@@ -98,9 +106,13 @@ The firmware will be updated and the PDU management processor will restart.
 
 ## Discover HPE PDU after Upgrading CSM
 
-**This procedure is only needed when upgrading CSM, not performing a fresh install. This procedure should be run after CSM has been fully upgraded including the discovery job.**
+Use the following procedure to ensure the `hms-discovery` job and Redfish Translation Service (RTS) correctly discover HPE PDUs when upgrading from CSM 1.0 or earlier releases to CSM 1.2.
 
-1.  In CSM releases 1.0 and earlier, the `hms-discovery` job and Redfish Translation Service (RTS) treated all PDUs as if were made by ServerTech. After the upgrade to CSM 1.2, RTS will still think the HPE PDUs in the system are ServerTech PDUs. These erroneous HPE PDU entries for RTS need to get removed from Vault.
+> **IMPORTANT:** This procedure is only needed when upgrading CSM, not performing a fresh install. This procedure should be run after CSM has been fully upgraded including the discovery job.
+
+### Procedure
+
+1.  In CSM 1.0 and earlier releases, the `hms-discovery` job and RTS treated all PDUs as if were made by ServerTech. After the upgrade to CSM 1.2, RTS will still think the HPE PDUs in the system are ServerTech PDUs. Remove these erroneous HPE PDU entries for RTS from Vault.
     
     1. Get Vault password and create Vault alias.
         
