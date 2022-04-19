@@ -8,11 +8,11 @@ The following procedures are used to manage the HPE Power Distribution Unit (PDU
  * [Change HPE PDU User Passwords](#change-hpe-pdu-user-passwords)
  * [Discover HPE PDU after Upgrading CSM](#discover-hpe-pdu-after-upgrading-csm)
 
-> **IMPORTANT:** Because of the polling method used to process sensor data from the HPE PDU, telemetry data may take up to six minutes to refresh; this includes outlet status reported by HSM.
+> **IMPORTANT:** Because of the polling method used to process sensor data from the HPE PDU, telemetry data may take up to six minutes to refresh; this includes the outlet status reported by the Hardware State Manager (HSM).
 
 ## Connect to HPE PDU Web Interface
 
-Connect and login to the HPE PDU web interface.
+Connect and log in to the HPE PDU web interface.
 Access to the HPE PDU web interface is required for the other administrative procedures in this section.
 
 ### Prerequisites
