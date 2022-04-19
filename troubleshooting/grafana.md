@@ -1,7 +1,7 @@
 #Grafana Links
 
 This document provides links to all environment with links to its Grafana.
-Default access is possible using `vers` ID and password
+Default access is possible using `vers` ID and password.
 
 | Environment | Grafana Link                            |
 | ----------- | --------------------------------------- |
