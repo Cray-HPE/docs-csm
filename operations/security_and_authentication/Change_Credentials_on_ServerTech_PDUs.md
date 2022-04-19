@@ -22,12 +22,24 @@ This procedure changes password used by the `admn` user on ServerTech PDUs. Eith
 
 2.  Specify the existing password for the `admn` user:
     ```bash
-    ncn-m001# OLD_PDU_PASSWORD=secret
+    ncn-m001# read -s OLD_PDU_PASSWORD
+    ncn-m001# echo $OLD_PDU_PASSWORD
+    ```
+
+    Expected output:
+    ```
+    secret
     ```
 
 3.  Specify the new desired password for the `admn` user. The new password must between 1 and 32 characters.
     ```bash
-    ncn-m001# NEW_PDU_PASSWORD=supersecret
+    ncn-m001# read -s NEW_PDU_PASSWORD
+    ncn-m001# echo $NEW_PDU_PASSWORD
+    ```
+
+    Expected output:
+    ```
+    supersecret
     ```
 
 4.  Change password for the `admn` user on the ServerTech PDU.
@@ -36,8 +48,8 @@ This procedure changes password used by the `admn` user on ServerTech PDUs. Eith
     -   To update the password on a single ServerTech PDU in the system:
         ```bash
         ncn-m001# PDU=x3000m0
-        ncn-m001# curl -i -k -u admn:$OLD_PDU_PASSWORD -X PATCH https://$PDU/jaws/config/users/local/admn \
-            -d "{ \"password\": \"$NEW_PDU_PASSWORD\" }"
+        ncn-m001# curl -i -k -u "admn:$OLD_PDU_PASSWORD" -X PATCH https://$PDU/jaws/config/users/local/admn \
+            -d $(jq --arg PASSWORD "$NEW_PDU_PASSWORD" -nc '{password: $PASSWORD}')
         ```
 
         Expected output upon a successful password change:
@@ -56,8 +68,8 @@ This procedure changes password used by the `admn` user on ServerTech PDUs. Eith
         ncn-m001# for PDU in $(cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
           jq -r '.RedfishEndpoints[] | select(.FQDN | contains("rts")).ID'); do
             echo "Updating password on $PDU"
-            curl -i -k -u admn:$OLD_PDU_PASSWORD -X PATCH https://$PDU/jaws/config/users/local/admn \
-                -d "{ \"password\": \"$NEW_PDU_PASSWORD\" }"
+            curl -i -k -u "admn:$OLD_PDU_PASSWORD" -X PATCH https://$PDU/jaws/config/users/local/admn \
+                -d $(jq --arg PASSWORD "$NEW_PDU_PASSWORD" -nc '{password: $PASSWORD}')
         done
         ```
 

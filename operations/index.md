@@ -261,6 +261,7 @@ The system management components are broken down into a series of micro-services
        *   [Restore Postgres](kubernetes/Restore_Postgres.md)
        *   [Disaster Recovery for Postgres](kubernetes/Disaster_Recovery_Postgres.md)
        *   [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
+   *   [Kubernetes CronJobs](kubernetes/CronJobs.md)
 
 
 <a name="package-repository-management"></a>

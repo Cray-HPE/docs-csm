@@ -9,7 +9,7 @@ node that is being rebuilt, but this password should be different than the one s
 that is applied by CFS during post-boot NCN personalization to change the on-disk password. Once
 NCN personalization has been run, then the password in Vault should be used for console access.
 
-Use one of these methods to change the root pasword in the image.
+Use one of these methods to change the root password in the image.
 
 1. If the PIT node is booted, see
 [Change NCN Image Root Password and SSH Keys on PIT Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
@@ -26,11 +26,15 @@ personalization including the CSM layer is run.
 
 ## Procedure: Configure Root Password in Vault
 
-1. Generate a new password hash for the root user. Replace `PASSWORD` with the
-   root password that will be used.
+
+1. Generate a new password hash for the root user. Type in your new password
+   after running the `read` command. The echo will verify that the hash is set
+   to the password you expect.
 
    ```bash
-   ncn# openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) PASSWORD
+   ncn# read -s NEWPASSWORD
+   ncn# openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) "$NEWPASSWORD"
+   ncn# echo "Password: $NEWPASSWORD"
    ```
 
 1. Get the HashiCorp Vault root token:

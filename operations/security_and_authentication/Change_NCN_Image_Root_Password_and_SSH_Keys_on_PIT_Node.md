@@ -39,13 +39,6 @@ The Kubernetes image is used by the master and worker nodes.
    pit# unsquashfs kubernetes-0.1.69.squashfs
    ```
 
-1. Save the old SquashFS image, kernel, and initrd.
-
-   ```bash
-   pit# mkdir -v old
-   pit# mv -v *squashfs *kernel initrd* old
-   ```
-
 1. Copy the generated public and private SSH keys for the root account into the image.
 
    This example assumes that an RSA key was generated.
@@ -167,7 +160,7 @@ The Kubernetes image is used by the master and worker nodes.
    pit# mv 5.3.18-24.75-default.kernel 5.3.18-24.75-default-${VERSION}.kernel
    ```
 
-1. Set the boot links.
+1. Set the boot links. Skip this step if proceeding to the Ceph Image section below.
 
    ```bash
    pit# cd

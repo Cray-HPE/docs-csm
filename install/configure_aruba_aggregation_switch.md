@@ -387,7 +387,7 @@ These are ports that are connected to management nodes.
 
 ## Configure User Access/Login/Application Node Port
 
-- One connection will go to a NMN (VLAN2) access port, which is where the UAN will PXE boot and communicate with internal nodes (see SHCD for UAN cabling).
+- One connection will go to an NMN (VLAN2) access port, which is where the UAN will PXE boot and communicate with internal nodes (see SHCD for UAN cabling).
 - One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be a trunk port for the CAN connection.
 
 1. Set the Aruba UAN NMN configuration.

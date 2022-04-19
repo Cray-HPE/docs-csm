@@ -148,7 +148,7 @@ Critical Issues Resolved:
 * CFS should check if the configuration is valid/exists when a session is created.
 * CFS does not set session start time until after job starts.
 * CFS will not list pending sessions.
-* MEDS, should not overwrite a components credentials when a xname becomes present again.
+* MEDS, should not overwrite a components credentials when an xname becomes present again.
 * The Cray HSM locks command locked more nodes than specified.
 * HSM crashes when discovering Bard Peak.
 * Resources limits are hit on three NCN systems.
