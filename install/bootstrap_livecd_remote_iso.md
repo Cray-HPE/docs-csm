@@ -422,8 +422,6 @@ Some files are needed for generating the configuration payload. See the [Command
 
    1. Generate the system configuration
 
-      > **Note:** For those more familiar with a CSM install, this step may be skipped entirely by using `pit-init.sh`, as detailed in the [Bring-up the PIT Services and Validate PIT Health](#bring---up-the-pit-services-and-validate-pit-health) section.
-
       > **Note:** Make sure to select a reachable NTP pool/server (passed in via the `--ntp-pools`/`--ntp-servers` flags, respectively). Adding an unreachable server can cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
 
       ```bash
@@ -461,8 +459,6 @@ Some files are needed for generating the configuration payload. See the [Command
 1. **For first-time/initial installs (without a `system_config.yaml`file)**, generate the system configuration. See below for an explanation of the command line parameters and some common settings.
 
    1. Check for the configuration files. The needed files should be in the preperation directory.
-
-      > **Note:** For those more familiar with a CSM install, this step may be skipped entirely by using `pit-init.sh`, as detailed in the [Bring-up the PIT Services and Validate PIT Health](#bring---up-the-pit-services-and-validate-pit-health) section.
 
       ```bash
       pit# ls -1 ${PITDATA}/prep
@@ -584,9 +580,12 @@ Prepare the `site-init` directory by performing the [Prepare Site Init](prepare_
 <a name="bring---up-the-pit-services-and-validate-pit-health"></a>
 ## 5. Bring-up the PIT Services and Validate PIT Health
 
-1. Set the same variables from the `csi config init` step from earlier, and then invoke `pit-init.sh` to set up the PIT server for deploying NCNs.
-   > **Note:** `pit-init.sh` will re-run `csi config init`, copy all generated files into place, apply the CA patch, and finally restart daemons. This will also re-print the `metalid.sh` content in case it was skipped in the earlier step. **Re-installs** can skip running `csi config init` entirely and simply run `pit-init.sh` after gathering CSI input files into the `prep` directory.
+1. Initialize the PIT.
 
+   The `pit-init.sh` script will prepare the PIT server for deploying NCNs.
+
+   > Set the `USERNAME` and `IPMI_PASSWORD` variables to the credentials for the BMC of the PIT node.
+   >
    > `read -s` is used in order to prevent the credentials from being displayed on the screen or recorded in the shell history.
 
    ```bash
