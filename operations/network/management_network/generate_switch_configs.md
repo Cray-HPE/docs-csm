@@ -32,7 +32,7 @@ Select one of the following commands to generate a configuration file for a sing
 * Generate a configuration file for single switch:
 
   ```bash
-  ncn# canu generate switch config --csm 1.2 -a full --ccj cabling.json  --sls-file sls_file.json --name sw-spine-001 --folder generated
+  ncn# canu generate switch config --csm 1.2 -a full --ccj cabling.json  --sls-file sls_file.json --name sw-spine-001.cfg
   ```
 
 * Generate a configuration files for full system:
