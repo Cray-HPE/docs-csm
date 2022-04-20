@@ -354,7 +354,7 @@ All commands in this section must be run **on the node being removed** \(unless 
 1. Unmount partitions and remove the volume group.
 
     ```bash
-    ncn-w# umount -v /var/lib/kubelet /run/lib-containerd /run/containerd /var/lib/sdu
+    ncn-w# umount -v /var/lib/kubelet /run/lib-containerd /run/containerd /var/lib/s3fs_cache
     ncn-w# vgremove -f -v --select 'vg_name=~metal*'
     ```
 

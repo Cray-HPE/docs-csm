@@ -26,6 +26,12 @@ The following procedures can be run from any master or worker node.
    ncn-mw# pdsh -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] systemctl restart goss-servers
    ```
 
+1. Specify the admin user password for the management switches in the system.
+
+    ```bash
+    ncn-mw# export SW_ADMIN_PASSWORD='changeme'
+    ```
+
 1. Collect data about the various subsystems.
 
    ```bash
