@@ -109,7 +109,7 @@ The firmware will be updated and the PDU management processor will restart.
     ```bash
     ncn# cray hsm inventory ethernetInterfaces delete {ID}
     ```
-1. On the next `hms-discovery` job run, it should locate the PDU and discover it correctly as a HPE PDU.
+1. On the next `hms-discovery` job run, it should locate the PDU and discover it correctly as an HPE PDU.
     After waiting 5 minutes, verify the Ethernet interfaces that were previously deleted are now present:
     ```bash
     ncn# cray hsm inventory ethernetInterfaces list --type CabinetPDUController

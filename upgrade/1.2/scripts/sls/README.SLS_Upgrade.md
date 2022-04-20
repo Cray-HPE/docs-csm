@@ -1,6 +1,17 @@
 # Upgrade SLS Offline from CSM 1.0.x to CSM 1.2
 
-## TL;DR
+## Abstract
+
+During the update of SLS,at a minimum, answers to the following questions must be known prior to upgrading:
+1. _By default in 1.2 non-administrative user traffic will be migrated from the CAN to the CHN while minimizing changes. If you want it to continue to come in via the CAN, or if the site is Air-gapped, specify the correct options Will user traffic (non-administrative) come in via the CAN, CHN or is the site Air-gapped?_
+2. _What is the internal VLAN and the site-routable IP subnet for the new CAN or CHN?_
+3. _Is there a need to preserve any existing IP address(es) during the CAN-to-CMN migration?_
+   1. One example would be the `external-dns` IP address used for DNS lookups of system resources from site DNS servers. Changes to `external-dns` often require changes to site resources with requisite pr ocess and timeframes from other groups. For preserving `external-dns` IP addresses, the flag is `--preserve-existing-subnet-for-cmn external-dns`. WARNING: It is up to the user to compare pre-upgraded and post-upgraded SLS files for sanity. Specifically, in the case of preserving `external-dns` values, to prevent site-networking changes that might result in NCN IP addresses overlapping during the upgrade process. This requires network subnetting expertise and EXPERT mode below.
+   2. Another, mutually exclusive example is the need to preserve all NCN IP addresses related to the old CAN whilst migrating the new CMN. This preservation is not often needed as the transition of NCN IP addresses for the CAN-to-CMN is automatically handled during the upgrade. The flag to preserve CAN-to-CMN NCN IP addresses is mutually exclusive with other preservations and the flag is `--preserve-existing-subnet-for-cmn ncns`.
+   3. Should no preservation flag be set, the default behavior is to recalculate every IP address on the existing CAN while migrating to the CMN. The behavior in this case is to calculate the subnet sizesbased on number of devices (with a bit of spare room), while maximizing IP address pool sizes for (dynamic) services.
+
+
+## Procedure
 
 * Get a token:
 
