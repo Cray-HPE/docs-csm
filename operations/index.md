@@ -74,6 +74,7 @@ Build and customize image recipes with the Image Management Service (IMS).
    * [Upload and Register an Image Recipe](image_management/Upload_and_Register_an_Image_Recipe.md)
    * [Build a New UAN Image Using the Default Recipe](image_management/Build_a_New_UAN_Image_Using_the_Default_Recipe.md)
    * [Build an Image Using IMS REST Service](image_management/Build_an_Image_Using_IMS_REST_Service.md)
+   * [Import External Image to IMS](image_management/Import_External_Image_to_IMS.md)
    * [Customize an Image Root Using IMS](image_management/Customize_an_Image_Root_Using_IMS.md)
      * [Create UAN Boot Images](image_management/Create_UAN_Boot_Images.md)
      * [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
