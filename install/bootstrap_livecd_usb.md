@@ -291,8 +291,6 @@ Some files are needed for generating the configuration payload. See these topics
 
    1. Generate the system configuration
 
-      > **Note:** If it is desirable to expedite booting into the USB, this step may be skipped. Instead, after logging into the PIT for [#first time](#51-first-login) and running `pit-init`, the USB will gain connectivity and SSH. As long as the required files are present, then one may continue to the first time boot.
-
       > **Note:** Ensure that you select a reachable NTP pool/server passed in using the `--ntp-pools`/`--ntp-servers` flags, respectively. Adding an unreachable server can cause clock skew as chrony tries to continually reach out to a server it can never reach.
 
       ```bash
@@ -330,8 +328,6 @@ Some files are needed for generating the configuration payload. See these topics
 1. **For first-time/initial installs (without a `system_config.yaml`file)**, generate the system configuration. See below for an explanation of the command line parameters and some common settings.
 
    1. Check for the configuration files. The needed files should be in the preparation directory.
-
-     > **Note:** if it is desirable to expedite booting into the USB, this step may be skipped. Instead, after logging into the PIT for [#first time](#51-first-login) and running `pit-init` the USB will gain connectivity and SSH. As long as the required files are present then one may continue to the first time boot.
 
       ```bash
       linux# ls -1 ${PITDATA}/prep
@@ -772,8 +768,6 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
 1. Initialize the PIT.
 
    The `pit-init.sh` script will prepare the PIT server for deploying NCNs.
-
-   > **Note:** `pit-init` will re-run `csi config init`, copy all generated files into place, apply the CA patch, and finally restart daemons. This will also re-print the `metalid.sh` content in case it was skipped in the previous step. **Re-installs** can skip running `csi config init` entirely and simply run `pit-init.sh` after gathering CSI input files into `/var/www/ephemeral/prep`.
 
    ```bash
    pit# /root/bin/pit-init.sh
