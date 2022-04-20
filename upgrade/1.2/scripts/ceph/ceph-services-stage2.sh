@@ -43,3 +43,13 @@ if [[ $(hostname) =~ ncn-s00[1-3] ]]; then
   . /srv/cray/scripts/common/csi-configuration.sh
   create_k8s_storage_class
 fi
+
+echo "Enabling ceph services to start on boot and starting if stopped"
+for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));
+do
+  systemctl enable $service
+  if [[ $(systemctl is-active $service) != "active" ]]
+  then
+    systemctl restart $service
+  fi
+done
