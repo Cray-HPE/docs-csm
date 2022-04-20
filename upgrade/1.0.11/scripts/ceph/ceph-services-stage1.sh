@@ -38,7 +38,7 @@ echo "Reconfiguring keepalived"
 systemctl enable keepalived.service
 systemctl restart keepalived.service
 
-echo "Enabling ceph services to start on boot and starting if stopped"
+echo "Enabling Ceph services to start on boot and starting if stopped"
 for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));
 do
   systemctl enable $service
