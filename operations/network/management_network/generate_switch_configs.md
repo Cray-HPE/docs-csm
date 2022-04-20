@@ -47,5 +47,5 @@ You will need to modify following items from your command:
 * Generate a configuration files for full system:
 
   ```bash
-  ncn# canu generate switch config --csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --folder generated
+  ncn# canu generate network config --csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --folder generated
   ```
