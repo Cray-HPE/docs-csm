@@ -55,3 +55,24 @@ Follow these steps on any NCN to fix the issue:
 #### Validate
 
 Running the script again will produce this output:
+
+```
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+Examining /metal/boot/boot/kernel...kernel is OK.
+Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
+```
+
+<a name="power-capping"></a>
