@@ -5,11 +5,11 @@ The services are accessed via three different ingress gateways using a token tha
 
 This page describes how to run a set of tests to determine if the gateways are functioning properly. The gateway test will obtain an API token from Keycloak and then use that token to attempt to access a set of service APIs on one or more networks as defined in the gateway test definition file (`gateway-test-defn.yaml`). The test will check the return code to make sure it gets the expected response.
 
-When the nmnlb network is specified, it will use `api-gw-service-nmn.local` as an override for `nmnlb.<system-domain>` in 1.2. You can set `use-api-gw-override: false` in gateway-test-defn.yaml if you would like to disable that override and use `nmnlb.<system-domain>`.
+When the nmnlb network is specified, it will use `api-gw-service-nmn.local` as an override for `nmnlb.<system-domain>` in 1.2. You can set `use-api-gw-override: false` in `gateway-test-defn.yaml` if you would like to disable that override and use `nmnlb.<system-domain>`.
 
 ## Running gateway tests on an NCN
 
-The gateway test scripts can be found in `/usr/share/doc/csm/scripts/operations/gateway-test`. To test the gateways from an NCN you will need to use gateway-test.py.  When `gateway-test.py` is run from an NCN, it has access to the admin client secret using `kubectl`. It will use the admin client secret to get the token for accessing the APIs.
+The gateway test scripts can be found in `/usr/share/doc/csm/scripts/operations/gateway-test`. To test the gateways from an NCN, use `gateway-test.py`. When `gateway-test.py` is run from an NCN, it has access to the admin client secret using `kubectl`. It will use the admin client secret to get the token for accessing the APIs.
 
 You can run the test by executing the following command. You will need to specify the system domain (for example, `eniac.dev.cray.com`).
 
@@ -17,9 +17,9 @@ You can run the test by executing the following command. You will need to specif
 ncn# /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com
 ```
 
-The test will cycle through all of the test networks specified in gateway-test-defn.yaml.
+The test will cycle through all of the test networks specified in `gateway-test-defn.yaml`.
 
-```bash
+```yaml
 test-networks:
 - name: nmnlb
   gateway: services-gateway
@@ -31,7 +31,7 @@ test-networks:
   gateway: customer-user-gateway
 ```
 
-For each network it will attempt to obtain a token from keycloak.  On an NCN, it should be able to get a token from each of those networks.  It will then use that token to attempt to access each of the services defined in gateway-test-defn.yaml on each of the test-networks.   The test will be able to determine whether it should or should not be able to access the service and it will output a PASS or FAIL for each test depending on the actual results.
+For each network it will attempt to obtain a token from Keycloak. On an NCN, it should be able to get a token from each of those networks. It will then use that token to attempt to access each of the services defined in `gateway-test-defn.yaml` on each of the `test-networks`. The test will be able to determine whether it should or should not be able to access the service and it will output a PASS or FAIL for each test, depending on the actual results.
 
 ## Running gateway tests from UAN, Compute Node, or a device outside of the cluster
 
@@ -47,7 +47,7 @@ You will then need to set the ADMIN_CLIENT_SECRET environment variable to the ad
 linux# export ADMIN_CLIENT_SECRET=26947343-d4ab-403b-14e937dbd700
 ```
 
-You can run the tests by executing the following the command. You will need to specify the system domain (e.g. eniac.dev.cray.com).
+Run the tests by executing the following the command. The system domain (e.g. eniac.dev.cray.com) must be specified.
 
 ```bash
 linux# /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com
@@ -55,23 +55,23 @@ linux# /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.
 
 ## Running gateway tests on a UAI 
 
-To test the gateways from a UAI you will need to run `uai-gateway-test.sh`.  
+In order to test the gateways from a UAI, you will need to run `uai-gateway-test.sh`.
 
 This script will execute the following steps:
 
-* Create a UAI with a cray-uai-gateway-test image.
-* Pass the system domain, user network, and admin client secret to the test UAI.
-* Execute gateway-test.py on the node
-* Output the results
-* Delete the test UAI
+1. Create a UAI with a `cray-uai-gateway-test` image.
+1. Pass the system domain, user network, and admin client secret to the test UAI.
+1. Execute `gateway-test.py` on the node.
+1. Output the results.
+1. Delete the test UAI.
 
-You can run the test by executing the following command.
+Run the test by executing the following command.
 
 ```bash
 ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
 ```
 
-The test will find the first UAI gateway-test image to create the test UAI.  If you prefer to specify a different image, you can use the --imagename option.
+The test will find the first UAI `cray-uai-gateway-test` image to create the test UAI. A different image may optionally be specified by using the `--imagename` option.
 
 The test will use /root/.ssh/id_rsa.pub as the default public key for creating the test UAI.  If you wish to use a different key, you can use the --publickey option.
 
@@ -80,18 +80,16 @@ The test will use /root/.ssh/id_rsa.pub as the default public key for creating t
 The results of running the tests will show the following
 
 * Retrieval of a token on the CMN network in order to get SLS data to determine which networks are defined on the system
-* For each of the test networks...
-    * Retrieval of a token on the network under test
+* For each of the test networks:
+    * Retrieval of a token on the network under test.
     * Results from each of the networks defined in `gateway-test-defn.yaml`. It will attempt to access each of the services with the token and check the expected results.
     * It will show PASS or FAIL depending on the expected response for the service and the token being used.
     * It will show SKIP for services that are not expected to be installed on the system.
-* The return code at the end of gateway-test.py will be non-zero if any of the tests within it fail or we are unable to retrieve a token on any of the networks that are expected to be accessible.
+* The return code of `gateway-test.py` will be non-zero if any of the tests within it fail or we are unable to retrieve a token on any of the networks that are expected to be accessible.
 
-### Running from an NCN that is configured with CHN as the user network. 
+### Running from an NCN that is configured with CHN as the user network
 
 ```bash
-# ./gateway-test.py eniac.dev.cray.com
-
 ncn-m001# ./gateway-test.py eniac.dev.cray.com
 auth.cmn.eniac.dev.cray.com is reachable
 Token successfully retrieved at https://auth.cmn.eniac.dev.cray.com/keycloak/realms/shasta/protocol/openid-connect/token
