@@ -44,7 +44,7 @@ if [[ $(hostname) =~ ncn-s00[1-3] ]]; then
   create_k8s_storage_class
 fi
 
-echo "Enabling ceph services to start on boot and starting if stopped"
+echo "Enabling Ceph services to start on boot and starting if stopped"
 for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));
 do
   systemctl enable $service
