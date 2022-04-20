@@ -111,17 +111,20 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
         ncn-m# kubectl -n services delete cm cray-ipxe-bss-ipxe
         ```
     
-    1.  Put the original iPXE bootscript into place:
+    2.  Put the original iPXE bootscript into place:
         ```bash
-        ncn-m# kubectl -n services apply -f cray-ipxe-bss-ipxe.backup.yaml
+        ncn-m# cp cray-ipxe-bss-ipxe.backup.yaml cray-ipxe-bss-ipxe.yaml
+        ncn-m# yq d -i cray-ipxe-bss-ipxe.yaml metadata.resourceVersion
+        ncn-m# yq d -i cray-ipxe-bss-ipxe.yaml metadata.uid
+        ncn-m# kubectl -n services apply -f cray-ipxe-bss-ipxe.yaml
         ```
     
-    1.  Take note of the last timestamp in the `cray-ipxe` log:
+    3.  Take note of the last timestamp in the `cray-ipxe` log:
         ```bash
         ncn-m# kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe
         ```
 
-    1.  Wait for the updated iPXE binary to be built:
+    4.  Wait for the updated iPXE binary to be built:
         ```bash
         ncn-m# sleep 30
         ncn-m# kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
