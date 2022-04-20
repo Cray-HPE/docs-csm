@@ -7,14 +7,14 @@ Afterwards, the IMS customization workflow automatically copies the NCN CA publi
 
 ### Prerequisites
 
-- System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
-    - `cray-ims`, the Image Management Service \(IMS\)
-    - `cray-nexus`, the Nexus repository manager service
-- `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
-- An IMS created image root archive or a pre-built image root SquashFS archive is available to customize.
-- The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
-- A token providing Simple Storage Service \(S3\) credentials has been generated.
-- When customizing an image using IMS Image Customization, once chrooted into the image root \(if using a \`jailed\` environment\), the image will only have access to whatever configuration the image already contains. In order to talk to services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable DNS resolution.
+* System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
+  * `cray-ims`, the Image Management Service \(IMS\)
+  * `cray-nexus`, the Nexus repository manager service
+* `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
+* An IMS registered image root archive or a pre-built image root SquashFS archive is available to customize.
+* The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
+* A token providing Simple Storage Service \(S3\) credentials has been generated.
+* When customizing an image using IMS Image Customization, once chrooted into the image root \(if using a \`jailed\` environment\), the image will only have access to whatever configuration the image already contains. In order to talk to services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable DNS resolution.
 
 
 ### Limitations
@@ -77,133 +77,9 @@ Afterwards, the IMS customization workflow automatically copies the NCN CA publi
 
 3.  Determine if the image root being used is in IMS and ready to be customized.
 
-    IMS requires that the image root being used meets the following criteria:
-
-    -   It is in SquashFS format.
-    -   It has been uploaded to S3 via the Cray CLI.
-    -   It is registered with the IMS service.
-    Select one of the following options based on the current state of the image root being used:
-
-    -   If the image root being customized meets the above requirements, proceed to [Locate an IMS Image to Customize](#locate).
-    -   If the image root being customized is not in SquashFS format, refer to [Convert TGZ Archives to SquashFS Images](Convert_TGZ_Archives_to_SquashFS_Images.md).
-    -   If the image root being customized is in SquashFS format and in S3, but not registered with the IMS service, proceed to [Register the Image Root with the IMS Service](#register).
-
-**Create an IMS Image Record**
-
-4.  Create a new IMS image record for the image.
-
-    ```bash
-    ncn# cray ims images create --name $IMS_ROOTFS_FILENAME
-
-    created = "2018-12-04T17:25:52.482514+00:00"
-    id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
-    name = "sles_15_image.squashfs"
-    ```
-
-    If successful, create a variable for the id value in the returned data.
-
-    ```bash
-    ncn# export IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
-    ```
-
-**Upload Image Artifacts to S3**
-
-The steps in this section apply only if the SquashFS image root is not yet in S3.
-
-5.  Upload the image root to S3.
-
-    ```bash
-    ncn# cray artifacts create boot-images $IMS_IMAGE_ID $IMS_ROOTFS_FILENAME $IMS_ROOTFS_FILENAME
-    ncn# export IMS_ROOTFS_MD5SUM=`md5sum $IMS_ROOTFS_FILENAME | awk '{ print $1 }'`
-    ```
-
-6.  Upload the kernel for the image to S3.
-
-    ```bash
-    ncn# export IMS_KERNEL_FILENAME=vmlinuz
-    ncn# cray artifacts create boot-images $IMS_IMAGE_ID $IMS_KERNEL_FILENAME \
-    image-root/boot/$IMS_KERNEL_FILENAME
-    ncn# export IMS_KERNEL_MD5SUM=`md5sum image-root/boot/$IMS_KERNEL_FILENAME | awk '{ print $1 }'`
-    ```
-
-7.  Upload the initrd for the image to S3.
-
-    ```bash
-    ncn# export IMS_INITRD_FILENAME=initrd
-    ncn# cray artifacts create boot-images $IMS_IMAGE_ID $IMS_INITRD_FILENAME \
-    image-root/boot/$IMS_INITRD_FILENAME
-    ncn# export IMS_INITRD_MD5SUM=`md5sum image-root/boot/$IMS_INITRD_FILENAME | awk '{ print $1 }'`
-    ```
-
-**Create an Image Manifest and Upload it to S3**
-
-Cray uses a manifest file that associates multiple related boot artifacts \(kernel, initrd, rootfs\) into an image description that is used by IMS and other services to boot nodes. Artifacts listed within the manifest are identified by a `type` value:
-
-- application/vnd.cray.image.rootfs.squashfs
-- application/vnd.cray.image.initrd
-- application/vnd.cray.image.kernel
-- application/vnd.cray.image.parameters.boot
-
-8.  Generate an image manifest file.
-
-    ```bash
-    ncn# cat <<EOF> manifest.json
-    {
-      "created": "`date '+%Y-%m-%d %H:%M:%S'`",
-      "version": "1.0",
-      "artifacts": [
-        {
-          "link": {
-              "path": "s3://boot-images/$IMS_IMAGE_ID/$IMS_ROOTFS_FILENAME",
-              "type": "s3"
-          },
-          "md5": "$IMS_ROOTFS_MD5SUM",
-          "type": "application/vnd.cray.image.rootfs.squashfs"
-        },
-        {
-          "link": {
-              "path": "s3://boot-images/$IMS_IMAGE_ID/$IMS_KERNEL_FILENAME",
-              "type": "s3"
-          },
-          "md5": "$IMS_KERNEL_MD5SUM",
-          "type": "application/vnd.cray.image.kernel"
-        },
-        {
-          "link": {
-              "path": "s3://boot-images/$IMS_IMAGE_ID/$IMS_INITRD_FILENAME",
-              "type": "s3"
-          },
-          "md5": "$IMS_INITRD_MD5SUM",
-          "type": "application/vnd.cray.image.initrd"
-        }
-      ]
-    }
-    EOF
-    ```
-
-9.  Upload the manifest to S3.
-
-    ```bash
-    ncn# cray artifacts create boot-images $IMS_IMAGE_ID/manifest.json manifest.json
-    ```
-<a name="register"></a>
-**Register the Image Root with the IMS Service**
-
-10. Update the IMS image record.
-
-    ```bash
-    ncn# cray ims images update $IMS_IMAGE_ID \
-    --link-type s3 \
-    --link-path s3://boot-images/$IMS_IMAGE_ID/manifest.json
-    created = "2018-12-04T17:25:52.482514+00:00"
-    id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
-    name = "sles_15_image.squashfs"
-
-    [link]
-    type = "s3"
-    path = "s3://boot-images/4e78488d-4d92-4675-9d83-97adfc17cb19/manifest.json"
-    etag = ""
-    ```
+    * If the image to be customized is already known to IMS, proceed to [Locate an IMS Image to Customize](#locate).
+    * If the image to be customized was created outside of IMS and is not yet known to IMS, proceed to [Import External Image to IMS](Import_External_Image_to_IMS.md).
+    * To build an image from an existing IMS recipe, proceed to [Build an Image Using IMS REST Service](Build_an_Image_Using_IMS_REST_Service.md).
 
 <a name="locate"></a>
 
