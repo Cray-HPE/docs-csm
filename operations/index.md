@@ -26,6 +26,7 @@ The following administrative topics can be found in this guide:
   - [System Configuration Service](#system-configuration-service)
   - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
   - [Hardware Management (HM) Collector](#hardware-management-hm-collector)
+  - [HPE Power Distribution Unit (PDU)](#hpe-power-distribution-unit-pdu)
   - [Node Management](#node-management)
   - [Network](#network)
     - [Management Network](#management-network)
@@ -73,6 +74,7 @@ Build and customize image recipes with the Image Management Service (IMS).
    * [Upload and Register an Image Recipe](image_management/Upload_and_Register_an_Image_Recipe.md)
    * [Build a New UAN Image Using the Default Recipe](image_management/Build_a_New_UAN_Image_Using_the_Default_Recipe.md)
    * [Build an Image Using IMS REST Service](image_management/Build_an_Image_Using_IMS_REST_Service.md)
+   * [Import External Image to IMS](image_management/Import_External_Image_to_IMS.md)
    * [Customize an Image Root Using IMS](image_management/Customize_an_Image_Root_Using_IMS.md)
      * [Create UAN Boot Images](image_management/Create_UAN_Boot_Images.md)
      * [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
@@ -490,6 +492,14 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
 The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system.
 
  * [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
+
+<a name="hpe-power-distribution-unit-pdu"></a>
+
+## HPE Power Distribution Unit (PDU)
+
+Procedures for managing and setting up HPE PDUs.
+
+ * [HPE PDU Admin Procedure](hpe_pdu/hpe_pdu_admin_procedures.md)
 
 <a name="node-management"></a>
 

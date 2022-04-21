@@ -4,20 +4,23 @@ The Pre-Install Toolkit (PIT) node needs to be bootstrapped from the LiveCD. The
 to bootstrap the PIT node: the RemoteISO or a bootable USB device. This procedure describes using the USB
 device. If not using the USB device, see [Bootstrap PIT Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md).
 
-There are 5 overall steps that provide a bootable USB with SSH enabled, capable of installing Shasta v1.5 (or higher).
+These steps provide a bootable USB with SSH enabled, capable of installing this CSM release.
 
 ## Topics
-   1. [Download and Expand the CSM Release](#download-and-expand-the-csm-release)
-   1. [Create the Bootable Media](#create-the-bootable-media)
-   1. [Configuration Payload](#configuration-payload)
-      1. [Generate Installation Files](#generate-installation-files)
-         1. [Subsequent Fresh-Installs (Re-Installs)](#subsequent-fresh-installs-re-installs)
-         1. [First-Time/Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal)
-      1. [Prepare Site Init](#prepare-site-init)
-   1. [Prepopulate LiveCD Daemons Configuration and NCN Artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
-   1. [Boot the LiveCD](#boot-the-livecd)
-      1. [First Login](#first-login)
-   1. [Next Topic](#next-topic)
+
+1. [Download and Expand the CSM Release](#download-and-expand-the-csm-release)
+1. [Create the Bootable Media](#create-the-bootable-media)
+1. [Configuration Payload](#configuration-payload)
+   1. [Generate Installation Files](#generate-installation-files)
+      * [Subsequent Installs (Reinstalls)](#subsequent-fresh-installs-re-installs)
+      * [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal)
+   1. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
+   1. [Prepare Site Init](#prepare-site-init)
+1. [Prepopulate LiveCD Daemons Configuration and NCN Artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
+1. [Boot the LiveCD](#boot-the-livecd)
+   1. [First Login](#first-login)
+1. [Configure the Running LiveCD](#configure-the-running-livecd)
+1. [Next Topic](#next-topic)
 
 <a name="download-and-expand-the-csm-release"></a>
 ## 1. Download and Expand the CSM Release
@@ -34,39 +37,50 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 1. Set up the initial typescript.
 
    ```bash
-   linux# script -af csm-install-usb.$(date +%Y-%m-%d).txt
+   linux# SCRIPT_FILE=$(pwd)/csm-install-usb.$(date +%Y-%m-%d).txt
+   linux# script -af ${SCRIPT_FILE}
    linux# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   ```
+
+1. Set and export helper variables.
+
+   > **Important:** All CSM install procedures for preparing the PIT node assume that these variables are set
+   > and exported.
+
+   ```bash
+   pit# export CSM_RELEASE=csm-x.y.z
+   pit# export SYSTEM_NAME=eniac
+   pit# export PITDATA=/mnt/pitdata
    ```
 
 1. Download and expand the CSM software release.
 
-   **Important:** In order to ensure that the CSM release plus any patches, documentation updates,
-   or hotfixes are included, follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
+   **Important:** Ensure that you have the CSM release plus any patches or hotfixes by
+   following the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
 
    **Important:** Download to a location that has sufficient space for both the tarball and the expanded tarball.
 
-   > Note: Expansion of the tarball may take more than 45 minutes.
-
-   The rest of this procedure will use the `CSM_RELEASE` and `CSM_PATH` variables.
+   > **Important:** All CSM install procedures for preparing the PIT node assume that the `CSM_PATH` variable
+   > has been set and exported.
+   >
+   > **Note:** Expansion of the tarball may take more than 45 minutes.
 
    ```bash
-   linux# CSM_RELEASE=csm-x.y.z
-   linux# echo $CSM_RELEASE
    linux# tar -zxvf ${CSM_RELEASE}.tar.gz
    linux# ls -l ${CSM_RELEASE}
-   linux# CSM_PATH=$(pwd)/${CSM_RELEASE}
+   linux# export CSM_PATH=$(pwd)/${CSM_RELEASE}
    ```
 
    The ISO and other files are now available in the directory from the extracted CSM tarball.
 
-1. Install/upgrade CSI; check if a newer version was included in the tarball.
+<a name="install-csi-rpm"></a>
+1. Install the latest version of CSI tool.
 
    ```bash
-   linux# rpm -Uvh $(find ./${CSM_RELEASE}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
+   linux# rpm -Uvh $(find ${CSM_PATH}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
 
-1. Download and install/upgrade the documentation RPM. If this machine does not have direct internet
-   access this RPM will need to be externally downloaded and then copied to this machine.
+1. Install the latest documentation RPM.
 
    See [Check for Latest Documentation](../update_product_stream/index.md#documentation)
 
@@ -110,8 +124,8 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
      from the `${CSM_PATH}/rpm/embedded` directory.
 
       ```bash
-      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/podman-*.x86_64.rpm
-      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Containers/15-SP2/x86_64/update/podman-cni-config-*.noarch.rpm
+      linux# rpm -Uvh $(find ${CSM_PATH}/rpm/embedded -name "podman-*.x86_64.rpm" | sort -V | tail -1) \
+                      $(find ${CSM_PATH}/rpm/embedded -name "podman-cni-config-*.noarch.rpm" | sort -V | tail -1)
       ```
 
 1. Install `lsscsi` to view attached storage devices.
@@ -129,7 +143,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
      from the `${CSM_PATH}/rpm/embedded` directory.
 
       ```bash
-      linux# rpm -Uvh ${CSM_PATH}/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/lsscsi-*.x86_64.rpm
+      linux# rpm -Uvh $(find ${CSM_PATH}/rpm/embedded -name "lsscsi-*.x86_64.rpm" | sort -V | tail -1)
       ```
 
 <a name="create-the-bootable-media"></a>
@@ -168,10 +182,10 @@ which device will be used for it.
     * On Linux, use the CSI application to do this:
 
         ```bash
-        linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+        linux# csi pit format ${USB} ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
         ```
 
-        > Note: If the previous command fails with the following error message, it indicates that this Linux computer does not have the checkmedia RPM installed. In that case, the RPM can be installed and `csi pit format` can be run again
+        > **Note:** If the previous command fails with the following error message, it indicates that this Linux computer does not have the checkmedia RPM installed. In that case, the RPM can be installed and `csi pit format` can be run again
         > ```
         > ERROR: Unable to validate ISO. Please install checkmedia
         > ```
@@ -180,28 +194,32 @@ which device will be used for it.
         >
         >   ```bash
         >   linux# zypper in --repo ${CSM_RELEASE}-embedded -y libmediacheck5 checkmedia
-        >   linux# csi pit format $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+        >   linux# csi pit format ${USB} ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
         >   ```
 
-    * On MacOS, use the `write-livecd.sh` script to do this:
+    * On MacOS, use the `write-livecd.sh` script to do this.
+    
+        This script is contained in the CSI tool RPM. See [install latest version of the CSI tool](#install-csi-rpm) step.
 
         ```bash
-        macos# ./cray-site-init/write-livecd.sh $USB ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+        macos# write-livecd.sh ${USB} ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
         ```
 
-    > NOTE: At this point the USB device is usable in any server with an x86_64 architecture based CPU. The remaining steps help add the installation data and enable SSH on boot.
+    > **Note:** At this point, the USB device is usable in any server with a CPU with x86_64 architecture. The remaining steps help add the installation data and enable SSH on boot.
 
-1. Mount the configuration and persistent data partition:
+1. Mount the configuration and persistent data partitions.
 
     ```bash
-    linux# mkdir -pv /mnt/{cow,pitdata}
-    linux# mount -vL cow /mnt/cow && mount -vL PITDATA /mnt/pitdata
+    linux# mkdir -pv /mnt/{cow,pitdata} && 
+           mount -vL cow /mnt/cow && 
+           mount -vL PITDATA ${PITDATA} && 
+           mkdir -pv ${PITDATA}/{admin,configs} ${PITDATA}/prep/{admin,logs} ${PITDATA}/data/{k8s,ceph}
     ```
 
 1.  Copy and extract the tarball into the USB:
     ```bash
-    linux# cp -v ${CSM_PATH}.tar.gz /mnt/pitdata/
-    linux# tar -zxvf ${CSM_PATH}.tar.gz -C /mnt/pitdata/
+    linux# cp -v ${CSM_PATH}.tar.gz ${PITDATA} &&
+           tar -zxvf ${CSM_PATH}.tar.gz -C ${PITDATA}/
     ```
 
 The USB device is now bootable and contains the CSM artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
@@ -209,10 +227,11 @@ The USB device is now bootable and contains the CSM artifacts. This may be usefu
 <a name="configuration-payload"></a>
 ## 3. Configuration Payload
 
-The SHASTA-CFG structure and other configuration files will be prepared, then `csi` will generate system-unique configuration payload used for the rest of the CSM installation on the USB device.
+The SHASTA-CFG structure and other configuration files will be prepared, then `csi` will generate a system-unique configuration payload. This payload will be used for the rest of the CSM installation on the USB device.
 
-* [Generate Installation Files](#generate-installation-files)
-* [Prepare Site Init](#prepare-site-init)
+1. [Generate Installation Files](#generate-installation-files)
+1. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
+1. [Prepare Site Init](#prepare-site-init)
 
 <a name="generate-installation-files"></a>
 ### 3.1 Generate Installation Files
@@ -222,16 +241,9 @@ Some files are needed for generating the configuration payload. See these topics
    * [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload)
    * [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files)
 
-> **`NOTE`**: The USB device is usable at this time, but without SSH enabled as well as core services. This means the USB device could be used to boot the system now, and a user can return to this step at another time.
+> **Note:**: The USB device is usable at this time, but without SSH enabled as well as core services. This means the USB device could be used to boot the system now, and a user can return to this step at another time.
 
 1. At this time see [Create HMN Connections JSON](create_hmn_connections_json.md) for instructions about creating the `hmn_connections.json`.
-
-1. Change into the preparation directory plus necessary PIT directories (for later):
-
-   ```bash
-   linux# mkdir -pv /mnt/pitdata/admin /mnt/pitdata/prep /mnt/pitdata/configs /mnt/pitdata/data/{k8s,ceph}
-   linux# cd /mnt/pitdata/prep
-   ```
 
 1. Pull these files into the current working directory, or create them if this is a first-time/initial install:
 
@@ -242,25 +254,28 @@ Some files are needed for generating the configuration payload. See these topics
    - `switch_metadata.csv`
    - `system_config.yaml` (only available after [first-install generation of system files](#first-timeinitial-installs-bare-metal)
 
-   > The optional `application_node_config.yaml` file may be provided for further defining of settings relating to how application nodes will appear in HSM for roles and subroles. See [Create Application Node YAML](create_application_node_config_yaml.md)
+   > The optional `application_node_config.yaml` file may be provided for further definition of settings relating to how application nodes will appear in HSM for roles and subroles. See [Create Application Node YAML](create_application_node_config_yaml.md)
 
    > The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some VLAN overrides. See [Create Cabinets YAML](create_cabinets_yaml.md).
 
-   > The `system_config.yaml` is required for a re-install, because it was created during a previous session of configuration generation. For a first time install, the information in it must be provided as command line arguments to `csi config init`.
+   > The `system_config.yaml` file is generated by the `csi` tool during the first install of a system, and can later be used for reinstalls of the system. For the initial install, the information in it must be provided as command line arguments to `csi config init`.
 
-   After gathering the files into this working directory, move on to [Subsequent Fresh-Installs (Re-Installs)](#subsequent-fresh-installs-re-installs).
+1. Proceed to the appropriate next step.
+
+   * If this is the initial install of the system, then proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
+   * If this is a reinstall of the system, then proceed to [Subsequent Installs (Re-Installs)](#subsequent-fresh-installs-re-installs).
 
 <a name="subsequent-fresh-installs-re-installs"></a>
-#### 3.1.a Subsequent Fresh-Installs (Re-Installs)
+#### 3.1.a Subsequent Installs (Reinstalls)
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
 
-   > **`SKIP STEP IF`** if the `system_config.yaml` file is unavailable please skip this step and move onto the next one in order to generate the first configuration payload.
+   > **SKIP STEP IF** if the `system_config.yaml` file is unavailable please skip this step and move onto the next one in order to generate the first configuration payload.
 
-   1. Check for the configuration files. The needed files should be in the current directory.
+   1. Check for the configuration files. The needed files should be in the preperation directory.
 
       ```bash
-      linux:/mnt/pitdata/prep# ls -1
+      linux# ls -1 ${PITDATA}/prep
       ```
 
       Expected output looks similar to the following:
@@ -274,31 +289,17 @@ Some files are needed for generating the configuration payload. See these topics
       system_config.yaml
       ```
 
-   1. Set an environment variable so this system name can be used in later commands.
-
-      ```bash
-      linux:/mnt/pitdata/prep# export SYSTEM_NAME=eniac
-      ```
-
    1. Generate the system configuration
 
-   > **`NOTE`** if it is desirable to expedite booting into the USB, this step may be skipped. Instead, after logging into the PIT for [#first time](#51-first-login) and running `pit-init` the USB will gain connectivity and SSH. As long as the required files are present then one may continue to the first time boot.
-
-   > **`NOTE`** ensure you select a reachable NTP pool/server passed in via the `--ntp-pools`/`--ntp-servers` flags, respectively. Adding an unreachable server can cause clock skew as chrony tries to continually reach out to a server it can never reach.
-
+      > **Note:** Ensure that you select a reachable NTP pool/server passed in using the `--ntp-pools`/`--ntp-servers` flags, respectively. Adding an unreachable server can cause clock skew as chrony tries to continually reach out to a server it can never reach.
 
       ```bash
-      linux:/mnt/pitdata/prep# csi config init
-
-      # Verify the newly generated configuration payload's `system_config.yaml` matches the current version of CSI.
-      # NOTE: Keep this new system_config.yaml somewhere safe to facilitate re-installs.
-      linux:/mnt/pitdata/prep# cat ${SYSTEM_NAME}/system_config.yaml
-      linux:/mnt/pitdata/prep# csi version
+      linux# cd ${PITDATA}/prep && csi config init
       ```
 
-      A new directory matching your `--system-name` argument will now exist in your working directory.
+      A new directory matching the `system-name` field in `system_config.yaml` will now exist in the working directory.
 
-      > **`NOTE`** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
+      > **Note:** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
       >
       > * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
       >    ```
@@ -319,19 +320,17 @@ Some files are needed for generating the configuration payload. See these topics
       >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >    ```
 
-   1. Skip the next step and continue to [prepare site init](#prepare-site-init).
+   1. Skip the next step and continue to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
 
 <a name="first-timeinitial-installs-bare-metal"></a>
-#### 3.1.b First-Time/Initial Installs (bare-metal)
+#### 3.1.b Initial Installs (bare-metal)
 
 1. **For first-time/initial installs (without a `system_config.yaml`file)**, generate the system configuration. See below for an explanation of the command line parameters and some common settings.
 
-   1. Check for the configuration files. The needed files should be in the current directory.
-
-     > **`NOTE`** if it is desirable to expedite booting into the USB, this step may be skipped. Instead, after logging into the PIT for [#first time](#51-first-login) and running `pit-init` the USB will gain connectivity and SSH. As long as the required files are present then one may continue to the first time boot.
+   1. Check for the configuration files. The needed files should be in the preparation directory.
 
       ```bash
-      linux:/mnt/pitdata/prep# ls -1
+      linux# ls -1 ${PITDATA}/prep
       ```
 
       Expected output looks similar to the following:
@@ -344,17 +343,11 @@ Some files are needed for generating the configuration payload. See these topics
       switch_metadata.csv
       ```
 
-   1. Set an environment variable so this system name can be used in later commands.
-
-      ```bash
-      linux:/mnt/pitdata/prep# export SYSTEM_NAME=eniac
-      ```
-
    1. Generate the system config:
-      > **`NOTE`** the provided command below is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary significatnly depending on ones system and site configuration.
+      > **Note:** the provided command below is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary significatnly depending on ones system and site configuration.
 
       ```bash
-      linux:/mnt/pitdata/prep# csi config init \
+      linux# cd ${PITDATA}/prep && csi config init \
           --bootstrap-ncn-bmc-user root \
           --bootstrap-ncn-bmc-pass ${IPMI_PASSWORD} \
           --system-name ${SYSTEM_NAME} \
@@ -378,18 +371,13 @@ Some files are needed for generating the configuration payload. See these topics
           --cabinets-yaml cabinets.yaml \
           --hmn-mtn-cidr 10.104.0.0/17 \
           --nmn-mtn-cidr 10.100.0.0/17 \
-
-      # Verify the newly generated configuration payload's `system_config.yaml` matches the current version of CSI.
-      # NOTE: Keep this new system_config.yaml somewhere safe to facilitate re-installs.
-      linux:/mnt/pitdata/prep# cat ${SYSTEM_NAME}/system_config.yaml
-      linux:/mnt/pitdata/prep# csi version
       ```
 
-      A new directory matching your `--system-name` argument will now exist in your working directory.
+      A new directory matching the `--system-name` argument will now exist in the working directory.
 
-      > **`IMPORTANT`** After generating a configuration, a visual audit of the generated files for network data should be performed.
+      > **Important:** After generating a configuration, a visual audit of the generated files for network data should be performed.
 
-      > **`SPECIAL NOTES`** Certain parameters to `csi config init` may be hard to grasp on first-time configuration generations:
+      > **Special Notes:** Certain parameters to `csi config init` may be hard to grasp on first-time configuration generations:
       >
       > * The `application_node_config.yaml` file is optional, but if one has one describing the mapping between prefixes in `hmn_connections.csv` that should be mapped to HSM subroles, one needs to include a command line option to have it used. See [Create Application Node YAML](create_application_node_config_yaml.md).
       > * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management NCNs.
@@ -403,7 +391,7 @@ Some files are needed for generating the configuration payload. See these topics
       > * For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. If one are using a `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
       > * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
 
-      > **`SPECIAL/IGNORABLE WARNINGS`** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored:
+      > **Ignorable Warnings:** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored:
       >
       > * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
       >
@@ -425,85 +413,128 @@ Some files are needed for generating the configuration payload. See these topics
       >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >    ```
 
-   1. Continue to the next step to [prepare site init](#prepare-site-init).
+   1. Continue to the next step to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
+
+<a name="verify-csi-versions-match"></a>
+### 3.2 Verify and Backup `system_config.yaml`
+
+1. Verify that the newly generated `system_config.yaml` matches the current version of CSI.
+
+   1. View the new `system_config.yaml` file and note the CSI version reported near the end of the file.
+
+      ```bash
+      linux# cat ${PITDATA}/prep/${SYSTEM_NAME}/system_config.yaml
+      ```
+
+   1. Note the version reported by the `csi` tool.
+
+      ```bash
+      linux# csi version
+      ```
+
+   1. The two versions should match. If they do not, determine the cause and regenerate the file.
+
+1. Copy the new `system_config.yaml` file somewhere safe to facilitate re-installs.
+
+1. Continue to the next step to [prepare site init](#prepare-site-init).
 
 <a name="prepare-site-init"></a>
-### 3.2 Prepare Site Init
+### 3.3 Prepare Site Init
 
-> **`NOTE`**: It is assumed at this point that `/mnt/pitdata` is still mounted on the linux system, this is important as the following procedure depends on that mount existing.
+> **Note:**: It is assumed at this point that `$PITDATA` (that is, `/mnt/pitdata`) is still mounted on the Linux system. This is important because the following procedure depends on that mount existing.
 
 1. Install Git if not already installed (recommended).
 
-    Although not strictly required, the procedures for setting up the
+   Although not strictly required, the procedures for setting up the
    `site-init` directory recommend persisting `site-init` files in a Git
    repository.
 
-1. Follow all of the [Prepare Site Init](prepare_site_init.md) procedures.
+1. Prepare the `site-init` directory.
+
+   Perform the [Prepare Site Init](prepare_site_init.md) procedures.
 
 <a name="prepopulate-livecd-daemons-configuration-and-ncn-artifacts"></a>
 ## 4. Prepopulate LiveCD Daemons Configuration and NCN Artifacts
 
-Now that the configuration is generated, we can populate the LiveCD with the generated files.
+Now that the configuration is generated, the LiveCD must be populated with the generated files.
 
-This will enable SSH, and other services when the LiveCD starts.
-
-1. Set system name and enter prep directory if one has not already (one should already be here from the previous section).
+1. Set system name and enter prep directory.
 
     ```bash
-    linux# export SYSTEM_NAME=eniac
-    linux# cd /mnt/pitdata/prep
+    linux# cd ${PITDATA}/prep
     ```
 
 1. Use CSI to populate the LiveCD with networking files so SSH will work on the first boot.
 
-   > **`NOTE`** ll other files will be copied in by "PIT init" in a later step, after booting into the USB stick).
+   ```bash
+   linux# csi pit populate cow /mnt/cow/ ${SYSTEM_NAME}/
+   ```
 
-    ```bash
-    linux:/mnt/pitdata/prep# csi pit populate cow /mnt/cow/ ${SYSTEM_NAME}/
-    ```
+   Expected output looks similar to the following:
 
-    Expected output looks similar to the following:
-
-    ```
-    config------------------------> /mnt/cow/rw/etc/sysconfig/network/config...OK
-    ifcfg-bond0-------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0...OK
-    ifcfg-lan0--------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0...OK
-    ifcfg-bond0.nmn0--------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0.nmn0...OK
-    ifcfg-bond0.hmn0--------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0.hmn0...OK
-    ifcfg-bond0.can0--------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0.can0...OK
-    ifcfg-bond0.cmn0--------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0.cmn0...OK
-    ifroute-lan0------------------> /mnt/cow/rw/etc/sysconfig/network/ifroute-lan0...OK
-    ifroute-bond0.nmn0------------> /mnt/cow/rw/etc/sysconfig/network/ifroute-bond0.nmn0...OK
-    CAN.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/CAN.conf...OK
-    CMN.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/CMN.conf...OK
-    HMN.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/HMN.conf...OK
-    NMN.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/NMN.conf...OK
-    MTL.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/MTL.conf...OK
-    statics.conf------------------> /mnt/cow/rw/etc/dnsmasq.d/statics.conf...OK
-    conman.conf-------------------> /mnt/cow/rw/etc/conman.conf...OK
-    ```
+   ```
+   config------------------------> /mnt/cow/rw/etc/sysconfig/network/config...OK
+   ifcfg-bond0-------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0...OK
+   ifcfg-lan0--------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0...OK
+   ifcfg-bond0.nmn0--------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0.nmn0...OK
+   ifcfg-bond0.hmn0--------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0.hmn0...OK
+   ifcfg-bond0.can0--------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0.can0...OK
+   ifcfg-bond0.cmn0--------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0.cmn0...OK
+   ifroute-lan0------------------> /mnt/cow/rw/etc/sysconfig/network/ifroute-lan0...OK
+   ifroute-bond0.nmn0------------> /mnt/cow/rw/etc/sysconfig/network/ifroute-bond0.nmn0...OK
+   CAN.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/CAN.conf...OK
+   CMN.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/CMN.conf...OK
+   HMN.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/HMN.conf...OK
+   NMN.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/NMN.conf...OK
+   MTL.conf----------------------> /mnt/cow/rw/etc/dnsmasq.d/MTL.conf...OK
+   statics.conf------------------> /mnt/cow/rw/etc/dnsmasq.d/statics.conf...OK
+   conman.conf-------------------> /mnt/cow/rw/etc/conman.conf...OK
+   ```
 
 1. Set the hostname and print it into the hostname file.
 
-   > **`NOTE`** Do not confuse other administrators by naming the LiveCD `ncn-m001`. Please append the `-pit` suffix,
-   > that will indicate that the node is booted from the LiveCD.
+   > **Note:** Do not confuse other administrators by naming the LiveCD `ncn-m001`. Append the `-pit` suffix,
+   > indicating that the node is booted from the LiveCD.
 
    ```bash
-   linux:/mnt/pitdata/prep# echo "${SYSTEM_NAME}-ncn-m001-pit" >/mnt/cow/rw/etc/hostname
+   linux# echo "${SYSTEM_NAME}-ncn-m001-pit" | tee /mnt/cow/rw/etc/hostname
    ```
 
-1. Unmount the Overlay, we are done with it
+1. Add some helpful variables to the PIT environment.
+
+   By adding these to the `/etc/environment` file of the PIT image, these variables will be
+   automatically set and exported in shell sessions on the booted PIT node.
+
+   > **Important:** All CSM install procedures on the booted PIT node assume that these variables
+   > are set and exported.
+   >
+   > **Note:** It is intentional that the `PITDATA` and `CSM_PATH` variables here have different
+   > values here than what was set earlier. This is because after booting from the PIT node, some
+   > paths will be different.
+   >
+   > The `echo` prepends a newline to ensure that the variable assignment occurs on a unique line,
+   > and not at the end of another line.
+
+   ```bash
+   linux# echo "
+   CSM_PATH=/var/www/ephemeral/${CSM_RELEASE}
+   CSM_RELEASE=${CSM_RELEASE}
+   PITDATA=/var/www/ephemeral
+   SYSTEM_NAME=${SYSTEM_NAME}" | tee -a /mnt/cow/rw/etc/environment
+   ```
+
+1. Unmount the overlay.
 
     ```bash
-    linux:/mnt/pitdata/prep# umount -v /mnt/cow
+    linux# umount -v /mnt/cow
     ```
 
-1. Copy the NCN artifacts:
+1. Copy the NCN artifacts.
 
-   1. Copy k8s artifacts:
+   1. Copy Kubernetes node artifacts:
 
        ```bash
-       linux:/mnt/pitdata/prep# csi pit populate pitdata "${CSM_PATH}/images/kubernetes/" /mnt/pitdata/data/k8s/ -kiK
+       linux# csi pit populate pitdata "${CSM_PATH}/images/kubernetes/" ${PITDATA}/data/k8s/ -kiK
        ```
 
        Expected output looks similar to the following:
@@ -514,10 +545,10 @@ This will enable SSH, and other services when the LiveCD starts.
        kubernetes-0.0.6.squashfs-------------------------> /mnt/pitdata/data/k8s/...OK
        ```
 
-   1. Copy Ceph/storage artifacts:
+   1. Copy Ceph/storage node artifacts:
 
        ```bash
-       linux:/mnt/pitdata/prep# csi pit populate pitdata "${CSM_PATH}/images/storage-ceph/" /mnt/pitdata/data/ceph/ -kiC
+       linux# csi pit populate pitdata "${CSM_PATH}/images/storage-ceph/" ${PITDATA}/data/ceph/ -kiC
        ```
 
        Expected output looks similar to the following:
@@ -528,21 +559,25 @@ This will enable SSH, and other services when the LiveCD starts.
        storage-ceph-0.0.5.squashfs-----------------------> /mnt/pitdata/data/ceph/...OK
        ```
 
-1. Quit the typescript session with the `exit` command and copy the file (csm-install-usb.<date>.txt) to the data partition on the USB drive.
+1. Quit the typescript session with the `exit` command and copy the typescript file to the data partition on the USB drive.
 
     ```bash
-    linux:/mnt/pitdata/prep# exit
-    linux:/mnt/pitdata/prep# cp ~/csm-install-usb.*.txt /mnt/pitdata/prep/admin
+    linux# exit
+    linux# cp -v ${SCRIPT_FILE} ${PITDATA}/prep/admin
     ```
 
 1. Unmount the data partition:
 
     ```bash
-    linux# cd; umount -v /mnt/pitdata
+    linux# cd; umount -v ${PITDATA}
     ```
 
-Now the USB device may be reattached to the management node, or if it was made on the management node then it can now
-reboot into the LiveCD.
+1. Move the USB device to the system to be installed, if needed.
+
+   If the USB device was created somewhere other than `ncn-m001` of the system to be installed, 
+   move it there from its current location.
+
+1. Proceed to the next step to boot into the LiveCD image.
 
 <a name="boot-the-livecd"></a>
 ## 5. Boot the LiveCD
@@ -550,50 +585,56 @@ reboot into the LiveCD.
 Some systems will boot the USB device automatically if no other OS exists (bare-metal). Otherwise the
 administrator may need to use the BIOS Boot Selection menu to choose the USB device.
 
-If an administrator has the node booted with an operating system which will next be rebooting into the LiveCD, then use `efibootmgr` to set the boot order to be the USB device. See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information about how to set the boot order to have the USB device first.
+If an administrator has the node booted with an operating system which will next be rebooting into the LiveCD,
+then use `efibootmgr` to set the boot order to be the USB device. See the 
+[set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information about how to set the
+boot order to have the USB device first.
 
-> UEFI booting must be enabled to find the USB device's EFI bootloader.
+> **Note:** UEFI booting must be enabled in order for the system to find the USB device's EFI bootloader.
 
-1. Start a typescript on an external system, such as a laptop or Linux system, to record this section of activities done on the console of `ncn-m001` via IPMI.
+1. Start a typescript on an external system.
+
+   This will record this section of activities done on the console of `ncn-m001` using IPMI.
 
    ```bash
    external# script -a boot.livecd.$(date +%Y-%m-%d).txt
    external# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-   Confirm that the IPMI credentials work for the BMC by checking the power status.
+1. Confirm that the IPMI credentials work for the BMC by checking the power status.
+
+   Set the `BMC` variable to the hostname or IP address of the BMC of the PIT node.
+
+   > `read -s` is used in order to prevent the credentials from being displayed on the screen or recorded in the shell history.
 
    ```bash
-   external# export SYSTEM_NAME=eniac
-   external# export USERNAME=root
-   external# export IPMI_PASSWORD=changeme
-   external# ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
+   external# BMC=eniac-ncn-m001-mgmt
+   external# read -s IPMI_PASSWORD
+   external# export IPMI_PASSWORD ; ipmitool -I lanplus -U root -E -H ${BMC} chassis power status
    ```
 
-   Connect to the IPMI console.
+1. Connect to the IPMI console.
 
    ```bash
-   external# ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
-   ncn-m001#
+   external# ipmitool -I lanplus -U root -E -H ${BMC} sol activate
    ```
 
-1. Reboot
+1. Reboot `ncn-m001`.
 
-    ```bash
-    ncn-m001# reboot
-    ```
+   ```bash
+   ncn-m001# reboot
+   ```
 
-Watch the shutdown and boot from the ipmitool session to the console terminal.
-The typescript can be discarded, otherwise if issues arise then it should be submitted with the bug report.
+1. Watch the shutdown and boot from the `ipmitool` console session.
 
-> **An integrity check** runs before Linux starts by default, it can be skipped by selecting "OK" in its prompt.
+   > **An integrity check** runs before Linux starts by default; it can be skipped by selecting `OK` in its prompt.
 
 <a name="first-login"></a>
 ### 5.1 First Login
 
-On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.
+On first log in (over SSH or at local console), the LiveCD will prompt the administrator to change the password.
 
-1. **The initial password is empty**; set the username of `root` and press `return` twice:
+1. **The initial password is empty**; enter the username of `root` and press `return` twice.
 
    ```
    pit login: root
@@ -611,20 +652,88 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    Welcome to the CRAY Pre-Install Toolkit (LiveOS)
    ```
 
-   > **`NOTE`** If this password ever becomes lost or forgotten, one may reset it by mounting the USB device on another computer. See [Reset root Password on LiveCD](reset_root_password_on_LiveCD.md) for information on clearing the password.
-
+   > **Note:** If this password ever becomes lost or forgotten, one may reset it by mounting the USB device on another computer. See [Reset root Password on LiveCD](reset_root_password_on_LiveCD.md) for information on clearing the password.
 
 1. Disconnect from IPMI console.
 
    Once the network is up so that SSH to the node works, disconnect from the IPMI console.
 
-   You can disconnect from the IPMI console by using the "~.", that is, the tilde character followed by a period character.
+   You can disconnect from the IPMI console by entering `~.`; That is, the tilde character followed by a period character.
 
-   Log in via `ssh` to the node as root and run `metalid.sh` to print the PIT's ID tag (this is used for referring to ones running PIT in any triage request).
+1. Exit the typescript started on the external system and use `scp` to transfer it to the PIT node.
+
+   > Set `PIT_NODE` variable to the site IP address or hostname of the PIT node.
 
    ```bash
-   external# ssh root@${SYSTEM_NAME}-ncn-m001
+   external# exit
+   external# PIT_NODE=eniac-ncn-m001
+   external# scp boot.livecd.*.txt root@${PIT_NODE}:/root
+   ```
+
+1. Log in to the PIT node as `root` using `ssh`.
+
+   ```bash
+   external# ssh root@${PIT_NODE}
+   ```
+
+1. Mount the data partition.
+
+   The data partition is set to `fsopt=noauto` to facilitate LiveCDs over virtual-ISO mount. Therefore, USB installations
+   need to mount this manually by running the following command.
+   
+   > **Note:** When creating the USB PIT image, this was mounted over `/mnt/pitdata`. Now that the USB PIT is booted,
+   > it will mount over `/var/www/ephemeral`. The FSLabel `PITDATA` is already in `/etc/fstab`, so the path is omitted
+   > in the following call to `mount`.
+
+   ```bash
+   pit# mount -vL PITDATA
+   ```
+
+1. Start a typescript to record this section of activities done on `ncn-m001` while booted from the LiveCD.
+
+   ```bash
+   pit# script -af /var/www/ephemeral/prep/admin/booted-csm-livecd.$(date +%Y-%m-%d).txt
+   pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   ```
+
+1. Verify that expected environment variables are set in the new login shell.
+
+   These were written into `/etc/environment` on the USB PIT image earlier in this procedure, before it was booted.
+
+   ```bash
+   pit# echo -e "CSM_PATH=${CSM_PATH}\nCSM_RELEASE=${CSM_RELEASE}\nPITDATA=${PITDATA}\nSYSTEM_NAME=${SYSTEM_NAME}"
+   ```
+
+1. Copy the typescript made on the external system into the `PITDATA` mount.
+
+   ```bash
+   pit# cp -v /root/boot.livecd.*.txt ${PITDATA}/prep/admin
+   ```
+
+1. Check hostname.
+
+   ```bash
+   pit# hostnamectl
+   ```
+
+   > **Note:** The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#` 
+   > in the documentation command prompts from this point onward.
+
+   > **Note:** If the hostname returned by the `hostnamectl` command is `pit`, then set the hostname manually with `hostnamectl`. In that case, be sure to append the `-pit` suffix to prevent masquerading a PIT node as a real NCN to administrators and automation.
+
+1. Print information about the booted PIT image.
+
+   There is nothing in the output that needs to be verified. This is run in order to ensure the information is
+   recorded in the typescript file, in case it is needed later. For example, this information is useful to include in
+   any bug reports or service queries for issues encountered on the PIT node.
+
+   ```bash
    pit# /root/bin/metalid.sh
+   ```
+   
+   Expected output looks similar to the following:
+
+   ```
    = PIT Identification = COPY/CUT START =======================================
    VERSION=1.5.7
    TIMESTAMP=20211028194247
@@ -643,29 +752,26 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    = PIT Identification = COPY/CUT END =========================================
    ```
 
-   Note: The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#` in the command prompts from this point onward.
-
 <a name="configure-the-running-livecd"></a>
 ## 6. Configure the Running LiveCD
 
-1. Start a typescript to record this section of activities done on `ncn-m001` while booted from the LiveCD.
+1. Set and export BMC credential variables.
+
+   > `read -s` is used in order to prevent the credentials from being displayed on the screen or recorded in the shell history.
 
    ```bash
-   pit# mkdir -pv /var/www/ephemeral/prep/admin
-   pit# script -af /var/www/ephemeral/prep/admin/booted-csm-livecd.$(date +%Y-%m-%d).txt
-   pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   pit# read -s IPMI_PASSWORD
+   pit# USERNAME=root
+   pit# export IPMI_PASSWORD USERNAME
    ```
 
-1. Set the same variables from the `csi config init` step from earlier, and then invoke "PIT init" to setup the PIT server for deploying NCNs.
-    > The data partition is set to `fsopt=noauto` to facilitate LiveCDs over virtual-ISO mount. USB installations need to mount this manually.
-   > **`NOTE`** `pit-init` will re-run `csi config init`, copy all generated files into place, apply the CA patch, and finally restart daemons. This will also re-print the `metalid.sh` content in case it was skipped in the previous step. **Re-installs** can skip running `csi config init` entirely and simply run `pit-init.sh` after gathering CSI input files into `/var/www/ephemeral/prep`.
+1. Initialize the PIT.
 
-    ```bash
-    pit# export SYSTEM_NAME=eniac
-    pit# export USERNAME=root
-    pit# export IPMI_PASSWORD=changeme
-    pit# /root/bin/pit-init.sh
-    ```
+   The `pit-init.sh` script will prepare the PIT server for deploying NCNs.
+
+   ```bash
+   pit# /root/bin/pit-init.sh
+   ```
 
 1. Start and configure NTP on the LiveCD for a fallback/recovery server.
 
@@ -673,26 +779,13 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# /root/bin/configure-ntp.sh
    ```
 
-1. Set shell environment variables.
-
-   The `CSM_RELEASE` and `CSM_PATH` variables will be used later.
-
-   ```bash
-   pit# cd /var/www/ephemeral
-   pit:/var/www/ephemeral# export CSM_RELEASE=csm-x.y.z
-   pit:/var/www/ephemeral# echo $CSM_RELEASE
-   pit:/var/www/ephemeral# export CSM_PATH=$(pwd)/${CSM_RELEASE}
-   pit:/var/www/ephemeral# echo $CSM_PATH
-   ```
-
 1. Install Goss Tests and Server
 
    The following assumes the `CSM_PATH` environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
-   pit:/var/www/ephemeral# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1)
-   pit:/var/www/ephemeral# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
-   pit:/var/www/ephemeral# cd
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1) \
+                         $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
    ```
 
 <a name="next-topic"></a>
