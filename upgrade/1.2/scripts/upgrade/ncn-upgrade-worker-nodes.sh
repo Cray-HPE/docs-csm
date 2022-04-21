@@ -83,7 +83,7 @@ state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    wget -q http://rgw-vip.nmn/ncn-utils/csi;chmod 0755 csi; mv csi /usr/local/bin/csi
+    wget -q http://rgw-vip.nmn/ncn-utils/csi;chmod 0755 csi; mv csi /usr/bin/csi
     csi pit validate --postgres
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
