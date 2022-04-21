@@ -1852,6 +1852,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
         ei["IPAddresses"] = []
 
         if interface == "mgmt0":
+            ei["Description"] = "- kea"
             for network in ["NMN", "CAN", "MTL", "HMN"]:
                 ei["IPAddresses"].append({"IPAddress": str(state.ncn_ips[network])})
 
@@ -1867,6 +1868,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
         bmc_ei = {}
         bmc_ei["MACAddress"] = bmc_mac
         bmc_ei["ComponentID"] = state.bmc_xname
+        bmc_ei["Description"] = "- kea"
         bmc_ei["IPAddresses"] = [{"IPAddress": str(state.bmc_ip)}]
 
         # Attempt creation of HSM EthernetInterface for the BMC
