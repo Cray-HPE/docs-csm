@@ -33,7 +33,7 @@ A healthy etcd cluster is available on the system. See [Check the Health and Bal
 2.  Check the status of the backup using the name returned in the output of the previous step.
 
     ```bash
-    ncn-w001# kubectl -n services get etcdbackup BACKUP_NAME -o yaml
+    ncn-w001# kubectl -n services get BACKUP_NAME -o yaml
     ```
 
     Example output:
