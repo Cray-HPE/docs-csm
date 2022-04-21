@@ -27,16 +27,16 @@ The following are the different architectures that can be specified:
 * ***Full*** – Aruba-based Leaf-Spine systems, usually customer production systems.
 * ***V1*** – Dell and Mellanox based systems of either a TDS or Full layout.
 
-Generating a configuration file can be done for a single switch, or for the full system. In below, example commands for both scenarios: 
+Generating a configuration file can be done for a single switch, or for the full system. Below are example commands for both scenarios:
 
 ***Important***
 
-You will need to modify following items from your command: 
+Modify the following items in your command:
 
-* --csm : Which CSM version configuration do you want to use. I.e.  1.2 or 1.0
-* --a   : Which architecture is the system based of. (See above)
-* --ccj : Match the ccj.json file to the one you created for your system.
-* --sls : Match the sls_file.json to the one you created for your system.
+* `--csm` : Which CSM version configuration do you want to use? For example, 1.2 or 1.0
+* `--a`   : What is the system architecture? (See above)
+* `--ccj` : Match the `ccj.json` file to the one you created for your system.
+* `--sls` : Match the `sls_file.json` to the one you created for your system.
 
 * Generate a configuration file for single switch:
 
