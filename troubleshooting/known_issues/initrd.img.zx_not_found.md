@@ -1,7 +1,6 @@
-<a name="initrd-not-found"></a>
-### `initrd.img.xz` Not Found
+# Known Issue: `initrd.img.xz` Not Found
 
-This is a problem that is fixed in CSM 1.0+, but if your system was upgraded from CSM 0.9 you may run into this. Below is the full error seen when attempting to boot:
+This is a problem that is fixed in CSM 1.0 and later, but if your system was upgraded from CSM 0.9 you may run into this. Below is the full error seen when attempting to boot:
 
 ```
 Loading Linux  ...
@@ -25,7 +24,7 @@ Press any key to continue...
 [    2.690969] ---[ end Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0) ]---
 ```
 
-#### Fix
+## Fix
 
 Follow these steps on any NCN to fix the issue:
 
@@ -41,9 +40,11 @@ Follow these steps on any NCN to fix the issue:
 
       ```bash
       ncn# for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' '); do
-               scp -r /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689 $i:/opt/cray/csm/workarounds/livecd-post-reboot/
+               scp -r /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689 \
+                    $i:/opt/cray/csm/workarounds/livecd-post-reboot/
             done
-      ncn# pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh'
+      ncn# pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
+            '/opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh'
       ```
 
    1. Remove the Shasta 1.4 install workaround RPM from the NCN.
@@ -52,7 +53,7 @@ Follow these steps on any NCN to fix the issue:
       ncn# rpm -e csm-install-workarounds
       ```
 
-#### Validate
+## Validate
 
 Running the script again will produce this output:
 
@@ -74,5 +75,3 @@ Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
 Examining /metal/boot/boot/kernel...kernel is OK.
 Examining /metal/boot/boot/initrd.img.xz...initrd.img.xz is OK.
 ```
-
-<a name="power-capping"></a>
