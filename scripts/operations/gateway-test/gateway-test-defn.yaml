@@ -24,7 +24,7 @@
 
 
 use-api-gw-override: true
-networks:
+test-networks:
 - name: nmnlb
   gateway: services-gateway
 - name: cmn
@@ -33,6 +33,8 @@ networks:
   gateway: customer-user-gateway
 - name: chn
   gateway: customer-user-gateway
+
+reachable-networks: [ "can", "chn" ]
 
 ingress_api_services:
 - name: cray-bos
@@ -167,13 +169,6 @@ ingress_api_services:
   expected-result: 200
   namespace: services
   gateways: ["services-gateway","customer-admin-gateway"]
-  project: CSM
-- name: gitea-vcs-web 
-  path: vcs
-  port: 443
-  expected-result: 200
-  namespace: services
-  gateways: ["services-gateway"]
   project: CSM
 - name: nmdv2-service
   path: apis/v2/nmd/dumps

@@ -26,6 +26,7 @@ The following administrative topics can be found in this guide:
   - [System Configuration Service](#system-configuration-service)
   - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
   - [Hardware Management (HM) Collector](#hardware-management-hm-collector)
+  - [HPE Power Distribution Unit (PDU)](#hpe-power-distribution-unit-pdu)
   - [Node Management](#node-management)
   - [Network](#network)
     - [Management Network](#management-network)
@@ -491,6 +492,14 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
 The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system.
 
  * [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
+
+<a name="hpe-power-distribution-unit-pdu"></a>
+
+## HPE Power Distribution Unit (PDU)
+
+Procedures for managing and setting up HPE PDUs.
+
+ * [HPE PDU Admin Procedure](hpe_pdu/hpe_pdu_admin_procedures.md)
 
 <a name="node-management"></a>
 
