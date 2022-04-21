@@ -31,7 +31,7 @@ Generating a configuration file can be done for a single switch, or for the full
 
 ***Important***
 
-You will need to modify following items from your command: 
+Modify the following items in your command:
 
 * --csm : Which CSM version configuration do you want to use. I.e.  1.2 or 1.0
 * --a   : Which architecture is the system based of. (See above)
