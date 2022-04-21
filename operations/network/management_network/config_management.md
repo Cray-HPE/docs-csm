@@ -2,7 +2,7 @@
 
 This page is designed for:
 
-- Showing users how initially save switch configurationss so they can be used again.
+- Showing users how initially save switch configurations so they can be used again.
 - Switching between saved configurations.
 
 > **CAUTION** All of these steps should be done using an out of band connection. This process is disruptive and will require downtime.
