@@ -78,6 +78,12 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
 
     **Important**: Save the `ifnames` and `bmc_mac` information if you plan to add this NCN back at some time in the future.
 
+1.  Shutdown cray-reds:
+
+    ```bash
+    ncn-mw# kubectl -n services scale deployment cray-reds --replicas=0
+    ```
+
 1.  Remove the node from SLS, HSM, and BSS:
 
     ```bash
@@ -102,6 +108,29 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
             bmc_mac: a4:bf:01:38:f4:54
 
     Successfully removed x3000c0s26b0n0 - ncn-s004
+    ```
+
+    **NOTE:**
+    If workers have been removed and the worker count is currently at two, a time out restarting cray-bss can be ignored. For example, the following failure output from `remove_management_ncn.py` can be ignored.
+
+    ```screen
+    Waiting for cray-bss to start.
+    Do not kill this script. The wait will timeout in 10 minutes if bss does not fully start up.
+    Ran:     kubectl -n services rollout status deployment cray-bss --timeout=600s
+    Error:          Failed: 1
+             stdout:
+    Waiting for deployment "cray-bss" rollout to finish: 0 out of 3 new replicas have been updated...
+    Waiting for deployment "cray-bss" rollout to finish: 1 out of 3 new replicas have been updated...
+    Waiting for deployment "cray-bss" rollout to finish: 2 out of 3 new replicas have been updated...
+
+             stderr:
+    error: timed out waiting for the condition
+    ```
+
+1.  Start cray-reds:
+
+    ```bash
+    ncn-mw# kubectl -n services scale deployment cray-reds --replicas=1
     ```
 
 1.  Verify the results by fetching the status of the management nodes:
