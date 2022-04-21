@@ -27,7 +27,7 @@ The following are the different architectures that can be specified:
 * ***Full*** – Aruba-based Leaf-Spine systems, usually customer production systems.
 * ***V1*** – Dell and Mellanox based systems of either a TDS or Full layout.
 
-Generating a configuration file can be done for a single switch, or for the full system. In below, example commands for both scenarios: 
+Generating a configuration file can be done for a single switch, or for the full system. Below are example commands for both scenarios:
 
 ***Important***
 
