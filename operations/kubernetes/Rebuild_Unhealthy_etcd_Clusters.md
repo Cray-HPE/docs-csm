@@ -102,16 +102,15 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
     ncn-w001# kubectl -n services get etcd cray-cps-etcd -o yaml > /root/etcd/cray-cps-etcd.yaml
     ```
 
-2.  Edit each .yaml file to remove the entire line for creationTimestamp, generation, resourceVersion, selfLink, uid, and everything after status \(including status\).
+2.  Edit each .yaml file to remove the entire line for creationTimestamp, generation, resourceVersion, uid, and everything after status \(including status\).
 
     For example:
 
-    ```screen
+    ```
     creationTimestamp: "2019-11-26T16:54:23Z"
     generation: 1
 
     resourceVersion: "5340297"
-    selfLink: /apis/extensions/v1beta1/namespaces/services/deployments/cray-bos
     uid: 65f4912e-106d-11ea-88b0-b42e993e060a
 
     status:
