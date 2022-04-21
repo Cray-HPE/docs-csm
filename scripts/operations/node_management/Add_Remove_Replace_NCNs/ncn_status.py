@@ -169,6 +169,7 @@ class State:
         self.components = collections.OrderedDict()
         self.ipmi_password = None
         self.ipmi_username = None
+        self.run_ipmitool = False
         self.bmc_mac = None
 
     def add_ip_reservation(self, ip, name, aliases):
@@ -228,15 +229,18 @@ class State:
                 # The following info is needed by add_management_ncn.py when adding the given hardware as an ncn
                 lines.append('ncn_macs:')
                 lines.append(f'    ifnames: {", ".join(asked_for_component.ifnames)}')
-                if self.ipmi_password and self.ipmi_username:
-                    if self.bmc_mac:
-                        lines.append(f'    bmc_mac: {self.bmc_mac}')
+                if self.run_ipmitool:
+                    if self.ipmi_password and self.ipmi_username:
+                        if self.bmc_mac:
+                            lines.append(f'    bmc_mac: {self.bmc_mac}')
+                        else:
+                            lines.append('    bmc_mac: # Unknown. Something unexpected happened running ipmitool. ' +
+                                         'Rerun ncn_sts.py with the option -v')
                     else:
-                        lines.append('    bmc_mac: Unknown. something unexpected happened running ipmitool. ' +
-                                     'Rerun ncn_sts.py with the option -v')
+                        lines.append('    bmc_mac: # Unknown. To get this value set the environment variable, ' +
+                                     'IPMI_PASSWORD, with the password for the BMC')
                 else:
-                    lines.append('    bmc_mac: # Unknown. To get this value set the environment variables: ' +
-                                 'IPMI_USERNAME, IPMI_PASSWORD with the correct values for the BMC')
+                    lines.append(f'    bmc_mac: # Unknown. This script is always unable to collect this for ncn-m001')
 
         return '\n'.join(lines)
 
@@ -683,6 +687,9 @@ def check_for_running_pods_on_ncn(state):
 
 def create_ipmitool_actions(state):
     command_actions = []
+    if not state.run_ipmitool:
+        return command_actions
+
     if state.ncn_name and state.ipmi_password and state.ipmi_username:
         mc_info_action = CommandAction([
             'ipmitool', '-I', 'lanplus', '-U', state.ipmi_username, '-E', '-H', f'{state.ncn_name}-mgmt',
@@ -797,8 +804,10 @@ def main(argv):
 
         session.headers.update({'Content-Type': 'application/json'})
 
-        state.ipmi_username = os.environ.get('IPMI_USERNAME')
         state.ipmi_password = os.environ.get('IPMI_PASSWORD')
+        state.ipmi_username = os.environ.get('IPMI_USERNAME')
+        if not state.ipmi_username:
+            state.ipmi_username = 'root'
 
         sls_actions = create_sls_actions(session, state)
         print_actions(sls_actions)
@@ -808,6 +817,9 @@ def main(argv):
 
         bss_actions = create_bss_actions(session, state)
         print_actions(bss_actions)
+
+        # ncn-m001 does not use DHCP. It is assigned a static IP.
+        state.run_ipmitool = state.ncn_name != 'ncn-m001'
 
         ipmitool_actions = create_ipmitool_actions(state)
         print_command_actions(ipmitool_actions)
