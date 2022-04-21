@@ -3,7 +3,7 @@
 ## CSM 1.2.0
 CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature development, and documentation improvements. Below are some of the highlights
 
-## What's New
+## New
 
 ### Monitoring
 * New Dashboard for network traffic dashboard

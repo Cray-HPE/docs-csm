@@ -30,7 +30,7 @@ CAN switch	cfcanb6s1	 	 	-	46	sw-25g02	x3000	u40	-	j36
 
 With this information we know that we need to backup the configuration on port 36 on both spine switches.
 
-Log into the switches. Get the configurationss of the ports and the default route. Save this output; this will be used after we apply the generated configurations.
+Log into the switches. Get the configurations of the ports and the default route. Save this output; this will be used after we apply the generated configurations.
 
 ### Aruba
 
