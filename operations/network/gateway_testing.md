@@ -113,8 +113,6 @@ ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
 The test will find the first UAI `cray-uai-gateway-test` image to create the test UAI. A different image may optionally
 be specified by using the `--imagename` option.
 
-The test will use /root/.ssh/id_rsa.pub as the default public key for creating the test UAI.  If you wish to use a different key, you can use the --publickey option.
-
 ## Example Results
 
 The results of running the tests will show the following
