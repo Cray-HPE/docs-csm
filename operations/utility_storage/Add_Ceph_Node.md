@@ -29,11 +29,11 @@
     ncn-s# /usr/share/doc/csm/scripts/join_ceph_cluster.sh
     ```
 
-    **IMPORTANT:** In the output from `watch ceph -s` the health should go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about `failed to probe daemons or devices`, but this should clear on its own.
+    **IMPORTANT:** In the output from `watch ceph -s` the health should go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about `failed to probe daemons or devices`, but this should clear on its own. In addition, it may take up to 5 minutes for the added OSDs to report as `up`.  This is dependent on the Ceph Orchestrator performing an inventory and completing batch processing to add the OSDs.
 
 ## Zapping OSDs
 
-**IMPORTANT:** Only do this if you were not able to wipe the node prior to rebuild.
+**IMPORTANT:** Only do this if you are 100% certain you need to erase data from a previous install.
 
 **NOTE:** The commands in this section will need to be run from a node running `ceph-mon`. Typically `ncn-s001`, `ncn-s002`, or `ncn-s003`.
 
@@ -90,13 +90,13 @@
    - If running Rados Gateway on all nodes is the desired configuration then run:
 
       ```bash
-      ceph orch apply rgw site1 zone1 --placement="*"
+      ncn-s00(1/2/3)# ceph orch apply rgw site1 zone1 --placement="*" --port=8080
       ```
 
    - If deploying to select nodes then do:
 
      ```bash
-     ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
+     ncn-s00(1/2/3)# ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
      ```
 
 1. Verify that Rados Gateway is running on the desired nodes.
@@ -116,6 +116,8 @@
 
 1. Add nodes into HAproxy and KeepAlived. Adjust the command based on the number of storage nodes.
 
+   - If the node was rebuilt:
+
      ```bash
      ncn-s# source /srv/cray/scripts/metal/update_apparmor.sh; reconfigure-apparmor
      ncn-s# pdsh -w ncn-s00[1-(end node number)] -f 2 \
@@ -125,6 +127,57 @@
                 systemctl restart keepalived.service'
      ```
 
+   - If the node was added:
+
+     Determine the IP address of the added node.
+   
+     ```bash
+     ncn-s# cloud-init query ds | jq -r ".meta_data[].host_records[] | select(.aliases[]? == \"$(hostname)\") | .ip" 2>/dev/null
+     ```
+
+     Example Output:
+
+     ```
+     10.252.1.13
+     ```
+
+     Update the HAproxy config to include the added node. Select a storage node `ncn-s00x` from `ncn-s001`, `ncn-s002`, or `ncn-s003`. This cannot be done from the added node.
+
+     ```
+     ncn-s00x# vi /etc/haproxy/haproxy.cfg
+     ```
+
+     This example adds or updates `ncn-s004` with the IP address `10.252.1.13` to `backend rgw-backend`.
+
+     ```
+     ...
+     backend rgw-backend
+         option forwardfor
+         balance static-rr
+         option httpchk GET /
+             server server-ncn-s001-rgw0 10.252.1.6:8080 check weight 100
+             server server-ncn-s002-rgw0 10.252.1.5:8080 check weight 100
+             server server-ncn-s003-rgw0 10.252.1.4:8080 check weight 100
+             server server-ncn-s004-rgw0 10.252.1.13:8080 check weight 100   <--- Added or updated line
+     ...
+     ```
+
+     Copy the updated HAproxy config to all the storage nodes. Adjust the command based on the number of storage nodes.
+
+     ```bash
+     ncn-s00x# pdcp -w ncn-s00[1-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
+     ```
+      
+     Configure `apparmor` and KeepAlived **on the added node** and restart the services across all the storage nodes.
+
+     ```bash
+     ncn-s# source /srv/cray/scripts/metal/update_apparmor.sh; reconfigure-apparmor
+     ncn-s# /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf
+     ncn-s# export  PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no"
+     ncn-s# pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service; systemctl restart keepalived.service'
+     ```
+
 ## Next Step
 
-Proceed to [Storage Node Validation](../node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
+- If rebuilding the storage node, proceed to [Storage Node Validation](../node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
+- If adding the storage node, proceed to [Boot NCN - Add storage node to the Ceph cluster](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn-storage-nodes-only)
