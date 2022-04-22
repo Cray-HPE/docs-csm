@@ -3,26 +3,27 @@
 The configuration payload consists of the information which must be known about the HPE Cray EX system so it
 can be passed to the `csi` (Cray Site Init) program during the CSM installation process.
 
-Information gathered from a site survey is needed to feed into the CSM installation process, such as system name, system size, site network information for the CAN, site DNS configuration, site NTP configuration, network information for the node used to bootstrap the installation. More detailed component level information about the system hardware is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadsheet prepared by HPE Cray Manufacturing to assemble the components of the system and connect appropriately labeled cables.
+Information gathered from a site survey is needed to feed into the CSM installation process, such as system name,
+system size, site network information for the CAN, site DNS configuration, site NTP configuration, network
+information for the node used to bootstrap the installation. More detailed component level information about the
+system hardware is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadsheet prepared by HPE Cray
+Manufacturing to assemble the components of the system and connect appropriately labeled cables.
 
 How the configuration payload is prepared depends on whether this is a first time install of CSM
 software on this system or the CSM software is being reinstalled. The reinstall scenario has the
 advantage of being able to use the configuration payload from a previous first time install of CSM
 and an extra configuration file which that generated.
 
+## Topics
 
-### Topics:
-
-   * [Command Line Configuration Payload](#command_line_configuration_payload)
-   * [Configuration Payload Files](#configuration_payload_files)
-   * [First Time Install](#first_time_install)
-   * [Reinstall](#reinstall)
-   * [Next Topic](#next-topic)
-
-## Details
+* [Command Line Configuration Payload](#command_line_configuration_payload)
+* [Configuration Payload Files](#configuration_payload_files)
+* [First Time Install](#first_time_install)
+* [Reinstall](#reinstall)
+* [Next Topic](#next-topic)
 
 <a name="command_line_configuration_payload"></a>
-### Command Line Configuration Payload
+## Command Line Configuration Payload
 
 This information from a site survey can be given to the `csi` command as command line arguments.
 The information is shown here to explain what data is needed. It will not be used until moving
@@ -31,7 +32,9 @@ to the procedure [Bootstrap PIT Node](index.md#bootstrap_pit_node)
 The air-cooled cabinet is known to `csi` as a `river` cabinet. The liquid-cooled cabinets are either
 `mountain` or `hill` (if a TDS system).
 
-For more description of these settings and the default values, see [Default IP Address Ranges](../introduction/csm_overview.md#default_ip_address_ranges) and the other topics in [CSM Overview](../introduction/csm_overview.md)
+For more description of these settings and the default values, see
+[Default IP Address Ranges](../introduction/csm_overview.md#default_ip_address_ranges) and the other topics in
+[CSM Overview](../introduction/csm_overview.md)
 
 | CSI option | Information |
 | --- | --- |
@@ -53,11 +56,11 @@ For more description of these settings and the default values, see [Default IP A
 | --nmn-mtn-cidr 10.100.0.0/17 | Override the default cabinet IPv4 subnet for Mountain NMN |
 | --ntp-pools time.nist.gov | External NTP pool(s) for this system to use |
 | --site-domain dev.cray.com | Domain name for this system |
-| --site-ip 172.30.53.79/20 | IP address and netmask for the PIT node lan0 connection |
+| --site-ip 172.30.53.79/20 | IP address and netmask for the PIT node `lan0` connection |
 | --site-gw 172.30.48.1 | Gateway for the PIT node to use |
-| --site-nic p1p2 | NIC on the PIT node to become lan0 |
+| --site-nic p1p2 | NIC on the PIT node to become `lan0` |
 | --site-dns 172.30.84.40 | Site DNS servers to be used by the PIT node |
-| --install-ncn-bond-members p1p1,p10p1 | NICs on each management node to become bond0 |
+| --install-ncn-bond-members p1p1,p10p1 | NICs on each management node to become `bond0` |
 | --application-node-config-yaml application_node_config.yaml | Name of `application_node_config.yaml` |
 | --cabinets-yaml cabinets.yaml | Name of `cabinets.yaml` |
 | --bgp-peers aggregation | Override the default BGP peers, using aggregation switches instead of spines |
@@ -77,9 +80,9 @@ For more description of these settings and the default values, see [Default IP A
    * For systems that use non-sequential cabinet id numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. See [Create Cabinets YAML](create_cabinets_yaml.md).
 
 <a name="configuration_payload_files"></a>
-### Configuration Payload Files
+## Configuration Payload Files
 
-A few configuration files are needed for the installation of Shasta v1.5. These are all provided to the `csi`
+A few configuration files are needed for the installation of CSM. These are all provided to the `csi`
 command during the installation process.
 
 | Filename | Source | Information |
@@ -95,7 +98,7 @@ HPE Cray Manufacturing is the best source of data for `hmn_connections.json`. Th
 require collection of MAC addresses from the management nodes because that information is not present in the SHCD.
 
 <a name="cabinets_yaml"></a>
-#### `cabinets.yaml`
+### `cabinets.yaml`
 
 The `cabinets.yaml` file describes the type of cabinets in the system, the number of each type of cabinet,
 and the starting cabinet ID for every cabinet in the system. This file can be used to indicate that a system
@@ -109,7 +112,7 @@ should have all management nodes.
 See [Create Cabinets YAML](create_cabinets_yaml.md) for instructions about creating this file.
 
 <a name="application_node_config_yaml"></a>
-#### `application_node_config.yaml`
+### `application_node_config.yaml`
 
 The `application_node_config.yaml` file controls how the `csi config init` command finds and treats
 application nodes discovered in the `hmn_connections.json` file when building the SLS Input file.
@@ -122,7 +125,7 @@ more hostname aliases.
 See [Create Application Node YAML](create_application_node_config_yaml.md) for instructions about creating this file.
 
 <a name="hmn_connections_json"></a>
-#### `hmn_connections.json`
+### `hmn_connections.json`
 
 The `hmn_connections.json` file is extracted from the HMN tab of the SHCD spreadsheet. The CSM release
 includes the `hms-shcd-parser` container which can be used on the PIT node booted from the LiveCD (RemoteISO
@@ -131,7 +134,7 @@ or USB device) or a Linux system to do this extraction. Although some informatio
 No action is required to create this file at this point, and will be created when the PIT node is bootstrapped.
 
 <a name="ncn_metadata_csv"></a>
-#### `ncn_metadata.csv`
+### `ncn_metadata.csv`
 
 The information in the `ncn_metadata.csv` file identifies each of the management nodes, assigns the function
 as a master, worker, or storage node, and provides the MAC address information needed to identify the BMC and
@@ -145,7 +148,7 @@ which enable partial data collection below in [First Time Install](#first_time_i
 See [Create NCN Metadata CSV](create_ncn_metadata_csv.md) for instructions about creating this file.
 
 <a name="switch_metadata_csv"></a>
-#### `switch_metadata.csv`
+### `switch_metadata.csv`
 
 The `switch_metadata.csv` file is manually created to include information about all spine, aggregation, CDU,
 and leaf switches in the system. None of the Slingshot switches for the HSN should be included in this file.
@@ -153,7 +156,7 @@ and leaf switches in the system. None of the Slingshot switches for the HSN shou
 See [Create Switch Metadata CSV](create_switch_metadata_csv.md) for instructions about creating this file.
 
 <a name="first_time_install"></a>
-### First Time Install
+## First Time Install
 
 The process to install for the first time must collect the information needed to create these files.
 
@@ -174,7 +177,7 @@ The process to install for the first time must collect the information needed to
    See [Create Switch Metadata CSV](create_switch_metadata_csv.md) for instructions about creating this file.
 
 <a name="reinstall"></a>
-### Reinstall
+## Reinstall
 
 The process to reinstall must have the configuration payload files available.
 
@@ -207,9 +210,7 @@ The process to reinstall must have the configuration payload files available.
       ```
 
 <a name="next-topic"></a>
-# Next Topic
+## Next Topic
 
-   After completing this procedure the next step is to prepare the management nodes.
-
-   * See [Prepare Management Nodes](index.md#prepare_management_nodes)
+After completing this procedure the next step is to prepare the management nodes. See [Prepare Management Nodes](index.md#prepare_management_nodes)
 
