@@ -332,7 +332,7 @@ All commands in this section must be run **on the node being removed** \(unless 
 1. Unmount etcd and `SDU`, and remove the volume group
 
    ```bash
-   ncn-m# umount -v /run/lib-etcd /var/lib/etcd /var/lib/sdu
+   ncn-m# umount -v /run/lib-etcd /var/lib/etcd /var/lib/s3fs_cache /var/lib/admin-tools
    ncn-m# vgremove -f -v --select 'vg_name=~metal*'
    ```
 
@@ -391,7 +391,7 @@ All commands in this section must be run **on the node being removed** \(unless 
 1. Unmount and remove the metalvg0 volume group
 
    ```bash
-   ncn-s# umount -v /etc/ceph ; umount -v /var/lib/ceph ; umount -v /var/lib/containers
+   ncn-s# umount -v /etc/ceph /var/lib/ceph /var/lib/containers
    ncn-s# vgremove -f metalvg0
    ```
 
