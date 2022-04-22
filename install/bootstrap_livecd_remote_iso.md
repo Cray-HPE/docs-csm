@@ -135,6 +135,36 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    = PIT Identification = COPY/CUT END =========================================
    ```
 
+1. Find a local disk for storing product installers.
+
+   ```bash
+   pit# disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print $2}' | head -n 1 | tr -d '\n')"
+   pit# echo $disk
+   pit# parted --wipesignatures -m --align=opt --ignore-busy -s /dev/$disk -- mklabel gpt mkpart primary ext4 2048s 100%
+   pit# mkfs.ext4 -L PITDATA "/dev/${disk}1"
+   pit# mount -vL PITDATA
+   ```
+
+   The `parted` command may give an error similar to the following:
+   ```text
+   Error: Partition(s) 4 on /dev/sda have been written, but we have been unable to inform the kernel of the change, probably
+   because it/they are in use. As a result, the old partition(s) will remain in use. You should reboot now before making
+   further changes.
+   ```
+
+   In that case, the following steps may resolve the problem without needing to reboot. These commands remove
+   volume groups and raid arrays that may be using the disk. **These commands only need to be run if the earlier
+   `parted` command failed.**
+
+   ```bash
+   pit# RAIDS=$(grep "${disk}[0-9]" /proc/mdstat | awk '{ print "/dev/"$1 }') ; echo ${RAIDS}
+   pit# VGS=$(echo ${RAIDS} | xargs -r pvs --noheadings -o vg_name 2>/dev/null) ; echo ${VGS}
+   pit# echo ${VGS} | xargs -r -t -n 1 vgremove -f -v
+   pit# echo ${RAIDS} | xargs -r -t -n 1 mdadm -S -f -v
+   ```
+
+   After running the above procedure, retry the `parted` command which failed. If it succeeds, resume the install from that point.
+
 1. <a name="set-up-site-link"></a>Set up the site-link, enabling SSH to work. You can reconnect with SSH after this step.
    > **Note:** If your site's network authority or network administrator has already provisioned a DHCP IPv4 address for your master node's external NIC(s), **then skip this step**.
 
@@ -190,6 +220,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
          ```bash
          pit# CSM_RELEASE=csm-x.y.z
          pit# SYSTEM_NAME=eniac
+         pit# PITDATA=$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)
          ```
 
       1. Add variables to the PIT environment.
@@ -202,9 +233,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
          ```bash
          pit# echo "
-         CSM_PATH=/var/www/ephemeral/${CSM_RELEASE}
          CSM_RELEASE=${CSM_RELEASE}
-         PITDATA=/var/www/ephemeral
+         PITDATA=${PITDATA}
+         CSM_PATH=${PITDATA}/${CSM_RELEASE}
          SYSTEM_NAME=${SYSTEM_NAME}" | tee -a /etc/environment
          ```
 
@@ -241,35 +272,6 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       > in the documentation command prompts from this point onward.
 
       > **Note:** If the hostname returned by the `hostnamectl` command is `pit`, then re-run the `csi-set-hostname.sh` script with the same parameters. Otherwise, an administrator should set the hostname manually with `hostnamectl`. In the latter case, be sure to append the `-pit` suffix to prevent masquerading a PIT node as a real NCN to administrators and automation.
-
-1. Find a local disk for storing product installers.
-
-   ```bash
-   pit# disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print $2}' | head -n 1 | tr -d '\n')"
-   pit# echo $disk
-   pit# parted --wipesignatures -m --align=opt --ignore-busy -s /dev/$disk -- mklabel gpt mkpart primary ext4 2048s 100%
-   pit# mkfs.ext4 -L PITDATA "/dev/${disk}1"
-   ```
-
-   The `parted` command may give an error similar to the following:
-   ```text
-   Error: Partition(s) 4 on /dev/sda have been written, but we have been unable to inform the kernel of the change, probably
-   because it/they are in use. As a result, the old partition(s) will remain in use. You should reboot now before making
-   further changes.
-   ```
-
-   In that case, the following steps may resolve the problem without needing to reboot. These commands remove
-   volume groups and raid arrays that may be using the disk. **These commands only need to be run if the earlier
-   `parted` command failed.**
-
-   ```bash
-   pit# RAIDS=$(grep "${disk}[0-9]" /proc/mdstat | awk '{ print "/dev/"$1 }') ; echo ${RAIDS}
-   pit# VGS=$(echo ${RAIDS} | xargs -r pvs --noheadings -o vg_name 2>/dev/null) ; echo ${VGS}
-   pit# echo ${VGS} | xargs -r -t -n 1 vgremove -f -v
-   pit# echo ${RAIDS} | xargs -r -t -n 1 mdadm -S -f -v
-   ```
-
-   After running the above procedure, retry the `parted` command which failed. If it succeeds, resume the install from that point.
 
 1. Mount local disk.
 
