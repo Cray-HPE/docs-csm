@@ -735,6 +735,10 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    > in the documentation command prompts from this point onward.
 
    > **Note:** If the hostname returned by the `hostnamectl` command is `pit`, then set the hostname manually with `hostnamectl`. In that case, be sure to append the `-pit` suffix to prevent masquerading a PIT node as a real NCN to administrators and automation.
+   
+1. Install the latest documentation RPM.
+
+   See [Check for Latest Documentation](../update_product_stream/index.md#documentation)
 
 1. Print information about the booted PIT image.
 
