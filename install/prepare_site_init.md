@@ -305,8 +305,8 @@ with system-specific customizations.
         1. Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
 
             ```bash
-            linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" |
-                yq r -j - | ${SITE_INIT}/utils/secrets-encrypt.sh |
+            linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
+                yq r -j - | ${SITE_INIT}/utils/secrets-encrypt.sh | \
                 yq w -f - -i ${SITE_INIT}/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
             {
               "kind": "Secret",
