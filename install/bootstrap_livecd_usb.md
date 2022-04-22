@@ -210,10 +210,10 @@ which device will be used for it.
 1. Mount the configuration and persistent data partitions.
 
     ```bash
-    linux# mkdir -pv /mnt/{cow,pitdata} && 
+    linux# mkdir -pv /mnt/cow ${PITDATA} && 
            mount -vL cow /mnt/cow && 
            mount -vL PITDATA ${PITDATA} && 
-           mkdir -pv ${PITDATA}/{admin,configs} ${PITDATA}/prep/{admin,logs} ${PITDATA}/data/{k8s,ceph}
+           mkdir -pv ${PITDATA}/configs ${PITDATA}/prep/{admin,logs} ${PITDATA}/data/{ceph,k8s}
     ```
 
 1.  Copy and extract the tarball into the USB:
@@ -508,18 +508,12 @@ Now that the configuration is generated, the LiveCD must be populated with the g
    > **Important:** All CSM install procedures on the booted PIT node assume that these variables
    > are set and exported.
    >
-   > **Note:** It is intentional that the `PITDATA` and `CSM_PATH` variables here have different
-   > values here than what was set earlier. This is because after booting from the PIT node, some
-   > paths will be different.
-   >
    > The `echo` prepends a newline to ensure that the variable assignment occurs on a unique line,
    > and not at the end of another line.
 
    ```bash
    linux# echo "
-   CSM_PATH=/var/www/ephemeral/${CSM_RELEASE}
    CSM_RELEASE=${CSM_RELEASE}
-   PITDATA=/var/www/ephemeral
    SYSTEM_NAME=${SYSTEM_NAME}" | tee -a /mnt/cow/rw/etc/environment
    ```
 
@@ -563,13 +557,13 @@ Now that the configuration is generated, the LiveCD must be populated with the g
 
     ```bash
     linux# exit
-    linux# cp -v ${SCRIPT_FILE} ${PITDATA}/prep/admin
+    linux# cp -v ${SCRIPT_FILE} /mnt/pitdata/prep/admin
     ```
 
 1. Unmount the data partition:
 
     ```bash
-    linux# cd; umount -v ${PITDATA}
+    linux# cd; umount -v /mnt/pitdata
     ```
 
 1. Move the USB device to the system to be installed, if needed.
@@ -687,6 +681,16 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
 
    ```bash
    pit# mount -vL PITDATA
+   ```
+
+1. Set new environment variables and save them to `/etc/environment`
+
+   ```bash
+   pit# PITDATA=$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)
+   pit# CSM_PATH=${PITDATA}/${CSM_RELEASE}
+   pit# echo "
+   PITDATA=${PITDATA}
+   CSM_PATH=${CSM_PATH}" | tee -a /etc/environment
    ```
 
 1. Start a typescript to record this section of activities done on `ncn-m001` while booted from the LiveCD.
