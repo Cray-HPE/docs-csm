@@ -537,6 +537,12 @@ def main():
         confirmation_question()
         ips_update_in_smd = add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks)
         xname_list = update_smd_and_kea(ips_update_in_smd, api_header, token)
+    else:
+        stop_log()
+        print(f'prerequisite to prepare NCNs for removal, move and add\n'
+        f'Network expansion COMPLETED\n'
+        f'Log and backup of SLS, BSS and SMD can be found at: {backup_folder}\n')
+        sys.exit(0)
 
     if xname_list != []:
         print(f'Please restart DVS and rebooting the following nodes before proceeding to the next step.:'
