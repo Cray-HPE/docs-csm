@@ -5,7 +5,7 @@ All System Management Health services are exposed outside the cluster through th
 The `{{shasta_domain}}` value in the examples below is an Ansible variable defined as follows and is expected to be the systems' FQDN from the CAN.
 
 ```screen
-ncn-m001# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations.yaml}' \
+ncn-m001# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' \
 | base64 -d | grep "external:"
       external: SHASTA_EXTERNAL_DOMAIN
 ```

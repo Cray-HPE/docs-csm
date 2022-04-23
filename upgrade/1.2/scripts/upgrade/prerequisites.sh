@@ -27,7 +27,7 @@ set -e
 locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${locOfScript}/../common/upgrade-state.sh
 . ${locOfScript}/../common/ncn-common.sh $(hostname)
-trap 'err_report' ERR
+trap 'err_report' ERR INT TERM HUP
 # array for paths to unmount after chrooting images
 declare -a UNMOUNTS=()
 
