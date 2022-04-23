@@ -517,9 +517,9 @@ Now that the configuration is generated, the LiveCD must be populated with the g
 
    ```bash
    linux# echo "
-   CSM_PATH=/var/www/ephemeral/${CSM_RELEASE}
    CSM_RELEASE=${CSM_RELEASE}
-   PITDATA=/var/www/ephemeral
+   PITDATA=$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)
+   CSM_PATH=${PITDATA}/${CSM_RELEASE}
    SYSTEM_NAME=${SYSTEM_NAME}" | tee -a /mnt/cow/rw/etc/environment
    ```
 
@@ -569,7 +569,7 @@ Now that the configuration is generated, the LiveCD must be populated with the g
 1. Unmount the data partition:
 
     ```bash
-    linux# cd; umount -v ${PITDATA}
+    linux# cd; umount -v /dev/disk/by-label/PITDATA
     ```
 
 1. Move the USB device to the system to be installed, if needed.
@@ -693,6 +693,8 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
 
    ```bash
    pit# script -af /var/www/ephemeral/prep/admin/booted-csm-livecd.$(date +%Y-%m-%d).txt
+   pit# PITDATA=$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)
+   pit# CSM_PATH=${PITDATA}/${CSM_RELEASE}
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
@@ -720,6 +722,10 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    > in the documentation command prompts from this point onward.
 
    > **Note:** If the hostname returned by the `hostnamectl` command is `pit`, then set the hostname manually with `hostnamectl`. In that case, be sure to append the `-pit` suffix to prevent masquerading a PIT node as a real NCN to administrators and automation.
+   
+1. Install the latest documentation RPM.
+
+   See [Check for Latest Documentation](../update_product_stream/index.md#documentation)
 
 1. Print information about the booted PIT image.
 
