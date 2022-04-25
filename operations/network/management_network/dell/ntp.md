@@ -1,4 +1,4 @@
-# Configure the Network Time Protocol (NTP) Client 
+# Configure the Network Time Protocol (NTP) Client
 
 The Network Time Protocol (NTP) client is essential for syncing time on various clients in the system. The following commands show how to configure NTP.
 
