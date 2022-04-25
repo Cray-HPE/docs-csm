@@ -43,9 +43,9 @@ For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP addres
    ncn-m002# mkdir -p /etc/cray/upgrade/csm/${CSM_RELEASE}
 
    ncn-m002# scp ncn-m001:/etc/cray/upgrade/csm/myenv /etc/cray/upgrade/csm/myenv
-   
+
    ncn-m002# scp ncn-m001:/root/output.log /root/pre-m001-reboot-upgrade.log
-   
+
    ncn-m002# cray artifacts create config-data pre-m001-reboot-upgrade.log /root/pre-m001-reboot-upgrade.log
 
    ncn-m002# csi_rpm=$(ssh ncn-m001 "find /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}/rpm/cray/csm/ -name 'cray-site-init*.rpm'")

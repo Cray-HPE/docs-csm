@@ -3,7 +3,7 @@
 These procedures guide administrators through setting up the `site-init`
 directory which contains important customizations for various products.
 
-**Note:** There are two media available to bootstrap the PIT node: the RemoteISO or a bootable USB device. Both of those can use this procedure. 
+**Note:** There are two media available to bootstrap the PIT node: the RemoteISO or a bootable USB device. Both of those can use this procedure.
 The only difference in this procedure is that the RemoteISO method will execute these commands on the PIT node, while the USB method could be done
 on any Linux system. This procedure works for both methods, so in order to be generic, this document uses the command prompt of `linux#` in its
 examples.
@@ -136,12 +136,12 @@ with system-specific customizations.
     For all credentials, Make sure `Username` and `Password` values are correct.
 
     1. Validate REDS credentials.
-    
+
         These credentials are used by the REDS and HMS discovery services, targeting River Redfish
         BMC endpoints and management switches
 
         > NOTE: For vault_redfish_defaults, the only entry used is '{"Cray": {"Username": "root", "Password": "XXXX"}'
-        > Make sure it is specified as shown, with the `Cray` key. This key is not used in any of the other credential specifications. 
+        > Make sure it is specified as shown, with the `Cray` key. This key is not used in any of the other credential specifications.
 
         ```bash
         linux# yq read ${SITE_INIT}/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials.generate.data[*].args.value' | jq
@@ -180,7 +180,7 @@ with system-specific customizations.
        ```
 
     1.  Update the `cray-keycloak` sealed secret value if LDAP requires TLS.
-    
+
         If LDAP requires TLS (recommended), then update the `cray-keycloak` sealed
         secret value by supplying a base64-encoded Java KeyStore (JKS) that
         contains the CA certificate that signed the LDAP server's host key. The
@@ -202,7 +202,7 @@ with system-specific customizations.
            ```
 
         1.  Get the issuer certificate.
-        
+
             Retrieve the issuer certificate for the LDAP server at port 636. Use `openssl s_client` to connect
             and show the certificate chain returned by the LDAP host:
 
@@ -211,7 +211,7 @@ with system-specific customizations.
             ```
 
         1.  Enter the issuer's certificate into `cacert.pem`.
-        
+
             Either manually extract (i.e., cut/paste) the issuer's
             certificate into `cacert.pem`, or try the following commands to
             create it automatically.

@@ -44,7 +44,7 @@ Identify the hardware configuration by PXE booting a node.
     - Collect the other NCNs' PCI Device and PCI Vendor IDs:
 
         ```bash
-        pit# for file in /var/log/conman/console*ncn*; do 
+        pit# for file in /var/log/conman/console*ncn*; do
                 echo $file
                 grep -Eoh '(net[0-9] MAC .*)' $file | sort -u |
                     grep PCI && echo -----
@@ -106,7 +106,7 @@ Identify the hardware configuration by PXE booting a node.
         pit # Replace the default Vendor ID with the desired Intel Vendor ID
         pit# sed -i 's/mgmt_vid0 .*/mgmt_vid0 8086/g' /var/www/boot/script.ipxe
         pit# # Restore the initrd.img.xz, kernel, and filesystem.squashfs links to the boot directories
-        pit# set-sqfs-links.sh 
+        pit# set-sqfs-links.sh
         ```
 
     - If only a subset of the NCNs have differing cards, re-run `set-sqfs-links.sh` and then update just that subset of boot scripts:
@@ -115,7 +115,7 @@ Identify the hardware configuration by PXE booting a node.
 
        ```bash
        pit# # Restore the initrd.img.xz, kernel, and filesystem.squashfs links to the boot directories
-       pit# set-sqfs-links.sh 
+       pit# set-sqfs-links.sh
        pit # Replace the default Vendor ID with the desired Intel Vendor ID
        pit# sed -i 's/mgmt_vid0 .*/mgmt_vid0 8086/g' /var/www/ncn-w*/script.ipxe
        ```
@@ -128,7 +128,7 @@ Identify the hardware configuration by PXE booting a node.
 
        ```bash
        pit# # Restore the initrd.img.xz, kernel, and filesystem.squashfs links to the boot directories
-       pit# set-sqfs-links.sh 
+       pit# set-sqfs-links.sh
        pit # Replace the default Vendor ID with the desired Intel Vendor ID
        pit# sed -i 's/hsn_did0 .*/hsn_did0 0000/g' /var/www/ncn-m*/script.ipxe
        pit# sed -i 's/hsn_did0 .*/hsn_did0 0000/g' /var/www/ncn-s*/script.ipxe

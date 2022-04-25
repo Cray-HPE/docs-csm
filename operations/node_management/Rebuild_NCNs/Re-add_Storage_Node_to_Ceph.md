@@ -1,4 +1,4 @@
-# Re-Add a Storage Node to Ceph 
+# Re-Add a Storage Node to Ceph
 
 Use the following procedure to re-add a Ceph node to the Ceph cluster.
 

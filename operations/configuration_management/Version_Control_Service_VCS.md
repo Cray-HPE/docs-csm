@@ -80,7 +80,7 @@ Data for Gitea is stored in two places. Git content is stored directly in a PVC,
     ```
 
     Example output:
-    
+
     ```text
     + Cluster: gitea-vcs-postgres (6995618180238446669) -----+----+-----------+
     |        Member        |     Host     |  Role  |  State  | TL | Lag in MB |

@@ -50,7 +50,7 @@ the instructions for attaching to the BMC will differ.
    The `cray-pre-install-toolkit` ISO and other files are now available in the directory from the extracted CSM tar file.
    The ISO will have a name similar to
    `cray-pre-install-toolkit-sle15sp3.x86_64-1.5.8-20211203183315-geddda8a.iso`
-   
+
    This ISO file can be extracted from the CSM release tar file using the following command:
    ```bash
    linux# tar --wildcards --no-anchored -xzvf <csm-release>.tar.gz 'cray-pre-install-toolkit-*.iso'
@@ -103,7 +103,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# script -af ~/csm-install-remoteiso.$(date +%Y-%m-%d).txt
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
-   
+
 1. Print information about the booted PIT image.
 
    There is nothing in the output that needs to be verified. This is run in order to ensure the information is
@@ -113,7 +113,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    ```bash
    pit# /root/bin/metalid.sh
    ```
-   
+
    Expected output looks similar to the following:
 
    ```
@@ -180,7 +180,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       | `site_gw`   | `site-gw`              | The IPv4 gateway address for the node's external interface(s)                      |
       | `site_dns`  | `site-dns`             | The IPv4 domain name server address for the site                                   |
       | `site_nics` | `site-nic`             | The actual NIC name(s) for the external site interface(s)                          |
-      
+
       > If the `system_config.yaml` file has not yet been generated for this system, the values for `site_ip`, `site_gw`, and
       > `site_dns` should be provided by the site's network administrator or network authority. The `site_nics` interface(s)
       > are typically the first onboard adapter or the first copper 1 GbE PCIe adapter on the PIT node. If multiple interfaces are
@@ -202,9 +202,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       ```
 
    1. Verify that `lan0` has an IP address and attempt to auto-set the hostname based on DNS.
-   
-      The script appends `-pit` to the end of the hostname as a means to reduce the chances of confusing the PIT node with an actual, deployed NCN. 
-      
+
+      The script appends `-pit` to the end of the hostname as a means to reduce the chances of confusing the PIT node with an actual, deployed NCN.
+
       ```bash
       pit# ip a show lan0
       pit# /root/bin/csi-set-hostname.sh # this will attempt to set the hostname based on the site's own DNS records.
@@ -226,7 +226,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       1. Add variables to the PIT environment.
 
          By adding these to the `/etc/environment` file of the PIT node, these variables will be
-         automatically set and exported in shell sessions on the PIT node. 
+         automatically set and exported in shell sessions on the PIT node.
 
          > The `echo` prepends a newline to ensure that the variable assignment occurs on a unique line,
          > and not at the end of another line.
@@ -268,7 +268,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# hostnamectl
       ```
 
-      > **Note:** The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#` 
+      > **Note:** The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#`
       > in the documentation command prompts from this point onward.
 
       > **Note:** If the hostname returned by the `hostnamectl` command is `pit`, then re-run the `csi-set-hostname.sh` script with the same parameters. Otherwise, an administrator should set the hostname manually with `hostnamectl`. In the latter case, be sure to append the `-pit` suffix to prevent masquerading a PIT node as a real NCN to administrators and automation.

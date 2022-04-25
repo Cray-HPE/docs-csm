@@ -722,7 +722,7 @@ Run the following command on the PIT node to remove the default pool, which can 
 ```bash
 pit# ssh ncn-m002 "\
         PDSH_SSH_ARGS_APPEND='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' \
-        pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | 
+        pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf |
             grep -v m001 | sort -u |  tr -t '\n' ,) \
         sed -i \'s/^! pool pool[.]ntp[.]org.*//\' /etc/chrony.conf"
 ```
