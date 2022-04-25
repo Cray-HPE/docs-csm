@@ -10,7 +10,7 @@ Configure the VLAN:
 switch(config)# vlan VLAN
 ```
 
-The default mode of any vlan is L2 only. To enable L3 functionality, run `no shutdown` on the VLAN: 
+The default mode of any vlan is L2 only. To enable L3 functionality, run `no shutdown` on the VLAN:
 
 ```
 switch(config)# interface vlan 2
