@@ -43,7 +43,7 @@ The following steps are structured to be executed on one node at a time. However
 
 7. Continue with the upgrade.
 8. When the upgrade is completed, run this script on each NCN to ensure the time is set correctly:
-    
+
     > If more than nine NCNs are in use on the system, update the for loop in the following command accordingly.
 
     ```bash

@@ -45,9 +45,9 @@ ncn# kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.
    one to start up in its place.
 
 1. Enable the NCNs to rejoin Spire.
-   
+
    ```bash
-   ncn# kubectl rollout restart -n spire daemonset request-ncn-join-token 
+   ncn# kubectl rollout restart -n spire daemonset request-ncn-join-token
    ```
 
 1. Re-run the command to get the certificate's expiration date to verify that

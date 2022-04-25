@@ -605,7 +605,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         * The component names (xnames) of Application nodes from step 18.
         * The customized image ID from step 17.
         * The CFS configuration session name from step 17.
-    
+
     1.  Verify that the session template matches the format and structure in the following example:
 
         ```bash
