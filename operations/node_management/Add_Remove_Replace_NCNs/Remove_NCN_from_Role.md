@@ -107,6 +107,9 @@ Remove master, worker, or storage NCN from current roles. Select the procedure b
    chmod +x /srv/cray/scripts/kubernetes/token-certs-refresh.sh
    /srv/cray/scripts/kubernetes/token-certs-refresh.sh skip-upload-certs
    echo "0 */1 * * * root /srv/cray/scripts/kubernetes/token-certs-refresh.sh >> /var/log/cray/cron.log 2>&1" > /etc/cron.d/cray-k8s-token-certs-refresh
+   cp /srv/cray/resources/common/cronjob_kicker.py /usr/bin/cronjob_kicker.py
+   chmod +x /usr/bin/cronjob_kicker.py
+   echo "0 */2 * * * root KUBECONFIG=/etc/kubernetes/admin.conf /usr/bin/cronjob_kicker.py >> /var/log/cray/cron.log 2>&1" > /etc/cron.d/cray-k8s-cronjob-kicker
    ```
 
 <a name="reset-kubernetes-on-master"></a>
