@@ -159,6 +159,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
+    rpm -e canu
     rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "canu*.rpm") 
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
