@@ -10,7 +10,7 @@ For any procedure below, it is assumed that the extra disks are going to be util
 
 ### Masters & Workers
 
-Add the kernel parameter `metal.disks=X` where `X` is the number of extra disks on the NCN. This parameter may be added to the PIT's boot scripts or to Boot Script Service (BSS). 
+Add the kernel parameter `metal.disks=X` where `X` is the number of extra disks on the NCN. This parameter may be added to the PIT's boot scripts or to Boot Script Service (BSS).
 
 - For the PIT:
 
@@ -24,7 +24,7 @@ Add the kernel parameter `metal.disks=X` where `X` is the number of extra disks 
    - Update BSS with the kernel parameter (the snippet below requires the xname of the NCN to limit the operation too):
 
       ```bash
-      ncn-m001# csi handoff bss-update-param --limit x3000c0s3b0n0 --kernel metal.disk=3 
+      ncn-m001# csi handoff bss-update-param --limit x3000c0s3b0n0 --kernel metal.disk=3
       ```
 
 ### Storage

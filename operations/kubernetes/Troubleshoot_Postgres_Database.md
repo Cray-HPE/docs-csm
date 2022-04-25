@@ -215,19 +215,19 @@ Example output:
     Are you sure you want to reinitialize members cray-console-data-postgres-1? [y/N]: y
     Failed: reinitialize for member cray-console-data-postgres-1, status code=503, (Cluster has no leader, can not reinitialize)
     ```
- 
+
     1. Delete the Postgres leader pod and wait for the leader to restart.
-    
+
         ```bash
         ncn-mw# kubectl delete pod cray-console-data-postgres-0 -n services
         ```
-    
+
         ```bash
         ncn-mw# kubectl exec keycloak-postgres-0 -c postgres -n services -it -- patronictl list
         ```
-    
+
         Example output:
-    
+
         ```text
         + Cluster: cray-console-data-postgres (7072784871993835594) ---+----+-----------+
         |            Member            |    Host    |  Role  |  State  | TL | Lag in MB |
@@ -293,7 +293,7 @@ Example output:
     | keycloak-postgres | keycloak-postgres-2 | 10.40.11.190 |        | stopped |    |   unknown |
     +-------------------+---------------------+--------------+--------+---------+----+-----------+
     ```
- 
+
     `kubectl exec` into that pod that is `stopped` and check the most recent Postgres log for any `invalid segment number 0` errors relating to `pg_internal.init.*` files.
 
     ```bash
@@ -311,7 +311,7 @@ Example output:
     If the check above finds such files, first find any zero length `pg_internal.init.*` files.
 
     ```bash
-    postgres@keycloak-postgres-2:~$ find /home/postgres/pgdata -name pg_internal.init.* -size 0 
+    postgres@keycloak-postgres-2:~$ find /home/postgres/pgdata -name pg_internal.init.* -size 0
     ```
 
     Example output:

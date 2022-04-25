@@ -15,7 +15,7 @@ This section applies to all node types. The commands in this section assume the 
    ```
 
 1. Modify the JSON file and set the kernel parameters to wipe the disk.
-   
+
    Locate the portion of the line that contains `"metal.no-wipe"` and ensure it is set to zero `"metal.no-wipe=0"`.
 
 

@@ -22,7 +22,7 @@ There are several situations that will cause automatic configuration:
 Configuration status of a given component \(using the component name (xname)\) is available through the `cray cfs components describe` command. The following fields are provided to determine the status and state of the component:
 
 * **configurationStatus**
-  
+
   The status of the component's configuration. Valid status values are unconfigured, failed, pending, and configured.
 
 * **desiredConfig**

@@ -5,7 +5,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 1. Understand that management service resiliency is reduced during the upgrade.
 
    **Warning:** Although it is expected that compute nodes and application nodes will continue to provide their services
-   without interruption, it is important to be aware that the degree of management services resiliency is reduced during the 
+   without interruption, it is important to be aware that the degree of management services resiliency is reduced during the
    upgrade. If, while one node is being upgraded, another node of the same type has an unplanned fault that removes it from service,
    there may be a degraded system. For example, if there are three Kubernetes master nodes and one is being upgraded, the quorum is
    maintained by the remaining two nodes. If one of those two nodes has a fault before the third node completes its upgrade,

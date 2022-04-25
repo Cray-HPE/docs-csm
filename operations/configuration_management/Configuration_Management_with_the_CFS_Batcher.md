@@ -44,7 +44,7 @@ See [CFS Global Options](CFS_Global_Options.md) for more information. Use the `c
 Review the following information about CFS Batcher options before changing the defaults. Setting these to non-optimal values may affect system performance. The optimal values will depend on system size and the specifics of the configuration layers that will be applied in the sessions created by CFS Batcher.
 
 * **batchSize**
-  
+
   This option determines the maximum number of components that will be included in each session created by CFS Batcher.
 
   The default value is 25 components per session.
@@ -68,7 +68,7 @@ Review the following information about CFS Batcher options before changing the d
   > **WARNING:** Lower values will cause CFS Batcher to be more responsive to creating sessions, but values too low may result in degraded performance of the CFS APIs on larger systems.
 
 * **defaultBatcherRetryPolicy**
-  
+
   When a component \(node\) requiring configuration fails to configure from a previous configuration session launched by CFS Batcher, the error is logged. defaultBatcherRetryPolicy is the maximum number of failed configurations allowed per component before CFS Batcher will stop attempts to configure the component.
 
   This value can be overridden on a per component basis.

@@ -26,7 +26,7 @@ ncn-mw# POSTGRESQL=cray-smd-postgres
 ncn-mw# NAMESPACE=services
 ncn-mw# kubectl get endpoints ${POSTGRESQL} -n ${NAMESPACE}
 ```
-    
+
 Expected output looks similar to:
 ```
 NAME                ENDPOINTS         AGE
@@ -34,12 +34,12 @@ cray-smd-postgres                     3d22h
 ```
 
 ```bash
-ncn-mw# for i in {0..2}; do 
+ncn-mw# for i in {0..2}; do
             echo "${POSTGRESQL}-${i}:"
             kubectl exec ${POSTGRESQL}-${i} -n ${NAMESPACE} -c postgres -- df -h pgdata
         done
 ```
-    
+
 Expected output looks similar to:
 ```
 cray-smd-postgres-0:
@@ -74,7 +74,7 @@ The following example is based on `cray-smd-postgres`.
     ncn-mw# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0" "${POSTGRESQL}-1" "${POSTGRESQL}-2"
     ncn-mw# kubectl delete pod -n services -l app.kubernetes.io/name=postgres-operator
     ```
-    
+
 1. Check if the database is running. If it is running, then continue with [Dumping the data](#dump).
 
     ```bash
@@ -84,7 +84,7 @@ The following example is based on `cray-smd-postgres`.
 
     postgres=#   <----- success!!  Type \q
     ```
-    
+
 1. If the database is still not running, then delete files from `/home/postgres/pgdata/pgroot/data/pg_wal/`.
 
     > CAUTION: This method could result in unintended consequences for the Postgres database and long service downtime; do not use unless there is a known [Disaster Recovery for Postgres](Disaster_Recovery_Postgres.md) procedure for repopulating the Postgres cluster.
@@ -100,7 +100,7 @@ The following example is based on `cray-smd-postgres`.
     ncn-mw# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0" "${POSTGRESQL}-1" "${POSTGRESQL}-2"
     ncn-mw# kubectl delete pod -n services -l app.kubernetes.io/name=postgres-operator
     ```
-    
+
 1. Check if the database is running.
     ```
     ncn-mw# kubectl exec "${POSTGRESQL}-1" -n ${NAMESPACE} -c postgres -it -- psql -U postgres
@@ -235,8 +235,8 @@ The following example is based on `cray-smd-postgres`, where the postgresql `cra
     error: could not get write-ahead log end position from server: ERROR:  invalid segment number
     ```
 
-1. In order to persist any Postgres PVC storage volume size changes, it is necessary that this change also be made to the 
-   customer-managed `customizations.yaml` file. See the Postgres PVC Resize information in the 
+1. In order to persist any Postgres PVC storage volume size changes, it is necessary that this change also be made to the
+   customer-managed `customizations.yaml` file. See the Postgres PVC Resize information in the
    [Post Install Customizations](../CSM_product_management/Post_Install_Customizations.md#postgres_pvc_resize).
 
 <a name="dump"></a>
@@ -347,8 +347,8 @@ The following example restores the dump to the `cray-smd-postgres` cluster.
 
 1. Restore the secrets.
 
-    Once the dump has been restored onto the newly built postgresql cluster, the current Kubernetes secrets need to be updated in the 
-    postgresql cluster, otherwise the service will experience readiness and liveness probe failures because it will be unable to 
+    Once the dump has been restored onto the newly built postgresql cluster, the current Kubernetes secrets need to be updated in the
+    postgresql cluster, otherwise the service will experience readiness and liveness probe failures because it will be unable to
     authenticate to the database.
 
     1. Determine what secrets are associated with the postgresql credentials.
