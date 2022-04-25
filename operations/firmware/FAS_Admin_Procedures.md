@@ -8,17 +8,17 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ### Topics
 
-- [FAS Admin Procedures](#fas-admin-procedures)
-  - [Topics](#topics)
-  - [Warning for Non-Compute Nodes (NCNs)</a>](#warning-for-non-compute-nodes-ncns)
-  - [Ignore Nodes within FAS](#ignore-nodes-within-fas)
-    - [Procedure](#procedure)
-  - [Override an Image for an Update](#override-an-image-for-an-update)
-  - [Procedure](#procedure-1)
-  - [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
-    - [Procedure](#procedure-2)
-  - [Load Firmware from Nexus](#load-firmware-from-nexus)
-  - [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file)
+  * [FAS Admin Procedures](#fas-admin-procedures)
+    * [Topics](#topics)
+    * [Warning for Non-Compute Nodes (NCNs)</a>](#warning-for-non-compute-nodes-ncns)
+    * [Ignore Nodes within FAS](#ignore-nodes-within-fas)
+      * [Procedure](#procedure)
+    * [Override an Image for an Update](#override-an-image-for-an-update)
+    * [Procedure](#procedure-1)
+    * [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
+      * [Procedure](#procedure-2)
+    * [Load Firmware from Nexus](#load-firmware-from-nexus)
+    * [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file)
 
 ---
 
@@ -26,7 +26,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ### Warning for Non-Compute Nodes (NCNs)</a>
 
-**WARNING:** NCNs and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
+NCNs and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
 ---
 
@@ -178,10 +178,10 @@ This procedure includes information on how check the firmware versions for the e
 
 	The following command parameters should be included in dry-run JSON files:
 
-	- overrideDryrun: The overrideDryrun parameter is set to false by default. FAS will only update the system if this is parameter is set to true.
-	- restoreNotPossibleOverride: FAS will not perform an update if the currently running firmware is not available in the images repository. Set to true to allow FAS to update firmware, even if the current firmware is unavailable on the system.
-	- description: A brief description that helps administrators distinguish between actions.
-	- version: Determine if the firmware should be set to the `latest`, the `earliest` semantic version, or set to a specific firmware version.
+	* overrideDryrun: The overrideDryrun parameter is set to false by default. FAS will only update the system if this is parameter is set to true.
+	* restoreNotPossibleOverride: FAS will not perform an update if the currently running firmware is not available in the images repository. Set to true to allow FAS to update firmware, even if the current firmware is unavailable on the system.
+	* description: A brief description that helps administrators distinguish between actions.
+	* version: Determine if the firmware should be set to the `latest`, the `earliest` semantic version, or set to a specific firmware version.
 
 	Use one of the options below to run on a dry-run on every system device or on targeted devices:
 
@@ -246,57 +246,56 @@ This procedure includes information on how check the firmware versions for the e
 
        Proceed to the next step to determine if any firmware needs to be updated.
 
-2.  View the status of the dry-run to determine if any firmware updates can be made.
+2. View the status of the dry-run to determine if any firmware updates can be made.
 
-	The following returned messages will help determine if a firmware update is needed.
+	 The following returned messages will help determine if a firmware update is needed.
 
-  	-   `noOperation`: Nothing to do, already at version.
-  	-   `noSolution`: No image is available or data is missing.
-  	-   `succeeded`: A firmware version that FAS can update the firmware to is available and it should work when actually updating the firmware.
-  	-   `failed`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
+   * `noOperation`: Nothing to do, already at version.
+   * `noSolution`: No image is available or data is missing.
+   * `succeeded`: A firmware version that FAS can update the firmware to is available and it should work when actually updating the firmware.
+   * `failed`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
 
-  	1. Get a high-level summary of the FAS job to determine if there are any upgradable firmware images available.
+   1. Get a high-level summary of the FAS job to determine if there are any upgradable firmware images available.
 
-		Use the returned `actionID` from the cray fas actions create command.
+		  Use the returned `actionID` from the cray fas actions create command.
 
-		In the example below, there are two operations in the `succeeded` state, indicating there is an available firmware version that FAS can use to update firmware.
+		  In the example below, there are two operations in the `succeeded` state, indicating there is an available firmware version that FAS can use to update firmware.
 
-    ```
-    ncn# cray fas actions status list {actionID}
-    actionID = "e6dc14cd-5e12-4d36-a97b-0dd372b0930f"
-    snapshotID = "00000000-0000-0000-0000-000000000000"
-    startTime = "2021-09-07 16:43:04.294233199 +0000 UTC"
-    endTime = "2021-09-07 16:53:09.363233482 +0000 UTC"
-    state = "completed"
-    blockedBy = []
+      ```
+      ncn# cray fas actions status list {actionID}
+      actionID = "e6dc14cd-5e12-4d36-a97b-0dd372b0930f"
+      snapshotID = "00000000-0000-0000-0000-000000000000"
+      startTime = "2021-09-07 16:43:04.294233199 +0000 UTC"
+      endTime = "2021-09-07 16:53:09.363233482 +0000 UTC"
+      state = "completed"
+      blockedBy = []
 
-    [command]
-    overrideDryrun = false
-    restoreNotPossibleOverride = true
-    overwriteSameImage = false
-    timeLimit = 2000
-    version = "latest"
-    tag = "default"
-    description = "Dryrun upgrade of Gigabyte node BMCs"
+      [command]
+      overrideDryrun = false
+      restoreNotPossibleOverride = true
+      overwriteSameImage = false
+      timeLimit = 2000
+      version = "latest"
+      tag = "default"
+      description = "Dryrun upgrade of Gigabyte node BMCs"
 
-    [operationCounts]
-    total = 14
-    initial = 0
-    configured = 0
-    blocked = 0
-    needsVerified = 0
-    verifying = 0
-    inProgress = 0
-    failed = 0
-    succeeded = 8
-    noOperation = 6
-    noSolution = 0
-    aborted = 0
-    unknown = 0
-    ```
+      [operationCounts]
+      total = 14
+      initial = 0
+      configured = 0
+      blocked = 0
+      needsVerified = 0
+      verifying = 0
+      inProgress = 0
+      failed = 0
+      succeeded = 8
+      noOperation = 6
+      noSolution = 0
+      aborted = 0
+      unknown = 0
+      ```
 
-       The action is still in progress if the state field is not completed or aborted.
-
+      The action is still in progress if the state field is not completed or aborted.
 
     2. View the details of an action to get more information on each operation in the FAS action.
 
