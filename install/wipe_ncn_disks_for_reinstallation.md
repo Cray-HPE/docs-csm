@@ -158,13 +158,13 @@ If a node type is not specified, the step should be run regardless of node type.
 
        1. Stop Ceph.
 
-           * ***1.4 or earlier***
+           * ***CSM 0.9 or earlier***
 
                ```bash
                ncn-s# systemctl stop ceph-osd.target
                ```
 
-           * ***1.5 or later***
+           * ***CSM 1.0 or later***
 
                ```bash
                ncn-s# cephadm rm-cluster --fsid $(cephadm ls|jq -r '.[0].fsid') --force
@@ -172,13 +172,13 @@ If a node type is not specified, the step should be run regardless of node type.
 
        1. Make sure the OSDs (if any) are not running.
 
-           * ***1.4 or earlier***
+           * ***CSM 0.9 or earlier***
 
                ```bash
                ncn-s# ps -ef|grep ceph-osd
                ```
 
-           * ***1.5 or later***
+           * ***CSM 1.0 or later***
 
                ```bash
                ncn-s# podman ps
