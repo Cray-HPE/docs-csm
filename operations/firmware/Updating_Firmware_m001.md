@@ -2,9 +2,9 @@
 
 Retrieve the model name and firmware image required to update an HPE or Gigabyte `ncn-m001` node.
 
-> **NOTE:** On HPE nodes, the BMC Firmware is iLO 5 and BIOS is System ROM.
-
-**The commands in the procedure must be run on `ncn-m001`**
+> **NOTE:** 
+> * On HPE nodes, the BMC Firmware is iLO 5 and BIOS is System ROM.
+> * The commands in the procedure must be run on `ncn-m001`.
 
 ## Prerequisites
 
