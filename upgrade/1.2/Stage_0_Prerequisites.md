@@ -50,7 +50,7 @@ Stage 0 has several critical procedures which prepares and verify if the environ
    - Air Gapped (replace the PATH_TO below with the location of the rpm)
 
       1. Copy the docs-csm RPM package and CSM release tarball to `ncn-m001`.
-     
+
       1. Run the script
 
          ```bash
@@ -133,7 +133,7 @@ One detail which must not be overlooked is that the existing Customer Access Net
 
 ### Verify if switches have 1.2 configuration in place
 
-1. Log in to each management switch 
+1. Log in to each management switch
    ```bash
    linux# ssh admin@1.2.3.4
    ```
