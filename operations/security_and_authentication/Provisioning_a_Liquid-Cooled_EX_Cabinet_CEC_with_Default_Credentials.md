@@ -84,7 +84,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
 9. Enter `set_hash` and provide the password hash value as the argument.
 
-   The CEC validates the input syntax of the hash. Adding an extra char or omitting a character is flagged as an error. If a character is changed, the password entered in the serial console login shell or the Redfish `root` account will not work. If that happens, rerun this procedure from the beginning.
+   The CEC validates the input syntax of the hash. Adding an extra character or omitting a character is flagged as an error. If a character is changed, the password entered in the serial console login shell or the Redfish `root` account will not work. If that happens, then rerun this procedure from the beginning.
 
       ```screen
       EXE> set_hash $6$v5YlqxKB$scBci.GbT8...
@@ -113,7 +113,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
     Skip this step if the compute blade slots in each chassis have already been powered off.
 
-    1. To perform blade power control operations, SSH to a CMM and and use the `redfish` command to perform the power cycle. This must be done for each populated compute blade in each odd or even numbered chassis in the cabinet depending on which CEC issued the reset above.
+    1. To perform blade power control operations, SSH to a CMM and and use the `redfish` command to perform the power cycle. This must be done for each populated compute blade in each odd- or even-numbered chassis in the cabinet depending on which CEC issued the reset above.
 
        ```screen
        > ssh root@x9000c1

@@ -8,7 +8,7 @@ This procedure provisions only the default Redfish `root` account passwords. It 
 
 ### Prerequisites
 
-- The hms-discovery Kubernetes cron job has been disabled.
+- The `hms-discovery` Kubernetes cron job has been disabled.
 - All blades in the cabinets have been powered off.
 - Perform procedures in [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md) on all CECs in the system.
 - All of the CECs must be configured with the __same__ global credential.
@@ -211,20 +211,20 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
     > ncn-m001# cray hsm inventory redfishEndpoints update BMC_XNAME --user root --password ${CRED_PASSWORD}
     > ```
 
-3. Restart the hms-discovery Kubernetes cron job.
+3. Restart the `hms-discovery` Kubernetes cron job.
    ```bash
    ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
    ```
-   After 2-3 minutes the hms-discovery cron job will start to power on all of the currently powered off compute slots.
+   After 2-3 minutes, the `hms-discovery` cron job will start to power on all of the currently powered off compute slots.
 
-4. Wait for compute slots to be pwoered on and for HSM to re-discover the updated RedfishEndpoints:
+4. Wait for compute slots to be pwoered on and for HSM to re-discover the updated Redfish endpoints.
     ```bash
     ncn-m001# sleep 300
     ```
 
-5. Wait for all updated Redfish endpoints to become `DiscoverOK`:
+5. Wait for all updated Redfish endpoints to become `DiscoverOK`.
 
-    The following bash script will find all Redfish endpoints for the liquid-cooled BMCs that are not in `DiscoverOK`, and display their last Discovery Status.
+    The following bash script will find all Redfish endpoints for the liquid-cooled BMCs that are not in `DiscoverOK`, and display their `lastDiscoveryStatus`.
     ```bash
     ncn-m001# \
     cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --type '!RouterBMC' --format json > /tmp/redfishEndpoints.json
