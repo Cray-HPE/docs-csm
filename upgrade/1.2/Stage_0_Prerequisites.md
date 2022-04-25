@@ -224,7 +224,7 @@ To prevent any possibility of losing Workload Manager configuration data or file
 
 Both NCNs and their BMCs require their roles to be set to `Management` in HSM for locking purposes. This is done automatically for NCNs but manually for their BMCs. For BMCs, this role may not have been set during the previous installation.
 
-1. Run the following command to ensure that the roles are properly set.
+1. Ensure that the roles in HSM are properly set.
 
     ```bash
     ncn-m001# cray hsm state components bulkRole update --role Management --component-ids \
@@ -249,7 +249,7 @@ Both NCNs and their BMCs require their roles to be set to `Management` in HSM fo
     "x3000c0s5b0 Role=Management"
     ```
 
-1. Run the following command to ensure that they are all locked (NCNs and their BMCs).
+1. Ensure the NCNs and their BMCs are all locked.
 
     ```bash
     ncn-m001# /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
