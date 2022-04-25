@@ -222,13 +222,23 @@ To prevent any possibility of losing Workload Manager configuration data or file
 
 ## Stage 0.6 - Verify NCN BMC Roles and Locks
 
-Both NCNs and their BMCs require their roles to be set to 'Management' in HSM for admin locking purposes. This is done automatically for NCNs but manually for their BMCs. For BMCs, this role may not have been set during the previous installation.
+Both NCNs and their BMCs require their roles to be set to `Management` in HSM for locking purposes. This is done automatically for NCNs but manually for their BMCs. For BMCs, this role may not have been set during the previous installation.
 
 1. Run the following command to ensure that the roles are properly set.
 
+    ```bash
+    ncn-m001# cray hsm state components bulkRole update --role Management --component-ids \
+                            $(cray hsm state components list --role management --type node --format json | \
+                                jq -r .Components[].ID | sed 's/n[0-9]*//' | tr '\n' ',' | sed 's/.$//')
+    ncn-m001# cray hsm state components query create --format json --component-ids \
+                            $(cray hsm state components list --role management --type node --format json | \
+                                jq -r .Components[].ID | sed 's/n[0-9]*//' | tr '\n' ',' | sed 's/.$//') | \
+                                jq '.Components[] | "\(.ID) Role=\(.Role)"'
     ```
-    ncn-m001# cray hsm state components bulkRole update --role Management --component-ids $(cray hsm state components list --role management --type node --format json | jq -r .Components[].ID | sed 's/n[0-9]*//' | tr '\n' ',' | sed 's/.$//')
-    ncn-m001# cray hsm state components query create --format json --component-ids $(cray hsm state components list --role management --type node --format json | jq -r .Components[].ID | sed 's/n[0-9]*//' | tr '\n' ',' | sed 's/.$//') | jq '.Components[] | "\(.ID) Role=\(.Role)"'
+
+    Expected output looks similar to the following:
+
+    ```
     "x3000c0s8b0 Role=Management"
     "x3000c0s9b0 Role=Management"
     "x3000c0s2b0 Role=Management"
@@ -239,15 +249,15 @@ Both NCNs and their BMCs require their roles to be set to 'Management' in HSM fo
     "x3000c0s5b0 Role=Management"
     ```
 
-1. Run the following command to ensure they're all locked (NCNs and their BMCs).
+1. Run the following command to ensure that they are all locked (NCNs and their BMCs).
 
-    ```
+    ```bash
     ncn-m001# /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
     ```
 
-For more information about setting NCN BMC roles see [Set BMC Management Role](../../operations/hardware_state_manager/Set_BMC_Management_Role.md)
+For more information about setting NCN BMC roles, see [Set BMC Management Role](../../operations/hardware_state_manager/Set_BMC_Management_Role.md).
 
-For more information about locking NCNs and their BMCs see [Lock and Unlock Nodes](../../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
+For more information about locking NCNs and their BMCs, see [Lock and Unlock Nodes](../../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
 
 <a name="stage_completed"></a>
 
