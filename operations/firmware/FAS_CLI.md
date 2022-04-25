@@ -92,7 +92,7 @@ There are several ways to get more information about a firmware update. An `acti
 
 <a name="interpreting"></a>
 
-### Interpreting Output
+## Interpreting Output
 
 For the steps below, the following returned messages will help determine if a firmware update is needed. The following are end `state`s for `operations`. The Firmware `action` itself should be in `completed` once all operations have finished.
 
@@ -682,7 +682,7 @@ Given the nature of the `model` field and its likelihood to not be standardized,
 
 ## FAS Loader Commands
 
-#### Loader Status
+### Loader Status
 
 To check if the loader is currently busy and receive a list of loader run IDs:
 
@@ -698,7 +698,7 @@ loaderRunID = "8efb19c4-77a2-41da-9a8f-fccbfe06f674"
 ```
 The loader can only run one job at a time, if the loader is `busy`, it will return an error on any attempt to create an additional job.
 
-#### Load Firmware From Nexus
+### Load Firmware From Nexus
 
 Firmware may be released and placed into the Nexus repository.
 FAS will return a loaderRunID.
@@ -713,7 +713,7 @@ loaderRunID = "c2b7e9bb-f428-4e4c-aa83-d8fd8bcfd820"
 
 See [Load Firmware from Nexus in FAS Admin Procedures](./FAS_Admin_Procedures.md#loadNexus)
 
-#### Load Individual RPM or ZIP into FAS
+### Load Individual RPM or ZIP into FAS
 
 To load an RPM or ZIP into FAS on a system, copy the RPM or ZIP file to ncn-m001 or one of the other NCNs.
 FAS will return a loaderRunID.
@@ -730,7 +730,7 @@ loaderRunID = "dd37dd45-84ec-4bd6-b3c9-7af480048966"
 
 See [Load Firmware from RPM or ZIP file in FAS Admin Procedures](./FAS_Admin_Procedures.md#loadRPM)
 
-#### Display Results of Loader Run
+### Display Results of Loader Run
 
 Using the loaderRunID returned from the loader upload command, run the following command to get the output from the upload. The `--format json` parameter makes it easier to read.
 
@@ -770,7 +770,7 @@ A successful run will end with `*** Number of Updates: x ***`.
 
 > **NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
 
-#### Delete Loader Run Data
+### Delete Loader Run Data
 
 To delete the output from a loader run and remove it from the loader run list:
 
