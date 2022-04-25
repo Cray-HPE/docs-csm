@@ -146,6 +146,21 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
       linux# rpm -Uvh $(find ${CSM_PATH}/rpm/embedded -name "lsscsi-*.x86_64.rpm" | sort -V | tail -1)
       ```
 
+1. Remove CNI configuration from prior install
+
+    If you are reinstalling the system and you are **using ncn-m001 to prepare the USB image**, remove some of prior CNI configuration.
+
+    ```bash
+    ncn-m001# rm -rf /etc/cni/net.d/00-multus.conf /etc/cni/net.d/10-*.conflist /etc/cni/net.d/multus.d
+    ```
+
+    This should leave you with the following two files in `/etc/cni/net.d`.
+
+    ```bash
+    ncn-m001# ls /etc/cni/net.d
+    87-podman-bridge.conflist  99-loopback.conf.sample
+    ```
+
 <a name="create-the-bootable-media"></a>
 ## 2. Create the Bootable Media
 
@@ -720,6 +735,10 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    > in the documentation command prompts from this point onward.
 
    > **Note:** If the hostname returned by the `hostnamectl` command is `pit`, then set the hostname manually with `hostnamectl`. In that case, be sure to append the `-pit` suffix to prevent masquerading a PIT node as a real NCN to administrators and automation.
+   
+1. Install the latest documentation RPM.
+
+   See [Check for Latest Documentation](../update_product_stream/index.md#documentation)
 
 1. Print information about the booted PIT image.
 
