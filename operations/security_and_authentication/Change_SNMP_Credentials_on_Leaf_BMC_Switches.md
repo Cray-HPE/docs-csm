@@ -17,7 +17,7 @@ There are three steps involved. The first two steps involve running the *leaf_sw
 
     1.  Set the SNMP auth password environment variable:
         ```bash
-        ncn-m001# read -s SNMP_AUTH_PASS 
+        ncn-m001# read -s SNMP_AUTH_PASS
         ncn-m001# echo $SNMP_AUTH_PASS
         ```
 
@@ -97,7 +97,7 @@ There are three steps involved. The first two steps involve running the *leaf_sw
                 vault kv put secret/hms-creds/$XNAME -
         done
         ```
-    
+
     -   To update Vault for a single leaf switch:
 
         ```bash
@@ -108,7 +108,7 @@ There are three steps involved. The first two steps involve running the *leaf_sw
             vault kv put secret/hms-creds/$XNAME -
         ```
 
-   
+
 
 5.  Restart the River Endpoint Discovery Service (REDS) to pickup the new SNMP credentials:
 

@@ -7,7 +7,7 @@ The containers that run the Ansible code cloned from the Git repositories in the
 The following modules and plug-ins are available:
 
 * **`cfs_aggregator.py` Callback Plug-in**
-  
+
   This callback plug-in is included to relay playbook execution results back to CFS for the purpose of tracking session status and component state.
 
   > **WARNING:** This plug-in is required for CFS to function properly and must not be removed from the `ansible.cfg` file.

@@ -9,7 +9,7 @@ The `kcadm.sh` utility is included with the Shasta Keycloak container image and 
     * Determine if a user is federated.
     * Change a user credential (for a keycloak-local account only).
     * Create a new local Keycloak user that is compatible (has the correct role mappings) with the Cray CLI.
-    
+
 All of the operations described below must be run as `root` from the `ncn-m001` node.
 
 Usage of Bash functions provided below will require making additions to the Linux environment. This can be accomplished by pasting the function into the shell, or pasting the function into a file and then sourcing the file, before running the indicated function.
@@ -41,13 +41,13 @@ kc-find-user(){
   fi
 
   local MAA
-  MAA=$(kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} | 
+  MAA=$(kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} |
         base64 --decode)
   if [ -z "$MAA" ]; then
     echo "Unable to get the master admin authentication credential"
     return 1
   fi
-  
+
   kubectl -n services exec cray-keycloak-0 -c keycloak -- sh -c "
     echo 'Looking for the Keycloak user: $1' &&
     ./opt/jboss/keycloak/bin/kcadm.sh get users -r shasta -q username='$1' --no-config \
@@ -152,17 +152,17 @@ kc-set-local-user-password(){
   fi
 
   local MAA
-  MAA=$(kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} | 
+  MAA=$(kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} |
         base64 --decode)
   if [ -z "$MAA" ]; then
     echo "Unable to get the master admin authentication credential"
     return 1
   fi
- 
+
   # Specify a new default password.
   # Set KC_USER_NEWPASSWD to a specific password override the default
   # before calling this function.
-  # i.e.: KC_USER_NEWPASSWD=someNewPassword 
+  # i.e.: KC_USER_NEWPASSWD=someNewPassword
   : ${KC_USER_NEWPASSWD:=changeme1}
 
   kubectl -n services exec cray-keycloak-0 -c keycloak -- sh -c "
@@ -218,7 +218,7 @@ kc-create-local-cli-user(){
   fi
 
   local MAA
-  MAA=$(kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} | 
+  MAA=$(kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} |
         base64 --decode)
   if [ -z "$MAA" ]; then
     echo "Unable to get the master admin authentication credential"
@@ -228,7 +228,7 @@ kc-create-local-cli-user(){
   # Specify a new default password.
   # Set KC_USER_NEWPASSWD to a specific password to override the default
   # before calling this function.
-  # i.e.: KC_USER_NEWPASSWD=someNewPassword 
+  # i.e.: KC_USER_NEWPASSWD=someNewPassword
   : ${KC_USER_NEWPASSWD:=changeme1}
 
   kubectl -n services exec cray-keycloak-0 -c keycloak -- sh -c "
@@ -293,7 +293,7 @@ Add the following Bash function to your environment:
 kc-delete-local-user(){
   if [ $# -eq 0 ]; then
     echo "Usage: ${FUNCNAME[0]} userID"
-    echo "where 'userID' is the 'id' of the user as reported by kc-find-user" 
+    echo "where 'userID' is the 'id' of the user as reported by kc-find-user"
     return 1
   fi
 
@@ -302,7 +302,7 @@ kc-delete-local-user(){
         confirm && [[ $confirm == [yY] ]] || return 1
 
   local MAA
-  MAA=$(kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} | 
+  MAA=$(kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} |
         base64 --decode)
   if [ -z "$MAA" ]; then
     echo "Unable to get the master admin authentication credential"

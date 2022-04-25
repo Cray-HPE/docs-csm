@@ -9,7 +9,7 @@
     > Run this command on the storage node that was rebuilt or added.
 
     ```bash
-    ncn-s# mkdir -pv /usr/share/doc/csm/scripts && 
+    ncn-s# mkdir -pv /usr/share/doc/csm/scripts &&
            scp -p ncn-m001:/usr/share/doc/csm/scripts/join_ceph_cluster.sh /usr/share/doc/csm/scripts
     ```
 
