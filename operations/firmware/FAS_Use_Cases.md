@@ -440,10 +440,11 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
 1.  Bring up the Slingshot Fabric.
     
-    Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
+    Refer to the following documentation on the HPE Customer Support Center
+    for more information on how to bring up the Slingshot Fabric:
     
-    * The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
-    * The *Slingshot Troubleshooting Guide* PDF.
+    * The *HPE Slingshot Operations Guide* PDF for HPE Cray EX systems.
+    * The *HPE Slingshot Troubleshooting Guide* PDF.
 
 2.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
@@ -463,29 +464,6 @@ This procedure updates node controller \(nC\) firmware.
 ### Prerequisites
 
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system.
-
-### Procedure for updating NCNs:
-1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H x3000c0s10b0 -s` (`x3000c0s10b0` is the component name (xname) of the NCN BMC)-
-   See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc)
-2. Run a `dryrun` for all NCNs first to determine which NCNs and targets need updating.
-3. For each NCN requiring updates to target `BMC` or `iLO5`
-   **NOTE:** Update of `BMC` and `iLO 5` will not affect the nodes.
-   1. Unlock the NCN BMC
-      See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
-   2. Run the FAS action on the NCN
-   3. Relock the NCN BMC
-      See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
-4. For each NCN requiring updates to target `BIOS` or `System ROM`:
-   1. Unlock the NCN BMC
-      See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
-   2. Run the FAS action on the NCN
-   3. Reboot the Node
-      See [Reboot NCNs](../node_management/Reboot_NCNs.md)
-   4. For `HPE` NCNs, run the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh`
-      See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc)
-   5. Relock the NCN BMC
-      See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
-
 
 ### Gigabyte
 
@@ -935,7 +913,7 @@ Make sure you have waited for the current firmware to be updated before starting
 
 The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
 
-### Procedure for Updating NCNs
+### Procedure
 
 1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H XNAME -s`. Replace `XNAME` with the xname of the NCN BMC.
    See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc) for more information.

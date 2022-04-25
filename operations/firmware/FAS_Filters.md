@@ -10,7 +10,6 @@ FAS uses five primary filters for `actions` and `snapshots` to determine what op
 * Command Filters - Determine `how` the operations will be executed. The following command filters are available:
 	* `command`
 
-
 All filters are logically connected with `AND` logic. Only the `stateComponentFilter`, `targetFilter`, and `inventoryHardwareFilter` are used for snapshots.
 
 ---
@@ -18,6 +17,7 @@ All filters are logically connected with `AND` logic. Only the `stateComponentFi
 ## Selection Filters
 
 ### `stateComponentFilter`
+
 The state component filter allows users to select hardware to update. Hardware can be selected individually with component names (xnames), or in groups by leveraging the Hardware State Manager (HSM) groups and partitions features.
 
 #### Parameters
@@ -51,7 +51,8 @@ For example, if a user specifies an image that only applies to gigabyte, nodeBMC
 #### Parameters
 
 * `imageID` - The ID of the image to force onto the system.
-* `overrideImage` - If this is combined with `imageID`; it will FORCE the selected image onto all hardware identified, even if it is not applicable. **WARNING:** This may cause undesirable outcomes, but most hardware will prevent a bad image from being loaded.
+* `overrideImage` - If this is combined with `imageID`; it will FORCE the selected image onto all hardware identified, even if it is not applicable.
+  > **WARNING:** This may cause undesirable outcomes, but most hardware will prevent a bad image from being loaded.
 
 ---
 

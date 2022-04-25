@@ -6,25 +6,20 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 <a name="topics"></a>
 
-### Topics
+## Topics
 
-  * [FAS Admin Procedures](#fas-admin-procedures)
-    * [Topics](#topics)
-    * [Warning for Non-Compute Nodes (NCNs)</a>](#warning-for-non-compute-nodes-ncns)
-    * [Ignore Nodes within FAS](#ignore-nodes-within-fas)
-      * [Procedure](#procedure)
-    * [Override an Image for an Update](#override-an-image-for-an-update)
-    * [Procedure](#procedure-1)
-    * [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
-      * [Procedure](#procedure-2)
-    * [Load Firmware from Nexus](#load-firmware-from-nexus)
-    * [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file)
+  * [Warning for Non-Compute Nodes (NCNs)</a>](#warning-for-non-compute-nodes-ncns)
+  * [Ignore Nodes within FAS](#ignore-nodes-within-fas)
+  * [Override an Image for an Update](#override-an-image-for-an-update)
+  * [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
+  * [Load Firmware from Nexus](#load-firmware-from-nexus)
+  * [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file)
 
 ---
 
 <a name="warning-for-non-compute-nodes-ncns"></a>
 
-### Warning for Non-Compute Nodes (NCNs)</a>
+## Warning for Non-Compute Nodes (NCNs)
 
 NCNs and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
@@ -32,7 +27,7 @@ NCNs and their BMCs should be locked with the HSM locking API to ensure they are
 
 <a name="ignore-nodes-within-fas"></a>
 
-### Ignore Nodes within FAS
+## Ignore Nodes within FAS
 
 The default configuration of FAS no longer ignores `management` nodes, which prevents FAS from firmware updating the NCNs. To reconfigure the FAS deployment to exclude non-compute nodes (NCNs) and ensure they cannot have their firmware upgraded, the `NODE_BLACKLIST` value must be manually enabled
 
@@ -40,7 +35,7 @@ The default configuration of FAS no longer ignores `management` nodes, which pre
 
 <a name="procedure"></a>
 
-#### Procedure
+### Procedure
 
 1. Check that there are no FAS actions running.
 
@@ -62,7 +57,7 @@ The default configuration of FAS no longer ignores `management` nodes, which pre
 
 <a name="override-an-image-for-an-update"></a>
 
-### Override an Image for an Update
+## Override an Image for an Update
 
 If an update fails because of `"No Image available"`, it may be caused by FAS unable to match the data on the node to find an image in the image list.
 
@@ -77,7 +72,9 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
    ```bash
    ncn# cray fas images list --format json | jq '.[] | .[] | select(.target=="TARGETNAME")'
    ```
+   
    To narrow down the selection, update the select field to match multiple items. For example:
+   
    ```bash
    ncn# cray fas images list --format json | jq '.[] | .[] | select(.target=="BMC" and .manufacturer=="cray" and .deviceType=="NodeBMC")'
    ```
@@ -152,7 +149,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
    ncn# cray fas images describe {imageID}
    ```
 
-   **WARNING:** FAS will force a flash of the device, using incorrect firmware may make it inoperable.
+   > **WARNING:** FAS will force a flash of the device, using incorrect firmware may make it inoperable.
 
 Re-run the FAS actions command using the updated json file. **It is strongly recommended to run a dry-run (overrideDryrun=false) first and check the actions output.**
 
@@ -160,11 +157,11 @@ Re-run the FAS actions command using the updated json file. **It is strongly rec
 
 <a name="check-for-new-firmware-versions-with-a-dry-run"></a>
 
-### Check for New Firmware Versions with a Dry-Run
+## Check for New Firmware Versions with a Dry-Run
 
 Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the overrideDryrun parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
 
-**WARNING:** It is crucial that an admin is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The admin assumes full responsibility for this knowledge.
+> **WARNING:** It is crucial that an admin is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The admin assumes full responsibility for this knowledge.
 
 It is likely that when performing a firmware update, that the current version of firmware will not be available. This means that after successfully upgrading, the firmware cannot be downgraded.
 
@@ -172,7 +169,7 @@ This procedure includes information on how check the firmware versions for the e
 
 <a name="procedure-2"></a>
 
-#### Procedure
+### Procedure
 
 1. Run a dry-run firmware update.
 
@@ -261,7 +258,7 @@ This procedure includes information on how check the firmware versions for the e
 
 		  In the example below, there are two operations in the `succeeded` state, indicating there is an available firmware version that FAS can use to update firmware.
 
-      ```
+      ```bash
       ncn# cray fas actions status list {actionID}
       actionID = "e6dc14cd-5e12-4d36-a97b-0dd372b0930f"
       snapshotID = "00000000-0000-0000-0000-000000000000"
@@ -428,7 +425,7 @@ Update the firmware on any devices indicating a new version is needed.
 
 <a name="load-firmware-from-nexus"></a>
 
-### Load Firmware from Nexus
+## Load Firmware from Nexus
 
 This procedure will read all RPMs in the Nexus repository and upload firmware images to S3 and create image records for firmware not already in FAS.
 
@@ -457,7 +454,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
     loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
     ```
 
-    **NOTE:** Depending on how many files are in Nexus and how large those files are, the loader may take several minutes to complete.
+    > **NOTE:** Depending on how many files are in Nexus and how large those files are, the loader may take several minutes to complete.
 
 3. Check the results of the loader run.
 
@@ -465,7 +462,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
     ncn# cray fas loader describe {loaderRunID} --format json
     ```
 
-    **NOTE:** `{loadRunID}` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
+    > **NOTE:** `{loadRunID}` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
     Use the `--format json` to make it easier to read.
 
     ```bash
@@ -499,15 +496,16 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
       ]
     }
     ```
+
     A successful run will end with `*** Number of Updates: x ***`.
 
-    **NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in Nexus. If the number is 0, all images were already in FAS.
+    > **NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in Nexus. If the number is 0, all images were already in FAS.
 
 ---
 
 <a name="load-firmware-from-rpm-or-zip-file"></a>
 
-### Load Firmware from RPM or ZIP file
+## Load Firmware from RPM or ZIP file
 
 This procedure will read a single local RPM (or ZIP) file and upload firmware images to S3 and create image records for firmware not already in FAS.
 
@@ -547,7 +545,7 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
     ncn# cray fas loader describe {loaderRunID} --format json
     ```
 
-    **NOTE:** `{loadRunID}` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
+    > **NOTE:** `{loadRunID}` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
     Use the `--format json` to make it easier to read.
 
     ```bash
@@ -578,6 +576,7 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
       ]
     }
     ```
+    
     A successful run will end with `*** Number of Updates: x ***`.
 
-    **NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
+    > **NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
