@@ -40,4 +40,3 @@ switch# show interface port-channel
 3. Administrators can configure a LAG interface
 
 [Back to Index](index.md)
-

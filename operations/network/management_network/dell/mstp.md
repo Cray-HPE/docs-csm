@@ -25,4 +25,3 @@ switch# show spanning-tree mst
 3. Spanning-tree splits traffic domain between two DUTs
 
 [Back to Index](index.md)
-

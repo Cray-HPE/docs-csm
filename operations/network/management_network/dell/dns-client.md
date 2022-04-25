@@ -23,4 +23,3 @@ Add names to complete unqualified host names in CONFIGURATION mode:
 3. Administrators can ping the device
 
 [Back to Index](index.md)
-

@@ -1,6 +1,6 @@
 # VLAN Trunking 802.1Q
 
-A trunk port carries packets on one or more VLANs specified. Packet that ingress on a trunk port are in the VLAN specified in its 802.1Q header, or native VLAN if the packet has no 802.1Q header. A packet that egresses through a trunk port will have an 802.1Q header if it has a nonzero VLAN ID. Any packet that ingresses on a trunk port tagged with a VLAN that the port does not trunk is dropped.
+A trunk port carries packets on one or more specified VLANs. Packet that ingress on a trunk port are in the VLAN specified in its 802.1Q header, or native VLAN if the packet has no 802.1Q header. A packet that egresses through a trunk port will have an 802.1Q header if it has a nonzero VLAN ID. Any packet that ingresses on a trunk port tagged with a VLAN that the port does not trunk is dropped.
 
 ## Configuration Commands
 
@@ -35,4 +35,3 @@ switch# show interfaces switchport
 
 
 [Back to Index](index.md)
-

@@ -18,4 +18,3 @@ switch# show ip access-list name
 ```
 
 [Back to Index](index.md)
-

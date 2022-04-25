@@ -1,4 +1,3 @@
-
 # Configure Physical Interfaces
 
 Ethernet port interfaces are enabled by default.

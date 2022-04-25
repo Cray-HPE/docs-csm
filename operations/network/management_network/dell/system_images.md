@@ -29,4 +29,3 @@ Switch(config)# show boot detail
 3. Administrators can see they are running the uploaded image
 
 [Back to Index](index.md)
-

@@ -7,4 +7,3 @@ switch(config)# delete startup-config
 ```
 
 [Back to Index](index.md)
-
