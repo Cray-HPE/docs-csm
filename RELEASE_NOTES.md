@@ -118,3 +118,4 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * The cray-externaldns-coredns, cray-externaldns-etcd, and cray-externaldns-wait-for-etcd pods have been removed. PowerDNS is now the provider of the external DNS service.
 
 ## Known Issues
+* Console logging may fill all available space for console log files. See [Console logs filling up availble storage](troubleshooting/known_issues/console_log_storage_filling.md) for more information.
