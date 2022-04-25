@@ -11,10 +11,10 @@ To recover from this situation, the following can be done.
 1. Re-run the keycloak localize job.
    ```bash
    ncn# kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
-   -ojson | jq '.items[0]' > keycloak-users-localize-job.json
+           -ojson | jq '.items[0]' > keycloak-users-localize-job.json
 
    ncn# cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
-   jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
+           jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
    job.batch "keycloak-users-localize-1" deleted
    job.batch/keycloak-users-localize-1 replaced
    ```
@@ -33,10 +33,10 @@ To recover from this situation, the following can be done.
 1. Re-run the keycloak localize job.
    ```bash
    ncn# kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
-   -ojson | jq '.items[0]' > keycloak-users-localize-job.json
+           -ojson | jq '.items[0]' > keycloak-users-localize-job.json
 
    ncn# cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
-   jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
+           jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
    job.batch "keycloak-users-localize-1" deleted
    job.batch/keycloak-users-localize-1 replaced
    ```

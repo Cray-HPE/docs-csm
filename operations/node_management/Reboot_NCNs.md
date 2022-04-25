@@ -90,19 +90,19 @@ The `kubectl` command is installed.
     Nodes that are in a failed state prior to the reboot will not be automatically
     configured once they have been rebooted. To get a list of nodes in the failed state:
    
-   ```
+   ```bash
    ncn-m001# cray cfs components list --status failed --format json | jq .[].id
    ```
    
    If there are any nodes in this list, they can be reset with:
    
-   ```
+   ```bash
    ncn-m001# cray cfs components update <xname> --enabled False --error-count 0
    ```
    
    Or, to reset the error count for all nodes:
    
-   ```
+   ```bash
    ncn-m001# cray cfs components list --status failed | jq .[].id -r | while read -r xname ; do
        echo "$xname"
        cray cfs components update $xname --enabled False --error-count 0
@@ -371,7 +371,7 @@ Before rebooting NCNs:
 
     14. Repeat all of the sub-steps above for the remaining worker nodes, going from the highest to lowest number until all worker nodes have successfully rebooted.
 
-2. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an ESTABLISHED state.
+2. Ensure that BGP sessions are reset so that all BGP peering sessions with the spine switches are in an `ESTABLISHED` state.
 
    See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
