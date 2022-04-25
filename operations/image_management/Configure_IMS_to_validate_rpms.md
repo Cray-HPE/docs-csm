@@ -65,7 +65,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     kiwi-ng $DEBUG_FLAGS --logfile=$PARAMETER_FILE_KIWI_LOGFILE --type tbz system build --description $RECIPE_ROOT_PARENT \
     --target $IMAGE_ROOT_PARENT --add-bootstrap-package file:///mnt/ca-rpm/cray_ca_cert-1.0.1-1.x86_64.rpm \
     --signing-key /signing-keys/my-signing-key.asc   # <--- ADD SIGNING-KEY FILE
-    
+
     [...]
     ```
 
@@ -137,7 +137,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     [...]
 
     - image: cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7-validate
-    
+
     [...]
     ```
 
@@ -262,7 +262,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     ```
 
     Example output:
-    
+
     ```
     id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
     recipe_type = "kiwi-ng"

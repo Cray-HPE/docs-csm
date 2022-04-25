@@ -50,7 +50,7 @@ This document outlines the hardware necessary to meet CSM's Plan of Record (PoR)
 - _Ephemeral:_ 1x SSD larger than 1TiB (1048576000000 bytes)
 
 <a name="worker-nics"></a>
-#### Worker NICs 
+#### Worker NICs
 
 > **`NOTE:`** There is no PCIe redundancy for the management network for worker NCNs. The only redundancy set up for workers is port redundancy.
 
@@ -64,7 +64,7 @@ This document outlines the hardware necessary to meet CSM's Plan of Record (PoR)
 #### Storage Disks
 
 - _Operating System:_ 2x SSDs of equal size, and less than 500GiB (524288000000 bytes)
-- _CEPH:_ 8x SSDs of any size 
+- _CEPH:_ 8x SSDs of any size
 
 > **`NOTE:`** Any available disk that is not consumed by the operating system will be used for CEPH, but a node needs a minimum of 8 disks for making an ideal CEPH pool for CSM.
 

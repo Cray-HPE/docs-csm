@@ -30,7 +30,7 @@ An example of this would be:
     --bican-user-network-name CAN
 ```
 
-The above example will use *default values* for all other input values.  A list of input parameters and default values can be found by running `./sls_updater_csm_1.2.py --help`.  Likely using default VLAN and Network values will not be what's desired:  The CAN or CHN are usually site-routable values.  
+The above example will use *default values* for all other input values.  A list of input parameters and default values can be found by running `./sls_updater_csm_1.2.py --help`.  Likely using default VLAN and Network values will not be what's desired:  The CAN or CHN are usually site-routable values.
 
 In this case an example minimal usable input while using CAN, would be:
 
@@ -144,7 +144,7 @@ As might be observed from the above example, due to pre-uprade subnet sizes, or 
     1. Copy the first entry in the log which says `Creating subnets in the following order`.
         1. If `--preserve-existing-subnet-for-cmn external-dns` was used, remove the metallb_address_pool from the subnets list.
         2. If `--preserve-existing-subnet-for-cmn external-dns` was used, remove bootstrap_dhcp from the subnets list.
-    2. Copy the first entry in the log which says `Remaining subnets`.  This provides the canonical list from which remaining subnets in the previous entry can be assigned IP addresses. 
+    2. Copy the first entry in the log which says `Remaining subnets`.  This provides the canonical list from which remaining subnets in the previous entry can be assigned IP addresses.
 4. Add override command line values to override the upgrader's default logic and pin subnet allocations for each network.  This is a manual step, but is safe because the upgrader produced both the list of subnets and the subnet IPAM allocations.  Users are simply assigning subnets from a fixed list and a pre-allocated list of IPv4 subnets.
 5. Re-run the upgrader with the new parameters.
 6. Repeat the process, if necessary.
@@ -249,4 +249,4 @@ After review, the allocations for CMN IPs in this run are as precribed.  A simil
 
 This has been a review of the process of using *expert mode* in the 1.2 SLS upgrader.  The focus has been on IP allocation of the CMN network.  A very similar process can be used if the CAN network is desired (instead of a CHN).
 
-**WARNING:** During design and implementation of the SLS upgrader all attempts were made to safely and accurately migrate and update SLS data.  
+**WARNING:** During design and implementation of the SLS upgrader all attempts were made to safely and accurately migrate and update SLS data.

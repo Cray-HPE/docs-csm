@@ -11,7 +11,7 @@ switch(config)# interface port-channel 10
 switch(config-if-po-1)# no shutdown
 ```
 
-Associate member links with the LAG interface: 
+Associate member links with the LAG interface:
 
 Example: `switch(config)# interface IFACE`
 
