@@ -1,4 +1,4 @@
-## Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials
+# Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials
 
 This procedure provisions a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish default global credential to access the CMM controllers and node controllers (BMCs).
 
@@ -6,9 +6,11 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
 ### Prerequisites
 
+- All blades in the cabinet have been powered off.
+
 - Physical access to the CEC LCD panel to enable privileged command mode. The CEC does not enable users to set, display, or clear the password hash in restricted command mode.
 
-- A laptop with a terminal program such as Netcat (`nc`), `telnet`, or PuTTY that supports 10/100 IPv6 Ethernet connectivity to the CEC Ethernet port is required. 
+- A laptop with a terminal program such as Netcat (`nc`), `telnet`, or PuTTY that supports 10/100 IPv6 Ethernet connectivity to the CEC Ethernet port is required.
 
 - A generated SHA-512 hash for the CEC credentials:
 
@@ -16,20 +18,20 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
    - See the `man 3 crypt` page for a description: https://man7.org/linux/man-pages/man3/crypt.3.html
 
   ```screen
-  remote# passhash PASSWORD 
+  remote# passhash PASSWORD
   $6$v5YlqfghB$scBci.GbT8...
   ```
-  
+
   **Note**: The example password hash is truncated to prevent using this example value. The password hash is a SHA-512 hash.
 
 ### Procedure
 
 1. Disconnect the CEC Ethernet cable from the Ethernet port.
-   
+
 2. Connect an Ethernet cable from an Apple Mac or Linux laptop to the CEC Ethernet port. The CEC Ethernet PHY will auto negotiate to either 10/100Mb speed and it supports auto crossover functionality. Any standard Ethernet patch cord should work for this.
-   
+
    ![](../../img/CEC_Front_Panel.svg)
-   
+
 3. Use the Right Arrow on the display controls to select the CEC Network Settings Menu. The IPv6 link local address is displayed on this menu.
 
 4. Start the terminal program and use Netcat (`nc`), `telnet`, or PuTTY to connect to CEC command shell and provide the CEC IPv6 link local address.
@@ -82,7 +84,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
 9. Enter `set_hash` and provide the password hash value as the argument.
 
-   The CEC validates the input syntax of the hash. Adding an extra char or omitting a character is flagged as an error. I a character is changed, the password entered in the serial console login shell or the Redfish `root` account will not work. If that happens, rerun the `set_hash` command on the CEC and reboot the CMMs.
+   The CEC validates the input syntax of the hash. Adding an extra character or omitting a character is flagged as an error. If a character is changed, the password entered in the serial console login shell or the Redfish `root` account will not work. If that happens, then rerun this procedure from the beginning.
 
       ```screen
       EXE> set_hash $6$v5YlqxKB$scBci.GbT8...
@@ -107,43 +109,42 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
     ![Front Panel Controls](../../img/CEC_Display_Controls_CEC_Actions.svg)
 
-    
+13. Power cycle the compute blade slots in each chassis.
 
-13. **Important!**: Power cycle the compute blade slots in each chassis.
+    Skip this step if the compute blade slots in each chassis have already been powered off.
 
-    1. If Cray System Management (CSM) is provisioned, use CAPMC to power cycle the compute blade slots (example show cabinets 1000-1003). **Note**: If a chassis is not fully populated, specify each slot individually:
+    1. To perform blade power control operations, SSH to a CMM and and use the `redfish` command to perform the power cycle. This must be done for each populated compute blade in each odd- or even-numbered chassis in the cabinet depending on which CEC issued the reset above.
 
-       ```bash
-       ncn-m001# cray capmc xname_off create --xnames x[1000-1003]c[0-7]s[0-7] --format json
-       ```
-
-       Check the power status:
-
-       ```bash
-       ncn-m001# cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
-       ```
-
-       Power on the compute chassis slots:
-
-       ```bash
-       ncn-m001# cray capmc xname_on create --xnames x[1000-1003]c[0-7]s[0-7] --format json
-       ```
-
-    2. If the cabinet has not been provisioned with CSM or other management software (bare-metal), the compute chassis slots are most likely powered off. To perform chassis power control operations, SSH to a CMM and and use the `redfish -h` command to display the power control commands:
-
-       ```
+       ```screen
        > ssh root@x9000c1
        x9000c1:> redfish -h
-       
+
        "redfish" -- redfish API debugging tool
-       <snip>    
+       <snip>
                redfish chassis status
                redfish chassis power [on|off|forceoff]
                redfish [blade|perif] [0-7] [on|off|forceoff]
                redfish node status
                redfish node [0-1] [on|off|forceoff]
        <snip>
-       x9000c1:> 
+       x9000c1:>
+       x9000c1:> redfish blade 0 off
+       x9000c1:> redfish blade 1 off
+       x9000c1:> redfish blade 2 off
+       x9000c1:> redfish blade 3 off
+       x9000c1:> redfish blade 4 off
+       x9000c1:> redfish blade 5 off
+       x9000c1:> redfish blade 6 off
+       x9000c1:> redfish blade 7 off
+       x9000c1:> redfish blade 0 on
+       x9000c1:> redfish blade 1 on
+       x9000c1:> redfish blade 2 on
+       x9000c1:> redfish blade 3 on
+       x9000c1:> redfish blade 4 on
+       x9000c1:> redfish blade 5 on
+       x9000c1:> redfish blade 6 on
+       x9000c1:> redfish blade 7 on
+       x9000c1:>
        ```
 
 14. To test the password, connect to the CMM serial console though the CEC. The IPv6 address is the same, but the port numbers are different as described below.
@@ -161,6 +162,6 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
 15. Perform this procedure for each CEC in all system cabinets.
 
-    - HPE Cray EX3000 and EX4000 cabinets have two CECs per cabinet.  
+    - HPE Cray EX3000 and EX4000 cabinets have two CECs per cabinet.
 
     - HPE Cray EX2000 cabinets have a single CEC per cabinet.
