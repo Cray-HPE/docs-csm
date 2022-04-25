@@ -24,7 +24,7 @@ The system is fully installed and has transitioned off of the LiveCD.
 
 All activities required for site maintenance are complete.
 
-The latest docs-csm RPM has been installed on the master nodes. See [Update CSM Product Stream](../../update_product_stream/index.md) for information in installing the latest docs-csm documentation RPM.
+The latest `docs-csm` RPM has been installed on the master nodes. See [Update CSM Product Stream](../../update_product_stream/index.md) for more information.
 
 1. Run `ncn_add_pre-req.py` to adjust the network.
 
