@@ -37,7 +37,7 @@ For more information about modifying `customizations.yaml` and tuning based on s
 
 1. Troubleshooting NTP
 
-   During execution of the upgrade procedure, if there is clock skew on one or more NCNs, the [Configure NTP on NCNs](../../operations/node_management/Configure_NTP_on_NCNs.md) procedure can be used to troubleshoot NTP configuration or to sync time.
+   During upgrades, clock skew may occurr when rebooting nodes.  If one node is rebooted and it's clock differs signifigantly from those that have _not_ been rebooted, it can cause slight contention among the other nodes because it rejoins the other NCNs and the new time of that NCN has to be calculated with that of the other NCNs.  Simply leaving the NCNs alone and letting Chrony slowly adjust the clocks can resolve intermittent clock skew issues.  If it does not resolve on its own, you can follow the [Configure NTP on NCNs](../../operations/node_management/Configure_NTP_on_NCNs.md) procedure to troubleshoot it further.
 
 1. Bare-Metal Etcd Recovery
 
