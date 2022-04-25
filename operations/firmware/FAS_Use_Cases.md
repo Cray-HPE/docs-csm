@@ -984,10 +984,10 @@ If the Redfish model is different \(ignoring casing\) and the blades in question
        "blockedBy":[
 
        ]
-    }
+     }
     ```
 
-    The model in this example is `WNC-Rome` and the firmware version currently running is `wnc.bios-1.2.5`.
+The model in this example is `WNC-Rome` and the firmware version currently running is `wnc.bios-1.2.5`.
 
 ### Procedure
 
