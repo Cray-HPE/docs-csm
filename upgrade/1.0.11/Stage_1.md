@@ -36,7 +36,7 @@
         ```bash
         ncn-s# ceph orch apply node-exporter && ceph orch apply alertmanager
         ```
-        
+
         Expected output should look similar to the following:
         ```
         Scheduled node-exporter update...
@@ -50,7 +50,7 @@
         ```bash
         ncn-s# ceph orch ps --daemon_type node-exporter
         ```
-        
+
         Expected output on a system with three Ceph nodes should look similar to the following:
         ```
         NAME                    HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                       IMAGE ID           CONTAINER ID
@@ -66,7 +66,7 @@
         ```bash
         ncn-s# ceph orch ps --daemon_type alertmanager
         ```
-        
+
         Expected output should look similar to the following:
         ```
         NAME                   HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                      IMAGE ID           CONTAINER ID

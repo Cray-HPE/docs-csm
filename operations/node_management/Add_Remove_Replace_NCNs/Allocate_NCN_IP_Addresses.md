@@ -30,7 +30,7 @@ This procedure will perform and verify the following:
     Node xname format: xXcCsSbBnN
 
     |   |                | SHCD Column to reference | Description
-    | - | -------------- | ------------------------ | ----------- 
+    | - | -------------- | ------------------------ | -----------
     | X | Cabinet number | SourceRack (K20)         | The Cabinet or rack number containing the Management NCN.
     | C | Chassis number |                          | For air-cooled nodes the chassis is 0.
     | S | Slot/Rack U    | Source Location (L20)    | The Slot of the node is determined by the bottom most rack U that node occupies.

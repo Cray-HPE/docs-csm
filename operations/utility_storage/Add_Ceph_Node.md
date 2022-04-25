@@ -9,7 +9,7 @@
     > Run this command on the storage node that was rebuilt or added.
 
     ```bash
-    ncn-s# mkdir -pv /usr/share/doc/csm/scripts && 
+    ncn-s# mkdir -pv /usr/share/doc/csm/scripts &&
            scp -p ncn-m001:/usr/share/doc/csm/scripts/join_ceph_cluster.sh /usr/share/doc/csm/scripts
     ```
 
@@ -125,7 +125,7 @@
    - If the node was added:
 
      Determine the IP address of the added node.
-   
+
      ```bash
      ncn-s# cloud-init query ds | jq -r ".meta_data[].host_records[] | select(.aliases[]? == \"$(hostname)\") | .ip" 2>/dev/null
      ```
@@ -162,7 +162,7 @@
      ```bash
      ncn-s00x# pdcp -w ncn-s00[1-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
      ```
-      
+
      Configure `apparmor` and KeepAlived **on the added node** and restart the services across all the storage nodes.
 
      ```bash

@@ -171,7 +171,7 @@ ncn-w004   Ready    <none>    1h    v1.19.9
         name = "csm-ncn-1.6.28"
         playbook = "site.yml"
         ```
-    
+
     * Determine the configuration applied another NCN of the same type. This example checks the configuration on `ncn-w002`.
 
         ```bash
@@ -234,7 +234,7 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
 **Skip this section if the node being added is NOT `ncn-m001`.**
 
 1. Restore and verify the site link for `ncn-m001`.
- 
+
     Access `ncn-m002` using its `$CAN_IP`, which was recorded prior to powering down `ncn-m001`.
 
     **IMPORTANT:** If the vendor of the replaced master node has changed, then before the configuration is reloaded, verify that the `BRIDGE_PORTS` setting in `/etc/sysconfig/network/ifcfg-lan0` is based on the actual NIC names for the external site interface.

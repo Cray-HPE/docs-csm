@@ -30,14 +30,14 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Update CS
 
    ```bash
    ncn-m# cd /usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/
-   ncn-m# ./ncn_add_pre-req.py 
+   ncn-m# ./ncn_add_pre-req.py
    ```
 
    1. Script the following question
 
       1. How many NCNs would you like to add? Do not include NCNs to be removed or moved.
 
-   Example output: 
+   Example output:
 
    ```text
     The prerequisite script prepares adding NCNs by adjusting SLS network configurations.
@@ -65,7 +65,7 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Update CS
     add_ncn_count: 10
     ip_dhcp_pool_start:
     {'MTL': '10.1.1.17', 'NMN': '10.252.1.20', 'CAN': '10.102.4.22', 'HMN': '10.254.1.26'}
-    new_ip_dhcp_pool_start: 
+    new_ip_dhcp_pool_start:
     {'HMN': '10.254.1.47'}
 
 
@@ -79,7 +79,7 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Update CS
     add_ncn_count: 10
     ip_dhcp_pool_start:
     {'MTL': '10.1.1.17', 'NMN': '10.252.1.20', 'CAN': '10.102.4.22', 'HMN': '10.254.1.26'}
-    new_ip_dhcp_pool_start: 
+    new_ip_dhcp_pool_start:
     {'HMN': '10.254.1.47', 'CAN': '10.102.4.33'}
 
 
@@ -93,7 +93,7 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Update CS
     add_ncn_count: 10
     ip_dhcp_pool_start:
     {'MTL': '10.1.1.17', 'NMN': '10.252.1.20', 'CAN': '10.102.4.22', 'HMN': '10.254.1.26'}
-    new_ip_dhcp_pool_start: 
+    new_ip_dhcp_pool_start:
     {'HMN': '10.254.1.47', 'CAN': '10.102.4.33', 'MTL': '10.1.1.28'}
 
 
@@ -107,7 +107,7 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Update CS
     add_ncn_count: 10
     ip_dhcp_pool_start:
     {'MTL': '10.1.1.17', 'NMN': '10.252.1.20', 'CAN': '10.102.4.22', 'HMN': '10.254.1.26'}
-    new_ip_dhcp_pool_start: 
+    new_ip_dhcp_pool_start:
     {'HMN': '10.254.1.47', 'CAN': '10.102.4.33', 'MTL': '10.1.1.28', 'NMN': '10.252.1.31'}
 
     2022-04-01 21:21:08,859 - __main__ - WARNING - Deleting {"ID": "a4bf013efa5d", "MACAddress": "a4:bf:01:3e:fa:5d", "IPAddress": []} from SMD EthernetInterfaces.
@@ -174,7 +174,7 @@ ncn# echo $XNAME
 **IMPORTANT:** Ensure that the node being added to the system has been properly configured. If the node being added to the system has not been perviously in the system, several settings need to be verified.
 *  Ensure that the NCN device to be added has been racked and cabled per the SHCD.
 *  Ensure the NCN BMC is configured with the expected root user credentials.
-   
+
    The NCN BMC credentials needs to match the current global air-cooled BMC default credentials. This can be viewed with the following command:
 
    ```bash
@@ -191,7 +191,7 @@ ncn# echo $XNAME
    ==== Data ====
    Key     Value
    ---     -----
-   Cray    map[password:foobar username:root] 
+   Cray    map[password:foobar username:root]
    ```
 
 *  If adding an NCN that was not previously in the system, follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md) procedure.

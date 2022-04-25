@@ -69,7 +69,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
    ```
 
 1. Check that the updated `customizations.yaml` contains the change to add or remove a storage IP address.
-   
+
    ```bash
    ncn-m# yq r /tmp/customizations.original.yaml -P > /tmp/customizations.original.yaml.pretty
    ncn-m# diff /tmp/customizations.original.yaml.pretty /tmp/customizations.yaml
@@ -171,7 +171,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 1. Determine the current resources.
 
     ```bash
-    ncn-m# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | 
+    ncn-m# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' |
               yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.resources'
     ```
 
@@ -253,7 +253,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
     10.252.1.4
     10.252.1.5
     10.252.1.6
-    ``` 
+    ```
 
 ### Cleanup
 
@@ -268,4 +268,4 @@ ncn-m# rm /tmp/customizations.yaml /tmp/customizations.original.yaml /tmp/custom
 Proceed to the next step:
 
 - If a storage NCN was added, proceed to [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
-- If a storage NCN was removed, proceed to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page. 
+- If a storage NCN was removed, proceed to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
