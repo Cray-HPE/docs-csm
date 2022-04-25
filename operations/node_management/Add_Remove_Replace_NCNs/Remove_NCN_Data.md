@@ -33,7 +33,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
     ```bash
     ncn-mw# ./ncn_status.py --all
     ```
-    
+
     Example output:
 
     ```text

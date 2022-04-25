@@ -6,7 +6,7 @@ Remove master, worker, or storage NCN from current roles. Select the procedure b
 
 ## Procedure
 
-**IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#remove-ncn-prerequisites) 
+**IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#remove-ncn-prerequisites)
 
 1. [Remove Roles](#remove-roles)
     - [Master node](#master-node-remove-roles)
@@ -40,7 +40,7 @@ Remove master, worker, or storage NCN from current roles. Select the procedure b
     ```screen
     ncn-m002
     ```
-  
+
     * If the node returned is not the one being removed, skip the substeps here and proceed to the [remove node from the Kubernetes cluster](#remove-the-node-from-the-kubernetes-cluster) step.
 
 1. Reconfigure the Boot Script Service \(BSS\) to point to a new first master node.
@@ -224,7 +224,7 @@ The master node role removal is complete; proceed to [wipe the drives](#wipe-dis
 
 #### Drain the node to clear any pods running on the node
 
-**IMPORTANT:** The following command will cordon and drain the node. 
+**IMPORTANT:** The following command will cordon and drain the node.
 
 Run the following:
 
@@ -429,7 +429,7 @@ Once the wipe of the drives is complete, proceed to [power off the node](#power-
          ```screen
          172.30.52.74
          ```
-     
+
       1. Record the CAN IP address for `ncn-m002`:
 
          ```bash
@@ -440,7 +440,7 @@ Once the wipe of the drives is complete, proceed to [power off the node](#power-
          Example output:
 
          ```screen
-         10.102.4.9 
+         10.102.4.9
          ```
 
 1. Export the root password of the BMC.

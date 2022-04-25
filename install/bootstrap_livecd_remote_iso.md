@@ -212,7 +212,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       > The `echo` prepends a newline to ensure that the variable assignment occurs on a unique line,
       > and not at the end of another.
 
-      ```bash      
+      ```bash
       pit# echo -e "\nCSM_RELEASE=$CSM_RELEASE" >>/etc/environment
       ```
 
@@ -341,7 +341,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
          ```
 
       1. Generate the system configuration.
-         > **NOTE:** Make sure to select a reachable NTP pool/server (passed in via the `--ntp-pools`/`--ntp-servers` flags, respectively). 
+         > **NOTE:** Make sure to select a reachable NTP pool/server (passed in via the `--ntp-pools`/`--ntp-servers` flags, respectively).
          > Adding an unreachable server can cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
 
          ```bash
