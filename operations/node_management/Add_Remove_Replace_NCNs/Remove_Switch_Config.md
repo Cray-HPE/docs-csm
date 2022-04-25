@@ -16,11 +16,11 @@ Update the network switches for the NCN that was removed.
 ### spine-01 switch updates
 ```
 no route-map ncn-w004 permit 10 match ip address pl-can
-no route-map ncn-w004 permit 10 set ip next-hop 10.102.4.15 
+no route-map ncn-w004 permit 10 set ip next-hop 10.102.4.15
 no route-map ncn-w004 permit 20 match ip address pl-hmn
-no route-map ncn-w004 permit 20 set ip next-hop 10.254.1.22  
+no route-map ncn-w004 permit 20 set ip next-hop 10.254.1.22
 no route-map ncn-w004 permit 30 match ip address pl-nmn
-no route-map ncn-w004 permit 30 set ip next-hop 10.252.1.13 
+no route-map ncn-w004 permit 30 set ip next-hop 10.252.1.13
 
 no interface mlag-port-channel 12
 no interface ethernet 1/12 mlag-channel-group 12 mode active
@@ -35,11 +35,11 @@ no interface mlag-port-channel 12 no shutdown
 ### spine-02 switch updates
 ```
 no route-map ncn-w004 permit 10 match ip address pl-can
-no route-map ncn-w004 permit 10 set ip next-hop 10.102.4.15 
+no route-map ncn-w004 permit 10 set ip next-hop 10.102.4.15
 no route-map ncn-w004 permit 20 match ip address pl-hmn
-no route-map ncn-w004 permit 20 set ip next-hop 10.254.1.22  
+no route-map ncn-w004 permit 20 set ip next-hop 10.254.1.22
 no route-map ncn-w004 permit 30 match ip address pl-nmn
-no route-map ncn-w004 permit 30 set ip next-hop 10.252.1.13 
+no route-map ncn-w004 permit 30 set ip next-hop 10.252.1.13
 
 no interface mlag-port-channel 12
 no interface ethernet 1/12 mlag-channel-group 12 mode active

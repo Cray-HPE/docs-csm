@@ -61,7 +61,7 @@ This procedure changes the SNMP credentials on management leaf switches in the s
 
     1.  Set the SNMP auth password environment variable:
         ```bash
-        ncn-m001# read -s SNMP_AUTH_PASS 
+        ncn-m001# read -s SNMP_AUTH_PASS
         ncn-m001# echo $SNMP_AUTH_PASS
         ```
 

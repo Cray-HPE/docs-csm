@@ -33,7 +33,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     ```bash
     ncn-s00(1/2/3)# ceph osd tree
     ```
- 
+
     Example output:
 
     ```text
@@ -192,7 +192,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
         rgw.site1.zone1.ncn-s002.tisuez  ncn-s002  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8   553b0cb212c   278830a273d3
         rgw.site1.zone1.ncn-s003.nnwuqy  ncn-s003  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8   553b0cb212c   a9706e6d7a69
         ```
-  
+
 1. Remove the node from the cluster.
 
     ```bash
@@ -222,5 +222,5 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
              1 stray daemons(s) not managed by cephadm
              1 stray host(s) with 1 daemon(s) not managed by cephadm
              1/3 mons down, quorum ncn-s003,ncn-s002
-             Degraded data redundancy:... 
+             Degraded data redundancy:...
     ```

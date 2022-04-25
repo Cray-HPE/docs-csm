@@ -32,7 +32,7 @@ The following procedures can be run from any master or worker node.
    ncn-mw# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-master
    ncn-mw# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-worker
    ncn-mw# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-storage
-   ncn-mw# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks 
+   ncn-mw# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
    ```
 
    **NOTE:**
@@ -43,4 +43,4 @@ The following procedures can be run from any master or worker node.
    If workers have been removed and the worker count is currently at two, failures of the following tests can be ignored. A re-check will be needed once workers are added and the count returns to three or above.
    - `Verify cray etcd is healthy`
 
-The procedure is complete. [Return to Main Page](../Add_Remove_Replace_NCNs.md). 
+The procedure is complete. [Return to Main Page](../Add_Remove_Replace_NCNs.md).
