@@ -18,10 +18,10 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ### Device Type: ChassisBMC | Target: BMC
 
-> **IMPORTANT:** Before updating a CMM, make sure all slot and rectifier power is off. The hms-discovery job must also be stopped before updates and restarted after updates are complete.
+> **IMPORTANT:** Before updating a CMM, make sure all slot and rectifier power is off. The `hms-discovery` job must also be stopped before updates and restarted after updates are complete.
 
-* Stop hms-discovery job: `kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'`
-* Start hms-discovery job: `kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'`
+* Stop `hms-discovery` job: `kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'`
+* Start `hms-discovery` job: `kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'`
 
 ```json
 {
@@ -85,7 +85,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 ### Device Type: NodeBMC | Target: NodeBIOS
 
 >**IMPORTANT:**
->* The Nodes themselves must be powered **off** in order to update the BIOS on the nodes. The BMC will still have power and will perform the update.
+>* The nodes themselves must be powered **off** in order to update their BIOS. The BMC will still have power and will perform the update.
 >* When the BMC is updated or rebooted after updating the Node0.BIOS and/or Node1.BIOS liquid-cooled nodes, the node BIOS version will not report the new version string until the nodes are powered back on. It is recommended that the Node0/1 BIOS be updated in a separate action, either before or after a BMC update and the nodes are powered back on after a BIOS update. The liquid-cooled nodes must be powered off for the BIOS to be updated.
 
 ```json
@@ -122,8 +122,8 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 ### Device Type: NodeBMC | Target: Redstone FPGA
 
 >**IMPORTANT:**
->* The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
->* If updating FPGAs fails because of "No Image available", update using the "Override an Image for an Update" procedure in [FAS Admin Procedures](FAS_Admin_Procedures.md). Find the imageID using the following command: `cray fas images list --format json | jq '.[] | .[] | select(.target=="Node0.AccFPGA0")'`
+>* The nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
+>* If updating FPGAs fails because of `No Image available`, update using the "Override an Image for an Update" procedure in [FAS Admin Procedures](FAS_Admin_Procedures.md). Find the imageID using the following command: `cray fas images list --format json | jq '.[] | .[] | select(.target=="Node0.AccFPGA0")'`
 
 ```json
 {
@@ -193,7 +193,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 ### Device Type: NodeBMC | Target: `System ROM` aka BIOS
 
 >**IMPORTANT:**
->* If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than ncn-m001** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
+>* If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
 >See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc)
 >* Node should be powered on for System ROM update and will need to be rebooted to use the updated BIOS.
 
@@ -265,7 +265,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 > **NOTE:** The timeLimit is `4000` because the Gigabytes can take a lot longer to update.
 
-**Troubleshooting:**
+#### Troubleshooting
 
 A node may fail to update with the output:
 
