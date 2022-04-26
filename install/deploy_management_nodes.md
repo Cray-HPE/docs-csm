@@ -332,8 +332,7 @@ The configuration workflow described here is intended to help understand the exp
 
     > **`NOTE`**: All console logs are located at `/var/log/conman/console*`
 
-<a name="boot-the-storage-nodes"></a>
-1. Boot the **Storage Nodes**
+1. <a name="boot-the-storage-nodes"></a>Boot the **Storage Nodes**
 
     1. Boot all storage nodes except `ncn-s001`:
 
