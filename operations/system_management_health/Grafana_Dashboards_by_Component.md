@@ -28,7 +28,7 @@ A Grafana dashboard is a powerful open source analytical and visualization tool 
 
 - CoreDNS
 
-##### ETCD Dashboard
+### ETCD
 
 - etcd
 - ETCD Clusters
