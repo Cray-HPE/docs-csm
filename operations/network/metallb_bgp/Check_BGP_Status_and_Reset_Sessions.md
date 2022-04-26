@@ -222,7 +222,7 @@ This procedure requires administrative privileges.
     1.  Clear the BGP sessions.
 
         ```bash
-        sw-spine-001# clear bgp *
+        sw-spine-001# clear bgp all *
         ```
 
     1.  Check the status of the BGP sessions.
