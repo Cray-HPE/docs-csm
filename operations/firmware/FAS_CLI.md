@@ -149,7 +149,7 @@ To view counts of operations, what state they are in, the overall state of the a
   unknown = 0
   ```
 
-> **IMPORTANT:** Unless the action's `state` is `completed` or `aborted`; then this action is still in progress.
+> **IMPORTANT:** This action is still in progress, unless the action's `state` is `completed` or `aborted`.
 
 #### Get Details of Action
 

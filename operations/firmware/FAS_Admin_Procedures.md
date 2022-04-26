@@ -149,7 +149,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
    ncn# cray fas images describe {imageID}
    ```
 
-   > **WARNING:** FAS will force a flash of the device, using incorrect firmware may make it inoperable.
+   > **WARNING:** FAS will force a flash of the device -- using incorrect firmware may make it inoperable.
 
 Re-run the FAS actions command using the updated json file. **It is strongly recommended to run a dry-run (overrideDryrun=false) first and check the actions output.**
 
