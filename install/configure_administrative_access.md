@@ -83,6 +83,8 @@ BMC/controller passwords.
 
       The Olympus hardware (NodeBMCs, ChassisBMCs, RouterBMCs) needs to have recovery firmware loaded to the cray-tftp server in case the BMC loses its firmware. The BMCs are configured to load a recovery firmware from a TFTP server. This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.
 
+      This step requires CMS software install, Cray CLI software install, and HPC Firmware Pack (HFP) install.  If these are not currently installed, this step will need to be skipped and run later in the install process.
+
       See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
    <a name="next-topic"></a>
    1. Next Topic
@@ -90,4 +92,3 @@ BMC/controller passwords.
       After completing the operational procedures above which configure administrative access, the next step is to validate the health of management nodes and CSM services.
 
       See [Validate CSM Health](index.md#validate_csm_health)
-
