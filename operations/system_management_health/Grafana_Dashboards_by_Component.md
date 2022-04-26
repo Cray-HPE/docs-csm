@@ -67,7 +67,7 @@ A Grafana dashboard is a powerful open source analytical and visualization tool 
 - Kubernetes / Scheduler
 - Kubernetes / StatefulSets
 
-##### Nodes
+### Nodes
 
 - Node Exporter Full
 - Nodes
