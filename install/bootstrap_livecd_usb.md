@@ -146,6 +146,21 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
       linux# rpm -Uvh $(find ${CSM_PATH}/rpm/embedded -name "lsscsi-*.x86_64.rpm" | sort -V | tail -1)
       ```
 
+1. Remove CNI configuration from prior install
+
+    If you are reinstalling the system and you are **using ncn-m001 to prepare the USB image**, remove some of prior CNI configuration.
+
+    ```bash
+    ncn-m001# rm -rf /etc/cni/net.d/00-multus.conf /etc/cni/net.d/10-*.conflist /etc/cni/net.d/multus.d
+    ```
+
+    This should leave you with the following two files in `/etc/cni/net.d`.
+
+    ```bash
+    ncn-m001# ls /etc/cni/net.d
+    87-podman-bridge.conflist  99-loopback.conf.sample
+    ```
+
 <a name="create-the-bootable-media"></a>
 ## 2. Create the Bootable Media
 
@@ -198,7 +213,7 @@ which device will be used for it.
         >   ```
 
     * On MacOS, use the `write-livecd.sh` script to do this.
-    
+
         This script is contained in the CSI tool RPM. See [install latest version of the CSI tool](#install-csi-rpm) step.
 
         ```bash
@@ -210,10 +225,10 @@ which device will be used for it.
 1. Mount the configuration and persistent data partitions.
 
     ```bash
-    linux# mkdir -pv /mnt/{cow,pitdata} && 
-           mount -vL cow /mnt/cow && 
-           mount -vL PITDATA ${PITDATA} && 
-           mkdir -pv ${PITDATA}/{admin,configs} ${PITDATA}/prep/{admin,logs} ${PITDATA}/data/{k8s,ceph}
+    linux# mkdir -pv /mnt/cow ${PITDATA} &&
+           mount -vL cow /mnt/cow &&
+           mount -vL PITDATA ${PITDATA} &&
+           mkdir -pv ${PITDATA}/configs ${PITDATA}/prep/{admin,logs} ${PITDATA}/data/{ceph,k8s}
     ```
 
 1.  Copy and extract the tarball into the USB:
@@ -508,18 +523,12 @@ Now that the configuration is generated, the LiveCD must be populated with the g
    > **Important:** All CSM install procedures on the booted PIT node assume that these variables
    > are set and exported.
    >
-   > **Note:** It is intentional that the `PITDATA` and `CSM_PATH` variables here have different
-   > values here than what was set earlier. This is because after booting from the PIT node, some
-   > paths will be different.
-   >
    > The `echo` prepends a newline to ensure that the variable assignment occurs on a unique line,
    > and not at the end of another line.
 
    ```bash
    linux# echo "
-   CSM_PATH=/var/www/ephemeral/${CSM_RELEASE}
    CSM_RELEASE=${CSM_RELEASE}
-   PITDATA=/var/www/ephemeral
    SYSTEM_NAME=${SYSTEM_NAME}" | tee -a /mnt/cow/rw/etc/environment
    ```
 
@@ -563,18 +572,18 @@ Now that the configuration is generated, the LiveCD must be populated with the g
 
     ```bash
     linux# exit
-    linux# cp -v ${SCRIPT_FILE} ${PITDATA}/prep/admin
+    linux# cp -v ${SCRIPT_FILE} /mnt/pitdata/prep/admin
     ```
 
 1. Unmount the data partition:
 
     ```bash
-    linux# cd; umount -v ${PITDATA}
+    linux# cd; umount -v /mnt/pitdata
     ```
 
 1. Move the USB device to the system to be installed, if needed.
 
-   If the USB device was created somewhere other than `ncn-m001` of the system to be installed, 
+   If the USB device was created somewhere other than `ncn-m001` of the system to be installed,
    move it there from its current location.
 
 1. Proceed to the next step to boot into the LiveCD image.
@@ -586,7 +595,7 @@ Some systems will boot the USB device automatically if no other OS exists (bare-
 administrator may need to use the BIOS Boot Selection menu to choose the USB device.
 
 If an administrator has the node booted with an operating system which will next be rebooting into the LiveCD,
-then use `efibootmgr` to set the boot order to be the USB device. See the 
+then use `efibootmgr` to set the boot order to be the USB device. See the
 [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information about how to set the
 boot order to have the USB device first.
 
@@ -680,13 +689,23 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
 
    The data partition is set to `fsopt=noauto` to facilitate LiveCDs over virtual-ISO mount. Therefore, USB installations
    need to mount this manually by running the following command.
-   
+
    > **Note:** When creating the USB PIT image, this was mounted over `/mnt/pitdata`. Now that the USB PIT is booted,
    > it will mount over `/var/www/ephemeral`. The FSLabel `PITDATA` is already in `/etc/fstab`, so the path is omitted
    > in the following call to `mount`.
 
    ```bash
    pit# mount -vL PITDATA
+   ```
+
+1. Set new environment variables and save them to `/etc/environment`
+
+   ```bash
+   pit# PITDATA=$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)
+   pit# CSM_PATH=${PITDATA}/${CSM_RELEASE}
+   pit# echo "
+   PITDATA=${PITDATA}
+   CSM_PATH=${CSM_PATH}" | tee -a /etc/environment
    ```
 
 1. Start a typescript to record this section of activities done on `ncn-m001` while booted from the LiveCD.
@@ -716,10 +735,14 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    pit# hostnamectl
    ```
 
-   > **Note:** The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#` 
+   > **Note:** The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#`
    > in the documentation command prompts from this point onward.
 
    > **Note:** If the hostname returned by the `hostnamectl` command is `pit`, then set the hostname manually with `hostnamectl`. In that case, be sure to append the `-pit` suffix to prevent masquerading a PIT node as a real NCN to administrators and automation.
+
+1. Install the latest documentation RPM.
+
+   See [Check for Latest Documentation](../update_product_stream/index.md#documentation)
 
 1. Print information about the booted PIT image.
 
@@ -730,7 +753,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    ```bash
    pit# /root/bin/metalid.sh
    ```
-   
+
    Expected output looks similar to the following:
 
    ```

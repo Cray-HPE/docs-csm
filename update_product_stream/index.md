@@ -16,7 +16,7 @@ After the RPM has been installed, the documentation will be available at `/usr/s
 
 Acquire a CSM software release tarball for installation on the HPE Cray EX supercomputer.
 
-### Details 
+### Details
 
    1. Download the CSM software release tarball for the HPE Cray EX system to a Linux system.
 

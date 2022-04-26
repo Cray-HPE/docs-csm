@@ -72,7 +72,7 @@
      }
      ```
  2. Pause and resume the upgrade.
-   
+
     ```bash
     ceph orch upgrade pause
     ceph orch upgrade resume
@@ -92,7 +92,7 @@
     podman pull registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
     ```
 
-    * If a node cannot pulled from any of the nodes then please contact support for further assistance.  
+    * If a node cannot pulled from any of the nodes then please contact support for further assistance.
 
 
 Expected Warnings:
@@ -171,7 +171,7 @@ Only processes running the v15.2.8 image will be upgraded. This will include `MO
    ceph orch ps -f json-pretty|jq -r '.[]|select(.version=="15.2.8")|.version'|wc -l
    ```
 
-   > If the above command shows any number other than 0, then the upgrade is not complete. Refer to [Ceph_Orchestrator_Usage.md](../operation/../../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting. 
+   > If the above command shows any number other than 0, then the upgrade is not complete. Refer to [Ceph_Orchestrator_Usage.md](../operation/../../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
 
    Some addtional commands to run to check the ceph upgrade:
 
@@ -187,7 +187,7 @@ Only processes running the v15.2.8 image will be upgraded. This will include `MO
    ceph -W cephadm
    ```
 
-   > This will watch the `cephadm` process. This is the most helpful, but can be slow as events will have to retry in order to see which part failed and why.  
+   > This will watch the `cephadm` process. This is the most helpful, but can be slow as events will have to retry in order to see which part failed and why.
 
 **IMPORTANT:** If you have any ceph mon/mgr/mds/osd/rgw processes still running 15.2.8 then do the following:
 

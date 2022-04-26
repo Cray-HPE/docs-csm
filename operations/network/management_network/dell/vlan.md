@@ -1,28 +1,25 @@
-# Virtual local access networks (VLANs)
+# Configure Virtual Local Access Networks (VLANs)
 
 VLANs allow for the logical grouping of switch interfaces, enabling communication as if all connected devices were on the same isolated network.
 
+## Configuration Commands
 
-Relevant Configuration
-
-Create VLAN
-
+Create VLAN:
 
 ```
 switch(config)# interface vlan <VLAN>
 ```
 
-Show Commands to Validate Functionality
+Show commands to validate functionality:
 
 ```
 switch# show vlan [VLAN]
 ```
 
+## Expected Results
 
-Expected Results
-
-* Step 1: You can create a VLAN
-* Step 2: You can assign a VLAN to the physical interface
+1. Administrators can create a VLAN
+2. Administrators can assign a VLAN to the physical interface
 
 
-[Back to Index](../index.md)
+[Back to Index](index.md)

@@ -5,7 +5,7 @@ Change the visibility of Gitea configuration content repositories from public to
 ## Procedure
 
 1. Log in to the Version Control Service \(VCS\) as the crayvcs user.
-   
+
    Use the following URL to access the VCS web interface:
 
    ```bash
@@ -19,7 +19,7 @@ Change the visibility of Gitea configuration content repositories from public to
    ```
 
 3. Select the repository title for each repository listed on the page.
-   
+
    ![Gitea Repositories](../../img/operations/gitea_repositories.png)
 
 4. Click the **Settings** button in the repository header section.
