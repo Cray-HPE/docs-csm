@@ -36,6 +36,7 @@ the number of storage and worker nodes.
    1. [Validate Management Node Deployment](#validate_management_node_deployment)
       1. [Validation](#validation)
       1. [Optional Validation](#optional-validation)
+   1. [Important Checkpoint](#important-checkpoint)
    1. [Next Topic](#next-topic)
 
 <a name="prepare_for_management_node_deployment"></a>
@@ -48,15 +49,23 @@ Preparation of the environment must be done before attempting to deploy the mana
 
 1. Define shell environment variables that will simplify later commands to deploy management nodes.
 
-    **Notice** that one of them is the `IPMI_PASSWORD`. Replace `changeme` with the real root password for BMCs.
+   1. Set `IPMI_PASSWORD` to the root password for the NCN BMCs.
 
-   ```bash
-   pit# export mtoken='ncn-m(?!001)\w+-mgmt'
-   pit# export stoken='ncn-s\w+-mgmt'
-   pit# export wtoken='ncn-w\w+-mgmt'
-   pit# export USERNAME=root
-   pit# export IPMI_PASSWORD=changeme
-   ```
+      >  `read -s` is used to prevent the password
+      > from being written to the screen or the shell history.
+
+      ```bash
+      pit# read -s IPMI_PASSWORD
+      pit# export IPMI_PASSWORD
+      ```
+
+   1. Set the remaining helper variables.
+
+      > These values do not need to be altered from what is shown.
+
+      ```bash
+      pit# export mtoken='ncn-m(?!001)\w+-mgmt' ; export stoken='ncn-s\w+-mgmt' ; export wtoken='ncn-w\w+-mgmt' ; export USERNAME=root
+      ```
 
    Throughout the guide, simple one-liners can be used to query status of expected nodes. If the shell or environment is terminated, these environment variables should be re-exported.
 
@@ -85,7 +94,7 @@ proceed to step 2.
 
    The time can be inaccurate if the system has been powered off for a long time, or, for example, the CMOS was cleared on a Gigabyte node. See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
 
-   > This step should not be skipped
+   > **This step should not be skipped.**
 
    Check the time on the PIT node to see whether it matches the current time:
 
@@ -339,8 +348,7 @@ The configuration workflow described here is intended to help understand the exp
 
     > **`NOTE`**: All console logs are located at `/var/log/conman/console*`
 
-<a name="boot-the-storage-nodes"></a>
-1. Boot the **Storage Nodes**
+1. <a name="boot-the-storage-nodes"></a>Boot the **Storage Nodes**
 
     Boot all the storage nodes. `ncn-s001` will start 1 minute after the other storage nodes.
 
@@ -840,12 +848,13 @@ Observe the output of the checks and note any failures, then remediate them.
 
       See [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md) for details.
 
-# Important Checkpoint
+<a name="important-checkpoint"></a>
+## Important Checkpoint
 
 > Before you move on, this is the last point where you will be able to rebuild nodes without having to rebuild the PIT node. So take time to double check both the cluster and the validation test results
 
 <a name="next-topic"></a>
-# Next Topic
+## Next Topic
 
 After completing the deployment of the management nodes, the next step is to install the CSM services.
 
