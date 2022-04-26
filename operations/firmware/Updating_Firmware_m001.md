@@ -47,7 +47,7 @@ Use one of the following commands to find the model name for the node type in us
     ncn-m001# cray artifacts get fw-update 4e5f569a603311eb96b582a8e219a16d/image.RBU image.RBU
     ```
 
-    `4e5f569a603311eb96b582a8e219a16d/image.RBU` is the path in the `s3URL`. 
+    `4e5f569a603311eb96b582a8e219a16d/image.RBU` is the path in the `s3URL`.
     `image.RBU` is the name of the file to save the image on local disk.
 
 ## Flash the Firmware
