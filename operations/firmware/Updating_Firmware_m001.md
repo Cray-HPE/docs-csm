@@ -81,7 +81,7 @@ Use one of the following commands to find the model name for the node type in us
        * `passwd` = Root password of BMC
        * `ipaddressOfBMC` = IP address of BMC
        * `ipaddressOfM001` = IP address of `ncn-m001` node
-       * `filename` = filename of the downloaded image
+       * `filename` = Filename of the downloaded image
 
        ```bash
        ncn-m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'

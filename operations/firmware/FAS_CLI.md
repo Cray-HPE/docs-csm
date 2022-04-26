@@ -25,7 +25,7 @@ The Cray command line interface (CLI) tool is initialized and configured on the 
 
 Use FAS to execute an action. An action produces a set of firmware operations. Each operation represents a component name (xname) + target on that component name (xname) that will be targeted for update. There are two of firmware action modes: : `dryrun` or `liveupdate`; the parameters used when creating either are completely identical except for the `overrideDryrun` setting. `overrideDryrun` will determine if feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware
 
-> **WARNING**: It is crucial that an admin is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The admin assumes full responsibility for this knowledge. It is also likely that when performing a firmware update, the current version of firmware will not be available. This means that after successfully upgrading, the firmware cannot be reverted or downgraded to a previous version.
+> **WARNING**: It is crucial that an administrator is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The administrator assumes full responsibility for this knowledge. It is also likely that when performing a firmware update, the current version of firmware will not be available. This means that after successfully upgrading, the firmware cannot be reverted or downgraded to a previous version.
 
 ### Procedure
 
@@ -149,7 +149,7 @@ To view counts of operations, what state they are in, the overall state of the a
   unknown = 0
   ```
 
-> **IMPORTANT:** Unless the action's `state` is `completed` or `aborted`; then this action is still in progress.
+> **IMPORTANT:** This action is still in progress, unless the action's `state` is `completed` or `aborted`.
 
 #### Get Details of Action
 
@@ -663,7 +663,7 @@ Given the nature of the `model` field and its likelihood to not be standardized,
 
    This step should be skipped if there is no clear evidence of a missing image or incorrect model name.
 
-   > **WARNING:** The admin needs to be certain the firmware is compatible before proceeding.
+   > **WARNING:** The administrator needs to be certain the firmware is compatible before proceeding.
 
    1. Dump the content of the firmware image to a JSON file.
 
@@ -703,8 +703,8 @@ The loader can only run one job at a time, if the loader is `busy`, it will retu
 ### Load Firmware From Nexus
 
 Firmware may be released and placed into the Nexus repository.
-FAS will return a loaderRunID.
-Use the loaderRunID to check the results of the loader run.
+FAS will return a `loaderRunID`.
+Use the `loaderRunID` to check the results of the loader run.
 To load the firmware from Nexus into FAS, use the following command:
 
 ```bash
@@ -717,10 +717,10 @@ See [Load Firmware from Nexus in FAS Admin Procedures](./FAS_Admin_Procedures.md
 
 ### Load Individual RPM or ZIP into FAS
 
-To load an RPM or ZIP into FAS on a system, copy the RPM or ZIP file to ncn-m001 or one of the other NCNs.
-FAS will return a loaderRunID.
-Use the loaderRunID to check the results of the loader run.
-Run the following command (RPM is this case is firmware.rpm):
+To load an RPM or ZIP into FAS on a system, copy the RPM or ZIP file to `ncn-m001` or one of the other NCNs.
+FAS will return a `loaderRunID`.
+Use the `loaderRunID` to check the results of the loader run.
+Run the following command (The RPM in this example is `firmware.rpm`):
 
 > **NOTE:** If firmware is not in the current directory, add the path to the filename.
 
@@ -734,9 +734,9 @@ See [Load Firmware from RPM or ZIP file in FAS Admin Procedures](./FAS_Admin_Pro
 
 ### Display Results of Loader Run
 
-Using the loaderRunID returned from the loader upload command, run the following command to get the output from the upload. The `--format json` parameter makes it easier to read.
+Using the `loaderRunID` returned from the loader upload command, run the following command to get the output from the upload. The `--format json` parameter makes it easier to read.
 
-> **NOTE:** `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the loaderRunID from previous run command.
+> **NOTE:** `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the `loaderRunID` from the previous `run` command.
 
 ```bash
 ncn# cray fas loader describe dd37dd45-84ec-4bd6-b3c9-7af480048966 --format json
@@ -776,7 +776,7 @@ A successful run will end with `*** Number of Updates: x ***`.
 
 To delete the output from a loader run and remove it from the loader run list:
 
-> **NOTE:** `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the loaderRunID from previous run command.
+> **NOTE:** `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the `loaderRunID` from the previous `run` command.
 
 ```bash
 ncn# cray fas loader delete dd37dd45-84ec-4bd6-b3c9-7af480048966
@@ -784,4 +784,4 @@ ncn# cray fas loader delete dd37dd45-84ec-4bd6-b3c9-7af480048966
 
 The delete command does not return anything if successful.
 
-> **NOTE:** The loader delete command does not delete any images from FAS, it only deletes the loader run saved status and removes the ID from the loader run list.
+> **NOTE:** The `loader delete` command does not delete any images from FAS; it only deletes the loader run saved status and removes the ID from the loader run list.

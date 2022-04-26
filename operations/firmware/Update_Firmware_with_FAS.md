@@ -65,7 +65,7 @@ For each item in the `Hardware Precedence Order`:
 1. Complete a dry-run:
 
    1. `cray fas actions create {jsonfile}`
-   2. Note the ActionID!
+   2. Note the `ActionID`.
    3. Poll the status of the action until the action `state` is `completed`:
       1. `cray fas actions describe {actionID} --format json`
 
@@ -73,14 +73,14 @@ For each item in the `Hardware Precedence Order`:
 
    For the steps below, the following returned messages will help determine if a firmware update is needed. The following are end `state`s for `operations`. The Firmware `action` itself should be in `completed` once all operations have finished.
 
-   * `NoOp`: Nothing to do, already at version.
+   * `NoOp`: Nothing to do; already at the requested version.
    * `NoSol`: No viable image is available; this will not be updated.
    * `succeeded`:
-      * IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update a component name (xname) + target with the declared strategy.
-   	* IF `live update`: the operation succeeded, and has updated the component name (xname) + target to the identified version.
+      * IF `dryrun`: The operation should succeed if performed as a `live update`. `succeeded` means that FAS identified that it COULD update a component name (xname) and target with the declared strategy.
+      * IF `live update`: The operation succeeded and has updated the component name (xname) and target to the identified version.
    * `failed`:
-      * IF `dryrun`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
-      * IF `live update`: the operation failed, the identified version could not be put on the component name (xname) + target.
+      * IF `dryrun`: There is something that FAS could do, but it likely would fail (most likely because the file is missing).
+      * IF `live update`: The operation failed. The identified version could not be put on the component name (xname) and target.
 
 3. If `succeeded` count > 0, now perform a live update.
 
@@ -100,7 +100,7 @@ For each item in the `Hardware Precedence Order`:
 After identifying which hardware is in the system, start with the top most item on this list to update. If any of the following hardware is not in the system, skip it.
 
 >**IMPORTANT:**
->* This process does not communicate the SAFE way to update NCNs. If the NCNs and their BMCs have not been locked, or FAS is >blindly used to update NCNs without following the correct process, then **THE STABILITY OF THE SYSTEM WILL BE JEOPARDIZED**.
+>* This process does not communicate the SAFE way to update NCNs. If the NCNs and their BMCs have not been locked, or FAS is blindly used to update NCNs without following the correct process, then **THE STABILITY OF THE SYSTEM WILL BE JEOPARDIZED**.
 >* Read the corresponding recipes before updating. There are sometimes ancillary actions that must be completed in order to ensure update integrity.
 
 > **NOTE:** To update Switch Controllers \(sC\) or RouterBMC, refer to the Rosetta Documentation.
@@ -154,15 +154,15 @@ Operations are individual tasks in a FAS action.
 FAS will create operations based on the configuration sent through the `actions create` command.
 FAS operations will have one of the following states:
 
-* initial - Operation just created.
-* configured - The operation is configured, but nothing has been started.
-* blocked - Only one operation can be performed on a node at a time. If more than one update is required for a component name (xname), operations will be blocked. This will have a message of "blocked by sibling".
-* inProgress - Update is in progress, but not completed.
-* verifying - Waiting for update to complete.
-* failed - An update was attempted, but FAS is unable to tell that the update succeeded in the allotted time.
-* noOperation - Firmware is at the correct version according to the images loaded into FAS.
-* noSolution - FAS does not have a suitable image for an update.
-* aborted - the operation was aborted before it could determine if it was successful. If aborted after the update command was sent to the node, the node may still have updated.
+* `initial` - Operation just created.
+* `configured` - The operation is configured, but nothing has been started.
+* `blocked` - Only one operation can be performed on a node at a time. If more than one update is required for a component name (xname), then operations will be blocked. This will have a message of `blocked by sibling`.
+* `inProgress` - Update is in progress, but not completed.
+* `verifying` - Waiting for update to complete.
+* `failed` - An update was attempted, but FAS is unable to tell that the update succeeded in the allotted time.
+* `noOperation` - Firmware is at the correct version according to the images loaded into FAS.
+* `noSolution` - FAS does not have a suitable image for an update.
+* `aborted` - The operation was aborted before it could determine if it was successful. If aborted after the update command was sent to the node, then the node may still have updated.
 
 <a name="firmware-images"></a>
 
