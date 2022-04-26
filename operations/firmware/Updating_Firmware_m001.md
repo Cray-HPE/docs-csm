@@ -93,7 +93,7 @@ Use one of the following commands to find the model name for the node type in us
 
 The web interface will be used to update iLO 5 (BMC) firmware and/or System ROM (BIOS) on the HPE `ncn-m001` node.
 
-1. Copy the iLO 5 firmware and/or System ROM file(s) to your local computer from `ncn-m001` using `scp` or other secure copy tools.
+1. Copy the iLO 5 firmware and/or System ROM file(s) to a local computer from `ncn-m001` using `scp` or other secure copy tools.
 
     ```bash
     linux# scp root@ipaddressOfM001Node:pathToFile/filename .

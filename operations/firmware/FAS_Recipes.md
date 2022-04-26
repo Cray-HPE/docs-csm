@@ -265,13 +265,22 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 > **NOTE:** The timeLimit is `4000` because the Gigabytes can take a lot longer to update.
 
-You may receive a node failed to update with the output:
-`stateHelper = "Firmware Update Information Returned Downloading – See /redfish/v1/UpdateService"`
+**Troubleshooting:**
+
+A node may fail to update with the output:
+
+```
+stateHelper = "Firmware Update Information Returned Downloading – See /redfish/v1/UpdateService"
+```
+
 FAS has incorrectly marked this node as failed.
 It most likely will complete the update successfully.
-You can check the update status by looking at the Redfish `FirmwareInventory (/redfish/v1/UpdateService/FirmwareInventory/BMC)`
-or rerunning FAS to verify that the BMC firmware was updated.
-Make sure you have waited for the current firmware to be updated before starting a new FAS action on the same node.
+
+To resolve this issue, do either of the following actions:
+* Check the update status by looking at the Redfish `FirmwareInventory` (`/redfish/v1/UpdateService/FirmwareInventory/BMC`).
+* Rerun FAS to verify that the BMC firmware was updated.
+  
+Make sure to wait for the current firmware to be updated before starting a new FAS action on the same node.
 
 <a name="gb-device-type-nodebmc-target-bios"></a>
 

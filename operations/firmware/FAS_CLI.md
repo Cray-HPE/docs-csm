@@ -33,7 +33,7 @@ This will cover the generic process for executing an action. For more specific e
 
 1. Identify the selection of filters to apply.
 
-  Filters narrow the scope of FAS to target specific component names (xnames), manufacturers, targets, and so on. For this example, FAS will run with no selection filters applied.
+   Filters narrow the scope of FAS to target specific component names (xnames), manufacturers, targets, and so on. For this example, FAS will run with no selection filters applied.
 
 2. Create a JSON file {whole-system-dryrun.json}; to make this a `live update` set `"overrideDryrun": true`.
 
@@ -52,7 +52,9 @@ This will cover the generic process for executing an action. For more specific e
 
     ```bash
     ncn# cray fas actions create {whole-system-dryrun.json}
-    ...
+    
+    [...]
+
     {
       "actionID": "e0cdd7c2-32b1-4a25-9b2a-8e74217eafa7",
       "overrideDryun": false
@@ -711,7 +713,7 @@ ncn# cray fas loader nexus create
 loaderRunID = "c2b7e9bb-f428-4e4c-aa83-d8fd8bcfd820"
 ```
 
-See [Load Firmware from Nexus in FAS Admin Procedures](./FAS_Admin_Procedures.md#loadNexus)
+See [Load Firmware from Nexus in FAS Admin Procedures](./FAS_Admin_Procedures.md#load-firmware-from-nexus).
 
 ### Load Individual RPM or ZIP into FAS
 
@@ -728,7 +730,7 @@ ncn# cray fas loader create --file firmware.rpm
 loaderRunID = "dd37dd45-84ec-4bd6-b3c9-7af480048966"
 ```
 
-See [Load Firmware from RPM or ZIP file in FAS Admin Procedures](./FAS_Admin_Procedures.md#loadRPM)
+See [Load Firmware from RPM or ZIP file in FAS Admin Procedures](./FAS_Admin_Procedures.md#load-firmware-from-rpm-or-zip-file).
 
 ### Display Results of Loader Run
 
