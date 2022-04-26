@@ -37,7 +37,7 @@ The inventory hardware filter takes place after the state component filter has b
 
 #### Parameters
 
-* `manufacturer` - Set to Cray, HPE, or Gigabyte.
+* `manufacturer` - Set to `Cray`, `HPE`, or `Gigabyte`.
 * `model` - The Redfish reported model, which can be specified.
 
 ---
@@ -46,12 +46,12 @@ The inventory hardware filter takes place after the state component filter has b
 
 FAS applies images to component name (xname)/targets. The image filter is a way to specify an explicit image that should be used. When included with other filters, the image filter reduces the devices considered to only those devices where the image can be applied.
 
-For example, if a user specifies an image that only applies to gigabyte, nodeBMCs, BIOS targets. If all hardware in the system is targeted with an empty stateComponentFilter, FAS would find all devices in the system that can be updated via Redfish, and then the image filter would remove all component name (xname)/ targets that this image could not be applied. In this example, FAS would remove any device that is not a Gigabyte nodeBMC, as well as any target that is not BIOS.
+For example, consider if a user specifies an image that only applies to Gigabyte nodeBMC BIOS targets. If all hardware in the system is targeted with an empty stateComponentFilter, FAS would find all devices in the system that can be updated via Redfish, and then the image filter would remove all component name (xname)/ targets that this image could not be applied to. In this example, FAS would remove any device that is not a Gigabyte nodeBMC, as well as any target that is not BIOS.
 
 #### Parameters
 
 * `imageID` - The ID of the image to force onto the system.
-* `overrideImage` - If this is combined with `imageID`; it will FORCE the selected image onto all hardware identified, even if it is not applicable.
+* `overrideImage` - If this is combined with `imageID`, then it will FORCE the selected image onto all hardware identified, even if it is not applicable.
   > **WARNING:** This may cause undesirable outcomes, but most hardware will prevent a bad image from being loaded.
 
 ---

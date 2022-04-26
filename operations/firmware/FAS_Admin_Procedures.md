@@ -8,7 +8,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ## Topics
 
-  * [Warning for Non-Compute Nodes (NCNs)</a>](#warning-for-non-compute-nodes-ncns)
+  * [Warning for Non-Compute Nodes (NCNs)](#warning-for-non-compute-nodes-ncns)
   * [Ignore Nodes within FAS](#ignore-nodes-within-fas)
   * [Override an Image for an Update](#override-an-image-for-an-update)
   * [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
@@ -161,7 +161,7 @@ Re-run the FAS actions command using the updated json file. **It is strongly rec
 
 Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the overrideDryrun parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
 
-> **WARNING:** It is crucial that an admin is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The admin assumes full responsibility for this knowledge.
+> **WARNING:** It is crucial that an administrator is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The administrator assumes full responsibility for this knowledge.
 
 It is likely that when performing a firmware update, that the current version of firmware will not be available. This means that after successfully upgrading, the firmware cannot be downgraded.
 
@@ -175,10 +175,10 @@ This procedure includes information on how check the firmware versions for the e
 
 	The following command parameters should be included in dry-run JSON files:
 
-	* overrideDryrun: The overrideDryrun parameter is set to false by default. FAS will only update the system if this is parameter is set to true.
-	* restoreNotPossibleOverride: FAS will not perform an update if the currently running firmware is not available in the images repository. Set to true to allow FAS to update firmware, even if the current firmware is unavailable on the system.
-	* description: A brief description that helps administrators distinguish between actions.
-	* version: Determine if the firmware should be set to the `latest`, the `earliest` semantic version, or set to a specific firmware version.
+	* `overrideDryrun`: The `overrideDryrun` parameter is set to `false` by default. FAS will only update the system if this is parameter is set to `true`.
+	* `restoreNotPossibleOverride`: FAS will not perform an update if the currently running firmware is not available in the images repository. Set this parameter to `true` in order to allow FAS to update firmware even if the current firmware is unavailable on the system.
+	* `description`: A brief description that helps administrators distinguish between actions.
+	* `version`: Determines if the firmware should be set to the `latest`, the `earliest` semantic version, or set to a specific firmware version.
 
 	Use one of the options below to run on a dry-run on every system device or on targeted devices:
 
@@ -245,18 +245,18 @@ This procedure includes information on how check the firmware versions for the e
 
 2. View the status of the dry-run to determine if any firmware updates can be made.
 
-	 The following returned messages will help determine if a firmware update is needed.
+   The following returned messages will help determine if a firmware update is needed.
 
-   * `noOperation`: Nothing to do, already at version.
+   * `noOperation`: Nothing to do; already at the requested version.
    * `noSolution`: No image is available or data is missing.
    * `succeeded`: A firmware version that FAS can update the firmware to is available and it should work when actually updating the firmware.
-   * `failed`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
+   * `failed`: There is something that FAS could do, but it likely would fail (most likely because the file is missing).
 
    1. Get a high-level summary of the FAS job to determine if there are any upgradable firmware images available.
 
-		  Use the returned `actionID` from the cray fas actions create command.
+      Use the returned `actionID` from the `cray fas actions create` command.
 
-		  In the example below, there are two operations in the `succeeded` state, indicating there is an available firmware version that FAS can use to update firmware.
+      In the example below, there are two operations in the `succeeded` state, indicating there is an available firmware version that FAS can use to update firmware.
 
       ```bash
       ncn# cray fas actions status list {actionID}
@@ -462,7 +462,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
     ncn# cray fas loader describe {loaderRunID} --format json
     ```
 
-    > **NOTE:** `{loadRunID}` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
+    > **NOTE:** `{loadRunID}` is the ID from step #2 above -- in that case `7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce`.
     Use the `--format json` to make it easier to read.
 
     ```bash
@@ -545,7 +545,7 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
     ncn# cray fas loader describe {loaderRunID} --format json
     ```
 
-    > **NOTE:** `{loadRunID}` is the ID from step #2 above in that case "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce".
+    > **NOTE:** `{loadRunID}` is the ID from step #2 above -- in that case `7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce`.
     Use the `--format json` to make it easier to read.
 
     ```bash
