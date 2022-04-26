@@ -1,5 +1,6 @@
 # Grafana Dashboards by Component
-## _This document show dashboards available per component in Grafana_
+
+This document show the dashboards that are available for each component in Grafana.
 
 
 A Grafana dashboard is a powerful open source analytical and visualization tool that consists of multiple individual panels arranged in a grid. The panels interact with configured data sources, including.
