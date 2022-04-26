@@ -6,6 +6,8 @@ When updating an entire system, walk down the device hierarchy component type by
 
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
 
+The following procedures are included in this section:
+
 1. [Update Liquid-Cooled Compute Node BMC, FPGA, and BIOS](#liquidcooled)
 1. [Update Air-Cooled Compute Node BMC, BIOS, iLO 5, and System ROM](#aircooled)
 1. [Update Chassis Management Module (CMM) Firmware](#cmm)
@@ -65,7 +67,7 @@ If the nodes are not off when the update command is issued, the update will get 
 
 **Manufacturer: Cray | Device Type: NodeBMC | Target: Redstone FPGA**
 
-**IMPORTANT**: The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
+> **IMPORTANT:** The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
 
 ```json
 {
@@ -501,14 +503,21 @@ This procedure updates node controller \(nC\) firmware.
 > **IMPORTANT:** The *timeLimit* is `4000` because the Gigabytes can take a lot longer to update.
 
 **Troubleshooting:**
-It may report that a node failed to update with the output:
-`stateHelper = "Firmware Update Information Returned Downloading – See /redfish/v1/UpdateService"`
+
+A node may fail to update with the output:
+
+```
+stateHelper = "Firmware Update Information Returned Downloading – See /redfish/v1/UpdateService"
+```
+
 FAS has incorrectly marked this node as failed.
 It most likely will complete the update successfully.
+
 To resolve this issue, do either of the following actions:
-* Check the update status by looking at the Redfish `FirmwareInventory` (`/redfish/v1/UpdateService/FirmwareInventory/BMC`)
+* Check the update status by looking at the Redfish `FirmwareInventory` (`/redfish/v1/UpdateService/FirmwareInventory/BMC`).
 * Rerun FAS to verify that the BMC firmware was updated.
-Make sure you have waited for the current firmware to be updated before starting a new FAS action on the same node.
+  
+Make sure to wait for the current firmware to be updated before starting a new FAS action on the same node.
 
 **Device Type: NodeBMC | Target: BIOS**
 
@@ -951,43 +960,42 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
   * The BIOS in question is running a version less than or equal to `1.2.5` as reported by Redfish or described by the `noSolution` operation in FAS.
 * The hardware model reported by Redfish is `wnc-rome`, which is now designated as `HPE CRAY EX425`.
 
-If the Redfish model is different \(ignoring casing\) and the blades in question are not `Windom`, contact customer support. To find the model reported by Redfish, run the following:
+  If the Redfish model is different \(ignoring casing\) and the blades in question are not `Windom`, contact customer support. To find the model reported by Redfish, run the following:
 
-    ```bash
-    ncn# cray fas operations describe {operationID} --format json
-    {
-       "operationID":"102c949f-e662-4019-bc04-9e4b433ab45e",
-       "actionID":"9088f9a2-953a-498d-8266-e2013ba2d15d",
-       "state":"noSolution",
-       "stateHelper":"No Image available",
-       "startTime":"2021-03-08 13:13:14.688500503 +0000 UTC",
-       "endTime":"2021-03-08 13:13:14.688508333 +0000 UTC",
-       "refreshTime":"2021-03-08 13:13:14.722345901 +0000 UTC",
-       "expirationTime":"2021-03-08 15:59:54.688500753 +0000 UTC",
-       "xname":"x9000c1s0b0",
-       "deviceType":"NodeBMC",
-       "target":"Node1.BIOS",
-       "targetName":"Node1.BIOS",
-       "manufacturer":"cray",
-       "model":"WNC-Rome",
-       "softwareId":"",
-       "fromImageID":"00000000-0000-0000-0000-000000000000",
-       "fromSemanticFirmwareVersion":"",
-       "fromFirmwareVersion":"wnc.bios-1.2.5",
-       "fromImageURL":"",
-       "fromTag":"",
-       "toImageID":"00000000-0000-0000-0000-000000000000",
-       "toSemanticFirmwareVersion":"",
-       "toFirmwareVersion":"",
-       "toImageURL":"",
-       "toTag":"",
-       "blockedBy":[
+  ```bash
+  ncn# cray fas operations describe {operationID} --format json
+  {
+    "operationID":"102c949f-e662-4019-bc04-9e4b433ab45e",
+    "actionID":"9088f9a2-953a-498d-8266-e2013ba2d15d",
+    "state":"noSolution",
+    "stateHelper":"No Image available",
+    "startTime":"2021-03-08 13:13:14.688500503 +0000 UTC",
+    "endTime":"2021-03-08 13:13:14.688508333 +0000 UTC",
+    "refreshTime":"2021-03-08 13:13:14.722345901 +0000 UTC",
+    "expirationTime":"2021-03-08 15:59:54.688500753 +0000 UTC",
+    "xname":"x9000c1s0b0",
+    "deviceType":"NodeBMC",
+    "target":"Node1.BIOS",
+    "targetName":"Node1.BIOS",
+    "manufacturer":"cray",
+    "model":"WNC-Rome",
+    "softwareId":"",
+    "fromImageID":"00000000-0000-0000-0000-000000000000",
+    "fromSemanticFirmwareVersion":"",
+    "fromFirmwareVersion":"wnc.bios-1.2.5",
+    "fromImageURL":"",
+    "fromTag":"",
+    "toImageID":"00000000-0000-0000-0000-000000000000",
+    "toSemanticFirmwareVersion":"",
+    "toFirmwareVersion":"",
+    "toImageURL":"",
+    "toTag":"",
+    "blockedBy":[
+      ]
+  }
+  ```
 
-       ]
-     }
-    ```
-
-The model in this example is `WNC-Rome` and the firmware version currently running is `wnc.bios-1.2.5`.
+  The model in this example is `WNC-Rome` and the firmware version currently running is `wnc.bios-1.2.5`.
 
 ### Procedure
 
