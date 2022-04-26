@@ -72,7 +72,7 @@ A Grafana dashboard is a powerful open source analytical and visualization tool 
 - Node Exporter Full
 - Nodes
 
-##### Postgres
+### Postgres
 
 - PostgreSQL Statistics
 
