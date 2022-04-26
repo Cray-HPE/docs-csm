@@ -8,7 +8,7 @@ A Grafana dashboard is a powerful open source analytical and visualization tool 
 - AWS CloudWatch
 - Prometheus
 
-_NOTE: There are some known issues around some of the grafana dashboards, and those are explained in [Troubleshoot_Grafana_Dashboard.md](./Troubleshoot_Grafana_Dashboard.md)._
+**NOTE:** There are some known issues around some of the Grafana dashboards; those are explained in [Troubleshoot_Grafana_Dashboard.md](./Troubleshoot_Grafana_Dashboard.md).
 ## Dashboards
 
 ##### Ceph Dashboards
