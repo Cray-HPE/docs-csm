@@ -76,7 +76,7 @@ A Grafana dashboard is a powerful open source analytical and visualization tool 
 
 - PostgreSQL Statistics
 
-##### Prometheus
+### Prometheus
 
 - Prometheus
 
