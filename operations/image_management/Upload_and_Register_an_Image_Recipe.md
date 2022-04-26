@@ -161,7 +161,7 @@ the following procedures must all be completed.
 
 ### Enable Templating in IMS Recipe Archive tgz File
 
-1. Add a file named '.ims_recipe_template.yaml' to the root of the recipe archive. 
+1. Add a file named `.ims_recipe_template.yaml` to the root of the recipe archive. 
 
    ``` bash
    ncn# ls -al
@@ -169,7 +169,6 @@ the following procedures must all be completed.
    
    Example output:
 
-   ``` bash
    drwxr-xr-x 3 root root    70 Feb 22 19:05 .
    drwxr-xr-x 3 root root    41 Feb 22 17:18 ..      
    -rw-r--r-- 1 root root  2744 Feb  4 21:14 config.sh
@@ -179,7 +178,7 @@ the following procedures must all be completed.
    drwxr-xr-x 3 root root    18 Feb  4 21:15 root
    ```
    
-   The contents of this file must be valid yaml containing the keyword `template_files`. The `template_files` keyword 
+   The contents of this file must be valid YAML, containing the keyword `template_files`. The `template_files` keyword
    must contain a list of files to be templated within the image recipe archive.
 
    ``` bash
@@ -188,13 +187,13 @@ the following procedures must all be completed.
 
    Example output:   
 
-   ```
+   ```yaml
    template_files:
    - config.xml
    ```
    
    IMS will template the indicated files 'in place' -- that is, the listed file will be replaced with the templated copy.
-   **NOTE:** Only files listed under the template_files key will be templated by IMS. 
+   **NOTE:** Only files listed under the `template_files` key will be templated by IMS. 
 
 2. For each indicated file above, add appropriate Jinja2 variables where required to enable the result that are sought.
    In the example below, the Jinja2 variable `{{ CSM_RELEASE_VERSION }}` is used to help identify the fully qualified 
@@ -211,7 +210,7 @@ the following procedures must all be completed.
 
    **NOTE:** The repo referenced above is for documentation purposes only and may not actually exist. 
 
-3. Create a tgz archive of the image recipe.
+3. Create a `tgz` archive of the image recipe.
 
     ```bash
     ncn# export ARTIFACT_FILENAME=recipe.tar.gz
@@ -232,7 +231,7 @@ the following procedures must all be completed.
    
     Example output:
     
-    ``` bash
+    ```
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
     linux_distribution = "sles15"
@@ -265,13 +264,12 @@ the following procedures must all be completed.
 
    ```bash
    ncn# cray ims recipes update $IMS_RECIPE_ID \
-   --link-type s3 \
-   --link-path s3://ims/recipes/$IMS_RECIPE_ID/$ARTIFACT_FILENAME
+           --link-type s3 \
+           --link-path s3://ims/recipes/$IMS_RECIPE_ID/$ARTIFACT_FILENAME
    ```
 
    Example output:
 
-   ``` bash
    id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
    recipe_type = "kiwi-ng"
    linux_distribution = "sles15"
@@ -296,12 +294,11 @@ but after downloading the recipe from S3, there will be an indication that IMS i
 `fetch-recipe` container.
 
 ```
-ncn# i logs cray-ims-812e9cda-62a8-4d1b-83a3-5891340671ff-create-78z6p -c fetch-recipe
+ncn# kubectl -n ims logs cray-ims-812e9cda-62a8-4d1b-83a3-5891340671ff-create-78z6p -c fetch-recipe
 ```
 
 Example Output:
 
-``` bash
 INFO:/scripts/fetch.py:IMS_JOB_ID=812e9cda-62a8-4d1b-83a3-5891340671ff
 INFO:/scripts/fetch.py:Setting job status to 'fetching_recipe'.
 INFO:ims_python_helper:image_set_job_status: {{ims_job_id: 812e9cda-62a8-4d1b-83a3-5891340671ff, job_status: fetching_recipe}}
