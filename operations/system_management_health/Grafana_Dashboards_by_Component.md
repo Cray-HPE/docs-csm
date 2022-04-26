@@ -7,78 +7,78 @@ A Grafana dashboard is a powerful open source analytical and visualization tool 
 - AWS CloudWatch
 - Prometheus
 
-_NOTE: There are some known issues around some of the grafana dashboards, and those are explained in [Troubleshoot_Grafana_Dashboard.md](./Troubleshoot_Grafana_Dashboard.md)._
+_NOTE: There are some known issues around some of the Grafana dashboards, and those are explained in [Troubleshoot_Grafana_Dashboard.md](./Troubleshoot_Grafana_Dashboard.md)._
 ## Dashboards
 
-##### Ceph Dashboards
+### Ceph Dashboards
 
-- Ceph - Cluster
-- Ceph - Host Overview
-- Ceph - Host Details
-- Ceph - MDS Performance
-- Ceph - OSD device details
-- Ceph - OSD Overview
-- Ceph - Pool Details
-- Ceph - Pools Overview
-- Ceph - RBD Overview
-- Ceph - RGW Instance Detail
-- Ceph - RGW Overview
+- Cluster
+- Host Overview
+- Host Details
+- MDS Performance
+- OSD device details
+- OSD Overview
+- Pool Details
+- Pools Overview
+- RBD Overview
+- RGW Instance Detail
+- RGW Overview
 
-##### CoreDNS Dashboard
+### CoreDNS Dashboard
 
 - CoreDNS
 
-##### ETCD Dashboard
+### ETCD Dashboard
 
-- etcd
-- ETCD Clusters
+- Main
+- Clusters
 
-##### Istio
+### Istio
 
-- Istio Mesh Dashboard
-- Istio Performance Dashboard
-- Istio Pilot Dashboard
-- Istio Service Dashboard
-- Istio Workload Dashboard
+- Mesh Dashboard
+- Performance Dashboard
+- Pilot Dashboard
+- Service Dashboard
+- Workload Dashboard
 
-##### Kea
+### Kea
 
-- Kea-dhcp
+- DHCP
 
-##### Kubernetes
+### Kubernetes
 
-- Kubernetes / API server
-- Kubernetes / Compute Resources / Cluster
-- Kubernetes / Compute Resources / Namespace (Pods)
-- Kubernetes / Compute Resources / Namespace (Workloads)
-- Kubernetes / Compute Resources / Node (Pods)
-- Kubernetes / Compute Resources / Pod
-- Kubernetes / Compute Resources / Workload
-- Kubernetes / Controller Manager
-- Kubernetes / Kubelet
-- Kubernetes / Networking / Cluster
-- Kubernetes / Networking / Namespace (Pods)
-- Kubernetes / Networking / Namespace (Workload)
-- Kubernetes / Networking / Pod
-- Kubernetes / Networking / Workload
-- Kubernetes / Persistent Volumes
-- Kubernetes / Proxy
-- Kubernetes / Scheduler
-- Kubernetes / StatefulSets
+-  API server
+-  Compute Resources / Cluster
+-  Compute Resources / Namespace (Pods)
+-  Compute Resources / Namespace (Workloads)
+-  Compute Resources / Node (Pods)
+-  Compute Resources / Pod
+-  Compute Resources / Workload
+-  Controller Manager
+-  Kubelet
+-  Networking / Cluster
+-  Networking / Namespace (Pods)
+-  Networking / Namespace (Workload)
+-  Networking / Pod
+-  Networking / Workload
+-  Persistent Volumes
+-  Proxy
+-  Scheduler
+-  StatefulSets
 
-##### Nodes
+### Nodes
 
-- Node Exporter Full
-- Nodes
+- Exporter Full
+- Main
 
-##### Postgres
+### Postgres
 
 - PostgreSQL Statistics
 
-##### Prometheus
+### Prometheus
 
 - Prometheus
 
-##### Use Method
-- USE Method / Cluster
-- USE Method / Node
+### Use Method
+- Cluster
+- Node
