@@ -3,7 +3,7 @@
 ## CSM 1.2.0
 CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature development, and documentation improvements. Below are some of the highlights
 
-## What's New
+## New
 
 ### Monitoring
 * New Dashboard for network traffic dashboard
@@ -50,7 +50,7 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * CAPMC support for HPE Apollo 6500 power capping
 * CAPMC support for new power schema for BardPeak power capping
 * CAPMC support for HPE G2 Metered 3Ph 39.9kVA 60A 480/277V FIO PDU
-* Improved CAPMC error handling in BOA 
+* Improved CAPMC error handling in BOA
 * Root user password and SSH keys now handled by NCN personalization after initial install; locations of data changed in Hashicorp Vault from previous releases
 * Generic Ansible passthrough parameter added to CFS session API
 * Improved CFS session resiliency after power outages

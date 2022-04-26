@@ -3,24 +3,33 @@
 These procedures guide administrators through setting up the `site-init`
 directory which contains important customizations for various products.
 
-   **Note:** There are two media available to bootstrap the PIT node--the RemoteISO or a bootable USB device. Both of those can use this procedure. The only difference in this procedure is that the RemoteISO method will execute these commands on the `PIT` node with command prompt `pit#` while the USB method could be done on any Linux system with the command prompt `linux#`. This procedure works for both methods, but has the command prompt of `linux#`, even though it would normally be `pit#` for the RemoteISO method.
+**Note:** There are two media available to bootstrap the PIT node: the RemoteISO or a bootable USB device. Both of those can use this procedure.
+The only difference in this procedure is that the RemoteISO method will execute these commands on the PIT node, while the USB method could be done
+on any Linux system. This procedure works for both methods, so in order to be generic, this document uses the command prompt of `linux#` in its
+examples.
 
-### Topics:
-   1. [Background](#background)
-   1. [Create and Initialize Site-Init Directory](#create-and-initialize-site-init-directory)
-   1. [Create Baseline System Customizations](#create-baseline-system-customizations)
-   1. [Generate Sealed Secrets](#generate-sealed-secrets)
-   1. [Version Control Site-Init Files](#version-control-site-init-files)
-      1. [Push to a Remote Repository](#push-to-a-remote-repository)
-   1. [Customer-Specific Customizations](#customer-specific-customizations)
+1. [Background](#background)
+1. [Create and Initialize Site-Init Directory](#create-and-initialize-site-init-directory)
+1. [Create Baseline System Customizations](#create-baseline-system-customizations)
+1. [Generate Sealed Secrets](#generate-sealed-secrets)
+1. [Version Control Site-Init Files](#version-control-site-init-files)
+    1. [Push to a Remote Repository](#push-to-a-remote-repository)
+1. [Customer-Specific Customizations](#customer-specific-customizations)
 
-## Details
+## Prerequisites
+
+The procedures on this page assumes that the `SYSTEM_NAME`, `CSM_RELEASE`, `CSM_PATH`, and `PITDATA` variables are
+set and exported. This is normally done as part of the [Bootstrap PIT Node](index.md#bootstrap_pit_node) procedure.
+
+```bash
+linux# echo -e "CSM_PATH=${CSM_PATH}\nCSM_RELEASE=${CSM_RELEASE}\nPITDATA=${PITDATA}\nSYSTEM_NAME=${SYSTEM_NAME}"
+```
 
 <a name="background"></a>
-### 1. Background
+## 1. Background
 
-The `shasta-cfg` directory included in CSM includes relatively static,
-installation-centric artifacts such as:
+The `shasta-cfg` directory included in the CSM release tarball includes relatively static,
+installation-centric artifacts, such as:
 
 *   Cluster-wide network configuration settings required by Helm Charts
     deployed by product stream Loftsman Manifests
@@ -31,60 +40,74 @@ installation-centric artifacts such as:
     product stream installers
 
 <a name="create-and-initialize-site-init-directory"></a>
-### 2. Create and Initialize Site-Init Directory
+## 2. Create and Initialize Site-Init Directory
 
-1.  Create directory `/mnt/pitdata/prep/site-init`:
+1.  Set the `SITE_INIT` variable.
 
-    ```bash
-    linux# mkdir -pv /mnt/pitdata/prep/site-init
-    linux# cd /mnt/pitdata/prep/site-init
-    ```
-
-1.  Set `CSM_RELEASE` and `SYSTEM_NAME` variables, if not already set:
+    > **Important:** All procedures on this page assume that this variable has been set.
 
     ```bash
-    linux# CSM_RELEASE=csm-x.y.z
-    linux# SYSTEM_NAME=eniac
+    linux# SITE_INIT=${PITDATA}/prep/site-init
     ```
 
-1.  Initialize `/mnt/pitdata/prep/site-init` from CSM:
+1.  Create the `site-init` directory.
 
     ```bash
-    linux# /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/meta/init.sh /mnt/pitdata/prep/site-init
+    linux# mkdir -pv ${SITE_INIT} && pushd ${SITE_INIT}
     ```
 
-1.  Set up an alias to the `yq` tool for use in later procedures.
+1.  Initialize `site-init` from CSM.
 
     ```bash
-    linux# alias yq="/mnt/pitdata/${CSM_RELEASE}/shasta-cfg/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
+    linux# ${CSM_PATH}/shasta-cfg/meta/init.sh ${SITE_INIT}
     ```
+
+1.  Set an alias to the `yq` tool for use in these procedures.
+
+    1.  Set the alias.
+
+        ```bash
+        linux# alias yq="${CSM_PATH}/shasta-cfg/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
+        ```
+
+    1.  Confirm that the alias points to the `yq` command.
+
+        ```bash
+        linux# yq -V
+        ```
+
+        Expected output looks similar to the following (although the version number may vary):
+
+        ```
+        yq version 3.3.0
+        ```
 
 <a name="create-baseline-system-customizations"></a>
 ### 3. Create Baseline System Customizations
 
-The following steps update `/mnt/pitdata/prep/site-init/customizations.yaml`
+The following steps update `${SITE_INIT}/customizations.yaml`
 with system-specific customizations.
 
 1.  Merge the system-specific settings generated by CSI into
-    `customizations.yaml`:
+    `customizations.yaml`.
 
     ```bash
-    linux# yq merge -xP -i /mnt/pitdata/prep/site-init/customizations.yaml <(yq prefix -P "/mnt/pitdata/prep/${SYSTEM_NAME}/customizations.yaml" spec)
+    linux# yq merge -xP -i ${SITE_INIT}/customizations.yaml <(yq prefix -P "${PITDATA}/prep/${SYSTEM_NAME}/customizations.yaml" spec)
     ```
 
-1. Set the cluster name:
+1. Set the cluster name.
 
     ```bash
-    linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.wlm.cluster_name "$SYSTEM_NAME"
+    linux# yq write -i ${SITE_INIT}/customizations.yaml spec.wlm.cluster_name "${SYSTEM_NAME}"
     ```
 
-1. Make a backup copy of `/mnt/pitdata/prep/site-init/customizations.yaml`:
+1. Make a backup copy of `${SITE_INIT}/customizations.yaml`.
 
     ```bash
-    linux# cp -v /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml.prepassword
+    linux# cp -v ${SITE_INIT}/customizations.yaml ${SITE_INIT}/customizations.yaml.prepassword
     ```
 
-1.  Review the configuration to generate these sealed secrets in `customizations.yaml` in the `site-init` directory:
+1.  Review the configuration to generate these sealed secrets in `customizations.yaml` in the `site-init` directory.
 
     * `spec.kubernetes.sealed_secrets.cray_reds_credentials`
     * `spec.kubernetes.sealed_secrets.cray_meds_credentials`
@@ -94,81 +117,103 @@ with system-specific customizations.
     The 'cray_meds_credentials' are used by the Mountain Endpoint Discovery Service (MEDS) for the liquid-cooled components in an Olympus (Mountain) cabinet.
     The 'cray_hms_rts_credentials' are used by the Redfish Translation Service (RTS) for any hardware components which are not managed by Redfish, such as a ServerTech PDU in a River Cabinet.
 
-    Edit `customizations.yaml` to replace the 'Username' and `Password` references in the file so that the values match the existing settings of your system hardware components.
+    Edit `customizations.yaml` to replace the `Username` and `Password` references in the file so that the values match the existing settings of your system hardware components.
     See the `Decrypt Sealed Secrets for Review` section of [Manage Sealed Secrets](../operations/security_and_authentication/Manage_Sealed_Secrets.md#decrypt-sealed-secrets-for-review)
     if you need to examine credentials from prior installs.
 
-1. Review the changes that you made:
-
     ```bash
-    linux# diff /mnt/pitdata/prep/site-init/customizations.yaml /mnt/pitdata/prep/site-init/customizations.yaml.prepassword
+    linux# vi ${SITE_INIT}/customizations.yaml
     ```
 
-1. Validate that REDS/MEDS/RTS sealed secrets contain valid JSON using `jq`:
+1. Review the changes that you made.
 
-    Validate REDS credentials (used by the REDS and HMS discovery services, targeting River Redfish BMC endpoints and management switches).
     ```bash
-    linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials.generate.data[0].args.value' | jq
-    linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials.generate.data[1].args.value' | jq
-    ```
-    > NOTE: For vault_redfish_defaults, the only entry used is '{"Cray": {"Username": "root", "Password": "XXXX"}'
-    > Make sure it is specified as shown, with the 'Cray' key. This key is not
-    > used in any of the other credential specifications. Make sure Username and
-    > Password entries are correct.
-
-    Validate MEDS credentials (used by the MEDS service, targeting Redfish BMC endpoints). Make sure Username and Password entries are correct.
-    ```bash
-    linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_meds_credentials.generate.data[0].args.value' | jq
+    linux# diff ${SITE_INIT}/customizations.yaml ${SITE_INIT}/customizations.yaml.prepassword
     ```
 
-    Validate RTS credentials (used by the Redfish Translation Service, targeting River Redfish BMC endpoints and PDU controllers). Make sure Username and Password entries are correct.
-    ```bash
-    linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_hms_rts_credentials.generate.data[0].args.value' | jq
-    linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_hms_rts_credentials.generate.data[1].args.value' | jq
-    ```
+1. Validate that REDS/MEDS/RTS credentials.
+
+    For all credentials, Make sure `Username` and `Password` values are correct.
+
+    1. Validate REDS credentials.
+
+        These credentials are used by the REDS and HMS discovery services, targeting River Redfish
+        BMC endpoints and management switches
+
+        > NOTE: For vault_redfish_defaults, the only entry used is '{"Cray": {"Username": "root", "Password": "XXXX"}'
+        > Make sure it is specified as shown, with the `Cray` key. This key is not used in any of the other credential specifications.
+
+        ```bash
+        linux# yq read ${SITE_INIT}/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials.generate.data[*].args.value' | jq
+        ```
+
+    1. Validate MEDS credentials.
+
+        These credentials are used by the MEDS service, targeting Redfish BMC endpoints.
+
+        ```bash
+        linux# yq read ${SITE_INIT}/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_meds_credentials.generate.data[0].args.value' | jq
+        ```
+
+    1. Validate RTS credentials.
+
+        These credentials are used by the Redfish Translation Service, targeting River Redfish BMC endpoints and PDU controllers.
+
+        ```bash
+        linux# yq read ${SITE_INIT}/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_hms_rts_credentials.generate.data[*].args.value' | jq
+        ```
 
 1.  To customize the PKI Certificate Authority (CA) used by the platform, see
     [Certificate_authority](../background/certificate_authority.md).
 
     > **`IMPORTANT`** The CA may not be modified after install.
 
-1.  To federate Keycloak with an upstream LDAP:
+1.  Federate Keycloak with an upstream LDAP server.
 
-    1. Set environment variables for LDAP and PORT
+    1. Set environment variables for the LDAP server and its port.
 
        In the example below, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
 
        ```bash
-       linux# export LDAP=dcldap2.us.cray.com
-       linux# export PORT=636
+       linux# LDAP=dcldap2.us.cray.com
+       linux# PORT=636
        ```
 
-    1.  If LDAP requires TLS (recommended), update the `cray-keycloak` sealed
-        secret value by supplying a base64 encoded Java KeyStore (JKS) that
+    1.  Update the `cray-keycloak` sealed secret value if LDAP requires TLS.
+
+        If LDAP requires TLS (recommended), then update the `cray-keycloak` sealed
+        secret value by supplying a base64-encoded Java KeyStore (JKS) that
         contains the CA certificate that signed the LDAP server's host key. The
         password for the JKS file must be `password`. Administrators may use the
         `keytool` command from the `openjdk:11-jre-slim` container image
         packaged with CSM to create a JKS file that includes a PEM-encoded
         CA certificate to verify the LDAP host(s) as follows:
 
-        This step builds an example that will create (or update) `cert.jks` with the PEM-encoded CA certificate for an LDAP host and then prepares `certs.jks.b64` which will be injected into customizations.yaml.
+        This step builds an example that will create (or update) `cert.jks` with the PEM-encoded CA certificate for an LDAP host, and then
+        prepares `certs.jks.b64`, which will be injected into `customizations.yaml`.
 
-        1. Load the `openjdk` container image:
+        1. Load the `openjdk` container image.
 
            > **`NOTE`** Requires a properly configured Docker or Podman
            > environment.
 
            ```bash
-           linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim
+           linux# ${CSM_PATH}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim
            ```
-        1.  Get the issuer certificate for the LDAP server at port 636. Use `openssl s_client` to connect
+
+        1.  Get the issuer certificate.
+
+            Retrieve the issuer certificate for the LDAP server at port 636. Use `openssl s_client` to connect
             and show the certificate chain returned by the LDAP host:
 
             ```bash
-            linux# openssl s_client -showcerts -connect $LDAP:${PORT} </dev/null
+            linux# openssl s_client -showcerts -connect ${LDAP}:${PORT} </dev/null
             ```
-        1.  Either manually extract (i.e., cut/paste) the issuer's
-            certificate into `cacert.pem` or try the following commands to
+
+        1.  Enter the issuer's certificate into `cacert.pem`.
+
+            Either manually extract (i.e., cut/paste) the issuer's
+            certificate into `cacert.pem`, or try the following commands to
             create it automatically.
 
             > **`NOTE`** The following commands were verified using OpenSSL
@@ -181,32 +226,32 @@ with system-specific customizations.
             > from the output of the above `openssl s_client` example if the
             > following commands are unsuccessful.
 
-            1.  Observe the issuer's DN:
+            1.  Observe the issuer's DN.
 
                 ```bash
-                linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
+                linux# openssl s_client -showcerts -nameopt RFC2253 -connect ${LDAP}:${PORT} </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
                 ```
 
-                Expected output would include a line similar to this:
+                Expected output includes a line similar to this:
 
                 ```
                 emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
                 ```
 
-            2.  Extract the issuer's certificate using `awk`:
+            2.  Extract the issuer's certificate using `awk`.
 
                 > **`NOTE`** The issuer DN is properly escaped as part of the
                 > `awk` pattern below. It must be changed to match the value
-                > for emailAddress, CN, OU, etc. for your LDAP. If the value
+                > for `emailAddress`, `CN`, `OU`, etc. for your LDAP. If the value
                 > you are using is different, be sure to escape it properly!
 
                 ```bash
-                linux# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | \
-                          awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' | \
+                linux# openssl s_client -showcerts -nameopt RFC2253 -connect ${LDAP}:${PORT} </dev/null 2>/dev/null |
+                          awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' |
                           awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
                 ```
 
-        1.  Verify issuer's certificate was properly extracted and saved in `cacert.pem`:
+        1.  Verify that the issuer's certificate was properly extracted and saved in `cacert.pem`.
 
             ```bash
             linux# cat cacert.pem
@@ -240,29 +285,29 @@ with system-specific customizations.
             -----END CERTIFICATE-----
             ```
 
-        1.  Create `certs.jks`:
+        1.  Create `certs.jks`.
 
             > **`NOTE`** The alias used in this command for `cray-data-center-ca` should be changed to match your LDAP.
 
             ```bash
             linux# podman run --rm -v "$(pwd):/data" \
-            artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim keytool \
-            -importcert -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca \
-            -keystore /data/certs.jks -storepass password -noprompt
+                    artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim keytool \
+                    -importcert -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca \
+                    -keystore /data/certs.jks -storepass password -noprompt
             ```
 
-        1.  Create `certs.jks.b64` by base-64 encoding `certs.jks`:
+        1.  Create `certs.jks.b64` by base64 encoding `certs.jks`.
 
             ```bash
             linux# base64 certs.jks > certs.jks.b64
             ```
 
-        1. Inject and encrypt `certs.jks.b64` into `customizations.yaml`:
+        1. Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
 
             ```bash
             linux# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
-            yq r -j - | /mnt/pitdata/prep/site-init/utils/secrets-encrypt.sh | \
-            yq w -f - -i /mnt/pitdata/prep/site-init/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
+                yq r -j - | ${SITE_INIT}/utils/secrets-encrypt.sh | \
+                yq w -f - -i ${SITE_INIT}/customizations.yaml 'spec.kubernetes.sealed_secrets.cray-keycloak'
             {
               "kind": "Secret",
               "apiVersion": "v1",
@@ -275,27 +320,29 @@ with system-specific customizations.
             }
             EOF
             ```
+
     1.  Update the `keycloak_users_localize` sealed secret with the
         appropriate value for `ldap_connection_url`.
 
-        1. Set `ldap_connection_url` in `customizations.yaml`:
+        1. Set `ldap_connection_url` in `customizations.yaml`.
 
            For example:
 
            ```bash
-           linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml \
-           'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' "ldaps://$LDAP"
+           linux# yq write -i ${SITE_INIT}/customizations.yaml \
+                    'spec.kubernetes.sealed_secrets.keycloak_users_localize.generate.data.(args.name==ldap_connection_url).args.value' \
+                    "ldaps://${LDAP}"
            ```
 
         1. On success, review the `keycloak_users_localize` sealed secret.
 
            ```bash
-           linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
+           linux# yq read ${SITE_INIT}/customizations.yaml spec.kubernetes.sealed_secrets.keycloak_users_localize
            ```
 
            Expected output is similar to:
 
-           ```
+           ```yaml
            generate:
                name: keycloak-users-localize
                data:
@@ -304,6 +351,7 @@ with system-specific customizations.
                    name: ldap_connection_url
                    value: ldaps://dcldap2.us.cray.com
            ```
+
     1.  Configure the `ldapSearchBase` and `localRoleAssignments` settings for
         the `cray-keycloak-users-localize` chart in `customizations.yaml`.
 
@@ -311,21 +359,20 @@ with system-specific customizations.
         Each admin group needs to be assigned to role `admin` and set to both `shasta` and `cray` clients in Keycloak.
         Each user group needs to be assigned to role `user` and set to both `shasta` and `cray` clients in Keycloak.
 
-
-        1. Set `ldapSearchBase` in `customizations.yaml`:
+        1. Set `ldapSearchBase` in `customizations.yaml`.
 
            This example sets `ldapSearchBase` to `dc=dcldap,dc=dit`
 
            ```bash
-           linux# yq write -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=dcldap,dc=dit'
+           linux# yq write -i ${SITE_INIT}/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=dcldap,dc=dit'
            ```
 
-        1. Set `localRoleAssignments` in `customizations.yaml`:
+        1. Set `localRoleAssignments` in `customizations.yaml`.
 
            This example sets `localRoleAssignments` for the LDAP groups `employee`, `craydev`, and `shasta_admins` to be the admin role and the LDAP group `shasta_users` to be the user role.
 
            ```bash
-           linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
+           linux# yq write -s - -i ${SITE_INIT}/customizations.yaml <<EOF
            - command: update
              path: spec.kubernetes.services.cray-keycloak-users-localize.localRoleAssignments
              value:
@@ -343,12 +390,12 @@ with system-specific customizations.
         1. On success, review the `cray-keycloak-users-localize` values.
 
            ```bash
-           linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize
+           linux# yq read ${SITE_INIT}/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize
            ```
 
            Expected output looks similar to:
 
-           ```
+           ```yaml
            sealedSecrets:
                - '{{ kubernetes.sealed_secrets.keycloak_users_localize | toYaml }}'
            localRoleAssignments:
@@ -365,7 +412,7 @@ with system-specific customizations.
 
 1.  Configure the Unbound DNS resolver (if needed).
 
-    If access to a site DNS server is required **and** this DNS server was specified to `csi` using the `site-dns` option (either on the command line or in the `system_config.yaml` file), **then no further action is required** and this step should be skipped.
+    **Important:** If access to a site DNS server is required **and** this DNS server was specified to `csi` using the `site-dns` option (either on the command line or in the `system_config.yaml` file), **then no further action is required and this step should be skipped**.
 
     The default configuration is as follows:
     ```yaml
@@ -380,23 +427,23 @@ with system-specific customizations.
     The configured site DNS server can be verified by inspecting the value set for `system_to_site_lookups`.
 
     ```bash
-    linux# yq r /mnt/pitdata/prep/site-init/customizations.yaml spec.network.netstaticips.system_to_site_lookups
+    linux# yq r ${SITE_INIT}/customizations.yaml spec.network.netstaticips.system_to_site_lookups
     172.30.84.40
     ```
 
     If there is **no requirement to resolve external hostnames or no upstream DNS server**,
     then remove the DNS forwarding configuration from the `cray-dns-unbound` service.
 
-    1. Remove the `forwardZones` configuration for the `cray-dns-unbound` service:
+    1. Remove the `forwardZones` configuration for the `cray-dns-unbound` service.
 
         ```bash
-        linux# yq delete -i /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound.forwardZones
+        linux# yq delete -i ${SITE_INIT}/customizations.yaml spec.kubernetes.services.cray-dns-unbound.forwardZones
         ```
 
     1. Review the `cray-dns-unbound` values.
 
         ```bash
-        linux# yq read /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-dns-unbound
+        linux# yq read ${SITE_INIT}/customizations.yaml spec.kubernetes.services.cray-dns-unbound
         ```
 
         Expected output is:
@@ -413,43 +460,44 @@ with system-specific customizations.
 
    * If DNSSEC is to be used then add the desired keys into the `dnssec` SealedSecret.
 
-   Please see the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
+   See the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
 
-1. (Optional) Configure Prometheus snmp-exporter.
+   <a name="configure-prometheus-snmp-exporter"></a>
 
-   The Prometheus snmp-exporter needs to be configured with a list of management network switches to scrape metrics from in order to populate the System Health Service Grafana dashboards.
+1. (Optional) Configure Prometheus SNMP Exporter.
 
-   Please see the [prometheus-snmp-exporter](../operations/network/management_network/snmp_exporter_configs.md) for more information.
+   The Prometheus SNMP exporter needs to be configured with a list of management network switches to scrape metrics from in
+   order to populate the System Health Service Grafana dashboards.
 
+   See [Prometheus SNMP Exporter](../operations/network/management_network/snmp_exporter_configs.md) for more information.
 
 <a name="generate-sealed-secrets"></a>
-### 4. Generate Sealed Secrets
+## 4. Generate Sealed Secrets
 
-Secrets are stored in `customizations.yaml` as `SealedSecret` resources (i.e.,
+Secrets are stored in `customizations.yaml` as `SealedSecret` resources (that is,
 encrypted secrets) which are deployed by specific charts and decrypted by the
 Sealed Secrets operator. But first, those secrets must be seeded generated and
 encrypted.
 
-1.  Load the `zeromq` container image required by Sealed Secret Generators:
+1.  Load the `zeromq` container image required by Sealed Secret Generators.
 
     > **`NOTE`** Requires a properly configured Docker or Podman environment.
 
     ```bash
-    linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/zeromq/zeromq:v4.0.5
+    linux# ${CSM_PATH}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/zeromq/zeromq:v4.0.5
     ```
 
-1.  Re-encrypt existing secrets:
+1.  Re-encrypt existing secrets.
 
     ```bash
-    linux# /mnt/pitdata/prep/site-init/utils/secrets-reencrypt.sh /mnt/pitdata/prep/site-init/customizations.yaml \
-    /mnt/pitdata/prep/site-init/certs/sealed_secrets.key /mnt/pitdata/prep/site-init/certs/sealed_secrets.crt
+    linux# ${SITE_INIT}/utils/secrets-reencrypt.sh ${SITE_INIT}/customizations.yaml \
+                ${SITE_INIT}/certs/sealed_secrets.key ${SITE_INIT}/certs/sealed_secrets.crt
     ```
 
-1.  Generate secrets:
+1.  Generate secrets.
 
     ```bash
-    linux# /mnt/pitdata/prep/site-init/utils/secrets-seed-customizations.sh \
-    /mnt/pitdata/prep/site-init/customizations.yaml
+    linux# ${SITE_INIT}/utils/secrets-seed-customizations.sh ${SITE_INIT}/customizations.yaml
     ```
 
     Expected output looks similar to:
@@ -489,57 +537,58 @@ encrypted.
     Generating type static...
     ```
 
-
 <a name="version-control-site-init-files"></a>
-### 5. Version Control Site-Init Files
+## 5. Version Control Site-Init Files
 
-Setup `/mnt/pitdata/prep/site-init` as a Git repository in order to manage the
+Setup `site-init` as a Git repository in order to manage the
 baseline configuration during initial system installation.
 
-1.  Initialize `/mnt/pitdata/prep/site-init` as a Git repository:
+1.  Initialize `site-init` as a Git repository.
 
     ```bash
-    linux# cd /mnt/pitdata/prep/site-init
+    linux# cd ${SITE_INIT}
     linux# git init .
     ```
 
-1.  (Optional) **`WARNING`** If production system or operational security is a
+1.  (Optional) Exclude sealed secret private keys from Git.
+
+    **`WARNING`** If production system or operational security is a
     concern, do NOT store the sealed secret private key in Git; instead,
     **store the sealed secret key outside of Git in a secure offline system**.
-    To ensure these sensitive keys are not accidentally committed, configure
-    `.gitignore` to ignore files under the `certs` directory:
+    In order to ensure that these sensitive keys are not accidentally committed,
+    configure `.gitignore` to ignore files under the `certs` directory:
 
     ```bash
     linux# echo "certs/" >> .gitignore
     ```
 
-1.  Stage site-init files to be committed:
+1.  Stage `site-init` files to be committed.
 
     ```bash
     linux# git add -A
     ```
 
-1.  Review what will be committed:
+1.  Review what will be committed.
 
     ```bash
     linux# git status
     ```
 
-1.  Commit all the above changes as the baseline configuration:
+1.  Commit the baseline configuration.
 
     ```bash
-    linux# git commit -m "Baseline configuration for $(/mnt/pitdata/${CSM_RELEASE}/lib/version.sh)"
+    linux# git commit -m "Baseline configuration for $(${CSM_PATH}/lib/version.sh)"
     ```
 
 <a name="push-to-a-remote-repository"></a>
-#### 5.1 Push to a Remote Repository
+### 5.1 Push to a Remote Repository
 
-It is **strongly recommended** that the site-init repository be maintained
+It is **strongly recommended** that the `site-init` repository be maintained
 off-cluster. Add a remote repository and push the baseline configuration on
 `master` branch to a corresponding remote branch.
 
 <a name="customer-specific-customizations"></a>
-### 6. Customer-Specific Customizations
+## 6. Customer-Specific Customizations
 
 Customer-specific customizations are any changes on top of the baseline
 configuration to satisfy customer-specific requirements. It is recommended that
@@ -547,7 +596,7 @@ customer-specific customizations be tracked on branches separate from the
 mainline in order to make them easier to manage.
 
 Apply any customer-specific customizations by merging the corresponding
-branches into `master` branch of `/mnt/pitdata/prep/site-init`.
+branches into `master` branch of `site-init`.
 
 When considering merges, and especially when resolving conflicts, carefully
 examine differences to ensure all changes are relevant. For example, when

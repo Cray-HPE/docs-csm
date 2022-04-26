@@ -501,7 +501,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    ```bash
    ncn-m001# ./utils/secrets-decrypt.sh keycloak_users_localize | jq -r '.data.ldap_connection_url' | base64 --decode
    ```
-   
+
    Expected output looks similar to the following:
    ```
    ldaps://my_ldap.my_org.test

@@ -6,16 +6,19 @@ The Prometheus SNMP Exporter is deployed by the the `cray-sysmgmt-health` chart 
 
 In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must be configured with a list of management network switches to scrape metrics from.
 
-1. Set the `SYSTEM_NAME` variable if not already set.
-
-    ```bash
-    linux# SYSTEM_NAME=eniac
-    ```
+This procedure assumes that this is being done as part of a CSM install as part of the
+[Prepare Site Init](../../../install/prepare_site_init.md#configure-prometheus-snmp-exporter) procedure.
+Specifically, it assumes that the `SYSTEM_NAME` and `PITDATA` variables are set, and that the `PITDATA` mount is
+in place.
 
 1. Obtain the list of switches to use as targets using CSM Automatic Network Utility (CANU).
 
     ```bash
-    linux# canu init --sls-file /var/www/ephemeral/prep/${SYSTEM_NAME}/sls_input_file.json --out -
+    linux# canu init --sls-file ${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json --out -
+    ```
+
+    Expected output looks similar to the following:
+    ```
     10.252.0.2
     10.252.0.3
     10.252.0.4
@@ -26,7 +29,7 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
 1. Update `customizations.yaml` with the list of switches.
 
     ```bash
-    linux# yq write -s - -i /mnt/pitdata/prep/site-init/customizations.yaml <<EOF
+    linux# yq write -s - -i ${PITDATA}/prep/site-init/customizations.yaml <<EOF
     - command: update
       path: spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter
       value:
@@ -49,10 +52,10 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
 1. Review the SNMP Exporter configuration.
 
     ```bash
-    linux# yq r /mnt/pitdata/prep/site-init/customizations.yaml spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter
+    linux# yq r ${PITDATA}/prep/site-init/customizations.yaml spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter
     ```
 
-    The expected output looks similar to
+    The expected output looks similar to:
 
     ```yaml
     serviceMonitor:
@@ -74,9 +77,9 @@ The most common configuration parameters are specified in the following table. T
 
 |Customization|Default|Description|
 |-------------|-------|-----------|
-|`serviceMonitor.enabled`|`true`|Enables `serviceMonitor` for snmp exporter \(default chart value is `true`\)|
+|`serviceMonitor.enabled`|`true`|Enables `serviceMonitor` for SNMP exporter \(default chart value is `true`\)|
 |`params.enabled`|`false`|Sets the snmp exporter params change to true \(default chart value is `false`\)|
-|`params.conf.module`|`if_mib`| snmp exporter to select which module \(default chart value is `if_mib`\)|
-|`params.conf.target`|`127.0.0.1`| add list of switch targets to snmp exporter to monitor \(default chart value is `127.0.0.1`\)|
+|`params.conf.module`|`if_mib`| SNMP exporter to select which module \(default chart value is `if_mib`\)|
+|`params.conf.target`|`127.0.0.1`| Add list of switch targets to SNMP exporter to monitor \(default chart value is `127.0.0.1`\)|
 
 For a complete set of available parameters, consult the `values.yaml` file for the `cray-sysmgmt-health` chart.

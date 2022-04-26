@@ -12,15 +12,15 @@ This procedure needs to be done on all mgmt switches.
     -  1.2 fresh install
     -  1.2 upgrade
     -  1.0
-  
+
 -  Leaf-BMC switches will have have two configuration files/checkpoints.
     - 1.2
     - 1.0
-  
+
 ### Aruba
 
-1. View the checkpoints. 
-   
+1. View the checkpoints.
+
     Ensure that the proper checkpoints exist. `CSM1_0` and `CSM1_2` are used in this example.
 
 
@@ -36,7 +36,7 @@ This procedure needs to be done on all mgmt switches.
 1. Rollback to desired checkpoint.
 
     ```
-    sw-spine-001# checkpoint rollback CSM1_2_UPGRADE_CANU_1_3_2    
+    sw-spine-001# checkpoint rollback CSM1_2_UPGRADE_CANU_1_3_2
     ```
 
 ## Dell
@@ -78,7 +78,7 @@ This procedure needs to be done on all mgmt switches.
 ## Mellanox
 
 1. View the configuration files.
-   
+
     Ensure that the proper checkpoints exist. `CSM1_0` and `CSM1_2` are used in this example.
 
 
