@@ -601,6 +601,25 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="RECONFIGURE_HAPROXY_MASTERS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u)
+    for master in $masters
+    do
+      echo "Reconfiguring haproxy on $master:"
+      scp /usr/share/doc/csm/upgrade/1.2/scripts/k8s/reconfigure_haproxy.sh $master:/tmp/reconfigure_haproxy.sh
+      pdsh -b -S -w $master '/tmp/reconfigure_haproxy.sh'
+    done
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="SUSPEND_NCN_CONFIGURATION"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
