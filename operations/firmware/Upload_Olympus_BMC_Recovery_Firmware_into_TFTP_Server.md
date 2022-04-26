@@ -4,11 +4,11 @@
 `cray-upload-recovery-images` should be run on every system.
 
 ## Prerequisites
-+ Cray System Management (CSM) software is installed
-+ The Cray Command Line Interface (CLI) tool is initialized and configured on the system
-+ Firmware is loaded into FAS as part of the HPC Firmware Pack (HFP) install; refer to the *HPE Cray EX System HPC Firmware Pack Install Guide* on the HPE Customer Support Center for more information.
+* Cray System Management (CSM) software is installed.
+* The Cray Command Line Interface (CLI) tool is initialized and configured on the system.
+* Firmware is loaded into FAS as part of the HPC Firmware Pack (HFP) install; refer to the *HPE Cray EX System HPC Firmware Pack Install Guide* on the HPE Customer Support Center for more information.
 
-### Procedure
+## Procedure
 
 1. Execute the `cray-upload-recovery-images` script.
 
