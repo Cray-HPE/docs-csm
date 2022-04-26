@@ -41,7 +41,7 @@ A Grafana dashboard is a powerful open source analytical and visualization tool 
 - Istio Service Dashboard
 - Istio Workload Dashboard
 
-##### Kea
+### Kea
 
 - Kea-dhcp
 
