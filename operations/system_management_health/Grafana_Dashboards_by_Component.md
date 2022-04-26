@@ -45,7 +45,7 @@ A Grafana dashboard is a powerful open source analytical and visualization tool 
 
 - Kea-dhcp
 
-##### Kubernetes
+### Kubernetes
 
 - Kubernetes / API server
 - Kubernetes / Compute Resources / Cluster
