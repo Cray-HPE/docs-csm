@@ -12,7 +12,7 @@ A Grafana dashboard is a powerful open source analytical and visualization tool 
 
 ### Ceph
 
-- Ceph - Cluster
+- Cluster
 - Ceph - Host Overview
 - Ceph - Host Details
 - Ceph - MDS Performance
