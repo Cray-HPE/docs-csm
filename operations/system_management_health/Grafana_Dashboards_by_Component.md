@@ -33,7 +33,7 @@ A Grafana dashboard is a powerful open source analytical and visualization tool 
 - etcd
 - ETCD Clusters
 
-##### Istio
+### Istio
 
 - Istio Mesh Dashboard
 - Istio Performance Dashboard
