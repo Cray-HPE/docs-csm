@@ -1,10 +1,9 @@
 # Update Spire Intermediate CA Certificate
 
-Starting with CSM 1.2.5, there is a cronjob in the `vault` namespace named
-`spire-intermediate` that runs once a week. If the Spire intermediate CA
-certificate is set to expire in less than a month when that job runs, then it
-will replace the certificate with a new one. If this process fails you can
-take the manual steps listed below in order to update the certificate.
+Prior to CSM 1.2.5 there is no mechanism to automatically update the spire
+intermediate CA certificate before it expires. This certificate expires after
+one year. Administrators will want to keep track of when this certificate
+expires and manually update the certificate before it expires.
 
 ## Obtain the Expiration Date for the Spire Intermediate CA
 
