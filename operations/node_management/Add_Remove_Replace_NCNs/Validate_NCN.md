@@ -104,10 +104,6 @@ Validate the worker node added successfully.
     ncn# kubectl get po -A -o wide | grep $NODE
     ```
 
-1. Confirm BGP is healthy.
-
-    Follow the steps in the [Check BGP Status and Reset Sessions](../../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md#Prerequisites) to verify and fix BGP if needed.
-
 <a name="validate-storage-node"></a>
 ## Validate: Storage Node
 
