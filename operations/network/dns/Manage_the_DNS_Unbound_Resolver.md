@@ -202,20 +202,20 @@ Use the following procedure to change the site DNS server that Unbound forwards 
             system_to_site_lookups: 172.30.84.40
       ```
 
-     If multiple DNS servers are required, add the additional servers into the `cray-dns-unbound` service configuration.
+      If multiple DNS servers are required, add the additional servers into the `cray-dns-unbound` service configuration.
 
-     ```yaml
-     spec:
-       kubernetes:
-         services:
-           cray-dns-unbound:
-             forwardZones:
-               - name: "."
-                 forwardIps:
-                   - "{{ network.netstaticips.system_to_site_lookups }}"
-                   - "192.168.0.1"
-             domain_name: '{{ network.dns.external }}'
-     ```
+      ```yaml
+      spec:
+        kubernetes:
+          services:
+            cray-dns-unbound:
+              forwardZones:
+                - name: "."
+                  forwardIps:
+                    - "{{ network.netstaticips.system_to_site_lookups }}"
+                    - "192.168.0.1"
+              domain_name: '{{ network.dns.external }}'
+      ```
 
    1. Update the site-init secret in the loftsman namespace.
 
