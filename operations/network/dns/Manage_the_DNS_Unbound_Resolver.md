@@ -185,9 +185,9 @@ Use the following procedure to change the site DNS server that Unbound forwards 
 
 1. Update `customizations.yaml`.
 
-   **`IMPORTANT:`** If this step is not performed, then the Unbound configuration will be overwritten with the previous value the next time CSM or Unbound is upgraded.
+   **IMPORTANT:** If this step is not performed, then the Unbound configuration will be overwritten with the previous value the next time CSM or Unbound is upgraded.
 
-   1. Extract `customizations.yaml` from the site-init secret in the loftsman namespace.
+   1. Extract `customizations.yaml` from the `site-init` secret in the `loftsman` namespace.
 
       ```bash
       ncn-m001# kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
@@ -217,7 +217,7 @@ Use the following procedure to change the site DNS server that Unbound forwards 
               domain_name: '{{ network.dns.external }}'
       ```
 
-   1. Update the site-init secret in the loftsman namespace.
+   1. Update the `site-init` secret in the `loftsman` namespace.
 
       ```bash
       ncn-m001# kubectl delete secret -n loftsman site-init
