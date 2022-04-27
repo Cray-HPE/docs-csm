@@ -185,7 +185,7 @@ Use the following procedure to change the site DNS server that Unbound forwards 
 
 1. Update `customizations.yaml`.
 
-   **`IMPORTANT:`** If this step is not performed, then the Unbound configuration will be overwritten with the previous value the next time CSM or Unbound is upgraded.
+   **IMPORTANT:** If this step is not performed, then the Unbound configuration will be overwritten with the previous value the next time CSM or Unbound is upgraded.
 
    1. Extract `customizations.yaml` from the `site-init` secret in the `loftsman` namespace.
 
