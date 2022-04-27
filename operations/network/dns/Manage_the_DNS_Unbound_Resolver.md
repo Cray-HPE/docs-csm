@@ -193,14 +193,14 @@ Use the following procedure to change the site DNS server that Unbound forwards 
    kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
    ```
 
-  1. Update the `system_to_site_lookups` with the value of the new DNS server.
+   1. Update the `system_to_site_lookups` with the value of the new DNS server.
 
-     ```yaml
-     spec:
-       network:
-         netstaticips:
-           system_to_site_lookups: 172.30.84.40
-     ```
+      ```yaml
+      spec:
+        network:
+          netstaticips:
+            system_to_site_lookups: 172.30.84.40
+      ```
 
      If multiple DNS servers are required, add the additional servers into the `cray-dns-unbound` service configuration.
 
@@ -217,9 +217,9 @@ Use the following procedure to change the site DNS server that Unbound forwards 
              domain_name: '{{ network.dns.external }}'
      ```
 
-  1. Update the site-init secret in the loftsman namespace.
+   1. Update the site-init secret in the loftsman namespace.
 
-     ```bash
-     ncn-m001# kubectl delete secret -n loftsman site-init
-     ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-     ```
+      ```bash
+      ncn-m001# kubectl delete secret -n loftsman site-init
+      ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+      ```
