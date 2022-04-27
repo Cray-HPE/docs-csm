@@ -10,16 +10,21 @@ Possible reasons the power state got out of sync include but are not limited to:
 ## Fix
 In most cases, once the underlying cause has been corrected, this should correct itself when the node boots OS, starts heartbeating, and goes to the 'Ready' state. If not, the power state for the affected nodes can be re-synced by kicking off HSM re-discovery of those nodes' BMCs.
 
+```bash
+ncn# cray hsm inventory discover create --xnames <list_of_BMC_xnames>
 ```
-cray hsm inventory discover create --xnames <list_of_BMCs>
 
-e.g.
-cray hsm inventory discover create --xnames x3000c0s0b0,x3000c0s1b0
+For example:
+```bash
+ncn# cray hsm inventory discover create --xnames x3000c0s0b0,x3000c0s1b0
 ```
 
 The power state will be re-synced after all of the BMCs listed have a 'LastDiscoveryStatus' of 'DiscoverOK'.
+```bash
+ncn# cray hsm inventory redfishEndpoints describe x3000c0s0b0
 ```
-> cray hsm inventory redfishEndpoints describe x3000c0s0b0
+
+```json
 {
   "ID": "x3000c0s0b0",
   "Type": "NodeBMC",
@@ -40,3 +45,4 @@ The power state will be re-synced after all of the BMCs listed have a 'LastDisco
 ```
 
 Any power operations done manually with CAPMC that alter the nodes' power state may also cause the power state to re-sync.
+

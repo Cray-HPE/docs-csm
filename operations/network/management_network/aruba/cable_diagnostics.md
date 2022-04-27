@@ -1,22 +1,24 @@
-# Cable diagnostics 
+# Cable Diagnostics
 
-In a situation where you believe you might have a bad copper cable, you can use the cable-diagnostic feature to test the cable. Note: This feature is only available on non-SFP copper ports. 
+Use the cable-diagnostic feature to test cables in the event where there might be a bad copper cable.
 
-Relevant Configuration 
+> **NOTE:** This feature is only available on non-SFP copper ports.
 
-Enter "diagnostics" to open up the diagnostics menu 
+## Procedure
+
+Enter `diagnostics` to open up the diagnostics menu:
 
 ```
 switch# diagnostics
 ```
 
-Once done, the diagnostics command set is now available for use, and the cable-diagnostics command can be executed 
+Once done, the diagnostics command set is now available for use, and the cable-diagnostics command can be executed:
 
 ```
 switch# diag cable-diagnostic <IFACE>
 ```
 
-Example Output 
+## Example output
 
 ```
 6300# diagnostics <CR>
@@ -27,12 +29,12 @@ Example Output
   cable-diagnostic            Cable diagnostic test
 ...snip for brevity
 6300# diag cable-diagnostic ?
-IFNAME  
+IFNAME
 ```
 
-Expected Results 
+## Expected Results
 
-* Step 1: You can enter diagnostics mode successfully
-* Step 2: You can test the cable and see the results in the CLI output 
+1. Administrators can enter diagnostics mode successfully
+1. Administrators can test the cable and see the results in the CLI output
 
-[Back to Index](../index.md)
+[Back to Index](index.md)

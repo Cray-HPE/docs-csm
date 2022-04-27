@@ -1,5 +1,3 @@
-
-
 # Reset root Password on LiveCD
 
 It may become desirable to clear the password on the LiveCD.

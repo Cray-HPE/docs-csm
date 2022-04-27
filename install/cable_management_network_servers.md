@@ -45,9 +45,9 @@ ports on the nodes and how to cable the nodes to the management network switches
 
 | Device | Port | Linux Device | Destination | Name | VLAN | LAG |
 |:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
-| OCP | 1 |  mgmt0 | primary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| OCP | 2 |  mgmt1 | secondary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| ILO | 1 |  None | HMN leaf-bmc |  N/A |  HMN  |  N/A |
+| OCP | 1 |  mgmt0  | primary      |  N/A  |  HMN, NMN, CAN  |  MLAG-LACP  |
+| OCP | 2 |  mgmt1  | secondary    |  N/A  |  HMN, NMN, CAN  |  MLAG-LACP  |
+| ILO | 1 |  None   | HMN leaf-bmc |  N/A  |  HMN            |  N/A        |
 
 <br>
 NOTES:
@@ -60,8 +60,8 @@ NOTES:
 
 |hostname|Source         |Destination   |Destination |
 |--------|---------------|--------------|------------|
-| wn01	 | x3000u04ocp-j1 | x3000u12-j7 | sw-25g01   |
-| wn01	 | x3000u04ocp-j2 | x3000u13-j7	| sw-25g02   |
+| wn01	 | x3000u04ocp-j1 | x3000u12-j7 | sw-25g01 |
+| wn01	 | x3000u04ocp-j2 | x3000u13-j7	| sw-25g02 |
 
 ![Diagram of HPE Worker Node Cabling](../img/network/HPE_Worker.png)
 
@@ -74,18 +74,18 @@ The table below describes the cabling of dual card configurations. Also read not
 
 | Device | Port | Linux Device | Destination | Name | VLAN | LAG |
 |:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
-| OCP | 1 |  mgmt0 | primary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| OCP | 2 |  mgmt1 | site |  N/A |  N/A  |  N/A |
-| PCIE-SLOT1 | 1 |  mgmt2 | secondary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| PCIE-SLOT1 | 2 |  mgmt3 | None |  N/A |  N/A  |  N/A |
-| ILO | 1 |  None | HMN leaf-bmc |  N/A |  HMN  |  N/A |
+| OCP        | 1 | mgmt0  | primary      |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| OCP        | 2 | sun0   | N/A          |  N/A |  N/A            |  N/A       |
+| PCIE-SLOT1 | 1 | mgmt1  | secondary    |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| PCIE-SLOT1 | 2 | sun1   | N/A          |  N/A |  N/A  |  N/A    |
+| ILO        | 1 | None   | HMN leaf-bmc |  N/A |  HMN  |  N/A    |
 
 <br>
 NOTES:
 
-* REQUIRED:  Master 001 (ncn-m001) is required to have a site connection on OCP Port 2 for installation and maintenance.
+* REQUIRED:  Master 001 (`ncn-m001`) is required to have a site connection on OCP Port 2 for installation and maintenance.
 * RECOMMENDED: Masters 002 and 003 may optionally have a site connection on OCP Port 2 for emergency system access.
-* REQUIRED:  Master 001 (ncn-m001) is required to have its BMC/iLO connected to the site.
+* REQUIRED:  Master 001 (`ncn-m001`) is required to have its BMC/iLO connected to the site.
 <br>
 <br>
 
@@ -98,10 +98,10 @@ NOTES:
 
 ![Diagram of HPE Master Node Cabling](../img/network/HPE_Master.png)
 
-**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access. This can have several configurations depending on customer requirements/equipment:
+**NOTE**: Master 1 (`ncn-m001`) is required to have a site connection for installation and non-CAN system access. This can have several configurations depending on customer requirements/equipment:
 
 * Dual 10/25Gb card configurations as described in the table above should use PCIe Slot 1, Port 2 as a site connection if the customer supports 10/25Gb.
-* If the customer does not support 10/25Gb speeds (or connection type) and requires RJ45 copper or 1Gb, then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.
+* If the customer does not support 10/25Gb speeds (or connection type) and requires RJ45 copper or 1Gb, then a new and separate card will be installed on `ncn-m001` and that card will provide site connectivity.
 * Another possibility (non-HPE hardware mainly) is that a built-in 1Gb port will be used if available (similar to Shasta v1.3 PoR on Gigabyte hardware).
 
 <a name="hpe_storage_node_cabling"></a>
@@ -109,11 +109,11 @@ NOTES:
 
 | Device | Port | Linux Device | Destination | Name | VLAN | LAG |
 |:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
-| OCP | 1 |  mgmt0 | primary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| OCP | 2 |  mgmt1 | primary |  N/A |  SUN  |  MLAG-LACP |
-| PCIE-SLOT1 | 1 |  mgmt2 | secondary |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
-| PCIE-SLOT1 | 2 |  mgmt3 | secondary |  N/A |  SUN  |  MLAG-LACP |
-| ILO | 1 |  None | HMN leaf-bmc |  N/A |  HMN  |  N/A |
+| OCP        | 1 |  mgmt0 | primary      |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| OCP        | 2 |  sun0  | primary      |  N/A |  SUN            |  MLAG-LACP |
+| PCIE-SLOT1 | 1 |  mgmt1 | secondary    |  N/A |  HMN, NMN, CAN  |  MLAG-LACP |
+| PCIE-SLOT1 | 2 |  sun1  | secondary    |  N/A |  SUN            |  MLAG-LACP |
+| ILO        | 1 |  None  | HMN leaf-bmc |  N/A |  HMN            |  N/A       |
 
 <br>
 NOTES:
@@ -152,11 +152,11 @@ For systems that include 4 leaf switches the cabling will look like the followin
 
 | Device | Port | Linux Device | Destination | Name | VLAN | LAG |
 |:-------|------|:------|:-------------------------|:--------------|:--------------------|:-----|
-| OCP | 1 |  mgmt0 | primary |  N/A |  NMN  |  N/A |
-| OCP | 2 |  mgmt1 | primary |  N/A |  CAN  |  MLAG-LACP |
-| PCIE-SLOT1 | 1 |  mgmt2 | secondary |  N/A |  N/A  |  N/A |
-| PCIE-SLOT1 | 2 |  mgmt3 | secondary |  N/A |  CAN  |  MLAG-LACP |
-| ILO | 1 |  None | HMN leaf-bmc |  N/A |  HMN  |  N/A |
+| OCP        | 1 |  mgmt0 | primary      |  N/A |  NMN  |  N/A       |
+| OCP        | 2 |  mgmt1 | primary      |  N/A |  CAN  |  MLAG-LACP |
+| PCIE-SLOT1 | 1 |  mgmt2 | secondary    |  N/A |  N/A  |  N/A       |
+| PCIE-SLOT1 | 2 |  mgmt3 | secondary    |  N/A |  CAN  |  MLAG-LACP |
+| ILO        | 1 |  None  | HMN leaf-bmc |  N/A |  HMN  |  N/A       |
 
 <br>
 NOTES:
@@ -240,7 +240,7 @@ NOTES:
 
 ![Diagram of Gigabyte Worker Node Cabling](../img/network/Gigaintel_Worker.png)
 
-**NOTE**: Cabling of ncn-w001 has changed in Shasta v1.4. Please see ncn-m001 note below.
+**NOTE**: Cabling of `ncn-w001` has changed in Shasta v1.4. Please see `ncn-m001` note below.
 
 <a name="master_node_cabling"></a>
 ### Master Node Cabling
@@ -250,7 +250,7 @@ NOTES:
 |--------------------|--------------------------------|-------|--------------------------------|
 | PCIe Slot 1 port 1 | spine or leaf pair, switch 1/2 | 40Gb  | Management Network NMN/HMN/CAN |
 | PCIe Slot 1 port 2 | spine or leaf pair, switch 2/2 | 40Gb  | Management Network NMN/HMN/CAN |
-| LAN0 port 1        | NONE (See note below for ncn-m001) | NONE  | Site (See note below for ncn-m001) |
+| LAN0 port 1        | NONE (See note below for `ncn-m001`) | NONE  | Site (See note below for `ncn-m001`) |
 
 #### SHCD Example
 
@@ -261,10 +261,10 @@ NOTES:
 
 ![Diagram of Gigabyte Master Node Cabling](../img/network/Gigaintel_Master.png)
 
-**NOTE**: Master 1 (ncn-m001) is required to have a site connection for installation and non-CAN system access. In Shasta versions <=1.3 this connection was on ncn-w001. This can have several configurations depending on customer requirements/equipment:
+**NOTE**: Master 1 (`ncn-m001`) is required to have a site connection for installation and non-CAN system access. In Shasta versions <=1.3 this connection was on `ncn-w001`. This can have several configurations depending on customer requirements/equipment:
 
-* The default configuration for Gigabyte systems uses the built-in 1Gb lan0 port for site connection on ncn-m001.
-* If the customer requires connectivity greater than 1Gb (or a different connection type), then a new and separate card will be installed on ncn-m001 and that card will provide site connectivity.
+* The default configuration for Gigabyte systems uses the built-in 1Gb lan0 port for site connection on `ncn-m001`.
+* If the customer requires connectivity greater than 1Gb (or a different connection type), then a new and separate card will be installed on `ncn-m001` and that card will provide site connectivity.
 
 <a name="storage_node_cabling"></a>
 ### Storage Node Cabling

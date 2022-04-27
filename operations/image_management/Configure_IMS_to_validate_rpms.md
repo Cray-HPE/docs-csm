@@ -1,20 +1,19 @@
+# Configure IMS to Validate RPMs
 
-## Configure IMS to validate RPMS
-
-Configuring IMS to validate the GPG signatures of RPMs during IMS Build operations involves two steps.
+Configuring the Image Management Service (IMS) to validate the GPG signatures of RPMs during IMS Build operations involves the following two steps:
 
 1. Create and update IMS to use a new Kiwi-NG Image with the Signing Keys embedded.
-   
-   **NOTE:** The default IMS Kiwi-NG Image is already configured with the signing keys needed to
-   validate HPE and SuSE RPMs and repositories. 
-   
-1. Update IMS Recipes to require GPG verification of RPMs, repositories, or both.
 
-### Create and Update IMS to Use a New Kiwi-NG Image with an Embedded Signing Key
+   > **NOTE:** The default IMS Kiwi-NG Image is already configured with the signing keys needed to
+   validate HPE and SuSE RPMs and repositories.
 
-1. Create a temporary directory to perform the actions necessary to configure IMS to validate 
+2. Update IMS Recipes to require GPG verification of RPMs, repositories, or both.
+
+## Create and Update IMS to Use a New Kiwi-NG Image with an Embedded Signing Key
+
+1. Create a temporary directory to perform the actions necessary to configure IMS to validate
    RPM signatures.
-   
+
     ```bash
     ncn# mkdir ims-validate
     ncn# cd ims-validate/
@@ -31,7 +30,7 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
    ```
      - image: cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7
    ```
-   
+
    If successful, make note of the version of the listed container. In this case, the version is `0.4.7`.
 
 
@@ -49,35 +48,42 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
    ```bash
    ncn# podman run -it --entrypoint "" --rm cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7 cat /scripts/entrypoint.sh | tee entrypoint.sh
    ```
-  
-1. Modify the `entrypoint.sh` script to pass the signing key to the `kiwi-ng` command.  
+
+1. Modify the `entrypoint.sh` script to pass the signing key to the `kiwi-ng` command.
 
     ```bash
     ncn# cat entrypoint.sh
-    ...
+    ```
+
+    Example output:
+
+    ```
+    [...]
+
     # Call kiwi to build the image recipe. Note that the command line --add-bootstrap-package
-    # causes kiwi to install the cray-ca-cert rpm into the image root.
+    # causes kiwi to install the cray-ca-cert RPM into the image root.
     kiwi-ng $DEBUG_FLAGS --logfile=$PARAMETER_FILE_KIWI_LOGFILE --type tbz system build --description $RECIPE_ROOT_PARENT \
     --target $IMAGE_ROOT_PARENT --add-bootstrap-package file:///mnt/ca-rpm/cray_ca_cert-1.0.1-1.x86_64.rpm \
     --signing-key /signing-keys/my-signing-key.asc   # <--- ADD SIGNING-KEY FILE
-    ...
+
+    [...]
     ```
 
 1. Create a `Dockerfile` to create a new `cray-ims-kiwi-ng-opensuse-x86_64-builder` image.
-   
+
     ```bash
     ncn# cat Dockerfile
     FROM registry.local/cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7
-    
+
     RUN mkdir /signing-keys
     COPY my-signing-key.asc /signing-keys
     COPY entrypoint.sh /scripts/entrypoint.sh
     ENTRYPOINT ["/scripts/entrypoint.sh"]
     ```
 
-    **NOTE:** Make sure that the version of the `cray-ims-kiwi-ng-opensuse-x86_64-builder`
+    > **NOTE:** Make sure that the version of the `cray-ims-kiwi-ng-opensuse-x86_64-builder`
     image in the `FROM` line matches the version of the image above.
-   
+
 1. Verify that the following files are in the temporary directory.
 
     ```bash
@@ -85,7 +91,7 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
     Dockerfile  entrypoint.sh  my-signing-key.asc
     ```
 
-1. Using the `podman` command, build and tag a new `cray-ims-kiwi-ng-opensuse-x86_64-builder` image. 
+1. Using the `podman` command, build and tag a new `cray-ims-kiwi-ng-opensuse-x86_64-builder` image.
 
     ```bash
     ncn# podman build -t registry.local/cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7-validate .
@@ -106,38 +112,45 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
     46c78827eb62c66c9f42aeba12333281b073dcc80212c4547c8cc806fe5519b3
     ```
 
-1. Obtain Nexus credentials.
+2. Obtain Nexus credentials.
 
     ```bash
     ncn# NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)"
     ncn# NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)"
     ```
 
-1. Push the new image to the Nexus image registry.
+3. Push the new image to the Nexus image registry.
 
     ```bash
     ncn# podman push registry.local/cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7-validate --creds="$NEXUS_USERNAME:$NEXUS_PASSWORD"
     ```
 
-1. Update the IMS `cray-configmap-ims-v2-image-create-kiwi-ng` configmap to use this new image.
-   
+4. Update the IMS `cray-configmap-ims-v2-image-create-kiwi-ng` ConfigMap to use this new image.
+
     ```bash
     ncn# kubectl -n services edit cm cray-configmap-ims-v2-image-create-kiwi-ng
-    ...
-    - image: cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7-validate
-    ...
     ```
-   
-   **NOTE:** It may take several minutes for this change to take effect. Restarting IMS is not necessary.
-   
-1. Cleanup and remove the temporary directory
+
+    Example output:
+
+    ```
+    [...]
+
+    - image: cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7-validate
+
+    [...]
+    ```
+
+   > **NOTE:** It may take several minutes for this change to take effect. Restarting IMS is not necessary.
+
+5. Cleanup and remove the temporary directory
 
     ```bash
     ncn# cd ..
     ncn# rm -rfv ims-validate/
     ```
 
-### Update IMS Recipes to Require GPG Verification of RPMs/Repos
+## Update IMS Recipes to Require GPG Verification of RPMs/Repos
 
 1. List the IMS recipes and determine which recipes need to be updated.
 
@@ -164,7 +177,7 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
         "name": "cos-2.1.51-slingshot-1.2.1",
         "recipe_type": "kiwi-ng"
       },
-    
+
     [...]
 
     ]
@@ -185,9 +198,9 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
     ```
 
 1. Modify the recipe's `config.xml` file and enable GPG validation on any repos that should be validated.
-   To validate each package's GPG signature, add `package_gpgcheck="true"`. To validate the repository signature, 
+   To validate each package's GPG signature, add `package_gpgcheck="true"`. To validate the repository signature,
    add `repository_gpgcheck="true"`.
-   
+
     ```
     <repository type="rpm-md" alias="..." priority="2" imageinclude="true" package_gpgcheck="true">
         ...
@@ -196,19 +209,19 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
         ...
     </repository>
     ```
-   
+
 1. Create a new recipe tar file.
 
     ```bash
     ncn# tar cvfz ../recipe-new.tgz .
     ```
-   
+
 1. Move to the parent directory.
-   
+
    ```bash
    ncn# cd ..
    ```
-   
+
 1. Create a new IMS recipe record.
 
     ```bash
@@ -220,7 +233,7 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
 
     ```
     created = "2018-12-04T17:25:52.482514+00:00"
-    id = "2233c82a-5081-4f67-bec4-4b59a60017a6" 
+    id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
     linux_distribution = "sles15"
     name = "my_recipe.tgz"
     recipe_type = "kiwi-ng"
@@ -249,24 +262,23 @@ Configuring IMS to validate the GPG signatures of RPMs during IMS Build operatio
     ```
 
     Example output:
+
     ```
     id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
     recipe_type = "kiwi-ng"
     linux_distribution = "sles15"
     name = "my_recipe.tgz"
     created = "2020-02-05T19:24:22.621448+00:00"
-    
+
     [link]
     path = "s3://ims/recipes/2233c82a-5081-4f67-bec4-4b59a60017a6/my_recipe.tgz"
     etag = ""
     type = "s3"
     ```
-   
+
 1. Cleanup and remove the temporary directory.
 
     ```bash
     ncn# cd ..
     ncn# rm -rf recipe/
     ```
-
-

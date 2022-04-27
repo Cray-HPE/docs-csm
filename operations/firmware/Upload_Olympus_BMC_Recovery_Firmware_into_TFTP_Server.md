@@ -1,19 +1,14 @@
-## Upload BMC Recovery Firmware into TFTP Server
+# Upload BMC Recovery Firmware into TFTP Server
 
-`cray-upload-recovery-images` is a utility for uploading the BMC recovery files for ChassisBMCs, NodeBMCs, and RouterBMCs to be served by the *cray-tftp* service. The tool uses the cray cli (*fas*, *artifacts*) and *cray-tftp* to download the s3 recovery images (as remembered by FAS) then upload them into the PVC that is used by *cray-tftp*.
+`cray-upload-recovery-images` is a utility for uploading the BMC recovery files for ChassisBMCs, NodeBMCs, and RouterBMCs to be served by the `cray-tftp` service. The tool uses the `cray` CLI (`fas`, `artifacts`) and `cray-tftp` to download the S3 recovery images (as remembered by FAS), then upload them into the PVC that is used by `cray-tftp`.
 `cray-upload-recovery-images` should be run on every system.
 
-### Procedure
+## Procedure
 
 1. Execute the `cray-upload-recovery-images` script.
 
 	```bash
 	ncn# cray-upload-recovery-images
-	```
-
-	Example output:
-
-	```
 	Attempting to retrieve ChassisBMC .itb file
 	s3:/fw-update/d7bb5be9eecc11eab18c26c5771395a4/cc-1.3.10.itb
 	d7bb5be9eecc11eab18c26c5771395a4/cc-1.3.10.itb

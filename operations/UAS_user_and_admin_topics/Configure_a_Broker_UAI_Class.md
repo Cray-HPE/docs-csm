@@ -115,12 +115,12 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
      * The secret is mounted on the directory `/etc/sssd` not the file `/etc/sssd/sssd.conf` because Kubernetes does not permit the replacement of an existing regular file with a volume but does allow overriding a directory
      * The value `384` is used here for the default mode of the file instead of `0600`, which would be easier to read, because JSON does not accept octal numbers in the leading zero form
 
-4. Make a volume to hold an empty and writeable `/etc/sssd/conf.d` in the Broker UAI:
+4. Make a volume to hold an empty and writable `/etc/sssd/conf.d` in the Broker UAI:
 
    ```
    ncn-m001# cray uas admin config volumes create --mount-path /etc/sssd/conf.d --volume-description '{"empty_dir": {"medium": "Memory"}}' --volumename sssd-conf-d --format yaml
    ```
-   
+
    Example output:
 
    ```
@@ -139,9 +139,9 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
    ```
    ncn-m001-pit# cray uas admin config images list
    ```
-   
+
    Example output:
-   
+
    ```
    [[results]]
    default = true
@@ -245,7 +245,7 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
     [volume_mounts.volume_description.host_path]
     path = "/lus"
     type = "DirectoryOrCreate"
-    
+
     [[results.volume_mounts]]
     mount_path = "/etc/sssd/conf.d"
     volume_id = "541980f9-fadc-41cd-8222-e2ffdb6421c4"
@@ -253,13 +253,13 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
 
     [results.volume_mounts.volume_description.empty_dir]
     medium = "Memory"
-    
+
     [uai_image]
     default = false
     image_id = "8f180ddc-37e5-4ead-b261-2b401914a79f"
     imagename = "registry.local/cray/cray-uai-broker:1.2.4"
     ```
 
-    __NOTE__: in some versions of UAS, SSSD will not start correctly when customized as described above because `/etc/sssd/sssd.conf` is mounted with the wrong mode in spite of being configured with the right mode. If SSSD is not working in a Broker UAI, refer to this [troubleshooting section](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md).
+    **NOTE:** In some versions of UAS, SSSD will not start correctly when customized as described above because `/etc/sssd/sssd.conf` is mounted with the wrong mode in spite of being configured with the right mode. If SSSD is not working in a Broker UAI, refer to this [troubleshooting section](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md).
 
 [Next Topic: Start a Broker UAI](Start_a_Broker_UAI.md)

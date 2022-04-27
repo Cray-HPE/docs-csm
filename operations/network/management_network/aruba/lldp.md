@@ -1,25 +1,26 @@
-# Link layer discovery protocol (LLDP) 
+# Link Layer Discovery Protocol (LLDP)
 
-LLDP is used to advertise the device's identity and abilities and read other devices connected to the same network. Note: LLDP is enabled by default. 
+LLDP is used to advertise the device's identity and abilities and read other devices connected to the same network.
 
-Relevant Configuration 
+> **NOTE:** LLDP is enabled by default.
 
+## Configuration Commands
 
-Enable an interface to receive or transmit LLDP packets 
+Enable an interface to receive or transmit LLDP packets:
 
-```
+```text
 switch(config-if)# lldp <receive|transmit>
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:
 
-```
+```text
 switch# show lldp [local-device|neighbor-info|statistics]
 ```
 
-Example Output 
+## Example Output
 
-```
+```text
 switch# show lldp configuration
 LLDP Global Configuration:
 LLDP Enabled :Yes
@@ -42,7 +43,7 @@ switch# show lldp local-device
 Global Data
 ---------------
 Chassis-id
-60 
+60
 Total Packets transmitted : 198
 Total Packets received : 170
 Total Packet received and discarded : 0
@@ -53,13 +54,14 @@ Port-ID        Tx-Packets     Rx-packets     Rx-discarded   TLVs-Unknown
 1/1/3          70             70             0              0
 ```
 
-Expected Results 
+## Expected Results
 
-* Step 1: Link status between the peer devices is UP 
-* Step 2: LLDP is enabled
-* Step 3: Local device LLDP Information is displayed
-* Step 4: Remote device LLDP information is displayed 
-* Step 5: LLDP statistics are displayed 
+1. Link status between the peer devices is UP
+2. LLDP is enabled
+3. Local device LLDP Information is displayed
+4. Remote device LLDP information is displayed
+5. LLDP statistics are displayed
+
 
 [Back to Index](../index.md)
 

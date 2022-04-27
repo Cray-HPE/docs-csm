@@ -21,8 +21,6 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-#
-
 # Default values
 verbose=false
 
@@ -105,9 +103,9 @@ function check_service(){
       fi
       if [[ -n "$osd_id" ]] || [[ -n "$osd" ]]
       then
-        read -r -d "\n" service_unit status epoch < <(pdsh -N -w "$host" podman ps --format json 2>&1 |grep -v "Permanently added"|jq --arg osd "osd-$osd_id" -r '.[]|select(.Names[]|contains($osd))|.Names[], .State, .StartedAt')
+        read -r -d "\n" service_unit status epoch < <(pdsh -N -w "$host" podman ps --format json 2>&1 |grep -v "Permanently added"|jq --arg osd "osd.$osd_id" -r '.[]|select(.Names[]|contains($osd))|.Names[], .State, .StartedAt')
         (( tests++ ))
-        if [[ "$service_unit" =~ "$FSID_STR-osd-$osd_id" ]]
+        if [[ "$service_unit" =~ "$FSID_STR-osd.$osd_id" ]]
         then
           (( passed++ ))
         fi
@@ -227,13 +225,10 @@ check_ceph_health_basic
 
 if [[ $verbose == "true" ]]
 then
-  echo "Updating ssh keys.."
+  echo "Updating SSH keys.."
 fi
 
-for node_num in $(seq 1 "$num_storage_nodes"); do
-  nodename=$(printf "ncn-s%03d" "$node_num")
-  pdsh -N -w "$nodename" truncate --size=0  2>&1
-done
+truncate --size=0 ~/.ssh/known_hosts  2>&1
 
 for node_num in $(seq 1 "$num_storage_nodes"); do
   nodename=$(printf "ncn-s%03d" "$node_num")
@@ -326,3 +321,4 @@ else
   fi
   exit 0
 fi
+#

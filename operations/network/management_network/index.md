@@ -1,6 +1,6 @@
-## Management Network User Guide
+# Management Network User Guide
 
-### Introduction
+## Introduction
 
 The intent for the this documentation is to help install and manage Aruba, Dell, and Mellanox network switches in a CSM install.
 
@@ -14,76 +14,95 @@ __________________________________
 The display and command line illustrated in this document are examples and might not exactly match your particular environment. The switch and accessory drawings in this document are for illustration only, and may not exactly match your installed products.
 __________________________________
 
-### Switch configuration guides
+### Switch Configuration Guides
 
-- [Fresh install](fresh_install.md)
-   - This is either a first time install or the previous CSM was wiped and requires a new install.
-- [Upgrade](upgrade.md)
-   - Upgrading to a new CSM version.
-- [Re-install](reinstall.md)
-   - Reinstalling the same CSM version.
-- [Added Hardware](added_hardware.md)
-   - New hardware was added to the system.
-- [Replace Switch](replace_switch.md)
-   - Switch failed and needs to be replaced.
+#### Switch Config States
+
+To check what state the switches are see the [upgrade](upgrade.md) page.
+
+- 1.0 Config: Non generated switch configs.
+- 1.2 Preconfig: CANU generated configs for 1.0
+- 1.2 Config: CANU generated configs for 1.2
+
+
+#### Starting Points
+
+- Current switch configs are not generated and need to upgrade to generated configs.
+  - This can either be 1.0 generated or 1.2 generated.
+  - [upgrade](upgrade.md)
+- Current switch configs are generated and need to go to 1.2.
+  - [1.2 (Preconfig) to 1.2](1.0_to_1.2_upgrade.md)
+- Switches have no config on them.
+  - [Fresh Install](fresh_install.md)
+- Reinstalling the same CSM version.
+  - [Re-install](reinstall.md)
+- New hardware was added to the system.
+  - [Added Hardware](added_hardware.md)
+- Switch failed and needs to be replaced.
+  - [Replace Switch](replace_switch.md)
 
 ### User guides
+
 The user guides contain information such as are generic configuration examples, explanation of currently used technologies, topology maps and summary of the network design used in the CSM management network.
 
 - [Aruba](aruba/index.md)
 - [Dell](dell/index.md)
 - [Mellanox](mellanox/index.md)
 
+### CANU
 
-### CANU:
-CANU (CSM Automatic Network Utility) is the tool used to generate/validate/test the Shasta management network.
+CSM Automatic Network Utility (CANU) is the tool used to generate/validate/test the Shasta management network.
 
 Documentation for CANU can be found at:
 
  https://github.com/Cray-HPE/canu
 
-### Useful pages
+### Useful Pages
+
 - [Collect data](collect_data.md)
-   - Input data needed to generate switch configs.
+  - Input data needed to generate switch configs.
 - [Cable Management Network Servers](../../../install/cable_management_network_servers.md)
-   - Shows how servers in CSM should be cabled.
+  - Shows how servers in CSM should be cabled.
 - [SHCD HMN Tab/HMN Connections Rules](../../../install/shcd_hmn_connections_rules.md)
-   - Shows how the HMN tab on the SHCD should be formatted.
+  - Shows how the HMN tab on the SHCD should be formatted.
 - [SHCD Connection Rules](../../../install/shcd_hmn_connections_rules.md)
-   - Shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.
-- [Backup custom config](backup_custom_config.md)
-   - Shows users how to backup configuration that's custom to their system, this include site connections and credentials.
-- [Config management](config_management.md)
-   - Shows users how to save a running config to the switch for backup purposes or to switch between different switch configs.
-- [Validate switch config](validate_switch_configs.md)
-   - Compares the configuration on a running system to what is generated.
-- [Wipe management switches](wipe_mgmt_switches.md)
-   - Erase the switch configuration, this is useful for fresh installs.
-- [Generate switch configs](generate_switch_configs.md)
-   - Generate configurations for all management switches.
-- [Manual switch configs](manual_switch_config.md)
-   - Some configuration needs to be done manually (authentication/SNMP).
+  - Shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.
+- [Backup Custom Config](backup_custom_config.md)
+  - Shows users how to backup configuration that is custom to their system; this includes site connections and credentials.
+- [Configuration Management](config_management.md)
+  - Shows users how to save a running config to the switch for backup purposes or to switch between different switch configs.
+- [Validate Switch Config](validate_switch_configs.md)
+  - Compares the configuration on a running system to what is generated.
+- [Wipe Management Switches](wipe_mgmt_switches.md)
+  - Erase the switch configuration, this is useful for fresh installs.
+- [Generate Switch Configs](generate_switch_configs.md)
+  - Generate configurations for all management switches.
+- [Manual Switch Configs](manual_switch_config.md)
+  - Some configuration needs to be done manually (authentication/SNMP).
 - [Validate SHCD](validate_shcd.md)
-   - Validate the SHCD against the CSM network architecture.
+  - Validate the SHCD against the CSM network architecture.
+
 ### Products Supported
 
 This release applies to the following product models:
 
-* Aruba 8320 Switch Series
-* Aruba 8325 Switch Series
-* Aruba 8360 Switch Series
-* Aruba 6300 Switch Series
-* Mellanox SN2100 Switch Series
-* Mellanox SN2700 Switch Series
-* Dell S3048-ON Switch Series
-* Dell S4148T-ON Switch Series
-* Dell S4148F-ON Switch Series
+- Aruba 8320 Switch Series
+- Aruba 8325 Switch Series
+- Aruba 8360 Switch Series
+- Aruba 6300 Switch Series
+- Mellanox SN2100 Switch Series
+- Mellanox SN2700 Switch Series
+- Dell S3048-ON Switch Series
+- Dell S4148T-ON Switch Series
+- Dell S4148F-ON Switch Series
 
-Architecture and naming conventions can be found at:
+### Architecture and Naming Conventions
 
+Architecture and naming convention information can be found in the network model model:
 https://github.com/Cray-HPE/canu/blob/main/network_modeling/models/cray-network-architecture.yaml
 
 ### Minimum software version requirements
+
 - [Network Firmware](firmware/update_management_network_firmware.md)
 
 ### Enhancements
@@ -104,15 +123,18 @@ Spanning-tree
 </pre>
 <td>
 <pre>
-In the Shasta management network version 1.2 Spanning-tree configuration 
+In the Shasta management network version 1.2 Spanning-tree configuration
 is changing from RPVST (RSTP) to MSTP to allow for better vendor interoperability
-and simplified Spanning-tree configuration. New default configuration: 
+and simplified Spanning-tree configuration. New default configuration:
 
-* Spanning-tree BPDU guard is removed from NCN LAG ports
-* Spanning-tree BPDU filter is removed
-* Spanning-tree admin-edge port settings are retained for allowing quicker PXE boot
-* Spanning-tree instance is tied to default (no longer multiple instances or per vlan) 
-* Spanning-tree MSTP configuration name and revision in all configurations generated by Canu are set as: ***name*** cray ***version*** 2 
+- Spanning-tree BPDU guard is removed from NCN LAG ports
+- Spanning-tree BPDU filter is removed
+- Spanning-tree admin-edge port settings are retained for allowing quicker PXE boot
+- Spanning-tree instance is tied to default (no longer multiple instances or per vlan)
+- Spanning-tree MSTP configuration name and revision in all configurations generated by CANU are set
+- Add peering from MetalLB to customer edge router.
+
+as: ***name*** cray ***version*** 2
 </td>
 </pre>
 </table>

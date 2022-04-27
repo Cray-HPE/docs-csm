@@ -96,7 +96,7 @@ logout
 Connection to 34.136.140.107 closed.
 ```
 
-Now finished with the UAI, the user deletes it with `cray uas delete`. If the user has more than one UAI to delete, the argument to the `--uai-list` option can be a comma separated list of UAI names.
+Now finished with the UAI, the user deletes it with `cray uas delete`. If the user has more than one UAI to delete, the argument to the `--uai-list` option can be a comma-separated list of UAI names.
 
 ```
 vers> cray uas delete --uai-list uai-vers-01b26dd1

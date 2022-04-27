@@ -23,6 +23,11 @@ Obtain the list of UAI images that are currently registered with UAS.
 
 ```bash
 ncn-m001-pit# cray uas admin config images list
+```
+
+Example output:
+
+```
 [[results]]
 default = true
 image_id = "08a04462-195a-4e66-aa31-08076072c9b3"

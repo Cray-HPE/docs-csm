@@ -1,22 +1,24 @@
-# Adding a Ceph Node to the Ceph Cluster
+# Re-Add a Storage Node to Ceph
+
+Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
 **NOTE:** This operation can be done to add more than one node at the same time.
 
 ## Add Join Script
 
-1. Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh`
+1. Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh`.
 
-   **NOTE:** This script may also available in the `/usr/share/doc/csm/scripts` directory where the latest ***docs-csm*** rpm is installed. If so, it can be copied from that node to the new storage node being rebuilt and skip to step 2.
+   **NOTE:** This script may also available in the `/usr/share/doc/csm/scripts` directory where the latest ***`docs-csm`*** RPM is installed. If so, it can be copied from that node to the new storage node being rebuilt and skip to step 2.
 
    ```bash
    #!/bin/bash
-   
+
    (( counter=0 ))
-   
+
    host=$(hostname)
-   
+
    > ~/.ssh/known_hosts
-   
+
    for node in ncn-s001 ncn-s002 ncn-s003; do
      ssh-keyscan -H "$node" >> ~/.ssh/known_hosts
      pdsh -w $node > ~/.ssh/known_hosts
@@ -32,7 +34,7 @@
        else
          scp $node:/etc/ceph/rgw.pem /etc/ceph/rgw.pem
        fi
-   
+
        if [[ ! $(pdsh -w $node "/srv/cray/scripts/common/pre-load-images.sh; ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-keyscan -H $host >> ~/.ssh/known_hosts ;ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
        then
          (( counter+1 ))
@@ -46,7 +48,7 @@
        fi
      fi
    done
-   
+
    sleep 30
    (( ceph_mgr_failed_restarts=0 ))
    (( ceph_mgr_successful_restarts=0 ))
@@ -73,7 +75,7 @@
        fi
      done
    done
-   
+
    for service in $(cephadm ls | jq -r '.[].systemd_unit')
    do
      systemctl enable $service
@@ -86,7 +88,7 @@
    chmod u+x /srv/cray/scripts/common/join_ceph_cluster.sh
    ```
 
-1. In a separate window log into one of the following ncn-s00(1/2/3) and execute the following:
+1. In a separate window, log into one of the following ncn-s00(1/2/3) and execute the following:
 
    ```bash
    watch ceph -s
@@ -98,15 +100,15 @@
    /srv/cray/scripts/common/join_ceph_cluster.sh
    ```
 
-   **IMPORTANT:** While watching your window running `watch ceph -s` you will see the health go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about "failed to probe daemons or devices" and this will clear.
+   **IMPORTANT:** While watching the window running `watch ceph -s`, the health will go to a `HEALTH_WARN` state. This is expected. Most commonly, there will be an alert about "failed to probe daemons or devices" and this will clear.
 
-## Zapping OSDs
+## Zap OSDs
 
-   **IMPORTANT:** Only do this if you were not able to wipe the node prior to rebuild.
+**IMPORTANT:** Only do this if unable to wipe the node prior to rebuild.
 
-   **NOTE:** The commands in the Zapping OSDs section will need to be run from a node running ceph-mon. Typically ncn-s00(1/2/3).
+**NOTE:** The commands in the Zapping OSDs section will need to be run from a node running ceph-mon. Typically ncn-s00(1/2/3).
 
-1. Find the devices on the node being rebuilt
+1. Find the devices on the node being rebuilt.
 
    ```bash
    ceph orch device ls $NODE
@@ -126,9 +128,9 @@
 
    **IMPORTANT:** In the above example the drives on our rebuilt node are showing "Available = no". This is expected because the check is based on the presence of an LVM on the volume.
 
-   **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that you are not seeing OS drives. These will have a size of 480G.
+   **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that there are no OS drives. These will have a size of 480G.
 
-1. Zap the drives
+2. Zap the drives.
 
    ```bash
    for drive in $(ceph orch device ls $NODE --format json-pretty |jq -r '.[].devices[].path')
@@ -137,15 +139,15 @@
    done
    ```
 
-1. Validate the drives are being added to the cluster.
+3. Validate the drives are being added to the cluster.
 
    ```bash
    watch ceph -s
    ```
 
-   You will see the OSD count UP and IN counts increase. **If** you see your **IN** count increase but not reflect the amount of drives being added back in, then you will need to fail over the ceph mgr daemon. This is a known bug and is addressed in newer releases.
+   The returned output will have the OSD count UP and IN counts increase. **If** the **IN** count increases but does not reflect the amount of drives being added back in, an administrator must fail over the ceph mgr daemon. This is a known bug and is addressed in newer releases.
 
-   If you need to fail over the ceph-mgr daemon please run:
+   If necessary, fail over the ceph-mgr daemon with the following command:
 
    ```bash
    ceph mgr fail
@@ -153,18 +155,18 @@
 
 ## Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
 
-   **IMPORTANT:** Radosgw by default is deployed to the first 3 storage nodes. This includes haproxy and keepalived. This is automated as part of the install, but you may have to regenerate the configuration if you are not running on the first 3 storage nodes or all nodes. Please see the 2 examples in step 1.
+**IMPORTANT:** Radosgw by default is deployed to the first 3 storage nodes. This includes haproxy and keepalived. This is automated as part of the install, but administrators may have to regenerate the configuration if they are not running on the first 3 storage nodes or all nodes. Please see the 2 examples in step 1.
 
 1. Deploy Rados Gateway containers to the new nodes.
 
-   - If running Rados Gateway on all nodes is the desired conifugration then do:
+   - If running Rados Gateway on all nodes is the desired configuration:
 
       ```bash
       ceph orch apply rgw site1 zone1 --placement="*"
       ```
 
-   - If deploying to select nodes then do:
-  
+   - If deploying to select nodes:
+
      ```bash
      ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
      ```
@@ -173,6 +175,11 @@
 
     ```bash
     ncn-s00(1/2/3)# ceph orch ps --daemon_type rgw
+    ```
+
+    Example output:
+
+    ```
     NAME                             HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE     D              CONTAINER ID
     rgw.site1.zone1.ncn-s001.kvskqt  ncn-s001  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8      553b0cb212c          6e323878db46
     rgw.site1.zone1.ncn-s002.tisuez  ncn-s002  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8      553b0cb212c          278830a273d3
@@ -185,4 +192,6 @@
    pdsh -w ncn-s00[1..(end node number)] -f 2 '/srv/cray/scripts/metal/generate_haproxy_cfg.sh; systemctl restart haproxy.service; /srv/cray/scripts/metal/generate_keepalived_conf.sh; systemctl restart keepalived.service'
    ```
 
-[Next Step - Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md)
+## Next Step
+
+Proceed to the next step: [Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md)

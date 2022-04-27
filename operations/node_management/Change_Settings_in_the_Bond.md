@@ -1,4 +1,4 @@
-## Change Settings in the Bond
+# Change Settings in the Bond
 
 iPXE is used to setup udev rules for interface names and bond members. The configuration of these are dynamic on boot until node customization runs (cloud-init) and sets up the conventional `/etc/sysconfig/network/ifcfg-bond0` and other neighboring files.
 
@@ -13,7 +13,7 @@ This procedure requires administrative privileges.
 ### Procedure
 
 1. Customize the settings of the bond(s).
-   
+
    For more information, refer to the following lines of the `script.ipxe` file in the [metal-ipxe repository](https://github.com/Cray-HPE/metal-ipxe/blob/main/script.ipxe):
 
    ```bash
@@ -27,7 +27,7 @@ This procedure requires administrative privileges.
    Use one of the following options depending on the number of bonds formed:
 
    * When one bond is formed:
-   
+
      ```bash
      bond=bond0:mgmt0,mgmt2:mode=802.3ad,miimon=100,lacp_rate=fast,xmit_hash_policy=layer2+3:9000 || set net-bond-params bond=bond0:mgmt0,mgmt1:mode=802.3ad,miimon=100,lacp_rate=fast,xmit_hash_policy=layer2+3:9000 hwprobe=+200:*:*:bond0
      ```

@@ -1,4 +1,4 @@
-## Pre-Install Steps
+# Pre-Install Steps
 
 This section provides information on what needs to be done before
 an initial install of CSM.
@@ -12,9 +12,9 @@ This procedure is outlined in [Change Air-Cooled BMC Credentials](Change_River_B
 
 ### Liquid-Cooled BMC Credentials
 
-As with air-cooled BMCs, Liquid-Cooled BMCs also need their credentials changed.
+As with air-cooled BMCs, liquid-cooled BMCs also need their credentials changed.
 
-This procedure is outlined in [Change Liquid-Cooled BMC Credentials](../security_and_authentication/Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md)
+This procedure is outlined in [Change Liquid-Cooled BMC Credentials](../security_and_authentication/Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md).
 
 ### ServerTech PDU Default Credentials
 
@@ -24,5 +24,4 @@ abstracted by the HMS Redfish Translation Service.
 
 To set ServerTech PDU default credentials, follow the procedure outlined in
 [Change ServerTech PDU Credentials](Change_ServerTech_PDU_Credentials.md).
-
 

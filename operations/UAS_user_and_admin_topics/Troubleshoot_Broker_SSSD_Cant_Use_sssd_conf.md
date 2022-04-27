@@ -2,7 +2,7 @@
 
 [Next Topic: Clear UAS Configuration](Reset_the_UAS_Configuration_to_Original_Installed_Settings.md)
 
-## Troubleshoot Broker UAI SSSD Can't Use `/etc/sssd/sssd.conf`
+## Troubleshoot Broker UAI SSSD Cannot Use `/etc/sssd/sssd.conf`
 
 ### Symptom
 
@@ -75,12 +75,12 @@ While this problem will be resolved in an upcoming release of UAS, if this behav
 
    Assuming the system is configured as shown above, the following steps will
 
-   - Remove the existing incorrect ClusterRoleBinding so that it can be relaced later.
+   - Remove the existing incorrect ClusterRoleBinding so that it can be replaced later.
    - Create a new Pod Security Policy called `uas-default-psp`.
    - Create a Cluster Role called `uas-default-psp` that uses the new Pod Security Policy
-   - Replace the Cluster Role Binding called `uas-defaul-psp` with a new one that binds the new Cluster Role to the `default` Service Account in the `uas` namespace.
+   - Replace the Cluster Role Binding called `uas-default-psp` with a new one that binds the new Cluster Role to the `default` Service Account in the `uas` namespace.
 
-   If the system is configured differently, it may be necessary to investigate further, which is largely beyond the scope of this section.  The important thing here is that the `default` Service Account in the `uas` namespace must not be bound to a Pod Security Policy with an `fsGroup` or `supplementalGroups` configured with anything but the `RunAsAny` rule.
+   If the system is configured differently, it may be necessary to investigate further, which is largely beyond the scope of this section. The important thing here is that the `default` Service Account in the `uas` namespace must not be bound to a Pod Security Policy with an `fsGroup` or `supplementalGroups` configured with anything but the `RunAsAny` rule.
 
 2. Remove the existing Cluster Role Binding:
 
@@ -161,7 +161,7 @@ While this problem will be resolved in an upcoming release of UAS, if this behav
 4. Apply this new configuration to Kubernetes:
 
    ```
-   ncn-m001# kubectl apply -f /tmp/uas-default-psp.yaml 
+   ncn-m001# kubectl apply -f /tmp/uas-default-psp.yaml
    ```
 
 5. Delete and re-create the offending Broker UAI(s) and they should come up and SSSD should run properly.

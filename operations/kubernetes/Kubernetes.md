@@ -1,4 +1,4 @@
-## Kubernetes
+# Kubernetes
 
 The system management components are broken down into a series of micro-services. Each service is independently deployable, fine-grained, and uses lightweight protocols. As a result, the system's micro-services are modular, resilient, and can be updated independently. Services within this architecture communicate via REST APIs.
 
@@ -18,5 +18,4 @@ Kubernetes components can be divided into:
 - **Worker components** - A Kubernetes worker is a node that provides services necessary to run application containers. It is managed by the Kubernetes master. Node components run on every node and keep pods running, while providing the Kubernetes runtime environment.
 
 An etcd cluster is used for storage and state management of the Kubernetes cluster.
-
 

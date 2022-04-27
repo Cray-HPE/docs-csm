@@ -1,4 +1,4 @@
-## Create a Manual Backup of a Healthy etcd Cluster
+# Create a Manual Backup of a Healthy etcd Cluster
 
 Manually create a backup of a healthy etcd cluster and check to see if the backup was created successfully.
 
@@ -33,7 +33,7 @@ A healthy etcd cluster is available on the system. See [Check the Health and Bal
 2.  Check the status of the backup using the name returned in the output of the previous step.
 
     ```bash
-    ncn-w001# kubectl -n services get etcdbackup BACKUP_NAME -o yaml
+    ncn-w001# kubectl -n services get BACKUP_NAME -o yaml
     ```
 
     Example output:
@@ -47,7 +47,4 @@ A healthy etcd cluster is available on the system. See [Check the Health and Bal
         lastSuccessDate: "2020-01-13T21:38:47Z"
         succeeded: true
     ```
-
-
-
 

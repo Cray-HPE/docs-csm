@@ -1,22 +1,22 @@
-# Exec banner
+# Configure Exec Banners
 
 Exec banners are custom messages displayed to users attempting to connect to the management interfaces. Multiple lines of text can be stored using a custom delimiter to mark the end of message.
 
-Relevant Configuration 
+## Configuration Commands
 
-Create a banner 
+Create a banner:
 
 ```
 switch(config)# banner <motd|exec> DELIM
 ```
 
-Show Commands to Validate Functionality 
+Show commands to validate functionality:
 
 ```
 switch# show banner <motd|exec>
 ```
 
-Example Output 
+## Example Output
 
 ```
 switch(config)# banner exec $
@@ -28,9 +28,9 @@ chosen delimiter.
 switch(config)# do show banner exec
 ```
 
-Expected Results 
+## Expected Results
 
-* Step 1: You can create the Exec banner
-* Step 2: The output of the Exec banner looks correct  
+1. Administrators can create the Exec banner
+2. The output of the Exec banner looks correct
 
 [Back to Index](../index.md)

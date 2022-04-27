@@ -18,7 +18,7 @@ POST faster than others or vary based on BIOS setting. After powering on a set o
 an administrator can expect a healthy boot session to take about 60 minutes depending on
 the number of storage and worker nodes.
 
-## Topics:
+## Topics
 
    1. [Prepare for Management Node Deployment](#prepare_for_management_node_deployment)
       1. [Tokens and IPMI Password](#tokens-and-ipmi-password)
@@ -32,6 +32,7 @@ the number of storage and worker nodes.
    1. [Configure after Management Node Deployment](#configure_after_management_node_deployment)
       1. [LiveCD Cluster Authentication](#livecd-cluster-authentication)
       1. [Install Tests and Test Server on NCNs](#install-tests)
+      1. [Remove the default NTP pool](#remove-the-default-ntp-pool)
    1. [Validate Management Node Deployment](#validate_management_node_deployment)
       1. [Validation](#validation)
       1. [Optional Validation](#optional-validation)
@@ -106,6 +107,13 @@ proceed to step 2.
 
    This ensures that the PIT is configured with an accurate date/time, which will be properly propagated to the NCNs during boot.
 
+   If you receive the error `Failed to set time: NTP unit is active` you will need to stop `chrony` first.
+
+   ```bash
+   pit# systemctl stop chronyd
+   ```
+   Then run the commands above to complete the process.
+
 1. Ensure the current time is set in BIOS for all management NCNs.
 
    > If each NCN is booted to the BIOS menu, you can check and set the current UTC time.
@@ -150,8 +158,8 @@ proceed to step 2.
       >
       > For HPE NCNs the date configuration menu can be found at the following path: `System Configuration -> BIOS/Platform Configuration (RBSU) -> Date and Time`
       >
-      > Alternatively for HPE NCNs you can log in to the BMC's web interface and access the HTML5 console for the node to interact with the graphical BIOS.
-      > From the administrators own machine create a SSH tunnel (-L creates the tunnel, and -N prevents a shell and stubs the connection):
+      > Alternatively, for HPE NCNs you can log in to the BMC's web interface and access the HTML5 console for the node, in order to interact with the graphical BIOS.
+      > From the administrator's own machine, create an SSH tunnel (`-L` creates the tunnel; `-N` prevents a shell and stubs the connection):
       >
       > ```bash
       > linux# bmc=ncn-w001-mgmt # Change this to be each node in turn.
@@ -177,19 +185,19 @@ firmware requirement before starting.
    the firmware because that service has not yet been installed. However, at this point, it would be possible to use
    the HPE Cray EX HPC Firmware Pack (HFP) product on the PIT node to learn about the firmware versions available in HFP.
 
-   If the firmware is not updated at this point in the installation workflow, it can be done with FAS after CSM and HFP have 
-   both been installed and configured, however, at that point a rolling reboot procedure for the management nodes will be needed 
+   If the firmware is not updated at this point in the installation workflow, then it can be done with FAS after CSM and HFP have
+   both been installed and configured. However, at that point a rolling reboot procedure for the management nodes will be needed,
    after the firmware has been updated.
 
    See the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
-   on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for information about the HPE Cray EX HPC Firmware Pack (HFP) product.
+   on the [HPE Customer Support Center](https://www.hpe.com/support/ex-gsg) for information about the _HPE Cray EX HPC Firmware Pack_ (HFP) product.
 
    In the HFP documentation there is information about the recommended firmware packages to be installed.
    See "Product Details" in the HPE Cray EX HPC Firmware Pack Installation Guide.
 
-   Some of the component types have manual procedures to check firmware versions and update firmware. 
+   Some of the component types have manual procedures to check firmware versions and update firmware.
    See "Upgrading Firmware Without FAS" in the HPE Cray EX HPC Firmware Pack Installation Guide.
-   It will be possible to extract the files from the product tarball, but the install.sh script from that product 
+   It will be possible to extract the files from the product tarball, but the install.sh script from that product
    will be unable to load the firmware versions into the Firmware Action Services (FAS) because the management nodes
    are not booted and running Kubernetes and FAS cannot be used until Kubernetes is running.
 
@@ -239,7 +247,7 @@ The configuration workflow described here is intended to help understand the exp
     - The third master node `ncn-m003` boots and waits for `ncn-m002` to create the `/etc/cray/kubernetes/join-command-control-plane` so it can join Kubernetes
     - The second master node `ncn-m002` boots, runs the kubernetes-cloudinit.sh which will create /etc/kubernetes/admin.conf and /etc/cray/kubernetes/join-command-control-plane, then waits for the storage node to create etcd-backup-s3-credentials
 1. Once `ncn-s001` notices that `ncn-m002` has created /etc/kubernetes/admin.conf, then `ncn-s001` waits for any worker node to become available.
-1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plane, then it will join the Kubernetes cluster.  
+1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plane, then it will join the Kubernetes cluster.
     - Now `ncn-s001` should notice this from any one of the worker nodes and move forward with creation of ConfigMaps and running the post-Ceph playbooks (s3, OSD pools, quotas, etc.)
 1. Once `ncn-s001` creates etcd-backup-s3-credentials during the ceph-rgw-users role which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward
    > **`NOTE`**: If several hours have elapsed between storage and master nodes booting, or if there were issues PXE booting master nodes, the cloud init script on `ncn-s001` may not complete successfully. This can cause the `/var/log/cloud-init-output.log` on master node(s) to continue to output the following message:
@@ -256,11 +264,12 @@ The configuration workflow described here is intended to help understand the exp
 <a name="deploy"></a>
 ### 3.2 Deploy
 
-1. Change the default root password and SSH keys
-   > If you want to avoid using the default install root password and SSH keys for the NCNs, follow the
-   > NCN image customization steps in [Change NCN Image Root Password and SSH Keys](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
+1. Set the default root password and SSH keys and optionally change the timezone.
 
-   This step is **strongly encouraged** for all systems.
+   The management nodes images do not contain a default password or default ssh keys.
+
+   It is **required** to set the default root password and SSH keys in the images used to boot the management nodes.
+   Follow the NCN image customization steps in [Change NCN Image Root Password and SSH Keys on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
 
 1. Create boot directories for any NCN in DNS This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
 
@@ -274,10 +283,10 @@ The configuration workflow described here is intended to help understand the exp
     - **kubernetes-worker nodes** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd)
     - A brief overview of what is expected is here, in [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline)
 
-1. Run the BIOS Baseline script to apply a configs to BMCs. The script will apply helper configs to facilitate more deterministic network booting on any NCN port. **This runs against any server vendor**, some settings are not applied for certain vendors. 
-   
+1. Run the BIOS Baseline script to apply a configs to BMCs. The script will apply helper configs to facilitate more deterministic network booting on any NCN port. **This runs against any server vendor**, some settings are not applied for certain vendors.
+
     > **`NOTE`** This script depends on `IPMI_PASSWORD` being set, this is done in [Tokens and IPMI Password](#tokens-and-ipmi-password)
-   
+
     > **`NOTE`** This script will enable DCMI/IPMI on Hewlett-Packard Enterprise servers equipped with ILO. If `ipmitool` is not working at this time, it will after running this script.
 
     ```bash
@@ -306,7 +315,6 @@ The configuration workflow described here is intended to help understand the exp
     pit# csi pit validate --livecd-preflight
     ```
 
-    > Note: This check sometimes leaves the terminal in a state where input is not echoed to the screen. If this happens, running the `reset` command will correct it.
     > Note: You can ignore any errors about not being able resolve arti.dev.cray.com.
 
 1. Print the consoles available to you:
@@ -329,49 +337,30 @@ The configuration workflow described here is intended to help understand the exp
     ncn-w003-mgmt
     ```
 
-    > **`NOTE`**: All consoles are located at `/var/log/conman/console*`
+    > **`NOTE`**: All console logs are located at `/var/log/conman/console*`
+
 <a name="boot-the-storage-nodes"></a>
 1. Boot the **Storage Nodes**
 
-    1. Boot all storage nodes except `ncn-s001`:
-
-        ```bash
-        pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | grep -v "ncn-s001-" | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
-        ```
-
-    1. Wait approximately 1 minute.
-
-    1. Boot `ncn-s001`:
-
-        ```bash
-        pit# ipmitool -I lanplus -U $USERNAME -E -H ncn-s001-mgmt power on
-        ```
-
-1. Wait. Observe the installation through `ncn-s001-mgmt`'s console:
-
-    Print the console name:
+    Boot all the storage nodes. `ncn-s001` will start 1 minute after the other storage nodes.
 
     ```bash
-    pit# conman -q | grep s001
+    pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | grep -v "ncn-s001-" | sort -u |
+            xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on; \
+         sleep 60; ipmitool -I lanplus -U $USERNAME -E -H ncn-s001-mgmt power on
     ```
 
-    Expected output looks similar to the following:
-
-    ```text
-    ncn-s001-mgmt
-    ```
-
-    Then join the console:
+1. Observe the installation through the console of `ncn-s001-mgmt`.
 
     ```bash
     pit# conman -j ncn-s001-mgmt
     ```
 
-    From there an administrator can witness console-output for the cloud-init scripts.
+    From there an administrator can witness console output for the `cloud-init` scripts.
 
-    **`NOTE`**: Watch the storage node consoles carefully for error messages. If any are seen, consult [Ceph-CSI Troubleshooting](ceph_csi_troubleshooting.md)
+    **`NOTE`**: Watch the storage node consoles carefully for error messages. If any are seen, consult [Ceph-CSI Troubleshooting](ceph_csi_troubleshooting.md).
 
-    **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary), see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
+    **`NOTE`**: If the nodes have PXE boot issues (for example, getting PXE errors, or not pulling the `ipxe.efi` binary), see [PXE boot troubleshooting](pxe_boot_troubleshooting.md).
 
 1. Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
 
@@ -444,7 +433,7 @@ The configuration workflow described here is intended to help understand the exp
 
 #### 3.3.1 Run The Check
 
-Run the following command on the PIT node to validate that the expected LVM labels are present on disks on the master and worker nodes. When it prompts you for a password, enter the password for `ncn-m002`.
+Run the following command on the PIT node to validate that the expected LVM labels are present on disks on the master and worker nodes. When it prompts you for a password, enter the root password for `ncn-m002`.
 
 ```bash
 pit# /usr/share/doc/csm/install/scripts/check_lvm.sh
@@ -525,11 +514,10 @@ If there are LVM check failures, then the problem must be resolved before contin
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 ### 3.4 Check for Unused Drives on Utility Storage Nodes
 
- > **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware.
- > **`IMPORTANT:`** the cephadm may output this warning "WARNING: The same type, major and minor should not be used for multiple devices.". You can ignore this warning. 
-
+> **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware. It is suggested (but optional) for HPE NCNs.
+>
 > **`IMPORTANT:`** Estimate the expected number of OSDs using the following table and using this equation:
-> 
+>
 >  total_osds = (num of utility storage/ceph nodes) * (OSD count from table below for the appropriate hardware)
 
 | Hardware Manufacturer | OSD Drive Count (not including OS drives)|
@@ -629,7 +617,7 @@ If there are LVM check failures, then the problem must be resolved before contin
     **`IMPORTANT:`** The `cephadm` command may output this warning `WARNING: The same type, major and minor should not be used for multiple devices.`. You can ignore this warning.
 
     The field `available` would be `True` if Ceph sees the drive as empty and can
-    be used, e.g.:
+    be used. For example:
 
     ```text
     Device Path               Size         rotates available Model name
@@ -682,7 +670,7 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
    If you are provisioning your HPE Cray EX system from `ncn-m001` (i.e. it is your PIT node), then most likely this will be `ncn-m002`.
 
    Run the following commands on the PIT node to extract the value of the `first-master-hostname` field from your `/var/www/ephemeral/configs/data.json` file:
-   
+
    ```bash
    pit# FM=$(cat /var/www/ephemeral/configs/data.json | jq -r '."Global"."meta-data"."first-master-hostname"')
    pit# echo $FM
@@ -726,6 +714,32 @@ pit# ${CSM_RELEASE}/lib/install-goss-tests.sh
 pit# popd
 ```
 
+<a name="remove-default-ntp-pool"></a>
+### 4.5 Remove the default NTP pool
+
+Run the following command on the PIT node to remove the default pool, which can cause contention issues with NTP. When it prompts you for a password, enter the root password for `ncn-m002`.
+
+```bash
+pit# ssh ncn-m002 "\
+        PDSH_SSH_ARGS_APPEND='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' \
+        pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf |
+            grep -v m001 | sort -u |  tr -t '\n' ,) \
+        sed -i \'s/^! pool pool[.]ntp[.]org.*//\' /etc/chrony.conf"
+```
+
+Expected output looks similar to the following:
+```
+Password:
+ncn-m002: Warning: Permanently added 'ncn-m002,10.252.1.11' (ECDSA) to the list of known hosts.
+ncn-s001: Warning: Permanently added 'ncn-s001,10.252.1.6' (ECDSA) to the list of known hosts.
+ncn-s002: Warning: Permanently added 'ncn-s002,10.252.1.5' (ECDSA) to the list of known hosts.
+ncn-s003: Warning: Permanently added 'ncn-s003,10.252.1.4' (ECDSA) to the list of known hosts.
+ncn-m003: Warning: Permanently added 'ncn-m003,10.252.1.10' (ECDSA) to the list of known hosts.
+ncn-w002: Warning: Permanently added 'ncn-w002,10.252.1.8' (ECDSA) to the list of known hosts.
+ncn-w001: Warning: Permanently added 'ncn-w001,10.252.1.9' (ECDSA) to the list of known hosts.
+ncn-w003: Warning: Permanently added 'ncn-w003,10.252.1.7' (ECDSA) to the list of known hosts.
+```
+
 <a name="validate_management_node_deployment"></a>
 ## 5. Validate Management Node Deployment
 
@@ -751,7 +765,7 @@ Observe the output of the checks and note any failures, then remediate them.
    Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4226 seconds
    ```
 
-   If the test total line reports any failed tests, look through the full output of the test in csi-pit-validate-ceph.log to see which node had the failed test and what the details are for that test.
+   If the test total line reports any failed tests, look through the full output of the test in `csi-pit-validate-ceph.log` to see which node had the failed test and what the details are for that test.
 
    **`Note`**: Please see [Utility Storage](../operations/utility_storage/Utility_Storage.md) to help resolve any failed tests.
 
@@ -779,7 +793,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
    If these total lines report any failed tests, look through the full output of the test to see which node had the failed test and what the details are for that test.
 
-   > **`WARNING`** If there are failures for tests with names like "Worker Node CONLIB FS Label", then manual tests should be run on the node which reported the failure. See [Manual LVM Check Procedure](#manual-lvm-check-procedure). If the manual tests fail, then the problem must be resolved before continuing to the next step. See [LVM Check Failure Recovery](#lvm-check-failure-recovery).
+   > **`WARNING`** If there are failures for tests with names like `Worker Node CONLIB FS Label`, then manual tests should be run on the node which reported the failure. See [Manual LVM Check Procedure](#manual-lvm-check-procedure). If the manual tests fail, then the problem must be resolved before continuing to the next step. See [LVM Check Failure Recovery](#lvm-check-failure-recovery).
 
 1. Ensure that weave has not become split-brained.
 
@@ -788,7 +802,7 @@ Observe the output of the checks and note any failures, then remediate them.
    ```bash
    ncn# weave --local status connections | grep failed
    ```
-   
+
    If the check is successful, there will be no output. If you see messages like `IP allocation was seeded by different peers`, then weave looks to have split-brained. At this point, it is necessary to wipe the NCNs and start the PXE boot again:
 
    1. Wipe the NCNs using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
@@ -804,9 +818,9 @@ Observe the output of the checks and note any failures, then remediate them.
       ```bash
       ncn-m# systemctl status etcd.service
       ```
-   
+
       The second two lines of the expected output should look similar to the following:
-   
+
       ```text
          Loaded: loaded (/etc/systemd/system/etcd.service; enabled; vendor preset: disabled)
          Active: active (running) since Mon 2021-12-13 20:12:00 UTC; 51min 6s ago
@@ -819,11 +833,11 @@ Observe the output of the checks and note any failures, then remediate them.
       ```bash
       ncn-mw/pit# kubectl get pods -o wide -n kube-system | grep -Ev '(Running|Completed)'
       ```
-   
+
       If any pods are listed by this command, it means they are not in the `Running` or `Completed` state. That needs to be investigated before proceeding.
 
    1. Verify that the ceph-csi requirements are in place.
-   
+
       See [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md) for details.
 
 # Important Checkpoint
@@ -833,6 +847,6 @@ Observe the output of the checks and note any failures, then remediate them.
 <a name="next-topic"></a>
 # Next Topic
 
-   After completing the deployment of the management nodes, the next step is to install the CSM services.
+After completing the deployment of the management nodes, the next step is to install the CSM services.
 
-   See [Install CSM Services](index.md#install_csm_services)
+See [Install CSM Services](index.md#install_csm_services)

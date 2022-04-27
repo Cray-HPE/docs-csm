@@ -1,4 +1,4 @@
-## Kubernetes Networking
+# Kubernetes Networking
 
 Every Kubernetes pod has an IP address in the pod network that is reachable within the cluster. The system uses the `weave-net` plugin for inter-node communication.
 
@@ -7,7 +7,9 @@ Every Kubernetes pod has an IP address in the pod network that is reachable with
 All services with a REST API must be accessed from outside the cluster using the Istio Ingress Gateway. This gateway can be accessed using a URL in the following format:
 
 ```
-https://api.SYSTEM-NAME_DOMAIN-NAME
+https://api.cmn.SYSTEM-NAME_DOMAIN-NAME
+https://api.can.SYSTEM-NAME_DOMAIN-NAME
+https://api.chn.SYSTEM-NAME_DOMAIN-NAME
 ```
 
 The API requests then get routed to the appropriate node running that service.

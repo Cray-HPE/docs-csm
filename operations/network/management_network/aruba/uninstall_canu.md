@@ -1,7 +1,6 @@
-
 # Uninstall CANU
 
-Unintalling Canu can be achieved by: 
+Uninstalling CANU can be achieved by:
 
 ```
 pip3 uninstall canu

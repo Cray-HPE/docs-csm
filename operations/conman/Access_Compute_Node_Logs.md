@@ -1,63 +1,62 @@
-## Access Compute Node Logs
+# Access Compute Node Logs
 
 This procedure shows how the ConMan utility can be used to retrieve compute node logs.
 
-### Prerequisites
+## Prerequisites
 
-The user performing this procedure needs to have access permission to the cray-console-operator pod.
+The user performing this procedure needs to have access permission to the `cray-console-operator` pod.
 
-### Limitations
+## Limitations
 
 Encryption of compute node logs is not enabled, so the passwords may be passed in clear text.
 
-### Procedure
+## Procedure
+
+**Note:** this procedure has changed since the CSM 0.9 release.
 
 1. Log on to a Kubernetes master or worker node.
 
-2. Retrieve the cray-console-operator pod ID.
+1. Find the `cray-console-operator` pod.
 
-    ```
-    ncn-m001# CONPOD=$(kubectl get pods -n services \
-    -o wide|grep cray-console-operator|awk '{print $1}')
-    ncn-m001# echo $CONPOD
-    ```
-
-3. Log on to the pod.
-
-    ```
-    ncn-m001# kubectl exec -it -n services $CONPOD -- sh
-    ```
-
-4. Go to the log directory.
-
-    ```
-    # cd /var/log/conman
-    ```
-
-5. List the directory contents to identify node IDs.
-
-    ```
-    /var/log/conman # ls -la
+    ```bash
+    ncn# OP_POD=$(kubectl get pods -n services \
+            -o wide|grep cray-console-operator|awk '{print $1}')
+    ncn# echo $OP_POD
     ```
 
     Example output:
-
+    ```text
+    cray-console-operator-6cf89ff566-kfnjr
     ```
+
+1. Log on to the pod.
+
+    ```bash
+    ncn# kubectl exec -it -n services $OP_POD -- sh
+    ```
+
+1. The console log file for each node is labeled with the component name (xname) of that node.
+
+    List the log directory contents.
+
+    ```bash
+    # ls -la /var/log/conman
     total 44
-    -rw------- 1 root root 1415 Nov 30 20:00 console.NODE_ID
-    
-    [...]
+    -rw------- 1 root root 1415 Nov 30 20:00 console.XNAME
+    ...
     ```
 
-6. Use the node's ID to retrieve its logs.
+    > The log directory is also accessible from the `cray-console-node` pods.
 
-    ```
-    /var/log/conman # tail console.NODE_ID
-    ```
+1. The log files are plain text files which can be viewed with commands like `cat` or `tail`.
 
-7. Exit out of the pod.
-
-    ```
-    /var/log/conman # exit
+    ```bash
+    # tail /var/log/conman/console.XNAME
     ```
 
+1. Exit out of the pod.
+
+    ```bash
+    # exit
+    ncn#
+    ```

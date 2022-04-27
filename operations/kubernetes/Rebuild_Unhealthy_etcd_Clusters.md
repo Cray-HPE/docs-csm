@@ -1,4 +1,4 @@
-## Rebuild Unhealthy etcd Clusters
+# Rebuild Unhealthy etcd Clusters
 
 Rebuild any cluster that does not have healthy pods by deleting and redeploying unhealthy pods. This procedure includes examples for rebuilding etcd clusters in the services namespace. This procedure must be used for each unhealthy cluster, not just the services used in the following examples.
 
@@ -9,7 +9,7 @@ A special use case is also included for the Content Projection Service \(CPS\) a
 ---
 **NOTE**
 
-Etcd Clusters can be rebuilt using the automation script or the manual procedure below. The automation script follows the same steps as the manual procedure. If the automation script fails at any step, continue rebuilding the cluster using the manual procedure. 
+Etcd Clusters can be rebuilt using the automation script or the manual procedure below. The automation script follows the same steps as the manual procedure. If the automation script fails at any step, continue rebuilding the cluster using the manual procedure.
 
 ---
 
@@ -102,16 +102,15 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
     ncn-w001# kubectl -n services get etcd cray-cps-etcd -o yaml > /root/etcd/cray-cps-etcd.yaml
     ```
 
-2.  Edit each .yaml file to remove the entire line for creationTimestamp, generation, resourceVersion, selfLink, uid, and everything after status \(including status\).
+2.  Edit each .yaml file to remove the entire line for creationTimestamp, generation, resourceVersion, uid, and everything after status \(including status\).
 
     For example:
 
-    ```screen
+    ```
     creationTimestamp: "2019-11-26T16:54:23Z"
     generation: 1
 
     resourceVersion: "5340297"
-    selfLink: /apis/extensions/v1beta1/namespaces/services/deployments/cray-bos
     uid: 65f4912e-106d-11ea-88b0-b42e993e060a
 
     status:
@@ -214,6 +213,4 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
 
 
 Rerun the etcd cluster health check \(see [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md)\) after recovering one or more clusters. Ensure that the clusters are healthy and have the correct number of pods.
-
-
 

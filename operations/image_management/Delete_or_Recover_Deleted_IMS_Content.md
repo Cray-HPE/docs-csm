@@ -1,6 +1,4 @@
-
-
-## Delete or Recover Deleted IMS Content
+# Delete or Recover Deleted IMS Content
 
 The Image Management System \(IMS\) manages user supplied SSH public Keys, customizable image recipes, images, and IMS jobs that are used to build or customize images. In previous versions of IMS, deleting an IMS public key, recipe, or image resulted in that item being permanently deleted. Additionally, IMS recipes and images store linked artifacts in the Simple Storage Service \(S3\) datastore. These artifacts are referenced by the IMS recipe and image records. The default option when deleting an IMS recipe and image record was to also delete these linked S3 artifacts.
 
@@ -54,8 +52,7 @@ New functionality has been added to IMS to enable administrators to soft delete,
 
 Soft deleting an IMS record effectively removes the record being deleted from the default collection, and moves it to a new deleted collection. Recovering a deleted IMS record \(undelete operation\) moves the IMS record from the deleted collection back to the collection of available items. Hard deleting an IMS record permanently deletes it from the deleted collection.
 
-
-### Delete an IMS Artifact
+## Delete an IMS Artifact
 
 Use the `cray` CLI utility to delete either soft delete or hard delete an IMS public-key, recipe, or image.
 
@@ -63,18 +60,18 @@ Soft deleting an IMS public key, recipe, or image removes the record\(s\) from t
 
 Deleting an IMS public-key, recipe, or image record performs the following actions:
 
-1.  The IMS record\(s\) being deleted are moved from the collection of available items to a new deleted collection. Any newly created records within the deleted collection will have the same IMS ID value as it did before being moved there.
-2.  Any Simple Storage Service \(S3\) artifacts that are associated with the record or records being deleted are renamed within their S3 buckets so as to make them unavailable under their original key name.
+1. The IMS record\(s\) being deleted are moved from the collection of available items to a new deleted collection. Any newly created records within the deleted collection will have the same IMS ID value as it did before being moved there.
+2. Any Simple Storage Service \(S3\) artifacts that are associated with the record or records being deleted are renamed within their S3 buckets so as to make them unavailable under their original key name.
 
-#### Prerequisites
+### Prerequisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
-- System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
-    - `cray-ims`, the Image Management Service \(IMS\)
-    - `cray-nexus`, the Nexus repository manager service
-- `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
+* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+* System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
+  * `cray-ims`, the Image Management Service \(IMS\)
+  * `cray-nexus`, the Nexus repository manager service
+* `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
 
-#### Procedure
+### Procedure
 
 1.  Soft delete the desired IMS artifact.
 
@@ -100,7 +97,7 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         type = "s3"
         path = "/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
         etag = ""
-        
+
         [...]
         ```
 
@@ -137,11 +134,11 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         type = "s3"
         path = "/deleted/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs" <<-- S3 path to linked artifact was renamed
         etag = ""
-        
+
         [...]
         ```
 
-        If the admin desires the public-key, recipe, or image to be permanently deleted, proceed to the next step. If the deleted image might need to be recovered in the future, no more work is needed.
+        If the administrator desires the public-key, recipe, or image to be permanently deleted, proceed to the next step. If the deleted image might need to be recovered in the future, no more work is needed.
 
 2.  Hard delete the desired IMS artifact.
 
@@ -152,7 +149,7 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         ```bash
         ncn# cray ims deleted images list
         ```
-        
+
         Example output:
 
         ```
@@ -168,7 +165,7 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         type = "s3"
         path = "/deleted/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
         etag = ""
-        
+
         [...]
         ```
 
@@ -179,24 +176,24 @@ Deleting an IMS public-key, recipe, or image record performs the following actio
         ```
 
 
-### Recover Deleted IMS Artifacts
+## Recover Deleted IMS Artifacts
 
 Use the IMS undelete command to update the record\(s\) within the deleted collection for an IMS public-key, recipe, or image.
 
 Recovering a deleted IMS public-key, recipe, or image record uses the following workflow:
 
-1.  The record\(s\) being undeleted are moved to from the deleted collection to the collection of available items. Any restored records will have the same IMS ID value as it did before being undeleted.
-2.  Any Simple Storage Service \(S3\) artifacts that are associated with the record\(s\) being undeleted are renamed within their S3 buckets so as to make them available under their original key name.
+1. The record\(s\) being undeleted are moved to from the deleted collection to the collection of available items. Any restored records will have the same IMS ID value as it did before being undeleted.
+2. Any Simple Storage Service \(S3\) artifacts that are associated with the record\(s\) being undeleted are renamed within their S3 buckets so as to make them available under their original key name.
 
-#### Prerequisites
+### Prerequisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
-- System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
-    - `cray-ims`, the Image Management Service \(IMS\)
-    - `cray-nexus`, the Nexus repository manager service
-- `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
+* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+* System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
+  * `cray-ims`, the Image Management Service \(IMS\)
+  * `cray-nexus`, the Nexus repository manager service
+* `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
 
-#### Procedure
+### Procedure
 
 The steps in this procedure assume that a deleted image is being recovered. The same process can be followed if recovering a deleted public-key or recipe.
 
@@ -221,11 +218,11 @@ The steps in this procedure assume that a deleted image is being recovered. The 
     type = "s3"
     path = "/deleted/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
     etag = ""
-    
+
     [...]
     ```
 
-2.  Use the undelete operation to recover the image.
+2.  Use the `undelete` operation to recover the image.
 
     ```bash
     ncn# cray ims deleted images update IMS_IMAGE_ID --operation undelete
@@ -257,11 +254,7 @@ The steps in this procedure assume that a deleted image is being recovered. The 
     type = "s3"
     path = "/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"  <<-- The restored artifact path
     etag = ""
-    
+
     [...]
     ```
-
-
-
-
 

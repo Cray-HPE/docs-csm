@@ -1,10 +1,9 @@
-
 # Kubernetes and Bare Metal EtcD Certificate Renewal
 
 As part of the installation, Kubernetes generates certificates for the required subcomponents. This document will help walk through the process of renewing the certificates.
 
-**IMPORTANT:** 
-   
+**IMPORTANT:**
+
    - Depending on the version of Kubernetes, the command may or may not reside under the `alpha` category. Use `kubectl certs --help` and `kubectl alpha certs --help` to determine this. The overall command syntax should be the same and this is just whether or not the command structure will require `alpha` in it.
    - The node referenced in this document as `ncn-m` is the master node selected to renew the certificates on.
    - This document is based off a base hardware configuration of three master nodes and three worker nodes. Utility storage nodes are not mentioned because they are not running Kubernetes. Please make sure to update any commands that run on multiple nodes accordingly.
@@ -60,10 +59,10 @@ Client (master and worker nodes):
     ```
 
     Example output:
-    
+
     ```
     WARNING: kubeadm cannot validate component configs for API groups [kubelet.config.k8s.io kubeproxy.config.k8s.io]
-    
+
     CERTIFICATE                EXPIRES                  RESIDUAL TIME   CERTIFICATE AUTHORITY   EXTERNALLY MANAGED
     admin.conf                 Sep 24, 2021 15:21 UTC   14d                                     no
     apiserver                  Sep 24, 2021 15:21 UTC   14d             ca                      no
@@ -75,7 +74,7 @@ Client (master and worker nodes):
     etcd-server                Sep 24, 2021 15:19 UTC   14d             etcd-ca                 no
     front-proxy-client         Sep 24, 2021 15:21 UTC   14d             front-proxy-ca          no
     scheduler.conf             Sep 24, 2021 15:21 UTC   14d                                     no
-    
+
     CERTIFICATE AUTHORITY   EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
     ca                      Sep 02, 2030 15:21 UTC   8y              no
     etcd-ca                 Sep 02, 2030 15:19 UTC   8y              no
@@ -89,7 +88,7 @@ Client (master and worker nodes):
     ```bash
     ncn-m# pdsh -w ncn-m00[1-3] tar cvf /root/cert_backup.tar /etc/kubernetes/pki/ /var/lib/kubelet/pki/
     ```
-    
+
     Example output:
 
     ```
@@ -119,7 +118,7 @@ Client (master and worker nodes):
     ncn-w003: /var/lib/kubelet/pki/kubelet.key
     ncn-w003: /var/lib/kubelet/pki/kubelet-client-2021-09-07-17-06-36.pem
     ncn-w003: /var/lib/kubelet/pki/kubelet.crt
-    
+
     [...]
     ```
 
@@ -170,7 +169,7 @@ Run the following steps on each master node.
     etcd-server                Sep 22, 2022 17:13 UTC   364d            etcd-ca                 no
     front-proxy-client         Sep 22, 2022 17:13 UTC   364d            front-proxy-ca          no
     scheduler.conf             Sep 22, 2022 17:13 UTC   364d                                    no
-    
+
     CERTIFICATE AUTHORITY   EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
     ca                      Sep 02, 2030 15:21 UTC   8y              no
     etcd-ca                 Sep 02, 2030 15:19 UTC   8y              no
@@ -301,7 +300,7 @@ Run the following steps on each master node.
    **NOTE:** The following command will only respond with Unauthorized if certificates have expired. In any case, the new client certificates will need to be distributed in the following steps.
 
    1. View the status of the nodes.
-   
+
       ```bash
       ncn-m# kubectl get nodes
       ```
@@ -313,13 +312,13 @@ Run the following steps on each master node.
       ```
 
    1. Copy /etc/kubernetes/admin.conf to /root/.kube/config.
-   
+
       ```
       ncn-m# cp /etc/kubernetes/admin.conf /root/.kube/config
       ```
 
    1. Check the status of the nodes again.
-   
+
       ```
       ncn-m# kubectl get nodes
       ```
@@ -339,7 +338,7 @@ Run the following steps on each master node.
 2. Distribute the client certificate to the rest of the cluster.
 
    **NOTE:** There may be errors when copying files. The target may or may not exist depending on the version of Shasta.
-  
+
    - **DO NOT** copy this to the master node where this work is being performed.
    - Copy `/etc/kubernetes/admin.conf` to all master and worker nodes.
 
@@ -379,7 +378,7 @@ Run the following steps on each master node.
       ```bash
       ncn-m# for node in $(kubectl get nodes -o json|jq -r '.items[].metadata.name'); do kubeadm alpha kubeconfig user --org system:nodes --client-name system:node:$node --apiserver-advertise-address 10.252.120.2 --apiserver-bind-port 6442 > /root/$node.kubelet.conf; done
       ```
-      
+
       There should be a new `kubelet.conf` file per node running Kubernetes.
 
 3. Copy each file to the corresponding node shown in the filename.
@@ -419,11 +418,11 @@ Run the following steps on each master node.
    ```
 
 6. Perform a rolling reboot of master nodes.
-   
+
    Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) process.
 
    **IMPORTANT:** Verify pods are running on the master node that was rebooted before proceeding to the next node.
 
 7. Perform a rolling reboot of worker nodes.
-   
+
    Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) process.

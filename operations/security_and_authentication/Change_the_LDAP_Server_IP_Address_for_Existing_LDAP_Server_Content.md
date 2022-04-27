@@ -1,4 +1,4 @@
-## Change the LDAP Server IP Address for Existing LDAP Server Content
+# Change the LDAP Server IP Address for Existing LDAP Server Content
 
 The IP address that Keycloak is using for the LDAP server can be changed. In the case where the new LDAP server has the same contents as the previous LDAP server, edit the LDAP user federation to switch Keycloak to use the new LDAP server.
 
@@ -84,12 +84,12 @@ Follow the steps in only one of the sections below depending on if it is preferr
         "fullSyncPeriod": [
           "-1"
         ],
-    
+
     [...]
         "connectionUrl": [
           "ldap://10.248.0.59"
         ],
-    
+
     [...]
     ```
 
@@ -108,6 +108,4 @@ Follow the steps in only one of the sections below depending on if it is preferr
     "Content-Type: application/json" -d @keycloak_ldap.json \
     https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components/$COMPONENT_ID
     ```
-
-
 

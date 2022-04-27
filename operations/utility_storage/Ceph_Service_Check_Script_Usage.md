@@ -1,6 +1,6 @@
-# Ceph Service Check Script Usage 
+# Ceph Service Check Script Usage
 
-A new Ceph service script that will check the status of ceph and then verify that status against the individual Ceph storage nodes.
+A new Ceph service script that will check the status of Ceph and then verify that status against the individual Ceph storage nodes.
 
 ## Location
 
@@ -8,8 +8,8 @@ A new Ceph service script that will check the status of ceph and then verify tha
 
 ## Usage
 
-```bash
-usage:  ceph-service-status.sh # runs a simple ceph health check
+```text
+usage:  ceph-service-status.sh # runs a simple Ceph health check
         ceph-service-status.sh -n <node> -s <service> # checks a single service on a single node
         ceph-service-status.sh -n <node> -a true # checks all Ceph services on a node
         ceph-service-status.sh -A true # checks all Ceph services on all nodes in a rolling fashion
@@ -25,7 +25,7 @@ usage:  ceph-service-status.sh # runs a simple ceph health check
 ### Simple Ceph Health Check
 
 ```bash
-# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
 ```
 
 Example output:
@@ -33,14 +33,14 @@ Example output:
 ```
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
-Updating ssh keys..
+Updating SSH keys..
 Tests run: 1  Tests Passed: 1
 ```
 
 ### Service Check for a Single Service on a Single Node
 
 ```bash
-# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -v true -s mon.ncn-s001
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -v true -s mon.ncn-s001
 ```
 
 Example output:
@@ -48,7 +48,7 @@ Example output:
 ```
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
-Updating ssh keys..
+Updating SSH keys..
 
 HOST: ncn-s001#######################
 Service mon.ncn-s001 on ncn-s001 has been restarted and up for 9280 seconds
@@ -61,7 +61,7 @@ Tests run: 2  Tests Passed: 2
 ### Service Check for All Services on a Single Node
 
 ```bash
-# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -a true -v true
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -a true -v true
 ```
 
 Example output:
@@ -69,7 +69,7 @@ Example output:
 ```
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
-Updating ssh keys..
+Updating SSH keys..
 
 HOST: ncn-s001#######################
 Service mds.cephfs.ncn-s001.rmisfx on ncn-s001 has been restarted and up for 9206 seconds
@@ -122,7 +122,7 @@ Tests run: 12  Tests Passed: 12
 ### Service Check for a Service Type
 
 ```bash
-# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -s mon
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -s mon
 ```
 
 Example output:
@@ -130,7 +130,7 @@ Example output:
 ```
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
-Updating ssh keys..
+Updating SSH keys..
 
 HOST: ncn-s001#######################
 Service mon on ncn-s001 has been restarted and up for 9547 seconds
@@ -155,11 +155,10 @@ Tests run: 4  Tests Passed: 4
 ### Service Check for All Services and All Nodes
 
 The output of the following command is similar to the above output, except it shows all services on all nodes.
-It is excluded in this case for brevity. 
+It is excluded in this case for brevity.
 
 ```bash
-# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -A true
+ncn# /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -A true
 ```
 
-> **IMPORTANT:** This script can be run without the verbose flag and with an echo for the return code `echo $?`.  rc = 0 clean check, rc = 1 or greater then there was an issue and re-run with the `-v true` flag.
-
+> **IMPORTANT:** This script can be run without the verbose flag and with an echo for the return code `echo $?`. A return code of `0` means the check was clean. A return code of `1` or greater means that there was an issue. In the latter case, re-run the command with the `-v true` flag.

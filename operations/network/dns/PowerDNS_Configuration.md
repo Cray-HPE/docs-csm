@@ -45,10 +45,10 @@ In addition to responding to external DNS queries, PowerDNS can support replicat
 
 Zone transfer is configured via `customizations.yaml` parameters and can also be configured at install time via CSI command line arguments.
 
-**Parameter:** `spec.network.dns.primary_server_name`  
-**CSI command line argument:** `--primary-server-name`  
-**Default value:** `primary`  
-**Description:**  
+**Parameter:** `spec.network.dns.primary_server_name`
+**CSI command line argument:** `--primary-server-name`
+**Default value:** `primary`
+**Description:**
 The name of the PowerDNS server, this is combined with the system domain information to create the NS record for zones, for example.
 
 ```
@@ -62,11 +62,11 @@ $ dig +short primary.system.dev.cray.com
 10.101.8.113
 ```
 
-**Parameter:** `spec.network.dns.secondary_servers`   
-**CSI command line argument:** `--secondary-servers`  
-**Default value:** `""`  
-**Description:**  
-A comma separated list of DNS servers to notify in the format `server name/ip address`. 
+**Parameter:** `spec.network.dns.secondary_servers`
+**CSI command line argument:** `--secondary-servers`
+**Default value:** `""`
+**Description:**
+A comma-separated list of DNS servers to notify in the format `server name/ip address`.
 
 ```
 externaldns1.my.domain/1.1.1.1,externaldns2.my.domain/2.2.2.2
@@ -74,11 +74,11 @@ externaldns1.my.domain/1.1.1.1,externaldns2.my.domain/2.2.2.2
 
 If the default value is used no servers to notify on zone update will be configured.
 
-**Parameter:** `spec.network.dns.notify_zones`  
-**CSI command line argument:** `--notify-zones`  
-**Default value:** `""`  
-**Description:**  
-A comma separated list of zones to transfer.
+**Parameter:** `spec.network.dns.notify_zones`
+**CSI command line argument:** `--notify-zones`
+**Default value:** `""`
+**Description:**
+A comma-separated list of zones to transfer.
 
 ```
 system.dev.cray.com,8.101.10.in-addr.arpa

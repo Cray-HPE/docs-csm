@@ -1,4 +1,4 @@
-## Repopulate Data in etcd Clusters When Rebuilding Them
+# Repopulate Data in etcd Clusters When Rebuilding Them
 
 When an etcd cluster is not healthy, it needs to be rebuilt. During that process, the pods that rely on etcd clusters lose data. That data needs to be repopulated in order for the cluster to go back to a healthy state.
 
@@ -16,7 +16,7 @@ The following services need their data repopulated in the etcd cluster:
 
 ### Prerequisites
 
-A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
+An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
 
 
 ### BOS
@@ -27,8 +27,6 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
 
     - UANs: Refer to the UAN product stream repository and search for the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
     - Cray Operating System \(COS\): Refer to the "Create a Boot Session Template" header in the "Boot COS" procedure in the COS product stream documentation.
-
-
 
 ### CPS
 
@@ -112,61 +110,6 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
     ncn-w001# kubectl delete pods -n services POD_NAME
     ```
 
-
-### External DNS
-
-The etcd cluster for external DNS maintains an ephemeral cache for CoreDNS. There is no reason to back it up. If it is having any issues, delete it and recreate it.
-
-1.  Save the external DNS configuration.
-
-2.  Edit the end of each .yaml file to remove the .status, .metadata.uid, .metadata.selfLink, .metadata.resourceVersion, .metadata.generation, and .metadata.creationTimestamp.
-
-    For example:
-
-    ```bash
-    apiVersion: etcd.database.coreos.com/v1beta2
-    kind: EtcdCluster
-    metadata:
-      annotations:
-        etcd.database.coreos.com/scope: clusterwide
-      labels:
-        app.kubernetes.io/name: cray-externaldns-etcd
-      name: cray-externaldns-etcd
-      namespace: services
-    spec:
-      pod:
-        ClusterDomain: ""
-        annotations:
-          sidecar.istio.io/inject: "false"
-        busyboxImage: registry.local/library/busybox:1.28.0-glibc
-        persistentVolumeClaimSpec:
-          accessModes:
-          - ReadWriteOnce
-          dataSource: null
-          resources:
-            requests:
-              storage: 1Gi
-        resources: {}
-      repository: registry.local/coreos/etcd
-      size: 3
-      version: 3.3.8
-    ```
-
-3.  Delete the current cluster.
-
-    ```bash
-    ncn-w001# kubectl -n services delete etcd cray-externaldns-etcd
-    ```
-
-4.  Recreate the cluster.
-
-    ```bash
-    ncn-w001# kubectl apply -f cray-externaldns-etcd.yaml
-    ```
-
-
-<a name="bss"></a>
-
 ### BSS
 
 Data is repopulated in BSS when the REDS init job is run.
@@ -198,7 +141,6 @@ Data is repopulated in BSS when the REDS init job is run.
     ncn-w001# kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-reds'
     ```
 
-
 ### MEDS
 
 1.  Restart MEDS.
@@ -214,7 +156,6 @@ Data is repopulated in BSS when the REDS init job is run.
     Refer to the "Use the `cray-fas-loader` Kubernetes Job" section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) for more information.
 
     When the etcd cluster is rebuilt, all historic data for firmware actions and all recorded snapshots will be lost. Image data will need to be reloaded by following the `cray-fas-loader` Kubernetes job procedure. After images are reloaded any running actions at time of failure will need to be recreated.
-
 
 ### HMNFD
 
@@ -239,6 +180,4 @@ Data is repopulated in BSS when the REDS init job is run.
         ```
 
         **NOTE:** On larger systems, [0-4] may have to be a larger range.
-
-
 

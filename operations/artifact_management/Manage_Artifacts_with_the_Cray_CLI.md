@@ -1,4 +1,4 @@
-## Manage Artifacts with the Cray CLI
+# Manage Artifacts with the Cray CLI
 
 The artifacts \(objects\) available for use on the system are created and managed with the Cray CLI. The cray artifacts command provides the ability to manage any given artifact. The Cray CLI automatically authenticates users and provides Simple Storage Service \(S3\) credentials.
 
@@ -15,7 +15,7 @@ Username: adminuser
 Password:
 ```
 
-`Success!` will be returned if the user is succesfully authenticated.
+`Success!` will be returned if the user is successfully authenticated.
 
 **Authorization is Local to a Host:** whenever you are using the CLI (`cray` command) on a host (e.g. a workstation or NCN) where it has not been used before, it is necessary to authenticate on that host using `cray auth login`. There is no mechanism to distribute CLI authorization amongst hosts.
 
@@ -129,6 +129,4 @@ ETag = "\"e3f195c20a2399bf1b5a20df12416115\""
 [artifact.Metadata]
 md5sum = "e3f195c20a2399bf1b5a20df12416115"
 ```
-
-
 

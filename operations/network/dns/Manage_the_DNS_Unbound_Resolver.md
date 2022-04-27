@@ -1,4 +1,4 @@
-## Manage the DNS Unbound Resolver
+# Manage the DNS Unbound Resolver
 
 The unbound DNS instance is used to resolve names for the physical equipment on the management networks within the system, such as NCNs, UANs, switches, compute nodes, and more. This instance is accessible only within the HPE Cray EX system.
 
@@ -150,4 +150,76 @@ ncn-w001# kubectl -n services patch configmaps cray-dns-unbound \
 --type merge -p '{"binaryData":{"records.json.gz":"H4sICLQ/Z2AAA3JlY29yZHMuanNvbgCLjuUCAETSaHADAAAA"}}'
 ```
 
+### Change the Site DNS Server
 
+Use the following procedure to change the site DNS server that Unbound forwards queries to. This may be necessary if the site DNS server is moved to a different IP address.
+
+1. Edit the `cray-dns-unbound` ConfigMap.
+
+   ```bash
+   ncn-m001# kubectl -n services edit configmap cray-dns-unbound
+   ```
+   Update the `forward-zone` value in `unbound.conf`.
+
+   ```yaml
+   forward-zone:
+       name: .
+       forward-addr: 172.30.84.40
+   ```
+
+   Multiple DNS servers can be defined if required.
+
+   ```yaml
+   forward-zone:
+       name: .
+       forward-addr: 172.30.84.40
+       forward-addr: 192.168.0.1
+   ```
+
+1. Restart `cray-dns-unbound` for this change to take effect.
+
+   ```bash
+   ncn-m001# kubectl -n services rollout restart deployment cray-dns-unbound
+   deployment.apps/cray-dns-unbound restarted
+   ```
+
+1. Update `customizations.yaml`.
+
+   **IMPORTANT:** If this step is not performed, then the Unbound configuration will be overwritten with the previous value the next time CSM or Unbound is upgraded.
+
+   1. Extract `customizations.yaml` from the `site-init` secret in the `loftsman` namespace.
+
+      ```bash
+      ncn-m001# kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
+      ```
+
+   1. Update `system_to_site_lookups` with the value of the new DNS server.
+
+      ```yaml
+      spec:
+        network:
+          netstaticips:
+            system_to_site_lookups: 172.30.84.40
+      ```
+
+      If multiple DNS servers are required, add the additional servers into the `cray-dns-unbound` service configuration.
+
+      ```yaml
+      spec:
+        kubernetes:
+          services:
+            cray-dns-unbound:
+              forwardZones:
+                - name: "."
+                  forwardIps:
+                    - "{{ network.netstaticips.system_to_site_lookups }}"
+                    - "192.168.0.1"
+              domain_name: '{{ network.dns.external }}'
+      ```
+
+   1. Update the `site-init` secret in the `loftsman` namespace.
+
+      ```bash
+      ncn-m001# kubectl delete secret -n loftsman site-init
+      ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+      ```

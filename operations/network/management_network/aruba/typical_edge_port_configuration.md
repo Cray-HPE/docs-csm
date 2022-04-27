@@ -1,9 +1,6 @@
-# Typical edge port configuration that you would see with BMC, PDUs etc
+# Typical Edge Port Configuration
 
-
-The intent here is to show case a very basic configuration for devices that are single homed to the network, i.e. network ILO cards etc.
-
-
+The following is a very basic configuration for devices that are single homed to the network. For instance, network ILO cards, BMCs, PDUs, and so on.
 
 <table>
 

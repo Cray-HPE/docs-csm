@@ -1,4 +1,4 @@
-## External DNS csi config init Input Values
+# External DNS csi config init Input Values
 
 External DNS requires the system-name, site-domain, and cmn-external-dns values that are defined with the `csi config init` command. These values are used to customize the External DNS configuration during installation.
 
@@ -30,5 +30,4 @@ Input for `csi config init`:
 ```
 
 This input is the CMN IP address for resolution of system services.
-
 

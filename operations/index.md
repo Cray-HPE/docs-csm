@@ -5,7 +5,8 @@ The Cray System Management (CSM) operational activities are administrative proce
 The following administrative topics can be found in this guide:
 
 - [Cray System Management (CSM) Administration Guide](#cray-system-management-csm-administration-guide)
-    - [CSM Product Management](#csm-product-management)
+  - [CSM Product Management](#csm-product-management)
+  - [Pre-Install](#pre-install)
   - [Image Management](#image-management)
   - [Boot Orchestration](#boot-orchestration)
   - [System Power Off Procedures](#system-power-off-procedures)
@@ -25,6 +26,7 @@ The following administrative topics can be found in this guide:
   - [System Configuration Service](#system-configuration-service)
   - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
   - [Hardware Management (HM) Collector](#hardware-management-hm-collector)
+  - [HPE Power Distribution Unit (PDU)](#hpe-power-distribution-unit-pdu)
   - [Node Management](#node-management)
   - [Network](#network)
     - [Management Network](#management-network)
@@ -39,7 +41,7 @@ The following administrative topics can be found in this guide:
 
 <a name="csm-product-management"></a>
 
-### CSM Product Management
+## CSM Product Management
 
    * [Validate CSM Health](validate_csm_health.md)
    * [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
@@ -50,6 +52,16 @@ The following administrative topics can be found in this guide:
    * [Access the LiveCD USB Device After Reboot](Access_LiveCD_USB_Device_After_Reboot.md)
    * [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
    * [Validate Signed RPMs](CSM_product_management/Validate_Signed_RPMs.md)
+
+<a name="pre-install"></a>
+
+## Pre-Install
+
+General information on what needs to be done before the initial install of CSM.
+
+   * [Pre-Install Steps](preinstall/Preinstall.md)
+   * [Change Air-Cooled BMC Credentials](preinstall/Change_River_BMC_Credentials.md)
+   * [Change ServerTech PDU Credentials](preinstall/Change_ServerTech_PDU_Credentials.md)
 
 <a name="image-management"></a>
 
@@ -62,11 +74,12 @@ Build and customize image recipes with the Image Management Service (IMS).
    * [Upload and Register an Image Recipe](image_management/Upload_and_Register_an_Image_Recipe.md)
    * [Build a New UAN Image Using the Default Recipe](image_management/Build_a_New_UAN_Image_Using_the_Default_Recipe.md)
    * [Build an Image Using IMS REST Service](image_management/Build_an_Image_Using_IMS_REST_Service.md)
+   * [Import External Image to IMS](image_management/Import_External_Image_to_IMS.md)
    * [Customize an Image Root Using IMS](image_management/Customize_an_Image_Root_Using_IMS.md)
      * [Create UAN Boot Images](image_management/Create_UAN_Boot_Images.md)
      * [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
    * [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
-   * [Configure IMS to validate RPMS](image_management/Configure_IMS_to_validate_rpms.md)
+   * [Configure IMS to Validate RPMs](image_management/Configure_IMS_to_validate_rpms.md)
 
 <a name="boot-orchestration"></a>
 
@@ -120,13 +133,14 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
 Procedures required for a full power off of an HPE Cray EX system.
 
   * [System Power Off Procedures](power_management/System_Power_Off_Procedures.md)
+
+Additional links to *power off sub procedures* provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
   * [Prepare the System for Power Off](power_management/Prepare_the_System_for_Power_Off.md)
   * [Shut Down and Power Off Compute and User Access Nodes](power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md)
   * [Save Management Network Switch Configuration Settings](power_management/Save_Management_Network_Switch_Configurations.md)
   * [Power Off Compute and IO Cabinets](power_management/Power_Off_Compute_and_IO_Cabinets.md)
   * [Shut Down and Power Off the Management Kubernetes Cluster](power_management/Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md)
   * [Power Off the External Lustre File System](power_management/Power_Off_the_External_Lustre_File_System.md)
-
 
 <a name="system-power-on-procedures"></a>
 
@@ -135,9 +149,11 @@ Procedures required for a full power off of an HPE Cray EX system.
 Procedures required for a full power on of an HPE Cray EX system.
 
   * [System Power On Procedures](power_management/System_Power_On_Procedures.md)
+
+Additional links to *power on sub procedures* provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
   * [Power On and Start the Management Kubernetes Cluster](power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
-  * [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
   * [Power On Compute and IO Cabinets](power_management/Power_On_Compute_and_IO_Cabinets.md)
+  * [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
   * [Bring Up the Slingshot Fabric](power_management/Bring_up_the_Slingshot_Fabric.md)
   * [Power On and Boot Compute and User Access Nodes](power_management/Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md)
   * [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md)
@@ -284,13 +300,14 @@ Mechanisms used by the system to ensure the security and authentication of inter
    * [Manage System Passwords](security_and_authentication/Manage_System_Passwords.md)
      * [Update NCN Passwords](security_and_authentication/Update_NCN_Passwords.md)
      * [Change Root Passwords for Compute Nodes](security_and_authentication/Change_Root_Passwords_for_Compute_Nodes.md)
+     * [Change NCN Image Root Password and SSH Keys on Pit Node](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
      * [Change NCN Image Root Password and SSH Keys](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
      * [Change EX Liquid-Cooled Cabinet Global Default Password](security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
      * [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](security_and_authentication/Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md)
      * [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
-     * [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md)
+     * [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
      * [Change Air-Cooled Node BMC Credentials](security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md)
-     * [Change SMNP Credentials on Leaf-BMC Switches](security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md)
+     * [Change SNMP Credentials on Leaf-BMC Switches](security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md)
      * [Update Default ServerTech PDU Credentials used by the Redfish Translation Service](security_and_authentication/Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md)
      * [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
      * [Add Root Service Account for Gigabyte Controllers](security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md)
@@ -298,6 +315,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
    * [Authenticate an Account with the Command Line](security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md)
    * [Default Keycloak Realms, Accounts, and Clients](security_and_authentication/Default_Keycloak_Realms_Accounts_and_Clients.md)
        * [Certificate Types](security_and_authentication/Certificate_Types.md)
+       * [Change Keycloak Token Lifetime](security_and_authentication/Change_Keycloak_Token_Lifetime.md)
        * [Change the Keycloak Admin Password](security_and_authentication/Change_the_Keycloak_Admin_Password.md)
        * [Create a Service Account in Keycloak](security_and_authentication/Create_a_Service_Account_in_Keycloak.md)
        * [Retrieve the Client Secret for Service Accounts](security_and_authentication/Retrieve_the_Client_Secret_for_Service_Accounts.md)
@@ -317,6 +335,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
        * [Change the LDAP Server IP Address for New LDAP Server Content](security_and_authentication/Change_the_LDAP_Server_IP_Address_for_New_LDAP_Server_Content.md)
        * [Remove the LDAP User Federation from Keycloak](security_and_authentication/Remove_the_LDAP_User_Federation_from_Keycloak.md)
        * [Add LDAP User Federation](security_and_authentication/Add_LDAP_User_Federation.md)
+       * [Keycloak User Management with `kcadm.sh`](security_and_authentication/Keycloak_User_Management_with_Kcadm.md)
    * [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
        * [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
        * [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
@@ -409,7 +428,7 @@ Enable system administrators to assess the health of their system. Operators nee
   * [System Management Health Checks and Alerts](system_management_health/System_Management_Health_Checks_and_Alerts.md)
   * [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md)
   * [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
-
+  * [Troubleshoot Grafana Dashboard](system_management_health/Troubleshoot_Grafana_Dashboard.md)
 
 <a name="system-layout-service-sls"></a>
 
@@ -470,9 +489,17 @@ Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware compo
 
 ## Hardware Management (HM) Collector
 
-The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system. 
+The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system.
 
  * [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
+
+<a name="hpe-power-distribution-unit-pdu"></a>
+
+## HPE Power Distribution Unit (PDU)
+
+Procedures for managing and setting up HPE PDUs.
+
+ * [HPE PDU Admin Procedure](hpe_pdu/hpe_pdu_admin_procedures.md)
 
 <a name="node-management"></a>
 
@@ -482,17 +509,15 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 
   * [Node Management](node_management/Node_Management.md)
   * [Node Management Workflows](node_management/Node_Management_Workflows.md)
-  * [Rebuild NCNs](node_management/Rebuild_NCNs.md)
+  * [Rebuild NCNs](node_management/Rebuild_NCNs/Rebuild_NCNs.md)
     * [Identify Nodes and Update Metadata](node_management/Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md)
-    * [Prepare Master Nodes](node_management/Rebuild_NCNs/Prepare_Master_Nodes.md)
-    * [Prepare Worker Nodes](node_management/Rebuild_NCNs/Prepare_Worker_Nodes.md)
     * [Prepare Storage Nodes](node_management/Rebuild_NCNs/Prepare_Storage_Nodes.md)
     * [Wipe Drives](node_management/Rebuild_NCNs/Wipe_Drives.md)
     * [Power Cycle and Rebuild Nodes](node_management/Rebuild_NCNs/Power_Cycle_and_Rebuild_Nodes.md)
     * [Adding a Ceph Node to the Ceph Cluster](node_management/Rebuild_NCNs/Re-add_Storage_Node_to_Ceph.md)
+    * [Customize PCIe Hardware](node_management/customize_pcie_hardware.md)
+    * [Customize Disk Hardware](node_management/customize_disk_hardware.md)
     * [Validate Boot Raid](node_management/Rebuild_NCNs/Validate_Boot_Raid.md)
-    * [Validate Master Node](node_management/Rebuild_NCNs/Post_Rebuild_Master_Node_Validation.md)
-    * [Validate Worker Node](node_management/Rebuild_NCNs/Post_Rebuild_Worker_Node_Validation.md)
     * [Validate Storage Node](node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
     * [Final Validation Steps](node_management/Rebuild_NCNs/Final_Validation_Steps.md)
   * [Reboot NCNs](node_management/Reboot_NCNs.md)
@@ -515,8 +540,8 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs.md)
   * [Change Settings for HMS Collector Polling of Air Cooled Nodes](node_management/Change_Settings_for_HMS_Collector_Polling_of_Air_Cooled_Nodes.md)
   * [Use the Physical KVM](node_management/Use_the_Physical_KVM.md)
-  * [Launch a Virtual KVM on Gigabyte Nodes](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Nodess.md)
-  * [Launch a Virtual KVM on Intel Nodes](node_management/Launch_a_Virtual_KVM_on_Intel_Nodess.md)
+  * [Launch a Virtual KVM on Gigabyte Nodes](node_management/Launch_a_Virtual_KVM_on_Gigabyte_Nodes.md)
+  * [Launch a Virtual KVM on Intel Nodes](node_management/Launch_a_Virtual_KVM_on_Intel_Nodes.md)
   * [Change Java Security Settings](node_management/Change_Java_Security_Settings.md)
   * [Configuration of NCN Bonding](node_management/Configuration_of_NCN_Bonding.md)
     * [Change Settings in the Bond](node_management/Change_Settings_in_the_Bond.md)
@@ -532,6 +557,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   * [Configure NTP on NCNs](node_management/Configure_NTP_on_NCNs.md)
   * [Swap a Compute Blade with a Different System](node_management/Swap_a_Compute_Blade_with_a_Different_System.md)
   * [Update the Gigabyte Node BIOS Time](node_management/Update_the_Gigabyte_Node_BIOS_Time.md)
+  * [S3FS Usage Guidelines](node_management/S3FS_Usage_and_Guidelines.md)
 
 
 <a name="network"></a>
@@ -576,7 +602,7 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
 
 ### Dynamic Host Configuration Protocol (DHCP)
 
-The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers. 
+The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers.
 
   * [DHCP](network/dhcp/DHCP.md)
   * [Troubleshoot DHCP Issues](network/dhcp/Troubleshoot_DHCP_Issues.md)
@@ -602,7 +628,6 @@ External DNS, along with the Customer Access Network \(CAN\), Border Gateway Pro
 
   * [External DNS](network/external_dns/External_DNS.md)
   * [External DNS csi config init Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
-  * [Update the system-name.site-domain Value Post-Installation](network/external_dns/Update_the_system-name_site-domain_Value_Post-Installation.md)
   * [Update the cmn-external-dns Value Post-Installation](network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md)
   * [Ingress Routing](network/external_dns/Ingress_Routing.md)
   * [Add NCNs and UANs to External DNS](network/external_dns/Add_NCNs_and_UANs_to_External_DNS.md)
@@ -634,6 +659,8 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 
   * [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
   * [Troubleshoot Spire Failing to Start on NCNs](spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
+  * [Update Spire Intermediate CA Certificate](spire/Update_Spire_Intermediate_CA_Certificate.md)
+  * [Xname Validation](spire/xname_validation.md)
 
 
 <a name="update-firmware-with-fas"></a>

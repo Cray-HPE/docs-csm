@@ -2,18 +2,14 @@
 
 Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.
 
-1. Graceful Shutdown of Workloads affected by CSM Upgrade
+1. Understand that management service resiliency is reduced during the upgrade.
 
    **Warning:** Although it is expected that compute nodes and application nodes will continue to provide their services
-   without interruption when the management nodes and services are being upgraded by CSM, it is important to
-   be aware of the possibility of interruption of running jobs. The management nodes will undergo a rolling upgrade
-   that should maintain enough nodes of each type to continue to provide services. However, while one node is being upgraded,
-   if another node of the same type has an unplanned fault that removes it from service, there may be a degraded system. For
-   example, if there are three Kubernetes master nodes and one is being upgraded, the quorum is maintained by the remaining
-   two nodes. If one of those two nodes has a fault before the third node completes its upgrade, then quorum would be lost.
-   There is a similar issue on small systems which have only three worker nodes for some services which have a data store that
-   is based on three copies of `etcd` or `postgres` because some of those pods have anti-affinity to avoid two pods of that type
-   being on the same worker node.
+   without interruption, it is important to be aware that the degree of management services resiliency is reduced during the
+   upgrade. If, while one node is being upgraded, another node of the same type has an unplanned fault that removes it from service,
+   there may be a degraded system. For example, if there are three Kubernetes master nodes and one is being upgraded, the quorum is
+   maintained by the remaining two nodes. If one of those two nodes has a fault before the third node completes its upgrade,
+   then quorum would be lost.
 
 1. Optional system health checks.
 
@@ -21,7 +17,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
         **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
 
-        ```screen
+        ```bash
         ncn-m001# sdu --scenario triage --start_time '-4 hours' \
         --reason "saving state before powerdown/up"
         ```
@@ -29,22 +25,22 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
     1. Check Ceph status.
 
-        ```screen
-        ncn-m001# ceph -s > ceph.status
+        ```bash
+        ncn-m001# ceph -s | tee ceph.status
         ```
 
     1. Check Kubernetes pod status for all pods.
 
-        ```screen
-        ncn-m001# kubectl get pods -o wide -A > k8s.pods
+        ```bash
+        ncn-m001# kubectl get pods -o wide -A | tee k8s.pods
         ```
 
         Additional Kubernetes status check examples :
 
-        ```screen
-        ncn-m001# kubectl get pods -o wide -A | egrep "CrashLoopBackOff" > k8s.pods.CLBO
-        ncn-m001# kubectl get pods -o wide -A | egrep "ContainerCreating" > k8s.pods.CC
-        ncn-m001# kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
+        ```bash
+        ncn-m001# egrep "CrashLoopBackOff" k8s.pods | tee k8s.pods.CLBO
+        ncn-m001# egrep "ContainerCreating" k8s.pods | tee k8s.pods.CC
+        ncn-m001# egrep -v "Run|Completed" k8s.pods | tee k8s.pods.errors
         ```
 
 1. Check for running sessions.
@@ -52,8 +48,12 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
     Ensure that these services do not have any sessions in progress: BOS, CFS, CRUS, FAS, or NMD.
     > This SAT command has `shutdown` as one of the command line options, but it will not start a shutdown process on the system.
 
-    ```screen
+    ```bash
     ncn-m001# sat bootsys shutdown --stage session-checks
+    ```
+
+    Example output:
+    ```text
     Checking for active BOS sessions.
     Found no active BOS sessions.
     Checking for active CFS sessions.
@@ -78,29 +78,29 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    Run the CSM health checks to ensure that everything is working properly before the upgrade starts.
 
-   Some of the CSM health checks, such as booting the barebones image on the compute nodes, could be skipped.
-
-   See the `CSM Install Validation and Health Checks` procedures in the documentation for your **`CURRENT**` CSM version.
-
-   **`IMPORTANT:` The validation procedures in the CSM 1.2 documentation are not all intended to work on previous versions of CSM.
+   **`IMPORTANT`**: See the `CSM Install Validation and Health Checks` procedures in the documentation for your **`CURRENT`** CSM version. The validation procedures in the CSM 1.2 documentation are not all intended to work on previous versions of CSM.
 
 1. Validate Lustre Health
 
-   If a Lustre file system is being used, see the ClustreStor documentation for details on how to check
+   If a Lustre file system is being used, see the ClusterStor documentation for details on how to check
    for Lustre health. Here are a few commands which could be used to validate Lustre health. This example
    is for a ClusterStor providing the cls01234 filesystem.
 
    1. SSH to the primary management node.
       For example, on system cls01234.
 
-      ```screen
+      ```bash
       remote$ ssh -l admin cls01234n000.systemname.com
       ```
 
    1. Check that the shared storage targets are available for the management nodes.
 
-      ```screen
+      ```bash
       [n000]$ pdsh -g mgmt cat /proc/mdstat | dshbak -c
+      ```
+
+      Example output:
+      ```text
       ----------------
       cls01234n000
       ----------------
@@ -125,7 +125,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    1. Check HA status.
 
-      ```screen
+      ```bash
       [n000]$ sudo crm_mon -1r
       ```
 
@@ -133,8 +133,12 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    1. Check the status of the nodes.
 
-      ```screen
+      ```bash
       [n000]# pdsh -a date
+      ```
+
+      Example output:
+      ```text
       cls01234n000: Thu Aug 7 01:29:28 PDT 2014
       cls01234n003: Thu Aug 7 01:29:28 PDT 2014
       cls01234n002: Thu Aug 7 01:29:28 PDT 2014
@@ -147,8 +151,10 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    1. Check the health of the Lustre file system.
 
-      ```screen
+      ```bash
       [n000]# cscli csinfo
       [n000]# cscli show_nodes
       [n000]# cscli fs_info
       ```
+
+After completing the above steps, proceed to [Upgrade Management Nodes and CSM Services](index.md#upgrade_management_nodes_csm_services).

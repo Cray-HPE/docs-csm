@@ -63,7 +63,7 @@ __________________________________
 ### Management network overview
    1. [Network Types – Naming and segment Function](./network_naming_function.md)
    1. [Network traffic pattern inside of the system](./network_traffic_pattern.md)
-   1. [System management network functions in more detail](./manegement_network_function_in_detail.md)
+   1. [System management network functions in more detail](management_network_function_in_detail.md)
 
 ### Key features used in the management network configuration
    1. [Key Feature list](./key_features.md)
@@ -94,7 +94,7 @@ __________________________________
 
 ### Layer one features
   1. [Physical Interfaces](./physical_interfaces.md)
-  1. [Cable Diagnostics](cable_diagnonstics.md)
+  1. [Cable Diagnostics](cable_diagnostics.md)
 
 ### Layer two features
   1. [Link Layer Discovery Protocol (LLDP)](./lldp.md)
@@ -129,7 +129,7 @@ __________________________________
 
 ### Backing up switch configuration
   1. [Backing up switch configuration](./backup.md)
- 
+
 ### Troubleshooting
 
 ### DHCP

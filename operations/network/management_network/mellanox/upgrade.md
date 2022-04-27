@@ -11,7 +11,7 @@ Target Version |Verified Versions from Which to Upgrade|
 
 Note: the following steps should be repeated for each "upgrade hop"
 
- 
+
 
 Upgrading the Switch via CLI
 
@@ -21,7 +21,7 @@ Installing the CPU software also automatically installs the embedded firmware. S
 
 The switch's OS image and its documentation collateral (release notes, user manual) can be found in MyMellanox
 
- 
+
 
 1. Run the following commands in order to upgrade (e.g. upgrading to version 3.9.0606 )
 ```
@@ -32,7 +32,7 @@ switch (config)#image boot next
 switch (config)#configuration write
 switch (config)#reload
 ```
- 
+
 
 2. Wait a few minutes to allow the OS's upgrade process to complete and then reconnect to the system.
 
@@ -56,7 +56,7 @@ Built by:          sw-r2d2-bot@b13770d14a06
 
 Version summary:   X86_64 3.9.0606 2020-05-01 08:20:15 x86_64
 
- 
+
 
 Product model:     x86
 
@@ -64,7 +64,7 @@ Host ID:           7CFE900BC470
 
 System UUID:       03000200-0400-0500-0006-000700080009
 
- 
+
 
 Uptime:            16m 54.930s
 
@@ -76,7 +76,7 @@ System memory:     485 MB used / 3278 MB free / 3763 MB total
 
 Swap:              0 MB used / 0 MB free / 0 MB total
 
-l-csi-7800-0537 [standalone: master] (config) # 
+l-csi-7800-0537 [standalone: master] (config) #
 
 6. To verify the system's firmware version:
 

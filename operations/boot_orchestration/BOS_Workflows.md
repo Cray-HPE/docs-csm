@@ -1,4 +1,4 @@
-## BOS Workflows
+# BOS Workflows
 
 The following workflows present a high-level overview of common Boot Orchestration Service \(BOS\) operations. These workflows depict how services interact with each other when booting, configuring, or shutting down nodes. They also help provide a quicker and deeper understanding of how the system functions.
 
@@ -41,7 +41,7 @@ Mentioned in this workflow:
     ```
 
     Example output:
-    
+
     ```
     {
     "lastUpdated": "2020-09-22T19:56:32Z",

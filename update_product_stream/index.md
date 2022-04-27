@@ -14,18 +14,9 @@ After the RPM has been installed, the documentation will be available at `/usr/s
 <a name="download-and-extract"></a>
 ## Download and Extract CSM Product Release
 
-### About this task
-
-#### Role
-System installer
-
-#### Objective
 Acquire a CSM software release tarball for installation on the HPE Cray EX supercomputer.
 
-#### Limitations
-None.
-
-### Procedure
+### Details
 
    1. Download the CSM software release tarball for the HPE Cray EX system to a Linux system.
 
@@ -48,18 +39,9 @@ None.
 <a name="patch"></a>
 ## Apply Patch to CSM Release
 
-### About this task
-
-#### Role
-System installer
-
-#### Objective
 Apply a CSM update patch to the release tarball. This ensures that the latest CSM product artifacts are installed on the HPE Cray EX supercomputer.
 
-#### Limitations
-None.
-
-### Procedure
+### Details
 
    1. Verify that the Git version is at least 2.16.5 on the Linux system which will apply the patch.
 
@@ -121,18 +103,9 @@ This tarball can now be used in place of the original CSM software release tarba
 <a name="documentation"></a>
 ## Check for Latest Documentation
 
-### About this task
-
-#### Role
-System installer
-
-#### Objective
 Acquire the latest documentation RPM. This may include updates, corrections, and enhancements that were not available until after the software release.
 
-#### Limitations
-None.
-
-### Procedure
+### Details
 
 1. Check the version of the currently installed CSM documentation.
 
@@ -160,19 +133,9 @@ None.
 <a name="hotfixes"></a>
 ## Check for Field Notices about Hotfixes
 
-### About this task
-
-#### Role
-System installer
-
-#### Objective
 Collect all available Field Notices about Hotfixes which should be applied to this CSM software release.
 
-#### Limitations
-None.
-
-### Procedure
+### Details
 
 Check with HPE Cray service for any Field Notices about Hotfixes which should be applied to this CSM software release.
-
 

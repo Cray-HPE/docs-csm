@@ -3,7 +3,7 @@
 
 ### Check Single Switch Firmware
 
-To check the firmware of a single switch run: 
+To check the firmware of a single switch run:
 
 ```
 canu --shasta 1.4 switch firmware --ip 192.168.1.1 --username USERNAME --password PASSWORD
@@ -13,9 +13,9 @@ canu --shasta 1.4 switch firmware --ip 192.168.1.1 --username USERNAME --passwor
 
 ### Check Firmware of Multiple Switches
 
-Multiple Aruba switches on a network can be checked for their firmware versions. The IPv4 addresses of the switches can either be entered comma separated, or be read from a file. To enter a comma separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
+Multiple Aruba switches on a network can be checked for their firmware versions. The IPv4 addresses of the switches can either be entered comma-separated, or be read from a file. To enter a comma-separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
 
-An example of checking the firmware of multiple switches: 
+An example of checking the firmware of multiple switches:
 
 ```
 canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
@@ -26,7 +26,7 @@ canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2 --username USER
 canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2,192.168.1.3,192.168.1.4 --username USERNAME --password PASSWORD
 ```
 
-### Expected output: 
+### Expected output:
 
 	------------------------------------------------------------------
     STATUS  IP              HOSTNAME            FIRMWARE
@@ -40,7 +40,7 @@ canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2,192.168.1.3,192
 	Errors
 	------------------------------------------------------------------
 	192.168.1.4     - HTTP Error. Check that this IP is an Aruba switch, or check the username and password
-	
+
 	Summary
 	------------------------------------------------------------------
 	🛶 Pass - 2 switches
@@ -95,13 +95,13 @@ canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2 --username USER
 
 ### Check Single Switch Cabling
 
-CANU can also use LLDP to check the cabling status of a switch. To check the cabling of a single switch run: 
+CANU can also use LLDP to check the cabling status of a switch. To check the cabling of a single switch run:
 
 ```
 canu --shasta 1.5 switch cabling --ip 192.168.1.1 --username USERNAME --password PASSWORD
 ```
 
-Expected results: 
+Expected results:
 
 	Switch: test-switch-spine01 (192.168.1.1)
 	Aruba 8325
@@ -116,7 +116,7 @@ Expected results:
 	1/1/52  ==> test-spine02   1/1/52                                                                   	Aruba JL635A  GL.10.06.0010
 
 
-Notes: 
+Notes:
 
 Sometimes when checking cabling using LLDP, the neighbor does not return any information except a MAC address. When that is the case, CANU looks up the MAC in the ARP table and displays the IP addresses and vlan information associated with the MAC.
 
@@ -124,9 +124,9 @@ Entries in the table will be colored based on what they are. For example: Neighb
 
 ### Check Cabling of Multiple Switches
 
-The cabling of multiple Aruba switches on a network can be checked at the same time using LLDP. The IPv4 addresses of the switches can either be entered comma separated, or be read from a file. To enter a comma separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
+The cabling of multiple Aruba switches on a network can be checked at the same time using LLDP. The IPv4 addresses of the switches can either be entered comma-separated, or be read from a file. To enter a comma-separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
 
-An example of checking the cabling of multiple switches: 
+An example of checking the cabling of multiple switches:
 
 ```
 canu --shasta 1.5 network cabling --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
@@ -138,7 +138,7 @@ There are two different `--view` options, **switch** and **equipment**.
 
 2. The `--view equipment` option displays a table for each mac address connection. This means that servers and switches will both display incoming and outgoing connections.
 
-An example of checking the cabling of multiple switches and displaying with the equipment view: 
+An example of checking the cabling of multiple switches and displaying with the equipment view:
 
 ```
 canu --shasta 1.5 network cabling --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD --view equipment`
@@ -148,7 +148,7 @@ canu --shasta 1.5 network cabling --ips 192.168.1.1,192.168.1.2 --username USERN
 canu --shasta 1.4 network cabling --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD --view equipment
 ```
 
-Expected results: 
+Expected results:
 
 	sw-spine01 Aruba JL635A  GL.10.06.0010
 	aa:aa:aa:aa:aa:aa
@@ -171,13 +171,13 @@ CANU can be used to validate that an SHCD (Shasta Cabling Diagram) passes basic 
 - Use the `--tabs` flag to select which tabs on the spreadsheet will be included.
 - The `--corners` flag is used to input the upper left and lower right corners of the table on each tab of the worksheet. The table should contain the 11 headers: **Source, Rack, Location, Slot, (Blank), Port, Destination, Rack, Location, (Blank), Port**. If the corners are not specified, you will be prompted to enter them for each tab.
 
-To check an SHCD run: 
+To check an SHCD run:
 
 ```
 canu -s 1.5 validate shcd -a tds --shcd FILENAME.xlsx --tabs 25G_10G,NMN,HMN --corners I14,S25,I16,S22,J20,T39
 ```
 
-Expected results: 
+Expected results:
 
 	SHCD Node Connections
 	------------------------------------------------------------
@@ -202,19 +202,19 @@ CANU can be used to validate that network cabling passes basic validation checks
 
 The `--architecture / -a` flag is used to set the architecture of the system, either **TDS**, or **Full**.
 
-To enter a comma separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
+To enter a comma-separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
 
-To validate the cabling run: 
-
-```
-canu -s 1.4 validate cabling -a tds --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
-```
+To validate the cabling run:
 
 ```
 canu -s 1.4 validate cabling -a tds --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
-Expected results: 
+```
+canu -s 1.4 validate cabling -a tds --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
+```
+
+Expected results:
 
 	Cabling Node Connections
 	------------------------------------------------------------
@@ -256,9 +256,9 @@ Use the `--tabs` flag to select which tabs on the spreadsheet will be included.
 
 The `--corners` flag is used to input the upper left and lower right corners of the table on each tab of the worksheet. The table should contain the 11 headers: **Source, Rack, Location, Slot, (Blank), Port, Destination, Rack, Location, (Blank), Port**. If the corners are not specified, you will be prompted to enter them for each tab.
 
-To enter a comma separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
+To enter a comma-separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
 
-To validate an SHCD against the cabling run: 
+To validate an SHCD against the cabling run:
 
 ```
 canu -s 1.5 validate shcd-cabling -a tds --shcd FILENAME.xlsx --tabs 25G_10G,NMN --corners I14,S49,I16,S22 --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD`
@@ -268,7 +268,7 @@ canu -s 1.5 validate shcd-cabling -a tds --shcd FILENAME.xlsx --tabs 25G_10G,NMN
 canu -s 1.5 validate shcd-cabling -a tds --shcd FILENAME.xlsx --tabs 25G_10G,NMN --corners I14,S49,I16,S22 --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
-Expected results: 
+Expected results:
 
 	====================================================================================================
 	SHCD
@@ -341,13 +341,13 @@ The output of the `validate shcd-cabling` command will show the results for `val
 
 CANU can be used to validate BGP neighbors. All neighbors of a switch must return status **Established** or the verification will fail.
 
-To enter a comma separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
+To enter a comma-separated list of IP addresses to the `---ips` flag. To read the IP addresses from a file, make sure the file has one IP address per line, and use the flag like `--ips-file FILENAME` to input the file.
 
 The default **asn** is set to _65533_ if it needs to be changed, use the flag `--asn NEW_ASN_NUMBER` to set the new number
 
 If you want to see the individual status of all the neighbors of a switch, use the `--verbose` flag.
 
-To validate BGP run: 
+To validate BGP run:
 ```
 canu -s 1.5 validate bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
@@ -356,12 +356,12 @@ canu -s 1.5 validate bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --pas
 canu -s 1.4 validate bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
-Expected results: 
+Expected results:
 
 	BGP Neighbors Established
 	--------------------------------------------------
-	PASS - IP: 192.168.1.1 Hostname: sw-spine01 
-	PASS - IP: 192.168.1.2 Hostname: sw-spine01 
+	PASS - IP: 192.168.1.1 Hostname: sw-spine01
+	PASS - IP: 192.168.1.2 Hostname: sw-spine01
 
 If any of the spine switch neighbors for a connection other than **Established**, the switch will **FAIL** validation.
 
@@ -390,7 +390,7 @@ Early in the install process, when running off of the LiveCD the sls_input_file.
 
 Later in the install process, the sls_input_file.json file is generally in `/mnt/pitdata/prep/SYSTEMNAME/`
 
-To configure BGP run: 
+To configure BGP run:
 
 ```
 canu -s 1.5 config bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
@@ -400,7 +400,7 @@ canu -s 1.5 config bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --passw
 canu -s 1.4 config bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
-Expected. Results:  
+Expected. Results:
 
 	BGP Updated
 	--------------------------------------------------
@@ -408,7 +408,7 @@ Expected. Results:
 	192.168.1.2
 
 
-To print extra details (prefixes, NCN names, IPs), add the `--verbose` flag
+To print extra details (prefixes, NCN names, IP addresses), add the `--verbose` flag
 
 ### Generate Switch Config
 
@@ -438,11 +438,11 @@ Use the `--tabs` flag to select which tabs on the spreadsheet will be included.
 
 The `--corners` flag is used to input the upper left and lower right corners of the table on each tab of the worksheet. The table should contain the 11 headers: **Source, Rack, Location, Slot, (Blank), Port, Destination, Rack, Location, (Blank), Port**. If the corners are not specified, you will be prompted to enter them for each tab.
 
-To generate config for a specific switch, a hostname must also be passed in using the `--name HOSTNAME` flag. 
+To generate config for a specific switch, a hostname must also be passed in using the `--name HOSTNAME` flag.
 
 To output the config to a file, append the `--out FILENAME` flag.
 
-To generate switch config run: 
+To generate switch config run:
 
 ```
 canu -s 1.5 switch config -a full --shcd FILENAME.xlsx --tabs 'INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES' --corners 'J14,T44,J14,T48,J14,T24,J14,T23' --csi-folder /CSI/OUTPUT/FOLDER/ADDRESS --name SWITCH_HOSTNAME --out FILENAME
@@ -452,9 +452,9 @@ canu -s 1.5 switch config -a full --shcd FILENAME.xlsx --tabs 'INTER_SWITCH_LINK
 canu -s 1.4 switch config -a full --shcd FILENAME.xlsx --tabs INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES --corners J14,T44,J14,T48,J14,T24,J14,T23 --csi-folder /CSI/OUTPUT/FOLDER/ADDRESS --name sw-spine-001
 ```
 
-Expected results: 
+Expected results:
 
-	<snippet> 
+	<snippet>
 	hostname sw-spine-001
 	user admin group administrators password plaintext
 	bfd

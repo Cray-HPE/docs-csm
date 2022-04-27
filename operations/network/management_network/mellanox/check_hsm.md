@@ -1,11 +1,11 @@
 # Check HSM
 
-Hardware State Manager has two important parts: 
+Hardware State Manager has two important parts:
 
 * SLS - Systems Layout Service: This is the "expected" state of the system (as populated by networks.yaml and other sources).
 * SMD - State Manager Daemon:  This is the "discovered" or active state of the system during runtime.
 
-SLS: 
+SLS:
 
 ```
 curl  -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/sls/v1/hardware | jq | less

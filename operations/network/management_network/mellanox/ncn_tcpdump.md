@@ -2,7 +2,7 @@
 
 If your host is not getting an IP address you can run a packet capture to see if DHCP traffic is being transmitted.
 
-On ncn-w001 or a worker/manager with kubectl, run:
+On `ncn-w001` or a worker/manager with `kubectl`, run:
 
 ```
 tcpdump -w dhcp.pcap -envli bond0.nmn0 port 67 or port 68
@@ -24,6 +24,6 @@ If you want to do a tcpdump for a certain MAC address you can run:
 tcpdump -i eth0 -vvv -s 1500 '((port 67 or port 68) and (udp[38:4] = 0x993b7030))'
 ```
 
-Note: This example is using the MAC of b4:2e:99:3b:70:30 and will show the output on your terminal and not save to a file. 
+Note: This example is using the MAC of b4:2e:99:3b:70:30 and will show the output on your terminal and not save to a file.
 
 [Back to Index](../index.md)

@@ -8,7 +8,7 @@ The provided End-User UAI image is a basic UAI image that includes an up-to-date
 
 A custom End-User UAI image can be any container image set up with the End-User UAI entrypoint script. Experimentation with the wide range of possible UAI images is beyond the scope of this document, but the example given here should offer a starting point for that kind of experimentation.
 
-The example provided here covers the most comon use-case, which is building a UAI image from the squashfs image used on compute nodes on the host system to support application development, workload management and analytics workflows. Some of the steps are specific to that activity, others would be common to or similar to steps needed to create special purpose UAIs.
+The example provided here covers the most common use-case, which is building a UAI image from the squashfs image used on compute nodes on the host system to support application development, workload management and analytics workflows. Some of the steps are specific to that activity, others would be common to or similar to steps needed to create special purpose UAIs.
 
 ### Prerequisites
 
@@ -35,6 +35,11 @@ The example provided here covers the most comon use-case, which is building a UA
 
     ```
     ncn-w001# cray bos sessiontemplate list --format yaml
+    ```
+
+    Example output:
+
+    ```
     - boot_sets:
         compute:
         boot_ordinal: 2
@@ -150,9 +155,10 @@ The example provided here covers the most comon use-case, which is building a UA
 
     ncn-w001# rm $SESSION_ID.tar rootfs.squashfs
 
-    # NOTE: the next step could be done as an `rm -rf` but, because the user
+    # NOTE: The next step could be done as an `rm -rf` but, because the user
     #       is `root` and the path is very similar to an important system
     #       path a more cautious approach is taken.
+
     ncn-w001# rm -fv ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
     ```
 

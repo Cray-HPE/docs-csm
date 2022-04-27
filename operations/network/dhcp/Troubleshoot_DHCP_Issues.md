@@ -1,4 +1,4 @@
-## Troubleshoot DHCP Issues
+# Troubleshoot DHCP Issues
 
 There are several things to check for when troubleshooting issues with Dynamic Host Configuration Protocol \(DHCP\) servers.
 
@@ -139,7 +139,7 @@ The HSM includes two important components:
 - Systems Layout Service \(SLS\): This is the expected state of the system, as populated by the networks.yaml and other sources.
 - State Manager Daemon \(SMD\): This is the discovered or active state of the system during runtime.
 
-To view the information stored in SLS for a specific xname:
+To view the information stored in SLS for a specific component name (xname):
 
 ```bash
 ncn-w001# cray sls hardware describe XNAME
@@ -267,5 +267,4 @@ VRF Name default:
                                       c        10.252.0.5        vlan2            bgp        200/0
                                       c        10.252.0.6        vlan2            bgp        200/0
 ```
-
 

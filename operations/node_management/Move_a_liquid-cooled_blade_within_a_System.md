@@ -1,5 +1,5 @@
 # Move a liquid-cooled blade within a System
-This top level procedure outlines common scenarios for moving blades around withing a HPE Cray EX system.
+This top level procedure outlines common scenarios for moving blades around within an HPE Cray EX system.
 
 Blade movement scenarios:
 * [Scenario 1: Swap locations of two blades](#swap-locations-of-two-blades)

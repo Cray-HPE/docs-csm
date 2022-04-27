@@ -28,20 +28,20 @@ and it will no longer DHCP an IP address.
 This procedure needs to be done for each of the HPE Apollo 6500 XL645d servers
 that will be managed by CSM software. River compute nodes always index their
 BMCs from 1. For example, the compute BMCs in servers with more than one node
-will have xnames as follows: x3000c0s30b1, x3000c0s30b2, x3000c0s30b3, and so
-on. The node indicator is always a 0. For example, x3000c0s30b1n0 or
-x3000c0s30b4n0.
+will have component names (xnames) as follows: `x3000c0s30b1`, `x3000c0s30b2`, `x3000c0s30b3`, and so
+on. The node indicator is always a 0. For example, `x3000c0s30b1n0` or
+`x3000c0s30b4n0`.
 
    <a name="gather_information"></a>
 
-1. Gather information
+1. Gather information.
 
-   The following is an example using x3000c0s30b1n0 as the target compute node
-   xname:
+   The following is an example using `x3000c0s30b1n0` as the target compute node
+   component name (xname):
 
-   ```
-   ncn-m001# XNAME=x3000c0s30b1n0
-   ncn-m001# cray hsm inventory ethernetInterfaces list --component-id \
+   ```bash
+   ncn# XNAME=x3000c0s30b1n0
+   ncn# cray hsm inventory ethernetInterfaces list --component-id \
          ${XNAME} --format json | jq '.[]|select((.IPAddresses|length)>0)'
    {
    "ID": "6805cabbc182",
@@ -76,10 +76,10 @@ x3000c0s30b4n0.
 
    Make a note of the ID, MACAddress, and IPAddress of the entry that has the
    10.254 address listed.
-   ```
-   ncn-m001# ID="9440c938f7b4"
-   ncn-m001# MAC="94:40:c9:38:f7:b4"
-   ncn-m001# IPADDR="10.254.1.38"
+   ```bash
+   ncn# ID="9440c938f7b4"
+   ncn# MAC="94:40:c9:38:f7:b4"
+   ncn# IPADDR="10.254.1.38"
    ```
    These will be used later to clean up KEA and Hardware State Manager (HSM).
    There may not be a 10.254 address associated with the node, that is OK, it
@@ -91,7 +91,7 @@ x3000c0s30b4n0.
    1. Connect to BMC WebUI and log in with standard root credentials.
       1. From the administrators own machine create an SSH tunnel (-L creates
          the tunnel, and -N prevents a shell and stubs the connection):
-         ```
+         ```bash
          linux# BMC=x3000c0s30b1
          linux# ssh -L 9443:$BMC:443 -N root@example-ncn-m001
          ```
@@ -101,12 +101,12 @@ x3000c0s30b4n0.
    2. Click on **iLO Shared Network Port** on left menu.
    2. Make a note of the **MAC Address** under the **Information** section,
         that will be needed later.
-        ```
-        ncn-m001# ILOMAC="<MAC Address>"
+        ```bash
+        ncn# ILOMAC="<MAC Address>"
         ```
         For example
-        ```
-        ncn-m001# ILOMAC="94:40:c9:38:08:c7"
+        ```bash
+        ncn# ILOMAC="94:40:c9:38:08:c7"
         ```
    3. Click on **General** on the top menu.
    4. Under **NIC Settings** move slider to **Enable VLAN**.
@@ -178,8 +178,8 @@ x3000c0s30b4n0.
    **NOTE:** Skip this step if there was no bad MAC and IPADDR found in step 1.
 
    Retrieve a bearer token if you have not done so already.
-   ```
-   export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+   ```bash
+   ncn# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
       -d client_id=admin-client \
       -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
@@ -188,14 +188,14 @@ x3000c0s30b4n0.
    Remove the entry from KEA that is associated with the MAC and IPADDRESS
    gathered in section 1.1.
 
-   ```
-   ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
+   ```bash
+   ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
    "Content-Type: application/json" -d '{"command": "lease4-del", \
    "service": [ "dhcp4" ], "arguments": {"hw-address": "'${MAC}'", \
    "ip-address": "'${IPADDR}'"}}' https://api-gw-service-nmn.local/apis/dhcp-kea
    ```
    Expected results:
-   ```
+   ```json
    [ { "result": 0, "text": "IPv4 lease deleted." } ]
    ```
 
@@ -206,11 +206,11 @@ x3000c0s30b4n0.
    **NOTE:** Skip this step if there was no bad ID found in step 1.
 
    Tell HSM to delete the bad ID out of the Ethernet Interfaces table.
-   ```
-   ncn-m001# cray hsm inventory ethernetInterfaces delete $ID
+   ```bash
+   ncn# cray hsm inventory ethernetInterfaces delete $ID
    ```
    Expected results:
-   ```
+   ```json
    {
    "code": 0,
    "message": "deleted 1 entry"

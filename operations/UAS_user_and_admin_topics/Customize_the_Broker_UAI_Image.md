@@ -78,212 +78,263 @@ As long as the basic flow and contents described here are honored, other changes
 
 The following is an example of replacing the entrypoint script with a new entrypoint script that changes the SSSD invocation to explicitly specify the `sssd.conf` file path (the standard path is used here, but a different path might make customizing SSSD for a given site simpler under some set of circumstances):
 
-```
-# Notice special here document form to prevent variable substitution in the file
+1. Create a new entrypoint script.
 
-ncn-m001-pit# cat <<-"EOF" > entrypoint.sh
-#!/bin/bash
+    **NOTE:** A special "here document" form is used to prevent variable substitution in the file.
 
-# MIT License
-#
-# (C) Copyright [2020] Hewlett Packard Enterprise Development LP
-#
-# Permission is hereby granted, free of charge, to any person obtaining a
-# copy of this software and associated documentation files (the "Software"),
-# to deal in the Software without restriction, including without limitation
-# the rights to use, copy, modify, merge, publish, distribute, sublicense,
-# and/or sell copies of the Software, and to permit persons to whom the
-# Software is furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included
-# in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-# OTHER DEALINGS IN THE SOFTWARE.
+    ```
+    ncn-m001-pit# cat <<-"EOF" > entrypoint.sh
+    #!/bin/bash
 
-echo "Configure PAM to use sssd..."
-pam-config -a --sss --mkhomedir
+    # MIT License
+    #
+    # (C) Copyright [2020] Hewlett Packard Enterprise Development LP
+    #
+    # Permission is hereby granted, free of charge, to any person obtaining a
+    # copy of this software and associated documentation files (the "Software"),
+    # to deal in the Software without restriction, including without limitation
+    # the rights to use, copy, modify, merge, publish, distribute, sublicense,
+    # and/or sell copies of the Software, and to permit persons to whom the
+    # Software is furnished to do so, subject to the following conditions:
+    #
+    # The above copyright notice and this permission notice shall be included
+    # in all copies or substantial portions of the Software.
+    #
+    # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+    # THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+    # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+    # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+    # OTHER DEALINGS IN THE SOFTWARE.
 
-echo "Generating broker host keys..."
-ssh-keygen -A
+    echo "Configure PAM to use sssd..."
+    pam-config -a --sss --mkhomedir
 
-echo "Checking for UAI_CREATION_CLASS..."
-if ! [ -z $UAI_CREATION_CLASS ]; then
-    echo UAI_CREATION_CLASS=$UAI_CREATION_CLASS >> /etc/environment
-fi
+    echo "Generating broker host keys..."
+    ssh-keygen -A
 
-echo "Starting sshd..."
-/usr/sbin/sshd -f /etc/switchboard/sshd_config
+    echo "Checking for UAI_CREATION_CLASS..."
+    if ! [ -z $UAI_CREATION_CLASS ]; then
+        echo UAI_CREATION_CLASS=$UAI_CREATION_CLASS >> /etc/environment
+    fi
 
-echo "Starting sssd..."
-# LOCAL MODIFICATION
-# change the normal SSSD invocation
-# sssd
-# to specify the config file path
-sssd --config /etc/sssd/sssd.conf
-# END OF LOCAL MODIFICATION
+    echo "Starting sshd..."
+    /usr/sbin/sshd -f /etc/switchboard/sshd_config
 
-sleep infinity
-EOF
+    echo "Starting sssd..."
+    # LOCAL MODIFICATION
+    # change the normal SSSD invocation
+    # sssd
+    # to specify the config file path
+    sssd --config /etc/sssd/sssd.conf
+    # END OF LOCAL MODIFICATION
 
-ncn-m001-pit# kubectl create configmap -n uas broker-entrypoint --from-file=entrypoint.sh
-```
+    sleep infinity
+    EOF
+    ```
 
-**NOTE**: The `default_mode` setting, which will set the mode on the file /app/broker/entrypoint.sh is decimal 493 here instead of octal 0755. The octal notation is not permitted in a JSON specification. Decimal numbers have to be used.
+2. Create a new ConfigMap with the content from the script.
 
-```
-ncn-m001-pit# cray uas admin config volumes create --mount-path /app/broker --volume-description '{"config_map": {"name": "broker-entrypoint", "default_mode": 493}}' --volumename broker-entrypoint
-mount_path = "/app/broker"
-volume_id = "2246bbb1-4006-4b11-ba57-6588a7b7c02f"
-volumename = "broker-entrypoint"
+    ```
+    ncn-m001-pit# kubectl create configmap -n uas broker-entrypoint --from-file=entrypoint.sh
+    ```
 
-[volume_description.config_map]
-default_mode = 493
-name = "broker-entrypoint"
+3. Create a new volume.
 
-ncn-m001-pit# cray uas admin config classes list | grep -e class_id -e comment
-class_id = "5eb523ba-a3b7-4a39-ba19-4cfe7d19d296"
-comment = "UAI Class to Create Non-Brokered End-User UAIs"
-class_id = "bdb4988b-c061-48fa-a005-34f8571b88b4"
-comment = "UAI Class to Create Brokered End-User UAIs"
-comment = "Resource Specification to use with Brokered End-User UAIs"
-class_id = "d764c880-41b8-41e8-bacc-f94f7c5b053d"
-comment = "UAI broker class"
+    **NOTE**: The `default_mode` setting, which will set the mode on the file /app/broker/entrypoint.sh is decimal 493 here instead of octal 0755. The octal notation is not permitted in a JSON specification. Decimal numbers have to be used.
 
-ncn-m001-pit# cray uas admin config classes describe d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
-class_id: d764c880-41b8-41e8-bacc-f94f7c5b053d
-comment: UAI broker class
-default: false
-image_id: 8f180ddc-37e5-4ead-b261-2b401914a79f
-namespace: uas
-opt_ports: []
-priority_class_name: uai-priority
-public_ip: true
-replicas: 1
-resource_config:
-resource_id:
-service_account:
-timeout:
-tolerations:
-uai_compute_network: false
-uai_creation_class: bdb4988b-c061-48fa-a005-34f8571b88b4
-uai_image:
-  default: false
-  image_id: 8f180ddc-37e5-4ead-b261-2b401914a79f
-  imagename: registry.local/cray/cray-uai-broker:1.2.4
-volume_list:
-- 11a4a22a-9644-4529-9434-d296eef2dc48
-- 1ec36af0-d5b6-4ad9-b3e8-755729765d76
-- a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
-volume_mounts:
-- mount_path: /etc/localtime
-  volume_description:
-    host_path:
-      path: /etc/localtime
-      type: FileOrCreate
-  volume_id: 11a4a22a-9644-4529-9434-d296eef2dc48
-  volumename: timezone
-- mount_path: /etc/sssd
-  volume_description:
-    secret:
-      default_mode: 384
-      secret_name: broker-sssd-conf
-  volume_id: 1ec36af0-d5b6-4ad9-b3e8-755729765d76
-  volumename: broker-sssd-config
-- mount_path: /lus
-  volume_description:
-    host_path:
-      path: /lus
-      type: DirectoryOrCreate
-  volume_id: a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
-  volumename: lustre
+    ```
+    ncn-m001-pit# cray uas admin config volumes create --mount-path /app/broker --volume-description '{"config_map": {"name": "broker-entrypoint", "default_mode": 493}}' --volumename broker-entrypoint
+    ```
 
-ncn-m001-pit# cray uas admin config classes update --volume-list '11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,2246bbb1-4006-4b11-ba57-6588a7b7c02f,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a' d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
-class_id: d764c880-41b8-41e8-bacc-f94f7c5b053d
-comment: UAI broker class
-default: false
-image_id: 8f180ddc-37e5-4ead-b261-2b401914a79f
-namespace: uas
-opt_ports: []
-priority_class_name: uai-priority
-public_ip: true
-replicas: 1
-resource_config:
-resource_id:
-service_account:
-timeout:
-tolerations:
-uai_compute_network: false
-uai_creation_class: bdb4988b-c061-48fa-a005-34f8571b88b4
-uai_image:
-  default: false
-  image_id: 8f180ddc-37e5-4ead-b261-2b401914a79f
-  imagename: registry.local/cray/cray-uai-broker:1.2.4
-volume_list:
-- 11a4a22a-9644-4529-9434-d296eef2dc48
-- 1ec36af0-d5b6-4ad9-b3e8-755729765d76
-- 2246bbb1-4006-4b11-ba57-6588a7b7c02f
-- a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
-volume_mounts:
-- mount_path: /etc/localtime
-  volume_description:
-    host_path:
-      path: /etc/localtime
-      type: FileOrCreate
-  volume_id: 11a4a22a-9644-4529-9434-d296eef2dc48
-  volumename: timezone
-- mount_path: /etc/sssd
-  volume_description:
-    secret:
-      default_mode: 384
-      secret_name: broker-sssd-conf
-  volume_id: 1ec36af0-d5b6-4ad9-b3e8-755729765d76
-  volumename: broker-sssd-config
-- mount_path: /app/broker
-  volume_description:
-    config_map:
-      default_mode: 493
-      name: broker-entrypoint
-  volume_id: 2246bbb1-4006-4b11-ba57-6588a7b7c02f
-  volumename: broker-entrypoint
-- mount_path: /lus
-  volume_description:
-    host_path:
-      path: /lus
-      type: DirectoryOrCreate
-  volume_id: a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
-  volumename: lustre
-```
+    Example output:
 
-With the Broker UAI class updated, all that remains is to clear out any existing End-User UAIs (existing UAIs will not work with the new broker because the new broker will have a new key-pair shared with its UAIs) and the existing Broker UAI (if any) and create a new Broker UAI.
+    ```
+    mount_path = "/app/broker"
+    volume_id = "2246bbb1-4006-4b11-ba57-6588a7b7c02f"
+    volumename = "broker-entrypoint"
 
-**NOTE:** Clearing out existing UAIs will terminate any user activity on those UAIs, make sure that users are warned of the disruption.
+    [volume_description.config_map]
+    default_mode = 493
+    name = "broker-entrypoint"
+    ```
 
-```
-ncn-m001-pit# cray uas admin uais delete --class-id bdb4988b-c061-48fa-a005-34f8571b88b4
-results = [ "Successfully deleted uai-vers-ee6f427e",]
+4. List the UAI classes.
 
-ncn-m001-pit# cray uas admin uais delete --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d
-results = [ "Successfully deleted uai-broker-11f36815",]
+    ```
+    ncn-m001-pit# cray uas admin config classes list | grep -e class_id -e comment
+    ```
 
-ncn-m001-pit# cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker
-uai_age = "0m"
-uai_connect_string = "ssh broker@34.136.140.107"
-uai_host = "ncn-w003"
-uai_img = "registry.local/cray/cray-uai-broker:1.2.4"
-uai_ip = "34.136.140.107"
-uai_msg = ""
-uai_name = "uai-broker-f5bfb28c"
-uai_status = "Running: Ready"
-username = "broker"
+    Example output:
 
-[uai_portmap]
-```
+    ```
+    class_id = "5eb523ba-a3b7-4a39-ba19-4cfe7d19d296"
+    comment = "UAI Class to Create Non-Brokered End-User UAIs"
+    class_id = "bdb4988b-c061-48fa-a005-34f8571b88b4"
+    comment = "UAI Class to Create Brokered End-User UAIs"
+    comment = "Resource Specification to use with Brokered End-User UAIs"
+    class_id = "d764c880-41b8-41e8-bacc-f94f7c5b053d"
+    comment = "UAI broker class"
+    ```
+
+5. Describe the desired UAI class.
+
+    ```
+    ncn-m001-pit# cray uas admin config classes describe d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
+    ```
+
+    Example output:
+
+    ```
+    class_id: d764c880-41b8-41e8-bacc-f94f7c5b053d
+    comment: UAI broker class
+    default: false
+    image_id: 8f180ddc-37e5-4ead-b261-2b401914a79f
+    namespace: uas
+    opt_ports: []
+    priority_class_name: uai-priority
+    public_ip: true
+    replicas: 1
+    resource_config:
+    resource_id:
+    service_account:
+    timeout:
+    tolerations:
+    uai_compute_network: false
+    uai_creation_class: bdb4988b-c061-48fa-a005-34f8571b88b4
+    uai_image:
+      default: false
+      image_id: 8f180ddc-37e5-4ead-b261-2b401914a79f
+      imagename: registry.local/cray/cray-uai-broker:1.2.4
+    volume_list:
+    - 11a4a22a-9644-4529-9434-d296eef2dc48
+    - 1ec36af0-d5b6-4ad9-b3e8-755729765d76
+    - a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
+    volume_mounts:
+    - mount_path: /etc/localtime
+      volume_description:
+        host_path:
+          path: /etc/localtime
+          type: FileOrCreate
+      volume_id: 11a4a22a-9644-4529-9434-d296eef2dc48
+      volumename: timezone
+    - mount_path: /etc/sssd
+      volume_description:
+        secret:
+          default_mode: 384
+          secret_name: broker-sssd-conf
+      volume_id: 1ec36af0-d5b6-4ad9-b3e8-755729765d76
+      volumename: broker-sssd-config
+    - mount_path: /lus
+      volume_description:
+        host_path:
+          path: /lus
+          type: DirectoryOrCreate
+      volume_id: a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
+      volumename: lustre
+    ```
+
+6. Update the UAI class.
+
+    ```
+    ncn-m001-pit# cray uas admin config classes update --volume-list '11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,2246bbb1-4006-4b11-ba57-6588a7b7c02f,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a' d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
+    ```
+
+    Example output:
+
+    ```
+    class_id: d764c880-41b8-41e8-bacc-f94f7c5b053d
+    comment: UAI broker class
+    default: false
+    image_id: 8f180ddc-37e5-4ead-b261-2b401914a79f
+    namespace: uas
+    opt_ports: []
+    priority_class_name: uai-priority
+    public_ip: true
+    replicas: 1
+    resource_config:
+    resource_id:
+    service_account:
+    timeout:
+    tolerations:
+    uai_compute_network: false
+    uai_creation_class: bdb4988b-c061-48fa-a005-34f8571b88b4
+    uai_image:
+      default: false
+      image_id: 8f180ddc-37e5-4ead-b261-2b401914a79f
+      imagename: registry.local/cray/cray-uai-broker:1.2.4
+    volume_list:
+    - 11a4a22a-9644-4529-9434-d296eef2dc48
+    - 1ec36af0-d5b6-4ad9-b3e8-755729765d76
+    - 2246bbb1-4006-4b11-ba57-6588a7b7c02f
+    - a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
+    volume_mounts:
+    - mount_path: /etc/localtime
+      volume_description:
+        host_path:
+          path: /etc/localtime
+          type: FileOrCreate
+      volume_id: 11a4a22a-9644-4529-9434-d296eef2dc48
+      volumename: timezone
+    - mount_path: /etc/sssd
+      volume_description:
+        secret:
+          default_mode: 384
+          secret_name: broker-sssd-conf
+      volume_id: 1ec36af0-d5b6-4ad9-b3e8-755729765d76
+      volumename: broker-sssd-config
+    - mount_path: /app/broker
+      volume_description:
+        config_map:
+          default_mode: 493
+          name: broker-entrypoint
+      volume_id: 2246bbb1-4006-4b11-ba57-6588a7b7c02f
+      volumename: broker-entrypoint
+    - mount_path: /lus
+      volume_description:
+        host_path:
+          path: /lus
+          type: DirectoryOrCreate
+      volume_id: a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
+      volumename: lustre
+    ```
+
+7. After the Broker UAI class is updated, all that remains is to clear out any existing End-User UAIs (existing UAIs will not work with the new broker because the new broker will have a new key-pair shared with its UAIs) and the existing Broker UAI (if any) and create a new Broker UAI.
+
+    **NOTE:** Clearing out existing UAIs will terminate any user activity on those UAIs, make sure that users are warned of the disruption.
+
+    1.  Clear out the UAIs.
+
+        ```
+        ncn-m001-pit# cray uas admin uais delete --class-id bdb4988b-c061-48fa-a005-34f8571b88b4
+
+        ncn-m001-pit# cray uas admin uais delete --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d
+        ```
+
+        Output similar to `results = [ "Successfully deleted uai-vers-e937b810",]` will be returned for each command.
+
+    2. Restart the broker.
+
+        ```
+        ncn-m001-pit# cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker
+        ```
+
+        Example output:
+
+        ```
+        uai_age = "0m"
+        uai_connect_string = "ssh broker@34.136.140.107"
+        uai_host = "ncn-w003"
+        uai_img = "registry.local/cray/cray-uai-broker:1.2.4"
+        uai_ip = "34.136.140.107"
+        uai_msg = ""
+        uai_name = "uai-broker-f5bfb28c"
+        uai_status = "Running: Ready"
+        username = "broker"
+
+        [uai_portmap]
+        ```
 
 ### Customize the Broker UAI SSH Configuration
 
@@ -317,146 +368,186 @@ These should be left unchanged. The rest of the configuration can be customized 
 
 The following is an example that follows on from the previous section and configures SSH to provide a pre-login banner. Both a new `banner` file and a new `sshd_config` are placed in a Kubernetes ConfigMap and mounted over `/etc/switchboard`:
 
-```
-# Notice special here document form to prevent variable substitution in the file
 
-ncn-m001-pit# cat <<-"EOF" > banner
-Here is a banner that will be displayed before login on
-the Broker UAI
+1. Create a new pre-login `banner` file.
 
-EOF
+    **NOTE:** A special "here document" form is used to prevent variable substitution in the file.
 
-# Notice special here document form to prevent variable substitution in the file
+    ```
+    ncn-m001-pit# cat <<-"EOF" > banner
+    Here is a banner that will be displayed before login on
+    the Broker UAI
 
-ncn-m001-pit# cat <<-"EOF" > sshd_config
-Port 30123
-AuthorizedKeysFile	.ssh/authorized_keys
-UsePAM yes
-X11Forwarding yes
-Subsystem	sftp	/usr/lib/ssh/sftp-server
-AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
-AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
-AcceptEnv LC_IDENTIFICATION LC_ALL
-AcceptEnv UAI_ONE_SHOT
-UseDNS no
-Banner /etc/switchboard/banner
+    EOF
+    ```
 
-Match User !root,*
-	PermitTTY yes
-	ForceCommand /usr/bin/switchboard broker --class-id $UAI_CREATION_CLASS
-EOF
+2. Create a new `sshd_config`.
 
-ncn-m001-pit# kubectl create configmap -n uas broker-sshd-conf --from-file sshd_config --from-file banner
+    **NOTE:** A special "here document" form is used to prevent variable substitution in the file.
 
-ncn-m001-pit#cray uas admin config volumes create \
-             --mount-path /etc/switchboard \
-             --volume-description '{"config_map": {"name": "broker-sshd-conf", "default_mode": 384}}' \
-             --volumename broker-sshd-config
-mount_path = "/etc/switchboard"
-volume_id = "4577eddf-d81e-40c9-9c91-082f3193edd6"
-volumename = "broker-sshd-config"
+    ```
+    ncn-m001-pit# cat <<-"EOF" > sshd_config
+    Port 30123
+    AuthorizedKeysFile	.ssh/authorized_keys
+    UsePAM yes
+    X11Forwarding yes
+    Subsystem	sftp	/usr/lib/ssh/sftp-server
+    AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+    AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+    AcceptEnv LC_IDENTIFICATION LC_ALL
+    AcceptEnv UAI_ONE_SHOT
+    UseDNS no
+    Banner /etc/switchboard/banner
 
-[volume_description.config_map]
-default_mode = 384
-name = "broker-sshd-conf"
+    Match User !root,*
+      PermitTTY yes
+      ForceCommand /usr/bin/switchboard broker --class-id $UAI_CREATION_CLASS
+    EOF
+    ```
 
-ncn-m001-pit# cray uas admin config classes update --volume-list '4577eddf-d81e-40c9-9c91-082f3193edd6,11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,2246bbb1-4006-4b11-ba57-6588a7b7c02f,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a' d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
-class_id: d764c880-41b8-41e8-bacc-f94f7c5b053d
-comment: UAI broker class
-default: false
-image_id: 8f180ddc-37e5-4ead-b261-2b401914a79f
-namespace: uas
-opt_ports: []
-priority_class_name: uai-priority
-public_ip: true
-replicas: 1
-resource_config:
-resource_id:
-service_account:
-timeout:
-tolerations:
-uai_compute_network: false
-uai_creation_class: bdb4988b-c061-48fa-a005-34f8571b88b4
-uai_image:
-  default: false
-  image_id: 8f180ddc-37e5-4ead-b261-2b401914a79f
-  imagename: registry.local/cray/cray-uai-broker:1.2.4
-volume_list:
-- 4577eddf-d81e-40c9-9c91-082f3193edd6
-- 11a4a22a-9644-4529-9434-d296eef2dc48
-- 1ec36af0-d5b6-4ad9-b3e8-755729765d76
-- 2246bbb1-4006-4b11-ba57-6588a7b7c02f
-- a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
-volume_mounts:
-- mount_path: /etc/switchboard
-  volume_description:
-    config_map:
-      default_mode: 384
-      name: broker-sshd-conf
-  volume_id: 4577eddf-d81e-40c9-9c91-082f3193edd6
-  volumename: broker-sshd-config
-- mount_path: /etc/localtime
-  volume_description:
-    host_path:
-      path: /etc/localtime
-      type: FileOrCreate
-  volume_id: 11a4a22a-9644-4529-9434-d296eef2dc48
-  volumename: timezone
-- mount_path: /etc/sssd
-  volume_description:
-    secret:
-      default_mode: 384
-      secret_name: broker-sssd-conf
-  volume_id: 1ec36af0-d5b6-4ad9-b3e8-755729765d76
-  volumename: broker-sssd-config
-- mount_path: /app/broker
-  volume_description:
-    config_map:
-      default_mode: 493
-      name: broker-entrypoint
-  volume_id: 2246bbb1-4006-4b11-ba57-6588a7b7c02f
-  volumename: broker-entrypoint
-- mount_path: /lus
-  volume_description:
-    host_path:
-      path: /lus
-      type: DirectoryOrCreate
-  volume_id: a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
-  volumename: lustre
-```
+3. Add the new `banner` file and `sshd_config` to a Kubernetes ConfigMap.
 
-With the new configuration installed, clean out the old UAIs and restart the broker:
+    ```
+    ncn-m001-pit# kubectl create configmap -n uas broker-sshd-conf --from-file sshd_config --from-file banner
+    ```
 
-**NOTE:** Clearing out existing UAIs will terminate any user activity on those UAIs, make sure that users are warned of the disruption.
+4. Mount the changes over `/etc/switchboard`.
 
-```
-ncn-m001-pit# cray uas admin uais delete --class-id bdb4988b-c061-48fa-a005-34f8571b88b4
-results = [ "Successfully deleted uai-vers-e937b810",]
+    ```
+    ncn-m001-pit# cray uas admin config volumes create \
+                --mount-path /etc/switchboard \
+                --volume-description '{"config_map": {"name": "broker-sshd-conf", "default_mode": 384}}' \
+                --volumename broker-sshd-config
+    ```
 
-ncn-m001-pit#  cray uas admin uais delete --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d
-results = [ "Successfully deleted uai-broker-f5bfb28c",]
+    Example output:
 
-ncn-m001-pit# cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker
-uai_age = "0m"
-uai_connect_string = "ssh broker@104.197.32.33"
-uai_host = "ncn-w003"
-uai_img = "registry.local/cray/cray-uai-broker:1.2.4"
-uai_ip = "104.197.32.33"
-uai_msg = "PodInitializing"
-uai_name = "uai-broker-ed144660"
-uai_status = "Waiting"
-username = "broker"
+    ```
+    mount_path = "/etc/switchboard"
+    volume_id = "4577eddf-d81e-40c9-9c91-082f3193edd6"
+    volumename = "broker-sshd-config"
 
-[uai_portmap]
-```
+    [volume_description.config_map]
+    default_mode = 384
+    name = "broker-sshd-conf"
+    ```
 
-To connect to the broker to log in:
+5. Update the UAI class.
 
-```
-vers> ssh vers@104.197.32.33
-Here is a banner that will be displayed before login to SSH
-on Broker UAIs
-Password:
-```
+    ```
+    ncn-m001-pit# cray uas admin config classes update --volume-list '4577eddf-d81e-40c9-9c91-082f3193edd6,11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,2246bbb1-4006-4b11-ba57-6588a7b7c02f,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a' d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
+    ```
+
+    Example output:
+
+    ```
+    class_id: d764c880-41b8-41e8-bacc-f94f7c5b053d
+    comment: UAI broker class
+    default: false
+    image_id: 8f180ddc-37e5-4ead-b261-2b401914a79f
+    namespace: uas
+    opt_ports: []
+    priority_class_name: uai-priority
+    public_ip: true
+    replicas: 1
+    resource_config:
+    resource_id:
+    service_account:
+    timeout:
+    tolerations:
+    uai_compute_network: false
+    uai_creation_class: bdb4988b-c061-48fa-a005-34f8571b88b4
+    uai_image:
+      default: false
+      image_id: 8f180ddc-37e5-4ead-b261-2b401914a79f
+      imagename: registry.local/cray/cray-uai-broker:1.2.4
+    volume_list:
+    - 4577eddf-d81e-40c9-9c91-082f3193edd6
+    - 11a4a22a-9644-4529-9434-d296eef2dc48
+    - 1ec36af0-d5b6-4ad9-b3e8-755729765d76
+    - 2246bbb1-4006-4b11-ba57-6588a7b7c02f
+    - a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
+    volume_mounts:
+    - mount_path: /etc/switchboard
+      volume_description:
+        config_map:
+          default_mode: 384
+          name: broker-sshd-conf
+      volume_id: 4577eddf-d81e-40c9-9c91-082f3193edd6
+      volumename: broker-sshd-config
+    - mount_path: /etc/localtime
+      volume_description:
+        host_path:
+          path: /etc/localtime
+          type: FileOrCreate
+      volume_id: 11a4a22a-9644-4529-9434-d296eef2dc48
+      volumename: timezone
+    - mount_path: /etc/sssd
+      volume_description:
+        secret:
+          default_mode: 384
+          secret_name: broker-sssd-conf
+      volume_id: 1ec36af0-d5b6-4ad9-b3e8-755729765d76
+      volumename: broker-sssd-config
+    - mount_path: /app/broker
+      volume_description:
+        config_map:
+          default_mode: 493
+          name: broker-entrypoint
+      volume_id: 2246bbb1-4006-4b11-ba57-6588a7b7c02f
+      volumename: broker-entrypoint
+    - mount_path: /lus
+      volume_description:
+        host_path:
+          path: /lus
+          type: DirectoryOrCreate
+      volume_id: a3b149fd-c477-41f0-8f8d-bfcee87fdd0a
+      volumename: lustre
+    ```
+
+6. Once the new configuration is installed, clean out the old UAIs and restart the broker.
+
+    **NOTE:** Clearing out existing UAIs will terminate any user activity on those UAIs, make sure that users are warned of the disruption.
+
+    1. Clean out the old UAIs.
+
+        ```
+        ncn-m001-pit# cray uas admin uais delete --class-id bdb4988b-c061-48fa-a005-34f8571b88b4
+
+        ncn-m001-pit#  cray uas admin uais delete --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d
+        ```
+
+        Output similar to `results = [ "Successfully deleted uai-vers-e937b810",]` will be returned for each command.
+
+    2. Restart the broker.
+
+        ```
+        ncn-m001-pit# cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker
+        ```
+
+        Example output:
+
+        ```
+        uai_age = "0m"
+        uai_connect_string = "ssh broker@104.197.32.33"
+        uai_host = "ncn-w003"
+        uai_img = "registry.local/cray/cray-uai-broker:1.2.4"
+        uai_ip = "104.197.32.33"
+        uai_msg = "PodInitializing"
+        uai_name = "uai-broker-ed144660"
+        uai_status = "Waiting"
+        username = "broker"
+
+        [uai_portmap]
+        ```
+
+7. Connect to the broker to log in:
+
+    ```
+    vers> ssh vers@104.197.32.33
+    Here is a banner that will be displayed before login to SSH
+    on Broker UAIs
+    Password:
+    ```
 
 [Next Topic: Customize End-User UAI Images](Customize_End-User_UAI_Images.md)

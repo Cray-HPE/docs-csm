@@ -38,7 +38,7 @@ usage()
    echo "git-commit           The git commit hash for CFS to use."
    echo "git-clone-url        The git clone url for CFS to use."
    echo "ncn-config-file      A file containing the NCN CFS configuration."
-   echo "xnames               A comma seperated list xnames to deploy to. All management nodes will be included if not set."
+   echo "xnames               A comma-separated list of component names (xnames) to deploy to. All management nodes will be included if not set."
    echo "clear-state          Clears existing state from components to ensure CFS runs."
    echo
 }
@@ -49,6 +49,11 @@ while [[ $# -gt 0 ]]; do
   case $key in
     --csm-release)
       RELEASE="$2"
+      shift # past argument
+      shift # past value
+      ;;
+    --csm-config-version)
+      VERSION="$2"
       shift # past argument
       shift # past value
       ;;
@@ -88,14 +93,20 @@ while [[ $# -gt 0 ]]; do
 done
 
 ## CONFIGURATION SETUP ##
-if [[ -z "${RELEASE}" ]]; then
+if [[ -z "${RELEASE}" &&  -z "${VERSION}" ]]; then
     RELEASE=$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' 2>/dev/null\
-        | yq r -j - 2>/dev/null | jq -r ' to_entries | .[0].value.configuration.import_branch' 2>/dev/null\
-        | awk -F'/' '{ print $NF }')
-    echo "Found release version ${RELEASE}"
+        | yq r -j - 2>/dev/null | jq -r ' to_entries | max_by(.key) | .key' 2>/dev/null)
+    echo "Using latest release ${RELEASE}"
 fi
 
-CSM_CONFIG_FILE="csm-config-$RELEASE.json"
+if [[ -z "${VERSION}" ]]; then
+    VERSION=$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' 2>/dev/null\
+        | yq r -j - 2>/dev/null | jq -r ".[\"$RELEASE\"].configuration.import_branch" 2>/dev/null\
+        | awk -F'/' '{ print $NF }')
+    echo "Using csm configuration version ${VERSION}"
+fi
+
+CSM_CONFIG_FILE="csm-config-$VERSION.json"
 if [[ -z "${NCN_CONFIG_FILE}" ]]; then
     NCN_CONFIG_FILE="ncn-personalization.json"
 fi
@@ -112,7 +123,7 @@ if [[ -z "${COMMIT}" ]]; then
     cd $TEMP_DIR
     echo "${CLONE_URL/\/\//\/\/${VCS_USER}:${VCS_PASSWORD}@}" > .git-credentials
     git config --file .gitconfig credential.helper store
-    COMMIT=$(git ls-remote $CLONE_URL refs/heads/cray/csm/${RELEASE} | awk '{print $1}')
+    COMMIT=$(git ls-remote $CLONE_URL refs/heads/cray/csm/${VERSION} | awk '{print $1}')
     if [[ -n $COMMIT ]]; then
         echo "Found git commit ${COMMIT}"
     else
@@ -127,7 +138,7 @@ fi
 CONFIG="{
   \"layers\": [
     {
-      \"name\": \"csm-${RELEASE}\",
+      \"name\": \"csm-${VERSION}\",
       \"cloneUrl\": \"$CLONE_URL\",
       \"commit\": \"${COMMIT}\",
       \"playbook\": \"site.yml\"
@@ -157,8 +168,8 @@ fi
 
 ## RUNNING CFS ##
 if [[ -z $XNAMES ]]; then
-    echo "Retrieving a list of all management node xnames"
-    XNAMES=$(cray hsm state components list --role Management --format json | jq -r '.Components | map(.ID) | join(",")')
+    echo "Retrieving a list of all management node component names (xnames)"
+    XNAMES=$(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
 fi
 XNAME_LIST=${XNAMES//,/ }
 

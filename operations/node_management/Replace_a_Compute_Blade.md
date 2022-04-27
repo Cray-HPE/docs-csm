@@ -1,6 +1,4 @@
-
-
-## Replace a Compute Blade
+# Replace a Compute Blade
 
 Replace an HPE Cray EX liquid-cooled compute blade.
 
@@ -18,11 +16,11 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 3. Use Boot Orchestration Services (BOS) to shut down the affected nodes. Specify the appropriate BOS template for the node type.
 
    ```bash
-   ncn-m001# cray bos v1 session create --template-uuid BOS_TEMPLATE \
+   ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE \
    --operation shutdown --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
    ```
 
-   Specify all the nodes in the blade using a comma separated list. This example shows the command to shut down an EX425 compute blade (Windom) in cabinet 1000, chassis 3, slot 5. This blade type includes two node cards, each with two logical nodes (4 processors).
+   Specify all the nodes in the blade using a comma-separated list. This example shows the command to shut down an EX425 compute blade (Windom) in cabinet 1000, chassis 3, slot 5. This blade type includes two node cards, each with two logical nodes (4 processors).
 
 4. Disable the chassis slot in the Hardware State Manager (HSM).
 
@@ -152,7 +150,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    ncn-m001# cray hsm inventory redfishEndpoints update --enabled true --rediscover-on-update true
    ```
 
-   The updated xname(s) will be returned.
+   The updated component name(s) (xnames) will be returned.
 
 10. Wait for 3-5 minutes for the blade to power on and the node BMCs to be discovered.
 
@@ -269,11 +267,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
     Specify the appropriate BOS template for the node type.
 
     ```bash
-    ncn-m001# cray bos v1 session create --template-uuid BOS_TEMPLATE --operation reboot \
+    ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot \
     --limit x1000c3s0b0n0,x1000c3s0b0n1,x1000c3s0b1n0,x1000c3s0b1n1
     ```
-
-
-
-
 

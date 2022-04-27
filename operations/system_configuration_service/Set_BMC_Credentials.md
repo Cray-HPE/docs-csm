@@ -1,4 +1,4 @@
-## Set BMC Credentials
+# Set BMC Credentials
 
 Use the System Configuration Service \(SCSD\) to set the BMCs credentials to unique values, or set them all to the same value. Redfish BMCs get installed into the system with default credentials. Once the machine is shipped, the Redfish credentials must be changed on all BMCs. This is done using System Configuration Service \(SCSD\) through the Cray CLI.
 
@@ -94,5 +94,4 @@ Use the System Configuration Service \(SCSD\) to set the BMCs credentials to uni
         ```
 
     **Troubleshooting:** If either command has any components that do not have the status of OK, they must be retried until they work, or the retries are exhausted and noted as failures. Failed modules need to be taken out of the system until they are fixed.
-
 

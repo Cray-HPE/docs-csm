@@ -1,11 +1,11 @@
-## Access System Management Health Services
+# Access System Management Health Services
 
 All System Management Health services are exposed outside the cluster through the Keycloak gatekeeper and Istio's ingress gateway to enforce the authentication and authorization policies. The URLs to access these services are available on any system with CAN, BGP, MetalLB, and external DNS properly configured.
 
 The `{{shasta_domain}}` value in the examples below is an Ansible variable defined as follows and is expected to be the systems' FQDN from the CAN.
 
 ```screen
-ncn-m001# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations.yaml}' \
+ncn-m001# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' \
 | base64 -d | grep "external:"
       external: SHASTA_EXTERNAL_DOMAIN
 ```
@@ -71,5 +71,4 @@ This procedure enables administrators to set up the service and access its compo
         Prometheus instance that collects Istio metrics \(included as part of `istio` Helm chart\).
 
         For more information regarding the use of the Prometheus interface, see [https://prometheus.io/docs/alerting/overview/](https://prometheus.io/docs/alerting/overview/).
-
 

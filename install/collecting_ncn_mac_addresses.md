@@ -1,5 +1,3 @@
-
-
 # Collecting NCN MAC Addresses
 
 This procedure will detail how to collect the NCN MAC addresses from an HPE Cray EX system. The MAC addresses needed for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns in `ncn_metadata.csv` will be collected.
@@ -49,11 +47,11 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 #### MAC Collection
 
 1. (Optional) Shim the boot so nodes bail after dumping their network devices.
-   
+
    Removing the iPXE script will prevent network booting. Be aware that the nodes may disk boot.
 
    This will prevent the nodes from continuing to boot and end in undesired states.
-    
+
     ```bash
     pit# mv /var/www/boot/script.ipxe /var/www/boot/script.ipxe.bak
     ```
@@ -73,7 +71,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     ```
 
 3. Set the nodes to PXE boot and (re)start them.
-    
+
     ```bash
     pit# export USERNAME=root
     pit# export IPMI_PASSWORD=changeme
@@ -104,16 +102,16 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     done
     ```
 
-7. Use the output from the previous step to collect 2 MACs to use for bond0, and 2 more to use for bond1 based on the topology. 
-   
-   **The `Bond0 MAC0` must be the first port** of the first PCIe card, specifically the port connecting the NCN to the lower spine. For example, if connected to spines01 and 02, this is going to sw-spine-001. If connected to sw-spine-007 and sw-spine-008, then this is sw-spine-007. 
-   
+7. Use the output from the previous step to collect 2 MACs to use for bond0, and 2 more to use for bond1 based on the topology.
+
+   **The `Bond0 MAC0` must be the first port** of the first PCIe card, specifically the port connecting the NCN to the lower spine. For example, if connected to spines01 and 02, this is going to sw-spine-001. If connected to sw-spine-007 and sw-spine-008, then this is sw-spine-007.
+
    **The 2nd MAC for `bond0` is the first port of the 2nd PCIe card, or 2nd port of the first when only one card exists**.
 
    Use the table provided on [NCN Networking](../background/ncn_networking.md) for referencing commonly seen devices.
 
    Worker nodes also have the high-speed network cards. If these cards are known, filter their device IDs out from the above output using this snippet:
-        
+
    ```bash
    pit# unset did # clear it if you used it.
    pit# did=1017 # ConnectX-5 example.
@@ -125,7 +123,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
    To filter out onboard NICs, or site-link cards, omit their device IDs as well. Use the above snippet but add the other IDs:
 
    **This snippet prints out only mgmt MACs, the `did` is the HSN and onboard NICs that is being ignored.**
-    
+
     ```bash
     pit# unset did # clear it if you used it.
     pit# did='(1017|8086|ffff)'
@@ -163,7 +161,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 
     The above output identified MAC0 and MAC1 of the bond as 94:40:c9:5f:b5:df and 14:02:ec:da:b9:99 respectively.
 
-9. Collect the NCN MAC address for the PIT node. This information will be used to populate the MAC addresses for ncn-m001.
+9. Collect the NCN MAC address for the PIT node. This information will be used to populate the MAC addresses for `ncn-m001`.
 
    ```bash
    pit# cat /proc/net/bonding/bond0  | grep Perm
@@ -172,7 +170,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
    ```
 
 10.  Update `ncn_metadata.csv` with the collected MAC addresses for Bond0 from all of the management NCNs.
-    
+
     > **NOTE:** Mind the index (3, 2, 1.... ; not 1, 2, 3).
 
     For each NCN update the corresponding row in `ncn_metadata` with the values for Bond0 MAC0 and Bond0 MAC1. The Bootstrap MAC should have the same value as the Bond0 MAC0.
@@ -205,9 +203,9 @@ Pick out the MAC addresses for the BOND from both the sw-spine-001 and sw-spine-
 > spine-01. Please refer to the cabling diagram or the actual rack (in-person).
 
 1. Follow "Metadata BMC" on each spine switch that port1 and port2 of the bond is plugged into.
-   
+
 2. Usually the 2nd/3rd/4th/Nth MAC on the PCIe card will be a 0x1 or 0x2 deviation from the first port.
-   
+
    Collection is quicker if this can be easily confirmed.
 
 <a name="procedure-recovering-from-an-incorrect-ncn_metadata_csv-file"></a>
@@ -216,7 +214,7 @@ Pick out the MAC addresses for the BOND from both the sw-spine-001 and sw-spine-
 If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy. This section details a recovery procedure in case that happens.
 
 1. Remove the incorrectly generated configurations.
-   
+
    Before deleting the incorrectly generated configurations, make a backup of them in case they need to be examined at a later time.
 
     > **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set. If `SYSTEM_NAME` is
@@ -273,5 +271,4 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
 8. Wipe the disks before relaunching the NCNs.
 
    See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
-
 

@@ -1,11 +1,11 @@
-## Verify Node Removal
+# Verify Node Removal
 
 Use this procedure to verify that a node has been successfully removed from the system.
 
 ### Prerequisites
 
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   This procedure requires the xname of the removed node to be known.
+-   This procedure requires the component name (xname) of the removed node to be known.
 
 ### Procedure
 
@@ -59,6 +59,4 @@ Use this procedure to verify that a node has been successfully removed from the 
     ```
 
 3.  If a River node will not be replaced, update SLS to omit it.
-
-
 

@@ -1,6 +1,4 @@
-
-
-## Manage Sealed Secrets
+# Manage Sealed Secrets
 
 Sealed secrets are essential for managing sensitive information on the system. The following procedures for managing sealed secrets are included in this section:
 
@@ -11,22 +9,22 @@ Sealed secrets are essential for managing sensitive information on the system. T
    - [Fix an Incorrect Value in a Sealed Secret](#fix-an-incorrect-value-in-a-sealed-secret)
 
 In the following sections, the term "tracked sealed secrets" is used to describe
-any existing secrets stored in `spec.kubernetes.tracked_sealed_secrets` that are available to be regenerated. 
+any existing secrets stored in `spec.kubernetes.tracked_sealed_secrets` that are available to be regenerated.
 
 Many of the examples in this section assume the USB stick used to install the system
 is still available. If site-init is no longer available on the USB stick and a backup
 has not been made, a new site-init will need to be created following step 1 in the [Generate Sealed Secrets Post-Install](#generate-sealed-secrets-post-install) section.
 
-The customizations.yaml file used in this procedure will be located in one of the following 
-locations depending on the state of the system: 
+The customizations.yaml file used in this procedure will be located in one of the following
+locations depending on the state of the system:
 
 * Fresh install location: `/mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml`
 * Post-install location: `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml`
-  
+
 
 ### Generate Sealed Secrets Post-Install
 
-Sealed secrets are stored in customizations.yaml as `SealedSecret` resources 
+Sealed secrets are stored in customizations.yaml as `SealedSecret` resources
 (encrypted secrets), which are deployed by specific charts and decrypted by the
 sealed secrets operator. First, those secrets must be seeded, generated, and
 encrypted.
@@ -55,7 +53,7 @@ If LDAP user federation is required, refer to [Add LDAP User Federation](../secu
       ncn-m001# cp -r ${CSM_DISTDIR}/shasta-cfg/* /root/site-init
       ncn-m001# cd /root/site-init
       ```
-  
+
    1. Extract customizations.yaml from the site-init secret.
 
       ```bash
@@ -71,7 +69,7 @@ If LDAP user federation is required, refer to [Add LDAP User Federation](../secu
       ```
 
 1. (Optional) Prevent tracked sealed secrets from being regenerated.
-    
+
    Remove the sealed secrets not being regenerated from the `spec.kubernetes.tracked_sealed_secrets` list in `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml` prior to executing the remaining steps in this section.
 
    Retain the REDS/MEDS/RTS credentials.
@@ -83,11 +81,11 @@ If LDAP user federation is required, refer to [Add LDAP User Federation](../secu
    ```
 
 2. Prepare to generate sealed secrets.
-   
+
    ```bash
    ncn-m001# ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
    ```
-      
+
 3. Encrypt the static values in the customizations.yaml file after making changes.
 
    The following command must be run within the site-init directory.
@@ -137,11 +135,11 @@ If LDAP user federation is required, refer to [Add LDAP User Federation](../secu
 
 ### Prevent Regeneration of Tracked Sealed Secrets
 
-Before performing the task to generate or regenerate sealed secrets, 
+Before performing the task to generate or regenerate sealed secrets,
 administrators are able to prevent existing tracked sealed secrets from being regenerated.
 
-To prevent regeneration, sealed secrets **MUST BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets` 
-list in the customizations.yaml file prior to executing the 
+To prevent regeneration, sealed secrets **MUST BE REMOVED** from the `spec.kubernetes.tracked_sealed_secrets`
+list in the customizations.yaml file prior to executing the
 "Generate Sealed Secrets" section of the [Prepare Site Init](../../install/prepare_site_init.md) procedure.
 
 To retain the REDS/MEDS/RTS credentials:

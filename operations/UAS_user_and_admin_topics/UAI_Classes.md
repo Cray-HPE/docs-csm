@@ -14,12 +14,17 @@ This topic describes the content and purpose of the the fields in a UAI Class an
 
 The following is JSON-formatted example output from the cray uas admin config classes list command \(see [List Available UAI Classes](List_Available_UAI_Classes.md)\). This output contains examples of three UAI classes:
 
--   A brokered End-User UAI class
--   A UAI broker class
--   A non-brokered End-User UAI class
+- A brokered End-User UAI class
+- A UAI broker class
+- A non-brokered End-User UAI class
 
 ```
 ncn-m001-pit# cray uas admin config classes list --format json
+```
+
+Example output:
+
+```
 [
   {
     "class_id": "bdb4988b-c061-48fa-a005-34f8571b88b4",
@@ -242,7 +247,7 @@ The following table explains each of these fields.
 |replicas|The number of replica UAI pods to be created when a UAI of this class is created.|This defaults to 1 and should not be set or should be set to 1 on End-User UAI Classes, since replica UAI pods for End-User UAIs only consume resources and potentially confuse the Broker UAI mechanism. For Broker UAI Classes, however, setting `replicas` to a larger value establishes both a degree of Broker UAI resiliency and a degree of load balancing, both for the purpose increasing network throughput on End-User UAI connections and for the purpose of avoiding overload of a single Broker UAI's resources.|
 |resource\id|The ID of the Resource Specification used by this UAI Class|By configuring a [Resource Specification](Resource_Specifications.md) in a UAI Class the default resource requests and limits can be overridden when creating a UAI from that UAI Class|
 |service\_account|An optional Kubernetes Service Account name to be granted to UAIs using this class|This is normally not set on End-User UAIs or Broker UAIs. It can be used to confer specific Kubernetes Role Based Access Control \(RBAC\) permissions on UAIs created using a UAI Class|
-|timeout|An optional specificiation of `hard` and `soft` timeouts used to control the life-cycle of UAIs created using this UAI Class|If either timeout setting is omitted that timeout will never expire. When a `soft` timeout, expires, the UAI terminates and is removed if it is or becomes idle, defined as having no logged in user sessions. When a `hard` timeout expires the UAI is terminated and removed immediately regardless of logged in user sessions. A `warning` may also be configured, specifying the number of seconds before a `hard` timeout that a warning will be sent to logged in users telling them of impending termination. The example here sets a `hard` timeout of 24 hours, a `soft` timeout of 30 minutes and a `warning` 60 seconds prior to arriving at the `hard` timeout.|
+|timeout|An optional specification of `hard` and `soft` timeouts used to control the life-cycle of UAIs created using this UAI Class|If either timeout setting is omitted that timeout will never expire. When a `soft` timeout, expires, the UAI terminates and is removed if it is or becomes idle, defined as having no logged in user sessions. When a `hard` timeout expires the UAI is terminated and removed immediately regardless of logged in user sessions. A `warning` may also be configured, specifying the number of seconds before a `hard` timeout that a warning will be sent to logged in users telling them of impending termination. The example here sets a `hard` timeout of 24 hours, a `soft` timeout of 30 minutes and a `warning` 60 seconds prior to arriving at the `hard` timeout.|
 |tolerations|An optional list of Kubernetes tolerations that can be used in combination with "taints" on Kubernetes worker nodes to permit only UAIs of this class to run on those nodes.|Tolerations and Taints can be used to designate certain Kubernetes Worker NCNs as hosts for UAIs and not for general management plane activities. They can also be used to specify that UAIs of a given class run only on nodes with specific resources. By default, all UAIs receive a toleration of `uai_only op=Exists` meaning that all UAIs can run on nodes that are tainted with a `uai_only` setting.|
 |uai\_compute\_network|A flag that indicates whether this UAI uses the macvlan mechanism to gain access to the HPE Cray EX compute node network.|This field must be true to support workload management from UAIs created by this class. It should be set to `false` on Broker UAIs.|
 |uai\_creation\_class|A field used in Broker UAI Classes to tell the Broker UAI what kind of UAI to create when automatically creating a UAI.|This field is not set in the preceding example.|

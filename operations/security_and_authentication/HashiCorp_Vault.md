@@ -1,4 +1,4 @@
-## HashiCorp Vault
+# HashiCorp Vault
 
 A deployment of HashiCorp Vault, managed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority \(CA\) material, and serves APIs through a PKI engine instance. This instance also serves as a general secrets engine for the system.
 
@@ -131,6 +131,4 @@ Raft Applied Index      521
 ```
 
 Healthy clusters will have one Vault pod in active HA mode, and two Vault pods in standby HA Mode. All instances should also be unsealed and initialized.
-
-
 

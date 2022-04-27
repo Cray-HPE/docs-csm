@@ -1,5 +1,4 @@
-
-## Add a Standard Rack Node
+# Add a Standard Rack Node
 
 These procedures are intended for trained technicians and support personnel only. Always follow ESD precautions when handling this equipment.
 
@@ -32,8 +31,8 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
     New node objects require the following information:
 
-    -   `Parent`: xname of the new node's BMC
-    -   `Xname`: xname of the new node
+    -   `Parent`: component name (xname) of the new node's BMC
+    -   `Xname`: component name (xname) of the new node
     -   `Role`: Either `Compute` or `Application`
     -   `Aliases`: Array of aliases for the node, for compute nodes, this is in the form of `nid0000`
     -   NID: The Node ID integer for the node, applies only to compute nodes.
@@ -81,12 +80,12 @@ For this procedure, a new object must be created in the SLS and modifications wi
     The MgmtSwitchConnector connector is used by the hms-discovery job to determine which management switch port the node's BMC is connected to. The SLS requires the following information:
 
     -   The management switch port that the new node's BMC is connected to
-    -   `Xname`: The xname for the MgmtSwitchConnector in the form of `xXcCwWjJ`
+    -   `Xname`: The component name (xname) for the MgmtSwitchConnector in the form of `xXcCwWjJ`
         -   `X` is the rack number
         -   `C` is the chassis \(standard racks are always chassis 0\)
         -   `W` is the rack U position of the management network leaf switch
         -   `J` is the switch port number
-    -   `NodeNics`: The xname of the new node's BMC. This field is an array in the payloads below, but should only contain 1 element.
+    -   `NodeNics`: The component name (xname) of the new node's BMC. This field is an array in the payloads below, but should only contain 1 element.
         -   `VendorName`: this field varies depending on the OEM for the management switch. For example, if the BMC is plugged into port 36 of the switch the following vendor names could apply:
         -   Aruba leaf switches use this format: `1/1/36`
         -   Dell leaf switches use this format: `ethernet1/1/36`
@@ -122,13 +121,13 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
     The hms-discovery cronjob will attempt to identity Node and BMC MAC addresses from the HSM Ethernet interfaces table with the connection information present in SLS to correctly identity the new node.
 
-7.  After roughly 5-10 minutes the node's BMC should be discovered by the HSM, and the node's BMC can be resolved by using its xname in DNS.
+7.  After roughly 5-10 minutes the node's BMC should be discovered by the HSM, and the node's BMC can be resolved by using its component name (xname) in DNS.
 
     ```bash
     ncn-m001# ping x3000c0s27b0
     ```
 
-8. Verify that discovery has completed. The 
+8. Verify that discovery has completed. The
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe x3000c0s27b0
@@ -229,11 +228,9 @@ For this procedure, a new object must be created in the SLS and modifications wi
     Use the appropriate BOS template for the node type.
 
     ```bash
-    ncn-m001# cray bos v1 session create --template-uuid cle-VERSION \
+    ncn-m001# cray bos session create --template-uuid cle-VERSION \
     --operation reboot --limit x3000c0s27b0n0,x3000c0s27b0n1,x3000c0s27b0n2,x3000c0s27b00n3
     ```
 
 14. Verify the chassis status LEDs indicate normal operation.
-
-
 

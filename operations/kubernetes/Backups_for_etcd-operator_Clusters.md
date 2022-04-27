@@ -1,4 +1,4 @@
-## Backups for etcd-operator Clusters
+# Backups for etcd-operator Clusters
 
 Backups are periodically created for etcd clusters. These backups are stored in the Ceph Rados Gateway \(S3\). Not all services are backed up automatically. Services that are not backed up automatically will need to be manually rediscovered if the cluster is unhealthy.
 
@@ -70,5 +70,4 @@ The following projects are not backed up as part of the automated solution:
 - Content Projection Service \(CPS\)
 
 If these clusters become unhealthy, the process for rediscovering their data should be followed. See [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md).
-
 

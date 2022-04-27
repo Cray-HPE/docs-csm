@@ -1,4 +1,4 @@
-## Check for and Clear etcd Cluster Alarms
+# Check for and Clear etcd Cluster Alarms
 
 Check for any etcd cluster alarms and clear them as needed. An etcd cluster alarm must be manually cleared.
 
@@ -118,7 +118,7 @@ For example, a cluster's database "NOSPACE" alarm is set when database storage s
         ### cray-bss-etcd-xprv5ht5d4 Disarmed Alarms: ###
         ### cray-cps-etcd-8hpztfkjdp Disarmed Alarms: ###
         ### cray-cps-etcd-fp4kfsf799 Disarmed Alarms: ###
-        
+
         [...]
         ```
 
@@ -151,6 +151,4 @@ For example, a cluster's database "NOSPACE" alarm is set when database storage s
         ### cray-bos-etcd-b9m4k5qfrd Disarmed Alarms:  ###
         ### cray-bos-etcd-tnpv8x6cxv Disarmed Alarms:  ###
         ```
-
-
 

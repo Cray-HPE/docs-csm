@@ -1,44 +1,46 @@
-# NCNs on install
+# NCNs on Install
 
-Verify the DNSMASQ config file matches what is configured on the switches.
+Use this procedure to verify the DNSMASQ config file on the NCNs is accurate.
 
-Here's a DNSMASQ config file for the Metal network (VLAN1). As you can see the router is 10.1.0.1, this has to match what the IP address is on the switches doing the routing for the MTL network.  
+## Procedure
 
-This is most commonly on the spines.  
+1. Verify the DNSMASQ config file matches what is configured on the switches.
 
-This configuration is commonly missed on the CSI input file.
+    The following is a DNSMASQ config file for the Metal network (VLAN1). The router is 10.1.0.1, which has to match what the IP address is on the switches doing the routing for the Metal (MTL) network.
 
-MTL dnsmasq file
+    Example MTL DNSMASQ file:
 
-```
-# MTL:
-server=/mtl/
-address=/mtl/
-domain=mtl,10.1.1.0,10.1.1.233,local
-dhcp-option=interface:bond0,option:domain-search,mtl
-interface=bond0
-interface-name=pit.mtl,bond0
-```
+    ```
+    # MTL:
+    server=/mtl/
+    address=/mtl/
+    domain=mtl,10.1.1.0,10.1.1.233,local
+    dhcp-option=interface:bond0,option:domain-search,mtl
+    interface=bond0
+    interface-name=pit.mtl,bond0
+    ```
 
-### This needs to point to the liveCD IP address for provisioning in bare-metal environments.
+    This is most commonly on the spines. This configuration is commonly missed on the CSI input file.
 
-```
-dhcp-option=interface:bond0,option:dns-server,10.1.1.2
-dhcp-option=interface:bond0,option:ntp-server,10.1.1.2
-```
+1. Verify it points to the LiveCD IP address for provisioning in bare-metal environments:
 
-### This must point at the router for the network; the L3/IP for the VLAN.
+    ```
+    dhcp-option=interface:bond0,option:dns-server,10.1.1.2
+    dhcp-option=interface:bond0,option:ntp-server,10.1.1.2
+    ```
 
-```
-dhcp-option=interface:bond0,option:router,10.1.0.1
-dhcp-range=interface:bond0,10.1.1.33,10.1.1.233,10m
-```
+1. Verify it points at the router for the network; the L3/IP for the VLAN:
 
-Here's an example of what the Spine config should be.
+    ```
+    dhcp-option=interface:bond0,option:router,10.1.0.1
+    dhcp-range=interface:bond0,10.1.1.33,10.1.1.233,10m
+    ```
 
-Aruba configuration: 
+## Configuration Example
 
-````
+The following is an example Aruba configuration for the spine:
+
+```text
 sw-spine-001# show run int vlan 1
 interface vlan1
     vsx-sync active-gateways
@@ -49,7 +51,7 @@ interface vlan1
     ip bootp-gateway 10.1.0.2
     ip helper-address 10.92.100.222
     exit
- 
+
 sw-spine-002# show run int vlan 1
 interface vlan1
     vsx-sync active-gateways
