@@ -150,7 +150,7 @@ ncn-w001# kubectl -n services patch configmaps cray-dns-unbound \
 --type merge -p '{"binaryData":{"records.json.gz":"H4sICLQ/Z2AAA3JlY29yZHMuanNvbgCLjuUCAETSaHADAAAA"}}'
 ```
 
-### Change the Site DNS server
+### Change the Site DNS Server
 
 Use the following procedure to change the site DNS server that Unbound forwards queries to. This may be necessary if the site DNS server is moved to a different IP address.
 
@@ -193,7 +193,7 @@ Use the following procedure to change the site DNS server that Unbound forwards 
       ncn-m001# kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
       ```
 
-   1. Update the `system_to_site_lookups` with the value of the new DNS server.
+   1. Update `system_to_site_lookups` with the value of the new DNS server.
 
       ```yaml
       spec:
