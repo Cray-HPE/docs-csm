@@ -1,17 +1,21 @@
 # Updating BMC Firmware and BIOS for `ncn-m001`
 
-**NOTE:** On HPE nodes, the BMC Firmware is iLO 5 and BIOS is System ROM
+Retrieve the model name and firmware image required to update an HPE or Gigabyte `ncn-m001` node.
 
-**The commands in the procedure must be run on `ncn-m001`**
+> **NOTE:** 
+> * On HPE nodes, the BMC Firmware is iLO 5 and BIOS is System ROM.
+> * The commands in the procedure must be run on `ncn-m001`.
 
-**Prerequisite:**
+## Prerequisites
 
 The following information is needed:
+
 * IP Address of `ncn-m001` BMC
 * IP Address of `ncn-m001`
 * Root password for `ncn-m001` BMC
 
 ## Find the Model Name
+
 Use one of the following commands to find the model name for the node type in use.
 
 ### HPE Nodes
@@ -29,7 +33,8 @@ Use one of the following commands to find the model name for the node type in us
 ## Get the Firmware Images
 
 1. View a list of images stored in FAS that are ready to be flashed:
-    where `ModelName` is the name from the previous command
+    
+    In the following example, `ModelName` is the name from the previous command.
 
     ```bash
     ncn-m001# cray fas images list --format json | jq '.[] | .[] | select(.models | index("ModelName"))'
@@ -54,7 +59,7 @@ Use one of the following commands to find the model name for the node type in us
 
 ### Gigabyte `ncn-m001`
 
-1. From the directory with the image you downloaded above, start a webserver:
+1. Start a webserver from the directory containing the downloaded image:
 
     ```bash
     ncn-m001# python3 -m http.server 8770
@@ -62,21 +67,21 @@ Use one of the following commands to find the model name for the node type in us
 
     1. Update BMC:
 
-       * `passwd` = root password of BMC
-       * `ipaddressOfBMC` = ipaddress of BMC
-       * `ipaddressOfM001` = ipaddress of `ncn-m001` node
-       * `filename` = filename of the image you downloaded above.
+       * `passwd` = Root password of BMC
+       * `ipaddressOfBMC` = IP address of BMC
+       * `ipaddressOfM001` = IP address of `ncn-m001` node
+       * `filename` = Filename of the downloaded image
 
        ```bash
        ncn-m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
        ```
 
-    1. Update BIOS:
+    2. Update BIOS:
 
-       * `passwd` = root password of BMC
-       * `ipaddressOfBMC` = ipaddress of BMC
-       * `ipaddressOfM001` = ipaddress of `ncn-m001` node
-       * `filename` = filename of the image you downloaded above.
+       * `passwd` = Root password of BMC
+       * `ipaddressOfBMC` = IP address of BMC
+       * `ipaddressOfM001` = IP address of `ncn-m001` node
+       * `filename` = Filename of the downloaded image
 
        ```bash
        ncn-m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'
@@ -88,21 +93,21 @@ Use one of the following commands to find the model name for the node type in us
 
 The web interface will be used to update iLO 5 (BMC) firmware and/or System ROM (BIOS) on the HPE `ncn-m001` node.
 
-1. Copy the iLO 5 firmware and/or System ROM file(s) to your local computer from `ncn-m001` using `scp` or other secure copy tools.
+1. Copy the iLO 5 firmware and/or System ROM file(s) to a local computer from `ncn-m001` using `scp` or other secure copy tools.
 
     ```bash
     linux# scp root@ipaddressOfM001Node:pathToFile/filename .
     ```
 
-1. Open a web browser window and type in the name or ipaddress of the iLO device for `ncn-m001`.
+1. Open a web browser window and type in the name or IP address of the iLO device for `ncn-m001`.
 
-1. Log in with `root` and the root password for the iLO device
+1. Log in with `root` and the root password for the iLO device.
 
-    1. Click on `"Firmware & OS Software"` on the left menu
-    1. Click on `"Update Firmware"` on the right menu
-    1. Check `"Local File"`
-    1. Click `"Choose File"` and select the iLO firmware file or System ROM file
-    1. Click `"Confirm TPM override"`
-    1. Click `"Flash"`
+    1. Click on `"Firmware & OS Software"` on the left menu.
+    1. Click on `"Update Firmware"` on the right menu.
+    1. Check `"Local File"`.
+    1. Click `"Choose File"` and select the iLO firmware file or System ROM file.
+    1. Click `"Confirm TPM override"`.
+    1. Click `"Flash"`.
 
     > After updating System ROM (BIOS), `ncn-m001` will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.
