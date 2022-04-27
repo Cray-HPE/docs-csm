@@ -51,6 +51,9 @@ The following procedures can be run from any master or worker node.
 
    **NOTE:**
    If workers have been removed and the worker count is currently at two, failures of the following tests can be ignored. A re-check will be needed once workers are added and the count returns to three or above.
+   - `Kubernetes Postgres Clusters have the Correct Number of Pods 'Running'`
+   - `Kubernetes Postgres Clusters Have Leaders`
+   - `Kubernetes Postgres Check for Replication Lag Across Pods in a Cluster`
    - `Verify cray etcd is healthy`
 
 The procedure is complete. [Return to Main Page](../Add_Remove_Replace_NCNs.md). 
