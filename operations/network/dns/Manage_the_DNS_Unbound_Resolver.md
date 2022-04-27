@@ -150,16 +150,16 @@ ncn-w001# kubectl -n services patch configmaps cray-dns-unbound \
 --type merge -p '{"binaryData":{"records.json.gz":"H4sICLQ/Z2AAA3JlY29yZHMuanNvbgCLjuUCAETSaHADAAAA"}}'
 ```
 
-### Change the site DNS server
+### Change the Site DNS server
 
 Use the following procedure to change the site DNS server that Unbound forwards queries to.
 
 1. Edit the `cray-dns-unbound` ConfigMap.
 
-  ```bash
-  ncn-m001# kubectl -n services edit configmap cray-dns-unbound
-  ```
-  Update the forward-zone value in unbound.conf.
+   ```bash
+   ncn-m001# kubectl -n services edit configmap cray-dns-unbound
+   ```
+   Update the `forward-zone` value in `unbound.conf`.
 
    ```yaml
    forward-zone:
@@ -167,7 +167,7 @@ Use the following procedure to change the site DNS server that Unbound forwards 
        forward-addr: 172.30.84.40
    ```
 
-  Multiple DNS servers can be defined if required.
+   Multiple DNS servers can be defined if required.
 
    ```yaml
    forward-zone:
@@ -176,16 +176,16 @@ Use the following procedure to change the site DNS server that Unbound forwards 
        forward-addr: 192.168.0.1
    ```
 
-1. Restart cray-dns-unbound for this change to take effect.
+1. Restart `cray-dns-unbound` for this change to take effect.
 
-  ```bash
-  ncn-m001# kubectl -n services rollout restart deployment cray-dns-unbound
-  deployment.apps/cray-dns-unbound restarted
-  ```
+   ```bash
+   ncn-m001# kubectl -n services rollout restart deployment cray-dns-unbound
+   deployment.apps/cray-dns-unbound restarted
+   ```
 
 1. Update `customizations.yaml`.
 
-   **`IMPORTANT:`** If this step is not performed then the Unbound configuration will be overwritten with the previous value next time CSM or Unbound is upgraded.
+   **`IMPORTANT:`** If this step is not performed, then the Unbound configuration will be overwritten with the previous value the next time CSM or Unbound is upgraded.
 
    1. Extract `customizations.yaml` from the site-init secret in the loftsman namespace.
 
@@ -202,7 +202,7 @@ Use the following procedure to change the site DNS server that Unbound forwards 
            system_to_site_lookups: 172.30.84.40
      ```
 
-     If multiple DNS servers are required then add the additional servers into the cray-dns-unbound service configuration.
+     If multiple DNS servers are required, add the additional servers into the `cray-dns-unbound` service configuration.
 
      ```yaml
      spec:
