@@ -10,8 +10,8 @@ Retrieve the model name and firmware image required to update an HPE or Gigabyte
 
 The following information is needed:
 
-* IP Address of `ncn-m001` BMC
-* IP Address of `ncn-m001`
+* IP address of `ncn-m001` BMC
+* IP address of `ncn-m001`
 * Root password for `ncn-m001` BMC
 
 ## Find the Model Name
@@ -73,7 +73,8 @@ Use one of the following commands to find the model name for the node type in us
        * `filename` = Filename of the downloaded image
 
        ```bash
-       ncn-m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
+       ncn-m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate \
+                  -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
        ```
 
     2. Update BIOS:

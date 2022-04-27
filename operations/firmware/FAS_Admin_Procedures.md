@@ -59,7 +59,7 @@ The default configuration of FAS no longer ignores `management` nodes, which pre
 
 ## Override an Image for an Update
 
-If an update fails because of `"No Image available"`, it may be caused by FAS unable to match the data on the node to find an image in the image list.
+If an update fails because of `"No Image available"`, it may be caused by FAS being unable to to find an image in the image list that matches the data on the node.
 
 <a name="procedure-1"></A>
 
@@ -292,7 +292,7 @@ This procedure includes information on how check the firmware versions for the e
       unknown = 0
       ```
 
-      The action is still in progress if the state field is not completed or aborted.
+      The action is still in progress if the `state` field is not `completed` or `aborted`.
 
     2. View the details of an action to get more information on each operation in the FAS action.
 
@@ -507,7 +507,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
 ## Load Firmware from RPM or ZIP file
 
-This procedure will read a single local RPM (or ZIP) file and upload firmware images to S3 and create image records for firmware not already in FAS.
+This procedure will read a single local RPM (or ZIP) file, upload firmware images to S3, and create image records for any firmware that is not already in FAS.
 
 1. Copy the file to ncn-m001 or one of the other NCNs.
 

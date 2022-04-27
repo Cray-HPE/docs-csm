@@ -263,7 +263,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 }
 ```
 
-> **NOTE:** The timeLimit is `4000` because the Gigabytes can take a lot longer to update.
+> **NOTE:** The `timeLimit` is `4000` because the Gigabytes can take a lot longer to update.
 
 #### Troubleshooting
 
