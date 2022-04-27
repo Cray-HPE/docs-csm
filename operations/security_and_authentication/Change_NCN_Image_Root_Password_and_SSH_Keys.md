@@ -39,9 +39,10 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
    ```
 
    This example uses k8s/0.1.109 for the current version and adds a suffix for the new version.
-
+   ```bash
    ncn-m# export K8SVERSION=0.1.109
    ncn-m# export K8SNEW=0.1.109-2
+   ```
 
 1. Make a temporary directory for the k8s-image using the current version string.
 
@@ -69,8 +70,10 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
 
    This example uses ceph/0.1.113 for the current version and adds a suffix for the new version.
 
+   ```bash
    ncn-m# export CEPHVERSION=0.1.113
    ncn-m# export CEPHNEW=0.1.113-2
+   ```
 
 1. Make a temporary directory for the ceph-image using the current version string.
 
@@ -174,54 +177,22 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
 
 1. Put the new squashfs, kernel, and initrd into S3
 
-   1. If not already available, get this script which will put a file into S3 with public read setting.
+   ***Note:*** The version string for the kernel file may be different.
 
    ```bash
-   ncn-m# wget https://github.com/Cray-HPE/s3_examples/blob/main/no_STS/ceph-upload-file-public-read.py
-   ncn-m# chmod +x ceph-upload-file-public-read.py
+   ncn-m# cd k8s/${K8SNEW}
+   /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/filesystem.squashfs' --file-name filesystem.squashfs
+   /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/initrd' --file-name initrd.img.xz
+   /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
    ```
 
-   1. Get info to add to `credentials.json` for the SDS user
-
-      ```bash
-      ncn-m# ssh ncn-s001 radosgw-admin user info --uid SDS | grep key
-      "keys": [
-              "access_key": "FKZWSIY92VBC4LPGXW9I",
-              "secret_key": "mYcViYWwXDT7PAR5JOwzsT5vjkKhWHUb8MGJpjsm"
-      "swift_keys": [],
-      "temp_url_keys": [],
-      ```
-
-   1. Using the `access_key` and `secret_key`, construct a `credentials.json` file with contents similar to this.
-
-      ```json
-      {
-          "access_key": "KJ1B22VP2MBKYPALP8VW",
-          "secret_key": "EJbDkvoaHEcMfhkMeDSA3tEM6DwBSmuGzVYkuUOv",
-          "endpoint_url": "http://10.252.1.11:8080"
-      }
-      ```
-
-   1. Upload the boot artifacts to S3.
-
-      ***Note:*** The version string for the kernel file may be different.
-
-      ```bash
-      ncn-m# cp -p credentials.json ceph-upload-file-public-read.py k8s/${K8SNEW}
-      ncn-m# cd k8s/${K8SNEW}
-      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/filesystem.squashfs' --file-name secure-filesystem.squashfs
-      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/initrd' --file-name initrd.img.xz
-      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
-      ```
-
-      ```bash
-      ncn-m# cp -p credentials.json ceph-upload-file-public-read.py ceph/${CEPHNEW}
-      ncn-m# cd ceph/${CEPHNEW}
-      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/filesystem.squashfs' --file-name secure-filesystem.squashfs
-      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/initrd' --file-name initrd.img.xz
-      ncn-m# ./ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
-      ncn-m# cd ../..
-      ```
+   ```bash
+   ncn-m# cd ceph/${CEPHNEW}
+   /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/filesystem.squashfs' --file-name filesystem.squashfs
+   /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/initrd' --file-name initrd.img.xz
+   /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
+   cd ../..
+   ```
 
 1. The Kubernetes and Storage images now have the image changes.
 
