@@ -1,4 +1,4 @@
-## Add NCNs and UANs to External DNS
+# Add NCNs and UANs to External DNS
 
 Edit the cray-externaldns-coredns ConfigMap to associate names with the Customer Access Network \(CAN\) IP addresses for non-compute nodes \(NCNs\) and User Access Nodes \(UANs\) in external DNS.
 
@@ -73,6 +73,4 @@ This procedure requires administrative privileges.
     Waiting for deployment "cray-externaldns-coredns" rollout to finish: 1 of 2 updated replicas are available...
     deployment "cray-externaldns-coredns" successfully rolled out
     ```
-
-
 

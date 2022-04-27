@@ -1,4 +1,4 @@
-## Interpreting HMS Health Check Results
+# Interpreting HMS Health Check Results
 
 ### Table of contents:
 1. [Introduction](#introduction)
@@ -16,9 +16,9 @@ This document describes how to interpret the results of the HMS Health Check scr
 <a name="hms-smoke-tests"></a>
 ### HMS Smoke Tests
 
-The HMS smoke tests consist of bash scripts that check the status of HMS service pods and jobs in Kubernetes and verify HTTP status codes returned by the HMS service APIs. Additionally, there is one test called *smd_discovery_status_test_ncn-smoke.sh* which verifies that the system hardware has been discovered successfully. The *hms_run_ct_smoke_tests_ncn-resources.sh* wrapper script checks for executable files in the HMS smoke test directory on the NCN and runs all tests found in succession.
+The HMS smoke tests consist of bash scripts that check the status of HMS service pods and jobs in Kubernetes and verify HTTP status codes returned by the HMS service APIs. Additionally, there is one test called `smd_discovery_status_test_ncn-smoke.sh` which verifies that the system hardware has been discovered successfully. The `hms_run_ct_smoke_tests_ncn-resources.sh` wrapper script checks for executable files in the HMS smoke test directory on the NCN and runs all tests found in succession.
 
-```
+```bash
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
 searching for HMS CT smoke tests...
 found 11 HMS CT smoke tests...
@@ -27,7 +27,7 @@ running HMS CT smoke tests...
 
 A summary of the test results is printed at the bottom of the output.
 
-```
+```text
 HMS smoke tests ran with 2/11 failures
 exiting with status code: 1
 ```
@@ -36,7 +36,7 @@ The tests print the commands being executed while running. They also print the c
 
 The following is an example of a pod status failure:
 
-```
+```text
 running '/opt/cray/tests/ncn-smoke/hms/hms-reds/reds_smoke_test_ncn-smoke.sh'...
 Running reds_smoke_test...
 (11:40:33) Running '/opt/cray/tests/ncn-resources/hms/hms-test/hms_check_pod_status_ncn-resources_remote-resources.sh cray-reds'...
@@ -51,7 +51,7 @@ cleaning up...
 
 The following is an example of an API call failure:
 
-```
+```text
 running '/opt/cray/tests/ncn-smoke/hms/hms-capmc/capmc_smoke_test_ncn-smoke.sh'...
 Running capmc_smoke_test...
 (11:40:27) Running '/opt/cray/tests/ncn-resources/hms/hms-test/hms_check_pod_status_ncn-resources_remote-resources.sh cray-capmc'...
@@ -70,9 +70,9 @@ cleaning up...
 <a name="hms-functional-tests"></a>
 ### HMS Functional Tests
 
-The HMS functional tests consist of Tavern-based API tests for HMS services that are written in yaml and execute within *hms-pytest* containers on the NCNs that are spun up using podman. The functional tests are more rigorous than the smoke tests and verify the behavior of HMS service APIs in greater detail. The *hms_run_ct_functional_tests_ncn-resources.sh* wrapper script checks for executable files in the HMS functional test directory on the NCN and runs all tests found in succession.
+The HMS functional tests consist of Tavern-based API tests for HMS services that are written in yaml and execute within `hms-pytest` containers on the NCNs that are spun up using podman. The functional tests are more rigorous than the smoke tests and verify the behavior of HMS service APIs in greater detail. The `hms_run_ct_functional_tests_ncn-resources.sh` wrapper script checks for executable files in the HMS functional test directory on the NCN and runs all tests found in succession.
 
-```
+```bash
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 searching for HMS CT functional tests...
 found 4 HMS CT functional tests...
@@ -81,16 +81,16 @@ running HMS CT functional tests...
 
 A summary of the test results is printed at the bottom of the output.
 
-```
+```text
 HMS functional tests ran with 1/4 failures
 exiting with status code: 1
 ```
 
 The tests print the commands being executed while running. They also print the command output and status code if failures occur in order to help with debugging.
 
-The following is an example of an *hms-pytest* container spin-up failure, which may occur if the *hms-pytest* image is unavailable or missing from the local image registry on the NCN:
+The following is an example of an `hms-pytest` container spin-up failure, which may occur if the `hms-pytest` image is unavailable or missing from the local image registry on the NCN:
 
-```
+```text
 (20:06:04) Running '/usr/bin/hms-pytest --tavern-global-cfg=/opt/cray/tests/ncn-functional/hms/hms-bss/common.yaml /opt/cray/tests/ncn-functional/hms/hms-bss'...
 Trying to pull registry.local/cray/hms-pytest:1.1.1...
   manifest unknown: manifest unknown
@@ -101,9 +101,9 @@ cleaning up...
 
 A summary of the test suites executed and their results is printed for each HMS service tested. Period '.' characters represent test cases that passed and letter 'F' characters represent test cases that failed within each test suite.
 
-The following is an example of a *pytest* summary table for Tavern test suites executed against a service:
+The following is an example of a `pytest` summary table for Tavern test suites executed against a service:
 
-```
+```text
 ============================= test session starts ==============================
 platform linux -- Python 3.8.5, pytest-6.1.2, py-1.10.0, pluggy-0.13.1
 rootdir: /opt/cray/tests/ncn-functional/hms/hms-smd, configfile: pytest.ini
@@ -127,15 +127,15 @@ test_smd_service_endpoints_ncn-functional_remote-functional.tavern.yaml . [ 65%]
 test_smd_state_change_notifications_ncn-functional_remote-functional.tavern.yaml . [100%]
 ```
 
-When API test failures occur, output from Tavern is printed by *pytest* indicating the following:
+When API test failures occur, output from Tavern is printed by `pytest` indicating the following:
 
-* The *Source test stage* that was executing when the failure occurred which is a portion of the source code for the failed test case.
-* The *Formatted stage* that was executing when the failure occurred which is a portion of the source code for the failed test case with its variables filled in with the values that were set at the time of the failure. This includes the request header, method, url, and other options of the failed test case which is useful for attempting to reproduce the failure using the *curl* command.
+* The `Source test stage` that was executing when the failure occurred which is a portion of the source code for the failed test case.
+* The `Formatted stage` that was executing when the failure occurred which is a portion of the source code for the failed test case with its variables filled in with the values that were set at the time of the failure. This includes the request header, method, url, and other options of the failed test case which is useful for attempting to reproduce the failure using the `curl` command.
 * The specific *Errors* encountered when processing the API response that caused the failure. **This is the first place to look when debugging API test failures.**
 
-The following is an example *Source test stage*:
+The following is an example `Source test stage`:
 
-```
+```text
 Source test stage (line 179):
   - name: Ensure the boot script service can provide the bootscript for a given node
     request:
@@ -148,9 +148,9 @@ Source test stage (line 179):
       status_code: 200
 ```
 
-The following is an example *Formatted stage*:
+The following is an example `Formatted stage`:
 
-```
+```yaml
 Formatted stage:
   name: Ensure the boot script service can provide the bootscript for a given node
   request:
@@ -163,9 +163,9 @@ Formatted stage:
     status_code: 200
 ```
 
-The following is an example *Errors* section:
+The following is an example `Errors` section:
 
-```
+```text
 Errors:
 E   tavern.util.exceptions.TestFailError: Test 'Ensure the boot script service can provide the bootscript for a given node' failed:
     - Status code was 400, expected 200:
@@ -183,7 +183,7 @@ This test verifies that the system hardware has been discovered successfully.
 
 The following is an example of a failed test execution:
 
-```
+```text
 Running smd_discovery_status_test...
 (22:19:34) Running 'kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}''...
 (22:19:34) Running 'curl -k -i -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=4c591ddc-b770-41c8-a4de-465ec034c7cf https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token'...
@@ -198,20 +198,20 @@ FAIL: smd_discovery_status_test found 4 endpoints that failed discovery, maximum
 '/opt/cray/tests/ncn-smoke/hms/hms-smd/smd_discovery_status_test_ncn-smoke.sh' exited with status code: 1
 ```
 
-The expected state of LastDiscoveryStatus is *DiscoverOK* for all endpoints with the exception of the BMC for ncn-m001 which is not normally connected to the site network and expected to be *HTTPsGetFailed*. If the test fails because of two or more endpoints not having been discovered successfully, the following additional steps can be taken to determine the cause of the failure:
+The expected state of LastDiscoveryStatus is `DiscoverOK` for all endpoints with the exception of the BMC for `ncn-m001`, which is not normally connected to the site network and expected to be `HTTPsGetFailed`. If the test fails because of two or more endpoints not having been discovered successfully, the following additional steps can be taken to determine the cause of the failure:
 
 ##### HTTPsGetFailed
 
-1. Check to see if the failed xname resolves using the *nslookup* command. If not, then the problem may be a DNS issue.
-```
+1. Check to see if the failed component name (xname) resolves using the `nslookup` command. If not, then the problem may be a DNS issue.
+```bash
 ncn# nslookup <xname>
 ```
-2. Check to see if the failed xname responds to the *ping* command. If not, then the problem may be a network or hardware issue.
-```
+2. Check to see if the failed component name (xname) responds to the `ping` command. If not, then the problem may be a network or hardware issue.
+```bash
 ncn# ping -c 1 <xname>
 ```
-3. Check to see if the failed xname responds to a Redfish query. If not, then the problem may be a credentials issue. Use the password set in the REDS sealed secret when creating site init.
-```
+3. Check to see if the failed component name (xname) responds to a Redfish query. If not, then the problem may be a credentials issue. Use the password set in the REDS sealed secret when creating site init.
+```bash
 ncn# curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq
 ```
 
@@ -219,7 +219,7 @@ ncn# curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq
 
 Check the SMD logs to determine the cause of the bad Redfish path encountered during discovery.
 
-```
+```bash
 # get the SMD pod names
 ncn # kubectl -n services get pods -l app.kubernetes.io/name=cray-smd
 NAME                        READY   STATUS    RESTARTS   AGE
@@ -239,7 +239,7 @@ The endpoint is in the process of being inventoried by Hardware State Manager (H
 
 Use the following command to check the current discovery status of the endpoint:
 
-```
+```bash
 ncn# cray hsm inventory redfishEndpoints describe <xname>
 ```
 

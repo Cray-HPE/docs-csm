@@ -1,5 +1,4 @@
-
-## Retrieve UAI Image Registration Information
+# Retrieve UAI Image Registration Information
 
 Use this procedure to obtain the default and imagename values for a UAI image that has been registered with UAS. This procedure can also be used to confirm that a specific image ID is still registered with UAS.
 
@@ -22,5 +21,4 @@ Obtain a valid UAS image ID.
     image_id = "8fdf5d4a-c190-24c1-2b96-74ab98c7ec07"
     imagename = "registry.local/cray/custom-end-user-uai:latest"
     ```
-
 

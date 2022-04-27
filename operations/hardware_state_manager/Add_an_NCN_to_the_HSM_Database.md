@@ -1,4 +1,4 @@
-## Add an NCN to the HSM Database
+# Add an NCN to the HSM Database
 
 This procedure details how to customize the bare-metal non-compute node \(NCN\) on a system and add the NCN to the Hardware State Manager \(HSM\) database.
 
@@ -12,12 +12,17 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
 
 ### Procedure
 
-1.  Locate the xname of the system.
+1.  Locate the component name (xname) of the system.
 
-    The xname is located in the /etc/hosts file.
+    The component name (xname) is located in the `/etc/hosts` file.
 
     ```bash
-    ncn-m001# grep ncn-w003-nmn /etc/hosts
+    ncn# grep ncn-w003-nmn /etc/hosts
+    ```
+
+    Example output:
+
+    ```
     0.252.1.15   ncn-w003.local ncn-w003 ncn-w003-nmn ncn-w003-nmn.local sms03-nmn x3000c0s24b0n0 #-label-10.252.1.15
     ```
 
@@ -26,18 +31,18 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
    get\_token needs to be created or exist in the script with the following curl command. The get\_token function is defined below:
 
    ```bash
-   function get_token () {
-   ADMIN_SECRET=$(kubectl get secrets admin-client-auth -ojsonpath='{.data.client-secret}' | base64 -d)
-   curl -s -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$ADMIN_SECRET \
-   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | python -c 'import sys,
-   json; print json.load(sys.stdin)["access_token"]'
-   }
+    ncn# function get_token () {
+        curl -s -S -d grant_type=client_credentials \
+            -d client_id=admin-client \
+            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'
+    }
    ```
 
-   The get\_token script adds the authorization required by the HTTPS security token. -H options tell the REST API to accept the data as JSON and that the information is for a JSON-enabled application.
+   The `get_token` function adds the authorization required by the HTTPS security token. `-H` options tell the REST API to accept the data as JSON and that the information is for a JSON-enabled application.
 
    ```bash
-   ncn-m001# curl -X POST -k https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components \
+   ncn# curl -X POST -k https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components \
    -H "Authorization: Bearer $(get_token)" -H "accept: application/json" -H \
    "Content-Type: application/json" -d \
    '{"Components":[{"ID":"x3000c0s24b0","State":"On","NetType":"Sling","Arch":"X86","Role":"Management"}]}'
@@ -46,7 +51,12 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
 3.  List HSM state components and verify information is correct.
 
     ```bash
-    ncn-m001# cray hsm state components list --id x3000c0s24b0
+    ncn# cray hsm state components list --id x3000c0s24b0
+    ```
+
+    Example output:
+
+    ```
     [[Components]]
     Arch = "X86"
     Enabled = true
@@ -61,7 +71,12 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
 4.  Find the daemonset pod that is running on the NCN being added to the HSM database.
 
     ```bash
-    ncn-m001# kubectl get pods -l app.kubernetes.io/instance=ncn-customization -n services -o wide
+    ncn# kubectl get pods -l app.kubernetes.io/instance=ncn-customization -n services -o wide
+    ```
+
+    Example output:
+
+    ```
     NAME                                  READY  STATUS    RESTARTS   AGE    IP          NODE       NOMINATED NODE   READINESS GATES
     ncn-customization-cray-service-4tqcg  2/2    Running   2          4d2h   10.47.0.3   ncn-m001   <none>           <none>
     ncn-customization-cray-service-dh8gb  2/2    Running   1          4d2h   10.42.0.4   ncn-w003   <none>           <none>
@@ -75,7 +90,7 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
     Deleting the pod will restart it and enable the changes to be picked up.
 
     ```bash
-    ncn-m001# kubectl -n services delete pod ncn-customization-cray-service-dh8gb
+    ncn# kubectl -n services delete pod ncn-customization-cray-service-dh8gb
     ```
 
 6.  Verify the daemonset restarts on the NCN with the CAN configuration.
@@ -83,7 +98,7 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
     1.  Retrieve the new pod name.
 
         ```bash
-        ncn-m001# kubectl get pods -l app.kubernetes.io/instance=ncn-customization \
+        ncn# kubectl get pods -l app.kubernetes.io/instance=ncn-customization \
         -n services -o wide | grep ncn-w003
         ncn-customization-cray-service-dh8gb   2/2  Running   2   22d   10.36.0.119   ncn-w003   <none>   <none>
         ```
@@ -93,7 +108,12 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
         This may take up to 5 minutes.
 
         ```bash
-        ncn-m001# cray cfs sessions list | grep "name ="
+        ncn# cray cfs sessions list | grep "name ="
+        ```
+
+        Example output:
+
+        ```
         name = "ncn-customization-ncn-w003-unload"
         ```
 
@@ -102,14 +122,16 @@ The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \
         This may take up to 5 minutes.
 
         ```bash
-        ncn-m001# cray cfs sessions list | grep "name ="
+        ncn# cray cfs sessions list | grep "name ="
+        ```
+
+        Example output:
+
+        ```
         name = "ncn-customization-ncn-w003-load"
         ```
 
         Once the load job completes, if there are no errors returned, the session is removed.
 
         Running `cray cfs sessions list | grep "name ="` again should return with no sessions active. If Ansible errors were encountered during the unload or load sessions, the dormant CFS session artifacts remain for CFS Ansible failure troubleshooting.
-
-
-
 

@@ -27,7 +27,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
     - [1.7 Verify the Vault Cluster is Healthy](#net-vault)
     - [1.8 Automated Goss Testing](#automated-goss-testing)
       - [1.8.1 Known Test Issues](#autogoss-issues)
-    - [1.9 OPTIONAL Check of System Management Monitoring Tools](#optional-check-of-system-management-monitoring-tools)
+    - [1.9 Check of System Management Monitoring Tools](#check-of-system-management-monitoring-tools)
   - [2. Hardware Management Services Health Checks](#hms-health-checks)
     - [2.1 HMS Test Execution](#hms-test-execution)
     - [2.2 Hardware State Manager Discovery Validation](#hms-smd-discovery-validation)
@@ -36,6 +36,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [3 Software Management Services Health Checks](#sms-health-checks)
     - [3.1 SMS Test Execution](#sms-checks)
     - [3.2 Interpreting cmsdev Results](#cmsdev-results)
+    - [3.3 Known Issues](#sms-checks-known-issues)
   - [4. Booting CSM Barebones Image](#booting-csm-barebones-image)
     - [4.1 Locate CSM Barebones Image in IMS](#locate-csm-barebones-image-in-ims)
     - [4.2 Create a BOS Session Template for the CSM Barebones Image](#csm-bos-session-template)
@@ -64,7 +65,6 @@ Health Check scripts can be run:
 * Any time there is unexpected behavior on the system to get a baseline of data for CSM services and components
 * In order to provide relevant information to support tickets that are being opened after CSM install.sh has been run
 
-
 Available Platform Health Checks:
 1. [ncnHealthChecks](#pet-ncnhealthchecks)
 1. [ncnPostgresHealthChecks](#pet-ncnpostgreshealthchecks)
@@ -78,10 +78,10 @@ Available Platform Health Checks:
 <a name="pet-ncnhealthchecks"></a>
 ### 1.1 ncnHealthChecks
 
-Health Check scripts can be found and run on any worker or master node (not on PIT node), from any directory.
+NCN Health Check scripts can be found and run on any worker or master node (**not on the PIT node**), from any directory.
 
    ```bash
-   ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
+   ncn-mw# /opt/cray/platform-utils/ncnHealthChecks.sh
    ```
 
 The ncnHealthChecks script reports the following health information:
@@ -105,10 +105,10 @@ Execute the ncnHealthChecks script and analyze the output of each individual che
 **IMPORTANT:** Only when ncn-m001 has been booted, if the output of the ncnHealthChecks.sh script shows that there are nodes that do not have the metal.no-wipe=1 status, then do the following:
 
 ```bash
-ncn# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
+ncn-mw# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME>
 ```
 
-**IMPORTANT:** If the output of pod statuses indicates that there are pods in the `Evicted` state, it may be due to the /root file system being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%. This may commonly happen on ncn-m001 as it is a location that install and doc files may be downloaded to. It may be necessary to clean-up space in the /root directory if this is the root cause of pod evictions. The following commands can be used to determine if analysis of files under /root is needed to free-up space.
+**IMPORTANT:** If the output of pod statuses indicates that there are pods in the `Evicted` state, it may be due to the `/root` file system being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%. This may commonly happen on `ncn-m001` as it is a location that install and doc files may be downloaded to. It may be necessary to clean-up space in the `/root` directory if this is the cause of pod evictions. The following commands can be used to determine if analysis of files under `/root` is needed to free-up space.
 
 ```bash
 ncn# df -h /root
@@ -129,15 +129,14 @@ ncn# du -ah -B 1024M /root | sort -n -r | head -n 10
 are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
 If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
 
-Additionally, hmn-discovery and unbound manager cronjob pods may be in a 'NotReady' state. This is expected as these pods are periodically started and transition to the completed state.
+Additionally, `hms-discovery` and `cray-dns-unbound-manager` cronjob pods may be in a 'NotReady' state. This is expected as these pods are periodically started and should eventually transition to the `Completed` state.
 
-**IMPORTANT:** If `ncn-s001` is down when running the ncnHealthChecks script, status from the `ceph -s` command  will be unavailable. In this case, the `ceph -s` command can be executed on any available master or storage node to determine the status of the Ceph cluster.
+**IMPORTANT:** If `ncn-s001` is down when running the ncnHealthChecks script, status from the `ceph -s` command will be unavailable. In this case, the `ceph -s` command can be executed on any available master or storage node to determine the status of the Ceph cluster.
 
 <a name="pet-ncnpostgreshealthchecks"></a>
 ### 1.2 ncnPostgresHealthChecks
 
-
-Postgres Health Check scripts can be found and run on any worker or master node (not on PIT node), from any directory.
+Postgres Health Check scripts can be found and run on any worker or master node (**not on the PIT node**), from any directory.
 The ncnPostgresHealthChecks script reports the following postgres health information:
 * The status of each postgresql resource
 * The number of cluster members
@@ -175,7 +174,7 @@ Execute ncnPostgresHealthChecks script and analyze the output of each individual
       1. Verify there are three cluster members (with the exception of sma-postgres-cluster where there should be only two cluster members).
       If the number of cluster members is not correct, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#missing).
 
-      2. Verify there is one cluster member with the Leader Role. 
+      2. Verify there is one cluster member with the Leader Role.
       If there is no Leader, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
 
       3. Verify the State of each cluster member is 'running'.
@@ -357,7 +356,7 @@ Retrieve all the leases currently in KEA:
 ncn# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
 ```
 
-If there is an non-zero amount of DHCP leases for air-cooled hardware returned, that is a good indication that KEA is working.
+If there is a non-zero amount of DHCP leases for air-cooled hardware returned, then that is a good indication that KEA is working.
 
 <a name="net-extdns"></a>
 ### 1.5 Verify ability to resolve external DNS
@@ -436,6 +435,7 @@ Run the NCN health checks against the three different types of nodes with the fo
 
 **IMPORTANT:** These tests should only be run while booted into the PIT node. Do not run these as part of upgrade testing. This includes the Kubernetes check in the next block.
 
+**IMPORTANT:** It is possible that the first pass of running these tests may fail due to could-init not being completed on the storage nodes. In this case please wait 5 minutes and re-run the tests.
 
 ```bash
 pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck-master
@@ -456,13 +456,21 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 * K8S Test: Kubernetes Query BSS Cloud-init for ca-certs
   - May fail immediately after platform install. Should pass after the TrustedCerts Operator has updated BSS (Global cloud-init meta) with CA certificates.
 * K8S Test: Kubernetes Velero No Failed Backups
-  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to use the `velero` command to delete backups from a Kubernetes node to clear this situation.
+  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule (for example, vault). It may be necessary to delete backups from a Kubernetes node to clear this situation. For example:
+     1. Run the following to find the failed backup.
+        ```bash
+        ncn# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
+        ```
+     1. Delete the backup, where `<backup>` is replaced with a backup returned in the previous step.
+        ```bash
+        ncn# velero backup delete <backup> --confirm
+        ```
 
-<a name="optional-check-of-system-management-monitoring-tools"></a>
-### 1.9 Optional Check of System Management Monitoring Tools
+<a name="check-of-system-management-monitoring-tools"></a>
+### 1.9 Check of System Management Monitoring Tools
 
-If all designated prerequisites are met, the availability of system management health services may optionally be validated by accessing the URLs listed in [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md).
-It is very important to check the `Prerequisites` section of this document.
+If all designated prerequisites are met, the availability of system management health services may be validated by accessing the URLs listed in [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md).
+It is very important to check the `Prerequisites` section for this topic.
 
 If one or more of the the URLs listed in the procedure are inaccessible, it does not necessarily mean that system is not healthy. It may simply mean that not all of the prerequisites have been met to allow access to the system management health tools via URL.
 
@@ -472,12 +480,15 @@ Information to assist with troubleshooting some of the components mentioned in t
 * [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
 * [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 * [Troubleshoot Services without an Allocated IP Address](network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
+* [Troubleshoot Prometheus Alerts](system_management_health/Troubleshoot_Prometheus_Alerts.md)
 
 
 <a name="hms-health-checks"></a>
 ## 2. Hardware Management Services Health Checks
 
 Execute the HMS smoke and functional tests after the CSM install to confirm that the Hardware Management Services are running and operational.
+
+Note: Do not run HMS tests concurrently on multiple nodes. They may interfere with one another and cause false failures.
 
 <a name="hms-test-execution"></a>
 ### 2.1 HMS Test Execution
@@ -538,9 +549,9 @@ ALL OK
 #### 2.2.1 Interpreting results
 
 Both sections `BMCs in SLS not in HSM components` and `BMCs in SLS not in HSM Redfish Endpoints` have the same format for mismatches between SLS and HSM. Each row starts with the xname of the BMC. If the BMC does not have an associated `MgmtSwitchConnector` in SLS, then `# No mgmt port association` will be displayed alongside the BMC xname.
-> MgmtSwitchConnectors in SLS are used to represent the switch port on a leaf switch that an the BMC of an air cooled device is connected to.
+> `MgmtSwitchConnector`s in SLS are used to represent the switch port on a leaf switch that is connected to the BMC of an air-cooled device.
 
-```bash
+```
 =============== BMCs in SLS not in HSM components ===============
 x3000c0s1b0  # No mgmt port association
 ```
@@ -553,16 +564,16 @@ __For each__ of the BMCs that show up in either of mismatch lists use the follow
    >   jq '.[] | { Xname: .Xname, Aliases: .ExtraProperties.Aliases }' -c
    > ```
 
-   Example mismatch for the BMC of ncn-m001:
+   Example mismatch for the BMC of `ncn-m001`:
    ```bash
    =============== BMCs in SLS not in HSM components ===============
    x3000c0s1b0  # No mgmt port association
    ```
 
-* The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depedning on the state of the system when the `hsm_discovery_verify.sh` script is ran. If the system is currently going through the process of installation, then this is an expected mistmatch as the [Preapre Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet. 
+* The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depending on the state of the system when the `hsm_discovery_verify.sh` script is run. If the system is currently going through the process of installation, then this is an expected mismatch as the [Prepare Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node may not have been completed yet.
    > For more information refer to [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
 
-   Example mistmatch for the BMC of a HPE Apollo XL654D:
+   Example mismatch for the BMC of an HPE Apollo XL654D:
    ```bash
    =============== BMCs in SLS not in HSM components ===============
    x3000c0s30b1
@@ -572,7 +583,7 @@ __For each__ of the BMCs that show up in either of mismatch lists use the follow
    ```
 
 * Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel node blades can be ignored. Gigabyte node blade CMCs not found in HSM is not normal and should be investigated. If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored.
-   > CMCs have xnames in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
+   > CMCs have component names (xnames) in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
 
    Example mismatch for a CMC an Intel node blade:
    ```bash
@@ -584,7 +595,7 @@ __For each__ of the BMCs that show up in either of mismatch lists use the follow
    ```
 
 * HPE PDUs are not supported at this time and will likely show up as not being found in HSM. They can be ignored.
-   > Cabinet PDU Controllers have xnames in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
+   > Cabinet PDU Controllers have component names (xnames) in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 
    Example mismatch for HPE PDU:
    ```bash
@@ -658,6 +669,19 @@ If one or more checks failed:
 
 Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
 
+<a name="sms-checks-known-issues"></a>
+### 3.3 Known Issues
+
+#### Failed To Create VCS Organization
+
+On a fresh install, it is possible that `cmsdev` reports an error similar to the following:
+```text
+ERROR (run tag zl7ak-vcs): POST https://api-gw-service-nmn.local/vcs/api/v1/orgs: expected status code 201, got 401
+ERROR (run tag zl7ak-vcs): Failed to create vcs organization
+```
+
+In this case, follow the [Gitea/VCS 401 Errors](../troubleshooting/known_issues/gitea_vcs_401_errors.md) troubleshooting procedure.
+
 <a name="booting-csm-barebones-image"></a>
 ## 4. Booting CSM Barebones Image
 
@@ -670,8 +694,10 @@ the Cray OS (COS) product, or similar, be used.
 ---
 **NOTES**
 
+* This test is **very important to run** during the CSM install prior to redeploying the PIT node
+because it validates all of the services required for that operation.
 * The CSM Barebones image included with the release will not successfully complete
-the beyond the dracut stage of the boot process. However, if the dracut stage is reached the
+beyond the dracut stage of the boot process. However, if the dracut stage is reached the
 boot can be considered successful and shows that the necessary CSM services needed to
 boot a node are up and available.
    * This inability to boot the barebones image fully will be resolved in future releases of the
@@ -710,7 +736,7 @@ Expected output is similar to the following:
     "path": "s3://boot-images/293b1e9c-2bc4-4225-b235-147d1d611eef/manifest.json",
     "type": "s3"
   },
-  "name": "cray-shasta-csm-sles15sp1-barebones.x86_64-shasta-1.4"
+  "name": "cray-shasta-csm-sles15sp2-barebones.x86_64-shasta-1.5"
 }
 ```
 
@@ -746,7 +772,7 @@ The session template below can be copied and used as the basis for the BOS Sessi
        "configuration": "cos-integ-config-1.4.0"
      },
      "enable_cfs": false,
-     "name": "shasta-1.4-csm-bare-bones-image"
+     "name": "shasta-1.5-csm-bare-bones-image"
    }
    ```
 
@@ -754,11 +780,11 @@ The session template below can be copied and used as the basis for the BOS Sessi
 
 2. Create the BOS session template using the following file as input:
    ```
-   ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
+   ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.5-csm-bare-bones-image
    ```
    The expected output is:
    ```
-   /sessionTemplate/shasta-1.4-csm-bare-bones-image
+   /sessionTemplate/shasta-1.5-csm-bare-bones-image
    ```
 
 <a name="csm-node"></a>
@@ -807,14 +833,14 @@ ncn# export XNAME=x3000c0s17b2n0
 
 Create a BOS session to reboot the chosen node using the BOS session template that was created:
 ```bash
-ncn# cray bos session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit $XNAME
+ncn# cray bos session create --template-uuid shasta-1.5-csm-bare-bones-image --operation reboot --limit $XNAME
 ```
 
 Expected output looks similar to the following:
 ```
 limit = "x3000c0s17b2n0"
 operation = "reboot"
-templateUuid = "shasta-1.4-csm-bare-bones-image"
+templateUuid = "shasta-1.5-csm-bare-bones-image"
 [[links]]
 href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
 jobId = "boa-8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1"
@@ -910,11 +936,11 @@ This section can be run on any NCN or the PIT node.
 
    Expected output looks similar to the following:
    ```
-   default_image = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
-   image_list = [ "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest",]
+   default_image = "registry.local/cray/cray-uai-sles15sp2:1.0.11"
+   image_list = [ "registry.local/cray/cray-uai-sles15sp2:1.0.11",]
    ```
 
-   This example output shows that the pre-made end-user UAI image (`cray/cray-uai-sles15sp1:latest`) is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use. If other UAI images have been created and registered, they may also show up here, which is acceptable.
+   This example output shows that the pre-made end-user UAI image (`cray/cray-uai-sles15sp2:1.0.11`) is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use. If other UAI images have been created and registered, they may also show up here, which is acceptable.
 
 <a name="uas-uai-validate-create"></a>
 ### 5.2 Validate UAI Creation
@@ -940,7 +966,7 @@ This procedure must run on a master or worker node (not the PIT node and not `nc
    ```
    uai_connect_string = "ssh vers@10.16.234.10"
    uai_host = "ncn-w001"
-   uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
+   uai_img = "registry.local/cray/cray-uai-sles15sp2:1.0.11"
    uai_ip = "10.16.234.10"
    uai_msg = ""
    uai_name = "uai-vers-a00fb46b"
@@ -954,7 +980,7 @@ This procedure must run on a master or worker node (not the PIT node and not `nc
 
 1. Set `UAINAME` to the value of the `uai_name` field in the previous command output (`uai-vers-a00fb46b` in our example):
    ```bash
-   ncn# export UAINAME=uai-vers-a00fb46b
+   ncn# UAINAME=uai-vers-a00fb46b
    ```
 
 1. Check the current status of the UAI:
@@ -968,7 +994,7 @@ This procedure must run on a master or worker node (not the PIT node and not `nc
    uai_age = "0m"
    uai_connect_string = "ssh vers@10.16.234.10"
    uai_host = "ncn-w001"
-   uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
+   uai_img = "registry.local/cray/cray-uai-sles15sp2:1.0.11"
    uai_ip = "10.16.234.10"
    uai_msg = ""
    uai_name = "uai-vers-a00fb46b"
@@ -1094,7 +1120,7 @@ The following shows an example of looking at UAS logs effectively (this example 
    2021-02-08 15:32:41,267 - uas_mgr - INFO - getting pod info uai-vers-87a0ff6e
    2021-02-08 15:32:41,360 - uas_mgr - INFO - No start time provided from pod
    2021-02-08 15:32:41,361 - uas_mgr - INFO - getting service info for uai-vers-87a0ff6e-ssh in namespace user
-   127.0.0.1 - - [08/Feb/2021 15:32:41] "POST /v1/uas?imagename=registry.local%2Fcray%2Fno-image-registered%3Alatest HTTP/1.1" 200 -
+   127.0.0.1 - - [08/Feb/2021 15:32:41] "POST /v1/uas?imagename=registry.local%2Fcray%2Fno-image-registered%3A1.0.11 HTTP/1.1" 200 -
    2021-02-08 15:32:54,455 - uas_auth - INFO - UasAuth lookup complete for user vers
    2021-02-08 15:32:54,455 - uas_mgr - INFO - UAS request for: vers
    2021-02-08 15:32:54,455 - uas_mgr - INFO - listing deployments matching: host None, labels uas=managed,user=vers
@@ -1127,7 +1153,7 @@ There may be something similar to the following output:
 uai_age = "0m"
 uai_connect_string = "ssh vers@10.103.13.172"
 uai_host = "ncn-w001"
-uai_img = "registry.local/cray/cray-uai-sles15sp1:latest"
+uai_img = "registry.local/cray/cray-uai-sles15sp2:1.0.11"
 uai_ip = "10.103.13.172"
 uai_msg = "ErrImagePull"
 uai_name = "uai-vers-87a0ff6e"

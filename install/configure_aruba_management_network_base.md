@@ -25,13 +25,13 @@ The base configuration is running OSPFv3 over IPv6 on VLAN 1, so the switches ca
 2. Set the hostname of the switch.
 
    Use the name defined in the SHCD to set the hostname.
-   
+
    ```bash
    switch(config)# hostname sw-25g04
    ```
 
 3. Enable and configure every uplink or switch to switch link.
-   
+
    Use SHCD to determine the uplink ports.
 
    ```bash
@@ -63,7 +63,7 @@ The base configuration is running OSPFv3 over IPv6 on VLAN 1, so the switches ca
    ```
 
 6. Add a unique IPv6 Loopback address, which is the address that we will be remotely connecting to.
-   
+
    Increment this address by 1 for every switch.
 
    ```bash
@@ -130,7 +130,7 @@ The base configuration is running OSPFv3 over IPv6 on VLAN 1, so the switches ca
    ```
 
 9. Verify there are now OSPFv3 neighbors.
-   
+
    ```bash
    sw-25g04# show ipv6 ospfv3 neighbors
    OSPFv3 Process ID 1 VRF default

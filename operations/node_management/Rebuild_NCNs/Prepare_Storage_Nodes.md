@@ -4,27 +4,27 @@
 
 Prepare a storage node before rebuilding it.
 
-**IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed. For example, if this is a rebuild in place then ceph components will not be reporting down, versus a failed node rebuild.
+**IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed. For example, if this is a rebuild in place, then Ceph components will not be reporting down, in contrast to a failed node rebuild.
 
-## Prequisites
+## Prerequisites
 
-If rebuilding ncn-s001, it is critical that the storage-ceph-cloudinit.sh has been removed from the runcmd in bss.
+If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` has been removed from the `runcmd` in BSS.
 
-1. Get the xname for ncn-s001.
+1. Get the component name (xname) for `ncn-s001`.
 
    ```bash
-   ssh ncn-s001 cat /etc/cray/xname
+   linux# ssh ncn-s001 cat /etc/cray/xname
    ```
 
-2. Check the bss boot parameters for ncn-s001.
+2. Check the bss boot parameters for `ncn-s001`.
 
    ```bash
-   cray bss bootparameters list --name x3000c0s7b0n0 --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'
+   ncn# cray bss bootparameters list --name x3000c0s7b0n0 --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'
    ```
 
    Expected Output:
 
-   ```screen
+   ```json
    [
    "/srv/cray/scripts/metal/install-bootloader.sh",
    "/srv/cray/scripts/metal/set-host-records.sh",
@@ -44,10 +44,10 @@ If rebuilding ncn-s001, it is critical that the storage-ceph-cloudinit.sh has be
 
    If it is there then it will need to be fixed by running:
 
-   **IMPORTANT:** The below python script is provided by the docs-csm rpm being installed.
+   **IMPORTANT:** The below python script is provided by the `docs-csm` RPM. To install the latest version of it, see [Check for Latest Documentation](../../../update_product_stream/index.md#documentation).
 
    ```bash
-   python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
+   ncn# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
    ```
 
 ## Step 1 - Check the status of Ceph
@@ -86,16 +86,16 @@ If rebuilding ncn-s001, it is critical that the storage-ceph-cloudinit.sh has be
                 6 osds down
                 1 host (6 osds) down
                 Degraded data redundancy: 21624/131171 objects degraded (16.485%),     522 pgs degraded, 763 pgs undersized
-    
+
       services:
         mon: 3 daemons, quorum ncn-s001,ncn-s002 (age 3m), out of quorum: ncn-s003
         mgr: ncn-s001.afiqwl(active, since 14h), standbys: ncn-s002.nafbdr
         mds: cephfs:1 {0=cephfs.ncn-s001.nzsgxr=up:active} 1 up:standby-replay
         osd: 36 osds: 30 up (since 3m), 36 in (since 14h)
         rgw: 3 daemons active (site1.zone1.ncn-s002.tipbuf, site1.zone1.ncn-s004.    uvzcms, site1.zone1.ncn-s005.twisxx)
-    
+
       task status:
-    
+
       data:
         pools:   12 pools, 1641 pgs
         objects: 43.72k objects, 81 GiB
@@ -104,17 +104,17 @@ If rebuilding ncn-s001, it is critical that the storage-ceph-cloudinit.sh has be
                  878 active+clean
                  522 active+undersized+degraded
                  241 active+undersized
-    
+
       io:
         client:   6.2 KiB/s rd, 280 KiB/s wr, 2 op/s rd, 49 op/s wr
     ```
 
-2. If the node is up, then stop and disable all the ceph services on the node being rebuilt.
+2. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
 
     On the node being rebuilt run:
 
     ```bash
-    for service in $(cephadm ls |jq -r '.[].systemd_unit'); do systemctl stop $service; systemctl disable $service; done
+    ncn-s# for service in $(cephadm ls |jq -r '.[].systemd_unit'); do systemctl stop $service; systemctl disable $service; done
     ```
 
     Example output:
@@ -138,7 +138,7 @@ If rebuilding ncn-s001, it is critical that the storage-ceph-cloudinit.sh has be
     The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
     ```screen
-     # ceph osd tree down
+     ncn-s# ceph osd tree down
      ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
      -1         62.87750  root default
      -9         10.47958      host ncn-s003
@@ -150,14 +150,14 @@ If rebuilding ncn-s001, it is critical that the storage-ceph-cloudinit.sh has be
      41    ssd   1.74660          osd.41       down   1.00000  1.00000
     ```
 
-    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives. By default if the OSD reference is not removed, then there will still a reference to them in the crush map and will show down OSDs down that no longer exist.
+    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives. By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map. This will result in OSDs that no longer exist appearing to be down.
 
     This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
-    This must be run from a ceph-mon node (ncn-s00[1/2/3])
+    This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
 
     ```bash
-    for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
+    ncn-s# for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
     ```
 
     Example Output:

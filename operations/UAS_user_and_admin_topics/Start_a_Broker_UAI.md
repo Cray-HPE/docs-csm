@@ -1,5 +1,4 @@
-
-## Start a Broker UAI
+# Start a Broker UAI
 
 Create a broker UAI after a broker UAI class has been created.
 

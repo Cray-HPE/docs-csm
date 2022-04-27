@@ -1,5 +1,4 @@
-
-## Redeploy the iPXE and TFTP Services
+# Redeploy the iPXE and TFTP Services
 
 Redeploy the iPXE and TFTP services if a pod with a ceph-fs Process Virtualization Service \(PVS\) on a Kubernetes worker node is causing a `HEALTH_WARN` error.
 
@@ -246,6 +245,4 @@ This procedure requires administrative privileges.
         -rw-r--r--    1 root     root        980768 May 15 16:49 debug.efi
         -rw-r--r--    1 root     root        983776 May 15 16:50 ipxe.efi
         ```
-
-
 

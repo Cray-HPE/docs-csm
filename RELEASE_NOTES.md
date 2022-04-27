@@ -1,13 +1,42 @@
 # Cray System Management (CSM) - Release Notes
 
-## CSM 1.0.1
-The following lists enumerate the improvements and enhancements since CSM 1.0
+## CSM 1.0.11
+The following lists enumerate the improvements and enhancements since CSM 1.0.10
+
+### New Functionality
+* Backport current cabinet expansion procedure from CSM 1.2 into the CSM 1.0 docs
+
+### Bug Fixes
+* SECURITY: CVE-2022-0185: Linux kernel buffer overflow/container escape
+* SECURITY: CVE-2021-4034: pwnkit: Local Privilege Escalation in polkit's pkexec
+* SECURITY: Address log4j vulnerabilities with regards to kafka in the CSM-1.0.11 patch
+* SECURITY: Update strimzi operator 0.15.0 to use patched kafka images
+* Bug Fix: csm upgrade incorrectly records CPS nodes
+* Bug Fix: update_bss_metadata.sh is not executable
+* Bug Fix: Upgrade waiting for boot error
+* Bug Fix: Upgrade to csm-1.0.11, m002 upgrade fails to join k8s
+* Bug Fix: Automate reinit of cluster members found to be lagging in csm 1.0 ncn-upgrade-k8s-worker.sh
+* Bug Fix: USB device wiped on ncn-m001 during csm-1.0.0 -> csm-1.0.1 upgrade
+* Bug Fix: cray-dns-unbound in CLBO after restart during csm-1.0.0 -> 1.0.11 upgrade
+* Bug Fix: Reboot of storage node (s003) halted for raid sync/health
+* Bug Fix: Clock skew on storage node during reboot test
+* Bug Fix: csm-1.0 Broker UAI Image 1.2.3 is missing openssh
+* Documentation Fix: Procedure to set metal.nowipe before and after a management node rebuild missing steps
+* Documentation Fix: First curl command update_management_network.md has incorrect output
+* Documentation Fix: ncn rebuild procedure missing a WAR to prevent dupe IPs on NCNs
+* Documentation Fix: csm-1.0.0 to csm-1.0.11 update is supported
+* Documentation Fix: bootstrap_livecd_remote_iso.md - Copy of typescript log uses incorrect directory path
+* Documentation Fix: CFS ncn-personalization will always fail on 1.0.11 if coming from 1.0.10
+* Documentation Fix: Goss server rpm is missing in desired location
+
+## CSM 1.0.10
+The following lists enumerate the improvements and enhancements since CSM 1.0.1
 
 ### New Functionality
 * Adds hardware discovery and power control for Bard Peak Olympus blades. (Power-capping not supported yet.)
 
 ### Bug Fixes
-* Fixes an intermittent issue where kernel dumps wouldn't deliver because the CA cert for Spire needed to be reset.
+* Fixes an intermittent issue where kernel dumps would not deliver because the CA cert for Spire needed to be reset.
 * Fixes an intermittent issue where PXE booting of NCNs was timing out.
 * Fixes an intermittent UX issue where Console was replaying output.
 * Fixes an issue with FAS loader not handling the new Slingshot 1.6 firmware version scheme.
@@ -17,13 +46,13 @@ The following lists enumerate the improvements and enhancements since CSM 1.0
 * Fixes an issue preventing SCSD changing root credentials for DL325/385.
 * Fixes an intermittent issue where Gigabyte firmware updates via FAS would return an error.
 * Fixes a rare issue where Nexus would not be available when scaling down to two nodes.
-* Fixes an issue where the boot order for Gigabyte NCNs wasn't persisting after a reboot or reinstall.
+* Fixes an issue where the boot order for Gigabyte NCNs was not persisting after a reboot or reinstall.
 * Fixes an intermittent issue where storage nodes would have clock skew during fresh install.
 
-## CSM 1.0
+## CSM 1.0.1
 The following lists enumerate major improvements since CSM v0.9.x.
 
-### What’s New
+### What's New
 * Functionality
   - Scale up to 6000 Nodes is supported.
     - Conman has been updated to using a deployment model that handles a larger scale.
@@ -82,9 +111,10 @@ The following lists enumerate major improvements since CSM v0.9.x.
   - Helm charts should have a way to be automatically patched during Shasta installation.
   - HSM should add a timestamp to State Change Notifications (SCN) data before publishing to Kafka topic: cray-hmsstatechange-notifications.
   - End-of-Life Alpine and nginx container images must be removed for security purposes.
+  - CAPMC simulates reinit on hardware that does not support restart; see [CAPMC reinit and configuration](troubleshooting/capmc/CAPMC_reinit_and_config.md) for more information
 
 ### Bug Fixes
-The following list enumerates the more important issues that were found and fixed in CSM v1.0.0. In total, there were more than 34 customer-reported issues and more than 350 development critical issues fixed in this release.
+The following list enumerates the more important issues that were found and fixed in CSM v1.0.1. In total, there were more than 34 customer-reported issues and more than 350 development critical issues fixed in this release.
 
 Critical Issues Resolved:
 * Prometheus cannot scrape kubelet/kube-proxy.
@@ -118,7 +148,7 @@ Critical Issues Resolved:
 * CFS should check if the configuration is valid/exists when a session is created.
 * CFS does not set session start time until after job starts.
 * CFS will not list pending sessions.
-* MEDS, should not overwrite a components credentials when a xname becomes present again.
+* MEDS, should not overwrite a components credentials when an xname becomes present again.
 * The Cray HSM locks command locked more nodes than specified.
 * HSM crashes when discovering Bard Peak.
 * Resources limits are hit on three NCN systems.
@@ -126,7 +156,7 @@ Critical Issues Resolved:
 * For better reliability, the orphan stratum in Chrony config needed to be adjusted.
 * The UEFI Boot Order Reverts/Restores on every reboot on an HPE DL325.
 and many more...
-        
+
 ### Known Issues
 * Incorrect_output_for_bos_command_rerun: When a Boot Orchestration Service (BOS) session fails, it may output a message in the Boot Orchestration Agent (BOA) log associated with that session. This output contains a command that instructs the user how to re-run the failed session. It will only contain the nodes that failed during that session. The command is faulty, and this issue addresses correcting it.
 * Cfs_session_stuck_in_pending: Under some circumstances, Configuration Framework Service (CFS) sessions can get stuck in a `pending` state, never completing and potentially blocking other sessions. This addresses cleaning up those sessions.
@@ -144,3 +174,7 @@ and many more...
 * Rarely, Nexus is not available when scaling down NCN workers to two nodes.
 * The boot order for Gigabyte NCNs does not persist after a reboot or reinstall.
 * Intermittently, storage nodes have clock skew during fresh install.
+* Kube-multus pods may fail to restart due to ImagePullBackOff. For more information see [Kube-multus pod is in ImagePullBackOff](troubleshooting/known_issues/kube_multus_pod_in_ImagePullBackOff.md).
+* Power capping Olympus and River compute hardware via CAPMC is not supported.
+* On fresh install, API calls to Gitea/VCS may give 401 Errors. See [Gitea/VCS 401 Errors](troubleshooting/known_issues/gitea_vcs_401_errors.md) for more information.
+* Console logging may fill all available space for console log files. See [Console logs filling up availble storage](troubleshooting/known_issues/console_log_storage_filling.md) for more information.

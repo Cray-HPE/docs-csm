@@ -1,5 +1,4 @@
-
-## Delete a UAI Class
+# Delete a UAI Class
 
 Delete a UAI class. After deletion, the class will no longer be available for new UAIs.
 
@@ -23,5 +22,4 @@ cray uas admin config classes delete UAI_CLASS_ID
     ```screen
     ncn-m001-pit# cray uas admin config classes delete bb28a35a-6cbc-4c30-84b0-6050314af76b
     ```
-
 

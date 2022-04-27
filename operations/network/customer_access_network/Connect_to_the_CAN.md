@@ -1,4 +1,4 @@
-## Connect to the CAN
+# Connect to the CAN
 
 How to connect to the CAN physically and via layer 3.
 
@@ -48,6 +48,4 @@ The system can be setup using other customer requirements. In order to do so, th
 |Domain namespace extension|Specifies the domain extension to be used; for example, HPE Cray EX.customer.com|
 |Customer network IP address for `ncn-m001`|Specifies an IP address for administrative access on the customer network for `ncn-m001`|
 |\(Optional\) BMC customer network IP address for `ncn-m001`|Specifies an IP address for BMC access on the customer network for `ncn-m001`|
-
-
 

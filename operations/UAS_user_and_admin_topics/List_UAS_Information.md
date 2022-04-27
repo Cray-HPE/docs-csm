@@ -1,5 +1,4 @@
-
-## List UAS Information
+# List UAS Information
 
 Use the `cray uas` command to gather information about the User Access Service's version, images, and running User Access Instances \(UAIs\).
 
@@ -78,5 +77,4 @@ uai_img = "registry.local/cray/cray-uas-sles15sp1-slurm:latest"
 uai_age = "1d5h"
 uai_name = "uai-user-f8671d33"
 ```
-
 

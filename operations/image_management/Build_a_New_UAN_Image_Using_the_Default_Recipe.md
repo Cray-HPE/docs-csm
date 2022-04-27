@@ -1,4 +1,4 @@
-## Build a New UAN Image Using the Default Recipe
+# Build a New UAN Image Using the Default Recipe
 
 Build or rebuild the UAN image using either the default UAN image or image recipe. Both of these are supplied by the User Access Node (UAN) product stream installer.
 
@@ -90,6 +90,3 @@ The Cray EX User Access Node \(UAN\) recipe currently requires the Slingshot Dia
         ```
 
     3.  Use the saved IMS image ID in the [Customize an Image Root Using IMS](Customize_an_Image_Root_Using_IMS.md) procedure to build the UAN image.
-
-
-

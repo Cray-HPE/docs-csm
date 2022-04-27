@@ -1,5 +1,3 @@
-
-
 # Create Switch Metadata CSV
 
 This page provides directions on constructing the `switch_metadata.csv` file.
@@ -7,7 +5,7 @@ This page provides directions on constructing the `switch_metadata.csv` file.
 This file is manually created to include information about all spine, leaf, CDU, and aggregation switches in the system.
 None of the Slingshot switches for the HSN should be included in this file.
 
-The file should have the following format, in ascending order by Xname:
+The file should have the following format, in ascending order by component name (xname):
 
 ```
 Switch Xname,Type,Brand
@@ -49,7 +47,7 @@ There may be other switches in a specific SHCD, but the general guidelines for a
 #### Requirements
 
 - The SHCD for the system
-  
+
   Check the description for component names while mapping names between the SHCD and your `switch_metadata.csv` file.
 
   See [Component Names (xnames)](../operations/Component_Names_xnames.md).
@@ -61,43 +59,43 @@ Spine and aggregation switches use the format `xXcChHsS`. Leaf switches use `xXc
 #### Reference Diagram for Subsequent Sections
 
 ![Reference diagram of a cabinet with side-by-side switches in SHCD](../img/shcd-rack-example.png)
-   
+
 > Diagram of a cabinet with side-by-side switches in SHCD.
 
 #### Directions
 
 1. Identify the switches in the SHCD.
-   
+
    Look for the following:
     - The slot number(s) for the leaf switches (usually 48-port switches)
         - In the above diagram this is x3000u22
-    
+
     - The slot number(s) for the spine switches
         - In the above diagram this is x3000u23R and x3000u23L (two side-by-side switches)
         - Newer side-by-side switches use slot numbers of s1 and s2 instead of R and L
-  
+
 2. Each spine or aggregation switch will follow this format: `xXcChHsS`
-   
+
     > This format also applies to CDU switches that are in a River cabinet that make connections to an adjacent Hill cabinet.
-    
+
     - xX : where "X" is the River cabinet identification number (the figure above is "3000")
     - cC : where "C" is the chassis identification number. This should be "0".
     - hH : where "H" is the slot number in the cabinet (height)
     - sS : where "S" is the horizontal space number'
 
 3. Each leaf switch will follow this format: `xXcCwW`:
-    
+
     - xX : where "X" is the River cabinet identification number (the figure above is "3000")
     - cC : where "C" is the chassis identification number. This should be "0".
     - wW : where "W" is the slot number in the cabinet (height)
 
 4. Each CDU switch will follow this format: `dDwW`:
-   
+
    > If a CDU switch is in a River cabinet, then follow the naming convention in step 2 instead.
-   
+
    - dD : where "D" is the Coolant Distribution Unit (CDU)
    - wW : where "W" is the management switch in a CDU
-  
+
 5. Each item in the file is either of type `Aggregation`, `CDU`, `Leaf`, or `Spine`.
 6. Each line in the file must denote the Brand, either `Dell`, `Mellanox`, or `Aruba`.
 7. Create the switch_metadata.csv file with this information.

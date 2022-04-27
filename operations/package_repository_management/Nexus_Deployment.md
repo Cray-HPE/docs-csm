@@ -1,4 +1,4 @@
-## Nexus Deployment
+# Nexus Deployment
 
 Nexus is deployed with the `cray-nexus` chart to the `nexus` namespace as part of the Cray System Management \(CSM\) release. Nexus is deployed after critical platform services are up and running. Product installers configure and populate Nexus blob stores and repositories using the `cray-nexus-setup` container image. As a result, there is no singular product that provides all Nexus repositories or assets; instead, individual products must be installed. However, CSM configures the `charts` Helm repository and the `registry` Docker repository, which all products may use.
 
@@ -11,6 +11,13 @@ For a complete set of available settings, consult the values.yaml file for the `
 |`istio.ingress.hosts.ui.enabled`|`true`|Enables ingress from the CAN \(default chart value is `false`\)|
 |`istio.ingress.hosts.ui.authority`|`nexus.{{ network.dns.external }}`|Sets the CAN hostname \(default chart value is `nexus.local`\)|
 |`sonatype-nexus.persistence.storageSize`|`1000Gi`|Nexus storage size, may be increased after installation; critical if `spec.kubernetes.services.cray-nexus-setup.s3.enabled` is `false`|
+
+If modifying the customizations.yaml file, ensure to upload the new file to Kubernetes so the changes persist in future installs or upgrades.
+
+```bash
+ncn-m001# kubectl delete secret -n loftsman site-init
+ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+```
 
 ### Common Nexus Deployments
 
@@ -77,6 +84,4 @@ clean-install-deps
 ```
 
 Product installers also load and clean up the install tools used to facilitate installation. By convention, vendored tools will be in the `vendor` directory. In case something goes wrong, it may be useful to manually load them into the install environment to help with debugging.
-
-
 

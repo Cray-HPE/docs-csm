@@ -57,4 +57,4 @@ This section applies to all node types. The commands in this section assume you 
 
 [Click here for the Next Step](Wipe_Drives.md)
 
-Or [Click here to returrn to the Main Page](../Rebuild_NCNs.md)
+Or [return to the Main Page](../Rebuild_NCNs.md)

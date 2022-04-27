@@ -6,7 +6,7 @@ As part of the installation, Kubernetes generates certificates for the required 
 
 **`IMPORTANT:`** Depending on the version of Kubernetes, the command may or may not reside under the alpha category. Use `kubectl certs --help` and `kubectl alpha certs --help` to determine this. The overall command syntax should be the same and this is just whether or not the command structure will require `alpha` in it.
 
-**`IMPORTANT:`** When you pick your master node to renew the certificatess on, that is the node that will be referenced in this document as `ncn-m`.
+**`IMPORTANT:`** When you pick your master node to renew the certificates on, that is the node that will be referenced in this document as `ncn-m`.
 
 **`IMPORTANT:`** This document is based off a base hardware configuration of 3 masters and 3 workers (We are leaving off utility storage because they are not running Kubernetes). Please make sure to update any commands that run on multiple nodes accordingly.
 
@@ -59,7 +59,7 @@ Check the expiration of the certificates.
     ```bash
     ncn-m# kubeadm alpha certs check-expiration --config /etc/kubernetes/kubeadmcfg.yaml
     WARNING: kubeadm cannot validate component configs for API groups [kubelet.config.k8s.io kubeproxy.config.k8s.io]
-    
+
     CERTIFICATE                EXPIRES                  RESIDUAL TIME   CERTIFICATE AUTHORITY   EXTERNALLY MANAGED
     admin.conf                 Sep 24, 2021 15:21 UTC   14d                                     no
     apiserver                  Sep 24, 2021 15:21 UTC   14d             ca                      no
@@ -71,7 +71,7 @@ Check the expiration of the certificates.
     etcd-server                Sep 24, 2021 15:19 UTC   14d             etcd-ca                 no
     front-proxy-client         Sep 24, 2021 15:21 UTC   14d             front-proxy-ca          no
     scheduler.conf             Sep 24, 2021 15:21 UTC   14d                                     no
-    
+
     CERTIFICATE AUTHORITY   EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
     ca                      Sep 02, 2030 15:21 UTC   8y              no
     etcd-ca                 Sep 02, 2030 15:19 UTC   8y              no
@@ -150,7 +150,7 @@ Check the expiration of the certificates.
     etcd-server                Sep 22, 2022 17:13 UTC   364d            etcd-ca                 no
     front-proxy-client         Sep 22, 2022 17:13 UTC   364d            front-proxy-ca          no
     scheduler.conf             Sep 22, 2022 17:13 UTC   364d                                    no
-    
+
     CERTIFICATE AUTHORITY   EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
     ca                      Sep 02, 2030 15:21 UTC   8y              no
     etcd-ca                 Sep 02, 2030 15:19 UTC   8y              no
@@ -282,7 +282,7 @@ Check the expiration of the certificates.
 3. Distribute the client certificate to the rest of the cluster.
 
    `NOTE:` You may have errors copying files. The target may or may not exist depending on the version of Shasta.
-  
+
    - You **DO NOT** need to copy this to the master node where you are performing this work.
    - Copy `/etc/kubernetes/admin.conf` to all master and worker nodes.
 

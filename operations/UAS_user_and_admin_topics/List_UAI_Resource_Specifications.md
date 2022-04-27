@@ -1,5 +1,4 @@
-
-## List UAI Resource Specifications
+# List UAI Resource Specifications
 
 Obtain a list of all the UAI resource specifications registered with UAS.
 

@@ -1,166 +1,91 @@
-# CSM 1.0.1 Patch Installation Instructions
+# CSM 0.9.4 or later to 1.0.1 Upgrade Process
 
-## Steps
+## Introduction
 
-1. [Preparation](#preparation)
-1. [Setup Nexus](#setup-nexus)
-1. [Upgrade Services](#upgrade-services)
-1. [Rollout Deployment Restart](#rollout-deployment-restart)
-1. [Verification](#verification)
-1. [Exit Typescript](#exit-typescript)
+This document is intended to guide an administrator through the upgrade process going to Cray Systems Management v1.0.1 from v0.9 (v0.9.4 or later) or v1.0.0. When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the resource_material directory for additional reference material in support of the process/scripts mentioned explicitly on this page.
 
-<a name="preparation"></a>
+## Terminology
 
-## Preparation
+Throughout the guide the terms "stable" and "upgrade" are used in the context of the management nodes (NCNs). The
+"stable" NCN is the master node from which all of these commands will be run and therefore cannot have its power state
+affected. Then the "upgrade" node is the node to next be upgraded.
 
-1. Start a typescript on `ncn-m001` to capture the commands and output from this procedure.
+When doing a rolling upgrade of the entire cluster, at some point you will need to transfer the
+responsibility of the "stable" NCN to another master node. However, you do not need to do this before you are ready to
+upgrade that node.
 
-   ```bash
-   ncn-m001# script -af csm-update.$(date +%Y-%m-%d).txt
-   ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
-   ```
+## Upgrade Stages
 
-1. Download and extract the CSM 1.0.1 release to `ncn-m001`.
+- [Stage 0 - Prerequisites](Stage_0_Prerequisites.md)
+- [Stage 1 - Ceph Initial Upgrade](Stage_1.md)
+- [Stage 2 - Ceph Node Image Upgrade](Stage_2.md)
+- [Stage 3 - Kubernetes Upgrade](Stage_3.md)
+- [Stage 4 - CSM Services Upgrade](Stage_4.md)
+- [Stage 5 - Apply Known Workarounds](Stage_5.md)
+- [Stage 6 - Return to Main Page and Proceed to *Update Management Network*](../index.md#update_management_network)
 
-   See [Download and Extract CSM Product Release](../../update_product_stream/index.md#download-and-extract).
+**`Important:`** Please take note of the below content for troubleshooting purposes in the case that you encounter issues.
 
-1. Set `CSM_DISTDIR` to the directory of the extracted files:
+## Relevant Troubleshooting Links for Upgrade-Related Issues
 
-   **IMPORTANT**: If necessary, be sure to change this example command to match the actual location of the extracted files.
+### General Kubernetes Commands for Troubleshooting
 
-   ```bash
-   ncn-m001# export CSM_DISTDIR="$(pwd)/csm-1.0.1"
-   ```
+Please see [Kubernetes_Troubleshooting_Information](../../troubleshooting/kubernetes/Kubernetes_Troubleshooting_Information.md).
 
-1. Set `CSM_RELEASE_VERSION` to the version reported by `${CSM_DISTDIR}/lib/version.sh`:
+### Troubleshooting PXE Boot Issues
 
-   ```bash
-   ncn-m001# CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
-   ncn-m001# echo $CSM_RELEASE_VERSION
-   ```
+If execution of the upgrade procedures results in NCNs that have errors booting, please refer to these troubleshooting procedures:
+[PXE Booting Runbook](../../troubleshooting/pxe_runbook.md)
 
-1. Download and install/upgrade the _latest_ documentation and workarounds RPMs on `ncn-m001`.
+### Troubleshooting NTP
 
-   See [Check for Latest Workarounds and Documentation Updates](../../update_product_stream/index.md#workarounds).
+During execution of the upgrade procedure, if it is noted that there is clock skew on one or more NCNs, the following procedure can be used to troubleshoot NTP config or to sync time:
+[Configure NTP on NCNs](../../operations/node_management/Configure_NTP_on_NCNs.md)
 
-1. Resets known_hosts on storage nodes. These change during the upgrade procedure and result in invalid known_hosts file that prevents password-less SSH between storage nodes.
+### Bare-Metal Etcd Recovery
 
-```bash
-ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
+If in the upgrade process of the master nodes, it is found that the bare-metal etcd cluster (that houses values for the Kubernetes cluster) has a failure,
+it may be necessary to restore that cluster from back-up. Please see
+[Restore Bare-Metal etcd Clusters from an S3 Snapshot](../../operations/kubernetes/Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md) for that procedure.
 
-ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
-```
+### Back-ups for Etcd-Operator Clusters
 
-<a name="setup-nexus"></a>
+After upgrading, if health checks indicate that etcd pods are not in a healthy/running state, recovery procedures may be needed. Please see
+[Backups for etcd-operator Clusters](../../operations/kubernetes/Backups_for_etcd-operator_Clusters.md) for these procedures.
 
-## Setup Nexus
+### Recovering from Postgres Dbase Issues
 
-Run `lib/setup-nexus.sh` to configure Nexus and upload new CSM RPM
-repositories, container images, and Helm charts:
+After upgrading, if health checks indicate the Postgres pods are not in a healthy/running state, recovery procedures may be needed.
+Please see [Troubleshoot Postgres Database](../../operations/kubernetes/Troubleshoot_Postgres_Database.md) for troubleshooting and recovery procedures.
 
-```bash
-ncn-m001# cd "$CSM_DISTDIR"
-ncn-m001# ./lib/setup-nexus.sh
-```
+### Troubleshooting Spire Pods Not Staring on NCNs
 
-On success, `setup-nexus.sh` will output `OK` on stderr and exit with status
-code `0`, e.g.:
-
-```bash
-+ Nexus setup complete
-setup-nexus.sh: OK
-ncn-m001# echo $?
-0
-```
-
-In the event of an error, consult [Troubleshoot Nexus](../../operations/package_repository_management/Troubleshoot_Nexus.md)
-to resolve potential problems and then try running `setup-nexus.sh` again. Note that subsequent runs of `setup-nexus.sh` may
-report `FAIL` when uploading duplicate assets. This is ok as long as `setup-nexus.sh` outputs `setup-nexus.sh: OK` and exits
-with status code `0`.
-
-<a name="run-validation-checks-pre-upgrade"></a>
-## Run Validation Checks (Pre-Upgrade)
-
-_Pre-upgrades must run after nexus is setup in order to ensure any and all necessary RPMs are available_.
-
-1. Invoke the 1.2 NCN boot order backport
-
-   > **`NOTE`** This presumes all NCNs are still online, and their BMCs are reachable. If some NCNs are not reachable over SSH then the EFI boot menus will not be corrected. If some BMCs are not reachable over IPMI then vendor specific tweaks will not be applied.
-
-   ```bash
-   ncn-m001# export IPMI_PASSWORD=changeme
-   ncn-m001# export CI=1
-   ncn-m001# /usr/share/doc/csm/upgrade/lib/validation/CASMREL-776-CSM12-NCN-boot-order-backport/install-hotfix.sh
-   ```
+Please see [Troubleshoot Spire Failing to Start on NCNs](../../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md).
 
 
-<a name="upgrade-services"></a>
+### Rerun a step/script
 
-## Upgrade Services
+When running upgrade scripts, each script record what has been done successfully on a node. This `state` file is stored at `/ect/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state`. If a rerun is required, you will need to remove the recorded steps from this file.
 
-Run `upgrade.sh` to deploy upgraded CSM applications and services:
+Here is an example of state file of `ncn-m001`:
 
 ```bash
-ncn-m001# cd "$CSM_DISTDIR"
-ncn-m001# ./upgrade.sh
+ncn-m001:~ # cat /etc/cray/upgrade/csm/{CSM_VERSION}/ncn-m001/state
+[2021-07-22 20:05:27] UNTAR_CSM_TARBALL_FILE
+[2021-07-22 20:05:30] INSTALL_CSI
+[2021-07-22 20:05:30] INSTALL_WAR_DOC
+[2021-07-22 20:13:15] SETUP_NEXUS
+[2021-07-22 20:13:16] UPGRADE_BSS <=== Remove this line if you want to rerun this step
+[2021-07-22 20:16:30] CHECK_CLOUD_INIT_PREREQ
+[2021-07-22 20:19:17] APPLY_POD_PRIORITY
+[2021-07-22 20:19:38] UPDATE_BSS_CLOUD_INIT_RECORDS
+[2021-07-22 20:19:38] UPDATE_CRAY_DHCP_KEA_TRAFFIC_POLICY
+[2021-07-22 20:21:03] UPLOAD_NEW_NCN_IMAGE
+[2021-07-22 20:21:03] EXPORT_GLOBAL_ENV
+[2021-07-22 20:50:36] PREFLIGHT_CHECK
+[2021-07-22 20:50:38] UNINSTALL_CONMAN
+[2021-07-22 20:58:39] INSTALL_NEW_CONSOLE
 ```
 
-<a name="rollout-deployment-restart"></a>
-
-## Rollout Deployment Restart
-
-Instruct Kubernetes to gracefully restart the Unbound pods:
-
-```text
-ncn-m001:~ # kubectl -n services rollout restart deployment cray-dns-unbound
-deployment.apps/cray-dns-unbound restarted
-
-ncn-m001:~ # kubectl -n services rollout status deployment cray-dns-unbound
-Waiting for deployment "cray-dns-unbound" rollout to finish: 0 out of 3 new replicas have been updated...
-Waiting for deployment "cray-dns-unbound" rollout to finish: 3 old replicas are pending termination...
-Waiting for deployment "cray-dns-unbound" rollout to finish: 3 old replicas are pending termination...
-Waiting for deployment "cray-dns-unbound" rollout to finish: 3 old replicas are pending termination...
-Waiting for deployment "cray-dns-unbound" rollout to finish: 2 old replicas are pending termination...
-Waiting for deployment "cray-dns-unbound" rollout to finish: 2 old replicas are pending termination...
-Waiting for deployment "cray-dns-unbound" rollout to finish: 2 old replicas are pending termination...
-Waiting for deployment "cray-dns-unbound" rollout to finish: 1 old replicas are pending termination...
-Waiting for deployment "cray-dns-unbound" rollout to finish: 1 old replicas are pending termination...
-deployment "cray-dns-unbound" successfully rolled out
-```
-
-<a name="verification"></a>
-
-## Verification
-
-### Verify CSM Version in Product Catalog
-
-1. Verify that the following command includes the new CSM version:
-
-   ```bash
-   ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key' | sort -V
-   0.9.2
-   0.9.3
-   0.9.4
-   0.9.5
-   0.9.6
-   1.0.0
-   1.0.1
-   ```
-
-1. Confirm the `import_date` reflects the timestamp of the upgrade:
-
-   ```bash
-   ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.0.1".configuration.import_date'
-   ```
-
-<a name="exit-typescript"></a>
-
-## Exit Typescript
-
-Remember to exit your typescript.
-
-```bash
-ncn-m001# exit
-```
-
-It is recommended to save the typescript file for later reference.
+* See the inline comment above on how to rerun a single step
+* If you need to rerun the whole upgrade of a node, you can just delete the state file

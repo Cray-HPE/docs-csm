@@ -1,4 +1,4 @@
-## About etcd
+# About etcd
 
 The system uses etcd for storing all of its cluster data. It is an open source database that is excellent for maintaining the state of Kubernetes. Failures in the etcd cluster at the heart of Kubernetes will cause a failure of Kubernetes. To mitigate this risk, the system is deployed with etcd on dedicated disks and with a specific configuration to optimize Kubernetes workloads. The system also provides additional etcd cluster\(s\) as necessary to help maintain an operational state of services. These additional clusters are managed by a Kubernetes operator and do not interact with the core Kubernetes etcd service.
 
@@ -28,6 +28,3 @@ The system utilizes etcd in two major ways:
     -   The etcd pods are mobile and will relocate in the event of a pod or node failure
     -   Each etcd cluster can be backed up to a Ceph Rados Gateway \(S3 compatible\) bucket
         -   This option is decided by the service owner or developer as some information has an extremely short lifespan, and by the time the restore could be performed, the data would be invalid
-
-
-

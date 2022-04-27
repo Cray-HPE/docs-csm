@@ -1,5 +1,4 @@
-
-## Add a Standard Rack Node
+# Add a Standard Rack Node
 
 These procedures are intended for trained technicians and support personnel only. Always follow ESD precautions when handling this equipment.
 
@@ -7,10 +6,10 @@ These procedures are intended for trained technicians and support personnel only
 
     ```screen
     ncn-m001# function get_token () {
-    ADMIN_SECRET=$(kubectl get secrets admin-client-auth -ojsonpath='{.data.client-secret}' | base64 -d)
-    curl -s -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$ADMIN_SECRET
-    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token
-    | python -c 'import sys, json; print json.load(sys.stdin)["access_token"]'
+        curl -s -S -d grant_type=client_credentials \
+            -d client_id=admin-client \
+            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'
     }
     ```
 
@@ -32,8 +31,8 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
     New node objects require the following information:
 
-    -   `Parent`: xname of the new node's BMC
-    -   `Xname`: xname of the new node
+    -   `Parent`: component name (xname) of the new node's BMC
+    -   `Xname`: component name (xname) of the new node
     -   `Role`: Either `Compute` or `Application`
     -   `Aliases`: Array of aliases for the node, for compute nodes, this is in the form of `nid0000`
     -   NID: The Node ID integer for the node, applies only to compute nodes.
@@ -81,12 +80,12 @@ For this procedure, a new object must be created in the SLS and modifications wi
     The MgmtSwitchConnector connector is used by the hms-discovery job to determine which management switch port the node's BMC is connected to. The SLS requires the following information:
 
     -   The management switch port that the new node's BMC is connected to
-    -   `Xname`: The xname for the MgmtSwitchConnector in the form of `xXcCwWjJ`
+    -   `Xname`: The component name (xname) for the MgmtSwitchConnector in the form of `xXcCwWjJ`
         -   `X` is the rack number
         -   `C` is the chassis \(standard racks are always chassis 0\)
         -   `W` is the rack U position of the management network leaf switch
         -   `J` is the switch port number
-    -   `NodeNics`: The xname of the new node's BMC. This field is an array in the payloads below, but should only contain 1 element.
+    -   `NodeNics`: The component name (xname) of the new node's BMC. This field is an array in the payloads below, but should only contain 1 element.
         -   `VendorName`: this field varies depending on the OEM for the management switch. For example, if the BMC is plugged into port 36 of the switch the following vendor names could apply:
         -   Aruba leaf switches use this format: `1/1/36`
         -   Dell leaf switches use this format: `ethernet1/1/36`
@@ -122,13 +121,39 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
     The hms-discovery cronjob will attempt to identity Node and BMC MAC addresses from the HSM Ethernet interfaces table with the connection information present in SLS to correctly identity the new node.
 
-7.  After roughly 5-10 minutes the node's BMC should be discovered by the HSM, and the node's BMC can be resolved by using its xname in DNS.
+7.  After roughly 5-10 minutes the node's BMC should be discovered by the HSM, and the node's BMC can be resolved by using its component name (xname) in DNS.
 
     ```screen
     ncn-m001# ping x3000c0s27b0
     ```
 
-8.  Verify that the nodes are enabled in the HSM.
+8. Verify that discovery has completed. The
+
+    ```screen
+    ncn-m001# cray hsm inventory redfishEndpoints describe x3000c0s27b0
+    ID = "x3000c0s2b0"
+    Type = "NodeBMC"
+    Hostname = ""
+    Domain = ""
+    FQDN = "x3000c0s27b0"
+    Enabled = true
+    UUID = "990150e5-03bc-58b5-b986-cfd418d5778b"
+    User = "root"
+    Password = ""
+    RediscoverOnUpdate = true
+
+    [DiscoveryInfo]
+    LastDiscoveryAttempt = "2021-10-20T21:19:32.332521Z"
+    RedfishVersion = "1.6.0"
+    LastDiscoveryStatus = **"DiscoverOK"**
+    ```
+
+    - When `LastDiscoveryStatus` displays as `DiscoverOK`, the node BMC has been successfully discovered.
+    -  If the last discovery state is `DiscoveryStarted` then the BMC is currently being inventoried by HSM.
+    - If the last discovery state is `HTTPsGetFailed` or `ChildVerificationFailed`, then an error has
+      occurred during the discovery process.
+
+9.  Verify that the nodes are enabled in the HSM.
 
     ```screen
     ncn-m001# cray hsm state components describe x3000c0s27b0n0
@@ -166,43 +191,15 @@ For this procedure, a new object must be created in the SLS and modifications wi
     -   If the last discovery state is `DiscoveryStarted` then the BMC is currently being inventoried by HSM.
     -   If the last discovery state is `HTTPsGetFailed` or `ChildVerificationFailed` then an error occurred during the discovery process.
 
-9.  Enable the nodes in the HSM database \(in this example, the nodes are `x3000c0s27b1n0-n3`\).
+10. Enable the nodes in the HSM database \(in this example, the nodes are `x3000c0s27b1n0-n3`\).
 
     ```screen
     ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids x3000c0s27b1n0,x3000c0s27b1n1,x3000c0s27b1n2,x3000c0s27b1n3
     ```
 
-10. To force rediscovery of the components in rack 3000 \(standard racks are chassis 0\).
+11. Verify that the correct firmware versions for node BIOS, BMC, HSN NICs, GPUs, and so on.
 
-    ```screen
-    ncn-m001# cray hsm inventory discover create --xnames x3000c0
-    ```
-
-11. Verify that discovery has completed.
-
-    ```screen
-    ncn-m001# cray hsm inventory redfishEndpoints describe x3000c0
-    Type = "ChassisBMC"
-    Domain = ""
-    MACAddr = "02:13:88:03:00:00"
-    Enabled = true
-    Hostname = "x3000c0"
-    RediscoverOnUpdate = true
-    FQDN = "x3000c0"
-    User = "root"
-    Password = ""
-    IPAddress = "10.104.0.76"
-    ID = "x3000c0b0"
-
-    [DiscoveryInfo]
-    LastDiscoveryAttempt = "2020-09-03T19:03:47.989621Z"
-    RedfishVersion = "1.2.0"
-    LastDiscoveryStatus = **"DiscoverOK"**
-    ```
-
-12. Verify that the correct firmware versions for node BIOS, BMC, HSN NICs, GPUs, and so on.
-
-13. If necessary, update the firmware.
+12. If necessary, update the firmware.
 
     ```screen
     ncn-m001# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
@@ -210,16 +207,14 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
     See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md).
 
-14. Use the Boot Orchestration Service \(BOS\) to power on and boot the nodes.
+13. Use the Boot Orchestration Service \(BOS\) to power on and boot the nodes.
 
     Use the appropriate BOS template for the node type.
 
-    ```screen
-    ncn-m001# cray bos v1 session create --template-uuid cle-VERSION \
+    ```bash
+    ncn-m001# cray bos session create --template-uuid cle-VERSION \
     --operation reboot --limit x3000c0s27b0n0,x3000c0s27b0n1,x3000c0s27b0n2,x3000c0s27b00n3
     ```
 
-15. Verify the chassis status LEDs indicate normal operation.
-
-
+14. Verify the chassis status LEDs indicate normal operation.
 

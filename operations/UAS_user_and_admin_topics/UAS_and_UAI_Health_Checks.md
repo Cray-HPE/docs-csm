@@ -1,5 +1,4 @@
-
-## UAS and UAI Health Checks
+# UAS and UAI Health Checks
 
 Initialize and authorize the CLI so a user may run procedures on any given node.
 
@@ -267,5 +266,4 @@ ncn-w003# kubectl describe -n user <pod-name>
 ```
 
 If volumes are missing, they will be in the Events:section of the output. Other problems may show up there as well. The names of the missing volumes or other issues should indicate what needs to be fixed to enable the UAI.
-
 

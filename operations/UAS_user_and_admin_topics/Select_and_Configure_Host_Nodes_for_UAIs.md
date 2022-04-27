@@ -1,5 +1,4 @@
-
-## Select and Configure Host Nodes for UAIs
+# Select and Configure Host Nodes for UAIs
 
 Site administrators can control the set of UAI host nodes by labeling Kubernetes worker nodes appropriately.
 
@@ -52,5 +51,4 @@ This procedure explains both how to identify and modify the list of current UAI 
     ```bash
     ncn-m001-pit# kubectl label node ncn-w001 uas=False --overwrite
     ```
-
 

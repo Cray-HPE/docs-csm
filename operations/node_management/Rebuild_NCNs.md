@@ -23,10 +23,10 @@ The following is a high-level overview of the NCN rebuild workflow:
 
 The system is fully installed and has transitioned off of the LiveCD.
 
-For several of the commands in this section, you will need to have variables set with the name of the node being rebuilt and its xname.
+For several of the commands in this section, you will need to have variables set with the name of the node being rebuilt and its component name (xname).
 
 Set NODE to the hostname of the node being rebuilt (e.g. `ncn-w001`, `ncn-w002`, etc).
-Set XNAME to the xname of that node.
+Set `XNAME` to the component name (xname) of that node.
 
 ```bash
 ncn# NODE=ncn-w00n
@@ -36,7 +36,7 @@ ncn# echo $XNAME
 
 ## Procedure
 
-   Choose the appropriate node type in the **Prepare Node** section
+Choose the appropriate node type in the **Prepare Node** section
 
 ### Prepare Node (prepare_node)
 
@@ -48,6 +48,4 @@ Only follow the steps in the section for the node type that is being rebuilt:
 
 ## Validation
 
-After you have completed all the steps, then please run the **Final Validation** steps.
-
-[Final Validation](rebuild_ncns/../Rebuild_NCNs/Final_Validation_Steps.md)
+After completing all of the steps, run the [Final Validation](Final_Validation_Steps.md) steps.

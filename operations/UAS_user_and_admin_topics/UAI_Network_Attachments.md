@@ -1,5 +1,4 @@
-
-## UAI Network Attachments
+# UAI Network Attachments
 
 The UAI network attachment configuration flows from the CRAY Site Initializer (CSI) localization data through `customizations.yaml` into the UAS Helm chart and, ultimately, into Kubernetes in the form of a "network-attachment-definition".
 
@@ -36,7 +35,7 @@ spec:
       nmn_supernet_gateway: 10.252.0.1
       nmn_vlan: vlan002
       # NOTE: the term DHCP here is misleading, this is merely
-      #       a range of reserved IPs for UAIs that should not
+      #       a range of reserved IP addresses for UAIs that should not
       #       be handed out to others because the network
       #       attachment will hand them out to UAIs.
       nmn_dhcp_start: 10.252.2.10
@@ -149,5 +148,4 @@ In this example, Kubernetes will assign UAI IP addresses in the range `10.252.2.
     - `10.92.100.0/24`
     - `10.106.0.0/17`
     - `10.104.0.0/17`
-
 

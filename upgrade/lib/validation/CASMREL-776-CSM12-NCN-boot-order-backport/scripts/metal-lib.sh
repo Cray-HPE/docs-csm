@@ -1,5 +1,9 @@
 #!/bin/bash
-# Copyright 2020-2021 Hewlett Packard Enterprise Development LP
+#
+# MIT License
+#
+# (C) Copyright 2020-2022 Hewlett Packard Enterprise Development LP
+#
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
 # to deal in the Software without restriction, including without limitation
@@ -12,13 +16,13 @@
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
 # THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-# (MIT License)
+
 # Permalink to original lib: https://github.com/Cray-HPE/node-image-build/blob/cfad25b84431cfc5c3b8935df78a7ce68d4a8be4/boxes/ncn-common/files/scripts/metal/metal-lib.sh
 fslabel=BOOTRAID
 type mprint >/dev/null 2>&1 || . /srv/cray/scripts/common/lib.sh
@@ -26,7 +30,8 @@ type mprint >/dev/null 2>&1 || . /srv/cray/scripts/common/lib.sh
 set -e
 
 # initrd - fetched from /proc/cmdline ; grab the horse we rode in on, not what the API aliens say.
-export initrd=$(grep -Po 'initrd=([\w\.]+)' /proc/cmdline | cut -d '=' -f2)
+initrd=$(grep -Po 'initrd=([\w\.]+)' /proc/cmdline | cut -d '=' -f2)
+export initrd
 [ -z "$initrd" ] && initrd=initrd.img.xz
 
 trim() {
@@ -39,7 +44,7 @@ install_grub2() {
     local working_path=${1:-/metal/recovery}
     mount -v -L $fslabel $working_path 2>/dev/null || echo 'continuing ...'
     # Remove all existing ones; this script installs the only bootloader.
-    for entry in $(efibootmgr | awk -F '*' '/CRAY/ {print $1}'); do
+    for entry in $(efibootmgr | awk -F '[* ]' /CRAY/'{print $1}'); do
          efibootmgr -q -b ${entry:4:8} -B
     done
 

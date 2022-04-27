@@ -1,4 +1,4 @@
-## Troubleshoot UAN Boot Issues
+# Troubleshoot UAN Boot Issues
 
 Use this topic to guide troubleshooting of UAN boot issues.
 
@@ -26,7 +26,7 @@ Most failures to PXE are the result of misconfigured network switches and/or BIO
 
 ### Initrd \(Dracut\) Issues
 
-Dracut failures are often caused by the wrong interface being named `nmn0`, or to multiple entries for the UAN xname in DNS. The latter is a result of multiple interfaces making DHCP requests. Either condition can cause IP address mismatches in the dvs\_node\_map. DNS configures entries based on DHCP leases.
+Dracut failures are often caused by the wrong interface being named `nmn0`, or by having multiple entries for the UAN component name (xname) in DNS. The latter is a result of multiple interfaces making DHCP requests. Either condition can cause IP address mismatches in the dvs\_node\_map. DNS configures entries based on DHCP leases.
 
 When dracut starts, it renames the network device named by the `ifmap=netX:nmn0` kernel parameter to `nmn0`. This interface is the only one dracut will enable DHCP on. The `ip=nmn0:dhcp` kernel parameter limits dracut to DHCP only `nmn0`. The ifmap value must be set correctly in the kernel\_parameters field of the BOS session template.
 
@@ -67,5 +67,4 @@ uan# systemctl status cfs-state-reporter
    Active: inactive (dead) since Wed 2021-02-24 14:29:51 CST; 19h ago
  Main PID: 3827 (code=exited, status=0/SUCCESS)
 ```
-
 

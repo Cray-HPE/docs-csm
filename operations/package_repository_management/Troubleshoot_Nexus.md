@@ -1,4 +1,4 @@
-## Troubleshoot Nexus
+# Troubleshoot Nexus
 
 General Nexus Troubleshooting Topics
 - [lookup registry.local: no such host](#error-registry-local-no-such-host)

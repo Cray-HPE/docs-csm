@@ -1,5 +1,27 @@
 #!/bin/bash
-# Copyright 2021 Hewlett Packard Enterprise Development LP
+#
+# MIT License
+#
+# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
 
 set -o errexit
 set -o pipefail
@@ -33,7 +55,10 @@ function copy {
     echo "Copying ${WORKING_DIR}/mini-install.sh and ${WORKING_DIR}/metal-lib.sh ${WORKING_DIR}/lib.sh to ..."
     for ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do
         echo "$ncn:/srv/cray/scripts/metal/mini-install.sh"
-        scp ${WORKING_DIR}/scripts/mini-install.sh ${ncn}:/srv/cray/scripts/metal/ >/dev/null
+        if ! scp ${WORKING_DIR}/scripts/mini-install.sh ${ncn}:/srv/cray/scripts/metal/ >/dev/null; then
+            echo "WARNING: unable to copy files to $ncn, skipping"
+            continue
+        fi
         echo "$ncn:/srv/cray/scripts/metal/metal-lib.sh"
         scp ${WORKING_DIR}/scripts/metal-lib.sh ${ncn}:/srv/cray/scripts/metal/ >/dev/null
         echo "$ncn:/srv/cray/scripts/common/lib.sh"

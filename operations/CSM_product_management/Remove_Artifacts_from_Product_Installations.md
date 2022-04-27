@@ -1,5 +1,4 @@
-
-## Remove Artifacts from Product Installations
+# Remove Artifacts from Product Installations
 
 Remove product artifacts that were imported from various Cray products. These instructions provide guidance for removing Image Management Service (IMS) images, IMS recipes, and Git repositories present in the Cray Product Catalog from the system.
 
@@ -13,7 +12,7 @@ The examples in this procedure show how to remove the product artifacts for the 
 
     ```bash
     ncn-m001# kubectl get cm cray-product-catalog -n services -o json | jq -r .data.csm
-    1.0.0:
+    1.0.1:
     configuration:
         clone_url: https://vcs.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git
         commit: 123264ba75c809c0db7742ea83ff57f713bc1562

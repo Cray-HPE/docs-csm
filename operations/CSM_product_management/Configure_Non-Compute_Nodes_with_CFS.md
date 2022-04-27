@@ -23,7 +23,7 @@ downstream environment to create and apply individual changes to NCNs.
 Passwordless SSH from downstream nodes into CSM management nodes is not intended
 or supported.
 
-Passwordless SSH keypairs for the Cray System Management (CSM) are created 
+Passwordless SSH keypairs for the Cray System Management (CSM) are created
 automatically and maintained with a Kubernetes deployment and staged into
 Kubernetes secrets (`csm-private-key`) and ConfigMaps (`csm-public-key`) in the
 `services` namespace. Administrators can use these provided keys, provide their
@@ -126,7 +126,7 @@ and managed in Vault.
 After completing the previous procedures, apply the configuration to the NCNs
 by running NCN personalization with [CFS](../configuration_management/Configuration_Management.md).
 
-Prior to running NCN personalization, gather the following information: 
+Prior to running NCN personalization, gather the following information:
 
 * HTTP clone URL for the configuration repository in [VCS](../configuration_management/Version_Control_Service_VCS.md)
 * Path to the Ansible play to run in the repository
@@ -138,11 +138,11 @@ Prior to running NCN personalization, gather the following information:
 | cloneUrl | https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git | CSM configuration repo |
 | commit  | **Example:** `5081c1ecea56002df41218ee39f6030c3eebdf27` | CSM configuration commit hash |
 | name | **Example:** `csm-ncn-<version>` | CSM Configuration layer name |
-| playbook | `site.yml` | Default site-wide Ansible playbook for CSM | 
+| playbook | `site.yml` | Default site-wide Ansible playbook for CSM |
 
 1. Retrieve the commit in the repository to use for configuration. If changes
    have been made to the default branch that was imported during a CSM
-   installation or upgrade, use the commit containing the changes. 
+   installation or upgrade, use the commit containing the changes.
 
 1. If no changes have been made, the latest commit on the default branch for
    this version of CSM should be used. Find the commit in the
@@ -150,7 +150,7 @@ Prior to running NCN personalization, gather the following information:
    ```bash
    ncn# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
 
-   1.0.0:
+   1.0.1:
       configuration:
          clone_url: https://vcs.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git
          commit: 43ecfa8236bed625b54325ebb70916f55884b3a4

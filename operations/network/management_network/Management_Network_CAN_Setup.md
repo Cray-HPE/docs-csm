@@ -18,7 +18,7 @@ There are two routes configured on the customer's switch to route traffic for th
 
 The CAN is connected between each spine switch and the NCNs through `vlan 7` running over the physical connections between the spines and the port on the NCN. This is the same physical connection used for the NMN and HMN on the NCNs.
 
-The two physical connections between the NCN and spines is MLAG'ed. MAGP/VSX is used to provide a single virtual router gateway that can be used as the default route on each of the NCNs.
+The two physical connections between the NCN and spines is MLAGed. MAGP/VSX is used to provide a single virtual router gateway that can be used as the default route on each of the NCNs.
 
 ![Diagram of Switch Configuration for CAN](../../../img/network/can-diagram.png)
 

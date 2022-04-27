@@ -8,7 +8,7 @@ You will not have BGP peers until CSM `install.sh` has run. This is where MetalL
     * Log into the spine switches and run `show bgp ipv4 unicast summary` for Aruba/HPE switches and `show ip bgp summary` for Mellanox.
 * Are my Neighbors stuck in IDLE?
     * Running `clear ip bgp all` on the Mellanox and `clear bgp *` on the Arubas will restart the BGP process. This process may need to be done when a system is reinstalled or when a worker node is rebuilt.
-    * If you cannot get the neighbors out of IDLE, make sure that passive neighbors are configured. This is in the automated scripts and shown in the example below. Passive neighbors should only be configured on NCN neighbors.  
+    * If you cannot get the neighbors out of IDLE, make sure that passive neighbors are configured. This is in the automated scripts and shown in the example below. Passive neighbors should only be configured on NCN neighbors.
 * The BGP neighbors will be the worker NCN IP addresses on the NMN (node management network) (VLAN002). If your system is using HPE/Aruba, one of the neighbors will be the other spine switch.
 
 ## Generate MetalLB configmap
@@ -60,13 +60,19 @@ In order for these scripts to work the following commands will need to be applie
 
     * The IP addresses used should be Node Management Network IP addresses (NMN). These IP addresses will be used for the BGP Router-ID.
     * The path to the CSI-generated network files must include `CAN.yaml`, `HMN.yaml`, `HMNLB.yaml`, `NMNLB.yaml`, and `NMN.yaml`. The path must include the `$SYSTEM_NAME.`
- 
+
     The IP addresses in this example should be replaced by the IP addresses of the switches. Make sure the `$CSI_PATH` variable is set to the correct directory.
 
     ```bash
     pit# SYSTEM_NAME=eniac
     pit# CSI_PATH="/var/www/ephemeral/prep/${SYSTEM_NAME}/networks/"
     pit# /usr/local/bin/mellanox_set_bgp_peers.py 10.252.0.2 10.252.0.3 "${CSI_PATH}"
+    ```
+
+   `*WARNING*` The mellanox_set_bgp_peers.py script assumes that the prefix length of the CAN is `/24`. If that value is incorrect for the system being installed then update the script with the correct prefix length by editing the following line.
+
+    ```python
+    cmd_prefix_list_can = "ip prefix-list pl-can seq 30 permit {} /24 ge 24".format()
     ```
 
 ### Verification

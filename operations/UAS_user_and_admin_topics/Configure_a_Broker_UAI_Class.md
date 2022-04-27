@@ -1,5 +1,4 @@
-
-## Configure a Broker UAI Class
+# Configure a Broker UAI Class
 
 Configuring a broker UAI class consists of the following:
 
@@ -182,7 +181,4 @@ This example, uses Kubernetes secrets and assumes that the broker UAIs run in th
    default = false
    image_id = "c5dcb261-5271-49b3-9347-afe7f3e31941"
    imagename = "dtr.dev.cray.com/cray/cray-uai-broker:latest"
-
-
-
 

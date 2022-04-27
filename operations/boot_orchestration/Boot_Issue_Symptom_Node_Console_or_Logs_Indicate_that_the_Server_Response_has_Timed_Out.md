@@ -1,5 +1,4 @@
-
-## Compute Node Boot Issue Symptom: Node Console or Logs Indicate that the Server Response has Timed Out
+# Compute Node Boot Issue Symptom: Node Console or Logs Indicate that the Server Response has Timed Out
 
 If the TFTP request is able to access the TFTP service pod but is unable to find its way back to the node, it may be because the kernel is not tracking established TFTP connections.
 
@@ -31,6 +30,3 @@ cray-tftp-885cc65c4-fk8bm    2/2       Running  0          56s  10.32.0.63     n
 ncn-m001# kubectl delete pod cray-tftp-885cc65c4-fk8bm
 pod "cray-tftp-885cc65c4-fk8bm" deleted
 ```
-
-
-

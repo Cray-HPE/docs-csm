@@ -62,7 +62,7 @@ interface 1/1/14
 
 ## UAN Port Configuration
 - UANs have the same network connections as Shasta v1.3.
-- One connection will go to a NMN(VLAN2) access port, this is where the UAN will pxe boot and communicate with internal systems (see SHCD for UAN cabling).
+- One connection will go to an NMN (VLAN2) access port. This is where the UAN will PXE boot and communicate with internal systems (see the SHCD file for the system for UAN cabling).
 - ONE OF THESE PORTS IS SHUTDOWN.
 - One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be a TRUNK port for the CAN connection.
 
@@ -215,49 +215,60 @@ interface mlag-port-channel 7 switchport hybrid allowed-vlan add 7
 interface mlag-port-channel 7 switchport hybrid allowed-vlan add
 ```
 
+Storage MLAG port configuration is not applicable on Gigabyte systems.
+
 ## HPE NCN Storage Port Configuration
 
-Aruba port configuration:
-```
-sw-spine02# show run int 1/1/7
-interface 1/1/7
-    no shutdown
-    mtu 9198
-    lag 4
-    exit
-```
 Aruba LAG configuration:
 ```
-sw-spine02# show run int lag 4
-interface lag 4 multi-chassis
+sw-leaf-003# show run int lag 6
+interface lag 6 multi-chassis
     no shutdown
+    description ncn-s001:ocp:1
     no routing
     vlan trunk native 1
     vlan trunk allowed 1-2,4,7
     lacp mode active
     lacp fallback
+    spanning-tree port-type admin-edge
     exit
 ```
-Aruba Storage port configuration (future use):
+Aruba port physical configuration:
+```
+sw-leaf-003# show run int 1/1/6
+interface 1/1/6
+    no shutdown
+    mtu 9198
+    description ncn-s001:ocp:1
+    lag 6
+    exit
+
+```
+Aruba Storage port lag interface configuration (future use):
 These will be configured, but the ports will be shut down until needed.
 ```
-sw-spine02# show run int 1/1/7
-interface 1/1/7
-    shutdown
-    mtu 9198
-    lag 4
-    exit
-```
-Aruba LAG configuration:
-```
-sw-spine02# show run int lag 4
-interface lag 4 multi-chassis
-    shutdown
+sw-leaf-003# show run int lag 3
+interface lag 3 multi-chassis
+    no shutdown
+    description ncn-s001:ocp:2
     no routing
-    vlan access 10
+    vlan trunk native 1
+    vlan trunk allowed 10
     lacp mode active
     lacp fallback
+    spanning-tree port-type admin-edge
     exit
+```
+Aruba Storage port physical interface configuration (future use):
+```
+sw-leaf-003# show run int 1/1/3
+interface 1/1/3
+    no shutdown
+    mtu 9198
+    description ncn-s001:ocp:2
+    lag 3
+    exit
+
 ```
 
 # CMM Port Configuration

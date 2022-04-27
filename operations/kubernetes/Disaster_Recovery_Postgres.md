@@ -1,4 +1,4 @@
-## Disaster Recovery for Postgres
+# Disaster Recovery for Postgres
 
 In the event that the Postgres cluster has failed to the point that it must be recovered and there is no dump available to restore the data, a full service specific disaster recovery is needed.
 
@@ -134,7 +134,7 @@ cray-console-data service.
       cray-console-data-postgres-1           3/3     Running      0          20d
       cray-console-data-postgres-2           3/3     Terminating  0          4d20h
       ```
-      This may take several minutes to complete. When all of the serivces have terminated and nothing
+      This may take several minutes to complete. When all of the services have terminated and nothing
       is displayed any longer, use **ctl-C** to exit from the watch command.
    1. Check that the data PVC instances have been removed using the command:
       ```
@@ -150,7 +150,7 @@ cray-console-data service.
 1. Install the helm chart.
    1. Install the helm chart from the file downloaded previously:
       ```
-      ncn-m# helm install -n services cray-console-data ./cray-console-data-1.0.8.tgz 
+      ncn-m# helm install -n services cray-console-data ./cray-console-data-1.0.8.tgz
       NAME: cray-console-data
       LAST DEPLOYED: Mon Oct 25 22:44:49 2021
       NAMESPACE: services
@@ -174,7 +174,7 @@ cray-console-data service.
       console services to settle and rebuild the database.
    1. Query cray-console-operator for a node location.
       After a few minutes you should be able to again query cray-console-operator to
-      find the pod a particular node is connected to.  Using the cray-console-operator
+      find the pod a particular node is connected to. Using the cray-console-operator
       pod on your system and node that is up on your system call:
       ```
       ncn-m# kubectl -n services exec -it cray-console-operator-7fdc797f9f-xz8rt -- sh -c '/app/get-node x9000c3s3b0n1'

@@ -61,7 +61,7 @@ Skip this section if a master or storage node was rebuilt.
     ```
 
     * If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
-    
+
     * If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md#Prerequisites) for how to analyze the pod logs from `cray-cfs` to determine why the configuration may not have completed.
 
 1. Redeploy the `cray-cps-cm-pm` pod.

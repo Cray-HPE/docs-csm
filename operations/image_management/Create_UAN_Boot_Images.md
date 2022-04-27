@@ -1,4 +1,4 @@
-## Create UAN Boot Images
+# Create UAN Boot Images
 
 Update configuration management git repository to match the installed version of the UAN product. Then use that updated configuration to create UAN boot images and a BOS session template.
 
@@ -326,7 +326,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
     10. Verify that there is only one subdirectory in the lib/modules directory of the image.
 
-        The existence of more than one subdirectory indicates a mismatch between the kernel of the image and the DVS RPMS that were installed in the previous step.
+        The existence of more than one subdirectory indicates a mismatch between the kernel of the image and the DVS RPMs that were installed in the previous step.
 
         ```bash
         ncn-m001# la UAN-1.4.0-day-zero/lib/modules/
@@ -436,7 +436,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         }
         ```
 
-        Alternatively, a manifest.json can be created from scratch. In that case, create a new hexadecimal value for the `etag` if the image referred to by the manifest does not already have one. The `etag` field cannot be left blank.
+        Alternatively, a `manifest.json` can be created from scratch. In that case, create a new hexadecimal value for the `etag` if the image referred to by the manifest does not already have one. The `etag` field cannot be left blank.
 
     17. Replace the path and md5 values of the initrd, kernel, and rootfs with the values obtained in substeps m and n.
 
@@ -499,9 +499,9 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
 ### Prepare UAN Boot Session Templates
 
-19. Retrieve the xnames of the UAN nodes from the Hardware State Manager \(HSM\).
+19. Retrieve the component names (xnames) of the UAN nodes from the Hardware State Manager \(HSM\).
 
-    These xnames are needed for Step 20.
+    These component names (xnames) are needed for Step 20.
 
     ```bash
     ncn-m001# cray hsm state components list --role Application --subrole UAN --format json | jq -r .Components[].ID
@@ -524,7 +524,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
     1.  Populate the template with the following information:
 
         -   The value of the ifmap option for the `kernel_parameters` string that was determined in the previous step.
-        -   The xnames of Application nodes from Step 18
+        -   The component names (xnames) of Application nodes from Step 18
         -   The customized image ID from Step 17 for
         -   The CFS configuration session name from Step 17
     2.  Verify that the session template matches the format and structure in the following example:
@@ -568,5 +568,4 @@ This guide only details how to apply UAN-specific configuration to the UAN image
 
 
 Perform [Boot UANs](../boot_orchestration/Boot_UANs.md) to boot the UANs with the new image and BOS session template.
-
 

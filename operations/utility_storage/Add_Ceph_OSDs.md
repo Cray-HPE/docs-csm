@@ -132,9 +132,9 @@ This procedure requires administrative privileges and will require at least two 
    ```
 
 2. Reset the pool quotas.
-   
+
    This step is only necessary when the cluster capacity has increased.
-   
+
    ```bash
    ncn-s00(1/2/3)# source /srv/cray/scripts/common/fix_ansible_inv.sh
    ncn-s00(1/2/3)# fix_inventory
@@ -142,5 +142,4 @@ This procedure requires administrative privileges and will require at least two 
    ncn-s00(1/2/3)# ansible-playbook /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
    ncn-s00(1/2/3)# deactivate
    ```
-
 

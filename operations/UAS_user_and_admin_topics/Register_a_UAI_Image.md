@@ -1,5 +1,4 @@
-
-## Register a UAI Image
+# Register a UAI Image
 
 Register a UAI image with UAS. Registration tells UAS where to locate the image and whether to use the image as the default for UAIs.
 
@@ -37,5 +36,4 @@ Register a UAI image with UAS. Registration tells UAS where to locate the image 
     ```
 
     Registering an image with the `--default no` option is usually unnecessary. Omitting the `--default` option causes UAS to set the default attribute as `false` internally.
-
 

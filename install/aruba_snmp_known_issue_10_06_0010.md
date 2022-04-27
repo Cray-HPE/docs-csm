@@ -1,5 +1,4 @@
-
-## Aruba SNMP Known Issue
+# Aruba SNMP Known Issue
 
 ### Affected Devices
 

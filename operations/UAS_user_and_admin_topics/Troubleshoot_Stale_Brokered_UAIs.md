@@ -1,5 +1,4 @@
-
-## Troubleshoot Stale Brokered UAIs
+# Troubleshoot Stale Brokered UAIs
 
 When a broker UAI terminates and restarts, the SSH key used to forward SSH sessions to end-user UAIs changes (this is a known problem) and subsequent broker UAIs are unable to forward sessions to end-user UAIs. The symptom of this is that a user logging into a broker UAI will receive a password prompt from the end-user UAI and be unable to log in even if providing the correct password. To fix this, remove the stale end-user UAIs and allow the broker UAI to recreate them. The easy way to do this is to use the command specifying the uai-creation-class identifier from the broker's UAI class.
 
@@ -26,5 +25,4 @@ results = [ "Successfully deleted uai-vers-6da50e7a",]
 ```
 
 After that, users should be able to log into the broker UAI and be directed to an end-user UAI as before.
-
 

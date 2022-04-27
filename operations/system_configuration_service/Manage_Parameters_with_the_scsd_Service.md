@@ -1,4 +1,4 @@
-## Manage Parameters with the scsd Service
+# Manage Parameters with the scsd Service
 
 The System Configuration Service commands below enable administrators to set various BMC and controller parameters. These parameters are controlled with the scsd command in the Cray CLI.
 
@@ -41,13 +41,13 @@ ncn-m001# cray scsd bmc dumpcfg create PAYLOAD_FILE --format json
         {
               "NTPServerInfo":
               {
-                  "NTPServers": "sms-ncn-w001",
+                  "NTPServers": ["sms-ncn-w001"],
                   "Port": 123,
                   "ProtocolEnabled": true
               },
               "SyslogServerInfo":
               {
-                  "SyslogServers": "sms-ncn-w001",
+                  "SyslogServers": ["sms-ncn-w001"],
                   "Port":514,
                   "ProtocolEnabled": true
               },
@@ -64,13 +64,13 @@ ncn-m001# cray scsd bmc dumpcfg create PAYLOAD_FILE --format json
         {
               "NTPServerInfo":
               {
-                  "NTPServers": "sms-ncn-w001",
+                  "NTPServers": ["sms-ncn-w001"],
                   "Port": 123,
                   "ProtocolEnabled": true
               },
               "SyslogServerInfo":
               {
-                  "SyslogServers": "sms-ncn-w001",
+                  "SyslogServers": ["sms-ncn-w001"],
                   "Port":514,
                   "ProtocolEnabled": true
               },
@@ -113,7 +113,7 @@ ncn-m001# cray scsd bmc cfg describe XNAME --format json
 }
 ```
 
-Individual parameters can be specified in the command line with the `--param` option. Multiple parameters can be specified by using a comma separated list with the `--params` option. This makes it easier to find information for certain parameters. For example, to only view the NTP server information, the following option can be used:
+Individual parameters can be specified in the command line with the `--param` option. Multiple parameters can be specified by using a comma-separated list with the `--params` option. This makes it easier to find information for certain parameters. For example, to only view the NTP server information, the following option can be used:
 
 ```
 ncn-m001# cray scsd bmc cfg describe --param NTPServerInfo \
@@ -148,13 +148,13 @@ The following is an example payload file that was used to generate the output in
     {
         "NTPServerInfo":
         {
-            "NTPServers": "sms-ncn-w001",
+            "NTPServers": ["sms-ncn-w001"],
             "Port": 123,
             "ProtocolEnabled": true
         },
         "SyslogServerInfo":
         {
-            "SyslogServers": "sms-ncn-w001",
+            "SyslogServers": ["sms-ncn-w001"],
             "Port":514,
             "ProtocolEnabled": true
         },
@@ -187,7 +187,7 @@ ncn-w001# cray scsd bmc loadcfg create PAYLOAD_FILE --format json
 
 ### Set Parameters for a Single BMC or Controller
 
-Set the BMC configuration for a single target using a specific xname. If no form data is specified, all network protocol data is returned for the target; otherwise, only the requested data is returned.
+Set the BMC configuration for a single target using a specific component name (xname). If no form data is specified, all network protocol data is returned for the target; otherwise, only the requested data is returned.
 
 The following is an example payload file that was used to generate the output in the command below:
 
@@ -198,13 +198,13 @@ The following is an example payload file that was used to generate the output in
     {
         "NTPServerInfo":
         {
-            "NTPServers": "sms-ncn-w001",
+            "NTPServers": ["sms-ncn-w001"],
             "Port": 123,
             "ProtocolEnabled": true
         },
         "SyslogServerInfo":
         {
-            "SyslogServers": "sms-ncn-w001",
+            "SyslogServers": ["sms-ncn-w001"],
             "Port":514,
             "ProtocolEnabled": true
         },
@@ -300,4 +300,3 @@ ncn-m001# cray scsd bmc creds create XNAME --format json
     "StatusMsg": "OK"
 }
 ```
-

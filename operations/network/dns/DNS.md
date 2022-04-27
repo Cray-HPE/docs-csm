@@ -1,4 +1,4 @@
-## Domain Name Service (DNS)
+# Domain Name Service (DNS)
 
 The central DNS infrastructure provides the structural networking hierarchy and datastore for the system. All DNS requests are managed by resolvers, not by the central DNS infrastructure. Resolvers provide the following within DNS:
 
@@ -18,6 +18,3 @@ The Data Helper Tools are used to update records, and takes in changes from the 
 The following figure shows a high-level overview of the various components used in the DNS infrastructure.
 
 ![DNS Architecture](../../../img/operations/DNS_architecture.PNG)
-
-
-

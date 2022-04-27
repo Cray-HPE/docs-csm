@@ -192,7 +192,7 @@ Snippet of MTL.yaml:
     sw-spine-001 [standalone: master] # show magp 1
     ```
     Example output:
-    
+
     ```
     MAGP 1:
       Interface vlan: 1
@@ -339,7 +339,7 @@ In some cases, rebooting the KEA pod has resolved PXE issues.
     ```
 
 1. Delete KEA Pod.
-    
+
     ```bash
     ncn-m002# kubectl delete pods -n services cray-dhcp-kea-6bd8cfc9c5-m6bgw
     ```
@@ -357,15 +357,15 @@ In that case, use the following recovery procedure.
 1. Reboot to the PIT.
 
     * If using a USB PIT:
-    
+
         1. Reboot the PIT node, watching the console as it boots.
-        
+
         1. Manually stop it at the boot menu.
-        
+
         1. Select the USB device for the boot.
-        
+
         1. Once booted, log in and mount the data partition.
-        
+
             ```bash
             pit# mount -vL PITDATA
             ```
@@ -387,18 +387,18 @@ In that case, use the following recovery procedure.
     pit# export CEPH_VERSION=x.y.z
     ```
 
-1. **If using a remote ISO PIT**, run the following commands to finish configuring the network and copy files. 
+1. **If using a remote ISO PIT**, run the following commands to finish configuring the network and copy files.
 
     **Skip these steps if using a USB PIT**.
 
     1. Run the following command to copy files from `ncn-m002` to the PIT node.
-        
+
         ```bash
         pit# scp -p ${CAN_IP_NCN_M002}:/metal/bootstrap/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
         ```
 
     1. Apply the network changes.
-        
+
         ```bash
         pit# wicked ifreload all
         pit# systemctl restart wickedd-nanny && sleep 5
@@ -436,7 +436,7 @@ In that case, use the following recovery procedure.
 1. Re-run the [BSS handoff commands from the Redeploy PIT Node procedure](redeploy_pit_node.md#ncn-boot-artifacts-hand-off).
 
     **WARNING: These commands should never be run from a node other than the PIT node or `ncn-m001`**
-    
+
     ```bash
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global

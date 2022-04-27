@@ -1,4 +1,4 @@
-## Post-Install Customizations
+# Post-Install Customizations
 
 Post-install customizations may be needed as systems scale. These customizations also need to persist across future installs or upgrades. Not all resources can be customized post-install; common scenarios are documented in the following sections.
 
@@ -64,16 +64,16 @@ Use Grafana to investigate and analyze CPU Throttling and/or Memory Usage.
 
 In order to apply post-install customizations to a system, the affected Helm chart must exist on the system so that the same chart version can be redeployed with the desired customizations.
 
-This example unpacks the the csm-1.0.0 tarball under /root and lists the Helm charts that are now on your system. Set `PATH_TO_RELEASE` to the release directory where the Helm directory exists. `PATH_TO_RELEASE` will be used below when deploying a customization.
+This example unpacks the the csm-1.0.1 tarball under /root and lists the Helm charts that are now on your system. Set `PATH_TO_RELEASE` to the release directory where the Helm directory exists. `PATH_TO_RELEASE` will be used below when deploying a customization.
 
 These unpacked files can be safely removed after the customizations are deployed through `loftsman ship` in the examples below.
 
 ```bash
-## This example assumes the csm-1.0.0 release is currently running and the csm-1.0.0.tar.gz has been pulled down under /root
+## This example assumes the csm-1.0.1 release is currently running and the csm-1.0.1.tar.gz has been pulled down under /root
 ncn# cd /root
-ncn# tar -xzf csm-1.0.0.tar.gz
-ncn# rm csm-1.0.0.tar.gz
-ncn# PATH_TO_RELEASE=/root/csm-1.0.0
+ncn# tar -xzf csm-1.0.1.tar.gz
+ncn# rm csm-1.0.1.tar.gz
+ncn# PATH_TO_RELEASE=/root/csm-1.0.1
 ncn# ls $PATH_TO_RELEASE/helm
 ```
 
@@ -163,6 +163,11 @@ Update resources associated with Prometheus in the `sysmgmt-health` namespace. T
    ```
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
+
+   ```bash
+   ncn# kubectl delete secret -n loftsman site-init
+   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
 
 <a name="postgres_resources"></a>
 ### Postgres Pods are `OOMKilled` or CPU Throttled
@@ -258,6 +263,11 @@ A similar flow can be used to update the resources for `cray-sls-postgres`, `cra
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
 
+   ```bash
+   ncn# kubectl delete secret -n loftsman site-init
+   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+
 **IMPORTANT:** If `cray-sls-postgres`, `cray-smd-postgres`, or `gitea-vcs-postgres` resources need to be adjusted, the same procedure as above can be used with the following changes:
 
   * `cray-sls-postgres`
@@ -352,6 +362,11 @@ Scale the replica count associated with the `cray-bss` service in the `services`
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
 
+   ```bash
+   ncn# kubectl delete secret -n loftsman site-init
+   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+
 <a name="postgres_pvc_resize"></a>
 ### Postgres PVC Resize
 
@@ -424,6 +439,11 @@ A similar flow can be used to update the volume size for `cray-sls-postgres`, `g
 1. If the status on the above command is `SyncFailed` instead of `Running`, refer to *Case 1* in the *SyncFailed* section of [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md#syncfailed). At this point the Postgres cluster is healthy, but additional steps are required to complete the resize of the Postgres PVCs.
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
+
+   ```bash
+   ncn# kubectl delete secret -n loftsman site-init
+   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
 
 **IMPORTANT:** If `cray-sls-postgres`, `gitea-vcs-postgres`, or `spire-postgres` `volumeSize` need to be adjusted, the same procedure as above can be used with the following changes:
 

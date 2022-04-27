@@ -1,5 +1,4 @@
-
-## View a UAI Class
+# View a UAI Class
 
 Display all the information for a specific UAI class by referencing its class ID.
 
@@ -69,5 +68,4 @@ Display all the information for a specific UAI class by referencing its class ID
     ```
 
     Refer to [UAI Classes](UAI_Classes.md) and [Elements of a UAI](Elements_of_a_UAI.md) for an explanation of the output of this command.
-
 

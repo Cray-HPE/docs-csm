@@ -1,5 +1,3 @@
-
-
 # Create Application Node Config YAML
 
 This topic provides directions on constructing the `application_node_config.yaml` file. This file controls how the `csi config init` command finds and treats application nodes discovered in the `hmn_connections.json` file when generating configuration files for the system.
@@ -29,9 +27,15 @@ For a detailed mapping between the data in the SHCD and the equivalent informati
 
 ### What is a Source Name?
 
-The source name is the `Source` field in each row or element of the `hmn_connections.json`, and this name of the device that is being connected to the HMN network. From this source name, the `csi config init` command can infer the type of hardware that is connected to the HMN network (Node BMC, PDU, HSN Switch BMC, and more).
+The source name is the name of the device that is being connected to the HMN network. In the SHCD HMN tab, this is in a column with the header `Source` or the `Source` field in the element of the `hmn_connections.json` for this device. From this source name, the `csi config init` command can infer the type of hardware that is connected to the HMN network (Node BMC, PDU, HSN Switch, BMC, and more).
 
-Example hmn_connections.json row representing an application node with SourceName `uan01` in cabinet `x3000` in slot 19. Its BMC is connected to port 47 of the management leaf switch in x3000 in slot 14.
+Example SHCD row from HMN tab with column headers representing an application node with SourceName `uan01` in cabinet `x3000` in slot 19. Its BMC is connected to port 37 of the management leaf switch in x3000 in slot 14.
+
+| Source (J20) | Rack (K20) | Location (L20) | (M20) | Parent (N20) | (O20) | Port (P20) | Destination (Q20) | Rack (R20) | Location (S20) | (T20) | Port (U20) |
+| ------------ | ---------- | -------------- | ----- | ------------ | ----- | ---------- | ----------------- | ---------- | -------------- | ----- | ---------- |
+| uan01    | x3000      | u19            |       |              | -     | j3         | sw-smn01          | x3000      | u14            | -     | j37        |
+
+Example `hmn_connections.json` row representing an application node with SourceName `uan01` in cabinet `x3000` in slot 19. Its BMC is connected to port 37 of the management leaf switch in x3000 in slot 14.
 
 ```json
 { "Source": "uan01", "SourceRack": "x3000", "SourceLocation": "u19", "DestinationRack": "x3000", "DestinationLocation": "u14", "DestinationPort": "j37" }
@@ -41,9 +45,9 @@ Example hmn_connections.json row representing an application node with SourceNam
 ## Directions
 
 1. Create a file called `application_node_config.yaml` with the following contents.
-   
+
    This is a base application node config file for CSI that does not add any additional prefixes, HSM SubRole mappings, or aliases.
-    
+
    ```yaml
    ---
    # Additional application node prefixes to match in the hmn_connections.json file
@@ -58,25 +62,7 @@ Example hmn_connections.json row representing an application node with SourceNam
 
 2. Identify application nodes present in `hmn_connections.json` or the HMN tab of the system's SHCD. In general, everything in the HMN tab of the SHCD or `hmn_connections.json` file that starts with uan, gn, or ln, are considered application nodes and any node that does not follow the [SHCD/HMN Connections Rules](shcd_hmn_connections_rules.md) should also be considered an [application node](../glossary.md#application-node), unless it is a `KVM`.
 
-    If the `hmn_connections.json` file is available, then the following command can be used to show the HMN rows that are application nodes.
-    
-    ```bash
-    linux# cat hmn_connections.json | jq -rc '.[] | select(.Source |
-      test("^((mn|wn|sn|nid|cn|cn\\-|pdu)\\d+|.*(cmc|rcm|kvm|door).*|x\\d+p\\d*|sw-.+|columbia$)"; "i") | not)'
-    ```
-
-    <a name="hmn-connections-example-output"></a>
-    Example `hmn_connections.json` output:
-    
-    ```json
-    {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u29","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j42"},
-    {"Source":"login02","SourceRack":"x3000","SourceLocation":"u28","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j43"}
-    {"Source":"lnet01","SourceRack":"x3000","SourceLocation":"u27","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j41"}
-    {"Source":"vn01","SourceRack":"x3000","SourceLocation":"u25","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j40"},
-    {"Source":"uan01","SourceRack":"x3000","SourceLocation":"u23","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j39"},
-    ```
-
-    If the HMN Connections.json file is not available, then the HMN tab of SHCD spreadsheet will need to be used instead. The table below is equivalent to the [example hmn_connections.json output](#hmn-connections-example-output) above.
+    If the `hmn_connections.json` file is not available, then use the HMN tab of SHCD spreadsheet. This table is equivalent to the [example hmn_connections.json output](#hmn-connections-example-output) below.
 
     | Source (J20) | Rack (K20) | Location (L20) | (M20) | Parent (N20) | (O20) | Port (P20) | Destination (Q20) | Rack (R20) | Location (S20) | (T20) | Port (U20) |
     | ------------ | ---------- | -------------- | ----- | ------------ | ----- | ---------- | ----------------- | ---------- | -------------- | ----- | ---------- |
@@ -86,6 +72,24 @@ Example hmn_connections.json row representing an application node with SourceNam
     | vn01         | x3000      | u25            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j40        |
     | uan01        | x3000      | u23            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j39        |
 
+    If the `hmn_connections.json` file is available, then the following command can be used to show the HMN rows that are application nodes.
+
+    ```bash
+    linux# cat hmn_connections.json | jq -rc '.[] | select(.Source |
+      test("^((mn|wn|sn|nid|cn|cn\\-|pdu)\\d+|.*(cmc|rcm|kvm|door).*|x\\d+p\\d*|sw-.+|columbia$)"; "i") | not)'
+    ```
+
+    <a name="hmn-connections-example-output"></a>
+    Example `hmn_connections.json` output:
+
+    ```json
+    {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u29","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j42"},
+    {"Source":"login02","SourceRack":"x3000","SourceLocation":"u28","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j43"}
+    {"Source":"lnet01","SourceRack":"x3000","SourceLocation":"u27","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j41"}
+    {"Source":"vn01","SourceRack":"x3000","SourceLocation":"u25","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j40"},
+    {"Source":"uan01","SourceRack":"x3000","SourceLocation":"u23","DestinationRack":"x3000","DestinationLocation":"u32","DestinationPort":"j39"},
+    ```
+
 3. Add additional application node prefixes.
 
     The `prefixes` field is an array of strings, that augments the list of source name prefixes that are treated as application nodes. By default, `csi config init` only looks for application nodes that have source names that start with `uan`, `gn`, and `ln`. If the system contains application nodes that fall outside of those source name prefixes, then additional prefixes must be added to `application_node_config.yaml`. These additional prefixes will be used in addition to the default prefixes.
@@ -94,7 +98,7 @@ Example hmn_connections.json row representing an application node with SourceNam
 
     > **NOTE:** The command `csi config init` does a case insensitive check for whether a source name contains an application node prefix. For example, the prefix `uan` will match `uan`, `Uan`, and `UAN`.
 
-    From the [example hmn_connections.json output](#hmn-connections-example-output), the following additional prefixes are required:
+    From the HMN example above, the following additional prefixes are required:
 
     ```yaml
     # Additional application node prefixes to match in the hmn_connections.json file
@@ -123,7 +127,7 @@ Example hmn_connections.json row representing an application node with SourceNam
 
     Valid HSM SubRoles values are: `Worker`, `Master`, `Storage`, `UAN`, `Gateway`, `LNETRouter`, `Visualization`, and `UserDefined`.
 
-    From the [example hmn_connections.json output](#hmn-connections-example-output) the following additional prefix HSM SubRole mappings are required:
+    From the HMN example above, the following additional prefix HSM SubRole mappings are required:
 
     ```yaml
     # Additional HSM SubRoles
@@ -136,16 +140,16 @@ Example hmn_connections.json row representing an application node with SourceNam
 
 5. Add application node aliases.
 
-    The `aliases` field is an map of xnames (strings) to an array of aliases (strings).
-    > For guidance on building application node xnames follow one of the following:
-    > * [Building xnames for nodes in a single application node chassis](shcd_hmn_connections_rules.md#application-node-single-node-chassis-xname)
-    > * [Building xnames for nodes in a dual application node chassis](shcd_hmn_connections_rules.md#application-node-dual-node-chassis-xname)
+    The `aliases` field is a map of component name (xname) strings to an array of alias strings.
+    > For guidance on building application node component names (xnames), follow one of the following:
+    > * [Building component names (xnames) for nodes in a single application node chassis](shcd_hmn_connections_rules.md#application-node-single-node-chassis-xname)
+    > * [Building component names (xnames) for nodes in a dual application node chassis](shcd_hmn_connections_rules.md#application-node-dual-node-chassis-xname)
 
     By default, the `csi config init` command does not set the `ExtraProperties.Alias` field for application nodes in the SLS input file.
 
-    For each application node add its alias mapping under the `aliases` field. Where the key is the xname of the application node, and the value is an array of aliases (strings) which allows for one or more aliases to be specified for an application node.
+    For each application node, add its alias mapping under the `aliases` field. Where the key is the component name (xname) of the application node, and the value is an array of aliases (strings) which allows for one or more aliases to be specified for an application node.
 
-    From the [example hmn_connections.json output](#hmn-connections-example-output) the following application node aliases are required:
+    From the HMN example above, the following application node aliases are required:
 
     ```yaml
     # Application Node aliases
@@ -156,10 +160,10 @@ Example hmn_connections.json row representing an application node with SourceNam
       x3113c0s25b0n0: ["visualization01", "vn02"]
       x3113c0s23b0n0: ["uan01"]
     ```
-    > The ordering of xnames under `aliases` does not matter.
+    > The ordering of component names (xnames) under `aliases` does not matter.
 
-6. Final information in the example `application_node_config.yaml` built from the [example hmn_connections.json output](#hmn-connections-example-output).
-    
+6. Final information in the example `application_node_config.yaml` built from the HMN example above.
+
     ```yaml
     ---
     # Additional application node prefixes to match in the hmn_connections.json file
@@ -184,5 +188,4 @@ Example hmn_connections.json row representing an application node with SourceNam
       x3113c0s25b0n0: ["visualization01", "vn02"]
       x3113c0s23b0n0: ["uan01"]
     ```
-
 

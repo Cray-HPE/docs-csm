@@ -1,5 +1,4 @@
-
-## User Access Service \(UAS\)
+# User Access Service \(UAS\)
 
 The User Access Service \(UAS\) is a containerized service managed by Kubernetes that enables application developers to create and run user applications. UAS runs on a non-compute node \(NCN\) that is acting as a Kubernetes worker node.
 
@@ -39,5 +38,3 @@ Use `cray uas list` to list the following parameters for a UAI.
 UAS is highly configurable and it is recommended that administrators familiarize themselves with the service by reading this topic before allowing users to use UAIs.
 
 Once administrators are familiar with the configurable options of UAS, they may want to create a UAI image that matches the booted compute nodes by following the procedure [Customize End-User UAI Images](Customize_End-User_UAI_Images.md).
-
-

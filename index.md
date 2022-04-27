@@ -1,6 +1,6 @@
 # Cray System Management Documentation
 
-### Scope and Audience
+## Scope and Audience
 
 The documentation included here describes the Cray System Management (CSM) software, how to install
 or upgrade CSM software, and related supporting operational procedures to manage an HPE Cray EX system.
@@ -12,8 +12,8 @@ perform their function as Kubernetes master nodes, Kubernetes worker nodes, or u
 nodes with the Ceph storage.
 
 System services on these nodes are provided as containerized micro-services packaged for deployment
-as helm charts. These services are orchestrated by Kubernetes to be scheduled on Kubernetes worker
-nodes with horizontal scaling to increase or decrease the number of instances of some services as
+via Helm charts. Kubernetes orchestrates these services and schedules them on Kubernetes worker
+nodes with horizontal scaling. Horizontal scales increases or decreases the number of service instances as
 demand for them varies, such as when booting many compute nodes or application nodes.
 
 This information is intended for system installers, system administrators, and network administrators
@@ -33,7 +33,7 @@ scripts, revision control with git, configuration management with Ansible, YAML,
 1. [Update CSM Product Stream](update_product_stream/index.md)
 
    This chapter explains how to get the CSM product release, any patches, update to the latest set of
-   documenation and any installation workarounds, and check for any Field Notices or Hotfixes.
+   documentation and any installation workarounds, and check for any Field Notices or Hotfixes.
 
 
 1. [Install CSM](install/index.md)
@@ -97,13 +97,13 @@ scripts, revision control with git, configuration management with Ansible, YAML,
 
 1. [Glossary](glossary.md)
 
-   This chapter provides a explanations of terms and acronyms used throughout the rest of this documentation.
-   
-### Copyright and License
+   This chapter provides explanations of terms and acronyms used throughout the rest of this documentation.
+
+## Copyright and License
 
 MIT License
 
-(C) Copyright [2020] Hewlett Packard Enterprise Development LP
+(C) Copyright [2020-2022] Hewlett Packard Enterprise Development LP
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),

@@ -17,7 +17,7 @@ If the `cray-cps-cm-pm` pod is running, there will be an extra step to redeploy 
     ```
 
     * Example output:
-  
+
       ```screen
       "node": "ncn-w002",
       "podname": "cray-cps-cm-pm-j7td7"
@@ -39,7 +39,7 @@ If the `cray-cps-cm-pm` pod is running, there will be an extra step to redeploy 
         "podname": "NA"
       }
       ```
-  
+
     * In this case, the `ncn-w001` and `ncn-w002` nodes have the pod.
     * A `404 Not Found` error is expected when the Content Projection Service (CPS) is not installed on the system. CPS is part of the COS product so if this worker node is being rebuilt before the COS product has been installed, CPS will not be installed yet.
 
@@ -69,7 +69,7 @@ Run the following on any node where the cray cli has been initialized:
 
 ### Step 3 - Drain the node to clear any pods running on the node
 
-**IMPORTANT:** The following command will cordon and drain the node. 
+**IMPORTANT:** The following command will cordon and drain the node.
 
 **NOTE:** This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 

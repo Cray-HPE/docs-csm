@@ -1,5 +1,4 @@
-
-## List Volumes Registered in UAS
+# List Volumes Registered in UAS
 
 List the details of all volumes registered in UAS with the `cray uas admin config volumes list` command. Use this command to obtain the volume\_id value of volume, which is required for other UAS administrative commands.
 

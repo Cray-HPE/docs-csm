@@ -1,4 +1,4 @@
-## Enable Passwordless Connections to Liquid Cooled Node BMCs
+# Enable Passwordless Connections to Liquid Cooled Node BMCs
 
 Set the passwordless SSH keys for the root account and/or console of all liquid-cooled Baseboard Management Controllers \(BMCs\) on the system. This procedure will not work on BMCs for air-cooled hardware.
 
@@ -57,14 +57,12 @@ Setting up SSH keys enables administrators to view recent console messages and i
 
     Ensure the following are true before running the command below:
 
-    -   The xname list looks valid/appropriate
-    -   The `SSHKey` and `SSHConsoleKey` settings match the desired public key
+    - The component name (xname) list looks valid/appropriate
+    - The `SSHKey` and `SSHConsoleKey` settings match the desired public key
 
     ```bash
     ncn-w001# cray scsd bmc loadcfg create scsd\_cfg.json
     ```
 
     Check the output to verify all hardware has been set with the correct keys. Passwordless SSH to the root user and/or the consoles should now function as expected.
-
-
 

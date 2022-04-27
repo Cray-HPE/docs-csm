@@ -1,4 +1,4 @@
-## Component Groups and Partitions
+# Component Groups and Partitions
 
 The Hardware State Manager \(HSM\) provides the group and partition services. Both are means of grouping \(also known as labeling\) system components that are tracked by HSM. Components include the nodes, blades, controllers, and more on a system.
 
@@ -13,6 +13,4 @@ If a group has `exclusiveGroup=EXCLUSIVE_LABEL_NAME` set, then a component may o
 ### Partitions
 
 Partitions are isolated, non-overlapping groups. Each component can be a member of only one partition at a time, and partitions are used as an access control mechanism. Partitions have a specific predefined meaning, intended to provide logical divisions of a single physical system.
-
-
 

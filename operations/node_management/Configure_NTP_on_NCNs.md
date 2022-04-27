@@ -1,52 +1,45 @@
 # Configure NTP on NCNs
 
-The management nodes serve Network Time Protocol (NTP) at stratum 3, and all management nodes
-peer with each other. Currently, the PIT node booted from the LiveCD does not run NTP, but the
-other nodes do when they are booted. NTP is currently allowed on the Node Management Network (NMN)
-and Hardware Management Network (HMN).
+The management nodes serve Network Time Protocol (NTP) at stratum 10, except for `ncn-m001`, which serves at stratum 8 (or lower if an upstream NTP server is set). All management nodes peer with each other.
 
-The NTP peers are set in the `data.json` file, which is normally created during an initial
-install. To configure NTP, edit this file, restart basecamp, and then reboot the nodes to apply
-the change.
+Until an upstream NTP server is configured, the time on the NCNs may not match the current time at the site, but they will stay in sync with each other.
 
-If NTP is not configured in the `data.json` file, the NCNs will simply peer with themselves
-until an upstream NTP server is configured. The time on the NCNs may not match the
-current time at the site, but they will stay in sync with each other.
-
-### Topics:
+**Topics**
    * [Change NTP Config](#change_ntp_config)
    * [Troubleshooting NTP](#troubleshooting_ntp)
       * [chrony Log Files](#chrony_log_files)
       * [Force a Time Sync](#force_a_time_sync)
+      * [Known Issues and Bugs](#known-issues-and-bugs)
    * [Customize NTP](#customize_ntp)
       * [Set A Local Timezone](#set-a-local-timezone)
-      * [Configure NTP on PIT to Local Timezone](#configure_ntp_on_pit_to_local_timezone)
-      * [Configure NCN Images to Use Local Timezone](#configure_ncn_images_to_use_local_timezone)
-
-## Details
 
 <a name="change_ntp_config"></a>
-### Change NTP Config
+## Change NTP Config
 
-There are three different methods for configuring NTP, which are described below. The first option is the
+The three different methods for configuring NTP are described below. The first option is the
 recommended method.
 
-   * Edit /etc/chrony.d/cray.conf and restart chronyd on each node.
+   * Edit `/etc/chrony.d/cray.conf` and restart `chronyd` on each node.
 
       ```bash
       ncn# vi /etc/chrony.d/cray.conf
       ncn# systemctl restart chronyd
       ```
 
-   * Edit the data.json file, restart basecamp, and run the NTP script on each node.
+   * Edit the `data.json` file, restart `basecamp`, and run the NTP script on each node.
 
       ```bash
       ncn-m001# vi data.json
       ncn-m001# systemctl restart basecamp
+      ```
+
+      Run the NTP script on each node.
+
+      ```bash
       ncn# /srv/cray/scripts/metal/set-ntp-config.sh
       ```
 
-   * Edit the data.json file, restart basecamp, and restart nodes so cloud-init runs on boot.
+   * Edit the `data.json` file, restart `basecamp`, and restart nodes so `cloud-init` runs on boot.
 
       ```bash
       ncn-m001# vi data.json
@@ -59,16 +52,16 @@ recommended method.
       ncn# reboot
       ```
 
-      Cloud-init caches data, so there could be inconsistent results with this method.
+      `cloud-init` caches data, so there could be inconsistent results with this method.
 
 <a name="troubleshooting_ntp"></a>
-### Troubleshooting NTP
+## Troubleshooting NTP
 
 Verify NTP is configured correctly and troubleshoot any issues.
 
 The `chronyc` command can be used to gather information on the state of NTP.
 
-1. Check if a host is allowed to use NTP from HOST. This example sets HOST to 10.252.0.7
+1. Check if a host is allowed to use NTP from HOST. This example sets HOST to `10.252.0.7`
 
    ```bash
    ncn# chronyc accheck 10.252.0.7
@@ -129,12 +122,12 @@ The `chronyc` command can be used to gather information on the state of NTP.
    ```
 
 <a name="chrony_log_files"></a>
-#### chrony Log Files
+### `chrony` Log Files
 
-The `chrony` logs are stored at `/var/log/chrony/`
+The `chrony` logs are stored in `/var/log/chrony/`
 
 <a name="force_a_time_sync"></a>
-#### Force a Time Sync
+### Force a Time Sync
 
 1. If the time is out of sync, force a sync of NTP.
 
@@ -157,11 +150,150 @@ The `chrony` logs are stored at `/var/log/chrony/`
    ncn# chronyc makestep
    ```
 
+<a name="known-issues-and-bugs"></a>
+
+### Known Issues and Bugs
+
+Older versions of CSM contained some NTP bugs that can carry forward through CSM upgrades. This can result in problems with time syncing correctly. This section describes how to diagnose and fix these.
+
+These issues all relate to certain nodes not being in a correct state.
+
+#### Correct State
+
+`ncn-m001` should have these important settings in `/etc/chrony.d/cray.conf`:
+
+```
+server time.nist.gov iburst trust
+# or
+pool time.nist.gov iburst
+# ncn-m001 should NOT use itself as a server and is known to cause issues
+
+# this allows the clock to step itself during a restart without affecting running apps if it drifts more than 1 second
+initstepslew 1 time.nist.gov
+# the other ncns are set to 10, so in the event of a tie, ncn-m001 is chosen as the leader
+local stratum 8 orphan
+```
+
+These settings ensure there is a low-stratum NTP server that `ncn-m001` has access to. `ncn-m001` also has the following:
+
+```
+# all non-ncn-m001 NCNs use ncn-m001 as their server, and they trust it
+server ncn-m001 iburst trust
+# no pools are on the other ncns
+# ncn-m001 should NOT use itself as a server and is known to cause issues
+
+# this allows the clock to step itself during a restart without affecting running apps if it drifts more than 1 second
+initstepslew 1 ncn-m001
+# the ncns peer with each other at a high stratum, and choose ncn-m001 (stratum 8 or lower) in the event of a tie
+local stratum 10 orphan
+
+# The nodes should have a max of 9 peers and should not include themselves in the list
+peer ncn-m001 minpoll -2 maxpoll 9 iburst
+peer ncn-m003 minpoll -2 maxpoll 9 iburst
+peer ncn-s001 minpoll -2 maxpoll 9 iburst
+peer ncn-s002 minpoll -2 maxpoll 9 iburst
+peer ncn-s003 minpoll -2 maxpoll 9 iburst
+peer ncn-w001 minpoll -2 maxpoll 9 iburst
+peer ncn-w002 minpoll -2 maxpoll 9 iburst
+peer ncn-w003 minpoll -2 maxpoll 9 iburst
+```
+
+#### Quick Fixes
+
+##### Fix BSS Metadata
+
+If nodes are missing metadata for NTP, you will be required to generate the data using `csi` and your system's `system_config.yaml`. If you do not have your seed data in the `system_config.yaml` then you will need to open a ticket to help generate the NTP data.
+
+The following steps are structured to be executed on one node at a time. However, step #3 will generate all relevant files for each node. If multiple nodes are missing NTP data in BSS, you can apply this fix to each node.
+
+1. Update `system_config.yaml` to have the correct NTP settings:
+    ```yaml
+    ntp-servers:
+      - ncn-m001
+      - time.nist.gov
+    ntp-timezone: UTC
+    ```
+1. Generate new configurations:
+    ```bash
+    ncn# csi config init
+    ```
+1. In the newly created `system/basecamp` directory, copy in and execute the metadata script that is included in the upgrade scripts of this documentation:
+    ```bash
+    ncn# ./upgrade_ntp_timezone_metadata.sh
+    ```
+1. Find the relevant file(s) to the node(s) with missing metadata, such as `upgrade-metadata-000000000000.json` based on the MAC address of the node.
+1. Find the component name (xname) for the node that needs to be fixed:
+    ```bash
+    ncn# cat /etc/cray/xname
+    ```
+1. From `ncn-m001` execute the following command to update BSS:
+    ```bash
+    ncn# csi handoff bss-update-cloud-init --user-data="upgrade-metadata-000000000000.json" --limit=<xname>`
+    ```
+1. Obtain the updated `cloud-init` code and template files from the scripts directory in the CSM documentation RPM:
+    ```bash
+    ncn# cp ./usr/share/doc/csm/scripts/cc_ntp.py /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py
+    ncn# cp ./usr/share/doc/csm/scripts/chrony.conf.cray.tmpl /etc/cloud/templates/chrony.conf.cray.tmpl
+    ```
+
+Alternatively, you can download the latest versions from Github:
+    ```bash
+    ncn# wget -O /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/cloudinit/config/cc_ntp.py`
+    ncn# wget -O /etc/cloud/templates/chrony.conf.cray.tmpl https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/config/cray.conf.j2`
+    ```
+1. Continue with the upgrade.
+1. When the upgrade is completed there might be extra files and configurations, execute the following steps to clean up NTP if required:
+    1. Remove `pool.conf` on all nodes:
+       ```bash
+       ncn# rm /etc/chrony.d/pool.conf
+       ```
+    1. Remove `cray.conf.dist` on all nodes:
+       ```bash
+       ncn# rm /etc/chrony.d/cray.conf.dist
+       ```
+    1. Comment out the default pool line in `/etc/chrony.conf` on all nodes:
+       ```bash
+       ncn# sed -i 's/^\!/#/' /etc/chrony.conf
+       ```
+    1. Restart `chronyd` on all nodes:
+       ```bash
+       ncn# systemctl restart chronyd
+       ```
+
+##### Fix `ncn-m001`
+
+Most of the bugs from CSM 0.9 carried forward with upgrades. Most commonly, `ncn-m001` is the problem because it either does not have a valid upstream server, or it has a bad configuration. This can be quickly remedied by running three commands to download the latest `cc_ntp` module, download an updated template, and re-run `cloud-init`.
+
+```bash
+ncn-m001# wget -O /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/cloudinit/config/cc_ntp.py
+ncn-m001# wget -O /etc/cloud/templates/chrony.conf.cray.tmpl https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/config/cray.conf.j2
+ncn-m001# cloud-init single --name ntp --frequency always
+```
+
+##### Fix other NCNs
+
+The other NCNs sometimes have the wrong stratum set or are missing the `initstepslew` directive. These can be added in fairly quickly with some `sed` commands:
+
+Increase the stratum on NCNs (other than `ncn-m001`):
+```bash
+ncn# sed -i "s/local stratum 3 orphan/local stratum 10 orphan/" /etc/chrony.d/cray.conf
+```
+
+Add a new line after the `logchange` directive
+```bash
+ncn# sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 ncn-m001" /etc/chrony.d/cray.conf
+```
+
+Restart `chronyd`
+```bash
+ncn# systemctl restart chronyd
+```
+
 <a name="customize_ntp"></a>
-### Customize NTP
+## Customize NTP
 
 <a name="set-a-local-timezone"></a>
-#### Set A Local Timezone
+### Set A Local Timezone
 
 This procedure needs to be completed on the PIT node before the other management nodes are deployed.
 
@@ -182,10 +314,15 @@ there. You can find a list of timezones to use in the commands below by running 
    pit# /root/bin/configure-ntp.sh
    ```
 
-1. The configure-ntp.sh script should have the information for your local timezone in the output.
+1. The `configure-ntp.sh` script should have the information for your local timezone in the output.
+
+   ```bash
+   pit# /root/bin/configure-ntp.sh
+   ```
+
+   Example output:
 
    ```
-   pit# /root/bin/configure-ntp.sh
    CURRENT TIME SETTINGS
    rtc: 2021-03-26 11:34:45.873331+00:00
    sys: 2021-03-26 11:34:46.015647+0000
@@ -230,9 +367,15 @@ there. You can find a list of timezones to use in the commands below by running 
 
 1. If the time is off and not accurate to your timezone, you will need to _manually_ set the date and then run the NTP script again.
 
+   Manually set the time as close as possible to the real time.
+
    ```bash
-   # Set as close as possible to the real time
    pit# timedatectl set-time "2021-03-26 00:00:00"
+   ```
+
+   Run the NTP script.
+
+   ```bash
    pit# /root/bin/configure-ntp.sh
    ```
 
@@ -241,110 +384,14 @@ there. You can find a list of timezones to use in the commands below by running 
 <a name="configure_ncn_images_to_use_local_timezone"></a>
 #### Configure NCN Images to Use Local Timezone
 
-You need to adjust the node images so that they also boot in the local timezone. This is accomplished by `chroot`ing into the unsquashed images, making some modifications, and then squashing it back up and moving the new images into place.
+Adjust the node images so that they also boot in the local timezone. This is accomplished by `chroot`ing into the unsquashed images, making some modifications, re-squashing them, and moving the new images into place. This is included as an optional image modification step in the two procedures below.
 
-1. Set some variables.
+* If the PIT node is booted, see
+[Change NCN Image Root Password and SSH Keys on PIT Node](../security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
+for more information.
 
-   This example uses `IMGTYPE=ceph` for the utility storage nodes, but the same process should also be done
-   with `IMGTYPE=k8s` for the Kubernetes master and worker nodes.
+   **Note:** Make a note that when performing the [csi handoff of NCN boot artifacts in Redeploy PIT Node](../../install/redeploy_pit_node.md#ncn-boot-artifacts-hand-off), you must be sure to specify these new images. Otherwise `ncn-m001` will use the default timezone when it boots, and subsequent reboots of the other NCNs will also lose the customized timezone changes.
 
-   ```bash
-   pit# export NEWTZ=America/Chicago
-   pit# export IMGTYPE=ceph
-   pit# export IMGDIR=/var/www/ephemeral/data/${IMGTYPE}
-   ```
-
-1. Go to the Ceph image directory and unsquash the image.
-
-    ```bash
-    pit# cd ${IMGDIR}
-    pit# unsquashfs *.squashfs
-    ```
-
-1. Start a chroot session inside the unsquashed image. Your prompt may change to reflect that you are now in the root directory of the image.
-
-    ```bash
-    pit# chroot ./squashfs-root
-    ```
-
-1. Inside the chroot session, you will modify a few files by running the following commands, and then exit from the chroot session.
-
-    ```bash
-    pit-chroot# echo TZ=${NEWTZ} >> /etc/environment
-    pit-chroot# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone $NEWTZ#" /srv/cray/scripts/metal/set-ntp-config.sh
-    pit-chroot# sed -i 's/--utc/--localtime/' /srv/cray/scripts/metal/set-ntp-config.sh
-    pit-chroot# /srv/cray/scripts/common/create-kis-artifacts.sh
-    pit-chroot# exit
-    pit#
-    ```
-
-1. Back outside the chroot session, you will now back up the original images and copy the new ones into place.
-
-    ```bash
-    pit# mkdir -v ${IMGDIR}/orig
-    pit# mv -v *.kernel *.xz *.squashfs ${IMGDIR}/orig/
-    pit# cp -v squashfs-root/squashfs/* .
-    pit# chmod -v 644 ${IMGDIR}/initrd.img.xz
-    ```
-
-1. Unmount the squashfs mount (which was mounted by the earlier unsquashfs command).
-
-    ```bash
-    pit# umount -v ${IMGDIR}/squashfs-root/mnt/squashfs
-    ```
-
-1. Repeat all of the previous steps, with this change to the IMGTYPE variable.
-
-   This example uses `IMGTYPE=k8s` for the Kubernetes master and worker nodes.
-
-   ```bash
-   pit# export IMGTYPE=k8s
-   pit# export IMGDIR=/var/www/ephemeral/data/${IMGTYPE}
-   ```
-
-1. Go to the k8s image directory and unsquash the image.
-
-    ```bash
-    pit# cd ${IMGDIR}
-    pit# unsquashfs *.squashfs
-    ```
-
-1. Start a chroot session inside the unsquashed image. Your prompt may change to reflect that you are now in the root directory of the image.
-
-    ```bash
-    pit# chroot ./squashfs-root
-    ```
-
-1. Inside the chroot session, you will modify a few files by running the following commands, and then exit from the chroot session.
-
-    ```bash
-    pit-chroot# echo TZ=${NEWTZ} >> /etc/environment
-    pit-chroot# sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone $NEWTZ#" /srv/cray/scripts/metal/set-ntp-config.sh
-    pit-chroot# sed -i 's/--utc/--localtime/' /srv/cray/scripts/metal/set-ntp-config.sh
-    pit-chroot# /srv/cray/scripts/common/create-kis-artifacts.sh
-    pit-chroot# exit
-    pit#
-    ```
-
-1. Back outside the chroot session, you will now back up the original images and copy the new ones into place.
-
-    ```bash
-    pit# mkdir -v ${IMGDIR}/orig
-    pit# mv -v *.kernel *.xz *.squashfs ${IMGDIR}/orig/
-    pit# cp -v squashfs-root/squashfs/* .
-    pit# chmod -v 644 ${IMGDIR}/initrd.img.xz
-    ```
-
-1. Unmount the squashfs mount (which was mounted by the earlier unsquashfs command)
-
-    ```bash
-    pit# umount -v ${IMGDIR}/squashfs-root/mnt/squashfs
-    ```
-
-1. Now link the new images so that the NCNs will get them from the LiveCD node when they boot.
-
-    ```bash
-    pit# set-sqfs-links.sh
-    ```
-
-1. Make a note that when performing the [csi handoff of NCN boot artifacts in Redeploy PIT Node](../../install/redeploy_pit_node.md#ncn-boot-artifacts-hand-off), you must be sure to specify these new images. Otherwise ncn-m001 will use the default timezone when it boots, and subsequent reboots of the other NCNs will also lose the customized timezone changes.
+* If the PIT node is not booted, see
+[Change NCN Image Root Password and SSH Keys](../security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
+for more information.

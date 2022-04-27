@@ -1,5 +1,4 @@
-
-## Tools for Resolving Compute Node Boot Issues
+# Tools for Resolving Compute Node Boot Issues
 
 A number of tools can be used to analyze and debug issues encountered during the compute node boot process. The underlying issue and symptoms dictate the type of tool required.
 
@@ -106,5 +105,4 @@ There are two tools that can be used to access a BMC's console via SOL:
     ```
 
 -   ConMan - The ConMan tool is used to collect logs from nodes. It is also used to attach to the node's SOL console. For more information, refer to [ConMan](../conman/ConMan.md) and [Access Compute Node Logs](../conman/Access_Compute_Node_Logs.md).
-
 

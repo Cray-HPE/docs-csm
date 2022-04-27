@@ -45,7 +45,7 @@ Setup a re-install of LiveCD on a node using the previous configuration.
    The tarball should have extracted everything into the install-data partition.
 
 1. Retrieve the SquashFS artifacts.
-   
+
    The artifacts can be retrieved at the following locations:
 
    * `/mnt/var/www/ephemeral/k8s/`
@@ -66,5 +66,4 @@ Setup a re-install of LiveCD on a node using the previous configuration.
    ```
 
 The LiveCD is now re-installed with the previous configuration.
-
 

@@ -1,5 +1,4 @@
-
-## Edit the iPXE Embedded Boot Script
+# Edit the iPXE Embedded Boot Script
 
 Manually adjust the iPXE embedded boot script to change the order of network interfaces for DHCP request. Changing the order of network interfaces for DHCP requests helps improve boot time performance.
 
@@ -66,8 +65,7 @@ This procedure requires administrative privileges.
 
             ```bash
             ncn-m001# kubectl delete configmap -n services cray-ipxe-bss-ipxe
-            ncn-m001# kubectl create configmap -n services cray-ipxe-bss-ipxe \
-            --from-file=/root/k8s/cray-ipxe-bss-ipxe.yaml
+            ncn-m001# kubectl create -f /root/k8s/cray-ipxe-bss-ipxe.yaml
             ```
 
 2.  Delete the iPXE pod to ensure the updated ConfigMap will be used.
@@ -89,5 +87,4 @@ This procedure requires administrative privileges.
 
 
 Wait about 30 seconds for the iPXE binary to be regenerated, and then the nodes will pick up the new ipxe.efi binary.
-
 

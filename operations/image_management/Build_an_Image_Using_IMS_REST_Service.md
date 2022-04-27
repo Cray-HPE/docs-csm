@@ -1,4 +1,4 @@
-## Build an Image Using IMS REST Service
+# Build an Image Using IMS REST Service
 
 Create an image root from an IMS recipe.
 
@@ -103,8 +103,8 @@ The commands in this procedure must be run as the `root` user.
 
     |Recipe|Recipe Name|Kernel File Name|Initrd File Name|
     |------|-----------|----------------|----------------|
-    |SLES 15 SP1 Barebones|cray-sles15sp1-barebones|vmlinuz|initrd|
-    |COS|cray-shasta-compute-sles15sp1.x86_64-1.4.66|vmlinuz|initrd|
+    |SLES 15 SP2 Barebones|cray-sles15sp2-barebones|vmlinuz|initrd|
+    |COS|cray-shasta-compute-sles15sp2.x86_64-1.4.66|vmlinuz|initrd|
 
     ```bash
     ncn# cray ims jobs create \
@@ -310,7 +310,7 @@ The commands in this procedure must be run as the `root` user.
     [===========================================================\] 26886/26886 100%
 
     Exportable Squashfs 4.0 filesystem, gzip compressed, data block size 131072
-    	compressed data, compressed metadata, compressed fragments, compressed xattrs
+        compressed data, compressed metadata, compressed fragments, compressed xattrs
     ...
     + python -m ims_python_helper image upload_artifacts sles15_barebones_image 7de80ccc-1e7d-43a9-a6e4-02cad10bb60b \
          -v -r /mnt/image/sles15_barebones_image.sqsh -k /mnt/image/image-root/boot/vmlinuz
@@ -531,5 +531,3 @@ The commands in this procedure must be run as the `root` user.
 Images built by IMS contain only the packages and settings that are referenced in the Kiwi-NG recipe used to build the image. The only exception is that IMS will dynamically install the system's root CA certificate to allow zypper \(via Kiwi-NG\) to talk securely with the required Nexus RPM repositories. Images that are intended to be used to boot a CN or other node must be configured with DNS and other settings that enable the image to talk to vital services. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable DNS resolution, which are typically run against an image after it is built by IMS.
 
 When customizing an image via [Customize an Image Root Using IMS](Customize_an_Image_Root_Using_IMS.md), once chrooted into the image root \(or if using a \`jailed\` environment\), the image will only have access to whatever configuration the image already contains. In order to talk to services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. That base level of customization is provided by the default Ansible plays used by the CFS to enable DNS resolution.
-
-
