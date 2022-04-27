@@ -143,26 +143,26 @@ The `kubectl` command is installed.
 
         This check will need to be run after all worker node have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the spine switches \(instructions will vary for Aruba and Mellanox switches\)
 
-        If there are BGP Peering sessions that are not ESTABLISHED on either switch, refer to [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
+        If there are BGP Peering sessions that are not `ESTABLISHED` on either switch, refer to [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
 1. Ensure that no nodes are in a `failed` state in CFS.
    
    Nodes that are in a failed state prior to the reboot will not be automatically
    configured once they have been rebooted. To get a list of nodes in the failed state:
    
-   ```
+   ```bash
    ncn-m001# cray cfs components list --status failed | jq .[].id
    ```
    
    If there are any nodes in this list, they can be reset with:
    
-   ```
+   ```bash
    ncn-m001# cray cfs components update <xname> --enabled False --error-count 0
    ```
    
    Or, to reset the error count for all nodes:
    
-   ```
+   ```bash
    ncn-m001# cray cfs components list --status failed | jq .[].id -r | while read -r xname ; do
        echo "$xname"
        cray cfs components update $xname --enabled False --error-count 0
@@ -182,7 +182,7 @@ The `kubectl` command is installed.
 
       For any NCN components found, reset the error count to 0. Each component will also have to be disabled in CFS in order to not immediately trigger configuration. The components will be re-enabled when they reboot.
       
-      **NOTE:** Be sure to replace the `<xname>` in the following command with the xname of the NCN component to be reset and disabled.
+      **NOTE:** Be sure to replace the `<xname>` in the following command with the component name (xname) of the NCN component to be reset and disabled.
       
       ```bash
       ncn-m001# cray cfs components update <xname> --error-count 0 --enabled false
@@ -406,7 +406,7 @@ Before rebooting NCNs:
 
        If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
-       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
+       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from `cray-cfs` to determine why the configuration may not have completed.
 
     10. Uncordon the node.
 
