@@ -152,7 +152,7 @@ ncn-w001# kubectl -n services patch configmaps cray-dns-unbound \
 
 ### Change the Site DNS server
 
-Use the following procedure to change the site DNS server that Unbound forwards queries to.
+Use the following procedure to change the site DNS server that Unbound forwards queries to. This may be necessary if the site DNS server is moved to a different IP address.
 
 1. Edit the `cray-dns-unbound` ConfigMap.
 
