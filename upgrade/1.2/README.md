@@ -1,5 +1,4 @@
-# CSM 1.0.0 or later to 1.2.0 Upgrade Process (WIP)
-#NOTE: this is a WIP doc
+# CSM 1.0.0 or later to 1.2.0 Upgrade Process 
 
 ## Introduction
 
