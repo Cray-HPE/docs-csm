@@ -138,16 +138,16 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
     The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
     ```screen
-     ncn-s# ceph osd tree down
-     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
-     -1         62.87750  root default
-     -9         10.47958      host ncn-s003
-     36    ssd   1.74660          osd.36       down   1.00000  1.00000
-     37    ssd   1.74660          osd.37       down   1.00000  1.00000
-     38    ssd   1.74660          osd.38       down   1.00000  1.00000
-     39    ssd   1.74660          osd.39       down   1.00000  1.00000
-     40    ssd   1.74660          osd.40       down   1.00000  1.00000
-     41    ssd   1.74660          osd.41       down   1.00000  1.00000
+    ncn-s# ceph osd tree down
+    ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
+    -1         62.87750  root default
+    -9         10.47958      host ncn-s003
+    36    ssd   1.74660          osd.36       down   1.00000  1.00000
+    37    ssd   1.74660          osd.37       down   1.00000  1.00000
+    38    ssd   1.74660          osd.38       down   1.00000  1.00000
+    39    ssd   1.74660          osd.39       down   1.00000  1.00000
+    40    ssd   1.74660          osd.40       down   1.00000  1.00000
+    41    ssd   1.74660          osd.41       down   1.00000  1.00000
     ```
 
     1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives. By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map. This will result in OSDs that no longer exist appearing to be down.

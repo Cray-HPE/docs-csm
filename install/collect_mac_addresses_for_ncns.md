@@ -15,11 +15,13 @@ topic could be skipped and instead move to [Deploy Management Nodes](index.md#de
 
 ## Topics
 
-1. [Collect the BMC MAC addresses](#collect_the_bmc_mac_addresses)
-1. [Restart Services after BMC MAC Addresses Collected](#restart_services_after_bmc_mac_addresses_collected)
-1. [Collect the NCN MAC addresses](#collect_the_ncn_mac_addresses)
-1. [Restart Services after NCN MAC Addresses Collected](#restart_services_after_ncn_mac_addresses_collected)
-1. [Next Topic](#next-topic)
+* [Collect MAC Addresses for NCNs](#collect-mac-addresses-for-ncns)
+  * [Topics](#topics)
+  * [1. Collect the BMC MAC addresses](#1-collect-the-bmc-mac-addresses)
+  * [2. Restart Services after BMC MAC Addresses Collected](#2-restart-services-after-bmc-mac-addresses-collected)
+  * [3. Collect the NCN MAC addresses](#3-collect-the-ncn-mac-addresses)
+    * [4. Restart Services after NCN MAC Addresses Collected](#4-restart-services-after-ncn-mac-addresses-collected)
+  * [Next Topic](#next-topic)
 
 <a name="collect_the_bmc_mac_addresses"></a>
 ## 1. Collect the BMC MAC addresses
@@ -116,6 +118,7 @@ making a backup of them, in case they need to be examined at a later time.
          ```json
          {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
          {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
+         ```
 
 
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.

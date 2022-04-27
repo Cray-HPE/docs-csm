@@ -56,6 +56,7 @@ interface vlan 1 magp 1 ip virtual-router address 10.1.0.
 interface vlan 1 magp 1 ip virtual-router mac-address
 00:00:5E:00:01:
 ```
+
 ```
 sw-spine-002 [standalone: master] # show run int vlan 1
 interface vlan 1
@@ -81,6 +82,7 @@ ip bootp-gateway 10.1.0.
 ip helper-address 10.92.100.
 exit
 ```
+
 ```
 sw-spine-002# show run int vlan 1
 interface vlan
