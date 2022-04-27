@@ -217,7 +217,7 @@ Use the following procedure to change the site DNS server that Unbound forwards 
               domain_name: '{{ network.dns.external }}'
       ```
 
-   1. Update the site-init secret in the loftsman namespace.
+   1. Update the `site-init` secret in the `loftsman` namespace.
 
       ```bash
       ncn-m001# kubectl delete secret -n loftsman site-init
