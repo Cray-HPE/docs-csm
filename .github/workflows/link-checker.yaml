@@ -38,7 +38,7 @@ jobs:
         files: "**/*.md"
         files_ignore: ".github/**/*"
 
-    - uses: docker://ghcr.io/tcort/markdown-link-check:stable
+    - uses: docker://ghcr.io/tcort/markdown-link-check:3.9.3
       with:
         args: "--config .github/config/markdown_link.json ${{ steps.changed-files.outputs.all_changed_files }}"
 
