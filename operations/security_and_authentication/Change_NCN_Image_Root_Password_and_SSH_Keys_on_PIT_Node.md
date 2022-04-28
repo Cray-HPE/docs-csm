@@ -16,7 +16,7 @@ This step is required. There is no default root password and no default SSH keys
    copy an existing set of keys and `authorized_hosts` file into a directory for reference in the following step. It is assumed
    that public keys have a `.pub` extension.
 
-   Execute the `ncn-image-modification.sh` script located at the top level of the CSM release tarball to add SSH key and set the
+   Execute the `ncn-image-modification.sh` script located at the top level of the CSM release tarball to add SSH keys and set the
    root password. Optionally, set a local timezone (UTC is the default). If you chose to create new SSH keys above, execute this
    script with `-d ~/.ssh` in addition to the other required options.
 
