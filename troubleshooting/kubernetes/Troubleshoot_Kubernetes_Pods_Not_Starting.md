@@ -8,7 +8,7 @@ The `kubectl get pod` command returns pods that seem to be stuck in the `Init` o
 
 ## Identify the node in question
 
-1. Run the `kubectl get pod -o wide` command to identify the node where the pod isn't starting.
+1. Run the `kubectl get pod -o wide` command to identify the node where the pod is not starting.
 
     ```bash
     ncn-w001# kubectl get pod -A -o wide | egrep 'Init|ContainerCreating'
