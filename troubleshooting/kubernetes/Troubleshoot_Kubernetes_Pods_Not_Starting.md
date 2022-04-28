@@ -40,7 +40,7 @@ Execute the following steps on the node that was determined in the previous step
    ncn-w002# systemctl restart containerd
    ```
 
-   Now ensure containerd is running:
+1. Ensure that `containerd` is running.
 
    ```bash
    ncn-w002# systemctl status containerd
