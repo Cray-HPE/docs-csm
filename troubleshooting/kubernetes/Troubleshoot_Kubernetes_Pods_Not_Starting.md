@@ -46,4 +46,4 @@ Execute the following steps on the node that was determined in the previous step
    ncn-w002# systemctl status containerd
    ```
 
-Try running the `kubectl get pod` command again, and within a few minutes the pods should transition to the `Running` state.
+Try running the `kubectl get pod` command again; within a few minutes, the pods should transition to the `Running` state.
