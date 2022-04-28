@@ -20,7 +20,7 @@ The `kubectl get pod` command returns pods that seem to be stuck in the `Init` o
 
 ## Recovery Steps
 
-Execute the following steps the node in determined in the previous step.
+Execute the following steps on the node that was determined in the previous step.
 
 1. Restart the kubelet service.
 
