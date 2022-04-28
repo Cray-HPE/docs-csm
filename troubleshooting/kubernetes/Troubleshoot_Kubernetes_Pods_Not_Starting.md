@@ -22,7 +22,7 @@ The `kubectl get pod` command returns pods that seem to be stuck in the `Init` o
 
 Execute the following steps on the node that was determined in the previous step.
 
-1. Restart the kubelet service.
+1. Restart the `kubelet` service.
 
    ```bash
    ncn-w002# systemctl restart kubelet
