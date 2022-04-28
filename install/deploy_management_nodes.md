@@ -441,9 +441,10 @@ be performed are in the [Deploy](#deploy) section.
     Refer to [timing of deployments](#timing-of-deployments). It should not take more than 60 minutes for the `kubectl get nodes` command to return output indicating
     that all the master nodes and worker nodes (excluding from the PIT node) booted from the LiveCD and are `Ready`.
 
+    > When the following command prompts for a password, enter the root password for `ncn-m002`.
+
     ```bash
-    pit# ssh ncn-m002
-    ncn-m002# kubectl get nodes -o wide
+    pit# ssh ncn-m002 kubectl get nodes -o wide
     ```
 
     Expected output looks similar to the following:
@@ -457,7 +458,75 @@ be performed are in the [Deploy](#deploy) section.
     ncn-w003   Ready    <none>                 2h    v1.20.13   10.252.1.9    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
     ```
 
-1. Stop watching the console from `ncn-m002`.
+1. Enable passwordless SSH for the PIT node.
+
+    1. Copy SSH files from `ncn-m002` to the PIT node.
+
+        > When the following command prompts for a password, enter the root password for `ncn-m002`.
+
+        ```ShellSession
+        pit# rsync -av ncn-m002:.ssh/ /root/.ssh/
+        ```
+
+        Expected output looks similar to the following:
+        
+        ```text
+        Password:
+        receiving incremental file list
+        ./
+        authorized_keys
+        id_rsa
+        id_rsa.pub
+        known_hosts
+
+        sent 145 bytes  received 13,107 bytes  3,786.29 bytes/sec
+        total size is 12,806  speedup is 0.97
+        ```
+
+    1. Make a list of all of the NCNs (including `ncn-m001`).
+    
+        ```ShellSession
+        pit# NCNS=$(grep -oP "ncn-[msw][0-9]{3}" /etc/dnsmasq.d/statics.conf | sort -u | tr '\n' ',') ; echo "${NCNS}"
+        ```
+        
+        Expected output looks similar to the following:
+        
+        ```text
+        ncn-m001,ncn-m002,ncn-m003,ncn-s001,ncn-s002,ncn-s003,ncn-w001,ncn-w002,ncn-w003
+        ```
+
+    1. Verify that passwordless SSH is now working from the PIT node to the other NCNs.
+    
+        The following command should not prompt you to enter a password.
+        
+        ```ShellSession
+        pit# PDSH_SSH_ARGS_APPEND='-o StrictHostKeyChecking=no' pdsh -Sw "${NCNS}" date && echo SUCCESS || echo ERROR
+        ```
+        
+        Expected output looks similar to the following:
+        ```text
+        ncn-w001: Warning: Permanently added 'ncn-w001,10.252.1.7' (ECDSA) to the list of known hosts.
+        ncn-w003: Warning: Permanently added 'ncn-w003,10.252.1.9' (ECDSA) to the list of known hosts.
+        ncn-m003: Warning: Permanently added 'ncn-m003,10.252.1.6' (ECDSA) to the list of known hosts.
+        ncn-s002: Warning: Permanently added 'ncn-s002,10.252.1.11' (ECDSA) to the list of known hosts.
+        ncn-m001: Warning: Permanently added 'ncn-m001,10.252.1.4' (ECDSA) to the list of known hosts.
+        ncn-w002: Warning: Permanently added 'ncn-w002,10.252.1.8' (ECDSA) to the list of known hosts.
+        ncn-m002: Warning: Permanently added 'ncn-m002,10.252.1.5' (ECDSA) to the list of known hosts.
+        ncn-s003: Warning: Permanently added 'ncn-s003,10.252.1.12' (ECDSA) to the list of known hosts.
+        ncn-s001: Warning: Permanently added 'ncn-s001,10.252.1.10' (ECDSA) to the list of known hosts.
+        ncn-s003: Thu 28 Apr 2022 02:43:21 PM UTC
+        ncn-s001: Thu 28 Apr 2022 02:43:21 PM UTC
+        ncn-s002: Thu 28 Apr 2022 02:43:21 PM UTC
+        ncn-m001: Thu 28 Apr 2022 02:43:21 PM UTC
+        ncn-m003: Thu 28 Apr 2022 02:43:21 PM UTC
+        ncn-m002: Thu 28 Apr 2022 02:43:21 PM UTC
+        ncn-w001: Thu 28 Apr 2022 02:43:22 PM UTC
+        ncn-w002: Thu 28 Apr 2022 02:43:22 PM UTC
+        ncn-w003: Thu 28 Apr 2022 02:43:22 PM UTC
+        SUCCESS
+        ```
+
+1. Stop watching the console of `ncn-m002`.
 
     Type the ampersand character and then the period character to exit from the conman session on `ncn-m002`.
 
@@ -472,7 +541,7 @@ be performed are in the [Deploy](#deploy) section.
 
 #### 3.3.1 Run The Check
 
-Run the following command on the PIT node to validate that the expected LVM labels are present on disks on the master and worker nodes. When it prompts you for a password, enter the root password for `ncn-m002`.
+Run the following command on the PIT node to validate that the expected LVM labels are present on disks on the master and worker nodes.
 
 ```bash
 pit# /usr/share/doc/csm/install/scripts/check_lvm.sh
@@ -768,28 +837,17 @@ pit# popd
 
 ### 4.3 Remove the default NTP pool
 
-Run the following command on the PIT node to remove the default pool, which can cause contention issues with NTP. When it prompts you for a password, enter the root password for `ncn-m002`.
+Run the following command on the PIT node to remove the default pool, which can cause contention issues with NTP.
 
-```bash
-pit# ssh ncn-m002 "\
-        PDSH_SSH_ARGS_APPEND='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' \
-        pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf |
-            grep -v m001 | sort -u |  tr -t '\n' ,) \
-        sed -i \'s/^! pool pool[.]ntp[.]org.*//\' /etc/chrony.conf"
+```ShellSession
+pit# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | grep -v m001 | sort -u |  tr -t '\n' ',')" \
+        'sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf' && echo SUCCESS
 ```
 
-Expected output looks similar to the following:
+Successful output is:
 
 ```text
-Password:
-ncn-m002: Warning: Permanently added 'ncn-m002,10.252.1.11' (ECDSA) to the list of known hosts.
-ncn-s001: Warning: Permanently added 'ncn-s001,10.252.1.6' (ECDSA) to the list of known hosts.
-ncn-s002: Warning: Permanently added 'ncn-s002,10.252.1.5' (ECDSA) to the list of known hosts.
-ncn-s003: Warning: Permanently added 'ncn-s003,10.252.1.4' (ECDSA) to the list of known hosts.
-ncn-m003: Warning: Permanently added 'ncn-m003,10.252.1.10' (ECDSA) to the list of known hosts.
-ncn-w002: Warning: Permanently added 'ncn-w002,10.252.1.8' (ECDSA) to the list of known hosts.
-ncn-w001: Warning: Permanently added 'ncn-w001,10.252.1.9' (ECDSA) to the list of known hosts.
-ncn-w003: Warning: Permanently added 'ncn-w003,10.252.1.7' (ECDSA) to the list of known hosts.
+SUCCESS
 ```
 
 <a name="validate_management_node_deployment"></a>
@@ -855,16 +913,17 @@ Observe the output of the checks and note any failures, then remediate them.
    See [Manual LVM Check Procedure](#manual-lvm-check-procedure). If the manual tests fail, then the problem must be resolved before continuing to the next step. See
    [LVM Check Failure Recovery](#lvm-check-failure-recovery).
 
-1. Ensure that weave has not become split-brained.
+1. Ensure that `weave` has not become split-brained.
 
-   To ensure that weave is operating as a single cluster, run the following command on each member of the Kubernetes cluster (master nodes and worker nodes but **not the PIT node**):
+   To ensure that `weave` is operating as a single cluster, run the following command on the PIT node to check each member of the Kubernetes cluster:
 
-   ```bash
-   ncn# weave --local status connections | grep failed
+   ```ShellSession
+   ncn# pdsh -b -S -w "$(grep -oP 'ncn-[mw][0-9]{3}' /etc/dnsmasq.d/statics.conf | grep -v '^ncn-m001$' | sort -u |  tr -t '\n' ',')" \
+           'weave --local status connections | grep -i failed || true'
    ```
 
-   If the check is successful, there will be no output. If you see messages like `IP allocation was seeded by different peers`, then weave looks to have split-brained.
-   At this point it is necessary to wipe the NCNs and start the PXE boot again:
+   If the check is successful, there will be no output. If you see messages like `IP allocation was seeded by different peers`, then `weave` appears to be split-brained.
+   At this point, it is necessary to wipe the NCNs and start the PXE boot again:
 
    1. Wipe the NCNs using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
    1. Return to the 'Boot the **Storage Nodes**' step of [Deploy Management Nodes](#deploy_management_nodes) section above.
@@ -873,19 +932,23 @@ Observe the output of the checks and note any failures, then remediate them.
 
 ### 5.2 Optional Validation
 
-   1. Verify `etcd` is running outside Kubernetes on master nodes
+   1. Verify that `etcd` is running outside Kubernetes on master nodes (but not the PIT node).
 
-      On each Kubernetes master node (but not the PIT node), check the status of the `etcd` service and ensure it is active and running:
+      Run the following command to check the status of the `etcd` service on the master nodes:
 
-      ```bash
-      ncn-m# systemctl status etcd.service
+      ```ShellSession
+      pit# pdsh -b -S -w "$(grep -oP 'ncn-m[0-9]{3}' /etc/dnsmasq.d/statics.conf | grep -v '^ncn-m001$' | sort -u |  tr -t '\n' ',')" \
+              'systemctl status etcd.service | grep -Pzo "\n[[:space:]]*Loaded: loaded.*\n[[:space:]]*Active: active .*\n" | grep -aE "Active|Loaded"' && echo SUCCESS
       ```
 
-      The second two lines of the expected output should look similar to the following:
+      Successful output looks similar to the following:
 
       ```text
-         Loaded: loaded (/etc/systemd/system/etcd.service; enabled; vendor preset: disabled)
-         Active: active (running) since Mon 2021-12-13 20:12:00 UTC; 51min 6s ago
+      ncn-m002:      Loaded: loaded (/etc/systemd/system/etcd.service; enabled; vendor preset: disabled)
+      ncn-m002:      Active: active (running) since Wed 2022-04-27 21:32:44 UTC; 17h ago
+      ncn-m003:      Loaded: loaded (/etc/systemd/system/etcd.service; enabled; vendor preset: disabled)
+      ncn-m003:      Active: active (running) since Wed 2022-04-27 21:32:44 UTC; 17h ago
+      SUCCESS
       ```
 
    1. Verify that all the pods in the `kube-system` namespace are `Running` or `Completed`.
