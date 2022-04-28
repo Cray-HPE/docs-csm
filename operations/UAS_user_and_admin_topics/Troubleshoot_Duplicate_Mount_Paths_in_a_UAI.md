@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Troubleshoot Missing or Incorrect UAI Images](Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
 

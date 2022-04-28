@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Troubleshoot UAS by Viewing Log Output](Troubleshoot_UAS_by_Viewing_Log_Output.md)
 

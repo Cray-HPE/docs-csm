@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Delete a UAI Resource Specification](Delete_a_UAI_Resource_Specification.md)
 

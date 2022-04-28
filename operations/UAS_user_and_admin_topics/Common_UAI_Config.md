@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Choosing UAI Resource Settings](Choosing_UAI_Resource_Settings.md)
 

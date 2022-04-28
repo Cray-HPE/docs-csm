@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Examining a UAI Using a Direct Administrative Command](Examine_a_UAI_Using_a_Direct_Administrative_Command.md)
 

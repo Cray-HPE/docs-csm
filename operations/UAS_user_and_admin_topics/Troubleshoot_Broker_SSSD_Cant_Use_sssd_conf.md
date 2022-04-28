@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Clear UAS Configuration](Reset_the_UAS_Configuration_to_Original_Installed_Settings.md)
 

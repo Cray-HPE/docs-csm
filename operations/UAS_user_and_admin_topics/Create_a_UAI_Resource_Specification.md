@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Retrieve Resource Specification Details](Retrieve_Resource_Specification_Details.md)
 

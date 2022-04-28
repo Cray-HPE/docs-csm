@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Obtain Configuration of a UAS Volume](Obtain_Configuration_of_a_UAS_Volume.md)
 

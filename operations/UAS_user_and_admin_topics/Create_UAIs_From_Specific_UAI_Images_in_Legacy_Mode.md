@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: UAS and UAI Legacy Mode Health Checks](UAS_and_UAI_Health_Checks.md)
 
