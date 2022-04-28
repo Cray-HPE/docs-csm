@@ -500,7 +500,7 @@ This procedure updates node controller \(nC\) firmware.
 }
 ```
 
-> **IMPORTANT:** The *timeLimit* is `4000` because the Gigabytes can take a lot longer to update.
+> **IMPORTANT:** The `timeLimit` is `4000` because the Gigabytes can take a lot longer to update.
 
 **Troubleshooting:**
 
@@ -924,7 +924,7 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
 
 ### Procedure
 
-1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H XNAME -s`. Replace `XNAME` with the xname of the NCN BMC.
+1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H XNAME -s`. Replace `XNAME` with the component name (xname) of the NCN BMC.
    See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc) for more information.
 1. Run a `dryrun` for all NCNs first to determine which NCNs and targets need updating.
 1. For each NCN requiring updates to target `BMC` or `iLO 5`:
@@ -965,6 +965,11 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
   ```bash
   ncn# cray fas operations describe {operationID} --format json
   {
+  ```
+
+  Example output:
+
+  ```json
     "operationID":"102c949f-e662-4019-bc04-9e4b433ab45e",
     "actionID":"9088f9a2-953a-498d-8266-e2013ba2d15d",
     "state":"noSolution",
