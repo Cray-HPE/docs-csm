@@ -42,30 +42,30 @@ See [CSM Automatic Network Utility (CANU)](../canu/index.md)
 
 ## Built in High Availability
 
-   * [VSX: MCLAG link HA	](mclag_link_ha.md)
+   * [VSX: MCLAG link HA](mclag_link_ha.md)
    * [VSX: ISL HA](mclag_isl_ha.md)
    * [VSX: Split](mclag_split.md)
    * [VSX: Member Power Failure](mclag_power_failure.md)
 
 ## Management Network Overview
 
-   * [Network Types – Naming and segment Function](network_naming_function.md)
-   * [Network traffic pattern inside of the system](network_traffic_pattern.md)
-   * [System management network functions in more detail](management_network_function_in_detail.md)
+   * [Network Types – Naming and Segment Function](network_naming_function.md)
+   * [Network Traffic Pattern](network_traffic_pattern.md)
+   * [System Management Network Functions](management_network_function_in_detail.md)
 
 ## Key Features Used in the Management Network Configuration
 
-   * [Key Feature list](key_features.md)
-   * [Typical configuration of VSX](typical_VSX_configuration.md)
-   * [Typical MCLAG port configuration connecting to dual homed devices](typical_mclag_port_configuration.md)
-   * [Typical edge port configuration connecting single homed devices](typical_edge_port_configuration.md)
+   * [Key Feature List](key_features.md)
+   * [Typical Configuration of VSX](typical_VSX_configuration.md)
+   * [Typical Configuration of MCLAG Link](typical_mclag_port_configuration.md)
+   * [Typical Edge Port Configuration](typical_edge_port_configuration.md)
 
 ## How to Connect Management Network to a Campus Network
 
-   * [Requirements and optional configuration](requirements_and_optional_configuration.md)
-   * [Scenario A: network connection via management network](scenario-a.md)
-   * [Scenario B: network connection via high speed network](scenario-b.md)
-   * [Example of how to configure Scenario A or B](management_network_configuration_example.md)
+   * [Connect the Management Network to a Campus Network](requirements_and_optional_configuration.md)
+   * [Scenario A: Network Connection via Management Network](scenario-a.md)
+   * [Scenario B: Network Connection via High-Speed Network](scenario-b.md)
+   * [Example of How to Configure Scenario A or B](management_network_configuration_example.md)
 
 ## Manage Switches from CLI
 
