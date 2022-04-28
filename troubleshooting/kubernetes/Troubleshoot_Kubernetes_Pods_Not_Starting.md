@@ -34,7 +34,7 @@ Execute the following steps on the node that was determined in the previous step
    ncn-w002# systemctl status kubelet
    ```
 
-1. Restart the containerd service.
+1. Restart the `containerd` service.
 
    ```bash
    ncn-w002# systemctl restart containerd
