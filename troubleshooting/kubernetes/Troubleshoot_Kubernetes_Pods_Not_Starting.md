@@ -28,7 +28,7 @@ Execute the following steps on the node that was determined in the previous step
    ncn-w002# systemctl restart kubelet
    ```
 
-   Now ensure kubelet is running:
+1. Ensure that `kubelet` is running.
 
    ```bash
    ncn-w002# systemctl status kubelet
