@@ -1,6 +1,6 @@
 # Troubleshoot Kubernetes Pods Not Starting
 
-Use this procedure to check if Kubernetes pods get scheduled on an NCN, but don't eventually reach the `Running` state.
+Use this procedure to check if Kubernetes pods get scheduled on an NCN, but do not eventually reach the `Running` state.
 
 ## Prerequisites
 
