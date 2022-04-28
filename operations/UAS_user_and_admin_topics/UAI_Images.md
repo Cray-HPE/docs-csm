@@ -1,8 +1,4 @@
-[Top: User Access Service (UAS)](index.md)
-
-[Next Topic: Listing Registered UAI Images](List_Registered_UAI_Images.md)
-
-## UAI Images
+# UAI Images
 
 There are three kinds of UAI images used by UAS:
 
@@ -15,5 +11,7 @@ UAS provides two stock UAI images when installed. The first is a standard End-Us
 The second image is a Broker UAI image. Broker UAIs are a special type of UAIs used in the ["broker based" operation model](Broker_Mode_UAI_Management.md). Broker UAIs present a single SSH endpoint that responds to each SSH connection by locating or creating a suitable End-User UAI and redirecting the SSH session to that End-User UAI.
 
 A site may provide any number of [Custom End-User UAI Images](Customize_End-User_UAI_Images.md) as needed to support various use cases and workflows.
+
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Listing Registered UAI Images](List_Registered_UAI_Images.md)
