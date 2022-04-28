@@ -299,7 +299,7 @@ cfs-default-ansible-cfg
 cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn
 cfs-state-reporter
 changeme
-Change_NCN_Image_Root_Password_and_SSH_Keys_PIT
+Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node
 channeled
 ChassisBMC
 ChassisBMCs
@@ -773,6 +773,7 @@ index.html
 index.md
 Infiniband
 Init
+InitNotReady
 initramFS
 initrd
 inode
