@@ -4,10 +4,12 @@ This procedure changes the credential for liquid-cooled EX cabinet chassis contr
 
 **NOTE:** This procedure does not provision Slingshot switch BMCs (RouterBMCs). Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot product documentation. To update Slingshot switch BMCs, refer to "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide (> 1.6.0)*.
 
-This procedure provisions only the default Redfish root account passwords. It does not modify Redfish accounts that have been added after an initial system installation.
+This procedure provisions only the default Redfish `root` account passwords. It does not modify Redfish accounts that have been added after an initial system installation.
 
 ### Prerequisites
 
+- The `hms-discovery` Kubernetes cron job has been disabled.
+- All blades in the cabinets have been powered off.
 - Perform procedures in [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md) on all CECs in the system.
 - All of the CECs must be configured with the __same__ global credential.
 - The previous default global credential for liquid-cooled BMCs needs to be known.
@@ -179,7 +181,6 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
     ncn-m001# read -s CRED_PASSWORD
     ncn-m001# echo $CRED_PASSWORD
     ```
-
     Expected output:
     ```
     foobar
@@ -210,14 +211,20 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
     > ncn-m001# cray hsm inventory redfishEndpoints update BMC_XNAME --user root --password ${CRED_PASSWORD}
     > ```
 
-3. Wait for HSM to re-discover the updated RedfishEndpoints:
+3. Restart the `hms-discovery` Kubernetes cron job.
+   ```bash
+   ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
+   ```
+   After 2-3 minutes, the `hms-discovery` cron job will start to power on all of the currently powered off compute slots.
+
+4. Wait for compute slots to be pwoered on and for HSM to re-discover the updated Redfish endpoints.
     ```bash
-    ncn-m001# sleep 180
+    ncn-m001# sleep 300
     ```
 
-4. Wait for all updated Redfish endpoints to become `DiscoverOK`:
+5. Wait for all updated Redfish endpoints to become `DiscoverOK`.
 
-    The following bash script will find all Redfish endpoints for the liquid-cooled BMCs that are not in `DiscoverOK`, and display their last Discovery Status.
+    The following bash script will find all Redfish endpoints for the liquid-cooled BMCs that are not in `DiscoverOK`, and display their `lastDiscoveryStatus`.
     ```bash
     ncn-m001# \
     cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --type '!RouterBMC' --format json > /tmp/redfishEndpoints.json
