@@ -23,7 +23,7 @@ The Cray command line interface (CLI) tool is initialized and configured on the 
 
 ## Execute an Action
 
-Use FAS to execute an action. An action produces a set of firmware operations. Each operation represents a component name (xname) + target on that component name (xname) that will be targeted for update. There are two of firmware action modes: : `dryrun` or `liveupdate`; the parameters used when creating either are completely identical except for the `overrideDryrun` setting. `overrideDryrun` will determine if feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware
+Use FAS to execute an action. An action produces a set of firmware operations. Each operation represents a component name (xname) and a target on that xname that will be targeted for update. There are two modes of firmware action: `dryrun` and `liveupdate`. The parameters used when creating either are identical except for the `overrideDryrun` setting. The `overrideDryrun` setting is `false` by default. This mode (the dry-run mode) will create a query according to the filters requested by the administrator. This will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
 
 > **WARNING**: It is crucial that an administrator is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The administrator assumes full responsibility for this knowledge. It is also likely that when performing a firmware update, the current version of firmware will not be available. This means that after successfully upgrading, the firmware cannot be reverted or downgraded to a previous version.
 
@@ -698,7 +698,7 @@ loaderRunID = "770af5a4-15bf-4e9f-9983-03069479dc23"
 [[loaderRunList]]
 loaderRunID = "8efb19c4-77a2-41da-9a8f-fccbfe06f674"
 ```
-The loader can only run one job at a time, if the loader is `busy`, it will return an error on any attempt to create an additional job.
+The loader can only run one job at a time; if the loader is `busy`, it will return an error on any attempt to create an additional job.
 
 ### Load Firmware From Nexus
 

@@ -159,7 +159,7 @@ Re-run the FAS actions command using the updated json file. **It is strongly rec
 
 ## Check for New Firmware Versions with a Dry-Run
 
-Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the overrideDryrun parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
+Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter. A dry-run will create a query according to the filters requested by the administrator. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
 
 > **WARNING:** It is crucial that an administrator is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The administrator assumes full responsibility for this knowledge.
 
@@ -507,7 +507,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
 ## Load Firmware from RPM or ZIP file
 
-This procedure will read a single local RPM (or ZIP) file and upload firmware images to S3 and create image records for firmware not already in FAS.
+This procedure will read a single local RPM (or ZIP) file, upload firmware images to S3, and create image records for any firmware not already in FAS.
 
 1. Copy the file to ncn-m001 or one of the other NCNs.
 

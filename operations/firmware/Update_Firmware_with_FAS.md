@@ -135,7 +135,7 @@ There are several use cases for using the FAS to update firmware on the system. 
 
 ## Firmware Actions
 
-An action is collection of operations, which are individual firmware update tasks. Only one FAS action can be run at a time. Any other attempted action will be queued. Additionally, only one operation can be run on a component name (xname) at a time. For example, if there are 1000 component names (xnames) with 5 targets each to be updated, all 1000 component names (xnames) can be updating a target, but only 1 target on each component name (xname) will be updated at a time.
+An action is collection of operations, which are individual firmware update tasks. Only one FAS action can be run at a time. Any other attempted action will be queued. Additionally, only one operation can be run on a component name (xname) at a time. For example, if there are 1000 xnames with 5 targets each to be updated, then all 1000 xnames can be updating a target, but only 1 target on each xname will be updated at a time.
 
 The life cycle of any action can be divided into the static and dynamic portions of the life cycle.
 
