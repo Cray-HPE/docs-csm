@@ -31,35 +31,35 @@ See [CSM Automatic Network Utility (CANU)](../canu/index.md)
    * [Medium](medium.md)
    * [Small](small.md)
 
-## Network design explained
+## Network Design Explained
 
    * [What is Spine-Leaf Architecture?](spine_leaf_architecture.md)
    * [How does a spine-leaf architecture differ from traditional network designs?](spine_leaf_architecture2.md)
    * [Why are spine-leaf architectures becoming more popular?](spine_leaf_architecture3.md)
    * [What is MLAG?](mlag_architecture.md)
 
-## Management network overview
+## Management Network Overview
 
-   * [Network Types – Naming and segment Function](network_naming_function.md)
-   * [Network traffic pattern inside of the system](network_traffic_pattern.md)
-   * [System management network functions in more detail](management_network_function_in_detail.md)
+   * [Network Types – Naming and Segment Function](network_naming_function.md)
+   * [Network Traffic Pattern](network_traffic_pattern.md)
+   * [System Management Network Functions](management_network_function_in_detail.md)
 
-## Key features used in the management network configuration
+## Key Features Used in the Management Network Configuration
 
-   * [Key Feature list](key_features.md)
-   * [Typical configuration of mlag switch configuration](typical_mlag_switch_configuration.md)
-   * [Typical MCLAG port configuration connecting to dual homed devices](typical_mlag_port_configuration.md)
+   * [Key Feature List](key_features.md)
+   * [Typical Configuration of MLAG Between Switches](typical_mlag_switch_configuration.md)
+   * [Typical Configuration of MLAG Link Connecting to NCN](typical_mlag_port_configuration.md)
 
-## How to connect management network to your campus network
+## How to Connect Management Network to a Campus Network
 
-   * [Requirements and optional configuration](requirements_and_optional_configuration.md)
-   * [Scenario A: network connection via management network](scenario-a.md)
-   * [Scenario B: network connection via high speed network](scenario-b.md)
-   * [Example of how to configure Scenario A or B](management_network_configuration_example.md)
+   * [Connect the Management Network to a Campus Network](requirements_and_optional_configuration.md)
+   * [Scenario A: Network Connection via Management Network](scenario-a.md)
+   * [Scenario B: Network Connection via High-Speed Network](scenario-b.md)
+   * [Example of How to Configure Scenario A or B](management_network_configuration_example.md)
 
-## Managing switches from CLI
+## Managing Switches from the CLI
 
-### Device management
+### Device Management
 
   * [Management Interface](management_interface.md)
   * [Network Time Protocol (NTP) Client](ntp.md)
@@ -72,25 +72,25 @@ See [CSM Automatic Network Utility (CANU)](../canu/index.md)
   * [Web User Interface (WebUI)](web-ui.md)
   * [SNMPv2c Community](snmp_community.md)
   * [SNMPv3 Users](snmpv3_users.md)
-  * [System images](system_images.md)
+  * [System Images](system_images.md)
 
-### Layer one features
+### Layer One Features
 
   * [Physical Interfaces](physical_interfaces.md)
   * [Cable Diagnostics](cable_diagnostics.md)
 
-### Layer two features
+### Layer Two Features
 
   * [Link Layer Discovery Protocol (LLDP)](lldp.md)
   * [Virtual Local Access Networks (VLANs)](vlan.md)
   * [Native VLAN](native_vlan.md)
   * [VLAN Trunking 802.1Q](vlan_trunking_8021q.md)
   * [Link Aggregation Group (LAG)](lag.md)
-  * [MLAG switch configuration](mlag_switch.md)
+  * [MLAG Switch Configuration](mlag_switch.md)
   * [Multi-Chassis Link Aggregation Group (MCLAG)](mlag.md)
   * [Multiple Spanning Tree Protocol (MSTP)](mstp.md)
 
-### Layer three features
+### Layer Three Features
 
   * [Routed Interfaces](routed_interface.md)
   * [VLAN Interface](vlan_interface.md)
@@ -111,11 +111,11 @@ See [CSM Automatic Network Utility (CANU)](../canu/index.md)
   * [Access Control Lists (ACLs)](acl.md)
   * [IP filter](ip_filter.md)
 
-### Performing upgrade on Mellanox
+### Performing Upgrade on Mellanox
 
   * [Switch upgrade](upgrade.md)
 
-### Backing up switch configuration
+### Backing Up Switch Configuration
 
   * [Backing up switch configuration](backup.md)
 
@@ -134,7 +134,7 @@ See [CSM Automatic Network Utility (CANU)](../canu/index.md)
 
 ### DNS
 
-### PXE boot
+### PXE Boot
 
   * [NCNs on install](ncns_on_install.md)
   * [Rebooting NCN and PXE fails](reboot_pxe_fail.md)

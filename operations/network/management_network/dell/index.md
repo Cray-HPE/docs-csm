@@ -24,9 +24,9 @@ This document is intended for network administrators and support personnel.
 
 See [CSM Automatic Network Utility (CANU)](../canu/index.md)
 
-## Managing switches from CLI
+## Managing Switches from the CLI
 
-### Device management
+### Device Management
   * [Management Interface](management_interface.md)
   * [Network Time Protocol (NTP) Client](ntp.md)
   * [Domain Name System (DNS) Client](dns-client.md)
@@ -37,12 +37,12 @@ See [CSM Automatic Network Utility (CANU)](../canu/index.md)
   * [SNMPv2c Community](snmp-community.md)
   * [System images](system_images.md)
 
-### Layer one features
+### Layer One Features
 
   * [Physical Interfaces](physical_interfaces.md)
   * [Locator LED](locator_led.md)
 
-### Layer two features
+### Layer Two Features
 
   * [Link Layer Discovery Protocol (LLDP)](lldp.md)
   * [Virtual Local Access Networks (VLANs)](vlan.md)
@@ -50,7 +50,7 @@ See [CSM Automatic Network Utility (CANU)](../canu/index.md)
   * [Link Aggregation Group (LAG)](lag.md)
   * [Multiple Spanning Tree Protocol (MSTP)](mstp.md)
 
-### Layer three features
+### Layer Three Features
 
   * [VLAN Interface](vlan_interface.md)
   * [Address Resolution Protocol (ARP)](arp.md)
@@ -68,14 +68,14 @@ See [CSM Automatic Network Utility (CANU)](../canu/index.md)
 
   * [Qos](qos.md)
 
-### Performing upgrade on Dell switches
+### Performing Upgrade on Dell Switches
 
   * [Software upgrade](upgrade.md)
 
-### Backing up switch configuration
+### Backing up Switch Configuration
 
   * [Backing up switch configuration](backup.md)
 
-### Factory reset
+### Factory Reset
 
   * [Reset configuration](reset.md)
