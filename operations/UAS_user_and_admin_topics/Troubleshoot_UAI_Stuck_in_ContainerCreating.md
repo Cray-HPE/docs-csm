@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Troubleshoot Duplicate Mount Paths in a UAI](Troubleshoot_Duplicate_Mount_Paths_in_a_UAI.md)
 

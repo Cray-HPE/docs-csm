@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Configure End-User UAI Classes for Broker Mode](Configure_End-User_UAI_Classes_for_Broker_Mode.md)
 
