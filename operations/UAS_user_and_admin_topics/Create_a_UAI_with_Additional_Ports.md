@@ -1,10 +1,8 @@
-[Top: User Access Service (UAS)](index.md)
-
-## Create a UAI with Additional Ports
+# Create a UAI with Additional Ports
 
 In legacy mode UAI creation, an option is available to expose UAI ports to the customer user network in addition to the the port used for SSH access. These ports are restricted to ports 80, 443, and 8888. This procedure allows a user or administrator to create a new UAI with these additional ports.
 
-### Prerequisites
+## Prerequisites
 
 * The user must be logged into a host that has user access to the HPE Cray EX System API Gateway
 * The user must have an installed initialized `cray` CLI and network access to the API Gateway
@@ -14,11 +12,11 @@ In legacy mode UAI creation, an option is available to expose UAI ports to the c
 * The user must have a public SSH key configured on the host from which SSH connections to the UAI will take place
 * The user must have access to a file containing the above public SSH key
 
-### Limitations
+## Limitations
 
 Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports will result in an error.
 
-### Procedure
+## Procedure
 
 1. Create a new UAI with the `--ports` option.
 
@@ -34,7 +32,7 @@ Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports 
 
     Example output:
 
-    ```
+    ```bash
     uai_age = "0m"
     uai_connect_string = "ssh vers@34.68.41.239"
     uai_host = "ncn-w002"
@@ -56,3 +54,5 @@ Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports 
     ```bash
     $ ssh USERNAME@UAI_IP_ADDRESS -i ~/.ssh/id_rsa
     ```
+
+[Top: User Access Service (UAS)](index.md)
