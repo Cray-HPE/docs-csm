@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # MIT License
 #
@@ -21,24 +22,8 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Check Links
 
-on: push
+sed -i.bak '/    default-server/s/.*/    default-server verify none check-ssl inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100/' /etc/haproxy/haproxy.cfg
+sed -i.bak '0,/    option tcp-check/s//    option httpchk GET \/readyz HTTP\/1.0\n    option  log-health-checks\n    http-check expect status 200/' /etc/haproxy/haproxy.cfg
 
-jobs:
-  markdown-link-check:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Get changed files
-      id: changed-files
-      uses: tj-actions/changed-files@v18.7
-      with:
-        files: "**/*.md"
-        files_ignore: ".github/**/*"
-
-    - uses: docker://ghcr.io/tcort/markdown-link-check:stable
-      with:
-        args: "--config .github/config/markdown_link.json ${{ steps.changed-files.outputs.all_changed_files }}"
-
+systemctl restart haproxy

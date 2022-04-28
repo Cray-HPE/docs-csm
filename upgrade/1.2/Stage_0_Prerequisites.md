@@ -12,6 +12,7 @@ Stage 0 has several critical procedures which prepares and verify if the environ
 - [Stage 0.3 - Upgrade Management Network](#update-management-network)
 - [Stage 0.4 - Prerequisites Check](#prerequisites-check)
 - [Stage 0.5 - Backup Workload Manager Data](#backup_workload_manager)
+- [Stage 0.6 - Verify NCN BMC Roles and Locks](#lock-ncn-bmcs)
 - [Stage Completed](#stage_completed)
 
 <a name="install-latest-docs"></a>
@@ -216,6 +217,47 @@ then clone a local working tree and commit appropriate changes to `customization
 ## Stage 0.5 - Backup Workload Manager Data
 
 To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
+
+<a name="lock-ncn-bmcs"></a>
+
+## Stage 0.6 - Verify NCN BMC Roles and Locks
+
+Both NCNs and their BMCs require their roles to be set to `Management` in HSM for locking purposes. This is done automatically for NCNs but manually for their BMCs. For BMCs, this role may not have been set during the previous installation.
+
+1. Ensure that the roles in HSM are properly set.
+
+    ```bash
+    ncn-m001# cray hsm state components bulkRole update --role Management --component-ids \
+                            $(cray hsm state components list --role management --type node --format json | \
+                                jq -r .Components[].ID | sed 's/n[0-9]*//' | tr '\n' ',' | sed 's/.$//')
+    ncn-m001# cray hsm state components query create --format json --component-ids \
+                            $(cray hsm state components list --role management --type node --format json | \
+                                jq -r .Components[].ID | sed 's/n[0-9]*//' | tr '\n' ',' | sed 's/.$//') | \
+                                jq '.Components[] | "\(.ID) Role=\(.Role)"'
+    ```
+
+    Expected output looks similar to the following:
+
+    ```
+    "x3000c0s8b0 Role=Management"
+    "x3000c0s9b0 Role=Management"
+    "x3000c0s2b0 Role=Management"
+    "x3000c0s6b0 Role=Management"
+    "x3000c0s3b0 Role=Management"
+    "x3000c0s7b0 Role=Management"
+    "x3000c0s4b0 Role=Management"
+    "x3000c0s5b0 Role=Management"
+    ```
+
+1. Ensure the NCNs and their BMCs are all locked.
+
+    ```bash
+    ncn-m001# /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
+    ```
+
+For more information about setting NCN BMC roles, see [Set BMC Management Role](../../operations/hardware_state_manager/Set_BMC_Management_Role.md).
+
+For more information about locking NCNs and their BMCs, see [Lock and Unlock Nodes](../../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
 
 <a name="stage_completed"></a>
 
