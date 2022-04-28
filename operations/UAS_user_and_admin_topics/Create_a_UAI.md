@@ -1,6 +1,6 @@
 # Create a UAI
 
-The UAS allows either administrators or authorized users using the [Legacy Mode](Legacy_Mode_User-Driven_UAI_Management.md) of UAI management to create uais. This section shows both methods.
+The UAS allows either administrators or authorized users using the [Legacy Mode](Legacy_Mode_User-Driven_UAI_Management.md) of UAI management to create UAIs. This section shows both methods.
 
 It is rare that an an administrator would hand-craft an End-User UAI using this administrative procedure, but it is possible. This is, however, the procedure used to create Broker UAIs for [Broker Mode UAI Management](Broker_Mode_UAI_Management.md).
 

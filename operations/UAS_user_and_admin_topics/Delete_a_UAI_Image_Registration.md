@@ -12,7 +12,7 @@ Unregister a UAI image from UAS.
 
 ## Procedure
 
-Deleting a UAI image from UAS unregisters the UAI image from UAS. This procedure does not delete the actual UAI image artifact, nor does it affect UAIs currently created using the UAI Image.
+Deleting a UAI image from UAS deregisters the UAI image from UAS. This procedure does not delete the actual UAI image artifact, nor does it affect UAIs currently created using the UAI Image.
 
 Delete a UAS image registration by using a command of the following form:
 
@@ -20,7 +20,7 @@ Delete a UAS image registration by using a command of the following form:
 ncn-m001-pit# cray uas admin config images delete IMAGE_ID
 ```
 
-`IMAGE_ID` is the image ID of the UAI image to unregister from UAS.
+`IMAGE_ID` is the image ID of the UAI image to deregister from UAS.
 
 For example:
 
