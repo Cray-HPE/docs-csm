@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: List Available UAI Images in Legacy Mode](List_Available_UAI_Images_in_Legacy_Mode.md)
 
