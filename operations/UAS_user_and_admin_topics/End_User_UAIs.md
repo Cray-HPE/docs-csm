@@ -1,8 +1,4 @@
-[Top: User Access Service (UAS)](index.md)
-
-[Next Topic: Special Purpose UAIs](Special_Purpose_UAIs.md)
-
-## End-User UAIs
+# End-User UAIs
 
 UAIs used for interactive logins are called End-User UAIs. End-User UAIs can be seen as lightweight User Access Nodes (UANs), but there are important differences between UAIs and UANs.
 
@@ -17,5 +13,7 @@ An administratively removed End-User UAI or an End-User UAI terminated by a time
 The impermanence of End-User UAIs makes them suitable for tasks that are immediate and interactive over relatively short time frames, such as building and testing software or launching workloads. This impermanence makes them unsuitable for unattended activities like executing cron jobs or continuous monitoring of workload progress from a logged-in shell. These kinds of activities are more suited to UANs, which are more permanent and, unless they are re-installed, retain modified state through reboots and other interruptions.
 
 Another way End-User UAIs differ from UANs is that any given End-User UAI is restricted to serving a single user. This protects users from interfering with each other within UAIs and means that any user who wants to use a UAI has to arrange for the UAI to be created and assigned. The [Brokered UAI Management](Broker_Mode_UAI_Management.md) mode simplifies this process by providing automatic creation of and connection to UAIs using SSH logins. Once a user has an End-User UAI assigned, the user may initiate any number of SSH sessions to that UAI (or, in the case of Broker UAIs the broker serving that UAI), but no other user will be recognized by the UAI when attempting to connect. In case of Broker UAIs each unique user will be assigned a unique End-User UAI upon successful login. Multiple sessions of the same user will be will be forwarded by the Broker UAI to the same End-User UAI.
+
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Special Purpose UAIs](Special_Purpose_UAIs.md)
