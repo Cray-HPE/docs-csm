@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Create UAIs From Specific UAI Images in Legacy Mode](Create_UAIs_From_Specific_UAI_Images_in_Legacy_Mode.md)
 

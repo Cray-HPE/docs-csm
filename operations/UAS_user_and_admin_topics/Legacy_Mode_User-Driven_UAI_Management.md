@@ -1,4 +1,4 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Configure A Default UAI Class for Legacy Mode](Configure_a_Default_UAI_Class_for_Legacy_Mode.md)
 
