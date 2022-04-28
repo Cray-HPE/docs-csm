@@ -4,7 +4,7 @@ The provided End-User UAI image is a basic UAI image that includes an up-to-date
 
 A custom End-User UAI image can be any container image set up with the End-User UAI entrypoint script. Experimentation with the wide range of possible UAI images is beyond the scope of this document, but the example given here should offer a starting point for that kind of experimentation.
 
-The example provided here covers the most common use-case, which is building a UAI image from the squashfs image used on compute nodes on the host system to support application development, workload management and analytics workflows. Some of the steps are specific to that activity, others would be common to or similar to steps needed to create special purpose UAIs.
+The example provided here covers the most common use-case, which is building a UAI image from the SquashFS image used on compute nodes on the host system to support application development, workload management and analytics workflows. Some of the steps are specific to that activity, others would be common to or similar to steps needed to create special purpose UAIs.
 
 ## Prerequisites
 
@@ -25,9 +25,9 @@ The example provided here covers the most common use-case, which is building a U
     ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
     ```
 
-2. Query BOS for a sessiontemplate ID.
+2. Query BOS for a `sessiontemplate` ID.
 
-    Identify the Sessiontemplate name to use. A full list may be found with the following command:
+    Identify the `sessiontemplate` name to use. A full list may be found with the following command:
 
     ```bash
     ncn-w001# cray bos sessiontemplate list --format yaml
@@ -62,7 +62,7 @@ The example provided here covers the most common use-case, which is building a U
 
 3. Download a compute node SquashFS.
 
-    Use the Sessiontemplate name to download a compute node squashfs from a BOS sessiontemplate name:
+    Use the `sessiontemplate` name to download a compute node SquashFS from a BOS `sessiontemplate` name:
 
     ```bash
     ncn-w001# SESSION_ID=$(cray bos sessiontemplate describe $SESSION_NAME --format json | jq -r '.boot_sets.compute.path' | awk -F/ '{print $4}')
