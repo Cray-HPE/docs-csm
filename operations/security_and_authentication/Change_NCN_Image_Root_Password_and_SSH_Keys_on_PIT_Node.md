@@ -1,4 +1,4 @@
-# Set NCN Image Root Password, SSH Keys, and timezone on PIT Node
+# Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node
 
 Modify the NCN images by setting the root password and adding SSH keys for the root account.
 Optionally, changing the timezone for the NCNs can also be done at this time. This procedure shows this process being
