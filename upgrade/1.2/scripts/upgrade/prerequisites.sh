@@ -619,6 +619,28 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="CHECK_BMC_NCN_LOCKS"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    # install the hpe-csm-scripts rpm early to get lock_management_nodes.py
+    rpm --force -Uvh $(find $CSM_ARTI_DIR/rpm/cray/csm/ -name \*hpe-csm-scripts\*.rpm | sort -V | tail -1)
+
+    # mark the NCN BMCs with the Management role in HSM
+    cray hsm state components bulkRole update --role Management --component-ids \
+                            $(cray hsm state components list --role management --type node --format json | \
+                                jq -r .Components[].ID | sed 's/n[0-9]*//' | tr '\n' ',' | sed 's/.$//')
+
+    # ensure that they are all locked
+    python3 /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
+
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 # restore previous ssh config if there was one, remove ours
 rm -f /root/.ssh/config
 test -f /root/.ssh/config.bak && mv /root/.ssh/config.bak /root/.ssh/config
