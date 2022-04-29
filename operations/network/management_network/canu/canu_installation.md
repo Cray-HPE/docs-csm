@@ -1,23 +1,21 @@
-# CANU
+# CANU Installation
+
+## Prerequisites
+
+In order to run CANU, both `python3` and `pip3` must be installed.
 
 ## Installation
 
-### Prerequisites
+1. Install `pip3`, if it is not already installed.
 
-In order to run CANU, both python3 and pip3 need to be installed.
+   ```ShellSession
+   linux# pip3 install --editable
+   ```
 
-### Installation
+1. Install the development build of CANU.
 
-To install the development build of CANU type:
+   ```ShellSession
+   linux# python3 setup.py develop --user
+   ```
 
-```
-python3 setup.py develop --user
-```
-
-If that does not work you may need to install pip3 first:
-
-```
-pip3 install --editable
-```
-
-[Back to Index](../index.md)
+[Back to Index](index.md)
