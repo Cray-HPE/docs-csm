@@ -66,7 +66,8 @@ sleep infinity
 
 Starting at the top:
 
-* `pam_config ...` can be customized to set up PAM as needed. The configuration here assumes the broker is using SSSD to reach a directory server for authentication and that, if a home directory is not present for a user at login, one should be made on the broker.
+* `pam_config ...` can be customized to set up PAM as needed. The configuration here assumes the broker is using SSSD to reach a directory server for authentication and that,
+  if a home directory is not present for a user at login, one should be made on the broker.
 * The `ssh-keygen...` part is needed to set up the SSH host key for the broker and should be left alone.
 * The `UAI_CREATION_CLASS` code should be left alone, as it sets up information used by `switchboard` to create End-User UAIs.
 * The `/usr/sbin/sshd...` part starts the SSH server on the broker and should be left alone. Configuration of SSH is covered in the next section and is done by replacing `/etc/switchboard/sshd_config` not by modifying this line.
@@ -238,7 +239,9 @@ but a different path might make customizing SSSD for a given site simpler under 
 6. Update the UAI class.
 
     ```bash
-    ncn-m001-pit# cray uas admin config classes update --volume-list '11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,2246bbb1-4006-4b11-ba57-6588a7b7c02f,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a' d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
+    ncn-m001-pit# cray uas admin config classes update \
+    --volume-list '11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,2246bbb1-4006-4b11-ba57-6588a7b7c02f,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a' \
+    d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
     ```
 
     Example output:
@@ -300,7 +303,8 @@ but a different path might make customizing SSSD for a given site simpler under 
       volumename: lustre
     ```
 
-7. After the Broker UAI class is updated, all that remains is to clear out any existing End-User UAIs (existing UAIs will not work with the new broker because the new broker will have a new key-pair shared with its UAIs) and the existing Broker UAI (if any) and create a new Broker UAI.
+7. After the Broker UAI class is updated, all that remains is to clear out any existing End-User UAIs (existing UAIs will not work with the new broker because the new broker will have a new key-pair shared with its UAIs)
+   and the existing Broker UAI (if any) and create a new Broker UAI.
 
     **NOTE:** Clearing out existing UAIs will terminate any user activity on those UAIs, make sure that users are warned of the disruption.
 
@@ -435,7 +439,9 @@ The following is an example that follows on from the previous section and config
 5. Update the UAI class.
 
     ```bash
-    ncn-m001-pit# cray uas admin config classes update --volume-list '4577eddf-d81e-40c9-9c91-082f3193edd6,11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,2246bbb1-4006-4b11-ba57-6588a7b7c02f,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a' d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
+    ncn-m001-pit# cray uas admin config classes update \
+    --volume-list '4577eddf-d81e-40c9-9c91-082f3193edd6,11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,2246bbb1-4006-4b11-ba57-6588a7b7c02f,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a' \
+    d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
     ```
 
     Example output:
