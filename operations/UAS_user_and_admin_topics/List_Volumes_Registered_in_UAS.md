@@ -11,7 +11,9 @@ List the details of all volumes registered in UAS with the `cray uas admin confi
 
 ## Procedure
 
-The volume registrations in the UAS configuration can be quite extensive and sometimes difficult to read in the default TOML format used by the `cray` administrative CLI. The following shows the `--format` option to the `cray` CLI being used to switch to various output formats that may be easier to read or more useful for certain tasks. Feel free to use that option with any `cray` CLI command to select a more comfortable output style.
+The volume registrations in the UAS configuration can be quite extensive and sometimes difficult to read in the default TOML format used by the `cray` administrative CLI.
+The following shows the `--format` option to the `cray` CLI being used to switch to various output formats that may be easier to read or more useful for certain tasks.
+Feel free to use that option with any `cray` CLI command to select a more comfortable output style.
 
 List the details of all the volumes registered in UAS.
 
@@ -138,7 +140,9 @@ The `mount_path` specifies where in the UAI the volume will be mounted.
 If multiple volumes with the same mount path exist in the UAS configuration, all UAIs must be created using UAI classes that specify a workable subset of volumes.
 A UAI created without a UAI Class under such a UAS configuration will try to use all configured volumes and creation will fail.
 
-The `volume_description` is the JSON description of the volume, specified as a dictionary with one entry, whose key identifies the kind of Kubernetes volume is described (i.e. `host_path`, `configmap`, `secret`, etc.) whose value is another dictionary containing the Kubernetes volume description itself. See [Kubernetes documentation](https://kubernetes.io/docs/concepts/storage/volumes) for details on what goes in various kinds of volume descriptions.
+The `volume_description` is the JSON description of the volume, specified as a dictionary with one entry, whose key identifies the kind of Kubernetes volume is described (i.e. `host_path`, `configmap`, `secret`, etc.)
+whose value is another dictionary containing the Kubernetes volume description itself.
+See [Kubernetes documentation](https://kubernetes.io/docs/concepts/storage/volumes) for details on what goes in various kinds of volume descriptions.
 
 The `volumename` is a string the creator of the volume may chose to describe or name the volume. It must be comprised of only lower case alphanumeric characters and dashes ('-') and must begin and end with an alphanumeric character.
 It is used inside the UAI pod specification to identify the volume that is mounted in a given location in a container. The name is required and administrators are free to use any name that meets the above requirements.

@@ -147,7 +147,7 @@ To do this, either set the `KUBECONFIG` environment variable or set the `--kubec
 The system may return the following error if the user attempts to use an application that requires an X window \(such as xeyes\):
 
 ```bash
-$ ssh user@203.0.113.0 -i ~/.ssh/id_rsa
+# ssh user@203.0.113.0 -i ~/.ssh/id_rsa
 ```
 
 Example output:
@@ -166,7 +166,7 @@ Error: Can't open display:
 To resolve this issue, pass the `-X` option with the `ssh` command as shown below:
 
 ```bash
-$ ssh UAI_USERNAME@UAI_IP_ADDRESS -i ~/.ssh/id_rsa -X
+# ssh UAI_USERNAME@UAI_IP_ADDRESS -i ~/.ssh/id_rsa -X
 ```
 
 Example output:

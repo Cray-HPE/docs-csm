@@ -19,7 +19,7 @@ Functionality that is currently not supported while using UAS.
 ## Limitations Related To Restarts
 
 Changes made to a running UAI will be lost if the UAI is restarted or deleted. The only changes in a UAI that will persist are those written to an externally mounted file system \(such as Lustre or NFS\).
-To make changes to the base image for a UAI, see [Create and Register a Custom UAI Image](Create_and_Register_a_Custom_UAI_Image.md).
+To make changes to the base image for a UAI, see [Customeized End-User UAI Images](Customize_End-User_UAI_Images.md).
 
 A UAI may restart because of an issue on the physical node, scheduled node maintenance, or intentional restarts by a site administrator.
 In this case, any running processes \(such as compiles\), Slurm interactive jobs, or changes made to the UAI \(such as package installations\) are lost.

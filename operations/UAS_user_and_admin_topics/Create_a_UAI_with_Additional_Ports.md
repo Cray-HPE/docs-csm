@@ -26,7 +26,8 @@ Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports 
     ```
 
     When these ports are exposed in the UAI, they will be mapped from the port number on the externally visible IP address of the UAI to the port number used to reach the UAI pod.
-    The mapping of these ports is displayed in the `uai_portmap` element of the returned output from `cray uas create`, and `cray uas list`. The mapping is shown as a dictionary where the key is the externally served port and the value is the internally routed port.
+    The mapping of these ports is displayed in the `uai_portmap` element of the returned output from `cray uas create`, and `cray uas list`.
+    The mapping is shown as a dictionary where the key is the externally served port and the value is the internally routed port.
     Applications running on the UAI should listen on the internally routed port. Usually these will be the same value.
 
     ```bash
