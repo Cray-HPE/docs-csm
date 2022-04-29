@@ -222,8 +222,9 @@ firmware requirement before starting.
 
 1. (optional) Check these BIOS settings on management nodes [NCN BIOS](../background/ncn_bios.md).
 
-    > This is **optional**, the BIOS settings (or lack thereof) do not prevent deployment. The NCN installation will work with the CMOS' default BIOS. There may be settings that facilitate the speed of deployment, but they may be tuned at a later time.
-
+    > This is **optional**, the BIOS settings (or lack thereof) do not prevent deployment. The NCN installation will work with the CMOS' default
+    > BIOS. There may be settings that facilitate the speed of deployment, but they may be tuned at a later time.
+    >
     > **NOTE** The BIOS tuning will be automated, further reducing this step.
 
 1. The firmware on the management nodes should be checked for compliance with the minimum required version
@@ -315,7 +316,7 @@ be performed are in the [Deploy](#deploy) section.
 1. Run the BIOS Baseline script to apply a configs to BMCs. The script will apply helper configs to facilitate more deterministic network booting on any NCN port. **This runs against any server vendor**, some settings are not applied for certain vendors.
 
     > **`NOTE`** This script depends on `IPMI_PASSWORD` being set, this is done in [Tokens and IPMI Password](#tokens-and-ipmi-password)
-
+    >
     > **`NOTE`** This script will enable DCMI/IPMI on Hewlett-Packard Enterprise servers equipped with ILO. If `ipmitool` is not working at this time, it will after running this script.
 
     ```bash
