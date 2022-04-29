@@ -2,7 +2,7 @@
 
 The CSM Automatic Network Utility (CANU) has the ability to run tests against the management network.
 
-If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, refer to the [Update CANU From CSM Tarball](update_canu_from_csm_tarball.md) procedure.
+If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, refer to the [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md) procedure.
 
 The switch inventory is dynamically created from either a System Layout Service (SLS) file `--sls-file`, or it will automatically query the SLS API if an SLS file is not specified.
 
