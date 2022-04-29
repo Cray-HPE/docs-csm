@@ -428,7 +428,7 @@ encrypted.
     linux# /mnt/pitdata/${CSM_RELEASE}/hack/load-container-image.sh dtr.dev.cray.com/zeromq/zeromq:v4.0.5
     ```
 
-    **`IMPORTANT`** CSM 1.0.11 shipped a version of `shasta-cfg` that requires a diffent image tag for the `zeromq` image. If installing this release please see [incorrectly_tagged_zeromq_image.md](../troubleshooting/known_issues/incorrectly_tagged_zeromq_image.md) for instructions on re-tagging the image before proceeding.
+    **IMPORTANT** CSM 1.0.11 shipped a version of `shasta-cfg` that requires a different image tag for the `zeromq` image. If installing this release, see [Incorrectly Tagged `zeromq` Image](../troubleshooting/known_issues/incorrectly_tagged_zeromq_image.md) for instructions on re-tagging the image before proceeding.
 
 1.  Re-encrypt existing secrets:
 
