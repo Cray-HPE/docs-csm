@@ -125,6 +125,7 @@ proceed to step 2.
    ```bash
    pit# systemctl stop chronyd
    ```
+
    Then run the commands above to complete the process.
 
 1. Ensure the current time is set in BIOS for all management NCNs.
@@ -334,11 +335,13 @@ be performed are in the [Deploy](#deploy) section.
    > Observe the output of the checks and note any failures, then remediate them.
 
     Specify the admin user password for the management switches in the system.
+
     ```bash
     pit# export SW_ADMIN_PASSWORD='changeme'
     ```
 
     Run the LiveCD preflight checks.
+
     ```bash
     pit# csi pit validate --livecd-preflight
     ```
