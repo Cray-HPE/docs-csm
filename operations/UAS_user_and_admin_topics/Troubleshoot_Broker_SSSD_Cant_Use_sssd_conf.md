@@ -36,11 +36,14 @@ Diagnose the problem as follows:
 
 ## Problem Explanation
 
-In the current release of UAS, the `default` Service Account on the `uas` namespace in Kubernetes is bound to a Cluster Role that uses a Pod Security Policy that defines a specific `fsGroup` range and a `MustRunAs` rule instead of simply using the `RunAsAny` rule. Because of the way Kubernetes handles volumes, when a volume containing a Secret or a ConfigMap is mounted on a Kubernetes pod with an `fsGroup` rule that is not `RunAsAny` in the Pod Security Policy, the requested mode of the volume is adjusted to something Kubernetes deems more appropriate. In this case, the requested mode (decimal 384 or octal 600) becomes octal 640 instead in the mounted volume. Unfortunately, SSSD requires that this mode be octal 600 or it will refuse to use the configuration file.
+In the current release of UAS, the `default` Service Account on the `uas` namespace in Kubernetes is bound to a Cluster Role that uses a Pod Security Policy that defines a specific `fsGroup` range and a `MustRunAs` rule instead of simply using the `RunAsAny` rule.
+Because of the way Kubernetes handles volumes, when a volume containing a Secret or a ConfigMap is mounted on a Kubernetes pod with an `fsGroup` rule that is not `RunAsAny` in the Pod Security Policy, the requested mode of the volume is adjusted to something Kubernetes deems more appropriate.
+In this case, the requested mode (decimal 384 or octal 600) becomes octal 640 instead in the mounted volume. Unfortunately, SSSD requires that this mode be octal 600 or it will refuse to use the configuration file.
 
 ## Workaround
 
-While this problem will be resolved in an upcoming release of UAS, if this behavior occurs, it is necessary to create a new Pod Security Policy and a Cluster Role using that Pod Security Policy, then change the existing Cluster Role Binding to bind the new Cluster Role instead of the one it currently uses. The following procedure does that.
+While this problem will be resolved in an upcoming release of UAS, if this behavior occurs, it is necessary to create a new Pod Security Policy and a Cluster Role using that Pod Security Policy,
+then change the existing Cluster Role Binding to bind the new Cluster Role instead of the one it currently uses. The following procedure does that.
 
 1. Verify that the system is set up the same way as the system on which this workaround was prepared. To do that, list the Cluster Role Binding named `uas-default-psp` and determine what Cluster Role it is bound to:
 
@@ -76,7 +79,8 @@ While this problem will be resolved in an upcoming release of UAS, if this behav
    * Create a Cluster Role called `uas-default-psp` that uses the new Pod Security Policy
    * Replace the Cluster Role Binding called `uas-default-psp` with a new one that binds the new Cluster Role to the `default` Service Account in the `uas` namespace
 
-   If the system is configured differently, it may be necessary to investigate further, which is largely beyond the scope of this section. The important thing here is that the `default` Service Account in the `uas` namespace must not be bound to a Pod Security Policy with an `fsGroup` or `supplementalGroups` configured with anything but the `RunAsAny` rule.
+   If the system is configured differently, it may be necessary to investigate further, which is largely beyond the scope of this section.
+   The important thing here is that the `default` Service Account in the `uas` namespace must not be bound to a Pod Security Policy with an `fsGroup` or `supplementalGroups` configured with anything but the `RunAsAny` rule.
 
 2. Remove the existing Cluster Role Binding:
 

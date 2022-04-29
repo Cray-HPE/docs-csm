@@ -30,7 +30,8 @@ This is caused by the authentication token being invalid. This can happen for ma
 
 To resolve this issue, run `cray auth login` to refresh the access token.
 
-**Authorization is Local to a Host:** whenever you are using the CLI (`cray` command) on a host (e.g. a workstation or NCN) where it has not been used before, it is necessary to authenticate on that host using `cray auth login`. There is no mechanism to distribute CLI authorization amongst hosts.
+**Authorization is Local to a Host:** whenever you are using the CLI (`cray` command) on a host (e.g. a workstation or NCN) where it has not been used before, it is necessary to authenticate on that host using `cray auth login`.
+There is no mechanism to distribute CLI authorization amongst hosts.
 
 ## Invalid Token
 
