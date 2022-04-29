@@ -18,7 +18,8 @@ To modify a particular resource specification, use a command of the following fo
 ncn-m001-pit# cray uas admin config resources update [OPTIONS] RESOURCE_ID
 ```
 
-The `[OPTIONS]` used by this command are the same options used to create resource specifications. See [Create a UAI Resource Specification](Create_a_UAI_Resource_Specification.md) and [Elements of a UAI](Elements_of_a_UAI.md) for a full description of those options.
+The `[OPTIONS]` used by this command are the same options used to create resource specifications.
+See [Create a UAI Resource Specification](Create_a_UAI_Resource_Specification.md) and [Elements of a UAI](Elements_of_a_UAI.md) for a full description of those options.
 
 Update a UAI resource specification.
 

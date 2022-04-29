@@ -15,7 +15,7 @@ List all available UAI classes.
 
 To list available UAI classes, use the following command:
 
-```
+```bash
 ncn-m001-pit# cray uas admin config classes list
 ```
 

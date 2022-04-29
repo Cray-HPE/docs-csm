@@ -13,9 +13,10 @@ To make UAIs useful, there is a minimum set of volumes that should be defined in
 * `/etc/localtime` for default timezone information
 * The directory on the host nodes that holds persistent end-user storage, typically `/lus`
 
-In addition to this, there may be volumes defined to support a workload manager (Slurm or PBS Professional) or the Cray Programming Environment (PE) or other packages the full extent of these volumes is outside the scope of this document, but whatever list of these other volumes is needed to get a suitable End-User UAI should be included in the default UAI class configuration.
+In addition to this, there may be volumes defined to support a workload manager (Slurm or PBS Professional) or the Cray Programming Environment (PE) or other packages the full extent of these volumes is outside the scope of this document,
+but whatever list of these other volumes is needed to get a suitable End-User UAI should be included in the default UAI class configuration.
 
-The [UAI Classes](UAI_Classes.md)  section has more information on what goes in End-User UAI classes and, specifically, the Non-Brokered End-User UAI classes used for Legacy mode.
+The [UAI Classes](UAI_Classes.md) section has more information on what goes in End-User UAI classes and, specifically, the Non-Brokered End-User UAI classes used for Legacy mode.
 
 [Top: User Access Service (UAS)](index.md)
 

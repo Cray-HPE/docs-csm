@@ -1,6 +1,8 @@
 # Troubleshoot Stale Brokered UAIs
 
-When a Broker UAI terminates and restarts, the SSH key used to forward SSH sessions to End-User UAIs changes (this is a known problem) and subsequent Broker UAIs are unable to forward sessions to End-User UAIs. The symptom of this is that a user logging into a Broker UAI will receive a password prompt from the End-User UAI and be unable to log in even if providing the correct password. To fix this, remove the stale End-User UAIs and allow the Broker UAI to recreate them. The easy way to do this is to use the command specifying the uai-creation-class identifier from the Broker's UAI class.
+When a Broker UAI terminates and restarts, the SSH key used to forward SSH sessions to End-User UAIs changes (this is a known problem) and subsequent Broker UAIs are unable to forward sessions to End-User UAIs.
+The symptom of this is that a user logging into a Broker UAI will receive a password prompt from the End-User UAI and be unable to log in even if providing the correct password.
+To fix this, remove the stale End-User UAIs and allow the Broker UAI to recreate them. The easy way to do this is to use the command specifying the uai-creation-class identifier from the Broker's UAI class.
 
 ```bash
 cray uas admin uais delete --class-id <creation-class-id>
