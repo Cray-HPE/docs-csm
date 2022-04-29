@@ -11,6 +11,7 @@ will join Kubernetes after it is rebooted later in
 [Deploy Final NCN](index.md#deploy_final_ncn).
 
 <a name="timing-of-deployments"></a>
+
 ## Timing of Deployments
 
 The timing of each set of boots varies based on hardware. Nodes from some manufacturers will
@@ -40,11 +41,13 @@ the number of storage and worker nodes.
    1. [Next Topic](#next-topic)
 
 <a name="prepare_for_management_node_deployment"></a>
+
 ## 1. Prepare for Management Node Deployment
 
 Preparation of the environment must be done before attempting to deploy the management nodes.
 
 <a name="tokens-and-ipmi-password"></a>
+
 ### 1.1 Tokens and IPMI Password
 
 1. Define shell environment variables that will simplify later commands to deploy management nodes.
@@ -84,9 +87,10 @@ Preparation of the environment must be done before attempting to deploy the mana
    ```
 
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
+
 ### 1.2 Ensure Time Is Accurate Before Deploying NCNs
 
-**NOTE**: If you wish to use a timezone other than UTC, instead of step 1 below, follow
+**NOTE:** If you wish to use a timezone other than UTC, instead of step 1 below, follow
 [this procedure for setting a local timezone](../operations/node_management/Configure_NTP_on_NCNs.md#set-a-local-timezone), then
 proceed to step 2.
 
@@ -126,7 +130,6 @@ proceed to step 2.
 1. Ensure the current time is set in BIOS for all management NCNs.
 
    > If each NCN is booted to the BIOS menu, you can check and set the current UTC time.
-
 
    ```bash
    pit# export USERNAME=root
@@ -174,20 +177,24 @@ proceed to step 2.
       > linux# bmc=ncn-w001-mgmt # Change this to be each node in turn.
       > linux# ssh -L 9443:$bmc:443 -N root@eniac-ncn-m001
       > ```
+      >
       > Opening a web browser to `https://localhost:9443` will give access to the BMC's web interface.
 
-   1. When the node boots, you will be able to use the conman session to see the BIOS menu to check and set the time to current UTC time. The process varies depending on the vendor of the NCN.
+   1. When the node boots, you will be able to use the conman session to see the BIOS menu to check and set the time to current UTC time.
+      The process varies depending on the vendor of the NCN.
+
    1. After you have verified the correct time, power off the NCN.
 
    Repeat the above process for each NCN.
 
 <a name="update_management_node_firmware"></a>
+
 ## 2. Update Management Node Firmware
 
 > All firmware can be found in the HFP package provided with the Shasta release.
 
-The management nodes are expected to have certain minimum firmware installed for BMC, node BIOS, and PCIe card
-firmware. Where possible, the firmware should be updated prior to install. It is good to meet the minimum NCN
+The management nodes are expected to have certain minimum firmware installed for BMC, node BIOS, and PCIe cards.
+Where possible, the firmware should be updated prior to install. It is good to meet the minimum NCN
 firmware requirement before starting.
 
    >**Note:** When the PIT node is booted from the LiveCD, it is not possible to use the Firmware Action Service (FAS) to update the
@@ -214,14 +221,14 @@ firmware requirement before starting.
 
 1. (optional) Check these BIOS settings on management nodes [NCN BIOS](../background/ncn_bios.md).
 
-    > This is _optional_, the BIOS settings (or lack thereof) do not prevent deployment. The NCN Installation will work with the CMOS' default BIOS. There may be settings that facilitate the speed of deployment, but they may be tuned at a later time.
+    > This is **optional**, the BIOS settings (or lack thereof) do not prevent deployment. The NCN installation will work with the CMOS' default BIOS. There may be settings that facilitate the speed of deployment, but they may be tuned at a later time.
 
-    > **`NOTE`** The BIOS tuning will be automated, further reducing this step.
+    > **NOTE** The BIOS tuning will be automated, further reducing this step.
 
 1. The firmware on the management nodes should be checked for compliance with the minimum required version
    and updated, if necessary, at this point.
 
-   > **`WARNING:`** Gigabyte NCNs running BIOS version C20 can become unusable
+   > **WARNING:** Gigabyte NCNs running BIOS version C20 can become unusable
    > when Shasta 1.5 is installed. This is a result of a bug in the Gigabyte
    > firmware. This bug has not been observed in BIOS version C17.
    >
@@ -232,6 +239,7 @@ firmware requirement before starting.
    * See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
 
 <a name="deploy_management_nodes"></a>
+
 ## 3. Deploy Management Nodes
 
 Deployment of the nodes starts with booting the storage nodes first. Then, the master nodes and worker nodes should be booted together.
@@ -239,38 +247,49 @@ After the operating system boots on each node, there are some configuration acti
 console or the console log for certain nodes can help to understand what happens and when. When the process is complete
 for all nodes, the Ceph storage will have been initialized and the Kubernetes cluster will be created ready for a workload.
 
-
 <a name="deploy-workflow"></a>
+
 ### 3.1 Deploy Workflow
-The configuration workflow described here is intended to help understand the expected path for booting and configuring. The actual steps you will be performing are in the [Deploy](#deploy) section.
+
+The configuration workflow described here is intended to help understand the expected path for booting and configuring. The actual steps to
+be performed are in the [Deploy](#deploy) section.
 
 1. Start watching the consoles for `ncn-s001` and at least one other storage node
 1. Boot all storage nodes at the same time
-    - The first storage node `ncn-s001` will boot and then starts a loop as ceph-ansible configuration waits for all other storage nodes to boot
-    - The other storage nodes boot and become passive. They will be fully configured when ceph-ansible runs to completion on `ncn-s001`
-1. Once `ncn-s001` notices that all other storage nodes have booted, ceph-ansible will begin Ceph configuration. This takes several minutes.
-1. Once ceph-ansible has finished on `ncn-s001`, then `ncn-s001` waits for `ncn-m002` to create /etc/kubernetes/admin.conf.
-1. Start watching the consoles for `ncn-m002`, `ncn-m003`, and at least one worker node
-1. Boot master nodes (`ncn-m002` and `ncn-m003`) and all worker nodes at the same time
-    - The worker nodes will boot and wait for `ncn-m002` to create the `/etc/cray/kubernetes/join-command-control-plane` so they can join Kubernetes
-    - The third master node `ncn-m003` boots and waits for `ncn-m002` to create the `/etc/cray/kubernetes/join-command-control-plane` so it can join Kubernetes
-    - The second master node `ncn-m002` boots, runs the kubernetes-cloudinit.sh which will create /etc/kubernetes/admin.conf and /etc/cray/kubernetes/join-command-control-plane, then waits for the storage node to create etcd-backup-s3-credentials
-1. Once `ncn-s001` notices that `ncn-m002` has created /etc/kubernetes/admin.conf, then `ncn-s001` waits for any worker node to become available.
-1. Once each worker node notices that `ncn-m002` has created /etc/cray/kubernetes/join-command-control-plane, then it will join the Kubernetes cluster.
-    - Now `ncn-s001` should notice this from any one of the worker nodes and move forward with creation of ConfigMaps and running the post-Ceph playbooks (s3, OSD pools, quotas, etc.)
-1. Once `ncn-s001` creates etcd-backup-s3-credentials during the ceph-rgw-users role which is one of the last roles after Ceph has been set up, then `ncn-m001` notices this and moves forward
-   > **`NOTE`**: If several hours have elapsed between storage and master nodes booting, or if there were issues PXE booting master nodes, the cloud init script on `ncn-s001` may not complete successfully. This can cause the `/var/log/cloud-init-output.log` on master node(s) to continue to output the following message:
-   >
-   > [ 1328.351558] cloud-init[8472]: Waiting for storage node to create etcd-backup-s3-credentials secret...
-   >
-   > In this case, the following script is safe to be executed again on `ncn-s001`:
-   >
-   > ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
-   >
-   > After this script finishes, the secrets will be created and the cloud-init script on the master node(s) should complete.
-   >
+    * The first storage node (`ncn-s001`) will boot; it then starts a loop as `ceph-ansible` configuration waits for all other storage nodes to boot.
+    * The other storage nodes boot and become passive. They will be fully configured when `ceph-ansible` runs to completion on `ncn-s001`.
+1. Once `ncn-s001` notices that all other storage nodes have booted, `ceph-ansible` will begin Ceph configuration. This takes several minutes.
+1. Once `ceph-ansible` has finished on `ncn-s001`, then `ncn-s001` waits for `ncn-m002` to create `/etc/kubernetes/admin.conf`.
+1. Start watching the consoles for `ncn-m002`, `ncn-m003`, and at least one worker node.
+1. Boot master nodes (`ncn-m002` and `ncn-m003`) and all worker nodes at the same time.
+    * The worker nodes will boot and wait for `ncn-m002` to create the `/etc/cray/kubernetes/join-command-control-plane` file so that they can join Kubernetes.
+    * The third master node (`ncn-m003`) boots and waits for `ncn-m002` to create the `/etc/cray/kubernetes/join-command-control-plane` file so that it can join Kubernetes
+    * The second master node (`ncn-m002`) boots and runs `kubernetes-cloudinit.sh`, which will create `/etc/kubernetes/admin.conf` and
+      `/etc/cray/kubernetes/join-command-control-plan`. It then waits for the storage node to `create etcd-backup-s3-credentials`.
+1. Once `ncn-s001` notices that `ncn-m002` has created `/etc/kubernetes/admin.conf`, then `ncn-s001` waits for any worker node to become available.
+1. As each worker node notices that `ncn-m002` has created `/etc/cray/kubernetes/join-command-control-plane`, they will join the Kubernetes cluster.
+    * Once `ncn-s001` notices that a worker node has done this, it moves forward with the creation of ConfigMaps and running the post-Ceph playbooks
+      (S3, OSD pools, quotas, and so on.)
+1. Once `ncn-s001` creates `etcd-backup-s3-credentials` during the `ceph-rgw-users` role (one of the last roles after Ceph has been set up), then `ncn-m001`
+   notices this and proceeds.
+
+> **NOTE:** If several hours have elapsed between storage and master nodes booting, or if there were issues PXE booting master nodes, the `cloud-init` script on
+> `ncn-s001` may not complete successfully. This can cause the `/var/log/cloud-init-output.log` on master node(s) to continue to output the following message:
+>
+> ```text
+> [ 1328.351558] cloud-init[8472]: Waiting for storage node to create etcd-backup-s3-credentials secret...
+> ```
+>
+> In this case, the following script is safe to be executed again on `ncn-s001`:
+>
+> ```ShellSession
+> ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
+> ```
+>
+> After this script finishes, the secrets will be created and the `cloud-init` script on the master node(s) should complete.
 
 <a name="deploy"></a>
+
 ### 3.2 Deploy
 
 1. Set the default root password and SSH keys and optionally change the timezone.
@@ -289,8 +308,8 @@ The configuration workflow described here is intended to help understand the exp
     ```
 
 1. Customize boot scripts for any out-of-baseline NCNs
-    - **kubernetes-worker nodes** with more than 2 small disks need to make adjustments to [prevent bare-metal etcd creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd)
-    - A brief overview of what is expected is here, in [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline)
+    * **Worker nodes** with more than two small disks need to make adjustments to [prevent bare-metal `etcd` creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd).
+    * For a brief overview of what is expected, see [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline).
 
 1. Run the BIOS Baseline script to apply a configs to BMCs. The script will apply helper configs to facilitate more deterministic network booting on any NCN port. **This runs against any server vendor**, some settings are not applied for certain vendors.
 
@@ -346,7 +365,7 @@ The configuration workflow described here is intended to help understand the exp
     ncn-w003-mgmt
     ```
 
-    > **`NOTE`**: All console logs are located at `/var/log/conman/console*`
+    > **NOTE:** All console logs are located at `/var/log/conman/console*`
 
 1. <a name="boot-the-storage-nodes"></a>Boot the **Storage Nodes**
 
@@ -366,27 +385,28 @@ The configuration workflow described here is intended to help understand the exp
 
     From there an administrator can witness console output for the `cloud-init` scripts.
 
-    **`NOTE`**: Watch the storage node consoles carefully for error messages. If any are seen, consult [Ceph-CSI Troubleshooting](ceph_csi_troubleshooting.md).
+    **NOTE:** Watch the storage node consoles carefully for error messages. If any are seen, consult [Ceph-CSI Troubleshooting](ceph_csi_troubleshooting.md).
 
-    **`NOTE`**: If the nodes have PXE boot issues (for example, getting PXE errors, or not pulling the `ipxe.efi` binary), see [PXE boot troubleshooting](pxe_boot_troubleshooting.md).
+    **NOTE:** If the nodes have PXE boot issues (for example, getting PXE errors, or not pulling the `ipxe.efi` binary), see [PXE boot troubleshooting](pxe_boot_troubleshooting.md).
 
 1. Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
 
-   **`NOTE`**: Once all storage nodes are up and the message `...sleeping 5 seconds until /etc/kubernetes/admin.conf` appears on `ncn-s001`'s console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
+   **NOTE:** Once all storage nodes are up and the message `...sleeping 5 seconds until /etc/kubernetes/admin.conf` appears on `ncn-s001`'s console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
 
     ```bash
     pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
     ```
 
-1.  Stop watching the console from `ncn-s001`.
+1. Stop watching the console from `ncn-s001`.
 
     Type the ampersand character and then the period character to exit from the conman session on `ncn-s001`.
+
     ```text
     &.
     pit#
     ```
 
-1.  Wait. Observe the installation through `ncn-m002-mgmt`'s console:
+1. Wait. Observe the installation through `ncn-m002-mgmt`'s console:
 
     Print the console name:
 
@@ -406,11 +426,15 @@ The configuration workflow described here is intended to help understand the exp
     pit# conman -j ncn-m002-mgmt
     ```
 
-    **`NOTE`**: If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
+    **NOTE:** If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
 
-    **`NOTE`**: If one of the master nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages. If any are found, consult [CEPH CSI Troubleshooting](ceph_csi_troubleshooting.md)
+    **NOTE:** If one of the master nodes seems hung waiting for the storage nodes to create a secret, check the storage node consoles for error messages.
+    If any are found, consult [CEPH CSI Troubleshooting](ceph_csi_troubleshooting.md)
 
-1. Refer to [timing of deployments](#timing-of-deployments). It should take no more than 60 minutes for the `kubectl get nodes` command to return output indicating that all the master nodes and worker nodes aside from the PIT node booted from the LiveCD are `Ready`:
+1. Wait for the deployment to finish.
+
+    Refer to [timing of deployments](#timing-of-deployments). It should not take more than 60 minutes for the `kubectl get nodes` command to return output indicating
+    that all the master nodes and worker nodes (excluding from the PIT node) booted from the LiveCD and are `Ready`.
 
     ```bash
     pit# ssh ncn-m002
@@ -428,15 +452,17 @@ The configuration workflow described here is intended to help understand the exp
     ncn-w003   Ready    <none>                 2h    v1.20.13   10.252.1.9    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
     ```
 
-1.  Stop watching the console from `ncn-m002`.
+1. Stop watching the console from `ncn-m002`.
 
     Type the ampersand character and then the period character to exit from the conman session on `ncn-m002`.
+
     ```text
     &.
     pit#
     ```
 
 <a name="check-lvm-on-masters-and-workers"></a>
+
 ### 3.3 Check LVM on Masters and Workers
 
 #### 3.3.1 Run The Check
@@ -449,7 +475,8 @@ pit# /usr/share/doc/csm/install/scripts/check_lvm.sh
 
 #### 3.3.2 Expected Check Output
 
-Expected output looks something like
+Expected output looks similar to the following:
+
 ```text
 When prompted, please enter the NCN password for ncn-m002
 Warning: Permanently added 'ncn-m002,10.252.1.11' (ECDSA) to the list of known hosts.
@@ -477,20 +504,23 @@ SUCCESS: LVM checks passed on all master and worker NCNs
 
 If the check succeeds, skip the manual check procedure and recovery steps.
 
-***If the check fails for any nodes, the problem must be resolved before continuing.*** See [LVM Check Failure Recovery](#lvm-check-failure-recovery).
+**If the check fails for any nodes, the problem must be resolved before continuing.** See [LVM Check Failure Recovery](#lvm-check-failure-recovery).
 
 <a name="manual-lvm-check-procedure"></a>
+
 #### 3.3.3 Manual LVM Check Procedure
 
 If needed, the LVM checks can be performed manually on the master and worker nodes.
 
 * Manual check on master nodes:
+
     ```bash
     ncn-m# blkid -L ETCDLVM
     /dev/sdc
     ```
 
 * Manual check on worker nodes:
+
     ```bash
     ncn-w# blkid -L CONLIB
     /dev/sdb2
@@ -500,9 +530,12 @@ If needed, the LVM checks can be performed manually on the master and worker nod
     /dev/sdb3
     ```
 
-The manual checks are considered successful if all of the `blkid` commands report a disk device (such as `/dev/sdc` -- the particular device is unimportant). If any of the `lsblk` commands return no output, then the check is a failure. **Any failures must be resolved before continuing.** See the following section for details on how to do so.
+The manual checks are considered successful if all of the `blkid` commands report a disk device (such as `/dev/sdc` -- the particular device is unimportant).
+If any of the `lsblk` commands return no output, then the check is a failure. **Any failures must be resolved before continuing.** See the following section
+for details on how to do so.
 
 <a name="lvm-check-failure-recovery"></a>
+
 #### 3.3.4 LVM Check Failure Recovery
 
 If there are LVM check failures, then the problem must be resolved before continuing with the install.
@@ -520,13 +553,14 @@ If there are LVM check failures, then the problem must be resolved before contin
         * Note: The `ipmitool` command will give errors trying to power on the unaffected nodes, because they are already powered on -- this is expected and not a problem.
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
+
 ### 3.4 Check for Unused Drives on Utility Storage Nodes
 
-> **`IMPORTANT:`** Do the following if NCNs are Gigabyte hardware. It is suggested (but optional) for HPE NCNs.
+> **IMPORTANT:** Do the following if NCNs are Gigabyte hardware. It is suggested (but optional) for HPE NCNs.
 >
-> **`IMPORTANT:`** Estimate the expected number of OSDs using the following table and using this equation:
+> **IMPORTANT:** Estimate the expected number of OSDs using the following table and using this equation:
 >
->  total_osds = (num of utility storage/ceph nodes) * (OSD count from table below for the appropriate hardware)
+> total_osds = (number of utility storage/Ceph nodes) * (OSD count from table below for the appropriate hardware)
 
 | Hardware Manufacturer | OSD Drive Count (not including OS drives)|
 | :-------------------: | :---------------------------------------: |
@@ -544,7 +578,7 @@ If there are LVM check failures, then the problem must be resolved before contin
     24
     ```
 
-   **`IMPORTANT:`** If the returned number of OSDs is equal to total_osds calculated, then you can skip the following steps. If not, then please proceed with the below additional checks and remediation steps.
+   **IMPORTANT:** If the returned number of OSDs is equal to total_osds calculated, then you can skip the following steps. If not, then please proceed with the below additional checks and remediation steps.
 
 1. Compare your number of OSDs to your output which should resemble the example below. The number of drives will depend on the server hardware.
 
@@ -622,7 +656,7 @@ If there are LVM check failures, then the problem must be resolved before contin
     ncn-s# cephadm shell -- ceph-volume inventory
     ```
 
-    **`IMPORTANT:`** The `cephadm` command may output this warning `WARNING: The same type, major and minor should not be used for multiple devices.`. You can ignore this warning.
+    **IMPORTANT:** The `cephadm` command may output this warning `WARNING: The same type, major and minor should not be used for multiple devices.`. You can ignore this warning.
 
     The field `available` would be `True` if Ceph sees the drive as empty and can
     be used. For example:
@@ -647,9 +681,9 @@ If there are LVM check failures, then the problem must be resolved before contin
 
 ##### Wipe and Add Drives
 
-1. Wipe the drive ***ONLY after you have confirmed the drive is not being used by the current Ceph cluster*** via options 1, 2, or both.
+1. Wipe the drive **ONLY after you have confirmed the drive is not being used by the current Ceph cluster** using options 1, 2, or both.
 
-    > The following example wipes drive `/dev/sdc` on `ncn-s002`. You should replace these values with the appropriate ones for your situation.
+    > The following example wipes drive `/dev/sdc` on `ncn-s002`. Replace these values with the appropriate ones for the situation.
 
     ```bash
     ncn-s# ceph orch device zap ncn-s002 /dev/sdc --force
@@ -664,11 +698,13 @@ If there are LVM check failures, then the problem must be resolved before contin
 More information can be found at [the `cephadm` reference page](../operations/utility_storage/Cephadm_Reference_Material.md).
 
 <a name="configure_after_management_node_deployment"></a>
+
 ## 4. Configure after Management Node Deployment
 
 After the management nodes have been deployed, configuration can be applied to the booted nodes.
 
 <a name="livecd-cluster-authentication"></a>
+
 ### 4.1 LiveCD Cluster Authentication
 
 The LiveCD needs to authenticate with the cluster to facilitate the rest of the CSM installation.
@@ -711,6 +747,7 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
     ```
 
 <a name="install-tests"></a>
+
 ### 4.4 Install Tests and Test Server on NCNs
 
 Run the following commands on the PIT node.
@@ -723,6 +760,7 @@ pit# popd
 ```
 
 <a name="remove-default-ntp-pool"></a>
+
 ### 4.5 Remove the default NTP pool
 
 Run the following command on the PIT node to remove the default pool, which can cause contention issues with NTP. When it prompts you for a password, enter the root password for `ncn-m002`.
@@ -736,7 +774,8 @@ pit# ssh ncn-m002 "\
 ```
 
 Expected output looks similar to the following:
-```
+
+```text
 Password:
 ncn-m002: Warning: Permanently added 'ncn-m002,10.252.1.11' (ECDSA) to the list of known hosts.
 ncn-s001: Warning: Permanently added 'ncn-s001,10.252.1.6' (ECDSA) to the list of known hosts.
@@ -749,11 +788,13 @@ ncn-w003: Warning: Permanently added 'ncn-w003,10.252.1.7' (ECDSA) to the list o
 ```
 
 <a name="validate_management_node_deployment"></a>
+
 ## 5. Validate Management Node Deployment
 
 Do all of the validation steps. The optional validation steps are manual steps which could be skipped.
 
 <a name="validation"></a>
+
 ### 5.1 Validation
 
 The following `csi pit validate` commands will run a series of remote tests on the other nodes to validate they are healthy and configured correctly.
@@ -769,28 +810,32 @@ Observe the output of the checks and note any failures, then remediate them.
    Once that command has finished, check the last line of output to see the results of the tests.
 
    Example last line of output:
+
    ```text
    Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4226 seconds
    ```
 
    If the test total line reports any failed tests, look through the full output of the test in `csi-pit-validate-ceph.log` to see which node had the failed test and what the details are for that test.
 
-   **`Note`**: Please see [Utility Storage](../operations/utility_storage/Utility_Storage.md) to help resolve any failed tests.
+   **Note:** Please see [Utility Storage](../operations/utility_storage/Utility_Storage.md) to help resolve any failed tests.
 
 1. Check the master and worker nodes.
 
-   **`Note`**: Throughout the output of the `csi pit validate` command there will be a test total for each node where the tests run. **Be sure to check all of them and not just the final one.** (a `grep` command is provided to help with this)
+   **Note:** Throughout the output of the `csi pit validate` command are test totals for each node where the tests run. **Be sure to check
+   all of them and not just the final one.** A `grep` command is provided to help with this.
 
    ```bash
    pit# csi pit validate --k8s | tee csi-pit-validate-k8s.log
    ```
 
    Once that command has finished, the following will extract the test totals reported for each node:
+
    ```bash
    pit# grep "Total Test" csi-pit-validate-k8s.log
    ```
 
-   Example output for a system with 5 master and worker nodes (other than the PIT node):
+   Example output for a system with five master and worker nodes (excluding the PIT node):
+
    ```text
    Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.3072 seconds
    Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.2727 seconds
@@ -801,7 +846,9 @@ Observe the output of the checks and note any failures, then remediate them.
 
    If these total lines report any failed tests, look through the full output of the test to see which node had the failed test and what the details are for that test.
 
-   > **`WARNING`** If there are failures for tests with names like `Worker Node CONLIB FS Label`, then manual tests should be run on the node which reported the failure. See [Manual LVM Check Procedure](#manual-lvm-check-procedure). If the manual tests fail, then the problem must be resolved before continuing to the next step. See [LVM Check Failure Recovery](#lvm-check-failure-recovery).
+   > **WARNING** If there are failures for tests with names like `Worker Node CONLIB FS Label`, then manual tests should be run on the node which reported the failure.
+   See [Manual LVM Check Procedure](#manual-lvm-check-procedure). If the manual tests fail, then the problem must be resolved before continuing to the next step. See
+   [LVM Check Failure Recovery](#lvm-check-failure-recovery).
 
 1. Ensure that weave has not become split-brained.
 
@@ -811,12 +858,14 @@ Observe the output of the checks and note any failures, then remediate them.
    ncn# weave --local status connections | grep failed
    ```
 
-   If the check is successful, there will be no output. If you see messages like `IP allocation was seeded by different peers`, then weave looks to have split-brained. At this point, it is necessary to wipe the NCNs and start the PXE boot again:
+   If the check is successful, there will be no output. If you see messages like `IP allocation was seeded by different peers`, then weave looks to have split-brained.
+   At this point it is necessary to wipe the NCNs and start the PXE boot again:
 
    1. Wipe the NCNs using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
    1. Return to the 'Boot the **Storage Nodes**' step of [Deploy Management Nodes](#deploy_management_nodes) section above.
 
 <a name="optional-validation"></a>
+
 ### 5.2 Optional Validation
 
    1. Verify `etcd` is running outside Kubernetes on master nodes
@@ -849,11 +898,13 @@ Observe the output of the checks and note any failures, then remediate them.
       See [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md) for details.
 
 <a name="important-checkpoint"></a>
+
 ## Important Checkpoint
 
 > Before you move on, this is the last point where you will be able to rebuild nodes without having to rebuild the PIT node. So take time to double check both the cluster and the validation test results
 
 <a name="next-topic"></a>
+
 ## Next Topic
 
 After completing the deployment of the management nodes, the next step is to install the CSM services.
