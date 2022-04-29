@@ -10,7 +10,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 1. [Known Issues](#known-issues)
     * [install.sh known issues](#known-issues-install-sh)
     * [Setup Nexus known issues](#known-issues-setup-nexus)
-1.  [Next Topic](#next-topic)
+1. [Next Topic](#next-topic)
 
 ## Details
 
@@ -41,8 +41,8 @@ and tuning based on specific systems, see
     pit# popd
     ```
 
-    > **NOTES:** 
-    > 
+    > **NOTES:**
+    >
     > * If any errors are encountered, then potential fixes should be displayed where the error occurred. You can rerun above command any time.
     > * Output is redirected to `/usr/share/doc/csm/install/scripts/csm_services/yapl.log` . To show stdout in the terminal, use
     >   `yapl -f install.yaml --console-output execute`
@@ -69,7 +69,7 @@ error. It may be possible to resume installation from the last successful
 command executed by `install.sh`, but administrators will need to appropriately
 modify `install.sh` to pick up where the previous run left off. (Note: The
 `install.sh` script runs with `set -x`, so each command will be printed to
-stderr prefixed with the expanded value of PS4, namely, `+ `.)
+stderr prefixed with the expanded value of PS4, namely, `+`.)
 
 The following error may occur when running `./install.sh`:
 
@@ -119,4 +119,4 @@ Known potential issues with suggested fixes are listed in [Troubleshoot Nexus](.
 
 After completing this procedure the next step is to validate CSM health before redeploying the final NCN.
 
-- See [Validate CSM Health Before Final NCN Deployment](index.md#validate_csm_health_before_final_ncn_deploy)
+See [Validate CSM Health Before Final NCN Deployment](index.md#validate_csm_health_before_final_ncn_deploy)
