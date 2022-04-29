@@ -22,7 +22,8 @@ ncn-m001-pit# cray uas admin config images create --imagename IMAGE_NAME
 
 In this example, `IMAGE_NAME` is the full name of the image, including registry host and version tag, to be registered.
 
-The following example registers a UAI image stored in the `registry.local` registry as `registry.local/cray/custom-end-user-uai:latest`. This example also explicitly sets the default attribute to `true` because the `--default yes` option is used in the command.
+The following example registers a UAI image stored in the `registry.local` registry as `registry.local/cray/custom-end-user-uai:latest`.
+This example also explicitly sets the default attribute to `true` because the `--default yes` option is used in the command.
 
 ```bash
 ncn-m001-pit# cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest --default yes

@@ -134,11 +134,15 @@ Looking at the above output, each volume has a `mount_path`, `volume_description
 
 The `mount_path` specifies where in the UAI the volume will be mounted.
 
-**NOTE:** While it is acceptable to have multiple volumes configured in UAS with the same `mount_path`, any given UAI will fail creation if it has more than one volume specified for a given mount path. If multiple volumes with the same mount path exist in the UAS configuration, all UAIs must be created using UAI classes that specify a workable subset of volumes. A UAI created without a UAI Class under such a UAS configuration will try to use all configured volumes and creation will fail.
+**NOTE:** While it is acceptable to have multiple volumes configured in UAS with the same `mount_path`, any given UAI will fail creation if it has more than one volume specified for a given mount path.
+If multiple volumes with the same mount path exist in the UAS configuration, all UAIs must be created using UAI classes that specify a workable subset of volumes.
+A UAI created without a UAI Class under such a UAS configuration will try to use all configured volumes and creation will fail.
 
 The `volume_description` is the JSON description of the volume, specified as a dictionary with one entry, whose key identifies the kind of Kubernetes volume is described (i.e. `host_path`, `configmap`, `secret`, etc.) whose value is another dictionary containing the Kubernetes volume description itself. See [Kubernetes documentation](https://kubernetes.io/docs/concepts/storage/volumes) for details on what goes in various kinds of volume descriptions.
 
-The `volumename` is a string the creator of the volume may chose to describe or name the volume. It must be comprised of only lower case alphanumeric characters and dashes ('-') and must begin and end with an alphanumeric character. It is used inside the UAI pod specification to identify the volume that is mounted in a given location in a container. The name is required and administrators are free to use any name that meets the above requirements. Volume names do need to be unique within any given UAI and are far more useful when searching for a volume if they are unique across the entire UAS configuration.
+The `volumename` is a string the creator of the volume may chose to describe or name the volume. It must be comprised of only lower case alphanumeric characters and dashes ('-') and must begin and end with an alphanumeric character.
+It is used inside the UAI pod specification to identify the volume that is mounted in a given location in a container. The name is required and administrators are free to use any name that meets the above requirements.
+Volume names do need to be unique within any given UAI and are far more useful when searching for a volume if they are unique across the entire UAS configuration.
 
 The `volume_id` is a unique identifier used to identify the UAS volume when examining, updating or deleting a volume and when linking a volume to a UAI class. It is assigned automatically by UAS.
 

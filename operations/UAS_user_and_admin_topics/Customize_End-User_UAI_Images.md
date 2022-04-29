@@ -1,10 +1,13 @@
 # Customize End-User UAI Images
 
-The provided End-User UAI image is a basic UAI image that includes an up-to-date version of the SLES Linux Distribution. It provides an entrypoint to using UAIs and an easy way for administrators to experiment with UAS configurations. To support building software to be run in compute nodes, or other HPC and Analytics workflows, it is necessary to create a custom End-User UAI image and use that.
+The provided End-User UAI image is a basic UAI image that includes an up-to-date version of the SLES Linux Distribution. It provides an entrypoint to using UAIs and an easy way for administrators to experiment with UAS configurations.
+To support building software to be run in compute nodes, or other HPC and Analytics workflows, it is necessary to create a custom End-User UAI image and use that.
 
-A custom End-User UAI image can be any container image set up with the End-User UAI entrypoint script. Experimentation with the wide range of possible UAI images is beyond the scope of this document, but the example given here should offer a starting point for that kind of experimentation.
+A custom End-User UAI image can be any container image set up with the End-User UAI entrypoint script.
+Experimentation with the wide range of possible UAI images is beyond the scope of this document, but the example given here should offer a starting point for that kind of experimentation.
 
-The example provided here covers the most common use-case, which is building a UAI image from the SquashFS image used on compute nodes on the host system to support application development, workload management and analytics workflows. Some of the steps are specific to that activity, others would be common to or similar to steps needed to create special purpose UAIs.
+The example provided here covers the most common use-case, which is building a UAI image from the SquashFS image used on compute nodes on the host system to support application development, workload management and analytics workflows.
+Some of the steps are specific to that activity, others would be common to or similar to steps needed to create special purpose UAIs.
 
 ## Prerequisites
 
@@ -54,7 +57,8 @@ The example provided here covers the most common use-case, which is building a U
     name: wlm-sessiontemplate-0.1.0
     ```
 
-    Alternatively, collect the sessiontemplate name used during the Cray Operating System (COS) install. Refer to the "Boot COS" procedure in the COS product stream documentation. Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name.
+    Alternatively, collect the sessiontemplate name used during the Cray Operating System (COS) install. Refer to the "Boot COS" procedure in the COS product stream documentation.
+    Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name.
 
     ```bash
     ncn-w001# SESSION_NAME=wlm-sessiontemplate-0.1.0
@@ -88,7 +92,8 @@ The example provided here covers the most common use-case, which is building a U
         ncn-w001# (cd `pwd`/mount; tar --xattrs --xattrs-include='*' --exclude="99-slingshot-network.conf" -cf "../$SESSION_ID.tar" .) > /dev/null
         ```
 
-        This may take several minutes. Notice that this does not create a compressed tarball. Using an uncompressed format makes it possible to add files if needed once the tarball is made. It also makes the procedure run just a bit more quickly. If warnings related to xattr are displayed, continue with the procedure as the resulting tarball should still result in a functioning UAI container image.
+        This may take several minutes. Notice that this does not create a compressed tarball. Using an uncompressed format makes it possible to add files if needed once the tarball is made.
+        It also makes the procedure run just a bit more quickly. If warnings related to xattr are displayed, continue with the procedure as the resulting tarball should still result in a functioning UAI container image.
 
     3. Check that the tarball contains `./usr/bin/uai-ssh.sh`.
 
@@ -128,7 +133,8 @@ The example provided here covers the most common use-case, which is building a U
 
 5. Create and push the container image.
 
-    Create a container image using podman or docker and push it to the site container registry. Any container-specific modifications may also be done here with a Dockerfile. The ENTRYPOINT layer must be /usr/bin/uai-ssh.sh as that starts SSHD for the user in the UAI container started by UAS.
+    Create a container image using podman or docker and push it to the site container registry. Any container-specific modifications may also be done here with a Dockerfile.
+    The ENTRYPOINT layer must be /usr/bin/uai-ssh.sh as that starts SSHD for the user in the UAI container started by UAS.
 
     ```bash
     ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
