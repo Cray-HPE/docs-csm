@@ -748,7 +748,7 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 
 <a name="install-tests"></a>
 
-### 4.4 Install Tests and Test Server on NCNs
+### 4.2 Install Tests and Test Server on NCNs
 
 Run the following commands on the PIT node.
 
@@ -761,7 +761,7 @@ pit# popd
 
 <a name="remove-default-ntp-pool"></a>
 
-### 4.5 Remove the default NTP pool
+### 4.3 Remove the default NTP pool
 
 Run the following command on the PIT node to remove the default pool, which can cause contention issues with NTP. When it prompts you for a password, enter the root password for `ncn-m002`.
 
