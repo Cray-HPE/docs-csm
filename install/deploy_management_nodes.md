@@ -469,7 +469,7 @@ be performed are in the [Deploy](#deploy) section.
         ```
 
         Expected output looks similar to the following:
-        
+
         ```text
         Password:
         receiving incremental file list
@@ -484,26 +484,27 @@ be performed are in the [Deploy](#deploy) section.
         ```
 
     1. Make a list of all of the NCNs (including `ncn-m001`).
-    
+
         ```ShellSession
         pit# NCNS=$(grep -oP "ncn-[msw][0-9]{3}" /etc/dnsmasq.d/statics.conf | sort -u | tr '\n' ',') ; echo "${NCNS}"
         ```
-        
+
         Expected output looks similar to the following:
-        
+
         ```text
         ncn-m001,ncn-m002,ncn-m003,ncn-s001,ncn-s002,ncn-s003,ncn-w001,ncn-w002,ncn-w003
         ```
 
     1. Verify that passwordless SSH is now working from the PIT node to the other NCNs.
-    
+
         The following command should not prompt you to enter a password.
-        
+
         ```ShellSession
         pit# PDSH_SSH_ARGS_APPEND='-o StrictHostKeyChecking=no' pdsh -Sw "${NCNS}" date && echo SUCCESS || echo ERROR
         ```
-        
+
         Expected output looks similar to the following:
+
         ```text
         ncn-w001: Warning: Permanently added 'ncn-w001,10.252.1.7' (ECDSA) to the list of known hosts.
         ncn-w003: Warning: Permanently added 'ncn-w003,10.252.1.9' (ECDSA) to the list of known hosts.
