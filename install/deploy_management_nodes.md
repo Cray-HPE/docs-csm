@@ -226,8 +226,8 @@ firmware requirement before starting.
 1. (optional) Check these BIOS settings on management nodes [NCN BIOS](../background/ncn_bios.md).
 
     > This is **optional**, the BIOS settings (or lack thereof) do not prevent deployment. The NCN installation will work with the CMOS' default BIOS. There may be settings that facilitate the speed of deployment, but they may be tuned at a later time.
-
-    > **NOTE** The BIOS tuning will be automated, further reducing this step.
+    >
+    > **NOTE:** The BIOS tuning will be automated, further reducing this step.
 
 1. Check for minimum NCN firmware versions and update them as needed,
    The firmware on the management nodes should be checked for compliance with the minimum version required
@@ -325,7 +325,7 @@ be performed are in the [Deploy](#deploy) section.
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     ```
 
-    > Note: some BMCs will "flake" and ignore the boot order setting by `ipmitool`. As a fallback, cloud-init will
+    > Note: Some BMCs will "flake" and ignore the boot order setting by `ipmitool`. As a fallback, cloud-init will
     > correct the boot order after NCNs complete their first boot. The first boot may need manual effort to set the boot order over the conman console. The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
 
 1. Validate that the LiveCD is ready for installing NCNs
@@ -335,8 +335,10 @@ be performed are in the [Deploy](#deploy) section.
     pit# csi pit validate --livecd-preflight
     ```
 
-    > Note: This check sometimes leaves the terminal in a state where input is not echoed to the screen. If this happens, running the `reset` command will correct it.
-    > Note: You can ignore any errors about not being able resolve arti.dev.cray.com.
+    > Notes:
+    >
+    > * This check sometimes leaves the terminal in a state where input is not echoed to the screen. If this happens, running the `reset` command will correct it.
+    > * Ignore any errors about not being able resolve `arti.dev.cray.com`.
 
 1. Print the consoles available to you:
 
@@ -359,7 +361,7 @@ be performed are in the [Deploy](#deploy) section.
     ```
 
     > **IMPORTANT:** This is the administrator's _last chance_ to run [NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds) (the `before-ncn-boot` breakpoint).
-
+    >
     > **NOTE:** All console logs are located at `/var/log/conman/console*`
 
 1. <a name="boot-the-storage-nodes"></a>Boot the **Storage Nodes**
