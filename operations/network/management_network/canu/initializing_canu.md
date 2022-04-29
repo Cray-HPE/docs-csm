@@ -1,6 +1,8 @@
 # Initializing CANU
 
-Initialize the CSM Automatic Network Utility (CANU) in order to help create the switch configuration. CANU can automatically parse CSI output or the Shasta System Layout Service (SLS) API for switch IPv4 addresses. Using the SLS API is only possible after the CSM install has been completed at least to the point where CSM Services have been deployed. Prior to that, parsing CSI output is the only option.
+Initialize the CSM Automatic Network Utility (CANU) in order to help create the switch configurations. CANU can automatically parse CSI output or
+the Shasta System Layout Service (SLS) API for switch IPv4 addresses. Using the SLS API is only possible after the CSM install has been completed
+at least to the point where CSM Services have been deployed. Prior to that, parsing CSI output is the only option.
 
 ## CANU Output File
 
@@ -26,9 +28,10 @@ Eight IP addresses are saved to `output.txt`.
 
 ## SLS API Input
 
-In order to parse the Shasta SLS API for IP addresses, ensure that you have a valid API token. The token file can either be passed in with the `--auth-token TOKEN_FILE` flag, or the token can be automatically read from the `SLS_TOKEN` environmental variable, if it is exported.
+In order to parse the Shasta SLS API for IP addresses, ensure that you have a valid API token. The token file can either be passed in with the
+`--auth-token TOKEN_FILE` flag, or the token can be read from the `SLS_TOKEN` environmental variable, if it is exported.
 
-The SLS address is by default set to `api-gw-service-nmn.local`. If you are operating on a system with a different SLS address, then you can specify it with the `--sls-address SLS_ADDRESS` flag.
+The SLS address is by default set to `api-gw-service-nmn.local`. If needed, a different address can be specified using the `--sls-address SLS_ADDRESS` flag.
 
 To get the switch IP addresses from the Shasta SLS API, run the following command:
 
