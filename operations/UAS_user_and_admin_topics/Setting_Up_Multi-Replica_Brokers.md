@@ -15,7 +15,8 @@ This has two beneficial effects:
 The number of replicas a Multi-Replica UAI Broker should have is dictated primarily by the number of host nodes on which Broker UAIs can be deployed.
 From a load-balancing perspective, it makes sense to make the number of replicas equal to the number of available host nodes.
 From a resiliency perspective, that number could be considerably smaller (3 for example) on the assumption that multi-node failures or evictions are unlikely, and brokers that are evicted or restarted will start up relatively quickly elsewhere.
-It does not make sense from either perspective, however, to over-subscribe the available number of host nodes (except, perhaps during a temporary outage) since that will result in no additional resiliency and the potential for network traffic and resource consumption hot spots.
+It does not make sense from either perspective, however, to over-subscribe the available number of host nodes (except, perhaps during a temporary outage)
+since that will result in no additional resiliency and the potential for network traffic and resource consumption hot spots.
 
 [Top: User Access Service (UAS)](index.md)
 

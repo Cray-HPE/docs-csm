@@ -20,7 +20,7 @@ Delete a UAS image registration by using a command of the following form:
 ncn-m001-pit# cray uas admin config images delete IMAGE_ID
 ```
 
-`IMAGE_ID` is the image ID of the UAI image registeration being removed from UAS.
+`IMAGE_ID` is the image ID of the UAI image registration being removed from UAS.
 
 For example:
 
