@@ -15,7 +15,7 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
 - Up to date SHCD.
 - CANU installed with version 1.1.11 or greater.
   - Run `canu --version` to see version.
-  - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](update_canu_from_csm_tarball.md)
+  - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md)
 
 ## Prepare to Validate
 
