@@ -1,7 +1,8 @@
 # Clear UAS Configuration
 
 **WARNING:** The procedure described here will remove all UAS configuration including some configuration that is installed upon installation / upgrade of the HPE Cray EX system.
-If this procedure is used, the `update-uas` Helm chart must be removed and re-deployed to restore the full HPE provided configuration. This procedure should only be used in an extreme situation where the UAS configuration has become corrupted to the point where it can no longer be managed.
+If this procedure is used, the `update-uas` Helm chart must be removed and re-deployed to restore the full HPE provided configuration.
+This procedure should only be used in an extreme situation where the UAS configuration has become corrupted to the point where it can no longer be managed.
 All UAS configuration can normally be managed through the `cray uas admin config ...` commands.
 
 **WARNING:** Configuration lost using this procedure is not recoverable.

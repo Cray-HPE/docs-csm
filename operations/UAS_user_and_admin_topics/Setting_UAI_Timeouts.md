@@ -15,7 +15,8 @@ In this case, a reasonably aggressive (30 minutes, for example) `soft` timeout c
 
 **NOTE:** Consider moving users with workflows like the above onto UANs instead of UAIs if the site provides UANs due to the [inherent impermanence](End_User_UAIs.md) of End-User UAIs.
 
-If a UAI Class is intended to provide UAIs for occasional launching or checking the status of workload management jobs and not for extended login sessions, it may make sense to set a fairly aggressive `hard` timeout (10 minutes, for example) and a very aggressive (30 seconds, for example) `soft` timeout.
+If a UAI Class is intended to provide UAIs for occasional launching or checking the status of workload management jobs and not for extended login sessions,
+it may make sense to set a fairly aggressive `hard` timeout (10 minutes, for example) and a very aggressive (30 seconds, for example) `soft` timeout.
 This will make sure that users do not overstay their welcome in this class of UAI, and will generally cause the UAI to terminate as soon as the user logs out.
 
 If a UAI Class creates more general purpose UAIs that are neither especially disruptive when they time out nor intended for especially short term work, a somewhat generous (24 hours, for example) `hard` timeout

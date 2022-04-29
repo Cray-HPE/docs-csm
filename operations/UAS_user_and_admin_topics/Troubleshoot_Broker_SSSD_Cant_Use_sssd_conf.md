@@ -36,8 +36,10 @@ Diagnose the problem as follows:
 
 ## Problem Explanation
 
-In the current release of UAS, the `default` Service Account on the `uas` namespace in Kubernetes is bound to a Cluster Role that uses a Pod Security Policy that defines a specific `fsGroup` range and a `MustRunAs` rule instead of simply using the `RunAsAny` rule.
-Because of the way Kubernetes handles volumes, when a volume containing a Secret or a ConfigMap is mounted on a Kubernetes pod with an `fsGroup` rule that is not `RunAsAny` in the Pod Security Policy, the requested mode of the volume is adjusted to something Kubernetes deems more appropriate.
+In the current release of UAS, the `default` Service Account on the `uas` namespace in Kubernetes is bound to a Cluster Role that uses a Pod Security Policy that defines a
+specific `fsGroup` range and a `MustRunAs` rule instead of simply using the `RunAsAny` rule.
+Because of the way Kubernetes handles volumes, when a volume containing a Secret or a ConfigMap is mounted on a Kubernetes pod with an `fsGroup` rule that is not `RunAsAny` in the Pod Security Policy,
+the requested mode of the volume is adjusted to something Kubernetes deems more appropriate.
 In this case, the requested mode (decimal 384 or octal 600) becomes octal 640 instead in the mounted volume. Unfortunately, SSSD requires that this mode be octal 600 or it will refuse to use the configuration file.
 
 ## Workaround

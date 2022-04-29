@@ -239,18 +239,30 @@ The following table explains each of these fields.
 
 |Field|Description|Notes|
 |-----|-----------|-----|
-|class\_id|The identifier used for this class when examining, updating, and deleting the class.|This identifier is also used to create UAIs using this class with the cray uas admin uais create, and by Broker UAI Classes to specify what kind of End-User UAIs to create using the `uai_creation_class` field of the Broker UAI Class|
+|class\_id|The identifier used for this class when examining, updating, and deleting the class.|This identifier is also used to create UAIs using this class with the `cray uas admin uais create` command,
+and by Broker UAI Classes to specify what kind of End-User UAIs to create using the `uai_creation_class` field of the Broker UAI Class|
 |comment|A free-form string describing the UAI class| |
-|default|A boolean value \(flag\) indicating whether this class is the default class.|When this field is set to `true`, this class overrides both the default UAI image and any specified image name when the `cray uas create` command is used to create an End-User UAI for a user. Setting a class to `"default": true`, gives the administrator fine-grained control over the behavior of End-User UAIs that are created by authorized users in legacy mode.|
+|default|A boolean value \(flag\) indicating whether this class is the default class.|When this field is set to `true`, this class overrides both the default UAI image and any specified image name when the `cray uas create` command is used to create an End-User UAI for a user.
+Setting a class to `"default": true`, gives the administrator fine-grained control over the behavior of End-User UAIs that are created by authorized users in legacy mode.|
 |namespace|The Kubernetes namespace in which this UAI will run.|The default setting is `user`. Broker UAIs should be configured to run in the `uas` namespace|
-|opt\_ports|An optional list of TCP port numbers that will be opened on the external IP address of the UAI when it runs.|This field controls whether services other than SSH can be run and reached publicly on the UAI. If this list is empty \(as in this example\), only SSH will be externally accessible. In order for any service other than SSH to be publicly reachable the `public_ip` field must be set to `true`|
+|opt\_ports|An optional list of TCP port numbers that will be opened on the external IP address of the UAI when it runs.|This field controls whether services other than SSH can be run and reached publicly on the UAI.
+If this list is empty \(as in this example\), only SSH will be externally accessible.
+In order for any service other than SSH to be publicly reachable the `public_ip` field must be set to `true`|
 |priority\_class\_name|The Kubernetes priority class of the UAI.|"uai\_priority" is the default. Using other values affects both Kubernetes default resource limit and request assignments and the Kubernetes scheduling priority for the UAI.|
-|public\_ip|A boolean value that indicates whether the UAI will be given an external IP address from the LoadBalancer service. Such an address enables clients outside the Kubernetes cluster to reach the UAI.|This field controls whether the UAI is reachable by SSH from external clients, but it also controls whether the ports in opt\_ports are reachable. If this field is set to `false`, the UAI will have only an internal IP address, reachable from within the Kubernetes cluster.|
-|replicas|The number of replica UAI pods to be created when a UAI of this class is created.|This defaults to 1 and should not be set or should be set to 1 on End-User UAI Classes, since replica UAI pods for End-User UAIs only consume resources and potentially confuse the Broker UAI mechanism. For Broker UAI Classes, however, setting `replicas` to a larger value establishes both a degree of Broker UAI resiliency and a degree of load balancing, both for the purpose increasing network throughput on End-User UAI connections and for the purpose of avoiding overload of a single Broker UAI's resources.|
+|public\_ip|A boolean value that indicates whether the UAI will be given an external IP address from the LoadBalancer service. Such an address enables clients outside the Kubernetes cluster to reach the UAI.|This field controls whether the UAI is reachable by SSH from external clients, but it also controls whether the ports in opt\_ports are reachable.
+If this field is set to `false`, the UAI will have only an internal IP address, reachable from within the Kubernetes cluster.|
+|replicas|The number of replica UAI pods to be created when a UAI of this class is created.|This defaults to 1 and should not be set or should be set to 1 on End-User UAI Classes, since replica UAI pods for End-User UAIs only consume resources and potentially confuse the Broker UAI mechanism.
+For Broker UAI Classes, however, setting `replicas` to a larger value establishes both a degree of Broker UAI resiliency and a degree of load balancing,
+both for the purpose increasing network throughput on End-User UAI connections and for the purpose of avoiding overload of a single Broker UAI's resources.|
 |resource\id|The ID of the Resource Specification used by this UAI Class|By configuring a [Resource Specification](Resource_Specifications.md) in a UAI Class the default resource requests and limits can be overridden when creating a UAI from that UAI Class|
 |service\_account|An optional Kubernetes Service Account name to be granted to UAIs using this class|This is normally not set on End-User UAIs or Broker UAIs. It can be used to confer specific Kubernetes Role Based Access Control \(RBAC\) permissions on UAIs created using a UAI Class|
-|timeout|An optional specification of `hard` and `soft` timeouts used to control the life-cycle of UAIs created using this UAI Class|If either timeout setting is omitted that timeout will never expire. When a `soft` timeout, expires, the UAI terminates and is removed if it is or becomes idle, defined as having no logged in user sessions. When a `hard` timeout expires the UAI is terminated and removed immediately regardless of logged in user sessions. A `warning` may also be configured, specifying the number of seconds before a `hard` timeout that a warning will be sent to logged in users telling them of impending termination. The example here sets a `hard` timeout of 24 hours, a `soft` timeout of 30 minutes and a `warning` 60 seconds prior to arriving at the `hard` timeout.|
-|tolerations|An optional list of Kubernetes tolerations that can be used in combination with "taints" on Kubernetes worker nodes to permit only UAIs of this class to run on those nodes.|Tolerations and Taints can be used to designate certain Kubernetes Worker NCNs as hosts for UAIs and not for general management plane activities. They can also be used to specify that UAIs of a given class run only on nodes with specific resources. By default, all UAIs receive a toleration of `uai_only op=Exists` meaning that all UAIs can run on nodes that are tainted with a `uai_only` setting.|
+|timeout|An optional specification of `hard` and `soft` timeouts used to control the life-cycle of UAIs created using this UAI Class|If either timeout setting is omitted that timeout will never expire.
+When a `soft` timeout, expires, the UAI terminates and is removed if it is or becomes idle, defined as having no logged in user sessions. When a `hard` timeout expires the UAI is terminated and removed immediately regardless of logged in user sessions.
+A `warning` may also be configured, specifying the number of seconds before a `hard` timeout that a warning will be sent to logged in users telling them of impending termination.
+The example here sets a `hard` timeout of 24 hours, a `soft` timeout of 30 minutes and a `warning` 60 seconds prior to arriving at the `hard` timeout.|
+|tolerations|An optional list of Kubernetes tolerations that can be used in combination with "taints" on Kubernetes worker nodes to permit only UAIs of this class to run on those nodes.|Tolerations and Taints can be used to designate certain Kubernetes Worker NCNs as hosts for UAIs and not for general management plane activities.
+They can also be used to specify that UAIs of a given class run only on nodes with specific resources.
+By default, all UAIs receive a toleration of `uai_only op=Exists` meaning that all UAIs can run on nodes that are tainted with a `uai_only` setting.|
 |uai\_compute\_network|A flag that indicates whether this UAI uses the macvlan mechanism to gain access to the HPE Cray EX compute node network.|This field must be true to support workload management from UAIs created by this class. It should be set to `false` on Broker UAIs.|
 |uai\_creation\_class|A field used in Broker UAI Classes to tell the Broker UAI what kind of UAI to create when automatically creating a UAI.|This field is not set in the preceding example.|
 
@@ -308,8 +320,8 @@ The following list of volume descriptions is provided as a convenience to allow 
 
 Refer to [Elements of a UAI](Elements_of_a_UAI.md) for a full explanation of UAI images, Resource Specifications and volumes.
 
-In the preceding section of output, the End-User UAI inherits the timezone from the host node by importing /etc/localtime. This UAI also gains access to the Lustre file system mounted on the host node.
-On the host node, the file system is mounted at /lus and the UAI mounts the file system at the same mount point as the host node.
+In the preceding section of output, the End-User UAI inherits the timezone from the host node by importing `/etc/localtime`. This UAI also gains access to the Lustre file system mounted on the host node.
+On the host node, the file system is mounted at `/lus` and the UAI mounts the file system at the same mount point as the host node.
 
 ## Specifics of a Broker UAI Class
 
@@ -361,7 +373,7 @@ The replica count should not exceed the number of Kubernetes Worker Nodes permit
 
 ### No Timeout is Specified
 
-Broker UAIs cannot time out (there is no timeout mechanism in them) so setting a timeout on Broker UAIs is meaningless. 
+Broker UAIs cannot time out (there is no timeout mechanism in them) so setting a timeout on Broker UAIs is meaningless.
 Furthermore, since Broker UAIs are resources that should remain in place on a running system, putting a timeout on a Broker UAI would be counterproductive. Broker UAIs should have either no `timeout` specified or an empty `timeout`.
 
 ### UAI Compute Network is False
@@ -395,7 +407,7 @@ Notice the following settings in the Brokered End-User UAI Class:
     },
 ```
 
-### Default is False
+### `default` is False
 
 The UAI Class used for Brokered End-User UAIs has characteristics that do not make it suitable for use as a Non-Brokered UAI, so a Brokered UAI Class should never be the default UAI Class.
 

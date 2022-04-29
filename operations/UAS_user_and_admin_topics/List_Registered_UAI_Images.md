@@ -3,7 +3,8 @@
 Administrators can use the `cray uas admin config images list` command to see the list of registered images. This command also displays the UAS registration information about each image.
 
 While Registering a UAI image name with UAS is necessary for UAIs to use the image, simply registering the image is not sufficient.
-The registered image must also be created and stored appropriately in its container registry. The basic HPE supplied UAI image is both installed and registered at UAS installation or upgrade time by the `update-uas` Kubernetes job when the `update-uas` Helm chart is deployed, upgraded or downgraded.
+The registered image must also be created and stored appropriately in its container registry.
+The basic HPE supplied UAI image is both installed and registered at UAS installation or upgrade time by the `update-uas` Kubernetes job when the `update-uas` Helm chart is deployed, upgraded or downgraded.
 Custom images are created, installed and registered as part of the [Customize End-User UAI Images](Customize_End-User_UAI_Images.md) procedure.
 
 This procedure describes how to list the currently registered UAI images.
