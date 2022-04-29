@@ -225,7 +225,7 @@ firmware requirement before starting.
     > This is **optional**, the BIOS settings (or lack thereof) do not prevent deployment. The NCN installation will work with the CMOS' default
     > BIOS. There may be settings that facilitate the speed of deployment, but they may be tuned at a later time.
     >
-    > **NOTE** The BIOS tuning will be automated, further reducing this step.
+    > **NOTE:** The BIOS tuning will be automated, further reducing this step.
 
 1. The firmware on the management nodes should be checked for compliance with the minimum required version
    and updated, if necessary, at this point.
@@ -333,6 +333,7 @@ be performed are in the [Deploy](#deploy) section.
     > **`NOTE`**:The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
 
 1. Validate that the LiveCD is ready for installing NCNs.
+
    > Observe the output of the checks and note any failures, then remediate them.
 
     Specify the admin user password for the management switches in the system.
@@ -347,7 +348,7 @@ be performed are in the [Deploy](#deploy) section.
     pit# csi pit validate --livecd-preflight
     ```
 
-    > Note: You can ignore any errors about not being able resolve arti.dev.cray.com.
+    > Note: Ignore any errors about not being able resolve `arti.dev.cray.com`.
 
 1. Print the consoles available to you:
 
