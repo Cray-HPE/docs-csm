@@ -7,11 +7,15 @@ The key pieces of the Broker UAI image are:
 * An entrypoint shell script that initializes the container and starts the SSH daemon running.
 * An SSH configuration that forces logged in users into the `switchboard` command which creates / selects End-User UAIs and redirects connections.
 
-The primary way to customize the Broker UAI image is by [defining volumes and connecting them to the Broker UAI class](Configure_a_Broker_UAI_Class.md) for a given broker. Some customizations may require action that cannot be covered simply by using volumes to override configuration. Those cases generally require changing the Broker UAI behavior in some way. Those cases can be covered either by volume mounting a customized entrypoint script, or volume mounting a customized SSH configuration. Both of these cases are shown in the following examples.
+The primary way to customize the Broker UAI image is by [defining volumes and connecting them to the Broker UAI class](Configure_a_Broker_UAI_Class.md) for a given broker.
+Some customizations may require action that cannot be covered simply by using volumes to override configuration. Those cases generally require changing the Broker UAI behavior in some way.
+Those cases can be covered either by volume mounting a customized entrypoint script, or volume mounting a customized SSH configuration. Both of these cases are shown in the following examples.
 
 ## Customize the Broker UAI Entrypoint Script
 
-The Broker UAI entrypoint script runs once every time the Broker UAI starts. It resides at `/app/broker/entrypoint.sh` in the Broker UAI image. The entrypoint script is the only file in that directory, so it can be overridden by creating a Kubernetes ConfigMap in the `uas` namespace containing the modified script and creating a volume using that ConfigMap with a mount point of `/app/broker`. There is critical content in the entrypoint script that should not be modified.
+The Broker UAI entrypoint script runs once every time the Broker UAI starts. It resides at `/app/broker/entrypoint.sh` in the Broker UAI image.
+The entrypoint script is the only file in that directory, so it can be overridden by creating a Kubernetes ConfigMap in the `uas` namespace containing the modified script and creating a volume using that ConfigMap with a mount point of `/app/broker`.
+There is critical content in the entrypoint script that should not be modified.
 
 The following shows the contents of an unmodified script:
 
@@ -71,7 +75,8 @@ Starting at the top:
 
 As long as the basic flow and contents described here are honored, other changes to this script should work without compromising the Broker UAI's function.
 
-The following is an example of replacing the entrypoint script with a new entrypoint script that changes the SSSD invocation to explicitly specify the `sssd.conf` file path (the standard path is used here, but a different path might make customizing SSSD for a given site simpler under some set of circumstances):
+The following is an example of replacing the entrypoint script with a new entrypoint script that changes the SSSD invocation to explicitly specify the `sssd.conf` file path (the standard path is used here,
+but a different path might make customizing SSSD for a given site simpler under some set of circumstances):
 
 1. Create a new entrypoint script.
 
@@ -337,10 +342,10 @@ The SSH configuration used on Broker UAIs resides in `/etc/switchboard/sshd_conf
 
 ```bash
 Port 30123
-AuthorizedKeysFile	.ssh/authorized_keys
+AuthorizedKeysFile  .ssh/authorized_keys
 UsePAM yes
 X11Forwarding yes
-Subsystem	sftp	/usr/lib/ssh/sftp-server
+Subsystem sftp  /usr/lib/ssh/sftp-server
 AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
 AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
 AcceptEnv LC_IDENTIFICATION LC_ALL
@@ -348,8 +353,8 @@ AcceptEnv UAI_ONE_SHOT
 UseDNS no
 
 Match User !root,*
-	PermitTTY yes
-	ForceCommand /usr/bin/switchboard broker --class-id $UAI_CREATION_CLASS
+  PermitTTY yes
+  ForceCommand /usr/bin/switchboard broker --class-id $UAI_CREATION_CLASS
 ```
 
 The important content here is as follows:
@@ -383,10 +388,10 @@ The following is an example that follows on from the previous section and config
     ```bash
     ncn-m001-pit# cat <<-"EOF" > sshd_config
     Port 30123
-    AuthorizedKeysFile	.ssh/authorized_keys
+    AuthorizedKeysFile  .ssh/authorized_keys
     UsePAM yes
     X11Forwarding yes
-    Subsystem	sftp	/usr/lib/ssh/sftp-server
+    Subsystem sftp  /usr/lib/ssh/sftp-server
     AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
     AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
     AcceptEnv LC_IDENTIFICATION LC_ALL

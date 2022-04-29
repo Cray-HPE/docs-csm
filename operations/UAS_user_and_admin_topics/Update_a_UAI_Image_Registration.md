@@ -20,7 +20,8 @@ Modify the registration information of a UAI image by using a command of the for
 ncn-m001-pit# cray uas admin config images update OPTIONS IMAGE_ID
 ```
 
-Use the `--default` or `--imagename` options as specified when registering an image to update those specific elements of an existing image registration. For example, to make the `registry.local/cray/custom-end-user-uai:latest` image shown in other procedures the default image, use the following command:
+Use the `--default` or `--imagename` options as specified when registering an image to update those specific elements of an existing image registration.
+For example, to make the `registry.local/cray/custom-end-user-uai:latest` image shown in other procedures the default image, use the following command:
 
 ```bash
 ncn-m001-pit# cray uas admin config images update --default yes 8fdf5d4a-c190-24c1-2b96-74ab98c7ec07

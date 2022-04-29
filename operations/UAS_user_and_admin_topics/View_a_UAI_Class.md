@@ -20,7 +20,8 @@ To examine an existing UAI class, use a command of the following form:
 ncn-m001-pit# cray uas admin config classes describe <class-id>
 ```
 
-The following example uses the `--format yaml` option to display the UAI class configuration in YAML format. Replace yaml with json to return JSON-formatted output. Omitting the `--format` option displays the UAI class in the default TOML format.
+The following example uses the `--format yaml` option to display the UAI class configuration in YAML format.
+Replace `yaml` with `json` to return JSON-formatted output. Omitting the `--format` option displays the UAI class in the default TOML format.
 
 Replace `bb28a35a-6cbc-4c30-84b0-6050314af76b` in the example command with the ID of the UAI class to be examined.
 

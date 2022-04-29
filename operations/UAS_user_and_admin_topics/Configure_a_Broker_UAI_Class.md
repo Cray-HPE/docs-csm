@@ -16,11 +16,15 @@ The basic contents of a Broker UAI Class is discussed in [UAI Classes](UAI_Class
 
 ## Example of Volumes to Connect Broker UAIs to LDAP
 
-Broker UAIs authenticate each user using SSH, and pass the SSH connection on to the selected or created End-User UAI for that user. An authentication source is required to authenticate users. For sites that use LDAP as a directory server for authentication, connecting Broker UAIs to LDAP is simply a matter of replicating the LDAP configuration used by other nodes or systems at the site (UANs can be a good source of this configuration) inside the Broker UAI. This section shows how to do that using [volumes](Volumes.md), which permits the standard Broker UAI image to be used out of the box and reconfigured at the site without direct modification.
+Broker UAIs authenticate each user using SSH, and pass the SSH connection on to the selected or created End-User UAI for that user. An authentication source is required to authenticate users.
+For sites that use LDAP as a directory server for authentication, connecting Broker UAIs to LDAP is simply a matter of replicating the LDAP configuration used by other nodes or systems at the site (UANs can be a good source of this configuration) inside the Broker UAI.
+This section shows how to do that using [volumes](Volumes.md), which permits the standard Broker UAI image to be used out of the box and reconfigured at the site without direct modification.
 
-While it would be possible to make the configuration available as files volume mounted from the host node of the Broker UAI, this is difficult to set up and maintain because it means that the configuration files must be present and synchronized across all UAI host nodes. A more practical approach to this is to install the configuration files in Kubernetes as secrets, and then mount them from Kubernetes directly. This ensures that no matter where a Broker UAI runs, it has access to the configuration.
+While it would be possible to make the configuration available as files volume mounted from the host node of the Broker UAI, this is difficult to set up and maintain because it means that the configuration files must be present and synchronized across all UAI host nodes.
+A more practical approach to this is to install the configuration files in Kubernetes as secrets, and then mount them from Kubernetes directly. This ensures that no matter where a Broker UAI runs, it has access to the configuration.
 
-This example, uses Kubernetes secrets and assumes that the Broker UAIs run in the `uas` Kubernetes namespace. If a different namespace is used, the creation of the ConfigMaps is different but the contents are the same. Using a namespace other than `uas` for Broker UAIs has implications beyond secrets and ConfigMaps; it is not recommended and is beyond the scope of this document.
+This example, uses Kubernetes secrets and assumes that the Broker UAIs run in the `uas` Kubernetes namespace. If a different namespace is used, the creation of the ConfigMaps is different but the contents are the same.
+Using a namespace other than `uas` for Broker UAIs has implications beyond secrets and ConfigMaps; it is not recommended and is beyond the scope of this document.
 
 1. Configure LDAP and determine which files need to be changed in the Broker UAI and what their contents should be.
 
@@ -78,13 +82,13 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
         EOF
         ```
 
-     2. Make a secret from the file.
+    2. Make a secret from the file.
 
         ```bash
         ncn-m001-pit# kubectl create secret generic -n uas broker-sssd-conf --from-file=sssd.conf
         ```
 
-  3. Make a volume for the secret in the UAS configuration.
+3. Make a volume for the secret in the UAS configuration.
 
      ```bash
      ncn-m001-pit# cray uas admin config volumes create \
@@ -256,7 +260,8 @@ This example, uses Kubernetes secrets and assumes that the Broker UAIs run in th
     imagename = "registry.local/cray/cray-uai-broker:1.2.4"
     ```
 
-    **NOTE:** In some versions of UAS, SSSD will not start correctly when customized as described above because `/etc/sssd/sssd.conf` is mounted with the wrong mode in spite of being configured with the right mode. If SSSD is not working in a Broker UAI, refer to this [troubleshooting section](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md).
+    **NOTE:** In some versions of UAS, SSSD will not start correctly when customized as described above because `/etc/sssd/sssd.conf` is mounted with the wrong mode in spite of being configured with the right mode.
+    If SSSD is not working in a Broker UAI, refer to this [troubleshooting section](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md).
 
 [Top: User Access Service (UAS)](index.md)
 

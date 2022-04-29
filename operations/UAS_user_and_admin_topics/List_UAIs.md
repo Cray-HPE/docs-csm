@@ -1,6 +1,7 @@
 # List UAIs
 
-There are two ways to list UAIs in UAS. One of these is an administrative action and provides access to all currently running UAIs. The other is associated with the [Legacy UAI Management](Legacy_Mode_User-Driven_UAI_Management.md) mode and provides authorized users access to their own UAIs. Both of these are shown here.
+There are two ways to list UAIs in UAS. One of these is an administrative action and provides access to all currently running UAIs.
+The other is associated with the [Legacy UAI Management](Legacy_Mode_User-Driven_UAI_Management.md) mode and provides authorized users access to their own UAIs. Both of these are shown here.
 
 View the details of every UAI that is running by using a direct UAS administrative command.
 
