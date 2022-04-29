@@ -1,22 +1,24 @@
-# Set NCN Image Root Password, SSH Keys, and timezone (optional) on PIT Node
+# Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node
 
 Modify the NCN images by setting the root password and adding SSH keys for the root account.
-Changing the timezone for the NCNs can also be done at this time. This procedure shows this process being
+Optionally, changing the timezone for the NCNs can also be done at this time. This procedure shows this process being
 done on the PIT node during a first time installation of the CSM software.
 
-***Note:*** This procedure can must be done before management nodes are deployed for the first time.
+***Note:*** This procedure must be done before management nodes are deployed for the first time.
 
 ## Set the root password and add SSH keys to the NCN images
 
 This step is required. There is no default root password and no default SSH keys in the NCN images.
 
-1. Add SSH keys and set the password in the squashfs. Optionally, set the timezone.
+1. Add SSH keys and set the password in the SquashFS. Optionally, set the timezone.
 
-   If desired, create new SSH keys on the PIT. These will be copied into the NCN Squashfs images in the next step. Alternately,
+   If desired, create new SSH keys on the PIT. These will be copied into the NCN SquashFS images in the next step. Alternately,
    copy an existing set of keys and `authorized_hosts` file into a directory for reference in the following step. It is assumed
    that public keys have a `.pub` extension.
 
-   Execute the `ncn-image-modification.sh` script located at the top level of the CSM release tarball to add SSH key and set the root password. Optionally, set a local timezone (UTC is the default). If you chose to create new SSH keys above, execute this script with `-d ~/.ssh` in addition to the other required options.
+   Execute the `ncn-image-modification.sh` script located at the top level of the CSM release tarball to add SSH keys and set the
+   root password. Optionally, set a local timezone (UTC is the default). If you chose to create new SSH keys above, execute this
+   script with `-d ~/.ssh` in addition to the other required options.
 
    ```bash
    pit# ncn-image-modification.sh -h
@@ -79,8 +81,8 @@ This step is required. There is no default root password and no default SSH keys
    pit# cd /var/www/ephemeral/data/
    pit# ${CSM_PATH}/ncn-image-modification.sh -p -z America/Chicago \
                                               -d /my/pre-existing/keys \
-                                              -k ./k8s/0.2.69/kubernetes-0.2.69.squashfs \
-                                              -s ./ceph/0.2.69/storage-ceph-0.2.69.squashfs
+                                              -k ./k8s/kubernetes-<version>.squashfs \
+                                              -s ./ceph/storage-ceph-<version>.squashfs
    ```
 
    An example generating new keys with an empty passphrase and the `$SQUASHFS_ROOT_PW_HASH` variable set.
@@ -93,11 +95,11 @@ This step is required. There is no default root password and no default SSH keys
    pit# ${CSM_PATH}/ncn-image-modification.sh -p \
                                               -t rsa \
                                               -N "" \
-                                              -k ./k8s/0.2.69/kubernetes-0.2.69.squashfs \
-                                              -s ./ceph/0.2.69/storage-ceph-0.2.69.squashfs
+                                              -k ./k8s/kubernetes-<version>.squashfs \
+                                              -s ./ceph/storage-ceph-<version>.squashfs
    ```
 
-   The script will save the original squashfs images in `./{k8s,ceph}/old`.  The new images will have a `secure-` prefix.
+   The script will save the original SquashFS images in `./{k8s,ceph}/old`.  The new images will have a `secure-` prefix.
    The initrd and kernel will retain their original names.
 
 1. Set the boot links.

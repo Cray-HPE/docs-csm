@@ -6,7 +6,7 @@ change the the timezone (UTC is the default).
 This procedure shows this process being done any time after the first time installation of the CSM
 software has been completed and the PIT node is booted as a regular master node. To change the NCN image
 during an installation while the PIT node is booted as the PIT node,
-see [Change_NCN_Image_Root_Password_and_SSH_Keys_PIT](#Change_NCN_Image_Root_Password_and_SSH_Keys_PIT.md).
+see [Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
 
 There is some common preparation before making the Kubernetes image for master nodes and worker nodes, making the Ceph image for utility storage nodes, and then some common cleanup afterwards.
 
@@ -39,6 +39,7 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
    ```
 
    This example uses k8s/0.1.109 for the current version and adds a suffix for the new version.
+
    ```bash
    ncn-m# export K8SVERSION=0.1.109
    ncn-m# export K8SNEW=0.1.109-2
@@ -68,7 +69,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    "ceph/0.1.48/filesystem.squashfs"
    ```
 
-   This example uses ceph/0.1.113 for the current version and adds a suffix for the new version.
+   This example uses `ceph/0.1.113` for the current version and adds a suffix for the new version.
 
    ```bash
    ncn-m# export CEPHVERSION=0.1.113
@@ -147,6 +148,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    ```
 
    Example:
+
    ```bash
    ncn-m# ncn-image-modification.sh -z Americas/Chicago \
                                     -k k8s/${K8SVERSION}/filesystem.squashfs \
@@ -154,11 +156,12 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
                                     -d ~/.ssh/
    ```
 
-   In the above example, the timezone in the squashfs is being changed to `Americas/Chicago`.
+   In the above example, the timezone in the `squashfs` is being changed to `Americas/Chicago`.
    The root password will **not** be changed because `-p` was not provided on the command line.
    It will copy the existing keys in `~/.ssh/` into the image.
 
    Example:
+
    ```bash
    ncn-m# export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
    ncn-m# ncn-image-modification.sh -p -t rsa \
@@ -173,9 +176,9 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    set to match the root password hash that exists on the current node. This invocation also creates new SSH keys.
 
    The newly created images will have a `secure-` prefix. The original images are retained in an `./old` directory
-   at the same level in the filesystem as the squashfs files.
+   at the same level in the filesystem as the `squashfs` files.
 
-1. Put the new squashfs, kernel, and initrd into S3
+1. Put the new `squashfs`, `kernel`, and `initrd` into S3
 
    ***Note:*** The version string for the kernel file may be different.
 
