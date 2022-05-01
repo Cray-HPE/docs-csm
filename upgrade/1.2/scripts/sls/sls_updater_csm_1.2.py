@@ -33,6 +33,7 @@ from csm_1_2_upgrade.sls_updates import create_metallb_pools_and_asns
 from csm_1_2_upgrade.sls_updates import migrate_can_to_cmn
 from csm_1_2_upgrade.sls_updates import migrate_switch_names
 from csm_1_2_upgrade.sls_updates import remove_api_gw_from_hmnlb_reservations
+from csm_1_2_upgrade.sls_updates import rename_uai_bridge_reservation
 from csm_1_2_upgrade.sls_updates import remove_can_static_pool
 from csm_1_2_upgrade.sls_updates import remove_kube_api_reservations
 from csm_1_2_upgrade.sls_updates import sls_and_input_data_checks
@@ -51,7 +52,8 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
     7. Convert IPs of the CAN network.\n
     8. Create MetalLB Pools and ASN entries on CMN and NMN networks.\n
     9. Update uai_macvlan in NMN dhcp ranges and uai_macvlan VLAN.\n
-   10. Remove unused user networks (CAN or CHN) if requested [--retain-unused-user-network to keep].\n
+   10. Rename uai_macvlan_bridge reservation to uai_nmn_blackhole
+   11. Remove unused user networks (CAN or CHN) if requested [--retain-unused-user-network to keep].\n
 """
 
 
@@ -315,6 +317,11 @@ def main(
     # Update uai_macvlan dhcp ranges in the NMN network.
     #   (not order dependent)
     update_nmn_uai_macvlan_dhcp_ranges(networks)
+
+    #
+    # Rename uai_macvlan_bridge reservation to uai_nmn_blackhole
+    #   (not order dependent)
+    rename_uai_bridge_reservation(networks)
 
     #
     # Remove superfluous user network if requested
