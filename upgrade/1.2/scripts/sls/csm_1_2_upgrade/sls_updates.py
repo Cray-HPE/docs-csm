@@ -177,7 +177,7 @@ def migrate_switch_names(networks, hardware):
             f"for subnet {subnet} in network {network.name()}.",
         )
         for reservation in reservations.values():
-            if not reservation.name().find("leaf"):
+            if reservation.name().find("leaf") < 0:
                 continue
             reservation.name(reservation.name().replace("leaf", "leaf-bmc"))
 
@@ -186,7 +186,7 @@ def migrate_switch_names(networks, hardware):
             f"for subnet {subnet} in network {network.name()}.",
         )
         for reservation in reservations.values():
-            if not reservation.name().find("agg"):
+            if reservation.name().find("agg") < 0:
                 continue
             reservation.name(reservation.name().replace("agg", "leaf"))
 
@@ -234,6 +234,29 @@ def remove_api_gw_from_hmnlb_reservations(networks):
                 f"Removing api-gw aliases {delete_reservation} from {network} {subnet}",
                 fg="bright_white",
             )
+
+def rename_uai_bridge_reservation(networks):
+    """Rename the uai_macvlan_bridge reservation to uai_nmn_blackhole
+
+    Args:
+        networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
+    """
+    network = "NMN"
+    subnet = "uai_macvlan"
+    reservations = networks.get(network).subnets().get(subnet).reservations()
+    for reservation in reservations.values():
+        if reservation.name().find("macvlan_bridge") < 0:
+            continue
+        reservation.name(reservation.name().replace("macvlan_bridge", "nmn_blackhole"))
+        reservation.comment(reservation.comment().replace("macvlan-bridge", "nmn-blackhole"))
+
+        for i, alias in enumerate(reservation.aliases()):
+            if alias.find("macvlan-bridge") >= 0:
+                click.echo(f"    Found macvlan-bridge in alias {alias}")
+                reservation.aliases()[i] = alias.replace("-macvlan-bridge", "-nmn-blackhole")
+            elif alias.find("macvlan_bridge") >= 0:
+                click.echo(f"    Found macvlan_bridge in alias {alias}")
+                reservation.aliases()[i] = alias.replace("_macvlan_bridge", "_nmn_blackhole")
 
 
 def remove_kube_api_reservations(networks):
