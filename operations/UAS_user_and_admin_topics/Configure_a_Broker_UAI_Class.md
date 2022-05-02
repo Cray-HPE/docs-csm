@@ -25,7 +25,7 @@ While it would be possible to make the configuration available as files volume m
 this is difficult to set up and maintain because it means that the configuration files must be present and synchronized across all UAI host nodes.
 A more practical approach to this is to install the configuration files in Kubernetes as secrets, and then mount them from Kubernetes directly. This ensures that no matter where a Broker UAI runs, it has access to the configuration.
 
-This example, uses Kubernetes secrets and assumes that the Broker UAIs run in the `uas` Kubernetes namespace. If a different namespace is used, the creation of the ConfigMaps is different but the contents are the same.
+This example uses Kubernetes secrets and assumes that the Broker UAIs run in the `uas` Kubernetes namespace. If a different namespace is used, the creation of the ConfigMaps is different but the contents are the same.
 Using a namespace other than `uas` for Broker UAIs has implications beyond secrets and ConfigMaps; it is not recommended and is beyond the scope of this document.
 
 1. Configure LDAP and determine which files need to be changed in the Broker UAI and what their contents should be.
