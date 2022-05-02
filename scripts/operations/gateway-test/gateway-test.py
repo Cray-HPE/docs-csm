@@ -186,7 +186,7 @@ def get_vs_gateways(vsyaml):
 if __name__ == '__main__':
 
     numarg = len(sys.argv)
-    test_defn_file = "./gateway-test-defn.yaml"
+    test_defn_file = "{}/gateway-test-defn.yaml".format(os.path.dirname(sys.argv[0]))
     TEST_FAILED = 0
 
     # Process the arguments
@@ -244,6 +244,8 @@ if __name__ == '__main__':
         reachnets.remove("can")
     elif NODE_TYPE == "uan":
       reachnets.append("nmnlb")
+    elif NODE_TYPE == "outside":
+      reachnets.append("cmn")
     elif NODE_TYPE != "uai":
       print("Invalid node type {}".format(NODE_TYPE))
       logging.critical("Invalid node type {}".format(NODE_TYPE))
