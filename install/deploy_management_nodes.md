@@ -101,11 +101,11 @@ Follow the [workaround instructions](../update_product_stream/index.md#apply-wor
 
 ### 1.3 Ensure Time Is Accurate Before Deploying NCNs
 
-**NOTE:** If you wish to use a timezone other than UTC, instead of step 1 below, follow
-[this procedure for setting a local timezone](../operations/node_management/Configure_NTP_on_NCNs.md#set-a-local-timezone), then
+**NOTE:** Optionally, in order to use a timezone other than UTC, instead of step 1 below, follow
+[this procedure for setting a local timezone](../operations/node_management/Configure_NTP_on_NCNs.md#set-a-local-timezone). Then
 proceed to step 2.
 
-1. Ensure that the PIT node has the current and correct time.
+1. Ensure that the PIT node has the correct current time.
 
    The time can be inaccurate if the system has been powered off for a long time, or, for example, the CMOS was cleared on a Gigabyte node. See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
 
@@ -133,7 +133,7 @@ proceed to step 2.
 
 1. Ensure the current time is set in BIOS for all management NCNs.
 
-   > If each NCN is booted to the BIOS menu, you can check and set the current UTC time.
+   > If each NCN is booted to the BIOS menu, then check and set the current UTC time.
 
    ```bash
    pit# export USERNAME=root
@@ -161,8 +161,8 @@ proceed to step 2.
 
       > For HPE NCNs the above process will boot the nodes to their BIOS, but the menu is unavailable through conman as the node is booted into a graphical BIOS menu.
       >
-      > To access the serial version of the BIOS setup. Perform the ipmitool steps above to boot the node. Then in conman press `ESC+9` key combination to when you
-      > see the following messages in the console, this will open you to a menu that can be used to enter the BIOS via conman.
+      > To access the serial version of the BIOS setup. Perform the ipmitool steps above to boot the node. Then, in conman, press `ESC+9` key combination when
+      > the following messages are shown in the console. This will open a menu that can be used to enter the BIOS using conman.
       >
       > ```text
       > For access via BIOS Serial Console:
@@ -174,7 +174,7 @@ proceed to step 2.
       >
       > For HPE NCNs the date configuration menu can be found at the following path: `System Configuration -> BIOS/Platform Configuration (RBSU) -> Date and Time`
       >
-      > Alternatively, for HPE NCNs you can log in to the BMC's web interface and access the HTML5 console for the node, in order to interact with the graphical BIOS.
+      > Alternatively, for HPE NCNs, log in to the BMC's web interface and access the HTML5 console for the node, in order to interact with the graphical BIOS.
       > From the administrator's own machine, create an SSH tunnel (`-L` creates the tunnel; `-N` prevents a shell and stubs the connection):
       >
       > ```bash
@@ -184,10 +184,10 @@ proceed to step 2.
       >
       > Opening a web browser to `https://localhost:9443` will give access to the BMC's web interface.
 
-   1. When the node boots, you will be able to use the conman session to see the BIOS menu to check and set the time to current UTC time.
+   1. When the node boots, the conman session can be used to see the BIOS menu, in order to check and set the time to current UTC time.
       The process varies depending on the vendor of the NCN.
 
-   1. After you have verified the correct time, power off the NCN.
+   1. After the correct time has been verified, power off the NCN.
 
    Repeat the above process for each NCN.
 
@@ -307,8 +307,10 @@ be performed are in the [Deploy](#deploy) section.
    It is **strongly encouraged** to change the default root password and SSH keys in the images used to boot the management nodes.
    Follow the NCN image customization steps in [Change NCN Image Root Password and SSH Keys on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
 
-1. Create boot directories for any NCN in DNS:
-    > This will create folders for each host in `/var/www`, allowing each host to have their own unique set of artifacts; kernel, initrd, SquashFS, and `script.ipxe` bootscript.
+1. Create boot directories for any NCN in DNS.
+
+    This will create folders for each host in `/var/www`, allowing each host to have its own unique set of artifacts:
+    kernel, initrd, SquashFS, and `script.ipxe` bootscript.
 
     ```bash
     pit# /root/bin/set-sqfs-links.sh
@@ -325,11 +327,11 @@ be performed are in the [Deploy](#deploy) section.
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     ```
 
-    > Note: Some BMCs will "flake" and ignore the boot order setting by `ipmitool`. As a fallback, cloud-init will
-    > correct the boot order after NCNs complete their first boot. The first boot may need manual effort to set the boot order over the conman console. The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
+    > **NOTE:** The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
 
-1. Validate that the LiveCD is ready for installing NCNs
-    Observe the output of the checks and note any failures, then remediate them.
+1. Validate that the LiveCD is ready for installing NCNs.
+
+   > Observe the output of the checks and note any failures, then remediate them.
 
     ```bash
     pit# csi pit validate --livecd-preflight
@@ -340,7 +342,7 @@ be performed are in the [Deploy](#deploy) section.
     > * This check sometimes leaves the terminal in a state where input is not echoed to the screen. If this happens, running the `reset` command will correct it.
     > * Ignore any errors about not being able resolve `arti.dev.cray.com`.
 
-1. Print the consoles available to you:
+1. Print the available consoles.
 
     ```bash
     pit# conman -q
@@ -545,13 +547,13 @@ for details on how to do so.
 
 If there are LVM check failures, then the problem must be resolved before continuing with the install.
 
-* If **any master node** has the problem, then you must wipe and redeploy **all** of the NCNs before continuing the installation:
+* If **any master node** has the problem, then wipe and redeploy **all** of the NCNs before continuing the installation:
     1. Wipe each worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
     1. Wipe each master node (**except** `ncn-m001` because it is the PIT node) using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
     1. Wipe each storage node using the 'Full Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
     1. Return to the [Set each node to always UEFI Network Boot, and ensure they are powered off](#set-uefi-and-power-off) step of the [Deploy Management Nodes](#deploy_management_nodes) section above.
 
-* If **only worker nodes** have the problem, then you must wipe and redeploy the affected worker nodes before continuing the installation:
+* If **only worker nodes** have the problem, then wipe and redeploy the affected worker nodes before continuing the installation:
     1. Wipe each affected worker node using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
     1. Power off each affected worker node.
     1. Return to the [Boot the Master and Worker Nodes](#boot-master-and-worker-nodes) step of the [Deploy Management Nodes](#deploy_management_nodes) section above.
@@ -574,7 +576,7 @@ If there are LVM check failures, then the problem must be resolved before contin
 
 #### Option 1
 
-  If you have OSDs on each node (`ceph osd tree` can be run from any master or storage node to show this) then you have all your nodes in Ceph. That means you can utilize the orchestrator to look for the devices.
+  If there are OSDs on each node (`ceph osd tree` can show this), then all the nodes are in Ceph. That means the orchestrator can be used to look for the devices.
 
 1. Get the number of OSDs in the cluster.
 
@@ -583,11 +585,11 @@ If there are LVM check failures, then the problem must be resolved before contin
     24
     ```
 
-   **IMPORTANT:** If the returned number of OSDs is equal to total_osds calculated, then you can skip the following steps. If not, then please proceed with the below additional checks and remediation steps.
+   **IMPORTANT:** If the returned number of OSDs is equal to total_osds calculated, then skip the following steps. If not, then proceed with the below additional checks and remediation steps.
 
-1. Compare your number of OSDs to your output which should resemble the example below. The number of drives will depend on the server hardware.
+1. Compare the number of OSDs to the output (which should resemble the example below). The number of drives will depend on the server hardware.
 
-    > **NOTE:**  If your Ceph cluster is large and has a lot of nodes, you can specify a node after the below command to limit the results.
+    > **NOTE:** If the Ceph cluster is large and has a lot of nodes, a node may be specified after the below command to limit the results.
 
     ```bash
     ncn-s# ceph orch device ls
@@ -618,24 +620,24 @@ If there are LVM check failures, then the problem must be resolved before contin
     ncn-s003  /dev/sdj  ssd   PHYF016500TQ1P9DGN  1920G  Unknown  N/A    N/A    No
     ```
 
-    If you have devices that are "Available = Yes" and they are not being automatically added you may have to zap that device.
+    If there are devices that show `Available` as `Yes` and they are not being automatically added, that device may need to be zapped.
 
-    **IMPORTANT:** Prior to zapping any device please ensure it is not being used.
+    **IMPORTANT:** Prior to zapping any device, ensure that it is not being used.
 
-1. Check to see if the number of devices is less than the number of listed drives or your output from step 1.
+1. Check to see if the number of devices is less than the number of listed drives in the output from step 1.
 
    ```bash
     ncn-s# ceph orch device ls|grep dev|wc -l
     24
     ```
 
-    If the numbers are equal, but less than the `total_osds` calculated, then you may need to fail your `ceph-mgr` daemon to get a fresh inventory.
+    If the numbers are equal, but less than the `total_osds` calculated, then the `ceph-mgr` daemon may need to be failed in order to get a fresh inventory.
 
     ```bash
     ncn-s# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
     ```
 
-    Give it 5 minutes then re-check `ceph orch device ls` to see if the drives are still showing as available. If so, then proceed to the next step.
+    Wait 5 minutes and then re-check `ceph orch device ls`. See if the drives are still showing as `Available`. If so, then proceed to the next step.
 
 1. `ssh` to the host and look at `lsblk` output and check against the device from the above `ceph orch device ls`
 
@@ -651,17 +653,17 @@ If there are LVM check failures, then the problem must be resolved before contin
      └─ceph--0a476f53--8b38--450d--8779--4e587402f8a8-osd--data--b620b7ef--184a--46d7--9a99--771239e7a323 254:7    0   1.8T  0 lvm
     ```
 
-    * If it has an LVM volume like above, then it may be in use and you should do the option 2 check below to make sure we can wipe the drive.
+    * If it has an LVM volume like above, then it may be in use. In that case, do the option 2 check below to make sure that the drive can be wiped.
 
 #### Option 2
 
-1. Log into **each** ncn-s node and check for unused drives.
+1. Log into **each** `ncn-s` node and check for unused drives.
 
     ```bash
     ncn-s# cephadm shell -- ceph-volume inventory
     ```
 
-    **IMPORTANT:** The `cephadm` command may output this warning `WARNING: The same type, major and minor should not be used for multiple devices.`. You can ignore this warning.
+    **IMPORTANT:** The `cephadm` command may output this warning `WARNING: The same type, major and minor should not be used for multiple devices.`. Ignore this warning.
 
     The field `available` would be `True` if Ceph sees the drive as empty and can
     be used. For example:
@@ -686,7 +688,7 @@ If there are LVM check failures, then the problem must be resolved before contin
 
 #### Wipe and Add Drives
 
-1. Wipe the drive **ONLY after you have confirmed the drive is not being used by the current Ceph cluster** using options 1, 2, or both.
+1. Wipe the drive **ONLY after confirming that the drive is not being used by the current Ceph cluster** using options 1, 2, or both.
 
     > The following example wipes drive `/dev/sdc` on `ncn-s002`. Replace these values with the appropriate ones for the situation.
 
@@ -722,9 +724,9 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 
 1. Determine which master node is the first master node.
 
-   If you are provisioning your HPE Cray EX system from `ncn-m001` (i.e. it is your PIT node), then most likely this will be `ncn-m002`.
+   Most often the first master node will be `ncn-m002`.
 
-   Run the following commands on the PIT node to extract the value of the `first-master-hostname` field from your `/var/www/ephemeral/configs/data.json` file:
+   Run the following commands on the PIT node to extract the value of the `first-master-hostname` field from the `/var/www/ephemeral/configs/data.json` file:
 
    ```bash
    pit# FM=$(cat /var/www/ephemeral/configs/data.json | jq -r '."Global"."meta-data"."first-master-hostname"')
@@ -740,7 +742,7 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
    pit# scp ${FM}.nmn:/etc/kubernetes/admin.conf ~/.kube/config
    ```
 
-1. Validate that you are now able to run `kubectl` commands from the PIT node.
+1. Validate that `kubectl` commands run successfully from the PIT node.
 
     ```bash
     pit# kubectl get nodes -o wide
@@ -977,7 +979,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
    If the test total line reports any failed tests, look through the full output of the test in `csi-pit-validate-ceph.log` to see which node had the failed test and what the details are for that test.
 
-   **Note:** Please see [Utility Storage](../operations/utility_storage/Utility_Storage.md) to help resolve any failed tests.
+   **Note:** See [Utility Storage](../operations/utility_storage/Utility_Storage.md) in order to help resolve any failed tests.
 
 1. Check the master and worker nodes.
 
@@ -1006,7 +1008,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
    If these total lines report any failed tests, look through the full output of the test to see which node had the failed test and what the details are for that test.
 
-   > **WARNING** If there are failures for tests with names like `Worker Node CONLIB FS Label`, then manual tests should be run on the node which reported the failure.
+   > **WARNING:** If there are failures for tests with names like `Worker Node CONLIB FS Label`, then manual tests should be run on the node which reported the failure.
    See [Manual LVM Check Procedure](#manual-lvm-check-procedure). If the manual tests fail, then the problem must be resolved before continuing to the next step. See
    [LVM Check Failure Recovery](#lvm-check-failure-recovery).
 
@@ -1018,8 +1020,8 @@ Observe the output of the checks and note any failures, then remediate them.
    ncn# weave --local status connections | grep failed
    ```
 
-   If the check is successful, there will be no output. If you see messages like `IP allocation was seeded by different peers`, then weave looks to have split-brained.
-   At this point it is necessary to wipe the NCNs and start the PXE boot again:
+   If the check is successful, there will be no output. If messages like `IP allocation was seeded by different peers` are seen, then `weave` appears to be split-brained.
+   At this point, it is necessary to wipe the NCNs and start the PXE boot again:
 
    1. Wipe the NCNs using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
    1. Return to the 'Boot the **Storage Nodes**' step of [Deploy Management Nodes](#deploy_management_nodes) section above.
@@ -1061,7 +1063,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
 ## Important Checkpoint
 
-> Before you move on, this is the last point where you will be able to rebuild nodes without having to rebuild the PIT node. So take time to double check both the cluster and the validation test results
+Before proceeding, be aware that this is the last point where the other NCN nodes can be rebuilt without also having to rebuild the PIT node. Therefore, take time to double check both the cluster and the validation test results
 
 <a name="next-topic"></a>
 
