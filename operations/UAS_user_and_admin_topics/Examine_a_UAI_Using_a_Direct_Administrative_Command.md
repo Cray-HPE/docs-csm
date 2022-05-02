@@ -1,9 +1,5 @@
 # Examine a UAI Using a Direct Administrative Command
 
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
-
-[Next Topic: Deleting a UAI](Delete_a_UAI.md)
-
 Print out information about a UAI.
 
 ## Prerequisites
