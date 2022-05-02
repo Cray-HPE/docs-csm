@@ -157,7 +157,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
     ```
 
-1. Patch the metadata for the Ceph nodes to have the correct run commands:
+1. Patch the metadata for the Ceph nodes to have the correct run commands.
 
     ```bash
     pit# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
@@ -228,7 +228,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
             rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:${CSM_PATH}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
 
-1. List IPv4 boot options using `efibootmgr`:
+1. List IPv4 boot options using `efibootmgr`.
 
     ```bash
     pit# efibootmgr | grep -Ei "ip(v4|4)"
@@ -444,7 +444,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
     ncn-m001# ip r show default
     ```
 
-1. Verify that there **is not** a metal bootstrap IP.
+1. Verify that there **is not** a metal bootstrap IP address.
 
     ```bash
      ncn-m001# ip a show bond0
