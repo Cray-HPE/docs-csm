@@ -12,9 +12,10 @@ Install and initialize the `cray` administrative CLI.
 
     To examine an existing UAI use a command of the following form:
 
+    ```console
+    linux# cray uas admin uais describe <uai-name>
     ```
-    cray uas admin uais describe <uai-name>
-    ```
+
     For example:
 
     ```console
