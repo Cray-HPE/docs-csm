@@ -170,7 +170,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
     ```
 
-1. Patch the metadata for the Ceph nodes to have the correct run commands:
+1. Patch the metadata for the Ceph nodes to have the correct run commands.
 
     ```bash
     pit# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
@@ -243,7 +243,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
             rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:${CSM_PATH}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
 
-1. List IPv4 boot options using `efibootmgr`:
+1. List IPv4 boot options using `efibootmgr`.
 
     ```bash
     pit# efibootmgr | grep -Ei "ip(v4|4)"
@@ -402,7 +402,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
 1. Run `kubectl get nodes` to see the full Kubernetes cluster.
 
-    > **NOTE:** If the new node fails to join the cluster after running other cloud-init items, please refer to the `handoff`.
+    > **NOTE:** If the new node fails to join the cluster after running other cloud-init items, refer to the `handoff`.
 
     ```bash
     ncn-m001# kubectl get nodes
@@ -410,7 +410,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
     Expected output looks similar to the following:
 
-    ```
+    ```text
     NAME       STATUS   ROLES    AGE     VERSION
     ncn-m001   Ready    master   7s      v1.18.6
     ncn-m002   Ready    master   4h40m   v1.18.6
@@ -458,7 +458,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
     ncn-m001# ip r show default
     ```
 
-1. Verify that there **is not** a metal bootstrap IP.
+1. Verify that there **is not** a metal bootstrap IP address.
 
     ```bash
      ncn-m001# ip a show bond0
@@ -598,6 +598,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
     ```
 
 <a name="validate-bootraid-artifacts"></a>
+
 ## 8. Validate `BOOTRAID` artifacts
 
 Perform the following steps **on `ncn-m001`**.
@@ -620,11 +621,11 @@ Perform the following steps **on `ncn-m001`**.
     ncn-m001# /opt/cray/tests/install/ncn/scripts/validate-bootraid-artifacts.sh
     ```
 
-1. If the above fails with messages about ` Host key verification failed`, clear them from the `known_hosts` file:
+1. If the above fails with messages about `Host key verification failed`, clear them from the `known_hosts` file:
 
     This script will perform the clear on all NCNs, including `ncn-m001`.
 
-    ```
+    ```console
     ncn-m001# for ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do ssh-keygen -R $ncn;done
     ```
 
