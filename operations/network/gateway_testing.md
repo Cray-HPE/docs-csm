@@ -13,7 +13,7 @@ When the `nmnlb` network is tested, the test will use `api-gw-service-nmn.local`
 `nmnlb.<system-domain>` in CSM v1.2. Optionally, setting `use-api-gw-override: false` in `gateway-test-defn.yaml`
 disables that override, and the test will use `nmnlb.<system-domain>`.
 
-## Topics:
+## Topics
 
 - [Gateway Testing](#gateway-testing)
   - [Topics:](#topics)
@@ -22,7 +22,6 @@ disables that override, and the test will use `nmnlb.<system-domain>`.
   - [Running gateway tests on a UAI](#running-gateway-tests-on-a-uai)
   - [Running gateway tests on a device outside the system](#running-gateway-tests-on-a-device-outside-the-system)
   - [Example Results](#example-results)
-
 
 ## Running gateway tests on an NCN management node
 
@@ -53,7 +52,7 @@ test-networks:
 For each network, the test will attempt to obtain a token from Keycloak. On an NCN, it should be able to get a token
 from NMNLB, CMN, and either CAN or CHN depending on how the system is configured. It will then use that token to attempt to
 access each of the services defined in `gateway-test-defn.yaml`, on each of the `test-networks`. The test will determine whether
-it should or should not be able to access the service, and it will output a `PASS` or `FAIL` for each service, as appropriate. 
+it should or should not be able to access the service, and it will output a `PASS` or `FAIL` for each service, as appropriate.
 At the end of the tests it will compile and output a final overall PASS/FAIL status.
 
 ## Running gateway tests on a UAN or a Compute Node
@@ -61,22 +60,24 @@ At the end of the tests it will compile and output a final overall PASS/FAIL sta
 The same set of tests will be run from a UAN or Compute Node by executing the following command from an NCN that has the `docs-csm` RPM installed.  The hostname of the UAN or Compute Node under tests must be specified.
 
 ### UAN Test execution
+
 ```bash
 ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uan-gateway-test.sh <uan-hostname>
 ```
 
 ### Compute Node Test execution
+
 ```bash
 ncn# /usr/share/doc/csm/scripts/operations/gateway-test/cn-gateway-test.sh <cn-hostname>
 ```
 
-Both scripts will fetch the admin client secret, the configured user network, and the site domain from the system.   
+Both scripts will fetch the admin client secret, the configured user network, and the site domain from the system.
 It will use that information to generate a script that will be transferred to the UAN, executed, and removed.
-The networks that should be accessible are different on a UAN versus a Compute node.   The script will determine the networks 
-that should be accessible on the node based on the node type. 
+The networks that should be accessible are different on a UAN versus a Compute node.   The script will determine the networks
+that should be accessible on the node based on the node type.
 
-The test will determine whether it should or should not be able to access the service, and it will output a `PASS` or `FAIL` 
-for each service, as appropriate.  At the end of the tests it will compile and output a final overall PASS/FAIL status. 
+The test will determine whether it should or should not be able to access the service, and it will output a `PASS` or `FAIL`
+for each service, as appropriate.  At the end of the tests it will compile and output a final overall PASS/FAIL status.
 
 ## Running gateway tests on a UAI
 
@@ -100,7 +101,7 @@ ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
 The test will find the first UAI `cray-uai-gateway-test` image to create the test UAI. A different image may optionally
 be specified by using the `--imagename` option.
 
-## Running gateway tests on a device outside the system 
+## Running gateway tests on a device outside the system
 
 The following steps must be performed on the system where the test is to be run:
 
@@ -110,14 +111,14 @@ The following steps must be performed on the system where the test is to be run:
 
    There are two options for doing this:
 
-   * Install the `docs-csm` RPM.
+   - Install the `docs-csm` RPM.
 
       See [Check for Latest Documentation](../../update_product_stream/index.md#documentation).
 
-   * Copy over the following files from a system where the `docs-csm` RPM is installed:
+   - Copy over the following files from a system where the `docs-csm` RPM is installed:
 
-      * `/usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py`
-      * `/usr/share/doc/csm/scripts/operations/gateway-test/gateway-test-defn.yaml`
+      - `/usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py`
+      - `/usr/share/doc/csm/scripts/operations/gateway-test/gateway-test-defn.yaml`
 
 1. Obtain the admin client secret.
 
@@ -151,15 +152,15 @@ The following steps must be performed on the system where the test is to be run:
 
 The results of running the tests will show the following
 
-* Retrieval of a token on the CMN network; the token is used to get SLS data, which determines which user network is configured 
+- Retrieval of a token on the CMN network; the token is used to get SLS data, which determines which user network is configured
   on the system.
-   * If CMN is not accessible, the test will get the user network from the command line
-* For each of the test networks defined in `gateway-test-defn.yaml`:
-   * Retrieval of a token on the network under test.
-   * It will attempt to access each of the services with the token and check the expected results.
-       * It will show PASS or FAIL depending on the expected response for the service and the token being used.
-       * It will show SKIP for services that are not expected to be installed on the system.
-* The return code of `gateway-test.py` will be non-zero if any of the tests within it fail
+  - If CMN is not accessible, the test will get the user network from the command line
+- For each of the test networks defined in `gateway-test-defn.yaml`:
+  - Retrieval of a token on the network under test.
+  - It will attempt to access each of the services with the token and check the expected results.
+    - It will show PASS or FAIL depending on the expected response for the service and the token being used.
+    - It will show SKIP for services that are not expected to be installed on the system.
+- The return code of `gateway-test.py` will be non-zero if any of the tests within it fail
 
 ### Running from an NCN that is configured with CHN as the user network
 
