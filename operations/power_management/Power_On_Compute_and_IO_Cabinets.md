@@ -18,7 +18,7 @@ instructions on how to acquire a SAT authentication token.
 
 ## Procedure
 
-1.  Verify with site management that it is safe to power on the system.
+1. Verify with site management that it is safe to power on the system.
 
 1. If the system does not have Cray EX liquid-cooled cabinets, proceed to [Power On Standard Rack PDU Circuit Breakers](#power-on-standard).
 
@@ -26,9 +26,9 @@ instructions on how to acquire a SAT authentication token.
 
 1. Power on the CDU for the cabinet cooling group.
 
-   1.  Open the rear door of the CDU.
+   1. Open the rear door of the CDU.
 
-   1.  Set the control panel circuit breakers to ON.
+   1. Set the control panel circuit breakers to ON.
 
       ![CDU Circuit Breakers](../../img/operations/CDU_Circuit_Breakers.png)
 
@@ -71,7 +71,7 @@ instructions on how to acquire a SAT authentication token.
 1. Switch the standard rack compute and I/O cabinet PDU circuit breakers to ON.
 
    This applies power to the server BMCs and connects them to the management network. Compute and I/O nodes
-   **do not power onand boot automatically**. The Boot Orchestration Service \(BOS\) brings up compute nodes and User Access Nodes \(UANs\).
+   **do not power on and boot automatically**. The Boot Orchestration Service \(BOS\) brings up compute nodes and User Access Nodes \(UANs\).
 
    If necessary, use IPMI commands to power on individual servers as needed.
 
@@ -81,7 +81,7 @@ instructions on how to acquire a SAT authentication token.
 1. Bring up the Slingshot Fabric.
    Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
 
-      *  The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
+      * The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
       * The *Slingshot Troubleshooting Guide* PDF.
 
 ## Next Step
