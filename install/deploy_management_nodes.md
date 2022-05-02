@@ -129,40 +129,46 @@ proceed to step 2.
    pit# /root/bin/configure-ntp.sh
    ```
 
-   This ensures that the PIT is configured with an accurate date/time, which will be properly propagated to the NCNs during boot.
+   This ensures that the PIT is configured with an accurate date/time, which will be propagated to the NCNs during boot.
 
-1. Ensure the current time is set in BIOS for all management NCNs.
+1. Ensure that the current time is set in BIOS for all management NCNs.
 
-   > If each NCN is booted to the BIOS menu, then check and set the current UTC time.
+   Each NCN is booted to the BIOS menu, the date and time are checked, and set to the current UTC time if needed.
 
-   ```bash
-   pit# export USERNAME=root
-   pit# export IPMI_PASSWORD=changeme
-   ```
+   > **NOTE:** Some steps in this procedure depend on `USERNAME` and `IPMI_PASSWORD` being set. This is done in
+[Tokens and IPMI Password](#tokens-and-ipmi-password).
 
    Repeat the following process for each NCN.
 
+   1. Set the `bmc` variable to the name of the BMC of the NCN being checked.
+
+      **Important:** Be sure to change the below example to the appropriate NCN.
+
+      ```console
+      pit# bmc=ncn-w001-mgmt
+      ```
+
    1. Start an IPMI console session to the NCN.
 
-      ```bash
-      pit# bmc=ncn-w001-mgmt  # Change this to be each node in turn.
+      ```console
       pit# conman -j $bmc
       ```
 
    1. Using another terminal to watch the console, boot the node to BIOS.
 
-      ```bash
-      pit# bmc=ncn-w001-mgmt  # Change this to be each node in turn.
+      ```console
       pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis bootdev bios
-      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power off
-      pit# sleep 10
-      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power on
+      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power off && sleep 10 && \
+           ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power on
       ```
 
-      > For HPE NCNs the above process will boot the nodes to their BIOS, but the menu is unavailable through conman as the node is booted into a graphical BIOS menu.
+      > For HPE NCNs, the above process will boot the nodes to their BIOS; however, the BIOS menu is unavailable through conman because
+      > the node is booted into a graphical BIOS menu.
       >
-      > To access the serial version of the BIOS setup. Perform the ipmitool steps above to boot the node. Then, in conman, press `ESC+9` key combination when
-      > the following messages are shown in the console. This will open a menu that can be used to enter the BIOS using conman.
+      > In order to access the serial version of the BIOS menu, perform the `ipmitool` steps above to boot the node.
+      > Then, in conman, press `ESC+9` key combination when
+      > the following messages are shown on the console. That key combination will open a menu that can be used to enter
+      > the BIOS using conman.
       >
       > ```text
       > For access via BIOS Serial Console:
@@ -172,13 +178,13 @@ proceed to step 2.
       > Press 'ESC+@' for Network Boot
       > ```
       >
-      > For HPE NCNs the date configuration menu can be found at the following path: `System Configuration -> BIOS/Platform Configuration (RBSU) -> Date and Time`
+      > For HPE NCNs, the date configuration menu is at the following path: `System Configuration -> BIOS/Platform Configuration (RBSU) -> Date and Time`.
       >
       > Alternatively, for HPE NCNs, log in to the BMC's web interface and access the HTML5 console for the node, in order to interact with the graphical BIOS.
       > From the administrator's own machine, create an SSH tunnel (`-L` creates the tunnel; `-N` prevents a shell and stubs the connection):
       >
       > ```bash
-      > linux# bmc=ncn-w001-mgmt # Change this to be each node in turn.
+      > linux# bmc=ncn-w001-mgmt # Change this to be the appropriate node
       > linux# ssh -L 9443:$bmc:443 -N root@eniac-ncn-m001
       > ```
       >
