@@ -13,7 +13,7 @@ This step is required. **There is no default root password and no default SSH ke
 
 1. Add SSH keys and set the password in the SquashFS. Optionally, set the timezone.
 
-   If desired, create new SSH keys on the PIT node. These will be copied into the NCN Squashfs images in the next step. Alternatively,
+   If desired, create new SSH keys on the PIT node. These will be copied into the NCN SquashFS images in the next step. Alternatively,
    copy an existing set of keys and `authorized_hosts` file into a directory for reference in the following step. It is assumed
    that public keys have a `.pub` extension.
 
@@ -86,7 +86,7 @@ This step is required. **There is no default root password and no default SSH ke
                                               -s ./ceph/storage-ceph-<version>.squashfs
    ```
 
-   The following example generates new keys with an empty passphrase, and the 
+   The following example generates new keys with an empty passphrase, and the
    `$SQUASHFS_ROOT_PW_HASH` variable set. This variable will be set to reuse the same root
    password hash that exists on the PIT node. This example will not prompt the administrator for
    any input after it is invoked.
