@@ -1,11 +1,5 @@
 # Troubleshoot UAIs with Administrative Access
 
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
-
-[Next Topic: Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
-
-## Introduction
-
 Sometimes there is no better way to figure out a problem with a UAI than to get inside it and look around as an administrator. This is done using `kubectl exec` to start a shell
 inside the running container as `root` (in the container). With this an administrator can diagnose problems, make changes to the running UAI, and find solutions. It is important
 to remember that any change made inside a UAI is transitory. These changes only last as long as the UAI is running. To make a permanent change, either the UAI image has to be
