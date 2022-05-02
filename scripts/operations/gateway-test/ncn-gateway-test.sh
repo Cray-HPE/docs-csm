@@ -38,7 +38,6 @@ fi
 craysys type get > /dev/null 2>&1
 if [ $? -ne 0 ]; then
   error "craysys command is not available"
-  exit 1
 fi
 
 # Get the Base Directory
