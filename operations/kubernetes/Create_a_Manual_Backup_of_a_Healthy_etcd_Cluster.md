@@ -28,7 +28,7 @@ A healthy etcd cluster is available on the system. See [Check the Health and Bal
     etcdbackup.etcd.database.coreos.com/cray-bos-etcd-cluster-manual-backup-25847 created
     ```
 
-1.  Check the status of the backup using the name returned in the output of the previous step.
+1. Check the status of the backup using the name returned in the output of the previous step.
 
     ```bash
     ncn-w001# kubectl -n services get etcdbackup BACKUP_NAME -o yaml

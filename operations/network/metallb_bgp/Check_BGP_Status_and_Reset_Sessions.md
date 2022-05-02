@@ -207,7 +207,7 @@ This procedure requires administrative privileges.
 
 <a name="reapply"></a>
 
-1.  Determine the `cray-metallb` chart version that is currently deployed.
+1. Determine the `cray-metallb` chart version that is currently deployed.
 
     ```bash
     ncn-m001# helm ls -A -a | grep cray-metallb
