@@ -9,20 +9,31 @@ will obtain an API token from Keycloak and then use that token to attempt to acc
 more networks, as defined in the gateway test definition file (`gateway-test-defn.yaml`). The test will check the
 return code to make sure it gets the expected response.
 
-When the `nmnlb` network is specified, the test will use `api-gw-service-nmn.local` as an override for
+When the `nmnlb` network is tested, the test will use `api-gw-service-nmn.local` as an override for
 `nmnlb.<system-domain>` in CSM v1.2. Optionally, setting `use-api-gw-override: false` in `gateway-test-defn.yaml`
 disables that override, and the test will use `nmnlb.<system-domain>`.
 
-## Running gateway tests on an NCN
+## Topics:
+
+- [Gateway Testing](#gateway-testing)
+  - [Topics:](#topics)
+  - [Running gateway tests on an NCN management node](#running-gateway-tests-on-an-ncn-management-node)
+  - [Running gateway tests on a UAN or a Compute Node](#running-gateway-tests-on-a-uan-or-a-compute-node)
+  - [Running gateway tests on a UAI](#running-gateway-tests-on-a-uai)
+  - [Running gateway tests on a device outside the system](#running-gateway-tests-on-a-device-outside-the-system)
+  - [Example Results](#example-results)
+
+
+## Running gateway tests on an NCN management node
 
 The gateway test scripts can be found in `/usr/share/doc/csm/scripts/operations/gateway-test`. When `gateway-test.py` is
 run from an NCN, it has access to the admin client secret using `kubectl`. It will use the admin client secret to get
 the token for accessing the APIs.
 
-Execute the test by running following command. The system domain (in this example, `eniac.dev.cray.com`) must be specified.
+Execute the test by running following command.
 
 ```bash
-ncn# /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com
+ncn# /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
 ```
 
 The test will cycle through all of the test networks specified in `gateway-test-defn.yaml`.
@@ -40,11 +51,56 @@ test-networks:
 ```
 
 For each network, the test will attempt to obtain a token from Keycloak. On an NCN, it should be able to get a token
-from each of those networks. It will then use that token to attempt to access each of the services defined in
-`gateway-test-defn.yaml`, on each of the `test-networks`. The test will determine whether it should or should not be
-able to access the service, and it will output a `PASS` or `FAIL` for each service, as appropriate.
+from NMNLB, CMN, and either CAN or CHN depending on how the system is configured. It will then use that token to attempt to
+access each of the services defined in `gateway-test-defn.yaml`, on each of the `test-networks`. The test will determine whether
+it should or should not be able to access the service, and it will output a `PASS` or `FAIL` for each service, as appropriate. 
+At the end of the tests it will compile and output a final overall PASS/FAIL status.
 
-## Running gateway tests from UAN, Compute Node, or a device outside of the cluster
+## Running gateway tests on a UAN or a Compute Node
+
+The same set of tests will be run from a UAN or Compute Node by executing the following command from an NCN that has the `docs-csm` RPM installed.  The hostname of the UAN or Compute Node under tests must be specified.
+
+### UAN Test execution
+```bash
+ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uan-gateway-test.sh <uan-hostname>
+```
+
+### Compute Node Test execution
+```bash
+ncn# /usr/share/doc/csm/scripts/operations/gateway-test/cn-gateway-test.sh <cn-hostname>
+```
+
+Both scripts will fetch the admin client secret, the configured user network, and the site domain from the system.   
+It will use that information to generate a script that will be transferred to the UAN, executed, and removed.
+The networks that should be accessible are different on a UAN versus a Compute node.   The script will determine the networks 
+that should be accessible on the node based on the node type. 
+
+The test will determine whether it should or should not be able to access the service, and it will output a `PASS` or `FAIL` 
+for each service, as appropriate.  At the end of the tests it will compile and output a final overall PASS/FAIL status. 
+
+## Running gateway tests on a UAI
+
+In order to test the gateways from a UAI, the `/usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh`
+script is used.
+
+This script will execute the following steps:
+
+1. Create a UAI with a `cray-uai-gateway-test` image.
+1. Pass the system domain, user network, and admin client secret to the test UAI.
+1. Execute `gateway-test.py` on the node.
+1. Output the results.
+1. Delete the test UAI.
+
+Run the test by executing the following command.
+
+```bash
+ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
+```
+
+The test will find the first UAI `cray-uai-gateway-test` image to create the test UAI. A different image may optionally
+be specified by using the `--imagename` option.
+
+## Running gateway tests on a device outside the system 
 
 The following steps must be performed on the system where the test is to be run:
 
@@ -88,44 +144,22 @@ The following steps must be performed on the system where the test is to be run:
    be specified.
 
    ```bash
-   linux# /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com
+   linux# /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com outside
    ```
-
-## Running gateway tests on a UAI
-
-In order to test the gateways from a UAI, the `/usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh`
-script is used.
-
-This script will execute the following steps:
-
-1. Create a UAI with a `cray-uai-gateway-test` image.
-1. Pass the system domain, user network, and admin client secret to the test UAI.
-1. Execute `gateway-test.py` on the node.
-1. Output the results.
-1. Delete the test UAI.
-
-Run the test by executing the following command.
-
-```bash
-ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
-```
-
-The test will find the first UAI `cray-uai-gateway-test` image to create the test UAI. A different image may optionally
-be specified by using the `--imagename` option.
 
 ## Example Results
 
 The results of running the tests will show the following
 
-* Retrieval of a token on the CMN network; the token is used to get SLS data, which determines which networks are defined
+* Retrieval of a token on the CMN network; the token is used to get SLS data, which determines which user network is configured 
   on the system.
+   * If CMN is not accessible, the test will get the user network from the command line
 * For each of the test networks defined in `gateway-test-defn.yaml`:
    * Retrieval of a token on the network under test.
    * It will attempt to access each of the services with the token and check the expected results.
        * It will show PASS or FAIL depending on the expected response for the service and the token being used.
        * It will show SKIP for services that are not expected to be installed on the system.
-* The return code of `gateway-test.py` will be non-zero if any of the tests within it fail, or if it is unable to retrieve
-  a token on any of the networks that are expected to be accessible.
+* The return code of `gateway-test.py` will be non-zero if any of the tests within it fail
 
 ### Running from an NCN that is configured with CHN as the user network
 
