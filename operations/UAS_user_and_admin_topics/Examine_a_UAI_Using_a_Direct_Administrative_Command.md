@@ -8,7 +8,7 @@ Install and initialize the `cray` administrative CLI.
 
 ## Procedure
 
-1.  Print out information about a UAI.
+1. Print out information about a UAI.
 
     To examine an existing UAI use a command of the following form:
 
