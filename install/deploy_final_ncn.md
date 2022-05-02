@@ -128,10 +128,10 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
         pit# csi handoff ncn-images \
                 --k8s-kernel-path $k8sdir/*.kernel \
                 --k8s-initrd-path $k8sdir/initrd.img*.xz \
-                --k8s-squashfs-path $k8sdir/*.squashfs \
+                --k8s-squashfs-path $k8sdir/secure-*.squashfs \
                 --ceph-kernel-path $cephdir/*.kernel \
                 --ceph-initrd-path $cephdir/initrd.img*.xz \
-                --ceph-squashfs-path $cephdir/*.squashfs
+                --ceph-squashfs-path $cephdir/secure-*.squashfs
         ```
 
         Running this command will output a block that looks like this at the end:
