@@ -68,11 +68,11 @@ This procedure requires administrative privileges.
 
         If any of the sessions are in an `IDLE` state, proceed to the next step.
 
-1.  Reset BGP to re-establish the sessions.
+1. Reset BGP to re-establish the sessions.
 
     <a name="mellanox-ssh"></a>
 
-    1.  SSH to each spine switch.
+    1. SSH to each spine switch.
 
         For example:
 
@@ -80,21 +80,21 @@ This procedure requires administrative privileges.
         ncn-m001# ssh admin@sw-spine-001.hmn
         ```
 
-    1.  Verify that BGP is enabled.
+    1. Verify that BGP is enabled.
 
         ```text
         sw-spine-001 [standalone: master] > show protocols | include bgp
          bgp:                    enabled
         ```
 
-    1.  Clear the BGP sessions.
+    1. Clear the BGP sessions.
 
         ```text
         sw-spine-001 [standalone: master] > enable
         sw-spine-001 [standalone: master] # clear ip bgp all
         ```
 
-    1.  Check the status of the BGP sessions to see if they are now `ESTABLISHED`.
+    1. Check the status of the BGP sessions to see if they are now `ESTABLISHED`.
 
         It may take a few minutes for sessions to become `ESTABLISHED`.
 
@@ -147,17 +147,17 @@ This procedure requires administrative privileges.
 
 ### Aruba
 
-1.  Verify that all BGP sessions are in an `Established` state for the Aruba spine switches.
+1. Verify that all BGP sessions are in an `Established` state for the Aruba spine switches.
 
     SSH to each spine switch to check the status of all BGP sessions.
 
-    1.  SSH to a spine switch.
+    1. SSH to a spine switch.
 
         ```bash
         ncn-m001# ssh admin@sw-spine-001.hmn
         ```
 
-    1.  View the status of the BGP sessions.
+    1. View the status of the BGP sessions.
 
         ```text
         sw-spine-001# show bgp all-vrf all summary
@@ -210,11 +210,11 @@ This procedure requires administrative privileges.
 
         If any of the sessions are in an `Idle` state, proceed to the next step.
 
-1.  Reset BGP to re-establish the sessions.
+1. Reset BGP to re-establish the sessions.
 
     <a name="aruba-ssh"></a>
 
-    1.  SSH to each spine switch.
+    1. SSH to each spine switch.
 
         For example:
 
@@ -222,13 +222,13 @@ This procedure requires administrative privileges.
         ncn-m001# ssh admin@sw-spine-001.hmn
         ```
 
-    1.  Clear the BGP sessions.
+    1. Clear the BGP sessions.
 
         ```text
         sw-spine-001# clear bgp all *
         ```
 
-    1.  Check the status of the BGP sessions.
+    1. Check the status of the BGP sessions.
 
         It may take a few minutes for sessions to become `Established`.
 
@@ -291,7 +291,7 @@ This procedure requires administrative privileges.
 
 ### Re-apply the `cray-metallb` Helm Chart
 
-1.  Determine the `cray-metallb` chart version that is currently deployed.
+1. Determine the `cray-metallb` chart version that is currently deployed.
 
     ```bash
     ncn-m001# helm ls -A -a | grep cray-metallb
@@ -303,7 +303,7 @@ This procedure requires administrative privileges.
     cray-metallb   metallb-system   1   2021-02-10 14:58:43.902752441 -0600 CST  deployed  cray-metallb-0.12.2   0.8.1
     ```
 
-1.  Create a manifest file that will be used to reapply the same chart version.
+1. Create a manifest file that will be used to reapply the same chart version.
 
     ```console
     ncn-m001# cat << EOF > ./metallb-manifest.yaml
