@@ -441,7 +441,7 @@ Scenarios where this procedure is applicable:
     ```
     ID = "x3000c0s11b0n0"
     Type = "Node"
-    State = "On"
+    State = "Off"
     Flag = "OK"
     Enabled = true
     Role = "Management"
