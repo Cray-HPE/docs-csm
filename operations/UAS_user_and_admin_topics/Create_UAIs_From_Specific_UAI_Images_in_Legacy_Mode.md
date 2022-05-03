@@ -2,7 +2,7 @@
 
 A user can create a UAI from a specific UAI image (assuming no default UAI class exists) using a command of the form:
 
-```bash
+```text
 user> cray uas create --publickey <path> --imagename <image-name>
 ```
 

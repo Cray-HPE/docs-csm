@@ -246,7 +246,7 @@ but a different path might make customizing SSSD for a given site simpler under 
 
     Example output:
 
-    ```bash
+    ```text
     class_id: d764c880-41b8-41e8-bacc-f94f7c5b053d
     comment: UAI broker class
     default: false
@@ -312,7 +312,6 @@ but a different path might make customizing SSSD for a given site simpler under 
 
         ```bash
         ncn-m001-pit# cray uas admin uais delete --class-id bdb4988b-c061-48fa-a005-34f8571b88b4
-
         ncn-m001-pit# cray uas admin uais delete --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d
         ```
 
