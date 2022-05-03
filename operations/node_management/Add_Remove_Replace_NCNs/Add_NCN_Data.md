@@ -186,7 +186,7 @@ Scenarios where this procedure is applicable:
 
         | Interface   | CLI Flag      | Required MAC Address     | Description
         | ----------- | ------------- | ------------------------ | ----------
-        | `mgmt0`     | `--mac-mgmt0` | Required                 | First MAC address of Bond 1.
+        | `mgmt0`     | `--mac-mgmt0` | Required                 | First MAC address of Bond 0.
         | `mgmt1`     | `--mac-mgmt1` | Required                 | Second MAC address of Bond 0.
         | `hsn0`      | `--mac-hsn0`  | Required for Worker NCNs | MAC address of the first High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
         | `hsn1`      | `--mac-hsn1`  | Optional for Worker NCNs | MAC address of the second High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
@@ -199,10 +199,10 @@ Scenarios where this procedure is applicable:
 
         | Interface   | CLI Flag      | Required MAC Address     | Description
         | ----------- | ------------- | ------------------------ | ----------
-        | `mgmt0`     | `--mac-mgmt0` | Required                 | TODO
-        | `mgmt1`     | `--mac-mgmt1` | Required                 | TODO
-        | `sun0`      | `--mac-sun0`  | Required                 | TODO
-        | `sun1`      | `--mac-sun0`  | Required                 | TODO
+        | `mgmt0`     | `--mac-mgmt0` | Required                 | First MAC address of Bond 0.
+        | `mgmt1`     | `--mac-mgmt1` | Required                 | Second MAC address of Bond 0.
+        | `sun0`      | `--mac-sun0`  | Required                 | First MAC address of Bond 1.
+        | `sun1`      | `--mac-sun0`  | Required                 | Second MAC address of Bond 1.
         | `hsn0`      | `--mac-hsn0`  | Required for Worker NCNs | MAC address of the first High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
         | `hsn1`      | `--mac-hsn1`  | Optional for Worker NCNs | MAC address of the second High Speed Network NIC. Master and Storage NCNs do not have HSN NICs.
         | `lan0`      | `--mac-lan0`  | Optional                 | MAC address for the first non-bond or HSN-related interface.
