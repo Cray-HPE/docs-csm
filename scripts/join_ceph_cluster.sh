@@ -54,8 +54,11 @@ for node in ncn-s001 ncn-s002 ncn-s003; do
       if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]] && [[ "$host" != "$node" ]]
       then
         scp $node:/etc/ceph/* /etc/ceph
-      else
+      elif [[ "$host" != "$node" ]]
+      then
         scp $node:/etc/ceph/rgw.pem /etc/ceph/rgw.pem
+      else
+        continue
       fi
 
       gather_ceph_conf
