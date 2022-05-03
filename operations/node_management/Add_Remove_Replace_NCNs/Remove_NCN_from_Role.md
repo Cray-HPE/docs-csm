@@ -344,6 +344,8 @@ All commands in this section must be run **on the node being removed** \(unless 
    ncn-m# wipefs --all --force $mdisks
    ```
 
+Once the wipe of the drives is complete, proceed to [power off the node](#power-off-the-node).
+
 <a name="wipe-disks-worker-node"></a>
 ### Wipe Disks: Worker Node
 
@@ -368,6 +370,8 @@ All commands in this section must be run **on the node being removed** \(unless 
     ncn-w# wipefs --all --force /dev/disk/by-label/*
     ncn-w# wipefs --all --force /dev/sd*
     ```
+
+Once the wipe of the drives is complete, proceed to [power off the node](#power-off-the-node).
 
 <a name="wipe-disks-utility-storage-node"></a>
 ### Wipe Disks: Utility Storage Node
