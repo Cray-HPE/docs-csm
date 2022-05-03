@@ -332,7 +332,7 @@ Scenarios where this procedure is applicable:
 
     ```text
     x3000c0s3b0n0 (ncn-m002) has been added to SLS/HSM/BSS
-        WARNING The NCN BMC currently has the IP address: 10.254.1.20, and needs to have IP address 10.254.1.13
+        WARNING The NCN BMC currently has the IP address: <$BMC_IP>, and needs to have IP address X.Y.Z.W
     ```
 
     Restart the BMC to pick up the expected IP address:
@@ -342,7 +342,7 @@ Scenarios where this procedure is applicable:
     ```bash
     ncn-m# read -s IPMI_PASSWORD
     ncn-m# export IPMI_PASSWORD
-    ncn-m# ipmitool -U root -I lanplus -E -H 10.254.1.20 mc reset cold
+    ncn-m# ipmitool -U root -I lanplus -E -H $BMC_IP mc reset cold
     ncn-m# sleep 60
     ```
 
