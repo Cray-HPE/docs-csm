@@ -180,4 +180,4 @@
 ## Next Step
 
 - If rebuilding the storage node, proceed to [Storage Node Validation](../node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
-- If adding the storage node, proceed to [Boot NCN - Add storage node to the Ceph cluster](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn-storage-nodes-only)
+- If adding the storage node, return to [Boot NCN - Add storage node to the Ceph cluster](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn-storage-nodes-only) for the next step
