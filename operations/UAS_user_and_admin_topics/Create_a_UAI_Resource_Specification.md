@@ -17,13 +17,15 @@ Add a resource specification.
 Use a command of the following form:
 
 ```bash
-ncn-m001-pit # cray uas admin config resources create [--limit <k8s-resource-limit>] [--request <k8s-resource-request>] [--comment '<string>']
+ncn# cray uas admin config resources create [--limit <k8s-resource-limit>] [--request <k8s-resource-request>] [--comment '<string>']
 ```
 
 For example:
 
 ```bash
-ncn-m001-pit# cray uas admin config resources create --request '{"cpu": "300m", "memory": "1Gi"}' --limit '{"cpu": "300m", "memory": "1Gi"}' --comment "Resource Specification to use with Brokered End-User UAIs"
+ncn# cray uas admin config resources create --request '{"cpu": "300m", "memory": "1Gi"}' \
+            --limit '{"cpu": "300m", "memory": "1Gi"}' \
+            --comment "Resource Specification to use with Brokered End-User UAIs"
 ```
 
 See [Elements of a UAI](Elements_of_a_UAI.md) for an explanation of UAI resource specifications.

@@ -73,7 +73,7 @@ username = "vers"
 Using `cray uas list`, the user watches the UAI until it reaches a `Running: Ready` state. The UAI is now ready to accept SSH logins from the user, and the user then logs into the UAI to run a simple Slurm job, and logs out.
 
 ```bash
-vers>  ssh vers@34.136.140.107
+vers> ssh vers@34.136.140.107
 The authenticity of host '34.136.140.107 (34.136.140.107)' can't be established.
 ECDSA key fingerprint is SHA256:5gU4SPiw8UvcX7s+xJfVMKULaUi3e0E3i+XA6AklEJA.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes

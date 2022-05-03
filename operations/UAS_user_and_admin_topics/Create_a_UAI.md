@@ -35,7 +35,7 @@ For Legacy Mode user procedures:
     Use a command of the following form:
 
     ```bash
-    cray uas admin uais create OPTIONS
+    ncn# cray uas admin uais create OPTIONS
     ```
 
     The following `OPTIONS` are available for use:
@@ -54,7 +54,7 @@ For Legacy Mode user procedures:
     Use a command of the following form:
 
     ```bash
-    cray uas create OPTIONS
+    ncn# cray uas create OPTIONS
     ```
 
     The following OPTIONS are available for use:

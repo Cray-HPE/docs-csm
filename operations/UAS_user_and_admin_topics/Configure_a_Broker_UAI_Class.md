@@ -32,7 +32,7 @@ Using a namespace other than `uas` for Broker UAIs has implications beyond secre
 
     In this example, the file is `/etc/sssd/sssd.conf` and its contents are representative but sanitized. Substitute your own site specific contents:
 
-    ```bash
+    ```text
     [sssd]
       config_file_version = 2
       services = nss, pam
@@ -102,7 +102,7 @@ Using a namespace other than `uas` for Broker UAIs has implications beyond secre
 
      Example output:
 
-     ```bash
+     ```text
      mount_path = "/etc/sssd"
      volume_id = "1ec36af0-d5b6-4ad9-b3e8-755729765d76"
      volumename = "broker-sssd-config"
@@ -210,7 +210,7 @@ Using a namespace other than `uas` for Broker UAIs has implications beyond secre
 
     Example output:
 
-    ```bash
+    ```text
     class_id = "d764c880-41b8-41e8-bacc-f94f7c5b053d"
     comment = "UAI broker class"
     default = false
