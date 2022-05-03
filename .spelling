@@ -1,3 +1,4 @@
+1.0.x
 100GBASE-CR2
 100GBASE-CR4
 100GBASE-SR2
@@ -608,7 +609,6 @@ fiber
 fibers
 firmware.RPM
 firmwareVersion
-fixup
 flavors
 follos
 FPGAs
@@ -691,6 +691,7 @@ HEALTH_OK
 HEALTH_WARN
 heartbeating
 hH
+highspeed
 Highspeed
 hmn
 hmn-cidr
@@ -714,8 +715,10 @@ host.crt
 hostkey
 hostname
 hostnames
+hotfix
+Hotfix
+hotfixes
 Hotfixes
-hould get furth
 HPCaaS
 hpe
 hpe-csm-scripts
@@ -945,6 +948,7 @@ Loftsman
 login02
 loginShell
 LOG_LEVEL
+loopback
 Loopback
 loopback0
 loopback1
@@ -997,7 +1001,6 @@ microservice
 milli-CPUs
 minicom
 mis-categorized
-mis-spelled
 mjson.tool
 mlag
 mlag-channel-group
@@ -1137,7 +1140,7 @@ node1
 Node1.BIOS
 node2
 NodeBIOS
-nodeBMC
+NodeBMC
 NodeBMCs
 Nodemap
 NodePort
@@ -1173,7 +1176,6 @@ NVidia
 nvram
 OAuth
 OAuth2
-ocess
 ojsonpath
 ok
 oldNCN
@@ -1284,17 +1286,14 @@ pre-config
 pre-LiveCD
 pre-NCN
 pre-pended
-pre-uprade
 preboot
 prebuilt
 Preconfig
 preconfigs
-precribed
 preempted
 preemptively
 Preinstalled
 Prepare_the_System_for_Power_Off
-preperation
 Prepopulate
 priv
 Prnt
@@ -1311,7 +1310,6 @@ provisioners
 psql
 PSUs
 public.schema_migrations
-publlic
 pv
 pvc
 PVCs
@@ -1455,7 +1453,6 @@ scsd_cfg.json
 SCSD_SSH_KEY
 SealedSecret
 sealed_secrets.key.
-Seet
 selfLink
 semanticFirmwareVersion
 SemVer
@@ -1581,7 +1578,6 @@ status.PostgresClusterStatus
 stderr
 stdin
 stdout
-stoage
 stoken
 storage-ceph
 storage-ceph-cloudinit
@@ -1747,6 +1743,7 @@ Unsuspend
 untainting
 Untar
 untarred
+upgrader
 Upgrader
 upgrader's
 upgradestepsize
@@ -1825,8 +1822,6 @@ vsx-pair
 vsx-sync
 vvvvv
 Wait_for_unbound
-waring
-wasn
 wc
 webhook
 webserver
@@ -2060,7 +2055,6 @@ yast2-country
 yast2-network
 yast2-services-manager
 yast2-users
-yered 
 yml
 zeroization
 zeroize
