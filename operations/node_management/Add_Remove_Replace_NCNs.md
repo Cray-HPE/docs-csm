@@ -6,7 +6,7 @@ Add, remove, replace or move NCNs. This applies to worker, storage, or master no
 - Worker or storage nodes are being added.
 - Worker, storage, or master nodes are being moved to a different cabinet.
 
-**IMPORTANT:** Always maintain at least 2 of the 3 first worker, storage and master nodes when adding, removing, replacing or moving NCNs.
+**IMPORTANT:** Always maintain at least two of the first three worker, storage and master nodes when adding, removing, replacing or moving NCNs.
 
 The following workflows are available:
 
