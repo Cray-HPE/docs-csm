@@ -3,6 +3,12 @@
 `cray-upload-recovery-images` is a utility for uploading the BMC recovery files for ChassisBMCs, NodeBMCs, and RouterBMCs to be served by the `cray-tftp` service. The tool uses the `cray` CLI (`fas`, `artifacts`) and `cray-tftp` to download the S3 recovery images (as remembered by FAS), then upload them into the PVC that is used by `cray-tftp`.
 `cray-upload-recovery-images` should be run on every system.
 
+## Prerequisites
+
+* Cray System Management (CSM) software is installed.
+* The Cray Command Line Interface (CLI) tool is initialized and configured on the system.
+* Firmware is loaded into FAS as part of the HPC Firmware Pack (HFP) install; refer to the *HPE Cray EX System HPC Firmware Pack Install Guide* on the HPE Customer Support Center for more information.
+
 ## Procedure
 
 1. Execute the `cray-upload-recovery-images` script.
