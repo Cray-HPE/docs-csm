@@ -56,7 +56,7 @@ Only ports 80, 443, and 8888 can be exposed. Attempting to open any other ports 
 2. Log in to the UAI with the connection string.
 
     ```bash
-    ssh USERNAME@UAI_IP_ADDRESS -i ~/.ssh/id_rsa
+    linux# ssh USERNAME@UAI_IP_ADDRESS -i ~/.ssh/id_rsa
     ```
 
 [Top: User Access Service (UAS)](index.md)
