@@ -5,12 +5,12 @@
 If the Intermediate CA that's used to sign service certificates changes after
 the NCNs are brought up then this causes the platform-ca on the NCNs to no
 longer be valid. This is due to the platform-ca only being pulled via cloud-init
-on first boot. You can run the following goss test to validate this is the
+on first boot. You can run the following Goss test to validate this is the
 case.
 
-### Example Error Messages
+### Example Error Messages of Failure During Install
 
-```bash
+```console
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
 and get
 {"ID":"x3007c0s12b0","LastDiscoveryStatus":"HTTPsGetFailed"}
@@ -20,7 +20,7 @@ FAIL: smd_discovery_status_test found no successfully discovered endpoints
 '/opt/cray/tests/ncn-smoke/hms/hms-smd/smd_discovery_status_test_ncn-smoke.sh' exited with status code: 1
 ```
 
-```bash
+```console
 ncn# curl https://api-gw-services-nmn.local/PATH
 curl: (60) SSL certificate problem: self signed certificate in certificate chain
 More details here: https://curl.haxx.se/docs/sslcerts.html
@@ -30,21 +30,20 @@ establish a secure connection to it. To learn more about this situation and
 how to fix it, please visit the web page mentioned above.
 ```
 
-### Resolution
+### Resolution of Failure During Install
 
-```bash
-goss -g /opt/cray/tests/install/ncn/tests/goss-platform-ca-certs-match-cloud-init.yaml v
+```console
+ncn# goss -g /opt/cray/tests/install/ncn/tests/goss-platform-ca-certs-match-cloud-init.yaml v
 ```
 
-If this test fails, then you should run the following commands to update the
-platform-ca.
+If this test fails, then run the following commands in order to update the `platform-ca`.
 
-```bash
-mv /var/lib/ca-certificates/ca-bundle.pem /root/ca-bundle.pem.bak
-curl http://10.92.100.71:8888/meta-data | jq -r  '.Global."ca-certs".trusted[]' \
-> /etc/pki/trust/anchors/platform-ca-certs.crt
-update-ca-certificates
-systemctl restart containerd
+```console
+ncn# mv /var/lib/ca-certificates/ca-bundle.pem /root/ca-bundle.pem.bak
+ncn# curl http://10.92.100.71:8888/meta-data | jq -r  '.Global."ca-certs".trusted[]' \
+        > /etc/pki/trust/anchors/platform-ca-certs.crt
+ncn# update-ca-certificates
+ncn# systemctl restart containerd
 ```
 
 Note: This will save a copy of the original CA bundle in `/root/ca-bundle.pem.bak`.
@@ -54,28 +53,29 @@ CA bundle if the file exists.
 
 ## SSL Validation Only Fails in Python Applications
 
-### Example Error Messages
+### Example Error Messages of Failure in Python Applications
 
-```bash
+```text
 python3[3705657]: Unable to contact CFS to report component status: HTTPSConnectionPool(host='api-gw-service-nmn.local', port=443):
 Max retries exceeded with url: /apis/cfs/v2/components/XNAME (Caused by SSLError(SSLError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate
 verify failed (_ssl.c:852)'),))
 ```
 
-```bash
-Error calling https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token: HTTPSConnectionPool(host='api-gw-service-nmn.local', port=443): Max retries exceeded with url: /keycloak/realms/shasta/protocol/openid-connect/token (Caused by SSLError(SSLError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:852)'),))
+```text
+Error calling https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token: HTTPSConnectionPool(host='api-gw-service-nmn.local', port=443): 
+Max retries exceeded with url: /keycloak/realms/shasta/protocol/openid-connect/token (Caused by SSLError(SSLError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:852)'),))
 ```
 
-### Resolution
+### Resolution of Failure in Python Applications
 
 Python3 applications, such as CFS, will fail to validate the API Gateway's SSL
-certificate if a non-SuSE provided certifi python package is used. This is due
-to the official certifi package using its own CA certificate bundle instead
+certificate if a non-SuSE-provided `certifi` Python package is used. This is due
+to the official `certifi` package using its own CA certificate bundle instead
 of the system's bundle. This normally happens if `pip install` is used to
-install an application with a certifi dependency. To see what version of certifi
-you are using, run `pip show certifi`.
+install an application with a `certifi` dependency. To see the version of `certifi`
+on the system, run `pip show certifi`.
 
-```bash
+```console
 ncn# pip show certifi
 Name: certifi
 Version: 2021.10.8
@@ -90,11 +90,11 @@ Required-by: canu, kubernetes, requests
 ```
 
 If this points to a local directory or is a different version then `2018.1.18`
-then you will need to uninstall this certifi package in order to trust the
-platform CA. The following command shows the expected output on a `1.2.5`
+then uninstall this `certifi` package in order to trust the
+platform CA. The following command shows the expected output on a CSM v1.3
 system.
 
-```bash
+```console
 ncn# pip show certifi
 Name: certifi
 Version: 2018.1.18
@@ -110,23 +110,23 @@ Required-by: kubernetes, requests
 
 ## SSL Validation Only Fails with Podman and/or Pulling Down Kubernetes Containers
 
-If the platform CA wasn't available in the system's CA certificate bundle when
+If the platform CA was not available in the system's CA certificate bundle when
 containerd started then the system will show SSL validation errors when talking
 to `https://registry.local`. This is due to containerd caching the CA bundle on
 startup.
 
-### Example Error Message
+### Example Error Message of Failure Pulling Containers
 
-```bash
+```text
 Get https://registry.local/v2/: x509: certificate signed by unknown authority
 Error: unable to pull registry.local/IMAGE:TAG: Error initializing source docker://registry.local/IMAGE:TAG: error pinging docker registry
 registry.local: Get https://registry.local/v2/: x509: certificate signed by unknown authority
 ```
 
-### Resolution
+### Resolution of Failure Pulling Containers
 
 Restart the `containerd` service.
 
-```bash
-systemctl restart containerd
+```console
+ncn# systemctl restart containerd
 ```
