@@ -56,4 +56,8 @@ The following procedures can be run from any master or worker node.
    - `Kubernetes Postgres Check for Replication Lag Across Pods in a Cluster`
    - `Verify cray etcd is healthy`
 
+   **NOTE:**
+   If a storage node has been added, ncn-healthcheck-storage failures of the following tests need to be remediated based on the test description informaiton and the ncn-healthcheck-storage tests should then be re-run to verify all tests pass.
+   - `Spire Health Check`
+
 The procedure is complete. [Return to Main Page](../Add_Remove_Replace_NCNs.md). 
