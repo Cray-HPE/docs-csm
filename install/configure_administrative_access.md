@@ -87,6 +87,9 @@ BMC/controller passwords.
       down or power up as part of the compute node booting process, it may be necessary to look at the logs
       on the BMC for node power down or node power up.
 
+      This step requires the CSM software, Cray CLI, and HPC Firmware Pack (HFP) to be installed.
+      If these are not currently installed, then this step will need to be skipped and run later in the install process.
+
       See [Configure BMC and Controller Parameters with SCSD](../operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md)
    <a name="configure-ncns"></a>
    1. Configure Non-compute Nodes with CFS
@@ -109,4 +112,3 @@ BMC/controller passwords.
       After completing the operational procedures above which configure administrative access, the next step is to validate the health of management nodes and CSM services.
 
       See [Validate CSM Health](index.md#validate_csm_health)
-
