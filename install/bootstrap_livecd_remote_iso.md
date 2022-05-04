@@ -441,8 +441,8 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
    1. Generate the system configuration.
 
-      > **Note:** Make sure to select a reachable NTP pool/server (passed in using the `--ntp-pools`/`--ntp-servers` flags, respectively). Adding an unreachable
-      > server can cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
+      > **Note:** Ensure that you specify a reachable NTP pool or server using the `ntp-pools` or `ntp-servers` fields, respectively. Adding an unreachable server can
+      > cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
 
       ```bash
       pit# cd ${PITDATA}/prep && csi config init
@@ -500,11 +500,12 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
    1. Generate the system configuration.
 
-      > **Note:** the provided command below is an **example only**. Run `csi config init --help` to print a full list of parameters that must be set. These will vary
-      > significatnly depending on the system and site configuration.
-
-      > **Note:** Ensure that you select a reachable NTP pool/server passed in using the `--ntp-pools`/`--ntp-servers` flags, respectively. Adding an unreachable server can
-      > cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
+      > **Notes:**
+      >
+      > * The command below is an **example only**. Run `csi config init --help` to print a full list of parameters that must be set. These will vary
+      >   significatnly depending on the system and site configuration.
+      > * Ensure that you specify a reachable NTP pool or server using the `--ntp-pools` or `--ntp-servers` flags, respectively. Adding an unreachable server can
+      >   cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
 
       ```bash
       pit# cd ${PITDATA}/prep && csi config init \
