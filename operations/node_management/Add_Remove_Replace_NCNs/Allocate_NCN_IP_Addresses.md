@@ -80,7 +80,7 @@ This procedure will perform and verify the following:
 
     > Depending on the networking configuration of the system the CMN or CAN networks may not be present in SLS network data. If CMN or CAN networks do not exist in SLS, then no IP will be allocated for that network.
 
-2. Allocate IP addresses for the NCN in SLS and HSM by adding the `--perform-changes` argument to the command in the previous step.
+1. Allocate IP addresses for the NCN in SLS and HSM by adding the `--perform-changes` argument to the command in the previous step.
 
     ```bash
     ncn-m# ./add_management_ncn.py allocate-ips \
