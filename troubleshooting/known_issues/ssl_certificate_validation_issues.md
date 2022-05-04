@@ -2,7 +2,7 @@
 
 ## SSL Validation Fails During the Installation Process
 
-If the Intermediate CA that's used to sign service certificates changes after
+If the Intermediate CA that is used to sign service certificates changes after
 the NCNs are brought up then this causes the platform-ca on the NCNs to no
 longer be valid. This is due to the platform-ca only being pulled via cloud-init
 on first boot. You can run the following Goss test to validate this is the
