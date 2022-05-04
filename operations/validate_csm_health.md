@@ -126,7 +126,7 @@ There are multiple Goss test suites available that cover a variety of subsystems
         ncn# velero backup delete <backup> --confirm
         ```
 
-- Verify spire-agent is enabled and running
+- Verify that `spire-agent` is enabled and running.
   - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker nodes and master nodes), logging errors
     (via `journalctl`) similar to "join token does not exist or has already been used" or the last logs containing multiple lines
     of `systemd[1]: spire-agent.service: Start request repeated too quickly.`. Deleting the `request-ncn-join-token` daemonset pod
@@ -469,7 +469,7 @@ on each accessible network.
 
 ### 4.1 Gateway Test Execution
 
-The gateway tests are executed on ncn-m001 (or any NCN with the docs-csm rpm installed) by running the following command.
+The gateway tests are executed on `ncn-m001` (or any NCN with the `docs-csm` RPM installed) by running the following command.
 
 ```bash
 ncn# /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
@@ -477,7 +477,7 @@ ncn# /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
 
 The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
 
-```bash
+```text
 Overall Gateway Test Status:  PASS
 ```
 
@@ -750,9 +750,10 @@ The UAI gateway tests are executed by running the following command.
 ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
 ```
 
-The test will launch a UAI with the gateway-test image, execute the gateway tests, and delete the UAI that was launched.  The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
+The test will launch a UAI with the `gateway-test image`, execute the gateway tests, and then delete the UAI that was launched.
+The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
 
-```bash
+```text
 Overall Gateway Test Status:  PASS
 ```
 
