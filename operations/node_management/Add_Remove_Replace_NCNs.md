@@ -39,7 +39,7 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Check for
 
       1. How many NCNs would you like to add? Do not include NCNs to be removed or moved.
 
-   Example output: 
+   Example output:
 
    ```text
     The prerequisite script prepares adding NCNs by adjusting SLS network configurations.
@@ -176,9 +176,10 @@ ncn# echo $XNAME
 ```
 
 **IMPORTANT:** Ensure that the node being added to the system has been properly configured. If the node being added to the system has not been previously in the system, several settings need to be verified.
+
 * Ensure that the NCN device to be added has been racked and cabled per the SHCD.
 * Ensure the NCN BMC is configured with the expected root user credentials.
-   
+
    The NCN BMC credentials needs to match the current global air-cooled BMC default credentials. This can be viewed with the following command:
 
    ```bash
