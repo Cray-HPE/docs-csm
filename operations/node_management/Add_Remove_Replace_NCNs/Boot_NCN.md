@@ -216,7 +216,7 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
 ### Set BMC Management Roles
 
-Follow the [Set BMC Management Roles](../../hardware_state_manager/Set_BMC_Management_Role.md) procedure. This will mark the added NCN's BMC with the `Management` role, making BMCs that are associated with the management nodes easlier to identify. This step is needed before locking the BCM of the added NCN.
+Follow the [Set BMC Management Roles](../../hardware_state_manager/Set_BMC_Management_Role.md) procedure. This will mark the added NCN's BMC with the `Management` role, making BMCs that are associated with the management nodes easier to identify. This step is needed before locking the BCM of the added NCN.
 
 ### Lock the management nodes
 

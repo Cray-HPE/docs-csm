@@ -57,7 +57,7 @@ The following procedures can be run from any master or worker node.
    - `Verify cray etcd is healthy`
 
    **NOTE:**
-   If a storage node has been added, ncn-healthcheck-storage failures for the following test may need to be remediated based on the test description informaiton and the ncn-healthcheck-storage tests should then be re-run to verify all tests pass.
+   If a storage node has been added, ncn-healthcheck-storage failures for the following test may need to be remediated based on the test description information and the ncn-healthcheck-storage tests should then be re-run to verify all tests pass.
    - `Spire Health Check`
 
 The procedure is complete. [Return to Main Page](../Add_Remove_Replace_NCNs.md). 
