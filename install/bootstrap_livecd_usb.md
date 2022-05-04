@@ -7,6 +7,7 @@ device. If not using the USB device, see [Bootstrap Pit Node from LiveCD Remote 
 There are 5 overall steps that provide a bootable USB with SSH enabled, capable of installing Shasta v1.5 (or higher).
 
 ## Topics
+
    1. [Download and Expand the CSM Release](#download-and-expand-the-csm-release)
    1. [Create the Bootable Media](#create-the-bootable-media)
    1. [Configuration Payload](#configuration-payload)
@@ -243,6 +244,7 @@ for the rest of the CSM installation on the USB device.
 * [Prepare Site Init](#prepare_site_init)
 
 <a name="before-configuration-payload-workarounds"></a>
+
 ### 3.1 Before Configuration Payload Workarounds
 
 Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-configuration-payload` breakpoint.
@@ -414,8 +416,6 @@ information for this system has not yet been prepared.
 
       A new directory matching your `--system-name` argument will now exist in your working directory.
 
-      > **`IMPORTANT`** After generating a configuration, a visual audit of the generated files for network data should be performed.
-
       > **Important:** After generating a configuration, a visual audit of the generated files for network data should be performed.
       >
       > **Special Notes:** Certain parameters to `csi config init` may be hard to grasp on first-time configuration generations:
@@ -535,13 +535,13 @@ This will enable SSH, and other services when the LiveCD starts.
     linux# umount -v /mnt/cow
     ```
 
-1. Make directories needed for basecamp (cloud-init) and the squashFS images
+1. Make necessary directories.
 
     ```bash
     linux# mkdir -pv /mnt/pitdata/configs/ /mnt/pitdata/data/{k8s,ceph}/
     ```
 
-1. Copy basecamp data
+1. Copy `basecamp` data.
 
     ```bash
     linux# csi pit populate pitdata ${SYSTEM_NAME} /mnt/pitdata/configs -b
@@ -549,7 +549,7 @@ This will enable SSH, and other services when the LiveCD starts.
 
     Expected output looks similar to the following:
 
-    ```
+    ```text
     data.json---------------------> /mnt/pitdata/configs/data.json...OK
     ```
 
@@ -591,7 +591,7 @@ This will enable SSH, and other services when the LiveCD starts.
     storage-ceph-0.0.5.squashfs-----------------------> /mnt/pitdata/data/ceph/...OK
     ```
 
-1. Quit the typescript session with the `exit` command and copy the file (csm-install-usb.<date>.txt) to the data partition on the USB drive.
+1. Quit the typescript session with the `exit` command and copy the file (`csm-install-usb.<date>.txt`) to the data partition on the USB drive.
 
     ```bash
     linux# mkdir -pv /mnt/pitdata/prep/admin
@@ -615,7 +615,8 @@ reboot into the LiveCD.
 Some systems will boot the USB device automatically if no other OS exists (bare-metal). Otherwise the
 administrator may need to use the BIOS Boot Selection menu to choose the USB device.
 
-If an administrator has the node booted with an operating system which will next be rebooting into the LiveCD, then use `efibootmgr` to set the boot order to be the USB device. See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information about how to set the boot order to have the USB device first.
+If an administrator has the node booted with an operating system which will next be rebooting into the LiveCD, then use `efibootmgr` to set the boot order to be the USB device.
+See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page for more information about how to set the boot order to have the USB device first.
 
 > UEFI booting must be enabled to find the USB device's EFI bootloader.
 
@@ -696,6 +697,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    Note: The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#` in the command prompts from this point onward.
 
 <a name="configure-the-running-livecd"></a>
+
 ## 6. Configure the Running LiveCD
 
 1. Mount the data partition
@@ -783,11 +785,11 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    pit# csi pit validate --services
    ```
 
-   > If dnsmasq is dead, restart it with `systemctl restart dnsmasq`.
+   > If `dnsmasq` is dead, then restart it with `systemctl restart dnsmasq`.
    >
-   > In addition, the final output from validating the services should have information about the Nexus and basecamp containers/images, similar this example.
+   > In addition, the final output from validating the services should have information about the Nexus and `basecamp` containers/images, similar this example.
 
-   ```
+   ```text
    CONTAINER ID  IMAGE                                               COMMAND               CREATED        STATUS            PORTS   NAMES
    ff7c22c6c6cb  dtr.dev.cray.com/sonatype/nexus3:3.25.0             sh -c ${SONATYPE_...  3 minutes ago  Up 3 minutes ago          nexus
    c7638b573b93  dtr.dev.cray.com/cray/metal-basecamp:1.1.0-1de4aa6                        5 minutes ago  Up 5 minutes ago          basecamp
