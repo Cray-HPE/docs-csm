@@ -1036,21 +1036,6 @@ Observe the output of the checks and note any failures, then remediate them.
 
 ### 5.2 Optional Validation
 
-   1. Verify `etcd` is running outside Kubernetes on master nodes
-
-      On each Kubernetes master node (but not the PIT node), check the status of the `etcd` service and ensure it is active and running:
-
-      ```bash
-      ncn-m# systemctl status etcd.service
-      ```
-
-      The second two lines of the expected output should look similar to the following:
-
-      ```text
-         Loaded: loaded (/etc/systemd/system/etcd.service; enabled; vendor preset: disabled)
-         Active: active (running) since Mon 2021-12-13 20:12:00 UTC; 51min 6s ago
-      ```
-
    1. Verify that all the pods in the `kube-system` namespace are `Running` or `Completed`.
 
       Run the following command on any Kubernetes master or worker node, or the PIT node:
