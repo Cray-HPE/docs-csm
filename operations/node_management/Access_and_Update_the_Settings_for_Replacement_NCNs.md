@@ -30,7 +30,6 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
 
 1. Connect to the BMC with the default login credentials. Contact service for the default credentials.
     > Default credentials for the Administrator user on HPE NCNs can be found on the serial label pull out tab attached to the server. See [this page for more information](https://support.hpe.com/hpesc/public/docDisplay?docId=sf000046874en_us&docLocale=en_US).
-
     > `read -s` is used to enter the password in order to prevent it from being echoed to the screen or saved in the shell history.
 
     ```bash
