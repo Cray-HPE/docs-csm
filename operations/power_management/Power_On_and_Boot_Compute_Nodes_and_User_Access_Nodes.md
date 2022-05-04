@@ -9,8 +9,8 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 * All compute cabinet PDUs, servers, and switches must be powered on.
 * The Slingshot Fabric is up and configured.
   Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
-  * The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
-  * The *Slingshot Troubleshooting Guide* PDF.
+  * The *HPE Slingshot Operations Guide* PDF for HPE Cray EX systems.
+  * The *HPE Slingshot Troubleshooting* PDF.
 * An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section
   of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
 
