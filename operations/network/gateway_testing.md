@@ -21,7 +21,7 @@ disables that override, and the test will use `nmnlb.<system-domain>`.
 - [Running Gateway Tests on a Device Outside the System](#running-gateway-tests-on-a-device-outside-the-system)
 - [Example Results](#example-results)
 
-## Running gateway tests on an NCN management node
+## Running Gateway Tests on an NCN Management Node
 
 The gateway test scripts can be found in `/usr/share/doc/csm/scripts/operations/gateway-test`. When `gateway-test.py` is
 run from an NCN, it has access to the admin client secret using `kubectl`. It will use the admin client secret to get
