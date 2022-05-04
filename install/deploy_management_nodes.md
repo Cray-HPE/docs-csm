@@ -944,25 +944,6 @@ Observe the output of the checks and note any failures, then remediate them.
 
 ### 5.2 Optional Validation
 
-   1. Verify that `etcd` is running outside Kubernetes on master nodes (but not the PIT node).
-
-      Run the following command to check the status of the `etcd` service on the master nodes:
-
-      ```ShellSession
-      pit# pdsh -b -S -w "$(grep -oP 'ncn-m[0-9]{3}' /etc/dnsmasq.d/statics.conf | grep -v '^ncn-m001$' | sort -u |  tr -t '\n' ',')" \
-              'systemctl status etcd.service | grep -Pzo "\n[[:space:]]*Loaded: loaded.*\n[[:space:]]*Active: active .*\n" | grep -aE "Active|Loaded"' && echo SUCCESS
-      ```
-
-      Successful output looks similar to the following:
-
-      ```text
-      ncn-m002:      Loaded: loaded (/etc/systemd/system/etcd.service; enabled; vendor preset: disabled)
-      ncn-m002:      Active: active (running) since Wed 2022-04-27 21:32:44 UTC; 17h ago
-      ncn-m003:      Loaded: loaded (/etc/systemd/system/etcd.service; enabled; vendor preset: disabled)
-      ncn-m003:      Active: active (running) since Wed 2022-04-27 21:32:44 UTC; 17h ago
-      SUCCESS
-      ```
-
    1. Verify that all the pods in the `kube-system` namespace are `Running` or `Completed`.
 
       Run the following command on any Kubernetes master or worker node, or the PIT node:
