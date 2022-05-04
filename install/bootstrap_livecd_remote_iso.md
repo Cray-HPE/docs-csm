@@ -11,6 +11,7 @@ lack of removable storage.
 [Prepare Configuration Payload](prepare_configuration_payload.md) for the relevant installation scenario.
 
 ## Topics
+
    1. [Known Compatibility Issues](#known-compatibility-issues)
    1. [Attaching and Booting the LiveCD with the BMC](#attaching-and-booting-the-livecd-with-the-bmc)
    1. [First Login](#first-login)
@@ -58,7 +59,7 @@ the instructions for attaching to the BMC will differ.
 
    **Note:** A shorter path name is better than a long path name on the webserver.
 
-      - The Cray Pre-Install Toolkit ISO is included in the CSM release tarball. It will have a long filename similar to
+      * The Cray Pre-Install Toolkit ISO is included in the CSM release tarball. It will have a long filename similar to
         `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`, so pick a shorter name on the webserver.
 
 1. See the respective procedure below to attach an ISO.
@@ -128,8 +129,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# /root/bin/csi-setup-lan0.sh $site_ip $site_gw $site_dns $site_nics
       ```
 
-   1. (recommended) print `lan0`, and if it has an IP address then exit console and log in again using SSH. The
-      SSH connection will provide larger window sizes and better bufferhandling (screen wrapping).
+   1. Print `lan0`, and if it has an IP address, then exit console and log in again using SSH.
 
       ```bash
       pit# ip a show lan0
@@ -150,6 +150,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       ```bash
       pit# hostnamectl
       ```
+
       > **Note:**
       >
       > * The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#`
@@ -168,6 +169,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     ```
 
     In some cases the `parted` command may give an error similar to the following:
+
     ```text
     Error: Partition(s) 4 on /dev/sda have been written, but we have been unable to inform the kernel of the change, probably
     because it/they are in use. As a result, the old partition(s) will remain in use. You should reboot now before making
@@ -197,7 +199,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
     pit# mkdir -v admin prep prep/admin configs data
     ```
 
-1. Quit the typescript session with the `exit` command, copy the file (csm-install-remoteis.<date>.txt) from its initial location to the newly created directory, and restart the typescript.
+1. Quit the typescript session with the `exit` command, copy the file (`csm-install-remoteis.<date>.txt`) from its initial location to the newly created directory, and restart the typescript.
 
     ```bash
     pit# exit # The typescript
@@ -271,7 +273,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    ```
 
    Expected output looks similar to the following:
-   ```
+
+   ```text
    CRAY-Site-Init build signature...
    Build Commit   : b3ed3046a460d804eb545d21a362b3a5c7d517a3-release-shasta-1.4
    Build Time     : 2021-02-04T21:05:32Z
@@ -509,7 +512,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
    Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
 
-1. Copy the interface config files generated earlier by `csi config init`
+1. Copy the interface configuration files generated earlier by `csi config init`
    into `/etc/sysconfig/network/` with the first option **or** use the provided scripts in the second option below.
 
    * Option 1: Copy PIT files.

@@ -104,7 +104,9 @@ This troubleshooting procedure is only applicable for air-cooled NodeBMCs and Ro
 1. If the BMC has a MAC Address with a component ID and does not have a `RedfishEndpoint` in HSM, then proceed to the next section.
 
 ## Solution
+
 1. Delete the MAC address associated with the BMC from HSM.
+
     ```bash
     ncn# cray hsm inventory ethernetInterfaces delete $BMC_MAC
     ```
