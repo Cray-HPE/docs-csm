@@ -11,8 +11,8 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
 1. Prepare for the procedure.
 
     ```bash
-    ncn-mw# cd /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs
-    ncn-mw# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+    cd /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs
+    export TOKEN=$(curl -s -S -d grant_type=client_credentials \
                 -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
                 -o jsonpath='{.data.client-secret}' | base64 -d` \
                 https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
@@ -25,14 +25,14 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
     > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
 
     ```bash
-    ncn-mw# read -s IPMI_PASSWORD
-    ncn-mw# export IPMI_PASSWORD
+    read -s IPMI_PASSWORD
+    export IPMI_PASSWORD
     ```
 
 1. Fetch the status of the nodes.
 
     ```bash
-    ncn-mw# ./ncn_status.py --all
+    ./ncn_status.py --all
     ```
 
     Example output:
@@ -56,7 +56,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
 1. Fetch the status of the node to be removed.
 
     ```bash
-    ncn-mw# ./ncn_status.py --xname $XNAME
+    ./ncn_status.py --xname $XNAME
     ```
 
     Example output:
@@ -83,13 +83,13 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
 1. Shutdown `cray-reds`.
 
     ```bash
-    ncn-mw# kubectl -n services scale deployment cray-reds --replicas=0
+    kubectl -n services scale deployment cray-reds --replicas=0
     ```
 
 1. Remove the node from SLS, HSM, and BSS.
 
     ```bash
-    ncn-mw# ./remove_management_ncn.py --xname $XNAME
+    ./remove_management_ncn.py --xname $XNAME
     ```
 
     Example output:
@@ -112,7 +112,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
     Successfully removed x3000c0s26b0n0 - ncn-s004
     ```
 
-    **NOTE:**
+    **`NOTE`**
     If workers have been removed and the worker count is currently at two, a timeout restarting `cray-bss` can be ignored. For example, the following failure output from `remove_management_ncn.py` can be ignored.
 
     ```text
@@ -132,13 +132,13 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
 1. Start `cray-reds`.
 
     ```bash
-    ncn-mw# kubectl -n services scale deployment cray-reds --replicas=1
+    kubectl -n services scale deployment cray-reds --replicas=1
     ```
 
 1. Verify the results by fetching the status of the management nodes.
 
     ```bash
-    ncn-mw# ./ncn_status.py --all
+    ./ncn_status.py --all
     ```
 
     Example output:
@@ -161,7 +161,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
 1. Fetch the status of the node that was removed:
 
     ```bash
-    ncn-mw# ./ncn_status.py --xname $XNAME
+    ./ncn_status.py --xname $XNAME
     ```
 
     Example output:

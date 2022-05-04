@@ -3,7 +3,7 @@
 How to reset Dell switch configuration:
 
 ```text
-switch(config)# delete startup-config
+delete startup-config
 ```
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

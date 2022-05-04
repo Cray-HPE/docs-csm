@@ -24,11 +24,11 @@ cray uas admin config volumes update [options] <volume-id>
 For example:
 
 ```bash
-ncn-m001-pit# cray uas admin config volumes update --volumename 'my-example-volume' a0066f48-9867-4155-9268-d001a4430f5c
+ncn-m001-cray uas admin config volumes update --volumename 'my-example-volume' a0066f48-9867-4155-9268-d001a4430f5c
 ```
 
 The `--volumename`, `--volume-description`, and `--mount-path` options may be used in any combination to update the configuration of a given volume.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Delete a Volume Configuration](Delete_a_Volume_Configuration.md)

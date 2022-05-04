@@ -6,8 +6,6 @@ General Nexus Troubleshooting Topics
 - [initiating layer upload... in registry.local](#error-initiating-layer-upload)
 - [not ready: https://packages.local](#error-not-ready)
 
-
-<a name="error-registry-local-no-such-host"></a>
 ### Error lookup registry.local: no such host
 
 The following error may occur when running `./lib/setup-nexus.sh`:
@@ -27,7 +25,6 @@ time="2021-03-04T22:45:07Z" level=fatal msg="Error copying ref \"dir:/image/cray
 These errors are most likely _intermittent_ and running `./lib/setup-nexus.sh`
 again is expected to succeed.
 
-<a name="error-initiating-layer-upload"></a>
 ### Error initiating layer upload ... in registry.local: received unexpected HTTP status: 200 OK
 
 The following error may occur when running `./lib/setup-nexus.sh`:
@@ -45,7 +42,6 @@ time="2021-02-07T20:25:33Z" level=fatal msg="Error copying tag \"dir:/image/jett
 This error is most likely _intermittent_ and running `./lib/setup-nexus.sh`
 again is expected to succeed.
 
-<a name="error-not-ready"></a>
 ### error: not ready: https://packages.local
 
 The `error: not ready: https://packages.local` indicates that from

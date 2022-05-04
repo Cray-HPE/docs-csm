@@ -5,12 +5,12 @@ The host joins a multicast-group by sending a join request message towards the n
 
 ## Configuration Command
 
-```text
-switch(config)# ip igmp snooping enable
+```console
+ip igmp snooping enable
 ```
 
 ## Expected Results
 
 `show ip igmp-snooping vlan 1` should show IGMP enabled on the VLAN, but no IGMP Querier set
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

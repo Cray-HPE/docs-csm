@@ -30,7 +30,7 @@ switch(config-if)# qos trust [none|cos|dscp]
 Show commands to validate functionality:
 
 ```text
-switch# show qos [cos-map|dscp-map|trust]
+show qos [cos-map|dscp-map|trust]
 ```
 
 ## Expected Results
@@ -38,7 +38,6 @@ switch# show qos [cos-map|dscp-map|trust]
 1. Administrators can enable QoS trust to CoS on an interface
 2. Administrators can map incoming 802.1p values to local priorities
 3. The output of all `show` commands is correct
-
 
 ## Example Output
 
@@ -57,4 +56,4 @@ code_point local_priority color   name
 7          7              green   Network_Control
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

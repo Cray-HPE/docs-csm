@@ -7,12 +7,12 @@ Once a repository is cloned, the git command line tool is available to interact 
 When pushing changes to the VCS server using the `crayvcs` user, input the password retrieved from the Kubernetes secret as the credentials. See the "VCS Administrative User" heading in [Version Control Service \(VCS\)](Version_Control_Service_VCS.md#vcs-administrative-user) for more information.
 
 ```bash
-ncn# git push
+git push
 ```
 
 Enter the appropriate credentials when prompted:
 
-```
+```text
 Username for 'https://api-gw-service-nmn.local': crayvcs
 Password for 'https://crayvcs@api-gw-service-nmn.local': <input password here>
 ```

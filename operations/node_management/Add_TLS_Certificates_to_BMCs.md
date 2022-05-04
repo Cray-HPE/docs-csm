@@ -26,7 +26,7 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
     2.  Generate the TLS certificates.
 
         ```bash
-        ncn-m001# cray scsd bmc createcerts create --format json cert_create.json
+        cray scsd bmc createcerts create --format json cert_create.json
         ```
 
         Example output:
@@ -75,7 +75,7 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
     2.  Set the certificates on the target BMCs.
 
         ```bash
-        ncn-m001# cray scsd bmc setcerts create --format json cert_set.json
+        cray scsd bmc setcerts create --format json cert_set.json
         ```
 
         Example output:
@@ -112,7 +112,7 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
     Each system's customizations.yaml file needs an entry to specify the URI where the Certificate Authority \(CA\) bundle can be found.
 
     ```bash
-    ncn-m001# vi customizations.yaml
+    vi customizations.yaml
     ```
 
     Example customizations.yaml:
@@ -154,7 +154,7 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
         The modifications to the system's customizations.yaml shown above will apply when CMS is installed or upgraded as a whole. When upgrading a single service, the manifest.yaml file must contain an override for ca\_host\_uri.
 
         ```bash
-        ncn-m001# vi manifest.yaml
+        vi manifest.yaml
         ```
 
         Example manifest.yaml:
@@ -184,9 +184,9 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
         Locate the section for the target service in the sysman.yaml file and copy the information described in this step from the values: section. This content will be copied to the values: section in the manifest.yaml file in the next step.
 
         ```bash
-        ncn-m001# manifestgen -i /opt/cray/site-info/manifests/sysmgmt.yaml \
+        manifestgen -i /opt/cray/site-info/manifests/sysmgmt.yaml \
         -c /opt/cray/site-info/customizations.yaml > sysman.yaml
-        ncn-m001# vi sysman.yaml
+        vi sysman.yaml
         ```
 
         Example sysman.yaml:
@@ -245,7 +245,7 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
         Ensure the proper indenting is preserved when copying information.
 
         ```bash
-        ncn-m001# vi manifest.yaml
+        vi manifest.yaml
         ```
 
     4.  Run loftsman to perform the upgrade.
@@ -253,19 +253,18 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
         If the image is not already in place, use docker to put it into place. The following example is for SMD:
 
         ```bash
-        ncn-m001# docker pull dtr.dev.cray.com/cray/cray-hms-smd:1.4.4-20201104155929_70c870d
-        ncn-m001# docker tag dtr.dev.cray.com/cray/cray-hms-smd:1.4.4-20201104155929_70c870d registry.local/cray/cray-hms-smd:1.4.4-20201104155929_70c870d
-        ncn-m001# docker push registry.local/cray/cray-hms-smd:1.4.4-20201104155929_70c870d
+        docker pull dtr.dev.cray.com/cray/cray-hms-smd:1.4.4-20201104155929_70c870d
+        docker tag dtr.dev.cray.com/cray/cray-hms-smd:1.4.4-20201104155929_70c870d registry.local/cray/cray-hms-smd:1.4.4-20201104155929_70c870d
+        docker push registry.local/cray/cray-hms-smd:1.4.4-20201104155929_70c870d
         ```
 
         Perform the upgrade:
 
         ```bash
-        ncn-m001# loftsman ship --shape --images-registry dtr.dev.cray.com \
+        loftsman ship --shape --images-registry dtr.dev.cray.com \
         --charts-repo http://helmrepo.dev.cray.com:8080 --loftsman-images-registry dtr.dev.cray.com \
         --manifest-file-path ./manifest.yaml
         ```
-
 
 At any point the TLS certs can be re-generated and replaced on Redfish BMCs. The CA trust bundle can also be modified at any time. When this is to be done, the following steps are needed:
 

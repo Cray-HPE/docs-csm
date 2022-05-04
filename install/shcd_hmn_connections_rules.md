@@ -4,25 +4,23 @@
 
   1. [Introduction](#introduction)
   2. [Compute node](#compute-node)
-      1. [Dense four node chassis - Gigabyte or Intel chassis](#compute-node-dense)
-      2. [Single node chassis - Apollo 6500 XL675D](#compute-node-single)
-      3. [Dual node chassis - Apollo 6500 XL645D](#compute-node-dual)
-  3. [Chassis Management Controller (CMC)](#chassis-management-controller)
+      1. [Dense four node chassis - Gigabyte or Intel chassis](#dense-four-node-chassis---gigabyte-or-intel-chassis)
+      2. [Single node chassis - Apollo 6500 XL675D](#single-node-chassis---apollo-6500-xl675d)
+      3. [Dual node chassis - Apollo 6500 XL645D](#dual-node-chassis---apollo-6500-xl645d)
+  3. [Chassis Management Controller (CMC)](#chassis-management-controller-cmc)
   4. [Management node](#management-node)
-      1. [Master](#management-node-master)
-      2. [Worker](#management-node-worker)
-      3. [Storage](#management-node-storage)
+      1. [Master](#master)
+      2. [Worker](#worker)
+      3. [Storage](#storage)
   5. [Application node](#application-node)
-      1. [Single node chassis](#application-node-single-node-chassis)
-          1. [Building component names (xnames) for nodes in a single application node chassis](#application-node-single-node-chassis-xname)
-      2. [Dual node chassis](#application-node-dual-node-chassis)
-          1. [Building component names (xnames) for nodes in a dual application node chassis](#application-node-dual-node-chassis-xname)
+      1. [Single node chassis](#single-node-chassis)
+          1. [Building component names (xnames) for nodes in a single application node chassis](#building-component-names-xnames-for-nodes-in-a-single-application-node-chassis)
+      2. [Dual node chassis](#dual-node-chassis)
+          1. [Building component names (xnames) for nodes in a dual application node chassis](#building-component-names-xnames-for-nodes-in-a-dual-application-node-chassis)
   6. [Columbia Slingshot switch](#columbia-slingshot-switch)
   7. [PDU cabinet controller](#pdu-cabinet-controller)
   8. [Cooling door](#cooling-door)
   9. [Management switches](#management-switches)
-
-<a name="introduction"></a>
 
 ## Introduction
 
@@ -56,15 +54,13 @@ Column mapping from SHCD to `hmn_connections.json`:
 | `T20`         |                    | `not used`              |                                                 |
 | `U20`         | `Port`             | `DestinationPort`       | Switch port on the management switch            |
 
-> Only `J20` needs to have the column name of `Source`. There are no requirements on what the other columns should be named.
+> **`NOTE`** Only `J20` needs to have the column name of `Source`. There are no requirements on what the other columns should be named.
 
 Some conventions for this document:
 
 * All `Source` names from the SHCD are converted to lowercase before being processed by the CSI tool.
 * Throughout this document, the field names from the `hmn_connections.json` file will be used to referenced values from the SHCD.
 * Each device type has an example of how it is represented in the `HMN` tab of the SHCD, the `hmn_connections.json` file, and in SLS.
-
-<a name="compute-node"></a>
 
 ## Compute node
 
@@ -88,11 +84,9 @@ For example, the following are valid `Source` field values for compute nodes:
 
 Depending on the type of compute node, additional rules may apply. Compute nodes in the follow sections will use the `nid` prefix.
 
-<a name="compute-node-dense"></a>
-
 ### Dense four node chassis - Gigabyte or Intel chassis
 
-> Apollo 2000 compute nodes are not currently supported by CSM.
+> **`NOTE`** Apollo 2000 compute nodes are not currently supported by CSM.
 
 Air-cooled compute nodes are typically in a `2U` chassis that contains four compute nodes. Each of the compute nodes in the chassis gets its own row in the `HMN` tab,
 plus a parent row.
@@ -115,7 +109,7 @@ component name (xname) of `x3000s10b2n0`.
 
 Example: Four compute nodes in the same chassis with a CMC connected to the network. The compute node chassis is located in slot 17 of cabinet 3000, and the compute
 node BMCs are connected to ports 33-36 in the management `leaf-bmc-bmc` switch in slot 14 of cabinet 3000. Port 32 on the `leaf-bmc-bmc` switch is for the CMC in
-the chassis. Refer to [Chassis Management Controller](#chassis-management-controller) section for additional details.
+the chassis. Refer to [Chassis Management Controller](#chassis-management-controller-cmc) section for additional details.
 
 | `Source`          | `Rack`  | `Location` |       | `Parent`          |       | `Port` | `Destination` | `Rack`   | `Location` |       | `Port` |
 | ----------------- | ------- | ---------- | ----- | ----------------- | ----- | ------ | ------------- | -------- | ---------- | ----- | ------ |
@@ -125,7 +119,7 @@ the chassis. Refer to [Chassis Management Controller](#chassis-management-contro
 | `nid000004`       | `x3000` | `u17`      | `L`   | `SubRack-001-CMC` | `-`   | `j3`   | `sw-smn01`    | `x3000`  | `u14`      | `-`   | `j33`  |
 | `SubRack-001-CMC` | `x3000` | `u17`      |       |                   | `-`   | `cmc`  | `sw-smn01`    | `x3000`  | `u14`      | `-`   | `j32`  |
 
-> Note: `Source` names like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **`NOTE`** `Source` names like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 Example: Four compute nodes in the same chassis without a CMC connected to the HMN network.
 
@@ -137,7 +131,7 @@ Example: Four compute nodes in the same chassis without a CMC connected to the H
 | `nid000004`       | `x3000` | `u17`      | `L`   | `SubRack-001-CMC` | `-`   | `j3`   | `sw-smn01`    | `x3000`  | `u14`      | `-`   | `j33`  |
 | `SubRack-001-CMC` | `x3000` | `u17`      |       |                   | `-`   |        |               |          |            |       |        |
 
-> Note: `Source` names like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **`NOTE`** `Source` names like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Compute: Four node chassis: HMN connections
 
@@ -153,11 +147,11 @@ compute node BMCs are connected to ports 33-36 in the management `leaf-bmc-bmc` 
 {"Source":"SubRack-001-CMC","SourceRack":"x3000","SourceLocation":"u17","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j32"}
 ```
 
-> Note: `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 Example: Four compute nodes in the same chassis without a CMC connected to the HMN network.
 
-> The `SourceParent` for the compute nodes `SubRack-001-CMC` is not connected the HMN network.
+> **`NOTE`** The `SourceParent` for the compute nodes `SubRack-001-CMC` is not connected the HMN network.
 
 ```json
 {"Source":"nid000001","SourceRack":"x3000","SourceLocation":"u17","SourceSubLocation":"R","SourceParent":"SubRack-001-CMC","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j36"}
@@ -167,7 +161,7 @@ Example: Four compute nodes in the same chassis without a CMC connected to the H
 {"Source":"SubRack-001-CMC","SourceRack":"x3000","SourceLocation":"u17","DestinationLocation":" ","DestinationPort":" "}
 ```
 
-> Note: `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Compute: Four node chassis: SLS
 
@@ -175,169 +169,167 @@ The CSI tool will generate the following SLS representations for compute nodes a
 
 ##### Compute: Four node chassis: SLS: Compute node with NID 1
 
-* Node
+- Node:
 
     ```json
     {
-      "Parent": "x3000c0s17b1",
-      "Xname": "x3000c0s17b1n0",
-      "Type": "comptype_node",
-      "Class": "River",
-      "TypeString": "Node",
-      "ExtraProperties": {
-        "NID": 1,
-        "Role": "Compute",
-        "Aliases": [
-          "nid000001"
-        ]
-      }
+        "Parent": "x3000c0s17b1",
+        "Xname": "x3000c0s17b1n0",
+        "Type": "comptype_node",
+        "Class": "River",
+        "TypeString": "Node",
+            "ExtraProperties": {
+            "NID": 1,
+            "Role": "Compute",
+            "Aliases": [
+                "nid000001"
+            ]
+        }
     }
     ```
 
-* Management switch connector
+- Management Switch Connector:
 
     ```json
     {
-      "Parent": "x3000c0w14",
-      "Xname": "x3000c0w14j36",
-      "Type": "comptype_mgmt_switch_connector",
-      "Class": "River",
-      "TypeString": "MgmtSwitchConnector",
-      "ExtraProperties": {
-        "NodeNics": [
-          "x3000c0s17b1"
-        ],
-        "VendorName": "1/1/36"
-      }
+        "Parent": "x3000c0w14",
+        "Xname": "x3000c0w14j36",
+        "Type": "comptype_mgmt_switch_connector",
+        "Class": "River",
+        "TypeString": "MgmtSwitchConnector",
+        "ExtraProperties": {
+            "NodeNics": [
+                "x3000c0s17b1"
+            ],
+            "VendorName": "1/1/36"
+        }
     }
     ```
 
-    > For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/36`. Dell `leaf-bmc` switches will have value `ethernet1/1/36`.
+    > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/36`. Dell `leaf-bmc` switches will have value `ethernet1/1/36`.
 
 ##### Compute: Four node chassis: SLS: Compute node with NID 2
 
-* Node:
+- Node:
 
     ```json
     {
-      "Parent": "x3000c0s17b2",
-      "Xname": "x3000c0s17b2n0",
-      "Type": "comptype_node",
-      "Class": "River",
-      "TypeString": "Node",
-      "ExtraProperties": {
-        "NID": 2,
-        "Role": "Compute",
-        "Aliases": [
-          "nid000002"
-        ]
-      }
+        "Parent": "x3000c0s17b2",
+        "Xname": "x3000c0s17b2n0",
+        "Type": "comptype_node",
+        "Class": "River",
+        "TypeString": "Node",
+            "ExtraProperties": {
+            "NID": 2,
+            "Role": "Compute",
+            "Aliases": [
+                "nid000002"
+            ]
+        }
     }
     ```
 
-* Management switch connector
+- Management Switch Connector:
 
     ```json
     {
-      "Parent": "x3000c0w14",
-      "Xname": "x3000c0w14j35",
-      "Type": "comptype_mgmt_switch_connector",
-      "Class": "River",
-      "TypeString": "MgmtSwitchConnector",
-      "ExtraProperties": {
-        "NodeNics": [
-          "x3000c0s17b2"
-        ],
-        "VendorName": "1/1/35"
-      }
+        "Parent": "x3000c0w14",
+        "Xname": "x3000c0w14j35",
+        "Type": "comptype_mgmt_switch_connector",
+        "Class": "River",
+        "TypeString": "MgmtSwitchConnector",
+        "ExtraProperties": {
+            "NodeNics": [
+                "x3000c0s17b2"
+            ],
+            "VendorName": "1/1/35"
+        }
     }
     ```
 
-    > For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/35`. Dell `leaf-bmc` switches will have value `ethernet1/1/35`.
+    > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/35`. Dell `leaf-bmc` switches will have value `ethernet1/1/35`.
 
 ##### Compute: Four node chassis: SLS: Compute node with NID 3
 
-* Node
+- Node
 
     ```json
     {
-      "Parent": "x3000c0s17b3",
-      "Xname": "x3000c0s17b3n0",
-      "Type": "comptype_node",
-      "Class": "River",
-      "TypeString": "Node",
-      "ExtraProperties": {
-        "NID": 3,
-        "Role": "Compute",
-        "Aliases": [
-          "nid000003"
-        ]
-      }
+        "Parent": "x3000c0s17b3",
+        "Xname": "x3000c0s17b3n0",
+        "Type": "comptype_node",
+        "Class": "River",
+        "TypeString": "Node",
+            "ExtraProperties": {
+            "NID": 3,
+            "Role": "Compute",
+            "Aliases": [
+                "nid000003"
+            ]
+        }
     }
     ```
 
-* Management switch connector
+- Management Switch Connector:
 
     ```json
     {
-      "Parent": "x3000c0w14",
-      "Xname": "x3000c0w14j34",
-      "Type": "comptype_mgmt_switch_connector",
-      "Class": "River",
-      "TypeString": "MgmtSwitchConnector",
-      "ExtraProperties": {
-        "NodeNics": [
-          "x3000c0s17b3"
-        ],
-        "VendorName": "1/1/34"
-      }
+        "Parent": "x3000c0w14",
+        "Xname": "x3000c0w14j34",
+        "Type": "comptype_mgmt_switch_connector",
+        "Class": "River",
+        "TypeString": "MgmtSwitchConnector",
+        "ExtraProperties": {
+            "NodeNics": [
+                "x3000c0s17b3"
+            ],
+            "VendorName": "1/1/34"
+        }
     }
     ```
 
-    > For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/34`. Dell `leaf-bmc` switches will have value `ethernet1/1/34`.
+    > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/34`. Dell `leaf-bmc` switches will have value `ethernet1/1/34`.
 
 ##### Compute: Four node chassis: SLS: Compute node with NID 4
 
-* Node
+- Node
 
     ```json
     {
-      "Parent": "x3000c0s17b4",
-      "Xname": "x3000c0s17b4n0",
-      "Type": "comptype_node",
-      "Class": "River",
-      "TypeString": "Node",
-      "ExtraProperties": {
-        "NID": 4,
-        "Role": "Compute",
-        "Aliases": [
-          "nid000004"
-        ]
-      }
+        "Parent": "x3000c0s17b4",
+        "Xname": "x3000c0s17b4n0",
+        "Type": "comptype_node",
+        "Class": "River",
+        "TypeString": "Node",
+            "ExtraProperties": {
+            "NID": 4,
+            "Role": "Compute",
+            "Aliases": [
+                "nid000004"
+            ]
+        }
     }
     ```
 
-* Management switch connector
+- Management Switch Connector:
 
     ```json
     {
-      "Parent": "x3000c0w14",
-      "Xname": "x3000c0w14j33",
-      "Type": "comptype_mgmt_switch_connector",
-      "Class": "River",
-      "TypeString": "MgmtSwitchConnector",
-      "ExtraProperties": {
-        "NodeNics": [
-          "x3000c0s17b4"
-        ],
-        "VendorName": "1/1/33"
-      }
+        "Parent": "x3000c0w14",
+        "Xname": "x3000c0w14j33",
+        "Type": "comptype_mgmt_switch_connector",
+        "Class": "River",
+        "TypeString": "MgmtSwitchConnector",
+        "ExtraProperties": {
+            "NodeNics": [
+                "x3000c0s17b4"
+            ],
+            "VendorName": "1/1/33"
+        }
     }
     ```
 
-    > For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/33`. Dell `leaf-bmc` switches will have value `ethernet1/1/33`.
-
-<a name="compute-node-single"></a>
+    > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/33`. Dell `leaf-bmc` switches will have value `ethernet1/1/33`.
 
 ### Single node chassis - Apollo 6500 XL675D
 
@@ -357,7 +349,7 @@ slot 40 of cabinet 3000.
 | ----------------- | ------- | ---------- | ----- | -------- | ----- | ------ | ------------- | -------- | ---------- | ----- | ------ |
 | `nid000001`       | `x3000` | `u02`      |       |          | `-`   | `j03`  | `sw-smn01`    | `x3000`  | `u40`      | `-`   | `j36`  |
 
-> Note: `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Compute: Single node chassis: HMN connections
 
@@ -367,50 +359,48 @@ The HMN connections representation for the two SHCD table rows above:
 {"Source":"nid000001","SourceRack":"x3000","SourceLocation":"u02","DestinationRack":"x3000","DestinationLocation":"u40","DestinationPort":"j36"}
 ```
 
-> Note: `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Compute: Single node chassis: SLS
 
-Compute node:
+- Compute node:
 
-```json
-{
-  "Parent": "x3000c0s2b0",
-  "Xname": "x3000c0s2b0n0",
-  "Type": "comptype_node",
-  "Class": "River",
-  "TypeString": "Node",
-  "ExtraProperties": {
-    "NID": 1,
-    "Role": "Compute",
-    "Aliases": [
-      "nid000001"
-    ]
-  }
-}
-```
+    ```json
+    {
+        "Parent": "x3000c0s2b0",
+        "Xname": "x3000c0s2b0n0",
+        "Type": "comptype_node",
+        "Class": "River",
+        "TypeString": "Node",
+        "ExtraProperties": {
+            "NID": 1,
+            "Role": "Compute",
+            "Aliases": [
+                "nid000001"
+            ]
+        }
+    }
+    ```
 
-Management switch connector
+- Management Switch Connector:
 
-```json
-{
-  "Parent": "x3000c0w40",
-  "Xname": "x3000c0w40j36",
-  "Type": "comptype_mgmt_switch_connector",
-  "Class": "River",
-  "TypeString": "MgmtSwitchConnector",
-  "ExtraProperties": {
-    "NodeNics": [
-      "x3000c0s2b0"
-    ],
-    "VendorName": "1/1/36"
-  }
-}
-```
+    ```json
+    {
+        "Parent": "x3000c0w40",
+        "Xname": "x3000c0w40j36",
+        "Type": "comptype_mgmt_switch_connector",
+        "Class": "River",
+        "TypeString": "MgmtSwitchConnector",
+        "ExtraProperties": {
+            "NodeNics": [
+                "x3000c0s2b0"
+            ],
+            "VendorName": "1/1/36"
+        }
+    }
+    ```
 
-> For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/36`. Dell `leaf-bmc` switches will have value `ethernet1/1/36`.
-
-<a name="compute-node-dual"></a>
+> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/36`. Dell `leaf-bmc` switches will have value `ethernet1/1/36`.
 
 ### Dual node chassis - Apollo 6500 XL645D
 
@@ -438,7 +428,7 @@ The two node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` 
 | `nid000001`       | `x3000` | `u08`      | `L`   |          | `-`   | `j03`  | `sw-smn01`    | `x3000`  | `u40`      | `-`   | `j38`  |
 | `nid000002`       | `x3000` | `u08`      | `R`   |          | `-`   | `j03`  | `sw-smn01`    | `x3000`  | `u40`      | `-`   | `j37`  |
 
-> Note: `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Compute: Dual node chassis: HMN connections
 
@@ -449,97 +439,95 @@ The HMN connections representation for the two SHCD table rows above:
 {"Source":"nid000002","SourceRack":"x3000","SourceLocation":"u08","SourceSubLocation":"R","DestinationRack":"x3000","DestinationLocation":"u40","DestinationPort":"j38"}
 ```
 
-> Note: `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Compute: Dual node chassis: SLS
 
 ##### Compute: Dual node chassis: SLS: Compute node with NID 1
 
-* Node:
+- Node:
 
     ```json
     {
-      "Parent": "x3000c0s8b1",
-      "Xname": "x3000c0s8b1n0",
-      "Type": "comptype_node",
-      "Class": "River",
-      "TypeString": "Node",
-      "ExtraProperties": {
-        "NID": 3,
-        "Role": "Compute",
-        "Aliases": [
-          "nid000003"
-        ]
-      }
+        "Parent": "x3000c0s8b1",
+        "Xname": "x3000c0s8b1n0",
+        "Type": "comptype_node",
+        "Class": "River",
+        "TypeString": "Node",
+        "ExtraProperties": {
+            "NID": 3,
+            "Role": "Compute",
+            "Aliases": [
+                "nid000003"
+            ]
+        }
     }
     ```
 
-* Management switch connector
+- Management Switch Connector:
 
     ```json
     {
-      "Parent": "x3000c0w40",
-      "Xname": "x3000c0w40j38",
-      "Type": "comptype_mgmt_switch_connector",
-      "Class": "River",
-      "TypeString": "MgmtSwitchConnector",
-      "ExtraProperties": {
-        "NodeNics": [
-          "x3000c0s8b1"
-        ],
-        "VendorName": "1/1/38"
-      }
+        "Parent": "x3000c0w40",
+        "Xname": "x3000c0w40j38",
+        "Type": "comptype_mgmt_switch_connector",
+        "Class": "River",
+        "TypeString": "MgmtSwitchConnector",
+        "ExtraProperties": {
+            "NodeNics": [
+                "x3000c0s8b1"
+            ],
+            "VendorName": "1/1/38"
+        }
     }
     ```
 
-    > For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/38`. Dell `leaf-bmc` switches will have value `ethernet1/1/38`.
+    > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/38`. Dell `leaf-bmc` switches will have value `ethernet1/1/38`.
 
 ##### Compute: Dual node chassis: SLS: Compute node with NID 2
 
-* Node
+- Node:
 
     ```json
     {
-      "Parent": "x3000c0s8b2",
-      "Xname": "x3000c0s8b2n0",
-      "Type": "comptype_node",
-      "Class": "River",
-      "TypeString": "Node",
-      "ExtraProperties": {
-        "NID": 2,
-        "Role": "Compute",
-        "Aliases": [
-          "nid000002"
-        ]
-      }
+        "Parent": "x3000c0s8b2",
+        "Xname": "x3000c0s8b2n0",
+        "Type": "comptype_node",
+        "Class": "River",
+        "TypeString": "Node",
+        "ExtraProperties": {
+            "NID": 2,
+            "Role": "Compute",
+            "Aliases": [
+                "nid000002"
+            ]
+        }
     }
     ```
 
-* Management switch connector
+- Management Switch Connectors:
 
     ```json
     {
-      "Parent": "x3000c0w40",
-      "Xname": "x3000c0w40j37",
-      "Type": "comptype_mgmt_switch_connector",
-      "Class": "River",
-      "TypeString": "MgmtSwitchConnector",
-      "ExtraProperties": {
-        "NodeNics": [
-          "x3000c0s8b2"
-        ],
-        "VendorName": "1/1/37"
-      }
+        "Parent": "x3000c0w40",
+        "Xname": "x3000c0w40j37",
+        "Type": "comptype_mgmt_switch_connector",
+        "Class": "River",
+        "TypeString": "MgmtSwitchConnector",
+        "ExtraProperties": {
+            "NodeNics": [
+                    "x3000c0s8b2"
+            ],
+            "VendorName": "1/1/37"
+        }
     }
     ```
 
-    > For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/37`. Dell `leaf-bmc` switches will have value `ethernet1/1/37`.
-
-<a name="chassis-management-controller"></a>
+    > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/37`. Dell `leaf-bmc` switches will have value `ethernet1/1/37`.
 
 ## Chassis Management Controller (CMC)
 
-> Note: This is not the same as an RCM (Rack Consolidation Module) that is present in Apollo 2000 chassis.
+> **`NOTE`** This is not the same as an RCM (Rack Consolidation Module) that is present in Apollo 2000 chassis.
 
 Matching conditions:
 
@@ -569,43 +557,39 @@ The HMN connections representation for the SHCD table row above:
 
 ### CMC: SLS
 
-Chassis Management Controller:
+- Chassis Management Controller:
 
-```json
-{
-  "Parent": "x3000",
-  "Xname": "x3000c0s17b999",
-  "Type": "comptype_chassis_bmc",
-  "Class": "River",
-  "TypeString": "ChassisBMC"
-}
-```
-
-Management switch connector:
-
-```json
-{
-  "Parent": "x3000c0w14",
-  "Xname": "x3000c0w14j32",
-  "Type": "comptype_mgmt_switch_connector",
-  "Class": "River",
-  "TypeString": "MgmtSwitchConnector",
-  "ExtraProperties": {
-    "NodeNics": [
-      "x3000c0s17b999"
-    ],
-    "VendorName": "1/1/32"
+  ```json
+  {
+      "Parent": "x3000",
+      "Xname": "x3000c0s17b999",
+      "Type": "comptype_chassis_bmc",
+      "Class": "River",
+      "TypeString": "ChassisBMC"
   }
-}
-```
+  ```
 
-> For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/32`. Dell `leaf-bmc` switches will have value `ethernet1/1/32`.
+- Management Switch Connector:
 
-<a name="management-node"></a>
+  ```json
+  {
+      "Parent": "x3000c0w14",
+      "Xname": "x3000c0w14j32",
+      "Type": "comptype_mgmt_switch_connector",
+      "Class": "River",
+      "TypeString": "MgmtSwitchConnector",
+      "ExtraProperties": {
+          "NodeNics": [
+              "x3000c0s17b999"
+          ],
+          "VendorName": "1/1/32"
+      }
+  }
+  ```
+
+> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/32`. Dell `leaf-bmc` switches will have value `ethernet1/1/32`.
 
 ## Management node
-
-<a name="management-node-master"></a>
 
 ### Master
 
@@ -647,8 +631,8 @@ Example: master node where its BMC is connected to the site network, and no conn
 {"Source":"mn01","SourceRack":"x3000","SourceLocation":"u01"}
 ```
 
-> The following is also equivalent to a master node with not connection to the HMN. The values `DestinationRack`, `DestinationLocation`, and
-> `DestinationPort` can all contain whitespace and it is still considered to have no connection the HMN.
+> **`NOTE`** The following is also equivalent to a master node with not connection to the HMN. The values `DestinationRack`, `DestinationLocation`, and
+> **`NOTE`** `DestinationPort` can all contain whitespace and it is still considered to have no connection the HMN.
 >
 > ```json
 > {"Source":"mn01","SourceRack":"x3000","SourceLocation":"u01","DestinationRack":" ","DestinationLocation":" ","DestinationPort":" "}
@@ -656,47 +640,45 @@ Example: master node where its BMC is connected to the site network, and no conn
 
 #### Master: SLS
 
-Management master node:
+- Management Master Node:
 
-```json
-{
-  "Parent": "x3000c0s2b0",
-  "Xname": "x3000c0s2b0n0",
-  "Type": "comptype_node",
-  "Class": "River",
-  "TypeString": "Node",
-  "ExtraProperties": {
-    "NID": 100008,
-    "Role": "Management",
-    "SubRole": "Master",
-    "Aliases": [
-      "ncn-m002"
-    ]
-  }
-}
-```
+    ```json
+    {
+        "Parent": "x3000c0s2b0",
+        "Xname": "x3000c0s2b0n0",
+        "Type": "comptype_node",
+        "Class": "River",
+        "TypeString": "Node",
+        "ExtraProperties": {
+            "NID": 100008,
+            "Role": "Management",
+            "SubRole": "Master",
+            "Aliases": [
+                "ncn-m002"
+            ]
+        }
+    }
+    ```
 
-Management switch connector:
+- Management Switch Connector:
 
-```json
-{
-  "Parent": "x3000c0w14",
-  "Xname": "x3000c0w14j25",
-  "Type": "comptype_mgmt_switch_connector",
-  "Class": "River",
-  "TypeString": "MgmtSwitchConnector",
-  "ExtraProperties": {
-    "NodeNics": [
-      "x3000c0s2b0"
-    ],
-    "VendorName": "1/1/25"
-  }
-}
-```
+    ```json
+    {
+        "Parent": "x3000c0w14",
+        "Xname": "x3000c0w14j25",
+        "Type": "comptype_mgmt_switch_connector",
+        "Class": "River",
+        "TypeString": "MgmtSwitchConnector",
+        "ExtraProperties": {
+            "NodeNics": [
+                "x3000c0s2b0"
+            ],
+            "VendorName": "1/1/25"
+        }
+    }
+    ```
 
-> For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/25`. Dell `leaf-bmc` switches will have value `ethernet1/1/25`.
-
-<a name="management-node-worker"></a>
+> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/25`. Dell `leaf-bmc` switches will have value `ethernet1/1/25`.
 
 ### Worker
 
@@ -725,47 +707,45 @@ The HMN connections representation for the SHCD table row above:
 
 #### Worker: SLS
 
-Management worker node:
+- Management Worker Node:
 
-```json
-{
-  "Parent": "x3000c0s4b0",
-  "Xname": "x3000c0s4b0n0",
-  "Type": "comptype_node",
-  "Class": "River",
-  "TypeString": "Node",
-  "ExtraProperties": {
-    "NID": 100006,
-    "Role": "Management",
-    "SubRole": "Worker",
-    "Aliases": [
-      "ncn-w001"
-    ]
-  }
-}
-```
+    ```json
+    {
+        "Parent": "x3000c0s4b0",
+        "Xname": "x3000c0s4b0n0",
+        "Type": "comptype_node",
+        "Class": "River",
+        "TypeString": "Node",
+        "ExtraProperties": {
+            "NID": 100006,
+            "Role": "Management",
+            "SubRole": "Worker",
+            "Aliases": [
+                "ncn-w001"
+            ]
+        }
+    }
+    ```
 
-Management switch connector:
+- Management Switch Connector:
 
-```json
-{
-  "Parent": "x3000c0w14",
-  "Xname": "x3000c0w14j48",
-  "Type": "comptype_mgmt_switch_connector",
-  "Class": "River",
-  "TypeString": "MgmtSwitchConnector",
-  "ExtraProperties": {
-    "NodeNics": [
-      "x3000c0s4b0"
-    ],
-    "VendorName": "1/1/48"
-  }
-}
-```
+    ```json
+    {
+        "Parent": "x3000c0w14",
+        "Xname": "x3000c0w14j48",
+        "Type": "comptype_mgmt_switch_connector",
+        "Class": "River",
+        "TypeString": "MgmtSwitchConnector",
+        "ExtraProperties": {
+            "NodeNics": [
+                "x3000c0s4b0"
+            ],
+            "VendorName": "1/1/48"
+        }
+    }
+    ```
 
-> For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/48`. Dell `leaf-bmc` switches will have value `ethernet1/1/48`.
-
-<a name="management-node-storage"></a>
+> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/48`. Dell `leaf-bmc` switches will have value `ethernet1/1/48`.
 
 ### Storage
 
@@ -794,47 +774,45 @@ The HMN connections representation for the SHCD table row above:
 
 #### Storage: SLS
 
-Management storage node:
+- Management Storage Node:
 
-```json
-{
-  "Parent": "x3000c0s7b0",
-  "Xname": "x3000c0s7b0n0",
-  "Type": "comptype_node",
-  "Class": "River",
-  "TypeString": "Node",
-  "ExtraProperties": {
-    "NID": 100003,
-    "Role": "Management",
-    "SubRole": "Storage",
-    "Aliases": [
-      "ncn-s001"
-    ]
-  }
-}
-```
+    ```json
+    {
+        "Parent": "x3000c0s7b0",
+        "Xname": "x3000c0s7b0n0",
+        "Type": "comptype_node",
+        "Class": "River",
+        "TypeString": "Node",
+        "ExtraProperties": {
+            "NID": 100003,
+            "Role": "Management",
+            "SubRole": "Storage",
+            "Aliases": [
+                "ncn-s001"
+            ]
+        }
+    }
+    ```
 
-Management switch connector:
+- Management Switch Connector:
 
-```json
-{
-  "Parent": "x3000c0w14",
-  "Xname": "x3000c0w14j29",
-  "Type": "comptype_mgmt_switch_connector",
-  "Class": "River",
-  "TypeString": "MgmtSwitchConnector",
-  "ExtraProperties": {
-    "NodeNics": [
-      "x3000c0s7b0"
-    ],
-    "VendorName": "1/1/29"
-  }
-}
-```
+    ```json
+    {
+        "Parent": "x3000c0w14",
+        "Xname": "x3000c0w14j29",
+        "Type": "comptype_mgmt_switch_connector",
+        "Class": "River",
+        "TypeString": "MgmtSwitchConnector",
+        "ExtraProperties": {
+            "NodeNics": [
+                "x3000c0s7b0"
+            ],
+            "VendorName": "1/1/29"
+        }
+    }
+    ```
 
-> For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/29`. Dell `leaf-bmc` switches will have value `ethernet1/1/29`.
-
-<a name="application-node"></a>
+> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/29`. Dell `leaf-bmc` switches will have value `ethernet1/1/29`.
 
 ## Application node
 
@@ -845,11 +823,9 @@ The `Source` field needs to match these conditions to be considered an applicati
   * `gn`
   * `ln`
 
-> Note: The naming conventions for application nodes can be unique to a system. Refer to the
+> **`NOTE`** The naming conventions for application nodes can be unique to a system. Refer to the
 > [Create Application Node Configuration YAML](create_application_node_config_yaml.md)
 > procedure for the process to add additional `Source` name prefixes for application nodes.
-
-<a name="application-node-single-node-chassis"></a>
 
 ### Single node chassis
 
@@ -876,8 +852,6 @@ The HMN connections representation for the SHCD table row above:
 {"Source":"uan01","SourceRack":"x3000","SourceLocation":"u04","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j25"}
 ```
 
-<a name="application-node-single-node-chassis-xname"></a>
-
 #### Building component names (xnames) for nodes in a single application node chassis
 
 The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
@@ -889,8 +863,6 @@ The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
 * `nN`: where `N` is the ordinal of the node This should be `0`.
 
 For example, if an application node is in slot 4 of cabinet 3000, then it would have `x3000c0s4b0n0` as its component name (xname).
-
-<a name="application-node-dual-node-chassis"></a>
 
 ### Dual node chassis
 
@@ -921,7 +893,7 @@ node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` switch i
 | `uan01`           | `x3000` | `u08`      | `L`   |          | `-`   | `j03`  | `sw-smn01`    | `x3000`  | `u40`      | `-`   | `j38`  |
 | `uan02`           | `x3000` | `u08`      | `R`   |          | `-`   | `j03`  | `sw-smn01`    | `x3000`  | `u40`      | `-`   | `j37`  |
 
-> Note: `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Application node: Dual node chassis: HMN connections
 
@@ -931,8 +903,6 @@ The HMN connections representation for the two SHCD table rows above:
 {"Source":"uan01","SourceRack":"x3000","SourceLocation":"u08","SourceSubLocation":"L","DestinationRack":"x3000","DestinationLocation":"u40","DestinationPort":"j37"}
 {"Source":"uan02","SourceRack":"x3000","SourceLocation":"u08","SourceSubLocation":"R","DestinationRack":"x3000","DestinationLocation":"u40","DestinationPort":"j38"}
 ```
-
-<a name="application-node-dual-node-chassis-xname"></a>
 
 #### Building component names (xnames) for nodes in a dual application node chassis
 
@@ -952,8 +922,6 @@ For example:
 
 * If an application node is in slot 8 of cabinet 3000 with a `SourceSubLocation` of `L`, then it would have `x3000c0s8b1n0` as its component name (xname).
 * If an application node is in slot 8 of cabinet 3000 with a `SourceSubLocation` of `R`, then it would have `x3000c0s8b2n0` as its component name (xname).
-
-<a name="columbia-slingshot-switch"></a>
 
 ## Columbia Slingshot switch
 
@@ -976,7 +944,7 @@ Example: A Columbia Slingshot switch in slot 42 of cabinet 3000. Its BMC is conn
 | ----------------- | ------- | ---------- | ----- | -------- | ----- | ------ | ------------- | -------- | ---------- | ----- | ------ |
 | `sw-hsn01`        | `x3000` | `u42`      | `-`   |          |       | `j3`   | `sw-smn01`    | `x3000`  | `u38`      | `-`   | `j45`  |
 
-> Note: `Source` values like `Columbia` or `columbia` are also valid.
+> **`NOTE`** `Source` values like `Columbia` or `columbia` are also valid.
 
 ### Columbia Slingshot switch: HMN connections
 
@@ -988,43 +956,41 @@ The HMN connections representation for the SHCD table row above:
 
 ### Columbia Slingshot switch: SLS
 
-Router BMC:
+- Router BMC:
 
-```json
-{
-  "Parent": "x3000",
-  "Xname": "x3000c0r42b0",
-  "Type": "comptype_rtr_bmc",
-  "Class": "River",
-  "TypeString": "RouterBMC",
-  "ExtraProperties": {
-    "Username": "vault://hms-creds/x3000c0r42b0",
-    "Password": "vault://hms-creds/x3000c0r42b0"
-  }
-}
-```
+    ```json
+    {
+        "Parent": "x3000",
+        "Xname": "x3000c0r42b0",
+        "Type": "comptype_rtr_bmc",
+        "Class": "River",
+        "TypeString": "RouterBMC",
+        "ExtraProperties": {
+            "Username": "vault://hms-creds/x3000c0r42b0",
+            "Password": "vault://hms-creds/x3000c0r42b0"
+        }
+    }
+    ```
 
-Management switch connector:
+- Management Switch Connector:
 
-```json
-{
-  "Parent": "x3000c0w38",
-  "Xname": "x3000c0w38j45",
-  "Type": "comptype_mgmt_switch_connector",
-  "Class": "River",
-  "TypeString": "MgmtSwitchConnector",
-  "ExtraProperties": {
-    "NodeNics": [
-      "x3000c0r42b0"
-    ],
-    "VendorName": "1/1/45"
-  }
-}
-```
+    ```json
+    {
+        "Parent": "x3000c0w38",
+        "Xname": "x3000c0w38j45",
+        "Type": "comptype_mgmt_switch_connector",
+        "Class": "River",
+        "TypeString": "MgmtSwitchConnector",
+        "ExtraProperties": {
+            "NodeNics": [
+                "x3000c0r42b0"
+            ],
+            "VendorName": "1/1/45"
+        }
+    }
+    ```
 
-> For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/45`. Dell `leaf-bmc` switches will have value `ethernet1/1/45`.
-
-<a name="pdu-cabinet-controller"></a>
+> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/45`. Dell `leaf-bmc` switches will have value `ethernet1/1/45`.
 
 ## PDU cabinet controller
 
@@ -1070,39 +1036,37 @@ The HMN connections representation for alternative naming convention.
 
 ### PDU cabinet controller: SLS
 
-Cabinet PDU controller:
+- Cabinet PDU Controller:
 
-```json
-{
-  "Parent": "x3000",
-  "Xname": "x3000m0",
-  "Type": "comptype_cab_pdu_controller",
-  "Class": "River",
-  "TypeString": "CabinetPDUController"
-}
-```
+    ```json
+    {
+        "Parent": "x3000",
+        "Xname": "x3000m0",
+        "Type": "comptype_cab_pdu_controller",
+        "Class": "River",
+        "TypeString": "CabinetPDUController"
+    }
+    ```
 
-Management switch connector:
+- Management Switch Connector:
 
-```json
-{
-  "Parent": "x3000c0w38",
-  "Xname": "x3000c0w38j41",
-  "Type": "comptype_mgmt_switch_connector",
-  "Class": "River",
-  "TypeString": "MgmtSwitchConnector",
-  "ExtraProperties": {
-    "NodeNics": [
-      "x3000m0"
-    ],
-    "VendorName": "1/1/41"
-  }
-}
-```
+    ```json
+    {
+        "Parent": "x3000c0w38",
+        "Xname": "x3000c0w38j41",
+        "Type": "comptype_mgmt_switch_connector",
+        "Class": "River",
+        "TypeString": "MgmtSwitchConnector",
+        "ExtraProperties": {
+            "NodeNics": [
+              "x3000m0"
+            ],
+            "VendorName": "1/1/41"
+        }
+    }
+    ```
 
-> For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/41`. Dell `leaf-bmc` switches will have value `ethernet1/1/41`.
-
-<a name="cooling-door"></a>
+> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/41`. Dell `leaf-bmc` switches will have value `ethernet1/1/41`.
 
 ## Cooling door
 
@@ -1129,8 +1093,6 @@ The HMN connections representation for the SHCD table row above:
 ### Cooling door: SLS
 
 Cooling doors are not currently supported by HMS services, and are not present in SLS.
-
-<a name="management-switches"></a>
 
 ## Management switches
 

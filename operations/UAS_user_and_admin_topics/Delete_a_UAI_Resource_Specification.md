@@ -15,15 +15,15 @@ Delete a specific UAI resource specification using the `resource_id` of that spe
 To delete a particular resource specification, use a command of the following form:
 
 ```bash
-ncn-m001-pit# cray uas admin config resources delete RESOURCE_ID
+ncn-m001-cray uas admin config resources delete RESOURCE_ID
 ```
 
 Remove a UAI resource specification from UAS.
 
 ```bash
-ncn-m001-pit# cray uas admin config resources delete 7c78f5cf-ccf3-4d69-ae0b-a75648e5cddb
+ncn-m001-cray uas admin config resources delete 7c78f5cf-ccf3-4d69-ae0b-a75648e5cddb
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: UAI Classes](UAI_Classes.md)

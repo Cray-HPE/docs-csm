@@ -93,6 +93,6 @@ These items are configured in UAI Classes so only UAIs created from UAI Classes 
 All of the above described UAI configuration and more can be encapsulated into a [UAI Class](UAI_Classes.md), which can then be used to create UAIs with greater precision and efficiency.
 UAI Classes are especially important when using [Broker UAIs](Broker_Mode_UAI_Management.md) because Broker UAIs use a UAI Creation Class configured into the Broker UAI's class to determine what kind of End-User UAI to create when a user logs into the Broker.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: UAI Host Nodes](UAI_Host_Nodes.md)

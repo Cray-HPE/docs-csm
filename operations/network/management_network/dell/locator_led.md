@@ -9,13 +9,13 @@ such as asking an engineer to run a cable to the switch.
 Enable LED:
 
 ```text
-switch# location-led system 1 on
+location-led system 1 on
 ```
 
 Disable LED:
 
 ```text
-switch# location-led system 1 off
+location-led system 1 off
 ```
 
 ## Expected Results
@@ -23,4 +23,4 @@ switch# location-led system 1 off
 1. The Locator LED is in the off state
 2. The Locator LED is now flashing
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

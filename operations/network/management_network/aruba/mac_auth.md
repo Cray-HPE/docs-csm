@@ -79,7 +79,7 @@ switch(config-macauth)# cached-reauth
 Show commands to validate functionality:
 
 ```text
-switch# show aaa authentication port-access mac-auth interface <IFACE|all> <port-statistics|client-status [mac MAC-ADDR]>
+show aaa authentication port-access mac-auth interface <IFACE|all> <port-statistics|client-status [mac MAC-ADDR]>
 ```
 
 ## Expected Results
@@ -88,4 +88,4 @@ switch# show aaa authentication port-access mac-auth interface <IFACE|all> <port
 2. Administrators are able to authenticate using the specified dot1x authentication method
 3. The output of the `show` commands looks correct
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

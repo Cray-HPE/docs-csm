@@ -11,7 +11,7 @@ The examples in this procedure show how to remove the product artifacts for the 
 1. View the imported artifacts by printing them from the Cray Product Catalog ConfigMap.
 
     ```bash
-    ncn-m001# kubectl get cm cray-product-catalog -n services -o json | jq -r .data.csm
+    kubectl get cm cray-product-catalog -n services -o json | jq -r .data.csm
     ```
 
     Example output:
@@ -37,7 +37,7 @@ The examples in this procedure show how to remove the product artifacts for the 
    The example in step 1 includes one image with the *id = 4871cb4a-e055-4131-a228-c0a26f0903cd* value. Remove the image with the following command:
 
     ```bash
-    ncn-m001# cray ims images delete 4871cb4a-e055-4131-a228-c0a26f0903cd
+    cray ims images delete 4871cb4a-e055-4131-a228-c0a26f0903cd
     ```
 
 3. Remove the imported IMS recipes using the ID of each recipe in the *recipes* mapping.
@@ -45,7 +45,7 @@ The examples in this procedure show how to remove the product artifacts for the 
    The example in step 1 includes one recipe with the *id = 5f5a74e0-108e-4159-9699-47dd2a952205* value. Remove the image with the following command:
 
     ```bash
-    ncn-m001# cray ims recipes delete 5f5a74e0-108e-4159-9699-47dd2a952205
+    cray ims recipes delete 5f5a74e0-108e-4159-9699-47dd2a952205
     ```
 
 4. Remove the Gitea repositories or branches.
@@ -65,9 +65,9 @@ The examples in this procedure show how to remove the product artifacts for the 
     Run the following commands on a CSM Kubernetes master or worker node, replacing the name of the repository in the second command.
 
     ```bash
-    ncn-m001# VCSPWD=$(kubectl get secret -n services vcs-user-credentials \
+    VCSPWD=$(kubectl get secret -n services vcs-user-credentials \
     --template={{.data.vcs_password}} | base64 --decode)
-    ncn-m001# curl -X DELETE -u crayvcs:${VCSPWD} \
+    curl -X DELETE -u crayvcs:${VCSPWD} \
     https://api-gw-service-nmn.local/vcs/api/v1/repos/cray/{name of repository}
     ```
 
@@ -76,7 +76,7 @@ The examples in this procedure show how to remove the product artifacts for the 
     Once the images, recipes, and repositories/branches have been removed from the system, update the product catalog to remove the references to them. This is done by editing the cray-product-catalog Kubernetes ConfigMap.
 
     ```bash
-    ncn-m001# kubectl edit configmap -n services cray-product-catalog
+    kubectl edit configmap -n services cray-product-catalog
     ```
 
     In the editor, delete the entries for the artifacts that were deleted on the system for the specific version of the product. In this example, all artifacts were deleted and only a single product version exists, so the entire entry in the product catalog for the CSM product can be deleted. Save the changes and exit the editor to persist the changes in the ConfigMap.

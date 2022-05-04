@@ -7,14 +7,14 @@ The CSM installation prepares and deploys a distributed system across a group of
 System services on these nodes are provided as containerized micro-services packaged for deployment via Helm charts. Kubernetes orchestrates these services and schedules them on Kubernetes worker nodes with horizontal scaling. Horizontal scaling increases or decreases the number of services' instances as demand for them varies, such as when booting many compute nodes or application nodes.
 
 ### Topics:
-   1. [System Nodes and Networks](#system_nodes_and_networks)
-   1. [Default IP Address Ranges](#default_ip_address_ranges)
-   1. [Resilience of System Management Services](#resilience_of_system_management_services)
-   1. [Access to System Management Services](#access_to_system_management_services)
+
+1. [System Nodes and Networks](#1-system-nodes-and-networks)
+1. [Default IP Address Ranges](#2-default-ip-address-ranges)
+1. [Resilience of System Management Services](#3-resilience-of-system-management-services)
+1. [Access to System Management Services](#4-access-to-system-management-services)
 
 ## Details
 
-<a name="system_nodes_and_networks"></a>
 ## 1. System Nodes and Networks
 
 The HPE Cray EX system has two types of nodes:
@@ -57,7 +57,7 @@ Management Unit (MMU), and Scalable Storage Unit (SSU))
       * ClusterStor controller data interfaces of all ClusterStor components (SMU, MMU, and SSU)
 
 During initial installation, several of those networks are created with default IP address ranges. See
-[Default IP Address Ranges](#default_ip_address_ranges)
+[Default IP Address Ranges](#default-ip-address-ranges)
 
 The network management system (NMS) data model and REST API enable customer sites to construct their own
 "networks" of nodes within the high-speed fabric, where a "network" is a collection of nodes that share a VLAN
@@ -72,7 +72,6 @@ A site may create other networks as well, but it is only the supported network t
 
 ![Management Network Connections for HPE Cray EX System](../img/Management_Network_Connections_Liquid_Cooled.png)
 
-<a name="default_ip_address_ranges"></a>
 ## 2. Default IP Address Ranges
 
 The initial installation of the system creates default networks with default settings and with no external exposure.
@@ -123,7 +122,6 @@ part of the main subnet.
    gateway between the CAN and the rest of the customer's internal networks. This address would be the lasthop
    route to the CAN network.
 
-<a name="resilience_of_system_management_services"></a>
 ## 3. Resilience of System Management Services
 
 HPE Cray EX systems are designed so that system management services (SMS) are fully resilient and that there
@@ -154,7 +152,6 @@ micro-services.
 For more information about resiliency topics see
 [Resilience of System Management Services](../operations/resiliency/Resilience_of_System_Management_Services.md).
 
-<a name="access_to_system_management_services"></a>
 ## 4. Access to System Management Services
 
 The standard configuration for System Management Services (SMS) is the containerized REST micro-service

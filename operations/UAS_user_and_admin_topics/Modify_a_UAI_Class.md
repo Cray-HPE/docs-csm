@@ -43,6 +43,6 @@ cray uas admin config classes update --help
 
 2. **Optional:** Update currently running UAIs by deleting and recreating them, or deleting them and allowing them to be re-created through a Broker UAI. See [Delete a UAI](Delete_a_UAI.md) for more details.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Delete a UAI Class](Delete_a_UAI_Class.md)

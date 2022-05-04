@@ -15,7 +15,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         The output of the command below is organized by the creation time of the BOA job with the most recent one listed last.
 
         ```bash
-        ncn-m001# kubectl -nservices --sort-by=.metadata.creationTimestamp get pods | grep boa
+        kubectl -nservices --sort-by=.metadata.creationTimestamp get pods | grep boa
         ```
 
         Example output:
@@ -29,7 +29,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
     2.  Watch the log from BOA job.
 
         ```bash
-        ncn-m001# kubectl logs -n services -f -c boa BOA_JOB_ID
+        kubectl logs -n services -f -c boa BOA_JOB_ID
         ```
 
         Example output:
@@ -60,7 +60,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         There may be more than one job if multiple components are being configured. If there are multiple different BOA jobs running, check the BOA logs first to find the timestamp value when CFS was updated. Expect a delay of a couple minutes after the CFS session starts depending on the `cfs-batcher` settings.
 
         ```bash
-        ncn-m001# kubectl -n services get cfs
+        kubectl -n services get cfs
         ```
 
         Example output:
@@ -84,13 +84,13 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         If multiple BOA jobs exist, describe the CFS sessions and look at the configuration, as well as which components are included. It is unlikely, but a single session may contain components from multiple separate BOS sessions if they both request the same configuration for different components at around the same time.
 
         ```bash
-        ncn-m001# kubectl -n services describe cfs SESSION_NAME
+        kubectl -n services describe cfs SESSION_NAME
         ```
 
     2.  Find the pods for the CFS job.
 
         ```bash
-        ncn-m001# kubectl -n services get pods | grep JOB_NAME
+        kubectl -n services get pods | grep JOB_NAME
         ```
 
         Example output:
@@ -102,7 +102,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
     3.  View the log from the CFS job.
 
         ```bash
-        ncn-m001# kubectl -n services logs POD_NAME ansible
+        kubectl -n services logs POD_NAME ansible
         ```
 
         Example output:
@@ -147,7 +147,6 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
         [...]
         ```
-
 
 Use the data returned in the BOA and CFS logs to determine the underlying issue for slow boot times.
 

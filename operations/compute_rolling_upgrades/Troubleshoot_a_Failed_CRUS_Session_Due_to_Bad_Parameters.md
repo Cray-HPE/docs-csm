@@ -1,7 +1,7 @@
 # Troubleshoot a Failed CRUS Session Because of Bad Parameters
 
-**Note:** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
-[Deprecated features](../../introduction/differences.md#deprecated_features).
+> **`NOTE`** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
+[Deprecated features](../../introduction/differences.md#deprecated-features).
 
 A CRUS session must be deleted and recreated if it does not start or complete because of parameters having incorrect values.
 
@@ -25,7 +25,7 @@ The following are examples of incorrect parameters:
     a delete request, which will prevent further processing of the upgrade in that session.
 
     ```bash
-    ncn# cray crus session delete CRUS_UPGRADE_ID
+    cray crus session delete CRUS_UPGRADE_ID
     ```
 
     Example output:
@@ -50,13 +50,13 @@ The following are examples of incorrect parameters:
     Ensure that the correct parameters are used when restarting the session.
 
     ```bash
-    ncn# cray crus session create \
-            --starting-label slurm-nodes \
-            --upgrading-label node-group \
-            --failed-label failed-node-group \
-            --upgrade-step-size 50 \
-            --workload-manager-type slurm \
-            --upgrade-template-id boot-template
+    cray crus session create \
+        --starting-label slurm-nodes \
+        --upgrading-label node-group \
+        --failed-label failed-node-group \
+        --upgrade-step-size 50 \
+        --workload-manager-type slurm \
+        --upgrade-template-id boot-template
     ```
 
     Example output:

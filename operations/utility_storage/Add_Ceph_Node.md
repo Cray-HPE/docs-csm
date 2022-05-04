@@ -1,6 +1,6 @@
 # Adding a Ceph Node to the Ceph Cluster
 
-**NOTE:** This operation can be done to add more than one node at the same time.
+**`NOTE`** This operation can be done to add more than one node at the same time.
 
 ## Add Join Script
 
@@ -9,7 +9,7 @@
     > Run this command on the storage node that was rebuilt or added.
 
     ```bash
-    ncn-s# mkdir -pv /usr/share/doc/csm/scripts &&
+    mkdir -pv /usr/share/doc/csm/scripts &&
            scp -p ncn-m001:/usr/share/doc/csm/scripts/join_ceph_cluster.sh /usr/share/doc/csm/scripts
     ```
 
@@ -18,7 +18,7 @@
     In a separate window, run the following command on `ncn-s001`, `ncn-s002`, or `ncn-s003` (but not the same node that was rebuilt or added):
 
     ```bash
-    ncn-s# watch ceph -s
+    watch ceph -s
     ```
 
 1. Execute the script from the first step.
@@ -26,7 +26,7 @@
     > Run this command on the storage node that was rebuilt or added.
 
     ```bash
-    ncn-s# /usr/share/doc/csm/scripts/join_ceph_cluster.sh
+    /usr/share/doc/csm/scripts/join_ceph_cluster.sh
     ```
 
     **IMPORTANT:** In the output from `watch ceph -s` the health should go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about `failed to probe daemons or devices`, but this should clear on its own.
@@ -36,12 +36,12 @@
 
 **IMPORTANT:** Only do this if you are 100% certain you need to erase data from a previous install.
 
-**NOTE:** The commands in this section will need to be run from a node running `ceph-mon`. Typically `ncn-s001`, `ncn-s002`, or `ncn-s003`.
+**`NOTE`** The commands in this section will need to be run from a node running `ceph-mon`. Typically `ncn-s001`, `ncn-s002`, or `ncn-s003`.
 
 1. Find the devices on the node being rebuilt.
 
    ```bash
-   ncn-s# ceph orch device ls $NODE
+   ceph orch device ls $NODE
    ```
 
    Example Output:
@@ -58,12 +58,12 @@
 
    **IMPORTANT:** In the above example the drives on our rebuilt node are showing `Available = no`. This is expected because the check is based on the presence of an LVM on the volume.
 
-   **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that you are not seeing OS drives. These will have a size of `480G`.
+   **`NOTE`** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that you are not seeing OS drives. These will have a size of `480G`.
 
 1. Zap the drives.
 
    ```bash
-   ncn-s# for drive in $(ceph orch device ls $NODE --format json-pretty |jq -r '.[].devices[].path') ; do
+   for drive in $(ceph orch device ls $NODE --format json-pretty |jq -r '.[].devices[].path') ; do
              ceph orch device zap $NODE $drive --force
           done
    ```
@@ -71,7 +71,7 @@
 1. Validate that the drives are being added to the cluster.
 
    ```bash
-   ncn-s# watch ceph -s
+   watch ceph -s
    ```
 
    The OSD `up` and `in` counts should increase. If the `in` count increases but does not reflect the amount of drives being added back in, then fail over the `ceph-mgr` daemon. This is a known bug and is addressed in newer releases.
@@ -79,7 +79,7 @@
    If you need to fail over the `ceph-mgr` daemon, run:
 
    ```bash
-   ncn-s# ceph mgr fail
+   ceph mgr fail
    ```
 
 ## Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
@@ -121,8 +121,8 @@
    - If the node was rebuilt:
 
      ```bash
-     ncn-s# source /srv/cray/scripts/metal/update_apparmor.sh; reconfigure-apparmor
-     ncn-s# pdsh -w ncn-s00[1-(end node number)] -f 2 \
+     source /srv/cray/scripts/metal/update_apparmor.sh; reconfigure-apparmor
+     pdsh -w ncn-s00[1-(end node number)] -f 2 \
                 '/srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg
                 systemctl restart haproxy.service
                 /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf
@@ -134,7 +134,7 @@
      Determine the IP address of the added node.
 
      ```bash
-     ncn-s# cloud-init query ds | jq -r ".meta_data[].host_records[] | select(.aliases[]? == \"$(hostname)\") | .ip" 2>/dev/null
+     cloud-init query ds | jq -r ".meta_data[].host_records[] | select(.aliases[]? == \"$(hostname)\") | .ip" 2>/dev/null
      ```
 
      Example Output:
@@ -146,7 +146,7 @@
      Update the HAproxy configuration to include the added node. Select a storage node `ncn-s00x` from one of the first three storage nodes. This cannot be done from the added node.
 
      ```bash
-     ncn-s00x# vi /etc/haproxy/haproxy.cfg
+     vi /etc/haproxy/haproxy.cfg
      ```
 
      This example adds or updates `ncn-s004` with the IP address `10.252.1.13` to `backend rgw-backend`.
@@ -167,16 +167,16 @@
      Copy the updated HAproxy configuration to all the storage nodes. Adjust the command based on the number of storage nodes.
 
      ```bash
-     ncn-s00x# pdcp -w ncn-s00[1-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
+     pdcp -w ncn-s00[1-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
      ```
 
      Configure `apparmor` and KeepAlived **on the added node** and restart the services across all the storage nodes.
 
      ```bash
-     ncn-s# source /srv/cray/scripts/metal/update_apparmor.sh; reconfigure-apparmor
-     ncn-s# /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf
-     ncn-s# export  PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no"
-     ncn-s# pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service; systemctl restart keepalived.service'
+     source /srv/cray/scripts/metal/update_apparmor.sh; reconfigure-apparmor
+     /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf
+     export  PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no"
+     pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service; systemctl restart keepalived.service'
      ```
 
 ## Next Step

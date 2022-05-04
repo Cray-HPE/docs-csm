@@ -15,7 +15,7 @@ This procedure requires administrative privileges.
     `ssh` into the node controller for the host component name (xname). For example, if the host component name (xname) \(as defined in `/etc/hosts`\) is `x5000c1s0b0n0`, the node controller would be `x5000c1s0b0`.
 
     ```bash
-    ncn# ssh XNAME
+    ssh XNAME
     ```
 
 2.  Confirm the hostname is correct for the node being used.

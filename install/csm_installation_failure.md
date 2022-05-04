@@ -29,12 +29,12 @@ and the appropriate remediation steps to take if it is encountered.
 
     If the above `secrets "admin-client-auth" not found` error is observed, then proceed to the next step.
 
-1. Verify that `keycloak-setup` has this issue.
+1. (`pit#`) Verify that `keycloak-setup` has this issue.
 
     Look for a `keycloak-setup` pod still in the `Running` state:
 
     ```bash
-    pit# kubectl get pods -n services | grep keycloak-setup
+    kubectl get pods -n services | grep keycloak-setup
     ```
 
     Example output:
@@ -43,12 +43,12 @@ and the appropriate remediation steps to take if it is encountered.
     keycloak-setup-1-xj9s5                                            1/2     Running   0          32m
     ```
 
-1. Check the `istio-proxy` container logs for the `keycloak-setup` pod found in the previous step.
+1. (`pit#`) Check the `istio-proxy` container logs for the `keycloak-setup` pod found in the previous step.
 
     In the following command, substitute the name of the `keycloak-setup` pod found in the previous step.
 
     ```bash
-    pit # kubectl logs --namespace services -n services KEYCLOAK-SETUP-POD-NAME --container istio-proxy | grep '[[:space:]]503[[:space:]]' | grep SDS | tail -n2
+    kubectl logs --namespace services -n services KEYCLOAK-SETUP-POD-NAME --container istio-proxy | grep '[[:space:]]503[[:space:]]' | grep SDS | tail -n2
     ```
 
     If the output looks similar to the following, then proceed to the remediation steps.
@@ -60,22 +60,22 @@ and the appropriate remediation steps to take if it is encountered.
 
 ## Remediate the problem
 
-1. Delete the current `keycloak-setup` pod.
+1. (`pit#`) Delete the current `keycloak-setup` pod.
 
     In the following command, substitute the name of the `keycloak-setup` pod found in the previous section.
 
     ```bash
-    pit # kubectl delete pod --namespace services KEYCLOAK-SETUP-POD-NAME
+    kubectl delete pod --namespace services KEYCLOAK-SETUP-POD-NAME
     ```
 
 1. Find the pod name of the new `keycloak-setup` pod by using the same `kubectl get pods` command from the previous section.
 
-1. Ensure that the new `keycloak-setup` pod completed setup:
+1. (`pit#`) Ensure that the new `keycloak-setup` pod completed setup:
 
     In the following command, substitute the name of the new `keycloak-setup` pod found in the previous step.
 
     ```bash
-    pit # kubectl logs --namespace services -n services NEW-KEYCLOAK-SETUP-POD-NAME --container keycloak-setup | tail -n 3
+    kubectl logs --namespace services -n services NEW-KEYCLOAK-SETUP-POD-NAME --container keycloak-setup | tail -n 3
     ```
 
     Example output indicating that it has completed setup:
@@ -86,10 +86,10 @@ and the appropriate remediation steps to take if it is encountered.
     2022-05-27 14:12:25,264 - INFO    - keycloak_setup - Keycloak setup complete
     ```
 
-1. Once all Keycloak pods have successfully completed, then re-run the installation script and proceed with the installation.
+1. (`pit#`) Once all Keycloak pods have successfully completed, then re-run the installation script and proceed with the installation.
 
     ```bash
-    pit # kubectl get pods --namespace services | grep keycloak | grep -Ev '(Completed|Running)'
+    kubectl get pods --namespace services | grep keycloak | grep -Ev '(Completed|Running)'
     ```
 
     If this command gives no output, then installation may proceed.

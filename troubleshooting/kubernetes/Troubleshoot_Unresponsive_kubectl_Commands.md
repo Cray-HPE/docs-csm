@@ -26,7 +26,7 @@ In the following procedures, unless otherwise directed, run the commands on the 
         this state.
 
         ```bash
-        ncn# ps aux |grep [k]worker|grep -e " D"| awk '{ print $2 }'
+        ps aux |grep [k]worker|grep -e " D"| awk '{ print $2 }'
         ```
 
     1. Show the stack for all `kworker`s in the `D` state.
@@ -34,7 +34,7 @@ In the following procedures, unless otherwise directed, run the commands on the 
         Note which `kworker`s clear and which ones remain stuck in this state over a period of time.
 
         ```bash
-        ncn# for i in `ps aux | grep [k]worker | grep -e " D" | awk '{print $2}'` ; do
+        for i in `ps aux | grep [k]worker | grep -e " D" | awk '{print $2}'` ; do
                 cat /proc/$i/stack; echo
              done
         ```
@@ -44,7 +44,7 @@ In the following procedures, unless otherwise directed, run the commands on the 
     1. Monitor the processes and system resource usage.
 
         ```bash
-        ncn# top
+        top
         ```
 
         Example output (some trailing lines omitted):
@@ -75,7 +75,7 @@ In the following procedures, unless otherwise directed, run the commands on the 
         In the following command, replace the `PID` value with the actual `PID` number.
 
         ```bash
-        ncn# perf top -g -p PID
+        perf top -g -p PID
         ```
 
         Example output (some trailing lines omitted):
@@ -93,13 +93,13 @@ In the following procedures, unless otherwise directed, run the commands on the 
     1. Verify that `ps -ef` completes.
 
         ```bash
-        ncn# ps -ef
+        ps -ef
         ```
 
 1. Check the `/var/log/messages` file on the node to see if there are any errors.
 
     ```bash
-    ncn# grep -i error /var/log/messages
+    grep -i error /var/log/messages
     ```
 
     Example output (some trailing lines omitted):
@@ -125,7 +125,7 @@ In the following procedures, unless otherwise directed, run the commands on the 
 1. Restart the `kubelet` on the node with the issue.
 
     ```bash
-    ncn# systemctl restart kubelet
+    systemctl restart kubelet
     ```
 
     If restarting the `kubelet` did not resolve the issue, then proceed to the next step to restart the container runtime environment.
@@ -136,7 +136,7 @@ In the following procedures, unless otherwise directed, run the commands on the 
     the next step.
 
     ```bash
-    ncn# systemctl restart containerd
+    systemctl restart containerd
     ```
 
 1. Reboot the node with the issue.
@@ -150,14 +150,14 @@ In the following procedures, unless otherwise directed, run the commands on the 
     > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
     ```bash
-    ncn# NCN_NAME=ncn-w999
-    ncn# USERNAME=root
-    ncn# read -s IPMI_PASSWORD
-    ncn# export IPMI_PASSWORD    
-    ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power off; sleep 5;
-    ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power show; echo
-    ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power on; sleep 5;
-    ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME} power show; echo
+    NCN_NAME=ncn-w999
+    USERNAME=root
+    read -s IPMI_PASSWORD
+    export IPMI_PASSWORD    
+    ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power off; sleep 5;
+    ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power show; echo
+    ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power on; sleep 5;
+    ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME} power show; echo
     ```
 
 1. Watch the console of the node being rebooted.
@@ -169,10 +169,10 @@ In the following procedures, unless otherwise directed, run the commands on the 
     * Alternatively, the console can be accessed by using `ipmitool`.
 
         ```bash
-        ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt sol activate
+        ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt sol activate
         ```
 
        This command will not return anything, but will show the `ttyS0` console of the node. Use `~.` to disconnect.
-       **NOTE:** The same `~.` keystroke can also break an SSH session. After doing this, the connection to the SSH session may need to be reestablished.
+       **`NOTE`** The same `~.` keystroke can also break an SSH session. After doing this, the connection to the SSH session may need to be reestablished.
 
 Try running a `kubectl` command on the node where it was previously unresponsive.

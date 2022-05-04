@@ -41,7 +41,6 @@ There is a separate set of DNS instances within HPE Cray EX that is used by the 
 
     There is a CoreDNS instance within Kubernetes that is used by Kubernetes pods to resolve names for internal pods and services. This instance is accessible only within the HPE Cray EX Kubernetes cluster.
 
-
 ### Connect Customer DNS to External DNS
 
 The DNS instance at the customer site should use DNS forwarding to forward the subdomain specified by the `system-name` and `site-domain` values \(combined to make the `system-name.site-domain` value\) to the IP address specified by the `cmn-external-dns` value. These values are defined with the `csi config init` command. The specifics on how to do the forwarding configuration is dependent on the type of DNS used by the customer.

@@ -43,7 +43,7 @@ instructions on how to acquire a SAT authentication token.
 1. Use the System Admin Toolkit \(`sat`\) to power on liquid-cooled cabinets chassis and slots.
 
    ```console
-   ncn-m001# sat bootsys boot --stage cabinet-power
+   sat bootsys boot --stage cabinet-power
    ```
 
    This command resumes the `hms-discovery` job which initiates power-on of the liquid-cooled cabinets. The `--stage cabinet-power`
@@ -59,12 +59,10 @@ instructions on how to acquire a SAT authentication token.
    compute blade slots, and all populated switch blade slots \(1, 3, 5, and 7\). This example shows cabinets 1000-1003.
 
    ```bash
-   ncn-m001# cray capmc xname_on create --xnames x[1000-1003]c[0-7] --format json
-   ncn-m001# cray capmc xname_on create --xnames x[1000-1003]c[0-7]s[0-7] --format json
-   ncn-m001# cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[1,3,5,7] --format json
+   cray capmc xname_on create --xnames x[1000-1003]c[0-7] --format json
+   cray capmc xname_on create --xnames x[1000-1003]c[0-7]s[0-7] --format json
+   cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[1,3,5,7] --format json
    ```
-
-<a name="power-on-standard"></a>
 
 ### Power On Standard Rack PDU Circuit Breakers
 

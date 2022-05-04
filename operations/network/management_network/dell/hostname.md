@@ -7,21 +7,21 @@ A hostname is a human-friendly name used to identify a device. An example of a h
 Create a hostname:
 
 ```text
-switch(config)# hostname NAME
+hostname NAME
 ```
 
 Show commands to validate functionality:
 
 ```text
-switch# show hostname
+show hostname
 ```
 
 ## Example Output
 
 ```text
-switch(config)# hostname switch-test
-switch-test# show hostname
-switch-test
+hostname switch-test
+show hostname
+
 ```
 
 ## Expected Results
@@ -29,4 +29,4 @@ switch-test
 1. Administrators can configure the hostname
 2. The output of all `show` commands is correct
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

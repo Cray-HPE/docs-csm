@@ -7,13 +7,13 @@ ARP is commonly used for mapping IPv4 addresses to MAC addresses.
 Configure static ARP on an interface:
 
 ```text
-switch(config-if)# ip arp ipv4 IP-ADDR mac MAC-ADDR
+ip arp ipv4 IP-ADDR mac MAC-ADDR
 ```
 
 Show commands to validate functionality:
 
 ```text
-switch# show ip arp
+show ip arp
 ```
 
 ## Expected Results
@@ -21,4 +21,4 @@ switch# show ip arp
 1. Administrators are able to ping the connected device
 2. Administrators can view the ARP entries
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

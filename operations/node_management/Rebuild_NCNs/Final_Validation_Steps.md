@@ -6,12 +6,12 @@ Use this procedure to finish validating the success of a rebuilt NCN(s).
 
 1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
-   **NOTE:** The following command will indicate if a CFS job is currently in progress for this node.
+   **`NOTE`** The following command will indicate if a CFS job is currently in progress for this node.
 
    **IMPORTANT:** The following command assumes that the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) have been set.
 
    ```bash
-   ncn# cray cfs components describe $XNAME --format json
+   cray cfs components describe $XNAME --format json
    ```
 
    Example output:
@@ -34,8 +34,8 @@ Use this procedure to finish validating the success of a rebuilt NCN(s).
 1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
    ```bash
-   ncn-mw# /opt/cray/platform-utils/ncnHealthChecks.sh
-   ncn-mw# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+   /opt/cray/platform-utils/ncnHealthChecks.sh
+   /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
    ```
 
 ## Next Step

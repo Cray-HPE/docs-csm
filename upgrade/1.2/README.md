@@ -83,7 +83,7 @@ For more information about modifying `customizations.yaml` and tuning for specif
    Here is an example of state file of `ncn-m001`:
 
    ```console
-   ncn# cat /etc/cray/upgrade/csm/{CSM_VERSION}/ncn-m001/state
+   cat /etc/cray/upgrade/csm/csm-{CSM_VERSION}/ncn-m001/state
    ```
 
    Example output:

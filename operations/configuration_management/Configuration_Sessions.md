@@ -27,7 +27,7 @@ for cleanup. Age is given in the format "1d" for days, or "6h" for hours.
 `bos_session` tag when CFS is triggered by BOS. This can be searched using the following command:
 
   ```bash
-  ncn-m001# cray cfs sessions list --tags bos_session=BOS_SESSION_NAME
+  cray cfs sessions list --tags bos_session=BOS_SESSION_NAME
   ```
 
 ## Configuration Session Workflow

@@ -148,6 +148,6 @@ Another option when compute nodes are booted is to download their rootfs into RA
 The new CPS-based session template can be used when creating a BOS session. The following is an example of creating a reboot session using the CLI:
 
 ```bash
-ncn# cray bos session create --template-uuid cps_rootfs_template --operation Reboot
+cray bos session create --template-uuid cps_rootfs_template --operation Reboot
 ```
 

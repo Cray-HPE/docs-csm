@@ -3,18 +3,16 @@
 PXE booting is a key component of a working Shasta system. There are a lot of different components involved, which increases the complexity.
 This guide runs through the most common issues and shows what is needed in order to have a successful PXE boot.
 
-1. [NCNs on install](#ncns-on-install)
-2. [`ncn-m001` on reboot or NCN boot](#ncn-m001-on-reboot)
-    2.1. [Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)](#Verify-DHCP-packets)
-    2.2. [Verify BGP](#verify-bgp)
-    2.3. [Verify route to TFTP](#verify-route-to-tftp)
-    2.4. [Test TFTP traffic (Aruba Only)](#test-tftp-traffic)
-    2.5. [Check DHCP lease is getting allocated](#check-dhcp-lease)
-    2.6. [Verify the DHCP traffic on the Workers](#verify-the-dhcp-traffic)
-    2.7. [Verify the switches are forwarding DHCP traffic.](#verify-the-switches)
-3. [Computes/UANs/Application Nodes](#computes-uans-applications-nodes)
-
-<a name="ncns-on-install"></a>
+1. [NCNs on install](#1-ncns-on-install)
+2. [`ncn-m001` on reboot or NCN boot](#2-ncn-m001-on-reboot-or-ncn-boot)
+    2.1. [Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)](#21-verify-dhcp-packets-can-be-forwarded-from-the-workers-to-the-mtl-network-vlan1)
+    2.2. [Verify BGP](#22-verify-bgp)
+    2.3. [Verify route to TFTP](#23-verify-route-to-tftp)
+    2.4. [Test TFTP traffic (Aruba Only)](#23-verify-route-to-tftp)
+    2.5. [Check DHCP lease is getting allocated](#25-check-dhcp-lease-is-getting-allocated)
+    2.6. [Verify the DHCP traffic on the Workers](#26-verify-the-dhcp-traffic-on-the-workers)
+    2.7. [Verify the switches are forwarding DHCP traffic.](#27-verify-the-switches-are-forwarding-dhcp-traffic)
+3. [Computes/UANs/Application Nodes](#3-compute-nodesuansapplication-nodes)
 
 ## 1. NCNs on install
 
@@ -71,7 +69,7 @@ interface vlan 1 magp 1 ip virtual-router mac-address
 >Aruba Configuration
 
 ```text
-sw-spine-001# show run int vlan 1
+show run int vlan 1
 interface vlan
 vsx-sync active-gateways
 ip address 10.1.0.2/
@@ -84,7 +82,7 @@ exit
 ```
 
 ```text
-sw-spine-002# show run int vlan 1
+show run int vlan 1
 interface vlan
 vsx-sync active-gateways
 ip address 10.1.0.3/
@@ -97,8 +95,6 @@ exit
 
 * You should be able to ping the MTL router from `ncn-m001`.
 
-<a name="ncn-m001-on-reboot"></a>
-
 ## 2. `ncn-m001` on reboot or NCN boot
 
 * Common Error messages.
@@ -106,8 +102,6 @@ exit
   * `2021-02-02 17:06:13 PXE-E99: Unexpected network error.`
 
 * Verify the `ip helper-address` on VLAN 1 on the switches. This is the same configuration as above for the "Mellanox Configuration" and "Aruba Configuration".
-
-<a name="Verify-DHCP-packets"></a>
 
 ## 2.1. Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)
 
@@ -117,7 +111,7 @@ exit
 * TEST
 
 ```bash
-ncn-w# ping 10.1.0.
+ping 10.1.0.
 PING 10.1.0.1 (10.1.0.1) 56(84) bytes of data.
 64 bytes from 10.1.0.1: icmp_seq=1 ttl=64 time=0.361 ms
 64 bytes from 10.1.0.1: icmp_seq=2 ttl=64 time=0.145 ms
@@ -126,10 +120,8 @@ PING 10.1.0.1 (10.1.0.1) 56(84) bytes of data.
 * If this fails you may have a misconfigured CAN or need to add a route to the MTL network.
 
 ```bash
-ncn-w# ip route add 10.1.0.0/16 via 10.252.0.1 dev vlan
+ip route add 10.1.0.0/16 via 10.252.0.1 dev vlan
 ```
-
-<a name="verify-bgp"></a>
 
 ## 2.2. Verify BGP
 
@@ -138,7 +130,7 @@ ncn-w# ip route add 10.1.0.0/16 via 10.252.0.1 dev vlan
 >Aruba BGP
 
 ```text
-sw-spine-002# show bgp ipv4 u s
+show bgp ipv4 u s
 VRF : default
 BGP Summary
 -----------
@@ -177,15 +169,13 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 10.252.1.9        4    65533        18010     20671     39        0      0      6:05:52:03    ESTABLISHED/6
 ```
 
-<a name="verify-route-to-tftp"></a>
-
 ## 2.3. Verify route to TFTP
 
 * On BOTH Aruba switches we need a single route to the TFTP server 10.92.100.60. This is needed because there are issues with Aruba
 ECMP hashing and TFTP traffic.
 
 ```text
-sw-spine-002# show ip route 10.92.100.60
+show ip route 10.92.100.60
 
 Displaying ipv4 routes selected for forwarding
 
@@ -199,8 +189,6 @@ Displaying ipv4 routes selected for forwarding
 * Verify that you can ping the next hop of this route.
 * For the example above we would ping 10.252.1.9. If this is not reachable this is your problem.
 
-<a name="test-tftp-traffic"></a>
-
 ## 2.4. Test TFTP traffic (Aruba Only)
 
 * You can test the TFTP traffic by trying to download the `ipxe.efi` binary.
@@ -208,9 +196,9 @@ Displaying ipv4 routes selected for forwarding
 * This requires that the leaf switch can talk to the TFTP server "10.92.100.60"
 
 ```text
-sw-leaf-001# start-shell
+start-shell
 sw-leaf-001:~$ sudo su
-sw-leaf-001:/home/admin# tftp 10.92.100.
+sw-leaf-001:/home/tftp 10.92.100.
 tftp> get ipxe.efi
 Received 1007200 bytes in 2.2 seconds
 tftp> get ipxe.efi
@@ -222,14 +210,12 @@ Received 1007200 bytes in 2.2 seconds
 * You can see here that the `ipxe.efi` binary is downloaded three times in a row. When we have seen issues with ECMP hashing this
 would fail intermittently.
 
-<a name="check-dhcp-lease"></a>
-
 ## 2.5. Check DHCP lease is getting allocated
 
 * Check the KEA logs and verify that the lease is getting allocated.
 
     ```bash
-    ncn# kubectl logs -n services pod/$(kubectl get -n services pods |
+    kubectl logs -n services pod/$(kubectl get -n services pods |
             grep kea | head -n1 | cut -f 1 -d ' ') -c cray-dhcp-kea
     ```
 
@@ -244,8 +230,6 @@ would fail intermittently.
     2021-06-21 16:44:31.124 INFO  [kea-dhcp4.leases/18.139837089017472] DHCP4_LEASE_ADVERT [hwtype=1 14:02:ec:d9:79:88], cid=[no info], tid=0xe87fad10: lease 10.252.1.16 will be advertised
     ```
 
-<a name="verify-the-dhcp-traffic"></a>
-
 ## 2.6. Verify the DHCP traffic on the Workers
 
 * We have ran into issues on HPE servers and Aruba switches where the source address of the DHCP Offer is the MetalLB address
@@ -254,7 +238,7 @@ Worker.
 * Here is how to look at DHCP traffic on the workers.
 
     ```bash
-    ncn-w# tcpdump -envli bond0 port 67 or 68
+    tcpdump -envli bond0 port 67 or 68
     ```
 
 * You are looking for the source IP address of the DHCP Reply/Offer.
@@ -283,8 +267,6 @@ this is below.
 * If you run into this, the only solution that we have found so far is restarting KEA and making sure that it gets moved to a different
 worker. We believe this has something to do with conntrack.
 
-<a name="verify-the-switches"></a>
-
 ## 2.7. Verify the switches are forwarding DHCP traffic
 
 * If you still cannot PXE boot, the IP-Helper may be breaking on the switch.
@@ -293,8 +275,6 @@ worker. We believe this has something to do with conntrack.
   * On an Aruba or Mellanox switch, delete the entire VLAN configuration and re-apply it, in order for the DHCP traffic to come back.
   * On a Dell switch, do a reboot in order to restore DHCP traffic.
 * The underlying cause of IP-Helper breaking is not yet known.
-
-<a name="computes-uans-applications-nodes"></a>
 
 ## 3. Compute Nodes/UANs/Application Nodes
 

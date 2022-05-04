@@ -18,7 +18,7 @@ Optional: the administrator may choose a site defined name for the Broker UAI to
 Use the following command to create a Broker UAI:
 
 ```bash
-ncn-m001-pit# cray uas admin uais create --class-id <class-id> [--owner <name>]
+ncn-m001-cray uas admin uais create --class-id <class-id> [--owner <name>]
 ```
 
 To make the broker obvious in the list of UAIs, giving it an owner name of `broker` is handy. The owner name on a broker is used for naming and filtering (for listing or deleting), but nothing else, so this is a convenient convention.
@@ -27,7 +27,7 @@ Alternatively, giving it a descriptive owner to make it easy to tell the differe
 The following is an example using the class created above:
 
 ```bash
-ncn-m001-pit# cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker
+ncn-m001-cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker
 ```
 
 Example output:
@@ -51,7 +51,7 @@ Unless a site defined name is used, a unique name like the one shown above is ca
 If a site defined DNS name for the Broker UAI is desired, the UAI name may be added to the command that creates the Broker UAI as follows:
 
 ```bash
-ncn-m001-pit# cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker --uai-name my-broker-uai
+ncn-m001-cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker --uai-name my-broker-uai
 ```
 
 Example output:
@@ -72,6 +72,6 @@ username = "broker"
 
 If a UAI name is specified for creation that matches that of an already created UAI, no new UAI will be created, but the creation operation will appear to succeed and will return the status of the already existing UAI.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Log in to a Broker UAI](Log_in_to_a_Broker_UAI.md)

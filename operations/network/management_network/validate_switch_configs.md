@@ -18,24 +18,27 @@ can also pull the configuration from the switch by using the `--ip`, `--username
 
 Example of CANU pulling configuration.
 
+(`ncn#` or `pit#`)
 ```bash
-ncn# canu validate switch config --ip 192.168.1.1 --username USERNAME --password PASSWORD --generated ./generated/sw-spine-001.cfg
+canu validate switch config --ip 192.168.1.1 --username USERNAME --password PASSWORD --generated ./generated/sw-spine-001.cfg
 ```
 
 Doing file comparisons on your local machine:
 
 * Comparing configuration file for single switch:
 
+(`ncn#` or `pit#`)
 ```bash
-ncn# canu validate switch config --running ./running/sw-spine-001.cfg --generated sw-spine-001.cfg
+canu validate switch config --running ./running/sw-spine-001.cfg --generated sw-spine-001.cfg
 ```
 
 Please enter the vendor (Aruba, Dell, Mellanox): Aruba
 
 * Comparing configuration files for full system:
 
+(`ncn#` or `pit#`)
 ```bash
-ncn# canu validate network config --csm 1.2 --running ./running/ --generated ./generated/
+canu validate network config --csm 1.2 --running ./running/ --generated ./generated/
 ```
 
 CANU-generated switch configurations will not include any ports or devices not defined in the model. These were previously discussed in the

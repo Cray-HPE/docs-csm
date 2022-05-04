@@ -1,7 +1,7 @@
 # Troubleshoot Nodes Failing to Upgrade in a CRUS Session
 
-**Note:** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
-[Deprecated features](../../introduction/differences.md#deprecated_features).
+> **`NOTE`** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
+[Deprecated features](../../introduction/differences.md#deprecated-features).
 
 Troubleshoot compute nodes failing to upgrade during a Compute Rolling Upgrade Service \(CRUS\) session and rerun the session on the failed nodes.
 
@@ -17,10 +17,13 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
 
 ## Procedure
 
+- A CRUS upgrade session has completed with a group of nodes that failed to upgrade.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+
 1. Determine which nodes failed the upgrade by listing the contents of the Hardware State Manager \(HSM\) group that was set up for failed nodes.
 
     ```bash
-    ncn# cray hsm groups describe FAILED_NODES_GROUP
+    cray hsm groups describe FAILED_NODES_GROUP
     ```
 
     Example output:
@@ -50,7 +53,7 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
         This group should be empty.
 
         ```bash
-        ncn# cray hsm groups create --label NEW_FAILED_NODES_GROUP --description 'Failed Node Group for my Compute Node upgrade'
+        cray hsm groups create --label NEW_FAILED_NODES_GROUP --description 'Failed Node Group for my Compute Node upgrade'
         ```
 
     1. Create a new CRUS session.
@@ -59,13 +62,13 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
         The rest of the parameters need to be the same ones that were used in the original upgrade.
 
         ```bash
-        ncn# cray crus session create \
-                --starting-label OLD_FAILED_NODES_GROUP \
-                --upgrading-label node-group \
-                --failed-label NEW_FAILED_NODES_GROUP \
-                --upgrade-step-size 50 \
-                --workload-manager-type slurm \
-                --upgrade-template-id boot-template
+        cray crus session create \
+            --starting-label OLD_FAILED_NODES_GROUP \
+            --upgrading-label node-group \
+            --failed-label NEW_FAILED_NODES_GROUP \
+            --upgrade-step-size 50 \
+            --workload-manager-type slurm \
+            --upgrade-template-id boot-template
         ```
 
         Example output:

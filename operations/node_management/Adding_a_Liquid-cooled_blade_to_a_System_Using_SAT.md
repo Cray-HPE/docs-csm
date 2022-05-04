@@ -37,13 +37,13 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    [Removing a Liquid-cooled Blade from a System Using SAT](Removing_a_Liquid-cooled_blade_from_a_System_Using_SAT.md) procedure on the other system.
 
    ```bash
-   ncn# sat swap blade --src-mapping <SRC_MAPPING> --dst-mapping <DST_MAPPING> --action enable <SLOT_XNAME>
+   sat swap blade --src-mapping <SRC_MAPPING> --dst-mapping <DST_MAPPING> --action enable <SLOT_XNAME>
    ```
 
    If the slot was not previously populated, the `--src-mapping` and `--dst-mapping` arguments should be omitted.
 
    ```bash
-   ncn# sat swap blade --action enable <SLOT_XNAME>
+   sat swap blade --action enable <SLOT_XNAME>
    ```
 
 ## Power on and boot the nodes
@@ -57,13 +57,13 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
       If it is unclear which session template is in use, proceed to the next substep.
 
       ```bash
-      ncn# cray bos sessiontemplate list
+      cray bos sessiontemplate list
       ```
 
    1. Find the node xnames with `sat status`. In this example, the target blade is in slot `x9000c3s0`.
 
       ```bash
-      ncn# sat status --filter 'xname=x9000c3s0*'
+      sat status --filter 'xname=x9000c3s0*'
       ```
 
       Example output:
@@ -82,7 +82,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    1. Find the `bos_session` value for each node via the Configuration Framework Service (CFS).
 
       ```bash
-      ncn# cray cfs components describe x9000c3s0b1n0 | grep bos_session
+      cray cfs components describe x9000c3s0b1n0 | grep bos_session
       ```
 
       Example output:
@@ -94,7 +94,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    1. Find the required `templateName` value with BOS.
 
       ```bash
-      ncn# cray bos session describe BOS_SESSION | grep templateName
+      cray bos session describe BOS_SESSION | grep templateName
       ```
 
       Example output:
@@ -106,7 +106,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    1. Determine the list of xnames associated with the desired session template.
 
       ```bash
-      ncn# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+      cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
       ```
 
       Example output:
@@ -121,8 +121,8 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    a comma-separated list of the BOS session templates determined in the previous step.
 
    ```bash
-   ncn# BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
-   ncn# sat bootsys boot --stage bos-operations --bos-limit x9000c3s0 --recursive --bos-templates $BOS_TEMPLATES
+   BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
+   sat bootsys boot --stage bos-operations --bos-limit x9000c3s0 --recursive --bos-templates $BOS_TEMPLATES
    ```
 
 ## Check firmware
@@ -142,7 +142,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
 1. Check the `cray-cps` pods on worker nodes and verify they are `Running`.
 
    ```bash
-   ncn# kubectl get pods -Ao wide | grep cps
+   kubectl get pods -Ao wide | grep cps
    ```
 
    Example output:
@@ -162,7 +162,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
    Ensure that there are no recurring `"DVS: merge_one"` error messages shown. These error messages indicate that DVS is detecting an IP address change for one of the client nodes.
 
    ```bash
-   ncn-w# dmesg -T | grep "DVS: merge_one"
+   dmesg -T | grep "DVS: merge_one"
    ```
 
    Example output:
@@ -178,7 +178,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
 1. SSH to the node and check each DVS mount.
 
    ```bash
-   nid# mount | grep dvs | head -1
+   mount | grep dvs | head -1
    ```
 
    Example output:
@@ -192,7 +192,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
 1. Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
 
    ```bash
-   ncn# kubectl exec -it -n services \
+   kubectl exec -it -n services \
      $(kubectl get pods --all-namespaces |grep slingshot | awk '{print $2}') \
      -- fmn_status
    ```
@@ -204,7 +204,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
    1. Verify that each node hostname resolves to a single IP address.
 
       ```bash
-      ncn# nslookup x9000c3s0b0n1
+      nslookup x9000c3s0b0n1
       ```
 
       Example output with only one IP address resolving:
@@ -220,7 +220,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
    1. Reload the KEA configuration.
 
       ```bash
-      ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
+      curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
                 -d '{ "command": "config-reload",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
       ```
 
@@ -248,7 +248,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
    1. Show the `EthernetInterfaces` for the duplicate IP address:
 
       ```bash
-      ncn# cray hsm inventory ethernetInterfaces list --ip-address 10.100.0.105 --format json | jq
+      cray hsm inventory ethernetInterfaces list --ip-address 10.100.0.105 --format json | jq
       ```
 
       Example output for an IP address that is associated with two MAC addresses:
@@ -279,7 +279,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
    1. Delete the older entry.
 
       ```bash
-      ncn# cray hsm inventory ethernetInterfaces delete 0040a68350a4
+      cray hsm inventory ethernetInterfaces delete 0040a68350a4
       ```
 
 1. Use the following example `curl` command to check for active DHCP leases.
@@ -287,7 +287,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
    If there are zero DHCP leases, then there is a configuration error.
 
    ```bash
-   ncn# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
+   curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
              -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
    ```
 
@@ -308,7 +308,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
 1. Check DNS using `nslookup`.
 
    ```bash
-   ncn# nslookup 10.100.0.105
+   nslookup 10.100.0.105
    ```
 
    Example output:
@@ -323,7 +323,7 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
 1. Verify the ability to connect using SSH.
 
    ```bash
-   ncn# ssh x9000c3s0b0n1
+   ssh x9000c3s0b0n1
    ```
 
    Example output:

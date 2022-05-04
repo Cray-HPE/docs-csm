@@ -30,7 +30,7 @@ To setup the compute configuration layer, first gather the following information
      `cray-product-catalog` for the current version of CSM. For example:
 
        ```bash
-       ncn# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
+       kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
        ```
 
        Part of the output will be a section resembling the following:
@@ -50,13 +50,13 @@ To setup the compute configuration layer, first gather the following information
 
 1. Craft a new configuration layer entry for CSM using the procedure in [Update a CFS Configuration](../configuration_management/Update_a_CFS_Configuration.md):
 
-  The following is an example entry for the JSON configuration file:
+    The following is an example entry for the JSON configuration file:
 
-  ```json
-     {
+    ```json
+    {
         "name": "csm-<version>",
         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
         "playbook": "compute_nodes.yml",
         "commit": "<retrieved git commit>"
-     }
-  ```
+    }
+    ```

@@ -32,7 +32,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
 1. Get a token:
 
     ```bash
-    ncn# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
+    export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
             -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
             https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
@@ -40,7 +40,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
 1. Extract SLS data to a file:
 
     ```bash
-    ncn# curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
+    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
     ```
 
 1. Upgrade SLS data.
@@ -48,7 +48,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
     * Example 1: Upgrade, using the CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
         ```bash
-        ncn# ./sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+        ./sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
                 --bican-user-network-name CHN \
                 --customer-highspeed-network 5 10.103.11.192/26
         ```
@@ -56,7 +56,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
     * Example 2: Upgrade, using the CAN as the system default route, keep the generated CHN (for testing), and preserve the existing external-dns entry.
 
         ```bash
-        ncn# ./sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+        ./sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
                 --bican-user-network-name CAN \
                 --customer-highspeed-network 5 10.103.11.192/26 \
                 --preserve-existing-subnet-for-cmn external-dns \
@@ -69,7 +69,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
 1. Upload migrated SLS file to SLS service:
 
     ```bash
-    ncn# curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
+    curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
     ```
 
 ## SLS Updater Help
@@ -77,7 +77,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
 For help and all options, run the following:
 
 ```bash
-ncn# ./sls_updater_csm_1.2.py --help
+./sls_updater_csm_1.2.py --help
 ```
 
 ## Actions and Order

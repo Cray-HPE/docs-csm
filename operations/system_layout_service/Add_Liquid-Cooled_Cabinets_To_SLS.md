@@ -2,7 +2,7 @@
 
 This procedure adds one or more liquid-cooled cabinets and associated CDU management switches to SLS.
 
-**NOTE:** This procedure is intended to be used in conjunction with the top level [Add additional Liquid-Cooled Cabinets to a System](../node_management/Add_additional_Liquid-Cooled_Cabinets_to_a_System.md) procedure.
+**`NOTE`** This procedure is intended to be used in conjunction with the top level [Add additional Liquid-Cooled Cabinets to a System](../node_management/Add_additional_Liquid-Cooled_Cabinets_to_a_System.md) procedure.
 
 ## Prerequisites
 
@@ -24,8 +24,8 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 1.  Perform an SLS dump state operation:
 
     ```bash
-    ncn# cray sls dumpstate list --format json > sls_dump.json
-    ncn# cp sls_dump.json sls_dump.original.json
+    cray sls dumpstate list --format json > sls_dump.json
+    cp sls_dump.json sls_dump.original.json
     ```
 
 1.  **For each** new liquid-cooled cabinet being added to the system, collect the following information about each cabinet:
@@ -38,7 +38,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 
     > The `inspect_sls_cabinets.py` script can be used to help display information about existing cabinets present in the system:
     > ```bash
-    > ncn# /usr/share/doc/csm/scripts/operations/system_layout_service/inspect_sls_cabinets.py sls_dump.json
+    > /usr/share/doc/csm/scripts/operations/system_layout_service/inspect_sls_cabinets.py sls_dump.json
     > ```
     > Example output on a system with 1 air-cooled cabinet and 4 liquid-cooled cabinets:
     > ```
@@ -77,7 +77,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     | `--starting-nid`     | Starting NID for new cabinet. Each cabinet is allocated 256 NIDs  | `2024`               |
 
     ```bash
-    ncn# /usr/share/doc/csm/scripts/operations/system_layout_service/add_liquid_cooled_cabinet.py sls_dump.json \
+    /usr/share/doc/csm/scripts/operations/system_layout_service/add_liquid_cooled_cabinet.py sls_dump.json \
         --cabinet x1004  \
         --cabinet-type Mountain \
         --cabinet-vlan-hmn 3004 \
@@ -86,6 +86,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     ```
 
     Example output:
+
     ```
     ========================
     Configuration
@@ -128,7 +129,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     Writing updated SLS state to sls_dump.json
     ```
 
-    **Note**: If adding more than one cabinet and contiguous NIDs are desired, the value of the `Next available NID 2280` can be used as the value for the `--start-nid` argument when adding the next cabinet.
+   > **`NOTE`**: If adding more than one cabinet and contiguous NIDs are desired, the value of the `Next available NID 2280` can be used as the value for the `--start-nid` argument when adding the next cabinet.
 
     Possible Errors:
     | Problem                        | Error Message                                                         | Resolution |
@@ -141,10 +142,11 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 1.  Inspect cabinet subnet and VLAN allocations in the system after adding the new cabinets.
 
     ```bash
-    ncn# /usr/share/doc/csm/scripts/operations/system_layout_service/inspect_sls_cabinets.py sls_dump.json
+    /usr/share/doc/csm/scripts/operations/system_layout_service/inspect_sls_cabinets.py sls_dump.json
     ```
 
     Example output:
+
     ```
     =================================
     Cabinet NID Allocations
@@ -180,13 +182,14 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 1.  **For each** new CDU switch, add it to the SLS state dump taken in step 1 in __ascending order__ based on the switch alias:
 
     ```bash
-    ncn# /usr/share/doc/csm/scripts/operations/system_layout_service/add_cdu_switch.py sls_dump.json \
+    /usr/share/doc/csm/scripts/operations/system_layout_service/add_cdu_switch.py sls_dump.json \
         --cdu-switch d1w1 \
         --alias sw-cdu-003 \
         --brand Dell
     ```
 
     Example output:
+
     ```
     ========================
     Configuration
@@ -234,25 +237,27 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 1. Inspect the differences between the original SLS state file and the modified one.
 
     ```bash
-    ncn# diff sls_dump.original.json sls_dump.json
+    diff sls_dump.original.json sls_dump.json
     ```
 
 1.  Perform an SLS load state operation to replace the contents of SLS with the data from the `sls_dump.json` file.
 
     Get an API Token:
+
     ```bash
-    ncn# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+    export TOKEN=$(curl -s -S -d grant_type=client_credentials \
                           -d client_id=admin-client \
                           -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
                           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
     Perform the load state operation:
+
     ```bash
-    ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -F sls_dump=@sls_input_file.json \
+    curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -F sls_dump=@sls_input_file.json \
         https://api-gw-service-nmn.local/apis/sls/v1/loadstate
     ```
 
 1.  MEDS will automatically start looking for potential hardware in the newly added liquid-cooled cabinets.
 
-    **Note**: No hardware in these new cabinets will be discovered until the management network has been reconfigured to support the new cabinets, and routes have been added to the management NCNs in the system.
+   > **`NOTE`**: No hardware in these new cabinets will be discovered until the management network has been reconfigured to support the new cabinets, and routes have been added to the management NCNs in the system.

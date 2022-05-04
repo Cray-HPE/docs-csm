@@ -22,7 +22,7 @@ If there are duplicate email addresses for LDAP users, it can cause Keycloak to 
     If the function is working, it will return a long string that is base64-encoded.
 
     ```bash
-    ncn-w001# get_master_token
+    get_master_token
     eyJhbGciO...YceX4Ig
     ```
 
@@ -31,29 +31,29 @@ If there are duplicate email addresses for LDAP users, it can cause Keycloak to 
     Replace SHASTA-USER-FEDERATION-LDAP in the command below with the name of the user federation being used.
 
     ```bash
-    ncn-w001# FEDERATION_ID=$(curl -s -H "Authorization: Bearer $(get_master_token)" \
+    FEDERATION_ID=$(curl -s -H "Authorization: Bearer $(get_master_token)" \
     https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components?name=SHASTA-USER-FEDERATION-LDAP \
     | jq .[0].id -r)
 
-    ncn-w001# echo $FEDERATION_ID
+    echo $FEDERATION_ID
     e080d20a-51b0-40ad-8f21-98f7b752e39c
     ```
 
 4.  Get the ID of the email mapper.
 
     ```bash
-    ncn-w001# EMAIL_COMPONENT_ID=$(curl -s -H "Authorization: Bearer $(get_master_token)" \
+    EMAIL_COMPONENT_ID=$(curl -s -H "Authorization: Bearer $(get_master_token)" \
     "https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components?name=email&parent=$FEDERATION_ID" \
     | jq .[0].id -r)
 
-    ncn-w001# echo $EMAIL_COMPONENT_ID
+    echo $EMAIL_COMPONENT_ID
     ba3cfe20-c2ed-4c92-aac0-3b6fc865989c
     ```
 
 5.  Delete the email mapper.
 
     ```bash
-    ncn-w001# curl -i -s -XDELETE -H "Authorization: Bearer $(get_master_token)" \
+    curl -i -s -XDELETE -H "Authorization: Bearer $(get_master_token)" \
     https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components/$EMAIL_COMPONENT_ID
     ```
 

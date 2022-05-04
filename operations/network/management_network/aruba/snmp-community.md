@@ -19,7 +19,7 @@ switch(config)# snmp-server vrf <default|VRF>
 Show commands to validate functionality:
 
 ```text
-switch# show snmp community
+show snmp community
 ```
 
 ## Example Output
@@ -28,12 +28,12 @@ switch# show snmp community
 switch(config)# snmp-server community public
 switch(config)# snmp-server vrf default
 switch(config)# end
-switch# show snmp community
+show snmp community
 ---------------------
 SNMP communities
 ---------------------
 mysnmp
-switch# show snmp vrf
+show snmp vrf
 SNMP enabled VRF
 ----------------------------
 default
@@ -45,5 +45,4 @@ default
 2. Administrators can bind the SNMP server to the default VRF
 3. Administrators can connect from the workstation using the community name
 
-
-[Back to Index](../index.md)
+[Back to Index](../README.md)

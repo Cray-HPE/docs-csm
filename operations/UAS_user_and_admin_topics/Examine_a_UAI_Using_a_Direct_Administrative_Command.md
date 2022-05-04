@@ -17,13 +17,13 @@ Print out information about a UAI.
 To examine an existing UAI use a command of the following form:
 
 ```console
-linux# cray uas admin uais describe <uai-name>
+cray uas admin uais describe <uai-name>
 ```
 
 For example:
 
 ```console
-ncn-m001-pit# cray uas admin uais describe uai-broker-07624d65
+ncn-m001-cray uas admin uais describe uai-broker-07624d65
 ```
 
 Example output:
@@ -42,6 +42,6 @@ username = "broker"
 [uai_portmap]
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Deleting a UAI](Delete_a_UAI.md)

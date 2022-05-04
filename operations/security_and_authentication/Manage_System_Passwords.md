@@ -4,8 +4,6 @@ Many system services require login credentials to gain access to them. The infor
 
 Contact HPE Cray service in order to obtain the default usernames and passwords for any of these components or services.
 
-
-
 ### Keycloak
 
 Default Keycloak admin user login credentials:
@@ -14,7 +12,7 @@ Default Keycloak admin user login credentials:
 - The password can be obtained with the following command:
 
   ```bash
-  ncn-w001# kubectl get secret -n services keycloak-master-admin-auth \
+  kubectl get secret -n services keycloak-master-admin-auth \
   --template={{.data.password}} | base64 --decode
   ```
 
@@ -22,15 +20,13 @@ To update the default password for the admin account, refer to [Change the Keycl
 
 To create new accounts, refer to [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal_User_Accounts_in_the_Keycloak_Shasta_Realm.md).
 
-
-
 ### Gitea
 
 The default Gitea user credentials is `crayvcs`. The password is randomly generated at install time
 and can be found in the vcs-user-credentials secret.
 
 ```bash
-ncn-w001# kubectl get secret -n services vcs-user-credentials \
+kubectl get secret -n services vcs-user-credentials \
 --template={{.data.vcs_password}} | base64 --decode
 ```
 
@@ -40,19 +36,17 @@ For more information on Gitea, including how to change the password, see [Versio
 
 The default username is admin.
 
-> **NOTE:** Contact HPE Cray service in order to obtain the default password for Grafana and Kiali.
-
-
+> **`NOTE`** Contact HPE Cray service in order to obtain the default password for Grafana and Kiali.
 
 ### Management Network Switches
 
 Each rack type includes a different set of passwords. During different stages of installation, these passwords are subject to change.
 
-> **NOTE:** Contact HPE Cray service in order to obtain the default passwords.
+> **`NOTE`** Contact HPE Cray service in order to obtain the default passwords.
 
 The tables below include the default login credentials for each rack type. These passwords can be changed by going into the console on a given switch and changing it. However, if the user gets locked out attempting to change the password or the configuration gets corrupted for an individual switch, it can wipe out the entire network configuration for the system.
 
-> **NOTE:** IP addresses can be found from the generated SLS file.
+> **`NOTE`** IP addresses can be found from the generated SLS file.
 
 **Liquid-Cooled Cabinet:**
 
@@ -78,7 +72,6 @@ The tables below include the default login credentials for each rack type. These
 | sw-cdu | CDU/Leaf | Dell S4048T-ON |  admin |
 | sw-cdu | CDU/Leaf | Aruba 8360 |  admin |
 
-
 **ClusterStor:**
 
 | Name     | Role                  | Switch         | IP Address    | Login |
@@ -86,8 +79,6 @@ The tables below include the default login credentials for each rack type. These
 | Arista   |                       | DCS-7060CX-32S | 172.16.249.10 | admin |
 | Sonexion | Entry point to Arista | CS-L300        | 172.30.49.178 | admin |
 | E1000    |                       | CS-E1000       |               | admin |
-
-
 
 ### Redfish Credentials
 
@@ -104,7 +95,7 @@ Three accounts are created by default:
 - ReadOnly - Log in, configure self, and read values
     - Username: guest
 
-> **NOTE:** Contact HPE Cray service in order to obtain the default passwords.
+> **`NOTE`** Contact HPE Cray service in order to obtain the default passwords.
 
 The System Configuration Service (SCSD) is used to set the credentials for Redfish BMCs.
 Refer to [Set BMC Credentials](../system_configuration_service/Set_BMC_Credentials.md) for more information.
@@ -233,8 +224,6 @@ Update the password for an account with the `curl` command:
 https://x0c0s0b0/redfish/v1/AccountService/Accounts/ACCOUNT_ID
 ```
 
-
-
 ### System Controllers
 
 For SSH access, the system controllers have the following default credentials:
@@ -251,16 +240,16 @@ For SSH access, the system controllers have the following default credentials:
 - sC minimal recovery firmware image \(rec\)
     - Username: root
 
-> **NOTE:** Contact HPE Cray service in order to obtain the default passwords.
+> **`NOTE`** Contact HPE Cray service in order to obtain the default passwords.
 
 Passwords for nC, cC, and sC controllers are all managed with the following process. The cfgsh tool is a configuration shell that can be used interactively or scripted. Interactively, it may be used as follows after logging in as root via `ssh`:
 
 ```bash
-x0c1# config
+config
 x0c1(conf)# CURRENT_PASSWORD root NEW_PASSWORD
 x0c1(conf)# exit
-x0c1# copy running-config startup-config
-x0c1# exit
+copy running-config startup-config
+exit
 ```
 
 It may be used non-interactively as well. This is useful for separating out several of the commands used for the initial setup. The shell utility returns non-zero on error.
@@ -271,8 +260,6 @@ It may be used non-interactively as well. This is useful for separating out seve
 ```
 
 In both cases, a `running-config` must be saved out to non-volatile storage in a startup configuration file. If it is not, the password will revert to default on the next boot. This is the exact same behavior as standard managed Ethernet switches.
-
-
 
 ### SNMP Credentials
 
@@ -285,8 +272,6 @@ To adjust the SNMP credentials, perform the following tasks:
 2. Update the credentials actively being used for existing leaf switches.
 
    * See [Change SNMP Credentials on Leaf BMC Switches](Change_SNMP_Credentials_on_Leaf_BMC_Switches.md)
-
-
 
 ### HPE Cray EX Liquid-Cooled Cabinet Hardware
 
@@ -302,13 +287,11 @@ Change the credential for HPE Cray EX liquid-cooled cabinet chassis controllers 
 
 * See [Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials after a CEC Password Change](Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
 
-
 ### Gigabyte
 
 The default username is admin.
 
-> **NOTE:** Contact HPE Cray service in order to obtain the default password for Gigabyte.
-
+> **`NOTE`** Contact HPE Cray service in order to obtain the default password for Gigabyte.
 
 ### Passwords Managed in Other Product Streams
 

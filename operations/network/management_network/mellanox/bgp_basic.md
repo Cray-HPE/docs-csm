@@ -44,7 +44,7 @@ switch(config router bgp 100)# neighbor 10.10.10.1 remote-as 100
 Show Commands to Validate Functionality
 
 ```
-switch# show ip bgp summary
+show ip bgp summary
 ```
 
 Expected Results
@@ -55,4 +55,4 @@ Expected Results
 * Step 4: You can validate the BGP relationship is established and that the network statement is advertised to the peer □ Step 5: Soft reconfiguration is enabled
 Use the space below for notes as needed.
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

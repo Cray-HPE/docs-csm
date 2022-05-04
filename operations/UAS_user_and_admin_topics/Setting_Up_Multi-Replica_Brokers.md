@@ -10,7 +10,7 @@ This has two beneficial effects:
 * SSH Connections to Broker UAIs are load balanced so that no single broker carries all of the weight of users logged into or copying data to UAIs of a given class
 * Individual Broker UAI pods can be evicted or restarted by Kubernetes without interrupting access to End-User UAIs
 
-**NOTE:** When a Broker UAI pod terminates for any reason, all SSH sessions going through that pod are dropped. This is because the Broker UAI pods forward SSH sessions to the End-User UAIs, so they are always an active part of the connection.
+**`NOTE`** When a Broker UAI pod terminates for any reason, all SSH sessions going through that pod are dropped. This is because the Broker UAI pods forward SSH sessions to the End-User UAIs, so they are always an active part of the connection.
 
 The number of replicas a Multi-Replica UAI Broker should have is dictated primarily by the number of host nodes on which Broker UAIs can be deployed.
 From a load-balancing perspective, it makes sense to make the number of replicas equal to the number of available host nodes.
@@ -18,6 +18,6 @@ From a resiliency perspective, that number could be considerably smaller (3 for 
 It does not make sense from either perspective, however, to over-subscribe the available number of host nodes (except, perhaps during a temporary outage)
 since that will result in no additional resiliency and the potential for network traffic and resource consumption hot spots.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Broker Mode UAI Management](Broker_Mode_UAI_Management.md)

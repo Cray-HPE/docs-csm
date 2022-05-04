@@ -4,38 +4,19 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
 
 ## Topics
 
-* [Prerequisites before validating the SHCD](#prerequisites)
-* [Begin validation in the following order](#begin-validation-in-the-following-order)
-* [Checks and Validations](#checks-and-validations)
-* [Logging and Updates](#logging-and-updates)
-* [Output SHD to JSON](#output-shcd-to-json)
+1. [Prerequisites](#prerequisites)
+1. [Validation Steps](#validation-steps)
+1. [Under-the-Hood](#under-the-hood)
+1. [Logging and Updates](#logging-and-updates)
 
 ## Prerequisites
 
-* Up to date SHCD.
+* Up-to-date SHCD.
 * CANU installed with version 1.1.11 or greater.
   * Run `canu --version` to see version.
   * If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md)
 
-## Prepare to Validate
-
-1. Open existing SHCD in Excel.
-
-1. Save a new copy with an incremented revision number and make sure the updated version is being edited.
-
-Several worksheets (tabs) are used to store the topology of the management network.
-
-## Begin Validation
-
-The SHCD must be validated in the following order:
-
-1. `10G_25G_40G_100G` tab (or some variation thereof) contains switch-to-switch connections, as well as NCN server connections to the switch
-1. Node Management Network (NMN) contains network management nodes
-1. Hardware Management Network (HMN) contains device BMCs and other 1G management ports
-1. `MTN_TDS`, `Mountain-TDS-Management`, or some variation thereof for Mountain cabinets
-1. `PDU`
-
-### Validation Steps
+## Validation Steps
 
 1. Validate the `10G_25G_40G_100G` tab and select the upper left corner and lower right corner of the spreadsheet with the `Source Rack Location Slot Port Destination Rack Location Port` information.
 
@@ -46,29 +27,42 @@ The SHCD must be validated in the following order:
    In this example above, the `10G_25G_40G_100G` worksheet has the upper left and lower right corners of `I37` and `T107` respectively.
    Note, the above screenshot is trimmed and only the first full 68 rows are shown.
 
-1. Use CANU to validate this worksheet.
+1. (`pit#`) Generate the HMN paddle file (by default this runs in interactive mode to select the tabs and corners).
 
+   > **`NOTE`**
+   > `-a` defines the architecture, this will be:
+   >  - v1 if the CRAY system is composed only of river cabinets
+   >  - TDS if the CRAY system has an attached hill cabinet
+   >  - FULL if the CRAY system has an attached mountain (or a mountain and a hill)
+                                                                                          
    ```bash
-   ncn# canu validate shcd -a full --shcd ./HPE\ System\ Hela\ CCD.revA27.xlsx --tabs 10G_25G_40G_100G --corners I37,T107
+   export ARCH=v1
    ```
 
-   The `-a` or `–architecture` parameter can be set to `tds`, `full`, or `v1` (case insensitive):
+   > **`NOTE`** The `canu` command below will start interactive mode for defining `--corners`. If
+   > the `--corners` are already known, then append `--corners` with the desired corners to bypass interactive mode.
 
-   * `tds` – Aruba-based Test and Development System. These are small systems characterized by Kubernetes NCNs cabled directly to the spine.
-   * `full` – Aruba-based Leaf-Spine systems. These are usually customer production systems.
-   * `v1` – Dell and Mellanox based systems of either a TDS or Full layout.
+   ```bash
+   canu validate shcd --json --out "${SYSTEM_NAME}-hmn-paddle.json" --tabs HMN -a "${ARCH}" --shcd <shcd_file.xlsx>
+   ```
 
-   CANU will ensure that each cell has valid data and that the connections between devices are allowed. Errors will stop processing and must be fixed in
+    > **`NOTE`** 
+
+1. (`pit#`) Generate the full paddle file (by default the command below will run in interactive mode.)
+
+   > **`NOTE`** The `canu` commands below will start interactive mode for defining `--corners`
+
+   ```bash
+   canu validate shcd --json --out "${SYSTEM_NAME}-full-paddle.json" -a "${ARCH}" --shcd <shcd_file>.xlsx
+   ```
+
+   > **`NOTE`** CANU will ensure that each cell has valid data and that the connections between devices are allowed. Errors will stop processing and must be fixed in
    the spreadsheet before moving on. A "clean run" through a worksheet will include the model, a port-map of each node and may include warnings. See a
    list of typical errors at the end of this document to help in fixing the worksheet data.
+                   
+1. Proceed to [generate topology files](../../../install/pre-installation.md#generate-topology-files).
 
-1. Check for errors after validating the worksheet.
-
-   ```bash
-   ncn# canu validate shcd -a full --shcd ./HPE\ System\ Hela\ CCD.revA27.xlsx --tabs 10G_25G_40G_100G,NMN --corners I37,T107,J15,T16 --log DEBUG
-   ```
-
-### Checks and Validation
+## Under-the-Hood
 
 A worksheet that runs "cleanly" will have checked that:
 
@@ -93,11 +87,11 @@ In addition, a clean run will have the following sections:
 * Warnings:
   * A list of nodes found that are not categorized on the system.
 
-    **Note:** This list is important as it could include misspellings of nodes that should be included!
+    **`NOTE`** This list is important as it could include misspellings of nodes that should be included!
 
   * A list of cell-by-cell warnings of misspellings and other nit-picking items that CANU has autocorrected on the system.
 
-#### Check Warnings
+### Check Warnings
 
 **Critical:** The `Warnings` output will contain a section headed `Node type could not be determined for the following`. This needs to
 be carefully reviewed because it may contain site uplinks that are not tracked by CANU, and may also contain misspelled or mis-categorized
@@ -136,14 +130,14 @@ Cell: P16      Name: SITE
 
 1. Critically, cell `I38` has a name of `sw-spinx-002`. This should be noted as a misspelling of `sw-spine-002` and corrected.
 
-## Check SHCD Port Usage
+### Check SHCD Port Usage
 
 Today CANU validates many things, but a future feature is full cable specification checking of nodes (e.g. which NCN ports go to
 which switches to properly form bonds). There are several CANU roadmap items, but today a manual review of the `SHCD Port Usage`
 connections list is vital. Specifically, check:
 
 * Both Management NCNs (manager, worker, storage) and UAN NCNs (UAN, viz, and other Application Nodes) follow Plan of Record (PoR)
-  cabling. See [Cable Management Network Servers](../../../install/cable_management_network_servers.md).
+  cabling. See [Cable Management Network Servers](cable_management_network_servers.md).
 
 * Switch pair cabling is appropriate for VSX, MAGP, etc.
 
@@ -170,12 +164,3 @@ Once the SHCD has run cleanly through CANU and CANU output has been manually val
 
    * `customer communication` (CAST ticket for customers)
    * SharePoint (internal systems and sometimes customer systems)
-
-## Output SHCD to JSON
-
-* Once the SHCD is fully validated, the user will be able to output all the connection details to a `json` file.
-* This output `json` file is used to generate switch configurations.
-
-```bash
-ncn# canu validate shcd -a v1 --shcd ./test.xlsx --tabs 40G_10G,NMN,HMN --corners I12,S37,I9,S20,I20,S31  --json --out cabling.json
-```

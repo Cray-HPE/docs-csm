@@ -58,7 +58,7 @@ switch(config-if-port-security)# client-limit <1-64>
 Show commands to validate functionality:
 
 ```text
-switch# show port-access port-security interface <all|IFACE> <client-status|portstatistics>
+show port-access port-security interface <all|IFACE> <client-status|portstatistics>
 ```
 
 ## Example Output
@@ -70,7 +70,7 @@ switch(config-if)# port-access port-security
 switch(config-if-port-security)# client-limit 64
 switch(config-if-port-security)# mac-address aa:bb:cc:dd:ee:ff
 switch(config-if-port-security)# end
-switch# show port-access port-security interface all client-status
+show port-access port-security interface all client-status
 Port Security Client Status Details
   Authorized-Clients    Port
   ----------------------------
@@ -90,4 +90,4 @@ Number of authorized clients
 : 2
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

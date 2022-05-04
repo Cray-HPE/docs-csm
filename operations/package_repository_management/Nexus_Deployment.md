@@ -15,8 +15,8 @@ For a complete set of available settings, consult the values.yaml file for the `
 If modifying the customizations.yaml file, ensure to upload the new file to Kubernetes so the changes persist in future installs or upgrades.
 
 ```bash
-ncn-m001# kubectl delete secret -n loftsman site-init
-ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+kubectl delete secret -n loftsman site-init
+kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
 ```
 
 ### Common Nexus Deployments

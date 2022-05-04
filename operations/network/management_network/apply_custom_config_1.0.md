@@ -13,7 +13,7 @@ Apply the backed up site connection configuration with a couple modifications. S
 ## Aruba Apply Configurations
 
 ```console
-sw-spine-001# conf t
+conf t
 interface 1/1/36
     no shutdown
     description to:CANswitch_cfcanb6s1-31:from:sw-25g01_x3000u39-j36
@@ -22,12 +22,12 @@ interface 1/1/36
 ```
 
 ```console
-sw-spine-001# conf t
+conf t
 sw-spine-001(config)# system interface-group 3 speed 10g
 ```
 
 ```console
-sw-spine-002# conf t
+conf t
 interface 1/1/36
     no shutdown
     description to:CANswitch_cfcanb6s1-46:from:sw-25g02_x3000u40-j36
@@ -42,12 +42,12 @@ sw-spine-001(config)# system interface-group 3 speed 10g
 ```
 
 ```console
-sw-spine-001# conf t
+conf t
 sw-spine-001(config)# ip route 0.0.0.0/0 10.101.15.141 vrf default
 ```
 
 ```console
-sw-spine-002# conf t
+conf t
 sw-spine-002(config)# ip route 0.0.0.0/0 10.101.15.189 vrf default
 ```
 
@@ -86,14 +86,14 @@ All that is required to re-apply the users is to get into global configuration m
 ### Aruba credentials
 
 ```console
-sw-leaf-bmc-001# conf t
+conf t
 user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 ### Dell Credentials
 
 ```console
-sw-leaf-001# conf t
+conf t
 system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
 ```
@@ -111,7 +111,7 @@ sw-spine-001 [standalone: master] # conf t
 ### Dell SNMP
 
 ```console
-sw-leaf-bmc-001# conf t
+conf t
    snmp-server group cray-reds-group 3 noauth read cray-reds-view
    snmp-server user testuser cray-reds-group 3 auth md5 xxxxxxxx priv des xxxxxxx
    snmp-server view cray-reds-view 1.3.6.1.2 included
@@ -120,7 +120,7 @@ sw-leaf-bmc-001# conf t
 ### Aruba SNMP
 
 ```console
-sw-leaf-bmc-001# conf t
+conf t
    snmp-server vrf default
    snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxx
 ```

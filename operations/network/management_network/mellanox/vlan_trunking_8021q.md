@@ -4,7 +4,6 @@ A trunk port carries packets on one or more VLANs specified. Packet that ingress
 
 Relevant Configuration
 
-
 Create a VLAN:
 
 ```
@@ -43,4 +42,4 @@ Expected Results
 * Step 1: You can create and enable multiple VLAN interfaces
 * Step 2: You can assign the trunk VLAN interfaces
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

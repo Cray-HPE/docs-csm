@@ -14,7 +14,7 @@ switch(config-if)# no shutdown
 Show commands to validate functionality:
 
 ```text
-switch# show interface IFACE [transceiver|brief|dom|extended]
+show interface IFACE [transceiver|brief|dom|extended]
 ```
 
 ## Expected Results
@@ -24,4 +24,4 @@ switch# show interface IFACE [transceiver|brief|dom|extended]
 3. Administrators can establish a link with a partner
 4. Administrators can pass traffic as expected
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

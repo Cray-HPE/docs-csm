@@ -31,9 +31,9 @@ The parameters/syntax of the `copy` command are described below:
 The following is an example of copying a running configuration to remote file in the CLI format:
 
 ```text
-switch# copy running-config tftp://192.168.1.10/runcli cli vrf default
+copy running-config tftp://192.168.1.10/runcli cli vrf default
 
 ######################################################################### 100.0%Success
 ```
 
-[Back to Index](index.md)
+[Back to Index](README.md)

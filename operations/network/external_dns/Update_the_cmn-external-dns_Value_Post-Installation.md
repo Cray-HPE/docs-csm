@@ -15,7 +15,7 @@ The system is installed.
 1.  Find the external IP address for the `services/cray-externaldns-coredns-tcp` and `services/cray-externaldns-coredns-udp` services.
 
     ```bash
-    ncn-w001# kubectl -n services get svc | grep cray-externaldns-coredns-
+    kubectl -n services get svc | grep cray-externaldns-coredns-
     ```
 
     Example output:
@@ -30,12 +30,12 @@ The system is installed.
     1.  Edit the `cray-externaldns-coredns-tcp` service.
 
         ```bash
-        ncn-w001# kubectl -n services edit svc cray-externaldns-coredns-tcp
+        kubectl -n services edit svc cray-externaldns-coredns-tcp
         ```
 
     2.  Edit the `cray-externaldns-coredns-udp` service.
 
         ```bash
-        ncn-w001# kubectl -n services edit svc cray-externaldns-coredns-udp
+        kubectl -n services edit svc cray-externaldns-coredns-udp
         ```
 

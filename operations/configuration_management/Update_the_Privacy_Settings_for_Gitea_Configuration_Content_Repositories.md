@@ -12,21 +12,21 @@ Change the visibility of Gitea configuration content repositories from public to
    https://vcs.SYSTEM-NAME.DOMAIN-NAME
    ```
 
-2. Navigate to the cray organization.
+1. Navigate to the cray organization.
 
    ```bash
    https://vcs.SYSTEM-NAME.DOMAIN-NAME/vcs/cray
    ```
 
-3. Select the repository title for each repository listed on the page.
+1. Select the repository title for each repository listed on the page.
 
    ![Gitea Repositories](../../img/operations/gitea_repositories.png)
 
-4. Click the **Settings** button in the repository header section.
+1. Click the **Settings** button in the repository header section.
 
    ![Gitea Repository Settings](../../img/operations/gitea_repository_settings.png)
 
-5. Update the visibility settings for the repository.
+1. Update the visibility settings for the repository.
 
    ![Gitea Repository Visibility](../../img/operations/gitea_repository_visibility.png)
 
