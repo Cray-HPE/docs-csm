@@ -8,7 +8,8 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
 
 **IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#remove-ncn-prerequisites)
 
-1.  Setup:
+1. Setup:
+
     ```bash
     ncn-mw# cd /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs
 
@@ -29,7 +30,8 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
     ncn-mw# export IPMI_PASSWORD
     ```
 
-1.  Fetch the status of the nodes:
+1. Fetch the status of the nodes:
+
     ```bash
     ncn-mw# ./ncn_status.py --all
     ```
@@ -52,7 +54,8 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
         ncn-s004 x3000c0s26b0n0 storage
     ```
 
-1.  Fetch the status of the node to be removed:
+1. Fetch the status of the node to be removed:
+
     ```bash
     ncn-mw# ./ncn_status.py --xname $XNAME
     ```
@@ -78,13 +81,13 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
 
     **Important**: Save the `ifnames` and `bmc_mac` information if you plan to add this NCN back at some time in the future.
 
-1.  Shutdown cray-reds:
+1. Shutdown cray-reds:
 
     ```bash
     ncn-mw# kubectl -n services scale deployment cray-reds --replicas=0
     ```
 
-1.  Remove the node from SLS, HSM, and BSS:
+1. Remove the node from SLS, HSM, and BSS:
 
     ```bash
     ncn-mw# ./remove_management_ncn.py --xname $XNAME
@@ -127,13 +130,13 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
     error: timed out waiting for the condition
     ```
 
-1.  Start cray-reds:
+1. Start cray-reds:
 
     ```bash
     ncn-mw# kubectl -n services scale deployment cray-reds --replicas=1
     ```
 
-1.  Verify the results by fetching the status of the management nodes:
+1. Verify the results by fetching the status of the management nodes:
 
     ```bash
     ncn-mw# ./ncn_status.py --all
@@ -156,8 +159,8 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
         ncn-s003 x3000c0s17b0n0 storage
     ```
 
+1. Fetch the status of the node that was removed:
 
-1.  Fetch the status of the node that was removed:
     ```bash
     ncn-mw# ./ncn_status.py --xname $XNAME
     ```
