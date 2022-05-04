@@ -57,7 +57,7 @@ BMC/controller passwords.
       For more info on the importance of locking these components, see [Lock Management Nodes](#lock_management_nodes).
 
    <a name="lock_management_nodes"></a>
-   
+
    1. Lock Management Nodes
 
       The management nodes are unlocked at this point in the installation. Locking the management nodes and their BMCs will
