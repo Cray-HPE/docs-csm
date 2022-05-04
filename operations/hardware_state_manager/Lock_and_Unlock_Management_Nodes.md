@@ -9,6 +9,7 @@ on ignoring nodes, refer to the following sections:
 * Cray Advanced Platform Monitoring and Control (CAPMC): See [Ignore Nodes with CAPMC](../power_management/Ignore_Nodes_with_CAPMC.md)
 
 The following actions can be prevented when a node and its BMC is locked.
+
 * Firmware upgrades with FAS
 * Power off operations with CAPMC
 * Reset operations with CAPMC
@@ -123,13 +124,14 @@ Use the `cray hsm locks lock` command to perform locking.
    > **Note:** The BMC of `ncn-m001` typically does not exist in HSM under HSM State Components, and therefore cannot be locked as it does not exist.
 
 1. Lock the management nodes and BMCs.
+
    ```bash
    ncn# cray hsm locks lock create --role Management --component-ids x3000c0s6b0n0,x3000c0s6b0 --processing-model rigid
    ```
 
    Example output:
 
-   ```
+   ```screen
    Failure = []
 
    [Counts]
