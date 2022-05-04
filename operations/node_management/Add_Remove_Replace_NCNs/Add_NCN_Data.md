@@ -6,12 +6,12 @@ Add NCN data to System Layout Service (SLS), Boot Script Service (BSS), and Hard
 
 Scenarios where this procedure is applicable:
 1. Adding a management NCN that has not previously been in the system before:
-   - Add an additional NCN to an existing cabinet
-   - Add an NCN that is being replaced by another NCN of the same type and in the same slot
-   - Adding a new NCN that replaces an NCN removed from the system in a different location
+   * Add an additional NCN to an existing cabinet
+   * Add an NCN that is being replaced by another NCN of the same type and in the same slot
+   * Adding a new NCN that replaces an NCN removed from the system in a different location
 
 1. Adding a management NCN that has been present in the system previously:
-   - Adding an NCN that was previously removed from the system to move it to a new location
+   * Adding an NCN that was previously removed from the system to move it to a new location
 
 ## Procedure
 
@@ -112,15 +112,15 @@ Scenarios where this procedure is applicable:
                 > ```
                 >
                 > Example output:
-                > ```
+                > ```text
                 > x3000c0w14j39
                 > ```
                 >
                 > The switch port number for the above `MgmtSwitchConnector` xname would be `39`, so use `1/1/39` instead of `1/1/48` in the commands below.
 
-                __Dell Management Switch__
+                **Dell Management Switch**
 
-                ```
+                ```bash
                 sw-leaf-bmc-001# show mac address-table | grep 1/1/48
                 ```
 
@@ -130,9 +130,9 @@ Scenarios where this procedure is applicable:
                 4    a4:bf:01:65:68:54    dynamic        1/1/48
                 ```
 
-                __Aruba Management Switch__
+                **Aruba Management Switch**
 
-                ```
+                ```bash
                 sw-leaf-bmc-001# show mac-address-table | include 1/1/48
                 ```
 
@@ -147,7 +147,7 @@ Scenarios where this procedure is applicable:
         ```bash
         ncn-m# export BMC_MAC=a4:bf:01:65:68:54
         ```
-    
+
     1. **Skip if adding `ncn-m001`:** Determine the current IP address of the NCN BMC:
 
         1. Query Kea for the BMC MAC address to determine its current IP address:
@@ -183,10 +183,10 @@ Scenarios where this procedure is applicable:
     1. Collect NCN MAC addresses for the following interfaces if they are present. Depending on the hardware present, not all of the following interfaces will be present. The collected MAC addresses will be used later in this procedure with the `add_management_ncn.py` script.
 
         Depending on the hardware present in the NCN, not all of these interfaces may be present.
-        - NCNs will have either 1 or 2 management PCIe NIC cards (2 or 4 PCIe NIC ports).
-        - It is expected that only worker NCNs have HSN interfaces.
+        * NCNs will have either 1 or 2 management PCIe NIC cards (2 or 4 PCIe NIC ports).
+        * It is expected that only worker NCNs have HSN interfaces.
 
-        __NCN with a single PCIe card (1 card with 2 ports)__
+        **NCN with a single PCIe card (1 card with 2 ports)**
 
         | Interface   | CLI Flag      | Required MAC Address     | Description
         | ----------- | ------------- | ------------------------ | ----------
@@ -199,7 +199,7 @@ Scenarios where this procedure is applicable:
         | `lan2`      | `--mac-lan2`  | Optional                 | MAC address for the third non-bond or HSN-related interface.
         | `lan3`      | `--mac-lan3`  | Optional                 | MAC address for the forth non-bond or HSN-related interface.
 
-        __NCN with a dual PCIe cards (2 cards with 2 ports each for 4 ports total)__
+        **NCN with a dual PCIe cards (2 cards with 2 ports each for 4 ports total)**
 
         | Interface   | CLI Flag      | Required MAC Address     | Description
         | ----------- | ------------- | ------------------------ | ----------
@@ -243,7 +243,7 @@ Scenarios where this procedure is applicable:
             Using the example output from above, derive the following CLI flags for a worker NCN:
 
             | Interface | MAC Address         | CLI Flag
-            | --------- | ------------------- | -------- 
+            | --------- | ------------------- | --------
             | `mgmt0`   | `a4:bf:01:65:6a:aa` | `--mac-mgmt0=a4:bf:01:65:6a:aa`
             | `mgmt1`   | `a4:bf:01:65:6a:ab` | `--mac-mgmt1=a4:bf:01:65:6a:ab`
             | `lan0`    | `b8:59:9f:d9:9d:e8` | `--mac-lan0=b8:59:9f:d9:9d:e8`
@@ -331,8 +331,7 @@ Scenarios where this procedure is applicable:
         HMN     | 10.254.1.13
     ```
 
-    > Depending on the networking configuration of the system the CMN or CAN networks may not be present in SLS network data. If CMN or CAN networks do not exist in SLS, then no IP will be allocated for that network. 
-
+    > Depending on the networking configuration of the system the CMN or CAN networks may not be present in SLS network data. If CMN or CAN networks do not exist in SLS, then no IP will be allocated for that network.
 
 1. **If the following text is present** at the end of the `add_management_ncn.py` script output, then the NCN BMC was given an IP address by DHCP, and it is not at the expected IP address.
     Sample output when the BMC has an unexpected IP address.
@@ -343,9 +342,9 @@ Scenarios where this procedure is applicable:
     ```
 
     Restart the BMC to pick up the expected IP address:
-    
+
     > `read -s` is used to read the password in order to prevent it from being echoed to the screen or recorded in the shell history.
-    
+
     ```bash
     ncn-m# read -s IPMI_PASSWORD
     ncn-m# export IPMI_PASSWORD
@@ -415,8 +414,8 @@ Scenarios where this procedure is applicable:
         }
     }
     ```
-    
-    __Discovery troubleshooting__
+
+    **Discovery troubleshooting**
     The `redfishEndpoint` may cycle between `DiscoveryStarted` and `HTTPsGetFailed` before the endpoint becomes `DiscoverOK`. If the BMC is in `HTTPSGetFailed` for a long period of time, then the following steps may help to determine the cause:
     - Verify that the xname of the BMC resolves in DNS:
 
@@ -433,7 +432,7 @@ Scenarios where this procedure is applicable:
         Name:    x3000c0s38b0.hmn
         Address: 10.254.1.13
         ```
-    
+
     - Verify that the BMC is reachable at the expected IP address:
 
         ```bash
