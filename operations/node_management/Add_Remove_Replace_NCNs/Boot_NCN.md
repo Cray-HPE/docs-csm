@@ -62,7 +62,8 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 ### Observe the boot
 
-1. Within several minutes, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output. This indicates that the PXE boot has started the TFTP download of the `ipxe` program. Later messages will appear as the Linux kernel loads and the scripts in the `initrd` begin to run, including `cloud-init`.
+1. Within several minutes, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output.
+This indicates that the PXE boot has started the TFTP download of the `ipxe` program. Later messages will appear as the Linux kernel loads and the scripts in the `initrd` begin to run, including `cloud-init`.
 
 1. Wait until `cloud-init` displays messages similar to these on the console. This indicates that `cloud-init` has finished with the module called `modules-final`.
 
@@ -149,7 +150,7 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
 ### Run NCN Personalizations using CFS as desired
 
-1.  Determine which configuration to apply to the node.
+1. Determine which configuration to apply to the node.
 
     There are multiple ways to do this. Choose the one which best fits your situation.
 
@@ -171,7 +172,7 @@ ncn-w004   Ready    <none>    1h    v1.19.9
         name = "csm-ncn-1.6.28"
         playbook = "site.yml"
         ```
-    
+
     * Determine the configuration applied another NCN of the same type. This example checks the configuration on `ncn-w002`.
 
         ```bash
@@ -208,7 +209,7 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
     Example Output:
 
-    ```
+    ```text
     configurationStatus = "configured"
     desiredConfig = "ncn-personalization"
     ...
@@ -216,13 +217,18 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
 ### Set BMC Management Roles
 
-Follow the [Set BMC Management Roles](../../hardware_state_manager/Set_BMC_Management_Role.md) procedure. This will mark the added NCN's BMC with the `Management` role, making BMCs that are associated with the management nodes easier to identify. This step is needed before locking the BCM of the added NCN.
+Follow the [Set BMC Management Roles](../../hardware_state_manager/Set_BMC_Management_Role.md) procedure.
+This will mark the added NCN's BMC with the `Management` role, making BMCs that are associated with the management nodes easier to identify.
+This step is needed before locking the BCM of the added NCN.
 
 ### Lock the management nodes
 
-Follow the [How to Lock Management Single Node](../../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs) procedure. The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware, or from CAPMC to power off or do a power reset. Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
+Follow the [How to Lock Management Single Node](../../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs) procedure.
+The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware, or from CAPMC to power off or do a power reset.
+Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
 
 <a name="configure-the-cli"></a>
+
 ### Configure the Cray Command Line Interface (cray CLI)
 
 **Skip this section if the node being added is a storage node.**
@@ -230,6 +236,7 @@ Follow the [How to Lock Management Single Node](../../hardware_state_manager/Loc
 See [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md)
 
 <a name="boot-ncn-storage-nodes-only"></a>
+
 ### Add storage node to the Ceph cluster
 
 **Skip this section if the node being added is NOT a storage node.**
@@ -241,7 +248,7 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
 **Skip this section if the node being added is NOT `ncn-m001`.**
 
 1. Restore and verify the site link for `ncn-m001`.
- 
+
     Access `ncn-m002` using its `$CAN_IP`, which was recorded prior to powering down `ncn-m001`.
 
     **IMPORTANT:** If the vendor of the replaced master node has changed, then before the configuration is reloaded, verify that the `BRIDGE_PORTS` setting in `/etc/sysconfig/network/ifcfg-lan0` is based on the actual NIC names for the external site interface.
