@@ -18,7 +18,7 @@ disables that override, and the test will use `nmnlb.<system-domain>`.
 - [Running Gateway Tests on an NCN Management Node](#running-gateway-tests-on-an-ncn-management-node)
 - [Running Gateway Tests on a UAN or Compute Node](#running-gateway-tests-on-a-uan-or-a-compute-node)
 - [Running Gateway Tests on a UAI](#running-gateway-tests-on-a-uai)
-  - [Running gateway tests on a device outside the system](#running-gateway-tests-on-a-device-outside-the-system)
+- [Running Gateway Tests on a Device Outside the System](#running-gateway-tests-on-a-device-outside-the-system)
   - [Example Results](#example-results)
 
 ## Running gateway tests on an NCN management node
