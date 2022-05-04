@@ -24,6 +24,7 @@ BMC/controller passwords.
 ## Details
 
    <a name="configure_keycloak_account"></a>
+
    1. Configure Keycloak Account
 
       Upcoming steps in the installation workflow require an account to be configured in Keycloak for
@@ -56,6 +57,7 @@ BMC/controller passwords.
       For more info on the importance of locking these components, see [Lock Management Nodes](#lock_management_nodes).
 
    <a name="lock_management_nodes"></a>
+   
    1. Lock Management Nodes
 
       The management nodes are unlocked at this point in the installation. Locking the management nodes and their BMCs will
