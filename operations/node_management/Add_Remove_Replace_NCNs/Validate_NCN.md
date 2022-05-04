@@ -31,7 +31,7 @@ Validate the master node added successfully.
     ncn-w003   Ready    <none>   112m   v1.19.9
     ```
 
-1. Confirm the `sdc` disk has the correct lvm on the rebuilt node.
+1. Confirm the `sdc` disk has the correct `lvm` on the rebuilt node.
 
     ```bash
     ncn-m# lsblk | grep -A2 ^sdc
