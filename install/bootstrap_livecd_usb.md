@@ -377,9 +377,13 @@ information for this system has not yet been prepared.
       linux# export SYSTEM_NAME=eniac
       ```
 
-   1. Generate the system configuration. See below for an explanation of the command line parameters and some common settings.
+   1. Generate the system configuration.
+
       > **Note:** the provided command below is an **example only**. Run `csi config init --help` to print a full list of parameters that must be set. These will vary
       > significatnly depending on the system and site configuration.
+
+      > **Note:** Ensure that you select a reachable NTP pool/server passed in using the `--ntp-pools`/`--ntp-servers` flags, respectively. Adding an unreachable server can
+      > cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
 
       ```bash
       linux# csi config init \
@@ -415,21 +419,21 @@ information for this system has not yet been prepared.
       >
       > **Special Notes:** Certain parameters to `csi config init` may be hard to grasp on first-time configuration generations:
       >
-      > * The `application_node_config.yaml` file is optional, but if one has one describing the mapping between prefixes in `hmn_connections.csv` that should be mapped to HSM
-      >   subroles, one needs to include a command line option to have it used. See [Create Application Node YAML](create_application_node_config_yaml.md).
+      > * The optional `application_node_config.yaml` file is used to map prefixes in `hmn_connections.csv` to HSM subroles. A
+      >   command line option is required in order for `csi` to use the file. See [Create Application Node YAML](create_application_node_config_yaml.md).
       > * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management NCNs.
-      > * Set site parameters (`site-domain`, `site-ip`, `site-gw`, `site-nic`, `site-dns`) for the information which connects `ncn-m001` (the PIT node) to the site. The `site-nic`
-      >   is the interface on this node connected to the site.
+      > * Set site parameters (`site-domain`, `site-ip`, `site-gw`, `site-nic`, `site-dns`) for the network information which connects `ncn-m001` (the PIT node) to the site.
+      >   The `site-nic` is the interface on `ncn-m001` that is connected to the site network.
       > * There are other interfaces possible, but the `install-ncn-bond-members` are typically:
       >   * `p1p1,p10p1` for HPE nodes
       >   * `p1p1,p1p2` for Gigabyte nodes
       >   * `p801p1,p801p2` for Intel nodes
-      > * If one are not using a `cabinets-yaml` file, set the three cabinet parameters (`mountain-cabinets`, `hill-cabinets`, and `river-cabinets`) to the quantity of each cabinet
-      >   type which is part of this system.
-      > * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help`
-      > * For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID
-      >   for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. If using a
-      >   `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
+      > * If not using a `cabinets-yaml` file, then set the three cabinet parameters (`mountain-cabinets`, `hill-cabinets`, and `river-cabinets`) to the quantity of each cabinet
+      >   type included in this system.
+      > * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help`.
+      > * For systems that use non-sequential cabinet ID numbers, use the `cabinets-yaml` argument to include the `cabinets.yaml` file. This file gives the ability to
+      >   explicitly specify the ID of every cabinet in the system. When specifying a `cabinets.yaml` file with the `cabinets-yaml` argument, other command line arguments related to
+      >   cabinets will be ignored by `csi`. See [Create Cabinets YAML](create_cabinets_yaml.md).
       > * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
       > * By default, spine switches are used as MetalLB peers. Use `--bgp-peers aggregation` to use aggregation switches instead.
       > * Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network). The `can-gateway` is the common gateway IP
