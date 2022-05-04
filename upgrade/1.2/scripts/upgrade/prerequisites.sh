@@ -595,7 +595,16 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     done
 
     POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
-    kubectl -n services exec ${POD} -- tar -cvf vcs.tar /data/
+    #
+    # Gitea change in 1.2 from /data to /var/lib/gitea, see which version we're
+    # backing up (in support of 1.2 -> 1.2 upgrades)
+    #
+    if kubectl -n services exec -it ${POD} -- /bin/sh -c 'ls /data' >/dev/null 2>&1; then
+      kubectl -n services exec ${POD} -- tar -cvf vcs.tar /data/
+    else
+      kubectl -n services exec ${POD} -- tar -cvf vcs.tar /var/lib/gitea/
+    fi
+
     kubectl -n services cp ${POD}:vcs.tar ./vcs.tar
 
     backupBucket="config-data"
