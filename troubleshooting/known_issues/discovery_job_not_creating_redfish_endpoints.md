@@ -163,8 +163,8 @@ that manual intervention may be needed to correct the issue. Continue to the nex
 1. Verify that a `RedfishEndpoint` now exists for the BMC.
 
     > The BMC when first added to HSM may not be `DiscoverOK` right away. It may take up 5 minutes for BMC hostname
-    to start resolving in DNS. The HMS Discovery cronjob should automatically trigger a discovery for any `RedfishEndpoints`
-    that are not in the `DiscoveryOk` or `DiscoveryStarted` states, such as `HTTPsGetFailed`.
+    > to start resolving in DNS. The HMS Discovery cronjob should automatically trigger a discovery for any `RedfishEndpoints`
+    > that are not in the `DiscoveryOk` or `DiscoveryStarted` states, such as `HTTPsGetFailed`.
 
     ```console
     ncn# cray hsm inventory redfishEndpoints describe $BMC
