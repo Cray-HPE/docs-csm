@@ -124,7 +124,6 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
    1. Verify that the `hms-discovery` cron job has stopped (`ACTIVE` = `0` and `SUSPEND` = `True`).
 
-
       ```bash
       ncn# kubectl get cronjobs -n services hms-discovery
       ```
