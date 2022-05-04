@@ -316,7 +316,7 @@ Run the following command **on the node being removed**. The command can be run 
 ncn-w# rbd showmapped
 ```
 
-If mapped devices still exist, perform the [Stop running containers on worker node being removed](#stop-running-containers-on-worker) step again. 
+If mapped devices still exist, perform the [Stop running containers on worker node being removed](#stop-running-containers-on-worker) step again.
 If devices are still mapped, they can be forcibly unmapped using `rbd unmap -o force /dev/rbd#`, where `/dev/rbd#` is the device that is still returned as mapped.
 
 #### Worker node role removal complete
