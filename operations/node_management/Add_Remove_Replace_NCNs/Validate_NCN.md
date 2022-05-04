@@ -2,11 +2,12 @@
 
 Only follow the steps in the section for the node type that was added:
 
-  - [Master Node](#validate-master-node)
-  - [Worker Node](#validate-worker-node)
-  - [Storage Node](#validate-storage-node)
+- [Master Node](#validate-master-node)
+- [Worker Node](#validate-worker-node)
+- [Storage Node](#validate-storage-node)
 
 <a name="validate-master-node"></a>
+
 ## Validate: Master Node
 
 Validate the master node added successfully.
@@ -55,6 +56,7 @@ Validate the master node added successfully.
     ```
 
 <a name="validate-worker-node"></a>
+
 ## Validate: Worker Node
 
 Validate the worker node added successfully.
@@ -105,6 +107,7 @@ Validate the worker node added successfully.
     ```
 
 <a name="validate-storage-node"></a>
+
 ## Validate: Storage Node
 
 Validate the storage node added successfully. The following examples are based on a storage cluster that was expanded from three nodes to four.
@@ -143,10 +146,10 @@ Validate the storage node added successfully. The following examples are based o
           ```
 
     1. Verify that the status shows the following:
-        * 3 `mon`s
-        * 3 `mds`
-        * 3 `mgr` processes
-        * 1 `rgw` for each storage node (4 in this example)
+        - 3 `mon`s
+        - 3 `mds`
+        - 3 `mgr` processes
+        - 1 `rgw` for each storage node (4 in this example)
 
 1. Verify the added host contains OSDs and the OSDs are up.
 

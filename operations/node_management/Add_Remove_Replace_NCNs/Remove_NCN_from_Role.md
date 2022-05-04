@@ -1,4 +1,4 @@
-# Remove Roles
+# Remove NCN from Role
 
 ## Description
 
@@ -6,7 +6,7 @@ Remove master, worker, or storage NCN from current roles. Select the procedure b
 
 ## Procedure
 
-**IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#remove-ncn-prerequisites) 
+**IMPORTANT:** The following procedures assume you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#remove-ncn-prerequisites)
 
 1. [Remove Roles](#remove-roles)
     - [Master node](#master-node-remove-roles)
@@ -20,9 +20,11 @@ Remove master, worker, or storage NCN from current roles. Select the procedure b
 1. [Next step](#next-step)
 
 <a name="remove-roles"></a>
+
 ## Remove Roles
 
 <a name="master-node-remove-roles"></a>
+
 ### Master Node Remove Roles
 
 #### Determine if the master node being removed is the first master node
@@ -41,7 +43,7 @@ Remove master, worker, or storage NCN from current roles. Select the procedure b
     ncn-m002
     ```
   
-    * If the node returned is not the one being removed, skip the substeps here and proceed to the [remove node from the Kubernetes cluster](#remove-the-node-from-the-kubernetes-cluster) step.
+    - If the node returned is not the one being removed, skip the substeps here and proceed to the [remove node from the Kubernetes cluster](#remove-the-node-from-the-kubernetes-cluster) step.
 
 1. Reconfigure the Boot Script Service \(BSS\) to point to a new first master node.
 
@@ -114,6 +116,7 @@ Remove master, worker, or storage NCN from current roles. Select the procedure b
    ```
 
 <a name="reset-kubernetes-on-master"></a>
+
 #### Reset Kubernetes on master node being removed
 
 Run the following command **on the node being removed**. The command can be run from the ConMan console window.
@@ -123,6 +126,7 @@ ncn-m# kubeadm reset --force
 ```
 
 <a name="stop-running-containers-on-master"></a>
+
 #### Stop running containers on master node being removed
 
 Run the commands in this section **on the node being removed**. The commands can be run from the ConMan console window.
@@ -151,6 +155,7 @@ Run the commands in this section **on the node being removed**. The commands can
    ```
 
 <a name="remove-the-master-node-from-the-kubernetes-cluster"></a>
+
 #### Remove the master node from the Kubernetes cluster
 
 **IMPORTANT:** Run this command from a node ***NOT*** being deleted.
@@ -163,9 +168,9 @@ ncn-mw# kubectl delete node $NODE
 
 1. Determine the member ID of the master node being removed.
 
-    * Run the following command and find the line with the name of the master being removed. Note the member ID and IP address for use in subsequent steps.
-      * The ***member ID*** is the alphanumeric string in the first field of that line.
-      * The ***IP address*** is in the URL in the fourth field in the line.
+    - Run the following command and find the line with the name of the master being removed. Note the member ID and IP address for use in subsequent steps.
+      - The ***member ID*** is the alphanumeric string in the first field of that line.
+      - The ***IP address*** is in the URL in the fourth field in the line.
 
     On any master node:
 
@@ -193,8 +198,8 @@ ncn-m# systemctl stop kubelet.service ; systemctl stop containerd.service ; syst
 
 This will allow the node to rejoin the cluster automatically when it gets added back.
 
-* The IP address and hostname of the rebuilt node is needed for the following command.
-* Replace the `<IP_ADDRESS>` address value with the IP address you noted in an earlier step from the `etcdctl` command.
+- The IP address and hostname of the rebuilt node is needed for the following command.
+- Replace the `<IP_ADDRESS>` address value with the IP address you noted in an earlier step from the `etcdctl` command.
 
 ```bash
 ncn-mw# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt \
@@ -202,7 +207,7 @@ ncn-mw# etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/
             --peer-urls=https://<IP_ADDRESS>:2380
 ```
 
-#### Remove Etcd data directory ***on the master node being removed***.
+#### Remove Etcd data directory ***on the master node being removed***
 
 ```bash
 ncn-m# rm -rf /var/lib/etcd/*
@@ -221,11 +226,12 @@ ncn-m001# rsync /etc/sysconfig/network/ifcfg-lan0 ncn-m002:/tmp/ifcfg-lan0-m001
 The master node role removal is complete; proceed to [wipe the drives](#wipe-disks-master-node).
 
 <a name="worker-node-remove-roles"></a>
+
 ### Worker Node Remove Roles
 
 #### Drain the node to clear any pods running on the node
 
-**IMPORTANT:** The following command will cordon and drain the node. 
+**IMPORTANT:** The following command will cordon and drain the node.
 
 Run the following:
 
@@ -248,6 +254,7 @@ ncn-mw# kubectl delete pod [-n <namespace>] --force --grace-period=0 <pod>
 This will delete the offending pod, and Kubernetes should schedule a replacement on another node. You can then rerun the `kubectl drain` command, and it should report that the node is drained
 
 <a name="reset-kubernetes-on-worker"></a>
+
 #### Reset Kubernetes on worker node being removed
 
 Run the following command **on the node being removed**. The command can be run from the ConMan console window.
@@ -257,6 +264,7 @@ ncn-w# kubeadm reset --force
 ```
 
 <a name="stop-running-containers-on-worker"></a>
+
 #### Stop running containers on worker node being removed
 
 Run the commands in this section **on the node being removed**. The commands can be run from the ConMan console window.
@@ -285,6 +293,7 @@ Run the commands in this section **on the node being removed**. The commands can
    ```
 
 <a name="remove-the-worker-node-from-the-kubernetes-cluster"></a>
+
 #### Remove the worker node from the Kubernetes cluster after the node is drained
 
 ```bash
@@ -307,13 +316,15 @@ Run the following command **on the node being removed**. The command can be run 
 ncn-w# rbd showmapped
 ```
 
-If mapped devices still exist, perform the [Stop running containers on worker node being removed](#stop-running-containers-on-worker) step again. If devices are still mapped, they can be forcibly unmapped using `rbd unmap -o force /dev/rbd#`, where `/dev/rbd#` is the device that is still returned as mapped.
+If mapped devices still exist, perform the [Stop running containers on worker node being removed](#stop-running-containers-on-worker) step again. 
+If devices are still mapped, they can be forcibly unmapped using `rbd unmap -o force /dev/rbd#`, where `/dev/rbd#` is the device that is still returned as mapped.
 
 #### Worker node role removal complete
 
 The worker node role removal is complete; proceed to [wipe the drives](#wipe-disks-worker-node).
 
 <a name="storage-node-remove-roles"></a>
+
 ### Storage Node Remove Roles
 
 Open a new tab and follow [Remove Ceph Node](../../utility_storage/Remove_Ceph_Node.md) to remove Ceph role from the storage node.
@@ -321,9 +332,11 @@ Open a new tab and follow [Remove Ceph Node](../../utility_storage/Remove_Ceph_N
 Once the storage node role removal is complete; proceed to [wipe the drives](#wipe-disks-utility-storage-node).
 
 <a name="wipe-the-drives"></a>
+
 ## Wipe the Drives
 
 <a name="wipe-disks-master-node"></a>
+
 ### Wipe Disks: Master Node
 
 **NOTE:** etcd should already be stopped as part of the "Remove NCN from Role" steps.
@@ -347,6 +360,7 @@ All commands in this section must be run **on the node being removed** \(unless 
 Once the wipe of the drives is complete, proceed to [power off the node](#power-off-the-node).
 
 <a name="wipe-disks-worker-node"></a>
+
 ### Wipe Disks: Worker Node
 
 All commands in this section must be run **on the node being removed** \(unless otherwise indicated\). These commands can be done from the ConMan console window.
@@ -374,6 +388,7 @@ All commands in this section must be run **on the node being removed** \(unless 
 Once the wipe of the drives is complete, proceed to [power off the node](#power-off-the-node).
 
 <a name="wipe-disks-utility-storage-node"></a>
+
 ### Wipe Disks: Utility Storage Node
 
 All commands in this section must be run **on the node being removed** \(unless otherwise indicated\). These commands can be done from the ConMan console window.
@@ -410,6 +425,7 @@ All commands in this section must be run **on the node being removed** \(unless 
 Once the wipe of the drives is complete, proceed to [power off the node](#power-off-the-node).
 
 <a name="power-off-the-node"></a>
+
 ## Power Off the Node
 
 **IMPORTANT:** Run these commands from a node ***NOT*** being powered off.
@@ -434,7 +450,7 @@ Once the wipe of the drives is complete, proceed to [power off the node](#power-
          ```screen
          172.30.52.74
          ```
-     
+
       1. Record the CAN IP address for `ncn-m002`:
 
          ```bash
@@ -472,6 +488,7 @@ Once the wipe of the drives is complete, proceed to [power off the node](#power-
    > Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing any further commands.
 
 <a name="next-step"></a>
+
 ## Next Step
 
 Proceed to the next step to [Remove NCN Data](Remove_NCN_Data.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
