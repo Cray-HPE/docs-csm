@@ -12,11 +12,11 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
 ## IMPORTANT NOTES
 
-* Permanent removal of `ncn-s001`, `ncn-s002`, or `ncn-s003` is **NOT SUPPORTED**. They can only be rebuilt in place or replaced with new hardware.
-    * This is due to the Ceph mon and mgr processes running on them.
-* Always ensure you have the free capacity to remove the node(s) prior to performing this task.
-* When removing a node other than `ncn-s001`, `ncn-s002`, or `ncn-s003`, the SMF pools quotas must be adjusted accordingly.
-* Removal of more than one node at a time is **NOT SUPPORTED** because the SMA telemetry pool only has 2 copies.
+- Permanent removal of `ncn-s001`, `ncn-s002`, or `ncn-s003` is **NOT SUPPORTED**. They can only be rebuilt in place or replaced with new hardware.
+    - This is due to the Ceph mon and mgr processes running on them.
+- Always ensure you have the free capacity to remove the node(s) prior to performing this task.
+- When removing a node other than `ncn-s001`, `ncn-s002`, or `ncn-s003`, the SMF pools quotas must be adjusted accordingly.
+- Removal of more than one node at a time is **NOT SUPPORTED** because the SMA telemetry pool only has 2 copies.
 
 ## Procedure
 
@@ -140,7 +140,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
         This example removes NODE `ncn-s004` from the `backend rgw-backend`.
 
-        ```
+        ```text
         ...
         backend rgw-backend
             option forwardfor
@@ -159,7 +159,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
         ncn-s001# pdcp -w ncn-s00[2-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
         ```
 
-   1. Restart HAproxy on all the storage nodes, and stop HAproxy and KeepAlived on the node that is being removed.
+    1. Restart HAproxy on all the storage nodes, and stop HAproxy and KeepAlived on the node that is being removed.
 
         ```bash
         ncn# pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service'
