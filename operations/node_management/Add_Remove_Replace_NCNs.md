@@ -173,7 +173,7 @@ ncn# XNAME=<xname>
 ncn# echo $XNAME
 ```
 
-**IMPORTANT:** Ensure that the node being added to the system has been properly configured. If the node being added to the system has not been perviously in the system, several settings need to be verified.
+**IMPORTANT:** Ensure that the node being added to the system has been properly configured. If the node being added to the system has not been previously in the system, several settings need to be verified.
 *  Ensure that the NCN device to be added has been racked and cabled per the SHCD.
 *  Ensure the NCN BMC is configured with the expected root user credentials.
    
