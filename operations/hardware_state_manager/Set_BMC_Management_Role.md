@@ -17,7 +17,6 @@ For more information on locking or ignoring nodes, refer to the following sectio
 * [When To Set BMC Management Role](#when-to-set-bmc-management-role)
 * [How To Set BMC Management Role](#how-to-set-bmc-management-role)
 
-
 <a name="when-to-set-bmc-management-role"></a>
 
 ## When To Set BMC Management Role
