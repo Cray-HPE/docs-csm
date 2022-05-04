@@ -7,7 +7,7 @@ services via commands. The management nodes can be locked from accidental manipu
 management nodes. The `cray scsd` command can change the SSH keys, NTP server, syslog server, and
 BMC/controller passwords.
 
-### Topics
+## Topics
 
    1. [Configure Keycloak Account](#configure_keycloak_account)
    1. [Configure the Cray Command Line Interface (cray CLI)](#configure_cray_cli)
@@ -27,8 +27,8 @@ BMC/controller passwords.
    1. Configure Keycloak Account
 
       Upcoming steps in the installation workflow require an account to be configured in Keycloak for
-      authentication. This can be either a local keycloak account or an external Identity Provider (IdP),
-      such as LDAP. Having an account in keycloak with administrative credentials enables the use of many
+      authentication. This can be either a local Keycloak account or an external Identity Provider (IdP),
+      such as LDAP. Having an account in Keycloak with administrative credentials enables the use of many
       management services via the `cray` command.
 
       See [Configure Keycloak Account](../operations/CSM_product_management/Configure_Keycloak_Account.md)
@@ -69,7 +69,8 @@ BMC/controller passwords.
       **Lock the management nodes now!**
 
       Run the `lock_management_nodes.py` script to lock all management nodes and their BMCs that are not already locked:
-      ```
+
+      ```bash
       ncn# /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
       ```
 
@@ -100,7 +101,9 @@ BMC/controller passwords.
    <a name="cray_upload_recovery_images"></a>
    1. Upload Olympus BMC Recovery Firmware into TFTP server
 
-      The Olympus hardware (NodeBMCs, ChassisBMCs, RouterBMCs) needs to have recovery firmware loaded to the cray-tftp server in case the BMC loses its firmware. The BMCs are configured to load a recovery firmware from a TFTP server. This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.
+      The Olympus hardware (NodeBMCs, ChassisBMCs, RouterBMCs) needs to have recovery firmware loaded to the cray-tftp server in case the BMC loses its firmware.
+      The BMCs are configured to load a recovery firmware from a TFTP server.
+      This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.
 
       This step requires the CSM software, Cray CLI, and HPC Firmware Pack (HFP) to be installed.
       If these are not currently installed, then this step will need to be skipped and run later in the install process.
