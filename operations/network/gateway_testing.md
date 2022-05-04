@@ -158,9 +158,9 @@ The results of running the tests will show the following
 - For each of the test networks defined in `gateway-test-defn.yaml`:
   - Retrieval of a token on the network under test.
   - It will attempt to access each of the services with the token and check the expected results.
-    - It will show PASS or FAIL depending on the expected response for the service and the token being used.
-    - It will show SKIP for services that are not expected to be installed on the system.
-- The return code of `gateway-test.py` will be non-zero if any of the tests within it fail
+    - It will show `PASS` or `FAIL` depending on the expected response for the service and the token being used.
+    - It will show `SKIP` for services that are not expected to be installed on the system.
+- The return code of `gateway-test.py` will be non-zero if any of the tests within it fail.
 
 ### Running from an NCN that is configured with CHN as the user network
 
