@@ -24,7 +24,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
 
     Example output:
 
-    ```screen
+    ```text
     Error: Unable to establish IPMI v2 / RMCP+ session
     ```
 
@@ -41,7 +41,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
 
     Example output:
 
-    ```screen
+    ```text
     Chassis Power is on
     ```
 
@@ -70,7 +70,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
 
     Example output:
 
-    ```screen
+    ```text
     ID  Name        Callin  Link Auth  IPMI Msg   Channel Priv Limit
     1               false   false      true       ADMINISTRATOR
     2   admin       false   false      true       ADMINISTRATOR
@@ -136,7 +136,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
 
     Example output:
 
-    ```screen
+    ```text
     ID  Name             Callin  Link Auth  IPMI Msg   Channel Priv Limit
     1                    false   false      true       ADMINISTRATOR
     2   admin            false   false      true       ADMINISTRATOR
@@ -166,7 +166,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
 
     Example output:
 
-    ```screen
+    ```text
     ID  Name             Callin  Link Auth  IPMI Msg   Channel Priv Limit
     1                    false   false      true       ADMINISTRATOR
     2   admin            false   false      true       ADMINISTRATOR
