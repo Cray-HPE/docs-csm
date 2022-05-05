@@ -57,6 +57,14 @@ At the end of the tests it will compile and output a final overall PASS/FAIL sta
 
 The same set of tests will be run from a UAN or Compute Node by executing the following command from an NCN that has the `docs-csm` RPM installed. The hostname of the UAN or Compute Node under test must be specified.
 
+Both scripts will fetch the admin client secret, the configured user network, and the site domain from the system.
+It will use that information to generate a script that will be transferred to the UAN, executed, and removed.
+The networks that should be accessible are different on a UAN versus a Compute node. The script will determine the networks
+that should be accessible on the node based on the node type.
+
+The test will determine whether it should or should not be able to access the service, and it will output a `PASS` or `FAIL`
+for each service, as appropriate. At the end of the tests it will compile and output a final overall PASS/FAIL status.
+
 ### UAN Test Execution
 
 ```bash
@@ -68,14 +76,6 @@ ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uan-gateway-test.sh <uan
 ```bash
 ncn# /usr/share/doc/csm/scripts/operations/gateway-test/cn-gateway-test.sh <cn-hostname>
 ```
-
-Both scripts will fetch the admin client secret, the configured user network, and the site domain from the system.
-It will use that information to generate a script that will be transferred to the UAN, executed, and removed.
-The networks that should be accessible are different on a UAN versus a Compute node. The script will determine the networks
-that should be accessible on the node based on the node type.
-
-The test will determine whether it should or should not be able to access the service, and it will output a `PASS` or `FAIL`
-for each service, as appropriate. At the end of the tests it will compile and output a final overall PASS/FAIL status.
 
 ## Running Gateway Tests on a UAI
 
