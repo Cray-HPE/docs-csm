@@ -22,7 +22,7 @@ Validate the master node added successfully.
 
     Example output:
 
-    ```screen
+    ```text
     NAME       STATUS   ROLES    AGE    VERSION
     ncn-m001   Ready    master   113m   v1.19.9
     ncn-m002   Ready    master   113m   v1.19.9
@@ -40,7 +40,7 @@ Validate the master node added successfully.
 
     Example output:
 
-    ```screen
+    ```text
     sdc                   8:32   0 447.1G  0 disk
      └─ETCDLVM           254:0    0 447.1G  0 crypt
        └─etcdvg0-ETCDK8S 254:1    0    32G  0 lvm   /run/lib-etcd
@@ -71,7 +71,7 @@ Validate the worker node added successfully.
 
     Example output:
 
-    ```screen
+    ```text
     NAME       STATUS   ROLES    AGE    VERSION
     ncn-m001   Ready    master   113m   v1.19.9
     ncn-m002   Ready    master   113m   v1.19.9
@@ -91,7 +91,7 @@ Validate the worker node added successfully.
 
     Example output:
 
-    ```screen
+    ```text
     Filesystem            Size  Used Avail Use% Mounted on
     containerd_overlayfs  378G  245G  133G  65% /var/lib/containerd
     ```
@@ -121,7 +121,7 @@ Validate the storage node added successfully. The following examples are based o
 
         Example output:
 
-        ```screen
+        ```text
         cluster:
           id:     b13f1282-9b7d-11ec-98d9-b8599f2b2ed2
           health: HEALTH_OK
@@ -159,7 +159,7 @@ Validate the storage node added successfully. The following examples are based o
 
     Example output:
 
-    ```screen
+    ```text
     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
     -1         31.43875  root default
     -7          6.98639      host ncn-s001
@@ -198,7 +198,7 @@ Validate the storage node added successfully. The following examples are based o
 
     Example output:
 
-    ```screen
+    ```text
     <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
     ```
 
