@@ -23,6 +23,11 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
+function error() {
+  echo "ERROR: $1"
+  exit 1
+}
+
 if [ $# -ne 0 ]; then
   echo "usage: $0"
   exit 1
@@ -32,7 +37,7 @@ fi
 
 craysys type get > /dev/null 2>&1
 if [ $? -ne 0 ]; then
-  echo "ERROR: craysys command is not available"
+  error "craysys command is not available"
   exit 1
 fi
 
@@ -42,6 +47,15 @@ BASEDIR=$(dirname $0)
 # Get the SYSTEM_DOMAIN from cloud-init 
 SYSTEM_NAME=$(craysys metadata get system-name)
 SITE_DOMAIN=$(craysys metadata get site-domain)
+
+if [ -z ${SYSTEM_NAME} ]; then
+  error "SYSTEM_NAME not found"
+fi
+
+if [ -z ${SITE_DOMAIN} ]; then
+  error "SITE_DOMAIN not found"
+fi
+
 SYSTEM_DOMAIN=${SYSTEM_NAME}.${SITE_DOMAIN}
 echo "System domain is ${SYSTEM_DOMAIN}"
 
