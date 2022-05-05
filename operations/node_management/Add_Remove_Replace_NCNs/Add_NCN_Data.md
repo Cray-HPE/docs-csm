@@ -113,7 +113,7 @@ Scenarios where this procedure is applicable:
                 ```bash
                 ncn-m# echo $MGMT_SWITCH_CONNECTOR
                 ```
- 
+
                 Example output:
 
                 ```text
@@ -310,7 +310,7 @@ Scenarios where this procedure is applicable:
 
     Example output:
 
-    ```screen
+    ```text
     ...
     x3000c0s3b0n0 (ncn-m002) has been added to SLS/HSM/BSS
         WARNING The NCN BMC currently has the IP address: 10.254.1.20, and needs to have IP address 10.254.1.13
@@ -456,7 +456,7 @@ Scenarios where this procedure is applicable:
 
     Example output:
 
-    ```screen
+    ```text
     ID = "x3000c0s11b0n0"
     Type = "Node"
     State = "Off"
