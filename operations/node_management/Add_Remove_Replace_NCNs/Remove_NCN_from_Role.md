@@ -39,7 +39,7 @@ Remove master, worker, or storage NCN from current roles. Select the procedure b
 
     Example Output:
 
-    ```screen
+    ```text
     ncn-m002
     ```
   
@@ -139,7 +139,7 @@ Run the commands in this section **on the node being removed**. The commands can
 
    Example Output:
 
-   ```screen
+   ```text
    CONTAINER           IMAGE               CREATED              STATE               NAME                                                ATTEMPT             POD ID
    66a78adf6b4c2       18b6035f5a9ce       About a minute ago   Running             spire-bundle                                        1212                6d89f7dee8ab6
    7680e4050386d       c8344c866fa55       24 hours ago         Running             speaker                                             0                   5460d2bffb4d7
@@ -241,7 +241,7 @@ ncn-mw# kubectl drain --ignore-daemonsets --delete-local-data $NODE
 
 You may run into pods that cannot be gracefully evicted due to Pod Disruption Budgets (PDB), for example:
 
-```screen
+```text
 error when evicting pod "<pod>" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.
 ```
 
@@ -277,7 +277,7 @@ Run the commands in this section **on the node being removed**. The commands can
 
    Example output:
 
-   ```screen
+   ```text
    CONTAINER           IMAGE               CREATED              STATE               NAME                                                ATTEMPT             POD ID
    66a78adf6b4c2       18b6035f5a9ce       About a minute ago   Running             spire-bundle                                        1212                6d89f7dee8ab6
    7680e4050386d       c8344c866fa55       24 hours ago         Running             speaker                                             0                   5460d2bffb4d7
@@ -447,7 +447,7 @@ Once the wipe of the drives is complete, proceed to [power off the node](#power-
 
          Example output:
 
-         ```screen
+         ```text
          172.30.52.74
          ```
 
@@ -460,7 +460,7 @@ Once the wipe of the drives is complete, proceed to [power off the node](#power-
 
          Example output:
 
-         ```screen
+         ```text
          10.102.4.9 
          ```
 
