@@ -116,7 +116,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS) and Ha
     **NOTE:**
     If workers have been removed and the worker count is currently at two, a time out restarting cray-bss can be ignored. For example, the following failure output from `remove_management_ncn.py` can be ignored.
 
-    ```screen
+    ```text
     Waiting for cray-bss to start.
     Do not kill this script. The wait will timeout in 10 minutes if bss does not fully start up.
     Ran:     kubectl -n services rollout status deployment cray-bss --timeout=600s
