@@ -614,12 +614,13 @@ This section can be run on any NCN or the PIT node.
    Expected output looks similar to the following:
 
    ```text
-   default_image = "registry.local/cray/cray-uai-sles15sp3:1.0.11"
-   image_list = [ "registry.local/cray/cray-uai-sles15sp3:1.0.11",]
+   default_image = "artifactory.algol60.net/csm-docker/stable/cray-uai-sles15sp3:1.6.0"
+   image_list = [ "artifactory.algol60.net/csm-docker/stable/cray-uai-sles15sp3:1.6.0", "artifactory.algol60.net/csm-docker/stable/cray-uai-gateway-test:1.6.0", "artifactory.algol60.net/csm-docker/stable/cray-uai-broker:1.6.0",]
    ```
 
-   This example output shows that the pre-made end-user UAI image (`cray/cray-uai-sles15sp3:1.0.11`) is registered with UAS. This does not necessarily mean this image is installed in the container image
-   registry, but it is configured for use. If other UAI images have been created and registered, they may also show up here, which is acceptable.
+   This example output shows that the pre-made end-user UAI images (`artifactory.algol60.net/csm-docker/stable/cray-uai-sles15sp3:1.6.0`, `artifactory.algol60.net/csm-docker/stable/cray-uai-gateway-test:1.6.0`, and
+   `artifactory.algol60.net/csm-docker/stable/cray-uai-broker:1.6.0`) are registered with UAS. This does not necessarily mean these images are installed in the container image registry, but they are configured for use.
+   If other UAI images have been created and registered, they may also show up here, which is acceptable.
 
 <a name="uas-uai-validate-create"></a>
 
