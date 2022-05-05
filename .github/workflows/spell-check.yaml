@@ -21,13 +21,13 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Check Style
+name: Check Spelling
 
 on:
   pull_request:
 
 jobs:
-  markdown-style-check:
+  markdown-spell-check:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -39,6 +39,8 @@ jobs:
         files: "**/*.md"
         files_ignore: ".github/**/*"
 
-    - uses: docker://ghcr.io/igorshubovych/markdownlint-cli:v0.31.1
+    - uses: docker://tmaier/markdown-spellcheck:latest
+      id: markdown-spellcheck
       with:
-        args: "--config .github/config/markdown_style.yaml ${{ steps.changed-files.outputs.all_changed_files }}"
+        entrypoint: mdspell
+        args: ${{ steps.changed-files.outputs.all_changed_files }} -r -a -n

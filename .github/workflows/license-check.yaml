@@ -21,13 +21,13 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Check Style
+name: Check Licenses
 
 on:
   pull_request:
 
 jobs:
-  markdown-style-check:
+  license-check:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -35,10 +35,9 @@ jobs:
     - name: Get changed files
       id: changed-files
       uses: tj-actions/changed-files@v18.7
-      with:
-        files: "**/*.md"
-        files_ignore: ".github/**/*"
 
-    - uses: docker://ghcr.io/igorshubovych/markdownlint-cli:v0.31.1
+    - name: License Check
+      if: ${{ steps.changed-files.outputs.all_changed_files }}
+      uses: docker://artifactory.algol60.net/csm-docker/stable/license-checker:latest
       with:
-        args: "--config .github/config/markdown_style.yaml ${{ steps.changed-files.outputs.all_changed_files }}"
+        args: ${{ steps.changed-files.outputs.all_changed_files }}

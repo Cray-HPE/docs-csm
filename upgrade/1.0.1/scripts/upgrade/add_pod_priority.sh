@@ -83,11 +83,11 @@ function wait_for_running_pods() {
         operator_num_ready=$(kubectl get etcd $etcd_cluster -n $ns -o jsonpath='{.status.members.ready}' | jq .[] | wc -l)
         if [[ "$desired_size" -eq "$operator_num_ready" ]]; then
           echo "Found $desired_size ready members in $etcd_cluster etcd cluster"
-        fi
-        op_state=$(kubectl get etcd $etcd_cluster -n $ns -o jsonpath='{.status.phase}')
-        if [ $op_state == "Running" ]; then
-          echo "Found status of $op_state for $etcd_cluster etcd cluster"
-          break
+          op_state=$(kubectl get etcd $etcd_cluster -n $ns -o jsonpath='{.status.phase}')
+          if [ $op_state == "Running" ]; then
+            echo "Found status of $op_state for $etcd_cluster etcd cluster"
+            break
+          fi
         fi
         echo "Sleeping for ten seconds waiting for $desired_size ready members and 'Running' state for $etcd_cluster etcd cluster"
         sleep 10
