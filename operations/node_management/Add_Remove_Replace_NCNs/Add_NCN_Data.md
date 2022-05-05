@@ -125,27 +125,27 @@ Scenarios where this procedure is applicable:
 
                 **Dell Management Switch**
 
-                   ```bash
-                   sw-leaf-bmc-001# show mac address-table | grep 1/1/48
-                   ```
+                ```bash
+                sw-leaf-bmc-001# show mac address-table | grep 1/1/48
+                ```
 
-                   Example output:
+                Example output:
 
-                   ```text
-                   4    a4:bf:01:65:68:54    dynamic        1/1/48
-                   ```
+                ```text
+                4    a4:bf:01:65:68:54    dynamic        1/1/48
+                ```
 
                 **Aruba Management Switch**
 
-                   ```bash
-                   sw-leaf-bmc-001# show mac-address-table | include 1/1/48
-                   ```
+                ```bash
+                sw-leaf-bmc-001# show mac-address-table | include 1/1/48
+                ```
 
-                   Example output:
+                Example output:
 
-                   ```text
-                   a4:bf:01:65:68:54    4        dynamic                   1/1/48
-                   ```
+                ```text
+                a4:bf:01:65:68:54    4        dynamic                   1/1/48
+                ```
 
     1. **Skip if adding `ncn-m001`:** Set the `BMC_MAC` environment variable to the BMC MAC address:
 
