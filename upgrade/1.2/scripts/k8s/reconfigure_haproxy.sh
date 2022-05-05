@@ -23,7 +23,9 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-sed -i.bak '/    default-server/s/.*/    default-server verify none check-ssl inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100/' /etc/haproxy/haproxy.cfg
-sed -i.bak '0,/    option tcp-check/s//    option httpchk GET \/readyz HTTP\/1.0\n    option  log-health-checks\n    http-check expect status 200/' /etc/haproxy/haproxy.cfg
+if ! grep -q httpchk /etc/haproxy/haproxy.cfg; then
+  sed -i.bak '/    default-server/s/.*/    default-server verify none check-ssl inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 250 maxqueue 256 weight 100/' /etc/haproxy/haproxy.cfg
+  sed -i.bak '0,/    option tcp-check/s//    option httpchk GET \/readyz HTTP\/1.0\n    option  log-health-checks\n    http-check expect status 200/' /etc/haproxy/haproxy.cfg
+fi
 
 systemctl restart haproxy
