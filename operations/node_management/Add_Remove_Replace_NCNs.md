@@ -1,23 +1,23 @@
 # Alpha Framework to Add, Remove, Replace, or Move NCNs
 
-Add, remove, replace or move NCNs. This applies to worker, storage, or master nodes. Use this procedure in the event that:
+Add, remove, replace, or move non-compute nodes (NCNs). This applies to worker, storage, or master nodes. Use this procedure in the event that:
 
 * Worker, storage, or master nodes are being replaced and the MAC address is changing.
 * Worker or storage nodes are being added.
 * Worker, storage, or master nodes are being moved to a different cabinet.
 
-**IMPORTANT:** Always maintain at least two of the first three worker, storage and master nodes when adding, removing, replacing or moving NCNs.
+**IMPORTANT:** Always maintain at least two of the first three worker, storage, and master nodes when adding, removing, replacing, or moving NCNs.
 
 The following workflows are available:
 
 * [Prerequisites](#prerequisites)
-* [Add Worker, Storage or Master NCNs](#add-worker-storage-master)
+* [Add Worker, Storage, or Master NCNs](#add-worker-storage-master)
   * [Add NCN Prerequisites](#add-ncn-prerequisites)
   * [Add NCN Procedure](#add-ncn-procedure)
-* [Remove Worker, Storage or Master NCNs](#remove-worker-storage-master)
+* [Remove Worker, Storage, or Master NCNs](#remove-worker-storage-master)
   * [Remove NCN Prerequisites](#remove-ncn-prerequisites)
   * [Remove NCN Procedure](#remove-ncn-procedure)
-* [Replace or Move Worker, Storage or Master NCNs](#replace-worker-storage-master)
+* [Replace or Move Worker, Storage, or Master NCNs](#replace-worker-storage-master)
 
 <a name="prerequisites"></a>
 
@@ -36,7 +36,7 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Check for
    ncn-m# ./ncn_add_pre-req.py 
    ```
 
-   1. Script the following question
+   1. The script will ask the following question:
 
       1. How many NCNs would you like to add? Do not include NCNs to be removed or moved.
 
@@ -153,7 +153,7 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Check for
 
    1. When adding new NCNs, there will be network configuration changes that will impact changing IP addresses on computes. **That will require DVS restart to update the IP addresses in the DVS `node_map`.**
 
-   1. `ncn_add_pre-req.py` will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted. See example below:
+   1. `ncn_add_pre-req.py` will make the network adjustments and will list the component names (xnames) that will need to be rebooted after DVS is restarted. See example below:
 
       ```text
       Please restart DVS and rebooting the following nodes before proceeding to the next step.:["x3000c0s21b4", "x3000c0s19b0", "x3000c0s21b3", "x3000c0s21b1", "x3000c0s21b2", "x3000c0s21b2n0", "x3000c0s21b3n0", "x3000c0s21b1n0"]
@@ -164,15 +164,15 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Check for
 
 <a name="add-worker-storage-master"></a>
 
-## Add Worker, Storage or Master NCNs
+## Add Worker, Storage, or Master NCNs
 
-Use this procedure to add a worker, storage, or master non-compute node (NCN).
+Use this procedure to add a worker, storage, or master NCN.
 
 <a name="add-ncn-prerequisites"></a>
 
 ### Add NCN Prerequisites
 
-For several of the commands in this section, you will need to have variables set with the name of the node being added and its xname.
+For several of the commands in this section, variables must be set with the name of the node being added and its component name (xname).
 Set `NODE` to the hostname of the node being added (for example `ncn-w001`, `ncn-s002`, etc).
 
 ```bash
@@ -191,7 +191,7 @@ ncn# echo $XNAME
 * Ensure that the NCN device to be added has been racked and cabled per the SHCD.
 * Ensure the NCN BMC is configured with the expected root user credentials.
 
-   The NCN BMC credentials needs to match the current global air-cooled BMC default credentials. This can be viewed with the following command:
+   The NCN BMC credentials need to match the current global air-cooled BMC default credentials. These can be viewed with the following commands:
 
    ```bash
    ncn-m# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json |
@@ -320,7 +320,7 @@ Use this procedure to remove a worker, storage, or master node (NCN).
 ### Remove NCN Prerequisites
 
 Open two sessions: one on the node that is to be removed and another on a different master or worker node.
-For several of the commands in this section, you will need to have variables set with the name of the node being removed and its xname.
+For several of the commands in this section, variables must be set with the name of the node being removed and its component name (xname).
 Set `NODE` to the hostname of the node being removed (for example `ncn-w001`, `ncn-s002`, etc).
 Set `XNAME` to the xname of that node.
 
