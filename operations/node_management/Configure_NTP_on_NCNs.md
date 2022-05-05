@@ -47,8 +47,9 @@ The following steps are structured to be executed on one node at a time. However
     > If more than nine NCNs are in use on the system, update the for loop in the following command accordingly.
 
     ```bash
-    ncn-m002# for i in ncn-{w,s}00{1..3} ncn-m00{2..3}; do echo \
-    "------$i--------"; ssh $i '/srv/cray/scripts/common/chrony/csm_ntp.py'; done
+    ncn-m001# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    ncn-m001# for i in ncn-{w,s}00{1..3} ncn-m00{2..3}; do echo \
+    "------$i--------"; ssh $i 'pushd /srv/cray/scripts/common/chrony/ && TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py && popd'; done
     ```
 
 <a name="fix-broken-configs"></a>
@@ -58,5 +59,8 @@ The following steps are structured to be executed on one node at a time. However
 On each NCN, run:
 
 ```
-ncn# csm_ntp.py
+ncn# pushd /srv/cray/scripts/common/chrony
+ncn# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token') 
+ncn# /srv/cray/scripts/common/chrony/csm_ntp.py
+ncn# popd
 ```
