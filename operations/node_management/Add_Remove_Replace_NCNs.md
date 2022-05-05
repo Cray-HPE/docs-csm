@@ -12,14 +12,15 @@ The following workflows are available:
 
 * [Prerequisites](#prerequisites)
 * [Add Worker, Storage or Master NCNs](#add-worker-storage-master)
-   * [Add NCN Prerequisites](#add-ncn-prerequisites)
-   * [Add NCN Procedure](#add-ncn-procedure)
+  * [Add NCN Prerequisites](#add-ncn-prerequisites)
+  * [Add NCN Procedure](#add-ncn-procedure)
 * [Remove Worker, Storage or Master NCNs](#remove-worker-storage-master)
-   * [Remove NCN Prerequisites](#remove-ncn-prerequisites)
-   * [Remove NCN Procedure](#remove-ncn-procedure)
+  * [Remove NCN Prerequisites](#remove-ncn-prerequisites)
+  * [Remove NCN Procedure](#remove-ncn-procedure)
 * [Replace or Move Worker, Storage or Master NCNs](#replace-worker-storage-master)
 
 <a name="prerequisites"></a>
+
 ## Prerequisites
 
 The system is fully installed and has transitioned off of the LiveCD.
