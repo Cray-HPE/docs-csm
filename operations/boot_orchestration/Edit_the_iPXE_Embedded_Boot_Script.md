@@ -2,13 +2,13 @@
 
 Manually adjust the iPXE embedded boot script to change the order of network interfaces for DHCP request. Changing the order of network interfaces for DHCP requests helps improve boot time performance.
 
-### Prerequisites
+## Prerequisites
 
 This procedure requires administrative privileges.
 
-### Procedure
+## Procedure
 
-1.  Edit the ConfigMap using one of the following options.
+1. Edit the ConfigMap using one of the following options.
 
     **NOTE:** Save a backup of the ConfigMap before making any changes.
 
@@ -16,7 +16,7 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-m001# kubectl get configmap -n services cray-ipxe-bss-ipxe \
-    -o yaml > /root/k8s/cray-ipxe-bss-ipxe-backup.yaml
+            -o yaml > /root/cray-ipxe-bss-ipxe-backup.yaml
     ```
 
     Administrators can add, remove, or reorder sections in the ConfigMap related to the interface being used.
@@ -39,45 +39,45 @@ This procedure requires administrative privileges.
     ifclose net0 || echo No routes to drop.
     ```
 
-    -   **Option 1:** Edit the cray-ipxe-bss-ipxe ConfigMap directly.
+    - **Option 1:** Edit the `cray-ipxe-bss-ipxe` ConfigMap directly.
 
         ```bash
         ncn-m001#  kubectl edit configmap -n services cray-ipxe-bss-ipxe
         ```
 
-    -   **Option 2:** Edit the ConfigMap by saving the file, editing it, and reloading the ConfigMap.
-        1.  Save the file.
+    - **Option 2:** Edit the ConfigMap by saving the file, editing it, and reloading the ConfigMap.
+        1. Save the file.
 
             ```bash
             ncn-m001# kubectl get configmap -n services cray-ipxe-bss-ipxe \
-            -o yaml > /root/k8s/cray-ipxe-bss-ipxe.yaml
+                    -o yaml > /root/cray-ipxe-bss-ipxe.yaml
             ```
 
-        2.  Edit the cray-ipxe-bss-ipxe.yaml file.
+        2. Edit the `cray-ipxe-bss-ipxe.yaml` file.
 
             ```bash
-            ncn-m001# vi /root/k8s/cray-ipxe-bss-ipxe.yaml
+            ncn-m001# vi /root/cray-ipxe-bss-ipxe.yaml
             ```
 
-        3.  Reload the ConfigMap.
+        3. Reload the ConfigMap.
 
             Deleting and recreating the ConfigMap will reload it.
 
             ```bash
             ncn-m001# kubectl delete configmap -n services cray-ipxe-bss-ipxe
-            ncn-m001# kubectl create -f /root/k8s/cray-ipxe-bss-ipxe.yaml
+            ncn-m001# kubectl create -f /root/cray-ipxe-bss-ipxe.yaml
             ```
 
-2.  Delete the iPXE pod to ensure the updated ConfigMap will be used.
+2. Delete the iPXE pod to ensure the updated ConfigMap will be used.
 
-    1.  Find the pod ID.
+    1. Find the pod ID.
 
         ```bash
         ncn-m001# kubectl -n services get pods|grep cray-ipxe
         cray-ipxe-5dddfc65f-qfmrr           2/2     Running        2       39h
         ```
 
-    2.  Delete the pod.
+    2. Delete the pod.
 
         Replace CRAY-IPXE\_POD\_ID with the value returned in the previous step. In this example, the pod ID is `cray-ipxe-5dddfc65f-qfmrr`.
 
@@ -85,6 +85,4 @@ This procedure requires administrative privileges.
         ncn-m001# kubectl -n services delete pod CRAY-IPXE_POD_ID
         ```
 
-
-Wait about 30 seconds for the iPXE binary to be regenerated, and then the nodes will pick up the new ipxe.efi binary.
-
+Wait about 30 seconds for the iPXE binary to be regenerated, and then the nodes will pick up the new `ipxe.efi` binary.
