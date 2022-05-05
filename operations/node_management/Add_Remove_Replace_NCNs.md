@@ -155,7 +155,7 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Check for
 
    1. `ncn_add_pre-req.py` will make the network adjustments and will list the xnames that will need to be rebooted after DVS is restarted. See example below:
 
-      ```screen
+      ```text
       Please restart DVS and rebooting the following nodes before proceeding to the next step.:["x3000c0s21b4", "x3000c0s19b0", "x3000c0s21b3", "x3000c0s21b1", "x3000c0s21b2", "x3000c0s21b2n0", "x3000c0s21b3n0", "x3000c0s21b1n0"]
       prerequisite to prepare NCNs for removal, move and add
       Network expansion COMPLETED
