@@ -23,7 +23,7 @@ BMC/controller passwords.
 ## Details
 
    <a name="configure_keycloak_account"></a>
-   
+
    1. Configure Keycloak Account
 
       Upcoming steps in the installation workflow require an account to be configured in Keycloak for
