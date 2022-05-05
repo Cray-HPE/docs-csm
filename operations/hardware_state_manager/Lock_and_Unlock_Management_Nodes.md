@@ -46,7 +46,7 @@ ncn# kubectl -n services get pods | grep smd
 
 Example output:
 
-```screen
+```text
 cray-smd-848bcc875c-6wqsh           2/2     Running    0          9d
 cray-smd-848bcc875c-hznqj           2/2     Running    0          9d
 cray-smd-848bcc875c-tp6gf           2/2     Running    0          6d22h
@@ -132,7 +132,7 @@ Use the `cray hsm locks lock` command to perform locking.
 
    Example output:
 
-   ```screen
+   ```text
    Failure = []
 
    [Counts]
@@ -164,7 +164,7 @@ Use the `cray hsm locks unlock` command to perform unlocking.
 
    Example output:
 
-   ```screen
+   ```text
    Failure = []
 
    [Counts]
@@ -187,7 +187,7 @@ Use the `cray hsm locks unlock` command to perform unlocking.
 
    Example output:
 
-   ```screen
+   ```text
    Failure = []
 
    [Counts]
