@@ -8,11 +8,11 @@ Scenarios where this procedure is applicable:
 
 1. Adding a management NCN that has not previously been in the system before:
    * Add an additional NCN to an existing cabinet
-   * Add an NCN that is being replaced by another NCN of the same type and in the same slot
-   * Adding a new NCN that replaces an NCN removed from the system in a different location
+   * Add an NCN that is replacing another NCN of the same type and in the same slot
+   * Add a new NCN that replaces an NCN removed from the system in a different location
 
 1. Adding a management NCN that has been present in the system previously:
-   * Adding an NCN that was previously removed from the system to move it to a new location
+   * Add an NCN that was previously removed from the system to move it to a new location
 
 ## Procedure
 
@@ -27,17 +27,17 @@ Scenarios where this procedure is applicable:
     ```
 
 1. Collect the following information from the NCN:
-    1. Determine the xname of the NCN by referring to the HMN of the system's SHCD file, if it has not been determined yet.
+    1. Determine the component name (xname) of the NCN by referring to the HMN of the system's SHCD file, if it has not been determined yet.
 
         Sample row from the `HMN` tab of an SHCD file:
 
         | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
         | --------------- | ----------------- | --------------------- | ----- | ------------ | ---- | ----------------- | ----------------- | ---------------------- | -------------------------- | ----- | ---------------------- |
-        | wn01            | x3000             | u04                   | -     |              |      | j3                | sw-smn01          | x3000                  | u14                        | -     | j48                    |
+        | `wn01`            | `x3000`             | `u04`                   | `-`     |              |      | `j3`                | `sw-smn01`          | `x3000`                  | `u14`                        | `-`     | `j48`                    |
 
         > The `Source` name for a worker NCN would be in the format `wn01`; master NCNs have format `mn01` and storage NCNs have format `sn01`.
 
-        Node xname format: xXcCsSbBnN
+        Node xname format: `xXcCsSbBnN`
 
         |   |                | SHCD Column to reference | Description
         | - | -------------- | ------------------------ | -----------
@@ -63,9 +63,9 @@ Scenarios where this procedure is applicable:
 
         | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
         | --------------- | ----------------- | --------------------- | ----- | ------------ | ---- | ----------------- | ----------------- | ---------------------- | -------------------------- | ----- | ---------------------- |
-        | wn01            | x3000             | u04                   | -     |              |      | j3                | sw-smn01          | x3000                  | u14                        | -     | j48                    |
+        | `wn01`            | `x3000`             | `u04`                   | `-`     |              |      | `j3`                | `sw-smn01`          | `x3000`                  | `u14`                        | `-`     | `j48`                    |
 
-        `MgmtSwitchConnector` xname format: xXcCwWjJ
+        `MgmtSwitchConnector` xname format: `xXcCwWjJ`
 
         |   |                    | SHCD Column to reference   | Description
         | - | ------------------ | -------------------------- | ----
@@ -123,29 +123,29 @@ Scenarios where this procedure is applicable:
 
                 The switch port number for the above `MgmtSwitchConnector` xname would be `39`, so use `1/1/39` instead of `1/1/48` in the commands below.
 
-                **Dell Management Switch**
+                - **Dell Management Switch**
 
-                ```bash
-                sw-leaf-bmc-001# show mac address-table | grep 1/1/48
-                ```
+                   ```bash
+                   sw-leaf-bmc-001# show mac address-table | grep 1/1/48
+                   ```
 
-                Example output:
+                   Example output:
 
-                ```text
-                4    a4:bf:01:65:68:54    dynamic        1/1/48
-                ```
+                   ```text
+                   4    a4:bf:01:65:68:54    dynamic        1/1/48
+                   ```
 
-                **Aruba Management Switch**
+                - **Aruba Management Switch**
 
-                ```bash
-                sw-leaf-bmc-001# show mac-address-table | include 1/1/48
-                ```
+                   ```bash
+                   sw-leaf-bmc-001# show mac-address-table | include 1/1/48
+                   ```
 
-                Example output:
+                   Example output:
 
-                ```text
-                a4:bf:01:65:68:54    4        dynamic                   1/1/48
-                ```
+                   ```text
+                   a4:bf:01:65:68:54    4        dynamic                   1/1/48
+                   ```
 
     1. **Skip if adding `ncn-m001`:** Set the `BMC_MAC` environment variable to the BMC MAC address:
 
@@ -187,7 +187,7 @@ Scenarios where this procedure is applicable:
         ncn-m# export BMC_IP=10.0.0.10
         ```
 
-    1. Collect NCN MAC addresses for the following interfaces if they are present. Depending on the hardware present, not all of the following interfaces will be present.
+    1. Collect NCN MAC addresses for the following interfaces if they are present.
        The collected MAC addresses will be used later in this procedure with the `add_management_ncn.py` script.
 
         Depending on the hardware present in the NCN, not all of these interfaces may be present.
@@ -338,7 +338,7 @@ Scenarios where this procedure is applicable:
         HMN     | 10.254.1.13
     ```
 
-    > Depending on the networking configuration of the system the CMN or CAN networks may not be present in SLS network data. If CMN or CAN networks do not exist in SLS, then no IP will be allocated for that network.
+    > Depending on the networking configuration of the system the CMN or CAN networks may not be present in SLS network data. If CMN or CAN networks do not exist in SLS, then no IP address will be allocated for that network.
 
 1. **If the following text is present** at the end of the `add_management_ncn.py` script output, then the NCN BMC was given an IP address by DHCP, and it is not at the expected IP address.
     Sample output when the BMC has an unexpected IP address.
