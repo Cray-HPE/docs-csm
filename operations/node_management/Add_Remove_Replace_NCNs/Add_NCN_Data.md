@@ -123,7 +123,7 @@ Scenarios where this procedure is applicable:
 
                 The switch port number for the above `MgmtSwitchConnector` xname would be `39`, so use `1/1/39` instead of `1/1/48` in the commands below.
 
-                - **Dell Management Switch**
+                **Dell Management Switch**
 
                    ```bash
                    sw-leaf-bmc-001# show mac address-table | grep 1/1/48
@@ -135,7 +135,7 @@ Scenarios where this procedure is applicable:
                    4    a4:bf:01:65:68:54    dynamic        1/1/48
                    ```
 
-                - **Aruba Management Switch**
+                **Aruba Management Switch**
 
                    ```bash
                    sw-leaf-bmc-001# show mac-address-table | include 1/1/48
