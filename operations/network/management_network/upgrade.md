@@ -18,7 +18,7 @@ If the configs have not been generated, follow the procedure below.
 ## Procedure
 
 > **CAUTION:** All of these steps should be done using an out-of-band connection. This process is disruptive and will require downtime.
-> 
+>
 > **CAUTION:** This procedure must be done in coordination with the CSM network team.
 
 1. Collect system data.

@@ -1,31 +1,27 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
-
-[Next Topic: Create a UAI Resource Specification](Create_a_UAI_Resource_Specification.md)
-
-## List UAI Resource Specifications
+# List UAI Resource Specifications
 
 Obtain a list of all the UAI resource specifications registered with UAS.
 
-### Prerequisites
+## Prerequisites
 
 * The administrator must be logged into an NCN or a host that has administrative access to the HPE Cray EX System API Gateway
 * The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
 * The HPE Cray EX System CLI must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
 * The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
 
-### Procedure
+## Procedure
 
 List all the resource specifications registered in UAS.
 
 The resource specifications returned by the following command are available for UAIs to use:
 
-```
+```bash
 ncn-m001-pit# cray uas admin config resources list
 ```
 
 Example output:
 
-```
+```bash
 [[results]]
 comment = "Resource Specification to use with Brokered End-User UAIs"
 limit = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
@@ -41,5 +37,7 @@ The following are the configurable parts of a resource specification:
 * `resource-id` - Used for examining, updating or deleting the resource specification as well as linking the resource specification into a UAI class
 
 Refer to [Elements of a UAI](Elements_of_a_UAI.md) for more information.
+
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Create a UAI Resource Specification](Create_a_UAI_Resource_Specification.md)

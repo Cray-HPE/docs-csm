@@ -6,7 +6,7 @@ The Prometheus SNMP Exporter is deployed by the the `cray-sysmgmt-health` chart 
 
 In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must be configured with a list of management network switches to scrape metrics from.
 
-This procedure assumes that this is being done as part of a CSM install as part of the 
+This procedure assumes that this is being done as part of a CSM install as part of the
 [Prepare Site Init](../../../install/prepare_site_init.md#configure-prometheus-snmp-exporter) procedure.
 Specifically, it assumes that the `SYSTEM_NAME` and `PITDATA` variables are set, and that the `PITDATA` mount is
 in place.
@@ -16,7 +16,7 @@ in place.
     ```bash
     linux# canu init --sls-file ${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json --out -
     ```
-    
+
     Expected output looks similar to the following:
     ```
     10.252.0.2

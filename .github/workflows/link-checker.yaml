@@ -21,17 +21,25 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Check Markdown links
+name: Check Links
 
-on: push
+on:
+  pull_request:
 
 jobs:
   markdown-link-check:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - uses: gaurav-nelson/github-action-markdown-link-check@v1
+    - uses: actions/checkout@v3
+
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v18.7
       with:
-        use-quiet-mode: 'yes'
-        config-file: '.github/workflows/mlc_config.json'
+        files: "**/*.md"
+        files_ignore: ".github/**/*"
+
+    - uses: docker://ghcr.io/tcort/markdown-link-check:3.9.3
+      with:
+        args: "--config .github/config/markdown_link.json ${{ steps.changed-files.outputs.all_changed_files }}"
 

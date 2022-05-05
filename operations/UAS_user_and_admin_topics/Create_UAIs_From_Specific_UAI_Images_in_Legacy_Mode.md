@@ -1,12 +1,8 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
-
-[Next Topic: UAS and UAI Legacy Mode Health Checks](UAS_and_UAI_Health_Checks.md)
-
-## Create UAIs From Specific UAI Images in Legacy Mode
+# Create UAIs From Specific UAI Images in Legacy Mode
 
 A user can create a UAI from a specific UAI image (assuming no default UAI class exists) using a command of the form:
 
-```
+```text
 user> cray uas create --publickey <path> --imagename <image-name>
 ```
 
@@ -14,7 +10,7 @@ user> cray uas create --publickey <path> --imagename <image-name>
 
 For example:
 
-```
+```bash
 vers>  cray uas images list
 default_image = "registry.local/cray/cray-uai-sles15sp2:1.2.4"
 image_list = [ "registry.local/cray/cray-uai-sles15sp2:1.2.4", "registry.local/cray/cray-uai-sanity-test:1.2.4", "registry.local/cray/cray-uai-broker:1.2.4",]
@@ -32,5 +28,7 @@ username = "vers"
 
 [uai_portmap]
 ```
+
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: UAS and UAI Legacy Mode Health Checks](UAS_and_UAI_Health_Checks.md)

@@ -6,6 +6,8 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
 ### Prerequisites
 
+- All blades in the cabinet have been powered off.
+
 - Physical access to the CEC LCD panel to enable privileged command mode. The CEC does not enable users to set, display, or clear the password hash in restricted command mode.
 
 - A laptop with a terminal program such as Netcat (`nc`), `telnet`, or PuTTY that supports 10/100 IPv6 Ethernet connectivity to the CEC Ethernet port is required.
@@ -82,7 +84,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
 9. Enter `set_hash` and provide the password hash value as the argument.
 
-   The CEC validates the input syntax of the hash. Adding an extra char or omitting a character is flagged as an error. I a character is changed, the password entered in the serial console login shell or the Redfish `root` account will not work. If that happens, rerun the `set_hash` command on the CEC and reboot the CMMs.
+   The CEC validates the input syntax of the hash. Adding an extra character or omitting a character is flagged as an error. If a character is changed, the password entered in the serial console login shell or the Redfish `root` account will not work. If that happens, then rerun this procedure from the beginning.
 
       ```screen
       EXE> set_hash $6$v5YlqxKB$scBci.GbT8...
@@ -107,31 +109,13 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
     ![Front Panel Controls](../../img/CEC_Display_Controls_CEC_Actions.svg)
 
+13. Power cycle the compute blade slots in each chassis.
 
+    Skip this step if the compute blade slots in each chassis have already been powered off.
 
-13. **Important!**: Power cycle the compute blade slots in each chassis.
+    1. To perform blade power control operations, SSH to a CMM and and use the `redfish` command to perform the power cycle. This must be done for each populated compute blade in each odd- or even-numbered chassis in the cabinet depending on which CEC issued the reset above.
 
-    1. If Cray System Management (CSM) is provisioned, use CAPMC to power cycle the compute blade slots (example show cabinets 1000-1003). **Note**: If a chassis is not fully populated, specify each slot individually:
-
-       ```bash
-       ncn-m001# cray capmc xname_off create --xnames x[1000-1003]c[0-7]s[0-7] --format json
-       ```
-
-       Check the power status:
-
-       ```bash
-       ncn-m001# cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
-       ```
-
-       Power on the compute chassis slots:
-
-       ```bash
-       ncn-m001# cray capmc xname_on create --xnames x[1000-1003]c[0-7]s[0-7] --format json
-       ```
-
-    2. If the cabinet has not been provisioned with CSM or other management software (bare-metal), the compute chassis slots are most likely powered off. To perform chassis power control operations, SSH to a CMM and and use the `redfish -h` command to display the power control commands:
-
-       ```
+       ```screen
        > ssh root@x9000c1
        x9000c1:> redfish -h
 
@@ -143,6 +127,23 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
                redfish node status
                redfish node [0-1] [on|off|forceoff]
        <snip>
+       x9000c1:>
+       x9000c1:> redfish blade 0 off
+       x9000c1:> redfish blade 1 off
+       x9000c1:> redfish blade 2 off
+       x9000c1:> redfish blade 3 off
+       x9000c1:> redfish blade 4 off
+       x9000c1:> redfish blade 5 off
+       x9000c1:> redfish blade 6 off
+       x9000c1:> redfish blade 7 off
+       x9000c1:> redfish blade 0 on
+       x9000c1:> redfish blade 1 on
+       x9000c1:> redfish blade 2 on
+       x9000c1:> redfish blade 3 on
+       x9000c1:> redfish blade 4 on
+       x9000c1:> redfish blade 5 on
+       x9000c1:> redfish blade 6 on
+       x9000c1:> redfish blade 7 on
        x9000c1:>
        ```
 

@@ -227,11 +227,28 @@ if [ -z $NMN_GW ]; then
     exit 1
 fi
 
+UAI_NMN_BH=$(echo "${NETWORKSJSON}" | jq -r '.[] | select(.Name == "NMN") | .ExtraProperties.Subnets[] | select(.Name == "uai_macvlan") | .IPReservations[] | select(.Name == "uai_nmn_blackhole") | .IPAddress')
+if [ -z $UAI_NMN_BH ]; then
+    echo >&2 "error:  Could not find uai_nmn_blackhole reservation"
+    exit 1
+fi
+
 CMN_CIDR=$(echo "${NETWORKSJSON}" | jq -r '.[] | select(.Name == "CMN") | .ExtraProperties.CIDR')
 if [ -z $CMN_CIDR ]; then
     echo >&2 "error:  Could not find CMN CIDR"
     exit 1
 fi
+
+NMNLB_CIDR=$(echo "${NETWORKSJSON}" | jq -r '.[] | select(.Name == "NMNLB") | .ExtraProperties.CIDR')
+if [ -z $NMNLB_CIDR ]; then
+    echo >&2 "error:  Could not find NMNLB CIDR"
+    exit 1
+fi
+
+# Replace the NMNLB route in macvlan routes with the UAI NMN blackhole for gateway
+yq d -i "$c" "spec.wlm.macvlansetup.routes.(dst==${NMNLB_CIDR})"
+yq w -i "$c" "spec.wlm.macvlansetup.routes[+].dst" "${NMNLB_CIDR}"
+yq w -i "$c" "spec.wlm.macvlansetup.routes.(dst==${NMNLB_CIDR}).gw" "${UAI_NMN_BH}"
 
 # Add the CMN route to macvlan routes if it is not already there
 if [[ -z "$(yq r "$c" "spec.wlm.macvlansetup.routes.(dst==${CMN_CIDR})")" ]]; then
