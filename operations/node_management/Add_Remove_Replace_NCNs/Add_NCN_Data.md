@@ -194,7 +194,7 @@ Scenarios where this procedure is applicable:
         * NCNs will have either 1 or 2 management PCIe NIC cards (2 or 4 PCIe NIC ports).
         * It is expected that only worker NCNs have HSN interfaces.
 
-        __NCN with a single PCIe card (1 card with 2 ports)__
+        NCN with a single PCIe card (1 card with 2 ports):
 
         | Interface   | CLI Flag      | Required MAC Address     | Description
         | ----------- | ------------- | ------------------------ | ----------
@@ -207,7 +207,7 @@ Scenarios where this procedure is applicable:
         | `lan2`      | `--mac-lan2`  | Optional                 | MAC address for the third non-bond or HSN-related interface.
         | `lan3`      | `--mac-lan3`  | Optional                 | MAC address for the forth non-bond or HSN-related interface.
 
-        __NCN with a dual PCIe cards (2 cards with 2 ports each for 4 ports total)__
+        NCN with a dual PCIe cards (2 cards with 2 ports each for 4 ports total):
 
         | Interface   | CLI Flag      | Required MAC Address     | Description
         | ----------- | ------------- | ------------------------ | ----------
