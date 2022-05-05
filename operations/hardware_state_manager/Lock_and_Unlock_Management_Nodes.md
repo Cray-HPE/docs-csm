@@ -122,7 +122,7 @@ Use the `cray hsm locks lock` command to perform locking.
 
 #### To lock single nodes or lists of specific nodes (and their BMCs)
 
-   > **Note:** The BMC of `ncn-m001` typically does not exist in HSM under HSM State Components, and therefore cannot be locked as it does not exist.
+   > **Note:** The BMC of `ncn-m001` typically does not exist in HSM under HSM State Components, and therefore cannot be locked.
 
 1. Lock the management nodes and BMCs.
 
