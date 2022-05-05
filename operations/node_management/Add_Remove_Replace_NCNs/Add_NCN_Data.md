@@ -107,7 +107,8 @@ Scenarios where this procedure is applicable:
                 ncn-m# ssh admin@sw-leaf-bmc-001.hmn
                 ```
 
-            1. Locate the switch port that the BMC is connected to and record its MAC address. In the commands below, change the value of `1/1/39` to match the BMC switch port number (the BMC Switch port number is the `J` value in the in the `MgmtSwitchConnector` xname `xXwWjJ`).
+            1. Locate the switch port that the BMC is connected to and record its MAC address.
+               In the commands below, change the value of `1/1/39` to match the BMC switch port number (the BMC Switch port number is the `J` value in the in the `MgmtSwitchConnector` xname `xXwWjJ`).
                 For example, with the following `$MGMT_SWITCH_CONNECTOR` value:
 
                 ```bash
@@ -157,7 +158,9 @@ Scenarios where this procedure is applicable:
         1. Query Kea for the BMC MAC address to determine its current IP address:
 
             ```bash
-            ncn-m# export BMC_IP=$(curl -sk -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq --arg BMC_MAC $BMC_MAC '.[].arguments.leases[] | select(."hw-address" == $BMC_MAC)."ip-address"' -r)
+            ncn-m# export BMC_IP=$(curl -sk -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
+                                       -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' \
+                                        https://api-gw-service-nmn.local/apis/dhcp-kea | jq --arg BMC_MAC $BMC_MAC '.[].arguments.leases[] | select(."hw-address" == $BMC_MAC)."ip-address"' -r)
             ncn-m# echo $BMC_IP
             ```
 
@@ -184,13 +187,14 @@ Scenarios where this procedure is applicable:
         ncn-m# export BMC_IP=10.0.0.10
         ```
 
-    1. Collect NCN MAC addresses for the following interfaces if they are present. Depending on the hardware present, not all of the following interfaces will be present. The collected MAC addresses will be used later in this procedure with the `add_management_ncn.py` script.
+    1. Collect NCN MAC addresses for the following interfaces if they are present. Depending on the hardware present, not all of the following interfaces will be present.
+       The collected MAC addresses will be used later in this procedure with the `add_management_ncn.py` script.
 
         Depending on the hardware present in the NCN, not all of these interfaces may be present.
         * NCNs will have either 1 or 2 management PCIe NIC cards (2 or 4 PCIe NIC ports).
         * It is expected that only worker NCNs have HSN interfaces.
 
-        **NCN with a single PCIe card (1 card with 2 ports)**
+        __NCN with a single PCIe card (1 card with 2 ports)__
 
         | Interface   | CLI Flag      | Required MAC Address     | Description
         | ----------- | ------------- | ------------------------ | ----------
@@ -203,7 +207,7 @@ Scenarios where this procedure is applicable:
         | `lan2`      | `--mac-lan2`  | Optional                 | MAC address for the third non-bond or HSN-related interface.
         | `lan3`      | `--mac-lan3`  | Optional                 | MAC address for the forth non-bond or HSN-related interface.
 
-        **NCN with a dual PCIe cards (2 cards with 2 ports each for 4 ports total)**
+        __NCN with a dual PCIe cards (2 cards with 2 ports each for 4 ports total)__
 
         | Interface   | CLI Flag      | Required MAC Address     | Description
         | ----------- | ------------- | ------------------------ | ----------
