@@ -116,7 +116,8 @@ Use the `cray hsm locks lock` command to perform locking.
    Failure = 0
 
    [Success]
-   ComponentIDs = [ "x3000c0s5b0n0", "x3000c0s4b0n0", "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0", "x3000c0s5b0", "x3000c0s4b0", "x3000c0s7b0", "x3000c0s6b0", "x3000c0s3b0", "x3000c0s2b0", "x3000c0s9b0", "x3000c0s8b0",]
+   ComponentIDs = [ "x3000c0s5b0n0", "x3000c0s4b0n0", "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0", 
+                    "x3000c0s5b0", "x3000c0s4b0", "x3000c0s7b0", "x3000c0s6b0", "x3000c0s3b0", "x3000c0s2b0", "x3000c0s9b0", "x3000c0s8b0",]
    ```
 
 #### To lock single nodes or lists of specific nodes (and their BMCs)
@@ -172,7 +173,8 @@ Use the `cray hsm locks unlock` command to perform unlocking.
    Failure = 0
 
    [Success]
-   ComponentIDs = [ "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0", "x3000c0s5b0n0", "x3000c0s4b0n0", "x3000c0s5b0", "x3000c0s4b0", "x3000c0s7b0", "x3000c0s6b0", "x3000c0s3b0", "x3000c0s2b0", "x3000c0s9b0", "x3000c0s8b0",]
+   ComponentIDs = [ "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0", "x3000c0s5b0n0", "x3000c0s4b0n0", 
+                    "x3000c0s5b0", "x3000c0s4b0", "x3000c0s7b0", "x3000c0s6b0", "x3000c0s3b0", "x3000c0s2b0", "x3000c0s9b0", "x3000c0s8b0",]
    ```
 
 ### To unlock single or lists of specific nodes (and their BMCs)
