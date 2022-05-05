@@ -20,6 +20,10 @@ The following procedures can be run from any master or worker node.
    - the `ncnPostgresHealthChecks` may report `Unable to determine a leader` and one of the three Postgres pods may be in `Pending` state.
    - the `ncnHealthChecks` may report `Error from server...FAILED - Pod Not Healthy`, `FAILED DATABASE CHECK` and one of the three Etcd pods may be in `Pending` state.
 
+   **NOTE:**
+   If `ncn-s001`, `ncn-s002`, or `ncn-s003` has been temporarily removed, `HEALTH_WARN` may be seen until the storage node is added back to the cluster.
+   - the `ncnHealthChecks` may report `FAIL: Ceph's health status is not "HEALTH_OK"`. If Ceph health is `HEALTH_WARN`, this failure can be ignored.
+
 1. Restart the Goss server on all the NCNs. Adjust the commands based on the number of master, worker, and storage nodes.
 
    ```bash
@@ -40,7 +44,13 @@ The following procedures can be run from any master or worker node.
    `Server URL: http://<NODE> ... ERROR: Server endpoint could not be reached`
 
    **NOTE:**
-   If workers have been removed and the worker count is currently at two, failures of the following tests can be ignored. A re-check will be needed once workers are added and the count returns to three or above.
+   If workers have been removed and the worker count is currently at two, failures for the following test can be ignored:
    - `Verify cray etcd is healthy`
+
+   A re-check will be needed once workers are added and the count returns to three or above.
+
+   **NOTE:**
+   If a storage node has been added, `ncn-healthcheck-storage` failures for the following test may need to be remediated based on the test description information and the `ncn-healthcheck-storage` tests should then be re-run to verify all tests pass.
+   - `Spire Health Check`
 
 The procedure is complete. [Return to Main Page](../Add_Remove_Replace_NCNs.md).
