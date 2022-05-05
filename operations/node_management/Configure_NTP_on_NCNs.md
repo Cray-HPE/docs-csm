@@ -4,39 +4,50 @@ The management nodes serve Network Time Protocol (NTP) at stratum 10, except for
 
 Until an upstream NTP server is configured, the time on the NCNs may not match the current time at the site, but they will stay in sync with each other.
 
-**Topics**
-   * [Fix BSS Metadata](#fix-bss-metadata)
-   * [Fix broken configs](#fix-broken-configs)
+## Topics
+
+* [Fix BSS Metadata](#fix-bss-metadata)
+* [Fix broken configs](#fix-broken-configs)
 
 <a name="fix-bss-metadata"></a>
 
-###### Fix BSS Metadata
+### Fix BSS Metadata
 
-If nodes are missing metadata for NTP, you will be required to generate the data using `csi` and your system's `system_config.yaml`. If you do not have your seed data in the `system_config.yaml` then you will need to open a ticket to help generate the NTP data.
+If nodes are missing metadata for NTP, you will be required to generate the data using `csi` and your system's `system_config.yaml`.
+If you do not have your seed data in the `system_config.yaml` then you will need to open a ticket to help generate the NTP data.
 
 The following steps are structured to be executed on one node at a time. However, step #3 will generate all relevant files for each node. If multiple nodes are missing NTP data in BSS, you can apply this fix to each node.
 
 1. Update system_config.yaml to have the correct NTP settings:
+
     ```yaml
     ntp-servers:
       - ncn-m001
       - time.nist.gov
     ntp-timezone: UTC
     ```
+
 2. Generate new configs:
+
     ```bash
     ncn# csi config init
     ```
+
 3. In the newly created `system/basecamp` directory, copy in and execute the metadata script that is included in the upgrade scripts of this documentation:
+
     ```bash
     ncn# ./upgrade_ntp_timezone_metadata.sh
     ```
+
 4. Find the relevant file(s) to the node(s) with missing metadata, such as `upgrade-metadata-000000000000.json` based on the mac address of the node.
 5. Find the xname for the node that needs to be fixed:
+
     ```bash
     ncn# cat /etc/cray/xname
     ```
+
 6. From `ncn-m001` execute the following command to update BSS:
+
     ```bash
     ncn# csi handoff bss-update-cloud-init --user-data="upgrade-metadata-000000000000.json" --limit=<xname>`
     ```
@@ -47,20 +58,22 @@ The following steps are structured to be executed on one node at a time. However
     > If more than nine NCNs are in use on the system, update the for loop in the following command accordingly.
 
     ```bash
-    ncn-m001# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    ncn-m001# curl_cmd="curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d`"
+    ncn-m001# export TOKEN=$($curl_cmd https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token') 
     ncn-m001# for i in ncn-{w,s}00{1..3} ncn-m00{2..3}; do echo \
     "------$i--------"; ssh $i 'pushd /srv/cray/scripts/common/chrony/ && TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py && popd'; done
     ```
 
 <a name="fix-broken-configs"></a>
 
-###### Fix Broken Configs
+### Fix Broken Configs
 
 On each NCN, run:
 
-```
+```bash
 ncn# pushd /srv/cray/scripts/common/chrony
-ncn# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token') 
+ncn# curl_cmd="curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d`"
+ncn# export TOKEN=$($curl_cmd https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token') 
 ncn# /srv/cray/scripts/common/chrony/csm_ntp.py
 ncn# popd
 ```
