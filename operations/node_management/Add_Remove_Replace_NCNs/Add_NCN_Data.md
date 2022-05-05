@@ -108,17 +108,19 @@ Scenarios where this procedure is applicable:
                 ```
 
             1. Locate the switch port that the BMC is connected to and record its MAC address. In the commands below, change the value of `1/1/39` to match the BMC switch port number (the BMC Switch port number is the `J` value in the in the `MgmtSwitchConnector` xname `xXwWjJ`).
-                > For example, with the following `$MGMT_SWITCH_CONNECTOR` value:
-                > ```bash
-                > ncn-m# echo $MGMT_SWITCH_CONNECTOR
-                > ```
-                >
-                > Example output:
-                > ```text
-                > x3000c0w14j39
-                > ```
-                >
-                > The switch port number for the above `MgmtSwitchConnector` xname would be `39`, so use `1/1/39` instead of `1/1/48` in the commands below.
+                For example, with the following `$MGMT_SWITCH_CONNECTOR` value:
+
+                ```bash
+                ncn-m# echo $MGMT_SWITCH_CONNECTOR
+                ```
+ 
+                Example output:
+
+                ```text
+                x3000c0w14j39
+                ```
+
+                The switch port number for the above `MgmtSwitchConnector` xname would be `39`, so use `1/1/39` instead of `1/1/48` in the commands below.
 
                 **Dell Management Switch**
 
