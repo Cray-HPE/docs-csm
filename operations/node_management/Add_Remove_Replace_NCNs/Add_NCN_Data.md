@@ -163,7 +163,7 @@ Scenarios where this procedure is applicable:
 
             Example output:
 
-            ```
+            ```text
             10.254.1.26
             ```
 
