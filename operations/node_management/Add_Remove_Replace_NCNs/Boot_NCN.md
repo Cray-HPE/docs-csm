@@ -67,7 +67,7 @@ This indicates that the PXE boot has started the TFTP download of the `ipxe` pro
 
 1. Wait until `cloud-init` displays messages similar to these on the console. This indicates that `cloud-init` has finished with the module called `modules-final`.
 
-    ```screen
+    ```text
     [  300.390000] cloud-init[7110]: 2022-03-16 18:30:59,449 - util.py[DEBUG]: cloud-init mode 'modules' took 244.143 seconds (198.87)
     [  300.390106] cloud-init[7110]: 2022-03-16 18:30:59,449 - handlers.py[DEBUG]: finish: modules-final: SUCCESS: running modules for final
     [  OK  ] Started Execute cloud user/final scripts.
@@ -90,7 +90,7 @@ ncn-mw# kubectl get nodes
 
 Example output:
 
-```screen
+```text
 NAME       STATUS   ROLES    AGE    VERSION
 ncn-m001   Ready    master   2d7h   v1.19.9
 ncn-m002   Ready    master   20d    v1.19.9
@@ -162,7 +162,7 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
         Example Output:
 
-        ```screen
+        ```text
         [[results]]
         lastUpdated = "2022-03-14T20:59:44Z"
         name = "ncn-personalization"
@@ -181,7 +181,7 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
         Example Output:
 
-        ```screen
+        ```text
         configurationStatus = "configured"
         desiredConfig = "ncn-personalization"
         enabled = true
@@ -263,7 +263,7 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
 
     Example output:
 
-    ```screen
+    ```text
     lan0            up
       link:     #30, state up, mtu 1500
       type:     bridge, hwaddr a4:bf:01:5a:a9:ff
