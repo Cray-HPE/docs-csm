@@ -41,6 +41,16 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
   * Supports zone transfer to external DNS servers via AXFR query and DNSSEC
   * Please refer to the [PowerDNS Migration Guide](./operations/network/dns/PowerDNS_migration.md) and [PowerDNS Configuration Guide](./operations/network/dns/PowerDNS_Configuration.md) for further information.
 
+* Management network switch hostname changes
+
+  The management network switch hostnames have changed in CSM 1.2 to more accurately reflect the usage of each switch type.
+
+  | Old Name | New Name    | Usage                                                     |
+  |----------|-------------|-----------------------------------------------------------|
+  | sw-spine | Unchanged   | Network spine that links to other switches.               |
+  | sw-agg   | sw-leaf     | NMN connections for NCNs and Application nodes.           |
+  | sw-leaf  | sw-leaf-bmc | BMC connections, PDUs, Slingshot switches, Cooling doors. |
+
 ### Miscellaneous Functionality
 * SLES15 SP3 Support for NCNs, UANs, Compute Nodes, and Barebones validation image
 * S3FS added to master and worker nodes for storing SDU dumps and CPS content
