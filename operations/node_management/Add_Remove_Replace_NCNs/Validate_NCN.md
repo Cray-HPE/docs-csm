@@ -32,10 +32,12 @@ Validate theat the master node added successfully.
     ncn-w003   Ready    <none>   112m   v1.19.9
     ```
 
-1. Confirm the `sdc` disk has the correct `lvm` on the rebuilt node.
+1. Confirm the `ETCDLVM` disk has the correct `lvm`.
+
+    Run the following command on the added node.
 
     ```bash
-    ncn-m# lsblk | grep -A2 ^sdc
+    ncn-m# lsblk `blkid -L ETCDLVM`
     ```
 
     Example output:
@@ -97,6 +99,23 @@ Validate that the worker node added successfully.
     ```
 
     After several minutes of the node joining the cluster, pods should be in a `Running` state for the worker node.
+
+1. Confirm the three mountpoints exist.
+
+    Run the following command on the added node.
+
+    ```bash
+    ncn-w# lsblk `blkid -L CONRUN` `blkid -L CONLIB` `blkid -L K8SLET`
+    ```
+
+    Example output:
+
+    ```text
+    NAME MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+    sdc1   8:33   0  69.8G  0 part /run/containerd
+    sdc2   8:34   0 645.5G  0 part /run/lib-containerd
+    sdc3   8:35   0 178.8G  0 part /var/lib/kubelet
+    ```
 
 1. Confirm the pods are beginning to get scheduled and reach a `Running` state on the worker node.
 
