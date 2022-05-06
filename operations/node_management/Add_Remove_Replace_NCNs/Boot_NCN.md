@@ -103,6 +103,8 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
 ### Set the `no-wipe` Flag
 
+Setting the `no-wipe` flag safeguards against the disks being wiped when the node is rebooted.
+
 1. Run the following commands from a node that has `cray` CLI initialized:
 
     ```bash
