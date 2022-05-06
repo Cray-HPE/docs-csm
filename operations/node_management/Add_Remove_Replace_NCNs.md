@@ -36,9 +36,11 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Check for
    ncn-m# ./ncn_add_pre-req.py 
    ```
 
-   1. The script will ask the following question:
+   The script will ask the following question:
 
-      1. How many NCNs would you like to add? Do not include NCNs to be removed or moved.
+   ```text
+   How many NCNs would you like to add? Do not include NCNs to be removed or moved.
+   ```
 
    Example output:
 

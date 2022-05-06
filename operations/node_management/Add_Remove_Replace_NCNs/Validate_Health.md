@@ -30,10 +30,13 @@ The following procedures can be run from any master or worker node.
    ncn-mw# pdsh -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] systemctl restart goss-servers
    ```
 
-1. Specify the admin user password for the management switches in the system.
+1. Specify the `admin` user password for the management switches in the system.
+
+   > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
 
     ```bash
-    ncn-mw# export SW_ADMIN_PASSWORD='changeme'
+    ncn-mw# read -s SW_ADMIN_PASSWORD
+    ncn-mw# export SW_ADMIN_PASSWORD
     ```
 
 1. Collect data about the various subsystems.
@@ -59,7 +62,8 @@ The following procedures can be run from any master or worker node.
    A re-check will be needed once workers are added and the count returns to three or above.
 
    **NOTE:**
-   If a storage node has been added, `ncn-healthcheck-storage` failures for the following test may need to be remediated based on the test description information and the `ncn-healthcheck-storage` tests should then be re-run to verify all tests pass.
+   If a storage node has been added, then `ncn-healthcheck-storage` failures for the following test may need to be remediated based on the test description information.
+   After that is done, the `ncn-healthcheck-storage` tests should then be re-run to verify that all tests pass.
    - `Spire Health Check`
 
 The procedure is complete. [Return to Main Page](../Add_Remove_Replace_NCNs.md).

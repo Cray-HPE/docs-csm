@@ -10,13 +10,15 @@ Otherwise, if a storage node has been added or removed, proceed with the followi
 
 ## Prerequisite
 
-The docs-csm RPM has been installed on the NCN. Verify that the following file exists:
+The `docs-csm` RPM has been installed on the NCN. Verify that the following file exists:
 
 ```bash
 ncn-m# ls /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/update_customizations.sh
 ```
 
-## Update the `nmn_ncn_storage` list to include the IP addresses for any added or removed storage nodes
+## Update the `nmn_ncn_storage` List
+
+Update the `nmn_ncn_storage` list to include the IP addresses for any added or removed storage nodes.
 
 ### Acquire `site-init`
 
@@ -49,7 +51,9 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
    ncn-m# git commit -m 'Add customizations.yaml from site-init secret'
    ```
 
-### Modify the customizations to include the added or removed storage node
+### Modify the Customizations
+
+Modify the customizations to include the added or removed storage node.
 
 1. Retrieve an API token.
 
@@ -104,9 +108,11 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
     ncn-m# kubectl create secret -n loftsman generic site-init --from-file=/tmp/customizations.yaml
     ```
 
-#### Redeploy S3 to pick up any changes for storage node endpoints
+#### Redeploy S3
 
-1. Determine the version of S3:
+Redeploy S3 to pick up any changes for storage node endpoints.
+
+1. Determine the version of S3.
 
     ```bash
     ncn-m# S3_VERSION=$(kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' |
@@ -114,7 +120,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
     ncn-m# echo $S3_VERSION
     ```
 
-1. Create `s3-manifest.yaml`:
+1. Create `s3-manifest.yaml`.
 
     ```bash
     ncn-m# cat > s3-manifest.yaml << EOF
@@ -129,13 +135,13 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
     EOF
     ```
 
-1. Merge `customizations.yaml` with `s3-manifest.yaml`:
+1. Merge `customizations.yaml` with `s3-manifest.yaml`.
 
     ```bash
     ncn-m# manifestgen -c /tmp/customizations.yaml -i s3-manifest.yaml > s3-manifest.out.yaml
     ```
 
-1. Redeploy the S3 helm chart:
+1. Redeploy the S3 helm chart.
 
     ```bash
     ncn-m# loftsman ship \
@@ -158,9 +164,11 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
     10.252.1.6
     ```
 
-### Redeploy `sysmgmt-health` to pick up any changes for storage node endpoints
+### Redeploy `sysmgmt-health`
+ 
+Redeploy `sysmgmt-health` to pick up any changes for storage node endpoints.
 
-1. Determine the version of `sysmgmt-health`:
+1. Determine the version of `sysmgmt-health`.
 
     ```bash
     ncn-m# SYSMGMT_VERSION=$(kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' |
@@ -175,7 +183,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
               yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.resources'
     ```
 
-    Example Output:
+    Example output:
 
     ```yaml
     limits:
@@ -192,13 +200,13 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
     ncn-m# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.retention'
     ```
 
-    Example Output:
+    Example output:
 
     ```text
     48h
     ```
 
-1. Create `sysmgmt-health-manifest.yaml` and update the `resources` and `retention` sections as needed based upon the data from the previous steps:
+1. Create `sysmgmt-health-manifest.yaml` and update the `resources` and `retention` sections as needed based upon the data from the previous steps.
 
     ```bash
     ncn-m# cat > sysmgmt-health-manifest.yaml << EOF
@@ -225,13 +233,13 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
     EOF
     ```
 
-1. Merge `customizations.yaml` with `sysmgmt-health-manifest.yaml`:
+1. Merge `customizations.yaml` with `sysmgmt-health-manifest.yaml`.
 
     ```bash
     ncn-m# manifestgen -c /tmp/customizations.yaml -i sysmgmt-health-manifest.yaml > sysmgmt-health-manifest.out.yaml
     ```
 
-1. Redeploy the `sysmgmt-health` helm chart:
+1. Redeploy the `sysmgmt-health` helm chart.
 
     ```bash
     ncn-m# loftsman ship \
