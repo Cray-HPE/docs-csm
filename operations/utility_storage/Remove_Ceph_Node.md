@@ -159,7 +159,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
         ncn-s001# pdcp -w ncn-s00[2-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
         ```
 
-    1. Restart HAproxy on all the storage nodes, and stop HAproxy and KeepAlived on the node that is being removed.
+    1. Restart HAproxy on all the storage nodes, and stop HAproxy and KeepAlived ***on the node that is being removed***.
 
         ```bash
         ncn# pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service'

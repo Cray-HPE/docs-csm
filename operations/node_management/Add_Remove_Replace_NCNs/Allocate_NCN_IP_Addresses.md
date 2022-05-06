@@ -6,7 +6,7 @@ This procedure allocates IP addresses for an NCN being added to a system to the 
 
 This procedure will perform and verify the following:
 
-1. If the NCN being added is `ncn-m00[1-3]`, `ncn-w00[1-3]`, or `ncn-s00[1-3]`, it is expected to already be present and consistent between SLS and BSS.
+1. If the NCN being added is `ncn-m00[1-3]`, `ncn-w00[1-3]`, or `ncn-s00[1-3]`, the IP address for the NCN is expected to already be present and consistent between SLS and BSS.
 1. Otherwise, new IP addresses for the NCN will be allocated and verified to be within the static IP address pool in the `bootstrap_dhcp` subnet for the various networks in system.
 
 ## Procedure
