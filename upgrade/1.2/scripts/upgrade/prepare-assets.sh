@@ -106,7 +106,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
         touch /etc/cray/upgrade/csm/myenv
         echo "====> ${state_name} ..."
         {
-        wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
+        wget --progress=dot:giga ${ENDPOINT}/${CSM_RELEASE}.tar.gz
         # set TARBALL_FILE to newly downloaded file
         TARBALL_FILE=${CSM_RELEASE}.tar.gz
         } >> ${LOG_FILE} 2>&1
