@@ -1,12 +1,8 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
-
-[Next Topic: Update a UAS Volume](Update_a_UAS_Volume.md)
-
-## Obtain the Configuration of a UAS Volume
+# Obtain the Configuration of a UAS Volume
 
 View the configuration information of a specific UAS volume. This procedure requires the `volume_ID` of that volume.
 
-### Prerequisites
+## Prerequisites
 
 * The administrator must be logged into an NCN or a host that has administrative access to the HPE Cray EX System API Gateway
 * The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
@@ -14,7 +10,7 @@ View the configuration information of a specific UAS volume. This procedure requ
 * The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
 * The administrator must know the Volume ID of the volume to be retrieved: [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md)
 
-### Procedure
+## Procedure
 
 View the configuration of a specific UAS volume.
 
@@ -26,7 +22,7 @@ ncn-m001-pit# cray uas admin config volumes describe 11a4a22a-9644-4529-9434-d29
 
 Example output:
 
-```
+```json
 {
   "mount_path": "/etc/localtime",
   "volume_description": {
@@ -39,5 +35,7 @@ Example output:
   "volumename": "timezone"
 }
 ```
+
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Update a UAS Volume](Update_a_UAS_Volume.md)

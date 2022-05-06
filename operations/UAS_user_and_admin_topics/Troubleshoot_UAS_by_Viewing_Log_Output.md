@@ -1,20 +1,19 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+# Troubleshoot UAS by Viewing Log Output
 
-[Next Topic: Troubleshoot UAIs by Viewing Log Output](Troubleshoot_UAIs_by_Viewing_Log_Output.md)
+At times there will be problems with UAS. Usually this takes the form of errors showing up on CLI commands that are not immediately interpretable as some sort of input error.
+It is sometimes useful to examine the UAS service logs to find out what is wrong.
 
-## Troubleshoot UAS by Viewing Log Output
-
-At times there will be problems with UAS. Usually this takes the form of errors showing up on CLI commands that are not immediately interpretable as some sort of input error. It is sometimes useful to examine the UAS service logs to find out what is wrong.
+## Procedure
 
 1. Find the names of the Kubernetes pods running UAS:
 
-    ```
+    ```bash
     ncn-m001-pit# kubectl get po -n services | grep uas | grep -v etcd
     ```
 
     Example output:
 
-    ```
+    ```bash
     cray-uas-mgr-6bbd584ccb-zg8vx                                    2/2     Running     0          7d7h
     cray-uas-mgr-6bbd584ccb-acg7y                                    2/2     Running     0          7d7h
     ```
@@ -23,19 +22,20 @@ At times there will be problems with UAS. Usually this takes the form of errors 
 
     The logs are collected in the pods, and can be seen using the `kubectl logs` command on each of the pods. The pods produce a lot of debug logging in the form:
 
-    ```
+    ```bash
     127.0.0.1 - - [02/Feb/2021 22:57:18] "GET /v1/mgr-info HTTP/1.1" 200 -
     ```
 
-    Because of that, it is a good idea to filter this out unless the problem lies in specifically in the area of GET operations or aliveness checks. The following is an example where the last 25 lines of useful log output are retrieved from the pod `cray-uas-mgr-6bbd584ccb-zg8vx`:
+    Because of that, it is a good idea to filter this out unless the problem lies in specifically in the area of GET operations or aliveness checks.
+    The following is an example where the last 25 lines of useful log output are retrieved from the pod `cray-uas-mgr-6bbd584ccb-zg8vx`:
 
-    ```
-    kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v '"GET ' | tail -25
+    ```bash
+    ncn-m001-pit# kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v '"GET ' | tail -25
     ```
 
     Example output:
 
-    ```
+    ```bash
     2021-02-03 22:02:01,576 - uas_mgr - INFO - UAS request for: vers
     2021-02-03 22:02:01,628 - uas_mgr - INFO - opt_ports: []
     2021-02-03 22:02:01,702 - uas_mgr - INFO - cfg_ports: [30123]
@@ -63,6 +63,9 @@ At times there will be problems with UAS. Usually this takes the form of errors 
     127.0.0.1 - - [03/Feb/2021 22:15:32] "DELETE /v1/uas?uai_list=uai-vers-32079250 HTTP/1.1" 200 -
     ```
 
-If an error had occurred in UAS that error would likely show up here. Because there are two replicas of `cray-uas-mgr` running, the logging of interest may be in the other pod, so apply the same command to the other pod if the information is not here.
+If an error had occurred in UAS that error would likely show up here.
+Because there are two replicas of `cray-uas-mgr` running, the logging of interest may be in the other pod, so apply the same command to the other pod if the information is not here.
+
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Troubleshoot UAIs by Viewing Log Output](Troubleshoot_UAIs_by_Viewing_Log_Output.md)

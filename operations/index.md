@@ -686,7 +686,7 @@ See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list 
 
 The User Access Service \(UAS\) is a containerized service managed by Kubernetes that enables application developers to create and run user applications. Users launch a User Access Instance \(UAI\) using the `cray` command. Users can also transfer data between the Cray system and external systems using the UAI.
 
-  * [User Access Service (UAS)](UAS_user_and_admin_topics/User_Access_Service_UAS.md)
+  * [User Access Service (UAS)](UAS_user_and_admin_topics/index.md)
   * [End-User UAIs](UAS_user_and_admin_topics/End_User_UAIs.md)
   * [Special Purpose UAIs](UAS_user_and_admin_topics/Special_Purpose_UAIs.md)
   * [Elements of a UAI](UAS_user_and_admin_topics/Elements_of_a_UAI.md)

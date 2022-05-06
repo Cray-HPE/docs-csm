@@ -1,16 +1,12 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
-
-[Next Topic: List Available UAI Images in Legacy Mode](List_Available_UAI_Images_in_Legacy_Mode.md)
-
-## Create and Use Default UAIs in Legacy Mode
+# Create and Use Default UAIs in Legacy Mode
 
 Create a UAI using the default UAI image or the default UAI class in legacy mode.
 
-### Procedure
+## Procedure
 
 1. Create a UAI with a command of the following form:
 
-    ```
+    ```bash
     user> cray uas create --public-key '<path>'
     ```
 
@@ -18,7 +14,7 @@ Create a UAI using the default UAI image or the default UAI class in legacy mode
 
 2. Watch the UAI and see when it is ready for logins.
 
-    ```
+    ```bash
     user> cray uas list
     ```
 
@@ -26,15 +22,15 @@ Create a UAI using the default UAI image or the default UAI class in legacy mode
 
 4. Delete the UAI when finished working with it.
 
-    ```
+    ```bash
     user> cray uas delete --uai-list '<uai-list>'
     ```
 
-### Example UAI Lifecycle
+## Example UAI Lifecycle
 
 In the following example, the user logs into the CLI using `cray auth login` with a user name and password matching that user's credentials in Keycloak.
 
-```
+```bash
 vers> cray auth login
 Username: vers
 Password:
@@ -46,7 +42,7 @@ results = []
 
 From there the user creates a UAI. The UAI starts out in a `Pending` or `Waiting` state as Kubernetes constructs its pod and starts its container running.
 
-```
+```bash
 vers> cray uas create --publickey ~/.ssh/id_rsa.pub
 uai_age = "0m"
 uai_connect_string = "ssh vers@34.136.140.107"
@@ -76,8 +72,8 @@ username = "vers"
 
 Using `cray uas list`, the user watches the UAI until it reaches a `Running: Ready` state. The UAI is now ready to accept SSH logins from the user, and the user then logs into the UAI to run a simple Slurm job, and logs out.
 
-```
-vers>  ssh vers@34.136.140.107
+```bash
+vers> ssh vers@34.136.140.107
 The authenticity of host '34.136.140.107 (34.136.140.107)' can't be established.
 ECDSA key fingerprint is SHA256:5gU4SPiw8UvcX7s+xJfVMKULaUi3e0E3i+XA6AklEJA.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
@@ -98,9 +94,11 @@ Connection to 34.136.140.107 closed.
 
 Now finished with the UAI, the user deletes it with `cray uas delete`. If the user has more than one UAI to delete, the argument to the `--uai-list` option can be a comma-separated list of UAI names.
 
-```
+```bash
 vers> cray uas delete --uai-list uai-vers-01b26dd1
 results = [ "Successfully deleted uai-vers-01b26dd1",]
 ```
+
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: List Available UAI Images in Legacy Mode](List_Available_UAI_Images_in_Legacy_Mode.md)
