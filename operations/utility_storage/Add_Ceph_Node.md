@@ -30,7 +30,7 @@
     ```
 
     **IMPORTANT:** In the output from `watch ceph -s` the health should go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about `failed to probe daemons or devices`, but this should clear on its own.
-    In addition, it may take up to 5 minutes for the added OSDs to report as `up`.  This is dependent on the Ceph Orchestrator performing an inventory and completing batch processing to add the OSDs.
+    In addition, it may take up to 5 minutes for the added OSDs to report as `up`. This is dependent on the Ceph Orchestrator performing an inventory and completing batch processing to add the OSDs.
 
 ## Zapping OSDs
 
@@ -84,18 +84,18 @@
 
 ## Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
 
-   **IMPORTANT:** `radosgw` by default is deployed to the first 3 storage nodes. This includes `haproxy` and `keepalived`.
-   This is automated as part of the install, but you may have to regenerate the configuration if you are not running on the first 3 storage nodes or all nodes.
+   **IMPORTANT:** `radosgw` by default is deployed to the first three storage nodes. This includes `haproxy` and `keepalived`.
+   This is automated as part of the install, but the configuration may need to be regenerated if not running on the first three storage nodes or all nodes.
 
 1. Deploy Rados Gateway containers to the new nodes.
 
-   - If running Rados Gateway on all nodes is the desired configuration then run:
+   - If running Rados Gateway on all nodes is the desired configuration, then run:
 
       ```bash
       ncn-s00(1/2/3)# ceph orch apply rgw site1 zone1 --placement="*" --port=8080
       ```
 
-   - If deploying to select nodes then do:
+   - If deploying to select nodes, then instead run:
 
      ```bash
      ncn-s00(1/2/3)# ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
@@ -143,7 +143,7 @@
      10.252.1.13
      ```
 
-     Update the HAproxy config to include the added node. Select a storage node `ncn-s00x` from `ncn-s001`, `ncn-s002`, or `ncn-s003`. This cannot be done from the added node.
+     Update the HAproxy configuration to include the added node. Select a storage node `ncn-s00x` from one of the first three storage nodes. This cannot be done from the added node.
 
      ```bash
      ncn-s00x# vi /etc/haproxy/haproxy.cfg
@@ -164,7 +164,7 @@
      ...
      ```
 
-     Copy the updated HAproxy config to all the storage nodes. Adjust the command based on the number of storage nodes.
+     Copy the updated HAproxy configuration to all the storage nodes. Adjust the command based on the number of storage nodes.
 
      ```bash
      ncn-s00x# pdcp -w ncn-s00[1-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
@@ -181,5 +181,5 @@
 
 ## Next Step
 
-- If rebuilding the storage node, proceed to [Storage Node Validation](../node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
-- If adding the storage node, return to [Boot NCN - Add storage node to the Ceph cluster](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn-storage-nodes-only) for the next step
+- If rebuilding the storage node, then proceed to [Storage Node Validation](../node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md).
+- If adding the storage node, return to [Boot NCN - Add storage node to the Ceph cluster](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn-storage-nodes-only) for the next step.

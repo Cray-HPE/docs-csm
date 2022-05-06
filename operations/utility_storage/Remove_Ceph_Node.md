@@ -12,8 +12,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
 ## IMPORTANT NOTES
 
-* Permanent removal of `ncn-s001`, `ncn-s002`, or `ncn-s003` is **NOT SUPPORTED**. They can only be rebuilt in place or replaced with new hardware.
-  * This is due to the Ceph mon and mgr processes running on them.
+* Permanent removal of `ncn-s001`, `ncn-s002`, or `ncn-s003` is **NOT SUPPORTED**. They can only be rebuilt in place or replaced with new hardware. This is due to the Ceph `mon` and `mgr` processes running on them.
 * Always ensure you have the free capacity to remove the node(s) prior to performing this task.
 * When removing a node other than `ncn-s001`, `ncn-s002`, or `ncn-s003`, the SMF pools quotas must be adjusted accordingly.
 * Removal of more than one node at a time is **NOT SUPPORTED** because the SMA telemetry pool only has 2 copies.
@@ -94,7 +93,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
 1. Remove any weight 0 orphaned OSDs.
 
-    If orphaned OSDs from the host $NODE remain that have weight 0, remove those OSDs.
+    If orphaned OSDs from the host `$NODE` remain that have weight 0, then remove those OSDs.
 
     ```bash
     ncn-s00(1/2/3)# ceph osd tree
@@ -138,7 +137,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
         ncn-s00(1/2/3)# vi /etc/haproxy/haproxy.cfg
         ```
 
-        This example removes NODE `ncn-s004` from the `backend rgw-backend`.
+        This example removes node `ncn-s004` from the `backend rgw-backend`.
 
         ```text
         ...
@@ -178,7 +177,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
         ncn-ms# ceph orch apply rgw site1 zone1 --placement="3 ncn-s001 ncn-s002 ncn-s003" --port=8080
         ```
 
-    1. Verify the Rados Gateway is running on the desired nodes.
+    1. Verify that the Rados Gateway is running on the desired nodes.
 
         ```bash
         ncn-ms# ceph orch ps --daemon_type rgw
