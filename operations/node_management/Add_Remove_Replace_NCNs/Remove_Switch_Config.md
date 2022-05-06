@@ -1,4 +1,4 @@
-# Remove Switch Config for NCN
+# Remove Switch Configuration for NCN
 
 ## Description
 

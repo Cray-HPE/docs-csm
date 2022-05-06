@@ -1,4 +1,4 @@
-# Python Library for SLS network data
+# Python Library for SLS Network Data
 
 This is a reusable Python library for safely interacting with SLS network data (in JSON format).
 

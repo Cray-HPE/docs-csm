@@ -6,7 +6,7 @@ This procedure allocates IP addresses for an NCN being added to a system to the 
 
 This procedure will perform and verify the following:
 
-1. If the NCN being added is `ncn-m00[1-3]`, `ncn-w00[1-3]`, or `ncn-s00[1-3]`, the IP address for the NCN is expected to already be present and consistent between SLS and BSS.
+1. If the NCN being added is one of the first three master, storage, or worker NCNs, then its IP address is expected to already be present and consistent between SLS and BSS.
 1. Otherwise, new IP addresses for the NCN will be allocated and verified to be within the static IP address pool in the `bootstrap_dhcp` subnet for the various networks in system.
 
 ## Procedure
@@ -26,11 +26,11 @@ This procedure will perform and verify the following:
     Sample row from the `HMN` tab of an SHCD:
     | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
     | --------------- | ----------------- | --------------------- | ----- | ------------ | ---- | ----------------- | ----------------- | ---------------------- | -------------------------- | ----- | ---------------------- |
-    | wn01            | x3000             | u04                   | -     |              |      | j3                | sw-smn01          | x3000                  | u14                        | -     | j48                    |
+    | `wn01`            | `x3000`             | `u04`                   | `-`     |              |      | `j3`                | `sw-smn01`          | `x3000`                  | `u14`                        | `-`     | `j48`                    |
 
-    > The Source name for the a worker NCN would be in the format of `wn01`, master NCNs are `mn01`, and storage NCNs have `sn01`.
+    > The Source name for the a worker NCN would be in the format of `wn01`; master NCNs are `mn01`, and storage NCNs are `sn01`.
 
-    Node xname format: xXcCsSbBnN
+    Node xname format: `xXcCsSbBnN`
 
     |   |                | SHCD Column to reference | Description
     | - | -------------- | ------------------------ | -----------
@@ -78,7 +78,7 @@ This procedure will perform and verify the following:
         HMN     | 10.254.1.21
     ```
 
-    > Depending on the networking configuration of the system the CMN or CAN networks may not be present in SLS network data. If CMN or CAN networks do not exist in SLS, then no IP will be allocated for that network.
+    > Depending on the networking configuration of the system, the CMN or CAN networks may not be present in SLS network data. If CMN or CAN networks do not exist in SLS, then no IP addresses will be allocated for that network.
 
 1. Allocate IP addresses for the NCN in SLS and HSM by adding the `--perform-changes` argument to the command in the previous step.
 

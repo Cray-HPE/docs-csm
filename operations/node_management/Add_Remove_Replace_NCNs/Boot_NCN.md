@@ -6,17 +6,17 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 ## Procedure
 
-### Open and Watch the console for the node being rebuilt
+### Open and Watch the console for the Node Being Rebuilt
 
 1. Log in to a second session in order to watch the console.
 
-   ***Please open this link in a new tab or page*** [Log in to a Node Using ConMan](../../conman/Log_in_to_a_Node_Using_ConMan.md)
+   ***Open this link in a new tab or page:*** [Log in to a Node Using ConMan](../../conman/Log_in_to_a_Node_Using_ConMan.md)
 
    The first session will be needed to run the commands in the following Rebuild Node steps.
 
-### Set the PXE boot option and power on the node
+### Set the PXE Boot Option and Power on the Node
 
-**IMPORTANT:** These commands assume the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#add-ncn-prerequisites) have been set.
+**IMPORTANT:** These commands assume that the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#add-ncn-prerequisites) have been set.
 
 1. Set the `BMC` variable to the hostname of the BMC of the node being rebuilt. If booting `ncn-m001`, set this to the FQDN or IP address.
 
@@ -54,13 +54,13 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 1. Verify that the node is on.
 
-    1. Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
+    Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
 
      ```bash
      linux# ipmitool -I lanplus -U root -E -H $BMC chassis power status
      ```
 
-### Observe the boot
+### Observe the Boot
 
 1. Within several minutes, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output.
 This indicates that the PXE boot has started the TFTP download of the `ipxe` program. Later messages will appear as the Linux kernel loads and the scripts in the `initrd` begin to run, including `cloud-init`.
@@ -80,7 +80,7 @@ This indicates that the PXE boot has started the TFTP download of the `ipxe` pro
 
 1. Use `ssh` to log in to the node in order to complete any remaining steps based on the node type.
 
-### Verify that the added master or worker node has joined the cluster
+### Verify that the Added mMaster or Worker Node Has Joined the Cluster
 
 **Skip this section if the node being added is a storage node.**
 
@@ -101,7 +101,7 @@ ncn-w003   Ready    <none>   20d    v1.19.9
 ncn-w004   Ready    <none>    1h    v1.19.9
 ```
 
-### Set the wipe flag to safeguard against the disk being wiped when the node is rebooted
+### Set the `no-wipe` Flag
 
 1. Run the following commands from a node that has `cray` CLI initialized:
 
@@ -121,9 +121,9 @@ ncn-w004   Ready    <none>    1h    v1.19.9
         | jq -r '.access_token')
     ```
 
-1. Do a PUT action for the edited JSON file.
+1. Do a `PUT` action for the edited JSON file.
 
-    * This command can be run from any node.
+    > This command can be run from any node.
 
     ```bash
     ncn# curl -i -s -k -H "Content-Type: application/json" \
@@ -134,21 +134,21 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
 1. Verify the `cray bss bootparameters list` command returns the expected information.
 
-    * Export the list from BSS to a file with a different name.
+    1. Export the list from BSS to a file with a different name.
 
-    ```bash
-    ncn-mw# cray bss bootparameters list --name ${XNAME} --format=json |jq .[]> ${XNAME}.check.json
-    ```
+        ```bash
+        ncn-mw# cray bss bootparameters list --name ${XNAME} --format=json |jq .[]> ${XNAME}.check.json
+        ```
 
-    * Compare the new JSON file with what was PUT into BSS.
+    1. Compare the new JSON file with what was PUT into BSS.
 
-    ```bash
-    ncn-mw# diff ${XNAME}.json ${XNAME}.check.json
-    ```
+        ```bash
+        ncn-mw# diff ${XNAME}.json ${XNAME}.check.json
+        ```
 
-    * The files should be identical
+        The command should return no output because the files should be identical.
 
-### Run NCN Personalizations using CFS as desired
+### Run NCN Personalizations using CFS as Desired
 
 1. Determine which configuration to apply to the node.
 
@@ -218,10 +218,10 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 ### Set BMC Management Roles
 
 Follow the [Set BMC Management Roles](../../hardware_state_manager/Set_BMC_Management_Role.md) procedure.
-This will mark the added NCN's BMC with the `Management` role, making BMCs that are associated with the management nodes easier to identify.
+This will mark the added NCN's BMC with the `Management` role, making it easier to identify as a BMC that is associated with a management node.
 This step is needed before locking the BCM of the added NCN.
 
-### Lock the management nodes
+### Lock the Management Nodes
 
 Follow the [How to Lock Management Single Node](../../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs) procedure.
 The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware, or from CAPMC to power off or do a power reset.
@@ -229,21 +229,19 @@ Doing any of these by accident will take down a management node. If the manageme
 
 <a name="configure-the-cli"></a>
 
-### Configure the Cray Command Line Interface (cray CLI)
+### Configure the Cray Command Line Interface (Cray CLI)
 
-**Skip this section if the node being added is a storage node.**
-
-See [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md)
+See [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md).
 
 <a name="boot-ncn-storage-nodes-only"></a>
 
-### Add storage node to the Ceph cluster
+### Add Storage Node to the Ceph Cluster
 
 **Skip this section if the node being added is NOT a storage node.**
 
 Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added storage node to the Ceph cluster.
 
-### Restore the site link for `ncn-m001`
+### Restore the Site Link for `ncn-m001`
 
 **Skip this section if the node being added is NOT `ncn-m001`.**
 
