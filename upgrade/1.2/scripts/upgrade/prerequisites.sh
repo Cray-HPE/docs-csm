@@ -435,7 +435,21 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
-    helm -n nexus upgrade cray-precache-images ${CSM_ARTI_DIR}/helm/cray-precache-images-*.tgz
+    helm uninstall -n nexus cray-precache-images
+    tmp_manifest=/tmp/precache-manifest.yaml
+
+cat > $tmp_manifest <<EOF
+apiVersion: manifests/v1beta1
+metadata:
+  name: cray-precache-images-manifest
+spec:
+  charts:
+  -
+EOF
+
+    yq r "${CSM_ARTI_DIR}/manifests/platform.yaml" 'spec.charts.(name==cray-precache-images)' | sed 's/^/    /' >> $tmp_manifest
+    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path $tmp_manifest
+
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
 else
