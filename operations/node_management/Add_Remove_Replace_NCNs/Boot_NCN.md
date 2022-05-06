@@ -18,7 +18,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 **IMPORTANT:** These commands assume the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#add-ncn-prerequisites) have been set.
 
-1. Set the BMC variable to the hostname of the BMC of the node being rebuilt. If booting `ncn-m001`, set this to the FQDN or IP address.
+1. Set the `BMC` variable to the hostname of the BMC of the node being rebuilt. If booting `ncn-m001`, set this to the FQDN or IP address.
 
     ```bash
     linux# BMC=${NODE}-mgmt

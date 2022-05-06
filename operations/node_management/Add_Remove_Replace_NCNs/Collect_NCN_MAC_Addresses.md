@@ -7,7 +7,7 @@ A temporary MAC address collection iPXE bootscript is put into place on the syst
 
 ## Procedure
 
-1. Verify that the `BMC_MAC` environment variable is set.
+1. Verify that the `BMC_IP` environment variable is set.
 
     ```bash
     ncn-m# echo $BMC_IP
