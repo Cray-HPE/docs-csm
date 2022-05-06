@@ -33,6 +33,8 @@ function scale_down_cephfs_clients () {
   backup_name="$now-snapshot"
 
   echo "Taking a snapshot of nexus pvc ($backup_name)"
+  #shellcheck disable=SC2034
+  #shellcheck disable=SC2046
   output=$(kubectl -n nexus exec -it $(kubectl get po -n nexus -l 'app=nexus' -o json | jq -r '.items[].metadata.name') -c nexus -- /bin/sh -c "mkdir /nexus-data/.snap/$backup_name" 2>&1)
   if [[ "$?" -ne 0 ]]; then
     echo "Did not find nexus pod to take snapshot from -- continuing..."
@@ -43,6 +45,7 @@ function scale_down_cephfs_clients () {
   rm -f $cephfs_statefulsets_replica_counts_file
   cnt=0
   client_list=$(kubectl get pvc -A -o json | jq -r '.items[] | select(.spec.storageClassName=="ceph-cephfs-external") | .metadata.namespace, .metadata.name')
+  #shellcheck disable=SC2206
   client_array=( $client_list )
   array_length=${#client_array[@]}
   while [[ "$cnt" -lt "$array_length" ]]; do
@@ -89,6 +92,7 @@ function scale_down_cephfs_clients () {
 function scale_up_cephfs_clients () {
   cnt=0
   client_list=$(kubectl get pvc -A -o json | jq -r '.items[] | select(.spec.storageClassName=="ceph-cephfs-external") | .metadata.namespace, .metadata.name')
+  #shellcheck disable=SC2206
   client_array=( $client_list )
   array_length=${#client_array[@]}
   while [[ "$cnt" -lt "$array_length" ]]; do

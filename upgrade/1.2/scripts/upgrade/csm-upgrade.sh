@@ -31,6 +31,7 @@ trap 'err_report' ERR
 . /etc/cray/upgrade/csm/myenv
 
 if [[ -z ${LOG_FILE} ]]; then
+    #shellcheck disable=SC2155
     export LOG_FILE="/root/output.log"
     echo
     echo
@@ -42,18 +43,21 @@ if [[ -z ${LOG_FILE} ]]; then
 fi
 
 state_name="VERIFY_K8S_NODES_UPGRADED"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/util/verify-k8s-nodes-upgraded.sh
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="PRE_CEPH_CSI_TARGET_REQUIREMENTS"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
@@ -70,12 +74,14 @@ if [[ $state_recorded == "0" ]]; then
     create_sma_1.2_storage_class
     create_cephfs_1.2_storage_class
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="PRE_STRIMZI_UPGRADE"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
@@ -84,12 +90,14 @@ if [[ $state_recorded == "0" ]]; then
     ./kafka-prereq.sh
     popd +0
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="CSM_SERVICE_UPGRADE"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
@@ -98,42 +106,49 @@ if [[ $state_recorded == "0" ]]; then
     ./upgrade.sh
     popd +0
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="POST_CSM_ENABLE_PSP"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     /usr/share/doc/csm/upgrade/1.2/scripts/k8s/enable-psp.sh
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="POST_STRIMZI_UPGRADE"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     /usr/share/doc/csm/upgrade/1.2/scripts/strimzi/kafka-restart.sh
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="FIX_SPIRE_ON_STORAGE"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"

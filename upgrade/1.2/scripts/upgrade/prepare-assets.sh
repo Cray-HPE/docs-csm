@@ -26,9 +26,11 @@
 set -e
 locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${locOfScript}/../common/upgrade-state.sh
+#shellcheck disable=SC2046
 . ${locOfScript}/../common/ncn-common.sh $(hostname)
 trap 'err_report' ERR
 # array for paths to unmount after chrooting images
+#shellcheck disable=SC2034
 declare -a UNMOUNTS=()
 
 while [[ $# -gt 0 ]]
@@ -97,6 +99,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
 
     # Download tarball file
     state_name="GET_CSM_TARBALL_FILE"
+    #shellcheck disable=SC2046
     state_recorded=$(is_state_recorded "${state_name}" $(hostname))
     if [[ $state_recorded == "0" ]]; then
         # Because we are getting a new tarball
@@ -110,6 +113,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
         # set TARBALL_FILE to newly downloaded file
         TARBALL_FILE=${CSM_RELEASE}.tar.gz
         } >> ${LOG_FILE} 2>&1
+        #shellcheck disable=SC2046
         record_state ${state_name} $(hostname)
         echo
     else
@@ -119,6 +123,7 @@ fi
 
 # untar csm tarball file
 state_name="UNTAR_CSM_TARBALL_FILE"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
@@ -134,33 +139,40 @@ if [[ $state_recorded == "0" ]]; then
     echo "export CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="INSTALL_CSI"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
+    #shellcheck disable=SC2046
     rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "cray-site-init*.rpm") 
 
     # upload csi to s3
     csi handoff upload-utils --kubeconfig /etc/kubernetes/admin.conf
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="INSTALL_CANU"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
+    #shellcheck disable=SC2046
     rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "canu*.rpm") 
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"

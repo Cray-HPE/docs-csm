@@ -43,10 +43,12 @@ function gather_ceph_conf () {
   fi
   if [[ "$WAS_OSD" == "true" ]]
   then
+    #shellcheck disable=SC2207
     OSDS+=($(ssh $node "ceph osd ls-tree $host"))
   fi
   CONF=$(ssh $node ceph config generate-minimal-conf)
   echo "fsid $FSID"
+  #shellcheck disable=SC2145
   echo "OSDS ${OSDS[@]}"
   echo "WAS_MON $WAS_MON"
   echo "WAS_OSD $WAS_OSD"
@@ -64,6 +66,7 @@ function apply_ceph_conf () {
         exit 1
       fi
     fi
+    #shellcheck disable=SC2068
     for osd in ${OSDS[@]}
     do
       if [[ ! -d /var/lib/ceph/$FSID/osd.$osd ]]
@@ -136,6 +139,7 @@ then
   (( ceph_mgr_successful_restarts=0 ))
   until [[ $(cephadm shell -- ceph-volume inventory --format json-pretty|jq '.[] | select(.available == true) | .path' | wc -l) == 0 ]]
   do
+      #shellcheck disable=SC2071
       if [[ $ceph_mgr_successful_restarts > 10 ]]
       then
         echo "Failed to bring in OSDs, manual troubleshooting required."
@@ -167,6 +171,7 @@ then
       do
          sleep 15
       done
+      #shellcheck disable=SC2068
       for osd in ${OSDS[@]}
       do
          echo "redeploying osd.$osd"
@@ -180,7 +185,7 @@ then
      fi
   fi
 fi
-echo “loop counter: $loop_counter”
+echo "loop counter: $loop_counter"
 done
 
 num_storage_nodes=$(craysys metadata get num_storage_nodes)

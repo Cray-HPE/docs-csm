@@ -32,11 +32,17 @@ if [[ "$rc" -ne 0 ]]; then
 fi
 
 source /srv/cray/scripts/metal/lib.sh
+#shellcheck disable=SC2155
 export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"
+#shellcheck disable=SC2046
 echo $(kubeadm init phase upload-certs --upload-certs 2>&1 | tail -1) > /etc/cray/kubernetes/certificate-key
+#shellcheck disable=SC2155
 export CERTIFICATE_KEY=$(cat /etc/cray/kubernetes/certificate-key)
+#shellcheck disable=SC2155
 export MAX_PODS_PER_NODE=$(craysys metadata get kubernetes-max-pods-per-node)
+#shellcheck disable=SC2155
 export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
+#shellcheck disable=SC2155
 export SERVICES_CIDR=$(craysys metadata get kubernetes-services-cidr)
 envsubst < /srv/cray/resources/common/kubeadm.yaml > /etc/cray/kubernetes/kubeadm.yaml
 

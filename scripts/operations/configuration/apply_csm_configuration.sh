@@ -127,11 +127,14 @@ if [[ -z "${CLONE_URL}" ]]; then
 fi
 
 if [[ -z "${COMMIT}" ]]; then
+    #shellcheck disable=SC1083
     VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+    #shellcheck disable=SC1083
     VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
     TEMP_DIR=`mktemp -d`
     TEMP_HOME=$HOME
     HOME=$TEMP_DIR
+    #shellcheck disable=SC2164
     cd $TEMP_DIR
     echo "${CLONE_URL/\/\//\/\/${VCS_USER}:${VCS_PASSWORD}@}" > .git-credentials
     git config --file .gitconfig credential.helper store
@@ -142,11 +145,13 @@ if [[ -z "${COMMIT}" ]]; then
         echo "No git commit found"
         exit 1
     fi
+    #shellcheck disable=SC2164
     cd - >/dev/null 2>&1
     HOME=$TEMP_HOME
     rm -r $TEMP_DIR
 fi
 
+#shellcheck disable=SC2089
 CONFIG="{
   \"layers\": [
     {
@@ -159,6 +164,7 @@ CONFIG="{
 }"
 
 echo "Creating the configuration file ${CSM_CONFIG_FILE}"
+#shellcheck disable=SC2090
 echo $CONFIG | jq > $CSM_CONFIG_FILE
 
 if [[ -n ${OLD_NCN_CONFIG_FILE} && -f ${OLD_NCN_CONFIG_FILE} ]]; then

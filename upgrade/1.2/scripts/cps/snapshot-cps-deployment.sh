@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Take cps deployment snapshot (if cps installed)
 set +e
 trap - ERR
