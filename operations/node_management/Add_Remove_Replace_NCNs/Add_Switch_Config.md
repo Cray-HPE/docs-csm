@@ -1,4 +1,4 @@
-# Add Switch Config for NCN
+# Add Switch Configuration for NCN
 
 ## Description
 

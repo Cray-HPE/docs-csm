@@ -10,9 +10,9 @@ Only follow the steps in the section for the node type that was added:
 
 ## Validate: Master Node
 
-Validate the master node added successfully.
+Validate theat the master node added successfully.
 
-1. Verify the new node is in the cluster.
+1. Verify that the new node is in the cluster.
 
     Run the following command from any master or worker node that is already in the cluster. It is helpful to run this command several times to watch for the newly rebuilt node to join the cluster. This should occur within 10 to 20 minutes.
 
@@ -59,7 +59,7 @@ Validate the master node added successfully.
 
 ## Validate: Worker Node
 
-Validate the worker node added successfully.
+Validate that the worker node added successfully.
 
 1. Verify the new node is in the cluster.
 
@@ -100,7 +100,7 @@ Validate the worker node added successfully.
 
 1. Confirm the pods are beginning to get scheduled and reach a `Running` state on the worker node.
 
-    Run this command on any master or worker node. This command assumes you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#add-ncn-prerequisites).
+    Run this command on any master or worker node. This command assumes that you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#add-ncn-prerequisites).
 
     ```bash
     ncn# kubectl get po -A -o wide | grep $NODE
@@ -110,7 +110,7 @@ Validate the worker node added successfully.
 
 ## Validate: Storage Node
 
-Validate the storage node added successfully. The following examples are based on a storage cluster that was expanded from three nodes to four.
+Validate that the storage node added successfully. The following examples are based on a storage cluster that was expanded from three nodes to four.
 
 1. Verify the Ceph status looks correct.
     1. Get the current Ceph status:
@@ -146,12 +146,12 @@ Validate the storage node added successfully. The following examples are based o
           ```
 
     1. Verify that the status shows the following:
-        - 3 `mon`s
-        - 3 `mds`
-        - 3 `mgr` processes
-        - 1 `rgw` for each storage node (4 in this example)
+        - Three `mon`s
+        - Three `mds`
+        - Three `mgr` processes
+        - One `rgw` for each storage node (four total in this example)
 
-1. Verify the added host contains OSDs and the OSDs are up.
+1. Verify that the added host contains OSDs and that the OSDs are up.
 
     ```bash
     ncn-m# ceph osd tree
@@ -186,11 +186,11 @@ Validate the storage node added successfully. The following examples are based o
     17    ssd   1.74660          osd.17         up   1.00000  1.00000
     ```
 
-1. Verify the `radosgw` and `haproxy` are correct.
+1. Verify that the `radosgw` and `haproxy` are correct.
 
     Run the following command on the added storage node.
 
-    There will be an output \(without an error\) returned if `radosgw` and `haproxy` are correct.
+    There will be output \(without an error\) if `radosgw` and `haproxy` are correct.
 
     ```bash
     ncn-s# curl -k https://rgw-vip.nmn
