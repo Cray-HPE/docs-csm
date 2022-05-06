@@ -82,6 +82,7 @@ fi
 {
 first_master_hostname=`curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | \
      jq -r '.[] | ."cloud-init"."meta-data"."first-master-hostname"'`
+#shellcheck disable=SC2053
 if [[ ${first_master_hostname} == ${target_ncn} ]]; then
    state_name="RECONFIGURE_FIRST_MASTER"
    state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})

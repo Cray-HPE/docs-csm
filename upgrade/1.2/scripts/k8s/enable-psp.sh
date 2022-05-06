@@ -31,6 +31,7 @@ for master in $(kubectl get nodes | grep 'master' | awk '{print $1}'); do
 echo "* Enabling PodSecurityPolicy on kube-apiserver node ${master}"
   ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$master" "sed -i 's/--enable-admission-plugins=NodeRestriction$/--enable-admission-plugins=NodeRestriction,PodSecurityPolicy/' /etc/kubernetes/manifests/kube-apiserver.yaml"
 
+#shellcheck disable=SC2034
 for i in 1 2 3 4 5; do
   if kubectl describe pod -n kube-system "kube-apiserver-${master}" | grep -q 'enable-admission-plugins=NodeRestriction,PodSecurityPolicy'; then
     sleep 5

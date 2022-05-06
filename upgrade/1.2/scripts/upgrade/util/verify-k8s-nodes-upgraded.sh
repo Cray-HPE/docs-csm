@@ -26,7 +26,10 @@
 EXPECTED_VERSION="v1.20.13"
 display_output=$(kubectl get nodes)
 versions=$(kubectl get nodes -o json | jq -r '.items[].status.nodeInfo.kubeletVersion')
+#shellcheck disable=SC3030
+#shellcheck disable=SC2206
 stringarray=($versions)
+#shellcheck disable=SC3054
 for version in "${stringarray[@]}"; do
   if [ "$version" != "$EXPECTED_VERSION" ]; then
     echo "FAILURE: Not all NCNs have been updated to ${EXPECTED_VERSION}!"

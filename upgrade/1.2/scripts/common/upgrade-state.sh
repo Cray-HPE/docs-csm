@@ -75,6 +75,7 @@ function move_state_file () {
 }
 
 function err_report() {
+    #shellcheck disable=SC2155
     local caller="$(caller)"
     local cmd="$BASH_COMMAND"
     if [[ ! -z $NO_ERROR_TRAP ]]; then

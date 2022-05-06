@@ -30,11 +30,14 @@ for host in $(ceph node ls| jq -r '.osd|keys[]')
  do
   for osd in $(ceph node ls| jq --arg host_key "$host" -r '.osd[$host_key]|values|tostring|ltrimstr("[")|rtrimstr("]")'| sed "s/,/ /g")
    do
+    #shellcheck disable=SC2076
     if [[ ! "$(ceph tell osd.$osd version|jq -r '.version')" =~ "15.2.8" ]]
      then
+        #shellcheck disable=SC2154
         timeout 300 ssh "$host" "cephadm --image $registry/ceph/ceph:v15.2.8 adopt --style legacy --name osd.$osd" --skip-pull
         if [ $? -ne 0 ]
         then
+          #shellcheck disable=SC2046
           ceph mgr fail $(ceph mgr dump | jq -r .active_name)
         fi
         sleep 10
@@ -51,9 +54,11 @@ for host in $(ceph node ls| jq -r '.osd|keys[]')
        do
 	   (( counter++ ))
            sleep 30
+     #shellcheck disable=SC2071
 	   if [[ $counter > 10 ]]
 	   then
 	     echo "OSD status should have been active by now, failing the mgr process and restarting the OSD"
+              #shellcheck disable=SC2046
              ceph mgr fail $(ceph mgr dump | jq -r .active_name)
 	     echo "Sleep 30 seconds to allow the new mgr process to start"
              echo "Restarting OSD $osd"

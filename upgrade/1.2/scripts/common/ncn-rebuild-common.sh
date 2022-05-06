@@ -136,6 +136,7 @@ fi
     echo "mgmt IP/Host: ${target_ncn_mgmt_host}"
 
     # retrieve IPMI username/password from vault
+    #shellcheck disable=SC1083
     VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.data.vault-root} | base64 -d)
     # Make sure we got a vault token
     [[ -n ${VAULT_TOKEN} ]]
@@ -153,6 +154,7 @@ fi
             jq -r '.data.Username')
         # If we are not able to get the username, no need to try and get the password.
         [[ -n ${IPMI_USERNAME} ]] || continue
+        #shellcheck disable=SC2155
         export IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
             "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
             vault kv get -format=json secret/hms-creds/$TARGET_MGMT_XNAME" | 
