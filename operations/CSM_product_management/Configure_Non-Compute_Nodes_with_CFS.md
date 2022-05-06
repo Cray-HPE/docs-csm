@@ -86,9 +86,9 @@ System (COS) and User Access Node (UAN) configurations enable passwordless SSH.
 Refer to the following in the documentation for each product stream to change
 the default configuration:
 
-  * COS: Refer to the _VCS Configuration_ section in the _Install or Upgrade COS_
-    procedure.
-  * UAN: Refer to _Create UAN Boot Images_ and _UAN Ansible Roles_ procedures.
+* COS: Refer to the _VCS Configuration_ section in the _Install or Upgrade COS_
+  procedure.
+* UAN: Refer to _Create UAN Boot Images_ and _UAN Ansible Roles_ procedures.
 
 Modifying Ansible plays in a configuration repository will require a new commit
 and subsequent update of the [configuration layer](../configuration_management/Configuration_Layers.md)
@@ -115,7 +115,7 @@ keys will be republished.
     ncn# kubectl delete secret -n services csm-private-key
     ```
 
-1. Delete the `csm-public-key` Kubernetes configmap.
+1. Delete the `csm-public-key` Kubernetes ConfigMap.
 
     ```bash
     ncn# kubectl delete configmap -n services csm-public-key
