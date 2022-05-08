@@ -59,6 +59,14 @@ class GWException(Exception):
     this application.
     """
 
+def resolvable(service):
+    ret = os.system("nslookup {} >/dev/null".format(service))
+    if ret != 0:
+        print("{} is NOT resolvable".format(service))
+        return False
+    else:
+        return True
+
 def reachable(service):
     ret = os.system("ping -q -c 3 {} >/dev/null".format(service))
     if ret != 0:
@@ -97,10 +105,13 @@ def get_access_token(adminSecret, tokenNet, nmn_override):
 
     url = "https://{}/keycloak/realms/shasta/protocol/openid-connect/token".format(tokendomain)
  
+    if not resolvable(tokendomain):
+        return None
+
     if not reachable(tokendomain):
         return None
    
-    try: 
+    try:
       r = requests.post(url, data = payload, verify = False)
     except Exception as err:
         print("{}".format(err))
@@ -175,12 +186,12 @@ def get_vs_gateways(vsyaml):
 if __name__ == '__main__':
 
     numarg = len(sys.argv)
-    test_defn_file = "./gateway-test-defn.yaml"
+    test_defn_file = "{}/gateway-test-defn.yaml".format(os.path.dirname(sys.argv[0]))
     TEST_FAILED = 0
 
     # Process the arguments
-    if numarg < 2:
-      print("Usage: {} <system-domain> [<user-network>]".format(sys.argv[0]))
+    if numarg < 3:
+      print("Usage: {} <system-domain> <node-type> [<user-network>]".format(sys.argv[0]))
       logging.critical("Wrong number of arguments passed. Args = {}.".format(sys.argv))
       sys.exit(1)
 
@@ -190,6 +201,7 @@ if __name__ == '__main__':
       sys.exit(1)
 
     SYSTEM_DOMAIN = (sys.argv[1]).lower() 
+    NODE_TYPE = (sys.argv[2]).lower()
     ADMIN_SECRET = os.environ.get("ADMIN_CLIENT_SECRET", "")
 
     # Load the service definitions
@@ -197,7 +209,7 @@ if __name__ == '__main__':
         svcs = yaml.load(f, Loader=yaml.FullLoader)
 
     # initialize k8s if we are running from an NCN
-    if os.path.exists("/bin/craysys"):
+    if NODE_TYPE == "ncn":
       config.load_kube_config()
       k8sClientApi = client.CoreV1Api()
       ADMIN_SECRET = get_admin_secret(k8sClientApi)
@@ -207,19 +219,39 @@ if __name__ == '__main__':
         print("ADMIN_CLIENT_SECRET not defined")
         sys.exit(1)
 
+    reachnets = []
+
     # Get the user network
-    if numarg == 3:
-      USER_NET = (sys.argv[2]).lower()
+    if numarg == 4:
+      USER_NET = (sys.argv[3]).lower()
       if USER_NET not in ["can", "chn"]:
         print("{} is not a valid network".format(USER_NET))
         sys.exit(1)
-      reachnets = svcs['reachable-networks']
     else:
-      reachnets = get_sls_networks(ADMIN_SECRET, SYSTEM_DOMAIN, svcs['test-networks'])
-      if "can" in reachnets:
+      slsnetworks = get_sls_networks(ADMIN_SECRET, SYSTEM_DOMAIN, svcs['test-networks'])
+      if "can" in slsnetworks:
         USER_NET = "can"
-      if "chn" in reachnets:
+      if "chn" in slsnetworks:
         USER_NET = "chn"
+    reachnets.append(USER_NET)
+
+    if NODE_TYPE == "ncn":
+      reachnets.append("nmnlb")
+      reachnets.append("cmn")
+    elif NODE_TYPE == "cn":
+      reachnets.append("nmnlb")
+      if "can" in reachnets:
+        reachnets.remove("can")
+    elif NODE_TYPE == "uan":
+      reachnets.append("nmnlb")
+    elif NODE_TYPE == "outside":
+      reachnets.append("cmn")
+    elif NODE_TYPE != "uai":
+      print("Invalid node type {}".format(NODE_TYPE))
+      logging.critical("Invalid node type {}".format(NODE_TYPE))
+      sys.exit(1)
+
+    print("Reachable networks: {}".format(reachnets))
 
     for tokennet in svcs['test-networks']:
 
@@ -231,12 +263,17 @@ if __name__ == '__main__':
         # if the network in not in the set of reachable networks then it is expected
         # that we cannot get the token
         if tokname not in reachnets:
-            continue
+          print("Could not retrieve token for {} (expected)".format(tokname))
+          continue
         else:
-            sys.exit(1)
+          print("FAIL: Could not retrieve token for {}".format(tokname))
+          TEST_FAILED = 1
+          continue
       else:
         if tokname not in reachnets:
-            sys.exit(1)
+          print("FAIL: Token retrieved for {} network which should be unreachable".format(tokname))
+          TEST_FAILED = 1
+          continue
 
       for net in svcs['test-networks']:
 
@@ -248,16 +285,16 @@ if __name__ == '__main__':
 
         print("\n------------- {} -------------------".format(domain))
 
-        if not reachable(domain):
+        if not resolvable(domain) or not reachable(domain):
             if netname in reachnets:
-                    print("{} is expected to be reachable but is not".format(netname))
+                    print("FAIL: {} is not reachable".format(netname))
                     TEST_FAILED = 1
             else:
-                print("{} is not reachable and is not expected to be".format(netname))
+                print("{} is not reachable (expected)".format(netname))
                 continue
 
         if netname not in reachnets:
-            print("{} is reachable but is not expected to be".format(netname))
+            print("FAIL: {} is reachable".format(netname))
             TEST_FAILED = 1
             continue
 
@@ -275,11 +312,9 @@ if __name__ == '__main__':
 
           url = scheme + "://" + domain + "/" + svcpath
 
-          if os.path.exists("/bin/craysys"):
+          if NODE_TYPE == "ncn":
           # Getting the gateways from the Virtual Service definitions
           # This can only be done if we are running the tests from an NCN
-          # The best way I could find to determine if we are running on an NCN is to see if craysys is installed.
-          # There may be a better way
               vsyaml = get_vs(svcs['ingress_api_services'][i])
               if vsyaml is None:
                  print("SKIP - [" + svcname + "]: " + url + " - virtual service not found")
