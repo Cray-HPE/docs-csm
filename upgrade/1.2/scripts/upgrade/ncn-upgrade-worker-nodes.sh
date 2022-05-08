@@ -128,7 +128,7 @@ if [[ $redeploy == "1" ]];then
             fi
             echo "Command failed: cray cps deployment list --nodes $target_ncn; retrying in 5 seconds"
             sleep 5
-            let count += 1
+            let "count += 1"
             continue
         fi
         cps_state=$(grep -E "state =" "$tmpfile"|grep -v "running" | wc -l)
@@ -141,7 +141,7 @@ if [[ $redeploy == "1" ]];then
             fi
             echo "CPS not running yet on $target_ncn; checking again in 5 seconds"
             sleep 5
-            let count += 1
+            let "count += 1"
             continue
         fi
         rm -f "$tmpfile" >/dev/null 2>&1 || true
@@ -154,7 +154,7 @@ if [[ $redeploy == "1" ]];then
             fi
             echo "CPS pod not assigned yet to $target_ncn; checking again in 5 seconds"
             sleep 5
-            let count += 1
+            let "count += 1"
             continue
         fi
         break
