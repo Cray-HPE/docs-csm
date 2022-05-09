@@ -91,8 +91,9 @@ BOSv2
 Burstable
 busses
 cadvisor
+CAN
 CAN-to-CMN
-Canu
+CANU
 CANU-generated
 CAs
 Cassini
@@ -107,11 +108,13 @@ CFS-Batcher
 CFS-BOA
 channeled
 checkmark
+CHN
 chrony
 cleanup
 ClusterStor
 CMCs
 CMMs
+CMN
 CNs
 color
 colored
@@ -183,6 +186,10 @@ HashiCorp
 HashiCorp's
 heartbeating
 highspeed
+HMN
+HMNLB
+HMN_MTN 
+HMN_RVR
 honored
 hostname
 hostnames
@@ -286,7 +293,10 @@ nFPGA
 NICs
 NIDs
 NMCs
-non-0
+NMN
+NMNLB
+NMN_MTN
+NMN_RVR
 non-airgapped
 non-failsafe
 non-HPE
@@ -320,7 +330,6 @@ PDUs
 PECs
 PEM-encoded
 permissioned
-Pfx
 PGs
 pickup
 PIM-SM
@@ -409,7 +418,6 @@ specialty
 spilo
 SquashFS
 SR-IOV
-sS
 SSHing
 SSHKey
 standalone
@@ -498,7 +506,6 @@ Windom
 wireshark
 workarea
 writable
-wW
 X.509
 xname
 xnames
