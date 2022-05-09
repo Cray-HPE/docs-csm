@@ -1,10 +1,10 @@
-# Validate Switch Configs
+# Validate Switch Configurations
 
 ## Prerequisites
 
 * SSH access to the switches or the running configuration file.
 * Generated switch configurations.
-  * [Generate Switch Config](generate_switch_configs.md)
+  * [Generate Switch Configurations](generate_switch_configs.md)
 * CANU installed with version 1.1.11 or greater.
   * Run `canu --version` to see version.
   * If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md)
