@@ -4,11 +4,10 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
 ## Prerequisites
 
-* This procedure requires administrative privileges.
-* 3 ssh sessions.
-  * 1 to monitor the cluster.
-  * 1 to perform ***cluster wide*** actions from a ceph-mon node.
-  * 1 to perform ***node only*** actions on the node being removed.
+* This procedure requires administrative privileges and three `ssh` sessions.
+  * One to monitor the cluster.
+  * One to perform ***cluster wide*** actions from a `ceph-mon` node.
+  * One to perform ***node only*** actions on the node being removed.
 
 ## IMPORTANT NOTES
 
@@ -214,7 +213,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
 1. In the output from `ceph -s`, verify that the status is `HEALTH_OK`.
 
-    **NOTE:** If ncn-s001/2/3 has been temporarily removed, `HEALTH_WARN` will be seen until the storage node is added back to the cluster.
+    **NOTE:** If `ncn-s001`, `ncn-s002`, or `ncn-s003` has been temporarily removed, `HEALTH_WARN` will be seen until the storage node is added back to the cluster.
 
     ```text
      health: HEALTH_WARN
