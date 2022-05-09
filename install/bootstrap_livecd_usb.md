@@ -359,33 +359,10 @@ Some files are needed for generating the configuration payload. See these topics
       ```
 
    1. Generate the system config:
-      > **Note:** the provided command below is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary significatnly depending on ones system and site configuration.
+      > **Note:** Run `csi config init --help` to print a full list of parameters that must be set. These will vary significatnly depending on ones system and site configuration.
 
       ```bash
-      linux# cd ${PITDATA}/prep && csi config init \
-          --bootstrap-ncn-bmc-user root \
-          --bootstrap-ncn-bmc-pass ${IPMI_PASSWORD} \
-          --system-name ${SYSTEM_NAME} \
-          --can-cidr 10.103.11.0/24 \
-          --cmn-cidr 10.103.11.0/24 \
-          --can-external-dns 10.103.11.113 \
-          --can-gateway 10.103.11.1 \
-          --cmn-gateway 10.103.11.1 \
-          --can-static-pool 10.103.11.112/28 \
-          --can-dynamic-pool 10.103.11.128/25 \
-          --nmn-cidr 10.252.0.0/17 \
-          --hmn-cidr 10.254.0.0/17 \
-          --ntp-pools time.nist.gov \
-          --site-domain dev.cray.com \
-          --site-ip 172.30.53.79/20 \
-          --site-gw 172.30.48.1 \
-          --site-nic p1p2 \
-          --site-dns 172.30.84.40 \
-          --install-ncn-bond-members p1p1,p10p1 \
-          --application-node-config-yaml application_node_config.yaml \
-          --cabinets-yaml cabinets.yaml \
-          --hmn-mtn-cidr 10.104.0.0/17 \
-          --nmn-mtn-cidr 10.100.0.0/17 \
+      linux# cd ${PITDATA}/prep && csi config init <options>
       ```
 
       A new directory matching the `--system-name` argument will now exist in the working directory.
