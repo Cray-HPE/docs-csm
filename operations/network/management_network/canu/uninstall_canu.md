@@ -2,8 +2,6 @@
 
 Uninstalling CANU can be achieved by:
 
+```ShellSession
+linux# pip3 uninstall canu
 ```
-pip3 uninstall canu
-```
-
-[Back to Index](../index.md)
