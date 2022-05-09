@@ -10,7 +10,7 @@ Only follow the steps in the section for the node type that was added:
 
 ## Validate: Master Node
 
-Validate theat the master node added successfully.
+Validate that the master node added successfully.
 
 1. Verify that the new node is in the cluster.
 
@@ -100,7 +100,7 @@ Validate that the worker node added successfully.
 
     After several minutes of the node joining the cluster, pods should be in a `Running` state for the worker node.
 
-1. Confirm the three mountpoints exist.
+1. Confirm that the three mount points exist.
 
     Run the following command on the added node.
 
