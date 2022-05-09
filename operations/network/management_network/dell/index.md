@@ -61,9 +61,9 @@ See [CSM Automatic Network Utility (CANU)](../canu/index.md)
 
 * [Access Control Lists (ACLs)](acl.md)
 
-### Quality of Service
+### Quality of Service (QoS)
 
-* [Qos](qos.md)
+* [QoS](qos.md)
 
 ### Performing Upgrade on Dell Switches
 
