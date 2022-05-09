@@ -43,7 +43,7 @@ For more information about modifying `customizations.yaml` and tuning based on s
 
 - Troubleshooting NTP
 
-   During upgrades, clock skew may occur when rebooting nodes. If one node is rebooted and its clock differs signifigantly from those that have **not** been rebooted, it can
+   During upgrades, clock skew may occur when rebooting nodes. If one node is rebooted and its clock differs significantly from those that have **not** been rebooted, it can
    cause slight contention among the other nodes because it rejoins the other NCNs and the new time of that NCN has to be calculated with that of the other NCNs. Waiting
    for Chrony to slowly adjust the clocks can resolve intermittent clock skew issues. If it does not resolve on its own, follow the
    [Configure NTP on NCNs](../../operations/node_management/Configure_NTP_on_NCNs.md) procedure to troubleshoot it further.
