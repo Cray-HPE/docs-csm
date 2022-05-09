@@ -184,7 +184,7 @@ The Symptom statement describes what a user might experience if this is seen on 
 ### Security Bulletin Subscription Service
 
 To initiate a subscription to receive future HPE Security Bulletin alerts via email,
-see the [HPE Support Center](https://support.hpe.com/connect/s/?language=en_US).
+see the [`HPE Support Center`](https://support.hpe.com/connect/s/?language=en_US).
 
 A Security Bulletin is the published notification of security vulnerabilities and is the only communication
 vehicle for security vulnerabilities.
