@@ -38,9 +38,9 @@ accessory drawings in this document are for illustration only, and may not exact
 
 To check the current state of the switches, see the [upgrade](upgrade.md) page.
 
-* 1.0 Config: Non generated switch configurations.
-* 1.2 Preconfig: CANU generated configurations for 1.0
-* 1.2 Config: CANU generated configurations for 1.2
+* `1.0 Config`: Non-generated switch configurations
+* `1.2 Preconfig`: CANU-generated configurations for 1.0
+* `1.2 Config`: CANU-generated configurations for 1.2
 
 <a name="starting"></a>
 
@@ -50,7 +50,7 @@ To check the current state of the switches, see the [upgrade](upgrade.md) page.
   * This can either be 1.0 generated or 1.2 generated.
   * [upgrade](upgrade.md)
 * Current switch configurations are generated and need to go to 1.2.
-  * [1.2 (Preconfig) to 1.2](1.0_to_1.2_upgrade.md)
+  * [`1.2 (Preconfig)` to 1.2](1.0_to_1.2_upgrade.md)
 * Switches have no configuration on them.
   * [Fresh Install](fresh_install.md)
 * Reinstalling the same CSM version.
@@ -89,17 +89,17 @@ See [CSM Automatic Network Utility (CANU)](canu/index.md)
   * Shows how the HMN tab on the SHCD should be formatted.
 * [SHCD Connection Rules](../../../install/shcd_hmn_connections_rules.md)
   * Shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.
-* [Backup Custom Config](backup_custom_config.md)
+* [Backup Custom Configuration](backup_custom_config.md)
   * Shows users how to backup configuration that is custom to their system; this includes site connections and credentials.
 * [Configuration Management](config_management.md)
   * Shows users how to save a running configuration to the switch for backup purposes or to switch between different switch configurations.
-* [Validate Switch Config](validate_switch_configs.md)
+* [Validate Switch Configuration](validate_switch_configs.md)
   * Compares the configuration on a running system to what is generated.
 * [Wipe Management Switches](wipe_mgmt_switches.md)
   * Erase the switch configuration, this is useful for fresh installs.
-* [Generate Switch Configs](generate_switch_configs.md)
+* [Generate Switch Configurations](generate_switch_configs.md)
   * Generate configurations for all management switches.
-* [Manual Switch Configs](manual_switch_config.md)
+* [Manual Switch Configurations](manual_switch_config.md)
   * Some configuration needs to be done manually (authentication/SNMP).
 * [Validate SHCD](validate_shcd.md)
   * Validate the SHCD against the CSM network architecture.
@@ -110,15 +110,15 @@ See [CSM Automatic Network Utility (CANU)](canu/index.md)
 
 This release applies to the following product models:
 
-* Aruba 8320 Switch Series
-* Aruba 8325 Switch Series
-* Aruba 8360 Switch Series
-* Aruba 6300 Switch Series
-* Mellanox SN2100 Switch Series
-* Mellanox SN2700 Switch Series
-* Dell S3048-ON Switch Series
-* Dell S4148T-ON Switch Series
-* Dell S4148F-ON Switch Series
+* Aruba `8320` Switch Series
+* Aruba `8325` Switch Series
+* Aruba `8360` Switch Series
+* Aruba `6300` Switch Series
+* Mellanox `SN2100` Switch Series
+* Mellanox `SN2700` Switch Series
+* Dell `S3048-ON` Switch Series
+* Dell `S4148T-ON` Switch Series
+* Dell `S4148F-ON` Switch Series
 
 <a name="architecture"></a>
 
@@ -184,7 +184,7 @@ The Symptom statement describes what a user might experience if this is seen on 
 ### Security Bulletin Subscription Service
 
 To initiate a subscription to receive future HPE Security Bulletin alerts via email,
-see the [HPE Support Center](https://support.hpe.com/connect/s/?language=en_US).
+see the [`HPE Support Center`](https://support.hpe.com/connect/s/?language=en_US).
 
 A Security Bulletin is the published notification of security vulnerabilities and is the only communication
 vehicle for security vulnerabilities.

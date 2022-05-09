@@ -100,7 +100,7 @@ In addition, a clean run will have the following sections:
 #### Check Warnings
 
 **Critical:** The `Warnings` output will contain a section headed `Node type could not be determined for the following`. This needs to
-be carefully reviewed because it may contain site uplinks that are not tracked by CANU but may also contain mis-spelled or mis-categorized
+be carefully reviewed because it may contain site uplinks that are not tracked by CANU, and may also contain misspelled or mis-categorized
 nodes. As an example:
 
 For example:
@@ -134,7 +134,7 @@ Cell: P16      Name: SITE
 
 1. CAN and SITE uplinks are not in the *clean run* model. This means that these ports will not be configured.
 
-1. Critically, Cell I38 has a name of "sw-spinx-002". This should be noted as a misspelling of "sw-spine-002" and corrected.
+1. Critically, cell `I38` has a name of `sw-spinx-002`. This should be noted as a misspelling of `sw-spine-002` and corrected.
 
 ## Check SHCD Port Usage
 
@@ -156,7 +156,7 @@ connections list is vital. Specifically, check:
 Once the SHCD has run cleanly through CANU and CANU output has been manually validated, changes to the SHCD should be
 *committed* so that work is not lost, and other users can take advantage of the CANU changes.
 
-1. Add an entry to the changelog Config. Summary first worksheet.
+1. Add an entry to the changelog on the first worksheet (`Summary`).
 
    The changelog should include:
 
