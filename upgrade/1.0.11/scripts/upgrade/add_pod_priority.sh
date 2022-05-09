@@ -157,7 +157,7 @@ for statefulset in $STATEFULSETS; do
 done
 
 echo "Creating a backup of cray-bss etcdcluster prior to restarting the cluster"
-kubectl exec -it -n operators $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') -c util -- create_backup cray-bss pod-priority-backup-$(date "+%D-%T") | grep -v 'unknown operand'
+kubectl exec -it -n operators $(kubectl get pod -n operators -l app.kubernetes.io/name=cray-etcd-backup -o jsonpath='{.items[0].metadata.name}') -c util -- create_backup cray-bss pod-priority-backup-$(date "+%D-%T") | grep -v 'unknown operand'
 
 for etcdcluster in $ETCDCLUSTERS; do
   ns=$(kubectl get etcdcluster -A | grep " $etcdcluster " | awk '{print $1}')
