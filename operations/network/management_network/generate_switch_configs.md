@@ -1,4 +1,4 @@
-# Generate Switch Configs
+# Generate Switch Configurations
 
 Generating configuration files can be done for singular switch or for the full system.
 
@@ -14,7 +14,7 @@ For example, if there is a suspected configuration issue on single switch, a con
 * JSON output from validated SHCD.
   * See [Validate SHCD](validate_shcd.md).
 * System Layout Service (SLS) input file.
-  * If generating CSM 1.2 configs the SLS file will need to be updated prior to generating configurations.
+  * If generating CSM 1.2 configurations, the SLS file will need to be updated prior to generating configurations.
   * See [Collect Data](collect_data.md).
 
 ## Generate Configuration Files

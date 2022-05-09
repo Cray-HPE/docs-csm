@@ -63,6 +63,8 @@ analyze
 analyzer
 Ansible
 AOS-CX
+API
+APIs
 Arista
 artifact
 artifact's
@@ -127,6 +129,7 @@ ConnectX-4
 ConnectX-5
 ConnectX-5s
 conntrack
+Cray
 Cray-HPE
 CrayPort
 CRDs
@@ -134,6 +137,8 @@ cronjob
 CS-E1000
 CS-L300
 CS-XGE40-MLNX-2100-16
+CSI
+CSI-generated
 CSM-provided
 Cutoff
 CVEs
@@ -198,6 +203,7 @@ Hotfix
 hotfixes
 Hotfixes
 HPCaaS
+HPE
 hypervisors
 IaaS
 iBGP
@@ -403,6 +409,7 @@ serial-over-lan
 ServerTech
 SHA-512
 SharePoint
+Shasta
 SHCD-related
 SHCD-Related
 shutoff
@@ -410,6 +417,7 @@ singlemode
 site-routable
 Skopeo
 SLES-based
+SLS
 Slurm
 SMNet
 SNMPv2c
