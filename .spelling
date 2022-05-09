@@ -84,12 +84,17 @@ Basecamp
 Basecamp's
 behavior
 behaviors
+BGP
 BiCAN
 Bitnami
 blackhole
+BMC
 BMCs
 bootscript
+BOA
+BOS
 BOSv2
+BSS
 Burstable
 busses
 cadvisor
@@ -97,6 +102,7 @@ CAN
 CAN-to-CMN
 CANU
 CANU-generated
+CAPMC
 CAs
 Cassini
 cataloged
@@ -106,17 +112,23 @@ centers
 Ceph
 Cephadm
 CephFS
+CFS
 CFS-Batcher
 CFS-BOA
+CFS-Operator
 channeled
 checkmark
 CHN
 chrony
 cleanup
+CLI
 ClusterStor
+CMC
 CMCs
+CMM
 CMMs
 CMN
+CN
 CNs
 color
 colored
@@ -125,6 +137,7 @@ ConfigMap
 ConfigMap's
 ConfigMap-based
 ConfigMaps
+ConMan
 ConnectX-4
 ConnectX-5
 ConnectX-5s
@@ -134,11 +147,13 @@ Cray-HPE
 CrayPort
 CRDs
 cronjob
+CRUS
 CS-E1000
 CS-L300
 CS-XGE40-MLNX-2100-16
 CSI
 CSI-generated
+CSM
 CSM-provided
 Cutoff
 CVEs
@@ -148,7 +163,10 @@ daemonset
 datastore
 DB-9
 DellOS
+DHCP
 diskless
+DNS
+Docker
 Dockerfile
 dropdown
 dryrun
@@ -160,8 +178,10 @@ eBGP
 eC
 Elasticsearch
 etcd
+EX
 exascale
 failback
+FAS
 FastLinQ
 favor
 fiber
@@ -173,6 +193,7 @@ fulfills
 GbE
 Gen10
 Giga-Byte
+Git
 Gitea
 Goss
 Grafana
@@ -190,7 +211,9 @@ haproxy
 HashiCorp
 HashiCorp's
 heartbeating
+Helm
 highspeed
+HM
 HMN
 HMNLB
 HMN_MTN 
@@ -202,8 +225,10 @@ hotfix
 Hotfix
 hotfixes
 Hotfixes
+HPC
 HPCaaS
 HPE
+HSM
 hypervisors
 IaaS
 iBGP
@@ -213,6 +238,7 @@ iKVM
 iLO
 iLO5
 iLOM
+IMS
 IMS-hosted
 inband
 Infiniband
@@ -221,6 +247,7 @@ initrd
 inode
 ioctl
 ion
+IP
 iPDU
 iPDUs
 IPMI-based
@@ -288,6 +315,7 @@ MZ62-HD0-00
 MZ92-FS0-00
 nC
 nC's
+NCN
 NCNs
 neighbor
 neighboring
@@ -295,6 +323,7 @@ neighbors
 Netcat
 netmask
 NetworkManager
+Nexus
 nFPGA
 NICs
 NIDs
@@ -332,6 +361,7 @@ passwordless
 Patroni
 PCH-style
 PCI-SIG
+PDU
 PDUs
 PECs
 PEM-encoded
@@ -375,6 +405,7 @@ rbd
 re-architecting
 reauthentication
 Redbook
+Redfish
 redis
 Redstone
 reestablished
@@ -383,6 +414,7 @@ RemoteISO
 renewncnjoin
 Repomd
 respawns
+REST
 Restic
 Resync
 reweight
@@ -402,6 +434,7 @@ rsync
 rsyslog
 Runbook
 sC
+SCSD
 sC-ToR
 SealedSecret
 SemVer
@@ -422,10 +455,12 @@ Slurm
 SMNet
 SNMPv2c
 SNMPv3
+SMS
 Sonatype
 Sonexion
 specialty
 spilo
+Spire
 SquashFS
 SR-IOV
 SSHing
@@ -443,6 +478,7 @@ SuSE
 sysfs
 syslog
 SystemD
+TCP
 teardown
 timeframes
 timestamp
@@ -501,6 +537,7 @@ v2
 v2.0
 v277935
 v3
+VCS
 Velero
 vendored
 VirtualBox
@@ -519,6 +556,7 @@ writable
 X.509
 xname
 xnames
+Yum
 zeroization
 zeroize
 zypper
