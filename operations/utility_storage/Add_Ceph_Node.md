@@ -116,7 +116,7 @@
     rgw.site1.zone1.ncn-s003.nnwuqy  ncn-s003  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8   553b0cb212c   a9706e6d7a69
     ```
 
-1. Add nodes into HAproxy and KeepAlived. Adjust the command based on the number of storage nodes.
+1. Add nodes into `HAproxy` and `KeepAlived`. Adjust the command based on the number of storage nodes.
 
    - If the node was rebuilt:
 

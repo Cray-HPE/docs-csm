@@ -34,7 +34,7 @@ This procedure will perform and verify the following:
 
     |   |                | SHCD Column to reference | Description
     | - | -------------- | ------------------------ | -----------
-    | X | Cabinet number | SourceRack (K20)         | The Cabinet or rack number containing the Management NCN.
+    | X | Cabinet number | Source Rack (K20)        | The Cabinet or rack number containing the Management NCN.
     | C | Chassis number |                          | For air-cooled nodes the chassis is 0.
     | S | Slot/Rack U    | Source Location (L20)    | The Slot of the node is determined by the bottom most rack U that node occupies.
     | B | BMC number     |                          | For Management NCNs the BMC number is 0.
@@ -115,4 +115,4 @@ This procedure will perform and verify the following:
 
 ## Next Step
 
-Proceed to the next step to [Add Switch Config](Add_Switch_Config.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+Proceed to the next step to [Add Switch Configuration](Add_Switch_Config.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.

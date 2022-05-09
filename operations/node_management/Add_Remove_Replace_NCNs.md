@@ -297,7 +297,7 @@ The following is a high-level overview of the add NCN workflow:
 
 1. [Allocate NCN IP Addresses](Add_Remove_Replace_NCNs/Allocate_NCN_IP_Addresses.md)
 
-1. [Add Switch Config](Add_Remove_Replace_NCNs/Add_Switch_Config.md)
+1. [Add Switch Configuration](Add_Remove_Replace_NCNs/Add_Switch_Config.md)
 
 1. [Add NCN data](Add_Remove_Replace_NCNs/Add_NCN_Data.md) for SLS, BSS and HSM
 
@@ -342,7 +342,7 @@ The following is a high-level overview of the remove NCN workflow:
 
 1. [Remove NCN data](Add_Remove_Replace_NCNs/Remove_NCN_Data.md) from SLS, BSS and HSM
 
-1. [Remove Switch Config](Add_Remove_Replace_NCNs/Remove_Switch_Config.md)
+1. [Remove Switch Configuration](Add_Remove_Replace_NCNs/Remove_Switch_Config.md)
 
 1. [Redeploy Services](Add_Remove_Replace_NCNs/Redeploy_Services.md)
 

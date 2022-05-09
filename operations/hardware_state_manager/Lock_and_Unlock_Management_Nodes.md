@@ -90,7 +90,7 @@ The return value of the script is 0 if locking was successful. A non-zero return
 
 Use the `cray hsm locks lock` command to perform locking.
 
-**NOTE:** When locking NCNs, you must lock their NodeBMCs as well.
+**NOTE:** When locking NCNs, you must lock their node BMCs as well.
 
 **NOTE:** The following steps assume both the management nodes and their BMCs are marked with the `Management` role in HSM. If they are not, see [Set BMC Management Role](Set_BMC_Management_Role.md).
 
@@ -150,7 +150,7 @@ Use the `cray hsm locks lock` command to perform locking.
 
 Use the `cray hsm locks unlock` command to perform unlocking.
 
-**NOTE: When unlocking NCNs, you must unlock their NodeBMCs as well.**
+**NOTE: When unlocking NCNs, you must unlock their node BMCs as well.**
 
 **NOTE: The following steps assume both the management nodes and their BMCs are marked with the `Management` role in HSM. If they are not, see [Set BMC Management Role](Set_BMC_Management_Role.md).**
 
