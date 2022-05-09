@@ -208,6 +208,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
        *   [Create a CFS Configuration](configuration_management/Create_a_CFS_Configuration.md)
        *   [Update a CFS Configuration](configuration_management/Update_a_CFS_Configuration.md)
    *   [Ansible Inventory](configuration_management/Ansible_Inventory.md)
+       *   [Specifying Hosts and Groups](configuration_management/Specifying_Hosts_and_Groups.md)
        *   [Manage Multiple Inventories in a Single Location](configuration_management/Manage_Multiple_Inventories_in_a_Single_Location.md)
    *   [Configuration Sessions](configuration_management/Configuration_Sessions.md)
        *   [Create a CFS Session with Dynamic Inventory](configuration_management/Create_a_CFS_Session_with_Dynamic_Inventory.md)
