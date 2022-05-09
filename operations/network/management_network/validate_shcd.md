@@ -134,7 +134,7 @@ Cell: P16      Name: SITE
 
 1. CAN and SITE uplinks are not in the *clean run* model. This means that these ports will not be configured.
 
-1. Critically, Cell `I38` has a name of "sw-spinx-002". This should be noted as a misspelling of `sw-spine-002` and corrected.
+1. Critically, cell `I38` has a name of `sw-spinx-002`. This should be noted as a misspelling of `sw-spine-002` and corrected.
 
 ## Check SHCD Port Usage
 
