@@ -35,7 +35,7 @@ The following administrative topics can be found in this guide:
     - [Dynamic Host Configuration Protocol (DHCP)](#dynamic-host-configuration-protocol-dhcp)
     - [Domain Name Service (DNS)](#domain-name-service-dns)
     - [External DNS](#external-dns)
-    - [MetalLB in BGP-Mode](#metallb-in-bgp-mode)
+    - [MetalLB in `BGP-Mode`](#metallb-in-bgp-mode)
   - [Spire](#spire)
   - [Update Firmware with FAS](#update-firmware-with-fas)
   - [User Access Service (UAS)](#user-access-service-uas)
@@ -46,7 +46,7 @@ The following administrative topics can be found in this guide:
 
 - [Validate CSM Health](validate_csm_health.md)
 - [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
-- [Configure the Cray Command Line Interface (cray CLI)](configure_cray_cli.md)
+- [Configure the Cray Command Line Interface (`cray` CLI)](configure_cray_cli.md)
 - [Change Passwords and Credentials](CSM_product_management/Change_Passwords_and_Credentials.md)
 - [Configure Non-Compute Nodes with CFS](CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md)
 - [Perform NCN Personalization](CSM_product_management/Perform_NCN_Personalization.md)
@@ -223,9 +223,9 @@ management of nodes and boot images.
   - [Set Limits for a Configuration Session](configuration_management/Set_Limits_for_a_Configuration_Session.md)
   - [Use a Specific Inventory for a Configuration Session](configuration_management/Use_a_Specific_Inventory_in_a_Configuration_Session.md)
   - [Change the Ansible Verbosity Logs](configuration_management/Change_the_Ansible_Verbosity_Logs.md)
-  - [Set the ansible.cfg for a Session](configuration_management/Set_the_ansible-cfg_for_a_Session.md)
+  - [Set the `ansible.cfg` for a Session](configuration_management/Set_the_ansible-cfg_for_a_Session.md)
     - [Delete CFS Sessions](configuration_management/Delete_CFS_Sessions.md)
-    - [Automatic Session Deletion with sessionTTL](configuration_management/Automatic_Session_Deletion_with_sessionTTL.md)
+    - [Automatic Session Deletion with `sessionTTL`](configuration_management/Automatic_Session_Deletion_with_sessionTTL.md)
     - [Track the Status of a Session](configuration_management/Track_the_Status_of_a_Session.md)
     - [View Configuration Session Logs](configuration_management/View_Configuration_Session_Logs.md)
     - [Troubleshoot Ansible Play Failures in CFS Sessions](configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
@@ -233,7 +233,7 @@ management of nodes and boot images.
     - [Configuration Management with the CFS Batcher](configuration_management/Configuration_Management_with_the_CFS_Batcher.md)
     - [Configuration Management of System Components](configuration_management/Configuration_Management_of_System_Components.md)
     - [Ansible Execution Environments](configuration_management/Ansible_Execution_Environments.md)
-    - [Use a Custom ansible-cfg File](configuration_management/Use_a_Custom_ansible-cfg_File.md)
+    - [Use a Custom `ansible-cfg` File](configuration_management/Use_a_Custom_ansible-cfg_File.md)
     - [Enable Ansible Profiling](configuration_management/Enable_Ansible_Profiling.md)
     - [CFS Global Options](configuration_management/CFS_Global_Options.md)
     - [Version Control Service \(VCS\)](configuration_management/Version_Control_Service_VCS.md)
@@ -256,8 +256,8 @@ micro-services are modular, resilient, and can be updated independently. Service
 Kubernetes architecture communicate via REST APIs.
 
 - [Kubernetes Architecture](kubernetes/Kubernetes.md)
-- [About kubectl](kubernetes/About_kubectl.md)
-  - [Configure kubectl Credentials to Access the Kubernetes APIs](kubernetes/Configure_kubectl_Credentials_to_Access_the_Kubernetes_APIs.md)
+- [About `kubectl`](kubernetes/About_kubectl.md)
+  - [Configure `kubectl` Credentials to Access the Kubernetes APIs](kubernetes/Configure_kubectl_Credentials_to_Access_the_Kubernetes_APIs.md)
 - [About Kubernetes Taints and Labels](kubernetes/About_Kubernetes_Taints_and_Labels.md)
 - [Kubernetes Storage](kubernetes/Kubernetes_Storage.md)
 - [Kubernetes Networking](kubernetes/Kubernetes_Networking.md)
@@ -316,9 +316,9 @@ Mechanisms used by the system to ensure the security and authentication of inter
   - [Change EX Liquid-Cooled Cabinet Global Default Password](security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
   - [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](security_and_authentication/Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md)
   - [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
-  - [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
+  - [Update Default Air-Cooled BMC and `Leaf-BMC` Switch SNMP Credentials](security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
   - [Change Air-Cooled Node BMC Credentials](security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md)
-  - [Change SNMP Credentials on Leaf-BMC Switches](security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md)
+  - [Change SNMP Credentials on `Leaf-BMC` Switches](security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md)
   - [Update Default ServerTech PDU Credentials used by the Redfish Translation Service](security_and_authentication/Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md)
   - [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
   - [Add Root Service Account for Gigabyte Controllers](security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md)
@@ -376,7 +376,7 @@ there is no single point of failure.
 - [Resiliency](resiliency/Resiliency.md)
 - [Resilience of System Management Services](resiliency/Resilience_of_System_Management_Services.md)
 - [Restore System Functionality if a Kubernetes Worker Node is Down](resiliency/Restore_System_Functionality_if_a_Kubernetes_Worker_Node_is_Down.md)
-- [Recreate StatefulSet Pods on Another Node](resiliency/Recreate_StatefulSet_Pods_on_Another_Node.md)
+- [Recreate `StatefulSet` Pods on Another Node](resiliency/Recreate_StatefulSet_Pods_on_Another_Node.md)
 - [NTP Resiliency](resiliency/NTP_Resiliency.md)
 
 <a name="conman"></a>
@@ -472,8 +472,8 @@ after discovery. The operations to change these parameters are available in the 
 command.
 
 - [System Configuration Service](system_configuration_service/System_Configuration_Service.md)
-- [Configure BMC and Controller Parameters with SCSD](system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md)
-- [Manage Parameters with the scsd Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
+- [Configure BMC and Controller Parameters with `SCSD`](system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md)
+- [Manage Parameters with the `scsd` Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
 - [Set BMC Credentials](system_configuration_service/Set_BMC_Credentials.md)
 
 <a name="hardware-state-manager-hsm"></a>
@@ -540,7 +540,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   - [Validate Storage Node](node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
   - [Final Validation Steps](node_management/Rebuild_NCNs/Final_Validation_Steps.md)
 - [Reboot NCNs](node_management/Reboot_NCNs.md)
-  - [Check and Set the metalno-wipe Setting on NCNs](node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md)
+  - [Check and Set the `metalno-wipe` Setting on NCNs](node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md)
 - [Enable Nodes](node_management/Enable_Nodes.md)
 - [Disable Nodes](node_management/Disable_Nodes.md)
 - [Find Node Type and Manufacturer](node_management/Find_Node_Type_and_Manufacturer.md)
@@ -554,7 +554,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   - [Move a Standard Rack Node (Same Rack/Same HSN Ports)](node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
   - [Verify Node Removal](node_management/Verify_Node_Removal.md)
 - [Clear Space in Root File System on Worker Nodes](node_management/Clear_Space_in_Root_File_System_on_Worker_Nodes.md)
-- [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
+- [Troubleshoot Issues with Redfish Endpoint `DiscoveryCheck` for Redfish Events from Nodes](node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
 - [Reset Credentials on Redfish Devices](node_management/Reset_Credentials_on_Redfish_Devices_for_Reinstallation.md)
 - [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs.md)
 - [Change Settings for HMS Collector Polling of Air Cooled Nodes](node_management/Change_Settings_for_HMS_Collector_Polling_of_Air_Cooled_Nodes.md)
@@ -593,9 +593,9 @@ Overview of the several different networks supported by the HPE Cray EX system.
 
 ### Management Network
 
-HPE Cray EX systems can have network switches in many roles: spine switches, leaf switches, leaf-bmc
+HPE Cray EX systems can have network switches in many roles: spine switches, leaf switches, `leaf-bmc`
 switches, and CDU switches. Newer systems have HPE Aruba switches, while older systems have Dell and
-Mellanox switches. Switch IP addresses are generated by Cray Site Init (CSI).
+Mellanox switches. Switch IP addresses are generated by Cray Site `Init` (CSI).
 
 - [HPE Cray EX Management Network Installation and Configuration Guide](network/management_network/index.md)
   - [Aruba Installation and Configuration](network/management_network/aruba/index.md)
@@ -635,7 +635,7 @@ The central DNS infrastructure provides the structural networking hierarchy and 
 
 - [DNS](network/dns/DNS.md)
 - [Manage the DNS Unbound Resolver](network/dns/Manage_the_DNS_Unbound_Resolver.md)
-- [Enable ncsd on UANs](network/dns/Enable_ncsd_on_UANs.md)
+- [Enable `ncsd` on UANs](network/dns/Enable_ncsd_on_UANs.md)
 - [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
 - [Troubleshoot PowerDNS](network/dns/Troubleshoot_PowerDNS.md)
 
@@ -649,8 +649,8 @@ accessible directly from a laptop without needing to tunnel into a non-compute n
 /etc/hosts settings.
 
 - [External DNS](network/external_dns/External_DNS.md)
-- [External DNS csi config `init` Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
-- [Update the cmn-external-dns Value Post-Installation](network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md)
+- [External DNS `csi config init` Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
+- [Update the `cmn-external-dns` Value Post-Installation](network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md)
 - [Ingress Routing](network/external_dns/Ingress_Routing.md)
 - [Add NCNs and UANs to External DNS](network/external_dns/Add_NCNs_and_UANs_to_External_DNS.md)
 - [External DNS Failing to Discover Services Workaround](network/external_dns/External_DNS_Failing_to_Discover_Services_Workaround.md)
@@ -659,18 +659,18 @@ accessible directly from a laptop without needing to tunnel into a non-compute n
 
 <a name="metallb-in-bgp-mode"></a>
 
-### MetalLB in BGP-Mode
+### MetalLB in `BGP-Mode`
 
-MetalLB is a component in Kubernetes that manages access to LoadBalancer services from outside the
-Kubernetes cluster. There are LoadBalancer services on the Node Management Network \(NMN\), Hardware
+MetalLB is a component in Kubernetes that manages access to `LoadBalancer` services from outside the
+Kubernetes cluster. There are `LoadBalancer` services on the Node Management Network \(NMN\), Hardware
 Management Network \(HMN\), and Customer Access Network \(CAN\).
 
-MetalLB can run in either Layer2-mode or BGP-mode for each address pool it manages. BGP-mode is used
-for the NMN, HMN, and CAN. This enables true load balancing \(Layer2-mode does failover, not load
+MetalLB can run in either `Layer2-mode` or `BGP-mode` for each address pool it manages. `BGP-mode` is used
+for the NMN, HMN, and CAN. This enables true load balancing \(`Layer2-mode` does failover, not load
 balancing\) and allows for a more robust layer 3 configuration for these networks.
 
-- [MetalLB in BGP-Mode](network/metallb_bgp/MetalLB_in_BGP-Mode.md)
-- [MetalLB in BGP-Mode Configuration](network/metallb_bgp/MetalLB_in_BGP-Mode_Configuration.md)
+- [MetalLB in `BGP-Mode`](network/metallb_bgp/MetalLB_in_BGP-Mode.md)
+- [MetalLB in `BGP-Mode` Configuration](network/metallb_bgp/MetalLB_in_BGP-Mode_Configuration.md)
 - [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
 - [Troubleshoot Services without an Allocated IP Address](network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
 - [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
@@ -721,7 +721,7 @@ systems using the UAI.
 - [Special Purpose UAIs](UAS_user_and_admin_topics/Special_Purpose_UAIs.md)
 - [Elements of a UAI](UAS_user_and_admin_topics/Elements_of_a_UAI.md)
 - [UAI Host Nodes](UAS_user_and_admin_topics/UAI_Host_Nodes.md)
-- [UAI macvlans Network Attachments](UAS_user_and_admin_topics/UAI_macvlans_Network_Attachments.md)
+- [UAI `macvlans` Network Attachments](UAS_user_and_admin_topics/UAI_macvlans_Network_Attachments.md)
 - [UAI Host Node Selection](UAS_user_and_admin_topics/UAI_Host_Node_Selection.md)
 - [UAI Network Attachments](UAS_user_and_admin_topics/UAI_Network_Attachments.md)
 - [Configure UAIs in UAS](UAS_user_and_admin_topics/Configure_UAIs_in_UAS.md)
@@ -771,7 +771,7 @@ systems using the UAI.
   - [Troubleshoot UAS by Viewing Log Output](UAS_user_and_admin_topics/Troubleshoot_UAS_by_Viewing_Log_Output.md)
   - [Troubleshoot UAIs by Viewing Log Output](UAS_user_and_admin_topics/Troubleshoot_UAIs_by_Viewing_Log_Output.md)
   - [Troubleshoot Stale Brokered UAIs](UAS_user_and_admin_topics/Troubleshoot_Stale_Brokered_UAIs.md)
-  - [Troubleshoot UAI Stuck in "ContainerCreating"](UAS_user_and_admin_topics/Troubleshoot_UAI_Stuck_in_ContainerCreating.md)
+  - [Troubleshoot UAI Stuck in "`ContainerCreating`"](UAS_user_and_admin_topics/Troubleshoot_UAI_Stuck_in_ContainerCreating.md)
   - [Troubleshoot Duplicate Mount Paths in a UAI](UAS_user_and_admin_topics/Troubleshoot_Duplicate_Mount_Paths_in_a_UAI.md)
   - [Troubleshoot Missing or Incorrect UAI Images](UAS_user_and_admin_topics/Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
   - [Troubleshoot UAIs with Administrative Access](UAS_user_and_admin_topics/Troubleshoot_UAIs_with_Administrative_Access.md)
