@@ -7,7 +7,7 @@ None of the Slingshot switches for the HSN should be included in this file.
 
 The file should have the following format, in ascending order by component name (xname):
 
-```
+```text
 Switch Xname,Type,Brand
 d0w1,CDU,Dell
 d0w2,CDU,Dell
@@ -30,7 +30,9 @@ The above file would lead to this pairing between component name and hostname:
 
 The hostnames are automatically generated in ascending order by switch type.
 
-The Brand name of the management switches can be determined from one of two places. The Device Diagrams or River Device Diagrams tab of the SHCD has pictures and diagrams of the components of the system including the management network switches. This will have a long name which shows the part number and the vendor name. The Rack Layout or River Rack Layout tab shows the part number in the context of its location within the cabinet.
+The Brand name of the management switches can be determined from one of two places.
+The Device Diagrams or River Device Diagrams tab of the SHCD has pictures and diagrams of the components of the system including the management network switches.
+This will have a long name which shows the part number and the vendor name. The Rack Layout or River Rack Layout tab shows the part number in the context of its location within the cabinet.
 
 | Part Number | Brand |
 | ----------- | ----- |
@@ -44,23 +46,23 @@ The Brand name of the management switches can be determined from one of two plac
 
 There may be other switches in a specific SHCD, but the general guidelines for any abbreviations are that MLNX or MLX is for Mellanox and DL is for Dell. All other switches are HPE Aruba switches.
 
-#### Prerequisites
+## Prerequisites
 
 - The SHCD for the system
 
     Check the description for component names while mapping names between the SHCD and the `switch_metadata.csv` file.
     See [Component Names (xnames)](../operations/Component_Names_xnames.md).
 
-#### Format
+## Format
 
 Spine and leaf switches use the format `xXcChHsS`. LeafBMC switches use `xXcCwW`. CDU switches use `dDwW`.
 
-#### Reference Diagram for Subsequent Sections
+## Reference Diagram for Subsequent Sections
 
    ![Reference diagram of a cabinet with side-by-side switches in SHCD](../img/shcd-rack-example.png)
    > Diagram of a cabinet with side-by-side switches in SHCD.
 
-#### Directions
+## Directions
 
 1. Identify the switches in the SHCD.
 
@@ -103,17 +105,17 @@ Spine and leaf switches use the format `xXcChHsS`. LeafBMC switches use `xXcCwW`
 
 7. Create the switch_metadata.csv file with this information.
 
-```bash
+```text
 linux# vi switch_metadata.csv
 ```
 
 See the following example files for reference.
 
-#### Examples
+## Examples
 
 > __Use case:__ 2 Aruba CDU Switches, 2 Aruba LeafBMC switches, 4 Aruba leaf switches, and 2 Aruba spine switches:
 
-```bash
+```text
 pit# cat example_switch_metadata.csv
 Switch Xname,Type,Brand
 d0w1,CDU,Aruba
@@ -130,7 +132,7 @@ x3000c0h38s1,Spine,Aruba
 
 > __Use case:__ 2 Dell CDU switches, 2 Dell LeafBMC switches, and 2 Mellanox spine switches:
 
-```bash
+```text
 Switch Xname,Type,Brand
 d0w1,CDU,Dell
 d0w2,CDU,Dell
@@ -142,7 +144,7 @@ x3000c0h34s1,Spine,Mellanox
 
 > __Use case:__ 2 Dell LeafBMC switches and 2 Mellanox switches in the same slot number:
 
-```bash
+```text
 pit# cat example_switch_metadata.csv
 Switch Xname,Type,Brand
 x3000c0w38,LeafBMC,Dell
@@ -150,4 +152,3 @@ x3000c0w36,LeafBMC,Dell
 x3000c0h33s1,Spine,Mellanox
 x3000c0h33s2,Spine,Mellanox
 ```
-
