@@ -61,6 +61,7 @@ Spine and leaf switches use the format `xXcChHsS`. LeafBMC switches use `xXcCwW`
 
    ![Reference diagram of a cabinet with side-by-side switches in SHCD](../img/shcd-rack-example.png)
    > Diagram of a cabinet with side-by-side switches in SHCD.
+
 ## Directions
 
 1. Identify the switches in the SHCD.
@@ -111,6 +112,7 @@ See the following example files for reference.
 ## Examples
 
 > __Use case:__ 2 Aruba CDU Switches, 2 Aruba LeafBMC switches, 4 Aruba leaf switches, and 2 Aruba spine switches:
+
 ```text
 pit# cat example_switch_metadata.csv
 Switch Xname,Type,Brand
@@ -127,6 +129,7 @@ x3000c0h38s1,Spine,Aruba
 ```
 
 > __Use case:__ 2 Dell CDU switches, 2 Dell LeafBMC switches, and 2 Mellanox spine switches:
+
 ```text
 Switch Xname,Type,Brand
 d0w1,CDU,Dell
@@ -138,6 +141,7 @@ x3000c0h34s1,Spine,Mellanox
 ```
 
 > __Use case:__ 2 Dell LeafBMC switches and 2 Mellanox switches in the same slot number:
+
 ```text
 pit# cat example_switch_metadata.csv
 Switch Xname,Type,Brand
