@@ -108,7 +108,7 @@ Modify the customizations to include the added or removed storage node.
     ncn-m# kubectl create secret -n loftsman generic site-init --from-file=/tmp/customizations.yaml
     ```
 
-#### Redeploy S3
+### Redeploy S3
 
 Redeploy S3 to pick up any changes for storage node endpoints.
 
@@ -165,7 +165,7 @@ Redeploy S3 to pick up any changes for storage node endpoints.
     ```
 
 ### Redeploy `sysmgmt-health`
- 
+
 Redeploy `sysmgmt-health` to pick up any changes for storage node endpoints.
 
 1. Determine the version of `sysmgmt-health`.

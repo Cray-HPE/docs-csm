@@ -80,7 +80,7 @@ This indicates that the PXE boot has started the TFTP download of the `ipxe` pro
 
 1. Use `ssh` to log in to the node in order to complete any remaining steps based on the node type.
 
-### Verify that the Added mMaster or Worker Node Has Joined the Cluster
+### Verify that the Added Master or Worker Node Has Joined the Cluster
 
 **Skip this section if the node being added is a storage node.**
 
