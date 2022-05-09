@@ -4,16 +4,16 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 > **NOTE:** Check the information in [Known Issues](#known-issues) before starting this procedure to be warned about possible problems.
 
-### Topics
+## Topics
 
    1. [Initialize Bootstrap Registry](#initialize-bootstrap-registry)
-   1. [Create Site-Init Secret](#create-site-init-secret)
+   1. [Create `Site-Init` Secret](#create-site-init-secret)
    1. [Deploy Sealed Secret Decryption Key](#deploy-sealed-secret-decryption-key)
    1. [Deploy CSM Applications and Services](#deploy-csm-applications-and-services)
    1. [Setup Nexus](#setup-nexus)
    1. [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
    1. [Apply Pod Priorities](#apply-pod-priorities)
-   1. [Apply After Sysmgmt Manifest Workarounds](#apply-after-sysmgmt-manifest-workarounds)
+   1. [Apply `After Sysmgmt Manifest` Workarounds](#apply-after-sysmgmt-manifest-workarounds)
    1. [Wait For Everything To Settle](#wait-for-everything-to-settle)
    1. [Known Issues](#known-issues)
       * [`install.sh` Known Issues](#known-issues-install-sh)
@@ -46,7 +46,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
     Expected output looks similar to the following:
 
-    ```
+    ```bash
     HTTP/1.1 200 OK
     Date: Thu, 04 Feb 2021 05:27:44 GMT
     Server: Nexus/3.25.0-03 (OSS)
@@ -54,7 +54,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
     Content-Length: 0
     ```
 
-3. Load the Skopeo image installed by the cray-nexus RPM:
+3. Load the Skopeo image installed by the `cray-nexus` RPM:
 
     ```bash
     pit# podman load -i /var/lib/cray/container-images/cray-nexus/skopeo-stable.tar quay.io/skopeo/stable
@@ -75,7 +75,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 <a name="create-site-init-secret"></a>
 
-### 2. Create Site-Init Secret
+### 2. Create `Site-Init` Secret
 
 The `site-init` secret in the `loftsman` namespace makes
 `/var/www/ephemeral/prep/site-init/customizations.yaml` available to product
@@ -90,14 +90,14 @@ pit# kubectl create secret -n loftsman generic site-init --from-file=/var/www/ep
 
 Expected output looks similar to the following:
 
-```
+```bash
 secret/site-init created
 ```
 
 > **`NOTE`** If the `site-init` secret already exists then `kubectl` will error
 > with a message similar to:
 >
-> ```
+> ```bash
 > Error from server (AlreadyExists): secrets "site-init" already exists
 > ```
 >
@@ -111,7 +111,7 @@ secret/site-init created
 >
 >    Expected output looks similar to the following:
 >
->    ```
+>    ```bash
 >    secret "site-init" deleted
 >    ```
 >
@@ -123,10 +123,10 @@ secret/site-init created
 >
 >    Expected output looks similar to the following:
 >
->    ```
+>    ```bash
 >    secret/site-init created
 >    ```
-
+>
 > **`WARNING`** If for some reason the system customizations need to be
 > modified to complete product installation, administrators must first update
 > `customizations.yaml` in the `site-init` Git repository, which may no longer
@@ -163,7 +163,7 @@ pit# /var/www/ephemeral/prep/site-init/deploy/deploydecryptionkey.sh
 
 An error similar to the following may occur when deploying the key:
 
-```
+```bash
 Error from server (NotFound): secrets "sealed-secrets-key" not found
 
 W0304 17:21:42.749101   29066 helpers.go:535] --dry-run is deprecated and can be replaced with --dry-run=client.
@@ -178,7 +178,10 @@ This is expected and can safely be ignored.
 
 ### 4. Deploy CSM Applications and Services
 
-> **NOTE**: During this step, on (only) TDS systems with three worker nodes the `customizations.yaml` file will be edited (automatically) to lower pod CPU requests for some services in order to better facilitate scheduling on smaller systems. See the file: `/var/www/ephemeral/${CSM_RELEASE}/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified with different values (prior to executing the `install.sh` script below) if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/CSM_product_management/Post_Install_Customizations.md).
+> **NOTE**: During this step, on (only) TDS systems with three worker nodes the `customizations.yaml` file will be edited (automatically) to lower pod CPU requests for some services in order to better facilitate scheduling on smaller systems.
+> See the file: `/var/www/ephemeral/${CSM_RELEASE}/tds_cpu_requests.yaml` for these settings.
+> If desired, this file can be modified with different values (prior to executing the `install.sh` script below) if other settings are desired in the `customizations.yaml` file for this system.
+> For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/CSM_product_management/Post_Install_Customizations.md).
 
 Run `install.sh` to deploy CSM applications services. This command may take 25 minutes or more to run.
 
@@ -187,7 +190,7 @@ Run `install.sh` to deploy CSM applications services. This command may take 25 m
 > however, it needs to know `SYSTEM_NAME` in order to find `metallb.yaml` and
 > `sls_input_file.json` configuration files.
 >
-> Some commands will also need to have the CSM_RELEASE variable set.
+> Some commands will also need to have the `CSM_RELEASE` variable set.
 >
 > Verify that the `SYSTEM_NAME` and `CSM_RELEASE` environment variables are set:
 >
@@ -208,7 +211,7 @@ pit# cd /var/www/ephemeral/$CSM_RELEASE
 pit# ./install.sh
 ```
 
-On success, `install.sh` will output `OK` to stderr and exit with status code
+On success, `install.sh` will output `OK` to `stderr` and exit with status code
 `0`, e.g.:
 
 ```bash
@@ -222,7 +225,8 @@ In the event that `install.sh` does not complete successfully, consult the
 [known issues](#known-issues) below to resolve potential problems and then try
 running `install.sh` again.
 
-***IMPORTANT:*** If you have to re-run install.sh to re-deploy failed ceph-csi provisioners you must make sure to delete the jobs that have not completed. These are left there for investigation on failure. They are automatically removed on a successful deployment.
+**IMPORTANT:** If you have to re-run `install.sh` to re-deploy failed `ceph-csi` provisioners you must make sure to delete the jobs that have not completed.
+These are left there for investigation on failure. They are automatically removed on a successful deployment.
 
 ```bash
 pit# kubectl get jobs
@@ -231,7 +235,7 @@ cray-ceph-csi-cephfs   0/1                      3m35s
 cray-ceph-csi-rbd      0/1                      8m36s
 ```
 
-> If these jobs exist then `kubectl delete job <jobname>` before running install.sh again.
+> If these jobs exist then `kubectl delete job <jobname>` before running `install.sh` again.
 
 <a name="setup-nexus"></a>
 
@@ -244,7 +248,7 @@ container images, and Helm charts. This command may take 20 minutes or more to r
 pit# ./lib/setup-nexus.sh
 ```
 
-On success, `setup-nexus.sh` will output to `OK` on stderr and exit with status
+On success, `setup-nexus.sh` will output to `OK` on `stderr` and exit with status
 code `0`, e.g.:
 
 ```bash
@@ -257,7 +261,7 @@ setup-nexus.sh: OK
 In the event of an error, consult [Troubleshoot Nexus](../operations/package_repository_management/Troubleshoot_Nexus.md)
 to resolve potential problems and then try running `setup-nexus.sh` again. Note
 that subsequent runs of `setup-nexus.sh` may report `FAIL` when uploading
-duplicate assets. This is ok as long as `setup-nexus.sh` outputs
+duplicate assets. This is okay as long as `setup-nexus.sh` outputs
 `setup-nexus.sh: OK` and exits with status code `0`.
 
 <a name="set-ncns-to-use-unbound"></a>
@@ -292,7 +296,7 @@ If any management NCNs are missing from the output, take corrective action befor
 proceeding.
 
 Next, run `lib/set-ncns-to-unbound.sh` to SSH to each management NCN and update
-/etc/resolv.conf to use `Unbound` as the `nameserver`.
+`/etc/resolv.conf` to use `Unbound` as the `nameserver`.
 
 ```bash
 pit# ./lib/set-ncns-to-unbound.sh
@@ -302,7 +306,7 @@ pit# ./lib/set-ncns-to-unbound.sh
 > to enter the corresponding password as the script attempts to connect to each
 > NCN.
 
-On success, the `nameserver` configuration in /etc/resolv.conf will be printed
+On success, the `nameserver` configuration in `/etc/resolv.conf` will be printed
 for each management NCN, e.g.,:
 
 ```bash
@@ -340,14 +344,15 @@ Password:
 ncn-w003: nameserver 10.92.100.225
 ```
 
-> **`NOTE`** The script connects to ncn-m001 which will be the PIT node, whose
+> **`NOTE`** The script connects to `ncn-m001` which will be the PIT node, whose
 > password may be different from that of the other NCNs.
 
 <a name="apply-pod-priorities"></a>
 
 ### 7. Apply Pod Priorities
 
-Run the `add_pod_priority.sh` script to create and apply a pod priority class to services critical to CSM. This will give these services a higher priority than others to ensure they get scheduled by Kubernetes in the event that resources limited on smaller deployments.
+Run the `add_pod_priority.sh` script to create and apply a pod priority class to services critical to CSM.
+This will give these services a higher priority than others to ensure they get scheduled by Kubernetes in the event that resources limited on smaller deployments.
 
 ```bash
 pit# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/add_pod_priority.sh
@@ -375,7 +380,7 @@ After running the `add_pod_priority.sh` script, the affected pods will be restar
 > **`NOTE`** If the script doesn't finish and ends up looping on this message
 > longer than several minutes:
 >
-> ```
+> ```bash
 > Sleeping for ten seconds waiting for 3 pods in cray-bss-etcd etcd cluster
 > Sleeping for ten seconds waiting for 3 pods in cray-bss-etcd etcd cluster
 > Sleeping for ten seconds waiting for 3 pods in cray-bss-etcd etcd cluster
@@ -385,7 +390,7 @@ After running the `add_pod_priority.sh` script, the affected pods will be restar
 
 <a name="apply-after-sysmgmt-manifest-workarounds"></a>
 
-### 8. Apply After Sysmgmt Manifest Workarounds
+### 8. Apply `After Sysmgmt Manifest` Workarounds
 
 Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `after-sysmgmt-manifest` breakpoint.
 
@@ -410,11 +415,11 @@ error. It may be possible to resume installation from the last successful
 command executed by `install.sh`, but administrators will need to appropriately
 modify `install.sh` to pick up where the previous run left off. (Note: The
 `install.sh` script runs with `set -x`, so each command will be printed to
-stderr prefixed with the expanded value of PS4, namely, `+`.)
+`stderr` prefixed with the expanded value of PS4, namely, `+`.)
 
 The following error may occur when running `./install.sh`:
 
-  ```
+  ```bash
   + csi upload-sls-file --sls-file /var/www/ephemeral/prep/eniac/sls_input_file.json
   2021/10/05 18:42:58 Retrieving S3 credentials ( sls-s3-credentials ) for SLS
   2021/10/05 18:42:58 Unable to SLS S3 secret from k8s:secrets "sls-s3-credentials" not found
@@ -449,7 +454,7 @@ The following error may occur when running `./install.sh`:
 
 <a name="next-topic"></a>
 
-# 11. Next Topic
+## 11. Next Topic
 
    After completing this procedure the next step is to redeploy the PIT node.
 
