@@ -208,45 +208,6 @@ caused from upgrading compute nodes by working through one step of the upgrade p
 
 ## Configuration Management
 
-<<<<<<< HEAD
-The Configuration Framework Service \(CFS\) is available on systems for remote execution and configuration management of nodes and boot images.
-
-- [Configuration Management](configuration_management/Configuration_Management.md)
-- [Configuration Layers](configuration_management/Configuration_Layers.md)
-  - [Create a CFS Configuration](configuration_management/Create_a_CFS_Configuration.md)
-  - [Update a CFS Configuration](configuration_management/Update_a_CFS_Configuration.md)
-- [Ansible Inventory](configuration_management/Ansible_Inventory.md)
-  - [Specifying Hosts and Groups](configuration_management/Specifying_Hosts_and_Groups.md)
-  - [Manage Multiple Inventories in a Single Location](configuration_management/Manage_Multiple_Inventories_in_a_Single_Location.md)
-- [Configuration Sessions](configuration_management/Configuration_Sessions.md)
-  - [Create a CFS Session with Dynamic Inventory](configuration_management/Create_a_CFS_Session_with_Dynamic_Inventory.md)
-  - [Create an Image Customization CFS Session](configuration_management/Create_an_Image_Customization_CFS_Session.md)
-  - [Set Limits for a Configuration Session](configuration_management/Set_Limits_for_a_Configuration_Session.md)
-  - [Use a Specific Inventory for a Configuration Session](configuration_management/Use_a_Specific_Inventory_in_a_Configuration_Session.md)
-  - [Change the Ansible Verbosity Logs](configuration_management/Change_the_Ansible_Verbosity_Logs.md)
-  - [Set the ansible.cfg for a Session](configuration_management/Set_the_ansible-cfg_for_a_Session.md)
-  - [Delete CFS Sessions](configuration_management/Delete_CFS_Sessions.md)
-  - [Automatic Session Deletion with sessionTTL](configuration_management/Automatic_Session_Deletion_with_sessionTTL.md)
-  - [Track the Status of a Session](configuration_management/Track_the_Status_of_a_Session.md)
-  - [View Configuration Session Logs](configuration_management/View_Configuration_Session_Logs.md)
-  - [Troubleshoot Ansible Play Failures in CFS Sessions](configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
-  - [Troubleshoot CFS Session Failing to Complete](configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
-- [Configuration Management with the CFS Batcher](configuration_management/Configuration_Management_with_the_CFS_Batcher.md)
-- [Configuration Management of System Components](configuration_management/Configuration_Management_of_System_Components.md)
-- [Ansible Execution Environments](configuration_management/Ansible_Execution_Environments.md)
-  - [Use a Custom ansible-cfg File](configuration_management/Use_a_Custom_ansible-cfg_File.md)
-  - [Enable Ansible Profiling](configuration_management/Enable_Ansible_Profiling.md)
-- [CFS Global Options](configuration_management/CFS_Global_Options.md)
-- [Version Control Service \(VCS\)](configuration_management/Version_Control_Service_VCS.md)
-  - [Git Operations](configuration_management/Git_Operations.md)
-  - [VCS Branching Strategy](configuration_management/VCS_Branching_Strategy.md)
-  - [Customize Configuration Values](configuration_management/Customize_Configuration_Values.md)
-  - [Update the Privacy Settings for Gitea Configuration Content Repositories](configuration_management/Update_the_Privacy_Settings_for_Gitea_Configuration_Content_Repositories.md)
-  - [Create and Populate a VCS Configuration Repository](configuration_management/Create_and_Populate_a_VCS_Configuration_Repository.md)
-- [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
-  - [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
-- [CFS Key Management](configuration_management/CFS_Key_Management.md)
-
 The Configuration Framework Service \(CFS\) is available on systems for remote execution and configuration
 management of nodes and boot images.
 
