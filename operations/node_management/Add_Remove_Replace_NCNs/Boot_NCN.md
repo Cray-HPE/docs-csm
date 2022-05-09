@@ -233,7 +233,7 @@ Doing any of these by accident will take down a management node. If the manageme
 
 ### Configure the Cray Command Line Interface (Cray CLI)
 
-See [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md).
+See [Configure the Cray Command Line Interface (`cray` CLI)](../../configure_cray_cli.md) for details on how to do this.
 
 <a name="boot-ncn-storage-nodes-only"></a>
 
