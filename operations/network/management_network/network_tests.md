@@ -27,7 +27,7 @@ See also:
     ncn# canu test --log
     ```
 
-* Pulling switch inventory from SLS file and connecting to the switches via their CMN IP addresses, this can be done outside the shasta cluster.
+* Pulling switch inventory from SLS file and connecting to the switches via their CMN IP addresses, this can be done outside the Shasta cluster.
 
     ```bash
     ncn# canu test --sls-file ../Hela/sls_input_file.json --network CMN

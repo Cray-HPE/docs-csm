@@ -119,7 +119,7 @@ See [CSM Automatic Network Utility (CANU)](../canu/index.md)
 
 ### DHCP
 
-* [Confirm the status of the cray-dhcp-kea pods/services](status_of_cray-dhcp-kea_pods.md)
+* [Confirm the status of the `cray-dhcp-kea` pods/services](status_of_cray-dhcp-kea_pods.md)
 * [Check current DHCP leases](check_current_dhcp_leases.md)
 * [Check HSM](check_hsm.md)
 * [Check Kea DHPC logs](check_kea_dhcp_logs.md)

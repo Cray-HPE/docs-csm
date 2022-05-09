@@ -133,7 +133,7 @@ When using the `network firmware` commands, the table will show either: `🛶 Pa
 
 ## JSON Output
 
-To get the JSON output from a single switch, or from multiple switches, make sure to use the `--json` flag. An example json output is below.
+To get the JSON output from a single switch, or from multiple switches, make sure to use the `--json` flag. An example JSON output is below.
 
 ```ShellSession
 linux# canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD –json
