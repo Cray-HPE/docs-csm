@@ -420,35 +420,13 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
          > **Notes:**
          >
-         > * The command below is an **example only**. Run `csi config init --help` to print a full list of parameters that must be set. These will vary
+         > * Run `csi config init --help` to print a full list of parameters that must be set. These will vary
          >   significatnly depending on the system and site configuration.
          > * Ensure that you specify a reachable NTP pool or server using the `--ntp-pools` or `--ntp-servers` flags, respectively. Adding an unreachable server can
          >   cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
 
          ```bash
-         linux# csi config init \
-             --bootstrap-ncn-bmc-user root \
-             --bootstrap-ncn-bmc-pass changeme \
-             --system-name ${SYSTEM_NAME}  \
-             --can-cidr 10.103.11.0/24 \
-             --can-external-dns 10.103.11.113 \
-             --can-gateway 10.103.11.1 \
-             --can-static-pool 10.103.11.112/28 \
-             --can-dynamic-pool 10.103.11.128/25 \
-             --nmn-cidr 10.252.0.0/17 \
-             --hmn-cidr 10.254.0.0/17 \
-             --ntp-pools time.nist.gov \
-             --site-domain dev.cray.com \
-             --site-ip 172.30.53.79/20 \
-             --site-gw 172.30.48.1 \
-             --site-nic p1p2 \
-             --site-dns 172.30.84.40 \
-             --install-ncn-bond-members p1p1,p10p1 \
-             --application-node-config-yaml application_node_config.yaml \
-             --cabinets-yaml cabinets.yaml \
-             --hmn-mtn-cidr 10.104.0.0/17 \
-             --nmn-mtn-cidr 10.100.0.0/17 \
-             --bgp-peers aggregation
+         linux# csi config init <options>
          ```
 
          A new directory matching the `system-name` field in `system_config.yaml` will now exist in the working directory.
