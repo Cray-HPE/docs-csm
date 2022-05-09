@@ -34,8 +34,14 @@ truncate --size=0 ~/.ssh/known_hosts  2>&1
 function gather_ceph_conf () {
   FSID=$(ssh $node 'ceph -s --format=json-pretty|jq -r .fsid')
   WAS_MON=$(ssh $node ceph node ls|jq -r --arg h $host 'any(.mon|keys; .[] == $h)')
+  if [[ "$WAS_MON" != "true" ]]; then 
+    WAS_MON="false"
+  fi
   WAS_OSD=$(ssh $node ceph node ls|jq -r --arg h $host 'any(.osd|keys; .[] == $h)')
-  if $WAS_OSD
+  if [[ "$WAS_OSD" != "true" ]]; then 
+    WAS_OSD="false"
+  fi
+  if [[ "$WAS_OSD" == "true" ]]
   then
     OSDS+=($(ssh $node "ceph osd ls-tree $host"))
   fi
@@ -48,17 +54,25 @@ function gather_ceph_conf () {
 }
 
 function apply_ceph_conf () {
-  if [[ -n $WAS_OSD ]]
+  if [[ "$WAS_OSD" == "true" ]]
   then
     if [[ ! -d /var/lib/ceph/$FSID ]]
     then
-      mkdir /var/lib/ceph/$FSID
+      if [[ ! $(mkdir /var/lib/ceph/$FSID) ]]
+      then
+        echo "Unable to create /var/lib/ceph/$FSID directory"
+        exit 1
+      fi
     fi
     for osd in ${OSDS[@]}
     do
       if [[ ! -d /var/lib/ceph/$FSID/osd.$osd ]]
       then
-       mkdir /var/lib/ceph/$FSID/osd.$osd
+        if [[ ! $(mkdir /var/lib/ceph/$FSID/osd.$osd) ]]
+        then
+          echo "Unable to create /var/lib/ceph/$FSID/osd.$osd directory"
+          exit 1
+        fi
       fi
       echo "$CONF" > /var/lib/ceph/$FSID/osd.$osd/config
     done
@@ -87,7 +101,7 @@ for node in ncn-s001 ncn-s002 ncn-s003; do
       gather_ceph_conf
       apply_ceph_conf
 
-      if $WAS_OSD
+      if [[ "$WAS_OSD" == "true" ]]
       then
         if [[ $counter_a -eq 0 ]] && [[ $(ssh $node "ceph orch host rm $host") ]]
         then
@@ -95,7 +109,7 @@ for node in ncn-s001 ncn-s002 ncn-s003; do
         fi
       fi
 
-      if $WAS_MON
+      if [[ $WAS_MON == "true" ]]
       then
 	ssh $node "ceph mon rm $host"
       fi
@@ -116,7 +130,7 @@ for node in ncn-s001 ncn-s002 ncn-s003; do
 
 sleep 30
 
-if ! $WAS_OSD
+if [[ $WAS_OSD == "false" ]]
 then
   (( ceph_mgr_failed_restarts=0 ))
   (( ceph_mgr_successful_restarts=0 ))
@@ -204,4 +218,9 @@ fi
 for service in $(cephadm ls | jq -r '.[].systemd_unit'|grep -v cephadm)
 do
   systemctl enable $service
+  is_active=null
+  until [[ "$is_active" == "active" ]]
+  do 
+    is_active=$(systemctl is-active $service)
+  done
 done
