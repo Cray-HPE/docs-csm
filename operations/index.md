@@ -45,7 +45,7 @@ The following administrative topics can be found in this guide:
 
 - [Validate CSM Health](validate_csm_health.md)
 - [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
-- [Configure the Cray Command Line Interface (cray CLI)](configure_cray_cli.md)
+- [Configure the Cray Command Line Interface (Cray CLI)](configure_cray_cli.md)
 - [Change Passwords and Credentials](CSM_product_management/Change_Passwords_and_Credentials.md)
 - [Configure Non-Compute Nodes with CFS](CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md)
 - [Perform NCN Personalization](CSM_product_management/Perform_NCN_Personalization.md)
@@ -220,9 +220,9 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
   - [Set Limits for a Configuration Session](configuration_management/Set_Limits_for_a_Configuration_Session.md)
   - [Use a Specific Inventory for a Configuration Session](configuration_management/Use_a_Specific_Inventory_in_a_Configuration_Session.md)
   - [Change the Ansible Verbosity Logs](configuration_management/Change_the_Ansible_Verbosity_Logs.md)
-  - [Set the ansible.cfg for a Session](configuration_management/Set_the_ansible-cfg_for_a_Session.md)
+  - [Set the `ansible.cfg` for a Session](configuration_management/Set_the_ansible-cfg_for_a_Session.md)
   - [Delete CFS Sessions](configuration_management/Delete_CFS_Sessions.md)
-  - [Automatic Session Deletion with sessionTTL](configuration_management/Automatic_Session_Deletion_with_sessionTTL.md)
+  - [Automatic Session Deletion with `sessionTTL`](configuration_management/Automatic_Session_Deletion_with_sessionTTL.md)
   - [Track the Status of a Session](configuration_management/Track_the_Status_of_a_Session.md)
   - [View Configuration Session Logs](configuration_management/View_Configuration_Session_Logs.md)
   - [Troubleshoot Ansible Play Failures in CFS Sessions](configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
@@ -231,7 +231,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
 - [CFS Flow Diagrams](configuration_management/CFS_Flow_Diagrams.md)
 - [Configuration Management of System Components](configuration_management/Configuration_Management_of_System_Components.md)
 - [Ansible Execution Environments](configuration_management/Ansible_Execution_Environments.md)
-  - [Use a Custom ansible-cfg File](configuration_management/Use_a_Custom_ansible-cfg_File.md)
+  - [Use a Custom `ansible-cfg` File](configuration_management/Use_a_Custom_ansible-cfg_File.md)
   - [Enable Ansible Profiling](configuration_management/Enable_Ansible_Profiling.md)
 - [CFS Global Options](configuration_management/CFS_Global_Options.md)
 - [Version Control Service \(VCS\)](configuration_management/Version_Control_Service_VCS.md)
@@ -252,8 +252,8 @@ The system management components are broken down into a series of micro-services
 As a result, the system's micro-services are modular, resilient, and can be updated independently. Services within the Kubernetes architecture communicate via REST APIs.
 
 - [Kubernetes Architecture](kubernetes/Kubernetes.md)
-- [About kubectl](kubernetes/About_kubectl.md)
-  - [Configure kubectl Credentials to Access the Kubernetes APIs](kubernetes/Configure_kubectl_Credentials_to_Access_the_Kubernetes_APIs.md)
+- [About `kubectl`](kubernetes/About_kubectl.md)
+  - [Configure `kubectl` Credentials to Access the Kubernetes APIs](kubernetes/Configure_kubectl_Credentials_to_Access_the_Kubernetes_APIs.md)
 - [About Kubernetes Taints and Labels](kubernetes/About_Kubernetes_Taints_and_Labels.md)
 - [Kubernetes Storage](kubernetes/Kubernetes_Storage.md)
 - [Kubernetes Networking](kubernetes/Kubernetes_Networking.md)
@@ -370,7 +370,7 @@ HPE Cray EX systems are designed so that system management services \(SMS\) are 
 - [Resiliency](resiliency/Resiliency.md)
 - [Resilience of System Management Services](resiliency/Resilience_of_System_Management_Services.md)
 - [Restore System Functionality if a Kubernetes Worker Node is Down](resiliency/Restore_System_Functionality_if_a_Kubernetes_Worker_Node_is_Down.md)
-- [Recreate StatefulSet Pods on Another Node](resiliency/Recreate_StatefulSet_Pods_on_Another_Node.md)
+- [Recreate `StatefulSet` Pods on Another Node](resiliency/Recreate_StatefulSet_Pods_on_Another_Node.md)
 - [NTP Resiliency](resiliency/NTP_Resiliency.md)
 
 <a name="conman"></a>
@@ -462,7 +462,7 @@ this tool enables parameters to be set before or after discovery. The operations
 
 - [System Configuration Service](system_configuration_service/System_Configuration_Service.md)
 - [Configure BMC and Controller Parameters with SCSD](system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md)
-- [Manage Parameters with the scsd Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
+- [Manage Parameters with the SCSD Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
 - [Set BMC Credentials](system_configuration_service/Set_BMC_Credentials.md)
 
 <a name="hardware-state-manager-hsm"></a>
@@ -497,7 +497,7 @@ making it available via REST queries and message bus events when changes occur.
 
 The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system.
 
- * [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
+- [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
 
 <a name="hpe-power-distribution-unit-pdu"></a>
 
@@ -505,7 +505,7 @@ The Hardware Management (HM) Collector is used to collect telemetry and Redfish 
 
 Procedures for managing and setting up HPE PDUs.
 
- * [HPE PDU Admin Procedure](hpe_pdu/hpe_pdu_admin_procedures.md)
+- [HPE PDU Admin Procedure](hpe_pdu/hpe_pdu_admin_procedures.md)
 
 <a name="node-management"></a>
 
@@ -527,7 +527,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   - [Validate Storage Node](node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
   - [Final Validation Steps](node_management/Rebuild_NCNs/Final_Validation_Steps.md)
 - [Reboot NCNs](node_management/Reboot_NCNs.md)
-  - [Check and Set the metalno-wipe Setting on NCNs](node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md)
+  - [Check and Set the `metalno-wipe` Setting on NCNs](node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md)
 - [Enable Nodes](node_management/Enable_Nodes.md)
 - [Disable Nodes](node_management/Disable_Nodes.md)
 - [Find Node Type and Manufacturer](node_management/Find_Node_Type_and_Manufacturer.md)
@@ -541,7 +541,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   - [Move a Standard Rack Node (Same Rack/Same HSN Ports)](node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
   - [Verify Node Removal](node_management/Verify_Node_Removal.md)
 - [Clear Space in Root File System on Worker Nodes](node_management/Clear_Space_in_Root_File_System_on_Worker_Nodes.md)
-- [Troubleshoot Issues with Redfish Endpoint DiscoveryCheck for Redfish Events from Nodes](node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
+- [Troubleshoot Issues with Redfish Endpoint `DiscoveryCheck` for Redfish Events from Nodes](node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
 - [Reset Credentials on Redfish Devices](node_management/Reset_Credentials_on_Redfish_Devices_for_Reinstallation.md)
 - [Access and Update Settings for Replacement NCNs](node_management/Access_and_Update_the_Settings_for_Replacement_NCNs.md)
 - [Change Settings for HMS Collector Polling of Air Cooled Nodes](node_management/Change_Settings_for_HMS_Collector_Polling_of_Air_Cooled_Nodes.md)
@@ -580,8 +580,8 @@ Overview of the several different networks supported by the HPE Cray EX system.
 
 ### Management Network
 
-HPE Cray EX systems can have network switches in many roles: spine switches, leaf switches, leaf-bmc switches, and CDU switches. Newer systems have HPE Aruba switches,
-while older systems have Dell and Mellanox switches. Switch IP addresses are generated by Cray Site Init (CSI).
+HPE Cray EX systems can have network switches in many roles: spine switches, leaf switches, `LeafBMC` switches, and CDU switches. Newer systems have HPE Aruba switches,
+while older systems have Dell and Mellanox switches. Switch IP addresses are generated by `Cray Site Init` (CSI).
 
 - [HPE Cray EX Management Network Installation and Configuration Guide](network/management_network/index.md)
   - [Aruba Installation and Configuration](network/management_network/aruba/index.md)
@@ -619,7 +619,7 @@ The central DNS infrastructure provides the structural networking hierarchy and 
 
 - [DNS](network/dns/DNS.md)
 - [Manage the DNS Unbound Resolver](network/dns/Manage_the_DNS_Unbound_Resolver.md)
-- [Enable ncsd on UANs](network/dns/Enable_ncsd_on_UANs.md)
+- [Enable `ncsd` on UANs](network/dns/Enable_ncsd_on_UANs.md)
 - [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
 - [Troubleshoot PowerDNS](network/dns/Troubleshoot_PowerDNS.md)
 
@@ -631,8 +631,8 @@ External DNS, along with the Customer Access Network \(CAN\), Border Gateway Pro
 management services. Services are accessible directly from a laptop without needing to tunnel into a non-compute node \(NCN\) or override /etc/hosts settings.
 
 - [External DNS](network/external_dns/External_DNS.md)
-- [External DNS csi config init Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
-- [Update the cmn-external-dns Value Post-Installation](network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md)
+- [External DNS `csi config init` Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
+- [Update the `cmn-external-dns` Value Post-Installation](network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md)
 - [Ingress Routing](network/external_dns/Ingress_Routing.md)
 - [Add NCNs and UANs to External DNS](network/external_dns/Add_NCNs_and_UANs_to_External_DNS.md)
 - [External DNS Failing to Discover Services Workaround](network/external_dns/External_DNS_Failing_to_Discover_Services_Workaround.md)
@@ -643,9 +643,11 @@ management services. Services are accessible directly from a laptop without need
 
 ### MetalLB in BGP-Mode
 
-MetalLB is a component in Kubernetes that manages access to `LoadBalancer` services from outside the Kubernetes cluster. There are `LoadBalancer` services on the Node Management Network \(NMN\), Hardware Management Network \(HMN\), and Customer Access Network \(CAN\).
+MetalLB is a component in Kubernetes that manages access to `LoadBalancer` services from outside the Kubernetes cluster. There are `LoadBalancer` services on the Node
+Management Network \(NMN\), Hardware Management Network \(HMN\), and Customer Access Network \(CAN\).
 
-MetalLB can run in either `Layer2-mode` or `BGP-mode` for each address pool it manages. `BGP-mode` is used for the NMN, HMN, and CAN. This enables true load balancing \(`Layer2-mode` does failover, not load balancing\) and allows for a more robust layer 3 configuration for these networks.
+MetalLB can run in either `Layer2-mode` or `BGP-mode` for each address pool it manages. `BGP-mode` is used for the NMN, HMN, and CAN. This enables true load balancing
+\(`Layer2-mode` does failover, not load balancing\) and allows for a more robust layer 3 configuration for these networks.
 
 - [MetalLB in BGP-Mode](network/metallb_bgp/MetalLB_in_BGP-Mode.md)
 - [MetalLB in BGP-Mode Configuration](network/metallb_bgp/MetalLB_in_BGP-Mode_Configuration.md)
@@ -693,7 +695,7 @@ a User Access Instance \(UAI\) using the `cray` command. Users can also transfer
 - [Special Purpose UAIs](UAS_user_and_admin_topics/Special_Purpose_UAIs.md)
 - [Elements of a UAI](UAS_user_and_admin_topics/Elements_of_a_UAI.md)
 - [UAI Host Nodes](UAS_user_and_admin_topics/UAI_Host_Nodes.md)
-- [UAI macvlans Network Attachments](UAS_user_and_admin_topics/UAI_macvlans_Network_Attachments.md)
+- [UAI `macvlans` Network Attachments](UAS_user_and_admin_topics/UAI_macvlans_Network_Attachments.md)
 - [UAI Host Node Selection](UAS_user_and_admin_topics/UAI_Host_Node_Selection.md)
 - [UAI Network Attachments](UAS_user_and_admin_topics/UAI_Network_Attachments.md)
 - [Configure UAIs in UAS](UAS_user_and_admin_topics/Configure_UAIs_in_UAS.md)
@@ -743,7 +745,7 @@ a User Access Instance \(UAI\) using the `cray` command. Users can also transfer
   - [Troubleshoot UAS by Viewing Log Output](UAS_user_and_admin_topics/Troubleshoot_UAS_by_Viewing_Log_Output.md)
   - [Troubleshoot UAIs by Viewing Log Output](UAS_user_and_admin_topics/Troubleshoot_UAIs_by_Viewing_Log_Output.md)
   - [Troubleshoot Stale Brokered UAIs](UAS_user_and_admin_topics/Troubleshoot_Stale_Brokered_UAIs.md)
-  - [Troubleshoot UAI Stuck in "ContainerCreating"](UAS_user_and_admin_topics/Troubleshoot_UAI_Stuck_in_ContainerCreating.md)
+  - [Troubleshoot UAI Stuck in `ContainerCreating`](UAS_user_and_admin_topics/Troubleshoot_UAI_Stuck_in_ContainerCreating.md)
   - [Troubleshoot Duplicate Mount Paths in a UAI](UAS_user_and_admin_topics/Troubleshoot_Duplicate_Mount_Paths_in_a_UAI.md)
   - [Troubleshoot Missing or Incorrect UAI Images](UAS_user_and_admin_topics/Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
   - [Troubleshoot UAIs with Administrative Access](UAS_user_and_admin_topics/Troubleshoot_UAIs_with_Administrative_Access.md)
