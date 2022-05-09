@@ -373,7 +373,7 @@ deployment.apps/istio-ingressgateway patched
 After running the `add_pod_priority.sh` script, the affected pods will be restarted as the pod priority class is applied to them.
 
 > **`NOTE`** If the script doesn't finish and ends up looping on this message
-> longer that several minutes:
+> longer than several minutes:
 >
 > ```
 > Sleeping for ten seconds waiting for 3 pods in cray-bss-etcd etcd cluster
