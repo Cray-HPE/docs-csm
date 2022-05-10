@@ -141,7 +141,10 @@ This assumes that a dump of the database exists.
         Based off the four `spire-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, `spire`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
         ```bash
-        ncn-w001# for secret in postgres.spire-postgres.credentials service-account.spire-postgres.credentials spire.spire-postgres.credentials standby.spire-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
+        ncn-w001# for secret in postgres.spire-postgres.credentials service-account.spire-postgres.credentials spire.
+        spire-postgres.credentials standby.spire-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo 
+        -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret $
+        {secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
         ```
 
         Example output:
@@ -364,7 +367,10 @@ This assumes that a dump of the database exists.
         Based off the three `keycloak-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
         ```bash
-        ncn-w001# for secret in postgres.keycloak-postgres.credentials service-account.keycloak-postgres.credentials standby.keycloak-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
+        ncn-w001# for secret in postgres.keycloak-postgres.credentials service-account.keycloak-postgres.credentials standby.
+        keycloak-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret $
+        {secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} 
+        -ojsonpath='{.data.password}'| base64 -d`; done
 
         secret postgres.keycloak-postgres.credentials username & password: postgres ABCXYZ
         secret service-account.keycloak-postgres.credentials username & password: service_account ABC123
@@ -441,7 +447,9 @@ This assumes that a dump of the database exists.
 
         ```bash
         ncn-w001# kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak -o json > keycloak-setup.json
-        ncn-w001# cat keycloak-setup.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -
+        ncn-w001# cat keycloak-setup.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.
+        managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | jq 'del(.
+        spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -
         ```
 
         Check the status of the `keycloak-setup` job. If the `COMPLETIONS` value is not `1/1`, wait a few seconds and run the command again until the `COMPLETIONS` value is `1/1`.
@@ -457,7 +465,9 @@ This assumes that a dump of the database exists.
 
         ```bash
         ncn-w001# kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak-users-localize -o json > cray-keycloak-users-localize.json
-        ncn-w001# cat cray-keycloak-users-localize.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -`
+        ncn-w001# cat cray-keycloak-users-localize.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.
+        metadata.managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | 
+        jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -`
         ```
 
         Check the status of the `cray-keycloak-users-localize` job. If the `COMPLETIONS` value is not `1/1`, wait a few seconds and run the command again until the `COMPLETIONS` value is `1/1`.
@@ -614,7 +624,10 @@ This assumes that a dump of the database exists, as well as a backup of the VCS 
         Based off the three `gitea-vcs-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
         ```bash
-        ncn-w001# for secret in postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials gitea.gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
+        ncn-w001# for secret in postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials gitea.
+        gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials; do echo -n "secret ${secret} username & password: 
+        "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get 
+        secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
 
         secret postgres.gitea-vcs-postgres.credentials username & password: postgres ABCXYZ
         secret service-account.gitea-vcs-postgres.credentials username & password: service_account ABC123
@@ -810,7 +823,10 @@ This assumes that a dump of the database exists.
         Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
         ```bash
-        ncn-w001# for secret in postgres.capsules-warehouse-server-postgres.credentials service-account.capsules-warehouse-server-postgres.credentials standby.capsules-warehouse-server-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
+        ncn-w001# for secret in postgres.capsules-warehouse-server-postgres.credentials service-account.
+        capsules-warehouse-server-postgres.credentials standby.capsules-warehouse-server-postgres.credentials; do echo -n "secret 
+        ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | 
+        base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
         ```
 
         Example output:

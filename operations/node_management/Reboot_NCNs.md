@@ -17,7 +17,9 @@ The following is a high-level overview of the non-compute node \(NCN\) reboot wo
 
 The time duration for this procedure \(if health checks are being executed in between each boot, as recommended\) could take between two to four hours for a system with nine management nodes.
 
-This same procedure can be used to reboot a single management node as outlined above. Be sure to carry out the NCN pre-reboot checks and procedures before and after rebooting the node. Execute the rolling NCN reboot procedure steps for the particular node type being rebooted.
+This same procedure can be used to reboot a single management node as outlined above.
+Be sure to carry out the NCN pre-reboot checks and procedures before and after rebooting the node.
+Execute the rolling NCN reboot procedure steps for the particular node type being rebooted.
 
 ## Prerequisites
 
@@ -216,7 +218,10 @@ Before rebooting NCNs:
          Example output:
 
          ```text
-         Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
+         Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = 
+         Unknown desc = failed to setup network for sandbox "82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545": 
+         Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for 
+         range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
          ```
 
          ```bash
@@ -226,7 +231,10 @@ Before rebooting NCNs:
          Example output:
 
          ```text
-         Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
+         Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code 
+         = Unknown desc = failed to setup network for sandbox "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": 
+         Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for 
+         range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
          ```
 
          Remove the following files on every worker node to resolve the failure:

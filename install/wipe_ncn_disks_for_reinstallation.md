@@ -61,7 +61,7 @@ executed on **any type of management node** (master, storage, or worker).
 
 ## Advanced Wipe
 
-**This section is specific to utility storage nodes**. An advanced wipe includes stopping Ceph, 
+**This section is specific to utility storage nodes**. An advanced wipe includes stopping Ceph,
 deleting the Ceph volumes, and then wiping the disks and RAIDs.
 
 1. Stop Ceph.
@@ -318,11 +318,13 @@ wiping a different type of node than what a step specifies, then skip that step.
     ncn# vgremove -f -v --select 'vg_name=~metal*'
     ```
 
-    > **NOTE:** Optionally, run the `pvs` command. If any drives are still listed, then remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, ignore the error and proceed to the next step. This will not inhibit the wipe process.
+    > **NOTE:** Optionally, run the `pvs` command. If any drives are still listed, then remove them with `pvremove`, but this is rarely needed.
+    >Also, if the above command fails or returns a warning about the filesystem being in use, ignore the error and proceed to the next step.
+    >This will not inhibit the wipe process.
 
 1. Wipe the disks and RAIDs on **all node types** (master, storage, or worker).
 
-    If wiping multiple nodes, this group of commands should be done in succession on one node before moving to do the same set of commands on the next node. 
+    If wiping multiple nodes, this group of commands should be done in succession on one node before moving to do the same set of commands on the next node.
     The nodes should be addressed in descending order for each type of node. Start with the utility storage nodes, then the worker nodes, then `ncn-m003`, and finally `ncn-m002`.
 
     > **WARNING:** Do not run these commands on `ncn-m001`

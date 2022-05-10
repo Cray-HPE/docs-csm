@@ -2,7 +2,7 @@
 
 This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
-## Perquisites
+## Prerquisites
 
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 * Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
@@ -73,7 +73,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     hms-discovery    */3 * * * *     True         0       117s             15d
     ```
 
-2. Determine if the destination chassis slot is populated. This example is checking slot 0 in chassis 3 of cabinet x1005.
+2. Determine if the destination chassis slot is populated. This example is checking slot 0 in chassis 3 of cabinet `x1005`.
 
     ```bash
     ncn-m001# cray hsm state components describe x1005c3s0
@@ -128,11 +128,15 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
 ### Preserve node component name (xname) to IP address mapping
 
-6. **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.** When DVS is operating over the NMN and a blade is being replaced, the mapping of node component name (xname) to node IP address must be preserved. Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes). To prevent from Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
+6. **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.**
+   When DVS is operating over the NMN and a blade is being replaced, the mapping of node component name (xname) to node IP address must be preserved.
+   Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes).
+   To prevent from Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
 
-    1. Create an `eth_interfaces` file that contains the interface IDs for the `Node Maintenance Network` entries for the destination blade location. If there has not been a blade previously in the destination location there may not be any Ethernet Interfaces to delete from HSM.
-
-        The `blade_query.sh` script from the perquisites section can help determine the IDs for the HSM Ethernet Interfaces associated with the blade if any. It is expected that if a blade has not been populated in the slot before that no HSM Ethernet Interfaces IDs would be found.
+    1. Create an `eth_interfaces` file that contains the interface IDs for the `Node Maintenance Network` entries for the destination blade location.
+        If there has not been a blade previously in the destination location there may not be any Ethernet Interfaces to delete from HSM.
+        The `blade_query.sh` script from the perquisites section can help determine the IDs for the HSM Ethernet Interfaces associated with the blade if any.
+        It is expected that if a blade has not been populated in the slot before that no HSM Ethernet Interfaces IDs would be found.
 
         ```bash
         ncn-m001# cat eth_interfaces
@@ -142,7 +146,8 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
         0040a68362e3
         ```
 
-    2. Run the following commands in succession to remove the interfaces if any. Delete the `cray-dhcp-kea` pod to prevent the interfaces from being re-created.
+    2. Run the following commands in succession to remove the interfaces if any.
+       Delete the `cray-dhcp-kea` pod to prevent the interfaces from being re-created.
 
         ```bash
         ncn-m001# kubectl get pods -Ao wide | grep kea
@@ -151,7 +156,10 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
         ncn-m001# for ETH in $(cat eth_interfaces); do cray hsm inventory ethernetInterfaces delete $ETH --format json ; done
         ```
 
-    3. **Skip this step if the destination blade location has not been previously populated with a blade** Add the MAC and IP addresses and also the `Node Maintenance Network` description to the interfaces. The ComponentID and IPAddress must be the values recorded from the blade previously in the destination location and the MACAddress must be the value recorded from the blade. These values were recorded if the blade was removed via the [Removing a Liquid-cooled blade from a System](Removing_a_Liquid-cooled_blade_from_a_System.md) procedure.
+    3. **Skip this step if the destination blade location has not been previously populated with a blade.**
+       Add the MAC and IP addresses and also the `Node Maintenance Network` description to the interfaces.
+       The ComponentID and IPAddress must be the values recorded from the blade previously in the destination location and the MACAddress must be the value recorded from the blade.
+       These values were recorded if the blade was removed via the [Removing a Liquid-cooled blade from a System](Removing_a_Liquid-cooled_blade_from_a_System.md) procedure.
 
         Values recorded from the blade that was was previously in the slot.
 
@@ -189,15 +197,16 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
     4. Repeat the preceding command for each node in the blade.
 
-#### Re-enable hms-discovery cron job
+#### Re-enable `hms-discovery` cron job
 
-7. Rediscover the ChassisBMC (the example shows cabinet 1005, chassis 3). Rediscovering the ChassisBMC will update HSM to become aware of the newly populated slot and allow CAPMC to perform power actions on the slot.
+7. Rediscover the `ChassisBMC` (the example shows cabinet 1005, chassis 3).
+   Rediscovering the `ChassisBMC` will update HSM to become aware of the newly populated slot and allow CAPMC to perform power actions on the slot.
 
     ```bash
     ncn-m001# cray hsm inventory discover create --xnames x1005c3b0
     ```
 
-8. Verify that discovery of the ChassisBMC has completed (`LastDiscoveryStatus` = "`DiscoverOK`").
+8. Verify that discovery of the `ChassisBMC` has completed (`LastDiscoveryStatus` = "`DiscoverOK`").
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe x1005c3b0 --format json
@@ -367,7 +376,8 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 Use boot orchestration to power on and boot the nodes. Specify the appropriate BOS template for the node type.
 
 16. Determine how the BOS Session template references compute hosts.
-    Typically, they are referenced by their `Compute` role. However, if they are referenced by component name (xname), then these new nodes should added to the BOS Session template.
+    Typically, they are referenced by their `Compute` role.
+    However, if they are referenced by component name (xname), then these new nodes should added to the BOS Session template.
 
     ```bash
     ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
@@ -375,7 +385,8 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
     ```
 
     If this query returns empty, then skip to sub-step 3.
-    If this query returns with data, then one or more boot sets within the BOS Session template reference nodes explicitly by xname. Consider adding your new nodes to this list (sub-step 1) or adding them on the command line (sub-step 2).
+    If this query returns with data, then one or more boot sets within the BOS Session template
+    reference nodes explicitly by xname. Consider adding your new nodes to this list (sub-step 1) or adding them on the command line (sub-step 2).
 
     1. Adding new nodes to your list.
 
@@ -394,20 +405,22 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
     2. Create the Session template.
 
        1. The name of the Session template is determined by the name provided to the `--name` option on the command line.
-          Use the current value of `$BOS_TEMPLATE` if you want to overwrite the existing Session template. If you want to use the current value, skip this sub-step and go on to sub-step 2.
-          Otherwise, provide a different name for `BOS_TEMPLATE` which will be used the `--name` option. The name specified in `tmp.txt` is overridden by the value provided to the `--name` option.
+          Use the current value of `$BOS_TEMPLATE` if you want to overwrite the existing Session template.
+          If you want to use the current value, skip this sub-step and go on to sub-step 2.
+          Otherwise, provide a different name for `BOS_TEMPLATE` which will be used the `--name` option.
+          The name specified in `tmp.txt` is overridden by the value provided to the `--name` option.
 
           ```bash
           ncn-m001# BOS_TEMPLATE="New-Session-Template-Name"
           ```
 
-	   1. Create the Session template.
+       2. Create the Session template.
 
           ```bash
           ncn-m001# cray bos sessiontemplate create --file tmp.txt --name $BOS_TEMPLATE
           ```
 
-       1. Verify that the Session template contains the additional nodes and the proper name.
+       3. Verify that the Session template contains the additional nodes and the proper name.
 
            ```bash
            ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json
@@ -492,7 +505,8 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
 
 #### Check for duplicate IP address entries
 
-22. Check for duplicate IP address entries in the Hardware State Management Database (HSM). Duplicate entries will cause DNS operations to fail.
+22. Check for duplicate IP address entries in the Hardware State Management Database (HSM).
+    Duplicate entries will cause DNS operations to fail.
 
     1. Verify each node hostname resolves to one IP address.
 
@@ -527,13 +541,15 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
         ]
         ```
 
-        If there is a duplicate IP address an error message similar to the message below. This message indicates a duplicate IP address (10.100.0.105) in the HSM:
+        If there is a duplicate IP address an error message similar to the message below.
+        This message indicates a duplicate IP address (10.100.0.105) in the HSM:
 
         ```text
         [{'result': 1, 'text': "Config reload failed: configuration error using file '/usr/local/kea/cray-dhcp-kea-dhcp4.conf': failed to add new host using the HW address '00:40:a6:83:50:a4 and DUID '(null)' to the IPv4 subnet id '0' for the address 10.100.0.105: There's already a reservation for this address"}]
         ```
 
-23. Use the following example `curl` command to check for active DHCP leases. If there are 0 DHCP leases, there is a configuration error.
+23. Use the following example `curl` command to check for active DHCP leases.
+    If there are 0 DHCP leases, there is a configuration error.
 
     ```bash
     ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
@@ -553,7 +569,8 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     ]
     ```
 
-24. If there are duplicate entries in the HSM as a result of this procedure, (10.100.0.105 in this example), delete the duplicate entry.
+24. If there are duplicate entries in the HSM as a result of this procedure,
+    (`10.100.0.105` in this example), delete the duplicate entry.
 
     1. Show the `EthernetInterfaces` for the duplicate IP address:
 
