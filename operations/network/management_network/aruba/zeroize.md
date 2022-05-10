@@ -4,7 +4,7 @@ Erases customer data on the management modules in a secure manner. The command p
 
 ## Syntax
 
-```
+```text
 erase all zeroize
 ```
 
