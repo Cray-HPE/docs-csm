@@ -29,7 +29,10 @@
     ncn-s# /usr/share/doc/csm/scripts/join_ceph_cluster.sh
     ```
 
-    **IMPORTANT:** In the output from `watch ceph -s` the health should go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about `failed to probe daemons or devices`, but this should clear on its own. In addition, it may take up to 5 minutes for the added OSDs to report as `up`.  This is dependent on the Ceph Orchestrator performing an inventory and completing batch processing to add the OSDs.
+    **IMPORTANT:** In the output from `watch ceph -s` the health should go to a `HEALTH_WARN` state.
+    This is expected. Most commonly you will see an alert about `failed to probe daemons or devices`, but this should clear on its own.
+    In addition, it may take up to 5 minutes for the added OSDs to report as `up`.
+    This is dependent on the Ceph Orchestrator performing an inventory and completing batch processing to add the OSDs.
 
 ## Zapping OSDs
 
@@ -83,7 +86,8 @@
 
 ## Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
 
-   **IMPORTANT:** `radosgw` by default is deployed to the first 3 storage nodes. This includes `haproxy` and `keepalived`. This is automated as part of the install, but you may have to regenerate the configuration if you are not running on the first 3 storage nodes or all nodes.
+   **IMPORTANT:** `radosgw` by default is deployed to the first 3 storage nodes. This includes `haproxy` and `keepalived`.
+   This is automated as part of the install, but you may have to regenerate the configuration if you are not running on the first 3 storage nodes or all nodes.
 
 1. Deploy Rados Gateway containers to the new nodes.
 
@@ -109,7 +113,7 @@
     rgw.site1.zone1.ncn-s003.nnwuqy  ncn-s003  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8   553b0cb212c   a9706e6d7a69
     ```
 
-1. Add nodes into HAproxy and KeepAlived. Adjust the command based on the number of storage nodes.
+1. Add nodes into `HAproxy` and `KeepAlived`. Adjust the command based on the number of storage nodes.
 
    - If the node was rebuilt:
 
@@ -132,19 +136,19 @@
 
      Example Output:
 
-     ```
+     ```text
      10.252.1.13
      ```
 
      Update the HAproxy config to include the added node. Select a storage node `ncn-s00x` from `ncn-s001`, `ncn-s002`, or `ncn-s003`. This cannot be done from the added node.
 
-     ```
+     ```bash
      ncn-s00x# vi /etc/haproxy/haproxy.cfg
      ```
 
      This example adds or updates `ncn-s004` with the IP address `10.252.1.13` to `backend rgw-backend`.
 
-     ```
+     ```text
      ...
      backend rgw-backend
          option forwardfor
@@ -175,4 +179,4 @@
 ## Next Step
 
 - If rebuilding the storage node, proceed to [Storage Node Validation](../node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
-- If adding the storage node, proceed to [Boot NCN - Add storage node to the Ceph cluster](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn-storage-nodes-only)
+- If adding the storage node, return to [Boot NCN - Add storage node to the Ceph cluster](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn-storage-nodes-only) for the next step
