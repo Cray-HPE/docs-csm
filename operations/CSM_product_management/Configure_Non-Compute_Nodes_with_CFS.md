@@ -3,9 +3,9 @@
 Non-compute node (NCN) personalization applies post-boot configuration to the
 HPE Cray EX management nodes. Several HPE Cray EX product environments outside
 of CSM require NCN personalization to function. Consult the manual for each
-product to configure them on NCNs by referring to the [1.5 HPE Cray EX System
-Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-gsg) on
-the HPE Customer Support Center.
+product to configure them on NCNs by referring to the [`Shasta 1.5 HPE Cray EX System
+Software Getting Started Guide S-8000`](https://www.hpe.com/support/ex-gsg) on
+the `HPE Customer Support Center`.
 
 This procedure defines the NCN personalization process for the CSM product using
 the [Configuration Framework Service (CFS)](../configuration_management/Configuration_Management.md).
@@ -86,9 +86,9 @@ System (COS) and User Access Node (UAN) configurations enable passwordless SSH.
 Refer to the following in the documentation for each product stream to change
 the default configuration:
 
-* COS: Refer to the _VCS Configuration_ section in the _Install or Upgrade COS_
+* COS: Refer to the `VCS Configuration` section in the `Install or Upgrade COS`
   procedure.
-* UAN: Refer to _Create UAN Boot Images_ and _UAN Ansible Roles_ procedures.
+* UAN: Refer to `Create UAN Boot Images` and `UAN Ansible Roles` procedures.
 
 Modifying Ansible plays in a configuration repository will require a new commit
 and subsequent update of the [configuration layer](../configuration_management/Configuration_Layers.md)

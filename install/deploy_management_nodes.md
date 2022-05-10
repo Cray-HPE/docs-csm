@@ -215,15 +215,15 @@ firmware requirement before starting.
    both been installed and configured. However, at that point a rolling reboot procedure for the management nodes will be needed,
    after the firmware has been updated.
 
-   See the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
-   on the [HPE Customer Support Center](https://www.hpe.com/support/ex-gsg) for information about the _HPE Cray EX HPC Firmware Pack_ (HFP) product.
+   See the Shasta 1.5 `HPE Cray EX System Software Getting Started Guide S-8000`
+   on the [`HPE Customer Support Center`](https://www.hpe.com/support/ex-gsg) for information about the _HPE Cray EX HPC Firmware Pack_ (HFP) product.
 
    In the HFP documentation there is information about the recommended firmware packages to be installed.
    See "Product Details" in the _HPE Cray EX HPC Firmware Pack Installation Guide_.
 
    Some of the component types have manual procedures to check firmware versions and update firmware.
-   See "Upgrading Firmware Without FAS" in the _HPE Cray EX HPC Firmware Pack Installation Guide_.
-   It will be possible to extract the files from the product tarball, but the install.sh script from that product
+   See `Upgrading Firmware Without FAS` in the `HPE Cray EX HPC Firmware Pack Installation Guide`.
+   It will be possible to extract the files from the product tarball, but the `install.sh` script from that product
    will be unable to load the firmware versions into the Firmware Action Services (FAS) because the management nodes
    are not booted and running Kubernetes and FAS cannot be used until Kubernetes is running.
 
@@ -573,7 +573,7 @@ If there are LVM check failures, then the problem must be resolved before contin
 >
 > **IMPORTANT:** Estimate the expected number of OSDs using the following table and using this equation:
 >
-> total_osds = (number of utility storage/Ceph nodes) * (OSD count from table below for the appropriate hardware)
+> `total_osds` = `(number of utility storage/Ceph nodes)` `*` `(OSD count from table below for the appropriate hardware)`
 
 | Hardware Manufacturer | OSD Drive Count (not including OS drives)|
 | :-------------------: | :---------------------------------------: |
@@ -591,7 +591,7 @@ If there are LVM check failures, then the problem must be resolved before contin
     24
     ```
 
-   **IMPORTANT:** If the returned number of OSDs is equal to total_osds calculated, then skip the following steps. If not, then proceed with the below additional checks and remediation steps.
+   **IMPORTANT:** If the returned number of OSDs is equal to `total_osds` calculated, then skip the following steps. If not, then proceed with the below additional checks and remediation steps.
 
 1. Compare the number of OSDs to the output (which should resemble the example below). The number of drives will depend on the server hardware.
 
@@ -1046,7 +1046,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
       If any pods are listed by this command, it means they are not in the `Running` or `Completed` state. That needs to be investigated before proceeding.
 
-   1. Verify that the ceph-csi requirements are in place.
+   1. Verify that the `ceph-csi` requirements are in place.
 
       See [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md) for details.
 
