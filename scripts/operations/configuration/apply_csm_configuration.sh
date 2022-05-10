@@ -23,6 +23,17 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
+err()
+{
+    echo "ERROR: $*" 1>&2
+}
+
+err_exit()
+{
+    err "$@"
+    exit 1
+}
+
 usage()
 {
    # Display Help
@@ -68,7 +79,7 @@ while [[ $# -gt 0 ]]; do
       shift # past value
       ;;
     --ncn-config-file)
-      NCN_CONFIG_FILE="$2"
+      OLD_NCN_CONFIG_FILE="$2"
       shift # past argument
       shift # past value
       ;;
@@ -106,10 +117,11 @@ if [[ -z "${VERSION}" ]]; then
     echo "Using csm configuration version ${VERSION}"
 fi
 
-CSM_CONFIG_FILE="csm-config-$VERSION.json"
-if [[ -z "${NCN_CONFIG_FILE}" ]]; then
-    NCN_CONFIG_FILE="ncn-personalization.json"
-fi
+CSM_CONFIG_FILE=$(mktemp csm-config-$VERSION-XXXXXX.json) ||
+    err_exit "Failed to create temporary CSM configuration file with mktemp command (exit code=$?)"
+NCN_CONFIG_FILE=$(mktemp new-ncn-personalization-XXXXXX.json) ||
+    err_exit "Failed to create temporary NCN configuration file with mktemp command (exit code=$?)"
+
 if [[ -z "${CLONE_URL}" ]]; then
     CLONE_URL="https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
 fi
@@ -130,7 +142,7 @@ if [[ -z "${COMMIT}" ]]; then
         echo "No git commit found"
         exit 1
     fi
-    cd -
+    cd - >/dev/null 2>&1
     HOME=$TEMP_HOME
     rm -r $TEMP_DIR
 fi
@@ -146,24 +158,17 @@ CONFIG="{
   ]
 }"
 
-if [[ ! -f $CSM_CONFIG_FILE ]]; then
-    echo "Creating the configuration file ${CSM_CONFIG_FILE}"
-else
-    echo "Replacing the configuration file ${CSM_CONFIG_FILE}"
-fi
+echo "Creating the configuration file ${CSM_CONFIG_FILE}"
 echo $CONFIG | jq > $CSM_CONFIG_FILE
 
-if [ ! -f $NCN_CONFIG_FILE ]; then
-    echo "Creating the configuration file ${NCN_CONFIG_FILE}"
-    cp -p $CSM_CONFIG_FILE $NCN_CONFIG_FILE
-else
-    echo "Making a backup of old ${NCN_CONFIG_FILE}"
-    cp -p $NCN_CONFIG_FILE ${NCN_CONFIG_FILE}.backup
-    echo "Updating the configuration file ${NCN_CONFIG_FILE}"
-    jq -n --slurpfile new $CSM_CONFIG_FILE --slurpfile old $NCN_CONFIG_FILE \
+if [[ -n ${OLD_NCN_CONFIG_FILE} && -f ${OLD_NCN_CONFIG_FILE} ]]; then
+    echo "Combining new CSM configuration $CSM_CONFIG_FILE with contents of ${OLD_NCN_CONFIG_FILE} to generate ${NCN_CONFIG_FILE}"
+    jq -n --slurpfile new $CSM_CONFIG_FILE --slurpfile old $OLD_NCN_CONFIG_FILE \
         '{"layers": ($new[0].layers + ($old[0].layers | del(.[] | select(.cloneUrl == $new[0].layers[0].cloneUrl and .playbook == $new[0].layers[0].playbook))))}'\
-        > ${NCN_CONFIG_FILE}.new
-    mv ${NCN_CONFIG_FILE}.new $NCN_CONFIG_FILE
+        > ${NCN_CONFIG_FILE}
+else
+    echo "Creating new NCN configuration file ${NCN_CONFIG_FILE}"
+    cp -p ${CSM_CONFIG_FILE} ${NCN_CONFIG_FILE}
 fi
 
 ## RUNNING CFS ##

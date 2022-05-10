@@ -65,10 +65,8 @@ ncn# canu -s 1.5 validate shcd --shcd SHCD.xlsx
 ncn# canu -s 1.5 validate shcd-cabling --shcd SHCD.xlsx --ips-file ips.txt
 ```
 
-* Generate switch config for the network:
+* Generate switch configuration for the network:
 
 ```bash
 ncn# canu -s 1.5 network config --shcd SHCD.xlsx --csi-folder /var/www/prep/SYSTEMNAME/ --folder configs
 ```
-
-[Back to Index](../index.md)

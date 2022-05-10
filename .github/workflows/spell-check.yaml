@@ -24,7 +24,7 @@
 name: Check Spelling
 
 on:
-  push:
+  pull_request:
 
 jobs:
   markdown-spell-check:

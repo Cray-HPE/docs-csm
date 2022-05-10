@@ -35,6 +35,7 @@ ncn# kubectl create secret generic vcs-user-credentials --save-config \
 --from-literal=vcs_password="NEW_PASSWORD" \
 --dry-run=client -o yaml | kubectl apply -f -
 ```
+
 The `NEW_PASSWORD` value must be replaced with the updated password.
 
 ## Access the `cray` Gitea Organization
@@ -75,7 +76,7 @@ Data for Gitea is stored in two places. Git content is stored directly in a PVC,
 
 1. Determine which Postgres member is the leader and exec into the leader pod to dump the data to a local file:
 
-    ```
+    ```bash
     ncn-w001# kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list
     ```
 
@@ -99,7 +100,7 @@ Data for Gitea is stored in two places. Git content is stored directly in a PVC,
 
 2. Determine what secrets are associated with the postgresql credentials:
 
-    ```
+    ```bash
     ncn-w001# kubectl get secrets -n services | grep gitea-vcs-postgres.credentials
     ```
 
@@ -113,7 +114,7 @@ Data for Gitea is stored in two places. Git content is stored directly in a PVC,
 
 3. Export each secret to a manifest file:
 
-    ```
+    ```bash
     ncn# SECRETS="postgres service-account standby"
     ncn# echo "---" > gitea-vcs-postgres.manifest
     ncn# for secret in $SECRETS; do
@@ -124,7 +125,6 @@ Data for Gitea is stored in two places. Git content is stored directly in a PVC,
 
 4. Edit the manifest file to remove creationTimestamp, resourceVersion, selfLink, uid for each entry. Then, copy all files to a safe location.
 
-
 ### Backup PVC Data
 
 The VCS postgres backups should be accompanied by backups of the VCS PVC. The export process can be run at any time while the service is running using the following commands:
@@ -133,7 +133,7 @@ Backup (save the resulting tar file to a safe location):
 
 ```bash
 ncn# POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
-ncn# kubectl -n services exec ${POD} -- tar -cvf vcs.tar /data/
+ncn# kubectl -n services exec ${POD} -- tar -cvf vcs.tar /var/lib/gitea/
 ncn# kubectl -n services cp ${POD}:vcs.tar ./vcs.tar
 ```
 

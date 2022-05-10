@@ -157,7 +157,7 @@ fi
 
 {
 . /usr/share/doc/csm/upgrade/1.2/scripts/ceph/lib/ceph-health.sh
-wait_for_health_ok
+wait_for_health_ok ${target_ncn}
 
 # Wait for rgw to start before executing goss tests
 target_ncn=ncn-s001
