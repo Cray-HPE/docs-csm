@@ -21,7 +21,9 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ## Warning for Non-Compute Nodes (NCNs)
 
-NCNs and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
+NCNs and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS.
+Research [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
+Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
 ---
 
@@ -29,13 +31,15 @@ NCNs and their BMCs should be locked with the HSM locking API to ensure they are
 
 ## Ignore Nodes within FAS
 
-The default configuration of FAS no longer ignores `management` nodes, which prevents FAS from firmware updating the NCNs. To reconfigure the FAS deployment to exclude non-compute nodes (NCNs) and ensure they cannot have their firmware upgraded, the `NODE_BLACKLIST` value must be manually enabled
+The default configuration of FAS no longer ignores `management` nodes, which prevents FAS from firmware updating the NCNs.
+To reconfigure the FAS deployment to exclude non-compute nodes (NCNs) and ensure they cannot have their firmware upgraded, the `NODE_BLACKLIST` value must be manually enabled
 
-**Preferred Method:** Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
+**Preferred Method:** Nodes can also be locked with the Hardware State Manager (HSM) API.
+Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
 
 <a name="procedure"></a>
 
-### Procedure
+### Procedure to Ignore Nodes
 
 1. Check that there are no FAS actions running.
 
@@ -59,11 +63,12 @@ The default configuration of FAS no longer ignores `management` nodes, which pre
 
 ## Override an Image for an Update
 
-If an update fails because of `"No Image available"`, it may be caused by FAS unable to match the data on the node to find an image in the image list.
+If an update fails because of `"No Image available"`, it may be caused by FAS unable to
+match the data on the node to find an image in the image list.
 
 <a name="procedure-1"></A>
 
-### Procedure
+### Procedure to Override an Image
 
 1. Find the available image in FAS.
 
@@ -159,24 +164,32 @@ Re-run the FAS actions command using the updated JSON file. **It is strongly rec
 
 ## Check for New Firmware Versions with a Dry-Run
 
-Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
+Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmware can be updated on the system.
+Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter.
+A dry-run will create a query according to the filters requested by the administrator.
+It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
 
-> **WARNING:** It is crucial that an administrator is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The administrator assumes full responsibility for this knowledge.
+> **WARNING:** It is crucial that an administrator is familiar with the release notes of any firmware.
+> The release notes will indicate what new features the firmware provides and if there are any incompatibilities.
+> FAS does not know about incompatibilities or dependencies between versions. The administrator assumes full responsibility for this knowledge.
 
-It is likely that when performing a firmware update, that the current version of firmware will not be available. This means that after successfully upgrading, the firmware cannot be downgraded.
+It is likely that when performing a firmware update, that the current version of firmware will not be available.
+This means that after successfully upgrading, the firmware cannot be downgraded.
 
-This procedure includes information on how check the firmware versions for the entire system, as well as how to target specific manufacturers, component names (xnames), and targets.
+This procedure includes information on how check the firmware versions for the entire system,
+as well as how to target specific manufacturers, component names (xnames), and targets.
 
 <a name="procedure-2"></a>
 
-### Procedure
+### Procedure to Check for New Firmware Versions
 
 1. Run a dry-run firmware update.
 
    The following command parameters should be included in dry-run JSON files:
-   
+
    * `overrideDryrun`: The `overrideDryrun` parameter is set to `false` by default. FAS will only update the system if this is parameter is set to `true`.
-   * `restoreNotPossibleOverride`: FAS will not perform an update if the currently running firmware is not available in the images repository. Set this parameter to `true` in order to allow FAS to update firmware even if the current firmware is unavailable on the system.
+   * `restoreNotPossibleOverride`: FAS will not perform an update if the currently running firmware is not available in the images repository.
+   Set this parameter to `true` in order to allow FAS to update firmware even if the current firmware is unavailable on the system.
    * `description`: A brief description that helps administrators distinguish between actions.
    * `version`: Determines if the firmware should be set to the `latest`, the `earliest` semantic version, or set to a specific firmware version.
 
@@ -296,7 +309,8 @@ This procedure includes information on how check the firmware versions for the e
 
    2. View the details of an action to get more information on each operation in the FAS action.
 
-       In the example below, there is an operation for a component name (xname) in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is due to a missing firmware image file.
+       In the example below, there is an operation for a component name (xname) in the failed state, indicating there is something that FAS could do, but it likely would fail.
+       A common cause for an operation failing is due to a missing firmware image file.
 
        ```bash
        ncn# cray fas actions describe {actionID} --format json
@@ -500,7 +514,8 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
     A successful run will end with `*** Number of Updates: x ***`.
 
-    > **NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in Nexus. If the number is 0, all images were already in FAS.
+    > **NOTE:** The FAS loader will not overwrite image records already in FAS.
+    >`Number of Updates` will be the number of new images found in Nexus. If the number is 0, all images were already in FAS.
 
 ---
 
@@ -580,5 +595,5 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
 
     A successful run will end with `*** Number of Updates: x ***`.
 
-    > **NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
-    
+    > **NOTE:** The FAS loader will not overwrite image records already in FAS.
+    >`Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.

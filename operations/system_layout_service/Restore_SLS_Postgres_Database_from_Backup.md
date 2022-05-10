@@ -1,6 +1,8 @@
 # Restore SLS Postgres Database from Backup
 
-This procedure can be used to restore the SLS Postgres database from a previously taken backup. This can be a manual backup created by the [Create a Backup of the SLS Postgres Database](Create_a_Backup_of_the_SLS_Postgres_Database.md) procedure, or an automatic backup created by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
+This procedure can be used to restore the SLS Postgres database from a previously taken backup.
+This can be a manual backup created by the [Create a Backup of the SLS Postgres Database](Create_a_Backup_of_the_SLS_Postgres_Database.md) procedure, or an automatic backup created
+by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
 
 ## Prerequisites
 
@@ -29,7 +31,8 @@ This procedure can be used to restore the SLS Postgres database from a previousl
 
 ## Procedure
 
-1. Retrieve a previously taken SLS Postgres backup. This can be either a previously taken manual SLS backup or an automatic Postgres backup in the `postgres-backup` S3 bucket.
+1. Retrieve a previously taken SLS Postgres backup.
+   This can be either a previously taken manual SLS backup or an automatic Postgres backup in the `postgres-backup` S3 bucket.
 
     * From a previous manual backup:
         1. Copy over the folder or tarball containing the Postgres back up to be restored. If it is a tarball extract it.
@@ -151,9 +154,11 @@ This procedure can be used to restore the SLS Postgres database from a previousl
 
     > The output above shows the database schema is at version 3.
 
-    If the database schema versions match, proceed to the next step. Otherwise, the Postgres backup taken is not applicable to the currently running instance of SLS.
+    If the database schema versions match, proceed to the next step.
+    Otherwise, the Postgres backup taken is not applicable to the currently running instance of SLS.
 
-    __WARNING__: If the database schema versions do not match the version of the SLS deployed will need to be either upgraded/downgraded to a version with a compatible database schema version. Ideally to the same version of SLS that was used to create the Postgres backup.
+    __WARNING__: If the database schema versions do not match the version of the SLS deployed will need to be either upgraded/downgraded to a version with a compatible database schema version.
+    Ideally to the same version of SLS that was used to create the Postgres backup.
 
 6. Restore the database from the backup using the `restore_sls_postgres_from_backup.sh` script. This script requires the `POSTGRES_SQL_FILE` and `POSTGRES_SECRET_MANIFEST` environment variables to be set.
     > __THIS WILL DELETE AND REPLACE THE CURRENT CONTENTS OF THE SLS DATABASE__

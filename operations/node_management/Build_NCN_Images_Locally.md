@@ -28,7 +28,9 @@ The file name is either:
 
 You will need access to the appropriate SLES repositories in the form of official access, self-hosted access, or the provided Nexus access.
 
-To build locally you will need to provide your own repositories file and the `custom_repos_file` variable must be passed with the packer command. The `custom_repos_file` variable is a filename that is placed into the `custom` folder of the project. The file must be formatted with the following fields: `url name flags`
+To build locally you will need to provide your own repositories file and the `custom_repos_file` variable must be passed with the packer command.
+The `custom_repos_file` variable is a filename that is placed into the `custom` folder of the project.
+The file must be formatted with the following fields: `url name flags`
 
 * `-var 'custom_repos_file=custom.repos'`
 
@@ -132,7 +134,7 @@ Each layer creates a certain set of artifacts that can be used in different ways
 * Each layer creates a VM disk image that can be directly booted and/or used to create the next layer's image.
 * Each layer after `sles15-base` creates a list of packages and repos.
 * `ncn-common` creates kernel and initrd artifacts.
-* `ncn-node-images` creates kernel, initrd, and squashfs artifacts.
+* `ncn-node-images` creates Kernel, Initrd, and SquashFS artifacts.
 
 ## Versioning
 

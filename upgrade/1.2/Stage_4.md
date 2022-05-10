@@ -54,9 +54,9 @@
    ncn-s# watch "ceph -s; ceph orch ps"
    ```
 
-**IMPORTANT:** If the `ceph -s` has a warning with "UPGRADE_FAILED_PULL: Upgrade: failed to pull target image" as the description, then follow the below procedure.
+**IMPORTANT:** If the `ceph -s` has a warning with `"UPGRADE_FAILED_PULL: Upgrade: failed to pull target image"` as the description, then follow the below procedure.
 
-**Perform the below steps from one of these nodes (ncn-s001/2/3):**
+**Perform the below steps from one of these nodes `(ncn-s001/2/3`):**
 
 1. Check the upgrade status.
 
@@ -173,9 +173,9 @@ You will see the processes running the Ceph container image go through the upgra
    ceph orch ps -f json-pretty|jq -r '.[]|select(.version=="15.2.8")|.version'|wc -l
    ```
 
-   > If the above command shows any number other than 0, then the upgrade is not complete. Refer to [Ceph_Orchestrator_Usage.md](../operation/../../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
+   > If the above command shows any number other than 0, then the upgrade is not complete. Refer to [`Ceph_Orchestrator_Usage.md`](../operation/../../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
 
-   Some addtional commands to run to check the ceph upgrade:
+   Some additional commands to run to check the Ceph upgrade:
 
    on `ncn-m00/1/2/3` or `ncn-s001/2/3`:
 

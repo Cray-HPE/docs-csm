@@ -2,7 +2,7 @@
 
 Verify that the CSM services needed to boot a node are available and working properly. This section
 describes how the `barebonesImageTest` script works and how to interpret the results. If the script is
-unavailable, the manual steps for reproducing the barebones image boot test are provided.
+unavailable, the manual steps for reproducing the Barebones image boot test are provided.
 
 ## Topics
   
@@ -25,8 +25,8 @@ The script file is: `/opt/cray/tests/integration/csm/barebonesImageTest`
 This script automates the following steps.
 
 1. Obtain the Kubernetes API gateway access token
-2. Find the existing barebones boot image using IMS
-3. Create a BOS session template for the barebones boot image
+2. Find the existing Barebones boot image using IMS
+3. Create a BOS session template for the Barebones boot image
 4. Find an enabled compute node using HSM
 5. Watch the console log for the target compute node using console services
 6. Create a BOS session to reboot the target compute node
@@ -86,8 +86,8 @@ cray.barebones-boot-test: DEBUG    Creating bos session template with etag:bc390
 
 ## 4. Manual Steps To Reproduce This Script
 
-The following manual steps may be performed to reproduce the actions of this script. The result should
-be the same as running the script.
+The following manual steps may be performed to reproduce the actions of this script.
+The result should be the same as running the script.
 
 * [1. Steps the Script Performs](#1-steps-the-script-performs)
 * [2. Controlling Which Node Is Used](#2-controlling-which-node-is-used)
@@ -128,7 +128,8 @@ Expected output is similar to the following:
 
 ### 4.2 Create a BOS Session Template for the CSM Barebones Image
 
-The session template below can be copied and used as the basis for the BOS session template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in the Image Management Service (IMS).
+The session template below can be copied and used as the basis for the BOS session template.
+As noted below, make sure the S3 path for the manifest matches the S3 path shown in the Image Management Service (IMS).
 
 1. Create the `sessiontemplate.json` file.
 
