@@ -8,12 +8,12 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ## Topics
 
-  * [Warning for Non-Compute Nodes (NCNs)](#warning-for-non-compute-nodes-ncns)
-  * [Ignore Nodes within FAS](#ignore-nodes-within-fas)
-  * [Override an Image for an Update](#override-an-image-for-an-update)
-  * [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
-  * [Load Firmware from Nexus](#load-firmware-from-nexus)
-  * [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file)
+* [Warning for Non-Compute Nodes (NCNs)](#warning-for-non-compute-nodes-ncns)
+* [Ignore Nodes within FAS](#ignore-nodes-within-fas)
+* [Override an Image for an Update](#override-an-image-for-an-update)
+* [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
+* [Load Firmware from Nexus](#load-firmware-from-nexus)
+* [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file)
 
 ---
 
@@ -39,13 +39,13 @@ The default configuration of FAS no longer ignores `management` nodes, which pre
 
 1. Check that there are no FAS actions running.
 
-    ```
+    ```bash
     ncn# cray fas actions list
     ```
 
-2. Edit the cray-fas deployment.
+2. Edit the `cray-fas` deployment.
 
-    ```
+    ```bash
     ncn# kubectl -n services edit deployment cray-fas
     ```
 
@@ -72,17 +72,16 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
    ```bash
    ncn# cray fas images list --format json | jq '.[] | .[] | select(.target=="TARGETNAME")'
    ```
-   
+
    To narrow down the selection, update the select field to match multiple items. For example:
-   
+
    ```bash
    ncn# cray fas images list --format json | jq '.[] | .[] | select(.target=="BMC" and .manufacturer=="cray" and .deviceType=="NodeBMC")'
    ```
 
-
    The example command displays one or more images available for updates.
 
-   ```
+   ```text
    {
          "imageID": "ff268e8a-8f73-414f-a9c7-737a34bb02fc",
          "createTime": "2021-02-24T02:25:03Z",
@@ -108,7 +107,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
 
    If the `firmwareVersion` from the FAS image matches the `fromFirmwareVersion` from the FAS action, the firmware is at the latest version and no update is needed.
 
-2. Use the imageID from the `cray images list` in the previous step and add the following line to the action JSON file, replacing *IMAGEID* with the imageID.
+2. Use the `imageID` from the `cray images list` in the previous step and add the following line to the action JSON file, replacing *IMAGEID* with the `imageID`.
 
      In this example, the value would be: `ff268e8a-8f73-414f-a9c7-737a34bb02fc`.
 
@@ -119,7 +118,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
        }
    ```
 
-   Example actions JSON file with imageFilter added:
+   Example actions JSON file with `imageFilter` added:
 
    ```json
        {
@@ -152,7 +151,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS un
 
    > **WARNING:** FAS will force a flash of the device -- using incorrect firmware may make it inoperable.
 
-Re-run the FAS actions command using the updated json file. **It is strongly recommended to run a dry-run (overrideDryrun=false) first and check the actions output.**
+Re-run the FAS actions command using the updated JSON file. **It is strongly recommended to run a dry-run (`overrideDryrun=false`) first and check the actions output.**
 
 ---
 
@@ -160,7 +159,7 @@ Re-run the FAS actions command using the updated json file. **It is strongly rec
 
 ## Check for New Firmware Versions with a Dry-Run
 
-Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the overrideDryrun parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
+Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
 
 > **WARNING:** It is crucial that an administrator is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The administrator assumes full responsibility for this knowledge.
 
@@ -174,16 +173,16 @@ This procedure includes information on how check the firmware versions for the e
 
 1. Run a dry-run firmware update.
 
-	The following command parameters should be included in dry-run JSON files:
+   The following command parameters should be included in dry-run JSON files:
+   
+   * `overrideDryrun`: The `overrideDryrun` parameter is set to `false` by default. FAS will only update the system if this is parameter is set to `true`.
+   * `restoreNotPossibleOverride`: FAS will not perform an update if the currently running firmware is not available in the images repository. Set this parameter to `true` in order to allow FAS to update firmware even if the current firmware is unavailable on the system.
+   * `description`: A brief description that helps administrators distinguish between actions.
+   * `version`: Determines if the firmware should be set to the `latest`, the `earliest` semantic version, or set to a specific firmware version.
 
-	* `overrideDryrun`: The `overrideDryrun` parameter is set to `false` by default. FAS will only update the system if this is parameter is set to `true`.
-	* `restoreNotPossibleOverride`: FAS will not perform an update if the currently running firmware is not available in the images repository. Set this parameter to `true` in order to allow FAS to update firmware even if the current firmware is unavailable on the system.
-	* `description`: A brief description that helps administrators distinguish between actions.
-	* `version`: Determines if the firmware should be set to the `latest`, the `earliest` semantic version, or set to a specific firmware version.
+   Use one of the options below to run on a dry-run on every system device or on targeted devices:
 
-	Use one of the options below to run on a dry-run on every system device or on targeted devices:
-
-	**Option 1:** Determine the available firmware for every device on the system:
+   **Option 1:** Determine the available firmware for every device on the system:
 
     1. Create a JSON file for the command parameters.
 
@@ -197,7 +196,7 @@ This procedure includes information on how check the firmware versions for the e
         }
         ```
 
-    1. Run the dry-run for the full system.
+    2. Run the dry-run for the full system.
 
         ```bash
         ncn# cray fas actions create COMMAND.json
@@ -205,7 +204,7 @@ This procedure includes information on how check the firmware versions for the e
 
         Proceed to the next step to determine if any firmware needs to be updated.
 
-	**Option 2:** Determine the available firmware for specific devices:
+   **Option 2:** Determine the available firmware for specific devices:
 
     1. Create a JSON file with the specific device information to target when doing a dry-run.
 
@@ -295,9 +294,9 @@ This procedure includes information on how check the firmware versions for the e
 
       The action is still in progress if the state field is not completed or aborted.
 
-    2. View the details of an action to get more information on each operation in the FAS action.
+   2. View the details of an action to get more information on each operation in the FAS action.
 
-		In the example below, there is an operation for a component name (xname) in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is due to a missing firmware image file.
+       In the example below, there is an operation for a component name (xname) in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is due to a missing firmware image file.
 
        ```bash
        ncn# cray fas actions describe {actionID} --format json
@@ -431,6 +430,7 @@ Update the firmware on any devices indicating a new version is needed.
 This procedure will read all RPMs in the Nexus repository and upload firmware images to S3 and create image records for firmware not already in FAS.
 
 1. Check the loader status.
+
     ```bash
     ncn# cray fas loader list | grep loaderStatus
     ```
@@ -510,7 +510,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
 This procedure will read a single local RPM (or ZIP) file and upload firmware images to S3 and create image records for firmware not already in FAS.
 
-1. Copy the file to ncn-m001 or one of the other NCNs.
+1. Copy the file to `ncn-m001` or one of the other NCNs.
 
 2. Check the loader status:
 
@@ -528,7 +528,7 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
 
 3. Run the `loader` command.
 
-    firmware.rpm is the name of the RPM. If the file is not in the current directory, add the path to the filename.
+    `firmware.rpm` is the name of the RPM. If the file is not in the current directory, add the path to the filename.
 
     ```bash
     ncn# cray fas loader create --file firmware.RPM
@@ -577,7 +577,8 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
       ]
     }
     ```
-    
+
     A successful run will end with `*** Number of Updates: x ***`.
 
     > **NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
+    

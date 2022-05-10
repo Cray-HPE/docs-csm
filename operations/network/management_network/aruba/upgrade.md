@@ -6,14 +6,14 @@ The command displays the status of the VSX primary and secondary switches during
 
 If you stop the upgrade when the secondary switch has already installed the image in its flash memory or the secondary switch has started the reboot the process, it comes up with the new software.
 
-The primary switch continues to have with older software. Administrators can stop the software update process by pressing **ctrl+c**.
+The primary switch continues to have with older software. Administrators can stop the software update process by pressing **`ctrl+c`**.
 
 ## Prerequisites
 
 * Choose the method to upload the new software to the switches:
-	* Via USB
-	* Via WEB UI
-	* Via TFTP or SFTP
+  * Via USB
+  * Via WEB UI
+  * Via TFTP or SFTP
 
 > **NOTE:** If you do not want to proceed with pre-staging you can also upload the new software directly using `vsx update-software` command. However, you will be limited to only using TFTP if you choose not to pre-stage the firmware.
 
@@ -23,19 +23,19 @@ The `vsx update-software` command is used to update the switch software. The fol
 
 ### Syntax
 
-```
+```text
 vsx update-software <REMOTE-URL> [vrf <VRF-NAME>]
 ```
 
 ### Parameters
 
-```
+```text
 <REMOTE-URL>
 ```
 
 Specifies the TFTP URL for downloading the software.
 
-```
+```text
 vrf <VRF-NAME>
 ```
 
@@ -43,7 +43,7 @@ vrf <VRF-NAME>
 
 ## Example of Updating Software via TFTP
 
-> **NOTE:** If the new software is already pre-staged, call the image bank where the new image is located instead of using the tftp.
+> **NOTE:** If the new software is already pre-staged, call the image bank where the new image is located instead of using the TFTP.
 
 ```text
 switch# vsx update-software tftp://192.168.1.1/XL.10.0x.xxxx vrf mgmt
@@ -59,6 +59,5 @@ VSX ISL Status                         : <VSX ISL status>
 Progress [..........................................................................................]
 Secondary VSX system updated completely. Rebooting primary.
 ```
-
 
 [Back to Index](../index.md)

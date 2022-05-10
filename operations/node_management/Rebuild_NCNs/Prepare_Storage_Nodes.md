@@ -14,7 +14,7 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
    linux# ssh ncn-s001 cat /etc/cray/xname
    ```
 
-2. Check the bss boot parameters for `ncn-s001`.
+2. Check the `bss bootparameters` for `ncn-s001`.
 
    ```bash
    ncn# cray bss bootparameters list --name x3000c0s7b0n0 --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'
@@ -108,7 +108,7 @@ Check the status of Ceph.
 
     Example output:
 
-    ```
+    ```text
     ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
     -1       20.95917 root default
     -3        6.98639     host ncn-s001
@@ -136,7 +136,7 @@ Check the status of Ceph.
 
     Example output:
 
-    ```
+    ```text
       cluster:
         id:     184b8c56-172d-11ec-aa96-a4bf0138ee14
         health: HEALTH_WARN
@@ -177,7 +177,7 @@ Check the status of Ceph.
 
      Example output:
 
-     ```
+     ```text
      ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
      -1         62.87750  root default
      -9         10.47958      host ncn-s003
