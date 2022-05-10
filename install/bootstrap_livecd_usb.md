@@ -36,7 +36,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 
 1. Download and expand the CSM software release.
 
-   **Important:** In order to ensure that the CSM release plus any patches, workarounds, or hotfixes are included,
+   **Important:** In order to ensure that the CSM release plus any patches, workarounds, or hot fixes are included,
    follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
 
    **Important:** Download to a location that has sufficient space for both the tarball and the expanded tarball.
@@ -44,7 +44,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
    > Note: Expansion of the tarball may take more than 45 minutes.
 
    The rest of this procedure will use the `CSM_RELEASE` variable and expects to have the
-   contents of the CSM software release tarball plus any patches, workarounds, or hotfixes.
+   contents of the CSM software release tarball plus any patches, workarounds, or hot fixes.
 
    ```bash
    linux# CSM_RELEASE=csm-x.y.z
@@ -515,7 +515,7 @@ This will enable SSH, and other services when the LiveCD starts.
    linux# echo "${SYSTEM_NAME}-ncn-m001-pit" >/mnt/cow/rw/etc/hostname
    ```
 
-1. Unmount the Overlay, we are done with it
+1. Unmount the Overlay, we are done with it.
 
     ```bash
     linux# umount -v /mnt/cow
@@ -705,7 +705,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
 
-   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
+   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hot fixes
    were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
 
    ```bash
@@ -789,4 +789,4 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 After completing this procedure, the next step is to configure the management network switches.
 
-See [Configure Management Network Switches](index.md#configure_management_network)
+See [Configure Management Network Switches](index.md#configure_management_network).

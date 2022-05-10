@@ -41,7 +41,7 @@ the instructions for attaching to the BMC will differ.
 
 1. The CSM software release should be downloaded and expanded for use.
 
-   **Important:** To ensure that the CSM release plus any patches, workarounds, or hotfixes are included
+   **Important:** To ensure that the CSM release plus any patches, workarounds, or hot fixes are included
    follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
 
    The `cray-pre-install-toolkit` ISO and other files are now available in the directory from the extracted CSM `tar`.
@@ -137,7 +137,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       external# ssh root@${SYSTEM_NAME}-ncn-m001
       ```
 
-   1. (recommended) After reconnecting, resume the typescript (the `-a` appends to an existing script).
+   1. (Recommended) After reconnecting, resume the typescript (the `-a` appends to an existing script).
 
       ```bash
       pit# cd ~
@@ -212,11 +212,11 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 1. Download the CSM software release to the PIT node.
 
-   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
+   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hot fixes
    were downloaded to a system using the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
    Either copy from that system to the PIT node or set the ENDPOINT variable to URL and use `wget`.
 
-   1. Set helper variables
+   1. Set helper variables.
 
       ```bash
       pit# ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm
@@ -288,7 +288,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
 
-   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
+   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hot fixes
    were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
 
    ```bash
@@ -557,7 +557,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
        addr:     ipv4 10.254.1.4/17 [static]
        ```
 
-    1. Run tests, inspect failures.
+    2. Run tests, inspect failures.
 
        ```bash
        pit# csi pit validate --network
@@ -574,7 +574,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
         pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/basecamp/* /var/www/ephemeral/configs/
         ```
 
-    1. Enable, and fully restart all PIT services.
+    2. Enable, and fully restart all PIT services.
 
         ```bash
         pit# systemctl enable basecamp nexus dnsmasq conman
