@@ -3,9 +3,8 @@
 The software included in the CSM product stream is released in more than one way. The initial product release may be augmented with patches, late-breaking workarounds and documentation
 updates, or hotfixes after the release.
 
-The CSM documentation is included within the CSM product release tarball inside the docs-csm RPM.
-After it has been installed, the documentation will be available at `/usr/share/doc/csm` as installed by
-the docs-csm RPM.
+The CSM documentation is included within the CSM product release tarball inside the `docs-csm` RPM.
+After it has been installed, the documentation will be available at `/usr/share/doc/csm`.
 
 - [Download and Extract CSM Product Release](#download-and-extract)
 - [Apply Patch to CSM Release](#patch)
@@ -13,26 +12,11 @@ the docs-csm RPM.
 - [Check for and Apply Workarounds](#apply-workarounds)
 - [Check for Field Notices about Hotfixes](#hotfixes)
 
-The topics in this chapter need to be done as part of an ordered procedure so are shown here with numbered topics.
-
-## Details
-
 <a name="download-and-extract"></a>
 
 ## Download and Extract CSM Product Release
 
-### About this task
-
-#### Role
-System installer
-
-#### Objective
 Acquire a CSM software release tarball for installation on the HPE Cray EX supercomputer.
-
-#### Limitations
-None.
-
-### Procedure
 
 1. Download the CSM software release tarball for the HPE Cray EX system to a Linux system.
 
@@ -44,9 +28,9 @@ None.
 
 1. Extract the source release distribution.
 
-   If doing a first time install, this can be done on a Linux system, but for an upgrade, it may be done on one of the NCNs, such as `ncn-m001`.
+   If doing a first time install, this can be done on any Linux system. For an upgrade, it may be done on one of the NCNs, such as `ncn-m001`.
 
-   > **`NOTE:`** Use `--no-same-owner` and `--no-same-permissions` options to `tar` when extracting a CSM release
+   > **NOTE:** Use `--no-same-owner` and `--no-same-permissions` options to `tar` when extracting a CSM release
    > distribution as `root` to ensure the current `umask` value.
 
    ```bash
@@ -59,18 +43,7 @@ None.
 
 ## Apply Patch to CSM Release
 
-### About this task
-
-#### Role
-System installer
-
-#### Objective
 Apply a CSM update patch to the release tarball. This ensures that the latest CSM product artifacts are installed on the HPE Cray EX supercomputer.
-
-#### Limitations
-None.
-
-### Procedure
 
 1. Verify that the Git version is at least `2.16.5` on the Linux system which will apply the patch.
 
@@ -135,32 +108,16 @@ None.
 This tarball can now be used in place of the original CSM software release tarball.
 
 <a name="workarounds"></a>
+
 ## Check for Latest Workarounds and Documentation Updates
 
-### About this task
+Acquire the late-breaking CSM workarounds and documentation update RPMs. These fixes were not available until after the software release. The software installation and upgrade processes
+have several breakpoints where you check and apply workarounds before or after a critical procedure.
 
-#### Role
-System installer
-
-#### Objective
-Acquire the late-breaking CSM workarounds and documentation update RPMs. These fixes were not available until after the software release. The software installation and upgrade processes have several breakpoints where you check and apply workarounds before or after a critical procedure.
-
-This command will report the version of your installed documentation.
-
-```bash
-ncn# rpm -q docs-csm
-```
-
-
-#### Limitations
-None.
-
-### Procedure
-
-1. Check the version of the currently installed CSM documentation.
+1. Check the version of the currently installed CSM documentation and workarounds.
 
    ```bash
-   ncn# rpm -q docs-csm
+   ncn# rpm -q csm-install-workarounds docs-csm
    ```
 
 1. Download and upgrade the latest workaround and documentation RPMs.
@@ -184,85 +141,61 @@ None.
 1. Check the version of the newly installed documentation.
 
    ```bash
-   ncn# rpm -q docs-csm
+   ncn# rpm -q csm-install-workarounds docs-csm
    ```
 
 <a name="apply-workarounds"></a>
+
 ## Check for and Apply Workarounds
 
-### About this task
+The software installation and upgrade processes have several breakpoints before or after a critical procedure. At these breakpoints, workarounds
+are applied, if any are available for that particular breakpoint.
 
-#### Role
-System installer
+Check to see if workarounds need to be applied at a particular point of the install process. If so, then apply those workarounds.
 
-#### Objective
-The software installation and upgrade processes have several breakpoints where you check and apply workarounds before or after a critical procedure. Check to see if workarounds need to be applied at a particular point of the install process. If there are, apply those workarounds.
+In order to carry out this procedure, the name of the workaround breakpoint (for example, `before-configuration-payload` or
+`after-sysmgmt-manifest`) must be known.
 
-#### Limitations
-None.
+1. Change to the directory containing the workarounds to be applied at this breakpoint.
 
-#### Prerequisites
+   ```bash
+   linux# pushd /opt/cray/csm/workarounds/<put-actual-breakpoint-name-here>
+   ```
 
-   * The [latest workaround RPM](#workarounds) is installed.
-   * The name of the workaround breakpoint (e.g. `before-configuration-payload` or `after-sysmgmt-manifest`) is known.
+1. List all subdirectories of this directory.
 
-### Procedure
+   ```bash
+   linux# find -maxdepth 1 -type d ! -name . | cut -c3-
+   ```
 
-   1. Change to the directory containing the workarounds to be applied at this breakpoint.
+   If there is nothing listed, then there are no workarounds to be applied at this breakpoint and the procedure is complete.
+
+1. For each subdirectory which is listed, apply the workaround described within it.
+
+   Perform the following steps for each subdirectory which was listed in the previous step.
+
+   1. Change directory into the subdirectory.
 
       ```bash
-      linux# pushd /opt/cray/csm/workarounds/<put-actual-breakpoint-name-here>
+      linux# pushd <put-subdirectory-name-here>
       ```
 
-   1. List all subdirectories of this directory.
+   1. View the `README.md` file in this directory and carefully follow its instructions.
 
-      ```bash
-      linux# find -maxdepth 1 -type d ! -name . | cut -c3-
-      ```
-
-      If there is nothing listed, there are no workarounds to be applied at this breakpoint, and you can skip the next step.
-
-   1. For each subdirectory which is listed, apply the workaround described within it.
-
-      Perform the following steps for each subdirectory which was listed in the previous step.
-
-      1. Change directory into the subdirectory.
-
-         ```bash
-         linux# pushd <put-subdirectory-name-here>
-         ```
-
-      1. View the `README.md` file in this directory, and carefully follow its instructions.
-
-      1. Return to the main directory for workarounds for this breakpoint.
-
-         ```bash
-         linux# popd
-         ```
-
-   1. The procedure is complete. Return to your original directory.
+   1. Return to the main directory for workarounds for this breakpoint.
 
       ```bash
       linux# popd
       ```
 
+1. The procedure is complete. Return to the original directory.
+
+   ```bash
+   linux# popd
+   ```
+
 <a name="hotfixes"></a>
 
 ## Check for Field Notices about Hotfixes
-
-### About this task
-
-#### Role
-System installer
-
-#### Objective
-Collect all available Field Notices about Hotfixes which should be applied to this CSM software release.
-
-#### Limitations
-None.
-
-### Procedure
-
-Check with HPE Cray service for any Field Notices about Hotfixes which should be applied to this CSM software release.
 
 Collect all available field notices about hotfixes which should be applied to this CSM software release. Check with HPE Cray service for more information.
