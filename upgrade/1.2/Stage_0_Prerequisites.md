@@ -120,7 +120,7 @@ the correct options for the specific environment are used. Two examples are give
 
 ### Migrate SLS Data JSON to CSM 1.2
 
-- Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
+* Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
    ```bash
    ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
@@ -129,7 +129,7 @@ the correct options for the specific environment are used. Two examples are give
                          --customer-highspeed-network 5 10.103.11.192/26
    ```
 
-- Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing `external-dns` entry.
+* Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing `external-dns` entry.
 
    ```bash
    ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
@@ -178,7 +178,7 @@ If the following command does not complete successfully, check if the `TOKEN` en
 
    - If the banner does NOT contain text like the above, then contact support in order to get the `1.2 Preconfig` applied to the system.
 
-   - See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
+   * See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
 
 <a name="prerequisites-check"></a>
 

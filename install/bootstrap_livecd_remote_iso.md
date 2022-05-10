@@ -591,16 +591,36 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
 1. Copy the new `system_config.yaml` file somewhere safe to facilitate re-installs.
 
+<<<<<<< HEAD
 1. Continue to the next step to [Prepare `Site Init`](#prepare-site-init).
 
 <a name="prepare-site-init"></a>
 
 ### 4.3 Prepare `Site Init`
+=======
+<<<<<<< HEAD
+1. Continue to the next step to [Prepare Site Init](#prepare-site-init).
+
+<a name="prepare-site-init"></a>
+
+### 4.3 Prepare Site Init
+=======
+1. Continue to the next step to [Prepare `site-init`](#prepare-site-init).
+
+<a name="prepare-site-init"></a>
+
+### 4.3 Prepare `site-init`
+>>>>>>> f4cf0b23b3 (STP-3186: linter and spell check fixes)
+>>>>>>> 418729c7a8 (STP-3186: linter and spell check fixes)
 
 > **Important:** Although the command prompts in this procedure are `linux#`, the procedure should be
 > performed on the PIT node.
 
+<<<<<<< HEAD
 Prepare the `site-init` directory by performing the [Prepare `Site Init`](prepare_site_init.md) procedures.
+=======
+Prepare the `site-init` directory by performing the [Prepare `site-init`](prepare_site_init.md) procedures.
+>>>>>>> 418729c7a8 (STP-3186: linter and spell check fixes)
 
 <a name="bring---up-the-pit-services-and-validate-pit-health"></a>
 

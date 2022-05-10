@@ -225,7 +225,7 @@ Before creating the the bootable LiveCD, identify which device will be used for 
 
     > **Note:** At this point, the USB device is usable in any server with a CPU with x86_64 architecture. The remaining steps help add the installation data and enable SSH on boot.
 
-1. Mount the configuration and persistent data partitions.
+3. Mount the configuration and persistent data partitions.
 
     ```bash
     linux# mkdir -pv /mnt/cow ${PITDATA} &&
@@ -252,8 +252,8 @@ The `SHASTA-CFG` structure and other configuration files will be prepared, then 
 This payload will be used for the rest of the CSM installation on the USB device.
 
 1. [Generate Installation Files](#generate-installation-files)
-1. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
-1. [Prepare `Site Init`](#prepare-site-init)
+2. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
+3. [Prepare `Site Init`](#prepare-site-init)
 
 <a name="generate-installation-files"></a>
 
@@ -489,7 +489,7 @@ information for this system has not yet been prepared.
    `site-init` directory recommend persisting `site-init` files in a Git
    repository.
 
-1. Prepare the `site-init` directory.
+2. Prepare the `site-init` directory.
 
    Perform the [Prepare `Site Init`](prepare_site_init.md) procedures.
 
