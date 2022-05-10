@@ -772,9 +772,9 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IP addresses are incorrect on the switches. Follow the steps
 below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md) for more details on the BGP configuration.
 
-**IMPORTANT:** If the management switches are using the CANU-generated configuration for CSM 1.0 (a.k.a the CSM 1.2 Preconfig), then this procedure should be skipped.
+**IMPORTANT:** If the management switches are using the CANU-generated configuration for CSM 1.0 (the `CSM 1.2 Preconfig`), then this procedure should be skipped.
 
-1. To check if the management switches are using the CANU-generated configuration for CSM 1.0 (a.k.a the CSM 1.2 Preconfig) log into both spine switches and
+1. To check if the management switches are using the CANU-generated configuration for CSM 1.0 (the `CSM 1.2 Preconfig`) log in to both spine switches and
    see if a login banner exists. It should look similar to the examples below.
 
     The CSM version must be 1.0, and CANU should be present showing a version. An accurate login banner for Mellanox and Aruba will look similar to the following examples:
