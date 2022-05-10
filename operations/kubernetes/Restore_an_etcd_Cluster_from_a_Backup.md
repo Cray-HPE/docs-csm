@@ -62,6 +62,7 @@ A backup of a healthy etcd cluster has been created.
         ncn-w001# kubectl -n services delete etcdrestore.etcd.database.coreos.com/cray-bos-etcd
         etcdrestore.etcd.database.coreos.com "cray-bos-etcd" deleted
         ```
+        
 4. Verify if service/cray-bos-etcd-client was created.
 
        ```bash
