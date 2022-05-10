@@ -11,17 +11,20 @@ Restore Postgres Procedures by Service:
   * [Capsules Warehouse Server](#capsules-warehouse-server)
   * [Capsules Dispatch Server](#capsules-dispatch-server)
 
-
 <a name="spire"> </a>
 
-### Restore Postgres for Spire
+## Restore Postgres for Spire
 
-In the event that the Spire Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists.
+In the event that the Spire Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended.
+This assumes that a dump of the database exists.
 
 1. Copy the database dump to an accessible location.
 
     * If a manual dump of the database was taken, check that the dump file exists in a location off the Postgres cluster. It will be needed in the steps below.
-    * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket. These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket. The `python3` scripts below can be used to help list and download the files. Note that the `.psql` file contains the database dump and the .manifest file contains the secrets. The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
+    * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
+    These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
+    The `python3` scripts below can be used to help list and download the files. Note that the `.psql` file contains the database dump and the .manifest file contains the secrets.
+    The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
     ```bash
     ncn-w001# export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
@@ -233,14 +236,18 @@ In the event that the Spire Postgres cluster is in a state that the cluster must
 
 <a name="keycloak"> </a>
 
-### Restore Postgres for Keycloak
+## Restore Postgres for Keycloak
 
-In the event that the Keycloak Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists.
+In the event that the Keycloak Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended.
+This assumes that a dump of the database exists.
 
 1. Copy the database dump to an accessible location.
 
     * If a manual dump of the database was taken, check that the dump file exists in a location off the Postgres cluster. It will be needed in the steps below.
-    * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket. These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket. The `python3` scripts below can be used to help list and download the files. Note that the `.psql` file contains the database dump and the .manifest file contains the secrets. The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
+    * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
+    These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
+    The `python3` scripts below can be used to help list and download the files. Note that the `.psql` file contains the database dump and the .manifest file contains the secrets.
+    The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
     ```bash
     ncn-w001# export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
@@ -478,14 +485,19 @@ In the event that the Keycloak Postgres cluster is in a state that the cluster m
 
 <a name="vcs"> </a>
 
-### Restore Postgres for VCS
+## Restore Postgres for VCS
 
-In the event that the VCS Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists, as well as a backup of the VCS PVC.
+In the event that the VCS Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended.
+This assumes that a dump of the database exists, as well as a backup of the VCS PVC.
 
 1. Copy the database dump to an accessible location.
 
    * If a manual dump of the database was taken, check that the dump file exists in a location off the Postgres cluster. It will be needed in the steps below.
-   * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket. These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket. The `python3` scripts below can be used to help list and download the files. Note that the `.psql` file contains the database dump and the .manifest file contains the secrets. The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
+   * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
+   These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
+   The `python3` scripts below can be used to help list and download the files.
+   Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
+   The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
         ```bash
         ncn-w001# export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
@@ -656,7 +668,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
     ncn-w001# while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
     ```
 
-10. Scale the gitea service back up.
+10. Scale the Gitea service back up.
 
     ```bash
     ncn-w001# kubectl scale deployment ${SERVICE} -n ${NAMESPACE} --replicas=3
@@ -667,16 +679,20 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
 
 <a name="capsules"> </a>
 
-### Restore Postgres for Capsules
+## Restore Postgres for Capsules
 
-#### Capsules Warehouse Server
+### Capsules Warehouse Server
 
-In the event that the Capsules Warehouse Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended. This assumes that a dump of the database exists.
+In the event that the Capsules Warehouse Postgres cluster is in a state that the cluster must be rebuilt and the data restored, the following procedures are recommended.
+This assumes that a dump of the database exists.
 
 1. Copy the database dump to an accessible location.
 
    * If a manual dump of the database was taken, check that the dump file exists in a location off the Postgres cluster. It will be needed in the steps below.
-   * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket. These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket. The `python3` scripts below can be used to help list and download the files. Note that the `.psql` file contains the database dump and the .manifest file contains the secrets. The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
+   * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
+   These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
+   The `python3` scripts below can be used to help list and download the files. Note that the `.psql` file contains the database dump and the `.manifes`t file contains the secrets.
+   The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
         ```bash
         ncn-w001# export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
@@ -790,7 +806,8 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
 
         If a manual dump was done, and the secrets were not saved, then the secrets in the newly created Postgres cluster will need to be updated.
 
-        Based off the four `capsules-warehouse-server-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
+        Based off the four `capsules-warehouse-server-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`.
+        Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
         ```bash
         ncn-w001# for secret in postgres.capsules-warehouse-server-postgres.credentials service-account.capsules-warehouse-server-postgres.credentials standby.capsules-warehouse-server-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
@@ -857,7 +874,8 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
     ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start"; sleep 2; done
     ```
 
-    Also check the status of the `capsules-warehouse-server` pods. If there are pods that do not show that both containers are ready (READY is `2/2`), wait a few seconds and re-run the command until all containers are ready.
+    Also check the status of the `capsules-warehouse-server` pods.
+    If there are pods that do not show that both containers are ready (READY is `2/2`), wait a few seconds and re-run the command until all containers are ready.
 
     ```bash
     ncn-w001# kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}"
@@ -872,7 +890,9 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
     capsules-warehouse-server-2   2/2     Running   0          35s
     ```
 
-11. Verify Capsules services are accessible and contain the expected data. You may need to configure your default warehouse and default warehouse user as well as login though the Keycloak service depending on where you login from. It is recommended to use a UAN.
+11. Verify Capsules services are accessible and contain the expected data.
+    You may need to configure your default warehouse and default warehouse user as well as login though the Keycloak service depending on where you login from.
+    It is recommended to use a UAN.
 
     ```bash
     ncn-w001# capsule list
@@ -886,6 +906,9 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
       someusername/another-preexisting-capsule
     ```
 
-#### Capsules Dispatch Server
+### Capsules Dispatch Server
 
-The Capsules Dispatch Server can be restored in the same manner as the warehouse server by substituting the keyword `warehouse` with `dispatch`; however, the dispatch server maintains temporary information for running Capsules Environments. Therefore, restoring data to this service is not necessary. Using the analytics docs, you can instead cleanup existing jobs and skip this step.
+The Capsules Dispatch Server can be restored in the same manner as the warehouse
+server by substituting the keyword `warehouse` with `dispatch`;however, the dispatch server maintains
+temporary information for running Capsules Environments.
+Therefore, restoring data to this service is not necessary. Using the analytics docs, you can instead cleanup existing jobs and skip this step.

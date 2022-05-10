@@ -7,7 +7,7 @@ Results may vary if an unconfigured switch is being used.
 
 ## Prerequisites
 
-* There is a configured switch with SSH access _or_ unconfigured with `COM` access (serial-over-lan/DB-9).
+* There is a configured switch with SSH access or unconfigured with `COM` access (serial-over-lan/DB-9).
 * A file is available to record the collected BMC information.
 
 ## Procedure

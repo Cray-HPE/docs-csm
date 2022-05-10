@@ -212,7 +212,7 @@ See [Procedure: iPXE Consoles](collecting_ncn_mac_addresses.md#procedure-ipxe-co
 
 ### 4. Restart Services after NCN MAC Addresses Collected
 
-The previous step updated `ncn_metadata.csv` with the NCN MAC Addresses for Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1
+The previous step updated `ncn_metadata.csv` with the NCN MAC Addresses for `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1`
 so several earlier steps need to be repeated.
 
 1. Change into the preparation directory.
