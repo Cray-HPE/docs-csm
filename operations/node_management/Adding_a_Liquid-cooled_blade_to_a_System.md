@@ -2,7 +2,7 @@
 
 This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
-## Prerquisites
+## Prerequisites
 
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 * Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
@@ -11,7 +11,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 * The System Layout Service (SLS) must have the desired HSN configuration.
 * Check the status of the high-speed network (HSN) and record link status before the procedure.
 * Review the following command examples.
-  The commands can be used to capture the required values from the HSM `ethernetInterfaces` table and write the values to a file. 
+  The commands can be used to capture the required values from the HSM `ethernetInterfaces` table and write the values to a file.
   The file then can be used to automate subsequent commands in this procedure, for example:
 
     ```bash
@@ -24,7 +24,9 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
     BLADE_DOT=$BLADE.
 
-    cray hsm inventory ethernetInterfaces list --format json | jq -c --arg BLADE "$BLADE_DOT" 'map(select(.ComponentID|test($BLADE))) | map(select(.Description == "Node Maintenance Network")) | .[] | {xname: .ComponentID, ID: .ID,MAC: .MACAddress, IP: .IPAddresses[0].IPAddress,Desc: .Description}' > $OUTFILE
+    cray hsm inventory ethernetInterfaces list --format json | jq -c --arg BLADE "$BLADE_DOT" 'map(select(.ComponentID|test
+    ($BLADE))) | map(select(.Description == "Node Maintenance Network")) | .[] | {xname: .ComponentID, ID: .ID,MAC: .MACAddress, 
+    IP: .IPAddresses[0].IPAddress,Desc: .Description}' > $OUTFILE
     ```
 
     ```bash
@@ -45,7 +47,9 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     To insert an `ethernetInterfaces` entry using `curl`:
 
     ```bash
-    ncn-m001# while read  PAYLOAD ; do curl -H "Authorization: Bearer $TOKEN" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "$(echo $PAYLOAD | jq -c '{ComponentID: .xname,Description: .Desc,MACAddress: .MAC,IPAddress: .IP}')";sleep 5;  done < x1000c0s1.json
+    ncn-m001# while read  PAYLOAD ; do curl -H "Authorization: Bearer $TOKEN" -L -X POST 'https://api-gw-service-nmn.local/apis/
+    smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "$(echo $PAYLOAD | jq -c '
+    {ComponentID: .xname,Description: .Desc,MACAddress: .MAC,IPAddress: .IP}')";sleep 5;  done < x1000c0s1.json
     ```
 
 * The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
@@ -545,7 +549,9 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
         This message indicates a duplicate IP address (10.100.0.105) in the HSM:
 
         ```text
-        [{'result': 1, 'text': "Config reload failed: configuration error using file '/usr/local/kea/cray-dhcp-kea-dhcp4.conf': failed to add new host using the HW address '00:40:a6:83:50:a4 and DUID '(null)' to the IPv4 subnet id '0' for the address 10.100.0.105: There's already a reservation for this address"}]
+        [{'result': 1, 'text': "Config reload failed: configuration error using file '/usr/local/kea/cray-dhcp-kea-dhcp4.conf': 
+        failed to add new host using the HW address '00:40:a6:83:50:a4 and DUID '(null)' to the IPv4 subnet id '0' for the 
+        address 10.100.0.105: There's already a reservation for this address"}]
         ```
 
 23. Use the following example `curl` command to check for active DHCP leases.
