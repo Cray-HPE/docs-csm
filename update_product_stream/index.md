@@ -163,11 +163,11 @@ None.
    linux# rpm -Uvh --force https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
    ```
 
-   If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system. This example copies them to ncn-m001.
+   If this machine does not have direct Internet access, then these RPMs will need to be externally downloaded and copied to the system. This example copies them to `ncn-m001`.
 
    ```bash
-   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm
-   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm
+   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/docs-csm/docs-csm-latest.noarch.rpm -O docs-csm-latest.noarch.rpm
+   linux# wget https://storage.googleapis.com/csm-release-public/shasta-1.5/csm-install-workarounds/csm-install-workarounds-latest.noarch.rpm -O csm-install-workarounds-latest.noarch.rpm
    linux# scp -p docs-csm-*rpm csm-install-workarounds-*rpm ncn-m001:/root
    linux# ssh ncn-m001
    ncn-m001# rpm -Uvh --force docs-csm-latest.noarch.rpm
