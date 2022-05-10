@@ -216,22 +216,6 @@ The process to reinstall must have the configuration payload files available.
       extra command line options. It will expect to find all of the above files in the current working
       directory.
 
-      > **`NOTE`**: For fresh installs and reinstalls of CSM 1.2 or later, it is recommended that the `install-ncn-bond-members` option be double-checked. Systems
-      > with Mellanox PCIe cards will have new interface names.
-      > 1. Compare the output of `lid` with the background document here for PCIe devices. Cross-reference the Vendor ID with the IDs in the table in [Vendor and Bus ID Identification](../background/ncn_networking.md#vendor-and-bus-id-identification).
-      >
-      >     ```bash
-      >     <lan> <vid>:<did>
-      >     pit# lid
-      >     p238p1 8086:1521
-      >     p238p2 8086:1521
-      >     p238p3 15B3:1013
-      >     p238p4 15B3:1013
-      >     ```
-      >
-      > * Update `system_config.yaml`'s `install-ncn-bond-members` value with the interface names cross-referenced from the `lid` output.
-      > * _Alternatively_, run `csi config init --install-ncn-bond-members` with the discovered interface names.
-
       ```bash
       linux# csi config init
       ```

@@ -25,15 +25,20 @@
 
 function wait_for_health_ok() {
   cnt=0
+  node=$1
   while true; do
-    if [[ "$cnt" -eq 360 ]]; then
-      echo "ERROR: Giving up on waiting for Ceph to become healthy..."
-      break
-    fi
-    ceph_status=$(ceph health -f json-pretty | jq -r .status)
-    if [[ $ceph_status == "HEALTH_OK" ]]; then
-      echo "Ceph is healthy -- continuing..."
-      break
+    if [[ ! -z "$node" ]] && [[ "$cnt" -eq 300 ]] ; then
+      check_mon_daemon ${node}
+    else
+      if [[ "$cnt" -eq 360 ]]; then
+        echo "ERROR: Giving up on waiting for Ceph to become healthy..."
+        break
+      fi
+      ceph_status=$(ceph health -f json-pretty | jq -r .status)
+      if [[ $ceph_status == "HEALTH_OK" ]]; then
+        echo "Ceph is healthy -- continuing..."
+        break
+      fi
     fi
     sleep 5
     echo "Sleeping for five seconds waiting for Ceph to be healthy..."
@@ -119,4 +124,56 @@ function wait_for_osds() {
       wait_for_osd $osd
    done
  done
+}
+
+function get_ip_from_metadata() {
+  host=$1
+  ip=$(cloud-init query ds | jq -r ".meta_data[].host_records[] | select(.aliases[]? == \"$host\") | .ip" 2>/dev/null)
+  echo $ip
+}
+
+function wait_for_mon_stat() {
+  node=$1
+  cnt=0
+  while true; do
+    if [[ "$cnt" -eq 60 ]]; then
+      echo "ERROR: Giving up waiting for mon process to start on $node..."
+      break
+    fi
+    if [[ "$cnt" -eq 30 ]]; then
+      echo "Manually adding mon process for $node..."
+      ip=$(get_ip_from_metadata "${node}.nmn")
+      ceph mon add $node $ip
+    else
+      state_name=$(ceph mon stat -f json-pretty | jq --arg node $node -r '.quorum[] | select(.name==$node) | .name' )
+      if [ "$state_name" == "$node" ]; then
+        echo "Found mon process on $node..."
+        break
+      fi
+    fi
+    sleep 5
+    echo "Sleeping for five seconds waiting for mon process to start on $node..."
+    cnt=$((cnt+1))
+  done
+}
+
+function check_mon_daemon() {
+  node=$1
+  state_name=$(ceph mon stat -f json-pretty | jq --arg node $node -r '.quorum[] | select(.name==$node) | .name' )
+  if [ "$state_name" == "$node" ]; then
+    echo "Found ${node} in ceph mon stat command, continuing..."
+  else
+    echo "Didn't find ${node} in ceph mon stat command, ensuring we have quorum before restarting daemon..."
+    ceph mon ok-to-stop ${node}
+    if [ $? -ne 0 ]; then
+      echo "Unable to restart mon process for ${node}, would break quorum, halting..."
+      exit 1
+    fi
+    echo "Removing/restarting mon daemon for node ${node}..."
+    ceph orch daemon rm mon.${node} --force
+    wait_for_running_daemons "mon" 3
+    wait_for_mon_stat ${node}
+    echo "Archiving daemon crash info..."
+    ceph crash archive-all
+  fi
 }

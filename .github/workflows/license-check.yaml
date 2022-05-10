@@ -23,7 +23,8 @@
 #
 name: Check Licenses
 
-on: push
+on:
+  pull_request:
 
 jobs:
   license-check:
