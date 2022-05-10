@@ -81,8 +81,8 @@ instructions on how to acquire a SAT authentication token.
 1. Bring up the Slingshot Fabric.
    Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
 
-      * The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
-      * The *Slingshot Troubleshooting Guide* PDF.
+      * The *HPE Slingshot Operations Guide* PDF for HPE Cray EX systems.
+      * The *HPE Slingshot Troubleshooting* PDF.
 
 ## Next Step
 
