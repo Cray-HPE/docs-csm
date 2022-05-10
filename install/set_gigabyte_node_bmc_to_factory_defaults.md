@@ -19,7 +19,7 @@ Use the management scripts and text files to reset Gigabyte BMC to factory defau
 
 ### Apply the BMC Factory Command
 
-1.  Create a `node.txt` file and add the target node information as shown:
+1. Create a `node.txt` file and add the target node information as shown:
 
     Example `node.txt` file with two nodes:
 
@@ -52,9 +52,7 @@ Use the management scripts and text files to reset Gigabyte BMC to factory defau
       ncn-w001# sh do_bmc_power_control.sh raw 0x32 0x66
       ```
 
-  - **After the BMC has Been Reset to Factory Defaults**
-
-3. Wait five minutes for BMC and Redfish initialization.
+3. After the BMC has been reset to factory defaults, wait five minutes for BMC and Redfish initialization.
 
    ```bash
    ncn-w001# sleep 300
@@ -100,9 +98,7 @@ Use the management scripts and text files to reset Gigabyte BMC to factory defau
 
 8. Reboot or power cycle the target nodes.
 
-  - **After the CMC is Reset to Factory Defaults**
-
-9. Wait 300 seconds for CMC and Redfish initialization, then add the default login/password to the CMC.
+9. After the CMC is reset to factory defaults, wait 300 seconds for CMC and Redfish initialization, then add the default login/password to the CMC.
 
    ```bash
    ncn-w001# sleep 300
