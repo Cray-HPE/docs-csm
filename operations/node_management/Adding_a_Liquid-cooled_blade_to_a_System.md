@@ -77,7 +77,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     hms-discovery    */3 * * * *     True         0       117s             15d
     ```
 
-2. Determine if the destination chassis slot is populated. This example is checking slot 0 in chassis 3 of cabinet `x1005`.
+1. Determine if the destination chassis slot is populated. This example is checking slot 0 in chassis 3 of cabinet `x1005`.
 
     ```bash
     ncn-m001# cray hsm state components describe x1005c3s0
@@ -99,7 +99,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     If the state of the slot is `On` or `Off`, then the chassis slot is populated.
     If the state of the slot is `Empty`, then the chassis slot is not populated.
 
-3. **Skip this step if the chassis slot is unpopulated**. Verify the chassis slot is powered off.
+1. **Skip this step if the chassis slot is unpopulated**. Verify the chassis slot is powered off.
 
     ```bash
     ncn-m001# cray capmc get_xname_status create --xnames x1005c3s0
@@ -119,9 +119,9 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     ncn-m001# cray capmc component name (xname)_off create --xnames x1005c3s0 --recursive true
     ```
 
-4. Install the the blade into the system into the desired location.
+1. Install the the blade into the system into the desired location.
 
-5. Obtain an authentication token to access the API gateway.
+1. Obtain an authentication token to access the API gateway.
 
     ```bash
     ncn-m001# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
@@ -132,7 +132,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
 ### Preserve node component name (xname) to IP address mapping
 
-6. **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.**
+1. **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.**
    When DVS is operating over the NMN and a blade is being replaced, the mapping of node component name (xname) to node IP address must be preserved.
    Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes).
    To prevent from Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
@@ -203,14 +203,14 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
 #### Re-enable `hms-discovery` cron job
 
-7. Rediscover the `ChassisBMC` (the example shows cabinet 1005, chassis 3).
+1. Rediscover the `ChassisBMC` (the example shows cabinet 1005, chassis 3).
    Rediscovering the `ChassisBMC` will update HSM to become aware of the newly populated slot and allow CAPMC to perform power actions on the slot.
 
     ```bash
     ncn-m001# cray hsm inventory discover create --xnames x1005c3b0
     ```
 
-8. Verify that discovery of the `ChassisBMC` has completed (`LastDiscoveryStatus` = "`DiscoverOK`").
+1. Verify that discovery of the `ChassisBMC` has completed (`LastDiscoveryStatus` = "`DiscoverOK`").
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe x1005c3b0 --format json
@@ -238,7 +238,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     }
     ```
 
-9. Unsuspend the `hms-discovery cronjob` to re-enable the `hms-discovery` job.
+1. Unsuspend the `hms-discovery cronjob` to re-enable the `hms-discovery` job.
 
     ```bash
     ncn-m001# kubectl -n services patch cronjobs hms-discovery \
@@ -260,19 +260,19 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
 #### Enable and power on the chassis slot
 
-10. Enable the chassis slot. The example enables slot 0, chassis 3, in cabinet 1005.
+1. Enable the chassis slot. The example enables slot 0, chassis 3, in cabinet 1005.
 
     ```bash
     ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0
     ```
 
-11. Power on the chassis slot. The example powers on slot 0, chassis 3, in cabinet 1005.
+1. Power on the chassis slot. The example powers on slot 0, chassis 3, in cabinet 1005.
 
     ```bash
     ncn-m001# cray capmc component name (xname)_on create --xnames x1005c3s0 --recursive true
     ```
 
-12. Wait at least 3 minutes for the blade to power on and the node controllers (BMCs) to be discovered.
+1. Wait at least 3 minutes for the blade to power on and the node controllers (BMCs) to be discovered.
 
     ```bash
     ncn-m001# sleep 180
@@ -280,7 +280,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
 #### Verify discovery has completed
 
-13. To verify the two Node BMCs in the blade have been discovered by the HSM, run this command for each BMC in the blade (`x1005c3s0b0` and `x1005c3s0b1`).
+1. To verify the two Node BMCs in the blade have been discovered by the HSM, run this command for each BMC in the blade (`x1005c3s0b0` and `x1005c3s0b1`).
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints describe x1005c3s0b0 --format json
@@ -337,7 +337,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
         ncn-m001# curl -k -u root:password https://x1005c3s0b0/redfish/v1/Managers
         ```
 
-14. Enable the nodes in the HSM database.
+1. Enable the nodes in the HSM database.
 
     For a blade with four nodes per blade:
 
@@ -351,7 +351,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b1n0
     ```
 
-15. Verify that the nodes are enabled in the HSM.
+1. Verify that the nodes are enabled in the HSM.
 
     ```bash
     ncn-m001# cray hsm state components query create --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
@@ -379,7 +379,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
 Use boot orchestration to power on and boot the nodes. Specify the appropriate BOS template for the node type.
 
-16. Determine how the BOS Session template references compute hosts.
+1. Determine how the BOS Session template references compute hosts.
     Typically, they are referenced by their `Compute` role.
     However, if they are referenced by component name (xname), then these new nodes should added to the BOS Session template.
 
@@ -439,7 +439,7 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
 
 #### Check Firmware
 
-17. Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
+1. Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
 
     1. Review [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) to perform a dry run using FAS to verify firmware versions.
 
@@ -450,7 +450,7 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
 There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and their waiter, and at least one `cray-cps-cm-pm` pod.
 Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w003` and other worker nodes.
 
-18. Check the `cray-cps` pods on worker nodes and verify they are `Running`.
+1. Check the `cray-cps` pods on worker nodes and verify they are `Running`.
 
     ```bash
     ncn-m001# kubectl get pods -Ao wide | grep cps
@@ -468,7 +468,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     services   cray-cps-wait-for-etcd-jb95m 0/1  Completed
     ```
 
-19. SSH to each worker node running CPS/DVS, and run `dmesg -T` to ensure that there are no recurring `"DVS: merge_one"` error messages as shown.
+1. SSH to each worker node running CPS/DVS, and run `dmesg -T` to ensure that there are no recurring `"DVS: merge_one"` error messages as shown.
     The error messages indicate that DVS is detecting an IP address change for one of the client nodes.
 
     ```bash
@@ -485,7 +485,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     [Tue Jul 21 13:09:54 2020] DVS: merge_one#358:   Ignoring.
     ```
 
-20. SSH to the node and check each DVS mount.
+1. SSH to the node and check each DVS mount.
 
     ```bash
     nid# mount | grep dvs | head -1
@@ -499,7 +499,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
 
 #### Check the HSN for the affected nodes
 
-21. Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
+1. Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
 
     ```bash
     ncn-m001# kubectl exec -it -n services \
@@ -509,7 +509,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
 
 #### Check for duplicate IP address entries
 
-22. Check for duplicate IP address entries in the Hardware State Management Database (HSM).
+1. Check for duplicate IP address entries in the Hardware State Management Database (HSM).
     Duplicate entries will cause DNS operations to fail.
 
     1. Verify each node hostname resolves to one IP address.
@@ -554,7 +554,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
         address 10.100.0.105: There's already a reservation for this address"}]
         ```
 
-23. Use the following example `curl` command to check for active DHCP leases.
+1. Use the following example `curl` command to check for active DHCP leases.
     If there are 0 DHCP leases, there is a configuration error.
 
     ```bash
@@ -575,7 +575,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     ]
     ```
 
-24. If there are duplicate entries in the HSM as a result of this procedure,
+1. If there are duplicate entries in the HSM as a result of this procedure,
     (`10.100.0.105` in this example), delete the duplicate entry.
 
     1. Show the `EthernetInterfaces` for the duplicate IP address:
@@ -615,7 +615,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
        ncn-m001# cray hsm inventory ethernetInterfaces delete 0040a68350a4
        ```
 
-25. Check DNS using `nslookup`.
+1. Check DNS using `nslookup`.
 
     ```bash
     ncn-m001# nslookup 10.100.0.105
@@ -625,7 +625,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     105.0.100.10.in-addr.arpa        name = x1005c3s0b0n0.local.
     ```
 
-26. Check SSH.
+1. Check SSH.
 
     ```bash
     ncn-m001# ssh x1005c3s0b0n0

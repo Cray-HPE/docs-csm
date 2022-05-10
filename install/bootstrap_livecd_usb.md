@@ -302,6 +302,7 @@ information for this system has not yet been prepared.
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration
 <<<<<<< HEAD
+<<<<<<< HEAD
    (see [Cray `Site Init` Files](../background/index.md#cray_site_init_files)).
 =======
 <<<<<<< HEAD
@@ -310,6 +311,9 @@ information for this system has not yet been prepared.
    (see [Cray `site-init` Files](../background/index.md#cray_site_init_files)).
 >>>>>>> 2dc03804de (STP-3186: more linter and spell check fixes)
 >>>>>>> 95806626a7 (STP-3186: more linter and spell check fixes)
+=======
+   (see [Cray `site-init` Files](../background/index.md#cray_site_init_files)).
+>>>>>>> 209e017267 (STP-3186: step numbering for linter)
 
    > **Warning:** If the `system_config.yaml` file is unavailable, then skip this step and proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
 
@@ -482,11 +486,35 @@ information for this system has not yet been prepared.
 
 1. Copy the new `system_config.yaml` file somewhere safe to facilitate re-installs.
 
+<<<<<<< HEAD
 1. Continue to the next step to [Prepare `Site Init`](#prepare-site-init).
 
 <a name="prepare-site-init"></a>
 
 ### 3.3 Prepare `Site Init`
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+1. Continue to the next step to [Prepare Site Init](#prepare-site-init).
+
+<a name="prepare-site-init"></a>
+
+### 3.3 Prepare Site Init
+=======
+1. Continue to the next step to [Prepare `site-init`](#prepare-site-init).
+
+<a name="prepare-site-init"></a>
+
+### 3.3 Prepare `site-init`
+>>>>>>> f4cf0b23b3 (STP-3186: linter and spell check fixes)
+=======
+1. Continue to the next step to [Prepare `site-init`](#prepare-site-init).
+
+<a name="prepare-site-init"></a>
+
+### 3.3 Prepare `site-init`
+>>>>>>> dab81a9443 (STP-3186: step numbering for linter)
+>>>>>>> 209e017267 (STP-3186: step numbering for linter)
 
 > **Note:**: It is assumed at this point that `$PITDATA` (that is, `/mnt/pitdata`) is still mounted on the Linux system. This is important because the following procedure
 > depends on that mount existing.
