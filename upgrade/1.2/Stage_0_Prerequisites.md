@@ -20,13 +20,21 @@ Stage 0 has several critical procedures which prepares and verify if the environ
 
 1. Install latest documentation RPM package and prepare assets:
 
-   > The install scripts will look for the RPM in `/root`, so it is important that you copy it there.
+   > **Important:** The install scripts will look for the `docs-csm` RPM in `/root`, so be sure copy it there.
 
    ```bash
     ncn-m001# CSM_RELEASE=csm-1.2.0
    ```
 
    - Internet Connected
+
+      1. Download and install the latest documentation RPM.
+
+         ```bash
+         ncn-m001# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm \
+                        -O /root/docs-csm-latest.noarch.rpm &&
+                   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+         ```
 
       1. Set the ENDPOINT variable to the URL of the directory containing the CSM release tarball.
 
@@ -38,20 +46,19 @@ Stage 0 has several critical procedures which prepares and verify if the environ
          ncn-m001# ENDPOINT=https://put.the/url/here/
          ```
 
-      1. Run the script
+      1. Run the script.
 
          ```bash
-         ncn-m001# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm -P /root &&
-                   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-
          ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version [CSM_RELEASE] --endpoint [ENDPOINT]
          ```
 
    - Air Gapped (replace the PATH_TO below with the location of the rpm)
 
-      1. Copy the docs-csm RPM package and CSM release tarball to `ncn-m001`.
+      1. Copy the `docs-csm` RPM package and CSM release tarball to `ncn-m001`.
 
-      1. Run the script
+         See [Update Product Stream](../update_product_stream/index.md).
+
+      1. Run the script.
 
          ```bash
          ncn-m001# cp [PATH_TO_docs-csm-*.noarch.rpm] /root

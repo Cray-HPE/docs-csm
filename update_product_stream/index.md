@@ -119,10 +119,10 @@ Acquire the latest documentation RPM. This may include updates, corrections, and
    linux# rpm -Uvh --force https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm
    ```
 
-   If this machine does not have direct Internet access, this RPM will need to be externally downloaded and then copied to the system. This example copies it to `ncn-m001`.
+   If this machine does not have direct Internet access, then this RPM will need to be externally downloaded and copied to the system. This example copies it to `ncn-m001`.
 
    ```bash
-   linux# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm
+   linux# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm -O docs-csm-latest.noarch.rpm
    linux# scp -p docs-csm-*rpm ncn-m001:/root
    linux# ssh ncn-m001
    ncn-m001# rpm -Uvh --force docs-csm-latest.noarch.rpm
