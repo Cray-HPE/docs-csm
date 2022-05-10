@@ -18,4 +18,3 @@ the [Cray System Management Documentation](index.md) which introduces
 topics related to CSM software installation, upgrade, and operational use. Notice that the
 previous sentence had a link to the index.md file for the Cray System Management Documentation.
 If the link does not work, then a better Markdown viewer is needed.
-
