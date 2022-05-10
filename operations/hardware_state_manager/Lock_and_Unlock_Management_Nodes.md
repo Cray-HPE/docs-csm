@@ -5,13 +5,14 @@ The ability to ignore non-compute nodes (NCNs) is turned off by default. Managem
 This section only covers using locks with the Hardware State Manager (HSM). For more information
 on ignoring nodes, refer to the following sections:
 
-   * Firmware Action Service (FAS): See [Ignore Node within FAS](../firmware/FAS_Admin_Procedures.md#ignore).
-   * Cray Advanced Platform Monitoring and Control (CAPMC): See [Ignore Nodes with CAPMC](../power_management/Ignore_Nodes_with_CAPMC.md)
+* Firmware Action Service (FAS): See [Ignore Node within FAS](../firmware/FAS_Admin_Procedures.md#ignore).
+* Cray Advanced Platform Monitoring and Control (CAPMC): See [Ignore Nodes with CAPMC](../power_management/Ignore_Nodes_with_CAPMC.md)
 
 The following actions can be prevented when a node and its BMC is locked.
-   * Firmware upgrades with FAS
-   * Power off operations with CAPMC
-   * Reset operations with CAPMC
+
+* Firmware upgrades with FAS
+* Power off operations with CAPMC
+* Reset operations with CAPMC
 
 Doing any of these actions by accident will shut down a management node. If the node is a Kubernetes master or worker
 node, this can have serious negative effects on system operations. If a single node is taken down by mistake, it is
@@ -26,15 +27,16 @@ failure.
 * [When To Lock Management Nodes](#when-to-lock-management-nodes)
 * [When To Unlock Management Nodes](#when-to-unlock-management-nodes)
 * [How To Lock Management Nodes](#how-to-lock-management-nodes)
-    * [Script](#lock-script)
-    * [Manual Steps](#lock-manual)
+  * [Script](#lock-script)
+  * [Manual Steps](#lock-manual)
 * [How To Unlock Management Nodes](#how-to-unlock-management-nodes)
 
 <a name="when-to-lock-management-nodes"></a>
 
 ## When To Lock Management Nodes
 
-To best protect system health, NCNs and their BMCs should be locked as early as possible in the install/upgrade cycle. The later in the process, the more risk there is of accidentally taking down a critical node. NCN locking must be done after Kubernetes is running and the HSM service is operational.
+To best protect system health, NCNs and their BMCs should be locked as early as possible in the install/upgrade cycle. The later in the process, the more risk there is of accidentally taking down a critical node.
+NCN locking must be done after Kubernetes is running and the HSM service is operational.
 
 Check whether HSM is running with the following command:
 
@@ -44,7 +46,7 @@ ncn# kubectl -n services get pods | grep smd
 
 Example output:
 
-```
+```text
 cray-smd-848bcc875c-6wqsh           2/2     Running    0          9d
 cray-smd-848bcc875c-hznqj           2/2     Running    0          9d
 cray-smd-848bcc875c-tp6gf           2/2     Running    0          6d22h
@@ -75,6 +77,7 @@ should once again be locked.
 ### Script
 
 Run the `lock_management_nodes.py` script to lock all management nodes and BMCs that are not already locked:
+
 ```bash
 ncn# /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
 ```
@@ -87,7 +90,7 @@ The return value of the script is 0 if locking was successful. A non-zero return
 
 Use the `cray hsm locks lock` command to perform locking.
 
-**NOTE:** When locking NCNs, you must lock their NodeBMCs as well.
+**NOTE:** When locking NCNs, you must lock their node BMCs as well.
 
 **NOTE:** The following steps assume both the management nodes and their BMCs are marked with the `Management` role in HSM. If they are not, see [Set BMC Management Role](Set_BMC_Management_Role.md).
 
@@ -97,6 +100,7 @@ Use the `cray hsm locks lock` command to perform locking.
    target nodes or the entire operation will fail.
 
 1. Lock the management nodes and BMCs.
+
    ```bash
    ncn# cray hsm locks lock create --role Management --processing-model rigid
    ```
@@ -112,19 +116,23 @@ Use the `cray hsm locks lock` command to perform locking.
    Failure = 0
 
    [Success]
-   ComponentIDs = [ "x3000c0s5b0n0", "x3000c0s4b0n0", "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0", "x3000c0s5b0", "x3000c0s4b0", "x3000c0s7b0", "x3000c0s6b0", "x3000c0s3b0", "x3000c0s2b0", "x3000c0s9b0", "x3000c0s8b0",]
+   ComponentIDs = [ "x3000c0s5b0n0", "x3000c0s4b0n0", "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0", 
+                    "x3000c0s5b0", "x3000c0s4b0", "x3000c0s7b0", "x3000c0s6b0", "x3000c0s3b0", "x3000c0s2b0", "x3000c0s9b0", "x3000c0s8b0",]
    ```
 
 #### To lock single nodes or lists of specific nodes (and their BMCs)
 
+   > **Note:** The BMC of `ncn-m001` typically does not exist in HSM under HSM State Components, and therefore cannot be locked.
+
 1. Lock the management nodes and BMCs.
+
    ```bash
    ncn# cray hsm locks lock create --role Management --component-ids x3000c0s6b0n0,x3000c0s6b0 --processing-model rigid
    ```
 
    Example output:
 
-   ```
+   ```text
    Failure = []
 
    [Counts]
@@ -142,20 +150,21 @@ Use the `cray hsm locks lock` command to perform locking.
 
 Use the `cray hsm locks unlock` command to perform unlocking.
 
-**NOTE: When unlocking NCNs, you must unlock their NodeBMCs as well.**
+**NOTE: When unlocking NCNs, you must unlock their node BMCs as well.**
 
 **NOTE: The following steps assume both the management nodes and their BMCs are marked with the `Management` role in HSM. If they are not, see [Set BMC Management Role](Set_BMC_Management_Role.md).**
 
 ### To unlock all nodes (and their BMCs) with the _Management_ role
 
 1. Unlock the management nodes and BMCs.
+
    ```bash
    ncn# cray hsm locks unlock create --role Management --processing-model rigid
    ```
 
    Example output:
 
-   ```
+   ```text
    Failure = []
 
    [Counts]
@@ -164,19 +173,21 @@ Use the `cray hsm locks unlock` command to perform unlocking.
    Failure = 0
 
    [Success]
-   ComponentIDs = [ "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0", "x3000c0s5b0n0", "x3000c0s4b0n0", "x3000c0s5b0", "x3000c0s4b0", "x3000c0s7b0", "x3000c0s6b0", "x3000c0s3b0", "x3000c0s2b0", "x3000c0s9b0", "x3000c0s8b0",]
+   ComponentIDs = [ "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0", "x3000c0s5b0n0", "x3000c0s4b0n0", 
+                    "x3000c0s5b0", "x3000c0s4b0", "x3000c0s7b0", "x3000c0s6b0", "x3000c0s3b0", "x3000c0s2b0", "x3000c0s9b0", "x3000c0s8b0",]
    ```
 
 ### To unlock single or lists of specific nodes (and their BMCs)
 
 1. Unlock the management nodes.
+
    ```bash
    ncn# cray hsm locks unlock create --role Management --component-ids x3000c0s6b0n0,x3000c0s6b0 --processing-model rigid
    ```
 
    Example output:
 
-   ```
+   ```text
    Failure = []
 
    [Counts]
