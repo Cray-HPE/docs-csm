@@ -4,7 +4,7 @@ Log in to the spine switches if you have access and check that MetalLB is peerin
 
 Check both spines if they are available (powered up):
 
-```
+```bash
 show ip bgp summary
 ```
 
@@ -12,7 +12,7 @@ Example working state:
 
 All the neighbors should be in the Established state.
 
-```
+```bash
 sw-spine01 [standalone: master] # show ip bgp summary
 
 VRF name                  : default
@@ -32,9 +32,9 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 10.252.0.6        4    65533        463       500       6         0      0      0:03:36:39    ESTABLISHED/28
 ```
 
-If the State/pfxrcd is "IDLE" you need to restart the bgp process with this command
+If the `State`/`pfxrcd` is "IDLE" you need to restart the BGP process with this command
 
-```
+```bash
 sw-spine01 [standalone: master] # clear ip bgp all
 ```
 

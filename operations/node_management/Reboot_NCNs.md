@@ -2,18 +2,18 @@
 
 The following is a high-level overview of the non-compute node \(NCN\) reboot workflow:
 
-- Run the NCN pre-reboot checks and procedures:
-   - Ensure `ncn-m001` is not running in "LiveCD" or install mode
-   - Check the `metal.no-wipe` settings for all NCNs
-   - Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions
-   - [Validate the current boot order](../../background/ncn_boot_workflow.md#determine-the-current-boot-order) (or [specify the boot order](../../background/ncn_boot_workflow.md#set-boot-order))
-- Run the rolling NCN reboot procedure:
-   - Loop through reboots on storage nodes, worker nodes, and master nodes, where each boot consists of the following workflow:
-      - Establish console session with node to reboot
-      - Execute a Linux graceful shutdown or power off/on sequence to the node to allow it to boot up to completion
-      - Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN
-      - Disconnect console session with the node that was rebooted
-- Re-run all platform health checks, including checks on BGP peering sessions
+* Run the NCN pre-reboot checks and procedures:
+  * Ensure `ncn-m001` is not running in "LiveCD" or install mode
+  * Check the `metal.no-wipe` settings for all NCNs
+  * Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions
+  * [Validate the current boot order](../../background/ncn_boot_workflow.md#determine-the-current-boot-order) (or [specify the boot order](../../background/ncn_boot_workflow.md#set-boot-order))
+* Run the rolling NCN reboot procedure:
+  * Loop through reboots on storage nodes, worker nodes, and master nodes, where each boot consists of the following workflow:
+    * Establish console session with node to reboot
+    * Execute a Linux graceful shutdown or power off/on sequence to the node to allow it to boot up to completion
+    * Execute NCN/platform health checks and do not go on to reboot the next NCN until health has been ensured on the most recently rebooted NCN
+    * Disconnect console session with the node that was rebooted
+* Re-run all platform health checks, including checks on BGP peering sessions
 
 The time duration for this procedure \(if health checks are being executed in between each boot, as recommended\) could take between two to four hours for a system with nine management nodes.
 
@@ -48,7 +48,6 @@ The `kubectl` command is installed.
 
         **`NOTE`**: If the ncnHealthChecks script output indicates any `kube-multus-ds-` pods are in a `Terminating` state, that can indicate a previous restart of these pods did not complete. In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command. After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
 
-
     1. Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
 
         ```bash
@@ -75,40 +74,40 @@ The `kubectl` command is installed.
 
         If the preceding error is displayed, then remove all files in the following directories on all worker nodes:
 
-        - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
-        - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
+        * `/var/lib/cni/networks/macvlan-slurmctld-nmn-conf`
+        * `/var/lib/cni/networks/macvlan-slurmdbd-nmn-conf`
 
     1. Check that the BGP peering sessions are established.
 
         This check will need to be run after all worker node have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the spine switches
 
-        ```
+        ```bash
         ncn-m001# SW_ADMIN_PASSWORD='SWITCH_PASSWORD' GOSS_BASE=/opt/cray/tests/install/ncn goss -g  /opt/cray/tests/install/ncn/tests/goss-switch-bgp-neighbor-aruba-or-mellanox.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
         ```
 
 1. Ensure that no nodes are in a `failed` state in CFS.
     Nodes that are in a failed state prior to the reboot will not be automatically
     configured once they have been rebooted. To get a list of nodes in the failed state:
-   
+
    ```bash
    ncn-m001# cray cfs components list --status failed --format json | jq .[].id
    ```
-   
+
    If there are any nodes in this list, they can be reset with:
-   
+
    ```bash
    ncn-m001# cray cfs components update <xname> --enabled False --error-count 0
    ```
-   
+
    Or, to reset the error count for all nodes:
-   
+
    ```bash
    ncn-m001# cray cfs components list --status failed | jq .[].id -r | while read -r xname ; do
        echo "$xname"
        cray cfs components update $xname --enabled False --error-count 0
    done
    ```
-   
+
    This will leave the nodes in a disabled state in CFS. CFS will automatically
    re-enable them when they reboot, this is just so that CFS does not immediately
    start retrying configuration against the failed node.
@@ -138,7 +137,7 @@ Before rebooting NCNs:
         **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
 
         1. To power off the node:
-           
+
            ```bash
            ncn-m001# export USERNAME=root
            ncn-m001# export IPMI_PASSWORD=changeme
@@ -149,7 +148,7 @@ Before rebooting NCNs:
            Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
         2. To power back on the node:
-           
+
            ```bash
            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
@@ -184,7 +183,7 @@ Before rebooting NCNs:
 
        Example output:
 
-       ```
+       ```text
        {
          "configurationStatus": "configured",
          "desiredConfig": "ncn-personalization-full",
@@ -208,7 +207,7 @@ Before rebooting NCNs:
 
          Example output:
 
-         ```
+         ```text
          Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
          ```
 
@@ -218,14 +217,14 @@ Before rebooting NCNs:
 
          Example output:
 
-         ```
+         ```text
          Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
          ```
 
          Remove the following files on every worker node to resolve the failure:
 
-         - /var/lib/cni/networks/macvlan-slurmctld-nmn-conf
-         - /var/lib/cni/networks/macvlan-slurmdbd-nmn-conf
+         * `/var/lib/cni/networks/macvlan-slurmctld-nmn-conf`
+         * `/var/lib/cni/networks/macvlan-slurmdbd-nmn-conf`
 
     9. Disconnect from the console.
 
@@ -238,7 +237,7 @@ Before rebooting NCNs:
 
 1. Reboot each of the worker nodes (one at a time).
 
-    **NOTE:** You are doing a single worker at a time, so please keep track of what ncn-w0xx you are on for these steps.
+    **NOTE:** You are doing a single worker at a time, so please keep track of what `ncn-w` you are on for these steps.
 
     1. Establish a console session to the worker node you are rebooting.
 
@@ -246,7 +245,7 @@ Before rebooting NCNs:
 
         See [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
 
-    2. Failover any postgres leader that is running on the worker node you are rebooting.
+    2. Failover any Postgres leader that is running on the worker node you are rebooting.
 
        ```bash
        ncn-m# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/failover-leader.sh <node to be rebooted>
@@ -287,7 +286,7 @@ Before rebooting NCNs:
         **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
 
         1. To power off the node:
-           
+
            ```bash
            ncn-m001# export USERNAME=root
            ncn-m001# export IPMI_PASSWORD=changeme
@@ -298,7 +297,7 @@ Before rebooting NCNs:
            Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
         2. To power back on the node:
-           
+
            ```bash
            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
@@ -333,7 +332,7 @@ Before rebooting NCNs:
 
        Example output:
 
-       ```
+       ```text
        {
          "configurationStatus": "configured",
          "desiredConfig": "ncn-personalization-full",
@@ -417,10 +416,10 @@ Before rebooting NCNs:
 
     5. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
 
-   ```bash
-   ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
-   BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
-   ```
+        ```bash
+        ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
+        BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
+        ```
 
     6. Retrieve the component name (xname) for the node being rebooted.
 
@@ -440,7 +439,7 @@ Before rebooting NCNs:
 
        Example output:
 
-       ```
+       ```text
        {
          "configurationStatus": "configured",
          "desiredConfig": "ncn-personalization-full",
@@ -516,7 +515,7 @@ Before rebooting NCNs:
 
        Example output:
 
-       ```
+       ```text
        {
          "configurationStatus": "configured",
          "desiredConfig": "ncn-personalization-full",
@@ -534,11 +533,11 @@ Before rebooting NCNs:
 
     9. Disconnect from the console.
 
-3. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the CASMINST-2015 script:
+3. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the `CASMINST-2015.sh` script:
 
-```bash
-ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
-```
+    ```bash
+    ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+    ```
 
 4. Re-run the platform health checks and ensure that all BGP peering sessions are Established with both spine switches.
 

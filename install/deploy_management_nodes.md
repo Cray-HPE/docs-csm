@@ -943,7 +943,7 @@ Observe the output of the checks. If there are any failures, remediate them.
 
 ## Important checkpoint
 
-Before proceeding, be aware that this is the last point where the other NCN nodes can be rebuilt without also having to rebuild the PIT node. Therefore, take time to double check both the cluster and the validation test results
+Before proceeding, be aware that this is the last point where the other NCNs can be rebuilt without also having to rebuild the PIT node. Therefore, take time to double check both the cluster and the validation test results
 
 <a name="next-topic"></a>
 
