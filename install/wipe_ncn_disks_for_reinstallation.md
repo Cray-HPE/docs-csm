@@ -11,16 +11,18 @@ All types of disk wipe can be run from Linux or from an initramFS/initrd emergen
 <a name="use-cases"></a>
 The following are potential use cases for wiping disks:
 
-   * Adding a node that is not bare.
-   * Adopting new disks that are not bare.
-   * Doing a fresh install.
+* Adding a node that is not bare.
+* Adopting new disks that are not bare.
+* Doing a fresh install.
 
 ## Topics
-   * [Basic Wipe](#basic-wipe)
-   * [Advanced Wipe](#advanced-wipe)
-   * [Full Wipe](#full-wipe)
+
+* [Basic Wipe](#basic-wipe)
+* [Advanced Wipe](#advanced-wipe)
+* [Full Wipe](#full-wipe)
 
 <a name="basic-wipe"></a>
+
 ## Basic Wipe
 
 A basic wipe includes wiping the disks and all of the RAIDs. These basic wipe instructions can be
@@ -40,7 +42,7 @@ executed on **any type of management node** (master, storage, or worker).
 
     If any disks had labels present, then the output looks similar to the following:
 
-    ```
+    ```text
     /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
     /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
     /dev/sda: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
@@ -56,6 +58,7 @@ executed on **any type of management node** (master, storage, or worker).
     The `wipefs` command may fail if no labeled disks are found, which is an indication of a larger problem.
 
 <a name="advanced-wipe"></a>
+
 ## Advanced Wipe
 
 **This section is specific to utility storage nodes**. An advanced wipe includes stopping Ceph, 
@@ -100,6 +103,7 @@ deleting the Ceph volumes, and then wiping the disks and RAIDs.
 1. Perform the [Basic Wipe](#basic-wipe) procedure.
 
 <a name="full-wipe"></a>
+
 ## Full-Wipe
 
 This section is the preferred method for all nodes. A full wipe includes deleting the Ceph volumes (where applicable), stopping the
@@ -113,6 +117,7 @@ wiping a different type of node than what a step specifies, then skip that step.
    This will stop kubelet, underlying containers, and remove the contents of `/var/lib/kubelet`.
 
    1. Reset Kubernetes.
+
         ```bash
         ncn-w# kubeadm reset --force
         ```
@@ -129,7 +134,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         c3d4811fc3cd0       0215a709bdd9b       3 days ago           Running             weave-npc                                    0                   f5e25c12e617e
         ```
 
-    1. If there are any running containers from the output of the `crictl ps` command, stop them.
+   1. If there are any running containers from the output of the `crictl ps` command, stop them.
 
         ```bash
         ncn-w# crictl stop <container id from the CONTAINER column>
@@ -145,7 +150,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         ncn-m# kubeadm reset --force
         ```
 
-   1. List any containers running in `containerd`.
+    1. List any containers running in `containerd`.
 
         ```bash
         ncn-m# crictl ps
@@ -157,7 +162,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         c3d4811fc3cd0       0215a709bdd9b       3 days ago           Running             weave-npc                                    0                   f5e25c12e617e
         ```
 
-   1. If there are any running containers from the output of the `crictl ps` command, stop them.
+    1. If there are any running containers from the output of the `crictl ps` command, stop them.
 
        ```bash
        ncn-m# crictl stop <container id from the CONTAINER column>
@@ -284,7 +289,7 @@ wiping a different type of node than what a step specifies, then skip that step.
 
         Expected output when the `etcd` volume is present will show `ETCDLVM`, but the numbers might be different.
 
-        ```
+        ```text
         ETCDLVM (254:1)
         ```
 
@@ -295,7 +300,8 @@ wiping a different type of node than what a step specifies, then skip that step.
         ```
 
         > **NOTE:** The following output means the `etcd` volume mapper is not present. This is okay.
-        ```
+
+        ```text
         No device specified.
         Command failed.
         ```
@@ -335,7 +341,7 @@ wiping a different type of node than what a step specifies, then skip that step.
 
         If any disks had labels present, then output from `wipefs` looks similar to the following:
 
-        ```
+        ```text
         /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
         /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
         /dev/sda: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa

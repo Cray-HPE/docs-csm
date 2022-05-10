@@ -301,7 +301,7 @@ worker. We believe this has something to do with conntrack.
   * [Check DHCP lease is getting allocated](#check-dhcp-lease)
   * [Verify the DHCP traffic on the Workers](#verify-the-dhcp-traffic)
   * [Verify the switches are forwarding DHCP traffic](#verify-the-switches)
-* Verify the IP-Helpers on the VLAN the computes nodes are booting over. This is typically VLAN 2 or VLAN 2xxx (MTN Computes).
+* Verify the IP-Helpers on the VLAN the computes nodes are booting over. This is typically `VLAN 2` or `VLAN 2xxx` (MTN Computes).
 * If the compute nodes make it past PXE and go into the PXE shell you can verify DNS and connectivity.
 
 ```text

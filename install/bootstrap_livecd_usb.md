@@ -301,7 +301,15 @@ information for this system has not yet been prepared.
 #### 3.1.a Subsequent installs (reinstalls)
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration
+<<<<<<< HEAD
    (see [Cray `Site Init` Files](../background/index.md#cray_site_init_files)).
+=======
+<<<<<<< HEAD
+   (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
+=======
+   (see [Cray `site-init` Files](../background/index.md#cray_site_init_files)).
+>>>>>>> 2dc03804de (STP-3186: more linter and spell check fixes)
+>>>>>>> 95806626a7 (STP-3186: more linter and spell check fixes)
 
    > **Warning:** If the `system_config.yaml` file is unavailable, then skip this step and proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
 
