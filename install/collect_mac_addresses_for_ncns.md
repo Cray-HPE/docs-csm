@@ -107,7 +107,9 @@ making a backup of them, in case they need to be examined at a later time.
          "Couldn't find switch port for NCN: x3000c0s1b0"
          ```
 
-      * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
+      * An unexpected component may have this message.
+        If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`.
+        See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md).
 
          ```json
          {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
@@ -121,7 +123,7 @@ making a backup of them, in case they need to be examined at a later time.
          {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
          ```
 
-1. Copy the interface configuration files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
+2. Copy the interface configuration files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
 
    ```bash
    pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
@@ -129,7 +131,7 @@ making a backup of them, in case they need to be examined at a later time.
    pit# systemctl restart wickedd-nanny && sleep 5
    ```
 
-1. Check that IP addresses are set for each interface and investigate any failures.
+3. Check that IP addresses are set for each interface and investigate any failures.
 
     > **`Note:`** The `bond0.can0` interface is optional in CSM 1.2+
 
@@ -167,7 +169,7 @@ making a backup of them, in case they need to be examined at a later time.
     addr:     ipv4 10.254.1.4/17 [static]
     ```
 
-1. Copy the service configuration files generated earlier by `csi config init` for `dnsmasq`, Metal
+4. Copy the service configuration files generated earlier by `csi config init` for `dnsmasq`, Metal
    Basecamp (`cloud-init`), and ConMan.
 
     1. Copy files (files only, `-r` is expressly not used).
@@ -178,13 +180,13 @@ making a backup of them, in case they need to be examined at a later time.
         pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/basecamp/* /var/www/ephemeral/configs/
         ```
 
-    1. Restart all PIT services.
+    2. Restart all PIT services.
 
         ```bash
         pit# systemctl restart basecamp nexus dnsmasq conman
         ```
 
-1. Verify that all BMCs can be pinged.
+5. Verify that all BMCs can be pinged.
 
    **Note:** It may take about 10 minutes from when `dnsmasq` is restarted to when the BMCs pick up new DHCP leases.
 
@@ -298,7 +300,9 @@ making a backup of them, in case they need to be examined at a later time.
          "Couldn't find switch port for NCN: x3000c0s1b0"
          ```
 
-      * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
+      * An unexpected component may have this message.
+        If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`.
+        See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md).
 
          ```json
          {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
@@ -312,7 +316,7 @@ making a backup of them, in case they need to be examined at a later time.
          {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
          ```
 
-1. Copy the interface configuration files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
+2. Copy the interface configuration files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
 
    ```bash
    pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
@@ -320,7 +324,7 @@ making a backup of them, in case they need to be examined at a later time.
    pit# systemctl restart wickedd-nanny && sleep 5
    ```
 
-1. Check that IP addresses are set for each interface and investigate any failures.
+3. Check that IP addresses are set for each interface and investigate any failures.
 
     > **`Note:`** The `bond0.can0` interface is optional in CSM 1.2+
 
@@ -358,7 +362,7 @@ making a backup of them, in case they need to be examined at a later time.
     addr:     ipv4 10.254.1.4/17 [static]
     ```
 
-1. Copy the service configuration files generated earlier by `csi config init` for `dnsmasq`, Metal
+4. Copy the service configuration files generated earlier by `csi config init` for `dnsmasq`, Metal
    Basecamp (`cloud-init`), and ConMan.
 
     1. Copy files (files only, `-r` is expressly not used).
@@ -369,7 +373,7 @@ making a backup of them, in case they need to be examined at a later time.
         pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/basecamp/* /var/www/ephemeral/configs/
         ```
 
-    1. Update CA Cert on the copied `data.json` file for Basecamp with the generated certificate in `site-init`:
+    2. Update CA Cert on the copied `data.json` file for Basecamp with the generated certificate in `site-init`:
 
         ```bash
         pit# csi patch ca \
@@ -378,13 +382,13 @@ making a backup of them, in case they need to be examined at a later time.
         --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
         ```
 
-    1. Restart all PIT services.
+    3. Restart all PIT services.
 
         ```bash
         pit# systemctl restart basecamp nexus dnsmasq conman
         ```
 
-1. Ensure system-specific settings generated by CSI are merged into `customizations.yaml`.
+5. Ensure system-specific settings generated by CSI are merged into `customizations.yaml`.
     > The `yq` tool used in the following procedures is available under `/var/www/ephemeral/prep/site-init/utils/bin` once the `SHASTA-CFG` repository has been cloned.
 
     ```bash

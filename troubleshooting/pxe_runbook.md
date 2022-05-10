@@ -3,23 +3,26 @@
 PXE booting is a key component of a working Shasta system. There are a lot of different components involved, which increases the complexity.
 This guide runs through the most common issues and shows what is needed in order to have a successful PXE boot.
 
-1. [NCNs on install](#ncns-on-install)<br>
-2. [`ncn-m001` on reboot or NCN boot](#ncn-m001-on-reboot)<br>
-    2.1. [Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)](#Verify-DHCP-packets)<br>
-    2.2. [Verify BGP](#verify-bgp)<br>
-    2.3. [Verify route to TFTP](#verify-route-to-tftp)<br>
-    2.4. [Test TFTP traffic (Aruba Only)](#test-tftp-traffic)<br>
-    2.5. [Check DHCP lease is getting allocated](#check-dhcp-lease)<br>
-    2.6. [Verify the DHCP traffic on the Workers](#verify-the-dhcp-traffic)<br>
-    2.7. [Verify the switches are forwarding DHCP traffic.](#verify-the-switches)<br>
-3. [Computes/UANs/Application Nodes](#computes-uans-applications-nodes)<br>
+1. [NCNs on install](#ncns-on-install)
+2. [`ncn-m001` on reboot or NCN boot](#ncn-m001-on-reboot)
+    2.1. [Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)](#Verify-DHCP-packets)
+    2.2. [Verify BGP](#verify-bgp)
+    2.3. [Verify route to TFTP](#verify-route-to-tftp)
+    2.4. [Test TFTP traffic (Aruba Only)](#test-tftp-traffic)
+    2.5. [Check DHCP lease is getting allocated](#check-dhcp-lease)
+    2.6. [Verify the DHCP traffic on the Workers](#verify-the-dhcp-traffic)
+    2.7. [Verify the switches are forwarding DHCP traffic.](#verify-the-switches)
+3. [Computes/UANs/Application Nodes](#computes-uans-applications-nodes)
 
 <a name="ncns-on-install"></a>
 
 ## 1. NCNs on install
 
 * Verify the DNSMASQ configuration file matches what is configured on the switches.
-  * Here is a DNSMASQ configuration file for the Metal network (VLAN1). As you can see, the router IP address is `10.1.0.1`. This has to match what the IP address is on the switches doing the routing for the MTL network. This is most commonly on the spines. This configuration is commonly missed on the CSI input file.
+  * Here is a DNSMASQ configuration file for the Metal network (VLAN1).
+    As you can see, the router IP address is `10.1.0.1`.
+    This has to match what the IP address is on the switches doing the routing for the MTL network.
+    This is most commonly on the spines. This configuration is commonly missed on the CSI input file.
 
 >MTL DNSMASQ file
 
@@ -281,7 +284,8 @@ this is below.
 worker. We believe this has something to do with conntrack.
 
 <a name="verify-the-switches"></a>
-## 2.7. Verify the switches are forwarding DHCP traffic.
+
+## 2.7. Verify the switches are forwarding DHCP traffic
 
 * If you still cannot PXE boot, the IP-Helper may be breaking on the switch.
 * On Aruba, Dell, and Mellanox switches we have seen the IP-Helpers get stuck and stop forwarding DHCP traffic to the client.
@@ -295,7 +299,7 @@ worker. We believe this has something to do with conntrack.
 ## 3. Compute Nodes/UANs/Application Nodes
 
 * The following are required for compute node PXE booting.
-  * [Verify BGP](#ncns-on-install)<br>
+  * [Verify BGP](#ncns-on-install)
   * [Verify route to TFTP](#verify-route-to-tftp)
   * [Test TFTP traffic](#test-tftp-traffic)
   * [Check DHCP lease is getting allocated](#check-dhcp-lease)
