@@ -11,7 +11,7 @@ A backup of a healthy etcd cluster has been created.
 
 ### Procedure
 
-1.  List the backups for the desired etcd cluster.
+1. List the backups for the desired etcd cluster.
 
     The example below uses the Boot Orchestration Service \(BOS\).
 
@@ -28,7 +28,7 @@ A backup of a healthy etcd cluster has been created.
     cray-bos/etcd.backup_v86767_2020-03-19-18:00:05
     ```
 
-2.  Restore the cluster using a backup.
+2. Restore the cluster using a backup.
 
     Replace etcd.backup\_v277935\_2020-03-30-23:52:54 in the command below with the name of the backup being used.
 
@@ -41,7 +41,7 @@ A backup of a healthy etcd cluster has been created.
     etcdrestore.etcd.database.coreos.com/cray-bos-etcd created
     ```
 
-3.  Restart the pods for the etcd cluster.
+3. Restart the pods for the etcd cluster.
 
     1.  Watch the pods come back online.
 
@@ -62,3 +62,11 @@ A backup of a healthy etcd cluster has been created.
         ncn-w001# kubectl -n services delete etcdrestore.etcd.database.coreos.com/cray-bos-etcd
         etcdrestore.etcd.database.coreos.com "cray-bos-etcd" deleted
         ```
+4. Verify if service/cray-bos-etcd-client was created.
+
+       ```bash
+       $ kubectl get service -A | grep cray-bos-etcd-client
+       $
+       ```
+   
+      1. If service was not created repeat steps 1 to 3 for a new backup restore.
