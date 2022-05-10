@@ -31,7 +31,8 @@ The `kubectl` command is installed.
 
     This mode should only be in effect during the initial product install. If the word "pit" is NOT in the hostname of `ncn-m001`, then it is not in the "LiveCD" mode.
 
-    If "pit" is in the hostname of `ncn-m001`, the system is not in normal operational mode and rebooting `ncn-m001` may have unexpected results. This procedure assumes that the node is not running in the "LiveCD" mode that occurs during product install.
+    If "pit" is in the hostname of `ncn-m001`, the system is not in normal operational mode and rebooting `ncn-m001` may have unexpected results.
+    This procedure assumes that the node is not running in the "LiveCD" mode that occurs during product install.
 
 1. Run the platform health checks and analyze the results.
 
@@ -46,7 +47,9 @@ The `kubectl` command is installed.
         ncn-m001# csi pit validate --postgres
         ```
 
-        **`NOTE`**: If the ncnHealthChecks script output indicates any `kube-multus-ds-` pods are in a `Terminating` state, that can indicate a previous restart of these pods did not complete. In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command. After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
+        **`NOTE`**: If the ncnHealthChecks script output indicates any `kube-multus-ds-` pods are in a `Terminating` state, that can indicate a previous restart of these pods did not complete.
+        In this case, it is safe to force delete these pods in order to let them properly restart by executing the `kubectl delete po -n kube-system kube-multus-ds.. --force` command.
+        After executing this command, re-running the ncnHealthChecks script should indicate a new pod is in a `Running` state.
 
     1. Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
 
@@ -79,7 +82,8 @@ The `kubectl` command is installed.
 
     1. Check that the BGP peering sessions are established.
 
-        This check will need to be run after all worker node have been rebooted. Ensure that the checks have been run to check BGP peering sessions on the spine switches
+        This check will need to be run after all worker node have been rebooted.
+        Ensure that the checks have been run to check BGP peering sessions on the spine switches
 
         ```bash
         ncn-m001# SW_ADMIN_PASSWORD='SWITCH_PASSWORD' GOSS_BASE=/opt/cray/tests/install/ncn goss -g  /opt/cray/tests/install/ncn/tests/goss-switch-bgp-neighbor-aruba-or-mellanox.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
@@ -175,7 +179,8 @@ Before rebooting NCNs:
 
     7. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
-       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the component name (xname) of the node being rebooted.
+       The following command will indicate if a CFS job is currently in progress for this node.
+       Replace the `XNAME` value in the following command with the component name (xname) of the node being rebooted.
 
        ```bash
        ncn# cray cfs components describe XNAME --format json
@@ -193,9 +198,12 @@ Before rebooting NCNs:
          "retryPolicy": 3,
        ```
 
-       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+       If the configurationStatus is `pending`, wait for the job to finish before continuing.
+       If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.
+       If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
-       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
+       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
+       for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
     8. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
@@ -263,13 +271,16 @@ Before rebooting NCNs:
        ncn-m# error when evicting pod "<pod>" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.
        ```
 
-       In this case, there are some options. First, if the service is scalable, you can increase the scale to start up another pod on another node, and then the drain will be able to delete it. However, it will probably be necessary to force the deletion of the pod:
+       In this case, there are some options.
+       First, if the service is scalable, you can increase the scale to start up another pod on another node, and then the drain will be able to delete it.
+       However, it will probably be necessary to force the deletion of the pod:
 
        ```bash
        ncn-m# kubectl delete pod [-n <namespace>] --force --grace-period=0 <pod>
        ```
 
-       This will delete the offending pod, and Kubernetes should schedule a replacement on another node. You can then rerun the kubectl drain command, and it should report that the node is drained
+       This will delete the offending pod, and Kubernetes should schedule a replacement on another node.
+       You can then rerun the kubectl drain command, and it should report that the node is drained
 
        ```bash
        ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
@@ -294,7 +305,8 @@ Before rebooting NCNs:
            ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
            ```
 
-           Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
+           Ensure the power is reporting as off. This may take 5-10 seconds for this to update.
+           Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
         2. To power back on the node:
 
@@ -324,7 +336,8 @@ Before rebooting NCNs:
 
     9. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
-       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the component name (xname) of the node being rebooted.
+       The following command will indicate if a CFS job is currently in progress for this node.
+       Replace the `XNAME` value in the following command with the component name (xname) of the node being rebooted.
 
        ```bash
        ncn# cray cfs components describe XNAME --format json
@@ -342,9 +355,12 @@ Before rebooting NCNs:
          "retryPolicy": 3,
        ```
 
-       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+       If the configurationStatus is `pending`, wait for the job to finish before continuing.
+       If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.
+       If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
-       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
+       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
+       for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
     10. Uncordon the node.
 
@@ -362,7 +378,7 @@ Before rebooting NCNs:
 
     12. Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
 
-         Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the ncnHealthChecks.sh script returns a healthy report for all members of each etcd cluster.
+         Verify that the `Check the Health of the Etcd Clusters in the Services Namespace` check from the `ncnHealthChecks.sh` script returns a healthy report for all members of each etcd cluster.
 
          If terminating pods are reported when checking the status of the Kubernetes pods, wait for all pods to recover before proceeding.
 
@@ -401,7 +417,8 @@ Before rebooting NCNs:
         ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
         ```
 
-        Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
+        Ensure the power is reporting as off. This may take 5-10 seconds for this to update.
+        Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
         To power back on the node:
 
@@ -431,7 +448,8 @@ Before rebooting NCNs:
 
     7. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
 
-       The following command will indicate if a CFS job is currently in progress for this node. Replace the `XNAME` value in the following command with the component name (xname) of the node being rebooted.
+       The following command will indicate if a CFS job is currently in progress for this node.
+       Replace the `XNAME` value in the following command with the component name (xname) of the node being rebooted.
 
        ```bash
        ncn# cray cfs components describe XNAME --format json
@@ -449,9 +467,12 @@ Before rebooting NCNs:
          "retryPolicy": 3,
        ```
 
-       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+       If the configurationStatus is `pending`, wait for the job to finish before continuing.
+       If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.
+       If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
-       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
+       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
+       for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
     8. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
 
@@ -484,7 +505,8 @@ Before rebooting NCNs:
         external# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
         ```
 
-        Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
+        Ensure the power is reporting as off. This may take 5-10 seconds for this to update.
+        Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
         To power back on the node:
 
@@ -525,9 +547,12 @@ Before rebooting NCNs:
          "retryPolicy": 3,
        ```
 
-       If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+       If the configurationStatus is `pending`, wait for the job to finish before continuing.
+       If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node.
+       If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
-       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
+       If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
+       for how to analyze the pod logs from cray-cfs to determine why the configuration may not have completed.
 
     8. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
 

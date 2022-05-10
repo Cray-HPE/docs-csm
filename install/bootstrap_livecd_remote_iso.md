@@ -40,7 +40,15 @@ The LiveCD Remote ISO has known compatibility issues for nodes from certain vend
 > **Warning:** If this is a re-installation on a system that still has a USB device from a prior
 > installation, then that USB device must be wiped before continuing. Failing to wipe the USB, if present, may result in confusion.
 > If the USB is still booted, then it can wipe itself using the [basic wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
+<<<<<<< HEAD
 > If it is not booted, please do so and wipe it **or** disable the USB ports in the BIOS (not available for all vendors).
+=======
+<<<<<<< HEAD
+> If it is not booted, please do so and wipe it _or_ disable the USB ports in the BIOS (not available for all vendors).
+=======
+> If it is not booted, please do so and wipe it or disable the USB ports in the BIOS (not available for all vendors).
+>>>>>>> 2dc03804de (STP-3186: more linter and spell check fixes)
+>>>>>>> 95806626a7 (STP-3186: more linter and spell check fixes)
 
 Obtain and attach the LiveCD `cray-pre-install-toolkit` ISO file to the BMC. Depending on the vendor of the node,
 the instructions for attaching to the BMC will differ.
@@ -419,7 +427,15 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 #### 4.1.a Subsequent installs (reinstalls)
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration
+<<<<<<< HEAD
    (see [Cray `Site Init` Files](../background/index.md#cray_site_init_files)).
+=======
+<<<<<<< HEAD
+   (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
+=======
+   (see [Cray `site-init` Files](../background/index.md#cray_site_init_files)).
+>>>>>>> 2dc03804de (STP-3186: more linter and spell check fixes)
+>>>>>>> 95806626a7 (STP-3186: more linter and spell check fixes)
 
    > **Warning:** If the `system_config.yaml` file is unavailable, then skip this step and proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
 
