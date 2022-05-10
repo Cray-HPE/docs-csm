@@ -1,6 +1,8 @@
 # Cray CLI 403 Forbidden Errors
 
-There is a known issue where the Keycloak configuration obtained from LDAP is incomplete causing the `keycloak-users-localize` job to fail to complete. This, in turn, causes 403 Forbidden errors when trying to use the `cray` CLI. This can also cause a Keycloak test to fail during CSM health validation.
+There is a known issue where the Keycloak configuration obtained from LDAP is incomplete causing the `keycloak-users-localize` job to fail to complete.
+This, in turn, causes 403 Forbidden errors when trying to use the `cray` CLI.
+This can also cause a Keycloak test to fail during CSM health validation.
 
 ## Fix
 

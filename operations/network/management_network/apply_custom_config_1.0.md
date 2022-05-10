@@ -79,18 +79,18 @@ sw-spine-002 [mlag-domain: master] # conf t
    ip route vrf default 0.0.0.0/0 10.102.255.85
 ```
 
-## Apply users/password
+## Apply Users/Password
 
 All that is required to re-apply the users is to get into global configuration mode with `conf t` and to paste in the configuration that was copied from the previous step.
 
-### Aruba
+### Aruba Credentials
 
 ```text
 sw-leaf-bmc-001# conf t
 user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-### Dell
+### DellCredentials
 
 ```text
 sw-leaf-001# conf t
@@ -98,7 +98,7 @@ system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
 ```
 
-### Mellanox
+### Mellanox Credentials
 
 ```text
 sw-spine-001 [standalone: master] # conf t

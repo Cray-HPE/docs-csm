@@ -189,28 +189,30 @@ Check the status of Ceph.
      41    ssd   1.74660          osd.41       down   1.00000  1.00000
      ```
 
-    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives. By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map. This will result in OSDs that no longer exist appearing to be down.
+    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
+       By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map.
+       This will result in OSDs that no longer exist appearing to be down.
 
-      The following command assumes the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) are set.
+        The following command assumes the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) are set.
 
-      This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
+        This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
 
-      ```bash
-      ncn-s# for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
-      ```
+        ```bash
+        ncn-s# for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
+        ```
 
-      Example Output:
+        Example Output:
 
-      ```screen
-      destroyed osd.1
-      purged osd.1
-      destroyed osd.3
-      purged osd.3
-      destroyed osd.6
-      purged osd.6
-      destroyed osd.9
-      purged osd.9
-      ```
+        ```screen
+        destroyed osd.1
+        purged osd.1
+        destroyed osd.3
+        purged osd.3
+        destroyed osd.6
+        purged osd.6
+        destroyed osd.9
+        purged osd.9
+        ```
 
 ## Next Step
 
