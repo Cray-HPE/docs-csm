@@ -90,7 +90,7 @@ sw-leaf-bmc-001# conf t
 user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-### DellCredentials
+### Dell Credentials
 
 ```text
 sw-leaf-001# conf t
