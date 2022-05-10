@@ -75,10 +75,14 @@ function move_state_file () {
 }
 
 function err_report() {
-    # add more logging to capture next where exactly the error happened
-    echo "$(caller)"
-    echo "$BASH_COMMAND"
+    local caller="$(caller)"
     local cmd="$BASH_COMMAND"
+    if [[ ! -z $NO_ERROR_TRAP ]]; then
+        return 0
+    fi
+    # add more logging to capture next where exactly the error happened
+    echo "${caller}"
+    echo "${cmd}"
 
     # restore previous ssh config if there was one, remove ours
     rm -f /root/.ssh/config
@@ -106,10 +110,14 @@ function err_report() {
     # force output to console regardless of redirection
     echo >/dev/tty 
     echo "[ERROR] - Unexpected errors, check logs: ${LOG_FILE}" >/dev/tty 
+    # avoid shell double trap
+    NO_ERROR_TRAP=1
 }
 
 function ok_report() {
     # force output to console regardless of redirection
     echo >/dev/tty 
     echo "[OK] - Successfully completed" >/dev/tty
+    # avoid shell double trap
+    NO_ERROR_TRAP=1
 }
