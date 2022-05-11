@@ -308,12 +308,12 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     system_name=$(kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d|yq r - spec.network.dns.external)
     unbound_version=$(ls ${CSM_ARTI_DIR}/helm |grep cray-dns-unbound|sed -e 's/\.[^./]*$//'|cut -d '-' -f4)
 
-    echo "ERROR: null value found.  See list of variables"
-    echo "dns_forwarder is $dns_forwarder."
-    echo "system_name is $system_name."
-    echo "unbound_version is $unbound_version."
 
     if [ -z "$dns_forwarder" ] || [ -z "$system_name" ] || [ -z "$unbound_version" ]; then
+      echo "ERROR: null value found.  See list of variables"
+      echo "dns_forwarder is $dns_forwarder."
+      echo "system_name is $system_name."
+      echo "unbound_version is $unbound_version."
       exit 1
     fi
 
