@@ -303,12 +303,21 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
+    manifest_folder='/tmp'
     dns_forwarder=$(kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d|yq r - spec.network.netstaticips.system_to_site_lookups)
     system_name=$(kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d|yq r - spec.network.dns.external)
     unbound_version=$(ls ${CSM_ARTI_DIR}/helm |grep cray-dns-unbound|sed -e 's/\.[^./]*$//'|cut -d '-' -f4)
 
+    echo "ERROR: null value found.  See list of variables"
+    echo "dns_forwarder is $dns_forwarder."
+    echo "system_name is $system_name."
+    echo "unbound_version is $unbound_version."
 
-    cat > unbound.yaml <<EOF
+    if [ -z "$dns_forwarder" ] || [ -z "$system_name" ] || [ -z "$unbound_version" ]; then
+      exit 1
+    fi
+
+    cat > $manifest_folder/unbound.yaml <<EOF
 apiVersion: manifests/v1beta1
 metadata:
   name: unbound
@@ -330,7 +339,10 @@ spec:
     version: $unbound_version
 EOF
 
-loftsman ship --charts-path ${CSM_ARTI_DIR}/helm/ --manifest-path unbound.yaml
+echo "$manifest_folder/unbound.yaml"
+cat /tmp/unbound.yaml
+
+loftsman ship --charts-path ${CSM_ARTI_DIR}/helm/ --manifest-path manifest_folder/unbound.yaml
 
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
