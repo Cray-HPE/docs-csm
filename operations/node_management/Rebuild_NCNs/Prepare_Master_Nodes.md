@@ -6,7 +6,7 @@ Prepare a master node before rebuilding it.
 
 ## Procedure
 
-### Step 1 - Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig before shutting down the node
+### Step 1 - Confirm what the Configuration Framework Service (CFS) `configurationStatus` is for the `desiredConfig` before shutting down the node
 
 1. The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 
@@ -21,7 +21,9 @@ Prepare a master node before rebuilding it.
       "retryPolicy": 3,
     ```
 
-1. If the configurationStatus is **pending**, wait for the job finish before rebooting this node. If the configurationStatus is **failed**, this means the failed CFS job configurationStatus preceded this worker rebuild, and that can be addressed independent of rebuilding this worker. If the configurationStatus is **unconfigured** and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+1. If the `configurationStatus` is **pending**, wait for the job finish before rebooting this node.
+   If the `configurationStatus` is **failed**, this means the failed CFS job `configurationStatus` preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.
+   If the `configurationStatus` is **unconfigured** and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
 
 ### Step 2 - Determine if the master node being rebuilt is the first master node
 
@@ -44,7 +46,7 @@ Prepare a master node before rebuilding it.
    cray bss bootparameters list --name Global --format=json | jq '.[]' > Global.json
    ```
 
-1. Edit the Global.json file and edit the indicated line.
+1. Edit the `Global.json` file and edit the indicated line.
 
     Change the `first-master-hostname` value to another node that will be promoted to the first master node. For example, if the first node is changing from `ncn-m002` to `ncn-m001`, the line would be changed to the following:
 
@@ -90,6 +92,9 @@ Prepare a master node before rebuilding it.
     mkdir -p /srv/cray/scripts/kubernetes
     cat > /srv/cray/scripts/kubernetes/token-certs-refresh.sh <<'EOF'
     #!/bin/bash
+
+    export KUBECONFIG=/etc/kubernetes/admin.conf
+
     if [[ "$1" != "skip-upload-certs" ]]; then
         kubeadm init phase upload-certs --upload-certs --config /etc/cray/kubernetes/kubeadm.yaml
     fi
