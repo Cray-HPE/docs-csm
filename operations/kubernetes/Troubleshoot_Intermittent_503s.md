@@ -9,7 +9,7 @@ In the event that this occurs, the following steps may be useful to remediate th
    ncn-m # kubectl -n istio-system logs -l app=istio-ingressgateway
    ```
 
-   If you see TLS errors similar to the following proceed to the next step to restart the `istio-ingressgateway` pods.
+   If the logs include TLS errors similar to the following, then proceed to the next step to restart the `istio-ingressgateway` pods.
    Istio can occasionally get into this state when NCNs are being rebooted, as well as when many deployments are being created.
 
    ```text
