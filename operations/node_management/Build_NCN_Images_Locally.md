@@ -28,7 +28,9 @@ The file name is either:
 
 You will need access to the appropriate SLES repositories in the form of official access, self-hosted access, or the provided Nexus access.
 
-To build locally you will need to provide your own repositories file and the `custom_repos_file` variable must be passed with the packer command. The `custom_repos_file` variable is a filename that is placed into the `custom` folder of the project. The file must be formatted with the following fields: `url name flags`
+To build locally you will need to provide your own repositories file and the `custom_repos_file` variable must be passed with the packer command.
+The `custom_repos_file` variable is a filename that is placed into the `custom` folder of the project.
+The file must be formatted with the following fields: `url name flags`
 
 * `-var 'custom_repos_file=custom.repos'`
 

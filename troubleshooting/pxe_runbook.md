@@ -18,7 +18,6 @@ This guide runs through the most common issues and shows what is needed in order
 
 ## 1. NCNs on install
 
-
 * Verify the DNSMASQ configuration file matches what is configured on the switches.
   * Here is a DNSMASQ configuration file for the Metal network (VLAN1).
     As you can see, the router IP address is `10.1.0.1`.
@@ -106,7 +105,7 @@ exit
   * `2021-04-19 23:27:09 PXE-E18: Server response timeout.`
   * `2021-02-02 17:06:13 PXE-E99: Unexpected network error.`
 
-* Verify the ip helper-address on VLAN 1 on the switches. This is the same configuration as above ^ "Mellanox Config" and "Aruba Config"
+* Verify the `ip helper-address` on VLAN 1 on the switches. This is the same configuration as above ^ "Mellanox Config" and "Aruba Config"
 
 <a name="Verify-DHCP-packets"></a>
 

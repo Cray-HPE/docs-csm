@@ -109,7 +109,7 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
         client:   6.2 KiB/s rd, 280 KiB/s wr, 2 op/s rd, 49 op/s wr
     ```
 
-2. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
+1. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
 
     On the node being rebuilt run:
 
@@ -133,7 +133,7 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
     Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.38.service.
     ```
 
-3. Remove Ceph OSDs.
+1. Remove Ceph OSDs.
 
     The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
@@ -150,7 +150,9 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
     41    ssd   1.74660          osd.41       down   1.00000  1.00000
     ```
 
-    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives. By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map. This will result in OSDs that no longer exist appearing to be down.
+    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
+       By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map.
+       This will result in OSDs that no longer exist appearing to be down.
 
     This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
 

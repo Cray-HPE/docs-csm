@@ -28,60 +28,60 @@ the following procedures are recommended. This assumes that a dump of the databa
       Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
       The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
-    ```bash
-    ncn-w001# export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
+        ```bash
+        ncn-w001# export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
 
-    ncn-w001# export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
-    ```
+        ncn-w001# export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
+        ```
 
-    list.py:
+        list.py:
 
-    ```python
-    import io
-    import boto3
-    import os
+        ```python
+        import io
+        import boto3
+        import os
 
-    # postgres-backup-s3-credentials are needed to list keys in the postgres-backup bucket
+        # postgres-backup-s3-credentials are needed to list keys in the postgres-backup bucket
 
-    s3_access_key = os.environ['S3_ACCESS_KEY']
-    s3_secret_key = os.environ['S3_SECRET_KEY']
+        s3_access_key = os.environ['S3_ACCESS_KEY']
+        s3_secret_key = os.environ['S3_SECRET_KEY']
 
-    s3 = boto3.resource(
-        's3',
-        endpoint_url='http://rgw-vip.nmn',
-        aws_access_key_id=s3_access_key,
-        aws_secret_access_key=s3_secret_key,
-        verify=False)
+        s3 = boto3.resource(
+            's3',
+            endpoint_url='http://rgw-vip.nmn',
+            aws_access_key_id=s3_access_key,
+            aws_secret_access_key=s3_secret_key,
+            verify=False)
 
-	backup_bucket = s3.Bucket('postgres-backup')
-	for file in backup_bucket.objects.filter(Prefix='spire-postgres'):
-   	    print(file.key)
-    ```
+        backup_bucket = s3.Bucket('postgres-backup')
+        for file in backup_bucket.objects.filter(Prefix='spire-postgres'):
+            print(file.key)
+        ```
 
-    download.py:
+        download.py:
 
-    Update the script for the specific .manifest and .psql files you wish to download from S3.
+        Update the script for the specific .manifest and .psql files you wish to download from S3.
 
-    ```python
-    import io
-    import boto3
-    import os
+        ```python
+        import io
+        import boto3
+        import os
 
-    # postgres-backup-s3-credentials are needed to download from postgres-backup bucket
+        # postgres-backup-s3-credentials are needed to download from postgres-backup bucket
 
-    s3_access_key = os.environ['S3_ACCESS_KEY']
-    s3_secret_key = os.environ['S3_SECRET_KEY']
+        s3_access_key = os.environ['S3_ACCESS_KEY']
+        s3_secret_key = os.environ['S3_SECRET_KEY']
 
-    s3_client = boto3.client(
-        's3',
-        endpoint_url='http://rgw-vip.nmn',
-        aws_access_key_id=s3_access_key,
-        aws_secret_access_key=s3_secret_key,
-        verify=False)
+        s3_client = boto3.client(
+            's3',
+            endpoint_url='http://rgw-vip.nmn',
+            aws_access_key_id=s3_access_key,
+            aws_secret_access_key=s3_secret_key,
+            verify=False)
 
-    response = s3_client.download_file('postgres-backup', 'spire-postgres-2021-07-21T19:03:18.manifest', 'spire-postgres-2021-07-21T19:03:18.manifest')
-    response = s3_client.download_file('postgres-backup', 'spire-postgres-2021-07-21T19:03:18.psql', 'spire-postgres-2021-07-21T19:03:18.psql')
-    ```
+        response = s3_client.download_file('postgres-backup', 'spire-postgres-2021-07-21T19:03:18.manifest', 'spire-postgres-2021-07-21T19:03:18.manifest')
+        response = s3_client.download_file('postgres-backup', 'spire-postgres-2021-07-21T19:03:18.psql', 'spire-postgres-2021-07-21T19:03:18.psql')
+        ```
 
 2. Scale the spire service to 0.
 
@@ -143,7 +143,10 @@ the following procedures are recommended. This assumes that a dump of the databa
         Based off the four `spire-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, `spire`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
         ```bash
-        ncn-w001# for secret in postgres.spire-postgres.credentials service-account.spire-postgres.credentials spire.spire-postgres.credentials standby.spire-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
+        ncn-w001# for secret in postgres.spire-postgres.credentials service-account.spire-postgres.credentials spire.
+        spire-postgres.credentials standby.spire-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo 
+        -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret $
+        {secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
 
         secret postgres.spire-postgres.credentials username & password: postgres ABCXYZ
         secret service-account.spire-postgres.credentials username & password: service_account ABC123
@@ -363,7 +366,10 @@ In the event that the Keycloak Postgres cluster is in a state that the cluster m
         Based off the three `keycloak-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
         ```bash
-        ncn-w001# for secret in postgres.keycloak-postgres.credentials service-account.keycloak-postgres.credentials standby.keycloak-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
+        ncn-w001# for secret in postgres.keycloak-postgres.credentials service-account.keycloak-postgres.credentials standby.
+        keycloak-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret $
+        {secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} 
+        -ojsonpath='{.data.password}'| base64 -d`; done
 
         secret postgres.keycloak-postgres.credentials username & password: postgres ABCXYZ
         secret service-account.keycloak-postgres.credentials username & password: service_account ABC123
@@ -441,7 +447,9 @@ In the event that the Keycloak Postgres cluster is in a state that the cluster m
 
         ```bash
         ncn-w001# kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak -o json > keycloak-setup.json
-        ncn-w001# cat keycloak-setup.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -
+        ncn-w001# cat keycloak-setup.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.
+        managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | jq 'del(.
+        spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -
         ```
 
         Check the status of the `keycloak-setup` job. If the `COMPLETIONS` value is not `1/1`,
@@ -458,7 +466,9 @@ In the event that the Keycloak Postgres cluster is in a state that the cluster m
 
         ```bash
         ncn-w001# kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak-users-localize -o json > cray-keycloak-users-localize.json
-        ncn-w001# cat cray-keycloak-users-localize.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -`
+        ncn-w001# cat cray-keycloak-users-localize.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.
+        metadata.managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | 
+        jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -`
         ```
 
         Check the status of the `cray-keycloak-users-localize` job.
@@ -616,7 +626,10 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
         Based off the three `gitea-vcs-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
         ```bash
-        ncn-w001# for secret in postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials gitea.gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
+        ncn-w001# for secret in postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials gitea.
+        gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials; do echo -n "secret ${secret} username & password: 
+        "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get 
+        secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
 
         secret postgres.gitea-vcs-postgres.credentials username & password: postgres ABCXYZ
         secret service-account.gitea-vcs-postgres.credentials username & password: service_account ABC123
@@ -812,7 +825,10 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
         Based off the four `capsules-warehouse-server-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
         ```bash
-        ncn-w001# for secret in postgres.capsules-warehouse-server-postgres.credentials service-account.capsules-warehouse-server-postgres.credentials standby.capsules-warehouse-server-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
+        ncn-w001# for secret in postgres.capsules-warehouse-server-postgres.credentials service-account.
+        capsules-warehouse-server-postgres.credentials standby.capsules-warehouse-server-postgres.credentials; do echo -n "secret 
+        ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | 
+        base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
 
         secret postgres.capsules-warehouse-server-postgres.credentials username & password: postgres ABCXYZ
         secret service-account.capsules-warehouse-server-postgres.credentials username & password: service_account ABC123
