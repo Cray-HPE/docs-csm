@@ -5,9 +5,9 @@ As part of the installation, Kubernetes generates certificates for the required 
 **IMPORTANT:**
 
 - Depending on the version of Kubernetes, the command may or may not reside under the `alpha` category. Use `kubectl certs --help` and `kubectl alpha certs --help` to determine this.
-  The overall command syntax should be the same and this is just whether or not the command structure will require `alpha` in it.
+  The overall command syntax is the same; the only difference is whether or not the command structure includes `alpha`.
 - The node referenced in this document as `ncn-m` is the master node selected to renew the certificates on.
-- This document is based off a base hardware configuration of three master nodes and three worker nodes. Utility storage nodes are not mentioned because they are not running Kubernetes. Please make sure to update any commands that run on multiple nodes accordingly.
+- This document is based off a base hardware configuration of three master nodes and three worker nodes. Utility storage nodes are not mentioned because they are not running Kubernetes. Make sure to update any commands that run on multiple nodes accordingly.
 
 ## File Locations
 
@@ -127,7 +127,7 @@ Client (master and worker nodes):
 
 Run the following steps on each master node.
 
-1. Renew the Certificates.
+1. Renew the certificates.
 
     ```bash
     ncn-m# kubeadm alpha certs renew all --config /etc/kubernetes/kubeadmcfg.yaml
@@ -222,7 +222,7 @@ Run the following steps on each master node.
 
    Not all the certificate files were updated in this example.
 
-   **IMPORTANT:** Some certificates were not updated because they have a distant expiration time and did not need to be updated. ***This is expected.***
+   **IMPORTANT:** Some certificates were not updated because they have a distant expiration time and did not need to be updated. **This is expected.**
 
       Certificates most likely to not be updated due to a distant expiration:
 
@@ -275,7 +275,7 @@ Run the following steps on each master node.
    ```
 
    **IMPORTANT:** Do **NOT** forget to verify certificates in `/etc/kubernetes/pki/etcd`.
-   - As noted in the above output, all certificates including those for Etcd were updated. Please note `apiserver-etcd-client.crt` is a Kubernetes API certificate not an Etcd only certificate.
+   - As noted in the above output, all certificates including those for Etcd were updated. Note that `apiserver-etcd-client.crt` is a Kubernetes API certificate, not an Etcd only certificate.
      Also, the `/var/lib/kubelet/pki/` certificates will be updated in the Kubernetes client section that follows.
 
 1. Restart etcd.
@@ -399,16 +399,15 @@ Run the following steps on each master node.
    rm /etc/kubernetes/kubelet.conf
    rm /var/lib/kubelet/pki/*
    cp /etc/kubernetes/`<node>`.kubelet.conf /etc/kubernetes/kubelet.conf
-   systemctl start kubelet.service
-   kubeadm init phase kubelet-finalize all --cert-dir /var/lib/kubelet/pki/
+   systemctl start kubelet.service && kubeadm init phase kubelet-finalize all --cert-dir /var/lib/kubelet/pki/ && echo OK
    ```
 
 5. Check the expiration of the `kubectl` certificate files. See [File Locations](#file-locations) for the list of files.
 
-   ***This task is for each master and worker node. The example checks each kubelet certificate in [File Locations](#file-locations).***
+   **This task is for each master and worker node. The example checks each kubelet certificate in [File Locations](#file-locations).**
 
    ```bash
-   for i in $(ls /var/lib/kubelet/pki/*.crt;ls /var/lib/kubelet/pki/*.pem);do echo ${i}; openssl x509 -enddate -noout -in ${i};done
+   ncn# for i in $(ls /var/lib/kubelet/pki/*.crt;ls /var/lib/kubelet/pki/*.pem);do echo ${i}; openssl x509 -enddate -noout -in ${i};done
    ```
 
    Example output:
