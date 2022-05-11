@@ -310,10 +310,10 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
 
 
     if [ -z "$dns_forwarder" ] || [ -z "$system_name" ] || [ -z "$unbound_version" ]; then
-      echo "ERROR: null value found.  See list of variables"
-      echo "dns_forwarder is $dns_forwarder."
-      echo "system_name is $system_name."
-      echo "unbound_version is $unbound_version."
+    echo "ERROR: null value found.  See list of variables"
+    echo "dns_forwarder is $dns_forwarder."
+    echo "system_name is $system_name."
+    echo "unbound_version is $unbound_version."
       exit 1
     fi
 
@@ -340,7 +340,7 @@ spec:
 EOF
 
 echo "$manifest_folder/unbound.yaml"
-cat /tmp/unbound.yaml
+cat $manifest_folde/unbound.yaml
 
 loftsman ship --charts-path ${CSM_ARTI_DIR}/helm/ --manifest-path manifest_folder/unbound.yaml
 
