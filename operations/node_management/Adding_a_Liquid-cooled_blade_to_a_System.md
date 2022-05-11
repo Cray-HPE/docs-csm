@@ -202,7 +202,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
     1. Repeat the preceding command for each node in the blade.
 
-#### Re-enable hms-discovery cron job
+#### Re-enable `hms-discovery` cronjob
 
 1. Rediscover the `ChassisBMC` (the example shows cabinet 1005, chassis 3).
    Rediscovering the `ChassisBMC` will update HSM to become aware of the newly populated slot and allow CAPMC to perform power actions on the slot.

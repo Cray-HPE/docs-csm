@@ -637,7 +637,7 @@ Before rebooting NCNs:
 
     9. Disconnect from the console.
 
-3. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the CASMINST-2015 script:
+3. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the `CASMINST-2015.sh` script:
 
    ```bash
    ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh

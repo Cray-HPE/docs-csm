@@ -808,25 +808,25 @@ below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BG
         ###############################################################################
         ```
 
-1. Make sure the `SYSTEM_NAME` variable is set to name of your system.
+2. Make sure the `SYSTEM_NAME` variable is set to name of your system.
 
     ```bash
     pit# export SYSTEM_NAME=eniac
     ```
 
-1. Determine the IP addresses of the worker NCNs.
+3. Determine the IP addresses of the worker NCNs.
 
     ```bash
     pit# grep -B1 "name: ncn-w" /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
     ```
 
-1. Determine the IP addresses of the switches that are peering.
+4. Determine the IP addresses of the switches that are peering.
 
     ```bash
     pit# grep peer-address /var/www/ephemeral/prep/${SYSTEM_NAME}/metallb.yaml
     ```
 
-1. Run the script appropriate for your switch hardware vendor.
+5. Run the script appropriate for your switch hardware vendor.
 
     * If you have Mellanox switches, run the BGP helper script.
 
@@ -858,7 +858,7 @@ below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BG
         pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/
         ```
 
-1. Do the following steps **for each of the switch IP addresses that you found previously**.
+6. Do the following steps **for each of the switch IP addresses that you found previously**.
 
     1. Log in to the switch as the `admin` user:
 
@@ -866,7 +866,7 @@ below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BG
         pit# ssh admin@<switch_ip_address>
         ```
 
-    1. Check the status of the BGP peering sessions
+    2. Check the status of the BGP peering sessions
         * Aruba: `show bgp ipv4 unicast summary`
         * Mellanox: `show ip bgp summary`
 
@@ -876,7 +876,7 @@ below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BG
 
         You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
 
-    1. Check the BGP configuration to verify that the NCN neighbors are configured as passive.
+    3. Check the BGP configuration to verify that the NCN neighbors are configured as passive.
         * Aruba: `show run bgp` The passive neighbor configuration is required. `neighbor 10.252.1.7 passive`
 
             EXAMPLE ONLY
@@ -916,7 +916,7 @@ below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BG
             router bgp 65533 vrf default neighbor 10.252.1.9 transport connection-mode passive
             ```
 
-    1. Repeat the previous steps for the remaining switch IP addresses.
+    4. Repeat the previous steps for the remaining switch IP addresses.
 
 <a name="install-tests"></a>
 

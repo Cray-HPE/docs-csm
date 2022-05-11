@@ -105,7 +105,7 @@ exit
   * `2021-04-19 23:27:09 PXE-E18: Server response timeout.`
   * `2021-02-02 17:06:13 PXE-E99: Unexpected network error.`
 
-* Verify the `ip helper-address` on VLAN 1 on the switches. This is the same configuration as above ^ "Mellanox Config" and "Aruba Config"
+* Verify the `ip helper-address` on VLAN 1 on the switches. This is the same configuration as above in "Mellanox Configuration" and "Aruba Configuration"
 
 <a name="Verify-DHCP-packets"></a>
 
