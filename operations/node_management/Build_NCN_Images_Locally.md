@@ -7,9 +7,9 @@ Build and test NCN images locally by using the following procedure. This procedu
 The listed software below will equip a local machine or build server to build for any medium (`.squashfs`, `.vbox`, `.qcow2`, `.iso`).
 
 * media (`.iso`, `.ovf`, or `.qcow2`) (depending on the layer)
-* packer
-* qemu
-* envsubst
+* `packer`
+* `qemu`
+* `envsubst`
 
 ## Media
 
@@ -40,7 +40,7 @@ And example entry for a custom repo:
 
 * There are two Providers that can be built; VirtualBox and QEMU
 * VirtualBox is best for local development.
-* QEMU is best for pipeline and portability on linux machines.
+* QEMU is best for pipeline and portability on Linux machines.
 * Both outputs are capable of creating the Kernel, Initrd, and SquashFS required to boot nodes.
 
 ### Setup
@@ -60,7 +60,7 @@ If you are building QEMU images in MacOS, you will need to adjust specific QEMU 
 * Check out `csm-rpms` repository and create a symlink to it in the root directory of the project.
 * Execute `source scripts/environment`
 * Execute `./scripts/setup.sh`
-* Render the autoinst template
+* Render the `autoinst` template
 
 ### Quick Start
 
@@ -113,7 +113,7 @@ Once the image is built, the output will be placed in the `output-ncn-common` di
 
 ### Non-Compute Node Image Layer
 
-The ncn-node-images stage builds on top of the common layer to create functional images for Kubernetes and Ceph.
+The `ncn-node-images` stage builds on top of the common layer to create functional images for Kubernetes and Ceph.
 
 To build with QEMU, run the following command.
 

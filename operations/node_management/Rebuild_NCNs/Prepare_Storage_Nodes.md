@@ -16,7 +16,7 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
    linux# ssh ncn-s001 cat /etc/cray/xname
    ```
 
-2. Check the bss boot parameters for `ncn-s001`.
+2. Check the `bss bootparameters` for `ncn-s001`.
 
    ```bash
    ncn# cray bss bootparameters list --name x3000c0s7b0n0 --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'

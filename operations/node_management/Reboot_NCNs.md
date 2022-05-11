@@ -45,7 +45,7 @@ The `kubectl` command is installed.
 
 1. Check and set the `metal.no-wipe` setting on NCNs to ensure data on the node is preserved when rebooting.
 
-    Refer to [Check and Set the metal.no-wipe Setting on NCNs](Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md).
+    Refer to [Check and Set the `metal.no-wipe` Setting on NCNs](Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md).
 
 1. Run the platform health checks and analyze the results.
 
@@ -323,7 +323,7 @@ Before rebooting NCNs:
 
 1. Reboot each of the worker nodes (one at a time).
 
-    **NOTE:** You are doing a single worker at a time, so please keep track of what ncn-w0xx you are on for these steps.
+    **NOTE:** You are doing a single worker at a time, so please keep track of what `ncn-w` you are on for these steps.
 
     1. Establish a console session to the worker node you are rebooting.
 
@@ -448,7 +448,7 @@ Before rebooting NCNs:
          ncn-m# kubectl get pods -o wide -A | grep <node to be rebooted>
          ```
 
-    12. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the CASMINST-2015 script:
+    12. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the `CASMINST-2015.sh` script:
 
         ```bash
         ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
