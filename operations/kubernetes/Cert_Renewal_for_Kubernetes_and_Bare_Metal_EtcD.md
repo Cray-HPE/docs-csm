@@ -357,7 +357,7 @@ Run the following steps on each master node.
 
 1. Backup certificates for `kubelet` on each master and worker node:
 
-   **IMPORTANT:** The following example will need to be adjusted to reflect the correct nnumber of master and worker nodes in the environment being used.
+   **IMPORTANT:** The following example will need to be adjusted to reflect the correct number of master and worker nodes in the environment being used.
 
    ```bash
    ncn-m# pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] tar cvf \
