@@ -467,34 +467,12 @@ EOF
     yq r "${CSM_ARTI_DIR}/manifests/platform.yaml" 'spec.charts.(name==cray-precache-images)' | sed 's/^/    /' >> $tmp_manifest
     loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path $tmp_manifest
 
-    } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-state_name="PRECACHE_NEW_IMAGES"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    {
-
     #
-    # First edit the configmap with the three images that 1.x nexus
+    # Now edit the configmap with the three images that 1.x nexus
     # needs so it can move around on an upgraded NCN (before we deploy
     # the new nexus chart)
     #
     kubectl get configmap -n nexus cray-precache-images -o yaml | sed '/kind: ConfigMap/i\    docker.io/sonatype/nexus3:3.25.0\n    dtr.dev.cray.com/baseos/busybox:1\n    dtr.dev.cray.com/cray/istio/proxyv2:1.7.8-cray2-distroless' | kubectl apply -f -
-    images=$(kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.images_to_cache')
-    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    output=$(pdsh -b -S -w $(grep -oP 'ncn-w\w\d+' /etc/hosts | sort -u | tr -t '\n' ',') 'for image in '$images'; do crictl pull $image; done' 2>&1)
-    echo "$output"
-
-    if [[ "$output" == *"failed"* ]]; then
-      echo ""
-      echo "Verify the images which failed in the output above are available in nexus."
-      exit 1
-    fi
 
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
