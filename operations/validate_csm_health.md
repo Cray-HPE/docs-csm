@@ -28,7 +28,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
     - [2.2.2 Known Issues](#222-known-issues)
 - [3. Software Management Services Health Checks](#3-software-management-services-health-checks)
   - [3.1 SMS Test Execution](#31-sms-test-execution)
-  - [3.2 Interpreting cmsdev Results](#32-interpreting-cmsdev-results)
+  - [3.2 Interpreting `cmsdev` Results](#32-interpreting-cmsdev-results)
 - [4. NCN Gateway Health Checks](#4-ncn-gateway-health-checks)
   - [4.1 Gateway Test Execution](#41-gateway-test-execution)
 - [5. Booting CSM Barebones Image](#5-booting-csm-barebones-image)
@@ -64,8 +64,8 @@ All platform health checks are expected to pass. Each check has been implemented
 
 Available Platform Health Checks:
 
-1. [ncnHealthChecks](#pet-ncnhealthchecks)
-1. [OPTIONAL Check of ncnHealthChecks Resources](#pet-optional-ncnhealthchecks-resources)
+1. [`ncnHealthChecks`](#pet-ncnhealthchecks)
+1. [OPTIONAL Check of `ncnHealthChecks` Resources](#pet-optional-ncnhealthchecks-resources)
 1. [Check of System Management Monitoring Tools](#check-of-system-management-monitoring-tools)
 
 <a name="pet-ncnhealthchecks"></a>
@@ -104,11 +104,11 @@ There are multiple Goss test suites available that cover a variety of subsystems
 
 #### 1.1.1 Known Test Issues
 
-- It is possible that the first pass of running these tests may fail due to could-init not being completed on the storage nodes.
+- It is possible that the first pass of running these tests may fail due to `cloud-init` not being completed on the storage nodes.
   In this case please wait 5 minutes and re-run the tests.
-- Kubernetes Query BSS Cloud-init for ca-certs
+- Kubernetes Query BSS `Cloud-init` for ca-certs
   - This test may fail immediately after platform install. It should pass after the TrustedCerts Operator has updated BSS
-    (Global cloud-init meta) with CA certificates.
+    (Global `cloud-init` meta) with CA certificates.
 - Kubernetes Velero No Failed Backups
   - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately
     upon the deployment of a backup schedule (for example, vault). It may be necessary to delete backups from a Kubernetes node to
@@ -130,7 +130,7 @@ There are multiple Goss test suites available that cover a variety of subsystems
   - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker nodes and master nodes), logging errors
     (via `journalctl`) similar to "join token does not exist or has already been used" or the last logs containing multiple lines
     of `systemd[1]: spire-agent.service: Start request repeated too quickly.`. Deleting the `request-ncn-join-token` daemonset pod
-    running on the node may clear the issue. Even though the `spire-agent` systemctl service on the Kubernetes node should eventually
+    running on the node may clear the issue. Even though the `spire-agent` `systemctl` service on the Kubernetes node should eventually
     restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can
     be run from any Kubernetes node in the cluster.
      1. Define the following function
@@ -180,7 +180,7 @@ ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
 
 #### 1.2.1 Known Issues
 
-- pods_not_running
+- `pods_not_running`
   - If the output of `pods_not_running` indicates that there are pods in the `Evicted` state, it may be due to the root file system
     being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85%
     full until it is back under 80%. This commonly happens on `ncn-m001`, because it is a location where install and documentation files
@@ -202,10 +202,10 @@ ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
     ncn# du -ah -B 1024M /root | sort -n -r | head -n 10
     ```
 
-  - The `cray-crus-` pod is expected to be in the Init state until Slurm and MUNGE
+  - The `cray-crus-` pod is expected to be in the `Init` state until Slurm and MUNGE
 are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
 If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
-  - The `hmn-discovery` and `cray-dns-unbound-manager` cronjob pods may be in a 'NotReady' state. This is expected as these pods are periodically started and transition to the completed state.
+  - The `hmn-discovery` and `cray-dns-unbound-manager` cronjob pods may be in a `NotReady` state. This is expected as these pods are periodically started and transition to the completed state.
 
 <a name="check-of-system-management-monitoring-tools"></a>
 
@@ -250,7 +250,7 @@ ncn# /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
 The return value of the script is 0 if all CT tests ran successfully, non-zero
 if not. On CT test failures the script will instruct the admin to look at the
 CT test log files. If one or more failures occur, investigate the cause of
-each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
+each failure. See the [Interpreting HMS Health Check Results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
 
 <a name="hms-smd-discovery-validation"></a>
 
@@ -324,7 +324,7 @@ In the River section, any hardware found in SLS and not discovered by HSM is
 considered a failure, with the exception of PDU controllers, which is a
 warning. Also, the BMC of one of the management NCNs (typically `ncn-m001`)
 will not be connected to the HSM HW network and thus will show up as being not
-discovered and/or not having any mgmt network connection. This is treated as
+discovered and/or not having any `mgmt` network connection. This is treated as
 a warning.
 
 In the Mountain section, the only thing considered a failure are Chassis BMCs
@@ -344,7 +344,7 @@ BMC can be safely ignored or needs to be addressed before proceeding.
 - The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depending on the state of the system when the `hsm_discovery_verify.sh` script is run. If the system is currently going through the
   process of installation, then this is an expected mismatch as the [Prepare Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node
   may not have been completed yet.
-   > For more information refer to [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
+   > For more information refer to [Configure HPE Apollo 6500 XL645D Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
 
    Example mismatch for the BMC of an HPE Apollo XL654D:
 
@@ -398,7 +398,7 @@ If it was determined that the mismatch can not be ignored, then proceed onto the
 
 Known issues that may prevent hardware from getting discovered by Hardware State Manager:
 
-- [HMS Discovery job not creating RedfishEndpoints in Hardware State Manager](../troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints.md)
+- [HMS Discovery job not creating Redfish Endpoints in Hardware State Manager](../troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints.md)
 
 <a name="sms-health-checks"></a>
 
@@ -411,7 +411,7 @@ The Software Management Services health checks are run using `/usr/local/bin/cms
   - The same amount of data is written to the log file in either case.
 
 1. [SMS Test Execution](#sms-checks)
-1. [Interpreting cmsdev Results](#cmsdev-results)
+1. [Interpreting `cmsdev` Results](#cmsdev-results)
 
 <a name="sms-checks"></a>
 
@@ -427,7 +427,7 @@ ncn# /usr/local/bin/cmsdev test -q all
 
 <a name="cmsdev-results"></a>
 
-### 3.2 Interpreting cmsdev Results
+### 3.2 Interpreting `cmsdev` Results
 
 If all checks passed:
 
@@ -445,7 +445,7 @@ If all checks passed:
 
 If one or more checks failed:
 
-- The return code will be non-0
+- The return code will be non-zero
 - The final line of output will begin with `FAILURE` and will list which checks failed
 - For example:
 
@@ -458,6 +458,19 @@ If one or more checks failed:
   ```
 
 Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
+
+### 3.3 Known Issues
+
+If an Etcd restore has been performed on one of the `SMS` services (such as `BOS` or `CRUS`), the first Etcd pod that
+comes up after the restore will not have a `PVC` (Persistent Volume Claim) attached to it (until the pod is restarted).
+The Etcd cluster is in a healthy state at this point but the SMS Health Checks will detect this, and you may see errors similar to:
+
+```text
+ERROR (run tag 1khv7-bos): persistentvolumeclaims "cray-bos-etcd-ncchqgnczg" not found
+ERROR (run tag 1khv7-crus): persistentvolumeclaims "cray-crus-etcd-ffmszl7bvh" not found
+```
+
+In this case, these errors can be ignored, or the pod with the same name as the `PVC` mentioned in the output can be restarted (as long as the other two Etcd pods are healthy).
 
 ## 4. NCN Gateway Health Checks
 
@@ -500,7 +513,7 @@ the Cray OS (COS) product, or similar, be used.
 - This test is **very important to run** during the CSM install prior to redeploying the PIT node
 because it validates all of the services required for that operation.
 - The CSM Barebones image included with the release will not successfully complete
-beyond the dracut stage of the boot process. However, if the dracut stage is reached, the
+beyond the `dracut` stage of the boot process. However, if the `dracut` stage is reached, the
 boot can be considered successful and shows that the necessary CSM services needed to
 boot a node are up and available.
   - This inability to boot the Barebones image fully will be resolved in future releases of the
@@ -513,7 +526,7 @@ Cray OS (COS) product stream is also installed on to the system.
 - This procedure can be followed on any NCN or the PIT node.
 - This script uses the Kubernetes API Gateway to access CSM services. This gateway must be properly
 configured to allow an access token to be generated by the script.
-- This script is installed as part of the 'cray-cmstools-crayctldeploy' RPM.
+- This script is installed as part of the `cray-cmstools-crayctldeploy` RPM.
 - For additional information on the script and for troubleshooting help look at the document
   [Barebones Image Boot](../troubleshooting/cms_barebones_image_boot.md).
 
