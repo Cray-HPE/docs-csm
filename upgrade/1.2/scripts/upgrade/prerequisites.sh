@@ -340,7 +340,7 @@ spec:
 EOF
 
 echo "$manifest_folder/unbound.yaml"
-cat $manifest_folde/unbound.yaml
+cat $manifest_folder/unbound.yaml
 
 loftsman ship --charts-path ${CSM_ARTI_DIR}/helm/ --manifest-path manifest_folder/unbound.yaml
 
