@@ -298,6 +298,46 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="UPGRADE_UNBOUND"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    dns_forwarder=$(kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d|yq r - spec.network.netstaticips.system_to_site_lookups)
+    system_name=$(kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d|yq r - spec.network.dns.external)
+    unbound_version=$(ls ${CSM_ARTI_DIR}/helm |grep cray-dns-unbound|sed -e 's/\.[^./]*$//'|cut -d '-' -f4)
+
+
+    cat > unbound.yaml <<EOF
+apiVersion: manifests/v1beta1
+metadata:
+  name: unbound
+spec:
+  charts:
+  - name: cray-dns-unbound
+    namespace: services
+    source: csm
+    values:
+      domain_name: $system_name
+      forwardZones:
+      - forwardIps: [$dns_forwarder]
+        name: .
+      global:
+        appVersion: $unbound_version
+      localZones:
+      - localType: static
+        name: local
+    version: $unbound_version
+EOF
+
+loftsman ship --charts-path ${CSM_ARTI_DIR}/helm/ --manifest-path unbound.yaml
+
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
