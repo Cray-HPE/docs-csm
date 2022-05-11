@@ -1,7 +1,6 @@
-#
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,29 +19,4 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-#
-name: Check Spelling
-
-on:
-  pull_request:
-
-jobs:
-  markdown-spell-check:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Get changed files
-      id: changed-files
-      uses: tj-actions/changed-files@v18.7
-      with:
-        files: "**/*.md"
-        files_ignore: ".github/**/*"
-
-    - uses: docker://tmaier/markdown-spellcheck:latest
-      id: markdown-spellcheck
-      env:
-          FORCE_COLOR: "1"
-      with:
-        entrypoint: mdspell
-        args: ${{ steps.changed-files.outputs.all_changed_files }} -r -a -n
+"""Python Utilities for SLS."""
