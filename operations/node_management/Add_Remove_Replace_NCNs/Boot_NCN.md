@@ -62,11 +62,12 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 ### Observe the boot
 
-1. Within several minutes, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output. This indicates that the PXE boot has started the TFTP download of the `ipxe` program. Later messages will appear as the Linux kernel loads and the scripts in the `initrd` begin to run, including `cloud-init`.
+1. Within several minutes, the node should begin to boot. This can be viewed from the ConMan console window. Eventually, there will be a `NBP file...` message in the console output.
+This indicates that the PXE boot has started the TFTP download of the `ipxe` program. Later messages will appear as the Linux kernel loads and the scripts in the `initrd` begin to run, including `cloud-init`.
 
 1. Wait until `cloud-init` displays messages similar to these on the console. This indicates that `cloud-init` has finished with the module called `modules-final`.
 
-    ```screen
+    ```text
     [  300.390000] cloud-init[7110]: 2022-03-16 18:30:59,449 - util.py[DEBUG]: cloud-init mode 'modules' took 244.143 seconds (198.87)
     [  300.390106] cloud-init[7110]: 2022-03-16 18:30:59,449 - handlers.py[DEBUG]: finish: modules-final: SUCCESS: running modules for final
     [  OK  ] Started Execute cloud user/final scripts.
@@ -89,7 +90,7 @@ ncn-mw# kubectl get nodes
 
 Example output:
 
-```screen
+```text
 NAME       STATUS   ROLES    AGE    VERSION
 ncn-m001   Ready    master   2d7h   v1.19.9
 ncn-m002   Ready    master   20d    v1.19.9
@@ -149,7 +150,7 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
 ### Run NCN Personalizations using CFS as desired
 
-1.  Determine which configuration to apply to the node.
+1. Determine which configuration to apply to the node.
 
     There are multiple ways to do this. Choose the one which best fits your situation.
 
@@ -161,7 +162,7 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
         Example Output:
 
-        ```screen
+        ```text
         [[results]]
         lastUpdated = "2022-03-14T20:59:44Z"
         name = "ncn-personalization"
@@ -180,7 +181,7 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
         Example Output:
 
-        ```screen
+        ```text
         configurationStatus = "configured"
         desiredConfig = "ncn-personalization"
         enabled = true
@@ -208,7 +209,7 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
     Example Output:
 
-    ```
+    ```text
     configurationStatus = "configured"
     desiredConfig = "ncn-personalization"
     ...
@@ -216,13 +217,17 @@ ncn-w004   Ready    <none>    1h    v1.19.9
 
 ### Set BMC Management Roles
 
-Follow the [Set BMC Management Roles](../../hardware_state_manager/Set_BMC_Management_Role.md) procedure. This will mark the added NCN's BMC with the `Management` role, making BMCs that are associated with the management nodes easlier to identify. This step is needed before locking the BCM of the added NCN.
+Follow the [Set BMC Management Roles](../../hardware_state_manager/Set_BMC_Management_Role.md) procedure.
+This will mark the added NCN's BMC with the `Management` role, making BMCs that are associated with the management nodes easier to identify. This step is needed before locking the BCM of the added NCN.
 
 ### Lock the management nodes
 
-Follow the [How to Lock Management Single Node](../../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs) procedure. The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware, or from CAPMC to power off or do a power reset. Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
+Follow the [How to Lock Management Single Node](../../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs) procedure.
+The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware, or from CAPMC to power off or do a power reset.
+Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
 
 <a name="boot-ncn-storage-nodes-only"></a>
+
 ### Add storage node to the Ceph cluster
 
 **Skip this section if the node being added is NOT a storage node.**
@@ -249,7 +254,7 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
 
     Example output:
 
-    ```screen
+    ```text
     lan0            up
       link:     #30, state up, mtu 1500
       type:     bridge, hwaddr a4:bf:01:5a:a9:ff
