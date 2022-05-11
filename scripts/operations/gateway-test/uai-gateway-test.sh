@@ -75,9 +75,10 @@ fi
 
 # Find gateway image if one was not specified
 if [[ -z ${GATEWAY_IMAGE_NAME} ]]; then
-  GATEWAY_IMAGE_NAME=$(cray uas images list --format json | jq '.image_list' | jq .[] | grep gateway |  sed -e 's/"//g' | head -1)
+  # We will filter out the 1.6.0 image because we know that will not work with this version of the script
+  GATEWAY_IMAGE_NAME=$(cray uas images list --format json | jq '.image_list' | jq .[] | grep gateway |  sed -e 's/"//g' | grep -v "1.6.0" | sort | tail -1)
   if [[ -z ${GATEWAY_IMAGE_NAME} ]]; then
-    error "Could not find a cray-gateway-test image"
+    error "Could not find a valid cray-gateway-test image"
   fi
 else
   cray uas images list --format json | jq '.image_list' | jq .[] | grep -q -v ${GATEWAY_IMAGE_NAME}
