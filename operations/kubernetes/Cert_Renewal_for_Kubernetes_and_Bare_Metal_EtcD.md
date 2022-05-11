@@ -280,7 +280,7 @@ Run the following steps on each master node.
 
 1. Restart etcd.
 
-   Once the steps to renew the needed certs have been completed on all the master nodes, log into each master node one at a time and run the following:
+   Once the steps to renew the needed certificates have been completed on all the master nodes, log into each master node one at a time and run the following:
 
    ```bash
    ncn-m# systemctl restart etcd.service
@@ -288,7 +288,7 @@ Run the following steps on each master node.
 
 **Run the remaining steps on both master and worker nodes.**
 
-1. Restart kubelet.
+1. Restart `kubelet`.
 
    Run the following command on each Kubernetes node.
 
@@ -300,7 +300,7 @@ Run the following steps on each master node.
 
 1. Fix `kubectl` command access.
 
-   **NOTE:** The following command will only respond with Unauthorized if certificates have expired. In any case, the new client certificates will need to be distributed in the following steps.
+   **NOTE:** The following command will only respond with `Unauthorized` if certificates have expired. In any case, the new client certificates will need to be distributed in the following steps.
 
    1. View the status of the nodes.
 
@@ -347,7 +347,7 @@ Run the following steps on each master node.
 
    Client access:
 
-   **NOTE:** Update the following command with the appropriate amount of worker nodes.
+   **NOTE:** Update the following command with the appropriate range of worker nodes.
 
    ```bash
    ncn-m# pdcp -w ncn-m00[2-3] -w ncn-w00[1-3] /etc/kubernetes/admin.conf /etc/kubernetes/
@@ -357,25 +357,30 @@ Run the following steps on each master node.
 
 1. Backup certificates for `kubelet` on each master and worker node:
 
-   **IMPORTANT:** The following example will need to be adjusted to reflect the correct amount of master and worker nodes in the environment being used.
+   **IMPORTANT:** The following example will need to be adjusted to reflect the correct nnumber of master and worker nodes in the environment being used.
 
    ```bash
    ncn-m# pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] tar cvf \
-   /root/kubelet_certs.tar /etc/kubernetes/kubelet.conf /var/lib/kubelet/pki/
+               /root/kubelet_certs.tar /etc/kubernetes/kubelet.conf /var/lib/kubelet/pki/
    ```
 
 2. Log into the master node where the other certificates were updated.
 
-   1. Get your current `apiserver-advertise-address`.
+   1. Get the current `apiserver-advertise-address`.
 
       ```bash
       ncn# kubectl config view|grep server
+      ```
+
+      Example output:
+
+      ```text
       server: https://10.252.120.2:6442
       ```
 
    1. Generate a new `kubelet.conf` file in the `/root/` directory with the IP address from the previous command.
 
-      **NOTE:** The `apiserver-advertise-address` may vary, so make sure you are not copy and pasting without verifying.
+      **NOTE:** The `apiserver-advertise-address` may vary, so do not copy and paste without verifying.
 
       ```bash
       ncn-m# for node in $(kubectl get nodes -o json|jq -r '.items[].metadata.name'); do kubeadm alpha kubeconfig user --org system:nodes \
@@ -386,7 +391,7 @@ Run the following steps on each master node.
 
 3. Copy each file to the corresponding node shown in the filename.
 
-   **NOTE:** Please update the below command with the appropriate amount of master and worker nodes.
+   **NOTE:** Update the below command with the appropriate number of master and worker nodes.
 
    ```bash
    ncn-m# for node in ncn-m00{1..3} ncn-w00{1..3}; do scp /root/$node.kubelet.conf $node:/etc/kubernetes/; done
@@ -395,11 +400,11 @@ Run the following steps on each master node.
 4. Log into each node one at a time and run the following commands:
 
    ```bash
-   systemctl stop kubelet.service
-   rm /etc/kubernetes/kubelet.conf
-   rm /var/lib/kubelet/pki/*
-   cp /etc/kubernetes/`<node>`.kubelet.conf /etc/kubernetes/kubelet.conf
-   systemctl start kubelet.service && kubeadm init phase kubelet-finalize all --cert-dir /var/lib/kubelet/pki/ && echo OK
+   ncn# systemctl stop kubelet.service &&
+        rm -v /etc/kubernetes/kubelet.conf /var/lib/kubelet/pki/* &&
+        cp -v /etc/kubernetes/$(hostname -s).kubelet.conf /etc/kubernetes/kubelet.conf &&
+        systemctl start kubelet.service && 
+        kubeadm init phase kubelet-finalize all --cert-dir /var/lib/kubelet/pki/ && echo OK
    ```
 
 5. Check the expiration of the `kubectl` certificate files. See [File Locations](#file-locations) for the list of files.
