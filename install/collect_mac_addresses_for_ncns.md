@@ -108,7 +108,9 @@ making a backup of them, in case they need to be examined at a later time.
          "Couldn't find switch port for NCN: x3000c0s1b0"
          ```
 
-      * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
+      * An unexpected component may have this message.
+        If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file.
+        Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md).
 
          ```json
          {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
@@ -185,7 +187,7 @@ making a backup of them, in case they need to be examined at a later time.
         pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/basecamp/* /var/www/ephemeral/configs/
         ```
 
-    1. Restart all PIT services.
+    2. Restart all PIT services.
 
         ```bash
         pit# systemctl restart basecamp nexus dnsmasq conman
@@ -306,7 +308,9 @@ making a backup of them, in case they need to be examined at a later time.
          "Couldn't find switch port for NCN: x3000c0s1b0"
          ```
 
-      * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
+      * An unexpected component may have this message.
+        If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file.
+        Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md).
 
          ```json
          {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
@@ -372,8 +376,8 @@ making a backup of them, in case they need to be examined at a later time.
     pit# csi pit validate --network
     ```
 
-1. Copy the service configuration files generated earlier by `csi config init` for DNSMasq, Metal
-   Basecamp (cloud-init), and ConMan.
+1. Copy the service configuration files generated earlier by `csi config init` for `dnsmasq`, Metal
+   Basecamp (`cloud-init`), and ConMan.
 
     1. Copy files (files only, `-r` is expressly not used).
 
@@ -383,7 +387,7 @@ making a backup of them, in case they need to be examined at a later time.
         pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/basecamp/* /var/www/ephemeral/configs/
         ```
 
-    1. Update CA Cert on the copied `data.json` file for Basecamp with the generated certificate in site-init:
+    2. Update CA Cert on the copied `data.json` file for Basecamp with the generated certificate in site-init:
 
         ```bash
         pit# csi patch ca \
@@ -392,7 +396,7 @@ making a backup of them, in case they need to be examined at a later time.
         --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
         ```
 
-    1. Restart all PIT services.
+    3. Restart all PIT services.
 
         ```bash
         pit# systemctl restart basecamp nexus dnsmasq conman

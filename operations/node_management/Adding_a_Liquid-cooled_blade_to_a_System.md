@@ -409,11 +409,15 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
 
     2. Create the Session template.
 
-       1. The name of the Session template is determined by the name provided to the `--name` option on the command line. Use the current value of `$BOS_TEMPLATE` if you want to overwrite the existing Session template. If you want to use the current value, skip this sub-step and go on to sub-step 2. Otherwise, provide a different name for `BOS_TEMPLATE` which will be used with the `--name` option. The name specified in `tmp.txt` is overridden by the value provided by the `--name` option.
+       1. The name of the Session template is determined by the name provided to the `--name` option on the command line.
+          Use the current value of `$BOS_TEMPLATE` if you want to overwrite the existing Session template.
+          If you want to use the current value, skip this sub-step and go on to sub-step 2.
+          Otherwise, provide a different name for `BOS_TEMPLATE` which will be used with the `--name` option.
+          The name specified in `tmp.txt` is overridden by the value provided by the `--name` option.
 
-            ```bash
-            ncn-m001# $BOS_TEMPLATE=<New Session Template name>
-            ```
+          ```bash
+          ncn-m001# $BOS_TEMPLATE=<New Session Template name>
+          ```
 
        2. Create the Session template.
 
