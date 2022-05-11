@@ -122,6 +122,7 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
     - [Troubleshoot Compute Node Boot Issues Using Kubernetes](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Using_Kubernetes.md)
     - [Log File Locations and Ports Used in Compute Node Boot Troubleshooting](boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
     - [Troubleshoot Compute Node Boot Issues Related to Slow Boot Times](boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
+  - [Customize iPXE Binary Names](boot_orchestration/Customize_iPXE_Binary_Names.md)
   - [Edit the iPXE Embedded Boot Script](boot_orchestration/Edit_the_iPXE_Embedded_Boot_Script.md)
   - [Redeploy the iPXE and TFTP Services](boot_orchestration/Redeploy_the_IPXE_and_TFTP_Services.md)
   - [Upload Node Boot Information to Boot Script Service (BSS)](boot_orchestration/Upload_Node_Boot_Information_to_Boot_Script_Service_BSS.md)
@@ -280,6 +281,7 @@ As a result, the system's micro-services are modular, resilient, and can be upda
   - [Restore Postgres](kubernetes/Restore_Postgres.md)
   - [Disaster Recovery for Postgres](kubernetes/Disaster_Recovery_Postgres.md)
   - [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
+- [Troubleshoot Intermittent HTTP 503 Code Failures](kubernetes/Troubleshoot_Intermittent_503s.md)
 
 <a name="package-repository-management"></a>
 
