@@ -111,7 +111,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS be
 
    If the `firmwareVersion` from the FAS image matches the `fromFirmwareVersion` from the FAS action, the firmware is at the latest version and no update is needed.
 
-2. Use the imageID from the `cray images list` in the previous step and add the following line to the action JSON file, replacing *IMAGEID* with the imageID.
+2. Use the `imageID` from the `cray images list` in the previous step and add the following line to the action JSON file, replacing *IMAGEID* with the `imageID`.
 
      In this example, the value would be: `ff268e8a-8f73-414f-a9c7-737a34bb02fc`.
 
@@ -122,7 +122,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS be
        }
    ```
 
-   Example actions JSON file with imageFilter added:
+   Example actions JSON file with `imageFilter` added:
 
    ```json
        {
@@ -155,8 +155,8 @@ If an update fails because of `"No Image available"`, it may be caused by FAS be
 
    > **WARNING:** FAS will force a flash of the device -- using incorrect firmware may make it inoperable.
 
-Re-run the FAS actions command using the updated json file.
-**It is strongly recommended to run a dry-run (overrideDryrun=false) first and check the actions output.**
+Re-run the FAS actions command using the updated JSON file.
+**It is strongly recommended to run a dry-run (`overrideDryrun=false`) first and check the actions output.**
 
 ---
 
@@ -165,7 +165,7 @@ Re-run the FAS actions command using the updated json file.
 ## Check for New Firmware Versions with a Dry-Run
 
 Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmware can be updated on the system.
-Dry-runs are enabled by default, and can be configured with the overrideDryrun parameter.
+Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter.
 A dry-run will create a query according to the filters requested by the admin.
 It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
 
@@ -523,7 +523,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
 This procedure will read a single local RPM (or ZIP) file, upload firmware images to S3, and create image records for any firmware that is not already in FAS.
 
-1. Copy the file to ncn-m001 or one of the other NCNs.
+1. Copy the file to `ncn-m001` or one of the other NCNs.
 
 2. Check the loader status:
 

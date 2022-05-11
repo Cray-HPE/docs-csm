@@ -14,7 +14,7 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
       1. [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
       1. [Generate Installation Files](#generate-installation-files)
       1. [CSI Workarounds](#csi-workarounds)
-      1. [Prepare Site Init](#prepare_site_init)
+      1. [Prepare `site-init`](#prepare_site_init)
    1. [Prepopulate LiveCD Daemons Configuration and NCN Artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
    1. [Boot the LiveCD](#boot-the-livecd)
       1. [First Login](#first-login)
@@ -155,7 +155,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 
 ## 2. Create the Bootable Media
 
-Cray Site Init will create the bootable LiveCD. Before creating the media, identify
+Cray `site-init` will create the bootable LiveCD. Before creating the media, identify
 which device will be used for it.
 
 1. Identify the USB device.
@@ -235,13 +235,13 @@ on to the [configuration payload](#configuration-payload).
 
 ## 3. Configuration Payload
 
-The SHASTA-CFG structure and other configuration files will be prepared, then `csi` will generate a system-unique configuration payload. This payload will be used
+The `SHASTA-CFG` structure and other configuration files will be prepared, then `csi` will generate a system-unique configuration payload. This payload will be used
 for the rest of the CSM installation on the USB device.
 
 * [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
 * [Generate Installation Files](#generate-installation-files)
 * [CSI Workarounds](#csi-workarounds)
-* [Prepare Site Init](#prepare_site_init)
+* [Prepare `site-init`](#prepare_site_init)
 
 <a name="before-configuration-payload-workarounds"></a>
 
@@ -289,7 +289,7 @@ information for this system has not yet been prepared.
    > the information in it must be provided as command line arguments to `csi config init`.
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration
-   (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
+   (see [Cray `site-init` Files](../background/index.md#cray_site_init_files)).
 
    > **Warning:** If the `system_config.yaml` file is unavailable, then skip this step and proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
 
@@ -463,9 +463,9 @@ Follow the [workaround instructions](../update_product_stream/index.md#apply-wor
 
 <a name="prepare_site_init"></a>
 
-#### 3.4 Prepare Site Init
+#### 3.4 Prepare `site-init`
 
-Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for your system.
+Follow the procedures to [Prepare `site-init`](prepare_site_init.md) directory for your system.
 
 <a name="prepopulate-livecd-daemons-configuration-and-ncn-artifacts"></a>
 
@@ -549,7 +549,7 @@ This will enable SSH, and other services when the LiveCD starts.
     --sealed-secret-key-file /mnt/pitdata/prep/site-init/certs/sealed_secrets.key
    ```
 
-1. Copy k8s artifacts:
+1. Copy Kubernetes artifacts:
 
     ```bash
     linux# csi pit populate pitdata "${CSM_PATH}/images/kubernetes/" /mnt/pitdata/data/k8s/ -kiK
@@ -635,7 +635,7 @@ See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page
     ncn-m001# reboot
     ```
 
-Watch the shutdown and boot from the ipmitool session to the console terminal.
+Watch the shutdown and boot from the `ipmitool` session to the console terminal.
 The typescript can be discarded, otherwise if issues arise then it should be submitted with the bug report.
 
 > **An integrity check** runs before Linux starts by default, it can be skipped by selecting "OK" in its prompt.

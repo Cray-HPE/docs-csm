@@ -24,6 +24,7 @@ topic could be skipped and instead move to [Deploy Management Nodes](index.md#de
   * [Next Topic](#next-topic)
 
 <a name="collect_the_bmc_mac_addresses"></a>
+
 ## 1. Collect the BMC MAC addresses
 
 The BMC MAC address can be collected from the switches using knowledge about the cabling of the NMN from the SHCD.
@@ -31,6 +32,7 @@ The BMC MAC address can be collected from the switches using knowledge about the
 See [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md).
 
 <a name="restart_services_after_bmc_mac_addresses_collected"></a>
+
 ## 2. Restart Services after BMC MAC Addresses Collected
 
 The previous step updated `ncn_metadata.csv` with the BMC MAC addresses, so several earlier steps need to be repeated.
@@ -81,7 +83,7 @@ making a backup of them, in case they need to be examined at a later time.
 
    Expected output looks similar to the following:
 
-   ```
+   ```text
    application_node_config.yaml
    cabinets.yaml
    hmn_connections.json
@@ -102,7 +104,7 @@ making a backup of them, in case they need to be examined at a later time.
    These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
       * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
 
-         ```
+         ```text
          "Couldn't find switch port for NCN: x3000c0s1b0"
          ```
 
@@ -120,10 +122,9 @@ making a backup of them, in case they need to be examined at a later time.
          {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
          ```
 
-
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `csi-config` breakpoint.
 
-1. Copy the interface config files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
+1. Copy the interface configuration files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
 
    ```bash
    pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
@@ -173,8 +174,8 @@ making a backup of them, in case they need to be examined at a later time.
     pit# csi pit validate --network
     ```
 
-1. Copy the service configuration files generated earlier by `csi config init` for DNSMasq, Metal
-   Basecamp (cloud-init), and ConMan.
+1. Copy the service configuration files generated earlier by `csi config init` for `DNSMasq`, Metal
+   Basecamp (`cloud-init`), and ConMan.
 
     1. Copy files (files only, `-r` is expressly not used).
 
@@ -194,7 +195,7 @@ making a backup of them, in case they need to be examined at a later time.
 
 1. Verify that all BMCs can be pinged.
 
-   **Note:** It may take about 10 minutes from when dnsmasq is restarted to when the BMCs pick up new DHCP leases.
+   **Note:** It may take about 10 minutes from when `dnsmasq` is restarted to when the BMCs pick up new DHCP leases.
 
    This step will check all management nodes except `ncn-m001-mgmt` because that has an external connection and could
    not be booted by itself as the PIT node.
@@ -207,6 +208,7 @@ making a backup of them, in case they need to be examined at a later time.
    ```
 
 <a name="collect_the_ncn_mac_addresses"></a>
+
 ## 3. Collect the NCN MAC addresses
 
 Now that the BMC MAC addresses are correct in `ncn_metadata.csv` and the PIT node services have been restarted,
@@ -216,9 +218,10 @@ logs on the PIT node using the [Procedure: iPXE Consoles](collecting_ncn_mac_add
 See [Procedure: iPXE Consoles](collecting_ncn_mac_addresses.md#procedure-ipxe-consoles).
 
 <a name="restart_services_after_ncn_mac_addresses_collected"></a>
+
 ### 4. Restart Services after NCN MAC Addresses Collected
 
-The previous step updated `ncn_metadata.csv` with the NCN MAC Addresses for Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1
+The previous step updated `ncn_metadata.csv` with the NCN MAC Addresses for Bootstrap MAC, `Bond0 MAC0`, and `Bond0 MAC1`
 so several earlier steps need to be repeated.
 
 1. Change into the preparation directory.
@@ -228,25 +231,26 @@ so several earlier steps need to be repeated.
    ```
 
 1. Confirm that the `ncn_metadata.csv` file in this directory has the new information.
-   There should be no remaining dummy data (de:ad:be:ef:00:00) for columns or rows in the file.
+   There should be no remaining dummy data (`de:ad:be:ef:00:00`) for columns or rows in the file.
    Every row should have uniquely different MAC addresses from the other rows.
 
    ```bash
    pit# grep "de:ad:be:ef:00:00" ncn_metadata.csv
    ```
 
-   Expected output looks similar to the following, that is, no lines that still have "de:ad:be:ef:00:00":
+   Expected output looks similar to the following, that is, no lines that still have `"de:ad:be:ef:00:00"`:
 
    ```bash
 
    ```
 
    Display the file and confirm the contents are unique between the different rows.
+
    ```bash
    pit# cat ncn_metadata.csv
    ```
 
-1. Remove the incorrectly generated configs. Before deleting the incorrectly generated configs consider
+1. Remove the incorrectly generated configurations. Before deleting the incorrectly generated configurations consider
 making a backup of them, in case they need to be examined at a later time.
 
    > **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set.
@@ -278,7 +282,7 @@ making a backup of them, in case they need to be examined at a later time.
 
    Expected output looks similar to the following:
 
-   ```
+   ```text
    application_node_config.yaml
    cabinets.yaml
    hmn_connections.json
@@ -288,6 +292,7 @@ making a backup of them, in case they need to be examined at a later time.
    ```
 
    Regenerate the system configuration. The `system_config.yaml` file contains all of the options that where used to generate the initial system configuration, and can be used in place of specifying CLI flags to CSI.
+
    ```bash
    pit# csi config init
    ```
@@ -297,7 +302,7 @@ making a backup of them, in case they need to be examined at a later time.
    These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
       * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
 
-         ```
+         ```text
          "Couldn't find switch port for NCN: x3000c0s1b0"
          ```
 
@@ -394,7 +399,7 @@ making a backup of them, in case they need to be examined at a later time.
         ```
 
 1. Ensure system-specific settings generated by CSI are merged into `customizations.yaml`.
-    > The `yq` tool used in the following procedures is available under `/var/www/ephemeral/prep/site-init/utils/bin` once the SHASTA-CFG repo has been cloned.
+    > The `yq` tool used in the following procedures is available under `/var/www/ephemeral/prep/site-init/utils/bin` once the `SHASTA-CFG` repo has been cloned.
 
     ```bash
     pit# alias yq="/var/www/ephemeral/prep/site-init/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
@@ -404,6 +409,7 @@ making a backup of them, in case they need to be examined at a later time.
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `before-ncn-boot` breakpoint.
 
 <a name="next-topic"></a>
+
 ## Next Topic
 
 After completing the collection of BMC MAC addresses and NCN MAC addresses in order to update `ncn_metadata.csv`, and after restarting

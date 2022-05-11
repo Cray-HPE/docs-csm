@@ -25,7 +25,7 @@ This guide runs through the most common issues and shows what is needed in order
     This has to match what the IP address is on the switches doing the routing for the MTL network.
     This is most commonly on the spines. This configuration is commonly missed on the CSI input file.
 
->MTL dnsmasq file
+>MTL `dnsmasq` file
 
 ```text
 # MTL:
@@ -204,7 +204,7 @@ Displaying ipv4 routes selected for forwarding
 
 ## 2.4. Test TFTP traffic (Aruba Only)
 
-* You can test the TFTP traffic by trying to download the ipxe.efi binary.
+* You can test the TFTP traffic by trying to download the `ipxe.efi` binary.
 * Log into the leaf switch and try to download the iPXE binary.
 * This requires that the leaf switch can talk to the TFTP server "10.92.100.60"
 
@@ -220,7 +220,7 @@ tftp> get ipxe.efi
 Received 1007200 bytes in 2.2 seconds
 ```
 
-* You can see here that the ipxe.efi binary is downloaded three times in a row. When we have seen issues with ECMP hashing this
+* You can see here that the `ipxe.efi` binary is downloaded three times in a row. When we have seen issues with ECMP hashing this
 would fail intermittently.
 
 <a name="check-dhcp-lease"></a>
@@ -306,7 +306,7 @@ worker. We believe this has something to do with conntrack.
   * [Check DHCP lease is getting allocated](#check-dhcp-lease)
   * [Verify the DHCP traffic on the Workers](#verify-the-dhcp-traffic)
   * [Verify the switches are forwarding DHCP traffic](#verify-the-switches)
-* Verify the IP-Helpers on the VLAN the computes nodes are booting over. This is typically VLAN 2 or VLAN 2xxx (MTN Computes)
+* Verify the IP-Helpers on the VLAN the computes nodes are booting over. This is typically `VLAN 2` or `VLAN 2xxx` (MTN Computes)
 * If the compute nodes make it past PXE and go into the PXE shell you can verify DNS and connectivity.
 
 ```text

@@ -24,7 +24,7 @@ the following procedures are recommended. This assumes that a dump of the databa
       It will be needed in the steps below.
     * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
       These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
-      The python3 scripts below can be used to help list and download the files.
+      The `python3` scripts below can be used to help list and download the files.
       Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
       The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
@@ -244,7 +244,7 @@ In the event that the Keycloak Postgres cluster is in a state that the cluster m
       It will be needed in the steps below.
     * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
       These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
-      The python3 scripts below can be used to help list and download the files.
+      The `python3` scripts below can be used to help list and download the files.
       Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
       The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
@@ -497,7 +497,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
       It will be needed in the steps below.
     * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
       These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
-      The python3 scripts below can be used to help list and download the files.
+      The `python3` scripts below can be used to help list and download the files.
       Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
       The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
@@ -580,7 +580,7 @@ In the event that the VCS Postgres cluster is in a state that the cluster must b
     ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
-4. Create a new single instance vcs Postgres cluster.
+4. Create a new single instance VCS Postgres cluster.
 
     ```bash
     ncn-w001# cp postgres-cr.json postgres-orig-cr.json
@@ -693,7 +693,7 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
       It will be needed in the steps below.
     * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
       These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
-      The python3 scripts below can be used to help list and download the files.
+      The `python3` scripts below can be used to help list and download the files.
       Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
       The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
