@@ -339,10 +339,10 @@ spec:
     version: $unbound_version
 EOF
 
-echo "$manifest_folder/unbound.yaml"
-cat $manifest_folder/unbound.yaml
+    echo "$manifest_folder/unbound.yaml"
+    cat $manifest_folder/unbound.yaml
 
-loftsman ship --charts-path ${CSM_ARTI_DIR}/helm/ --manifest-path $manifest_folder/unbound.yaml
+    loftsman ship --charts-path ${CSM_ARTI_DIR}/helm/ --manifest-path $manifest_folder/unbound.yaml
 
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)
