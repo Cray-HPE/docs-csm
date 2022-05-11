@@ -781,7 +781,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    c7638b573b93  dtr.dev.cray.com/cray/metal-basecamp:1.1.0-1de4aa6                        5 minutes ago  Up 5 minutes ago          basecamp
    ```
 
-1. Follow directions in the output from the 'csi pit validate' commands for failed validations before continuing.
+1. Follow directions in the output from the `csi pit validate` commands for failed validations before continuing.
 
 <a name="next-topic"></a>
 
