@@ -42,7 +42,7 @@ and ready for reboot of the LiveCD:
 >
 > * SSH will cease to work when the LiveCD reboots; the serial console will need to be used.
 >
-> * Rebooting a remote ISO will dump all running changes on the PIT node; USBs are accessible after the install.
+> * Rebooting a remote ISO will dump all running changes on the PIT node; USB devices are accessible after the install.
 >
 > * The NCN **will never wipe a USB device** during installation.
 >
@@ -149,7 +149,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
     1. Run the `export` commands listed at the end of the output from the previous step.
 
-1. <a name="csi-handoff-bss-metadata"></a>Upload the `data.json` file to BSS, our Kubernetes `cloud-init` DataSource.
+1. <a name="csi-handoff-bss-metadata"></a>Upload the `data.json` file to BSS, our `cloud-init` data source.
 
     **If any changes have been made** to this file (for example, as a result of any customizations or workarounds), use the path to that file instead. This step will prompt for the root password of the NCNs.
 
@@ -200,7 +200,10 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
     > **NOTE:** This denotes information that should always be kept together in order to fresh-install the system again.
 
-    1. Log in; setup passwordless SSH _to_ the PIT node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the PIT (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
+    1. Log in and set up passwordless SSH **to** the PIT node.
+
+        Copying **only** the public keys from `ncn-m002` and `ncn-m003` to the PIT node. **Do not** set up
+        passwordless SSH **from** the PIT node or the key will have to be securely tracked or expunged if using a USB installation).
 
         > The `ssh` commands below may prompt for the NCN root password.
 
@@ -379,7 +382,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
 1. Run `kubectl get nodes` to see the full Kubernetes cluster.
 
-    > **NOTE:** If the new node fails to join the cluster after running other cloud-init items, refer to the `handoff`.
+    > **NOTE:** If the new node fails to join the cluster after running other `cloud-init` items, then refer to the `handoff`.
 
     ```bash
     ncn-m001# kubectl get nodes
