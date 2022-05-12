@@ -10,12 +10,23 @@ the `HPE Customer Support Center`.
 This procedure defines the NCN personalization process for the CSM product using
 the [Configuration Framework Service (CFS)](../configuration_management/Configuration_Management.md).
 
+During a fresh install, carry out these procedures in order. Later, individual
+procedures may be re-run as needed.
+
+1. [Set Up Passwordless SSH](#set_up_passwordless_ssh)
+   - [Option 1: Use the CSM-provided SSH Keys](#set_up_passwordless_ssh_option_1)
+   - [Option 2: Option 2: Provide Custom SSH Keys](#set_up_passwordless_ssh_option_2)
+   - [Option 3: Disable CSM-provided Passwordless SSH](#set_up_passwordless_ssh_option_3)
+   - [Restore CSM-provided SSH Keys](#set_up_passwordless_ssh_restore)
+2. [Configure the Root Password in Vault](#set_root_password)
+3. [Run NCN Personalization](#run_ncn_personalization)
+
 <a name="set_up_passwordless_ssh"></a>
 
-## Set Up Passwordless SSH
+## 1. Set Up Passwordless SSH
 
-This procedure should be run during CSM installation and any later time when
-the SSH keys need to be changed.
+This procedure should be run during CSM installation and later whenever
+the SSH keys need to be changed per site requirements.
 
 The goal of passwordless SSH is to enable an easy way for interactive
 passwordless SSH from and between CSM product environments (management nodes) to
@@ -32,13 +43,17 @@ own keys, or use their own solution for authentication.
 
 The management of keys on NCNs is achieved by the `trust-csm-ssh-keys` and
 `passwordless-ssh` Ansible roles in the CSM configuration management repository.
-The SSH keypair is applied to management nodes using NCN personalization.
+The SSH keypair is applied to management nodes suing NCN personalization.
+
+<a name="set_up_passwordless_ssh_option_1"></a>
 
 ### Option 1: Use the CSM-provided SSH Keys
 
 The default CSM Ansible plays are already configured to enable Passwordless SSH
 by default. No further action is necessary before running NCN personalization
 with CFS.
+
+<a name="set_up_passwordless_ssh_option_2"></a>
 
 ### Option 2: Provide Custom SSH Keys
 
@@ -76,6 +91,8 @@ keys. The keys stored in Kubernetes can be updated directly.
 Passwordless SSH with the provided keys will be setup once NCN personalization
 runs on the NCNs.
 
+<a name="set_up_passwordless_ssh_option_3"></a>
+
 ### Option 3: Disable CSM-provided Passwordless SSH
 
 Local site security requirements may preclude use of passwordless SSH access. If
@@ -97,6 +114,8 @@ associated with the product.
 > **NOTE:** CFS itself does not use the CSM-provided (or user-supplied) SSH keys
 > to make connections between nodes. CFS will continue to function if
 > passwordless SSH is disabled between CSM and other product environments.
+
+<a name="set_up_passwordless_ssh_restore"></a>
 
 ### Restore CSM-provided SSH Keys
 
@@ -123,7 +142,7 @@ keys will be republished.
 
 <a name="set_root_password"></a>
 
-## Configure the Root Password in Vault
+## 2. Configure the Root Password in Vault
 
 The root password is applied to NCNs by using the `csm.password` Ansible role
 located in the CSM configuration management repository. Root passwords are set
@@ -136,16 +155,18 @@ and managed in Vault.
 
 <a name="run_ncn_personalization"></a>
 
-## Run NCN Personalization
+## 3. Run NCN Personalization
 
 After completing the previous procedures, apply the configuration to the NCNs
 by running NCN personalization with [CFS](../configuration_management/Configuration_Management.md).
+This can be accomplished by running the `apply_csm_configuration.sh` script, or by
+running the steps manually.
 
 Prior to running NCN personalization, gather the following information:
 
-* HTTP clone URL for the configuration repository in [VCS](../configuration_management/Version_Control_Service_VCS.md).
-* Path to the Ansible play to run in the repository.
-* Commit ID in the repository for CFS to pull and run on the nodes.
+- HTTP clone URL for the configuration repository in [VCS](../configuration_management/Version_Control_Service_VCS.md)
+- Path to the Ansible play to run in the repository
+- Git commit ID in the repository for CFS to pull and run on the nodes.
 
 | Field | Value  | Description  |
 |:----------|:----------|:----------|
