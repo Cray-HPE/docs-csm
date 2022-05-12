@@ -59,7 +59,7 @@ do
 done
 
 if [[ -z ${LOG_FILE} ]]; then
-    LOG_FILE="$(pwd)/output.log"
+    LOG_FILE="/root/output.log"
     echo
     echo
     echo " ************"
