@@ -503,7 +503,7 @@ be performed are in the [Deploy](#deploy) section.
         Expected output looks similar to the following:
 
         ```text
-        ncn-m001,ncn-m002,ncn-m003,ncn-s001,ncn-s002,ncn-s003,ncn-w001,ncn-w002,ncn-w003
+        ncn-m001,ncn-m002,ncn-m003,ncn-s001,ncn-s002,ncn-s003,ncn-w001,ncn-w002,ncn-w003,
         ```
 
     1. Verify that passwordless SSH is now working from the PIT node to the other NCNs.
