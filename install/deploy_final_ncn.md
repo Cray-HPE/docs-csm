@@ -377,14 +377,6 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
     ncn-m002# ssh ncn-m001
     ```
 
-1. Change the root password on `ncn-m001` if the pre-NCN deployment password change method was not used.
-
-   Run `passwd` on `ncn-m001` and complete the prompts.
-
-    ```bash
-    ncn-m001# passwd
-    ```
-
 1. Run `kubectl get nodes` to see the full Kubernetes cluster.
 
     > **NOTE:** If the new node fails to join the cluster after running other cloud-init items, refer to the `handoff`.
@@ -412,9 +404,14 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
     ```bash
     ncn-m001# SYSTEM_NAME=eniac
-    ncn-m001# rsync ncn-m002:/metal/bootstrap/prep/${SYSTEM_NAME}/pit-files/ifcfg-lan0 /etc/sysconfig/network/
-    ncn-m001# wicked ifreload lan0
-    ncn-m001# wicked ifstatus lan0
+    ncn-m001# rsync ncn-m002:/metal/bootstrap/prep/${SYSTEM_NAME}/pit-files/ifcfg-lan0 /etc/sysconfig/network/ && \
+              wicked ifreload lan0 && \
+              wicked ifstatus lan0
+    ```
+
+    Expected output looks similar to:
+
+    ```text
     lan0            up
        link:     #32, state up, mtu 1500
        type:     bridge, hwaddr 90:e2:ba:0f:11:c2
@@ -423,19 +420,14 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
        addr:     ipv4 172.30.53.88/20 [static]
     ```
 
-1. Run `ip a` to show the lan0 IP address; verify the site link.
+1. Verify that the site link (`lan0`) and the VLANs have IP addresses.
+
+    > Examine the output to ensure that each interface has been assigned an IPv4 address.
 
     ```bash
-    ncn-m001# ip a show lan0
-    ```
-
-1. Run `ip a` to show the VLANs; verify that they all have IP addresses.
-
-    ```bash
-    ncn-m001# ip a show bond0.nmn0
-    ncn-m001# ip a show bond0.hmn0
-    ncn-m001# ip a show bond0.can0
-    ncn-m001# ip a show bond0.cmn0
+    ncn-m001# for INT in lan0 bond0.nmn0 bond0.hmn0 bond0.can0 bond0.cmn0 ; do
+                ip a show $INT || echo "ERROR: Command failed: ip a show $INT"
+              done
     ```
 
 1. Run `ip r` to show that the default route is via the CMN.
@@ -467,12 +459,11 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
     This is required to facilitate reinstallations, because it pulls the preparation data back over to the documented area (`ncn-m001`).
 
-    ```bash
+    ```console
     ncn-m001# exit
     ncn-m002# exit
     # typescript exited
-    ncn-m002# rsync -rltDv -P /metal/bootstrap ncn-m001:/metal/
-    ncn-m002# rm -rfv /metal/bootstrap
+    ncn-m002# rsync -rltDv -P /metal/bootstrap ncn-m001:/metal/ && rm -rfv /metal/bootstrap
     ncn-m002# exit
     ```
 
@@ -483,7 +474,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise because
 it is used for Cray installation and bootstrap.
 
-1. SSH back into `ncn-m001`, or restart a local console and resume the typescript.
+1. SSH back into `ncn-m001` or restart a local console; resume the typescript.
 
     ```bash
     ncn-m001# script -af /metal/bootstrap/prep/admin/csm-verify.$(date +%Y-%m-%d).txt
@@ -493,38 +484,38 @@ it is used for Cray installation and bootstrap.
 1. Obtain access to CSI.
 
     ```bash
-    ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs
-    ncn-m001# mount -v /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/
-    ncn-m001# mount -v /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
-    ncn-m001# mount -v /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
-    ncn-m001# cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi
-    ncn-m001# /tmp/csi version
-    ncn-m001# umount -vl /mnt/sqfs /mnt/rootfs /mnt/livecd
+    ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs && \
+              mount -v /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/ && \
+              mount -v /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/ && \
+              mount -v /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/ && \
+              cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi && \
+              /tmp/csi version && \
+              umount -vl /mnt/sqfs /mnt/rootfs /mnt/livecd
     ```
+
+    > **NOTE** `/tmp/csi` will delete itself on the next reboot. The `/tmp` directory is `tmpfs` and runs in memory;
+    > it will not persist on restarts.
 
 1. Authenticate with the cluster.
 
     ```bash
     ncn-m001# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
-    -d client_id=admin-client \
-    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                -d client_id=admin-client \
+                -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1. Set the wipe safeguard to allow safe net-reboots on all NCNs.
+1. Set the wipe safeguard to allow safe reboots on all NCNs.
 
     ```bash
     ncn-m001# /tmp/csi handoff bss-update-param --set metal.no-wipe=1
     ```
 
-**NOTE** `/tmp/csi` will delete itself on the next reboot. The `/tmp` directory is `tmpfs` and runs in memory;
-it will not persist on restarts.
-
 <a name="remove-the-default-ntp-pool"></a>
 
-## 6. Remove the default NTP pool
+## 6. Remove the Default NTP Pool
 
-Run the following commands on `ncn-m001` to remove the default pool, which can cause contention issues with NTP.
+Run the following command on `ncn-m001` to remove the default pool, which can cause contention issues with NTP.
 
 ```bash
 ncn-m001# sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf
@@ -532,18 +523,25 @@ ncn-m001# sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf
 
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
 
-## 7. Configure DNS and NTP on each BMC
+## 7. Configure DNS and NTP on Each BMC
 
- > **NOTE:** If the system uses Gigabyte or Intel hardware, skip this section.
+ > **NOTE:** Only follow this section if the NCNs are HPE hardware. If the system uses
+ > Gigabyte or Intel hardware, skip this section.
 
 Configure DNS and NTP on the BMC for each management node **except `ncn-m001`**.
 However, the commands in this section are all run **on** `ncn-m001`.
+
+1. Validate that the system is HPE hardware.
+
+    ```bash
+    ncn-m001# ipmitool mc info | grep "Hewlett Packard Enterprise" || echo "Not HPE hardware -- SKIP these steps"
+    ```
 
 1. Set environment variables.
 
     Set the `IPMI_PASSWORD` and `USERNAME` variables to the BMC credentials for the NCNs.
 
-    > Using `read -s` for this prevents the credentials from being echoed to the screen
+    > Using `read -s` for this prevents the credentials from being echoed to the screen or saved in the shell history.
 
     ```bash
     ncn-m001# read -s IPMI_PASSWORD
