@@ -7,21 +7,20 @@ join the Kubernetes cluster as the final of three master nodes, forming a quorum
 **IMPORTANT:** While the node is rebooting, it will only be available through Serial-Over-LAN (SOL) and local terminals. This
 procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be unavailable.
 
-* [Required Services](#required-services)
-* [Notice of Danger](#notice-of-danger)
-* [Hand-Off](#hand-off)
-  * [Start Hand-Off](#start-hand-off)
-* [Reboot](#reboot)
-* [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
-* [Fix NTP on `ncn-m001`](#fix-ntp-config-on-ncn-m001)
-* [Remove the default NTP pool](#remove-the-default-ntp-pool)
-* [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
-* [Validate `BOOTRAID` artifacts](#validate-bootraid-artifacts)
-* [Next Topic](#next-topic)
+1. [Required services](#required-services)
+2. [Notice of danger](#notice-of-danger)
+3. [Hand-off](#hand-off)
+4. [Reboot](#reboot)
+5. [Enable NCN disk wiping safeguard](#enable-ncn-disk-wiping-safeguard)
+6. [Fix NTP on `ncn-m001`](#fix-ntp-config-on-ncn-m001)
+7. [Remove the default NTP pool](#remove-the-default-ntp-pool)
+8. [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
+9. [Validate `BOOTRAID` artifacts](#validate-bootraid-artifacts)
+10. [Next topic](#next-topic)
 
 <a name="required-services"></a>
 
-## 1. Required Services
+## 1. Required services
 
 These services must be healthy before the reboot of the LiveCD can take place. If the health checks performed earlier in the install
 completed successfully \([Validate CSM Health](../operations/validate_csm_health.md)\), the following platform services will be healthy
@@ -37,7 +36,7 @@ and ready for reboot of the LiveCD:
 
 <a name="notice-of-danger"></a>
 
-## 2. Notice of Danger
+## 2. Notice of danger
 
 > An administrator is **strongly encouraged** to be mindful of pitfalls during this segment of the CSM install.
 > The steps below do contain warnings themselves, but overall there are risks:
@@ -56,16 +55,11 @@ and ready for reboot of the LiveCD:
 
 <a name="hand-off"></a>
 
-## 3. Hand-Off
+## 3. Hand-off
 
-The steps in this guide load hand-off data and reboot the LiveCD node.
-
-At the end of these steps, the LiveCD will be no longer active. The node it was using will join
-the Kubernetes cluster as the final of three master nodes, forming a quorum.
+The steps in this section load hand-off data before a later procedure reboots the LiveCD node.
 
 <a name="start-hand-off"></a>
-
-### 3.1 Start Hand-Off
 
 1. Start a new typescript.
 
@@ -126,18 +120,18 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
         * If the NCN images were customized, set the following variables:
 
             ```bash
-            pit# export artdir=/var/www/ephemeral/data
-            pit# export k8sdir=$artdir/k8s
-            pit# export cephdir=$artdir/ceph
+            pit# artdir=/var/www/ephemeral/data
+            pit# k8sdir=$artdir/k8s
+            pit# cephdir=$artdir/ceph
             ```
 
         * If the NCN images were **not** customized, set the following variables:
 
             ```bash
-            pit# export CSM_RELEASE=csm-x.y.z
-            pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
-            pit# export k8sdir=$artdir/kubernetes
-            pit# export cephdir=$artdir/storage-ceph
+            pit# CSM_RELEASE=csm-x.y.z
+            pit# artdir=/var/www/ephemeral/${CSM_RELEASE}/images
+            pit# k8sdir=$artdir/kubernetes
+            pit# cephdir=$artdir/storage-ceph
             ```
 
     1. After setting the variables in the previous step, run the following command.
@@ -152,7 +146,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
                 --ceph-squashfs-path $cephdir/*.squashfs
         ```
 
-        Running this command will output a block that looks like this at the end:
+        The end of the command output contains a block similar to this:
 
         ```text
         Run the following commands so that the versions of the images that were just uploaded can be used in other steps:
@@ -164,7 +158,10 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
 1. <a name="csi-handoff-bss-metadata"></a>Upload the `data.json` file to BSS, our `cloud-init` data source.
 
-    **If any changes have been made** to this file (for example, as a result of any customizations or workarounds), use the path to that file instead. This step will prompt for the root password of the NCNs.
+    **If any changes have been made** to this file (for example, as a result of any customizations or workarounds), then use the path to the
+    modified file instead.
+
+    > This step will prompt for the root password of the NCNs.
 
     ```bash
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
@@ -176,7 +173,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
     pit# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
     ```
 
-1. Ensure the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.
+1. Ensure that the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.
 
     ```bash
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
@@ -187,7 +184,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
     After the PIT node is redeployed, **all files on its local drives will be lost**. It is recommended to retain some of the log files and
     configuration files, because they may be useful if issues are encountered during the remainder of the install.
 
-    The following commands create a tar archive of these files, storing it in a directory that will be backed up in the next step.
+    The following commands create a `tar` archive of these files, storing it in a directory that will be backed up in the next step.
 
     ```bash
     pit# mkdir -pv /var/www/ephemeral/prep/logs &&
@@ -210,7 +207,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
 1. Upload the bootstrap information.
 
-    > **NOTE:** This denotes information that should always be kept together in order to fresh-install the system again.
+    > **NOTE:** This preserves information that should always be kept together in order to fresh-install the system again.
 
     1. Log in and set up passwordless SSH **to** the PIT node.
 
@@ -254,7 +251,9 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
 1. Set and trim the boot order on the PIT node.
 
-    This only needs to be done for the PIT node, not for any of the other NCNs. For the procedures to do this, see [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
+    This only needs to be done for the PIT node, not for any of the other NCNs. See
+    [Setting boot order](../background/ncn_boot_workflow.md#setting-order) and
+    [Trimming boot order](../background/ncn_boot_workflow.md#trimming_boot_order).
 
 1. Tell the PIT node to PXE boot on the next boot.
 
@@ -497,7 +496,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
 <a name="enable-ncn-disk-wiping-safeguard"></a>
 
-## 5. Enable NCN Disk Wiping Safeguard
+## 5. Enable NCN disk wiping safeguard
 
 The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise because
 it is used for Cray installation and bootstrap.
@@ -541,7 +540,7 @@ it is used for Cray installation and bootstrap.
 
 <a name="remove-the-default-ntp-pool"></a>
 
-## 6. Remove the Default NTP Pool
+## 6. Remove the default NTP pool
 
 Run the following command on `ncn-m001` to remove the default pool, which can cause contention issues with NTP.
 
@@ -551,7 +550,7 @@ ncn-m001# sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf
 
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
 
-## 7. Configure DNS and NTP on Each BMC
+## 7. Configure DNS and NTP on each BMC
 
  > **NOTE:** Only follow this section if the NCNs are HPE hardware. If the system uses
  > Gigabyte or Intel hardware, skip this section.
@@ -641,6 +640,6 @@ Perform the following steps **on `ncn-m001`**.
 
 <a name="next-topic"></a>
 
-## Next Topic
+## 8. Next topic
 
 After completing this procedure, the next step is to [Configure Administrative Access](index.md#configure_administrative_access).
