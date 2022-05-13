@@ -1,30 +1,13 @@
 # Kubernetes and Bare Metal EtcD Certificate Renewal
 
-As part of the installation, Kubernetes generates certificates for the required subcomponents.
-This document will help walk through the process of renewing the certificates.
+As part of the installation, Kubernetes generates certificates for the required subcomponents. This document will help walk through the process of renewing the certificates.
 
 **IMPORTANT:**
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 - Depending on the version of Kubernetes, the command may or may not reside under the `alpha` category. Use `kubectl certs --help` and `kubectl alpha certs --help` to determine this.
   The overall command syntax is the same; the only difference is whether or not the command structure includes `alpha`.
 - The node referenced in this document as `ncn-m` is the master node selected to renew the certificates on.
 - This document is based off a base hardware configuration of three master nodes and three worker nodes. Utility storage nodes are not mentioned because they are not running Kubernetes. Make sure to update any commands that run on multiple nodes accordingly.
-=======
-* Depending on the version of Kubernetes, the command may or may not reside under the `alpha` category. Use `kubectl certs --help` and `kubectl alpha certs --help` to determine this. The overall command syntax should be the same and this is just whether or not the command structure will require `alpha` in it.
-=======
-* Depending on the version of Kubernetes, the command may or may not reside under the `alpha` category. Use `kubectl certs --help` and `kubectl alpha certs --help` to determine this.
-  The overall command syntax should be the same and this is just whether or not the command structure will require `alpha` in it.
->>>>>>> a258f99eaa (STP-3186: another round of linting)
-* The node referenced in this document as `ncn-m` is the master node selected to renew the certificates on.
-<<<<<<< HEAD
-* This document is based off a base hardware configuration of three master nodes and three worker nodes. Utility storage nodes are not mentioned because they are not running Kubernetes. Please make sure to update any commands that run on multiple nodes accordingly.
->>>>>>> f4cf0b23b3 (STP-3186: linter and spell check fixes)
-=======
-* This document is based off a base hardware configuration of three master nodes and three worker nodes. Utility storage nodes are not mentioned because they are not running Kubernetes.
-  Please make sure to update any commands that run on multiple nodes accordingly.
->>>>>>> 2dc03804de (STP-3186: more linter and spell check fixes)
 
 ## File Locations
 
@@ -220,11 +203,7 @@ Run the following steps on each master node.
     -rw------- 1 root root  451 Sep 21 20:50 sa.pub
     ```
 
-<<<<<<< HEAD
     ```bash
-=======
-    ```text
->>>>>>> f4cf0b23b3 (STP-3186: linter and spell check fixes)
     ncn-m# ls -l /etc/kubernetes/pki/etcd
     ```
 
@@ -295,22 +274,11 @@ Run the following steps on each master node.
    notAfter=Sep  4 17:01:38 2022 GMT
    ```
 
-<<<<<<< HEAD
-<<<<<<< HEAD
    **IMPORTANT:** Do **NOT** forget to verify certificates in `/etc/kubernetes/pki/etcd`.
    - As noted in the above output, all certificates including those for Etcd were updated. Note that `apiserver-etcd-client.crt` is a Kubernetes API certificate, not an Etcd only certificate.
      Also, the `/var/lib/kubelet/pki/` certificates will be updated in the Kubernetes client section that follows.
-=======
-   **IMPORTANT:** Do **NOT** forget to verify certificates in /etc/kubernetes/pki/etcd.
-   * As noted in the above output, all certificates including those for etcd were updated. Please note `apiserver-etcd-client.crt` is a Kubernetes api cert not an etcd only cert. Also, the `/var/lib/kubelet/pki/` certificates will be updated in the Kubernetes client section that follows.
->>>>>>> f4cf0b23b3 (STP-3186: linter and spell check fixes)
-=======
-   **IMPORTANT:** Do **NOT** forget to verify certificates in `/etc/kubernetes/pki/etcd`.
-   * As noted in the above output, all certificates including those for etcd were updated. Please note `apiserver-etcd-client.crt` is a Kubernetes API certificate not an etcd only certificate.
-   Also, the `/var/lib/kubelet/pki/` certificates will be updated in the Kubernetes client section that follows.
->>>>>>> 2dc03804de (STP-3186: more linter and spell check fixes)
 
-1. Restart `etcd`.
+1. Restart etcd.
 
    Once the steps to renew the needed certificates have been completed on all the master nodes, log into each master node one at a time and run the following:
 
@@ -332,12 +300,7 @@ Run the following steps on each master node.
 
 1. Fix `kubectl` command access.
 
-<<<<<<< HEAD
    **NOTE:** The following command will only respond with `Unauthorized` if certificates have expired. In any case, the new client certificates will need to be distributed in the following steps.
-=======
-   **NOTE:** The following command will only respond with Unauthorized if certificates have expired.
-   In any case, the new client certificates will need to be distributed in the following steps.
->>>>>>> 2dc03804de (STP-3186: more linter and spell check fixes)
 
    1. View the status of the nodes.
 
@@ -377,10 +340,10 @@ Run the following steps on each master node.
 
 1. Distribute the client certificate to the rest of the cluster.
 
-   **NOTE:** There may be errors when copying files. The target may or may not exist depending on the version of CSM.
+   **NOTE:** There may be errors when copying files. The target may or may not exist depending on the version of Shasta.
 
-   * **DO NOT** copy this to the master node where this work is being performed.
-   * Copy `/etc/kubernetes/admin.conf` to all master and worker nodes.
+   - **DO NOT** copy this to the master node where this work is being performed.
+   - Copy `/etc/kubernetes/admin.conf` to all master and worker nodes.
 
    Client access:
 
@@ -390,11 +353,7 @@ Run the following steps on each master node.
    ncn-m# pdcp -w ncn-m00[2-3] -w ncn-w00[1-3] /etc/kubernetes/admin.conf /etc/kubernetes/
    ```
 
-<<<<<<< HEAD
 ## Regenerate kubelet `.pem` Certificates
-=======
-## Regenerate `kubelet .pem` Certificates
->>>>>>> f4cf0b23b3 (STP-3186: linter and spell check fixes)
 
 1. Backup certificates for `kubelet` on each master and worker node:
 
@@ -424,13 +383,8 @@ Run the following steps on each master node.
       **NOTE:** The `apiserver-advertise-address` may vary, so do not copy and paste without verifying.
 
       ```bash
-<<<<<<< HEAD
       ncn-m# for node in $(kubectl get nodes -o json|jq -r '.items[].metadata.name'); do kubeadm alpha kubeconfig user --org system:nodes \
                                --client-name system:node:$node --apiserver-advertise-address 10.252.120.2 --apiserver-bind-port 6442 > /root/$node.kubelet.conf; done
-=======
-      ncn-m# for node in $(kubectl get nodes -o json|jq -r '.items[].metadata.name'); do kubeadm alpha kubeconfig user --org
-      system:nodes --client-name system:node:$node --apiserver-advertise-address 10.252.120.2 --apiserver-bind-port 6442 > /root/$node.kubelet.conf; done
->>>>>>> a258f99eaa (STP-3186: another round of linting)
       ```
 
       There should be a new `kubelet.conf` file per node running Kubernetes.
@@ -445,7 +399,6 @@ Run the following steps on each master node.
 
 4. Log into each node one at a time and run the following commands:
 
-<<<<<<< HEAD
    ```bash
    ncn# systemctl stop kubelet.service &&
         rm -v /etc/kubernetes/kubelet.conf /var/lib/kubelet/pki/* &&
@@ -455,16 +408,6 @@ Run the following steps on each master node.
    ```
 
 5. Check the expiration of the `kubectl` certificate files. See [File Locations](#file-locations) for the list of files.
-=======
-   1. `systemctl stop kubelet.service`
-   2. `rm /etc/kubernetes/kubelet.conf`
-   3. `rm /var/lib/kubelet/pki/*`
-   4. `cp /etc/kubernetes/<NODE>.kubelet.conf /etc/kubernetes/kubelet.conf`
-   5. `systemctl start kubelet.service`
-   6. `kubeadm init phase kubelet-finalize all --cert-dir /var/lib/kubelet/pki/`
-
-5. Check the expiration of the `kubectl` certificates files. See [File Locations](#file-locations) for the list of files.
->>>>>>> f4cf0b23b3 (STP-3186: linter and spell check fixes)
 
    **This task is for each master and worker node. The example checks each kubelet certificate in [File Locations](#file-locations).**
 
