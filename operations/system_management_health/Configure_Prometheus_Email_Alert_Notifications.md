@@ -16,7 +16,7 @@ Configure an email alert notification for all Prometheus Postgres replication al
 
     1. Create the secret file.
 
-        ```bash
+        ```console
         ncn# cat << 'EOF' > /tmp/alertmanager-secret.yaml
         apiVersion: v1
         data:
@@ -39,7 +39,7 @@ Configure an email alert notification for all Prometheus Postgres replication al
         In the following example file, the Gmail SMTP server is used in this example to relay the notification to `receiver-email@yourcompany.com`.
         Update the fields under `email_configs:` accordingly before running the following command.
 
-        ```bash
+        ```console
         ncn# cat << 'EOF' > /tmp/alertmanager-new.yaml
         global:
           resolve_timeout: 5m
@@ -90,16 +90,18 @@ Configure an email alert notification for all Prometheus Postgres replication al
 
 1. Validate the configuration changes.
 
-    ```bash
-    ncn# kubectl exec alertmanager-cray-sysmgmt-health-promet-alertmanager-0 \
+    1. View the current configuration.
+
+        ```bash
+        ncn# kubectl exec alertmanager-cray-sysmgmt-health-promet-alertmanager-0 \
                 -n sysmgmt-health -c alertmanager -- cat /etc/alertmanager/config/alertmanager.yaml
-    ```
+        ```
 
-    Check the logs for any errors if the configuration does not look accurate.
+    1. Check the logs for any errors if the configuration does not look accurate.
 
-    ```bash
-    ncn# kubectl logs -f -n sysmgmt-health pod/alertmanager-cray-sysmgmt-health-promet-alertmanager-0 alertmanager
-    ```
+        ```bash
+        ncn# kubectl logs -f -n sysmgmt-health pod/alertmanager-cray-sysmgmt-health-promet-alertmanager-0 alertmanager
+        ```
 
 An email notification will be sent once either of the alerts set in this procedure is `FIRING` in Prometheus.
 See `https://prometheus.SYSTEM-NAME.SITE-DOMAIN/alerts` for more information.
