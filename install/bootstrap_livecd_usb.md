@@ -8,23 +8,23 @@ These steps provide a bootable USB with SSH enabled, capable of installing this 
 
 ## Topics
 
-1. [Download and Expand the CSM Release](#download-and-expand-the-csm-release)
-1. [Create the Bootable Media](#create-the-bootable-media)
-1. [Configuration Payload](#configuration-payload)
-   1. [Generate Installation Files](#generate-installation-files)
-      * [Subsequent Installs (Reinstalls)](#subsequent-fresh-installs-re-installs)
-      * [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal)
-   1. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
-   1. [Prepare Site Init](#prepare-site-init)
-1. [Prepopulate LiveCD Daemons Configuration and NCN Artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
+1. [Download and expand the CSM release](#download-and-expand-the-csm-release)
+1. [Create the bootable media](#create-the-bootable-media)
+1. [Configuration payload](#configuration-payload)
+   1. [Generate installation files](#generate-installation-files)
+      * [Subsequent installs (reinstalls)](#subsequent-fresh-installs-re-installs)
+      * [Initial installs (bare-metal)](#first-timeinitial-installs-bare-metal)
+   1. [Verify and backup `system_config.yaml`](#verify-csi-versions-match)
+   1. [Prepare `Site Init`](#prepare-site-init)
+1. [Prepopulate LiveCD daemons configuration and NCN artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
 1. [Boot the LiveCD](#boot-the-livecd)
-   1. [First Login](#first-login)
-1. [Configure the Running LiveCD](#configure-the-running-livecd)
-1. [Next Topic](#next-topic)
+   1. [First login](#first-login)
+1. [Configure the running LiveCD](#configure-the-running-livecd)
+1. [Next topic](#next-topic)
 
 <a name="download-and-expand-the-csm-release"></a>
 
-## 1. Download and Expand the CSM Release
+## 1. Download and expand the CSM release
 
 Fetch the base installation CSM tarball, extract it, and install the contained CSI tool.
 
@@ -148,13 +148,13 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 
 1. Remove CNI configuration from prior install
 
-    If you are reinstalling the system and you are **using ncn-m001 to prepare the USB image**, remove some of prior CNI configuration.
+    If reinstalling the system and **using `ncn-m001` to prepare the USB image**, then remove the prior CNI configuration.
 
     ```bash
     ncn-m001# rm -rf /etc/cni/net.d/00-multus.conf /etc/cni/net.d/10-*.conflist /etc/cni/net.d/multus.d
     ```
 
-    This should leave you with the following two files in `/etc/cni/net.d`.
+    This should leave the following two files in `/etc/cni/net.d`.
 
     ```bash
     ncn-m001# ls /etc/cni/net.d
@@ -163,10 +163,9 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 
 <a name="create-the-bootable-media"></a>
 
-## 2. Create the Bootable Media
+## 2. Create the bootable media
 
-Cray Site Init will create the bootable LiveCD. Before creating the media, identify
-which device will be used for it.
+Before creating the the bootable LiveCD, identify which device will be used for it.
 
 1. Identify the USB device.
 
@@ -247,24 +246,24 @@ on to the [configuration payload](#configuration-payload).
 
 <a name="configuration-payload"></a>
 
-## 3. Configuration Payload
+## 3. Configuration payload
 
-The SHASTA-CFG structure and other configuration files will be prepared, then `csi` will generate a system-unique configuration payload. This payload will be used
-for the rest of the CSM installation on the USB device.
+The `SHASTA-CFG` structure and other configuration files will be prepared, then `csi` will generate a system-unique configuration payload.
+This payload will be used for the rest of the CSM installation on the USB device.
 
 1. [Generate Installation Files](#generate-installation-files)
 1. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
-1. [Prepare Site Init](#prepare-site-init)
+1. [Prepare `Site Init`](#prepare-site-init)
 
 <a name="generate-installation-files"></a>
 
-### 3.1 Generate Installation Files
+### 3.1 Generate installation files
 
 Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if the
 information for this system has not yet been prepared.
 
-* [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload)
-* [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files)
+* [Command line configuration payload](prepare_configuration_payload.md#command_line_configuration_payload)
+* [Configuration payload files](prepare_configuration_payload.md#configuration_payload_files)
 
 > **Note:**: The USB device is usable at this time, but without SSH enabled as well as core services. This means the USB device could be used to boot the system now, and
 > this step can be returned to at another time.
@@ -299,10 +298,10 @@ information for this system has not yet been prepared.
 
 <a name="subsequent-fresh-installs-re-installs"></a>
 
-#### 3.1.a Subsequent Installs (Reinstalls)
+#### 3.1.a Subsequent installs (reinstalls)
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration
-   (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
+   (see [Cray `Site Init` Files](../background/index.md#cray_site_init_files)).
 
    > **Warning:** If the `system_config.yaml` file is unavailable, then skip this step and proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
 
@@ -362,7 +361,7 @@ information for this system has not yet been prepared.
 
 <a name="first-timeinitial-installs-bare-metal"></a>
 
-#### 3.1.b Initial Installs (bare-metal)
+#### 3.1.b Initial installs (bare-metal)
 
 1. **For first-time/initial installs (without a `system_config.yaml`file)**, generate the system configuration. See below for an explanation of the command line parameters and
    some common settings.
@@ -447,7 +446,7 @@ information for this system has not yet been prepared.
 
 <a name="verify-csi-versions-match"></a>
 
-### 3.2 Verify and Backup `system_config.yaml`
+### 3.2 Verify and backup `system_config.yaml`
 
 1. Verify that the newly generated `system_config.yaml` matches the current version of CSI.
 
@@ -467,11 +466,11 @@ information for this system has not yet been prepared.
 
 1. Copy the new `system_config.yaml` file somewhere safe to facilitate re-installs.
 
-1. Continue to the next step to [Prepare Site Init](#prepare-site-init).
+1. Continue to the next step to [Prepare `Site Init`](#prepare-site-init).
 
 <a name="prepare-site-init"></a>
 
-### 3.3 Prepare Site Init
+### 3.3 Prepare `Site Init`
 
 > **Note:**: It is assumed at this point that `$PITDATA` (that is, `/mnt/pitdata`) is still mounted on the Linux system. This is important because the following procedure
 > depends on that mount existing.
@@ -484,11 +483,11 @@ information for this system has not yet been prepared.
 
 1. Prepare the `site-init` directory.
 
-   Perform the [Prepare Site Init](prepare_site_init.md) procedures.
+   Perform the [Prepare `Site Init`](prepare_site_init.md) procedures.
 
 <a name="prepopulate-livecd-daemons-configuration-and-ncn-artifacts"></a>
 
-## 4. Prepopulate LiveCD Daemons Configuration and NCN Artifacts
+## 4. Prepopulate LiveCD daemons configuration and NCN artifacts
 
 Now that the configuration is generated, the LiveCD must be populated with the generated files.
 
@@ -654,7 +653,7 @@ boot order to have the USB device first.
 
 <a name="first-login"></a>
 
-### 5.1 First Login
+### 5.1 First login
 
 On first log in (over SSH or at local console), the LiveCD will prompt the administrator to change the password.
 
@@ -707,8 +706,8 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    need to mount this manually by running the following command.
 
    > **Note:** When creating the USB PIT image, this was mounted over `/mnt/pitdata`. Now that the USB PIT is booted,
-   > it will mount over `/var/www/ephemeral`. The FSLabel `PITDATA` is already in `/etc/fstab`, so the path is omitted
-   > in the following call to `mount`.
+   > it will mount over `/var/www/ephemeral`. The `FSLabel` `PITDATA` is already in `/etc/fstab`, so the path is omitted
+   > in the following `mount` command.
 
    ```bash
    pit# mount -vL PITDATA
@@ -795,7 +794,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
 
 <a name="configure-the-running-livecd"></a>
 
-## 6. Configure the Running LiveCD
+## 6. Configure the running LiveCD
 
 1. Set and export BMC credential variables.
 
@@ -832,7 +831,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
 
 <a name="next-topic"></a>
 
-## Next Topic
+## Next topic
 
 After completing this procedure, proceed to configure the management network switches.
 
