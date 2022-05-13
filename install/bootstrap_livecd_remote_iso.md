@@ -386,14 +386,18 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
 1. Create the `hmn_connections.json` file by following the [Create HMN Connections JSON](create_hmn_connections_json.md)  procedure. Return to this section when completed.
 
-1. Copy these files into the current working directory, or create them if this is an initial install of the system:
+1. Create the configuration input files if needed and copy them into the preparation directory.
+
+   The preparation directory is `${PITDATA}/prep`.
+
+   Copy these files into the preparation directory, or create them if this is an initial install of the system:
 
    * `application_node_config.yaml` (optional - see below)
    * `cabinets.yaml` (optional - see below)
    * `hmn_connections.json`
    * `ncn_metadata.csv`
    * `switch_metadata.csv`
-   * `system_config.yaml` (only available after [first-install generation of system files](#first-timeinitial-installs-bare-metal)
+   * `system_config.yaml` (only available after [first-install generation of system files](#first-timeinitial-installs-bare-metal))
 
    > The optional `application_node_config.yaml` file may be provided for further definition of settings relating to how application nodes will appear in HSM for roles and
    > subroles. See [Create Application Node YAML](create_application_node_config_yaml.md).
@@ -485,15 +489,15 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
       pit# ls -1 ${PITDATA}/prep
       ```
 
-       1. Expected output looks similar to the following:
+      Expected output looks similar to the following:
 
-          ```text
-          application_node_config.yaml
-          cabinets.yaml
-          hmn_connections.json
-          ncn_metadata.csv
-          switch_metadata.csv
-          ```
+      ```text
+      application_node_config.yaml
+      cabinets.yaml
+      hmn_connections.json
+      ncn_metadata.csv
+      switch_metadata.csv
+      ```
 
    1. Generate the system configuration.
 

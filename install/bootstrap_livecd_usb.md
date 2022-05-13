@@ -271,14 +271,18 @@ information for this system has not yet been prepared.
 
 1. At this time see [Create HMN Connections JSON](create_hmn_connections_json.md) for instructions about creating the `hmn_connections.json`.
 
-1. Pull these files into the current working directory, or create them if this is a first-time/initial install:
+1. Create the configuration input files if needed and copy them into the preparation directory.
+
+   The preparation directory is `${PITDATA}/prep`.
+
+   Copy these files into the preparation directory, or create them if this is an initial install of the system:
 
    * `application_node_config.yaml` (optional - see below)
    * `cabinets.yaml` (optional - see below)
    * `hmn_connections.json`
    * `ncn_metadata.csv`
    * `switch_metadata.csv`
-   * `system_config.yaml` (only available after [first-install generation of system files](#first-timeinitial-installs-bare-metal)
+   * `system_config.yaml` (only available after [first-install generation of system files](#first-timeinitial-installs-bare-metal))
 
    > The optional `application_node_config.yaml` file may be provided for further definition of settings relating to how application nodes will appear in HSM for roles and subroles.
    > See [Create Application Node YAML](create_application_node_config_yaml.md)
