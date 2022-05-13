@@ -3,6 +3,7 @@
 The following procedure deploys Linux and Kubernetes software to the management NCNs.
 Deployment of the nodes starts with booting the storage nodes followed by the master nodes
 and worker nodes together.
+
 After the operating system boots on each node, there are some configuration actions which
 take place. Watching the console or the console log for certain nodes can help to understand
 what happens and when. When the process completes for all nodes, the Ceph storage is
@@ -12,7 +13,7 @@ will join Kubernetes after it is rebooted later in
 
 <a name="timing-of-deployments"></a>
 
-## Timing of Deployments
+## Timing of deployments
 
 The timing of each set of boots varies based on hardware. Nodes from some manufacturers will
 POST faster than others or vary based on BIOS setting. After powering a set of nodes on,
@@ -21,37 +22,37 @@ the number of storage and worker nodes.
 
 ## Topics
 
-   1. [Prepare for Management Node Deployment](#prepare_for_management_node_deployment)
-      1. [Tokens and IPMI Password](#tokens-and-ipmi-password)
-      1. [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
-      1. [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
-   1. [Update Management Node Firmware](#update_management_node_firmware)
-   1. [Deploy Management Nodes](#deploy_management_nodes)
-      1. [Deploy Workflow](#deploy-workflow)
+   1. [Prepare for management node deployment](#prepare_for_management_node_deployment)
+      1. [Tokens and IPMI password](#tokens-and-ipmi-password)
+      1. [Apply NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds)
+      1. [Ensure time is accurate before deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
+   1. [Update management node firmware](#update_management_node_firmware)
+   1. [Deploy management nodes](#deploy_management_nodes)
+      1. [Deploy workflow](#deploy-workflow)
       1. [Deploy](#deploy)
-      1. [Check LVM on Masters and Workers](#check-lvm-on-masters-and-workers)
-      1. [Check for Unused Drives on Utility Storage Nodes](#check-for-unused-drives-on-utility-storage-nodes)
-      1. [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
-   1. [Configure after Management Node Deployment](#configure_after_management_node_deployment)
-      1. [LiveCD Cluster Authentication](#livecd-cluster-authentication)
-      1. [BGP Routing](#bgp-routing)
-      1. [Install Tests and Test Server on NCNs](#install-tests)
+      1. [Check LVM on Kubernetes NCNs](#check-lvm-on-masters-and-workers)
+      1. [Check for unused drives on utility storage nodes](#check-for-unused-drives-on-utility-storage-nodes)
+      1. [Apply NCN post-boot workarounds](#apply-ncn-post-boot-workarounds)
+   1. [Configure after management node deployment](#configure_after_management_node_deployment)
+      1. [LiveCD cluster authentication](#livecd-cluster-authentication)
+      1. [BGP routing](#bgp-routing)
+      1. [Install tests and test server on NCNs](#install-tests)
       1. [Remove the default NTP pool](#remove-the-default-ntp-pool)
-   1. [Validate Management Node Deployment](#validate_management_node_deployment)
+   1. [Validate management node deployment](#validate_management_node_deployment)
       1. [Validation](#validation)
-      1. [Optional Validation](#optional-validation)
-   1. [Important Checkpoint](#important-checkpoint)
-   1. [Next Topic](#next-topic)
+      1. [Optional validation](#optional-validation)
+   1. [Important checkpoint](#important-checkpoint)
+   1. [Next topic](#next-topic)
 
 <a name="prepare_for_management_node_deployment"></a>
 
-## 1. Prepare for Management Node Deployment
+## 1. Prepare for management node deployment
 
 Preparation of the environment must be done before attempting to deploy the management nodes.
 
 <a name="tokens-and-ipmi-password"></a>
 
-### 1.1 Tokens and IPMI Password
+### 1.1 Tokens and IPMI password
 
 1. Define shell environment variables that will simplify later commands to deploy management nodes.
 
@@ -73,25 +74,28 @@ Preparation of the environment must be done before attempting to deploy the mana
       pit# export mtoken='ncn-m(?!001)\w+-mgmt' ; export stoken='ncn-s\w+-mgmt' ; export wtoken='ncn-w\w+-mgmt' ; export USERNAME=root
       ```
 
-   Throughout the guide, simple one-liners can be used to query status of expected nodes. If the shell or environment is terminated, these environment variables should be re-exported.
+   Throughout the guide, simple one-liners can be used to query status of expected nodes. If the shell or environment is terminated, these
+   environment variables should be re-exported.
 
    Examples:
 
-   Check power status of all NCNs.
+   * Check power status of all NCNs.
 
-   ```bash
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
-   ```
+      ```bash
+      pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
+              xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
+      ```
 
-   Power off all NCNs.
+   * Power off all NCNs.
 
-   ```bash
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
-   ```
+      ```bash
+      pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
+              xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
+      ```
 
 <a name="apply-ncn-pre-boot-workarounds"></a>
 
-### 1.2 Apply NCN Pre-Boot Workarounds
+### 1.2 Apply NCN pre-boot workarounds
 
 _There will be post-boot workarounds as well._
 
@@ -99,7 +103,7 @@ Follow the [workaround instructions](../update_product_stream/index.md#apply-wor
 
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
 
-### 1.3 Ensure Time Is Accurate Before Deploying NCNs
+### 1.3 Ensure time is accurate before deploying NCNs
 
 **NOTE:** Optionally, in order to use a timezone other than UTC, instead of step 1 below, follow
 [this procedure for setting a local timezone](../operations/node_management/Configure_NTP_on_NCNs.md#set-a-local-timezone). Then
@@ -157,8 +161,8 @@ proceed to step 2.
    1. Using another terminal to watch the console, boot the node to BIOS.
 
       ```console
-      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis bootdev bios
-      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power off && sleep 10 && \
+      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis bootdev bios &&
+           ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power off && sleep 10 &&
            ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power on
       ```
 
@@ -199,7 +203,7 @@ proceed to step 2.
 
 <a name="update_management_node_firmware"></a>
 
-## 2. Update Management Node Firmware
+## 2. Update management node firmware
 
 > All firmware can be found in the HFP package provided with the Shasta release.
 
@@ -215,7 +219,7 @@ firmware requirement before starting.
    both been installed and configured. However, at that point a rolling reboot procedure for the management nodes will be needed,
    after the firmware has been updated.
 
-   See the Shasta 1.5 `HPE Cray EX System Software Getting Started Guide S-8000`
+   See the `Shasta 1.5 HPE Cray EX System Software Getting Started Guide S-8000`
    on the [`HPE Customer Support Center`](https://www.hpe.com/support/ex-gsg) for information about the _HPE Cray EX HPC Firmware Pack_ (HFP) product.
 
    In the HFP documentation there is information about the recommended firmware packages to be installed.
@@ -251,7 +255,7 @@ firmware requirement before starting.
 
 <a name="deploy_management_nodes"></a>
 
-## 3. Deploy Management Nodes
+## 3. Deploy management nodes
 
 Deployment of the nodes starts with booting the storage nodes first, then the master nodes and worker nodes together.
 After the operating system boots on each node there are some configuration actions which take place. Watching the
@@ -260,7 +264,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
 <a name="deploy-workflow"></a>
 
-### 3.1 Deploy Workflow
+### 3.1 Deploy workflow
 
 The configuration workflow described here is intended to help understand the expected path for booting and configuring. The actual steps to
 be performed are in the [Deploy](#deploy) section.
@@ -476,9 +480,9 @@ be performed are in the [Deploy](#deploy) section.
 
 <a name="check-lvm-on-masters-and-workers"></a>
 
-### 3.3 Check LVM on Masters and Workers
+### 3.3 Check LVM on Kubernetes NCNs
 
-#### 3.3.1 Run The Check
+#### 3.3.1 Run the check
 
 Run the following command on the PIT node to validate that the expected LVM labels are present on disks on the master and worker nodes. When it prompts you for a password, enter the root password for `ncn-m002`.
 
@@ -486,7 +490,7 @@ Run the following command on the PIT node to validate that the expected LVM labe
 pit# /usr/share/doc/csm/install/scripts/check_lvm.sh
 ```
 
-#### 3.3.2 Expected Check Output
+#### 3.3.2 Expected check output
 
 Expected output looks similar to the following:
 
@@ -521,7 +525,7 @@ If the check succeeds, skip the manual check procedure and recovery steps.
 
 <a name="manual-lvm-check-procedure"></a>
 
-#### 3.3.3 Manual LVM Check Procedure
+#### 3.3.3 Manual LVM check procedure
 
 If needed, the LVM checks can be performed manually on the master and worker nodes.
 
@@ -549,7 +553,7 @@ for details on how to do so.
 
 <a name="lvm-check-failure-recovery"></a>
 
-#### 3.3.3 LVM Check Failure Recovery
+#### 3.3.4 LVM check failure recovery
 
 If there are LVM check failures, then the problem must be resolved before continuing with the install.
 
@@ -567,7 +571,7 @@ If there are LVM check failures, then the problem must be resolved before contin
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 
-### 3.4 Check for Unused Drives on Utility Storage Nodes
+### 3.4 Check for unused drives on utility storage nodes
 
 > **IMPORTANT:** Do the following if NCNs are Gigabyte hardware. It is suggested (but optional) for HPE NCNs.
 >
@@ -692,7 +696,7 @@ If there are LVM check failures, then the problem must be resolved before contin
     ncn-s# cephadm shell -- ceph-volume inventory --format json-pretty | jq -r '.[]|select(.available==true)|.path'
     ```
 
-#### Wipe and Add Drives
+##### Wipe and add drives
 
 1. Wipe the drive **ONLY after confirming that the drive is not being used by the current Ceph cluster** using options 1, 2, or both.
 
@@ -718,13 +722,13 @@ Follow the [workaround instructions](../update_product_stream/index.md#apply-wor
 
 <a name="configure_after_management_node_deployment"></a>
 
-## 4. Configure after Management Node Deployment
+## 4. Configure after management node deployment
 
 After the management nodes have been deployed, configuration can be applied to the booted nodes.
 
 <a name="livecd-cluster-authentication"></a>
 
-### 4.1 LiveCD Cluster Authentication
+### 4.1 LiveCD cluster authentication
 
 The LiveCD needs to authenticate with the cluster to facilitate the rest of the CSM installation.
 
@@ -916,7 +920,7 @@ below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BG
 
 <a name="install-tests"></a>
 
-### 4.3 Install Tests and Test Server on NCNs
+### 4.3 Install tests and test server on NCNs
 
 Run the following commands on the PIT node.
 
@@ -957,7 +961,7 @@ ncn-w003: Warning: Permanently added 'ncn-w003,10.252.1.7' (ECDSA) to the list o
 
 <a name="validate_management_node_deployment"></a>
 
-## 5. Validate Management Node Deployment
+## 5. Validate management node deployment
 
 Do all of the validation steps. The optional validation steps are manual steps which could be skipped.
 
@@ -1034,7 +1038,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
 <a name="optional-validation"></a>
 
-### 5.2 Optional Validation
+### 5.2 Optional validation
 
    1. Verify that all the pods in the `kube-system` namespace are `Running` or `Completed`.
 
@@ -1052,13 +1056,13 @@ Observe the output of the checks and note any failures, then remediate them.
 
 <a name="important-checkpoint"></a>
 
-## Important Checkpoint
+## Important checkpoint
 
 Before proceeding, be aware that this is the last point where the other NCN nodes can be rebuilt without also having to rebuild the PIT node. Therefore, take time to double check both the cluster and the validation test results
 
 <a name="next-topic"></a>
 
-## Next Topic
+## Next topic
 
 After completing the deployment of the management nodes, the next step is to install the CSM services.
 
