@@ -4,7 +4,7 @@ Non-compute node (NCN) personalization applies post-boot configuration to the
 HPE Cray EX management nodes. Several HPE Cray EX product environments outside
 of CSM require NCN personalization to function. Consult the manual for each
 product to configure them on NCNs by referring to the
-[`1.5 HPE Cray EX System Software Getting Started Guide S-8000`](https://www.hpe.com/support/ex-gsg)
+[`HPE Cray EX System Software Getting Started Guide (S-8000) 22.06`](http://www.hpe.com/support/ex-gsg-042120221040)
 on the `HPE Customer Support Center`.
 
 This procedure defines the NCN personalization process for the CSM product using
@@ -153,7 +153,7 @@ documents for additional information, because role documentation is updated more
 changes are introduced.
 
 Consult the manual for each product in order to change the default configuration by
-referring to the [`1.5 HPE Cray EX System Software Getting Started Guide S-8000`](https://www.hpe.com/support/ex-gsg)
+referring to the [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.06`](http://www.hpe.com/support/ex-gsg-042120221040)
 on the `HPE Customer Support Center`. Similar configuration values for disabling the
 role will be required in these product-specific configuration repositories.
 
