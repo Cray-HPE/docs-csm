@@ -283,13 +283,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       >   Otherwise, an administrator should set the hostname manually with `hostnamectl`. In the latter case, do not confuse other administrators
       >   by using the hostname `ncn-m001`. Append the `-pit` suffix, indicating that the node is booted from the LiveCD.
 
-1. Mount local disk.
-
-   > **Note:** The FSLabel `PITDATA` is already in `/etc/fstab`, so the path is omitted in the following call to `mount`.
+1. Create necessary directories.
 
    ```bash
-   pit# mount -vL PITDATA &&
-        mkdir -pv ${PITDATA}/{admin,configs} ${PITDATA}/prep/{admin,logs} ${PITDATA}/data/{k8s,ceph}
+   pit# mkdir -pv ${PITDATA}/{admin,configs} ${PITDATA}/prep/{admin,logs} ${PITDATA}/data/{k8s,ceph}
    ```
 
 1. Relocate the typescript to the newly mounted `PITDATA` directory.
