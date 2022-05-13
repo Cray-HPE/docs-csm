@@ -44,8 +44,7 @@ the same regardless of the starting point in the workflow.
    1. [Prepare Compute Nodes](../install/index.md#prepare_compute_nodes)
 
 After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
-been fully installed and configured. Refer to the _HPE Cray EX System Software Getting Started Guide S-8000_
-on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for more information on other product streams
+been fully installed and configured. Refer to the [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.06`](http://www.hpe.com/support/ex-gsg-042120221040) for more information on other product streams
 to be installed and configured after CSM.
 
 See [Install CSM](../install/index.md) for the details on the installation process for either a first time install
