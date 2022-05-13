@@ -63,7 +63,7 @@ A backup of a healthy etcd cluster has been created.
         etcdrestore.etcd.database.coreos.com "cray-bos-etcd" deleted
         ```
         
-4. Verify if service/cray-bos-etcd-client was created.
+4. Verify that the `cray-bos-etcd-client` service was created.
 
        ```bash
        $ kubectl get service -A | grep cray-bos-etcd-client
