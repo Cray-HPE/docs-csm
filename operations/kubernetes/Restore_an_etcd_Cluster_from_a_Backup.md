@@ -66,7 +66,7 @@ A backup of a healthy etcd cluster has been created.
 4. Verify that the `cray-bos-etcd-client` service was created.
 
        ```bash
-       $ kubectl get service -A | grep cray-bos-etcd-client
+       ncn# kubectl get service -n services cray-bos-etcd-client
        $
        ```
    
