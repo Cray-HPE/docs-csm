@@ -77,7 +77,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 1. <a name="install-csi-rpm"></a>Install the latest version of CSI tool.
 
    ```bash
-   linux# rpm -Uvh $(find ${CSM_PATH}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
+   linux# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
 
 1. Install the latest documentation RPM.
