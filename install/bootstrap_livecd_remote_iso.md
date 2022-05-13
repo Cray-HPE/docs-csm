@@ -40,15 +40,7 @@ The LiveCD Remote ISO has known compatibility issues for nodes from certain vend
 > **Warning:** If this is a re-installation on a system that still has a USB device from a prior
 > installation, then that USB device must be wiped before continuing. Failing to wipe the USB, if present, may result in confusion.
 > If the USB is still booted, then it can wipe itself using the [basic wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
-<<<<<<< HEAD
 > If it is not booted, please do so and wipe it **or** disable the USB ports in the BIOS (not available for all vendors).
-=======
-<<<<<<< HEAD
-> If it is not booted, please do so and wipe it _or_ disable the USB ports in the BIOS (not available for all vendors).
-=======
-> If it is not booted, please do so and wipe it or disable the USB ports in the BIOS (not available for all vendors).
->>>>>>> 2dc03804de (STP-3186: more linter and spell check fixes)
->>>>>>> 95806626a7 (STP-3186: more linter and spell check fixes)
 
 Obtain and attach the LiveCD `cray-pre-install-toolkit` ISO file to the BMC. Depending on the vendor of the node,
 the instructions for attaching to the BMC will differ.
@@ -68,20 +60,20 @@ the instructions for attaching to the BMC will differ.
    linux# tar --wildcards --no-anchored -xzvf <csm-release>.tar.gz 'cray-pre-install-toolkit-*.iso'
    ```
 
-1. Prepare a server on the network to host the `cray-pre-install-toolkit` ISO file.
+2. Prepare a server on the network to host the `cray-pre-install-toolkit` ISO file.
 
    Place the `cray-pre-install-toolkit` ISO file on a server which the BMC of the PIT node
    will be able to contact using HTTP or HTTPS.
 
    **Note:** A short URL is better than a long URL for the PIT file on the webserver.
 
-1. See the respective procedure below to attach an ISO.
+3. See the respective procedure below to attach an ISO.
 
    * [HPE iLO BMCs](boot_livecd_virtual_iso.md#hpe-ilo-bmcs)
    * **Gigabyte BMCs** Do not use the RemoteISO method. See [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
    * **Intel BMCs** Do not use the RemoteISO method. See [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
 
-1. The chosen procedure should have rebooted the server. Observe the server boot into the LiveCD.
+4. The chosen procedure should have rebooted the server. Observe the server boot into the LiveCD.
 
 <a name="first-login"></a>
 
@@ -427,15 +419,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 #### 4.1.a Subsequent installs (reinstalls)
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration
-<<<<<<< HEAD
    (see [Cray `Site Init` Files](../background/index.md#cray_site_init_files)).
-=======
-<<<<<<< HEAD
-   (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
-=======
-   (see [Cray `site-init` Files](../background/index.md#cray_site_init_files)).
->>>>>>> 2dc03804de (STP-3186: more linter and spell check fixes)
->>>>>>> 95806626a7 (STP-3186: more linter and spell check fixes)
 
    > **Warning:** If the `system_config.yaml` file is unavailable, then skip this step and proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
 
@@ -456,7 +440,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
       system_config.yaml
       ```
 
-   1. Generate the system configuration.
+   2. Generate the system configuration.
 
       > **Note:** Ensure that you specify a reachable NTP pool or server using the `ntp-pools` or `ntp-servers` fields, respectively. Adding an unreachable server can
       > cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
@@ -491,7 +475,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
       >   {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >   ```
 
-   1. Skip the next step and continue to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
+   3. Skip the next step and continue to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
 
 <a name="first-timeinitial-installs-bare-metal"></a>
 
@@ -607,36 +591,16 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
 1. Copy the new `system_config.yaml` file somewhere safe to facilitate re-installs.
 
-<<<<<<< HEAD
 1. Continue to the next step to [Prepare `Site Init`](#prepare-site-init).
 
 <a name="prepare-site-init"></a>
 
 ### 4.3 Prepare `Site Init`
-=======
-<<<<<<< HEAD
-1. Continue to the next step to [Prepare Site Init](#prepare-site-init).
-
-<a name="prepare-site-init"></a>
-
-### 4.3 Prepare Site Init
-=======
-1. Continue to the next step to [Prepare `site-init`](#prepare-site-init).
-
-<a name="prepare-site-init"></a>
-
-### 4.3 Prepare `site-init`
->>>>>>> f4cf0b23b3 (STP-3186: linter and spell check fixes)
->>>>>>> 418729c7a8 (STP-3186: linter and spell check fixes)
 
 > **Important:** Although the command prompts in this procedure are `linux#`, the procedure should be
 > performed on the PIT node.
 
-<<<<<<< HEAD
 Prepare the `site-init` directory by performing the [Prepare `Site Init`](prepare_site_init.md) procedures.
-=======
-Prepare the `site-init` directory by performing the [Prepare `site-init`](prepare_site_init.md) procedures.
->>>>>>> 418729c7a8 (STP-3186: linter and spell check fixes)
 
 <a name="bring---up-the-pit-services-and-validate-pit-health"></a>
 
