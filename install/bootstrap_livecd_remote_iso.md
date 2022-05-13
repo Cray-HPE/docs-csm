@@ -12,15 +12,15 @@ lack of removable storage.
 
 ## Topics
 
-   1. [Known Compatibility Issues](#known-compatibility-issues)
-   1. [Attaching and Booting the LiveCD with the BMC](#attaching-and-booting-the-livecd-with-the-bmc)
-   1. [First Login](#first-login)
-   1. [Configure the Running LiveCD](#configure-the-running-livecd)
-   1. [Next Topic](#next-topic)
+1. [Known compatibility issues](#known-compatibility-issues)
+1. [Attaching and booting the LiveCD with the BMC](#attaching-and-booting-the-livecd-with-the-bmc)
+1. [First login](#first-login)
+1. [Configure the running LiveCD](#configure-the-running-livecd)
+1. [Next topic](#next-topic)
 
 <a name="known-compatibility-issues"></a>
 
-## 1. Known Compatibility Issues
+## 1. Known compatibility issues
 
 The LiveCD Remote ISO has known compatibility issues for nodes from certain vendors.
 
@@ -29,12 +29,12 @@ The LiveCD Remote ISO has known compatibility issues for nodes from certain vend
 
 <a name="attaching-and-booting-the-livecd-with-the-bmc"></a>
 
-## 2. Attaching and Booting the LiveCD with the BMC
+## 2. Attaching and booting the LiveCD with the BMC
 
 > **Warning:** If this is a re-installation on a system that still has a USB device from a prior
 > installation, then that USB device must be wiped before continuing. Failing to wipe the USB, if present, may result in confusion.
 > If the USB is still booted, then it can wipe itself using the [basic wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
-> If it is not booted, please do so and wipe it _or_ disable the USB ports in the BIOS (not available for all vendors).
+> If it is not booted, please do so and wipe it **or** disable the USB ports in the BIOS (not available for all vendors).
 
 Obtain and attach the LiveCD cray-pre-install-toolkit ISO file to the BMC. Depending on the vendor of the node,
 the instructions for attaching to the BMC will differ.
@@ -72,7 +72,7 @@ the instructions for attaching to the BMC will differ.
 
 <a name="first-login"></a>
 
-## 3. First Login
+## 3. First login
 
 On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.
 
@@ -96,7 +96,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 <a name="configure-the-running-livecd"></a>
 
-## 4. Configure the Running LiveCD
+## 4. Configure the running LiveCD
 
 1. Set up the initial typescript.
 
@@ -302,7 +302,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 <a name="generate-installation-files"></a>
 
-### 4.1 Generate Installation Files
+### 4.1 Generate installation files
 
 Some files are needed for generating the configuration payload. See the [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload)
 and [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files) topics if one has not already prepared the information for this system.
@@ -599,7 +599,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
 <a name="next-topic"></a>
 
-## Next Topic
+## Next topic
 
 After completing this procedure, the next step is to configure the management network switches.
 
