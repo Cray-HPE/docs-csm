@@ -67,7 +67,13 @@ A backup of a healthy etcd cluster has been created.
 
        ```bash
        ncn# kubectl get service -n services cray-bos-etcd-client
-       $
+       ```
+
+       Example of output showing that the service was created:    
+
+       ```text
+       NAME                   TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+       cray-bos-etcd-client   ClusterIP   10.28.248.232   <none>        2379/TCP   2m
        ```
    
       1. If service was not created repeat steps 1 to 3 for a new backup restore.
