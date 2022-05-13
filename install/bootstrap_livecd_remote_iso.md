@@ -337,10 +337,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    > **Note:** The PIT ISO, Helm charts/images, and bootstrap RPMs are now available in the extracted CSM tar file.
 
-1. Install/upgrade CSI; check if a newer version was included in the tarball.
+1. <a name="install-csi-rpm"></a>Install the latest version of CSI tool.
 
    ```bash
-   pit# rpm -Uvh $(find ${CSM_PATH}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
 
 1. Install the latest documentation RPM.
