@@ -36,7 +36,7 @@ The LiveCD Remote ISO has known compatibility issues for nodes from certain vend
 > If the USB is still booted, then it can wipe itself using the [basic wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
 > If it is not booted, please do so and wipe it **or** disable the USB ports in the BIOS (not available for all vendors).
 
-Obtain and attach the LiveCD cray-pre-install-toolkit ISO file to the BMC. Depending on the vendor of the node,
+Obtain and attach the LiveCD `cray-pre-install-toolkit` ISO file to the BMC. Depending on the vendor of the node,
 the instructions for attaching to the BMC will differ.
 
 1. The CSM software release should be downloaded and expanded for use.
@@ -44,22 +44,22 @@ the instructions for attaching to the BMC will differ.
    **Important:** To ensure that the CSM release plus any patches, workarounds, or hotfixes are included
    follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
 
-   The cray-pre-install-toolkit ISO and other files are now available in the directory from the extracted CSM tar.
+   The `cray-pre-install-toolkit` ISO and other files are now available in the directory from the extracted CSM `tar`.
    The ISO will have a name similar to
    `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`
 
-   This ISO file can be extracted from the CSM release tar file using the following command:
+   This ISO file can be extracted from the CSM release `tar` file using the following command:
 
    ```bash
    linux# tar --wildcards --no-anchored -xzvf <csm-release>.tar.gz 'cray-pre-install-toolkit-*.iso'
    ```
 
-   This release of CSM software, the cray-pre-install-toolkit ISO should be placed on a server which the PIT node
+   This release of CSM software, the `cray-pre-install-toolkit` ISO should be placed on a server which the PIT node
    will be able to contact using HTTP or HTTPS.
 
    **Note:** A shorter path name is better than a long path name on the webserver.
 
-      * The Cray Pre-Install Toolkit ISO is included in the CSM release tarball. It will have a long filename similar to
+      * The Cray Pre-Install Toolkit ISO is included in the CSM release `tar` file. It will have a long filename similar to
         `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`, so pick a shorter name on the webserver.
 
 1. See the respective procedure below to attach an ISO.
@@ -233,15 +233,15 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# echo -e "\nCSM_RELEASE=${CSM_RELEASE}\nSYSTEM_NAME=${SYSTEM_NAME}" >>/etc/environment
       ```
 
-   1. Fetch the release tarball.
+   1. Fetch the release `tar` file.
 
       ```bash
       pit# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz -O /var/www/ephemeral/${CSM_RELEASE}.tar.gz
       ```
 
-   1. Expand the tarball on the PIT node.
+   1. Expand the `tar` file on the PIT node.
 
-      > Note: Expansion of the tarball may take more than 45 minutes.
+      > Note: Expansion of the `tar` file may take more than 45 minutes.
 
       ```bash
       pit# tar -zxvf ${CSM_RELEASE}.tar.gz
@@ -256,7 +256,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# rsync -a -P --delete ./${CSM_RELEASE}/images/storage-ceph/ ./data/ceph/
       ```
 
-   > The PIT ISO, Helm charts/images, and bootstrap RPMs are now available in the extracted CSM tar.
+   > The PIT ISO, Helm charts/images, and bootstrap RPMs are now available in the extracted CSM `tar`.
 
 1. Install/upgrade the CSI and testing RPMs.
 
@@ -342,7 +342,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
       After gathering the files into this working directory, generate your configurations.
 
-   1. If doing a reinstall and have the `system_config.yaml` parameter file avail available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
+   1. If doing a reinstall and have the `system_config.yaml` parameter file available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
 
       If not doing a reinstall of Shasta software, then the `system_config.yaml` file will not be available, so skip the rest of this step.
 
@@ -505,7 +505,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
       pit# systemctl restart wickedd-nanny && sleep 5
       ```
 
-   * Option 2: Set up dnsmasq by hand.
+   * Option 2: Set up `dnsmasq` by hand.
 
       ```bash
       pit# /root/bin/csi-setup-vlan002.sh $nmn_cidr
@@ -555,8 +555,8 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
        pit# csi pit validate --network
        ```
 
-1. Copy the service configuration files generated earlier by `csi config init` for DNSMasq, Metal
-   Basecamp (cloud-init), and ConMan.
+1. Copy the service configuration files generated earlier by `csi config init` for `dnsmasq`, Metal
+   Basecamp (`cloud-init`), and ConMan.
 
     1. Copy files (files only, `-r` is expressly not used).
 
@@ -586,16 +586,16 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
    pit# csi pit validate --services
    ```
 
-1. Mount a shim to match the Shasta-CFG steps' directory structure.
+1. Mount a shim to match the `SHASTA-CFG` steps' directory structure.
 
     ```bash
     pit# mkdir -vp /mnt/pitdata
     pit# mount -v -L PITDATA /mnt/pitdata
     ```
 
-1. The following procedure will set up customized CA certificates for deployment using Shasta-CFG.
+1. The following procedure will set up customized CA certificates for deployment using `SHASTA-CFG`.
 
-   * [Prepare Site-Init](prepare_site_init.md) to create and prepare the `site-init` directory for your system.
+   * [Prepare `site-init`](prepare_site_init.md) to create and prepare the `site-init` directory for your system.
 
 <a name="next-topic"></a>
 
