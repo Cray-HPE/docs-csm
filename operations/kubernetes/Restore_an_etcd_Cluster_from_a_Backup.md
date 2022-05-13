@@ -30,7 +30,7 @@ A backup of a healthy etcd cluster has been created.
 
 2. Restore the cluster using a backup.
 
-    Replace etcd.backup\_v277935\_2020-03-30-23:52:54 in the command below with the name of the backup being used.
+    Replace `etcd.backup_v277935_2020-03-30-23:52:54` in the command below with the name of the backup being used.
 
     ```bash
     ncn-w001# kubectl exec -it -n operators \
