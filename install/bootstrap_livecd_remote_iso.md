@@ -12,21 +12,21 @@ lack of removable storage.
 
 ## Topics
 
-1. [Known Compatibility Issues](#known-compatibility-issues)
-1. [Attaching and Booting the LiveCD with the BMC](#attaching-and-booting-the-livecd-with-the-bmc)
-1. [First Login](#first-login)
-1. [Configure the Running LiveCD](#configure-the-running-livecd)
-   1. [Generate Installation Files](#generate-installation-files)
-      * [Subsequent Installs (Reinstalls)](#subsequent-fresh-installs-re-installs)
-      * [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal)
-   1. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
-   1. [Prepare Site Init](#prepare-site-init)
-1. [Bring-up the PIT Services and Validate PIT Health](#bring---up-the-pit-services-and-validate-pit-health)
-1. [Next Topic](#next-topic)
+1. [Known compatibility issues](#known-compatibility-issues)
+1. [Attaching and booting the LiveCD with the BMC](#attaching-and-booting-the-livecd-with-the-bmc)
+1. [First login](#first-login)
+1. [Configure the running LiveCD](#configure-the-running-livecd)
+   1. [Generate installation files](#generate-installation-files)
+      * [Subsequent installs (reinstalls)](#subsequent-fresh-installs-re-installs)
+      * [Initial installs (bare-metal)](#first-timeinitial-installs-bare-metal)
+   1. [Verify and backup `system_config.yaml`](#verify-csi-versions-match)
+   1. [Prepare `Site Init`](#prepare-site-init)
+1. [Bring up the PIT services and validate PIT health](#bring---up-the-pit-services-and-validate-pit-health)
+1. [Next topic](#next-topic)
 
 <a name="known-compatibility-issues"></a>
 
-## 1. Known Compatibility Issues
+## 1. Known compatibility issues
 
 The LiveCD Remote ISO has known compatibility issues for nodes from certain vendors.
 
@@ -35,12 +35,12 @@ The LiveCD Remote ISO has known compatibility issues for nodes from certain vend
 
 <a name="attaching-and-booting-the-livecd-with-the-bmc"></a>
 
-## 2. Attaching and Booting the LiveCD with the BMC
+## 2. Attaching and booting the LiveCD with the BMC
 
 > **Warning:** If this is a re-installation on a system that still has a USB device from a prior
 > installation, then that USB device must be wiped before continuing. Failing to wipe the USB, if present, may result in confusion.
 > If the USB is still booted, then it can wipe itself using the [basic wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
-> If it is not booted, please do so and wipe it _or_ disable the USB ports in the BIOS (not available for all vendors).
+> If it is not booted, please do so and wipe it **or** disable the USB ports in the BIOS (not available for all vendors).
 
 Obtain and attach the LiveCD `cray-pre-install-toolkit` ISO file to the BMC. Depending on the vendor of the node,
 the instructions for attaching to the BMC will differ.
@@ -77,7 +77,7 @@ the instructions for attaching to the BMC will differ.
 
 <a name="first-login"></a>
 
-## 3. First Login
+## 3. First login
 
 On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.
 
@@ -101,7 +101,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 <a name="configure-the-running-livecd"></a>
 
-## 4. Configure the Running LiveCD
+## 4. Configure the running LiveCD
 
 1. Start a typescript to record this section of activities done on `ncn-m001` while booted from the LiveCD.
 
@@ -376,7 +376,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 <a name="generate-installation-files"></a>
 
-### 4.1 Generate Installation Files
+### 4.1 Generate installation files
 
 Some files are needed for generating the configuration payload. See the [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload)
 and [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files) topics if one has not already prepared the information for this system.
@@ -416,10 +416,10 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
 <a name="subsequent-fresh-installs-re-installs"></a>
 
-#### 4.1.a Subsequent Installs (Reinstalls)
+#### 4.1.a Subsequent installs (reinstalls)
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration
-   (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
+   (see [Cray `Site Init` Files](../background/index.md#cray_site_init_files)).
 
    > **Warning:** If the `system_config.yaml` file is unavailable, then skip this step and proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
 
@@ -479,7 +479,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
 <a name="first-timeinitial-installs-bare-metal"></a>
 
-#### 4.1.b Initial Installs (bare-metal)
+#### 4.1.b Initial installs (bare-metal)
 
 1. **For first-time/initial installs (without a `system_config.yaml`file)**, generate the system configuration. See below for an explanation of the command line parameters and some common settings.
 
@@ -563,7 +563,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
 <a name="verify-csi-versions-match"></a>
 
-### 4.2 Verify and Backup `system_config.yaml`
+### 4.2 Verify and backup `system_config.yaml`
 
 1. Verify that the newly generated `system_config.yaml` matches the current version of CSI.
 
@@ -583,20 +583,20 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
 1. Copy the new `system_config.yaml` file somewhere safe to facilitate re-installs.
 
-1. Continue to the next step to [Prepare Site Init](#prepare-site-init).
+1. Continue to the next step to [Prepare `Site Init`](#prepare-site-init).
 
 <a name="prepare-site-init"></a>
 
-### 4.3 Prepare Site Init
+### 4.3 Prepare `Site Init`
 
 > **Important:** Although the command prompts in this procedure are `linux#`, the procedure should be
 > performed on the PIT node.
 
-Prepare the `site-init` directory by performing the [Prepare Site Init](prepare_site_init.md) procedures.
+Prepare the `site-init` directory by performing the [Prepare `Site Init`](prepare_site_init.md) procedures.
 
 <a name="bring---up-the-pit-services-and-validate-pit-health"></a>
 
-## 5. Bring-up the PIT Services and Validate PIT Health
+## 5. Bring up the PIT services and validate PIT health
 
 1. Initialize the PIT.
 
@@ -627,7 +627,7 @@ Prepare the `site-init` directory by performing the [Prepare Site Init](prepare_
 
 <a name="next-topic"></a>
 
-## Next Topic
+## Next topic
 
 After completing this procedure, proceed to configure the management network switches.
 
