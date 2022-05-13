@@ -225,7 +225,7 @@ Before creating the the bootable LiveCD, identify which device will be used for 
 
     > **Note:** At this point, the USB device is usable in any server with a CPU with x86_64 architecture. The remaining steps help add the installation data and enable SSH on boot.
 
-3. Mount the configuration and persistent data partitions.
+1. Mount the configuration and persistent data partitions.
 
     ```bash
     linux# mkdir -pv /mnt/cow ${PITDATA} &&
@@ -301,19 +301,7 @@ information for this system has not yet been prepared.
 #### 3.1.a Subsequent installs (reinstalls)
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration
-<<<<<<< HEAD
-<<<<<<< HEAD
    (see [Cray `Site Init` Files](../background/index.md#cray_site_init_files)).
-=======
-<<<<<<< HEAD
-   (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
-=======
-   (see [Cray `site-init` Files](../background/index.md#cray_site_init_files)).
->>>>>>> 2dc03804de (STP-3186: more linter and spell check fixes)
->>>>>>> 95806626a7 (STP-3186: more linter and spell check fixes)
-=======
-   (see [Cray `site-init` Files](../background/index.md#cray_site_init_files)).
->>>>>>> 209e017267 (STP-3186: step numbering for linter)
 
    > **Warning:** If the `system_config.yaml` file is unavailable, then skip this step and proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
 
@@ -334,7 +322,7 @@ information for this system has not yet been prepared.
       system_config.yaml
       ```
 
-   1. Generate the system configuration.
+   2. Generate the system configuration.
 
       > **Note:** Ensure that you specify a reachable NTP pool or server using the `ntp-pools` or `ntp-servers` fields, respectively. Adding an unreachable server can
       > cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
@@ -369,7 +357,7 @@ information for this system has not yet been prepared.
       >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >    ```
 
-   1. Skip the next step and continue to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
+   3. Skip the next step and continue to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
 
 <a name="first-timeinitial-installs-bare-metal"></a>
 
@@ -486,35 +474,11 @@ information for this system has not yet been prepared.
 
 1. Copy the new `system_config.yaml` file somewhere safe to facilitate re-installs.
 
-<<<<<<< HEAD
 1. Continue to the next step to [Prepare `Site Init`](#prepare-site-init).
 
 <a name="prepare-site-init"></a>
 
 ### 3.3 Prepare `Site Init`
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-1. Continue to the next step to [Prepare Site Init](#prepare-site-init).
-
-<a name="prepare-site-init"></a>
-
-### 3.3 Prepare Site Init
-=======
-1. Continue to the next step to [Prepare `site-init`](#prepare-site-init).
-
-<a name="prepare-site-init"></a>
-
-### 3.3 Prepare `site-init`
->>>>>>> f4cf0b23b3 (STP-3186: linter and spell check fixes)
-=======
-1. Continue to the next step to [Prepare `site-init`](#prepare-site-init).
-
-<a name="prepare-site-init"></a>
-
-### 3.3 Prepare `site-init`
->>>>>>> dab81a9443 (STP-3186: step numbering for linter)
->>>>>>> 209e017267 (STP-3186: step numbering for linter)
 
 > **Note:**: It is assumed at this point that `$PITDATA` (that is, `/mnt/pitdata`) is still mounted on the Linux system. This is important because the following procedure
 > depends on that mount existing.
