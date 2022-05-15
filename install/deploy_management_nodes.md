@@ -920,10 +920,10 @@ Observe the output of the checks. If there are any failures, remediate them.
 
    > **WARNING:** Notes on specific failures:
    >
-   > - If any of the `FS Label` tests fail (they have names like `Master Node ETCDLVM FS Label` or `Worker Node CONLIB FS Label`),
+   > * If any of the `FS Label` tests fail (they have names like `Master Node ETCDLVM FS Label` or `Worker Node CONLIB FS Label`),
    > then run manual tests on the node which reported the failure. See [Manual LVM Check Procedure](#manual-lvm-check-procedure). If the manual tests fail,
    > then the problem must be resolved before continuing to the next step. See [LVM Check Failure Recovery](#lvm-check-failure-recovery).
-   > - If the `Weave Health` test fails, run `weave --local status connections` on the node where the test failed. If messages similar to
+   > * If the `Weave Health` test fails, run `weave --local status connections` on the node where the test failed. If messages similar to
    > `IP allocation was seeded by different peers` are seen, then `weave` appears to be split-brained. At this point, it is necessary to wipe
    > the NCNs and start the PXE boot again:
    >    1. Wipe the NCNs using the 'Basic Wipe' section of [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md).
