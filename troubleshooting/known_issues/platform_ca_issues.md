@@ -50,7 +50,7 @@ Count: 1, Failed: 1, Skipped: 0
 
 ### Solution
 
-Run the following commands on any failed NCNs to update the platform-ca
+Run the following commands on any failed NCNs to update the `platform-ca` file.
 
 ```bash
 curl http://10.92.100.71:8888/meta-data | jq -r  '.Global."ca-certs".trusted[]' > /etc/pki/trust/anchors/platform-ca-certs.crt
