@@ -4,7 +4,9 @@ HPE Cray EX systems are designed so that system management services \(SMS\) are 
 
 * Three non-compute nodes \(NCNs\) are configured as Kubernetes master nodes. When one master goes down, operations \(such as jobs running across compute nodes\) are expected to continue.
 * At least three utility storage nodes provide persistent storage for the services running on the Kubernetes management nodes. When one of the utility storage nodes goes down, operations \(such as jobs running across compute nodes\) are expected to continue.
-* At least three NCNs are configured as Kubernetes worker nodes. If one of only three Kubernetes worker nodes were to go down, it would be much more difficult for the remaining two NCN worker nodes to handle the total balance of pods. It is less significant to lose one of the NCN worker nodes if the system has more than three NCN worker nodes because there are more worker nodes able to handle the pod load.
+* At least three NCNs are configured as Kubernetes worker nodes.
+  If one of only three Kubernetes worker nodes were to go down, it would be much more difficult for the remaining two NCN worker nodes to handle the total balance of pods.
+  It is less significant to lose one of the NCN worker nodes if the system has more than three NCN worker nodes because there are more worker nodes able to handle the pod load.
 * The state and configuration of the Kubernetes cluster are stored in an etcd cluster distributed across the Kubernetes master nodes. This cluster is also backed up on an interval, and backups are pushed to Ceph Rados Gateway \(S3\).
 * A micro-service can run on any node that meets the requirements for that micro-service, such as appropriate hardware attributes, which are indicated by labels and taints.
 * All micro-services have shared persistent storage so that they can be restarted on any NCN in the Kubernetes management cluster without losing state.
