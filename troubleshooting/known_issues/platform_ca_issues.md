@@ -115,7 +115,7 @@ running
 
 If certifi is installed in `/usr/lib/python3.6/site-packages` then you will need
 to reinstall the certifi RPM that ships with SLES. If this is not possible,
-you can run the following commands to replace the ca bundle that certifi uses
+you can run the following commands to replace the CA bundle that certifi uses
 with a link to the system's ca-bundle.
 
 ```bash
