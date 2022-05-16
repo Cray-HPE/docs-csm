@@ -2,7 +2,7 @@
 
 ## NCN Platform CA Certificate Does Not Match Certificate in BSS
 
-During install, if the beginning steps are re-run after the NCNs are booted
+During install, if the beginning steps are re-run after the NCNs are booted,
 then their platform-ca file will no longer match the server's CA. This can be
 detected with a goss test.
 
