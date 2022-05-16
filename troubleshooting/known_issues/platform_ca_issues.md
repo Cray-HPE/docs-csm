@@ -106,7 +106,7 @@ ncn-m001:~ #
 
 ### Solutions
 
-If certifi is installed in `/root/.local/...` then you can uninstall it by
+If certifi is installed in `/root/.local/...`, then you can uninstall it by
 running
 
 ```bash
