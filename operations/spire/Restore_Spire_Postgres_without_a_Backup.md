@@ -22,8 +22,7 @@ event that spire-postgres databases cannot be restored from a backup.
 3. Disable spire-agent on all of the Kubernetes NCNs (all worker nodes and master nodes) and delete the join data.
 
    ```bash
-   ncn# for ncn in $(kubectl get nodes -o name | cut -d'/' -f2); do ssh "${ncn}" systemctl stop spire-agent; ssh "${ncn}" rm /
-   root/spire/data/svid.key /root/spire/agent_svid.der /root/spire/bundle.der; done
+   ncn# for ncn in $(kubectl get nodes -o name | cut -d'/' -f2); do ssh "${ncn}" systemctl stop spire-agent; ssh "${ncn}" rm /root/spire/data/svid.key /root/spire/agent_svid.der /root/spire/bundle.der; done
    ```
 
 
@@ -50,40 +49,37 @@ The CSM release tarball is required as it contains the Spire helm chart.
 3. Get the current cached sysmgmt manifest.
 
    ```bash
-   ncn# kubectl get cm -n loftsman loftsman-sysmgmt  -o jsonpath='{.data.manifest\.yaml}' -o sysmgmt.yaml
+   ncn# kubectl get cm -n loftsman loftsman-sysmgmt  -o jsonpath='{.data.manifest\.yaml}' > spire.yaml
+
    ```
 
-4. Edit the `sysmgmt.yaml` spec.charts section to only include the `spire` chart and all its current data. (The resources specified above will be updated in the next step and the version may differ, because this is an example).
+4. Run the following command to remove non-spire charts from the spire.yaml file. This will also change the metadata.name so that it doesn't overwrite the sysmgmt.yaml file that is stored in the loftsman namespace.
 
    ```bash
+   for i in $(yq r spire.yaml 'spec.charts[*].name' | grep -Ev '^spire$'); do yq d -i spire.yaml  'spec.charts(name=='"$i"')'; done; yq w -i spire.yaml metadata.name spire
+   ```
+
+   Example spire.yaml after the command is run:
+   ```text
    apiVersion: manifests/v1beta1
-   metadata:
-     name: sysmgmt
-   spec:
-     charts:
-     - name: spire
-       namespace: spire
-       source: csm
-       values:
-         server:
-           fqdn: spire.local
-         trustDomain: shasta
-       version: 0.11.3
-       version: 0.12.0
-     sources:
+     metadata:
+       name: spire
+     spec:
        charts:
-       - location: ./helm
-         name: csm
-         type: directory
-       - location: ./helm
-         name: csm-algol60
-         type: directory
+         - name: spire
+           namespace: spire
+           source: csm-algol60
+           values:
+             server:
+               fqdn: spire.local
+             trustDomain: shasta
+           version: 0.11.5
    ```
 
 5. Generate the manifest that will be used to redeploy the chart with the modified resources.
 
    ```bash
-   ncn# manifestgen -c customizations.yaml -i sysmgmt.yaml -o manifest.yaml
+   ncn# manifestgen -c customizations.yaml -i spire.yaml -o manifest.yaml
    ```
 
 6. Update the helm chart path in the manifest.yaml file.
