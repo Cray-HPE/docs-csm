@@ -7,9 +7,9 @@ Functionality that is currently not supported while using UAS.
 * Lustre (`lfs`) commands within the UAS service pod
 * Executing Singularity containers within the UAS service
 * Building Docker containers within the UAS environment
-* Building containerd containers within the UAS environment
+* Building `containerd` containers within the UAS environment
 * `dmesg` cannot run inside a UAI because of container security limitations
-* Users cannot SSH from `ncn-w001` to a UAI because UAIs use LoadBalancer IP addresses on the Customer Access Network \(CAN\) instead of NodePorts and the LoadBalancer IP addresses are not accessible from `ncn-w001`
+* Users cannot SSH from `ncn-w001` to a UAI because UAIs use `LoadBalancer` IP addresses on the Customer Access Network \(CAN\) instead of `NodePorts` and the `LoadBalancer` IP addresses are not accessible from `ncn-w001`
 
 ## Other Limitations
 

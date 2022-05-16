@@ -24,8 +24,8 @@ By default, the timezone inside the UAI container is configured to match the tim
 |Container Element|Components|
 |-----------------|----------|
 |Operating system|SLES15 SP2|
-|kubectl command|Utility to interact with Kubernetes.|
-|cray command|Command that allows users to create, describe, and delete UAIs.|
+|`kubectl` command|Utility to interact with Kubernetes.|
+|`cray` command|Command that allows users to create, describe, and delete UAIs.|
 
 Administrative users use `cray uas admin uais list` to list the following parameters for all existing UAIs:
 
@@ -65,7 +65,7 @@ This can be done by following the [Customize End-User UAI Images](Customize_End-
 * [Elements of a UAI](Elements_of_a_UAI.md)
 * [UAI Host Nodes](UAI_Host_Nodes.md)
 * [UAI Host Node Selection](UAI_Host_Node_Selection.md)
-* [UAI macvlans Network Attachments](UAI_macvlans_Network_Attachments.md)
+* [UAI `macvlans` Network Attachments](UAI_macvlans_Network_Attachments.md)
 * [UAI Network Attachment Customization](UAI_Network_Attachments.md)
 * [Configure UAIs in UAS](Configure_UAIs_in_UAS.md)
   * [UAI Images](UAI_Images.md)
@@ -119,13 +119,13 @@ This can be done by following the [Customize End-User UAI Images](Customize_End-
   * [Troubleshoot UAS by Viewing Log Output](Troubleshoot_UAS_by_Viewing_Log_Output.md)
   * [Troubleshoot UAIs by Viewing Log Output](Troubleshoot_UAIs_by_Viewing_Log_Output.md)
   * [Troubleshoot Stale Brokered UAIs](Troubleshoot_Stale_Brokered_UAIs.md)
-  * [Troubleshoot UAI Stuck in "ContainerCreating"](Troubleshoot_UAI_Stuck_in_ContainerCreating.md)
+  * [Troubleshoot UAI Stuck in `ContainerCreating`](Troubleshoot_UAI_Stuck_in_ContainerCreating.md)
   * [Troubleshoot Duplicate Mount Paths in a UAI](Troubleshoot_Duplicate_Mount_Paths_in_a_UAI.md)
   * [Troubleshoot Missing or Incorrect UAI Images](Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
   * [Troubleshoot UAIs with Administrative Access](Troubleshoot_UAIs_with_Administrative_Access.md)
   * [Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
   * [Troubleshoot UAS / CLI Authentication Issues](Troubleshoot_UAI_Authentication_Issues.md)
-  * [Troubleshoot Broker UAI SSSD Cannot Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
+  * [Troubleshoot Broker UAI SSSD Cannot Use `/etc/sssd/sssd.conf`](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
 * [Clear UAS Configuration](Reset_the_UAS_Configuration_to_Original_Installed_Settings.md)
 
 [Next Topic: UAS Limitations](UAS_Limitations.md)

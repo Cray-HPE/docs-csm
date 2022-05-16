@@ -4,18 +4,18 @@ The Broker UAI image that comes with UAS is the image used to construct Broker U
 
 The key pieces of the Broker UAI image are:
 
-* An entrypoint shell script that initializes the container and starts the SSH daemon running.
+* An `entrypoint` shell script that initializes the container and starts the SSH daemon running.
 * An SSH configuration that forces logged in users into the `switchboard` command which creates / selects End-User UAIs and redirects connections.
 
 The primary way to customize the Broker UAI image is by [defining volumes and connecting them to the Broker UAI class](Configure_a_Broker_UAI_Class.md) for a given broker.
 Some customizations may require action that cannot be covered simply by using volumes to override configuration. Those cases generally require changing the Broker UAI behavior in some way.
-Those cases can be covered either by volume mounting a customized entrypoint script, or volume mounting a customized SSH configuration. Both of these cases are shown in the following examples.
+Those cases can be covered either by volume mounting a customized `entrypoint` script, or volume mounting a customized SSH configuration. Both of these cases are shown in the following examples.
 
-## Customize the Broker UAI Entrypoint Script
+## Customize the Broker UAI `entrypoint` Script
 
-The Broker UAI entrypoint script runs once every time the Broker UAI starts. It resides at `/app/broker/entrypoint.sh` in the Broker UAI image.
-The entrypoint script is the only file in that directory, so it can be overridden by creating a Kubernetes ConfigMap in the `uas` namespace containing the modified script and creating a volume using that ConfigMap with a mount point of `/app/broker`.
-There is critical content in the entrypoint script that should not be modified.
+The Broker UAI `entrypoint` script runs once every time the Broker UAI starts. It resides at `/app/broker/entrypoint.sh` in the Broker UAI image.
+The `entrypoint` script is the only file in that directory, so it can be overridden by creating a Kubernetes ConfigMap in the `uas` namespace containing the modified script and creating a volume using that ConfigMap with a mount point of `/app/broker`.
+There is critical content in the `entrypoint` script that should not be modified.
 
 The following shows the contents of an unmodified script:
 
@@ -76,10 +76,10 @@ Starting at the top:
 
 As long as the basic flow and contents described here are honored, other changes to this script should work without compromising the Broker UAI's function.
 
-The following is an example of replacing the entrypoint script with a new entrypoint script that changes the SSSD invocation to explicitly specify the `sssd.conf` file path (the standard path is used here,
+The following is an example of replacing the `entrypoint` script with a new `entrypoint` script that changes the SSSD invocation to explicitly specify the `sssd.conf` file path (the standard path is used here,
 but a different path might make customizing SSSD for a given site simpler under some set of circumstances):
 
-1. Create a new entrypoint script.
+1. Create a new `entrypoint` script.
 
     **NOTE:** A special "here document" form is used to prevent variable substitution in the file.
 
@@ -143,7 +143,7 @@ but a different path might make customizing SSSD for a given site simpler under 
 
 3. Create a new volume.
 
-    **NOTE**: The `default_mode` setting, which will set the mode on the file /app/broker/entrypoint.sh is decimal 493 here instead of octal 0755. The octal notation is not permitted in a JSON specification. Decimal numbers have to be used.
+    **NOTE**: The `default_mode` setting, which will set the mode on the file `/app/broker/entrypoint.sh` is decimal 493 here instead of octal 0755. The octal notation is not permitted in a JSON specification. Decimal numbers have to be used.
 
     ```bash
     ncn-m001-pit# cray uas admin config volumes create --mount-path /app/broker --volume-description '{"config_map": {"name": "broker-entrypoint", "default_mode": 493}}' --volumename broker-entrypoint
@@ -362,11 +362,11 @@ Match User !root,*
 
 The important content here is as follows:
 
-* `Port 30123` tells sshd to listen on a port that can be reached through port forwarding by the publicly visible Kubernetes service.
+* `Port 30123` tells SSHD to listen on a port that can be reached through port forwarding by the publicly visible Kubernetes service.
 * The `UseDNS no` avoids any DNS issues resulting from the Broker UAI running in the Kubernetes network space.
 * The `permitTTY yes` setting permits interactive UAI logins.
 * The `ForceCommand ...` statement ensures that users are always sent on to End-User UAIs or drop out of the Broker UAI on failure, preventing users from directly accessing the Broker UAI.
-* The `AcceptEnv UAI_ONE_SHOT` setting is not required, but it allows a user to set the UAI_ONE_SHOT variable which instructs the broker to delete any created End-User UAI after the user logs out.
+* The `AcceptEnv UAI_ONE_SHOT` setting is not required, but it allows a user to set the `UAI_ONE_SHOT` variable which instructs the broker to delete any created End-User UAI after the user logs out.
 
 These should be left unchanged. The rest of the configuration can be customized as needed.
 

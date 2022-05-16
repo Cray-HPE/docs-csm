@@ -1,9 +1,9 @@
 # Customize End-User UAI Images
 
-The provided End-User UAI image is a basic UAI image that includes an up-to-date version of the SLES Linux Distribution. It provides an entrypoint to using UAIs and an easy way for administrators to experiment with UAS configurations.
+The provided End-User UAI image is a basic UAI image that includes an up-to-date version of the SLES Linux Distribution. It provides an entry point to using UAIs and an easy way for administrators to experiment with UAS configurations.
 To support building software to be run in compute nodes, or other HPC and Analytics workflows, it is necessary to create a custom End-User UAI image and use that.
 
-A custom End-User UAI image can be any container image set up with the End-User UAI entrypoint script.
+A custom End-User UAI image can be any container image set up with the End-User UAI `entrypoint.sh` script.
 Experimentation with the wide range of possible UAI images is beyond the scope of this document, but the example given here should offer a starting point for that kind of experimentation.
 
 The example provided here covers the most common use-case, which is building a UAI image from the SquashFS image used on compute nodes on the host system to support application development, workload management and analytics workflows.
@@ -86,7 +86,7 @@ Some of the steps are specific to that activity, others would be common to or si
 
     2. Create the tarball.
 
-        **IMPORTANT:** 99-slingshot-network.conf is omitted from the tarball as that prevents the UAI from running sshd as the UAI user with the `su` command:
+        **IMPORTANT:** 99-slingshot-network.conf is omitted from the tarball as that prevents the UAI from running SSHD as the UAI user with the `su` command:
 
         ```bash
         ncn-w001# (cd `pwd`/mount; tar --xattrs --xattrs-include='*' --exclude="99-slingshot-network.conf" -cf "../$SESSION_ID.tar" .) > /dev/null
@@ -134,7 +134,7 @@ Some of the steps are specific to that activity, others would be common to or si
 5. Create and push the container image.
 
     Create a container image using podman or docker and push it to the site container registry. Any container-specific modifications may also be done here with a Dockerfile.
-    The ENTRYPOINT layer must be /usr/bin/uai-ssh.sh as that starts SSHD for the user in the UAI container started by UAS.
+    The `ENTRYPOINT` layer must be `/usr/bin/uai-ssh.sh` as that starts SSHD for the user in the UAI container started by UAS.
 
     ```bash
     ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest

@@ -1,6 +1,6 @@
 # Troubleshoot UAIs by Viewing Log Output
 
-Sometimes a UAI will come up and run but will not work correctly. It is possible to see errors reported by elements of the UAI entrypoint script using the `kubectl logs` command.
+Sometimes a UAI will come up and run but will not work correctly. It is possible to see errors reported by elements of the UAI `entrypoint` script using the `kubectl logs` command.
 
 ## Procedure
 
