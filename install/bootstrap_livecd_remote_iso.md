@@ -490,7 +490,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
       1. Link the generated `system_config.yaml` file into the `prep/` directory. This is needed for `pit-init` to find and resolve the file.
 
-         > **`NOTE`** This step is removed in CSM 1.3, this step is needed only for Fresh Installs where `system_config.yaml` is missing.
+         > **`NOTE`** This step is needed only for fresh installs where `system_config.yaml` is missing from the `prep/` directory.
 
          ```bash
          pit# cd ${PITDATA}/prep && ln ${SYSTEM_NAME}/system_config.yaml
