@@ -3,7 +3,6 @@
 Reinstall the Spire helm chart in the
 event that spire-postgres databases cannot be restored from a backup.
 
-
 ### Uninstall Spire
 
 1. Uninstall the Spire helm chart.
@@ -25,7 +24,6 @@ event that spire-postgres databases cannot be restored from a backup.
    ncn# for ncn in $(kubectl get nodes -o name | cut -d'/' -f2); do ssh "${ncn}" systemctl stop spire-agent; ssh "${ncn}" rm /root/spire/data/svid.key /root/spire/agent_svid.der /root/spire/bundle.der; done
    ```
 
-
 ### Re-install the Spire Helm Chart
 
 The CSM release tarball is required as it contains the Spire helm chart.
@@ -33,11 +31,11 @@ The CSM release tarball is required as it contains the Spire helm chart.
 1. Extract the current release tarball.
 
    ```bash
-   ## This example assumes the csm-1.0.0 release is currently running and the csm-1.0.0.tar.gz has been pulled down under /root
+   ## This example assumes the csm-1.2.0 release is currently running and the csm-1.2.0.tar.gz has been pulled down under /root
    ncn# cd /root
-   ncn# tar -xzf csm-1.0.0.tar.gz
-   ncn# rm csm-1.0.0.tar.gz
-   ncn# PATH_TO_RELEASE=/root/csm-1.0.0
+   ncn# tar -xzf csm-1.2.0.tar.gz
+   ncn# rm csm-1.2.0.tar.gz
+   ncn# PATH_TO_RELEASE=/root/csm-1.2.0
    ```
 
 2. Get the current cached customizations.
@@ -60,6 +58,7 @@ The CSM release tarball is required as it contains the Spire helm chart.
    ```
 
    Example spire.yaml after the command is run:
+
    ```text
    apiVersion: manifests/v1beta1
      metadata:
@@ -89,7 +88,7 @@ The CSM release tarball is required as it contains the Spire helm chart.
    ```
 
 7. Validate that the manifest.yaml file only contains chart information for Spire,
-and that the sources charts location points to the directory the helm chart was extracted from to prepend to /helm.
+   and that the sources charts location points to the directory the helm chart was extracted from to prepend to /helm.
 
 8. Redeploy the Spire chart.
 
@@ -107,6 +106,5 @@ and that the sources charts location points to the directory the helm chart was 
 
 10. Restart all compute nodes and User Access Nodes (UANs).
 
-   Compute nodes and UANs get their join token on boot from the Boot Script Service (BSS).
-   Their old SVID data is no longer valid and a reboot is required in order for them to re-join Spire.
-
+Compute nodes and UANs get their join token on boot from the Boot Script Service (BSS).
+Their old SVID data is no longer valid and a reboot is required in order for them to re-join Spire.
