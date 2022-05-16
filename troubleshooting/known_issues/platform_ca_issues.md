@@ -85,7 +85,7 @@ Max retries exceeded with url: /keycloak/realms/shasta/protocol/openid-connect/t
 Command:
 
 ```bash
-ncn# pip show ceritfy
+ncn# pip show certifi
 ```
 
 Example output:
