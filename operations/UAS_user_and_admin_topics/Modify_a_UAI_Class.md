@@ -31,7 +31,7 @@ cray uas admin config classes update --help
 
 1. Modify a UAI class.
 
-   The following example changes the comment on the UAI class with an ID of bb28a35a-6cbc-4c30-84b0-6050314af76b.
+   The following example changes the comment on the UAI class with an ID of `bb28a35a-6cbc-4c30-84b0-6050314af76b`.
 
    ```bash
    ncn-m001-pit#cray uas admin config classes update \

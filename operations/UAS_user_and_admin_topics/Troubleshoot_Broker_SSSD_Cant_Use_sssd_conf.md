@@ -76,7 +76,7 @@ then change the existing Cluster Role Binding to bind the new Cluster Role inste
 
    Assuming the system is configured as shown above, the following steps will
 
-   * Remove the existing incorrect ClusterRoleBinding so that it can be replaced later
+   * Remove the existing incorrect `ClusterRoleBinding` so that it can be replaced later
    * Create a new Pod Security Policy called `uas-default-psp`.
    * Create a Cluster Role called `uas-default-psp` that uses the new Pod Security Policy
    * Replace the Cluster Role Binding called `uas-default-psp` with a new one that binds the new Cluster Role to the `default` Service Account in the `uas` namespace

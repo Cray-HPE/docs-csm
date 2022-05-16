@@ -2,7 +2,7 @@
 
 When a Broker UAI terminates and restarts, the SSH key used to forward SSH sessions to End-User UAIs changes (this is a known problem) and subsequent Broker UAIs are unable to forward sessions to End-User UAIs.
 The symptom of this is that a user logging into a Broker UAI will receive a password prompt from the End-User UAI and be unable to log in even if providing the correct password.
-To fix this, remove the stale End-User UAIs and allow the Broker UAI to recreate them. The easy way to do this is to use the command specifying the uai-creation-class identifier from the Broker's UAI class.
+To fix this, remove the stale End-User UAIs and allow the Broker UAI to recreate them. The easy way to do this is to use the command specifying the `uai-creation-class` identifier from the Broker's UAI class.
 
 ```bash
 cray uas admin uais delete --class-id <creation-class-id>
@@ -30,4 +30,4 @@ After that, users should be able to log into the Broker UAI and be directed to a
 
 [Top: User Access Service (UAS)](index.md)
 
-[Next Topic: Troubleshoot UAI Stuck in "ContainerCreating"](Troubleshoot_UAI_Stuck_in_ContainerCreating.md)
+[Next Topic: Troubleshoot UAI Stuck in `ContainerCreating`](Troubleshoot_UAI_Stuck_in_ContainerCreating.md)

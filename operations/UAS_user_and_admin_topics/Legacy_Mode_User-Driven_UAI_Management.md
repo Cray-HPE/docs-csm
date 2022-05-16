@@ -12,7 +12,7 @@ In the simplest UAS configuration, there is some number of UAI images available 
 In this configuration, when a UAI is created, the user may specify the UAI image to use as an option when creating the UAI, or may allow a default UAI image, if one is assigned, to be used.
 Every volume defined at the time the UAI is created will be mounted unconditionally in every newly created UAI if this approach is used.
 This can lead to problems with conflicting volume mount points (see [Troubleshoot Duplicate Mount Paths in a UAI](Troubleshoot_Duplicate_Mount_Paths_in_a_UAI.md))
-and unresolvable volumes (see [Troubleshoot UAI Stuck in "ContainerCreating"](Troubleshoot_UAI_Stuck_in_ContainerCreating.md)) in some configurations of UAS.
+and unresolvable volumes (see [Troubleshoot UAI Stuck in `ContainerCreating`](Troubleshoot_UAI_Stuck_in_ContainerCreating.md)) in some configurations of UAS.
 Unless UAI classes are used to make UAIs, care must be taken to ensure all volumes have unique mount-path settings and are accessible in the `user` Kubernetes namespace.
 
 ## The Benefits of Using UAI Classes with Legacy Mode

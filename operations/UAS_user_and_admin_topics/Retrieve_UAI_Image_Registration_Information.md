@@ -1,6 +1,6 @@
 # Retrieve UAI Image Registration Information
 
-Use this procedure to obtain the default and imagename values for a registered UAI image. This procedure can also be used to confirm that a specific image ID is still registered with UAS.
+Use this procedure to obtain the `default` and `imagename` values for a registered UAI image. This procedure can also be used to confirm that a specific image ID is still registered with UAS.
 
 This procedure returns the same information as [List Registered UAI Images](List_Registered_UAI_Images.md), but only for one image.
 

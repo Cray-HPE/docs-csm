@@ -8,8 +8,8 @@ This section provides examples of some commands that can be used to troubleshoot
 packet_write_wait: Connection to 203.0.113.0 port 30841: Broken pipe
 ```
 
-If an error message related to broken pipes returns, enable keep-alives on the client side.
-The admin should update the /etc/ssh/sshd\_config and /etc/ssh/ssh\_config files to add the following:
+If an error message related to broken pipes returns, enable `keep-alives` on the client side.
+The admin should update the `/etc/ssh/sshd_config` and `/etc/ssh/ssh_config` files to add the following:
 
 ```bash
 TCPKeepAlive yes
@@ -117,8 +117,8 @@ If none of the nodes are found or if the nodes listed are marked as `NotReady`, 
 
 ## Troubleshoot `kubectl` Certificate Issues
 
-While `kubectl` is supported in a UAI, kubeconfig file to access a Kubernetes cluster is not provided.
-To use `kubectl` to interface with a Kubernetes cluster, the user must supply their own kubeconfig.
+While `kubectl` is supported in a UAI, `kubeconfig` file to access a Kubernetes cluster is not provided.
+To use `kubectl` to interface with a Kubernetes cluster, the user must supply their own `kubeconfig`.
 
 ```bash
 [user@uai-user-be3a6770-6876c88676-2p2lk ~]# kubectl get nodes
@@ -139,12 +139,12 @@ ncn-m001 Ready control-plane,master 16d v1.20.13
 ncn-m002 Ready control-plane,master 16d v1.20.13
 ```
 
-Users must specify `KUBECONFIG` with every `kubectl` command or specify the kubeconfig file location for the life of the UAI.
+Users must specify `KUBECONFIG` with every `kubectl` command or specify the `kubeconfig` file location for the life of the UAI.
 To do this, either set the `KUBECONFIG` environment variable or set the `--kubeconfig` flag.
 
 ## Troubleshoot X11 Issues
 
-The system may return the following error if the user attempts to use an application that requires an X window \(such as xeyes\):
+The system may return the following error if the user attempts to use an application that requires an X window \(such as `xeyes`\):
 
 ```bash
 # ssh user@203.0.113.0 -i ~/.ssh/id_rsa
@@ -183,7 +183,7 @@ Example output:
 203.0.113.0
 ```
 
-The warning stating "Xauthority does not exist" will disappear with subsequent logins.
+The warning stating `"Xauthority does not exist"` will disappear with subsequent logins.
 
 ## Troubleshoot SSH Host Key Issues
 
@@ -193,10 +193,10 @@ If strict host key checking enabled is enabled on the user's client, the below e
 WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED
 ```
 
-This can occur in a few circumstances, but is most likely to occur after the UAI container is restarted. If this occurs, remove the offending `ssh` hostkey from the local `known_hosts` file and try to connect again.
+This can occur in a few circumstances, but is most likely to occur after the UAI container is restarted. If this occurs, remove the offending `ssh` host key from the local `known_hosts` file and try to connect again.
 The error message from `ssh` will contain the correct path to the `known_hosts` file and the line number of the problematic key.
 
-## Delete UAS Objects with kubectl
+## Delete UAS Objects with `kubectl`
 
 If Kubernetes resources used to create a UAI are not cleaned up during the normal deletion process, resources can be deleted with the following commands.
 
