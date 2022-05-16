@@ -84,7 +84,7 @@ Error calling https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/o
 Command:
 
 ```bash
-pip show ceritfy
+ncn# pip show ceritfy
 ```
 
 Example Output:
