@@ -63,36 +63,6 @@ def sls_and_input_data_checks(
         fg="bright_white",
     )
 
-    bican = networks.get("BICAN")
-    if bican is not None:
-        click.secho(
-            "    ERROR: A BICAN network already exists in the SLS file being upgraded "
-            "and exists only in CSM 1.2 systems and later. This system has already been "
-            "upgraded to CSM 1.2 and the upgrader cannot be re-run.",
-            fg="red",
-        )
-        sys.exit(1)
-
-    cmn = networks.get("CMN")
-    if cmn is not None:
-        click.secho(
-            "    ERROR: A CMN network already exists in the SLS file being upgraded "
-            "and exists only in CSM 1.2 systems and later. This system has already been "
-            "upgraded to CSM 1.2 and the upgrader cannot be re-run.",
-            fg="red",
-        )
-        sys.exit(1)
-
-    chn = networks.get("CHN")
-    if chn is not None:
-        click.secho(
-            "    ERROR: A BICAN network already exists in the SLS file being upgraded "
-            "and exists only in CSM 1.2 systems and later. This system has already been "
-            "upgraded to CSM 1.2 and the upgrader cannot be re-run.",
-            fg="red",
-        )
-        sys.exit(1)
-
     can = networks.get("CAN")
     if can is not None:
         click.secho(
@@ -106,6 +76,21 @@ def sls_and_input_data_checks(
                 fg="bright_yellow",
             )
 
+    cmn = networks.get("CMN")
+    if cmn is not None:
+        click.secho(
+            "    INFO: A CMN network already exists in SLS.  This is unusual except where the "
+            "upgrade process has already run or on an existing CSM 1.2 system.",
+            fg="white",
+        )
+
+    chn = networks.get("CHN")
+    if chn is not None:
+        click.secho(
+            "    INFO: A CHN network already exists in SLS.  This is unusual except where the "
+            "upgrade process has already run or on an existing CSM 1.2 system.",
+            fg="white",
+        )
     if bican_name == "CHN":
         if chn_data[1] == ipaddress.IPv4Network("10.104.7.0/24"):
             click.secho(
