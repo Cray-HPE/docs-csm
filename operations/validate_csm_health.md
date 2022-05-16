@@ -80,109 +80,101 @@ There are multiple Goss test suites available that cover a variety of subsystems
 
 1. Specify the admin user password for the management switches in the system, which is required for the `ncn-healthcheck` test.
 
-   ```bash
-   ncn/pit# export SW_ADMIN_PASSWORD='changeme'
-   ```
+    ```bash
+    ncn/pit# export SW_ADMIN_PASSWORD='changeme'
+    ```
 
 1. Run the NCN health checks.
 
-   ```bash
-   ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck
-   ```
+    ```bash
+    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck
+    ```
 
 1. Run the Kubernetes checks.
 
-   ```bash
-   ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
-   ```
+    ```bash
+    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
+    ```
 
 1. Review results.
 
-   Review the output for `Result: FAIL` and follow the instructions provided to resolve any such test failures. With the exception of the [Known Test Issues](#autogoss-issues), all health checks are expected to pass.
+    Review the output for `Result: FAIL` and follow the instructions provided to resolve any such test failures. With the exception of the [Known Test Issues](#autogoss-issues), all health checks are expected to pass.
 
 <a name="autogoss-issues"></a>
 
 #### 1.1.1 Known Test Issues
 
 - It is possible that the first pass of running these tests may fail due to `cloud-init` not being completed on the storage nodes.
-  In this case please wait 5 minutes and re-run the tests.
+  In this case, please wait five minutes and re-run the tests.
 - For any failures related to SSL certificates, see the [SSL Certificate Validation Issues](../troubleshooting/known_issues/ssl_certificate_validation_issues.md) troubleshooting guide.
-- Kubernetes Query BSS `Cloud-init` for ca-certs
+- `Kubernetes Query BSS Cloud-init for ca-certs`
   - This test may fail immediately after platform install. It should pass after the TrustedCerts Operator has updated BSS
     (Global `cloud-init` meta) with CA certificates.
-- Kubernetes Velero No Failed Backups
-
+- `Kubernetes Velero No Failed Backups`
   - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately
     upon the deployment of a backup schedule (for example, vault). It may be necessary to delete backups from a Kubernetes node to
     clear this situation. See the output of the test for more details on how to cleanup backups that have failed due to a known
     interruption. For example:
+     1. Run the following to find the failed backup.
 
-    1. Run the following to find the failed backup.
+        ```bash
+        ncn/pit# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
+        ```
 
-       ```bash
-       ncn/pit# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
-       ```
+     1. Delete the backup, where `<backup>` is replaced with a backup returned in the previous step.
 
-    1. Delete the backup, where `<backup>` is replaced with a backup returned in the previous step.
+        ```bash
+        ncn# velero backup delete <backup> --confirm
+        ```
 
-       ```bash
-       ncn# velero backup delete <backup> --confirm
-       ```
-
-- Verify that `spire-agent` is enabled and running.
-
-  - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker nodes and master nodes), logging errors
-    (via `journalctl`) similar to "join token does not exist or has already been used" or the last logs containing multiple lines
+- `Verify spire-agent is enabled and running`
+  - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker and master nodes), logging errors
+    (via `journalctl`) similar to `join token does not exist or has already been used`, or the last log entries containing multiple lines
     of `systemd[1]: spire-agent.service: Start request repeated too quickly.`. Deleting the `request-ncn-join-token` daemonset pod
     running on the node may clear the issue. Even though the `spire-agent` `systemctl` service on the Kubernetes node should eventually
     restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can
     be run from any Kubernetes node in the cluster.
+     1. Define the following function
 
-    1. Define the following function
+        ```bash
+        ncn/pit# function renewncnjoin() {
+            for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do
+                if kubectl describe -n spire pods $pod | grep -q "Node:.*$1"; then
+                    echo "Restarting $pod running on $1"
+                    kubectl delete -n spire pod "$pod"
+                fi
+            done }
+        ```
 
-       ```bash
-       ncn/pit# function renewncnjoin() {
-           for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do
-               if kubectl describe -n spire pods $pod | grep -q "Node:.*$1"; then
-                   echo "Restarting $pod running on $1"
-                   kubectl delete -n spire pod "$pod"
-               fi
-           done }
-       ```
+     1. Run the function as follows (substituting the name of the impacted NCN):
 
-    1. Run the function as follows (substituting the name of the impacted NCN):
+        ```bash
+        ncn/pit# renewncnjoin ncn-xxxx
+        ```
 
-       ```bash
-       ncn/pit# renewncnjoin ncn-xxxx
-       ```
-
-  - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, delete
+  - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, then delete
     `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the
     `request-ncn-join-token` daemonset pod.
+- `cfs-state-reporter service ran successfully`
+  - If this test is failing, it could be due to SSL certificate issues on that NCN.
+     1. Run the following command on the node where the test is failing.
 
-  - `cfs-state-reporter service ran successfully`
+        ```bash
+        ncn# systemctl status cfs-state-reporter | grep HTTPSConnectionPool
+        ```
 
-    - If this test is failing, it could be due to SSL certificate issues on that NCN.
+     1. If the previous command gives any output, this indicates possible SSL certificate problems on that NCN.
 
-      1. Run the following command on the node where the test is failing.
+        - See the [SSL Certificate Validation Issues](../troubleshooting/known_issues/ssl_certificate_validation_issues.md) troubleshooting guide.
 
-         ```bash
-         ncn# systemctl status cfs-state-reporter | grep HTTPSConnectionPool
-         ```
+  - If this test is failing on a storage node, it could be an issue with the node's Spire token. The following procedure may resolve the problem:
+     1. Run the following script on `ncn-m002`:
 
-      1. If the previous command gives any output, this indicates possible SSL certificate problems on that NCN.
+        ```bash
+        ncn-m002# /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
+        ```
 
-         - See the [SSL Certificate Validation Issues](../troubleshooting/known_issues/ssl_certificate_validation_issues.md) troubleshooting guide.
-
-    - If this test is failing on a storage node, it could be an issue with the node's Spire token. The following procedure may resolve the problem:
-
-      1. Run the following script on `ncn-m002`:
-
-         ```bash
-         ncn-m002# /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
-         ```
-
-      1. Then re-run the check to see if the problem has been resolved.
+     1. Then re-run the check to see if the problem has been resolved.
 
 <a name="pet-optional-ncnhealthchecks-resources"></a>
 
@@ -201,7 +193,6 @@ ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
 #### 1.2.1 Known Issues
 
 - `pods_not_running`
-
   - If the output of `pods_not_running` indicates that there are pods in the `Evicted` state, it may be due to the root file system
     being filled up on the Kubernetes node in question. Kubernetes will begin evicting pods once the root file system space is at 85%
     full until it is back under 80%. This commonly happens on `ncn-m001`, because it is a location where install and documentation files
@@ -224,8 +215,8 @@ ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
     ```
 
   - The `cray-crus-` pod is expected to be in the `Init` state until Slurm and MUNGE
-    are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
-    If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
+are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
+If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
   - The `hmn-discovery` and `cray-dns-unbound-manager` cronjob pods may be in a `NotReady` state. This is expected as these pods are periodically started and transition to the completed state.
 
 <a name="check-of-system-management-monitoring-tools"></a>
@@ -365,27 +356,25 @@ BMC can be safely ignored or needs to be addressed before proceeding.
 - The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depending on the state of the system when the `hsm_discovery_verify.sh` script is run. If the system is currently going through the
   process of installation, then this is an expected mismatch as the [Prepare Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node
   may not have been completed yet.
+   > For more information refer to [Configure HPE Apollo 6500 XL645D Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
 
-  > For more information refer to [Configure HPE Apollo 6500 XL645D Gen10 Plus Compute Nodes](../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes) for additional required configuration for this type of BMC.
+   Example mismatch for the BMC of an HPE Apollo XL654D:
 
-  Example mismatch for the BMC of an HPE Apollo XL654D:
-
-  ```bash
-  ...
-    Nodes: FAIL
-      - x3000c0s30b1n0 (Compute, NID 5) - Not found in HSM Components.
-    NodeBMCs: FAIL
-      - x3000c0s19b1 - Not found in HSM Components; Not found in HSM Redfish Endpoints.
-  ...
-  ```
+   ```bash
+   ...
+     Nodes: FAIL
+       - x3000c0s30b1n0 (Compute, NID 5) - Not found in HSM Components.
+     NodeBMCs: FAIL
+       - x3000c0s19b1 - Not found in HSM Components; Not found in HSM Redfish Endpoints.
+   ...
+   ```
 
 - Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel node blades can be ignored. Gigabyte node blade CMCs not found in HSM is not normal and should be investigated.
   If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored. Otherwise, verify that the root service account is configured for the CMC and add it if needed by following
   the steps outlined in [Add Root Service Account for Gigabyte Controllers](./security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md).
+   > CMCs have component names (xnames) in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
 
-  > CMCs have component names (xnames) in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
-
-  Example mismatch for a CMC an Intel node blade:
+   Example mismatch for a CMC an Intel node blade:
 
 ```bash
 ...
@@ -397,10 +386,9 @@ BMC can be safely ignored or needs to be addressed before proceeding.
 - HPE PDUs are supported and should show up as being found in HSM. If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are
   required for the PDUs to be discovered. Refer to [HPE PDU Admin Procedures](hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on
   if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
+   > Cabinet PDU Controllers have component names (xnames) in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 
-  > Cabinet PDU Controllers have component names (xnames) in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
-
-  Example mismatch for HPE PDU:
+   Example mismatch for HPE PDU:
 
 ```bash
 ...
@@ -498,10 +486,10 @@ In this case, these errors can be ignored, or the pod with the same name as the 
 
 ## 4. NCN Gateway Health Checks
 
-The gateway tests check the health of the API Gateway on all of the relevant networks. On NCNs, the API gateway is accessible
+The gateway tests check the health of the API Gateway on all of the relevant networks.   On NCNs, the API gateway is accessible
 on the NMNLB network, the CMN network, and either the CAN or CHN user network depending on the configuration of the system.
 The gateway tests will check that the gateway is accessible on all networks it should be accessible and NOT accessible on all
-networks it should NOT be accessible. It will also check several service endpoints to verify that they return the proper response
+networks it should NOT be accessible.  It will also check several service endpoints to verify that they return the proper response
 on each accessible network.
 
 ### 4.1 Gateway Test Execution
@@ -535,21 +523,21 @@ the Cray OS (COS) product, or similar, be used.
 ### NOTES
 
 - This test is **very important to run** during the CSM install prior to redeploying the PIT node
-  because it validates all of the services required for that operation.
+because it validates all of the services required for that operation.
 - The CSM Barebones image included with the release will not successfully complete
-  beyond the `dracut` stage of the boot process. However, if the `dracut` stage is reached, the
-  boot can be considered successful and shows that the necessary CSM services needed to
-  boot a node are up and available.
+beyond the `dracut` stage of the boot process. However, if the `dracut` stage is reached, the
+boot can be considered successful and shows that the necessary CSM services needed to
+boot a node are up and available.
   - This inability to boot the Barebones image fully will be resolved in future releases of the
-    CSM product.
+CSM product.
 - In addition to the CSM Barebones image, the release also includes an IMS Recipe that
-  can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires
-  RPMs that are not installed with the CSM product. The CSM Barebones recipe can be built after the
-  Cray OS (COS) product stream is also installed on to the system.
+can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires
+RPMs that are not installed with the CSM product. The CSM Barebones recipe can be built after the
+Cray OS (COS) product stream is also installed on to the system.
   - In future releases of the CSM product, work will be undertaken to resolve these dependency issues.
 - This procedure can be followed on any NCN or the PIT node.
 - This script uses the Kubernetes API Gateway to access CSM services. This gateway must be properly
-  configured to allow an access token to be generated by the script.
+configured to allow an access token to be generated by the script.
 - This script is installed as part of the `cray-cmstools-crayctldeploy` RPM.
 - For additional information on the script and for troubleshooting help look at the document
   [Barebones Image Boot](../troubleshooting/cms_barebones_image_boot.md).
@@ -615,8 +603,9 @@ The following procedures run on separate nodes of the system.
 This section can be run on any NCN or the PIT node.
 
 1. Basic UAS installation is validated using the following:
+   1.
 
-   1. ```bash
+      ```bash
       ncn# cray uas mgr-info list
       ```
 
@@ -628,8 +617,9 @@ This section can be run on any NCN or the PIT node.
       ```
 
       In this example output, it shows that UAS is installed and running the `1.11.5` version.
+   1.
 
-   1. ```bash
+      ```bash
       ncn# cray uas list
       ```
 
@@ -639,8 +629,7 @@ This section can be run on any NCN or the PIT node.
       results = []
       ```
 
-      This example output shows that there are no currently running UAIs. It is possible, if someone else has been using the UAS, that there could be UAIs in the list. That is acceptable too from a validation standpoint.
-
+     This example output shows that there are no currently running UAIs. It is possible, if someone else has been using the UAS, that there could be UAIs in the list. That is acceptable too from a validation standpoint.
 1. Verify that the pre-made UAI images are registered with UAS
 
    ```bash
@@ -662,13 +651,13 @@ This section can be run on any NCN or the PIT node.
 
 ### 6.2 Validate UAI Creation
 
-> **`IMPORTANT:`** If you are upgrading CSM and your site does not use UAIs, skip UAS and UAI validation.
-> If you do use UAIs, there are products that configure UAS like Cray Analytics and Cray Programming
-> Environment. These must be working correctly with UAIs and should be validated and corrected (the
-> procedures for this are beyond the scope of this document) prior to validating UAS and UAI. Failures
-> in UAI creation that result from incorrect or incomplete installation of these products will generally
-> take the form of UAIs stuck in 'waiting' state trying to set up volume mounts. See the
-> [UAI Troubleshooting](#uas-uai-validate-debug) section for more information.
+   > **`IMPORTANT:`** If you are upgrading CSM and your site does not use UAIs, skip UAS and UAI validation.
+   > If you do use UAIs, there are products that configure UAS like Cray Analytics and Cray Programming
+   > Environment. These must be working correctly with UAIs and should be validated and corrected (the
+   > procedures for this are beyond the scope of this document) prior to validating UAS and UAI. Failures
+   > in UAI creation that result from incorrect or incomplete installation of these products will generally
+   > take the form of UAIs stuck in 'waiting' state trying to set up volume mounts. See the
+   > [UAI Troubleshooting](#uas-uai-validate-debug) section for more information.
 
 This procedure must run on a master or worker node (**not the PIT node and not `ncn-w001`**) on the system.
 
@@ -723,7 +712,6 @@ This procedure must run on a master or worker node (**not the PIT node and not `
    ```
 
    If the `uai_status` field is `Running: Ready`, proceed to the next step. Otherwise, wait and repeat this command until that is the case. It normally should not take more than a minute or two.
-
 1. The UAI is ready for use. Log into it with the command in the `uai_connect_string` field in the previous command output:
 
    ```bash
@@ -777,7 +765,7 @@ If the commands ran with similar results, then the basic functionality of the UA
 Like the NCN gateway health check, the gateway tests check the health of the API Gateway on all of the relevant networks.
 On UAIs, the API gateway should only be accessible on the user network (either CAN or CHN depending on the configuration of the system).
 The gateway tests will check that the gateway is accessible on all networks it should be accessible and NOT accessible on all
-networks it should NOT be accessible. It will also check several service endpoints to verify that they return the proper response
+networks it should NOT be accessible.  It will also check several service endpoints to verify that they return the proper response
 on each accessible network.
 
 #### 6.3.1 Gateway Test Execution
