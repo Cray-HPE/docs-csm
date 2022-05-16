@@ -20,6 +20,7 @@ NCNs by referring to the [`HPE Cray EX System Software Getting Started Guide (S-
 ## Procedure: Perform NCN Personalization
 
 <a name="ncn_personalization_determine_existence"></a>
+
 ### Determine if NCN Personalization CFS Configuration Exists
 
 If upgrading a product to a new version, an NCN personalization configuration in
@@ -39,6 +40,7 @@ not exist, the file will be created empty and the command will respond with an
 error. This error can be ignored.
 
 <a name="ncn_personalization_add_layer"></a>
+
 ### Add Layer(s) to the CFS Configuration
 
 CFS executes configuration layers in order. Refer to the [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.06`](http://www.hpe.com/support/ex-gsg-042120221040) to determine if the
@@ -54,7 +56,7 @@ configuration layer requires special placement in the layer list.
      configuring the NCNs. Use the [sample file with a single layer](../configuration_management/Configuration_Layers.md#configuration_layer_example_configuration_single)
      as a template.
    * If a CFS configuration exists with one or more layers, add (or replace)
-     the corresponding layer entry(ies) with the configuration layer
+     the corresponding layer entry/entries with the configuration layer
      information gathered for this specific product. For example:
 
         ```bash
@@ -63,7 +65,7 @@ configuration layer requires special placement in the layer list.
 
         Example configuration:
 
-        ```
+        ```json
         {
           "layers": [
             # ...
@@ -79,6 +81,7 @@ configuration layer requires special placement in the layer list.
         ```
 
 <a name="ncn_personalization_update_cfs_configuration"></a>
+
 ### Create/Update the NCN Personalization CFS Configuration Layer
 
 1. Upload the configuration file to CFS to update or create the
@@ -90,7 +93,7 @@ configuration layer requires special placement in the layer list.
 
    Example output:
 
-   ```
+   ```json
    {
       "lastUpdated": "2021-07-28T03:26:01Z",
       "layers": [
@@ -101,6 +104,7 @@ configuration layer requires special placement in the layer list.
    ```
 
 <a name="ncn_personalization_set_component_config"></a>
+
 ### Set the Desired Configuration on NCNs
 
 1. Update the desired configuration for all NCNs.
@@ -111,6 +115,7 @@ configuration layer requires special placement in the layer list.
        cray cfs components update --desired-config ncn-personalization --enabled true --format json $xname
    done
    ```
+
    After this command is issued, the CFS Batcher service will dispatch a CFS
    session to configure the NCNs. Since the NCN is now managed by CFS by setting
    a desired configuration, the same will happen every time the NCN boots.
@@ -132,7 +137,7 @@ configuration layer requires special placement in the layer list.
 
    Example output:
 
-   ```
+   ```text
    x3000c0s17b0n0 status=configured
    x3000c0s19b0n0 status=pending
    x3000c0s21b0n0 status=configured
@@ -149,6 +154,7 @@ configuration layer requires special placement in the layer list.
    CFS.
 
 <a name="rerun_ncn_personalization"></a>
+
 ## Procedure: Re-Run NCN Personalization
 
 If no changes have been made to the configuration layers (such as a new layer,
