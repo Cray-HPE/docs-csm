@@ -117,17 +117,17 @@ There are multiple Goss test suites available that cover a variety of subsystems
     clear this situation. See the output of the test for more details on how to cleanup backups that have failed due to a known
     interruption. For example:
 
-    1.  Run the following to find the failed backup.
+    1. Run the following to find the failed backup.
 
-        ```bash
-        ncn/pit# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
-        ```
+       ```bash
+       ncn/pit# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
+       ```
 
-    1.  Delete the backup, where `<backup>` is replaced with a backup returned in the previous step.
+    1. Delete the backup, where `<backup>` is replaced with a backup returned in the previous step.
 
-        ```bash
-        ncn# velero backup delete <backup> --confirm
-        ```
+       ```bash
+       ncn# velero backup delete <backup> --confirm
+       ```
 
 - Verify that `spire-agent` is enabled and running.
 
@@ -138,48 +138,51 @@ There are multiple Goss test suites available that cover a variety of subsystems
     restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can
     be run from any Kubernetes node in the cluster.
 
-    1.  Define the following function
+    1. Define the following function
 
-        ```bash
-        ncn/pit# function renewncnjoin() {
-            for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do
-                if kubectl describe -n spire pods $pod | grep -q "Node:.*$1"; then
-                    echo "Restarting $pod running on $1"
-                    kubectl delete -n spire pod "$pod"
-                fi
-            done }
-        ```
+       ```bash
+       ncn/pit# function renewncnjoin() {
+           for pod in $(kubectl get pods -n spire |grep request-ncn-join-token | awk '{print $1}'); do
+               if kubectl describe -n spire pods $pod | grep -q "Node:.*$1"; then
+                   echo "Restarting $pod running on $1"
+                   kubectl delete -n spire pod "$pod"
+               fi
+           done }
+       ```
 
-    1.  Run the function as follows (substituting the name of the impacted NCN):
+    1. Run the function as follows (substituting the name of the impacted NCN):
 
-        ```bash
-        ncn/pit# renewncnjoin ncn-xxxx
-        ```
+       ```bash
+       ncn/pit# renewncnjoin ncn-xxxx
+       ```
 
   - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, delete
     `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the
     `request-ncn-join-token` daemonset pod.
 
   - `cfs-state-reporter service ran successfully`
+
     - If this test is failing, it could be due to SSL certificate issues on that NCN.
-       1. Run the following command on the node where the test is failing.
 
-          ```bash
-          ncn# systemctl status cfs-state-reporter | grep HTTPSConnectionPool
-          ```
+      1. Run the following command on the node where the test is failing.
 
-       1. If the previous command gives any output, this indicates possible SSL certificate problems on that NCN.
+         ```bash
+         ncn# systemctl status cfs-state-reporter | grep HTTPSConnectionPool
+         ```
 
-          - See the [SSL Certificate Validation Issues](../troubleshooting/known_issues/ssl_certificate_validation_issues.md) troubleshooting guide.
+      1. If the previous command gives any output, this indicates possible SSL certificate problems on that NCN.
+
+         - See the [SSL Certificate Validation Issues](../troubleshooting/known_issues/ssl_certificate_validation_issues.md) troubleshooting guide.
 
     - If this test is failing on a storage node, it could be an issue with the node's Spire token. The following procedure may resolve the problem:
-      1.  Run the following script on `ncn-m002`:
 
-          ```bash
-          ncn-m002# /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
-          ```
+      1. Run the following script on `ncn-m002`:
 
-      1.  Then re-run the check to see if the problem has been resolved.
+         ```bash
+         ncn-m002# /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
+         ```
+
+      1. Then re-run the check to see if the problem has been resolved.
 
 <a name="pet-optional-ncnhealthchecks-resources"></a>
 
