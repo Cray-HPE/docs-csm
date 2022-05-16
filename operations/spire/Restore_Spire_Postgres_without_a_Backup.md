@@ -3,7 +3,7 @@
 Reinstall the Spire helm chart in the
 event that spire-postgres databases cannot be restored from a backup.
 
-### Uninstall Spire
+## Uninstall Spire
 
 1. Uninstall the Spire helm chart.
 
@@ -24,7 +24,7 @@ event that spire-postgres databases cannot be restored from a backup.
    ncn# for ncn in $(kubectl get nodes -o name | cut -d'/' -f2); do ssh "${ncn}" systemctl stop spire-agent; ssh "${ncn}" rm /root/spire/data/svid.key /root/spire/agent_svid.der /root/spire/bundle.der; done
    ```
 
-### Re-install the Spire Helm Chart
+## Re-install the Spire Helm Chart
 
 The CSM release tarball is required as it contains the Spire helm chart.
 
