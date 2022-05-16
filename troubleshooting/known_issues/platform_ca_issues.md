@@ -29,7 +29,7 @@ Command:
 goss -g /opt/cray/tests/install/ncn/tests/goss-platform-ca-certs-match-cloud-init.yaml v
 ```
 
-Example: Output:
+Example output:
 
 ```text
 Failures/Skipped:
