@@ -62,7 +62,7 @@ verify failed (_ssl.c:852)'),))
 ```
 
 ```text
-Error calling https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token: HTTPSConnectionPool(host='api-gw-service-nmn.local', port=443): 
+Error calling https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token: HTTPSConnectionPool(host='api-gw-service-nmn.local', port=443):
 Max retries exceeded with url: /keycloak/realms/shasta/protocol/openid-connect/token (Caused by SSLError(SSLError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:852)'),))
 ```
 
@@ -108,6 +108,17 @@ Requires:
 Required-by: kubernetes, requests
 ```
 
+If certifi is installed in /usr/lib/python3.6/site-packages, then reinstall the
+certifi RPM that ships with SLES. If this is not possible, run the following
+commands to replace the ca-bundle that certifi uses with a link to the system's
+ca-bundle.
+
+```bash
+ncn# CERTIFIDIR="$(pip show certifi | grep Location | awk '{print $2}')/certifi"
+ncn# mv "$CERTIFIDIR"/cacert.pem "$CERTIFIDIR"/cacert.pem.orig
+ncn# ln -s /var/lib/ca-certificates/ca-bundle.pem "$CERTIFIDIR"/cacert.pem
+```
+
 ## SSL Validation Only Fails with Podman and/or Pulling Down Kubernetes Containers
 
 If the platform CA was not available in the system's CA certificate bundle when
@@ -129,4 +140,41 @@ Restart the `containerd` service.
 
 ```console
 ncn# systemctl restart containerd
+```
+
+## `update-ca-certificates` fails to add `platform-ca` to `ca-bundle`
+
+update-ca-certificates can occasionally fail to add the platform-ca-certs.crt
+file to the system's ca-bundle.pem. This can cause the same error message as the
+previous issues. If the previous checks do not show any issues, then try the
+solution outlined below.
+
+### Example Error Messages from `platform-ca` missing `ca-bundle`
+
+```text
+(Caused by SSLError(SSLError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:852)'),))
+```
+
+```text
+curl: (60) SSL certificate problem: self signed certificate in certificate chain
+More details here: https://curl.haxx.se/docs/sslcerts.html
+
+curl failed to verify the legitimacy of the server and therefore could not
+establish a secure connection to it. To learn more about this situation and
+how to fix it, please visit the web page mentioned above.
+```
+
+### Resolution of `platform-ca` missing from `ca-bundle`
+
+Run the following commands on the affected node to regenerate the ca-bundle.pem file with the platform-ca-certs.crt file included.
+
+```bash
+ncn# rm -v /var/lib/ca-certificates/ca-bundle.pem
+ncn# update-ca-certificates
+```
+
+If these issues are suspected to have caused problems with cfs-state-reporter, then restart the cfs-state-reporter service:
+
+```bash
+ncn# systemctl restart cfs-state-reporter
 ```
