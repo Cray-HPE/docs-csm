@@ -167,5 +167,5 @@ If you are having problems with cfs-state-reporter then you should also restart
 the cfs-state-reporter service:
 
 ```bash
-systemctl restart cfs-state-reporter
+ncn# systemctl restart cfs-state-reporter
 ```
