@@ -109,6 +109,7 @@ There are multiple Goss test suites available that cover a variety of subsystems
 - Kubernetes Query BSS `Cloud-init` for ca-certs
   - This test may fail immediately after platform install. It should pass after the TrustedCerts Operator has updated BSS
     (Global `cloud-init` meta) with CA certificates.
+- If you experience any SSL certificate failures, check the [Platform CA Issues](../troubleshooting/known_issues/platform_ca_issues.md) troubleshooting guide.
 - Kubernetes Velero No Failed Backups
   - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately
     upon the deployment of a backup schedule (for example, vault). It may be necessary to delete backups from a Kubernetes node to
