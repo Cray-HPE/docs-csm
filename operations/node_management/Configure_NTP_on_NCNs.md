@@ -68,14 +68,14 @@ The following steps are structured to be executed on one node at a time. However
 
     ```bash
     ncn-m001# for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do 
-    ssh $i "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"; done
+                  ssh $i "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"; done
     ```
 
 <a name="fix-broken-configs"></a>
 
-## Fix Broken Configuration
+## Fix broken configuration
 
-1. Set a token as described in [Identify Nodes and Update Metadata](Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md)
+1. Set a token as described in [Identify Nodes and Update Metadata](Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md).
 
 1. On each affected NCN, run:
 
