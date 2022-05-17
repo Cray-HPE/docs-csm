@@ -12,7 +12,7 @@ ncn-w001# tcpdump -envli bond0 port 67 or 68
 
 Look for the source IP address of the DHCP Reply/Offer. The following is an example of working offer:
 
-```
+```text
 10.252.1.9.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 309, hops 1, xid 0x98b0982e, Flags [Broadcast]
       Administratorsr-IP 10.252.1.17
       Server-IP 10.92.100.60

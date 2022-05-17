@@ -4,7 +4,7 @@ The intent here is to showcase an inter-switch-link (ISL) link failover scenario
 
 The following image is a visualization of disconnected ISL link:
 
-![](../../../../img/network/management_network/vsx_isl_ha.png)
+![Disconnected ISL link](../../../../img/network/management_network/vsx_isl_ha.png)
 
 The following things are expected to be seen in this scenario:
 

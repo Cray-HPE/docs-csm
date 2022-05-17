@@ -6,13 +6,13 @@ A domain name is a name to identify the person, group, or organization that cont
 
 Create a domain name:
 
-```
+```text
 switch(config)# domain-name NAME
 ```
 
 Show commands to validate functionality:
 
-```
+```text
 switch# show domain-name
 ```
 
