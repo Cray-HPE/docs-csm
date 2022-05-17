@@ -26,35 +26,28 @@ event that spire-postgres databases cannot be restored from a backup.
 
 ## Re-install the Spire Helm Chart
 
-The CSM release tarball is required as it contains the Spire helm chart.
-
-1. Extract the current release tarball.
-
-   ```bash
-   ## This example assumes the csm-1.3.0 release is currently running and the csm-1.3.0.tar.gz has been pulled down under /root
-   ncn# cd /root
-   ncn# tar -xzf csm-1.3.0.tar.gz
-   ncn# rm csm-1.3.0.tar.gz
-   ncn# PATH_TO_RELEASE=/root/csm-1.3.0
-   ```
-
-2. Get the current cached customizations.
+1. Get the current cached customizations.
 
    ```bash
    ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
    ```
 
-3. Get the current cached sysmgmt manifest.
+1. Get the current cached sysmgmt manifest.
 
    ```bash
    ncn# kubectl get cm -n loftsman loftsman-sysmgmt  -o jsonpath='{.data.manifest\.yaml}' > spire.yaml
 
    ```
 
-4. Run the following command to remove non-spire charts from the spire.yaml file. This will also change the metadata.name so that it doesn't overwrite the sysmgmt.yaml file that is stored in the loftsman namespace.
+1. Run the following command to remove non-spire charts from the spire.yaml file. This will also change the metadata.name so that it doesn't overwrite the sysmgmt.yaml file that is stored in the loftsman namespace.
 
    ```bash
-   for i in $(yq r spire.yaml 'spec.charts[*].name' | grep -Ev '^spire$'); do yq d -i spire.yaml  'spec.charts(name=='"$i"')'; done; yq w -i spire.yaml metadata.name spire
+   for i in $(yq r spire.yaml 'spec.charts[*].name' | grep -Ev '^spire$'); do yq d -i spire.yaml  'spec.charts(name=='"$i"')'; done
+   yq w -i spire.yaml metadata.name spire
+   yq d -i spire.yaml spec.sources
+   yq w -i spire.yaml spec.sources.charts[0].location 'https://packages.local/repository/charts'
+   yq w -i spire.yaml spec.sources.charts[0].name csm-algol60
+   yq w -i spire.yaml spec.sources.charts[0].type repo
    ```
 
    Example spire.yaml after the command is run:
@@ -72,31 +65,29 @@ The CSM release tarball is required as it contains the Spire helm chart.
              server:
                fqdn: spire.local
              trustDomain: shasta
-           version: 0.11.5
+           version: 2.4.0
+       charts:
+         - location: https://packages.local/repository/charts
+           name: csm-algol60
+           type: repo
    ```
 
-5. Generate the manifest that will be used to redeploy the chart with the modified resources.
+1. Generate the manifest that will be used to redeploy the chart with the modified resources.
 
    ```bash
    ncn# manifestgen -c customizations.yaml -i spire.yaml -o manifest.yaml
    ```
 
-6. Update the helm chart path in the manifest.yaml file.
+1. Validate that the manifest.yaml file only contains chart information for Spire,
+   and that the sources charts location points to `https://packages.local/repository/charts`
 
-   ```bash
-   ncn# sed -i "s|./helm|${PATH_TO_RELEASE}/helm|" manifest.yaml
-   ```
-
-7. Validate that the manifest.yaml file only contains chart information for Spire,
-   and that the sources charts location points to the directory the helm chart was extracted from to prepend to /helm.
-
-8. Redeploy the Spire chart.
+1. Redeploy the Spire chart.
 
    ```bash
    ncn# loftsman ship --manifest-path ${PWD}/manifest.yaml
    ```
 
-9. Verify that all Spire pods have started.
+1. Verify that all Spire pods have started.
 
    This step may take a few minutes due to a number of pods requiring other pods to be up.
 
@@ -104,7 +95,7 @@ The CSM release tarball is required as it contains the Spire helm chart.
    ncn# kubectl get pods -n spire
    ```
 
-10. Restart all compute nodes and User Access Nodes (UANs).
+1. Restart all compute nodes and User Access Nodes (UANs).
 
 Compute nodes and UANs get their join token on boot from the Boot Script Service (BSS).
 Their old SVID data is no longer valid and a reboot is required in order for them to re-join Spire.
