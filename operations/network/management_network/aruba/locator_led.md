@@ -18,7 +18,7 @@ switch# show environment led
 
 ## Example Output
 
-```
+```text
 switch# show environment led
 Name           State     Status
 -----------------------------------
