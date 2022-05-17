@@ -1,12 +1,8 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
-
-[Next Topic: Troubleshoot Broker UAI SSSD Cannot Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
-
-## Troubleshoot UAS / CLI Authentication Issues
+# Troubleshoot UAS / CLI Authentication Issues
 
 Several troubleshooting steps related to authentication in a UAI.
 
-### Internal Server Error
+## Internal Server Error
 
 An error was encountered while accessing Keycloak because of an invalid token.
 
@@ -17,7 +13,7 @@ Try "cray uas create --help" for help.
 Error: Internal Server Error: An error was encountered while accessing Keycloak
 ```
 
-The uas-mgr logs show:
+The `uas-mgr` logs show:
 
 ```bash
 2020-03-06 18:52:07,642 - uas_auth - ERROR - <class 'requests.exceptions.HTTPError'> HTTPError('401 Client Error: Unauthorized for url: https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/userinfo')
@@ -34,9 +30,10 @@ This is caused by the authentication token being invalid. This can happen for ma
 
 To resolve this issue, run `cray auth login` to refresh the access token.
 
-**Authorization Is Local to a Host:** whenever you are using the CLI (`cray` command) on a host (e.g. a workstation or NCN) where it has not been used before, it is necessary to authenticate on that host using `cray auth login`. There is no mechanism to distribute CLI authorization amongst hosts.
+**Authorization is Local to a Host:** whenever you are using the CLI (`cray` command) on a host (e.g. a workstation or NCN) where it has not been used before, it is necessary to authenticate on that host using `cray auth login`.
+There is no mechanism to distribute CLI authorization amongst hosts.
 
-### Invalid Token
+## Invalid Token
 
 ```bash
 # cray uas create --publickey ~/.ssh/id_rsa.pub
@@ -46,7 +43,7 @@ Try "cray uas create --help" for help.
 Error: Bad Request: Token not valid for UAS. Attributes missing: ['name', 'uidNumber', 'preferred_username', 'gidNumber', 'loginShell', 'homeDirectory']
 ```
 
-To resolve this issue, make sure the `cray` command is configured to use one of the following URLs for an API gateway \(excluding the /keycloak/realms/shastaendpoint\).
+To resolve this issue, make sure the `cray` command is configured to use one of the following URLs for an API gateway \(excluding the `/keycloak/realms/shastaendpoint`\).
 
 ```bash
 # kubectl exec -c api-gateway api-gateway-544d5c676f-682m2 -- curl -s http://localhost:8001/consumers/remote-admin/jwt | python -mjson.tool | grep ""key""
@@ -67,7 +64,7 @@ Success!
 Initialization complete.
 ```
 
-### Invalid Credentials
+## Invalid Credentials
 
 ```bash
 # cray auth login --username <user> --password <wrongpassword>
@@ -79,11 +76,10 @@ Error: Invalid Credentials
 
 To resolve this issue:
 
-- Log in to Keycloak and verify the user exists.
-- Make sure the username and password are correct.
+* Log in to Keycloak and verify the user exists.
+* Make sure the username and password are correct.
 
-
-### `cray uas describe <user>` Does Not Work
+## `cray uas describe <user>` Does Not Work
 
 The `cray uas describe <user>` is no longer a valid command.
 
@@ -103,7 +99,7 @@ Use `cray uas list` instead.
 
 Example output:
 
-```
+```bash
 [[results]]
 username = ""
 uai_host = ""
@@ -114,4 +110,6 @@ uai_age = "11m"
 uai_name = ""
 ```
 
-[Next Topic: Troubleshoot Broker UAI SSSD Cannot Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
+[Top: User Access Service (UAS)](index.md)
+
+[Next Topic: Troubleshoot Broker UAI SSSD Cannot Use `/etc/sssd/sssd.conf`](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)

@@ -329,15 +329,15 @@ def main(
     #   NEVER REMOVE THE HSN!!!
     if retain_unused_user_network:
         if bican_user_network_name == "CAN":
-            click.secho("Removing unused CHN as requested", fg="bright_white")
-            networks.pop("CHN")
+            click.secho("Removing unused CHN (if it exists) as requested", fg="bright_white")
+            networks.pop("CHN", None)
         if bican_user_network_name == "CHN":
-            click.secho("Removing unused CAN as requested", fg="bright_white")
-            networks.pop("CAN")
+            click.secho("Removing unused CAN (if it exists) as requested", fg="bright_white")
+            networks.pop("CAN", None)
         if bican_user_network_name == "HSN":
-            click.secho("Removing unused CAN as requested", fg="bright_white")
-            networks.pop("CAN")
-            networks.pop("CHN")
+            click.secho("Removing unused CAN and CHN (if they exist) as requested", fg="bright_white")
+            networks.pop("CAN", None)
+            networks.pop("CHN", None)
 
     click.secho(
         f"Writing CSM 1.2 upgraded and schema validated SLS file to {sls_output_file.name}",

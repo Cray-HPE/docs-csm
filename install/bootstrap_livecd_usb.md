@@ -100,7 +100,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
    Git Version    : b3ed3046a460d804eb545d21a362b3a5c7d517a3
    Platform       : linux/amd64
    App. Version   : 1.5.18
-    ```
+   ```
 
 1. Configure `zypper` with the `embedded` repository from the CSM release.
 
@@ -252,8 +252,8 @@ The `SHASTA-CFG` structure and other configuration files will be prepared, then 
 This payload will be used for the rest of the CSM installation on the USB device.
 
 1. [Generate Installation Files](#generate-installation-files)
-1. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
-1. [Prepare `Site Init`](#prepare-site-init)
+2. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
+3. [Prepare `Site Init`](#prepare-site-init)
 
 <a name="generate-installation-files"></a>
 
@@ -322,7 +322,7 @@ information for this system has not yet been prepared.
       system_config.yaml
       ```
 
-   1. Generate the system configuration.
+   2. Generate the system configuration.
 
       > **Note:** Ensure that you specify a reachable NTP pool or server using the `ntp-pools` or `ntp-servers` fields, respectively. Adding an unreachable server can
       > cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
@@ -357,7 +357,7 @@ information for this system has not yet been prepared.
       >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >    ```
 
-   1. Skip the next step and continue to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
+   3. Skip the next step and continue to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
 
 <a name="first-timeinitial-installs-bare-metal"></a>
 
@@ -442,6 +442,14 @@ information for this system has not yet been prepared.
       >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >    ```
 
+   1. Link the generated `system_config.yaml` file into the `prep/` directory. This is needed for `pit-init` to find and resolve the file.
+
+      > **`NOTE`** This step is needed only for fresh installs where `system_config.yaml` is missing from the `prep/` directory.
+
+      ```bash
+      pit# cd ${PITDATA}/prep && ln ${SYSTEM_NAME}/system_config.yaml
+      ```
+
    1. Continue to the next step to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
 
 <a name="verify-csi-versions-match"></a>
@@ -481,7 +489,7 @@ information for this system has not yet been prepared.
    `site-init` directory recommend persisting `site-init` files in a Git
    repository.
 
-1. Prepare the `site-init` directory.
+2. Prepare the `site-init` directory.
 
    Perform the [Prepare `Site Init`](prepare_site_init.md) procedures.
 

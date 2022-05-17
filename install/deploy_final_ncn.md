@@ -12,7 +12,7 @@ procedure entails deactivating the LiveCD, meaning the LiveCD and all of its res
 3. [Hand-off](#hand-off)
 4. [Reboot](#reboot)
 5. [Enable NCN disk wiping safeguard](#enable-ncn-disk-wiping-safeguard)
-6. [Remove the default NTP pool](#remove-the-default-ntp-pool)
+6. [Clean up chrony configurations](#clean-up-chrony-configurations)
 7. [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
 8. [Next topic](#next-topic)
 
@@ -437,8 +437,8 @@ The steps in this section load hand-off data before a later procedure reboots th
 1. Verify that there **is not** a metal bootstrap IP address.
 
     ```bash
-     ncn-m001# ip a show bond0
-     ```
+    ncn-m001# ip a show bond0
+    ```
 
 1. Verify zypper repositories are empty and all remote SUSE repositories are disabled.
 
@@ -511,12 +511,19 @@ it is used for Cray installation and bootstrap.
 
 <a name="remove-the-default-ntp-pool"></a>
 
-## 6. Remove the default NTP pool
+## 6. Clean up chrony configurations
 
-Run the following command on `ncn-m001` to remove the default pool, which can cause contention issues with NTP.
+Set a token as described in [Identify Nodes and Update Metadata](../operations/node_management/Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md), then run the following command.
 
-```bash
-ncn-m001# sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf
+```ShellSession
+ncn-m001# /srv/cray/scripts/common/chrony/csm_ntp.py
+```
+
+Successful output is:
+
+```text
+Chrony configuration created
+Restarted chronyd
 ```
 
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
