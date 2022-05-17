@@ -14,7 +14,7 @@ no lldp transmit
 no lldp receive
 ```
 
-Disable the LLDP holdtime multiplier value in CONFIGURATION mode:
+Disable the LLDP `holdtime-multiplier` value in CONFIGURATION mode:
 
 ```text
 no lldp holdtime-multiplier

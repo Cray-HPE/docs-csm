@@ -33,7 +33,8 @@ switch(config-if)# vlan trunk allowed <VLAN>
 
 Configure VLAN as Voice:
 
-> **NOTE:** To give a specific VLAN a voice designation and adding the proper hooks, you need to add voice command in the vlan context. This configuration is the same for all CX-series switches.
+> **NOTE:** To give a specific VLAN a voice designation and adding the proper hooks, you need to add the `voice` command in the VLAN context.
+> This configuration is the same for all CX-series switches.
 
 ```text
 switch(config)# vlan <VLAN>
