@@ -6,21 +6,21 @@ Ethernet port interfaces are enabled by default.
 
 Enable the interface:
 
-```
+```text
 switch(config)# interface ethernet 1/1/1
 switch(conf-if-eth1/1/1)# no shutdown
 ```
 
 Disable the interface:
 
-```
+```text
 switch(config)# interface ethernet 1/1/1
 switch(conf-if-eth1/1/1)# shutdown
 ```
 
 Show commands to validate functionality:
 
-```
+```text
 switch# show configuration
 ```
 

@@ -6,19 +6,19 @@ A hostname is a human-friendly name used to identify a device. An example of a h
 
 Create a hostname:
 
-```
+```text
 switch(config)# hostname NAME
 ```
 
 Show commands to validate functionality:
 
-```
+```text
 switch# show hostname
 ```
 
 ## Example Output
 
-```
+```text
 switch(config)# hostname switch-test
 switch-test# show hostname
 switch-test

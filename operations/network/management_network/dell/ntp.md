@@ -1,30 +1,31 @@
-# Configure the Network Time Protocol (NTP) Client 
+# Configure the Network Time Protocol (NTP) Client
 
-The Network Time Protocol (NTP) client is essential for syncing time on various clients in the system. The following commands show how to configure NTP.
+The Network Time Protocol (NTP) client is essential for syncing time on various clients in the system.
+The following commands show how to configure NTP.
 
 ## Relevant Configuration
 
 Specify a remote NTP server to use for time synchronization:
 
-```
+```text
 switch(config)# ntp server <FQDN|IP-ADDR>
 ```
 
 Configure source for NTP:
 
-```
+```text
 switch(config)# ntp source interface
 ```
 
 Show NTP status:
 
-```
+```text
 switch# show ntp status
 ```
 
 ## Example Output
 
-```
+```text
 OS10(config)# do show ntp status
 system peer:          0.0.0.0
 system peer mode:     unspec

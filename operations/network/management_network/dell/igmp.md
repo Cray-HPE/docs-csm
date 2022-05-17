@@ -1,10 +1,11 @@
 # Configure Internet Group Multicast Protocol (IGMP)
 
-The Internet Group Multicast Protocol (IGMP) is a communications protocol used by hosts and adjacent routers on IP networks to establish multicast group memberships. The host joins a multicast-group by sending a join request message towards the network router, and responds to queries sent from the network router by dispatching a join report.
+The Internet Group Multicast Protocol (IGMP) is a communications protocol used by hosts and adjacent routers on IP networks to establish multicast group memberships.
+The host joins a multicast-group by sending a join request message towards the network router, and responds to queries sent from the network router by dispatching a join report.
 
 ## Configuration Command
 
-```
+```text
 switch(config)# ip igmp snooping enable
 ```
 
