@@ -144,8 +144,10 @@ the correct options for the specific environment are used. Two examples are give
 
 ### Upload migrated SLS file to SLS service
 
+If the following command does not complete successfully check the TOKEN variable is set correctly.
+
    ```bash
-   ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
+   ncn-m001# curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
    ```
 
 <a name="update-management-network"></a>
