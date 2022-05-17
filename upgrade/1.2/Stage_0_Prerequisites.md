@@ -11,12 +11,12 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 ### Stages
 
-- [Stage 0.1 - Install latest docs RPM](#install-latest-docs)
-- [Stage 0.2 - Update SLS](#update-sls)
-- [Stage 0.3 - Upgrade Management Network](#update-management-network)
-- [Stage 0.4 - Prerequisites Check](#prerequisites-check)
-- [Stage 0.5 - Backup Workload Manager Data](#backup_workload_manager)
-- [Stage Completed](#stage_completed)
+* [Stage 0.1 - Install latest docs RPM](#install-latest-docs)
+* [Stage 0.2 - Update SLS](#update-sls)
+* [Stage 0.3 - Upgrade Management Network](#update-management-network)
+* [Stage 0.4 - Prerequisites Check](#prerequisites-check)
+* [Stage 0.5 - Backup Workload Manager Data](#backup_workload_manager)
+* [Stage Completed](#stage_completed)
 
 <a name="install-latest-docs"></a>
 
@@ -120,7 +120,7 @@ the correct options for the specific environment are used. Two examples are give
 
 ### Migrate SLS Data JSON to CSM 1.2
 
-- Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
+* Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
    ```bash
    ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
@@ -129,7 +129,7 @@ the correct options for the specific environment are used. Two examples are give
                          --customer-highspeed-network 5 10.103.11.192/26
    ```
 
-- Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing `external-dns` entry.
+* Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing `external-dns` entry.
 
    ```bash
    ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
@@ -139,13 +139,15 @@ the correct options for the specific environment are used. Two examples are give
                          --preserve-existing-subnet-for-cmn external-dns
    ```
 
-- **Note:**: A detailed review of the migrated/upgraded data (using `vimdiff` or otherwise) for production systems and for systems which have many add-on components (UANs, login
+* **Note:**: A detailed review of the migrated/upgraded data (using `vimdiff` or otherwise) for production systems and for systems which have many add-on components (UANs, login
   nodes, storage integration points, etc.) is strongly recommended. Particularly, ensure that subnet reservations are correct in order to prevent any data mismatches.
 
 ### Upload migrated SLS file to SLS service
 
+If the following command does not complete successfully, check if the `TOKEN` environment variable is set correctly.
+
    ```bash
-   ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
+   ncn-m001# curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
    ```
 
 <a name="update-management-network"></a>
@@ -171,12 +173,12 @@ the correct options for the specific environment are used. Two examples are give
    ##################################################################################
    ```
 
-   - If you see text like the above, then it means that the switches have a CANU-generated configuration for CSM 1.2 in place. In this case, follow the steps in
+   * If you see text like the above, then it means that the switches have a CANU-generated configuration for CSM 1.2 in place. In this case, follow the steps in
      [Management Network 1.0 (`1.2 Preconfig`) to 1.2](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/network/management_network/1.0_to_1.2_upgrade.md).
 
-   - If the banner does NOT contain text like the above, then contact support in order to get the `1.2 Preconfig` applied to the system.
+   * If the banner does NOT contain text like the above, then contact support in order to get the `1.2 Preconfig` applied to the system.
 
-   - See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
+   * See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
 
 <a name="prerequisites-check"></a>
 

@@ -34,7 +34,7 @@ the number of storage and worker nodes.
    1. [Configure after management node deployment](#configure_after_management_node_deployment)
       1. [LiveCD cluster authentication](#livecd-cluster-authentication)
       1. [Install tests and test server on NCNs](#install-tests)
-      1. [Remove the default NTP pool](#remove-the-default-ntp-pool)
+      1. [Clean up chrony configurations](#clean-up-chrony-configurations)
    1. [Validate management node deployment](#validate_management_node_deployment)
    1. [Important checkpoint](#important-checkpoint)
    1. [Next topic](#next-topic)
@@ -707,7 +707,7 @@ If there are LVM check failures, then the problem must be resolved before contin
 
 1. Check to see if the number of devices is less than the number of listed drives in the output from step 1.
 
-   ```bash
+    ```bash
     ncn-s# ceph orch device ls|grep dev|wc -l
     24
     ```
@@ -847,21 +847,24 @@ pit# ${CSM_RELEASE}/lib/install-goss-tests.sh
 pit# popd
 ```
 
-<a name="remove-default-ntp-pool"></a>
+<a name="clean-up-chrony-configurations"></a>
 
-### 4.3 Remove the default NTP pool
+### 4.3 Clean up chrony configurations
 
-Run the following command on the PIT node to remove the default pool, which can cause contention issues with NTP.
+Set a token as described in [Identify Nodes and Update Metadata](../operations/node_management/Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md) and then run the following command:
 
 ```ShellSession
-pit# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | grep -v m001 | sort -u |  tr -t '\n' ',')" \
-        'sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf' && echo SUCCESS
+pit# for i in $(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | sort -u | grep -v ncn-m001); do 
+       ssh $i "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"; done
 ```
 
 Successful output is:
 
 ```text
-SUCCESS
+...
+Chrony configuration created
+Restarted chronyd
+...
 ```
 
 <a name="validate_management_node_deployment"></a>
@@ -943,7 +946,7 @@ Observe the output of the checks. If there are any failures, remediate them.
 
 ## Important checkpoint
 
-Before proceeding, be aware that this is the last point where the other NCN nodes can be rebuilt without also having to rebuild the PIT node. Therefore, take time to double check both the cluster and the validation test results
+Before proceeding, be aware that this is the last point where the other NCNs can be rebuilt without also having to rebuild the PIT node. Therefore, take time to double check both the cluster and the validation test results
 
 <a name="next-topic"></a>
 

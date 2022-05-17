@@ -48,6 +48,31 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="ELIMINATE_NTP_CLOCK_SKEW"
+state_recorded=$(is_state_recorded "${state_name}" "${target_ncn}")
+if [[ $state_recorded == "0" && $2 != "--rebuild" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    # ensure the correct template is in place and any problematic files are found
+    if ! /srv/cray/scripts/common/chrony/csm_ntp.py; then
+        echo "${target_ncn} csm_ntp failed"
+        exit 1
+    else
+        record_state "${state_name}" "${target_ncn}"
+    fi
+
+    # if the node is not in sync after a minute, fail
+    if ! chronyc waitsync 6 0.5 0.5 10; then
+        echo "${target_ncn} the clock is not in sync.  Wait a bit more or try again."
+        exit 1
+    else
+        record_state "${state_name}" "${target_ncn}"
+    fi
+    } >> ${LOG_FILE} 2>&1
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="WIPE_NODE_DISK"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
