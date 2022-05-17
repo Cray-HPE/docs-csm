@@ -34,7 +34,7 @@ the number of storage and worker nodes.
    1. [Configure after management node deployment](#configure_after_management_node_deployment)
       1. [LiveCD cluster authentication](#livecd-cluster-authentication)
       1. [Install tests and test server on NCNs](#install-tests)
-      1. [Remove the default NTP pool](#remove-the-default-ntp-pool)
+      1. [Clean up chrony configurations](#clean-up-chrony-configurations)
    1. [Validate management node deployment](#validate_management_node_deployment)
    1. [Important checkpoint](#important-checkpoint)
    1. [Next topic](#next-topic)
@@ -847,21 +847,29 @@ pit# ${CSM_RELEASE}/lib/install-goss-tests.sh
 pit# popd
 ```
 
-<a name="remove-default-ntp-pool"></a>
+<a name="clean-up-chrony-configurations"></a>
 
-### 4.3 Remove the default NTP pool
+### 4.3 Clean up chrony configurations
 
-Run the following command on the PIT node to remove the default pool, which can cause contention issues with NTP.
+Set a token to any string since BSS is not yet available, which will allow the script to fail over to the local cache.
 
 ```ShellSession
-pit# pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | grep -v m001 | sort -u |  tr -t '\n' ',')" \
-        'sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf' && echo SUCCESS
+pit# for i in $(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | sort -u | grep -v ncn-m001); do 
+       ssh $i "TOKEN=token /srv/cray/scripts/common/chrony/csm_ntp.py"; done
 ```
 
-Successful output is:
+Successful output can appear as:
+
+If BSS is unreachable, local cache is checked and the configuration is still deployed:
 
 ```text
-SUCCESS
+...
+BSS query failed. Checking local cache...
+Chrony configuration created
+Problematic config found: /etc/chrony.d/cray.conf.dist
+Problematic config found: /etc/chrony.d/pool.conf
+Restarted chronyd
+...
 ```
 
 <a name="validate_management_node_deployment"></a>
