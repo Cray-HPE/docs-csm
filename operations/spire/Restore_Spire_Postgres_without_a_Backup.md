@@ -1,7 +1,7 @@
 # Restore Spire Postgres without an Existing Backup
 
 Reinstall the Spire helm chart in the
-event that spire-postgres databases cannot be restored from a backup.
+event that `spire-postgres` databases cannot be restored from a backup.
 
 ## Uninstall Spire
 
@@ -12,7 +12,7 @@ event that spire-postgres databases cannot be restored from a backup.
    ```
 
 2. Wait for the pods in the Spire namespace to terminate. Once that is done, remove
-   the spire-data-server pvcs.
+   the spire-data-server `PVCs`.
 
    ```bash
    ncn# kubectl get pvc -n spire | grep spire-data-spire-server | awk '{print $1}' | xargs kubectl delete -n spire pvc
@@ -41,8 +41,8 @@ event that spire-postgres databases cannot be restored from a backup.
    ```
 
 1. Run the following command to remove non-Spire charts from the `spire.yaml`
-   file. This will also change the metadata.name so that it does not overwrite the
-   `sysmgmt.yaml` file that is stored in the loftsman namespace.
+   file. This will also change the `metadata.name` so that it does not overwrite the
+   `sysmgmt.yaml` file that is stored in the `loftsman` namespace.
 
    ```bash
    ncn# for i in $(yq r spire.yaml 'spec.charts[*].name' | grep -Ev '^spire$'); do yq d -i spire.yaml  'spec.charts(name=='"$i"')'; done
