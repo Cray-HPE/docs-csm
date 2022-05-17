@@ -18,7 +18,7 @@ event that `spire-postgres` databases cannot be restored from a backup.
    ncn# kubectl get pvc -n spire | grep spire-data-spire-server | awk '{print $1}' | xargs kubectl delete -n spire pvc
    ```
 
-3. Disable spire-agent on all of the Kubernetes NCNs (all worker nodes and
+3. Disable `spire-agent` on all of the Kubernetes NCNs (all worker nodes and
    master nodes) and delete the join data.
 
    ```bash
@@ -37,7 +37,6 @@ event that `spire-postgres` databases cannot be restored from a backup.
 
    ```bash
    ncn# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}' > spire.yaml
-
    ```
 
 1. Run the following command to remove non-Spire charts from the `spire.yaml`
@@ -84,7 +83,7 @@ event that `spire-postgres` databases cannot be restored from a backup.
 
 1. Validate that the `manifest.yaml` file only contains chart information for
    Spire, and that the sources chart location points to
-   `https://packages.local/repository/charts`
+   `https://packages.local/repository/charts`.
 
 1. Redeploy the Spire chart.
 
