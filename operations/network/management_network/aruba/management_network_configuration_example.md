@@ -19,7 +19,7 @@ This section provides an example of how to configure the management network.
 
    Example Aruba primary configuration:
 
-      ```text
+      ```
       interface vlan 7
           vsx-sync active-gateways
           vrf attach CAN
@@ -33,7 +33,7 @@ This section provides an example of how to configure the management network.
 
    Example Aruba secondary configuration:
 
-      ```text
+      ```
       interface vlan 7
           vsx-sync active-gateways
           vrf attach CAN
@@ -53,7 +53,7 @@ This section provides an example of how to configure the management network.
 
    Aruba configuration:
 
-    ```text
+    ```
     router bgp 65533
     vrf CAN
         maximum-paths 8
@@ -75,7 +75,7 @@ This section provides an example of how to configure the management network.
 
     Arista LAG configuration:
 
-    ```text
+    ```
     interface Ethernet24/1
       mtu 9214
       flowcontrol send on
@@ -103,7 +103,7 @@ This section provides an example of how to configure the management network.
 
     Example VLAN 2 configuration:
 
-    ```text
+    ```
     interface Vlan2
       ip address 10.101.10.1/24
     ```
@@ -112,7 +112,7 @@ This section provides an example of how to configure the management network.
 
     Example HSN IP:
 
-    ```bash
+    ```
     ncn-w001# ip a show hsn0
     8: hsn0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen 1000
         link/ether 02:00:00:00:00:0d brd ff:ff:ff:ff:ff:ff
@@ -126,7 +126,7 @@ This section provides an example of how to configure the management network.
 
     Example Arista BGP configuration:
 
-    ```text
+    ```
     ip prefix-list HSN seq 10 permit 10.101.10.0/24 ge 24
 
     route-map HSN permit 5
@@ -147,7 +147,7 @@ This section provides an example of how to configure the management network.
 
 1. Configure MetalLB to peer with the new CAN VRF interfaces and the new HSN interface on the customer Edge router.
 
-    ```text
+    ```
     apiVersion: v1
     data:
       config: |
@@ -200,7 +200,7 @@ This section provides an example of how to configure the management network.
 
    Arista Edge Router:
 
-    ```text
+    ```
     sw-edge01(config-router-bgp)# show ip bgp summary
     BGP summary information for VRF default
     Router identifier 192.168.50.50, local AS number 65534
@@ -214,7 +214,7 @@ This section provides an example of how to configure the management network.
     * The Arista routing table should now include the external IP addresses exposed by MetalLB
     * The on-site network team will be responsible for distributing these routes to the rest of their network
 
-    ```text
+    ```
     sw-edge01(config)#show ip route
     B E    10.101.8.113/32 [200/0] via 10.101.10.10, Vlan2
                                     via 10.101.10.11, Vlan2
@@ -234,7 +234,7 @@ This section provides an example of how to configure the management network.
 
     Example of how BGP routes look like in the switch located in the HSN:
 
-    ```text
+    ```
     sw-spine-001 [standalone: master] # show ip bgp vrf CAN summary
 
     VRF name                  : CAN
@@ -258,20 +258,20 @@ This section provides an example of how to configure the management network.
 
    1. The default route will need to change on the workers so they send their traffic out the HSN interface.
 
-      ```bash
+      ```
       ncn-w001# ip route replace default via 10.101.10.1 dev hsn0
       ```
 
    1. To make it persistent we will need to create an ifcfg file for hsn0 and remove the old vlan7 default route.
 
-      ```bash
+      ```
       ncn-w001# mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old
       ncn-w001# echo "default 10.101.10.1 - -" > /etc/sysconfig/network/ifroute-hsn0
       ```
 
    1. Verify the routing table and external connectivity.
 
-      ```bash
+      ```
       ncn-w001# ip route
       default via 10.101.10.1 dev hsn0
 
@@ -286,7 +286,7 @@ This section provides an example of how to configure the management network.
 
     1. Verify the connection is going over the HSN with a traceroute:
 
-        ```bash
+        ```
         ncn-m001# % traceroute 10.101.8.113
         traceroute to 10.101.8.113 (10.101.8.113), 64 hops max, 52 byte packets
           1  172.30.252.234 (172.30.252.234)  37.652 ms  37.930 ms  36.574 ms
@@ -304,7 +304,7 @@ This section provides an example of how to configure the management network.
 
     1. Listen on all the HSN interfaces for ping/traceroute while you ping the external facing IP address. In this example, the IP address is 10.101.8.113.
 
-        ```bash
+        ```
         ncn-m001# nodes=$(kubectl get nodes| awk '{print $1}' | grep  ncn-w | awk -vORS=, '{print $1}'); pdsh -w ${nodes} "tcpdump -envli hsn0 icmp"
 
         ncn-w002: tcpdump: listening on hsn0, link-type EN10MB (Ethernet), capture size 262144 bytes

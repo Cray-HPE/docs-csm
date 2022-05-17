@@ -4,7 +4,7 @@ The management interface can be used to gain remote management access to the swi
 
 Alternatively, a loopback interface can be configured to be used as management interface.
 
-```text
+```
 Address Mode
 Admin State
 Mac Address
