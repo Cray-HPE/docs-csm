@@ -6,11 +6,10 @@ reference information for these disks, their partition tables, and their managem
 ### Topics:
 
    * [What Controls Partitioning?](#what-controls-partitioning)
-   * [Plan of Record / Baseline](#plan-of-record--baseline)
-       * [Problems When Above/Below Baseline](#problems-when-abovebelow-baseline)
-       * [Worker Nodes with ETCD](#worker-nodes-with-etcd)
-           * [Disable Luks](#disable-luks)
-           * [Expand the RAID](#expand-the-raid)
+   * [Problems When Above/Below Baseline](#problems-when-abovebelow-baseline)
+   * [Worker Nodes with ETCD](#worker-nodes-with-etcd)
+       * [Disable Luks](#disable-luks)
+       * [Expand the RAID](#expand-the-raid)
    * [Disk Layout Quick-Reference Tables](#disk-layout-quick-reference-tables)
    * [OverlayFS and Persistence](#overlayfs-and-persistence)
        * [OverlayFS Example](#overlayfs-example)
@@ -36,21 +35,10 @@ Partitioning is controlled by two aspects:
 - dracut; this selects disks and builds their partition tables and/or LVM storage.
 - cloud-init; this manages standalone partitions or volumes, as well as high-level object storage.
 
-<a name="plan-of-record--baseline"></a>
-### Plan of Record / Baseline
-
-| Node Type | No. of "small" disks (0.5 TiB) | No. of "large" disks (1.9 TiB) |
-| --- |:---:|:---:|
-| k8s-master nodes | 3 | 0
-| k8s-worker nodes | 2 | 1
-| ceph-storage nodes | 2 | 3+
-
-Disks are chosen by dracut. Kubernetes and storage nodes use different dracut modules.
-- First, `two disks` for the OS are chosen from the pool of "small" disks
-- Second, `one disk` is selected for the ephemeral data
-
 <a name="problems-when-abovebelow-baseline"></a>
-#### Problems When Above/Below Baseline
+### Problems When Above/Below Baseline
+
+Plane of Record Baseline is defined in [NCN Plan of Record](./ncn_plan_of_record.md). See that document for help customizing PCIe and Disk differences.
 
 The master nodes and worker nodes use the same artifacts, and thus have the same dracut modules assimilating disks. Therefore, it is important
 to beware of:
@@ -58,13 +46,13 @@ to beware of:
 - ceph-storage nodes do not run the same dracut modules because they have different disk demands
 
 <a name="worker-nodes-with-etcd"></a>
-#### Worker Nodes with ETCD
+### Worker Nodes with ETCD
 
 k8s-worker nodes with 1 or more extra "small" disk(s); these disks are confusing and unnecessary and can be disabled
 easily.
 
 <a name="disable-luks"></a>
-##### Disable Luks
+#### Disable Luks
 
 > **`NOTE`** This is broken, use the [expand RAID](#expand-the-raid) option instead. (MTL-1309)
 
