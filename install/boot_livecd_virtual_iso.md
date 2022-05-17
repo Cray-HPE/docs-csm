@@ -53,7 +53,7 @@ HPE iLO BMCs allow for booting directly from an HTTP-accessible ISO location.
 
 1. Open the virtual terminal by choosing the `HTML5 Console` option when clicking the terminal image in the bottom left corner.
 
-   > **NOTE:** It may appear that the boot is stalled at a line of `EXT4-fs (loop1): mounted ...` or `Starting dracut pre-mount hook...`. This is the step when it actually begins downloading the ISO's squashfs root file system and can take a few minutes
+   > **NOTE:** It may appear that the boot is stalled at a line of `EXT4-fs (loop1): mounted ...` or `Starting dracut pre-mount hook...`. This is the step when it actually begins downloading the ISO's SquashFS root file system and can take a few minutes
 
 <a name="gigabyte-bmcs"></a>
 
@@ -104,13 +104,14 @@ The ISO boots with no password, requiring one be set on first login.
 Continue the bootstrap process by setting the root password
 following the procedure [First Login](bootstrap_livecd_remote_iso.md#first-login).
 
-> **NOTE:** The root OS `/` directory is writable without persistence. This means that restarting the machine will result in all changes being lost. Before restarting, consider following [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup) section.
+> **NOTE:** The root OS `/` directory is writable without persistence. This means that restarting the machine will result in all changes being lost.
+> Before restarting, consider following [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup) section.
 
 <a name="backing-up-the-overlay-cow-fs"></a>
 
 #### Backing up the Overlay COW FS
 
-Backup the writable overlay upper-dir so that changes are not lost after a reboot or when updating the ISO.
+Backup the writable overlay `upper-dir` so that changes are not lost after a reboot or when updating the ISO.
 
 This requires a location to `scp` a tar file as a backup.
 
@@ -119,7 +120,7 @@ tar czf /run/overlay.tar.gz -C /run/overlayfs/rw .
 scp /run/overlay.tar.gz <somelocation>
 ```
 
-> **NOTE:** To reduce the size of the backup, delete any squashfs files first, or exclude them in the tar command using `--exclude='*.squashfs'`. Those will need to be repopulated after you restoring the backup.
+> **NOTE:** To reduce the size of the backup, delete any SquashFS files first, or exclude them in the tar command using `--exclude='*.squashfs'`. Those will need to be repopulated after you restoring the backup.
 
 <a name="restoring-from-an-overlay-cow-fs-backup"></a>
 
