@@ -6,7 +6,7 @@ Configure remote logging to view log files from the switch on a remote server. T
 
 Configure logging:
 
-```
+```text
 switch(config)# logging server dell.com severity log-info
 ```
 
