@@ -1,12 +1,8 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
-
-[Next Topic Modify a UAI Class](Modify_a_UAI_Class.md)
-
-## View a UAI Class
+# View a UAI Class
 
 Display all the information for a specific UAI class by referencing its class ID.
 
-### Prerequisites
+## Prerequisites
 
 * The administrator must be logged into an NCN or a host that has administrative access to the HPE Cray EX System API Gateway
 * The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
@@ -14,19 +10,20 @@ Display all the information for a specific UAI class by referencing its class ID
 * The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
 * The administrator must know the Class ID of a UAI class: [List Available UAI Classes](List_Available_UAI_Classes.md)
 
-### Procedure
+## Procedure
 
 View all the information about a specific UAI class.
 
 To examine an existing UAI class, use a command of the following form:
 
-```
+```bash
 ncn-m001-pit# cray uas admin config classes describe <class-id>
 ```
 
-The following example uses the `--format yaml` option to display the UAI class configuration in YAML format. Replace yaml with json to return JSON-formatted output. Omitting the `--format` option displays the UAI class in the default TOML format.
+The following example uses the `--format yaml` option to display the UAI class configuration in YAML format.
+Replace `yaml` with `json` to return JSON-formatted output. Omitting the `--format` option displays the UAI class in the default TOML format.
 
-Replace bb28a35a-6cbc-4c30-84b0-6050314af76b in the example command with the ID of the UAI class to be examined.
+Replace `bb28a35a-6cbc-4c30-84b0-6050314af76b` in the example command with the ID of the UAI class to be examined.
 
 ```bash
 ncn-m001-pit# cray uas admin config classes describe bdb4988b-c061-48fa-a005-34f8571b88b4 --format yaml
@@ -34,7 +31,7 @@ ncn-m001-pit# cray uas admin config classes describe bdb4988b-c061-48fa-a005-34f
 
 Example output:
 
-```
+```yaml
 class_id: bdb4988b-c061-48fa-a005-34f8571b88b4
 comment: UAI Class to Create Brokered End-User UAIs
 default: false
@@ -83,5 +80,7 @@ volume_mounts:
 ```
 
 Refer to [UAI Classes](UAI_Classes.md) and [Elements of a UAI](Elements_of_a_UAI.md) for an explanation of the output of this command.
+
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic Modify a UAI Class](Modify_a_UAI_Class.md)

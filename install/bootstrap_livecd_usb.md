@@ -442,6 +442,14 @@ information for this system has not yet been prepared.
       >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >    ```
 
+   1. Link the generated `system_config.yaml` file into the `prep/` directory. This is needed for `pit-init` to find and resolve the file.
+
+      > **`NOTE`** This step is needed only for fresh installs where `system_config.yaml` is missing from the `prep/` directory.
+
+      ```bash
+      pit# cd ${PITDATA}/prep && ln ${SYSTEM_NAME}/system_config.yaml
+      ```
+
    1. Continue to the next step to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
 
 <a name="verify-csi-versions-match"></a>
