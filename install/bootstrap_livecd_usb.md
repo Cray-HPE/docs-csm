@@ -453,7 +453,7 @@ information for this system has not yet been prepared.
       pit# cd ${PITDATA}/prep && ln ${SYSTEM_NAME}/system_config.yaml
       ```
 
-   1. Continue to the next step to apply the csi-config workarounds.
+   1. Continue to the next step to apply the `csi-config` workarounds.
 
 <a name="csi-workarounds"></a>
 
