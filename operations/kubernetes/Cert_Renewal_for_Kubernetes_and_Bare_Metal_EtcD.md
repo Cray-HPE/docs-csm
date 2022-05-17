@@ -343,8 +343,8 @@ Run the following steps on each master node.
 
    **NOTE:** There may be errors when copying files. The target may or may not exist depending on the version of CSM.
 
-   * **DO NOT** copy this to the master node where this work is being performed.
-   * Copy `/etc/kubernetes/admin.conf` to all master and worker nodes.
+   - **DO NOT** copy this to the master node where this work is being performed.
+   - Copy `/etc/kubernetes/admin.conf` to all master and worker nodes.
 
    Client access:
 

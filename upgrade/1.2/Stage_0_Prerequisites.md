@@ -139,7 +139,7 @@ the correct options for the specific environment are used. Two examples are give
                          --preserve-existing-subnet-for-cmn external-dns
    ```
 
-* **Note:**: A detailed review of the migrated/upgraded data (using `vimdiff` or otherwise) for production systems and for systems which have many add-on components (UANs, login
+- **Note:**: A detailed review of the migrated/upgraded data (using `vimdiff` or otherwise) for production systems and for systems which have many add-on components (UANs, login
   nodes, storage integration points, etc.) is strongly recommended. Particularly, ensure that subnet reservations are correct in order to prevent any data mismatches.
 
 ### Upload migrated SLS file to SLS service
