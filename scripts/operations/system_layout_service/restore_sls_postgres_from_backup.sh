@@ -76,6 +76,7 @@ for i in {1..300}; do
 done
 
 # Determine the postgres leader
+#shellcheck disable=SC2155
 export POSTGRES_LEADER=$(kubectl exec cray-sls-postgres-0 -n services -c postgres -t -- patronictl list -f json | jq  -r '.[] | select(.Role == "Leader").Member')
 echo "The SLS postgres leader is $POSTGRES_LEADER"
 

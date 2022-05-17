@@ -97,6 +97,8 @@ else
 fi
 
 # Get a token to talk to SLS
+#shellcheck disable=SC2155
+#shellcheck disable=SC2046
 export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 
 if [ -z ${TOKEN} ]; then
@@ -144,7 +146,8 @@ fi
 # Wait for pod to become ready
 echo "Waiting for ${UAI_NAME} to be ready"
 UAI_READY=0
-for i in `seq 1 10`;do
+#shellcheck disable=SC2034
+for i in `seq 1 10`;do 
   UAI_STATUS=$(cray uas list --format json | jq --arg n "${UAI_NAME}" '.[] | select(.uai_name == $n) | .uai_status' | sed -e 's/"//g')
   echo "status = $UAI_STATUS"
   if [ "$UAI_STATUS" == "Running: Ready" ]; then

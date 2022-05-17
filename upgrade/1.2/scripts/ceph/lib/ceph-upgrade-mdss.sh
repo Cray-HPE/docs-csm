@@ -54,8 +54,9 @@ function upgrade_mds () {
   do
     pdsh -w $mds_node cephfs-journal-tool --rank cephfs:all journal export /root/backup."$date".bin
   done
-
+  #shellcheck disable=SC2155
   export standby_mdss=$(ceph fs dump -f json-pretty|jq -r '.standbys|map(.name)|join(" ")')
+  #shellcheck disable=SC2155
   export active_mds=$(ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name')
   export mds_cluster="$active_mds $standby_mdss"
 
