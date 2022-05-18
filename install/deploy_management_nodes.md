@@ -851,7 +851,7 @@ pit# popd
 
 ### 4.3 Clean up chrony configurations
 
-Set a token to any string since BSS is not yet available, which will allow the script to fail over to the local cache.
+Run the following command without editing the value of the `TOKEN` variable.
 
 ```ShellSession
 pit# for i in $(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | sort -u | grep -v ncn-m001); do 
