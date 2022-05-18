@@ -22,11 +22,17 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
+function check_quotes {
+    local error=0
+    printf "=============== Linting \” (https://www.compart.com/en/unicode/U+201C and U+201D) ... \n"
+    grep -n -R \” *.md && echo >&2 'Malformed quotes detected (bad: ” vs. good: ").' && error=1
+    if [ $error = 1 ]; then
+        echo >&2 "Failed: ${FUNCNAME[0]}"
+        return 1
+    else
+        echo "OK: ${FUNCNAME[0]}"
+        return 0
+    fi
+}
+check_quotes
 
-error=0
-printf "=============== Linting \” (https://www.compart.com/en/unicode/U+201D) ... \n"
-grep -n -R \” *.md && echo >&2 'Malformed quotes detected (bad: ” vs. good: ").' && error=1
-[ $error = 1 ] && echo '^FAILED'
-
-
-printf "+++++++++++++++ ... OK\n" && exit 0
