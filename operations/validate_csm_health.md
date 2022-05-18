@@ -949,7 +949,7 @@ This section can be run on any NCN or the PIT node.
    > waiting state trying to set up volume mounts. See the
    > [UAI Troubleshooting](#uas-uai-validate-debug) section for more information.
 
-This procedure must run on a master or worker node (not the PIT node and not `ncn-w001`) on the system. (It is also possible to do from an external host, but the procedure for that is not covered here).
+This procedure must run on a master or worker node (**not the PIT node**).
 
 1. Initialize the Cray CLI on the node where you are running this section. See [Configure the Cray Command Line Interface](configure_cray_cli.md) for details on how to do this.
 
