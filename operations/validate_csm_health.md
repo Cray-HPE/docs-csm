@@ -632,7 +632,7 @@ This section can be run on any NCN or the PIT node.
    > waiting state trying to set up volume mounts. See the
    > [UAI Troubleshooting](#uas-uai-validate-debug) section for more information.
 
-This procedure must run on a master or worker node (**not the PIT node and not `ncn-w001`**) on the system.
+This procedure must run on a master or worker node (**not the PIT node**).
 
 1. Verify that a UAI can be created:
 
