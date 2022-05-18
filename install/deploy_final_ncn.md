@@ -437,8 +437,8 @@ The steps in this section load hand-off data before a later procedure reboots th
 1. Verify that there **is not** a metal bootstrap IP address.
 
     ```bash
-     ncn-m001# ip a show bond0
-     ```
+    ncn-m001# ip a show bond0
+    ```
 
 1. Verify zypper repositories are empty and all remote SUSE repositories are disabled.
 
