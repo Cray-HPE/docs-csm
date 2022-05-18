@@ -46,14 +46,14 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
     1. Migrate switch naming (in order):  leaf to leaf-bmc and agg to leaf.\n
     2. Remove api-gateway entries from HMLB subnets for CSM 1.2 security.\n
     3. Remove kubeapi-vip reservations for all networks except NMN.\n
-    4. Create the new BICAN "toggle" network.\n
-    5. Migrate the existing CAN to CMN.\n
-    7. Create the CHN network.\n
-    7. Convert IPs of the CAN network.\n
-    8. Create MetalLB Pools and ASN entries on CMN and NMN networks.\n
-    9. Update uai_macvlan in NMN dhcp ranges and uai_macvlan VLAN.\n
-   10. Rename uai_macvlan_bridge reservation to uai_nmn_blackhole
-   11. Remove unused user networks (CAN or CHN) if requested [--retain-unused-user-network to keep].\n
+    4. Migrate the existing CAN to CMN.\n
+    5. Create the CHN network.\n
+    6. Convert IPs of the CAN network.\n
+    7. Create MetalLB Pools and ASN entries on CMN and NMN networks.\n
+    8. Update uai_macvlan in NMN dhcp ranges and uai_macvlan VLAN.\n
+    9. Rename uai_macvlan_bridge reservation to uai_nmn_blackhole
+   10. Remove unused user networks (CAN or CHN) if requested [--retain-unused-user-network to keep].\n
+   11. Create the new BICAN "toggle" network.\n
 """
 
 
@@ -263,11 +263,6 @@ def main(
     remove_api_gw_from_hmnlb_reservations(networks)
 
     #
-    # Create BICAN network
-    #   (not order dependent)
-    create_bican_network(networks, default_route_network_name=bican_user_network_name)
-
-    #
     # Clone (existing) CAN network to CMN
     #   (ORDER DEPENDENT!!!)
     #   Use CAN as a template and create the CMN (leaves CAN in-place)
@@ -338,6 +333,11 @@ def main(
             click.secho("Removing unused CAN and CHN (if they exist) as requested", fg="bright_white")
             networks.pop("CAN", None)
             networks.pop("CHN", None)
+
+    #
+    # Create BICAN network
+    #   (not order dependent)
+    create_bican_network(networks, default_route_network_name=bican_user_network_name)
 
     click.secho(
         f"Writing CSM 1.2 upgraded and schema validated SLS file to {sls_output_file.name}",
