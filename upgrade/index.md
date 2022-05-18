@@ -6,8 +6,6 @@ After the upgrade of CSM software, the CSM health checks will validate the syste
 tasks like the check and update of firmware on system components. Once the CSM upgrade has completed, other
 product streams for the HPE Cray EX system can be installed or upgraded.
 
-## Topics
-
 1. [Prepare for Upgrade](#prepare_for_upgrade)
 1. [Upgrade Management Nodes and CSM Services](#upgrade_management_nodes_csm_services)
 1. [Update Management Network](#update_management_network)
@@ -62,18 +60,22 @@ See [Update Management Network](update_management_network.md)
 <a name="validate_csm_health"></a>
 ## Validate CSM Health
 
-> **`IMPORTANT:`** Wait at least 15 minutes after completing the previous steps to let the updated
-> CSM Kubernetes resources initialize and start.
+**NOTE:**
+
+- Before performing the health validation, be sure that at least 15 minutes have elapsed
+  since the CSM services were upgraded. This allows the various Kubernetes resources to
+  initialize and start.
+- If the site does not use UAIs, skip UAS and UAI validation. If UAIs are used, there are
+  products that configure UAS like Cray Analytics and Cray Programming Environment that
+  must be working correctly with UAIs, and should be validated (the procedures for this are
+  beyond the scope of this document) prior to validating UAS and UAI. Failures in UAI creation that result
+  from incorrect or incomplete installation of these products will generally take the form of UAIs stuck in
+  waiting state trying to set up volume mounts.
+- Performing the `Booting CSM Barebones Image` test may be skipped if no compute nodes are available
+  (that is, if all compute nodes are active running application workloads).
 
 It is always recommended to run all possible CSM health validation procedures. At a minimum, run the
 following validation checks to ensure that everything is still working properly after the upgrade.
-
-> **`IMPORTANT:`** If your site does not use UAIs, skip UAS and UAI validation. If you do use
-> UAIs, there are products that configure UAS like Cray Analytics and Cray Programming Environment that
-> must be working correctly with UAIs and should be validated and corrected (the procedures for this are
-> beyond the scope of this document) prior to validating UAS and UAI. Failures in UAI creation that result
-> from incorrect or incomplete installation of these products will generally take the form of UAIs stuck in
-> waiting state trying to set up volume mounts.
 
 1. [Platform Health Checks](../operations/validate_csm_health.md#platform-health-checks)
 2. [Hardware Management Services Health Checks](../operations/validate_csm_health.md#hms-health-checks)
@@ -95,4 +97,3 @@ After completion of the firmware update with FAS, the CSM product stream has bee
 configured. Refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
 on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg
 more information on other product streams to be upgraded and configured after CSM.
-
