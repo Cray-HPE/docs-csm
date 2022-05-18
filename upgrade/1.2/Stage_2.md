@@ -26,7 +26,7 @@
 
 Up to this point, we have already upgraded all worker, storage and master nodes except `ncn-m001`. `ncn-m001` has been our stable node that we logged into the cluster with to upgrade the other nodes. The procedure at this stage will now use `ncn-m002` as a new **stable** node, to login to the cluster, and from it upgrade `ncn-m001`. During this process, ensure `ncn-m001` does not have its power state affected.
 
-For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CAN IP address to `ssh` to `ncn-m002` for this `ncn-m001` install
+For `ncn-m001`, use `ncn-m002` as the stable NCN. Use `bond0.cmn0`/CMN IP address to `ssh` to `ncn-m002` for this `ncn-m001` install
 
 1. Authenticate with the Cray CLI on `ncn-m002`.
 
