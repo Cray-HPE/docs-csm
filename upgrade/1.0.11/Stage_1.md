@@ -2,15 +2,16 @@
 
 ## Procedure
 
->**`IMPORTANT:`**
+>**IMPORTANT:**
 >
 > Reminder: Before running any upgrade scripts, be sure the Cray CLI output format is reset to default by running the following command:
 >
->```bash
+> ```bash
 > ncn# unset CRAY_FORMAT
->```
+> ```
 
-1. In order for nodes to properly PXE boot, Border Gateway Protocol \(BGP\) must be healthy. Before proceeding, check the status of BGP as described in the [Check BGP Status and Reset Sessions](../../operations/network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) procedure.
+1. In order for nodes to properly PXE boot, Border Gateway Protocol \(BGP\) must be healthy. Before proceeding, check the status of BGP as described in the
+   [Check BGP Status and Reset Sessions](../../operations/network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md) procedure.
 
 1. Run `ncn-upgrade-ceph-nodes.sh` for `ncn-s001`. Follow output of the script carefully. The script will pause for manual interaction.
 
@@ -23,6 +24,7 @@
 1. Repeat the previous step for each other storage node, one at a time.
 
 1. After `ncn-upgrade-ceph-nodes.sh` has successfully run for all storage nodes, rescan SSH keys on all storage nodes
+
     ```bash
     ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
     ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
@@ -84,7 +86,7 @@
     ncn-m001# update_bss_storage
     ```
 
-1. Ensure the Ceph services are set to autostart
+1. Ensure the Ceph services are set to automatically start.
 
    On `ncn-s001`:
 
