@@ -3,14 +3,8 @@
 The management nodes use drive storage for persistence and block storage. This page outlines
 reference information for these disks, their partition tables, and their management.
 
-### Topics:
+## Topics
 
-   * [What Controls Partitioning?](#what-controls-partitioning)
-   * [Plan of Record / Baseline](#plan-of-record--baseline)
-       * [Problems When Above/Below Baseline](#problems-when-abovebelow-baseline)
-       * [Worker Nodes with ETCD](#worker-nodes-with-etcd)
-           * [Disable Luks](#disable-luks)
-           * [Expand the RAID](#expand-the-raid)
    * [Disk Layout Quick-Reference Tables](#disk-layout-quick-reference-tables)
    * [OverlayFS and Persistence](#overlayfs-and-persistence)
        * [OverlayFS Example](#overlayfs-example)
@@ -27,94 +21,6 @@ reference information for these disks, their partition tables, and their managem
    * [Old/Retired FS-Labels](#oldretired-fs-labels)
 
 ## Details
-
-<a name="what-controls-partitioning"></a>
-### What Controls Partitioning?
-
-Partitioning is controlled by two aspects:
-
-- dracut; this selects disks and builds their partition tables and/or LVM storage.
-- cloud-init; this manages standalone partitions or volumes, as well as high-level object storage.
-
-<a name="plan-of-record--baseline"></a>
-### Plan of Record / Baseline
-
-| Node Type | No. of "small" disks (0.5 TiB) | No. of "large" disks (1.9 TiB) |
-| --- |:---:|:---:|
-| k8s-master nodes | 3 | 0
-| k8s-worker nodes | 2 | 1
-| ceph-storage nodes | 2 | 3+
-
-Disks are chosen by dracut. Kubernetes and storage nodes use different dracut modules.
-- First, `two disks` for the OS are chosen from the pool of "small" disks
-- Second, `one disk` is selected for the ephemeral data
-
-<a name="problems-when-abovebelow-baseline"></a>
-#### Problems When Above/Below Baseline
-
-The master nodes and worker nodes use the same artifacts, and thus have the same dracut modules assimilating disks. Therefore, it is important
-to beware of:
-- k8s-master nodes with one or more extra "large" disk(s); these disks help but are unnecessary
-- ceph-storage nodes do not run the same dracut modules because they have different disk demands
-
-<a name="worker-nodes-with-etcd"></a>
-#### Worker Nodes with ETCD
-
-k8s-worker nodes with 1 or more extra "small" disk(s); these disks are confusing and unnecessary and can be disabled
-easily.
-
-<a name="disable-luks"></a>
-##### Disable Luks
-
-> **`NOTE`** This is broken, use the [expand RAID](#expand-the-raid) option instead. (MTL-1309)
-
-All NCNs (master/worker/storage) have the same kernel parameters, but are not always necessary. This method works by toggling the dependency
-for the metal ETCD module, disabling LUKs will disable ETCD bare-metal creation.
-
-1. Disable LUKs for each worker node, thus disabling the metal ETCD module:
-    - During Bootstrap (on the `pit` node):
-        ```bash
-        sed -i 's/disk-opts rd.luks /disk-opts rd.luks=0 /g' /var/www/ncn-w*/script.ipxe
-        ```
-    - During runtime with `csi`:
-        ```bash
-        csi handoff bss-update-param rd.luks=0
-        ```
-
-1. Rebuild the node
-    - Run the [basic wipe](../install/wipe_ncn_disks_for_reinstallation.md#basic-wipe) if the node was already booted
-    - (re)boot the node
-
-<a name="expand-the-raid"></a>
-##### Expand the RAID
-
-This option simply expands the RAID to consume the extra disks, leaving none behind for the metal ETCD module to find.
-
-1. Set `metal.disks` equal to the number of "small" disks in the node(s), this will reserve them for the RAID and prevent any other partitioning from happening on them.
-
-    - During Bootstrap (on the `pit` node):
-        ```bash
-        sed -i 's/disk-opts /disk-opts metal.disks=3 /g' /var/www/ncn-w*/script.ipxe
-        ```
-    - During runtime with `csi`:
-        ```bash
-        csi handoff bss-update-param metal.disks=3
-        ```
-
-1. Change the RAID type, or leave it as default (mirror)
-
-    - During Bootstrap (on the `pit` node):
-        ```bash
-        sed -i 's/disk-opts /disk-opts metal.md-level=stripe /g' /var/www/ncn-w*/script.ipxe
-        ```
-    - During runtime with `csi`:
-        ```bash
-        csi handoff bss-update-param metal.md-level=stripe
-        ```
-
-1. Rebuild the node
-    - Run the [basic wipe](../install/wipe_ncn_disks_for_reinstallation.md#basic-wipe) if the node was already booted
-    - (re)boot the node
 
 <a name="disk-layout-quick-reference-tables"></a>
 ### Disk Layout Quick-Reference Tables
@@ -135,9 +41,8 @@ The table below represents all recognizable FS labels on any given management no
 | ❌ | ✅ | ❌ | `CONLIB` | `/run/lib-containerd` | Ephemeral | `25%` | ✅ | [MTL-892](https://jira-pro.its.hpecorp.net:8443/browse/MTL-892) [CASMINST-255](https://jira-pro.its.hpecorp.net:8443/browse/CASMINST-255) | |
 | ✅ | ❌ | ❌ | `ETCDLVM` | `/run/lib-etcd` | Ephemeral | `32 GiB` | ✅ | [CASMPET-338](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-338) | |
 | ✅ | ❌ | ❌ | `K8SLET` | `/var/lib/kubelet` | Ephemeral | `25%` | ❌ | [MTL-892](https://jira-pro.its.hpecorp.net:8443/browse/MTL-892) [CASMINST-255](https://jira-pro.its.hpecorp.net:8443/browse/CASMINST-255) | |
->>>>>>> 5b2ff4be6f... afix all JIRA links to new JIRA
 
-The above table's rows with overlayFS map their "Mount Paths" to the "Upper Directory" in the table below:
+The above table's rows with `overlayFS` map their `Mount Paths` to the `Upper Directory` in the table below:
 
 > The "OverlayFS Name" is the name used in fstab and seen in the output of `mount`.
 
