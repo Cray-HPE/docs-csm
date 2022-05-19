@@ -274,7 +274,7 @@ and restored together.
     done
     ```
 
-   Edit the manifest file created above to remove `creationTimestamp`, `resourceVersion`, `selfLink`, `uid` for each entry. Then `copy all files to a safe location`.
+   Edit the manifest file created above to remove `creationTimestamp`, `resourceVersion`, `selfLink`, `uid` for each entry. Then, copy all files to a safe location.
 
 ## Backup PVC Data
 
