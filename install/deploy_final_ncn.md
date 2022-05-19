@@ -519,11 +519,27 @@ Set a token as described in [Identify Nodes and Update Metadata](../operations/n
 ncn-m001# /srv/cray/scripts/common/chrony/csm_ntp.py
 ```
 
-Successful output is:
+Successful output can appear as:
+
+If BSS is unreachable, local cache is checked and the configuration is still deployed:
 
 ```text
+...
+BSS query failed. Checking local cache...
+Chrony configuration created
+Problematic config found: /etc/chrony.d/cray.conf.dist
+Problematic config found: /etc/chrony.d/pool.conf
+Restarted chronyd
+...
+```
+
+or
+
+```text
+...
 Chrony configuration created
 Restarted chronyd
+...
 ```
 
 <a name="configure-dns-and-ntp-on-each-bmc"></a>

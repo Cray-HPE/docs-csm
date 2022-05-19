@@ -42,3 +42,9 @@ jobs:
     - uses: docker://ghcr.io/igorshubovych/markdownlint-cli:v0.31.1
       with:
         args: "--config .github/config/markdown_style.yaml ${{ steps.changed-files.outputs.all_changed_files }}"
+
+    - name: Check for illegal ASCII
+      id: illegal-ascii
+      run: |
+        ./runLint.sh
+

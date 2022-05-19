@@ -851,18 +851,23 @@ pit# popd
 
 ### 4.3 Clean up chrony configurations
 
-Set a token as described in [Identify Nodes and Update Metadata](../operations/node_management/Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md) and then run the following command:
+Run the following command without editing the value of the `TOKEN` variable.
 
 ```ShellSession
 pit# for i in $(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | sort -u | grep -v ncn-m001); do 
-       ssh $i "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"; done
+       ssh $i "TOKEN=token /srv/cray/scripts/common/chrony/csm_ntp.py"; done
 ```
 
-Successful output is:
+Successful output can appear as:
+
+If BSS is unreachable, local cache is checked and the configuration is still deployed:
 
 ```text
 ...
+BSS query failed. Checking local cache...
 Chrony configuration created
+Problematic config found: /etc/chrony.d/cray.conf.dist
+Problematic config found: /etc/chrony.d/pool.conf
 Restarted chronyd
 ...
 ```
