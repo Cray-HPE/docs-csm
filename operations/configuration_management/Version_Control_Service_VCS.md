@@ -48,10 +48,10 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
    - Username: `admin`
    - The password can be obtained with the following command:
 
-    ```bash
-    ncn# kubectl get secret -n services keycloak-master-admin-auth \
-                 --template={{.data.password}} | base64 --decode
-    ```
+     ```bash
+     ncn# kubectl get secret -n services keycloak-master-admin-auth \
+                  --template={{.data.password}} | base64 --decode
+     ```
 
 1. Ensure the selected Realm is `Shasta` from the top-left dropdown in the left sidebar.
 
@@ -76,10 +76,10 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
    - Username: `crayvcs`
    - The old VCS password, which can be obtained with the following command:
 
-    ```bash
-    ncn# kubectl get secret -n services vcs-user-credentials \
-            --template={{.data.vcs_password}} | base64 --decode
-    ```
+     ```bash
+     ncn# kubectl get secret -n services vcs-user-credentials \
+             --template={{.data.vcs_password}} | base64 --decode
+     ```
 
 1. Enter the existing password (from previous step), new password and confirmation, and then click `Update Password`.
 1. Now SSH into `ncn-w001` or `ncn-m001`.
