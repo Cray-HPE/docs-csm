@@ -37,13 +37,13 @@ or may result in losing access to VCS altogether.
 
 To change the password in the `vcs-user-credentials` Kubernetes secret, use the following procedure:
 
-1. Log in to Keycloak with the default admin credentials.
+1. Log in to Keycloak with the default `admin` credentials.
 
-   Point a browser at `https://auth.SYSTEM_DOMAIN_NAME/keycloak/admin`, replacing SYSTEM\_DOMAIN\_NAME with the actual NCN's DNS name.
+   Point a browser at `https://auth.SYSTEM_DOMAIN_NAME/keycloak/admin`, replacing `SYSTEM_DOMAIN_NAME` with the actual NCN's DNS name.
 
-   The following is an example URL for a system: '<https://auth.cmn.system1.us.cray.com/keycloak/admin>`
+   The following is an example URL for a system: `https://auth.cmn.system1.us.cray.com/keycloak/admin`
 
-   Use the following admin login credentials:
+   Use the following `admin` login credentials:
 
    - Username: `admin`
    - The password can be obtained with the following command:
@@ -65,7 +65,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
    Enter the new password in the `Reset Password` form. Ensure `Temporary` is switched **off**. Click on `Reset Password` button.
 
-1. Now log in to Gitea with the default admin credentials.
+1. Log in to Gitea with the default `admin` credentials.
 
    Point the browser at `https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/user/settings/account`.
 
@@ -81,10 +81,11 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
              --template={{.data.vcs_password}} | base64 --decode
      ```
 
-1. Enter the existing password (from previous step), new password and confirmation, and then click `Update Password`.
+1. Enter the existing password (from previous step), new password, and confirmation, and then click `Update Password`.
 1. Now SSH into `ncn-w001` or `ncn-m001`.
 1. Run `git clone https://github.com/Cray-HPE/csm.git`.
-1. Copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` to your desired working directory, and run the following commands from that working directory.
+1. Copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` to the desired working directory.
+1. Change directories to be in the working directory set in the previous step.   
 1. Save a local copy of the `customizations.yaml` file.
 
     ```bash
@@ -130,7 +131,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
     ncn# ./secrets-seed-customizations.sh customizations.yaml
     ```
 
-   If the above command complains that it cannot find `certs/sealed_secrets.crt` then you can run the following commands to create it:
+   If the above command complains that it cannot find `certs/sealed_secrets.crt`, then you can run the following commands to create it:
 
     ```bash
     ncn# mkdir -p ../certs &&
