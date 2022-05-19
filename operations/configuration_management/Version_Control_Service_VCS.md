@@ -4,7 +4,9 @@ The Version Control Service \(VCS\) includes a web interface for repository mana
 
 `https://vcs.SHASTA_CLUSTER_DNS_NAME`
 
-On cluster nodes, the VCS service can be accessed through the gateway. VCS credentials for the `crayvcs` user are required before cloning a repository \(see the "VCS Administrative User" section below\). To clone a repository in the `cray` organization, use the following command:
+On cluster nodes, the VCS service can be accessed through the gateway. VCS credentials for the `crayvcs` user are required
+before cloning a repository \(see the "VCS Administrative User" section below\). To clone a repository in the `cray` organization,
+use the following command:
 
 ```bash
 ncn# git clone https://api-gw-service-nmn.local/vcs/cray/REPO_NAME.git
@@ -12,7 +14,9 @@ ncn# git clone https://api-gw-service-nmn.local/vcs/cray/REPO_NAME.git
 
 ## VCS Administrative User
 
-The Cray System Management \(CSM\) product installation creates the administrative user `crayvcs` that is used by CSM and other product installers to import their configuration content into VCS. The initial VCS credentials for the `crayvcs` user are obtained with the following command:
+The Cray System Management \(CSM\) product installation creates the administrative user `crayvcs` that is used by CSM and
+other product installers to import their configuration content into VCS. The initial VCS credentials for the `crayvcs` user
+are obtained with the following command:
 
 ```bash
 ncn# kubectl get secret -n services vcs-user-credentials \
@@ -23,11 +27,13 @@ ncn# kubectl get secret -n services vcs-user-credentials \
 
 The initial VCS login credentials for the `crayvcs` user are stored in three places:
 
--   `vcs-user-credentials` Kubernetes secret: This is used to initialize the other two locations, as well as providing a place where other users can query for the password.
--   VCS \(Gitea\): These credentials are used when pushing to Git using the default username and password. The password should be changed through the Gitea UI.
--   Keycloak: These credentials are used to access the VCS UI. They must be changed through Keycloak. For more information on accessing Keycloak, see [Access the Keycloak User Management UI](../security_and_authentication/Access_the_Keycloak_User_Management_UI.md).
+- `vcs-user-credentials` Kubernetes secret: This is used to initialize the other two locations, as well as providing a place where other users can query for the password.
+- VCS \(Gitea\): These credentials are used when pushing to Git using the default username and password. The password should be changed through the Gitea UI.
+- Keycloak: These credentials are used to access the VCS UI. They must be changed through Keycloak. For more information on accessing Keycloak, see [Access the Keycloak User Management UI](../security_and_authentication/Access_the_Keycloak_User_Management_UI.md).
 
-**WARNING:** These three sources of credentials are not synced by any mechanism. Changing the default password requires that is it changed in all three places. Changing only one may result in difficulty determining the password at a later date, or may result in losing access to VCS altogether.
+**WARNING:** These three sources of credentials are not synced by any mechanism. Changing the default password requires
+that is it changed in all three places. Changing only one may result in difficulty determining the password at a later date,
+or may result in losing access to VCS altogether.
 
 To change the password in the `vcs-user-credentials` Kubernetes secret, use the following procedure:
 
@@ -35,7 +41,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
    Point a browser at `https://auth.SYSTEM_DOMAIN_NAME/keycloak/admin`, replacing SYSTEM\_DOMAIN\_NAME with the actual NCN's DNS name.
 
-   The following is an example URL for a system: 'https://auth.cmn.system1.us.cray.com/keycloak/admin`
+   The following is an example URL for a system: '<https://auth.cmn.system1.us.cray.com/keycloak/admin>`
 
    Use the following admin login credentials:
 
@@ -53,7 +59,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
 1. In the `Search...` textbox, type in `crayvcs` and click the search icon.
 
-1. In the filtered table below, click on the ID for the row that shows `crayvcs` in the `Username` column. 
+1. In the filtered table below, click on the ID for the row that shows `crayvcs` in the `Username` column.
 
 1. Go to the `Credentials` tab and change the password.
 
@@ -90,9 +96,12 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
    The Gitea `crayvcs` password is stored in the `vcs-user-credentials` Kubernetes Secret in the `services` namespace. This must be updated so that clients which need to make requests can authenticate with the new password.
 
-   In the `customizations.yaml` file, set the values for the `gitea` keys in the `spec.kubernetes.sealed_secrets` field. The value in the data element where the name is `password` needs to be changed to the new Gitea password. The section below will replace the existing sealed secret data in the `customizations.yaml` file.
+   In the `customizations.yaml` file, set the values for the `gitea` keys in the `spec.kubernetes.sealed_secrets` field.
+   The value in the data element where the name is `password` needs to be changed to the new Gitea password. The section
+   below will replace the existing sealed secret data in the `customizations.yaml` file.
 
    For example:
+
     ```yaml
           gitea:
             generate:
@@ -192,7 +201,10 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
 ## Access the `cray` Gitea Organization
 
-The VCS UI uses Keycloak to authenticate users on the system. However, users from external authentication sources are not automatically associated with permissions in the `cray` Gitea organization. As a result, users configured via Keycloak can log in and create organizations and repositories of their own, but they cannot modify the cray organization that is created during system installation unless they are given permissions to do so.
+The VCS UI uses Keycloak to authenticate users on the system. However, users from external authentication sources are not
+automatically associated with permissions in the `cray` Gitea organization. As a result, users configured via Keycloak can
+log in and create organizations and repositories of their own, but they cannot modify the cray organization that is created
+during system installation unless they are given permissions to do so.
 
 The `crayvcs` Gitea admin user that is created during CSM installation can log in to the UI via Keycloak. To allow users other than `crayvcs` to have access to repositories in the `cray` organization, use the following procedure:
 
@@ -218,7 +230,9 @@ Select the permissions appropriately, and then navigate to the following URL to 
 
 ### Backup and Restore Data
 
-Data for gitea is stored in two places. Git content is stored directly in a PVC, while structural data, such as gitea users and the list and attributes of repos, is stored in a Postgres database. Because of this, both sources must be backed up and restored together.
+Data for gitea is stored in two places. Git content is stored directly in a PVC, while structural data, such as gitea users
+and the list and attributes of repos, is stored in a Postgres database. Because of this, both sources must be backed up
+and restored together.
 
 #### Backup Postgres Data
 
@@ -267,7 +281,6 @@ The VCS postgres backups should be accompanied by backups of the VCS PVC. The ex
 
 Backup (save the resulting tar file to a safe location):
 
-
 ```bash
 ncn-mw# POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
 ncn-mw# kubectl -n services exec ${POD} -- tar -cvf vcs.tar /data/
@@ -297,7 +310,10 @@ ncn-mw# kubectl -n services rollout restart deployment gitea-vcs
 
 ## Alternative Backup/Restore Strategy
 
-An alternative to the separate backups of the postgres and pvc data is to backup the git data. This has the advantage that only one backup is needed and that the git backups can be imported into any git server, not just gitea, but has the disadvantage that some information about the gitea deployment is lost (such as user/org information) and may need to be recreated manually if the VCS deployment is lost.
+An alternative to the separate backups of the postgres and pvc data is to backup the git data. This has the advantage that
+only one backup is needed and that the git backups can be imported into any git server, not just gitea, but has the disadvantage
+that some information about the gitea deployment is lost (such as user/org information) and may need to be recreated manually
+if the VCS deployment is lost.
 
 The following scripts create/use a `vcs-content` directory that contains all git data. This should be copied to a safe location after export, and moved back to the system before import.
 
