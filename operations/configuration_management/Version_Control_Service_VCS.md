@@ -85,7 +85,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 1. Now SSH into `ncn-w001` or `ncn-m001`.
 1. Run `git clone https://github.com/Cray-HPE/csm.git`.
 1. Copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` to the desired working directory.
-1. Change directories to be in the working directory set in the previous step.   
+1. Change directories to be in the working directory set in the previous step.
 1. Save a local copy of the `customizations.yaml` file.
 
     ```bash
