@@ -204,7 +204,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
 The VCS UI uses Keycloak to authenticate users on the system. However, users from external authentication sources are not
 automatically associated with permissions in the `cray` Gitea organization. As a result, users configured via Keycloak can
-log in and create organizations and repositories of their own, but they cannot modify the cray organization that is created
+log in and create organizations and repositories of their own, but they cannot modify the Cray organization that is created
 during system installation unless they are given permissions to do so.
 
 The `crayvcs` Gitea admin user that is created during CSM installation can log in to the UI via Keycloak. To allow users other than `crayvcs` to have access to repositories in the `cray` organization, use the following procedure:
@@ -231,7 +231,7 @@ Select the permissions appropriately, and then navigate to the following URL to 
 
 ### Backup and Restore Data
 
-Data for gitea is stored in two places. Git content is stored directly in a PVC, while structural data, such as gitea users
+Data for Gitea is stored in two places. Git content is stored directly in a PVC, while structural data, such as Gitea users
 and the list and attributes of repos, is stored in a Postgres database. Because of this, both sources must be backed up
 and restored together.
 
@@ -254,7 +254,7 @@ and restored together.
     ncn-w001# kubectl exec -it ${POSTGRES_LEADER} -n services -c postgres -- pg_dumpall -c -U postgres > gitea-vcs-postgres.sql
     ```
 
-2. Determine what secrets are associated with the postgresql credentials:
+2. Determine what secrets are associated with the Postgres credentials:
 
     ```bash
     ncn-w001# kubectl get secrets -n services | grep gitea-vcs-postgres.credentials
@@ -274,11 +274,11 @@ and restored together.
     done
     ```
 
-   Edit the manifest file created above to remove creationTimestamp, resourceVersion, selfLink, uid for each entry. Then `copy all files to a safe location`.
+   Edit the manifest file created above to remove `creationTimestamp`, `resourceVersion`, `selfLink`, `uid` for each entry. Then `copy all files to a safe location`.
 
 ## Backup PVC Data
 
-The VCS postgres backups should be accompanied by backups of the VCS PVC. The export process can be run at any time while the service is running using the following commands:
+The VCS Postgres backups should be accompanied by backups of the VCS PVC. The export process can be run at any time while the service is running using the following commands:
 
 Backup (save the resulting tar file to a safe location):
 
@@ -290,15 +290,15 @@ ncn-mw# kubectl -n services cp ${POD}:vcs.tar ./vcs.tar
 
 ## Restore Postgres Data
 
-**`IMPORTANT:`** Only do this if necessary. You will not always restore after a backup as we callout the backup procedure as a precautionary step.
+**`IMPORTANT:`** Only do this if necessary. You will not always restore after a backup as we call out the backup procedure as a precautionary step.
 
-Restoring VCS from Postgres is documented here: [Restore_Postgres.md](../../operations/kubernetes/Restore_Postgres.md#restore-postgres-for-vcs)
+Restoring VCS from Postgres is documented here: [Restore Postgres](../../operations/kubernetes/Restore_Postgres.md#restore-postgres-for-vcs)
 
 ## Restore PVC Data
 
-**`IMPORTANT:`** Only do this if necessary. You will not always restore after a backup as we callout the backup procedure as a precautionary step.
+**`IMPORTANT:`** Only do this if necessary. You will not always restore after a backup as we call out the backup procedure as a precautionary step.
 
-When restoring the VCS postgres database, the PVC should also be restored to the same point in time. The restore process can be run at any time while the service is running using the following commands:
+When restoring the VCS Postgres database, the PVC should also be restored to the same point in time. The restore process can be run at any time while the service is running using the following commands:
 
 Restore:
 
@@ -311,9 +311,9 @@ ncn-mw# kubectl -n services rollout restart deployment gitea-vcs
 
 ## Alternative Backup/Restore Strategy
 
-An alternative to the separate backups of the postgres and pvc data is to backup the git data. This has the advantage that
-only one backup is needed and that the git backups can be imported into any git server, not just gitea, but has the disadvantage
-that some information about the gitea deployment is lost (such as user/org information) and may need to be recreated manually
+An alternative to the separate backups of the Postgres and `pvc` data is to backup the git data. This has the advantage that
+only one backup is needed and that the git backups can be imported into any git server, not just Gitea, but has the disadvantage
+that some information about the Gitea deployment is lost (such as `user/org` information) and may need to be recreated manually
 if the VCS deployment is lost.
 
 The following scripts create/use a `vcs-content` directory that contains all git data. This should be copied to a safe location after export, and moved back to the system before import.
