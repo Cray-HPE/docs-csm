@@ -22,7 +22,7 @@ sections, but there is also a general troubleshooting topic.
 
     The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
 
-    The upgrade is a guided process Starting with [Upgrade Management Nodes and CSM Services](1.2/README.md)
+    The upgrade is a guided process starting with [Upgrade Management Nodes and CSM Services](1.2/README.md).
 
 1. <a name="validate_csm_health"></a>Validate CSM Health
 
@@ -37,7 +37,7 @@ sections, but there is also a general troubleshooting topic.
        beyond the scope of this document) prior to validating UAS and UAI. Failures in UAI creation that result
        from incorrect or incomplete installation of these products will generally take the form of UAIs stuck in
        waiting state trying to set up volume mounts.
-     * Performing the `Booting CSM Barebones Image` test may be skipped if no compute nodes are available
+     * Performing the [Booting CSM `barebones` image](../operations/validate_csm_health.md#booting-csm-barebones-image) test may be skipped if no compute nodes are available
        (that is, if all compute nodes are active running application workloads).
 
      See [Validate CSM Health](../operations/validate_csm_health.md)
