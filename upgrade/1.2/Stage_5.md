@@ -65,7 +65,7 @@
             [--csm-release 1.2.0] [--git-commit COMMIT] [--ncn-config-file  /path/to/ncn-personalization.json]
    ```
 
-   For more information on this script, see [Automatically Apply CSM Configuration to NCNs](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#auto_apply_csm_config)
+   For more information on this script, see [Automatically Apply CSM Configuration to NCNs](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#auto_apply_csm_config).
 
 1. Review the new `ncn-personalization` configuration and write it to a JSON file.
 
