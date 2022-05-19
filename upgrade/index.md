@@ -76,10 +76,11 @@ See [Update Management Network](update_management_network.md).
   beyond the scope of this document) prior to validating UAS and UAI. Failures in UAI creation that result
   from incorrect or incomplete installation of these products will generally take the form of UAIs stuck in
   waiting state trying to set up volume mounts.
-* Performing the `Booting CSM Barebones Image` test may be skipped if no compute nodes are available
-  (that is, if all compute nodes are active running application workloads).
+* Performing the [Booting CSM `barebones` image](../operations/validate_csm_health.md#booting-csm-barebones-image)
+  test may be skipped if no compute nodes are available (that is, if all compute nodes are active running
+  application workloads).
 
-It is always recommended to run all possible CSM health validation procedures. At a minimum, run the
+It is always recommended to run all possible CSM health validation procedures. **At a minimum**, run the
 following validation checks to ensure that everything is still working properly after the upgrade.
 
 1. [Platform Health Checks](../operations/validate_csm_health.md#platform-health-checks)
