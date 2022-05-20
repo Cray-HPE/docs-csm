@@ -5,14 +5,14 @@ The Version Control Service \(VCS\) includes a web interface for repository mana
 `https://vcs.SHASTA_CLUSTER_DNS_NAME`
 
 On cluster nodes, the VCS service can be accessed through the gateway. VCS credentials for the `crayvcs` user are required
-before cloning a repository \(see the "VCS Administrative User" section below\). To clone a repository in the `cray` organization,
+before cloning a repository \(see the "VCS administrative user" section below\). To clone a repository in the `cray` organization,
 use the following command:
 
 ```bash
 ncn# git clone https://api-gw-service-nmn.local/vcs/cray/REPO_NAME.git
 ```
 
-## VCS Administrative User
+## VCS administrative user
 
 The Cray System Management \(CSM\) product installation creates the administrative user `crayvcs` that is used by CSM and
 other product installers to import their configuration content into VCS. The initial VCS credentials for the `crayvcs` user
@@ -20,10 +20,10 @@ are obtained with the following command:
 
 ```bash
 ncn# kubectl get secret -n services vcs-user-credentials \
---template={{.data.vcs_password}} | base64 --decode
+             --template={{.data.vcs_password}} | base64 --decode
 ```
 
-## Change VCS Administrative User Password
+## Change VCS administrative user password
 
 The initial VCS login credentials for the `crayvcs` user are stored in three places:
 
@@ -140,9 +140,9 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
 1. Create a local copy of the `sysmgmt.yaml` file.
 
-```bash
+    ```bash
     ncn# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > sysmgmt.yaml
-```
+    ```
 
 1. Edit the `sysmgmt.yaml` to only include the `gitea` chart and all its current data.
 
@@ -200,7 +200,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
             kubectl apply -f -
     ```
 
-## Access the `cray` Gitea Organization
+## Access the `cray` Gitea organization
 
 The VCS UI uses Keycloak to authenticate users on the system. However, users from external authentication sources are not
 automatically associated with permissions in the `cray` Gitea organization. As a result, users configured via Keycloak can
@@ -233,13 +233,13 @@ Select the permissions appropriately, and then navigate to the following URL to 
 https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/org/cray/teams
 ```
 
-## Backup and Restore Data
+## Backup and restore data
 
 Data for Gitea is stored in two places. Git content is stored directly in a PVC, while structural data, such as Gitea users
 and the list and attributes of repos, is stored in a Postgres database. Because of this, both sources must be backed up
 and restored together.
 
-### Backup Postgres Data
+### Backup Postgres data
 
 1. Determine which Postgres member is the leader and exec into the leader pod to dump the data to a local file:
 
@@ -292,7 +292,7 @@ and restored together.
 
 4. Edit the manifest file to remove `creationTimestamp`, `resourceVersion`, `selfLink`, `uid` for each entry. Then, copy all files to a safe location.
 
-### Backup PVC Data
+### Backup PVC data
 
 The VCS Postgres backups should be accompanied by backups of the VCS PVC. The export process can be run at any time while the service is running using the following commands:
 
@@ -304,11 +304,11 @@ ncn# kubectl -n services exec ${POD} -- tar -cvf vcs.tar /var/lib/gitea/
 ncn# kubectl -n services cp ${POD}:vcs.tar ./vcs.tar
 ```
 
-### Restore Postgres Data
+### Restore Postgres data
 
 Restoring VCS from Postgres is documented here: [Restore Postgres](../../operations/kubernetes/Restore_Postgres.md#restore-postgres-for-vcs)
 
-### Restore PVC Data
+### Restore PVC data
 
 When restoring the VCS Postgres database, the PVC should also be restored to the same point in time. The restore process can be run at any time while the service is running using the following commands:
 
@@ -321,7 +321,7 @@ ncn# kubectl -n services exec ${POD} -- tar -xvf vcs.tar
 ncn# kubectl -n services rollout restart deployment gitea-vcs
 ```
 
-### Alternative Backup/Restore Strategy
+### Alternative backup/restore strategy
 
 An alternative to the separate backups of the Postgres and `pvc` data is to backup the git data. This has the advantage that
 only one backup is needed and that the git backups can be imported into any git server, not just Gitea, but has the disadvantage
