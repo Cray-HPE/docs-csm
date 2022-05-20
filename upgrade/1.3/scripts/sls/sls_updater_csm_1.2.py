@@ -20,7 +20,7 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-"""Upgrade an SLS file from any CSM 1.0.x version to CSM 1.2 idempotently."""
+"""Upgrade an SLS file from any CSM 1.0.x version to CSM 1.3 idempotently."""
 import ipaddress
 import json
 import sys
@@ -41,10 +41,10 @@ from csm_1_2_upgrade.sls_updates import update_nmn_uai_macvlan_dhcp_ranges
 from sls_utils.Managers import NetworkManager
 
 
-help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
+help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.3.
 
     1. Migrate switch naming (in order):  leaf to leaf-bmc and agg to leaf.\n
-    2. Remove api-gateway entries from HMLB subnets for CSM 1.2 security.\n
+    2. Remove api-gateway entries from HMLB subnets for CSM 1.3 security.\n
     3. Remove kubeapi-vip reservations for all networks except NMN.\n
     4. Create the new BICAN "toggle" network.\n
     5. Migrate the existing CAN to CMN.\n
@@ -203,7 +203,7 @@ def main(
     number_of_chn_edge_switches,
     retain_unused_user_network,
 ):
-    """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
+    """Upgrade a system SLS file from CSM 1.0 to CSM 1.3.
 
     Args:
         ctx: Click context
@@ -271,7 +271,7 @@ def main(
     # Clone (existing) CAN network to CMN
     #   (ORDER DEPENDENT!!!)
     #   Use CAN as a template and create the CMN (leaves CAN in-place)
-    #   On any pre-CSM-1.2 system there WILL/MUST be a CAN in SLS
+    #   On any pre-CSM-1.3 system there WILL/MUST be a CAN in SLS
     migrate_can_to_cmn(
         networks,
         preserve=preserve_existing_subnet_for_cmn,
@@ -340,7 +340,7 @@ def main(
             networks.pop("CHN")
 
     click.secho(
-        f"Writing CSM 1.2 upgraded and schema validated SLS file to {sls_output_file.name}",
+        f"Writing CSM 1.3 upgraded and schema validated SLS file to {sls_output_file.name}",
         fg="bright_white",
     )
 

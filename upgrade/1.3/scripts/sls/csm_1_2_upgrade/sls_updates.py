@@ -19,7 +19,7 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-"""Functions used to update SLS from CSM 1.0.x to CSM 1.2."""
+"""Functions used to update SLS from CSM 1.0.x to CSM 1.3."""
 from collections import defaultdict
 import ipaddress
 import sys
@@ -80,7 +80,7 @@ def sls_and_input_data_checks(
     if cmn is not None:
         click.secho(
             "    INFO: A CMN network already exists in SLS.  This is unusual except where the "
-            "upgrade process has already run or on an existing CSM 1.2 system.",
+            "upgrade process has already run or on an existing CSM 1.3 system.",
             fg="white",
         )
 
@@ -88,7 +88,7 @@ def sls_and_input_data_checks(
     if chn is not None:
         click.secho(
             "    INFO: A CHN network already exists in SLS.  This is unusual except where the "
-            "upgrade process has already run or on an existing CSM 1.2 system.",
+            "upgrade process has already run or on an existing CSM 1.3 system.",
             fg="white",
         )
     if bican_name == "CHN":
@@ -147,9 +147,9 @@ def sls_and_input_data_checks(
 
 
 def migrate_switch_names(networks, hardware):
-    """Rename CSM <=1.0.x switches to new CSM 1.2 naming.
+    """Rename CSM <=1.0.x switches to new CSM 1.3 naming.
 
-    CSM 1.2 changes switch names in the following order:
+    CSM 1.3 changes switch names in the following order:
       1. sw-leaf-xyz -> sw-leaf-bmc-xyz
       2. sw-agg-xyz -> sw-leaf-xyz
 
@@ -157,7 +157,7 @@ def migrate_switch_names(networks, hardware):
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
         hardware (json): Unmanaged SLS Hardware structure in JSON
     """
-    # The BICAN network only exists in CSM >=1.2.  If it exists do NOT migrate
+    # The BICAN network only exists in CSM >=1.3.  If it exists do NOT migrate
     # switch names.
     # WARNING:  If this check is not in place the script is not guaranteed to
     # be idempotent!

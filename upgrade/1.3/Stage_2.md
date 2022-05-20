@@ -1,11 +1,11 @@
-# Stage 2 - Kubernetes Upgrade from 1.19.9 to 1.20.13
+# Stage 2 - Kubernetes Upgrade from 1.19.9 to 1.30.13
 
 ## Stage 2.1
 
 1. Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`. Follow output of the script carefully. The script will pause for manual interaction.
 
    ```bash
-   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
+   ncn-m001# /usr/share/doc/csm/upgrade/1.3/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
    ```
 
    > **NOTE:** The root password for the node may need to be reset after it is rebooted.
@@ -17,7 +17,7 @@
 1. Run `ncn-upgrade-worker-nodes.sh` for `ncn-w001`. Follow output of the script carefully. The script will pause for manual interaction.
 
    ```bash
-   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001
+   ncn-m001# /usr/share/doc/csm/upgrade/1.3/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001
    ```
 
    > **NOTE:** The root password for the node may need to be reset after it is rebooted.
@@ -40,7 +40,7 @@ from which the other nodes were upgraded. At this point, the upgrade procedure p
 1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-   ncn-m002# CSM_RELEASE=csm-1.2.0
+   ncn-m002# CSM_RELEASE=csm-1.3.0
    ```
 
 1. Copy artifacts from `ncn-m001`.
@@ -61,7 +61,7 @@ from which the other nodes were upgraded. At this point, the upgrade procedure p
 1. Upgrade `ncn-m001`.
 
    ```bash
-   ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
+   ncn-m002# /usr/share/doc/csm/upgrade/1.3/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
    ```
 
 ## Stage 2.4
@@ -77,7 +77,7 @@ ncn-m002# /srv/cray/scripts/common/apply-networking-manifests.sh
 Run the following script to apply anti-affinity to `coredns` pods:
 
 ```bash
-ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/apply-coredns-pod-affinity.sh
+ncn-m002# /usr/share/doc/csm/upgrade/1.3/scripts/k8s/apply-coredns-pod-affinity.sh
 ```
 
 ## Stage 2.6
@@ -85,7 +85,7 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/apply-coredns-pod-affinity.
 Run the following script to complete the Kubernetes upgrade _(this will restart several pods on each master to their new Docker containers)_:
 
 ```bash
-ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/upgrade_control_plane.sh
+ncn-m002# /usr/share/doc/csm/upgrade/1.3/scripts/k8s/upgrade_control_plane.sh
 ```
 
 > **`NOTE`**: `kubelet` has been upgraded already, ignore the warning to upgrade it.

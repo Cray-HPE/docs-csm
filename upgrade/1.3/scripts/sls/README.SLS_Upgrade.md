@@ -1,10 +1,10 @@
-# Upgrade SLS Offline from CSM 1.0.x to CSM 1.2
+# Upgrade SLS Offline from CSM 1.0.x to CSM 1.3
 
 ## Abstract
 
 During the update of SLS, at a minimum, answers to the following questions must be known prior to upgrading:
 
-1. By default in 1.2 non-administrative user traffic will be migrated from the CAN to the CHN while minimizing changes. If
+1. By default in 1.3 non-administrative user traffic will be migrated from the CAN to the CHN while minimizing changes. If
    you want it to continue to come in via the CAN, or if the site is air-gapped, specify the correct options Will user
    traffic (non-administrative) come in via the CAN, CHN or is the site air-gapped?
 
@@ -48,7 +48,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
     * Example 1: Upgrade, using the CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
         ```bash
-        ncn# ./sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+        ncn# ./sls_updater_csm_1.3.py --sls-input-file sls_input_file.json \
                 --bican-user-network-name CHN \
                 --customer-highspeed-network 5 10.103.11.192/26
         ```
@@ -56,7 +56,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
     * Example 2: Upgrade, using the CAN as the system default route, keep the generated CHN (for testing), and preserve the existing external-dns entry.
 
         ```bash
-        ncn# ./sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+        ncn# ./sls_updater_csm_1.3.py --sls-input-file sls_input_file.json \
                 --bican-user-network-name CAN \
                 --customer-highspeed-network 5 10.103.11.192/26 \
                 --preserve-existing-subnet-for-cmn external-dns \
@@ -77,7 +77,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
 For help and all options, run the following:
 
 ```bash
-ncn# ./sls_updater_csm_1.2.py --help
+ncn# ./sls_updater_csm_1.3.py --help
 ```
 
 ## Actions and Order
@@ -86,7 +86,7 @@ This migration is performed offline for data security. The running SLS file is f
 migration script is run and a new, migrated output file is created.
 
 1. Migrate switch naming (in order): `leaf` to `leaf-bmc`, and `agg` to `leaf`.
-1. Remove `api-gateway` entries from HMLB subnets for CSM 1.2 security.
+1. Remove `api-gateway` entries from HMLB subnets for CSM 1.3 security.
 1. Remove `kubeapi-vip` reservations for all networks except NMN.
 1. Create the new BICAN "toggle" network.
 1. Migrate the existing CAN to CMN.
@@ -98,7 +98,7 @@ migration script is run and a new, migrated output file is created.
 
 ## Migrate Switch Names
 
-Switch names change in CSM 1.2 and must be applied in the following order:
+Switch names change in CSM 1.3 and must be applied in the following order:
 
 1. `leaf` switches become `leaf-bmc` switches.
 1. `agg` switches become `leaf` switches.
@@ -107,12 +107,12 @@ This needs to be done in the order listed above.
 
 ## Remove `api-gateway` / `istio-ingress-gateway` Reservations from HMNLB Subnets
 
-For CSM 1.2, the API gateway will no longer listen on the HMNLB MetalLB address pool.
+For CSM 1.3, the API gateway will no longer listen on the HMNLB MetalLB address pool.
 These aliases provided DNS records and are being removed.
 
 ## Create the BICAN Network "Toggle"
 
-New for CSM 1.2, the BICAN network `ExtraProperties` value of `SystemDefaultRoute` is used
+New for CSM 1.3, the BICAN network `ExtraProperties` value of `SystemDefaultRoute` is used
 to point to the CAN, CHN, or CMN, and is used by utilities to systematically toggle routes.
 
 ## Migrate (existing) CAN to (new) CMN

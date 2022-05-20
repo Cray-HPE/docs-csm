@@ -48,7 +48,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/util/verify-k8s-nodes-upgraded.sh
+    /usr/share/doc/csm/upgrade/1.3/scripts/upgrade/util/verify-k8s-nodes-upgraded.sh
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
@@ -65,14 +65,14 @@ if [[ $state_recorded == "0" ]]; then
     scp ncn-s001:/srv/cray/scripts/common/csi-configuration.sh /tmp/csi-configuration.sh
     mkdir -p /srv/cray/tmp
     . /tmp/csi-configuration.sh
-    create_ceph_rbd_1.2_csi_configmap
-    create_ceph_cephfs_1.2_csi_configmap
-    create_k8s_1.2_ceph_secrets
-    create_sma_1.2_ceph_secrets
-    create_cephfs_1.2_ceph_secrets
-    create_k8s_1.2_storage_class
-    create_sma_1.2_storage_class
-    create_cephfs_1.2_storage_class
+    create_ceph_rbd_1.3_csi_configmap
+    create_ceph_cephfs_1.3_csi_configmap
+    create_k8s_1.3_ceph_secrets
+    create_sma_1.3_ceph_secrets
+    create_cephfs_1.3_ceph_secrets
+    create_k8s_1.3_storage_class
+    create_sma_1.3_storage_class
+    create_cephfs_1.3_storage_class
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
@@ -86,7 +86,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    pushd /usr/share/doc/csm/upgrade/1.2/scripts/strimzi
+    pushd /usr/share/doc/csm/upgrade/1.3/scripts/strimzi
     ./kafka-prereq.sh
     popd +0
     } >> ${LOG_FILE} 2>&1
@@ -118,7 +118,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    /usr/share/doc/csm/upgrade/1.2/scripts/k8s/enable-psp.sh
+    /usr/share/doc/csm/upgrade/1.3/scripts/k8s/enable-psp.sh
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
@@ -132,7 +132,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    /usr/share/doc/csm/upgrade/1.2/scripts/strimzi/kafka-restart.sh
+    /usr/share/doc/csm/upgrade/1.3/scripts/strimzi/kafka-restart.sh
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)

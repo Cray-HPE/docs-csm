@@ -39,6 +39,7 @@ state_name="BACKUP_SAT_LOCAL_FILES"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    {
     sat_paths_to_backup="/root/.config/sat/sat.toml
         /root/.config/sat/tokens/
         /root/.config/sat/s3_access_key
@@ -58,6 +59,7 @@ if [[ $state_recorded == "0" ]]; then
         fi
     done
     echo "SAT local files backed up to $sat_backup_directory"
+    } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -68,14 +70,16 @@ if [[ ${target_ncn} == "ncn-m001" ]]; then
    state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
    if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
-
+      {
       scp root@ncn-m001:/etc/sysconfig/network/ifcfg-lan0 .
+      } >> ${LOG_FILE} 2>&1
       record_state "${state_name}" ${target_ncn}
    else
       echo "====> ${state_name} has been completed"
    fi
 fi
 
+{
 first_master_hostname=`curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | \
      jq -r '.[] | ."cloud-init"."meta-data"."first-master-hostname"'`
 #shellcheck disable=SC2053
@@ -108,7 +112,7 @@ if [[ ${first_master_hostname} == ${target_ncn} ]]; then
 
       scp /root/docs-csm-latest.noarch.rpm $promotingMaster:/root/docs-csm-latest.noarch.rpm
       ssh $promotingMaster "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
-      ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/1.2/scripts/k8s/promote-initial-master.sh"
+      ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/1.3/scripts/k8s/promote-initial-master.sh"
       VERBOSE=1 csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
 
       record_state "${state_name}" ${target_ncn}
@@ -116,15 +120,17 @@ if [[ ${first_master_hostname} == ${target_ncn} ]]; then
       echo "====> ${state_name} has been completed"
    fi
 fi
+} >> ${LOG_FILE} 2>&1
 
 state_name="PREPARE_ETCD"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    {
     csi automate ncn etcd --action remove-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
     ssh $target_ncn 'systemctl daemon-reload'
     ssh $target_ncn 'systemctl stop etcd.service'
-    
+
     set +e
     while true ; do    
         csi automate ncn etcd --action add-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
@@ -135,7 +141,7 @@ if [[ $state_recorded == "0" ]]; then
         fi
     done
     set -e
-
+    } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -143,6 +149,7 @@ fi
 
 drain_node $target_ncn
 
+{
 set +e
 while true ; do    
     csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
@@ -153,14 +160,16 @@ while true ; do
     fi
 done
 set -e
+} >> ${LOG_FILE} 2>&1
 
-${basedir}/../common/ncn-rebuild-common.sh $target_ncn --rebuild
+${basedir}/../common/ncn-rebuild-common.sh $target_ncn
 
 # Restore files used by the System Admin Toolkit (SAT) that were previously backed up
 state_name="RESTORE_SAT_LOCAL_FILES"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    {
     sat_backup_directory="/tmp/sat-backup-${target_ncn}/"
     # Check the existence of the SAT backup directory. The directory missing should
     # not happen, but if it does the upgrade script probably should not fail.
@@ -170,6 +179,7 @@ if [[ $state_recorded == "0" ]]; then
     else
         echo "$sat_backup_directory does not exist"
     fi
+    } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
@@ -180,9 +190,12 @@ state_name="INSTALL_DOCS_NEW_MASTER"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
+    {
     record_state "${state_name}" ${target_ncn}
     scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
     ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
+    } >> ${LOG_FILE} 2>&1
+    record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
@@ -191,11 +204,11 @@ if [[ ${target_ncn} != "ncn-m001" ]]; then
    state_name="UPDATE_M001_KUBEAPI_SERVICE_ISSUER"
    state_recorded=$(is_state_recorded "${state_name}" ncn-m001)
    if [[ $state_recorded == "0" ]]; then
-      echo "====> ${state_name} ..."
-
-      /usr/share/doc/csm/upgrade/1.2/scripts/k8s/update_kubeapi_service_issuer.sh ncn-m001
-
-      record_state "${state_name}" ncn-m001
+        echo "====> ${state_name} ..."
+        {
+        /usr/share/doc/csm/upgrade/1.3/scripts/k8s/update_kubeapi_service_issuer.sh ncn-m001
+        } >> ${LOG_FILE} 2>&1
+        record_state "${state_name}" ncn-m001
    else
       echo "====> ${state_name} has been completed"
    fi
@@ -204,12 +217,12 @@ fi
 if [[ ${target_ncn} != "ncn-m001" ]]; then
    state_name="UPDATE_M001_KUBEAPI_ISTIO_CA"
    state_recorded=$(is_state_recorded "${state_name}" ncn-m001)
-   if [[ $state_recorded == "0" ]]; then
-      echo "====> ${state_name} ..."
-
-      /usr/share/doc/csm/upgrade/1.2/scripts/k8s/update_kubeapi_istio_ca.sh ncn-m001
-
-      record_state "${state_name}" ncn-m001
+    if [[ $state_recorded == "0" ]]; then
+        echo "====> ${state_name} ..."
+        {
+        /usr/share/doc/csm/upgrade/1.3/scripts/k8s/update_kubeapi_istio_ca.sh ncn-m001
+        } >> ${LOG_FILE} 2>&1
+        record_state "${state_name}" ncn-m001
    else
       echo "====> ${state_name} has been completed"
    fi
@@ -220,9 +233,9 @@ state_name="UPDATE_KUBEAPI_ISTIO_CA"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
    echo "====> ${state_name} ..."
-
-   /usr/share/doc/csm/upgrade/1.2/scripts/k8s/update_kubeapi_istio_ca.sh ${target_ncn}
-
+   {
+   /usr/share/doc/csm/upgrade/1.3/scripts/k8s/update_kubeapi_istio_ca.sh ${target_ncn}
+   } >> ${LOG_FILE} 2>&1
    record_state "${state_name}" ${target_ncn}
 else
    echo "====> ${state_name} has been completed"
@@ -233,7 +246,7 @@ NOTE:
     If below test failed, try to fix it based on test output. Then run current script again
 EOF
 ssh $target_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-master.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'
-/usr/share/doc/csm/scripts/CASMINST-2015.sh
+
 move_state_file ${target_ncn}
 
 ok_report

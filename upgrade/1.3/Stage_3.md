@@ -5,7 +5,7 @@
 1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-    ncn-m002# CSM_RELEASE=csm-1.2.0
+    ncn-m002# CSM_RELEASE=csm-1.3.0
    ```
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
@@ -32,7 +32,7 @@
    **NOTE** For Cray/HPE internal installs, if `ncn-m002` can reach the internet, then the `--endpoint` argument may be omitted.
 
    ```bash
-   ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
+   ncn-m002# /usr/share/doc/csm/upgrade/1.3/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
    ```
 
 1. Skip the `Manual copy` subsection.
@@ -54,7 +54,7 @@
 1. Run the script.
 
    ```bash
-   ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
+   ncn-m002# /usr/share/doc/csm/upgrade/1.3/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
 ## Perform upgrade
@@ -75,7 +75,7 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
    Run `csm-upgrade.sh` to deploy upgraded CSM applications and services.
 
    ```bash
-   ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/csm-upgrade.sh
+   ncn-m002# /usr/share/doc/csm/upgrade/1.3/scripts/upgrade/csm-upgrade.sh
    ```
 
 ## Stage completed

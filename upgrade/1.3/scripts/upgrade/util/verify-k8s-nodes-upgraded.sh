@@ -1,6 +1,8 @@
+#!/bin/sh
+#
 # MIT License
 #
-# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -19,4 +21,29 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-"""Modifications to SLS to upgrade from CSM 1.0.x to CSM 1.2."""
+#
+
+EXPECTED_VERSION="v1.30.13"
+display_output=$(kubectl get nodes)
+versions=$(kubectl get nodes -o json | jq -r '.items[].status.nodeInfo.kubeletVersion')
+#shellcheck disable=SC3030
+#shellcheck disable=SC2206
+stringarray=($versions)
+#shellcheck disable=SC3054
+for version in "${stringarray[@]}"; do
+  if [ "$version" != "$EXPECTED_VERSION" ]; then
+    echo "FAILURE: Not all NCNs have been updated to ${EXPECTED_VERSION}!"
+    echo "         Return to the previous step to ensure all NCNs have been upgraded"
+    echo "         before proceeding."
+    echo ""
+    echo "Node versions:"
+    echo ""
+    echo "$display_output"
+    exit 1
+  fi
+done
+
+echo "SUCCESS: All NCNs have been updated to ${EXPECTED_VERSION}:"
+echo ""
+echo "$display_output"
+exit 0

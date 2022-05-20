@@ -1,8 +1,8 @@
-# CSM 1.0.0 or later to 1.2.0 Upgrade Process
+# CSM 1.0.0 or later to 1.3.0 Upgrade Process
 
 ## Introduction
 
-This document is intended to guide an administrator through the upgrade process going from Cray Systems Management v1.0 to v1.2. When upgrading a system, this top-level `README.md`
+This document is intended to guide an administrator through the upgrade process going from Cray Systems Management v1.0 to v1.3. When upgrading a system, this top-level `README.md`
 file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the resource_material
 directory for additional reference material in support of the processes/scripts mentioned explicitly on this page.
 
@@ -13,11 +13,11 @@ executed automatically as part of [Stage 0.4](Stage_0_Prerequisites.md#prerequis
 information.
 
 Independently, the `customizations.yaml` file will be edited automatically during upgrade for TDS systems prior to deploying new CSM services. See the file:
-`/usr/share/doc/csm/upgrade/1.2/scripts/upgrade/tds_cpu_requests.yaml` for these settings. This file can be modified (prior to proceeding with this upgrade) with
+`/usr/share/doc/csm/upgrade/1.3/scripts/upgrade/tds_cpu_requests.yaml` for these settings. This file can be modified (prior to proceeding with this upgrade) with
 different values, if other settings are desired in the `customizations.yaml` file for this system.
 
 For more information about modifying `customizations.yaml` and tuning based on specific systems, see
-[Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/CSM_product_management/Post_Install_Customizations.md).
+[Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.3/operations/CSM_product_management/Post_Install_Customizations.md).
 
 ## Upgrade Stages
 

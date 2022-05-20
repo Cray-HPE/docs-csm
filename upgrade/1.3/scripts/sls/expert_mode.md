@@ -1,6 +1,6 @@
 # SLS Updates Expert Mode
 
-The 1.2 SLS Upgrader aims to make the upgrade of SLS from pre-CMS 1.2 to CSM 1.2 as seamless as possible. However, certain system constraints and subnet sizes quickly necessitate overriding standard input.
+The 1.3 SLS Upgrader aims to make the upgrade of SLS from pre-CMS 1.3 to CSM 1.3 as seamless as possible. However, certain system constraints and subnet sizes quickly necessitate overriding standard input.
 
 ***Key Takeaways***
 
@@ -26,18 +26,18 @@ The upgrader requires only two inputs:
 An example of this would be:
 
 ```bash
-ncn# ./sls_updater_csm_1.2.py \
+ncn# ./sls_updater_csm_1.3.py \
         --sls-input-file sls_input_file.json \
         --bican-user-network-name CAN
 ```
 
-The above example will use *default values* for all other input values. A list of input parameters and default values can be found by running `./sls_updater_csm_1.2.py --help`.
+The above example will use *default values* for all other input values. A list of input parameters and default values can be found by running `./sls_updater_csm_1.3.py --help`.
 Likely using default VLAN and Network values will not be what is desired: The CAN or CHN are usually site-routable values.
 
 In this case an example minimal usable input while using CAN, would be:
 
 ```bash
-ncn# ./sls_updater_csm_1.2.py \
+ncn# ./sls_updater_csm_1.3.py \
         --sls-input-file sls_input_file.json \
         --bican-user-network-name CAN \
         --customer-access-network <CAN VLAN ID> <CAN NETORK CIDR>
@@ -46,7 +46,7 @@ ncn# ./sls_updater_csm_1.2.py \
 For CHN the analog minimal usable input would be:
 
 ```bash
-ncn# ./sls_updater_csm_1.2.py \
+ncn# ./sls_updater_csm_1.3.py \
         --sls-input-file sls_input_file.json \
         --bican-user-network-name CHN \
         --customer-highspeed-network <CHN VLAN ID> <CHN NETWORK CIDR>
@@ -54,7 +54,7 @@ ncn# ./sls_updater_csm_1.2.py \
 
 ## Forcing Preservation of (some) Existing Values
 
-As part of the upgrade process an exist CAN is migrated to a CSM 1.2 Customer Management Network (CMN). The reasoning behind this was that most systems in production currently use
+As part of the upgrade process an exist CAN is migrated to a CSM 1.3 Customer Management Network (CMN). The reasoning behind this was that most systems in production currently use
 the CAN as an administrative network. Additionally, and more operationally important, system IP addresses shared with the site (External DNS for instance) are administrative IP
 addresses, and it is often more difficult to change these IP addresses than it is to make changes in software and avoid operational changes.
 
@@ -72,7 +72,7 @@ Note that `external-dns` preservation is mutually exclusive from `ncns`. This is
 A very common (and recommended) next step minimal command line is as follows for a system desiring the CHN with no change of the `external-dns` value:
 
 ```bash
-ncn# ./sls_updater_csm_1.2.py \
+ncn# ./sls_updater_csm_1.3.py \
         --sls-input-file sls_input_file.json \
         --bican-user-network-name CHN \
         --customer-highspeed-network <CHN VLAN ID> <CHN NETWORK CIDR> \
@@ -80,14 +80,14 @@ ncn# ./sls_updater_csm_1.2.py \
 ```
 
 This creates a new CHN and migrates the existing CAN to the new CMN, while maintaining the `external-dns` IP address in the process. Note that this command line would very likely change
-existing CAN/CMN addresses on manager, worker, and storage NCNs during the upgrade to CSM 1.2.
+existing CAN/CMN addresses on manager, worker, and storage NCNs during the upgrade to CSM 1.3.
 
 **NOTE:** The output of the upgrader is to a file, not the screen. The logged output of the upgrader should be used as a guide and reviewed.
 
 For example, using:
 
 ```bash
-ncn# ./sls_updater_csm_1.2.py --sls-input-file sls_input_file.json --bican-user-network-name CAN \
+ncn# ./sls_updater_csm_1.3.py --sls-input-file sls_input_file.json --bican-user-network-name CAN \
         --customer-access-network 6 10.103.11.128/25 --preserve-existing-subnet-for-cmn external-dns
 ```
 
@@ -152,7 +152,7 @@ As might be observed from the above example, due to pre-upgrade subnet sizes, or
 ### Expert Mode Process
 
 1. Review the existing networks and subnets in the SLS input file.
-2. Make an educated guess about how `sls_updater_csm_1.2.py` should work and run the program. A typical first pass is to `--preserve-existing-subnet-for-cmn external-dns`.
+2. Make an educated guess about how `sls_updater_csm_1.3.py` should work and run the program. A typical first pass is to `--preserve-existing-subnet-for-cmn external-dns`.
 3. Review the logged output, noting warnings and errors as well as the location and size of subnets.
     1. Copy the first entry in the log which says `Creating subnets in the following order`.
         1. If `--preserve-existing-subnet-for-cmn external-dns` was used, remove the `metallb_address_pool` from the subnets list.
@@ -169,18 +169,18 @@ For this example of expert mode a very common use case is used with the followin
 
 1. The user network will be the CHN.
 2. The external-dns IP must be maintained to avoid operational changes to the site/customer network.
-3. The upgrade to CSM 1.2 will be a rolling upgrade, not a full outage. In order to prevent race conditions during the rolling upgrade with temporary IP overlaps, preservation of the K8S NCN IPs for CAN (CMN) are required.
+3. The upgrade to CSM 1.3 will be a rolling upgrade, not a full outage. In order to prevent race conditions during the rolling upgrade with temporary IP overlaps, preservation of the K8S NCN IPs for CAN (CMN) are required.
 
 The focus of the process that follows will be on the CMN IP allocations. The same process may be used for the CAN.
 
 **Process:**
 
-1. Review of the existing SLS file for CAN shows that NCN addresses are in the range: `10.103.11.2` to `10.103.11.14` with a DHCP Pool above this.
+1. Review of the existing SLS file for CAN shows that NCN addresses are in the range: `10.103.11.3` to `10.103.11.14` with a DHCP Pool above this.
 
 2. An educated first pass is to run the updater while preserving the external-dns IP only and look for the CMN output:
 
     ```bash
-    ncn# ./sls_updater_csm_1.2.py \
+    ncn# ./sls_updater_csm_1.3.py \
             --sls-input-file sls_input_file.json \
             --bican-user-network-name CHN \
             --customer-highspeed-network 55 172.16.0.0/16 \
@@ -218,7 +218,7 @@ The focus of the process that follows will be on the CMN IP allocations. The sam
 5. The next run of the upgrader for the example looks like:
 
     ```bash
-    ncn# ./sls_updater_csm_1.2.py \
+    ncn# ./sls_updater_csm_1.3.py \
         --sls-input-file sls_input_file.json \
         --bican-user-network-name CHN \
         --customer-highspeed-network 55 172.16.0.0/16 \
@@ -269,7 +269,7 @@ The focus of the process that follows will be on the CMN IP allocations. The sam
 
 After review, the allocations for CMN IP addresses in this run are as prescribed. A similar expert override process can be followed if a CAN is desired rather than a CMN.
 
-This has been a review of the process of using "expert mode" in the 1.2 SLS upgrader. The focus has been on IP address allocation of the CMN network. A very similar process can be
+This has been a review of the process of using "expert mode" in the 1.3 SLS upgrader. The focus has been on IP address allocation of the CMN network. A very similar process can be
 used if the CAN network is desired (instead of a CHN).
 
 **WARNING:** During design and implementation of the SLS upgrader, all attempts were made to safely and accurately migrate and update SLS data.

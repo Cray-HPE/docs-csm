@@ -1,11 +1,11 @@
 # Stage 0 - Prerequisites and Preflight Checks
 
-> **Note:** CSM 1.0.1 or higher is required in order to upgrade to CSM 1.2.0.
+> **Note:** CSM 1.0.1 or higher is required in order to upgrade to CSM 1.3.0.
 
 ## Abstract (Stage 0)
 
 Stage 0 has several critical procedures which prepares and verify if the environment is ready for upgrade. First, the latest documentation RPM is installed; it includes
-critical install scripts used in the upgrade procedure. Next, the current configuration of the System Layout Service (SLS) is updated to have necessary information for CSM 1.2.
+critical install scripts used in the upgrade procedure. Next, the current configuration of the System Layout Service (SLS) is updated to have necessary information for CSM 1.3.
 The management network configuration is also upgraded. Towards the end, prerequisite checks are performed to ensure that the upgrade is ready to proceed. Finally, a
 backup of Workload Manager configuration data and files is created. Once complete, the upgrade proceeds to Stage 1.
 
@@ -25,7 +25,7 @@ backup of Workload Manager configuration data and files is created. Once complet
 1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-    ncn-m001# CSM_RELEASE=csm-1.2.0
+    ncn-m001# CSM_RELEASE=csm-1.3.0
    ```
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
@@ -42,7 +42,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    > **Important:** The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why this command copies it there.
 
    ```bash
-   ncn-m001# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm \
+   ncn-m001# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.3/noarch/docs-csm-latest.noarch.rpm \
                 -O /root/docs-csm-latest.noarch.rpm &&
              rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
    ```
@@ -62,7 +62,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    **NOTE** For Cray/HPE internal installs, if `ncn-m001` can reach the internet, then the `--endpoint` argument may be omitted.
 
    ```bash
-   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
+   ncn-m001# /usr/share/doc/csm/upgrade/1.3/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
    ```
 
 1. Skip the `Manual copy` subsection.
@@ -96,7 +96,7 @@ backup of Workload Manager configuration data and files is created. Once complet
 1. Run the script.
 
    ```bash
-   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
+   ncn-m001# /usr/share/doc/csm/upgrade/1.3/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
 <a name="update-sls"></a>
@@ -105,18 +105,18 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 ### Abstract (Stage 0.2)
 
-CSM 1.2 introduces the bifurcated CAN (BICAN) as well as network configuration controlled by data in SLS. An offline upgrade of SLS data is performed. For more details on the
+CSM 1.3 introduces the bifurcated CAN (BICAN) as well as network configuration controlled by data in SLS. An offline upgrade of SLS data is performed. For more details on the
 upgrade and its sequence of events, see the [SLS upgrade `README`](scripts/sls/README.SLS_Upgrade.md).
 
-The SLS data upgrade is a critical step in moving to CSM 1.2. Upgraded SLS data is used in DNS and management network configuration. For details to aid in understanding and
+The SLS data upgrade is a critical step in moving to CSM 1.3. Upgraded SLS data is used in DNS and management network configuration. For details to aid in understanding and
 decision making, see the [Management Network User Guide](../../operations/network/management_network/index.md).
 
 One detail which must not be overlooked is that the existing Customer Access Network (CAN) will be migrated or retrofitted into the new Customer Management Network (CMN) while
 minimizing changes. A new CAN (or CHN) network is then created. Pivoting the existing CAN to the new CMN allows administrative traffic (already on the CAN) to remain as-is while
 moving standard user traffic to a new site-routable network.
 
-> **Important:** If this is the first time performing the SLS update to CSM 1.2, review the [SLS upgrade `README`](scripts/sls/README.SLS_Upgrade.md) in order to ensure
-the correct options for the specific environment are used. Two examples are given below. To see all options from the update script, run `./sls_updater_csm_1.2.py --help`.
+> **Important:** If this is the first time performing the SLS update to CSM 1.3, review the [SLS upgrade `README`](scripts/sls/README.SLS_Upgrade.md) in order to ensure
+the correct options for the specific environment are used. Two examples are given below. To see all options from the update script, run `./sls_updater_csm_1.3.py --help`.
 
 ### Retrieve SLS data as JSON
 
@@ -140,13 +140,13 @@ the correct options for the specific environment are used. Two examples are give
    ncn-m001# curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
    ```
 
-### Migrate SLS data JSON to CSM 1.2
+### Migrate SLS data JSON to CSM 1.3
 
 - Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
    ```bash
-   ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
-   ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+   ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.3/scripts/sls
+   ncn-m001# ${DOCDIR}/sls_updater_csm_1.3.py --sls-input-file sls_input_file.json \
                          --bican-user-network-name CHN \
                          --customer-highspeed-network 5 10.103.11.192/26
    ```
@@ -154,8 +154,8 @@ the correct options for the specific environment are used. Two examples are give
 - Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing `external-dns` entry.
 
    ```bash
-   ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
-   ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+   ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.3/scripts/sls
+   ncn-m001# ${DOCDIR}/sls_updater_csm_1.3.py --sls-input-file sls_input_file.json \
                          --bican-user-network-name CAN \
                          --customer-access-network 6 10.103.15.192/26 \
                          --preserve-existing-subnet-for-cmn external-dns
@@ -176,12 +176,12 @@ If the following command does not complete successfully, check if the `TOKEN` en
 
 ## Stage 0.3 - Upgrade management network
 
-### Verify that switches have 1.2 configuration in place
+### Verify that switches have 1.3 configuration in place
 
 1. Log in to each management switch.
 
    ```bash
-   linux# ssh admin@1.2.3.4
+   linux# ssh admin@1.3.3.4
    ```
 
 1. Examine the text displayed when logging in to the switch.
@@ -190,14 +190,14 @@ If the following command does not complete successfully, check if the `TOKEN` en
 
    ```text
    ##################################################################################
-   # CSM version:  1.2
+   # CSM version:  1.3
    # CANU version: 1.3.2
    ##################################################################################
    ```
 
-   - Output like the above text means that the switches have a CANU-generated configuration for CSM 1.2 in place. In this case, follow the steps in
-     [Management Network 1.0 (`1.2 Preconfig`) to 1.2](../../operations/network/management_network/1.0_to_1.2_upgrade.md).
-   - If the banner does NOT contain text like the above, then contact support in order to get the `1.2 Preconfig` applied to the system.
+   - Output like the above text means that the switches have a CANU-generated configuration for CSM 1.3 in place. In this case, follow the steps in
+     [Management Network 1.0 (`1.3 Preconfig`) to 1.3](../../operations/network/management_network/1.0_to_1.3_upgrade.md).
+   - If the banner does NOT contain text like the above, then contact support in order to get the `1.3 Preconfig` applied to the system.
    - See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
 
 <a name="prerequisites-check"></a>
@@ -231,7 +231,7 @@ If the following command does not complete successfully, check if the `TOKEN` en
 1. Run the script.
 
    ```bash
-   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}
+   ncn-m001# /usr/share/doc/csm/upgrade/1.3/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}
    ```
 
    **IMPORTANT:** If any errors are encountered, then potential fixes should be displayed where the error occurred. **If** the upgrade `prerequisites.sh` script fails and does
@@ -256,7 +256,7 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ncn-m001# cd site-init
    ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
    ncn-m001# git add customizations.yaml
-   ncn-m001# git commit -m 'CSM 1.2 upgrade - customizations.yaml'
+   ncn-m001# git commit -m 'CSM 1.3 upgrade - customizations.yaml'
    ncn-m001# git push
    ```
 
