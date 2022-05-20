@@ -28,6 +28,7 @@ import json
 import base64
 import urllib3
 import requests
+from urllib3.util.retry import Retry
 import argparse
 from kubernetes import client, config
 
@@ -62,9 +63,16 @@ on_debug(debug, "Command line arguments: {}".format(args))
 #
 def remote_request(remote_type, remote_url, headers=None, data=None, verify=True, debug=False):
     remote_response = None
+
+    retry_strategy = Retry(total=3, backoff_factor=0.1)
+    adapter = requests.adapters.HTTPAdapter(max_retries=retry_strategy)
+    http = requests.Session()
+    http.mount("https://", adapter)
+    http.mount("http://", adapter)
+
     while True:
         try:
-            response = requests.request(remote_type, url=remote_url, headers=headers, data=data, verify=verify)
+            response = http.request(remote_type, url=remote_url, headers=headers, data=data, verify=verify,)
             on_debug(debug, "Request response: {}".format(response.text))
             response.raise_for_status()
             remote_response = json.dumps({})
@@ -148,7 +156,7 @@ if args.route:
         sys.exit(0)
 
     sls_data["ExtraProperties"]["SystemDefaultRoute"] = args.route
-    print("Setting SystemDefaultRoute to ".format(args.route))
+    print("Setting SystemDefaultRoute to {}".format(args.route))
     on_debug(debug=debug, message="Updated SLS data: {}".format(sls_data))
 
     sls_request = None
