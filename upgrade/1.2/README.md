@@ -6,6 +6,10 @@ This document is intended to guide an administrator through the upgrade process 
 file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the resource_material
 directory for additional reference material in support of the processes/scripts mentioned explicitly on this page.
 
+A major feature of CSM 1.2 is the bifurcated CAN (BICAN). The BICAN is designed to separate admin network traffic from user network traffic.  More information can be found on the [BICAN summary page](../../operations/network/management_network/bican_technical_summary.md). Please review the BICAN summary before continuing with the CSM 1.2 upgrade. 
+
+Detailed BICAN documentation can be found on the [BICAN technical details](../../operations/network/management_network/bican_technical_details.md) page.
+
 ## Abstract
 
 For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed. This step is
@@ -31,6 +35,7 @@ For more information about modifying `customizations.yaml` and tuning based on s
 
 **`Important:`** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
 
+<a name="relevant-troubleshooting-links-for-upgrade-related-issues"></a>
 ## Relevant Troubleshooting Links for Upgrade-Related Issues
 
 - General Kubernetes Commands for Troubleshooting

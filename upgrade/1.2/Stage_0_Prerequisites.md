@@ -272,4 +272,11 @@ the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Wor
 
 ## Stage completed
 
+To comfirm `prerequisites.sh` has run successfully.  You should see:
+   ```bash
+   [OK] - Successfully completed
+   ```
+If you do not see the message above.  Try rerunning `prerequisites.sh`
+Please see troubleshooting section  [Upgrade Troubleshooting](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/upgrade/1.2/README.md#relevant-troubleshooting-links-for-upgrade-related-issues)
+
 This stage is completed. Continue to [Stage 1 - Ceph image upgrade](Stage_1.md).
