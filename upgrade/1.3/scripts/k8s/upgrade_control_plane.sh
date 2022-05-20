@@ -44,7 +44,7 @@ for master in $masters
 do
   echo "Upgrading kube-system pods for $master:"
   echo ""
-  pdsh -b -S -w $master 'kubeadm upgrade apply v1.30.13 -y'
+  pdsh -b -S -w $master 'kubeadm upgrade apply v1.20.13 -y'
   rc=$?
   if [ "$rc" -ne 0 ]; then
     echo ""

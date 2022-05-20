@@ -1,4 +1,4 @@
-# Stage 2 - Kubernetes Upgrade from 1.19.9 to 1.30.13
+# Stage 2 - Kubernetes Upgrade from 1.19.9 to 1.20.13
 
 ## Stage 2.1
 

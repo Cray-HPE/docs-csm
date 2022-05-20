@@ -41,7 +41,7 @@ from csm_1_2_upgrade.sls_updates import update_nmn_uai_macvlan_dhcp_ranges
 from sls_utils.Managers import NetworkManager
 
 
-help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.3.
+help = """Upgrade a system SLS file from CSM 1.2 to CSM 1.3.
 
     1. Migrate switch naming (in order):  leaf to leaf-bmc and agg to leaf.\n
     2. Remove api-gateway entries from HMLB subnets for CSM 1.3 security.\n
@@ -119,7 +119,7 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.3.
 @click.option(
     "--bgp-nmn-asn",
     required=False,
-    help="The autonomous system number for NMN BGP clients (preserve <= CSM 1.0 defaults)",
+    help="The autonomous system number for NMN BGP clients (preserve <= CSM 1.2 defaults)",
     type=click.IntRange(64512, 65534),
     default=65533,
     show_default=True,
@@ -203,7 +203,7 @@ def main(
     number_of_chn_edge_switches,
     retain_unused_user_network,
 ):
-    """Upgrade a system SLS file from CSM 1.0 to CSM 1.3.
+    """Upgrade a system SLS file from CSM 1.2 to CSM 1.3.
 
     Args:
         ctx: Click context

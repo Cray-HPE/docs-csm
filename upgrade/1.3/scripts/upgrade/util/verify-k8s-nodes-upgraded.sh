@@ -23,7 +23,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-EXPECTED_VERSION="v1.30.13"
+EXPECTED_VERSION="v1.20.13"
 display_output=$(kubectl get nodes)
 versions=$(kubectl get nodes -o json | jq -r '.items[].status.nodeInfo.kubeletVersion')
 #shellcheck disable=SC3030

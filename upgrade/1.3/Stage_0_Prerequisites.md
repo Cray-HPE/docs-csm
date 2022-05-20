@@ -196,7 +196,7 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ```
 
    - Output like the above text means that the switches have a CANU-generated configuration for CSM 1.3 in place. In this case, follow the steps in
-     [Management Network 1.0 (`1.3 Preconfig`) to 1.3](../../operations/network/management_network/1.0_to_1.3_upgrade.md).
+     [Management Network 1.2 (`1.3 Preconfig`) to 1.3](../../operations/network/management_network/1.0_to_1.3_upgrade.md).
    - If the banner does NOT contain text like the above, then contact support in order to get the `1.3 Preconfig` applied to the system.
    - See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
 
