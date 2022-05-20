@@ -193,6 +193,10 @@ proceed to step 2.
 
    1. After the correct time has been verified, power off the NCN.
 
+      ```bash
+      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power off
+      ```
+
    Repeat the above process for each NCN.
 
 <a name="update_management_node_firmware"></a>
