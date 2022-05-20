@@ -11,6 +11,7 @@ The following services are backed up \(daily, one week's worth of backups retain
 - Compute Rolling Upgrade Service \(CRUS\)
 - External DNS
 - Firmware Action Service \(FAS\)
+- User Access Service \(UAS\)
 
 Run the following command on any master node \(`ncn-mXXX`\) or the first worker node \(`ncn-w001`\) to list the backups for a specific project. In the example below, the backups for BSS are listed.
 
@@ -66,7 +67,6 @@ The following projects are not backed up as part of the automated solution:
 - Heartbeat Tracking Daemon \(HBTD\)
 - HMS Notification Fanout Daemon \(HMNFD\)
 - River Endpoint Discovery Service \(REDS\)
-- User Access Service \(UAS\) Manager
 - Content Projection Service \(CPS\)
 
 If these clusters become unhealthy, the process for rediscovering their data should be followed. See [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md).
