@@ -58,8 +58,7 @@ Preparation of the environment must be done before attempting to deploy the mana
 
    1. Set `IPMI_PASSWORD` to the root password for the NCN BMCs.
 
-      >  `read -s` is used to prevent the password
-      > from being written to the screen or the shell history.
+      > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
       ```bash
       pit# read -s IPMI_PASSWORD
@@ -71,7 +70,7 @@ Preparation of the environment must be done before attempting to deploy the mana
       > These values do not need to be altered from what is shown.
 
       ```bash
-      pit# export mtoken='ncn-m(?!001)\w+-mgmt' ; export stoken='ncn-s\w+-mgmt' ; export wtoken='ncn-w\w+-mgmt' ; export USERNAME=root
+      pit# mtoken='ncn-m(?!001)\w+-mgmt' ; stoken='ncn-s\w+-mgmt' ; wtoken='ncn-w\w+-mgmt' ; export USERNAME=root
       ```
 
    Throughout the guide, simple one-liners can be used to query status of expected nodes. If the shell or environment is terminated, these
@@ -326,6 +325,11 @@ be performed are in the [Deploy](#deploy) section.
     pit# /root/bin/set-sqfs-links.sh
     ```
 
+    > Every NCN except for `ncn-m001` should be included in the output from this script. If that is not the case,
+    > then verify that all NCN BMCs are set to use DHCP. See
+    > [Set node BMCs to DHCP](prepare_management_nodes.md#set_node_bmcs_to_dhcp). After that is done,
+    > re-run the `set-sqfs-links.sh` script.
+
 1. Customize boot scripts for any out-of-baseline NCNs
     * **Worker nodes** with more than two small disks need to make adjustments to [prevent bare-metal `etcd` creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd).
     * For a brief overview of what is expected, see [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline).
@@ -341,7 +345,7 @@ be performed are in the [Deploy](#deploy) section.
 
 1. Validate that the LiveCD is ready for installing NCNs.
 
-   > Observe the output of the checks and note any failures, then remediate them.
+   Observe the output of the checks and note any failures, then remediate them.
 
     ```bash
     pit# csi pit validate --livecd-preflight
@@ -926,9 +930,7 @@ Run the following commands on the PIT node.
 
 ```bash
 pit# export CSM_RELEASE=csm-x.y.z
-pit# pushd /var/www/ephemeral
-pit# ${CSM_RELEASE}/lib/install-goss-tests.sh
-pit# popd
+pit# pushd /var/www/ephemeral && ${CSM_RELEASE}/lib/install-goss-tests.sh && popd
 ```
 
 <a name="remove-default-ntp-pool"></a>
@@ -979,15 +981,21 @@ Observe the output of the checks and note any failures, then remediate them.
    pit# csi pit validate --ceph | tee csi-pit-validate-ceph.log
    ```
 
-   Once that command has finished, check the last line of output to see the results of the tests.
+   Once that command has finished, the following will extract the test totals reported for each node:
 
-   Example last line of output:
-
-   ```text
-   Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4226 seconds
+   ```bash
+   pit# grep "Total Test" csi-pit-validate-ceph.log
    ```
 
-   If the test total line reports any failed tests, look through the full output of the test in `csi-pit-validate-ceph.log` to see which node had the failed test and what the details are for that test.
+   Example output for a system with three storage nodes:
+
+   ```text
+   Total Tests: 8, Total Passed: 8, Total Failed: 0, Total Execution Time: 74.3782 seconds
+   Total Tests: 3, Total Passed: 3, Total Failed: 0, Total Execution Time: 0.6091 seconds
+   Total Tests: 3, Total Passed: 3, Total Failed: 0, Total Execution Time: 0.6260 seconds
+   ```
+
+   If these total lines report any failed tests, then look through the full output of the test in `csi-pit-validate-ceph.log` to see which node had the failed test and what the details are for that test.
 
    **Note:** See [Utility Storage](../operations/utility_storage/Utility_Storage.md) in order to help resolve any failed tests.
 
@@ -1016,7 +1024,7 @@ Observe the output of the checks and note any failures, then remediate them.
    Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.2353 seconds
    ```
 
-   If these total lines report any failed tests, look through the full output of the test to see which node had the failed test and what the details are for that test.
+   If these total lines report any failed tests, then look through the full output of the test in `csi-pit-validate-k8s.log` to see which node had the failed test and what the details are for that test.
 
    > **WARNING:** If there are failures for tests with names like `Worker Node CONLIB FS Label`, then manual tests should be run on the node which reported the failure.
    See [Manual LVM Check Procedure](#manual-lvm-check-procedure). If the manual tests fail, then the problem must be resolved before continuing to the next step. See
