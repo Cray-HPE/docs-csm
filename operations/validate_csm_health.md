@@ -82,8 +82,11 @@ There are multiple Goss test suites available that cover a variety of subsystems
 
     This is required for the `ncn-healthcheck` test.
 
+    > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
     ```bash
-    ncn/pit# export SW_ADMIN_PASSWORD='changeme'
+    linux# read -s SW_ADMIN_PASSWORD
+    linux# export SW_ADMIN_PASSWORD
     ```
 
 1. Run the NCN health checks.
