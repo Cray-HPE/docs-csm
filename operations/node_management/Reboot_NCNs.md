@@ -33,7 +33,7 @@ The `kubectl` command is installed.
 
 ## Procedure
 
-### NCN Pre-Reboot Health Checks
+### NCN pre-reboot health checks
 
 1. Ensure that `ncn-m001` is not running in "LiveCD" mode.
 
@@ -133,7 +133,7 @@ The `kubectl` command is installed.
         ncn-m001# kubectl describe pod -n user -lapp=slurmdbd
         ```
 
-        ```bash
+        ```text
         Events:
           Type     Reason                  Age                    From               Message
           ----     ------                  ----                   ----               -------
@@ -203,14 +203,14 @@ The `kubectl` command is installed.
       ncn-m001# cray cfs components update <xname> --error-count 0 --enabled false
       ```
 
-### NCN Rolling Reboot
+### NCN rolling reboot
 
 Before rebooting NCNs:
 
 * Ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN.
   Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
 
-#### Utility Storage Nodes (Ceph)
+#### Utility storage nodes (Ceph)
 
 1. Reboot each of the storage nodes (one at a time).
 
@@ -325,7 +325,7 @@ Before rebooting NCNs:
     **Important:** Ensure `ceph -s` shows that Ceph is healthy (`HEALTH_OK`) **BEFORE MOVING ON** to reboot the next storage node. Once Ceph has recovered the downed mon,
     it may take a several minutes for Ceph to resolve clock skew.
 
-#### NCN Worker Nodes
+#### NCN worker nodes
 
 1. Reboot each of the worker nodes (one at a time).
 
@@ -474,7 +474,7 @@ Before rebooting NCNs:
 
    See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
-#### NCN Master Nodes
+#### NCN master nodes
 
 1. Reboot each of the master nodes (one at a time) starting with `ncn-m003` then `ncn-m001`. There are special instructions for `ncn-m001` below because its console connection is not managed by conman.
 
