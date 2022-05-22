@@ -27,7 +27,7 @@ The `kubectl` command is installed.
 
 ## Procedure
 
-### NCN Pre-Reboot Health Checks
+### NCN pre-reboot health checks
 
 1. Ensure that `ncn-m001` is not running in "LiveCD" mode.
 
@@ -63,7 +63,7 @@ The `kubectl` command is installed.
         ncn-m001# kubectl describe pod -n user -lapp=slurmdbd
         ```
 
-        ```bash
+        ```text
         Events:
           Type     Reason                  Age                    From               Message
           ----     ------                  ----                   ----               -------
@@ -87,8 +87,14 @@ The `kubectl` command is installed.
         This check will need to be run after all worker node have been rebooted.
         Ensure that the checks have been run to check BGP peering sessions on the spine switches
 
+        > Set `SW_ADMIN_PASSWORD` to the `admin` user password for the management switches in the system.
+        > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
         ```bash
-        ncn-m001# SW_ADMIN_PASSWORD='SWITCH_PASSWORD' GOSS_BASE=/opt/cray/tests/install/ncn goss -g  /opt/cray/tests/install/ncn/tests/goss-switch-bgp-neighbor-aruba-or-mellanox.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+        ncn-m001# read -s SW_ADMIN_PASSWORD
+        ncn-m001# export SW_ADMIN_PASSWORD
+        ncn-m001# GOSS_BASE=/opt/cray/tests/install/ncn goss -g  /opt/cray/tests/install/ncn/tests/goss-switch-bgp-neighbor-aruba-or-mellanox.yaml \
+                    --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
         ```
 
 1. Ensure that no nodes are in a `failed` state in CFS.
@@ -118,13 +124,13 @@ The `kubectl` command is installed.
    re-enable them when they reboot, this is just so that CFS does not immediately
    start retrying configuration against the failed node.
 
-### NCN Rolling Reboot
+### NCN rolling reboot
 
 Before rebooting NCNs:
 
 * Ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
 
-#### Utility Storage Nodes (Ceph)
+#### Utility storage nodes (Ceph)
 
 1. Reboot each of the storage nodes (one at a time).
 
@@ -249,7 +255,7 @@ Before rebooting NCNs:
     **Important:** Ensure `ceph -s` shows that Ceph is healthy (`HEALTH_OK`) **BEFORE MOVING ON** to reboot the next storage node. Once Ceph has recovered the downed mon,
     it may take a several minutes for Ceph to resolve clock skew.
 
-#### NCN Worker Nodes
+#### NCN worker nodes
 
 1. Reboot each of the worker nodes (one at a time).
 
@@ -398,7 +404,7 @@ Before rebooting NCNs:
 
    See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
-#### NCN Master Nodes
+#### NCN master nodes
 
 1. Reboot each of the master nodes (one at a time) starting with `ncn-m003` then `ncn-m001`. There are special instructions for `ncn-m001` below because its console connection is not managed by conman.
 
