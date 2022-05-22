@@ -66,8 +66,11 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
 
    Set it to the `admin` user password for the switches. This is required for post-upgrade tests.
 
+   > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
    ```bash
-   ncn-m002# export SW_ADMIN_PASSWORD=PutYourOwnPasswordHere
+   ncn-m002# read -s SW_ADMIN_PASSWORD
+   ncn-m002# export SW_ADMIN_PASSWORD
    ```
 
 1. Perform the upgrade.
