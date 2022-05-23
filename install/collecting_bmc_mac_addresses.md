@@ -40,7 +40,7 @@ Results may vary if an unconfigured switch is being used.
 
     DellOS 10
 
-    ```bash
+    ```console
     # DellOS 10
     sw-leaf-bmc-001# show mac address-table vlan 4
     VlanId  Mac Address          Type     Interface
@@ -84,7 +84,7 @@ Results may vary if an unconfigured switch is being used.
 
     DellOS 10
 
-    ```bash
+    ```console
     # DellOS 10
     sw-leaf-bmc-001# show mac address-table interface ethernet 1/1/32
     VlanId  Mac Address          Type     Interface
@@ -110,7 +110,7 @@ Results may vary if an unconfigured switch is being used.
 
     DellOS 10
 
-    ```bash
+    ```console
     # DellOS 10
     sw-leaf-bmc-001# show mac address-table
     VlanId  Mac Address          Type     Interface
@@ -158,7 +158,7 @@ Results may vary if an unconfigured switch is being used.
 
    The column heading must match that shown above for `csi` to parse it correctly.
 
-1. Collect the BMC MAC address information for ncn-m001 which is currently the PIT node.
+1. Collect the BMC MAC address information for `ncn-m001`, which is currently the PIT node.
 
    * For HPE and Gigabyte nodes:
 
