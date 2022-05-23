@@ -1,4 +1,4 @@
-# Prepare Site Init
+# Prepare `Site Init`
 
 These procedures guide administrators through setting up the `site-init`
 directory which contains important customizations for various products.
@@ -9,10 +9,10 @@ on any Linux system. This procedure works for both methods, so in order to be ge
 examples.
 
 1. [Background](#background)
-1. [Create and Initialize Site-Init Directory](#create-and-initialize-site-init-directory)
+1. [Create and Initialize `site-init` Directory](#create-and-initialize-site-init-directory)
 1. [Create Baseline System Customizations](#create-baseline-system-customizations)
 1. [Generate Sealed Secrets](#generate-sealed-secrets)
-1. [Version Control Site-Init Files](#version-control-site-init-files)
+1. [Version Control `Site Init` Files](#version-control-site-init-files)
     1. [Push to a Remote Repository](#push-to-a-remote-repository)
 1. [Customer-Specific Customizations](#customer-specific-customizations)
 
@@ -39,7 +39,7 @@ installation-centric artifacts, such as:
 
 <a name="create-and-initialize-site-init-directory"></a>
 
-## 2. Create and Initialize Site-Init Directory
+## 2. Create and Initialize `site-init` Directory
 
 1. Set the `SITE_INIT` variable.
 
@@ -113,21 +113,21 @@ with system-specific customizations.
     * `spec.kubernetes.sealed_secrets.cray_meds_credentials`
     * `spec.kubernetes.sealed_secrets.cray_hms_rts_credentials`
 
-    The 'cray_reds_credentials' are used by the HMS Discovery Cronjob and the River Endpoint Discovery Service (REDS) for River components. This sealed secret contains the following:
-      * Default Redfish root credentials for air-cooled Node and Router BMCs.
-      * Default SNMP credentials configured on leaf-bmc switches. This needs to match the SNMP credentials currently configured on leaf-bmc switches or the credentials will be configured later in the install. The SNMP usernamne, authentication password,
+    The `cray_reds_credentials` are used by the HMS Discovery CronJob and the River Endpoint Discovery Service (REDS) for River components. This sealed secret contains the following:
+      * Default Redfish `root` user credentials for air-cooled Node and Router BMCs.
+      * Default SNMP credentials configured on `leaf-bmc` switches. This needs to match the SNMP credentials currently configured on `leaf-bmc` switches or the credentials will be configured later in the install. The SNMP username, authentication password,
         and the privacy password need to be provided.
 
-    The 'cray_meds_credentials' are used by the Mountain Endpoint Discovery Service (MEDS) for the liquid-cooled components in an Olympus (Mountain) cabinet.
-      * The root password needs to match what is currently configured on the CECs for the liquid-cooled cabinets in the system.
+    The `cray_meds_credentials` are used by the Mountain Endpoint Discovery Service (MEDS) for the liquid-cooled components in an Olympus (Mountain) cabinet.
+      * The `root` user password needs to match what is currently configured on the CECs for the liquid-cooled cabinets in the system.
 
-    The 'cray_hms_rts_credentials' are used by the Redfish Translation Service (RTS) for any hardware components which are not managed by Redfish, such as a ServerTech PDU in a River Cabinet.
-      * The ServerTech PDU credentials need to match the credentials for the admn user that is currently configured on the PDUs.
-      * The RTS root user credentials are unique to RTS and used only withing the service mesh, and can be set as desired.
+    The `cray_hms_rts_credentials` are used by the Redfish Translation Service (RTS) for any hardware components which are not managed by Redfish, such as a ServerTech PDU in a River Cabinet.
+      * The ServerTech PDU credentials need to match the credentials for the `admn` user that is currently configured on the PDUs.
+      * The RTS `root` user credentials are unique to RTS and used only within the service mesh; these can be set as desired.
 
     Edit `customizations.yaml` to replace the `Username` and `Password` references in the file so that the values match the **existing settings** of your system hardware components.
     See the `Decrypt Sealed Secrets for Review` section of [Manage Sealed Secrets](../operations/security_and_authentication/Manage_Sealed_Secrets.md#decrypt-sealed-secrets-for-review)
-    if you need to examine credentials from prior installs.
+    if needing to examine credentials from prior installs.
 
     ```bash
     linux# vi ${SITE_INIT}/customizations.yaml
@@ -148,7 +148,7 @@ with system-specific customizations.
         These credentials are used by the REDS and HMS discovery services, targeting River Redfish
         BMC endpoints and management switches
 
-        > NOTE: For vault_redfish_defaults, the only entry used is '{"Cray": {"Username": "root", "Password": "XXXX"}'
+        > NOTE: For `vault_redfish_defaults`, the only entry used is '{"Cray": {"Username": "root", "Password": "XXXX"}'
         > Make sure it is specified as shown, with the `Cray` key. This key is not used in any of the other credential specifications.
 
         ```bash
@@ -172,7 +172,7 @@ with system-specific customizations.
         ```
 
 1. To customize the PKI Certificate Authority (CA) used by the platform, see
-    [Certificate_authority](../background/certificate_authority.md).
+    [Certificate Authority](../background/certificate_authority.md).
 
     > **`IMPORTANT`** The CA may not be modified after install.
 
@@ -363,7 +363,7 @@ with system-specific customizations.
     1. Configure the `ldapSearchBase` and `localRoleAssignments` settings for
         the `cray-keycloak-users-localize` chart in `customizations.yaml`.
 
-        There may be one or more groups in LDAP for admins and one or more for users.
+        There may be one or more groups in LDAP for administrators and one or more for users.
         Each admin group needs to be assigned to role `admin` and set to both `shasta` and `cray` clients in Keycloak.
         Each user group needs to be assigned to role `user` and set to both `shasta` and `cray` clients in Keycloak.
 
@@ -550,7 +550,7 @@ encrypted.
 
 <a name="version-control-site-init-files"></a>
 
-## 5. Version Control Site-Init Files
+## 5. Version Control `Site Init` Files
 
 Setup `site-init` as a Git repository in order to manage the
 baseline configuration during initial system installation.
