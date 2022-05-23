@@ -60,20 +60,20 @@ the instructions for attaching to the BMC will differ.
    linux# tar --wildcards --no-anchored -xzvf <csm-release>.tar.gz 'cray-pre-install-toolkit-*.iso'
    ```
 
-1. Prepare a server on the network to host the `cray-pre-install-toolkit` ISO file.
+2. Prepare a server on the network to host the `cray-pre-install-toolkit` ISO file.
 
    Place the `cray-pre-install-toolkit` ISO file on a server which the BMC of the PIT node
    will be able to contact using HTTP or HTTPS.
 
    **Note:** A short URL is better than a long URL for the PIT file on the webserver.
 
-1. See the respective procedure below to attach an ISO.
+3. See the respective procedure below to attach an ISO.
 
    * [HPE iLO BMCs](boot_livecd_virtual_iso.md#hpe-ilo-bmcs)
    * **Gigabyte BMCs** Do not use the RemoteISO method. See [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
    * **Intel BMCs** Do not use the RemoteISO method. See [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md)
 
-1. The chosen procedure should have rebooted the server. Observe the server boot into the LiveCD.
+4. The chosen procedure should have rebooted the server. Observe the server boot into the LiveCD.
 
 <a name="first-login"></a>
 
@@ -258,7 +258,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    1. After reconnecting, resume the typescript (the `-a` appends to an existing script).
 
-       ```bash
+      ```bash
       pit# script -af $(ls -tr ~/csm-install-remoteiso*.txt | head -n 1)
       pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
       ```
@@ -440,7 +440,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
       system_config.yaml
       ```
 
-   1. Generate the system configuration.
+   2. Generate the system configuration.
 
       > **Note:** Ensure that you specify a reachable NTP pool or server using the `ntp-pools` or `ntp-servers` fields, respectively. Adding an unreachable server can
       > cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
@@ -475,7 +475,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
       >   {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >   ```
 
-   1. Skip the next step and continue to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
+   3. Skip the next step and continue to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
 
 <a name="first-timeinitial-installs-bare-metal"></a>
 
