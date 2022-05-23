@@ -100,7 +100,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
    Git Version    : b3ed3046a460d804eb545d21a362b3a5c7d517a3
    Platform       : linux/amd64
    App. Version   : 1.5.18
-    ```
+   ```
 
 1. Configure `zypper` with the `embedded` repository from the CSM release.
 
@@ -193,7 +193,7 @@ Before creating the the bootable LiveCD, identify which device will be used for 
     linux# USB=/dev/sd<disk_letter>
     ```
 
-1. Format the USB device.
+2. Format the USB device.
 
     * On Linux, use the CSI application to do this:
 
@@ -225,7 +225,7 @@ Before creating the the bootable LiveCD, identify which device will be used for 
 
     > **Note:** At this point, the USB device is usable in any server with a CPU with x86_64 architecture. The remaining steps help add the installation data and enable SSH on boot.
 
-1. Mount the configuration and persistent data partitions.
+3. Mount the configuration and persistent data partitions.
 
     ```bash
     linux# mkdir -pv /mnt/cow ${PITDATA} &&
@@ -234,7 +234,7 @@ Before creating the the bootable LiveCD, identify which device will be used for 
            mkdir -pv ${PITDATA}/configs ${PITDATA}/prep/{admin,logs} ${PITDATA}/data/{ceph,k8s}
     ```
 
-1. Copy and extract the tarball into the USB.
+4. Copy and extract the tarball into the USB.
 
     ```bash
     linux# cp -v ${CSM_PATH}.tar.gz ${PITDATA} &&

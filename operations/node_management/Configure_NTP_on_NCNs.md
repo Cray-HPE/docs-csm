@@ -4,59 +4,81 @@ The management nodes serve Network Time Protocol (NTP) at stratum 10, except for
 
 Until an upstream NTP server is configured, the time on the NCNs may not match the current time at the site, but they will stay in sync with each other.
 
-**Topics**
-   * [Fix BSS Metadata](#fix-bss-metadata)
-   * [Fix broken configs](#fix-broken-configs)
+## Topics
+
+* [Fix BSS metadata](#fix-bss-metadata)
+* [Fix broken configurations](#fix-broken-configurations)
 
 <a name="fix-bss-metadata"></a>
 
-###### Fix BSS Metadata
+## Fix BSS metadata
 
-If nodes are missing metadata for NTP, you will be required to generate the data using `csi` and your system's `system_config.yaml`. If you do not have your seed data in the `system_config.yaml` then you will need to open a ticket to help generate the NTP data.
+If nodes are missing metadata for NTP, then the data must be generated using `csi` and the system's `system_config.yaml` file.
 
-The following steps are structured to be executed on one node at a time. However, step #3 will generate all relevant files for each node. If multiple nodes are missing NTP data in BSS, you can apply this fix to each node.
+The `csi` tool is not available on `ncn-m001` after the CSM install is completed. However, if the install recovery data is still available on `ncn-m001` or `ncn-m003`,
+then the `csi` tool can be retrieved from the saved PIT ISO file. To do this, see the step used to obtain access to CSI in the
+[Enable NCN Disk Wiping Safeguard](../../install/deploy_final_ncn.md#enable-ncn-disk-wiping-safeguard) procedure.
 
-1. Update system_config.yaml to have the correct NTP settings:
+If the seed data from `system_config.yaml` is not available, then open a support ticket to help generate the NTP data.
+
+The following steps are structured to be executed on one node at a time. However, step #3 will generate all relevant files for each node. If multiple nodes are missing NTP data in BSS, then apply this fix to each node.
+
+1. Update `system_config.yaml` to have the correct NTP settings:
+
     ```yaml
     ntp-servers:
       - ncn-m001
       - time.nist.gov
     ntp-timezone: UTC
     ```
-2. Generate new configs:
+
+1. Generate new configurations:
+
     ```bash
     ncn# csi config init
     ```
-3. In the newly created `system/basecamp` directory, copy in and execute the metadata script that is included in the upgrade scripts of this documentation:
+
+1. Change directory to the newly created `system/basecamp` directory and execute the `upgrade_ntp_timezone_metadata.sh` script.
+
     ```bash
-    ncn# ./upgrade_ntp_timezone_metadata.sh
+    ncn# cd system/basecamp && /usr/share/doc/csm/upgrade/scripts/upgrade_ntp_timezone_metadata.sh
     ```
-4. Find the relevant file(s) to the node(s) with missing metadata, such as `upgrade-metadata-000000000000.json` based on the mac address of the node.
-5. Find the xname for the node that needs to be fixed:
+
+1. Find the relevant file for the node with missing metadata (such as `upgrade-metadata-000000000000.json`) based on the MAC address of the node.
+
+1. Find the component name (xname) for the node that needs to be fixed:
+
+    Run this command on the node that needs to be fixed in order to determine its xname.
+
     ```bash
     ncn# cat /etc/cray/xname
     ```
-6. From `ncn-m001` execute the following command to update BSS:
+
+1. From `ncn-m001`, update BSS:
+
     ```bash
-    ncn# csi handoff bss-update-cloud-init --user-data="upgrade-metadata-000000000000.json" --limit=<xname>`
+    ncn-m001# csi handoff bss-update-cloud-init --user-data="upgrade-metadata-000000000000.json" --limit=<xname>`
     ```
 
-7. Continue with the upgrade.
-8. When the upgrade is completed, run this script on each NCN to ensure the time is set correctly:
+1. Continue with the upgrade.
 
-    > If more than nine NCNs are in use on the system, update the for loop in the following command accordingly.
+1. Set a token as described in [Identify Nodes and Update Metadata](Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md)
+
+1. When the upgrade is completed, run this script on `ncn-m001` in order to ensure the time is set correctly on all NCNs:
 
     ```bash
-    ncn-m002# for i in ncn-{w,s}00{1..3} ncn-m00{2..3}; do echo \
-    "------$i--------"; ssh $i '/srv/cray/scripts/common/chrony/csm_ntp.py'; done
+    ncn-m001# for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do 
+                  ssh $i "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"; done
     ```
 
 <a name="fix-broken-configs"></a>
 
-###### Fix Broken Configs
+## Fix broken configuration
 
-On each NCN, run:
+1. Set a token as described in [Identify Nodes and Update Metadata](Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md).
 
-```
-ncn# csm_ntp.py
+1. On each affected NCN, run:
+
+```bash
+ncn# /srv/cray/scripts/common/chrony/csm_ntp.py
 ```

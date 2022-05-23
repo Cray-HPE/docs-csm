@@ -45,7 +45,7 @@ and ready for reboot of the LiveCD:
 >
 > * The NCN **will never wipe a USB device** during installation.
 >
-> * Prior to shutting down the PIT node, learning the CAN IP addresses of the other NCNs will be helpful if
+> * Prior to shutting down the PIT node, learning the CMN IP addresses of the other NCNs will be helpful if
 >   troubleshooting is required.
 >
 > This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
@@ -437,8 +437,8 @@ The steps in this section load hand-off data before a later procedure reboots th
 1. Verify that there **is not** a metal bootstrap IP address.
 
     ```bash
-     ncn-m001# ip a show bond0
-     ```
+    ncn-m001# ip a show bond0
+    ```
 
 1. Verify zypper repositories are empty and all remote SUSE repositories are disabled.
 

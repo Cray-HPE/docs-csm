@@ -5,9 +5,7 @@
    nodes `ncn-w001`, `ncn-w002`, and `ncn-w003` have the pod.
 
    > NOTE: If the command below does not return any pod names, proceed to step 2.
-
    > NOTE: A 404 error is expected if the COS product is not installed on the system. In this case, proceed to step 2.
-
    > NOTE: If the `cray` command is not initialized, see [Initialize the CLI Configuration](../../../../operations/configure_cray_cli.md)
 
     ```bash
@@ -52,5 +50,4 @@
      "errorCount": 0,
      "id": "x3000c0s7b0n0",
      "retryPolicy": 3,
-    ```
-
+   ```

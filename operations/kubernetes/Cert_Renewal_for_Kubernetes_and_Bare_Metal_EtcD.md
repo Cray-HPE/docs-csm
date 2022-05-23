@@ -1,6 +1,7 @@
 # Kubernetes and Bare Metal EtcD Certificate Renewal
 
-As part of the installation, Kubernetes generates certificates for the required subcomponents. This document will help walk through the process of renewing the certificates.
+As part of the installation, Kubernetes generates certificates for the required subcomponents.
+This document will help walk through the process of renewing the certificates.
 
 **IMPORTANT:**
 
@@ -278,7 +279,7 @@ Run the following steps on each master node.
    - As noted in the above output, all certificates including those for Etcd were updated. Note that `apiserver-etcd-client.crt` is a Kubernetes API certificate, not an Etcd only certificate.
      Also, the `/var/lib/kubelet/pki/` certificates will be updated in the Kubernetes client section that follows.
 
-1. Restart etcd.
+1. Restart `etcd`.
 
    Once the steps to renew the needed certificates have been completed on all the master nodes, log into each master node one at a time and run the following:
 
@@ -340,7 +341,7 @@ Run the following steps on each master node.
 
 1. Distribute the client certificate to the rest of the cluster.
 
-   **NOTE:** There may be errors when copying files. The target may or may not exist depending on the version of Shasta.
+   **NOTE:** There may be errors when copying files. The target may or may not exist depending on the version of CSM.
 
    - **DO NOT** copy this to the master node where this work is being performed.
    - Copy `/etc/kubernetes/admin.conf` to all master and worker nodes.

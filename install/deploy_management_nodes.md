@@ -707,7 +707,7 @@ If there are LVM check failures, then the problem must be resolved before contin
 
 1. Check to see if the number of devices is less than the number of listed drives in the output from step 1.
 
-   ```bash
+    ```bash
     ncn-s# ceph orch device ls|grep dev|wc -l
     24
     ```
@@ -933,7 +933,7 @@ Observe the output of the checks. If there are any failures, remediate them.
 
 ## Important checkpoint
 
-Before proceeding, be aware that this is the last point where the other NCN nodes can be rebuilt without also having to rebuild the PIT node. Therefore, take time to double check both the cluster and the validation test results
+Before proceeding, be aware that this is the last point where the other NCNs can be rebuilt without also having to rebuild the PIT node. Therefore, take time to double check both the cluster and the validation test results
 
 <a name="next-topic"></a>
 
