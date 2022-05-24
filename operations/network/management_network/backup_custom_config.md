@@ -23,7 +23,7 @@ This configuration will likely vary from site to site. This guide will cover the
 
 You can find the site connections in the SHCD file.
 
-```
+```bash
 CAN switch	cfcanb6s1	 	 	-	31	sw-25g01	x3000	u39	-	j36
 CAN switch	cfcanb6s1	 	 	-	46	sw-25g02	x3000	u40	-	j36
 ```
@@ -32,9 +32,9 @@ With this information we know that we need to backup the configuration on port 3
 
 Log into the switches. Get the configurations of the ports and the default route. Save this output; this will be used after we apply the generated configurations.
 
-### Aruba
+### Aruba site connection
 
-```
+```bash
 sw-spine-001# show run int 1/1/36
 interface 1/1/36
     no shutdown
@@ -43,12 +43,12 @@ interface 1/1/36
     exit
 ```
 
-```
+```bash
 sw-spine-001(config)# show run | include interface-group
 system interface-group 3 speed 10g
 ```
 
-```
+```bash
 sw-spine-002# show run int 1/1/36
 interface 1/1/36
     no shutdown
@@ -57,24 +57,24 @@ interface 1/1/36
     exit
 ```
 
-```
+```bash
 sw-spine-002(config)# show run | include interface-group
 system interface-group 3 speed 10g
 ```
 
-```
+```bash
 sw-spine-001# show run | include "ip route"
 ip route 0.0.0.0/0 10.101.15.141
 ```
 
-```
+```bash
 sw-spine-002# show run | include "ip route"
 ip route 0.0.0.0/0 10.101.15.189
 ```
 
-### Mellanox
+### Mellanox site connection
 
-```
+```bash
 sw-spine-001 [mlag-domain: master] # show run int ethernet 1/16
 interface ethernet 1/16 speed 10G force
 interface ethernet 1/16 mtu 1500 force
@@ -82,7 +82,7 @@ interface ethernet 1/16 no switchport force
 interface ethernet 1/16 ip address 10.102.255.10/30 primary
 ```
 
-```
+```bash
 sw-spine-002 [mlag-domain: master] # show run int ethernet 1/16
 interface ethernet 1/16 speed 10G force
 interface ethernet 1/16 mtu 1500 force
@@ -90,13 +90,13 @@ interface ethernet 1/16 no switchport force
 interface ethernet 1/16 ip address 10.102.255.86/30 primary
 ```
 
-```
+```bash
 sw-spine-001 [mlag-domain: master] # show run | include "ip route"
    ip route 0.0.0.0/0 10.102.3.3 5
    ip route 0.0.0.0/0 10.102.255.9
 ```
 
-```
+```bash
 sw-spine-002 [mlag-domain: master] # show run | include "ip route"
    ip route 0.0.0.0/0 10.102.3.2 5
    ip route 0.0.0.0/0 10.102.255.85
@@ -104,24 +104,24 @@ sw-spine-002 [mlag-domain: master] # show run | include "ip route"
 
 ## Backup users/passwords
 
-### Aruba
+### Aruba users/passwords
 
-```
+```bash
 sw-leaf-bmc-001# show run | include user
 user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-### Dell
+### Dell users/passwords
 
-```
+```bash
 sw-leaf-001# show running-configuration | grep user
 system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
 ```
 
-### Mellanox
+### Mellanox users/passwords
 
-```
+```bash
 sw-spine-001 [standalone: master] # show run | include username
    username admin password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    username monitor password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -133,17 +133,17 @@ For more information on SNMP credentials, see [Change SNMP Credentials on Leaf-B
 
 Once these credentials are retrieved from Vault, you can fill in the `xxxxxx` fields below.
 
-### Aruba
+### Aruba SNMP
 
-```text
+```bash
 sw-leaf-001# show run | include snmp
 snmp-server vrf default
 snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxxx
 ```
 
-### Dell
+### Dell SNMP
 
-```text
+```bash
 sw-leaf-001# show running-configuration | grep snmp
 snmp-server group cray-reds-group 3 noauth read cray-reds-view
 snmp-server user xxxxxx cray-reds-group 3 auth md5 xxxxxx priv des xxxxxx
