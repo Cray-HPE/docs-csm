@@ -39,11 +39,7 @@ This procedure requires administrative privileges.
     ifclose net0 || echo No routes to drop.
     ```
 
-<<<<<<< HEAD
-    - **Option 1:** Edit the cray-ipxe-bss-ipxe ConfigMap directly.
-=======
     - **Option 1:** Edit the `cray-ipxe-bss-ipxe` ConfigMap directly.
->>>>>>> 5e959619b4a7aa8497b220c52a7a855b4a3bf3ca
 
         ```bash
         ncn-m001#  kubectl edit configmap -n services cray-ipxe-bss-ipxe
