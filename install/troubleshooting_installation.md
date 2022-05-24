@@ -93,6 +93,6 @@ for additional information on system hardware, troubleshooting, and administrati
 
    1. Postgres Troubleshooting
 
-      * Time-out on cray-sls-init-load during Install CSM Services due to postgres cluster in SyncFailed state
+      * Timeout on `cray-sls-init-load` during Install CSM Services due to Postgres cluster in `SyncFailed` state
 
       See [Troubleshoot Postgres Database](../operations//kubernetes/Troubleshoot_Postgres_Database.md#syncfailed)
