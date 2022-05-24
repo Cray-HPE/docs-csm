@@ -4,7 +4,7 @@ The installation of the Cray System Management (CSM) product requires knowledge 
 switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM install
 for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
 
-### Topics:
+## Topics
 
    1. [Reset root Password on LiveCD](#reset_root_password_on_LiveCD)
    1. [Reinstall LiveCD](#reinstall_livecd)
@@ -16,10 +16,10 @@ for additional information on system hardware, troubleshooting, and administrati
    1. [Safeguards for CSM NCN Upgrades](#safeguards_for_csm_ncn_upgrades)
    1. [Postgres Troubleshooting](#postgres_troubleshooting)
 
-
 ## Details
 
    <a name="reset_root_password_on_LiveCD"></a>
+
    1. Reset root Password on LiveCD
 
       If the root password on the LiveCD needs to be changed, then this procedure does the reset.
@@ -76,7 +76,7 @@ for additional information on system hardware, troubleshooting, and administrati
       If there has been a failure to initialize all Ceph CSI components on `ncn-s001`, then the storage node
       `cloud-init` may need to be rerun.
          * Verify Ceph CSI
-         * Rerun Storage Node cloud-init
+         * Rerun Storage Node `cloud-init`
 
       See [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md)
    <a name="safeguards_for_csm_ncn_upgrades"></a>
@@ -88,7 +88,7 @@ for additional information on system hardware, troubleshooting, and administrati
          * Protect RAID Configuration on Management Nodes
 
       See [Safeguards for CSM NCN Upgrades](safeguards_for_csm_ncn_upgrades.md)
-   
+
    <a name="postgres_troubleshooting"></a>
 
    1. Postgres Troubleshooting
