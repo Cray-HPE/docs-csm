@@ -14,6 +14,7 @@ for additional information on system hardware, troubleshooting, and administrati
    1. [Utility Storage Node Installation Troubleshooting](#utility_storage_node_installation_troubleshooting)
    1. [Ceph CSI Troubleshooting](#ceph_csi_troubleshooting)
    1. [Safeguards for CSM NCN Upgrades](#safeguards_for_csm_ncn_upgrades)
+   1. [Postgres Troubleshooting](#postgres_troubleshooting)
 
 
 ## Details
@@ -87,3 +88,11 @@ for additional information on system hardware, troubleshooting, and administrati
          * Protect RAID Configuration on Management Nodes
 
       See [Safeguards for CSM NCN Upgrades](safeguards_for_csm_ncn_upgrades.md)
+   
+   <a name="postgres_troubleshooting"></a>
+
+   1. Postgres Troubleshooting
+
+      * Time-out on cray-sls-init-load during Install CSM Services due to postgres cluster in SyncFailed state
+
+      See [Troubleshoot Postgres Database](../operations//kubernetes/Troubleshoot_Postgres_Database.md#syncfailed)
