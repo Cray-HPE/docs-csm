@@ -18,7 +18,7 @@ The endpoint can also display the details of a given session when the specific s
 BOS supports a RESTful API. This API can be interacted with directly using tools like cURL.
 It can also be interacted with through the Cray Command Line Interface \(CLI\). See [Manage a BOS Session](Manage_a_BOS_Session.md) for more information.
 
-## Boot Orchestration Agent (BOA) Functionality
+## BOA Functionality
 
 The Boot Orchestration Agent \(BOA\) implements each session and sees it through to completion. A BOA is a Kubernetes job. It runs once to completion.
 If there are transient failures, BOA will exit and Kubernetes will reschedule it so that it can re-execute its session.
