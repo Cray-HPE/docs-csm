@@ -20,7 +20,7 @@ node is referenced during these procedures, it means the node that will be boote
 
 The compute nodes and application nodes depend on the management nodes to provide services for their runtime environment. For example:
 
-* CPS to project the operating system image, the CPE image, or the Analytics image
+* Content Projection Service (CPS) to project the operating system image, the CPE image, or the Analytics image
 * `cray-dns-unbound` (internal system DNS)
 * `cray-kea` (DHCP leases)
 * Access to the API gateway for node heartbeats
@@ -51,7 +51,7 @@ ncn# kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
 
 > **Skip this section if none of the management nodes are booted.**
 
-If any of the management nodes are booted with Linux, then they have previous installations data on them which must be wiped.
+If any of the management nodes are booted with Linux, then they have data from previous installations on them which must be wiped.
 
 **REQUIRED** If the above is true, then for each management node (**excluding** `ncn-m001`), log in and do a "full wipe" of the node's disks.
 

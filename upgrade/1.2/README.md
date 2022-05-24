@@ -18,7 +18,7 @@ Independently, the `customizations.yaml` file will be edited automatically durin
 `/usr/share/doc/csm/upgrade/1.2/scripts/upgrade/tds_cpu_requests.yaml` for these settings. This file can be modified (prior to proceeding with this upgrade), if other settings
 are desired in the `customizations.yaml` file for this system.
 
-For more information about modifying `customizations.yaml` and tuning for on specific systems, see
+For more information about modifying `customizations.yaml` and tuning for specific systems, see
 [Post Install Customizations](../../operations/CSM_product_management/Post_Install_Customizations.md).
 
 ## Upgrade stages
@@ -72,8 +72,8 @@ For more information about modifying `customizations.yaml` and tuning for on spe
 
 - Rerun a step
 
-   When running upgrade scripts, each script records what has been done successfully on a node. The file in which this is recorded is
-   `/etc/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state`.
+   When running upgrade scripts, each script records what has been done successfully on a node. This is recorded in the
+   `/etc/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state` file.
    If a rerun is required, the recorded steps to be re-run must be removed from this file.
 
    Here is an example of state file of `ncn-m001`:
