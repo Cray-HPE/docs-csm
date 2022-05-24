@@ -24,8 +24,8 @@ This configuration will likely vary from site to site. This guide will cover the
 You can find the site connections in the SHCD file.
 
 ```bash
-CAN switch	cfcanb6s1	 	 	-	31	sw-25g01	x3000	u39	-	j36
-CAN switch	cfcanb6s1	 	 	-	46	sw-25g02	x3000	u40	-	j36
+CAN switch  cfcanb6s1         -  31 sw-25g01 x3000 u39   -  j36
+CAN switch  cfcanb6s1         -  46 sw-25g02 x3000 u40   -  j36
 ```
 
 With this information we know that we need to backup the configuration on port 36 on both spine switches.
