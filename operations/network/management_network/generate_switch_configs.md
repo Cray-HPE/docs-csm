@@ -35,7 +35,7 @@ Generating a configuration file can be done for a single switch, or for the full
 * `--a`   : What is the system architecture? (See above)
 * `--ccj` : Match the `ccj.json` file to the one you created for your system.
 * `--sls` : Match the `sls_file.json` to the one you created for your system.
-* `--custom-config` Pass in a switch config file that CANU will inject into the generated config.  More documentation can be found from the official CANU docs. https://github.com/Cray-HPE/canu#generate-switch-configs-including-custom-configurations
+* `--custom-config` Pass in a switch config file that CANU will inject into the generated config.  More documentation can be found from the official [CANU docs](https://github.com/Cray-HPE/canu#generate-switch-configs-including-custom-configurations).
 
 * Generate a configuration file for single switch:
 

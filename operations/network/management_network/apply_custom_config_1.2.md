@@ -15,7 +15,7 @@ Apply the backed up site connection configuration with a couple modifications. S
 
 `vrf attach Customer` will be added to the port configuration that connects to the site. This has to be applied before the `ip address` configuration.
 
-```
+```bash
 sw-spine-001# conf t
 interface 1/1/36
     no shutdown
@@ -25,12 +25,12 @@ interface 1/1/36
     exit
 ```
 
-```
+```bash
 sw-spine-001# conf t
 sw-spine-001(config)# system interface-group 3 speed 10g
 ```
 
-```
+```bash
 sw-spine-002# conf t
 interface 1/1/36
     no shutdown
@@ -42,18 +42,18 @@ interface 1/1/36
 
 If the switch had `system interface-group` commands those would be added here.
 
-```
+```bash
 sw-spine-001(config)# system interface-group 3 speed 10g
 ```
 
 `vrf Customer` will be appended to the default route configuration.
 
-```
+```bash
 sw-spine-001# conf t
 sw-spine-001(config)# ip route 0.0.0.0/0 10.101.15.141 vrf Customer
 ```
 
-```
+```bash
 sw-spine-002# conf t
 sw-spine-002(config)# ip route 0.0.0.0/0 10.101.15.189 vrf Customer
 ```
@@ -62,7 +62,7 @@ sw-spine-002(config)# ip route 0.0.0.0/0 10.101.15.189 vrf Customer
 
 `vrf forwarding Customer` will be added to the port config. This has to be applied before the `ip address` configuration.
 
-```
+```bash
 sw-spine-001 [mlag-domain: master] # conf t
 interface ethernet 1/16 speed 10G force
 interface ethernet 1/16 mtu 1500 force
@@ -71,7 +71,7 @@ interface ethernet 1/16 vrf forwarding Customer
 interface ethernet 1/16 ip address 10.102.255.10/30 primary
 ```
 
-```
+```bash
 sw-spine-002 [mlag-domain: master] # conf t
 interface ethernet 1/16 speed 10G force
 interface ethernet 1/16 mtu 1500 force
@@ -82,12 +82,12 @@ interface ethernet 1/16 ip address 10.102.255.86/30 primary
 
 `vrf Customer` will replace `vrf default`
 
-```
+```bash
 sw-spine-001 [mlag-domain: master] # conf t
    ip route vrf Customer 0.0.0.0/0 10.102.255.9
 ```
 
-```
+```bash
 sw-spine-002 [mlag-domain: master] # conf t
    ip route vrf Customer 0.0.0.0/0 10.102.255.85
 ```
@@ -96,16 +96,16 @@ sw-spine-002 [mlag-domain: master] # conf t
 
 All that is required to re-apply the users is to get into the global configuration mode using `conf t` and paste in the configuration that was copied from the previous step.
 
-### Aruba
+### Aruba Credentials
 
-```
+```bash
 sw-leaf-bmc-001# conf t
 user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-### Dell
+### Dell Credentials
 
-```
+```bash
 sw-leaf-001# conf t
 system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
@@ -113,7 +113,7 @@ username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin p
 
 ### Mellanox
 
-```
+```bash
 sw-spine-001 [standalone: master] # conf t
    username admin password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    username monitor password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

@@ -127,7 +127,6 @@ sw-leaf-bmc-001# conf t
 
 For more information on SNMP credentials, see [Change SNMP Credentials on Leaf-BMC Switches](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md) & [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md)
 
-
 ## Write memory
 
 Save the configuration once the configuration is applied. See [Saving Configuration](saving_config.md).
