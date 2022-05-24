@@ -6,9 +6,10 @@ Apply the backed up site connection configuration with a couple modifications. S
 
 - Access to the switches
 - Custom switch configurations
-    - [Backup Custom Config](backup_custom_config.md)
+  - [Backup Custom Config](backup_custom_config.md)
+
 - Generated switch configurations already applied
-    - [Apply Switch Configs](apply_switch_configs.md)
+  - [Apply Switch Configs](apply_switch_configs.md)
 
 ## Aruba
 
@@ -122,7 +123,7 @@ sw-spine-001 [standalone: master] # conf t
 
 ### Dell SNMP
 
-```text
+```bash
 sw-leaf-bmc-001# conf t
    snmp-server group cray-reds-group 3 noauth read cray-reds-view
    snmp-server user testuser cray-reds-group 3 auth md5 xxxxxxxx priv des xxxxxxx
@@ -131,7 +132,7 @@ sw-leaf-bmc-001# conf t
 
 ### Aruba SNMP
 
-```text
+```bash
 sw-leaf-bmc-001# conf t
    snmp-server vrf default
    snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxx
