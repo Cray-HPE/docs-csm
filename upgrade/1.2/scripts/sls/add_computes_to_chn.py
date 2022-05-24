@@ -1,0 +1,220 @@
+#!/usr/bin/env python3
+# MIT License
+#
+# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+"""Upgrade an SLS file from any CSM 1.0.x version to CSM 1.2 idempotently."""
+import ipaddress
+import json
+import sys
+
+import pprint
+
+import click
+
+from sls_utils.ipam import next_free_ipv4_address
+from sls_utils.Managers import NetworkManager
+from sls_utils.Reservations import Reservation
+
+
+help = """Add Compute Nodes to the CHN
+
+This procedure adds all Compute nodes to the Customer Highspeed Network (CHN).  In *many* cases this is
+not required.  Generalized User access to computes over the CHN is only required in the following cases:
+
+1. **Ingress** Users need to access *all* computes from the site (ssh or otherwise).
+2. **Egrss** The HSN has no NAT device in place and the CHN subnet is both large enough and site-routable.
+
+Processing of SLS records will only occur if both the BICAN network exists (CSM >= 1.2) and the
+SystemDefaultRoute values has been set to "CHN".  If these conditions are not met, running the
+script is a no-op.
+
+Script processing involves:
+* Ensuring CHN is large enough to fit all HSN Reservations.
+  * If not it's possible that either a NAT device is in place, or
+  * This procedure is not required, or
+  * The CHN was truly not large enough to accomodate all the compute nodes (typical).
+ 
+TODO FINISH THIS OFF
+
+"""
+
+
+@click.command(help=help)
+@click.option(
+    "--sls-input-file",
+    required=True,
+    help="Input SLS JSON file",
+    type=click.File("r"),
+)
+@click.option(
+    "--sls-output-file",
+    help="Upgraded SLS JSON file name",
+    type=click.File("w"),
+    default="chn_with_computes_added_sls_file.json",
+)
+@click.pass_context
+def main(
+    ctx,
+    sls_input_file,
+    sls_output_file,
+):
+    """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
+
+    Args:
+        ctx: Click context
+        sls_input_file (str): Name of the SLS input file
+        sls_output_file (str): Name of the updated SLS output file
+
+    """
+    click.secho("Loading SLS JSON file.", fg="bright_white")
+    try:
+        sls_json = json.load(sls_input_file)
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        click.secho(
+            f"The file {sls_input_file.name} is not valid JSON.",
+            fg="red",
+        )
+        sys.exit(1)
+
+    click.secho(
+        "Extracting existing Networks from SLS file and schema validating.",
+        fg="bright_white",
+    )
+    networks = NetworkManager(sls_json["Networks"])
+
+    bican = networks.get("BICAN")
+    if bican is None:
+        click.secho(
+            "INFO: The BICAN network does not exist in SLS.  This script has nothing to process for CSM < 1.2.",
+            fg="bright_white"
+        )
+        sys.exit(1)
+
+    if bican.system_default_route() != "CHN":
+        click.secho(
+            "INFO: The BICAN toggle (SystemDefaultRoute) is not set to CHN. This script has nothing to process.",
+            fg="bright_white"
+        )
+        sys.exit(1)
+
+    chn = networks.get("CHN")
+    if chn is None:
+        click.secho(
+            "ERROR:  The BICAN toggle (SystemDefaultRoute)is set to CHN, but the CHN Network does not exist.\n"
+            "        This should never happen.  Look at CSI output or sls_upgrader output for the root cause.",
+            fg="red"
+        )
+        sys.exit(1)
+
+    chn_subnet = chn.subnets().get("bootstrap_dhcp")
+    if chn_subnet is None:
+        click.secho(
+            "ERROR:  The CHN Subnet bootrap_dhcp does not exist and is required.\n"
+            "        Look at CSI output or sls_upgrader output for the root cause.",
+            fg="red"
+        )
+        sys.exit(1)
+
+    hsn = networks.get("HSN")
+    if hsn is None:
+        click.secho(
+            "ERROR:  The HSN network does not exist, but the CHN Network exists.\n"
+            "        HSN is pre-requisite for CHN.  Look at CSI output or sls_upgrader output for the root cause.",
+            fg="red"
+        )
+        sys.exit(1)
+
+    hsn_subnet = hsn.subnets().get("hsn_base_subnet")
+    if hsn_subnet is None:
+        click.secho(
+            "ERROR:  The HSN Subnet hsn_base_subnet does not exist and is required.\n"
+            "        Look at CSI output or sls_upgrader output for the root cause.",
+            fg="red"
+        )
+        sys.exit(1)
+
+    hsn_ipv4_network = hsn_subnet.ipv4_network()
+    hsn_size = hsn_ipv4_network.num_addresses
+    hsn_used = len(hsn_subnet.reservations()) + 1
+    click.secho(
+        f"INFO:  The HSN {hsn_ipv4_network} supports {hsn_size} addresses "
+        f"of which {hsn_used} are currently used.",
+        fg="bright_white"
+    )
+
+    chn_ipv4_network = chn_subnet.ipv4_network()
+    chn_size = chn_ipv4_network.num_addresses
+    chn_used = len(chn_subnet.reservations()) + 1
+    click.secho(
+        f"INFO:  The CHN {chn_ipv4_network} supports {chn_size} addresses "
+        f"of which {chn_used} are currently used.",
+        fg="bright_white"
+    )
+
+    chn_available_ips = chn_size - chn_used
+    if chn_available_ips < hsn_used:
+        click.secho(
+            f"ERROR:  The CHN with {chn_available_ips} IPs available is too small to add {hsn_used} HSN IPs.\n"
+            "        This can be for two reasons:\n"
+            "        1. A NAT device is in place to provides HSN egress access for Computes.\n"
+            "        2. The CHN size allocated during installation or upgrade is indeed to small and needs resizing.",
+            fg="red"
+        )
+        sys.exit(1)
+
+    hsn_reservations = hsn_subnet.reservations().values()
+    for hsn_reservation in hsn_reservations:
+        new_name = hsn_reservation.name()
+        new_ipv4_address = next_free_ipv4_address(chn_subnet)
+        click.secho(
+            f"    Adding Reservation {new_name} {new_ipv4_address}",
+            fg="white"
+        )
+        chn_subnet.reservations().update(
+            {
+                new_name: Reservation(
+                    new_name,
+                    new_ipv4_address,
+                    [],
+                ),
+            },
+        )
+
+    pprint.pprint(chn_subnet.reservations())
+    click.secho(
+        f"CHN now has {len(chn_subnet.reservations()) + 1} IP reservations",
+        fg="bright_white"
+    )
+
+    click.secho(
+        f"Writing CSM 1.2 upgraded and schema validated SLS file to {sls_output_file.name}",
+        fg="bright_white",
+    )
+
+    if sls_output_file:
+        sls_json.pop("Networks")
+        sls_json.update({"Networks": networks.to_sls()})
+        new_json = json.dumps(sls_json, indent=2, sort_keys=True)
+        click.echo(new_json, file=sls_output_file)
+
+
+if __name__ == "__main__":
+    main()
