@@ -94,7 +94,7 @@ spec:
 
           ## install.sh known issues
           
-          1.  The `install.sh` script changes cluster state and should not simply be rerun
+          The `install.sh` script changes cluster state and should not simply be rerun
             in the event of a failure without careful consideration of the specific
             error. It may be possible to resume installation from the last successful
             command executed by `install.sh`, but administrators will need to appropriately
@@ -102,7 +102,7 @@ spec:
             `install.sh` script runs with `set -x`, so each command will be printed to
             stderr prefixed with the expanded value of PS4, namely, `+ `.)
             
-            The following error may occur when running `./install.sh`:
+            * The following error may occur when running `install.sh`:
               ```
               + csi upload-sls-file --sls-file /var/www/ephemeral/prep/eniac/sls_input_file.json
               2021/10/05 18:42:58 Retrieving S3 credentials ( sls-s3-credentials ) for SLS
@@ -116,7 +116,9 @@ spec:
                 sls-s3-credentials   Opaque   7      28d
                 ```
 
-              2. Check for running sonar-sync jobs. If there are no sonar-sync jobs, then wait for one to complete. The sonar-sync cronjob is responsible for copying the `sls-s3-credentials` secret from the `default` to `services` namespaces.
+              2. Check for running sonar-sync jobs. If there are no sonar-sync jobs, then wait for one to complete.
+                The sonar-sync cronjob is responsible for copying the `sls-s3-credentials` secret from the `default`
+                to the `services` namespaces.
                 ```bash
                 pit# kubectl -n services get pods -l cronjob-name=sonar-sync
                 NAME                          READY   STATUS      RESTARTS   AGE
@@ -133,7 +135,7 @@ spec:
               
               4. Running `install.sh` again is expected to succeed.
             
-            1. Time-out on cray-sls-init-load during Install CSM Services due to postgres cluster in SyncFailed state
+            * Timeout on cray-sls-init-load during Install CSM Services due to Postgres cluster in SyncFailed state
               {{ readFile "../../../operations/kubernetes/Troubleshoot_Postgres_Database.md" | indent 14 }}
       postValidation:
         description: |-
