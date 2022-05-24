@@ -129,13 +129,13 @@ sw-spine-001 [standalone: master] # show run | include username
 
 ## Backup SNMP credentials
 
-SNMP is currently only used on sw-leaf-bmc switches. These credentials can be retrieved from Vault. For more information on SNMP credentials, see [Change SNMP Credentials on Leaf-BMC Switches](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md).
+For more information on SNMP credentials, see [Change SNMP Credentials on Leaf-BMC Switches](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md) & [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md)
 
 Once these credentials are retrieved from Vault, you can fill in the `xxxxxx` fields below.
 
 ### Aruba
 
-```
+```text
 sw-leaf-001# show run | include snmp
 snmp-server vrf default
 snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxxx
@@ -143,7 +143,7 @@ snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plai
 
 ### Dell
 
-```
+```text
 sw-leaf-001# show running-configuration | grep snmp
 snmp-server group cray-reds-group 3 noauth read cray-reds-view
 snmp-server user xxxxxx cray-reds-group 3 auth md5 xxxxxx priv des xxxxxx
