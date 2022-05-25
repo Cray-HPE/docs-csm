@@ -135,7 +135,7 @@ echo "Got admin client secret"
 
 # Create the UAI pod
 echo "Creating Gateway Test UAI with image ${GATEWAY_IMAGE_NAME}"
-UAI_NAME=$(cray uas create --publickey ~/.ssh/id_rsa.pub --imagename ${GATEWAY_IMAGE_NAME} | grep uai_name | awk '{print $3}' | sed -e 's/"//g')
+UAI_NAME=$(cray uas create --publickey ~/.ssh/id_rsa.pub --imagename ${GATEWAY_IMAGE_NAME} --format json | jq '.uai_name' | sed -e 's/"//g')
 
 if [[ -z ${UAI_NAME} ]]; then
   error "Failure creating UAI"
