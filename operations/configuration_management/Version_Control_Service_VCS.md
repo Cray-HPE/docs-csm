@@ -144,9 +144,9 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
     ncn# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > gitea.yaml
     ```
 
-1. Run the following command to remove non-Gitea charts from the `gitea.yaml` file. This will also change the `metadata.name` so 
+1. Run the following command to remove non-Gitea charts from the `gitea.yaml` file. This will also change the `metadata.name` so
    that it does not overwrite the `sysmgmt.yaml` file that is stored in the `loftsman` namespace.
-   
+
    ```bash
    ncn# for i in $(yq r gitea.yaml 'spec.charts[*].name' | grep -Ev '^gitea'); do yq d -i gitea.yaml  'spec.charts(name=='"$i"')'; done
    ncn# yq w -i gitea.yaml metadata.name gitea
@@ -155,7 +155,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
    ncn# yq w -i gitea.yaml spec.sources.charts[0].name csm-algol60
    ncn# yq w -i gitea.yaml spec.sources.charts[0].type repo
    ```
-   
+
 1. Example `gitea.yaml` after the command is run:
 
    Example:
@@ -192,9 +192,9 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
     ncn# manifestgen -c customizations.yaml -i gitea.yaml -o manifest.yaml
     ```
 
-1. Validate that the `manifest.yaml` file only contains chart information for Gitea, and that the sources chart location 
+1. Validate that the `manifest.yaml` file only contains chart information for Gitea, and that the sources chart location
    points to `https://packages.local/repository/charts`.
-   
+
 1. Re-apply the `gitea` Helm chart with the updated `customizations.yaml` file.
 
    This will update the `vcs-user-credentials` SealedSecret which will cause the SealedSecret controller to update the Secret.
