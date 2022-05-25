@@ -116,14 +116,15 @@ if [[ $redeploy == "1" ]];then
     tmpfile=/tmp/cray-cps-deployment-list.${target_ncn}.$$.$(date +%Y-%m-%d_%H-%M-%S.%N).tmp
     count=0
     while [ true ]; do
-        if ! cray cps deployment list --nodes $target_ncn > $tmpfile ; then
+        # Our grep on the output of this CLI command only works if the output is in TOML format, so specify that explicitly with the --format argument
+        if ! cray cps deployment list --nodes $target_ncn --format toml > $tmpfile ; then
             # This command can fail when a node is first being brought up and deploying its CPS pods.
             if [[ $count -gt 30 ]]; then
                 rm -f "$tmpfile" >/dev/null 2>&1 || true
-                echo "ERROR: Command still failing after retries: Command failed: cray cps deployment list --nodes $target_ncn"
+                echo "ERROR: Command still failing after retries: Command failed: cray cps deployment list --nodes $target_ncn --format toml"
                 exit 1
             fi
-            echo "Command failed: cray cps deployment list --nodes $target_ncn; retrying in 5 seconds"
+            echo "Command failed: cray cps deployment list --nodes $target_ncn --format toml; retrying in 5 seconds"
             sleep 5
             let "count += 1"
             continue
@@ -132,7 +133,8 @@ if [[ $redeploy == "1" ]];then
         if [[ $cps_state -ne 0 ]];then
             if [[ $count -gt 30 ]]; then
                 echo "ERROR: CPS is not running on $target_ncn"
-                cray cps deployment list --nodes $target_ncn |grep -E "state ="
+                # Our grep on the output of this CLI command only works if the output is in TOML format, so specify that explicitly with the --format argument
+                cray cps deployment list --nodes $target_ncn --format toml |grep -E "state ="
                 rm -f "$tmpfile" >/dev/null 2>&1 || true
                 exit 1
             fi

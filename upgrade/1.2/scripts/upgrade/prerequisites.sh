@@ -586,8 +586,9 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
-    
-    cray bss bootparameters list --format=json > bss-backup-$(date +%Y-%m-%d).json
+
+    #shellcheck disable=SC2046
+    cray bss bootparameters list --format json > bss-backup-$(date +%Y-%m-%d).json
 
     backupBucket="config-data"
     set +e
@@ -698,7 +699,8 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     {
     
     export CRAY_FORMAT=json
-    for xname in $(cray hsm state components list --role Management --type node | jq -r .Components[].ID)
+    # Even though we export the CRAY_FORMAT environment variable, it still is safest to also specify the --format command line argument
+    for xname in $(cray hsm state components list --role Management --type node --format json | jq -r .Components[].ID)
     do
         cray cfs components update --enabled false --desired-config "" $xname
     done
