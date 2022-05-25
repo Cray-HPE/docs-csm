@@ -35,7 +35,7 @@ For more information about modifying `customizations.yaml` and tuning for specif
 
 ## Relevant troubleshooting links for upgrade-related issues
 
-- General Upgrade troubleshooting
+- General upgrade troubleshooting
 
   If execution of the upgrade procedure fails, it is safe to just rerun the failed script. If a rerun still fails, wait for 10s and rerun it again. If the issue persists, then refer to below troubleshooting procedures.
 
