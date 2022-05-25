@@ -301,7 +301,7 @@ Configured SystemDefaultRoute: CHN
    Overall Gateway Test Status:  PASS
    ```
 
-Please refer to the [gateway testing documentation](../operations/network/gateway_testing.md) for more information.
+Please refer to the [gateway testing documentation](../gateway_testing.md) for more information.
 
 <a name="validate-compute"></a>
 
@@ -377,4 +377,4 @@ The test will complete with an overall test status based on the result of the in
 Overall Gateway Test Status:  PASS
 ```
 
-Please refer to the [gateway testing documentation](../operations/network/gateway_testing.md) for more information.
+Please refer to the [gateway testing documentation](../gateway_testing.md) for more information.
