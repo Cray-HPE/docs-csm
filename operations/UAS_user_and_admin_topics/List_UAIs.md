@@ -1,15 +1,11 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+# List UAIs
 
-[Next Topic: Creating a UAI](Create_a_UAI.md)
-
-
-## List UAIs
-
-There are two ways to list UAIs in UAS. One of these is an administrative action and provides access to all currently running UAIs. The other is associated with the [Legacy UAI Management](Legacy_Mode_User-Driven_UAI_Management.md) mode and provides authorized users access to their own UAIs. Both of these are shown here.
+There are two ways to list UAIs in UAS. One of these is an administrative action and provides access to all currently running UAIs.
+The other is associated with the [Legacy UAI Management](Legacy_Mode_User-Driven_UAI_Management.md) mode and provides authorized users access to their own UAIs. Both of these are shown here.
 
 View the details of every UAI that is running by using a direct UAS administrative command.
 
-### Prerequisites
+## Prerequisites
 
 For administrative procedures:
 
@@ -26,18 +22,18 @@ For Legacy Mode user procedures:
 * The HPE Cray EX System CLI must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
 * The user must be logged in as to the HPE Cray EX System CLI (`cray auth login` command)
 
-
-### Procedure
+## Procedure
 
 1. List the existing UAIs as an administrator.
 
     Use a command of the following form:
 
-    ```
+    ```bash
     ncn-m001-pit# cray uas admin uais list OPTIONS
     ```
 
     OPTIONS includes includes the following selection options:
+
     * `--owner '<user-name>'` show only UAIs owned by the named user
     * `--class-id '<class-id'` show only UAIs of the specified UAI class
 
@@ -49,7 +45,7 @@ For Legacy Mode user procedures:
 
     Example output:
 
-    ```
+    ```bash
     [[results]]
     uai_age = "5h3m"
     uai_connect_string = "ssh broker@34.136.140.107"
@@ -70,7 +66,7 @@ For Legacy Mode user procedures:
 
     Example output:
 
-    ```
+    ```bash
     [[results]]
     uai_age = "3m"
     uai_connect_string = "ssh vers@35.188.16.85"
@@ -81,6 +77,8 @@ For Legacy Mode user procedures:
     uai_name = "uai-vers-4a38a807"
     uai_status = "Running: Ready"
     username = "vers"
-    ````
+    ```
+
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Creating a UAI](Create_a_UAI.md)

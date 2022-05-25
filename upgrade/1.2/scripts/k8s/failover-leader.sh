@@ -53,6 +53,7 @@ do
     then
         echo "$podname is master - failover to $new_master"
         kubectl exec $podname -c postgres -n $namespace -- patronictl failover --master $podname --candidate $new_master --force 2>/dev/null
+        #shellcheck disable=SC2046
         while [ $(kubectl exec $new_master -c postgres -n $namespace -- curl -sL -w "%{http_code}" -I -X GET http://localhost:8008/master -o /dev/null) != 200 ] ; do echo "  waiting for master to respond"; sleep 2; done
     else
         echo "$podname is not master - do nothing"

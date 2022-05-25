@@ -7,14 +7,14 @@ Results may vary if an unconfigured switch is being used.
 
 ## Prerequisites
 
-* There is a configured switch with SSH access _or_ unconfigured with COM access (serial-over-lan/DB-9).
+* There is a configured switch with SSH access or unconfigured with `COM` access (serial-over-lan/DB-9).
 * A file is available to record the collected BMC information.
 
 ## Procedure
 
-1. Start a session on the leaf-bmc switch, either using SSH or a USB serial cable (see [Connect to Switch over USB-Serial Cable](connect_to_switch_over_usb_serial_cable.md) for details on how to do that).
+1. Start a session on the `leaf-bmc` switch, either using SSH or a USB serial cable (see [Connect to Switch over USB-Serial Cable](connect_to_switch_over_usb_serial_cable.md) for details on how to do that).
 
-    > **NOTE:** These IP addresses are examples; 10.X.0.4 may or may not match the setup.
+    > **NOTE:** These IP addresses are examples; `10.X.0.4` may or may not match the setup.
 
     ```bash
     # SSH over METAL MANAGEMENT
@@ -39,21 +39,24 @@ Results may vary if an unconfigured switch is being used.
     Print using the VLAN ID:
 
     DellOS 10
+
     ```bash
     # DellOS 10
     sw-leaf-bmc-001# show mac address-table vlan 4
-    VlanId	Mac Address		Type		Interface
-    4	00:1e:67:98:fe:2c	dynamic		ethernet1/1/11
-    4	a4:bf:01:38:f0:b1	dynamic		ethernet1/1/27
-    4	a4:bf:01:38:f1:44	dynamic		ethernet1/1/25
-    4	a4:bf:01:48:1e:ac	dynamic		ethernet1/1/28
-    4	a4:bf:01:48:1f:70	dynamic		ethernet1/1/31
-    4	a4:bf:01:48:1f:e0	dynamic		ethernet1/1/26
-    4	a4:bf:01:48:20:03	dynamic		ethernet1/1/30
-    4	a4:bf:01:48:20:57	dynamic		ethernet1/1/29
-    4	a4:bf:01:4d:d9:9a	dynamic		ethernet1/1/32
+    VlanId Mac Address  Type        Interface
+    4 00:1e:67:98:fe:2c dynamic     ethernet1/1/11
+    4 a4:bf:01:38:f0:b1 dynamic     ethernet1/1/27
+    4 a4:bf:01:38:f1:44 dynamic     ethernet1/1/25
+    4 a4:bf:01:48:1e:ac dynamic     ethernet1/1/28
+    4 a4:bf:01:48:1f:70 dynamic     ethernet1/1/31
+    4 a4:bf:01:48:1f:e0 dynamic     ethernet1/1/26
+    4 a4:bf:01:48:20:03 dynamic     ethernet1/1/30
+    4 a4:bf:01:48:20:57 dynamic     ethernet1/1/29
+    4 a4:bf:01:4d:d9:9a dynamic     ethernet1/1/32
     ```
+
     Aruba AOS-CX
+
     ```bash
     # Aruba AOS-CX
     sw-leaf-bmc-001# show mac-address-table vlan 4
@@ -80,13 +83,16 @@ Results may vary if an unconfigured switch is being used.
     Print using the interface and trunk:
 
     DellOS 10
+
     ```bash
     # DellOS 10
     sw-leaf-bmc-001# show mac address-table interface ethernet 1/1/32
-    VlanId	Mac Address		Type		Interface
-    4	a4:bf:01:4d:d9:9a	dynamic		ethernet1/1/32
+    VlanId  Mac Address  Type      Interface
+    4 a4:bf:01:4d:d9:9a  dynamic   ethernet1/1/32
     ```
+
     Aruba AOS-CX
+
     ```bash
     # Aruba AOS-CX
     sw-leaf-bmc-001# show mac-address-table port
@@ -103,16 +109,19 @@ Results may vary if an unconfigured switch is being used.
     Print everything:
 
     DellOS 10
+
     ```bash
     # DellOS 10
     sw-leaf-bmc-001# show mac address-table
-    VlanId	Mac Address		Type		Interface
-    4	a4:bf:01:4d:d9:9a	dynamic		ethernet1/1/32
+    VlanId Mac Address   Type       Interface
+    4 a4:bf:01:4d:d9:9a  dynamic    ethernet1/1/32
     ....
     # Onyx and Aruba
     sw-leaf-bmc-001# show mac-address-table
     ```
+
     Aruba AOS-CX
+
     ```bash
     # Aruba AOS-CX
     sw-leaf-bmc-001# show mac-address-table
@@ -133,15 +142,17 @@ Results may vary if an unconfigured switch is being used.
    Fill in the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1` columns with a placeholder value, such as `de:ad:be:ef:00:00`,
    as a marker that the correct value is not in this file yet.
 
-   **IMPORTANT:** Mind the index for each group of nodes (3, 2, 1.... ; not 1, 2, 3). If storage nodes are `ncn-s001 x3000c0s7b0n0`, `ncn-s002 x3000c0s8b0n0`, `ncn-s003 x3000c0s9b0n0`, then their portion of the file would be ordered `x3000c0s9b0n0`, `x3000c0s8b0n0`, `x3000c0s7b0n0`.
+   **IMPORTANT:** Mind the index for each group of nodes (3, 2, 1.... ; not 1, 2, 3).
+   If storage nodes are `ncn-s001 x3000c0s7b0n0`, `ncn-s002 x3000c0s8b0n0`, `ncn-s003 x3000c0s9b0n0`,
+   then their portion of the file would be ordered `x3000c0s9b0n0`, `x3000c0s8b0n0`, `x3000c0s7b0n0`.
 
-   ```
+   ```text
    Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
    x3000c0s9b0n0,Management,Storage,a4:bf:01:38:f1:44,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    x3000c0s8b0n0,Management,Storage,a4:bf:01:48:1f:e0,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    x3000c0s7b0n0,Management,Storage,a4:bf:01:38:f0:b1,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
                                      ^^^^^^^^^^^^^^^^^
-    ```
+   ```
 
    The column heading must match that shown above for `csi` to parse it correctly.
 
@@ -161,7 +172,7 @@ Results may vary if an unconfigured switch is being used.
 
    Add this information for `ncn-m001` to the `ncn_metadata.csv` file. There should be `ncn-m003`, then `ncn-m002`, and this new entry for `ncn-m001` as the last line in the file.
 
-   ```
+   ```text
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    ```
 
@@ -172,7 +183,7 @@ Results may vary if an unconfigured switch is being used.
    Sample file showing storage nodes 3, 2, and 1, then worker nodes 3, 2, and 1, and finally master nodes 3, 2, and 1 with valid `BMC MAC`
   addresses, but placeholder value `de:ad:be:ef:00:00` for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1`.
 
-   ```
+   ```text
    Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
    x3000c0s9b0n0,Management,Storage,a4:bf:01:38:f1:44,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    x3000c0s8b0n0,Management,Storage,a4:bf:01:48:1f:e0,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
@@ -184,4 +195,3 @@ Results may vary if an unconfigured switch is being used.
    x3000c0s2b0n0,Management,Master,a4:bf:01:4d:d9:9a,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    ```
-

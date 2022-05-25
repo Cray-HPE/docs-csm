@@ -24,6 +24,7 @@
 #
 
 function update_image_values () {
+ #shellcheck disable=SC2154
  IMAGE="$registry/ceph/ceph:v15.2.8"
  ceph config set global container_image $IMAGE
  for SERVICE in mon mgr osd mds client

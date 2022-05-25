@@ -25,15 +25,20 @@
 
 function wait_for_health_ok() {
   cnt=0
+  node=$1
   while true; do
-    if [[ "$cnt" -eq 360 ]]; then
-      echo "ERROR: Giving up on waiting for Ceph to become healthy..."
-      break
-    fi
-    ceph_status=$(ceph health -f json-pretty | jq -r .status)
-    if [[ $ceph_status == "HEALTH_OK" ]]; then
-      echo "Ceph is healthy -- continuing..."
-      break
+    if [[ ! -z "$node" ]] && [[ "$cnt" -eq 300 ]] ; then
+      check_mon_daemon ${node}
+    else
+      if [[ "$cnt" -eq 360 ]]; then
+        echo "ERROR: Giving up on waiting for Ceph to become healthy..."
+        break
+      fi
+      ceph_status=$(ceph health -f json-pretty | jq -r .status)
+      if [[ $ceph_status == "HEALTH_OK" ]]; then
+        echo "Ceph is healthy -- continuing..."
+        break
+      fi
     fi
     sleep 5
     echo "Sleeping for five seconds waiting for Ceph to be healthy..."
@@ -91,6 +96,7 @@ function wait_for_osd() {
     #
     if [[ "$cnt" -eq 6 ]]; then
       echo "INFO: Restarting active mgr daemon to kick things along..."
+      #shellcheck disable=SC2046
       ceph mgr fail $(ceph mgr dump | jq -r .active_name)
       cnt=$((cnt+1))
       continue

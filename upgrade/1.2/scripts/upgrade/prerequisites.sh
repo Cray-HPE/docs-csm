@@ -26,9 +26,11 @@
 set -e
 locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${locOfScript}/../common/upgrade-state.sh
+#shellcheck disable=SC2046
 . ${locOfScript}/../common/ncn-common.sh $(hostname)
-trap 'err_report' ERR INT TERM HUP
+trap 'err_report' ERR INT TERM HUP EXIT
 # array for paths to unmount after chrooting images
+#shellcheck disable=SC2034
 declare -a UNMOUNTS=()
 
 while [[ $# -gt 0 ]]
@@ -65,6 +67,7 @@ if [[ -z ${CSM_ARTI_DIR} ]]; then
 fi
 
 state_name="UPDATE_SSH_KEYS"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
@@ -81,12 +84,14 @@ EOF
     grep -oP "(ncn-\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
 
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="CHECK_CLOUD_INIT_PREREQ"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
@@ -101,6 +106,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         ssh_keygen_keyscan $host
         until ssh $host test -f /run/cloud-init/instance-data.json
         do
+            #shellcheck disable=SC2069
             ssh $host cloud-init init 2>&1 >/dev/null
             counter=$((counter+1))
             sleep 10
@@ -120,9 +126,11 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         ssh_keygen_keyscan $host
         until ssh $host test -f /run/cloud-init/instance-data.json
         do
+            #shellcheck disable=SC2069
             ssh $host cloud-init init 2>&1 >/dev/null
             counter=$((counter+1))
             sleep 10
+            #shellcheck disable=SC2071
             if [[ $counter > 5 ]]
             then
                 echo "Cloud init data is missing and cannot be recreated. Existing upgrade.."
@@ -132,12 +140,14 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
 
     set -e
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="UPDATE_DOC_RPM"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
@@ -148,12 +158,14 @@ if [[ $state_recorded == "0" ]]; then
     fi
     cp /root/docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="UPDATE_CUSTOMIZATIONS"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
@@ -183,12 +195,14 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     kubectl create secret -n loftsman generic site-init --from-file=./customizations.yaml
     popd
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="SETUP_NEXUS"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
@@ -196,12 +210,14 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     ${CSM_ARTI_DIR}/lib/setup-nexus.sh
 
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="DISABLE_SERVICE_REPOS"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
@@ -212,12 +228,14 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     pdsh -w "$NCNS" 'zypper ms -d SUSE_Linux_Enterprise_Server_15_SP2_x86_64'
     pdsh -w "$NCNS" 'zypper ms -d Server_Applications_Module_15_SP2_x86_64'
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="REMOVE_DUPLICATE_BMC_DNS_RECORDS"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
@@ -228,6 +246,7 @@ if [[ $state_recorded == "0" ]]; then
         # turn until one of them has the IPMI credentials.
         USERNAME=""
         IPMI_PASSWORD=""
+        #shellcheck disable=SC1083
         VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.data.vault-root} | base64 -d)
         for VAULT_POD in $(kubectl get pods -n vault --field-selector status.phase=Running --no-headers \
                             -o custom-columns=:.metadata.name | grep -E "^cray-vault-(0|[1-9][0-9]*)$") ; do
@@ -237,6 +256,7 @@ if [[ $state_recorded == "0" ]]; then
                 jq -r '.data.Username')
             # If we are not able to get the username, no need to try and get the password.
             [[ -n ${USERNAME} ]] || continue
+            #shellcheck disable=SC2155
             export IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
                 "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
                 vault kv get -format=json secret/hms-creds/$TARGET_MGMT_XNAME" |
@@ -256,11 +276,14 @@ if [[ $state_recorded == "0" ]]; then
         # Check for and remove any duplicate DNS entries for BMCs
         bmc_duplicate_error=0
         for ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do
+            #shellcheck disable=SC2071
             if [[ "$(dig +short ${ncn}-mgmt | wc -l)" > "1" ]]; then
                 bmc_duplicate_error=1
             fi
         done
         if [ $bmc_duplicate_error = 1 ]; then
+            #shellcheck disable=SC2155
+            #shellcheck disable=SC2046
             export TOKEN=$(curl -s -S -d grant_type=client_credentials \
                               -d client_id=admin-client \
                               -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
@@ -269,43 +292,104 @@ if [[ $state_recorded == "0" ]]; then
         fi
         set -e
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="UPGRADE_BSS"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
     helm -n services upgrade cray-hms-bss ${CSM_ARTI_DIR}/helm/cray-hms-bss-*.tgz
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="UPGRADE_KEA"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
     helm -n services upgrade cray-dhcp-kea ${CSM_ARTI_DIR}/helm/cray-dhcp-kea-*.tgz
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="UPGRADE_UNBOUND"
+#shellcheck disable=SC2046
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    manifest_folder='/tmp'
+    dns_forwarder=$(kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d|yq r - spec.network.netstaticips.system_to_site_lookups)
+    system_name=$(kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d|yq r - spec.network.dns.external)
+    #shellcheck disable=SC2010
+    unbound_version=$(ls ${CSM_ARTI_DIR}/helm |grep cray-dns-unbound|sed -e 's/\.[^./]*$//'|cut -d '-' -f4)
+
+
+    if [ -z "$dns_forwarder" ] || [ -z "$system_name" ] || [ -z "$unbound_version" ]; then
+      echo "ERROR: null value found.  See list of variables"
+      echo "dns_forwarder is $dns_forwarder."
+      echo "system_name is $system_name."
+      echo "unbound_version is $unbound_version."
+      exit 1
+    fi
+
+    cat > $manifest_folder/unbound.yaml <<EOF
+apiVersion: manifests/v1beta1
+metadata:
+  name: unbound
+spec:
+  charts:
+  - name: cray-dns-unbound
+    namespace: services
+    source: csm
+    values:
+      domain_name: $system_name
+      forwardZones:
+      - forwardIps: [$dns_forwarder]
+        name: .
+      global:
+        appVersion: $unbound_version
+      localZones:
+      - localType: static
+        name: local
+    version: $unbound_version
+EOF
+
+    echo "$manifest_folder/unbound.yaml"
+    cat $manifest_folder/unbound.yaml
+
+    loftsman ship --charts-path ${CSM_ARTI_DIR}/helm/ --manifest-path $manifest_folder/unbound.yaml
+
+    } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="UPLOAD_NEW_NCN_IMAGE"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
     temp_file=$(mktemp)
     artdir=${CSM_ARTI_DIR}/images
-
+    #shellcheck disable=SC2155
     export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
     DEBUG=1 ${CSM_ARTI_DIR}/ncn-image-modification.sh \
         -d /root/.ssh \
@@ -331,12 +415,14 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> /etc/cray/upgrade/csm/myenv
 
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="UPDATE_CLOUD_INIT_RECORDS"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
@@ -354,6 +440,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     # check for record already exists and create the script to be idempotent
     for ((i=0;i<$entry_number; i++)); do
         record=$(jq '."cloud-init"."meta-data".host_records['$i']' cloud-init-global.json)
+        #shellcheck disable=SC2076
         if [[ $record =~ "packages.local" ]] || [[ $record =~ "registry.local" ]]; then
                 echo "packages.local and registry.local already in BSS cloud-init host_records"
         fi
@@ -373,6 +460,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         --storage-version ${CEPH_VERSION}
 
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
     echo
 else
@@ -380,11 +468,13 @@ else
 fi
 
 state_name="PREFLIGHT_CHECK"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    #shellcheck disable=SC2046
     rpm --force -Uvh $(find $CSM_ARTI_DIR/rpm/cray/csm/ -name \*csm-testing\*.rpm | sort -V | tail -1)
     /opt/cray/tests/install/ncn/scripts/validate-bootraid-artifacts.sh
 
@@ -402,70 +492,49 @@ if [[ $state_recorded == "0" ]]; then
     GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
 
     } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-state_name="PRECACHE_EXISTING_NEXUS_IMAGES"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    {
-
-    images=$(kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.images_to_cache' | grep "sonatype\|proxy\|busybox")
-    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    output=$(pdsh -b -S -w $(grep -oP 'ncn-w\w\d+' /etc/hosts | sort -u | tr -t '\n' ',') 'for image in '$images'; do crictl pull $image; done' 2>&1)
-    echo "$output"
-
-    if [[ "$output" == *"failed"* ]]; then
-      echo ""
-      echo "Verify the images which failed in the output above are available in nexus."
-      exit 1
-    fi
-
-    } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="UPGRADE_PRECACHE_CHART"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
-    helm -n nexus upgrade cray-precache-images ${CSM_ARTI_DIR}/helm/cray-precache-images-*.tgz
-    } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
+    helm uninstall -n nexus cray-precache-images
+    tmp_manifest=/tmp/precache-manifest.yaml
 
-state_name="PRECACHE_NEW_IMAGES"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    {
+cat > $tmp_manifest <<EOF
+apiVersion: manifests/v1beta1
+metadata:
+  name: cray-precache-images-manifest
+spec:
+  charts:
+  -
+EOF
 
-    images=$(kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.images_to_cache')
-    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    output=$(pdsh -b -S -w $(grep -oP 'ncn-w\w\d+' /etc/hosts | sort -u | tr -t '\n' ',') 'for image in '$images'; do crictl pull $image; done' 2>&1)
-    echo "$output"
+    yq r "${CSM_ARTI_DIR}/manifests/platform.yaml" 'spec.charts.(name==cray-precache-images)' | sed 's/^/    /' >> $tmp_manifest
+    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path $tmp_manifest
 
-    if [[ "$output" == *"failed"* ]]; then
-      echo ""
-      echo "Verify the images which failed in the output above are available in nexus."
-      exit 1
-    fi
+    #
+    # Now edit the configmap with the three images that 1.x nexus
+    # needs so it can move around on an upgraded NCN (before we deploy
+    # the new nexus chart)
+    #
+    kubectl get configmap -n nexus cray-precache-images -o yaml | sed '/kind: ConfigMap/i\    docker.io/sonatype/nexus3:3.25.0\n    dtr.dev.cray.com/baseos/busybox:1\n    dtr.dev.cray.com/cray/istio/proxyv2:1.7.8-cray2-distroless' | kubectl apply -f -
 
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="POD_ANTI_AFFINITY"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
@@ -495,6 +564,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     }}'
 
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
@@ -503,6 +573,7 @@ fi
 ${locOfScript}/../cps/snapshot-cps-deployment.sh
 
 state_name="ADD_MTL_ROUTES"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
@@ -535,12 +606,14 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     fi
 
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="CREATE_CEPH_RO_KEY"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
@@ -549,17 +622,20 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     ceph auth import -i /etc/ceph/ceph.client.ro.keyring
     for node in $(ceph orch host ls --format=json|jq -r '.[].hostname'); do scp /etc/ceph/ceph.client.ro.keyring $node:/etc/ceph/ceph.client.ro.keyring; done
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="BACKUP_BSS_DATA"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
-    
+
+    #shellcheck disable=SC2046
     cray bss bootparameters list --format=json > bss-backup-$(date +%Y-%m-%d).json
 
     backupBucket="config-data"
@@ -570,15 +646,18 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     fi
     set -e
 
+    #shellcheck disable=SC2046
     cray artifacts create ${backupBucket} bss-backup-$(date +%Y-%m-%d).json bss-backup-$(date +%Y-%m-%d).json
     
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="BACKUP_VCS_DATA"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
@@ -620,12 +699,14 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     cray artifacts create ${backupBucket} vcs.tar vcs.tar
     
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="TDS_LOWER_CPU_REQUEST"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
@@ -640,12 +721,14 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     fi
     
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="SUSPEND_NCN_CONFIGURATION"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
@@ -658,20 +741,24 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     done
     
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="CHECK_BMC_NCN_LOCKS"
+#shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
     # install the hpe-csm-scripts rpm early to get lock_management_nodes.py
+    #shellcheck disable=SC2046
     rpm --force -Uvh $(find $CSM_ARTI_DIR/rpm/cray/csm/ -name \*hpe-csm-scripts\*.rpm | sort -V | tail -1)
 
     # mark the NCN BMCs with the Management role in HSM
+    #shellcheck disable=SC2046
     cray hsm state components bulkRole update --role Management --component-ids \
                             $(cray hsm state components list --role management --type node --format json | \
                                 jq -r .Components[].ID | sed 's/n[0-9]*//' | tr '\n' ',' | sed 's/.$//')
@@ -680,6 +767,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     python3 /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
 
     } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
 else
     echo "====> ${state_name} has been completed"
