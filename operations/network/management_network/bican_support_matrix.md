@@ -30,7 +30,6 @@ For CSM 1.2 the notion of the CAN has been expanded to meet customer requests fo
 
 * Creation of the Customer Management Network (CMN) during installation or upgrade is mandatory.
 
-* Shasta can support systems which are not connected to Site or external networks.  While possible, these "airgap" systems lose many of the rich features of the cloud-native Shasta.
 
 ## Network Overview
 
@@ -45,9 +44,8 @@ Internal Networks:
 External and Edge Networks:
 
 * Customer Management Network (CMN) \- Provides customer access from the Site to the System for administrators.
-* Customer Access Network (CAN) or Customer High Speed Network (CHN) provide:
-
-* Customer access from the site to the System for job control and jobs data movement.
+  * Customer Access Network (CAN) or Customer High Speed Network (CHN) provide:
+  * Customer access from the site to the System for job control and jobs data movement.
 * Access from the System to the Site for network services like DNS, LDAP, etc...
 
 ## Supported Configurations
@@ -97,12 +95,11 @@ CMN
 * Contiguous (CIDR block)
 * Non-overlapping with internal networks (configurable during installation)
 * Size estimate is the sum of:
-
-* Number of Non-Compute Nodes (NCNs) of type master, worker or storage used by the Kubernetes cluster
-* Number of switches on the Management Network
-* Number of administrative API endpoints
-* Several administrative addresses for switch interfaces and routing.
-* SWAG:  A /26 block is typically sufficient for systems less than approximately 4000 nodes.
+  * Number of Non-Compute Nodes (NCNs) of type master, worker or storage used by the Kubernetes cluster
+  * Number of switches on the Management Network
+  * Number of administrative API endpoints
+  * Several administrative addresses for switch interfaces and routing. 
+  * SWAG:  A /26 block is typically sufficient for systems less than approximately 4000 nodes.
 
 CAN or CHN
 
@@ -112,9 +109,8 @@ CAN or CHN
 * Contiguous (CIDR block)
 * Non-overlapping with internal networks (configurable during installation)
 * Size estimate is the sum of:
-
-* Number of Application Nodes requiring access from the Site:  User Access Node (UAN), Login, etc...
-* Number of User Access Instances (UAI) in Kubernetes (if used).
-* Number of API endpoints
-* Several administrative addresses for switch interfaces and routing
-* NOTE:  CAN or CHN sizing is largely dependent on customer-specific use cases and Application Node hardware.
+  * Number of Application Nodes requiring access from the Site:  User Access Node (UAN), Login, etc...
+  * Number of User Access Instances (UAI) in Kubernetes (if used).
+  * Number of API endpoints
+  * Several administrative addresses for switch interfaces and routing
+  * NOTE:  CAN or CHN sizing is largely dependent on customer-specific use cases and Application Node hardware.

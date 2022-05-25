@@ -31,7 +31,6 @@
     - [When configuration occurs](#when-configuration-occurs)
     - [Ability to change post install](#ability-to-change-post-install)
 - [Work towards CAN bifurcation for CSM-1.2](#work-towards-can-bifurcation-for-csm-1.2)
-  - [Risks](#risk)
 - [Bifurcated CAN Network Configuration](#bifurcated-can-network-configuration)
 
 <a name="can-new-features-overview"></a>
@@ -89,15 +88,15 @@ Examples:
 
 Where <tld> is configurable at installation and can be a subdomain of the site domain system.  Exchange of system DNS with the site may be via delegation (preferred) or zone transfer (AXFR).
 
-Once added to CSI, names and IP's will use the standard (v1.4) data flow and end up in SLS and be available for use via both DNS and DHCP services.
+Once added to CSI, names and IP's will use the standard CSM data flow and end up in SLS and be available for use via both DNS and DHCP services.
 
 <a name="touchpoints:-effects-and-changes"></a>
 ### Touchpoints: effects and changes
 
 - Will require installation and admininistration document changes.
 - The CHN requires a small change in CSI to add this network.
-- Will (automatically) use the DNS infrastructure from v1.4.
-- Name aliases can be added/changed/removed via the API to SLS and become available in DNS automatically.  DNS tooling for this was released in Shasta v1.4.
+- Will (automatically) use the DNS infrastructure from previous CSM install.
+- Name aliases can be added/changed/removed via the API to SLS and become available in DNS automatically.  DNS tooling for this was released in Shasta v1.4 with [SLS](../../index.md#system-layout-service-sls)
 
 <a name="when-naming-occurs"></a>
 ### When naming occurs
@@ -143,7 +142,7 @@ The CHN will, by default, have a private IPv4 address block.  This is intended t
 <a name="traffic-separation-and-routing"></a>
 ## Traffic Separation and Routing
 
-In CSM-1.2 the Slingshot HSN will likely not be able to support VLAN separation.  Thus there will be Layer 3 separation internal to the system but co-mingled Layer 2 between the CHN IPv4 addressing and the internal HSN private IPv4 addresses.  Isolation will be within the Slingshot network as well as separated at the Edge Router.
+In CSM 1.2, there will be Layer 3 separation internal to the system but co-mingled Layer 2 between the CHN IPv4 addressing and the internal HSN private IPv4 addresses.  Isolation will be within the Slingshot network as well as separated at the Edge Router.
 
 <a name="touchpoings:-effects-and-changes"></a>
 ### Touchpoints: effects and changes
@@ -260,19 +259,6 @@ At installation time one of the following egress routes from the system to the s
 # Work Towards CAN Bifurcation for CSM-1.2
 
 Specific work and it&#39;s resultant ticketing Tier 2 and 3 ticketing towards bifurcating the CAN in CSM-1.2 is covered in [this document](////confluence/display/CASMNET/CASMNET+Shasta+v1.5+Planning), which also describes specific customer-sourced requirements.
-
-<a name="risks"></a>
-## Risks
-
-1. The Arista Edge routers/switches are available for development and test, but are expensive and in short supply.
-2. Designation of dev and test environments for this effort is critical.
-3. The Slingshot team currently has not identified High Speed CAN (CHN) as a CSM-1.2 deliverable.
-  1. There should be no changes to the Slingshot Fabric Manager or other low-level code changes since the CHN utilizes existing mechanisms.
-  2. There will likely be a need for assistance on the testbed(s) from the slingshot team should the fabric have issues, but _this assistance would be required for jobs to run anyway._
-  3. Adding a secondary IP to the HSN for the CHN may require assistance from the Slingshot team.  Equivalently, should the customer desire the CHN IP range to be the same IP as internally used for jobs, some guidance from the Slingshot team may be needed.
-  4. Documentation will be needed from the Slingshot team.
-4. The High Speed CAN (CHN) (and it&#39;s external access variant) includes several team that have not been operationally coupled previously:  Management Network, PET, CFS, UAN, UAI, Slingshot, and the maintainers of the Arista Edge Routers.  Developing new contacts and teamwork will slow initial development.
-5. The number of touchpoints throughout the system for CHN in particular is substantial.  Image and CFS image changes will need to be bootstrapped pretty quickly in the v1.5 development cycle.
 
 <a name="bifurcated-can-network-configuration"></a>
 # Bifurcated CAN Network Configuration
