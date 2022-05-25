@@ -45,8 +45,8 @@ The `kubectl` command is installed.
         The output of the following scripts will need to be referenced in the remaining sub-steps.
 
         ```bash
-        ncn-m001# /opt/cray/platform-utils/ncnHealthChecks.sh
-        ncn-m001# csi pit validate --postgres
+        ncn# /opt/cray/platform-utils/ncnHealthChecks.sh
+        ncn# csi pit validate --postgres
         ```
 
         **`NOTE`**: If the ncnHealthChecks script output indicates any `kube-multus-ds-` pods are in a `Terminating` state, that can indicate a previous restart of these pods did not complete.
@@ -56,11 +56,11 @@ The `kubectl` command is installed.
     1. Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
 
         ```bash
-        ncn-m001# kubectl describe pod -n user -lapp=slurmctld
+        ncn# kubectl describe pod -n user -lapp=slurmctld
         ```
 
         ```bash
-        ncn-m001# kubectl describe pod -n user -lapp=slurmdbd
+        ncn# kubectl describe pod -n user -lapp=slurmdbd
         ```
 
         ```text
@@ -91,9 +91,9 @@ The `kubectl` command is installed.
         > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
         ```bash
-        ncn-m001# read -s SW_ADMIN_PASSWORD
-        ncn-m001# export SW_ADMIN_PASSWORD
-        ncn-m001# GOSS_BASE=/opt/cray/tests/install/ncn goss -g  /opt/cray/tests/install/ncn/tests/goss-switch-bgp-neighbor-aruba-or-mellanox.yaml \
+        ncn# read -s SW_ADMIN_PASSWORD
+        ncn# export SW_ADMIN_PASSWORD
+        ncn# GOSS_BASE=/opt/cray/tests/install/ncn goss -g  /opt/cray/tests/install/ncn/tests/goss-switch-bgp-neighbor-aruba-or-mellanox.yaml \
                     --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
         ```
 
@@ -102,19 +102,19 @@ The `kubectl` command is installed.
     configured once they have been rebooted. To get a list of nodes in the failed state:
 
    ```bash
-   ncn-m001# cray cfs components list --status failed --format json | jq .[].id
+   ncn# cray cfs components list --status failed --format json | jq .[].id
    ```
 
    If there are any nodes in this list, they can be reset with:
 
    ```bash
-   ncn-m001# cray cfs components update <xname> --enabled False --error-count 0
+   ncn# cray cfs components update <xname> --enabled False --error-count 0
    ```
 
    Or, to reset the error count for all nodes:
 
    ```bash
-   ncn-m001# cray cfs components list --status failed | jq .[].id -r | while read -r xname ; do
+   ncn# cray cfs components list --status failed | jq .[].id -r | while read -r xname ; do
        echo "$xname"
        cray cfs components update $xname --enabled False --error-count 0
    done
@@ -150,11 +150,14 @@ Before rebooting NCNs:
 
         1. To power off the node:
 
+           > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
            ```bash
-           ncn-m001# export USERNAME=root
-           ncn-m001# export IPMI_PASSWORD=changeme
-           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
-           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+           ncn# USERNAME=root
+           ncn# read -s IPMI_PASSWORD
+           ncn# export IPMI_PASSWORD
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
            ```
 
            Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
@@ -162,8 +165,8 @@ Before rebooting NCNs:
         2. To power back on the node:
 
            ```bash
-           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
            ```
 
            Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
@@ -223,7 +226,7 @@ Before rebooting NCNs:
          **Troubleshooting:** If the slurmctld and slurmdbd pods do not start after powering back up the node, check for the following error:
 
          ```bash
-         ncn-m001# kubectl describe pod -n user -lapp=slurmctld
+         ncn# kubectl describe pod -n user -lapp=slurmctld
          ```
 
          Example output:
@@ -236,7 +239,7 @@ Before rebooting NCNs:
          ```
 
          ```bash
-         ncn-m001# kubectl describe pod -n user -lapp=slurmdbd
+         ncn# kubectl describe pod -n user -lapp=slurmdbd
          ```
 
          Example output:
@@ -317,11 +320,14 @@ Before rebooting NCNs:
 
         1. To power off the node:
 
+           > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
            ```bash
-           ncn-m001# export USERNAME=root
-           ncn-m001# export IPMI_PASSWORD=changeme
-           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
-           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+           ncn# USERNAME=root
+           ncn# read -s IPMI_PASSWORD
+           ncn# export IPMI_PASSWORD
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
            ```
 
            Ensure the power is reporting as off. This may take 5-10 seconds for this to update.
@@ -330,8 +336,8 @@ Before rebooting NCNs:
         2. To power back on the node:
 
            ```bash
-           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-           ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
            ```
 
            Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
@@ -342,6 +348,11 @@ Before rebooting NCNs:
 
        ```bash
        ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
+       ```
+
+       Example output:
+
+       ```text
        BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
        ```
 
@@ -422,18 +433,21 @@ Before rebooting NCNs:
     3. Reboot the selected node.
 
         ```bash
-         ncn-m001# shutdown -r now
+         ncn# shutdown -r now
         ```
 
         **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
 
         To power off the node:
 
+        > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
         ```bash
-        ncn-m001# export USERNAME=root
-        ncn-m001# export IPMI_PASSWORD=changeme
-        ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
-        ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+        ncn# USERNAME=root
+        ncn# read -s IPMI_PASSWORD
+        ncn# export IPMI_PASSWORD
+        ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
+        ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as off. This may take 5-10 seconds for this to update.
@@ -442,8 +456,8 @@ Before rebooting NCNs:
         To power back on the node:
 
         ```bash
-        ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-        ncn-m001# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+        ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
+        ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
         ```
 
         Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
@@ -454,6 +468,11 @@ Before rebooting NCNs:
 
         ```bash
         ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
+        ```
+
+        Example output:
+
+        ```text
         BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
         ```
 
@@ -511,9 +530,12 @@ Before rebooting NCNs:
 
         Ensure the expected results are returned from the power status check before rebooting:
 
+        > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
         ```bash
-        external# export USERNAME=root
-        external# export IPMI_PASSWORD=changeme
+        external# USERNAME=root
+        external# read -s IPMI_PASSWORD
+        external# export IPMI_PASSWORD
         external# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
         ```
 
@@ -580,7 +602,7 @@ Before rebooting NCNs:
 3. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the `CASMINST-2015.sh` script:
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/scripts/CASMINST-2015.sh
+    ncn# /usr/share/doc/csm/scripts/CASMINST-2015.sh
     ```
 
 4. Re-run the platform health checks and ensure that all BGP peering sessions are Established with both spine switches.
