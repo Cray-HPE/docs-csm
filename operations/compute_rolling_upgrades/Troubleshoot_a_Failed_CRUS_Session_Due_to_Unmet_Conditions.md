@@ -1,4 +1,4 @@
-## Troubleshoot a Failed CRUS Session Because of Unmet Conditions
+# Troubleshoot a Failed CRUS Session Because of Unmet Conditions
 
 If a CRUS session has any unmet conditions, adding or fixing them will cause the session to continue from wherever it got stuck. Updating other parts of the system to meet the required conditions of a CRUS session will unblock the upgrade session.
 
@@ -19,6 +19,11 @@ The following are examples of unmet conditions:
 
     ```bash
     ncn# cray crus session describe CRUS_UPGRADE_ID
+    ```
+
+    Example output:
+
+    ```
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-node-group"
@@ -41,6 +46,11 @@ The following are examples of unmet conditions:
 
     ```bash
     ncn# cray hsm groups create --label failed-node-group
+    ```
+
+    Example output:
+
+    ```
     [[results]]
     URI = "/hsm/v2/groups/failed-node-group"
     ```
@@ -49,6 +59,11 @@ The following are examples of unmet conditions:
 
     ```bash
     ncn-w001# cray crus session describe CRUS_UPGRADE_ID
+    ```
+
+    Example output:
+
+    ```
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-node-group"
@@ -64,6 +79,4 @@ The following are examples of unmet conditions:
     ```
 
     The messages value states that the job has resumed now that the error has been fixed.
-
-
 

@@ -1,5 +1,4 @@
-
-## Log File Locations and Ports Used in Compute Node Boot Troubleshooting
+# Log File Locations and Ports Used in Compute Node Boot Troubleshooting
 
 This section includes the port IDs and log file locations of components associated with the node boot process.
 
@@ -28,5 +27,4 @@ The following table includes the port IDs for DHCP and TFTP.
 |DHCP server|67|
 |DHCP client|68|
 |TFTP server|69|
-
 

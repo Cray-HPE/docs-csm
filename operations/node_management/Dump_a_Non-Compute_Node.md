@@ -1,4 +1,4 @@
-## Dump a Non-Compute Node
+# Dump a Non-Compute Node
 
 Trigger an NCN memory dump and send the dump for analysis. This procedure is helpful for debugging NCN crashes.
 
@@ -18,7 +18,7 @@ A non-compute node \(NCN\) has crashed or an admin has triggered a node crash.
 
     The NCN dump is stored in /var/crash is on local disk after the node is rebooted.
 
-3.  Collect the dump data using the System Dump Utility \(SDU\).
+3.  Collect the dump data using the System Diagnostic Utility (SDU).
 
     Refer to the "Run a Triage Collection with SDU" procedure in the SDU product stream documentation for more information about collecting dump data.
 
@@ -30,5 +30,4 @@ A non-compute node \(NCN\) has crashed or an admin has triggered a node crash.
     ```
 
     Refer to the [https://documentation.suse.com/](https://documentation.suse.com/) for more information on memory dumps or crash dumps.
-
 

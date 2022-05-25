@@ -1,4 +1,4 @@
-## Clean Up After a BOS/BOA Job is Completed or Cancelled
+# Clean Up After a BOS/BOA Job is Completed or Cancelled
 
 When a BOS session is created, there are a number of items created on the system. When a session is cancelled or completed, these items need to be cleaned up to ensure there is not lingering content from the session on the system.
 
@@ -24,6 +24,11 @@ When a session is launched, the items below are created:
 
     ```bash
     ncn-m001# cray bos session describe --format json BOS_SESSION_ID
+    ```
+
+    Example output:
+
+    ```
     {
       "status_link": "/v1/session/d200f7e4-1a9f-4466-9ef4-30add3bd87dd/status",
       "complete": "",
@@ -44,7 +49,12 @@ When a session is launched, the items below are created:
 
     ```bash
     ncn-m001# kubectl -n services describe job BOA_JOB_NAME
-    ...
+    ```
+
+    Example output:
+
+    ```
+    [...]
       Volumes:
        boot-session:
         Type:      ConfigMap (a volume populated by a ConfigMap)
@@ -92,7 +102,7 @@ When a session is launched, the items below are created:
     -   Configuration has completed and the desired state needs to be cleaned up so that configuration does not happen on restart:
         1.  Unset the desired state for all components affected.
 
-            To find the impacted xnames for the components with the desired configuration matching what was applied:
+            To find the impacted component names (xnames) for the components with the desired configuration matching what was applied:
 
             ```bash
             ncn-m001# cray cfs components list
@@ -109,7 +119,7 @@ When a session is launched, the items below are created:
     -   Configuration was set/started and needs to be cancelled:
         1.  Unset the desired state for all components affected.
 
-            To find the impacted xnames for the components with the desired configuration matching what was applied:
+            To find the impacted component names (xnames) for the components with the desired configuration matching what was applied:
 
             ```bash
             ncn-m001# cray cfs components list
@@ -127,10 +137,15 @@ When a session is launched, the items below are created:
 
             This will purge any information that CFS cached in relation to the BOA job that it was intending to act upon.
 
-            To get the cfs-batcher pod id:
+            To get the cfs-batcher pod ID:
 
             ```bash
             ncn-m001# kubectl -n services get pods|grep cray-cfs-batcher
+            ```
+
+            Example output:
+
+            ```
             cray-cfs-batcher-644599c6cc-rwl8f           2/2     Running             0          6d17h
             ```
 
@@ -153,7 +168,7 @@ When a session is launched, the items below are created:
 
             Unfortunately, it is hard to link a specific BOA session to a CFS session. At this time, they are identified by comparing the CFS timestamps with those of the BOA job, and associating them based on proximity. Additionally, examine the components in the CFS job to see that they match the components in the BOA job.
 
-            ```screen
+            ```bash
             ncn-m001# cray cfs sessions delete CFS_SESSION_NAME
             ```
 
@@ -161,7 +176,7 @@ When a session is launched, the items below are created:
 
     The BOA job is not deleted right away because it is needed to find the ConfigMap name.
 
-    ```screen
+    ```bash
     ncn-m001# kubectl -n services delete job BOA_JOB_NAME
     ```
 

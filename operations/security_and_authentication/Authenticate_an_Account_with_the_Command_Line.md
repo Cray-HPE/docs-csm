@@ -1,4 +1,4 @@
-## Authenticate an Account with the Command Line
+# Authenticate an Account with the Command Line
 
 Retrieve a token to authenticate to the Cray CLI using the command line. If the Cray CLI is needed before localization occurs and Keycloak is setup, an administrator can use this procedure to authenticate to the Cray CLI.
 
@@ -29,7 +29,4 @@ Retrieve a token to authenticate to the Cray CLI using the command line. If the 
     ```bash
     ncn-w001# export CRAY_CREDENTIALS=/tmp/setup-token.json;
     ```
-
-
-
 

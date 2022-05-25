@@ -2,7 +2,7 @@
 
 ## Description
 
- There is a known bug in Kubernetes 1.19.9 where movement of a pod with an attached volume may not complete in time and cause the kubelet service to stream error messages to the /var/log/messages log file.  If this goes unchecked, it will fill up the root file system.
+ There is a known bug in Kubernetes 1.19.9 where movement of a pod with an attached volume may not complete in time and cause the kubelet service to stream error messages to the /var/log/messages log file. If this goes unchecked, it will fill up the root file system.
 
 ## Fix
 

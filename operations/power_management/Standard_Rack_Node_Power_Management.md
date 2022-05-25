@@ -1,101 +1,225 @@
+# Standard Rack Node Power Management
 
+HPE Cray EX standard EIA rack node power management is supported by the server
+vendor BMC firmware. The BMC exposes the power control API for a node through
+the node's Redfish Power schema.
 
-## Standard Rack Node Power Management
+Out-of-band power management data is polled by a collector and published on a
+Kafka bus for entry into the Power Management Database (PMDB). Access to the
+data stored in the PMDB is available through the System Monitoring Application
+(SMA) Grafana instance.
 
-HPE Cray EX standard EIA rack node power management is supported by the server vendor BMC firmware. The BMC exposes the power control API for a node through the node's Redfish ChassisPower schema.
+Power limiting of a node must be enabled and may require additional licenses to
+use. Refer to vendor documentation for instructions on how to enable power
+limiting and what licenses, if any, are needed.
 
-Out-of-band power management data is polled by a collector and published on a Kafka bus for entry into the Power Management Database. The Cray Advanced Platform Management and Control \(CAPMC\) API facilitates power control and enables power aware WLMs such as Slurm to perform power management and power capping tasks.
+CAPMC only handles power limiting of one hardware type at a time. Each vendor and
+server model has their own power limiting capabilities. Therefore a different
+power limit request will be needed for each vendor and model that needs to have
+its power limited.
 
-**Important:** Always use the Boot Orchestration Service \(BOS\) to power off or power on compute nodes.
+## Requirements
+* Hardware State Manager (cray-hms-smd) >= v1.30.16
+* CAPMC (cray-hms-capmc) >= 1.31.0
+* CrayCLI >= 0.44.0
 
-### Redfish API
+## Deprecated Interfaces
+See the [CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md) for
+more information.
+-   get_node_energy (Deprecated)
+-   get_node_energy_stats (Deprecated)
+-   get_system_power (Deprecated)
 
-The Redfish API for rack-mounted nodes is the node's Chassis Power resource which is presented by the BMC. OEM properties may be used to augment the Power schema and allow for feature parity with previous Cray system power management capabilities. A PowerControl resource presents the various power management capabilities for the node.
+## Redfish API
 
-Each node has a node power control resource. The power control of the node must be enabled and may require additional licenses to use.
+The Redfish API for rack-mounted nodes is the node's Power resource which is
+presented by the BMC. OEM properties may be used to augment the Power schema to
+provide additional power management capabilities.
 
-CAPMC does not enable power capping on all standard rack nodes because each server vendor has a different implementation. The `Activate` and `Deactivate` commands that follow apply to Gigabyte nodes only.
+## Power Limiting
 
-**Get Node Power Limit Settings**
+CAPMC power limiting controls for compute nodes can query component capabilities
+and manipulate the node power constraints. This functionality enables external
+software to establish an upper bound, or estimate a minimum bound, on the amount
+of power a system or a select subset of the system may consume.
 
-```bash
-# curl -k -u $login:$pass -H "Content-Type: application/json" \
--X GET https://$BMC_IP/redfish/v1/Chassis/Self/Power 2>/dev/null | python -m json.tool | egrep 'LimitInWatts'
-```
+CAPMC API calls provide means for third party software to implement advanced
+power management strategies using JSON data structures.
 
-Use the Cray CLI to get the node power limit settings:
+The rack-mounted compute nodes support these power limiting and monitoring API
+calls:
+-   get_power_cap_capabilities
+-   get_power_cap
+-   set_power_cap
 
-```bash
-# cray capmc get_power_cap create --nids 100006 --format json | jq
-{
-  "e": 0,
-  "err_msg": "",
-  "groups": [
+In general, rack-mounted compute nodes do not allow for power limiting of any
+installed accelerators separately from the node limit.
+
+Power limit control will only be valid on a compute node when power limiting is
+enabled, the node is booted, and the node is in the Ready state as seen via the
+Hardware State Manager (HSM).
+
+## Cray CLI Examples for Standard Rack Compute Node Power Management
+
+-   **Get Node Power Control and Limit Settings**
+
+    ```
+    ncn-m001# cray capmc get_power_cap create –-nids NID_LIST --format json
+    ```
+    Return the current power limit settings for a node and any accelerators that
+    are installed. Valid settings are only returned if power limiting is enabled
+    on the target nodes.
+    ```
+    ncn-m001# cray capmc get_power_cap create --nids 4
     {
-      "powerup": 0,
-      "host_limit_min": 0,
-      "supply": 65535,
-      "host_limit_max": 0,
-      "controls": [
-        {
-          "max": 0,
-          "min": 0,
-          "name": "Chassis Power Control",
-          "desc": "Chassis Power Control"
-        }
-      ],
-      "nids": [
-        100006
-      ],
-      "static": 0,
-      "desc": "3_AuthenticAMD_64c_244GiB_3200MHz_NoAccel",
-      "name": "3_AuthenticAMD_64c_244GiB_3200MHz_NoAccel"
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 4,
+                "controls": [
+                    {
+                        "name": "Chassis Power Control",
+                        "val": 500
+                    }
+                ]
+            }
+        ]
     }
-  ]
-}
+    ````
 
-```
+-   **Get Power Limiting Capabilities**
 
-**Set Node Power Limit**
+    ```
+    ncn-m001# cray capmc get_power_cap_capabilities create –-nids NID_LIST --format json
+    ```
+    Return the min and max power limit settings for the node list and any
+    accelerators that are installed.
+    ```
+    ncn-m001# cray capmc get_power_cap_capabilities create --nids 4 --format json
+    {
+        "e": 0,
+        "err_msg": "",
+        "groups": [
+            {
+                "name": "3_AuthenticAMD_64c_244GiB_3200MHz_NoAccel",
+                "desc": "3_AuthenticAMD_64c_244GiB_3200MHz_NoAccel",
+                "host_limit_max": 0,
+                "host_limit_min": 0,
+                "static": 0,
+                "supply": 900,
+                "powerup": 0,
+                "nids": [
+                    4
+                ],
+                "controls": [
+                    {
+                        "name": "Chassis Power Control",
+                        "desc": "Chassis Power Control",
+                        "max": 900,
+                        "min": 61
+                    }
+                ]
+            }
+        ]
+    }
+    ```
 
-```bash
-# curl -k -u $login:$pass -H "Content-Type: application/json" \
--H 'If-Match: W/"'${o_data}'"' -X PATCH https://$BMC_IP/redfish/v1/Chassis/Self/Power \
---data '{"PowerControl": [{"PowerLimit": {"LimitInWatts": '$LimitValue'}}]}'
-```
+-   **Set Node Power Limit**
 
-Set the node power limit to 600 Watts:
+    ```
+    ncn-m001#  cray capmc set_power_cap create --nids NID_LIST --control CONTROL_NAME VALUE --format json
+    ```
+    Set the total power limit of the node by using the name of the node control.
+    The power provided to the host CPU and memory is the total node power limit
+    minus the power limits of each of the accelerators installed on the node.
+    ```
+    ncn-m001# cray capmc set_power_cap create --nids 4 --control "Chassis Power Control" 600
+    {
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 4,
+                "e": 0,
+                "err_msg": ""
+            }
+        ]
+    }
+    ```
+    Multiple controls can be set at the same time on multiple nodes, but all
+    target nodes must have the same set of controls available, otherwise the
+    call will fail.
+    ```
+    ncn-m001# cray capmc set_power_cap create \
+    --nids [1-4] --control "Chassis Power Control" 600
+    {
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 1,
+                "e": 0,
+                "err_msg": ""
+            },
+            {
+                "nid": 2,
+                "e": 0,
+                "err_msg": ""
+            },
+            {
+                "nid": 3,
+                "e": 0,
+                "err_msg": ""
+            },
+            {
+                "nid": 4,
+                "e": 0,
+                "err_msg": ""
+            }
+        ]
+    }
+    ```
 
-```bash
-# cray capmc set_power_cap create --nids 1,2,3 --node 600
-```
+-   **Remove Node Power Limit (Set to Default)**
 
-**Get Node Energy Counter**
+    ```
+    ncn-m001#  cray capmc set_power_cap create --nids NID_LIST --control CONTROL_NAME 0 --format json
+    ```
+    Reset the power limit to the default maximum. Alternatively, using the max
+    value returned from get_power_cap_capabilities may also be used. Multiple
+    controls can be set at the same time on multiple nodes, but all target nodes
+    must have the same set of controls available, otherwise the call will fail.
+    ```
+    ncn-m001# cray capmc set_power_cap create --nids 4 --control "Node Power Limit" 0
+    {
+        "e": 0,
+        "err_msg": "",
+        "nids": [
+            {
+                "nid": 4,
+                "e": 0,
+                "err_msg": ""
+            }
+        ]
+    }
+    ```
 
-```bash
-# curl -k -u $login:$pass -H "Content-Type: application/json" \
--X GET https://$BMC_IP/redfish/v1/Chassis/Self/Power 2>/dev/null \
-| python -m json.tool | egrep 'PowerConsumedWatts'
+## Enable and Disable Power Limiting
 
-```
+### Gigabyte
 
-**Activate Node Power Limit**
+-   **Enable Power Limiting**
 
-```bash
-# curl -k -u $login:$pass -H "Content-Type: application/json" \
--X POST https://$BMC_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
---data '{"PowerLimitTrigger": "Activate"}'
-```
+    ```
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" \
+    -X POST https://${BMC}/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
+    --data '{"PowerLimitTrigger": "Activate"}'
+    ```
 
-**Deactivate Node Power Limit**
-
-```bash
-# curl -k -u $login:$pass -H "Content-Type: application/json" \
--X POST https://$BMC_IP/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
---data '{"PowerLimitTrigger": "Deactivate"}'
-```
-
-
-
-
-
+-   **Deactivate Node Power Limit**
+    ```
+    ncn-m001# curl -k -u $login:$pass -H "Content-Type: application/json" \
+    -X POST https://${BMC}/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
+    --data '{"PowerLimitTrigger": "Deactivate"}'
+    ```

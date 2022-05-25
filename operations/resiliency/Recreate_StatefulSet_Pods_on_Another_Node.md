@@ -1,4 +1,4 @@
-## Recreate StatefulSet Pods on Another Node
+# Recreate StatefulSet Pods on Another Node
 
 Some pods are members of StatefulSets, meaning that there is a very specific number of them, each likely running on a different node. Similar to DaemonSets, these pods will never be recreated on another node as long as they are sitting in a `Terminating` state.
 
@@ -22,6 +22,11 @@ This procedure prevents services from being taken out of service when a node goe
 
     ```bash
     ncn-w001# kubectl get statefulsets -A
+    ```
+
+    Example output:
+
+    ```
     NAMESPACE        NAME                                                   READY              AGE
     backups          benji-k8s-postgresql                                   1/1                2d14h
     nexus            nexus                                                  1/1                2d14h
@@ -59,6 +64,11 @@ This procedure prevents services from being taken out of service when a node goe
 
     ```bash
     ncn-w001# kubectl get pods -A -o wide | grep SERVICE_NAME
+    ```
+
+    Example output:
+
+    ```
     operators   cray-vault-operator-57dbbb7db5-9lr6z       1/1     Running        0    5d18h   10.40.0.11    ncn-w002   <none>  <none>
     services    cray-meds-vault-loader-bzgbd               0/2     Completed      0    5d18h   10.40.0.24    ncn-w002   <none>  <none>
     services    cray-reds-vault-loader-d9cn9               0/2     Completed      0    5d18h   10.40.0.25    ncn-w002   <none>  <none>
@@ -86,6 +96,4 @@ This procedure prevents services from being taken out of service when a node goe
     ```
 
     The StatefulSet will then recreate cray-vault-0 on a node that is in `Ready` state.
-
-
 

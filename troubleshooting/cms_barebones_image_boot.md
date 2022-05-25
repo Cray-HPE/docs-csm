@@ -37,7 +37,7 @@ and examine the detailed log file to find information on the exact error and cau
 The boot may take up to 10 or 15 minutes. The image being booted does not support a complete boot,
 so the node will not boot fully into an operating system. This test is merely to verify that the
 CSM services needed to boot a node are available and working properly. This boot test is considered
-successful if the boot reaches the dracut stage. 
+successful if the boot reaches the dracut stage.
 
 <a name="csm-boot-compute-node"></a>
 ## 2. Controlling Which Node Is Used
@@ -64,7 +64,7 @@ each new run of the script.
 The messages output to the console and the log file may be controlled separately through
 environment variables. To control the information being sent to the console, set the variable
 `CONSOLE_LOG_LEVEL`. To control the information being sent to the log file, set the variable
-`FILE_LOG_LEVEL`. Valid values in increasing levels of detail are: `CRITICAL`, `ERROR`, 
+`FILE_LOG_LEVEL`. Valid values in increasing levels of detail are: `CRITICAL`, `ERROR`,
 `WARNING`, `INFO`, `DEBUG`. The default for the console output is `INFO` and the default for
 the log file is `DEBUG`.
 
@@ -196,7 +196,7 @@ Class = "River"
 
 > Troubleshooting: If any compute nodes are missing from HSM database, refer to [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) to troubleshoot any Node BMCs that have not been discovered.
 
-Choose a node from those listed and set `XNAME` to its ID. In this example, `x3000c0s17b2n0`:
+Choose a node from those listed and set `XNAME` to its component name (xname). In this example, `x3000c0s17b2n0`:
 ```bash
 ncn# export XNAME=x3000c0s17b2n0
 ```
@@ -247,7 +247,7 @@ CSM services needed to boot a node are available and working properly.
    ```
 
    **NOTE**: As long as the preceding text is found near the end of the console output, the test is
-   considered successful. It is normal (and **not** indicative of a test failure) to see something 
+   considered successful. It is normal (and **not** indicative of a test failure) to see something
    similar to the following at the very end of the console output:
    ```
             Starting Dracut Emergency Shell...

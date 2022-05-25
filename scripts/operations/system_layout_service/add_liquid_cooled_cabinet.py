@@ -89,7 +89,7 @@ DEFAULT_NMN_MTN_CIDR="10.100.0.0/17"
 # Parse CLI Arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("sls_state_file", type=str, help="SLS State file to modify")
-parser.add_argument("--cabinet", type=str, required=True, help="Cabinet xname to add, ex: x1000")
+parser.add_argument("--cabinet", type=str, required=True, help="Cabinet component name (xname) to add, ex: x1000")
 parser.add_argument("--cabinet-type", type=str, required=True, help="Cabinet type", choices={"Hill", "Mountain"})
 parser.add_argument("--cabinet-vlan-hmn", type=int, required=True, help="Hardware Management Network (HMN) VLAN ID configured on the CEC, ex: 1000")
 parser.add_argument("--cabinet-vlan-nmn", type=int, required=True, help="Cabinet NMN vlan add, ex: 2000")
@@ -97,7 +97,7 @@ parser.add_argument("--starting-nid", type=int, required=True, help="Starting NI
 args = parser.parse_args()
 
 if re.match("^x([0-9]{1,4})$", args.cabinet) == None:
-    print("Invalid cabinet xname provided: ", args.cabinet)
+    print("Invalid cabinet component name (xname) provided: ", args.cabinet)
     exit(1)
 
 chassis_list = MOUNTAIN_CHASSIS_LIST
@@ -143,7 +143,7 @@ cabinet = {
     "Type": "comptype_cabinet",
     "TypeString": "Cabinet",
     "ExtraProperties": {
-        "Networks": { # This networks block is only presnet for MEDS compatability
+        "Networks": { # This networks block is only present for MEDS compatibility
             "cn": {
                 "HMN": {},
                 "NMN": {},

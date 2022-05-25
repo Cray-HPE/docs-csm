@@ -1,12 +1,13 @@
-## Rebalance Healthy etcd Clusters
+# Rebalance Healthy etcd Clusters
 
 Rebalance the etcd clusters. The clusters need to be in a healthy state, and there needs to be the same number of pods running on each worker node for the etcd clusters to be balanced.
 
 Restoring the balance of etcd clusters will help with the storage of Kubernetes cluster data.
 
 ### Prerequisites
--   etcd clusters are in a healthy state.
--   etcd clusters do not have the same number of pods on each worker node.
+
+- etcd clusters are in a healthy state.
+- etcd clusters do not have the same number of pods on each worker node.
 
 ### Procedure
 
@@ -16,6 +17,11 @@ Restoring the balance of etcd clusters will help with the storage of Kubernetes 
 
     ```bash
     ncn-w001# kubectl get pods -o wide -A -l app=etcd
+    ```
+
+    Example output:
+
+    ```
     NAMESPACE  NAME                       READY  STATUS    RESTARTS   AGE     IP           NODE      NOMINATED NODE  READINESS GATES
     services   cray-bos-etcd-cqjr66ldlr   1/1    Running   0          5d10h   10.39.1.55   ncn-w001  <none>          <none>
     services   cray-bos-etcd-hsb2zfzxqv   1/1    Running   0          5d10h   10.36.0.13   ncn-w003  <none>          <none>
@@ -35,6 +41,4 @@ Restoring the balance of etcd clusters will help with the storage of Kubernetes 
 4.  Check the health of the pods.
 
     Refer to [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md).
-
-
 

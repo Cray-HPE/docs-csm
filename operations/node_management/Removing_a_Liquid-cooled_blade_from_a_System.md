@@ -1,8 +1,8 @@
 # Removing a Liquid-cooled blade from a System
 
-This procedure will remove a liquid-cooled blades from a HPE Cray EX system. 
+This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 
-## Perquisites 
+## Perquisites
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 -   Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
@@ -22,30 +22,30 @@ This procedure will remove a liquid-cooled blades from a HPE Cray EX system.
 ### Prepare the source system blade for removal
 1.  Using the work load manager (WLM), drain running jobs from the affected nodes on the blade. Refer to the vendor documentation for the WLM for more information.
 
-2.  Use Boot Orchestration Services (BOS) to shut down the affected nodes in the source blade (in this example, x9000c3s0). Specify the appropriate xname and BOS template for the node type in the following command.
+2.  Use Boot Orchestration Services (BOS) to shut down the affected nodes in the source blade (in this example, `x9000c3s0`). Specify the appropriate component name (xname) and BOS template for the node type in the following command.
 
     ```bash
-    ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-    ncn-m001# cray bos session create --template-uuid $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
+    ncn# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    ncn# cray bos session create --template-uuid $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
     ```
 
 #### Disable the Redfish endpoints for the nodes
 3.  Temporarily disable the Redfish endpoints for NodeBMCs present in the blade.
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0
-    ncn-m001# cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1
+    ncn# cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b0
+    ncn# cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1
     ```
 
 #### Clear the node controller settings
 4. Remove the system specific settings from each node controller on the blade.
 
    ```bash
-   ncn-m001# curl -k -u root:PASSWORD -X POST -H \
+   ncn# curl -k -u root:PASSWORD -X POST -H \
      'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
      https://x9000c3s0b0/redfish/v1/Managers/BMC/Actions/Manager.Reset
 
-   ncn-m001# curl -k -u root:PASSWORD -X POST -H \
+   ncn# curl -k -u root:PASSWORD -X POST -H \
      'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
      https://x9000c3s0b1/redfish/v1/Managers/BMC/Actions/Manager.Reset
    ```
@@ -56,13 +56,13 @@ This procedure will remove a liquid-cooled blades from a HPE Cray EX system.
 5.  Suspend the hms-discovery cron job.
 
     ```bash
-    ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
+    ncn# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
     ```
 
     1.  Verify that the hms-discovery cron job has stopped (`ACTIVE` = `0` and `SUSPEND` = `True`).
 
         ```bash
-        ncn-m001# kubectl get cronjobs -n services hms-discovery
+        ncn# kubectl get cronjobs -n services hms-discovery
         NAME             SCHEDULE        SUSPEND     ACTIVE   LAST   SCHEDULE  AGE
         hms-discovery    */3 * * * *     True         0       117s             15d
         ```
@@ -70,14 +70,14 @@ This procedure will remove a liquid-cooled blades from a HPE Cray EX system.
     2.  Power off the chassis slot. This examples powers off slot 0, chassis 3, in cabinet 9000.
 
         ```bash
-        ncn-m001# cray capmc xname_off create --xnames x9000c3s0 --recursive true
+        ncn# cray capmc xname_off create --xnames x9000c3s0 --recursive true
         ```
 
 #### Disable the chassis slot
-6.  Disable the chassis slot. Disabling the slot prevents hms-discovery from automatically powering on the slot. This example disables slot 0, chassis 3, in cabinet 9000. 
+6.  Disable the chassis slot. Disabling the slot prevents hms-discovery from automatically powering on the slot. This example disables slot 0, chassis 3, in cabinet 9000.
 
     ```bash
-    ncn-m001# cray hsm state components enabled update --enabled false x9000c3s0
+    ncn# cray hsm state components enabled update --enabled false x9000c3s0
     ```
 
 #### Record MAC and IP addresses for nodes
@@ -89,7 +89,7 @@ The NodeBMC MAC and IP addresses are assigned algorithmically and *must not be d
    The prerequisites show an example of how to gather HSM values and store them to a file.
 
     ```bash
-    ncn-m001# cray hsm inventory ethernetInterfaces list --component-id x9000c3s0b0n0 --format json
+    ncn# cray hsm inventory ethernetInterfaces list --component-id x9000c3s0b0n0 --format json
     [
         {
         "ID": "0040a6836339",
@@ -121,13 +121,13 @@ The NodeBMC MAC and IP addresses are assigned algorithmically and *must not be d
 #### Cleanup Hardware State Manager
 8.  Set environment corresponding the chassis slot of the blade.
     ```bash
-    ncn-m001# export CHASSIS_SLOT=x9000c3s0
+    ncn# export CHASSIS_SLOT=x9000c3s0
     ```
 
 9.  Delete the Redfish endpoints for each node.
 
     ```bash
-    ncn-m001# for xname in $(cray hsm inventory redfishEndpoints list --format json | jq -r --arg CHASSIS_SLOT $CHASSIS_SLOT '.RedfishEndpoints[] | select(.ID | startswith($CHASSIS_SLOT)) | .ID'); do
+    ncn# for xname in $(cray hsm inventory redfishEndpoints list --format json | jq -r --arg CHASSIS_SLOT $CHASSIS_SLOT '.RedfishEndpoints[] | select(.ID | startswith($CHASSIS_SLOT)) | .ID'); do
         echo "Removing $xname from HSM Inventory RedfishEndpoints"
         cray hsm inventory redfishEndpoints delete "$xname"
     done
@@ -150,7 +150,7 @@ The NodeBMC MAC and IP addresses are assigned algorithmically and *must not be d
 
 12. Restart KEA.
     ```bash
-    ncn-m001# kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
+    ncn# kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
     ```
 
 #### Remove the blade
@@ -160,18 +160,18 @@ The NodeBMC MAC and IP addresses are assigned algorithmically and *must not be d
 14.  Drain the coolant from the blade and fill with fresh coolant to minimize cross-contamination of cooling systems.
     - Review *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, review procedures in the *HPE Cray EX Hand Pump User Guide H-6200* (https://internal.support.hpe.com/).
 
-15. Install the blade from the source system in a storage rack or leave it on the cart. 
+15. Install the blade from the source system in a storage rack or leave it on the cart.
 
 16. Un-suspend the hms-discovery cron job if no more liquid-cooled blades are planned to be removed from the system.
 
     ```bash
-    ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
+    ncn# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
     Verify that the hms-discovery cron job has stopped (`ACTIVE` = `0` and `SUSPEND` = `False`).
 
     ```bash
-    ncn-m001# kubectl get cronjobs -n services hms-discovery
+    ncn# kubectl get cronjobs -n services hms-discovery
     NAME            SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
     hms-discovery   */3 * * * *   False     1        46s             15d
     ```

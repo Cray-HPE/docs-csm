@@ -1,13 +1,13 @@
 # Adding a Liquid-cooled blade to a System
 
-This procedure will add a liquid-cooled blades from a HPE Cray EX system. 
+This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
-## Perquisites 
+## Perquisites
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 -   Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 
--   Blade is being added to a existing liquid-cooled cabinet in the system.
+-   Blade is being added to an existing liquid-cooled cabinet in the system.
 
 -   The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
 
@@ -89,10 +89,10 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
     Enabled = true
     NetType = "Sling"
     Arch = "X86"
-    Class = "Mountain" 
+    Class = "Mountain"
     ```
 
-    If the state of the slot is `On` or `Off`, then the chassis slot is populated. 
+    If the state of the slot is `On` or `Off`, then the chassis slot is populated.
     If the state of the slot is `Empty`, then the chassis slot is not populated.
 
 3.  **Skip this step if the chassis slot is unpopulated**. Verify the chassis slot is powered off.
@@ -109,8 +109,8 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
     If the slot is powered on, then power the chassis slot off.
     ```
-    ncn-m001# cray capmc xname_off create --xnames x1005c3s0 --recursive true
-    ``` 
+    ncn-m001# cray capmc component name (xname)_off create --xnames x1005c3s0 --recursive true
+    ```
 
 4.  Install the the blade into the system into the desired location.
 
@@ -122,12 +122,12 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
                           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-### Preserve node xname to IP address mapping
-6.  **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.** When DVS is operating over the NMN, and a blade is being replaced the mapping of node xname to node IP address must be preserved. Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes). To prevent from Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
+### Preserve node component name (xname) to IP address mapping
+6.  **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.** When DVS is operating over the NMN and a blade is being replaced, the mapping of node component name (xname) to node IP address must be preserved. Kea automatically adds entries to the HSM `ethernetInterfaces` table when DHCP lease is provided (about every 5 minutes). To prevent from Kea from automatically adding MAC entries to the HSM `ethernetInterfaces` table, use the following commands:
 
     1.  Create an `eth_interfaces` file that contains the interface IDs for the `Node Maintenance Network` entries for the destination blade location. If there has not been a blade previously in the destination location there may not be any Ethernet Interfaces to delete from HSM.
-      
-        The `blade_query.sh` script from the perquisites section can help determine the IDs for the HSM Ethernet Interfaces associated with the blade if any. It is expected that if a blade has not been populated in the slot before that no HSM Ethernet Interfaces IDs would be found.   
+
+        The `blade_query.sh` script from the perquisites section can help determine the IDs for the HSM Ethernet Interfaces associated with the blade if any. It is expected that if a blade has not been populated in the slot before that no HSM Ethernet Interfaces IDs would be found.
 
         ```bash
         ncn-m001# cat eth_interfaces
@@ -148,7 +148,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
     3.  **Skip this step if the destination blade location has not been previously populated with a blade** Add the MAC and IP addresses and also the `Node Maintenance Network` description to the interfaces. The ComponentID and IPAddress must be the values recorded from the blade previously in the destination location and the MACAddress must be the value recorded from the blade. These values were recorded if the blade was removed via the [Removing a Liquid-cooled blade from a System](Removing_a_Liquid-cooled_blade_from_a_System.md) procedure.
 
-        Values recorded from the blade that was was previously in the slot.  
+        Values recorded from the blade that was was previously in the slot.
         ```bash
         ComponentID: "x1005c3s0b0n0"
         MACAddress: "00:40:a6:83:63:99"
@@ -156,10 +156,10 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
         ```
 
         ```bash
-        ncn-m001# MAC=NEW_BLADE_MAC_ADDRESS 
+        ncn-m001# MAC=NEW_BLADE_MAC_ADDRESS
         ncn-m001# IP_ADDRESS=DESTLOCATION_IP_ADDRESS
         ncn-m001# XNAME=DESTLOCATION_XNAME
-       
+
         ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "{
             \"Description\": \"Node Maintenance Network\",
             \"MACAddress\": \"$MAC\",
@@ -245,7 +245,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 11. Power on the chassis slot. The example powers on slot 0, chassis 3, in cabinet 1005.
 
     ```bash
-    ncn-m001# cray capmc xname_on create --xnames x1005c3s0 --recursive true
+    ncn-m001# cray capmc component name (xname)_on create --xnames x1005c3s0 --recursive true
     ```
 
 12. Wait at least 3 minutes for the blade to power on and the node controllers (BMCs) to be discovered.
@@ -286,23 +286,23 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
     **Troubleshooting**:
     - If the redfish endpoint does not exist for a BMC verify the following:
-        
+
         Verify the Node BMC is pingable:
         ```bash
         ncn-m001# ping x1005c3s0b0
-        ``` 
+        ```
 
         If the BMC is not pingable, verify the chassis slot has power.
         ```bash
         ncn-m001# cray capmc get_xname_status create --xnames x1005c3s0
-        ``` 
+        ```
 
-    - If the redfish endpoint is in `HTTPSsGetFailed`:
-        
+    - If the redfish endpoint is in `HTTPsGetFailed`:
+
         Verify the Node BMC is pingable:
         ```bash
         ncn-m001# ping x1005c3s0b0
-        ``` 
+        ```
 
         If the BMC is pingable, verify the node BMC is configured with expected credentials.
         ```bash
@@ -311,12 +311,12 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
 14. Enable the nodes in the HSM database.
 
-    For a blade with four nodes per blade: 
+    For a blade with four nodes per blade:
     ```bash
     ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
-    For a blade with two nodes per blade: 
+    For a blade with two nodes per blade:
     ```bash
     ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b1n0
     ```
@@ -326,7 +326,7 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
     ```bash
     ncn-m001# cray hsm state components query create --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
-    
+
     Example output:
     ```
     [[Components]]
@@ -345,13 +345,45 @@ This procedure will add a liquid-cooled blades from a HPE Cray EX system.
 
 #### Power on and boot the nodes
 
-16. Use boot orchestration to power on and boot the nodes. Specify the appropriate BOS template for the node type.
+Use boot orchestration to power on and boot the nodes. Specify the appropriate BOS template for the node type.
 
-    ```bash
-    ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-    ncn-m001# cray bos session create --template-uuid $BOS_TEMPLATE \
-      --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
-    ```
+16. Determine how the BOS Session template references compute hosts.
+    Typically, they are referenced by their "Compute" role. However, if they are referenced by xname, then these new nodes should added to the BOS Session template.
+      ```bash
+      ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+      ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json|jq '.boot_sets[] | select(.node_list)'
+      ```
+    If this query returns empty, then skip to sub-step 3.
+    If this query returns with data, then one or more boot sets within the BOS Session template reference nodes explicitly by xname. Consider adding your new nodes to this list (sub-step 1) or adding them on the command line (sub-step 2).
+
+    1. Adding new nodes to your list.
+          1. Dump the current Session template.
+             ```bash
+             ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json > tmp.txt
+             ```
+          2. Edit the tmp.txt file adding the new nodes to the node_list.
+             ```bash
+             ncn-m001# vi tmp.txt
+             ```
+    2. Create the Session template.
+         1. The name of the Session template is determined by the name provided to the '--name' option on the command line. Use the current value of $BOS_TEMPLATE if you want to overwrite the existing Session template. If you want to use the current value, skip this sub-step and go on to sub-step 2. Otherwise, provide a different name for BOS_TEMPLATE which will be used the '--name' option. The name specified in tmp.txt is overridden by the value provided by the '--name' option.
+  	    ```bash
+	    ncn-m001# $BOS_TEMPLATE=<New Session Template name>
+	    ```
+	 2. Create the Session template.
+            ```bash
+            ncn-m001# cray bos sessiontemplate create --file tmp.txt --name $BOS_TEMPLATE
+            ```
+         3. Verify that the Session template contains the additional nodes and the proper name.
+            ```bash
+            ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json
+            ```
+
+    3. Boot the nodes.
+       ```bash
+       ncn-m001# cray bos session create --template-uuid $BOS_TEMPLATE \
+         --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+       ```
 
 #### Check firmware
 17. Verify that the correct firmware versions for node BIOS, node controller (nC), NIC mezzanine card (NMC), GPUs, and so on.
@@ -394,9 +426,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     [Tue Jul 21 13:09:54 2020] DVS: merge_one#358:   Ignoring.
     ```
 
-20. Make sure the Configuration Framework Service (CFS) finished successfully. Review *HPE Cray EX DVS Administration Guide 1.4.1 S-8004*.
-
-21. SSH to the node and check each DVS mount.
+20. SSH to the node and check each DVS mount.
 
     ```bash
     nid# mount | grep dvs | head -1
@@ -408,7 +438,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     ```
 #### Check the HSN for the affected nodes
 
-22. Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
+21. Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
 
     ```bash
     ncn-m001# kubectl exec -it -n services \
@@ -417,7 +447,8 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     ```
 
 #### Check for duplicate IP address entries
-23. Check for duplicate IP address entries in the Hardware State Management Database (HSM). Duplicate entries will cause DNS operations to fail.
+
+22. Check for duplicate IP address entries in the Hardware State Management Database (HSM). Duplicate entries will cause DNS operations to fail.
 
   1.  Verify each node hostname resolves to one IP address.
       ```bash
@@ -453,7 +484,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
       [{'result': 1, 'text': "Config reload failed: configuration error using file '/usr/local/kea/cray-dhcp-kea-dhcp4.conf': failed to add new host using the HW address '00:40:a6:83:50:a4 and DUID '(null)' to the IPv4 subnet id '0' for the address 10.100.0.105: There's already a reservation for this address"}]
       ```
 
-24. Use the following example curl command to check for active DHCP leases. If there are 0 DHCP leases, there is a configuration error.
+23. Use the following example curl command to check for active DHCP leases. If there are 0 DHCP leases, there is a configuration error.
 
     ```bash
     ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
@@ -472,7 +503,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     ]
     ```
 
-25. If there are duplicate entries in the HSM as a result of this procedure, (10.100.0.105 in this example), delete the duplicate entry.
+24. If there are duplicate entries in the HSM as a result of this procedure, (10.100.0.105 in this example), delete the duplicate entry.
 
     1. Show the `EthernetInterfaces` for the duplicate IP address:
 
@@ -510,7 +541,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
        ncn-m001# cray hsm inventory ethernetInterfaces delete 0040a68350a4
        ```
 
-26. Check DNS using `nslookup`.
+25. Check DNS using `nslookup`.
 
     ```bash
     ncn-m001# nslookup 10.100.0.105
@@ -520,7 +551,7 @@ There should be a cray-cps pod (the broker), three cray-cps-etcd pods and their 
     105.0.100.10.in-addr.arpa        name = x1005c3s0b0n0.local.
     ```
 
-27. Check SSH.
+26. Check SSH.
 
     ```bash
     ncn-m001# ssh x1005c3s0b0n0

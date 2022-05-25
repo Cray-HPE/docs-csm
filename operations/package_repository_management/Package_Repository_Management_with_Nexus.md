@@ -1,4 +1,4 @@
-## Package Repository Management with Nexus
+# Package Repository Management with Nexus
 
 Overview of RPM repositories and container registry in Nexus.
 
@@ -8,6 +8,11 @@ Repositories are available at https://packages.local/repository/REPO\_NAME. For 
 
 ```bash
 ncn# zypper addrepo -fG https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2
+```
+
+Example output:
+
+```
 Adding repository 'csm-sle-15sp2' .................................................................................................[done]
 Warning: GPG checking is disabled in configuration of repository 'csm-sle-15sp2'. Integrity and origin of packages cannot be verified.
 Repository 'csm-sle-15sp2' successfully added
@@ -31,10 +36,15 @@ The `-G` option is used in this example to disable GPG checks. However, if the n
 
 Container registry is available at https://registry.local on the NCNs or compute nodes. By default, access to the container registry is not available over the Customer Access Network \(CAN\). If desired, a corresponding route may be added to the `nexus` VirtualService resource in the `nexus` namespace:
 
-**Warning:** If access to the container registry in Nexus is exposed over CAN, it is strongly recommended to setup and configure fine-grained access control. However, as mentioned above, the default setup assumes the OPA policy only permits admin users access.
+**WARNING:** If access to the container registry in Nexus is exposed over CAN, it is strongly recommended to setup and configure fine-grained access control. However, as mentioned above, the default setup assumes the OPA policy only permits admin users access.
 
 ```bash
 ncn# kubectl -n nexus get vs nexus
+```
+
+Example output:
+
+```
 NAME    GATEWAYS                      HOSTS                                                     AGE
 nexus   [services/services-gateway]   [packages.local registry.local nexus.odin.dev.cray.com]   21d
 ```
@@ -46,6 +56,11 @@ The Cray System Management \(CSM\) product adds a recent version of quay.io/skop
 ```bash
 ncn# podman run --rm registry.local/skopeo/stable copy \
 --dest-tls-verify=false docker://quay.io/skopeo/stable docker://registry.local/skopeo/stable
+```
+
+Example output:
+
+```
 Getting image source signatures
 Copying blob sha256:85a74b04b5b84b45c763e9763cc0f62269390bb30058d3e2b2545d820d3558f7
 Copying blob sha256:ab9d1e8c4764f52ed5041c38bd3d64b6ae9c27d0f436be50f658ece38440a97b
@@ -60,13 +75,13 @@ Storing signatures
 
 Kubernetes Pods are expected to rely on the registry mirror configuration in */etc/containerd/config.toml* to automatically fetch container images from it using upstream references. By default, the following upstream registries are automatically redirected to `registry.local`:
 
--   `dtr.dev.cray.com`
--   `docker.io` \(and `registry-1.docker.io`\)
--   `quay.io`
--   `gcr.io`
--   `k8s.gcr.io`
+- `dtr.dev.cray.com`
+- `docker.io` \(and `registry-1.docker.io`\)
+- `quay.io`
+- `gcr.io`
+- `k8s.gcr.io`
 
-**Warning:** The registry mirror configuration in /etc/containerd/config.toml only applies to the CRI. When using the ctr command or another container runtime \(For example, `podman` or `docker`\), the admin must explicitly reference `registry.local`.
+**WARNING:** The registry mirror configuration in /etc/containerd/config.toml only applies to the CRI. When using the ctr command or another container runtime \(For example, `podman` or `docker`\), the admin must explicitly reference `registry.local`.
 
 The following is an example of pulling dtr.dev.cray.com/baseos/alpine:3.12.0 using CRI:
 
@@ -81,6 +96,11 @@ The following is an example for containerd:
 
 ```bash
 ncn# ctr image pull registry.local/baseos/alpine:3.12.0
+```
+
+Example output:
+
+```
 registry.local/baseos/alpine:3.12.0:                                              resolved       |++++++++++++++++++++++++++++++++++++++|
 manifest-sha256:e25f4e287fad9c0ee0a47af590e999f9ff1f043fb636a9dc7a61af6d13fc40ca: done           |++++++++++++++++++++++++++++++++++++++|
 layer-sha256:3ab6766f6281be4c2349e2122bab3b4d1ba1b524236b85fce0784453e759b516:    done           |++++++++++++++++++++++++++++++++++++++|
@@ -96,6 +116,11 @@ The following is an example for Podman:
 
 ```bash
 ncn# podman pull registry.local/baseos/alpine:3.12.0
+```
+
+Example output:
+
+```
 Trying to pull registry.local/baseos/alpine:3.12.0...
 Getting image source signatures
 Copying blob df20fa9351a1 [--------------------------------------] 0.0b / 0.0b
@@ -106,6 +131,4 @@ Writing manifest to image destination
 Storing signatures
 5779738096ecb47dd7192d44ceef7032110edd38204f66c9ca4e35fca952975c
 ```
-
-
 

@@ -1,4 +1,4 @@
-## Manage Component Groups
+# Manage Component Groups
 
 The creation, deletion, and modification of groups is enabled by the Hardware State Manager \(HSM\) APIs.
 
@@ -86,6 +86,4 @@ Delete a group with the following command:
 ```bash
 ncn-m# cray hsm groups delete GROUP_LABEL
 ```
-
-
 

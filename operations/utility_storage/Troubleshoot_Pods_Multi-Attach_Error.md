@@ -28,7 +28,13 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-m001# kubectl -n services describe pod POD_ID
-    ...
+    ```
+
+    Example output:
+
+    ```
+    [...]
+
     Events:
       Type     Reason              Age   From                     Message
       ----     ------              ----  ----                     -------
@@ -43,6 +49,11 @@ This procedure requires administrative privileges.
 
     ```bash
     ncn-m001# kubectl describe -n NAMESPACE pv PVC_NAME
+    ```
+
+    Example output:
+
+    ```
     Name:            pvc-6ac68e32-de91-4e21-ac9f-c743b3ecb776
     Labels:          <none>
     Annotations:     pv.kubernetes.io/provisioned-by: ceph.com/rbd
@@ -94,8 +105,12 @@ This procedure requires administrative privileges.
 
         ```bash
         ncn-m001# grep IP_ADDRESS /etc/hosts
-        10.252.0.4      ncn-w001.local ncn-w001 ncn-w001-nmn.local x3000c0s7b0n0 ncn-w001-nmn sms01-nmn.local sms04-nmn sms.local sms-nmn sms-nmn.local mgmt-plane-cmn mgmt-plane-cmn.local mgmt-plane-nmn.local bis.local bis time-nmn time-nmn.local #-label-10.252.0.4
+        ```
 
+        Example output:
+
+        ```
+        10.252.0.4      ncn-w001.local ncn-w001 ncn-w001-nmn.local x3000c0s7b0n0 ncn-w001-nmn sms01-nmn.local sms04-nmn sms.local sms-nmn sms-nmn.local mgmt-plane-cmn mgmt-plane-cmn.local mgmt-plane-nmn.local bis.local bis time-nmn time-nmn.local #-label-10.252.0.4
         ```
 
 1. SSH to the host name returned in the previous step.
@@ -112,6 +127,11 @@ This procedure requires administrative privileges.
 
         ```bash
         ncn-m001# rbd showmapped|grep CEPH_IMAGE_NAME
+        ```
+
+        Example output:
+
+        ```
         16 kube           kubernetes-dynamic-pvc-3ce9ec37-846b-11ea-acae-86f521872f4c -    /dev/**rbd16**
         ```
 

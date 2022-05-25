@@ -1,4 +1,4 @@
-## About Kubernetes Taints and Labels
+# About Kubernetes Taints and Labels
 
 Kubernetes labels control node affinity, which is the property of pods that attracts them to a set of nodes. On the other hand, Kubernetes taints enable a node to repel a set of pods. In addition, pods can have tolerances for taints to allow them to run on nodes with certain taints.
 
@@ -11,6 +11,4 @@ ncn# kubectl get nodes --show-labels
 ```
 
 To learn more, refer to [https://kubernetes.io/](https://kubernetes.io/).
-
-
 

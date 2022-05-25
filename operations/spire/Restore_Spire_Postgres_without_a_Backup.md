@@ -1,6 +1,4 @@
-
-
-## Restore Spire Postgres without an Existing Backup
+# Restore Spire Postgres without an Existing Backup
 
 Reinstall the Spire helm chart in the
 event that spire-postgres databases cannot be restored from a backup.
@@ -94,7 +92,7 @@ The CSM release tarball is required as it contains the Spire helm chart.
    ncn# sed -i "s|./helm|${PATH_TO_RELEASE}/helm|" manifest.yaml
    ```
 
-7. Validate that the manifest.yaml file only contains chart information for Spire, 
+7. Validate that the manifest.yaml file only contains chart information for Spire,
 and that the sources charts location points to the directory the helm chart was extracted from to prepend to /helm.
 
 8. Redeploy the Spire chart.

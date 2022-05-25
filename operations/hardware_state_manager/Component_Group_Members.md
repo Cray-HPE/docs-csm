@@ -1,4 +1,4 @@
-## Component Group Members
+# Component Group Members
 
 The members object in the group definition has additional actions available for managing the members after the group has been created.
 
@@ -50,7 +50,7 @@ ncn-m# cray hsm groups members create --id x1c0s0b0n0 blue
 
 ### Remove Group Members
 
-Single members are removed with the component xname ID from the given group.
+Single members with the specified component name (xname) are removed from the given group.
 
 Remove a member from a group:
 
@@ -63,6 +63,4 @@ For example:
 ```bash
 ncn-m# cray hsm groups members delete x1c0s0b0n0 blue
 ```
-
-
 

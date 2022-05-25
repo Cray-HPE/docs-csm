@@ -1,4 +1,4 @@
-## Generate Temporary S3 Credentials
+# Generate Temporary S3 Credentials
 
  Cray provides a simple token service \(STS\) via the API gateway for administrators to generate temporary Simple Storage Service \(S3\) credentials for use with S3 buckets. Temporary S3 credentials are generated using either cURL or Python.
 
@@ -19,6 +19,11 @@ The generated S3 credentials will expire after one hour.
         ```bash
         ncn# curl -X PUT -H "Authorization: Bearer $TOKEN" \
         https://api-gw-service-nmn.local/apis/sts/token
+        ```
+
+        Example output:
+
+        ```
         {
           "Credentials": {
             "AccessKeyId": "KtSRFzmAkoDfgCnBLYt",
@@ -28,7 +33,6 @@ The generated S3 credentials will expire after one hour.
             "SessionToken": "qbwVvv6w1ec/NwI0VzzOXuzFVczjdVICcij0s7kmqKvyZ59RrHJWjLKvmUhGeBATMtkEK72s+qL7Tdn06tPMCQr04MEOpyeUOLmfFyKN3Awm0/7Rlx7rKVaOejpeYaRzO2kWDu3llrpZOONSMPYfck6KjAfvqg/ZJPGEJ5Mzb9YfeSCBq0ghj3G51o9V4DhjjL0YoA/XARMnN0NTHav+OIUHBkXcxZIfT+ti9bSjmz6ExKsJj8zPLvGMK2TIo/Xp"
           }
         }
-
         ```
 
 2.  Retrieve temporary S3 credentials with Python \(`s3creds.py`\).
@@ -77,7 +81,4 @@ The generated S3 credentials will expire after one hour.
     ```
 
     The mapping creds\_kwargs can now be used for further interaction with S3 in Python.
-
-
-
 

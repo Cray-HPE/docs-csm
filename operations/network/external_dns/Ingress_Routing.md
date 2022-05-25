@@ -1,15 +1,27 @@
-## Ingress Routing
+# Ingress Routing
 
 Ingress routing to services via Istio's ingress gateway is configured by VirtualService custom resource definitions \(CRD\). When using external hostnames, there needs to be a VirtualService CRD that matches the external hostname to the desired destination.
 
-For example, the configuration below controls the ingress routing for prometheus.SYSTEM_DOMAIN_NAME:
+For example, the configuration below controls the ingress routing for prometheus.cmn.SYSTEM_DOMAIN_NAME:
 
 ```bash
 ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus
-NAME                             GATEWAYS                      HOSTS                              AGE
-cray-sysmgmt-health-prometheus   [services/services-gateway]   [prometheus.SYSTEM_DOMAIN_NAME]   22h
+```
 
+Example output:
+
+```
+NAME                             GATEWAYS                      HOSTS                              AGE
+cray-sysmgmt-health-prometheus   [services/services-gateway]   [prometheus.cmn.SYSTEM_DOMAIN_NAME]   22h
+```
+
+```
 ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus -o yaml
+```
+
+Example output:
+
+```
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -31,11 +43,11 @@ spec:
   gateways:
   - services/services-gateway
   hosts:
-  - prometheus.SYSTEM_DOMAIN_NAME
+  - prometheus.cmn.SYSTEM_DOMAIN_NAME
   http:
   - match:
     - authority:
-        exact: prometheus.SYSTEM_DOMAIN_NAME
+        exact: prometheus.cmn.SYSTEM_DOMAIN_NAME
     route:
     - destination:
         host: cray-sysmgmt-health-promet-prometheus
@@ -44,12 +56,11 @@ spec:
 
 ```
 
-By matching the external hostname in the authority field, Istio's ingress gateway is able to route incoming traffic from OAuth2 Proxy to the `cray-sysmgmt-health-prometheus` service in the `sysmgmt-health` namespace. Also, notice that the VirtualService for prometheus.SYSTEM_DOMAIN_NAME uses the existing `services/services-gateway` Gateway CRD and does not create a new one.
+By matching the external hostname in the authority field, Istio's ingress gateway is able to route incoming traffic from OAuth2 Proxy to the `cray-sysmgmt-health-prometheus` service in the `sysmgmt-health` namespace. Also, notice that the VirtualService for prometheus.cmn.SYSTEM_DOMAIN_NAME uses the existing `services/services-gateway` Gateway CRD and does not create a new one.
 
 ### Secure Ingress via OAuth2 Proxy
 
 Web apps intended to be accessed via the browser, such as Prometheus, Alertmanager, Grafana, Kiali, Jaeger, Kibana, Elasticsearch, should go through the OAuth2 Proxy reverse proxy. Browser sessions are automatically configured to use a JSON Web Token \(JWT\) for authorization to Istio's ingress gateway, enabling a central enforcement point of Open Policy Agent \(OPA\) policies for system management traffic.
 
 The OAuth2 Proxy will inject HTTP headers so that an upstream endpoint can identify the user and customize access as needed. To enable ingress via OAuth2 Proxy external hostnames, web apps need to be added to the `proxiedWebAppExternalHostnames` for the appropriate ingress (`customerManagement`, `customerAccess`, or `customerHighSpeed`) in customizations.yaml (`i.e sma-grafana.{{ network.dns.external }}`).
-
 

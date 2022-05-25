@@ -1,4 +1,4 @@
-## Troubleshoot Common DNS Issues
+# Troubleshoot Common DNS Issues
 
 The Domain Name Service \(DNS\) is part of an integrated infrastructure set designed to provide dynamic host discovery, addressing, and naming. There are several different place to look for troubleshooting as DNS interacts with Dynamic Host Configuration Protocol \(DHCP\), the Hardware Management Service \(HMS\), the System Layout Service \(SLS\), and the State Manager Daemon \(SMD\).
 
@@ -6,35 +6,40 @@ The information below describes what to check when experiencing issues with DNS.
 
 ### Troubleshoot an Invalid Hostname
 
-It is important to verify if a hostname is correct. The values in the networks.yml or networks\_derived.yml files are sometimes inaccurate.
+It is important to verify if a hostname is correct. The values in the `networks.yml` or `networks_derived.yml` files are sometimes inaccurate.
 
 The formats show below are valid hostnames:
 
--   xnames
-    -   Node Management Network \(NMN\):
-        -   <xname\>
-        -   <xname\>.local
-    -   Hardware Management Network \(HMN\):
-        -   <xname\>-mgmt
-        -   <xname\>-mgmt.local
--   nid
-    -   <nid\_number\>-nmn
-    -   <nid\_number\>-nmn.local
+- component names (xnames)
+  - Node Management Network \(NMN\):
+    - <xname\>
+    - <xname\>.local
+  - Hardware Management Network \(HMN\):
+    - <xname\>-mgmt
+    - <xname\>-mgmt.local
+  - nid
+    - <nid\_number\>-nmn
+    - <nid\_number\>-nmn.local
 
-Additional steps are needed if a hostname or xname is either listed incorrectly or not listed at all in the networks.yml or networks\_derived.yml files. The following actions need to be taken:
+Additional steps are needed if a hostname or component name (xname) is either listed incorrectly or not listed at all in the `networks.yml` or `networks_derived.yml` files. The following actions need to be taken:
 
-1.  Update the hostname in the Hardware State Manager \(HSM\).
-2.  Re-run any Ansible plays that require the data in these files.
+1. Update the hostname in the Hardware State Manager \(HSM\).
+2. Re-run any Ansible plays that require the data in these files.
 
 ### Check if a Host is in DNS
 
-Use the dig or nslookup commands directly against the Unbound resolver. A host is correctly in DNS if the response from the dig command includes the following:
+Use the `dig` or `nslookup` commands directly against the Unbound resolver. A host is correctly in DNS if the response from the `dig` command includes the following:
 
--   The `ANSWER SECTION` value exists with a valid hostname and IP address
--   A `QUERY` value exists that has the `status: NOERROR` message
+- The `ANSWER SECTION` value exists with a valid hostname and IP address
+- A `QUERY` value exists that has the `status: NOERROR` message
 
 ```bash
-ncn-w001# dig HOSTNAME @10.92.100.225
+ncn# dig HOSTNAME @10.92.100.225
+```
+
+Example output:
+
+```
 ; <<>> DiG 9.11.2 <<>> x3000c0r41b0 @10.92.100.225
 ;; global options: +cmd
 ;; Got answer:
@@ -60,10 +65,17 @@ If either of the commands fail to meet the two conditions mentioned above, colle
 If there no record in the Unbound pod, that is also an indication that the host is not in DNS.
 
 ```bash
-ncn-w001# kubectl describe -n services configmaps cray-dns-unbound | grep XNAME
-...
+ncn# kubectl describe -n services configmaps cray-dns-unbound | grep XNAME
+```
+
+Example output:
+
+```
+[...]
+
 {"hostname": "x1003c7s7b0", "ip-address": "10.104.12.191"}
-...
+
+[...]
 ```
 
 ### Check the `cray-dns-unbound` Logs for Errors
@@ -71,8 +83,12 @@ ncn-w001# kubectl describe -n services configmaps cray-dns-unbound | grep XNAME
 Use the following command to check the logs. Any logs with a message saying `ERROR` or `Exception` are an indication that the Unbound service is not healthy.
 
 ```bash
-ncn-w001# kubectl logs -n services -l \
-app.kubernetes.io/instance=cray-dns-unbound -c unbound
+ncn# kubectl logs -n services -l app.kubernetes.io/instance=cray-dns-unbound -c cray-dns-unbound
+```
+
+Example output:
+
+```
 [1596224129] unbound[8:0] debug: using localzone health.check.unbound. transparent
 [1596224129] unbound[8:0] debug: using localzone health.check.unbound. transparent
 [1596224135] unbound[8:0] debug: using localzone health.check.unbound. transparent
@@ -98,8 +114,13 @@ app.kubernetes.io/instance=cray-dns-unbound -c unbound
 To view the DNS Helper logs:
 
 ```bash
-ncn-w001# kubectl logs -n services pod/$(kubectl get -n services pods | \
+ncn# kubectl logs -n services pod/$(kubectl get -n services pods | \
 grep unbound | tail -n 1 | cut -f 1 -d ' ') -c manager | tail -n4
+```
+
+Example output:
+
+```
   uid: bc1e8b7f-39e2-49e5-b586-2028953d2940
 
 Comparing new and existing DNS records.
@@ -112,8 +133,13 @@ Log in to the spine switches and check that MetalLB is peering to the spines via
 
 Check both spines if they are available and powered up. All worker nodes should be peered with the spine BGP.
 
-```bash
+```
 sw-spine-001 [standalone: master] # show ip bgp neighbors
+```
+
+Example output:
+
+```
 BGP neighbor: 10.252.0.4, remote AS: 65533, link: internal:
   Route-map (in/out)                                   : rm-ncn-w001
   BGP version                                          : 4
@@ -137,8 +163,13 @@ BGP neighbor: 10.252.0.4, remote AS: 65533, link: internal:
 
 Confirm that routes to Kea \(10.92.100.222\) via all the NCN worker nodes are available:
 
-```bash
+```
 sw-spine-001 [standalone: master] # show ip route 10.92.100.222
+```
+
+Example output:
+
+```
 Flags:
   F: Failed to install in H/W
   B: BFD protected (static route)
@@ -158,28 +189,28 @@ VRF Name default:
 
 ### TCPDUMP
 
-Verify if the NCN is receiving DNS queries. On an NCN worker or manager with kubectl installed, run the following command:
+Verify if the NCN is receiving DNS queries. On an NCN worker or manager with `kubectl` installed, run the following command:
 
 ```bash
-ncn-w001# tcpdump -envli bond0.nmn0 port 53
+ncn-mw# tcpdump -envli bond0.nmn0 port 53
 ```
 
 ### The ping and SSH Commands Fail for Hosts in DNS
 
-If the IP address returned by the ping command is different than the IP address returned by the dig command, restart nscd on the impacted node. This is done with the following command:
+If the IP address returned by the `ping` command is different than the IP address returned by the `dig` command, restart `nscd` on the impacted node. This is done with the following command:
 
 ```bash
-ncn-w001# systemctl restart nscd.service
+ncn# systemctl restart nscd.service
 ```
 
-Attempt to ping or SSH to the IP address that was experiencing issues after restarting nscd.
+Attempt to `ping` or `ssh` to the IP address that was experiencing issues after restarting `nscd`.
 
 ### Check for Missing DHCP Leases
 
 Search for a DHCP lease by checking active leases for the service:
 
 ```bash
-ncn-w001# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
+ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
 "Content-Type: application/json" \-d '{ "command": "lease4-get-all",  "service": \
 [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea |jq
 ```
@@ -187,7 +218,7 @@ ncn-w001# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
 For example:
 
 ```bash
-ncn-w001# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X \
+ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X \
 POST -H "Content-Type: application/json" \-d '{ "command": "lease4-get-all",  "service": \
 [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea \
 |jq|grep x3000c0s19b4  -A 6 -B 4
@@ -206,8 +237,6 @@ POST -H "Content-Type: application/json" \-d '{ "command": "lease4-get-all",  "s
 
 If there is not a DHCP lease found, then:
 
--   Ensure the system is running and that its DHCP client is still sending requests. Reboot the system via Redfish/IPMI if required.
--   See [Troubleshoot DHCP Issues](../dhcp/Troubleshoot_DHCP_Issues.md) for more information.
-
-
+- Ensure the system is running and that its DHCP client is still sending requests. Reboot the system via Redfish/IPMI if required.
+- See [Troubleshoot DHCP Issues](../dhcp/Troubleshoot_DHCP_Issues.md) for more information.
 

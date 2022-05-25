@@ -6,11 +6,16 @@ The health of a Ceph cluster can be viewed with the following command:
 
 ```bash
 ncn-m001# ceph -s
+```
+
+Example output:
+
+```
 cluster:
   id:     5f3b4031-d6c0-4118-94c0-bffd90b534eb
   health: HEALTH_OK  <<-- Health state
 
-...
+[...]
 ```
 
 The following is an overview of potential health states:

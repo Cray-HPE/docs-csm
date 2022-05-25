@@ -20,6 +20,11 @@ Print the status of the Ceph cluster with the following command:
 
 ```bash
 ncn-m001# ceph -s
+```
+
+Example output:
+
+```
   cluster:
   id:     5f3b4031-d6c0-4118-94c0-bffd90b534eb
   health: HEALTH_OK  <<-- WARN/ERROR/CRITICAL are other states
@@ -49,6 +54,11 @@ Check the OSD status, weight, and location.
 
 ```bash
 ncn-m001# ceph osd tree
+```
+
+Example output:
+
+```
 ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 -1       62.85938 root default
 -7       20.95312     host ncn-s001
@@ -80,6 +90,11 @@ The following command shows the storage utilization of the cluster and pools:
 
 ```bash
 ncn-m001# ceph df
+```
+
+Example output:
+
+```
 RAW STORAGE:
     CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
     kube      27 GiB     15 GiB     9.2 GiB       12 GiB         45.25
@@ -106,6 +121,11 @@ Show the utilization of the OSDs with the following command. This is very helpfu
 
 ```bash
 ncn-m001# ceph osd df
+```
+
+Example output:
+
+```
 ID CLASS WEIGHT  REWEIGHT SIZE   RAW USE DATA    OMAP META  AVAIL   %USE  VAR  PGS STATUS
  1  kube 0.00879  1.00000  9 GiB 4.1 GiB 3.1 GiB  0 B 1 GiB 4.9 GiB 45.25 0.96  99     up
  4   smf 0.01859  1.00000 19 GiB 9.1 GiB 8.1 GiB  0 B 1 GiB 9.9 GiB 48.09 1.02 141     up
@@ -123,6 +143,11 @@ Use the following command to obtain information about a single OSD using the OSD
 
 ```bash
 ncn-m001# ceph osd find OSD.ID
+```
+
+Example output:
+
+```
 {
     "osd": 1,
     "addrs": {
@@ -149,6 +174,11 @@ List the storage pools with the following commands:
 
 ```bash
 ncn-m001# ceph osd lspools
+```
+
+Example output:
+
+```
 1 cephfs_data
 2 cephfs_metadata
 3 .rgw.root

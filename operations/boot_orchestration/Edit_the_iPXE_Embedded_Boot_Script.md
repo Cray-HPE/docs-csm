@@ -1,5 +1,4 @@
-
-## Edit the iPXE Embedded Boot Script
+# Edit the iPXE Embedded Boot Script
 
 Manually adjust the iPXE embedded boot script to change the order of network interfaces for DHCP request. Changing the order of network interfaces for DHCP requests helps improve boot time performance.
 
@@ -88,5 +87,4 @@ This procedure requires administrative privileges.
 
 
 Wait about 30 seconds for the iPXE binary to be regenerated, and then the nodes will pick up the new ipxe.efi binary.
-
 

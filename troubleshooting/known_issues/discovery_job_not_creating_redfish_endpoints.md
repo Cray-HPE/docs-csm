@@ -1,6 +1,6 @@
 # HMS Discovery job not creating RedfishEndpoints in Hardware State Manager
 
-There is a known issue with the HMS Discovery cronjob when a BMC does not respond by its IP address for some reason the discovery job will not create a RedfishEndpoint for the BMC in Hardware State Manager (HSM). However, it does update the BMC MAC address in HSM with its xname. The discovery job only creates a new RedfishEndpoints when it encounters an unknown MAC address without a xname associated with it.
+There is a known issue with the HMS Discovery cronjob when a BMC does not respond by its IP address for some reason the discovery job will not create a RedfishEndpoint for the BMC in Hardware State Manager (HSM). However, it does update the BMC MAC address in HSM with its component name (xname). The discovery job only creates a new RedfishEndpoints when it encounters an unknown MAC address without a component name (xname) associated with it.
 
 This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and RouterBMCs.
 
@@ -15,7 +15,7 @@ This troubleshooting procedure is only applicable for Air Cooled NodeBMCs and Ro
 
 ## Check for symptoms
 1. Setup an environment variable with to store the xname of the BMC.
-    > This should be either the xname for a NodeBMC (`xXcCsSbB`) or RouterBMC (`xXcCrRbB`).
+    > This should be either the component name (xname) for a NodeBMC (`xXcCsSbB`) or RouterBMC (`xXcCrRbB`).
     ```bash
     ncn# export BMC=x3000c0s18b0
     ```
@@ -121,7 +121,7 @@ The return value of the script is 0 if fixup was successful or no fixup was need
     If `ComponentID` remains empty check the hms-discovery logs for errors. Otherwise, move on to the next step.
 
 3. Verify that a RedfishEndpoint now exists for the BMC.
-    > The BMC when first added to HSM may not be DiscoverOK right away. It may take up 5 minutes for BMC hostname to start resolving in DNS. The HMS Discovery cronjob should automatically trigger a discovery for any RedfishEndpoints that are not in the DiscoveryOk or DiscoveryStated states, such as HTTPsGETFailed.
+    > The BMC when first added to HSM may not be DiscoverOK right away. It may take up 5 minutes for BMC hostname to start resolving in DNS. The HMS Discovery cronjob should automatically trigger a discovery for any RedfishEndpoints that are not in the DiscoveryOk or DiscoveryStated states, such as HTTPsGetFailed.
     ```bash
     ncn# cray hsm inventory redfishEndpoints describe $BMC
     ID = "x3000c0s18b0"

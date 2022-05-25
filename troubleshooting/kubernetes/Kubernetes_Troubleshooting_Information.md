@@ -1,4 +1,4 @@
-## Kubernetes Troubleshooting Information
+# Kubernetes Troubleshooting Information
 
 Commands for performing basic Kubernetes cluster troubleshooting.
 
@@ -98,7 +98,4 @@ ncn# kubectl delete pod POD_NAME
 ```
 
 **CAUTION:** It is recommended to be careful while deleting deployments or pods, as doing so can have an affect on other pods.
-
-
-
 

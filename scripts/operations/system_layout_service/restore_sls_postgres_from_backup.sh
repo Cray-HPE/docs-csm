@@ -22,7 +22,6 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-
 set -eo pipefail
 
 if [[ -z "${POSTGRES_SQL_FILE}" ]]; then
@@ -80,8 +79,8 @@ done
 export POSTGRES_LEADER=$(kubectl exec cray-sls-postgres-0 -n services -c postgres -t -- patronictl list -f json | jq  -r '.[] | select(.Role == "Leader").Member')
 echo "The SLS postgres leader is $POSTGRES_LEADER"
 
-# Temporally revoke connections to the sls and service_db databases to they can be dropped.
-echo "Temporally revoking connections to the sls and service_db databases"
+# Temporarily revoke connections to the sls and service_db databases to they can be dropped.
+echo "Temporarily revoking connections to the sls and service_db databases"
 echo "REVOKE CONNECT ON DATABASE sls FROM public;
 REVOKE CONNECT ON DATABASE service_db FROM public;
 SELECT pid, pg_terminate_backend(pid)

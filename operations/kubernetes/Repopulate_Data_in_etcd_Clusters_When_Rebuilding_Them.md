@@ -1,22 +1,22 @@
-## Repopulate Data in etcd Clusters When Rebuilding Them
+# Repopulate Data in etcd Clusters When Rebuilding Them
 
 When an etcd cluster is not healthy, it needs to be rebuilt. During that process, the pods that rely on etcd clusters lose data. That data needs to be repopulated in order for the cluster to go back to a healthy state.
 
 The following services need their data repopulated in the etcd cluster:
 
--   Boot Orchestration Service \(BOS\)
--   Boot Script Service \(BSS\)
--   Content Projection Service \(CPS\)
--   Compute Rolling Upgrade Service \(CRUS\)
--   External DNS
--   Firmware Action Service \(FAS\)
--   HMS Notification Fanout Daemon \(HMNFD\)
--   Mountain Endpoint Discovery Service \(MEDS\)
--   River Endpoint Discovery Service \(REDS\)
+- Boot Orchestration Service \(BOS\)
+- Boot Script Service \(BSS\)
+- Content Projection Service \(CPS\)
+- Compute Rolling Upgrade Service \(CRUS\)
+- External DNS
+- Firmware Action Service \(FAS\)
+- HMS Notification Fanout Daemon \(HMNFD\)
+- Mountain Endpoint Discovery Service \(MEDS\)
+- River Endpoint Discovery Service \(REDS\)
 
 ### Prerequisites
 
-A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
+An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
 
 
 ### BOS
@@ -25,16 +25,17 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
 
     Boot preparation information for other product streams can be found in the following locations:
 
-    -   UANs: Refer to the UAN product stream documenation and search for the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
-    -   Cray Operating System \(COS\): Refer to the "Create a Boot Session Template" header in the "Boot COS" procedure in the COS product stream documentation.
+    - UANs: Refer to the UAN product stream repository and search for the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
+    - Cray Operating System \(COS\): Refer to the "Create a Boot Session Template" header in the "Boot COS" procedure in the COS product stream documentation.
+
 
 
 ### CPS
 
 1.  Repopulate clusters for CPS.
 
-    -   If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are up and running. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md) for more information.
-    -   If any clients have already mounted content provided by CPS, that content should be unmounted before rebuilding the etcd cluster, and then re-mounted after the etcd cluster is rebuilt. Compute nodes that use CPS to access their root file system must be shut down to unmount, and then booted to perform the re-mount.
+    - If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are up and running. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md) for more information.
+    - If any clients have already mounted content provided by CPS, that content should be unmounted before rebuilding the etcd cluster, and then re-mounted after the etcd cluster is rebuilt. Compute nodes that use CPS to access their root file system must be shut down to unmount, and then booted to perform the re-mount.
 
 
 ### CRUS
@@ -45,6 +46,11 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
 
         ```bash
         ncn-w001# cray crus session list
+        ```
+
+        Example output:
+
+        ```
         [[results]]
         api_version = "1.0.0"
         completed = false
@@ -66,6 +72,11 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
 
         ```bash
         ncn-w001# cray crus session describe CRUS_UPGRADE_ID
+        ```
+
+        Example output:
+
+        ```
         api_version = "1.0.0"
         completed = false
         failed_label = "failed-nodes"
@@ -85,6 +96,11 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
 
     ```bash
     ncn-w001# kubectl get pods -n services | grep cray-crus
+    ```
+
+    Example output:
+
+    ```
     cray-crus-549cb9cb5d-jtpqg                                   3/4     Running   528        25h
     ```
 
@@ -222,7 +238,5 @@ Data is repopulated in BSS when the REDS init job is run.
         ncn-m001# pdsh -w ncn-s00[0-4]-can.local "systemctl restart cray-dvs-orca"
         ```
 
-        Note: on larger systems, [0-4] may have to be a larger range.
-
-
+        **NOTE:** On larger systems, [0-4] may have to be a larger range.
 

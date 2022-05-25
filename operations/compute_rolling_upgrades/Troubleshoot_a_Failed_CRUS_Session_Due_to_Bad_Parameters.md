@@ -1,4 +1,4 @@
-## Troubleshoot a Failed CRUS Session Because of Bad Parameters
+# Troubleshoot a Failed CRUS Session Because of Bad Parameters
 
 A CRUS session must be deleted and recreated if it does not start or complete because of parameters having incorrect values.
 
@@ -21,6 +21,11 @@ The following are examples of incorrect parameters:
 
     ```bash
     ncn# cray crus session delete CRUS_UPGRADE_ID
+    ```
+
+    Example output:
+
+    ```
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-node-group"
@@ -47,6 +52,11 @@ The following are examples of incorrect parameters:
     --upgrade-step-size 50 \
     --workload-manager-type slurm \
     --upgrade-template-id boot-template
+    ```
+
+    Example output:
+
+    ```
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-node-group"
@@ -60,6 +70,4 @@ The following are examples of incorrect parameters:
     upgrading_label = "node-group"
     workload_manager_type = "slurm"
     ```
-
-
 

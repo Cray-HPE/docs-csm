@@ -1,4 +1,4 @@
-## BOS Sessions
+# BOS Sessions
 
 Overview of BOS Session operations and limitations.
 
@@ -31,5 +31,4 @@ The following limitations currently exist with BOS sessions:
 -   The boot ordinal and shutdown ordinal are not honored.
 -   The partition parameter is not honored.
 -   The Configuration Framework Service \(CFS\) has its own limitations. Refer to the CFS documentation for more information.
-
 

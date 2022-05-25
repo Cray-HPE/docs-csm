@@ -4,7 +4,7 @@ This CSM Overview describes the Cray System Management ecosystem with its hardwa
 
 The CSM installation prepares and deploys a distributed system across a group of management nodes organized into a Kubernetes cluster which uses Ceph for utility storage. These nodes perform their function as Kubernetes master nodes, Kubernetes worker nodes, or utility storage nodes with the Ceph storage.
 
-System services on these nodes are provided as containerized micro-services packaged for deployment via Helm charts. Kubernetes orchestrates these services and schedules them on Kubernetes worker nodes with horizontal scaling. Horizontal scales increases or decreases the number of services instances demand for them varies, such as when booting many compute nodes or application nodes.
+System services on these nodes are provided as containerized micro-services packaged for deployment via Helm charts. Kubernetes orchestrates these services and schedules them on Kubernetes worker nodes with horizontal scaling. Horizontal scaling increases or decreases the number of services' instances as demand for them varies, such as when booting many compute nodes or application nodes.
 
 ### Topics:
    1. [System Nodes and Networks](#system_nodes_and_networks)
@@ -84,12 +84,12 @@ The following table shows the default IP address ranges
 
 | Network | IP Address Range |
 | --- | --- |
-| Kubernetes service network | 10.16.0.0/12 | 
-| Kubernetes pod network | 10.32.0.0/12 | 
-| Install Network (MTL) | 10.1.0.0/16 | 
-| Node Management Network (NMN) | 10.252.0.0/17 | 
-| High Speed Network (HSN) | 10.253.0.0/16 | 
-| Hardware Management Network (HMN) | 10.254.0.0/17 | 
+| Kubernetes service network | 10.16.0.0/12 |
+| Kubernetes pod network | 10.32.0.0/12 |
+| Install Network (MTL) | 10.1.0.0/16 |
+| Node Management Network (NMN) | 10.252.0.0/17 |
+| High Speed Network (HSN) | 10.253.0.0/16 |
+| Hardware Management Network (HMN) | 10.254.0.0/17 |
 | Mountain NMN Allocate a /22 from this range per liquid cooled cabinet: * cabinet 1 * cabinet 2 * cabinet 3 * ...  | 10.100.0.0/17 Example IP address in the allocated ranges: * 10.100.0.0/22 * 10.100.4.0/22 * 10.100.8.0/22 * ... |
 | Mountain HMN Allocate a /22 from this range per liquid cooled cabinet: * cabinet 1 * cabinet 2 * cabinet 3 * ... | 10.104.0.0/17 Example IP address in the allocated ranges: * 10.104.0.0/22 * 10.104.4.0/22 * 10.104.8.0/22 * ... |
 | River NMN | 10.106.0.0/17 |
@@ -139,8 +139,8 @@ is no single point of failure. The design of the system allows for resiliency in
    the total balance of pods. It is less significant to lose one of the worker nodes if the system has more
    than three worker nodes because there are more worker nodes able to handle the pod load.
    * The state and configuration of the Kubernetes cluster are stored in an etcd cluster distributed across the
-   Kubernetes master nodes. This cluster is also backed up on an interval, and backups are pushed to Ceph
-   Rados Gateway (S3).
+   Kubernetes master nodes. This cluster is also backed up on an interval, and backups are pushed to the
+   local cluster's Ceph Rados Gateway (S3).
    * A micro-service can run on any node that meets the requirements for that micro-service, such as appropriate
    hardware attributes, which are indicated by Kubernetes labels and taints.
    * All micro-services have shared persistent storage so that they can be restarted on any worker node in the Kubernetes
@@ -178,6 +178,6 @@ as both an internal definition of the API contract and the external documentatio
 up-to-date reference available.
 
 The API Gateway URL for accessing the APIs on a site-specific system is
-https://api.SYSTEM-NAME.DOMAIN-NAME/apis/.
+https://api.cmn.SYSTEM-NAME.DOMAIN-NAME/apis/.
 
 The internal URL from a local console on any of the management nodes is https://api-gw-service-nmn.local/apis.

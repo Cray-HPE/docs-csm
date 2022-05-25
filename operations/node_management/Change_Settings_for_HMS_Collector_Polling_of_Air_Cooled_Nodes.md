@@ -1,4 +1,4 @@
-## Change Settings for HMS Collector Polling of Air Cooled Nodes
+# Change Settings for HMS Collector Polling of Air Cooled Nodes
 
 The cray-hms-hmcollector service polls all Air Cooled hardware to gather the necessary telemetry information for use by other services, such as the Cray Advanced Platform Monitoring and Control \(CAPMC\) service. This polling occurs every 10 seconds on a continual basis. Instabilities with the AMI Redfish implementation in the Gigabyte BMCs requires a less significant approach when gathering power and temperature telemetry data. If the BMCs are overloaded, they can become unresponsive, return incorrect data, or encounter other errors.
 
@@ -11,43 +11,43 @@ Collecting telemetry data while trying to boot Air Cooled compute nodes increase
 The following are the best practices for using the HMS Collector polling:
 
 -   Do not query the power state of Air Cooled nodes using CAPMC more than two or three times a minute.
-    -   This is done via the CAPMC get\_xname\_status command.
+    -   This is done via the CAPMC `get_xname_status` command.
 
         ```bash
-        ncn-m001# cray capmc get_xname_status create --xnames LIST_OF_NODES
+        ncn# cray capmc get_xname_status create --xnames LIST_OF_NODES
         ```
 
--   Polling of Air Cooled nodes should be disabled by default. Before nodes are booted, verify that cray-hms-hmcollector polling is disabled.
+-   Polling of Air Cooled nodes should be disabled by default. Before nodes are booted, verify that `cray-hms-hmcollector` polling is disabled.
     -   To check if polling is disabled:
 
         ```bash
-        ncn-m001# kubectl get deployments.apps -n services cray-hms-hmcollector -o json | jq \
+        ncn# kubectl get deployments.apps -n services cray-hms-hmcollector -o json | jq \
         '.spec.template.spec.containers[].env[]|select(.name=="POLLING_ENABLED")'
         ```
 
     -   To disable polling if it is not already:
 
         ```bash
-        ncn-m001# kubectl edit deployment -n services cray-hms-hmcollector
+        ncn# kubectl edit deployment -n services cray-hms-hmcollector
         ```
 
-        Change the value for the POLLING\_ENABLED environment variable to false in the `spec:` section. Save and quit the editor for the changes to take effect. The cray-hms-hmcollector pod will automatically restart.
+        Change the value for the `POLLING_ENABLED` environment variable to `false` in the `spec:` section. Save and quit the editor for the changes to take effect. The `cray-hms-hmcollector` pod will automatically restart.
 
 -   Only enable telemetry polling when needed, such as when running jobs.
 
     ```bash
-    ncn-m001# kubectl edit deployment -n services cray-hms-hmcollector
+    ncn# kubectl edit deployment -n services cray-hms-hmcollector
     ```
 
-    Change the value for the POLLING\_ENABLED environment variable to true in the `spec:` section. Save and quit the editor for the changes to take effect. The cray-hms-hmcollector pod will automatically restart.
+    Change the value for the `POLLING_ENABLED` environment variable to `true` in the `spec:` section. Save and quit the editor for the changes to take effect. The `cray-hms-hmcollector` pod will automatically restart.
 
 -   If BMCs are encountering issues at a high rate, increase the polling interval. Do not set the polling interval to less than the default of 10s.
 
     ```bash
-    ncn-m001# kubectl edit deployment -n services cray-hms-hmcollector
+    ncn# kubectl edit deployment -n services cray-hms-hmcollector
     ```
 
-    Change the value for the POLLING\_INTERVAL environment variable to the selected rate in seconds. This value is located in the `spec:` section. Save and quit the editor for the changes to take effect. The cray-hms-hmcollector pod will automatically restart.
+    Change the value for the `POLLING_INTERVAL` environment variable to the selected rate in seconds. This value is located in the `spec:` section. Save and quit the editor for the changes to take effect. The `cray-hms-hmcollector` pod will automatically restart.
 
 
 ### Reset BMCs in a Bad State
@@ -57,19 +57,19 @@ Even with the polling recommendations above, it is still possible for the BMCs t
 To restart the BMCs:
 
 ```bash
-ncn-m001# export USERNAME=root
-ncn-m001# export IPMI_PASSWORD=changeme
-ncn-m001# ipmitool -H BMC_HOSTNAME -U $USERNAME -E -I lanplus mc reset cold
+ncn# export USERNAME=root
+ncn# export IPMI_PASSWORD=changeme
+ncn# ipmitool -H BMC_HOSTNAME -U $USERNAME -E -I lanplus mc reset cold
 ```
 
-If the reset does not recover the BMCs, shut down the nodes, unplug the servers and plug them back in. Use the following steps:
+If the reset does not recover the BMCs, then use the following steps to shut down the nodes, unplug the servers, and plug them back in:
 
 1.  Shut down the nodes.
 
     For each server with a BMC in a bad state:
 
     ```bash
-    ncn-m001# ipmitool -H BMC_HOSTNAME -U $USERNAME -E -I lanplus chassis power soft
+    ncn# ipmitool -H BMC_HOSTNAME -U $USERNAME -E -I lanplus chassis power soft
     ```
 
     Wait 30 seconds after shutting down the nodes before proceeding.
@@ -83,16 +83,14 @@ If the reset does not recover the BMCs, shut down the nodes, unplug the servers 
 4.  Verify the BMCs are available again.
 
     ```bash
-    ncn-m001# ping -c 1 BMC_HOSTNAME
+    ncn# ping -c 1 BMC_HOSTNAME
     ```
 
 5.  Check the power of the nodes.
 
     ```bash
-    ncn-m001# cray capmc get_xname_status create --xnames LIST_OF_NODES
+    ncn# cray capmc get_xname_status create --xnames LIST_OF_NODES
     ```
 
 After these steps, the nodes should be ready to be booted again with the Boot Orchestration Service (BOS).
-
-
 

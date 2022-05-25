@@ -1,4 +1,4 @@
-## Configure Prometheus Email Alert Notifications
+# Configure Prometheus Email Alert Notifications
 
 Configure an email alert notification for all Prometheus Postgres replication alerts: PostgresReplicationLagSMA, PostgresReplicationServices, PostgresqlFollowerReplicationLagSMA and PostgresqlFollowerReplicationLagServices.
 
@@ -102,5 +102,4 @@ Configure an email alert notification for all Prometheus Postgres replication al
 An email notification will be sent once either of the alerts set in this procedure is `FIRING` in Prometheus. See https://prometheus.SYSTEM-NAME.SITE-DOMAIN/alerts for more information.
 
 If an alert is received, refer to [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md) section for more information about recovering replication.
-
 

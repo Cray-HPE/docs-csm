@@ -84,4 +84,3 @@ ncn-m001# GOSS_BASE=/opt/cray/tests/install/ncn /opt/cray/tests/install/ncn/scri
 
     If Ceph reports any status other than "HEALTH_OK", refer to [Utility Storage](Utility_Storage.md) for general Ceph troubleshooting.
 
-

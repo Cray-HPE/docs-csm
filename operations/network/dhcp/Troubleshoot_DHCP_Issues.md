@@ -1,4 +1,4 @@
-## Troubleshoot DHCP Issues
+# Troubleshoot DHCP Issues
 
 There are several things to check for when troubleshooting issues with Dynamic Host Configuration Protocol \(DHCP\) servers.
 
@@ -10,6 +10,11 @@ Check to make sure `cray-dhcp` is not running in Kubernetes:
 
 ```bash
 ncn-w001# kubectl get pods -A | grep cray-dhcp
+```
+
+Example output:
+
+```
 services  cray-dhcp-5f8c8767db-hg6ch       1/1     Running   0          35d
 ```
 
@@ -27,6 +32,11 @@ Check to see if the Kea DHCP services are running:
 
 ```bash
 ncn-w001# kubectl get services -n services | grep kea
+```
+
+Example output:
+
+```
 cray-dhcp-kea-api              ClusterIP     10.26.142.204  <none>         8000/TCP      5d23h
 cray-dhcp-kea-postgres         ClusterIP     10.19.97.142   <none>         5432/TCP      5d23h
 cray-dhcp-kea-postgres-0       ClusterIP     10.30.214.27   <none>         5432/TCP      5d23h
@@ -44,6 +54,11 @@ If the services shown in the output above are not present, it could be an indica
 
 ```bash
 ncn-w001# kubectl get pods -n services -o wide | grep kea
+```
+
+Example output:
+
+```
 cray-dhcp-kea-788b4c899b-x6ltd 3/3 Running 0 36h 10.40.3.183 ncn-w002 <none> <none>
 cray-dhcp-kea-postgres-0 2/2 Running 0 5d23h 10.40.3.121 ncn-w002 <none> <none>
 cray-dhcp-kea-postgres-1 2/2 Running 0 5d23h 10.42.2.181 ncn-w003 <none> <none>
@@ -121,10 +136,10 @@ Once a token has been generated, the DHCP lease database can be viewed. The comm
 
 The HSM includes two important components:
 
--   Systems Layout Service \(SLS\): This is the expected state of the system, as populated by the networks.yaml and other sources.
--   State Manager Daemon \(SMD\): This is the discovered or active state of the system during runtime.
+- Systems Layout Service \(SLS\): This is the expected state of the system, as populated by the networks.yaml and other sources.
+- State Manager Daemon \(SMD\): This is the discovered or active state of the system during runtime.
 
-To view the information stored in SLS for a specific xname:
+To view the information stored in SLS for a specific component name (xname):
 
 ```bash
 ncn-w001# cray sls hardware describe XNAME
@@ -143,6 +158,11 @@ The specific pod name is needed in order to check the logs for a pod. Run the co
 ```bash
 ncn-w001# kubectl logs -n services -l \
 app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea
+```
+
+Example output:
+
+```
 2020-08-03 21:47:50.580 INFO  [kea-dhcp4.dhcpsrv/10] DHCPSRV_MEMFILE_LEASE_FILE_LOAD loading leases from file /cray-dhcp-kea-socket/dhcp4.leases
 2020-08-03 21:47:50.580 INFO  [kea-dhcp4.dhcpsrv/10] DHCPSRV_MEMFILE_LFC_SETUP setting up the Lease File Cleanup interval to 3600 sec
 2020-08-03 21:47:50.580 WARN  [kea-dhcp4.dhcpsrv/10] DHCPSRV_OPEN_SOCKET_FAIL failed to open socket: the interface eth0 has no usable IPv4 addresses configured
@@ -196,6 +216,11 @@ Check both spines if they are available and powered up. All worker nodes should 
 
 ```bash
 sw-spine-001 [standalone: master] # show ip bgp neighbors
+```
+
+Example output:
+
+```
 BGP neighbor: 10.252.0.4, remote AS: 65533, link: internal:
   Route-map (in/out)                                   : rm-ncn-w001
   BGP version                                          : 4
@@ -221,6 +246,11 @@ Confirm that routes to Kea \(10.92.100.222\) via all the NCN worker nodes are av
 
 ```bash
 sw-spine-001 [standalone: master] # show ip route 10.92.100.222
+```
+
+Example output:
+
+```
 Flags:
   F: Failed to install in H/W
   B: BFD protected (static route)
@@ -237,5 +267,4 @@ VRF Name default:
                                       c        10.252.0.5        vlan2            bgp        200/0
                                       c        10.252.0.6        vlan2            bgp        200/0
 ```
-
 

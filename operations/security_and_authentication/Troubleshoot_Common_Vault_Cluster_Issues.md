@@ -1,4 +1,4 @@
-## Troubleshoot Common Vault Cluster Issues
+# Troubleshoot Common Vault Cluster Issues
 
 Search for underlying issues causing unhealthy Vault clusters. Check the Vault statefulset and various pod logs to determine what is impacting the health of the Vault.
 
@@ -33,6 +33,4 @@ Search for underlying issues causing unhealthy Vault clusters. Check the Vault s
     ```bash
     # kubectl logs -n vault cray-vault-operator-7dbbdbb68b-zvg2g --tail=-1 --prefix
     ```
-
-
 

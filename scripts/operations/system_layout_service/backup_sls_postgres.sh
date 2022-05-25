@@ -22,7 +22,6 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-
 set -eo pipefail
 
 if [[ -z "${BACKUP_FOLDER}" ]]; then
@@ -81,7 +80,7 @@ for secret in ${secrets[@]}; do
 done
 echo "Secret manifest is located at ${BACKUP_FOLDER}/${BACKUP_NAME}.manifest"
 
-# Perform a SLS dumpstate. Does not hurt to take one.
+# Perform an SLS dumpstate. Does not hurt to take one.
 echo "Performing SLS dumpstate..."
 export TOKEN=$(curl -s -S -d grant_type=client_credentials \
                           -d client_id=admin-client \

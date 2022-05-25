@@ -1,5 +1,3 @@
-
-
 # PXE Boot Troubleshooting
 
 This page is designed to cover various issues that arise when trying to PXE boot nodes in an HPE Cray EX system.
@@ -21,7 +19,7 @@ In order for PXE booting to work successfully, the management network switches n
 
 To successfully PXE boot nodes, the following is required:
 
-- The IP helper-address must be configured on VLAN 1,2,4,7. This will be where the layer 3 gateway exists (spine or aggregation)
+- The IP helper-address must be configured on VLAN 1,2,4,7. This will be where the layer 3 gateway exists (Spine or Leaf).
 - The virtual-IP/VSX/MAGP IP address must be configured on VLAN 1,2,4,7.
 - spine01/spine02 needs an active gateway on VLAN1 this can be identified from MTL.yaml generated from CSI.
 - spine01/spine02 needs an IP helper-address on VLAN1 pointing to 10.92.100.222.
@@ -43,7 +41,7 @@ To successfully PXE boot nodes, the following is required:
     sw-spine-001(config-if-vlan-<1,2,4,7>)# show run current-context
     ```
 
-    Example ouput:
+    Example output:
 
     ```
     interface vlan 1
@@ -147,7 +145,7 @@ To successfully PXE boot nodes, the following is required:
     sw-spine-001 [standalone: master] # show magp 1
     ```
     Example output:
-    
+
     ```
     MAGP 1:
       Interface vlan: 1
@@ -287,14 +285,14 @@ HTTP 0x6d35da88 status 404 Not Found
 In some cases, rebooting the KEA pod has resolved PXE issues.
 
 1. Get the KEA pod.
-    
+
     ```bash
     ncn-m002# kubectl get pods -n services | grep kea
     cray-dhcp-kea-6bd8cfc9c5-m6bgw                                 3/3     Running     0          20h
     ```
 
 1. Delete the KEA Pod.
-    
+
     ```bash
     ncn-m002# kubectl delete pods -n services cray-dhcp-kea-6bd8cfc9c5-m6bgw
     ```
@@ -310,17 +308,17 @@ failed or were skipped accidentally, this will cause the `ncn-m001` PXE boot to 
 In that case, use the following recovery procedure.
 
 1. Reboot to the PIT.
-   
+
    * If using a USB PIT:
-     
+
      1. Reboot the PIT node, watching the console as it boots.
-        
+
      1. Manually stop it at the boot menu.
-        
+
      2. Select the USB device for the boot.
-        
+
      3. Once booted, log in and mount the data partition.
-   
+
         ```bash
         pit# mount -vL PITDATA
         ```
@@ -342,18 +340,18 @@ In that case, use the following recovery procedure.
     pit# export CEPH_VERSION=x.y.z
     ```
 
-3. **If using a remote ISO PIT**, run the following commands to finish configuring the network and copy files. 
+3. **If using a remote ISO PIT**, run the following commands to finish configuring the network and copy files.
 
     **Skip these steps if using a USB PIT**.
 
     1. Run the following command to copy files from `ncn-m002` to the PIT node.
-        
+
         ```bash
         pit# scp -p ${CAN_IP_NCN_M002}:/metal/bootstrap/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
         ```
 
     2. Apply the network changes.
-        
+
         ```bash
         pit# wicked ifreload all
         pit# systemctl restart wickedd-nanny && sleep 5
@@ -391,7 +389,7 @@ In that case, use the following recovery procedure.
 7. Re-run the [BSS handoff commands from the Deploy Final NCN procedure](deploy_final_ncn.md#ncn-boot-artifacts-hand-off).
 
     **WARNING: These commands should never be run from a node other than the PIT node or `ncn-m001`**
-    
+
     ```bash
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global

@@ -1,4 +1,4 @@
-## Dump SLS Information
+# Dump SLS Information
 
 Perform a dump of the System Layout Service \(SLS\) database and an encrypted dump of the credentials stored in Vault.
 
@@ -47,6 +47,4 @@ This procedure requires administrative privileges.
     -H "Authorization: Bearer $(get_token)" \
     -F public_key=@public_key.pem > sls_dump.json
     ```
-
-
 

@@ -1,3 +1,6 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: Update a Resource Specification](Update_a_Resource_Specification.md)
 
 ## Retrieve Resource Specification Details
 
@@ -5,26 +8,30 @@ Display a specific resource specification using the `resource_id` of that specif
 
 ### Prerequisites
 
-Install and initialize the `cray` administrative CLI.
+* The administrator must be logged into an NCN or a host that has administrative access to the HPE Cray EX System API Gateway
+* The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
+* The HPE Cray EX System CLI must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
+* The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
+* The administrator must know the Resource ID of the resource specification to be retrieved: [List Resource Specifications](List_UAI_Resource_Specifications.md)
 
 ### Procedure
 
-1.  Print out a resource specification.
+Retrieve a resource specification.
 
-    To examine a particular resource specification, use a command of the following form:
+To examine a particular resource specification, use a command of the following form:
 
-    ```bash
-    ncn-m001-pit# cray uas admin config resources describe RESOURCE_ID
-    ```
+```bash
+ncn-m001-pit# cray uas admin config resources describe RESOURCE_ID
+```
 
-    For example:
+For example:
 
-    ```bash
-    ncn-m001-pit# cray uas admin config resources describe 85645ff3-1ce0-4f49-9c23-05b8a2d31849
-    comment = "my first example resource specification"
-    limit = "{"cpu": "300m", "memory": "250Mi"}"
-    request = "{"cpu": "300m", "memory": "250Mi"}"
-    resource_id = "85645ff3-1ce0-4f49-9c23-05b8a2d31849"
-    ```
+```bash
+ncn-m001-pit# cray uas admin config resources describe f26ee12c-6215-4ad1-a15e-efe4232f45e6
+comment = "Resource Specification to use with Brokered End-User UAIs"
+limit = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
+request = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
+resource_id = "f26ee12c-6215-4ad1-a15e-efe4232f45e6"
+```
 
-
+[Next Topic: Update a Resource Specification](Update_a_Resource_Specification.md)

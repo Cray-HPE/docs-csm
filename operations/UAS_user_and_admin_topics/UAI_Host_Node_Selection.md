@@ -1,3 +1,7 @@
+[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+
+[Next Topic: UAI macvlans Network Attachments](UAI_macvlans_Network_Attachments.md)
+
 ## UAI Host Node Selection
 
 When selecting UAI host nodes, it is a good idea to take into account the amount of combined load users and system services will bring to those nodes. UAIs run by default at a lower priority than system services on worker nodes which means that, if the combined load exceeds the capacity of the nodes, Kubernetes will eject UAIs and/or refuse to schedule them to protect system services. This can be disruptive or frustrating for users. This section explains how to identify the currently configured UAI host nodes and how to adjust that selection to meet the needs of users.
@@ -10,29 +14,39 @@ UAI host node identification is an exclusive activity, not an inclusive one, so 
 
   ```
   ncn-m001-pit# kubectl get nodes | grep -v master
+  ```
+
+  Example output:
+
+  ```
   NAME       STATUS   ROLES    AGE   VERSION
-  ncn-w001   Ready    <none>   10d   v1.18.6
-  ncn-w002   Ready    <none>   25d   v1.18.6
-  ncn-w003   Ready    <none>   23d   v1.18.6
+  ncn-w001   Ready    <none>   10d   v1.20.13
+  ncn-w002   Ready    <none>   25d   v1.20.13
+  ncn-w003   Ready    <none>   23d   v1.20.13
   ```
 
   In this example, there are three nodes known by Kubernetes that are not running as Kubernetes master nodes. These are all potential UAI host nodes.
 
-1. Identify the nodes that are excluded from eligibility as UAI host nodes.
+2. Identify the nodes that are excluded from eligibility as UAI host nodes.
 
   ```
   ncn-m001-pit# kubectl get no -l uas=False
+  ```
+
+  Example output:
+
+  ```
   NAME       STATUS   ROLES    AGE   VERSION
-  ncn-w001   Ready    <none>   10d   v1.18.6
+  ncn-w001   Ready    <none>   10d   v1.20.13
   ```
 
   **NOTE:** Given the fact that labels are textual not boolean, it is a good idea to try various common spellings of false. The ones that will prevent UAIs from running are 'False', 'false' and 'FALSE'. Repeat the above with all three options to be sure.
 
-  Of the non-master nodes, there is one node that is configured to reject UAIs, `ncn-w001`. So, `ncn-w002` and `ncn-w003` are UAI host nodes.
+  Of the non-master nodes, there is one node in this example that is configured to reject UAIs, `ncn-w001`. So, `ncn-w002` and `ncn-w003` are UAI host nodes.
 
 ### Specify UAI Host Nodes
 
-UAI host nodes are determined by tainting the nodes against UAIs. For example:
+UAI host nodes are determined by labeling the nodes to reject UAIs. For example:
 
 ```
 ncn-m001-pit# kubectl label node ncn-w001 uas=False --overwrite
@@ -48,6 +62,11 @@ The following summarizes its use:
 
 ```
 ncn-m001# /opt/cray/csm/scripts/node_management/make_node_groups --help
+```
+
+Example output:
+
+```
 getopt: unrecognized option '--help'
 usage: make_node_groups [-m][-s][-u][w][-A][-R][-N]
 Where:
@@ -70,6 +89,11 @@ Here is an example of a dry-run that will create or update a node group for UAI 
 
 ```
 ncn-m001# /opt/cray/csm/scripts/node_management/make_node_groups -N -R -u
+```
+
+Example output:
+
+```
 (dry run)cray hsm groups delete uai
 (dry run)cray hsm groups create --label uai
 (dry run)cray hsm groups members create uai --id x3000c0s4b0n0
@@ -87,3 +111,11 @@ So, to create a new node group or replace an existing one, called `uai`, contain
 ```
 # /opt/cray/csm/scripts/node_management/make_node_groups -R -u
 ```
+
+## Use Kubernetes Taints and Tolerations to Make NCNs Exclusive UAI Hosts
+
+If a site has the NCN resources to host UAIs exclusively on a set of NCNs without impacting the operation of the HPE Cray EX System Management Plane, it is recommended to isolate UAIs on NCNs that do not also host Management Plane services. This can be done using [Kubernetes Taints and Tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration). By default, UAIs tolerate running on nodes where the `uai_only` taint has been set, while management services beyond the minimal set required to make the node a functioning Kubernetes Worker node on HPE Cray EX do not tolerate that taint. By adding that taint to nodes in the Kubernetes cluster, sites can keep management services away from those nodes while allowing UAIs to run there. By further adding the `uas=False` label to all worker nodes in the Kubernetes cluster where UAIs are _not_ allowed, sites can ensure that UAIs only run on exclusive UAI hosts.
+
+Further selection of UAI hosts can be achieved by any site by adding further taints to Kubernetes nodes, and configuring tolerations for those taints into specific [UAI Classes](UAI_Classes.md).
+
+[Next Topic: UAI macvlans Network Attachments](UAI_macvlans_Network_Attachments.md)

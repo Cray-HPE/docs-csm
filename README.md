@@ -13,7 +13,7 @@ There are many tools which can render the Markdown format to get these advantage
 for Markdown tools will provide a long list of these tools. Some of the tools are better than others
 at displaying the images and allowing you to follow the navigational links.
 
-The exploration of the CSM documentation begins with 
+The exploration of the CSM documentation begins with
 the [Cray System Management Documentation](index.md) which introduces
 topics related to CSM software installation, upgrade, and operational use. Notice that the
 previous sentence had a link to the index.md file for the Cray System Management Documentation.

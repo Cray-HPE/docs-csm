@@ -1,4 +1,4 @@
-## Create a Manual Backup of a Healthy etcd Cluster
+# Create a Manual Backup of a Healthy etcd Cluster
 
 Manually create a backup of a healthy etcd cluster and check to see if the backup was created successfully.
 
@@ -22,7 +22,11 @@ A healthy etcd cluster is available on the system. See [Check the Health and Bal
     ncn-w001# kubectl exec -it -n operators \
     $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
     -c util -- create_backup cray-bos wednesday-manual-backup
+    ```
 
+    Example output:
+
+    ```
     etcdbackup.etcd.database.coreos.com/cray-bos-etcd-cluster-manual-backup-25847 created
     ```
 
@@ -30,7 +34,11 @@ A healthy etcd cluster is available on the system. See [Check the Health and Bal
 
     ```bash
     ncn-w001# kubectl -n services get etcdbackup BACKUP_NAME -o yaml
+    ```
 
+    Example output:
+
+    ```
       .
       .
       status:
@@ -39,7 +47,4 @@ A healthy etcd cluster is available on the system. See [Check the Health and Bal
         lastSuccessDate: "2020-01-13T21:38:47Z"
         succeeded: true
     ```
-
-
-
 
