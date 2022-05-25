@@ -30,8 +30,7 @@
     - [Touchpoints: effects and changes](#touchpoints:-effects-and-changes)
     - [When configuration occurs](#when-configuration-occurs)
     - [Ability to change post install](#ability-to-change-post-install)
-- [Work towards CAN bifurcation for CSM-1.2](#work-towards-can-bifurcation-for-csm-1.2)
-- [Bifurcated CAN Network Configuration](#bifurcated-can-network-configuration)
+
 
 <a name="can-new-features-overview"></a>
 # CAN New Features Overview 
@@ -254,14 +253,3 @@ At installation time one of the following egress routes from the system to the s
 ### Ability to change post install
 
 - NO
-
-<a name="work-towards-can-bifurcation-for-csm-1.2"></a>
-# Work Towards CAN Bifurcation for CSM-1.2
-
-Specific work and it&#39;s resultant ticketing Tier 2 and 3 ticketing towards bifurcating the CAN in CSM-1.2 is covered in [this document](////confluence/display/CASMNET/CASMNET+Shasta+v1.5+Planning), which also describes specific customer-sourced requirements.
-
-<a name="bifurcated-can-network-configuration"></a>
-# Bifurcated CAN Network Configuration
-
-- This page is for the configuration of network devices involved in the Bifurcated CAN.
-- [Bifurcated CAN Network Configuration](////confluence/display/CASMNET/Bifurcated+CAN+Network+Configuration)
