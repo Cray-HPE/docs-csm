@@ -138,13 +138,25 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
          ./bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > ../certs/sealed_secrets.crt
     ```
 
-1. Create a local copy of the `sysmgmt.yaml` file.
+1. Get the current cached `sysmgmt` manifest and save it into a `gitea.yaml` file.
 
     ```bash
-    ncn# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > sysmgmt.yaml
+    ncn# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > gitea.yaml
     ```
 
-1. Edit the `sysmgmt.yaml` to only include the `gitea` chart and all its current data.
+1. Run the following command to remove non-Gitea charts from the `gitea.yaml` file. This will also change the `metadata.name` so
+   that it does not overwrite the `sysmgmt.yaml` file that is stored in the `loftsman` namespace.
+
+   ```bash
+   ncn# for i in $(yq r gitea.yaml 'spec.charts[*].name' | grep -Ev '^gitea'); do yq d -i gitea.yaml  'spec.charts(name=='"$i"')'; done
+   ncn# yq w -i gitea.yaml metadata.name gitea
+   ncn# yq d -i gitea.yaml spec.sources
+   ncn# yq w -i gitea.yaml spec.sources.charts[0].location 'https://packages.local/repository/charts'
+   ncn# yq w -i gitea.yaml spec.sources.charts[0].name csm-algol60
+   ncn# yq w -i gitea.yaml spec.sources.charts[0].type repo
+   ```
+
+1. Example `gitea.yaml` after the command is run:
 
    Example:
 
@@ -165,21 +177,30 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
                   metadata:
                     annotations:
                       sealedsecrets.bitnami.com/cluster-wide: 'true'
+                      ...
+        sources:
+          charts:
+            - location: https://packages.local/repository/charts
+              name: csm-algol60
+              type: repo
     ...
     ```
 
 1. Generate the manifest that will be used to redeploy the chart with the modified resources.
 
     ```bash
-    ncn# manifestgen -c customizations.yaml -i sysmgmt.yaml -o manifest.yaml
+    ncn# manifestgen -c customizations.yaml -i gitea.yaml -o manifest.yaml
     ```
+
+1. Validate that the `manifest.yaml` file only contains chart information for Gitea, and that the sources chart location
+   points to `https://packages.local/repository/charts`.
 
 1. Re-apply the `gitea` Helm chart with the updated `customizations.yaml` file.
 
    This will update the `vcs-user-credentials` SealedSecret which will cause the SealedSecret controller to update the Secret.
 
     ```bash
-    ncn# loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ./manifest.yaml
+    ncn# loftsman ship --manifest-path ${PWD}/manifest.yaml
     ```
 
 1. Verify that the Secret has been updated.
