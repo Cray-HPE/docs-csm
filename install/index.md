@@ -106,7 +106,6 @@ sections, but there is also a general troubleshooting topic.
 
       See [Management Network User Guide](../operations/network/management_network/index.md)
 
-
       **Note**: If a reinstall of this software release is being done on this system and the management network switches
       have already been configured, then this topic could be skipped and instead move to
       [Collect MAC Addresses for NCNs](#collect_mac_addresses_for_ncns)
@@ -171,7 +170,7 @@ sections, but there is also a general troubleshooting topic.
 
       Now that all of the CSM services have been installed and the PIT node has been redeployed, administrative access
       can be prepared. This may include configuring Keycloak with a local Keycloak account or confirming Keycloak
-      is properly federating LDAP or other Identity Provider (IdP), initializing the 'cray' CLI for administrative
+      is properly federating LDAP or other Identity Provider (IdP), initializing the `cray` CLI for administrative
       commands, locking the management nodes from accidental actions such as firmware updates by FAS or power actions by
       CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization,and configuring the node BMCs (node
       controllers) for nodes in liquid cooled cabinets.
@@ -212,8 +211,7 @@ sections, but there is also a general troubleshooting topic.
       communicates with at once, or specific devices can be targeted for a firmware update.
 
       >**IMPORTANT:**
-      Before FAS can be used to update firmware, refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
-      on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for more information about how to install
+      Before FAS can be used to update firmware, refer to the [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.06`](http://www.hpe.com/support/ex-gsg-042120221040) for more information about how to install
       the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
       available. Once FAS is aware that new firmware is available, then see
       [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
@@ -225,7 +223,7 @@ sections, but there is also a general troubleshooting topic.
       types have special preparation steps, but most compute nodes are ready to be used now.
 
       These compute node types require preparation.
-         * HPE Apollo 6500 XL645d Gen10 Plus
+         * HPE Apollo 6500 XL645D Gen10 Plus
          * Gigabyte
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
@@ -234,8 +232,9 @@ sections, but there is also a general troubleshooting topic.
    1. Next Topic
 
       After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
-      been fully installed and configured. Refer to the _HPE Cray EX System Software Getting Started Guide S-8000_
-      on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for more information on other product streams to be installed and configured after CSM.
+      been fully installed and configured.
+      Refer to the [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.06`](http://www.hpe.com/support/ex-gsg-042120221040) on the HPE Customer Support Center
+      for more information on other product streams to be installed and configured after CSM.
    <a name="troubleshooting_installation"></a>
 
    1. Troubleshooting Installation Problems
