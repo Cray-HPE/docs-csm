@@ -162,33 +162,43 @@ def main(
     )
 
     xname_pattern = re.compile('^x([0-9]{1,4})c([0-7])s([0-9]+)b([0-9]+)n([0-9]+)h([0-3])$') # HSN Node NIC xXcCsSbBnNhH
+
     hsn_reservations = hsn_subnet.reservations().values()
-    hsn_xname_used = len([r for r in hsn_reservations if xname_pattern.match(r.name())]) + 1
-    click.secho(
-        f"INFO:  The HSN {hsn_ipv4_network} supports {hsn_size} addresses "
-        f"of which {hsn_xname_used} are currently for HSN Node NICs.",
-        fg="bright_white"
-    )
+    hsn_xnames = set([r.name() for r in hsn_reservations if xname_pattern.match(r.name())])
 
     chn_ipv4_network = chn_subnet.ipv4_network()
+    chn_xnames = set([r.name() for r in chn_subnet.reservations().values() if xname_pattern.match(r.name())])
     chn_size = chn_ipv4_network.num_addresses
     chn_used = len(chn_subnet.reservations()) + 1
+
+    hsn_to_be_added = hsn_xnames - chn_xnames   # xnames in hsn but not in chn (will be added to chn)
+    chn_to_be_removed = chn_xnames - hsn_xnames # xnames in chn but not in hsn (will be removed from chn)
+
+    chn_available_ips = chn_size - chn_used + len(chn_to_be_removed)
+    net_chn_add_count = len(hsn_to_be_added) - len(chn_to_be_removed)
     click.secho(
         f"INFO:  The CHN {chn_ipv4_network} supports {chn_size} addresses "
-        f"of which {chn_used} are currently used.",
+        f"of which {chn_used} are currently used. {len(hsn_to_be_added)} "
+        f"will be added and {len(chn_to_be_removed)} will be removed.",
         fg="bright_white"
     )
-
-    chn_available_ips = chn_size - chn_used
-    if chn_available_ips < hsn_xname_used:
+    if chn_available_ips < net_chn_add_count:
         click.secho(
-            f"ERROR:  The CHN with {chn_available_ips} IPs available is too small to add {hsn_xname_used} HSN IPs.\n"
+            f"ERROR:  The CHN with {chn_available_ips} IPs available is too small to add {net_chn_add_count} HSN IPs.\n"
             "        This can be for two reasons:\n"
             "        1. A NAT device is in place to provides HSN egress access for Computes.\n"
             "        2. The CHN size allocated during installation or upgrade is indeed to small and needs resizing.",
             fg="red"
         )
         sys.exit(1)
+
+    for xname in chn_to_be_removed:
+        if xname in chn_subnet.reservations():
+            click.secho(
+                f"    Removing {xname} from CHN because it is not in HSN",
+                fg="white"
+            )
+            del chn_subnet.reservations()[xname]
 
     for hsn_reservation in hsn_reservations:
         new_name = hsn_reservation.name()
@@ -198,6 +208,13 @@ def main(
                 fg="white"
             )
             continue
+        if new_name in chn_xnames:
+            click.secho(
+                f"    Skipping {new_name} because it is already in the CHN",
+                fg="white"
+            )
+            continue
+
         new_ipv4_address = next_free_ipv4_address(chn_subnet)
         click.secho(
             f"    Adding Reservation {new_name} {new_ipv4_address}",
@@ -209,6 +226,7 @@ def main(
                     new_name,
                     new_ipv4_address,
                     [],
+                    comment=None,
                 ),
             },
         )
