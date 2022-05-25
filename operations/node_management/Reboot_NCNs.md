@@ -216,25 +216,28 @@ Before rebooting NCNs:
 
         **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
 
-        To power off the node:
+        1. Power off the node.
 
-        1. ```bash
-           ncn# export USERNAME=root
-           ncn# export IPMI_PASSWORD=changeme
+           > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
+           ```bash
+           ncn# USERNAME=root
+           ncn# read -s IPMI_PASSWORD
+           ncn# export IPMI_PASSWORD
            ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
            ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
            ```
 
-            Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
+           Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
-        To power back on the node:
+        2. Power the node back on.
 
-        1. ```bash
-            ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-            ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
-            ```
+           ```bash
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+           ```
 
-        Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
+           Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
     1. Watch on the console until the node has successfully booted and the login prompt is reached.
 
@@ -297,6 +300,11 @@ Before rebooting NCNs:
 
          ```bash
          ncn-mw# kubectl describe pod -n user -lapp=slurmctld
+         ```
+
+         Example output:
+
+         ```text
          Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = 
          Unknown desc = failed to setup network for sandbox "82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545": 
          Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for 
@@ -305,6 +313,11 @@ Before rebooting NCNs:
 
          ```bash
          ncn-mw# kubectl describe pod -n user -lapp=slurmdbd
+         ```
+
+         Example output:
+
+         ```text
          Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code 
          = Unknown desc = failed to setup network for sandbox "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": 
          Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for 
@@ -378,34 +391,42 @@ Before rebooting NCNs:
 
         **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
 
-        To power off the node:
+        1. Power off the node.
 
-        1. ```bash
-           ncn-mw# export USERNAME=root
-           ncn-mw# export IPMI_PASSWORD=changeme
-           ncn-mw# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
-           ncn-mw# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+           > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
+           ```bash
+           ncn# USERNAME=root
+           ncn# read -s IPMI_PASSWORD
+           ncn# export IPMI_PASSWORD
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
            ```
 
-            Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
+           Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
-        To power back on the node:
+        2. Power the node back on.
 
-        1. ```bash
-            ncn-mw# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-            ncn-mw# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
-            ```
+           ```bash
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
+           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+           ```
 
-        Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
+           Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
     1. Watch on the console until the node has successfully booted and the login prompt is reached.
 
     1. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
 
-        ```bash
-        ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
-        BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
-        ```
+       ```bash
+       ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
+       ```
+
+       Example output:
+
+       ```text
+       BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
+       ```
 
     1. Retrieve the component name (xname) for the node being rebooted.
 
@@ -492,9 +513,12 @@ Before rebooting NCNs:
 
         To power off the node:
 
+        > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
         ```bash
-        ncn# export USERNAME=root
-        ncn# export IPMI_PASSWORD=changeme
+        ncn# USERNAME=root
+        ncn# read -s IPMI_PASSWORD
+        ncn# export IPMI_PASSWORD
         ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
         ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
         ```
@@ -515,8 +539,13 @@ Before rebooting NCNs:
     1. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
 
         ```bash
-        ncn-m# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
-        BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
+        ncn-m# egrep -o '^(BOOT_IMAGE|kernel)' /proc/cmdline
+        ```
+
+        Expected output for a disk boot is:
+
+        ```text
+        BOOT_IMAGE
         ```
 
     1. Retrieve the component name (xname) for the node being rebooted.
@@ -579,9 +608,12 @@ Before rebooting NCNs:
 
         Ensure the expected results are returned from the power status check before rebooting:
 
+        > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
         ```bash
-        external# export USERNAME=root
-        external# export IPMI_PASSWORD=changeme
+        external# USERNAME=root
+        external# read -s IPMI_PASSWORD
+        external# export IPMI_PASSWORD
         external# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
         ```
 
