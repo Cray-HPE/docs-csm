@@ -1,19 +1,20 @@
-# Validate Switch Configs
+# Validate Switch Configurations
 
 ## Prerequisites
 
-- SSH access to the switches or the running configuration file.
-- Generated switch configurations.
-    - [Generate Switch Config](generate_switch_configs.md)
-- CANU installed with version 1.1.11 or greater.
-  - Run `canu --version` to see version.
-  - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](update_canu_from_csm_tarball.md)
+* SSH access to the switches or the running configuration file.
+* Generated switch configurations.
+  * [Generate Switch Configurations](generate_switch_configs.md)
+* CANU installed with version 1.1.11 or greater.
+  * Run `canu --version` to see version.
+  * If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md)
 
 ## Compare CSM 1.2 switch configurations with running configurations
 
-Next compare the current running configuration with the generated configuration.
+Compare the current running configuration with the generated configuration.
 
-For the comparison, since we have pulled the configuration to our working directory we can compare the files locally. You can also have CANU pull the configuration from the switch by defining using the `--ip`, `--username`, and `--password` arguments.
+For the comparison, because we have pulled the configuration to our working directory we can compare the files locally. CANU
+can also pull the configuration from the switch by using the `--ip`, `--username`, and `--password` arguments.
 
 Example of CANU pulling configuration.
 
@@ -37,20 +38,28 @@ Please enter the vendor (Aruba, Dell, Mellanox): Aruba
 ncn# canu validate network config --csm 1.2 --running ./running/ --generated ./generated/
 ```
 
+CANU-generated switch configurations will not include any ports or devices not defined in the model. These were previously discussed in the
+"Validate the SHCD section" but include edge uplinks (CAN/CMN) and custom configurations applied by the customer. When looking at the generated
+configurations being applied against existing running configurations CANU will recommend removal of some critical configurations. It is vital
+that these devices and configurations be identified and protected. This can be accomplished in three ways:
 
-CANU-generated switch configurations will not include any ports or devices not defined in the model. These were previously discussed in the Validate the SHCD section but include edge uplinks (CAN/CMN) and custom configurations applied by the customer..  When looking at the generated configurations being applied against existing running configurations CANU will recommend removal of some critical configurations. It is vital that these devices and configurations be identified and protected. This can be accomplished in three ways:
+* Provide CANU validation of generated configurations against running configurations with an override or "blackout" configuration – a YAML file
+which tells CANU to ignore customer-specific configurations. The process of creating this file was previously described in the This file will be
+custom to every site and must be distributed with the analysis and configuration file bundle to be used in the future.
 
-* Provide CANU validation of generated configurations against running configurations with an override or "blackout" configuration – a yaml file which tells CANU to ignore customer-specific configurations. The process of creating this file was previously described in the This file will be custom to every site and must be distributed with the analysis and configuration file bundle to be used in the future.
+* Based on experienced networking knowledge, manually reorder the proposed upgrade configurations. This may require manual exclusion of required
+  configurations which the CANU analysis says to remove.
 
-* Based on experienced networking knowledge, manually reorder the proposed upgrade configurations. This may require manual exclusion of required configurations which the CANU analysis says to remove.
+* Some devices may be used by multiple sites and may not currently be in the CANU architecture and configuration. If a device type is more
+  universally used on several sites, then it should be added to the architectural and configuration definitions via the CANU code and
+  Pull Request (PR) process.
 
-* Some devices may be used by multiple sites and may not currently be in the CANU architecture and configuration. If a device type is more universally used on several sites, then it should be added to the architectural and configuration definitions via the CANU code and Pull Request (PR) process.
-
-Note:  A roadmap item for CANU is the ability to "inject" customer configurations into CANU and provide solid, repeatable configuration customization.
+Note: A roadmap item for CANU is the ability to "inject" customer configurations into CANU and provide solid, repeatable configuration customization.
 
 ## Analyze CSM 1.2 configuration upgrade
 
-Configuration updates depending on the current version of network configuration may be as easy as adding few lines or be complete rip & replace operation which may lead you to choosing to wipe the existing configuration or just simply adding few lines in the configuration.
+Configuration updates depending on the current version of network configuration may be as easy as adding few lines or be a complete "rip and replace"
+operation which may lead you to choosing to wipe the existing configuration or just simply adding few lines in the configuration.
 
 Always before making configuration changes, analyze the changes shown in the above configuration diff section.
 
@@ -58,11 +67,11 @@ Always before making configuration changes, analyze the changes shown in the abo
 
 ## Caveats and known issues
 
-- Mellanox and Dell support is limited.
-- Some configuration may need to be applied in a certain order.
-  - Example: `Customer VRF` needs to be applied before adding interfaces/routes to the VRF.
-- When applying certain configuration it may wipe out pre-existing configuration.
-  - An example of this would be adding a VRF to a port.
+* Mellanox and Dell support is limited.
+* Some configuration may need to be applied in a certain order.
+  * Example: `Customer VRF` needs to be applied before adding interfaces/routes to the VRF.
+* When applying certain configuration it may wipe out pre-existing configuration.
+  * An example of this would be adding a VRF to a port.
 
 For example:
 

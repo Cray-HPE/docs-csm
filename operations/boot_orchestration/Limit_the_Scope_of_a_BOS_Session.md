@@ -25,5 +25,5 @@ The table below helps demonstrate the logic used with the --limit parameter and 
 |Excluding groups|group1,!group2|Nodes in group1 but not in group2|
 |Intersection of groups|group1,&group2|Nodes in both group1 and group2|
 
-The `--limit` parameter for BOS works similarly to the `--ansible-limit` parameter for CFS, as well as the `--limit` parameter for Ansible. Some limitations do apply for those familiar with the Ansible syntax. BOS accepts only a comma-separated list, not colons, and does not support regex in the patterns.
+The `--limit` parameter for BOS works similarly to the `--ansible-limit` parameter for CFS, as well as the `--limit` parameter for Ansible. Some limitations do apply for those familiar with the Ansible syntax. BOS accepts only a comma-separated list, not colons, and does not support regular expressions in the patterns. For more information on what it means to provide a limit, see [Specifying Hosts and Groups](../configuration_management/Specifying_Hosts_and_Groups.md).
 

@@ -8,22 +8,23 @@ These steps provide a bootable USB with SSH enabled, capable of installing this 
 
 ## Topics
 
-1. [Download and Expand the CSM Release](#download-and-expand-the-csm-release)
-1. [Create the Bootable Media](#create-the-bootable-media)
-1. [Configuration Payload](#configuration-payload)
-   1. [Generate Installation Files](#generate-installation-files)
-      * [Subsequent Installs (Reinstalls)](#subsequent-fresh-installs-re-installs)
-      * [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal)
-   1. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
-   1. [Prepare Site Init](#prepare-site-init)
-1. [Prepopulate LiveCD Daemons Configuration and NCN Artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
+1. [Download and expand the CSM release](#download-and-expand-the-csm-release)
+1. [Create the bootable media](#create-the-bootable-media)
+1. [Configuration payload](#configuration-payload)
+   1. [Generate installation files](#generate-installation-files)
+      * [Subsequent installs (reinstalls)](#subsequent-fresh-installs-re-installs)
+      * [Initial installs (bare-metal)](#first-timeinitial-installs-bare-metal)
+   1. [Verify and backup `system_config.yaml`](#verify-csi-versions-match)
+   1. [Prepare `Site Init`](#prepare-site-init)
+1. [Prepopulate LiveCD daemons configuration and NCN artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
 1. [Boot the LiveCD](#boot-the-livecd)
-   1. [First Login](#first-login)
-1. [Configure the Running LiveCD](#configure-the-running-livecd)
-1. [Next Topic](#next-topic)
+   1. [First login](#first-login)
+1. [Configure the running LiveCD](#configure-the-running-livecd)
+1. [Next topic](#next-topic)
 
 <a name="download-and-expand-the-csm-release"></a>
-## 1. Download and Expand the CSM Release
+
+## 1. Download and expand the CSM release
 
 Fetch the base installation CSM tarball, extract it, and install the contained CSI tool.
 
@@ -73,11 +74,10 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 
    The ISO and other files are now available in the directory from the extracted CSM tarball.
 
-<a name="install-csi-rpm"></a>
-1. Install the latest version of CSI tool.
+1. <a name="install-csi-rpm"></a>Install the latest version of CSI tool.
 
    ```bash
-   linux# rpm -Uvh $(find ${CSM_PATH}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
+   linux# rpm -Uvh --force $(find ${CSM_PATH}/rpm/cray/csm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
 
 1. Install the latest documentation RPM.
@@ -92,7 +92,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 
    Expected output looks similar to the following:
 
-   ```
+   ```text
    CRAY-Site-Init build signature...
    Build Commit   : b3ed3046a460d804eb545d21a362b3a5c7d517a3-release-shasta-1.4
    Build Time     : 2021-02-04T21:05:32Z
@@ -100,7 +100,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
    Git Version    : b3ed3046a460d804eb545d21a362b3a5c7d517a3
    Platform       : linux/amd64
    App. Version   : 1.5.18
-    ```
+   ```
 
 1. Configure `zypper` with the `embedded` repository from the CSM release.
 
@@ -148,13 +148,13 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 
 1. Remove CNI configuration from prior install
 
-    If you are reinstalling the system and you are **using ncn-m001 to prepare the USB image**, remove some of prior CNI configuration.
+    If reinstalling the system and **using `ncn-m001` to prepare the USB image**, then remove the prior CNI configuration.
 
     ```bash
     ncn-m001# rm -rf /etc/cni/net.d/00-multus.conf /etc/cni/net.d/10-*.conflist /etc/cni/net.d/multus.d
     ```
 
-    This should leave you with the following two files in `/etc/cni/net.d`.
+    This should leave the following two files in `/etc/cni/net.d`.
 
     ```bash
     ncn-m001# ls /etc/cni/net.d
@@ -162,10 +162,10 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
     ```
 
 <a name="create-the-bootable-media"></a>
-## 2. Create the Bootable Media
 
-Cray Site Init will create the bootable LiveCD. Before creating the media, identify
-which device will be used for it.
+## 2. Create the bootable media
+
+Before creating the the bootable LiveCD, identify which device will be used for it.
 
 1. Identify the USB device.
 
@@ -176,7 +176,8 @@ which device will be used for it.
     ```
 
     Expected output looks similar to the following:
-    ```
+
+    ```text
     [6:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sda
     [7:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sdb
     [8:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sdc
@@ -184,7 +185,7 @@ which device will be used for it.
     [14:0:0:1]   enclosu SanDisk  SES Device       1012  -
     ```
 
-    In the above example, we can see our internal disks as the `ATA` devices and our USB as the `disk` or `enclosu` device. Because the `SanDisk` fits the profile we are looking for, we are going to use `/dev/sdd` as our disk.
+    In the above example, internal disks are the `ATA` devices and USB drives are final two devices.
 
     Set a variable with your disk to avoid mistakes:
 
@@ -192,7 +193,7 @@ which device will be used for it.
     linux# USB=/dev/sd<disk_letter>
     ```
 
-1. Format the USB device
+1. Format the USB device.
 
     * On Linux, use the CSI application to do this:
 
@@ -200,17 +201,19 @@ which device will be used for it.
         linux# csi pit format ${USB} ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
         ```
 
-        > **Note:** If the previous command fails with the following error message, it indicates that this Linux computer does not have the checkmedia RPM installed. In that case, the RPM can be installed and `csi pit format` can be run again
-        > ```
+        > **Note:** If the previous command fails with the following error message, it indicates that this Linux computer does not have the `checkmedia` RPM installed.
+        > In that case, install the RPM and run `csi pit format` again.
+        >
+        > ```text
         > ERROR: Unable to validate ISO. Please install checkmedia
         > ```
         >
-        >   1.  Install the missing RPMs
+        > 1. Install the missing RPMs
         >
-        >   ```bash
-        >   linux# zypper in --repo ${CSM_RELEASE}-embedded -y libmediacheck5 checkmedia
-        >   linux# csi pit format ${USB} ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
-        >   ```
+        > ```bash
+        > linux# zypper in --repo ${CSM_RELEASE}-embedded -y libmediacheck5 checkmedia
+        > linux# csi pit format ${USB} ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+        > ```
 
     * On MacOS, use the `write-livecd.sh` script to do this.
 
@@ -231,49 +234,62 @@ which device will be used for it.
            mkdir -pv ${PITDATA}/configs ${PITDATA}/prep/{admin,logs} ${PITDATA}/data/{ceph,k8s}
     ```
 
-1.  Copy and extract the tarball into the USB:
+1. Copy and extract the tarball into the USB.
+
     ```bash
     linux# cp -v ${CSM_PATH}.tar.gz ${PITDATA} &&
            tar -zxvf ${CSM_PATH}.tar.gz -C ${PITDATA}/
     ```
 
-The USB device is now bootable and contains the CSM artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue onto the [configuration payload](#configuration-payload).
+The USB device is now bootable and contains the CSM artifacts. This may be useful for internal or quick usage. Administrators seeking a Shasta installation must continue
+on to the [configuration payload](#configuration-payload).
 
 <a name="configuration-payload"></a>
-## 3. Configuration Payload
 
-The SHASTA-CFG structure and other configuration files will be prepared, then `csi` will generate a system-unique configuration payload. This payload will be used for the rest of the CSM installation on the USB device.
+## 3. Configuration payload
+
+The `SHASTA-CFG` structure and other configuration files will be prepared, then `csi` will generate a system-unique configuration payload.
+This payload will be used for the rest of the CSM installation on the USB device.
 
 1. [Generate Installation Files](#generate-installation-files)
-1. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
-1. [Prepare Site Init](#prepare-site-init)
+2. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
+3. [Prepare `Site Init`](#prepare-site-init)
 
 <a name="generate-installation-files"></a>
-### 3.1 Generate Installation Files
 
-Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if one has not already prepared the information for this system.
+### 3.1 Generate installation files
 
-   * [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload)
-   * [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files)
+Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if the
+information for this system has not yet been prepared.
 
-> **Note:**: The USB device is usable at this time, but without SSH enabled as well as core services. This means the USB device could be used to boot the system now, and a user can return to this step at another time.
+* [Command line configuration payload](prepare_configuration_payload.md#command_line_configuration_payload)
+* [Configuration payload files](prepare_configuration_payload.md#configuration_payload_files)
+
+> **Note:**: The USB device is usable at this time, but without SSH enabled as well as core services. This means the USB device could be used to boot the system now, and
+> this step can be returned to at another time.
 
 1. At this time see [Create HMN Connections JSON](create_hmn_connections_json.md) for instructions about creating the `hmn_connections.json`.
 
-1. Pull these files into the current working directory, or create them if this is a first-time/initial install:
+1. Create the configuration input files if needed and copy them into the preparation directory.
 
-   - `application_node_config.yaml` (optional - see below)
-   - `cabinets.yaml` (optional - see below)
-   - `hmn_connections.json`
-   - `ncn_metadata.csv`
-   - `switch_metadata.csv`
-   - `system_config.yaml` (only available after [first-install generation of system files](#first-timeinitial-installs-bare-metal)
+   The preparation directory is `${PITDATA}/prep`.
 
-   > The optional `application_node_config.yaml` file may be provided for further definition of settings relating to how application nodes will appear in HSM for roles and subroles. See [Create Application Node YAML](create_application_node_config_yaml.md)
+   Copy these files into the preparation directory, or create them if this is an initial install of the system:
 
+   * `application_node_config.yaml` (optional - see below)
+   * `cabinets.yaml` (optional - see below)
+   * `hmn_connections.json`
+   * `ncn_metadata.csv`
+   * `switch_metadata.csv`
+   * `system_config.yaml` (only available after [first-install generation of system files](#first-timeinitial-installs-bare-metal))
+
+   > The optional `application_node_config.yaml` file may be provided for further definition of settings relating to how application nodes will appear in HSM for roles and subroles.
+   > See [Create Application Node YAML](create_application_node_config_yaml.md)
+   >
    > The optional `cabinets.yaml` file allows cabinet naming and numbering as well as some VLAN overrides. See [Create Cabinets YAML](create_cabinets_yaml.md).
-
-   > The `system_config.yaml` file is generated by the `csi` tool during the first install of a system, and can later be used for reinstalls of the system. For the initial install, the information in it must be provided as command line arguments to `csi config init`.
+   >
+   > The `system_config.yaml` file is generated by the `csi` tool during the first install of a system, and can later be used for reinstalls of the system. For the initial install,
+   > the information in it must be provided as command line arguments to `csi config init`.
 
 1. Proceed to the appropriate next step.
 
@@ -281,66 +297,13 @@ Some files are needed for generating the configuration payload. See these topics
    * If this is a reinstall of the system, then proceed to [Subsequent Installs (Re-Installs)](#subsequent-fresh-installs-re-installs).
 
 <a name="subsequent-fresh-installs-re-installs"></a>
-#### 3.1.a Subsequent Installs (Reinstalls)
 
-1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
+#### 3.1.a Subsequent installs (reinstalls)
 
-   > **SKIP STEP IF** if the `system_config.yaml` file is unavailable please skip this step and move onto the next one in order to generate the first configuration payload.
+1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration
+   (see [Cray `Site Init` Files](../background/index.md#cray_site_init_files)).
 
-   1. Check for the configuration files. The needed files should be in the preperation directory.
-
-      ```bash
-      linux# ls -1 ${PITDATA}/prep
-      ```
-
-      Expected output looks similar to the following:
-
-      ```
-      application_node_config.yaml
-      cabinets.yaml
-      hmn_connections.json
-      ncn_metadata.csv
-      switch_metadata.csv
-      system_config.yaml
-      ```
-
-   1. Generate the system configuration
-
-      > **Note:** Ensure that you select a reachable NTP pool/server passed in using the `--ntp-pools`/`--ntp-servers` flags, respectively. Adding an unreachable server can cause clock skew as chrony tries to continually reach out to a server it can never reach.
-
-      ```bash
-      linux# cd ${PITDATA}/prep && csi config init
-      ```
-
-      A new directory matching the `system-name` field in `system_config.yaml` will now exist in the working directory.
-
-      > **Note:** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
-      >
-      > * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
-      >    ```
-       >   "Couldn't find switch port for NCN: x3000c0s1b0"
-      >    ```
-      >
-      > * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
-      >
-      >    ```json
-      >    {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
-      >    {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
-      >    ```
-      >
-      > * If a cooling door is found in `hmn_connections.json`, there may be a message like the following. It can be safely ignored.
-      >
-      >    ```json
-      >    {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
-      >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
-      >    ```
-
-   1. Skip the next step and continue to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
-
-<a name="first-timeinitial-installs-bare-metal"></a>
-#### 3.1.b Initial Installs (bare-metal)
-
-1. **For first-time/initial installs (without a `system_config.yaml`file)**, generate the system configuration. See below for an explanation of the command line parameters and some common settings.
+   > **Warning:** If the `system_config.yaml` file is unavailable, then skip this step and proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
 
    1. Check for the configuration files. The needed files should be in the preparation directory.
 
@@ -350,71 +313,37 @@ Some files are needed for generating the configuration payload. See these topics
 
       Expected output looks similar to the following:
 
-      ```
+      ```text
       application_node_config.yaml
       cabinets.yaml
       hmn_connections.json
       ncn_metadata.csv
       switch_metadata.csv
+      system_config.yaml
       ```
 
-   1. Generate the system config:
-      > **Note:** the provided command below is an **example only**, run `csi config init --help` to print a full list of parameters that must be set. These will vary significatnly depending on ones system and site configuration.
+   2. Generate the system configuration.
+
+      > **Note:** Ensure that you specify a reachable NTP pool or server using the `ntp-pools` or `ntp-servers` fields, respectively. Adding an unreachable server can
+      > cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
 
       ```bash
-      linux# cd ${PITDATA}/prep && csi config init \
-          --bootstrap-ncn-bmc-user root \
-          --bootstrap-ncn-bmc-pass ${IPMI_PASSWORD} \
-          --system-name ${SYSTEM_NAME} \
-          --can-cidr 10.103.11.0/24 \
-          --cmn-cidr 10.103.11.0/24 \
-          --can-external-dns 10.103.11.113 \
-          --can-gateway 10.103.11.1 \
-          --cmn-gateway 10.103.11.1 \
-          --can-static-pool 10.103.11.112/28 \
-          --can-dynamic-pool 10.103.11.128/25 \
-          --nmn-cidr 10.252.0.0/17 \
-          --hmn-cidr 10.254.0.0/17 \
-          --ntp-pools time.nist.gov \
-          --site-domain dev.cray.com \
-          --site-ip 172.30.53.79/20 \
-          --site-gw 172.30.48.1 \
-          --site-nic p1p2 \
-          --site-dns 172.30.84.40 \
-          --install-ncn-bond-members p1p1,p10p1 \
-          --application-node-config-yaml application_node_config.yaml \
-          --cabinets-yaml cabinets.yaml \
-          --hmn-mtn-cidr 10.104.0.0/17 \
-          --nmn-mtn-cidr 10.100.0.0/17 \
+      linux# cd ${PITDATA}/prep && csi config init
       ```
 
-      A new directory matching the `--system-name` argument will now exist in the working directory.
+      A new directory matching the `system-name` field in `system_config.yaml` will now exist in the working directory.
 
-      > **Important:** After generating a configuration, a visual audit of the generated files for network data should be performed.
-
-      > **Special Notes:** Certain parameters to `csi config init` may be hard to grasp on first-time configuration generations:
+      > **Note:** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
       >
-      > * The `application_node_config.yaml` file is optional, but if one has one describing the mapping between prefixes in `hmn_connections.csv` that should be mapped to HSM subroles, one needs to include a command line option to have it used. See [Create Application Node YAML](create_application_node_config_yaml.md).
-      > * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management NCNs.
-      > * Set site parameters (`site-domain`, `site-ip`, `site-gw`, `site-nic`, `site-dns`) for the information which connects `ncn-m001` (the PIT node) to the site. The `site-nic` is the interface on this node connected to the site.
-      > * There are other interfaces possible, but the `install-ncn-bond-members` are typically:
-      >    * `p1p1,p10p1` for HPE nodes
-      >    * `p1p1,p1p2` for Gigabyte nodes
-      >    * `p801p1,p801p2` for Intel nodes
-      > * If not using a `cabinets-yaml` file, set the three cabinet parameters (`mountain-cabinets`, `hill-cabinets`, and `river-cabinets`) to the number of each cabinet which are part of this system.
-      > * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help`
-      > * For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file. This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the id of every cabinet in the system. If one are using a `cabinets-yaml` file, flags specified on the `csi` command-line related to cabinets will be ignored. See [Create Cabinets YAML](create_cabinets_yaml.md).
-      > * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
-
-      > **Ignorable Warnings:** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored:
+      > * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other
+      >   management NCNs. It can be ignored.
       >
-      > * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other management NCNs. It can be ignored.
-      >
-      >    ```
+      >    ```text
       >    "Couldn't find switch port for NCN: x3000c0s1b0"
       >    ```
       >
-      > * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml` file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md)
+      > * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml`
+      >   file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md).
       >
       >    ```json
       >    {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
@@ -428,10 +357,104 @@ Some files are needed for generating the configuration payload. See these topics
       >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >    ```
 
+   3. Skip the next step and continue to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
+
+<a name="first-timeinitial-installs-bare-metal"></a>
+
+#### 3.1.b Initial installs (bare-metal)
+
+1. **For first-time/initial installs (without a `system_config.yaml`file)**, generate the system configuration. See below for an explanation of the command line parameters and
+   some common settings.
+
+   1. Check for the configuration files. The needed files should be in the preparation directory.
+
+      ```bash
+      linux# ls -1 ${PITDATA}/prep
+      ```
+
+      Expected output looks similar to the following:
+
+      ```text
+      application_node_config.yaml
+      cabinets.yaml
+      hmn_connections.json
+      ncn_metadata.csv
+      switch_metadata.csv
+      ```
+
+   1. Generate the system configuration.
+
+      > **Notes:**
+      >
+      > * Run `csi config init --help` to print a full list of parameters that must be set. These will vary
+      >   significantly depending on the system and site configuration.
+      > * Ensure that you specify a reachable NTP pool or server using the `--ntp-pools` or `--ntp-servers` flags, respectively. Adding an unreachable server can
+      >   cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
+
+      ```bash
+      linux# cd ${PITDATA}/prep && csi config init <options>
+      ```
+
+      A new directory matching the `--system-name` argument will now exist in the working directory.
+
+      > **Important:** After generating a configuration, a visual audit of the generated files for network data should be performed.
+      >
+      > **Special Notes:** Certain parameters to `csi config init` may be hard to grasp on first-time configuration generations:
+      >
+      > * The optional `application_node_config.yaml` file is used to map prefixes in `hmn_connections.csv` to HSM subroles. A
+      >   command line option is required in order for `csi` to use the file. See [Create Application Node YAML](create_application_node_config_yaml.md).
+      > * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management NCNs.
+      > * Set site parameters (`site-domain`, `site-ip`, `site-gw`, `site-nic`, `site-dns`) for the network information which connects `ncn-m001` (the PIT node) to the site.
+      >   The `site-nic` is the interface on `ncn-m001` that is connected to the site network.
+      > * There are other interfaces possible, but the `install-ncn-bond-members` are typically:
+      >   * `p1p1,p10p1` for HPE nodes
+      >   * `p1p1,p1p2` for Gigabyte nodes
+      >   * `p801p1,p801p2` for Intel nodes
+      > * If not using a `cabinets-yaml` file, then set the three cabinet parameters (`mountain-cabinets`, `hill-cabinets`, and `river-cabinets`) to the quantity of each cabinet
+      >   type included in this system.
+      > * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help`.
+      > * For systems that use non-sequential cabinet ID numbers, use the `cabinets-yaml` argument to include the `cabinets.yaml` file. This file gives the ability to
+      >   explicitly specify the ID of every cabinet in the system. When specifying a `cabinets.yaml` file with the `cabinets-yaml` argument, other command line arguments related to
+      >   cabinets will be ignored by `csi`. See [Create Cabinets YAML](create_cabinets_yaml.md).
+      > * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
+      >
+      > **Note:** These warnings from `csi config init` for issues in `hmn_connections.json` can be ignored.
+      >
+      > * The node with the external connection (`ncn-m001`) will have a warning similar to this because its BMC is connected to the site and not the HMN like the other
+      >   management NCNs. It can be ignored.
+      >
+      >    ```text
+      >    "Couldn't find switch port for NCN: x3000c0s1b0"
+      >    ```
+      >
+      > * An unexpected component may have this message. If this component is an application node with an unusual prefix, it should be added to the `application_node_config.yaml`
+      >   file. Then rerun `csi config init`. See the procedure to [Create Application Node Config YAML](create_application_node_config_yaml.md).
+      >
+      >    ```json
+      >    {"level":"warn","ts":1610405168.8705149,"msg":"Found unknown source prefix! If this is expected to be an Application node, please update application_node_config.yaml","row":
+      >    {"Source":"gateway01","SourceRack":"x3000","SourceLocation":"u33","DestinationRack":"x3002","DestinationLocation":"u48","DestinationPort":"j29"}}
+      >    ```
+      >
+      > * If a cooling door is found in `hmn_connections.json`, there may be a message like the following. It can be safely ignored.
+      >
+      >    ```json
+      >    {"level":"warn","ts":1612552159.2962296,"msg":"Cooling door found, but xname does not yet exist for cooling doors!","row":
+      >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
+      >    ```
+
+   1. Link the generated `system_config.yaml` file into the `prep/` directory. This is needed for `pit-init` to find and resolve the file.
+
+      > **`NOTE`** This step is needed only for fresh installs where `system_config.yaml` is missing from the `prep/` directory.
+
+      ```bash
+      pit# cd ${PITDATA}/prep && ln ${SYSTEM_NAME}/system_config.yaml
+      ```
+
    1. Continue to the next step to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
 
 <a name="verify-csi-versions-match"></a>
-### 3.2 Verify and Backup `system_config.yaml`
+
+### 3.2 Verify and backup `system_config.yaml`
 
 1. Verify that the newly generated `system_config.yaml` matches the current version of CSI.
 
@@ -451,12 +474,14 @@ Some files are needed for generating the configuration payload. See these topics
 
 1. Copy the new `system_config.yaml` file somewhere safe to facilitate re-installs.
 
-1. Continue to the next step to [prepare site init](#prepare-site-init).
+1. Continue to the next step to [Prepare `Site Init`](#prepare-site-init).
 
 <a name="prepare-site-init"></a>
-### 3.3 Prepare Site Init
 
-> **Note:**: It is assumed at this point that `$PITDATA` (that is, `/mnt/pitdata`) is still mounted on the Linux system. This is important because the following procedure depends on that mount existing.
+### 3.3 Prepare `Site Init`
+
+> **Note:**: It is assumed at this point that `$PITDATA` (that is, `/mnt/pitdata`) is still mounted on the Linux system. This is important because the following procedure
+> depends on that mount existing.
 
 1. Install Git if not already installed (recommended).
 
@@ -464,30 +489,25 @@ Some files are needed for generating the configuration payload. See these topics
    `site-init` directory recommend persisting `site-init` files in a Git
    repository.
 
-1. Prepare the `site-init` directory.
+2. Prepare the `site-init` directory.
 
-   Perform the [Prepare Site Init](prepare_site_init.md) procedures.
+   Perform the [Prepare `Site Init`](prepare_site_init.md) procedures.
 
 <a name="prepopulate-livecd-daemons-configuration-and-ncn-artifacts"></a>
-## 4. Prepopulate LiveCD Daemons Configuration and NCN Artifacts
+
+## 4. Prepopulate LiveCD daemons configuration and NCN artifacts
 
 Now that the configuration is generated, the LiveCD must be populated with the generated files.
-
-1. Set system name and enter prep directory.
-
-    ```bash
-    linux# cd ${PITDATA}/prep
-    ```
 
 1. Use CSI to populate the LiveCD with networking files so SSH will work on the first boot.
 
    ```bash
-   linux# csi pit populate cow /mnt/cow/ ${SYSTEM_NAME}/
+   linux# cd ${PITDATA}/prep && csi pit populate cow /mnt/cow/ ${SYSTEM_NAME}/
    ```
 
    Expected output looks similar to the following:
 
-   ```
+   ```text
    config------------------------> /mnt/cow/rw/etc/sysconfig/network/config...OK
    ifcfg-bond0-------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-bond0...OK
    ifcfg-lan0--------------------> /mnt/cow/rw/etc/sysconfig/network/ifcfg-lan0...OK
@@ -506,7 +526,7 @@ Now that the configuration is generated, the LiveCD must be populated with the g
    conman.conf-------------------> /mnt/cow/rw/etc/conman.conf...OK
    ```
 
-1. Set the hostname and print it into the hostname file.
+1. Set the hostname and print it into the `hostname` file.
 
    > **Note:** Do not confuse other administrators by naming the LiveCD `ncn-m001`. Append the `-pit` suffix,
    > indicating that the node is booted from the LiveCD.
@@ -548,7 +568,7 @@ Now that the configuration is generated, the LiveCD must be populated with the g
 
        Expected output looks similar to the following:
 
-       ```
+       ```text
        5.3.18-24.37-default-0.0.6.kernel-----------------> /mnt/pitdata/data/k8s/...OK
        initrd.img-0.0.6.xz-------------------------------> /mnt/pitdata/data/k8s/...OK
        kubernetes-0.0.6.squashfs-------------------------> /mnt/pitdata/data/k8s/...OK
@@ -562,7 +582,7 @@ Now that the configuration is generated, the LiveCD must be populated with the g
 
        Expected output looks similar to the following:
 
-       ```
+       ```text
        5.3.18-24.37-default-0.0.5.kernel-----------------> /mnt/pitdata/data/ceph/...OK
        initrd.img-0.0.5.xz-------------------------------> /mnt/pitdata/data/ceph/...OK
        storage-ceph-0.0.5.squashfs-----------------------> /mnt/pitdata/data/ceph/...OK
@@ -578,7 +598,7 @@ Now that the configuration is generated, the LiveCD must be populated with the g
 1. Unmount the data partition:
 
     ```bash
-    linux# cd; umount -v /mnt/pitdata
+    linux# cd ~ && umount -v /mnt/pitdata
     ```
 
 1. Move the USB device to the system to be installed, if needed.
@@ -589,6 +609,7 @@ Now that the configuration is generated, the LiveCD must be populated with the g
 1. Proceed to the next step to boot into the LiveCD image.
 
 <a name="boot-the-livecd"></a>
+
 ## 5. Boot the LiveCD
 
 Some systems will boot the USB device automatically if no other OS exists (bare-metal). Otherwise the
@@ -639,19 +660,20 @@ boot order to have the USB device first.
    > **An integrity check** runs before Linux starts by default; it can be skipped by selecting `OK` in its prompt.
 
 <a name="first-login"></a>
-### 5.1 First Login
+
+### 5.1 First login
 
 On first log in (over SSH or at local console), the LiveCD will prompt the administrator to change the password.
 
 1. **The initial password is empty**; enter the username of `root` and press `return` twice.
 
-   ```
+   ```text
    pit login: root
    ```
 
    Expected output looks similar to the following:
 
-   ```
+   ```text
    Password:           <-------just press Enter here for a blank password
    You are required to change your password immediately (administrator enforced)
    Changing password for root.
@@ -661,7 +683,8 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    Welcome to the CRAY Pre-Install Toolkit (LiveOS)
    ```
 
-   > **Note:** If this password ever becomes lost or forgotten, one may reset it by mounting the USB device on another computer. See [Reset root Password on LiveCD](reset_root_password_on_LiveCD.md) for information on clearing the password.
+   > **Note:** If this password ever becomes lost or forgotten, one may reset it by mounting the USB device on another computer. See
+   > [Reset root Password on LiveCD](reset_root_password_on_LiveCD.md) for information on clearing the password.
 
 1. Disconnect from IPMI console.
 
@@ -691,14 +714,14 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    need to mount this manually by running the following command.
 
    > **Note:** When creating the USB PIT image, this was mounted over `/mnt/pitdata`. Now that the USB PIT is booted,
-   > it will mount over `/var/www/ephemeral`. The FSLabel `PITDATA` is already in `/etc/fstab`, so the path is omitted
-   > in the following call to `mount`.
+   > it will mount over `/var/www/ephemeral`. The `FSLabel` `PITDATA` is already in `/etc/fstab`, so the path is omitted
+   > in the following `mount` command.
 
    ```bash
    pit# mount -vL PITDATA
    ```
 
-1. Set new environment variables and save them to `/etc/environment`
+1. Set new environment variables and save them to `/etc/environment`.
 
    ```bash
    pit# PITDATA=$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)
@@ -729,16 +752,18 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    pit# cp -v /root/boot.livecd.*.txt ${PITDATA}/prep/admin
    ```
 
-1. Check hostname.
+1. Check the hostname.
 
    ```bash
    pit# hostnamectl
    ```
 
-   > **Note:** The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#`
-   > in the documentation command prompts from this point onward.
-
-   > **Note:** If the hostname returned by the `hostnamectl` command is `pit`, then set the hostname manually with `hostnamectl`. In that case, be sure to append the `-pit` suffix to prevent masquerading a PIT node as a real NCN to administrators and automation.
+   > **Note:**
+   >
+   > * The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#`
+   >   in the documentation command prompts from this point onward.
+   > * If the hostname returned by the `hostnamectl` command is `pit`, then set the hostname manually with `hostnamectl`. In that case, do not confuse other administrators
+   >   by using the hostname `ncn-m001`. Append the `-pit` suffix, indicating that the node is booted from the LiveCD.
 
 1. Install the latest documentation RPM.
 
@@ -756,7 +781,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
 
    Expected output looks similar to the following:
 
-   ```
+   ```text
    = PIT Identification = COPY/CUT START =======================================
    VERSION=1.5.7
    TIMESTAMP=20211028194247
@@ -776,7 +801,8 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    ```
 
 <a name="configure-the-running-livecd"></a>
-## 6. Configure the Running LiveCD
+
+## 6. Configure the running LiveCD
 
 1. Set and export BMC credential variables.
 
@@ -812,7 +838,8 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    ```
 
 <a name="next-topic"></a>
-## Next Topic
+
+## Next topic
 
 After completing this procedure, proceed to configure the management network switches.
 

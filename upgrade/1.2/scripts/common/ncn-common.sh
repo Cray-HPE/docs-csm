@@ -31,7 +31,7 @@ touch /etc/cray/upgrade/csm/myenv
 . /etc/cray/upgrade/csm/myenv
 
 if [[ -z ${LOG_FILE} ]]; then
-    export LOG_FILE="$(pwd)/output.log"
+    export LOG_FILE="/root/output.log"
     echo
     echo
     echo " ************"

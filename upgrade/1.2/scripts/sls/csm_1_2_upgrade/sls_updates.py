@@ -98,6 +98,7 @@ def sls_and_input_data_checks(
                 "Using [default: 5, 10.104.7.0/24]",
                 fg="bright_yellow",
             )
+
     nmn = networks.get("NMN")
     if nmn is not None:
         if None not in nmn.bgp():
@@ -121,29 +122,30 @@ def sls_and_input_data_checks(
         )
 
     # Old CAN migrates to CMN.  New CAN must not have overlaps.
-    old_can_vlan = can.subnets().get("bootstrap_dhcp").vlan()
-    old_can_net = can.subnets().get("bootstrap_dhcp").ipv4_network()
-    new_can_vlan = can_data[0]
-    new_can_net = can_data[1]
-    overlap_errors = False
-    if old_can_vlan == new_can_vlan:
-        click.secho(
-            f"    ERROR: New CMN VLAN {old_can_vlan} overlaps with New CAN VLAN {new_can_vlan}.\n"
-            "         Please correct the --customer-access-network input values on the command line.",
-            fg="red",
-        )
-        overlap_errors = True
+    if cmn is None:
+        old_can_vlan = can.subnets().get("bootstrap_dhcp").vlan()
+        old_can_net = can.subnets().get("bootstrap_dhcp").ipv4_network()
+        new_can_vlan = can_data[0]
+        new_can_net = can_data[1]
+        overlap_errors = False
+        if old_can_vlan == new_can_vlan:
+            click.secho(
+                f"    ERROR: New CMN VLAN {old_can_vlan} overlaps with New CAN VLAN {new_can_vlan}.\n"
+                "         Please correct the --customer-access-network input values on the command line.",
+                fg="red",
+            )
+            overlap_errors = True
 
-    if old_can_net.overlaps(new_can_net):
-        click.secho(
-            f"    ERROR: New CMN Network {old_can_net} overlaps with New CAN Network {new_can_net}.\n"
-            "         Please correct the --customer-access-network input values on the command line.",
-            fg="red",
-        )
-        overlap_errors = True
+        if old_can_net.overlaps(new_can_net):
+            click.secho(
+                f"    ERROR: New CMN Network {old_can_net} overlaps with New CAN Network {new_can_net}.\n"
+                "         Please correct the --customer-access-network input values on the command line.",
+                fg="red",
+            )
+            overlap_errors = True
 
-    if overlap_errors:
-        sys.exit(1)
+        if overlap_errors:
+            sys.exit(1)
 
 
 def migrate_switch_names(networks, hardware):
@@ -225,15 +227,20 @@ def remove_api_gw_from_hmnlb_reservations(networks):
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
     """
+    click.secho(
+        f"Removing any api-gw aliases from HMNLB.",
+        fg="bright_white",
+    )
     network = "HMNLB"
     subnet = "hmn_metallb_address_pool"
     reservations = networks.get(network).subnets().get(subnet).reservations()
     for delete_reservation in ["istio-ingressgateway", "istio-ingressgateway-local"]:
         if reservations.pop(delete_reservation, None) is not None:
             click.secho(
-                f"Removing api-gw aliases {delete_reservation} from {network} {subnet}",
-                fg="bright_white",
+                f"    Removing api-gw aliases {delete_reservation} from {network} {subnet}",
+                fg="white",
             )
+
 
 def rename_uai_bridge_reservation(networks):
     """Rename the uai_macvlan_bridge reservation to uai_nmn_blackhole
@@ -241,6 +248,10 @@ def rename_uai_bridge_reservation(networks):
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
     """
+    click.secho(
+        "Renaming uai_macvlan_bridge reservation to uai_nmn_blackhole",
+        fg="bright_white"
+    )
     network = "NMN"
     subnet = "uai_macvlan"
     reservations = networks.get(network).subnets().get(subnet).reservations()
@@ -301,6 +312,9 @@ def remove_can_static_pool(networks):
     """
     can = networks.get("CAN")
     if can is None:
+        return
+
+    if can.subnets().get("can_metallb_static_pool") is None:
         return
 
     click.secho(
@@ -425,17 +439,9 @@ def migrate_can_to_cmn(networks, preserve=None, overrides=None):
     """
     can_network = networks.get("CAN")
     if can_network is None:
-        click.secho(
-            "ERROR: No CAN network found, not creating CMN.",
-            fg="red",
-        )
         return
 
     if networks.get("CMN") is not None:
-        click.secho(
-            "ERROR: Existing CMN network found.  This will be replaced.",
-            fg="red",
-        )
         return
 
     click.secho("Converting existing CAN network to CMN.", fg="bright_white")
@@ -480,16 +486,16 @@ def convert_can_ips(networks, can_data, preserve=None, overrides=None):
     """
     can_network = networks.get("CAN")
     if can_network is None:
-        click.secho(
-            "WARNING: CAN network not found.  Cannot re-IP.",
-            fg="red",
-        )
+        return
+
+    if networks.get("BICAN"):
         return
 
     click.secho(
         "Converting existing CAN network and IPv4 addresses.",
         fg="bright_white",
     )
+
     source_network_name = "CAN"
     destination_network_name = "CAN"
     destination_network_full_name = "Customer Access Network"
@@ -867,6 +873,7 @@ def create_metallb_pools_and_asns(
             f"    Updating the NMN network with BGP peering info MyASN: {bgp_nmn_asn} and PeerASN: {bgp_asn}",
         )
         nmn.bgp(bgp_nmn_asn, bgp_asn)  # bgp(my_asn, peer_asn)
+
     metallb_subnet_name_map = {
         "can_metallb_address_pool": "customer-access",
         "chn_metallb_address_pool": "customer-high-speed",

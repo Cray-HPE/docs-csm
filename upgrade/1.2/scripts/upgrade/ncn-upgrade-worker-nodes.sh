@@ -115,50 +115,6 @@ ${basedir}/../cfs/wait_for_configuration.sh --xnames $TARGET_XNAME
 redeploy=$(cat /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot | grep $target_ncn | wc -l)
 if [[ $redeploy == "1" ]];then
     cray cps deployment update --nodes $target_ncn
-    # We will retry for a few minutes before giving up
-    tmpfile=/tmp/cray-cps-deployment-list.${target_ncn}.$$.$(date +%Y-%m-%d_%H-%M-%S.%N).tmp
-    count=0
-    while [ true ]; do
-        if ! cray cps deployment list --nodes $target_ncn > $tmpfile ; then
-            # This command can fail when a node is first being brought up and deploying its CPS pods.
-            if [[ $count -gt 30 ]]; then
-                rm -f "$tmpfile" >/dev/null 2>&1 || true
-                echo "ERROR: Command still failing after retries: Command failed: cray cps deployment list --nodes $target_ncn"
-                exit 1
-            fi
-            echo "Command failed: cray cps deployment list --nodes $target_ncn; retrying in 5 seconds"
-            sleep 5
-            let count += 1
-            continue
-        fi
-        cps_state=$(grep -E "state =" "$tmpfile"|grep -v "running" | wc -l)
-        if [[ $cps_state -ne 0 ]];then
-            if [[ $count -gt 30 ]]; then
-                echo "ERROR: CPS is not running on $target_ncn"
-                cray cps deployment list --nodes $target_ncn |grep -E "state ="
-                rm -f "$tmpfile" >/dev/null 2>&1 || true
-                exit 1
-            fi
-            echo "CPS not running yet on $target_ncn; checking again in 5 seconds"
-            sleep 5
-            let count += 1
-            continue
-        fi
-        rm -f "$tmpfile" >/dev/null 2>&1 || true
-        cps_pod_assigned=$(kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $target_ncn|wc -l)
-        if [[ $cps_pod_assigned -ne 1 ]];then
-            if [[ $count -gt 30 ]]; then
-                echo "ERROR: CPS pod is not assigned to $target_ncn"
-                kubectl get pod -A -o wide|grep cray-cps-cm-pm|grep $target_ncn
-                exit 1
-            fi
-            echo "CPS pod not assigned yet to $target_ncn; checking again in 5 seconds"
-            sleep 5
-            let count += 1
-            continue
-        fi
-        break
-    done
 fi
 } >> ${LOG_FILE} 2>&1
 

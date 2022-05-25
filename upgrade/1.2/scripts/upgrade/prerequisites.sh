@@ -27,7 +27,7 @@ set -e
 locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${locOfScript}/../common/upgrade-state.sh
 . ${locOfScript}/../common/ncn-common.sh $(hostname)
-trap 'err_report' ERR INT TERM HUP
+trap 'err_report' ERR INT TERM HUP EXIT
 # array for paths to unmount after chrooting images
 declare -a UNMOUNTS=()
 
@@ -298,6 +298,58 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="UPGRADE_UNBOUND"
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    manifest_folder='/tmp'
+    dns_forwarder=$(kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d|yq r - spec.network.netstaticips.system_to_site_lookups)
+    system_name=$(kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d|yq r - spec.network.dns.external)
+    unbound_version=$(ls ${CSM_ARTI_DIR}/helm |grep cray-dns-unbound|sed -e 's/\.[^./]*$//'|cut -d '-' -f4)
+
+
+    if [ -z "$dns_forwarder" ] || [ -z "$system_name" ] || [ -z "$unbound_version" ]; then
+      echo "ERROR: null value found.  See list of variables"
+      echo "dns_forwarder is $dns_forwarder."
+      echo "system_name is $system_name."
+      echo "unbound_version is $unbound_version."
+      exit 1
+    fi
+
+    cat > $manifest_folder/unbound.yaml <<EOF
+apiVersion: manifests/v1beta1
+metadata:
+  name: unbound
+spec:
+  charts:
+  - name: cray-dns-unbound
+    namespace: services
+    source: csm
+    values:
+      domain_name: $system_name
+      forwardZones:
+      - forwardIps: [$dns_forwarder]
+        name: .
+      global:
+        appVersion: $unbound_version
+      localZones:
+      - localType: static
+        name: local
+    version: $unbound_version
+EOF
+
+    echo "$manifest_folder/unbound.yaml"
+    cat $manifest_folder/unbound.yaml
+
+    loftsman ship --charts-path ${CSM_ARTI_DIR}/helm/ --manifest-path $manifest_folder/unbound.yaml
+
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
@@ -407,57 +459,32 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="PRECACHE_EXISTING_NEXUS_IMAGES"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    {
-
-    images=$(kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.images_to_cache' | grep "sonatype\|proxy\|busybox")
-    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    output=$(pdsh -b -S -w $(grep -oP 'ncn-w\w\d+' /etc/hosts | sort -u | tr -t '\n' ',') 'for image in '$images'; do crictl pull $image; done' 2>&1)
-    echo "$output"
-
-    if [[ "$output" == *"failed"* ]]; then
-      echo ""
-      echo "Verify the images which failed in the output above are available in nexus."
-      exit 1
-    fi
-
-    } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
 state_name="UPGRADE_PRECACHE_CHART"
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
-    helm -n nexus upgrade cray-precache-images ${CSM_ARTI_DIR}/helm/cray-precache-images-*.tgz
-    } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
+    helm uninstall -n nexus cray-precache-images
+    tmp_manifest=/tmp/precache-manifest.yaml
 
-state_name="PRECACHE_NEW_IMAGES"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    {
+cat > $tmp_manifest <<EOF
+apiVersion: manifests/v1beta1
+metadata:
+  name: cray-precache-images-manifest
+spec:
+  charts:
+  -
+EOF
 
-    images=$(kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.images_to_cache')
-    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    output=$(pdsh -b -S -w $(grep -oP 'ncn-w\w\d+' /etc/hosts | sort -u | tr -t '\n' ',') 'for image in '$images'; do crictl pull $image; done' 2>&1)
-    echo "$output"
+    yq r "${CSM_ARTI_DIR}/manifests/platform.yaml" 'spec.charts.(name==cray-precache-images)' | sed 's/^/    /' >> $tmp_manifest
+    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path $tmp_manifest
 
-    if [[ "$output" == *"failed"* ]]; then
-      echo ""
-      echo "Verify the images which failed in the output above are available in nexus."
-      exit 1
-    fi
+    #
+    # Now edit the configmap with the three images that 1.x nexus
+    # needs so it can move around on an upgraded NCN (before we deploy
+    # the new nexus chart)
+    #
+    kubectl get configmap -n nexus cray-precache-images -o yaml | sed '/kind: ConfigMap/i\    docker.io/sonatype/nexus3:3.25.0\n    dtr.dev.cray.com/baseos/busybox:1\n    dtr.dev.cray.com/cray/istio/proxyv2:1.7.8-cray2-distroless' | kubectl apply -f -
 
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} $(hostname)

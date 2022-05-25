@@ -1,45 +1,44 @@
-[Top: User Access Service (UAS)](User_Access_Service_UAS.md)
+# Customize End-User UAI Images
 
-[Next Topic: Legacy Mode User-Driven UAI Management](Legacy_Mode_User-Driven_UAI_Management.md)
+The provided End-User UAI image is a basic UAI image that includes an up-to-date version of the SLES Linux Distribution. It provides an entry point to using UAIs and an easy way for administrators to experiment with UAS configurations.
+To support building software to be run in compute nodes, or other HPC and Analytics workflows, it is necessary to create a custom End-User UAI image and use that.
 
-## Customize End-User UAI Images
+A custom End-User UAI image can be any container image set up with the End-User UAI `entrypoint.sh` script.
+Experimentation with the wide range of possible UAI images is beyond the scope of this document, but the example given here should offer a starting point for that kind of experimentation.
 
-The provided End-User UAI image is a basic UAI image that includes an up-to-date version of the SLES Linux Distribution. It provides an entrypoint to using UAIs and an easy way for administrators to experiment with UAS configurations. To support building software to be run in compute nodes, or other HPC and Analytics workflows, it is necessary to create a custom End-User UAI image and use that.
+The example provided here covers the most common use-case, which is building a UAI image from the SquashFS image used on compute nodes on the host system to support application development, workload management and analytics workflows.
+Some of the steps are specific to that activity, others would be common to or similar to steps needed to create special purpose UAIs.
 
-A custom End-User UAI image can be any container image set up with the End-User UAI entrypoint script. Experimentation with the wide range of possible UAI images is beyond the scope of this document, but the example given here should offer a starting point for that kind of experimentation.
-
-The example provided here covers the most common use-case, which is building a UAI image from the squashfs image used on compute nodes on the host system to support application development, workload management and analytics workflows. Some of the steps are specific to that activity, others would be common to or similar to steps needed to create special purpose UAIs.
-
-### Prerequisites
+## Prerequisites
 
 * The administrator must be logged into an NCN or a host that has administrative access to the HPE Cray EX System API Gateway
 * The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
 * The HPE Cray EX System CLI must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
 * The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
 
-**NOTE:** this procedure cannot be run from a PIT node or an external host, it must be run from a Kubernetes Worker or Master node.
+**NOTE:** This procedure cannot be run from a PIT node or an external host, it must be run from a Kubernetes Worker or Master node.
 
-### Procedure
+## Procedure
 
 1. Choose a name for the custom image
 
      This example names the custom End-User UAI image called `registry.local/cray/cray-uai-compute:latest`, and places that name in an environment variable for convenience. Alter the name as appropriate for the image to be created:
 
-    ```
+    ```bash
     ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
     ```
 
-2. Query BOS for a sessiontemplate ID.
+2. Query BOS for a `sessiontemplate` ID.
 
-    Identify the Sessiontemplate name to use. A full list may be found with the following command:
+    Identify the `sessiontemplate` name to use. A full list may be found with the following command:
 
-    ```
+    ```bash
     ncn-w001# cray bos sessiontemplate list --format yaml
     ```
 
     Example output:
 
-    ```
+    ```bash
     - boot_sets:
         compute:
         boot_ordinal: 2
@@ -58,17 +57,18 @@ The example provided here covers the most common use-case, which is building a U
     name: wlm-sessiontemplate-0.1.0
     ```
 
-    Alternatively, collect the sessiontemplate name used during the Cray Operating System (COS) install. Refer to the "Boot COS" procedure in the COS product stream documentation. Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name.
+    Alternatively, collect the sessiontemplate name used during the Cray Operating System (COS) install. Refer to the "Boot COS" procedure in the COS product stream documentation.
+    Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name.
 
-    ```
+    ```bash
     ncn-w001# SESSION_NAME=wlm-sessiontemplate-0.1.0
     ```
 
 3. Download a compute node SquashFS.
 
-    Use the Sessiontemplate name to download a compute node squashfs from a BOS sessiontemplate name:
+    Use the `sessiontemplate` name to download a compute node SquashFS from a BOS `sessiontemplate` name:
 
-    ```
+    ```bash
     ncn-w001# SESSION_ID=$(cray bos sessiontemplate describe $SESSION_NAME --format json | jq -r '.boot_sets.compute.path' | awk -F/ '{print $4}')
 
     ncn-w001# cray artifacts get boot-images $SESSION_ID/rootfs rootfs.squashfs
@@ -78,7 +78,7 @@ The example provided here covers the most common use-case, which is building a U
 
     1. Create a directory and mount the SquashFS on the directory:
 
-        ```
+        ```bash
         ncn-w001# mkdir -v mount
 
         ncn-w001# mount -v -o loop,ro rootfs.squashfs `pwd`/mount
@@ -86,24 +86,25 @@ The example provided here covers the most common use-case, which is building a U
 
     2. Create the tarball.
 
-        **IMPORTANT:** 99-slingshot-network.conf is omitted from the tarball as that prevents the UAI from running sshd as the UAI user with the `su` command:
+        **IMPORTANT:** 99-slingshot-network.conf is omitted from the tarball as that prevents the UAI from running SSHD as the UAI user with the `su` command:
 
-        ```
+        ```bash
         ncn-w001# (cd `pwd`/mount; tar --xattrs --xattrs-include='*' --exclude="99-slingshot-network.conf" -cf "../$SESSION_ID.tar" .) > /dev/null
         ```
 
-        This may take several minutes. Notice that this does not create a compressed tarball. Using an uncompressed format makes it possible to add files if needed once the tarball is made. It also makes the procedure run just a bit more quickly. If warnings related to xattr are displayed, continue with the procedure as the resulting tarball should still result in a functioning UAI container image.
+        This may take several minutes. Notice that this does not create a compressed tarball. Using an uncompressed format makes it possible to add files if needed once the tarball is made.
+        It also makes the procedure run just a bit more quickly. If warnings related to xattr are displayed, continue with the procedure as the resulting tarball should still result in a functioning UAI container image.
 
-    3. Check that the tarball contains './usr/bin/uai-ssh.sh'.
+    3. Check that the tarball contains `./usr/bin/uai-ssh.sh`.
 
-        ```
+        ```bash
         ncn-w001# tar tf $SESSION_ID.tar | grep '[.]/usr/bin/uai-ssh[.]sh'
         ./usr/bin/uai-ssh.sh
         ```
 
         If this script is not present, the easiest place to get a copy of the script is from a UAI built from the End-User UAI image provided with UAS, and it can be appended to the tarball:
 
-        ```
+        ```bash
         ncn-w001# mkdir -pv ./usr/bin
         ncn-w001# cray uas create --publickey ~/.ssh/id_rsa.pub
         uai_connect_string = "ssh vers@10.26.23.123"
@@ -132,9 +133,10 @@ The example provided here covers the most common use-case, which is building a U
 
 5. Create and push the container image.
 
-    Create a container image using podman or docker and push it to the site container registry. Any container-specific modifications may also be done here with a Dockerfile. The ENTRYPOINT layer must be /usr/bin/uai-ssh.sh as that starts SSHD for the user in the UAI container started by UAS.
+    Create a container image using podman or docker and push it to the site container registry. Any container-specific modifications may also be done here with a Dockerfile.
+    The `ENTRYPOINT` layer must be `/usr/bin/uai-ssh.sh` as that starts SSHD for the user in the UAI container started by UAS.
 
-    ```
+    ```bash
     ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
 
     ncn-w001# podman import --change "ENTRYPOINT /usr/bin/uai-ssh.sh" $SESSION_ID.tar $UAI_IMAGE_NAME
@@ -144,13 +146,13 @@ The example provided here covers the most common use-case, which is building a U
 
 6. Register the new container image with UAS.
 
-    ```
+    ```bash
     ncn-w001# cray uas admin config images create --imagename $UAI_IMAGE_NAME
     ```
 
 7. Cleanup the mount directory and tarball.
 
-    ```
+    ```bash
     ncn-w001# umount -v mount; rmdir -v mount
 
     ncn-w001# rm $SESSION_ID.tar rootfs.squashfs
@@ -161,5 +163,7 @@ The example provided here covers the most common use-case, which is building a U
 
     ncn-w001# rm -fv ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
     ```
+
+[Top: User Access Service (UAS)](index.md)
 
 [Next Topic: Legacy Mode User-Driven UAI Management](Legacy_Mode_User-Driven_UAI_Management.md)
