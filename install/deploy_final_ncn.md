@@ -45,7 +45,7 @@ and ready for reboot of the LiveCD:
 >
 > * The NCN **will never wipe a USB device** during installation.
 >
-> * Prior to shutting down the PIT node, learning the CAN IP addresses of the other NCNs will be helpful if
+> * Prior to shutting down the PIT node, learning the CMN IP addresses of the other NCNs will be helpful if
 >   troubleshooting is required.
 >
 > This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
