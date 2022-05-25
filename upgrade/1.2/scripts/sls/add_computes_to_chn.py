@@ -170,17 +170,18 @@ def main(
     chn_xnames = set([r.name() for r in chn_subnet.reservations().values() if xname_pattern.match(r.name())])
     chn_size = chn_ipv4_network.num_addresses
     chn_used = len(chn_subnet.reservations()) + 1
-    click.secho(
-        f"INFO:  The CHN {chn_ipv4_network} supports {chn_size} addresses "
-        f"of which {chn_used} are currently used.",
-        fg="bright_white"
-    )
 
     hsn_to_be_added = hsn_xnames - chn_xnames   # xnames in hsn but not in chn (will be added to chn)
     chn_to_be_removed = chn_xnames - hsn_xnames # xnames in chn but not in hsn (will be removed from chn)
 
-    chn_available_ips = chn_size - chn_used
+    chn_available_ips = chn_size - chn_used + len(chn_to_be_removed)
     net_chn_add_count = len(hsn_to_be_added) - len(chn_to_be_removed)
+    click.secho(
+        f"INFO:  The CHN {chn_ipv4_network} supports {chn_size} addresses "
+        f"of which {chn_used} are currently used. {len(hsn_to_be_added)} "
+        f"will be added and {len(chn_to_be_removed)} will be removed.",
+        fg="bright_white"
+    )
     if chn_available_ips < net_chn_add_count:
         click.secho(
             f"ERROR:  The CHN with {chn_available_ips} IPs available is too small to add {net_chn_add_count} HSN IPs.\n"
