@@ -24,6 +24,7 @@
 import ipaddress
 import json
 import sys
+import re
 
 import pprint
 
@@ -160,6 +161,15 @@ def main(
         fg="bright_white"
     )
 
+    xname_pattern = re.compile('^x([0-9]{1,4})c([0-7])s([0-9]+)b([0-9]+)n([0-9]+)h([0-3])$') # HSN Node NIC xXcCsSbBnNhH
+    hsn_reservations = hsn_subnet.reservations().values()
+    hsn_xname_used = len([r for r in hsn_reservations if xname_pattern.match(r.name())]) + 1
+    click.secho(
+        f"INFO:  The HSN {hsn_ipv4_network} supports {hsn_size} addresses "
+        f"of which {hsn_xname_used} are currently for HSN Node NICs.",
+        fg="bright_white"
+    )
+
     chn_ipv4_network = chn_subnet.ipv4_network()
     chn_size = chn_ipv4_network.num_addresses
     chn_used = len(chn_subnet.reservations()) + 1
@@ -170,9 +180,9 @@ def main(
     )
 
     chn_available_ips = chn_size - chn_used
-    if chn_available_ips < hsn_used:
+    if chn_available_ips < hsn_xname_used:
         click.secho(
-            f"ERROR:  The CHN with {chn_available_ips} IPs available is too small to add {hsn_used} HSN IPs.\n"
+            f"ERROR:  The CHN with {chn_available_ips} IPs available is too small to add {hsn_xname_used} HSN IPs.\n"
             "        This can be for two reasons:\n"
             "        1. A NAT device is in place to provides HSN egress access for Computes.\n"
             "        2. The CHN size allocated during installation or upgrade is indeed to small and needs resizing.",
@@ -180,9 +190,14 @@ def main(
         )
         sys.exit(1)
 
-    hsn_reservations = hsn_subnet.reservations().values()
     for hsn_reservation in hsn_reservations:
         new_name = hsn_reservation.name()
+        if not xname_pattern.match(new_name):
+            click.secho(
+                f"    Skipping {new_name} because it is not an xname",
+                fg="white"
+            )
+            continue
         new_ipv4_address = next_free_ipv4_address(chn_subnet)
         click.secho(
             f"    Adding Reservation {new_name} {new_ipv4_address}",
