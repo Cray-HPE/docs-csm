@@ -18,20 +18,20 @@ The endpoint can also display the details of a given session when the specific s
 BOS supports a RESTful API. This API can be interacted with directly using tools like cURL.
 It can also be interacted with through the Cray Command Line Interface \(CLI\). See [Manage a BOS Session](Manage_a_BOS_Session.md) for more information.
 
-## BOA Functionality
+## BOA functionality
 
 The Boot Orchestration Agent \(BOA\) implements each session and sees it through to completion. A BOA is a Kubernetes job. It runs once to completion.
 If there are transient failures, BOA will exit and Kubernetes will reschedule it so that it can re-execute its session.
 
-BOA moves nodes towards the requested state, but if a node fails during any of the immediate steps, it takes note of it.
+BOA moves nodes towards the requested state, but if a node fails during any of the intermediate steps, it takes note of it.
 BOA will then provide a command in the output of the BOA log that can be used to retry the action.
 This behavior impacts all BOS operations.
 
 For example, if there is a 6,000 node system and 3 nodes fail to power off during a BOS operation.
-BOA will continue and attempt to re-provision the remaining 5,997 nodes.
-After the command is finished, it will provide output information about what the administrator needs to do to retry the last 3 nodes that failed.
+then BOA will continue and attempt to re-provision the remaining 5,997 nodes.
+After the command is finished, it will provide information about what the administrator needs to do in order to retry the operation on the 3 nodes that failed.
 
-## Current BOS Session Limitations
+## Current BOS session limitations
 
 The following limitations currently exist with BOS sessions:
 
