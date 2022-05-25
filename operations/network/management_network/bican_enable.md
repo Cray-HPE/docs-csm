@@ -37,6 +37,8 @@ Setting SystemDefaultRoute to CHN
 
 ## Configure UAN
 
+The CHN will automatically be configure on a UAN if the SLS `BICAN` network `SystemDefaultRoute` attribute is set to `CHN` and the following Ansible variable is set.
+
 `uan_can_setup: yes`
 
 Please refer to the "HPE Cray User Access Node (UAN) Software Administration Guide (S-8033)" document on the [HPE Support Center](https://support.hpe.com) website for more information.
