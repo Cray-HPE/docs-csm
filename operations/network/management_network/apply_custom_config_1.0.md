@@ -8,7 +8,7 @@ Apply the backed up site connection configuration with a couple modifications. S
 * Custom switch configurations
   * [Backup Custom Configurations](backup_custom_configuration.md)
 * Generated switch configurations already applied
-  * [Apply Switch Configurations](apply_switch_Configurations.md)
+  * [Apply Switch Configurations](apply_switch_configurations.md)
 
 ## Aruba
 
