@@ -208,8 +208,11 @@ If the following command does not complete successfully, check if the `TOKEN` en
 
    Set it to the password for `admin` user on the switches. This is needed for preflight tests within the check script.
 
+   > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
    ```bash
-   ncn-m001# export SW_ADMIN_PASSWORD=PutYourOwnPasswordHere
+   ncn-m001# read -s SW_ADMIN_PASSWORD
+   ncn-m001# export SW_ADMIN_PASSWORD
    ```
 
 1. Set the `NEXUS_PASSWORD` variable **only if needed**.
