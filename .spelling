@@ -169,7 +169,6 @@ diskless
 DNS
 Docker
 Dockerfile
-"Dogfoodd Factory"
 dropdown
 dryrun
 dsa2
@@ -565,3 +564,9 @@ Yum
 zeroization
 zeroize
 zypper
+
+# Per file overrides
+
+ - operations/validate_csm_health.md
+ Dogfoodd
+ Factoryy
