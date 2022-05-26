@@ -148,7 +148,7 @@ with system-specific customizations.
         These credentials are used by the REDS and HMS discovery services, targeting River Redfish
         BMC endpoints and management switches
 
-        > NOTE: For `vault_redfish_defaults`, the only entry used is '{"Cray": {"Username": "root", "Password": "XXXX"}'
+        > NOTE: For `vault_redfish_defaults`, the only entry used is `'{"Cray": {"Username": "root", "Password": "XXXX"}'`
         > Make sure it is specified as shown, with the `Cray` key. This key is not used in any of the other credential specifications.
 
         ```bash
