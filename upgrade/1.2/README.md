@@ -35,6 +35,10 @@ For more information about modifying `customizations.yaml` and tuning for specif
 
 ## Relevant troubleshooting links for upgrade-related issues
 
+- General upgrade troubleshooting
+
+  If the execution of the upgrade procedure fails, it is safe to rerun the failed script. If a rerun still fails, wait for 10 seconds and then run it again. If the issue persists, then refer to the below troubleshooting procedures.
+
 - General Kubernetes troubleshooting
 
    For general Kubernetes commands for troubleshooting, see [Kubernetes Troubleshooting Information](../../troubleshooting/kubernetes/Kubernetes_Troubleshooting_Information.md).
