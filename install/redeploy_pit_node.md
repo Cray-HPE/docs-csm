@@ -23,7 +23,7 @@ procedure entails deactivating the LiveCD, meaning the LiveCD and all of its res
 ## 1. Required services
 
 These services must be healthy before the reboot of the LiveCD can take place. If the health checks performed earlier in the install
-completed successfully \([Validate CSM Health](../operations/validate_csm_health.md)\), the following platform services will be healthy
+completed successfully \([Validate CSM Health](../operations/validate_csm_health.md)\), then the following platform services will be healthy
 and ready for reboot of the LiveCD:
 
 * Utility Storage (Ceph)
@@ -42,16 +42,12 @@ and ready for reboot of the LiveCD:
 > The steps below do contain warnings themselves, but overall there are risks:
 >
 > * SSH will cease to work when the LiveCD reboots; the serial console will need to be used.
->
 > * Rebooting a remote ISO will dump all running changes on the PIT node; USB devices are accessible after the install.
->
 > * The NCN **will never wipe a USB device** during installation.
->
-> * Prior to shutting down the PIT node, learning the CAN IP addresses of the other NCNs will be helpful if
+> * Prior to shutting down the PIT node, learning the CMN IP addresses of the other NCNs will be helpful if
 >   troubleshooting is required.
 >
-> This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
-> **unavailable**.
+> This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be **unavailable**.
 
 <a name="hand-off"></a>
 
@@ -243,26 +239,28 @@ The steps in this section load hand-off data before a later procedure reboots th
             rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:${CSM_PATH}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
 
-1. List IPv4 boot options using `efibootmgr`.
+1. Set the PIT node to PXE boot.
 
-    ```bash
-    pit# efibootmgr | grep -Ei "ip(v4|4)"
-    ```
+    1. List IPv4 boot options using `efibootmgr`.
 
-1. Set and trim the boot order on the PIT node.
+        ```bash
+        pit# efibootmgr | grep -Ei "ip(v4|4)"
+        ```
 
-    This only needs to be done for the PIT node, not for any of the other NCNs. See
-    [Setting boot order](../background/ncn_boot_workflow.md#setting-order) and
-    [Trimming boot order](../background/ncn_boot_workflow.md#trimming_boot_order).
+    1. Set and trim the boot order on the PIT node.
 
-1. Tell the PIT node to PXE boot on the next boot.
+        This only needs to be done for the PIT node, not for any of the other NCNs. See
+        [Setting boot order](../background/ncn_boot_workflow.md#setting-order) and
+        [Trimming boot order](../background/ncn_boot_workflow.md#trimming_boot_order).
 
-   Use `efibootmgr` to set the next boot device to the first PXE boot option. This step assumes the boot order was set up in the previous step.
+    1. Tell the PIT node to PXE boot on the next boot.
 
-    ```bash
-    pit# efibootmgr -n $(efibootmgr | grep -Ei "ip(v4|4)" | awk '{print $1}' | head -n 1 | tr -d Boot*) | grep -i bootnext
-    BootNext: 0014
-    ```
+        Use `efibootmgr` to set the next boot device to the first PXE boot option. This step assumes the boot order was set up in the previous step.
+
+        ```bash
+        pit# efibootmgr -n $(efibootmgr | grep -Ei "ip(v4|4)" | awk '{print $1}' | head -n 1 | tr -d Boot*) | grep -i bootnext
+        BootNext: 0014
+        ```
 
 1. <a name="collect-can-ip-ncn-m002"></a>Collect a backdoor login. Fetch the CAN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
 
@@ -272,7 +270,7 @@ The steps in this section load hand-off data before a later procedure reboots th
         pit# ssh ncn-m002 'ip a show vlan007 | grep inet'
         ```
 
-        _Expected output will look similar to the following (exact values may differ)_:
+        Expected output will look similar to the following (exact values may differ):
 
         ```text
         inet 10.102.11.13/24 brd 10.102.11.255 scope global vlan007
@@ -287,16 +285,16 @@ The steps in this section load hand-off data before a later procedure reboots th
         ```
 
         > Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN.
-        > If the reboot successfully deploys the LiveCD, this terminal can be exited.
+        > If the reboot successfully deploys the LiveCD, then this terminal can be exited.
         >
-        > **POINT OF NO RETURN:** The next step will wipe the underlying nodes disks clean, it will ignore USB devices.
+        > **POINT OF NO RETURN:** The next step will wipe the underlying nodes disks clean. It will ignore USB devices.
         > RemoteISOs are at risk here; even though a backup has been performed of the PIT node, it is not possible to
         > boot back to the same state. This is the last step before rebooting the node.
 
 1. Wipe the disks on the PIT node.
 
-    > **WARNING:** Risk of **USER ERROR**! Do not assume to wipe the first three disks (e.g. `sda`, `sdb`, and `sdc`); they are not
-    > pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**. USB devices can
+    > **WARNING:** Risk of **USER ERROR**! Do not assume to wipe the first three disks (for example, `sda`, `sdb`, and `sdc`);
+    > they are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**. USB devices can
     > only be wiped by operators at this point in the install. USB devices are never wiped by the CSM installer.
 
     1. Select disks to wipe (SATA/NVME/SAS).
@@ -370,13 +368,14 @@ The steps in this section load hand-off data before a later procedure reboots th
     pit# reboot
     ```
 
-1. Wait for the node to boot, acquire its hostname (i.e. `ncn-m001`), and run `cloud-init`.
+1. Wait for the node to boot, acquire its hostname (`ncn-m001`), and run `cloud-init`.
 
-    If all of that happens successfully, **skip the rest of this step and proceed to the next step**. Otherwise, use the following information to remediate the problems.
+    If all of that happens successfully, then **skip the rest of this step and proceed to the next step**. Otherwise, use the following information to remediate the problems.
 
-    > **NOTE:** If the node has PXE boot issues, such as getting PXE errors or not pulling the `ipxe.efi` binary, see [PXE boot troubleshooting](pxe_boot_troubleshooting.md).
+    > **NOTES:**
     >
-    > **NOTE:** If `ncn-m001` did not run all the `cloud-init` scripts, the following commands need to be run **(but only in that circumstance)**.
+    > * If the node has PXE boot issues, such as getting PXE errors or not pulling the `ipxe.efi` binary, see [PXE boot troubleshooting](pxe_boot_troubleshooting.md).
+    > * If `ncn-m001` did not run all the `cloud-init` scripts, then the following commands need to be run **(but only in that circumstance)**.
 
     ```bash
     ncn-m001# cloud-init clean ; cloud-init init ; cloud-init modules -m init ; \
@@ -404,8 +403,6 @@ The steps in this section load hand-off data before a later procedure reboots th
 
 1. Run `kubectl get nodes` to see the full Kubernetes cluster.
 
-    > **NOTE:** If the new node fails to join the cluster after running other `cloud-init` items, then refer to the `handoff`.
-
     ```bash
     ncn-m001# kubectl get nodes
     ```
@@ -424,8 +421,8 @@ The steps in this section load hand-off data before a later procedure reboots th
 
 1. Restore and verify the site link.
 
-    It will be necessary to restore the `ifcfg-lan0` file from either manual backup taken during the prior "Hand-Off" step or
-    re-mount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.
+    Restore networking files from the manual backup taken during the
+    [Backup the bootstrap information](#backup-bootstrap-information) step.
 
     ```bash
     ncn-m001# SYSTEM_NAME=eniac
@@ -455,7 +452,7 @@ The steps in this section load hand-off data before a later procedure reboots th
               done
     ```
 
-1. Run `ip r` to show that the default route is via the CAN/`vlan007`.
+1. Verify that the default route is via the CAN/`vlan007`.
 
     ```bash
     ncn-m001# ip r show default
@@ -467,18 +464,17 @@ The steps in this section load hand-off data before a later procedure reboots th
      ncn-m001# ip a show bond0
      ```
 
-1. Verify zypper repositories are empty and all remote SUSE repositories are disabled.
+1. Verify `zypper` repositories are empty and all remote SUSE repositories are disabled.
+
+    > If the `rm` command fails because the files do not exist, this is not an error and should be ignored.
 
     ```bash
     ncn-m001# rm -v /etc/zypp/repos.d/* && zypper ms --remote --disable
     ```
 
-1. Download and install/upgrade the documentation RPM.
+1. Download and install/upgrade the documentation and workarounds RPMs.
 
-    If this machine does not have direct internet access, then this RPM will need to be
-    externally downloaded and then copied to this machine.
-
-    **Important:** To ensure that the latest workarounds and documentation updates are available, see [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds)
+    See [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md).
 
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-post-reboot` breakpoint.
 
@@ -501,7 +497,9 @@ The steps in this section load hand-off data before a later procedure reboots th
 The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise because
 it is used for Cray installation and bootstrap.
 
-1. SSH back into `ncn-m001` or restart a local console; resume the typescript.
+1. SSH back into `ncn-m001` or restart a local console.
+
+1. Resume the typescript.
 
     ```bash
     ncn-m001# script -af /metal/bootstrap/prep/admin/csm-verify.$(date +%Y-%m-%d).txt
@@ -583,8 +581,13 @@ However, the commands in this section are all run **on** `ncn-m001`.
     ncn-m001# BMCS=$(grep -Eo "[[:space:]]ncn-[msw][0-9][0-9][0-9]-mgmt([.]|[[:space:]]|$)" /etc/hosts |
                         sed 's/^.*\(ncn-[msw][0-9][0-9][0-9]-mgmt\).*$/\1/' |
                         sort -u |
-                        grep -v "^ncn-m001-mgmt$")
-    ncn-m001# echo $BMCS
+                        grep -v "^ncn-m001-mgmt$") ; echo $BMCS
+    ```
+
+    Expected output looks similar to the following:
+
+    ```text
+    ncn-m002-mgmt ncn-m003-mgmt ncn-s001-mgmt ncn-s002-mgmt ncn-s003-mgmt ncn-w001-mgmt ncn-w002-mgmt ncn-w003-mgmt
     ```
 
 1. Run the following to loop through all of the BMCs (except `ncn-m001-mgmt`) and apply the desired settings.
@@ -600,9 +603,6 @@ However, the commands in this section are all run **on** `ncn-m001`.
                 echo "$BMC: Showing settings"
                 /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -s
                 echo
-                echo "Press enter to proceed to next BMC, or control-C to abort"
-                echo
-                read
             done ; echo "Configuration completed on all NCN BMCs"
     ```
 
@@ -642,4 +642,4 @@ Perform the following steps **on `ncn-m001`**.
 
 ## 8. Next topic
 
-After completing this procedure, the next step is to [Configure Administrative Access](index.md#configure_administrative_access).
+After completing this procedure, proceed to [Configure Administrative Access](index.md#configure_administrative_access).
