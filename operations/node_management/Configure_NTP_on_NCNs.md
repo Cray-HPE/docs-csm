@@ -75,15 +75,17 @@ The following steps are structured to be executed on one node at a time. However
 
 ## Fix broken configuration
 
+On each affected NCN run the following:
+
 1. Set a token as described in [Identify Nodes and Update Metadata](Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md).
 
 1. Export the token.
 
     ```bash
-    export TOKEN
+    ncn# export TOKEN
     ```
 
-1. On each affected NCN, run:
+1. Run the script:
 
 ```bash
 ncn# /srv/cray/scripts/common/chrony/csm_ntp.py
