@@ -12,13 +12,13 @@ On the other hand, this is not an absolute requirement. If the node has only a s
 
 - [Collecting NCN MAC Addresses](#collecting-ncn-mac-addresses)
   - [Sections](#sections)
-  - [Procedure: iPXE Consoles](#procedure-ipxe-consoles)
+  - [Procedure: iPXE consoles](#procedure-ipxe-consoles)
     - [Requirements](#requirements)
     - [MAC address collection](#mac-collection)
-  - [Procedure: Serial Consoles](#procedure-serial-consoles)
+  - [Procedure: Serial consoles](#procedure-serial-consoles)
   - [Procedure: Recovering from an incorrect `ncn_metadata.csv` file](#procedure-recovering-from-an-incorrect-ncn_metadatacsv-file)
 
-The easy way to do this leverages the NIC information dumping provided by the `metal-ipxe` package. This page will walk-through
+The easy way to do this leverages the NIC information dumping provided by the `metal-ipxe` package. This page will walk through
 booting NCNs and collecting their MACs from the ConMan console logs.
 
 > The alternative is to use serial cables (or SSH) to collect the MACs from the switch ARP tables, this can become exponentially difficult for large systems.
@@ -49,7 +49,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 
 ### MAC address collection
 
-1. (Optional) Shim the boot so nodes bail after dumping their network devices.
+1. (Optional) Shim the boot so nodes stop booting after dumping their network devices.
 
    Removing the iPXE script will prevent network booting. Be aware that the nodes may disk boot.
 
@@ -75,9 +75,12 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 
 1. Set the nodes to PXE boot and start (or restart) them.
 
+    > `read -s` is used in order to prevent the credentials from being displayed on the screen or recorded in the shell history.
+
     ```bash
     pit# USERNAME=root
-    pit# export IPMI_PASSWORD=changeme
+    pit# read -s IPMI_PASSWORD
+    pit# export IPMI_PASSWORD
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot,persistent
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     pit# sleep 10
@@ -90,13 +93,13 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     ```console
     pit# conman -m ncn-m002-mgmt
     <ConMan> Connection to console [ncn-m002-mgmt] opened.
-      << hardware dependent boot log messages >>
+      << hardware-dependent boot log messages >>
     ```
 
 1. Exit ConMan by typing `&.`
 
     ```console
-      << hardware dependent boot log messages >>
+      << hardware-dependent boot log messages >>
     &.
     <ConMan> Connection to console [ncn-m002-mgmt] closed.
     pit#
@@ -211,7 +214,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 
 <a name="procedure-serial-consoles"></a>
 
-## Procedure: Serial Consoles
+## Procedure: Serial consoles
 
 Pick out the MAC addresses for the `BOND` from both the `sw-spine-001` and `sw-spine-002` switches, following the [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md) procedure.
 
