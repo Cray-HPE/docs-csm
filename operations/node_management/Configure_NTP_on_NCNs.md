@@ -77,6 +77,12 @@ The following steps are structured to be executed on one node at a time. However
 
 1. Set a token as described in [Identify Nodes and Update Metadata](Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md).
 
+1. Export the token.
+
+    ```bash
+    export TOKEN
+    ```
+
 1. On each affected NCN, run:
 
 ```bash
