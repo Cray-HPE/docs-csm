@@ -30,7 +30,6 @@ There are some caveats that are mentioned below.
 
 1. Paste in the generated configuration.
 
-
 ## Dell
 
 1. Shut down all ports.
