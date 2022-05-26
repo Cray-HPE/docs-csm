@@ -9,22 +9,22 @@ There are some caveats that are mentioned below.
 ## Prerequisites
 
 - Switch without any configuration
-    - [Wipe Mgmt Switches](wipe_mgmt_switches.md)
+  - [Wipe Mgmt Switches](wipe_mgmt_switches.md)
 - Generated switch configurations
-    - [Generate Switch Config](generate_switch_configurations.md)
+  - [Generate Switch Config](generate_switch_configurations.md)
 
 ## Aruba
 
 1. Shutdown all ports. Use `show int physical` to see the range of ports.
 
-    ```
+    ```console
     switch(config)# int 1/1/1-1/1/52
     switch(config-if-<1/1/1-1/1/52# shut
     ```
 
 1. Enter `auto-confirm` before pasting in the configuration. This will automatically accept prompts.
 
-    ```
+    ```console
     switch(config)# auto-confirm
     ```
 
@@ -35,7 +35,7 @@ There are some caveats that are mentioned below.
 
 1. Shut down all ports.
 
-    ```
+    ```console
     sw-leaf-bmc-001(config)# interface range ethernet 1/1/1-1/1/52
     sw-leaf-bmc-001(conf-range-eth1/1/1-1/1/52)# shut
     ```
@@ -47,7 +47,7 @@ There are some caveats that are mentioned below.
 
       For example:
 
-      ```
+      ```console
       sw-leaf-bmc-001(config)# router ospf 1
       sw-leaf-bmc-001(config-router-ospf-1)# router-id 10.2.0.4
       sw-leaf-bmc-001(config-router-ospf-1)# router-id ospf 2 vrf Customer
@@ -57,7 +57,7 @@ There are some caveats that are mentioned below.
 
       To fix:
 
-      ```
+      ```console
       sw-leaf-bmc-001(config)# router ospf 1
       sw-leaf-bmc-001(config-router-ospf-1)# router-id 10.2.0.4
       sw-leaf-bmc-001(config-router-ospf-1)# exit
@@ -69,7 +69,7 @@ There are some caveats that are mentioned below.
 
 Verify that `no cli default prefix-modes enable` is configured on the switch before applying any configuration.
 
-```
+```console
 sw-spine-001 [mlag-domain: standby] (config) # no cli default prefix-modes enable
 ```
 
