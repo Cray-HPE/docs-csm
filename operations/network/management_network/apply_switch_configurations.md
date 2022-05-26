@@ -9,9 +9,9 @@ There are some caveats that are mentioned below.
 ## Prerequisites
 
 - Switch without any configuration
-  - [Wipe Mgmt Switches](wipe_mgmt_switches.md)
+  - [Wipe Management Switches](wipe_Management_switches.md)
 - Generated switch configurations
-  - [Generate Switch Config](generate_switch_configs.md)
+  - [Generate Switch Configuration](generate_switch_configs.md)
 
 ## Aruba
 
@@ -28,7 +28,7 @@ There are some caveats that are mentioned below.
     switch(config)# auto-confirm
     ```
 
-1. Paste in the generated config.
+1. Paste in the generated configuration.
 
 
 ## Dell
@@ -40,9 +40,9 @@ There are some caveats that are mentioned below.
     sw-leaf-bmc-001(conf-range-eth1/1/1-1/1/52)# shut
     ```
 
-1. Paste in the generated config.
+1. Paste in the generated configuration.
 
-    - When pasting in the config be sure that all the commands were accepted. In some cases you will need to back out of the current config context and back to global configuration for the commands to work as intended.
+    - When pasting in the configuration be sure that all the commands were accepted. In some cases you will need to back out of the current configuration context and back to global configuration for the commands to work as intended.
     - `banner exec` will need to be manually applied.
 
       For example:
@@ -77,4 +77,4 @@ sw-spine-001 [mlag-domain: standby] (config) # no cli default prefix-modes enabl
 
 Save the configuration once the configuration is applied.
 
-Refer to the [Saving Config](saving_config.md) procedure.
+Refer to the [Saving Configuration](saving_configuration.md) procedure.
