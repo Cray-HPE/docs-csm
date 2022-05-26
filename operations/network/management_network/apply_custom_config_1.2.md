@@ -6,7 +6,7 @@ Apply the backed up site connection configuration with a couple modifications. S
 
 - Access to the switches
 - Custom switch configurations
-  - [Backup Custom Config](backup_custom_configurations.md)
+  - [Backup Custom Configuration](backup_custom_configurations.md)
 
 - Generated switch configurations already applied
   - [Apply Switch Configurations](apply_switch_Configurations.md)
@@ -60,7 +60,7 @@ sw-spine-002(config)# ip route 0.0.0.0/0 10.101.15.189 vrf Customer
 
 ## Mellanox
 
-`vrf forwarding Customer` will be added to the port config. This has to be applied before the `ip address` configuration.
+`vrf forwarding Customer` will be added to the port configuration. This has to be applied before the `ip address` configuration.
 
 ```console
 sw-spine-001 [mlag-domain: master] # conf t
@@ -142,4 +142,4 @@ For more information on SNMP credentials, see [Change SNMP Credentials on Leaf-B
 
 ## Write memory
 
-Save the configuration once the configuration is applied. See [Saving Config](saving_config.md).
+Save the configuration once the configuration is applied. See [Saving Configuration](saving_config.md).
