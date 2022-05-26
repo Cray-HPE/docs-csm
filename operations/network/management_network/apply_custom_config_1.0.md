@@ -6,7 +6,7 @@ Apply the backed up site connection configuration with a couple modifications. S
 
 * Access to the switches
 * Custom switch configurations
-  * [Backup Custom Configurations](backup_custom_config.md)
+  * [Backup Custom Configurations](backup_custom_configuration.md)
 * Generated switch configurations already applied
   * [Apply Switch Configurations](apply_switch_Configurations.md)
 
