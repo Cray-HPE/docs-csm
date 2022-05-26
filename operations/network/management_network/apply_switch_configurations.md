@@ -9,7 +9,7 @@ There are some caveats that are mentioned below.
 ## Prerequisites
 
 - Switch without any configuration
-  - [Wipe Management Switches](wipe_Management_switches.md)
+  - [Wipe Management Switches](wipe_mgmt_switches.md)
 - Generated switch configurations
   - [Generate Switch Configuration](generate_switch_configs.md)
 
@@ -76,4 +76,4 @@ sw-spine-001 [mlag-domain: standby] (config) # no cli default prefix-modes enabl
 
 Save the configuration once the configuration is applied.
 
-Refer to the [Saving Configuration](saving_configuration.md) procedure.
+Refer to the [Saving Configuration](saving_config.md) procedure.
