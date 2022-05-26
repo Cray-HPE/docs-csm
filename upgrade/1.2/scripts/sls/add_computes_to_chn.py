@@ -159,13 +159,14 @@ def main(
         fg="bright_white"
     )
 
-    xname_pattern = re.compile('^x([0-9]{1,4})c([0-7])s([0-9]+)b([0-9]+)n([0-9]+)h([0-3])$') # HSN Node NIC xXcCsSbBnNhH
+    xname_pattern = re.compile('^x([0-9]{1,4})c([0-7])s([0-9]+)b([0-9]+)n([0-9]+)h0$') # HSN Node NIC xXcCsSbBnNhH but only the h0 one
+    xname_pattern_to_remove = re.compile('^x([0-9]{1,4})c([0-7])s([0-9]+)b([0-9]+)n([0-9]+)h([0-3])$') # HSN Node NIC xXcCsSbBnNhH
 
     hsn_reservations = hsn_subnet.reservations().values()
     hsn_xnames = set([r.name() for r in hsn_reservations if xname_pattern.match(r.name())])
 
     chn_ipv4_network = chn_subnet.ipv4_network()
-    chn_xnames = set([r.name() for r in chn_subnet.reservations().values() if xname_pattern.match(r.name())])
+    chn_xnames = set([r.name() for r in chn_subnet.reservations().values() if xname_pattern_to_remove.match(r.name())])
     chn_size = chn_ipv4_network.num_addresses
     chn_used = len(chn_subnet.reservations()) + 1
 
@@ -193,7 +194,7 @@ def main(
     for xname in chn_to_be_removed:
         if xname in chn_subnet.reservations():
             click.secho(
-                f"    Removing {xname} from CHN because it is not in HSN",
+                f"    Removing {xname} from CHN because it is not in HSN or is not an h0 node",
                 fg="white"
             )
             del chn_subnet.reservations()[xname]
@@ -202,7 +203,7 @@ def main(
         new_name = hsn_reservation.name()
         if not xname_pattern.match(new_name):
             click.secho(
-                f"    Skipping {new_name} because it is not an xname",
+                f"    Skipping {new_name} because it is not an xname for HSN h0 Node NIC",
                 fg="white"
             )
             continue
