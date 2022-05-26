@@ -5,7 +5,7 @@ This procedure will detail how to collect the NCN MAC addresses from an HPE Cray
 The Bootstrap MAC address will be used for identification of this node during the early part of the PXE boot process before the bonded interface can be established.
 
 The `Bond0 MAC0` and `Bond0 MAC1` are the MAC addresses for the physical interfaces that the node will use for the various VLANs.
-`Bond0 MAC0` and `Bond0 MAC1` should be on the different network cards, in order to establish redundancy for a failed network card.
+`Bond0 MAC0` and `Bond0 MAC1` should be on the different network cards in order to establish redundancy for a failed network card.
 On the other hand, this is not an absolute requirement. If the node has only a single network card, then this will force `MAC1` and `MAC0` to reside on the same physical card; this will still produce a valid configuration.
 
 ## Sections
@@ -187,7 +187,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 
     > **NOTE:** Mind the index (3, 2, 1.... ; not 1, 2, 3).
 
-    For each NCN update the corresponding row in `ncn_metadata` with the values for `Bond0 MAC0` and `Bond0 MAC1`. The `Bootstrap MAC` should have the same value as the `Bond0 MAC0`.
+    For each NCN, update the corresponding row in `ncn_metadata` with the values for `Bond0 MAC0` and `Bond0 MAC1`. The `Bootstrap MAC` should have the same value as the `Bond0 MAC0`.
 
     ```csv
     Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
@@ -200,7 +200,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     pit# vi ncn_metadata.csv
     ```
 
-1. Power off the NCNs
+1. Power off the NCNs.
 
     ```bash
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
