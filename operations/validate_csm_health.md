@@ -17,18 +17,19 @@ The areas should be tested in the order they are listed on this page. Errors in 
 - [0. Cray command line interface](#0-cray-command-line-interface)
 - [1. Platform health checks](#1-platform-health-checks)
   - [1.1 NCN health checks](#11-ncn-health-checks)
-    - [1.1.1 known test issues](#111-known-test-issues)
+    - [1.1.1 Known issues with NCN health checks](#111-known-issues-with-ncn-health-checks)
   - [1.2 NCN resource checks (optional)](#12-ncn-resource-checks-optional)
-    - [1.2.1 Known issues](#121-known-issues)
+    - [1.2.1 Known issues with NCN resource checks](#121-known-issues-with-ncn-resource-checks)
   - [1.3 Check of system management monitoring tools](#13-check-of-system-management-monitoring-tools)
 - [2. Hardware Management Services health checks](#2-hardware-management-services-health-checks)
   - [2.1 HMS CT test execution](#21-hms-ct-test-execution)
   - [2.2 Hardware State Manager discovery validation](#22-hardware-state-manager-discovery-validation)
-    - [2.2.1 Interpreting results](#221-interpreting-results)
-    - [2.2.2 Known issues](#222-known-issues)
+    - [2.2.1 Interpreting HSM discovery results](#221-interpreting-hsm-discovery-results)
+    - [2.2.2 Known issues with HSM discovery validation](#222-known-issues-with-hsm-discovery)
 - [3. Software Management Services health checks](#3-software-management-services-health-checks)
   - [3.1 SMS test execution](#31-sms-test-execution)
   - [3.2 Interpreting `cmsdev` results](#32-interpreting-cmsdev-results)
+  - [3.3 Known issues with SMS tests](#33-known-issues-with-sms-tests)
 - [4. NCN gateway health checks](#4-ncn-gateway-health-checks)
   - [4.1 Gateway test execution](#41-gateway-test-execution)
 - [5. Booting CSM `barebones` image](#5-booting-csm-barebones-image)
@@ -60,13 +61,15 @@ The Cray CLI must be configured on all NCNs and the PIT node. The following proc
 
 ## 1. Platform health checks
 
-All platform health checks are expected to pass. Each check has been implemented as a [Goss](https://github.com/aelsabbahy/goss) test which reports a PASS or FAIL.
+All platform health checks are expected to pass. Each check has been implemented as a [Goss](https://github.com/aelsabbahy/goss) test which reports a `PASS` or `FAIL`.
 
-Available Platform Health Checks:
+Available platform health checks:
 
-1. [`ncnHealthChecks`](#pet-ncnhealthchecks)
-1. [OPTIONAL Check of `ncnHealthChecks` Resources](#pet-optional-ncnhealthchecks-resources)
-1. [Check of System Management Monitoring Tools](#check-of-system-management-monitoring-tools)
+1. [NCN health checks](#pet-ncnhealthchecks)
+    1. [Known issues with NCN health checks](#autogoss-issues)
+1. [OPTIONAL Check of `ncnHealthChecks` resources](#pet-optional-ncnhealthchecks-resources)
+    1. [Known issues with NCN resource checks](#pet-resource-checks-known-issues)
+1. [Check of system management monitoring tools](#check-of-system-management-monitoring-tools)
 
 <a name="pet-ncnhealthchecks"></a>
 
@@ -74,31 +77,41 @@ Available Platform Health Checks:
 
 These checks require that the [Cray CLI is configured](#cray-command-line-interface) on all worker NCNs.
 
-If `ncn-m001` is the PIT node, run these checks on `ncn-m001`, otherwise run them from any NCN.
-
-There are multiple Goss test suites available that cover a variety of subsystems. The platform health checks are defined in the test suites `ncn-healthcheck` and `ncn-kubernetes-checks`.
+If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise run them from any NCN.
 
 1. Specify the `admin` user password for the management switches in the system.
 
-    This is required for the `ncn-healthcheck` test.
+    This is required for the `ncn-healthcheck` tests.
 
     > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
     ```bash
-    linux# read -s SW_ADMIN_PASSWORD
-    linux# export SW_ADMIN_PASSWORD
+    ncn/pit# read -s SW_ADMIN_PASSWORD
+    ncn/pit# export SW_ADMIN_PASSWORD
     ```
 
 1. Run the NCN health checks.
 
     ```bash
-    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck
+    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck | tee ncn-healthcheck.log
+    ```
+
+    The following command will extract the test totals for the various nodes:
+
+    ```bash
+    ncn/pit# grep "Total Test" ncn-healthcheck.log
     ```
 
 1. Run the Kubernetes checks.
 
     ```bash
-    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
+    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks | tee ncn-kubernetes-checks.log
+    ```
+
+    The following command will extract the test totals for the various nodes:
+
+    ```bash
+    ncn/pit# grep "Total Test" ncn-kubernetes-checks.log
     ```
 
 1. Review results.
@@ -107,35 +120,39 @@ There are multiple Goss test suites available that cover a variety of subsystems
 
 <a name="autogoss-issues"></a>
 
-#### 1.1.1 Known test issues
+#### 1.1.1 Known issues with NCN health checks
 
 - It is possible that the first pass of running these tests may fail due to `cloud-init` not being completed on the storage nodes.
   In this case, please wait five minutes and re-run the tests.
 - For any failures related to SSL certificates, see the [SSL Certificate Validation Issues](../troubleshooting/known_issues/ssl_certificate_validation_issues.md) troubleshooting guide.
 - `Kubernetes Query BSS Cloud-init for ca-certs`
-  - This test may fail immediately after platform install. It should pass after the TrustedCerts Operator has updated BSS
+  - This test may fail immediately after platform install. It should pass after the TrustedCerts operator has updated BSS
     (Global `cloud-init` meta) with CA certificates.
 - `Kubernetes Velero No Failed Backups`
-  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately
-    upon the deployment of a backup schedule (for example, vault). It may be necessary to delete backups from a Kubernetes node to
+  - Because of a [known issue  with Velero](https://github.com/vmware-tanzu/velero/issues/1980), a backup may be attempted immediately
+    upon the deployment of a backup schedule (for example, Vault). It may be necessary to delete backups from a Kubernetes node to
     clear this situation. See the output of the test for more details on how to cleanup backups that have failed due to a known
     interruption. For example:
-     1. Run the following to find the failed backup.
+     1. Find the failed backup.
 
         ```bash
         ncn/pit# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
         ```
 
-     1. Delete the backup, where `<backup>` is replaced with a backup returned in the previous step.
+     1. Delete the backup.
+
+        > In the following command, replace `<backup>` with a backup returned in the previous step.
+        >
+        > This command will not work on the PIT node.
 
         ```bash
         ncn# velero backup delete <backup> --confirm
         ```
 
 - `Verify spire-agent is enabled and running`
-  - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker and master nodes), logging errors
-    (via `journalctl`) similar to `join token does not exist or has already been used`, or the last log entries containing multiple lines
-    of `systemd[1]: spire-agent.service: Start request repeated too quickly.`. Deleting the `request-ncn-join-token` daemonset pod
+  - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker and master nodes). In this case, it may log errors
+    (using `journalctl`) similar to `join token does not exist or has already been used`, or the last log entries may contain multiple
+    instances of `systemd[1]: spire-agent.service: Start request repeated too quickly.`. Deleting the `request-ncn-join-token` `daemonset` pod
     running on the node may clear the issue. Even though the `spire-agent` `systemctl` service on the Kubernetes node should eventually
     restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can
     be run from any Kubernetes node in the cluster.
@@ -193,9 +210,9 @@ ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s node_resource_consumptio
 ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
 ```
 
-<a name="known-issues"></a>
+<a name="pet-resource-checks-known-issues"></a>
 
-#### 1.2.1 Known issues
+#### 1.2.1 Known issues with NCN resource checks
 
 - `pods_not_running`
   - If the output of `pods_not_running` indicates that there are pods in the `Evicted` state, it may be due to the root file system
@@ -253,6 +270,11 @@ The checks in this section require that the [Cray CLI is configured](#cray-comma
 Execute the HMS tests to confirm that the Hardware Management Services are running and operational.
 
 Note: Do not run HMS tests concurrently on multiple nodes. They may interfere with one another and cause false failures.
+
+1. [HMS CT test execution](#hms-test-execution)
+1. [Hardware State Manager discovery validation](#hms-smd-discovery-validation)
+    1. [Interpreting HSM discovery results](#hms-smd-discovery-validation-interpreting-results)
+    1. [Known issues with HSM discovery validation](#hms-smd-discovery-validation-known-issues)
 
 <a name="hms-test-execution"></a>
 
@@ -330,7 +352,7 @@ code. Failure information interpretation is described in the next section.
 
 <a name="hms-smd-discovery-validation-interpreting-results"></a>
 
-#### 2.2.1 Interpreting results
+#### 2.2.1 Interpreting HSM discovery results
 
 The Cabinet Checks output is divided into three sections:
 
@@ -404,7 +426,7 @@ If it was determined that the mismatch can not be ignored, then proceed onto the
 
 <a name="hms-smd-discovery-validation-known-issues"></a>
 
-#### 2.2.2 Known issues
+#### 2.2.2 Known issues with HSM discovery validation
 
 Known issues that may prevent hardware from getting discovered by Hardware State Manager:
 
@@ -414,14 +436,9 @@ Known issues that may prevent hardware from getting discovered by Hardware State
 
 ## 3 Software Management Services health checks
 
-The Software Management Services health checks are run using `/usr/local/bin/cmsdev`.
-
-- The tool logs to `/opt/cray/tests/cmsdev.log`
-- The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
-  - The same amount of data is written to the log file in either case.
-
-1. [SMS Test Execution](#sms-checks)
+1. [SMS test execution](#sms-checks)
 1. [Interpreting `cmsdev` Results](#cmsdev-results)
+1. [Known issues with SMS tests](#cmsdev-known-issues)
 
 <a name="sms-checks"></a>
 
@@ -435,6 +452,10 @@ The following test can be run on any Kubernetes node (any master or worker node,
 ncn# /usr/local/bin/cmsdev test -q all
 ```
 
+- The `cmsdev` tool logs to `/opt/cray/tests/cmsdev.log`
+- The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
+  - The same amount of data is written to the log file in either case.
+
 <a name="cmsdev-results"></a>
 
 ### 3.2 Interpreting `cmsdev` results
@@ -447,21 +468,27 @@ ncn# /usr/local/bin/cmsdev test -q all
   - The return code will be non-zero.
   - The final line of output will begin with `FAILURE` and will list which checks failed.
     - For example: `FAILURE: 2 service tests FAILED (conman, ims), 5 passed (bos, cfs, crus, tftp, vcs)`
+  - After remediating a test failure for a particular service, just that single service test can be re-run by replacing
+    `all` in the `cmsdev` command line with the name of the service. For example: `/usr/local/bin/cmsdev test -q cfs`
 
 Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
 
-### 3.3 Known issues
+<a name="cmsdev-known-issues"></a>
 
-If an Etcd restore has been performed on one of the `SMS` services (such as `BOS` or `CRUS`), the first Etcd pod that
-comes up after the restore will not have a `PVC` (Persistent Volume Claim) attached to it (until the pod is restarted).
-The Etcd cluster is in a healthy state at this point but the SMS Health Checks will detect this, and you may see errors similar to:
+### 3.3 Known issues with SMS tests
+
+If an Etcd restore has been performed on one of the SMS services (such as BOS or CRUS), then the first Etcd pod that
+comes up after the restore will not have a PVC (Persistent Volume Claim) attached to it (until the pod is restarted).
+The Etcd cluster is in a healthy state at this point, but the SMS health checks will detect the above condition and
+may report test failures similar to the following:
 
 ```text
 ERROR (run tag 1khv7-bos): persistentvolumeclaims "cray-bos-etcd-ncchqgnczg" not found
 ERROR (run tag 1khv7-crus): persistentvolumeclaims "cray-crus-etcd-ffmszl7bvh" not found
 ```
 
-In this case, these errors can be ignored, or the pod with the same name as the `PVC` mentioned in the output can be restarted (as long as the other two Etcd pods are healthy).
+In this case, these errors can be ignored, or the pod with the same name as the PVC mentioned in the output can be restarted
+(as long as the other two Etcd pods are healthy).
 
 ## 4. NCN gateway health checks
 
@@ -512,7 +539,7 @@ can be used to build the CSM Barebones image. However, the CSM Barebones recipe 
 RPMs that are not installed with the CSM product. The CSM Barebones recipe can be built after the
 Cray OS (COS) product stream is also installed on to the system.
   - In future releases of the CSM product, work will be undertaken to resolve these dependency issues.
-- This procedure can be followed on any NCN or the PIT node.
+- This test can be run on any NCN, but not the PIT node.
 - This script uses the Kubernetes API Gateway to access CSM services. This gateway must be properly
 configured to allow an access token to be generated by the script.
 - This script is installed as part of the `cray-cmstools-crayctldeploy` RPM.
@@ -542,7 +569,7 @@ cray.barebones-boot-test: INFO     Successfully completed barebones image boot t
 ```
 
 The script will choose an enabled compute node that is listed in the Hardware State Manager (HSM) for
-the test unless the user passes in a specific node using the `--xname` argument. If a compute node is
+the test, unless the user passes in a specific node using the `--xname` argument. If a compute node is
 specified but unavailable, an available node will be used instead and a warning will be logged.
 
 ```bash
