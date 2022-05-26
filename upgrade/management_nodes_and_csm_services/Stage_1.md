@@ -5,7 +5,7 @@
 1. Run `ncn-upgrade-ceph-nodes.sh` for `ncn-s001`. Follow output of the script carefully. The script will pause for manual interaction.
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-ceph-nodes.sh ncn-s001
+    ncn-m001# /usr/share/doc/csm/upgrade/management_nodes_and_csm_services/scripts/upgrade/ncn-upgrade-ceph-nodes.sh ncn-s001
     ```
 
     > **NOTE:** The root password for the node may need to be reset after it is rebooted.
@@ -87,7 +87,7 @@
 1. Update BSS to ensure that the Ceph images are loaded if a node is rebuilt.
 
     ```bash
-    ncn-m001# . /usr/share/doc/csm/upgrade/1.2/scripts/ceph/lib/update_bss_metadata.sh
+    ncn-m001# . /usr/share/doc/csm/upgrade/management_nodes_and_csm_services/scripts/ceph/lib/update_bss_metadata.sh
     ncn-m001# update_bss_storage
     ```
 

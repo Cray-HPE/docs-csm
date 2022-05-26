@@ -81,7 +81,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
 
     if [[ -z ${ENDPOINT} ]]; then
         # default endpoint to internal artifactory
-        ENDPOINT=https://artifactory.algol60.net/artifactory/releases/csm/1.2/
+        ENDPOINT=https://artifactory.algol60.net/artifactory/releases/csm/management_nodes_and_csm_services/
         echo "Use internal endpoint: ${ENDPOINT}"
     fi
 

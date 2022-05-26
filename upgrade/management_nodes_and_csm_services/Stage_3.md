@@ -32,7 +32,7 @@
    **NOTE** For Cray/HPE internal installs, if `ncn-m002` can reach the internet, then the `--endpoint` argument may be omitted.
 
    ```bash
-   ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
+   ncn-m002# /usr/share/doc/csm/upgrade/management_nodes_and_csm_services/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
    ```
 
 1. Skip the `Manual copy` subsection.
@@ -54,7 +54,7 @@
 1. Run the script.
 
    ```bash
-   ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
+   ncn-m002# /usr/share/doc/csm/upgrade/management_nodes_and_csm_services/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
 ## Perform upgrade
@@ -78,7 +78,7 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
    Run `csm-upgrade.sh` to deploy upgraded CSM applications and services.
 
    ```bash
-   ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/csm-upgrade.sh
+   ncn-m002# /usr/share/doc/csm/upgrade/management_nodes_and_csm_services/scripts/upgrade/csm-upgrade.sh
    ```
 
 ## Stage completed

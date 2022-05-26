@@ -42,7 +42,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    > **Important:** The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why this command copies it there.
 
    ```bash
-   ncn-m001# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm \
+   ncn-m001# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/management_nodes_and_csm_services/noarch/docs-csm-latest.noarch.rpm \
                 -O /root/docs-csm-latest.noarch.rpm &&
              rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
    ```
@@ -62,7 +62,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    **NOTE** For Cray/HPE internal installs, if `ncn-m001` can reach the internet, then the `--endpoint` argument may be omitted.
 
    ```bash
-   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
+   ncn-m001# /usr/share/doc/csm/upgrade/management_nodes_and_csm_services/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
    ```
 
 1. Skip the `Manual copy` subsection.
@@ -96,7 +96,7 @@ backup of Workload Manager configuration data and files is created. Once complet
 1. Run the script.
 
    ```bash
-   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
+   ncn-m001# /usr/share/doc/csm/upgrade/management_nodes_and_csm_services/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
 <a name="update-sls"></a>
@@ -145,7 +145,7 @@ the correct options for the specific environment are used. Two examples are give
 - Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
    ```bash
-   ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+   ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/management_nodes_and_csm_services/scripts/sls
    ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
                          --bican-user-network-name CHN \
                          --customer-highspeed-network 5 10.103.11.192/26
@@ -154,7 +154,7 @@ the correct options for the specific environment are used. Two examples are give
 - Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing `external-dns` entry.
 
    ```bash
-   ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+   ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/management_nodes_and_csm_services/scripts/sls
    ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
                          --bican-user-network-name CAN \
                          --customer-access-network 6 10.103.15.192/26 \
@@ -234,7 +234,7 @@ If the following command does not complete successfully, check if the `TOKEN` en
 1. Run the script.
 
    ```bash
-   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}
+   ncn-m001# /usr/share/doc/csm/upgrade/management_nodes_and_csm_services/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}
    ```
 
    **IMPORTANT:** If any errors are encountered, then potential fixes should be displayed where the error occurred. **If** the upgrade `prerequisites.sh` script fails and does

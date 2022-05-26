@@ -15,7 +15,7 @@ executed automatically as part of [Stage 0.4](Stage_0_Prerequisites.md#prerequis
 information.
 
 Independently, the `customizations.yaml` file will be edited automatically during upgrade for three worker systems prior to deploying new CSM services. See the file
-`/usr/share/doc/csm/upgrade/1.2/scripts/upgrade/tds_cpu_requests.yaml` for these settings. This file can be modified (prior to proceeding with this upgrade), if other settings
+`/usr/share/doc/csm/upgrade/management_nodes_and_csm_services/scripts/upgrade/tds_cpu_requests.yaml` for these settings. This file can be modified (prior to proceeding with this upgrade), if other settings
 are desired in the `customizations.yaml` file for this system.
 
 For more information about modifying `customizations.yaml` and tuning for specific systems, see
