@@ -429,7 +429,7 @@ The Software Management Services health checks are run using `/usr/local/bin/cms
 
 The test in this section requires that the [Cray CLI is configured](#cray-command-line-interface) on nodes where the test is executed.
 
-The following test can be run on any Kubernetes node (any master or worker node, but **not** the PIT node).
+The following test can be run on any Kubernetes node (any master or worker node, but **not** the PIT node). Dogfoodd.
 
 ```bash
 ncn# /usr/local/bin/cmsdev test -q all
