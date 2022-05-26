@@ -8,11 +8,11 @@ Apply the backed up site connection configuration with a couple modifications. S
 * Custom switch configurations
   * [Backup Custom Configurations](backup_custom_config.md)
 * Generated switch configurations already applied
-  * [Apply Switch Configurations](apply_switch_configs.md)
+  * [Apply Switch Configurations](apply_switch_Configurations.md)
 
 ## Aruba
 
-```bash
+```console
 sw-spine-001# conf t
 interface 1/1/36
     no shutdown
@@ -21,12 +21,12 @@ interface 1/1/36
     exit
 ```
 
-```bash
+```console
 sw-spine-001# conf t
 sw-spine-001(config)# system interface-group 3 speed 10g
 ```
 
-```bash
+```console
 sw-spine-002# conf t
 interface 1/1/36
     no shutdown
@@ -37,23 +37,23 @@ interface 1/1/36
 
 If the switch had `system interface-group` commands those would be added here.
 
-```bash
+```console
 sw-spine-001(config)# system interface-group 3 speed 10g
 ```
 
-```bash
+```console
 sw-spine-001# conf t
 sw-spine-001(config)# ip route 0.0.0.0/0 10.101.15.141 vrf default
 ```
 
-```bash
+```console
 sw-spine-002# conf t
 sw-spine-002(config)# ip route 0.0.0.0/0 10.101.15.189 vrf default
 ```
 
 ## Mellanox
 
-```bash
+```console
 sw-spine-001 [mlag-domain: master] # conf t
 interface ethernet 1/16 speed 10G force
 interface ethernet 1/16 mtu 1500 force
@@ -61,7 +61,7 @@ interface ethernet 1/16 no switchport force
 interface ethernet 1/16 ip address 10.102.255.10/30 primary
 ```
 
-```bash
+```console
 sw-spine-002 [mlag-domain: master] # conf t
 interface ethernet 1/16 speed 10G force
 interface ethernet 1/16 mtu 1500 force
@@ -69,12 +69,12 @@ interface ethernet 1/16 no switchport force
 interface ethernet 1/16 ip address 10.102.255.86/30 primary
 ```
 
-```bash
+```console
 sw-spine-001 [mlag-domain: master] # conf t
    ip route vrf default 0.0.0.0/0 10.102.255.9
 ```
 
-```bash
+```console
 sw-spine-002 [mlag-domain: master] # conf t
    ip route vrf default 0.0.0.0/0 10.102.255.85
 ```
@@ -85,14 +85,14 @@ All that is required to re-apply the users is to get into global configuration m
 
 ### Aruba Credentials
 
-```bash
+```console
 sw-leaf-bmc-001# conf t
 user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 ### Dell Credentials
 
-```bash
+```console
 sw-leaf-001# conf t
 system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
@@ -100,7 +100,7 @@ username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin p
 
 ### Mellanox Credentials
 
-```bash
+```console
 sw-spine-001 [standalone: master] # conf t
    username admin password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    username monitor password 7 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -110,7 +110,7 @@ sw-spine-001 [standalone: master] # conf t
 
 ### Dell SNMP
 
-```bash
+```console
 sw-leaf-bmc-001# conf t
    snmp-server group cray-reds-group 3 noauth read cray-reds-view
    snmp-server user testuser cray-reds-group 3 auth md5 xxxxxxxx priv des xxxxxxx
@@ -119,13 +119,13 @@ sw-leaf-bmc-001# conf t
 
 ### Aruba SNMP
 
-```bash
+```console
 sw-leaf-bmc-001# conf t
    snmp-server vrf default
    snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxx
 ```
 
-For more information on SNMP credentials, see [Change SNMP Credentials on Leaf-BMC Switches](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md) & [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md)
+For more information on SNMP credentials, see [Change SNMP Credentials on Leaf-BMC Switches](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md) and [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md)
 
 ## Write memory
 
