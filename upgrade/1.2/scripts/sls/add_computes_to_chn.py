@@ -160,18 +160,18 @@ def main(
     )
 
     xname_pattern = re.compile('^x([0-9]{1,4})c([0-7])s([0-9]+)b([0-9]+)n([0-9]+)h0$') # HSN Node NIC xXcCsSbBnNhH but only the h0 one
-    xname_pattern_to_remove = re.compile('^x([0-9]{1,4})c([0-7])s([0-9]+)b([0-9]+)n([0-9]+)h([0-3])$') # HSN Node NIC xXcCsSbBnNhH
+    xname_pattern_chn = re.compile('^x([0-9]{1,4})c([0-7])s([0-9]+)b([0-9]+)n([0-9]+)h([0-3])$') # HSN Node NIC xXcCsSbBnNhH
 
     hsn_reservations = hsn_subnet.reservations().values()
     hsn_xnames = set([r.name() for r in hsn_reservations if xname_pattern.match(r.name())])
 
     chn_ipv4_network = chn_subnet.ipv4_network()
-    chn_xnames = set([r.name() for r in chn_subnet.reservations().values() if xname_pattern_to_remove.match(r.name())])
+    chn_xnames = set([r.name() for r in chn_subnet.reservations().values() if xname_pattern_chn.match(r.name())])
     chn_size = chn_ipv4_network.num_addresses
     chn_used = len(chn_subnet.reservations()) + 1
 
-    hsn_to_be_added = hsn_xnames - chn_xnames   # xnames in hsn but not in chn (will be added to chn)
-    chn_to_be_removed = chn_xnames - hsn_xnames # xnames in chn but not in hsn (will be removed from chn)
+    hsn_to_be_added = hsn_xnames - chn_xnames   # xnames in hsn but not in chn (these will be added to chn)
+    chn_to_be_removed = chn_xnames - hsn_xnames # xnames in chn but not in hsn, also any h[1-3] nodes in chn (these will be removed from chn)
 
     chn_available_ips = chn_size - chn_used + len(chn_to_be_removed)
     net_chn_add_count = len(hsn_to_be_added) - len(chn_to_be_removed)
