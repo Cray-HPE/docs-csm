@@ -11,7 +11,7 @@ There are some caveats that are mentioned below.
 - Switch without any configuration
   - [Wipe Mgmt Switches](wipe_mgmt_switches.md)
 - Generated switch configurations
-  - [Generate Switch Config](generate_switch_configurations.md)
+  - [Generate Switch Config](generate_switch_configs.md)
 
 ## Aruba
 
