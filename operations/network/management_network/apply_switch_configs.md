@@ -1,4 +1,4 @@
-# Apply Switch Configs
+# Apply Switch Configurations
 
 This process is generally straightforward and requires the user to copy and paste the generated switch configuration into the terminal.
 
@@ -11,7 +11,7 @@ There are some caveats that are mentioned below.
 - Switch without any configuration
     - [Wipe Mgmt Switches](wipe_mgmt_switches.md)
 - Generated switch configurations
-    - [Generate Switch Config](generate_switch_configs.md)
+    - [Generate Switch Config](generate_switch_Configurations.md)
 
 ## Aruba
 
