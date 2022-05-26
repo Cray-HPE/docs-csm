@@ -26,8 +26,6 @@ import json
 import sys
 import re
 
-import pprint
-
 import click
 
 from sls_utils.ipam import next_free_ipv4_address
@@ -231,7 +229,6 @@ def main(
             },
         )
 
-    pprint.pprint(chn_subnet.reservations())
     click.secho(
         f"CHN now has {len(chn_subnet.reservations()) + 1} IP reservations",
         fg="bright_white"
