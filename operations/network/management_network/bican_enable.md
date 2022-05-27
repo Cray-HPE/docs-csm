@@ -9,6 +9,7 @@
     - [Retrieve SLS data as JSON](#retrieve-sls-data-as-json)
     - [Add Compute IPs to CHN SLS data](#add-compute-ips-to-chn-sls-data)
     - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
+    - [Enable CFS layer](#enable-cfs-layer)
   - [Configure NCNs](#configure-ncns)
   - [Configure the API gateways](#configure-the-api-gateways)
 - [Validation Tasks](#validation-tasks)
@@ -105,6 +106,170 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ```bash
    ncn-m001# curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@chn_with_computes_added_sls_file.json'
    ```
+
+### Enable CFS layer
+
+CHN network configuration of compute nodes is performed by the UAN CFS configuration layer. This procedure describes how to identify the UAN layer and add it to the compute node configuration.
+
+1. Determine the CFS configuration in use on the compute nodes.
+
+   1. Indentify the worker nodes.
+
+      ```bash
+      ncn# cray hsm state components list --role Compute --format json | jq -r '.Components[] | .ID'
+      x1000c5s1b0n1
+      x1000c5s1b0n0
+      x1000c5s0b0n0
+      x1000c5s0b0n1
+      ```
+
+   1. Identify CFS configuration in use on the worker nodes.
+
+      ```bash
+      ncn# cray cfs components describe x1000c5s1b0n1
+      configurationStatus = "configured"
+      desiredConfig = "cos-config-full-2.3-integration"
+      enabled = true
+      errorCount = 0
+      id = "x1000c5s1b0n1"
+      ```
+
+   1. Extract the CFS configuration.
+
+      ```bash
+      ncn# cray cfs configurations describe cos-config-full-2.3-integration --format json | jq 'del(.lastUpdated) | del(.name)' > cos-config-full-2.3-integration.json
+      ```
+
+1. Identify the UAN CFS configuration.
+
+   1. Identify the UAN nodes.
+
+      ```bash
+      ncn# cray hsm state components list --role Application --subrole UAN --format    json | jq -r '.Components[] | .ID'
+      x3000c0s25b0n0
+      x3000c0s16b0n0
+      x3000c0s15b0n0
+      ```
+
+   1. Identify the UAN CFS configuration in use.
+
+      ```bash
+      ncn# cray cfs components describe x3000c0s25b0n0
+      configurationStatus = "configured"
+      desiredConfig = "chn-uan-cn"
+      enabled = true
+      errorCount = 0
+      id = "x3000c0s25b0n0"
+      ```
+
+   1. Identify the UAN CFS configuration layer.
+
+      The resulting output should look similar to this. Installed products, versions, and commit hashes will vary.
+
+      ```json
+      ncn# cray cfs configurations describe chn-uan-cn --format json
+      {
+        "lastUpdated": "2022-05-27T20:15:10Z",
+        "layers": [
+          {
+            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git",
+            "commit": "359611be2f6893ddd0020841b73a3d4924120bb1",
+            "name": "chn-uan-cn",
+            "playbook": "site.yml"
+          }
+        ],
+        "name": "chn-uan-cn"
+      }
+      ```
+
+1. Edit the extracted compute node configuration and add the UAN layer to it.
+
+2. Update the compute node CFS configuration.
+
+   ```bash
+   ncn# cray cfs configurations update cos-config-full-2.3-integration --file cos-config-full-2.3-integration.json
+   lastUpdated = "2022-05-27T20:47:18Z"
+   name = "cos-config-full-2.3-integration"
+   [[layers]]
+   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/   slingshot-host-software-config-management.git"
+   commit = "dd428854a04a652f825a3abbbf5ae2ff9842dd55"
+   name = "shs-integration"
+   playbook = "shs_mellanox_install.yml"
+
+   [[layers]]
+   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+   commit = "92ce2c9988fa092ad05b40057c3ec81af7b0af97"
+   name = "csm-1.9.21"
+   playbook = "site.yml"
+
+   [[layers]]
+   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
+   name = "cos-compute-integration-2.3.75"
+   playbook = "cos-compute.yml"
+
+   [[layers]]
+   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/sma-config-management.git"
+   commit = "2219ca094c0a2721f3bf52f5bd542d8c4794bfed"
+   name = "sma-base-config"
+   playbook = "sma-base-config.yml"
+
+   [[layers]]
+   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/sma-config-management.git"
+   commit = "2219ca094c0a2721f3bf52f5bd542d8c4794bfed"
+   name = "sma-ldms-ncn"
+   playbook = "sma-ldms-ncn.yml"
+
+   [[layers]]
+   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/slurm-config-management.git"
+   commit = "0982661002a857d743ee5b772520e47c97f63acc"
+   name = "slurm master"
+   playbook = "site.yml"
+
+   [[layers]]
+   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/pbs-config-management.git"
+   commit = "874050c9820cc0752c6424ef35295289487acccc"
+   name = "pbs master"
+   playbook = "site.yml"
+
+   [[layers]]
+   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/analytics-config-management.git"
+   commit = "d4b26b74d08e668e61a1e5ee199e1a235e9efa3b"
+   name = "analytics integration"
+   playbook = "site.yml"
+
+   [[layers]]
+   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git"
+   commit = "dd2bcbb97e3adbfd604f9aa297fb34baa0dd90f7"
+   name = "cos-compute-last-integration-2.3.75"
+   playbook = "cos-compute-last.yml"
+
+   [[layers]]
+   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git"
+   commit = "359611be2f6893ddd0020841b73a3d4924120bb1"
+   name = "chn-uan-cn"
+   playbook = "site.yml"
+   ```
+
+3. Check that CFS configuration of the compute node completes successfully.
+
+   Updating the CFS configuration will cause CFS to schedule the nodes for configuration. Run the following command to verify this has occurred.
+
+   ```bash
+   ncn# cray cfs components describe x1000c5s1b0n1
+   configurationStatus = "pending"
+   desiredConfig = "cos-config-full-2.3-integration"
+   enabled = true
+   errorCount = 0
+   id = "x1000c5s1b0n1"
+   state = []
+
+   [tags]
+   ```
+
+   `configurationStatus` should change from `pending` to `configured` once CFS configuration of the node is complete.
+
+For more information on managing node with CFS please refer to the [Configuration Management](../../../operations/index.md#configuration-management) documentation.
 
 <a name="configure-ncn"></a>
 
@@ -255,7 +420,7 @@ Prerequisites for this task:
 
    `configurationStatus` should change from `pending` to `configured` once NCN personalization completes successfully.
 
-For more information on managing NCN personalization please refer to operations/CSM_product_management/Perform_NCN_Personalization.md
+For more information on managing NCN personalization please refer to [Perform_NCN_Personalization.md](../../../operations/CSM_product_management/Perform_NCN_Personalization.md)
 
 <a name="configure-api-gw"></a>
 
@@ -356,7 +521,51 @@ Please refer to the [gateway testing documentation](../gateway_testing.md) for m
 
 ## Validate Compute Nodes
 
-TBD
+1. Retrieve the `CHN` network information from SLS.
+
+   ```bash
+   ncn-m001:~ # cray sls search networks list --name CHN --format json  | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp") | del(.IPReservations)'
+   {
+     "CIDR": "10.103.9.0/25",
+     "DHCPEnd": "10.103.9.62",
+     "DHCPStart": "10.103.9.16",
+     "FullName": "CHN Bootstrap DHCP Subnet",
+     "Gateway": "10.103.9.1",
+     "Name": "bootstrap_dhcp",
+     "VlanID": 5
+   }
+   ```
+
+1. Verify the compute nodes have `CMN` IP addresses set on the hsn0 interface.
+
+   ```bash
+   nid001160:~ # ip ad show hsn0
+   3: hsn0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen    1000
+       link/ether 02:00:00:00:08:73 brd ff:ff:ff:ff:ff:ff
+       altname enp194s0np0
+       inet 10.253.0.54/16 scope global hsn0
+          valid_lft forever preferred_lft forever
+       inet 10.103.9.48/25 scope global hsn0
+          valid_lft forever preferred_lft forever
+       inet6 fe80::ff:fe00:873/64 scope link
+          valid_lft forever preferred_lft forever
+   ```
+
+1. Verify the default route is set correctly on the compute nodes.
+
+   ```
+   nid001160:~ # ip route show
+   default via 10.103.9.1 dev hsn0
+   10.92.100.0/24 via 10.100.0.1 dev nmn0
+   10.100.0.0/22 dev nmn0 proto kernel scope link src 10.100.0.13
+   10.100.0.0/17 via 10.100.0.1 dev nmn0
+   10.103.9.0/25 dev hsn0 proto kernel scope link src 10.103.9.48
+   10.252.0.0/17 via 10.100.0.1 dev nmn0
+   10.253.0.0/16 dev hsn3 proto kernel scope link src 10.253.0.53
+   10.253.0.0/16 dev hsn2 proto kernel scope link src 10.253.0.37
+   10.253.0.0/16 dev hsn1 proto kernel scope link src 10.253.0.38
+   10.253.0.0/16 dev hsn0 proto kernel scope link src 10.253.0.54
+   ```
 
 <a name="validate-ncn"></a>
 
