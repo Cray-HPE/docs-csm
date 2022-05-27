@@ -254,6 +254,11 @@ Before rebooting NCNs:
 
        ```bash
        ncn# egrep -o '^(BOOT_IMAGE|kernel)' /proc/cmdline
+       ```
+
+       Expected output for a disk boot is:
+
+       ```text
        BOOT_IMAGE
        ```
 
