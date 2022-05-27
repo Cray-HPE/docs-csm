@@ -173,8 +173,8 @@ Before rebooting NCNs:
     5. If desired verify method of boot is expected. If the `/proc/cmdline` begins with `BOOT_IMAGE` then this NCN booted from disk:
 
        ```bash
-       ncn# egrep -o '^(BOOT_IMAGE.+/kernel)' /proc/cmdline
-       BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
+       ncn# egrep -o '^(BOOT_IMAGE|kernel)' /proc/cmdline
+       BOOT_IMAGE
        ```
 
     6. Retrieve the component name (xname) for the node being rebooted.
