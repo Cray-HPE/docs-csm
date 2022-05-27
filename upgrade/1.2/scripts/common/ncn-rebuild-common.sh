@@ -56,8 +56,8 @@ if [[ $state_recorded == "0" && $2 != "--rebuild" ]]; then
     if [[ "${target_ncn}" != "ncn-m001" ]]; then
       # ensure the directory exists
       ssh "${target_ncn}" 'mkdir -p /srv/cray/scripts/common/'
-      # copy the ntp script and template to the node
-      scp -r "${CSM_ARTI_DIR}"/chrony/ "${target_ncn}":/srv/cray/scripts/common/
+      # copy the NTP script and template to the node
+      scp -pr "${CSM_ARTI_DIR}"/chrony/ "${target_ncn}":/srv/cray/scripts/common/
       # run the script
       #shellcheck disable=SC2029
       if ! ssh "${target_ncn}" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"; then

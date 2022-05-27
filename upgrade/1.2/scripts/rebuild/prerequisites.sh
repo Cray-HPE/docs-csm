@@ -65,8 +65,8 @@ if [[ $state_recorded == "0" && $2 != "--rebuild" ]]; then
     if [[ "${target_ncn}" == "ncn-m001" ]]; then
       # ensure the directory exists
       mkdir -p /srv/cray/scripts/common/
-      # copy the ntp script and template to ncn-m001
-      cp -r "${CSM_ARTI_DIR}"/chrony/ /srv/cray/scripts/common/
+      # copy the NTP script and template to ncn-m001
+      cp -r --preserve=mode "${CSM_ARTI_DIR}"/chrony/ /srv/cray/scripts/common/
       # run the script
       if ! TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py; then
           echo "${target_ncn} csm_ntp failed"
