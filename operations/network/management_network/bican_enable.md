@@ -113,7 +113,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 
 1. Determine the CFS configuration in use on the compute nodes.
 
-   1. Indentify the worker nodes.
+   1. Identify the worker nodes.
 
       ```bash
       ncn# cray hsm state components list --role Compute --format json | jq -r '.Components[] | .ID'
@@ -184,7 +184,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 
 1. Edit the extracted compute node configuration and add the UAN layer to it.
 
-2. Update the compute node CFS configuration.
+1. Update the compute node CFS configuration.
 
    ```bash
    ncn# cray cfs configurations update cos-config-full-2.3-integration --file cos-config-full-2.3-integration.json
@@ -251,7 +251,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    playbook = "site.yml"
    ```
 
-3. Check that CFS configuration of the compute node completes successfully.
+1. Check that CFS configuration of the compute node completes successfully.
 
    Updating the CFS configuration will cause CFS to schedule the nodes for configuration. Run the following command to verify this has occurred.
 
@@ -276,12 +276,12 @@ For more information on managing node with CFS please refer to the [Configuratio
 ## Configure NCNs
 
 Prerequisites for this task: 
-  - CSM NCN personalization has been configured.
-  - Cray Operating System, Slingshot Host Software, and Slingshot have been installed and configured.
+- CSM NCN personalization has been configured.
+- Cray Operating System, Slingshot Host Software, and Slingshot have been installed and configured.
 
 1. Determine the CFS configuration in use on the worker nodes.
 
-   1. Indentify the worker nodes.
+   1. Identify the worker nodes.
    
       ```bash
       ncn# cray hsm state components list --role Management --subrole Worker --format json | jq -r '.Components[] | .ID'
