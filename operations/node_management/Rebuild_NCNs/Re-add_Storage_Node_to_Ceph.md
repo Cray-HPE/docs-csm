@@ -85,13 +85,13 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 1. Change the mode of the script.
 
    ```bash
-   chmod u+x /srv/cray/scripts/common/join_ceph_cluster.sh
+   ncn-s# chmod u+x /srv/cray/scripts/common/join_ceph_cluster.sh
    ```
 
-1. In a separate window, log into one of the following `ncn-s00(1/2/3)` and execute the following:
+1. In a separate window, log into one of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`) and execute the following:
 
    ```bash
-   watch ceph -s
+   ncn-ms# watch ceph -s
    ```
 
 1. Execute the script.
@@ -106,7 +106,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
 **IMPORTANT:** Only do this if unable to wipe the node prior to rebuild.
 
-**NOTE:** The commands in the Zapping OSDs section will need to be run from a node running `ceph-mon`. Typically `ncn-s00(1/2/3)`.
+**NOTE:** The commands in the Zapping OSDs section must be run on a node running `ceph-mon`. Typically these are `ncn-s001`, `ncn-s002`, and `ncn-s003`.
 
 1. Find the devices on the node being rebuilt.
 
@@ -142,16 +142,16 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 3. Validate the drives are being added to the cluster.
 
    ```bash
-   watch ceph -s
+   ncn-ms# watch ceph -s
    ```
 
-   The returned output will have the OSD count UP and IN counts increase. **If** the **IN** count increases but does not reflect the amount of drives being added back in, an administrator must fail over the `ceph-mgr` daemon.
+   The returned output will have the OSD count `UP` and `IN` counts increase. **If** the `IN` count increases but does not reflect the amount of drives being added back in, an administrator must fail over the `ceph-mgr` daemon.
    This is a known bug and is addressed in newer releases.
 
    If necessary, fail over the `ceph-mgr` daemon with the following command:
 
    ```bash
-   ceph mgr fail
+   ncn-s# ceph mgr fail
    ```
 
 ## Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
@@ -164,7 +164,7 @@ This is automated as part of the install, but administrators may have to regener
    - Configure Rados Gateway containers with the complete list of nodes it should be running on:
 
      ```bash
-     ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
+     ncn-s# ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
      ```
 
 1. Verify Rados Gateway is running on the desired nodes.
@@ -175,7 +175,7 @@ This is automated as part of the install, but administrators may have to regener
 
     Example output:
 
-    ```bash
+    ```text
     NAME                             HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE     D              CONTAINER ID
     rgw.site1.zone1.ncn-s001.kvskqt  ncn-s001  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8      553b0cb212c          6e323878db46
     rgw.site1.zone1.ncn-s002.tisuez  ncn-s002  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8      553b0cb212c          278830a273d3
