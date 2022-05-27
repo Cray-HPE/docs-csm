@@ -11,7 +11,7 @@ Apply the backed up site connection configuration with a couple modifications. S
 - Generated switch configurations already applied
   - [Apply Switch Configurations](apply_switch_configurations.md)
 
-## Aruba
+## Aruba Apply Configurations
 
 `vrf attach Customer` will be added to the port configuration that connects to the site. This has to be applied before the `ip address` configuration.
 
@@ -58,7 +58,7 @@ sw-spine-002# conf t
 sw-spine-002(config)# ip route 0.0.0.0/0 10.101.15.189 vrf Customer
 ```
 
-## Mellanox
+## Mellanox Apply Configurations
 
 `vrf forwarding Customer` will be added to the port configuration. This has to be applied before the `ip address` configuration.
 
