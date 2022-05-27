@@ -10,7 +10,7 @@ Apply the backed up site connection configuration with a couple modifications. S
 * Generated switch configurations already applied
   * [Apply Switch Configurations](apply_switch_configurations.md)
 
-## Aruba
+## Aruba Apply Configurations
 
 ```console
 sw-spine-001# conf t
@@ -51,7 +51,7 @@ sw-spine-002# conf t
 sw-spine-002(config)# ip route 0.0.0.0/0 10.101.15.189 vrf default
 ```
 
-## Mellanox
+## Mellanox Apply Configurations
 
 ```console
 sw-spine-001 [mlag-domain: master] # conf t
