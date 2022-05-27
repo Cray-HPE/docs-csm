@@ -40,19 +40,19 @@ Results may vary if an unconfigured switch is being used.
 
     DellOS 10
 
-    ```bash
+    ```console
     # DellOS 10
     sw-leaf-bmc-001# show mac address-table vlan 4
-    VlanId Mac Address  Type        Interface
-    4 00:1e:67:98:fe:2c dynamic     ethernet1/1/11
-    4 a4:bf:01:38:f0:b1 dynamic     ethernet1/1/27
-    4 a4:bf:01:38:f1:44 dynamic     ethernet1/1/25
-    4 a4:bf:01:48:1e:ac dynamic     ethernet1/1/28
-    4 a4:bf:01:48:1f:70 dynamic     ethernet1/1/31
-    4 a4:bf:01:48:1f:e0 dynamic     ethernet1/1/26
-    4 a4:bf:01:48:20:03 dynamic     ethernet1/1/30
-    4 a4:bf:01:48:20:57 dynamic     ethernet1/1/29
-    4 a4:bf:01:4d:d9:9a dynamic     ethernet1/1/32
+    VlanId  Mac Address          Type     Interface
+    4       00:1e:67:98:fe:2c    dynamic  ethernet1/1/11
+    4       a4:bf:01:38:f0:b1    dynamic  ethernet1/1/27
+    4       a4:bf:01:38:f1:44    dynamic  ethernet1/1/25
+    4       a4:bf:01:48:1e:ac    dynamic  ethernet1/1/28
+    4       a4:bf:01:48:1f:70    dynamic  ethernet1/1/31
+    4       a4:bf:01:48:1f:e0    dynamic  ethernet1/1/26
+    4       a4:bf:01:48:20:03    dynamic  ethernet1/1/30
+    4       a4:bf:01:48:20:57    dynamic  ethernet1/1/29
+    4       a4:bf:01:4d:d9:9a    dynamic  ethernet1/1/32
     ```
 
     Aruba AOS-CX
@@ -84,11 +84,11 @@ Results may vary if an unconfigured switch is being used.
 
     DellOS 10
 
-    ```bash
+    ```console
     # DellOS 10
     sw-leaf-bmc-001# show mac address-table interface ethernet 1/1/32
-    VlanId  Mac Address  Type      Interface
-    4 a4:bf:01:4d:d9:9a  dynamic   ethernet1/1/32
+    VlanId  Mac Address          Type     Interface
+    4       a4:bf:01:4d:d9:9a    dynamic  ethernet1/1/32
     ```
 
     Aruba AOS-CX
@@ -110,11 +110,11 @@ Results may vary if an unconfigured switch is being used.
 
     DellOS 10
 
-    ```bash
+    ```console
     # DellOS 10
     sw-leaf-bmc-001# show mac address-table
-    VlanId Mac Address   Type       Interface
-    4 a4:bf:01:4d:d9:9a  dynamic    ethernet1/1/32
+    VlanId  Mac Address          Type     Interface
+    4       a4:bf:01:4d:d9:9a    dynamic  ethernet1/1/32
     ....
     # Onyx and Aruba
     sw-leaf-bmc-001# show mac-address-table
@@ -135,7 +135,8 @@ Results may vary if an unconfigured switch is being used.
 
 1. Ensure the management NCNs are present in the `ncn_metadata.csv` file.
 
-   The output from the previous `show mac address-table` command will display information for all management NCNs that do not have an external connection for their BMC, such as `ncn-m001`.
+   The output from the previous `show mac address-table` command will display information for all management NCNs that do not have an external connection for their BMC, such as `ncn-m001`. The BMC MAC address for `ncn-m001` will be collected in the next
+   step, as this BMC is not connected to the system's management network like the other management nodes.
 
    All of the management NCNs should be present in the `ncn_metadata.csv` file.
 
@@ -151,29 +152,38 @@ Results may vary if an unconfigured switch is being used.
    x3000c0s9b0n0,Management,Storage,a4:bf:01:38:f1:44,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    x3000c0s8b0n0,Management,Storage,a4:bf:01:48:1f:e0,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    x3000c0s7b0n0,Management,Storage,a4:bf:01:38:f0:b1,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
-                                     ^^^^^^^^^^^^^^^^^
+                                    ^^^^^^^^^^^^^^^^^
+                                    BMC MAC Address
    ```
 
    The column heading must match that shown above for `csi` to parse it correctly.
 
-1. Collect the BMC MAC address information for the PIT node.
+1. Collect the BMC MAC address information for `ncn-m001`, which is currently the PIT node.
 
-   The PIT node BMC is not connected to the switch like the other management nodes.
+   * For HPE and Gigabyte nodes:
 
-   ```bash
-   linux# export SYSTEM_NAME=eniac
-   linux# export USERNAME=root
-   linux# export IPMI_PASSWORD=changeme
-   linux# ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt lan print | grep "MAC Address"
+     ```bash
+     pit# ipmitool lan print 1 | grep "MAC Address"
+     ```
+
+   * For Intel nodes:
+
+     ```bash
+     pit# ipmitool lan print 3 | grep "MAC Address"
+     ```
+
+   Expected output:
+
+   ```text
    MAC Address             : a4:bf:01:37:87:32
    ```
-
-   > **NOTE:** An Intel node needs to use `ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt lan print` instead of the above command.
 
    Add this information for `ncn-m001` to the `ncn_metadata.csv` file. There should be `ncn-m003`, then `ncn-m002`, and this new entry for `ncn-m001` as the last line in the file.
 
    ```text
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
+                                   ^^^^^^^^^^^^^^^^^
+                                   BMC MAC Address
    ```
 
 1. Verify the `ncn_metadata.csv` file has a row for every management node in the SHCD.
