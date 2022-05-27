@@ -83,7 +83,7 @@ sw-spine-002 [mlag-domain: master] # conf t
 
 All that is required to re-apply the users is to get into global configuration mode with `conf t` and to paste in the configuration that was copied from the previous step.
 
-### Aruba Credentials
+### Aruba credentials
 
 ```console
 sw-leaf-bmc-001# conf t
