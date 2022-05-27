@@ -10,7 +10,7 @@ Apply the backed up site connection configuration with a couple modifications. S
 * Generated switch configurations already applied
   * [Apply Switch Configurations](apply_switch_configurations.md)
 
-## Aruba Apply Configurations
+## Aruba apply configurations
 
 ```console
 sw-spine-001# conf t
@@ -51,7 +51,7 @@ sw-spine-002# conf t
 sw-spine-002(config)# ip route 0.0.0.0/0 10.101.15.189 vrf default
 ```
 
-## Mellanox Apply Configurations
+## Mellanox apply configurations
 
 ```console
 sw-spine-001 [mlag-domain: master] # conf t
@@ -90,7 +90,7 @@ sw-leaf-bmc-001# conf t
 user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-### Dell Credentials
+### Dell credentials
 
 ```console
 sw-leaf-001# conf t
@@ -125,7 +125,7 @@ sw-leaf-bmc-001# conf t
    snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxx
 ```
 
-For more information on SNMP credentials, see [Change SNMP Credentials on Leaf-BMC Switches](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md) and [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../../../operations/security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
+For more information on SNMP credentials, see [Change SNMP Credentials on Leaf-BMC Switches](../../security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md) and [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../../security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md).
 
 ## Write memory
 

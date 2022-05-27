@@ -11,7 +11,7 @@ Apply the backed up site connection configuration with a couple modifications. S
 - Generated switch configurations already applied
   - [Apply Switch Configurations](apply_switch_configurations.md)
 
-## Aruba Apply Configurations
+## Aruba apply configurations
 
 `vrf attach Customer` will be added to the port configuration that connects to the site. This has to be applied before the `ip address` configuration.
 
@@ -58,7 +58,7 @@ sw-spine-002# conf t
 sw-spine-002(config)# ip route 0.0.0.0/0 10.101.15.189 vrf Customer
 ```
 
-## Mellanox Apply Configurations
+## Mellanox apply configurations
 
 `vrf forwarding Customer` will be added to the port configuration. This has to be applied before the `ip address` configuration.
 
@@ -96,14 +96,14 @@ sw-spine-002 [mlag-domain: master] # conf t
 
 All that is required to re-apply the users is to get into the global configuration mode using `conf t` and paste in the configuration that was copied from the previous step.
 
-### Aruba Credentials
+### Aruba credentials
 
 ```console
 sw-leaf-bmc-001# conf t
 user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-### Dell Credentials
+### Dell credentials
 
 ```console
 sw-leaf-001# conf t
@@ -111,7 +111,7 @@ system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
 ```
 
-### Mellanox Credentials
+### Mellanox credentials
 
 ```console
 sw-spine-001 [standalone: master] # conf t
@@ -138,7 +138,7 @@ sw-leaf-bmc-001# conf t
    snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxx
 ```
 
-For more information on SNMP credentials, see [Change SNMP Credentials on Leaf-BMC Switches](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md) and [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../../../operations/security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
+For more information on SNMP credentials, see [Change SNMP Credentials on Leaf-BMC Switches](../../security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md) and [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../../security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md).
 
 ## Write memory
 

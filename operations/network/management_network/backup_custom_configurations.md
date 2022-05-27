@@ -104,14 +104,14 @@ sw-spine-002 [mlag-domain: master] # show run | include "ip route"
 
 ## Backup users/passwords
 
-### Aruba users/passwords
+### Aruba users and passwords
 
 ```console
 sw-leaf-bmc-001# show run | include user
 user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-### Dell users/passwords
+### Dell users and passwords
 
 ```console
 sw-leaf-001# show running-configuration | grep user
