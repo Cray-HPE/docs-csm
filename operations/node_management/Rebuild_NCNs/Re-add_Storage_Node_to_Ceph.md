@@ -183,7 +183,14 @@
 1. Add nodes into `HAproxy` and `KeepAlived`.
 
    ```bash
-   pdsh -w ncn-s00[1-(end node number)] -f 2 'source /srv/cray/scripts/metal/update_apparmor.sh ; reconfigure-apparmor; /srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg; systemctl enable haproxy.service; systemctl restart haproxy.service; /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf; systemctl enable keepalived.service; systemctl restart keepalived.service'
+   ncn-s# pdsh -w ncn-s00[1-(end node number)] -f 2 \
+                   'source /srv/cray/scripts/metal/update_apparmor.sh
+                    reconfigure-apparmor; /srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg
+                    systemctl enable haproxy.service
+                    systemctl restart haproxy.service
+                    /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf
+                    systemctl enable keepalived.service
+                    systemctl restart keepalived.service'
    ```
 
 [Next Step - Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md)
