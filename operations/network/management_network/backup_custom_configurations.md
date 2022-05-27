@@ -119,7 +119,7 @@ system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
 ```
 
-### Mellanox users/passwords
+### Mellanox users and passwords
 
 ```console
 sw-spine-001 [standalone: master] # show run | include username
