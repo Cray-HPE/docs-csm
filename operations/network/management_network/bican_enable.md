@@ -275,14 +275,15 @@ For more information on managing node with CFS please refer to the [Configuratio
 
 ## Configure NCNs
 
-Prerequisites for this task: 
+Prerequisites for this task:
+
 - CSM NCN personalization has been configured.
 - Cray Operating System, Slingshot Host Software, and Slingshot have been installed and configured.
 
 1. Determine the CFS configuration in use on the worker nodes.
 
    1. Identify the worker nodes.
-   
+
       ```bash
       ncn# cray hsm state components list --role Management --subrole Worker --format json | jq -r '.Components[] | .ID'
       x3000c0s4b0n0
@@ -307,6 +308,7 @@ Prerequisites for this task:
    ```bash
    ncn# cray cfs configurations describe ncn-personalization --format json | jq 'del(.lastUpdated) | del(.name)' > ncn-personalization.json
    ```
+
    The resulting output file should look similar to this. Installed products, versions, and commit hashes will vary.
 
    ```json
@@ -482,7 +484,7 @@ Configured SystemDefaultRoute: CHN
 
 1. Retrieve the configured CHN subnet from SLS
 
-   ```
+   ```bash
    ncn-m001# cray sls search networks list --name CHN --format json | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="chn_metallb_address_pool")'
    {
      "CIDR": "10.103.9.64/27",
@@ -496,7 +498,7 @@ Configured SystemDefaultRoute: CHN
 
 1. Verify that UAIs are being created with IP addresses in the correct range.
 
-   ```
+   ```bash
    ncn-m001# cray uas admin uais list --format json | jq -c '.[] | {uai_name, uai_ip}'
    {"uai_name":"uai-vers-93f0289d","uai_ip":"10.103.9.69"}
    {"uai_name":"uai-vers-9f67ac89","uai_ip":"10.103.9.70"}
@@ -505,13 +507,13 @@ Configured SystemDefaultRoute: CHN
 
 1. Run the UAI gateway tests
 
-   ```
+   ```bash
    ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
    ```
 
    The test will launch a UAI with the gateway-test image, execute the gateway tests, and then delete the UAI that was launched. The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
 
-   ```
+   ```bash
    Overall Gateway Test Status:  PASS
    ```
 
@@ -553,7 +555,7 @@ Please refer to the [gateway testing documentation](../gateway_testing.md) for m
 
 1. Verify the default route is set correctly on the compute nodes.
 
-   ```
+   ```bash
    nid001160:~ # ip route show
    default via 10.103.9.1 dev hsn0
    10.92.100.0/24 via 10.100.0.1 dev nmn0
@@ -618,7 +620,7 @@ Please refer to the [gateway testing documentation](../gateway_testing.md) for m
 
 Check that the `istio-ingressgateway-cmn` API gateway has an IP address.
 
-```
+```bash
 ncn-m001:~ # kubectl -n istio-system get svc istio-ingressgateway-chn
 NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
 istio-ingressgateway-chn   LoadBalancer   10.23.158.228   10.103.9.65   80:30126/TCP,443:31972/TCP   74d
@@ -626,12 +628,12 @@ istio-ingressgateway-chn   LoadBalancer   10.23.158.228   10.103.9.65   80:30126
 
 Run the NCN gateway health checks
 
-```
+```bash
 ncn-m001:~ # /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
 ```
 The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
 
-```
+```bash
 Overall Gateway Test Status:  PASS
 ```
 
