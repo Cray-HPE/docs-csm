@@ -82,7 +82,7 @@ This step is required. **There is no default root password and no default SSH ke
    pit# cd /var/www/ephemeral/data/
    pit# ${CSM_PATH}/ncn-image-modification.sh -p -z America/Chicago \
                                               -d /my/pre-existing/keys \
-                                              -k $(find . -name "kubernetes-*.squashfs" | sort -V | tail -1)
+                                              -k $(find . -name "kubernetes-*.squashfs" | sort -V | tail -1) \
                                               -s $(find . -name "storage-ceph-*.squashfs" | sort -V | tail -1)
    ```
 
