@@ -1,52 +1,55 @@
 # Collecting NCN MAC Addresses
 
-This procedure will detail how to collect the NCN MAC addresses from an HPE Cray EX system. The MAC addresses needed for the Bootstrap MAC, Bond0 MAC0, and Bond0 MAC1 columns in `ncn_metadata.csv` will be collected.
+This procedure will detail how to collect the NCN MAC addresses from an HPE Cray EX system. The MAC addresses needed for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1` columns in `ncn_metadata.csv` will be collected.
 
 The Bootstrap MAC address will be used for identification of this node during the early part of the PXE boot process before the bonded interface can be established.
 
-The Bond0 MAC0 and Bond0 MAC1 are the MAC addresses for the physical interfaces that the node will use for the various VLANs.
-The Bond0 MAC0 and Bond0 MAC1 should be on the different network cards to establish redundancy for a failed network card.
-On the other hand, if the node has only a single network card, then MAC1 and MAC0 will still produce a valid configuration if they do reside on the same physical card.
+The `Bond0 MAC0` and `Bond0 MAC1` are the MAC addresses for the physical interfaces that the node will use for the various VLANs.
+`Bond0 MAC0` and `Bond0 MAC1` should be on the different network cards in order to establish redundancy for a failed network card.
+On the other hand, this is not an absolute requirement. If the node has only a single network card, then this will force `MAC1` and `MAC0` to reside on the same physical card; this will still produce a valid configuration.
 
-#### Sections
+## Sections
 
 - [Collecting NCN MAC Addresses](#collecting-ncn-mac-addresses)
-      - [Sections](#sections)
-  - [Procedure: iPXE Consoles](#procedure-ipxe-consoles)
-      - [Requirements](#requirements)
-      - [MAC Collection](#mac-collection)
-  - [Procedure: Serial Consoles](#procedure-serial-consoles)
+  - [Sections](#sections)
+  - [Procedure: iPXE consoles](#procedure-ipxe-consoles)
+    - [Requirements](#requirements)
+    - [MAC address collection](#mac-collection)
+  - [Procedure: Serial consoles](#procedure-serial-consoles)
   - [Procedure: Recovering from an incorrect `ncn_metadata.csv` file](#procedure-recovering-from-an-incorrect-ncn_metadatacsv-file)
 
-The easy way to do this leverages the NIC-dump provided by the metal-ipxe package. This page will walk-through
+The easy way to do this leverages the NIC information dumping provided by the `metal-ipxe` package. This page will walk through
 booting NCNs and collecting their MACs from the ConMan console logs.
 
 > The alternative is to use serial cables (or SSH) to collect the MACs from the switch ARP tables, this can become exponentially difficult for large systems.
 > If this is the only way, please proceed to the bottom of this page.
 
 <a name="procedure-ipxe-consoles"></a>
+
 ## Procedure: iPXE Consoles
 
 This procedure is faster for those with the LiveCD (CRAY Pre-Install Toolkit). It can be used to quickly
 boot-check nodes to dump network device information without an operating system. This works by accessing the PCI Configuration Space.
 
 <a name="requirements"></a>
-#### Requirements
 
-> If CSI does not work because of a file requirement, please file a ticket. By default, dnsmasq
-> and ConMan are already running on the LiveCD, but bond0 needs to be configured. dnsmasq needs to
-> serve/listen over bond0, and ConMan needs the BMC information.
+### Requirements
 
-1. LiveCD dnsmasq is configured for the bond0/metal network (NMN/HMN/CAN do not matter)
-2. BMC MAC addresses already collected
-3. LiveCD ConMan is configured for each BMC
+> If CSI does not work because of a file requirement, then file a ticket. By default, `dnsmasq`
+> and ConMan are already running on the LiveCD, but `bond0` needs to be configured. `dnsmasq` needs to
+> serve/listen over `bond0`, and ConMan needs the BMC information.
+
+1. LiveCD `dnsmasq` is configured for the `bond0`/metal network (NMN/HMN/CAN do not matter)
+1. BMC MAC addresses already collected
+1. LiveCD ConMan is configured for each BMC
 
 For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md).
 
 <a name="mac-collection"></a>
-#### MAC Collection
 
-1. (Optional) Shim the boot so nodes bail after dumping their network devices.
+### MAC address collection
+
+1. (Optional) Shim the boot so nodes stop booting after dumping their network devices.
 
    Removing the iPXE script will prevent network booting. Be aware that the nodes may disk boot.
 
@@ -56,7 +59,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     pit# mv /var/www/boot/script.ipxe /var/www/boot/script.ipxe.bak
     ```
 
-2. Verify consoles are active with `conman -q`. The following command lists all nodes that ConMan is configured for,
+1. Verify consoles are active. The following command lists all nodes for which ConMan is configured:
 
     ```bash
     pit# conman -q
@@ -70,31 +73,40 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     ncn-w003-mgmt
     ```
 
-3. Set the nodes to PXE boot and (re)start them.
+1. Set the nodes to PXE boot and start (or restart) them.
+
+    > `read -s` is used in order to prevent the credentials from being displayed on the screen or recorded in the shell history.
 
     ```bash
-    pit# export USERNAME=root
-    pit# export IPMI_PASSWORD=changeme
+    pit# USERNAME=root
+    pit# read -s IPMI_PASSWORD
+    pit# export IPMI_PASSWORD
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot,persistent
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     pit# sleep 10
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
     ```
-4. Wait for the nodes to netboot. You can follow them with ConMan - the `-m` option follows the console output in read-only mode or the `-j` option joins an interactive console session. The available node names were listed in step 2 above. The boot usually starts in less than 3 minutes and log data should start flowing through ConMan, speed depends on how quickly your nodes POST. To see a ConMan help screen for all supported escape sequences use `&?`.
 
-    ```
+1. Wait for the nodes to network boot. This can be monitored using ConMan; the `-m` option follows the console output in read-only mode, and the `-j` option joins an interactive console session. The available node names were listed in step 2 above. The boot
+   usually starts in less than 3 minutes and log data should start flowing through ConMan; the speed depends on how quickly the nodes POST. To see a ConMan help screen for all supported escape sequences, use `&?`.
+
+    ```console
     pit# conman -m ncn-m002-mgmt
     <ConMan> Connection to console [ncn-m002-mgmt] opened.
-      << hardware dependent boot log messages >>
+      << hardware-dependent boot log messages >>
     ```
-5. Exit ConMan by typing `&.`
-    ```
-      << hardware dependent boot log messages >>
+
+1. Exit ConMan by typing `&.`
+
+    ```console
+      << hardware-dependent boot log messages >>
     &.
     <ConMan> Connection to console [ncn-m002-mgmt] closed.
     pit#
     ```
-6. Print off what has been found in the console logs, this snippet will omit duplicates from multiple boot attempts:
+
+1. Print off what has been found in the console logs. This snippet will omit duplicates from multiple boot attempts:
+
     ```bash
     pit# for file in /var/log/conman/*; do
         echo $file
@@ -102,9 +114,10 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     done
     ```
 
-7. Use the output from the previous step to collect 2 MACs to use for bond0, and 2 more to use for bond1 based on the topology.
+1. Use the output from the previous step to collect two MAC addresses to use for `bond0`, and two more to use for `bond1`, based on the topology.
 
-   **The `Bond0 MAC0` must be the first port** of the first PCIe card, specifically the port connecting the NCN to the lower spine. For example, if connected to spines01 and 02, this is going to sw-spine-001. If connected to sw-spine-007 and sw-spine-008, then this is sw-spine-007.
+   **The `Bond0 MAC0` must be the first port** of the first PCIe card, specifically the port connecting the NCN to the lower spine. For example, if connected to `spines01` and `spines02`, this is going to `sw-spine-001`. If connected to `sw-spine-007`
+   and `sw-spine-008`, then this is `sw-spine-007`.
 
    **The 2nd MAC for `bond0` is the first port of the 2nd PCIe card, or 2nd port of the first when only one card exists**.
 
@@ -120,9 +133,10 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
      grep -Eoh '(net[0-9] MAC .*)' $file | sort -u | grep PCI | grep -Ev "$did" && echo -----
    done
    ```
+
    To filter out onboard NICs, or site-link cards, omit their device IDs as well. Use the above snippet but add the other IDs:
 
-   **This snippet prints out only mgmt MACs, the `did` is the HSN and onboard NICs that is being ignored.**
+   **This snippet prints out only `mgmt` MAC addresses; the `did` is the HSN and onboard NICs that are being ignored.**
 
     ```bash
     pit# unset did # clear it if you used it.
@@ -133,9 +147,9 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     done
     ```
 
-8. Examine the output from `grep` to identify the MAC address that make up Bond0 for each management NCN. Use the lowest value MAC address per PCIe card.
+1. Examine the output from `grep` to identify the MAC addresses that make up `Bond0` for each management NCN. Use the lowest value MAC address per PCIe card.
 
-    > Example: 1 PCIe card with 2 ports for a total of 2 ports per node.
+    > Example: One PCIe card with two ports for a total of two ports per node.
 
     ```bash
     -----
@@ -159,9 +173,9 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     -----
     ```
 
-    The above output identified MAC0 and MAC1 of the bond as 94:40:c9:5f:b5:df and 14:02:ec:da:b9:99 respectively.
+    The above output identified `MAC0` and `MAC1` of the bond as `94:40:c9:5f:b5:df` and `14:02:ec:da:b9:99` respectively.
 
-9. Collect the NCN MAC address for the PIT node. This information will be used to populate the MAC addresses for `ncn-m001`.
+1. Collect the NCN MAC addresses for the PIT node. This information will be used to populate the MAC addresses for `ncn-m001`.
 
    ```bash
    pit# cat /proc/net/bonding/bond0  | grep Perm
@@ -169,13 +183,13 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
    Permanent HW addr: b8:59:9f:c7:12:f3 <-bond0-mac1
    ```
 
-10.  Update `ncn_metadata.csv` with the collected MAC addresses for Bond0 from all of the management NCNs.
+1. Update `ncn_metadata.csv` with the collected MAC addresses for `Bond0` from all of the management NCNs.
 
     > **NOTE:** Mind the index (3, 2, 1.... ; not 1, 2, 3).
 
-    For each NCN update the corresponding row in `ncn_metadata` with the values for Bond0 MAC0 and Bond0 MAC1. The Bootstrap MAC should have the same value as the Bond0 MAC0.
+    For each NCN, update the corresponding row in `ncn_metadata` with the values for `Bond0 MAC0` and `Bond0 MAC1`. The `Bootstrap MAC` should have the same value as the `Bond0 MAC0`.
 
-    ```
+    ```csv
     Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
     x3000c0s9b0n0,Management,Worker,94:40:c9:37:77:26,b8:59:9f:c7:12:f2,b8:59:9f:c7:12:f2,b8:59:9f:c7:12:f3
                                                       ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
@@ -186,29 +200,37 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     pit# vi ncn_metadata.csv
     ```
 
-11. If the `script.ipxe` file was renamed in the first step of this procedure, restore it to its original location.
+1. Power off the NCNs.
+
+    ```bash
+    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
+    ```
+
+1. If the `script.ipxe` file was renamed in the first step of this procedure, then restore it to its original location.
 
     ```bash
     pit# mv /var/www/boot/script.ipxe.bak /var/www/boot/script.ipxe
     ```
 
 <a name="procedure-serial-consoles"></a>
-## Procedure: Serial Consoles
 
-Pick out the MAC addresses for the BOND from both the sw-spine-001 and sw-spine-002 switch following the [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md) procedure.
+## Procedure: Serial consoles
 
-> **NOTE:** The node must be booted into an operating system in order for the Bond MAC addresses to appear on the spine switches.
+Pick out the MAC addresses for the `BOND` from both the `sw-spine-001` and `sw-spine-002` switches, following the [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md) procedure.
 
-> A PCIe card with dual-heads may go to either spine switch, meaning MAC0 must be collected from
-> spine-01. Please refer to the cabling diagram or the actual rack (in-person).
+> **NOTE:** The node must be booted into an operating system in order for the `Bond` MAC addresses to appear on the spine switches.
+>
+> A PCIe card with dual-heads may go to either spine switch, meaning `MAC0` must be collected from
+> `spine-01`. Refer to the cabling diagram or the actual rack (in-person).
 
-1. Follow "Metadata BMC" on each spine switch that port1 and port2 of the bond is plugged into.
+1. Follow `Metadata BMC` on each spine switch that `port1` and `port2` of the bond are plugged into.
 
-2. Usually the 2nd/3rd/4th/Nth MAC on the PCIe card will be a 0x1 or 0x2 deviation from the first port.
+1. Usually the 2nd/3rd/4th/Nth MAC address on the PCIe card will be a `0x1` or `0x2` deviation from the first port.
 
    Collection is quicker if this can be easily confirmed.
 
 <a name="procedure-recovering-from-an-incorrect-ncn_metadata_csv-file"></a>
+
 ## Procedure: Recovering from an incorrect `ncn_metadata.csv` file
 
 If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy. This section details a recovery procedure in case that happens.
@@ -218,7 +240,8 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
    Before deleting the incorrectly generated configurations, make a backup of them in case they need to be examined at a later time.
 
     > **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set. If `SYSTEM_NAME` is
-    > not set the command below could potentially remove the entire prep directory.
+    > not set, then the command below could potentially remove the entire `prep` directory.
+    >
     > ```bash
     > pit# export SYSTEM_NAME=eniac
     > ```
@@ -227,11 +250,11 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
     pit# rm -rf /var/www/ephemeral/prep/$SYSTEM_NAME
     ```
 
-2. Manually edit `ncn_metadata.csv`, replacing the bootstrap MAC address with Bond0 MAC0 address for the afflicted nodes that failed to boot.
+1. Manually edit `ncn_metadata.csv`, replacing the bootstrap MAC address with `Bond0 MAC0` address for the afflicted nodes that failed to boot.
 
-3. Re-run `csi config init` with the required flags.
+1. Re-run `csi config init` with the required flags.
 
-4. Copy all of the newly generated files into place.
+1. Copy all of the newly generated files into place.
 
     ```bash
     pit# \
@@ -241,7 +264,7 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
     cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/pit-files/* /etc/sysconfig/network/
     ```
 
-5. Update the CA Cert on the copied data.json file. Provide the path to the data.json, the path to the customizations.yaml file, and the sealed_secrets.key.
+1. Update the CA certificates on the copied `data.json` file. Provide the path to the `data.json` file, the path to the `customizations.yaml` file, and the `sealed_secrets.key` file.
 
     ```bash
     pit# csi patch ca \
@@ -250,7 +273,7 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
     --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
     ```
 
-6. Restart everything to apply the new configurations:
+1. Restart everything to apply the new configurations:
 
     ```bash
     pit# \
@@ -259,7 +282,7 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
     systemctl restart nexus
     ```
 
-7. Ensure system-specific settings generated by CSI are merged into `customizations.yaml`:
+1. Ensure system-specific settings generated by CSI are merged into `customizations.yaml`:
 
     > The `yq` tool used in the following procedures is available under `/var/www/ephemeral/prep/site-init/utils/bin` once the `SHASTA-CFG` repo has been cloned.
 
@@ -268,7 +291,6 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
     pit# yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)
     ```
 
-8. Wipe the disks before relaunching the NCNs.
+1. Wipe the disks before relaunching the NCNs.
 
    See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
-
