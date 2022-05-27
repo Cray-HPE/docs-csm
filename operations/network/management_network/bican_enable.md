@@ -402,7 +402,7 @@ Prerequisites for this task:
    commit = "92ce2c9988fa092ad05b40057c3ec81af7b0af97"
    name = "csm-1.9.21"
    playbook = "enable_chn.yml"
-   ``` 
+   ```
 
 1. Check that NCN personalization runs and completes successfully on the worker nodes
 
@@ -631,6 +631,7 @@ Run the NCN gateway health checks
 ```bash
 ncn-m001:~ # /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
 ```
+
 The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
 
 ```bash
