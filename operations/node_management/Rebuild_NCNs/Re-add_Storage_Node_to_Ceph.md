@@ -86,7 +86,7 @@
    chmod u+x /srv/cray/scripts/common/join_ceph_cluster.sh
    ```
 
-1. In a separate window log into one of the following ncn-s00(1/2/3) and execute the following:
+1. In a separate window log into one of the following `ncn-s00(1/2/3)` and execute the following:
 
    ```bash
    watch ceph -s
@@ -104,7 +104,7 @@
 
    **IMPORTANT:** Only do this if you were not able to wipe the node prior to rebuild.
 
-   **NOTE:** The commands in the Zapping OSDs section will need to be run from a node running ceph-mon. Typically ncn-s00(1/2/3).
+   **NOTE:** The commands in the Zapping OSDs section will need to be run from a node running `ceph-mon`. Typically `ncn-s00(1/2/3)`.
 
 1. Find the devices on the node being rebuilt
 
@@ -143,9 +143,10 @@
    watch ceph -s
    ```
 
-   You will see the OSD count UP and IN counts increase. **If** you see your **IN** count increase but not reflect the amount of drives being added back in, then you will need to fail over the ceph mgr daemon. This is a known bug and is addressed in newer releases.
+   You will see the OSD count UP and IN counts increase. **If** you see your **IN** count increase but not reflect the amount of drives being added back in, then you will need to fail over the `ceph-mgr` daemon.
+   This is a known bug and is addressed in newer releases.
 
-   If you need to fail over the ceph-mgr daemon please run:
+   If you need to fail over the `ceph-mgr` daemon please run:
 
    ```bash
    ceph mgr fail
@@ -153,17 +154,12 @@
 
 ## Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
 
-   **IMPORTANT:** Radosgw by default is deployed to the first 3 storage nodes. This includes haproxy and keepalived. This is automated as part of the install, but you may have to regenerate the configuration if you are not running on the first 3 storage nodes or all nodes. Please see the 2 examples in step 1.
+   **IMPORTANT:** `Rados-GW` by default is deployed to the first 3 storage nodes. This includes `HAproxy` and `Keepalived`.
+   This is automated as part of the install, but administrators may have to regenerate the configuration if they are not running on the first 3 storage nodes or all nodes.
 
 1. Deploy Rados Gateway containers to the new nodes.
 
-   - If running Rados Gateway on all nodes is the desired configuration, then do:
-
-      ```bash
-      ceph orch apply rgw site1 zone1 --placement="*"
-      ```
-
-   - If deploying to select nodes then do:
+   - Configure Rados Gateway containers with the complete list of nodes it should be running on:
 
      ```bash
      ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
@@ -179,10 +175,10 @@
     rgw.site1.zone1.ncn-s003.nnwuqy  ncn-s003  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8           553b0cb212c      a9706e6d7a69
     ```
 
-1. Add nodes into HAproxy and KeepAlived.
+1. Add nodes into `HAproxy` and `KeepAlived`.
 
    ```bash
-   pdsh -w ncn-s00[1..(end node number)] -f 2 '/srv/cray/scripts/metal/generate_haproxy_cfg.sh; systemctl restart haproxy.service; /srv/cray/scripts/metal/generate_keepalived_conf.sh; systemctl restart keepalived.service'
+   pdsh -w ncn-s00[1-(end node number)] -f 2 'source /srv/cray/scripts/metal/update_apparmor.sh ; reconfigure-apparmor; /srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg; systemctl enable haproxy.service; systemctl restart haproxy.service; /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf; systemctl enable keepalived.service; systemctl restart keepalived.service'
    ```
 
 [Next Step - Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md)
