@@ -98,7 +98,7 @@ system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
 ```
 
-### Mellanox Credentials
+### Mellanox credentials
 
 ```console
 sw-spine-001 [standalone: master] # conf t
