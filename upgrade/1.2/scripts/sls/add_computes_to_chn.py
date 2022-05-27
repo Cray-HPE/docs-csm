@@ -20,7 +20,7 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-"""Upgrade an SLS file from any CSM 1.0.x version to CSM 1.2 idempotently."""
+"""Add Compute node IPs to the CHN"""
 import ipaddress
 import json
 import sys
@@ -51,7 +51,7 @@ Script processing involves:
   * This procedure is not required, or
   * The CHN was truly not large enough to accomodate all the compute nodes (typical).
  
-TODO FINISH THIS OFF
+NOTE:  Typicaly you will want a NAT device instead of running this, unless a very large CHN is allocated.
 
 """
 
