@@ -6,6 +6,9 @@
   - [Configure UAN](#configure-uan)
   - [Configure UAI](#configure-uai)
   - [Configure Compute Nodes](#configure-compute-nodes)
+    - [Retrieve SLS data as JSON](#retrieve-sls-data-as-json)
+    - [Add Compute IPs to CHN SLS data](#add-compute-ips-to-chn-sls-data)
+    - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
   - [Configure NCNs](#configure-ncns)
   - [Configure the API gateways](#configure-the-api-gateways)
 - [Validation Tasks](#validation-tasks)
@@ -55,7 +58,53 @@ Existing UAIs will continue to use the network that was set when it was created.
 
 ## Configure Compute Nodes
 
-TBD
+Prerequisites for this task:
+
+- Cray Operating System, Slingshot Host Software, and Slingshot have been installed and configured.
+- Egress connection from Compute nodes to site resources (e.g. license server) is required, **and**
+  - A NAT device is not in place to enable use of HSN IP addresses, **and**
+  - The CHN subnet is large enough to contain all Compute nodes.
+
+### Retrieve SLS data as JSON
+
+1. Obtain a token.
+
+   ```bash
+   ncn-m001# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
+                                -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+   ```
+
+1. Create a working directory.
+
+   ```bash
+   ncn-m001# mkdir /root/sls_chn_ips && cd /root/sls_chn_ips
+   ```
+
+1. Extract SLS data to a file.
+
+   ```bash
+   ncn-m001# curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
+   ```
+
+### Add Compute IPs to CHN SLS data
+
+Process the SLS file:
+
+   ```bash
+   ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+   ncn-m001# ${DOCDIR}/add_computes_to_chn.py --sls-input-file sls_input_file.json
+   ```
+
+The default output file name will be `chn_with_computes_added_sls_file.json`, but can  be changed by using the flag `--sls-output-file` with the script.
+
+### Upload migrated SLS file to SLS service
+
+If the following command does not complete successfully, check if the `TOKEN` environment variable is set correctly.
+
+   ```bash
+   ncn-m001# curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@chn_with_computes_added_sls_file.json'
+   ```
 
 <a name="configure-ncn"></a>
 
