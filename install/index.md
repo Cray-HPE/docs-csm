@@ -103,7 +103,6 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
 
       See [Management Network User Guide](../operations/network/management_network/index.md)
 
-
       **Note**: If a reinstall of this software release is being done on this system and the management network switches
       have already been configured, then this topic could be skipped and instead move to
       [Collect MAC addresses for NCNs](#collect_mac_addresses_for_ncns)
@@ -233,8 +232,9 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
    1. Next topic
 
       After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
-      been fully installed and configured. Refer to the _HPE Cray EX System Software Getting Started Guide S-8000_
-      on the HPE Customer Support Center at https://www.hpe.com/support/ex-gsg for more information on other product streams to be installed and configured after CSM.
+      been fully installed and configured.
+      Refer to the [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.06`](http://www.hpe.com/support/ex-gsg-042120221040) on the HPE Customer Support Center
+      for more information on other product streams to be installed and configured after CSM.
    <a name="troubleshooting_installation"></a>
 
    1. Troubleshooting installation problems
