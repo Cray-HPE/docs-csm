@@ -155,7 +155,7 @@ Results may vary if an unconfigured switch is being used.
    x3000c0s8b0n0,Management,Storage,a4:bf:01:48:1f:e0,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    x3000c0s7b0n0,Management,Storage,a4:bf:01:38:f0:b1,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    ```
-   
+
    ```text
                                     ^^^^^^^^^^^^^^^^^
                                     BMC MAC Address
