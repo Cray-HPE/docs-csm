@@ -46,7 +46,6 @@ The `kubectl` command is installed.
         The output of the following scripts will need to be referenced in the remaining sub-steps.
 
         ```bash
-<<<<<<< HEAD
         ncn-mw# /opt/cray/platform-utils/ncnHealthChecks.sh
         ncn-mw# csi pit validate --postgres
         ```
