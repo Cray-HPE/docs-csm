@@ -46,6 +46,8 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
 
    **IMPORTANT:** The below python script is provided by the `docs-csm` RPM. To install the latest version of it, see [Check for Latest Documentation](../../../update_product_stream/index.md#documentation).
 
+   A token will need to be generated and made available as an environment variable. Refer to docs: https://github.com/Cray-HPE/docs-csm/blob/release/1.2/operations/security_and_authentication/Retrieve_an_Authentication_Token.md
+
    ```bash
    ncn# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
    ```
