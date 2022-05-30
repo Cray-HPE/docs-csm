@@ -1,49 +1,42 @@
-
 # BICAN Support Matrix - Shasta Customer Access Networks
 
-## <u>Data Sheet</u>
+## Data sheet
 
-
-### <b><u>Shasta Networking</u></b>
-
+### Shasta networking
 
 ### Customer Access Networks
 
 ### Overview
 
+Customer Access Networks provide the interface between Shasta system networking and the customer site network.  Customer Access Networks (CANs) are routed networks with broadcast domain separation.  Customer Access
+Networks provide higher availability and more flexibility in accessing cloud services compared to traditional "bastion hosts", and are more in line with cloud-native architecture of Shasta as whole.
 
-Customer Access Networks provide the interface between Shasta System networking and the customer Site network.  Customer Access Networks (CANs) are routed networks with broadcast domain separation.  Customer Access Networks networks provides higher availability and more flexibility in accessing cloud services compared to traditional "bastion hosts", and are more in line with cloud-native architecture of Shasta as whole.
-
-Customer Access Networks (CANs) provide flexible networking at the edge between the Site and Shasta System to
+Customer Access Networks (CANs) provide flexible networking at the edge between the site and Shasta system to do the following:
 
 * Perform administrative tasks _on_ the system.
-* Run jobs and move jobs data _to and from_ the system.
+* Run jobs and move job data _to and from_ the system.
 * Access site resources like DNS and LDAP _from_ the system.
 
-## Feature Access Matrix
+## Feature access matrix
 
-
-For CSM 1.2 the notion of the CAN has been expanded to meet customer requests for increased flexibility and policy control.
-
+For CSM 1.2, the notion of the CAN has been expanded to meet customer requests for increased flexibility and policy control.
 
 * Selection of user access for job control and data movement over the Shasta Management Network (CAN) _or_ the High Speed Network (CHN) is made during system installation or upgrade.
 
 * Creation of the Customer Management Network (CMN) during installation or upgrade is mandatory.
 
-
-## Network Overview
-
+## Network overview
 
 ![](img/tds_can_overview.png)
 
-Internal Networks:
+### Internal networks
 
 * Node Management Network (NMN) \- Provides the internal control plane for systems management and jobs control.
 * Hardware Management Network (HMN) \- Provides internal access to system baseboard management controllers (BMC/iLO) and other lower-level hardware access.
 
-External and Edge Networks:
+### External and edge networks
 
-* Customer Management Network (CMN) \- Provides customer access from the Site to the System for administrators.
+* Customer Management Network (CMN) \- Provides customer access from the site to the system for administrators.
   * Customer Access Network (CAN) or Customer High Speed Network (CHN) provide:
   * Customer access from the site to the System for job control and jobs data movement.
 * Access from the System to the Site for network services like DNS, LDAP, etc...
