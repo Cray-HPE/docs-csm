@@ -1,44 +1,50 @@
 # Network time protocol (NTP) client
 
+Summary of NTP from [RFC-1305 Network Time Protocol (Version 3)](https://tools.ietf.org/html/rfc1305):
 
-"NTP is used to synchronize timekeeping among a set of distributed time servers and clients [...] It provides the protocol mechanisms to synchronize time in principle to precisions in the order of nanoseconds while preserving a non-ambiguous date well into the next century." –rfc1305
+> NTP is used to synchronize timekeeping among a set of distributed time servers and clients
+> ...
+> It provides the protocol mechanisms to synchronize time in principle to precisions in the order of nanoseconds while preserving a non-ambiguous date
+> well into the next century.
 
-Relevant Configuration
+## Enable NTP
 
-Enable NTP
-
-```
+```console
 switch (config) # ntp enable
 ```
 
-Test the NTP server by querying the current time.
+## Test the NTP server
 
-```
+Test the NTP server by querying the current time:
+
+```console
 switch (config) # ntpdate 10.4.0.134
 ```
 
-Specify a remote NTP server to use for time synchronization
+## Specify a remote NTP server
 
-```
+Specify a remote NTP server to use for time synchronization:
+
+```console
 switch(config)# ntp server <FQDN|IP-ADDR>
 ```
 
-Configure the system timezone
+## Configure the system timezone
 
-```
+```console
 switch (config) # clock timezone UTC-offset UTC-7
 ```
 
-Show Commands to Validate Functionality
+## Validate functionality
 
 ```console
 switch (config)# show ntp
 ```
 
-Expected results:
+## Expected results
 
-* Step 1: You can configure the NTP client
-* Step 2: You can validate the functionality using the show command
-* Step 3: The system time of the switch matches the NTP server
+1. The NTP client can be configured.
+1. The functionality can be validated using the `show` command.
+1. The system time of the switch matches that of the NTP server.
 
-[Back to Index](../index.md)
+[Back to index](index.md).
