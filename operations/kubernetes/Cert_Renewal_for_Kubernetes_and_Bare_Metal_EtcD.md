@@ -508,7 +508,7 @@ Run the following steps from a master node.
       ncn-m# kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-client" | @base64d' | openssl x509 -noout -enddate
       ```
 
-      Example output:
+         Example output:
 
       ```text
       notAfter=May  4 18:20:24 2023 GMT
