@@ -37,9 +37,8 @@ The initial VCS login credentials for the `crayvcs` user are stored in three pla
 * Keycloak: These credentials are used to access the VCS UI. They must be changed through Keycloak. For more information on accessing Keycloak, see
   [Access the Keycloak User Management UI](../security_and_authentication/Access_the_Keycloak_User_Management_UI.md).
 
-**WARNING:** These three sources of credentials are not synced by any mechanism. Changing the default password requires
-that is it changed in all three places. Changing only one may result in difficulty determining the password at a later date,
-or may result in losing access to VCS altogether.
+> **WARNING:** These three sources of credentials are not synced by any mechanism. Changing the default password requires that is it changed in all three places. Changing only
+> one may result in difficulty determining the password at a later date, or may result in losing access to VCS altogether.
 
 To change the password in the `vcs-user-credentials` Kubernetes secret, use the following procedure:
 
@@ -229,10 +228,9 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
 ## Access the `cray` Gitea organization
 
-The VCS UI uses Keycloak to authenticate users on the system. However, users from external authentication sources are not
-automatically associated with permissions in the `cray` Gitea organization. As a result, users configured via Keycloak can
-log in and create organizations and repositories of their own, but they cannot modify the Cray organization that is created
-during system installation unless they are given permissions to do so.
+The VCS UI uses Keycloak to authenticate users on the system. However, users from external authentication sources are not automatically associated with permissions in the `cray`
+Gitea organization. As a result, users configured via Keycloak can log in and create organizations and repositories of their own, but they cannot modify the `cray` organization
+that is created during system installation, unless they are given permissions to do so.
 
 The `crayvcs` Gitea `admin` user that is created during CSM installation can log in to the UI via Keycloak. To allow users other than `crayvcs` to have access to repositories in
 the `cray` organization, use the following procedure:
