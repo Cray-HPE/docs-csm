@@ -1,4 +1,4 @@
-# Network time protocol (NTP) client
+# Network Time Protocol (NTP) Client
 
 Summary of NTP from [RFC-1305 Network Time Protocol (Version 3)](https://tools.ietf.org/html/rfc1305):
 
@@ -6,6 +6,9 @@ Summary of NTP from [RFC-1305 Network Time Protocol (Version 3)](https://tools.i
 > ...
 > It provides the protocol mechanisms to synchronize time in principle to precisions in the order of nanoseconds while preserving a non-ambiguous date
 > well into the next century.
+
+The Network Time Protocol (NTP) client is essential for syncing time on various clients in the system.
+This document shows how to view NTP status and configure NTP on a Mellanox switch.
 
 - [Enable NTP](#enable-ntp)
 - [Test the NTP server](#test-the-ntp-server)
