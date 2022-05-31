@@ -29,11 +29,15 @@ and the appropriate remediation steps to take if it is encountered.
 
     If the above `secrets "admin-client-auth" not found` error is observed, then proceed to the next step.
 
-## Validate Keycloak Setup Is Running
-
 1. Verify that `keycloak-setup` has this issue.
 
     Look for a `keycloak-setup` pod still in the `Running` state:
+
+    ```bash
+    pit# kubectl get pods -n services | grep keycloak-setup
+    ```
+
+    Example output:
 
     ```text
     keycloak-setup-1-xj9s5                                            1/2     Running   0          32m
@@ -71,7 +75,7 @@ and the appropriate remediation steps to take if it is encountered.
     In the following command, substitute the name of the new `keycloak-setup` pod found in the previous step.
 
     ```bash
-     pit # kubectl logs --namespace services -n services NEW-KEYCLOAK-SETUP-POD-NAME --container keycloak-setup | tail -n 3
+    pit # kubectl logs --namespace services -n services NEW-KEYCLOAK-SETUP-POD-NAME --container keycloak-setup | tail -n 3
     ```
 
     Example output indicating that it has completed setup:
