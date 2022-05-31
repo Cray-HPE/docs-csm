@@ -19,21 +19,21 @@ The areas should be tested in the order they are listed on this page. Errors in 
     - [1.3.1 Mellanox switch](#pet-bgp-mellanox)
     - [1.3.2 Aruba switch](#pet-bgp-aruba)
   - [1.4 Verify that KEA has active DHCP leases](#net-kea)
-  - [1.5 Verify ability to resolve external DNS](#net-extdns)
-  - [1.6 Verify Spire agent is running on Kubernetes NCNs](#net-spire)
-  - [1.7 Verify the Vault cluster is healthy](#net-vault)
+  - [1.5 Verify the ability to resolve external DNS](#net-extdns)
+  - [1.6 Verify that the Spire agent is running on Kubernetes NCNs](#net-spire)
+  - [1.7 Verify that the Vault cluster is healthy](#net-vault)
   - [1.8 Automated Goss testing](#automated-goss-testing)
     - [1.8.1 Known test issues](#autogoss-issues)
   - [1.9 Check of system management monitoring tools](#check-of-system-management-monitoring-tools)
 - [2. Hardware Management Services health checks](#hms-health-checks)
   - [2.1 HMS test execution](#hms-test-execution)
   - [2.2 Hardware State Manager discovery validation](#hms-smd-discovery-validation)
-    - [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results)
-    - [2.2.2 Known issues](#hms-smd-discovery-validation-known-issues)
+    - [2.2.1 Interpreting HSM discovery results](#hms-smd-discovery-validation-interpreting-results)
+    - [2.2.2 Known issues with HSM discovery validation](#hms-smd-discovery-validation-known-issues)
 - [3 Software Management Services health checks](#sms-health-checks)
   - [3.1 SMS test execution](#sms-checks)
   - [3.2 Interpreting `cmsdev` results](#cmsdev-results)
-  - [3.3 Known issues](#sms-checks-known-issues)
+  - [3.3 Known issues with SMS tests](#sms-checks-known-issues)
 - [4. Booting CSM `barebones` image](#booting-csm-barebones-image)
   - [4.1 Locate CSM `barebones` image in IMS](#locate-csm-barebones-image-in-ims)
   - [4.2 Create a BOS session template for the CSM `barebones` image](#csm-bos-session-template)
@@ -69,11 +69,15 @@ Available platform health checks:
 1. [`ncnHealthChecks`](#pet-ncnhealthchecks)
 1. [`ncnPostgresHealthChecks`](#pet-ncnpostgreshealthchecks)
 1. [BGP peering status and reset](#pet-bgp)
+    1. [Mellanox switch](#pet-bgp-mellanox)
+    1. [Aruba switch](#pet-bgp-aruba)
 1. [KEA / DHCP](#net-kea)
 1. [External DNS](#net-extdns)
 1. [Spire agent](#net-spire)
 1. [Vault cluster](#net-vault)
 1. [Automated Goss testing](#automated-goss-testing)
+    1. [Known test issues](#autogoss-issues)
+1. [System management monitoring tools](#check-of-system-management-monitoring-tools)
 
 <a name="pet-ncnhealthchecks"></a>
 
@@ -187,20 +191,25 @@ ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
 
     For each Postgres cluster:
 
-    1. Verify there are three cluster members (with the exception of `sma-postgres-cluster` where there should be only two cluster members).
+    1. Verify that there are three cluster members (with the exception of `sma-postgres-cluster`, where there should be only two cluster members).
+
        If the number of cluster members is not correct, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#missing).
 
-    1. Verify there is one cluster member with the `Leader` `Role`.
+    1. Verify that there is one cluster member with the `Leader` `Role`.
+
        If there is no `Leader`, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#leader).
 
-    1. Verify the `State` of each cluster member is `running`.
-       If any cluster members are found not to be in `running` state (such as `start failed`), refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#diskfull).
+    1. Verify that the `State` of each cluster member is `running`.
+
+       If any cluster members are found not to be in `running` state (such as `start failed`), refer to
+       [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#diskfull).
 
     1. Verify there is no large or growing lag.
+
        If any cluster members are found to have lag or lag is `unknown`, refer to [Troubleshoot Postgres Database](./kubernetes/Troubleshoot_Postgres_Database.md#lag).
 
-    **If all the above four checks indicate Postgres clusters are healthy, the log output for the `postgres` pods can be ignored.** If possible health issues exist, re-check the
-    health by re-running the `ncnPostgresHealthChecks` script in 15 minutes. If health issues persist, then review the log output and consult
+    **If all the above four checks indicate that Postgres clusters are healthy, then the log output for the `postgres` pods can be ignored.** If possible health issues exist,
+    then re-check the health by re-running the `ncnPostgresHealthChecks` script after waiting for 15 minutes. If health issues persist, then review the log output and consult
     [Troubleshoot Postgres Database](kubernetes/Troubleshoot_Postgres_Database.md). During NCN reboots, temporary errors related to re-election are common but should resolve
     upon the re-check.
 
@@ -397,7 +406,7 @@ commands can be run on any of the master or worker nodes.
 
 <a name="net-extdns"></a>
 
-### 1.5 Verify ability to resolve external DNS
+### 1.5 Verify the ability to resolve external DNS
 
 If `unbound` is configured to resolve outside hostnames, then the following check should be performed. If this has not been done, then this check may be skipped.
 
@@ -424,7 +433,7 @@ Verify that the command has exit code zero, reports no errors, and resolves the 
 
 <a name="net-spire"></a>
 
-### 1.6 Verify Spire agent is running on Kubernetes NCNs
+### 1.6 Verify that the Spire agent is running on Kubernetes NCNs
 
 Execute the following command on all Kubernetes NCNs (all worker nodes and master nodes), excluding the PIT node:
 
@@ -436,13 +445,16 @@ Known failures and how to recover:
 
 - K8S Test: Verify `spire-agent` is enabled and running
 
-  - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker nodes and master nodes), logging errors (via `journalctl`) similar to
-    `join token does not exist or has already been used` or the last logs containing multiple lines of
-    `systemd[1]: spire-agent.service: Start request repeated too quickly.`. Deleting the
-    `request-ncn-join-token` `daemonset` pod running on the node may clear the issue. Even though the `spire-agent` `systemctl` service on the Kubernetes node should eventually
-    restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can be run from any Kubernetes node in the cluster.
+  - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker and master nodes). In this case, it may log errors
+    (using `journalctl`) similar to `join token does not exist or has already been used`, or the last log entries may contain multiple
+    instances of `systemd[1]: spire-agent.service: Start request repeated too quickly.`. Deleting the `request-ncn-join-token` `daemonset` pod
+    running on the node may clear the issue. Even though the `spire-agent` `systemctl` service on the Kubernetes node should eventually
+    restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can
+    be run from any Kubernetes node in the cluster.
 
      1. Set `NODE` to the NCN which is experiencing the issue. In this example, `ncn-w002`.
+
+        > This command will not work on the PIT node.
 
         ```bash
           ncn# export NODE=ncn-w002
@@ -467,7 +479,7 @@ Known failures and how to recover:
 
 <a name="net-vault"></a>
 
-### 1.7 Verify the Vault cluster is healthy
+### 1.7 Verify that the Vault cluster is healthy
 
 Execute the following commands on `ncn-m002`:
 
@@ -513,16 +525,21 @@ pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
 - Kubernetes Test: `Kubernetes Query BSS Cloud-init for ca-certs`
   - May fail immediately after platform install. Should pass after the `TrustedCerts` operator has updated BSS with CA certificates.
 - Kubernetes Test: `Kubernetes Velero No Failed Backups`
-  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately upon the deployment of a backup schedule
-    (for example, Vault). It may be necessary to delete backups from a Kubernetes node to clear this situation. For example:
+  - Because of a [known issue  with Velero](https://github.com/vmware-tanzu/velero/issues/1980), a backup may be attempted immediately
+    upon the deployment of a backup schedule (for example, Vault). It may be necessary to delete backups from a Kubernetes node to
+    clear this situation. For example:
 
-     1. Run the following to find the failed backup.
+     1. Find the failed backup.
 
         ```bash
-        ncn# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
+        ncn/pit# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
         ```
 
-     1. Delete the backup, where `<backup>` is replaced with a backup returned in the previous step.
+     1. Delete the backup.
+
+        > In the following command, replace `<backup>` with a backup returned in the previous step.
+        >
+        > This command will not work on the PIT node.
 
         ```bash
         ncn# velero backup delete <backup> --confirm
@@ -555,6 +572,11 @@ Information to assist with troubleshooting some of the components mentioned in t
 Execute the HMS smoke and functional tests after the CSM install to confirm that the Hardware Management Services are running and operational.
 
 Note: Do not run HMS tests concurrently on multiple nodes. They may interfere with one another and cause false failures.
+
+1. [HMS test execution](#hms-test-execution)
+1. [Hardware State Manager discovery validation](#hms-smd-discovery-validation)
+    1. [Interpreting HSM discovery results](#hms-smd-discovery-validation-interpreting-results)
+    1. [Known issues with HSM discovery validation](#hms-smd-discovery-validation-known-issues)
 
 <a name="hms-test-execution"></a>
 
@@ -619,7 +641,7 @@ ALL OK
 
 <a name="hms-smd-discovery-validation-interpreting-results"></a>
 
-#### 2.2.1 Interpreting results
+#### 2.2.1 Interpreting HSM discovery results
 
 Both sections `BMCs in SLS not in HSM components` and `BMCs in SLS not in HSM Redfish Endpoints` have the same format for mismatches between SLS and HSM. Each row starts with
 the component name (xname) of the BMC. If the BMC does not have an associated `MgmtSwitchConnector` in SLS, then `# No mgmt port association` will be displayed alongside the BMC xname.
@@ -702,7 +724,7 @@ If it was determined that the mismatch can not be ignored, then proceed onto the
 
 <a name="hms-smd-discovery-validation-known-issues"></a>
 
-#### 2.2.2 Known issues
+#### 2.2.2 Known issues with HSM discovery validation
 
 Known issues that may prevent hardware from getting discovered by Hardware State Manager:
 
@@ -713,14 +735,9 @@ Known issues that may prevent hardware from getting discovered by Hardware State
 
 ## 3 Software Management Services health checks
 
-The Software Management Services health checks are run using `/usr/local/bin/cmsdev`.
-
-- The tool logs to `/opt/cray/tests/cmsdev.log`
-- The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
-  - The same amount of data is written to the log file in either case.
-
 1. [SMS test execution](#sms-checks)
-1. [Interpreting `cmsdev` results](#cmsdev-results)
+1. [Interpreting `cmsdev` Results](#cmsdev-results)
+1. [Known issues with SMS tests](#cmsdev-known-issues)
 
 <a name="sms-checks"></a>
 
@@ -731,6 +748,10 @@ The following test can be run on any Kubernetes node (any master or worker node,
 ```bash
 ncn# /usr/local/bin/cmsdev test -q all
 ```
+
+- The `cmsdev` tool logs to `/opt/cray/tests/cmsdev.log`
+- The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
+  - The same amount of data is written to the log file in either case.
 
 <a name="cmsdev-results"></a>
 
@@ -744,10 +765,14 @@ ncn# /usr/local/bin/cmsdev test -q all
   - The return code will be non-zero.
   - The final line of output will begin with `FAILURE` and will list which checks failed.
     - For example: `FAILURE: 2 service tests FAILED (conman, ims), 5 passed (bos, cfs, crus, tftp, vcs)`
+  - After remediating a test failure for a particular service, just that single service test can be re-run by replacing
+    `all` in the `cmsdev` command line with the name of the service. For example: `/usr/local/bin/cmsdev test -q cfs`
 
 Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
 
-### 3.3 Known issues
+<a name="cmsdev-known-issues"></a>
+
+### 3.3 Known issues with SMS tests
 
 #### `Failed to create vcs organization`
 
@@ -907,8 +932,9 @@ Arch = "X86"
 Class = "River"
 ```
 
-> If it is noticed that compute nodes are missing from Hardware State Manager, refer to [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) to troubleshoot any node
-BMCs that have not been discovered.
+> If it is observed that expected compute nodes are missing from Hardware State Manager, then refer to
+> [Known issues with HSM discovery validation](#hms-smd-discovery-validation-known-issues)
+> in order to troubleshoot any node BMCs that have not been discovered.
 
 Choose a node from those listed and set `XNAME` to its ID. In this example, `x3000c0s17b2n0`:
 
