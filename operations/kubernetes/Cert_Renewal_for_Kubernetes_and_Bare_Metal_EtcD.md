@@ -490,7 +490,7 @@ Run the following steps from a master node.
                      --save-config --dry-run=client -o yaml | kubectl apply -f -
       ```
 
-   1. Check that the certificate's expiration dates are not expired.
+   1. Check the certificates' expiration dates to verify that none of the certificate are expired.
 
       ```bash
       ncn-m# kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-ca" | @base64d' | openssl x509 -noout -enddate
