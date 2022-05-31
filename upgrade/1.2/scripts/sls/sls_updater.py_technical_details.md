@@ -1,5 +1,6 @@
 # sls_updater.py Technical Details
-**<u>No Action needed.  Informational Purposes only.</u>**
+
+**No Action needed.  Informational Purposes only.**
 
 ## Actions and Order
 
