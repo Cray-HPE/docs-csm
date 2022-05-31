@@ -508,7 +508,7 @@ Run the following steps from a master node.
 
          ```bash
          ncn-m# kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-client" | @base64d' | openssl x509 -noout -enddate
-      ```
+         ```
 
          Example output:
 
