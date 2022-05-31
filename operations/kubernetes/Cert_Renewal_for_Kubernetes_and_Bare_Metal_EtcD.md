@@ -453,7 +453,7 @@ Run the following steps from a master node.
                      --save-config --dry-run=client -o yaml | kubectl apply -f -
       ```
 
-   1. Check that the certificate's expiration date is not expired.
+   1. Check the certificate's expiration date to verify that the certificate is not expired.
 
       ```bash
       ncn-m# kubectl get secret -n kube-system kube-etcdbackup-etcd -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
