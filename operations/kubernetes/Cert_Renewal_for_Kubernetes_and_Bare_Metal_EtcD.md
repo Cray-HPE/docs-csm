@@ -501,7 +501,7 @@ Run the following steps from a master node.
          Example output:
 
          ```text
-      notAfter=May  1 18:20:23 2032 GMT
+         notAfter=May  1 18:20:23 2032 GMT
       ```
 
       ```bash
