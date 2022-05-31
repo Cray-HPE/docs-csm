@@ -500,7 +500,7 @@ Run the following steps from a master node.
 
          Example output:
 
-      ```text
+         ```text
       notAfter=May  1 18:20:23 2032 GMT
       ```
 
