@@ -22,7 +22,7 @@ This step is required. **There is no default root password and no default SSH ke
    the directory where these keys are located with the `-d` argument to the script, in addition to the other required options.
 
    ```console
-   pit# ncn-image-modification.sh -h
+   pit# ${$CSM_PATH}/ncn-image-modification.sh -h
    Usage: ncn-image-modification.sh [-p] [-d dir] [ -z timezone] [-k kubernetes-squashfs-file] [-s storage-squashfs-file] [ssh-keygen arguments]
 
           This script semi-automates the process of changing the timezone, root
@@ -82,8 +82,8 @@ This step is required. **There is no default root password and no default SSH ke
    pit# cd /var/www/ephemeral/data/
    pit# ${CSM_PATH}/ncn-image-modification.sh -p -z America/Chicago \
                                               -d /my/pre-existing/keys \
-                                              -k ./k8s/kubernetes-<version>.squashfs \
-                                              -s ./ceph/storage-ceph-<version>.squashfs
+                                              -k $(find . -name "kubernetes-*.squashfs" | sort -V | tail -1) \
+                                              -s $(find . -name "storage-ceph-*.squashfs" | sort -V | tail -1)
    ```
 
    The following example generates new keys with an empty passphrase, and the
@@ -97,8 +97,8 @@ This step is required. **There is no default root password and no default SSH ke
    pit# ${CSM_PATH}/ncn-image-modification.sh -p \
                                               -t rsa \
                                               -N "" \
-                                              -k ./k8s/kubernetes-<version>.squashfs \
-                                              -s ./ceph/storage-ceph-<version>.squashfs
+                                              -k $(find . -name "kubernetes-*.squashfs" | sort -V | tail -1)
+                                              -s $(find . -name "storage-ceph-*.squashfs" | sort -V | tail -1)
    ```
 
    The script will save the original SquashFS images in `./{k8s,ceph}/old`. The new image filenames will
