@@ -33,6 +33,7 @@ Show Commands to Validate Functionality
 
 ```
 switch (config)# show ntp
+```
 
 Expected Results
 
