@@ -512,7 +512,7 @@ Run the following steps from a master node.
       notAfter=May  4 18:20:24 2023 GMT
       ```
 
-   1. Restart Prometheus
+   1. Restart Prometheus.
 
       ```bash
       ncn-m# kubectl rollout restart -n sysmgmt-health statefulSet/prometheus-cray-sysmgmt-health-promet-prometheus
