@@ -492,7 +492,9 @@ Run the following steps from a master node.
 
    1. Check the certificates' expiration dates to verify that none of the certificate are expired.
 
-      ```bash
+      1. Check the `etcd-ca` expiration date.
+
+         ```bash
       ncn-m# kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-ca" | @base64d' | openssl x509 -noout -enddate
       ```
 
