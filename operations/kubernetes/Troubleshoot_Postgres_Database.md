@@ -538,7 +538,7 @@ ncn-mw# kubectl delete pods -n services -lapp.kubernetes.io/name=postgres-operat
 ncn-mw# while [ $(kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq -r '.status.PostgresClusterStatus') != "Running" ]; do echo "waiting for ${POSTGRESQL} to start running"; sleep 2; done
 ```
 
-Scale the service back to 1 (for different services this may be to 3)
+Scale the service back to 1 (for different services this may be to 3):
 
 ```bash
 ncn-mw# kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=1
