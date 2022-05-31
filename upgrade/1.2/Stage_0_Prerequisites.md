@@ -224,8 +224,11 @@ If the following command does not complete successfully, check if the `TOKEN` en
    >
    > For example:
    >
+   > > `read -s` is used to prevent the password from being written to the screen or the shell history.
+   >
    > ```bash
-   > ncn-m001# export NEXUS_PASSWORD=changeme
+   > ncn-m001# read -s NEXUS_PASSWORD
+   > ncn-m001# export NEXUS_PASSWORD
    > ```
    >
    > Otherwise, a random 32-character base-64-encoded string will be generated
