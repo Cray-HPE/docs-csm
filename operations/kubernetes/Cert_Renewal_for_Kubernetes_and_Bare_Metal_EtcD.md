@@ -511,7 +511,7 @@ Run the following steps from a master node.
          Example output:
 
          ```text
-      notAfter=May  4 18:20:24 2023 GMT
+         notAfter=May  4 18:20:24 2023 GMT
          ```
 
    1. Restart Prometheus.
