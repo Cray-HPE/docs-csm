@@ -21,13 +21,24 @@ Customer Access Networks (CANs) provide flexible networking at the edge between 
 
 For CSM 1.2, the notion of the CAN has been expanded to meet customer requests for increased flexibility and policy control.
 
+|     |                |                                   |                                   |                                            |
+| --- |----------------|-----------------------------------|-----------------------------------|--------------------------------------------|
+|     |                | **User Access**<br><br>**(Jobs)** | **User Access**<br><br>**(Jobs)** | **Management**<br><br>**(Administrators)** |
+| **System Resource** | **Traffic**<br><br>**to-from**<br><br>**System** | **Management Network (or)**<br><br>**(CAN)** | **High Speed Network**<br><br>**(CHN)** | **Management Network**<br><br>**(CMN)** |
+| System Cloud Resources (APIs) | Ingress | Jobs-related APIs | Jobs-related APIs | Administrative APIs |
+| Application Node Servers (UAI, UAN, re-purposed CN) | Ingress | Allowed | Allowed  | Not Allowed |
+| Non-Compute Node (NCN) Servers | Ingress | Not Allowed | Not Allowed | Allowed |
+| System Access to External/Site (LDAP, DNS) | Egress | Allowed| Allowed | Not Allowed |
+
+
+
 * Selection of user access for job control and data movement over the Shasta Management Network (CAN) _or_ the High Speed Network (CHN) is made during system installation or upgrade.
 
 * Creation of the Customer Management Network (CMN) during installation or upgrade is mandatory.
 
 ## Network overview
 
-![](img/tds_can_overview.png)
+![tds can overview](img/tds_can_overview.png)
 
 ### Internal networks
 
@@ -41,31 +52,27 @@ For CSM 1.2, the notion of the CAN has been expanded to meet customer requests f
   * Customer access from the site to the System for job control and jobs data movement.
 * Access from the System to the Site for network services like DNS, LDAP, etc...
 
-## Supported Configurations
+# Supported Configurations
 
+## Option A: CMN + CAN (Management Network only - Layer 2 separation)
 
-# Option A: CMN + CAN (Management Network only - Layer 2 separation)
+![cmn plus can](img/cmn_plus_can.png)
 
+## Option B: CMN + CHN (Administration over Management Network, User Access over High Speed Network)
 
-![](img/cmn_plus_can.png)
+![cmn plus chn](img/cmn_plus_chn.png)
 
-# Option B: CMN + CHN (Administration over Management Network, User Access over High Speed Network)
+Note: During installation the High Speed Network is not configured until relatively late in the install process.
+Installation generally requires site access for deployment artifacts, site DNS, etc...
+To achieve this the Management Network CAN is used during the installation process for system traffic egress until the High Speed Network is available.
 
+# Network Capabilities
 
-![](img/cmn_plus_chn.png)
-
-Note: During installation the High Speed Network is not configured until relatively late in the install process.  Installation generally requires site access for deployment artifacts, site DNS, etc... To achieve this the Management Network CAN is used during the installation process for system traffic egress until the High Speed Network is available.
-
-## Network Capabilities
-
-
-# Layer 2
-
+## Layer 2
 
 * CMN, CAN and CHN have broadcast boundaries at the System:Site edge.
 
-# Layer 3
-
+## Layer 3
 
 * Addressing
 
@@ -79,7 +86,6 @@ Note: During installation the High Speed Network is not configured until relativ
 
 ## Network Sizing and Requirements
 
-
 CMN
 
 * IPv4:
@@ -91,7 +97,7 @@ CMN
   * Number of Non-Compute Nodes (NCNs) of type master, worker or storage used by the Kubernetes cluster
   * Number of switches on the Management Network
   * Number of administrative API endpoints
-  * Several administrative addresses for switch interfaces and routing. 
+  * Several administrative addresses for switch interfaces and routing.
   * SWAG:  A /26 block is typically sufficient for systems less than approximately 4000 nodes.
 
 CAN or CHN
