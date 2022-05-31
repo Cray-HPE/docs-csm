@@ -31,11 +31,11 @@ switch (config) # clock timezone UTC-offset UTC-7
 
 Show Commands to Validate Functionality
 
-```
+```console
 switch (config)# show ntp
 ```
 
-Expected Results
+Expected results:
 
 * Step 1: You can configure the NTP client
 * Step 2: You can validate the functionality using the show command
