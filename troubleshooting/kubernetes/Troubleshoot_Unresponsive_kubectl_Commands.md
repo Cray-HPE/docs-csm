@@ -1,44 +1,55 @@
-# Troubleshoot Unresponsive kubectl Commands
+# Troubleshoot Unresponsive `kubectl` Commands
 
-Use this procedure to check if any kworkers are in an error state because of a high load. Once the error has been identified, workaround the issue by returning the high load to a normal level.
+Use this procedure to check if any `kworker`s are in an error state because of a high load. Once the error has been identified, workaround the issue by returning the high load to a normal level.
 
-The `kubectl` command can become unresponsive because of a high load. Another symptom is that `ps aux` cannot return or complete because of aspects of the proc file system being locked.
+## Symptoms
 
-If `kubectl` is non-responsive on `ncn-w001`, the commands can be run from any other master or worker non-compute node \(NCN\).
+One or more of the following issues are possible symptoms of this issue.
 
+* The `kubectl` command can become unresponsive because of a high load.
+* `ps aux` cannot return or complete because of aspects of the `/proc` file system being locked.
 
-### Prerequisites
+If `kubectl` is non-responsive on any particular node, then commands can be run from any other master or worker non-compute node \(NCN\).
 
-The `kubectl` command is not responsive on a node.
+## Procedure
 
+In the following procedures, unless otherwise directed, run the commands on the node experiencing the issue. However, if `kubectl` is non-responsive on that node, run the
+`kubectl` commands from any other master or worker NCN.
 
-### Identify the kworker Issue
+### Identify the `kworker` issue
 
-1.  Check to see if `kubectl` is not responding because of a kworker issue.
+1. Check to see if `kubectl` is not responding because of a `kworker` issue.
 
-    1.  List the process identification \(pid\) numbers of the kworkers in the D state.
+    1. List the process identification \(`PID`\) numbers of the `kworker`s in the `D` state.
 
-        Processes in the D state are blocked on I/O and are not an issue unless they remain blocked indefinitely. Use the command below to see which pids remain stuck in this state.
+        Processes in the `D` state are blocked on I/O and are not an issue unless they remain blocked indefinitely. Use the command below to see which `PID`s remain stuck in
+        this state.
 
         ```bash
-        ncn-w001# ps aux |grep [k]worker|grep -e " D"| awk '{ print $2 }'
+        ncn# ps aux |grep [k]worker|grep -e " D"| awk '{ print $2 }'
         ```
 
-    2.  Show the stack for all kworkers in the D state.
+    1. Show the stack for all `kworker`s in the `D` state.
 
-        Note which kworkers clear and which ones remain stuck in this state over a period of time.
+        Note which `kworker`s clear and which ones remain stuck in this state over a period of time.
 
         ```bash
-        ncn-w001# for i in `ps aux | grep [k]worker | grep -e " D" |\
-         awk '{print $2}'` ; do cat /proc/$i/stack; echo; done
+        ncn# for i in `ps aux | grep [k]worker | grep -e " D" | awk '{print $2}'` ; do
+                cat /proc/$i/stack; echo
+             done
         ```
 
-2. Check to see what the load is on the worker node and gather data for any pids consuming a lot of CPU.
+1. Check to see what the load is on the node and gather data for any `PID`s consuming a lot of CPU.
 
-    1.  Monitor the processes and system resource usage.
+    1. Monitor the processes and system resource usage.
 
         ```bash
-        ncn-w001# top
+        ncn# top
+        ```
+
+        Example output (some trailing lines omitted):
+
+        ```text
         top - 10:12:03 up 34 days, 17:31, 10 users,  load average: 7.39, 9.16, 10.99
         Tasks: 2155 total,   4 running, 2141 sleeping,   1 stopped,   9 zombie
         %Cpu(s):  4.3 us,  2.5 sy,  0.0 ni, 93.0 id,  0.0 wa,  0.0 hi,  0.3 si,  0.0 st
@@ -57,16 +68,19 @@ The `kubectl` command is not responsive on a node.
           81539 root      20   0  300276 161372  26036 S 5.902 0.061   4145:40 mixs
           89619 root      20   0 4731796 498600  24144 S 5.902 0.189   2898:54 envoy
           85600 root      20   0 2292564 123596  23248 S 4.590 0.047   2211:58 envoy
-
-        ...
         ```
 
-    2.  Generate a performance counter profile for the pids consuming a lot of CPU.
+    1. Generate a performance counter profile for the `PID`s consuming a lot of CPU.
 
-        Replace the PID value with the actual pid number.
+        In the following command, replace the `PID` value with the actual `PID` number.
 
         ```bash
-        ncn-w001# perf top -g -p PID
+        ncn# perf top -g -p PID
+        ```
+
+        Example output (some trailing lines omitted):
+
+        ```text
         Samples: 18  of event 'cycles', Event count (approx.): 4065227
           Children      Self  Shared Object     Symbol
         +   29.31%     9.77%  [kernel]          [k] load_balance
@@ -74,20 +88,23 @@ The `kubectl` command is not responsive on a node.
         +   11.17%    11.17%  kubelet           [.] 0x0000000000038d3c
         +    9.77%     9.77%  [kernel]          [k] select_task_rq_fair
         +    9.77%     9.77%  [kernel]          [k] cpuacct_charge
-
-        ...
         ```
 
-    3.  Verify that `ps -ef` completes.
+    1. Verify that `ps -ef` completes.
 
         ```bash
-        ncn-w001# ps -ef
+        ncn# ps -ef
         ```
 
-3.  Check the /var/log/messages on the worker node to see if there are any errors.
+1. Check the `/var/log/messages` file on the node to see if there are any errors.
 
     ```bash
-    ncn-w001# grep -i error /var/log/messages
+    ncn# grep -i error /var/log/messages
+    ```
+
+    Example output (some trailing lines omitted):
+
+    ```text
     <nil>"
     2020-07-19T07:19:34.485659+00:00 ncn-w001 containerd[43098]: time="2020-07-19T07:19:34.485540765Z" level=info msg="Exec process \"9946991ef8108d21c163a04c9085fd15a60e3991b8e9d7b2250a071df9b6cbb8\" exits with exit code 0 and error
     <nil>"
@@ -95,62 +112,67 @@ The `kubectl` command is not responsive on a node.
     <nil>"
     2020-07-19T07:19:44.440413+00:00 ncn-w001 containerd[43098]: time="2020-07-19T07:19:44.440243465Z" level=info msg="Exec process \"7a3cf826f008c37bd0fe89382561af42afe37ac4d52f37ce9312cc950248f4da\" exits with exit code 0 and error
     <nil>"
-    2020-07-19T07:20:02.442421+00:00 ncn-w001 containerd[43098]: time="2020-07-19T07:20:02.442266943Z" level=error msg="StopPodSandbox for \"d449618d075b918fd6397572c79bd758087b31788dd8bf40f4dc10bb1a013a68\" failed" error="failed to destroy network for sandbox \"d449618d075b918fd6397572c79bd758087b31788dd8bf40f4dc10bb1a013a68\": Multus: Err in getting k8s network from pod: getPodNetworkAnnotation: failed to query the pod sma-monasca-agent-xkxnj in out of cluster comm: pods \"sma-monasca-agent-xkxnj\" not found"
+    2020-07-19T07:20:02.442421+00:00 ncn-w001 containerd[43098]: time="2020-07-19T07:20:02.442266943Z" level=error msg="StopPodSandbox for \"d449618d075b918fd6397572c79bd758087b31788dd8bf40f4dc10bb1a013a68\" failed" 
+        error="failed to destroy network for sandbox \"d449618d075b918fd6397572c79bd758087b31788dd8bf40f4dc10bb1a013a68\": Multus: Err in getting k8s network from pod: getPodNetworkAnnotation: failed to query the pod sma-monasca-agent-xkxnj in out of cluster comm: pods \"sma-monasca-agent-xkxnj\" not found"
     2020-07-19T07:20:04.440834+00:00 ncn-w001 containerd[43098]: time="2020-07-19T07:20:04.440742542Z" level=info msg="Exec process \"2a751ca1453d7888be88ab4010becbb0e75b7419d82e45ca63e55e4155110208\" exits with exit code 0 and error
     <nil>"
     2020-07-19T07:20:06.587325+00:00 ncn-w001 containerd[43098]: time="2020-07-19T07:20:06.587133372Z" level=error msg="collecting metrics for bf1d562e060ba56254f5f5ea4634ef4ae189abb462c875e322c3973b83c4c85d" error="ttrpc: closed: unknown"
     2020-07-19T07:20:14.450624+00:00 ncn-w001 containerd[43098]: time="2020-07-19T07:20:14.450547541Z" level=info msg="Exec process \"ceb384f1897d742134e7d2c9da5a62650ed1274f0ee4c5a17fa9cac1a24b6dc4\" exits with exit code 0 and error
-
-    ...
     ```
 
+### Recovery steps
 
-### Recovery Steps
-
-1.  Restart the kubelet.
-
-    Run the following command on the node where kubectl in non-responsive.
+1. Restart the `kubelet` on the node with the issue.
 
     ```bash
-    ncn-w001# systemctl restart kubelet
+    ncn# systemctl restart kubelet
     ```
 
-    If restarting the kubelet did not resolve the issue, proceed to the next step to restart the container runtime environment.
+    If restarting the `kubelet` did not resolve the issue, then proceed to the next step to restart the container runtime environment.
 
-2.  Restart the container runtime environment on the node with the issue.
+1. Restart the container runtime environment on the node with the issue.
 
-    This will likely hang or fail to complete without a timeout.
+    This will likely hang or fail to complete without a timeout. If that is the case, cancel the command with control-C and proceed to
+    the next step.
 
     ```bash
-    ncn-w001# systemctl restart containerd
+    ncn# systemctl restart containerd
     ```
 
-3.  Reboot the node.
+1. Reboot the node with the issue.
 
-    The node must be rebooted if the remediation of restarting kubelet and containerd did not resolve the kworker and high load average issue.
+    The node must be rebooted if the remediation of restarting `kubelet` and `containerd` did not resolve the `kworker` and high load average issue.
 
-    **IMPORTANT:** If the node experiencing issues is `ncn-w001`, the ipmitool command must be run from another node that has access to the management plane. The admin will be cut off if using `ncn-w001` when powering off `ncn-w001-mgmt`.
+    **IMPORTANT:** Do NOT run the commands in this step on the node experiencing the problem. Access to that node will be cut off when it is powered off.
 
-    Replace NCN\_NAME in the commands below with the node experiencing the issue. In this example, it is `ncn-w999`.
+    Replace `NCN_NAME` in the commands below with the node experiencing the issue. In this example, it is `ncn-w999`.
+
+    > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
     ```bash
-    ncn-w001# export USERNAME=root
-    ncn-w001# export IPMI_PASSWORD=changeme
-    ncn-w001# export NCN_NAME=ncn-w999
-    ncn-w001# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power off; sleep 5;
-    ncn-w001# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power show; echo
-    ncn-w001# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power on; sleep 5;
-    ncn-w001# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME} power show; echo
+    ncn# NCN_NAME=ncn-w999
+    ncn# USERNAME=root
+    ncn# read -s IPMI_PASSWORD
+    ncn# export IPMI_PASSWORD    
+    ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power off; sleep 5;
+    ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power show; echo
+    ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power on; sleep 5;
+    ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME} power show; echo
     ```
 
-4.  Watch the console of the node being rebooted.
+1. Watch the console of the node being rebooted.
 
-    This command will not return anything, but will show the ttyS0 console of the node. Use `~.` to disconnect. The same `~.` keystroke can also break an SSH session. After doing this, the connection to the SSH session may need to be reestablished.
+    This can be done using the Cray console service or with `ipmitool`.
 
-    ```bash
-    ncn-w001# ipmitool -U $USERNAME -E -I lanplus -H NCN_NAME-mgmt sol activate
-    ```
+    * The recommended method is to use the Cray console service. See [Log in to a Node Using ConMan](../../operations/conman/Log_in_to_a_Node_Using_ConMan.md).
 
+    * Alternatively, the console can be accessed by using `ipmitool`.
+
+        ```bash
+        ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt sol activate
+        ```
+
+       This command will not return anything, but will show the `ttyS0` console of the node. Use `~.` to disconnect.
+       **NOTE:** The same `~.` keystroke can also break an SSH session. After doing this, the connection to the SSH session may need to be reestablished.
 
 Try running a `kubectl` command on the node where it was previously unresponsive.
-

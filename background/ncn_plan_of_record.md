@@ -24,14 +24,26 @@ This document outlines the hardware necessary to meet CSM's Plan of Record (PoR)
 
 > **`NOTE:`** Several components below are necessary to provide redundancy in the event of hardware failure.
 
+Any of the disks may be used over the following busses:
+- SAS
+- SATA
+- NVME
+
+> **NOTE:** USB is implicitly excluded during disk selection and wiping. The NCN's deployment code will wipe all disks if they are a RAID or in the above list.
+> The manual wipes will exclude USB, but it is recommended to verify that the manual wipes are actually doing so.
+
+The OS disks are chosen by selecting the smallest disks. Two disks are used for OS disks by default.
+
+The number of OS disks can be modified by the [`metal.disks` kernel parameter](https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.md#metaldisks).
+
 <a name="masters-ncns"></a>
 ## Masters NCNs
 
 <a name="master-disks"></a>
 #### Master Disks
 
-- _Operating System:_ 2x SSDs of equal size, and less than 500GiB (524288000000 bytes)
-- _ETCD:_ 1x SSD smaller than 500GiB (524288000000 bytes) (This disk will be fully encrypted with LUKS2)
+- _Operating System:_ 2x SSDs of equal size that are at least 500GiB (524288000000 bytes)
+- _ETCD:_ 1x SSD that is at least 500GiB (524288000000 bytes) (This disk will be fully encrypted with LUKS2)
 
 <a name="master-nics"></a>
 #### Master NICs
@@ -46,8 +58,8 @@ This document outlines the hardware necessary to meet CSM's Plan of Record (PoR)
 <a name="worker-disks"></a>
 #### Worker Disks
 
-- _Operating System:_ 2x SSDs of equal size, and less than 500GiB (524288000000 bytes)
-- _Ephemeral:_ 1x SSD larger than 1TiB (1048576000000 bytes)
+- _Operating System:_ 2x SSDs of equal size that are at least 500GiB (524288000000 bytes)
+- _Ephemeral:_ 1x SSD larger than or equal to 1TiB (1048576000000 bytes)
 
 <a name="worker-nics"></a>
 #### Worker NICs
@@ -63,7 +75,7 @@ This document outlines the hardware necessary to meet CSM's Plan of Record (PoR)
 <a name="storage-disks"></a>
 #### Storage Disks
 
-- _Operating System:_ 2x SSDs of equal size, and less than 500GiB (524288000000 bytes)
+- _Operating System:_ 2x SSDs of equal size that are at least 500GiB (524288000000 bytes)
 - _CEPH:_ 8x SSDs of any size
 
 > **`NOTE:`** Any available disk that is not consumed by the operating system will be used for CEPH, but a node needs a minimum of 8 disks for making an ideal CEPH pool for CSM.
