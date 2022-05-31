@@ -713,11 +713,13 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    pit# mount -vL PITDATA
    ```
 
-1. Set new environment variables and save them to `/etc/environment`.
+1. Set and export new environment variables.
+
+   The commands below save them to `/etc/environment` as well, which makes them available in all new shell sessions on the PIT node.
 
    ```bash
-   pit# PITDATA=$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)
-   pit# CSM_PATH=${PITDATA}/${CSM_RELEASE}
+   pit# export PITDATA=$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)
+   pit# export CSM_PATH=${PITDATA}/${CSM_RELEASE}
    pit# echo "
    PITDATA=${PITDATA}
    CSM_PATH=${CSM_PATH}" | tee -a /etc/environment
