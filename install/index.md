@@ -16,9 +16,9 @@ like the checking and updating of firmware on system components or the preparati
 
 Once the CSM installation has completed, other product streams for the HPE Cray EX system can be installed.
 
-A major feature of CSM 1.2 is the bifurcated CAN (BICAN). 
+A major feature of CSM 1.2 is the bifurcated CAN (BICAN).
 The BICAN is designed to separate administrative network traffic from user network traffic.
-More information can be found on the [BICAN summary page](../operations/network/management_network/bican_technical_summary.md). 
+More information can be found on the [BICAN summary page](../operations/network/management_network/bican_technical_summary.md).
 Review the BICAN summary before continuing with the CSM 1.2 install.
 
 Detailed BICAN documentation can be found on the [BICAN technical details](../operations/network/management_network/bican_technical_details.md) page.

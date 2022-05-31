@@ -54,7 +54,7 @@ At this time customers may choose to:
 The feature matrix of the CAN is described [here](bican_support_matrix.md).
 Details of the High Speed CAN (CHN) and the Management CAN (CMN) are described below.
 
-![Customer Access Overview](img/customer_access_overview.png) 
+![Customer Access Overview](img/customer_access_overview.png)
 
 <a name="high-speed-can-(chn)"></a>
 
