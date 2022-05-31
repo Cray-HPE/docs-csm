@@ -138,12 +138,6 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
    If the above command complains that it cannot find `certs/sealed_secrets.crt`, then you can run the following commands to create it:
 
-In the command below, the `NEW_PASSWORD` value must be replaced with the updated password.
-
-> **WARNING:** The following command includes the new password in plaintext on the command line, meaning it will be stored in the shell history as well
-> as be visible to all users on the system in the process table. These dangers can be avoided by creating the secret using an alternative method
-> (for example, using the `--from-env-file` or `--from-file` arguments to `kubectl create secret generic`).
-
     ```bash
     ncn# mkdir -p ../certs &&
          ./bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > ../certs/sealed_secrets.crt
