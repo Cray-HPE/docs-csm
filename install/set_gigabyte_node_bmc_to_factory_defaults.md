@@ -1,111 +1,123 @@
 # Set Gigabyte Node BMC to Factory Defaults
 
-### Prerequisites
+There are cases when a Gigabyte node BMC must be reset to its factory default settings. This page describes when this reset is appropriate, and
+how to use management scripts and text files to do the reset.
 
-Use the management scripts and text files to reset Gigabyte BMC to factory default settings. Set the BMC to the factory default settings in the following cases:
+Set the BMC to the factory default settings in the following cases:
 
-- There are problems using the ipmitool command and Redfish does not respond
-- There are problems using the ipmitool command and Redfish is running
-- When BIOS or BMC flash procedures fail using Redfish
-  - Run the `do_bmc_factory_default.sh` script
-  - Run `ipmitool -I lanplus -U admin -P password -H BMC_or_CMC_IP mc reset cold` and flash it again after 5 minutes seconds
-- If booted from the PIT node:
-  - the firmware packages are located in the HFP package provided with the Shasta release
-  - the required scripts are located in `/var/www/fw/river/sh-svr-scripts`
+- There are problems using the `ipmitool` command and Redfish does not respond.
+- There are problems using the `ipmitool` command and Redfish is running.
+- When BIOS or BMC flash procedures fail using Redfish.
 
-### Procedure
+## Procedure
 
-#### Apply the BMC Factory Command
+**This section refers to scripts that exist only in the PIT environment.** If necessary, copy the LiveCD data from a different machine to get these scripts.
+
+**Note**: When BIOS or BMC flash procedures fail using Redfish:
+
+- Run the `do_bmc_factory_default.sh` script
+- Run `ipmitool -I lanplus -U admin -P password -H BMC_or_CMC_IP mc reset cold` and flash it again after five minutes.
+
+If booted from the PIT node:
+
+- The firmware packages are located in the HPE Cray EX HPC Firmware Pack (HFP) provided with the Shasta release.
+- The required scripts are located in `/var/www/fw/river/sh-svr-scripts`
 
 1. Create a `node.txt` file and add the target node information as shown:
 
-   Example `node.txt` file with two nodes:
+    Example `node.txt` file with two nodes:
 
-   ```screen
+    ```text
     10.254.1.11 x3000c0s9b0 ncn-w002
     10.254.1.21 x3000c0s27b0 uan01
-   ```
+    ```
 
    Example `node.txt` file with one node:
 
-   ```screen
+    ```text
     10.254.1.11 x3000c0s9b0 ncn-w002
-   ```
+    ```
 
-2. Use Redfish to reset the BMC to factory default.
+1. Use Redfish to reset the BMC to factory default.
 
-   The BMC is running 12.84.01 or a later version.
+    - **Option 1:** If the BMC is running version `12.84.01` or later, then run:
 
-   ```bash
-   ncn-w001# sh do_Redfish_BMC_Factory.sh
-   ```
+        ```bash
+        ncn# sh do_Redfish_BMC_Factory.sh
+        ```
 
-   - Alternatively, use `ipmitool` to reset the BMC to factory defaults:
+    - **Option 2:** Use `ipmitool` to reset the BMC to factory defaults:
 
-      ```bash
-      ncn-w001# sh do_bmc_factory_default.sh
-      ```
+        ```bash
+        ncn# sh do_bmc_factory_default.sh
+        ```
 
-   - Alternatively, use the power control script:
+    - **Option 3:** Use the power control script:
 
-      ```bash
-      ncn-w001# sh do_bmc_power_control.sh raw 0x32 0x66
-      ```
+        ```bash
+        ncn# sh do_bmc_power_control.sh raw 0x32 0x66
+        ```
 
-   #### After the BMC has Been Reset to Factory Defaults
+        (`raw 0x32 0x66` are Gigabyte/AMI vendor-specific IPMI commands to reset to factory defaults.)
 
-3. Wait 5 minutes for BMC and Redfish initialization.
+1. Wait five minutes (300 seconds) for the BMC and Redfish to initialize.
 
-   ```bash
-   ncn-w001# sleep 300
-   ```
+    ```bash
+    ncn# sleep 300
+    ```
 
-4. Add the default login/password to the BMC.
+1. Add the default login and password to the BMC.
 
-   ```bash
-   ncn-w001# ncn-w001# sh do_bmc_root_account.sh
-   ```
+    ```bash
+    ncn# sh do_bmc_root_account.sh
+    ```
 
-5. If BMC is version 12.84.01 or later, skip this step. Otherwise, add the default login/password to Redfish.
+1. Add the default login and password to Redfish.
 
-   ```bash
-   ncn-w001# sh do_Redfish_credentials.sh
-   ```
+    **IMPORTANT:** If the BMC is version `12.84.01` or later, then **skip this step**.
 
-6. Make sure the BMC is not in failover mode. Run the script with the `read` option to check the BMC status:
+    ```bash
+    ncn# sh do_Redfish_credentials.sh
+    ```
 
-   ```bash
-   ncn-w001# sh do_bmc_change_mode_to_manual.sh read
-   ---------------------------------------------------
-   [ BMC: 172.30.48.33 ]
-   => Manual mode (O)
-   ```
+1. Make sure the BMC is not in failover mode.
 
-   If the BMC displays `Failover mode`:
+    Run the script with the `read` option to check the BMC status:
 
-   ```bash
-   [ BMC: 172.30.48.33 ]
-   ==> Failover mode (X) <==
-   ```
+    ```bash
+    ncn# sh do_bmc_change_mode_to_manual.sh read
+    ---------------------------------------------------
+    [ BMC: 172.30.48.33 ]
+    => Manual mode (O)
+    ```
 
-   Change the BMC back to manual mode.
+    The BMC is in failover mode if the previous command includes output similar to the following:
 
-   ```bash
-   ncn-w001# sh do_bmc_change_mode_to_manual.sh change
-   ```
+    ```text
+    [ BMC: 172.30.48.33 ]
+    ==> Failover mode (X) <==
+    ```
 
-7. If the BMC is in a booted management NCN running v1.4+ or v1.3, reapply the static IP address and clear the DHCP address from HSM/KEA.
+    If the BMC is in failover mode, then change the BMC back to manual mode:
 
-   Determine the MAC address in HSM for the DHCP address for the BMC, then delete it from HSM and restart KEA.
+    ```bash
+    ncn# sh do_bmc_change_mode_to_manual.sh change
+    ```
 
-8. Reboot or power cycle the target nodes.
+1. If the BMC is in a booted management NCN running Shasta v1.3 or later, then reapply the static IP address and clear the DHCP address from HSM/KEA.
 
-   #### After the CMC is Reset to Factory Defaults
+    Determine the MAC address in HSM for the DHCP address for the BMC, delete it from HSM, and restart KEA.
 
-9. Wait 300 seconds for CMC and Redfish initialization, then add the default login/password to the CMC.
+1. Reboot or power cycle the target nodes.
 
-   ```bash
-   ncn-w001# sleep 300
-   ncn-w001# sh do_bmc_root_account.sh
-   ```
+1. After the BMC is reset to factory defaults, wait 300 seconds for BMC and Redfish initialization.
 
+    ```bash
+    ncn# sleep 300
+    ```
+
+1. Add the default login and password to the BMC:
+
+    ```bash
+    ncn# sh do_bmc_root_account.sh
+    ```
