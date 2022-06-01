@@ -583,6 +583,10 @@ bs
 # To allow Site Init
 Init
 
+- install/collecting_ncn_mac_addresses.md
+# To allow Site Init
+Init
+
  - install/prepare_configuration_payload.md
 # To allow Site Init
 Init
