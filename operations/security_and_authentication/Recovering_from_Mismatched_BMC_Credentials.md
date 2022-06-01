@@ -49,7 +49,7 @@ This type of problem can occur in the following scenarios:
 1. Update the credentials for the Redfish endpoint stored in Vault using Hardware State Manager (HSM):
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoint update $BMC --password $CURRENT_ROOT_PASSWORD 
+    ncn-m001# cray hsm inventory redfishEndpoints update $BMC --user root --password $CURRENT_ROOT_PASSWORD 
     ```
 
 1. Wait a few minutes for HSM to attempt to inventory the BMC:
@@ -124,6 +124,15 @@ This type of problem can occur in the following scenarios:
 
     ```bash
     ncn-m001# cray scsd bmc discreetcreds create scsd_payload.json
+    ```
+
+    Example of a successful credentail change:
+    
+    ```text
+    [[Targets]]
+    Xname = "x1000c0r1b0"
+    StatusCode = 204
+    StatusMsg = "No Content"
     ```
 
     If the operation is not successful inspect the the SCSD logs.
