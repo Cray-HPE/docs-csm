@@ -102,7 +102,7 @@ This step is required. **There is no default root password and no default SSH ke
    ```
 
    The script will save the original SquashFS images in `./{k8s,ceph}/old`. The new image filenames will
-   have a `secure-` prefix. The initrd and kernel will retain their original filenames.
+   have a `secure-` prefix. The `initrd` and kernel will retain their original filenames.
 
 1. Set the boot links.
 
