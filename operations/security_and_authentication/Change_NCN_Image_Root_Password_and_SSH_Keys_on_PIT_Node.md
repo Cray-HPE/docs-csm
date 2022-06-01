@@ -97,7 +97,7 @@ This step is required. **There is no default root password and no default SSH ke
    pit# ${CSM_PATH}/ncn-image-modification.sh -p \
                                               -t rsa \
                                               -N "" \
-                                              -k $(find . -name "kubernetes-*.squashfs" | sort -V | tail -1)
+                                              -k $(find . -name "kubernetes-*.squashfs" | sort -V | tail -1) \
                                               -s $(find . -name "storage-ceph-*.squashfs" | sort -V | tail -1)
    ```
 
