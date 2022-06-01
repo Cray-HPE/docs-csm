@@ -45,7 +45,7 @@ The CHN will automatically be configure on a UAN if the SLS `BICAN` network `Sys
 
 `uan_can_setup: yes`
 
-Please refer to the "HPE Cray User Access Node (UAN) Software Administration Guide (S-8033)" document on the [HPE Support Center](https://support.hpe.com) website for more information.
+Please refer to the "HPE Cray User Access Node (UAN) Software Administration Guide (`S-8033`)" document on the [HPE Support Center](https://support.hpe.com) website for more information.
 
 <a name="configure-uai"></a>
 
@@ -422,7 +422,7 @@ Prerequisites for this task:
 
    `configurationStatus` should change from `pending` to `configured` once NCN personalization completes successfully.
 
-For more information on managing NCN personalization please refer to [Perform_NCN_Personalization.md](../../../operations/CSM_product_management/Perform_NCN_Personalization.md)
+For more information on managing NCN personalization please refer to [Perform NCN Personalization](../../../operations/CSM_product_management/Perform_NCN_Personalization.md)
 
 <a name="configure-api-gw"></a>
 
@@ -538,7 +538,7 @@ Please refer to the [gateway testing documentation](../gateway_testing.md) for m
    }
    ```
 
-1. Verify the compute nodes have `CHN` IP addresses set on the hsn0 interface.
+1. Verify the compute nodes have `CHN` IP addresses set on the `hsn0` interface.
 
    ```bash
    nid001160:~ # ip ad show hsn0
@@ -588,7 +588,7 @@ Please refer to the [gateway testing documentation](../gateway_testing.md) for m
    }
    ```
 
-1. Verify the worker nodes have `CHN` IP addresses set on the hsn0 interface.
+1. Verify the worker nodes have `CHN` IP addresses set on the `hsn0` interface.
 
    ```bash
    ncn-m001:~ # pdsh -w ncn-w00[1-4] 'ip ad show hsn0 | grep inet\ ' | dshbak -c
