@@ -13,9 +13,9 @@ Networks provide higher availability and more flexibility in accessing cloud ser
 
 Customer Access Networks (CANs) provide flexible networking at the edge between the site and Shasta system to do the following:
 
-* Perform administrative tasks _on_ the system.
-* Run jobs and move job data _to and from_ the system.
-* Access site resources like DNS and LDAP _from_ the system.
+* Perform administrative tasks on the system.
+* Run jobs and move job data to and from the system.
+* Access site resources like DNS and LDAP from the system.
 
 ## Feature access matrix
 
@@ -30,7 +30,7 @@ For CSM 1.2, the notion of the CAN has been expanded to meet customer requests f
 | Non-Compute Node (NCN) Servers | Ingress                    | Not Allowed                  | Not Allowed                | Allowed                          |
 | System Access to External/Site (LDAP, DNS) | Egress                     | Allowed                      | Allowed                    | Not Allowed                      |
 
-* Selection of user access for job control and data movement over the Shasta Management Network (CAN) _or_ the High Speed Network (CHN) is made during system installation or upgrade.
+* Selection of user access for job control and data movement over the Shasta Management Network (CAN) or the High Speed Network (CHN) is made during system installation or upgrade.
 
 * Creation of the Customer Management Network (CMN) during installation or upgrade is mandatory.
 
