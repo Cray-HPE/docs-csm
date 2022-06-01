@@ -15,6 +15,7 @@ for additional information on system hardware, troubleshooting, and administrati
    1. [Ceph CSI Troubleshooting](#ceph_csi_troubleshooting)
    1. [Safeguards for CSM NCN Upgrades](#safeguards_for_csm_ncn_upgrades)
    1. [Postgres Troubleshooting](#postgres_troubleshooting)
+   1. [CSM Services Install Fails Because of Missing Secret](#csm_installation_failure_missing_secret)
 
 ## Details
 
@@ -96,3 +97,9 @@ for additional information on system hardware, troubleshooting, and administrati
       * Timeout on `cray-sls-init-load` during Install CSM Services due to Postgres cluster in `SyncFailed` state
 
       See [Troubleshoot Postgres Database](../operations//kubernetes/Troubleshoot_Postgres_Database.md#syncfailed)
+   <a name="csm_installation_failure_missing_secret"></a>
+
+   1. CSM Services Install Fails Because of Missing Secret
+
+      If a new installation is failing with a missing `admin-client-auth` secret, then see
+      [CSM Services Install Fails Because of Missing Secret](csm_installation_failure.md).
