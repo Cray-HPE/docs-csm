@@ -1,13 +1,13 @@
 # Recovering from Mismatched BMC Credentials
 
-This procedure is aimed recovering from the situation when new or replacement hardware has `root` credentials that do not match the system's current default `root` user credentials.
+Use this procedure to recover from the situation when new or replacement hardware has `root` credentials that do not match the system's current default `root` user credentials.
 
 This type of problem can occur in the following scenarios:
 
-- The Site has customized the default `root` credentials using either the
+- The site has customized the default `root` credentials using either the
   [Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials after a CEC Password Change](Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md) or
   [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md) procedures.
-- Hardware has the factory default `root` password or a different known `root` password configured. Such as a pieces of hardware that moved from a different system with customized default `root` password.
+- Hardware has the factory default `root` password or a different known `root` password configured. For example, hardware that has moved from a different system with a customized default `root` password.
 
 ## Procedure
 
@@ -19,14 +19,14 @@ This type of problem can occur in the following scenarios:
 
 1. Specify the current `root` user password for the BMC:
 
-    > Depending on the origin of the piece of hardware, this could be the factory default password or a different systems default password.
+    > Depending on the origin of the piece of hardware, this could be the factory default password or a different system's default password.
 
     ```bash
     ncn-m001# read -s CURRENT_ROOT_PASSWORD
     ncn-m001# echo $CURRENT_ROOT_PASSWORD
     ```
 
-1. Verify the credentials work with Redfish using curl:
+1. Verify the credentials work with Redfish using `curl`:
 
     ```bash
     ncn-m001# curl -k -u "root:$CURRENT_ROOT_PASSWORD" https://$BMC/redfish/v1/Managers -i
@@ -39,7 +39,7 @@ This type of problem can occur in the following scenarios:
     ...output truncated...
     ```
 
-    Conversely the following output shows the `CURRENT_ROOT_PASSWORD` environment variable contains an **invalid** `root` user password for the BMC. Update the `CURRENT_ROOT_PASSWORD` environment variable to contain a valid `root` user password for the BMC.
+    Conversely, the following output shows the `CURRENT_ROOT_PASSWORD` environment variable contains an **invalid** `root` user password for the BMC. Update the `CURRENT_ROOT_PASSWORD` environment variable to contain a valid `root` user password for the BMC.
 
     ```text
     HTTP/1.1 401 Unauthorized
@@ -64,7 +64,7 @@ This type of problem can occur in the following scenarios:
     ncn-m001# cray hsm inventory redfishEndpoints describe $BMC
     ```
 
-    If `DiscoveryStarted`, then wait and recheck the discovery status again. If `HTTPsGetFailed` examine the HSM logs to troubleshoot the issue.
+    If `DiscoveryStarted`, then wait and recheck the discovery status again. If `HTTPsGetFailed`, then examine the HSM logs to troubleshoot the issue.
 
 1. Determine the system's default BMC `root` user password:
 
@@ -73,13 +73,13 @@ This type of problem can occur in the following scenarios:
     ncn-m001# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
     ```
 
-    1. Retrieve the default root password for liquid-cooled hardware:
+    1. Retrieve the default `root` password for liquid-cooled hardware:
 
         ```bash
         ncn-m001# SYSTEM_ROOT_PASSWORD=$(vault kv get secret/meds-cred/global/ipmi | jq .data.Password -r)
         ```
 
-    1. Retrieve the default root password for air-cooled hardware:
+    1. Retrieve the default `root` password for air-cooled hardware:
 
         ```bash
         ncn-m001# SYSTEM_ROOT_PASSWORD=$(vault kv get secret/reds-creds/defaults | jq .data.Cray.password -r)
@@ -91,7 +91,7 @@ This type of problem can occur in the following scenarios:
     ncn-m001# echo $SYSTEM_ROOT_PASSWORD
     ```
 
-1. Create payload for the System Configuration Service (SCSD):
+1. Create a payload for the System Configuration Service (SCSD):
 
     ```bash
     ncn-m001# jq --arg BMC "$BMC" --arg PASSWORD "$SYSTEM_ROOT_PASSWORD" -n \
