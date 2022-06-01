@@ -43,6 +43,7 @@ pit# popd
 >
 > * This command may take up to 90 minutes to complete.
 > * If any errors are encountered, then potential fixes should be displayed where the error occurred.
+> * If the installation fails with a missing secret error message, then see [CSM Services Install Fails Because of Missing Secret](csm_installation_failure.md).
 > * Output is redirected to `/usr/share/doc/csm/install/scripts/csm_services/yapl.log` . To show the output in the terminal, append
 >   the `--console-output execute` argument to the `yapl` command.
 > * The `yapl` command can safely be rerun. By default, it will skip any steps which were previously completed successfully. To force it to
