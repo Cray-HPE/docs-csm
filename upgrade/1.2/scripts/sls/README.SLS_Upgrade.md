@@ -24,7 +24,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
      handled during the upgrade. The flag to preserve CAN-to-CMN NCN IP addresses is mutually exclusive with other preservations
      and the flag is `--preserve-existing-subnet-for-cmn ncns`.
    * Should no preservation flag be set, the default behavior is to recalculate every IP address on the existing CAN while migrating
-     to the CMN. The behavior in this case is to calculate the subnet sizesbased on number of devices (with a bit of spare room),
+     to the CMN. The behavior in this case is to calculate the subnet sizes based on number of devices (with a bit of spare room),
      while maximizing IP address pool sizes for (dynamic) services.
 
 ## Procedure

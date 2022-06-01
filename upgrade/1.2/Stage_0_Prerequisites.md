@@ -275,7 +275,7 @@ the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Wor
 
 ## Stage completed
 
-To comfirm `prerequisites.sh` has run successfully.  You should see:
+To confirm `prerequisites.sh` has run successfully.  You should see:
 
    ```bash
    [OK] - Successfully completed
