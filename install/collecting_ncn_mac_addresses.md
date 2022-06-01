@@ -258,7 +258,7 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
 
     ```bash
     pit# \
-    cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/dnsmasq.d/* /etc/dnsmasq.d/*
+    cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/dnsmasq.d/* /etc/dnsmasq.d/
     cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/basecamp/* /var/www/ephemeral/configs/
     cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/conman.conf /etc/
     cp -p /var/www/ephemeral/prep/$SYSTEM_NAME/pit-files/* /etc/sysconfig/network/
