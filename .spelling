@@ -391,6 +391,7 @@ playbook
 playbooks
 plugin
 plugins
+Podman
 PoR
 post-Ceph
 post-Ceph-install
@@ -432,6 +433,7 @@ respawns
 REST
 Restic
 Resync
+RFC-1305
 RFC5171-compliant
 Rivest-Shamir-Adleman
 RJ-45
