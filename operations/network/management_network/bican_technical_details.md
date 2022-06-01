@@ -1,39 +1,39 @@
 # Bifurcating the CAN - CSM-1.2 Feature Details
 
-- [CAN New Features Overview](#can-new-features-overview)
-- [High Speed CAN (CHN)](#high-speed-can-(chn))
-  - [CHN system ingress endpoints accessible in CSM-1.2](#chn-system-ingress-endpoints-accessible-in-csm-1.2)
-  - [CHN system egress endpoints accessible in CSM-1.2](#chn-system-egress-endpoints-accessible-in-csm-1.2)
-  - [Endpoint Naming](#endpoint-naming)
-    - [Touchpoints: effects and changes](#touchpoints:-effects-and-changes)
-    - [When naming occurs](#when-naming-occurs)
-    - [Ability to change post-install](#ability-to-change-post-install)
-  - [Endpoint Addressing](#endpoint-addressing)
-    - [Touchpoints: effects and changes](#touchpoints:-effects-and-changes)
-    - [When addressing occurs](#when-addressing-occurs)
-    - [Ability to change post-install](#ability-to-change-post-install)
-  - [Traffic Separation and Routing](#traffic-separation-and-routing)
-    - [Touchpoints: effects and changes](#touchpoints:-effects-and-changes)
-    - [When configuration occurs](#when-configuration-occurs)
-    - [Ability to change post install](#ability-to-change-post-install)
-- [Management CAN(CMN)](#management-can(cmn))
-  - [Traffic Separation and Routing](#traffic-separation-and-routing)
-  - [Endpoint Naming](#endpoint-naming)
-  - [Endpoint Addressing](#endpoint-addressing)
-  - [Changes](#changes)
-    - [Touchpoints: effects and changes](#touchpoints:-effects-and-changes)
-    - [When configuration occurs](#when-configuration-occurs)
-    - [Ability to change post install](#ability-to-change-post-install)
-- [CAN External/Site Access (site DNS, LDAP, etc...)](#can-external/site-access-(site-dns,-ldap,-etc...))
-  - [Traffic Separation and Routing](#traffic-separation-and-routing)
-  - [Changes](#changes)
-    - [Touchpoints: effects and changes](#touchpoints:-effects-and-changes)
-    - [When configuration occurs](#when-configuration-occurs)
-    - [Ability to change post install](#ability-to-change-post-install)
+- [1 CAN New Features Overview](#1-can-new-features-overview)
+- [2 High Speed CAN (CHN)](#2-high-speed-can-(chn))
+  - [2.1 CHN system ingress endpoints accessible in CSM-1.2](#21-chn-system-ingress-endpoints-accessible-in-csm-1.2)
+  - [2.2 CHN system egress endpoints accessible in CSM-1.2](#22-chn-system-egress-endpoints-accessible-in-csm-1.2)
+  - [2.3 Endpoint Naming](#23-endpoint-naming)
+    - [2.3.1 Touchpoints: effects and changes](#231-touchpoints:-effects-and-changes)
+    - [2.3.2 When naming occurs](#232-when-naming-occurs)
+    - [2.3.3 Ability to change post-install](#233-ability-to-change-post-install)
+  - [2.4 Endpoint Addressing](#24-endpoint-addressing)
+    - [2.4.1 Touchpoints: effects and changes](#241-touchpoints:-effects-and-changes)
+    - [2.4.2 When addressing occurs](#242-when-addressing-occurs)
+    - [2.4.3 Ability to change post-install](#243-ability-to-change-post-install)
+  - [2.5 Traffic Separation and Routing](#25-traffic-separation-and-routing)
+    - [2.5.1 Touchpoints: effects and changes](#251-touchpoints:-effects-and-changes)
+    - [2.5.2 When configuration occurs](#252-when-configuration-occurs)
+    - [2.5.3 Ability to change post install](#253-ability-to-change-post-install)
+- [3 Management CAN(CMN)](#3-management-can(cmn))
+  - [3.1 Traffic Separation and Routing](#31-traffic-separation-and-routing)
+  - [3.2 Endpoint Naming](#32-endpoint-naming)
+  - [3.3 Endpoint Addressing](#33-endpoint-addressing)
+  - [3.4 Changes](#34-changes)
+    - [3.4.1 Touchpoints: effects and changes](#341-touchpoints:-effects-and-changes)
+    - [3.4.2 When configuration occurs](#342-when-configuration-occurs)
+    - [3.4.3 Ability to change post install](#343-ability-to-change-post-install)
+- [4 CAN External/Site Access (site DNS, LDAP, etc...)](#4-can-external/site-access)
+  - [4.1 Traffic Separation and Routing](#41-traffic-separation-and-routing)
+  - [4.2 Changes](#42-changes)
+    - [4.2.1 Touchpoints: effects and changes](#421-touchpoints:-effects-and-changes)
+    - [4.2.2 When configuration occurs](#422-when-configuration-occurs)
+    - [4.2.3 Ability to change post install](#423-ability-to-change-post-install)
 
-<a name="can-new-features-overview"></a>
+<a name="1-can-new-features-overview"></a>
 
-## CAN New Features Overview
+## 1 CAN New Features Overview
 
 Bifurcation or splitting of the Customer Access Network (CAN) enables customization of customer traffic to and from the system.
 Customization will be performed during installation.
@@ -56,9 +56,9 @@ Details of the High Speed CAN (CHN) and the Management CAN (CMN) are described b
 
 ![Customer Access Overview](img/customer_access_overview.png)
 
-<a name="high-speed-can-(chn)"></a>
+<a name="2-high-speed-can-(chn)"></a>
 
-## High Speed CAN (CHN)
+## 2 High Speed CAN (CHN)
 
 Access to system resources from the customer site over the High Speed Network is provided by the High Speed CAN (CHN).
 As can be seen in the diagram above, traffic ingress from the site for the CHN is over the Edge Routers
@@ -67,23 +67,23 @@ As can be seen in the diagram above, traffic ingress from the site for the CHN i
 NOTE:  Arista routing configurations as a virtual routing instance are in-scope for CSM-1.2 CHN work.
 Other Edge Routers, including Juniper are out of scope.
 
-<a name="chn-system-ingress-endpoints-accessible-in-csm-1.2"></a>
+<a name="21-chn-system-ingress-endpoints-accessible-in-csm-1.2"></a>
 
-## CHN system ingress endpoints accessible in CSM-1.2
+### 2.1 CHN system ingress endpoints accessible in CSM-1.2
 
 - Designated Application Nodes, particularly **UAN, over ssh**.
 - Designated **Compute Nodes (CN)**, including those used for Compute-as-UAN, **over ssh**.
 - Kubernetes **API endpoints over https**.
 
-<a name="chn-system-egress-endpoints-accessible-in-csm-1.2"></a>
+<a name="22-chn-system-egress-endpoints-accessible-in-csm-1.2"></a>
 
-## CHN system egress endpoints accessible in CSM-1.2
+### 2.2 CHN system egress endpoints accessible in CSM-1.2
 
 - System access to **site external resources** , including LDAP(s) and DNS.
 
-<a name="endpoint-naming"></a>
+<a name="23-endpoint-naming"></a>
 
-## Endpoint Naming
+### 2.3 Endpoint Naming
 
 A ".chn" DNS suffix will be used for all endpoints accessed over the High Speed CAN.
 Endpoints naming will be resolved and maintained in the system Authoritative DNS (another CSM-1.2 feature).
@@ -101,9 +101,9 @@ Exchange of system DNS with the site may be via delegation (preferred) or zone t
 
 Once added to CSI, names and IP's will use the standard CSM data flow and end up in SLS and be available for use via both DNS and DHCP services.
 
-<a name="touchpoints:-effects-and-changes"></a>
+<a name="231-touchpoints:-effects-and-changes"></a>
 
-### Touchpoints: effects and changes
+#### 2.3.1 Touchpoints: effects and changes
 
 - Will require installation and admininistration document changes.
 - The CHN requires a small change in CSI to add this network.
@@ -111,24 +111,24 @@ Once added to CSI, names and IP's will use the standard CSM data flow and end up
 - Name aliases can be added/changed/removed via the API to SLS and become available in DNS automatically.
 DNS tooling for this was released in Shasta v1.4 with [SLS](../../index.md#system-layout-service-sls)
 
-<a name="when-naming-occurs"></a>
+<a name="232-when-naming-occurs"></a>
 
-### When naming occurs
+#### 2.3.2 When naming occurs
 
 - Installation as part of Cray Site Initialization (CSI) data.
 - During site customizations.
 
-<a name="ability-to-change-post-install"></a>
+<a name="233-ability-to-change-post-install"></a>
 
-### Ability to change post-install
+#### 2.3.3 Ability to change post-install
 
 - YES - Add/Remove/Change Aliases
 - NO Change FQDN and domain suffixes because of the number of touchpoints.
 Chiefly Kubernetes limitations introduced at install time and sheer number of touchpoints.
 
-<a name="endpoint-addressing"></a>
+<a name="2-4-endpoint-addressing"></a>
 
-## Endpoint Addressing
+### 2.4 Endpoint Addressing
 
 For the CSM-1.2 release CHN endpoints will have **IPv4 addressing only** , with IPv6 introduction in a future release.
 The current limitation to system introduction of IPv6 is Kubernetes Weave as well as a vast amount of system configuration
@@ -137,9 +137,9 @@ and testing required to certify IPv6 system-wide.
 The CHN will, by default, have a private IPv4 address block.
 This is intended to be changed during installation to a **customer-supplied IPv4 address block**.
 
-<a name="touchpoints:-effects-and-changes"></a>
+<a name="241-touchpoints:-effects-and-changes"></a>
 
- ### Touchpoints: effects and changes
+#### 2.4.1 Touchpoints: effects and changes
 
 - Installer and documentation changes to support new network and pathing as part of configuration.
 - CSI for network generation and initial configuration.
@@ -150,28 +150,28 @@ This is intended to be changed during installation to a **customer-supplied IPv4
 - Arista switch pair to create new or add to existing virtual routing instance for pathing and access control.
 - HSN required for transport of application traffic so new procedures need to be developed for troubleshooting and support.
 
-<a name="when-addressing-occurs"></a>
+<a name="242-when-addressing-occurs"></a>
 
-### When addressing occurs
+#### 2.4.2 When addressing occurs
 
 - Installation as part of CSI data.
 
-<a name="ability-to-change-post-install"></a>
+<a name="243-ability-to-change-post-install"></a>
 
- ### Ability to change post-install
+#### 2.4.3 Ability to change post-install
 
 - NO - There are dozens of touchpoints throughout the system.
 
-<a name="traffic-separation-and-routing"></a>
+<a name="2-5-traffic-separation-and-routing"></a>
 
-## Traffic Separation and Routing
+### 2.5 Traffic Separation and Routing
 
 In CSM 1.2, there will be Layer 3 separation internal to the system but co-mingled Layer 2 between the CHN IPv4 addressing and the internal HSN private IPv4 addresses.
 Isolation will be within the Slingshot network as well as separated at the Edge Router.
 
-<a name="touchpoings:-effects-and-changes"></a>
+<a name="251-touchpoings:-effects-and-changes"></a>
 
-  ### Touchpoints: effects and changes
+#### 2.5.1 Touchpoints: effects and changes
 
 - Edge Router provides all **routing and access controls** in CSM-1.2 (via a virtual routing instance if Arista switch pair is used).
 As noted above, non-Arista router configurations are out of scope for CSM-1.2 work.
@@ -182,22 +182,22 @@ As noted above, non-Arista router configurations are out of scope for CSM-1.2 wo
 - API endpoints in MetalLB for the CHN will be accessible over NCN worker hsn interfaces (via ECMP Layer 3 routing).
   - MetalLB will peer with the Edge Routers to supply load balanced API access.
 
-<a name="when-configuration-occurs"></a>
+<a name="252-when-configuration-occurs"></a>
 
-### When configuration occurs
+#### 2.5.2 When configuration occurs
 
 - Installation as part of a virtual routing instance on the Edge Routers.
 
-<a name="ability-to-change-post-install"></a>
+<a name="253-ability-to-change-post-install"></a>
 
-### Ability to change post install
+#### 2.5.3 Ability to change post install
 
 - NOT RECOMMENDED - Edge Router controls external access so change scope is limited.
 - NO - Node images could be changed but routing and IP changes to CFS images would need extensive testing to certify.
 
-<a name="management-can(cmn)"></a>
+<a name="3-management-can(cmn)"></a>
 
-## Management CAN(CMN)
+## 3 Management CAN(CMN)
 
 The original CAN released in Shasta v1.1 contained the ability to access NCN workers, masters and storage directly via ssh for administrative purposes.
 This administrative traffic was co-mingled with general user traffic for jobs.
@@ -206,9 +206,9 @@ The new Customer Management Network (CMN) will be created as **a separate-and-di
 This new CMN network will allow ssh into the NCNs and CAN access will be disallowed.
 NOTE this is generally for ingress access for administrative purposes.
 
-<a name="traffic-separation-and-routing"></a>
+<a name="3-1-traffic-separation-and-routing"></a>
 
- ## Traffic Separation and Routing
+### 3.1 Traffic Separation and Routing
 
 Enabling the CMN at installation time will have the following effects:
 
@@ -216,9 +216,9 @@ Enabling the CMN at installation time will have the following effects:
 - Creating of a new VLAN on the Management Network.
 - Adding a new subnet and routing to the Management Network and NCNs.
 
-<a name="endpoint-naming"></a>
+<a name="3-2-endpoint-naming"></a>
 
-  ## Endpoint Naming
+### 3.2 Endpoint Naming
 
 If enabled during installation a &quot;.cmn&quot; suffix will be generated by CSI and used in SLS and Authoritative DNS.
 The "plumbing" of this will occur as previously described in the CHN.
@@ -227,19 +227,19 @@ Examples:
 
 - ssh ncn-w001.cmn.tld
 
-<a name="endpoint-addressing"></a>
+<a name="3-3-endpoint-addressing"></a>
 
-  ## Endpoint Addressing
+### 3.3 Endpoint Addressing
 
 For the CSM-1.2 release the CMN will only be available via customer-supplied IPv4 addressing.
 
-<a name="changes"></a>
+<a name="3-4-changes"></a>
 
-## Changes
+### 3.4 Changes
 
-<a name="touchpoints:-effects-and-changes"></a>
+<a name="341-touchpoints:-effects-and-changes"></a>
 
-   ### Touchpoints: effects and changes
+#### 3.4.1 Touchpoints: effects and changes
 
 - CMN required beginning with this release.
   - Customer will supply a subnet similar to the way the CAN is deployed.
@@ -254,54 +254,54 @@ For the CSM-1.2 release the CMN will only be available via customer-supplied IPv
   - Image support for CMN VLAN, addressing and routing.
 - CSI changes to support the new network and naming.
 
-<a name="when-configuration-occurs"></a>
+<a name="342-when-configuration-occurs"></a>
 
- ### When configuration occurs
+#### 3.4.2 When configuration occurs
 
 - During installation as part of CSI data generation.
 - During installation as part of Management Network configuration.
 - During installation as part of NCN deployment.
 
-<a name="ability-to-change-post-install"></a>
+<a name="343-ability-to-change-post-install"></a>
 
-### Ability to change post install
+#### 3.4.3 Ability to change post install
 
 - NOT RECOMMENDED and would be manual.
 
-<a name="can-external/site-access-(site-dns,-ldap,-etc...)"></a>
+<a name="4-can-external/site-access"></a>
 
-## CAN External/Site Access (site DNS, LDAP, etc...)
+## 4 CAN External/Site Access (site DNS, LDAP, etc...)
 
 System access to site or external resources, like the Internet, site DNS and site LDAP were previously provided over the CAN.
 By default this CAN access path will remain, but for the CSM-1.2 release it will be possible during installation to select system-to-site access over the CHN or CMN.
 
-<a name="traffic-separation-and-routing"></a>
+<a name="4-1-traffic-separation-and-routing"></a>
 
-## Traffic Separation and Routing
+### 4.1 Traffic Separation and Routing
 
 At installation time one of the following egress routes from the system to the site may be selected: CAN (default), CHN, CMN.
 
-<a name="changes"></a>
+<a name="4-2-changes"></a>
 
-   ## Changes
+### 4.2 Changes
 
-<a name="touchpoints:-effects-and-changes"></a>
+<a name="421-touchpoints:-effects-and-changes"></a>
 
-   ### Touchpoints: effects and changes
+#### 4.2.1 Touchpoints: effects and changes
 
 - Installer customizations changes:
   - Management Network changes possibly for routing, but new ACLs may be necessary.
   - NCNs will require specific site routes to prioritize selected pathing over the system default (CAN).
 - Dependent on CHN and CMN work.
 
-<a name="when-configuration-occurs"></a>
+<a name="422-when-configuration-occurs"></a>
 
-   ### When configuration occurs
+#### 4.2.2 When configuration occurs
 
 - During installation as part of site configuration.
 
-<a name="ability-to-change-post-install"></a>
+<a name="423-ability-to-change-post-install"></a>
 
-   ### Ability to change post install
+#### 4.2.3 Ability to change post install
 
 - NO
