@@ -53,6 +53,18 @@ done
 
 sed -i "s/LASTNODE/$num_storage_nodes/g" /etc/ansible/hosts
 
+# Adding conditional wait for k8s credentials.
+# Will exit with error if they do not show up within 2 mins.
+
+COUNTER=0
+while [[ ! -f /etc/kubernetes/admin.conf ]]; do
+  sleep 5
+  let COUNTER=COUNTER+1
+  if [[ $COUNTER -gt 24 ]]; then
+    exit 1
+  fi
+done
+
 source /etc/ansible/boto3_ansible/bin/activate
 
 playbook=/etc/ansible/ceph-rgw-users/ceph-rgw-users.yaml

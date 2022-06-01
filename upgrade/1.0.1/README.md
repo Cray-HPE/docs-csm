@@ -26,7 +26,7 @@ upgrade that node.
 
 **`Important:`** Please take note of the below content for troubleshooting purposes in the case that you encounter issues.
 
-## Relevant Troubleshooting Links for Upgrade Related Issues
+## Relevant Troubleshooting Links for Upgrade-Related Issues
 
 ### General Kubernetes Commands for Troubleshooting
 

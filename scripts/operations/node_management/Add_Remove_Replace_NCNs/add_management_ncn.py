@@ -49,6 +49,7 @@ from sls_utils import ipam
 BSS_URL = None
 HSM_URL = None
 SLS_URL = None
+KEA_URL = None
 
 #
 # HTTP Action stuff
@@ -182,8 +183,8 @@ def http_delete(session: requests.Session, url, payload, expected_status=http.HT
 def verify_sls_hardware_not_found(session: requests.Session, xname: str):
     action = http_get(session, f'{SLS_URL}/hardware/{xname}', expected_status=http.HTTPStatus.NOT_FOUND)
     if action["status"] == http.HTTPStatus.OK:
-        if "Aliass" in action["response"]["ExtraProperties"]:
-            alias = ", ".join(action["response"]["ExtraProperties"]["Aliass"])
+        if "Aliases" in action["response"]["ExtraProperties"]:
+            alias = ", ".join(action["response"]["ExtraProperties"]["Aliases"])
             action_log(action, f"Error {xname} ({alias}) already exists in SLS")
         else:
             action_log(action, f"Error {xname} already exists in SLS")
@@ -210,7 +211,7 @@ def get_sls_management_ncns(session: requests.Session):
         print_action(action)
         sys.exit(1)
 
-    return action, sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliass"][0])
+    return action, sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliases"][0])
 
 def get_sls_hardware(session: requests.Session, xname: str):
     action = http_get(session, f'{SLS_URL}/hardware/{xname}', expected_status=http.HTTPStatus.OK)
@@ -338,12 +339,16 @@ def create_hsm_inventory_ethernet_interfaces(session: requests.Session, ei: dict
     print(f'Creating {ei["MACAddress"]} in HSM Ethernet Interfaces...')
     r = session.post(f'{HSM_URL}/Inventory/EthernetInterfaces', json=ei)
 
-    if r.status_code != http.HTTPStatus.CREATED:
+    if r.status_code == http.HTTPStatus.CONFLICT:
+        print(f'Error creating {ei["MACAddress"]}, as it already exists in HSM EthernetInterfaces')
+    elif r.status_code != http.HTTPStatus.CREATED:
         print(f'Error failed to create {ei["MACAddress"]}, unexpected status code {r.status_code}')
         sys.exit(1)
+    else:
+        print(f'Created {ei["MACAddress"]} in HSM Inventory Ethernet Interfaces')
+        print(json.dumps(ei, indent=2))
 
-    print(f'Created {ei["MACAddress"]} in HSM Inventory Ethernet Interfaces')
-    print(json.dumps(ei, indent=2))
+    return r.status_code
 
 def get_hsm_inventory_ethernet_interfaces(session: requests.Session, mac: str):
     id = mac.replace(":", "").lower()
@@ -369,7 +374,7 @@ def patch_hsm_inventory_ethernet_interfaces(session: requests.Session, ei: dict)
 def delete_hsm_inventory_ethernet_interfaces(session: requests.Session, ei: dict):
     id = ei["MACAddress"].replace(":", "").lower()
     if len(id) == "":
-        print("Error unable to delete EthernetInterface from HSM as a empty value was provided as the MAC Address")
+        print("Error unable to delete EthernetInterface from HSM as an empty value was provided as the MAC Address")
         sys.exit(1)
     action = http_delete(session, f'{HSM_URL}/Inventory/EthernetInterfaces/{id}', payload=ei)
     if action["error"] is not None:
@@ -429,6 +434,25 @@ def put_bss_bootparameters(session: requests.Session, bootparameters: dict):
 def generate_instance_id() -> str:
     b = os.urandom(4)
     return f'i-{binascii.hexlify(b).decode("utf-8").upper()}'
+
+#
+# KEA API Helpers
+#
+def get_kea_lease4_get_by_hw_address(session: requests.Session, mac_address: str):
+    action = http_post(session, KEA_URL, payload={
+        "command": "lease4-get-by-hw-address",
+        "arguments": {
+            "hw-address": mac_address
+        },
+        "service": [ "dhcp4" ]
+    })
+
+    if action["error"] is not None:
+        action_log(action, f'Error failed to query KEA for DHCP leases associated with {mac_address}. {action["error"]}')
+        print_action(action)
+        sys.exit(1)
+
+    return action, action["response"][0]["arguments"]["leases"]
 
 #
 # Functions to process xnames
@@ -563,7 +587,7 @@ def run_command_actions(command_actions):
 def create_update_etc_hosts_actions(existing_management_ncns, ncn_alias, ncn_xname, ncn_ips, bmc_ip, log_dir):
     command_actions = []
 
-    ncn_aliases = list(map(lambda ncn: ncn["ExtraProperties"]["Aliass"][0], existing_management_ncns))
+    ncn_aliases = list(map(lambda ncn: ncn["ExtraProperties"]["Aliases"][0], existing_management_ncns))
     for alias in ncn_aliases:
         scp_action = CommandAction(['scp', f'{alias}:/etc/hosts', f'{log_dir}/etc-hosts-{alias}'])
         command_actions.append(scp_action)
@@ -647,7 +671,7 @@ class State:
             print_action(action)
             sys.exit(1)
 
-        # Validate each network that has a bootstrap_dhcp subnet that a IP Reservation exists for this NCN
+        # Validate each network that has a bootstrap_dhcp subnet that an IP Reservation exists for this NCN
         failed_to_find_ip = False
         for network_name, ncn_ip in ncn_ips.items():
             network = self.sls_networks[network_name]
@@ -669,7 +693,7 @@ class State:
                 failed_to_find_ip = True
 
 
-        # Validate the HMN network has a BMC IP  that has a bootstrap_dhcp subnet has a IP Reservation for this NCN
+        # Validate the HMN network has a BMC IP  that has a bootstrap_dhcp subnet has an IP Reservation for this NCN
         reservation_found = False
         hmn_dhcp_bootstrap = self.sls_networks["HMN"].subnets()["bootstrap_dhcp"]
         for name, reservation in hmn_dhcp_bootstrap.reservations().items():
@@ -701,7 +725,7 @@ class State:
         bmc_ip = allocate_ip_address_in_subnet(action, self.sls_networks, "HMN", "bootstrap_dhcp")
 
         # Add BMC IP reservation to the HMN network.
-        # Example: {"Aliass":["ncn-s001-mgmt"],"Comment":"x3000c0s13b0","IPAddress":"10.254.1.31","Name":"x3000c0s13b0"}
+        # Example: {"Aliases":["ncn-s001-mgmt"],"Comment":"x3000c0s13b0","IPAddress":"10.254.1.31","Name":"x3000c0s13b0"}
         bmc_ip_reservation = IPReservation(self.bmc_xname, bmc_ip, comment=self.bmc_xname, aliases=[self.bmc_alias])
         action_log(action, f"Temporally adding NCN BMC IP reservation to bootstrap_dhcp subnet in the HMN network: {bmc_ip_reservation.to_sls()}")
 
@@ -733,7 +757,7 @@ class State:
         self.action_log_ncn_ips(action)
 
         # Only for new IP addresses that have been allocated:
-        # Validate the NCN and its BMC to be added does not have a IP reservation already defined for it
+        # Validate the NCN and its BMC to be added does not have an IP reservation already defined for it
         # Also validate that none of the IP addresses we have allocated are currently in use in SLS.
         fail_sls_network_check = False
         for network_name, sls_network in self.sls_networks.items():
@@ -908,9 +932,9 @@ class State:
         for network_name, ip in self.ncn_ips.items():
             sls_network = self.sls_networks[network_name]
             # CAN
-            # Master:  {"Aliass":["ncn-m002-can","time-can","time-can.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.134","Name":"ncn-m002"}
-            # Worker:  {"Aliass":["ncn-w001-can","time-can","time-can.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.101.5.136","Name":"ncn-w001"}
-            # Storage: {"Aliass":["ncn-s001-can","time-can","time-can.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.101.5.147","Name":"ncn-s001"}
+            # Master:  {"Aliases":["ncn-m002-can","time-can","time-can.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.134","Name":"ncn-m002"}
+            # Worker:  {"Aliases":["ncn-w001-can","time-can","time-can.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.101.5.136","Name":"ncn-w001"}
+            # Storage: {"Aliases":["ncn-s001-can","time-can","time-can.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.101.5.147","Name":"ncn-s001"}
 
             # CHN
             # Master:  {"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.198","Name":"x3000c0s3b0n0"}
@@ -918,24 +942,24 @@ class State:
             # Storage: {"Comment":"x3000c0s13b0n0","IPAddress":"10.101.5.211","Name":"x3000c0s13b0n0"}
 
             # CMN
-            # Master:  {"Aliass":["ncn-m002-cmn","time-cmn","time-cmn.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.20","Name":"ncn-m002"}
-            # Worker:  {"Aliass":["ncn-w001-cmn","time-cmn","time-cmn.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.101.5.22","Name":"ncn-w001"}
-            # Storage: {"Aliass":["ncn-s001-cmn","time-cmn","time-cmn.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.101.5.33","Name":"ncn-s001"}
+            # Master:  {"Aliases":["ncn-m002-cmn","time-cmn","time-cmn.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.20","Name":"ncn-m002"}
+            # Worker:  {"Aliases":["ncn-w001-cmn","time-cmn","time-cmn.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.101.5.22","Name":"ncn-w001"}
+            # Storage: {"Aliases":["ncn-s001-cmn","time-cmn","time-cmn.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.101.5.33","Name":"ncn-s001"}
 
             # HMN
-            # Master:  {"Aliass":["ncn-m002-hmn","time-hmn","time-hmn.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.254.1.6","Name":"ncn-m002"}
-            # Worker:  {"Aliass":["ncn-w001-hmn","time-hmn","time-hmn.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.254.1.10","Name":"ncn-w001"}
-            # Storage: {"Aliass":["ncn-s001-hmn","time-hmn","time-hmn.local","rgw-vip.hmn"],"Comment":"x3000c0s13b0n0","IPAddress":"10.254.1.32","Name":"ncn-s001"}
+            # Master:  {"Aliases":["ncn-m002-hmn","time-hmn","time-hmn.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.254.1.6","Name":"ncn-m002"}
+            # Worker:  {"Aliases":["ncn-w001-hmn","time-hmn","time-hmn.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.254.1.10","Name":"ncn-w001"}
+            # Storage: {"Aliases":["ncn-s001-hmn","time-hmn","time-hmn.local","rgw-vip.hmn"],"Comment":"x3000c0s13b0n0","IPAddress":"10.254.1.32","Name":"ncn-s001"}
 
             # MTL
-            # Master:  {"Aliass":["ncn-m002-mtl","time-mtl","time-mtl.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.1.1.3","Name":"ncn-m002"}
-            # Worker:  {"Aliass":["ncn-w001-mtl","time-mtl","time-mtl.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.1.1.5","Name":"ncn-w001"}
-            # Storage: {"Aliass":["ncn-s001-mtl","time-mtl","time-mtl.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.1.1.16","Name":"ncn-s001"}
+            # Master:  {"Aliases":["ncn-m002-mtl","time-mtl","time-mtl.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.1.1.3","Name":"ncn-m002"}
+            # Worker:  {"Aliases":["ncn-w001-mtl","time-mtl","time-mtl.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.1.1.5","Name":"ncn-w001"}
+            # Storage: {"Aliases":["ncn-s001-mtl","time-mtl","time-mtl.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.1.1.16","Name":"ncn-s001"}
 
             # NMN
-            # Master:  {"Aliass":["ncn-m002-nmn","time-nmn","time-nmn.local","x3000c0s3b0n0","ncn-m002.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.252.1.5","Name":"ncn-m002"}
-            # Worker:  {"Aliass":["ncn-w001-nmn","time-nmn","time-nmn.local","x3000c0s7b0n0","ncn-w001.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.252.1.7","Name":"ncn-w001"}
-            # Storage: {"Aliass":["ncn-s001-nmn","time-nmn","time-nmn.local","x3000c0s13b0n0","ncn-s001.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.252.1.18","Name":"ncn-s001"}
+            # Master:  {"Aliases":["ncn-m002-nmn","time-nmn","time-nmn.local","x3000c0s3b0n0","ncn-m002.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.252.1.5","Name":"ncn-m002"}
+            # Worker:  {"Aliases":["ncn-w001-nmn","time-nmn","time-nmn.local","x3000c0s7b0n0","ncn-w001.local"],"Comment":"x3000c0s7b0n0","IPAddress":"10.252.1.7","Name":"ncn-w001"}
+            # Storage: {"Aliases":["ncn-s001-nmn","time-nmn","time-nmn.local","x3000c0s13b0n0","ncn-s001.local"],"Comment":"x3000c0s13b0n0","IPAddress":"10.252.1.18","Name":"ncn-s001"}
 
             # Generalizations
             # - All IP reservations have the NCN xname for the comment
@@ -996,7 +1020,7 @@ class State:
 
             if network_name == "HMN":
                 # Add BMC IP reservation to the HMN network.
-                # Example: {"Aliass":["ncn-s001-mgmt"],"Comment":"x3000c0s13b0","IPAddress":"10.254.1.31","Name":"x3000c0s13b0"}
+                # Example: {"Aliases":["ncn-s001-mgmt"],"Comment":"x3000c0s13b0","IPAddress":"10.254.1.31","Name":"x3000c0s13b0"}
                 bmc_ip_reservation = IPReservation(self.bmc_xname, self.bmc_ip, comment=self.bmc_xname, aliases=[self.bmc_alias])
                 print("Adding NCN BMC IP reservation to bootstrap_dhcp subnet in the HMN network")
                 print(json.dumps(bmc_ip_reservation.to_sls(), indent=2))
@@ -1085,9 +1109,9 @@ def allocate_ips_command(session: requests.Session, args, state: State):
     action, existing_management_ncns = get_sls_management_ncns(session)
 
     # Verify that the alias is unique
-    existing_management_ncns = sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliass"][0])
+    existing_management_ncns = sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliases"][0])
     for node in existing_management_ncns:
-        for alias in node["ExtraProperties"]["Aliass"]:
+        for alias in node["ExtraProperties"]["Aliases"]:
             if alias == args.alias:
                 action_log(action, f'Error the provided alias {state.ncn_alias} is already in use by {node["Xname"]}')
                 print_action(action)
@@ -1100,9 +1124,9 @@ def allocate_ips_command(session: requests.Session, args, state: State):
     action, existing_management_ncns = get_sls_management_ncns(session)
 
     # Verify that the alias is unique
-    existing_management_ncns = sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliass"][0])
+    existing_management_ncns = sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliases"][0])
     for node in existing_management_ncns:
-        for alias in node["ExtraProperties"]["Aliass"]:
+        for alias in node["ExtraProperties"]["Aliases"]:
             if alias == args.alias:
                 action_log(action, f'Error the provided alias {state.ncn_alias} is already in use by {node["Xname"]}')
                 print_action(action)
@@ -1140,7 +1164,7 @@ def allocate_ips_command(session: requests.Session, args, state: State):
 
     if not state.use_existing_ip_addresses:
         # Only for new IP addresses that have been allocated:
-        # Validate the NCN and its BMC to be added does not have a IP reservation already defined for it
+        # Validate the NCN and its BMC to be added does not have an IP reservation already defined for it
         # Also validate that none of the IP addresses we have allocated are currently in use in SLS.
         fail_sls_network_check = False
         for network_name, sls_network in sls_networks.items():
@@ -1405,9 +1429,9 @@ def ncn_data_command(session: requests.Session, args, state: State):
     action, existing_management_ncns = get_sls_management_ncns(session)
 
     # Verify that the alias is unique
-    existing_management_ncns = sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliass"][0])
+    existing_management_ncns = sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliases"][0])
     for node in existing_management_ncns:
-        for alias in node["ExtraProperties"]["Aliass"]:
+        for alias in node["ExtraProperties"]["Aliases"]:
             if alias == args.alias:
                 action_log(action, f'Error the provided alias {state.ncn_alias} is already in use by {node["Xname"]}')
                 print_action(action)
@@ -1425,7 +1449,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
         action, mgmt_switch = get_sls_hardware(session, mgmt_switch_xname)
 
         mgmt_switch_brand = mgmt_switch["ExtraProperties"]["Brand"]
-        mgmt_switch_alias = mgmt_switch["ExtraProperties"]["Aliass"][0]
+        mgmt_switch_alias = mgmt_switch["ExtraProperties"]["Aliases"][0]
 
         action_log(action, f'Management Switch Xname: {mgmt_switch_xname}')
         action_log(action, f'Management Switch Brand: {mgmt_switch_brand}')
@@ -1512,20 +1536,25 @@ def ncn_data_command(session: requests.Session, args, state: State):
         print_action(action)
 
     # Check to see if the BMC MAC address exists in HSM
-    existing_bmc_ei = None
+    existing_bmc_ip = None
     if bmc_connected_to_hmn:
-        action, existing_bmc_ei = get_hsm_inventory_ethernet_interfaces(session, bmc_mac)
-        if action["status"] == http.HTTPStatus.NOT_FOUND:
-            action_log(action, "Pass BMC MAC address does not exist in HSM Ethernet Interfaces")
-        elif action["status"] == http.HTTPStatus.OK:
-            action_log(action, f'BMC MAC address exists in HSM Ethernet Interfaces: {existing_bmc_ei}')
-        print_action(action)
+        # KEA Check
+        action, existing_bmc_leases = get_kea_lease4_get_by_hw_address(session, bmc_mac)
+        if len(existing_bmc_leases) == 0:
+            action_log(action, "BMC MAC address is not associated with a DHCP lease in KEA")
+        elif len(existing_bmc_leases) == 1:
+            action_log(action, f'BMC MAC address associated with KEA DHCP lease: {existing_bmc_leases[0]}')
+            existing_bmc_ip = existing_bmc_leases[0]["ip-address"]
+        else:
+            action_log(action, "Fail BMC MAC address is associated with multiple KEA DHCP lease: ", existing_bmc_leases)
+            print_action(action)
+            sys.exit(1)
 
     # Validate allocated BMC IP is not in use in the HSM EthernetInterfaces table
     # If the MAC Address associated with the BMC is already at the right IP, then we are good.
     existing_bmc_ip_matches = False
-    if (existing_bmc_ei is not None) and ("IPAddresses" in existing_bmc_ei) and (len(existing_bmc_ei["IPAddresses"]) == 1):
-        existing_bmc_ip_matches = existing_bmc_ei["IPAddresses"][0]["IPAddress"] == str(state.bmc_ip)
+    if existing_bmc_ip is not None:
+        existing_bmc_ip_matches = existing_bmc_ip == str(state.bmc_ip)
 
     if not existing_bmc_ip_matches:
         action = verify_hsm_inventory_ethernet_interface_not_found(session, ip_address=state.bmc_ip)
@@ -1581,7 +1610,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
         print(f"Failed to find a Management NCN with subrole {state.ncn_subrole} to donate bootparameters")
         sys.exit(1)
 
-    donor_alias = donor_ncn["ExtraProperties"]["Aliass"][0]
+    donor_alias = donor_ncn["ExtraProperties"]["Aliases"][0]
     print(f'Found existing NCN {donor_ncn["Xname"]} ({donor_alias}) of the same type to donate bootparameters to {state.ncn_xname} ({state.ncn_alias})')
 
     action, donor_bootparameters = get_bss_bootparameters(session,  donor_ncn["Xname"])
@@ -1685,7 +1714,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
             "NID": nid,
             "Role": "Management",
             "SubRole": state.ncn_subrole,
-            "Aliass": [state.ncn_alias]
+            "Aliases": [state.ncn_alias]
         }
     }
 
@@ -1817,20 +1846,16 @@ def ncn_data_command(session: requests.Session, args, state: State):
         bmc_ei["MACAddress"] = bmc_mac
         bmc_ei["ComponentID"] = state.bmc_xname
         bmc_ei["IPAddresses"] = [{"IPAddress": str(state.bmc_ip)}]
-        if existing_bmc_ei is None:
-            # Create a new entry
-            print(f"Adding BMC MAC Addresses {bmc_mac} to HSM Inventory EthernetInterfaces")
-            print(json.dumps(bmc_ei, indent=2))
-            if args.perform_changes:
-                create_hsm_inventory_ethernet_interfaces(session, bmc_ei)
-        else:
-            # Update an existing entry
-            print(f"Patching BMC MAC Addresses {bmc_mac} in HSM Inventory EthernetInterfaces")
-            print(json.dumps(bmc_ei, indent=2))
-            if args.perform_changes:
+
+        # Attempt creation of HSM EthernetInterface for the BMC
+        print(f"Adding BMC MAC Addresses {bmc_mac} to HSM Inventory EthernetInterfaces")
+        print(json.dumps(bmc_ei, indent=2))
+        if args.perform_changes:
+            status = create_hsm_inventory_ethernet_interfaces(session, bmc_ei)
+            if status == http.HTTPStatus.CONFLICT:
+                # If the EI already exists, then patch it
+                print(f"Patching BMC MAC Addresses {bmc_mac} in HSM Inventory EthernetInterfaces")
                 patch_hsm_inventory_ethernet_interfaces(session, bmc_ei)
-            else:
-                print("Skipping due to dry run!")
 
 
     #
@@ -1892,8 +1917,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
     print(f'{state.ncn_xname} ({state.ncn_alias}) has been added to SLS/HSM/BSS')
     if not args.perform_changes:
         print('        WARNING A Dryrun was performed, and no changes were performed to the system')
-    if existing_bmc_ei is not None and not existing_bmc_ip_matches:
-        existing_bmc_ip = ",".join(list(map(lambda element: element["IPAddress"], existing_bmc_ei["IPAddresses"])))
+    if existing_bmc_ip is not None and not existing_bmc_ip_matches:
         print(f'        WARNING The NCN BMC currently has the IP address: {existing_bmc_ip}, and needs to have IP Address {state.bmc_ip}')
     if not bmc_connected_to_hmn:
         print(f'        The BMC of {state.ncn_alias} is not connected to the system\'s HMN, this is typical for ncn-m001')
@@ -1904,6 +1928,7 @@ def main():
     global BSS_URL
     global HSM_URL
     global SLS_URL
+    global KEA_URL
 
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     token = os.environ.get('TOKEN')
@@ -1925,6 +1950,7 @@ def main():
     base_parser.add_argument("--url-bss", type=str, required=False, default="https://api-gw-service-nmn.local/apis/bss/boot/v1")
     base_parser.add_argument("--url-hsm", type=str, required=False, default="https://api-gw-service-nmn.local/apis/smd/hsm/v2")
     base_parser.add_argument("--url-sls", type=str, required=False, default="https://api-gw-service-nmn.local/apis/sls/v1")
+    base_parser.add_argument("--url-kea", type=str, required=False, default="https://api-gw-service-nmn.local/apis/dhcp-kea")
     base_parser.add_argument("--log-dir", help="Directory where to log and save current state.", default='/tmp/add_management_ncn')
 
     # allocate-ip arguments
@@ -1957,6 +1983,7 @@ def main():
     BSS_URL = args.url_bss
     HSM_URL = args.url_hsm
     SLS_URL = args.url_sls
+    KEA_URL = args.url_kea
 
     # Validate provide node alias
     if re.match("^ncn-[mws][0-9][0-9][0-9]$", args.alias) is None:

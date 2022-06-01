@@ -20,7 +20,7 @@ This procedure will perform and verify the following:
 
 1.  Determine the component name (xname) of the NCN by referring to the HMN of the systems SHCD, if it has not been determined yet.
 
-    Sample row from the `HMN` tab of a SHCD:
+    Sample row from the `HMN` tab of an SHCD:
     | Source (J20)    | Source Rack (K20) | Source Location (L20) | (M20) | Parent (N20) | (O20)| Source Port (P20) | Destination (Q20) | Destination Rack (R20) | Destination Location (S20) | (T20) | Destination Port (U20) |
     | --------------- | ----------------- | --------------------- | ----- | ------------ | ---- | ----------------- | ----------------- | ---------------------- | -------------------------- | ----- | ---------------------- |
     | wn01            | x3000             | u04                   | -     |              |      | j3                | sw-smn01          | x3000                  | u14                        | -     | j48                    |
@@ -30,7 +30,7 @@ This procedure will perform and verify the following:
     Node xname format: xXcCsSbBnN
 
     |   |                | SHCD Column to reference | Description
-    | - | -------------- | ------------------------ | ----------- 
+    | - | -------------- | ------------------------ | -----------
     | X | Cabinet number | SourceRack (K20)         | The Cabinet or rack number containing the Management NCN.
     | C | Chassis number |                          | For air-cooled nodes the chassis is 0.
     | S | Slot/Rack U    | Source Location (L20)    | The Slot of the node is determined by the bottom most rack U that node occupies.

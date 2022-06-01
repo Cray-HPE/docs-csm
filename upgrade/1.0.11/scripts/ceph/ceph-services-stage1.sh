@@ -37,3 +37,14 @@ echo "Reconfiguring keepalived"
 /srv/cray/scripts/metal/generate_keepalived_conf.sh > /etc/keepalived/keepalived.conf
 systemctl enable keepalived.service
 systemctl restart keepalived.service
+
+echo "Enabling Ceph services to start on boot and starting if stopped"
+for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));
+do
+  systemctl enable $service
+  if [[ $(systemctl is-active $service) != "active" ]]
+  then
+    systemctl restart $service
+  fi
+done
+

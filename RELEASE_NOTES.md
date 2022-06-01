@@ -148,7 +148,7 @@ Critical Issues Resolved:
 * CFS should check if the configuration is valid/exists when a session is created.
 * CFS does not set session start time until after job starts.
 * CFS will not list pending sessions.
-* MEDS, should not overwrite a components credentials when a xname becomes present again.
+* MEDS, should not overwrite a components credentials when an xname becomes present again.
 * The Cray HSM locks command locked more nodes than specified.
 * HSM crashes when discovering Bard Peak.
 * Resources limits are hit on three NCN systems.
@@ -177,3 +177,4 @@ and many more...
 * Kube-multus pods may fail to restart due to ImagePullBackOff. For more information see [Kube-multus pod is in ImagePullBackOff](troubleshooting/known_issues/kube_multus_pod_in_ImagePullBackOff.md).
 * Power capping Olympus and River compute hardware via CAPMC is not supported.
 * On fresh install, API calls to Gitea/VCS may give 401 Errors. See [Gitea/VCS 401 Errors](troubleshooting/known_issues/gitea_vcs_401_errors.md) for more information.
+* Console logging may fill all available space for console log files. See [Console logs filling up availble storage](troubleshooting/known_issues/console_log_storage_filling.md) for more information.

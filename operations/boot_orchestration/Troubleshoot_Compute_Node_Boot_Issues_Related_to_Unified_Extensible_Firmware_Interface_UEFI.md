@@ -35,5 +35,5 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 3.  Use one of the following options to resolve the issue:
 
     -   Contact the system administrator or someone who is knowledgeable about UEFI if the node is stuck in the UEFI shell.
-    -   Reseat the node if it is suspected that this may be a hardware related issue. To reseat a node, pull the power cable off the back end of the box. Wait a few seconds, then reconnect the power cable and push the power button on the front of the box. Reseating a node must be done on site. Contact customer support for more information.
+    -   Reseat the node if it is suspected that this may be a hardware-related issue. To reseat a node, pull the power cable off the back end of the box. Wait a few seconds, then reconnect the power cable and push the power button on the front of the box. Reseating a node must be done on site. Contact customer support for more information.
 

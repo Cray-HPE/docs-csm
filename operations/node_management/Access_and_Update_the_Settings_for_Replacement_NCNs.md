@@ -46,7 +46,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
            linux# ipmitool raw 0x32 0x66
            ```
     1. Troubleshoot HPE NCNs.
-        
+
         __Coming soon__
 
 1.  Determine if the root user is configured.

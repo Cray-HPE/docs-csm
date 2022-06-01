@@ -38,19 +38,19 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
         ncn-m# kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
         ```
 
-        The following output means the new iPXE binary has been built. 
+        The following output means the new iPXE binary has been built.
         ```
         2022-03-17 22:16:14,648 - INFO    - __main__ - Build completed.
         2022-03-17 22:16:14,653 - INFO    - __main__ - Newly created ipxe binary created: '/shared_tftp/ipxe.efi'
         ```
-        
-        Wait until you see a build notification message with a timestamp that is 
+
+        Wait until you see a build notification message with a timestamp that is
         more recent than the timestamp recorded in the previous step.
 
 1.  Power on node and collect MAC addresses from the NCN:
     1.  Verify the NCN is off:
         > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
-    
+
         ```bash
         ncn-m# read -s IPMI_PASSWORD
         ncn-m# export IPMI_PASSWORD
@@ -59,7 +59,7 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
 
     1.  In another terminal capture the NCN's Serial Over Lan (SOL) console:
         > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
-    
+
         ```bash
         ncn-m# BMC_IP=10.254.1.20
         ncn-m# read -s IPMI_PASSWORD
@@ -67,7 +67,7 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
         ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP sol activate
         ```
 
-        > Note when disconnecting from the IPMI SOL console you can perform the key sequence `~~.` to exit ipmitool without exiting your SSH session. 
+        > Note when disconnecting from the IPMI SOL console you can perform the key sequence `~~.` to exit ipmitool without exiting your SSH session.
 
     1.  Set the `pxe` `efiboot` option:
 
@@ -95,11 +95,11 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
         Using the above output from the MAC Collection iPXE script, derive the following `add_management_ncn.py` script arguments:
 
         | Interface   | MAC Address         | CLI Flag
-        | ----------- | ------------------- | -------- 
+        | ----------- | ------------------- | --------
         | `mgmt0`     | `98:03:9b:bb:a9:94` | `--mac-mgmt0=98:03:9b:bb:a9:94`
         | `mgmt1`     | `98:03:9b:bb:a9:95` | `--mac-mgmt1=98:03:9b:bb:a9:95`
         | `hsn0`      | `ec:0d:9a:d4:2b:d8` | `--mac-hsn0=ec:0d:9a:d4:2b:d8`
-        
+
     1.  Power off the NCN:
         ```bash
         ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP chassis power off
@@ -110,12 +110,12 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
         ```bash
         ncn-m# kubectl -n services delete cm cray-ipxe-bss-ipxe
         ```
-    
+
     1.  Put the original iPXE bootscript into place:
         ```bash
         ncn-m# kubectl -n services apply -f cray-ipxe-bss-ipxe.backup.yaml
         ```
-    
+
     1.  Take note of the last timestamp in the `cray-ipxe` log:
         ```bash
         ncn-m# kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe
@@ -127,11 +127,11 @@ This procedure can be used to to collect MAC addresses from the NCNs along with 
         ncn-m# kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
         ```
 
-        The following output means the new iPXE binary has been built. 
+        The following output means the new iPXE binary has been built.
         ```
         2022-03-17 22:16:14,648 - INFO    - __main__ - Build completed.
         2022-03-17 22:16:14,653 - INFO    - __main__ - Newly created ipxe binary created: '/shared_tftp/ipxe.efi'
         ```
-        
-        Wait until you see a build notification message with a timestamp that is 
+
+        Wait until you see a build notification message with a timestamp that is
         more recent than the timestamp recorded in the previous step.

@@ -465,7 +465,7 @@ def write_ntp_config_template(distro_name, local_hostname=None,
                               service_name=None, servers=None, pools=None,
                               path=None, template_fn=None, allow=None,
                               peers=None, template=None):
-    """Render a ntp client configuration for the specified client.
+    """Render an NTP client configuration for the specified client.
 
     @param distro_name: string.  The distro class name.
     @param local_hostname: string. Generated automatically from the hostname.

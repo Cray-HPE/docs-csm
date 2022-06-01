@@ -46,7 +46,7 @@ The host name in a command prompt indicates where the command must be run. The a
 The following list contains abbreviations for nodes used below
 
 * CN - compute Node
-* NCN - Non Compute Node
+* NCN - Non-Compute Node
 * AN - Application Node (special type of NCN)
 * UAN - User Access Node (special type of AN)
 * PIT - Pre-Install Toolkit (initial node used as the inception node during software installation booted from the LiveCD)

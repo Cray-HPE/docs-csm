@@ -62,7 +62,7 @@ interface 1/1/14
 
 ## UAN Port Configuration
 - UANs have the same network connections as Shasta v1.3.
-- One connection will go to a NMN(VLAN2) access port, this is where the UAN will pxe boot and communicate with internal systems (see SHCD for UAN cabling).
+- One connection will go to an NMN (VLAN2) access port. This is where the UAN will PXE boot and communicate with internal systems (see the SHCD file for the system for UAN cabling).
 - ONE OF THESE PORTS IS SHUTDOWN.
 - One Bond (two connections) will be going to the MLAG/VSX pair of switches. This will be a TRUNK port for the CAN connection.
 

@@ -36,11 +36,11 @@ For more information, see [Update BGP Neighbors](../../network/metallb_bgp/Updat
 
 ```text
 route-map ncn-w004 permit 10 match ip address pl-can
-route-map ncn-w004 permit 10 set ip next-hop 10.102.4.15 
+route-map ncn-w004 permit 10 set ip next-hop 10.102.4.15
 route-map ncn-w004 permit 20 match ip address pl-hmn
-route-map ncn-w004 permit 20 set ip next-hop 10.254.1.22  
+route-map ncn-w004 permit 20 set ip next-hop 10.254.1.22
 route-map ncn-w004 permit 30 match ip address pl-nmn
-route-map ncn-w004 permit 30 set ip next-hop 10.252.1.13 
+route-map ncn-w004 permit 30 set ip next-hop 10.252.1.13
 router bgp 65533 vrf default neighbor 10.252.1.13 remote-as 65533
 router bgp 65533 vrf default neighbor 10.252.1.13 route-map ncn-w004
 router bgp 65533 vrf default neighbor 10.252.1.13 timers 1 3

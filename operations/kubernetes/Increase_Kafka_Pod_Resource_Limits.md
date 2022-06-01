@@ -1,6 +1,6 @@
 # Increase Kafka Pod Resource Limits
 
-For larger scale systems, the Kafka resource limits may need to be increased. See [Increase Pod Resource Limits](Increase_Pod_Resource_Limits.md) for details on how to increase limits. 
+For larger scale systems, the Kafka resource limits may need to be increased. See [Increase Pod Resource Limits](Increase_Pod_Resource_Limits.md) for details on how to increase limits.
 
 **Increase Kafka Resource Limits Example**
 

@@ -83,11 +83,13 @@ function wait_for_running_pods() {
         operator_num_ready=$(kubectl get etcd $etcd_cluster -n $ns -o jsonpath='{.status.members.ready}' | jq .[] | wc -l)
         if [[ "$desired_size" -eq "$operator_num_ready" ]]; then
           echo "Found $desired_size ready members in $etcd_cluster etcd cluster"
-        fi
-        op_state=$(kubectl get etcd $etcd_cluster -n $ns -o jsonpath='{.status.phase}')
-        if [ $op_state == "Running" ]; then
-          echo "Found status of $op_state for $etcd_cluster etcd cluster"
-          break
+          op_state=$(kubectl get etcd $etcd_cluster -n $ns -o jsonpath='{.status.phase}')
+          if [ $op_state == "Running" ]; then
+            echo "Found status of $op_state for $etcd_cluster etcd cluster"
+            echo "Sleeping for thirty seconds to let the etcd operator reconcile"
+            sleep 30
+            break
+          fi
         fi
         echo "Sleeping for ten seconds waiting for $desired_size ready members and 'Running' state for $etcd_cluster etcd cluster"
         sleep 10
@@ -129,6 +131,7 @@ for deployment in $DEPLOYMENTS; do
   if [ ! -z "$ns" ]; then
     echo "Patching $deployment deployment in $ns namespace"
     kubectl -n $ns patch deployment $deployment --type merge -p '{"spec": {"template": {"spec": {"priorityClassName": "csm-high-priority-service"}}}}'
+    kubectl rollout status deployment -n $ns $deployment
     echo ""
   fi
 done
@@ -138,6 +141,7 @@ for daemonset in $DAEMONSETS; do
   if [ ! -z "$ns" ]; then
     echo "Patching $daemonset daemonset in $ns namespace"
     kubectl -n $ns patch daemonset $daemonset --type merge -p '{"spec": {"template": {"spec": {"priorityClassName": "csm-high-priority-service"}}}}'
+    kubectl rollout status daemonset -n $ns $daemonset
     echo ""
   fi
 done
@@ -147,9 +151,13 @@ for statefulset in $STATEFULSETS; do
   if [ ! -z "$ns" ]; then
     echo "Patching $statefulset statefulset in $ns namespace"
     kubectl -n $ns patch statefulset $statefulset --type merge -p '{"spec": {"template": {"spec": {"priorityClassName": "csm-high-priority-service"}}}}'
+    kubectl rollout status statefulset -n $ns $statefulset
     echo ""
   fi
 done
+
+echo "Creating a backup of cray-bss etcdcluster prior to restarting the cluster"
+kubectl exec -it -n operators $(kubectl get pod -n operators -l app.kubernetes.io/name=cray-etcd-backup -o jsonpath='{.items[0].metadata.name}') -c util -- create_backup cray-bss pod-priority-backup-$(date "+%D-%T") | grep -v 'unknown operand'
 
 for etcdcluster in $ETCDCLUSTERS; do
   ns=$(kubectl get etcdcluster -A | grep " $etcdcluster " | awk '{print $1}')
