@@ -4,7 +4,7 @@ The installation of the Cray System Management (CSM) product requires knowledge 
 switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM install
 for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
 
-### Topics:
+## Topics
 
    1. [Reset root Password on LiveCD](#reset_root_password_on_LiveCD)
    1. [Reinstall LiveCD](#reinstall_livecd)
@@ -14,11 +14,13 @@ for additional information on system hardware, troubleshooting, and administrati
    1. [Utility Storage Node Installation Troubleshooting](#utility_storage_node_installation_troubleshooting)
    1. [Ceph CSI Troubleshooting](#ceph_csi_troubleshooting)
    1. [Safeguards for CSM NCN Upgrades](#safeguards_for_csm_ncn_upgrades)
-
+   1. [Postgres Troubleshooting](#postgres_troubleshooting)
+   1. [CSM Services Install Fails Because of Missing Secret](#csm_installation_failure_missing_secret)
 
 ## Details
 
    <a name="reset_root_password_on_LiveCD"></a>
+
    1. Reset root Password on LiveCD
 
       If the root password on the LiveCD needs to be changed, then this procedure does the reset.
@@ -75,7 +77,7 @@ for additional information on system hardware, troubleshooting, and administrati
       If there has been a failure to initialize all Ceph CSI components on `ncn-s001`, then the storage node
       `cloud-init` may need to be rerun.
          * Verify Ceph CSI
-         * Rerun Storage Node cloud-init
+         * Rerun Storage Node `cloud-init`
 
       See [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md)
    <a name="safeguards_for_csm_ncn_upgrades"></a>
@@ -87,3 +89,17 @@ for additional information on system hardware, troubleshooting, and administrati
          * Protect RAID Configuration on Management Nodes
 
       See [Safeguards for CSM NCN Upgrades](safeguards_for_csm_ncn_upgrades.md)
+
+   <a name="postgres_troubleshooting"></a>
+
+   1. Postgres Troubleshooting
+
+      * Timeout on `cray-sls-init-load` during Install CSM Services due to Postgres cluster in `SyncFailed` state
+
+      See [Troubleshoot Postgres Database](../operations//kubernetes/Troubleshoot_Postgres_Database.md#syncfailed)
+   <a name="csm_installation_failure_missing_secret"></a>
+
+   1. CSM Services Install Fails Because of Missing Secret
+
+      If a new installation is failing with a missing `admin-client-auth` secret, then see
+      [CSM Services Install Fails Because of Missing Secret](csm_installation_failure.md).

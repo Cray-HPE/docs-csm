@@ -31,7 +31,7 @@ from which the other nodes were upgraded. At this point, the upgrade procedure p
 
 1. Log in to `ncn-m002` from outside the cluster.
 
-   `ssh` to the `bond0.cmn0`/CAN IP address of `ncn-m002`.
+   `ssh` to the `bond0.cmn0`/CMN IP address of `ncn-m002`.
 
 1. Authenticate with the Cray CLI on `ncn-m002`.
 

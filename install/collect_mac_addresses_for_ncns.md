@@ -49,10 +49,12 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC addresses, so seve
    pit# cat ncn_metadata.csv
    ```
 
-1. Remove the incorrectly generated configurations. Before deleting the incorrectly generated configurations, consider
-making a backup of them, in case they need to be examined at a later time.
+1. Rename the incorrectly generated configurations.
 
-   > **`Warning`** Ensure that the `SYSTEM_NAME` environment variable is correctly set.
+   Before deleting the incorrectly generated configurations, consider
+   making a backup of them, in case they need to be examined at a later time.
+
+   > **Warning** Ensure that the `SYSTEM_NAME` environment variable is correctly set.
 
    ```bash
    pit# export SYSTEM_NAME=eniac
@@ -212,9 +214,9 @@ See [Procedure: iPXE Consoles](collecting_ncn_mac_addresses.md#procedure-ipxe-co
 
 <a name="restart_services_after_ncn_mac_addresses_collected"></a>
 
-### 4. Restart Services after NCN MAC Addresses Collected
+## 4. Restart Services after NCN MAC Addresses Collected
 
-The previous step updated `ncn_metadata.csv` with the NCN MAC Addresses for `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1`
+The previous step updated `ncn_metadata.csv` with the NCN MAC addresses for `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1`
 so several earlier steps need to be repeated.
 
 1. Change into the preparation directory.
