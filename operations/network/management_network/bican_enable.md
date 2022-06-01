@@ -113,7 +113,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 
 1. Determine the CFS configuration in use on the compute nodes.
 
-   1. Identify the worker nodes.
+   1. Identify the compute nodes.
 
       ```bash
       ncn# cray hsm state components list --role Compute --format json | jq -r '.Components[] | .ID'
@@ -123,7 +123,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
       x1000c5s0b0n1
       ```
 
-   1. Identify CFS configuration in use on the worker nodes.
+   1. Identify CFS configuration in use on the compute nodes.
 
       ```bash
       ncn# cray cfs components describe x1000c5s1b0n1
