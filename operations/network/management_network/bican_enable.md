@@ -538,7 +538,7 @@ Please refer to the [gateway testing documentation](../gateway_testing.md) for m
    }
    ```
 
-1. Verify the compute nodes have `CMN` IP addresses set on the hsn0 interface.
+1. Verify the compute nodes have `CHN` IP addresses set on the hsn0 interface.
 
    ```bash
    nid001160:~ # ip ad show hsn0
@@ -588,7 +588,7 @@ Please refer to the [gateway testing documentation](../gateway_testing.md) for m
    }
    ```
 
-1. Verify the worker nodes have `CMN` IP addresses set on the hsn0 interface.
+1. Verify the worker nodes have `CHN` IP addresses set on the hsn0 interface.
 
    ```bash
    ncn-m001:~ # pdsh -w ncn-w00[1-4] 'ip ad show hsn0 | grep inet\ ' | dshbak -c
@@ -618,7 +618,7 @@ Please refer to the [gateway testing documentation](../gateway_testing.md) for m
 
 ## Validate the API gateways
 
-Check that the `istio-ingressgateway-cmn` API gateway has an IP address.
+Check that the `istio-ingressgateway-chn` API gateway has an IP address.
 
 ```bash
 ncn-m001:~ # kubectl -n istio-system get svc istio-ingressgateway-chn
