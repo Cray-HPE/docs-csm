@@ -126,8 +126,8 @@ This type of problem can occur in the following scenarios:
     ncn-m001# cray scsd bmc discreetcreds create scsd_payload.json
     ```
 
-    Example of a successful credentail change:
-    
+    Example of a successful credential change:
+
     ```text
     [[Targets]]
     Xname = "x1000c0r1b0"
@@ -142,3 +142,23 @@ This type of problem can occur in the following scenarios:
     ```bash
     ncn-m001# rm scsd_payload.json
     ```
+
+1. Perform a rediscovery on the BMC that had its credentials changed:
+
+    ```bash
+    ncn-m001# cray hsm inventory discover create --xnames $BMC
+    ```
+
+1. Wait a few minutes for HSM to attempt to inventory the BMC:
+
+    ```bash
+    ncn-m001# sleep 120
+    ```
+
+1. Verify the BMC's discovery status is `DiscoverOK`:
+
+    ```bash
+    ncn-m001# cray hsm inventory redfishEndpoints describe $BMC
+    ```
+
+    If `DiscoveryStarted`, then wait and recheck the discovery status again. If `HTTPsGetFailed` examine the HSM logs to troubleshoot the issue.
