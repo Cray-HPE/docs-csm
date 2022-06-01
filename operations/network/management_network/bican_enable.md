@@ -1,32 +1,32 @@
 # Enabling Customer High Speed Network Routing
 
 - [Enabling Customer High Speed Network Routing](#enabling-customer-high-speed-network-routing)
-- [Configuration Tasks](#configuration-tasks)
-  - [Configure SLS](#configure-sls)
-  - [Configure UAN](#configure-uan)
-  - [Configure UAI](#configure-uai)
-  - [Configure Compute Nodes](#configure-compute-nodes)
-    - [Retrieve SLS data as JSON](#retrieve-sls-data-as-json)
-    - [Add Compute IPs to CHN SLS data](#add-compute-ips-to-chn-sls-data)
-    - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
-    - [Enable CFS layer](#enable-cfs-layer)
-  - [Configure NCNs](#configure-ncns)
-  - [Configure the API gateways](#configure-the-api-gateways)
-- [Validation Tasks](#validation-tasks)
-  - [Validating SLS](#validating-sls)
-  - [Validating UAN](#validating-uan)
-  - [Validating UAI](#validating-uai)
-  - [Validate Compute Nodes](#validate-compute-nodes)
-  - [Validate NCNs](#validate-ncns)
-  - [Validate the API gateways](#validate-the-api-gateways)
+  - [Configuration Tasks](#configuration-tasks)
+    - [Configure SLS](#configure-sls)
+    - [Configure UAN](#configure-uan)
+    - [Configure UAI](#configure-uai)
+    - [Configure Compute Nodes](#configure-compute-nodes)
+      - [Retrieve SLS data as JSON](#retrieve-sls-data-as-json)
+      - [Add Compute IPs to CHN SLS data](#add-compute-ips-to-chn-sls-data)
+      - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
+      - [Enable CFS layer](#enable-cfs-layer)
+    - [Configure NCNs](#configure-ncns)
+    - [Configure the API gateways](#configure-the-api-gateways)
+  - [Validation Tasks](#validation-tasks)
+    - [Validating SLS](#validating-sls)
+    - [Validating UAN](#validating-uan)
+    - [Validating UAI](#validating-uai)
+    - [Validate Compute Nodes](#validate-compute-nodes)
+    - [Validate NCNs](#validate-ncns)
+    - [Validate the API gateways](#validate-the-api-gateways)
 
 <a name="configuration-tasks"></a>
 
-# Configuration Tasks
+## Configuration Tasks
 
 <a name="configure-sls"></a>
 
-## Configure SLS
+### Configure SLS
 
 To enable the Customer High Speed Network (CHN) the `SystemDefaultRoute` attribute in the System Layout Service (SLS) `BICAN` network needs to be set to the desired network.
 
@@ -39,7 +39,7 @@ Setting SystemDefaultRoute to CHN
 
 <a name="configure-uan"></a>
 
-## Configure UAN
+### Configure UAN
 
 The CHN will automatically be configure on a UAN if the SLS `BICAN` network `SystemDefaultRoute` attribute is set to `CHN` and the following Ansible variable is set.
 
@@ -49,7 +49,7 @@ Please refer to the "HPE Cray User Access Node (UAN) Software Administration Gui
 
 <a name="configure-uai"></a>
 
-## Configure UAI
+### Configure UAI
 
 Newly created User Access Instances (UAI) will use the network configured as the `SystemDefaultRoute` in the SLS `BICAN` network.
 
@@ -57,7 +57,7 @@ Existing UAIs will continue to use the network that was set when it was created.
 
 <a name="configure-compute"></a>
 
-## Configure Compute Nodes
+### Configure Compute Nodes
 
 Prerequisites for this task:
 
@@ -66,7 +66,7 @@ Prerequisites for this task:
   - A NAT device is not in place to enable use of HSN IP addresses, **and**
   - The CHN subnet is large enough to contain all Compute nodes.
 
-### Retrieve SLS data as JSON
+#### Retrieve SLS data as JSON
 
 1. Obtain a token.
 
@@ -88,7 +88,7 @@ Prerequisites for this task:
    ncn-m001# curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
    ```
 
-### Add Compute IPs to CHN SLS data
+#### Add Compute IPs to CHN SLS data
 
 Process the SLS file:
 
@@ -99,7 +99,7 @@ Process the SLS file:
 
 The default output file name will be `chn_with_computes_added_sls_file.json`, but can  be changed by using the flag `--sls-output-file` with the script.
 
-### Upload migrated SLS file to SLS service
+#### Upload migrated SLS file to SLS service
 
 If the following command does not complete successfully, check if the `TOKEN` environment variable is set correctly.
 
@@ -107,7 +107,7 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ncn-m001# curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@chn_with_computes_added_sls_file.json'
    ```
 
-### Enable CFS layer
+#### Enable CFS layer
 
 CHN network configuration of compute nodes is performed by the UAN CFS configuration layer. This procedure describes how to identify the UAN layer and add it to the compute node configuration.
 
@@ -273,7 +273,7 @@ For more information on managing node with CFS please refer to the [Configuratio
 
 <a name="configure-ncn"></a>
 
-## Configure NCNs
+### Configure NCNs
 
 Prerequisites for this task:
 
@@ -426,7 +426,7 @@ For more information on managing NCN personalization please refer to [Perform_NC
 
 <a name="configure-api-gw"></a>
 
-## Configure the API gateways
+### Configure the API gateways
 
 No additional steps are required to configure the API gateways for CHN.
 
@@ -434,11 +434,11 @@ If CHN is selected during CSM installation or upgrade the `customer-high-speed` 
 
 <a name="validation-tasks"></a>
 
-# Validation Tasks
+## Validation Tasks
 
 <a name="validate-sls"></a>
 
-## Validating SLS
+### Validating SLS
 
 To display current setting of the `SystemDefaultRoute` SLS `BICAN` network, run the following command.
 
@@ -449,7 +449,7 @@ Configured SystemDefaultRoute: CHN
 
 <a name="validate-uan"></a>
 
-## Validating UAN
+### Validating UAN
 
 1. Retrieve the `CHN` network information from SLS.
 
@@ -480,7 +480,7 @@ Configured SystemDefaultRoute: CHN
 
 <a name="validate-uai"></a>
 
-## Validating UAI
+### Validating UAI
 
 1. Retrieve the configured CHN subnet from SLS
 
@@ -521,7 +521,7 @@ Please refer to the [gateway testing documentation](../gateway_testing.md) for m
 
 <a name="validate-compute"></a>
 
-## Validate Compute Nodes
+### Validate Compute Nodes
 
 1. Retrieve the `CHN` network information from SLS.
 
@@ -571,7 +571,7 @@ Please refer to the [gateway testing documentation](../gateway_testing.md) for m
 
 <a name="validate-ncn"></a>
 
-## Validate NCNs
+### Validate NCNs
 
 1. Retrieve the `CHN` network information from SLS.
 
@@ -616,7 +616,7 @@ Please refer to the [gateway testing documentation](../gateway_testing.md) for m
 
 <a name="validate-api-gw"></a>
 
-## Validate the API gateways
+### Validate the API gateways
 
 Check that the `istio-ingressgateway-chn` API gateway has an IP address.
 
