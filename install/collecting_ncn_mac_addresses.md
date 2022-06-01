@@ -297,3 +297,8 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
 1. Wipe the disks before relaunching the NCNs.
 
    See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
+
+1. Set BMCs to DHCP, if needed.
+
+   For any NCNs which booted far enough to begin running `cloud-init`, set their BMCs to DHCP. If in doubt, it does no
+   harm to perform this step. See [Set node BMCs to DHCP](prepare_management_nodes.md#set_node_bmcs_to_dhcp).
