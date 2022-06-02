@@ -39,6 +39,8 @@ ncn# echo $XNAME
 Only follow the steps in the section for the node type that is being rebuilt:
 
 * Worker node
+  
+  1. Make sure not all pods of `ingressgateway-hmn, spire-server` are running on the same worker nodes. If all pods of above deployments are placed onto one worker node, then use `/opt/cray/platform-utils/move_pod.sh` to move at least one pod to a different worker noede.
 
   ```bash
   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-worker-nodes.sh ncn-w001
