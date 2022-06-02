@@ -371,18 +371,18 @@ the same procedure as above can be used with the following changes:
 
 * `cray-sls-postgres`
 
-  Get the current cached manifest ConfigMap from: `loftsman-core-services`
-  Resource path: `spec.kubernetes.services.cray-hms-sls.cray-service.sqlCluster.resources`
+  * Get the current cached manifest ConfigMap from: `loftsman-core-services`
+  * Resource path: `spec.kubernetes.services.cray-hms-sls.cray-service.sqlCluster.resources`
 
 * `cray-smd-postgres`
 
-  Get the current cached manifest ConfigMap from: `loftsman-core-services`
-  Resource path: `spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.resources`
+  * Get the current cached manifest ConfigMap from: `loftsman-core-services`
+  * Resource path: `spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.resources`
 
 * `gitea-vcs-postgres`
 
-  Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
-  Resource path: `spec.kubernetes.services.gitea.cray-service.sqlCluster.resources`
+  * Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
+  * Resource path: `spec.kubernetes.services.gitea.cray-service.sqlCluster.resources`
 
 <a name="bss_scale"></a>
 
@@ -568,18 +568,18 @@ Refer to the note at the end of this section for more details.
 
 * `cray-sls-postgres`
 
-  Get the current cached manifest ConfigMap from: `loftsman-core-services`
-  Resource path: `spec.kubernetes.services.cray-hms-sls.cray-service.sqlCluster.volumeSize`
+  * Get the current cached manifest ConfigMap from: `loftsman-core-services`
+  * Resource path: `spec.kubernetes.services.cray-hms-sls.cray-service.sqlCluster.volumeSize`
 
 * `gitea-vcs-postgres`
 
-  Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
-  Resource path: `spec.kubernetes.services.gitea.cray-service.sqlCluster.volumeSize`
+  * Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
+  * Resource path: `spec.kubernetes.services.gitea.cray-service.sqlCluster.volumeSize`
 
 * `spire-postgres`
 
-  Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
-  Resource path: `spec.kubernetes.services.spire.cray-service.sqlCluster.volumeSize`
+  * Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
+  * Resource path: `spec.kubernetes.services.spire.cray-service.sqlCluster.volumeSize`
 
 ## References
 
