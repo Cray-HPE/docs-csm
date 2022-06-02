@@ -73,23 +73,25 @@ This type of problem can occur in the following scenarios:
     ncn-m001# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
     ```
 
-    1. Retrieve the default `root` password for liquid-cooled hardware:
+    1. Retrieve the default `root` password.
 
-        ```bash
-        ncn-m001# SYSTEM_ROOT_PASSWORD=$(vault kv get secret/meds-cred/global/ipmi | jq .data.Password -r)
-        ```
+        - For liquid-cooled hardware:
 
-    1. Retrieve the default `root` password for air-cooled hardware:
+            ```bash
+            ncn-m001# SYSTEM_ROOT_PASSWORD=$(vault kv get secret/meds-cred/global/ipmi | jq .data.Password -r)
+            ```
 
-        ```bash
-        ncn-m001# SYSTEM_ROOT_PASSWORD=$(vault kv get secret/reds-creds/defaults | jq .data.Cray.password -r)
-        ```
+        - For air-cooled hardware:
 
-    Verify the systems's default `root` user password:
+            ```bash
+            ncn-m001# SYSTEM_ROOT_PASSWORD=$(vault kv get secret/reds-creds/defaults | jq .data.Cray.password -r)
+            ```
 
-    ```bash
-    ncn-m001# echo $SYSTEM_ROOT_PASSWORD
-    ```
+    1. Verify the systems's default `root` user password:
+
+       ```bash
+       ncn-m001# echo $SYSTEM_ROOT_PASSWORD
+       ```
 
 1. Create a payload for the System Configuration Service (SCSD):
 
