@@ -130,7 +130,7 @@ This type of problem can occur in the following scenarios:
 
     Example of a successful credential change:
 
-    ```text
+    ```toml
     [[Targets]]
     Xname = "x1000c0r1b0"
     StatusCode = 204
