@@ -10,7 +10,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
 
 1. What is the internal VLAN and the site-routable IP subnet for the new CAN or CHN?
 
-1. Is there a need to preserve any existing IP address or ipaddresses during the CAN-to-CMN migration?
+1. Is there a need to preserve any existing IP address during the CAN-to-CMN migration?
 
    * One example is the `external-dns` IP address used for DNS lookups of system resources from site DNS servers. Changes to
      `external-dns` often require changes to site resources with requisite process and timeframes from other groups. For

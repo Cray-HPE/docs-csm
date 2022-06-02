@@ -96,7 +96,7 @@ Examples:
 - `nid000001.chn.tld`
 - `api-gateway-service.chn.tld`
 
-Where *tld* is configurable at installation and can be a subdomain of the site domain system.
+Where `tld` is configurable at installation and can be a subdomain of the site domain system.
 Exchange of system DNS with the site may be via delegation (preferred) or zone transfer (AXFR).
 
 Once added to CSI, names and IP's will use the standard CSM data flow and end up in SLS and be available for use via both DNS and DHCP services.
