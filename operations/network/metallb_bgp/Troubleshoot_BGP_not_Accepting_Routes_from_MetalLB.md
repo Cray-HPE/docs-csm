@@ -1,6 +1,6 @@
 # Troubleshoot BGP not Accepting Routes from MetalLB
 
-Check the number of routes that the Border Gateway Protocol \(BGP\) Router is accepting in the peering session. This procedure is useful if Kubernetes LoadBalancer services in the NMN, HMN, or CAN address pools are not accessible from outside the cluster.
+Check the number of routes that the Border Gateway Protocol \(BGP\) Router is accepting in the peering session. This procedure is useful if Kubernetes LoadBalancer services in the NMNLB, HMNLB, CMN, CHN or CAN address pools are not accessible from outside the cluster.
 
 Regain access to Kubernetes LoadBalancer services from outside the cluster.
 
@@ -32,8 +32,8 @@ This procedure requires administrative privileges.
         Example output:
 
         ```
-        VRF name                  : CAN
-        BGP router identifier     : 10.101.8.2
+        VRF name                  : Customer
+        BGP router identifier     : 10.2.0.2
         local AS number           : 65533
         BGP table version         : 1634
         Main routing table version: 1634
@@ -49,7 +49,7 @@ This procedure requires administrative privileges.
         10.101.8.10       4    65536        1267478   1278327   1634      0      0      13:20:12:15   ESTABLISHED/14
 
         VRF name                  : default
-        BGP router identifier     : 10.252.0.2
+        BGP router identifier     : 10.2.0.2
         local AS number           : 65533
         BGP table version         : 40
         Main routing table version: 40
@@ -115,7 +115,7 @@ This procedure requires administrative privileges.
                                               c        10.254.1.12       vlan4            bgp        200/0
                                               c        10.254.1.14       vlan4            bgp        200/0
 
-        VRF Name CAN:
+        VRF Name Customer:
           ------------------------------------------------------------------------------------------------------
           Destination       Mask              Flag     Gateway           Interface        Source     AD/M
           ------------------------------------------------------------------------------------------------------

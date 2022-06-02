@@ -17,7 +17,7 @@ The Domain Name Service \(DNS\) is not configured properly.
 1.  View the DNS configuration on the system.
 
     ```bash
-    ncn-w001# kubectl -n services get svc cray-dns-powerdns-cmn-udp
+    ncn# kubectl -n services get svc cray-dns-powerdns-cmn-udp
     ```
 
     Example output:
@@ -47,10 +47,10 @@ The Domain Name Service \(DNS\) is not configured properly.
 
 4.  Direct DNS requests to the cluster IP address from an NCN.
 
-    Replace the example cluster IP address \(10.25.156.88\) with the CLUSTER-IP value returned in step 1. If an IP address is returned, external DNS is configured on the cluster and something is likely wrong with CMN/CAN/CHN/BGP.
+    Replace the example cluster IP address \(10.25.156.88\) with the CLUSTER-IP value returned in step 1. If an IP address is returned, external DNS is configured on the cluster and something is likely wrong with CMN or BGP.
 
     ```bash
-    ncn-w001# dig SERVICE.NETWORK.SYSTEM_DOMAIN_NAME +short @10.25.156.88
+    ncn# dig SERVICE.NETWORK.SYSTEM_DOMAIN_NAME +short @10.25.156.88
     ```
 
 5.  Access services in the event that external DNS is down, the backing etcd database is having issues, or something was configured incorrectly.
@@ -58,7 +58,7 @@ The Domain Name Service \(DNS\) is not configured properly.
     Search through Kubernetes service objects for `external-dns.alpha.kubernetes.io/hostname` annotations to find the corresponding external IP. The kubectl command makes it easy to generate an /etc/hosts compatible listing of IP addresses to hostnames using the go-template output format shown below.
 
     ```bash
-    ncn-m001# kubectl get svc --all-namespaces -o go-template --template \
+    ncn# kubectl get svc --all-namespaces -o go-template --template \
     '{{ range .items }}{{ $lb := .status.loadBalancer }}{{ with .metadata.annotations }}
     {{ with (index . "external-dns.alpha.kubernetes.io/hostname") }}
     {{ $hostnames := . }}{{ with $lb }}{{ range .ingress }}

@@ -44,7 +44,7 @@ Use this procedure for either a first-time install or in the event a previous CS
 
 1. Setup connection to the site.
 
-   Refer to [Setup Site Connection](../customer_access_network/Customer_Access_Network_CAN.md).
+   Refer to [Setup Site Connection](../customer_accessible_networks/Customer_Accessible_Networks.md).
 
 1. Check the differences between the generated configs and the configs on the system.
 
