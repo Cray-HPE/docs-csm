@@ -91,10 +91,10 @@ As part of the introduction of authoritative DNS endpoints will also have a top-
 
 Examples:
 
-- uan01.chn.*tld* as resolved externally.
-- uan01.chn can be resolved internal to the system (maintained via local resolv.conf).
-- nid000001.chn.*tld*
-- api-gateway-service.chn.*tld*
+- `uan01.chn.tld` as resolved externally.
+- `uan01.chn` can be resolved internal to the system (maintained via local `resolv.conf`).
+- `nid000001.chn.tld`
+- `api-gateway-service.chn.tld`
 
 Where *tld* is configurable at installation and can be a subdomain of the site domain system.
 Exchange of system DNS with the site may be via delegation (preferred) or zone transfer (AXFR).
@@ -225,7 +225,7 @@ The "plumbing" of this will occur as previously described in the CHN.
 
 Examples:
 
-- SSH ncn-w001.cmn.tld
+- SSH `ncn-w001.cmn.tld`
 
 <a name="3-3-endpoint-addressing"></a>
 

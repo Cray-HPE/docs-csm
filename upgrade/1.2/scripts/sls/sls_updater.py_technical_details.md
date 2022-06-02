@@ -1,4 +1,4 @@
-# sls_updater.py Technical Details
+# `sls_updater.py` Technical Details
 
 **No Action needed.  Informational Purposes only.**
 
