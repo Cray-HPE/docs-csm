@@ -14,7 +14,7 @@ This type of problem can occur in the following scenarios:
 1. Specify the BMC hostname with the mismatched credentials:
 
     ```bash
-    ncn-m001# BMC=x1000c0r1b0
+    ncn-mw# BMC=x1000c0r1b0
     ```
 
 1. Specify the current `root` user password for the BMC:
@@ -22,14 +22,14 @@ This type of problem can occur in the following scenarios:
     > Depending on the origin of the piece of hardware, this could be the factory default password or a different system's default password.
 
     ```bash
-    ncn-m001# read -s CURRENT_ROOT_PASSWORD
-    ncn-m001# echo $CURRENT_ROOT_PASSWORD
+    ncn-mw# read -s CURRENT_ROOT_PASSWORD
+    ncn-mw# echo $CURRENT_ROOT_PASSWORD
     ```
 
 1. Verify the credentials work with Redfish using `curl`:
 
     ```bash
-    ncn-m001# curl -k -u "root:$CURRENT_ROOT_PASSWORD" https://$BMC/redfish/v1/Managers -i
+    ncn-mw# curl -k -u "root:$CURRENT_ROOT_PASSWORD" https://$BMC/redfish/v1/Managers -i
     ```
 
     The following example output shows the `CURRENT_ROOT_PASSWORD` environment variable contains a valid root password for the BMC.
@@ -49,19 +49,19 @@ This type of problem can occur in the following scenarios:
 1. Update the credentials for the Redfish endpoint stored in Vault using Hardware State Manager (HSM):
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoints update $BMC --user root --password $CURRENT_ROOT_PASSWORD 
+    ncn-mw# cray hsm inventory redfishEndpoints update $BMC --user root --password $CURRENT_ROOT_PASSWORD 
     ```
 
 1. Wait a few minutes for HSM to attempt to inventory the BMC:
 
     ```bash
-    ncn-m001# sleep 120
+    ncn-mw# sleep 120
     ```
 
 1. Verify the BMC's discovery status is `DiscoverOK`:
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoints describe $BMC
+    ncn-mw# cray hsm inventory redfishEndpoints describe $BMC
     ```
 
     If `DiscoveryStarted`, then wait and recheck the discovery status again. If `HTTPsGetFailed`, then examine the HSM logs to troubleshoot the issue.
@@ -69,8 +69,8 @@ This type of problem can occur in the following scenarios:
 1. Determine the system's default BMC `root` user password:
 
     ```bash
-    ncn-m001# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
-    ncn-m001# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+    ncn-mw# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+    ncn-mw# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
     ```
 
     1. Retrieve the default `root` password.
@@ -78,32 +78,32 @@ This type of problem can occur in the following scenarios:
         - For liquid-cooled hardware:
 
             ```bash
-            ncn-m001# SYSTEM_ROOT_PASSWORD=$(vault kv get secret/meds-cred/global/ipmi | jq .data.Password -r)
+            ncn-mw# SYSTEM_ROOT_PASSWORD=$(vault kv get secret/meds-cred/global/ipmi | jq .data.Password -r)
             ```
 
         - For air-cooled hardware:
 
             ```bash
-            ncn-m001# SYSTEM_ROOT_PASSWORD=$(vault kv get secret/reds-creds/defaults | jq .data.Cray.password -r)
+            ncn-mw# SYSTEM_ROOT_PASSWORD=$(vault kv get secret/reds-creds/defaults | jq .data.Cray.password -r)
             ```
 
     1. Verify the systems's default `root` user password:
 
        ```bash
-       ncn-m001# echo $SYSTEM_ROOT_PASSWORD
+       ncn-mw# echo $SYSTEM_ROOT_PASSWORD
        ```
 
 1. Create a payload for the System Configuration Service (SCSD):
 
     ```bash
-    ncn-m001# jq --arg BMC "$BMC" --arg PASSWORD "$SYSTEM_ROOT_PASSWORD" -n \
-        '{Targets:[{Xname: $BMC, Creds: {Username: "root", Password: $PASSWORD}}]}' > scsd_payload.json
+    ncn-mw# jq --arg BMC "$BMC" --arg PASSWORD "$SYSTEM_ROOT_PASSWORD" -n \
+                '{Targets:[{Xname: $BMC, Creds: {Username: "root", Password: $PASSWORD}}]}' > scsd_payload.json
     ```
 
 1. Inspect the payload:
 
     ```bash
-    ncn-m001# jq . scsd_payload.json
+    ncn-mw# jq . scsd_payload.json
     ```
 
     Example payload contents:
@@ -125,7 +125,7 @@ This type of problem can occur in the following scenarios:
 1. Apply the the systems's default BMC `root` user credentials to the BMC:
 
     ```bash
-    ncn-m001# cray scsd bmc discreetcreds create scsd_payload.json
+    ncn-mw# cray scsd bmc discreetcreds create scsd_payload.json
     ```
 
     Example of a successful credential change:
@@ -142,25 +142,25 @@ This type of problem can occur in the following scenarios:
 1. Remove SCSD payload file containing credentials from the file system:
 
     ```bash
-    ncn-m001# rm scsd_payload.json
+    ncn-mw# rm scsd_payload.json
     ```
 
 1. Perform a rediscovery on the BMC that had its credentials changed:
 
     ```bash
-    ncn-m001# cray hsm inventory discover create --xnames $BMC
+    ncn-mw# cray hsm inventory discover create --xnames $BMC
     ```
 
 1. Wait a few minutes for HSM to attempt to inventory the BMC:
 
     ```bash
-    ncn-m001# sleep 120
+    ncn-mw# sleep 120
     ```
 
 1. Verify the BMC's discovery status is `DiscoverOK`:
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoints describe $BMC
+    ncn-mw# cray hsm inventory redfishEndpoints describe $BMC
     ```
 
     If `DiscoveryStarted`, then wait and recheck the discovery status again. If `HTTPsGetFailed` examine the HSM logs to troubleshoot the issue.
