@@ -13,6 +13,7 @@
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
 ## Stage 2.2
+1. Make sure not all pods of `ingressgateway-hmn, spire-server` are running on the same worker nodes. If all pods of above deployments are placed onto one worker node, then use `/opt/cray/platform-utils/move_pod.sh` to move at least one pod to a different worker noede.
 
 1. Run `ncn-upgrade-worker-nodes.sh` for `ncn-w001`. Follow output of the script carefully. The script will pause for manual interaction.
 
