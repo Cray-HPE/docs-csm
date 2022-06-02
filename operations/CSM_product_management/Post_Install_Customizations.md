@@ -7,7 +7,7 @@ Not all resources can be customized post-install; common scenarios are documente
 The following is a guide for determining where issues may exist, how to adjust the resources, and how to ensure the changes will persist.
 Different values may be be needed for systems as they scale.
 
-## Kubectl Events `OOMKilled`
+## Kubectl events `OOMKilled`
 
 Check to see if there are any recent out of memory events.
 
@@ -20,19 +20,19 @@ Check to see if there are any recent out of memory events.
 1. Log in to Grafana.
 
    ```text
-   https://grafana.SYSTEM-NAME_DOMAIN-NAME/
+   https://grafana.cmn.SYSTEM-NAME_DOMAIN-NAME/
    ```
 
-1. Search for the "Kubernetes / Compute Resources / Pod" Dashboard to view the memory utilization graphs over time for any pod that has been `OOMKilled`.
+1. Search for the "Kubernetes / Compute Resources / Pod" dashboard to view the memory utilization graphs over time for any pod that has been `OOMKilled`.
 
-## Prometheus `CPUThrottlingHigh` Alerts
+## Prometheus `CPUThrottlingHigh` alerts
 
 Check Prometheus for recent `CPUThrottlingHigh` Alerts.
 
 1. Log in to Prometheus.
 
    ```text
-   https://prometheus.SYSTEM-NAME_DOMAIN-NAME/
+   https://prometheus.cmn.SYSTEM-NAME_DOMAIN-NAME/
    ```
 
    1. Select the **Alert** tab.
@@ -42,22 +42,22 @@ Check Prometheus for recent `CPUThrottlingHigh` Alerts.
 1. Log in to Grafana.
 
    ```text
-   https://grafana.SYSTEM-NAME_DOMAIN-NAME/
+   https://grafana.cmn.SYSTEM-NAME_DOMAIN-NAME/
    ```
 
-   1. Search for the "Kubernetes / Compute Resources / Pod" Dashboard to view the throttling graphs over time for any pod that is alerting.
+1. Search for the "Kubernetes / Compute Resources / Pod" dashboard to view the throttling graphs over time for any pod that is alerting.
 
-## Grafana "Kubernetes / Compute Resources / Pod" Dashboard
+## Grafana "Kubernetes / Compute Resources / Pod" dashboard
 
-Use Grafana to investigate and analyze CPU Throttling and/or Memory Usage.
+Use Grafana to investigate and analyze CPU throttling and memory usage.
 
 1. Log in to Grafana.
 
    ```text
-   https://grafana.SYSTEM-NAME_DOMAIN-NAME/
+   https://grafana.cmn.SYSTEM-NAME_DOMAIN-NAME/
    ```
 
-   1. Search for the "Kubernetes / Compute Resources / Pod" Dashboard.
+1. Search for the "Kubernetes / Compute Resources / Pod" dashboard.
 
 1. Select the datasource, namespace, and pod based on the pod being examined.
 
@@ -69,7 +69,7 @@ Use Grafana to investigate and analyze CPU Throttling and/or Memory Usage.
    pod: prometheus-cray-sysmgmt-health-promet-prometheus-0
    ```
 
-### For CPU Throttling
+### CPU throttling
 
 1. Select the **CPU Throttling** drop-down to see the CPU Throttling graph for the pod during the selected time (from the top right).
 
@@ -78,14 +78,16 @@ Use Grafana to investigate and analyze CPU Throttling and/or Memory Usage.
 1. Review the graph and adjust the `resources.limits.cpu` as needed.
 
    The presence of CPU throttling does not always indicate a problem, but if a service is being slow or experiencing latency
-   issues, adjusting `resources.limits.cpu` may be beneficial. For example:
+   issues, adjusting `resources.limits.cpu` may be beneficial.
+
+   For example:
 
    * If the pod is being throttled at or near 100% for any period of time, then adjustments are likely needed.
    * If the service's response time is critical, then adjusting the pod's resources to greatly reduce or eliminate any CPU throttling may be required.
 
    > **NOTE:** The `resources.requests.cpu` are used by the Kubernetes scheduler to decide which node to place the pod on and do not impact CPU Throttling. The `resources.limits.cpu` can never be lower than the `resources.requests.cpu`.
 
-### For Memory Usage
+### Memory usage
 
 1. Select the **Memory Usage** drop-down to see the Memory Usage graph for the pod during the selected time (from the top right).
 
@@ -110,7 +112,7 @@ Use Grafana to investigate and analyze CPU Throttling and/or Memory Usage.
 
 In order to apply post-install customizations to a system, the affected Helm chart must exist on the system so that the same chart version can be redeployed with the desired customizations.
 
-This example unpacks the the csm-1.0.0 tarball under /root and lists the Helm charts that are now on your system.
+This example unpacks the the `csm-1.0.0` tarball under `/root` and lists the Helm charts that are now on the system.
 Set `PATH_TO_RELEASE` to the release directory where the Helm directory exists.
 `PATH_TO_RELEASE` will be used below when deploying a customization.
 
@@ -207,16 +209,25 @@ Trial and error may be needed to determine what is best for a given system at sc
    ```
 
 1. Verify the pod restarts and that the desired resources have been applied.
-   ```bash
-   # Watch the pod prometheus-cray-sysmgmt-health-promet-prometheus-0 restart
-   ncn# watch "kubectl get pods -n sysmgmt-health -l prometheus=cray-sysmgmt-health-promet-prometheus"
 
-   # It may take 10m for the prometheus-cray-sysmgmt-health-promet-prometheus-0 pod to Terminate - it can be forced deleted if it remains in Terminating state
-   ncn#  kubectl delete pod prometheus-cray-sysmgmt-health-promet-prometheus-0 --force --grace-period=0 -n sysmgmt-health
+   1. Watch the `prometheus-cray-sysmgmt-health-promet-prometheus-0` pod restart.
 
-   # Verify that the resource changes are in place
-   ncn#  kubectl get pod prometheus-cray-sysmgmt-health-promet-prometheus-0 -n sysmgmt-health -o json | jq -r '.spec.containers[] | select(.name == "prometheus").resources'
-   ```
+      ```bash
+      ncn# watch "kubectl get pods -n sysmgmt-health -l prometheus=cray-sysmgmt-health-promet-prometheus"
+      ```
+
+      It may take about 10 minutes for the `prometheus-cray-sysmgmt-health-promet-prometheus-0` pod to terminate.
+      It can be forced deleted if it remains in the terminating state:
+
+      ```bash
+      ncn# kubectl delete pod prometheus-cray-sysmgmt-health-promet-prometheus-0 --force --grace-period=0 -n sysmgmt-health
+      ```
+
+   2. Verify that the resource changes are in place.
+
+      ```bash
+      ncn# kubectl get pod prometheus-cray-sysmgmt-health-promet-prometheus-0 -n sysmgmt-health -o json | jq -r '.spec.containers[] | select(.name == "prometheus").resources'
+      ```
 
 1. **This step is critical.** Store the modified `customizations.yaml` file in the `site-init` repository in the customer-managed location.
 
@@ -243,7 +254,12 @@ Refer to the note at the end of this section for more details.
    ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
    ```
 
+<<<<<<< HEAD
 1. Get the current cached sysmgmt manifest.
+=======
+1. Get the current cached `sysmgmt` manifest.
+
+>>>>>>> c12edd8451b (STP-3237: improved grafana/prometheus steps, linting, and updated links)
    ```bash
    ncn# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > sysmgmt.yaml
    ```
@@ -355,17 +371,17 @@ the same procedure as above can be used with the following changes:
 
 * `cray-sls-postgres`
 
-  Get the current cached manifest configmap from: `loftsman-core-services`
+  Get the current cached manifest ConfigMap from: `loftsman-core-services`
   Resource path: `spec.kubernetes.services.cray-hms-sls.cray-service.sqlCluster.resources`
 
 * `cray-smd-postgres`
 
-  Get the current cached manifest configmap from: `loftsman-core-services`
+  Get the current cached manifest ConfigMap from: `loftsman-core-services`
   Resource path: `spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.resources`
 
 * `gitea-vcs-postgres`
 
-  Get the current cached manifest configmap from: `loftsman-sysmgmt`
+  Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
   Resource path: `spec.kubernetes.services.gitea.cray-service.sqlCluster.resources`
 
 <a name="bss_scale"></a>
@@ -552,17 +568,17 @@ Refer to the note at the end of this section for more details.
 
 * `cray-sls-postgres`
 
-  Get the current cached manifest configmap from: `loftsman-core-services`
+  Get the current cached manifest ConfigMap from: `loftsman-core-services`
   Resource path: `spec.kubernetes.services.cray-hms-sls.cray-service.sqlCluster.volumeSize`
 
 * `gitea-vcs-postgres`
 
-  Get the current cached manifest configmap from: `loftsman-sysmgmt`
+  Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
   Resource path: `spec.kubernetes.services.gitea.cray-service.sqlCluster.volumeSize`
 
 * `spire-postgres`
 
-  Get the current cached manifest configmap from: `loftsman-sysmgmt`
+  Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
   Resource path: `spec.kubernetes.services.spire.cray-service.sqlCluster.volumeSize`
 
 ## References
