@@ -198,6 +198,10 @@ proceed to step 2.
 
    1. After the correct time has been verified, power off the NCN.
 
+      ```bash
+      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power off
+      ```
+
    Repeat the above process for each NCN.
 
 <a name="update_management_node_firmware"></a>
@@ -319,7 +323,7 @@ be performed are in the [Deploy](#deploy) section.
 1. Create boot directories for any NCN in DNS.
 
     This will create folders for each host in `/var/www`, allowing each host to have its own unique set of artifacts:
-    kernel, initrd, SquashFS, and `script.ipxe` bootscript.
+    kernel, `initrd`, SquashFS, and `script.ipxe` bootscript.
 
     ```bash
     pit# /root/bin/set-sqfs-links.sh
