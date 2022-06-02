@@ -2,7 +2,7 @@
 
 Add the Customer Access Network \(CAN\) IP addresses for User Access Nodes \(UANs\) to the IP address reservations in the System Layout Service \(SLS\). Adding these IP addresses will propagate the data needed for the Domain Name Service \(DNS\).
 
-For more information on CAN IP addresses, refer to the [Customer Access Network (CAN)](../network/customer_access_network/Customer_Access_Network_CAN.md).
+For more information on CAN IP addresses, refer to the [Customer Accessible Networks](../network/customer_accessible_networks/Customer_Accessible_Networks.md).
 
 ### Prerequisites
 

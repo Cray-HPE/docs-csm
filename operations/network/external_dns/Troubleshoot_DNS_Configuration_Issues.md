@@ -47,7 +47,7 @@ The Domain Name Service \(DNS\) is not configured properly.
 
 4.  Direct DNS requests to the cluster IP address from an NCN.
 
-    Replace the example cluster IP address \(10.25.156.88\) with the CLUSTER-IP value returned in step 1. If an IP address is returned, external DNS is configured on the cluster and something is likely wrong with CMN/CAN/CHN/BGP.
+    Replace the example cluster IP address \(10.25.156.88\) with the CLUSTER-IP value returned in step 1. If an IP address is returned, external DNS is configured on the cluster and something is likely wrong with CMN or BGP.
 
     ```bash
     dig SERVICE.NETWORK.SYSTEM_DOMAIN_NAME +short @10.25.156.88

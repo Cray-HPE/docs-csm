@@ -21,5 +21,5 @@ There are also several ways to physically connect to the nodes on the system. Th
 |Administrative node|1GB copper connection made from the customer network that provides administrative access and hardware management|
 |Application node|Different interconnect types are available from the customer network based on customer requirements|
 
-For more information on connecting to the CAN, see [Connect to the CAN](customer_access_network/Connect_to_the_CAN.md).
+For more information on connecting to the CAN, see [Connect to the CMN and CAN](customer_accessible_networks/Connect_to_the_CMN_CAN.md).
 

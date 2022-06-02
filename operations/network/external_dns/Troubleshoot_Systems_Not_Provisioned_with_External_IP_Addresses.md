@@ -4,15 +4,15 @@ Systems that do not support CMN/CAN/CHN will not have services provisioned with 
 
 If SSH access to a non-compute node \(NCN\) is available, it is possible to override resolution of external hostnames and forward local ports into the cluster for the cluster IP address of the corresponding service.
 
-**WARNING:** This will bypass the Keycloak gatekeeper and Istio ingress gateway, which handle authentication and authorization.
+**WARNING:** This will bypass the OAuth2 Proxy and Istio ingress gateway, which handle authentication and authorization.
 
-Enable systems without CAN to provision services with external hostnames.
+Enable systems without CMN to provision services with external hostnames.
 
-### Prerequisites
+## Prerequisites
 
-The Customer Access Network \(CAN\) is not supported on the system.
+The Customer Management Network \(CMN\) is not supported on the system.
 
-### Procedure
+## Procedure
 
 1.  Search for the VirtualService object that corresponds to the desired service.
 
@@ -59,7 +59,7 @@ The Customer Access Network \(CAN\) is not supported on the system.
     Replace the cluster IP, port, and system name values in the example below.
 
     ```bash
-    $ ssh -L 9090:10.22.78.59:9090 root@SYSTEM_NCN_DOMAIN_NAME
+    $ ssh -L 9090:10.25.124.159:9090 root@SYSTEM_NCN_DOMAIN_NAME
     ```
 
 4.  Visit http://localhost:9090/ in a laptop or workstation browser.
