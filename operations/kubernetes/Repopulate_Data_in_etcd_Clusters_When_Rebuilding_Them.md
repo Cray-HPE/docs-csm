@@ -64,7 +64,7 @@ Compute nodes that use CPS to access their root file system must be shut down to
   workload_manager_type = "slurm"
   ```
 
-  2. Describe the CRUS session to see if the session failed or is stuck.
+  1. Describe the CRUS session to see if the session failed or is stuck.
 
     If the session continued and appears to be in a healthy state, proceed to the [BSS](#bss) section.
 
