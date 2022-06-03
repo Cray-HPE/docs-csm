@@ -14,15 +14,15 @@ FAS images contain the following information that is needed for a hardware devic
 
 ## Topics
 
-   * [Prerequisites](#prerequisites)
-   * [Warning](#warning)
-   * [Current Capabilities](#current-capabilities)
-   * [Order Of Operations](#order-of-operations)
-   * [Hardware Precedence Order](#hardware-precedence-order)
-   * [FAS Admin Procedures](#fas-admin-procedures)
-   * [Firmware Actions](#firmware-actions)
-   * [Firmware Operations](#firmware-operations)
-   * [Firmware Images](#firmware-images)
+* [Prerequisites](#prerequisites)
+* [Warning](#warning)
+* [Current Capabilities](#current-capabilities)
+* [Order Of Operations](#order-of-operations)
+* [Hardware Precedence Order](#hardware-precedence-order)
+* [FAS Admin Procedures](#fas-admin-procedures)
+* [Firmware Actions](#firmware-actions)
+* [Firmware Operations](#firmware-operations)
+* [Firmware Images](#firmware-images)
 
 <a name="prerequisites"></a>
 
@@ -36,7 +36,9 @@ FAS images contain the following information that is needed for a hardware devic
 
 ## Warning
 
-Non-compute nodes (NCNs) and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
+Non-compute nodes (NCNs) and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS.
+See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
+Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
 Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use the recipes listed in [FAS Recipes](FAS_Recipes.md) to update each supported type.
 
@@ -48,7 +50,7 @@ Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use t
 
 The following table describes the hardware items that can have their firmware updated via FAS. For more information about the upgradable targets, refer to the Firmware product stream repository.
 
-*Table 1. Upgradable Firmware Items*
+Table 1. Upgradable Firmware Items
 
 | **Manufacturer** | **Type**   | **Target**                                                   |
 | ---------------- | ---------- | ------------------------------------------------------------ |
@@ -88,10 +90,10 @@ For each item in the `Hardware Precedence Order`:
 
 4. Update the JSON file `overrideDryrun` to `true`:
 
-   1. `cray fas actions create {jsonfile}`
-     1. Note the ActionID!
-     2. Poll the status of the action until the action `state` is `completed`:
-        1. `cray fas actions describe {actionID} --format json`
+  1. `cray fas actions create {jsonfile}`
+    1. Note the ActionID!
+    2. Poll the status of the action until the action `state` is `completed`:
+      1. `cray fas actions describe {actionID} --format json`
 
 5. Interpret the outcome of the live update; proceed to next type of hardware.
 
@@ -120,12 +122,13 @@ After identifying which hardware is in the system, start with the top most item 
    1. [BMC (iLO5)](FAS_Recipes.md#hpe-device-type-nodebmc-target--aka-bmc)
    2. [BIOS (System ROM)](FAS_Recipes.md#hpe-device-type-nodebmc-target--aka-bios)
 
-
 <a name="fas-admin-procedures"></a>
 
 ## FAS Admin Procedures
 
-There are several use cases for using the FAS to update firmware on the system. These use cases are intended to be run by system administrators with a good understanding of firmware. Under no circumstances should non-administrator users attempt to use FAS or perform a firmware update.
+There are several use cases for using the FAS to update firmware on the system.
+These use cases are intended to be run by system administrators with a good understanding of firmware.
+Under no circumstances should non-administrator users attempt to use FAS or perform a firmware update.
 
 * Perform a firmware update: Update the firmware of a component name (xname)'s target to the latest, earliest, or an explicit version.
 * Determine what hardware can be updated by performing a dry-run: This is the easiest way to determine what can be updated.
@@ -137,7 +140,11 @@ There are several use cases for using the FAS to update firmware on the system. 
 
 ## Firmware Actions
 
-An action is collection of operations, which are individual firmware update tasks. Only one FAS action can be run at a time. Any other attempted action will be queued. Additionally, only one operation can be run on a component name (xname) at a time. For example, if there are 1000 component names (xnames) with 5 targets each to be updated, all 1000 component names (xnames) can be updating a target, but only 1 target on each component name (xname) will be updated at a time.
+An action is collection of operations, which are individual firmware update tasks.
+Only one FAS action can be run at a time.
+Any other attempted action will be queued.
+Additionally, only one operation can be run on a component name (xname) at a time.
+For example, if there are 1000 component names (xnames) with 5 targets each to be updated, all 1000 component names (xnames) can be updating a target, but only 1 target on each component name (xname) will be updated at a time.
 
 The life cycle of any action can be divided into the static and dynamic portions of the life cycle.
 
