@@ -109,6 +109,7 @@ CFS-BOA
 CFS-Operator
 channeled
 ChassisBMC
+chassisBMC
 checkmark
 CHN
 cleanup
@@ -349,6 +350,7 @@ NMN_MTN
 NMN_RVR
 NodeBIOS
 NodeBMC
+nodeBMC
 non-airgapped
 non-failsafe
 non-HPE
