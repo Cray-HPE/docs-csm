@@ -53,7 +53,7 @@ from which the other nodes were upgraded. At this point, the upgrade procedure p
              scp ncn-m001:/root/output.log /root/pre-m001-reboot-upgrade.log &&
              cray artifacts create config-data pre-m001-reboot-upgrade.log /root/pre-m001-reboot-upgrade.log
    ncn-m002# csi_rpm=$(ssh ncn-m001 "find /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}/rpm/cray/csm/ -name 'cray-site-init*.rpm'") &&
-             scp ncn-m001:${csi_rpm} /tmp/cray-site-init.rpm
+             scp ncn-m001:${csi_rpm} /tmp/cray-site-init.rpm &&
              scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-latest.noarch.rpm &&
              rpm -Uvh --force /tmp/cray-site-init.rpm /root/docs-csm-latest.noarch.rpm
    ```
