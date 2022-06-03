@@ -54,11 +54,11 @@ Table 1. Upgradable Firmware Items
 
 | **Manufacturer** | **Type**   | **Target**                                                   |
 | ---------------- | ---------- | ------------------------------------------------------------ |
-| Cray             | `nodeBMC`    | `BMC`, `Node0.BIOS`,  `Node1.BIOS`,  `Recovery`, `Node1.AccFPGA0`, `Node0.AccFPGA0` |
-| Cray             | `chassisBMC` | `BMC`, `Recovery`                                            |
-| Cray             | `routerBMC`  | `BMC`, `Recovery`                                            |
-| Gigabyte         | `nodeBMC`    | `BMC`, `BIOS`                                                |
-| HPE              | `nodeBMC`    | `iLO 5` (BMC aka `1` ), `System ROM` ,`Redundant System ROM` (BIOS aka `2`) |
+| Cray             | nodeBMC    | `BMC`, `Node0.BIOS`,  `Node1.BIOS`,  `Recovery`, `Node1.AccFPGA0`, `Node0.AccFPGA0` |
+| Cray             | chassisBMC | `BMC`, `Recovery`                                            |
+| Cray             | routerBMC  | `BMC`, `Recovery`                                            |
+| Gigabyte         | nodeBMC    | `BMC`, `BIOS`                                                |
+| HPE              | nodeBMC    | `iLO 5` (BMC aka `1` ), `System ROM` ,`Redundant System ROM` (BIOS aka `2`) |
 
 <a name="order-of-operations"></a>
 
@@ -108,10 +108,10 @@ After identifying which hardware is in the system, start with the top most item 
 > **NOTE:** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
 
 1. [Cray](FAS_Recipes.md#manufacturer-cray)
-   1. [`ChassisBMC`](FAS_Recipes.md#cray-device-type-chassisbmc-target-bmc)
-   2. `NodeBMC`
+   1. [ChassisBMC](FAS_Recipes.md#cray-device-type-chassisbmc-target-bmc)
+   2. NodeBMC
       1. [BMC](FAS_Recipes.md#cray-device-type-nodebmc-target-bmc)
-      2. [`NodeBIOS`](FAS_Recipes.md#cray-device-type-nodebmc-target-nodebios)
+      2. [NodeBIOS](FAS_Recipes.md#cray-device-type-nodebmc-target-nodebios)
       3. [Redstone FPGA](FAS_Recipes.md#cray-device-type-nodebmc-target-redstone-fpga)
 2. [Gigabyte](FAS_Recipes.md#manufacturer-gigabyte)
    1. [BMC](FAS_Recipes.md#gb-device-type-nodebmc-target-bmc)
