@@ -63,4 +63,36 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="ELIMINATE_NTP_CLOCK_SKEW_M001"
+state_recorded=$(is_state_recorded "${state_name}" "${target_ncn}")
+if [[ $state_recorded == "0" && $2 != "--rebuild" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    if [[ "${target_ncn}" == "ncn-m001" ]]; then
+      # ensure the directory exists
+      mkdir -p /srv/cray/scripts/common/
+      # copy the NTP script and template to ncn-m001
+      cp -r --preserve=mode "${CSM_ARTI_DIR}"/chrony/ /srv/cray/scripts/common/
+      # run the script
+      if ! TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py; then
+          echo "${target_ncn} csm_ntp failed"
+          exit 1
+      else
+          record_state "${state_name}" "${target_ncn}"
+      fi
+
+      # if the node is not in sync after three minutes, fail
+      # ncn-m001 can take a little longer to syncrhonize, so it waits longer than the normal test
+      if ! ssh "${target_ncn}" 'chronyc waitsync 6 0.5 0.5 30'; then
+          echo "${target_ncn} the clock is not in sync.  Wait a bit more or try again."
+          exit 1
+      else
+          record_state "${state_name}" "${target_ncn}"
+      fi
+    fi
+    } >> ${LOG_FILE} 2>&1
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 ok_report
