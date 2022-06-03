@@ -4,13 +4,13 @@ If FAS has not yet been installed, firmware for NCNs can be updated manually wit
 
 The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State Managers (HSM), device data, and image data in order to update firmware.
 
-Reset Gigabyte node BMC to factory defaults if having problems with ipmitool, using Redfish, or when flashing procedures fail. See [Set Gigabyte Node BMC to Factory Defaults](../../install/set_gigabyte_node_bmc_to_factory_defaults.md).
+Reset Gigabyte node BMC to factory defaults if having problems with `ipmitool`, using Redfish, or when flashing procedures fail. See [Set Gigabyte Node BMC to Factory Defaults](../../install/set_gigabyte_node_bmc_to_factory_defaults.md).
 
 FAS images contain the following information that is needed for a hardware device to update firmware versions:
 
 * Hardware-specific information: Contains the allowed device states and how to reboot a device if necessary.
 * Selection criteria: How to link a firmware image to a specific hardware type.
-* Image data: Where the firmware image resides in Simple Storage Service (S3) and what firmwareVersion it will report after it is successfully applied. See [Artifact Management](../artifact_management/Artifact_Management.md) for more information.
+* Image data: Where the firmware image resides in Simple Storage Service (S3) and what `firmwareVersion`it will report after it is successfully applied. See [Artifact Management](../artifact_management/Artifact_Management.md) for more information.
 
 ## Topics
 
@@ -54,11 +54,11 @@ Table 1. Upgradable Firmware Items
 
 | **Manufacturer** | **Type**   | **Target**                                                   |
 | ---------------- | ---------- | ------------------------------------------------------------ |
-| Cray             | nodeBMC    | `BMC`, `Node0.BIOS`,  `Node1.BIOS`,  `Recovery`, `Node1.AccFPGA0`, `Node0.AccFPGA0` |
-| Cray             | chassisBMC | `BMC`, `Recovery`                                            |
-| Cray             | routerBMC  | `BMC`, `Recovery`                                            |
-| Gigabyte         | nodeBMC    | `BMC`, `BIOS`                                                |
-| HPE              | nodeBMC    | `iLO 5` (BMC aka `1` ), `System ROM` ,`Redundant System ROM` (BIOS aka `2`) |
+| Cray             | `nodeBMC`    | `BMC`, `Node0.BIOS`,  `Node1.BIOS`,  `Recovery`, `Node1.AccFPGA0`, `Node0.AccFPGA0` |
+| Cray             | `chassisBMC` | `BMC`, `Recovery`                                            |
+| Cray             | `routerBMC`  | `BMC`, `Recovery`                                            |
+| Gigabyte         | `nodeBMC`    | `BMC`, `BIOS`                                                |
+| HPE              | `nodeBMC`    | `iLO 5` (BMC aka `1` ), `System ROM` ,`Redundant System ROM` (BIOS aka `2`) |
 
 <a name="order-of-operations"></a>
 
@@ -90,7 +90,7 @@ For each item in the `Hardware Precedence Order`:
 
 4. Update the JSON file `overrideDryrun` to `true`:
      1. `cray fas actions create {jsonfile}`
-          1. Note the ActionID!
+          1. Note the `ActionID`!
           2. Poll the status of the action until the action `state` is `completed`:
                1. `cray fas actions describe {actionID} --format json`
 
@@ -105,13 +105,13 @@ After identifying which hardware is in the system, start with the top most item 
 >**IMPORTANT:**
 >This process does not communicate the SAFE way to update NCNs. If the NCNs and their BMCs have not been locked, or FAS is blindly used to update NCNs without following the correct process, then **THE STABILITY OF THE SYSTEM WILL BE JEOPARDIZED**.
 >Read the corresponding recipes before updating. There are sometimes ancillary actions that must be completed in order to ensure update integrity.
-> **NOTE:** To update Switch Controllers \(sC\) or RouterBMC, refer to the Rosetta Documentation.
+> **NOTE:** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
 
 1. [Cray](FAS_Recipes.md#manufacturer-cray)
-   1. [ChassisBMC](FAS_Recipes.md#cray-device-type-chassisbmc-target-bmc)
-   2. NodeBMC
+   1. [`ChassisBMC`](FAS_Recipes.md#cray-device-type-chassisbmc-target-bmc)
+   2. `NodeBMC`
       1. [BMC](FAS_Recipes.md#cray-device-type-nodebmc-target-bmc)
-      2. [NodeBIOS](FAS_Recipes.md#cray-device-type-nodebmc-target-nodebios)
+      2. [`NodeBIOS`](FAS_Recipes.md#cray-device-type-nodebmc-target-nodebios)
       3. [Redstone FPGA](FAS_Recipes.md#cray-device-type-nodebmc-target-redstone-fpga)
 2. [Gigabyte](FAS_Recipes.md#manufacturer-gigabyte)
    1. [BMC](FAS_Recipes.md#gb-device-type-nodebmc-target-bmc)
