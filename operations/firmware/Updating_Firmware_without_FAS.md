@@ -3,6 +3,7 @@
 **NOTE: This procedure should only be used if FAS is not available such as during installation time.**
 
 > **NOTE:**
+
 > * On HPE nodes, the BMC Firmware is iLO 5 and BIOS is System ROM.
 > * The commands in the procedure must be run on `ncn-m001`.
 
@@ -16,7 +17,7 @@ The following information is needed:
 
 ## Obtain the Required Firmware
 
-The firmware or BIOS can be obtained from the `HFP` tarball if it has been installed, or from HPE Morpheus Server (https://morph.ams.hpecorp.net/app/)
+The firmware or BIOS can be obtained from the `HFP` tarball if it has been installed, or from HPE Morpheus Server.
 
 **You must select the correct version of firmware / BIOS.**
 
@@ -84,6 +85,7 @@ The web interface will be used to update iLO 5 (BMC) firmware and/or System ROM 
 Do the following steps for each NCN needing update:
 
 1. From your own machine, create a SSH tunnel (`-L` creates the tunnel, and `-N` prevents a shell and stubs the connect).
+
     ```bash
     linux# ssh -L 6443:ipaddressOfNCN:443 -N ipaddressofM001
     ```
