@@ -79,7 +79,7 @@ This step is required. **There is no default root password and no default SSH ke
    each squashed image is unsquashed.
 
    ```bash
-   pit# cd /var/www/ephemeral/data/
+   pit# cd ${PITDATA}/data/
    pit# ${CSM_PATH}/ncn-image-modification.sh -p -z America/Chicago \
                                               -d /my/pre-existing/keys \
                                               -k $(find . -name "kubernetes-*.squashfs" | sort -V | tail -1) \
@@ -92,23 +92,22 @@ This step is required. **There is no default root password and no default SSH ke
    any input after it is invoked.
 
    ```bash
-   pit# cd /var/www/ephemeral/data/
+   pit# cd ${PITDATA}/data/
    pit# export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
    pit# ${CSM_PATH}/ncn-image-modification.sh -p \
                                               -t rsa \
                                               -N "" \
-                                              -k $(find . -name "kubernetes-*.squashfs" | sort -V | tail -1)
+                                              -k $(find . -name "kubernetes-*.squashfs" | sort -V | tail -1) \
                                               -s $(find . -name "storage-ceph-*.squashfs" | sort -V | tail -1)
    ```
 
    The script will save the original SquashFS images in `./{k8s,ceph}/old`. The new image filenames will
-   have a `secure-` prefix. The initrd and kernel will retain their original filenames.
+   have a `secure-` prefix. The `initrd` and kernel will retain their original filenames.
 
 1. Set the boot links.
 
    ```bash
-   pit# cd
-   pit# set-sqfs-links.sh
+   pit# cd && set-sqfs-links.sh
    ```
 
 ## Cleanup
@@ -118,5 +117,5 @@ This step is required. **There is no default root password and no default SSH ke
    These may be removed now, or after verifying that the nodes are able to boot successfully with the new images.
 
    ```bash
-   pit# cd /var/www/ephemeral/data && rm -rf ceph/old k8s/old
+   pit# cd ${PITDATA}/data/ && rm -rvf ceph/old k8s/old
    ```
