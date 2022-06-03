@@ -141,7 +141,11 @@ Some of the steps are specific to that activity, others would be common to or si
 
     ncn-w001# podman import --change "ENTRYPOINT /usr/bin/uai-ssh.sh" $SESSION_ID.tar $UAI_IMAGE_NAME
 
-    ncn-w001# podman push $UAI_IMAGE_NAME
+    ncn-w001# PODMAN_USER=$(kubectl get secret -n nexus nexus-admin-credential -o json | jq -r '.data.username' | base64 -d)
+
+    ncn-w001# PODMAN_PASSWD=$(kubectl get secret -n nexus nexus-admin-credential -o json | jq -r '.data.password' | base64 -d)
+
+    ncn-w001# podman push --creds "$PODMAN_USER:$PODMAN_PASSWD" $UAI_IMAGE_NAME
     ```
 
 6. Register the new container image with UAS.
