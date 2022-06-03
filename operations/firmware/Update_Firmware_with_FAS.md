@@ -89,10 +89,10 @@ For each item in the `Hardware Precedence Order`:
 3. If `succeeded` count > 0, now perform a live update.
 
 4. Update the JSON file `overrideDryrun` to `true`:
-  1. `cray fas actions create {jsonfile}`
-    1. Note the ActionID!
-    2. Poll the status of the action until the action `state` is `completed`:
-      1. `cray fas actions describe {actionID} --format json`
+     1. `cray fas actions create {jsonfile}`
+          1. Note the ActionID!
+          2. Poll the status of the action until the action `state` is `completed`:
+               1. `cray fas actions describe {actionID} --format json`
 
 5. Interpret the outcome of the live update; proceed to next type of hardware.
 
