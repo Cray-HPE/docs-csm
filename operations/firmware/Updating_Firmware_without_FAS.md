@@ -16,7 +16,7 @@ The following information is needed:
 
 ## Obtain the Required Firmware
 
-The firmware or BIOS can be obtained from the `HFP` pack if it has been installed, or from HPE Morpheus Server (https://morph.ams.hpecorp.net/app/)
+The firmware or BIOS can be obtained from the `HFP` tarball if it has been installed, or from HPE Morpheus Server (https://morph.ams.hpecorp.net/app/)
 
 **You must select the correct version of firmware / BIOS.**
 
@@ -63,13 +63,13 @@ Move the firmware to be updated into a directory you have access to.
 If the command `ilorest` is available, use the following command for each NCN to be updated.
 If that command is not available, follow the procedure Using the iLO GUI.
 
-Do the following command for each NCN needing update:
+1. Do the following for each NCN needing update:
 
     ```bash
     ncn-m001# ilorest flashfwpkg filename.fwpkg --url ipaddressOfNCN -u root -p passwd
     ```
 
-    > After updating System ROM (BIOS), NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.
+    > After updating System ROM (BIOS), NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot NCNs.
 
 ## Using the iLO GUI
 
@@ -99,4 +99,4 @@ Do the following steps for each NCN needing update:
     1. Click `"Confirm TPM override"`.
     1. Click `"Flash"`.
 
-    > After updating System ROM (BIOS), NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.
+    > After updating System ROM (BIOS), NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot NCNs.
