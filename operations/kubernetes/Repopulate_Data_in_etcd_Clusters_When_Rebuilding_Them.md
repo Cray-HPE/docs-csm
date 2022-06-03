@@ -20,7 +20,7 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
 
 ### BOS
 
-1.  Reconstruct boot session templates for impacted product streams to repopulate data.
+1. Reconstruct boot session templates for impacted product streams to repopulate data.
 
   Boot preparation information for other product streams can be found in the following locations:
 
@@ -29,17 +29,18 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
 
 ### CPS
 
-1.  Repopulate clusters for CPS.
+1. Repopulate clusters for CPS.
 
-  - If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are up and running. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md) for more information.
+  - If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are up and running.
+  See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md) for more information.
   - If any clients have already mounted content provided by CPS, that content should be unmounted before rebuilding the etcd cluster, and then re-mounted after the etcd cluster is rebuilt.
   Compute nodes that use CPS to access their root file system must be shut down to unmount, and then booted to perform the re-mount.
 
 ### CRUS
 
-1.  View the progress of existing CRUS sessions.
+1. View the progress of existing CRUS sessions.
 
-  1.  List the existing CRUS sessions to find the upgrade\_id for the desired session.
+  1. List the existing CRUS sessions to find the upgrade\_id for the desired session.
 
     ```bash
     ncn-w001# cray crus session list
@@ -63,7 +64,7 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
         workload_manager_type = "slurm"
         ```
 
-    2.  Describe the CRUS session to see if the session failed or is stuck.
+    2. Describe the CRUS session to see if the session failed or is stuck.
 
         If the session continued and appears to be in a healthy state, proceed to the [BSS](#bss) section.
 
@@ -89,7 +90,7 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
         workload_manager_type = "slurm"
         ```
 
-2.  Find the name of the running CRUS pod.
+2. Find the name of the running CRUS pod.
 
     ```bash
     ncn-w001# kubectl get pods -n services | grep cray-crus
@@ -101,7 +102,7 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
     cray-crus-549cb9cb5d-jtpqg                                   3/4     Running   528        25h
     ```
 
-3.  Restart the CRUS pod.
+3. Restart the CRUS pod.
 
   Deleting the pod will restart CRUS and start the discovery process for any data recovered in etcd.
 
@@ -113,7 +114,7 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
 
 Data is repopulated in BSS when the `REDS init` job is run.
 
-1.  Get the current REDS job.
+1. Get the current REDS job.
 
     ```bash
     ncn-w001# kubectl get -o json -n services job/cray-reds-init | \
@@ -126,7 +127,7 @@ Data is repopulated in BSS when the `REDS init` job is run.
     ncn-w001# kubectl delete -n services -f cray-reds-init.json
     ```
 
-3.  Restart the `reds-client-init` job.
+3. Restart the `reds-client-init` job.
 
     ```bash
     ncn-w001# kubectl apply -n services -f cray-reds-init.json
@@ -134,7 +135,7 @@ Data is repopulated in BSS when the `REDS init` job is run.
 
 ### REDS
 
-1.  Restart REDS.
+1. Restart REDS.
 
     ```bash
     ncn-w001# kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-reds'
@@ -142,7 +143,7 @@ Data is repopulated in BSS when the `REDS init` job is run.
 
 ### MEDS
 
-1.  Restart MEDS.
+1. Restart MEDS.
 
     ```bash
     ncn-w001# kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-meds'
@@ -159,12 +160,11 @@ Data is repopulated in BSS when the `REDS init` job is run.
     Any images that were loaded into FAS outside of Nexus will need to be reloaded using the `Load Firmware from RPM or ZIP file` section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md).
     After images are reloaded any running actions at time of failure will need to be recreated.
 
-
 ### HMNFD
 
-1.  Resubscribe the compute nodes and any NCNs that use the ORCA daemon for their State Change Notifications \(SCN\).
+1. Resubscribe the compute nodes and any NCNs that use the ORCA daemon for their State Change Notifications \(SCN\).
 
-    1.  Resubscribe all compute nodes.
+    1. Resubscribe all compute nodes.
 
         ```bash
         ncn-m001# TMPFILE=$(mktemp)
@@ -175,11 +175,11 @@ Data is repopulated in BSS when the `REDS init` job is run.
         ncn-m001# rm -rf $TMPFILE
         ```
 
-    2.  Resubscribe the NCNs.
+    2. Resubscribe the NCNs.
 
-        ```bash
-        ncn-m001# pdsh -w ncn-w00[0-4]-can.local "systemctl restart cray-dvs-orca"
-        ncn-m001# pdsh -w ncn-s00[0-4]-can.local "systemctl restart cray-dvs-orca"
-        ```
+      ```bash
+      ncn-m001# pdsh -w ncn-w00[0-4]-can.local "systemctl restart cray-dvs-orca"
+      ncn-m001# pdsh -w ncn-s00[0-4]-can.local "systemctl restart cray-dvs-orca"
+      ```
 
-        **NOTE:** On larger systems, [0-4] may have to be a larger range.
+      **NOTE:** On larger systems, [0-4] may have to be a larger range.
