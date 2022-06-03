@@ -354,7 +354,7 @@ Run the following steps on each master node.
    ncn-m# pdcp -w ncn-m00[2-3] -w ncn-w00[1-3] /etc/kubernetes/admin.conf /etc/kubernetes/
    ```
 
-## Regenerate kubelet `.pem` Certificates
+### Regenerate `kubelet` `.pem` Certificates
 
 1. Backup certificates for `kubelet` on each master and worker node:
 
@@ -410,7 +410,7 @@ Run the following steps on each master node.
 
 5. Check the expiration of the `kubectl` certificate files. See [File Locations](#file-locations) for the list of files.
 
-   **This task is for each master and worker node. The example checks each kubelet certificate in [File Locations](#file-locations).**
+   **This task is for each master and worker node. The example checks each `kubelet` certificate in [File Locations](#file-locations).**
 
    ```bash
    ncn# for i in $(ls /var/lib/kubelet/pki/*.crt;ls /var/lib/kubelet/pki/*.pem);do echo ${i}; openssl x509 -enddate -noout -in ${i};done
@@ -437,7 +437,11 @@ Run the following steps on each master node.
 
    Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) process.
 
-8. Update the client certificate for `kube-etcdbackup`.
+### Update client secrets
+
+Run the following steps from a master node.
+
+1. Update the client certificate for `kube-etcdbackup`.
 
    1. Update the `kube-etcdbackup-etcd` secret.
 
@@ -449,7 +453,7 @@ Run the following steps on each master node.
                      --save-config --dry-run=client -o yaml | kubectl apply -f -
       ```
 
-   1. Check that the certificate's expiration date has been updated.
+   1. Check the certificate's expiration date to verify that the certificate is not expired.
 
       ```bash
       ncn-m# kubectl get secret -n kube-system kube-etcdbackup-etcd -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
@@ -458,7 +462,7 @@ Run the following steps on each master node.
       Example output:
 
       ```text
-      notAfter=Apr 21 07:18:51 2023 GMT
+      notAfter=May  4 22:37:16 2023 GMT
       ```
 
    1. Check that the next `kube-etcdbackup` cronjob `Completed`. This cronjob runs every 10 minutes.
@@ -472,4 +476,69 @@ Run the following steps on each master node.
       ```text
       NAME                               READY   STATUS      RESTARTS   AGE
       kube-etcdbackup-1652201400-czh5p   0/1     Completed   0          107s
+      ```
+
+1. Update the client certificate for `etcd-client`.
+
+   1. Update the `etcd-client-cert` secret.
+
+      ```bash
+      ncn-m# kubectl --namespace=sysmgmt-health create secret generic etcd-client-cert 
+                     --from-file=etcd-client=/etc/kubernetes/pki/apiserver-etcd-client.crt \
+                     --from-file=etcd-client-key=/etc/kubernetes/pki/apiserver-etcd-client.key \
+                     --from-file=etcd-ca=/etc/kubernetes/pki/etcd/ca.crt \
+                     --save-config --dry-run=client -o yaml | kubectl apply -f -
+      ```
+
+   1. Check the certificates' expiration dates to verify that none of the certificate are expired.
+
+      1. Check the `etcd-ca` expiration date.
+
+         ```bash
+         ncn-m# kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-ca" | @base64d' | openssl x509 -noout -enddate
+         ```
+
+         Example output:
+
+         ```text
+         notAfter=May  1 18:20:23 2032 GMT
+         ```
+
+      1. Check the `etcd-client` expiration date.
+
+         ```bash
+         ncn-m# kubectl get secret -n sysmgmt-health etcd-client-cert -o json | jq -r '.data."etcd-client" | @base64d' | openssl x509 -noout -enddate
+         ```
+
+         Example output:
+
+         ```text
+         notAfter=May  4 18:20:24 2023 GMT
+         ```
+
+   1. Restart Prometheus.
+
+      ```bash
+      ncn-m# kubectl rollout restart -n sysmgmt-health statefulSet/prometheus-cray-sysmgmt-health-promet-prometheus
+      ncn-m# kubectl rollout status -n sysmgmt-health statefulSet/prometheus-cray-sysmgmt-health-promet-prometheus
+      ```
+
+      Example output:
+
+      ```text
+      Waiting for 1 pods to be ready...
+      statefulset rolling update complete ...
+      ```
+
+   1. Check for any `tls` errors from the active Prometheus targets. No errors are expected.
+
+      ```bash
+      ncn-m# PROM_IP=$(kubectl get services -n sysmgmt-health cray-sysmgmt-health-promet-prometheus -o json | jq -r '.spec.clusterIP')
+      ncn-m# curl -s http://${PROM_IP}:9090/api/v1/targets | jq -r '.data.activeTargets[] | select(."scrapePool" == "sysmgmt-health/cray-sysmgmt-health-promet-kube-etcd/0")' | grep lastError | sort -u
+      ```
+
+      Example output:
+
+      ```text
+        "lastError": "",
       ```
