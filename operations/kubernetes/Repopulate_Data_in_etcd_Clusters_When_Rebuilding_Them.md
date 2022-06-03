@@ -31,10 +31,10 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
 
 1. Repopulate clusters for CPS.
 
-  - If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are up and running.
-  See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md) for more information.
-  - If any clients have already mounted content provided by CPS, that content should be unmounted before rebuilding the etcd cluster, and then re-mounted after the etcd cluster is rebuilt.
-  Compute nodes that use CPS to access their root file system must be shut down to unmount, and then booted to perform the re-mount.
+- If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are up and running.
+See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md) for more information.
+- If any clients have already mounted content provided by CPS, that content should be unmounted before rebuilding the etcd cluster, and then re-mounted after the etcd cluster is rebuilt.
+Compute nodes that use CPS to access their root file system must be shut down to unmount, and then booted to perform the re-mount.
 
 ### CRUS
 
@@ -42,67 +42,67 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
 
   1. List the existing CRUS sessions to find the upgrade\_id for the desired session.
 
-    ```bash
-    ncn-w001# cray crus session list
-    ```
+  ```bash
+  ncn-w001# cray crus session list
+  ```
 
-        Example output:
+  Example output:
 
-        ```
-        [[results]]
-        api_version = "1.0.0"
-        completed = false
-        failed_label = "failed-nodes"
-        kind = "ComputeUpgradeSession"
-        messages = [ "Quiesce requested in step 0: moving to QUIESCING", "All nodes quiesced in step 0: moving to QUIESCED", "Began the boot session for step 0: moving to BOOTING",]
-        starting_label = "slurm-nodes"
-        state = "UPDATING"
-        upgrade_id = "e0131663-dbee-47c2-aa5c-13fe9b110242" <<-- Note this value
-        upgrade_step_size = 50
-        upgrade_template_id = "boot-template"
-        upgrading_label = "upgrading-nodes"
-        workload_manager_type = "slurm"
-        ```
+  ```bash
+  [[results]]
+  api_version = "1.0.0"
+  completed = false
+  failed_label = "failed-nodes"
+  kind = "ComputeUpgradeSession"
+  messages = [ "Quiesce requested in step 0: moving to QUIESCING", "All nodes quiesced in step 0: moving to QUIESCED", "Began the boot session for step 0: moving to BOOTING",]
+  starting_label = "slurm-nodes"
+  state = "UPDATING"
+  upgrade_id = "e0131663-dbee-47c2-aa5c-13fe9b110242" <<-- Note this value
+  upgrade_step_size = 50
+  upgrade_template_id = "boot-template"
+  upgrading_label = "upgrading-nodes"
+  workload_manager_type = "slurm"
+  ```
 
-    2. Describe the CRUS session to see if the session failed or is stuck.
+  2. Describe the CRUS session to see if the session failed or is stuck.
 
-        If the session continued and appears to be in a healthy state, proceed to the [BSS](#bss) section.
-
-        ```bash
-        ncn-w001# cray crus session describe CRUS_UPGRADE_ID
-        ```
-
-        Example output:
-
-        ```bash
-        api_version = "1.0.0"
-        completed = false
-        failed_label = "failed-nodes"
-        kind = "ComputeUpgradeSession"
-        messages = [ "Quiesce requested in step 0: moving to QUIESCING", "All nodes quiesced in step 0:
-        moving to QUIESCED", "Began the boot session for step 0: moving to BOOTING",]
-        starting_label = "slurm-nodes"
-        state = "UPDATING"
-        upgrade_id = "e0131663-dbee-47c2-aa5c-13fe9b110242"
-        upgrade_step_size = 50
-        upgrade_template_id = "boot-template"
-        upgrading_label = "upgrading-nodes"
-        workload_manager_type = "slurm"
-        ```
-
-2. Find the name of the running CRUS pod.
+    If the session continued and appears to be in a healthy state, proceed to the [BSS](#bss) section.
 
     ```bash
-    ncn-w001# kubectl get pods -n services | grep cray-crus
+    ncn-w001# cray crus session describe CRUS_UPGRADE_ID
     ```
 
     Example output:
 
     ```bash
-    cray-crus-549cb9cb5d-jtpqg                                   3/4     Running   528        25h
+    api_version = "1.0.0"
+    completed = false
+    failed_label = "failed-nodes"
+    kind = "ComputeUpgradeSession"
+    messages = [ "Quiesce requested in step 0: moving to QUIESCING", "All nodes quiesced in step 0:
+    moving to QUIESCED", "Began the boot session for step 0: moving to BOOTING",]
+    starting_label = "slurm-nodes"
+    state = "UPDATING"
+    upgrade_id = "e0131663-dbee-47c2-aa5c-13fe9b110242"
+    upgrade_step_size = 50
+    upgrade_template_id = "boot-template"
+    upgrading_label = "upgrading-nodes"
+    workload_manager_type = "slurm"
     ```
 
-3. Restart the CRUS pod.
+1. Find the name of the running CRUS pod.
+
+  ```bash
+  ncn-w001# kubectl get pods -n services | grep cray-crus
+  ```
+
+  Example output:
+
+  ```bash
+  cray-crus-549cb9cb5d-jtpqg                                   3/4     Running   528        25h
+  ```
+
+1. Restart the CRUS pod.
 
   Deleting the pod will restart CRUS and start the discovery process for any data recovered in etcd.
 
