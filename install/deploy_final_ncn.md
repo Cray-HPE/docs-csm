@@ -12,7 +12,7 @@ procedure entails deactivating the LiveCD, meaning the LiveCD and all of its res
 3. [Hand-off](#hand-off)
 4. [Reboot](#reboot)
 5. [Enable NCN disk wiping safeguard](#enable-ncn-disk-wiping-safeguard)
-6. [Clean up chrony configurations](#clean-up-chrony-configurations)
+6. [Clean up `chrony` configurations](#clean-up-chrony-configurations)
 7. [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
 8. [Next topic](#next-topic)
 
@@ -509,17 +509,16 @@ it is used for Cray installation and bootstrap.
 
 <a name="remove-the-default-ntp-pool"></a>
 
-## 6. Clean up chrony configurations
+## 6. Clean up `chrony` configurations
 
-Set a token as described in [Identify Nodes and Update Metadata](../operations/node_management/Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md), then run the following command.
+This step requires the exported `TOKEN` variable from the previous section: [Enable NCN disk wiping safeguard](#enable-ncn-disk-wiping-safeguard).
+If still using the same shell session, there is no need to export it again.
 
-```ShellSession
+```bash
 ncn-m001# /srv/cray/scripts/common/chrony/csm_ntp.py
 ```
 
 Successful output can appear as:
-
-If BSS is unreachable, local cache is checked and the configuration is still deployed:
 
 ```text
 ...
