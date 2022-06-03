@@ -151,11 +151,15 @@ Data is repopulated in BSS when the REDS init job is run.
 
 ### FAS
 
-1.  Run the `cray-fas-loader` Kubernetes job.
+1. Reload the firmware images from Nexus.
 
-    Refer to the "Use the `cray-fas-loader` Kubernetes Job" section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) for more information.
+    Refer to the `Load Firmware from Nexus` section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) for more information.
 
-    When the etcd cluster is rebuilt, all historic data for firmware actions and all recorded snapshots will be lost. Image data will need to be reloaded by following the `cray-fas-loader` Kubernetes job procedure. After images are reloaded any running actions at time of failure will need to be recreated.
+    When the etcd cluster is rebuilt, all historic data for firmware actions and all recorded snapshots will be lost.
+    Image data will be reloaded from Nexus.
+    Any images that were loaded into FAS outside of Nexus will need to be reloaded using the `Load Firmware from RPM or ZIP file` section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md).
+    After images are reloaded any running actions at time of failure will need to be recreated.
+
 
 ### HMNFD
 
@@ -180,4 +184,3 @@ Data is repopulated in BSS when the REDS init job is run.
         ```
 
         **NOTE:** On larger systems, [0-4] may have to be a larger range.
-
