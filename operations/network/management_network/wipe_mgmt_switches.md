@@ -1,4 +1,4 @@
-# Wipe Management Switch Config
+# Wipe Management Switch Configuration
 
 This procedure describes how to wipe Aruba, Dell, and Mellanox switch configurations.
 
@@ -18,16 +18,16 @@ Out-of-band access to the switches (console)
 
 1. (`sw-spine-001#`)Verify the checkpoint was created.
 
-   ```
+   ```console
    show checkpoint
    ```
 
    Example output:
 
-      ```
-      NAME                         TYPE        WRITER  DATE(YYYY/MM/DD)      IMAGE VERSION
-      CSM1_0                       latest      User    2022-01-27T18:52:31Z  GL.10.08.1021
-      ```
+     ```console
+     NAME                         TYPE        WRITER  DATE(YYYY/MM/DD)      IMAGE VERSION
+     CSM1_0                       latest      User    2022-01-27T18:52:31Z  GL.10.08.1021
+     ```
 
 1. (`sw-spine-002#`) Erase the startup configuration.
 
@@ -63,7 +63,7 @@ Out-of-band access to the switches (console)
 
    > **`NOTE`** The default user is `admin` without any password.
 
-1. See [Apply Switch Configs](apply_switch_configs.md).
+1. See [Apply Switch Configurations](apply_switch_configurations.md).
 
 ## Dell
 
@@ -107,7 +107,7 @@ Out-of-band access to the switches (console)
 
    > **`NOTE`** The default username and password are `admin`.
 
-1. See [Apply Switch Configs](apply_switch_configs.md) procedure.
+1. See [Apply Switch Configurations](apply_switch_configurations.md) procedure.
 
 ## Mellanox
 
