@@ -28,6 +28,8 @@ The initial VCS credentials for the `crayvcs` user are obtained with the followi
 ncn# kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode
 ```
 
+## Change VCS administrative user password
+
 The initial VCS login credentials for the `crayvcs` user are stored in three places:
 
 * `vcs-user-credentials` Kubernetes secret: This is used to initialize the other two locations, as well as providing a place where other users can query for the password.
@@ -38,20 +40,191 @@ The initial VCS login credentials for the `crayvcs` user are stored in three pla
 > **WARNING:** These three sources of credentials are not synced by any mechanism. Changing the default password requires that is it changed in all three places. Changing only
 > one may result in difficulty determining the password at a later date, or may result in losing access to VCS altogether.
 
-To change the password in the `vcs-user-credentials` Kubernetes secret, use the following command:
+To change the password in the `vcs-user-credentials` Kubernetes secret, use the following procedure:
 
-In the command below, the `NEW_PASSWORD` value must be replaced with the updated password.
+1. Log in to Keycloak with the default `admin` credentials.
 
-> **WARNING:** The following command includes the new password in plaintext on the command line, meaning it will be stored in the shell history as well
-> as be visible to all users on the system in the process table. These dangers can be avoided by creating the secret using an alternative method
-> (for example, using the `--from-env-file` or `--from-file` arguments to `kubectl create secret generic`).
+   Point a browser at `https://auth.SYSTEM_DOMAIN_NAME/keycloak/admin`, replacing `SYSTEM_DOMAIN_NAME` with the actual NCN's DNS name.
 
-```bash
-ncn# kubectl create secret generic vcs-user-credentials --save-config \
-        --from-literal=vcs_username="crayvcs" \
-        --from-literal=vcs_password="NEW_PASSWORD" \
-        --dry-run=client -o yaml | kubectl apply -f -
-```
+   The following is an example URL for a system: `https://auth.cmn.system1.us.cray.com/keycloak/admin`
+
+   Use the following `admin` login credentials:
+
+   * Username: `admin`
+   * The password can be obtained with the following command:
+
+     ```bash
+     ncn# kubectl get secret -n services keycloak-master-admin-auth \
+                  --template={{.data.password}} | base64 --decode
+     ```
+
+1. Ensure the selected Realm is `Shasta` from the top-left dropdown in the left sidebar.
+
+1. From the left sidebar, under the `Manage` section, select `Users`.
+
+1. In the `Search...` textbox, type in `crayvcs` and click the search icon.
+
+1. In the filtered table below, click on the ID for the row that shows `crayvcs` in the `Username` column.
+
+1. Go to the `Credentials` tab and change the password.
+
+   Enter the new password in the `Reset Password` form. Ensure `Temporary` is switched **off**. Click on `Reset Password` button.
+
+1. Log in to Gitea with the default `admin` credentials.
+
+   Point the browser at `https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/user/settings/account`.
+
+   If presented with Keycloak login, use `crayvcs` as the username and the new VCS password. Wait to be redirected to the Gitea login page before continuing to the next step.
+
+1. Use the following Gitea login credentials:
+
+   * Username: `crayvcs`
+   * The old VCS password, which can be obtained with the following command:
+
+     ```bash
+     ncn# kubectl get secret -n services vcs-user-credentials \
+             --template={{.data.vcs_password}} | base64 --decode
+     ```
+
+1. Enter the existing password (from previous step), new password, and confirmation, and then click `Update Password`.
+1. Now SSH into `ncn-w001` or `ncn-m001`.
+1. Run `git clone https://github.com/Cray-HPE/csm.git`.
+1. Copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` to the desired working directory.
+1. Change directories to be in the working directory set in the previous step.
+1. Save a local copy of the `customizations.yaml` file.
+
+    ```bash
+    ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' |
+         base64 -d > customizations.yaml
+    ```
+
+1. Change the password in the `customizations.yaml` file.
+
+   The Gitea `crayvcs` password is stored in the `vcs-user-credentials` Kubernetes Secret in the `services` namespace. This must be updated so that clients which need to make requests can authenticate with the new password.
+
+   In the `customizations.yaml` file, set the values for the `gitea` keys in the `spec.kubernetes.sealed_secrets` field.
+   The value in the data element where the name is `password` needs to be changed to the new Gitea password. The section
+   below will replace the existing sealed secret data in the `customizations.yaml` file.
+
+   For example:
+
+    ```yaml
+          gitea:
+            generate:
+              name: vcs-user-credentials
+              data:
+              - type: static
+                args:
+                  name: vcs_password
+                  value: my_secret_password
+              - type: static
+                args:
+                  name: vcs_username
+                  value: crayvcs
+    ```
+
+1. Upload the modified `customizations.yaml` file to Kubernetes.
+
+   ```bash
+   ncn# kubectl delete secret -n loftsman site-init
+   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+
+1. Encrypt the values after changing the `customizations.yaml` file.
+
+    ```bash
+    ncn# ./secrets-seed-customizations.sh customizations.yaml
+    ```
+
+   If the above command complains that it cannot find `certs/sealed_secrets.crt`, then you can run the following commands to create it:
+
+    ```bash
+    ncn# mkdir -p ../certs &&
+         ./bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > ../certs/sealed_secrets.crt
+    ```
+
+1. Get the current cached `sysmgmt` manifest and save it into a `gitea.yaml` file.
+
+    ```bash
+    ncn# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > gitea.yaml
+    ```
+
+1. Run the following command to remove non-Gitea charts from the `gitea.yaml` file. This will also change the `metadata.name` so
+   that it does not overwrite the `sysmgmt.yaml` file that is stored in the `loftsman` namespace.
+
+   ```bash
+   ncn# for i in $(yq r gitea.yaml 'spec.charts[*].name' | grep -Ev '^gitea'); do yq d -i gitea.yaml  'spec.charts(name=='"$i"')'; done
+   ncn# yq w -i gitea.yaml metadata.name gitea
+   ncn# yq d -i gitea.yaml spec.sources
+   ncn# yq w -i gitea.yaml spec.sources.charts[0].location 'https://packages.local/repository/charts'
+   ncn# yq w -i gitea.yaml spec.sources.charts[0].name csm-algol60
+   ncn# yq w -i gitea.yaml spec.sources.charts[0].type repo
+   ```
+
+1. Example `gitea.yaml` after the command is run:
+
+   Example:
+
+    ```yaml
+    apiVersion: manifests/v1beta1
+      metadata:
+        name: sysmgmt
+      spec:
+        charts:
+          - name: gitea
+            namespace: services
+            source: csm-algol60
+            values:
+              cray-service:
+                sealedSecrets:
+                - apiVersion: bitnami.com/v1alpha1
+                  kind: SealedSecret
+                  metadata:
+                    annotations:
+                      sealedsecrets.bitnami.com/cluster-wide: 'true'
+                      ...
+        sources:
+          charts:
+            - location: https://packages.local/repository/charts
+              name: csm-algol60
+              type: repo
+    ...
+    ```
+
+1. Generate the manifest that will be used to redeploy the chart with the modified resources.
+
+    ```bash
+    ncn# manifestgen -c customizations.yaml -i gitea.yaml -o manifest.yaml
+    ```
+
+1. Validate that the `manifest.yaml` file only contains chart information for Gitea, and that the sources chart location
+   points to `https://packages.local/repository/charts`.
+
+1. Re-apply the `gitea` Helm chart with the updated `customizations.yaml` file.
+
+   This will update the `vcs-user-credentials` SealedSecret which will cause the SealedSecret controller to update the Secret.
+
+    ```bash
+    ncn# loftsman ship --manifest-path ${PWD}/manifest.yaml
+    ```
+
+1. Verify that the Secret has been updated.
+
+   Give the SealedSecret controller a few seconds to update the Secret, then run the following command to see the current value of the Secret:
+
+    ```bash
+    ncn# kubectl get secret -n services vcs-user-credentials \
+                 --template={{.data.vcs_password}} | base64 --decode
+    ```
+
+1. Save an updated copy of `customizations.yaml` to the `site-init` secret in the `loftsman` Kubernetes namespace.
+
+    ```bash
+    ncn# CUSTOMIZATIONS=$(base64 < customizations.yaml  | tr -d '\n')
+    ncn# kubectl get secrets -n loftsman site-init -o json |
+            jq ".data.\"customizations.yaml\" |= \"$CUSTOMIZATIONS\"" |
+            kubectl apply -f -
+    ```
 
 ## Access the `cray` Gitea organization
 
