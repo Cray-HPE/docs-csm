@@ -89,7 +89,6 @@ For each item in the `Hardware Precedence Order`:
 3. If `succeeded` count > 0, now perform a live update.
 
 4. Update the JSON file `overrideDryrun` to `true`:
-
   1. `cray fas actions create {jsonfile}`
     1. Note the ActionID!
     2. Poll the status of the action until the action `state` is `completed`:
@@ -104,9 +103,8 @@ For each item in the `Hardware Precedence Order`:
 After identifying which hardware is in the system, start with the top most item on this list to update. If any of the following hardware is not in the system, skip it.
 
 >**IMPORTANT:**
->* This process does not communicate the SAFE way to update NCNs. If the NCNs and their BMCs have not been locked, or FAS is blindly used to update NCNs without following the correct process, then **THE STABILITY OF THE SYSTEM WILL BE JEOPARDIZED**.
->* Read the corresponding recipes before updating. There are sometimes ancillary actions that must be completed in order to ensure update integrity.
-
+>This process does not communicate the SAFE way to update NCNs. If the NCNs and their BMCs have not been locked, or FAS is blindly used to update NCNs without following the correct process, then **THE STABILITY OF THE SYSTEM WILL BE JEOPARDIZED**.
+>Read the corresponding recipes before updating. There are sometimes ancillary actions that must be completed in order to ensure update integrity.
 > **NOTE:** To update Switch Controllers \(sC\) or RouterBMC, refer to the Rosetta Documentation.
 
 1. [Cray](FAS_Recipes.md#manufacturer-cray)
