@@ -45,6 +45,7 @@ Column mapping from SHCD to `hmn_connections.json`:
 | S20         | Location         | DestinationLocation   | Rack slot of the management switch              |
 | T20         |                  | `not used`            |                                                 |
 | U20         | Port             | DestinationPort       | Switch port on the management switch            |
+
 > Only J20 needs to have the column name of `Source`. There are no requirements on what the other columns should be named.
 
 
@@ -97,6 +98,7 @@ Example 4 compute nodes in the same chassis with a CMC connected to the network.
 | nid000003       | x3000 | u18      | L   | SubRack-001-CMC | -   | j3   | sw-smn01    | x3000  | u14      | -   | j34  |
 | nid000004       | x3000 | u17      | L   | SubRack-001-CMC | -   | j3   | sw-smn01    | x3000  | u14      | -   | j33  |
 | SubRack-001-CMC | x3000 | u17      |     |                 | -   | cmc  | sw-smn01    | x3000  | u14      | -   | j32  |
+
 > Note that `Source` names like `cn1` and `cn-01` are equivalent to the value `nid000001`
 
 Example 4 compute nodes in the same chassis without a CMC connected to the HMN network.
@@ -108,6 +110,7 @@ Example 4 compute nodes in the same chassis without a CMC connected to the HMN n
 | nid000003       | x3000 | u18      | L   | SubRack-001-CMC | -   | j3   | sw-smn01    | x3000  | u14      | -   | j34  |
 | nid000004       | x3000 | u17      | L   | SubRack-001-CMC | -   | j3   | sw-smn01    | x3000  | u14      | -   | j33  |
 | SubRack-001-CMC | x3000 | u17      |     |                 | -   |      |             |        |          |     |      |
+
 > Note that `Source` names like `cn1` and `cn-01` are equivalent to the value `nid000001`
 
 
@@ -301,6 +304,7 @@ A single chassis node with NID 1 located in slot 2 of cabinet 3000. The node's B
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
 | nid000001       | x3000 | u02      |     |                 | -   | j03  | sw-smn01    | x3000  | u40      | -   | j36  |
+
 > Note that `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`
 
 #### HMN Connections
@@ -368,6 +372,7 @@ A compute node chassis with 2 nodes located in slot 8 of cabinet 3000. NID 1 is 
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
 | nid000001       | x3000 | u08      | L   |                 | -   | j03  | sw-smn01    | x3000  | u40      | -   | j38  |
 | nid000002       | x3000 | u08      | R   |                 | -   | j03  | sw-smn01    | x3000  | u40      | -   | j37  |
+
 > Note that `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`
 
 #### HMN Connections
@@ -770,6 +775,7 @@ An application node chassis with 2 nodes located in slot 8 of cabinet 3000. `uan
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
 | uan01           | x3000 | u08      | L   |                 | -   | j03  | sw-smn01    | x3000  | u40      | -   | j38  |
 | uan02           | x3000 | u08      | R   |                 | -   | j03  | sw-smn01    | x3000  | u40      | -   | j37  |
+
 > Note that `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`
 
 #### HMN Connections
@@ -813,6 +819,7 @@ A Columbia Slingshot Switch in slot 42 of cabinet 3000. Its BMC is connected to 
 | Source          | Rack  | Location |     | Parent          |     | Port | Destination | Rack   | Location |     | Port |
 | --------------- | ----- | -------- | --- | --------------- | --- | ---- | ----------- | ------ | -------- | --- | ---- |
 | sw-hsn01        | x3000 | u42      | -   |                 |     | j3   | sw-smn01    | x3000  | u38      | -   | j45  |
+
 > Note that `Source` values like `Columbia` or `columbia` are also valid.
 
 ### HMN Connections
