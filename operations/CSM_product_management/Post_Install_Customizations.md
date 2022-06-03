@@ -7,7 +7,7 @@ Not all resources can be customized post-install; common scenarios are documente
 The following is a guide for determining where issues may exist, how to adjust the resources, and how to ensure the changes will persist.
 Different values may be be needed for systems as they scale.
 
-## Kubectl events `OOMKilled`
+## `kubectl` events `OOMKilled`
 
 Check to see if there are any recent out of memory events.
 
@@ -59,7 +59,7 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 
 1. Search for the "Kubernetes / Compute Resources / Pod" dashboard.
 
-1. Select the datasource, namespace, and pod based on the pod being examined.
+1. Select the `datasource`, `namespace`, and `pod` based on the pod being examined.
 
    For example:
 
@@ -253,7 +253,7 @@ Trial and error may be needed to determine what is best for a given system at sc
 
 ### Postgres pods are `OOMKilled` or CPU throttled
 
-Update resources associated with spire-postgres in the `spire` namespace.
+Update resources associated with `spire-postgres` in the `spire` namespace.
 This example is based on what was needed for a system with 4000 compute nodes.
 Trial and error may be needed to determine what is best for a given system at scale.
 
@@ -435,7 +435,7 @@ Trial and error may be needed to determine what is best for a given system at sc
    ```
 
 1. Edit the `sysmgmt.yaml` to only include the `cray-hms-bss` chart and all its current data.
-   The replicaCount specified above will be updated in the next step and the version may differ, because this is an example.
+   The `replicaCount` specified above will be updated in the next step and the version may differ, because this is an example.
 
    ```yaml
    apiVersion: manifests/v1beta1
@@ -595,7 +595,7 @@ Refer to the note at the end of this section for more details.
    ```
 
 1. If the status on the above command is `SyncFailed` instead of `Running`, refer to *Case 1* in the
-   *SyncFailed* section of [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md#syncfailed).
+   `SyncFailed` section of [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md#syncfailed).
    At this point the Postgres cluster is healthy, but additional steps are required to complete the resize of the Postgres PVCs.
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location.
