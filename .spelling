@@ -46,6 +46,7 @@
 8325-48Y8C
 ACLs
 airgapped
+Alertmanager
 analog
 analyze
 analyzed
@@ -443,6 +444,7 @@ RPMs
 RPs
 RSAv1
 RSAv2
+Rsyslog
 Runbook
 S-8000
 S-8024
@@ -592,14 +594,18 @@ Init
 # To allow Site Init
 Init
 
- - install/prepare_configuration_payload.md
+- install/prepare_configuration_payload.md
 # To allow Site Init
 Init
 
- - introduction/site_survey.md
+- introduction/site_survey.md
 # To allow Site Init
 Init
 
 - operations/security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md
 # To allow Site Init
 Init
+
+- operations/network/management_network/upgrade.md
+Preconfig
+preconfig

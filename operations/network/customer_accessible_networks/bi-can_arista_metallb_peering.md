@@ -105,9 +105,9 @@ SLS entries from the above output:
                 "Name": "chn-switch-2"
 ```
 
-The following config is needed on both switches:
+The following configuration is needed on both switches:
 
-- The prefix list will be the subnet of the CHN, the `ge` will equal the cidr.
+- The prefix list will be the subnet of the CHN, the `ge` will equal the CIDR.
   - This prevents routes from other networks being installed into the routing table.
 
 - `router bgp 65533` will match the ASN from SLS.`"MyASN": 65533,`

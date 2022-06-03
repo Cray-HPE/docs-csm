@@ -591,7 +591,7 @@ while older systems have Dell and Mellanox switches. Switch IP addresses are gen
 
 The customer accessible networks \(CMN/CAN/CHN\) provide access from outside the customer network to services, NCNs, and User Access Nodes \(UANs\) in the system.
 
-- [Customer Accessible Networks ](network/customer_accessible_networks/Customer_Accessible_Networks.md)
+- [Customer Accessible Networks](network/customer_accessible_networks/Customer_Accessible_Networks.md)
 - [Externally Exposed Services](network/customer_accessible_networks/Externally_Exposed_Services.md)
 - [Connect to the CMN and CAN](network/customer_accessible_networks/Connect_to_the_CMN_CAN.md)
 - [CAN/CMN with Dual-Spine Configuration](network/customer_accessible_networks/Dual_Spine_Configuration.md)

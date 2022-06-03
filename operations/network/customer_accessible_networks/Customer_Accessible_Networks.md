@@ -51,10 +51,10 @@ The user network will allow for the following:
 CMN IP addresses are allocated from a single IP subnet that is configured as the `cmn-cidr` value in the `csi config init` input. This subnet is further divided into three smaller subnets:
 
 - Subnet for NCNs and switches.
-- Subnet for the MetalLB static pool \(cmn-static-pool\).
+- Subnet for the MetalLB static pool \(`cmn-static-pool`\).
   - This is used for services that need to be pinned to the same IP address. For example, the PowerDNS service that needs to be configured in the upstream DNS server.
   - This subnet currently needs only a few IP addresses.
-- Subnet for the MetalLB dynamic pool \(cmn-dynamic-pool\).
+- Subnet for the MetalLB dynamic pool \(`cmn-dynamic-pool`\).
   - This is used for the rest of the externally exposed services and are allocated dynamically. These IP addresses can be allocated differently across deployments because these services are accessed by DNS name rather than by IP.
 
 The minimum size for the CMN subnet is /25. The CMN /25 subnet allows for the following:
@@ -66,18 +66,17 @@ The minimum size for the CMN subnet is /25. The CMN /25 subnet allows for the fo
 
     The 64 service IP addresses will be used for the 6 standard CMN service IP addresses and the remaining 58 IP addresses are for IMS services.
 
-
-![CMN /25 Subnet Layout](../../../img/operations/CMN_25_Subnet.PNG "CMN /25 Subnet Layout")
+![CMN /25 Subnet Layout](../../../img/operations/CMN_25_Subnet.png "CMN /25 Subnet Layout")
 
 If there are more IP addresses needed for any of those sections, then the CMN subnet will need to be larger than a /25.
 
 ### CAN/CHN Subnets
 
-
-CAN or CHN IP addresses are allocated from a single IP subnet that is configured as the `can-cidr` or `chn-cidr` value in the `csi config init` input. Only one of these two networks should be defined. The user network subnet is further divided into two smaller subnets:
+CAN or CHN IP addresses are allocated from a single IP subnet that is configured as the `can-cidr` or `chn-cidr` value in the `csi config init` input. Only one of these two networks should be defined. The user
+network subnet is further divided into two smaller subnets:
 
 - Subnet for NCNs, UANs, and switches.
-- Subnet for the MetalLB dynamic pool \(can-dynamic-pool\) or \(chn-dynamic-pool\).
+- Subnet for the MetalLB dynamic pool \(`can-dynamic-pool`\) or \(`chn-dynamic-pool`\).
   - This is used for all of the externally exposed services and are allocated dynamically. These IP addresses can be allocated differently across deployments because these services are accessed by DNS name rather than by IP.
 
 The minimum size for the CAN or CHN subnet is /27. The /27 subnet allows for the following:
@@ -87,7 +86,7 @@ The minimum size for the CAN or CHN subnet is /27. The /27 subnet allows for the
 
     The 16 service IP addresses will be used for the 2 standard CAN/CHN service IP addresses and the remaining 14 IP addresses are for UAI services.
 
-![CAN/CHN /27 Subnet Layout](../../../img/operations/CAN_CHN_27_Subnet.PNG "CAN/CHN /27 Subnet Layout")
+![CAN/CHN /27 Subnet Layout](../../../img/operations/CAN_CHN_27_Subnet.png "CAN/CHN /27 Subnet Layout")
 
 If there are more than 16 IP addresses needed for either of those sections, then the CAN/CHN subnet will need to be larger than a /27.
 
@@ -101,7 +100,7 @@ The following variables are defined in the `csi config init` input. These exampl
 linux# csi config init
 ```
 
-Example output with CAN: 
+Example output with CAN:
 
 ```text
 [...]
@@ -110,18 +109,18 @@ Example output with CAN:
      --site-domain example.com
      --bican-user-network-name CAN
      --cmn-cidr 10.102.5.0/25
-     --cmn-gateway  10.102.5.1
+     --cmn-gateway 10.102.5.1
      --cmn-static-pool 10.102.5.60/30
      --cmn-dynamic-pool 10.102.5.64/26
      --cmn-external-dns 10.102.5.61
      --can-cidr 10.102.6.0/27
-     --can-gateway  10.102.6.1
+     --can-gateway 10.102.6.1
      --can-dynamic-pool 10.102.6.16/28
 
 [...]
 ```
 
-Example output with CHN: 
+Example output with CHN:
 
 ```text
 [...]
