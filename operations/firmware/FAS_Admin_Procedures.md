@@ -8,12 +8,12 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ## Topics
 
-  * [Warning for Non-Compute Nodes (NCNs)](#warning-for-non-compute-nodes-ncns)
-  * [Ignore Nodes within FAS](#ignore-nodes-within-fas)
-  * [Override an Image for an Update](#override-an-image-for-an-update)
-  * [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
-  * [Load Firmware from Nexus](#load-firmware-from-nexus)
-  * [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file)
+* [Warning for Non-Compute Nodes (NCNs)](#warning-for-non-compute-nodes-ncns)
+* [Ignore Nodes within FAS](#ignore-nodes-within-fas)
+* [Override an Image for an Update](#override-an-image-for-an-update)
+* [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
+* [Load Firmware from Nexus](#load-firmware-from-nexus)
+* [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file)
 
 ---
 
@@ -21,7 +21,9 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ## Warning for Non-Compute Nodes (NCNs)
 
-NCNs and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS. Research [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information. Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
+NCNs and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS.
+Research [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
+Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
 ---
 
@@ -29,23 +31,25 @@ NCNs and their BMCs should be locked with the HSM locking API to ensure they are
 
 ## Ignore Nodes within FAS
 
-The default configuration of FAS no longer ignores `management` nodes, which prevents FAS from firmware updating the NCNs. To reconfigure the FAS deployment to exclude non-compute nodes (NCNs) and ensure they cannot have their firmware upgraded, the `NODE_BLACKLIST` value must be manually enabled
+The default configuration of FAS no longer ignores `management` nodes, which prevents FAS from firmware updating the NCNs.
+To reconfigure the FAS deployment to exclude non-compute nodes (NCNs) and ensure they cannot have their firmware upgraded, the `NODE_BLACKLIST` value must be manually enabled.
 
-**Preferred Method:** Nodes can also be locked with the Hardware State Manager (HSM) API. Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
+**Preferred Method:** Nodes can also be locked with the Hardware State Manager (HSM) API.
+Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
 
 <a name="procedure"></a>
 
-### Procedure
+### Procedure to Ignore Nodes
 
 1. Check that there are no FAS actions running.
 
-    ```
+    ```bash
     ncn# cray fas actions list
     ```
 
-2. Edit the cray-fas deployment.
+2. Edit the `cray-fas` deployment.
 
-    ```
+    ```bash
     ncn# kubectl -n services edit deployment cray-fas
     ```
 
@@ -63,7 +67,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS be
 
 <a name="procedure-1"></A>
 
-### Procedure
+### Procedure to Override an Image
 
 1. Find the available image in FAS.
 
@@ -72,17 +76,16 @@ If an update fails because of `"No Image available"`, it may be caused by FAS be
    ```bash
    ncn# cray fas images list --format json | jq '.[] | .[] | select(.target=="TARGETNAME")'
    ```
-   
+
    To narrow down the selection, update the select field to match multiple items. For example:
-   
+
    ```bash
    ncn# cray fas images list --format json | jq '.[] | .[] | select(.target=="BMC" and .manufacturer=="cray" and .deviceType=="NodeBMC")'
    ```
 
-
    The example command displays one or more images available for updates.
 
-   ```
+   ```text
    {
          "imageID": "ff268e8a-8f73-414f-a9c7-737a34bb02fc",
          "createTime": "2021-02-24T02:25:03Z",
@@ -108,7 +111,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS be
 
    If the `firmwareVersion` from the FAS image matches the `fromFirmwareVersion` from the FAS action, the firmware is at the latest version and no update is needed.
 
-2. Use the imageID from the `cray images list` in the previous step and add the following line to the action JSON file, replacing *IMAGEID* with the imageID.
+2. Use the `imageID` from the `cray images list` in the previous step and add the following line to the action JSON file, replacing *IMAGEID* with the `imageID`.
 
      In this example, the value would be: `ff268e8a-8f73-414f-a9c7-737a34bb02fc`.
 
@@ -119,7 +122,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS be
        }
    ```
 
-   Example actions JSON file with imageFilter added:
+   Example actions JSON file with `imageFilter` added:
 
    ```json
        {
@@ -142,6 +145,7 @@ If an update fails because of `"No Image available"`, it may be caused by FAS be
            "overwriteSameImage":false
          }
        }
+   ```
 
 3. Verify the correct image ID was found.
 
@@ -151,7 +155,8 @@ If an update fails because of `"No Image available"`, it may be caused by FAS be
 
    > **WARNING:** FAS will force a flash of the device -- using incorrect firmware may make it inoperable.
 
-Re-run the FAS actions command using the updated json file. **It is strongly recommended to run a dry-run (overrideDryrun=false) first and check the actions output.**
+Re-run the FAS actions command using the updated JSON file.
+**It is strongly recommended to run a dry-run (`overrideDryrun=false`) first and check the actions output.**
 
 ---
 
@@ -159,89 +164,96 @@ Re-run the FAS actions command using the updated json file. **It is strongly rec
 
 ## Check for New Firmware Versions with a Dry-Run
 
-Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmware can be updated on the system. Dry-runs are enabled by default, and can be configured with the overrideDryrun parameter. A dry-run will create a query according to the filters requested by the admin. It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
+Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmware can be updated on the system.
+Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter.
+A dry-run will create a query according to the filters requested by the admin.
+It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
 
-> **WARNING:** It is crucial that an administrator is familiar with the release notes of any firmware. The release notes will indicate what new features the firmware provides and if there are any incompatibilities. FAS does not know about incompatibilities or dependencies between versions. The administrator assumes full responsibility for this knowledge.
+> **WARNING:** It is crucial that an administrator is familiar with the release notes of any firmware.
+> The release notes will indicate what new features the firmware provides and if there are any incompatibilities.
+> FAS does not know about incompatibilities or dependencies between versions. The administrator assumes full responsibility for this knowledge.
 
-It is likely that when performing a firmware update, that the current version of firmware will not be available. This means that after successfully upgrading, the firmware cannot be downgraded.
+It is likely that when performing a firmware update, that the current version of firmware will not be available.
+This means that after successfully upgrading, the firmware cannot be downgraded.
 
 This procedure includes information on how check the firmware versions for the entire system, as well as how to target specific manufacturers, component names (xnames), and targets.
 
 <a name="procedure-2"></a>
 
-### Procedure
+### Procedure to Check for New Firmware
 
 1. Run a dry-run firmware update.
 
-	The following command parameters should be included in dry-run JSON files:
+    The following command parameters should be included in dry-run JSON files:
 
-	* `overrideDryrun`: The `overrideDryrun` parameter is set to `false` by default. FAS will only update the system if this is parameter is set to `true`.
-	* `restoreNotPossibleOverride`: FAS will not perform an update if the currently running firmware is not available in the images repository. Set this parameter to `true` in order to allow FAS to update firmware even if the current firmware is unavailable on the system.
-	* `description`: A brief description that helps administrators distinguish between actions.
-	* `version`: Determines if the firmware should be set to the `latest`, the `earliest` semantic version, or set to a specific firmware version.
+    * `overrideDryrun`: The `overrideDryrun` parameter is set to `false` by default. FAS will only update the system if this is parameter is set to `true`.
+    * `restoreNotPossibleOverride`: FAS will not perform an update if the currently running firmware is not available in the images repository.
+    Set this parameter to `true` in order to allow FAS to update firmware even if the current firmware is unavailable on the system.
+    * `description`: A brief description that helps administrators distinguish between actions.
+    * `version`: Determines if the firmware should be set to the `latest`, the `earliest` semantic version, or set to a specific firmware version.
 
-	Use one of the options below to run on a dry-run on every system device or on targeted devices:
+    Use one of the options below to run on a dry-run on every system device or on targeted devices:
 
-	**Option 1:** Determine the available firmware for every device on the system:
+    **Option 1:** Determine the available firmware for every device on the system:
 
-    1. Create a JSON file for the command parameters.
+      1. Create a JSON file for the command parameters.
 
-        ```json
+          ```json
+          {
+            "command": {
+              "restoreNotPossibleOverride": true,
+              "timeLimit": 1000,
+              "description": "full system dryrun 2020623_0"
+            }
+          }
+          ```
+
+      2. Run the dry-run for the full system.
+
+          ```bash
+          ncn# cray fas actions create COMMAND.json
+          ```
+
+          Proceed to the next step to determine if any firmware needs to be updated.
+
+    **Option 2:** Determine the available firmware for specific devices:
+
+      1. Create a JSON file with the specific device information to target when doing a dry-run.
+
+      ```json
         {
-          "command": {
+        "stateComponentFilter": {
+            "xnames": [
+              "x9000c1s3b1"
+            ]
+          },
+        "inventoryHardwareFilter": {
+            "manufacturer": "cray"
+            },
+        "targetFilter": {
+            "targets": [
+                "Node1.BIOS",
+                "Node0.BIOS"
+            ]
+          },
+        "command": {
+            "version": "latest",
+            "tag": "default",
+            "overrideDryrun": false,
             "restoreNotPossibleOverride": true,
             "timeLimit": 1000,
-            "description": "full system dryrun 2020623_0"
+            "description": "dryrun upgrade of x9000c1s3b1 Nodex.BIOS to WNC 1.1.2"
           }
         }
-        ```
+      ```
 
-    1. Run the dry-run for the full system.
+      1. Run a dry-run on the targeted devices.
 
-        ```bash
-        ncn# cray fas actions create COMMAND.json
-        ```
+         ```bash
+         ncn# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
+         ```
 
-        Proceed to the next step to determine if any firmware needs to be updated.
-
-	**Option 2:** Determine the available firmware for specific devices:
-
-    1. Create a JSON file with the specific device information to target when doing a dry-run.
-
-       ```json
-       {
-       "stateComponentFilter": {
-           "xnames": [
-             "x9000c1s3b1"
-           ]
-         },
-       "inventoryHardwareFilter": {
-           "manufacturer": "cray"
-           },
-       "targetFilter": {
-           "targets": [
-              "Node1.BIOS",
-              "Node0.BIOS"
-           ]
-         },
-       "command": {
-           "version": "latest",
-           "tag": "default",
-           "overrideDryrun": false,
-           "restoreNotPossibleOverride": true,
-           "timeLimit": 1000,
-           "description": "dryrun upgrade of x9000c1s3b1 Nodex.BIOS to WNC 1.1.2"
-         }
-       }
-       ```
-
-    2. Run a dry-run on the targeted devices.
-
-       ```bash
-       ncn# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
-       ```
-
-       Proceed to the next step to determine if any firmware needs to be updated.
+         Proceed to the next step to determine if any firmware needs to be updated.
 
 2. View the status of the dry-run to determine if any firmware updates can be made.
 
@@ -294,9 +306,9 @@ This procedure includes information on how check the firmware versions for the e
 
       The action is still in progress if the `state` field is not `completed` or `aborted`.
 
-    2. View the details of an action to get more information on each operation in the FAS action.
+   2. View the details of an action to get more information on each operation in the FAS action.
 
-		In the example below, there is an operation for a component name (xname) in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is due to a missing firmware image file.
+      In the example below, there is an operation for a component name (xname) in the failed state, indicating there is something that FAS could do, but it likely would fail. A common cause for an operation failing is due to a missing firmware image file.
 
        ```bash
        ncn# cray fas actions describe {actionID} --format json
@@ -430,6 +442,7 @@ Update the firmware on any devices indicating a new version is needed.
 This procedure will read all RPMs in the Nexus repository and upload firmware images to S3 and create image records for firmware not already in FAS.
 
 1. Check the loader status.
+
     ```bash
     ncn# cray fas loader list | grep loaderStatus
     ```
@@ -499,7 +512,8 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
     A successful run will end with `*** Number of Updates: x ***`.
 
-    > **NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in Nexus. If the number is 0, all images were already in FAS.
+    > **NOTE:** The FAS loader will not overwrite image records already in FAS.
+    >`Number of Updates` will be the number of new images found in Nexus. If the number is 0, all images were already in FAS.
 
 ---
 
@@ -509,7 +523,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
 This procedure will read a single local RPM (or ZIP) file, upload firmware images to S3, and create image records for any firmware that is not already in FAS.
 
-1. Copy the file to ncn-m001 or one of the other NCNs.
+1. Copy the file to `ncn-m001` or one of the other NCNs.
 
 2. Check the loader status:
 
@@ -527,7 +541,7 @@ This procedure will read a single local RPM (or ZIP) file, upload firmware image
 
 3. Run the `loader` command.
 
-    firmware.rpm is the name of the RPM. If the file is not in the current directory, add the path to the filename.
+    `firmware.rpm` is the name of the RPM. If the file is not in the current directory, add the path to the filename.
 
     ```bash
     ncn# cray fas loader create --file firmware.RPM
@@ -562,8 +576,15 @@ This procedure will read a single local RPM (or ZIP) file, upload firmware image
         "2021-04-28T14:40:45Z-FWLoader-INFO-get_file_list(file://download/)",
         "2021-04-28T14:40:45Z-FWLoader-INFO-Processing File: file://download/ ilo5_241.json",
         "2021-04-28T14:40:45Z-FWLoader-INFO-Uploading b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin",
-        "2021-04-28T14:40:45Z-FWLoader-INFO-Metadata {'imageData': \"{'deviceType': 'nodeBMC', 'manufacturer': 'hpe', 'models': ['ProLiant XL270d Gen10', 'ProLiant DL325 Gen10', 'ProLiant DL325 Gen10 Plus', 'ProLiant DL385 Gen10', 'ProLiant DL385 Gen10 Plus', 'ProLiant XL645d Gen10 Plus', 'ProLiant XL675d Gen10 Plus'], 'targets': ['iLO 5'], 'tags': ['default'], 'firmwareVersion': '2.41 Mar 08 2021', 'semanticFirmwareVersion': '2.41.0', 'pollingSpeedSeconds': 30, 'fileName': 'ilo5_241.bin'}\"}",
-        "2021-04-28T14:40:46Z-FWLoader-INFO-IMAGE: {\"s3URL\": \"s3:/fw-update/b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin\", \"target\": \"iLO 5\", \"deviceType\": \"nodeBMC\", \"manufacturer\": \"hpe\", \"models\": [\"ProLiant XL270d Gen10\", \"ProLiant DL325 Gen10\", \"ProLiant DL325 Gen10 Plus\", \"ProLiant DL385 Gen10\", \"ProLiant DL385 Gen10 Plus\", \"ProLiant XL645d Gen10 Plus\", \"ProLiant XL675d Gen10 Plus\"], \"softwareIds\": [], \"tags\": [\"default\"], \"firmwareVersion\": \"2.41 Mar 08 2021\", \"semanticFirmwareVersion\": \"2.41.0\", \"allowableDeviceStates\": [], \"needManualReboot\": false, \"pollingSpeedSeconds\": 30}",
+        "2021-04-28T14:40:45Z-FWLoader-INFO-Metadata {'imageData': \"{'deviceType': 'nodeBMC', 'manufacturer': 'hpe', 'models': ['ProLiant XL270d Gen10', 'ProLiant DL325 Gen10', 'ProLiant DL325 Gen10 Plus', 'ProLiant DL385 Gen10', 'ProLiant DL385 
+        Gen10 Plus', 'ProLiant XL645d Gen10 Plus', 'ProLiant XL675d Gen10 Plus'], 'targets': ['iLO 5'], 'tags': ['default'], 
+        'firmwareVersion': '2.41 Mar 08 2021', 'semanticFirmwareVersion': '2.41.0', 'pollingSpeedSeconds': 30, 'fileName': 
+        'ilo5_241.bin'}\"}",
+        "2021-04-28T14:40:46Z-FWLoader-INFO-IMAGE: {\"s3URL\": \"s3:/fw-update/b73a48cea82f11eb8c8a0242c0a81003/ilo5_241.bin\", 
+        \"target\": \"iLO 5\", \"deviceType\": \"nodeBMC\", \"manufacturer\": \"hpe\", \"models\": [\"ProLiant XL270d Gen10\", 
+        \"ProLiant DL325 Gen10\", \"ProLiant DL325 Gen10 Plus\", \"ProLiant DL385 Gen10\", \"ProLiant DL385 Gen10 Plus\", 
+        \"ProLiant XL645d Gen10 Plus\", \"ProLiant XL675d Gen10 Plus\"], \"softwareIds\": [], \"tags\": [\"default\"], 
+        \"firmwareVersion\": \"2.41 Mar 08 2021\", \"semanticFirmwareVersion\": \"2.41.0\", \"allowableDeviceStates\": [], \"needManualReboot\": false, \"pollingSpeedSeconds\": 30}",
         "2021-04-28T14:40:46Z-FWLoader-INFO-Number of Updates: 1",
         "2021-04-28T14:40:46Z-FWLoader-INFO-Iterate images",
         "2021-04-28T14:40:46Z-FWLoader-INFO-update ACL to public-read for 5ab9f804a82b11eb8a700242c0a81003/wnc.bios-1.1.2.tar.gz",
@@ -576,7 +597,7 @@ This procedure will read a single local RPM (or ZIP) file, upload firmware image
       ]
     }
     ```
-    
+
     A successful run will end with `*** Number of Updates: x ***`.
 
     > **NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.

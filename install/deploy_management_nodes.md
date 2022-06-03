@@ -3,6 +3,7 @@
 The following procedure deploys Linux and Kubernetes software to the management NCNs.
 Deployment of the nodes starts with booting the storage nodes followed by the master nodes
 and worker nodes together.
+
 After the operating system boots on each node, there are some configuration actions which
 take place. Watching the console or the console log for certain nodes can help to understand
 what happens and when. When the process completes for all nodes, the Ceph storage is
@@ -12,7 +13,7 @@ will join Kubernetes after it is rebooted later in
 
 <a name="timing-of-deployments"></a>
 
-## Timing of Deployments
+## Timing of deployments
 
 The timing of each set of boots varies based on hardware. Nodes from some manufacturers will
 POST faster than others or vary based on BIOS setting. After powering a set of nodes on,
@@ -21,44 +22,43 @@ the number of storage and worker nodes.
 
 ## Topics
 
-   1. [Prepare for Management Node Deployment](#prepare_for_management_node_deployment)
-      1. [Tokens and IPMI Password](#tokens-and-ipmi-password)
-      1. [Apply NCN Pre-Boot Workarounds](#apply-ncn-pre-boot-workarounds)
-      1. [Ensure Time Is Accurate Before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
-   1. [Update Management Node Firmware](#update_management_node_firmware)
-   1. [Deploy Management Nodes](#deploy_management_nodes)
-      1. [Deploy Workflow](#deploy-workflow)
+   1. [Prepare for management node deployment](#prepare_for_management_node_deployment)
+      1. [Tokens and IPMI password](#tokens-and-ipmi-password)
+      1. [Apply NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds)
+      1. [Ensure time is accurate before deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
+   1. [Update management node firmware](#update_management_node_firmware)
+   1. [Deploy management nodes](#deploy_management_nodes)
+      1. [Deploy workflow](#deploy-workflow)
       1. [Deploy](#deploy)
-      1. [Check LVM on Masters and Workers](#check-lvm-on-masters-and-workers)
-      1. [Check for Unused Drives on Utility Storage Nodes](#check-for-unused-drives-on-utility-storage-nodes)
-      1. [Apply NCN Post-Boot Workarounds](#apply-ncn-post-boot-workarounds)
-   1. [Configure after Management Node Deployment](#configure_after_management_node_deployment)
-      1. [LiveCD Cluster Authentication](#livecd-cluster-authentication)
-      1. [BGP Routing](#bgp-routing)
-      1. [Install Tests and Test Server on NCNs](#install-tests)
+      1. [Check LVM on Kubernetes NCNs](#check-lvm-on-masters-and-workers)
+      1. [Check for unused drives on utility storage nodes](#check-for-unused-drives-on-utility-storage-nodes)
+      1. [Apply NCN post-boot workarounds](#apply-ncn-post-boot-workarounds)
+   1. [Configure after management node deployment](#configure_after_management_node_deployment)
+      1. [LiveCD cluster authentication](#livecd-cluster-authentication)
+      1. [BGP routing](#bgp-routing)
+      1. [Install tests and test server on NCNs](#install-tests)
       1. [Remove the default NTP pool](#remove-the-default-ntp-pool)
-   1. [Validate Management Node Deployment](#validate_management_node_deployment)
+   1. [Validate management node deployment](#validate_management_node_deployment)
       1. [Validation](#validation)
-      1. [Optional Validation](#optional-validation)
-   1. [Important Checkpoint](#important-checkpoint)
-   1. [Next Topic](#next-topic)
+      1. [Optional validation](#optional-validation)
+   1. [Important checkpoint](#important-checkpoint)
+   1. [Next topic](#next-topic)
 
 <a name="prepare_for_management_node_deployment"></a>
 
-## 1. Prepare for Management Node Deployment
+## 1. Prepare for management node deployment
 
 Preparation of the environment must be done before attempting to deploy the management nodes.
 
 <a name="tokens-and-ipmi-password"></a>
 
-### 1.1 Tokens and IPMI Password
+### 1.1 Tokens and IPMI password
 
 1. Define shell environment variables that will simplify later commands to deploy management nodes.
 
    1. Set `IPMI_PASSWORD` to the root password for the NCN BMCs.
 
-      >  `read -s` is used to prevent the password
-      > from being written to the screen or the shell history.
+      > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
       ```bash
       pit# read -s IPMI_PASSWORD
@@ -70,28 +70,31 @@ Preparation of the environment must be done before attempting to deploy the mana
       > These values do not need to be altered from what is shown.
 
       ```bash
-      pit# export mtoken='ncn-m(?!001)\w+-mgmt' ; export stoken='ncn-s\w+-mgmt' ; export wtoken='ncn-w\w+-mgmt' ; export USERNAME=root
+      pit# mtoken='ncn-m(?!001)\w+-mgmt' ; stoken='ncn-s\w+-mgmt' ; wtoken='ncn-w\w+-mgmt' ; export USERNAME=root
       ```
 
-   Throughout the guide, simple one-liners can be used to query status of expected nodes. If the shell or environment is terminated, these environment variables should be re-exported.
+   Throughout the guide, simple one-liners can be used to query status of expected nodes. If the shell or environment is terminated, these
+   environment variables should be re-exported.
 
    Examples:
 
-   Check power status of all NCNs.
+   * Check power status of all NCNs.
 
-   ```bash
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
-   ```
+      ```bash
+      pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
+              xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
+      ```
 
-   Power off all NCNs.
+   * Power off all NCNs.
 
-   ```bash
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
-   ```
+      ```bash
+      pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
+              xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
+      ```
 
 <a name="apply-ncn-pre-boot-workarounds"></a>
 
-### 1.2 Apply NCN Pre-Boot Workarounds
+### 1.2 Apply NCN pre-boot workarounds
 
 _There will be post-boot workarounds as well._
 
@@ -99,7 +102,7 @@ Follow the [workaround instructions](../update_product_stream/index.md#apply-wor
 
 <a name="ensure-time-is-accurate-before-deploying-ncns"></a>
 
-### 1.3 Ensure Time Is Accurate Before Deploying NCNs
+### 1.3 Ensure time is accurate before deploying NCNs
 
 **NOTE:** Optionally, in order to use a timezone other than UTC, instead of step 1 below, follow
 [this procedure for setting a local timezone](../operations/node_management/Configure_NTP_on_NCNs.md#set-a-local-timezone). Then
@@ -157,8 +160,8 @@ proceed to step 2.
    1. Using another terminal to watch the console, boot the node to BIOS.
 
       ```console
-      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis bootdev bios
-      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power off && sleep 10 && \
+      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis bootdev bios &&
+           ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power off && sleep 10 &&
            ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power on
       ```
 
@@ -199,7 +202,7 @@ proceed to step 2.
 
 <a name="update_management_node_firmware"></a>
 
-## 2. Update Management Node Firmware
+## 2. Update management node firmware
 
 > All firmware can be found in the HFP package provided with the Shasta release.
 
@@ -215,15 +218,15 @@ firmware requirement before starting.
    both been installed and configured. However, at that point a rolling reboot procedure for the management nodes will be needed,
    after the firmware has been updated.
 
-   See the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
-   on the [HPE Customer Support Center](https://www.hpe.com/support/ex-gsg) for information about the _HPE Cray EX HPC Firmware Pack_ (HFP) product.
+   See the `Shasta 1.5 HPE Cray EX System Software Getting Started Guide S-8000`
+   on the [`HPE Customer Support Center`](https://www.hpe.com/support/ex-gsg) for information about the _HPE Cray EX HPC Firmware Pack_ (HFP) product.
 
    In the HFP documentation there is information about the recommended firmware packages to be installed.
    See "Product Details" in the _HPE Cray EX HPC Firmware Pack Installation Guide_.
 
    Some of the component types have manual procedures to check firmware versions and update firmware.
-   See "Upgrading Firmware Without FAS" in the _HPE Cray EX HPC Firmware Pack Installation Guide_.
-   It will be possible to extract the files from the product tarball, but the install.sh script from that product
+   See `Upgrading Firmware Without FAS` in the `HPE Cray EX HPC Firmware Pack Installation Guide`.
+   It will be possible to extract the files from the product tarball, but the `install.sh` script from that product
    will be unable to load the firmware versions into the Firmware Action Services (FAS) because the management nodes
    are not booted and running Kubernetes and FAS cannot be used until Kubernetes is running.
 
@@ -251,7 +254,7 @@ firmware requirement before starting.
 
 <a name="deploy_management_nodes"></a>
 
-## 3. Deploy Management Nodes
+## 3. Deploy management nodes
 
 Deployment of the nodes starts with booting the storage nodes first, then the master nodes and worker nodes together.
 After the operating system boots on each node there are some configuration actions which take place. Watching the
@@ -260,7 +263,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
 <a name="deploy-workflow"></a>
 
-### 3.1 Deploy Workflow
+### 3.1 Deploy workflow
 
 The configuration workflow described here is intended to help understand the expected path for booting and configuring. The actual steps to
 be performed are in the [Deploy](#deploy) section.
@@ -322,6 +325,11 @@ be performed are in the [Deploy](#deploy) section.
     pit# /root/bin/set-sqfs-links.sh
     ```
 
+    > Every NCN except for `ncn-m001` should be included in the output from this script. If that is not the case,
+    > then verify that all NCN BMCs are set to use DHCP. See
+    > [Set node BMCs to DHCP](prepare_management_nodes.md#set_node_bmcs_to_dhcp). After that is done,
+    > re-run the `set-sqfs-links.sh` script.
+
 1. Customize boot scripts for any out-of-baseline NCNs
     * **Worker nodes** with more than two small disks need to make adjustments to [prevent bare-metal `etcd` creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd).
     * For a brief overview of what is expected, see [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline).
@@ -337,7 +345,7 @@ be performed are in the [Deploy](#deploy) section.
 
 1. Validate that the LiveCD is ready for installing NCNs.
 
-   > Observe the output of the checks and note any failures, then remediate them.
+   Observe the output of the checks and note any failures, then remediate them.
 
     ```bash
     pit# csi pit validate --livecd-preflight
@@ -476,9 +484,9 @@ be performed are in the [Deploy](#deploy) section.
 
 <a name="check-lvm-on-masters-and-workers"></a>
 
-### 3.3 Check LVM on Masters and Workers
+### 3.3 Check LVM on Kubernetes NCNs
 
-#### 3.3.1 Run The Check
+#### 3.3.1 Run the check
 
 Run the following command on the PIT node to validate that the expected LVM labels are present on disks on the master and worker nodes. When it prompts you for a password, enter the root password for `ncn-m002`.
 
@@ -486,7 +494,7 @@ Run the following command on the PIT node to validate that the expected LVM labe
 pit# /usr/share/doc/csm/install/scripts/check_lvm.sh
 ```
 
-#### 3.3.2 Expected Check Output
+#### 3.3.2 Expected check output
 
 Expected output looks similar to the following:
 
@@ -521,7 +529,7 @@ If the check succeeds, skip the manual check procedure and recovery steps.
 
 <a name="manual-lvm-check-procedure"></a>
 
-#### 3.3.3 Manual LVM Check Procedure
+#### 3.3.3 Manual LVM check procedure
 
 If needed, the LVM checks can be performed manually on the master and worker nodes.
 
@@ -549,7 +557,7 @@ for details on how to do so.
 
 <a name="lvm-check-failure-recovery"></a>
 
-#### 3.3.3 LVM Check Failure Recovery
+#### 3.3.4 LVM check failure recovery
 
 If there are LVM check failures, then the problem must be resolved before continuing with the install.
 
@@ -567,13 +575,13 @@ If there are LVM check failures, then the problem must be resolved before contin
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 
-### 3.4 Check for Unused Drives on Utility Storage Nodes
+### 3.4 Check for unused drives on utility storage nodes
 
 > **IMPORTANT:** Do the following if NCNs are Gigabyte hardware. It is suggested (but optional) for HPE NCNs.
 >
 > **IMPORTANT:** Estimate the expected number of OSDs using the following table and using this equation:
 >
-> total_osds = (number of utility storage/Ceph nodes) * (OSD count from table below for the appropriate hardware)
+> `total_osds` = `(number of utility storage/Ceph nodes)` `*` `(OSD count from table below for the appropriate hardware)`
 
 | Hardware Manufacturer | OSD Drive Count (not including OS drives)|
 | :-------------------: | :---------------------------------------: |
@@ -591,7 +599,7 @@ If there are LVM check failures, then the problem must be resolved before contin
     24
     ```
 
-   **IMPORTANT:** If the returned number of OSDs is equal to total_osds calculated, then skip the following steps. If not, then proceed with the below additional checks and remediation steps.
+   **IMPORTANT:** If the returned number of OSDs is equal to `total_osds` calculated, then skip the following steps. If not, then proceed with the below additional checks and remediation steps.
 
 1. Compare the number of OSDs to the output (which should resemble the example below). The number of drives will depend on the server hardware.
 
@@ -632,7 +640,7 @@ If there are LVM check failures, then the problem must be resolved before contin
 
 1. Check to see if the number of devices is less than the number of listed drives in the output from step 1.
 
-   ```bash
+    ```bash
     ncn-s# ceph orch device ls|grep dev|wc -l
     24
     ```
@@ -692,7 +700,7 @@ If there are LVM check failures, then the problem must be resolved before contin
     ncn-s# cephadm shell -- ceph-volume inventory --format json-pretty | jq -r '.[]|select(.available==true)|.path'
     ```
 
-#### Wipe and Add Drives
+##### Wipe and add drives
 
 1. Wipe the drive **ONLY after confirming that the drive is not being used by the current Ceph cluster** using options 1, 2, or both.
 
@@ -718,13 +726,13 @@ Follow the [workaround instructions](../update_product_stream/index.md#apply-wor
 
 <a name="configure_after_management_node_deployment"></a>
 
-## 4. Configure after Management Node Deployment
+## 4. Configure after management node deployment
 
 After the management nodes have been deployed, configuration can be applied to the booted nodes.
 
 <a name="livecd-cluster-authentication"></a>
 
-### 4.1 LiveCD Cluster Authentication
+### 4.1 LiveCD cluster authentication
 
 The LiveCD needs to authenticate with the cluster to facilitate the rest of the CSM installation.
 
@@ -772,9 +780,9 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 After the NCNs are booted, the BGP peers will need to be checked and updated if the neighbor IP addresses are incorrect on the switches. Follow the steps
 below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BGP_Neighbors.md) for more details on the BGP configuration.
 
-**IMPORTANT:** If the management switches are using the CANU-generated configuration for CSM 1.0 (a.k.a the CSM 1.2 Preconfig), then this procedure should be skipped.
+**IMPORTANT:** If the management switches are using the CANU-generated configuration for CSM 1.0 (the `CSM 1.2 Preconfig`), then this procedure should be skipped.
 
-1. To check if the management switches are using the CANU-generated configuration for CSM 1.0 (a.k.a the CSM 1.2 Preconfig) log into both spine switches and
+1. To check if the management switches are using the CANU-generated configuration for CSM 1.0 (the `CSM 1.2 Preconfig`) log in to both spine switches and
    see if a login banner exists. It should look similar to the examples below.
 
     The CSM version must be 1.0, and CANU should be present showing a version. An accurate login banner for Mellanox and Aruba will look similar to the following examples:
@@ -804,25 +812,25 @@ below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BG
         ###############################################################################
         ```
 
-1. Make sure the `SYSTEM_NAME` variable is set to name of your system.
+2. Make sure the `SYSTEM_NAME` variable is set to name of your system.
 
     ```bash
     pit# export SYSTEM_NAME=eniac
     ```
 
-1. Determine the IP addresses of the worker NCNs.
+3. Determine the IP addresses of the worker NCNs.
 
     ```bash
     pit# grep -B1 "name: ncn-w" /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
     ```
 
-1. Determine the IP addresses of the switches that are peering.
+4. Determine the IP addresses of the switches that are peering.
 
     ```bash
     pit# grep peer-address /var/www/ephemeral/prep/${SYSTEM_NAME}/metallb.yaml
     ```
 
-1. Run the script appropriate for your switch hardware vendor.
+5. Run the script appropriate for your switch hardware vendor.
 
     * If you have Mellanox switches, run the BGP helper script.
 
@@ -854,7 +862,7 @@ below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BG
         pit# canu -s 1.5 config bgp --ips 10.252.0.2,10.252.0.3 --csi-folder /var/www/ephemeral/prep/${SYSTEM_NAME}/
         ```
 
-1. Do the following steps **for each of the switch IP addresses that you found previously**.
+6. Do the following steps **for each of the switch IP addresses that you found previously**.
 
     1. Log in to the switch as the `admin` user:
 
@@ -862,7 +870,7 @@ below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BG
         pit# ssh admin@<switch_ip_address>
         ```
 
-    1. Check the status of the BGP peering sessions
+    2. Check the status of the BGP peering sessions
         * Aruba: `show bgp ipv4 unicast summary`
         * Mellanox: `show ip bgp summary`
 
@@ -872,7 +880,7 @@ below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BG
 
         You should see that the `MsgRcvd` and `MsgSent` columns for the worker IP addresses are 0.
 
-    1. Check the BGP configuration to verify that the NCN neighbors are configured as passive.
+    3. Check the BGP configuration to verify that the NCN neighbors are configured as passive.
         * Aruba: `show run bgp` The passive neighbor configuration is required. `neighbor 10.252.1.7 passive`
 
             EXAMPLE ONLY
@@ -912,19 +920,17 @@ below and see [Update BGP Neighbors](../operations/network/metallb_bgp/Update_BG
             router bgp 65533 vrf default neighbor 10.252.1.9 transport connection-mode passive
             ```
 
-    1. Repeat the previous steps for the remaining switch IP addresses.
+    4. Repeat the previous steps for the remaining switch IP addresses.
 
 <a name="install-tests"></a>
 
-### 4.3 Install Tests and Test Server on NCNs
+### 4.3 Install tests and test server on NCNs
 
 Run the following commands on the PIT node.
 
 ```bash
 pit# export CSM_RELEASE=csm-x.y.z
-pit# pushd /var/www/ephemeral
-pit# ${CSM_RELEASE}/lib/install-goss-tests.sh
-pit# popd
+pit# pushd /var/www/ephemeral && ${CSM_RELEASE}/lib/install-goss-tests.sh && popd
 ```
 
 <a name="remove-default-ntp-pool"></a>
@@ -957,7 +963,7 @@ ncn-w003: Warning: Permanently added 'ncn-w003,10.252.1.7' (ECDSA) to the list o
 
 <a name="validate_management_node_deployment"></a>
 
-## 5. Validate Management Node Deployment
+## 5. Validate management node deployment
 
 Do all of the validation steps. The optional validation steps are manual steps which could be skipped.
 
@@ -975,15 +981,21 @@ Observe the output of the checks and note any failures, then remediate them.
    pit# csi pit validate --ceph | tee csi-pit-validate-ceph.log
    ```
 
-   Once that command has finished, check the last line of output to see the results of the tests.
+   Once that command has finished, the following will extract the test totals reported for each node:
 
-   Example last line of output:
-
-   ```text
-   Total Tests: 7, Total Passed: 7, Total Failed: 0, Total Execution Time: 1.4226 seconds
+   ```bash
+   pit# grep "Total Test" csi-pit-validate-ceph.log
    ```
 
-   If the test total line reports any failed tests, look through the full output of the test in `csi-pit-validate-ceph.log` to see which node had the failed test and what the details are for that test.
+   Example output for a system with three storage nodes:
+
+   ```text
+   Total Tests: 8, Total Passed: 8, Total Failed: 0, Total Execution Time: 74.3782 seconds
+   Total Tests: 3, Total Passed: 3, Total Failed: 0, Total Execution Time: 0.6091 seconds
+   Total Tests: 3, Total Passed: 3, Total Failed: 0, Total Execution Time: 0.6260 seconds
+   ```
+
+   If these total lines report any failed tests, then look through the full output of the test in `csi-pit-validate-ceph.log` to see which node had the failed test and what the details are for that test.
 
    **Note:** See [Utility Storage](../operations/utility_storage/Utility_Storage.md) in order to help resolve any failed tests.
 
@@ -1012,7 +1024,7 @@ Observe the output of the checks and note any failures, then remediate them.
    Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.2353 seconds
    ```
 
-   If these total lines report any failed tests, look through the full output of the test to see which node had the failed test and what the details are for that test.
+   If these total lines report any failed tests, then look through the full output of the test in `csi-pit-validate-k8s.log` to see which node had the failed test and what the details are for that test.
 
    > **WARNING:** If there are failures for tests with names like `Worker Node CONLIB FS Label`, then manual tests should be run on the node which reported the failure.
    See [Manual LVM Check Procedure](#manual-lvm-check-procedure). If the manual tests fail, then the problem must be resolved before continuing to the next step. See
@@ -1034,7 +1046,7 @@ Observe the output of the checks and note any failures, then remediate them.
 
 <a name="optional-validation"></a>
 
-### 5.2 Optional Validation
+### 5.2 Optional validation
 
    1. Verify that all the pods in the `kube-system` namespace are `Running` or `Completed`.
 
@@ -1046,19 +1058,19 @@ Observe the output of the checks and note any failures, then remediate them.
 
       If any pods are listed by this command, it means they are not in the `Running` or `Completed` state. That needs to be investigated before proceeding.
 
-   1. Verify that the ceph-csi requirements are in place.
+   1. Verify that the `ceph-csi` requirements are in place.
 
       See [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md) for details.
 
 <a name="important-checkpoint"></a>
 
-## Important Checkpoint
+## Important checkpoint
 
 Before proceeding, be aware that this is the last point where the other NCN nodes can be rebuilt without also having to rebuild the PIT node. Therefore, take time to double check both the cluster and the validation test results
 
 <a name="next-topic"></a>
 
-## Next Topic
+## Next topic
 
 After completing the deployment of the management nodes, the next step is to install the CSM services.
 

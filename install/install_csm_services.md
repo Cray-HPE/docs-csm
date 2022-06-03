@@ -4,26 +4,22 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 > **NOTE:** Check the information in [Known Issues](#known-issues) before starting this procedure to be warned about possible problems.
 
-## Topics
-
-   1. [Initialize Bootstrap Registry](#initialize-bootstrap-registry)
-   1. [Create `Site-Init` Secret](#create-site-init-secret)
-   1. [Deploy Sealed Secret Decryption Key](#deploy-sealed-secret-decryption-key)
-   1. [Deploy CSM Applications and Services](#deploy-csm-applications-and-services)
-   1. [Setup Nexus](#setup-nexus)
-   1. [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
-   1. [Apply Pod Priorities](#apply-pod-priorities)
-   1. [Apply `After Sysmgmt Manifest` Workarounds](#apply-after-sysmgmt-manifest-workarounds)
-   1. [Wait For Everything To Settle](#wait-for-everything-to-settle)
-   1. [Known Issues](#known-issues)
-      * [`install.sh` Known Issues](#known-issues-install-sh)
-   1. [Next Topic](#next-topic)
-
-## Details
+1. [Initialize bootstrap registry](#initialize-bootstrap-registry)
+1. [Create `Site-Init` secret](#create-site-init-secret)
+1. [Deploy sealed secret decryption key](#deploy-sealed-secret-decryption-key)
+1. [Deploy CSM applications and services](#deploy-csm-applications-and-services)
+1. [Setup Nexus](#setup-nexus)
+1. [Set NCNs to use Unbound](#set-ncns-to-use-unbound)
+1. [Apply pod priorities](#apply-pod-priorities)
+1. [Apply `After Sysmgmt Manifest` workarounds](#apply-after-sysmgmt-manifest-workarounds)
+1. [Wait for everything to settle](#wait-for-everything-to-settle)
+1. [Known issues](#known-issues)
+   * [`install.sh` known issues](#known-issues-install-sh)
+1. [Next topic](#next-topic)
 
 <a name="initialize-bootstrap-registry"></a>
 
-### 1. Initialize Bootstrap Registry
+## 1. Initialize bootstrap registry
 
 > **`NOTE`** The bootstrap registry runs in a default Nexus configuration,
 > which is started and populated in this section. It only exists during initial
@@ -75,7 +71,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 <a name="create-site-init-secret"></a>
 
-### 2. Create `Site-Init` Secret
+## 2. Create `Site-Init` secret
 
 The `site-init` secret in the `loftsman` namespace makes
 `/var/www/ephemeral/prep/site-init/customizations.yaml` available to product
@@ -153,7 +149,7 @@ secret/site-init created
 
 <a name="deploy-sealed-secret-decryption-key"></a>
 
-### 3. Deploy Sealed Secret Decryption Key
+## 3. Deploy sealed secret decryption key
 
 Deploy the corresponding key necessary to decrypt sealed secrets:
 
@@ -176,12 +172,14 @@ This is expected and can safely be ignored.
 
 <a name="deploy-csm-applications-and-services"></a>
 
-### 4. Deploy CSM Applications and Services
+## 4. Deploy CSM applications and services
 
-> **NOTE**: During this step, on (only) TDS systems with three worker nodes the `customizations.yaml` file will be edited (automatically) to lower pod CPU requests for some services in order to better facilitate scheduling on smaller systems.
-> See the file: `/var/www/ephemeral/${CSM_RELEASE}/tds_cpu_requests.yaml` for these settings.
-> If desired, this file can be modified with different values (prior to executing the `install.sh` script below) if other settings are desired in the `customizations.yaml` file for this system.
-> For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/CSM_product_management/Post_Install_Customizations.md).
+> **NOTE**: During this step, only on systems with only three worker nodes (typically Testing and  Development Systems (TDS)), the `customizations.yaml` file will be
+> automatically edited to lower pod CPU requests for some services, in order to better facilitate scheduling on smaller systems. See the file:
+> `/var/www/ephemeral/${CSM_RELEASE}/tds_cpu_requests.yaml` for these settings. This file can be modified with different values (prior to executing the
+> `yapl` command below), if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml`
+> and tuning for specific systems, see
+> [Post Install Customizations](../operations/CSM_product_management/Post_Install_Customizations.md).
 
 Run `install.sh` to deploy CSM applications services. This command may take 25 minutes or more to run.
 
@@ -239,7 +237,7 @@ cray-ceph-csi-rbd      0/1                      8m36s
 
 <a name="setup-nexus"></a>
 
-### 5. Setup Nexus
+## 5. Setup Nexus
 
 Run `./lib/setup-nexus.sh` to configure Nexus and upload CSM RPM repositories,
 container images, and Helm charts. This command may take 20 minutes or more to run.
@@ -266,7 +264,7 @@ duplicate assets. This is okay as long as `setup-nexus.sh` outputs
 
 <a name="set-ncns-to-use-unbound"></a>
 
-### 6. Set Management NCNs to use Unbound
+## 6. Set Management NCNs to use Unbound
 
 First, verify that SLS properly reports all management NCNs in the system:
 
@@ -349,7 +347,7 @@ ncn-w003: nameserver 10.92.100.225
 
 <a name="apply-pod-priorities"></a>
 
-### 7. Apply Pod Priorities
+## 7. Apply pod priorities
 
 Run the `add_pod_priority.sh` script to create and apply a pod priority class to services critical to CSM.
 This will give these services a higher priority than others to ensure they get scheduled by Kubernetes in the event that resources limited on smaller deployments.
@@ -390,24 +388,24 @@ After running the `add_pod_priority.sh` script, the affected pods will be restar
 
 <a name="apply-after-sysmgmt-manifest-workarounds"></a>
 
-### 8. Apply `After Sysmgmt Manifest` Workarounds
+## 8. Apply `After Sysmgmt Manifest` Workarounds
 
 Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `after-sysmgmt-manifest` breakpoint.
 
 <a name="wait-for-everything-to-settle"></a>
 
-### 9. Wait For Everything To Settle
+## 9. Wait for everything to settle
 
-Wait **at least 15 minutes** to let the various Kubernetes resources get initialized and started before proceeding with the rest of the install.
+Wait **at least 15 minutes** to let the various Kubernetes resources initialize and start before proceeding with the rest of the install.
 Because there are a number of dependencies between them, some services are not expected to work immediately after the install script completes.
 
 <a name="known-issues"></a>
 
-### 10. Known Issues
+## 10. Known issues
 
 <a name="known-issues-install-sh"></a>
 
-#### 10.1 `install.sh` Known Issues
+### 10.1 `install.sh` Known Issues
 
 The `install.sh` script changes cluster state and should not simply be rerun
 in the event of a failure without careful consideration of the specific
@@ -417,45 +415,61 @@ modify `install.sh` to pick up where the previous run left off. (Note: The
 `install.sh` script runs with `set -x`, so each command will be printed to
 `stderr` prefixed with the expanded value of PS4, namely, `+`.)
 
-The following error may occur when running `./install.sh`:
+The following error may occur during `install.sh`:
 
-  ```bash
+  ```text
   + csi upload-sls-file --sls-file /var/www/ephemeral/prep/eniac/sls_input_file.json
   2021/10/05 18:42:58 Retrieving S3 credentials ( sls-s3-credentials ) for SLS
   2021/10/05 18:42:58 Unable to SLS S3 secret from k8s:secrets "sls-s3-credentials" not found
   ```
 
-  1. Verify the `sls-s3-credentials` secret exists in the `default` namespace:
+1. Verify that the `sls-s3-credentials` secret exists in the `default` namespace:
 
-     ```bash
-     pit# kubectl get secret sls-s3-credentials
-     NAME                 TYPE     DATA   AGE
-     sls-s3-credentials   Opaque   7      28d
-     ```
+   ```bash
+   pit# kubectl get secret sls-s3-credentials
+   ```
 
-  2. Check for running sonar-sync jobs. If there are no sonar-sync jobs, then wait for one to complete. The sonar-sync cronjob is responsible for copying the `sls-s3-credentials` secret from the `default` to `services` namespaces.
+   Example output:
 
-     ```bash
-     pit# kubectl -n services get pods -l cronjob-name=sonar-sync
-     NAME                          READY   STATUS      RESTARTS   AGE
-     sonar-sync-1634322840-4fckz   0/1     Completed   0          73s
-     sonar-sync-1634322900-pnvl6   1/1     Running     0          13s
-     ```
+   ```text
+   NAME                 TYPE     DATA   AGE
+   sls-s3-credentials   Opaque   7      28d
+   ```
 
-  3. Verify the `sls-s3-credentials` secret now exists in the `services` namespaces.
+1. Check for running `sonar-sync` jobs. If there are no `sonar-sync` jobs, then wait for one to complete. The `sonar-sync` `CronJob` is responsible
+   for copying the `sls-s3-credentials` secret from the `default` namespace to the `services` namespace.
 
-     ```bash
-     pit# kubectl -n services get secret sls-s3-credentials
-     NAME                 TYPE     DATA   AGE
-     sls-s3-credentials   Opaque   7      20s
-     ```
+   ```bash
+   pit# kubectl -n services get pods -l cronjob-name=sonar-sync
+   ```
 
-  4. Running `install.sh` again is expected to succeed.
+   Example output:
+
+   ```text
+   NAME                          READY   STATUS      RESTARTS   AGE
+   sonar-sync-1634322840-4fckz   0/1     Completed   0          73s
+   sonar-sync-1634322900-pnvl6   1/1     Running     0          13s
+   ```
+
+1. Verify that the `sls-s3-credentials` secret now exists in the `services` namespace.
+
+   ```bash
+   pit# kubectl -n services get secret sls-s3-credentials
+   ```
+
+   Example output:
+
+   ```text
+   NAME                 TYPE     DATA   AGE
+   sls-s3-credentials   Opaque   7      20s
+   ```
+
+1. Running `install.sh` again is expected to succeed.
 
 <a name="next-topic"></a>
 
 ## 11. Next Topic
 
-   After completing this procedure the next step is to redeploy the PIT node.
+The next step is to redeploy the PIT node.
 
-* See [Validate CSM Health Before PIT Node Redeploy](index.md#validate_csm_health_before_pit_redeploy)
+See [Validate CSM Health Before PIT Node Redeploy](index.md#validate_csm_health_before_pit_redeploy).

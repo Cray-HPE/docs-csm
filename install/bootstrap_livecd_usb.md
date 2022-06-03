@@ -14,7 +14,7 @@ There are 5 overall steps that provide a bootable USB with SSH enabled, capable 
       1. [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
       1. [Generate Installation Files](#generate-installation-files)
       1. [CSI Workarounds](#csi-workarounds)
-      1. [Prepare Site Init](#prepare_site_init)
+      1. [Prepare `site-init`](#prepare_site_init)
    1. [Prepopulate LiveCD Daemons Configuration and NCN Artifacts](#prepopulate-livecd-daemons-configuration-and-ncn-artifacts)
    1. [Boot the LiveCD](#boot-the-livecd)
       1. [First Login](#first-login)
@@ -36,7 +36,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 
 1. Download and expand the CSM software release.
 
-   **Important:** In order to ensure that the CSM release plus any patches, workarounds, or hotfixes are included,
+   **Important:** In order to ensure that the CSM release plus any patches, workarounds, or hot fixes are included,
    follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
 
    **Important:** Download to a location that has sufficient space for both the tarball and the expanded tarball.
@@ -44,7 +44,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
    > Note: Expansion of the tarball may take more than 45 minutes.
 
    The rest of this procedure will use the `CSM_RELEASE` variable and expects to have the
-   contents of the CSM software release tarball plus any patches, workarounds, or hotfixes.
+   contents of the CSM software release tarball plus any patches, workarounds, or hot fixes.
 
    ```bash
    linux# CSM_RELEASE=csm-x.y.z
@@ -84,7 +84,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
    Git Version    : b3ed3046a460d804eb545d21a362b3a5c7d517a3
    Platform       : linux/amd64
    App. Version   : 1.5.18
-    ```
+   ```
 
 1. Configure `zypper` with the `embedded` repository from the CSM release.
 
@@ -155,7 +155,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 
 ## 2. Create the Bootable Media
 
-Cray Site Init will create the bootable LiveCD. Before creating the media, identify
+Cray `site-init` will create the bootable LiveCD. Before creating the media, identify
 which device will be used for it.
 
 1. Identify the USB device.
@@ -235,13 +235,13 @@ on to the [configuration payload](#configuration-payload).
 
 ## 3. Configuration Payload
 
-The SHASTA-CFG structure and other configuration files will be prepared, then `csi` will generate a system-unique configuration payload. This payload will be used
+The `SHASTA-CFG` structure and other configuration files will be prepared, then `csi` will generate a system-unique configuration payload. This payload will be used
 for the rest of the CSM installation on the USB device.
 
 * [Before Configuration Payload Workarounds](#before-configuration-payload-workarounds)
 * [Generate Installation Files](#generate-installation-files)
 * [CSI Workarounds](#csi-workarounds)
-* [Prepare Site Init](#prepare_site_init)
+* [Prepare `site-init`](#prepare_site_init)
 
 <a name="before-configuration-payload-workarounds"></a>
 
@@ -289,7 +289,7 @@ information for this system has not yet been prepared.
    > the information in it must be provided as command line arguments to `csi config init`.
 
 1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration
-   (see [Cray Site Init Files](../background/index.md#cray_site_init_files)).
+   (see [Cray `site-init` Files](../background/index.md#cray_site_init_files)).
 
    > **Warning:** If the `system_config.yaml` file is unavailable, then skip this step and proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
 
@@ -445,7 +445,15 @@ information for this system has not yet been prepared.
       >    {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
       >    ```
 
-   1. Continue to the next step to apply the csi-config workarounds.
+   1. Link the generated `system_config.yaml` file into the `prep/` directory. This is needed for `pit-init` to find and resolve the file.
+
+      > **`NOTE`** This step is needed only for fresh installs where `system_config.yaml` is missing from the `prep/` directory.
+
+      ```bash
+      pit# cd ${PITDATA}/prep && ln ${SYSTEM_NAME}/system_config.yaml
+      ```
+
+   1. Continue to the next step to apply the `csi-config` workarounds.
 
 <a name="csi-workarounds"></a>
 
@@ -455,9 +463,9 @@ Follow the [workaround instructions](../update_product_stream/index.md#apply-wor
 
 <a name="prepare_site_init"></a>
 
-#### 3.4 Prepare Site Init
+#### 3.4 Prepare `site-init`
 
-Follow the procedures to [Prepare Site Init](prepare_site_init.md) directory for your system.
+Follow the procedures to [Prepare `site-init`](prepare_site_init.md) directory for your system.
 
 <a name="prepopulate-livecd-daemons-configuration-and-ncn-artifacts"></a>
 
@@ -507,7 +515,7 @@ This will enable SSH, and other services when the LiveCD starts.
    linux# echo "${SYSTEM_NAME}-ncn-m001-pit" >/mnt/cow/rw/etc/hostname
    ```
 
-1. Unmount the Overlay, we are done with it
+1. Unmount the Overlay, we are done with it.
 
     ```bash
     linux# umount -v /mnt/cow
@@ -541,7 +549,7 @@ This will enable SSH, and other services when the LiveCD starts.
     --sealed-secret-key-file /mnt/pitdata/prep/site-init/certs/sealed_secrets.key
    ```
 
-1. Copy k8s artifacts:
+1. Copy Kubernetes artifacts:
 
     ```bash
     linux# csi pit populate pitdata "${CSM_PATH}/images/kubernetes/" /mnt/pitdata/data/k8s/ -kiK
@@ -627,7 +635,7 @@ See the [set boot order](../background/ncn_boot_workflow.md#set-boot-order) page
     ncn-m001# reboot
     ```
 
-Watch the shutdown and boot from the ipmitool session to the console terminal.
+Watch the shutdown and boot from the `ipmitool` session to the console terminal.
 The typescript can be discarded, otherwise if issues arise then it should be submitted with the bug report.
 
 > **An integrity check** runs before Linux starts by default, it can be skipped by selecting "OK" in its prompt.
@@ -697,7 +705,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
 
-   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
+   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hot fixes
    were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
 
    ```bash
@@ -773,7 +781,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    c7638b573b93  dtr.dev.cray.com/cray/metal-basecamp:1.1.0-1de4aa6                        5 minutes ago  Up 5 minutes ago          basecamp
    ```
 
-1. Follow directions in the output from the 'csi pit validate' commands for failed validations before continuing.
+1. Follow directions in the output from the `csi pit validate` commands for failed validations before continuing.
 
 <a name="next-topic"></a>
 
@@ -781,4 +789,4 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 After completing this procedure, the next step is to configure the management network switches.
 
-See [Configure Management Network Switches](index.md#configure_management_network)
+See [Configure Management Network Switches](index.md#configure_management_network).

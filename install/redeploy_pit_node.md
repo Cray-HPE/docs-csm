@@ -7,24 +7,23 @@ join the Kubernetes cluster as the final of three master nodes, forming a quorum
 **IMPORTANT:** While the node is rebooting, it will only be available through Serial-Over-LAN (SOL) and local terminals. This
 procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be unavailable.
 
-* [Required Services](#required-services)
-* [Notice of Danger](#notice-of-danger)
-* [Hand-Off](#hand-off)
-  * [Start Hand-Off](#start-hand-off)
-* [Reboot](#reboot)
-* [Enable NCN Disk Wiping Safeguard](#enable-ncn-disk-wiping-safeguard)
-* [Fix NTP on `ncn-m001`](#fix-ntp-config-on-ncn-m001)
-* [Remove the default NTP pool](#remove-the-default-ntp-pool)
-* [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
-* [Validate `BOOTRAID` artifacts](#validate-bootraid-artifacts)
-* [Next Topic](#next-topic)
+1. [Required services](#required-services)
+2. [Notice of danger](#notice-of-danger)
+3. [Hand-off](#hand-off)
+4. [Reboot](#reboot)
+5. [Enable NCN disk wiping safeguard](#enable-ncn-disk-wiping-safeguard)
+6. [Fix NTP on `ncn-m001`](#fix-ntp-config-on-ncn-m001)
+7. [Remove the default NTP pool](#remove-the-default-ntp-pool)
+8. [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
+9. [Validate `BOOTRAID` artifacts](#validate-bootraid-artifacts)
+10. [Next topic](#next-topic)
 
 <a name="required-services"></a>
 
-## 1. Required Services
+## 1. Required services
 
 These services must be healthy before the reboot of the LiveCD can take place. If the health checks performed earlier in the install
-completed successfully \([Validate CSM Health](../operations/validate_csm_health.md)\), the following platform services will be healthy
+completed successfully \([Validate CSM Health](../operations/validate_csm_health.md)\), then the following platform services will be healthy
 and ready for reboot of the LiveCD:
 
 * Utility Storage (Ceph)
@@ -37,35 +36,26 @@ and ready for reboot of the LiveCD:
 
 <a name="notice-of-danger"></a>
 
-## 2. Notice of Danger
+## 2. Notice of danger
 
 > An administrator is **strongly encouraged** to be mindful of pitfalls during this segment of the CSM install.
 > The steps below do contain warnings themselves, but overall there are risks:
 >
 > * SSH will cease to work when the LiveCD reboots; the serial console will need to be used.
->
-> * Rebooting a remote ISO will dump all running changes on the PIT node; USBs are accessible after the install.
->
+> * Rebooting a remote ISO will dump all running changes on the PIT node; USB devices are accessible after the install.
 > * The NCN **will never wipe a USB device** during installation.
->
-> * Prior to shutting down the PIT node, learning the CAN IP addresses of the other NCNs will be helpful if
+> * Prior to shutting down the PIT node, learning the CMN IP addresses of the other NCNs will be helpful if
 >   troubleshooting is required.
 >
-> This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be
-> **unavailable**.
+> This procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be **unavailable**.
 
 <a name="hand-off"></a>
 
-## 3. Hand-Off
+## 3. Hand-off
 
-The steps in this guide load hand-off data and reboot the LiveCD node.
-
-At the end of these steps, the LiveCD will be no longer active. The node it was using will join
-the Kubernetes cluster as the final of three master nodes, forming a quorum.
+The steps in this section load hand-off data before a later procedure reboots the LiveCD node.
 
 <a name="start-hand-off"></a>
-
-### 3.1 Start Hand-Off
 
 1. Start a new typescript.
 
@@ -126,18 +116,18 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
         * If the NCN images were customized, set the following variables:
 
             ```bash
-            pit# export artdir=/var/www/ephemeral/data
-            pit# export k8sdir=$artdir/k8s
-            pit# export cephdir=$artdir/ceph
+            pit# artdir=/var/www/ephemeral/data
+            pit# k8sdir=$artdir/k8s
+            pit# cephdir=$artdir/ceph
             ```
 
         * If the NCN images were **not** customized, set the following variables:
 
             ```bash
-            pit# export CSM_RELEASE=csm-x.y.z
-            pit# export artdir=/var/www/ephemeral/${CSM_RELEASE}/images
-            pit# export k8sdir=$artdir/kubernetes
-            pit# export cephdir=$artdir/storage-ceph
+            pit# CSM_RELEASE=csm-x.y.z
+            pit# artdir=/var/www/ephemeral/${CSM_RELEASE}/images
+            pit# k8sdir=$artdir/kubernetes
+            pit# cephdir=$artdir/storage-ceph
             ```
 
     1. After setting the variables in the previous step, run the following command.
@@ -152,7 +142,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
                 --ceph-squashfs-path $cephdir/*.squashfs
         ```
 
-        Running this command will output a block that looks like this at the end:
+        The end of the command output contains a block similar to this:
 
         ```text
         Run the following commands so that the versions of the images that were just uploaded can be used in other steps:
@@ -162,9 +152,12 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
     1. Run the `export` commands listed at the end of the output from the previous step.
 
-1. <a name="csi-handoff-bss-metadata"></a>Upload the `data.json` file to BSS, our Kubernetes `cloud-init` DataSource.
+1. <a name="csi-handoff-bss-metadata"></a>Upload the `data.json` file to BSS, our `cloud-init` data source.
 
-    **If any changes have been made** to this file (for example, as a result of any customizations or workarounds), use the path to that file instead. This step will prompt for the root password of the NCNs.
+    **If any changes have been made** to this file (for example, as a result of any customizations or workarounds), then use the path to the
+    modified file instead.
+
+    > This step will prompt for the root password of the NCNs.
 
     ```bash
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
@@ -176,7 +169,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
     pit# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
     ```
 
-1. Ensure the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.
+1. Ensure that the DNS server value is correctly set to point toward Unbound at `10.92.100.225`.
 
     ```bash
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
@@ -187,7 +180,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
     After the PIT node is redeployed, **all files on its local drives will be lost**. It is recommended to retain some of the log files and
     configuration files, because they may be useful if issues are encountered during the remainder of the install.
 
-    The following commands create a tar archive of these files, storing it in a directory that will be backed up in the next step.
+    The following commands create a `tar` archive of these files, storing it in a directory that will be backed up in the next step.
 
     ```bash
     pit# mkdir -pv /var/www/ephemeral/prep/logs &&
@@ -210,9 +203,12 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
 1. Upload the bootstrap information.
 
-    > **NOTE:** This denotes information that should always be kept together in order to fresh-install the system again.
+    > **NOTE:** This preserves information that should always be kept together in order to fresh-install the system again.
 
-    1. Log in; setup passwordless SSH _to_ the PIT node by copying ONLY the public keys from `ncn-m002` and `ncn-m003` to the PIT (**do not setup passwordless SSH _from_ the PIT** or the key will have to be securely tracked or expunged if using a USB installation).
+    1. Log in and set up passwordless SSH **to** the PIT node.
+
+        Copying **only** the public keys from `ncn-m002` and `ncn-m003` to the PIT node. **Do not** set up
+        passwordless SSH **from** the PIT node or the key will have to be securely tracked or expunged if using a USB installation).
 
         > The `ssh` commands below may prompt for the NCN root password.
 
@@ -243,24 +239,28 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
             rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:${CSM_PATH}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
 
-1. List IPv4 boot options using `efibootmgr`.
+1. Set the PIT node to PXE boot.
 
-    ```bash
-    pit# efibootmgr | grep -Ei "ip(v4|4)"
-    ```
+    1. List IPv4 boot options using `efibootmgr`.
 
-1. Set and trim the boot order on the PIT node.
+        ```bash
+        pit# efibootmgr | grep -Ei "ip(v4|4)"
+        ```
 
-    This only needs to be done for the PIT node, not for any of the other NCNs. For the procedures to do this, see [Setting Boot Order](../background/ncn_boot_workflow.md#setting-order) and [Trimming Boot Order](../background/ncn_boot_workflow.md#trimming_boot_order).
+    1. Set and trim the boot order on the PIT node.
 
-1. Tell the PIT node to PXE boot on the next boot.
+        This only needs to be done for the PIT node, not for any of the other NCNs. See
+        [Setting boot order](../background/ncn_boot_workflow.md#setting-order) and
+        [Trimming boot order](../background/ncn_boot_workflow.md#trimming_boot_order).
 
-   Use `efibootmgr` to set the next boot device to the first PXE boot option. This step assumes the boot order was set up in the previous step.
+    1. Tell the PIT node to PXE boot on the next boot.
 
-    ```bash
-    pit# efibootmgr -n $(efibootmgr | grep -Ei "ip(v4|4)" | awk '{print $1}' | head -n 1 | tr -d Boot*) | grep -i bootnext
-    BootNext: 0014
-    ```
+        Use `efibootmgr` to set the next boot device to the first PXE boot option. This step assumes the boot order was set up in the previous step.
+
+        ```bash
+        pit# efibootmgr -n $(efibootmgr | grep -Ei "ip(v4|4)" | awk '{print $1}' | head -n 1 | tr -d Boot*) | grep -i bootnext
+        BootNext: 0014
+        ```
 
 1. <a name="collect-can-ip-ncn-m002"></a>Collect a backdoor login. Fetch the CAN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
 
@@ -270,7 +270,7 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
         pit# ssh ncn-m002 'ip a show vlan007 | grep inet'
         ```
 
-        _Expected output will look similar to the following (exact values may differ)_:
+        Expected output will look similar to the following (exact values may differ):
 
         ```text
         inet 10.102.11.13/24 brd 10.102.11.255 scope global vlan007
@@ -285,16 +285,16 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
         ```
 
         > Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN.
-        > If the reboot successfully deploys the LiveCD, this terminal can be exited.
+        > If the reboot successfully deploys the LiveCD, then this terminal can be exited.
         >
-        > **POINT OF NO RETURN:** The next step will wipe the underlying nodes disks clean, it will ignore USB devices.
+        > **POINT OF NO RETURN:** The next step will wipe the underlying nodes disks clean. It will ignore USB devices.
         > RemoteISOs are at risk here; even though a backup has been performed of the PIT node, it is not possible to
         > boot back to the same state. This is the last step before rebooting the node.
 
 1. Wipe the disks on the PIT node.
 
-    > **WARNING:** Risk of **USER ERROR**! Do not assume to wipe the first three disks (e.g. `sda`, `sdb`, and `sdc`); they are not
-    > pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**. USB devices can
+    > **WARNING:** Risk of **USER ERROR**! Do not assume to wipe the first three disks (for example, `sda`, `sdb`, and `sdc`);
+    > they are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**. USB devices can
     > only be wiped by operators at this point in the install. USB devices are never wiped by the CSM installer.
 
     1. Select disks to wipe (SATA/NVME/SAS).
@@ -368,13 +368,14 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
     pit# reboot
     ```
 
-1. Wait for the node to boot, acquire its hostname (i.e. `ncn-m001`), and run `cloud-init`.
+1. Wait for the node to boot, acquire its hostname (`ncn-m001`), and run `cloud-init`.
 
-    If all of that happens successfully, **skip the rest of this step and proceed to the next step**. Otherwise, use the following information to remediate the problems.
+    If all of that happens successfully, then **skip the rest of this step and proceed to the next step**. Otherwise, use the following information to remediate the problems.
 
-    > **NOTE:** If the node has PXE boot issues, such as getting PXE errors or not pulling the `ipxe.efi` binary, see [PXE boot troubleshooting](pxe_boot_troubleshooting.md).
+    > **NOTES:**
     >
-    > **NOTE:** If `ncn-m001` did not run all the `cloud-init` scripts, the following commands need to be run **(but only in that circumstance)**.
+    > * If the node has PXE boot issues, such as getting PXE errors or not pulling the `ipxe.efi` binary, see [PXE boot troubleshooting](pxe_boot_troubleshooting.md).
+    > * If `ncn-m001` did not run all the `cloud-init` scripts, then the following commands need to be run **(but only in that circumstance)**.
 
     ```bash
     ncn-m001# cloud-init clean ; cloud-init init ; cloud-init modules -m init ; \
@@ -402,8 +403,6 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
 1. Run `kubectl get nodes` to see the full Kubernetes cluster.
 
-    > **NOTE:** If the new node fails to join the cluster after running other cloud-init items, refer to the `handoff`.
-
     ```bash
     ncn-m001# kubectl get nodes
     ```
@@ -422,14 +421,19 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
 1. Restore and verify the site link.
 
-    It will be necessary to restore the `ifcfg-lan0` file from either manual backup taken during the prior "Hand-Off" step or
-    re-mount the USB and copy it from the prep directory to `/etc/sysconfig/network/`.
+    Restore networking files from the manual backup taken during the
+    [Backup the bootstrap information](#backup-bootstrap-information) step.
 
     ```bash
     ncn-m001# SYSTEM_NAME=eniac
-    ncn-m001# rsync ncn-m002:/metal/bootstrap/prep/${SYSTEM_NAME}/pit-files/ifcfg-lan0 /etc/sysconfig/network/
-    ncn-m001# wicked ifreload lan0
-    ncn-m001# wicked ifstatus lan0
+    ncn-m001# rsync ncn-m002:/metal/bootstrap/prep/${SYSTEM_NAME}/pit-files/ifcfg-lan0 /etc/sysconfig/network/ && \
+              wicked ifreload lan0 && \
+              wicked ifstatus lan0
+    ```
+
+    Expected output looks similar to:
+
+    ```text
     lan0            up
        link:     #32, state up, mtu 1500
        type:     bridge, hwaddr 90:e2:ba:0f:11:c2
@@ -438,21 +442,17 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
        addr:     ipv4 172.30.53.88/20 [static]
     ```
 
-1. Run `ip a` to show the lan0 IP address; verify the site link.
+1. Verify that the site link (`lan0`) and the VLANs have IP addresses.
+
+    > Examine the output to ensure that each interface has been assigned an IPv4 address.
 
     ```bash
-    ncn-m001# ip a show lan0
+    ncn-m001# for INT in lan0 vlan002 vlan004 vlan007 ; do
+                ip a show $INT || echo "ERROR: Command failed: ip a show $INT"
+              done
     ```
 
-1. Run `ip a` to show the VLANs; verify that they all have IP addresses.
-
-    ```bash
-    ncn-m001# ip a show vlan002
-    ncn-m001# ip a show vlan004
-    ncn-m001# ip a show vlan007
-    ```
-
-1. Run `ip r` to show that the default route is via the CAN/`vlan007`.
+1. Verify that the default route is via the CAN/`vlan007`.
 
     ```bash
     ncn-m001# ip r show default
@@ -464,18 +464,17 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
      ncn-m001# ip a show bond0
      ```
 
-1. Verify zypper repositories are empty and all remote SUSE repositories are disabled.
+1. Verify `zypper` repositories are empty and all remote SUSE repositories are disabled.
+
+    > If the `rm` command fails because the files do not exist, this is not an error and should be ignored.
 
     ```bash
     ncn-m001# rm -v /etc/zypp/repos.d/* && zypper ms --remote --disable
     ```
 
-1. Download and install/upgrade the documentation RPM.
+1. Download and install/upgrade the documentation and workarounds RPMs.
 
-    If this machine does not have direct internet access, then this RPM will need to be
-    externally downloaded and then copied to this machine.
-
-    **Important:** To ensure that the latest workarounds and documentation updates are available, see [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds)
+    See [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md).
 
 1. Follow the [workaround instructions](../update_product_stream/index.md#apply-workarounds) for the `livecd-post-reboot` breakpoint.
 
@@ -483,23 +482,24 @@ the Kubernetes cluster as the final of three master nodes, forming a quorum.
 
     This is required to facilitate reinstallations, because it pulls the preparation data back over to the documented area (`ncn-m001`).
 
-    ```bash
+    ```console
     ncn-m001# exit
     ncn-m002# exit
     # typescript exited
-    ncn-m002# rsync -rltDv -P /metal/bootstrap ncn-m001:/metal/
-    ncn-m002# rm -rfv /metal/bootstrap
+    ncn-m002# rsync -rltDv -P /metal/bootstrap ncn-m001:/metal/ && rm -rfv /metal/bootstrap
     ncn-m002# exit
     ```
 
 <a name="enable-ncn-disk-wiping-safeguard"></a>
 
-## 5. Enable NCN Disk Wiping Safeguard
+## 5. Enable NCN disk wiping safeguard
 
 The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise because
 it is used for Cray installation and bootstrap.
 
-1. SSH back into `ncn-m001`, or restart a local console and resume the typescript.
+1. SSH back into `ncn-m001` or restart a local console.
+
+1. Resume the typescript.
 
     ```bash
     ncn-m001# script -af /metal/bootstrap/prep/admin/csm-verify.$(date +%Y-%m-%d).txt
@@ -509,38 +509,38 @@ it is used for Cray installation and bootstrap.
 1. Obtain access to CSI.
 
     ```bash
-    ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs
-    ncn-m001# mount -v /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/
-    ncn-m001# mount -v /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/
-    ncn-m001# mount -v /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/
-    ncn-m001# cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi
-    ncn-m001# /tmp/csi version
-    ncn-m001# umount -vl /mnt/sqfs /mnt/rootfs /mnt/livecd
+    ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs && \
+              mount -v /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/ && \
+              mount -v /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/ && \
+              mount -v /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/ && \
+              cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi && \
+              /tmp/csi version && \
+              umount -vl /mnt/sqfs /mnt/rootfs /mnt/livecd
     ```
+
+    > **NOTE** `/tmp/csi` will delete itself on the next reboot. The `/tmp` directory is `tmpfs` and runs in memory;
+    > it will not persist on restarts.
 
 1. Authenticate with the cluster.
 
     ```bash
     ncn-m001# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
-    -d client_id=admin-client \
-    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                -d client_id=admin-client \
+                -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1. Set the wipe safeguard to allow safe net-reboots on all NCNs.
+1. Set the wipe safeguard to allow safe reboots on all NCNs.
 
     ```bash
     ncn-m001# /tmp/csi handoff bss-update-param --set metal.no-wipe=1
     ```
 
-**NOTE** `/tmp/csi` will delete itself on the next reboot. The `/tmp` directory is `tmpfs` and runs in memory;
-it will not persist on restarts.
-
 <a name="remove-the-default-ntp-pool"></a>
 
 ## 6. Remove the default NTP pool
 
-Run the following commands on `ncn-m001` to remove the default pool, which can cause contention issues with NTP.
+Run the following command on `ncn-m001` to remove the default pool, which can cause contention issues with NTP.
 
 ```bash
 ncn-m001# sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf
@@ -550,16 +550,23 @@ ncn-m001# sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf
 
 ## 7. Configure DNS and NTP on each BMC
 
- > **`NOTE`** If the system uses Gigabyte nodes or Intel nodes, skip this section.
+ > **NOTE:** Only follow this section if the NCNs are HPE hardware. If the system uses
+ > Gigabyte or Intel hardware, skip this section.
 
 Configure DNS and NTP on the BMC for each management node **except `ncn-m001`**.
 However, the commands in this section are all run **on** `ncn-m001`.
+
+1. Validate that the system is HPE hardware.
+
+    ```bash
+    ncn-m001# ipmitool mc info | grep "Hewlett Packard Enterprise" || echo "Not HPE hardware -- SKIP these steps"
+    ```
 
 1. Set environment variables.
 
     Set the `IPMI_PASSWORD` and `USERNAME` variables to the BMC credentials for the NCNs.
 
-    > Using `read -s` for this prevents the credentials from being echoed to the screen
+    > Using `read -s` for this prevents the credentials from being echoed to the screen or saved in the shell history.
 
     ```bash
     ncn-m001# read -s IPMI_PASSWORD
@@ -574,8 +581,13 @@ However, the commands in this section are all run **on** `ncn-m001`.
     ncn-m001# BMCS=$(grep -Eo "[[:space:]]ncn-[msw][0-9][0-9][0-9]-mgmt([.]|[[:space:]]|$)" /etc/hosts |
                         sed 's/^.*\(ncn-[msw][0-9][0-9][0-9]-mgmt\).*$/\1/' |
                         sort -u |
-                        grep -v "^ncn-m001-mgmt$")
-    ncn-m001# echo $BMCS
+                        grep -v "^ncn-m001-mgmt$") ; echo $BMCS
+    ```
+
+    Expected output looks similar to the following:
+
+    ```text
+    ncn-m002-mgmt ncn-m003-mgmt ncn-s001-mgmt ncn-s002-mgmt ncn-s003-mgmt ncn-w001-mgmt ncn-w002-mgmt ncn-w003-mgmt
     ```
 
 1. Run the following to loop through all of the BMCs (except `ncn-m001-mgmt`) and apply the desired settings.
@@ -591,9 +603,6 @@ However, the commands in this section are all run **on** `ncn-m001`.
                 echo "$BMC: Showing settings"
                 /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -s
                 echo
-                echo "Press enter to proceed to next BMC, or control-C to abort"
-                echo
-                read
             done ; echo "Configuration completed on all NCN BMCs"
     ```
 
@@ -631,6 +640,6 @@ Perform the following steps **on `ncn-m001`**.
 
 <a name="next-topic"></a>
 
-## Next Topic
+## 8. Next topic
 
-After completing this procedure, the next step is to [Configure Administrative Access](index.md#configure_administrative_access).
+After completing this procedure, proceed to [Configure Administrative Access](index.md#configure_administrative_access).

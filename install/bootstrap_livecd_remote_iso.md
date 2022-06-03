@@ -12,15 +12,15 @@ lack of removable storage.
 
 ## Topics
 
-   1. [Known Compatibility Issues](#known-compatibility-issues)
-   1. [Attaching and Booting the LiveCD with the BMC](#attaching-and-booting-the-livecd-with-the-bmc)
-   1. [First Login](#first-login)
-   1. [Configure the Running LiveCD](#configure-the-running-livecd)
-   1. [Next Topic](#next-topic)
+1. [Known compatibility issues](#known-compatibility-issues)
+1. [Attaching and booting the LiveCD with the BMC](#attaching-and-booting-the-livecd-with-the-bmc)
+1. [First login](#first-login)
+1. [Configure the running LiveCD](#configure-the-running-livecd)
+1. [Next topic](#next-topic)
 
 <a name="known-compatibility-issues"></a>
 
-## 1. Known Compatibility Issues
+## 1. Known compatibility issues
 
 The LiveCD Remote ISO has known compatibility issues for nodes from certain vendors.
 
@@ -29,37 +29,37 @@ The LiveCD Remote ISO has known compatibility issues for nodes from certain vend
 
 <a name="attaching-and-booting-the-livecd-with-the-bmc"></a>
 
-## 2. Attaching and Booting the LiveCD with the BMC
+## 2. Attaching and booting the LiveCD with the BMC
 
 > **Warning:** If this is a re-installation on a system that still has a USB device from a prior
 > installation, then that USB device must be wiped before continuing. Failing to wipe the USB, if present, may result in confusion.
 > If the USB is still booted, then it can wipe itself using the [basic wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#basic-wipe).
-> If it is not booted, please do so and wipe it _or_ disable the USB ports in the BIOS (not available for all vendors).
+> If it is not booted, please do so and wipe it **or** disable the USB ports in the BIOS (not available for all vendors).
 
-Obtain and attach the LiveCD cray-pre-install-toolkit ISO file to the BMC. Depending on the vendor of the node,
+Obtain and attach the LiveCD `cray-pre-install-toolkit` ISO file to the BMC. Depending on the vendor of the node,
 the instructions for attaching to the BMC will differ.
 
 1. The CSM software release should be downloaded and expanded for use.
 
-   **Important:** To ensure that the CSM release plus any patches, workarounds, or hotfixes are included
+   **Important:** To ensure that the CSM release plus any patches, workarounds, or hot fixes are included
    follow the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
 
-   The cray-pre-install-toolkit ISO and other files are now available in the directory from the extracted CSM tar.
+   The `cray-pre-install-toolkit` ISO and other files are now available in the directory from the extracted CSM `tar`.
    The ISO will have a name similar to
    `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`
 
-   This ISO file can be extracted from the CSM release tar file using the following command:
+   This ISO file can be extracted from the CSM release `tar` file using the following command:
 
    ```bash
    linux# tar --wildcards --no-anchored -xzvf <csm-release>.tar.gz 'cray-pre-install-toolkit-*.iso'
    ```
 
-   This release of CSM software, the cray-pre-install-toolkit ISO should be placed on a server which the PIT node
+   This release of CSM software, the `cray-pre-install-toolkit` ISO should be placed on a server which the PIT node
    will be able to contact using HTTP or HTTPS.
 
    **Note:** A shorter path name is better than a long path name on the webserver.
 
-      * The Cray Pre-Install Toolkit ISO is included in the CSM release tarball. It will have a long filename similar to
+      * The Cray Pre-Install Toolkit ISO is included in the CSM release `tar` file. It will have a long filename similar to
         `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`, so pick a shorter name on the webserver.
 
 1. See the respective procedure below to attach an ISO.
@@ -72,7 +72,7 @@ the instructions for attaching to the BMC will differ.
 
 <a name="first-login"></a>
 
-## 3. First Login
+## 3. First login
 
 On first login (over SSH or at local console) the LiveCD will prompt the administrator to change the password.
 
@@ -96,7 +96,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 <a name="configure-the-running-livecd"></a>
 
-## 4. Configure the Running LiveCD
+## 4. Configure the running LiveCD
 
 1. Set up the initial typescript.
 
@@ -137,9 +137,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       external# ssh root@${SYSTEM_NAME}-ncn-m001
       ```
 
-   1. (recommended) After reconnecting, resume the typescript (the `-a` appends to an existing script).
+   1. (Recommended) After reconnecting, resume the typescript (the `-a` appends to an existing script).
 
-       ```bash
+      ```bash
       pit# cd ~
       pit# script -af $(ls -tr csm-install-remoteiso* | head -n 1)
       pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
@@ -212,11 +212,11 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 1. Download the CSM software release to the PIT node.
 
-   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
+   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hot fixes
    were downloaded to a system using the instructions in [Update CSM Product Stream](../update_product_stream/index.md)
    Either copy from that system to the PIT node or set the ENDPOINT variable to URL and use `wget`.
 
-   1. Set helper variables
+   1. Set helper variables.
 
       ```bash
       pit# ENDPOINT=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm
@@ -233,15 +233,15 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# echo -e "\nCSM_RELEASE=${CSM_RELEASE}\nSYSTEM_NAME=${SYSTEM_NAME}" >>/etc/environment
       ```
 
-   1. Fetch the release tarball.
+   1. Fetch the release `tar` file.
 
       ```bash
       pit# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz -O /var/www/ephemeral/${CSM_RELEASE}.tar.gz
       ```
 
-   1. Expand the tarball on the PIT node.
+   1. Expand the `tar` file on the PIT node.
 
-      > Note: Expansion of the tarball may take more than 45 minutes.
+      > Note: Expansion of the `tar` file may take more than 45 minutes.
 
       ```bash
       pit# tar -zxvf ${CSM_RELEASE}.tar.gz
@@ -256,7 +256,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       pit# rsync -a -P --delete ./${CSM_RELEASE}/images/storage-ceph/ ./data/ceph/
       ```
 
-   > The PIT ISO, Helm charts/images, and bootstrap RPMs are now available in the extracted CSM tar.
+   > The PIT ISO, Helm charts/images, and bootstrap RPMs are now available in the extracted CSM `tar`.
 
 1. Install/upgrade the CSI and testing RPMs.
 
@@ -288,7 +288,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
    If this machine does not have direct Internet access these RPMs will need to be externally downloaded and then copied to the system.
 
-   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hotfixes
+   **Important:** In an earlier step, the CSM release plus any patches, workarounds, or hot fixes
    were downloaded to a system using the instructions in [Check for Latest Workarounds and Documentation Updates](../update_product_stream/index.md#workarounds). Use that set of RPMs rather than downloading again.
 
    ```bash
@@ -302,7 +302,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 
 <a name="generate-installation-files"></a>
 
-### 4.1 Generate Installation Files
+### 4.1 Generate installation files
 
 Some files are needed for generating the configuration payload. See the [Command Line Configuration Payload](prepare_configuration_payload.md#command_line_configuration_payload)
 and [Configuration Payload Files](prepare_configuration_payload.md#configuration_payload_files) topics if one has not already prepared the information for this system.
@@ -312,14 +312,18 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
 1. Create the `hmn_connections.json` file by following the [Create HMN Connections JSON](create_hmn_connections_json.md)  procedure. Return to this section when completed.
 
-1. Copy these files into the current working directory, or create them if this is an initial install of the system:
+1. Create the configuration input files if needed and copy them into the preparation directory.
+
+   The preparation directory is `${PITDATA}/prep`.
+
+   Copy these files into the preparation directory, or create them if this is an initial install of the system:
 
    * `application_node_config.yaml` (optional - see below)
    * `cabinets.yaml` (optional - see below)
    * `hmn_connections.json`
    * `ncn_metadata.csv`
    * `switch_metadata.csv`
-   * `system_config.yaml` (only available after [first-install generation of system files](#first-timeinitial-installs-bare-metal)
+   * `system_config.yaml` (only available after [first-install generation of system files](#first-timeinitial-installs-bare-metal))
 
    > The optional `application_node_config.yaml` file may be provided for further definition of settings relating to how application nodes will appear in HSM for roles and
    > subroles. See [Create Application Node YAML](create_application_node_config_yaml.md).
@@ -338,7 +342,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 
       After gathering the files into this working directory, generate your configurations.
 
-   1. If doing a reinstall and have the `system_config.yaml` parameter file avail available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
+   1. If doing a reinstall and have the `system_config.yaml` parameter file available, then generate the system configuration reusing this parameter file (see [avoiding parameters](../background/cray_site_init_files.md#save-file--avoiding-parameters)).
 
       If not doing a reinstall of Shasta software, then the `system_config.yaml` file will not be available, so skip the rest of this step.
 
@@ -484,6 +488,14 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
          >   {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}}
          >   ```
 
+      1. Link the generated `system_config.yaml` file into the `prep/` directory. This is needed for `pit-init` to find and resolve the file.
+
+         > **`NOTE`** This step is needed only for fresh installs where `system_config.yaml` is missing from the `prep/` directory.
+
+         ```bash
+         pit# cd ${PITDATA}/prep && ln ${SYSTEM_NAME}/system_config.yaml
+         ```
+
       1. Continue with the next step to apply the csi-config workarounds.
 
 1. <a name="csi-workarounds"></a>CSI Workarounds
@@ -501,7 +513,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
       pit# systemctl restart wickedd-nanny && sleep 5
       ```
 
-   * Option 2: Set up dnsmasq by hand.
+   * Option 2: Set up `dnsmasq` by hand.
 
       ```bash
       pit# /root/bin/csi-setup-vlan002.sh $nmn_cidr
@@ -545,14 +557,14 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
        addr:     ipv4 10.254.1.4/17 [static]
        ```
 
-    1. Run tests, inspect failures.
+    2. Run tests, inspect failures.
 
        ```bash
        pit# csi pit validate --network
        ```
 
-1. Copy the service configuration files generated earlier by `csi config init` for DNSMasq, Metal
-   Basecamp (cloud-init), and ConMan.
+1. Copy the service configuration files generated earlier by `csi config init` for `dnsmasq`, Metal
+   Basecamp (`cloud-init`), and ConMan.
 
     1. Copy files (files only, `-r` is expressly not used).
 
@@ -562,7 +574,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
         pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/basecamp/* /var/www/ephemeral/configs/
         ```
 
-    1. Enable, and fully restart all PIT services.
+    2. Enable, and fully restart all PIT services.
 
         ```bash
         pit# systemctl enable basecamp nexus dnsmasq conman
@@ -582,20 +594,20 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
    pit# csi pit validate --services
    ```
 
-1. Mount a shim to match the Shasta-CFG steps' directory structure.
+1. Mount a shim to match the `SHASTA-CFG` steps' directory structure.
 
     ```bash
     pit# mkdir -vp /mnt/pitdata
     pit# mount -v -L PITDATA /mnt/pitdata
     ```
 
-1. The following procedure will set up customized CA certificates for deployment using Shasta-CFG.
+1. The following procedure will set up customized CA certificates for deployment using `SHASTA-CFG`.
 
-   * [Prepare Site-Init](prepare_site_init.md) to create and prepare the `site-init` directory for your system.
+   * [Prepare `site-init`](prepare_site_init.md) to create and prepare the `site-init` directory for your system.
 
 <a name="next-topic"></a>
 
-## Next Topic
+## Next topic
 
 After completing this procedure, the next step is to configure the management network switches.
 
