@@ -10,7 +10,7 @@ FAS images contain the following information that is needed for a hardware devic
 
 * Hardware-specific information: Contains the allowed device states and how to reboot a device if necessary.
 * Selection criteria: How to link a firmware image to a specific hardware type.
-* Image data: Where the firmware image resides in Simple Storage Service (S3) and what `firmwareVersion`it will report after it is successfully applied. See [Artifact Management](../artifact_management/Artifact_Management.md) for more information.
+* Image data: Where the firmware image resides in Simple Storage Service (S3) and what `firmwareVersion` it will report after it is successfully applied. See [Artifact Management](../artifact_management/Artifact_Management.md) for more information.
 
 ## Topics
 

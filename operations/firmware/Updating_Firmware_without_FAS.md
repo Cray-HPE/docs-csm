@@ -3,7 +3,7 @@
 **NOTE: This procedure should only be used if FAS is not available such as during installation time.**
 
 > **NOTE:**
-> On HPE nodes, the BMC Firmware is iLO 6 and BIOS is System ROM.
+> On HPE nodes, the BMC Firmware is iLO 5 and BIOS is System ROM.
 > The commands in the procedure must be run on `ncn-m001`.
 
 ## Prerequisites
@@ -66,7 +66,7 @@ If that command is not available, follow the procedure Using the iLO GUI.
 1. Do the following for each NCN needing update:
 
     ```bash
-    ncn-m001# ilorest flashfwpkg filename.fwpkg --url ipaddressOfNCN -u root -p passwd
+    ncn-m001# ilorest flashfwpkg filename.fwpkg --url ipaddressOfNCNBMC -u root -p passwd
     ```
 
     > After updating System ROM (BIOS), NCN will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot NCNs.
@@ -86,7 +86,7 @@ Do the following steps for each NCN needing update:
 1. From your own machine, create a SSH tunnel (`-L` creates the tunnel, and `-N` prevents a shell and stubs the connect).
 
     ```bash
-    linux# ssh -L 6443:ipaddressOfNCN:443 -N ipaddressofM001
+    linux# ssh -L 6443:ipaddressOfNCNBMC:443 -N ipaddressofM001
     ```
 
 1. Open a web browser window and type `https://127.0.0.1:6443`
