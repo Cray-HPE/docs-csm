@@ -97,12 +97,12 @@ This step is required. **There is no default root password and no default SSH ke
    pit# ${CSM_PATH}/ncn-image-modification.sh -p \
                                               -t rsa \
                                               -N "" \
-                                              -k $(find . -name "kubernetes-*.squashfs" | sort -V | tail -1)
+                                              -k $(find . -name "kubernetes-*.squashfs" | sort -V | tail -1) \
                                               -s $(find . -name "storage-ceph-*.squashfs" | sort -V | tail -1)
    ```
 
    The script will save the original SquashFS images in `./{k8s,ceph}/old`. The new image filenames will
-   have a `secure-` prefix. The initrd and kernel will retain their original filenames.
+   have a `secure-` prefix. The `initrd` and kernel will retain their original filenames.
 
 1. Set the boot links.
 
