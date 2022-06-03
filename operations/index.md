@@ -36,6 +36,7 @@ The following administrative topics can be found in this guide:
   - [Spire](#spire)
   - [Update Firmware with FAS](#update-firmware-with-fas)
   - [User Access Service (UAS)](#user-access-service-uas)
+  - [Troubleshoot Intermittent HTTP 503 Code Failures](kubernetes/Troubleshoot_Intermittent_503s.md)
 
 <a name="csm-product-management"></a>
 
