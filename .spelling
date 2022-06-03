@@ -108,7 +108,7 @@ CFS-Batcher
 CFS-BOA
 CFS-Operator
 channeled
-chassisBMC
+ChassisBMC
 checkmark
 CHN
 cleanup
@@ -347,8 +347,8 @@ NMN
 NMNLB
 NMN_MTN
 NMN_RVR
-nodeBIOS
-nodeBMC
+NodeBIOS
+NodeBMC
 non-airgapped
 non-failsafe
 non-HPE
