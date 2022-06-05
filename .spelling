@@ -108,8 +108,6 @@ CFS-Batcher
 CFS-BOA
 CFS-Operator
 channeled
-ChassisBMC
-chassisBMC
 checkmark
 CHN
 cleanup
@@ -348,9 +346,6 @@ NMN
 NMNLB
 NMN_MTN
 NMN_RVR
-NodeBIOS
-NodeBMC
-nodeBMC
 non-airgapped
 non-failsafe
 non-HPE
@@ -444,7 +439,6 @@ Rivest-Shamir-Adleman
 RJ-45
 Rollout
 routable
-routerBMC
 RPMs
 RPs
 RSAv1
