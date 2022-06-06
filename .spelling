@@ -445,6 +445,7 @@ RSAv1
 RSAv2
 Runbook
 S-8000
+S-8024
 sC
 SCSD
 sC-ToR
@@ -581,6 +582,10 @@ zeroize
 - glossary.md
 # To allow 802.3cd/bs
 bs
+# To allow Site Init
+Init
+
+- install/collecting_ncn_mac_addresses.md
 # To allow Site Init
 Init
 
