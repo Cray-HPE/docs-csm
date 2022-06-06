@@ -344,7 +344,7 @@ This procedure requires administrative privileges.
 
    Example output:
 
-   ```text
+   ```yaml
    peers:
      - peer-address: 10.101.3.2
        peer-asn: 65533
