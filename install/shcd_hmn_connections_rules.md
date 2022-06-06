@@ -111,7 +111,7 @@ The BMC ordinal for a node's BMC is derived from the NID of the node by applying
 For example, a node with NID 17 will have a BMC ordinal of `(17 modulo 4) + 1 == 1 + 1 == 2`. Therefore a node with NID 17 in slot 10 in cabinet 3000 will have the
 component name (xname) of `x3000s10b2n0`.
 
-#### SHCD
+#### Compute: Four node chassis: SHCD
 
 Example: Four compute nodes in the same chassis with a CMC connected to the network. The compute node chassis is located in slot 17 of cabinet 3000, and the compute
 node BMCs are connected to ports 33-36 in the management `leaf-bmc-bmc` switch in slot 14 of cabinet 3000. Port 32 on the `leaf-bmc-bmc` switch is for the CMC in
@@ -139,7 +139,7 @@ Example: Four compute nodes in the same chassis without a CMC connected to the H
 
 > Note: `Source` names like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### HMN connections
+#### Compute: Four node chassis: HMN connections
 
 Example Four compute nodes in the same chassis with the a CMC connected to the network. The compute node chassis is located in slot 17 of cabinet 3000, and the
 compute node BMCs are connected to ports 33-36 in the management `leaf-bmc-bmc` switch in slot 14 of cabinet 3000. The `SourceParent` for the compute nodes
@@ -169,11 +169,11 @@ Example: Four compute nodes in the same chassis without a CMC connected to the H
 
 > Note: `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### SLS
+#### Compute: Four node chassis: SLS
 
 The CSI tool will generate the following SLS representations for compute nodes and their BMC connections to the HMN network.
 
-##### Compute node with NID 1
+##### Compute: Four node chassis: SLS: Compute node with NID 1
 
 * Node
 
@@ -214,7 +214,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
 
     > For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/36`. Dell `leaf-bmc` switches will have value `ethernet1/1/36`.
 
-##### Compute node with NID 2
+##### Compute: Four node chassis: SLS: Compute node with NID 2
 
 * Node:
 
@@ -255,7 +255,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
 
     > For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/35`. Dell `leaf-bmc` switches will have value `ethernet1/1/35`.
 
-##### Compute node with NID 3
+##### Compute: Four node chassis: SLS: Compute node with NID 3
 
 * Node
 
@@ -296,7 +296,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
 
     > For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/34`. Dell `leaf-bmc` switches will have value `ethernet1/1/34`.
 
-##### Compute node with NID 4
+##### Compute: Four node chassis: SLS: Compute node with NID 4
 
 * Node
 
@@ -348,7 +348,7 @@ A single compute node chassis needs to match these additional conditions:
 
 This convention applies to all compute nodes that have a single node in a chassis, such as the Apollo XL675D.
 
-#### SHCD
+#### Compute: Single node chassis: SHCD
 
 Example: A single chassis node with NID 1 located in slot 2 of cabinet 3000. The node's BMC is connected to port 36 of the management `leaf-bmc` switch in
 slot 40 of cabinet 3000.
@@ -359,7 +359,7 @@ slot 40 of cabinet 3000.
 
 > Note: `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### HMN connections
+#### Compute: Single node chassis: HMN connections
 
 The HMN connections representation for the two SHCD table rows above:
 
@@ -369,7 +369,7 @@ The HMN connections representation for the two SHCD table rows above:
 
 > Note: `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### SLS
+#### Compute: Single node chassis: SLS
 
 Compute node:
 
@@ -428,7 +428,7 @@ In addition to the top-level compute node naming requirements, when there are tw
 
 This convention applies to all compute nodes that have two nodes in a chassis, such as the Apollo XL645D.
 
-#### SHCD
+#### Compute: Dual node chassis: SHCD
 
 Example: A compute node chassis with 2 nodes located in slot 8 of cabinet 3000. NID 1 is on the left side of the chassis, and NID 2 is on the right side.
 The two node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` switch in slot 40 of cabinet 3000.
@@ -440,7 +440,7 @@ The two node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` 
 
 > Note: `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### HMN connections
+#### Compute: Dual node chassis: HMN connections
 
 The HMN connections representation for the two SHCD table rows above:
 
@@ -451,9 +451,9 @@ The HMN connections representation for the two SHCD table rows above:
 
 > Note: `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### SLS
+#### Compute: Dual node chassis: SLS
 
-##### Compute node with NID 1
+##### Compute: Dual node chassis: SLS: Compute node with NID 1
 
 * Node:
 
@@ -494,7 +494,7 @@ The HMN connections representation for the two SHCD table rows above:
 
     > For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/38`. Dell `leaf-bmc` switches will have value `ethernet1/1/38`.
 
-##### Compute node with NID 2
+##### Compute: Dual node chassis: SLS: Compute node with NID 2
 
 * Node
 
@@ -551,7 +551,7 @@ A Gigabyte CMC is an example of a CMC. If a CMC is not connected to the HMN netw
 
 These devices will have the BMC ordinal of 999 for their component names (xnames). For example, `x3000c0s10b999`.
 
-### SHCD
+### CMC: SHCD
 
 Example: The CMC for the chassis in slot 28 of cabinet 3000 is connected to port 32 of the management `leaf-bmc` switch in slot 22 of cabinet 3000.
 
@@ -559,7 +559,7 @@ Example: The CMC for the chassis in slot 28 of cabinet 3000 is connected to port
 | ----------------- | ------- | ---------- | ----- | -------- | ----- | ------ | ------------- | -------- | ---------- | ----- | ------ |
 | `SubRack-002-cmc` | `x3000` | `u28`      |       |          | `-`   | `cmc`  | `sw-smn01`    | `x3000`  | `u22`      | `-`   | `j42`  |
 
-### HMN Connections
+### CMC: HMN Connections
 
 The HMN connections representation for the SHCD table row above:
 
@@ -567,7 +567,7 @@ The HMN connections representation for the SHCD table row above:
 {"Source":"SubRack-002-cmc","SourceRack":"x3000","SourceLocation":"u28","DestinationRack":"x3000","DestinationLocation":"u22","DestinationPort":"j42"}
 ```
 
-### SLS
+### CMC: SLS
 
 Chassis Management Controller:
 
@@ -618,7 +618,7 @@ The integer after the prefix is used to determine the hostname of the master nod
 
 Typically, the BMC of the first master node is not connected to the HMN, as its BMC is connected to the site network.
 
-#### SHCD
+#### Master: SHCD
 
 Example: master node where its BMC is connected to the HMN. The master node is in slot 2 in cabinet 3000, and its BMC is connected to port 25 in the management
 `leaf-bmc` switch in slot 14 of cabinet 3000.
@@ -633,7 +633,7 @@ Example: master node where its BMC is connected to the site network.
 | ----------------- | ------- | ---------- | ----- | -------- | ----- | ------ | ------------- | -------- | ---------- | ----- | ------ |
 | `mn01`            | `x3000` | `u01`      | `-`   |          |       | `j3`   |               |          |            |       |        |
 
-#### HMN Connections
+#### Master: HMN Connections
 
 Example: master node where its BMC is connected to the HMN
 
@@ -654,7 +654,7 @@ Example: master node where its BMC is connected to the site network, and no conn
 > {"Source":"mn01","SourceRack":"x3000","SourceLocation":"u01","DestinationRack":" ","DestinationLocation":" ","DestinationPort":" "}
 > ```
 
-#### SLS
+#### Master: SLS
 
 Management master node:
 
@@ -707,7 +707,7 @@ The `Source` field needs to match both of the following conditions:
 
 The integer after the prefix is used to determine the hostname of the worker node. For example, `wn01` corresponds to hostname `ncn-w001`.
 
-#### SHCD
+#### Worker: SHCD
 
 Example: The worker node is in slot 4 of cabinet 3000, and its BMC is connected to port 48 of management `leaf-bmc` switch in slot 14 of cabinet 3000.
 
@@ -715,7 +715,7 @@ Example: The worker node is in slot 4 of cabinet 3000, and its BMC is connected 
 | ----------------- | ------- | ---------- | ----- | -------- | ----- | ------ | ------------- | -------- | ---------- | ----- | ------ |
 | `wn01`            | `x3000` | `u04`      | `-`   |          |       | `j3`   | `sw-smn01`    | `x3000`  | `u14`      | `-`   | `j48`  |
 
-#### HMN connections
+#### Worker: HMN connections
 
 The HMN connections representation for the SHCD table row above:
 
@@ -723,7 +723,7 @@ The HMN connections representation for the SHCD table row above:
 {"Source":"wn01","SourceRack":"x3000","SourceLocation":"u04","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j48"}
 ```
 
-#### SLS
+#### Worker: SLS
 
 Management worker node:
 
@@ -776,7 +776,7 @@ The `Source` field needs to match both of the following conditions:
 
 The integer after the prefix is used to determine the hostname of the storage node. For example, `sn01` corresponds to hostname `ncn-s001`.
 
-#### SHCD
+#### Storage: SHCD
 
 Example: The storage node is in slot 4 of cabinet 3000, and its BMC is connected to port 29 of management `leaf-bmc` switch in slot 14 of cabinet 3000.
 
@@ -784,7 +784,7 @@ Example: The storage node is in slot 4 of cabinet 3000, and its BMC is connected
 | ----------------- | ------- | ---------- | ----- | -------- | ----- | ------ | ------------- | -------- | ---------- | ----- | ------ |
 | `sn01`            | `x3000` | `u07`      | `-`   |          |       | `j3`   | `sw-smn01`    | `x3000`  | `u14`      | `-`   | `j29`  |
 
-#### HMN connections
+#### Storage: HMN connections
 
 The HMN connections representation for the SHCD table row above:
 
@@ -792,7 +792,7 @@ The HMN connections representation for the SHCD table row above:
 {"Source":"sn01","SourceRack":"x3000","SourceLocation":"u07","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j29"}
 ```
 
-#### SLS
+#### Storage: SLS
 
 Management storage node:
 
@@ -846,7 +846,7 @@ The `Source` field needs to match these conditions to be considered an applicati
   * `ln`
 
 > Note: The naming conventions for application nodes can be unique to a system. Refer to the
-> [Create Application Node Config YAML](create_application_node_config_yaml.md)
+> [Create Application Node Configuration YAML](create_application_node_config_yaml.md)
 > procedure for the process to add additional `Source` name prefixes for application nodes.
 
 <a name="application-node-single-node-chassis"></a>
@@ -860,7 +860,7 @@ A single application node chassis needs to match these additional conditions:
 
 This convention applies to all application nodes that have a single node in a chassis.
 
-#### SHCD
+#### Application node: Single node chassis: SHCD
 
 Example: application node is in slot 4 of cabinet 3000, and its BMC is connected to port 25 of management `leaf-bmc` switch in slot 14 of cabinet 3000.
 
@@ -868,7 +868,7 @@ Example: application node is in slot 4 of cabinet 3000, and its BMC is connected
 | ----------------- | ------- | ---------- | ----- | -------- | ----- | ------ | ------------- | -------- | ---------- | ----- | ------ |
 | `uan01`           | `x3000` | `u04`      | `-`   |          |       | `j3`   | `sw-smn01`    | `x3000`  | `u14`      | `-`   | `j25`  |
 
-#### HMN connections
+#### Application node: Single node chassis: HMN connections
 
 The HMN connections representation for the SHCD table row above:
 
@@ -911,7 +911,7 @@ In addition to the top-level compute node naming requirements, when there are tw
 
 This convention applies to all application nodes that have two nodes in a single chassis.
 
-#### SHCD
+#### Application node: Dual node chassis: SHCD
 
 Example: An application node chassis with 2 nodes located in slot 8 of cabinet 3000. `uan01` is on the left side of the chassis, and `uan02` is on the right side. The two
 node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` switch in slot 40 of cabinet 3000.
@@ -923,7 +923,7 @@ node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` switch i
 
 > Note: `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### HMN connections
+#### Application node: Dual node chassis: HMN connections
 
 The HMN connections representation for the two SHCD table rows above:
 
@@ -968,7 +968,7 @@ The following are examples of valid matches:
 * `Columbia`
 * `columbia`
 
-### SHCD
+### Columbia Slingshot switch: SHCD
 
 Example: A Columbia Slingshot switch in slot 42 of cabinet 3000. Its BMC is connected to port 45 of the `leaf-bmc` switch in slot 38 of cabinet 3000.
 
@@ -978,7 +978,7 @@ Example: A Columbia Slingshot switch in slot 42 of cabinet 3000. Its BMC is conn
 
 > Note: `Source` values like `Columbia` or `columbia` are also valid.
 
-### HMN connections
+### Columbia Slingshot switch: HMN connections
 
 The HMN connections representation for the SHCD table row above:
 
@@ -986,7 +986,7 @@ The HMN connections representation for the SHCD table row above:
 {"Source":"sw-hsn01","SourceRack":"x3000","SourceLocation":"u42","DestinationRack":"x3000","DestinationLocation":"u38","DestinationPort":"j45"}
 ```
 
-### SLS
+### Columbia Slingshot switch: SLS
 
 Router BMC:
 
@@ -1040,7 +1040,7 @@ The following are examples of valid matches:
 * `x3000p0`
 * `pdu0`
 
-### SHCD
+### PDU cabinet controller: SHCD
 
 Example: PDU controller for cabinet 3000 is connected port 41 of the `leaf-bmc` switch in slot 38 of cabinet 3000.
 
@@ -1054,7 +1054,7 @@ Alternative naming convention for the same HMN connection.
 | ----------------- | ------- | ---------- | ----- | -------- | ----- | ------ | ------------- | -------- | ---------- | ----- | ------ |
 | `pdu0`            | `x3000` | `pdu0`     | `-`   |          |       | `i0`   | `sw-smn01`    | `x3000`  | `u38`      | `-`   | `j41`  |
 
-### HMN connections
+### PDU cabinet controller: HMN connections
 
 The HMN connections representation for the first SHCD table above.
 
@@ -1068,7 +1068,7 @@ The HMN connections representation for alternative naming convention.
 {"Source":"pdu0","SourceRack":"x3000","SourceLocation":"pdu0","DestinationRack":"x3000","DestinationLocation":"u38","DestinationPort":"j41"}
 ```
 
-### SLS
+### PDU cabinet controller: SLS
 
 Cabinet PDU controller:
 
@@ -1110,7 +1110,7 @@ The `Source` field for a cooling door contains `door`.
 
 Cooling doors in an air-cooled cabinet are not currently supported by CSM software and are ignored.
 
-### SHCD
+### Cooling door: SHCD
 
 Example: Cooling door for cabinet 3000 is connected to port 27 of the `leaf-bmc` switch in slot 36 of cabinet 3000.
 
@@ -1118,7 +1118,7 @@ Example: Cooling door for cabinet 3000 is connected to port 27 of the `leaf-bmc`
 | ----------------- | ------- | ---------- | ----- | -------- | ----- | ------ | ------------- | -------- | ---------- | ----- | ------ |
 | `x3000door-Motiv` | `x3000` |            | `-`   |          |       | `j1`   | `sw-smn04`    | `x3000`  | `u36`      | `-`   | `j27`  |
 
-### HMN connections
+### Cooling door: HMN connections
 
 The HMN connections representation for the SHCD table row above:
 
@@ -1126,7 +1126,7 @@ The HMN connections representation for the SHCD table row above:
 {"Source":"x3000door-Motiv","SourceRack":"x3000","SourceLocation":" ","DestinationRack":"x3000","DestinationLocation":"u36","DestinationPort":"j27"}
 ```
 
-### SLS
+### Cooling door: SLS
 
 Cooling doors are not currently supported by HMS services, and are not present in SLS.
 
@@ -1144,7 +1144,7 @@ The `Source` field has one of the following prefixes:
 
 Any management switch that is found in the `HMN` tab of the SHCD will be ignored by CSI.
 
-### SHCD
+### Management switches: SHCD
 
 Example: Management switch in slot 12 of cabinet 3000, its management port is connected to port 41 of the `leaf-bmc` management switch in slot 14 of cabinet 3000.
 
@@ -1152,7 +1152,7 @@ Example: Management switch in slot 12 of cabinet 3000, its management port is co
 | ----------------- | ------- | ---------- | ----- | -------- | ----- | ------ | ------------- | -------- | ---------- | ----- | ------ |
 | `sw-25g01`        | `x3000` | `u12`      | `-`   |          |       | `j1`   | `sw-smn01`    | `x3000`  | `u14`      | `-`   | `j41`  |
 
-### HMN connections
+### Management switches: HMN connections
 
 The HMN connections representation for the SHCD table row above:
 
@@ -1160,6 +1160,6 @@ The HMN connections representation for the SHCD table row above:
 {"Source":"sw-25g01","SourceRack":"x3000","SourceLocation":"u12","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j41"}
 ```
 
-### SLS
+### Management switches: SLS
 
 The management switches in SLS are not populated by `hmn_connections.json`, but instead from `switch_metadata.csv`.
