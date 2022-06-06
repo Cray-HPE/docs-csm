@@ -1,7 +1,7 @@
 # Updating BMC Firmware and BIOS for NCNs without FAS
 
-
 > **NOTE:**
+> 
 > * On HPE nodes, the BMC Firmware is iLO 5 and BIOS is System ROM.
 > * The commands in the procedure must be run on `ncn-m001`.
 > * This procedure should only be used if FAS is not available, such as during initial CSM install.
@@ -70,7 +70,6 @@ If the command `ilorest` is available, then follow the procedure in this section
 Otherwise, see [Using the iLO GUI](#using-the-ilo-gui).
 
 1. Use the `ilorest` command to flash the firmware for each NCN that requires an update:
-
 
     * `passwd` = `root` user password of BMC
     * `ipaddressOfBMC` = IP address of BMC
