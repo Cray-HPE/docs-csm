@@ -324,21 +324,6 @@ This procedure requires administrative privileges.
     EOF
     ```
 
-1. Open SSH sessions to all spine switches.
-
-1. Uninstall the current `cray-metallb` chart.
-
-    Until the chart is reapplied, this will also affect unbound name resolution, and all BGP sessions will be Idle for all of the worker nodes.
-
-    ```bash
-    ncn-m001# helm del cray-metallb -n metallb-system
-    ```
-
-1. Use the open SSH sessions to the switches to clear the BGP sessions based on the above Mellanox or Aruba procedures.
-
-    * Refer to substeps [1-3](#mellanox-ssh) for Mellanox.
-    * Refer to substeps [1-2](#aruba-ssh) for Aruba.
-
 1. Extract `customizations.yaml` from the `site-init` secret.
 
    ```bash
@@ -351,13 +336,73 @@ This procedure requires administrative privileges.
    ncn-m001# manifestgen -c customizations.yaml -i metallb-manifest.yaml -o deploy.yaml
    ```
 
-1. Reapply the `cray-metallb` chart.
+1. Check `customizations.yaml` contains the MetalLB configuration.
+
+   ```bash
+   ncn-m001# yq read customizations.yaml spec.network.metallb
+   ```
+
+   Example output:
+
+   ```text
+   peers:
+     - peer-address: 10.101.3.2
+       peer-asn: 65533
+       my-asn: 65532
+     - peer-address: 10.101.3.3
+       peer-asn: 65533
+       my-asn: 65532
+     - peer-address: 10.252.0.2
+       peer-asn: 65533
+       my-asn: 65531
+     - peer-address: 10.252.0.3
+       peer-asn: 65533
+       my-asn: 65531
+   address-pools:
+     - name: customer-access
+       protocol: bgp
+       addresses:
+         - 10.101.3.192/26
+     - name: node-management
+       protocol: bgp
+       addresses:
+         - 10.92.100.0/24
+     - name: hardware-management
+       protocol: bgp
+       addresses:
+         - 10.94.100.0/24
+     - name: customer-management-static
+       protocol: bgp
+       addresses:
+         - 10.101.3.60/30
+     - name: customer-management
+       protocol: bgp
+       addresses:
+         - 10.101.3.64/26
+   ```
+
+2. Open SSH sessions to all spine switches.
+
+3. Uninstall the current `cray-metallb` chart.
+
+    Until the chart is reapplied, this will also affect unbound name resolution, and all BGP sessions will be Idle for all of the worker nodes.
+
+    ```bash
+    ncn-m001# helm del cray-metallb -n metallb-system
+    ```
+
+4. Use the open SSH sessions to the switches to clear the BGP sessions based on the above Mellanox or Aruba procedures.
+
+    * Refer to substeps [1-3](#mellanox-ssh) for Mellanox.
+    * Refer to substeps [1-2](#aruba-ssh) for Aruba.
+
+5. Reapply the `cray-metallb` chart.
 
     ```bash
     ncn-m001# loftsman ship --manifest-path ./deploy.yaml
     ```
 
-1. Check that the speaker pods are all running.
+6. Check that the speaker pods are all running.
 
     This may take a few minutes.
 
@@ -375,7 +420,7 @@ This procedure requires administrative privileges.
     cray-metallb-speaker-h7s7b                 1/1     Running   0          79m
     ```
 
-1. Use the open SSH sessions to the switches to check the status of the BGP sessions.
+7. Use the open SSH sessions to the switches to check the status of the BGP sessions.
 
     * Refer to substeps [1-3](#mellanox-ssh) for Mellanox.
     * Refer to substeps [1-2](#aruba-ssh) for Aruba.
