@@ -300,7 +300,7 @@ This procedure requires administrative privileges.
     Example output:
 
     ```text
-    cray-metallb   metallb-system  1  022-06-06 16:17:42.684984475 +0000 UTC	deployed  cray-metallb-1.1.1  v0.11.0
+    cray-metallb  metallb-system  1  022-06-06 16:17:42.684984475 +0000 UTC deployed cray-metallb-1.1.1  v0.11.0
     ```
 
 1. Create a manifest file that will be used to reapply the same chart version.
@@ -381,9 +381,9 @@ This procedure requires administrative privileges.
          - 10.101.3.64/26
    ```
 
-2. Open SSH sessions to all spine switches.
+1. Open SSH sessions to all spine switches.
 
-3. Uninstall the current `cray-metallb` chart.
+1. Uninstall the current `cray-metallb` chart.
 
     Until the chart is reapplied, this will also affect unbound name resolution, and all BGP sessions will be Idle for all of the worker nodes.
 
@@ -391,18 +391,18 @@ This procedure requires administrative privileges.
     ncn-m001# helm del cray-metallb -n metallb-system
     ```
 
-4. Use the open SSH sessions to the switches to clear the BGP sessions based on the above Mellanox or Aruba procedures.
+1. Use the open SSH sessions to the switches to clear the BGP sessions based on the above Mellanox or Aruba procedures.
 
     * Refer to substeps [1-3](#mellanox-ssh) for Mellanox.
     * Refer to substeps [1-2](#aruba-ssh) for Aruba.
 
-5. Reapply the `cray-metallb` chart.
+1. Reapply the `cray-metallb` chart.
 
     ```bash
     ncn-m001# loftsman ship --manifest-path ./deploy.yaml
     ```
 
-6. Check that the speaker pods are all running.
+1. Check that the speaker pods are all running.
 
     This may take a few minutes.
 
@@ -420,7 +420,7 @@ This procedure requires administrative privileges.
     cray-metallb-speaker-h7s7b                 1/1     Running   0          79m
     ```
 
-7. Use the open SSH sessions to the switches to check the status of the BGP sessions.
+1. Use the open SSH sessions to the switches to check the status of the BGP sessions.
 
     * Refer to substeps [1-3](#mellanox-ssh) for Mellanox.
     * Refer to substeps [1-2](#aruba-ssh) for Aruba.
