@@ -30,7 +30,7 @@ The `HMN` tab of the SHCD describes the air-cooled hardware present in the syste
 This information is required by CSM to perform hardware discovery and geolocation of air-cooled hardware in the system. The `HMN` tab may contain other hardware
 that is not managed by CSM, but is connected to the HMN.
 
-The `hmn_connections.json` file is derived from the `HMN` tab of a system SHCD, and is one of the seed files required by the Cray Site Init (CSI) tool to generate
+The `hmn_connections.json` file is derived from the `HMN` tab of a system SHCD, and is one of the seed files required by the `Cray Site Init` (CSI) tool to generate
 configuration files required to install CSM. The `hmn_connections.json` file is almost a one-to-one copy of the right-hand table in the `HMN` tab of the SHCD. It is an
 array of JSON objects, and each object represents a row from the `HMN` tab. Any row that is not understood by CSI will be ignored; this includes any additional
 devices connected to the HMN that are not managed by CSM.
