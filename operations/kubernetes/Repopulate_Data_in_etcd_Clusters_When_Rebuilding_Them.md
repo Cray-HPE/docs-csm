@@ -153,11 +153,11 @@ Data is repopulated in BSS when the REDS `init` job is run.
 
 1. Reload the firmware images from Nexus.
 
-  Refer to the `Load Firmware from Nexus` section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) for more information.
+  Refer to the `Load Firmware from Nexus` section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md#load-firmware-from-nexus) for more information.
 
   When the etcd cluster is rebuilt, all historic data for firmware actions and all recorded snapshots will be lost.
   Image data will be reloaded from Nexus.
-  Any images that were loaded into FAS outside of Nexus will need to be reloaded using the `Load Firmware from RPM or ZIP file` section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md).
+  Any images that were loaded into FAS outside of Nexus will need to be reloaded using the `Load Firmware from RPM or ZIP file` section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md#load-firmware-from-rpm-or-zip-file).
   After images are reloaded, any running actions at time of failure will need to be recreated.
 
 ### HMNFD
