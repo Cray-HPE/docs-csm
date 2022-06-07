@@ -64,7 +64,7 @@ A backup of a healthy etcd cluster has been created.
     cray-bos-etcd-tk4pr4kgqk             1/1     Running              0          4
     ```
 
-1.  Delete the `EtcdRestore` custom resource.
+1. Delete the `EtcdRestore` custom resource.
 
     This step makes it possible for future restores to occur. Replace the `etcdrestore.etcd.database.coreos.com/cray-bos-etcd` value with the name returned in
     the earlier step when creating the backup.
@@ -85,7 +85,7 @@ A backup of a healthy etcd cluster has been created.
     ncn# kubectl get service -n services cray-bos-etcd-client
     ```
 
-    Example of output showing that the service was created:    
+    Example of output showing that the service was created:
 
     ```text
     NAME                   TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
