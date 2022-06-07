@@ -76,5 +76,5 @@ A backup of a healthy etcd cluster has been created.
        cray-bos-etcd-client   ClusterIP   10.28.248.232   <none>        2379/TCP   2m
        ```
    
-      If the service was not created, then repeat the procedure for a new backup restore.
+      If the `etcd-client` service was not created, then repeat the procedure to restore the cluster again.
    
