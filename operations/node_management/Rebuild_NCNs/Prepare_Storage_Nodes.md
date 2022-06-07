@@ -14,7 +14,7 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
    linux# ssh ncn-s001 cat /etc/cray/xname
    ```
 
-2. Check the bss boot parameters for `ncn-s001`.
+2. Check the `bss bootparameters` for `ncn-s001`.
 
    ```bash
    ncn# cray bss bootparameters list --name x3000c0s7b0n0 --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'
@@ -42,7 +42,9 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
 
    If it is there then it will need to be fixed by running:
 
-   **IMPORTANT:** The below python script is provided by the `docs-csm` RPM. To install the latest version of it, see [Check for Latest Documentation](../../../update_product_stream/index.md#documentation).
+   **IMPORTANT:** The below Python script is provided by the `docs-csm` RPM. To install the latest version of it, see [Check for Latest Documentation](../../../update_product_stream/index.md#documentation).
+
+   A token will need to be generated and made available as an environment variable. Refer to the [Retrieve an Authentication Token](../../security_and_authentication/Retrieve_an_Authentication_Token.md) procedure for more information.
 
    ```bash
    ncn# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
@@ -76,30 +78,6 @@ Check the status of Ceph.
     Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.38.service.
     ```
 
-1. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
-
-    On the node being rebuilt run:
-
-    ```bash
-    ncn-s# for service in $(cephadm ls |jq -r '.[].systemd_unit'); do systemctl stop $service; systemctl disable $service; done
-    ```
-
-    Example output:
-
-    ```screen
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.39.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mgr.ncn-s003.tjuyhj.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mon.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.41.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.36.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.37.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mds.cephfs.ncn-s003.jcnovs.    service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.40.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@crash.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@node-exporter.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.38.service.
-    ```
-
 1. Check the OSD status, weight, and location:
 
     ```bash
@@ -108,7 +86,7 @@ Check the status of Ceph.
 
     Example output:
 
-    ```
+    ```text
     ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
     -1       20.95917 root default
     -3        6.98639     host ncn-s001
@@ -136,7 +114,7 @@ Check the status of Ceph.
 
     Example output:
 
-    ```
+    ```text
       cluster:
         id:     184b8c56-172d-11ec-aa96-a4bf0138ee14
         health: HEALTH_WARN
@@ -177,7 +155,7 @@ Check the status of Ceph.
 
      Example output:
 
-     ```
+     ```text
      ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
      -1         62.87750  root default
      -9         10.47958      host ncn-s003
@@ -187,30 +165,32 @@ Check the status of Ceph.
      39    ssd   1.74660          osd.39       down   1.00000  1.00000
      40    ssd   1.74660          osd.40       down   1.00000  1.00000
      41    ssd   1.74660          osd.41       down   1.00000  1.00000
-    ```
+     ```
 
-    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives. By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map. This will result in OSDs that no longer exist appearing to be down.
+    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
+       By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map.
+       This will result in OSDs that no longer exist appearing to be down.
 
-      The following command assumes the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) are set.
+        The following command assumes the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) are set.
 
-      This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
+        This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
 
-      ```bash
-      ncn-s# for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
-      ```
+        ```bash
+        ncn-s# for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
+        ```
 
-      Example Output:
+        Example Output:
 
-      ```screen
-      destroyed osd.1
-      purged osd.1
-      destroyed osd.3
-      purged osd.3
-      destroyed osd.6
-      purged osd.6
-      destroyed osd.9
-      purged osd.9
-      ```
+        ```screen
+        destroyed osd.1
+        purged osd.1
+        destroyed osd.3
+        purged osd.3
+        destroyed osd.6
+        purged osd.6
+        destroyed osd.9
+        purged osd.9
+        ```
 
 ## Next Step
 

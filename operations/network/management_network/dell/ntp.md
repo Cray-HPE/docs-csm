@@ -1,32 +1,31 @@
-# Configure the Network Time Protocol (NTP) Client
+# Network Time Protocol (NTP) Client
+
+Summary of NTP from [RFC-1305 Network Time Protocol (Version 3)](https://tools.ietf.org/html/rfc1305):
+
+> NTP is used to synchronize timekeeping among a set of distributed time servers and clients
+> ...
+> It provides the protocol mechanisms to synchronize time in principle to precisions in the order of nanoseconds while preserving a non-ambiguous date
+> well into the next century.
 
 The Network Time Protocol (NTP) client is essential for syncing time on various clients in the system.
-The following commands show how to configure NTP.
+This document shows how to view NTP status and configure NTP on a Dell switch.
 
-## Relevant Configuration
+- [Show NTP status](#show-ntp-status)
+- [Specify a remote NTP server](#specify-a-remote-ntp-server)
+- [Configure source for NTP](#configure-source-for-ntp)
+- [Expected results](#expected-results)
 
-Specify a remote NTP server to use for time synchronization:
+<a name="show-ntp-status"></a>
 
-```text
-switch(config)# ntp server <FQDN|IP-ADDR>
-```
+## Show NTP status
 
-Configure source for NTP:
-
-```text
-switch(config)# ntp source interface
-```
-
-Show NTP status:
-
-```text
-switch# show ntp status
-```
-
-## Example Output
-
-```text
+```console
 OS10(config)# do show ntp status
+```
+
+Example output:
+
+```text
 system peer:          0.0.0.0
 system peer mode:     unspec
 leap indicator:       11
@@ -43,10 +42,30 @@ broadcastdelay:       0.000000 s
 authdelay:            0.000000 s
 ```
 
-## Expected Results
+<a name="specify-a-remote-ntp-server"></a>
 
-1. Administrators can configure the NTP client
-2. Administrators can validate the functionality using the `show` command
-3. The system time of the switch matches the NTP server
+## Specify a remote NTP server
 
-[Back to Index](index.md)
+Specify a remote NTP server to use for time synchronization:
+
+```console
+switch(config)# ntp server <FQDN|IP-ADDR>
+```
+
+<a name="configure-source-for-ntp"></a>
+
+## Configure source for NTP
+
+```console
+switch(config)# ntp source interface
+```
+
+<a name="expected-results"></a>
+
+## Expected results
+
+1. The NTP client can be configured.
+1. The functionality can be validated using the `show` command.
+1. The system time of the switch matches that of the NTP server.
+
+[Back to index](index.md).

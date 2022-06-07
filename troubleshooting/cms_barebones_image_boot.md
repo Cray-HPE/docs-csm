@@ -1,22 +1,23 @@
 # Troubleshoot the CMS Barebones Image Boot Test
 
 Verify that the CSM services needed to boot a node are available and working properly. This section
-describes how the barebonesImageTest script works and how to interpret the results. If the script is
-unavailable, the manual steps for reproducing the barebones image boot test are provided.
+describes how the `barebonesImageTest` script works and how to interpret the results. If the script is
+unavailable, the manual steps for reproducing the Barebones image boot test are provided.
 
 ## Topics
-
-- [1. Steps the Script Performs](#csm-boot-script-steps)
-- [2. Controlling Which Node Is Used](#csm-boot-compute-node)
-- [3. Controlling Output](#csm-boot-output-level)
-- [4. Manual Steps](#csm-boot-manual-steps)
-  - [4.1 Locate CSM Barebones Image in IMS](#csm-boot-steps-locate-barebones-image-in-ims)
-  - [4.2 Create a BOS Session Template for the CSM Barebones Image](#csm-boot-steps-bos-session-template)
-  - [4.3 Find an available compute node](#csm-boot-steps-node)
-  - [4.4 Reboot the node using a BOS session template](#csm-boot-steps-reboot)
-  - [4.5 Connect to the node's console and watch the boot](#csm-boot-steps-watch-boot)
+  
+* [1. Steps the Script Performs](#1-steps-the-script-performs)
+* [2. Controlling Which Node Is Used](#2-controlling-which-node-is-used)
+* [3. Controlling Test Script Output Level](#3-controlling-test-script-output-level)
+* [4. Manual Steps To Reproduce This Script](#4-manual-steps-to-reproduce-this-script)
+  * [4.1 Locate CSM Barebones Image in IMS](#41-locate-csm-barebones-image-in-ims)
+  * [4.2 Create a BOS Session Template for the CSM Barebones Image](#42-create-a-bos-session-template-for-the-csm-barebones-image)
+  * [4.3 Find an Available Compute Node](#43-find-an-available-compute-node)
+  * [4.4 Reboot the Node Using a BOS Session Template](#44-reboot-the-node-using-a-bos-session-template)
+  * [4.5 Connect to the Node's Console and Watch the Boot](#45-connect-to-the-nodes-console-and-watch-the-boot)
 
 <a name="csm-boot-script-steps"></a>
+
 ## 1. Steps the Script Performs
 
 The script file is: `/opt/cray/tests/integration/csm/barebonesImageTest`
@@ -24,12 +25,12 @@ The script file is: `/opt/cray/tests/integration/csm/barebonesImageTest`
 This script automates the following steps.
 
 1. Obtain the Kubernetes API gateway access token
-2. Find the existing barebones boot image using IMS
-3. Create a BOS session template for the barebones boot image
+2. Find the existing Barebones boot image using IMS
+3. Create a BOS session template for the Barebones boot image
 4. Find an enabled compute node using HSM
 5. Watch the console log for the target compute node using console services
 6. Create a BOS session to reboot the target compute node
-7. Wait for the console output to show an error or successfully reach dracut
+7. Wait for the console output to show an error or successfully reach `dracut`
 
 If the script fails, investigate the underlying service to ensure it is operating correctly
 and examine the detailed log file to find information on the exact error and cause of failure.
@@ -37,9 +38,10 @@ and examine the detailed log file to find information on the exact error and cau
 The boot may take up to 10 or 15 minutes. The image being booted does not support a complete boot,
 so the node will not boot fully into an operating system. This test is merely to verify that the
 CSM services needed to boot a node are available and working properly. This boot test is considered
-successful if the boot reaches the dracut stage.
+successful if the boot reaches the `dracut` stage.
 
 <a name="csm-boot-compute-node"></a>
+
 ## 2. Controlling Which Node Is Used
 
 By default, the script will gather all enabled compute nodes that are present in HSM and
@@ -54,6 +56,7 @@ ncn# /opt/cray/tests/integration/csm/barebonesImageTest --xname x3000c0s10b1n0
 ```
 
 <a name="csm-boot-output-level"></a>
+
 ## 3. Controlling Test Script Output Level
 
 Output is directed to both the console calling the script as well as a log file that will hold
@@ -70,6 +73,7 @@ the log file is `DEBUG`.
 
 Here is an example of running the script with more information displayed on the console
 during the execution of the test:
+
 ```bash
 ncn# CONSOLE_LOG_LEVEL=DEBUG /opt/cray/tests/integration/csm/barebonesImageTest
 cray.barebones-boot-test: INFO     Barebones image boot test starting
@@ -79,18 +83,24 @@ cray.barebones-boot-test: DEBUG    Creating bos session template with etag:bc390
 ```
 
 <a name="csm-boot-manual-steps"></a>
+
 ## 4. Manual Steps To Reproduce This Script
 
-The following manual steps may be performed to reproduce the actions of this script. The result should
-be the same as running the script.
+The following manual steps may be performed to reproduce the actions of this script.
+The result should be the same as running the script.
 
-1. [Locate CSM Barebones Image in IMS](#csm-boot-steps-locate-barebones-image-in-ims)
-1. [Create a BOS Session Template for the CSM Barebones Image](#csm-boot-steps-bos-session-template)
-1. [Find an available compute node](#csm-boot-steps-node)
-1. [Reboot the node using a BOS session template](#csm-boot-steps-reboot)
-1. [Watch Boot on Console](#csm-boot-steps-watch-boot)
+* [1. Steps the Script Performs](#1-steps-the-script-performs)
+* [2. Controlling Which Node Is Used](#2-controlling-which-node-is-used)
+* [3. Controlling Test Script Output Level](#3-controlling-test-script-output-level)
+* [4. Manual Steps To Reproduce This Script](#4-manual-steps-to-reproduce-this-script)
+  * [4.1 Locate CSM Barebones Image in IMS](#41-locate-csm-barebones-image-in-ims)
+  * [4.2 Create a BOS Session Template for the CSM Barebones Image](#42-create-a-bos-session-template-for-the-csm-barebones-image)
+  * [4.3 Find an Available Compute Node](#43-find-an-available-compute-node)
+  * [4.4 Reboot the Node Using a BOS Session Template](#44-reboot-the-node-using-a-bos-session-template)
+  * [4.5 Connect to the Node's Console and Watch the Boot](#45-connect-to-the-nodes-console-and-watch-the-boot)
 
 <a name="csm-boot-steps-locate-barebones-image-in-ims"></a>
+
 ### 4.1 Locate CSM Barebones Image in IMS
 
 Locate the CSM Barebones image and note the `etag` and `path` fields in the output.
@@ -100,6 +110,7 @@ ncn# cray ims images list --format json | jq '.[] | select(.name | contains("bar
 ```
 
 Expected output is similar to the following:
+
 ```json
 {
   "created": "2021-01-14T03:15:55.146962+00:00",
@@ -114,23 +125,30 @@ Expected output is similar to the following:
 ```
 
 <a name="csm-boot-steps-bos-session-template"></a>
+
 ### 4.2 Create a BOS Session Template for the CSM Barebones Image
 
-The session template below can be copied and used as the basis for the BOS session template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in the Image Management Service (IMS).
+The session template below can be copied and used as the basis for the BOS session template.
+As noted below, make sure the S3 path for the manifest matches the S3 path shown in the Image Management Service (IMS).
 
 1. Create the `sessiontemplate.json` file.
+
    ```bash
    ncn# vi sessiontemplate.json
    ```
 
    The session template should contain the following:
+
    ```json
    {
      "boot_sets": {
        "compute": {
          "boot_ordinal": 2,
          "etag": "etag_value_from_cray_ims_command",
-         "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+         "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off 
+         intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic 
+         pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 
+         spire_join_token=${SPIRE_JOIN_TOKEN}",
          "network": "nmn",
          "node_roles_groups": [
            "Compute"
@@ -147,28 +165,35 @@ The session template below can be copied and used as the basis for the BOS sessi
      "enable_cfs": false,
      "name": "shasta-1.4-csm-bare-bones-image"
    }
+   ```
 
    **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones noted earlier in the `cray ims images list` command.
 
-
 2. Create the BOS session template using the following file as input:
+
    ```bash
    ncn# cray bos sessiontemplate create --file sessiontemplate.json --name shasta-1.4-csm-bare-bones-image
    ```
+
    The expected output is:
-   ```
+
+   ```text
    /sessionTemplate/shasta-1.4-csm-bare-bones-image
    ```
 
 <a name="csm-boot-steps-node"></a>
+
 ### 4.3 Find an Available Compute Node
-To list hte compute nodes managed by HSM:
+
+To list the compute nodes managed by HSM:
+
 ```bash
 ncn# cray hsm state components list --role Compute --enabled true
 ```
 
 Example output:
-```
+
+```text
 [[Components]]
 ID = "x3000c0s17b1n0"
 Type = "Node"
@@ -197,20 +222,24 @@ Class = "River"
 > Troubleshooting: If any compute nodes are missing from HSM database, refer to [2.3.2 Known Issues](#hms-smd-discovery-validation-known-issues) to troubleshoot any Node BMCs that have not been discovered.
 
 Choose a node from those listed and set `XNAME` to its component name (xname). In this example, `x3000c0s17b2n0`:
+
 ```bash
 ncn# export XNAME=x3000c0s17b2n0
 ```
 
 <a name="csm-boot-steps-reboot"></a>
+
 ### 4.4 Reboot the Node Using a BOS Session Template
 
 Create a BOS session to reboot the chosen node using the BOS session template that was created:
+
 ```bash
 ncn# cray bos session create --template-uuid shasta-1.4-csm-bare-bones-image --operation reboot --limit $XNAME
 ```
 
 Expected output looks similar to the following:
-```
+
+```text
 limit = "x3000c0s17b2n0"
 operation = "reboot"
 templateUuid = "shasta-1.4-csm-bare-bones-image"
@@ -227,6 +256,7 @@ type = "GET"
 ```
 
 <a name="csm-boot-steps-watch-boot"></a>
+
 ### 4.5 Connect to the Node's Console and Watch the Boot
 
 The boot may take up to 10 or 15 minutes. The image being booted does not support a complete boot,
@@ -238,10 +268,11 @@ CSM services needed to boot a node are available and working properly.
    for information on how to connect to the node's console (and for instructions on how to close it later).
 
 2. Monitor the boot.
-   This boot test is considered successful if the boot reaches the dracut stage. You know this has
+   This boot test is considered successful if the boot reaches the `dracut` stage. You know this has
    happened if the console output has something similar to the following somewhere within the final
    20 lines of its output:
-   ```
+
+   ```text
    [    7.876909] dracut: FATAL: Don't know how to handle 'root=craycps-s3:s3://boot-images/e3ba09d7-e3c2-4b80-9d86-0ee2c48c2214/rootfs:c77c0097bb6d488a5d1e4a2503969ac0-27:dvs:api-gw-service-nmn.local:300:nmn0'
    [    7.898169] dracut: Refusing to continue
    ```
@@ -249,7 +280,8 @@ CSM services needed to boot a node are available and working properly.
    **NOTE**: As long as the preceding text is found near the end of the console output, the test is
    considered successful. It is normal (and **not** indicative of a test failure) to see something
    similar to the following at the very end of the console output:
-   ```
+
+   ```text
             Starting Dracut Emergency Shell...
    [   11.591948] device-mapper: uevent: version 1.0.3
    [   11.596657] device-mapper: ioctl: 4.40.0-ioctl (2019-01-18) initialised: dm-devel@redhat.com
@@ -259,7 +291,8 @@ CSM services needed to boot a node are available and working properly.
    ```
 
 3. Exit the console.
-   ```
+
+   ```bash
    cray-console-node# &.
    ```
 
