@@ -5,7 +5,7 @@ unwanted IP traffic by filtering packets where they enter the switch on layer 2 
 An ACL is an ordered list of one or more access control list entries (ACEs) prioritized by sequence number.
 An incoming packet is matched sequentially against each entry in an ACL.
 
-## Configuration Commands
+## Configuration commands
 
 Create an ACL:
 
@@ -21,4 +21,3 @@ switch# show ip access-list name
 ```
 
 [Back to Index](index.md)
-
