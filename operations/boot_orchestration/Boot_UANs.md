@@ -2,17 +2,22 @@
 
 Boot UANs with an image so that they are ready for user logins.
 
-### Prerequisites
+## Prerequisites
 
 UAN boot images and a BOS session template have been created. See [Create UAN Boot Images](../image_management/Create_UAN_Boot_Images.md).
 
-### Procedure
+## Procedure
 
-1.  Create a BOS session to boot the UAN nodes.
+1. Create a BOS session to boot the UAN nodes.
 
     ```bash
-    ncn-m001# cray bos session create --template-uuid uan-sessiontemplate-PRODUCT_VERSION \
-    --operation reboot --format json | tee session.json
+    ncn# cray bos session create --template-uuid uan-sessiontemplate-PRODUCT_VERSION \
+            --operation reboot --format json | tee session.json
+    ```
+
+    Example output:
+
+    ```json
     {
      "links": [
        {
@@ -30,12 +35,11 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
      "operation": "reboot",
      "templateUuid": "uan-sessiontemplate-PRODUCT_VERSION"
     }
-
     ```
 
     The first attempt to reboot the UANs will most likely fail. The UAN boot may hang and the UAN console will look similar to the following:
 
-    ```bash
+    ```text
     2021-03-19 01:32:41 dracut-initqueue[420]: DVS: node map generated.
     2021-03-19 01:32:41 katlas: init_module: katlas loaded, currently disabled
     2021-03-19 01:32:41
@@ -56,66 +60,74 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
 
     If this occurs, repeat the BOS command.
 
-2.  Verify that the Day Zero patch was applied correctly during [Create UAN Boot Images](../image_management/Create_UAN_Boot_Images.md). Skip this step if the patch has already been verified.
-
-    1.  SSH into a newly booted UAN.
-
-        ```bash
-        ncn-m001# ssh uan01-nmn
-        Last login: Wed Mar 17 19:10:12 2021 from 10.252.1.12
-        uan01#
-        ```
-
-    2.  Verify that the DVS RPM versions match what exists in the 1.4.0-p2/rpms directory.
-
-        ```bash
-        uan01# rpm -qa | grep 'cray-dvs.*2.12' | sort
-        cray-dvs-compute-2.12_4.0.102-7.0.1.0_8.1__g30d29e7a.x86_64
-        cray-dvs-devel-2.12_4.0.102-7.0.1.0_8.1__g30d29e7a.x86_64
-        cray-dvs-kmp-cray_shasta_c-2.12_4.0.102_k4.12.14_197.78_9.1.58-7.0.1.0_8.1__g30d29e7a.x86_64
-        ```
-
-    3.  Log out of the UAN.
-
-        ```bash
-        uan01# exit
-        ```
-
-3.  Retrieve the BOS session ID from the output of the previous command.
+1. Retrieve the BOS session ID from the output of the `cray bos session create` command in the previous step.
 
     ```bash
-    ncn-m001# BOS_SESSION=$(jq -r '.links[] | select(.rel=="session") | .href' session.json | cut -d '/' -f4)
+    ncn# BOS_SESSION=$(jq -r '.links[] | select(.rel=="session") | .href' session.json | cut -d '/' -f4) ; echo $BOS_SESSION
+    ```
 
-    ncn-m001# echo $BOS_SESSION
+    Example output:
+
+    ```text
     89680d0a-3a6b-4569-a1a1-e275b71fce7d
     ```
 
-4.  Retrieve the Boot Orchestration Agent \(BOA\) Kubernetes job name for the BOS session.
+1. Retrieve the Boot Orchestration Agent \(BOA\) Kubernetes job name for the BOS session.
 
     ```bash
-    ncn-m001# BOA_JOB_NAME=$(cray bos session describe $BOS_SESSION --format json | jq -r .boa_job_name)
+    ncn# BOA_JOB_NAME=$(cray bos session describe $BOS_SESSION --format json | jq -r .boa_job_name)
     ```
 
-5.  Retrieve the Kubernetes pod name for the BOA assigned to run this session.
+1. Retrieve the Kubernetes pod name for the BOA assigned to run this session.
 
     ```bash
-    ncn-m001# BOA_POD=$(kubectl get pods -n services -l job-name=$BOA_JOB_NAME \
-    --no-headers -o custom-columns=":metadata.name")
+    ncn# BOA_POD=$(kubectl get pods -n services -l job-name=$BOA_JOB_NAME --no-headers -o custom-columns=":metadata.name")
     ```
 
-6.  View the logs for the BOA to track session progress.
+1. View the logs for the BOA to track session progress.
 
     ```bash
-    ncn-m001# kubectl logs -f -n services $BOA_POD -c boa
+    ncn# kubectl logs -f -n services $BOA_POD -c boa
     ```
 
-7.  List the CFS sessions started by the BOA. Skip this step if CFS was not enabled in the boot session template used to boot the UANs.
+1. List the CFS sessions started by the BOA.
+
+    > Skip this step if CFS was not enabled in the boot session template used to boot the UANs.
 
     If CFS was enabled in the boot session template, the BOA will initiate a CFS session.
 
     In the following command, `pending` and `complete` are also valid statuses to filter on.
 
     ```bash
-    ncn-m001# cray cfs sessions list --tags bos_session=$BOS_SESSION --status running --format json
+    ncn# cray cfs sessions list --tags bos_session=$BOS_SESSION --status running --format json
     ```
 
+1. Verify that the Day Zero patch was applied correctly during [Create UAN Boot Images](../image_management/Create_UAN_Boot_Images.md).
+
+    > Skip this step if the patch has already been verified.
+
+    1. SSH into a newly booted UAN.
+
+        ```bash
+        ncn# ssh uan01-nmn
+        ```
+
+    1. Verify that the DVS RPM versions match what exists in the `1.4.0-p2/rpms` directory.
+
+        ```bash
+        uan01# rpm -qa | grep 'cray-dvs.*2.12' | sort
+        ```
+
+        Example output:
+
+        ```text
+        cray-dvs-compute-2.12_4.0.102-7.0.1.0_8.1__g30d29e7a.x86_64
+        cray-dvs-devel-2.12_4.0.102-7.0.1.0_8.1__g30d29e7a.x86_64
+        cray-dvs-kmp-cray_shasta_c-2.12_4.0.102_k4.12.14_197.78_9.1.58-7.0.1.0_8.1__g30d29e7a.x86_64
+        ```
+
+    1. Log out of the UAN.
+
+        ```bash
+        uan01# exit
+        ```
