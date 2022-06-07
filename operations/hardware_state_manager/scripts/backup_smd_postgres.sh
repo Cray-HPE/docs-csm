@@ -54,12 +54,14 @@ secrets=(
     postgres.cray-smd-postgres.credentials
     standby.cray-smd-postgres.credentials
 )
+#shellcheck disable=SC2068
 for secret in ${secrets[@]}; do
     filename="${secret}.yaml"
     echo "Saving Kubernetes secret ${secret}"
     kubectl -n services get secret $secret -o yaml > "${filename}"
 done
 
+#shellcheck disable=SC2068
 for secret in ${secrets[@]}; do
     filename="${secret}.yaml"
 
@@ -71,6 +73,7 @@ for secret in ${secrets[@]}; do
     yq d -i "${filename}" metadata.uid
 done
 
+#shellcheck disable=SC2068
 for secret in ${secrets[@]}; do
     filename="${secret}.yaml"
 

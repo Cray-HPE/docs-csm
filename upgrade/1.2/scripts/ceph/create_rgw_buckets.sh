@@ -41,6 +41,7 @@ function ssh_keygen_keyscan() {
     return $?
 }
 
+#shellcheck disable=SC2046
 num_storage_nodes=$(printf "%03d" $(craysys metadata get num_storage_nodes))
 truncate /root/.ssh/known_hosts --size=0
 

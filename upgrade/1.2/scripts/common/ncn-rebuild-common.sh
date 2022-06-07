@@ -48,6 +48,38 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="ELIMINATE_NTP_CLOCK_SKEW"
+state_recorded=$(is_state_recorded "${state_name}" "${target_ncn}")
+if [[ $state_recorded == "0" && $2 != "--rebuild" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    if [[ "${target_ncn}" != "ncn-m001" ]]; then
+      # ensure the directory exists
+      ssh "${target_ncn}" 'mkdir -p /srv/cray/scripts/common/'
+      # copy the NTP script and template to the node
+      scp -pr "${CSM_ARTI_DIR}"/chrony/ "${target_ncn}":/srv/cray/scripts/common/
+      # run the script
+      #shellcheck disable=SC2029
+      if ! ssh "${target_ncn}" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"; then
+          echo "${target_ncn} csm_ntp failed"
+          exit 1
+      else
+          record_state "${state_name}" "${target_ncn}"
+      fi
+
+      # if the node is not in sync after two minutes, fail
+      if ! ssh "${target_ncn}" 'chronyc waitsync 6 0.5 0.5 20'; then
+          echo "${target_ncn} the clock is not in sync.  Wait a bit more or try again."
+          exit 1
+      else
+          record_state "${state_name}" "${target_ncn}"
+      fi
+    fi
+    } >> ${LOG_FILE} 2>&1
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="WIPE_NODE_DISK"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
@@ -136,6 +168,7 @@ fi
     echo "mgmt IP/Host: ${target_ncn_mgmt_host}"
 
     # retrieve IPMI username/password from vault
+    #shellcheck disable=SC1083
     VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.data.vault-root} | base64 -d)
     # Make sure we got a vault token
     [[ -n ${VAULT_TOKEN} ]]
@@ -153,6 +186,7 @@ fi
             jq -r '.data.Username')
         # If we are not able to get the username, no need to try and get the password.
         [[ -n ${IPMI_USERNAME} ]] || continue
+        #shellcheck disable=SC2155
         export IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
             "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
             vault kv get -format=json secret/hms-creds/$TARGET_MGMT_XNAME" | 

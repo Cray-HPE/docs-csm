@@ -96,6 +96,7 @@ function wait_for_osd() {
     #
     if [[ "$cnt" -eq 6 ]]; then
       echo "INFO: Restarting active mgr daemon to kick things along..."
+      #shellcheck disable=SC2046
       ceph mgr fail $(ceph mgr dump | jq -r .active_name)
       cnt=$((cnt+1))
       continue

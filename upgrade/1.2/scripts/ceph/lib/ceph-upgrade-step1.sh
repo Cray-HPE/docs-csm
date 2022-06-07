@@ -45,6 +45,8 @@ ceph cephadm get-pub-key > ~/ceph.pub
 
 # IMPORTANT:  make sure to copy the key to all nodes including itself and distribute to each utility storage node
 
+#shellcheck disable=SC1073
+#shellcheck disable=SC1072
 ssh-copy-id -f -i ~/ceph.pub root@<host>
 
 ssh-copy-id -f -i ~/ceph.pub root@ncn-s002

@@ -29,6 +29,7 @@ function upgrade_ceph_mgrs () {
 for host in $(ceph node ls| jq -r '.mgr|keys[]')
  do
   echo "Converting ceph-mgr to Octopus"
+  #shellcheck disable=SC2154
   ssh "$host" "cephadm --image $registry/ceph/ceph:v15.2.8 adopt --style legacy --name mgr.$host" --skip-pull
  done
  echo "Sleeping 20 seconds..."

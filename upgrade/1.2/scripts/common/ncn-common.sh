@@ -31,7 +31,8 @@ touch /etc/cray/upgrade/csm/myenv
 . /etc/cray/upgrade/csm/myenv
 
 if [[ -z ${LOG_FILE} ]]; then
-    export LOG_FILE="$(pwd)/output.log"
+    #shellcheck disable=SC2155
+    export LOG_FILE="/root/output.log"
     echo
     echo
     echo " ************"
@@ -65,20 +66,25 @@ do
 done
 
 export TARGET_NCN=$1
+#shellcheck disable=SC2155
 export STABLE_NCN=$(hostname)
 
+#shellcheck disable=SC2155
+#shellcheck disable=SC2046
 export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
    -d client_id=admin-client \
    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 
+#shellcheck disable=SC2155
 export TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
 
-
+#shellcheck disable=SC2155
 export TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Parent")
 
+#shellcheck disable=SC2155
 export TARGET_IP_NMN=$(dig +short $TARGET_NCN.nmn)
 
 function drain_node() {

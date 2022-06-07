@@ -45,6 +45,7 @@ if [[ $(hostname) =~ ncn-s00[1-3] ]]; then
 fi
 
 echo "Enabling Ceph services to start on boot and starting if stopped"
+#shellcheck disable=SC2046
 for service in $(cephadm ls |jq -r .[].systemd_unit|grep $(ceph status -f json-pretty |jq -r .fsid));
 do
   systemctl enable $service

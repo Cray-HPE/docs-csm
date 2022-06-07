@@ -54,12 +54,14 @@ secrets=(
     postgres.cray-sls-postgres.credentials
     standby.cray-sls-postgres.credentials
 )
+#shellcheck disable=SC2068
 for secret in ${secrets[@]}; do
     filename="${secret}.yaml"
     echo "Saving Kubernetes secret ${secret}"
     kubectl -n services get secret $secret -o yaml > "${filename}"
 done
 
+#shellcheck disable=SC2068
 for secret in ${secrets[@]}; do
     filename="${secret}.yaml"
 
@@ -71,6 +73,7 @@ for secret in ${secrets[@]}; do
     yq d -i "${filename}" metadata.uid
 done
 
+#shellcheck disable=SC2068
 for secret in ${secrets[@]}; do
     filename="${secret}.yaml"
 
@@ -82,6 +85,8 @@ echo "Secret manifest is located at ${BACKUP_FOLDER}/${BACKUP_NAME}.manifest"
 
 # Perform an SLS dumpstate. Does not hurt to take one.
 echo "Performing SLS dumpstate..."
+#shellcheck disable=SC2155
+#shellcheck disable=SC2046
 export TOKEN=$(curl -s -S -d grant_type=client_credentials \
                           -d client_id=admin-client \
                           -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \

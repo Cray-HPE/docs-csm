@@ -37,6 +37,7 @@ fi
 UAN_NAME=$1
 
 # Make sure we can resolve the UAN Name
+#shellcheck disable=SC2046
 if [ $(dig +short ${UAN_NAME} | wc -l) -lt 1 ]; then
     error "Unknown UAN ${UAN_NAME}"
 fi
@@ -77,6 +78,8 @@ SYSTEM_DOMAIN=${SYSTEM_NAME}.${SITE_DOMAIN}
 echo "System domain is ${SYSTEM_DOMAIN}"
 
 # Get a token to talk to SLS
+#shellcheck disable=SC2155
+#shellcheck disable=SC2046
 export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 
 if [ -z ${TOKEN} ]; then
@@ -120,6 +123,7 @@ fi
 
 # Running tests on the UAN and cleaning up 
 printf "\nRunning tests on the UAN\n"
+#shellcheck disable=SC2088
 ssh ${UAN_NAME} "~/run-gateway-test-${UAN_NAME}.sh;rm gateway-test.py gateway-test-defn.yaml run-gateway-test-${UAN_NAME}.sh;exit 0"
 
 rm -f /tmp/run-gateway-test-${UAN_NAME}.sh
