@@ -16,7 +16,7 @@ The following information is needed:
 
 ## Obtain the required firmware
 
-The firmware or BIOS can be obtained from the `HFP` tarball if it has been installed, or from the HPE Morpheus Server.
+The firmware or BIOS can be obtained from the `HFP` tarball if it has been installed, or from the HPE Support Center (HPESC).
 
 **The correct version of firmware / BIOS must be selected.**
 
