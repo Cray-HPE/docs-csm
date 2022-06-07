@@ -125,7 +125,7 @@ By default these nodes are `ncn-s001`, `ncn-s002`, and `ncn-s003`.
 
     > A process which has restarted should have an `AGE` in seconds. Restarting all of them could require a couple of minutes depending on how many.
 
-1. In the event that more than 5 minutes have passed and the `radosgw` processes have not restarted, then fail the `ceph-mgr` process.
+1. In the event that more than five minutes have passed and the `radosgw` processes have not restarted, then fail the `ceph-mgr` process.
 
     1. Determine the active `ceph-mgr`.
 
