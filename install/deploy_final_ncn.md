@@ -564,7 +564,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
 1. Get the DNS server IP address for the NMN.
 
     ```bash
-    ncn-m001# export NMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-nmn | awk '{ print $4 }'); echo $NMN_DNS
+    ncn-m001# NMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-nmn | awk '{ print $4 }'); echo $NMN_DNS
     ```
 
     Example output:
@@ -576,7 +576,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
 1. Get the DNS server IP address for the HMN.
 
     ```bash
-    ncn-m001# export HMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-hmn | awk '{ print $4 }'); echo $HMN_DNS
+    ncn-m001# HMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-hmn | awk '{ print $4 }'); echo $HMN_DNS
     ```
 
     Example output:

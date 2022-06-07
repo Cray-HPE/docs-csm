@@ -87,7 +87,7 @@ to boot a node\) to the artifact repository.
     Create a variable for the IMS public key `id` value noted previously.
 
     ```bash
-    ncn# export IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
+    ncn# IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
     ```
 
 1. Determine if the image root being used is in IMS and ready to be customized.
@@ -125,7 +125,7 @@ to boot a node\) to the artifact repository.
     Create a variable for the `id` field value for the image that is being customized.
 
     ```bash
-    ncn# export IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
+    ncn# IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
     ```
 
 1. Create an IMS job record in order to start the image customization job.
@@ -202,8 +202,8 @@ to boot a node\) to the artifact repository.
     the `kubernetes_job` field.
 
     ```bash
-    ncn# export IMS_JOB_ID=ad5163d2-398d-4e93-94f0-2f439f114fe7
-    ncn# export IMS_KUBERNETES_JOB=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize
+    ncn# IMS_JOB_ID=ad5163d2-398d-4e93-94f0-2f439f114fe7
+    ncn# IMS_KUBERNETES_JOB=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize
     ```
 
 1. Create variables for the SSH connection values in the returned data.
@@ -235,8 +235,8 @@ to boot a node\) to the artifact repository.
     To create the variables:
 
     ```bash
-    ncn# export IMS_SSH_HOST=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com
-    ncn# export IMS_SSH_PORT=22
+    ncn# IMS_SSH_HOST=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com
+    ncn# IMS_SSH_PORT=22
     ```
 
 1. Describe the image create job.
@@ -262,7 +262,7 @@ to boot a node\) to the artifact repository.
 1. Record the name of the Kubernetes pod from the previous command.
 
     ```bash
-    ncn# export POD=cray-ims-cfa864b3-4e08-49b1-9c57-04573228fd3f-customize-xh2jf
+    ncn# POD=cray-ims-cfa864b3-4e08-49b1-9c57-04573228fd3f-customize-xh2jf
     ```
 
 1. Verify that the status of the IMS job is `waiting_on_user`.
@@ -519,7 +519,7 @@ to boot a node\) to the artifact repository.
     Set `IMS_RESULTANT_IMAGE_ID` to the value of the `resultant_image_id` field in the output of the previous command.
 
     ```bash
-    ncn# export IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
+    ncn# IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
     ```
 
 1. Verify that the new IMS image record exists.

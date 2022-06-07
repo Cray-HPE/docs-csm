@@ -55,10 +55,10 @@ the following procedure can be used to add this external image to IMS and upload
 
 1.  Create an environment variable for the ID of the new IMS Image Record.
 
-    Set and export the `IMS_IMAGE_ID` variable, using the `id` field value from the returned data in the previous step.
+    Set the `IMS_IMAGE_ID` variable, using the `id` field value from the returned data in the previous step.
 
     ```bash
-    ncn# export IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
+    ncn# IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
     ```
 
     <a name="upload_to_s3"></a>
@@ -75,7 +75,7 @@ the following procedure can be used to add this external image to IMS and upload
     1. Record the `md5sum` of the image root to be uploaded.
 
         ```bash
-        ncn# export IMS_ROOTFS_MD5SUM=`md5sum $ROOTFS_FILENAME | awk '{ print $1 }'`
+        ncn# IMS_ROOTFS_MD5SUM=`md5sum $ROOTFS_FILENAME | awk '{ print $1 }'`
         ```
 
     1. Upload the image root to S3.
@@ -90,10 +90,10 @@ the following procedure can be used to add this external image to IMS and upload
     > `image-root/boot/vmlinuz`.
 
     ```bash
-    ncn# export IMS_KERNEL_FILENAME=vmlinuz
+    ncn# IMS_KERNEL_FILENAME=vmlinuz
     ncn# cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_KERNEL_FILENAME \
             image-root/boot/$IMS_KERNEL_FILENAME
-    ncn# export IMS_KERNEL_MD5SUM=`md5sum image-root/boot/$IMS_KERNEL_FILENAME | awk '{ print $1 }'`
+    ncn# IMS_KERNEL_MD5SUM=`md5sum image-root/boot/$IMS_KERNEL_FILENAME | awk '{ print $1 }'`
     ```
 
 1. Optionally, upload the initrd for the image to S3.
@@ -102,10 +102,10 @@ the following procedure can be used to add this external image to IMS and upload
     > `image-root/boot/initrd`.
 
     ```bash
-    ncn# export IMS_INITRD_FILENAME=initrd
+    ncn# IMS_INITRD_FILENAME=initrd
     ncn# cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_INITRD_FILENAME \
     image-root/boot/$IMS_INITRD_FILENAME
-    ncn# export IMS_INITRD_MD5SUM=`md5sum image-root/boot/$IMS_INITRD_FILENAME | awk '{ print $1 }'`
+    ncn# IMS_INITRD_MD5SUM=`md5sum image-root/boot/$IMS_INITRD_FILENAME | awk '{ print $1 }'`
     ```
 
     <a name="image_manifest"></a>

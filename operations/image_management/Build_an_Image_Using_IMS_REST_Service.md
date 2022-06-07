@@ -48,7 +48,7 @@ The commands in this procedure must be run as the `root` user.
     If a public key associated with the username in use is not returned, proceed to the next step. If a public key associated with the username does exist, create a variable for the IMS public key `id` value in the returned data and then proceed to step 3.
 
     ```bash
-    ncn# export IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
+    ncn# IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
     ```
 
 2.  Upload the SSH public key to the IMS service.
@@ -75,7 +75,7 @@ The commands in this procedure must be run as the `root` user.
     If successful, create a variable for the IMS public key `id` value in the returned data.
 
     ```bash
-    ncn# export IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
+    ncn# IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
     ```
 
 **Get the IMS Recipe to Build**
@@ -107,7 +107,7 @@ The commands in this procedure must be run as the `root` user.
     If successful, create a variable for the IMS recipe `id` in the returned data.
 
     ```bash
-    ncn# export IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
+    ncn# IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
     ```
 
 **Submit the Kubernetes Image Create Job**
@@ -154,8 +154,8 @@ The commands in this procedure must be run as the `root` user.
     If successful, create variables for the IMS job `id` and `kubernetes_job` values in the returned data.
 
     ```bash
-    ncn# export IMS_JOB_ID=ad5163d2-398d-4e93-94f0-2f439f114fe7
-    ncn# export IMS_KUBERNETES_JOB=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create
+    ncn# IMS_JOB_ID=ad5163d2-398d-4e93-94f0-2f439f114fe7
+    ncn# IMS_KUBERNETES_JOB=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create
     ```
 
 5.  Use `kubectl` and the returned `IMS_KUBERNETES_JOB` value to describe the image create job.
@@ -181,7 +181,7 @@ The commands in this procedure must be run as the `root` user.
     If successful, create a variable for the pod name that was created above, which will be used in the next step.
 
     ```bash
-    ncn# export POD=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create-lt69t
+    ncn# POD=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create-lt69t
     ```
 
 6.  Watch the logs from the `fetch-recipe`, `wait-for-repos`, `build-ca-rpm`, `build-image`, and `buildenv-sidecar` containers to monitor the image creation process.
@@ -367,7 +367,7 @@ The commands in this procedure must be run as the `root` user.
     [===========================================================\] 26886/26886 100%
 
     Exportable Squashfs 4.0 filesystem, gzip compressed, data block size 131072
-    	compressed data, compressed metadata, compressed fragments, compressed xattrs
+        compressed data, compressed metadata, compressed fragments, compressed xattrs
 
     [...]
 
@@ -575,7 +575,7 @@ The commands in this procedure must be run as the `root` user.
     If successful, create a variable for the IMS `resultant_image_id`.
 
     ```bash
-    ncn# export IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
+    ncn# IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
     ```
 
 11. Verify the new IMS image record exists.

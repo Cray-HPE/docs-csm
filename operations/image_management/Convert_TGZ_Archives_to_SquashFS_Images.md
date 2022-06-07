@@ -27,7 +27,7 @@ There is a pre-built image that is not currently in SquashFS format.
 3.  Recompress the image root with SquashFS.
 
     ```bash
-    ncn-m001# export IMS_ROOTFS_FILENAME=IMAGE_NAME.squashfs
+    ncn-m001# IMS_ROOTFS_FILENAME=IMAGE_NAME.squashfs
     ncn-m001# mksquashfs image-root $IMS_ROOTFS_FILENAME
     ```
 
