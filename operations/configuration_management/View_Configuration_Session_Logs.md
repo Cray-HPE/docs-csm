@@ -13,7 +13,7 @@ cfs-f9d18751-e6d1-4326-bf76-434293a7b1c5-q8tsc
 Store the returned pod name as the `CFS_POD_NAME` variable for future use:
 
 ```bash
-ncn# export CFS_POD_NAME=cfs-f9d18751-e6d1-4326-bf76-434293a7b1c5-q8tsc
+ncn# CFS_POD_NAME=cfs-f9d18751-e6d1-4326-bf76-434293a7b1c5-q8tsc
 ```
 
 Alternatively, if the session is one of many recent sessions and the session name is not known, it is possible to list all CFS pods by start time and pick the desired pod based on status or start time:

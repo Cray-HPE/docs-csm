@@ -83,7 +83,7 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
     If successful, note the upgrade\_id in the returned data.
 
     ```bash
-    ncn-w001# export UPGRADE_ID=e0131663-dbee-47c2-aa5c-13fe9b110242
+    ncn-w001# UPGRADE_ID=e0131663-dbee-47c2-aa5c-13fe9b110242
     ```
 
 5.  Monitor the status of the upgrade session.

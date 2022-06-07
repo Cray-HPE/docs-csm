@@ -262,7 +262,7 @@ This guide only details how to apply UAN-specific configuration to the UAN image
         Replace IMAGE\_ID in the following export command with the IMS image id recorded in Step 1.
 
         ```bash
-        ncn-m001# export UAN_IMAGE_ID=IMAGE_ID
+        ncn-m001# UAN_IMAGE_ID=IMAGE_ID
         ncn-m001# cray artifacts get boot-images ${UAN_IMAGE_ID}/rootfs \
         ${UAN_IMAGE_ID}.squashfs
         ncn-m001# la ${UAN_IMAGE_ID}.squashfs
