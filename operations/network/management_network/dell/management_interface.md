@@ -9,23 +9,25 @@ Alternatively, a loopback interface can be configured to be used as management i
 
 Configure the Management interface in CONFIGURATION mode:
 
-```text
+```bash
 interface mgmt 1/1/1
 ```
 
 Configure an IP address and mask on the Management interface in INTERFACE mode:
 
-```text
+```bash
 ip address A.B.C.D/prefix-length
 ```
 
 (Optional) Configure DHCP client operations in INTERFACE mode. By default, DHCP client is enabled on the Management interface:
 
+```bash
 dhcp
+```
 
 Enable the Management interface in INTERFACE mode:
 
-```text
+```bash
 no shutdown
 ```
 

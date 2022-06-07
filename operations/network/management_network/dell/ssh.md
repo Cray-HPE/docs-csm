@@ -5,7 +5,7 @@ SSH server enables an SSH client to make a secure and encrypted connection to a 
 Currently, switches support SSH version 2.0 only.
 The user authentication mechanisms supported for SSH are public key authentication and password authentication (RADIUS, TACACS+, or locally stored password).
 Secure File Transfer Protocol (SFTP) provides file transfer.
-SSH Server and sftp-client via the `copy` command are supported for managing the router.
+SSH Server and `sftp-client` via the `copy` command are supported for managing the router.
 
 ## Configuration Commands
 

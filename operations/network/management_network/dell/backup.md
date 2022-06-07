@@ -9,4 +9,3 @@ sftp://userid:passwd@hostip/filepath | tftp://hostip/filepath}
 ```
 
 [Back to Index](index.md)
-

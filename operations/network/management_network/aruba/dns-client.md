@@ -6,19 +6,19 @@ The Domain Name Service (DNS) translates domain and host names to and from IP ad
 
 Configure the switch to resolve queries via a DNS server:
 
-```
+```bash
 switch(config)# ip dns server-address IP-ADDR [vrf VRF]
 ```
 
 Configure a domain name:
 
-```
+```bash
 switch(config)# ip dns domain-name NAME
 ```
 
 Show commands to validate functionality:
 
-```
+```bash
 switch# show ip dns
 ```
 
