@@ -437,17 +437,40 @@ BMC can be safely ignored or needs to be addressed before proceeding.
        - x3000c0s10b999 - Not found in HSM Components; Not found in HSM Redfish Endpoints; No mgmt port connection.
    ```
 
-- HPE PDUs are supported and should show up as being found in HSM. If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are
-  required for the PDUs to be discovered. Refer to [HPE PDU Admin Procedures](hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on
-  if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
-   > Cabinet PDU Controllers have component names (xnames) in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
+- **TODO Phrase**: Cabinet PDU Controllers have component names (xnames) in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 
-   Example mismatch for HPE PDU:
+   Example mismatch for a PDU:
 
    ```text
      CabinetPDUControllers: WARNING
        - x3000m0 - Not found in HSM Components ; Not found in HSM Redfish Endpoints
    ```
+
+
+  If the PDU is accessible over the network, the following can be used to determine the vendor of the PDU.
+  
+   ```bash
+  ncn-m001# PDU=x3000m0
+  ncn-m001# c curl -k -s --compressed  https://$PDU -i | grep Server:
+  ```
+
+
+    - Example ServerTech output:
+
+      ```
+      Server: ServerTech-AWS/v8.0v
+      ```
+
+    - Example HPE output
+      ```
+      Server: HPE/1.4.0
+      ```
+
+  - **TODO** ServerTech PDUs may need password changed from their defaults to become functional... perform the steps in [Change Credentials on ServerTech PDUs](./security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
+
+  - HPE PDUs are supported and should show up as being found in HSM. If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are
+    required for the PDUs to be discovered. Refer to [HPE PDU Admin Procedures](hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on
+    if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
 
 - BMCs having no association with a management switch port will be annotated as such, and should be investigated. Exceptions to this are in Mountain or Hill configurations where Mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
 - In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated
