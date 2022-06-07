@@ -5,7 +5,7 @@ HPE Cray EX management nodes. Several HPE Cray EX product environments outside
 of CSM require NCN personalization to function. Consult the manual for each
 product to configure them on NCNs by referring to the
 [`1.5 HPE Cray EX System Software Getting Started Guide S-8000`](https://www.hpe.com/support/ex-gsg)
-on the `HPE Customer Support Center`.
+on the HPE Customer Support Center.
 
 This procedure defines the NCN personalization process for the CSM product using
 the [Configuration Framework Service (CFS)](../configuration_management/Configuration_Management.md).
@@ -13,17 +13,17 @@ the [Configuration Framework Service (CFS)](../configuration_management/Configur
 During a fresh install, carry out these procedures in order. Later, individual
 procedures may be re-run as needed.
 
-1. [Set Up Passwordless SSH](#set_up_passwordless_ssh)
-   - [Option 1: Use the CSM-provided SSH Keys](#set_up_passwordless_ssh_option_1)
-   - [Option 2: Option 2: Provide Custom SSH Keys](#set_up_passwordless_ssh_option_2)
-   - [Option 3: Disable CSM-provided Passwordless SSH](#set_up_passwordless_ssh_option_3)
-   - [Restore CSM-provided SSH Keys](#set_up_passwordless_ssh_restore)
-2. [Configure the Root Password in Vault](#set_root_password)
-3. [Run NCN Personalization](#run_ncn_personalization)
+1. [Set up passwordless SSH](#set_up_passwordless_ssh)
+   - [Option 1: Use the CSM-provided SSH keys](#set_up_passwordless_ssh_option_1)
+   - [Option 2: Provide custom SSH keys](#set_up_passwordless_ssh_option_2)
+   - [Option 3: Disable CSM-provided passwordless SSH](#set_up_passwordless_ssh_option_3)
+   - [Restore CSM-provided SSH keys](#set_up_passwordless_ssh_restore)
+2. [Configure the `root` password in Vault](#set_root_password)
+3. [Run NCN personalization](#run_ncn_personalization)
 
 <a name="set_up_passwordless_ssh"></a>
 
-## 1. Set Up Passwordless SSH
+## 1. Set up passwordless SSH
 
 This procedure should be run during CSM installation and any later time when
 the SSH keys need to be changed per site requirements.
@@ -47,15 +47,15 @@ The SSH keypair is applied to management nodes using NCN personalization.
 
 <a name="set_up_passwordless_ssh_option_1"></a>
 
-### Option 1: Use the CSM-provided SSH Keys
+### Option 1: Use the CSM-provided SSH keys
 
 The default CSM Ansible plays are already configured to enable Passwordless SSH
-by default. No further action is necessary before running NCN personalization
-with CFS.
+by default. No further action is necessary before proceeding to
+[Configure the `root` password in Vault](#set_root_password).
 
 <a name="set_up_passwordless_ssh_option_2"></a>
 
-### Option 2: Provide Custom SSH Keys
+### Option 2: Provide custom SSH keys
 
 Administrators may elect to replace the CSM-provided keys with their own custom
 keys.
@@ -66,8 +66,8 @@ keys.
     > key files on the system.
 
     ```bash
-    ncn# PUBLIC_KEY_FILE=/root/.ssh/id_rsa-csm.pub
-    ncn# PRIVATE_KEY_FILE=/root/.ssh/id_rsa-csm
+    ncn# PUBLIC_KEY_FILE=/path/to/id_rsa-csm.pub
+    ncn# PRIVATE_KEY_FILE=/path/to/id_rsa-csm
     ```
 
 1. Provide the custom keys by script or manually.
@@ -111,9 +111,11 @@ keys.
 Passwordless SSH with the provided keys will be setup once NCN personalization
 runs on the NCNs.
 
+Proceed [Configure the `root` password in Vault](#set_root_password).
+
 <a name="set_up_passwordless_ssh_option_3"></a>
 
-### Option 3: Disable CSM-provided Passwordless SSH
+### Option 3: Disable CSM-provided passwordless SSH
 
 Local site security requirements may preclude use of passwordless SSH access between
 management nodes. If this is the case, remove or comment out the invocation of the
@@ -135,12 +137,14 @@ associated with the product.
 > to make connections between nodes. CFS will continue to function if
 > passwordless SSH is disabled between CSM and other product environments.
 
+Proceed [Configure the `root` password in Vault](#set_root_password).
+
 <a name="set_up_passwordless_ssh_restore"></a>
 
-### Restore CSM-provided SSH Keys
+### Restore CSM-provided SSH keys
 
 > Use this procedure if switching from custom keys to the default CSM SSH keys
-> only; otherwise it can be skipped.
+> only; otherwise it should be skipped.
 
 The keys can be deleted from Kubernetes directly. The `csm-ssh-keys` Kubernetes deployment
 provided by CSM periodically checks the ConfigMap and secret containing the key information.
@@ -162,10 +166,10 @@ keys will be republished.
 
 <a name="set_root_password"></a>
 
-## 2. Configure the Root Password in Vault
+## 2. Configure the `root` password in Vault
 
-The root password is applied to NCNs by using the `csm.password` Ansible role
-located in the CSM configuration management repository. Root passwords are set
+The `root` password is applied to NCNs by using the `csm.password` Ansible role
+located in the CSM configuration management repository. `root` passwords are set
 and managed in Vault.
 
 1. Set the password in Vault by following the `Configure Root Password in Vault`
@@ -175,12 +179,7 @@ and managed in Vault.
 
 <a name="run_ncn_personalization"></a>
 
-## 3. Run NCN Personalization
-
-After completing the previous procedures, apply the configuration to the NCNs
-by running NCN personalization with [CFS](../configuration_management/Configuration_Management.md).
-This can be accomplished by running the `apply_csm_configuration.sh` script, or by
-running the steps manually.
+## 3. Run NCN personalization
 
 Prior to running NCN personalization, gather the following information:
 
