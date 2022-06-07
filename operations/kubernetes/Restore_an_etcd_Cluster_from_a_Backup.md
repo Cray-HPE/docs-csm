@@ -2,7 +2,7 @@
 
 Use an existing backup of a healthy etcd cluster to restore an unhealthy cluster to a healthy state.
 
-The commands in this procedure can be run on any master node \(`ncn-mXXX`\) or worker node \(`ncn-wXXX`\) on the system.
+The commands in this procedure can be run on any master or worker node on the system.
 
 ## Prerequisites
 
@@ -53,7 +53,7 @@ A backup of a healthy etcd cluster has been created.
     This may take a couple minutes.
 
     ```bash
-    ncn-w001# kubectl -n services get pod | grep SERVICE_NAME
+    ncn# kubectl -n services get pod | grep SERVICE_NAME
     ```
 
     Example output:
@@ -70,7 +70,7 @@ A backup of a healthy etcd cluster has been created.
     the earlier step when creating the backup.
 
     ```bash
-    ncn-w001# kubectl -n services delete etcdrestore.etcd.database.coreos.com/cray-bos-etcd
+    ncn# kubectl -n services delete etcdrestore.etcd.database.coreos.com/cray-bos-etcd
     ```
 
     Example output:
