@@ -563,18 +563,37 @@ However, the commands in this section are all run **on** `ncn-m001`.
 
 1. Run the following to loop through all of the BMCs (except `ncn-m001-mgmt`) and apply the desired settings.
 
+    Get the NMN DNS IP value
+
+    ```bash
+    ncn-m001# export NMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-nmn | awk '{ print $4 }')
+
+    ```
+
+    Get the HMN DNS IP value
+
+    ```bash
+    ncn-m001# export HMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-hmn | awk '{ print $4 }')
+    ```
+
+    Confirm variables were set:
+
+    ```bash
+    ncn-m001# env | grep _DNS
+    ```
+
     ```bash
     ncn-m001# for BMC in $BMCS ; do
-                echo "$BMC: Disabling DHCP and configure NTP on the BMC using data from cloud-init"
+                echo "$BMC: Disabling DHCP and configure NTP on the BMC using data from unbound service"
                 /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -S -n
                 echo
-                echo "$BMC: Configuring DNS on the BMC using data from cloud-init"
-                /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -d
+                echo "$BMC: Configuring DNS on the BMC using data from unbound"
+                /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -D $NMN_DNS,$HMN_DNS -d
                 echo
                 echo "$BMC: Showing settings"
                 /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -s
                 echo
-            done ; echo "Configuration completed on all NCN BMCs"
+              done ; echo "Configuration completed on all NCN BMCs"
     ```
 
 <a name="next-topic"></a>
