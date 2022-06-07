@@ -561,26 +561,31 @@ However, the commands in this section are all run **on** `ncn-m001`.
     ncn-m002-mgmt ncn-m003-mgmt ncn-s001-mgmt ncn-s002-mgmt ncn-s003-mgmt ncn-w001-mgmt ncn-w002-mgmt ncn-w003-mgmt
     ```
 
+1. Get the DNS server IP address for the NMN.
+
+    ```bash
+    ncn-m001# export NMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-nmn | awk '{ print $4 }'); echo $NMN_DNS
+    ```
+
+    Example output:
+
+    ```text
+    10.92.100.225
+    ```
+
+1. Get the DNS server IP address for the HMN.
+
+    ```bash
+    ncn-m001# export HMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-hmn | awk '{ print $4 }'); echo $HMN_DNS
+    ```
+
+    Example output:
+
+    ```text
+    10.94.100.225
+    ```
+
 1. Run the following to loop through all of the BMCs (except `ncn-m001-mgmt`) and apply the desired settings.
-
-    Get the NMN DNS IP value
-
-    ```bash
-    ncn-m001# export NMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-nmn | awk '{ print $4 }')
-
-    ```
-
-    Get the HMN DNS IP value
-
-    ```bash
-    ncn-m001# export HMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-hmn | awk '{ print $4 }')
-    ```
-
-    Confirm variables were set:
-
-    ```bash
-    ncn-m001# env | grep _DNS
-    ```
 
     ```bash
     ncn-m001# for BMC in $BMCS ; do
