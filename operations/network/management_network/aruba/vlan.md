@@ -2,7 +2,6 @@
 
 VLANs allow for the logical grouping of switch interfaces, enabling communication as if all connected devices were on the same isolated network.
 
-
 ## Configuration Commands
 
 Create VLAN:
@@ -34,7 +33,8 @@ switch(config-if)# vlan trunk allowed <VLAN>
 
 Configure VLAN as Voice:
 
-> **NOTE:** To give a specific VLAN a voice designation and adding the proper hooks, you need to add voice command in the vlan context. This configuration is the same for all CX-series switches.
+> **NOTE:** To give a specific VLAN a voice designation and adding the proper hooks, you need to add the `voice` command in the VLAN context.
+> This configuration is the same for all CX-series switches.
 
 ```text
 switch(config)# vlan <VLAN>
@@ -62,6 +62,5 @@ VLAN  Name                              Status  Reason          Type      Interf
 
 1. Administrators can create a VLAN
 1. Administrators can assign a VLAN to the physical interface
-
 
 [Back to Index](../index.md)
