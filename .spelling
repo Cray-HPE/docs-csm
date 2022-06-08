@@ -67,7 +67,7 @@ ASICs
 backdoor
 backend
 BardPeak
-Barebones
+barebones
 base-64
 base-64-encoded
 Basecamp
@@ -83,7 +83,6 @@ BMCs
 bootscript
 BOA
 BOS
-BOSv2
 BSS
 Burstable
 buses
@@ -537,6 +536,7 @@ V1.20.13
 v1.3
 v1.3.x
 v1.30.16
+V1.3.0
 v1.4
 v1.4.
 v1.4.0
@@ -571,6 +571,7 @@ workarea
 writable
 X.509
 XL645d
+XL675d
 xname
 xnames
 Yum
