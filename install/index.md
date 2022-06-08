@@ -19,8 +19,8 @@ Once the CSM installation has completed, other product streams for the HPE Cray 
 ## Topics
 
 1. [Validate SHCD](#validate_shcd)
-1. [PrePare configuration payload](#prepare_configuration_payload)
-1. [PrePare management nodes](#prepare_management_nodes)
+1. [Prepare configuration payload](#prepare_configuration_payload)
+1. [Prepare management nodes](#prepare_management_nodes)
 1. [Bootstrap PIT node](#bootstrap_pit_node)
 1. [Configure management network switches](#configure_management_network)
 1. [Collect MAC addresses for NCNs](#collect_mac_addresses_for_ncns)
