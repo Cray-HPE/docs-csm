@@ -2,15 +2,14 @@
 
 This document provides links to troubleshooting information for services and functionality provided by CSM.
 
-## Known Issues
+## Known issues
 
-* [Known Issues](#known-issues)
-  * [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
-  * [HMS Discovery job not creating `RedfishEndpoint`s in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
+* [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
+* [HMS Discovery job not creating `RedfishEndpoint`s in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
   * [`initrd.img.xz` not found](known_issues/initrd.img.zx_not_found.md)
   * [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)
 
-## Troubleshooting Topics
+## Troubleshooting topics
 
 * Kubernetes
   * [General Kubernetes Commands for Troubleshooting](kubernetes/Kubernetes_Troubleshooting_Information.md)
@@ -42,7 +41,7 @@ This document provides links to troubleshooting information for services and fun
     * [Issues Related to Slow Boot Times](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
 * Compute Rolling Upgrades
   * CRUS has been deprecated.
-    * It will be removed in CSM-1.3.0 and replaced with BOSv2, which will provide similar functionality.
+    * It will be removed in CSM V1.3.0 and replaced with BOS V2, which will provide similar functionality.
     * See [Deprecated features](../introduction/differences.md#deprecated_features).
   * [Nodes Failing to Upgrade in a CRUS Session](../operations/compute_rolling_upgrades/Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
   * [Failed CRUS Session Because of Unmet Conditions](../operations/compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)

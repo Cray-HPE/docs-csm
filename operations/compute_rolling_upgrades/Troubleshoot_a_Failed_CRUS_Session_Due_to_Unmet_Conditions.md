@@ -1,24 +1,24 @@
 # Troubleshoot a Failed CRUS Session Because of Unmet Conditions
 
-**Note:** CRUS has been deprecated. It will be removed in CSM-1.3.0 and replaced with BOSv2, which will provide similar functionality. See
+**Note:** CRUS has been deprecated. It will be removed in CSM V1.3.0 and replaced with BOS V2, which will provide similar functionality. See
 [Deprecated features](../../introduction/differences.md#deprecated_features).
 
-If a CRUS session has any unmet conditions, adding or fixing them will cause the session to continue from wherever it got stuck. Updating other parts of the system to meet the required conditions of a CRUS session will unblock the upgrade session.
+If a CRUS session has any unmet conditions, adding or fixing them will cause the session to continue from wherever it got stuck. Updating other parts of the system to meet
+the required conditions of a CRUS session will unblock the upgrade session.
 
 The following are examples of unmet conditions:
 
--   Undefined groups in the Hardware State Manager \(HSM\).
--   No predefined Boot Orchestration Service \(BOS\) session template exists that describes the desired states of the nodes being upgraded.
+- Undefined groups in the Hardware State Manager \(HSM\).
+- No predefined Boot Orchestration Service \(BOS\) session template exists that describes the desired states of the nodes being upgraded.
 
+## Prerequisites
 
-### Prerequisites
+- A Compute Rolling Upgrade Service \(CRUS\) session was run and failed to complete.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
 
--   A Compute Rolling Upgrade Service \(CRUS\) session was run and failed to complete.
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+## Procedure
 
-### Procedure
-
-1.  View the details for the CRUS session that failed.
+1. View the details for the CRUS session that failed.
 
     ```bash
     ncn# cray crus session describe CRUS_UPGRADE_ID
@@ -26,7 +26,7 @@ The following are examples of unmet conditions:
 
     Example output:
 
-    ```
+    ```toml
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-node-group"
@@ -41,9 +41,10 @@ The following are examples of unmet conditions:
     workload_manager_type = "slurm"
     ```
 
-    The messages value returned in the output will provide details explaining where the job failed. In this example, there is a note stating the failed node group could not be obtained. This implies that the user forgot to create the failed node group before starting the job.
+    The `messages` value returned in the output will provide details explaining where the job failed. In this example, there is a note stating the failed node group could not be
+    obtained. This implies that the user forgot to create the failed node group before starting the job.
 
-2.  Create a new node group for the missing group.
+1. Create a new node group for the missing group.
 
     Following the example in the previous step, the failed node group needs to be created.
 
@@ -53,20 +54,20 @@ The following are examples of unmet conditions:
 
     Example output:
 
-    ```
+    ```toml
     [[results]]
     URI = "/hsm/v2/groups/failed-node-group"
     ```
 
-3.  View the details for the CRUS session again to see if the job started.
+1. View the details for the CRUS session again to see if the job started.
 
     ```bash
-    ncn-w001# cray crus session describe CRUS_UPGRADE_ID
+    ncn# cray crus session describe CRUS_UPGRADE_ID
     ```
 
     Example output:
 
-    ```
+    ```toml
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-node-group"
@@ -81,5 +82,4 @@ The following are examples of unmet conditions:
     workload_manager_type = "slurm"
     ```
 
-    The messages value states that the job has resumed now that the error has been fixed.
-
+    The `messages` value states that the job has resumed now that the error has been fixed.
