@@ -89,7 +89,7 @@ Verify that the Keycloak users localize job has completed as expected.
 
 After an upgrade, it is possible that all expected Keycloak users were not localized. The procedure below helps determine whether or not this has happened, and
 provides remediation steps if they are needed.
-   
+
 1. Check to see if the Keycloak users localize job has completed.
 
    ```bash
@@ -99,7 +99,7 @@ provides remediation steps if they are needed.
    The job completed if the output contains the string `condition met`.
 
 1. If the job completed, check that the count of localized users matches the expected count from the Keycloak server.
-   
+
    This can be done by looking at the count of users reported from the command below.
 
    ```bash
