@@ -94,7 +94,7 @@ The following is an example of the values for the CHN address pool in the Config
 The CAN or CHN configuration is set in the `csi config init` input:
 
 ```bash
-linux# csi config init
+csi config init
 .
 .
 .

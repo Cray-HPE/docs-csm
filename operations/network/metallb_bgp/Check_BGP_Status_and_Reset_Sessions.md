@@ -70,7 +70,7 @@ This procedure requires administrative privileges.
 
 1. Reset BGP to re-establish the sessions.
 
-        1. SSH to each spine switch.
+    1. SSH to each spine switch.
 
         For example:
 
@@ -210,7 +210,7 @@ This procedure requires administrative privileges.
 
 1. Reset BGP to re-establish the sessions.
 
-        1. SSH to each spine switch.
+    1. SSH to each spine switch.
 
         For example:
 

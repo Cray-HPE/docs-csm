@@ -11,7 +11,7 @@ This is an example configuration of how to connect a pair of Arista switches to 
 
 Below is a snippet from an upgraded SLS.
 
-```json
+```text
  "CHN": {
       "Name": "CHN",
       "FullName": "Customer High-Speed Network",
@@ -96,13 +96,15 @@ In this example, `chn-switch-1` and `chn-switch-2` will be the Arista pair.
 
 SLS entries from the above output:
 
-```json
+```text
+              {
                 "IPAddress": "10.103.9.2",
                 "Name": "chn-switch-1"
               },
               {
                 "IPAddress": "10.103.9.3",
                 "Name": "chn-switch-2"
+              }
 ```
 
 The following configuration is needed on both switches:

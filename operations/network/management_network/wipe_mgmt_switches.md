@@ -97,7 +97,7 @@ Out-of-band access to the switches (console)
 
    - Answer `no` and then answer `yes` on the following prompts:
 
-      ```
+      ```text
       System configuration has been modified. Save? [yes/no]:no
       Continuing without saving system configuration
       Proceed to reboot the system? [confirm yes/no]:yes
