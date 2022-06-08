@@ -108,11 +108,14 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * fixed issues causing PXE boot failures during installs, upgrades, and NCN rebuilds
 
 ## Deprecations
-* CRUS has been deprecated. It will be removed in a future release and replaced with BOSv2, which will provide similar functionality.
+* CRUS has been deprecated. It will be removed in CSM-1.3.0 and replaced with BOSv2, which will provide similar functionality.
 * PowerDNS will replace Unbound as the authoritative DNS source in a future CSM release.
   * The cray-dns-unbound-manager CronJob will be deprecated in a future release once all DNS records are migrated to PowerDNS.
   * The introduction of PowerDNS and Bifurcated CAN will introduce some node and service naming changes.
   * Please see the [PowerDNS Migration Guide](./operations/network/dns/PowerDNS_migration.md) for more information.
+
+See [Deprecated features](introduction/differences.md#deprecated_features).
+
 ## Removals
 * The V1 version of the CFS API was removed
 * The cray-externaldns-coredns, cray-externaldns-etcd, and cray-externaldns-wait-for-etcd pods have been removed. PowerDNS is now the provider of the external DNS service.

@@ -1,5 +1,8 @@
 # Upgrade Compute Nodes with CRUS
 
+**Note:** CRUS has been deprecated. It will be removed in CSM-1.3.0 and replaced with BOSv2, which will provide similar functionality. See
+[Deprecated features](../../introduction/differences.md#deprecated_features).
+
 Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\). Manage the workload management status of nodes and quiesce each node before taking the node out of service and upgrading it. Then reboot it into the upgraded state and return it to service within the workload manager \(WLM\).
 
 ### Prerequisites
