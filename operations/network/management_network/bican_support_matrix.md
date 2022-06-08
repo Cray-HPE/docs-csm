@@ -18,14 +18,13 @@ Customer Access Networks (CANs) provide flexible networking at the edge between 
 For CSM 1.2, the notion of the CAN has been expanded to meet customer requests for increased flexibility and policy control.
 
 
-|     |                            |                              |                            |                                  |
-| --- |----------------------------|------------------------------|----------------------------|----------------------------------|
-|     |                            | **User Access Jobs**         | **User Access Jobs**      | **Management or Administrators** |
-| **System Resource** | **Traffic to and from System** | **Management Network or CAN** | **High Speed Network CHN** | **Management Network CMN**       |
-| System Cloud Resources (APIs) | Ingress                    | Jobs-related APIs            | Jobs-related APIs          | Administrative APIs              |
-| Application Node Servers (UAI, UAN, re-purposed CN) | Ingress                    | Allowed                      | Allowed                    | Not Allowed                      |
-| Non-Compute Node (NCN) Servers | Ingress                    | Not Allowed                  | Not Allowed                | Allowed                          |
-| System Access to External/Site (LDAP, DNS) | Egress                     | Allowed                      | Allowed                    | Not Allowed                      |
+
+| System Resource | Traffic to and from System | Management Network or CAN | High Speed Network CHN | Management Network CMN       |
+| --------------- | :------------------------: | :-----------------------: | :--------------------: |:-----------------------: |
+| System Cloud Resources (APIs) | Ingress                    | Jobs-related APIs         | Jobs-related APIs      | Administrative APIs          |
+| Application Node Servers (UAI, UAN, re-purposed CN) | Ingress                    | Allowed                   | Allowed                | Not Allowed                  |
+| Non-Compute Node (NCN) Servers | Ingress                    | Not Allowed               | Not Allowed            | Allowed                      |
+| System Access to External/Site (LDAP, DNS) | Egress                     | Allowed                   | Allowed                | Not Allowed                  |
 
 * Selection of user access for job control and data movement over the Shasta Management Network (CAN) or the High Speed Network (CHN) is made during system installation or upgrade.
 
