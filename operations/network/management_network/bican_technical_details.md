@@ -128,7 +128,7 @@ DNS tooling for this was released in Shasta v1.4 with [SLS](../../index.md#syste
 #### 2.3.3 Ability to change post-install
 
 - YES - Add/Remove/Change Aliases
-- NO Change FQDN and domain suffixes because of the number of touchpoints.
+- NO - Changing FQDN and domain suffixes because of the number of touchpoints.
 Chiefly Kubernetes limitations introduced at install time and sheer number of touchpoints.
 
 <a name="2-4-endpoint-addressing"></a>
