@@ -1,6 +1,6 @@
 # Keycloak User Localization
 
-## Verification Procedure
+## Verification procedure
 
 Verify that the Keycloak users localize job has completed as expected.
 
