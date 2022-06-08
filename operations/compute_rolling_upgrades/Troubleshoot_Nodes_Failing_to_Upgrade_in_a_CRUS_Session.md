@@ -1,6 +1,6 @@
 # Troubleshoot Nodes Failing to Upgrade in a CRUS Session
 
-**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in CSM 1.3.0 and replaced with BOS V2, which will provide similar functionality.
+**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
 
 Troubleshoot compute nodes failing to upgrade during a Compute Rolling Upgrade Service \(CRUS\) session and rerun the session on the failed nodes.
 

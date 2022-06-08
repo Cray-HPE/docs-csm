@@ -39,7 +39,7 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
 
 ## CRUS
 
-**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in CSM 1.3.0 and replaced with BOS V2, which will provide similar functionality.
+**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
 
 1. View the progress of existing CRUS sessions.
 
