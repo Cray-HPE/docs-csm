@@ -59,7 +59,7 @@ The following features have been completely removed:
 
 * `cray-conman` pod. This has been replaced by `cray-console-node`.
 * The `csi config init` command has changed the option from `-ntp-pool` to `ntp-pools` to support a comma-separated list of NTP pools.
-* CFS v1 API and CLI will be removed in CSM V1.2.0. The v2 API and CLI have been the default since CSM 0.9 (Shasta 1.4).
+* CFS v1 API and CLI will be removed in CSM 1.2.0. The v2 API and CLI have been the default since CSM 0.9 (Shasta 1.4).
 
 <a name="other_changes"></a>
 
