@@ -1,5 +1,8 @@
 # Troubleshoot Nodes Failing to Upgrade in a CRUS Session
 
+**Note:** CRUS has been deprecated. It will be removed in CSM-1.3.0 and replaced with BOSv2, which will provide similar functionality. See
+[Deprecated features](../../introduction/differences.md#deprecated_features).
+
 Troubleshoot compute nodes failing to upgrade during a Compute Rolling Upgrade Service \(CRUS\) session and rerun the session on the failed nodes.
 
 When a nodes are marked as failed they are added to the failed node group associated with the upgrade session, and the nodes are marked as down in the workload manager \(WLM\). If the WLM supports some kind of reason string, that string contains the cause of the down status.

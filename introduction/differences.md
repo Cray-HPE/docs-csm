@@ -47,7 +47,7 @@ The following features are no longer supported and are planned to be removed in 
    * The Boot Orchestration Service (BOS) API is changing in the upcoming CSM-1.2.0 release:
         * The `--template-body` option for the Cray CLI `bos` command will be deprecated.
         * Performing a GET on the session status for a boot set (i.e. `/v1/session/{session_id}/status/{boot_set_name}`) currently returns a status code of 201, but instead it should return a status code of 200. This will be corrected to return 200.
-   * The Compute Rolling Upgrade Service (CRUS) will be deprecated in the CSM-1.3.0 release. Enhanced BOS functionality will replace CRUS. This includes the ability to stage changes to nodes that can be acted upon later when the node reboots. It also includes the ability to reboot nodes without specifying any boot artifacts. This latter ability relies on the artifacts already having been staged.
+   * The Compute Rolling Upgrade Service (CRUS) is deprecated and will be removed in the CSM-1.3.0 release. Enhanced BOS functionality will replace CRUS. This includes the ability to stage changes to nodes that can be acted upon later when the node reboots. It also includes the ability to reboot nodes without specifying any boot artifacts. This latter ability relies on the artifacts already having been staged.
 
 <a name="removed_features"></a>
 ### Removed Features
