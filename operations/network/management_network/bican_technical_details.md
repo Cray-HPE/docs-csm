@@ -46,13 +46,13 @@ Administrative access was previously available on the original CAN and this feat
 
 Enabling BICAN will remove the original CAN. 
 
-**During installation the opportunity to enable these new features will be presented.**
+**During installation the opportunity to enable the new features will be presented.**
 
-At this time customers may choose to:
+At this time, the customers must:
 
-1. **Add** High Speed CAN (CHN) access in addition to the existing CAN.
-2. **Move** system access to site external resources (LDAP, DNS, etc...) from the CAN to either the CMN or CHN.
-3. **Move** administrative traffic from the existing CAN to the Management CAN (CMN).
+- **Add** High Speed CAN (CHN) access and remove CAN.
+- **Move** system access to site external resources (LDAP, DNS, etc...) from the CAN to either the CMN or CHN.
+- **Add** migrate administrative traffic from CAN to the new Management CAN (CMN).
 
 **Reverting or changing any decisions will be manual**
 
