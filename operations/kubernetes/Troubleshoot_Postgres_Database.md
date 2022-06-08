@@ -1,6 +1,6 @@
 # Troubleshoot Postgres Database
 
-General Postgres Troubleshooting Topics
+This page contains general Postgres troubleshooting topics.
 
 - [The `patronictl` tool](#patronictl)
 - [Database unavailable](#Unavailable)
@@ -944,8 +944,8 @@ If a Postgres cluster no longer has a leader, the database will need to be recov
     It sometimes happen that the above check reports a leader, but other checks report no leader, or report conflicting
     leader information. The following steps show the status reported by each member of the cluster.
 
-    1. Make a list of the Kuberenetes pods of the cluster members.
-    
+    1. Make a list of the Kubernetes pods of the cluster members.
+
         ```bash
         ncn-mw# PODS=$(kubectl get pods -n ${NAMESPACE} --no-headers -o custom-columns=:.metadata.name | grep "^${POSTGRESQL}-[0-9]$") ; echo ${PODS}
         ```
@@ -958,8 +958,8 @@ If a Postgres cluster no longer has a leader, the database will need to be recov
 
     1. Query each pod about the status of the cluster.
 
-        This script will report the cluster status as perceived by each member of the cluster.
-        
+        This script reports the cluster status as perceived by each member of the cluster.
+
         ```bash
         ncn-mw# for POD in ${PODS} ; do
                     echo "Checking ${POD}..."
