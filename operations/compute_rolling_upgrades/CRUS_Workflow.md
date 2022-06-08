@@ -1,97 +1,122 @@
 # CRUS Workflow
 
-**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in CSM-1.3.0 and replaced with BOSv2, which will provide similar functionality.
+**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in CSM 1.3.0 and replaced with BOS V2, which will provide similar functionality.
 
-The following workflow is intended to be a high-level overview of how to upgrade compute nodes. This workflow depicts how services interact with each other during the compute node upgrade process, and helps to provide a quicker and deeper understanding of how the system functions.
+The following workflow is intended to be a high-level overview of how to upgrade compute nodes. This workflow depicts how services interact with each other during the compute node
+upgrade process, and helps to provide a quicker and deeper understanding of how the system functions.
 
-### Upgrade Compute Nodes
+## Use cases
 
-**Use Cases:** Administrator upgrades select compute nodes \(around 500\) to a newer compute image by using Compute Rolling Upgrade Service \(CRUS\).
+Administrator upgrades select compute nodes to a newer compute image by using Compute Rolling Upgrade Service \(CRUS\).
 
-**Requirement** The compute nodes are up and running and their workloads are managed by Slurm.
+## Requirements
 
-**Components:** This workflow is based on the interaction of CRUS with Boot Orchestration Service \(BOS\) and Slurm \(Workload Manager\).
+- The compute nodes are up and running.
+- Compute node workloads are managed by Slurm.
 
-Mentioned in this workflow:
+## Components
 
--   Compute Rolling Upgrade Service \(CRUS\) allows an administrator to modify the boot image and/or configuration on a set of compute nodes without the need to take the entire set of nodes out of service at once. It manages the workload management status of nodes, quiescing each node before taking the node out of service, upgrading the node, rebooting the node into the upgraded state and then returning the node to service within the workload manager.
--   Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes. The Boot Orchestration Service has the following components:
-    -   Boot Orchestration Session Template is a collection of one or more boot set objects. A boot set defines a collection of nodes and the information about the boot artifacts and parameters.
-    -   Boot Orchestration Session carries out an operation. The possible operations in a session are boot, shutdown, reboot, and configure.
-    -   Boot Orchestration Agent \(BOA\) is automatically launched to execute the session. A BOA executes the given operation, and if the operation is a boot or a reboot, it also configures the nodes post-boot \(if configure is enabled\).
--   Slurm has a component called slurmctld that runs on a non-compute node in a container. The Slurm control daemon or slurmctld is the central management daemon of Slurm. It monitors all other Slurm daemons and resources, accepts jobs, and allocates resources to those jobs. Slurm also has a component called slurmd that runs on all compute nodes. The Slurm daemon or slurmd monitors all tasks running on the compute node, accepts tasks, launches tasks, and kills running tasks upon request.
+This workflow is based on the interaction of CRUS with Boot Orchestration Service \(BOS\) and Slurm \(Workload Manager\).
+
+The following terms are mentioned in this workflow:
+
+- Compute Rolling Upgrade Service \(CRUS\) allows an administrator to modify the boot image and/or configuration on a set of compute nodes without the need to take the entire set
+  of nodes out of service at once. It manages the workload management status of nodes, quiescing each node before taking the node out of service, upgrading the node, rebooting
+  the node into the upgraded state and then returning the node to service within the workload manager.
+- Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes. The Boot Orchestration Service has the following components:
+  - Boot Orchestration Session Template is a collection of one or more boot set objects. A boot set defines a collection of nodes and the information about the boot artifacts
+    and parameters.
+  - Boot Orchestration Session carries out an operation. The possible operations in a session are boot, shutdown, reboot, and configure.
+  - Boot Orchestration Agent \(BOA\) is automatically launched to execute the session. A BOA executes the given operation, and if the operation is a boot or a reboot, it also
+    configures the nodes post-boot \(if configure is enabled\).
+- The Slurm control daemon (`slurmctld`) is the central management daemon of Slurm. It runs on non-compute nodes in a container. It monitors all other Slurm daemons and
+  resources, accepts jobs, and allocates resources to those jobs.
+- The Slurm daemon (`slurmd`) monitors all tasks running on compute nodes, accepts tasks, launches tasks, and kills running tasks upon request. It runs on compute nodes.
+
+## Workflow
 
 ![CRUS Upgrade Workflow](../../img/operations/crus_upgrade.gif)
 
-**Workflow Overview:** The following sequence of steps occur during this workflow.
+The following sequence of steps occur during this workflow.
 
-1.  **Administrator creates HSM groups and populates the starting group**
+### 1. Administrator creates HSM groups and populates the starting group
 
-    Create three HSM groups with starting, failed, and upgrading labels.
+1. Create three HSM groups with starting, failed, and upgrading labels.
 
-    For example: crusfailed, crusupgrading, and crus\_starting.
+    Any names can be used for these groups.
+    For this example: `crus_starting`, `crusfailed`, and `crusupgrading`, respectively.
 
-    Add all of the 500 compute nodes to be updated to the crus\_starting group. Leave the failed and upgrading groups empty.
+1. Add all of the compute nodes to be updated to the `crus_starting` group.
 
-2.  **Administrator creates a session template**
+    Leave the `crusfailed`, and `crusupgrading` groups empty.
 
-    Create a BOS session template which points to the new image, the desired CFS configuration, and with a boot set which includes all the compute nodes to be updated. The boot set can include additional nodes, but it must contain all the nodes that need to be updated. The BOS session template you use should specify "upgrading\_label" in the "node\_groups" field of one of its boot sets.
+### 2. Administrator creates a session template
 
-    For example: newcomputetemplate.
+A session template is a collection of metadata for a group of nodes and their desired configuration.
 
-3.  **Administrator creates a CRUS session**
+Create a BOS session template which points to the new image, the desired CFS configuration, and with a boot set which includes all the compute nodes to be updated.
+The boot set can include additional nodes, but it must contain all the nodes that need to be updated. The BOS session template should specify `crusupgrading` in the
+`node_groups` field of one of its boot sets.
 
-    A new upgrade session is launched as a result of this call.
+This example will use the BOS session template named `newcomputetemplate`.
 
-    Specify the following parameters:
+### 3. Administrator creates a CRUS session
 
-    -   failed\_label: An empty Hardware State Manager \(HSM\) group which CRUS will populate with any nodes that fail their upgrades.
-    -   starting\_label: An HSM group which contains the total set of nodes to be upgraded. Example: 500.
-    -   upgrading\_label: An empty HSM group which CRUS will use to boot and configure the discrete sets of nodes.
-    -   upgradestepsize: The number of nodes to include in each discrete upgrade step.
+A new upgrade session is launched as a result of this call.
 
-        The upgrade steps will never exceed this quantity, although in some cases they may be smaller. Example: 50
+Specify the following parameters:
 
-    -   upgradetemplateid: The name of the BOS session template to use for the upgrades. A session template is a collection of metadata for a group of nodes and their desired configuration.
-    -   workloadmanagertype: Currently only slurm is supported.
+| Parameter             | Example              | Meaning                                                                                                         |
+|-----------------------|----------------------|-----------------------------------------------------------------------------------------------------------------|
+| `failed_label`        | `crusfailed`         | An empty Hardware State Manager \(HSM\) group which CRUS will populate with any nodes that fail their upgrades. |
+| `starting_label`      | `crus_starting`      | An HSM group which contains the total set of nodes to be upgraded.                                              |
+| `upgrading_label`     | `crusupgrading`      | An empty HSM group which CRUS will use to boot and configure subsets of the compute nodes.                      |
+| `upgradestepsize`     | `50`                 | The number of nodes to include in each discrete upgrade step.*                                                  |
+| `upgradetemplateid`   | `newcomputetemplate` | The name of the BOS session template to use for the upgrades.                                                   |
+| `workloadmanagertype` | `slurm`              | Only Slurm is supported.                                                                                        |
 
-4.  **CRUS to HSM**
+> \* Each group of concurrent upgrades will never exceed this number of compute nodes, although in some cases they may be smaller.
 
-    CRUS calls HSM to find the nodes in the starting\_label group.
+### 4. CRUS to HSM
 
-5.  **CRUS to HSM**
+CRUS calls HSM to find the nodes in the `crus_starting` group.
 
-    It then takes a number of these nodes equal to the step size \(50\), and calls HSM to put them into the upgrading\_label group.
+### 5. CRUS to HSM
 
-6.  **CRUS to Slurm**
+CRUS selects a number of these nodes equal to `upgradestepsize` and calls HSM to put them into the `crusupgrading` group.
 
-    CRUS tells Slurm to quiesce these nodes. As each node is quiesced, Slurm puts the node offline.
+### 6. CRUS to Slurm
 
-7.  **Slurm to CRUS**
+CRUS tells Slurm to quiesce these nodes. As each node is quiesced, Slurm puts the node offline.
 
-    Slurm reports back to CRUS that all of the nodes as offline.
+### 7. Slurm to CRUS
 
-8.  **CRUS to BOS**
+Slurm reports back to CRUS that all of the nodes as offline.
 
-    CRUS calls BOS to create a session with the following arguments:
+### 8. CRUS to BOS
 
-    -   operation: reboot
-    -   templateUuid: upgrade*template*id
-    -   limit: upgrading\_label
+CRUS calls BOS to create a session with the following arguments:
 
-9.  **CRUS retrieves the BOA job details from BOS**
+| Parameter      | Value                |
+|----------------|----------------------|
+| `operation`    | `reboot`             |
+| `templateUuid` | `newcomputetemplate` |
+| `limit`        | `crusupgrading`      |
 
-    CRUS retrieves the BOS session to get the BOA job name. CRUS waits for the BOA job to finish.
+### 9. CRUS retrieves the BOA job details from BOS
 
-    CRUS looks at the exit code of the BOA job to determine whether or not there were errors.
+1. CRUS retrieves the BOS session to get the BOA job name.
 
-    If there were errors, CRUS adds the nodes from the upgrading\_label group into the failed\_label group.
+1. CRUS waits for the BOA job to finish.
 
-10. **CRUS to HSM**
+1. CRUS looks at the exit code of the BOA job to determine whether or not there were errors.
 
-    After the BOA job is complete, CRUS calls HSM to empty the upgrading\_label group.
+    If there were errors, CRUS adds the nodes from the `crusupgrading` group into the `crusfailed` group.
 
-11. **CRUS repeats steps for remaining nodes, then updates status**
+1. CRUS calls HSM to empty the `crusupgrading` group.
 
-    CRUS repeats steps **5-10** until all of the nodes from the starting\_label group have gone through these steps. After this, CRUS marks the session status as "complete".
+### 10. CRUS repeats steps for remaining nodes, then updates status
 
+1. CRUS repeats steps 5-9 until all of the nodes from the `crus_starting` group have gone through these steps.
+
+1. CRUS marks the session status as `complete`.
