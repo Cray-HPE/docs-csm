@@ -37,13 +37,13 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    [Removing a Liquid-cooled Blade from a System Using SAT](Removing_a_Liquid-cooled_blade_from_a_System_Using_SAT.md) procedure on the other system.
 
    ```bash
-   ncn# sat swap blade --src-mapping <SRC_MAPPING> --dst-mapping <DST_MAPPING> -a enable <SLOT_XNAME>
+   ncn# sat swap blade --src-mapping <SRC_MAPPING> --dst-mapping <DST_MAPPING> --action enable <SLOT_XNAME>
    ```
 
    If the slot was not previously populated, the `--src-mapping` and `--dst-mapping` arguments should be omitted.
 
    ```bash
-   ncn# sat swap blade -a enable <SLOT_XNAME>
+   ncn# sat swap blade --action enable <SLOT_XNAME>
    ```
 
 ## Power on and boot the nodes
@@ -91,16 +91,16 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
       ```
 
-   1. Find the required `templateUuid` value with BOS.
+   1. Find the required `templateName` value with BOS.
 
       ```bash
-      ncn# cray bos session describe BOS_SESSION | grep templateUuid
+      ncn# cray bos session describe BOS_SESSION | grep templateName
       ```
 
       Example output:
 
       ```toml
-      templateUuid = "compute-nid1-4-sessiontemplate"
+      templateName = "compute-nid1-4-sessiontemplate"
       ```
 
    1. Determine the list of xnames associated with the desired session template.

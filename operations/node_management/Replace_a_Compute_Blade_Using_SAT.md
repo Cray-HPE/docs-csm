@@ -66,16 +66,16 @@ Replace an HPE Cray EX liquid-cooled compute blade.
       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
       ```
 
-   1. Find the required `templateUuid` value with BOS.
+   1. Find the required `templateName` value with BOS.
 
       ```bash
-      ncn# cray bos session describe BOS_SESSION | grep templateUuid
+      ncn# cray bos session describe BOS_SESSION | grep templateName
       ```
 
       Example output:
 
       ```toml
-      templateUuid = "compute-nid1-4-sessiontemplate"
+      templateName = "compute-nid1-4-sessiontemplate"
       ```
 
    1. Determine the list of xnames associated with the desired boot session template.
@@ -107,7 +107,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    Use the `sat swap` command to power off the slot and delete the blade's Ethernet interfaces and Redfish endpoints from HSM.
 
    ```bash
-   ncn# sat swap blade -a disable x9000c3s0
+   ncn# sat swap blade --action disable x9000c3s0
    ```
 
 ## Replace the blade hardware
@@ -126,7 +126,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 1. Use the `sat swap` command to begin discovery for the blade and add it to hardware management.
 
    ```bash
-   ncn# sat swap blade -a enable x9000c3s0
+   ncn# sat swap blade --action enable x9000c3s0
    ```
 
 ## Perform updates and boot the nodes

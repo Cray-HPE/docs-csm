@@ -80,16 +80,16 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
       ```
 
-   1. Find the required `templateUuid` value with BOS.
+   1. Find the required `templateName` value with BOS.
 
       ```bash
-      ncn# cray bos session describe BOS_SESSION | grep templateUuid
+      ncn# cray bos session describe BOS_SESSION | grep templateName
       ```
 
       Example output:
 
       ```toml
-      templateUuid = "compute-nid1-4-sessiontemplate"
+      templateName = "compute-nid1-4-sessiontemplate"
       ```
 
    1. Determine the list of xnames associated with the desired boot session template.
@@ -121,7 +121,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    Use the `sat swap` command to power off the slot and delete the blade's Ethernet interfaces and Redfish endpoints from HSM.
 
    ```bash
-   ncn# sat swap blade -a disable x9000c3s0
+   ncn# sat swap blade --action disable x9000c3s0
    ```
 
    This command will save the MAC addresses, IP addresses, and node component names (xnames) from the blade to a JSON document. The document is stored in a file with the following naming convention:
@@ -174,7 +174,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    Use the `sat swap` command to power off the slot and delete the blade's Ethernet interfaces and Redfish endpoints from HSM.
 
    ```bash
-   ncn# sat swap blade -a disable x1005c0s3
+   ncn# sat swap blade --action disable x1005c0s3
    ```
 
    The mapping file should be copied to the NCN on the destination system used for the swap procedure, if necessary. In this example, the
@@ -203,7 +203,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    The `--src-mapping` and `--dst-mapping` arguments should be used to pass in the Ethernet interface mapping files created during the previous steps.
 
    ```bash
-   ncn# sat swap blade -a enable --src-mapping ethernet-interface-mappings-src.json --dst-mapping ethernet-interface-mappings-x1005c0s3-2022-01-01.json x10005c0s3
+   ncn# sat swap blade --action enable --src-mapping ethernet-interface-mappings-src.json --dst-mapping ethernet-interface-mappings-x1005c0s3-2022-01-01.json x10005c0s3
    ```
 
 ### Destination: Power on and boot the nodes
