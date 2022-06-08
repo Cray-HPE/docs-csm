@@ -2,7 +2,9 @@
 
 ## Stage 2.1
 
-1. Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`. Follow output of the script carefully. The script will pause for manual interaction.
+1. Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`.
+
+   Follow output of the script carefully. The script will pause for manual interaction.
 
    ```bash
    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
@@ -14,7 +16,14 @@
 
 ## Stage 2.2
 
-1. Run `ncn-upgrade-worker-nodes.sh` for `ncn-w001`. Follow output of the script carefully. The script will pause for manual interaction.
+1. Make sure that not all pods of `ingressgateway-hmn` or `spire-server` are running on the same worker node.
+
+   For either of those two deployments, if all pods are running on a single worker node, then use the
+   `/opt/cray/platform-utils/move_pod.sh` script to move at least one pod to a different worker node.
+
+1. Run `ncn-upgrade-worker-nodes.sh` for `ncn-w001`.
+
+   Follow output of the script carefully. The script will pause for manual interaction.
 
    ```bash
    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001
@@ -22,12 +31,13 @@
 
    > **NOTE:** The root password for the node may need to be reset after it is rebooted.
 
-1. Repeat the previous step for each other worker node, one at a time.
+1. Repeat the previous steps for each other worker node, one at a time.
 
 ## Stage 2.3
 
-All NCNs have been upgraded, except for `ncn-m001`. In the upgrade process so far, `ncn-m001` has been the "stable node" -- that is, the node
-from which the other nodes were upgraded. At this point, the upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to allow the upgrade of `ncn-m001`.
+By this point, all NCNs have been upgraded, except for `ncn-m001`. In the upgrade process so far, `ncn-m001`
+has been the "stable node" -- that is, the node from which the other nodes were upgraded. At this point, the
+upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to allow the upgrade of `ncn-m001`.
 
 1. Log in to `ncn-m002` from outside the cluster.
 
@@ -82,7 +92,7 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/apply-coredns-pod-affinity.
 
 ## Stage 2.6
 
-Run the following script to complete the Kubernetes upgrade _(this will restart several pods on each master to their new Docker containers)_:
+Complete the Kubernetes upgrade. This script will restart several pods on each master node to their new Docker containers.
 
 ```bash
 ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/upgrade_control_plane.sh

@@ -48,6 +48,7 @@ The following administrative topics can be found in this guide:
 - [Configure the Cray Command Line Interface (Cray CLI)](configure_cray_cli.md)
 - [Change Passwords and Credentials](CSM_product_management/Change_Passwords_and_Credentials.md)
 - [Configure Non-Compute Nodes with CFS](CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md)
+- [Configure Compute Nodes with CFS](CSM_product_management/Configure_Compute_Nodes_with_CFS.md)
 - [Perform NCN Personalization](CSM_product_management/Perform_NCN_Personalization.md)
 - [Access the LiveCD USB Device After Reboot](Access_LiveCD_USB_Device_After_Reboot.md)
 - [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
