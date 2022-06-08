@@ -12,7 +12,7 @@ The following are some things to check to make sure CMN is configured correctly:
 Check the status of the `bond0.cmn0` interface. Make sure it has an address specified.
 
 ```bash
-ncn-w002# ip addr show bond0.cmn0
+ip addr show bond0.cmn0
 ```
 
 Example output:
@@ -33,7 +33,7 @@ If there is not an address specified, make sure the `cmn-` values have been defi
 Check the default route on an NCN other than `ncn-m001`. There should be a default route with a gateway matching the `cmn-gateway` value.
 
 ```bash
-ncn-w002# ip route | grep default
+ip route | grep default
 ```
 
 Example output:
@@ -49,7 +49,7 @@ If there is not an address specified, make sure the `can-` values have been defi
 Check that the node can ping the default gateway shown in the default route.
 
 ```bash
-ncn-w002# ping 10.102.5.1
+ping 10.102.5.1
 ```
 
 Example output:
