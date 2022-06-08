@@ -57,3 +57,4 @@ The following features have been completely removed:
 <a name="other_changes"></a>
 ### Other Changes
 
+* The Compute Rolling Upgrade Service (CRUS) is deprecated in CSM 1.2.0 and will be removed in the CSM-1.3.0 release. Enhanced BOS functionality will replace CRUS.
