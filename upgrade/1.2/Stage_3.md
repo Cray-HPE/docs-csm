@@ -88,7 +88,7 @@ Verify that the Keycloak users localize job has completed as expected.
 > This section can be skipped if user localization is not required.
 
 After an upgrade, it is possible that all expected Keycloak users were not localized.
-See [Verification Procedure](../../operations/security_and_authentication/Keycloak_User_Localization.md) to confirm that Keycloak localization has completed as expected.
+See [Verification procedure](../../operations/security_and_authentication/Keycloak_User_Localization.md#Verification-procedure) to confirm that Keycloak localization has completed as expected.
 
 ## Stage completed
 
