@@ -44,12 +44,17 @@ and Kubernetes API endpoints from the customer site via the High Speed Network (
 2. **Management CAN - CMN** :  Using a new VLAN on the Management Network, this feature allows system administrative access from the customer site.
 Administrative access was previously available on the original CAN and this feature provides a traffic path and access split.
 
-The existing and original CAN will remain as-is. **During installation the opportunity to enable these new features will be presented.**
+Enabling BICAN will remove the original CAN. 
+
+**During installation the opportunity to enable these new features will be presented.**
+
 At this time customers may choose to:
 
 1. **Add** High Speed CAN (CHN) access in addition to the existing CAN.
 2. **Move** system access to site external resources (LDAP, DNS, etc...) from the CAN to either the CMN or CHN.
 3. **Move** administrative traffic from the existing CAN to the Management CAN (CMN).
+
+**Reverting or changing any decisions will be manual**
 
 The feature matrix of the CAN is described [here](bican_support_matrix.md).
 Details of the High Speed CAN (CHN) and the Management CAN (CMN) are described below.
