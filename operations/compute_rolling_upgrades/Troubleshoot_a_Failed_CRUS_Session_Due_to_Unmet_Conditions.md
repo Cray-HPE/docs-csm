@@ -1,6 +1,6 @@
 # Troubleshoot a Failed CRUS Session Because of Unmet Conditions
 
-**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
+**Note:** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
 [Deprecated features](../../introduction/differences.md#deprecated_features).
 
 If a CRUS session has any unmet conditions, adding or fixing them will cause the session to continue from wherever it got stuck. Updating other parts of the system to meet

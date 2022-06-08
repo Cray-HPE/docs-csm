@@ -131,7 +131,7 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 
 ## Deprecations
 
-* CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
+* CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
 * PowerDNS will replace Unbound as the authoritative DNS source in a future CSM release.
   * The `cray-dns-unbound-manager` CronJob will be deprecated in a future release once all DNS records are migrated to PowerDNS.
   * The introduction of PowerDNS and Bifurcated CAN will introduce some node and service naming changes.

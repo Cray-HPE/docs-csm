@@ -40,7 +40,7 @@ This document provides links to troubleshooting information for services and fun
     * [Log File Locations and Ports Used](../operations/boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
     * [Issues Related to Slow Boot Times](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
 * Compute Rolling Upgrades
-  * CRUS is deprecated in CSM 1.2.0.
+  * CRUS was deprecated in CSM 1.2.0.
     * It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
     * See [Deprecated features](../introduction/differences.md#deprecated_features).
   * [Nodes Failing to Upgrade in a CRUS Session](../operations/compute_rolling_upgrades/Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)

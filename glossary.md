@@ -156,7 +156,7 @@ management status of nodes, handling each of the steps required to upgrade compu
 
 See [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
 
-**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
+**Note:** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
 [Deprecated features](introduction/differences.md#deprecated_features).
 
 <a name="cray-advanced-platform-monitoring-and-control"></a>
