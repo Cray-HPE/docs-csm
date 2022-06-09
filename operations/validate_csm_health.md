@@ -175,7 +175,7 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
 
   - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, then delete
     `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the
-    `request-ncn-join-token` daemonset pod.
+    `request-ncn-join-token` daemon set pod.
 - `cfs-state-reporter service ran successfully`
   - If this test is failing, it could be due to SSL certificate issues on that NCN.
      1. Run the following command on the node where the test is failing.
@@ -491,7 +491,7 @@ In this case, these errors can be ignored, or the pod with the same name as the 
 
 ## 4. Gateway health checks
 
-The gateway tests check the health of the API Gateway on all of the relevant networks.  The gateway tests will check that the gateway is accessible on all networks where it should be accessible, 
+The gateway tests check the health of the API Gateway on all of the relevant networks.  The gateway tests will check that the gateway is accessible on all networks where it should be accessible,
 and NOT accessible on all networks where it should NOT be accessible. It will also check several service endpoints to verify that they return the proper response
 on each accessible network.
 
@@ -500,9 +500,10 @@ Externally, the API gateway is accessible on the CMN network and either the CAN 
 On NCNs, the API gateway is accessible on the same networks (CMN and CAN/CHN) and it is also accessible on the NMNLB network.
 
 Follow these instructions for executing the gateway tests from an NCN and from outside the system.
-- [Running Gateway Tests on an NCN Management Node](network/gateway-testing.md#running-gateway-tests-on-an-ncn-management-node)
+
+- [Running Gateway Tests on an NCN Management Node](network/gateway_testing.md#running-gateway-tests-on-an-ncn-management-node)
   - The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/index.md#documentation).
-- [Running Gateway Tests on a Device Outside the System](network/gateway-testing.md#running-gateway-tests-on-a-device-outside-the-system)
+- [Running Gateway Tests on a Device Outside the System](network/gateway_testing.md#running-gateway-tests-on-a-device-outside-the-system)
 
 The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
 
