@@ -174,7 +174,7 @@ Trial and error may be needed to determine what is best for a given system at sc
      memory: 30Gi
    ```
 
-1. Edit the `platform.yaml` to only include the `cray-sysmgmt-health` chart and all its current data. 
+1. Edit the `platform.yaml` to only include the `cray-sysmgmt-health` chart and all its current data.
 
    The resources specified above will be updated in the next step. The version may differ, because this is an example.
 
