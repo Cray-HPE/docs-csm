@@ -41,7 +41,7 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
 1. Log in to `ncn-m002` from outside the cluster.
 
-    > **NOTE:** Very rarely, a password hash for the root user that works properly on a SLES SP2 NCN is
+    > **NOTE:** Very rarely, a password hash for the `root` user that works properly on a SLES SP2 NCN is
     > not recognized on a SLES SP3 NCN. If password login fails, then log in to `ncn-m002` from
     > `ncn-m001` and use the `passwd` command to reset the password. Then log in using the CMN IP address as directed
     > below. Once `ncn-m001` has been upgraded, log in from `ncn-m002` and use the `passwd` command to reset
