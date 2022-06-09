@@ -207,7 +207,7 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
 
   - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, then delete
     `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the
-    `request-ncn-join-token` daemon set pod.
+    `request-ncn-join-token` `daemonset` pod.
 - `cfs-state-reporter service ran successfully`
   - If this test is failing, it could be due to SSL certificate issues on that NCN.
      1. Run the following command on the node where the test is failing.
@@ -446,25 +446,24 @@ BMC can be safely ignored or needs to be addressed before proceeding.
        - x3000m0 - Not found in HSM Components ; Not found in HSM Redfish Endpoints
    ```
 
-
   If the PDU is accessible over the network, the following can be used to determine the vendor of the PDU.
-  
+
    ```bash
   ncn-m001# PDU=x3000m0
   ncn-m001# c curl -k -s --compressed  https://$PDU -i | grep Server:
   ```
 
+  - Example ServerTech output:
 
-    - Example ServerTech output:
+  ```bash
+  Server: ServerTech-AWS/v8.0v
+  ```
 
-      ```
-      Server: ServerTech-AWS/v8.0v
-      ```
+  - Example HPE output
 
-    - Example HPE output
-      ```
-      Server: HPE/1.4.0
-      ```
+  ```bash
+  Server: HPE/1.4.0
+  ```
 
   - **TODO** ServerTech PDUs may need password changed from their defaults to become functional... perform the steps in [Change Credentials on ServerTech PDUs](./security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
 

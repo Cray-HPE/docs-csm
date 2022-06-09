@@ -42,7 +42,9 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
     > **TODO** If the PDUs have already been discovered this should match what is on the PDU currently. Need to pull the password from vault
     >
-    > **TODO rephrase/context** If the PDU has not been discovered, then needs to match the current credentials of the `admn` user. This would most likely match the default admn password. Otherwise this would apply if the PDU was either factory reset, or has a different known credential set on the PDU that does not match the sealed secret containing default PDU credentials (this is set in [Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)](Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md))
+    > **TODO rephrase/context** If the PDU has not been discovered, then needs to match the current credentials of the `admn` user.
+    This would most likely match the default admn password.
+    Otherwise this would apply if the PDU was either factory reset, or has a different known credential set on the PDU that does not match the sealed secret containing default PDU credentials (this is set in [Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)](Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md))
 
     ```bash
     ncn-m001# read -s OLD_PDU_PASSWORD
@@ -116,7 +118,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
         1. Update the PDU credentials stored in Vault:
 
-    1. To update all ServerTech PDUs in the system to the same password:
+     1. To update all ServerTech PDUs in the system to the same password:
 
         1. Change password for the `admn` user on the ServerTech PDUs currently discovered in the system.
 
