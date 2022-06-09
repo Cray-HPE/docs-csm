@@ -38,7 +38,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
     x3000m0
     ```
 
-2. Specify the existing password for the `admn` user:
+1. Specify the existing password for the `admn` user:
 
     > **TODO** If the PDUs have already been discovered this should match what is on the PDU currently. Need to pull the password from vault
     >
@@ -55,7 +55,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
     secret
     ```
 
-3. Specify the new desired password for the `admn` user. The new password must follow the following criteria:
+1. Specify the new desired password for the `admn` user. The new password must follow the following criteria:
     - Minimum of 8 characters
     - At least 1 uppercase letter
     - At least 1 lowercase letter
@@ -79,7 +79,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
     ncn-m001# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
     ```
 
-4. Change and update the password for a ServerTech PDU(s). Either change the credentials on a single PDU or change all ServerTech PDUs to the same global default value:
+1. Change and update the password for a ServerTech PDU(s). Either change the credentials on a single PDU or change all ServerTech PDUs to the same global default value:
 
      1. To update the password on a single ServerTech PDU in the system:
 
@@ -163,7 +163,6 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
             ```
 
     **NOTE**: After 5 minutes, the previous credential should stop working as the existing session timed out.
-
 
 1. Restart the Redfish Translation Service (RTS) to pickup the new PDU credentials:
 
