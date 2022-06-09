@@ -19,7 +19,7 @@ The following services need their data repopulated in the etcd cluster:
 
 An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
 
-### BOS
+## BOS
 
 1. Reconstruct boot session templates for impacted product streams to repopulate data.
 
@@ -28,7 +28,7 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
     - UANs: Refer to the UAN product stream repository and search for the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
     - Cray Operating System \(COS\): Refer to the "Create a Boot Session Template" header in the "Boot COS" procedure in the COS product stream documentation.
 
-### CPS
+## CPS
 
 Repopulate clusters for CPS.
 
@@ -37,7 +37,10 @@ Repopulate clusters for CPS.
 - If any clients have already mounted content provided by CPS, that content should be unmounted before rebuilding the etcd cluster, and then re-mounted after the etcd cluster is rebuilt.
   Compute nodes that use CPS to access their root file system must be shut down to unmount, and then booted to perform the re-mount.
 
-### CRUS
+## CRUS
+
+**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
+[Deprecated features](../../introduction/differences.md#deprecated_features).
 
 1. View the progress of existing CRUS sessions.
 
@@ -110,7 +113,7 @@ Repopulate clusters for CPS.
     ncn# kubectl delete pods -n services POD_NAME
     ```
 
-### BSS
+## BSS
 
 Data is repopulated in BSS when the REDS `init` job is run.
 
@@ -121,19 +124,21 @@ Data is repopulated in BSS when the REDS `init` job is run.
             jq 'del(.spec.template.metadata.labels["controller-uid"], .spec.selector)' > cray-reds-init.json
     ```
 
-1. Delete the job.
+
+1. Delete the `reds-client-init` job.
 
     ```bash
     ncn# kubectl delete -n services -f cray-reds-init.json
     ```
 
-1. Restart the job.
+
+1. Restart the `reds-client-init` job.
 
     ```bash
     ncn# kubectl apply -n services -f cray-reds-init.json
     ```
 
-### REDS
+## REDS
 
 1. Restart REDS.
 
@@ -141,7 +146,7 @@ Data is repopulated in BSS when the REDS `init` job is run.
     ncn# kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-reds'
     ```
 
-### MEDS
+## MEDS
 
 1. Restart MEDS.
 
@@ -149,7 +154,7 @@ Data is repopulated in BSS when the REDS `init` job is run.
     ncn# kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-meds'
     ```
 
-### FAS
+## FAS
 
 1. Reload the firmware images from Nexus.
 
@@ -160,9 +165,10 @@ Data is repopulated in BSS when the REDS `init` job is run.
   Any images that were loaded into FAS outside of Nexus will need to be reloaded using the `Load Firmware from RPM or ZIP file` section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md#load-firmware-from-rpm-or-zip-file).
   After images are reloaded, any running actions at time of failure will need to be recreated.
 
-### HMNFD
+## HMNFD
 
 1. Resubscribe the compute nodes and any NCNs that use the ORCA daemon for their State Change Notifications \(SCN\).
+
     1. Resubscribe all compute nodes.
 
       ```bash
@@ -174,9 +180,9 @@ Data is repopulated in BSS when the REDS `init` job is run.
 
     1. Resubscribe the NCNs.
 
-      > **NOTE:** For the commands below, adjust the argument to the `-w` flag to reflect the actual range of worker nodes on the system.
+        **NOTE:** Modify the `-w` arguments in the following commands to reflect the number of worker and storage nodes in the system.
 
-      ```bash
-      ncn-m001# pdsh -w ncn-w00[0-4]-can.local "systemctl restart cray-dvs-orca"
-      ncn-m001# pdsh -w ncn-s00[0-4]-can.local "systemctl restart cray-dvs-orca"
-      ```
+        ```bash
+        ncn-m001# pdsh -w ncn-w00[0-4]-can.local "systemctl restart cray-dvs-orca"
+        ncn-m001# pdsh -w ncn-s00[0-4]-can.local "systemctl restart cray-dvs-orca"
+        ```

@@ -1,6 +1,6 @@
 # Troubleshoot Postgres Database
 
-General Postgres Troubleshooting Topics
+This page contains general Postgres troubleshooting topics.
 
 - [The `patronictl` tool](#patronictl)
 - [Database unavailable](#Unavailable)
@@ -190,6 +190,8 @@ The following is an example where replication is broken:
 +-------------------+---------------------+--------------+--------+----------+----+-----------+
 ```
 
+<a name="recover-replication"></a>
+
 ### Recover replication
 
 In the event that a state of broken Postgres replication persists and the space allocated for the WAL files fills up, the affected database will likely shut down and create a
@@ -197,7 +199,7 @@ state where it can be very difficult to recover. This can impact the reliability
 If replication lag is caught and remediated before the database shuts down, replication can be recovered using `patronictl reinit`.
 
 A reinitialize will get the lagging replica member re-synced and replicating again. This should be done as soon as replication lag is detected. In the preceding example,
-`keycloak-postgres-0` and `keycloak-postgres-2` were not replicating properly (Lag>0 or `unknown`). To remediate, `kubectl exec` into the leader pod and use
+`keycloak-postgres-0` and `keycloak-postgres-2` were not replicating properly (`unknown` or non-zero lag). To remediate, `kubectl exec` into the leader pod and use
 `patronictl reinit <cluster> <lagging cluster member>` to reinitialize the lagging member(s).
 
 For example:
@@ -934,6 +936,134 @@ If a Postgres cluster no longer has a leader, the database will need to be recov
     | cray-smd-postgres | cray-smd-postgres-2 | 10.36.0.44 |      | start failed |    |   unknown |
     +-------------------+---------------------+------------+------+--------------+----+-----------+
     ```
+
+    If the output does not list a leader, then proceed to [Recover from a missing Postgres leader](#recover-missing-leader).
+
+1. Check if there is conflicting leader information.
+
+    It sometimes happen that the above check reports a leader, but other checks report no leader, or report conflicting
+    leader information. The following steps show the status reported by each member of the cluster.
+
+    1. Make a list of the Kubernetes pods of the cluster members.
+
+        ```bash
+        ncn-mw# PODS=$(kubectl get pods -n ${NAMESPACE} --no-headers -o custom-columns=:.metadata.name | grep "^${POSTGRESQL}-[0-9]$") ; echo ${PODS}
+        ```
+
+        Example output:
+
+        ```text
+        cray-smd-postgres-0 cray-smd-postgres-1 cray-smd-postgres-2
+        ```
+
+    1. Query each pod about the status of the cluster.
+
+        This script reports the cluster status as perceived by each member of the cluster.
+
+        ```bash
+        ncn-mw# for POD in ${PODS} ; do
+                    echo "Checking ${POD}..."
+                    kubectl exec ${POD} -n ${NAMESPACE} -c postgres -- curl -s http://localhost:8008/cluster |  jq ; echo
+                done
+        ```
+
+        Example output:
+
+        ```text
+        Checking cray-smd-postgres-0...
+        ```
+
+        ```json
+        {
+          "members": [
+            {
+              "name": "cray-smd-postgres-0",
+              "role": "leader",
+              "state": "running",
+              "api_url": "http://10.32.0.33:8008/patroni",
+              "host": "10.32.0.33",
+              "port": 5432,
+              "timeline": 1
+            },
+            {
+              "name": "cray-smd-postgres-1",
+              "role": "replica",
+              "state": "running",
+              "api_url": "http://10.44.0.30:8008/patroni",
+              "host": "10.44.0.30",
+              "port": 5432,
+              "timeline": 1,
+              "lag": 0
+            },
+            {
+              "name": "cray-smd-postgres-2",
+              "role": "replica",
+              "state": "running",
+              "api_url": "http://10.47.0.33:8008/patroni",
+              "host": "10.47.0.33",
+              "port": 5432,
+              "timeline": 1,
+              "lag": 0
+            }
+          ]
+        }
+        ```
+
+        ```text
+        Checking cray-smd-postgres-1...
+        ```
+
+        ```json
+        {
+          "members": [
+            {
+              "name": "cray-smd-postgres-0",
+              "role": "leader",
+              "state": "running",
+              "api_url": "http://10.32.0.33:8008/patroni",
+              "host": "10.32.0.33",
+              "port": 5432,
+              "timeline": 1
+            },
+            {
+              "name": "cray-smd-postgres-1",
+              "role": "replica",
+              "state": "running",
+              "api_url": "http://10.44.0.30:8008/patroni",
+              "host": "10.44.0.30",
+              "port": 5432,
+              "timeline": 1,
+              "lag": 0
+            },
+            {
+              "name": "cray-smd-postgres-2",
+              "role": "replica",
+              "state": "running",
+              "api_url": "http://10.47.0.33:8008/patroni",
+              "host": "10.47.0.33",
+              "port": 5432,
+              "timeline": 1,
+              "lag": 0
+            }
+          ]
+        }
+        ```
+
+        And so on for every member of the cluster. This script does not do any checking -- it only
+        displays the information.
+
+    1. Check the output for errors or inconsistencies.
+
+        In particular, validate the following:
+
+        - Every cluster member reports exactly one leader.
+        - Every cluster member reports the same leader.
+        - Every cluster member reports the same states for each member.
+
+        If any of the above are not true, this indicates that the cluster members are no longer properly synchronized.
+        In this case, attempt the [Recover replication](#recover-replication) remediation procedures.
+
+<a name="recover-missing-leader"></a>
 
 ### Recover from a missing Postgres leader
 

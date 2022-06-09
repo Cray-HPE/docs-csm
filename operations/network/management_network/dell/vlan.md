@@ -6,13 +6,13 @@ VLANs allow for the logical grouping of switch interfaces, enabling communicatio
 
 Create VLAN:
 
-```
+```text
 switch(config)# interface vlan <VLAN>
 ```
 
 Show commands to validate functionality:
 
-```
+```text
 switch# show vlan [VLAN]
 ```
 
@@ -20,6 +20,5 @@ switch# show vlan [VLAN]
 
 1. Administrators can create a VLAN
 2. Administrators can assign a VLAN to the physical interface
-
 
 [Back to Index](index.md)

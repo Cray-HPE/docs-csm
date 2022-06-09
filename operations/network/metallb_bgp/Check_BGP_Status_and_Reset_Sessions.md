@@ -294,13 +294,13 @@ This procedure requires administrative privileges.
 1. Determine the `cray-metallb` chart version that is currently deployed.
 
     ```bash
-    ncn-m001# helm ls -A -a | grep cray-metallb
+    ncn-m001# helm ls -A -a --filter cray-metallb
     ```
 
     Example output:
 
     ```text
-    cray-metallb   metallb-system   1   2021-02-10 14:58:43.902752441 -0600 CST  deployed  cray-metallb-0.12.2   0.8.1
+    cray-metallb  metallb-system  1  022-06-06 16:17:42.684984475 +0000 UTC deployed cray-metallb-1.1.1  v0.11.0
     ```
 
 1. Create a manifest file that will be used to reapply the same chart version.
@@ -309,39 +309,79 @@ This procedure requires administrative privileges.
     ncn-m001# cat << EOF > ./metallb-manifest.yaml
     apiVersion: manifests/v1beta1
     metadata:
-      name: reapply-metallb
+      name: metallb
     spec:
+      sources:
+        charts:
+        - name: csm
+          type: repo
+          location: https://packages.local/repository/charts
       charts:
       - name: cray-metallb
+        source: csm
+        version: 1.1.1
         namespace: metallb-system
-        values:
-          imagesHost: dtr.dev.cray.com
-        version: 0.12.2
     EOF
     ```
 
+1. Extract `customizations.yaml` from the `site-init` secret.
+
+   ```bash
+   ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+   ```
+
+1. Run `manifestgen` to incorporate the MetalLB configuration into the manifest.
+
+   ```bash
+   ncn-m001# manifestgen -c customizations.yaml -i metallb-manifest.yaml -o deploy.yaml
+   ```
+
+1. Check `customizations.yaml` contains the MetalLB configuration.
+
+   ```bash
+   ncn-m001# yq read customizations.yaml spec.network.metallb
+   ```
+
+   Example output:
+
+   ```yaml
+   peers:
+     - peer-address: 10.101.3.2
+       peer-asn: 65533
+       my-asn: 65532
+     - peer-address: 10.101.3.3
+       peer-asn: 65533
+       my-asn: 65532
+     - peer-address: 10.252.0.2
+       peer-asn: 65533
+       my-asn: 65531
+     - peer-address: 10.252.0.3
+       peer-asn: 65533
+       my-asn: 65531
+   address-pools:
+     - name: customer-access
+       protocol: bgp
+       addresses:
+         - 10.101.3.192/26
+     - name: node-management
+       protocol: bgp
+       addresses:
+         - 10.92.100.0/24
+     - name: hardware-management
+       protocol: bgp
+       addresses:
+         - 10.94.100.0/24
+     - name: customer-management-static
+       protocol: bgp
+       addresses:
+         - 10.101.3.60/30
+     - name: customer-management
+       protocol: bgp
+       addresses:
+         - 10.101.3.64/26
+   ```
+
 1. Open SSH sessions to all spine switches.
-
-1. Determine the `CSM_RELEASE` version that is currently running and set an environment variable.
-
-    For example:
-
-    ```bash
-    ncn-m001# CSM_RELEASE=0.8.0
-    ```
-
-1. Mount the `PITDATA` so that helm charts are available for the re-install \(it might already be mounted\) and verify that the chart with the expected version exists.
-
-    ```bash
-    ncn-m001# mkdir -pv /mnt/pitdata && mount -L PITDATA /mnt/pitdata && \
-              ls /mnt/pitdata/csm-${CSM_RELEASE}/helm/cray-metallb*
-    ```
-
-    Example output:
-
-    ```text
-    /mnt/pitdata/csm-0.8.0/helm/cray-metallb-0.12.2.tgz
-    ```
 
 1. Uninstall the current `cray-metallb` chart.
 
@@ -356,11 +396,10 @@ This procedure requires administrative privileges.
     * Refer to substeps [1-3](#mellanox-ssh) for Mellanox.
     * Refer to substeps [1-2](#aruba-ssh) for Aruba.
 
-1. Reapply the `cray-metallb` chart based on the `CSM_RELEASE`.
+1. Reapply the `cray-metallb` chart.
 
     ```bash
-    ncn-m001# loftsman ship --manifest-path ./metallb-manifest.yaml \
-                --charts-path /mnt/pitdata/csm-${CSM_RELEASE}/helm
+    ncn-m001# loftsman ship --manifest-path ./deploy.yaml
     ```
 
 1. Check that the speaker pods are all running.

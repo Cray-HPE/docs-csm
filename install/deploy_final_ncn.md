@@ -12,7 +12,7 @@ procedure entails deactivating the LiveCD, meaning the LiveCD and all of its res
 3. [Hand-off](#hand-off)
 4. [Reboot](#reboot)
 5. [Enable NCN disk wiping safeguard](#enable-ncn-disk-wiping-safeguard)
-6. [Clean up chrony configurations](#clean-up-chrony-configurations)
+6. [Clean up `chrony` configurations](#clean-up-chrony-configurations)
 7. [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
 8. [Next topic](#next-topic)
 
@@ -509,17 +509,16 @@ it is used for Cray installation and bootstrap.
 
 <a name="remove-the-default-ntp-pool"></a>
 
-## 6. Clean up chrony configurations
+## 6. Clean up `chrony` configurations
 
-Set a token as described in [Identify Nodes and Update Metadata](../operations/node_management/Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md), then run the following command.
+This step requires the exported `TOKEN` variable from the previous section: [Enable NCN disk wiping safeguard](#enable-ncn-disk-wiping-safeguard).
+If still using the same shell session, there is no need to export it again.
 
-```ShellSession
+```bash
 ncn-m001# /srv/cray/scripts/common/chrony/csm_ntp.py
 ```
 
 Successful output can appear as:
-
-If BSS is unreachable, local cache is checked and the configuration is still deployed:
 
 ```text
 ...
@@ -584,20 +583,44 @@ However, the commands in this section are all run **on** `ncn-m001`.
     ncn-m002-mgmt ncn-m003-mgmt ncn-s001-mgmt ncn-s002-mgmt ncn-s003-mgmt ncn-w001-mgmt ncn-w002-mgmt ncn-w003-mgmt
     ```
 
+1. Get the DNS server IP address for the NMN.
+
+    ```bash
+    ncn-m001# NMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-nmn | awk '{ print $4 }'); echo $NMN_DNS
+    ```
+
+    Example output:
+
+    ```text
+    10.92.100.225
+    ```
+
+1. Get the DNS server IP address for the HMN.
+
+    ```bash
+    ncn-m001# HMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-hmn | awk '{ print $4 }'); echo $HMN_DNS
+    ```
+
+    Example output:
+
+    ```text
+    10.94.100.225
+    ```
+
 1. Run the following to loop through all of the BMCs (except `ncn-m001-mgmt`) and apply the desired settings.
 
     ```bash
     ncn-m001# for BMC in $BMCS ; do
-                echo "$BMC: Disabling DHCP and configure NTP on the BMC using data from cloud-init"
+                echo "$BMC: Disabling DHCP and configure NTP on the BMC using data from unbound service"
                 /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -S -n
                 echo
-                echo "$BMC: Configuring DNS on the BMC using data from cloud-init"
-                /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -d
+                echo "$BMC: Configuring DNS on the BMC using data from unbound"
+                /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -D $NMN_DNS,$HMN_DNS -d
                 echo
                 echo "$BMC: Showing settings"
                 /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H $BMC -s
                 echo
-            done ; echo "Configuration completed on all NCN BMCs"
+              done ; echo "Configuration completed on all NCN BMCs"
     ```
 
 <a name="next-topic"></a>
