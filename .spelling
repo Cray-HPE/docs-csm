@@ -67,7 +67,7 @@ ASICs
 backdoor
 backend
 BardPeak
-Barebones
+barebones
 base-64
 base-64-encoded
 Basecamp
@@ -83,7 +83,6 @@ BMCs
 bootscript
 BOA
 BOS
-BOSv2
 BSS
 Burstable
 buses
@@ -133,6 +132,7 @@ ConMan
 ConnectX-4
 ConnectX-5
 ConnectX-5s
+CoreDNS
 Cray
 Cray-HPE
 CrayPort
@@ -537,6 +537,7 @@ V1.20.13
 v1.3
 v1.3.x
 v1.30.16
+V1.3.0
 v1.4
 v1.4.
 v1.4.0
@@ -571,6 +572,7 @@ workarea
 writable
 X.509
 XL645d
+XL675d
 xname
 xnames
 Yum
@@ -595,5 +597,9 @@ Init
 Init
 
  - introduction/site_survey.md
+# To allow Site Init
+Init
+
+- operations/security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md
 # To allow Site Init
 Init
