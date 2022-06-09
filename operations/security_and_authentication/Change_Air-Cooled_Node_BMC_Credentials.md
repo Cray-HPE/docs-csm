@@ -1,6 +1,6 @@
 # Change Air-Cooled Node BMC Credentials
 
-This procedure describes how to use the System Adminostrator Toolkit's `sat bmccreds`
+This procedure describes how to use the System Administrator Toolkit's `sat bmccreds`
 command to set a global credential for all BMCs on air-cooled nodes.
 
 ### Limitations

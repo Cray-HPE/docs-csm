@@ -1,7 +1,7 @@
 # Set BMC Credentials
 
-Redfish BMCs are installed in the system with default credentials. After the
-machine is shipped, credentials must be changed on all BMCs.
+Redfish BMCs are installed on the system with default credentials. After the
+machine is shipped, all BMC credentials must be changed.
 
 BMC credentials may be set with either the System Configuration Service \(SCSD\),
 or with the System Administrator Toolkit's `sat bmccreds` command. Both methods
@@ -9,7 +9,7 @@ enable administrators to set a unique value for each credential, or to set the s
 value for every credential.
 
 This procedure describes how to set BMC credentials with `sat bmccreds`, which
-conveniently automates the steps required by the SCSD procedure.
+conveniently automates the steps of the SCSD procedure.
 
 **Important:** If the credentials for other devices need to be changed, refer to the following device-specific procedures:
 - To change liquid-cooled BMC credentials, refer to [Change Cray EX Liquid-Cooled Cabinet Global Default Password](../security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md).
@@ -23,7 +23,7 @@ The System Administrator Toolkit is installed and configured.
 
 ### Procedures
 
-Choose one of the following procedures to set BMC credentials.
+Choose one of the following procedures.
 
 #### Generate a unique random password for each BMC in the system.
 
