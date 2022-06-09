@@ -75,7 +75,7 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 
 1. Select the container (from the legends under the x axis).
 
-1. Review the graph and adjust the `resources.limits.cpu` as needed.
+1. Review the graph and adjust the `resources.limits.cpu` value as needed.
 
    The presence of CPU throttling does not always indicate a problem, but if a service is being slow or experiencing latency
    issues, adjusting `resources.limits.cpu` may be beneficial.
@@ -85,7 +85,8 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
    * If the pod is being throttled at or near 100% for any period of time, then adjustments are likely needed.
    * If the service's response time is critical, then adjusting the pod's resources to greatly reduce or eliminate any CPU throttling may be required.
 
-   > **NOTE:** The `resources.requests.cpu` are used by the Kubernetes scheduler to decide which node to place the pod on and do not impact CPU throttling. The `resources.limits.cpu` can never be lower than the `resources.requests.cpu`.
+   > **NOTE:** The `resources.requests.cpu` values are used by the Kubernetes scheduler to decide which node to place the pod on and do not impact CPU
+   > throttling. The value of `resources.limits.cpu` can never be lower than the value of `resources.requests.cpu`.
 
 ### Memory usage
 
@@ -95,8 +96,8 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 
 1. Determine the steady state memory usage by looking at the memory usage graph for the container.
 
-   This is where the `resources.requests.memory` should be minimally set.
-   But more importantly, determine the spike usage for the container and set the `resources.limits.memory` based on the spike values with some additional headroom.
+   This is where the `resources.requests.memory` value should be minimally set.
+   But more importantly, determine the spike usage for the container and set the `resources.limits.memory` value based on the spike values with some additional headroom.
 
 ## Common customization scenarios
 
@@ -106,7 +107,7 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 * [Scale `cray-bss` service](#bss_scale)
 * [Postgres PVC resize](#postgres_pvc_resize)
 
-<a name="prerequisite"></a>
+<a name="prerequisites"></a>
 
 ### Prerequisites
 
@@ -449,7 +450,7 @@ Trial and error may be needed to determine what is best for a given system at sc
 
 1. Verify the `cray-bss` pods scale.
 
-   1. Watch the `cray-bss` pods scale to 5 and each reach a 2/2 ready state.
+   1. Watch the `cray-bss` pods scale to 5, with each pod reaching a `2/2` ready state.
 
       ```bash
       ncn# watch "kubectl get pods -l app.kubernetes.io/instance=cray-hms-bss -n services"
@@ -577,7 +578,7 @@ Refer to the note at the end of this section for more details.
    ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
-**IMPORTANT:** If the `volumeSize` of `cray-sls-postgres`, `gitea-vcs-postgres`, or `spire-postgres` needs to be adjusted, the same procedure as above can be used with the following changes:
+**IMPORTANT:** If the volume sizes of `cray-sls-postgres`, `gitea-vcs-postgres`, or `spire-postgres` need to be adjusted, the same procedure as above can be used with the following changes:
 
 * `cray-sls-postgres`
 
