@@ -113,7 +113,7 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/upgrade_control_plane.sh
 
 All Kubernetes nodes have been rebooted into the new image.
 
-> **NOTE**: If password for `ncn-m002` was reset during Stage 2.3, then also reset the password
+> **REMINDER**: If password for `ncn-m002` was reset during Stage 2.3, then also reset the password
 > on `ncn-m001` at this time.
 
 This stage is completed. Continue to [Stage 3](Stage_3.md).
