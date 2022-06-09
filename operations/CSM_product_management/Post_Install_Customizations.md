@@ -27,7 +27,7 @@ Check to see if there are any recent out of memory events.
 
 ## Prometheus `CPUThrottlingHigh` alerts
 
-Check Prometheus for recent `CPUThrottlingHigh` Alerts.
+Check Prometheus for recent `CPUThrottlingHigh` alerts.
 
 1. Log in to Prometheus.
 
@@ -37,7 +37,7 @@ Check Prometheus for recent `CPUThrottlingHigh` Alerts.
 
    1. Select the **Alert** tab.
 
-   2. Scroll down to the alert for `CPUThrottlingHigh`.
+   1. Scroll down to the alert for `CPUThrottlingHigh`.
 
 1. Log in to Grafana.
 
@@ -63,7 +63,7 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 
    For example:
 
-   ```text
+   ```yaml
    datasource: default
    namespace: sysmgmt-health
    pod: prometheus-cray-sysmgmt-health-promet-prometheus-0
@@ -85,22 +85,22 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
    * If the pod is being throttled at or near 100% for any period of time, then adjustments are likely needed.
    * If the service's response time is critical, then adjusting the pod's resources to greatly reduce or eliminate any CPU throttling may be required.
 
-   > **NOTE:** The `resources.requests.cpu` are used by the Kubernetes scheduler to decide which node to place the pod on and do not impact CPU Throttling. The `resources.limits.cpu` can never be lower than the `resources.requests.cpu`.
+   > **NOTE:** The `resources.requests.cpu` are used by the Kubernetes scheduler to decide which node to place the pod on and do not impact CPU throttling. The `resources.limits.cpu` can never be lower than the `resources.requests.cpu`.
 
 ### Memory usage
 
-1. Select the **Memory Usage** drop-down to see the Memory Usage graph for the pod during the selected time (from the top right).
+1. Select the **Memory Usage** drop-down to see the memory usage graph for the pod during the selected time (from the top right).
 
 1. Select the container (from the legends under the x axis).
 
-1. Determine the steady state memory usage by looking at the Memory Usage graph for the container.
+1. Determine the steady state memory usage by looking at the memory usage graph for the container.
 
    This is where the `resources.requests.memory` should be minimally set.
    But more importantly, determine the spike usage for the container and set the `resources.limits.memory` based on the spike values with some additional headroom.
 
 ## Common customization scenarios
 
-* [Prerequisite](#prerequisite)
+* [Prerequisites](#prerequisites)
 * [Prometheus pod is `OOMKilled` or CPU throttled](#prometheus_resources)
 * [Postgres pods are `OOMKilled` or CPU throttled](#postgres_resources)
 * [Scale `cray-bss` service](#bss_scale)
@@ -108,12 +108,12 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 
 <a name="prerequisite"></a>
 
-### Prerequisite
+### Prerequisites
 
 In order to apply post-install customizations to a system, the affected Helm chart must exist on the system so that the same chart version can be redeployed with the desired customizations.
 
 This example unpacks the the `csm-1.0.0` tarball under `/root` and lists the Helm charts that are now on the system.
-Set `PATH_TO_RELEASE` to the release directory where the Helm directory exists.
+Set `PATH_TO_RELEASE` to the release directory where the `helm` directory exists.
 `PATH_TO_RELEASE` will be used below when deploying a customization.
 
 These unpacked files can be safely removed after the customizations are deployed through `loftsman ship` in the examples below.
@@ -166,7 +166,9 @@ Trial and error may be needed to determine what is best for a given system at sc
      memory: 30Gi
    ```
 
-1. Edit the `platform.yaml` to only include the `cray-sysmgmt-health` chart and all its current data. (The resources specified above will be updated in the next step and the version may differ, because this is an example).
+1. Edit the `platform.yaml` to only include the `cray-sysmgmt-health` chart and all its current data. 
+
+   The resources specified above will be updated in the next step. The version may differ, because this is an example.
 
    ```yaml
    apiVersion: manifests/v1beta1
@@ -208,7 +210,7 @@ Trial and error may be needed to determine what is best for a given system at sc
    ncn# loftsman ship charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
    ```
 
-1. Verify the pod restarts and that the desired resources have been applied.
+1. Verify that the pod restarts and that the desired resources have been applied.
 
    1. Watch the `prometheus-cray-sysmgmt-health-promet-prometheus-0` pod restart.
 
@@ -231,7 +233,7 @@ Trial and error may be needed to determine what is best for a given system at sc
 
 1. **This step is critical.** Store the modified `customizations.yaml` file in the `site-init` repository in the customer-managed location.
 
-   If not done, these changes will not persist in future installs or upgrades.
+   If this is not done, these changes will not persist in future installs or upgrades.
 
    ```bash
    ncn# kubectl delete secret -n loftsman site-init
@@ -254,12 +256,8 @@ Refer to the note at the end of this section for more details.
    ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
    ```
 
-<<<<<<< HEAD
-1. Get the current cached sysmgmt manifest.
-=======
 1. Get the current cached `sysmgmt` manifest.
 
->>>>>>> c12edd8451b (STP-3237: improved grafana/prometheus steps, linting, and updated links)
    ```bash
    ncn# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > sysmgmt.yaml
    ```
@@ -287,7 +285,7 @@ Refer to the note at the end of this section for more details.
 
 1. Edit the `sysmgmt.yaml` to only include the `spire` chart and all its current data.
 
-   (The resources specified above will be updated in the next step and the version may differ, because this is an example).
+   The resources specified above will be updated in the next step. The version may differ, because this is an example.
 
    ```yaml
    apiVersion: manifests/v1beta1
@@ -337,7 +335,7 @@ Refer to the note at the end of this section for more details.
       ncn# watch "kubectl get pods -n spire -l application=spilo,cluster-name=spire-postgres"
       ```
 
-   2. Verify the desired resources have been applied.
+   1. Verify that the desired resources have been applied.
 
       ```bash
       ncn# kubectl get pod spire-postgres-0 -n spire -o json | jq -r '.spec.containers[] | select(.name == "postgres").resources'
@@ -359,7 +357,8 @@ Refer to the note at the end of this section for more details.
       ```
 
 1. **This step is critical.** Store the modified `customizations.yaml` file in the `site-init` repository in the customer-managed location.
-   If not done, these changes will not persist in future installs or upgrades.
+
+   If this is not done, these changes will not persist in future installs or upgrades.
 
    ```bash
    ncn# kubectl delete secret -n loftsman site-init
@@ -414,7 +413,8 @@ Trial and error may be needed to determine what is best for a given system at sc
    ```
 
 1. Edit the `sysmgmt.yaml` to only include the `cray-hms-bss` chart and all its current data.
-   The `replicaCount` specified above will be updated in the next step and the version may differ, because this is an example.
+
+   The `replicaCount` specified above will be updated in the next step. The version may differ, because this is an example.
 
    ```yaml
    apiVersion: manifests/v1beta1
@@ -448,24 +448,34 @@ Trial and error may be needed to determine what is best for a given system at sc
    ```
 
 1. Verify the `cray-bss` pods scale.
-   ```bash
-   # Watch the `cray-bss` pods scale to 5 and each reach a 2/2 ready state
-   ncn# watch "kubectl get pods -l app.kubernetes.io/instance=cray-hms-bss -n services"
 
-   NAME                       READY   STATUS    RESTARTS   AGE
-   cray-bss-fccbc9f7d-7jw2q   2/2     Running   0          82m
-   cray-bss-fccbc9f7d-l524g   2/2     Running   0          93s
-   cray-bss-fccbc9f7d-qwzst   2/2     Running   0          93s
-   cray-bss-fccbc9f7d-sw48b   2/2     Running   0          82m
-   cray-bss-fccbc9f7d-xr26l   2/2     Running   0          82m
+   1. Watch the `cray-bss` pods scale to 5 and each reach a 2/2 ready state.
 
-   # Verify that the replicas change is present in the Kubernetes `cray-bss` deployment
-   ncn# kubectl get deployment cray-bss -n services -o json | jq -r '.spec.replicas'
-   5
-   ```
+      ```bash
+      ncn# watch "kubectl get pods -l app.kubernetes.io/instance=cray-hms-bss -n services"
+      ```
+
+      Example output:
+
+      ```text
+      NAME                       READY   STATUS    RESTARTS   AGE
+      cray-bss-fccbc9f7d-7jw2q   2/2     Running   0          82m
+      cray-bss-fccbc9f7d-l524g   2/2     Running   0          93s
+      cray-bss-fccbc9f7d-qwzst   2/2     Running   0          93s
+      cray-bss-fccbc9f7d-sw48b   2/2     Running   0          82m
+      cray-bss-fccbc9f7d-xr26l   2/2     Running   0          82m
+      ```
+
+   2. Verify that the replicas change is present in the Kubernetes `cray-bss` deployment.
+
+      ```bash
+      ncn# kubectl get deployment cray-bss -n services -o json | jq -r '.spec.replicas'
+      5
+      ```
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location.
-   If not done, these changes will not persist in future installs or upgrades.
+
+   If this is not done, these changes will not persist in future installs or upgrades.
 
    ```bash
    ncn# kubectl delete secret -n loftsman site-init
@@ -506,7 +516,8 @@ Refer to the note at the end of this section for more details.
    ```
 
 1. Edit the `core-services.yaml` to only include the `cray-hms-smd` chart and all its current data.
-   The `volumeSize` specified above will be updated in the next step and the version may differ, because this is an example.
+
+   The `volumeSize` specified above will be updated in the next step. The version may differ, because this is an example.
 
    ```yaml
    apiVersion: manifests/v1beta1
@@ -554,17 +565,19 @@ Refer to the note at the end of this section for more details.
 
 1. If the status on the above command is `SyncFailed` instead of `Running`, refer to *Case 1* in the
    `SyncFailed` section of [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md#syncfailed).
+
    At this point the Postgres cluster is healthy, but additional steps are required to complete the resize of the Postgres PVCs.
 
 1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location.
-   If not done, these changes will not persist in future installs or upgrades.
+
+   If this is not done, these changes will not persist in future installs or upgrades.
 
    ```bash
    ncn# kubectl delete secret -n loftsman site-init
    ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
-**IMPORTANT:** If `cray-sls-postgres`, `gitea-vcs-postgres`, or `spire-postgres` `volumeSize` need to be adjusted, the same procedure as above can be used with the following changes:
+**IMPORTANT:** If the `volumeSize` of `cray-sls-postgres`, `gitea-vcs-postgres`, or `spire-postgres` needs to be adjusted, the same procedure as above can be used with the following changes:
 
 * `cray-sls-postgres`
 
@@ -587,5 +600,5 @@ To make changes that will not persist across installs or upgrades, see the follo
 These procedures will also help to verify and eliminate any issues in the short term.
 As other resource customizations are needed, contact support to request the feature.
 
-* Reference [Determine if Pods are Hitting Resource Limits](../kubernetes/Determine_if_Pods_are_Hitting_Resource_Limits.md)
-* Reference [Increase Pod Resource Limits](../kubernetes/Increase_Pod_Resource_Limits.md)
+* [Determine if Pods are Hitting Resource Limits](../kubernetes/Determine_if_Pods_are_Hitting_Resource_Limits.md)
+* [Increase Pod Resource Limits](../kubernetes/Increase_Pod_Resource_Limits.md)
