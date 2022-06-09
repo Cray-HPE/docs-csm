@@ -20,7 +20,7 @@ Check to see if there are any recent out of memory events.
 1. Log in to Grafana.
 
    ```text
-   https://grafana.cmn.SYSTEM-NAME_DOMAIN-NAME/
+   https://grafana.cmn.SYSTEM_DOMAIN_NAME/
    ```
 
 1. Search for the "Kubernetes / Compute Resources / Pod" dashboard to view the memory utilization graphs over time for any pod that has been `OOMKilled`.
@@ -32,7 +32,7 @@ Check Prometheus for recent `CPUThrottlingHigh` Alerts.
 1. Log in to Prometheus.
 
    ```text
-   https://prometheus.cmn.SYSTEM-NAME_DOMAIN-NAME/
+   https://prometheus.cmn.SYSTEM_DOMAIN_NAME/
    ```
 
    1. Select the **Alert** tab.
@@ -42,7 +42,7 @@ Check Prometheus for recent `CPUThrottlingHigh` Alerts.
 1. Log in to Grafana.
 
    ```text
-   https://grafana.cmn.SYSTEM-NAME_DOMAIN-NAME/
+   https://grafana.cmn.SYSTEM_DOMAIN_NAME/
    ```
 
 1. Search for the "Kubernetes / Compute Resources / Pod" dashboard to view the throttling graphs over time for any pod that is alerting.
@@ -54,7 +54,7 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 1. Log in to Grafana.
 
    ```text
-   https://grafana.cmn.SYSTEM-NAME_DOMAIN-NAME/
+   https://grafana.cmn.SYSTEM_DOMAIN_NAME/
    ```
 
 1. Search for the "Kubernetes / Compute Resources / Pod" dashboard.
