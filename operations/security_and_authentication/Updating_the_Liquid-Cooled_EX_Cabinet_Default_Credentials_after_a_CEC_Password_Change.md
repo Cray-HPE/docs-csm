@@ -256,7 +256,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 
    After 2-3 minutes, the `hms-discovery` CronJob will start to power on all of the currently powered off compute slots.
 
-1. Wait for compute slots to be pwoered on and for HSM to re-discover the updated Redfish endpoints.
+1. Wait for compute slots to be powered on and for HSM to re-discover the updated Redfish endpoints.
 
     ```bash
     ncn-m001# sleep 300
@@ -397,6 +397,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
         ```
 
         Example output:
+
         ```text
         NAME                         READY   STATUS    RESTARTS   AGE
         cray-meds-6d8b5875bc-4jngc   2/2     Running   0          17d
@@ -501,7 +502,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 
     1. Inspect the generated `scsd_cfg.json` file.
 
-        Ensure that the following are true before running the `cray scsd` command in the following strep:
+        Ensure that the following are true before running the `cray scsd` command in the following step:
 
        - The component name (xname) looks valid/appropriate.
          - Limit the `scsd_cfg.json` file to `NodeBMCs` that have had the `StatefulReset` action applied to them.
