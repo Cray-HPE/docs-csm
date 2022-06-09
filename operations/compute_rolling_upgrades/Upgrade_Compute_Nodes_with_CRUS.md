@@ -15,11 +15,11 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
 
 1. Create and populate the starting node group.
 
-    This will be the group of nodes that will be upgraded.
+    This is the group of nodes that will be upgraded.
 
     1. Create a starting node group \(starting label\).
 
-        Label names are defined by the user and the names used in this procedure are only examples. The label name used in this example is `slurm-nodes`.
+        Label names are defined by the user. The names used in this procedure are only examples. The label name used in this example is `slurm-nodes`.
 
         ```bash
         ncn# cray hsm groups create --label slurm-nodes --description 'Starting Node Group for my Compute Node upgrade'
@@ -62,7 +62,8 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
 
 1. Create an upgrade session with CRUS.
 
-    The following example is upgrading 50 nodes at a step. The `--upgrade-template-id` value should be the name of the Boot Orchestration Service \(BOS\) session template being used.
+    The following example is upgrading 50 nodes per step. The `--upgrade-template-id` value should be the name of the Boot Orchestration Service \(BOS\) session template
+    being used to reboot the nodes.
 
     ```bash
     ncn# cray crus session create \
@@ -91,10 +92,10 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
     workload_manager_type = "slurm"
     ```
 
-    If successful, note the `upgrade_id` in the returned data.
+1. Note the `upgrade_id` in the returned data of the previous command.
 
     ```bash
-    ncn# export UPGRADE_ID=e0131663-dbee-47c2-aa5c-13fe9b110242
+    ncn# UPGRADE_ID=e0131663-dbee-47c2-aa5c-13fe9b110242
     ```
 
 1. Monitor the status of the upgrade session.
@@ -139,7 +140,7 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
 
 1. Delete the CRUS upgrade session. (Optional)
 
-    Once a CRUS upgrade session is complete, it can no longer be used. It can be kept for historical purposes if desired, or it can be deleted.
+    Once a CRUS upgrade session has completed, it can no longer be used. It can be kept for historical purposes if desired, or it can be deleted.
 
     ```bash
     ncn# cray crus session delete $UPGRADE_ID
