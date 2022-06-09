@@ -41,6 +41,13 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
 1. Log in to `ncn-m002` from outside the cluster.
 
+    > **NOTE:** Very rarely, a password hash for the root user that works properly on a SLES SP2 NCN is
+    not recognized on a SLES SP3 NCN. If you cannot log in with your password, log in to `ncn-m002` from
+    `ncn-m001` and use the `passwd` command to reset the password. Then log in using the CMN IP as directed
+    below. Once `ncn-m001` has been upgraded, log in from `ncn-m002` and use the `passwd` command to reset
+    the password. The other NCNs will have their passwords updated when NCN personalization is run in a
+    subsequent step.
+
    `ssh` to the `bond0.cmn0`/CMN IP address of `ncn-m002`.
 
 1. Authenticate with the Cray CLI on `ncn-m002`.
@@ -105,5 +112,8 @@ ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/upgrade_control_plane.sh
 ## Stage completed
 
 All Kubernetes nodes have been rebooted into the new image.
+
+> **NOTE**: If you needed to reset the password for `ncn-m002` during Stage 2.3, reset the password
+on `ncn-m001` at this time.
 
 This stage is completed. Continue to [Stage 3](Stage_3.md).
