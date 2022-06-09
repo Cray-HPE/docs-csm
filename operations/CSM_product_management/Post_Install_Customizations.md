@@ -161,6 +161,7 @@ Trial and error may be needed to determine what is best for a given system at sc
 
    ```bash
    ncn# yq read customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources'
+   ```
 
    ```yaml
    requests:
@@ -200,6 +201,7 @@ Trial and error may be needed to determine what is best for a given system at sc
 
    ```bash
    ncn# yq read manifest.yaml 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.resources'
+   ```
 
    Example output:
 
@@ -284,6 +286,9 @@ Refer to the note at the end of this section for more details.
 
    ```bash
    ncn# yq read customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources'
+   ```
+
+   Example output:
 
    ```yaml
    requests:
@@ -323,6 +328,7 @@ Refer to the note at the end of this section for more details.
 
    ```bash
    ncn# yq read manifest.yaml 'spec.charts.(name==spire).values.cray-service.sqlCluster.resources'
+   ```
 
    Example output:
 
