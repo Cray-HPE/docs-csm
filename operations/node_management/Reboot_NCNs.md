@@ -41,13 +41,12 @@ The `kubectl` command is installed.
 
     Refer to the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md) for an overview of the health checks.
 
-    1. Run the platform health scripts from a master or worker node.
+    1. Run the platform health script.
 
-        The output of the following scripts will need to be referenced in the remaining sub-steps.
+        Run this on any master or worker node. The output of the following script will need to be referenced in some of the remaining sub-steps.
 
         ```bash
         ncn-mw# /opt/cray/platform-utils/ncnHealthChecks.sh
-        ncn-mw# csi pit validate --postgres
         ```
 
         **NOTE**: If the `ncnHealthChecks` script output indicates any `kube-multus-ds-` pods are in
@@ -55,6 +54,39 @@ The `kubectl` command is installed.
         In this case, it is safe to force delete these pods in order to let them properly restart; this is
         done by running `kubectl delete po -n kube-system kube-multus-ds.. --force`. After executing this
         command, re-running the `ncnHealthChecks` script should indicate that a new pod is in the `Running` state.
+
+    1. Validate Postgres health.
+
+        Run this on any master or worker node. It will run a set of checks on every Postgres cluster.
+
+        ```bash
+        ncn-mw# /opt/cray/tests/install/ncn/automated/ncn-postgres-tests
+        ```
+
+        Example output:
+
+        ```text
+        NCN Postgres Tests
+        ---------------
+        ..........
+
+        Total Duration: 27.170s
+        Count: 10, Failed: 0, Skipped: 0
+        ..........
+
+        Total Duration: 27.265s
+        Count: 10, Failed: 0, Skipped: 0
+        ..........
+        ```
+
+        ...
+
+        ```text
+        Total Duration: 27.264s
+        Count: 10, Failed: 0, Skipped: 0
+        ```
+
+        Remediate any reported failures before proceeding.
 
     1. Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
 
