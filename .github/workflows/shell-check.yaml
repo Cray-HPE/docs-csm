@@ -21,24 +21,26 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: shellcheck
+name: Check Shell Scripts
 on:
   pull_request:
-    branches:
-      - develop
-      - main
-      - master
-      - lts/*
-      - release/*
 
 jobs:
-  shellcheck:
-    name: shellcheck
+  shell-check:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    
-    - name: run shellcheck
-      uses: ludeeus/action-shellcheck@1.1.0
+
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v18.7
       with:
-        severity: warning
+        files: "**/*.sh"
+        files_ignore: ".github/**/*"
+
+    - uses: docker://koalaman/shellcheck:stable
+      if: ${{ steps.changed-files.outputs.all_changed_files }}
+      id: shell-check
+      with:
+        args: --severity=warning --color=always ${{ steps.changed-files.outputs.all_changed_files }}
+
