@@ -59,7 +59,7 @@
 
 ## Perform upgrade
 
-During this stage there will be a brief (approximately 5 minutes) window where pods with Persistent Volumes (`PV`s) will not be able to migrate between nodes.
+During this stage there will be a brief (approximately five minutes) window where pods with Persistent Volumes (`PV`s) will not be able to migrate between nodes.
 This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in order to accommodate the newer charts and a better upgrade strategy.
 
 1. Set the `SW_ADMIN_PASSWORD` environment variable.
@@ -80,6 +80,15 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
    ```bash
    ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/csm-upgrade.sh
    ```
+
+## Verify Keycloak users
+
+Verify that the Keycloak users localize job has completed as expected.
+
+> This section can be skipped if user localization is not required.
+
+After an upgrade, it is possible that all expected Keycloak users were not localized.
+See [Verification procedure](../../operations/security_and_authentication/Keycloak_User_Localization.md#Verification-procedure) to confirm that Keycloak localization has completed as expected.
 
 ## Stage completed
 

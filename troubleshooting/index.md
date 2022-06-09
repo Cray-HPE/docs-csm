@@ -51,6 +51,7 @@ This document provides links to troubleshooting information for services and fun
   * [CFS Session Failing to Complete](../operations/configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
 * Security and Authentication
   * [Common Vault Cluster Issues](../operations/security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
+  * [Keycloak User Localization](../operations/security_and_authentication/Keycloak_User_Localization.md)
 * ConMan
   * [ConMan Blocking Access to a Node BMC](../operations/conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
   * [ConMan Failing to Connect to a Console](../operations/conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
