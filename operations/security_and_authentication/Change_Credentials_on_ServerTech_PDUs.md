@@ -20,7 +20,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
     Expected output:
 
-    ```bash
+    ```text
     Server: ServerTech-AWS/v8.0v
     ```
 
@@ -35,7 +35,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
     Sample output:
 
-    ```bash
+    ```text
     x3000m0
     ```
 
@@ -54,7 +54,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
     Expected output:
 
-    ```bash
+    ```text
     secret
     ```
 
@@ -71,7 +71,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
     Expected output:
 
-    ```bash
+    ```text
     Super5ecret
     ```
 
@@ -107,7 +107,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
             Expected output upon a successful password change:
 
-            ```bash
+            ```text
             HTTP/1.1 204 No Content
             Content-Type: text/html
             Transfer-Encoding: chunked
@@ -140,7 +140,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
             Expected output upon a successful password change:
 
-            ```bash
+            ```text
             Updating password on x3000m0
             HTTP/1.1 204 No Content
             Content-Type: text/html
@@ -194,7 +194,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
     Expected output for a system with 2 PDUs.
 
-    ```bash
+    ```text
     1) "x3000m0/redfish/v1/Managers"
     2) "x3001m0/redfish/v1/Managers"
     ```

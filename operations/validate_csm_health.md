@@ -387,8 +387,8 @@ code. Failure information interpretation is described in the next section.
 
 The Cabinet Checks output is divided into three sections:
 
-- Summary information for for each cabinet
-- Detail information for for River cabinets
+- Summary information for each cabinet
+- Detail information for River cabinets
 - Detail information for Mountain/Hill cabinets.
 
 In the River section, any hardware found in SLS and not discovered by HSM is
