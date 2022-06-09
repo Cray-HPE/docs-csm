@@ -30,8 +30,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [3.1 SMS test execution](#31-sms-test-execution)
   - [3.2 Interpreting `cmsdev` results](#32-interpreting-cmsdev-results)
   - [3.3 Known issues with SMS tests](#33-known-issues-with-sms-tests)
-- [4. NCN gateway health checks](#4-ncn-gateway-health-checks)
-  - [4.1 Gateway test execution](#41-gateway-test-execution)
+- [4. Gateway health checks](#4-gateway-health-checks)
 - [5. Booting CSM `barebones` image](#5-booting-csm-barebones-image)
   - [5.1 Run the test script](#51-run-the-test-script)
 - [6. UAS / UAI tests](#6-uas--uai-tests)
@@ -176,7 +175,7 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
 
   - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, then delete
     `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the
-    `request-ncn-join-token` daemonset pod.
+    `request-ncn-join-token` daemon set pod.
 - `cfs-state-reporter service ran successfully`
   - If this test is failing, it could be due to SSL certificate issues on that NCN.
      1. Run the following command on the node where the test is failing.
@@ -490,23 +489,21 @@ ERROR (run tag 1khv7-crus): persistentvolumeclaims "cray-crus-etcd-ffmszl7bvh" n
 In this case, these errors can be ignored, or the pod with the same name as the PVC mentioned in the output can be restarted
 (as long as the other two Etcd pods are healthy).
 
-## 4. NCN gateway health checks
+## 4. Gateway health checks
 
-The gateway tests check the health of the API Gateway on all of the relevant networks. On NCNs, the API gateway is accessible
-on the NMNLB network, the CMN network, and either the CAN or CHN user network depending on the configuration of the system.
-The gateway tests will check that the gateway is accessible on all networks where it should be accessible, and NOT accessible on all
-networks where it should NOT be accessible. It will also check several service endpoints to verify that they return the proper response
+The gateway tests check the health of the API Gateway on all of the relevant networks.  The gateway tests will check that the gateway is accessible on all networks where it should be accessible,
+and NOT accessible on all networks where it should NOT be accessible. It will also check several service endpoints to verify that they return the proper response
 on each accessible network.
 
-### 4.1 Gateway test execution
+The gateway tests can be run from various locations.   For this part of the CSM validation, we will check gateway access from the NCNs and from outside the system.
+Externally, the API gateway is accessible on the CMN network and either the CAN or CHN user network depending on the configuration of the system.
+On NCNs, the API gateway is accessible on the same networks (CMN and CAN/CHN) and it is also accessible on the NMNLB network.
 
-The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/index.md#documentation).
+Follow these instructions for executing the gateway tests from an NCN and from outside the system.
 
-Execute the tests by by running the following command.
-
-```bash
-ncn# /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
-```
+- [Running Gateway Tests on an NCN Management Node](network/gateway_testing.md#running-gateway-tests-on-an-ncn-management-node)
+  - The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/index.md#documentation).
+- [Running Gateway Tests on a Device Outside the System](network/gateway_testing.md#running-gateway-tests-on-a-device-outside-the-system)
 
 The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
 
