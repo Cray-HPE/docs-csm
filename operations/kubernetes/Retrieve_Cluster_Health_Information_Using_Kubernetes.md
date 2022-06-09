@@ -44,15 +44,17 @@ ncn# kubectl get pods -A | grep -E 'Completed|Running'
 
 ### Retrieve a list of unhealthy pods
 
-```bash
-ncn# kubectl get pods -A | grep -Ev 'Completed|Running'
-```
+- Option 1: List all pods that are not reported as `Completed` or `Running`.
 
-or
+    ```bash
+    ncn# kubectl get pods -A | grep -Ev 'Completed|Running'
+    ```
 
-```bash
-ncn# kubectl get pods -A | grep -E 'Creating|ImagePull|Error|Init|Crash'
-```
+- Option 2: List all pods that are reported as `Creating`, `ImagePull`, `Error`, `Init`, or `Crash`.
+
+    ```bash
+    ncn# kubectl get pods -A | grep -E 'Creating|ImagePull|Error|Init|Crash'
+    ```
 
 ### Retrieve status of pods in a specific namespace
 
