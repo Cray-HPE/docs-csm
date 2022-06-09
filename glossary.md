@@ -10,6 +10,7 @@ Glossary of terms used in CSM documentation.
 * [Cabinet Cooling Group](#cabinet-cooling-group)
 * [Cabinet Environmental Controller (CEC)](#cabinet-environmental-controller)
 * [CEC microcontroller (eC)](#cec-microcontroller)
+* [Compute Rolling Upgrade Service (CRUS)](#compute-rolling-upgrade-service)
 * [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control)
 * [Customer Access Network](#customer-access-network)
 * [Chassis Management Module (CMM)](#chassis-management-module)
@@ -145,6 +146,18 @@ environmental sensors, and communicates cabinet status to the cooling distributi
 (CDU). The eC does not provide a REST endpoint on SMNet as do other embedded
 controllers, but simply monitors the cabinet sensors and provides the cabinet environmental
 and CDU status to the CMMs for evaluation and/or action.
+
+<a name="compute-rolling-upgrade-service"></a>
+
+## Compute Rolling Upgrade Service (CRUS)
+
+The Compute Rolling Upgrade Service (CRUS) upgrades sets of compute nodes without requiring an entire set of nodes to be out of service at once. CRUS manages the workload
+management status of nodes, handling each of the steps required to upgrade compute nodes.
+
+See [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
+
+**Note:** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
+[Deprecated features](introduction/differences.md#deprecated_features).
 
 <a name="cray-advanced-platform-monitoring-and-control"></a>
 
