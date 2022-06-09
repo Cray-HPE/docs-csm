@@ -30,7 +30,6 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
 
 ## CPS
 
-
 Repopulate clusters for CPS.
 
 - If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are up and running.
@@ -44,7 +43,6 @@ Repopulate clusters for CPS.
 [Deprecated features](../../introduction/differences.md#deprecated_features).
 
 1. View the progress of existing CRUS sessions.
-
 
     1. List the existing CRUS sessions to find the `upgrade_id` for the desired session.
 
