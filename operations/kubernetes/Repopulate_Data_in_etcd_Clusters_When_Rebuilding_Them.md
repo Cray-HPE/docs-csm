@@ -124,13 +124,11 @@ Data is repopulated in BSS when the REDS `init` job is run.
             jq 'del(.spec.template.metadata.labels["controller-uid"], .spec.selector)' > cray-reds-init.json
     ```
 
-
 1. Delete the `reds-client-init` job.
 
     ```bash
     ncn# kubectl delete -n services -f cray-reds-init.json
     ```
-
 
 1. Restart the `reds-client-init` job.
 
