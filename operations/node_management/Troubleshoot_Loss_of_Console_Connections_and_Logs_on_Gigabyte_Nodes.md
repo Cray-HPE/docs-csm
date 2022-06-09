@@ -35,6 +35,7 @@ Console log information is no longer being collected for Gigabyte nodes or ConMa
         ncn# ipmitool -H XNAME -U root -E sol deactivate
         ```
 
-1. Verify that console access to the node is working using the Cray console services.
+1. Manually open a console connection to the node using the Cray console services.
 
+    This is necessary to force the ConMan reconnection after closing the SOL session.
     See [Log in to a Node Using ConMan](../conman/Log_in_to_a_Node_Using_ConMan.md).
