@@ -42,19 +42,19 @@ if [[ -z ${LOG_FILE} ]]; then
 fi
 
 state_name="VERIFY_K8S_NODES_UPGRADED"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/util/verify-k8s-nodes-upgraded.sh
     } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
+    record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="PRE_CEPH_CSI_TARGET_REQUIREMENTS"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
@@ -70,13 +70,13 @@ if [[ $state_recorded == "0" ]]; then
     create_sma_1.2_storage_class
     create_cephfs_1.2_storage_class
     } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
+    record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="PRE_STRIMZI_UPGRADE"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
@@ -84,13 +84,25 @@ if [[ $state_recorded == "0" ]]; then
     ./kafka-prereq.sh
     popd +0
     } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
+    record_state ${state_name} "$(hostname)"
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="REMOVE_ISTIO_REQ_ANTI_AFFINITY"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    /usr/share/doc/csm/upgrade/1.2/scripts/k8s/remove_istio_req_affinity.sh
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="CSM_SERVICE_UPGRADE"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
@@ -98,43 +110,43 @@ if [[ $state_recorded == "0" ]]; then
     ./upgrade.sh
     popd +0
     } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
+    record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="POST_CSM_ENABLE_PSP"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     /usr/share/doc/csm/upgrade/1.2/scripts/k8s/enable-psp.sh
     } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
+    record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="POST_STRIMZI_UPGRADE"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     /usr/share/doc/csm/upgrade/1.2/scripts/strimzi/kafka-restart.sh
     } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
+    record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
 
 state_name="FIX_SPIRE_ON_STORAGE"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
     } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} $(hostname)
+    record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
