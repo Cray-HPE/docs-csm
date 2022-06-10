@@ -48,10 +48,6 @@ clock timezone UTC-offset UTC-7
 ## Validate functionality
 
 ```console
-switch (config)# show ntp
-```
-
-```console
 show ntp
 ```
 
