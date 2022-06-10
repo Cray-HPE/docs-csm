@@ -51,7 +51,7 @@ clock timezone UTC-offset UTC-7
 switch (config)# show ntp
 ```
 
-```
+```console
 show ntp
 ```
 
