@@ -1,6 +1,6 @@
 # Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node
 
-> **Note:** This procedure is **required** during initial CSM installs **before management nodes are first deployed**.
+> **NOTE:** This procedure is **required** during initial CSM installs **before management nodes are first deployed**.
 
 Modify the NCN images by setting the `root` user password and adding SSH keys for the `root` user account.
 If desired, also change the timezone for the NCNs.
