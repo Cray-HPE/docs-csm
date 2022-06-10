@@ -35,7 +35,7 @@ ntpdate 10.4.0.134
 
 Specify a remote NTP server to use for time synchronization:
 
-```
+```console
 ntp server <FQDN|IP-ADDR>
 ```
 
