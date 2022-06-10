@@ -51,7 +51,7 @@ For more information about modifying `customizations.yaml` and tuning for specif
 - Troubleshooting NTP
 
    During upgrades, clock skew may occur when rebooting nodes. If one node is rebooted and its clock differs significantly from those that have **not** been rebooted, it can
-   cause contention among the other nodes. Waiting for Chrony to slowly adjust the clocks can resolve intermittent clock skew issues. If it does not resolve on its own, follow the
+   cause contention among the other nodes. Waiting for `Chrony` to slowly adjust the clocks can resolve intermittent clock skew issues. If it does not resolve on its own, follow the
    [Configure NTP on NCNs](../../operations/node_management/Configure_NTP_on_NCNs.md) procedure to troubleshoot it further.
 
 - Bare-metal Etcd recovery
@@ -73,6 +73,10 @@ For more information about modifying `customizations.yaml` and tuning for specif
 - Troubleshooting Spire pods not starting on NCNs
 
    See [Troubleshoot Spire Failing to Start on NCNs](../../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md).
+
+- Fixing `shared-kafka` `kafka` cluster after upgrade
+
+   See [Kafka Failure after CSM 1.2 Upgrade](../../troubleshooting/known_issues/kafka_upgrade_failure.md)
 
 - Rerun a step
 
