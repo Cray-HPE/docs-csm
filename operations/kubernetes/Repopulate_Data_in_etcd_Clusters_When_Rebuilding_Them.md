@@ -1,7 +1,7 @@
 # Repopulate Data in etcd Clusters When Rebuilding Them
 
-When an etcd cluster is not healthy, it needs to be rebuilt. During that process, the pods that rely on etcd clusters lose data. That data needs to be repopulated in order for
-the cluster to go back to a healthy state.
+When an etcd cluster is not healthy, it needs to be rebuilt. During that process, the pods that rely on etcd clusters lose data.
+That data needs to be repopulated in order for the cluster to go back to a healthy state.
 
 The following services need their data repopulated in the etcd cluster:
 
@@ -30,12 +30,12 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
 
 ## CPS
 
-1. Repopulate clusters for CPS.
+Repopulate clusters for CPS.
 
-    - If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are
-      up and running. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md) for more information.
-    - If any clients have already mounted content provided by CPS, that content should be unmounted before rebuilding the etcd cluster, and then re-mounted after the etcd cluster
-      is rebuilt. Compute nodes that use CPS to access their root file system must be shut down to unmount, and then booted to perform the re-mount.
+- If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are up and running.
+  See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md) for more information.
+- If any clients have already mounted content provided by CPS, that content should be unmounted before rebuilding the etcd cluster, and then re-mounted after the etcd cluster is rebuilt.
+  Compute nodes that use CPS to access their root file system must be shut down to unmount, and then booted to perform the re-mount.
 
 ## CRUS
 
@@ -44,7 +44,7 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
 
 1. View the progress of existing CRUS sessions.
 
-    1. List the existing CRUS sessions to find the upgrade\_id for the desired session.
+    1. List the existing CRUS sessions to find the `upgrade_id` for the desired session.
 
         ```bash
         ncn# cray crus session list
@@ -83,8 +83,7 @@ An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhea
         completed = false
         failed_label = "failed-nodes"
         kind = "ComputeUpgradeSession"
-        messages = [ "Quiesce requested in step 0: moving to QUIESCING", "All nodes quiesced in step 0:
-        moving to QUIESCED", "Began the boot session for step 0: moving to BOOTING",]
+        messages = [ "Quiesce requested in step 0: moving to QUIESCING", "All nodes quiesced in step 0: moving to QUIESCED", "Began the boot session for step 0: moving to BOOTING",]
         starting_label = "slurm-nodes"
         state = "UPDATING"
         upgrade_id = "e0131663-dbee-47c2-aa5c-13fe9b110242"
@@ -155,12 +154,14 @@ Data is repopulated in BSS when the REDS `init` job is run.
 
 ## FAS
 
-1. Run the `cray-fas-loader` Kubernetes job.
+1. Reload the firmware images from Nexus.
 
-    Refer to the "Use the `cray-fas-loader` Kubernetes Job" section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) for more information.
+  Refer to the `Load Firmware from Nexus` section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md#load-firmware-from-nexus) for more information.
 
-    When the etcd cluster is rebuilt, all historic data for firmware actions and all recorded snapshots will be lost. Image data will need to be reloaded by following the
-    `cray-fas-loader` Kubernetes job procedure. After images are reloaded any running actions at time of failure will need to be recreated.
+  When the etcd cluster is rebuilt, all historic data for firmware actions and all recorded snapshots will be lost.
+  Image data will be reloaded from Nexus.
+  Any images that were loaded into FAS outside of Nexus will need to be reloaded using the `Load Firmware from RPM or ZIP file` section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md#load-firmware-from-rpm-or-zip-file).
+  After images are reloaded, any running actions at time of failure will need to be recreated.
 
 ## HMNFD
 
@@ -168,14 +169,12 @@ Data is repopulated in BSS when the REDS `init` job is run.
 
     1. Resubscribe all compute nodes.
 
-        ```bash
-        ncn-m001# TMPFILE=$(mktemp)
-        ncn-m001# sat status --no-borders --no-headings | grep Ready | grep Compute | awk '{printf("nid%06d-nmn\n",$3);}' > $TMPFILE
-
-        ncn-m001# pdsh -w ^${TMPFILE} "systemctl restart cray-dvs-orca"
-
-        ncn-m001# rm -rf $TMPFILE
-        ```
+      ```bash
+      ncn-m001# TMPFILE=$(mktemp)
+      ncn-m001# sat status --no-borders --no-headings | grep Ready | grep Compute | awk '{printf("nid%06d-nmn\n",$3);}' > $TMPFILE
+      ncn-m001# pdsh -w ^${TMPFILE} "systemctl restart cray-dvs-orca"
+      ncn-m001# rm -rf $TMPFILE
+      ```
 
     1. Resubscribe the NCNs.
 
