@@ -82,7 +82,7 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
    This example assumes that an RSA key was generated so it adds the id_rsa.pub file to authorized_keys.
 
    ```bash
-   ncn-m# cat /root/.ssh/id_rsa.pub >> k8s/${K8SVERSION}/filesystem.squashfs/root/.ssh/authorized_keys
+   ncn-m# cat /root/.ssh/id_rsa.pub > k8s/${K8SVERSION}/filesystem.squashfs/root/.ssh/authorized_keys
    ncn-m# chmod 640 k8s/${K8SVERSION}/filesystem.squashfs/root/.ssh/authorized_keys
    ```
 
