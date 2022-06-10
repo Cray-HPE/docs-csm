@@ -74,6 +74,10 @@ For more information about modifying `customizations.yaml` and tuning for specif
 
    See [Troubleshoot Spire Failing to Start on NCNs](../../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md).
 
+- Fixing shared-kafka kafka cluster after upgrade
+ 
+   See [Kafka Failure after CSM 1.2 Upgrade](../../troubleshooting/known_issues/kafka_upgrade_failure.md)
+
 - Rerun a step
 
    When running upgrade scripts, each script records what has been done successfully on a node. This is recorded in the
