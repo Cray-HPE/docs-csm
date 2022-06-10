@@ -13,7 +13,7 @@ switch(config)# banner <motd|exec> DELIM
 Show commands to validate functionality:
 
 ```
-switch# show banner <motd|exec>
+show banner <motd|exec>
 ```
 
 ## Example Output
@@ -33,4 +33,4 @@ switch(config)# do show banner exec
 1. Administrators can create the Exec banner
 2. The output of the Exec banner looks correct
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

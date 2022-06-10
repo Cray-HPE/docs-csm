@@ -1,2 +1,7 @@
-# docs-csm pull request review team
-*  @Cray-HPE/docs-csm-reviewers
+
+*                       @Cray-HPE/docs-csm-reviewers
+
+background/ncn_*        @Cray-HPE/metal
+install/*               @Cray-HPE/metal
+install/livecd          @Cray-HPE/metal
+operations/network      @Cray-HPE/management-network

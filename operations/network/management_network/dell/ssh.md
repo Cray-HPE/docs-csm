@@ -14,7 +14,7 @@ The SSH server is enabled by default.
 To disable the SSH server:
 
 ```text
-# no ip ssh server enable.
+no ip ssh server enable.
 ```
 
 ## Expected Results
@@ -24,4 +24,4 @@ To disable the SSH server:
 3. The output of the `show` commands is correct
 4. Administrators can successfully connect to the switch via an SSH client using SSH 2.0
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

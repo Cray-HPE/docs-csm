@@ -12,7 +12,7 @@ To obtain the expiration date of the Spire intermediate CA certificate, run the
 following command on a node that has access to `kubectl` (such as `ncn-m001`):
 
 ```bash
-ncn# kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
+kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
 ```
 
 ## Replace the Spire Intermediate CA Certificate
@@ -20,15 +20,15 @@ ncn# kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.
 1. Delete the secret that stores the certificate.
 
    ```bash
-   ncn# SPIRE_INTERMEDIATE_JOB=$(kubectl get job -n vault -o name| grep 'spire-intermediate' | tail -n1)
-   ncn# kubectl get secrets -n spire spire.spire.ca-tls -o yaml > spire.spire.ca-tls.yaml.bak
-   ncn# kubectl delete secret -n spire spire.spire.ca-tls
+   SPIRE_INTERMEDIATE_JOB=$(kubectl get job -n vault -o name| grep 'spire-intermediate' | tail -n1)
+   kubectl get secrets -n spire spire.spire.ca-tls -o yaml > spire.spire.ca-tls.yaml.bak
+   kubectl delete secret -n spire spire.spire.ca-tls
    ```
 
 1. Re-run the job that obtains the secret and creates the certificate.
 
    ```bash
-   ncn# kubectl get -n vault "$SPIRE_INTERMEDIATE_JOB" -o json | jq 'del(.spec.selector,.spec.template.metadata.labels)' | kubectl replace --force -f -
+   kubectl get -n vault "$SPIRE_INTERMEDIATE_JOB" -o json | jq 'del(.spec.selector,.spec.template.metadata.labels)' | kubectl replace --force -f -
    ```
 
 1. After the `spire.spire.ca-tls` secret in the `spire` namespace has been
@@ -36,7 +36,7 @@ ncn# kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.
    the new CA.
 
    ```bash
-   ncn# kubectl rollout restart -n spire statefulset spire-server
+   kubectl rollout restart -n spire statefulset spire-server
    ```
 
    Any `spire-agent` in the `CrashLoopBackOff` state should come back into a `Running` state the
@@ -47,12 +47,12 @@ ncn# kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.
 1. Enable the NCNs to rejoin Spire.
 
    ```bash
-   ncn# kubectl rollout restart -n spire daemonset request-ncn-join-token
+   kubectl rollout restart -n spire daemonset request-ncn-join-token
    ```
 
 1. Re-run the command to get the certificate's expiration date to verify that
    it has been updated.
 
    ```bash
-   ncn# kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
+   kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
    ```

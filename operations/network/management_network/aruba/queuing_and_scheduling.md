@@ -24,30 +24,30 @@ The supported scheduling disciplines are:
 Create a profile:
 
 ```text
-switch(config)# qos queue-profile NAME
-switch(config)# qos schedule-profile NAME
+qos queue-profile NAME
+qos schedule-profile NAME
 ```
 
 Apply a profile:
 
 ```text
-switch(config)# apply qos queue-profile NAME schedule-profile NAME
+apply qos queue-profile NAME schedule-profile NAME
 ```
 
 Configure a profile:
 
 ```text
-switch(config-queue)# map queue <0-7> local-priority <0-7>
-switch(config-schedule)# strict queue <0-7>
-switch(config-schedule)# wfq queue <0-7> weight <0-253>
+map queue <0-7> local-priority <0-7>
+strict queue <0-7>
+wfq queue <0-7> weight <0-253>
 ```
 
 Show commands to validate functionality:
 
 ```text
-switch# show interface IFACE queues
-switch# show qos queue-profile [QUEUE-NAME]
-switch# show qos schedule-profile [SCHED-NAME]
+show interface IFACE queues
+show qos queue-profile [QUEUE-NAME]
+show qos schedule-profile [SCHED-NAME]
 ```
 
 ## Expected Results
@@ -60,26 +60,26 @@ switch# show qos schedule-profile [SCHED-NAME]
 ## Example Output
 
 ```text
-switch(config)# qos queue-profile VOICE-Q-PROFILE
-switch(config-queue)# map queue 0 local-priority 0
-switch(config-queue)# map queue 1 local-priority 1
-switch(config-queue)# map queue 2 local-priority 2
-switch(config-queue)# map queue 3 local-priority 3
-switch(config-queue)# map queue 4 local-priority 4
-switch(config-queue)# map queue 5 local-priority 6
-switch(config-queue)# map queue 6 local-priority 7
-switch(config-queue)# map queue 7 local-priority 5
-switch(config-queue)# exit
-switch(config)# qos schedule-profile VOICE-SCHED-PROFILE
-switch(config-schedule)# wfq queue 0 weight 3
-switch(config-schedule)# wfq queue 1 weight 6
-switch(config-schedule)# wfq queue 2 weight 12
-switch(config-schedule)# wfq queue 3 weight 25
-switch(config-schedule)# wfq queue 4 weight 50
-switch(config-schedule)# wfq queue 5 weight 100
-switch(config-schedule)# wfq queue 6 weight 200
-switch(config-schedule)# strict queue 7
-switch(config-schedule)# exit
+qos queue-profile VOICE-Q-PROFILE
+map queue 0 local-priority 0
+map queue 1 local-priority 1
+map queue 2 local-priority 2
+map queue 3 local-priority 3
+map queue 4 local-priority 4
+map queue 5 local-priority 6
+map queue 6 local-priority 7
+map queue 7 local-priority 5
+exit
+qos schedule-profile VOICE-SCHED-PROFILE
+wfq queue 0 weight 3
+wfq queue 1 weight 6
+wfq queue 2 weight 12
+wfq queue 3 weight 25
+wfq queue 4 weight 50
+wfq queue 5 weight 100
+wfq queue 6 weight 200
+strict queue 7
+exit
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

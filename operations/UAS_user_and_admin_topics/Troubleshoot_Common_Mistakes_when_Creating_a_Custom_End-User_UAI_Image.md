@@ -9,6 +9,6 @@ There a several problems that may occur while making or working with a custom En
 * Did the container image get pushed and registered with UAS?
 * Did the creation process run from a real worker or master node as opposed to a LiveCD node?
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Troubleshoot UAS / CLI Authentication Issues](Troubleshoot_UAI_Authentication_Issues.md)

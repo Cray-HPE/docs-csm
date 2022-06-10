@@ -14,7 +14,7 @@ Username: `admin`
 The password can be obtained with the following command:
 
 ```bash
-ncn-w001# kubectl get secret -n services keycloak-master-admin-auth \
+kubectl get secret -n services keycloak-master-admin-auth \
 --template={{.data.password}} | base64 --decode
 ```
 

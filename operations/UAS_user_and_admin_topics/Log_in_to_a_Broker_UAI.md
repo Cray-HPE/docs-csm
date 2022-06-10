@@ -49,6 +49,6 @@ SSH to log into a Broker UAI and reach the End-User UAIs on demand.
 
     Only the password prompt appears now, because the hosts are all known and the End-User UAI exists but there is no `.ssh/authorized_keys` known yet by the Broker UAI for `vers`.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: UAI Image Customization](UAI_Image_Customization.md)

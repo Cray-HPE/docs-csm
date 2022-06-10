@@ -5,18 +5,14 @@ product stream installer.
 
 * [Prerequisites](#prerequisites)
 * [Overview](#overview)
-* [Remove Slingshot Diagnostics RPM From Default UAN Recipe](#remove_slingshot_diags_from_uan_recipe)
-* [Build the UAN Image Automatically Using IMS](#build_uan_image_automatically)
-* [Build the UAN Image By Customizing It Manually](#build_uan_image_manually)
-
-<a name="prerequisites"></a>
+* [Remove Slingshot Diagnostics RPM From Default UAN Recipe](#remove-slingshot-diags-from-uan-recipe)
+* [Build the UAN Image Automatically Using IMS](#build-uan-image-automatically)
+* [Build the UAN Image By Customizing It Manually](#build-uan-image-manually)
 
 ## Prerequisites
 
 * Both the Cray Operation System (COS) and UAN product streams must be installed.
 * The Cray administrative CLI must be initialized.
-
-<a name="overview"></a>
 
 ## Overview
 
@@ -26,8 +22,6 @@ removed from the recipe.
 
 First, determine if the Slingshot product stream is installed on the HPE Cray EX system. The Slingshot Diagnostics RPM must be removed from
 the default recipe if the Slingshot product is not installed.
-
-<a name="remove_slingshot_diags_from_uan_recipe"></a>
 
 ## Remove Slingshot Diagnostics RPM From Default UAN Recipe
 
@@ -51,8 +45,6 @@ This procedure does not need to be followed if the Slingshot package is installe
 1. Perform the [Build an Image Using IMS REST Service](Build_an_Image_Using_IMS_REST_Service.md) procedure in order to build the UAN image
    from the modified recipe. Use the `id` of the new image recipe.
 
-<a name="build_uan_image_automatically"></a>
-
 ## Build the UAN Image Automatically Using IMS
 
 This procedure does not need to be followed if choosing to build the UAN image manually.
@@ -60,7 +52,7 @@ This procedure does not need to be followed if choosing to build the UAN image m
 1. Identify the UAN image recipe.
 
     ```bash
-    ncn# cray ims recipes list --format json | jq '.[] | select(.name | contains("uan"))'
+    cray ims recipes list --format json | jq '.[] | select(.name | contains("uan"))'
     ```
 
     Example output:
@@ -83,13 +75,11 @@ This procedure does not need to be followed if choosing to build the UAN image m
 1. Save the ID of the IMS recipe in an environment variable.
 
     ```bash
-    ncn# IMS_RECIPE_ID=4a5d1178-80ad-4151-af1b-bbe1480958d1
+    IMS_RECIPE_ID=4a5d1178-80ad-4151-af1b-bbe1480958d1
     ```
 
 1. Using the saved IMS recipe ID, follow the [Build an Image Using IMS REST Service](Build_an_Image_Using_IMS_REST_Service.md) procedure to
    build the UAN image.
-
-<a name="build_uan_image_manually"></a>
 
 ## Build the UAN Image By Customizing It Manually
 
@@ -98,7 +88,7 @@ This procedure does not need to be followed if the previous procedure was used t
 1. Identify the base UAN image to customize.
 
     ```bash
-    ncn# cray ims images list --format json | jq '.[] | select(.name | contains("uan"))'
+    cray ims images list --format json | jq '.[] | select(.name | contains("uan"))'
     ```
 
     Example output:
@@ -119,7 +109,7 @@ This procedure does not need to be followed if the previous procedure was used t
 1. Save the ID of the IMS image in an environment variable.
 
     ```bash
-    ncn# IMS_IMAGE_ID=4a5d1178-80ad-4151-af1b-bbe1480958d1
+    IMS_IMAGE_ID=4a5d1178-80ad-4151-af1b-bbe1480958d1
     ```
 
 1. Using the saved IMS image ID, follow the [Customize an Image Root Using IMS](Customize_an_Image_Root_Using_IMS.md) procedure to build

@@ -7,7 +7,7 @@ The `kubectl` CLI commands can be used to retrieve information about the Kuberne
 ### Retrieve node status
 
 ```bash
-ncn# kubectl get nodes
+kubectl get nodes
 ```
 
 Example output:
@@ -27,19 +27,19 @@ ncn-w003   Ready    <none>                 8d    v1.20.13
 ### Retrieve information about individual pods
 
 ```bash
-ncn# kubectl describe pod POD_NAME -n NAMESPACE_NAME
+kubectl describe pod POD_NAME -n NAMESPACE_NAME
 ```
 
 ### Retrieve a list of all pods
 
 ```bash
-ncn# kubectl get pods -A
+kubectl get pods -A
 ```
 
 ### Retrieve a list of healthy pods
 
 ```bash
-ncn# kubectl get pods -A | grep -E 'Completed|Running'
+kubectl get pods -A | grep -E 'Completed|Running'
 ```
 
 ### Retrieve a list of unhealthy pods
@@ -47,19 +47,19 @@ ncn# kubectl get pods -A | grep -E 'Completed|Running'
 - Option 1: List all pods that are not reported as `Completed` or `Running`.
 
     ```bash
-    ncn# kubectl get pods -A | grep -Ev 'Completed|Running'
+    kubectl get pods -A | grep -Ev 'Completed|Running'
     ```
 
 - Option 2: List all pods that are reported as `Creating`, `ImagePull`, `Error`, `Init`, or `Crash`.
 
     ```bash
-    ncn# kubectl get pods -A | grep -E 'Creating|ImagePull|Error|Init|Crash'
+    kubectl get pods -A | grep -E 'Creating|ImagePull|Error|Init|Crash'
     ```
 
 ### Retrieve status of pods in a specific namespace
 
 ```bash
-ncn# kubectl get pods -n NAMESPACE_NAME
+kubectl get pods -n NAMESPACE_NAME
 ```
 
 Example output for `vault` namespace:
@@ -77,7 +77,7 @@ spire-intermediate-1-ltzwk               0/2     Completed   0          7d
 ### Retrieve pod logs
 
 ```bash
-ncn# kubectl logs -n NAMESPACE_NAME POD_NAME
+kubectl logs -n NAMESPACE_NAME POD_NAME
 ```
 
 ## Services
@@ -85,13 +85,13 @@ ncn# kubectl logs -n NAMESPACE_NAME POD_NAME
 ### Retrieve a list of all services
 
 ```bash
-ncn# kubectl get services -A
+kubectl get services -A
 ```
 
 ### Retrieve status of services in a specific namespace
 
 ```bash
-ncn# kubectl get services -n NAMESPACE_NAME
+kubectl get services -n NAMESPACE_NAME
 ```
 
 Example output for `operators` namespace:

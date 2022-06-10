@@ -15,4 +15,4 @@ Additional information can be found in the [CANU documentation](https://github.c
 
 If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](update_canu_from_csm_tarball.md)
 
-[Back to Index](index.md)
+[Back to Index](README.md)

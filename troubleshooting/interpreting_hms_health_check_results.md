@@ -5,20 +5,18 @@
 2. [HMS Smoke Tests](#hms-smoke-tests)
 3. [HMS Functional Tests](#hms-functional-tests)
 4. [Additional Troubleshooting](#additional-troubleshooting)
-5. [Install Blocking vs. Non-Blocking Failures](#blocking-vs-nonblocking-failures)
+5. [Install Blocking vs. Non-Blocking Failures](#install-blocking-vs-non-blocking-failures)
 
-<a name="introduction"></a>
 ### Introduction
 
 This document describes how to interpret the results of the HMS Health Check scripts and techniques for troubleshooting when failures occur.
 
-<a name="hms-smoke-tests"></a>
 ### HMS Smoke Tests
 
 The HMS smoke tests consist of bash scripts that check the status of HMS service pods and jobs in Kubernetes and verify HTTP status codes returned by the HMS service APIs. Additionally, there is one test called `smd_discovery_status_test_ncn-smoke.sh` which verifies that the system hardware has been discovered successfully. The `hms_run_ct_smoke_tests_ncn-resources.sh` wrapper script checks for executable files in the HMS smoke test directory on the NCN and runs all tests found in succession.
 
 ```bash
-ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
+/opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
 searching for HMS CT smoke tests...
 found 11 HMS CT smoke tests...
 running HMS CT smoke tests...
@@ -66,13 +64,12 @@ cleaning up...
 '/opt/cray/tests/ncn-smoke/hms/hms-capmc/capmc_smoke_test_ncn-smoke.sh' exited with status code: 1
 ```
 
-<a name="hms-functional-tests"></a>
 ### HMS Functional Tests
 
 The HMS functional tests consist of Tavern-based API tests for HMS services that are written in yaml and execute within `hms-pytest` containers on the NCNs that are spun up using podman. The functional tests are more rigorous than the smoke tests and verify the behavior of HMS service APIs in greater detail. The `hms_run_ct_functional_tests_ncn-resources.sh` wrapper script checks for executable files in the HMS functional test directory on the NCN and runs all tests found in succession.
 
 ```bash
-ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
+/opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 searching for HMS CT functional tests...
 found 4 HMS CT functional tests...
 running HMS CT functional tests...
@@ -171,7 +168,6 @@ E   tavern.util.exceptions.TestFailError: Test 'Ensure the boot script service c
         {"type": "about:blank", "title": "Bad Request", "detail": "Need a mac=, name=, or nid= parameter", "status": 400}
 ```
 
-<a name="additional-troubleshooting"></a>
 ### Additional Troubleshooting
 
 This section provides guidance for handling specific HMS Health Check failures that may occur.
@@ -203,15 +199,15 @@ The expected state of LastDiscoveryStatus is `DiscoverOK` for all endpoints with
 
 1. Check to see if the failed component name (xname) resolves using the `nslookup` command. If not, then the problem may be a DNS issue.
 ```bash
-ncn# nslookup <xname>
+nslookup <xname>
 ```
 2. Check to see if the failed component name (xname) responds to the `ping` command. If not, then the problem may be a network or hardware issue.
 ```bash
-ncn# ping -c 1 <xname>
+ping -c 1 <xname>
 ```
 3. Check to see if the failed component name (xname) responds to a Redfish query. If not, then the problem may be a credentials issue. Use the password set in the REDS sealed secret when creating site init.
 ```bash
-ncn# curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq
+curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq
 ```
 
 If discovery failures for Gigabyte CMCs with component names (xnames) of the form `xXc0sSb999` occur, verify that the root service account is configured for the CMC and add it if needed by following the steps outlined in [Add Root Service Account for Gigabyte Controllers](../operations/security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md).
@@ -231,9 +227,9 @@ cray-smd-5b9d574756-bnztf   2/2     Running   0          24d
 cray-smd-5b9d574756-hhc5p   2/2     Running   0          24d
 
 # get the logs from each of the SMD pods
-ncn# kubectl -n services logs <cray-smd-pod1> cray-smd > smd_pod1_logs
-ncn# kubectl -n services logs <cray-smd-pod2> cray-smd > smd_pod2_logs
-ncn# kubectl -n services logs <cray-smd-pod3> cray-smd > smd_pod3_logs
+kubectl -n services logs <cray-smd-pod1> cray-smd > smd_pod1_logs
+kubectl -n services logs <cray-smd-pod2> cray-smd > smd_pod2_logs
+kubectl -n services logs <cray-smd-pod3> cray-smd > smd_pod3_logs
 ```
 
 ##### DiscoveryStarted
@@ -243,10 +239,9 @@ The endpoint is in the process of being inventoried by Hardware State Manager (H
 Use the following command to check the current discovery status of the endpoint:
 
 ```bash
-ncn# cray hsm inventory redfishEndpoints describe <xname>
+cray hsm inventory redfishEndpoints describe <xname>
 ```
 
-<a name="blocking-vs-nonblocking-failures"></a>
 ### Install Blocking vs. Non-Blocking Failures
 
 The HMS Health Checks include tests for multiple types of system components, some of which are critical for the installation of the system, while others are not.

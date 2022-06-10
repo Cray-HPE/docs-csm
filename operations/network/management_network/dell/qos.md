@@ -9,22 +9,22 @@ QoS trust is by default disabled.
 Create a `dot1p` trust map:
 
 ```text
-switch(config)# trust dot1p-map dot1p-trust-map
+trust dot1p-map dot1p-trust-map
 switch(config-tmap-dot1p-map)#
 ```
 
 Define the set of values to match the class:
 
 ```text
-switch(config-tmap-dot1p-map)# qos-group 3 dot1p 0-4
-switch(config-tmap-dot1p-map)# qos-group 5 dot1p 5-7
+qos-group 3 dot1p 0-4
+qos-group 5 dot1p 5-7
 ```
 
 Apply the map on a specific interface or on global level:
 
 ```text
-switch(conf-if-eth1/1/1)# trust-map dot1p dot1p-trust-map
-switch(config-sys-qos)# trust-map dot1p dot1p-trust-map
+trust-map dot1p dot1p-trust-map
+trust-map dot1p dot1p-trust-map
 ```
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

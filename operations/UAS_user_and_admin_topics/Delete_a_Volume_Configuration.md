@@ -17,17 +17,17 @@ Delete the target volume configuration.
 To delete a UAS Volume, use a command of the following form:
 
 ```bash
-ncn-m001-pit# cray uas admin config volumes delete <volume-id>
+ncn-m001-cray uas admin config volumes delete <volume-id>
 ```
 
 For example:
 
 ```bash
-ncn-m001-pit# cray uas admin config volumes delete a0066f48-9867-4155-9268-d001a4430f5c
+ncn-m001-cray uas admin config volumes delete a0066f48-9867-4155-9268-d001a4430f5c
 ```
 
 If wanted, perform [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) to confirm that the UAS volume has been deleted.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Resource Specifications](Resource_Specifications.md)

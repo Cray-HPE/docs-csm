@@ -7,21 +7,21 @@ Ethernet port interfaces are enabled by default.
 Enable the interface:
 
 ```text
-switch(config)# interface ethernet 1/1/1
-switch(conf-if-eth1/1/1)# no shutdown
+interface ethernet 1/1/1
+no shutdown
 ```
 
 Disable the interface:
 
 ```text
-switch(config)# interface ethernet 1/1/1
-switch(conf-if-eth1/1/1)# shutdown
+interface ethernet 1/1/1
+shutdown
 ```
 
 Show commands to validate functionality:
 
 ```text
-switch# show configuration
+show configuration
 ```
 
 ## Expected Results
@@ -31,4 +31,4 @@ switch# show configuration
 3. Administrators can establish a link with a partner
 4. Administrators can pass traffic as expected
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

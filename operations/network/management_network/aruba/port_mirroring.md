@@ -37,15 +37,15 @@ switch(config-mirror)# destination cpu
 Generate and copy the internal packet capture:
 
 ```text
-switch# diagnostics
-switch# diag utilities tshark [file]
-switch# copy tshark-pcap REMOTE-URL vrf VRF
+diagnostics
+diag utilities tshark [file]
+copy tshark-pcap REMOTE-URL vrf VRF
 ```
 
 Show commands to validate functionality:
 
 ```text
-switch# show mirror <1-4>
+show mirror <1-4>
 ```
 
 > **NOTES:**
@@ -68,17 +68,17 @@ To do a port capture directly on device:
 To start TCPDUMP from shell:
 
 ```
-8325# start-shell
+start-shell
 8325:~$ sudo su
-8325:/home/admin# ip netns
+8325:/home/ip netns
 VRF_1
 wireless_mgmt
 ntb (id: 0)
 mirror_ns
 nonet
 swns
-8325:/home/admin# ip netns exec mirror_ns bash
-8325:/home/admin# ifconfig
+8325:/home/ip netns exec mirror_ns bash
+8325:/home/ifconfig
 MirrorRxNetLink encap:Ethernet  HWaddr 02:10:18:96:FD:EE
           UP BROADCAST RUNNING MULTICAST  MTU:9326  Metric:1
           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
@@ -93,7 +93,7 @@ lo        Link encap:Local Loopback
           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
           collisions:0 txqueuelen:1
           RX bytes:0  TX bytes:0
-8325:/home/admin# tcpdump -i MirrorRxNet -xx
+8325:/home/tcpdump -i MirrorRxNet -xx
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
 listening on MirrorRxNet, link-type EN10MB (Ethernet), capture size 262144 bytes
 ^C
@@ -102,7 +102,7 @@ listening on MirrorRxNet, link-type EN10MB (Ethernet), capture size 262144 bytes
 0 packets dropped by kernel
 ```
 
-> **NOTE:** host/dst arguments to the `tcpdump` command can help to restrict the filter to only capture the desired packets.
+> **`NOTE`** host/dst arguments to the `tcpdump` command can help to restrict the filter to only capture the desired packets.
 
 ## Expected Results
 
@@ -110,5 +110,4 @@ listening on MirrorRxNet, link-type EN10MB (Ethernet), capture size 262144 bytes
 2. The output of the `show` commands is correct
 3. Administrators can see the traffic for the source interface on the sniffer
 
-
-[Back to Index](../index.md)
+[Back to Index](../README.md)

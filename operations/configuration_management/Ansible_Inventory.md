@@ -15,7 +15,7 @@ Dynamic inventory is the default inventory when creating a CFS session. CFS auto
 Retrieve a list of HSM groups with the following command:
 
 ```bash
-ncn# cray hsm groups list --format json | jq .[].label
+cray hsm groups list --format json | jq .[].label
 ```
 
 These groups can be referenced in Ansible plays or when creating a CFS session directly.
@@ -37,13 +37,13 @@ Create a static inventory file in a hosts directory at the root of the configura
 In the following example, this is done for a single node in static inventory:
 
 ```bash
-ncn# mkdir -p hosts; cd hosts; cat > static <<EOF
+mkdir -p hosts; cd hosts; cat > static <<EOF
 [test_nodes]
 x3000c0s25b0n0
 EOF
-ncn# cd ..; git add hosts/static
-ncn# git commit -m "Added a single test node to static inventory"
-ncn# git push
+cd ..; git add hosts/static
+git commit -m "Added a single test node to static inventory"
+git push
 ```
 
 The process can be used to include any nodes in the system reachable over the Node Management Network \(NMN\), which contains the public SSH key pair provisioned by the install process. This inventory information will only be located in the repository to which it is added. If the desired configuration contains multiple layers, use the additionalInventoryUrl option in CFS to provide inventory information on a per-session level instead of a per-repository level. Refer to [Manage Multiple Inventories in a Single Location](Manage_Multiple_Inventories_in_a_Single_Location.md) for more information.

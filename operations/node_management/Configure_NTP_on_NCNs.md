@@ -9,15 +9,13 @@ Until an upstream NTP server is configured, the time on the NCNs may not match t
 * [Fix BSS metadata](#fix-bss-metadata)
 * [Fix broken configurations](#fix-broken-configurations)
 
-<a name="fix-bss-metadata"></a>
-
 ## Fix BSS metadata
 
 If nodes are missing metadata for NTP, then the data must be generated using `csi` and the system's `system_config.yaml` file.
 
 The `csi` tool is not available on `ncn-m001` after the CSM install is completed. However, if the install recovery data is still available on `ncn-m001` or `ncn-m003`,
 then the `csi` tool can be retrieved from the saved PIT ISO file. To do this, see the step used to obtain access to CSI in the
-[Enable NCN Disk Wiping Safeguard](../../install/deploy_final_ncn.md#enable-ncn-disk-wiping-safeguard) procedure.
+[Enable NCN Disk Wiping Safeguard](../../install/deploy_final_non-compute_node.md#enable-ncn-disk-wiping-safeguard) procedure.
 
 If the seed data from `system_config.yaml` is not available, then open a support ticket to help generate the NTP data.
 
@@ -35,13 +33,13 @@ The following steps are structured to be executed on one node at a time. However
 1. Generate new configurations:
 
     ```bash
-    ncn# csi config init
+    csi config init
     ```
 
 1. Change directory to the newly created `system/basecamp` directory and execute the `upgrade_ntp_timezone_metadata.sh` script.
 
     ```bash
-    ncn# cd system/basecamp && /usr/share/doc/csm/upgrade/scripts/upgrade_ntp_timezone_metadata.sh
+    cd system/basecamp && /usr/share/doc/csm/upgrade/scripts/upgrade_ntp_timezone_metadata.sh
     ```
 
 1. Find the relevant file for the node with missing metadata (such as `upgrade-metadata-000000000000.json`) based on the MAC address of the node.
@@ -51,13 +49,13 @@ The following steps are structured to be executed on one node at a time. However
     Run this command on the node that needs to be fixed in order to determine its xname.
 
     ```bash
-    ncn# cat /etc/cray/xname
+    cat /etc/cray/xname
     ```
 
 1. From `ncn-m001`, update BSS:
 
     ```bash
-    ncn-m001# csi handoff bss-update-cloud-init --user-data="upgrade-metadata-000000000000.json" --limit=<xname>`
+    csi handoff bss-update-cloud-init --user-data="upgrade-metadata-000000000000.json" --limit=<xname>`
     ```
 
 1. Continue with the upgrade.
@@ -67,11 +65,9 @@ The following steps are structured to be executed on one node at a time. However
 1. When the upgrade is completed, run this script on `ncn-m001` in order to ensure the time is set correctly on all NCNs:
 
     ```bash
-    ncn-m001# for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do 
+    for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do 
                   ssh $i "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"; done
     ```
-
-<a name="fix-broken-configs"></a>
 
 ## Fix broken configuration
 
@@ -82,11 +78,11 @@ On each affected NCN run the following:
 1. Export the token.
 
     ```bash
-    ncn# export TOKEN
+    export TOKEN
     ```
 
 1. Run the script:
 
 ```bash
-ncn# /srv/cray/scripts/common/chrony/csm_ntp.py
+/srv/cray/scripts/common/chrony/csm_ntp.py
 ```

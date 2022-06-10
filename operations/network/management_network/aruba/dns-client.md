@@ -8,19 +8,19 @@ A DNS client resolves hostnames to IP addresses by querying assigned DNS servers
 Configure the switch to resolve queries via a DNS server:
 
 ```tex
-switch(config)# ip dns server-address IP-ADDR [vrf VRF]
+ip dns server-address IP-ADDR [vrf VRF]
 ```
 
 Configure a domain name:
 
 ```text
-switch(config)# ip dns domain-name NAME
+ip dns domain-name NAME
 ```
 
 Show commands to validate functionality:
 
 ```text
-switch# show ip dns
+show ip dns
 ```
 
 ## Expected Results
@@ -29,4 +29,4 @@ switch# show ip dns
 1. The output is correct
 1. Administrators can ping the device
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

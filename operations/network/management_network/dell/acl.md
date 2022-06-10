@@ -10,14 +10,14 @@ An incoming packet is matched sequentially against each entry in an ACL.
 Create an ACL:
 
 ```text
-switch(config)# ip access-list name
-switch(conf-ipv4-acl)# permit ip 1.1.1.0/24 any
+ip access-list name
+permit ip 1.1.1.0/24 any
 ```
 
 Show commands to validate functionality:
 
 ```text
-switch# show ip access-list name
+show ip access-list name
 ```
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

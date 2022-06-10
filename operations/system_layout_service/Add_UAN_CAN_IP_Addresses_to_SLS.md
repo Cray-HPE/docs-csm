@@ -13,16 +13,16 @@ This procedure requires administrative privileges.
 1.  Retrieve the SLS data for the CAN.
 
     ```bash
-    ncn-m001# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials \
+    export TOKEN=$(curl -s -k -S -d grant_type=client_credentials \
     -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
     -o jsonpath='{.data.client-secret}' | base64 -d` \
     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
     | jq -r '.access_token')
 
-    ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" \
+    curl -s -k -H "Authorization: Bearer ${TOKEN}" \
     https://api-gw-service-nmn.local/apis/sls/v1/networks/CAN|jq > CAN.json
 
-    ncn-m001# cp CAN.json CAN.json.bak
+    cp CAN.json CAN.json.bak
     ```
 
 2.  Edit the CAN.json file and add the desired UAN CAN IP addresses in the ExtraProperties.Subnets section.
@@ -56,7 +56,7 @@ This procedure requires administrative privileges.
 3.  Upload the updated CAN.json file to SLS.
 
     ```bash
-    ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" --header \
+    curl -s -k -H "Authorization: Bearer ${TOKEN}" --header \
     "Content-Type: application/json" --request PUT --data @CAN.json \
     https://api-gw-service-nmn.local/apis/sls/v1/networks/CAN
     ```
@@ -68,7 +68,7 @@ This procedure requires administrative privileges.
     For example:
 
     ```bash
-    ncn-m001# nslookup uan01.can
+    nslookup uan01.can
     ```
 
     Example output:
@@ -82,7 +82,7 @@ This procedure requires administrative privileges.
     ```
 
     ```
-    ncn-m001# nslookup uan01-can.can
+    nslookup uan01-can.can
     ```
 
     Example output:

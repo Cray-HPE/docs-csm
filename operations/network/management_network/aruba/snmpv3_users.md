@@ -19,7 +19,7 @@ switch(config)# no snmpv3 user <USER>
 Show commands to validate functionality:
 
 ```text
-switch# show snmpv3 users
+show snmpv3 users
 ```
 
 ## Example Output
@@ -49,4 +49,4 @@ Snmpv3user                        md5       aes       none           True
 1. Administrators can configure the new user
 2. Administrators can connect to the server from the workstation
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

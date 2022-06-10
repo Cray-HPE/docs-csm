@@ -4,7 +4,7 @@ TDS systems with three worker nodes will encounter pod scheduling issues when wo
 
 >
 >```bash
-> ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/tds_lower_cpu_requests.sh
+> /usr/share/doc/csm/upgrade/1.2/scripts/k8s/tds_lower_cpu_requests.sh
 >```
 >
 

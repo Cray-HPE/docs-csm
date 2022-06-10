@@ -16,7 +16,7 @@ Restoring the balance of etcd clusters will help with the storage of Kubernetes 
     The following is an example of an unhealthy cluster. Two of the pods are on `ncn-w001`, and only one pod is on `ncn-w003`.
 
     ```bash
-    ncn-w001# kubectl get pods -o wide -A -l app=etcd
+    kubectl get pods -o wide -A -l app=etcd
     ```
 
     Example output:
@@ -35,7 +35,7 @@ Restoring the balance of etcd clusters will help with the storage of Kubernetes 
 3.  Delete one of the pods that is on the same node as another in the cluster.
 
     ```bash
-    ncn-w001# kubectl -A delete pod POD_NAME
+    kubectl -A delete pod POD_NAME
     ```
 
 4.  Check the health of the pods.

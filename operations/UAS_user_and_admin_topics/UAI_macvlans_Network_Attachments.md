@@ -8,6 +8,6 @@ The type of network attachment used on HPE Cray EX hardware for this purpose is 
 This network attachment integrates the UAI into the HPE Cray EX internal networks on the [UAI host node](UAI_Host_Nodes.md) where the UAI is running and assigns the UAI an IP address on the network defined by the network attachment.
 The network attachment also installs a set of routes in the UAI used to reach the compute nodes in the HPE Cray EX platform.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: UAI Network Attachment Customization](UAI_Network_Attachments.md)

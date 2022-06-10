@@ -1,13 +1,10 @@
 #Wait_for_unbound or cray-dns-unbound-manager hangs
 
-
-
 * Run the following command:
 
     ```bash
     kubectl get jobs -n services | grep cray-dns-unbound-manager
     ```
-
 
 	```bash
     services            cray-dns-unbound-manager-1635352560                  0/1           26h        26h
@@ -17,7 +14,6 @@
 	```
 
 * If you see one of the jobs show `0/1` for more than 10 minutes and there are other runs with `1/1`. That means that job is hung. You can delete the job with:
-
 
 	```bash
 	kubectl delete jobs -n services $job_with_0/1

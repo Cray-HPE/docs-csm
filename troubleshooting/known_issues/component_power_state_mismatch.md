@@ -20,19 +20,19 @@ heartbeating, and goes to the `Ready` state. If not, the power state for the aff
 off HSM re-discovery of those nodes' BMCs.
 
 ```bash
-ncn# cray hsm inventory discover create --xnames <list_of_BMC_xnames>
+cray hsm inventory discover create --xnames <list_of_BMC_xnames>
 ```
 
 For example:
 
 ```bash
-ncn# cray hsm inventory discover create --xnames x3000c0s0b0,x3000c0s1b0
+cray hsm inventory discover create --xnames x3000c0s0b0,x3000c0s1b0
 ```
 
 The power state will be re-synced after all of the BMCs listed have a `LastDiscoveryStatus` of `DiscoverOK`.
 
 ```bash
-ncn# cray hsm inventory redfishEndpoints describe x3000c0s0b0
+cray hsm inventory redfishEndpoints describe x3000c0s0b0
 ```
 
 Example output:

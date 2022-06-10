@@ -18,11 +18,11 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
    - See the `man 3 crypt` page for a description: https://man7.org/linux/man-pages/man3/crypt.3.html
 
   ```screen
-  remote# passhash PASSWORD
+  passhash PASSWORD
   $6$v5YlqfghB$scBci.GbT8...
   ```
 
-  **Note**: The example password hash is truncated to prevent using this example value. The password hash is a SHA-512 hash.
+ > **`NOTE`**: The example password hash is truncated to prevent using this example value. The password hash is a SHA-512 hash.
 
 ### Procedure
 
@@ -48,9 +48,9 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
 
    - Enter return a few times to start the connection.
 
-   - **Note**: If the network connection to the CEC is lost, or if a CEC command does not return to the prompt, it may be necessary to reboot the CEC. Use the Right Arrow on the CEC control panel to display the Action menu, select Reset CEC, and press the green checkmark button to reboot the CEC. Then re-establish the `nc` or `telnet` connection.
-
-     ![CEC Front Panel Controls](../../img//CEC_Display_Controls_CEC_Actions.svg)
+   > **`NOTE`**: If the network connection to the CEC is lost, or if a CEC command does not return to the prompt, it may be necessary to reboot the CEC. Use the Right Arrow on the CEC control panel to display the Action menu, select Reset CEC, and press the green checkmark button to reboot the CEC. Then re-establish the `nc` or `telnet` connection.
+   >
+   >  ![CEC Front Panel Controls](../../img//CEC_Display_Controls_CEC_Actions.svg)
 
 5. From the CEC> prompt, enter help to view the list of commands.
 
@@ -90,7 +90,7 @@ This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC de
       EXE> set_hash $6$v5YlqxKB$scBci.GbT8...
       ```
 
-   **Note**: Example truncated to prevent accidental setting of production password hash to example values. The password hash is a SHA-512 hash.
+  > **`NOTE`**: Example truncated to prevent accidental setting of production password hash to example values. The password hash is a SHA-512 hash.
 
 10. Exit privileged command mode.
 

@@ -10,12 +10,12 @@ This procedure requires administrative privileges.
 
 1. Edit the ConfigMap using one of the following options.
 
-    **NOTE:** Save a backup of the ConfigMap before making any changes.
+    > **`NOTE`** Save a backup of the ConfigMap before making any changes.
 
     The following is an example of creating a backup:
 
     ```bash
-    ncn-m001# kubectl get configmap -n services cray-ipxe-bss-ipxe \
+    kubectl get configmap -n services cray-ipxe-bss-ipxe \
             -o yaml > /root/cray-ipxe-bss-ipxe-backup.yaml
     ```
 
@@ -42,21 +42,22 @@ This procedure requires administrative privileges.
     - **Option 1:** Edit the `cray-ipxe-bss-ipxe` ConfigMap directly.
 
         ```bash
-        ncn-m001#  kubectl edit configmap -n services cray-ipxe-bss-ipxe
+        kubectl edit configmap -n services cray-ipxe-bss-ipxe
         ```
 
     - **Option 2:** Edit the ConfigMap by saving the file, editing it, and reloading the ConfigMap.
+
         1. Save the file.
 
             ```bash
-            ncn-m001# kubectl get configmap -n services cray-ipxe-bss-ipxe \
+            kubectl get configmap -n services cray-ipxe-bss-ipxe \
                     -o yaml > /root/cray-ipxe-bss-ipxe.yaml
             ```
 
         2. Edit the `cray-ipxe-bss-ipxe.yaml` file.
 
             ```bash
-            ncn-m001# vi /root/cray-ipxe-bss-ipxe.yaml
+            vi /root/cray-ipxe-bss-ipxe.yaml
             ```
 
         3. Reload the ConfigMap.
@@ -64,8 +65,8 @@ This procedure requires administrative privileges.
             Deleting and recreating the ConfigMap will reload it.
 
             ```bash
-            ncn-m001# kubectl delete configmap -n services cray-ipxe-bss-ipxe
-            ncn-m001# kubectl create -f /root/cray-ipxe-bss-ipxe.yaml
+            kubectl delete configmap -n services cray-ipxe-bss-ipxe
+            kubectl create -f /root/cray-ipxe-bss-ipxe.yaml
             ```
 
 2. Delete the iPXE pod to ensure the updated ConfigMap will be used.
@@ -73,7 +74,7 @@ This procedure requires administrative privileges.
     1. Find the pod ID.
 
         ```bash
-        ncn-m001# kubectl -n services get pods|grep cray-ipxe
+        kubectl -n services get pods|grep cray-ipxe
         cray-ipxe-5dddfc65f-qfmrr           2/2     Running        2       39h
         ```
 
@@ -82,7 +83,7 @@ This procedure requires administrative privileges.
         Replace CRAY-IPXE\_POD\_ID with the value returned in the previous step. In this example, the pod ID is `cray-ipxe-5dddfc65f-qfmrr`.
 
         ```bash
-        ncn-m001# kubectl -n services delete pod CRAY-IPXE_POD_ID
+        kubectl -n services delete pod CRAY-IPXE_POD_ID
         ```
 
 Wait about 30 seconds for the iPXE binary to be regenerated, and then the nodes will pick up the new `ipxe.efi` binary.

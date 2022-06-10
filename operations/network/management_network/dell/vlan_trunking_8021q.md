@@ -10,7 +10,7 @@ Any packet that ingresses on a trunk port tagged with a VLAN that the port does 
 Configure an interface as a trunk port:
 
 ```text
-switch(config-if)# switchport mode trunk
+switchport mode trunk
 ```
 
 Add the allowed VLANs:
@@ -22,13 +22,13 @@ switch(config-if)#switchport trunk allowed vlan add 1,50,100
 Assign a native VLAN:
 
 ```text
-switch(config-if)# switchport trunk native vlan-id 1
+switchport trunk native vlan-id 1
 ```
 
 Show commands to validate functionality:
 
 ```text
-switch# show interfaces switchport
+show interfaces switchport
 ```
 
 ## Expected Results
@@ -36,4 +36,4 @@ switch# show interfaces switchport
 1. Administrators can create and enable multiple VLAN interfaces
 2. Administrators can assign the trunk VLAN interfaces
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

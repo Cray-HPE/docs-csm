@@ -16,7 +16,7 @@ Setting up SSH keys enables administrators to view recent console messages and i
 1.  Save the public SSH key for the root user.
 
     ```bash
-    ncn-w001# export SSH_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub | sed 's/[[:space:]]*$//')
+    export SSH_PUBLIC_KEY=$(cat /root/.ssh/id_rsa.pub | sed 's/[[:space:]]*$//')
     ```
 
 2.  Enable passwordless SSH to the root user of the BMCs.
@@ -24,7 +24,7 @@ Setting up SSH keys enables administrators to view recent console messages and i
     Skip this step if passwordless SSH to the root user is not desired.
 
     ```bash
-    ncn-w001# export SCSD_SSH_KEY=$SSH_PUBLIC_KEY
+    export SCSD_SSH_KEY=$SSH_PUBLIC_KEY
     ```
 
 3.  Enable passwordless SSH to the consoles on the BMCs.
@@ -32,7 +32,7 @@ Setting up SSH keys enables administrators to view recent console messages and i
     Skip this step if passwordless SSH to the consoles is not desired.
 
     ```bash
-    ncn-w001# export SCSD_SSH_CONSOLE_KEY=$SSH_PUBLIC_KEY
+    export SCSD_SSH_CONSOLE_KEY=$SSH_PUBLIC_KEY
     ```
 
 4.  Generate a System Configuration Service configuration via the scsd tool.
@@ -40,7 +40,7 @@ Setting up SSH keys enables administrators to view recent console messages and i
     The admin must be authenticated to the Cray CLI before proceeding.
 
     ```bash
-    ncn-w001# cat > scsd_cfg.json <<DATA
+    cat > scsd_cfg.json <<DATA
     {
        "Force":false,
        "Targets":
@@ -61,7 +61,7 @@ Setting up SSH keys enables administrators to view recent console messages and i
     - The `SSHKey` and `SSHConsoleKey` settings match the desired public key
 
     ```bash
-    ncn-w001# cray scsd bmc loadcfg create scsd\_cfg.json
+    cray scsd bmc loadcfg create scsd\_cfg.json
     ```
 
     Check the output to verify all hardware has been set with the correct keys. Passwordless SSH to the root user and/or the consoles should now function as expected.

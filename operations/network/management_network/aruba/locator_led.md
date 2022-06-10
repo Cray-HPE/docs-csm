@@ -8,34 +8,34 @@ This is a handy feature when guiding someone to the switch during a "remote hand
 Enable LED:
 
 ```text
-switch# led locator <flashing|off|on>
+led locator <flashing|off|on>
 ```
 
 Show commands to validate functionality:
 
 ```text
-switch# show environment led
+show environment led
 ```
 
 ## Example Output
 
 ```text
-switch# show environment led
+show environment led
 Name           State     Status
 -----------------------------------
 locator        off           ok
-switch# led locator flashing
-switch# show system led
+led locator flashing
+show system led
 Name           State     Status
 -----------------------------------
 locator        flashing      ok
-switch# led locator on
-switch# show system led
+led locator on
+show system led
 Name           State     Status
 -----------------------------------
 locator        on            ok
-switch# led locator off
-switch# show system led
+led locator off
+show system led
 Name           State     Status
 -----------------------------------
 locator        off           ok
@@ -51,4 +51,4 @@ locator        off           ok
 6. The LED is no longer lit
 7. The `show` command shows the LED is in the off state
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

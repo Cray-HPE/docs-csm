@@ -11,7 +11,7 @@ The best way to resolve this issue is to try to ping an outside IP address from 
 Check the status of the bond0.cmn0 interface. Make sure it has an address specified.
 
 ```
-ncn-w002# ip addr show bond0.cmn0
+ip addr show bond0.cmn0
 ```
 
 Example output:
@@ -32,7 +32,7 @@ If there is not an address specified, make sure the `can-` values have been defi
 Check the default route on an NCN other than `ncn-m001`. There should be a default route with a gateway matching the can-gateway value.
 
 ```screen
-ncn-w002# ip route | grep default
+ip route | grep default
 ```
 
 Example output:
@@ -48,7 +48,7 @@ If there is not an address specified, make sure the `can-` values have been defi
 Check that the node can ping the default gateway shown in the default route.
 
 ```bash
-ncn-w002# ping 10.102.5.27
+ping 10.102.5.27
 ```
 
 Example output:
@@ -120,7 +120,7 @@ If the NCN cannot be reached, check the spine switch configuration.
 Check that a device outside the HPE Cray EX system that is expected to have access to nodes and services on the CAN can ping the CAN gateway.
 
 ```bash
-$ ping 10.102.5.27
+ping 10.102.5.27
 ```
 
 Example output:

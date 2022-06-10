@@ -21,22 +21,22 @@ See also:
 
 ## Examples
 
-* Pulling switch inventory from SLS and logging to screen, this requires the API gateway to be up.
+* (`ncn#`) Pulling switch inventory from SLS and logging to screen, this requires the API gateway to be up.
 
     ```bash
-    ncn# canu test --log
+    canu test --log
     ```
 
-* Pulling switch inventory from SLS file and connecting to the switches via their CMN IP addresses, this can be done outside the Shasta cluster.
+* (`ncn#`) Pulling switch inventory from SLS file and connecting to the switches via their CMN IP addresses, this can be done outside the Shasta cluster.
 
     ```bash
-    ncn# canu test --sls-file ../Hela/sls_input_file.json --network CMN
+    canu test --sls-file ../Hela/sls_input_file.json --network CMN
     ```
 
-* Pulling switch inventory from SLS and having the output be in JSON format.
+* (`ncn#`) Pulling switch inventory from SLS and having the output be in JSON format.
 
     ```bash
-    ncn# canu test --json
+    canu test --json
     ```
 
 Running the tests can take some time if there are a lot of management switches.

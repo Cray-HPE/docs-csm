@@ -6,8 +6,6 @@
   * [Verify zones are being signed with the zone signing key](#verify-zones-being-signed)
   * [Verify TSIG operation](#verify-tsig-operation)
 
-<a name="list-dns-zone-contents"></a>
-
 ## List DNS zone contents
 
 The PowerDNS zone database is populated with data from two sources:
@@ -18,7 +16,7 @@ The PowerDNS zone database is populated with data from two sources:
 Use the `cray-powerdns-visualizer` command to view the zone structure that `cray-powerdns-manager` will create.
 
 ```bash
-ncn# kubectl -n services exec deployment/cray-powerdns-manager -c cray-powerdns-manager -- cray-powerdns-visualizer
+kubectl -n services exec deployment/cray-powerdns-manager -c cray-powerdns-manager -- cray-powerdns-visualizer
 ```
 
 Example output:
@@ -48,8 +46,6 @@ Example output:
 
 For more information on External DNS and troubleshooting steps, see the [External DNS documentation](../external_dns/External_DNS.md).
 
-<a name="powerdns-logging"></a>
-
 ## PowerDNS logging
 
 When troubleshooting DNS problems, it may prove helpful to increase the level of logging from the default value of 3 (error).
@@ -57,7 +53,7 @@ When troubleshooting DNS problems, it may prove helpful to increase the level of
 1. Edit the `cray-dns-powerdns` Kubernetes ConfigMap.
 
    ```bash
-   ncn# kubectl -n services edit cm cray-dns-powerdns
+   kubectl -n services edit cm cray-dns-powerdns
    ```
 
 1. Set the `loglevel` parameter in `pdns.conf` to the desired setting.
@@ -77,7 +73,7 @@ When troubleshooting DNS problems, it may prove helpful to increase the level of
 1. Restart the PowerDNS service.
 
    ```bash
-   ncn# kubectl -n services rollout restart deployment cray-dns-powerdns
+   kubectl -n services rollout restart deployment cray-dns-powerdns
    ```
 
    Example output:
@@ -88,11 +84,7 @@ When troubleshooting DNS problems, it may prove helpful to increase the level of
 
 Refer to the external [PowerDNS documentation](https://doc.powerdns.com/authoritative/settings.html#loglevel) for more information.
 
-<a name="verify-dnssec-operation"></a>
-
 ## Verify DNSSEC operation
-
-<a name="verify-zones-being-signed"></a>
 
 ### Verify zones are being signed with the zone signing key
 
@@ -101,7 +93,7 @@ Check that the required zone has a DNSKEY entry; this should match the public ke
 > In the command below, be sure to replace `system.dev.cray.com` with the correct value for the system.
 
 ```bash
-ncn# kubectl -n services exec deployment/cray-dns-powerdns -c cray-dns-powerdns -- pdnsutil show-zone system.dev.cray.com
+kubectl -n services exec deployment/cray-dns-powerdns -c cray-dns-powerdns -- pdnsutil show-zone system.dev.cray.com
 ```
 
 Example output:
@@ -127,8 +119,6 @@ DS = system.dev.cray.com. IN DS 26690 13 4 df40f23a7ee051d7e3d40d4059640bda3558c
 If the DNSKEY record is incorrect, then verify that the zone name is correct in the `dnssec` SealedSecret in `customizations.yaml`,
 and that the desired zone signing key was used. See the [PowerDNS Configuration Guide](PowerDNS_Configuration.md) for more information.
 
-<a name="verify-tsig-operation"></a>
-
 ### Verify TSIG operation
 
 > **IMPORTANT:** These examples are for informational purposes only. The use of the `dig` command `-y` option to present the key should be avoided in favor of the `-k` option
@@ -137,7 +127,7 @@ with the secret in a file, in order to avoid the key being displayed in `ps` com
 1. Determine the IP address of the external DNS service.
 
    ```bash
-   ncn# kubectl -n services get service cray-dns-powerdns-can-tcp
+   kubectl -n services get service cray-dns-powerdns-can-tcp
    ```
 
    Example output:
@@ -150,7 +140,7 @@ with the secret in a file, in order to avoid the key being displayed in `ps` com
 2. Verify that an AXFR query to the external DNS service works when the correct TSIG key is presented.
 
    ```bash
-   ncn# dig -t axfr system.dev.cray.com @10.101.8.113 -y \ "hmac-sha256:system-key:dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY=" +nocrypto | head
+   dig -t axfr system.dev.cray.com @10.101.8.113 -y \ "hmac-sha256:system-key:dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY=" +nocrypto | head
    ```
 
    Example output:
@@ -170,7 +160,7 @@ with the secret in a file, in order to avoid the key being displayed in `ps` com
    When presented with an invalid key, the transfer should fail.
 
    ```bash
-   ncn# dig -t axfr system.dev.cray.com @10.101.8.113 -y "hmac-sha256:system-key:B7n/sK74pa7r0ygOZkKpW9mWkPjq8fV71j1SaTpzJMQ="
+   dig -t axfr system.dev.cray.com @10.101.8.113 -y "hmac-sha256:system-key:B7n/sK74pa7r0ygOZkKpW9mWkPjq8fV71j1SaTpzJMQ="
    ```
 
    Example output:
@@ -186,7 +176,7 @@ with the secret in a file, in order to avoid the key being displayed in `ps` com
    The `cray-dns-powerdns` pod log will also indicate that the request failed.
 
    ```bash
-   ncn# kubectl -n services logs cray-dns-powerdns-64fdf6597c-pqgdt -c cray-dns-powerdns
+   kubectl -n services logs cray-dns-powerdns-64fdf6597c-pqgdt -c cray-dns-powerdns
    ```
 
    Example output:

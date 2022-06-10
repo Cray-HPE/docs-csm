@@ -22,7 +22,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     There may be multiple records returned. Ensure that the correct record is selected in the returned data.
 
     ```bash
-    ncn# cray ims recipes list
+    cray ims recipes list
     ```
 
     Excerpt from example output:
@@ -32,7 +32,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     id = "76ef564d-47d5-415a-bcef-d6022a416c3c"
     name = "cray-sles15-barebones"
     created = "2020-02-05T19:24:22.621448+00:00"
-    
+
     [results.link]
     path = "s3://ims/recipes/76ef564d-47d5-415a-bcef-d6022a416c3c/cray-sles15-barebones.tgz"
     etag = "28f3d78c8cceca2083d7d3090d96bbb7"
@@ -42,9 +42,9 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
 1. Create variables for the S3 `bucket` and `key` values from the S3 `path` in the returned data of the previous step.
 
     ```bash
-    ncn# S3_ARTIFACT_BUCKET=ims
-    ncn# S3_ARTIFACT_KEY=recipes/76ef564d-47d5-415a-bcef-d6022a416c3c/cray-sles15-barebones.tgz
-    ncn# ARTIFACT_FILENAME=cray-sles15-barebones.tgz
+    S3_ARTIFACT_BUCKET=ims
+    S3_ARTIFACT_KEY=recipes/76ef564d-47d5-415a-bcef-d6022a416c3c/cray-sles15-barebones.tgz
+    ARTIFACT_FILENAME=cray-sles15-barebones.tgz
     ```
 
 1. Download the recipe archive.
@@ -52,14 +52,14 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     Use the variables created in the previous step when running the following command.
 
     ```bash
-    ncn# cray artifacts get $S3_ARTIFACT_BUCKET $S3_ARTIFACT_KEY $ARTIFACT_FILENAME
+    cray artifacts get $S3_ARTIFACT_BUCKET $S3_ARTIFACT_KEY $ARTIFACT_FILENAME
     ```
 
 1. Expand the recipe with `tar`.
 
     ```bash
-    ncn# mkdir image-recipe
-    ncn# tar xvf $ARTIFACT_FILENAME -C image-recipe
+    mkdir image-recipe
+    tar xvf $ARTIFACT_FILENAME -C image-recipe
     ```
 
 1. Modify the recipe by editing the files and subdirectories in the `image-recipe` directory.
@@ -79,26 +79,26 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     This step should be done after the recipe has been changed.
 
     ```bash
-    ncn# cd image-recipe
+    cd image-recipe
     ```
 
 1. Set an environment variable for the name of the file that will contain the archive of the image recipe.
 
     ```bash
-    ncn# ARTIFACT_FILE=my_recipe.tgz
+    ARTIFACT_FILE=my_recipe.tgz
     ```
 
 1. Create a `tgz` archive of the image recipe.
 
     ```bash
-    ncn# tar cvfz ../$ARTIFACT_FILE .
-    ncn# cd ..
+    tar cvfz ../$ARTIFACT_FILE .
+    cd ..
     ```
 
 1. Create a new IMS recipe record.
 
     ```bash
-    ncn# cray ims recipes create --name "My Recipe" \
+    cray ims recipes create --name "My Recipe" \
             --recipe-type kiwi-ng --linux-distribution sles15
     ```
 
@@ -115,7 +115,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
 1. Create a variable for the `id` value in the returned data.
 
     ```bash
-    ncn# IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
+    IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
     ```
 
 1. Upload the customized recipe to S3.
@@ -124,13 +124,13 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     in order to remove ambiguity.
 
     ```bash
-    ncn# cray artifacts create ims recipes/$IMS_RECIPE_ID/$ARTIFACT_FILE $ARTIFACT_FILE
+    cray artifacts create ims recipes/$IMS_RECIPE_ID/$ARTIFACT_FILE $ARTIFACT_FILE
     ```
 
 1. Update the IMS recipe record with the S3 path to the recipe archive.
 
     ```bash
-    ncn# cray ims recipes update $IMS_RECIPE_ID --link-type s3 \
+    cray ims recipes update $IMS_RECIPE_ID --link-type s3 \
             --link-path s3://ims/recipes/$IMS_RECIPE_ID/$ARTIFACT_FILE
     ```
 
@@ -164,7 +164,7 @@ the following procedures must all be completed.
 1. Add a file named `.ims_recipe_template.yaml` to the root of the recipe archive.
 
    ``` bash
-   ncn# ls -al
+   ls -al
    ```
 
    Example output:
@@ -183,7 +183,7 @@ the following procedures must all be completed.
    must contain a list of files to be templated within the image recipe archive.
 
    ``` bash
-   ncn# cat .ims_recipe_template.yaml
+   cat .ims_recipe_template.yaml
    ```
 
    Example output:
@@ -194,14 +194,14 @@ the following procedures must all be completed.
    ```
 
    IMS will template the indicated files "in place" -- that is, the listed file will be replaced with the templated copy.
-   **NOTE:** Only files listed under the `template_files` key will be templated by IMS.
+   **`NOTE`** Only files listed under the `template_files` key will be templated by IMS.
 
 1. For each indicated file above, add appropriate Jinja2 variables where required to enable the results that are sought.
    In the example below, the Jinja2 variable `{{ CSM_RELEASE_VERSION }}` is used to help identify the fully qualified
    Nexus repository name/path to use when building the recipe.
 
    ```bash
-   ncn# cat config.xml
+   cat config.xml
    ```
 
    Excerpt of example output:
@@ -212,14 +212,14 @@ the following procedures must all be completed.
    </repository>
    ```
 
-   **NOTE:** The repository referenced above is for documentation purposes only and may not actually exist.
+   **`NOTE`** The repository referenced above is for documentation purposes only and may not actually exist.
 
 1. Create a `tgz` archive of the image recipe.
 
     ```bash
-    ncn# ARTIFACT_FILENAME=recipe.tar.gz
-    ncn# tar cvfz ../$ARTIFACT_FILE .
-    ncn# cd ..
+    ARTIFACT_FILENAME=recipe.tar.gz
+    tar cvfz ../$ARTIFACT_FILE .
+    cd ..
     ```
 
 ### Add Template Key/Value Pairs to IMS Recipe Record
@@ -227,7 +227,7 @@ the following procedures must all be completed.
 1. Create a new IMS recipe record with `template_dictionary` key/value pairs.
 
     ```bash
-    ncn# cray ims recipes create --name "My Recipe" \
+    cray ims recipes create --name "My Recipe" \
             --recipe-type kiwi-ng --linux-distribution sles15 \
             --template-dictionary-key CSM_RELEASE_VERSION \
             --template-dictionary-value 1.2.5
@@ -253,7 +253,7 @@ the following procedures must all be completed.
 1. Create a variable for the `id` value in the returned data.
 
     ```bash
-    ncn# IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
+    IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
     ```
 
 1. Upload the customized recipe to S3.
@@ -262,13 +262,13 @@ the following procedures must all be completed.
    in order to remove ambiguity.
 
    ```bash
-   ncn# cray artifacts create ims recipes/$IMS_RECIPE_ID/$ARTIFACT_FILENAME $ARTIFACT_FILENAME
+   cray artifacts create ims recipes/$IMS_RECIPE_ID/$ARTIFACT_FILENAME $ARTIFACT_FILENAME
    ```
 
 1. Update the IMS recipe record with the S3 path to the recipe archive.
 
    ```bash
-   ncn# cray ims recipes update $IMS_RECIPE_ID --link-type s3 \
+   cray ims recipes update $IMS_RECIPE_ID --link-type s3 \
            --link-path s3://ims/recipes/$IMS_RECIPE_ID/$ARTIFACT_FILENAME
    ```
 
@@ -299,7 +299,7 @@ but after downloading the recipe from S3, there will be an indication that IMS i
 `fetch-recipe` container log.
 
 ```bash
-ncn# kubectl -n ims logs cray-ims-812e9cda-62a8-4d1b-83a3-5891340671ff-create-78z6p -c fetch-recipe
+kubectl -n ims logs cray-ims-812e9cda-62a8-4d1b-83a3-5891340671ff-create-78z6p -c fetch-recipe
 ```
 
 Example output:

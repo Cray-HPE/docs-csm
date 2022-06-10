@@ -8,13 +8,13 @@ An example of a domain name could be `us.cray.com`.
 Create a domain name:
 
 ```text
-switch(config)# domain-name NAME
+domain-name NAME
 ```
 
 Show commands to validate functionality:
 
 ```text
-switch# show domain-name
+show domain-name
 ```
 
 ## Expected Results
@@ -22,4 +22,4 @@ switch# show domain-name
 1. Administrators can configure the domain name
 2. The output of all `show` commands is correct
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

@@ -14,7 +14,7 @@ Only follow the steps in the section for the node type that is being rebuilt:
 
 1. Unmount the etcd volume and remove the volume group.
 
-   **NOTE:** etcd should already be stopped as part of the "Prepare Master Node" steps.
+   **`NOTE`** etcd should already be stopped as part of the "Prepare Master Node" steps.
 
    ```bash
    /run/lib-etcd
@@ -62,14 +62,14 @@ Only follow the steps in the section for the node type that is being rebuilt:
 1. Stop running OSDs on the node being wiped.
 
     ```bash
-    ncn-s# systemctl stop ceph-osd.target
+    systemctl stop ceph-osd.target
     ```
 
 2. Make sure the OSDs (if any) are not running after running the first command.
 
     ```bash
-    ncn-s# ls -1 /dev/sd* /dev/disk/by-label/*
-    ncn-s# vgremove -f --select 'vg_name=~ceph*'
+    ls -1 /dev/sd* /dev/disk/by-label/*
+    vgremove -f --select 'vg_name=~ceph*'
     ```
 
 3. Unmount and remove the metalvg0 volume group.

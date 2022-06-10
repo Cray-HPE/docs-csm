@@ -22,7 +22,7 @@ Collect the input data needed to generate switch configurations.
     **IMPORTANT:** If this is an upgrade SLS needs to be updated to the correct CSM version first.
 
     ```bash
-    ncn# cray sls dumpstate list  --format json >> sls_file.json
+    cray sls dumpstate list  --format json >> sls_file.json
     ```
 
 1. Retrieve switch running configurations.
@@ -31,7 +31,7 @@ Collect the input data needed to generate switch configurations.
     This can also be done from outside the cluster using the CMN switch IP addresses.
 
     ```bash
-    ncn# canu backup network --folder switch_backups/ --sls-file ./sls_input_file_1_2.json
+    canu backup network --folder switch_backups/ --sls-file ./sls_input_file_1_2.json
     ```
 
     Example output:
@@ -60,7 +60,7 @@ Collect the input data needed to generate switch configurations.
     Log into `ncn-m001` and run the following command:
 
     ```bash
-    ncn# kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
+    kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
     ```
 
     This will output the customizations file to a file called `customizations.yaml` in the current working directory.

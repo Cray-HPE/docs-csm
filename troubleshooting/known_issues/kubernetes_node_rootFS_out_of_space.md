@@ -18,19 +18,19 @@
 1. Restart kubelet to address the streaming log entries.
 
    ```bash
-   ncn-m/w# systemctl restart kubelet.service
+   ncn-m/systemctl restart kubelet.service
    ```
 
 1. Restart the syslog service.
 
    ```bash
-   ncn-m/w# systemctl restart rsyslog
+   ncn-m/systemctl restart rsyslog
    ```
 
 1. Verify that the space issue is resolved
 
    ```bash
-   ncn-m/w# df -h /
+   ncn-m/df -h /
    Filesystem      Size  Used Avail Use% Mounted on
    LiveOS_rootfs   280G  933M  279G   1% /
    ```

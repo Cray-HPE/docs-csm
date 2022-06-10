@@ -7,37 +7,37 @@ How to perform an upgrade on the Dell switches.
 Download the new software image:
 
 ```text
-switch# image download file-url
+image download file-url
 ```
 
 View the current software download status:
 
 ```text
-switch# show image status
+show image status
 ```
 
 Install the software image:
 
 ```text
-switch# image install image-url
+image install image-url
 ```
 
 View the status of the current software install:
 
 ```text
-switch# show image status
+show image status
 ```
 
 Change the next boot partition to the standby partition:
 
 ```text
-switch# boot system standby
+boot system standby
 ```
 
 Reload the new software image:
 
 ```text
-switch# reload
+reload
 ```
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

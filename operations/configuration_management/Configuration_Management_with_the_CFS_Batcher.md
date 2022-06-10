@@ -27,7 +27,7 @@ There are two safety mechanisms built into the Batcher scheduling that can delay
 Several Batcher behaviors are configurable. All of the Batcher configuration is available through the CFS options:
 
 ```bash
-# cray cfs options list | grep -i batch
+cray cfs options list | grep -i batch
 ```
 
 Example output:
@@ -78,13 +78,13 @@ Review the following information about CFS Batcher options before changing the d
 The CFS Batcher prepends all CFS session names it creates with `batcher-`. Sessions that have be created by CFS Batcher are found by using the following command with the `--name-contains` option:
 
 ```bash
-# cray cfs sessions list --name-contains batcher-
+cray cfs sessions list --name-contains batcher-
 ```
 
 To list the batcher sessions that are currently running, filter with the `cray cfs sessions list` command options:
 
 ```bash
-# cray cfs sessions list --name-contains batcher- --status running
+cray cfs sessions list --name-contains batcher- --status running
 ```
 
 Use the `cray cfs sessions list --help` command output for all filtering options, including session age, tags, status, and success.
@@ -94,6 +94,6 @@ Use the `cray cfs sessions list --help` command output for all filtering options
 To find all of the sessions created by the CFS Batcher because of configuration requests made by a specific Boot Orchestration Service \(BOS\) session, filter the sessions by the name of the BOS session, which is added as a tag on the sessions. The BOS session ID is required to run the following command.
 
 ```bash
-# cray cfs sessions list --tags bos_session=BOS_SESSION_ID
+cray cfs sessions list --tags bos_session=BOS_SESSION_ID
 ```
 

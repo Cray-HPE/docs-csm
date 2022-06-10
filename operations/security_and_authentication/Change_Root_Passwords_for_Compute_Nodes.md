@@ -17,7 +17,10 @@ The initial root password for compute nodes are not set. Use this procedure to s
     In the following example, mypasswd-example is the new password set by the admin, and demonstration is an example salt value, which is also configured by the admin. Refer to the `openssl` man pages for more information.
 
     ```bash
-    # openssl passwd -6 -salt demonstration
+    openssl passwd -6 -salt demonstration
+    ```
+
+    ```text
     Password: mypasswd-example
     $6$demonstration$gbSD0NlKb2QTo7NRu/pUn4zTNjk5yhSysTS1tUruNIfbROX/a5H92T7CF8fovhORUkOtPrLUpGXmbqIEMmvrh/
     ```

@@ -23,9 +23,9 @@ In order to log into the Web UI or authenticate with the REST API, a user accoun
 During the deployment or update of Nexus, a local admin account is created. To access the local admin account for Nexus on any NCN, run the following commands:
 
 ```bash
-ncn# kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d; echo
+kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d; echo
 
-ncn# kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d; echo
+kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d; echo
 ```
 
 The first command will print the username of the local admin account. The second command will print the password for the local admin account. (Note that the secret will not update or stay in sync if the username or password of the local account is changed.). This account has the same permissions as an account created in Keycloak with the `nx-admin` role.

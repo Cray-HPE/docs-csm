@@ -8,13 +8,13 @@ A DNS client resolves hostnames to IP addresses by querying assigned DNS servers
 Enter a domain name in CONFIGURATION mode (up to 64 alphanumeric characters):
 
 ```text
-# ip domain-name NAME
+ip domain-name NAME
 ```
 
 Add names to complete unqualified host names in CONFIGURATION mode:
 
 ```text
-# ip domain-list NAME
+ip domain-list NAME
 ```
 
 ## Expected Results
@@ -22,5 +22,4 @@ Add names to complete unqualified host names in CONFIGURATION mode:
 1. Administrators can configure the DNS client
 2. The output is correct
 3. Administrators can ping the device
-
-[Back to Index](index.md)
+[Back to Index](../README.md)

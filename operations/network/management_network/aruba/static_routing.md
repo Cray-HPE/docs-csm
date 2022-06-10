@@ -11,26 +11,26 @@ switch(config)# <ip|ipv6> route IP-ADDR/<SUBNET|PREFIX> IP-ADDR
 Show commands to validate functionality:
 
 ```text
-switch# show <ip|ipv6> route [static]
+show <ip|ipv6> route [static]
 ```
 
 ## Example Output
 
 ```text
-switch# show ip route
+show ip route
 Displaying ipv4 routes selected for forwarding
 '[x/y]' denotes [distance/metric]30.0.0.0/30,  1 (null) next-hops
         via  1/1/3,  [0/0],  connected, vrf vrf_default
 40.0.0.0/24,  1 (null) next-hops
         via  30.0.0.2,  [1/0],  static, vrf vrf_default
 
-switch# show ip route static
+show ip route static
 Displaying ipv4 routes selected for forwarding
 '[x/y]' denotes [distance/metric]
 40.0.0.0/24,  1 (null) next-hops
         via  30.0.0.2,  [1/0],  static, vrf vrf_default
 
-switch# show ipv6 route
+show ipv6 route
 Displaying ipv6 routes selected for forwarding
 '[x/y]' denotes [distance/metric]
 2001:10::/64,  1 (null) next-hops
@@ -38,7 +38,7 @@ Displaying ipv6 routes selected for forwarding
 2001:30::/64,  1 (null) next-hops
         via  2001:10::2,  [1/0],  static, vrf default
 
-switch# show ipv6 route static
+show ipv6 route static
 Displaying ipv6 routes selected for forwarding
 '[x/y]' denotes [distance/metric]
 2001:30::/64,  1 (null) next-hops
@@ -51,4 +51,4 @@ Displaying ipv6 routes selected for forwarding
 2. Administrators can validate using the `show` command(s)
 3. Administrators can ping the connected device
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

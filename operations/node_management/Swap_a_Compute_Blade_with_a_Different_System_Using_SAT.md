@@ -35,7 +35,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 1. Using the work load manager (WLM), drain running jobs from the affected nodes on the blade. Refer to the vendor documentation for the WLM for more information.
 
-<a name="determine-bos-session-template"></a>
+
 
 1. Determine which Boot Orchestration Service \(BOS\) templates to use to shut down nodes on the target blade.
 
@@ -46,13 +46,13 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
       If it is unclear which session template is in use, proceed to the next substep.
 
       ```bash
-      ncn# cray bos sessiontemplate list
+      cray bos sessiontemplate list
       ```
 
    1. Find the node xnames with `sat status`. In this example, the target blade is in slot `x9000c3s0`.
 
       ```bash
-      ncn# sat status --filter 'xname=x9000c3s0*'
+      sat status --filter 'xname=x9000c3s0*'
       ```
 
       Example output:
@@ -71,7 +71,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    1. Find the `bos_session` value for each node via the Configuration Framework Service (CFS).
 
       ```bash
-      ncn# cray cfs components describe x9000c3s0b1n0 | grep bos_session
+      cray cfs components describe x9000c3s0b1n0 | grep bos_session
       ```
 
       Example output:
@@ -83,7 +83,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    1. Find the required `templateName` value with BOS.
 
       ```bash
-      ncn# cray bos session describe BOS_SESSION | grep templateName
+      cray bos session describe BOS_SESSION | grep templateName
       ```
 
       Example output:
@@ -95,7 +95,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    1. Determine the list of xnames associated with the desired boot session template.
 
       ```bash
-      ncn# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+      cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
       ```
 
       Example output:
@@ -110,8 +110,8 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    name (xname) for the slot, and a comma-separated list of the BOS session templates determined in the previous step.
 
    ```bash
-   ncn# BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
-   ncn# sat bootsys shutdown --stage bos-operations --bos-limit x9000c3s0 --recursive --bos-templates $BOS_TEMPLATES
+   BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
+   sat bootsys shutdown --stage bos-operations --bos-limit x9000c3s0 --recursive --bos-templates $BOS_TEMPLATES
    ```
 
 ### Source: Use SAT to remove the blade from hardware management
@@ -121,7 +121,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    Use the `sat swap` command to power off the slot and delete the blade's Ethernet interfaces and Redfish endpoints from HSM.
 
    ```bash
-   ncn# sat swap blade --action disable x9000c3s0
+   sat swap blade --action disable x9000c3s0
    ```
 
    This command will save the MAC addresses, IP addresses, and node component names (xnames) from the blade to a JSON document. The document is stored in a file with the following naming convention:
@@ -136,7 +136,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    filename is changed to `ethernet-interface-mappings-src.json` on the destination system for clarity.
 
    ```bash
-   ncn# scp ethernet-interface-mappings-x3000c3s0-2022-01-01.json <dest>-ncn-m001:ethernet-interface-mappings-src.json
+   scp ethernet-interface-mappings-x3000c3s0-2022-01-01.json <dest>-ncn-m001:ethernet-interface-mappings-src.json
    ```
 
 ### Source: Remove the blade
@@ -163,8 +163,8 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    The appropriate BOS session templates should be determined using the same procedure as was used to [determine the appropriate BOS session templates on the source system](#determine-bos-session-template).
 
    ```bash
-   ncn# BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
-   ncn# sat bootsys shutdown --stage bos-operations --bos-limit x1005c0s3 --recursive --bos-templates $BOS_TEMPLATES
+   BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
+   sat bootsys shutdown --stage bos-operations --bos-limit x1005c0s3 --recursive --bos-templates $BOS_TEMPLATES
    ```
 
 ### Destination: Use SAT to remove the blade from hardware management
@@ -174,14 +174,14 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    Use the `sat swap` command to power off the slot and delete the blade's Ethernet interfaces and Redfish endpoints from HSM.
 
    ```bash
-   ncn# sat swap blade --action disable x1005c0s3
+   sat swap blade --action disable x1005c0s3
    ```
 
    The mapping file should be copied to the NCN on the destination system used for the swap procedure, if necessary. In this example, the
    filename is changed to `ethernet-interface-mappings-src.json` on the destination system for clarity.
 
    ```bash
-   ncn# scp ethernet-interface-mappings-x1005c0s3-2022-01-01.json <src>-ncn-m001:ethernet-interface-mappings-dest.json
+   scp ethernet-interface-mappings-x1005c0s3-2022-01-01.json <src>-ncn-m001:ethernet-interface-mappings-dest.json
    ```
 
 ## Swap the blade hardware on the destination system
@@ -190,7 +190,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 1. Install the blade from the source system into the destination system.
 
-<a name="bring-up-the-blade-in-the-destination-system"></a>
+
 
 ## Bring up the blade in the destination system
 
@@ -203,7 +203,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    The `--src-mapping` and `--dst-mapping` arguments should be used to pass in the Ethernet interface mapping files created during the previous steps.
 
    ```bash
-   ncn# sat swap blade --action enable --src-mapping ethernet-interface-mappings-src.json --dst-mapping ethernet-interface-mappings-x1005c0s3-2022-01-01.json x10005c0s3
+   sat swap blade --action enable --src-mapping ethernet-interface-mappings-src.json --dst-mapping ethernet-interface-mappings-x1005c0s3-2022-01-01.json x10005c0s3
    ```
 
 ### Destination: Power on and boot the nodes
@@ -213,8 +213,8 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    Use `sat bootsys` to power on and boot the nodes. Specify the appropriate BOS template for the node type.
 
    ```bash
-   ncn# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-   ncn# sat bootsys boot --stage bos-operations --bos-limit x1005c0s3 --recursive --bos-templates $BOS_TEMPLATE
+   BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+   sat bootsys boot --stage bos-operations --bos-limit x1005c0s3 --recursive --bos-templates $BOS_TEMPLATE
    ```
 
 ### Destination: Check firmware
@@ -228,7 +228,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    Review the [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) and [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) procedure.
 
    ```bash
-   ncn# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
+   cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
    ```
 
 ### Destination: Check DVS
@@ -239,7 +239,7 @@ one on `ncn-w002` and one on another worker node.
 1. Check the `cray-cps` pods on worker nodes and verify they are `Running`.
 
    ```bash
-   ncn# kubectl get pods -Ao wide | grep cps
+   kubectl get pods -Ao wide | grep cps
    ```
 
    Example output:
@@ -260,7 +260,7 @@ one on `ncn-w002` and one on another worker node.
    is detecting an IP address change for one of the client nodes.
 
    ```bash
-   ncn# dmesg -T | grep "DVS: merge_one"
+   dmesg -T | grep "DVS: merge_one"
    ```
 
    ```text
@@ -300,12 +300,12 @@ one on `ncn-w002` and one on another worker node.
 1. Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
 
    ```bash
-   ncn# kubectl exec -it -n services \
+   kubectl exec -it -n services \
            $(kubectl get pods --all-namespaces |grep slingshot | awk '{print $2}') \
            -- fmn_status
    ```
 
-<a name="check-dns"></a>
+
 
 ### Destination: Check DNS
 
@@ -314,11 +314,11 @@ one on `ncn-w002` and one on another worker node.
    Duplicate entries will cause DNS operations to fail.
 
    ```bash
-   ncn# ssh uan01
+   ssh uan01
    ssh: Could not resolve hostname uan01: Temporary failure in name resolution
-   ncn# ssh x3000c0s14b0n0
+   ssh x3000c0s14b0n0
    ssh: Could not resolve hostname x3000c0s14b0n0: Temporary failure in name resolution
-   ncn# ssh x1000c1s1b0n1
+   ssh x1000c1s1b0n1
    ssh: Could not resolve hostname x1000c1s1b0n1: Temporary failure in name resolution
    ```
 
@@ -337,7 +337,7 @@ one on `ncn-w002` and one on another worker node.
    In this example, an authentication token for the API gateway is stored in the `TOKEN` shell variable. See [Retrieve an Authentication Token](../security_and_authentication/Retrieve_an_Authentication_Token.md) for more information.
 
    ```bash
-   ncn# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
+   curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
        -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
    ```
 
@@ -362,7 +362,7 @@ one on `ncn-w002` and one on another worker node.
    1. Show the `EthernetInterfaces` for the duplicate IP address:
 
       ```bash
-      ncn# cray hsm inventory ethernetInterfaces list --ip-address 10.100.0.105 --format json | jq
+      cray hsm inventory ethernetInterfaces list --ip-address 10.100.0.105 --format json | jq
       ```
 
       Example output:
@@ -393,13 +393,13 @@ one on `ncn-w002` and one on another worker node.
    1. Delete the older entry.
 
       ```bash
-      ncn# cray hsm inventory ethernetInterfaces delete 0040a68350a4
+      cray hsm inventory ethernetInterfaces delete 0040a68350a4
       ```
 
 1. Check DNS using `dnslookup`.
 
    ```bash
-   ncn# nslookup 10.252.1.29
+   nslookup 10.252.1.29
    ```
 
    Example output:
@@ -414,7 +414,7 @@ one on `ncn-w002` and one on another worker node.
    ```
 
    ```console
-   ncn# nslookup uan01
+   nslookup uan01
    ```
 
    Example output:
@@ -428,7 +428,7 @@ one on `ncn-w002` and one on another worker node.
    ```
 
    ```console
-   ncn# nslookup x3000c0s14b0n0
+   nslookup x3000c0s14b0n0
    ```
 
    Example output:
@@ -444,7 +444,7 @@ one on `ncn-w002` and one on another worker node.
 1. Verify the ability to connect using SSH.
 
    ```bash
-   ncn# ssh x3000c0s14b0n0
+   ssh x3000c0s14b0n0
    ```
 
    Example output:

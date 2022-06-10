@@ -13,7 +13,7 @@ The `nscd` service is not currently enabled by default and `systemd` does not st
     2.  Start `ncsd` using systemctl.
 
         ```bash
-        uan# systemctl start nscd
+        systemctl start nscd
         ```
 
     3.  Repeat the previous two substeps for every UAN.
@@ -22,7 +22,7 @@ The `nscd` service is not currently enabled by default and `systemd` does not st
 
     1.  Determine the ID of the image used by the UAN. This ID can be found in the BOS session template used to boot the UAN:
 
-        ```bash
+        ```json
         {
            "boot_sets": {
              "uan": {

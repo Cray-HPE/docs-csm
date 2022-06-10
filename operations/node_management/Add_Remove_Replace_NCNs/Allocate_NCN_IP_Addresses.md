@@ -14,7 +14,7 @@ This procedure will perform and verify the following:
 1. Retrieve an API token.
 
     ```bash
-    ncn-m# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+    export TOKEN=$(curl -s -S -d grant_type=client_credentials \
             -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
             -o jsonpath='{.data.client-secret}' | base64 -d` \
             https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
@@ -41,13 +41,13 @@ This procedure will perform and verify the following:
     | N | Node number    |                          | For Management NCNs the Node number is 0.
 
     ```bash
-    ncn-m# export XNAME=x3000c0s4b0n0
+    export XNAME=x3000c0s4b0n0
     ```
 
 1. Perform a dry-run of allocating IP addresses for the NCN:
 
     ```bash
-    ncn-m# ./add_management_ncn.py allocate-ips \
+    ./add_management_ncn.py allocate-ips \
         --xname $XNAME \
         --alias $NODE
     ```
@@ -83,7 +83,7 @@ This procedure will perform and verify the following:
 1. Allocate IP addresses for the NCN in SLS and HSM by adding the `--perform-changes` argument to the command in the previous step.
 
     ```bash
-    ncn-m# ./add_management_ncn.py allocate-ips \
+    ./add_management_ncn.py allocate-ips \
         --xname $XNAME \
         --alias $NODE \
         --perform-changes

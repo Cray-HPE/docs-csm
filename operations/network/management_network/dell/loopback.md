@@ -6,8 +6,8 @@ and are used for device management and routing protocols.
 ## Configuration Commands
 
 ```text
-switch(config)# interface loopback LOOPBACK
-switch(config-loopback-if)# ip address IP-ADDR/<SUBNET|PREFIX>
+interface loopback LOOPBACK
+ip address IP-ADDR/<SUBNET|PREFIX>
 ```
 
 ## Expected Results
@@ -16,4 +16,4 @@ switch(config-loopback-if)# ip address IP-ADDR/<SUBNET|PREFIX>
 1. Give a loopback interface an IP address.
 1. Validate the configuration using the `show` commands.
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

@@ -16,7 +16,7 @@ List all the resource specifications registered in UAS.
 The resource specifications returned by the following command are available for UAIs to use:
 
 ```bash
-ncn-m001-pit# cray uas admin config resources list
+ncn-m001-cray uas admin config resources list
 ```
 
 Example output:
@@ -38,6 +38,6 @@ The following are the configurable parts of a resource specification:
 
 Refer to [Elements of a UAI](Elements_of_a_UAI.md) for more information.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Create a UAI Resource Specification](Create_a_UAI_Resource_Specification.md)

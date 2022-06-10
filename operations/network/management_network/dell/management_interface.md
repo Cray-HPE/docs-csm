@@ -35,4 +35,4 @@ no shutdown
 2. Administrators can assign an IP address to the management interface
 3. Administrators can configure a loopback interface to be use for switch management
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

@@ -13,6 +13,6 @@ Nodes can also be "tainted" in Kubernetes to permit UAIs but not permit general 
 Through the use of [Kubernetes Taints and Tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration),
 with tolerations configured in a [UAI Class](UAI_Classes.md), it is possible to achieve fine-grained control of where UAIs of different classes are deployed on an HPE Cray EX System.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: UAI Host Node Selection](UAI_Host_Node_Selection.md)

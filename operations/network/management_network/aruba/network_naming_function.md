@@ -7,6 +7,5 @@ The following table provides an overview of the different network services defin
 | Full name      | Hardware Management Network       | Node Management Network   | Customer Access Network | Customer Management Network | Storage User Network |
 | Short name / acronym   | HMN        | NMN      | CAN | CMN | SUN
 
-
-[Back to Index](../index.md)
+[Back to Index](../README.md)
 

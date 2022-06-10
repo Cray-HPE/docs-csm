@@ -33,7 +33,7 @@ For Legacy Mode user procedures:
 To delete a list of UAIs as an administrator use a command of the following form:
 
 ```bash
-ncn-m001-pit# cray uas admin uais delete --uai-list UAI-NAMES
+ncn-m001-cray uas admin uais delete --uai-list UAI-NAMES
 ```
 
 `UAI-NAMES` is a comma-separated list of UAI Names of targeted UAIs.
@@ -41,7 +41,7 @@ ncn-m001-pit# cray uas admin uais delete --uai-list UAI-NAMES
 To deleted all UAIs owned by a given user, use a command of the form:
 
 ```bash
-ncn-m001-pit# cray uas admin uais delete --owner USERNAME
+ncn-m001-cray uas admin uais delete --owner USERNAME
 ```
 
 `USERNAME` is the user name of the owner of the targeted UAIs.
@@ -49,7 +49,7 @@ ncn-m001-pit# cray uas admin uais delete --owner USERNAME
 To delete all UAIs of a given class, use a command of the form:
 
 ```bash
-ncn-m001-pit# cray uas admin uais delete --class-id CLASS-ID
+ncn-m001-cray uas admin uais delete --class-id CLASS-ID
 ```
 
 `CLASS-ID` is the class ID of the class used to create the targeted UAIs.
@@ -59,21 +59,21 @@ Here are some examples:
 * Delete a list of UAIs by name:
 
   ```bash
-  ncn-m001-pit# cray uas admin uais delete --uai-list uai-vers-5f46dffb,uai-vers-e530f53a
+  ncn-m001-cray uas admin uais delete --uai-list uai-vers-5f46dffb,uai-vers-e530f53a
   results = [ "Successfully deleted uai-vers-5f46dffb", "Successfully deleted uai-vers-e530f53a",]
   ```
 
 * Delete all UAIs belonging to a named user (user name here is `vers`):
 
   ```bash
-  ncn-m001-pit# cray uas admin uais delete --owner vers
+  ncn-m001-cray uas admin uais delete --owner vers
   results = [ "Successfully deleted uai-vers-5ef890be", "Successfully deleted uai-vers-da65468d",]
   ```
 
 * Delete all UAIs belonging to a given UAI Class:
 
   ```bash
-  ncn-m001-pit# cray uas admin uais delete --class-id a630cbda-24b4-47eb-a1f7-be1c25965ead
+  ncn-m001-cray uas admin uais delete --class-id a630cbda-24b4-47eb-a1f7-be1c25965ead
   results = [ "Successfully deleted uai-vers-5ef890be", "Successfully deleted uai-vers-da65468d",]
   ```
 
@@ -130,6 +130,6 @@ Output similar to the following is expected:
 results = [ "Successfully deleted uai-vers-be3e219c", "Successfully deleted uai-vers-ea57eb7b",]
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Common UAI Configurations](Common_UAI_Config.md)

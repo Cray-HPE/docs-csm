@@ -12,7 +12,7 @@ enables the use of the `cray` CLI for many administrative commands, such as thos
 [Validate CSM Health](../validate_csm_health.md) and general operation of the management services
 via the API gateway.
 
-In [Security and Authentication](../index.md#security-and-authentication)
+In [Security and Authentication](../README.md#security-and-authentication)
 see the "Default Keycloak Realms, Accounts, and Clients" section for more information about these topics:
 
    * Certificate Types

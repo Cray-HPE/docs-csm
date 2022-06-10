@@ -13,9 +13,9 @@ Variables set with the name of the node being rebuilt and its component name (xn
 - Set `XNAME` to the component name (xname) of that node.
 
 ```bash
-ncn# NODE=ncn-w00n
-ncn# XNAME=$(ssh $NODE cat /etc/cray/xname)
-ncn# echo $XNAME
+NODE=ncn-w00n
+XNAME=$(ssh $NODE cat /etc/cray/xname)
+echo $XNAME
 ```
 
 ## Procedure
@@ -32,13 +32,13 @@ Only follow the steps in the section for the node type that is being rebuilt.
 1. Rebuild the node.
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-worker-nodes.sh ncn-w001
+    /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-worker-nodes.sh ncn-w001
     ```
 
 ### Master node
 
 ```bash
-ncn# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
+/usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
 ```
 
 ### Storage node

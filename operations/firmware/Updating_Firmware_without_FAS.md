@@ -1,6 +1,6 @@
 # Updating BMC Firmware and BIOS for NCNs without FAS
 
-> **NOTE:**
+> **`NOTE`**
 >
 > * On HPE nodes, the BMC Firmware is iLO 5 and BIOS is System ROM.
 > * The commands in the procedure must be run on `ncn-m001`.
@@ -29,7 +29,7 @@ Move the firmware to be updated into an accessible directory.
 1. Start a webserver from the directory containing the downloaded firmware / BIOS image:
 
     ```bash
-    ncn-m001# python3 -m http.server 8770
+    python3 -m http.server 8770
     ```
 
 1. Update BMC firmware.
@@ -40,7 +40,7 @@ Move the firmware to be updated into an accessible directory.
     * `filename` = Filename of the downloaded image
 
     ```bash
-    ncn-m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate \
+    curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate \
                   -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
     ```
 
@@ -52,7 +52,7 @@ Move the firmware to be updated into an accessible directory.
     * `filename` = Filename of the downloaded image
 
     ```bash
-    ncn-m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate \
+    curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate \
                   -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'
     ```
 
@@ -77,12 +77,12 @@ Otherwise, see [Using the iLO GUI](#using-the-ilo-gui).
     * `filename.fwpkg` = Filename of the downloaded image
 
     ```bash
-    ncn-m001# ilorest flashfwpkg filename.fwpkg --url ipaddressOfBMC -u root -p passwd
+    ilorest flashfwpkg filename.fwpkg --url ipaddressOfBMC -u root -p passwd
     ```
 
     > After updating its System ROM (BIOS), an NCN must be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot NCNs.
 
-<a name="using-the-ilo-gui"></a>
+
 
 ## Using the iLO GUI
 
@@ -91,7 +91,7 @@ The web interface will be used to update iLO 5 (BMC) firmware and/or System ROM 
 1. Copy the iLO 5 firmware and/or System ROM files to a local computer from `ncn-m001` using `scp` or other secure copy tools.
 
     ```bash
-    linux# scp root@ipaddressOfM001Node:pathToFile/filename .
+    scp root@ipaddressOfM001Node:pathToFile/filename .
     ```
 
 Do the following steps for each NCN to be updated:
@@ -102,7 +102,7 @@ Do the following steps for each NCN to be updated:
     > * `-N` prevents a shell and stubs the connection
 
     ```bash
-    linux# ssh -L 6443:ipaddressOfNCNBMC:443 -N ipaddressofM001
+    ssh -L 6443:ipaddressOfNCNBMC:443 -N ipaddressofM001
     ```
 
 1. Open the following URL in a web browser: `https://127.0.0.1:6443`

@@ -9,6 +9,6 @@ Refer to the following configuration topics:
 * [Setting End-User UAI Timeouts](Setting_UAI_Timeouts.md)
 * [Broker UAI Resiliency and Load Balancing](Setting_Up_Multi-Replica_Brokers.md)
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Choosing UAI Resource Settings](Choosing_UAI_Resource_Settings.md)

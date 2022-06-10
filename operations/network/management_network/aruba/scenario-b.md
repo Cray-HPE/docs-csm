@@ -19,4 +19,4 @@ The following is an example topology:
 
 ![](../../../../img/network/management_network/scenario-b-topology.png)
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

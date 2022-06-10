@@ -37,7 +37,7 @@ switch(config-if)# vsx-sync access-lists vlans
 Show commands to validate functionality:
 
 ```text
-switch# show run vsx-sync
+show run vsx-sync
 ```
 
 ## Example Output
@@ -58,7 +58,7 @@ switch(config-acl-ip)# 30 permit any any
 On the secondary switch:
 
 ```text
-switch2# show run vsx-sync
+show run vsx-sync
 Current vsx-sync configuration:
 vlan 10
     vsx-sync
@@ -82,4 +82,4 @@ access-list ip secure_mcast_sources
 2. Administrators can create the ACL
 3. Everything synchronized on the primary is now on the secondary
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

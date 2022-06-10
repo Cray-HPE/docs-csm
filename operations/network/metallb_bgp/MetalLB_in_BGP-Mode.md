@@ -11,7 +11,7 @@ BGP peering is only between the MetalLB speakers and the spine switches. It does
 The routes in the BGP route table will only be the IP addresses of the Kubernetes LoadBalancer services. This is the fifth column displayed in the output of the following command:
 
 ```bash
-ncn-w001# kubectl get service -A | grep LoadBalancer
+kubectl get service -A | grep LoadBalancer
 ```
 
 For example:

@@ -13,46 +13,47 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
 1. Optional system health checks.
 
-    1. Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
+    1. (`ncn-m001#`) Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
 
         **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
 
         ```bash
-        ncn-m001# sdu --scenario triage --start_time '-4 hours' \
+        sdu --scenario triage --start_time '-4 hours' \
         --reason "saving state before powerdown/up"
         ```
         Refer to the HPE Cray EX System Diagnostic Utility (SDU) Administration Guide for more information and troubleshooting steps.
 
-    1. Check Ceph status.
+    1. (`ncn-m001#`) Check Ceph status.
 
         ```bash
-        ncn-m001# ceph -s | tee ceph.status
+        ceph -s | tee ceph.status
         ```
 
-    1. Check Kubernetes pod status for all pods.
+    1. (`ncn-m001#`) Check Kubernetes pod status for all pods.
 
         ```bash
-        ncn-m001# kubectl get pods -o wide -A | tee k8s.pods
+        kubectl get pods -o wide -A | tee k8s.pods
         ```
 
         Additional Kubernetes status check examples :
 
         ```bash
-        ncn-m001# egrep "CrashLoopBackOff" k8s.pods | tee k8s.pods.CLBO
-        ncn-m001# egrep "ContainerCreating" k8s.pods | tee k8s.pods.CC
-        ncn-m001# egrep -v "Run|Completed" k8s.pods | tee k8s.pods.errors
+        egrep "CrashLoopBackOff" k8s.pods | tee k8s.pods.CLBO
+        egrep "ContainerCreating" k8s.pods | tee k8s.pods.CC
+        egrep -v "Run|Completed" k8s.pods | tee k8s.pods.errors
         ```
 
-1. Check for running sessions.
+1. (`ncn-m001#`) Check for running sessions.
 
     Ensure that these services do not have any sessions in progress: BOS, CFS, CRUS, FAS, or NMD.
     > This SAT command has `shutdown` as one of the command line options, but it will not start a shutdown process on the system.
 
     ```bash
-    ncn-m001# sat bootsys shutdown --stage session-checks
+    sat bootsys shutdown --stage session-checks
     ```
 
     Example output:
+
     ```text
     Checking for active BOS sessions.
     Found no active BOS sessions.
@@ -72,7 +73,6 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 1. Coordinate with the site to prevent new sessions from starting in the services listed (BOS, CFS, CRUS, FAS, NMD).
 
     In version Shasta v1.5, there is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
-
 
 1. Validate CSM Health
 
@@ -100,6 +100,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       ```
 
       Example output:
+
       ```text
       ----------------
       cls01234n000
@@ -138,6 +139,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       ```
 
       Example output:
+
       ```text
       cls01234n000: Thu Aug 7 01:29:28 PDT 2014
       cls01234n003: Thu Aug 7 01:29:28 PDT 2014
@@ -157,4 +159,4 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       [n000]# cscli fs_info
       ```
 
-After completing the above steps, proceed to [Upgrade Management Nodes and CSM Services](index.md#upgrade_management_nodes_csm_services).
+After completing the above steps, proceed to [Upgrade Management Nodes and CSM Services](README.md#upgrade_management_nodes_csm_services).

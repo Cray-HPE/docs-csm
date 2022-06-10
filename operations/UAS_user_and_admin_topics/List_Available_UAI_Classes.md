@@ -16,7 +16,7 @@ List all available UAI classes.
 To list available UAI classes, use the following command:
 
 ```bash
-ncn-m001-pit# cray uas admin config classes list
+ncn-m001-cray uas admin config classes list
 ```
 
 The `cray uas admin config classes list` command supports the same `--format` options as the `cray uas admin config volumes list` command. See [List Volumes Registered in UAS](List_Volumes_Registered_in_UAS.md) for details.
@@ -24,12 +24,12 @@ The `cray uas admin config classes list` command supports the same `--format` op
 For example:
 
 ```bash
-ncn-m001-pit# cray uas admin config classes list --format json
+ncn-m001-cray uas admin config classes list --format json
 <output not shown>
 ```
 
 See [UAI Classes](UAI_Classes.md) and [Elements of a UAI](Elements_of_a_UAI.md) for more details on the output.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Create a UAI Class](Create_a_UAI_Class.md)

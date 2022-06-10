@@ -7,20 +7,20 @@ The switch also supports classic L3 VLAN interfaces.
 Configure the VLAN:
 
 ```text
-switch(config)# vlan VLAN
+vlan VLAN
 ```
 
 The default mode of any VLAN is L2 only. To enable L3 functionality, run `no shutdown` on the VLAN:
 
 ```text
-switch(config)# interface vlan 2
-switch(conf-if-vl-2)# no shutdown
+interface vlan 2
+no shutdown
 ```
 
 Show commands to validate functionality:
 
 ```text
-switch# show interface vlan
+show interface vlan
 ```
 
 ## Expected Results
@@ -31,4 +31,4 @@ switch# show interface vlan
 4. Administrators validate the configuration is correct
 5. Administrators can ping from the switch to the client and from the client to the switch
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

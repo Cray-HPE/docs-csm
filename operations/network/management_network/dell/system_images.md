@@ -7,19 +7,19 @@ Dell switches support active and standby images.
 Copy an image from a local server:
 
 ```text
-Switch(config)# image download ftp://admin@1.1.1.1:/image.bin
+image download ftp://admin@1.1.1.1:/image.bin
 ```
 
 Install image:
 
 ```text
-Switch(config)# image install file-url
+image install file-url
 ```
 
 Show commands to validate functionality:
 
 ```text
-Switch(config)# show boot detail
+show boot detail
 ```
 
 ## Expected Results
@@ -28,4 +28,4 @@ Switch(config)# show boot detail
 2. Administrators can boot into the uploaded image
 3. Administrators can see they are running the uploaded image
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

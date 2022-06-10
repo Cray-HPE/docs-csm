@@ -49,8 +49,7 @@ switch(config-vlan)# apply access-list <ip|ipv6|mac> ACL <in|out>
 Show commands to validate functionality: :
 
 ```text
-switch# show access-list [hitcounts] [ip|ipv6|mac ACL] [control-plane vrf VRF]
+show access-list [hitcounts] [ip|ipv6|mac ACL] [control-plane vrf VRF]
 ```
 
-
-[Back to Index](index.md)
+[Back to Index](README.md)

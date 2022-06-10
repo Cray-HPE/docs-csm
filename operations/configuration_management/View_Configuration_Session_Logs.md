@@ -6,19 +6,19 @@ Logs for the individual steps of a session are available via the `kubectl log` c
 To find the name of the Kubernetes pod that is running the CFS session:
 
 ```bash
-ncn# kubectl get pods --no-headers -o custom-columns=":metadata.name" -n services -l cfsession=example
+kubectl get pods --no-headers -o custom-columns=":metadata.name" -n services -l cfsession=example
 ```
 
 Store the returned pod name as the `CFS_POD_NAME` variable for future use:
 
 ```bash
-ncn# CFS_POD_NAME=cfs-f9d18751-e6d1-4326-bf76-434293a7b1c5-q8tsc
+CFS_POD_NAME=cfs-f9d18751-e6d1-4326-bf76-434293a7b1c5-q8tsc
 ```
 
 Alternatively, if the session is one of many recent sessions and the session name is not known, it is possible to list all CFS pods by start time and pick the desired pod based on status or start time:
 
 ```bash
-ncn# kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
+kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
 ```
 
 Example output:
@@ -34,7 +34,7 @@ cfs-b9f50fbe-04de-4d9a-b5eb-c75d2d561221-dhgg6                 6/7     NotReady 
 To view the logs of the various containers:
 
 ```bash
-ncn# kubectl logs -n services ${CFS_POD_NAME} -c ${CONTAINER_NAME}
+kubectl logs -n services ${CFS_POD_NAME} -c ${CONTAINER_NAME}
 ```
 
 The `${CONTAINER_NAME}` value is one of the containers mentioned in [Configuration Sessions](Configuration_Sessions.md). Depending on the number of configuration layers in the
@@ -44,7 +44,7 @@ To view the Ansible logs, determine which configuration layer's logs to view fro
 then the `${CONTAINER_NAME}` will be `ansible-0`.
 
 ```bash
-ncn# kubectl logs -n services ${CFS_POD_NAME} -c ansible-0
+kubectl logs -n services ${CFS_POD_NAME} -c ansible-0
 ```
 
 The `git-clone-#` and `ansible-#` containers may not start at 0 and may not be numbered sequentially if the session was created with the `--configuration-limit` option.

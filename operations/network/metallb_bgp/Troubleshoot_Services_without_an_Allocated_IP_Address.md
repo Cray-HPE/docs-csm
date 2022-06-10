@@ -15,7 +15,7 @@ This procedure requires administrative privileges.
     If <pending\> appears in this column, the service is having a problem getting an IP address assigned from MetalLB.
 
     ```bash
-    ncn-w001# kubectl get service -A | grep Load
+    kubectl get service -A | grep Load
     ```
 
     Example output:
@@ -33,7 +33,7 @@ This procedure requires administrative privileges.
     To view information on the service:
 
     ```bash
-    ncn-w001# kubectl -n istio-system describe service istio-ingressgateway-cmn
+    kubectl -n istio-system describe service istio-ingressgateway-cmn
     ```
 
     Example output:
@@ -67,7 +67,7 @@ This procedure requires administrative privileges.
     Run the following command to view the ConfigMap. There is no customer-management address pool in the example below, indicated it has not been added yet. This is why the external IP address value is <pending\>.
 
     ```bash
-    ncn-w001# kubectl -n metallb-system get cm config -o yaml
+    kubectl -n metallb-system get cm config -o yaml
     ```
 
     Example output:

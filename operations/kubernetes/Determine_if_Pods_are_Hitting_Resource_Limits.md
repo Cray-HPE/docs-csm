@@ -10,7 +10,6 @@ Identify pods that are hitting resource limits in order to increase the resource
 
 `kubectl` is installed.
 
-
 ### Procedure
 
 1.  Use the detect\_cpu\_throttling.sh script to determine if any pods are being CP throttled.
@@ -20,7 +19,10 @@ Identify pods that are hitting resource limits in order to increase the resource
         The script can be installed on `ncn-w001`, or any NCN that can SSH to worker nodes.
 
         ```bash
-        ncn-w001# cat detect_cpu_throttling.sh
+        cat detect_cpu_throttling.sh
+        ```
+        
+        ```bash
         #!/bin/sh
         # Usage: detect_cpu_throttling.sh [pod_name_substr] (default evaluates all pods)
 
@@ -57,7 +59,7 @@ Identify pods that are hitting resource limits in order to increase the resource
         In the example below, the externaldns pods are being used.
 
         ```bash
-        ncn-w001# ./detect_cpu_throttling.sh externaldns
+        ./detect_cpu_throttling.sh externaldns
         ```
 
         Example output:
@@ -85,7 +87,7 @@ Identify pods that are hitting resource limits in order to increase the resource
         It can take two minutes or more to run when evaluating all pods:
 
         ```bash
-        ncn-w001# ./detect_cpu_throttling.sh
+        ./detect_cpu_throttling.sh
         ```
 
         Example output:
@@ -111,7 +113,7 @@ Identify pods that are hitting resource limits in order to increase the resource
     1.  Look for a Kubernetes event associated with the pod being killed/restarted.
 
         ```bash
-        ncn-w001# kubectl get events -A | grep -C3 OOM
+        kubectl get events -A | grep -C3 OOM
         ```
 
         Example output:
@@ -126,9 +128,8 @@ Identify pods that are hitting resource limits in order to increase the resource
         Use grep on the string returned in the previous step to find the pod name. In this example, prometheus is used.
 
         ```bash
-        ncn-w001# kubectl get pod -A | grep prometheus
+        kubectl get pod -A | grep prometheus
         ```
-
 
 Follow the procedure to increase the resource limits for the pods identified in this procedure. See [Increase Pod Resource Limits](Increase_Pod_Resource_Limits.md).
 

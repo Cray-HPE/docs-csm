@@ -35,13 +35,13 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
       If it is unclear which session template is in use, proceed to the next substep.
 
       ```bash
-      ncn# cray bos sessiontemplate list
+      cray bos sessiontemplate list
       ```
 
    1. Find the node xnames with `sat status`. In this example, the target blade is in slot `x9000c3s0`.
 
       ```bash
-      ncn# sat status --filter 'xname=x9000c3s0*'
+      sat status --filter 'xname=x9000c3s0*'
       ```
 
       Example output:
@@ -60,7 +60,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
    1. Find the `bos_session` value for each node via the Configuration Framework Service (CFS).
 
       ```bash
-      ncn# cray cfs components describe x9000c3s0b1n0 | grep bos_session
+      cray cfs components describe x9000c3s0b1n0 | grep bos_session
       ```
 
       Example output:
@@ -72,7 +72,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
    1. Find the required `templateName` value with BOS.
 
       ```bash
-      ncn# cray bos session describe BOS_SESSION | grep templateName
+      cray bos session describe BOS_SESSION | grep templateName
       ```
 
       Example output:
@@ -84,7 +84,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
    1. Determine the list of xnames associated with the desired boot session template.
 
       ```bash
-      ncn# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+      cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
       ```
 
       Example output:
@@ -99,8 +99,8 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
    Specify the appropriate component name (xname) for the slot, and a comma-separated list of the BOS session templates determined in the previous step.
 
    ```bash
-   ncn# BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
-   ncn# sat bootsys shutdown --stage bos-operations --bos-limit x9000c3s0 --recursive --bos-templates $BOS_TEMPLATES
+   BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
+   sat bootsys shutdown --stage bos-operations --bos-limit x9000c3s0 --recursive --bos-templates $BOS_TEMPLATES
    ```
 
 ## Use SAT to remove the blade from hardware management
@@ -110,7 +110,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
    Use the `sat swap` command to power off the slot and delete the blade's Ethernet interfaces and Redfish endpoints from HSM.
 
    ```bash
-   ncn# sat swap blade --action disable x9000c3s0
+   sat swap blade --action disable x9000c3s0
    ```
 
    This command will also save the MAC addresses, IP addresses, and node component names (xnames) from the blade to a JSON document.

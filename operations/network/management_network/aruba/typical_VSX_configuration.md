@@ -48,7 +48,6 @@ interface 1/1/47
 Spine-02
 vrf keepalive
 
-
 interface lag 254
     no shutdown
     description ISL link
@@ -84,4 +83,4 @@ interface 1/1/47
 </pre>
 </table>
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

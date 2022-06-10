@@ -59,8 +59,8 @@ switch(config-if)# ip ospf message-digest-key md5 <cipher|plain>text KEY
 Show commands to validate functionality:
 
 ```text
-switch# show ip ospf [interface|neighbors]
-switch# show ip route ospf
+show ip ospf [interface|neighbors]
+show ip route ospf
 ```
 
 ## Expected Results
@@ -69,5 +69,5 @@ switch# show ip route ospf
 2. Administrators can enable OSPF on the loopback, SVI or routed interfaces
 3. The output of the `show` commands looks correct
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)
 

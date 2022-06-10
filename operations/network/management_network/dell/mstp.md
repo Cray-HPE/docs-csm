@@ -9,15 +9,15 @@ MSTP instances significantly improve network resource utilization while maintain
 Enable MSTP (default mode for spanning-tree):
 
 ```text
-switch(config)# spanning-tree mode mst
-switch(conf-mstp)# name my-mstp-region
-switch(conf-mstp)# revision 0
+spanning-tree mode mst
+name my-mstp-region
+revision 0
 ```
 
 Show commands to validate functionality:
 
 ```text
-switch# show spanning-tree mst
+show spanning-tree mst
 ```
 
 ## Expected Results
@@ -26,4 +26,4 @@ switch# show spanning-tree mst
 2. Spanning-tree is enabled, if loops are detected ports should go blocked state
 3. Spanning-tree splits traffic domain between two DUTs
 
-[Back to Index](index.md)
+[Back to Index](../README.md)

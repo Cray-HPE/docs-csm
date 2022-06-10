@@ -6,30 +6,28 @@ The Prometheus SNMP Exporter is deployed by the the `cray-sysmgmt-health` chart 
 
 In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must be configured with a list of management network switches to scrape metrics from.
 
-This procedure assumes that this is being done as part of a CSM install as part of the
-[Prepare Site Init](../../../install/prepare_site_init.md#configure-prometheus-snmp-exporter) procedure.
-Specifically, it assumes that the `SYSTEM_NAME` and `PITDATA` variables are set, and that the `PITDATA` mount is
-in place.
+> **`NOTE`** All variables used within this page depend on the `/etc/environment` setup done in the [pre-installation document](../../../install/pre-installation.md).
 
-1. Obtain the list of switches to use as targets using CSM Automatic Network Utility (CANU).
+1. (`pit#`) Obtain the list of switches to use as targets using CSM Automatic Network Utility (CANU).
 
     ```bash
-    linux# canu init --sls-file ${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json --out -
+    canu init --sls-file ${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json --out -
     ```
 
     Expected output looks similar to the following:
-    ```
-    10.252.0.2
-    10.252.0.3
-    10.252.0.4
-    10.252.0.5
-    4 IP addresses saved to <stdout>
-    ```
 
-1. Update `customizations.yaml` with the list of switches.
+       ```
+       10.252.0.2
+       10.252.0.3
+       10.252.0.4
+       10.252.0.5
+       4 IP addresses saved to <stdout>
+       ```
+
+1. (`pit#`) Update `customizations.yaml` with the list of switches.
 
     ```bash
-    linux# yq write -s - -i ${PITDATA}/prep/site-init/customizations.yaml <<EOF
+    yq write -s - -i ${PITDATA}/prep/site-init/customizations.yaml <<EOF
     - command: update
       path: spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter
       value:
@@ -49,10 +47,10 @@ in place.
     EOF
     ```
 
-1. Review the SNMP Exporter configuration.
+1. (`pit#`) Review the SNMP Exporter configuration.
 
     ```bash
-    linux# yq r ${PITDATA}/prep/site-init/customizations.yaml spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter
+    yq r ${PITDATA}/prep/site-init/customizations.yaml spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter
     ```
 
     The expected output looks similar to:

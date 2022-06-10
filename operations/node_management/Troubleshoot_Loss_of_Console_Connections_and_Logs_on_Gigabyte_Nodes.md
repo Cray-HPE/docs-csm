@@ -15,24 +15,24 @@ Console log information is no longer being collected for Gigabyte nodes or ConMa
 
     1. Enter `root` user password for the BMC of the affected node.
 
-        > `read -s` is used to prevent the password from being displayed on the screen or preserved in the shell history.
+        > **`NOTE`** `read -s` is used to prevent the password from being displayed on the screen or preserved in the shell history.
 
         ```bash
-        ncn# read -s IPMI_PASSWORD
+        export USERNAME=$(whoami)
+        read -s IPMI_PASSWORD
         ```
 
     1. Export the variable.
 
         ```bash
-        ncn# export IPMI_PASSWORD
+        export IPMI_PASSWORD
         ```
-
     1. Deactivate the SOL session for the node.
 
-        > In the following command, replace `XNAME` with the component name (xname) of the BMC of the affected node.
+        > **`NOTE`** In the following command, replace `XNAME` with the component name (xname) of the BMC of the affected node.
 
         ```bash
-        ncn# ipmitool -H XNAME -U root -E sol deactivate
+        ipmitool -H XNAME -U $USERNAME -E sol deactivate
         ```
 
 1. Manually open a console connection to the node using the Cray console services.
