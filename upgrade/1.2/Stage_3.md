@@ -81,9 +81,12 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
    ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/csm-upgrade.sh
    ```
 
-## Validate cray-shared-kafka was updated properly
+## Validate `cray-shared-kafka` was updated properly
 
-Occasionally the cray-shared-kafka-kafka pods will be restarted before the cray-shared-kafka-zookeeper pods are ready. Check to make sure that all cray-shared-kafka-kafka and cray-shared-kafka-zookeeper pods have a Ready status of 1/1. If any of them have a 2/2 then rerun the kafka-restart.sh script.
+Occasionally the `cray-shared-kafka-kafka` pods will be restarted before the
+`cray-shared-kafka-zookeeper` pods are ready. Check to make sure that all
+`cray-shared-kafka-kafka` and `cray-shared-kafka-zookeeper` pods have a Ready status
+of 1/1. If any of them have a 2/2 then rerun the `kafka-restart.sh` script.
 
 ```bash
 ncn# kubectl get pods -n services -l app.kubernetes.io/instance=cray-shared-kafka
