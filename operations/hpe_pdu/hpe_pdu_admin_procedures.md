@@ -2,13 +2,38 @@
 
 The following procedures are used to manage the HPE Power Distribution Unit (PDU):
 
+ * [Verify PDU Vendor](#verify-pdu-vendor)
  * [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)
  * [HPE PDU Initial Set-up](#hpe-pdu-initial-set-up)
  * [Update HPE PDU Firmware](#update-hpe-pdu-firmware)
  * [Change HPE PDU User Passwords](#change-hpe-pdu-user-passwords)
+ * [Update Vault Credentials](#update-vault-credentials)
  * [Discover HPE PDU after Upgrading CSM](#discover-hpe-pdu-after-upgrading-csm)
 
 > **IMPORTANT:** Because of the polling method used to process sensor data from the HPE PDU, telemetry data may take up to six minutes to refresh; this includes the outlet status reported by the Hardware State Manager (HSM).
+
+## Verify PDU Vendor
+
+If the PDU is accessible over the network, the following can be used to determine the vendor of the PDU.
+
+```bash
+ncn-m001# PDU=x3000m0
+ncn-m001# c curl -k -s --compressed  https://$PDU -i | grep Server:
+```
+
+- Example ServerTech output:
+
+```bash
+Server: ServerTech-AWS/v8.0v
+```
+
+- Example HPE output
+
+```bash
+Server: HPE/1.4.0
+```
+
+This document covers HPE PDU procedures
 
 ## Connect to HPE PDU Web Interface
 
@@ -36,9 +61,11 @@ The following is needed before running this procedure:
 
    Enter the root password for `ncn-m001` when prompted.
 
-2. Connect to [`https://localhost:8443`](https://localhost:8443) using a web browser.
+1. Connect to [`https://localhost:8443`](https://localhost:8443) using a web browser.
 
-3. Log in with the `admin` username. Enter the admin password. If the admin password has not been changed, there will be a prompt to change the password.
+1. Log in with the `admin` username. Enter the admin password. If the admin password has not been changed, there will be a prompt to change the password.
+
+1. If the `admin` password was changed, update Vault with the new credentials following procduere [Update Vault Credentials](#update-vault-credentials)
 
 ## HPE PDU Initial Set-up
 
@@ -85,11 +112,11 @@ Verify that the firmware version for the HPE PDU is **2.0.0.L**. If it is not, a
 1. Download version **2.0.0.L** firmware from: [https://support.hpe.com/connect/s/search?language=en_US#q=P9S23A&t=All&sort=%40hpescuniversaldate%20descending&numberOfResults=25&f:@contenttype=[Drivers%20and%20Software]](https://support.hpe.com/connect/s/search?language=en_US#q=P9S23A&t=All&sort=%40hpescuniversaldate%20descending&numberOfResults=25&f:@contenttype=[Drivers%20and%20Software])
 This will download an .exe file, which is a self extracting zip file.
 1. If using a Windows system, run the .exe file to extract the files, or use an unzip program on the file. One of the files extracted will be named **"HPE.FW"**, that is the firmware file needed for uploading.
-2. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
-3. Use the **"Settings"** icon (gear in computer monitor in top right corner) to navigate to **"System Management"**.
-4. Click the **"Update Firmware"** button.
-5. Click **"Choose File"** and select the **"HPE.FW"** file downloaded.
-6. Click **"Upload"** button.
+1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
+1. Use the **"Settings"** icon (gear in computer monitor in top right corner) to navigate to **"System Management"**.
+1. Click the **"Update Firmware"** button.
+1. Click **"Choose File"** and select the **"HPE.FW"** file downloaded.
+1. Click **"Upload"** button.
 
 The firmware will be updated and the PDU management processor will restart.
 
@@ -103,6 +130,24 @@ Change the password of any existing user account using the HPE PDU web interface
 1. Use the **"admin"** menu (top right corner) to navigate to **"User Accounts"**.
 1. Click on the **"Edit"** icon (pencil) next to the user.
 1. Enter new password and make any other changes for that user account and click the **"Save"** button.
+1. If the `admin` password was changed, update Vault with the new credentials following procduere [Update Vault Credentials](#update-vault-credentials)
+
+### Update Vault Credentials
+
+1. Set up aliases:
+
+    ```bash
+    ncn-m001# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+    ncn-m001# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+    ```
+
+1. Update the PDU credentials stored in Vault:
+
+    ```bash
+    ncn-m001# vault kv get secret/pdu-creds/$PDU |
+    jq --arg PASSWORD "$NEW_PDU_PASSWORD" '.data | .Password=$PASSWORD' |
+    vault kv put secret/pdu-creds/$PDU -
+    ```
 
 ## Discover HPE PDU after Upgrading CSM
 
@@ -176,4 +221,3 @@ Use the following procedure to ensure the `hms-discovery` job and Redfish Transl
    ```bash
    ncn# cray hsm inventory redfishEndpoints list --type CabinetPDUController
    ```
-
