@@ -4,7 +4,7 @@ Customize the NCN images by changing the root password or adding different SSH k
 This procedure shows this process being done any time after the first time installation of the CSM
 software has been completed and the PIT node is booted as a regular master node. To change the NCN image
 during an installation while the PIT node is booted as the PIT node,
-see [Change_NCN_Image_Root_Password_and_SSH_Keys_PIT](#Change_NCN_Image_Root_Password_and_SSH_Keys_PIT.md).
+see [Change NCN Image Root Password and SSH Keys PIT](#Change_NCN_Image_Root_Password_and_SSH_Keys_PIT.md).
 
 There is some common preparation before making the Kubernetes image for master nodes and worker nodes, making the Ceph image for utility storage nodes, and then some common cleanup afterwards.
 
@@ -12,9 +12,11 @@ There is some common preparation before making the Kubernetes image for master n
 
 ## Common Preparation
 
-1. Prepare new SSH keys for the root account in advance. The same key information will be added to both `k8s-image` and `ceph-image`.
+1. Prepare new SSH keys for the root account in advance. The same key information will be added to both `k8s-image` and Ceph image.
 
-   Either replace the root public and private SSH keys with your own previously generated keys or generate a new pair with `ssh-keygen(1)`. By default `ssh-keygen` will create an RSA key, but other types could be chosen and different filenames would need to be substituted in later steps.
+   Either replace the root public and private SSH keys with your own previously generated keys or generate a new
+   pair with `ssh-keygen(1)`. By default `ssh-keygen` will create an RSA key, but other types could be chosen and
+   different filenames would need to be substituted in later steps.
 
    ```bash
    ncn-m# mkdir /root/.ssh
@@ -45,13 +47,14 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
    "k8s/0.1.48/filesystem.squashfs"
    ```
 
-   This example uses k8s/0.1.109 for the current version and adds a suffix for the new version.
+   This example uses `k8s/0.1.109` for the current version and adds a suffix for the new version.
+
    ```bash
    ncn-m# export K8SVERSION=0.1.109
    ncn-m# export K8SNEW=0.1.109-2
    ```
 
-1. Make a temporary directory for the k8s-image using the current version string.
+1. Make a temporary directory for the `k8s-image` using the current version string.
 
    ```bash
    ncn-m# mkdir -p k8s/${K8SVERSION}
@@ -77,9 +80,9 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
    ncn-m# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub k8s/${K8SVERSION}/filesystem.squashfs/root/.ssh
    ```
 
-1. Add the public SSH key for the root account to `authorized_keys`.
+1. Replace the public SSH key for the root account to `authorized_keys`.
 
-   This example assumes that an RSA key was generated so it adds the id_rsa.pub file to authorized_keys.
+   This example assumes that an RSA key was generated so it adds the `id_rsa.pub` file to `authorized_keys`. It also removes any previously authorized keys. Feel free to manage this differently to retain additional keys if desired.
 
    ```bash
    ncn-m# cat /root/.ssh/id_rsa.pub > k8s/${K8SVERSION}/filesystem.squashfs/root/.ssh/authorized_keys
@@ -134,7 +137,7 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
    chroot-ncn-m# /srv/cray/scripts/common/create-kis-artifacts.sh
    ```
 
-1. Exit the chroot environment.
+1. Exit the `chroot` environment.
 
    ```bash
    chroot-ncn-m# exit
@@ -146,20 +149,20 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
    ncn-m# umount -v k8s/${K8SVERSION}/filesystem.squashfs/mnt/squashfs
    ```
 
-1. Move new SquashFS image, kernel, and initrd into place.
+1. Move new SquashFS image, kernel, and `initrd` into place.
 
    ```bash
    ncn-m# mkdir k8s/${K8SNEW}
    ncn-m# mv -v k8s/${K8SVERSION}/filesystem.squashfs/squashfs/* k8s/${K8SNEW}
    ```
 
-1. Update file permissions on initrd.
+1. Update file permissions on `initrd`.
 
    ```bash
    ncn-m# chmod -v 644 k8s/${K8SNEW}/initrd.img.xz
    ```
 
-1. Put the new squashfs, kernel, and initrd into S3
+1. Put the new `squashfs`, `kernel`, and `initrd` into S3
 
    ```bash
    ncn-m# cd k8s/${K8SNEW}
@@ -176,7 +179,7 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
 
    > If not doing a CSM software upgrade, this process will update the entries in BSS for the master nodes and worker nodes to use the new `k8s-image`.
    >
-   > 1. Set all master nodes and worker nodes to use newly created k8s-image.
+   > 1. Set all master nodes and worker nodes to use newly created `k8s-image`.
    >
    >     This will use the K8SVERSION and K8SNEW variables defined earlier.
    >
@@ -197,9 +200,9 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
 
 ## Ceph Image
 
-The Ceph image `ceph-image` is used by the utility storage nodes.
+The Ceph image Ceph image is used by the utility storage nodes.
 
-1. Decide which ceph-image is to be modified
+1. Decide which Ceph image is to be modified
 
    ```bash
    ncn-m# cray artifacts list ncn-images --format json | jq '.artifacts[] .Key' | grep ceph | grep squashfs
@@ -209,14 +212,14 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    "ceph/0.1.48/filesystem.squashfs"
    ```
 
-   This example uses ceph/0.1.113 for the current version and adds a suffix for the new version.
+   This example uses `ceph/0.1.113` for the current version and adds a suffix for the new version.
 
    ```bash
    ncn-m# export CEPHVERSION=0.1.113
    ncn-m# export CEPHNEW=0.1.113-2
    ```
 
-1. Make a temporary directory for the ceph-image using the current version string.
+1. Make a temporary directory for the Ceph image using the current version string.
 
    ```bash
    ncn-m# mkdir -p ceph/${CEPHVERSION}
@@ -242,12 +245,12 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    ncn-m# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub ceph/${CEPHVERSION}/filesystem.squashfs/root/.ssh
    ```
 
-1. Add the public SSH key for the root account to `authorized_keys`.
+1. Replace the public SSH key for the root account to `authorized_keys`.
 
-   This example assumes that an RSA key was generated so it adds the id_rsa.pub file to authorized_keys.
+   This example assumes that an RSA key was generated so it adds the `id_rsa.pub` file to `authorized_keys`. It also removes any previously authorized keys. Feel free to manage this differently to retain additional keys if desired.
 
    ```bash
-   ncn-m# cat /root/.ssh/id_rsa.pub >> ceph/${CEPHVERSION}/filesystem.squashfs/root/.ssh/authorized_keys
+   ncn-m# cat /root/.ssh/id_rsa.pub > ceph/${CEPHVERSION}/filesystem.squashfs/root/.ssh/authorized_keys
    ncn-m# chmod 640 ceph/${CEPHVERSION}/filesystem.squashfs/root/.ssh/authorized_keys
    ```
 
@@ -299,7 +302,7 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    chroot-ncn-m# /srv/cray/scripts/common/create-kis-artifacts.sh
    ```
 
-1. Exit the chroot environment.
+1. Exit the `chroot` environment.
 
    ```bash
    chroot-ncn-m# exit
@@ -311,13 +314,13 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
    ncn-m# umount -v ceph/${CEPHVERSION}/filesystem.squashfs/mnt/squashfs
    ```
 
-1. Update file permissions on initrd.
+1. Update file permissions on `initrd`.
 
    ```bash
    ncn-m# chmod -v 644 ceph/${CEPHNEW}/initrd.img.xz
    ```
 
-1. Put the new initrd.img.xz, kernel, and squashfs into S3
+1. Put the new `initrd.img.xz`, `kernel`, and SquashFS into S3
 
    ***Note:*** The version string for the kernel file may be different.
 
@@ -335,9 +338,9 @@ The Ceph image `ceph-image` is used by the utility storage nodes.
 
    **WARNING:** If doing a CSM software upgrade, skip this section to continue with Common Cleanup.
 
-   > If not doing a CSM software upgrade, this process will update the entries in BSS for the utility storage nodes to use the new `ceph-image`.
+   > If not doing a CSM software upgrade, this process will update the entries in BSS for the utility storage nodes to use the new Ceph image.
    >
-   > 1. Set all utility storage nodes to use newly created ceph-image.
+   > 1. Set all utility storage nodes to use newly created Ceph image.
    >
    >     This will use the CEPHVERSION and CEPHNEW variables defined earlier.
    >
