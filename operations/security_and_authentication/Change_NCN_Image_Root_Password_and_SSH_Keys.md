@@ -134,7 +134,7 @@ ncn-mw# mkdir -pv /run/initramfs/overlayfs/workingarea && cd /run/initramfs/over
     ncn-mw# for art in filesystem.squashfs initrd kernel ; do
                 cray artifacts get ncn-images ceph/${CEPHVERSION}/${art} ceph/${CEPHVERSION}/${art}
             done
-   ```
+    ```
 
 ### 3. Customize the images
 
@@ -287,7 +287,7 @@ ncn-mw# ncn-image-modification.sh -t rsa \
                     --key-name "k8s/${K8SNEW}/${art}" \
                     --file-name k8s/${K8SVERSION}/${art}
             done
-   ```
+    ```
 
 1. Upload the new Ceph image into S3.
 
@@ -307,7 +307,7 @@ ncn-mw# ncn-image-modification.sh -t rsa \
                     --key-name "ceph/${CEPHNEW}/${art}" \
                     --file-name ceph/${CEPHVERSION}/${art}
             done
-   ```
+    ```
 
 The Kubernetes and storage images now have the image changes.
 
