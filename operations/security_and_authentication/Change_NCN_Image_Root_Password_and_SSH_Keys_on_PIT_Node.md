@@ -124,7 +124,6 @@ copies the `root` user password from the PIT node. It does not change the timezo
 
 ```bash
 pit# export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
-pit# cd ${PITDATA}/data/
 pit# ${CSM_PATH}/ncn-image-modification.sh -p \
                                            -t rsa \
                                            -k "${PITDATA}"/data/k8s/kubernetes-*.squashfs \
@@ -137,7 +136,6 @@ This example uses existing SSH keys located in the `/my/pre-existing/keys` direc
 administrator for the `root` user password during execution. It changes the timezone to `America/Chicago`.
 
 ```bash
-pit# cd ${PITDATA}/data/
 pit# ${CSM_PATH}/ncn-image-modification.sh -p \
                                            -d /my/pre-existing/keys \
                                            -z America/Chicago \
@@ -153,7 +151,6 @@ is provided, so that the script requires no input from the administrator while i
 
 ```bash
 pit# export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
-pit# cd ${PITDATA}/data/
 pit# ${CSM_PATH}/ncn-image-modification.sh -p \
                                            -t rsa \
                                            -N "" \
