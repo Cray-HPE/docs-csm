@@ -14,7 +14,7 @@ All of the commands in this procedure are intended to be run on a single master 
 
 - This procedure can only be done after the PIT node is rebuilt to become a normal master node.
 - The Cray CLI must be configured on the node where the procedure is being done. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
-- The CSM documentation RPM must be installed on the node where the procedure is being run. See [Check for Latest Documentation](../../update_product_stream/index.md#documentation).
+- The CSM documentation RPM must be installed on the node where the procedure is being run. See [Check for Latest Documentation](../../update_product_stream/README.md#documentation).
 - The `ncn-image-modification.sh` script must be extracted from the top level of the CSM release tarball.
 
 ## Procedure
