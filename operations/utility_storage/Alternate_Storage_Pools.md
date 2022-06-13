@@ -94,7 +94,7 @@ id  pool         namespace  image            snap  device
   * If mapping to a worker node where there are mapped PVCs, then ensure the proper `rbd` device is being captured for the following steps.
   * Failure to do this most likely will result in data corruption or loss.
 
-### Mounting an `rbd` device
+### Mount an `rbd` device
 
 ```bash
 mkfs.ext4 /dev/rbd0
