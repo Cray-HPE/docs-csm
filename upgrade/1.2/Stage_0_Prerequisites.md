@@ -26,7 +26,9 @@ backup of Workload Manager configuration data and files is created. Once complet
     CSM_RELEASE=1.2.0
    ```
 
-1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
+1. If there are space concerns on the node please see the process for adding an rbd device to store the CSM tarball [here](../operations/utility_storage/Alternate_Storage_Pools.md).
+
+2. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
    - If there is a URL for the CSM `tar` file that is accessible from `ncn-m001`, then the [Direct download](#direct-download) procedure may be used.
    - Alternatively, the [Manual copy](#manual-copy) procedure may be used, which includes manually copying the CSM `tar` file to `ncn-m001`.
