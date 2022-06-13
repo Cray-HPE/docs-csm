@@ -1,6 +1,7 @@
 # Remove Kiali
 
 If you do not plan to use Kiali, you can remove Kiali from your environment for CVE (Common Vulnerabilities and Exposures) remediation.
+**NOTE:** The removal will not persist after an upgrade, so you will need to rerun the commands to remove Kiali after the upgrade.
 
 ## Procedure
 
