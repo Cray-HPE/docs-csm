@@ -449,10 +449,10 @@ def migrate_can_to_cmn(networks, preserve=None, overrides=None):
     destination_network_name = "CMN"
     destination_network_full_name = "Customer Management Network"
     subnet_names = [
-        "network_hardware",
         "bootstrap_dhcp",
         "metallb_address_pool",
         "metallb_static_pool",
+        "network_hardware",
     ]
     clone_subnet_and_pivot(
         networks,
@@ -553,10 +553,10 @@ def clone_subnet_and_pivot(
     #
     if subnet_names is None:
         subnet_names = [
-            "network_hardware",
             "bootstrap_dhcp",
             "metallb_address_pool",
             "metallb_static_pool",
+            "network_hardware",
         ]
     preserve_subnet = None
     if preserve == "external-dns":
