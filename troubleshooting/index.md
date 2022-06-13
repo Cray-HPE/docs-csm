@@ -70,12 +70,12 @@ This document provides links to troubleshooting information for services and fun
   * [Issues with Redfish Endpoint `DiscoveryCheck` for Redfish Events from Nodes](../operations/node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
   * [Interfaces with IP Address Issues](../operations/node_management/Troubleshoot_Interfaces_with_IP_Address_Issues.md)
   * [Loss of Console Connections and Logs on Gigabyte Nodes](../operations/node_management/Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
-* Customer Access Network (CAN)
-  * [CAN Issues](../operations/network/customer_access_network/Troubleshoot_CAN_Issues.md)
+* Customer Management Network (CMN)
+  * [CMN Issues](../operations/network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 * Domain Name Service (DNS)
   * [Connectivity to Services with External IP addresses](../operations/network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
   * [DNS Configuration Issues](../operations/network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
-* MetalLB in BGP-Mode
+* MetalLB
   * [Services Without an Allocated IP Address](../operations/network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
   * [BGP not Accepting Routes from MetalLB](../operations/network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 * Spire
