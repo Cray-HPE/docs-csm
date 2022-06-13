@@ -63,8 +63,6 @@ if [[ $state_recorded == "0" && $2 != "--rebuild" ]]; then
       if ! ssh "${target_ncn}" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"; then
           echo "${target_ncn} csm_ntp failed"
           exit 1
-      else
-          record_state "${state_name}" "${target_ncn}"
       fi
 
       # if the node is not in sync after two minutes, fail
