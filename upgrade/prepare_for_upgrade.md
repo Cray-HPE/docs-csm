@@ -54,6 +54,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
     ```
 
     Example output:
+
     ```text
     Checking for active BOS sessions.
     Found no active BOS sessions.
@@ -73,7 +74,6 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 1. Coordinate with the site to prevent new sessions from starting in the services listed (BOS, CFS, CRUS, FAS, NMD).
 
     In version Shasta v1.5, there is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
-
 
 1. Validate CSM Health
 
@@ -101,6 +101,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       ```
 
       Example output:
+
       ```text
       ----------------
       cls01234n000
@@ -139,6 +140,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       ```
 
       Example output:
+
       ```text
       cls01234n000: Thu Aug 7 01:29:28 PDT 2014
       cls01234n003: Thu Aug 7 01:29:28 PDT 2014
