@@ -63,7 +63,7 @@ quotas for pool 'csm-release':
 
 **IMPORTANT:**
 
-* Creating and rbd device requires proper access and must be run from ncn-m001/2/3 or ncn-s001/2/3.
+* Creating and rbd device requires proper access and must be run from `ncn-m001/2/3` or `ncn-s001/2/3`.
 * Mounting a device will occur on the node where the storage needs to be present.
 
 ```bash

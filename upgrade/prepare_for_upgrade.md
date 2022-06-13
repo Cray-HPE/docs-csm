@@ -85,10 +85,10 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    If a Lustre file system is being used, see the ClusterStor documentation for details on how to check
    for Lustre health. Here are a few commands which could be used to validate Lustre health. This example
-   is for a ClusterStor providing the cls01234 filesystem.
+   is for a ClusterStor providing the `cls01234` filesystem.
 
    1. SSH to the primary management node.
-      For example, on system cls01234.
+      For example, on system `cls01234`.
 
       ```bash
       remote$ ssh -l admin cls01234n000.systemname.com
