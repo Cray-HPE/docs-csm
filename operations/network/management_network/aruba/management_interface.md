@@ -45,8 +45,8 @@ switch(config-if-mgmt)# ip <dhcp|static IP-ADDR>
 Show commands to validate functionality:
 
 ```text
-switch# show interface mgmt
-switch# show interface loopback 0
+show interface mgmt
+show interface loopback 0
 ```
 
 Create and configure loopback interface:
@@ -62,4 +62,4 @@ switch(config)# interface loopback 0
 2. Administrators can assign an IP address to the management interface
 3. Administrators can configure a loopback interface to be use for Switch management.
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

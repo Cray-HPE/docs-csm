@@ -2,12 +2,12 @@
 
 There are no configuration commands for switch power supply functionality.
 
-> **NOTE:** HA will be covered in HA section.
+> **`NOTE`** HA will be covered in HA section.
 
 Show commands to validate functionality:
 
 ```bash
-switch# show environment power-supply
+show environment power-supply
 ```
 
 ## Expected Results
@@ -19,7 +19,7 @@ switch# show environment power-supply
 ## Example Output
 
 ```bash
-switch# show environment power-supply
+show environment power-supply
          Product  Serial           PSU
 Wattage
 Mbr/PSU  Number   Number           Status
@@ -30,4 +30,4 @@ Mbr/PSU  Number   Number           Status
 1/4       N/A      N/A              Absent        0
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

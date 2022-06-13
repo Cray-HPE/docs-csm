@@ -11,7 +11,7 @@ This document does not cover the process for updating any of the certificates de
 -   **NCN CA certificate** - The NCN CA is created by the installer and located at sms-1:/var/opt/cray/certificate\_authority/certificate\_authority.crt. The signature algorithm used is `sha256WithRSAEncryption` and the key length is 2048 bits. The CA `Issuer` is generated at the time of creation and therefore specific to each installation. This and other certificate details can be viewed from the NCN by executing:
 
     ```bash
-    # openssl x509 -in /var/opt/cray/certificate_authority/certificate_authority.crt -noout -text
+    openssl x509 -in /var/opt/cray/certificate_authority/certificate_authority.crt -noout -text
     ```
 
 -   **NCN host certificate** - The NCN host certificate is created by the installer and located at sms-1:/var/opt/cray/certificate\_authority/hosts/host.crt
@@ -19,7 +19,7 @@ This document does not cover the process for updating any of the certificates de
     The signature algorithm used is `sha256WithRSAEncryption` and the key length is 2048 bits. Additional certificate details can be viewed from the NCN by executing:
 
     ```bash
-    # openssl x509 -in /var/opt/cray/certificate_authority/hosts/host.crt -noout -text
+    openssl x509 -in /var/opt/cray/certificate_authority/hosts/host.crt -noout -text
     ```
 
 -   **API Gateway TLS certificate** - The API gateway is configured with the NCN host certificate and key to allow enabling TLS/HTTPS on the gateway. Configuration details are handled by the installer when the API gateway Kubernetes pods are created.

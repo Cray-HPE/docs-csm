@@ -18,6 +18,6 @@ but whatever list of these other volumes is needed to get a suitable End-User UA
 
 The [UAI Classes](UAI_Classes.md) section has more information on what goes in End-User UAI classes and, specifically, the Non-Brokered End-User UAI classes used for Legacy mode.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Create and Use Default UAIs in Legacy Mode](Create_and_Use_Default_UAIs_in_Legacy_Mode.md)

@@ -1,11 +1,15 @@
 # Network Time Protocol (NTP) Client
 
+<<<<<<< HEAD
 Summary of NTP from [RFC-1305 Network Time Protocol (Version 3)](https://tools.ietf.org/html/rfc1305):
 
 > NTP is used to synchronize timekeeping among a set of distributed time servers and clients
 > ...
 > It provides the protocol mechanisms to synchronize time in principle to precisions in the order of nanoseconds while preserving a non-ambiguous date
 > well into the next century.
+=======
+"NTP is used to synchronize timekeeping among a set of distributed time servers and clients [...] It provides the protocol mechanisms to synchronize time in principle to precisions in the order of nanoseconds while preserving a non-ambiguous date well into the next century." –rfc1305
+>>>>>>> MTL-1695
 
 The Network Time Protocol (NTP) client is essential for syncing time on various clients in the system.
 This document shows how to view NTP status and configure NTP on a Mellanox switch.
@@ -17,43 +21,40 @@ This document shows how to view NTP status and configure NTP on a Mellanox switc
 - [Validate functionality](#validate-functionality)
 - [Expected results](#expected-results)
 
-<a name="enable-ntp"></a>
-
 ## Enable NTP
 
 ```console
-switch (config) # ntp enable
+(`switch (config) # `)
 ```
-
-<a name="test-the-ntp-server"></a>
+ntp enable
+```
 
 ## Test the NTP server
 
 Test the NTP server by querying the current time:
 
 ```console
-switch (config) # ntpdate 10.4.0.134
+(`switch (config) # `)
 ```
-
-<a name="specify-a-remote-ntp-server"></a>
+ntpdate 10.4.0.134
+```
 
 ## Specify a remote NTP server
 
 Specify a remote NTP server to use for time synchronization:
 
-```console
-switch(config)# ntp server <FQDN|IP-ADDR>
+(`switch(config)# `)
 ```
-
-<a name="configure-the-system-timezone"></a>
+ntp server <FQDN|IP-ADDR>
+```
 
 ## Configure the system timezone
 
 ```console
-switch (config) # clock timezone UTC-offset UTC-7
+(`switch (config) # `)
 ```
-
-<a name="validate-functionality"></a>
+clock timezone UTC-offset UTC-7
+```
 
 ## Validate functionality
 
@@ -61,7 +62,10 @@ switch (config) # clock timezone UTC-offset UTC-7
 switch (config)# show ntp
 ```
 
-<a name="expected-results"></a>
+(`switch (config)# `)
+```
+show ntp
+```
 
 ## Expected results
 
@@ -69,4 +73,4 @@ switch (config)# show ntp
 1. The functionality can be validated using the `show` command.
 1. The system time of the switch matches that of the NTP server.
 
-[Back to index](index.md).
+[Back to Index](../README.md)

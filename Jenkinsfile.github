@@ -75,8 +75,10 @@ pipeline {
                 } else {
                     RELEASE_FOLDER = ""
                 }
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", arch: "noarch", isStable: env.IS_STABLE)
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/*.rpm", arch: "src", isStable: env.IS_STABLE)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", os: "sle-15sp2", arch: "noarch", isStable: env.IS_STABLE)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", os: "sle-15sp3", arch: "noarch", isStable: env.IS_STABLE)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/*.rpm", os: "sle-15sp2", arch: "src", isStable: env.IS_STABLE)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/*.rpm", os: "sle-15sp3", arch: "src", isStable: env.IS_STABLE)
             }
         }
       }

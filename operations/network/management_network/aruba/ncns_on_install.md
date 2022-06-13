@@ -41,7 +41,7 @@ Use this procedure to verify the DNSMASQ config file on the NCNs is accurate.
 The following is an example Aruba configuration for the spine:
 
 ```text
-sw-spine-001# show run int vlan 1
+show run int vlan 1
 interface vlan1
     vsx-sync active-gateways
     ip address 10.1.0.2/16
@@ -52,7 +52,7 @@ interface vlan1
     ip helper-address 10.92.100.222
     exit
 
-sw-spine-002# show run int vlan 1
+show run int vlan 1
 interface vlan1
     vsx-sync active-gateways
     ip address 10.1.0.3/16
@@ -63,4 +63,4 @@ interface vlan1
     exit
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

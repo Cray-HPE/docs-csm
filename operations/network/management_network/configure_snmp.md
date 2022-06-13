@@ -9,7 +9,7 @@ For more information on SNMP credentials, see [Change SNMP Credentials on Leaf-B
 ## Dell SNMP
 
 ```console
-sw-leaf-bmc-001# conf t
+conf t
    snmp-server group cray-reds-group 3 noauth read cray-reds-view
    snmp-server user testuser cray-reds-group 3 auth md5 xxxxxxxx priv des xxxxxxx
    snmp-server view cray-reds-view 1.3.6.1.2 included
@@ -18,7 +18,7 @@ sw-leaf-bmc-001# conf t
 ## Aruba SNMP
 
 ```console
-sw-leaf-bmc-001# conf t
+conf t
    snmp-server vrf default
    snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxx
 ```

@@ -33,13 +33,13 @@ An authentication token is required to access the API gateway and to use the `sa
        If it is unclear what session template is in use, proceed to the next substep.
 
        ```bash
-       ncn# cray bos sessiontemplate list
+       cray bos sessiontemplate list
        ```
 
     1. Find the xname with `sat status`.
 
        ```bash
-       ncn# sat status | grep "Compute\|Application"
+       sat status | grep "Compute\|Application"
        ```
 
        Example output:
@@ -55,7 +55,7 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Find the `bos_session` value via the Configuration Framework Service (CFS).
 
        ```bash
-       ncn# cray cfs components describe XNAME | grep bos_session
+       cray cfs components describe XNAME | grep bos_session
        ```
 
        Example output:
@@ -67,7 +67,7 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Find the required `templateUuid` value with BOS.
 
        ```bash
-       ncn# cray bos session describe BOS_SESSION | grep templateUuid
+       cray bos session describe BOS_SESSION | grep templateUuid
        ```
 
        Example output:
@@ -79,7 +79,7 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Determine the list of xnames associated with the desired boot session template.
 
        ```bash
-       ncn# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+       cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
        ```
 
        Example output:
@@ -91,7 +91,7 @@ An authentication token is required to access the API gateway and to use the `sa
 1.  Use sat to capture state of the system before the shutdown.
 
     ```bash
-    ncn# sat bootsys shutdown --stage capture-state
+    sat bootsys shutdown --stage capture-state
     ```
 
 1.  Optional system health checks.
@@ -101,58 +101,58 @@ An authentication token is required to access the API gateway and to use the `sa
         **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
 
         ```bash
-        ncn# sdu --scenario triage --start_time '-4 hours' \
+        sdu --scenario triage --start_time '-4 hours' \
                  --reason "saving state before powerdown"
         ```
 
     1.  Capture the state of all nodes.
 
         ```bash
-        ncn# sat status | tee sat.status.off
+        sat status | tee sat.status.off
         ```
 
     1.  Capture the list of disabled nodes.
 
         ```bash
-        ncn# sat status --filter Enabled=false | tee sat.status.disabled
+        sat status --filter Enabled=false | tee sat.status.disabled
         ```
 
     1.  Capture the list of nodes that are `off`.
 
         ```bash
-        ncn# sat status --filter State=Off | tee sat.status.off
+        sat status --filter State=Off | tee sat.status.off
         ```
 
     1.  Capture the state of nodes in the workload manager. For example, if the system uses Slurm:
 
         ```bash
-        ncn# ssh uan01 sinfo | tee uan01.sinfo
+        ssh uan01 sinfo | tee uan01.sinfo
         ```
 
     1.  Capture the list of down nodes in the workload manager and the reason.
 
         ```bash
-        ncn# ssh nid000001-nmn sinfo --list-reasons | tee sinfo.reasons
+        ssh nid000001-nmn sinfo --list-reasons | tee sinfo.reasons
         ```
 
     1.  Check Ceph status.
 
         ```bash
-        ncn# ceph -s | tee ceph.status
+        ceph -s | tee ceph.status
         ```
 
     1.  Check Kubernetes pod status for all pods.
 
         ```bash
-        ncn# kubectl get pods -o wide -A | tee k8s.pods
+        kubectl get pods -o wide -A | tee k8s.pods
         ```
 
         Additional Kubernetes status check examples:
 
         ```bash
-        ncn# kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" > k8s.pods.CLBO
-        ncn# kubectl get pods -o wide -A | egrep  "ContainerCreating" > k8s.pods.CC
-        ncn# kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
+        kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" > k8s.pods.CLBO
+        kubectl get pods -o wide -A | egrep  "ContainerCreating" > k8s.pods.CC
+        kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
         ```
 
     1.  Check HSN status.
@@ -160,7 +160,7 @@ An authentication token is required to access the API gateway and to use the `sa
         Determine the name of the `slingshot-fabric-manager` pod:
 
         ```bash
-        ncn# kubectl get pods -l app.kubernetes.io/name=slingshot-fabric-manager -n services
+        kubectl get pods -l app.kubernetes.io/name=slingshot-fabric-manager -n services
         ```
 
         Example output:
@@ -173,14 +173,14 @@ An authentication token is required to access the API gateway and to use the `sa
         Run `fmn_status` in the `slingshot-fabric-manager` pod and save the output to a file:
 
         ```bash
-        ncn# kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
+        kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
                      -c slingshot-fabric-manager -- fmn_status --details | tee fabric.status
         ```
 
     1. Check management switches to verify they are reachable \(switch host names depend on system configuration\).
 
         ```bash
-        ncn# for switch in sw-leaf-00{1,2}.mtl sw-spine-00{1,2}.mtl sw-cdu-00{1,2}.mtl; do
+        for switch in sw-leaf-00{1,2}.mtl sw-spine-00{1,2}.mtl sw-cdu-00{1,2}.mtl; do
                  while true; do
                      ping -c 1 $switch > /dev/null && break
                      echo "switch $switch is not yet up"
@@ -193,21 +193,21 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Check Lustre server health.
 
         ```bash
-        ncn# ssh admin@cls01234n00.us.cray.com
-        admin@cls01234n00# cscli show_nodes
+        ssh admin@cls01234n00.us.cray.com
+        admin@cscli show_nodes
         ```
 
     1. From a node which has the Lustre file system mounted.
 
         ```bash
-        uan01# lfs check servers
-        uan01# lfs df
+        lfs check servers
+        lfs df
         ```
 
 1.  Check for running sessions.
 
     ```bash
-    ncn# sat bootsys shutdown --stage session-checks | tee sat.session-checks
+    sat bootsys shutdown --stage session-checks | tee sat.session-checks
     ```
 
     Example output:
@@ -240,7 +240,7 @@ An authentication token is required to access the API gateway and to use the `sa
          To find a list of BOA jobs that are still running:
 
          ```bash
-         ncn# kubectl -n services get jobs|egrep -i "boa|Name"
+         kubectl -n services get jobs|egrep -i "boa|Name"
          ```
 
          Output similar to the following will be returned:
@@ -268,13 +268,13 @@ An authentication token is required to access the API gateway and to use the `sa
          Find the BOA job's ConfigMap with the following command:
 
          ```bash
-         ncn# kubectl -n services describe job <BOA Job ID> |grep ConfigMap -A 1 -B 1
+         kubectl -n services describe job <BOA Job ID> |grep ConfigMap -A 1 -B 1
          ```
 
          Example:
 
          ```bash
-         ncn# kubectl -n services describe job boa-0216d2d9-b2bc-41b0-960d-165d2af7a742 |grep ConfigMap -A 1 -B 1
+         kubectl -n services describe job boa-0216d2d9-b2bc-41b0-960d-165d2af7a742 |grep ConfigMap -A 1 -B 1
             boot-session:
              Type:      ConfigMap (a volume populated by a ConfigMap)
              Name:      e0543eb5-3445-4ee0-93ec-c53e3d1832ce    <<< ConfigMap name. Delete this one.
@@ -289,20 +289,20 @@ An authentication token is required to access the API gateway and to use the `sa
          To delete the ConfigMap:
 
          ```bash
-         ncn# kubectl -n services delete cm <ConfigMap name>
+         kubectl -n services delete cm <ConfigMap name>
          ```
 
          Example:
 
          ```bash
-         ncn# kubectl -n services delete cm e0543eb5-3445-4ee0-93ec-c53e3d1832ce
+         kubectl -n services delete cm e0543eb5-3445-4ee0-93ec-c53e3d1832ce
          configmap "e0543eb5-3445-4ee0-93ec-c53e3d1832ce" deleted
          ```
 
     1.   Delete the BOA job(s).
 
          ```bash
-         ncn# kubectl -n services delete job <BOA JOB ID>
+         kubectl -n services delete job <BOA JOB ID>
          ```
 
          This will kill the BOA job and the BOS session associated with it.
@@ -317,13 +317,13 @@ An authentication token is required to access the API gateway and to use the `sa
          string. Use the following command to delete the BOS database entry.
 
          ```bash
-         ncn# cray bos session delete <session ID>
+         cray bos session delete <session ID>
          ```
 
          Example:
 
          ```bash
-         ncn# cray bos session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
+         cray bos session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
          ```
 
 1.  Coordinate with the site to prevent new sessions from starting in the services listed.

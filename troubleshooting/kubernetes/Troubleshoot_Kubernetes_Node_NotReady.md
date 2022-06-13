@@ -11,7 +11,7 @@ The `kubectl get nodes` command returns a NotReady state for a master or worker 
 1.  Run the`kubectl get nodes` command to identify the node in NotReady state.
 
     ```bash
-    ncn-w001# kubectl get nodes
+    kubectl get nodes
     NAME       STATUS   ROLES                  AGE   VERSION
     ncn-m001   Ready    control-plane,master   27h   v1.20.13
     ncn-m002   Ready    control-plane,master   8d    v1.20.13
@@ -34,7 +34,7 @@ The `kubectl get nodes` command returns a NotReady state for a master or worker 
     Run the following command on the node in a NotReady state.
 
     ```bash
-    ncn-w001# systemctl restart kubelet
+    systemctl restart kubelet
     ```
 
 Try running the `kubectl get nodes` command and ensure the node is now in a Ready state.

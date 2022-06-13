@@ -15,7 +15,7 @@ This section provides an example of how to configure the management network.
 
    If you have existing CAN interface configuration, it will be deleted once you move the interface into the new VRF.  You will have to re-apply it.
 
-   > **NOTE:** These are example configs only, most implementations of Bi-CAN will be different.
+   > **`NOTE`** These are example configs only, most implementations of Bi-CAN will be different.
 
    Example Aruba primary configuration:
 
@@ -99,7 +99,7 @@ This section provides an example of how to configure the management network.
       switchport mode trunk
     ```
 
-    > **NOTE:** VLAN 2 is used for the HSN network.
+    > **`NOTE`** VLAN 2 is used for the HSN network.
 
     Example VLAN 2 configuration:
 
@@ -113,7 +113,7 @@ This section provides an example of how to configure the management network.
     Example HSN IP:
 
     ```
-    ncn-w001# ip a show hsn0
+    ip a show hsn0
     8: hsn0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen 1000
         link/ether 02:00:00:00:00:0d brd ff:ff:ff:ff:ff:ff
         inet 10.101.10.10/24 scope global hsn0
@@ -259,23 +259,23 @@ This section provides an example of how to configure the management network.
    1. The default route will need to change on the workers so they send their traffic out the HSN interface.
 
       ```
-      ncn-w001# ip route replace default via 10.101.10.1 dev hsn0
+      ip route replace default via 10.101.10.1 dev hsn0
       ```
 
    1. To make it persistent we will need to create an ifcfg file for hsn0 and remove the old vlan7 default route.
 
       ```
-      ncn-w001# mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old
-      ncn-w001# echo "default 10.101.10.1 - -" > /etc/sysconfig/network/ifroute-hsn0
+      mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old
+      echo "default 10.101.10.1 - -" > /etc/sysconfig/network/ifroute-hsn0
       ```
 
    1. Verify the routing table and external connectivity.
 
       ```
-      ncn-w001# ip route
+      ip route
       default via 10.101.10.1 dev hsn0
 
-      ncn-w001# ping 8.8.8.8 -c 1
+      ping 8.8.8.8 -c 1
       PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
       64 bytes from 8.8.8.8: icmp_seq=1 ttl=110 time=13.6 ms
       ```
@@ -287,7 +287,7 @@ This section provides an example of how to configure the management network.
     1. Verify the connection is going over the HSN with a traceroute:
 
         ```
-        ncn-m001# % traceroute 10.101.8.113
+        % traceroute 10.101.8.113
         traceroute to 10.101.8.113 (10.101.8.113), 64 hops max, 52 byte packets
           1  172.30.252.234 (172.30.252.234)  37.652 ms  37.930 ms  36.574 ms
           2  10.103.255.228 (10.103.255.228)  37.684 ms  37.180 ms  36.765 ms
@@ -305,7 +305,7 @@ This section provides an example of how to configure the management network.
     1. Listen on all the HSN interfaces for ping/traceroute while you ping the external facing IP address. In this example, the IP address is 10.101.8.113.
 
         ```
-        ncn-m001# nodes=$(kubectl get nodes| awk '{print $1}' | grep  ncn-w | awk -vORS=, '{print $1}'); pdsh -w ${nodes} "tcpdump -envli hsn0 icmp"
+        nodes=$(kubectl get nodes| awk '{print $1}' | grep  ncn-w | awk -vORS=, '{print $1}'); pdsh -w ${nodes} "tcpdump -envli hsn0 icmp"
 
         ncn-w002: tcpdump: listening on hsn0, link-type EN10MB (Ethernet), capture size 262144 bytes
         ncn-w003: tcpdump: listening on hsn0, link-type EN10MB (Ethernet), capture size 262144 bytes
@@ -315,4 +315,4 @@ This section provides an example of how to configure the management network.
         ncn-w003: 04:59:36.825591 98:5d:82:71:ba:2d > 02:00:00:00:00:1e, ethertype IPv4 (0x0800), length 98: (tos 0x0, ttl 54, id 33996, offset 0, flags [none], proto ICMP (1), length 84)
         ```
 
-[Back to Index](./index.md)
+[Back to Index](./README.md)

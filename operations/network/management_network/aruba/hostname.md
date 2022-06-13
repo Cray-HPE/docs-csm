@@ -13,14 +13,14 @@ switch(config)# hostname <NAME>
 Show commands to validate functionality:
 
 ```
-switch# show hostname
+show hostname
 ```
 
 ## Example Output
 
 ```
 switch(config)# hostname switch-test
-switch-test# show hostname
+show hostname
 switch-test
 ```
 
@@ -29,5 +29,5 @@ switch-test
 1. Administrators can configure the hostname
 2. The output of all show commands is correct
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)
 

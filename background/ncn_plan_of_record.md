@@ -2,8 +2,8 @@
 
 This document outlines the hardware necessary to meet CSM's Plan of Record (PoR). This serves as the **minimum, necessary** pieces required per each server in the management plane.
 
-1. If the system's NICs do not align to the PoR NICs outlined below (e.g. Onboard NICs are used instead of PCIe), then follow [Customize PCIe Hardware](../operations/node_management/customize_pcie_hardware.md) before booting the NCN(s).
-1. If there are more disks than what is listed below in the PoR for disks, then follow [Customize Disk Hardware](../operations/node_management/customize_disk_hardware.md) before booting the NCN(s).
+1. If the system's NICs do not align to the PoR NICs outlined below (e.g. Onboard NICs are used instead of PCIe), then follow [Customize PCIe Hardware](../operations/node_management/Customize_PCIe_Hardware.md) before booting the NCN(s).
+1. If there are more disks than what is listed below in the PoR for disks, then follow [Customize Disk Hardware](../operations/node_management/Customize_Disk_Hardware.md) before booting the NCN(s).
 
 ## Table of Contents
 
@@ -18,8 +18,6 @@ This document outlines the hardware necessary to meet CSM's Plan of Record (PoR)
         * [Disks](#storage-disks)
         * [NICs](#storage-nics)
 
-
-<a name="non-compute-nodes"></a>
 # Non-Compute Nodes
 
 > **`NOTE:`** Several components below are necessary to provide redundancy in the event of hardware failure.
@@ -29,39 +27,33 @@ Any of the disks may be used over the following busses:
 - SATA
 - NVME
 
-> **NOTE:** USB is implicitly excluded during disk selection and wiping. The NCN's deployment code will wipe all disks if they are a RAID or in the above list.
+> **`NOTE`** USB is implicitly excluded during disk selection and wiping. The NCN's deployment code will wipe all disks if they are a RAID or in the above list.
 > The manual wipes will exclude USB, but it is recommended to verify that the manual wipes are actually doing so.
 
 The OS disks are chosen by selecting the smallest disks. Two disks are used for OS disks by default.
 
 The number of OS disks can be modified by the [`metal.disks` kernel parameter](https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.md#metaldisks).
 
-<a name="masters-ncns"></a>
 ## Masters NCNs
 
-<a name="master-disks"></a>
 #### Master Disks
 
 - _Operating System:_ 2x SSDs of equal size that are at least 500GiB (524288000000 bytes)
 - _ETCD:_ 1x SSD that is at least 500GiB (524288000000 bytes) (This disk will be fully encrypted with LUKS2)
 
-<a name="master-nics"></a>
 #### Master NICs
 
 > **`NOTE:`** The 2nd port on each card is unused/empty (reserved for future use).
 
 - _Management Network:_ 2x PCIe cards, with 1 or 2 heads/ports each for a total of 4 ports split between two PCIe cards
 
-<a name="workers-ncns"></a>
 ## Workers NCNs
 
-<a name="worker-disks"></a>
 #### Worker Disks
 
 - _Operating System:_ 2x SSDs of equal size that are at least 500GiB (524288000000 bytes)
 - _Ephemeral:_ 1x SSD larger than or equal to 1TiB (1048576000000 bytes)
 
-<a name="worker-nics"></a>
 #### Worker NICs
 
 > **`NOTE:`** There is no PCIe redundancy for the management network for worker NCNs. The only redundancy set up for workers is port redundancy.
@@ -69,10 +61,8 @@ The number of OS disks can be modified by the [`metal.disks` kernel parameter](h
 - _Management Network:_ 1x PCIe card with 2 heads/ports for a total of 2 ports dedicated to a single PCIe card
 - _High-Speed Network:_ 1x PCIe card capable of 100Gbps (e.g. ConnectX-5 or Cassini), with 1 or 2 heads/ports
 
-<a name="storage-ncns"></a>
 ## Storage NCNs
 
-<a name="storage-disks"></a>
 #### Storage Disks
 
 - _Operating System:_ 2x SSDs of equal size that are at least 500GiB (524288000000 bytes)
@@ -80,7 +70,6 @@ The number of OS disks can be modified by the [`metal.disks` kernel parameter](h
 
 > **`NOTE:`** Any available disk that is not consumed by the operating system will be used for CEPH, but a node needs a minimum of 8 disks for making an ideal CEPH pool for CSM.
 
-<a name="storage-nics"></a>
 #### Storage NICs
 
 > **`NOTE:`** The 2nd port on each card is filled but not configured (reserved for future use).

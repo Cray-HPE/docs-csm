@@ -16,7 +16,7 @@ switch(config)# spanning-tree mst name mellanox
 Show Commands to Validate Functionality
 
 ```
-switch# show spanning-tree
+show spanning-tree
 ```
 
 Expected Results
@@ -25,4 +25,4 @@ Expected Results
 * Step 2: Spanning-tree is enabled, if loops are detected ports should go blocked state.
 * Step 3: Spanning-tree splits traffic domain between two DUTs
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

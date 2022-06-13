@@ -17,13 +17,13 @@ switch(config)# spanning-tree instance VALUE priority VALUE
 Show commands to validate functionality:
 
 ```text
-switch# show spanning-tree mst detail
+show spanning-tree mst detail
 ```
 
 ## Example Output
 
 ```text
-switch# show span
+show span
 Spanning tree status
 Extended System-id
 Ignore PVID Inconsistency : Disabled
@@ -50,4 +50,4 @@ Port         Role           State        Cost    Priority   Type
 2. Spanning-tree is enabled, if loops are detected ports should go blocked state
 3. Spanning-tree splits traffic domain between two DUTs
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

@@ -38,4 +38,4 @@ If the `State`/`pfxrcd` is "IDLE" you need to restart the BGP process with the f
 sw-spine01 [standalone: master] # clear ip bgp all
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

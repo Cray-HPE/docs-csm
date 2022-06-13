@@ -9,7 +9,7 @@ Sometimes a UAI will come up and run but will not work correctly. It is possible
    This starts by identifying the UAI name using the CLI:
 
    ```bash
-   ncn-m001-pit# cray uas admin uais list
+   ncn-m001-cray uas admin uais list
    ```
 
    Example output:
@@ -43,7 +43,7 @@ Sometimes a UAI will come up and run but will not work correctly. It is possible
    * End-User:
 
      ```bash
-     ncn-m001-pit# kubectl get po -n user | grep uai-vers-6da50e7a
+     ncn-m001-kubectl get po -n user | grep uai-vers-6da50e7a
      ```
 
      Example output:
@@ -55,7 +55,7 @@ Sometimes a UAI will come up and run but will not work correctly. It is possible
    * Broker:
 
      ```bash
-     ncn-m001-pit# kubectl get po -n uas | grep uai-broker-2e6ce6b7
+     ncn-m001-kubectl get po -n uas | grep uai-broker-2e6ce6b7
      ```
 
      Example output:
@@ -69,7 +69,7 @@ Sometimes a UAI will come up and run but will not work correctly. It is possible
    * End-User UAI pod name and the `user` namespace:
 
      ```bash
-     ncn-m001-pit# kubectl logs -n user uai-vers-6da50e7a-54dbc99fdd-csxmk uai-vers-6da50e7a
+     ncn-m001-kubectl logs -n user uai-vers-6da50e7a-54dbc99fdd-csxmk uai-vers-6da50e7a
      ```
 
      Example output:
@@ -95,7 +95,7 @@ Sometimes a UAI will come up and run but will not work correctly. It is possible
    * Broker UAI pod name and the `uas` namespace:
 
      ```bash
-     ncn-m001-pit# kubectl logs -n uas uai-broker-2e6ce6b7-68d78c6c95-s28dh uai-broker-2e6ce6b7
+     ncn-m001-kubectl logs -n uas uai-broker-2e6ce6b7-68d78c6c95-s28dh uai-broker-2e6ce6b7
      ```
 
      Example output:
@@ -113,6 +113,6 @@ Sometimes a UAI will come up and run but will not work correctly. It is possible
 
      The above is from a successful Broker starting and running.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Troubleshoot Stale Brokered UAIs](Troubleshoot_Stale_Brokered_UAIs.md)

@@ -10,13 +10,12 @@ Product installers currently do not expect to authenticate to Nexus, so it is ne
 
 The system is fully installed.
 
-
 ### Procedure
 
 1.  Verify that the `registry` repository has `docker.forceBasicAuth` set to `true`.
 
     ```bash
-    ncn# curl -sS https://packages.local/service/rest/beta/repositories \
+    curl -sS https://packages.local/service/rest/beta/repositories \
     | jq '.[] | select(.name == "registry") | .docker.forceBasicAuth = true' \
     | curl -sSi -X PUT 'https://packages.local/service/rest/beta/repositories/docker/hosted/registry' \
     -H "Content-Type: application/json" -d @-
@@ -27,7 +26,7 @@ The system is fully installed.
     Replace SYSTEM_DOMAIN_NAME in the following command before running it.
 
     ```bash
-    ncn# kubectl patch virtualservice -n nexus nexus --type merge --patch \
+    kubectl patch virtualservice -n nexus nexus --type merge --patch \
     '{"spec":{"http":[{"match":[{"authority":{"exact":"packages.local"}}],\
     "route":[{"destination":{"host":"nexus","port":{"number":80}},"headers":{\
     "request":{"remove":["X-WEBAUTH-USER"]}}}]},{"match":[{"authority":\
@@ -104,13 +103,12 @@ The system is fully installed.
             - X-WEBAUTH-USER
     ```
 
-
 **Troubleshooting:** If the patch needs to be removed for maintenance activities or any other purpose, run the following command:
 
 Replace SYSTEM_DOMAIN_NAME in the following command before running it.
 
 ```bash
-ncn# kubectl patch virtualservice -n nexus nexus --type merge \
+kubectl patch virtualservice -n nexus nexus --type merge \
 --patch '{"spec":{"http":[{"match":[{"authority":{"exact":"packages.local"}}]\
 ,"route":[{"destination":{"host":"nexus","port":{"number":80}},"headers":\
 {"request":{"add":{"X-WEBAUTH-USER":"admin"},"remove":["Authorization"]}}}]},\

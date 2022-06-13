@@ -18,17 +18,17 @@ The orchestrator manages Ceph clusters with the following capabilities:
 Watching log messages is useful when making changes with the orchestrator, such as add/remove/scale services or upgrades.
 
 ```bash
-ncn-s# ceph -w cephadm
+ceph -w cephadm
 ```
 
 To watch log messages with debug:
 
 ```bash
-ncn-s# ceph config set mgr mgr/cephadm/log_to_cluster_level debug
-ncn-s# ceph -W cephadm --watch-debug
+ceph config set mgr mgr/cephadm/log_to_cluster_level debug
+ceph -W cephadm --watch-debug
 ```
 
-> **NOTE:** For use with orchestration tasks, this can be typically run from a node running the ceph mon process. In most cases, this is ncn-s00(1/2/3). There may be cases where a cephadm is run locally on a host and it will be more efficient to tail `/var/log/ceph/cephadm.log`.
+> **`NOTE`** For use with orchestration tasks, this can be typically run from a node running the ceph mon process. In most cases, this is ncn-s00(1/2/3). There may be cases where a cephadm is run locally on a host and it will be more efficient to tail `/var/log/ceph/cephadm.log`.
 
 ## Usage Examples
 
@@ -37,7 +37,7 @@ This section will provide some in-depth usage with examples of the more commonly
 ### List Service Deployments
 
 ```bash
-ncn-s# ceph orch ls
+ceph orch ls
 ```
 
 Example output:
@@ -66,7 +66,7 @@ rgw.site1.zone1                3/3  6m ago     4h   ncn-s001;ncn-s002;ncn-s003;c
 ### List Deployed Daemons
 
 ```bash
-ncn-s# ceph orch ps
+ceph orch ps
 ```
 
 Example output:
@@ -109,10 +109,10 @@ rgw.site1.zone1.ncn-s003.tzkxya  ncn-s003  running (5h)  5m ago     5h   15.2.8 
 
 ### Ceph Daemon start|stop|restart|reconfig
 
-> **NOTE:** The service name is from `ceph orch ps` **NOT** `ceph orch ls`.
+> **`NOTE`** The service name is from `ceph orch ps` **NOT** `ceph orch ls`.
 
 ```bash
-ncn-s# ceph orch daemon restart alertmanager.ncn-s001
+ceph orch daemon restart alertmanager.ncn-s001
 ```
 
 A message stating "Scheduled to restart alertmanager.ncn-s001 on host 'ncn-s001'" will be returned.
@@ -121,10 +121,10 @@ Monitor the restart using the `ceph orch ps` command and the time associated wit
 
 ### Deploy or Scale Services
 
-> **NOTE:** The service name is from `ceph orch ls` **NOT** `ceph orch ps`.
+> **`NOTE`** The service name is from `ceph orch ls` **NOT** `ceph orch ps`.
 
 ```bash
-ncn-s# ceph orch apply alertmanager --placement="2 ncn-s001 ncn-s002"
+ceph orch apply alertmanager --placement="2 ncn-s001 ncn-s002"
 ```
 
 A message stating "Scheduled alertmanager update..." will be returned.
@@ -139,7 +139,7 @@ A message stating "Scheduled alertmanager update..." will be returned.
 ### List Hosts Known to Ceph Orchestrator
 
 ```bash
-ncn-s# ceph orch host ls
+ceph orch host ls
 ```
 
 Example output:
@@ -154,7 +154,7 @@ ncn-s003  ncn-s003
 ### List Drives on Hosts Known to Ceph Orchestrator
 
 ```bash
-ncn-s# ceph orch device ls
+ceph orch device ls
 ```
 
 Example output:
@@ -179,67 +179,67 @@ ncn-s003  /dev/vdd  hdd   3b2c090d-37a0-403b-a   107G  Unknown  N/A    N/A    No
 Update the size or placement for a service or apply a large YAML spec:
 
 ```bash
-ncn-s# ceph orch apply [mon|mgr|rbd-mirror|crash|alertmanager|grafana|node-exporter|prometheus] [<placement>] [--dry-run] [plain|json|json-pretty|yaml] [--unmanaged]
+ceph orch apply [mon|mgr|rbd-mirror|crash|alertmanager|grafana|node-exporter|prometheus] [<placement>] [--dry-run] [plain|json|json-pretty|yaml] [--unmanaged]
 ```
 
 Scale an iSCSI service:
 
 ```bash
-ncn-s# ceph orch apply iscsi <pool> <api_user> <api_password> [<trusted_ip_list>][<placement>] [--dry-run] [plain|json|json-pretty|yaml] [--unmanaged]
+ceph orch apply iscsi <pool> <api_user> <api_password> [<trusted_ip_list>][<placement>] [--dry-run] [plain|json|json-pretty|yaml] [--unmanaged]
 ```
 
 Update the number of MDS instances for the given fs_name:
 
 ```bash
-ncn-s# ceph orch apply mds <fs_name> [<placement>] [--dry-run] [--unmanaged] [plain|json|json-pretty|yaml]
+ceph orch apply mds <fs_name> [<placement>] [--dry-run] [--unmanaged] [plain|json|json-pretty|yaml]
 ```
 
 Scale an NFS service:
 
 ```bash
-ncn-s# ceph orch apply nfs <svc_id> <pool> [<namespace>] [<placement>] [--dry-run] [plain|json|json-pretty|yaml] [--unmanaged]
+ceph orch apply nfs <svc_id> <pool> [<namespace>] [<placement>] [--dry-run] [plain|json|json-pretty|yaml] [--unmanaged]
 ```
 
 Create OSD daemon(s) using a drive group spec:
 
 ```bash
-ncn-s# ceph orch apply osd [--all-available-devices] [--dry-run] [--unmanaged] [plain|json|json-pretty|yaml]
+ceph orch apply osd [--all-available-devices] [--dry-run] [--unmanaged] [plain|json|json-pretty|yaml]
 ```
 
 Update the number of RGW instances for the given zone:
 
 ```bash
-ncn-s# ceph orch apply rgw <realm_name> <zone_name> [<subcluster>] [<port:int>] [--ssl] [<placement>] [--dry-run] [plain|json|json-pretty|yaml] [--unmanaged]
+ceph orch apply rgw <realm_name> <zone_name> [<subcluster>] [<port:int>] [--ssl] [<placement>] [--dry-run] [plain|json|json-pretty|yaml] [--unmanaged]
 ```
 
 Cancel ongoing operations:
 
 ```bash
-ncn-s# ceph orch cancel
+ceph orch cancel
 ```
 
 Add daemon(s):
 
 ```bash
-ncn-s# ceph orch daemon add [mon|mgr|rbd-mirror|crash|alertmanager|grafana|node-exporter|prometheus] [<placement>]
+ceph orch daemon add [mon|mgr|rbd-mirror|crash|alertmanager|grafana|node-exporter|prometheus] [<placement>]
 ```
 
 Start iscsi daemon(s):
 
 ```bash
-ncn-s# ceph orch daemon add iscsi <pool> <api_user> <api_password> [<trusted_ip_list>] [<placement>]
+ceph orch daemon add iscsi <pool> <api_user> <api_password> [<trusted_ip_list>] [<placement>]
 ```
 
 Start MDS daemon(s):
 
 ```bash
-ncn-s# ceph orch daemon add mds <fs_name> [<placement>]
+ceph orch daemon add mds <fs_name> [<placement>]
 ```
 
 Start NFS daemon(s):
 
 ```bash
-ncn-s# ceph orch daemon add nfs <svc_id> <pool> [<namespace>] [<placement>]
+ceph orch daemon add nfs <svc_id> <pool> [<namespace>] [<placement>]
 ```
 
 Create an OSD service:
@@ -247,185 +247,185 @@ Create an OSD service:
 Either --svc_arg=host:drives
 
 ```bash
-ncn-s# ceph orch daemon add osd [<svc_arg>]
+ceph orch daemon add osd [<svc_arg>]
 ```
 
 Start RGW daemon(s):
 
 ```bash
-ncn-s# ceph orch daemon add rgw <realm_name> <zone_name> [<subcluster>] [<port:int>] [--ssl] [<placement>]
+ceph orch daemon add rgw <realm_name> <zone_name> [<subcluster>] [<port:int>] [--ssl] [<placement>]
 ```
 
 Redeploy a daemon (with a specific image):
 
 ```bash
-ncn-s# ceph orch daemon redeploy <name> [<image>]
+ceph orch daemon redeploy <name> [<image>]
 ```
 
 Remove specific daemon(s):
 
 ```bash
-ncn-s# ceph orch daemon rm <names>... [--force]
+ceph orch daemon rm <names>... [--force]
 ```
 
 Start, stop, restart, (redeploy,) or reconfig a specific daemon:
 
 ```bash
-ncn-s# ceph orch daemon start|stop|restart|reconfig <name>
+ceph orch daemon start|stop|restart|reconfig <name>
 ```
 
 List devices on a host:
 
 ```bash
-ncn-s# ceph orch device ls [<hostname>...] [plain|json|json-pretty|yaml] [--refresh] [--wide]
+ceph orch device ls [<hostname>...] [plain|json|json-pretty|yaml] [--refresh] [--wide]
 ```
 
 Zap (erase!) a device so it can be re-used:
 
 ```bash
-ncn-s# ceph orch device zap <hostname> <path> [--force]
+ceph orch device zap <hostname> <path> [--force]
 ```
 
 Add a host:
 
 ```bash
-ncn-s# ceph orch host add <hostname> [<addr>] [<labels>...]
+ceph orch host add <hostname> [<addr>] [<labels>...]
 ```
 
 Add a host label:
 
 ```bash
-ncn-s# ceph orch host label add <hostname> <label>
+ceph orch host label add <hostname> <label>
 ```
 
 Remove a host label:
 
 ```bash
-ncn-s# ceph orch host label rm <hostname> <label>
+ceph orch host label rm <hostname> <label>
 ```
 
 List hosts:
 
 ```bash
-ncn-s# ceph orch host ls [plain|json|json-pretty|yaml]
+ceph orch host ls [plain|json|json-pretty|yaml]
 ```
 
 Check if the specified host can be safely stopped without reducing availability:
 
 ```bash
-ncn-s# ceph orch host ok-to-stop <hostname>
+ceph orch host ok-to-stop <hostname>
 ```
 
 Remove a host:
 
 ```bash
-ncn-s# ceph orch host rm <hostname>
+ceph orch host rm <hostname>
 ```
 
 Update a host address:
 
 ```bash
-ncn-s# ceph orch host set-addr <hostname> <addr>
+ceph orch host set-addr <hostname> <addr>
 ```
 
 List services known to orchestrator:
 
 ```bash
-ncn-s# ceph orch ls [<service_type>] [<service_name>] [--export] [plain|json|json-pretty|yaml] [--refresh]
+ceph orch ls [<service_type>] [<service_name>] [--export] [plain|json|json-pretty|yaml] [--refresh]
 ```
 
 Remove OSD services:
 
 ```bash
-ncn-s# ceph orch osd rm <svc_id>... [--replace] [--force]
+ceph orch osd rm <svc_id>... [--replace] [--force]
 ```
 
 Status of OSD removal operation:
 
 ```bash
-ncn-s# ceph orch osd rm status [plain|json|json-pretty|yaml]
+ceph orch osd rm status [plain|json|json-pretty|yaml]
 ```
 
 Remove OSD services:
 
 ```bash
-ncn-s# ceph orch osd rm stop <svc_id>...
+ceph orch osd rm stop <svc_id>...
 ```
 
 Pause orchestrator background work:
 
 ```bash
-ncn-s# ceph orch pause
+ceph orch pause
 ```
 
 List daemons known to orchestrator:
 
 ```bash
-ncn-s# ceph orch ps [<hostname>] [<service_name>] [<daemon_type>] [<daemon_id>] [plain|json|json-pretty|yaml] [--refresh]
+ceph orch ps [<hostname>] [<service_name>] [<daemon_type>] [<daemon_id>] [plain|json|json-pretty|yaml] [--refresh]
 ```
 
 Resume orchestrator background work (if paused):
 
 ```bash
-ncn-s# ceph orch resume
+ceph orch resume
 ```
 
 Remove a service:
 
 ```bash
-ncn-s# ceph orch rm <service_name> [--force]
+ceph orch rm <service_name> [--force]
 ```
 
 Select orchestrator module backend:
 
 ```bash
-ncn-s# ceph orch set backend <module_name>
+ceph orch set backend <module_name>
 ```
 
 Start, stop, restart, redeploy, or reconfig an entire service (i.e. all daemons):
 
 ```bash
-ncn-s# ceph orch start|stop|restart|redeploy|reconfig <service_name>
+ceph orch start|stop|restart|redeploy|reconfig <service_name>
 ```
 
 Report configured backend and its status:
 
 ```bash
-ncn-s# ceph orch status [plain|json|json-pretty|yaml]
+ceph orch status [plain|json|json-pretty|yaml]
 ```
 
 Check service versions vs available and target containers:
 
 ```bash
-ncn-s# ceph orch upgrade check [<image>] [<ceph_version>]
+ceph orch upgrade check [<image>] [<ceph_version>]
 ```
 
 Pause an in-progress upgrade:
 
 ```bash
-ncn-s# ceph orch upgrade pause
+ceph orch upgrade pause
 ```
 
 Resume paused upgrade:
 
 ```bash
-ncn-s# ceph orch upgrade resume
+ceph orch upgrade resume
 ```
 
 Initiate upgrade:
 
 ```bash
-ncn-s# ceph orch upgrade start [<image>] [<ceph_version>]
+ceph orch upgrade start [<image>] [<ceph_version>]
 ```
 
 Check service versions vs available and target containers:
 
 ```bash
-ncn-s# ceph orch upgrade status
+ceph orch upgrade status
 ```
 
 Stop an in-progress upgrade:
 
 ```bash
-ncn-s# ceph orch upgrade stop
+ceph orch upgrade stop
 ```

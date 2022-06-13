@@ -26,9 +26,9 @@ The upgrader requires only two inputs:
 An example of this would be:
 
 ```bash
-ncn# ./sls_updater_csm_1.2.py \
-        --sls-input-file sls_input_file.json \
-        --bican-user-network-name CAN
+./sls_updater_csm_1.2.py \
+    --sls-input-file sls_input_file.json \
+    --bican-user-network-name CAN
 ```
 
 The above example will use *default values* for all other input values. A list of input parameters and default values can be found by running `./sls_updater_csm_1.2.py --help`.
@@ -37,16 +37,16 @@ Likely using default VLAN and Network values will not be what is desired: The CA
 In this case an example minimal usable input while using CAN, would be:
 
 ```bash
-ncn# ./sls_updater_csm_1.2.py \
-        --sls-input-file sls_input_file.json \
-        --bican-user-network-name CAN \
-        --customer-access-network <CAN VLAN ID> <CAN NETORK CIDR>
+./sls_updater_csm_1.2.py \
+    --sls-input-file sls_input_file.json \
+    --bican-user-network-name CAN \
+    --customer-access-network <CAN VLAN ID> <CAN NETORK CIDR>
 ```
 
 For CHN the analog minimal usable input would be:
 
 ```bash
-ncn# ./sls_updater_csm_1.2.py \
+./sls_updater_csm_1.2.py \
         --sls-input-file sls_input_file.json \
         --bican-user-network-name CHN \
         --customer-highspeed-network <CHN VLAN ID> <CHN NETWORK CIDR>
@@ -62,7 +62,7 @@ To allow some semblance of control over the need to preserve one or more IP addr
 `--preserve-existing-subnet-for-cmn` has two possible values:
 
 * `external-dns`: This is the IP address by which customer/site DNS lookups to system internal (K8S services) DNS happen. Often changing this **requires** operational change control
-  from the site. **NOTE:** `--preserve-existing-subnet-for-cmn external-dns` is the most frequent use of this command line flag.
+  from the site. **`NOTE`** `--preserve-existing-subnet-for-cmn external-dns` is the most frequent use of this command line flag.
 * `ncns`: During the migration of CAN to CMN, all system switches need to be added to a (new) `network_hardware` subnet inside the CMN Network. Without guidance, NCN IP addresses for
 the existing CAN (as it is migrated to CMN) will shift to allow room for the new `network_hardware` subnet. Using `--preserve-existing-subnet-for-cmn ncns` will prevent changes to CMN
 NCN IP addresses (managers, workers and storage only) during the upgrade process.
@@ -72,23 +72,26 @@ Note that `external-dns` preservation is mutually exclusive from `ncns`. This is
 A very common (and recommended) next step minimal command line is as follows for a system desiring the CHN with no change of the `external-dns` value:
 
 ```bash
-ncn# ./sls_updater_csm_1.2.py \
-        --sls-input-file sls_input_file.json \
-        --bican-user-network-name CHN \
-        --customer-highspeed-network <CHN VLAN ID> <CHN NETWORK CIDR> \
-        --preserve-existing-subnet-for-cmn external-dns
+./sls_updater_csm_1.2.py \
+    --sls-input-file sls_input_file.json \
+    --bican-user-network-name CHN \
+    --customer-highspeed-network <CHN VLAN ID> <CHN NETWORK CIDR> \
+    --preserve-existing-subnet-for-cmn external-dns
 ```
 
 This creates a new CHN and migrates the existing CAN to the new CMN, while maintaining the `external-dns` IP address in the process. Note that this command line would very likely change
 existing CAN/CMN addresses on manager, worker, and storage NCNs during the upgrade to CSM 1.2.
 
-**NOTE:** The output of the upgrader is to a file, not the screen. The logged output of the upgrader should be used as a guide and reviewed.
+**`NOTE`** The output of the upgrader is to a file, not the screen. The logged output of the upgrader should be used as a guide and reviewed.
 
 For example, using:
 
 ```bash
-ncn# ./sls_updater_csm_1.2.py --sls-input-file sls_input_file.json --bican-user-network-name CAN \
-        --customer-access-network 6 10.103.11.128/25 --preserve-existing-subnet-for-cmn external-dns
+./sls_updater_csm_1.2.py \
+    --sls-input-file sls_input_file.json \
+    --bican-user-network-name CAN \
+    --customer-access-network 6 10.103.11.128/25 \
+    --preserve-existing-subnet-for-cmn external-dns
 ```
 
 The log output for migration/converting the existing CAN to the new CMN looks like:
@@ -180,7 +183,7 @@ The focus of the process that follows will be on the CMN IP allocations. The sam
 2. An educated first pass is to run the updater while preserving the external-dns IP only and look for the CMN output:
 
     ```bash
-    ncn# ./sls_updater_csm_1.2.py \
+    ./sls_updater_csm_1.2.py \
             --sls-input-file sls_input_file.json \
             --bican-user-network-name CHN \
             --customer-highspeed-network 55 172.16.0.0/16 \
@@ -218,7 +221,7 @@ The focus of the process that follows will be on the CMN IP allocations. The sam
 5. The next run of the upgrader for the example looks like:
 
     ```bash
-    ncn# ./sls_updater_csm_1.2.py \
+    ./sls_updater_csm_1.2.py \
         --sls-input-file sls_input_file.json \
         --bican-user-network-name CHN \
         --customer-highspeed-network 55 172.16.0.0/16 \

@@ -16,38 +16,30 @@ This document shows how to view NTP status and configure NTP on an Aruba switch.
 - [Validate functionality](#validate-functionality)
 - [Expected results](#expected-results)
 
-<a name="specify-a-remote-ntp-server"></a>
-
 ## Specify a remote NTP server
 
 Specify a remote NTP server to use for time synchronization:
 
 ```console
-switch(config)# ntp server <FQDN|IP-ADDR>
+ntp server <FQDN|IP-ADDR>
 ```
-
-<a name="force-ntp-to-use-a-specific-vrf-for-requests"></a>
 
 ## Force NTP to use a specific VRF for requests
 
 ```console
-switch(config)# ntp vrf VRF
+ntp vrf VRF
 ```
-
-<a name="configure-the-system-timezone"></a>
 
 ## Configure the system timezone
 
 ```console
-switch(config)# clock timezone TIMEZONE
+clock timezone TIMEZONE
 ```
-
-<a name="validate-functionality"></a>
 
 ## Validate functionality
 
 ```console
-switch# show ntp status
+show ntp status
 ```
 
 Example output:
@@ -64,12 +56,10 @@ Time accuracy is within 0.994 seconds
 Reference time: Thu Jan 28 2016 0:57:06.647 (UTC)
 ```
 
-<a name="expected-results"></a>
-
 ## Expected results
 
 1. The NTP client can be configured.
 1. The functionality can be validated using the `show` command.
 1. The system time of the switch matches that of the NTP server.
 
-[Back to index](index.md).
+[Back to Index](../README.md)

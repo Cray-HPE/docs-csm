@@ -8,7 +8,7 @@ The kernel boot parameters obtained from the image can be overridden by specifyi
 
 The following is a simplified kernel boot parameter ordering:
 
-```
+```text
 <Image parameters> <Session template parameters>
 ```
 
@@ -16,6 +16,6 @@ If there are competing values, the ones earlier in the boot string are supersede
 
 The actual contents of the boot parameters are not as simple as previously described. For completeness, the following is the entire kernel boot parameter ordering:
 
-```
+```text
 <Image parameters> <Session template parameters> <rootfs parameters> <rootfs passthrough parameters> <BOS session id>
 ```

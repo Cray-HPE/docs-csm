@@ -8,17 +8,15 @@ Non-compute nodes boot two ways:
 ## Topics
 
 - [Determine the current boot order](#determine-the-current-boot-order)
-- [Reasons to change the boot order after CSM install](#reasons-to-change-the-bootorder)
+- [Reasons to change the boot order after CSM install](#reasons-to-change-the-boot-order-after-csm-install)
 - [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
 - [Set BMCs to DHCP](#set-bmcs-to-dhcp)
-- [Boot order overview](#set-boot-order)
-- [Setting boot order](#setting-order)
-- [Trimming boot order](#trimming_boot_order)
-- [Example boot orders](#examples)
+- [Boot order overview](#setting-boot-order)
+- [Setting boot order](#setting-boot-order)
+- [Trimming boot order](#trimming-boot-order)
+- [Example boot orders](#example-boot-orders)
 - [Reverting changes](#reverting-changes)
 - [Locating USB device](#locating-usb-device)
-
-<a name="determine-the-current-boot-order"></a>
 
 ## Determine the current boot order
 
@@ -26,8 +24,6 @@ Under normal operations, the NCNs use the following boot order:
 
 1. PXE (to ensure the NCN is booting with desired images and configuration)
 2. Disk (fallback in the event that PXE services are unavailable)
-
-<a name="reasons-to-change-the-bootorder"></a>
 
 ## Reasons to change the boot order after CSM install
 
@@ -39,17 +35,15 @@ It may be desirable to change the boot order under these circumstances:
 - Booting from a USB or remote ISO
 - Testing or deploying other customizations
 
-<a name="determine-if-ncns-booted-via-disk-or-pxe"></a>
-
 ## Determine if NCNs booted via disk or PXE
 
 There are two different methods for determining whether a management node is booted using disk or
 PXE. The method to use will vary depending on the system environment.
 
-1. Check kernel parameters.
+1. (`ncn#` or `pit#`) Check kernel parameters.
 
     ```bash
-    ncn# cat /proc/cmdline
+    cat /proc/cmdline
     ```
 
     If it starts with `kernel`, then the node network booted. If it starts with `BOOT_IMAGE=(`, then it disk booted.
@@ -57,13 +51,13 @@ PXE. The method to use will vary depending on the system environment.
 1. Check output from `efibootmgr`.
 
     ```bash
-    ncn# efibootmgr
+    efibootmgr
     ```
 
     The `BootCurrent` value should be matched to the list beneath to see if it lines up with a networking option or a `cray sd*)` option for disk boots.
 
     ```bash
-    ncn# efibootmgr
+    efibootmgr
     ```
 
     Example output:
@@ -96,8 +90,6 @@ PXE. The method to use will vary depending on the system environment.
     Boot0021* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
     ```
 
-<a name="set-bmcs-to-dhcp"></a>
-
 ## Set BMCs to DHCP
 
 When reinstalling a system, the BMCs for the NCNs may be set to static IP addressing. The `/var/lib/misc/dnsmasq.leases` file is checked when setting up the symlinks for the
@@ -106,33 +98,29 @@ artifacts each node needs to boot. So if the BMCs are set to static, those artif
 > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
 ```bash
-ncn# USERNAME=root
-ncn# read -s IPMI_PASSWORD
-ncn# export IPMI_PASSWORD
-ncn# for h in $( grep mgmt /etc/hosts | grep -v m001 | awk -F ',' '{print $2}' ); do
-         ipmitool -U $USERNAME -I lanplus -H $h -E lan set 1 ipsrc dhcp
-     done
+USERNAME=root
+read -s IPMI_PASSWORD
+export IPMI_PASSWORD
+for h in $( grep mgmt /etc/hosts | grep -v m001 | awk -F ',' '{print $2}' ); do
+    ipmitool -U $USERNAME -I lanplus -H $h -E lan set 1 ipsrc dhcp
+done
 ```
 
 Some BMCs need a cold reset in order to pick up this change fully:
 
 ```bash
-ncn# for h in $( grep mgmt /etc/hosts | grep -v m001 | awk -F ',' '{print $2}' ); do
-         ipmitool -U $USERNAME -I lanplus -H $h -E mc reset cold
-     done
+for h in $( grep mgmt /etc/hosts | grep -v m001 | awk -F ',' '{print $2}' ); do
+      ipmitool -U $USERNAME -I lanplus -H $h -E mc reset cold
+done
 ```
-
-<a name="set-boot-order"></a>
 
 ## Boot order overview
 
 - `ipmitool` can set and edit boot order; it works better for some vendors based on their BMC implementation
 - `efibootmgr` speaks directly to the node's UEFI; it can only be ignored by new BIOS activity
 
-> **NOTE** `cloud-init` will set boot order when it runs, but this does not always work with certain hardware vendors. An administrator can invoke the `cloud-init` script at
+> **`NOTE`** `cloud-init` will set boot order when it runs, but this does not always work with certain hardware vendors. An administrator can invoke the `cloud-init` script at
 > `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN. Find the script [here, on GitHub](https://github.com/Cray-HPE/node-image-build/blob/lts/csm-1.0/boxes/ncn-common/files/scripts/metal/set-efi-bbs.sh).
-
-<a name="setting-order"></a>
 
 ## Setting boot order
 
@@ -149,44 +137,42 @@ The commands are the same for all hardware vendors, except where noted.
     - Gigabyte Technology
 
         ```bash
-        ncn/pit# efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
+        efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
         ```
 
     - Hewlett-Packard Enterprise
 
         ```bash
-        ncn/pit# efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
+        efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
         ```
 
     - Intel Corporation
 
         ```bash
-        ncn/pit# efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
+        efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
         ```
 
 1. Create a list of the Cray disk boot devices.
 
     ```bash
-    ncn/pit# efibootmgr | grep -i cray | tee /tmp/bbs2
+    efibootmgr | grep -i cray | tee /tmp/bbs2
     ```
 
 1. Set the boot order to first PXE boot, with disk boot as the fallback option.
 
     ```bash
-    ncn/pit# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
+    efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
     ```
 
 1. Set all of the desired boot options to be active.
 
     ```bash
-    ncn/pit# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
+    cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
     ```
 
 After following the steps above on a given NCN, that NCN will use the desired Shasta boot order.
 
 This is the end of the `Setting boot order` procedure.
-
-<a name="trimming_boot_order"></a>
 
 ## Trimming boot order
 
@@ -197,41 +183,40 @@ vendor-specific entries beyond disks and NICs to cover in this section (e.g. BIO
 
 In this case, the instructions are the same regardless of node type (management, storage, or worker):
 
-1. Make lists of the unwanted boot entries.
+1. (`ncn#` or `pit#`) Make lists of the unwanted boot entries.
 
     - Gigabyte Technology
 
         ```bash
-        ncn/pit# efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection|nvme|sata)' | tee /tmp/rbbs1
-        ncn/pit# efibootmgr | grep -iP '(pxe ipv?4.*)' | grep -i connection | tee /tmp/rbbs2
+        efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection|nvme|sata)' | tee /tmp/rbbs1
+        efibootmgr | grep -iP '(pxe ipv?4.*)' | grep -i connection | tee /tmp/rbbs2
         ```
 
     - Hewlett-Packard Enterprise
-        > **NOTE** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippets](../install/switch_pxe_boot_from_onboard_nic_to_pcie.md#high-speed-network).
+
+        > **`NOTE`** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippets](../install/switch_pxe_boot_from_onboard_nic_to_pcie.md#high-speed-network).
 
         ```bash
-        ncn/pit# efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1
-        ncn/pit# efibootmgr | grep -iP '(sata|nvme)' | tee /tmp/rbbs2
+        efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1
+        efibootmgr | grep -iP '(sata|nvme)' | tee /tmp/rbbs2
         ```
 
     - Intel Corporation
 
         ```bash
-        ncn/pit# efibootmgr | grep -vi 'ipv4' | grep -iP '(sata|nvme|uefi)' | tee /tmp/rbbs1
-        ncn/pit# efibootmgr | grep -i baseboard | tee /tmp/rbbs2
+        efibootmgr | grep -vi 'ipv4' | grep -iP '(sata|nvme|uefi)' | tee /tmp/rbbs1
+        efibootmgr | grep -i baseboard | tee /tmp/rbbs2
         ```
 
-1. Remove them.
+1. (`ncn#` or `pit#`) Remove them.
 
     ```bash
-    ncn/pit# cat /tmp/rbbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -t -i efibootmgr -b {} -B
+    cat /tmp/rbbs* | awk '!x[$0]++' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -t -i efibootmgr -b {} -B
     ```
 
 The boot menu should be trimmed down to contain only relevant entries.
 
 This is the end of the `Trimming boot order` procedure.
-
-<a name="examples"></a>
 
 ## Example boot orders
 
@@ -289,46 +274,42 @@ Each section shows example output of the `efibootmgr` command.
     Boot000D* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
     ```
 
-<a name="reverting-changes"></a>
-
 ## Reverting changes
 
 **This procedure is only needed if wishing to revert boot order changes.**
 
 Reset the BIOS. Refer to vendor documentation for resetting the BIOS or attempt to reset the BIOS with `ipmitool`
 
-> **NOTE** When using `ipmitool` against a machine remotely, it requires more arguments:
+> **`NOTE`** When using `ipmitool` against a machine remotely, it requires more arguments:
 >
 > `read -s` is used to prevent the password from being written to the screen or the shell history.
 >
 > ```bash
-> linux# USERNAME=root
-> linux# read -s IPMI_PASSWORD
-> linux# export IPMI_PASSWORD
-> linux# ipmitool -I lanplus -U $USERNAME -E -H <bmc-hostname>
+> USERNAME=root
+> read -s IPMI_PASSWORD
+> export IPMI_PASSWORD
+> ipmitool -I lanplus -U $USERNAME -E -H <bmc-hostname>
 > ```
 
-1. Reset BIOS with `ipmitool`
+1. (`ncn#` or `pit#`) Reset BIOS with `ipmitool`
 
     ```bash
-    ncn/pit# ipmitool chassis bootdev none options=clear-cmos
+    ipmitool chassis bootdev none options=clear-cmos
     ```
 
 1. Set next boot with `ipmitool`
 
     ```bash
-    ncn/pit# ipmitool chassis bootdev pxe options=efiboot,persistent
+    ipmitool chassis bootdev pxe options=efiboot,persistent
     ```
 
 1. Boot to BIOS for checkout of boot devices
 
     ```bash
-    ncn/pit# ipmitool chassis bootdev bios options=efiboot
+    ipmitool chassis bootdev bios options=efiboot
     ```
 
 This is the end of the `Reverting changes` procedure.
-
-<a name="locating-usb-device"></a>
 
 ## Locating USB device
 
@@ -339,10 +320,10 @@ Some nodes very obviously display which device is the USB, other nodes (such as 
 Parsing the output of `efibootmgr` can be helpful in determining which device is a USB device. Tools such as `lsblk`, `blkid`, or kernel (`/proc`) may
 also be of use. As an example, one can sometimes match up `ls -l /dev/disk/by-partuuid` with `efibootmgr -v`.
 
-1. Display the current UEFI boot selections.
+1. (`ncn#` or `pit#`) Display the current UEFI boot selections.
 
     ```bash
-    ncn/pit# efibootmgr
+    efibootmgr
     ```
 
     Example output:
@@ -377,25 +358,30 @@ also be of use. As an example, one can sometimes match up `ls -l /dev/disk/by-pa
     Boot1001* Enter Setup
     ```
 
-1. Set next boot entry.
+1. (`ncn#` or `pit#`) Set next boot entry.
 
     In the example above, the device is `0014` or `0015`. An option is to guess it is the first one, and can correct this on-the-fly in POST.
     Notice the lack of `Boot` in the ID number given; If wanting to choose `Boot0014` in the output above, pass `0014` to `efibootmgr`:
 
     ```bash
-    ncn/pit# efibootmgr -n 0014
+    efibootmgr -n 0014
     ```
 
-1. Verify the `BootNext` device is what was selected:
+1. (`ncn#` or `pit#`) Verify the `BootNext` device is what was selected:
 
     ```bash
-    ncn/pit# efibootmgr | grep -i bootnext
+    efibootmgr | grep -i bootnext
+    ```
+   
+    Example outptut:
+
+    ```bash
     BootNext: 0014
     ```
 
 1. Now the UEFI Samsung Flash Drive will boot next.
 
-    > **Note** There are duplicates in the list. During boot, the EFI boot manager will select the first one. If the first one is false, false entries can be deleted with
+    > **`NOTE`** There are duplicates in the list. During boot, the EFI boot manager will select the first one. If the first one is false, false entries can be deleted with
     > `efibootmgr -b 0014 -d`.
 
 This is the end of the `Locating USB device` procedure.

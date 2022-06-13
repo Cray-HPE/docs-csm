@@ -88,7 +88,6 @@ Access to the Keycloak UI is needed.
 
     3.  Click **Save**.
 
-
 Here are a couple of things to try after this is set up to verify that it is working:
 
 -   Point a browser at the following URL:
@@ -104,7 +103,7 @@ Here are a couple of things to try after this is set up to verify that it is wor
     Run the following cURL command from `ncn-w001`. Replace USER with a user in Keycloak, PWD\_NAME with the user's password, RSA\_USER with the user in RSA, and TOKEN\_CODE with the token code:
 
     ```screen
-    ncn-w001# curl -i -d grant_type=password -d client_id=shasta -d username=USER \
+    curl -i -d grant_type=password -d client_id=shasta -d username=USER \
     -d password=PWD_NAME -d rsa_username=RSA_USER -d rsa_otp=TOKEN_CODE \
     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token
     ```

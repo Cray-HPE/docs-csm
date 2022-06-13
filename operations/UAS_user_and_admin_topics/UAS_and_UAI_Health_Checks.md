@@ -19,7 +19,7 @@ There is a procedure for extracting the OAUTH token for this service account and
 The UAS / UAI validation procedure runs as a post-installation procedure and requires an actual user with Linux credentials, not this service account. Prior to running any of the steps below you must unset the `CRAY_CREDENTIALS` environment variable.
 
 ```bash
-ncn-m002# unset CRAY_CREDENTIALS
+unset CRAY_CREDENTIALS
 ```
 
 ## Initialize the CLI Configuration
@@ -30,7 +30,7 @@ This example uses the `vers` username. In practice, `vers` and the response to t
 To check whether the CLI needs initialization, run the following command.
 
 ```bash
-ncn-m002# cray config describe
+cray config describe
 ```
 
 If the output appears as follows, the CLI requires initialization.
@@ -47,7 +47,7 @@ If vers is the correct user, proceed to the validation procedure on that node.
 If the CLI must be initialized again, use the following command and include the correct username, password, and the password response.
 
 ```bash
-ncn-m002# cray init
+cray init
 Cray Hostname: api-gw-service-nmn.local
 Username: vers
 Password:
@@ -61,7 +61,7 @@ Initialization complete.
 If the CLI is initialized but authorized for a user different, run the following command and substitute the correct username and password.
 
 ```bash
-ncn-m002# cray auth login
+cray auth login
 Username: vers
 Password:
 Success!
@@ -88,7 +88,7 @@ This procedure and the following procedures run on separate nodes on the system 
 Ensure this runs on the LiveCD node and that the CLI is authorized for the user.
 
 ```bash
-ncn-m002# cray uas mgr-info list
+cray uas mgr-info list
 ```
 
 Example output:
@@ -99,7 +99,7 @@ version = "1.11.5"
 ```
 
 ```bash
-ncn-m001-pit# cray uas list
+ncn-m001-cray uas list
 ```
 
 Example output:
@@ -114,7 +114,7 @@ That is acceptable from a validation standpoint.
 To verify that the pre-made UAI images are registered with UAS, run the following command.
 
 ```bash
-ncn-m002# cray uas images list
+cray uas images list
 ```
 
 Example output:
@@ -138,7 +138,7 @@ The following are needed for this procedure:
 1. Verify that the user account can create a UAI.
 
     ```bash
-    ncn-w003# cray uas create --publickey ~/.ssh/id_rsa.pub
+    cray uas create --publickey ~/.ssh/id_rsa.pub
     ```
 
     Example output:
@@ -163,7 +163,7 @@ The following are needed for this procedure:
     The following can be repeated as many times as desired. If the results appear like the following, the UAI is ready for use.
 
     ```bash
-    ncn-w003# cray uas list
+    cray uas list
     ```
 
     Example output:
@@ -186,7 +186,7 @@ The following are needed for this procedure:
     1. SSH to the UAI.
 
         ```bash
-        ncn-w003# ssh vers@10.16.234.10
+        ssh vers@10.16.234.10
         ```
 
         Example output:
@@ -227,7 +227,7 @@ The following are needed for this procedure:
 1. Clean up the UAI and note that the UAI name used is the same as the name in the output from `cray uas create` above.
 
     ```bash
-    ncn-w003# cray uas delete --uai-list uai-vers-a00fb46b
+    cray uas delete --uai-list uai-vers-a00fb46b
     ```
 
     In this example, `results = [ "Successfully deleted uai-vers-a00fb46b",]` will be returned if successful.
@@ -240,7 +240,7 @@ If the user is not logged in as a valid Keycloak user or is inadvertently using 
 the output of running the `cray uas list command` will produce output like the following.
 
 ```bash
-ncn-w003# cray uas list
+cray uas list
 Usage: cray uas list [OPTIONS]
 Try 'cray uas list --help' for help.
 
@@ -254,7 +254,7 @@ Fix this by logging in as a "real user" \(a user with Linux credentials\) and en
 If the output of the cray uas list command appears similar to the following, the wrong hostname to reach the API gateway may be in use. In that case, run the CLI initialization steps again.
 
 ```bash
-ncn-w003# cray uas list
+cray uas list
 Usage: cray uas list [OPTIONS]
 Try 'cray uas list --help' for help.
 
@@ -268,14 +268,14 @@ There are typically two UAS pods. View logs from both pods to identify the speci
 The following shows an example of viewing UAS logs \(the example shows only one UAS manage, normally there would be two\).
 
 ```bash
-ncn-w003# kubectl get po -n services | grep uas-mgr | grep -v etcd
+kubectl get po -n services | grep uas-mgr | grep -v etcd
 ```
 
 Example output:
 
 ```bash
 cray-uas-mgr-6bbd584ccb-zg8vx            2/2     Running            0          12d
-ncn-w003# kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v 'GET ' | tail -25
+kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v 'GET ' | tail -25
 2021-02-08 15:32:41,211 - uas_mgr - INFO - getting deployment uai-vers-87a0ff6e in namespace user
 2021-02-08 15:32:41,225 - uas_mgr - INFO - creating deployment uai-vers-87a0ff6e in namespace user
 2021-02-08 15:32:41,241 - uas_mgr - INFO - creating the UAI service uai-vers-87a0ff6e-ssh
@@ -309,7 +309,7 @@ If output is similar to the following, the pre-made End-User UAI image is not in
 Locate and the image and push / import it to the registry.
 
 ```bash
-ncn-w003# cray uas list
+cray uas list
 ```
 
 Example output:
@@ -336,18 +336,18 @@ UAIs run in the user Kubernetes namespace and are pods that can be examined usin
 Run the following command to locate the pod.
 
 ```bash
-ncn-w003# kubectl get po -n user | grep <uai-name>
+kubectl get po -n user | grep <uai-name>
 ```
 
 Run the following command to investigate the problem.
 
 ```bash
-ncn-w003# kubectl describe -n user <pod-name>
+kubectl describe -n user <pod-name>
 ```
 
 If volumes are missing, they will be in the `Events:section` of the output. Other problems may show up there as well.
 The names of the missing volumes or other issues should indicate what needs to be fixed to enable the UAI.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Troubleshoot UAS Issues](Troubleshoot_UAS_Issues.md)

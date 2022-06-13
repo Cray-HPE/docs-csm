@@ -10,7 +10,7 @@ New admin and user accounts are authenticated with Keycloak. Authenticated accou
 -   This procedure assumes that the password for the Keycloak `admin` account is known. The Keycloak password is set during the software installation process. The password can be obtained using the following command:
 
     ```bash
-    ncn-w001# kubectl get secret -n services keycloak-master-admin-auth \
+    kubectl get secret -n services keycloak-master-admin-auth \
     --template={{.data.password}} | base64 --decode
     ```
 
@@ -68,7 +68,7 @@ New admin and user accounts are authenticated with Keycloak. Authenticated accou
 12. Verify that the new local Keycloak account can authenticate to the Cray CLI.
 
     ```bash
-    ncn-w001# cray auth login --username USERNAME
+    cray auth login --username USERNAME
     Password:
     Success!
     ```

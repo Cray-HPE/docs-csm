@@ -3,7 +3,7 @@
 If a user attempts to create a UAI in the legacy mode and cannot create the UAI at all, a good place to look is at volumes. Duplicate `mount_path` specifications in the list of volumes in a UAI will cause a failure that looks like this:
 
 ```bash
-ncn-m001-pit# cray uas create --publickey ~/.ssh/id_rsa.pub
+ncn-m001-cray uas create --publickey ~/.ssh/id_rsa.pub
 ```
 
 Example output:
@@ -18,7 +18,7 @@ Error: Unprocessable Entity: Failed to create deployment uai-erl-543cdbbc: Unpro
 Currently, there is not a lot of UAS log information available from this error (this is a known problem), but a likely cause is duplicate `mount_path` specifications in volumes. Looking through the configured volumes for duplicates can be helpful.
 
 ```bash
-ncn-m001-pit# cray uas admin config volumes list | grep -e mount_path -e volumename -e volume_id
+ncn-m001-cray uas admin config volumes list | grep -e mount_path -e volumename -e volume_id
 ```
 
 Example output:
@@ -59,7 +59,7 @@ volumename = "optforge"
 Looking through this list, the mount path for the volume named `delete-me` and the mount path for the volume named `optforge` are the same. The obvious candidate for deletion in this case is `delete-me`, so it can be deleted.
 
 ```bash
-ncn-m001-pit# cray uas admin config volumes delete 7b924270-c9e9-4b0e-85f5-5bc62c02457e
+ncn-m001-cray uas admin config volumes delete 7b924270-c9e9-4b0e-85f5-5bc62c02457e
 ```
 
 Example output:
@@ -74,6 +74,6 @@ path = "/tmp/foo"
 type = "DirectoryOrCreate"
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Troubleshoot Missing or Incorrect UAI Images](Troubleshoot_Missing_or_Incorrect_UAI_Images.md)

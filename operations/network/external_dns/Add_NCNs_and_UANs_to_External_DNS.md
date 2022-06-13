@@ -13,7 +13,7 @@ This procedure requires administrative privileges.
 1.  View the existing cray-externaldns-coredns ConfigMap.
 
     ```bash
-    ncn-w001# kubectl -n services get configmap cray-externaldns-coredns -o jsonpath='{.data}'
+    kubectl -n services get configmap cray-externaldns-coredns -o jsonpath='{.data}'
     ```
 
     Example output:
@@ -38,12 +38,12 @@ This procedure requires administrative privileges.
 2.  Edit the cray-externaldns-coredns ConfigMap to add support for a static hosts file.
 
     ```bash
-    ncn-w001# kubectl -n services edit configmaps cray-externaldns-coredns
+    kubectl -n services edit configmaps cray-externaldns-coredns
     ```
 
     Add a "hosts" file configuration \(analogous to /etc/hosts\) and update the Corefile configuration so CoreDNS uses it. For example:
 
-    ```bash
+    ```yaml
     data:
       Corefile: |-
         .:53 {
@@ -71,7 +71,7 @@ This procedure requires administrative privileges.
 3.  Restart the CoreDNS pods once the ConfigMap is updated.
 
     ```bash
-    ncn-w001# kubectl -n services rollout status deployment cray-externaldns-coredns
+    kubectl -n services rollout status deployment cray-externaldns-coredns
     ```
 
     Example output:

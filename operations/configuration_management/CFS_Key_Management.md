@@ -9,7 +9,7 @@ If Ansible is unable to connect with its target and fails with an `Unreachable -
 Every booted node should be running a copy of `cfs-state-reporter`. This service is responsible for pulling down the public key. To check the status of this service, ssh to the node that CFS cannot communicate with, and run `systemctl status cfs-state-reporter`.
 
 ```
-ncn-m001# systemctl status cfs-state-reporter
+systemctl status cfs-state-reporter
 ```
 
 `cfs-state-reporter` should be complete, but report success. Any other state

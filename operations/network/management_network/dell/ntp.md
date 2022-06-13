@@ -1,11 +1,15 @@
 # Network Time Protocol (NTP) Client
 
+<<<<<<< HEAD
 Summary of NTP from [RFC-1305 Network Time Protocol (Version 3)](https://tools.ietf.org/html/rfc1305):
 
 > NTP is used to synchronize timekeeping among a set of distributed time servers and clients
 > ...
 > It provides the protocol mechanisms to synchronize time in principle to precisions in the order of nanoseconds while preserving a non-ambiguous date
 > well into the next century.
+=======
+"NTP is used to synchronize timekeeping among a set of distributed time servers and clients [...] It provides the protocol mechanisms to synchronize time in principle to precisions in the order of nanoseconds while preserving a non-ambiguous date well into the next century." –rfc1305
+>>>>>>> MTL-1695
 
 The Network Time Protocol (NTP) client is essential for syncing time on various clients in the system.
 This document shows how to view NTP status and configure NTP on a Dell switch.
@@ -15,12 +19,10 @@ This document shows how to view NTP status and configure NTP on a Dell switch.
 - [Configure source for NTP](#configure-source-for-ntp)
 - [Expected results](#expected-results)
 
-<a name="show-ntp-status"></a>
-
 ## Show NTP status
 
 ```console
-OS10(config)# do show ntp status
+do show ntp status
 ```
 
 Example output:
@@ -42,25 +44,19 @@ broadcastdelay:       0.000000 s
 authdelay:            0.000000 s
 ```
 
-<a name="specify-a-remote-ntp-server"></a>
-
 ## Specify a remote NTP server
 
 Specify a remote NTP server to use for time synchronization:
 
 ```console
-switch(config)# ntp server <FQDN|IP-ADDR>
+ntp server <FQDN|IP-ADDR>
 ```
-
-<a name="configure-source-for-ntp"></a>
 
 ## Configure source for NTP
 
 ```console
-switch(config)# ntp source interface
+ntp source interface
 ```
-
-<a name="expected-results"></a>
 
 ## Expected results
 
@@ -68,4 +64,4 @@ switch(config)# ntp source interface
 1. The functionality can be validated using the `show` command.
 1. The system time of the switch matches that of the NTP server.
 
-[Back to index](index.md).
+[Back to Index](../README.md)

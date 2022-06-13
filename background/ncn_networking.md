@@ -11,7 +11,6 @@ the network interfaces for management nodes.
 
 ## Details
 
-<a name="ncn-network-interfaces"></a>
 ### NCN Network Interfaces
 
 The following table includes information about the different NCN network interfaces:
@@ -36,10 +35,9 @@ The following table includes information about the different NCN network interfa
 These interfaces can be observed on a live NCN with the following command.
 
    ```bash
-   ncn# ip link
+   ip link
    ```
 
-<a name="device-naming"></a>
 #### Device Naming
 
 The underlying naming relies on [BIOSDEVNAME](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname), this helps conform device naming into a smaller
@@ -55,8 +53,6 @@ the PCI busses and sort network interfaces into 3 buckets:
    * `lan`: external/site-connection
 
 The source code for the rule generation is in [metal-ipxe][1], but for technical information on the PCI configuration/reading please read on.
-
-<a name="vendor-and-bus-id-identification"></a>
 
 ### Vendor and Bus ID Identification
 

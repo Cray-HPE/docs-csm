@@ -16,7 +16,7 @@ This procedure requires administrative privileges.
     You should check BOTH spine switches during this process.
 
     ```bash
-    ncn-m001# ssh admin@sw-spine-001.hmn
+    ssh admin@sw-spine-001.hmn
     ```
 
 2.  Check the number of routes that the BGP Router is accepting in the peering session.
@@ -174,7 +174,7 @@ This procedure requires administrative privileges.
         To check the status for Aruba:
 
         ```bash
-        sw-spine-001# show bgp all-vrf all summary
+        show bgp all-vrf all summary
         ```
 
         Example output:
@@ -225,7 +225,7 @@ This procedure requires administrative privileges.
         To check the routes for Aruba:
 
         ```bash
-        sw-spine-001# show ip route bgp all-vrfs
+        show ip route bgp all-vrfs
         ```
 
         Example output:

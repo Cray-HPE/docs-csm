@@ -43,7 +43,6 @@ State descriptions:
 
     Both `On` and `Ready` to provide its expected services. For example, used for jobs.
 
-
 Flag descriptions:
 
 - **`OK`**

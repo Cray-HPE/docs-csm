@@ -1,6 +1,6 @@
 # Recipes
 
-> **NOTE:** This file contains a collection of various FAS recipes for performing updates.
+> **`NOTE`** This file contains a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS_Use_Cases](FAS_Use_Cases.md)
 
 The following example JSON files are useful to reference when updating specific hardware components. In all of these examples, the `overrideDryrun` field will be set to `false`; set them to `true` to perform a live update.
@@ -10,11 +10,7 @@ When updating an entire system, walk down the device hierarchy component type by
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
 
 ---
-<a name="manufacturer-cray"></a>
-
 ## Manufacturer : Cray
-
-<a name="cray-device-type-chassisbmc-target-bmc"></a>
 
 ### Device Type: ChassisBMC | Target: BMC
 
@@ -49,8 +45,6 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 }
 ```
 
-<a name="cray-device-type-nodebmc-target-bmc"></a>
-
 ### Device Type: NodeBMC | Target: BMC
 
 ```json
@@ -79,8 +73,6 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
   }
 }
 ```
-
-<a name="cray-device-type-nodebmc-target-nodebios"></a>
 
 ### Device Type: NodeBMC | Target: NodeBIOS
 
@@ -115,9 +107,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 }
 ```
 
->**NOTE:** If this update does not work as expected, follow the [Compute Node BIOS Workaround for HPE CRAY EX425](FAS_Use_Cases.md#cn-workaround) procedure.
-
-<a name="cray-device-type-nodebmc-target-redstone-fpga"></a>
+>**`NOTE`** If this update does not work as expected, follow the [Compute Node BIOS Workaround for HPE CRAY EX425](FAS_Use_Cases.md#compute-node-bios-workaround-for-hpe-cray-ex425) procedure.
 
 ### Device Type: NodeBMC | Target: Redstone FPGA
 
@@ -154,11 +144,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ---
 
-<a name="manufacturer-hpe"></a>
-
 ## Manufacturer: HPE
-
-<a name="hpe-device-type-nodebmc-target--aka-bmc"></a>
 
 ### Device Type: NodeBMC | Target: `iLO 5` aka BMC
 
@@ -188,13 +174,11 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 }
 ```
 
-<a name="hpe-device-type-nodebmc-target--aka-bios"></a>
-
 ### Device Type: NodeBMC | Target: `System ROM` aka BIOS
 
 >**IMPORTANT:**
 >* If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
->See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#configure-dns-and-ntp-on-each-bmc)
+>See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc)
 >* Node should be powered on for System ROM update and will need to be rebooted to use the updated BIOS.
 
 ```json
@@ -223,16 +207,11 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 }
 ```
 
->**NOTE:** Update of System ROM may report as an error when it actually succeeded because of an incorrect string in the image metadata in FAS. Manually check the update version to get around this error.
-
+>**`NOTE`** Update of System ROM may report as an error when it actually succeeded because of an incorrect string in the image metadata in FAS. Manually check the update version to get around this error.
 
 ---
 
-<a name="manufacturer-gigabyte"></a>
-
 ## Manufacturer: Gigabyte
-
-<a name="gb-device-type-nodebmc-target-bmc"></a>
 
 ### Device Type: NodeBMC | Target: BMC
 
@@ -263,7 +242,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 }
 ```
 
-> **NOTE:** The timeLimit is `4000` because the Gigabytes can take a lot longer to update.
+> **`NOTE`** The timeLimit is `4000` because the Gigabytes can take a lot longer to update.
 
 #### Troubleshooting
 
@@ -279,10 +258,8 @@ It most likely will complete the update successfully.
 To resolve this issue, do either of the following actions:
 * Check the update status by looking at the Redfish `FirmwareInventory` (`/redfish/v1/UpdateService/FirmwareInventory/BMC`).
 * Rerun FAS to verify that the BMC firmware was updated.
-  
-Make sure to wait for the current firmware to be updated before starting a new FAS action on the same node.
 
-<a name="gb-device-type-nodebmc-target-bios"></a>
+Make sure to wait for the current firmware to be updated before starting a new FAS action on the same node.
 
 ### Device Type: NodeBMC | Target: BIOS
 
@@ -315,4 +292,4 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
 ## Update Non-Compute Nodes (NCNs)
 
-See [Uploading BIOS and BMC Firmware for NCNs in FAS Use Cases](./FAS_Use_Cases.md#ncn-bios-bmc).
+See [Uploading BIOS and BMC Firmware for NCNs in FAS Use Cases](./FAS_Use_Cases.md#update-non-compute-node-ncn-bios-and-bmc-firmware).

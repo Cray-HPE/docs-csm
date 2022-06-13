@@ -13,7 +13,7 @@ switch(config)# snmp-server user admin v3 enable
 Show Commands to Validate Functionality
 
 ```
-switch# show snmp users
+show snmp users
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

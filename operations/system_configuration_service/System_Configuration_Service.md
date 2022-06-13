@@ -20,7 +20,7 @@ The specified targets can be BMCs, controller component names (xnames), or HSM g
 
 To view the current build version of the scsd service:
 
-```
-ncn-m001# cray scsd version list
+```bash
+cray scsd version list
 ```
 

@@ -1058,13 +1058,12 @@ https-server vrf default
 https-server vrf mgmt
 ```
 
-
 ##### Below is the desired state of a system running this configuration.
 - two ospf neighbors on the Customer vrf.
 - two default routes.
 
 ```
-sw-spine-001# show ip ospf neighbors vrf Customer
+show ip ospf neighbors vrf Customer
 VRF : Customer                         Process : 2
 ===================================================
 
@@ -1077,7 +1076,7 @@ Neighbor ID      Priority  State             Nbr Address       Interface
 10.103.15.234    n/a       FULL              192.168.80.0       1/1/29
 ```
 ```
-sw-spine-001# show ip route vrf Customer
+show ip route vrf Customer
 
 Displaying ipv4 routes selected for forwarding
 
@@ -1096,7 +1095,7 @@ Prefix              Nexthop          Interface     VRF(egress)       Origin/   D
                     192.168.80.4     1/1/28        -                           [110/1]      00m:01w:01d
 ```
 ```
-sw-spine-002# show ip ospf neighbors vrf Customer
+show ip ospf neighbors vrf Customer
 VRF : Customer                         Process : 2
 ===================================================
 
@@ -1109,7 +1108,7 @@ Neighbor ID      Priority  State             Nbr Address       Interface
 10.103.15.234    n/a       FULL              192.168.80.2       1/1/29
 ```
 ```
-sw-spine-002# show ip route vrf Customer
+show ip route vrf Customer
 
 Displaying ipv4 routes selected for forwarding
 

@@ -1,16 +1,11 @@
-# Backing up switch configuration
+# Back Up a Switch Configuration
 
+The following command copies the running configuration or the startup configuration to a remote location as a file.
 
-Copies the running configuration or the startup configuration to a remote location as a file.
-
-Relevant configuration
-
-
-```
-switch# copy running-configuration {config://filepath | home://filepath |
+```console
+copy running-configuration {config://filepath | home://filepath |
 ftp://userid:passwd@hostip/filepath | scp://userid:passwd@hostip/filepath |
 sftp://userid:passwd@hostip/filepath | tftp://hostip/filepath}
 ```
 
-[Back to Index](../index.md)
-
+[Back to Index](../README.md)

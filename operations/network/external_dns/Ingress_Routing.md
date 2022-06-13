@@ -5,7 +5,7 @@ Ingress routing to services via Istio's ingress gateway is configured by Virtual
 For example, the configuration below controls the ingress routing for prometheus.cmn.SYSTEM_DOMAIN_NAME:
 
 ```bash
-ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus
+kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus
 ```
 
 Example output:
@@ -16,12 +16,12 @@ cray-sysmgmt-health-prometheus   [services/services-gateway]   [prometheus.cmn.S
 ```
 
 ```
-ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus -o yaml
+kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus -o yaml
 ```
 
 Example output:
 
-```
+```yaml
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:

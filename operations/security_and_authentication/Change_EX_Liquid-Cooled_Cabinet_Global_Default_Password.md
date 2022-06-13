@@ -12,29 +12,29 @@ This procedure changes the global default `root` credential on HPE Cray EX liqui
 1. If necessary, shut down compute nodes in each cabinet. Refer to [Shut Down and Power Off Compute and User Access Nodes](../power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
 
    ```screen
-   ncn-m001# sat bootsys shutdown --stage bos-operations --bos-templates COS_SESSION_TEMPLATE
+   sat bootsys shutdown --stage bos-operations --bos-templates COS_SESSION_TEMPLATE
    ```
 
 2. Disable the `hms-discovery` Kubernetes cron job.
 
    ```screen
-    ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
+    kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
     ```
 
 3. Power off all compute slots in the cabinets the passwords are to be changed on.
 
-   **Note**: If a chassis is not fully populated, specify each slot individually.
+  > **`NOTE`**: If a chassis is not fully populated, specify each slot individually.
 
    Example showing fully populated cabinets 1000-1003:
 
    ```screen
-   ncn-m001# cray capmc xname_off create --xnames x[1000-1003]c[0-7]s[0-7] --format json
+   cray capmc xname_off create --xnames x[1000-1003]c[0-7]s[0-7] --format json
    ```
 
    Check the power status:
 
    ```screen
-   ncn-m001# cray capmc get_xname_status create --xnames x[1000-1003]c[0-7]s[0-7] --format json
+   cray capmc get_xname_status create --xnames x[1000-1003]c[0-7]s[0-7] --format json
    ```
 
    Continue when all compute slots are `Off`.

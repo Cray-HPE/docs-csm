@@ -35,13 +35,13 @@ To create a volume, follow this procedure.
     Note difference between the UAS name for the volume type and the Kubernetes name for that type. Kubernetes uses `camelCase` for its type names, while UAS uses `lower_case_with_underscores`.
 
     ```bash
-    ncn-m001-pit# cray uas admin config volumes create --mount-path <path in UAI> --volume-description '{"<volume-kind>": <k8s-volume-description>}' --volumename '<string>'
+    ncn-m001-cray uas admin config volumes create --mount-path <path in UAI> --volume-description '{"<volume-kind>": <k8s-volume-description>}' --volumename '<string>'
     ```
 
     For example:
 
     ```bash
-    ncn-m001-pit# cray uas admin config volumes create --mount-path /host_files/host_passwd --volume-description '{"host_path": {"path": "/etc/passwd", "type": "FileOrCreate"}}' --volumename 'my-volume-with-passwd-from-the-host-node'
+    ncn-m001-cray uas admin config volumes create --mount-path /host_files/host_passwd --volume-description '{"host_path": {"path": "/etc/passwd", "type": "FileOrCreate"}}' --volumename 'my-volume-with-passwd-from-the-host-node'
     ```
 
     The example above will create a directory `/host_files` in every UAI configured to use this volume and mount the file `/etc/passwd` from the host node into that directory as a file named `host_passwd`.
@@ -51,6 +51,6 @@ To create a volume, follow this procedure.
 
     The new volume appears in the output of the `cray uas admin config volumes list` command.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Obtain Configuration of a UAS Volume](Obtain_Configuration_of_a_UAS_Volume.md)

@@ -15,7 +15,10 @@ The tool uses the `cray` CLI (`fas`, `artifacts`) and `cray-tftp` to download th
 1. Execute the `cray-upload-recovery-images` script.
 
   ```bash
-  ncn# cray-upload-recovery-images
+  cray-upload-recovery-images
+  ```
+
+  ```text
   Attempting to retrieve ChassisBMC .itb file
   s3:/fw-update/d7bb5be9eecc11eab18c26c5771395a4/cc-1.3.10.itb
   d7bb5be9eecc11eab18c26c5771395a4/cc-1.3.10.itb

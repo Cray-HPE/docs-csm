@@ -30,9 +30,12 @@ is being monitored by conman for console logs.
 
    This will return an array of application nodes currently known in SLS:
    ```json
-   ncn-w001# curl -s -k -H "Authorization: Bearer ${TOKEN}" \
+   curl -s -k -H "Authorization: Bearer ${TOKEN}" \
    "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Application" \
    | jq
+   ```
+
+   ```json
    [
      {
        "Parent": "x3000c0s19b0",
@@ -74,7 +77,6 @@ is being monitored by conman for console logs.
    }'
    ```
 
-
    Using the response from the previous step, we can build the following command. The hostname for this uan is `uan01`, and this is reflected in the added `Aliases` field in the UAN's `ExtraProperties`.
 
    ```json
@@ -97,7 +99,7 @@ is being monitored by conman for console logs.
    Example response:
 
    ```json
-   ncn-w001# curl -X PUT -s -k -H "Authorization: Bearer ${TOKEN}" \
+   curl -X PUT -s -k -H "Authorization: Bearer ${TOKEN}" \
    >"https://api-gw-service-nmn.local/apis/sls/v1/hardware/x3000c0s19b0n0" -d '
    > {
    >   "Parent": "x3000c0s19b0",
@@ -119,7 +121,7 @@ is being monitored by conman for console logs.
 1. Confirm that the BMC for the UAN is up and running at the aliased address.
 
    ```
-   ncn-w001# ping -c 4 uan01-mgmt
+   ping -c 4 uan01-mgmt
    ```
 
    Example output:

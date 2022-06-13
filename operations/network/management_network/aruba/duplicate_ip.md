@@ -21,4 +21,4 @@ For example:
 
 To test for duplicate IP addresses, ping the suspected address while turning off the node. If there continues to be responses, then there is a duplicate IP.
 
-[Back to Index](./index.md)
+[Back to Index](./README.md)

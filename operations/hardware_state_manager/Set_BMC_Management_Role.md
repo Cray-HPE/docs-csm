@@ -14,10 +14,8 @@ For more information on locking or ignoring nodes, refer to the following sectio
 
 ## Topics
 
-* [When To Set BMC Management Role](#when-to-set-bmc-management-role)
-* [How To Set BMC Management Role](#how-to-set-bmc-management-role)
-
-<a name="when-to-set-bmc-management-role"></a>
+* [When To Set BMC Management Role](#when-to-set-management-role-on-ncn-bmcs)
+* [How To Set BMC Management Role](#how-to-set-management-role-on-ncn-bmcs)
 
 ## When To Set BMC Management Role
 
@@ -27,7 +25,7 @@ The `Management` role on the BMCs cannot be set until after Kubernetes is runnin
 Check whether HSM is running with the following command:
 
 ```bash
-ncn# kubectl -n services get pods | grep smd
+kubectl -n services get pods | grep smd
 ```
 
 Example output:
@@ -46,8 +44,6 @@ cray-smd-wait-for-postgres-4-7c78j  0/3     Completed  0          9d
 The `cray-smd` pods need to be in the `Running` state, except for `cray-smd-init` and
 `cray-smd-wait-for-postgres` which should be in `Completed` state.
 
-<a name="how-to-set-bmc-management-role"></a>
-
 ## How To Set BMC Management Role
 
 Use the `cray hsm state components bulkRole update` command to perform setting roles on the BMC.
@@ -57,9 +53,9 @@ Use the `cray hsm state components bulkRole update` command to perform setting r
 1. Get the list of BMCs of management nodes.
 
    ```bash
-   ncn# BMCList=$(cray hsm state components list --role management --type node --format json | jq -r .Components[].ID | \
+   BMCList=$(cray hsm state components list --role management --type node --format json | jq -r .Components[].ID | \
                 sed 's/n[0-9]*//' | tr '\n' ',' | sed 's/.$//')
-   ncn# echo ${BMCList}
+   echo ${BMCList}
    ```
 
    Example output:
@@ -71,7 +67,7 @@ Use the `cray hsm state components bulkRole update` command to perform setting r
 1. Set the `Management` role for those BMCs.
 
    ```bash
-   ncn# cray hsm state components bulkRole update --role Management --component-ids ${BMCList}
+   cray hsm state components bulkRole update --role Management --component-ids ${BMCList}
    ```
 
 ### How To Set BMC Management Roles on specific BMCs of Management Nodes
@@ -79,5 +75,5 @@ Use the `cray hsm state components bulkRole update` command to perform setting r
 1. Set the `Management` role for specific BMCs.
 
    ```bash
-   ncn# cray hsm state components bulkRole update --role Management --component-ids x3000c0s8b0
+   cray hsm state components bulkRole update --role Management --component-ids x3000c0s8b0
    ```

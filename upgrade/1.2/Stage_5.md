@@ -18,7 +18,7 @@
    the `commit` field.
 
    ```bash
-   ncn# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
+   kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
    ```
 
    The output will contain a section resembling the following:
@@ -38,7 +38,7 @@
 1. View the current `ncn-personalization` configuration and write it to a JSON file.
 
    ```bash
-   ncn# cray cfs configurations describe ncn-personalization --format json | tee ncn-personalization.json
+   cray cfs configurations describe ncn-personalization --format json | tee ncn-personalization.json
    ```
 
 1. Run the `apply_csm_configuration.sh` script. This script will update the CSM
@@ -61,7 +61,7 @@
        `ncn-personalization` configuration.
 
    ```bash
-   ncn# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+   /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
             [--csm-release 1.2.0] [--git-commit COMMIT] [--ncn-config-file  /path/to/ncn-personalization.json]
    ```
 
@@ -70,9 +70,10 @@
 1. Review the new `ncn-personalization` configuration and write it to a JSON file.
 
    ```bash
-   ncn# cray cfs configurations describe ncn-personalization --format json | tee ncn-personalization.json.new
+   cray cfs configurations describe ncn-personalization --format json | tee ncn-personalization.json.new
    ```
 
 ## Stage completed
 
-This stage is completed. Continue to [Validate CSM Health](../index.md#validate_csm_health) on the main upgrade page.
+This stage is completed. See to [*Validate CSM Health*](../README.md#6-validate-csm-health) on the main upgrade page.
+

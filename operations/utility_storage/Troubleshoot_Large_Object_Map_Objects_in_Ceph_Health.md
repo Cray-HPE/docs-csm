@@ -7,7 +7,7 @@ Troubleshoot an issue where Ceph reports a HEALTH\_WARN of 1 large omap objects.
 Ceph health is reporting a HEALTH\_WARN for large Object Map \(omap\) objects.
 
 ```bash
-ncn-m001# ceph -s
+ceph -s
 ```
 
 Example output:
@@ -25,7 +25,6 @@ Example output:
     mds: cephfs:1 {0=ncn-s002=up:active} 2 up:standby
     osd: 18 osds: 18 up (since 20h), 18 in (since 9d)
     rgw: 3 daemons active (ncn-s001.rgw0, ncn-s002.rgw0, ncn-s003.rgw0)
-
 
   data:
     pools:   11 pools, 600 pgs
@@ -49,7 +48,7 @@ Example output:
         In the example below, the omap object key threshold is set to 350000, but it can be set to a higher number if desired.
 
         ```bash
-        ncn-m001# ceph config set client.osd osd_deep_scrub_large_omap_object_key_threshold 350000
+        ceph config set client.osd osd_deep_scrub_large_omap_object_key_threshold 350000
         ```
 
         In the example below, the rgw_usage_max_user_shards is set to 16 from 1. This can be set to a maximum of 32.
@@ -62,7 +61,7 @@ Example output:
         1. Get the current threshold and PG numbers.
 
             ```bash
-            ncn-m001# ceph osd pool autoscale-status
+            ceph osd pool autoscale-status
             ```
 
             Example output:
@@ -89,13 +88,13 @@ Example output:
             In the example below, the target\_size\_ratio is set to 0.2.
 
             ```bash
-            ncn-m001# ceph osd pool set POOL_NAME target_size_ratio 0.2
+            ceph osd pool set POOL_NAME target_size_ratio 0.2
             ```
 
         1. Check to see if the change is taking effect.
 
             ```bash
-            ncn-m001# ceph osd pool autoscale-status
+            ceph osd pool autoscale-status
             ```
 
         1. Watch the status of the Ceph health.
@@ -103,5 +102,5 @@ Example output:
             Verify the recovery traffic is taking place on the keys. The -w option can be used to watch the cluster.
 
             ```bash
-            ncn-m001# ceph -s
+            ceph -s
             ```

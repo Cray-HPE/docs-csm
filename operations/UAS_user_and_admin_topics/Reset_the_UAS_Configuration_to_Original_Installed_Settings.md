@@ -42,4 +42,4 @@ To do this, delete the running configuration, which will cause the UAS to reset 
     ncn-w001 # cray uas admin config delete -y
     ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)

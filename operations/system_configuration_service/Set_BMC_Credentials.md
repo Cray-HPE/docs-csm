@@ -19,7 +19,7 @@ Use the System Configuration Service \(SCSD\) to set the BMCs credentials to uni
     The list of BMCs must include air-cooled compute BMCs, air-cooled High Speed Network \(HSN\) switch BMCs, liquid-cooled compute BMCs, liquid-cooled switch BMCs, and liquid-cooled chassis BMCs.
 
     ```bash
-    ncn-m001# for fff in `cray hsm inventory redfishEndpoints list --format json \
+    for fff in `cray hsm inventory redfishEndpoints list --format json \
     | jq '.RedfishEndpoints[] | select(.FQDN | contains("-rts") | not) | \
     select(.DiscoveryInfo.LastDiscoveryStatus == "DiscoverOK") | select(.Enabled==true) \
     | .ID' | sed 's/"//g'`; do
@@ -40,7 +40,7 @@ Use the System Configuration Service \(SCSD\) to set the BMCs credentials to uni
     -   Set all BMCs with the same credentials.
 
         ```bash
-        ncn-m001# vi bmc_creds_glb.json
+        vi bmc_creds_glb.json
         {
           "Force": false,
           "Username": "root",
@@ -55,7 +55,7 @@ Use the System Configuration Service \(SCSD\) to set the BMCs credentials to uni
     -   Set all BMCs with different credentials.
 
         ```bash
-        ncn-m001# vi bmc_creds_dsc.json
+        vi bmc_creds_dsc.json
         {
           "Force": true,
           "Targets": [
@@ -84,13 +84,13 @@ Use the System Configuration Service \(SCSD\) to set the BMCs credentials to uni
     -   Apply global credentials to BMCs with the same credentials.
 
         ```bash
-        ncn-m001# cray scsd bmc globalcreds create ./bmc_creds_glb.json
+        cray scsd bmc globalcreds create ./bmc_creds_glb.json
         ```
 
     -   Apply discrete credentials to BMCs with different credentials.
 
         ```bash
-        ncn-m001# cray scsd bmc discreetcreds create ./bmc_creds_dsc.json
+        cray scsd bmc discreetcreds create ./bmc_creds_dsc.json
         ```
 
     **Troubleshooting:** If either command has any components that do not have the status of OK, they must be retried until they work, or the retries are exhausted and noted as failures. Failed modules need to be taken out of the system until they are fixed.

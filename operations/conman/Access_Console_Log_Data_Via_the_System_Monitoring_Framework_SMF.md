@@ -11,7 +11,7 @@ This procedure requires the Kibana service to be up and running on a non-compute
 1.  Determine the external domain name by running the following command on any NCN:
 
     ```bash
-    ncn# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations.yaml}' |
+    kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations.yaml}' |
             base64 -d | grep "external:"
           external: SHASTA_EXTERNAL_DOMAIN.com
     ```

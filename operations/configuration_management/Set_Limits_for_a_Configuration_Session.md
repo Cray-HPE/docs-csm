@@ -13,7 +13,7 @@ See [Using Ansible Limits](https://ansible-tips-and-tricks.readthedocs.io/en/lat
 Use the following command to create a CFS session to run on all hosts in the `Compute` group, but not a previously defined `dev` group:
 
 ```bash
-ncn# cray cfs sessions create --name example \
+cray cfs sessions create --name example \
 --configuration-name configurations-example \
 --ansible-limit 'Compute:!dev'
 ```
@@ -58,7 +58,7 @@ Use the following command to create a CFS session to run only on `example-layer1
 > **WARNING:** If the configuration's layers do not have names, then indices must be specified. Do not mix layer names and layer indices when using limits.
 
 ```bash
-ncn# cray cfs sessions create --name example \
+cray cfs sessions create --name example \
 --configuration-name configurations-example \
 --configuration-limit 'example-layer1,example-layer5'
 ```

@@ -19,7 +19,7 @@ The Customer Access Network \(CAN\) is not supported on the system.
     The command below will list all external hostnames.
 
     ```bash
-    ncn-w001# kubectl get vs -A | grep -v '[*]'
+    kubectl get vs -A | grep -v '[*]'
     ```
 
     Example output:
@@ -42,7 +42,7 @@ The Customer Access Network \(CAN\) is not supported on the system.
     The example below is for the cray-sysmgmt-health-promet-prometheus service.
 
     ```bash
-    ncn-w001# kubectl -n sysmgmt-health get service cray-sysmgmt-health-promet-prometheus
+    kubectl -n sysmgmt-health get service cray-sysmgmt-health-promet-prometheus
     ```
 
     Example output:

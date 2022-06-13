@@ -32,5 +32,4 @@ Description
 * **Storage**
 	* Ceph (IP-based storage)
 
-
-[Back to Index](../index.md)
+[Back to Index](../README.md)

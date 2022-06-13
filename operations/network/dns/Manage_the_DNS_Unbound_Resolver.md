@@ -7,7 +7,7 @@ The unbound DNS instance is used to resolve names for the physical equipment on 
 Use the kubectl command to check the status of the pods:
 
 ```bash
-ncn-w001# kubectl get -n services pods | grep unbound
+kubectl get -n services pods | grep unbound
 ```
 
 Example output:
@@ -48,7 +48,7 @@ The table below describes what the status of each pod means for the health of th
 Logs for the unbound Pods will show the status and health of actual DNS lookups. Any logs with `ERROR` or `Exception` are an indication that the Unbound service is not healthy.
 
 ```bash
-ncn-w001# kubectl logs -n services -l app.kubernetes.io/instance=cray-dns-unbound -c unbound
+kubectl logs -n services -l app.kubernetes.io/instance=cray-dns-unbound -c unbound
 ```
 
 Example output:
@@ -82,13 +82,12 @@ Example output:
 
         **ACTION:** Review and troubleshoot the Manager Logs as shown below.
 
-
 ### View Manager \(DNS Helper\) Logs
 
 Manager logs will show the status of the latest "true up" of DNS with respect to DHCP actual leases and SLS/SMD status. The following command shows the last four lines of the last Manager run, and can be adjusted as needed.
 
 ```bash
-ncn-w001# kubectl logs -n services pod/$(kubectl get -n services pods \
+kubectl logs -n services pod/$(kubectl get -n services pods \
 | grep unbound | tail -n 1 | cut -f 1 -d ' ') -c manager | tail -n4
 ```
 
@@ -118,7 +117,6 @@ Any log with `ERROR` or `Exception` is an indication that DNS is not healthy. Th
 
         **ACTION:** If connections to DHCP \(Kea\) are involved, refer to [Troubleshoot DHCP Issues](../dhcp/Troubleshoot_DHCP_Issues.md).
 
-
 ### Restart Unbound
 
 If any errors discovered in the sections above have been deemed transient or have not been resolved, the Unbound pods can be restarted.
@@ -128,7 +126,7 @@ Use the following command to restart the pods:
 1.  Restart Unbound
 
     ```bash
-    ncn-w001# kubectl -n services rollout restart deployment cray-dns-unbound
+    kubectl -n services rollout restart deployment cray-dns-unbound
     ```
 
 A rolling restart of the Unbound pods will occur, old pods will not be terminated and new pods will not be added to the load balancer until the new pods have successfully loaded the DNS records.
@@ -146,7 +144,7 @@ This is useful in the following cases:
 The following clears the \(DNS Helper\) Manager generated data in the ConfigMap. This is generally safe as Unbound runtime data is held elsewhere.
 
 ```bash
-ncn-w001# kubectl -n services patch configmaps cray-dns-unbound \
+kubectl -n services patch configmaps cray-dns-unbound \
 --type merge -p '{"binaryData":{"records.json.gz":"H4sICLQ/Z2AAA3JlY29yZHMuanNvbgCLjuUCAETSaHADAAAA"}}'
 ```
 
@@ -157,7 +155,7 @@ Use the following procedure to change the site DNS server that Unbound forwards 
 1. Edit the `cray-dns-unbound` ConfigMap.
 
    ```bash
-   ncn-m001# kubectl -n services edit configmap cray-dns-unbound
+   kubectl -n services edit configmap cray-dns-unbound
    ```
    Update the `forward-zone` value in `unbound.conf`.
 
@@ -179,7 +177,7 @@ Use the following procedure to change the site DNS server that Unbound forwards 
 1. Restart `cray-dns-unbound` for this change to take effect.
 
    ```bash
-   ncn-m001# kubectl -n services rollout restart deployment cray-dns-unbound
+   kubectl -n services rollout restart deployment cray-dns-unbound
    deployment.apps/cray-dns-unbound restarted
    ```
 
@@ -190,7 +188,7 @@ Use the following procedure to change the site DNS server that Unbound forwards 
    1. Extract `customizations.yaml` from the `site-init` secret in the `loftsman` namespace.
 
       ```bash
-      ncn-m001# kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
+      kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
       ```
 
    1. Update `system_to_site_lookups` with the value of the new DNS server.
@@ -220,6 +218,6 @@ Use the following procedure to change the site DNS server that Unbound forwards 
    1. Update the `site-init` secret in the `loftsman` namespace.
 
       ```bash
-      ncn-m001# kubectl delete secret -n loftsman site-init
-      ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+      kubectl delete secret -n loftsman site-init
+      kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
       ```

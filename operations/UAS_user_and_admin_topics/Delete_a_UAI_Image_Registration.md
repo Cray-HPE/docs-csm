@@ -17,7 +17,7 @@ Deleting a UAI image from UAS removes the UAI image registration from UAS. This 
 Delete a UAS image registration by using a command of the following form:
 
 ```bash
-ncn-m001-pit# cray uas admin config images delete IMAGE_ID
+ncn-m001-cray uas admin config images delete IMAGE_ID
 ```
 
 `IMAGE_ID` is the image ID of the UAI image registration being removed from UAS.
@@ -25,9 +25,9 @@ ncn-m001-pit# cray uas admin config images delete IMAGE_ID
 For example:
 
 ```bash
-ncn-m001-pit# cray uas admin config images delete 8fdf5d4a-c190-24c1-2b96-74ab98c7ec07
+ncn-m001-cray uas admin config images delete 8fdf5d4a-c190-24c1-2b96-74ab98c7ec07
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Volumes](Volumes.md)

@@ -29,7 +29,7 @@ The following is needed before running this procedure:
 1. Use the `ssh` command from a local PC/MAC/Linux machine:
 
    ```bash
-   > ssh -L 8443:{PDU_xname}:443 -N root@{ncn-m001_ip}
+   ssh -L 8443:{PDU_xname}:443 -N root@{ncn-m001_ip}
    ```
 
    In this example, `{PDU_xname}` is the component name (xname) of the PDU and `{ncn-m001_ip}` is the IP address of `ncn-m001`.
@@ -117,14 +117,14 @@ Use the following procedure to ensure the `hms-discovery` job and Redfish Transl
     1. Get Vault password and create Vault alias.
 
         ```bash
-        ncn# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
-        ncn# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+        VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+        alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
         ```
 
     1.  Identify HPE PDUs known by RTS:
 
         ```bash
-        ncn# vault kv list secret/pdu-creds
+        vault kv list secret/pdu-creds
         ```
 
         Example output:
@@ -140,27 +140,27 @@ Use the following procedure to ensure the `hms-discovery` job and Redfish Transl
     1.  Remove each HPE PDU identified in the previous sub-step from Vault:
 
         ```bash
-        ncn# PDU=x3000m0
-        ncn# vault kv delete secret/pdu-creds/$PDU
+        PDU=x3000m0
+        vault kv delete secret/pdu-creds/$PDU
         ```
 
     1.  Restart the Redfish Translation Service (RTS):
 
         ```bash
-        ncn# kubectl -n services rollout restart deployment cray-hms-rts
-        ncn# kubectl -n services rollout status deployment cray-hms-rts
+        kubectl -n services rollout restart deployment cray-hms-rts
+        kubectl -n services rollout status deployment cray-hms-rts
         ```
 
 1. Find the list of PDU MAC address. The `ID` field in each element is the normalized MAC address of each PDU:
 
    ```bash
-   ncn# cray hsm inventory ethernetInterfaces list --type CabinetPDUController
+   cray hsm inventory ethernetInterfaces list --type CabinetPDUController
    ```
 
 1. Use the returned `ID` from the previous step to delete each HPE PDU MAC address from HSM:
 
    ```bash
-   ncn# cray hsm inventory ethernetInterfaces delete {ID}
+   cray hsm inventory ethernetInterfaces delete {ID}
    ```
 
    On the next `hms-discovery` job run, it should relocate the deleted PDUs and discover it correctly as an HPE PDU.
@@ -168,12 +168,12 @@ Use the following procedure to ensure the `hms-discovery` job and Redfish Transl
 1. After waiting five minutes, verify the Ethernet interfaces that were previously deleted are now present:
 
    ```bash
-   ncn# cray hsm inventory ethernetInterfaces list --type CabinetPDUController
+   cray hsm inventory ethernetInterfaces list --type CabinetPDUController
    ```
 
 1. Verify the Redfish endpoints for the PDUs exist and are `DiscoverOK`:
 
    ```bash
-   ncn# cray hsm inventory redfishEndpoints list --type CabinetPDUController
+   cray hsm inventory redfishEndpoints list --type CabinetPDUController
    ```
 

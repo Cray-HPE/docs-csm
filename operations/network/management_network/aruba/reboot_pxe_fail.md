@@ -22,7 +22,7 @@ The following are common error messages when PXE fails:
 1. Run connectivity tests.
 
     ```text
-    ncn-w001# ping 10.1.0.1
+    ping 10.1.0.1
     ```
 
     Example output:
@@ -36,7 +36,7 @@ The following are common error messages when PXE fails:
     If this fails, CAN may be misconfigured, or a route might need to be added to the MTL network.
 
     ```text
-    ncn-w001# ip route add 10.1.0.0/16 via 10.252.0.1 dev bond0.nmn0
+    ip route add 10.1.0.0/16 via 10.252.0.1 dev bond0.nmn0
     ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

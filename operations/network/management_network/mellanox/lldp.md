@@ -20,7 +20,7 @@ switch (config interface ethernet 1/1) # lldp transmit
 Show Commands to Validate Functionality
 
 ```
-switch# show lldp local
+show lldp local
 ```
 
 Expected Results
@@ -31,5 +31,4 @@ Expected Results
 * Step 4: Remote device LLDP information is displayed
 * Step 5: LLDP statistics are displayed
 
-
-[Back to Index](../index.md)
+[Back to Index](../README.md)

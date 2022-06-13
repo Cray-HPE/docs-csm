@@ -13,7 +13,7 @@ This procedure requires admin privileges.
 1. View the status of Ceph.
 
     ```bash
-    ncn-m001# ceph -s
+    ceph -s
     ```
 
     Example output:

@@ -7,19 +7,19 @@ If doing a CSM install or upgrade, the release tarball contains a CANU RPM. It c
 1. Display the current CANU version.
 
     ```bash
-    ncn# canu --version
+    canu --version
     ```
 
 1. Set the `TARBALL` variable to the path and filename of the CSM release tarball:
 
     ```bash
-    ncn# TARBALL=/your/path/here/csm-version.tar.gz
+    TARBALL=/your/path/here/csm-version.tar.gz
     ```
 
 1. Extract the CANU RPM from the tarball:
 
     ```bash
-    ncn# tar -xzvf "$TARBALL" --wildcards "*/canu*.rpm"
+    tar -xzvf "$TARBALL" --wildcards "*/canu*.rpm"
     ```
 
     Output should look similar to the following:
@@ -31,11 +31,11 @@ If doing a CSM install or upgrade, the release tarball contains a CANU RPM. It c
 1. Note the path to the RPM from the output of the previous command, and install it:
 
     ```bash
-    ncn# rpm -Uvh <path-to-canu-rpm>
+    rpm -Uvh <path-to-canu-rpm>
     ```
 
 1. Display the new CANU version.
 
     ```bash
-    ncn# canu --version
+    canu --version
     ```

@@ -13,7 +13,6 @@ This procedure prevents services from being taken out of service when a node goe
 -   A StatefulSet pod failed to be moved to another healthy non-compute node \(NCN\) acting as a worker node.
 -   If the network is being brought down temporarily during testing, ignore any issues with StatefulSet pods until the testing is complete. These errors should be ignored because the nodes could have the network restored, and then the `Terminating` pod may go `ACTIVE` temporarily \(causing a race and corruption\) if it comes up at the same time as another StatefulSet running the pod. This is much more likely to occur during testing of a network outage.
 
-
 ### Procedure
 
 1.  View the StatefulSet pods on the system.
@@ -21,7 +20,7 @@ This procedure prevents services from being taken out of service when a node goe
     Any of the pods with `x/1` in the READY column could be on a node that goes down, at which point that service will no longer be available.
 
     ```bash
-    ncn-w001# kubectl get statefulsets -A
+    kubectl get statefulsets -A
     ```
 
     Example output:
@@ -58,12 +57,12 @@ This procedure prevents services from being taken out of service when a node goe
     vault            cray-vault                                             3/3                2d14h
     ```
 
-2.  Describe a service to find the StatefulSet pod name.
+1.  Describe a service to find the StatefulSet pod name.
 
     The StatefulSet pod will have a name in the StatefulSet-0 format. Vault is the service being described in the example below. The StatefulSet pod name is cray-vault-0.
 
     ```bash
-    ncn-w001# kubectl get pods -A -o wide | grep SERVICE_NAME
+    kubectl get pods -A -o wide | grep SERVICE_NAME
     ```
 
     Example output:
@@ -81,18 +80,18 @@ This procedure prevents services from being taken out of service when a node goe
     vault       cray-vault-etcd-mx8qc596t9                 1/1     Running        0    5d18h   10.47.0.23    ncn-w001   <none>  <none>
     ```
 
-3.  Delete the StatefulSet pod in a `Terminating` state.
+1.  Delete the StatefulSet pod in a `Terminating` state.
 
     The StatefulSet \(the controller\) will recreate the pod on a working node when the pod or the node it sits on is deleted. The command below assumes the pod is located on the downed node and is currently in a `Terminating` state.
 
     ```bash
-    ncn-w001# kubectl delete pod -n NAMESPACE POD_NAME --force --grace-period 0
+    kubectl delete pod -n NAMESPACE POD_NAME --force --grace-period 0
     ```
 
     For example:
 
     ```bash
-    ncn-w001# kubectl delete pod -n vault cray-vault-0 --force --grace-period 0
+    kubectl delete pod -n vault cray-vault-0 --force --grace-period 0
     ```
 
     The StatefulSet will then recreate cray-vault-0 on a node that is in `Ready` state.

@@ -6,7 +6,7 @@ The HPE Cray recommended way of configuring the network is with the CANU tool. T
 
 This guide also includes the current documented and supported network scenarios.
 
-> **NOTE:** Not every configuration option is covered here, and for any configuration outside of the scope of this document, refer to the official Aruba user manuals.
+> **`NOTE`** Not every configuration option is covered here, and for any configuration outside of the scope of this document, refer to the official Aruba user manuals.
 
 Aruba documentation and software can be found from:
 

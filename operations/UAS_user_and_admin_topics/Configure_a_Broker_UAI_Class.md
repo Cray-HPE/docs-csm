@@ -60,7 +60,7 @@ Using a namespace other than `uas` for Broker UAIs has implications beyond secre
     1. Create a file with the appropriate content.
 
         ```bash
-        ncn-m001-pit# cat <<EOF > sssd.conf
+        ncn-m001-cat <<EOF > sssd.conf
         [sssd]
         config_file_version = 2
         services = nss, pam
@@ -87,13 +87,13 @@ Using a namespace other than `uas` for Broker UAIs has implications beyond secre
     2. Make a secret from the file.
 
         ```bash
-        ncn-m001-pit# kubectl create secret generic -n uas broker-sssd-conf --from-file=sssd.conf
+        ncn-m001-kubectl create secret generic -n uas broker-sssd-conf --from-file=sssd.conf
         ```
 
 3. Make a volume for the secret in the UAS configuration.
 
      ```bash
-     ncn-m001-pit# cray uas admin config volumes create \
+     ncn-m001-cray uas admin config volumes create \
                    --mount-path /etc/sssd \
                    --volume-description \
                    '{"secret": {"secret_name": "broker-sssd-conf", "default_mode": 384}}' \
@@ -120,7 +120,7 @@ Using a namespace other than `uas` for Broker UAIs has implications beyond secre
 4. Make a volume to hold an empty and writable `/etc/sssd/conf.d` in the Broker UAI:
 
    ```bash
-   ncn-m001# cray uas admin config volumes create --mount-path /etc/sssd/conf.d --volume-description '{"empty_dir": {"medium": "Memory"}}' --volumename sssd-conf-d --format yaml
+   cray uas admin config volumes create --mount-path /etc/sssd/conf.d --volume-description '{"empty_dir": {"medium": "Memory"}}' --volumename sssd-conf-d --format yaml
    ```
 
    Example output:
@@ -139,7 +139,7 @@ Using a namespace other than `uas` for Broker UAIs has implications beyond secre
    The image-id of the Broker UAI image, the volume-ids of the volumes to be added to the broker class, and the class-id of the End-User UAI class managed by the broker are required:
 
    ```bash
-   ncn-m001-pit# cray uas admin config images list
+   ncn-m001-cray uas admin config images list
    ```
 
    Example output:
@@ -160,7 +160,7 @@ Using a namespace other than `uas` for Broker UAIs has implications beyond secre
    image_id = "8f180ddc-37e5-4ead-b261-2b401914a79f"
    imagename = "registry.local/cray/cray-uai-broker:1.2.4"
 
-   ncn-m001-pit# cray uas admin config volumes list
+   ncn-m001-cray uas admin config volumes list
    [[results]]
    mount_path = "/etc/localtime"
    volume_id = "11a4a22a-9644-4529-9434-d296eef2dc48"
@@ -262,9 +262,9 @@ Using a namespace other than `uas` for Broker UAIs has implications beyond secre
     imagename = "registry.local/cray/cray-uai-broker:1.2.4"
     ```
 
-    **NOTE:** In some versions of UAS, SSSD will not start correctly when customized as described above because `/etc/sssd/sssd.conf` is mounted with the wrong mode in spite of being configured with the right mode.
+    **`NOTE`** In some versions of UAS, SSSD will not start correctly when customized as described above because `/etc/sssd/sssd.conf` is mounted with the wrong mode in spite of being configured with the right mode.
     If SSSD is not working in a Broker UAI, refer to this [troubleshooting section](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md).
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Start a Broker UAI](Start_a_Broker_UAI.md)
