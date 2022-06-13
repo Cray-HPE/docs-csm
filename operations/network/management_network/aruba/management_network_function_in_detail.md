@@ -32,5 +32,4 @@ The following is a description of the system management network functions:
 * **Storage**
 	* Ceph (IP-based storage)
 
-
-[Back to Index](../index.md)
+[Back to Index](../README.md)

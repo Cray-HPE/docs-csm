@@ -42,39 +42,35 @@ The switch's OS image and its documentation collateral (release notes, user manu
 
    ```text
    Product name:      MLNX-OS
-   
+
    Product release:   3.9.0606
-   
+
    Build ID:          #1-dev
-   
+
    Build date:        2020-05-01 08:20:15
-   
+
    Target arch:       x86_64
-   
+
    Target hw:         x86_64
-   
+
    Built by:          sw-r2d2-bot@b13770d14a06
-   
+
    Version summary:   X86_64 3.9.0606 2020-05-01 08:20:15 x86_64
-   
-   
-   
+
    Product model:     x86
-   
+
    Host ID:           7CFE900BC470
-   
+
    System UUID:       03000200-0400-0500-0006-000700080009
-   
-   
-   
+
    Uptime:            16m 54.930s
-   
+
    CPU load averages: 0.02 / 0.08 / 0.11
-   
+
    Number of CPUs:    2
-   
+
    System memory:     485 MB used / 3278 MB free / 3763 MB total
-   
+
    Swap:              0 MB used / 0 MB free / 0 MB total
    ```
 
@@ -88,12 +84,12 @@ The switch's OS image and its documentation collateral (release notes, user manu
 
    ```text
    ---------------------------------------------------
-   
+
    Module             Device              Version
-   
+
    ---------------------------------------------------
-   
+
    MGMT               SIB2                15.2007.0900
    ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

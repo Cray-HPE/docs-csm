@@ -23,7 +23,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
         This command needs to be run on each manager node to determine where the issues are occurring. Make a note of which nodes do not have the ceph-mon process running.
 
         ```bash
-        ncn-m001# ps -ef |grep ceph-mon
+        ps -ef |grep ceph-mon
         ```
 
         Example output:
@@ -67,7 +67,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 1. Restart the ceph-mon process on all manager nodes.
 
     ```bash
-    ncn-m001# systemctl daemon-reload
+    systemctl daemon-reload
     ncn-s00(1/2/3)# ceph orch daemon restart mon.<hostname>
     ```
 

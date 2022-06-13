@@ -2,7 +2,7 @@
 
 LLDP is used to advertise the device's identity and abilities and read other devices connected to the same network.
 
-> **NOTE:** LLDP is enabled by default.
+> **`NOTE`** LLDP is enabled by default.
 
 ## Configuration Commands
 
@@ -15,13 +15,13 @@ switch(config-if)# lldp <receive|transmit>
 Show commands to validate functionality:
 
 ```text
-switch# show lldp [local-device|neighbor-info|statistics]
+show lldp [local-device|neighbor-info|statistics]
 ```
 
 ## Example Output
 
 ```text
-switch# show lldp configuration
+show lldp configuration
 LLDP Global Configuration:
 LLDP Enabled :Yes
 LLDP Transmit Interval :30
@@ -39,7 +39,7 @@ LLDP Port Configuration:
 Port           Tx-Enabled          Rx-Enabled
 1/1/1          Yes                 Yes
 ...
-switch# show lldp local-device
+show lldp local-device
 Global Data
 ---------------
 Chassis-id
@@ -62,6 +62,5 @@ Port-ID        Tx-Packets     Rx-packets     Rx-discarded   TLVs-Unknown
 4. Remote device LLDP information is displayed
 5. LLDP statistics are displayed
 
-
-[Back to Index](../index.md)
+[Back to Index](../README.md)
 

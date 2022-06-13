@@ -14,26 +14,26 @@ Once these credentials are retrieved from vault, fill in the `xxxxxx` fields bel
 
 ### Aruba
 
-```
-sw-leaf-001# conf t
+```bash
+conf t
 ```
 
 Example output:
 
-```
+```text
 snmp-server vrf default
 snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxxx
 ```
 
 ### Dell
 
-```
-sw-leaf-001# conf t
+```bash
+conf t
 ```
 
 Example output:
 
-```
+```text
 snmp-server group cray-reds-group 3 noauth read cray-reds-view
 snmp-server user xxxxxx cray-reds-group 3 auth md5 xxxxxx priv des xxxxxx
 snmp-server view cray-reds-view 1.3.6.1.2 included
@@ -43,42 +43,40 @@ snmp-server view cray-reds-view 1.3.6.1.2 included
 
 This is for all switches.
 
-
 ### Aruba
 
-```
-sw-leaf-bmc-001# conf t
+```bash
+conf t
 ```
 
 Example output:
 
-```
+```text
 user admin group administrators password plaintext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 ### Dell
 
-```
-sw-leaf-001# conf t
+```bash
+conf t
 ```
 
 Example output:
 
-```
+```text
 system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
 ```
 
-
 ### Mellanox
 
-```
-sw-spine-001 [standalone: master] # conf t
+```bash
+conf t
 ```
 
 Example output:
 
-```
-   username admin password 0 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-   username monitor password 0 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```text
+username admin password 0 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+username monitor password 0 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```

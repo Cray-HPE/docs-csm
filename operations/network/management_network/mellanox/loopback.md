@@ -20,7 +20,7 @@ switch (config interface loopback 2)# ip address 20.20.20.20 /32
 Show Commands to Validate Functionality
 
 ```
-switch# show interfaces loopback 2
+show interfaces loopback 2
 ```
 
 Expected Results
@@ -29,5 +29,5 @@ Expected Results
 * Step 2: You can give a loopback interface an IP address
 * Step 3: You can validate the configuration using the show commands.
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)
 

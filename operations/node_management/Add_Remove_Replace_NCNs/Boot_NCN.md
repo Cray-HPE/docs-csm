@@ -21,7 +21,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 1. Set the `BMC` variable to the hostname of the BMC of the node being rebuilt. If booting `ncn-m001`, set this to the FQDN or IP address.
 
     ```bash
-    linux# BMC=${NODE}-mgmt
+    BMC=${NODE}-mgmt
     ```
 
 1. Export the root password of the BMC.
@@ -29,27 +29,27 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
     > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
 
     ```bash
-    linux# read -s IPMI_PASSWORD
-    linux# export IPMI_PASSWORD
+    read -s IPMI_PASSWORD
+    export IPMI_PASSWORD
     ```
 
 1. Check the power status. Power the BMC off if `Chassis Power is on`.
 
     ```bash
-    linux# ipmitool -I lanplus -U root -E -H $BMC chassis power status
-    linux# ipmitool -I lanplus -U root -E -H $BMC chassis power off
+    ipmitool -I lanplus -U root -E -H $BMC chassis power status
+    ipmitool -I lanplus -U root -E -H $BMC chassis power off
     ```
 
 1. Set the `pxe` `efiboot` option.
 
     ```bash
-    linux# ipmitool -I lanplus -U root -E -H $BMC chassis bootdev pxe options=efiboot
+    ipmitool -I lanplus -U root -E -H $BMC chassis bootdev pxe options=efiboot
     ```
 
 1. Power on the node.
 
      ```bash
-     linux# ipmitool -I lanplus -U root -E -H $BMC chassis power on
+     ipmitool -I lanplus -U root -E -H $BMC chassis power on
      ```
 
 1. Verify that the node is on.
@@ -57,7 +57,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
     Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
 
      ```bash
-     linux# ipmitool -I lanplus -U root -E -H $BMC chassis power status
+     ipmitool -I lanplus -U root -E -H $BMC chassis power status
      ```
 
 ### Observe the Boot
@@ -85,7 +85,7 @@ This indicates that the PXE boot has started the TFTP download of the `ipxe` pro
 **Skip this section if the node being added is a storage node.**
 
 ```bash
-ncn-mw# kubectl get nodes
+kubectl get nodes
 ```
 
 Example output:
@@ -108,7 +108,7 @@ Setting the `no-wipe` flag safeguards against the disks being wiped when the nod
 1. Run the following commands from a node that has `cray` CLI initialized:
 
     ```bash
-    ncn-mw# cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
+    cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
     ```
 
 1. Edit the `XNAME.json` file and set the `metal.no-wipe=1` value.
@@ -116,7 +116,7 @@ Setting the `no-wipe` flag safeguards against the disks being wiped when the nod
 1. Get a token to interact with BSS using the REST API.
 
     ```bash
-    ncn-mw# TOKEN=$(curl -s -S -d grant_type=client_credentials \
+    TOKEN=$(curl -s -S -d grant_type=client_credentials \
         -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
         -o jsonpath='{.data.client-secret}' | base64 -d` \
         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
@@ -128,7 +128,7 @@ Setting the `no-wipe` flag safeguards against the disks being wiped when the nod
     > This command can be run from any node.
 
     ```bash
-    ncn# curl -i -s -k -H "Content-Type: application/json" \
+    curl -i -s -k -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${TOKEN}" \
             "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" \
             -X PUT -d @./${XNAME}.json
@@ -139,13 +139,13 @@ Setting the `no-wipe` flag safeguards against the disks being wiped when the nod
     1. Export the list from BSS to a file with a different name.
 
         ```bash
-        ncn-mw# cray bss bootparameters list --name ${XNAME} --format=json |jq .[]> ${XNAME}.check.json
+        cray bss bootparameters list --name ${XNAME} --format=json |jq .[]> ${XNAME}.check.json
         ```
 
     1. Compare the new JSON file with what was PUT into BSS.
 
         ```bash
-        ncn-mw# diff ${XNAME}.json ${XNAME}.check.json
+        diff ${XNAME}.json ${XNAME}.check.json
         ```
 
         The command should return no output because the files should be identical.
@@ -159,7 +159,7 @@ Setting the `no-wipe` flag safeguards against the disks being wiped when the nod
     * Run the following commands to list the available configurations.
 
         ```bash
-        ncn-mw# cray cfs configurations list
+        cray cfs configurations list
         ```
 
         Example Output:
@@ -178,7 +178,7 @@ Setting the `no-wipe` flag safeguards against the disks being wiped when the nod
     * Determine the configuration applied another NCN of the same type. This example checks the configuration on `ncn-w002`.
 
         ```bash
-        ncn-mw# cray cfs components describe $(ssh ncn-w002 cat /etc/cray/xname)
+        cray cfs components describe $(ssh ncn-w002 cat /etc/cray/xname)
         ```
 
         Example Output:
@@ -200,13 +200,13 @@ Setting the `no-wipe` flag safeguards against the disks being wiped when the nod
 1. Select the appropriate configuration based on the previous step to personalize the added NCN. In this example, the `ncn-personalization` configuration is used.
 
     ```bash
-    ncn-mw# cray cfs components update $XNAME --desired-config ncn-personalization
+    cray cfs components update $XNAME --desired-config ncn-personalization
     ```
 
 1. Wait for `configurationStatus` to transition from `pending` to `configured`.
 
     ```bash
-    ncn-mw# watch "cray cfs components describe $XNAME"
+    watch "cray cfs components describe $XNAME"
     ```
 
     Example Output:
@@ -229,13 +229,9 @@ Follow the [How to Lock Management Single Node](../../hardware_state_manager/Loc
 The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware, or from CAPMC to power off or do a power reset.
 Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have serious negative effects on system operation.
 
-<a name="configure-the-cli"></a>
-
 ### Configure the Cray Command Line Interface (Cray CLI)
 
 See [Configure the Cray Command Line Interface (`cray` CLI)](../../configure_cray_cli.md) for details on how to do this.
-
-<a name="boot-ncn-storage-nodes-only"></a>
 
 ### Add Storage Node to the Ceph Cluster
 
@@ -254,11 +250,11 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
     **IMPORTANT:** If the vendor of the replaced master node has changed, then before the configuration is reloaded, verify that the `BRIDGE_PORTS` setting in `/etc/sysconfig/network/ifcfg-lan0` is based on the actual NIC names for the external site interface.
 
     ```bash
-    remote# ssh root@$CAN_IP
-    ncn-m002# rsync /tmp/ifcfg-lan0-m001 ncn-m001:/etc/sysconfig/network/ifcfg-lan0
-    ncn-m002# ssh ncn-m001
-    ncn-m001# wicked ifreload lan0
-    ncn-m001# wicked ifstatus lan0
+    ssh root@$CAN_IP
+    rsync /tmp/ifcfg-lan0-m001 ncn-m001:/etc/sysconfig/network/ifcfg-lan0
+    ssh ncn-m001
+    wicked ifreload lan0
+    wicked ifstatus lan0
     ```
 
     Example output:
@@ -275,7 +271,7 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
 1. Run `ip a` to show the `lan0` IP address. Verify that the correct information is displayed for the site link.
 
     ```bash
-    ncn-m001# ip a show lan0
+    ip a show lan0
     ```
 
 ### Next Step

@@ -14,7 +14,7 @@ switch(config)# banner <motd|exec> DELIM
 Show commands to validate functionality:
 
 ```text
-switch# show banner <motd|exec>
+show banner <motd|exec>
 ```
 
 ## Example Output
@@ -32,11 +32,9 @@ switch(config)# do show banner motd
 This is an example of a custom pre-login banner
 that spans multiple lines.
 
-
 ## Expected Results
 
 1. Administrators can create the MOTD banner
 1. The output of the MOTD banner looks correct
 
-
-[Back to Index](../index.md)
+[Back to Index](../README.md)

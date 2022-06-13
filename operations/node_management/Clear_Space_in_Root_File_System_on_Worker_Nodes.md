@@ -11,7 +11,7 @@ An NCN worker node has a full disk.
 1. Check to see if Docker is running.
 
     ```bash
-    ncn-w001# syctemctl status docker
+    syctemctl status docker
     ```
 
     Example output:
@@ -37,7 +37,7 @@ An NCN worker node has a full disk.
 2. View the file space usage for Docker.
 
     ```bash
-    ncn-w001# du -sh /var/lib/docker
+    du -sh /var/lib/docker
     ```
 
     Example output:
@@ -53,7 +53,7 @@ An NCN worker node has a full disk.
     The `until=24` option in the command below preserves data less than one day old.
 
     ```bash
-    ncn-w001# docker image prune -a --filter until=24h
+    docker image prune -a --filter until=24h
     ```
 
     Check the usage again with the `du -sh /var/lib/docker` command.
@@ -63,7 +63,7 @@ An NCN worker node has a full disk.
     The `until=24` option in the command below preserves data less than one day old.
 
     ```bash
-    ncn-w001# docker volume prune -a --filter until=24h
+    docker volume prune -a --filter until=24h
     ```
 
     Check the usage again with the `du -sh /var/lib/docker` command.
@@ -73,7 +73,7 @@ An NCN worker node has a full disk.
     Another potentially large consumer of space is /var/log/cray when certain debug flags are enabled.
 
     ```bash
-    ncn-w001# du -sh /var/log/cray
+    du -sh /var/log/cray
     ```
 
     Example output:

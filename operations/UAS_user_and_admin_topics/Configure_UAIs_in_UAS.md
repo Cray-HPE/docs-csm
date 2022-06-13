@@ -39,6 +39,6 @@ The following procedures provide instructions for creating, updating, examining,
   * [Modify a UAI Class](Modify_a_UAI_Class.md)
   * [Delete a UAI Class](Delete_a_UAI_Class.md)
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: UAI Images](UAI_Images.md)

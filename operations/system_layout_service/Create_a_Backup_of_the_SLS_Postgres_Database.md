@@ -6,7 +6,7 @@ Perform a manual backup of the contents of the SLS Postgres database. This backu
 - Healthy SLS Postgres Cluster.
     > Use `patronictl list` on the SLS Postgres cluster to determine the current state of the cluster, and a healthy cluster will look similar to the following:
     > ```
-    > ncn# kubectl exec cray-sls-postgres-0 -n services -c postgres -it -- patronictl list
+    > kubectl exec cray-sls-postgres-0 -n services -c postgres -it -- patronictl list
     > + Cluster: cray-sls-postgres (6975238790569058381) ---+----+-----------+
     > |        Member       |    Host    |  Role  |  State  | TL | Lag in MB |
     > +---------------------+------------+--------+---------+----+-----------+
@@ -18,7 +18,7 @@ Perform a manual backup of the contents of the SLS Postgres database. This backu
 - Healthy SLS Service.
     > Verify all 3 SLS replicas are up and running:
     > ```
-    > ncn# kubectl -n services get pods -l cluster-name=cray-sls-postgres
+    > kubectl -n services get pods -l cluster-name=cray-sls-postgres
     > NAME                  READY   STATUS    RESTARTS   AGE
     > cray-sls-postgres-0   3/3     Running   0          18d
     > cray-sls-postgres-1   3/3     Running   0          18d
@@ -27,23 +27,25 @@ Perform a manual backup of the contents of the SLS Postgres database. This backu
 
 ## Procedure
 1. Create a directory to store the SLS backup files in:
+
     ```bash
-    ncn# BACKUP_LOCATION="/root"
-    ncn# export BACKUP_NAME="cray-sls-postgres-backup_`date '+%Y-%m-%d_%H-%M-%S'`"
-    ncn# export BACKUP_FOLDER="${BACKUP_LOCATION}/${BACKUP_NAME}"
-    ncn# mkdir -p "$BACKUP_FOLDER"
+    BACKUP_LOCATION="/root"
+    export BACKUP_NAME="cray-sls-postgres-backup_`date '+%Y-%m-%d_%H-%M-%S'`"
+    export BACKUP_FOLDER="${BACKUP_LOCATION}/${BACKUP_NAME}"
+    mkdir -p "$BACKUP_FOLDER"
     ```
 
     The SLS backup will be located at the following directory:
+
     ```bash
-    ncn# echo $BACKUP_FOLDER
+    echo $BACKUP_FOLDER
     /root/cray-sls-postgres-backup_2021-07-07_16-39-44
     ```
 
 2. Run the `backup_sls_postgres.sh` script to take a backup of the SLS Postgres:
 
     ```
-    ncn# /usr/share/doc/csm/scripts/operations/system_layout_service/backup_sls_postgres.sh
+    /usr/share/doc/csm/scripts/operations/system_layout_service/backup_sls_postgres.sh
     ```
 
     Example output:
@@ -78,7 +80,7 @@ Perform a manual backup of the contents of the SLS Postgres database. This backu
     The `BACKUP_FOLDER` environment variable is the name of the folder to backup.
 
     ```bash
-    ncn# echo $BACKUP_FOLDER
+    echo $BACKUP_FOLDER
     ```
 
     `/root/cray-sls-postgres-backup_2021-07-07_16-39-44` is the returned value in this example.
@@ -86,6 +88,6 @@ Perform a manual backup of the contents of the SLS Postgres database. This backu
     Optionally, create a tarball of the Postgres backup files:
 
     ```bash
-    ncn# cd $BACKUP_FOLDER && cd ..
-    ncn# tar -czvf $BACKUP_NAME.tar.gz $BACKUP_NAME
+    cd $BACKUP_FOLDER && cd ..
+    tar -czvf $BACKUP_NAME.tar.gz $BACKUP_NAME
     ```

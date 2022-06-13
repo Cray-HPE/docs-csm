@@ -29,6 +29,6 @@ username = "vers"
 [uai_portmap]
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: UAS and UAI Legacy Mode Health Checks](UAS_and_UAI_Health_Checks.md)

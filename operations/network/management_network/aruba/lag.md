@@ -23,13 +23,13 @@ switch(config-if)# lag LAG
 Show commands to validate functionality:
 
 ```text
-switch# show lacp <interfaces|aggregates|configuration>
+show lacp <interfaces|aggregates|configuration>
 ```
 
 ## Example Output
 
 ```text
-switch# show interface lag1
+show interface lag1
 Aggregate-name lag1
 Aggregated-interfaces : 1/1/1 1/1/4
 Aggregation-key : 1
@@ -50,7 +50,7 @@ TX
     0 dropped
 56975 bytes
     0 dropped
-switch# show lacp interfaces
+show lacp interfaces
 State abbreviations :
 A - Active        P - Passive
 S - Short-timeout L - Long-timeout N - InSync     O - OutofSync
@@ -70,7 +70,7 @@ Intf Aggregate  Partner Port     State   System-id         System   Aggr
 ------------------------------------------------------------------------------
 1/1/1lag1       0       65534    PLFOEX  00:00:00:00:00:00 65534    0
 1/1/4lag1       0       65534    PLFOEX  00:00:00:00:00:00 65534    0
-switch# show lacp aggregates
+show lacp aggregates
 Aggregate-name        : lag1
 Aggregated-interfaces : 1/1/1 1/1/4
 Heartbeat rate        : slow
@@ -84,4 +84,4 @@ F - Aggregable I - Individual
 2. Administrators can add ports to a LAG
 3. Administrators can configure a LAG interface
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

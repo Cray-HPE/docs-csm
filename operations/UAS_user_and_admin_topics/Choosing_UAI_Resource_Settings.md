@@ -21,6 +21,6 @@ Another reason for setting custom resource limits on a class of UAIs is that the
 This can increase the capacity of the pool of available UAI host nodes, for UAIs of that class. The caveat here is that Kubernetes will terminate any pod (UAI) that tries to grow past its resource limits.
 Making the resource limits on UAI Classes too small can lead to instability of UAIs of that class.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Setting End-User UAI Timeouts](Setting_UAI_Timeouts.md)

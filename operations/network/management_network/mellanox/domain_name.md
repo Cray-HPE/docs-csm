@@ -13,7 +13,7 @@ switch(config)# ip map-hostname
 Show Commands to Validate Functionality
 
 ```
-switch# show hosts
+show hosts
 ```
 
 Expected Results
@@ -21,4 +21,4 @@ Expected Results
 * Step 1: You can configure the domain name
 * Step 2: The output of all show commands is correct
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

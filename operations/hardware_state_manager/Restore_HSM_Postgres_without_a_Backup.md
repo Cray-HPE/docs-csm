@@ -11,7 +11,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
   Verify all 3 HSM postgres replicas are up and running:
 
   ```bash
-  ncn# kubectl -n services get pods -l cluster-name=cray-smd-postgres
+  kubectl -n services get pods -l cluster-name=cray-smd-postgres
   ```
 
   Example output:
@@ -28,19 +28,19 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
 1. Re-run the HSM loader job.
 
     ```bash
-    ncn# kubectl -n services get job cray-smd-init -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f -
+    kubectl -n services get job cray-smd-init -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f -
     ```
 
     Wait for the job to complete:
 
     ```bash
-    ncn# kubectl wait -n services job cray-smd-init --for=condition=complete --timeout=5m
+    kubectl wait -n services job cray-smd-init --for=condition=complete --timeout=5m
     ```
 
 2. Verify that the service is functional.
 
     ```bash
-    ncn# cray hsm service ready
+    cray hsm service ready
     ```
 
     Example output:
@@ -53,7 +53,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
 3. Get the number of node objects stored in HSM.
 
     ```bash
-    ncn# cray hsm state components list --type node --format json | jq .[].ID | wc -l
+    cray hsm state components list --type node --format json | jq .[].ID | wc -l
     ```
 
 4. Restart MEDS and REDS.
@@ -61,25 +61,25 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
     To repopulate HSM with components, restart MEDS and REDS so that they will add known RedfishEndpoints back in to HSM. This will also kick off HSM rediscovery to repopulate components and hardware inventory.
 
     ```bash
-    ncn# kubectl scale deployment cray-meds -n services --replicas=0
-    ncn# kubectl scale deployment cray-meds -n services --replicas=1
-    ncn# kubectl scale deployment cray-reds -n services --replicas=0
-    ncn# kubectl scale deployment cray-reds -n services --replicas=1
+    kubectl scale deployment cray-meds -n services --replicas=0
+    kubectl scale deployment cray-meds -n services --replicas=1
+    kubectl scale deployment cray-reds -n services --replicas=0
+    kubectl scale deployment cray-reds -n services --replicas=1
     ```
 
     Wait for the RedfishEndpoints table to get repopulated and discovery to complete.
 
     ```bash
-    ncn# cray hsm inventory RedfishEndpoints list --format json | jq .[].ID | wc -l
+    cray hsm inventory RedfishEndpoints list --format json | jq .[].ID | wc -l
     100
-    ncn# cray hsm inventory redfishEndpoints list --format json | grep -c "DiscoveryStarted"
+    cray hsm inventory redfishEndpoints list --format json | grep -c "DiscoveryStarted"
     0
     ```
 
 5. Check for Discovery Errors.
 
     ```bash
-    ncn# cray hsm inventory redfishEndpoints list --format json | grep LastDiscoveryStatus | grep -v -c "DiscoverOK"
+    cray hsm inventory redfishEndpoints list --format json | grep LastDiscoveryStatus | grep -v -c "DiscoverOK"
     ```
 
     If any of the RedfishEndpoint entries have a `LastDiscoveryStatus` other than `DiscoverOK` after discovery has completed, refer to the [Troubleshoot Issues with Redfish Endpoint Discovery](../node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md) procedure for guidance.

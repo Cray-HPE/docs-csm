@@ -26,11 +26,11 @@ switch (config) # interface mgmt0 ip address <IP address> <netmask>
 Show Commands to Validate Functionality
 
 ```
-switch# show interface mgmt
+show interface mgmt
 ```
 
 * Step 1: You can enable/disable the management interface.
 * Step 2: You can assign an IP address to the management interface
 *  Step 3: You can configure a loopback interface to be use for Switch management.
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

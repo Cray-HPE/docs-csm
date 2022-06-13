@@ -26,7 +26,6 @@ Allocate a `/22` from this range per liquid-cooled cabinet. For example, the fol
 - cabinet 3 =  10.100.8.0/22
 - ...
 
-
 For the Mountain HMN:
 
 Allocate a `/22` from this range per liquid-cooled cabinet. For example, the following cabinets would be given the following IP addresses in the allocated ranges:

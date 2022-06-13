@@ -24,7 +24,7 @@ SAT is installed and configured.
         --format json | jq -r '[.Components[] | .ID ]| join(",")')
     ```
 
-2. Set the same random password for every BMC on an air-cooled node.
+1. Set the same random password for every BMC on an air-cooled node.
 
     ```bash
     sat bmccreds --xnames $RIVER_NODEBMC_XNAMES --random-password --pw-domain bmc

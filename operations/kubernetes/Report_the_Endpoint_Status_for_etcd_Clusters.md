@@ -4,12 +4,10 @@ Report etcd cluster end point status. The report includes a cluster's endpoint, 
 
 This procedure provides the ability to view the etcd cluster endpoint status.
 
-
 ### Prerequisites
 
 - This procedure requires root privileges.
 - The etcd clusters are in a healthy state.
-
 
 ### Procedure
 
@@ -30,7 +28,7 @@ This procedure provides the ability to view the etcd cluster endpoint status.
     Example of command being run:
 
     ```bash
-    ncn-w001# for pod in $(kubectl get pods -l app=etcd -n services -o \
+    for pod in $(kubectl get pods -l app=etcd -n services -o \
     jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} Endpoint Status: ###"; \
     kubectl -n services exec ${pod} -- /bin/sh -c \
     "ETCDCTL_API=3 etcdctl endpoint status -w table"; done;
@@ -96,7 +94,7 @@ This procedure provides the ability to view the etcd cluster endpoint status.
     Example of command being run:
 
     ```bash
-    ncn-w001# for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd -n services \
+    for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd -n services \
     -o jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} Endpoint Status: \
     ###"; kubectl -n services exec ${pod} -- /bin/sh -c \
     "ETCDCTL\_API=3 etcdctl endpoint status -w table"; done

@@ -9,7 +9,7 @@
 	* Normal: Determines link unidirectionality but will not block the port
 	* Aggressive: Once a port has been determined to be bidirectional and then becomes unidirectional, it will be blocked
 
-> **NOTE:** The default UDLD mode is forward-then-verify.
+> **`NOTE`** The default UDLD mode is forward-then-verify.
 
 ## Configuration Commands
 
@@ -22,7 +22,7 @@ switch(config-if)# udld
 Show commands to validate functionality:
 
 ```text
-switch# show udld [interface IFACE]
+show udld [interface IFACE]
 ```
 
 ## Example Output
@@ -31,7 +31,7 @@ switch# show udld [interface IFACE]
 switch(config)# interface 1/1/1
 switch(config-if)# udld
 switch(config-if)# exit
-switch# show udld interface 1/1/1
+show udld interface 1/1/1
 Interface 1/1/1
  Config: enabled
  State: inactive
@@ -51,7 +51,7 @@ Interface 1/1/1
 1. Administrators can enable UDLD on an interface
 1. UDLD state should be "Unblocked | UDLD determined the link is bidirectional"
 
-> **NOTE:** With SFP+ XCVERS, Aruba Switches automatically detect a broken bidirectional link, rendering the port into a down state.
+> **`NOTE`** With SFP+ XCVERS, Aruba Switches automatically detect a broken bidirectional link, rendering the port into a down state.
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)
 

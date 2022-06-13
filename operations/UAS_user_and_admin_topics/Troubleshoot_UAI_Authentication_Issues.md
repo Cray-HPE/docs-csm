@@ -7,7 +7,7 @@ Several troubleshooting steps related to authentication in a UAI.
 An error was encountered while accessing Keycloak because of an invalid token.
 
 ```bash
-# cray uas create --publickey ~/.ssh/id_rsa.pub
+cray uas create --publickey ~/.ssh/id_rsa.pub
 Usage: cray uas create [OPTIONS]
 Try "cray uas create --help" for help.
 Error: Internal Server Error: An error was encountered while accessing Keycloak
@@ -36,7 +36,7 @@ There is no mechanism to distribute CLI authorization amongst hosts.
 ## Invalid Token
 
 ```bash
-# cray uas create --publickey ~/.ssh/id_rsa.pub
+cray uas create --publickey ~/.ssh/id_rsa.pub
 Usage: cray uas create [OPTIONS]
 Try "cray uas create --help" for help.
 
@@ -50,9 +50,8 @@ To resolve this issue, make sure the `cray` command is configured to use one of 
             "key": "https://api-gateway.default.svc.cluster.local/keycloak/realms/shasta",
             "key": "https://api-gw-service-nmn.local/keycloak/realms/shasta",
             "key": "https://mgmt-plane-cmn.local/keycloak/realms/shasta",
-# cray config describe | grep hostname
+cray config describe | grep hostname
     "hostname": "https://172.30.51.127:30443" <---- 172.30.51.127:30443 will not work
-
 
 # Change to "https://api-gw-service-nmn.local"
 cray init --hostname "https://api-gw-service-nmn.local"
@@ -67,7 +66,7 @@ Initialization complete.
 ## Invalid Credentials
 
 ```bash
-# cray auth login --username <user> --password <wrongpassword>
+cray auth login --username <user> --password <wrongpassword>
 Usage: cray auth login [OPTIONS]
 Try "cray auth login --help" for help.
 
@@ -84,7 +83,7 @@ To resolve this issue:
 The `cray uas describe <user>` is no longer a valid command.
 
 ```bash
-# cray uas describe <user>
+cray uas describe <user>
 Usage: cray uas [OPTIONS] COMMAND [ARGS]...
 Try "cray uas --help" for help.
 
@@ -94,7 +93,7 @@ Error: No such command "describe".
 Use `cray uas list` instead.
 
 ```bash
-# cray uas list
+cray uas list
 ```
 
 Example output:
@@ -110,6 +109,6 @@ uai_age = "11m"
 uai_name = ""
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Troubleshoot Broker UAI SSSD Cannot Use /etc/sssd/sssd.conf](Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)

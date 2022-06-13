@@ -18,7 +18,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 2.  Check that the DHCP service is running.
 
     ```bash
-    ncn-m001# kubectl get pods -A | grep kea
+    kubectl get pods -A | grep kea
     ```
 
     Example output:
@@ -36,19 +36,19 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     The following example sends tcpdump data to `stdout`.
 
     ```bash
-    cray-dhcp# tcpdump
+    tcpdump
     ```
 
 4.  Obtain the DHCP pod's ID.
 
     ```bash
-    ncn-m001# PODID=$(kubectl get pods --no-headers -o wide | grep cray-dhcp | awk '{print $1}')
+    PODID=$(kubectl get pods --no-headers -o wide | grep cray-dhcp | awk '{print $1}')
     ```
 
 5.  Enter the DHCP pod using its ID.
 
     ```bash
-    ncn-m001# kubectl exec -it $PODID /bin/sh
+    kubectl exec -it $PODID /bin/sh
     ```
 
 6.  Start a `tcpdump` session from within the DHCP pod.

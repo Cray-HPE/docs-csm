@@ -27,6 +27,6 @@ A UAI may also terminate and have to be restarted if its `hard` timeout is reach
 
 If a UAI restarts on a node that was recently rebooted, some of the configured volumes may not be ready and it could appear that content in the UAI is missing. In this case, restart the UAI.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: List UAS Version Information](List_UAS_Information.md)

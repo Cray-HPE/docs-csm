@@ -17,7 +17,7 @@ View the configuration of a specific UAS volume.
 This command returns output in TOML format by default. JSON or YAML formatted output can be obtained by using the `--format json` or `--format yaml` options respectively.
 
 ```bash
-ncn-m001-pit# cray uas admin config volumes describe 11a4a22a-9644-4529-9434-d296eef2dc48 --format json
+ncn-m001-cray uas admin config volumes describe 11a4a22a-9644-4529-9434-d296eef2dc48 --format json
 ```
 
 Example output:
@@ -36,6 +36,6 @@ Example output:
 }
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Update a UAS Volume](Update_a_UAS_Volume.md)

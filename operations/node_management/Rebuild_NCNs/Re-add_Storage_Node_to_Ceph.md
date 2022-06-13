@@ -2,13 +2,13 @@
 
 Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
-**NOTE:** This operation can be done to add more than one node at the same time.
+**`NOTE`** This operation can be done to add more than one node at the same time.
 
 ## Add Join Script
 
 1. Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh`.
 
-   **NOTE:** This script may also available in the `/usr/share/doc/csm/scripts` directory where the latest ***`docs-csm`*** RPM is installed. If so, it can be copied from that node to the new storage node being rebuilt and skip to step 2.
+   **`NOTE`** This script may also available in the `/usr/share/doc/csm/scripts` directory where the latest ***`docs-csm`*** RPM is installed. If so, it can be copied from that node to the new storage node being rebuilt and skip to step 2.
 
    ```bash
    #!/bin/bash
@@ -85,13 +85,13 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 1. Change the mode of the script.
 
    ```bash
-   ncn-s# chmod u+x /srv/cray/scripts/common/join_ceph_cluster.sh
+   chmod u+x /srv/cray/scripts/common/join_ceph_cluster.sh
    ```
 
 1. In a separate window, log into one of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`) and execute the following:
 
    ```bash
-   ncn-ms# watch ceph -s
+   watch ceph -s
    ```
 
 1. Execute the script.
@@ -106,7 +106,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
 **IMPORTANT:** Only do this if unable to wipe the node prior to rebuild.
 
-**NOTE:** The commands in the Zapping OSDs section must be run on a node running `ceph-mon`. Typically these are `ncn-s001`, `ncn-s002`, and `ncn-s003`.
+**`NOTE`** The commands in the Zapping OSDs section must be run on a node running `ceph-mon`. Typically these are `ncn-s001`, `ncn-s002`, and `ncn-s003`.
 
 1. Find the devices on the node being rebuilt.
 
@@ -128,7 +128,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
    **IMPORTANT:** In the above example the drives on our rebuilt node are showing "Available = no". This is expected because the check is based on the presence of an LVM on the volume.
 
-   **NOTE:** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that there are no OS drives. These will have a size of 480G.
+   **`NOTE`** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that there are no OS drives. These will have a size of 480G.
 
 2. Zap the drives.
 
@@ -142,7 +142,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 3. Validate the drives are being added to the cluster.
 
    ```bash
-   ncn-ms# watch ceph -s
+   watch ceph -s
    ```
 
    The returned output will have the OSD count `UP` and `IN` counts increase. **If** the `IN` count increases but does not reflect the amount of drives being added back in, an administrator must fail over the `ceph-mgr` daemon.
@@ -151,7 +151,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    If necessary, fail over the `ceph-mgr` daemon with the following command:
 
    ```bash
-   ncn-s# ceph mgr fail
+   ceph mgr fail
    ```
 
 ## Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
@@ -164,7 +164,7 @@ This is automated as part of the install, but administrators may have to regener
    - Configure Rados Gateway containers with the complete list of nodes it should be running on:
 
      ```bash
-     ncn-s# ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
+     ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
      ```
 
 1. Verify Rados Gateway is running on the desired nodes.
@@ -185,7 +185,7 @@ This is automated as part of the install, but administrators may have to regener
 1. Add nodes into `HAproxy` and `KeepAlived`.
 
    ```bash
-   ncn-s# pdsh -w ncn-s00[1-(end node number)] -f 2 \
+   pdsh -w ncn-s00[1-(end node number)] -f 2 \
                    'source /srv/cray/scripts/metal/update_apparmor.sh
                     reconfigure-apparmor; /srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg
                     systemctl enable haproxy.service

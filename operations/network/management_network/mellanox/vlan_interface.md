@@ -20,7 +20,7 @@ switch(config vlan 6)# ip address 10.1.0.2/16
 Show Commands to Validate Functionality
 
 ```
-switch# show vlan
+show vlan
 ```
 
 Expected Results
@@ -31,4 +31,4 @@ Expected Results
 * Step 4: You validate the configuration is correct
 * Step 5: You can ping from the switch to the client and from the client to the switch
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

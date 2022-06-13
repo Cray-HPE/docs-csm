@@ -35,7 +35,6 @@ For example: 10.06.0120
 
 - 0120	= CPE release (bug fixes)
 
-
 It is considered to be a best practice to keep all Aruba CX platform devices running the same software version.
 
 Aruba CX devices two software image banks, which means sw images can be pre-staged to the device without booting to the new image.
@@ -45,7 +44,7 @@ If upgrading to a new major branch, in Aruba identified by the second integer in
 When upgrading past a major software release, for example, from 10.6 to 10.8 (and skipping 10.7), issue the `allow-unsafe-upgrades` command to allow any low level firmware/driver upgrades to complete. If going from the 10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically completed.
 
 ```
-sw-leaf-001# config
+config
 sw-leaf-001(config)# allow-unsafe-updates 30
 ```
 
@@ -70,7 +69,7 @@ VSX software upgrade command can automatically upgrade both of the peers in VSX 
 Console into the switch being upgraded.
 1. Check images
    ```
-   sw-leaf-001# show images
+   show images
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
@@ -100,15 +99,15 @@ Console into the switch being upgraded.
 1. Upload the firmware to the desired image.
 In this example we are uploading it to the secondary.
    ```
-   sw-leaf-001# copy sftp://root@10.252.1.12//root/ArubaOS-CX_6400-6300_10_08_1021.swi secondary
+   copy sftp://root@10.252.1.12//root/ArubaOS-CX_6400-6300_10_08_1021.swi secondary
 
-   sw-leaf-001# write mem
+   write mem
    Copying configuration: [Success]
    ```
 1. Once the upload is complete, check the images:
 
    ```
-   sw-leaf-001# show image
+   show image
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
@@ -138,13 +137,13 @@ In this example we are uploading it to the secondary.
 1. After the firmware is uploaded, boot the switch to the correct image.
 
    ```
-   sw-leaf-001# boot system secondary
+   boot system secondary
    ```
 
 1. Once the reboot is complete, check and make sure the firmware version is correct.
 
    ```
-   sw-leaf-001# show version
+   show version
    -----------------------------------------------------------------------------
    ArubaOS-CX
    (c) Copyright 2017-2020 Hewlett Packard Enterprise Development LP
@@ -166,7 +165,7 @@ In this example we are pre-staging the firmware to `sw-spine-001` and `sw-spine-
 1. Check images first.
 
    ```
-   sw-spine-002# show images
+   show images
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
@@ -197,16 +196,16 @@ In this example we are pre-staging the firmware to `sw-spine-001` and `sw-spine-
 1. Upload the firmware to the desired image.
 In this example we are uploading it to the secondary.
    ```
-   sw-leaf-001# copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_8325_10_08_1021.swi secondary
+   copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_8325_10_08_1021.swi secondary
 
-   sw-leaf-001# write mem
+   write mem
    Copying configuration: [Success]
    ```
 
 1. Once the upload is complete, check the images and make sure the version is correct.
 
    ```
-   sw-spine-001# show image
+   show image
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
@@ -238,14 +237,14 @@ In this example we are uploading it to the secondary.
 
 Since we uploaded to the secondary image, we choose that one to boot to.
 ```
-sw-spine-001# vsx update-software boot-bank secondary
+vsx update-software boot-bank secondary
 ```
 This will trigger the upgrade process on the VSX pair and it will start the dialogue explaining what will happen next, i.e. if any firmware/driver upgrades are needed (i.e. the unit would reboot twice if this was the case) and it will show you on the screen the current status of the upgrade process. in VSX upgrade process the secondary VSX member will always boot first.
 
 Once software update is complete verify the image version on both switches.
 
 ```
-sw-spine-002# show version
+show version
 -----------------------------------------------------------------------------
 ArubaOS-CX
 (c) Copyright 2017-2021 Hewlett Packard Enterprise Development LP
@@ -259,8 +258,6 @@ Active Image : secondary
 Service OS Version : GL.01.08.0002
 BIOS Version       : GL-01-0013
 ```
-
-
 
 ## Mellanox Firmware Update
 
@@ -319,13 +316,13 @@ BIOS Version       : GL-01-0013
 1. Fetch the image from `ncn-m001`.
 
    ```
-   sw-leaf-001# image install http://10.252.1.4/fw/network/OS10_Enterprise_10.5.1.4.stable.tar
+   image install http://10.252.1.4/fw/network/OS10_Enterprise_10.5.1.4.stable.tar
    ```
 
 3. Check the image upload status.
 
    ```
-   sw-leaf-001# show image status
+   show image status
    Image Upgrade State:     download
    ==================================================
    File Transfer State:     download
@@ -342,14 +339,14 @@ BIOS Version       : GL-01-0013
 4. Reboot after the image is uploaded.
 
    ```
-   sw-leaf-001# write memory
-   sw-leaf-001# reload
+   write memory
+   reload
    ```
 
 5. Once the switch is available, verify the image is installed.
 
    ```
-   sw-leaf-001# show version
+   show version
    Dell EMC Networking OS10 Enterprise
    Copyright (c) 1999-2020 by Dell Inc. All Rights Reserved.
    OS Version: 10.5.1.4

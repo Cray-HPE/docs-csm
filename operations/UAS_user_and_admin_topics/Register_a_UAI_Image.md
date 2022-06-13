@@ -17,7 +17,7 @@ Register a UAI image with UAS.
 The following is the minimum required CLI command form:
 
 ```bash
-ncn-m001-pit# cray uas admin config images create --imagename IMAGE_NAME
+ncn-m001-cray uas admin config images create --imagename IMAGE_NAME
 ```
 
 In this example, `IMAGE_NAME` is the full name of the image, including registry host and version tag, to be registered.
@@ -26,21 +26,21 @@ The following example registers a UAI image stored in the `registry.local` regis
 This example also explicitly sets the default attribute to `true` because the `--default yes` option is used in the command.
 
 ```bash
-ncn-m001-pit# cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest --default yes
+ncn-m001-cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest --default yes
 ```
 
 To register the image explicitly as non-default:
 
 ```bash
-ncn-m001-pit# cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest --default no
+ncn-m001-cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest --default no
 ```
 
 Registering an image with the `--default no` option is usually unnecessary. Omitting the `--default` option causes UAS to set the default attribute as `false`. So, the following command would be equivalent to the previous command:
 
 ```bash
-ncn-m001-pit# cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest
+ncn-m001-cray uas admin config images create --imagename registry.local/cray/custom-end-user-uai:latest
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Retrieve UAI Image Registration Information](Retrieve_UAI_Image_Registration_Information.md)

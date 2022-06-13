@@ -44,12 +44,12 @@ There are multiple ways to check if this problem exists:
 -   Check the Address Resolution Protocol \(ARP\) cache using the `arp` command. Because it is a cache, it is possible that IP addresses can age out of the cache, so the IP address may not be present. If the address that is failing to be assigned is in the ARP cache, and it is assigned to a node with a different MAC address, then that is confirmation that this problem has occurred.
 
     ```bash
-    ncn-m001# arp
+    arp
     ```
 
     Example output:
 
-    ```
+    ```text
     Address                  HWtype  HWaddress           Flags Mask            Iface
     ncn-w002.local           ether   98:03:9b:b4:f1:fe   C                     bond0.nmn0
     10.46.11.201             ether   ca:d3:dc:33:29:e7   C                     weave
@@ -65,7 +65,6 @@ There are multiple ways to check if this problem exists:
 
     [...]
     ```
-
 
 ### Resolution
 

@@ -12,7 +12,7 @@ Disaster Recovery Procedures by Service:
 - [Restore Keycloak Postgres without a Backup](#restore-keycloak-postgres)
 - [Restore Console Postgres without a Backup](#restore-console-postgres)
 
-<a name="restore-keycloak-postgres"> </a>
+
 ### Keycloak
 
 The following procedures are required to rebuild the automatically populated
@@ -106,7 +106,7 @@ recreated.
 Any other changes made to Keycloak, such as local users that have been created,
 will have to be manually re-applied.
 
-<a name="#restore-console-postgres"> </a>
+
 ### Restore Console Postgres without a Backup
 
 Many times the PostgreSQL database used for the console services may be restored to health using
@@ -124,7 +124,7 @@ cray-console-data service.
    1. Run the following command to find the version of cray-console-data deployed on the system:
 
       ```
-      ncn-m# helm history -n services cray-console-data
+      helm history -n services cray-console-data
       ```
 
       Output similar to the following will be returned:
@@ -153,7 +153,7 @@ cray-console-data service.
    1. Uninstall the current cray-console-data helm chart:
 
       ```
-      ncn-m# helm uninstall -n services cray-console-data
+      helm uninstall -n services cray-console-data
       release "cray-console-data" uninstalled
       ```
 
@@ -165,7 +165,7 @@ cray-console-data service.
       they are terminated and removed:
 
       ```
-      ncn-m# watch -n .2 'kubectl -n services get pods | grep cray-console-data'
+      watch -n .2 'kubectl -n services get pods | grep cray-console-data'
       ```
 
       Output similar to the following will be returned:
@@ -183,14 +183,14 @@ cray-console-data service.
    1. Check that the data PVC instances have been removed using the command:
 
       ```
-      ncn-m# kubectl -n services get pvc | grep console-data-postgres
+      kubectl -n services get pvc | grep console-data-postgres
       ```
 
       There should be no PVC instances returned by this command. If there are, delete them
       manually with the following command:
 
       ```
-      ncn-m# kubectl -n services delete pvc pgdata-cray-console-data-postgres-0
+      kubectl -n services delete pvc pgdata-cray-console-data-postgres-0
       ```
 
       Change the name of the PVC and repeat until all of the `pgdata-cray-console-data-postgres-'
@@ -201,7 +201,7 @@ cray-console-data service.
    1. Install the helm chart from the file downloaded previously:
 
       ```
-      ncn-m# helm install -n services cray-console-data ./cray-console-data-1.0.8.tgz
+      helm install -n services cray-console-data ./cray-console-data-1.0.8.tgz
       ```
 
       Example output:
@@ -220,7 +220,7 @@ cray-console-data service.
    1. Watch the services come back up again:
 
       ```
-      ncn-m# watch -n .2 'kubectl -n services get pods | grep cray-console-data'
+      watch -n .2 'kubectl -n services get pods | grep cray-console-data'
       ```
 
       After a little time you will see something similar to:
@@ -242,7 +242,7 @@ cray-console-data service.
       pod on your system and node that is up on your system call:
 
       ```
-      ncn-m# kubectl -n services exec -it cray-console-operator-7fdc797f9f-xz8rt -- sh -c '/app/get-node x9000c3s3b0n1'
+      kubectl -n services exec -it cray-console-operator-7fdc797f9f-xz8rt -- sh -c '/app/get-node x9000c3s3b0n1'
       {"podname":"cray-console-node-0"}
       ```
 

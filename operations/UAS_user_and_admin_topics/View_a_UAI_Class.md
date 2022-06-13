@@ -17,7 +17,7 @@ View all the information about a specific UAI class.
 To examine an existing UAI class, use a command of the following form:
 
 ```bash
-ncn-m001-pit# cray uas admin config classes describe <class-id>
+ncn-m001-cray uas admin config classes describe <class-id>
 ```
 
 The following example uses the `--format yaml` option to display the UAI class configuration in YAML format.
@@ -26,7 +26,7 @@ Replace `yaml` with `json` to return JSON-formatted output. Omitting the `--form
 Replace `bb28a35a-6cbc-4c30-84b0-6050314af76b` in the example command with the ID of the UAI class to be examined.
 
 ```bash
-ncn-m001-pit# cray uas admin config classes describe bdb4988b-c061-48fa-a005-34f8571b88b4 --format yaml
+ncn-m001-cray uas admin config classes describe bdb4988b-c061-48fa-a005-34f8571b88b4 --format yaml
 ```
 
 Example output:
@@ -81,6 +81,6 @@ volume_mounts:
 
 Refer to [UAI Classes](UAI_Classes.md) and [Elements of a UAI](Elements_of_a_UAI.md) for an explanation of the output of this command.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic Modify a UAI Class](Modify_a_UAI_Class.md)

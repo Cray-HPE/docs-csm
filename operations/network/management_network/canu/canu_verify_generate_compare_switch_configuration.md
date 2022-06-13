@@ -1,23 +1,21 @@
 # Use CANU to Verify, Generate, or Compare Switch Configurations
 
-* [Common CANU Arguments](#common_canu_arguments)
-  * [SHCD-Related Arguments](#shcd_related_arguments)
-  * [CSI and SLS API Input to CANU](#csi_sls_input)
-    * [CSI Input](#csi_input)
-    * [SLS API Input](#sls_input)
-* [Check Single Switch Firmware](#single_switch_fw)
-* [Check Firmware of Multiple Switches](#multi_switch_fw)
-* [JSON Output](#json_output)
-* [Check Single Switch Cabling](#single_switch_cabling)
-* [Check Cabling of Multiple Switches](#multi_switch_cabling)
-* [Validate SHCD](#validate_shcd)
-* [Validate Cabling](#validate_cabling)
-* [Validate SHCD and Cabling](#validate_both)
-* [Validate BGP](#validate_bgp)
-* [Configuration Creation For BGP](#config_creation_for_bgp)
-* [Generate Switch Configurations](#generate_switch_config)
-
-<a name="common_canu_arguments"></a>
+* [Common CANU Arguments](#common-canu-arguments)
+  * [SHCD-Related Arguments](#shcd-related-arguments)
+  * [CSI and SLS API Input to CANU](#csi-sls-input)
+    * [CSI Input](#csi-input)
+    * [SLS API Input](#sls-input)
+* [Check Single Switch Firmware](#single-switch-fw)
+* [Check Firmware of Multiple Switches](#multi-switch-fw)
+* [JSON Output](#json-output)
+* [Check Single Switch Cabling](#single-switch-cabling)
+* [Check Cabling of Multiple Switches](#multi-switch-cabling)
+* [Validate SHCD](#validate-shcd)
+* [Validate Cabling](#validate-cabling)
+* [Validate SHCD and Cabling](#validate-both)
+* [Validate BGP](#validate-bgp)
+* [Configuration Creation For BGP](#config-creation-for-bgp)
+* [Generate Switch Configurations](#generate-switch-config)
 
 ## Common CANU Arguments
 
@@ -27,8 +25,6 @@ The following CANU flags are used for multiple different actions.
 * IPv4 addresses can be read from a file or specified in a comma-separated list with the `--ips` flag. When passing in the IP addresses
   in a file, the file must have one IP address per line, and the filename is specified with the `--ips-file` flag.
 * The `--architecture` / `-a` flag is used to set the architecture of the system: `TDS` or `Full`.
-
-<a name="shcd_related_arguments"></a>
 
 ### SHCD-Related Arguments
 
@@ -40,13 +36,9 @@ Some of the CANU flags are specific to SHCD (Shasta Cabling Diagram) input files
   should contain the 11 headers: `Source`, `Rack`, `Location`, `Slot`, Blank, `Port`, `Destination`, `Rack`, `Location`, Blank, `Port`.
   If the corners are not specified, CANU will prompt for the columns for each tab.
 
-<a name="csi_sls_input"></a>
-
 ### CSI and SLS API Input to CANU
 
 In some cases, CANU accepts input from a CSI-generated file or from the SLS API. The following two sections go over these options.
-
-<a name="csi_input"></a>
 
 #### CSI Input
 
@@ -57,8 +49,6 @@ The `sls_input_file.json` file is generally stored in one of two places, dependi
 * Early in the install process, when running off of the LiveCD, the `sls_input_file.json` file is normally found on the PIT node in the the `/var/www/ephemeral/prep/SYSTEMNAME/` directory.
 * Later in the install process, after the PIT node has been redeployed, the `sls_input_file.json` file is generally found on
 `ncn-m001` or `ncn-m003` in the `/metal/bootstrap/prep/SYSTEMNAME/` directory.
-
-<a name="sls_input"></a>
 
 #### SLS API Input
 
@@ -71,14 +61,12 @@ Instead of passing in a token file, the environment variable `SLS_TOKEN` can be 
 
 The SLS address is by default set to `api-gw-service-nmn.local`. If needed, a different SLS address can be specified using the `--sls-address` flag.
 
-<a name="single_switch_fw"></a>
-
 ## Check Single Switch Firmware
 
 To check the firmware of a single switch, run the following:
 
 ```ShellSession
-linux# canu --shasta 1.4 switch firmware --ip 192.168.1.1 --username USERNAME --password PASSWORD
+canu --shasta 1.4 switch firmware --ip 192.168.1.1 --username USERNAME --password PASSWORD
 ```
 
 Expected output:
@@ -87,18 +75,16 @@ Expected output:
 🛶 - Pass - IP: 192.168.1.1 Hostname:test-switch-spine01 Firmware: GL.10.06.0130
 ```
 
-<a name="multi_switch_fw"></a>
-
 ## Check Firmware of Multiple Switches
 
 Multiple Aruba switches on a network can be checked for their firmware versions. An example of checking the firmware of multiple switches:
 
 ```ShellSession
-linux# canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
+canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
 ```ShellSession
-linux# canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2,192.168.1.3,192.168.1.4 --username USERNAME --password PASSWORD
+canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2,192.168.1.3,192.168.1.4 --username USERNAME --password PASSWORD
 ```
 
 Expected Output
@@ -111,7 +97,6 @@ Expected Output
      🛶 Pass    192.168.1.2     test-switch-leaf01  FL.10.06.0010
      ❌ Fail    192.168.1.3     test-wrong-version  FL.10.05.0001   Firmware should be in range ['FL.10.06.0001']
      🔺 Error   192.168.1.4'
-
 
     Errors
     ------------------------------------------------------------------
@@ -129,14 +114,12 @@ Expected Output
 
 When using the `network firmware` commands, the table will show either: `🛶 Pass`, `❌ Fail`, or `🔺 Error`. The switch will `pass` or `fail` based on whether or not the switch firmware matches the `canu.yaml` file.
 
-<a name="json_output"></a>
-
 ## JSON Output
 
 To get the JSON output from a single switch, or from multiple switches, make sure to use the `--json` flag. An example JSON output is below.
 
 ```ShellSession
-linux# canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD –json
+canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD –json
 ```
 
 ```json
@@ -168,14 +151,12 @@ linux# canu --shasta 1.4 network firmware --ips 192.168.1.1,192.168.1.2 --userna
     }
 ```
 
-<a name="single_switch_cabling"></a>
-
 ## Check Single Switch Cabling
 
 CANU can also use LLDP to check the cabling status of a switch. To check the cabling of a single switch, run the following:
 
 ```ShellSession
-linux# canu --shasta 1.5 switch cabling --ip 192.168.1.1 --username USERNAME --password PASSWORD
+canu --shasta 1.5 switch cabling --ip 192.168.1.1 --username USERNAME --password PASSWORD
 ```
 
 Expected results:
@@ -201,8 +182,6 @@ Entries in the table will be colored based on what they are. For example: Neighb
 blue. Neighbors that have a port labeled (not a MAC address) are generally switches and are labeled green. Ports that are duplicated
 will be bright white.
 
-<a name="multi_switch_cabling"></a>
-
 ## Check Cabling of Multiple Switches
 
 The cabling of multiple Aruba switches on a network can be checked at the same time using LLDP.
@@ -210,7 +189,7 @@ The cabling of multiple Aruba switches on a network can be checked at the same t
 An example of checking the cabling of multiple switches:
 
 ```ShellSession
-linux# canu --shasta 1.5 network cabling --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
+canu --shasta 1.5 network cabling --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
 There are two different `--view` options: `switch` and `equipment`:
@@ -221,11 +200,11 @@ There are two different `--view` options: `switch` and `equipment`:
 An example of checking the cabling of multiple switches and displaying with the equipment view:
 
 ```ShellSession
-linux# canu --shasta 1.5 network cabling --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD --view equipment`
+canu --shasta 1.5 network cabling --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD --view equipment`
 ```
 
 ```ShellSession
-linux# canu --shasta 1.4 network cabling --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD --view equipment
+canu --shasta 1.4 network cabling --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD --view equipment
 ```
 
 Expected results:
@@ -238,13 +217,10 @@ Expected results:
     1/1/3                     ===>                 00:00:00:00:00:00 mgmt1
     1/1/4                     ===> ncn-test        bb:bb:bb:bb:bb:bb mgmt1 Linux ncn-test
 
-
     sw-spine02 Aruba JL635A  GL.10.06.0010 bb:bb:bb:bb:bb:bb
     -------------------------------------------------------------------------------------------
     1/1/1                     <==> sw-spine01      1/1/1  Aruba JL635A  GL.10.06.0010 00:00:00:00:00:00 192.168.2.2:vlan3, 192.168.1.2:vlan1
 ```
-
-<a name="validate_shcd"></a>
 
 ## Validate SHCD
 
@@ -253,7 +229,7 @@ CANU can be used to perform basic validation of an SHCD (Shasta Cabling Diagram)
 In order to check an SHCD, run the following:
 
 ```ShellSession
-linux# canu -s 1.5 validate shcd -a tds --shcd FILENAME.xlsx --tabs 25G_10G,NMN,HMN --corners I14,S25,I16,S22,J20,T39
+canu -s 1.5 validate shcd -a tds --shcd FILENAME.xlsx --tabs 25G_10G,NMN,HMN --corners I14,S25,I16,S22,J20,T39
 ```
 
 Expected results:
@@ -276,8 +252,6 @@ Expected results:
     CAN switch
 ```
 
-<a name="validate_cabling"></a>
-
 ## Validate Cabling
 
 CANU can be used to perform basic validation of network cabling.
@@ -285,11 +259,11 @@ CANU can be used to perform basic validation of network cabling.
 In order to validate the cabling, run the following:
 
 ```ShellSession
-linux# canu -s 1.4 validate cabling -a tds --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
+canu -s 1.4 validate cabling -a tds --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
 ```ShellSession
-linux# canu -s 1.4 validate cabling -a tds --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
+canu -s 1.4 validate cabling -a tds --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
 Expected results:
@@ -325,8 +299,6 @@ Expected results:
 
 If there are any nodes that cannot be determined or should be renamed, there will be warning tables that show the details.
 
-<a name="validate_both"></a>
-
 ## Validate SHCD and Cabling
 
 CANU can be used to validate an SHCD against the current network cabling.
@@ -334,11 +306,11 @@ CANU can be used to validate an SHCD against the current network cabling.
 In order to validate an SHCD against the cabling, run the following:
 
 ```ShellSession
-linux# canu -s 1.5 validate shcd-cabling -a tds --shcd FILENAME.xlsx --tabs 25G_10G,NMN --corners I14,S49,I16,S22 --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD`
+canu -s 1.5 validate shcd-cabling -a tds --shcd FILENAME.xlsx --tabs 25G_10G,NMN --corners I14,S49,I16,S22 --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD`
 ```
 
 ```ShellSession
-linux# canu -s 1.5 validate shcd-cabling -a tds --shcd FILENAME.xlsx --tabs 25G_10G,NMN --corners I14,S49,I16,S22 --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
+canu -s 1.5 validate shcd-cabling -a tds --shcd FILENAME.xlsx --tabs 25G_10G,NMN --corners I14,S49,I16,S22 --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
 Expected results:
@@ -413,8 +385,6 @@ The output of the `validate shcd-cabling` command will show the results for `val
 A node will be displayed in blue if it is found in the SHCD but not the network, or vice versa. If a node is found on both the network and in the SHCD,
 but the connections are not the same, that node will be shown in green, and the missing connections will be shown.
 
-<a name="validate_bgp"></a>
-
 ## Validate BGP
 
 CANU can be used to validate BGP neighbors. All neighbors of a switch must return status `Established` or the verification will fail.
@@ -426,11 +396,11 @@ In order to see the individual status of all the neighbors of a switch, use the 
 In order to validate BGP, run the following command:
 
 ```ShellSession
-linux# canu -s 1.5 validate bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
+canu -s 1.5 validate bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
 ```ShellSession
-linux# canu -s 1.4 validate bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
+canu -s 1.4 validate bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
 Expected results:
@@ -446,8 +416,6 @@ If any of the spine switch neighbors for a connection other than `Established`, 
 
 If a switch that is not a **spine** switch is tested, it will show in the results table as `SKIP`.
 
-<a name="config_creation_for_bgp"></a>
-
 ## Configuration Creation For BGP
 
 CANU can be used to configure BGP for a pair of switches.
@@ -456,16 +424,16 @@ CANU can be used to configure BGP for a pair of switches.
 create route maps, update BGP neighbors, and write it all to the switch memory.
 
 The network and NCN data can be read from one of two sources: the SLS API or a file generated by CSI.
-See [CSI and SLS API Input to CANU](#csi_sls_input).
+See [CSI and SLS API Input to CANU](#csi-sls-input).
 
 In order to configure BGP, run the following:
 
 ```ShellSession
-linux# canu -s 1.5 config bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
+canu -s 1.5 config bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
 ```ShellSession
-linux# canu -s 1.4 config bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
+canu -s 1.4 config bgp --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
 Expected. Results:
@@ -479,25 +447,23 @@ Expected. Results:
 
 To print extra details (prefixes, NCN names, IP addresses), add the `--verbose` flag.
 
-<a name="generate_switch_config"></a>
-
 ## Generate Switch Configurations
 
 CANU can be used to generate switch configurations.
 
 In order to generate a switch configuration, a valid SHCD must be passed in and system variables must be read in from either CSI output or the SLS API.
-See [CSI and SLS API Input to CANU](#csi_sls_input).
+See [CSI and SLS API Input to CANU](#csi-sls-input).
 
 In order to generate a configuration for a specific switch, a hostname must  be passed in using the `--name` flag.
 
 In order to generate a switch configuration, run the following:
 
 ```ShellSession
-linux# canu -s 1.5 switch config -a full --shcd FILENAME.xlsx --tabs 'INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES' --corners 'J14,T44,J14,T48,J14,T24,J14,T23' --csi-folder /CSI/OUTPUT/FOLDER/ADDRESS --name SWITCH_HOSTNAME --out FILENAME
+canu -s 1.5 switch config -a full --shcd FILENAME.xlsx --tabs 'INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES' --corners 'J14,T44,J14,T48,J14,T24,J14,T23' --csi-folder /CSI/OUTPUT/FOLDER/ADDRESS --name SWITCH_HOSTNAME --out FILENAME
 ```
 
 ```ShellSession
-linux# canu -s 1.4 switch config -a full --shcd FILENAME.xlsx --tabs INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES --corners J14,T44,J14,T48,J14,T24,J14,T23 --csi-folder /CSI/OUTPUT/FOLDER/ADDRESS --name sw-spine-001
+canu -s 1.4 switch config -a full --shcd FILENAME.xlsx --tabs INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES --corners J14,T44,J14,T48,J14,T24,J14,T23 --csi-folder /CSI/OUTPUT/FOLDER/ADDRESS --name sw-spine-001
 ```
 
 ```text

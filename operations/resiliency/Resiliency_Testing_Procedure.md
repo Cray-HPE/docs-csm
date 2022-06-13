@@ -15,7 +15,6 @@ It is assumed that some procedures are already known by admins and thus does not
    - [Power on the Downed NCN](#power-on-the-downed-ncn)
    - [Execute Post-Boot Health Checks](#execute-post-boot-health-checks)
 
-<a name="prepare-for-resiliency-testing"></a>
 ### Prepare for Resiliency Testing
 
 * Confirm the component name (xname) mapping for each node on the system. This get dumped out by execution of the `/opt/cray/platform-utils/ncnGetXnames.sh` script.
@@ -27,7 +26,7 @@ It is assumed that some procedures are already known by admins and thus does not
   Log in as a user account where the credentials are known:
 
    ```bash
-   ncn# export CRAY_CONFIG_DIR=$(mktemp -d); echo $CRAY_CONFIG_DIR; cray init --configuration default --hostname https://api-gw-service-nmn.local
+   export CRAY_CONFIG_DIR=$(mktemp -d); echo $CRAY_CONFIG_DIR; cray init --configuration default --hostname https://api-gw-service-nmn.local
    /tmp/tmp.ShkBrUfhsJ
    Username: username
    Password:
@@ -39,19 +38,19 @@ It is assumed that some procedures are already known by admins and thus does not
 * Verify that `kubectl get nodes` reports all master and worker nodes are `Ready`.
 
    ```bash
-   ncn# kubectl get nodes -o wide
+   kubectl get nodes -o wide
    ```
 
 * Get a current list of pods that have a status of anything other than `Running` or `Completed`. Investigate any of concern. Save the list of pods for comparison once resiliency testing is completed and the system has been restored.
 
    ```bash
-   ncn# kubectl get pods -o wide -A | grep -Ev 'Running|Completed'
+   kubectl get pods -o wide -A | grep -Ev 'Running|Completed'
    ```
 
 * Note which pods are running on an NCN that will be taken down (as well as the total number of pods running). The following is an example that shows the listing of pods running on `ncn-w001`:
 
    ```bash
-   ncn# kubectl get pods -o wide -A | grep ncn-w001 | awk '{print $2}'
+   kubectl get pods -o wide -A | grep ncn-w001 | awk '{print $2}'
    ```
 
    Note that the above would only apply to Kubernetes nodes, such as master and worker nodes (ncn-m00x and ncn-w00x).
@@ -59,7 +58,7 @@ It is assumed that some procedures are already known by admins and thus does not
 * Verify `ipmitool` can report power status for the NCN to be shutdown.
 
    ```bash
-   ncn# ipmitool -I lanplus -U root -P <password> -H <ncn-node-name> chassis power status
+   ipmitool -I lanplus -U root -P <password> -H <ncn-node-name> chassis power status
    ```
 
    If `ncn-m001` is the node to be brought down, note that it has the external network connection. Therefore it is important to establish that `ipmitool` commands are able to be run from a node external to the system, in order to get the power status of `ncn-m001`.
@@ -73,7 +72,7 @@ It is assumed that some procedures are already known by admins and thus does not
    To see a list of BOS templates that exist on the system:
 
    ```bash
-   ncn# cray bos sessiontemplate list
+   cray bos sessiontemplate list
    ```
 
    For more information regarding management of BOS session templates, refer to [Manage a Session Template](../boot_orchestration/Manage_a_Session_Template.md).
@@ -83,10 +82,9 @@ It is assumed that some procedures are already known by admins and thus does not
    The following is an example for Slurm:
 
    ```bash
-   uan# srun -N 4 hostname | sort
+   srun -N 4 hostname | sort
    ```
 
-<a name="establish-system-health-before-beginning"></a>
 ### Establish System Health Before Beginning
 
 In order to ensure that the system is healthy before taking an NCN node down, run the `Platform Health Checks` section of [Validate CSM Health](../validate_csm_health.md).
@@ -96,10 +94,9 @@ If health issues are noted, it is best to address those before proceeding with t
 Part of the data being returned via execution of the `Platform Health Checks` includes patronictl info for each Postgres cluster. Each of the Postgres clusters has a leader pod, and in the case of a resiliency test that involves bringing an NCN worker node down, it may be useful to take note of the Postgres clusters that have their leader pods running on the NCN worker targeted for shutdown. The postgres-operator should handle re-establishment of a leader on another pod running in the cluster, but it is worth taking note of where leader re-elections are expected to occur so special attention can be given to those Postgres clusters. The Postgres health check is included in [Validate CSM Health](../validate_csm_health.md), but the script for dumping Postgres data can be run at any time:
 
    ```bash
-   ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+   /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
    ```
 
-<a name="monitor-for-changes"></a>
 ### Monitor for Changes
 
 In order to keep watch on various items during and after the fault has been introduced (in this case, the shutdown of a single NCN node), the steps listed below can help give insight into changing health conditions. It is an eventual goal to strive for a monitoring dashboard which would help track these sort of things in a single or few automated views. Until that can be incorporated, these kinds of command prompt sessions can be useful.
@@ -111,17 +108,17 @@ In order to keep watch on various items during and after the fault has been intr
    It may be useful to reference instructions for [Configuring the Cray CLI](../configure_cray_cli.md).
 
    ```bash
-   ncn# watch -n 5 "date; cray cps contents"
+   watch -n 5 "date; cray cps contents"
    ```
 
    ```bash
-   ncn# watch -n 5 "date; cray bos session list"
+   watch -n 5 "date; cray bos session list"
    ```
 
 1. Monitor Ceph health, in a window, during and after a single NCN is taken down.
 
    ```bash
-   ncn# watch -n 5 "date; ceph -s"
+   watch -n 5 "date; ceph -s"
    ```
 
 1. Identify when pods on a downed master or worker NCN are no longer responding.
@@ -133,15 +130,15 @@ In order to keep watch on various items during and after the fault has been intr
    Run the following commands in separate windows:
 
    ```bash
-   ncn# watch -n 5 "date; kubectl get pods -o wide -A | grep Termin"
+   watch -n 5 "date; kubectl get pods -o wide -A | grep Termin"
    ```
 
    ```bash
-   ncn# watch -n 10 "date; kubectl get pods -o wide -A | grep Pending"
+   watch -n 10 "date; kubectl get pods -o wide -A | grep Pending"
    ```
 
    ```bash
-   ncn# watch -n 5 "date; kubectl get pods -o wide -A | grep -v Completed | grep -v Running"
+   watch -n 5 "date; kubectl get pods -o wide -A | grep -v Completed | grep -v Running"
    ```
 
 1. Detect the change in state of the various Postgres instances running.
@@ -149,12 +146,11 @@ In order to keep watch on various items during and after the fault has been intr
    Run the following in a separate window:
 
    ```bash
-   ncn# watch -n 30 "date; kubectl get postgresql -A"
+   watch -n 30 "date; kubectl get postgresql -A"
    ```
 
    If Postgres reports a status that deviates from `Running`, that would require further investigation and possibly remediation via [Troubleshooting the Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md).
 
-<a name="launch-a-non-interactive-batch-job"></a>
 ### Launch a Non-Interactive Batch Job
 
 The purpose of this procedure is to launch a non-interactive, long-running batch job across computes via a UAI (or the UAN, if present) in order to ensure that even though the UAI pod used to launch the job is running on the NCN worker node being taken down, it will start up on another NCN worker (once Kubernetes begins terminating pods).
@@ -174,8 +170,8 @@ Additionally, it is important to verify that the batch job continued to run, uni
       In this example, `ncn-w002` is the target node for shutdown on a system with only three NCN worker nodes.
 
       ```bash
-      ncn# kubectl label node ncn-w001 uas=False --overwrite
-      ncn# kubectl label node ncn-w003 uas=False --overwrite
+      kubectl label node ncn-w001 uas=False --overwrite
+      kubectl label node ncn-w003 uas=False --overwrite
       ```
 
       If successful, output similar to `node/ncn-w00X labeled` will be returned.
@@ -183,7 +179,7 @@ Additionally, it is important to verify that the batch job continued to run, uni
    1. Verify the labels were applied successfully.
 
       ```bash
-      ncn# kubectl get nodes -l uas=False
+      kubectl get nodes -l uas=False
       ```
 
       Example output:
@@ -199,8 +195,8 @@ Additionally, it is important to verify that the batch job continued to run, uni
       > **IMPORTANT:** After a UAI has been created, labels must be cleared or else when Kubernetes terminates the running UAI on the NCN being shut down, it will not be able to reschedule the UAI on another pod.
 
       ```bash
-      ncn# kubectl label node ncn-w001 uas-
-      ncn# kubectl label node ncn-w003 uas-
+      kubectl label node ncn-w001 uas-
+      kubectl label node ncn-w003 uas-
       ```
 
 1. Verify that WLM is configured with the appropriate workload manager within the created UAI.
@@ -208,7 +204,7 @@ Additionally, it is important to verify that the batch job continued to run, uni
    1. Verify the connection string of the created UAI.
 
       ```bash
-      ncn# cray uas list
+      cray uas list
       ```
 
       Example output:
@@ -231,7 +227,7 @@ Additionally, it is important to verify that the batch job continued to run, uni
       For example:
 
       ```bash
-      ncn# ssh vers@10.103.8.170
+      ssh vers@10.103.8.170
       ```
 
    1. Verify the configuration of Slurm, for example, within the UAI:
@@ -258,7 +254,7 @@ Additionally, it is important to verify that the batch job continued to run, uni
    1. Delete the UAI session when all of the testing is complete.
 
       ```bash
-      ncn# cray uas delete --uai-list uai-vers-f8fa541f
+      cray uas delete --uai-list uai-vers-f8fa541f
       ```
 
 #### Launch on a UAN
@@ -268,7 +264,7 @@ Additionally, it is important to verify that the batch job continued to run, uni
    In this example, Slurm will be used.
 
    ```bash
-   uan01# srun -N 4 hostname | sort
+   srun -N 4 hostname | sort
    ```
 
    Example output:
@@ -286,7 +282,6 @@ Additionally, it is important to verify that the batch job continued to run, uni
 
 1. Verify that the job launched on the UAN is running and that application output is streaming to a file. Streaming output will be used to verify that the batch job is still running during resiliency testing. A batch job, when submitted, will designate a log file location. This log file can be accessed to be able to verify that the batch job is continuing to run after an NCN is brought down and once it is back online. Additionally, the `squeue` command can be used to verify that the job continues to run (for Slurm).
 
-<a name="shut-down-an-ncn"></a>
 ### Shut Down an NCN
 
 1. Establish a console session to the NCN targeted for shutdown by executing the steps in [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md).
@@ -298,16 +293,15 @@ Additionally, it is important to verify that the batch job continued to run, uni
    1. Once the target node is reported as being powered off, verify that the node's power status with the `ipmitool` is reported as off.
 
       ```bash
-      ncn# ipmitool -I lanplus -U root -P <password> -H <ncn-node-name> chassis power status
+      ipmitool -I lanplus -U root -P <password> -H <ncn-node-name> chassis power status
       ```
 
-      **NOTE:** In previous releases, an `ipmitool` command has been used to simply yank the power to an NCN. There have been times where this resulted in a longer recovery procedure under Shasta 1.5 (mostly due to issues with getting nodes physically booted up again), so the preference has been to simply use the `shutdown` command.
+      **`NOTE`** In previous releases, an `ipmitool` command has been used to simply yank the power to an NCN. There have been times where this resulted in a longer recovery procedure under Shasta 1.5 (mostly due to issues with getting nodes physically booted up again), so the preference has been to simply use the `shutdown` command.
 
       If the NCN shutdown is a master or worker node, within 5-6 minutes of the node being shut down, Kubernetes will begin reporting `Terminating` pods on the target node and start rescheduling pods to other NCN nodes. New pending pods will be created for pods that can not be relocated off of the NCN shut down. Pods reported as `Terminating` will remain in that state until the NCN has been powered back up.
 
 1. Take note of changes in the data being reported out of the many monitoring windows that were set-up in a previous step.
 
-<a name="conduct-testing"></a>
 ### Conduct Testing
 
 After the target NCN was shut down, assuming the command line windows that were set-up for ensuring API responsiveness are not encountering persistent failures, the next step will be to use a BOS template to boot a pre-designated set of compute nodes. The timing of this test is recommended to be around 10 minutes after the NCN has gone down. That should give ample time for Kubernetes to have terminated pods on the downed node (in the case of a master or worker NCN) and for them to have been rescheduled and in a healthy state on another NCN. Going too much earlier than 10 minutes runs the risk that there are still some critical pods that are settling out to reach a healthy state.
@@ -317,7 +311,7 @@ After the target NCN was shut down, assuming the command line windows that were 
    1. Use BOS to reboot the designated compute node(s).
 
       ```bash
-      ncn# cray bos session create --template-uuid boot-nids-1-4 --operation reboot
+      cray bos session create --template-uuid boot-nids-1-4 --operation reboot
       ```
 
       Issuing this reboot command will spit out a Boot Orchestration Agent (BOA) "jobId", which can be used to find the new BOA pod that has been created for the boot. Then, the logs can be tailed to watch the compute boot proceed.
@@ -325,13 +319,13 @@ After the target NCN was shut down, assuming the command line windows that were 
    1. Find the BOA job name using the returned BOA "jobID".
 
       ```
-      ncn# kubectl get pods -o wide -A | grep <boa-job-id>
+      kubectl get pods -o wide -A | grep <boa-job-id>
       ```
 
    1. Watch the progress of the reboot of the compute(s).
 
       ```
-      ncn# kubectl logs -n services <boa-job-pod-name> -c boa -f
+      kubectl logs -n services <boa-job-pod-name> -c boa -f
       ```
 
       Failures or a timeout being reached in either the boot or CFS (post-boot configuration) phase will need investigation. For more information around accessing logs for the BOS operations, see [Check the Progress of BOS Session Operations](../boot_orchestration/Check_the_Progress_of_BOS_Session_Operations.md).
@@ -348,7 +342,7 @@ After the target NCN was shut down, assuming the command line windows that were 
 1. Look at any pods that, are at this point, in a state other than `Running`, `Completed`, `Pending`, or `Terminating`:
 
    ```bash
-   ncn# kubectl get pods -o wide -A | grep -Ev "Running|Completed|Pending|Termin"
+   kubectl get pods -o wide -A | grep -Ev "Running|Completed|Pending|Termin"
    ```
 
    Compare what comes up in this list to the pod list that was collected before. If there are new pods that are in status `ImagePullBackOff` or `CrashLoopBackOff`, a `kubectl describe` as well as `kubectl logs` command should be run against them to collect additional data about what happened. Obviously, if there were pods in a bad state before the procedure started, then it should not be expected that bringing one of the NCNs down is going to fix that.
@@ -357,7 +351,6 @@ After the target NCN was shut down, assuming the command line windows that were 
 
    Additionally, it is as important to understand (and document) any work-around procedures needed to fix issues encountered. In addition to filing a bug for a permanent fix, work-around documentation can be very useful when written up - for both internal and external customers to access.
 
-<a name="power-on-the-downed-ncn"></a>
 ### Power on the Downed NCN
 
 1. Use the `ipmitool` command to power up the NCN.
@@ -365,7 +358,7 @@ After the target NCN was shut down, assuming the command line windows that were 
    It will take several minutes for the NCN to reboot. Progress can be monitored over the connected serial console session. Wait to begin execution of the next steps until after it can be determined that the NCN has booted up and is back at the login prompt (when viewing the serial console log).
 
    ```bash
-   ncn# ipmitool -I lanplus -U root -P <password> -H <hostname> chassis power on   #example hostname is ncn-w003-mgmt
+   ipmitool -I lanplus -U root -P <password> -H <hostname> chassis power on   #example hostname is ncn-w003-mgmt
    ```
 
    Check the following depending on the NCN type powered on:
@@ -375,7 +368,6 @@ After the target NCN was shut down, assuming the command line windows that were 
 
 1. Check that pod statuses have returned to the state that they were in at the beginning of this procedure, paying particular attention to any pods that were previously noted to be in a bad state while the NCN was down. Additionally, there is no concern if pods that were in a bad state at the beginning of the procedure, are still in a bad state. What is important to note is anything that is different from either the beginning of the test or from the time that the NCN was down.
 
-<a name="execute-post-boot-health-check"></a>
 ### Execute Post-Boot Health Checks
 
 1. Re-run the `Platform Health Checks` section of [Validate CSM Health](../validate_csm_health.md) noting any output that indicates output is not as expected. Note that in a future version of CSM, these checks will be further automated for better efficiency and pass/fail clarity.

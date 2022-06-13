@@ -4,7 +4,7 @@ Use the following procedure to upgrade switches from 1.0 to 1.2 preconfig.
 
 To check if the management network is using generated switch configs, log onto a management switch and check for a banner with a `CANU version`. This indicates the switch config has been generated.
 
-```
+```text
 ###############################################################################
 # CSM version:  1.0
 # CANU version: 1.1.10

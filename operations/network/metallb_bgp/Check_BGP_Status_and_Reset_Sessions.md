@@ -20,7 +20,7 @@ This procedure requires administrative privileges.
         For example:
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.hmn
+        ssh admin@sw-spine-001.hmn
         ```
 
     1. View the status of the BGP sessions.
@@ -41,14 +41,14 @@ This procedure requires administrative privileges.
         IPV4 Prefixes             : 46
         IPV6 Prefixes             : 0
         L2VPN EVPN Prefixes       : 0
-        
+
         ------------------------------------------------------------------------------------------------------------------
         Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
         ------------------------------------------------------------------------------------------------------------------
         10.101.8.8        4    65536        667385    678016    1634      0      0      6:21:29:59    ESTABLISHED/14
         10.101.8.9        4    65536        667177    678199    1634      0      0      6:21:30:04    ESTABLISHED/18
         10.101.8.10       4    65536        667359    678211    1634      0      0      6:21:30:16    ESTABLISHED/14
-        
+
         VRF name                  : default
         BGP router identifier     : 10.252.0.2
         local AS number           : 65533
@@ -57,7 +57,7 @@ This procedure requires administrative privileges.
         IPV4 Prefixes             : 40
         IPV6 Prefixes             : 0
         L2VPN EVPN Prefixes       : 0
-        
+
         ------------------------------------------------------------------------------------------------------------------
         Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
         ------------------------------------------------------------------------------------------------------------------
@@ -70,14 +70,12 @@ This procedure requires administrative privileges.
 
 1. Reset BGP to re-establish the sessions.
 
-    <a name="mellanox-ssh"></a>
-
-    1. SSH to each spine switch.
+        1. SSH to each spine switch.
 
         For example:
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.hmn
+        ssh admin@sw-spine-001.hmn
         ```
 
     1. Verify that BGP is enabled.
@@ -114,14 +112,14 @@ This procedure requires administrative privileges.
         IPV4 Prefixes             : 46
         IPV6 Prefixes             : 0
         L2VPN EVPN Prefixes       : 0
-        
+
         ------------------------------------------------------------------------------------------------------------------
         Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
         ------------------------------------------------------------------------------------------------------------------
         10.101.8.8        4    65536        667385    678016    1634      0      0      6:21:29:59    ESTABLISHED/14
         10.101.8.9        4    65536        667177    678199    1634      0      0      6:21:30:04    ESTABLISHED/18
         10.101.8.10       4    65536        667359    678211    1634      0      0      6:21:30:16    ESTABLISHED/14
-        
+
         VRF name                  : default
         BGP router identifier     : 10.252.0.2
         local AS number           : 65533
@@ -130,7 +128,7 @@ This procedure requires administrative privileges.
         IPV4 Prefixes             : 40
         IPV6 Prefixes             : 0
         L2VPN EVPN Prefixes       : 0
-        
+
         ------------------------------------------------------------------------------------------------------------------
         Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
         ------------------------------------------------------------------------------------------------------------------
@@ -154,13 +152,13 @@ This procedure requires administrative privileges.
     1. SSH to a spine switch.
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.hmn
+        ssh admin@sw-spine-001.hmn
         ```
 
     1. View the status of the BGP sessions.
 
         ```text
-        sw-spine-001# show bgp all-vrf all summary
+        show bgp all-vrf all summary
         ```
 
         Example output:
@@ -173,7 +171,7 @@ This procedure requires administrative privileges.
         Peers                  : 4            Log Neighbor Changes   : No
         Cfg. Hold Time         : 3            Cfg. Keep Alive        : 1
         Confederation Id       : 0
-        
+
         Address-family : IPv4 Unicast
         -----------------------------
         Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
@@ -181,13 +179,13 @@ This procedure requires administrative privileges.
         10.252.1.7      65533       451712  451502  03d:09h:34m  Established   Up
         10.252.1.8      65533       450943  450712  03d:09h:36m  Established   Up
         10.252.1.9      65533       451463  451267  03d:09h:35m  Established   Up
-        
+
         Address-family : IPv6 Unicast
         -----------------------------
-        
+
         Address-family : L2VPN EVPN
         -----------------------------
-        
+
         VRF : Customer
         BGP Summary
         -----------
@@ -195,7 +193,7 @@ This procedure requires administrative privileges.
         Peers                  : 4            Log Neighbor Changes   : No
         Cfg. Hold Time         : 3            Cfg. Keep Alive        : 1
         Confederation Id       : 0
-        
+
         Address-family : IPv4 Unicast
         -----------------------------
         Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
@@ -203,7 +201,7 @@ This procedure requires administrative privileges.
         10.103.11.8     65536       374118  374039  03d:09h:35m  Established   Up
         10.103.11.9     65536       373454  373290  03d:09h:35m  Established   Up
         10.103.11.10    65536       374169  374087  03d:09h:34m  Established   Up
-        
+
         Address-family : IPv6 Unicast
         -----------------------------
         ```
@@ -212,20 +210,18 @@ This procedure requires administrative privileges.
 
 1. Reset BGP to re-establish the sessions.
 
-    <a name="aruba-ssh"></a>
-
-    1. SSH to each spine switch.
+        1. SSH to each spine switch.
 
         For example:
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.hmn
+        ssh admin@sw-spine-001.hmn
         ```
 
     1. Clear the BGP sessions.
 
         ```text
-        sw-spine-001# clear bgp all *
+        clear bgp all *
         ```
 
     1. Check the status of the BGP sessions.
@@ -233,7 +229,7 @@ This procedure requires administrative privileges.
         It may take a few minutes for sessions to become `Established`.
 
         ```text
-        sw-spine-001# show bgp all-vrf all summary
+        show bgp all-vrf all summary
         ```
 
         Example output:
@@ -246,7 +242,7 @@ This procedure requires administrative privileges.
         Peers                  : 4            Log Neighbor Changes   : No
         Cfg. Hold Time         : 3            Cfg. Keep Alive        : 1
         Confederation Id       : 0
-        
+
         Address-family : IPv4 Unicast
         -----------------------------
         Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
@@ -254,13 +250,13 @@ This procedure requires administrative privileges.
         10.252.1.7      65533       451712  451502  03d:09h:34m  Established   Up
         10.252.1.8      65533       450943  450712  03d:09h:36m  Established   Up
         10.252.1.9      65533       451463  451267  03d:09h:35m  Established   Up
-        
+
         Address-family : IPv6 Unicast
         -----------------------------
-        
+
         Address-family : L2VPN EVPN
         -----------------------------
-        
+
         VRF : Customer
         BGP Summary
         -----------
@@ -268,7 +264,7 @@ This procedure requires administrative privileges.
         Peers                  : 4            Log Neighbor Changes   : No
         Cfg. Hold Time         : 3            Cfg. Keep Alive        : 1
         Confederation Id       : 0
-        
+
         Address-family : IPv4 Unicast
         -----------------------------
         Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
@@ -276,7 +272,7 @@ This procedure requires administrative privileges.
         10.103.11.8     65536       374118  374039  03d:09h:35m  Established   Up
         10.103.11.9     65536       373454  373290  03d:09h:35m  Established   Up
         10.103.11.10    65536       374169  374087  03d:09h:34m  Established   Up
-        
+
         Address-family : IPv6 Unicast
         -----------------------------
         ```
@@ -287,68 +283,106 @@ This procedure requires administrative privileges.
     If some sessions still remain `Idle`, then proceed to the next step to reapply the `cray-metallb` helm chart, along with the
     BGP reset, in order to force the speaker pods to re-establish sessions with the switch.
 
-<a name="reapply"></a>
-
 ### Re-apply the `cray-metallb` Helm Chart
 
 1. Determine the `cray-metallb` chart version that is currently deployed.
 
     ```bash
-    ncn-m001# helm ls -A -a | grep cray-metallb
+    helm ls -A -a --filter cray-metallb
     ```
 
     Example output:
 
     ```text
-    cray-metallb   metallb-system   1   2021-02-10 14:58:43.902752441 -0600 CST  deployed  cray-metallb-0.12.2   0.8.1
+    cray-metallb  metallb-system  1  022-06-06 16:17:42.684984475 +0000 UTC deployed cray-metallb-1.1.1  v0.11.0
     ```
 
 1. Create a manifest file that will be used to reapply the same chart version.
 
     ```console
-    ncn-m001# cat << EOF > ./metallb-manifest.yaml
+    cat << EOF > ./metallb-manifest.yaml
     apiVersion: manifests/v1beta1
     metadata:
-      name: reapply-metallb
+      name: metallb
     spec:
+      sources:
+        charts:
+        - name: csm
+          type: repo
+          location: https://packages.local/repository/charts
       charts:
       - name: cray-metallb
+        source: csm
+        version: 1.1.1
         namespace: metallb-system
-        values:
-          imagesHost: dtr.dev.cray.com
-        version: 0.12.2
     EOF
     ```
 
+1. Extract `customizations.yaml` from the `site-init` secret.
+
+   ```bash
+   kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+   ```
+
+1. Run `manifestgen` to incorporate the MetalLB configuration into the manifest.
+
+   ```bash
+   manifestgen -c customizations.yaml -i metallb-manifest.yaml -o deploy.yaml
+   ```
+
+1. Check `customizations.yaml` contains the MetalLB configuration.
+
+   ```bash
+   yq read customizations.yaml spec.network.metallb
+   ```
+
+   Example output:
+
+   ```yaml
+   peers:
+     - peer-address: 10.101.3.2
+       peer-asn: 65533
+       my-asn: 65532
+     - peer-address: 10.101.3.3
+       peer-asn: 65533
+       my-asn: 65532
+     - peer-address: 10.252.0.2
+       peer-asn: 65533
+       my-asn: 65531
+     - peer-address: 10.252.0.3
+       peer-asn: 65533
+       my-asn: 65531
+   address-pools:
+     - name: customer-access
+       protocol: bgp
+       addresses:
+         - 10.101.3.192/26
+     - name: node-management
+       protocol: bgp
+       addresses:
+         - 10.92.100.0/24
+     - name: hardware-management
+       protocol: bgp
+       addresses:
+         - 10.94.100.0/24
+     - name: customer-management-static
+       protocol: bgp
+       addresses:
+         - 10.101.3.60/30
+     - name: customer-management
+       protocol: bgp
+       addresses:
+         - 10.101.3.64/26
+   ```
+
 1. Open SSH sessions to all spine switches.
-
-1. Determine the `CSM_RELEASE` version that is currently running and set an environment variable.
-
-    For example:
-
-    ```bash
-    ncn-m001# CSM_RELEASE=0.8.0
-    ```
-
-1. Mount the `PITDATA` so that helm charts are available for the re-install \(it might already be mounted\) and verify that the chart with the expected version exists.
-
-    ```bash
-    ncn-m001# mkdir -pv /mnt/pitdata && mount -L PITDATA /mnt/pitdata && \
-              ls /mnt/pitdata/csm-${CSM_RELEASE}/helm/cray-metallb*
-    ```
-
-    Example output:
-
-    ```text
-    /mnt/pitdata/csm-0.8.0/helm/cray-metallb-0.12.2.tgz
-    ```
 
 1. Uninstall the current `cray-metallb` chart.
 
     Until the chart is reapplied, this will also affect unbound name resolution, and all BGP sessions will be Idle for all of the worker nodes.
 
     ```bash
-    ncn-m001# helm del cray-metallb -n metallb-system
+    helm del cray-metallb -n metallb-system
     ```
 
 1. Use the open SSH sessions to the switches to clear the BGP sessions based on the above Mellanox or Aruba procedures.
@@ -356,11 +390,10 @@ This procedure requires administrative privileges.
     * Refer to substeps [1-3](#mellanox-ssh) for Mellanox.
     * Refer to substeps [1-2](#aruba-ssh) for Aruba.
 
-1. Reapply the `cray-metallb` chart based on the `CSM_RELEASE`.
+1. Reapply the `cray-metallb` chart.
 
     ```bash
-    ncn-m001# loftsman ship --manifest-path ./metallb-manifest.yaml \
-                --charts-path /mnt/pitdata/csm-${CSM_RELEASE}/helm
+    loftsman ship --manifest-path ./deploy.yaml
     ```
 
 1. Check that the speaker pods are all running.
@@ -368,7 +401,7 @@ This procedure requires administrative privileges.
     This may take a few minutes.
 
     ```bash
-    ncn-m001# kubectl get pods -n metallb-system
+    kubectl get pods -n metallb-system
     ```
 
     Example output:

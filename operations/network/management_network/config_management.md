@@ -87,7 +87,7 @@ The following example is a 1.0 system that is going to 1.2.
    1. Erase the startup config.
 
       ```
-      sw-leaf-bmc-001# delete startup-configuration
+      delete startup-configuration
       ```
 
       Example output:
@@ -99,7 +99,7 @@ The following example is a 1.0 system that is going to 1.2.
    1. Reboot after erasing the config.
 
       ```
-      sw-leaf-bmc-001# reload
+      reload
       ```
 
       Example output:
@@ -174,7 +174,6 @@ The following example shows going from CSM 1.2 to CSM 1.0 switch configuration.
     ```
 
 The switch will then boot to the desired configuration.
-
 
 ## Mellanox
 

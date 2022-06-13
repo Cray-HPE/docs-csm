@@ -102,11 +102,11 @@ Spine and leaf switches use the format `xXcChHsS`. `LeafBMC` switches use `xXcCw
 
 6. Each line in the file must denote the Brand, either `Dell`, `Mellanox`, or `Aruba`.
 
-7. Create the `switch_metadata.csv` file with this information.
+7. (`pit#`) Create the `switch_metadata.csv` file with this information.
 
-```console
-linux# vi switch_metadata.csv
-```
+   ```console
+   vim switch_metadata.csv
+   ```
 
 See the following example files for reference.
 

@@ -24,13 +24,16 @@ The Cray command line interface \(CLI\) tool is initialized and configured on th
     Even after the console services are disabled, the ConMan SOL session might need to be directly disabled using `ipmitool`.
     Note: This is only required for River nodes as Mountain hardware does not use IPMI.
 
-    > `read -s` is used to prevent the password from appearing in the command history.
+    > **`NOTE`** `read -s` is used to prevent the password from appearing in the command history.
 
     ```bash
-    ncn# USERNAME=root
-    ncn# read -s IPMI_PASSWORD
-    ncn# export IPMI_PASSWORD
-    ncn# ipmitool -I lanplus -H BMC_IP -U $USERNAME -E sol deactivate
+    USERNAME=$(whoami)
+    read -s IPMI_PASSWORD
+    ```
+
+    ```bash    
+    export IPMI_PASSWORD
+    ipmitool -I lanplus -H BMC_IP -U $USERNAME -E sol deactivate
     ```
 
 1. Restart the console services.

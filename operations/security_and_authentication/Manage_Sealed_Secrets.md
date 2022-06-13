@@ -43,8 +43,8 @@ If LDAP user federation is required, then refer to
    clone a local working tree. Replace the `<URL>` value in the following command before running it.
 
    ```bash
-   ncn# git clone <URL> /root/site-init
-   ncn# cd /root/site-init
+   git clone <URL> /root/site-init
+   cd /root/site-init
    ```
 
    If there is not a backup of `site-init`, perform the following steps to create a new one using the
@@ -54,27 +54,27 @@ If LDAP user federation is required, then refer to
 
       Determine the location of the initial unpacked install tarball and set `${CSM_DISTDIR}` accordingly.
 
-      > **NOTE:** If the unpacked set of CSM directories was copied, no action is required to expand the tarball.
+      > **`NOTE`** If the unpacked set of CSM directories was copied, no action is required to expand the tarball.
       If the tarball tgz file was copied, the command to unpack it is `tar -zxvf CSM_RELEASE.tar.gz`.
       Replace the `CSM_RELEASE` value before running the command to unpack the tarball.
 
       ```bash
-      ncn# cp -r ${CSM_DISTDIR}/shasta-cfg/* /root/site-init
-      ncn# cd /root/site-init
+      cp -r ${CSM_DISTDIR}/shasta-cfg/* /root/site-init
+      cd /root/site-init
       ```
 
    1. Extract `customizations.yaml` from the `site-init` secret.
 
       ```bash
-      ncn# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
+      kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
       ```
 
    1. Extract the certificate and key used to create the sealed secrets.
 
       ```bash
-      ncn# mkdir -p certs
-      ncn# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
-      ncn# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
+      mkdir -p certs
+      kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
+      kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
       ```
 
 1. (Optional) Prevent tracked sealed secrets from being regenerated.
@@ -85,15 +85,15 @@ If LDAP user federation is required, then refer to
    Retain the REDS/MEDS/RTS credentials.
 
    ```bash
-   ncn# yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
-   ncn# yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
-   ncn# yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
+   yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
+   yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
+   yq delete -i customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
    ```
 
 1. Prepare to generate sealed secrets.
 
    ```bash
-   ncn# ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
+   ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
    ```
 
 1. Encrypt the static values in the `customizations.yaml` file after making changes.
@@ -101,7 +101,7 @@ If LDAP user federation is required, then refer to
    The following command must be run within the `site-init` directory.
 
    ```bash
-   ncn# ./utils/secrets-seed-customizations.sh customizations.yaml
+   ./utils/secrets-seed-customizations.sh customizations.yaml
    ```
 
    Expected output looks similar to:
@@ -153,9 +153,9 @@ list in the `customizations.yaml` file prior to executing the
 To retain the REDS/MEDS/RTS credentials:
 
 ```bash
-ncn# yq delete -i /mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
-ncn# yq delete -i /mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
-ncn# yq delete -i /mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
+yq delete -i /mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
+yq delete -i /mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
+yq delete -i /mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
 ```
 
 ## View Tracked Sealed Secrets
@@ -166,7 +166,7 @@ use of `utils/secrets-seed-customizations.sh` above).
 To view currently tracked sealed secrets:
 
 ```bash
-ncn# yq read /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets
+yq read /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets
 ```
 
 Expected output looks similar to the following:
@@ -187,7 +187,7 @@ Syntax: `secret-decrypt.sh SEALED-SECRET-NAME SEALED-SECRET-PRIVATE-KEY CUSTOMIZ
 For example:
 
 ```bash
-ncn# cd /mnt/pitdata/prep/site-init &&
+cd /mnt/pitdata/prep/site-init &&
      ./utils/secrets-decrypt.sh cray_meds_credentials ./certs/sealed_secrets.key ./customizations.yaml | \
         jq .data.vault_redfish_defaults | sed -e 's/"//g' | base64 -d; echo
 ```
@@ -206,8 +206,7 @@ in the `cray_reds_credentials` secret, resulting in hardware not being discovere
 
 The general process outlined in the following steps can be followed if a different value is incorrect.
 
-```bash
-ncn# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
+```bash./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
 ```
 
 Output looks similar to the following:
@@ -219,7 +218,7 @@ Output looks similar to the following:
 1. Decrypt the `cray_reds_credentials` secret.
 
    ```bash
-   ncn# ./utils/secrets-decrypt.sh cray_reds_credentials > cray_reds_credentials.json
+   ./utils/secrets-decrypt.sh cray_reds_credentials > cray_reds_credentials.json
    ```
 
    The output file should look similar to the following.
@@ -255,7 +254,7 @@ Output looks similar to the following:
 1. Decode the `vault_switch_defaults` credentials to a working file.
 
    ```bash
-   ncn# jq -r '.data.vault_switch_defaults' cray_reds_credentials.json | base64 --decode > vault_switch_defaults.json
+   jq -r '.data.vault_switch_defaults' cray_reds_credentials.json | base64 --decode > vault_switch_defaults.json
    ```
 
 1. Correct the password in the `vault_switch_defaults.json` file.
@@ -267,13 +266,13 @@ Output looks similar to the following:
 1. Update `cray_reds_credentials.json` with an encoded version of the new password.
 
    ```bash
-   ncn# cat <<< $(jq ".data.vault_switch_defaults=\"$(base64 --wrap=0 vault_switch_defaults.json)\"" cray_reds_credentials.json) > cray_reds_credentials.json
+   cat <<< $(jq ".data.vault_switch_defaults=\"$(base64 --wrap=0 vault_switch_defaults.json)\"" cray_reds_credentials.json) > cray_reds_credentials.json
    ```
 
 1. Verify that `cray_reds_credentials.json` has been updated with the new password.
 
    ```bash
-   ncn# jq -r '.data.vault_switch_defaults' cray_reds_credentials.json | base64 --decode
+   jq -r '.data.vault_switch_defaults' cray_reds_credentials.json | base64 --decode
    ```
 
    Example output:
@@ -285,13 +284,13 @@ Output looks similar to the following:
 1. Replace the `cray_reds_credentials` secret in `customizations.yaml` with one containing the new credentials.
 
    ```bash
-   ncn# cat cray_reds_credentials.json | ./utils/secrets-encrypt.sh | yq w -f - -i customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials'
+   cat cray_reds_credentials.json | ./utils/secrets-encrypt.sh | yq w -f - -i customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials'
    ```
 
 1. Verify that `customizations.yaml` contains the updated password.
 
    ```bash
-   ncn# ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
+   ./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
    ```
 
    Example output:

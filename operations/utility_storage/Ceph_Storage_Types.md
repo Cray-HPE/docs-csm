@@ -7,7 +7,7 @@ As a reference, the following `ceph` and `rbd` commands are run from a master no
 **List block devices in a specific pool:**
 
 ```bash
-ncn-m001# rbd -p POOL_NAME ls -l
+rbd -p POOL_NAME ls -l
 ```
 
 Example output:
@@ -20,19 +20,19 @@ kube_vol 4 GiB          2
 **Create a block device:**
 
 ```bash
-ncn-m001# rbd create -p POOL_NAME VOLUME_NAME -size SIZE
+rbd create -p POOL_NAME VOLUME_NAME -size SIZE
 ```
 
 **Remove a block device:**
 
 ```bash
-ncn-m001# rbd -p POOL_NAME remove VOLUME_NAME
+rbd -p POOL_NAME remove VOLUME_NAME
 ```
 
 **Show mapped devices:**
 
 ```bash
-ncn-m001# rbd showmapped
+rbd showmapped
 ```
 
 Example output:
@@ -49,7 +49,7 @@ id pool namespace image    snap device
 **Display CephFS shares with their pool information:**
 
 ```bash
-ncn-m001# ceph fs ls
+ceph fs ls
 ```
 
 Example output:
@@ -61,7 +61,7 @@ name: cephfs, metadata pool: cephfs_metadata, data pools: [cephfs_data ]
 **Show the status of all CephFS components:**
 
 ```bash
-ncn-m001# ceph fs status
+ceph fs status
 ```
 
 Example output:
@@ -97,7 +97,7 @@ MDS version: ceph version 14.2.0-300-gacd2f2b9e1 (acd2f2b9e196222b0350b3b59af998
 The following command lists more than just the radosgw service, so ensure the correct sections are used.
 
 ```bash
-ncn-m001# ceph service dump
+ceph service dump
 ```
 
 Example output:
@@ -147,7 +147,7 @@ Example output:
 The following command is an example of how to get information about a specific user.
 
 ```bash
-ncn-m001# radosgw-admin user info --uid TEST_USER
+radosgw-admin user info --uid TEST_USER
 ```
 
 Example output:
@@ -198,11 +198,11 @@ The `radosgw-admin bucket` command is used to remove or view buckets.
 **To list the buckets:**
 
 ```bash
-ncn-m001# radosgw-admin bucket list
+radosgw-admin bucket list
 ```
 
 **To remove a specific bucket:**
 
 ```bash
-ncn-m001# radosgw-admin bucket rm --bucket-name BUCKET_NAME
+radosgw-admin bucket rm --bucket-name BUCKET_NAME
 ```

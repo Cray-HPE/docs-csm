@@ -7,8 +7,11 @@ Administrators who want to make changes to the ansible.cfg file on a per-session
 To create a custom `ansible.cfg` that CFS can use, create a new `ansible.cfg` file and a ConfigMap:
 
 ```bash
-ncn# vi ansible.cfg     # create an Ansible config file
-ncn# kubectl create configmap custom-ansible-cfg -n services --from-file=ansible.cfg
+vi ansible.cfg     # create an Ansible config file
+```
+
+```bash
+kubectl create configmap custom-ansible-cfg -n services --from-file=ansible.cfg
 ```
 
 To use this Ansible configuration file for a specific session, set `--ansible-config custom-ansible-cfg` when creating a session, or set `--default-ansible-config custom-ansible-cfg` when setting global CFS options with the `cray cfs options update` command.

@@ -23,7 +23,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 1. Monitor the progress of the OSDs that have been added.
 
     ```bash
-    ncn# watch ceph -s
+    watch ceph -s
     ```
 
 1. View the status of each OSD and see where they reside.
@@ -64,7 +64,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 1. Set the `NODE` variable.
 
    ```bash
-   ncn# export NODE=<node being removed>
+   export NODE=<node being removed>
    ```
 
 1. Reweigh the OSD\(s\) ***on the node being removed*** to rebalance the cluster.
@@ -125,7 +125,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     ```
 
     ```bash
-    ncn-s# ceph osd down osd.1; ceph osd destroy osd.1 --force; ceph osd purge osd.1 --force
+    ceph osd down osd.1; ceph osd destroy osd.1 --force; ceph osd purge osd.1 --force
     ```
 
 1. Regenerate Rados-GW Load Balancer Configuration.
@@ -154,32 +154,32 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
     1. Copy the HAproxy configuration from `ncn-s001` to all the storage nodes. Adjust the command based on the number of storage nodes.
 
         ```bash
-        ncn-s001# pdcp -w ncn-s00[2-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
+        pdcp -w ncn-s00[2-(end node number)] /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg
         ```
 
     1. Restart HAproxy on all the storage nodes, and stop HAproxy and KeepAlived ***on the node that is being removed***.
 
         ```bash
-        ncn# pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service'
-        ncn# pdsh -w $NODE 'systemctl stop haproxy.service; systemctl stop keepalived.service'
+        pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service'
+        pdsh -w $NODE 'systemctl stop haproxy.service; systemctl stop keepalived.service'
         ```
 
     1. Redeploy the Rados Gateway containers to adjust the placement group.
 
         ```bash
-        ncn-ms# ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
+        ceph orch apply rgw site1 zone1 --placement="<num-daemons> <node1 node2 node3 node4 ... >" --port=8080
         ```
 
         For example:
 
         ```bash
-        ncn-ms# ceph orch apply rgw site1 zone1 --placement="3 ncn-s001 ncn-s002 ncn-s003" --port=8080
+        ceph orch apply rgw site1 zone1 --placement="3 ncn-s001 ncn-s002 ncn-s003" --port=8080
         ```
 
     1. Verify that the Rados Gateway is running on the desired nodes.
 
         ```bash
-        ncn-ms# ceph orch ps --daemon_type rgw
+        ceph orch ps --daemon_type rgw
         ```
 
         Example output:
@@ -202,7 +202,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
    On the ***node being removed***
 
     ```bash
-    ncn-s# cephadm rm-cluster --fsid $(cephadm ls|jq -r .[1].fsid) --force
+    cephadm rm-cluster --fsid $(cephadm ls|jq -r .[1].fsid) --force
     ```
 
 1. Remove the node from the CRUSH map.
@@ -213,7 +213,7 @@ This procedure describes how to remove a Ceph node from the Ceph cluster. Once t
 
 1. In the output from `ceph -s`, verify that the status is `HEALTH_OK`.
 
-    **NOTE:** If `ncn-s001`, `ncn-s002`, or `ncn-s003` has been temporarily removed, `HEALTH_WARN` will be seen until the storage node is added back to the cluster.
+    **`NOTE`** If `ncn-s001`, `ncn-s002`, or `ncn-s003` has been temporarily removed, `HEALTH_WARN` will be seen until the storage node is added back to the cluster.
 
     ```text
      health: HEALTH_WARN

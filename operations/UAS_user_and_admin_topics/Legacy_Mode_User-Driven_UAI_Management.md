@@ -24,6 +24,6 @@ All other configuration in the default UAI Class will also be applied to all new
 
 The [UAI Classes](UAI_Classes.md) section provides information on what might go in an End-User UAI Class and what should specifically go in the Non-Brokered UAI Class used in legacy mode.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Configure A Default UAI Class for Legacy Mode](Configure_a_Default_UAI_Class_for_Legacy_Mode.md)

@@ -20,7 +20,7 @@ List the details of all the volumes registered in UAS.
 * Retrieve the list in TOML.
 
     ```bash
-    ncn-m001-pit# cray uas admin config volumes list
+    ncn-m001-cray uas admin config volumes list
     ```
 
     Example output:
@@ -55,7 +55,7 @@ List the details of all the volumes registered in UAS.
 * Retrieve the list in YAML format.
 
     ```bash
-    ncn-m001-pit# cray uas admin config volumes list --format yaml
+    ncn-m001-cray uas admin config volumes list --format yaml
     ```
 
     Example output:
@@ -87,7 +87,7 @@ List the details of all the volumes registered in UAS.
 * Retrieve the list in JSON format.
 
     ```bash
-    ncn-m001-pit# cray uas admin config volumes list --format json
+    ncn-m001-cray uas admin config volumes list --format json
     ```
 
     Example output:
@@ -136,7 +136,7 @@ Looking at the above output, each volume has a `mount_path`, `volume_description
 
 The `mount_path` specifies where in the UAI the volume will be mounted.
 
-**NOTE:** While it is acceptable to have multiple volumes configured in UAS with the same `mount_path`, any given UAI will fail creation if it has more than one volume specified for a given mount path.
+**`NOTE`** While it is acceptable to have multiple volumes configured in UAS with the same `mount_path`, any given UAI will fail creation if it has more than one volume specified for a given mount path.
 If multiple volumes with the same mount path exist in the UAS configuration, all UAIs must be created using UAI classes that specify a workable subset of volumes.
 A UAI created without a UAI Class under such a UAS configuration will try to use all configured volumes and creation will fail.
 
@@ -150,6 +150,6 @@ Volume names do need to be unique within any given UAI and are far more useful w
 
 The `volume_id` is a unique identifier used to identify the UAS volume when examining, updating or deleting a volume and when linking a volume to a UAI class. It is assigned automatically by UAS.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Add a Volume to UAS](Add_a_Volume_to_UAS.md)

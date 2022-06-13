@@ -14,7 +14,7 @@ Modify a Configuration Framework Service \(CFS\) configuration by specifying the
     Do not include the name of the configuration in the JSON file. This is specified on the command line in the next step.
 
     ```bash
-    ncn# cat configurations-example.json
+    cat configurations-example.json
     ```
 
     Example configuration:
@@ -32,10 +32,10 @@ Modify a Configuration Framework Service \(CFS\) configuration by specifying the
     }
     ```
 
-2.  Update the configuration in CFS.
+1.  Update the configuration in CFS.
 
     ```bash
-    ncn# cray cfs configurations update configurations-example \
+    cray cfs configurations update configurations-example \
     --file ./configurations-example.json --format json
     ```
 

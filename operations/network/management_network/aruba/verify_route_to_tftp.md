@@ -5,7 +5,7 @@ On **BOTH** Aruba switches, a single route to the TFTP server 10.92.100.60 is ne
 This is needed because there are issues with Aruba ECMP hashing and TFTP traffic.
 
 ```bash
-sw-spine-002# show ip route 10.92.100.60
+show ip route 10.92.100.60
 ```
 
 Example output:
@@ -23,5 +23,4 @@ This route can be a static route or a BGP route that is pinned to a single worke
 
 Verify that you can ping the next hop of this route. For example, in the example above we would ping 10.252.1.9. If this is not reachable, this is the problem.
 
-
-[Back to Index](../index.md)
+[Back to Index](../README.md)

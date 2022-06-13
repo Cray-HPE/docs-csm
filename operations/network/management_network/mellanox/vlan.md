@@ -45,7 +45,7 @@ switch (config interface ethernet 1/35) # switchport mode trunk
 Show Commands to Validate Functionality
 
 ```
-switch# show vlan [VLAN]
+show vlan [VLAN]
 ```
 
 Expected Results
@@ -53,4 +53,4 @@ Expected Results
 * Step 1: You can create a VLAN
 * Step 2: You can assign a VLAN to the physical interface
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

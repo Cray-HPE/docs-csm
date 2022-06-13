@@ -7,7 +7,7 @@ The source address of the DHCP Reply/Offer NEEDS to be the address of the vlan i
 Here is how to look at DHCP traffic on the workers:
 
 ```
-ncn-w001# tcpdump -envli bond0 port 67 or 68
+tcpdump -envli bond0 port 67 or 68
 ```
 
 You are looking for the source IP address of the DHCP Reply/Offer, this is an example of working offer:
@@ -30,4 +30,4 @@ If the Source IP address of the DHCP Reply/Offer is the MetalLB IP address, the 
 
 If you run into this, the only solution that we have found so far is restarting KEA and making sure that it gets moved to a different worker.
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

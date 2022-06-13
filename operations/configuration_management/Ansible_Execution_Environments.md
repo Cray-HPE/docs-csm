@@ -24,7 +24,7 @@ The following modules and plug-ins are available:
 
   An example of using this module is as follows:
 
-  ```text
+  ```yaml
   - name: Retrieve credentials from abc-s3-credentials k8s secret
     shasta_s3_creds:
       k8s_secret: abc-s3-credentials

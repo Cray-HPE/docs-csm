@@ -14,6 +14,6 @@ The Broker UAI should be configured by the site to permit authentication of user
 The necessary Broker UAI customization can be achieved using [volumes](Volumes.md) to place configuration files as needed in the file system namespace of the Broker UAI.
 Finally, once all of this is prepared, the administrator launches the Broker UAI, and makes the IP address of the Broker UAI available for users to log into.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Configure End-User UAI Classes for Broker Mode](Configure_End-User_UAI_Classes_for_Broker_Mode.md)

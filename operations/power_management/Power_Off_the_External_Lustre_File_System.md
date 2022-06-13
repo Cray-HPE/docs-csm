@@ -15,7 +15,7 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 1.  SSH to the primary MGMT node as `admin`.
 
     ```bash
-    ncn# remote$ ssh -l admin cls01234n00.us.cray.com
+    remote$ ssh -l admin cls01234n00.us.cray.com
     ```
 
 1.  Change to root user.
@@ -27,21 +27,21 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 1.  Collect status information for the system before shutdown.
 
     ```bash
-    n000# cscli csinfo
-    n000# cscli show_nodes
-    n000# cscli fs_info
-    n000# crm_mon -1r
+    cscli csinfo
+    cscli show_nodes
+    cscli fs_info
+    crm_mon -1r
     ```
 
 1.  Check resources before unmounting the file system.
 
     ```bash
-    n000# ssh cls01234n002 crm_mon -r1 | grep fsys
-    n000# ssh cls01234n004 crm_mon -r1 | grep fsys
-    n000# ssh cls01234n006 crm_mon -r1 | grep fsys
-    n000# ssh cls01234n008 crm_mon -r1 | grep fsys
-    n000# ssh cls01234n010 crm_mon -r1 | grep fsys
-    n000# ssh cls01234n012 crm_mon -r1 | grep fsys
+    ssh cls01234n002 crm_mon -r1 | grep fsys
+    ssh cls01234n004 crm_mon -r1 | grep fsys
+    ssh cls01234n006 crm_mon -r1 | grep fsys
+    ssh cls01234n008 crm_mon -r1 | grep fsys
+    ssh cls01234n010 crm_mon -r1 | grep fsys
+    ssh cls01234n012 crm_mon -r1 | grep fsys
     . . .
     ```
 
@@ -73,7 +73,7 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 1.  SSH to the MGS node.
 
     ```bash
-    MGS# ssh MGS_NODE
+    ssh MGS_NODE
 
     ```
 
@@ -105,19 +105,19 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 1. Exit the MGS node.
 
     ```bash
-    MGS# exit
+    exit
     ```
 
 1. Power off the non-MGMT diskless nodes.
 
     ```bash
-    n000# cscli power_manage -n DISKLESS_NODES[XX-YY --power-off
+    cscli power_manage -n DISKLESS_NODES[XX-YY --power-off
     ```
 
 1. Check power state of all non-MGMT nodes and list the node hostnames \(in this example `cls01234n[02-15]`\) before power off.
 
     ```bash
-    n000# pm –q
+    pm –q
     ```
 
     Example output:
@@ -137,7 +137,7 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 1. Check the power status of the nodes.
 
     ```bash
-    n000# pm –q
+    pm –q
     ```
 
     Example output:
@@ -153,13 +153,13 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 1. From the primary MGMT node, power off the MGMT nodes:
 
     ```bash
-    n000# cscli power_manage -n cls01234n[000-001] --power-off
+    cscli power_manage -n cls01234n[000-001] --power-off
     ```
 
 1. Shut down the primary management node.
 
     ```bash
-    n000# shutdown -h now
+    shutdown -h now
     ```
 
 ## Next Step

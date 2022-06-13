@@ -23,11 +23,10 @@ This procedure needs to be done on all mgmt switches.
 
     Ensure that the proper checkpoints exist. `CSM1_0` and `CSM1_2` are used in this example.
 
-
     Example:
 
     ```
-    sw-spine-001# show checkpoint | include CSM
+    show checkpoint | include CSM
     CSM1_2_FRESH_INSTALL_CANU_1_3_2                     latest      User    2022-04-01T20:11:57Z  GL.10.09.0010
     CSM1_2_UPGRADE_CANU_1_3_2                           checkpoint  User    2022-04-01T18:57:06Z  GL.10.09.0010
     CSM1_0_CANU_1_2_4                                   checkpoint  User    2022-03-15T21:37:11Z  GL.10.09.0010
@@ -36,17 +35,15 @@ This procedure needs to be done on all mgmt switches.
 1. Rollback to desired checkpoint.
 
     ```
-    sw-spine-001# checkpoint rollback CSM1_2_UPGRADE_CANU_1_3_2
+    checkpoint rollback CSM1_2_UPGRADE_CANU_1_3_2
     ```
 
 ## Dell
 
-
     Ensure that the proper config files exist. `CSM1_0` and `CSM1_2` are used in this example.
 
-
     ```
-    sw-leaf-001# dir config
+    dir config
     ```
 
     Example output:
@@ -63,7 +60,7 @@ This procedure needs to be done on all mgmt switches.
 1. Copy the desired configuration to the startup configuration.
 
     ```
-    sw-leaf-001# copy config://csm1.0.xml config://startup.xml
+    copy config://csm1.0.xml config://startup.xml
     ```
 
     `Copy completed` will be returned if successful.
@@ -71,7 +68,7 @@ This procedure needs to be done on all mgmt switches.
 1. Reboot the switch without saving configuration.
 
     ```
-    sw-leaf-001# reload
+    reload
     System configuration has been modified. Save? [yes/no]:no
     ```
 
@@ -80,7 +77,6 @@ This procedure needs to be done on all mgmt switches.
 1. View the configuration files.
 
     Ensure that the proper checkpoints exist. `CSM1_0` and `CSM1_2` are used in this example.
-
 
     ```
     sw-spine-001 [standalone: master] (config) # show configuration files

@@ -32,13 +32,13 @@ Power up storage nodes in the following sequence:
     For example, on system `cls01234`.
 
     ```bash
-    remote$ ssh -l admin cls01234n000.systemname.com
+    ssh -l admin cls01234n000.systemname.com
     ```
 
 1.  Check that the shared storage targets are available for the management nodes.
 
     ```bash
-    [n000]$ pdsh -g mgmt cat /proc/mdstat | dshbak -c
+    pdsh -g mgmt cat /proc/mdstat | dshbak -c
     ```
 
     Example output:
@@ -69,7 +69,7 @@ Power up storage nodes in the following sequence:
 1.  Check HA status once the node is up and HA configuration has been established.
 
     ```bash
-    [n000]$ sudo crm_mon -1r
+    sudo crm_mon -1r
     ```
 
     The output indicates that all resources have started and are balanced between two nodes.
@@ -77,27 +77,25 @@ Power up storage nodes in the following sequence:
 1.  In cases when all resources started on a single node \(for example, all resources have started on node 00 and did not fail back to node 01, run the failback operation:
 
     ```bash
-    [n000]$ cscli failback –n primary_MGMT_node
+    cscli failback –n primary_MGMT_node
     ```
 
 1.  As `root` on the primary management node, power on the MGS and MDS nodes, for example:
 
     ```bash
-    [n000]# cscli power_manage -n cls01234n[02-03] --power-on
-
+    cscli power_manage -n cls01234n[02-03] --power-on
     ```
 
 1. Power on the OSS nodes and, if present, the ADU nodes.
 
     ```bash
-    [n000]# cscli power_manage -n oss_adu_nodes --power-on
-
+    cscli power_manage -n oss_adu_nodes --power-on
     ```
 
 1. Check the status of the nodes.
 
     ```bash
-    [n000]# pdsh -a date
+    pdsh -a date
     ```
 
     Example output:
@@ -116,9 +114,9 @@ Power up storage nodes in the following sequence:
 1. Check the health of the system.
 
     ```bash
-    [n000]# cscli csinfo
-    [n000]# cscli show_nodes
-    [n000]# cscli fs_info
+    cscli csinfo
+    cscli show_nodes
+    cscli fs_info
     ```
 
 1. Check resources before mounting the file system.
@@ -136,7 +134,7 @@ Power up storage nodes in the following sequence:
 1. Mount the file system.
 
     ```bash
-    [n000]# cscli mount -f cls01234
+    cscli mount -f cls01234
     ```
 
 ## Next Step

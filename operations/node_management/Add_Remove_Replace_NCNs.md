@@ -19,21 +19,19 @@ The following workflows are available:
   * [Remove NCN Procedure](#remove-ncn-procedure)
 * [Replace or Move Worker, Storage, or Master NCNs](#replace-worker-storage-master)
 
-<a name="prerequisites"></a>
-
 ## Prerequisites
 
 The system is fully installed and has transitioned off of the LiveCD.
 
 All activities required for site maintenance are complete.
 
-The latest `docs-csm` RPM has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/index.md#documentation)
+The latest `docs-csm` RPM has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation)
 
 1. Run `ncn_add_pre-req.py` to adjust the network.
 
    ```bash
-   ncn-m# cd /usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/
-   ncn-m# ./ncn_add_pre-req.py 
+   cd /usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/
+   ./ncn_add_pre-req.py 
    ```
 
    The script will ask the following question:
@@ -46,7 +44,6 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Check for
 
    ```text
     The prerequisite script prepares adding NCNs by adjusting SLS network configurations.
-
 
     Please enter answer as an integer.
     How many NCNs would you like to add? Do not include NCNs to be removed or moved.
@@ -74,7 +71,6 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Check for
     new_ip_dhcp_pool_start: 
     {'HMN': '10.254.1.47'}
 
-
     Checking CAN.
     last_reserved_ip: 10.102.4.14    start_dhcp_pool:10.102.4.22
     The space between last_reserved_ip and start_dhcp_pool is 8 IP.
@@ -89,7 +85,6 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Check for
     {'MTL': '10.1.1.17', 'NMN': '10.252.1.20', 'CAN': '10.102.4.22', 'HMN': '10.254.1.26'}
     new_ip_dhcp_pool_start: 
     {'HMN': '10.254.1.47', 'CAN': '10.102.4.33'}
-
 
     Checking MTL.
     last_reserved_ip: 10.1.1.10    start_dhcp_pool:10.1.1.17
@@ -106,7 +101,6 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Check for
     {'MTL': '10.1.1.17', 'NMN': '10.252.1.20', 'CAN': '10.102.4.22', 'HMN': '10.254.1.26'}
     new_ip_dhcp_pool_start: 
     {'HMN': '10.254.1.47', 'CAN': '10.102.4.33', 'MTL': '10.1.1.28'}
-
 
     Checking NMN.
     last_reserved_ip: 10.252.1.12    start_dhcp_pool:10.252.1.20
@@ -164,13 +158,9 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Check for
       Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-04-01_21-21-04
       ```
 
-<a name="add-worker-storage-master"></a>
-
 ## Add Worker, Storage, or Master NCNs
 
 Use this procedure to add a worker, storage, or master NCN.
-
-<a name="add-ncn-prerequisites"></a>
 
 ### Add NCN Prerequisites
 
@@ -178,14 +168,14 @@ For several of the commands in this section, variables must be set with the name
 Set `NODE` to the hostname of the node being added (for example `ncn-w001`, `ncn-s002`, etc).
 
 ```bash
-ncn# NODE=ncn-x00n
+NODE=ncn-x00n
 ```
 
 If the component name (xname) is known, set it now. Otherwise it will be determined in a later step.
 
 ```bash
-ncn# XNAME=<xname>
-ncn# echo $XNAME
+XNAME=<xname>
+echo $XNAME
 ```
 
 **IMPORTANT:** Ensure that the node being added to the system has been properly configured. If the node being added to the system has not been previously in the system, several settings need to be verified.
@@ -196,9 +186,9 @@ ncn# echo $XNAME
    The NCN BMC credentials need to match the current global air-cooled BMC default credentials. These can be viewed with the following commands:
 
    ```bash
-   ncn-m# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json |
+   VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json |
                          jq -r '.data["vault-root"]' |  base64 -d)
-   ncn-m# kubectl -n vault exec -it cray-vault-0 -c vault -- env \
+   kubectl -n vault exec -it cray-vault-0 -c vault -- env \
       VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 \
       vault kv get secret/reds-creds/defaults
    ```
@@ -214,7 +204,7 @@ ncn# echo $XNAME
 
 * If adding an NCN that was not previously in the system, follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md) procedure.
 * Ensure the NCN BMC is configured to use DHCP. (This does not apply to the BMC for `ncn-m001`, because it is statically configured for the site.)
-* Ensure that the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](../../install/switch_pxe_boot_from_onboard_nic_to_pcie.md) procedure.
+* Ensure that the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md) procedure.
 
 * If adding an HPE NCN, ensure that IPMI is enabled.
 
@@ -225,9 +215,9 @@ ncn# echo $XNAME
       > another way.
 
       ```bash
-      ncn# read -s IPMI_PASSWORD
-      ncn# export IPMI_PASSWORD
-      ncn# curl -k -u root:$IPMI_PASSWORD https://NCN_NODE-mgmt/redfish/v1/Managers/1/NetworkProtocol | jq .IPMI
+      read -s IPMI_PASSWORD
+      export IPMI_PASSWORD
+      curl -k -u root:$IPMI_PASSWORD https://NCN_NODE-mgmt/redfish/v1/Managers/1/NetworkProtocol | jq .IPMI
       ```
 
       Expected output:
@@ -242,7 +232,7 @@ ncn# echo $XNAME
    2. If IPMI is disabled, then enable IPMI:
 
       ```bash
-      ncn# curl -k -u root:$IPMI_PASSWORD -X PATCH \
+      curl -k -u root:$IPMI_PASSWORD -X PATCH \
          -H 'Content-Type: application/json' \
          -d '{"IPMI": {"Port": 623, "ProtocolEnabled": true}}' \
          https://${NODE}-mgmt/redfish/v1/Managers/1/NetworkProtocol | jq
@@ -267,7 +257,7 @@ ncn# echo $XNAME
    3. If IPMI was disabled, then restart the BMC:
 
       ```bash
-      ncn# curl -k -u root:$IPMI_PASSWORD -X POST \
+      curl -k -u root:$IPMI_PASSWORD -X POST \
          -H 'Content-Type: application/json' \
          -d '{"ResetType": "GracefulRestart"}' \
          https://${NODE}-mgmt/redfish/v1/Managers/1/Actions/Manager.Reset | jq
@@ -289,8 +279,6 @@ ncn# echo $XNAME
       }
       ```
 
-<a name="add-ncn-procedure"></a>
-
 ### Add NCN Procedure
 
 The following is a high-level overview of the add NCN workflow:
@@ -311,13 +299,9 @@ The following is a high-level overview of the add NCN workflow:
 
 1. [Validate Health](Add_Remove_Replace_NCNs/Validate_Health.md)
 
-<a name="remove-worker-storage-master"></a>
-
 ## Remove Worker, Storage, or Master NCNs
 
 Use this procedure to remove a worker, storage, or master node (NCN).
-
-<a name="remove-ncn-prerequisites"></a>
 
 ### Remove NCN Prerequisites
 
@@ -327,12 +311,10 @@ Set `NODE` to the hostname of the node being removed (for example `ncn-w001`, `n
 Set `XNAME` to the xname of that node.
 
 ```bash
-ncn# NODE=ncn-x00n
-ncn# XNAME=$(ssh $NODE cat /etc/cray/xname)
-ncn# echo $XNAME
+NODE=ncn-x00n
+XNAME=$(ssh $NODE cat /etc/cray/xname)
+echo $XNAME
 ```
-
-<a name="remove-ncn-procedure"></a>
 
 ### Remove NCN Procedure
 
@@ -349,8 +331,6 @@ The following is a high-level overview of the remove NCN workflow:
 1. [Validate Health](Add_Remove_Replace_NCNs/Validate_Health.md)
 
 **IMPORTANT:** Update the SHCD to remove the device. This is only needed if no NCN device will be added back to same location with the same cabling.
-
-<a name="replace-worker-storage-master"></a>
 
 ## Replace or Move Worker, Storage, or Master NCNs
 

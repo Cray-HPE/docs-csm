@@ -7,6 +7,6 @@ Refer to the following topics for more information:
 * [Customize the Broker UAI Image](Customize_the_Broker_UAI_Image.md)
 * [Customize End-User UAI Images](Customize_End-User_UAI_Images.md)
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Customize the Broker UAI Image](Customize_the_Broker_UAI_Image.md)

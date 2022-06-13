@@ -17,7 +17,7 @@ This procedure requires administrative privileges.
     The command below will list all external hostnames.
 
     ```bash
-    ncn-w001# kubectl get vs -A | grep -v '[*]'
+    kubectl get vs -A | grep -v '[*]'
     ```
 
     Example output:
@@ -40,12 +40,12 @@ This procedure requires administrative privileges.
     Use the NAME value returned in the previous step. The following example is for the cray-sysmgmt-health-prometheus service.
 
     ```bash
-    ncn-w001# kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus -o yaml
+    kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus -o yaml
     ```
 
     Example output:
 
-    ```
+    ```yaml
     apiVersion: networking.istio.io/v1beta1
     kind: VirtualService
     metadata:
@@ -80,7 +80,6 @@ This procedure requires administrative privileges.
     ```
 
     From the VirtualService data, it is straightforward to see how traffic will be routed. In this example, connections to prometheus.cmn.SYSTEM_DOMAIN_NAME will be routed to the cray-sysmgmt-health-prometheus service in the sysmgmt-health namespace on port 9090.
-
 
 External DNS will now be connected to the back-end service.
 
