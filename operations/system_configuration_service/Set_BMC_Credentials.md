@@ -1,4 +1,4 @@
-# Set BMC Credentials
+# Set BMC Credentials Using SAT
 
 Redfish BMCs are installed on the system with default credentials. After the
 machine is shipped, all BMC credentials must be changed.
