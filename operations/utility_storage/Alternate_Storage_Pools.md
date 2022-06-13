@@ -25,7 +25,7 @@ This example shows the creation and mounting of an `rbd` device on `ncn-m001`.
 
 ### Create storage pool
 
-The below example will create a storage pool name `csm-release`.  The pool name can be changed to better reflect any use cases outside of support for upgrades.
+The below example will create a storage pool name `csm-release`. The pool name can be changed to better reflect any use cases outside of support for upgrades.
 
 ```bash
 ceph osd pool create csm-release 3 3
