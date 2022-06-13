@@ -26,7 +26,11 @@ backup of Workload Manager configuration data and files is created. Once complet
     CSM_RELEASE=1.2.0
    ```
 
-1. If there are space concerns on the node please see the process for adding an rbd device to store the CSM tarball [here](../operations/utility_storage/Alternate_Storage_Pools.md).
+1. If there are space concerns on the node, add an `rbd` device on the node for the CSM tarball.
+
+    This same `rbd` device can be remapped to `ncn-m002` later in the upgrade procedure, when the CSM tarball is needed on that node.
+
+    See [Alternate Storage Pools](../../operations/utility_storage/Alternate_Storage_Pools.md).
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
